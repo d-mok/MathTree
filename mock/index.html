@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src='../dist/index.js'></script>
+</head>
+
+<body>
+    <textarea id="code" rows="40" cols="100">
+    </textarea>
+
+    <button type="button" onClick="hi()">Click Me!</button>
+
+    <div id="img"></div>
+
+    <script>
+        let template = `const pen = new Pen();
+
+pen.setup.size(1);
+pen.setup.range([-5,5],[-5,5]);
+
+pen.axis.x();
+pen.axis.y();
+pen.grid.x();
+pen.grid.y();
+pen.tick.x();
+pen.tick.y();`
+
+        document.getElementById("code").value = template
+
+        function hi() {
+            let text = document.getElementById("code").value
+            let q = '<img src="img" style="border:1px solid #000000" />';
+            eval(text + '\n document.getElementById("img").innerHTML = pen.export(q,"img")');
+        }
+
+
+    </script>
+
+
+
+</body>
+
+</html>

@@ -11631,10 +11631,6 @@ globalThis.Frame = Frame;
 
 "use strict";
 
-/**
- * Pen.
- * @namespace Pen
- */
 class PenCls {
     constructor() {
         /**
