@@ -145,6 +145,22 @@ class PenCls {
             [this.pen.frame.xmin, this.pen.frame.xmax] = xRange;
             [this.pen.frame.ymin, this.pen.frame.ymax] = yRange;
         },
+
+        /**
+         * Set the coordinate range of the canvas with given size and center.
+         * Equivalent to pen.range([-size, size], [-size, size]) but shifted center.
+         * @memberof Pen.setup
+         * @param {number} size - The max x and y coordinates in range.
+         * @param {number[]} center - [x,y] coordinates of the center.
+         * @example
+         * pen.setup.squareRange(5) // define range -5&lt;x&lt;5 and -5&lt;y&lt;5
+         * pen.setup.squareRange(5,[1,2]) // define range -4&lt;x&lt;6 and -3&lt;y&lt;7
+         */
+        squareRange(size: number, center = [0, 0]) {
+            let [x, y] = center
+            this.range([x - size, x + size], [y - size, y + size])
+        },
+
         /**
          * Set the coordinate range by specifying in-view points.
          * @memberof Pen.setup

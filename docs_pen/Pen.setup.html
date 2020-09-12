@@ -387,7 +387,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line52">line 52</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line66">line 66</a>
             </span>
         </p>
     
@@ -821,6 +821,190 @@
     
     
         <pre class="prettyprint"><code>pen.setup.size(0.5,2) // half the standard width, with height-to-width = 2:1</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".squareRange">
+        <a class="href-link" href="#.squareRange">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                squareRange<span class="signature">(size, center)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Set the coordinate range of the canvas with given size and center.Equivalent to pen.range([-size, size], [-size, size]) but shifted center.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>size</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The max x and y coordinates in range.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>center</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Array.&lt;number></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">[x,y] coordinates of the center.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Pen.ts.html" class="button">View Source</a>
+            <span>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line53">line 53</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>pen.setup.squareRange(5) // define range -5&lt;x&lt;5 and -5&lt;y&lt;5pen.setup.squareRange(5,[1,2]) // define range -4&lt;x&lt;6 and -3&lt;y&lt;7</code></pre>
     
 
 
