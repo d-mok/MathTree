@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "test": "jest --coverage",
     "jest": "jest",
     "tsc": "tsc",
-    "docs": "./node_modules/.bin/jsdoc ./src --configure .jsdoc.json --verbose"
+    "docs_math": "./node_modules/.bin/jsdoc ./src/Math --configure .jsdoc.json --verbose -d docs_math",
+    "docs_pen": "./node_modules/.bin/jsdoc ./src/Pen --configure .jsdoc.json --verbose -d docs_pen"
   },
   "repository": {
     "type": "git",

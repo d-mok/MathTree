@@ -15,8 +15,7 @@
         "encoding": "utf8",
         "private": false,
         "recurse": true,
-        "template": "node_modules/better-docs",
-        "destination": "./docs/"
+        "template": "node_modules/better-docs"
     },
     "plugins": [
         "node_modules/better-docs/typescript",
