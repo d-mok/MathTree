@@ -4,6 +4,7 @@ class PenCls {
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D
     frame: FrameCls
+    imgStore: ImageData | null
 
 
     constructor() {
@@ -15,6 +16,7 @@ class PenCls {
         this.setup.size();
         this.setup.range([-5, 5], [-5, 5]);
         this.set.reset();
+        this.imgStore = null
     }
 
     /**
@@ -855,6 +857,7 @@ class PenCls {
     }
 
 
+
     dataURL() {
         return this.canvas.toDataURL();
     }
@@ -890,6 +893,28 @@ class PenCls {
     clear() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
+
+    /**
+     * Temporarily save the img internally. Can be later restored by restoreImg.
+     * @memberof Pen.export
+     * @example
+     * pen.saveImg() // save the current canvas image
+     */
+    saveImg() {
+        this.imgStore = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
+    }
+
+    /**
+     * Restored the previously saved img by saveImg.
+     * @memberof Pen.export
+     * @example
+     * pen.restoreImg() // restore the previously saved img
+     */
+    restoreImg() {
+        if (this.imgStore !== null)
+            this.ctx.putImageData(this.imgStore, 0, 0);
+    }
+
 };
 
 
