@@ -1,0 +1,36 @@
+{
+  "name": "mathtree",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "jest --coverage",
+    "jest": "jest",
+    "tsc": "tsc",
+    "docs": "./node_modules/.bin/jsdoc ./src --configure .jsdoc.json --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d-mok/MathTree.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/d-mok/MathTree/issues"
+  },
+  "homepage": "https://github.com/d-mok/MathTree#readme",
+  "devDependencies": {
+    "better-docs": "^2.3.2",
+    "jest": "^26.4.2",
+    "jsdoc": "^3.6.5",
+    "ts-loader": "^8.0.3",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "@types/chance": "^1.1.0",
+    "chance": "^1.1.7"
+  }
+}
