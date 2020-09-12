@@ -1,3 +1,3 @@
 module.exports = {
-    "setupFiles": ["./dist/index.js"]
+    "setupFiles": ["./dist/edge.js"]
 }

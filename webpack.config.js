@@ -16,10 +16,10 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        filename: 'index.js',
+        filename: 'egde.js',
         path: path.resolve(__dirname, 'dist'),
     },
     optimization: {
-        minimize: false
+        minimize: true
     },
 };
