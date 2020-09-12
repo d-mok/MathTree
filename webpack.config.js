@@ -16,7 +16,7 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        filename: 'egde.js',
+        filename: 'edge.js',
         path: path.resolve(__dirname, 'dist'),
     },
     optimization: {

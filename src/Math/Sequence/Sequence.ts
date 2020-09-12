@@ -2,7 +2,7 @@
 
 /**
 * Return an array of integers from start to end inclusive.
-* @category Utility
+* @category Sequence
 * @param {number} start - The starting number.
 * @param {number} end - The ending number.
 * @return {number[]} An array [start, ..., end].
