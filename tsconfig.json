@@ -58,13 +58,5 @@
     /* Advanced Options */
     "skipLibCheck": true, /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
-  },
-  "typedocOptions": {
-    "mode": "file",
-    "module": "umd",
-    "out": "docs",
-    "theme": "./node_modules/typedoc-default-themes-extension/bin/default",
-    "categorizeByGroup": false,
-    "hideGenerator": true
   }
 }

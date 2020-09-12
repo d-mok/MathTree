@@ -1,7 +1,7 @@
 var PEN_QUALITY = 3;
 globalThis.PEN_QUALITY = PEN_QUALITY
 
-class Frame {
+class FrameCls {
     wPixel: number
     hPixel: number
     xmin: number
@@ -85,3 +85,6 @@ class Frame {
         return this.axisOffset / this.xUnit();
     }
 }
+
+var Frame = FrameCls
+globalThis.Frame = Frame

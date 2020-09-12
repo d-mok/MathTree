@@ -1,5 +1,92 @@
 
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Pen.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.straight.html">straight</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>Pen.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+
 class PenCls {
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D
@@ -50,7 +137,7 @@ class PenCls {
          * @param {number[]} xRange - The range [xmin,xmax].
          * @param {number[]} yRange - The range [ymin,ymax].
          * @example
-         * pen.setup.range([-5,5],[-2,4]) // define range -5<x<5 and -2<y<4
+         * pen.setup.range([-5,5],[-2,4]) // define range -5&lt;x&lt;5 and -2&lt;y&lt;4
          */
         range(xRange: number[], yRange: number[]) {
             [this.pen.frame.xmin, this.pen.frame.xmax] = xRange;
@@ -71,12 +158,12 @@ class PenCls {
             let xmax = points[0][0];
             let ymin = points[0][1];
             let ymax = points[0][1];
-            for (let i = 0; i < points.length; i++) {
+            for (let i = 0; i &lt; points.length; i++) {
                 let x = points[i][0];
                 let y = points[i][1];
-                if (x < xmin) xmin = x;
+                if (x &lt; xmin) xmin = x;
                 if (x > xmax) xmax = x;
-                if (y < ymin) ymin = y;
+                if (y &lt; ymin) ymin = y;
                 if (y > ymax) ymax = y;
             }
             xmin -= (xmax - xmin) * border;
@@ -259,9 +346,9 @@ class PenCls {
         this.ctx.moveTo(xStart, yStart);
 
         let active = true;
-        let outside = (x: number, y: number) => (x > this.frame.wPixel + 2000 || y > this.frame.hPixel + 2000 || x < -2000 || y < -2000);
+        let outside = (x: number, y: number) => (x > this.frame.wPixel + 2000 || y > this.frame.hPixel + 2000 || x &lt; -2000 || y &lt; -2000);
 
-        for (let t = tStart; t <= tEnd; t += step) {
+        for (let t = tStart; t &lt;= tEnd; t += step) {
             let [x, y] = tracer(t);
             if (outside(x, y)) {
                 if (active) {
@@ -393,7 +480,7 @@ class PenCls {
         this.ctx.beginPath();
         let [xStart, yStart] = this.frame.toPix(points[0]);
         this.ctx.moveTo(xStart, yStart);
-        for (let i = 1; i < points.length; i++) {
+        for (let i = 1; i &lt; points.length; i++) {
             let [x, y] = this.frame.toPix(points[i]);
             this.ctx.lineTo(x, y);
         }
@@ -496,12 +583,12 @@ class PenCls {
             };
             if (tick % 2 === 1) {
                 mark(0);
-                for (let i = 1; i <= (tick - 1) / 2; i++) {
+                for (let i = 1; i &lt;= (tick - 1) / 2; i++) {
                     mark(i * space);
                     mark(-i * space);
                 }
             } else {
-                for (let i = 1; i <= tick / 2; i++) {
+                for (let i = 1; i &lt;= tick / 2; i++) {
                     mark((i - 0.5) * space);
                     mark(-(i - 0.5) * space);
                 }
@@ -541,7 +628,7 @@ class PenCls {
                 this.pen.ctx.stroke();
                 this.pen.ctx.restore();
             };
-            for (let i = 0; i < tick; i++) {
+            for (let i = 0; i &lt; tick; i++) {
                 mark(i * space);
             }
         },
@@ -564,7 +651,7 @@ class PenCls {
             B = this.pen.frame.toPix(B);
             let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
             let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
-            for (let i = 0; i < arc; i++) {
+            for (let i = 0; i &lt; arc; i++) {
                 this.pen.circle(O, radius + i * space, [a1, a2]);
             }
         },
@@ -832,8 +919,8 @@ class PenCls {
             imageData = ctx.getImageData(0, 0, canvas.width, canvas.height),
             x, y, index;
 
-        for (y = 0; y < h; y++) {
-            for (x = 0; x < w; x++) {
+        for (y = 0; y &lt; h; y++) {
+            for (x = 0; x &lt; w; x++) {
                 index = (y * w + x) * 4;
                 if (imageData.data[index + 3] > 0) {
                     pix.x.push(x);
@@ -894,4 +981,32 @@ class PenCls {
 
 
 var Pen = PenCls
-globalThis.Pen = Pen
+globalThis.Pen = Pen</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

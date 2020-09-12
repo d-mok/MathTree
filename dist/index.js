@@ -11544,7 +11544,7 @@ __webpack_require__(24);
 
 var PEN_QUALITY = 3;
 globalThis.PEN_QUALITY = PEN_QUALITY;
-class Frame {
+class FrameCls {
     constructor() {
         this.wPixel = 0; // total width in pixel
         this.hPixel = 0; // total height in pixel
@@ -11621,6 +11621,8 @@ class Frame {
         return this.axisOffset / this.xUnit();
     }
 }
+var Frame = FrameCls;
+globalThis.Frame = Frame;
 
 
 /***/ }),
@@ -11633,7 +11635,7 @@ class Frame {
  * Pen.
  * @namespace Pen
  */
-class Pen {
+class PenCls {
     constructor() {
         /**
          * Setup of canvas.
@@ -12475,6 +12477,8 @@ class Pen {
     }
 }
 ;
+var Pen = PenCls;
+globalThis.Pen = Pen;
 
 
 /***/ }),
@@ -12487,7 +12491,7 @@ class Pen {
  * AutoPen.
  * @namespace AutoPen
  */
-class AutoPen {
+class AutoPenCls {
     constructor() {
         this.pen = new Pen();
     }
@@ -12639,6 +12643,8 @@ class AutoPen {
         this.pen = pen;
     }
 }
+var AutoPen = AutoPenCls;
+globalThis.AutoPen = AutoPen;
 
 
 /***/ })
