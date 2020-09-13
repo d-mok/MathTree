@@ -8,10 +8,10 @@
 * @category Flow
 * @return {object} The random config object.
 * @example
-* RndComboConfig // may return {config:[true,true,false], choices:["I and II","I only","I and III","I, II and III"]}
+* RndComboConfig // may return {truth:[true,true,false], choices:["I and II","I only","I and III","I, II and III"],sections:[[1,1],[2,1],[3,0]]}
 */
 function RndComboConfig(): {
-    config: boolean[],
+    truth: boolean[],
     choices: string[],
     sections: any[][]
 } {
@@ -40,16 +40,16 @@ function RndComboConfig(): {
         return GrammarJoin(...opts)
     }
     let codes = RndPickN([1, 2, 3, 4, 5, 6, 7], 4)
-    let config = codes.map(x => convertBool(x))[0]
+    let truth = codes.map(x => convertBool(x))[0]
     let choices = codes.map(x => convertText(x))
 
     let sections = []
-    sections.push([1, config[0] ? 1 : 0])
-    sections.push([2, config[1] ? 1 : 0])
-    sections.push([3, config[2] ? 1 : 0])
+    sections.push([1, truth[0] ? 1 : 0])
+    sections.push([2, truth[1] ? 1 : 0])
+    sections.push([3, truth[2] ? 1 : 0])
 
 
-    return { config, choices, sections }
+    return { truth, choices, sections }
 
 }
 globalThis.RndComboConfig = RndComboConfig
