@@ -187,9 +187,9 @@ class AutoPenCls {
      * @param {number} [ratio=0.7] - ratio for pen.setup.size()
      * @returns {void} The image is ready for export.
      * @example
-     * autoPen.TrigSolution({trig:'sin', k=0.5})
+     * autoPen.TrigSolution({trig:'sin', k:0.5})
      */
-    TrigSolution({ trig = 'sin', k = 0, scale = 0.8, ratio = 0.7 }: { trig: string, k: number, scale: number, ratio: number }) {
+    TrigSolution({ trig = 'sin', k = 0, scale = 0.7, ratio = 0.7 }: { trig: string, k: number, scale: number, ratio: number }) {
 
         if (trig === 'sin' || trig === 'cos') {
             if (k > 2) k = 2
