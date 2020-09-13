@@ -43,6 +43,19 @@ test('RndU', () => {
 
 
 
+
+
+test('RndT', () => {
+    let arr = sample(() => RndT());
+    let inRange = arr.every(x => x === true || x === false);
+    let uniform = [... new Set(arr)].length === 2;
+    expect(inRange).toBe(true);
+    expect(uniform).toBe(true);
+});
+
+
+
+
 test('RndZ', () => {
     let arr = sample(() => RndZ(5, 10));
     let inRange = arr.every(x => Math.abs(x) >= 5 && Math.abs(x) <= 10);

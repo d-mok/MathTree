@@ -48,6 +48,19 @@ function RndU(): number {
 globalThis.RndU = RndU
 
 
+/**
+ * Return true or false.
+ * @category Random
+ * @return {boolean} true or false.
+ * @example
+ * RndT() // may return true or false
+ */
+function RndT(): boolean {
+    return chance.pickone([true, false]);
+}
+globalThis.RndT = RndT
+
+
 
 
 /**
@@ -157,6 +170,11 @@ function RndShake(anchor: number, range: number, n = -1): number[] {
     }
 }
 globalThis.RndShake = RndShake
+
+
+
+
+
 
 
 
