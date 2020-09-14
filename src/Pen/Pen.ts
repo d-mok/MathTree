@@ -676,6 +676,7 @@ class PenCls {
         let BPixel = this.frame.toPix(B);
         let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
         let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
+        if (a2 < a1) a2 = a2 + 360
         this.label(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
     }
 
