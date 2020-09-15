@@ -21,6 +21,23 @@ test('RndN', () => {
 
 
 
+
+test('RndNs', () => {
+    let arr = sample(() => RndNs(5, 10, 3));
+    let inRange = arr.flat().every(x => x >= 5 && x <= 10);
+    let isInteger = arr.flat().every(x => IsInteger(x));
+    let uniform = [... new Set(arr.flat())].length === 6;
+    let correctLength = arr.every(x => x.length === 3);
+    expect(inRange).toBe(true);
+    expect(isInteger).toBe(true);
+    expect(uniform).toBe(true);
+    expect(correctLength).toBe(true);
+});
+
+
+
+
+
 test('RndR', () => {
     let arr = sample(() => RndR(5, 10));
     let inRange = arr.every(x => x >= 5 && x <= 10);
@@ -65,6 +82,30 @@ test('RndZ', () => {
     expect(isInteger).toBe(true);
     expect(uniform).toBe(true);
 });
+
+
+
+
+
+test('RndZs', () => {
+    let arr = sample(() => RndZs(5, 10, 3));
+    let inRange = arr.flat().every(x => Math.abs(x) >= 5 && Math.abs(x) <= 10);
+    let isInteger = arr.flat().every(x => IsInteger(x));
+    let uniform = [... new Set(arr.flat())].length === 12;
+    let correctLength = arr.every(x => x.length === 3);
+    expect(inRange).toBe(true);
+    expect(isInteger).toBe(true);
+    expect(uniform).toBe(true);
+    expect(correctLength).toBe(true);
+});
+
+
+
+
+
+
+
+
 
 test('RndP', () => {
     let arr = sample(() => RndP(100));

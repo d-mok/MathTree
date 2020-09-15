@@ -16,6 +16,22 @@ function RndN(min: number, max: number): number {
 }
 globalThis.RndN = RndN
 
+/**
+ * Return an array of unique random integer in [min, max] inclusive.
+ * @category Random
+ * @param {number} min - The min integer.
+ * @param {number} max - The max integer.
+ * @param {number} [n=-1] - The number of integers requested. Default to 10.
+ * @return {number[]} An array of random integers in [min, max].
+ * @example
+ * RndNs(2,8,3) // may return [5,3,7]
+ */
+function RndNs(min: number, max: number, n = -1): number[] {
+    if (n < 0) n = Min(Math.floor(max - min + 1), 10)
+    return chance.unique(() => RndN(min, max), n);
+}
+globalThis.RndNs = RndNs
+
 
 
 
@@ -76,6 +92,31 @@ function RndZ(min: number, max: number): number {
     return RndN(min, max) * RndU();
 }
 globalThis.RndZ = RndZ
+
+
+
+
+/**
+ * Return an array of absolutely unique random integers in [min, max] or [-max, -min] inclusive.
+ * @category Random
+ * @param {number} min - The min integer.
+ * @param {number} max - The max integer.
+ * @param {number} [n=-1] - The number of integers requested. Default to 10.
+ * @return {number[]} An array of random integers in [min, max].
+ * @example
+ * RndZs(2,8,3) // may return [5,-3,7]
+ */
+function RndZs(min: number, max: number, n = -1): number[] {
+    if (n < 0) n = Min(Math.floor(max - min + 1), 10)
+    let arr = chance.unique(() => RndN(min, max), n);
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = arr[i] * RndU()
+    }
+    return arr
+}
+globalThis.RndZs = RndZs
+
+
 
 
 

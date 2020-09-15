@@ -351,6 +351,121 @@ class AutoPenCls {
 
         this.pen = pen;
     }
+
+
+
+    /**
+     * Sketch for solving quadratic inequality.
+     * @memberof AutoPen.AutoPen_Tool
+     * @param {number[]} quadratic - [a,b,c] representing coeff of quadratic inequality.
+     * @param {string} sign - The sign of the inequality. Can be like '>=' , '<' or '\\ge' , '\\lt'.
+     * @param {number} [scale=0.5] - scale for pen.setup.size()
+     * @param {number} [ratio=0.8] - ratio for pen.setup.size()
+     * @returns {void} The image is ready for export.
+     * @example
+     * autoPen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
+     */
+    QuadraticInequality({ quadratic, sign, scale = 0.5, ratio = 0.8 }: { quadratic: number[], sign: string, scale: number, ratio: number }) {
+        let a = quadratic[0]
+        let b = quadratic[1]
+        let c = quadratic[2]
+
+        let greater = sign.includes('>') || sign.includes('g');
+        let equal = sign.includes('=') || sign.includes('e');
+
+        let [p, q] = QuadraticRoot(a, b, c);
+        if (p !== undefined && q !== undefined) {
+            [p, q] = [Max(p, q), Min(p, q)]
+            p = Fix(p, 2)
+            q = Fix(q, 2)
+        }
+
+        const pen = new Pen();
+        pen.setup.size(scale, ratio);
+        pen.setup.range([-5, 5], [-5, 5]);
+        pen.axis.x('');
+
+        if (p !== undefined && q !== undefined && p !== q) {
+            pen.plot(x => Sign(a) * (x ** 2 - 4))
+            let P = [2, 0]
+            let Q = [-2, 0]
+            pen.cutterH(P)
+            pen.cutterH(Q)
+            pen.set.weight(3)
+            pen.set.strokeColor('red')
+
+            if (a > 0) {
+                if (greater) {
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -5, -2)
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), 2, 5)
+                } else {
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -2, 2)
+                }
+            }
+
+            if (a < 0) {
+                if (greater) {
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -2, 2)
+                } else {
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -5, -2)
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), 2, 5)
+                }
+            }
+            pen.set.weight()
+            pen.set.strokeColor()
+            pen.label(P, p.toString(), a > 0 ? 315 : 45)
+            pen.label(Q, q.toString(), a > 0 ? 225 : 135)
+        }
+
+        if (p === undefined && q === undefined) {
+            if ((a > 0 && greater) || (a < 0 && !greater)) {
+                pen.set.weight(3)
+                pen.set.strokeColor('red')
+            }
+            if (a > 0) pen.plot(x => x ** 2 + 2)
+            if (a < 0) pen.plot(x => -(x ** 2) - 2)
+        }
+
+        if (p !== undefined && q !== undefined && p === q) {
+            let func = a > 0 ? (x: number) => x ** 2 : (x: number) => -(x ** 2)
+            pen.plot(func)
+            pen.label([0, 0], p.toString(), a > 0 ? 270 : 90)
+            if (a > 0) {
+                pen.set.weight(3)
+                pen.set.strokeColor('red')
+                if (greater && equal) pen.plot(func)
+                if (greater && !equal) {
+                    pen.plot(func)
+                    pen.set.strokeColor()
+                    pen.set.fillColor('white')
+                    pen.circle([0, 0], 4, [0, 360], true)
+                }
+                if (!greater && equal) {
+                    pen.set.fillColor('red')
+                    pen.circle([0, 0], 4, [0, 360], true)
+                }
+                if (!greater && !equal) { }
+            }
+
+            if (a < 0) {
+                pen.set.weight(3)
+                pen.set.strokeColor('red')
+                if (!greater && equal) pen.plot(func)
+                if (!greater && !equal) {
+                    pen.plot(func)
+                    pen.set.strokeColor()
+                    pen.set.fillColor('white')
+                    pen.circle([0, 0], 4, [0, 360], true)
+                }
+                if (greater && equal) {
+                    pen.set.fillColor('red')
+                    pen.circle([0, 0], 4, [0, 360], true)
+                }
+                if (greater && !equal) { }
+            }
+        }
+    }
+
 }
 
 

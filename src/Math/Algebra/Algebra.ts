@@ -46,15 +46,16 @@ globalThis.Discriminant = Discriminant
  * @return {any[]} The roots [r1,r2], or [undefined,undefined] if no real root.
  * @example
  * QuadraticRoot(1,2,-3) // return [-3,1]
+ * QuadraticRoot(-1,-2,3) // return [-3,1]
  * QuadraticRoot(1,2,1) // return [-1,-1]
  * QuadraticRoot(1,2,3) // return [undefined,undefined]
  */
-function QuadraticRoot(a: number, b: number, c: number): any[] {
+function QuadraticRoot(a: number, b: number, c: number): number[] | undefined[] {
     const d = Discriminant(a, b, c);
     if (d < 0) return [undefined, undefined];
     const r1 = (-b - Math.sqrt(d)) / (2 * a);
     const r2 = (-b + Math.sqrt(d)) / (2 * a);
-    return [r1, r2];
+    return [Math.min(r1, r2), Math.max(r1, r2)];
 }
 globalThis.QuadraticRoot = QuadraticRoot
 
@@ -76,6 +77,49 @@ function QuadraticVertex(a: number, b: number, c: number): number[] {
     return [h, k];
 }
 globalThis.QuadraticVertex = QuadraticVertex
+
+
+
+/**
+ * Return the quadratic [a,b,c] from [a,p,q] where p and q are the roots.
+ * @category Algebra
+ * @param {number} a - The value of a.
+ * @param {number} p - The value of a root.
+ * @param {number} q - The value of a root.
+ * @return {number[]} The quadratic coeff [a,b,c].
+ * @example
+ * QuadraticFromRoot(1,2,3) // return [1,-5,6]
+ * QuadraticFromRoot(-2,4,-3) // return [-2,2,24]
+ */
+function QuadraticFromRoot(a: number, p: number, q: number): number[] {
+    return [a, -a * (p + q), a * p * q]
+}
+globalThis.QuadraticFromRoot = QuadraticFromRoot
+
+
+
+
+/**
+ * Return the quadratic [a,b,c] from [a,h,k] where (h,k) is the vertex.
+ * @category Algebra
+ * @param {number} a - The value of a.
+ * @param {number} h - The x-coord of the vertex.
+ * @param {number} k - The y-coord of the vertex.
+ * @return {number[]} The quadratic coeff [a,b,c].
+ * @example
+ * QuadraticFromVertex(1,2,3) // return [1,-4,7]
+ * QuadraticFromVertex(-2,4,-3) // return [-2,16,-35]
+ */
+function QuadraticFromVertex(a: number, h: number, k: number): number[] {
+    let b = -2 * a * h
+    let c = k - a * h * h - b * h
+    return [a, b, c]
+}
+globalThis.QuadraticFromVertex = QuadraticFromVertex
+
+
+
+
 
 
 /**
