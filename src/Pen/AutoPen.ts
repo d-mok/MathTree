@@ -464,6 +464,7 @@ class AutoPenCls {
                 if (greater && !equal) { }
             }
         }
+        this.pen = pen;
     }
 
 }

@@ -261,6 +261,299 @@ class AutoPenCls {
         pen.autoCrop();
         this.pen = pen;
     }
+
+
+
+
+    /**
+     * Trig Graph for solving basic trig equation.
+     * @memberof AutoPen.AutoPen_Tool
+     * @param {string} trig - 'sin' | 'cos' | 'tan'
+     * @param {number} k - value of trig, like sin = k.
+     * @param {number} [scale=0.8] - scale for pen.setup.size()
+     * @param {number} [ratio=0.7] - ratio for pen.setup.size()
+     * @returns {void} The image is ready for export.
+     * @example
+     * autoPen.TrigSolution({trig:'sin', k:0.5})
+     */
+    TrigSolution({ trig = 'sin', k = 0, scale = 0.7, ratio = 0.7 }: { trig: string, k: number, scale: number, ratio: number }) {
+
+        if (trig === 'sin' || trig === 'cos') {
+            if (k > 2) k = 2
+            if (0.9 &lt; k &amp;&amp; k &lt; 1) k = 0.9
+            if (0 &lt; k &amp;&amp; k &lt; 0.3) k = 0.3
+            if (-1 &lt; k &amp;&amp; k &lt; -0.9) k = -0.9
+            if (-0.3 &lt; k &amp;&amp; k &lt; 0) k = -0.3
+            if (k &lt; -2) k = -2
+        }
+
+        if (trig === 'tan') {
+            if (k > 4) k = 4
+            if (k &lt; -4) k = -4
+            if (0 &lt; k &amp;&amp; k &lt; 0.9) k = 0.9
+            if (0 > k &amp;&amp; k > -0.9) k = -0.9
+        }
+
+        let [a, b, c] = TrigRoot(trig, k)
+
+
+        const pen = new Pen()
+        pen.setup.size(scale, ratio)
+
+        let limit = Max(1, Abs(k)) + 0.2
+
+        if (trig === 'sin') pen.setup.range([-40, 390], [-limit, limit])
+        if (trig === 'cos') pen.setup.range([-40, 390], [-limit, limit])
+        if (trig === 'tan') pen.setup.range([-40, 390], [-5, 5])
+
+        pen.axis.x()
+        pen.axis.y()
+        if (trig === 'sin' || trig === 'cos') {
+            pen.tick.x(360)
+        }
+        if (trig === 'tan') {
+            pen.tick.x(180)
+        }
+
+        if (trig === 'sin' || trig === 'cos') {
+            pen.cutterV([0, 1])
+            pen.cutterV([0, -1])
+            pen.label([0, 1], '1', 180)
+            pen.label([0, -1], '-1', 180)
+        }
+
+
+        pen.set.weight(1.5)
+        if (trig === 'sin') pen.plot(x => sin(x), 0, 360)
+        if (trig === 'cos') pen.plot(x => cos(x), 0, 360)
+        if (trig === 'tan') {
+            pen.plot(x => tan(x), 0, 360)
+            pen.set.strokeColor('grey')
+            pen.set.dash([5, 10])
+            pen.set.weight(0.7)
+            pen.straight.vertical(90)
+            pen.straight.vertical(270)
+            pen.set.strokeColor()
+            pen.set.dash()
+            pen.set.weight(1)
+        }
+        pen.set.weight(1)
+
+
+        function arrow(x: number, y: number, func: string, label = '') {
+            let anchor = 0
+            let skipAnchor = false
+
+            if (func === 'sin') {
+                if ([0, 90, 180, 270, 360].includes(x)) skipAnchor = true
+                if (x > 0 &amp;&amp; x &lt; 90) anchor = 0
+                if (x > 90 &amp;&amp; x &lt; 270) anchor = 180
+                if (x > 270 &amp;&amp; x &lt; 360) anchor = 360
+            }
+
+            if (func === 'cos') {
+                if ([0, 90, 180, 270, 360].includes(x)) skipAnchor = true
+                if (x > 0 &amp;&amp; x &lt; 180 &amp;&amp; x !== 90) anchor = 0
+                if (x > 180 &amp;&amp; x &lt; 360 &amp;&amp; x !== 270) anchor = 360
+            }
+
+            if (func === 'tan') {
+                if ([0, 90, 180, 270, 360].includes(x)) skipAnchor = true
+                if (x > 0 &amp;&amp; x &lt; 180) anchor = 0
+                if (x > 180 &amp;&amp; x &lt; 360) anchor = 180
+            }
+
+            if (x === undefined) return
+            let P = [x, y]
+            let Q = [x, 0]
+            let R = [anchor, 0]
+            pen.set.fillColor()
+            pen.point(P)
+            pen.set.fillColor('red')
+            if (y !== 0) { pen.line(P, Q, true) }
+            if (y >= 0) { pen.label(Q, label, 270) }
+            if (y &lt; 0) { pen.label(Q, label, 90) }
+
+            if (skipAnchor) return
+            pen.set.weight(3)
+            pen.set.strokeColor('blue')
+            pen.line(R, Q)
+            pen.set.weight(1)
+            pen.set.strokeColor('red')
+        }
+
+        pen.set.strokeColor('red')
+        pen.set.fillColor('red')
+        pen.set.dash([5, 5])
+        pen.straight.horizontal(k)
+        pen.set.dash()
+
+        if (trig === 'sin') {
+            if (k === 0) {
+                arrow(a, k, 'sin', '0')
+                arrow(b, k, 'sin', '180')
+                arrow(c, k, 'sin', '360')
+            }
+            if (k === 1) {
+                arrow(a, k, 'sin', '90')
+            }
+            if (k === -1) {
+                arrow(a, k, 'sin', '270')
+            }
+            if (k > -1 &amp;&amp; k &lt; 1 &amp;&amp; k !== 0) {
+                arrow(a, k, 'sin', 'α')
+                arrow(b, k, 'sin', 'β')
+            }
+        }
+
+        if (trig === 'cos') {
+            if (k === 0) {
+                arrow(a, k, 'cos', '90')
+                arrow(b, k, 'cos', '270')
+            }
+            if (k === 1) {
+                arrow(a, k, 'cos', '0')
+                arrow(b, k, 'cos', '360')
+            }
+            if (k === -1) {
+                arrow(a, k, 'cos', '180')
+            }
+            if (k > -1 &amp;&amp; k &lt; 1 &amp;&amp; k !== 0) {
+                arrow(a, k, 'cos', 'α')
+                arrow(b, k, 'cos', 'β')
+            }
+        }
+
+        if (trig === 'tan') {
+            if (k === 0) {
+                arrow(a, k, 'tan', '0')
+                arrow(b, k, 'tan', '180')
+                arrow(c, k, 'tan', '360')
+            }
+            if (k !== 0) {
+                arrow(a, k, 'tan', 'α')
+                arrow(b, k, 'tan', 'β')
+            }
+        }
+
+        this.pen = pen;
+    }
+
+
+
+    /**
+     * Sketch for solving quadratic inequality.
+     * @memberof AutoPen.AutoPen_Tool
+     * @param {number[]} quadratic - [a,b,c] representing coeff of quadratic inequality.
+     * @param {string} sign - The sign of the inequality. Can be like '>=' , '&lt;' or '\\ge' , '\\lt'.
+     * @param {number} [scale=0.5] - scale for pen.setup.size()
+     * @param {number} [ratio=0.8] - ratio for pen.setup.size()
+     * @returns {void} The image is ready for export.
+     * @example
+     * autoPen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
+     */
+    QuadraticInequality({ quadratic, sign, scale = 0.5, ratio = 0.8 }: { quadratic: number[], sign: string, scale: number, ratio: number }) {
+        let a = quadratic[0]
+        let b = quadratic[1]
+        let c = quadratic[2]
+
+        let greater = sign.includes('>') || sign.includes('g');
+        let equal = sign.includes('=') || sign.includes('e');
+
+        let [p, q] = QuadraticRoot(a, b, c);
+        if (p !== undefined &amp;&amp; q !== undefined) {
+            [p, q] = [Max(p, q), Min(p, q)]
+            p = Fix(p, 2)
+            q = Fix(q, 2)
+        }
+
+        const pen = new Pen();
+        pen.setup.size(scale, ratio);
+        pen.setup.range([-5, 5], [-5, 5]);
+        pen.axis.x('');
+
+        if (p !== undefined &amp;&amp; q !== undefined &amp;&amp; p !== q) {
+            pen.plot(x => Sign(a) * (x ** 2 - 4))
+            let P = [2, 0]
+            let Q = [-2, 0]
+            pen.cutterH(P)
+            pen.cutterH(Q)
+            pen.set.weight(3)
+            pen.set.strokeColor('red')
+
+            if (a > 0) {
+                if (greater) {
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -5, -2)
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), 2, 5)
+                } else {
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -2, 2)
+                }
+            }
+
+            if (a &lt; 0) {
+                if (greater) {
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -2, 2)
+                } else {
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -5, -2)
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), 2, 5)
+                }
+            }
+            pen.set.weight()
+            pen.set.strokeColor()
+            pen.label(P, p.toString(), a > 0 ? 315 : 45)
+            pen.label(Q, q.toString(), a > 0 ? 225 : 135)
+        }
+
+        if (p === undefined &amp;&amp; q === undefined) {
+            if ((a > 0 &amp;&amp; greater) || (a &lt; 0 &amp;&amp; !greater)) {
+                pen.set.weight(3)
+                pen.set.strokeColor('red')
+            }
+            if (a > 0) pen.plot(x => x ** 2 + 2)
+            if (a &lt; 0) pen.plot(x => -(x ** 2) - 2)
+        }
+
+        if (p !== undefined &amp;&amp; q !== undefined &amp;&amp; p === q) {
+            let func = a > 0 ? (x: number) => x ** 2 : (x: number) => -(x ** 2)
+            pen.plot(func)
+            pen.label([0, 0], p.toString(), a > 0 ? 270 : 90)
+            if (a > 0) {
+                pen.set.weight(3)
+                pen.set.strokeColor('red')
+                if (greater &amp;&amp; equal) pen.plot(func)
+                if (greater &amp;&amp; !equal) {
+                    pen.plot(func)
+                    pen.set.strokeColor()
+                    pen.set.fillColor('white')
+                    pen.circle([0, 0], 4, [0, 360], true)
+                }
+                if (!greater &amp;&amp; equal) {
+                    pen.set.fillColor('red')
+                    pen.circle([0, 0], 4, [0, 360], true)
+                }
+                if (!greater &amp;&amp; !equal) { }
+            }
+
+            if (a &lt; 0) {
+                pen.set.weight(3)
+                pen.set.strokeColor('red')
+                if (!greater &amp;&amp; equal) pen.plot(func)
+                if (!greater &amp;&amp; !equal) {
+                    pen.plot(func)
+                    pen.set.strokeColor()
+                    pen.set.fillColor('white')
+                    pen.circle([0, 0], 4, [0, 360], true)
+                }
+                if (greater &amp;&amp; equal) {
+                    pen.set.fillColor('red')
+                    pen.circle([0, 0], 4, [0, 360], true)
+                }
+                if (greater &amp;&amp; !equal) { }
+            }
+        }
+        this.pen = pen;
+    }
+
 }
 
 
