@@ -9,6 +9,9 @@
 * @return {object} The random config object.
 * @example
 * RndComboConfig // may return {truth:[true,true,false], choices:["I and II","I only","I and III","I, II and III"],sections:[[1,1],[2,1],[3,0]]}
+* // truth: the true value of the 3 options.
+* // choices: for filling in the 4 answer choices, the 1st one is the correct answer.
+* // sections: the sections object for section versioning, version 0 is the false version, version 1 is the true version.
 */
 function RndComboConfig(): {
     truth: boolean[],
