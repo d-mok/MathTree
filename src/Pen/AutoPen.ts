@@ -479,7 +479,8 @@ class AutoPenCls {
      * @example
      * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:[4,37,5,53,3,90],labels:['A','B','C']})
      */
-    Triangle(vertices: number[][], triangle: number[], labels: (number | string)[], scale = 1) {
+    Triangle({ vertices, triangle, labels, scale = 1 }:
+        { vertices: number[][], triangle: number[], labels: (number | string)[], scale: number }) {
 
         let A = vertices[0]
         let B = vertices[1]
