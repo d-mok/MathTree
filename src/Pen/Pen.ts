@@ -97,10 +97,12 @@ class PenCls {
                 if (y < ymin) ymin = y;
                 if (y > ymax) ymax = y;
             }
-            xmin -= (xmax - xmin) * border;
-            xmax += (xmax - xmin) * border;
-            ymin -= (ymax - ymin) * border;
-            ymax += (ymax - ymin) * border;
+            let xBorder = (xmax - xmin) * border
+            let yBorder = (ymax - ymin) * border;
+            xmin -= xBorder;
+            xmax += xBorder;
+            ymin -= yBorder
+            ymax += yBorder
             this.range([xmin, xmax], [ymin, ymax]);
         }
     };
