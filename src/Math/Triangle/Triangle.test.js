@@ -33,3 +33,36 @@ test('TriangleFromVertex', () => {
     expect(T[5]).toBeCloseTo(61.3138524263);
 });
 
+
+
+test('SolveTriangle', () => {
+    let T = SolveTriangle(2, null, 2, null, 2, null);
+    expect(T[0]).toBeCloseTo(2);
+    expect(T[1]).toBeCloseTo(60);
+    expect(T[2]).toBeCloseTo(2);
+    expect(T[3]).toBeCloseTo(60);
+    expect(T[4]).toBeCloseTo(2);
+    expect(T[5]).toBeCloseTo(60);
+    T = SolveTriangle(3, 90, 4, null, null, null);
+    expect(T[0]).toBeCloseTo(3);
+    expect(T[1]).toBeCloseTo(90);
+    expect(T[2]).toBeCloseTo(4);
+    expect(T[3]).toBeCloseTo(36.86989765);
+    expect(T[4]).toBeCloseTo(5);
+    expect(T[5]).toBeCloseTo(53.13010235);
+    T = SolveTriangle(5, 30, null, 80, null, null);
+    expect(T[0]).toBeCloseTo(5);
+    expect(T[1]).toBeCloseTo(30);
+    expect(T[2]).toBeCloseTo(4.770944471);
+    expect(T[3]).toBeCloseTo(80);
+    expect(T[4]).toBeCloseTo(2.53856653);
+    expect(T[5]).toBeCloseTo(70);
+    T = SolveTriangle(6, 30, null, null, null, 40);
+    expect(T[0]).toBeCloseTo(6);
+    expect(T[1]).toBeCloseTo(30);
+    expect(T[2]).toBeCloseTo(4.10424172);
+    expect(T[3]).toBeCloseTo(110);
+    expect(T[4]).toBeCloseTo(3.192533317);
+    expect(T[5]).toBeCloseTo(40);
+});
+
