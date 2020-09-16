@@ -467,6 +467,111 @@ class AutoPenCls {
         this.pen = pen;
     }
 
+
+    /**
+     * Draw a triangle.
+     * @memberof AutoPen.AutoPen_Tool
+     * @param {number[][]} vertices - [A,B,C] an array of coordinates [x,y] of 3 vertices, must be anticlockwise.
+     * @param {number[]} triangle - The elements of triangle to print, [c,B,a,C,b,A]. If falsy, show no label.
+     * @param {(number|string)[]} labels - The labels of the vertices. If falsy, show no label.
+     * @param {number} [ratio=1] - ratio for pen.setup.size()
+     * @returns {void} The image is ready for export.
+     * @example
+     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:[4,37,5,53,3,90],labels:['A','B','C']})
+     */
+    Triangle(vertices: number[][], triangle: number[], labels: (number | string)[], scale = 1) {
+
+        let A = vertices[0]
+        let B = vertices[1]
+        let C = vertices[2]
+
+        let xmax = Math.max(A[0], B[0], C[0])
+        let xmin = Math.min(A[0], B[0], C[0])
+        let xmid = (xmax + xmin) / 2
+
+        let ymax = Math.max(A[1], B[1], C[1])
+        let ymin = Math.min(A[1], B[1], C[1])
+        let ymid = (ymax + ymin) / 2
+
+        let dx = xmax - xmin
+        let dy = ymax - ymin
+
+        let dmax = Math.max(dx, dy) * 0.8
+
+        let G = SumPoint(A, B, C)
+        G = ScalePoint(G, 1 / 3)
+
+        let T = triangle
+        let sideA = T[2]
+        let sideB = T[4]
+        let sideC = T[0]
+        let angleA: number | string = T[5]
+        let angleB: number | string = T[1]
+        let angleC: number | string = T[3]
+
+        let labelA = labels[0]
+        let labelB = labels[1]
+        let labelC = labels[2]
+
+        const pen = new Pen();
+        pen.setup.size(scale);
+        pen.setup.range([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax])
+        pen.polygon([A, B, C])
+
+        pen.set.textItalic(true)
+        if (labelA) pen.label(A, labelA.toString(), Inclination(G, A))
+        if (labelB) pen.label(B, labelB.toString(), Inclination(G, B))
+        if (labelC) pen.label(C, labelC.toString(), Inclination(G, C))
+        pen.set.textItalic()
+
+
+        if (sideC) {
+            if (typeof sideC === 'string') pen.set.textItalic(true)
+            pen.labelLine([A, B], sideC.toString())
+            pen.set.textItalic()
+        }
+
+        if (sideA) {
+            if (typeof sideA === 'string') pen.set.textItalic(true)
+            pen.labelLine([B, C], sideA.toString())
+            pen.set.textItalic()
+        }
+
+        if (sideB) {
+            if (typeof sideB === 'string') pen.set.textItalic(true)
+            pen.labelLine([C, A], sideB.toString())
+            pen.set.textItalic()
+        }
+
+
+        if (angleA) {
+            if (typeof angleA === 'string') pen.set.textItalic(true)
+            if (typeof angleA === 'number') angleA = angleA + '°'
+            pen.decorate.angle(B, A, C)
+            pen.labelAngle([B, A, C], angleA)
+            pen.set.textItalic()
+        }
+
+        if (angleB) {
+            if (typeof angleB === 'string') pen.set.textItalic(true)
+            if (typeof angleB === 'number') angleB = angleB + '°'
+            pen.decorate.angle(C, B, A)
+            pen.labelAngle([C, B, A], angleB)
+            pen.set.textItalic()
+        }
+
+        if (angleC) {
+            if (typeof angleC === 'string') pen.set.textItalic(true)
+            if (typeof angleC === 'number') angleC = angleC + '°'
+            pen.decorate.angle(A, C, B)
+            pen.labelAngle([A, C, B], angleC)
+            pen.set.textItalic()
+        }
+
+        pen.autoCrop()
+        this.pen = pen;
+    }
+
 }
 
 
