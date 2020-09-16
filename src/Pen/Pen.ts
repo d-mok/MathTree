@@ -667,11 +667,11 @@ class PenCls {
      * @param {number[][]} anglePoints - An array [A,O,B] for the coordinates of A,O,B.
      * @param {string} text - The string to write.
      * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-     * @param {number} [offsetPixel=25] - The pixel distance to offset from the position.
+     * @param {number} [offsetPixel=30] - The pixel distance to offset from the position.
      * @example
      * pen.labelAngle([[1,2],[0,0],[-2,1]],'x') // label the angle as 'x'
      */
-    labelAngle(anglePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = 25) {
+    labelAngle(anglePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = 30) {
         let [A, O, B] = anglePoints;
         let APixel = this.frame.toPix(A);
         let OPixel = this.frame.toPix(O);
