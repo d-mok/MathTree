@@ -195,4 +195,3 @@ function Intersection(A: number[], B: number[], C: number[], D: number[]): any[]
     return Crammer(-m1, 1, c1, -m2, 1, c2);
 }
 globalThis.Intersection = Intersection
-
