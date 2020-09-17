@@ -527,7 +527,7 @@ class AutoPenCls {
 
         let AB = [B[0] - A[0], B[1] - A[1]]
         let BC = [C[0] - B[0], C[1] - B[1]]
-        let anticlockwise = AB[0] * BC[1] - AB[1] * BC[0]
+        let anticlockwise = (AB[0] * BC[1] - AB[1] * BC[0]) > 0
 
         function writeSide(side: any, start: number[], end: number[]): void {
             if (side) {
