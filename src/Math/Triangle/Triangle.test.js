@@ -17,20 +17,27 @@ test('CosineLawAngle', () => {
 
 
 test('TriangleFromVertex', () => {
-    let T = TriangleFromVertex([0, 0], [4, 0], [0, 3]);
+    let T = TriangleFromVertex([0, 0], [4, 0], [0, 3], false);
     expect(T.sideC).toBeCloseTo(4);
     expect(T.angleB).toBeCloseTo(36.86989765);
     expect(T.sideA).toBeCloseTo(5);
     expect(T.angleC).toBeCloseTo(53.13013235);
     expect(T.sideB).toBeCloseTo(3);
     expect(T.angleA).toBeCloseTo(90);
-    T = TriangleFromVertex([-3, -2], [5, 1], [-2, 5]);
+    T = TriangleFromVertex([-3, -2], [5, 1], [-2, 5], false);
     expect(T.sideC).toBeCloseTo(8.5440037453);
     expect(T.angleB).toBeCloseTo(50.3009265165);
     expect(T.sideA).toBeCloseTo(8.0622577483);
     expect(T.angleC).toBeCloseTo(68.3852210572);
     expect(T.sideB).toBeCloseTo(7.0710678119);
     expect(T.angleA).toBeCloseTo(61.3138524263);
+    T = TriangleFromVertex([-3, -2], [5, 1], [-2, 5], true);
+    expect(T.sideC).toBe(9);
+    expect(T.angleB).toBe(50);
+    expect(T.sideA).toBe(8);
+    expect(T.angleC).toBe(68);
+    expect(T.sideB).toBe(7);
+    expect(T.angleA).toBe(61);
 });
 
 

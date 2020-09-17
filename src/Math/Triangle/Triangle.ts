@@ -45,12 +45,13 @@ globalThis.CosineLawAngle = CosineLawAngle
  * @param {number[]} A - Coordinates [x,y] of vertice A.
  * @param {number[]} B - Coordinates [x,y] of vertice B.
  * @param {number[]} C - Coordinates [x,y] of vertice C.
+ * @param {boolean} [fix=true] - Round all return values to integer.
  * @return {object} return { sideC, angleB, sideA, angleC, sideB, angleA }
  * @example
- * TriangleFromVertex([0,0],[4,0],[0,3]) 
+ * TriangleFromVertex([0,0],[4,0],[0,3],false) 
  * // return {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
  */
-function TriangleFromVertex(A: number[], B: number[], C: number[])
+function TriangleFromVertex(A: number[], B: number[], C: number[], fix = true)
     : { sideA: number, sideB: number, sideC: number, angleA: number, angleB: number, angleC: number } {
     let sideC = Distance(A, B)
     let sideA = Distance(B, C)
@@ -58,6 +59,14 @@ function TriangleFromVertex(A: number[], B: number[], C: number[])
     let angleC = CosineLawAngle(sideA, sideB, sideC)
     let angleA = CosineLawAngle(sideB, sideC, sideA)
     let angleB = CosineLawAngle(sideA, sideC, sideB)
+    if (fix) {
+        sideC = Fix(sideC)
+        sideA = Fix(sideA)
+        sideB = Fix(sideB)
+        angleC = Fix(angleC)
+        angleA = Fix(angleA)
+        angleB = Fix(angleB)
+    }
     return { sideC, angleB, sideA, angleC, sideB, angleA }
 }
 globalThis.TriangleFromVertex = TriangleFromVertex
