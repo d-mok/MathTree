@@ -531,7 +531,8 @@ class AutoPenCls {
 
         function writeSide(side: any, start: number[], end: number[]): void {
             if (side) {
-                if (typeof side === 'string') pen.set.textItalic(true)
+                if (typeof side === 'string' && !(/\d/.test(side)))
+                    pen.set.textItalic(true)
                 if (anticlockwise) {
                     pen.labelLine([start, end], side.toString())
                 } else {
