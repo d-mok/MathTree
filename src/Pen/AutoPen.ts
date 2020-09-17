@@ -474,12 +474,12 @@ class AutoPenCls {
      * @param {number[][]} vertices - [A,B,C] an array of coordinates [x,y] of 3 vertices, must be anticlockwise.
      * @param {any[]} triangle - The elements of triangle to print, [c,B,a,C,b,A]. If falsy, show no label.
      * @param {string[]} labels - The labels of the vertices. If falsy, show no label.
-     * @param {number} [ratio=1] - ratio for pen.setup.size()
+     * @param {number} [scale=0.8] - scale for pen.setup.size()
      * @returns {void} The image is ready for export.
      * @example
      * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:[4,37,5,53,3,90],labels:['A','B','C']})
      */
-    Triangle({ vertices, triangle = [null, null, null, null, null, null], labels = ['', '', ''], scale = 1 }:
+    Triangle({ vertices, triangle = [null, null, null, null, null, null], labels = ['', '', ''], scale = 0.8 }:
         { vertices: number[][], triangle: any[], labels: string[], scale: number }) {
 
         let A = vertices[0]
