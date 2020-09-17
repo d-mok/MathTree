@@ -132,19 +132,20 @@ globalThis.CosineLawAngle = CosineLawAngle
  * @param {number[]} A - Coordinates [x,y] of vertice A.
  * @param {number[]} B - Coordinates [x,y] of vertice B.
  * @param {number[]} C - Coordinates [x,y] of vertice C.
- * @return {number[]} return [c, angleB, a, angleC, b, angleA], in direction A --> B --> C.
+ * @return {object} return { sideC, angleB, sideA, angleC, sideB, angleA }
  * @example
- * TriangleFromVertex([0,0],[4,0],[0,3]) // return [4,36.86989765,5,53.13013235,3,90]
- * TriangleFromVertex([-3,-2],[5,1],[-2,5]) // return [8.5440037453,50.3009265165,8.0622577483,68.3852210572,7.0710678119,61.3138524263]
+ * TriangleFromVertex([0,0],[4,0],[0,3]) 
+ * // return {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
  */
-function TriangleFromVertex(A: number[], B: number[], C: number[]): number[] {
-    let c = Distance(A, B)
-    let a = Distance(B, C)
-    let b = Distance(C, A)
-    let angleC = CosineLawAngle(a, b, c)
-    let angleA = CosineLawAngle(b, c, a)
-    let angleB = CosineLawAngle(a, c, b)
-    return [c, angleB, a, angleC, b, angleA]
+function TriangleFromVertex(A: number[], B: number[], C: number[])
+    : { sideA: number, sideB: number, sideC: number, angleA: number, angleB: number, angleC: number } {
+    let sideC = Distance(A, B)
+    let sideA = Distance(B, C)
+    let sideB = Distance(C, A)
+    let angleC = CosineLawAngle(sideA, sideB, sideC)
+    let angleA = CosineLawAngle(sideB, sideC, sideA)
+    let angleB = CosineLawAngle(sideA, sideC, sideB)
+    return { sideC, angleB, sideA, angleC, sideB, angleA }
 }
 globalThis.TriangleFromVertex = TriangleFromVertex
 
@@ -152,28 +153,28 @@ globalThis.TriangleFromVertex = TriangleFromVertex
 /**
  * Solve a triangle.
  * @category Triangle
- * @param {number|null} a - side a
- * @param {number|null} B - angle B
- * @param {number|null} c - side c
- * @param {number|null} A - angle A
- * @param {number|null} b - side b
- * @param {number|null} C - angle C
- * @return {number[]} return [a, B, c, A, b, C] solved
+ * @param {object} triangle - { sideC, angleB, sideA, angleC, sideB, angleA } where unknown elements are null.
+ * @return {object} return the triangle object solved.
  * @example
- * SolveTriangle(2,null,2,null,2,null) // return [2,60,2,60,2,60]
- * SolveTriangle(3,90,4,null,null,null) // return [3,90,4,36.86989765,5,53.13010235]
+ * SolveTriangle(2,null,2,null,2,null) 
+ * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
+ * SolveTriangle(3,90,4,null,null,null)
+ * // {sideC:3, angleB:90, sideA:4, angleC:36.86989765, sideB:5, angleA:53.13010235}
  * SolveTriangle(5,30,null,80,null,null) // return [5,30,4.770944471,80,2.53856653,70]
- * SolveTriangle(6,30,null,null,null,40) // return [6,30,4.10424172,110,3.192533317,40]
+ * // {sideC:5, angleB:30, sideA:4.770944471, angleC:80, sideB:2.53856653, angleA:70}
+ * SolveTriangle(6,30,null,null,null,40)
+ * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
  */
 function SolveTriangle(
-    a: number | null,
-    B: number | null,
-    c: number | null,
-    A: number | null,
-    b: number | null,
-    C: number | null
-): number[] {
+    { sideA = null, sideB = null, sideC = null, angleA = null, angleB = null, angleC = null }: { sideA: number | null, sideB: number | null, sideC: number | null, angleA: number | null, angleB: number | null, angleC: number | null }
+) {
 
+    let a = sideA
+    let b = sideB
+    let c = sideC
+    let A = angleA
+    let B = angleB
+    let C = angleC
 
     function angleSum() {
         if (A === null &amp;&amp; B !== null &amp;&amp; C !== null) A = 180 - B - C
@@ -206,7 +207,9 @@ function SolveTriangle(
     }
 
     for (let i = 0; i &lt; 10; i++) {
-        if (a !== null &amp;&amp; b !== null &amp;&amp; c !== null &amp;&amp; A !== null &amp;&amp; B !== null &amp;&amp; C !== null) { return [a, B, c, A, b, C] }
+        if (a !== null &amp;&amp; b !== null &amp;&amp; c !== null &amp;&amp; A !== null &amp;&amp; B !== null &amp;&amp; C !== null) {
+            return { sideA: a, sideB: b, sideC: c, angleA: A, angleB: B, angleC: C }
+        }
         angleSum()
         SSS()
         SAS()

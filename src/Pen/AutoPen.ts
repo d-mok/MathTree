@@ -472,15 +472,15 @@ class AutoPenCls {
      * Draw a triangle.
      * @memberof AutoPen.AutoPen_Tool
      * @param {number[][]} vertices - [A,B,C] an array of coordinates [x,y] of 3 vertices, must be anticlockwise.
-     * @param {any[]} triangle - The elements of triangle to print, [c,B,a,C,b,A]. If falsy, show no label.
+     * @param {object} triangle - The elements of triangle to print, {sideC,angleB,sideA,angleC,sideB,angleA}. If falsy, show no label.
      * @param {string[]} labels - The labels of the vertices. If falsy, show no label.
      * @param {number} [scale=0.8] - scale for pen.setup.size()
      * @returns {void} The image is ready for export.
      * @example
-     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:[4,37,5,53,3,90],labels:['A','B','C']})
+     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C']})
      */
-    Triangle({ vertices, triangle = [null, null, null, null, null, null], labels = ['', '', ''], scale = 0.8 }:
-        { vertices: number[][], triangle: any[], labels: string[], scale: number }) {
+    Triangle({ vertices, triangle = {}, labels = ['', '', ''], scale = 0.8 }:
+        { vertices: number[][], triangle: any, labels: string[], scale: number }) {
 
         let A = vertices[0]
         let B = vertices[1]
@@ -503,12 +503,12 @@ class AutoPenCls {
         G = ScalePoint(G, 1 / 3)
 
         let T = triangle
-        let sideA = T[2]
-        let sideB = T[4]
-        let sideC = T[0]
-        let angleA = T[5]
-        let angleB = T[1]
-        let angleC = T[3]
+        let sideA = T.sideA
+        let sideB = T.sideB
+        let sideC = T.sideC
+        let angleA = T.angleA
+        let angleB = T.angleB
+        let angleC = T.angleC
 
         let labelA = labels[0]
         let labelB = labels[1]

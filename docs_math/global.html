@@ -19235,7 +19235,7 @@
         
         <span class="code-name">
             
-                SolveTriangle<span class="signature">(a, B, c, A, b, C)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span>
+                SolveTriangle<span class="signature">(triangle)</span><span class="type-signature"> &rarr; {object}</span>
             
         </span>
     </h4>
@@ -19282,16 +19282,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>a</code></td>
+      <td class="name"><code>triangle</code></td>
   
 
   <td class="type">
   
       
-<span class="param-type">number</span>
-|
-
-<span class="param-type">null</span>
+<span class="param-type">object</span>
 
 
   
@@ -19301,147 +19298,7 @@
 
   
 
-  <td class="description last">side a</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>B</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">number</span>
-|
-
-<span class="param-type">null</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">angle B</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>c</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">number</span>
-|
-
-<span class="param-type">null</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">side c</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>A</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">number</span>
-|
-
-<span class="param-type">null</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">angle A</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>b</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">number</span>
-|
-
-<span class="param-type">null</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">side b</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>C</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">number</span>
-|
-
-<span class="param-type">null</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">angle C</td>
+  <td class="description last">{ sideC, angleB, sideA, angleC, sideB, angleA } where unknown elements are null.</td>
 </tr>
 
 
@@ -19489,7 +19346,7 @@
         <p class="tag-source">
             <a href="Triangle_Triangle.ts.html" class="button">View Source</a>
             <span>
-                <a href="Triangle_Triangle.ts.html">Triangle/Triangle.ts</a>, <a href="Triangle_Triangle.ts.html#line72">line 72</a>
+                <a href="Triangle_Triangle.ts.html">Triangle/Triangle.ts</a>, <a href="Triangle_Triangle.ts.html#line71">line 71</a>
             </span>
         </p>
     
@@ -19520,13 +19377,13 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'>return [a, B, c, A, b, C] solved</div>
+    <div class='param-desc column is-7'>return the triangle object solved.</div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">Array.&lt;number></span>
+<span class="param-type">object</span>
 
 
     </div>
@@ -19543,7 +19400,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>SolveTriangle(2,null,2,null,2,null) // return [2,60,2,60,2,60]SolveTriangle(3,90,4,null,null,null) // return [3,90,4,36.86989765,5,53.13010235]SolveTriangle(5,30,null,80,null,null) // return [5,30,4.770944471,80,2.53856653,70]SolveTriangle(6,30,null,null,null,40) // return [6,30,4.10424172,110,3.192533317,40]</code></pre>
+        <pre class="prettyprint"><code>SolveTriangle(2,null,2,null,2,null)// {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}SolveTriangle(3,90,4,null,null,null)// {sideC:3, angleB:90, sideA:4, angleC:36.86989765, sideB:5, angleA:53.13010235}SolveTriangle(5,30,null,80,null,null) // return [5,30,4.770944471,80,2.53856653,70]// {sideC:5, angleB:30, sideA:4.770944471, angleC:80, sideB:2.53856653, angleA:70}SolveTriangle(6,30,null,null,null,40)// {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}</code></pre>
     
 
 
@@ -20359,7 +20216,7 @@
         
         <span class="code-name">
             
-                TriangleFromVertex<span class="signature">(A, B, C)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span>
+                TriangleFromVertex<span class="signature">(A, B, C)</span><span class="type-signature"> &rarr; {object}</span>
             
         </span>
     </h4>
@@ -20551,13 +20408,13 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'>return [c, angleB, a, angleC, b, angleA], in direction A --> B --> C.</div>
+    <div class='param-desc column is-7'>return { sideC, angleB, sideA, angleC, sideB, angleA }</div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">Array.&lt;number></span>
+<span class="param-type">object</span>
 
 
     </div>
@@ -20574,7 +20431,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>TriangleFromVertex([0,0],[4,0],[0,3]) // return [4,36.86989765,5,53.13013235,3,90]TriangleFromVertex([-3,-2],[5,1],[-2,5]) // return [8.5440037453,50.3009265165,8.0622577483,68.3852210572,7.0710678119,61.3138524263]</code></pre>
+        <pre class="prettyprint"><code>TriangleFromVertex([0,0],[4,0],[0,3])// return {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}</code></pre>
     
 
 
