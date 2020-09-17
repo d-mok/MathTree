@@ -525,49 +525,44 @@ class AutoPenCls {
         if (labelC) pen.label(C, labelC.toString(), Inclination(G, C))
         pen.set.textItalic()
 
+        let AB = [B[0] - A[0], B[1] - A[1]]
+        let BC = [C[0] - B[0], C[1] - B[1]]
+        let anticlockwise = AB[0] * BC[1] - AB[1] * BC[0]
 
-        if (sideC) {
-            if (typeof sideC === 'string') pen.set.textItalic(true)
-            pen.labelLine([A, B], sideC.toString())
-            pen.set.textItalic()
+        function writeSide(side: any, start: number[], end: number[]): void {
+            if (side) {
+                if (typeof side === 'string') pen.set.textItalic(true)
+                if (anticlockwise) {
+                    pen.labelLine([start, end], side.toString())
+                } else {
+                    pen.labelLine([end, start], side.toString())
+                }
+                pen.set.textItalic()
+            }
         }
 
-        if (sideA) {
-            if (typeof sideA === 'string') pen.set.textItalic(true)
-            pen.labelLine([B, C], sideA.toString())
-            pen.set.textItalic()
+        writeSide(sideC, A, B)
+        writeSide(sideA, B, C)
+        writeSide(sideB, C, A)
+
+        function writeAngle(angle: any, P: number[], O: number[], Q: number[]): void {
+            if (angle) {
+                if (typeof angle === 'string') pen.set.textItalic(true)
+                if (typeof angle === 'number') angle = angle + '°'
+                if (anticlockwise) {
+                    pen.decorate.angle(P, O, Q)
+                    pen.labelAngle([P, O, Q], angle)
+                } else {
+                    pen.decorate.angle(Q, O, P)
+                    pen.labelAngle([Q, O, P], angle)
+                }
+                pen.set.textItalic()
+            }
         }
 
-        if (sideB) {
-            if (typeof sideB === 'string') pen.set.textItalic(true)
-            pen.labelLine([C, A], sideB.toString())
-            pen.set.textItalic()
-        }
-
-
-        if (angleA) {
-            if (typeof angleA === 'string') pen.set.textItalic(true)
-            if (typeof angleA === 'number') angleA = angleA + '°'
-            pen.decorate.angle(B, A, C)
-            pen.labelAngle([B, A, C], angleA)
-            pen.set.textItalic()
-        }
-
-        if (angleB) {
-            if (typeof angleB === 'string') pen.set.textItalic(true)
-            if (typeof angleB === 'number') angleB = angleB + '°'
-            pen.decorate.angle(C, B, A)
-            pen.labelAngle([C, B, A], angleB)
-            pen.set.textItalic()
-        }
-
-        if (angleC) {
-            if (typeof angleC === 'string') pen.set.textItalic(true)
-            if (typeof angleC === 'number') angleC = angleC + '°'
-            pen.decorate.angle(A, C, B)
-            pen.labelAngle([A, C, B], angleC)
-            pen.set.textItalic()
-        }
+        writeAngle(angleA, B, A, C)
+        writeAngle(angleB, C, B, A)
+        writeAngle(angleC, A, C, B)
 
         pen.autoCrop()
         this.pen = pen;
