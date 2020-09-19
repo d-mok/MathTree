@@ -66,7 +66,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.straight.html">straight</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.Graph.html">Graph</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.straight.html">straight</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
                 
             </nav>
         </div>
@@ -331,7 +331,7 @@
   
       <td class="default">
       
-          1
+          0.8
       
       </td>
   
@@ -372,7 +372,7 @@
   
       <td class="default">
       
-          1
+          0.5
       
       </td>
   
@@ -1001,7 +1001,7 @@
         
         <span class="code-name">
             
-                AutoPenCls#Triangle<span class="signature">(vertices, triangle, labels, ratio<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span>
+                AutoPenCls#Triangle<span class="signature">(vertices, triangle, labels, scale<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span>
             
         </span>
     </h4>
@@ -1095,7 +1095,7 @@
   <td class="type">
   
       
-<span class="param-type">Array.&lt;any></span>
+<span class="param-type">object</span>
 
 
   
@@ -1117,7 +1117,7 @@
       </td>
   
 
-  <td class="description last">The elements of triangle to print, [c,B,a,C,b,A]. If falsy, show no label.</td>
+  <td class="description last">The elements of triangle to print, {sideC,angleB,sideA,angleC,sideB,angleA}. If falsy, show no label.</td>
 </tr>
 
 
@@ -1163,7 +1163,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>ratio</code></td>
+      <td class="name"><code>scale</code></td>
   
 
   <td class="type">
@@ -1190,12 +1190,12 @@
   
       <td class="default">
       
-          1
+          0.8
       
       </td>
   
 
-  <td class="description last">ratio for pen.setup.size()</td>
+  <td class="description last">scale for pen.setup.size()</td>
 </tr>
 
 
@@ -1297,7 +1297,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:[4,37,5,53,3,90],labels:['A','B','C']})</code></pre>
+        <pre class="prettyprint"><code>autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C']})</code></pre>
     
 
 

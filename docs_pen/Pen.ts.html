@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.straight.html">straight</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.Graph.html">Graph</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.straight.html">straight</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
                 
             </nav>
         </div>
@@ -386,6 +386,35 @@ class PenCls {
         }
         this.ctx.stroke();
     }
+
+
+
+
+    /**
+     * Drawing graph of functions.
+     * @namespace Graph
+     * @memberof Pen
+     */
+
+    graph = {
+        pen: this,
+        /**
+         * Draw a circle (x-h)^2+(y-k)^2 = r^2.
+         * @memberof Pen.Graph
+         * @param {number[]} center - The center coordinates [h,k].
+         * @param {number} radius - The radius.
+         * @example
+         * pen.graph.circle([1,2],3) // draw (x-1)^2+(y-2)^2 = 9.
+         */
+        circle(center: number[], radius: number) {
+            const [h, k] = center
+            this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
+        }
+    };
+
+
+
+
 
     /**
      * Draw a point.

@@ -317,7 +317,7 @@ class PenCls {
          * @param {number[]} center - The center coordinates [h,k].
          * @param {number} radius - The radius.
          * @example
-         * pen.straight.line(2,1) // draw the line y=2x+1
+         * pen.graph.circle([1,2],3) // draw (x-1)^2+(y-2)^2 = 9.
          */
         circle(center: number[], radius: number) {
             const [h, k] = center

@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.straight.html">straight</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.Graph.html">Graph</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.straight.html">straight</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
                 
             </nav>
         </div>
@@ -182,13 +182,13 @@ class AutoPenCls {
      * @memberof AutoPen.AutoPen_Tool
      * @param {Array} items - Represent the inequalities.
      * @param {Array} ticks - Represent the tick or cross for each region.
-     * @param {number} [scale=1] - scale for pen.setup.size()
-     * @param {number} [ratio=1] - ratio for pen.setup.size()
+     * @param {number} [scale=0.8] - scale for pen.setup.size()
+     * @param {number} [ratio=0.5] - ratio for pen.setup.size()
      * @returns {void} The image is ready for export.
      * @example
      * autoPen.Inequalities({items:[{ position: 0.3, sign: "\\ge", num: 5,vertical:true },{ position: 0.7, sign: "&lt;", num: "k" }], ticks:[true,true,false]})
      */
-    Inequalities({ items = [], ticks = [], scale = 1, ratio = 1 }: { items: any[], ticks: boolean[], scale: number, ratio: number }) {
+    Inequalities({ items = [], ticks = [], scale = 0.8, ratio = 0.5 }: { items: any[], ticks: boolean[], scale: number, ratio: number }) {
 
         const width = 5;
         const height = 2;
@@ -559,15 +559,15 @@ class AutoPenCls {
      * Draw a triangle.
      * @memberof AutoPen.AutoPen_Tool
      * @param {number[][]} vertices - [A,B,C] an array of coordinates [x,y] of 3 vertices, must be anticlockwise.
-     * @param {any[]} triangle - The elements of triangle to print, [c,B,a,C,b,A]. If falsy, show no label.
+     * @param {object} triangle - The elements of triangle to print, {sideC,angleB,sideA,angleC,sideB,angleA}. If falsy, show no label.
      * @param {string[]} labels - The labels of the vertices. If falsy, show no label.
-     * @param {number} [ratio=1] - ratio for pen.setup.size()
+     * @param {number} [scale=0.8] - scale for pen.setup.size()
      * @returns {void} The image is ready for export.
      * @example
-     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:[4,37,5,53,3,90],labels:['A','B','C']})
+     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C']})
      */
-    Triangle({ vertices, triangle, labels, scale = 1 }:
-        { vertices: number[][], triangle: any[], labels: string[], scale: number }) {
+    Triangle({ vertices, triangle = {}, labels = ['', '', ''], scale = 0.8 }:
+        { vertices: number[][], triangle: any, labels: string[], scale: number }) {
 
         let A = vertices[0]
         let B = vertices[1]
@@ -590,12 +590,12 @@ class AutoPenCls {
         G = ScalePoint(G, 1 / 3)
 
         let T = triangle
-        let sideA = T[2]
-        let sideB = T[4]
-        let sideC = T[0]
-        let angleA = T[5]
-        let angleB = T[1]
-        let angleC = T[3]
+        let sideA = T.sideA
+        let sideB = T.sideB
+        let sideC = T.sideC
+        let angleA = T.angleA
+        let angleB = T.angleB
+        let angleC = T.angleC
 
         let labelA = labels[0]
         let labelB = labels[1]
@@ -612,49 +612,45 @@ class AutoPenCls {
         if (labelC) pen.label(C, labelC.toString(), Inclination(G, C))
         pen.set.textItalic()
 
+        let AB = [B[0] - A[0], B[1] - A[1]]
+        let BC = [C[0] - B[0], C[1] - B[1]]
+        let anticlockwise = (AB[0] * BC[1] - AB[1] * BC[0]) > 0
 
-        if (sideC) {
-            if (typeof sideC === 'string') pen.set.textItalic(true)
-            pen.labelLine([A, B], sideC.toString())
-            pen.set.textItalic()
+        function writeSide(side: any, start: number[], end: number[]): void {
+            if (side) {
+                if (typeof side === 'string' &amp;&amp; !(/\d/.test(side)))
+                    pen.set.textItalic(true)
+                if (anticlockwise) {
+                    pen.labelLine([start, end], side.toString())
+                } else {
+                    pen.labelLine([end, start], side.toString())
+                }
+                pen.set.textItalic()
+            }
         }
 
-        if (sideA) {
-            if (typeof sideA === 'string') pen.set.textItalic(true)
-            pen.labelLine([B, C], sideA.toString())
-            pen.set.textItalic()
+        writeSide(sideC, A, B)
+        writeSide(sideA, B, C)
+        writeSide(sideB, C, A)
+
+        function writeAngle(angle: any, P: number[], O: number[], Q: number[]): void {
+            if (angle) {
+                if (typeof angle === 'string') pen.set.textItalic(true)
+                if (typeof angle === 'number') angle = angle + '°'
+                if (anticlockwise) {
+                    pen.decorate.angle(P, O, Q)
+                    pen.labelAngle([P, O, Q], angle)
+                } else {
+                    pen.decorate.angle(Q, O, P)
+                    pen.labelAngle([Q, O, P], angle)
+                }
+                pen.set.textItalic()
+            }
         }
 
-        if (sideB) {
-            if (typeof sideB === 'string') pen.set.textItalic(true)
-            pen.labelLine([C, A], sideB.toString())
-            pen.set.textItalic()
-        }
-
-
-        if (angleA) {
-            if (typeof angleA === 'string') pen.set.textItalic(true)
-            if (typeof angleA === 'number') angleA = angleA + '°'
-            pen.decorate.angle(B, A, C)
-            pen.labelAngle([B, A, C], angleA)
-            pen.set.textItalic()
-        }
-
-        if (angleB) {
-            if (typeof angleB === 'string') pen.set.textItalic(true)
-            if (typeof angleB === 'number') angleB = angleB + '°'
-            pen.decorate.angle(C, B, A)
-            pen.labelAngle([C, B, A], angleB)
-            pen.set.textItalic()
-        }
-
-        if (angleC) {
-            if (typeof angleC === 'string') pen.set.textItalic(true)
-            if (typeof angleC === 'number') angleC = angleC + '°'
-            pen.decorate.angle(A, C, B)
-            pen.labelAngle([A, C, B], angleC)
-            pen.set.textItalic()
-        }
+        writeAngle(angleA, B, A, C)
+        writeAngle(angleB, C, B, A)
+        writeAngle(angleC, A, C, B)
 
         pen.autoCrop()
         this.pen = pen;
