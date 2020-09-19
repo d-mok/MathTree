@@ -300,6 +300,35 @@ class PenCls {
         this.ctx.stroke();
     }
 
+
+
+
+    /**
+     * Drawing graph of functions.
+     * @namespace Graph
+     * @memberof Pen
+     */
+
+    graph = {
+        pen: this,
+        /**
+         * Draw a circle (x-h)^2+(y-k)^2 = r^2.
+         * @memberof Pen.Graph
+         * @param {number[]} center - The center coordinates [h,k].
+         * @param {number} radius - The radius.
+         * @example
+         * pen.straight.line(2,1) // draw the line y=2x+1
+         */
+        circle(center: number[], radius: number) {
+            const [h, k] = center
+            this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
+        }
+    };
+
+
+
+
+
     /**
      * Draw a point.
      * @memberof Pen.draw
