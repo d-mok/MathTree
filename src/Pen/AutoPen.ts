@@ -95,13 +95,13 @@ class AutoPenCls {
      * @memberof AutoPen.AutoPen_Tool
      * @param {Array} items - Represent the inequalities.
      * @param {Array} ticks - Represent the tick or cross for each region.
-     * @param {number} [scale=1] - scale for pen.setup.size()
-     * @param {number} [ratio=1] - ratio for pen.setup.size()
+     * @param {number} [scale=0.8] - scale for pen.setup.size()
+     * @param {number} [ratio=0.5] - ratio for pen.setup.size()
      * @returns {void} The image is ready for export.
      * @example
      * autoPen.Inequalities({items:[{ position: 0.3, sign: "\\ge", num: 5,vertical:true },{ position: 0.7, sign: "<", num: "k" }], ticks:[true,true,false]})
      */
-    Inequalities({ items = [], ticks = [], scale = 1, ratio = 1 }: { items: any[], ticks: boolean[], scale: number, ratio: number }) {
+    Inequalities({ items = [], ticks = [], scale = 0.8, ratio = 0.5 }: { items: any[], ticks: boolean[], scale: number, ratio: number }) {
 
         const width = 5;
         const height = 2;
