@@ -478,7 +478,7 @@ class AutoPenCls {
      * @param {number} [scale=0.8] - scale for pen.setup.size()
      * @returns {void} The image is ready for export.
      * @example
-     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C'],heights = [false, false, false]})
+     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C'],heights :[false, false, false]})
      */
     Triangle({ vertices, triangle = {}, labels = ['', '', ''], heights = [false, false, false], scale = 0.8 }:
         { vertices: number[][], triangle: any, labels: string[], heights: boolean[], scale: number }) {
@@ -570,7 +570,7 @@ class AutoPenCls {
             let F = PerpendicularFoot(base[0], base[1], vertex)
             pen.set.dash([10, 10])
             pen.line(vertex, F)
-            pen.line(vertex, base[0])
+            pen.line(F, base[0])
             pen.set.dash()
             pen.decorate.rightAngle(vertex, F, base[0])
         }
