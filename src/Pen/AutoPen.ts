@@ -518,17 +518,6 @@ class AutoPenCls {
         const pen = new Pen();
         pen.setup.size(scale);
         pen.setup.range([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax])
-        pen.polygon([A, B, C])
-
-        pen.set.textItalic(true)
-        if (labelA) pen.label(A, labelA.toString(), Inclination(G, A))
-        if (labelB) pen.label(B, labelB.toString(), Inclination(G, B))
-        if (labelC) pen.label(C, labelC.toString(), Inclination(G, C))
-        pen.set.textItalic()
-
-        let AB = [B[0] - A[0], B[1] - A[1]]
-        let BC = [C[0] - B[0], C[1] - B[1]]
-        let anticlockwise = (AB[0] * BC[1] - AB[1] * BC[0]) > 0
 
 
         function drawHeight(vertex: number[], base: number[][]) {
@@ -542,7 +531,6 @@ class AutoPenCls {
                 pen.line(F, base[0])
             }
             pen.set.dash()
-            pen.line(vertex, F)
             if (F[0] === base[0][0] && F[1] === base[0][1]) {
                 pen.decorate.rightAngle(vertex, F, base[1])
             } else {
@@ -555,6 +543,22 @@ class AutoPenCls {
         if (heights[0]) drawHeight(A, [B, C])
         if (heights[1]) drawHeight(B, [C, A])
         if (heights[2]) drawHeight(C, [A, B])
+
+
+        pen.polygon([A, B, C])
+
+        pen.set.textItalic(true)
+        if (labelA) pen.label(A, labelA.toString(), Inclination(G, A))
+        if (labelB) pen.label(B, labelB.toString(), Inclination(G, B))
+        if (labelC) pen.label(C, labelC.toString(), Inclination(G, C))
+        pen.set.textItalic()
+
+        let AB = [B[0] - A[0], B[1] - A[1]]
+        let BC = [C[0] - B[0], C[1] - B[1]]
+        let anticlockwise = (AB[0] * BC[1] - AB[1] * BC[0]) > 0
+
+
+
 
 
         function writeSide(side: any, start: number[], end: number[]): void {
