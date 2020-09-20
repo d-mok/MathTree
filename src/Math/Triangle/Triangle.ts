@@ -38,6 +38,23 @@ function CosineLawAngle(a: number, b: number, c: number): number {
 globalThis.CosineLawAngle = CosineLawAngle
 
 
+/**
+ * Find area by Heron's formula.
+ * @category Triangle
+ * @param {number} a - Side length a
+ * @param {number} b - Side length b
+ * @param {number} c - Side length c
+ * @return {number} Area
+ * @example
+ * Heron(3,4,5) // return 6
+ * Heron(1,1,1) // return 0.433012701
+ * Heron(7,8,9) // return 26.83281573
+ */
+function Heron(a: number, b: number, c: number): number {
+    let s = (a + b + c) / 2
+    return (s * (s - a) * (s - b) * (s - c)) ** 0.5
+}
+globalThis.Heron = Heron
 
 /**
  * Return the 6 elements of a triangle given vertice.

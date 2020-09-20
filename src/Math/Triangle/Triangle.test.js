@@ -15,6 +15,13 @@ test('CosineLawAngle', () => {
 });
 
 
+test('Heron', () => {
+    expect(Heron(3, 4, 5)).toBeCloseTo(6);
+    expect(Heron(1, 1, 1)).toBeCloseTo(0.433012701);
+    expect(Heron(7, 8, 9)).toBeCloseTo(26.83281573);
+});
+
+
 
 test('TriangleFromVertex', () => {
     let T = TriangleFromVertex([0, 0], [4, 0], [0, 3], false);
