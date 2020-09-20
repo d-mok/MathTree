@@ -78,13 +78,13 @@ globalThis.TriangleFromVertex = TriangleFromVertex
  * @param {object} triangle - { sideC, angleB, sideA, angleC, sideB, angleA } where unknown elements are null.
  * @return {object} return the triangle object solved.
  * @example
- * SolveTriangle(2,null,2,null,2,null) 
+ * SolveTriangle({sideC:2, sideA:2, sideB:2}) 
  * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
- * SolveTriangle(3,90,4,null,null,null)
+ * SolveTriangle({sideC:3, angleB:90, sideA:4})
  * // {sideC:3, angleB:90, sideA:4, angleC:36.86989765, sideB:5, angleA:53.13010235}
- * SolveTriangle(5,30,null,80,null,null) // return [5,30,4.770944471,80,2.53856653,70]
+ * SolveTriangle({sideC:5, angleB:30, angleC:80})
  * // {sideC:5, angleB:30, sideA:4.770944471, angleC:80, sideB:2.53856653, angleA:70}
- * SolveTriangle(6,30,null,null,null,40)
+ * SolveTriangle({sideC:6, angleB:30, angleA:40})
  * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
  */
 function SolveTriangle(
