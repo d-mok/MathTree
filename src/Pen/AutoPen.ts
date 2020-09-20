@@ -474,13 +474,14 @@ class AutoPenCls {
      * @param {number[][]} vertices - [A,B,C] an array of coordinates [x,y] of 3 vertices, must be anticlockwise.
      * @param {object} triangle - The elements of triangle to print, {sideC,angleB,sideA,angleC,sideB,angleA}. If falsy, show no label.
      * @param {string[]} labels - The labels of the vertices. If falsy, show no label.
+     * @param {boolean[]} heights - Whether to draw the height.
      * @param {number} [scale=0.8] - scale for pen.setup.size()
      * @returns {void} The image is ready for export.
      * @example
-     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C']})
+     * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C'],heights = [false, false, false]})
      */
-    Triangle({ vertices, triangle = {}, labels = ['', '', ''], scale = 0.8 }:
-        { vertices: number[][], triangle: any, labels: string[], scale: number }) {
+    Triangle({ vertices, triangle = {}, labels = ['', '', ''], heights = [false, false, false], scale = 0.8 }:
+        { vertices: number[][], triangle: any, labels: string[], heights: boolean[], scale: number }) {
 
         let A = vertices[0]
         let B = vertices[1]
@@ -564,6 +565,19 @@ class AutoPenCls {
         writeAngle(angleA, B, A, C)
         writeAngle(angleB, C, B, A)
         writeAngle(angleC, A, C, B)
+
+        function drawHeight(vertex: number[], base: number[][]) {
+            let F = PerpendicularFoot(base[0], base[1], vertex)
+            pen.set.dash([10, 10])
+            pen.line(vertex, F)
+            pen.line(vertex, base[0])
+            pen.set.dash()
+            pen.decorate.rightAngle(vertex, F, base[0])
+        }
+
+        if (heights[0]) drawHeight(A, [B, C])
+        if (heights[1]) drawHeight(B, [C, A])
+        if (heights[2]) drawHeight(C, [A, B])
 
         pen.autoCrop()
         this.pen = pen;
