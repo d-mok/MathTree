@@ -274,12 +274,20 @@ globalThis.PerpendicularFoot = PerpendicularFoot
  * Intersection([0,0],[2,2],[2,0],[0,2]) // return [1,1]
  */
 function Intersection(A: number[], B: number[], C: number[], D: number[]): any[] {
-    let m1 = Slope(A, B);
-    let c1 = A[1] - A[0] * m1;
-    let m2 = Slope(C, D);
-    let c2 = C[1] - C[0] * m2;
-    if (m1 === m2) return [undefined, undefined];
-    return Crammer(-m1, 1, c1, -m2, 1, c2);
+    // let m1 = Slope(A, B);
+    // let c1 = A[1] - A[0] * m1;
+    // let m2 = Slope(C, D);
+    // let c2 = C[1] - C[0] * m2;
+    // if (m1 === m2) return [undefined, undefined];
+    // return Crammer(-m1, 1, c1, -m2, 1, c2);
+    return Crammer(
+        B[1]-A[1],
+        A[0]-B[0],
+        A[0]*B[1]-B[0]*A[1],
+        D[1]-C[1],
+        C[0]-D[0],
+        C[0]*D[1]-D[0]*C[1],
+    )
 }
 globalThis.Intersection = Intersection
 </code></pre>

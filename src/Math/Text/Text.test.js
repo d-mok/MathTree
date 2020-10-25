@@ -35,5 +35,6 @@ test('Dfrac', () => {
     expect(Dfrac(6, -2)).toBe('-3');
     expect(Dfrac(0, 2)).toBe('0');
     expect(Dfrac(5, 0)).toBe(undefined);
+    expect(Dfrac(6, -4,false)).toBe('-\\dfrac{3}{2}');
 });
 

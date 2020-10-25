@@ -167,6 +167,7 @@ globalThis.IneqSign = IneqSign
 * @category Text
 * @param {number} numerator - numerator p.
 * @param {number} denominator - denominator q.
+* @param {boolean} [upSign=true] - put -ve sign on numerator instead of the front.
 * @return {string} latex like \dfrac{1}{2}.
 * @example
 * Dfrac(1,2) // return '\\dfrac{1}{2}'
@@ -176,7 +177,7 @@ globalThis.IneqSign = IneqSign
 * Dfrac(0,2) // return '0'
 * Dfrac(5,0) // return undefined
 */
-function Dfrac(numerator: number, denominator: number): string | undefined {
+function Dfrac(numerator: number, denominator: number,upSign:boolean=true): string | undefined {
     let p = numerator
     let q = denominator
     if (q === 0) return undefined
@@ -186,7 +187,16 @@ function Dfrac(numerator: number, denominator: number): string | undefined {
     q = Math.abs(q);
     [p, q] = SimpRatio(p, q)
     if (q === 1) return p.toString()
-    return '\\dfrac{' + p + '}{' + q + '}'
+    if(upSign){
+        return '\\dfrac{' + p + '}{' + q + '}'
+    }else{
+        if(p>0){
+            return  '\\dfrac{' + p + '}{' + q + '}'
+        }else{
+            return '-\\dfrac{' + Math.abs(p) + '}{' + q + '}'
+        }
+    }
+    
 }
 globalThis.Dfrac = Dfrac</code></pre>
         </article>
