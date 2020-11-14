@@ -18,3 +18,14 @@ test('Max', () => {
     expect(Max(1, 1)).toBe(1);
     expect(Max(0.1, 0.2)).toBe(0.2);
 });
+
+
+
+test('Sort', () => {
+    expect(Sort(2,3,1)).toEqual([1,2,3]);
+    expect(Sort(2,-3,1)).toEqual([-3,1,2]);
+    expect(Sort(4.5,3,2,1)).toEqual([1,2,3,4.5]);
+    expect(Sort(3,2,2,0,1)).toEqual([0,1,2,2,3]);
+});
+
+
