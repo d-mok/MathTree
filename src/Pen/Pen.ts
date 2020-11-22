@@ -68,7 +68,7 @@ class PenCls {
          * pen.setup.resolution(0.1,0.2) // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
          */
         resolution(xPPI=0.1,yPPI=-1){
-            if(yPPI=-1) yPPI=xPPI
+            if(yPPI===-1) yPPI=xPPI
             let xRange =  this.pen.frame.xmax- this.pen.frame.xmin
             let yRange = this.pen.frame.ymax- this.pen.frame.ymin
             let xScale = xRange*xPPI
