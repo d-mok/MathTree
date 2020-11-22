@@ -1001,7 +1001,7 @@
         
         <span class="code-name">
             
-                AutoPenCls#Triangle<span class="signature">(vertices, triangle, labels, scale<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span>
+                AutoPenCls#Triangle<span class="signature">(vertices, triangle, labels, heights, scale<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span>
             
         </span>
     </h4>
@@ -1163,6 +1163,43 @@
             
 <tr class="deep-level-0">
   
+      <td class="name"><code>heights</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Array.&lt;boolean></span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">Whether to draw the height.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
       <td class="name"><code>scale</code></td>
   
 
@@ -1243,7 +1280,7 @@
         <p class="tag-source">
             <a href="AutoPen.ts.html" class="button">View Source</a>
             <span>
-                <a href="AutoPen.ts.html">AutoPen.ts</a>, <a href="AutoPen.ts.html#line460">line 460</a>
+                <a href="AutoPen.ts.html">AutoPen.ts</a>, <a href="AutoPen.ts.html#line461">line 461</a>
             </span>
         </p>
     
@@ -1297,7 +1334,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C']})</code></pre>
+        <pre class="prettyprint"><code>autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C'],heights :[false, false, false]})</code></pre>
     
 
 

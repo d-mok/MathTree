@@ -87,3 +87,14 @@ test('Intersection', () => {
 
 
 
+test('Intersection', () => {
+    expect(TranslatePoint([1,2],90,3)).toEqual([1, 5]);
+    expect(TranslatePoint([1,2],-90,3)).toEqual([1, -1]);
+    expect(TranslatePoint([1,2],180,3)).toEqual([-2, 2]);
+    expect(TranslatePoint([1,2],0,3)).toEqual([4, 2]);
+    expect(TranslatePoint([1,2],30,3)[0]).toBeCloseTo(3.598)
+    expect(TranslatePoint([1,2],30,3)[1]).toBeCloseTo(3.5)
+    expect(TranslatePoint([1,2],[10,12],3)[0]).toBeCloseTo(3.00689)
+    expect(TranslatePoint([1,2],[10,12],3)[1]).toBeCloseTo(4.22988)
+});
+

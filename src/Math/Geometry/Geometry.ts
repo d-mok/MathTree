@@ -203,3 +203,28 @@ function Intersection(A: number[], B: number[], C: number[], D: number[]): any[]
     )
 }
 globalThis.Intersection = Intersection
+
+
+
+
+
+
+
+
+/**
+ * Translate point P in the polar angle q by a distance.
+ * @category Geometry
+ * @param {number[]} P - Coordinates [x,y] of point P to translate.
+ * @param {number|number[]} q - Polar angle to translate, or a point in the direction to translate.
+ * @param {number[]} distance - The distance to translate.
+ * @return {number[]} Coordinates [x,y] the resulting point.
+ * @example
+ * TranslatePoint([1,2],90,3) // return [1,5]
+ */
+function TranslatePoint(P: number[], q: number|number[], distance:number): number[] {
+    if(Array.isArray(q)) q = Inclination(P,q)
+    let x = P[0]+distance*cos(q)
+    let y = P[1]+distance*sin(q)
+    return [x,y] 
+}
+globalThis.TranslatePoint = TranslatePoint
