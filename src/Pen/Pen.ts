@@ -47,6 +47,19 @@ class PenCls {
             this.pen.set.reset();
         },
         /**
+         * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
+         * @memberof Pen.setup
+         * @param {number} [scale=1] - The scale of the width.
+         * @example
+         * pen.setup.squareSize(0.5) // half the standard width, with height-to-width defined by coordinates range set.
+         */
+        squareSize(scale=1){
+            let xRange =  this.pen.frame.xmax- this.pen.frame.xmin
+            let yRange = this.pen.frame.ymax- this.pen.frame.ymin
+            let ratio = yRange / xRange
+            this.size(scale,ratio)
+        },
+        /**
          * Set the coordinate range of the canvas.
          * @memberof Pen.setup
          * @param {number[]} xRange - The range [xmin,xmax].
