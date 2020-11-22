@@ -60,6 +60,22 @@ class PenCls {
             this.size(scale,ratio)
         },
         /**
+         * Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
+         * @memberof Pen.setup
+         * @param {number} [xPPI=0.1] - The scale per unit x.
+         * @param {number} [yPPI=-1] - The scale per unit y, if not provided, follow x.
+         * @example
+         * pen.setup.resolution(0.1,0.2) // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
+         */
+        resolution(xPPI=0.1,yPPI=-1){
+            if(yPPI=-1) yPPI=xPPI
+            let xRange =  this.pen.frame.xmax- this.pen.frame.xmin
+            let yRange = this.pen.frame.ymax- this.pen.frame.ymin
+            let xScale = xRange*xPPI
+            let yScale = yRange*yPPI
+            this.size(xScale,yScale/xScale)
+        },
+        /**
          * Set the coordinate range of the canvas.
          * @memberof Pen.setup
          * @param {number[]} xRange - The range [xmin,xmax].
