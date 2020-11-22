@@ -387,7 +387,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line66">line 66</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line96">line 96</a>
             </span>
         </p>
     
@@ -571,7 +571,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line39">line 39</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line69">line 69</a>
             </span>
         </p>
     
@@ -601,6 +601,226 @@
     
     
         <pre class="prettyprint"><code>pen.setup.range([-5,5],[-2,4]) // define range -5&lt;x&lt;5 and -2&lt;y&lt;4</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".resolution">
+        <a class="href-link" href="#.resolution">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                resolution<span class="signature">(xPPI<span class="signature-attributes">opt</span>, yPPI<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>xPPI</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          0.1
+      
+      </td>
+  
+
+  <td class="description last">The scale per unit x.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>yPPI</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          -1
+      
+      </td>
+  
+
+  <td class="description last">The scale per unit y, if not provided, follow x.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Pen.ts.html" class="button">View Source</a>
+            <span>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line52">line 52</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>pen.setup.resolution(0.1,0.2) // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.</code></pre>
     
 
 
@@ -975,7 +1195,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line53">line 53</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line83">line 83</a>
             </span>
         </p>
     
@@ -1005,6 +1225,185 @@
     
     
         <pre class="prettyprint"><code>pen.setup.squareRange(5) // define range -5&lt;x&lt;5 and -5&lt;y&lt;5pen.setup.squareRange(5,[1,2]) // define range -4&lt;x&lt;6 and -3&lt;y&lt;7</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".squareSize">
+        <a class="href-link" href="#.squareSize">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                squareSize<span class="signature">(scale<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>scale</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          1
+      
+      </td>
+  
+
+  <td class="description last">The scale of the width.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Pen.ts.html" class="button">View Source</a>
+            <span>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line38">line 38</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>pen.setup.squareSize(0.5) // half the standard width, with height-to-width defined by coordinates range set.</code></pre>
     
 
 

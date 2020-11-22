@@ -153,7 +153,7 @@ class PenCls {
             this.pen.ctx.lineWidth = weight * PEN_QUALITY;
         },
         /**
-         * Set the color of the pen.
+         * Set the color of the pen stroke.
          * @memberof Pen.set
          * @param {string} [color="black"] - The line color.
          * @example
@@ -171,6 +171,17 @@ class PenCls {
          */
         fillColor(color = "black") {
             this.pen.ctx.fillStyle = color;
+        },
+        /**
+         * Set the color of both filling and stroke.
+         * @memberof Pen.set
+         * @param {string} [color="black"] - The color.
+         * @example
+         * pen.set.color('grey') // set grey filling and stroke
+         */
+        color(color="black"){
+            this.strokeColor(color);
+            this.fillColor(color);
         },
         /**
          * Set the transparency.

@@ -134,6 +134,35 @@ class PenCls {
             this.pen.set.reset();
         },
         /**
+         * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
+         * @memberof Pen.setup
+         * @param {number} [scale=1] - The scale of the width.
+         * @example
+         * pen.setup.squareSize(0.5) // half the standard width, with height-to-width defined by coordinates range set.
+         */
+        squareSize(scale=1){
+            let xRange =  this.pen.frame.xmax- this.pen.frame.xmin
+            let yRange = this.pen.frame.ymax- this.pen.frame.ymin
+            let ratio = yRange / xRange
+            this.size(scale,ratio)
+        },
+        /**
+         * Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
+         * @memberof Pen.setup
+         * @param {number} [xPPI=0.1] - The scale per unit x.
+         * @param {number} [yPPI=-1] - The scale per unit y, if not provided, follow x.
+         * @example
+         * pen.setup.resolution(0.1,0.2) // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
+         */
+        resolution(xPPI=0.1,yPPI=-1){
+            if(yPPI===-1) yPPI=xPPI
+            let xRange =  this.pen.frame.xmax- this.pen.frame.xmin
+            let yRange = this.pen.frame.ymax- this.pen.frame.ymin
+            let xScale = xRange*xPPI
+            let yScale = yRange*yPPI
+            this.size(xScale,yScale/xScale)
+        },
+        /**
          * Set the coordinate range of the canvas.
          * @memberof Pen.setup
          * @param {number[]} xRange - The range [xmin,xmax].
@@ -211,7 +240,7 @@ class PenCls {
             this.pen.ctx.lineWidth = weight * PEN_QUALITY;
         },
         /**
-         * Set the color of the pen.
+         * Set the color of the pen stroke.
          * @memberof Pen.set
          * @param {string} [color="black"] - The line color.
          * @example
@@ -229,6 +258,17 @@ class PenCls {
          */
         fillColor(color = "black") {
             this.pen.ctx.fillStyle = color;
+        },
+        /**
+         * Set the color of both filling and stroke.
+         * @memberof Pen.set
+         * @param {string} [color="black"] - The color.
+         * @example
+         * pen.set.color('grey') // set grey filling and stroke
+         */
+        color(color="black"){
+            this.strokeColor(color);
+            this.fillColor(color);
         },
         /**
          * Set the transparency.
