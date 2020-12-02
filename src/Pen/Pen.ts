@@ -797,12 +797,19 @@ class PenCls {
          * @example
          * pen.label.point([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
          */
-        point(position: number[], text: string, dodgeDirection = 0, offsetPixel = 15) {
+        point(position: number[], text = '', dodgeDirection = 0, offsetPixel = 15) {
             let [x, y] = this.pen.frame.toPix(position);
             offsetPixel = offsetPixel * PEN_QUALITY;
             x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
             y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
+
+            this.pen.ctx.save();
+            if (!isNaN(Number(text)))
+                this.pen.set.textItalic(false)
+            if (isNaN(Number(text)) && text.length === 1)
+                this.pen.set.textItalic(true)
             this.pen.ctx.fillText(text, x, y);
+            this.pen.ctx.restore();
         },
         /**
          * Add a label to an angle AOB.
