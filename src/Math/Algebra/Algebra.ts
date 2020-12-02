@@ -12,7 +12,7 @@
  * @example
  * Crammer(1,1,5,1,-1,1) // Solve x+y=5, x-y=1, return [3,2]
  */
-function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): number[] {
+function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number,number] {
     const x = ((c * q - b * r) / (a * q - b * p));
     const y = ((a * r - c * p) / (a * q - b * p));
     return [x, y];

@@ -601,6 +601,221 @@ class AutoPenCls {
         this.pen = pen;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Draw a graph for linear programming.
+     * @memberof AutoPen.AutoPen_Tool
+     * @param {any[][]} constraints - Constraint as system of inequalities, like [[1,1,'<',2]] represent x+y<2.
+     * @param {number[]} field - The target linear function to optimize, [a,b,c] represent ax+by+c.
+     * @param {number[]} contours - The contours to draw, [4,5] represent P=4 and P=5.
+     * @param {void[]} labelConstraints - Constraint to label integral points.
+     * @param {object[]} [highlights=[]] - Points to highlight, [[point,color,circle,contour,coordinates,label]].
+     * @param {number} [scale=1] - Size of the image.
+     * @returns {void} The image is ready for export.
+     * @example
+     * constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
+     * field =  [1, -3, 3]
+     * contours = [4,5]
+     * labelConstraints = [(x,y)=>y>0]
+     * highlights = [[0,0]]
+     * autoPen.LinearProgram({
+     * constraints,field,contours,labelConstraints,highlights,
+     * showGrid:1,
+     * showLine : true,
+     * showShade : true,
+     * showVertex : true,
+     * showVertexCoordinates : true,
+     * showVertexLabel : true,
+     * showVertexMax : false,
+     * showVertexMin : false,
+     * showIntegral : false,
+     * showIntegralLabel : false,
+     * showIntegralMax : false,
+     * showIntegralMin : false,
+     * contourColor : "grey"})
+     */
+    LinearProgram({
+        constraints = [],
+        field = [1, 1, 0],
+        contours = [4, 5, 6],
+        labelConstraints = [],
+        highlights = [],
+        scale = 1,
+        showGrid = 1,
+        showTick = 1,
+        showLine = true,
+        showShade = true,
+        showVertex = true,
+        showVertexCoordinates = true,
+        showVertexLabel = true,
+        showVertexMax = false,
+        showVertexMin = false,
+        showIntegral = false,
+        showIntegralLabel = false,
+        showIntegralMax = false,
+        showIntegralMin = false,
+        contourColor = "grey"
+    }:
+        {
+            constraints: [number, number, string, number][],
+            field: [number, number, number],
+            contours: number[],
+            labelConstraints: ((x: number, y: number) => boolean)[],
+            highlights: object[],
+            scale: number,
+            showGrid: number,
+            showTick: number,
+            showLine: boolean, showShade: boolean, showVertex: boolean,
+            showVertexCoordinates: boolean,
+            showVertexLabel: boolean,
+            showVertexMax: boolean,
+            showVertexMin: boolean,
+            showIntegral: boolean,
+            showIntegralLabel: boolean,
+            showIntegralMax: boolean,
+            showIntegralMin: boolean,
+            contourColor: string
+
+        }) {
+
+        //setting
+
+
+        function fieldAt(p: [number, number]) {
+            return field[0] * p[0] + field[1] * p[1] + field[2];
+        }
+
+        let LP = LinearProgram(constraints, field);
+        // let xmax = 20;
+        // let xmin = -20;
+        // let ymax = 20;
+        // let ymin = -20;
+
+        const pen = new Pen();
+
+        pen.setup.size(scale);
+        pen.setup.inView([...(LP.vertex)])
+        //pen.setup.range([xmin - 0.8, xmax + 0.8], [ymin - 0.8, ymax + 0.8]);
+
+        pen.axis.x();
+        pen.axis.y();
+
+        if (showGrid > 0) {
+            pen.set.alpha(0.6);
+            pen.grid.x(showGrid);
+            pen.grid.y(showGrid);
+            pen.set.alpha();
+        }
+
+        if (showTick > 0) {
+            pen.set.fillColor("grey");
+            pen.set.textSize(0.8);
+            pen.tick.x(showTick);
+            pen.tick.y(showTick);
+            pen.set.fillColor();
+            pen.set.textSize();
+        }
+
+
+        function drawLines() {
+            constraints.forEach((constraint) => {
+                let [a, b, s, c] = constraint;
+                if (!s.includes("=")) pen.set.dash([5, 5]);
+                pen.graph.linear(a, b, -c);
+
+                pen.set.dash();
+            });
+        }
+
+        function drawIntegral(label = false) {
+            LP.integral.forEach((p) => {
+                pen.point(p);
+                if (label) {
+                    if (labelConstraints.every((f) => f(...p)))
+                        pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
+                }
+            });
+        }
+
+        function drawVertex(coordinates = false, label = false) {
+            LP.vertex.forEach((p) => {
+                pen.point(p);
+                if (coordinates) pen.label.coordinates(p, 270);
+                if (label) {
+                    if (labelConstraints.every((f) => f(...p)))
+                        pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
+                }
+            });
+        }
+
+        function drawShade() {
+            pen.set.alpha(0.3);
+            pen.polygon(LP.vertex, true);
+            pen.set.alpha();
+        }
+
+        function drawContour(value: number) {
+            pen.graph.linear(field[0], field[1], field[2] - value);
+        }
+
+        function drawContours(color = contourColor) {
+            pen.set.color(color);
+            contours.forEach((c) => drawContour(c));
+            pen.set.color();
+        }
+
+        function drawHighlight({
+            point = [0, 0],
+            color = "red",
+            circle = true,
+            contour = true,
+            coordinates = true,
+            label = true,
+        }: { point: [number, number], color?: string, circle?: boolean, contour?: boolean, coordinates?: boolean, label?: boolean }) {
+            pen.set.color(color);
+            pen.point(point);
+            if (circle) pen.circle(point, 5);
+            if (contour) drawContour(fieldAt(point));
+            if (coordinates) pen.label.coordinates(point, 270);
+            if (label) pen.label.point(point, Round(fieldAt(point), 3).toString(), 60, 10);
+            pen.set.color();
+        }
+
+        function drawHighlights() {
+            highlights.forEach((h) => drawHighlight(h));
+        }
+
+        if (showLine) drawLines();
+
+        if (showIntegral)
+            drawIntegral(showIntegralLabel);
+        if (showShade) drawShade();
+        if (showVertex) drawVertex(showVertexCoordinates, showVertexLabel);
+        drawHighlights();
+        drawContours();
+
+        if (showVertexMax) drawHighlight({ point: LP.vertexMax.point, color: "red" });
+        if (showVertexMin) drawHighlight({ point: LP.vertexMin.point, color: "blue" });
+
+        if (showIntegralMax)
+            drawHighlight({ point: LP.integralMax.point, color: "red" });
+        if (showIntegralMin)
+            drawHighlight({ point: LP.integralMin.point, color: "blue" });
+
+
+        this.pen = pen;
+    }
+
 }
 
 

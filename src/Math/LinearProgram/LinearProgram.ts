@@ -15,7 +15,7 @@
  * // optimize P=2x+3y+4 under [x+y<=5, x-y<4, 2x+y>=5]
  */
 function LinearProgram(constraints: [number, number, string, number][], field: number[], bound = [100, 100]) {
-    function fieldAt(p: number[]) {
+    function fieldAt(p: [number, number]) {
         return field[0] * p[0] + field[1] * p[1] + field[2];
     }
 
@@ -67,7 +67,7 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
         cs.push([0, 1, "<", bound[1]]);
         cs.push([0, 1, ">", -bound[1]]);
 
-        let points = [];
+        let points: [number, number][] = [];
         for (let i = -100; i <= 100; i++) {
             for (let j = -100; j <= 100; j++) {
                 if (isConstrained(constraints, [i, j])) {
@@ -78,7 +78,7 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
         return points;
     }
 
-    function OptimizeField(field: number[], feasiblePoints: number[][]) {
+    function OptimizeField(field: number[], feasiblePoints: [number,number][]): [[number, number], [number, number]] {
         let [a, b, c] = field;
         let f = (p: number[]) => a * p[0] + b * p[1] + c;
         let ps = [...feasiblePoints];
@@ -100,3 +100,4 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
 }
 
 globalThis.LinearProgram = LinearProgram
+
