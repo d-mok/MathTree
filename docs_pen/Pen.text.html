@@ -66,7 +66,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.Graph.html">Graph</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.straight.html">straight</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="AutoPen.html">AutoPen</a></li><li><a href="AutoPen.AutoPen_Export.html">AutoPen_Export</a></li><li><a href="AutoPen.AutoPen_Tool.html">AutoPen_Tool</a></li><li><a href="Pen.axis.html">axis</a></li><li><a href="Pen.axisGrid.html">axisGrid</a></li><li><a href="Pen.axisTick.html">axisTick</a></li><li><a href="Pen.decorator.html">decorator</a></li><li><a href="Pen.draw.html">draw</a></li><li><a href="Pen.export.html">export</a></li><li><a href="Pen.graph.html">graph</a></li><li><a href="Pen.set.html">set</a></li><li><a href="Pen.setup.html">setup</a></li><li><a href="Pen.text.html">text</a></li></ul></div>
                 
             </nav>
         </div>
@@ -135,7 +135,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line794">line 794</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line927">line 927</a>
             </span>
         </p>
     
@@ -169,8 +169,8 @@
 
 
     
-    <h4 class="name" id="label">
-        <a class="href-link" href="#label">#</a>
+    <h4 class="name" id=".angle">
+        <a class="href-link" href="#.angle">#</a>
         
             
                 <span class='tag'>static</span>
@@ -178,7 +178,7 @@
         
         <span class="code-name">
             
-                PenCls#label<span class="signature">(position, text, dodgeDirection<span class="signature-attributes">opt</span>, offsetPixel<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+                angle<span class="signature">(anglePoints, text, dodgeDirection<span class="signature-attributes">opt</span>, offsetPixel<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -187,7 +187,7 @@
     
     
     <div class="description">
-        Add a label to a point.
+        Add a label to an angle AOB.
     </div>
     
 
@@ -229,13 +229,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>position</code></td>
+      <td class="name"><code>anglePoints</code></td>
   
 
   <td class="type">
   
       
-<span class="param-type">Array.&lt;number></span>
+<span class="param-type">Array.&lt;Array.&lt;number>></span>
 
 
   
@@ -257,7 +257,7 @@
       </td>
   
 
-  <td class="description last">The coordinates [x,y] of the point to label.</td>
+  <td class="description last">An array [A,O,B] for the coordinates of A,O,B.</td>
 </tr>
 
 
@@ -335,7 +335,7 @@
       </td>
   
 
-  <td class="description last">The direction to offset, given as a polar angle.</td>
+  <td class="description last">The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.</td>
 </tr>
 
 
@@ -371,7 +371,7 @@
   
       <td class="default">
       
-          15
+          30
       
       </td>
   
@@ -424,7 +424,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line821">line 821</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line581">line 581</a>
             </span>
         </p>
     
@@ -453,7 +453,301 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>pen.label([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)</code></pre>
+        <pre class="prettyprint"><code>pen.label.angle([[1,2],[0,0],[-2,1]],'x') // label the angle as 'x'</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".line">
+        <a class="href-link" href="#.line">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                line<span class="signature">(linePoints, text, dodgeDirection<span class="signature-attributes">opt</span>, offsetPixel<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Add a label to a line AB.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>linePoints</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Array.&lt;Array.&lt;number>></span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">An array [A,B] for the coordinates of AB.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>text</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">string</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">The string to write.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>dodgeDirection</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          0
+      
+      </td>
+  
+
+  <td class="description last">The direction to offset, given as a polar angle,relative to the right normal of AB.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>offsetPixel</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          25
+      
+      </td>
+  
+
+  <td class="description last">The pixel distance to offset from the position.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Pen.ts.html" class="button">View Source</a>
+            <span>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line602">line 602</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'</code></pre>
     
 
 
@@ -700,6 +994,8 @@
     
 
     
+        <dt class="important tag-deprecated">Deprecated:</dt><dd class="yes-def tag-deprecated"><ul class="dummy"><li>Yes</li></ul></dd>
+    
 
     
 
@@ -718,7 +1014,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line838">line 838</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line991">line 991</a>
             </span>
         </p>
     
@@ -994,6 +1290,8 @@
     
 
     
+        <dt class="important tag-deprecated">Deprecated:</dt><dd class="yes-def tag-deprecated"><ul class="dummy"><li>Yes</li></ul></dd>
+    
 
     
 
@@ -1012,7 +1310,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line859">line 859</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line1013">line 1013</a>
             </span>
         </p>
     
@@ -1042,6 +1340,302 @@
     
     
         <pre class="prettyprint"><code>pen.labelLine([[0,0],[2,4]],'L') // label the line as 'L'</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="labelPoint">
+        <a class="href-link" href="#labelPoint">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                PenCls#labelPoint<span class="signature">(position, text, dodgeDirection<span class="signature-attributes">opt</span>, offsetPixel<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Add a label to a point.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>position</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Array.&lt;number></span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">The coordinates [x,y] of the point to label.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>text</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">string</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">The string to write.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>dodgeDirection</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          0
+      
+      </td>
+  
+
+  <td class="description last">The direction to offset, given as a polar angle.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>offsetPixel</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          15
+      
+      </td>
+  
+
+  <td class="description last">The pixel distance to offset from the position.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <dt class="important tag-deprecated">Deprecated:</dt><dd class="yes-def tag-deprecated"><ul class="dummy"><li>Yes</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Pen.ts.html" class="button">View Source</a>
+            <span>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line973">line 973</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>pen.labelPoint([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)</code></pre>
     
 
 
@@ -1196,7 +1790,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line807">line 807</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line940">line 940</a>
             </span>
         </p>
     
@@ -1226,6 +1820,300 @@
     
     
         <pre class="prettyprint"><code>pen.write([1,2],'abc') // write 'abc' at [1,2]</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".point">
+        <a class="href-link" href="#.point">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                point<span class="signature">(position, text, dodgeDirection<span class="signature-attributes">opt</span>, offsetPixel<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Add a label to a point.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>position</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Array.&lt;number></span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">The coordinates [x,y] of the point to label.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>text</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">string</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">The string to write.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>dodgeDirection</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          0
+      
+      </td>
+  
+
+  <td class="description last">The direction to offset, given as a polar angle.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>offsetPixel</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          15
+      
+      </td>
+  
+
+  <td class="description last">The pixel distance to offset from the position.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Pen.ts.html" class="button">View Source</a>
+            <span>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line564">line 564</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>pen.label.point([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)</code></pre>
     
 
 

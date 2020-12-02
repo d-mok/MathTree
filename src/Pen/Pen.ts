@@ -558,53 +558,53 @@ class PenCls {
         if (fill) this.ctx.fill();
     }
 
-    /**
-     * Drawing straight line.
-     * @namespace straight
-     * @memberof Pen
-     * @deprecated
-     */
-    straight = {
-        pen: this,
-        /**
-         * Draw a line y=mx+c.
-         * @memberof Pen.straight
-         * @deprecated
-         * @param {number} m - The slope.
-         * @param {number} c - The y-intercept.
-         * @example
-         * pen.straight.line(2,1) // draw the line y=2x+1
-         */
-        line(m: number, c: number) {
-            const [xmin, xmax] = this.pen.frame.xRange();
-            const y = (x: number) => m * x + c;
-            this.pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
-        },
-        /**
-         * Draw a horizontal line y=constant.
-         * @memberof Pen.straight
-         * @deprecated
-         * @param {number} y - The constant value of y.
-         * @example
-         * pen.straight.horizontal(2) // draw the line y=2
-         */
-        horizontal(y: number) {
-            const [xmin, xmax] = this.pen.frame.xRange();
-            this.pen.line([xmin, y], [xmax, y]);
-        },
-        /**
-         * Draw a vertical line x=constant.
-         * @memberof Pen.straight
-         * @deprecated
-         * @param {number} x - The constant value of x.
-         * @example
-         * pen.straight.vertical(2) // draw the line x=2
-         */
-        vertical(x: number) {
-            const [ymin, ymax] = this.pen.frame.yRange();
-            this.pen.line([x, ymin], [x, ymax]);
-        }
-    };
+    // /**
+    //  * Drawing straight line.
+    //  * @namespace straight
+    //  * @memberof Pen
+    //  * @deprecated
+    //  */
+    // straight = {
+    //     pen: this,
+    //     /**
+    //      * Draw a line y=mx+c.
+    //      * @memberof Pen.straight
+    //      * @deprecated
+    //      * @param {number} m - The slope.
+    //      * @param {number} c - The y-intercept.
+    //      * @example
+    //      * pen.straight.line(2,1) // draw the line y=2x+1
+    //      */
+    //     line(m: number, c: number) {
+    //         const [xmin, xmax] = this.pen.frame.xRange();
+    //         const y = (x: number) => m * x + c;
+    //         this.pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
+    //     },
+    //     /**
+    //      * Draw a horizontal line y=constant.
+    //      * @memberof Pen.straight
+    //      * @deprecated
+    //      * @param {number} y - The constant value of y.
+    //      * @example
+    //      * pen.straight.horizontal(2) // draw the line y=2
+    //      */
+    //     horizontal(y: number) {
+    //         const [xmin, xmax] = this.pen.frame.xRange();
+    //         this.pen.line([xmin, y], [xmax, y]);
+    //     },
+    //     /**
+    //      * Draw a vertical line x=constant.
+    //      * @memberof Pen.straight
+    //      * @deprecated
+    //      * @param {number} x - The constant value of x.
+    //      * @example
+    //      * pen.straight.vertical(2) // draw the line x=2
+    //      */
+    //     vertical(x: number) {
+    //         const [ymin, ymax] = this.pen.frame.yRange();
+    //         this.pen.line([x, ymin], [x, ymax]);
+    //     }
+    // };
 
 
 
@@ -782,28 +782,97 @@ class PenCls {
         this.ctx.fillText(text, x, y);
     }
 
-    /**
-     * Add a label to a point.
-     * @memberof Pen.text
-     * @deprecated
-     * @param {number[]} position - The coordinates [x,y] of the point to label.
-     * @param {string} text - The string to write.
-     * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
-     * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
-     * @example
-     * pen.label([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
-     */
-    label(position: number[], text: string, dodgeDirection = 0, offsetPixel = 15) {
-        let [x, y] = this.frame.toPix(position);
-        offsetPixel = offsetPixel * PEN_QUALITY;
-        x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
-        y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
-        this.ctx.fillText(text, x, y);
-    }
+
+
+    label = {
+        pen: this,
+
+        /**
+         * Add a label to a point.
+         * @memberof Pen.text
+         * @param {number[]} position - The coordinates [x,y] of the point to label.
+         * @param {string} text - The string to write.
+         * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
+         * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
+         * @example
+         * pen.label.point([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
+         */
+        point(position: number[], text: string, dodgeDirection = 0, offsetPixel = 15) {
+            let [x, y] = this.pen.frame.toPix(position);
+            offsetPixel = offsetPixel * PEN_QUALITY;
+            x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
+            y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
+            this.pen.ctx.fillText(text, x, y);
+        },
+        /**
+         * Add a label to an angle AOB.
+         * @memberof Pen.text
+         * @param {number[][]} anglePoints - An array [A,O,B] for the coordinates of A,O,B.
+         * @param {string} text - The string to write.
+         * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+         * @param {number} [offsetPixel=30] - The pixel distance to offset from the position.
+         * @example
+         * pen.label.angle([[1,2],[0,0],[-2,1]],'x') // label the angle as 'x'
+         */
+        angle(anglePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = 30) {
+            let [A, O, B] = anglePoints;
+            let APixel = this.pen.frame.toPix(A);
+            let OPixel = this.pen.frame.toPix(O);
+            let BPixel = this.pen.frame.toPix(B);
+            let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
+            let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
+            if (a2 < a1) a2 = a2 + 360
+            this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
+        },
+        /**
+         * Add a label to a line AB.
+         * @memberof Pen.text
+         * @param {number[][]} linePoints - An array [A,B] for the coordinates of AB.
+         * @param {string} text - The string to write.
+         * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to the right normal of AB.
+         * @param {number} [offsetPixel=25] - The pixel distance to offset from the position.
+         * @example
+         * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
+         */
+        line(linePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = 25) {
+            let [A, B] = linePoints;
+            let M = MidPoint(A, B);
+            let APixel = this.pen.frame.toPix(A);
+            let BPixel = this.pen.frame.toPix(B);
+            let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
+            this.point(M, text, q + dodgeDirection, offsetPixel);
+        }
+
+    };
+
+
+
+
+
+
+    // /**
+    //  * Add a label to a point.
+    //  * @memberof Pen.text
+    //  * @deprecated
+    //  * @param {number[]} position - The coordinates [x,y] of the point to label.
+    //  * @param {string} text - The string to write.
+    //  * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
+    //  * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
+    //  * @example
+    //  * pen.label([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
+    //  */
+    // label(position: number[], text: string, dodgeDirection = 0, offsetPixel = 15) {
+    //     let [x, y] = this.frame.toPix(position);
+    //     offsetPixel = offsetPixel * PEN_QUALITY;
+    //     x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
+    //     y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
+    //     this.ctx.fillText(text, x, y);
+    // }
 
     /**
      * Add a label to a point.
      * @memberof Pen.text
+     * @deprecated
      * @param {number[]} position - The coordinates [x,y] of the point to label.
      * @param {string} text - The string to write.
      * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
@@ -822,6 +891,7 @@ class PenCls {
     /**
      * Add a label to an angle AOB.
      * @memberof Pen.text
+     * @deprecated
      * @param {number[][]} anglePoints - An array [A,O,B] for the coordinates of A,O,B.
      * @param {string} text - The string to write.
      * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
@@ -843,6 +913,7 @@ class PenCls {
     /**
      * Add a label to a line AB.
      * @memberof Pen.text
+     * @deprecated
      * @param {number[][]} linePoints - An array [A,B] for the coordinates of AB.
      * @param {string} text - The string to write.
      * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to the right normal of AB.
@@ -981,7 +1052,7 @@ class PenCls {
             this.pen.ctx.save();
             this.pen.ctx.strokeStyle = "#d3d5db";
             for (let x of this.pen.frame.xTicks(interval)) {
-                this.pen.straight.vertical(x);
+                this.pen.graph.vertical(x);
             }
             this.pen.ctx.restore();
         },
@@ -996,7 +1067,7 @@ class PenCls {
             this.pen.ctx.save();
             this.pen.ctx.strokeStyle = "#d3d5db";
             for (let y of this.pen.frame.yTicks(interval)) {
-                this.pen.straight.horizontal(y);
+                this.pen.graph.horizontal(y);
             }
             this.pen.ctx.restore();
         }

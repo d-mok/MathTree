@@ -129,7 +129,7 @@ class AutoPenCls {
             if (vertical) {
                 pen.set.strokeColor('grey');
                 pen.set.dash([10, 10]);
-                pen.straight.vertical(align);
+                pen.graph.vertical(align);
                 pen.set.strokeColor();
                 pen.set.dash();
             }
@@ -244,8 +244,8 @@ class AutoPenCls {
             pen.set.strokeColor('grey')
             pen.set.dash([5, 10])
             pen.set.weight(0.7)
-            pen.straight.vertical(90)
-            pen.straight.vertical(270)
+            pen.graph.vertical(90)
+            pen.graph.vertical(270)
             pen.set.strokeColor()
             pen.set.dash()
             pen.set.weight(1)
@@ -298,7 +298,7 @@ class AutoPenCls {
         pen.set.strokeColor('red')
         pen.set.fillColor('red')
         pen.set.dash([5, 5])
-        pen.straight.horizontal(k)
+        pen.graph.horizontal(k)
         pen.set.dash()
 
         if (trig === 'sin') {
