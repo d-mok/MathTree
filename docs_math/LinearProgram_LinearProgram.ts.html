@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Numeracy/Numeracy.ts</title>
+  <title> LinearProgram/LinearProgram.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>Numeracy/Numeracy.ts</h1>
+                    <h1>LinearProgram/LinearProgram.ts</h1>
                 </header>
                 
 
@@ -86,222 +86,107 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>
-
 /**
- * Return the absolute value. Equivalent to Math.abs(x).
- * @category Numeracy
- * @param {number} num - The input number.
- * @return {number} The absolute value.
+ * Return result of linear programming. Equivalent to Math.abs(x).
+ * @category LinearProgram
+ * @param {any[]} constraints - The constraints.
+ * @param {number[]} field - The target function.
+ * @param {number[]} [bound=[100,100]] - The virtual bounding square box
+ * @return {object} The result, { vertex, integral, vertexMin, vertexMax, integralMin, integralMax }.
  * @example
- * Abs(-2) // return 2
+ * LinearProgram([[1, 1, "&lt;=", 5],[1, -1, "&lt;", 4],[2, 1, ">=", -5]],[2,3,4])
+ * // return { vertex:number[][], integral:number[][], vertexMin:{point,value}, vertexMax, integralMin, integralMax }
+ * // vertex: an array of vertex coordinates
+ * // integral: an array of feasible integral points
+ * // vertexMin: info about the minimum vertex
+ * // optimize P=2x+3y+4 under [x+y&lt;=5, x-y&lt;4, 2x+y>=5]
  */
-function Abs(num: number): number {
-    return Math.abs(num);
+function LinearProgram(constraints: [number, number, string, number][], field: number[], bound = [100, 100]) {
+    function fieldAt(p: number[]) {
+        return field[0] * p[0] + field[1] * p[1] + field[2];
+    }
+
+    function isConstrained(constraints: [number, number, string, number][], point: number[]): boolean {
+        return constraints.every((constraint) => {
+            let [a, b, s, c] = constraint;
+            let P = a * point[0] + b * point[1] - c;
+            let greater = s.includes(">") || s.includes("g");
+            let eq = s.includes("=") || s.includes("e");
+            if (greater &amp;&amp; eq) return P >= 0;
+            if (greater &amp;&amp; !eq) return P > 0;
+            if (!greater &amp;&amp; eq) return P &lt;= 0;
+            if (!greater &amp;&amp; !eq) return P &lt; 0;
+        });
+    }
+
+    function feasiblePolygon(constraints: [number, number, string, number][]) {
+        let cs = [...constraints];
+        cs.push([1, 0, "&lt;", bound[0]]);
+        cs.push([1, 0, ">", -bound[0]]);
+        cs.push([0, 1, "&lt;", bound[1]]);
+        cs.push([0, 1, ">", -bound[1]]);
+
+        let vertices = [];
+        for (let i = 0; i &lt; cs.length; i++) {
+            for (let j = i + 1; j &lt; cs.length; j++) {
+                let [a1, b1, s1, c1] = cs[i];
+                let [a2, b2, s2, c2] = cs[j];
+                let p = Crammer(a1, b1, c1, a2, b2, c2);
+
+                let otherCons = [...cs];
+                otherCons.splice(j, 1);
+                otherCons.splice(i, 1);
+                if (isConstrained(otherCons, p)) {
+                    vertices.push(p);
+                }
+            }
+        }
+
+        let center = ScalePoint(SumPoint(...vertices), 1 / vertices.length);
+        vertices.sort((a, b) => Inclination(center, a) - Inclination(center, b));
+        return vertices;
+    }
+
+    function feasibleIntegral(constraints: [number, number, string, number][]) {
+        let cs = [...constraints];
+        cs.push([1, 0, "&lt;", bound[0]]);
+        cs.push([1, 0, ">", -bound[0]]);
+        cs.push([0, 1, "&lt;", bound[1]]);
+        cs.push([0, 1, ">", -bound[1]]);
+
+        let points = [];
+        for (let i = -100; i &lt;= 100; i++) {
+            for (let j = -100; j &lt;= 100; j++) {
+                if (isConstrained(constraints, [i, j])) {
+                    points.push([i, j]);
+                }
+            }
+        }
+        return points;
+    }
+
+    function OptimizeField(field: number[], feasiblePoints: number[][]) {
+        let [a, b, c] = field;
+        let f = (p: number[]) => a * p[0] + b * p[1] + c;
+        let ps = [...feasiblePoints];
+        ps.sort((a, b) => f(a) - f(b));
+        return [ps[0], ps[ps.length - 1]];
+    }
+
+    let vertex = feasiblePolygon(constraints);
+    let [minVertex, maxVertex] = OptimizeField(field, vertex);
+    let vertexMin = { point: minVertex, value: fieldAt(minVertex) };
+    let vertexMax = { point: maxVertex, value: fieldAt(maxVertex) };
+
+    let integral = feasibleIntegral(constraints);
+    let [minIntegral, maxIntegral] = OptimizeField(field, integral);
+    let integralMin = { point: minIntegral, value: fieldAt(minIntegral) };
+    let integralMax = { point: maxIntegral, value: fieldAt(maxIntegral) };
+
+    return { vertex, integral, vertexMin, vertexMax, integralMin, integralMax };
 }
-globalThis.Abs = Abs
 
-
-/**
- * Return the sign of the number as 1,0 or -1.
- * @category Numeracy
- * @param {number} num - The input number.
- * @return {number} The sign of num. 1,0 or -1.
- * @example
- * Sign(3) // return 1
- * Sign(-4.5) // return -1
- * Sign(0) // return 0
- */
-function Sign(num: number): number {
-    if (num > 0) return 1;
-    if (num &lt; 0) return -1;
-    return 0;
-}
-globalThis.Sign = Sign
-
-
-/**
- * Return the number rounded off to given sigfig.
- * @category Numeracy
- * @param {number} num - The input number.
- * @param {number} [sigfig=3] - The sigfig to round to.
- * @return {number} The rounded number.
- * @example
- * Round(1.23456,3) // return 1.23
- * Round(1.23567,3) // return 1.24
- */
-function Round(num: number, sigfig = 3): number {
-    if (sigfig &lt; 1) sigfig = 1;
-    return parseFloat(num.toPrecision(sigfig));
-}
-globalThis.Round = Round
-
-/**
- * Return the number rounded up to given sigfig.
- * @category Numeracy
- * @param {number} num - The input number.
- * @param {number} [sigfig=3] - The sigfig to round to.
- * @return {number} The rounded up number.
- * @example
- * RoundUp(1.23456,3) // return 1.23
- * RoundUp(1.23567,1) // return 2
- */
-function RoundUp(num: number, sigfig = 3): number {
-    if (sigfig &lt; 1) sigfig = 1;
-    let d = -Math.floor(Math.log(num) / Math.log(10)) + sigfig - 1;
-    return FixUp(num, d);
-}
-globalThis.RoundUp = RoundUp
-
-/**
- * Return the number rounded down to given sigfig.
- * @category Numeracy
- * @param {number} num - The input number.
- * @param {number} [sigfig=3] - The sigfig to round to.
- * @return {number} The rounded down number.
- * @example
- * RoundDown(1.23456,5) // return 1.2345
- * RoundDown(1.6789,1) // return 1
- */
-function RoundDown(num: number, sigfig = 3): number {
-    if (sigfig &lt; 1) sigfig = 1;
-    let d = -Math.floor(Math.log(num) / Math.log(10)) + sigfig - 1;
-    return FixDown(num, d);
-}
-globalThis.RoundDown = RoundDown
-
-
-/**
- * Return the number rounded off to given decimal place.
- * @category Numeracy
- * @param {number} num - The input number.
- * @param {number} [dp=0] - The decimal place to round to.
- * @return {number} The rounded number.
- * @example
- * Fix(12345.678,0) // round to integer, return 12346
- * Fix(12345.678,2) // round to 2 dp, return 12345.68
- * Fix(12345.678,-2) // round to hundred, return 12300
- */
-function Fix(num: number, dp = 0): number {
-    num = num * (10 ** dp);
-    num = Math.round(num);
-    num = num / (10 ** dp);
-    if (dp &lt; 0) num = Fix(num, 1);   // correct for floating point error
-    return num;
-}
-globalThis.Fix = Fix
-
-/**
- * Return the number rounded up to given decimal place.
- * @category Numeracy
- * @param {number} num - The input number.
- * @param {number} [dp=0] - The decimal place to round to.
- * @return {number} The rounded up number.
- * @example
- * FixUp(12.34,0) // round to integer, return 13
- * FixUp(12.34,1) // round to 1 dp, return 12.4
- * FixUp(12.34,-1) // round to ten, return 20
- */
-function FixUp(num: number, dp = 0): number {
-    num = num * (10 ** dp);
-    let original = num;
-    num = Math.round(num);
-    if (num &lt; original) num = num + 1;
-    num = num / (10 ** dp);
-    if (dp &lt; 0) num = Fix(num, 1);   // correct for floating point error
-    return num;
-}
-globalThis.FixUp = FixUp
-
-
-
-/**
- * Return the number rounded down to given decimal place.
- * @category Numeracy
- * @param {number} num - The input number.
- * @param {number} [dp=0] - The decimal place to round to.
- * @return {number} The rounded down number.
- * @example
- * FixDown(17.89,0) // round to integer, return 17
- * FixDown(17.89,1) // round to 1 dp, return 17.8
- * FixDown(17.89,-1) // round to ten, return 10
- */
-function FixDown(num: number, dp = 0): number {
-    num = num * (10 ** dp);
-    let original = num;
-    num = Math.round(num);
-    if (num > original) num = num - 1;
-    num = num / (10 ** dp);
-    if (dp &lt; 0) num = Fix(num, 1);   // correct for floating point error
-    return num;
-}
-globalThis.FixDown = FixDown
-
-
-
-/**
- * Return the ceiling integer of the number.
- * @category Numeracy
- * @param {number} num - The input number.
- * @return {number} The ceiling integer.
- * @example
- * Ceil(1.1) // return 2
- * Ceil(-1.1) // return -1
- * Ceil(2)) // return 2
- */
-function Ceil(num: number): number {
-    return Math.ceil(num);
-}
-globalThis.Ceil = Ceil
-
-/**
- * Return the floor integer of the number.
- * @category Numeracy
- * @param {number} num - The input number.
- * @return {number} The floor integer.
- * @example
- * Floor(1.9) // return 1
- * Floor(-1.9) // return -2
- * Floor(2)) // return 2
- */
-function Floor(num: number): number {
-    return Math.floor(num);
-}
-globalThis.Floor = Floor
-
-
-/**
- * Return the array of reduced ratio.
- * @category Numeracy
- * @param {...number} nums - The array of ratio.
- * @return {number[]} The array of reduced ratio.
- * @example
- * SimpRatio(2,4,6) // return [1,2,3]
- */
-function SimpRatio(...nums: number[]): number[] {
-    let h = HCF(...nums);
-    return nums.map(x => x / h);
-}
-globalThis.SimpRatio = SimpRatio
-
-/**
- * Return the number of sigfig.
- * @category Numeracy
- * @param {number} value - The input number.
- * @return {number} The number of sigfig.
- * @example
- * SigFig(1.234) // return 4
- * SigFig(1200) // return 2
- * SigFig(0.00123) // return 3
- */
-function SigFig(value: number): number {
-    return Math.abs(value)
-        .toExponential()
-        .replace(/e[\+\-0-9]*$/, '')  // remove exponential notation
-        .replace(/^0\.?0*|\./, '')    // remove decimal point and leading zeros
-        .length;
-};
-globalThis.SigFig = SigFig
-</code></pre>
+globalThis.LinearProgram = LinearProgram</code></pre>
         </article>
     </section>
 

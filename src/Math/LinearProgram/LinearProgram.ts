@@ -2,7 +2,7 @@
 /**
  * Return result of linear programming. Equivalent to Math.abs(x).
  * @category LinearProgram
- * @param {[number, number, string, number][]} constraints - The constraints.
+ * @param {any[]} constraints - The constraints.
  * @param {number[]} field - The target function.
  * @param {number[]} [bound=[100,100]] - The virtual bounding square box
  * @return {object} The result, { vertex, integral, vertexMin, vertexMax, integralMin, integralMax }.
