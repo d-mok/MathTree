@@ -151,7 +151,7 @@ class AutoPenCls {
             pen.set.weight();
             pen.set.fillColor('black');
 
-            pen.labelPoint(B, num.toString(), 270);
+            pen.label.point(B, num.toString(), 270);
         }
 
         function tick(position: number, correct: boolean) {
@@ -231,8 +231,8 @@ class AutoPenCls {
         if (trig === 'sin' || trig === 'cos') {
             pen.cutterV([0, 1])
             pen.cutterV([0, -1])
-            pen.labelPoint([0, 1], '1', 180)
-            pen.labelPoint([0, -1], '-1', 180)
+            pen.label.point([0, 1], '1', 180)
+            pen.label.point([0, -1], '-1', 180)
         }
 
 
@@ -284,8 +284,8 @@ class AutoPenCls {
             pen.point(P)
             pen.set.fillColor('red')
             if (y !== 0) { pen.line(P, Q, true) }
-            if (y >= 0) { pen.labelPoint(Q, label, 270) }
-            if (y < 0) { pen.labelPoint(Q, label, 90) }
+            if (y >= 0) { pen.label.point(Q, label, 270) }
+            if (y < 0) { pen.label.point(Q, label, 90) }
 
             if (skipAnchor) return
             pen.set.weight(3)
@@ -413,8 +413,8 @@ class AutoPenCls {
             }
             pen.set.weight()
             pen.set.strokeColor()
-            pen.labelPoint(P, p.toString(), a > 0 ? 315 : 45)
-            pen.labelPoint(Q, q.toString(), a > 0 ? 225 : 135)
+            pen.label.point(P, p.toString(), a > 0 ? 315 : 45)
+            pen.label.point(Q, q.toString(), a > 0 ? 225 : 135)
         }
 
         if (p === undefined && q === undefined) {
@@ -429,7 +429,7 @@ class AutoPenCls {
         if (p !== undefined && q !== undefined && p === q) {
             let func = a > 0 ? (x: number) => x ** 2 : (x: number) => -(x ** 2)
             pen.plot(func)
-            pen.labelPoint([0, 0], p.toString(), a > 0 ? 270 : 90)
+            pen.label.point([0, 0], p.toString(), a > 0 ? 270 : 90)
             if (a > 0) {
                 pen.set.weight(3)
                 pen.set.strokeColor('red')
@@ -548,9 +548,9 @@ class AutoPenCls {
         pen.polygon([A, B, C])
 
         pen.set.textItalic(true)
-        if (labelA) pen.labelPoint(A, labelA.toString(), Inclination(G, A))
-        if (labelB) pen.labelPoint(B, labelB.toString(), Inclination(G, B))
-        if (labelC) pen.labelPoint(C, labelC.toString(), Inclination(G, C))
+        if (labelA) pen.label.point(A, labelA.toString(), Inclination(G, A))
+        if (labelB) pen.label.point(B, labelB.toString(), Inclination(G, B))
+        if (labelC) pen.label.point(C, labelC.toString(), Inclination(G, C))
         pen.set.textItalic()
 
         let AB = [B[0] - A[0], B[1] - A[1]]
@@ -566,9 +566,9 @@ class AutoPenCls {
                 if (typeof side === 'string' && !(/\d/.test(side)))
                     pen.set.textItalic(true)
                 if (anticlockwise) {
-                    pen.labelLine([start, end], side.toString())
+                    pen.label.line([start, end], side.toString())
                 } else {
-                    pen.labelLine([end, start], side.toString())
+                    pen.label.line([end, start], side.toString())
                 }
                 pen.set.textItalic()
             }
@@ -584,10 +584,10 @@ class AutoPenCls {
                 if (typeof angle === 'number') angle = angle + '°'
                 if (anticlockwise) {
                     pen.decorate.angle(P, O, Q)
-                    pen.labelAngle([P, O, Q], angle)
+                    pen.label.angle([P, O, Q], angle)
                 } else {
                     pen.decorate.angle(Q, O, P)
-                    pen.labelAngle([Q, O, P], angle)
+                    pen.label.angle([Q, O, P], angle)
                 }
                 pen.set.textItalic()
             }
