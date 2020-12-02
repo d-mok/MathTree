@@ -671,7 +671,7 @@ class AutoPenCls {
             field: [number, number, number],
             contours: number[],
             labelConstraints: ((x: number, y: number) => boolean)[],
-            highlights: object[],
+            highlights: { point: [number, number], color?: string, circle?: boolean, contour?: boolean, coordinates?: boolean, label?: boolean }[],
             scale: number,
             showGrid: number,
             showTick: number,
