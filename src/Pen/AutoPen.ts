@@ -623,11 +623,11 @@ class AutoPenCls {
      * @param {number} [scale=1] - Size of the image.
      * @returns {void} The image is ready for export.
      * @example
-     * constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
-     * field =  [1, -3, 3]
-     * contours = [4,5]
-     * labelConstraints = [(x,y)=>y>0]
-     * highlights = [[0,0]]
+     * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
+     * let field =  [1, -3, 3]
+     * let contours = [4,5]
+     * let labelConstraints = [(x,y)=>y>0]
+     * let highlights = [[0,0]]
      * autoPen.LinearProgram({
      * constraints,field,contours,labelConstraints,highlights,
      * showGrid:1,
