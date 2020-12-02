@@ -151,7 +151,7 @@ class AutoPenCls {
             pen.set.weight();
             pen.set.fillColor('black');
 
-            pen.label(B, num.toString(), 270);
+            pen.labelPoint(B, num.toString(), 270);
         }
 
         function tick(position: number, correct: boolean) {
@@ -231,8 +231,8 @@ class AutoPenCls {
         if (trig === 'sin' || trig === 'cos') {
             pen.cutterV([0, 1])
             pen.cutterV([0, -1])
-            pen.label([0, 1], '1', 180)
-            pen.label([0, -1], '-1', 180)
+            pen.labelPoint([0, 1], '1', 180)
+            pen.labelPoint([0, -1], '-1', 180)
         }
 
 
@@ -284,8 +284,8 @@ class AutoPenCls {
             pen.point(P)
             pen.set.fillColor('red')
             if (y !== 0) { pen.line(P, Q, true) }
-            if (y >= 0) { pen.label(Q, label, 270) }
-            if (y < 0) { pen.label(Q, label, 90) }
+            if (y >= 0) { pen.labelPoint(Q, label, 270) }
+            if (y < 0) { pen.labelPoint(Q, label, 90) }
 
             if (skipAnchor) return
             pen.set.weight(3)
@@ -413,8 +413,8 @@ class AutoPenCls {
             }
             pen.set.weight()
             pen.set.strokeColor()
-            pen.label(P, p.toString(), a > 0 ? 315 : 45)
-            pen.label(Q, q.toString(), a > 0 ? 225 : 135)
+            pen.labelPoint(P, p.toString(), a > 0 ? 315 : 45)
+            pen.labelPoint(Q, q.toString(), a > 0 ? 225 : 135)
         }
 
         if (p === undefined && q === undefined) {
@@ -429,7 +429,7 @@ class AutoPenCls {
         if (p !== undefined && q !== undefined && p === q) {
             let func = a > 0 ? (x: number) => x ** 2 : (x: number) => -(x ** 2)
             pen.plot(func)
-            pen.label([0, 0], p.toString(), a > 0 ? 270 : 90)
+            pen.labelPoint([0, 0], p.toString(), a > 0 ? 270 : 90)
             if (a > 0) {
                 pen.set.weight(3)
                 pen.set.strokeColor('red')
@@ -548,9 +548,9 @@ class AutoPenCls {
         pen.polygon([A, B, C])
 
         pen.set.textItalic(true)
-        if (labelA) pen.label(A, labelA.toString(), Inclination(G, A))
-        if (labelB) pen.label(B, labelB.toString(), Inclination(G, B))
-        if (labelC) pen.label(C, labelC.toString(), Inclination(G, C))
+        if (labelA) pen.labelPoint(A, labelA.toString(), Inclination(G, A))
+        if (labelB) pen.labelPoint(B, labelB.toString(), Inclination(G, B))
+        if (labelC) pen.labelPoint(C, labelC.toString(), Inclination(G, C))
         pen.set.textItalic()
 
         let AB = [B[0] - A[0], B[1] - A[1]]

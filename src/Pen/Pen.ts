@@ -53,11 +53,11 @@ class PenCls {
          * @example
          * pen.setup.squareSize(0.5) // half the standard width, with height-to-width defined by coordinates range set.
          */
-        squareSize(scale=1){
-            let xRange =  this.pen.frame.xmax- this.pen.frame.xmin
-            let yRange = this.pen.frame.ymax- this.pen.frame.ymin
+        squareSize(scale = 1) {
+            let xRange = this.pen.frame.xmax - this.pen.frame.xmin
+            let yRange = this.pen.frame.ymax - this.pen.frame.ymin
             let ratio = yRange / xRange
-            this.size(scale,ratio)
+            this.size(scale, ratio)
         },
         /**
          * Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
@@ -67,13 +67,13 @@ class PenCls {
          * @example
          * pen.setup.resolution(0.1,0.2) // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
          */
-        resolution(xPPI=0.1,yPPI=-1){
-            if(yPPI===-1) yPPI=xPPI
-            let xRange =  this.pen.frame.xmax- this.pen.frame.xmin
-            let yRange = this.pen.frame.ymax- this.pen.frame.ymin
-            let xScale = xRange*xPPI
-            let yScale = yRange*yPPI
-            this.size(xScale,yScale/xScale)
+        resolution(xPPI = 0.1, yPPI = -1) {
+            if (yPPI === -1) yPPI = xPPI
+            let xRange = this.pen.frame.xmax - this.pen.frame.xmin
+            let yRange = this.pen.frame.ymax - this.pen.frame.ymin
+            let xScale = xRange * xPPI
+            let yScale = yRange * yPPI
+            this.size(xScale, yScale / xScale)
         },
         /**
          * Set the coordinate range of the canvas.
@@ -113,14 +113,15 @@ class PenCls {
          * pen.setup.inView([[1,2],[3,4]]) // the points [0,0], [1,2] and [3,4] must be in-view
          */
         inView(points: number[][], border = 0.3, origin = true) {
-            if (origin) points.push([0, 0]);
-            let xmin = points[0][0];
-            let xmax = points[0][0];
-            let ymin = points[0][1];
-            let ymax = points[0][1];
-            for (let i = 0; i < points.length; i++) {
-                let x = points[i][0];
-                let y = points[i][1];
+            let pts = [...points]
+            if (origin) pts.push([0, 0]);
+            let xmin = pts[0][0];
+            let xmax = pts[0][0];
+            let ymin = pts[0][1];
+            let ymax = pts[0][1];
+            for (let i = 0; i < pts.length; i++) {
+                let x = pts[i][0];
+                let y = pts[i][1];
                 if (x < xmin) xmin = x;
                 if (x > xmax) xmax = x;
                 if (y < ymin) ymin = y;
@@ -179,7 +180,7 @@ class PenCls {
          * @example
          * pen.set.color('grey') // set grey filling and stroke
          */
-        color(color="black"){
+        color(color = "black") {
             this.strokeColor(color);
             this.fillColor(color);
         },
@@ -196,12 +197,17 @@ class PenCls {
         /**
          * Set the dash pattern of line.
          * @memberof Pen.set
-         * @param {Array} [segments=[]] - The dash pattern.
+         * @param {Array|number|boolean} [segments=[]] - The dash pattern, as [5,5] or 5 or true.
          * @example
          * pen.set.dash([10,5]) // set dash line
          */
-        dash(segments: number[] = []) {
-            this.pen.ctx.setLineDash(segments.map(x => x * PEN_QUALITY));
+        dash(segments: (number[] | number | boolean) = []) {
+            if (Array.isArray(segments))
+                this.pen.ctx.setLineDash(segments.map(x => x * PEN_QUALITY));
+            if (typeof segments === 'number')
+                this.dash([segments, segments])
+            if (typeof segments === 'boolean')
+                this.dash(segments ? [5, 5] : [])
         },
         /**
          * Set the horizontal alignment of text.
@@ -345,7 +351,7 @@ class PenCls {
 
     /**
      * Drawing graph of functions.
-     * @namespace Graph
+     * @namespace graph
      * @memberof Pen
      */
 
@@ -353,7 +359,7 @@ class PenCls {
         pen: this,
         /**
          * Draw a circle (x-h)^2+(y-k)^2 = r^2.
-         * @memberof Pen.Graph
+         * @memberof Pen.graph
          * @param {number[]} center - The center coordinates [h,k].
          * @param {number} radius - The radius.
          * @example
@@ -362,6 +368,67 @@ class PenCls {
         circle(center: number[], radius: number) {
             const [h, k] = center
             this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
+        },
+        /**
+         * Draw a quadratic graph y=ax^2+bx+c.
+         * @memberof Pen.graph
+         * @param {number} a - The coeff of x^2.
+         * @param {number} b - The coeff of x.
+         * @param {number} c - The constant.
+         * @example
+         * pen.graph.quadratic(1,2,3) // draw y=x^2+2x+3.
+         */
+        quadratic(a: number, b: number, c: number) {
+            this.pen.plot(x => a * x * x + b * x + c)
+        },
+        /**
+         * Draw a line y=mx+c.
+         * @memberof Pen.graph
+         * @param {number} m - The slope.
+         * @param {number} c - The y-intercept.
+         * @example
+         * pen.graph.line(2,1) // draw the line y=2x+1
+         */
+        line(m: number, c: number) {
+            const [xmin, xmax] = this.pen.frame.xRange();
+            const y = (x: number) => m * x + c;
+            this.pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
+        },
+        /**
+         * Draw a horizontal line y=constant.
+         * @memberof Pen.graph
+         * @param {number} y - The constant value of y.
+         * @example
+         * pen.graph.horizontal(2) // draw the line y=2
+         */
+        horizontal(y: number) {
+            const [xmin, xmax] = this.pen.frame.xRange();
+            this.pen.line([xmin, y], [xmax, y]);
+        },
+        /**
+         * Draw a vertical line x=constant.
+         * @memberof Pen.graph
+         * @param {number} x - The constant value of x.
+         * @example
+         * pen.graph.vertical(2) // draw the line x=2
+         */
+        vertical(x: number) {
+            const [ymin, ymax] = this.pen.frame.yRange();
+            this.pen.line([x, ymin], [x, ymax]);
+        },
+        /**
+         * Draw a line ax+by+c=0.
+         * @memberof Pen.graph
+         * @param {number} a - The coeff of x.
+         * @param {number} b - The coeff of y.
+         * @param {number} c - The constant.
+         * @example
+         * pen.graph.linear(1,2,3) // draw the line x+2y+3=0
+         */
+        linear(a: number, b: number, c: number) {
+            if (a === 0 && b !== 0) this.horizontal(-c);
+            if (b == 0 && a !== 0) this.vertical(-c);
+            if (a !== 0 && b !== 0) this.line(-a / b, -c / b);
         }
     };
 
@@ -495,13 +562,14 @@ class PenCls {
      * Drawing straight line.
      * @namespace straight
      * @memberof Pen
+     * @deprecated
      */
-
     straight = {
         pen: this,
         /**
          * Draw a line y=mx+c.
          * @memberof Pen.straight
+         * @deprecated
          * @param {number} m - The slope.
          * @param {number} c - The y-intercept.
          * @example
@@ -515,6 +583,7 @@ class PenCls {
         /**
          * Draw a horizontal line y=constant.
          * @memberof Pen.straight
+         * @deprecated
          * @param {number} y - The constant value of y.
          * @example
          * pen.straight.horizontal(2) // draw the line y=2
@@ -526,6 +595,7 @@ class PenCls {
         /**
          * Draw a vertical line x=constant.
          * @memberof Pen.straight
+         * @deprecated
          * @param {number} x - The constant value of x.
          * @example
          * pen.straight.vertical(2) // draw the line x=2
@@ -715,6 +785,7 @@ class PenCls {
     /**
      * Add a label to a point.
      * @memberof Pen.text
+     * @deprecated
      * @param {number[]} position - The coordinates [x,y] of the point to label.
      * @param {string} text - The string to write.
      * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
@@ -723,6 +794,24 @@ class PenCls {
      * pen.label([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
      */
     label(position: number[], text: string, dodgeDirection = 0, offsetPixel = 15) {
+        let [x, y] = this.frame.toPix(position);
+        offsetPixel = offsetPixel * PEN_QUALITY;
+        x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
+        y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
+        this.ctx.fillText(text, x, y);
+    }
+
+    /**
+     * Add a label to a point.
+     * @memberof Pen.text
+     * @param {number[]} position - The coordinates [x,y] of the point to label.
+     * @param {string} text - The string to write.
+     * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
+     * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
+     * @example
+     * pen.labelPoint([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
+     */
+    labelPoint(position: number[], text: string, dodgeDirection = 0, offsetPixel = 15) {
         let [x, y] = this.frame.toPix(position);
         offsetPixel = offsetPixel * PEN_QUALITY;
         x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
@@ -748,7 +837,7 @@ class PenCls {
         let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
         let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
         if (a2 < a1) a2 = a2 + 360
-        this.label(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
+        this.labelPoint(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
     }
 
     /**
@@ -767,7 +856,7 @@ class PenCls {
         let APixel = this.frame.toPix(A);
         let BPixel = this.frame.toPix(B);
         let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
-        this.label(M, text, q + dodgeDirection, offsetPixel);
+        this.labelPoint(M, text, q + dodgeDirection, offsetPixel);
     }
 
     /**
