@@ -620,7 +620,8 @@ class AutoPenCls {
      * @param {number[]} contours - The contours to draw, [4,5] represent P=4 and P=5.
      * @param {void[]} labelConstraints - Constraint to label integral points.
      * @param {object[]} [highlights=[]] - Points to highlight, [[point,color,circle,contour,coordinates,label]].
-     * @param {number} [scale=1] - Size of the image.
+     * @param {any[]} [ranges=[[-10,10],[-10,10]]] - Range of Canvas.
+     * @param {number} [resolution=0.1] - Resolution of Canvas
      * @returns {void} The image is ready for export.
      * @example
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
@@ -630,7 +631,9 @@ class AutoPenCls {
      * let highlights = [[0,0]]
      * autoPen.LinearProgram({
      * constraints,field,contours,labelConstraints,highlights,
-     * showGrid:1,
+     * ranges:[[-10,10],[-10,10]],
+     * resolution:0.1,
+     * grid:1,
      * showLine : true,
      * showShade : true,
      * showVertex : true,
@@ -650,9 +653,10 @@ class AutoPenCls {
         contours = [4, 5, 6],
         labelConstraints = [],
         highlights = [],
-        scale = 1,
-        showGrid = 1,
-        showTick = 1,
+        ranges = [[-10, 10], [-10, 10]],
+        resolution = 0.1,
+        grid = 1,
+        tick = 1,
         showLine = true,
         showShade = true,
         showVertex = true,
@@ -672,9 +676,10 @@ class AutoPenCls {
             contours: number[],
             labelConstraints: ((x: number, y: number) => boolean)[],
             highlights: { point: [number, number], color?: string, circle?: boolean, contour?: boolean, coordinates?: boolean, label?: boolean }[],
-            scale: number,
-            showGrid: number,
-            showTick: number,
+            ranges: [[number, number], [number, number]],
+            resolution: number,
+            grid: number,
+            tick: number,
             showLine: boolean, showShade: boolean, showVertex: boolean,
             showVertexCoordinates: boolean,
             showVertexLabel: boolean,
@@ -703,25 +708,25 @@ class AutoPenCls {
 
         const pen = new Pen();
 
-        pen.setup.size(scale);
-        pen.setup.inView([...(LP.vertex)])
+        pen.setup.range(...ranges)
+        pen.setup.resolution(resolution);
         //pen.setup.range([xmin - 0.8, xmax + 0.8], [ymin - 0.8, ymax + 0.8]);
 
         pen.axis.x();
         pen.axis.y();
 
-        if (showGrid > 0) {
+        if (grid > 0) {
             pen.set.alpha(0.6);
-            pen.grid.x(showGrid);
-            pen.grid.y(showGrid);
+            pen.grid.x(grid);
+            pen.grid.y(grid);
             pen.set.alpha();
         }
 
-        if (showTick > 0) {
+        if (tick > 0) {
             pen.set.fillColor("grey");
             pen.set.textSize(0.8);
-            pen.tick.x(showTick);
-            pen.tick.y(showTick);
+            pen.tick.x(tick);
+            pen.tick.y(tick);
             pen.set.fillColor();
             pen.set.textSize();
         }
