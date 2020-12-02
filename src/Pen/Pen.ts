@@ -848,6 +848,20 @@ class PenCls {
             let BPixel = this.pen.frame.toPix(B);
             let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
             this.point(M, text, q + dodgeDirection, offsetPixel);
+        },
+
+        /**
+         * Add a coordinates label to a point.
+         * @memberof Pen.text
+         * @param {number[]} position - The coordinates [x,y] of the point to label.
+         * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
+         * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
+         * @example
+         * pen.label.coordinates([1,2],180) // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
+         */
+        coordinates(point: number[], dodgeDirection = 0, offsetPixel = 15) {
+            let text = '(' + Fix(point[0], 1) + ', ' + Fix(point[1], 1) + ')'
+            this.point(point, text, dodgeDirection, offsetPixel)
         }
 
     };
