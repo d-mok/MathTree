@@ -741,8 +741,10 @@ class AutoPenCls {
             LP.integral.forEach((p) => {
                 pen.point(p);
                 if (label) {
+                    pen.set.textAlign("left")
                     if (labelConstraints.every((f) => f(...p)))
                         pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
+                    pen.set.textAlign()
                 }
             });
         }
