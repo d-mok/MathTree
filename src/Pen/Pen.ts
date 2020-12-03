@@ -1159,6 +1159,80 @@ class PenCls {
         return html.replace('src="' + placeholder + '"', src + width + height);
     };
 
+
+
+
+
+
+
+    exportCropped(html: string, placeholder: string) {
+
+        function cloneCanvas(oldCanvas: HTMLCanvasElement) {
+            //create a new canvas
+            let newCanvas = document.createElement('canvas');
+            let context = newCanvas.getContext('2d')!;
+            //set dimensions
+            newCanvas.width = oldCanvas.width;
+            newCanvas.height = oldCanvas.height;
+            //apply the old canvas to the new one
+            context.drawImage(oldCanvas, 0, 0);
+            //return the new canvas
+            return newCanvas;
+        }
+
+        function autoCrop(canvas: HTMLCanvasElement) {
+            let ctx = canvas.getContext("2d")!;
+            let w = canvas.width;
+            let h = canvas.height;
+            let pix: { x: number[], y: number[] } = { x: [], y: [] };
+            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            let x;
+            let y;
+            let index;
+            for (y = 0; y < h; y++) {
+                for (x = 0; x < w; x++) {
+                    index = (y * w + x) * 4;
+                    if (imageData.data[index + 3] > 0) {
+                        pix.x.push(x);
+                        pix.y.push(y);
+                    }
+                }
+            }
+            pix.x.sort((a, b) => a - b);
+            pix.y.sort((a, b) => a - b);
+            let n = pix.x.length - 1;
+            w = 1 + pix.x[n] - pix.x[0];
+            h = 1 + pix.y[n] - pix.y[0];
+            let cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
+            canvas.width = w;
+            canvas.height = h;
+            ctx.putImageData(cut, 0, 0);
+        }
+        let clone = cloneCanvas(this.canvas);
+        autoCrop(clone);
+
+        const src = 'src="' + clone.toDataURL() + '"';
+        const w = Math.floor(clone.width / PEN_QUALITY)
+        const h = Math.floor(clone.height / PEN_QUALITY)
+        const width = ' width="' + w + '"';
+        const height = ' height="' + h + '"';
+        return html.replace('src="' + placeholder + '"', src + width + height);
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Clear the canvas.
      * @memberof Pen.export
