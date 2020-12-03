@@ -783,7 +783,7 @@ class AutoPenCls {
         }: { point: [number, number], color?: string, circle?: boolean, contour?: boolean, coordinates?: boolean, label?: boolean }) {
             pen.set.color(color);
             pen.point(point);
-            if (circle) pen.circle(point, 4);
+            if (circle) pen.circle(point, 5);
             if (contour) drawContour(fieldAt(point));
             if (coordinates) pen.label.coordinates(point, 270);
             if (label) {
