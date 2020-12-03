@@ -715,7 +715,7 @@ class AutoPenCls {
      * let field =  [1, -3, 3]
      * let contours = [4,5]
      * let labelConstraints = [(x,y)=>y>0]
-     * let highlights = [[0,0]]
+     * let highlights = [{point:[0,0]}]
      * autoPen.LinearProgram({
      * constraints,field,contours,labelConstraints,highlights,
      * ranges:[[-10,10],[-10,10]],
@@ -790,8 +790,8 @@ class AutoPenCls {
         pen.setup.range(...ranges)
         pen.setup.resolution(resolution);
 
-        pen.axis.x();
-        pen.axis.y();
+        pen.axis.x('');
+        pen.axis.y('');
 
         if (grid > 0) {
             pen.set.alpha(0.6);
@@ -836,8 +836,10 @@ class AutoPenCls {
                 pen.point(p);
                 if (coordinates) pen.label.coordinates(p, 270);
                 if (label) {
+                    pen.set.textAlign("left")
                     if (labelConstraints.every((f) => f(...p)))
                         pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
+                    pen.set.textAlign()
                 }
             });
         }
@@ -868,10 +870,14 @@ class AutoPenCls {
         }: { point: [number, number], color?: string, circle?: boolean, contour?: boolean, coordinates?: boolean, label?: boolean }) {
             pen.set.color(color);
             pen.point(point);
-            if (circle) pen.circle(point, 5);
+            if (circle) pen.circle(point, 4);
             if (contour) drawContour(fieldAt(point));
             if (coordinates) pen.label.coordinates(point, 270);
-            if (label) pen.label.point(point, Round(fieldAt(point), 3).toString(), 60, 10);
+            if (label) {
+                pen.set.textAlign("left")
+                pen.label.point(point, Round(fieldAt(point), 3).toString(), 60, 10);
+                pen.set.textAlign()
+            }
             pen.set.color();
         }
 

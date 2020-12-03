@@ -628,7 +628,7 @@ class AutoPenCls {
      * let field =  [1, -3, 3]
      * let contours = [4,5]
      * let labelConstraints = [(x,y)=>y>0]
-     * let highlights = [[0,0]]
+     * let highlights = [{point:[0,0]}]
      * autoPen.LinearProgram({
      * constraints,field,contours,labelConstraints,highlights,
      * ranges:[[-10,10],[-10,10]],
@@ -783,7 +783,7 @@ class AutoPenCls {
         }: { point: [number, number], color?: string, circle?: boolean, contour?: boolean, coordinates?: boolean, label?: boolean }) {
             pen.set.color(color);
             pen.point(point);
-            if (circle) pen.circle(point, 5);
+            if (circle) pen.circle(point, 4);
             if (contour) drawContour(fieldAt(point));
             if (coordinates) pen.label.coordinates(point, 270);
             if (label) {

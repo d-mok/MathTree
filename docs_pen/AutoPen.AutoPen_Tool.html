@@ -913,7 +913,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>let constraints = [[1, 1, "&lt;=", 5], [1, -1, "&lt;", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]let field =  [1, -3, 3]let contours = [4,5]let labelConstraints = [(x,y)=>y>0]let highlights = [[0,0]]autoPen.LinearProgram({constraints,field,contours,labelConstraints,highlights,ranges:[[-10,10],[-10,10]],resolution:0.1,grid:1,showLine : true,showShade : true,showVertex : true,showVertexCoordinates : true,showVertexLabel : true,showVertexMax : false,showVertexMin : false,showIntegral : false,showIntegralLabel : false,showIntegralMax : false,showIntegralMin : false,contourColor : "grey"})</code></pre>
+        <pre class="prettyprint"><code>let constraints = [[1, 1, "&lt;=", 5], [1, -1, "&lt;", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]let field =  [1, -3, 3]let contours = [4,5]let labelConstraints = [(x,y)=>y>0]let highlights = [{point:[0,0]}]autoPen.LinearProgram({constraints,field,contours,labelConstraints,highlights,ranges:[[-10,10],[-10,10]],resolution:0.1,grid:1,showLine : true,showShade : true,showVertex : true,showVertexCoordinates : true,showVertexLabel : true,showVertexMax : false,showVertexMin : false,showIntegral : false,showIntegralLabel : false,showIntegralMax : false,showIntegralMin : false,contourColor : "grey"})</code></pre>
     
 
 

@@ -5,7 +5,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> decorator</title>
+  <title> graph</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -74,7 +74,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Namespace</p>
-                    <h1>decorator</h1>
+                    <h1>graph</h1>
                 </header>
                 
 
@@ -85,7 +85,7 @@
 
 <header>
     
-        <h2>decorator</h2>
+        <h2>graph</h2>
         
     
 </header>
@@ -94,7 +94,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Geometry Decorator.</div>
+            <div class="description">Drawing graph of functions.</div>
         
 
         
@@ -135,7 +135,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line414">line 414</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line283">line 283</a>
             </span>
         </p>
     
@@ -169,8 +169,8 @@
 
 
     
-    <h4 class="name" id=".angle">
-        <a class="href-link" href="#.angle">#</a>
+    <h4 class="name" id=".circle">
+        <a class="href-link" href="#.circle">#</a>
         
             
                 <span class='tag'>static</span>
@@ -178,7 +178,7 @@
         
         <span class="code-name">
             
-                angle<span class="signature">(A, O, B, arc<span class="signature-attributes">opt</span>, radius<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+                circle<span class="signature">(center, radius)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -187,7 +187,7 @@
     
     
     <div class="description">
-        Decorate an angle AOB, always in anti-clockwise.
+        Draw a circle (x-h)^2+(y-k)^2 = r^2.
     </div>
     
 
@@ -212,11 +212,7 @@
             <th>Type</th>
 
             
-            <th>Attributes</th>
-            
 
-            
-            <th>Default</th>
             
 
             <th class="last">Description</th>
@@ -229,7 +225,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>A</code></td>
+      <td class="name"><code>center</code></td>
   
 
   <td class="type">
@@ -242,137 +238,10 @@
   </td>
 
   
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
 
   
-      <td class="default">
-      
-      </td>
-  
 
-  <td class="description last">The starting point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>O</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The vertex point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>B</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The ending point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>arc</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">number</span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-          &lt;optional><br>
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-          1
-      
-      </td>
-  
-
-  <td class="description last">The number of arcs.</td>
+  <td class="description last">The center coordinates [h,k].</td>
 </tr>
 
 
@@ -394,26 +263,10 @@
   </td>
 
   
-      <td class="attributes">
-      
-          &lt;optional><br>
-      
-
-      
-
-      
-      </td>
-  
 
   
-      <td class="default">
-      
-          15
-      
-      </td>
-  
 
-  <td class="description last">The radius of the angle arc, in pixel.</td>
+  <td class="description last">The radius.</td>
 </tr>
 
 
@@ -461,7 +314,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line512">line 512</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line298">line 298</a>
             </span>
         </p>
     
@@ -490,7 +343,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>pen.decorate.angle([1,0],[0,0],[3,2],2) // decorate an angle AOB with double-arc in anti-clockwise.</code></pre>
+        <pre class="prettyprint"><code>pen.graph.circle([1,2],3) // draw (x-1)^2+(y-2)^2 = 9.</code></pre>
     
 
 
@@ -500,8 +353,8 @@
 
 
     
-    <h4 class="name" id=".equalSide">
-        <a class="href-link" href="#.equalSide">#</a>
+    <h4 class="name" id=".horizontal">
+        <a class="href-link" href="#.horizontal">#</a>
         
             
                 <span class='tag'>static</span>
@@ -509,7 +362,7 @@
         
         <span class="code-name">
             
-                equalSide<span class="signature">(startPoint, endPoint, tick<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+                horizontal<span class="signature">(y)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -518,7 +371,7 @@
     
     
     <div class="description">
-        Decorate equal side lengths.
+        Draw a horizontal line y=constant.
     </div>
     
 
@@ -543,11 +396,7 @@
             <th>Type</th>
 
             
-            <th>Attributes</th>
-            
 
-            
-            <th>Default</th>
             
 
             <th class="last">Description</th>
@@ -560,81 +409,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>startPoint</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The starting point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>endPoint</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The ending point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>tick</code></td>
+      <td class="name"><code>y</code></td>
   
 
   <td class="type">
@@ -647,26 +422,10 @@
   </td>
 
   
-      <td class="attributes">
-      
-          &lt;optional><br>
-      
-
-      
-
-      
-      </td>
-  
 
   
-      <td class="default">
-      
-          1
-      
-      </td>
-  
 
-  <td class="description last">The number of ticks.</td>
+  <td class="description last">The constant value of y.</td>
 </tr>
 
 
@@ -714,7 +473,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line430">line 430</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line334">line 334</a>
             </span>
         </p>
     
@@ -743,7 +502,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>pen.decorate.equalSide([1,0],[3,2],2) // decorate a double-tick at the mid-pt of [1,0] and [3,2]</code></pre>
+        <pre class="prettyprint"><code>pen.graph.horizontal(2) // draw the line y=2</code></pre>
     
 
 
@@ -753,8 +512,8 @@
 
 
     
-    <h4 class="name" id=".parallel">
-        <a class="href-link" href="#.parallel">#</a>
+    <h4 class="name" id=".line">
+        <a class="href-link" href="#.line">#</a>
         
             
                 <span class='tag'>static</span>
@@ -762,7 +521,7 @@
         
         <span class="code-name">
             
-                parallel<span class="signature">(startPoint, endPoint, tick<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+                line<span class="signature">(m, c)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -771,7 +530,7 @@
     
     
     <div class="description">
-        Decorate parallel side.
+        Draw a line y=mx+c.
     </div>
     
 
@@ -796,11 +555,7 @@
             <th>Type</th>
 
             
-            <th>Attributes</th>
-            
 
-            
-            <th>Default</th>
             
 
             <th class="last">Description</th>
@@ -813,81 +568,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>startPoint</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The starting point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>endPoint</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The ending point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>tick</code></td>
+      <td class="name"><code>m</code></td>
   
 
   <td class="type">
@@ -900,26 +581,35 @@
   </td>
 
   
-      <td class="attributes">
-      
-          &lt;optional><br>
-      
 
-      
+  
 
+  <td class="description last">The slope.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>c</code></td>
+  
+
+  <td class="type">
+  
       
-      </td>
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
   
 
   
-      <td class="default">
-      
-          1
-      
-      </td>
-  
 
-  <td class="description last">The number of ticks.</td>
+  <td class="description last">The y-intercept.</td>
 </tr>
 
 
@@ -967,7 +657,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line474">line 474</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line322">line 322</a>
             </span>
         </p>
     
@@ -996,7 +686,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>pen.decorate.parallel([1,0],[3,2],2) // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]</code></pre>
+        <pre class="prettyprint"><code>pen.graph.line(2,1) // draw the line y=2x+1</code></pre>
     
 
 
@@ -1006,8 +696,8 @@
 
 
     
-    <h4 class="name" id=".rightAngle">
-        <a class="href-link" href="#.rightAngle">#</a>
+    <h4 class="name" id=".linear">
+        <a class="href-link" href="#.linear">#</a>
         
             
                 <span class='tag'>static</span>
@@ -1015,7 +705,7 @@
         
         <span class="code-name">
             
-                rightAngle<span class="signature">(A, O, B, size<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+                linear<span class="signature">(a, b, c)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -1024,7 +714,7 @@
     
     
     <div class="description">
-        Decorate a right-angle AOB.
+        Draw a line ax+by+c=0.
     </div>
     
 
@@ -1049,11 +739,7 @@
             <th>Type</th>
 
             
-            <th>Attributes</th>
-            
 
-            
-            <th>Default</th>
             
 
             <th class="last">Description</th>
@@ -1066,118 +752,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>A</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The starting point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>O</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The vertex point [x,y].</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>B</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array.&lt;number></span>
-
-
-  
-  </td>
-
-  
-      <td class="attributes">
-      
-
-      
-
-      
-      </td>
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The ending point [x,y]. Interchangeable with A.</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>size</code></td>
+      <td class="name"><code>a</code></td>
   
 
   <td class="type">
@@ -1190,26 +765,60 @@
   </td>
 
   
-      <td class="attributes">
-      
-          &lt;optional><br>
-      
 
-      
+  
 
+  <td class="description last">The coeff of x.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>b</code></td>
+  
+
+  <td class="type">
+  
       
-      </td>
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
   
 
   
-      <td class="default">
-      
-          15
-      
-      </td>
+
+  <td class="description last">The coeff of y.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>c</code></td>
   
 
-  <td class="description last">The size of the mark, in pixel.</td>
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The constant.</td>
 </tr>
 
 
@@ -1257,7 +866,7 @@
         <p class="tag-source">
             <a href="Pen.ts.html" class="button">View Source</a>
             <span>
-                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line534">line 534</a>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line358">line 358</a>
             </span>
         </p>
     
@@ -1286,7 +895,375 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>pen.decorate.rightAngle([1,0],[0,0],[3,2]) // decorate an right-angle AOB</code></pre>
+        <pre class="prettyprint"><code>pen.graph.linear(1,2,3) // draw the line x+2y+3=0</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".quadratic">
+        <a class="href-link" href="#.quadratic">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                quadratic<span class="signature">(a, b, c)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Draw a quadratic graph y=ax^2+bx+c.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>a</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The coeff of x^2.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>b</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The coeff of x.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>c</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The constant.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Pen.ts.html" class="button">View Source</a>
+            <span>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line311">line 311</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>pen.graph.quadratic(1,2,3) // draw y=x^2+2x+3.</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".vertical">
+        <a class="href-link" href="#.vertical">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                vertical<span class="signature">(x)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Draw a vertical line x=constant.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>x</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The constant value of x.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Pen.ts.html" class="button">View Source</a>
+            <span>
+                <a href="Pen.ts.html">Pen.ts</a>, <a href="Pen.ts.html#line345">line 345</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>pen.graph.vertical(2) // draw the line x=2</code></pre>
     
 
 
