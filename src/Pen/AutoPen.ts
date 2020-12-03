@@ -703,8 +703,8 @@ class AutoPenCls {
         pen.setup.range(...ranges)
         pen.setup.resolution(resolution);
 
-        pen.axis.x();
-        pen.axis.y();
+        pen.axis.x('');
+        pen.axis.y('');
 
         if (grid > 0) {
             pen.set.alpha(0.6);
@@ -749,8 +749,10 @@ class AutoPenCls {
                 pen.point(p);
                 if (coordinates) pen.label.coordinates(p, 270);
                 if (label) {
+                    pen.set.textAlign("left")
                     if (labelConstraints.every((f) => f(...p)))
                         pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
+                    pen.set.textAlign()
                 }
             });
         }
@@ -784,7 +786,11 @@ class AutoPenCls {
             if (circle) pen.circle(point, 5);
             if (contour) drawContour(fieldAt(point));
             if (coordinates) pen.label.coordinates(point, 270);
-            if (label) pen.label.point(point, Round(fieldAt(point), 3).toString(), 60, 10);
+            if (label) {
+                pen.set.textAlign("left")
+                pen.label.point(point, Round(fieldAt(point), 3).toString(), 60, 10);
+                pen.set.textAlign()
+            }
             pen.set.color();
         }
 
