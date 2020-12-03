@@ -692,25 +692,16 @@ class AutoPenCls {
             contourColor: string
 
         }) {
-
-        //setting
-
-
         function fieldAt(p: [number, number]) {
             return field[0] * p[0] + field[1] * p[1] + field[2];
         }
 
         let LP = LinearProgram(constraints, field);
-        // let xmax = 20;
-        // let xmin = -20;
-        // let ymax = 20;
-        // let ymin = -20;
 
         const pen = new Pen();
 
         pen.setup.range(...ranges)
         pen.setup.resolution(resolution);
-        //pen.setup.range([xmin - 0.8, xmax + 0.8], [ymin - 0.8, ymax + 0.8]);
 
         pen.axis.x();
         pen.axis.y();
@@ -730,7 +721,6 @@ class AutoPenCls {
             pen.set.fillColor();
             pen.set.textSize();
         }
-
 
         function drawLines() {
             constraints.forEach((constraint) => {
@@ -803,9 +793,7 @@ class AutoPenCls {
         }
 
         if (showLine) drawLines();
-
-        if (showIntegral)
-            drawIntegral(showIntegralLabel);
+        if (showIntegral) drawIntegral(showIntegralLabel);
         if (showShade) drawShade();
         if (showVertex) drawVertex(showVertexCoordinates, showVertexLabel);
         drawHighlights();
@@ -813,12 +801,8 @@ class AutoPenCls {
 
         if (showVertexMax) drawHighlight({ point: LP.vertexMax.point, color: "red" });
         if (showVertexMin) drawHighlight({ point: LP.vertexMin.point, color: "blue" });
-
-        if (showIntegralMax)
-            drawHighlight({ point: LP.integralMax.point, color: "red" });
-        if (showIntegralMin)
-            drawHighlight({ point: LP.integralMin.point, color: "blue" });
-
+        if (showIntegralMax) drawHighlight({ point: LP.integralMax.point, color: "red" });
+        if (showIntegralMin) drawHighlight({ point: LP.integralMin.point, color: "blue" });
 
         this.pen = pen;
     }

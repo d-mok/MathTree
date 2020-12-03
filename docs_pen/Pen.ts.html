@@ -715,12 +715,12 @@ class PenCls {
          * @param {number[]} startPoint - The starting point [x,y].
          * @param {number[]} endPoint - The ending point [x,y].
          * @param {number} [tick=1] - The number of ticks.
-         * @param {number} [length=5] - The one-sided length of a tick, in pixel.
-         * @param {number} [space=3] - The space between ticks, if tick > 1, in pixel.
          * @example
          * pen.decorate.equalSide([1,0],[3,2],2) // decorate a double-tick at the mid-pt of [1,0] and [3,2]
          */
-        equalSide(startPoint: number[], endPoint: number[], tick = 1, length = 5, space = 3) {
+        equalSide(startPoint: number[], endPoint: number[], tick = 1) {
+            let length = 5
+            let space = 3
             length = length * PEN_QUALITY;
             space = space * PEN_QUALITY;
             startPoint = this.pen.frame.toPix(startPoint);
@@ -760,12 +760,12 @@ class PenCls {
          * @param {number[]} startPoint - The starting point [x,y].
          * @param {number[]} endPoint - The ending point [x,y].
          * @param {number} [tick=1] - The number of ticks.
-         * @param {number} [size=4] - The size of a tick, in pixel.
-         * @param {number} [space=6] - The space between ticks, if tick > 1, in pixel.
          * @example
          * pen.decorate.parallel([1,0],[3,2],2) // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
          */
-        parallel(startPoint: number[], endPoint: number[], tick = 1, size = 4, space = 6) {
+        parallel(startPoint: number[], endPoint: number[], tick = 1) {
+            let size = 4
+            let space = 6
             size = size * PEN_QUALITY;
             space = space * PEN_QUALITY;
             startPoint = this.pen.frame.toPix(startPoint);
@@ -799,19 +799,20 @@ class PenCls {
          * @param {number[]} O - The vertex point [x,y].
          * @param {number[]} B - The ending point [x,y].
          * @param {number} [arc=1] - The number of arcs.
-         * @param {number} [radius=5] - The radius of the angle arc, in pixel.
-         * @param {number} [space=1] - The space between arcs, if arc > 1, in pixel.
+         * @param {number} [radius=15] - The radius of the angle arc, in pixel.
          * @example
          * pen.decorate.angle([1,0],[0,0],[3,2],2) // decorate an angle AOB with double-arc in anti-clockwise.
          */
-        angle(A: number[], O: number[], B: number[], arc = 1, radius = 15, space = 3) {
+        angle(A: number[], O: number[], B: number[], arc = 1, radius = 15) {
             A = this.pen.frame.toPix(A);
             let OPixel = this.pen.frame.toPix(O);
             B = this.pen.frame.toPix(B);
             let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
             let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
+            let space = 3
+            let outset = arc > 1 ? space / 2 : 0
             for (let i = 0; i &lt; arc; i++) {
-                this.pen.circle(O, radius + i * space, [a1, a2]);
+                this.pen.circle(O, radius + outset - i * space, [a1, a2]);
             }
         },
 
@@ -893,7 +894,7 @@ class PenCls {
             this.pen.ctx.save();
             if (!isNaN(Number(text)))
                 this.pen.set.textItalic(false)
-            if (isNaN(Number(text)) &amp;&amp; text.length === 1)
+            if (text.length === 1 &amp;&amp; (text.toLowerCase() !== text.toUpperCase()))
                 this.pen.set.textItalic(true)
             this.pen.ctx.fillText(text, x, y);
             this.pen.ctx.restore();
@@ -904,11 +905,11 @@ class PenCls {
          * @param {number[][]} anglePoints - An array [A,O,B] for the coordinates of A,O,B.
          * @param {string} text - The string to write.
          * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param {number} [offsetPixel=30] - The pixel distance to offset from the position.
+         * @param {number} [offsetPixel=-1] - The pixel distance to offset from the position. If negative, default to (text.length &lt;= 2 ? 25 : 30).
          * @example
          * pen.label.angle([[1,2],[0,0],[-2,1]],'x') // label the angle as 'x'
          */
-        angle(anglePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = 30) {
+        angle(anglePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = -1) {
             let [A, O, B] = anglePoints;
             let APixel = this.pen.frame.toPix(A);
             let OPixel = this.pen.frame.toPix(O);
@@ -916,6 +917,8 @@ class PenCls {
             let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
             let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
             if (a2 &lt; a1) a2 = a2 + 360
+            if (offsetPixel &lt; 0)
+                offsetPixel = text.length &lt;= 2 ? 25 : 30
             this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
         },
         /**
@@ -924,16 +927,18 @@ class PenCls {
          * @param {number[][]} linePoints - An array [A,B] for the coordinates of AB.
          * @param {string} text - The string to write.
          * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to the right normal of AB.
-         * @param {number} [offsetPixel=25] - The pixel distance to offset from the position.
+         * @param {number} [offsetPixel=-1] - The pixel distance to offset from the position. If negative, default to (text.length &lt;= 2 ? 15 : text.length &lt;= 4 ? 20 : 25).
          * @example
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          */
-        line(linePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = 25) {
+        line(linePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = -1) {
             let [A, B] = linePoints;
             let M = MidPoint(A, B);
             let APixel = this.pen.frame.toPix(A);
             let BPixel = this.pen.frame.toPix(B);
             let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
+            if (offsetPixel &lt; 0)
+                offsetPixel = text.length &lt;= 2 ? 15 : text.length &lt;= 4 ? 20 : 25
             this.point(M, text, q + dodgeDirection, offsetPixel);
         },
 
