@@ -539,6 +539,24 @@ class PenCls {
     }
 
     /**
+     * Draw a polyline given points.
+     * @memberof Pen.draw
+     * @param {...number[]} points - The coordinates [x,y] of all points.
+     * @example
+     * pen.polyline([[0,0],[5,2],[3,4]]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
+     */
+    polyline(...points: number[][]) {
+        this.ctx.beginPath();
+        let [xStart, yStart] = this.frame.toPix(points[0]);
+        this.ctx.moveTo(xStart, yStart);
+        for (let i = 1; i < points.length; i++) {
+            let [x, y] = this.frame.toPix(points[i]);
+            this.ctx.lineTo(x, y);
+        }
+        this.ctx.stroke();
+    }
+
+    /**
      * Draw a polygon given vertex points.
      * @memberof Pen.draw
      * @param {number[][]} points - The coordinates [x,y] of all vetices.
