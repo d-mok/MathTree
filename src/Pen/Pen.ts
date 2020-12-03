@@ -241,25 +241,25 @@ class PenCls {
             size = Math.round(size * REM_PIXEL * PEN_QUALITY);
             this.pen.ctx.font = this.pen.ctx.font.replace(/\d+px/g, size + 'px');
         },
-        /**
-         * Set the style of text.
-         * @memberof Pen.set
-         * @deprecated use textItalic() instead
-         * @ignore
-         * @param {string} [style='normal'] - The text style {'normal','italic'}.
-         * @example
-         * pen.set.textStyle('italic') // set italic text
-         */
-        textStyle(style = "normal") {
-            if (style == 'normal') {
-                this.pen.ctx.font = this.pen.ctx.font.replace('italic ', '');
-            }
-            if (style == 'italic') {
-                if (!this.pen.ctx.font.includes('italic')) {
-                    this.pen.ctx.font = 'italic ' + this.pen.ctx.font;
-                }
-            }
-        },
+        // /**
+        //  * Set the style of text.
+        //  * @memberof Pen.set
+        //  * @deprecated use textItalic() instead
+        //  * @ignore
+        //  * @param {string} [style='normal'] - The text style {'normal','italic'}.
+        //  * @example
+        //  * pen.set.textStyle('italic') // set italic text
+        //  */
+        // textStyle(style = "normal") {
+        //     if (style == 'normal') {
+        //         this.pen.ctx.font = this.pen.ctx.font.replace('italic ', '');
+        //     }
+        //     if (style == 'italic') {
+        //         if (!this.pen.ctx.font.includes('italic')) {
+        //             this.pen.ctx.font = 'italic ' + this.pen.ctx.font;
+        //         }
+        //     }
+        // },
         /**
          * Set italic style of text.
          * @memberof Pen.set
@@ -269,9 +269,10 @@ class PenCls {
          */
         textItalic(italic = false) {
             if (italic) {
-                this.textStyle('italic');
+                if (!this.pen.ctx.font.includes('italic'))
+                    this.pen.ctx.font = 'italic ' + this.pen.ctx.font;
             } else {
-                this.textStyle();
+                this.pen.ctx.font = this.pen.ctx.font.replace('italic ', '');
             }
         },
         /**
@@ -964,9 +965,9 @@ class PenCls {
 
     axis = {
         pen: this,
-        getStyle(label: string): string {
-            return label.length === 1 ? "italic" : "normal";
-        },
+        // getStyle(label: string): string {
+        //     return label.length === 1 ? "italic" : "normal";
+        // },
         /**
          * Draw x-axis.
          * @memberof Pen.axis
@@ -979,7 +980,7 @@ class PenCls {
             const offset = 3 * this.pen.frame.xOffset();
             this.pen.line([xmin, 0], [xmax, 0], true);
             this.pen.ctx.save();
-            this.pen.set.textStyle(this.getStyle(label));
+            this.pen.set.textItalic(label.length === 1);
             this.pen.set.textAlign("right");
             this.pen.set.textBaseline("middle");
             this.pen.write([xmax, offset], label);
@@ -997,7 +998,7 @@ class PenCls {
             const offset = 3 * this.pen.frame.yOffset();
             this.pen.line([0, ymin], [0, ymax], true);
             this.pen.ctx.save();
-            this.pen.set.textStyle(this.getStyle(label));
+            this.pen.set.textItalic(label.length === 1);
             this.pen.set.textAlign("left");
             this.pen.set.textBaseline("top");
             this.pen.write([offset, ymax], label);
@@ -1027,7 +1028,7 @@ class PenCls {
                 this.pen.line([x, -offset], [x, offset]);
                 if (mark) {
                     this.pen.ctx.save();
-                    this.pen.set.textStyle("normal");
+                    this.pen.set.textItalic();
                     this.pen.set.textAlign("center");
                     this.pen.set.textBaseline("middle");
                     this.pen.write([x, -3 * offset], x.toString());
@@ -1049,7 +1050,7 @@ class PenCls {
                 this.pen.line([-offset, y], [offset, y]);
                 if (mark) {
                     this.pen.ctx.save();
-                    this.pen.set.textStyle("normal");
+                    this.pen.set.textItalic();
                     this.pen.set.textAlign("right");
                     this.pen.set.textBaseline("middle");
                     this.pen.write([-2 * offset, y], y.toString());
