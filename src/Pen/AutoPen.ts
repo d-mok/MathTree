@@ -701,10 +701,11 @@ class AutoPenCls {
         const pen = new Pen();
 
         let [[xmin, xmax], [ymin, ymax]] = ranges
-        xmin -= 0.8
-        xmax += 0.8
-        ymin -= 0.8
-        ymax += 0.8
+        let bound = 0.7
+        xmin -= bound
+        xmax += bound
+        ymin -= bound
+        ymax += bound
         pen.setup.range([xmin, xmax], [ymin, ymax])
         pen.setup.resolution(resolution);
 
@@ -736,6 +737,12 @@ class AutoPenCls {
                 pen.set.dash();
             });
         }
+
+        labelConstraints.push((x, y) => x > xmin)
+        labelConstraints.push((x, y) => x < xmax)
+        labelConstraints.push((x, y) => y > ymin)
+        labelConstraints.push((x, y) => y < ymax)
+
 
         function drawIntegral(label = false) {
             LP.integral.forEach((p) => {
