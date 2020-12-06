@@ -649,8 +649,8 @@ class AutoPenCls {
      */
     LinearProgram({
         constraints = [],
-        field = [1, 1, 0],
-        contours = [4, 5, 6],
+        field = [0, 0, 0],
+        contours = [],
         labelConstraints = [],
         highlights = [],
         ranges = [[-10, 10], [-10, 10]],
@@ -700,7 +700,12 @@ class AutoPenCls {
 
         const pen = new Pen();
 
-        pen.setup.range(...ranges)
+        let [[xmin, xmax], [ymin, ymax]] = ranges
+        xmin -= 0.8
+        xmax += 0.8
+        ymin -= 0.8
+        ymax += 0.8
+        pen.setup.range([xmin, xmax], [ymin, ymax])
         pen.setup.resolution(resolution);
 
         pen.axis.x('');
