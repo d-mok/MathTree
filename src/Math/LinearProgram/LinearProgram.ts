@@ -19,16 +19,22 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
         return field[0] * p[0] + field[1] * p[1] + field[2];
     }
 
-    function isConstrained(constraints: [number, number, string, number][], point: number[]): boolean {
+    function isConstrained(constraints: [number, number, string, number][], point: number[], strict = true): boolean {
         return constraints.every((constraint) => {
             let [a, b, s, c] = constraint;
             let P = a * point[0] + b * point[1] - c;
             let greater = s.includes(">") || s.includes("g");
             let eq = s.includes("=") || s.includes("e");
-            if (greater && eq) return P >= 0;
-            if (greater && !eq) return P > 0;
-            if (!greater && eq) return P <= 0;
-            if (!greater && !eq) return P < 0;
+            if (strict) {
+                if (greater && eq) return P >= 0;
+                if (greater && !eq) return P > 0;
+                if (!greater && eq) return P <= 0;
+                if (!greater && !eq) return P < 0;
+            } else {
+                if (greater) return P >= 0;
+                if (!greater) return P <= 0;
+            }
+
         });
     }
 
@@ -49,7 +55,7 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
                 let otherCons = [...cs];
                 otherCons.splice(j, 1);
                 otherCons.splice(i, 1);
-                if (isConstrained(otherCons, p)) {
+                if (isConstrained(otherCons, p, false)) {
                     vertices.push(p);
                 }
             }
@@ -78,7 +84,7 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
         return points;
     }
 
-    function OptimizeField(field: number[], feasiblePoints: [number,number][]): [[number, number], [number, number]] {
+    function OptimizeField(field: number[], feasiblePoints: [number, number][]): [[number, number], [number, number]] {
         let [a, b, c] = field;
         let f = (p: number[]) => a * p[0] + b * p[1] + c;
         let ps = [...feasiblePoints];
