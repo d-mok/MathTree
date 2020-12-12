@@ -1,13 +1,12 @@
 
 /**
- * Return the HCF.
- * If any input is non-integer, return 1.
  * @category Utility
- * @param {...number} nums - Find HCF of these numbers. Negative integers will be treated as positive.
- * @return {number} The HCF.
- * @example
+ * @param nums - Find HCF of these numbers. Negative integers will be treated as positive.
+ * @return The HCF. If any input is non-integer, return 1.
+ * ```typescript
  * HCF(6,8) // return 2
  * HCF(6,8,9) // return 1
+ * ```
  */
 function HCF(...nums: number[]): number {
     function _HCF(n1: number, n2: number): number {
@@ -27,16 +26,15 @@ globalThis.HCF = HCF
 
 
 /**
- * Return the LCM.
- * If any input is non-integer, return the product of the inputs.
  * @category Utility
- * @param {...number} nums - Find LCM of these numbers. Negative integers will be treated as positive.
- * @return {number} The LCM.
- * @example
+ * @param nums - Find LCM of these numbers. Negative integers will be treated as positive.
+ * @return The LCM. If any input is non-integer, return the product of the inputs.
+ * ```typescript
  * LCM(2,3) // return 6
  * LCM(2,3,5) // return 30
+ * ```
  */
-function LCM(...nums: number[]) {
+function LCM(...nums: number[]): number {
     if (!IsInteger(...nums))
         return nums.reduce((a, b) => a * b)
     function _LCM(n1: number, n2: number) {

@@ -8,7 +8,8 @@
     "jest": "jest",
     "tsc": "tsc",
     "docs_math": "./node_modules/.bin/jsdoc ./src/Math --configure .jsdoc.json --verbose -d docs_math",
-    "docs_pen": "./node_modules/.bin/jsdoc ./src/Pen --configure .jsdoc.json --verbose -d docs_pen"
+    "docs_pen": "./node_modules/.bin/jsdoc ./src/Pen --configure .jsdoc.json --verbose -d docs_pen",
+    "typedoc_math": "typedoc --out typedoc_math ./src/Math"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "jest": "^26.4.2",
     "jsdoc": "^3.6.5",
     "ts-loader": "^8.0.3",
+    "typedoc": "^0.19.2",
     "typescript": "^4.0.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"

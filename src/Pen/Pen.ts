@@ -863,7 +863,7 @@ class PenCls {
          * @example
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          */
-        line(linePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = -1) {
+        line(linePoints: [number,number][], text: string, dodgeDirection = 0, offsetPixel = -1) {
             let [A, B] = linePoints;
             let M = MidPoint(A, B);
             let APixel = this.pen.frame.toPix(A);

@@ -1,25 +1,28 @@
 
 /**
- * Return result of linear programming. Equivalent to Math.abs(x).
  * @category LinearProgram
- * @param {any[]} constraints - The constraints.
- * @param {number[]} field - The target function.
- * @param {number[]} [bound=[100,100]] - The virtual bounding square box
- * @return {object} The result, { vertex, integral, vertexMin, vertexMax, integralMin, integralMax }.
- * @example
- * LinearProgram([[1, 1, "<=", 5],[1, -1, "<", 4],[2, 1, ">=", -5]],[2,3,4])
- * // return { vertex:number[][], integral:number[][], vertexMin:{point,value}, vertexMax, integralMin, integralMax }
+ * @return result of linear programming.
+ * ```typescript
+ * LinearProgram([[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5]], [2,3,4])
+ * // optimize P=2x+3y+4 under [x+y<=5, x-y<4, 2x+y>=5]
  * // vertex: an array of vertex coordinates
  * // integral: an array of feasible integral points
  * // vertexMin: info about the minimum vertex
- * // optimize P=2x+3y+4 under [x+y<=5, x-y<4, 2x+y>=5]
+ * ```
  */
-function LinearProgram(constraints: [number, number, string, number][], field: number[], bound = [100, 100]) {
-    function fieldAt(p: [number, number]) {
+function LinearProgram(constraints: Constraint[], field: Field, bound = [100, 100]): {
+    vertex: Point[],
+    integral: Point[],
+    vertexMin: Optimum,
+    vertexMax: Optimum,
+    integralMin: Optimum,
+    integralMax: Optimum
+} {
+    function fieldAt(p: Point): number {
         return field[0] * p[0] + field[1] * p[1] + field[2];
     }
 
-    function isConstrained(constraints: [number, number, string, number][], point: number[], strict = true): boolean {
+    function isConstrained(constraints: Constraint[], point: Point, strict = true): boolean {
         return constraints.every((constraint) => {
             let [a, b, s, c] = constraint;
             let P = a * point[0] + b * point[1] - c;
@@ -38,14 +41,14 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
         });
     }
 
-    function feasiblePolygon(constraints: [number, number, string, number][]) {
+    function feasiblePolygon(constraints: Constraint[]): Point[] {
         let cs = [...constraints];
         cs.push([1, 0, "<", bound[0]]);
         cs.push([1, 0, ">", -bound[0]]);
         cs.push([0, 1, "<", bound[1]]);
         cs.push([0, 1, ">", -bound[1]]);
 
-        let vertices = [];
+        let vertices: Point[] = [];
         for (let i = 0; i < cs.length; i++) {
             for (let j = i + 1; j < cs.length; j++) {
                 let [a1, b1, s1, c1] = cs[i];
@@ -66,14 +69,14 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
         return vertices;
     }
 
-    function feasibleIntegral(constraints: [number, number, string, number][]) {
+    function feasibleIntegral(constraints: Constraint[]): Point[] {
         let cs = [...constraints];
         cs.push([1, 0, "<", bound[0]]);
         cs.push([1, 0, ">", -bound[0]]);
         cs.push([0, 1, "<", bound[1]]);
         cs.push([0, 1, ">", -bound[1]]);
 
-        let points: [number, number][] = [];
+        let points: Point[] = [];
         for (let i = -100; i <= 100; i++) {
             for (let j = -100; j <= 100; j++) {
                 if (isConstrained(constraints, [i, j])) {
@@ -84,11 +87,11 @@ function LinearProgram(constraints: [number, number, string, number][], field: n
         return points;
     }
 
-    function OptimizeField(field: number[], feasiblePoints: [number, number][]): [[number, number], [number, number]] {
+    function OptimizeField(field: Field, feasiblePoints: Point[]): [Point, Point] {
         let [a, b, c] = field;
-        let f = (p: number[]) => a * p[0] + b * p[1] + c;
+        let f = (p: Point) => a * p[0] + b * p[1] + c;
         let ps = [...feasiblePoints];
-        ps.sort((a, b) => f(a) - f(b));
+        ps.sort((p1, p2) => f(p1) - f(p2));
         return [ps[0], ps[ps.length - 1]];
     }
 

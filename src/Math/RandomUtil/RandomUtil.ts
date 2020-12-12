@@ -4,28 +4,26 @@ var chance = new Chance();
 
 
 /**
- * Return a random element.
  * @category RandomUtil
- * @param {...any} items - The list of elements to pick from.
- * @return {any} A random element.
- * @example
+ * @return a random item from the given items
+ * ```typescript
  * RndPick(2,4,6) // may return 2, 4 or 6
+ * ```
  */
-function RndPick(...items: any[]): any {
+function RndPick<T>(...items: T[]): T {
     return chance.pickone(items);
 }
 globalThis.RndPick = RndPick
 
 
 /**
- * Return a shuffled array.
  * @category RandomUtil
- * @param {...any} items - The list of elements to shuffle.
- * @return {any[]} A shuffled array.
- * @example
+ * @return a shuffled array of the given items
+ * ```typescript
  * RndShuffle(2,4,6) // may return [4,2,6]
+ * ```
  */
-function RndShuffle(...items: any[]): any[] {
+function RndShuffle<T>(...items: T[]): T[] {
     return chance.shuffle(items);
 }
 globalThis.RndShuffle = RndShuffle
@@ -33,25 +31,23 @@ globalThis.RndShuffle = RndShuffle
 
 
 /**
- * Return n random unique elements.
  * @category RandomUtil
- * @param {any[]} items - The array of elements to pick from.
- * @param {number} n - The number of unique elements required.
- * @return {any[]} An array of n unique elements.
- * @example
+ * @return n random unique items from given items
+ * ```typescript
  * RndPickN([2,4,6],2) // may return [4,2]
+ * ```
  */
-function RndPickN(items: any[], n: number): any[] {
+function RndPickN<T>(items: T[], n: number): T[] {
     return chance.pickset(items, n);
 }
 globalThis.RndPickN = RndPickN
 
 /**
- * Return a random male name.
  * @category RandomUtil
- * @return {string} A male name.
- * @example
+ * @return a random male name
+ * ```typescript
  * RndHe() // may return 'Peter', 'David', etc
+ * ```
  */
 function RndHe(): string {
     return chance.first({ gender: 'male', nationality: 'en' });
@@ -59,11 +55,11 @@ function RndHe(): string {
 globalThis.RndHe = RndHe
 
 /**
- * Return a random female name.
  * @category RandomUtil
- * @return {string} A female name.
- * @example
+ * @return a random female name
+ * ```typescript
  * RndShe() // may return 'Mary', 'Alice', etc
+ * ```
  */
 function RndShe(): string {
     return chance.first({ gender: 'female', nationality: 'en' });

@@ -1,11 +1,10 @@
 
 /**
- * Return the factorial n!.
  * @category Combinatorics
- * @param {number} n - The input number.
- * @return {number} n!
- * @example
+ * @return the factorial n!
+ * ```typescript
  * Factorial(5) // return 120
+ * ```
  */
 function Factorial(n: number): number {
     return n <= 0 ? 1 : n * Factorial(n - 1)
@@ -13,13 +12,11 @@ function Factorial(n: number): number {
 globalThis.Factorial = Factorial
 
 /**
- * Return nCr.
  * @category Combinatorics
- * @param {number} n - The total number of objects.
- * @param {number} r - The number of selected objects.
- * @return {number} nCr
- * @example
+ * @return nCr
+ * ```typescript
  * nCr(5,3) // return 10
+ * ```
  */
 function nCr(n: number, r: number): number {
     return Factorial(n) / (Factorial(r) * Factorial(n - r));
@@ -27,13 +24,11 @@ function nCr(n: number, r: number): number {
 globalThis.nCr = nCr
 
 /**
- * Return nPr.
  * @category Combinatorics
- * @param {number} n - The total number of objects.
- * @param {number} r - The number of selected objects.
- * @return {number} nPr
- * @example
+ * @return nPr
+ * ```typescript
  * nPr(5,3) // return 60
+ * ```
  */
 function nPr(n: number, r: number): number {
     return nCr(n, r) * Factorial(r);

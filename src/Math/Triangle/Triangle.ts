@@ -1,17 +1,13 @@
 
-
 /**
- * Find side length by cosine law.
  * @category Triangle
- * @param {number} a - Side length a
- * @param {number} b - Side length b
- * @param {number} C - Angle C
- * @return {number} Side length c, opposite to angle C.
- * @example
+ * @return Find side length c by cosine law. Input sides a,b and angle C.
+ * ```typescript
  * CosineLawLength(5,5,60) // return 5
  * CosineLawLength(2,4,30) // return 2.47862735
  * CosineLawLength(1,2,180) // return 3
  * CosineLawLength(4,6,0) // return 2
+ * ```
  */
 function CosineLawLength(a: number, b: number, C: number): number {
     return (a ** 2 + b ** 2 - 2 * a * b * cos(C)) ** 0.5
@@ -21,16 +17,13 @@ globalThis.CosineLawLength = CosineLawLength
 
 
 /**
- * Find angle by cosine law.
  * @category Triangle
- * @param {number} a - Side length a
- * @param {number} b - Side length b
- * @param {number} c - Side length c
- * @return {number} Angle C, opposite to side c.
- * @example
+ * @return Find angle C by cosine law. Input sides a,b,c.
+ * ```typescript
  * CosineLawAngle(5,5,5) // return 60
  * CosineLawAngle(3,4,5) // return 90
  * CosineLawAngle(7,8,9) // return 73.3984504
+ * ```
  */
 function CosineLawAngle(a: number, b: number, c: number): number {
     return arccos((c ** 2 - a ** 2 - b ** 2) / (-2 * a * b))
@@ -39,16 +32,13 @@ globalThis.CosineLawAngle = CosineLawAngle
 
 
 /**
- * Find area by Heron's formula.
  * @category Triangle
- * @param {number} a - Side length a
- * @param {number} b - Side length b
- * @param {number} c - Side length c
- * @return {number} Area
- * @example
+ * @return Find area by Heron's formula.
+ * ```typescript
  * Heron(3,4,5) // return 6
  * Heron(1,1,1) // return 0.433012701
  * Heron(7,8,9) // return 26.83281573
+ * ```
  */
 function Heron(a: number, b: number, c: number): number {
     let s = (a + b + c) / 2
@@ -57,19 +47,15 @@ function Heron(a: number, b: number, c: number): number {
 globalThis.Heron = Heron
 
 /**
- * Return the 6 elements of a triangle given vertice.
  * @category Triangle
- * @param {number[]} A - Coordinates [x,y] of vertice A.
- * @param {number[]} B - Coordinates [x,y] of vertice B.
- * @param {number[]} C - Coordinates [x,y] of vertice C.
- * @param {boolean} [fix=true] - Round all return values to integer.
- * @return {object} return { sideC, angleB, sideA, angleC, sideB, angleA }
- * @example
+ * @param fix - Round all return values to integer.
+ * @return Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
+ * ```typescript
  * TriangleFromVertex([0,0],[4,0],[0,3],false) 
  * // return {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
+ * ```
  */
-function TriangleFromVertex(A: number[], B: number[], C: number[], fix = true)
-    : { sideA: number, sideB: number, sideC: number, angleA: number, angleB: number, angleC: number } {
+function TriangleFromVertex(A: Point, B: Point, C: Point, fix = true): Triangle {
     let sideC = Distance(A, B)
     let sideA = Distance(B, C)
     let sideB = Distance(C, A)
@@ -90,11 +76,10 @@ globalThis.TriangleFromVertex = TriangleFromVertex
 
 
 /**
- * Solve a triangle.
  * @category Triangle
- * @param {object} triangle - { sideC, angleB, sideA, angleC, sideB, angleA } where unknown elements are null.
- * @return {object} return the triangle object solved.
- * @example
+ * @param triangle - unknown elements are null.
+ * @return Solve a triangle. return the triangle object solved.
+ * ```typescript
  * SolveTriangle({sideC:2, sideA:2, sideB:2}) 
  * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
  * SolveTriangle({sideC:3, angleB:90, sideA:4})
@@ -103,10 +88,16 @@ globalThis.TriangleFromVertex = TriangleFromVertex
  * // {sideC:5, angleB:30, sideA:4.770944471, angleC:80, sideB:2.53856653, angleA:70}
  * SolveTriangle({sideC:6, angleB:30, angleA:40})
  * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
+ * ```
  */
 function SolveTriangle(
-    { sideA = null, sideB = null, sideC = null, angleA = null, angleB = null, angleC = null }: { sideA: number | null, sideB: number | null, sideC: number | null, angleA: number | null, angleB: number | null, angleC: number | null }
-) {
+    { sideA = null,
+        sideB = null,
+        sideC = null,
+        angleA = null,
+        angleB = null,
+        angleC = null
+    }: PartialTriangle): Triangle {
 
     let a = sideA
     let b = sideB

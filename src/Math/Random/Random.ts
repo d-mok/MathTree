@@ -3,13 +3,11 @@ var chance = new Chance();
 
 
 /**
- * Return a random integer in [min, max] inclusive.
  * @category Random
- * @param {number} min - The min integer.
- * @param {number} max - The max integer.
- * @return {number} A random integer in [min, max].
- * @example
+ * @return a random integer in [min, max] inclusive.
+ * ```typescript
  * RndN(2,5) // may return 2, 3, 4 or 5
+ * ```
  */
 function RndN(min: number, max: number): number {
     return chance.integer({ min, max });
@@ -17,17 +15,15 @@ function RndN(min: number, max: number): number {
 globalThis.RndN = RndN
 
 /**
- * Return an array of unique random integer in [min, max] inclusive.
  * @category Random
- * @param {number} min - The min integer.
- * @param {number} max - The max integer.
- * @param {number} [n=-1] - The number of integers requested. Default to 10.
- * @return {number[]} An array of random integers in [min, max].
- * @example
+ * @return an array of unique random integer in [min, max] inclusive. default n = 10.
+ * ```typescript
  * RndNs(2,8,3) // may return [5,3,7]
+ * ```
  */
-function RndNs(min: number, max: number, n = -1): number[] {
-    if (n < 0) n = Min(Math.floor(max - min + 1), 10)
+function RndNs(min: number, max: number, n?: number): number[] {
+    // n = n ?? Math.min(Math.floor(max - min + 1), 10)
+    if (!n) n = Math.min(Math.floor(max - min + 1), 10)
     return chance.unique(() => RndN(min, max), n);
 }
 globalThis.RndNs = RndNs
@@ -36,13 +32,11 @@ globalThis.RndNs = RndNs
 
 
 /**
- * Return a random real number in [min, max] inclusive.
  * @category Random
- * @param {number} min - The min real number.
- * @param {number} max - The max real number.
- * @return {number} A random real number in [min, max].
- * @example
+ * @return a random real number in [min, max] inclusive
+ * ```typescript
  * RndR(1,2) // may return 1.242574363
+ * ```
  */
 function RndR(min: number, max: number): number {
     return chance.floating({ min, max, fixed: 8 });
@@ -52,24 +46,24 @@ globalThis.RndR = RndR
 
 
 /**
- * Return 1 or -1.
  * @category Random
- * @return {number} 1 or -1.
- * @example
+ * @return 1 or -1
+ * ```typescript
  * RndU() // may return 1 or -1
+ * ```
  */
-function RndU(): number {
+function RndU(): 1 | -1 {
     return chance.pickone([-1, 1]);
 }
 globalThis.RndU = RndU
 
 
 /**
- * Return true or false.
  * @category Random
- * @return {boolean} true or false.
- * @example
+ * @return true or false.
+ * ```typescript
  * RndT() // may return true or false
+ * ```
  */
 function RndT(): boolean {
     return chance.pickone([true, false]);
@@ -80,13 +74,11 @@ globalThis.RndT = RndT
 
 
 /**
- * Return a random integer in [min, max] or [-max, -min] inclusive.
  * @category Random
- * @param {number} min - The min integer.
- * @param {number} max - The max integer.
- * @return {number} A random integer in [min, max] or [-max, -min].
- * @example
+ * @return a random integer in [min, max] or [-max, -min] inclusive.
+ * ```typescript
  * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
+ * ```
  */
 function RndZ(min: number, max: number): number {
     return RndN(min, max) * RndU();
@@ -97,17 +89,14 @@ globalThis.RndZ = RndZ
 
 
 /**
- * Return an array of absolutely unique random integers in [min, max] or [-max, -min] inclusive.
  * @category Random
- * @param {number} min - The min integer.
- * @param {number} max - The max integer.
- * @param {number} [n=-1] - The number of integers requested. Default to 10.
- * @return {number[]} An array of random integers in [min, max].
- * @example
+ * @return an array of absolutely unique random integers in [min, max] or [-max, -min] inclusive.
+ * ```typescript
  * RndZs(2,8,3) // may return [5,-3,7]
+ * ```
  */
-function RndZs(min: number, max: number, n = -1): number[] {
-    if (n < 0) n = Min(Math.floor(max - min + 1), 10)
+function RndZs(min: number, max: number, n?:number): number[] {
+    if (!n) n = Min(Math.floor(max - min + 1), 10)
     let arr = chance.unique(() => RndN(min, max), n);
     for (let i = 0; i < arr.length; i++) {
         arr[i] = arr[i] * RndU()
@@ -121,12 +110,11 @@ globalThis.RndZs = RndZs
 
 
 /**
- * Return a random prime number less than or equal to max.
  * @category Random
- * @param {number} max - The max allowed prime.
- * @return {number} A random prime.
- * @example
+ * @return a random prime number less than or equal to max.
+ * ```typescript
  * RndP(10) // may return 2, 3, 5 or 7
+ * ```
  */
 function RndP(max: number): number {
     return chance.prime({ min: 2, max: max });
@@ -138,13 +126,11 @@ globalThis.RndP = RndP
 
 
 /**
- * Return a random odd integer in [min, max] inclusive.
  * @category Random
- * @param {number} min - The min integer.
- * @param {number} max - The max integer.
- * @return {number} A random odd integer in [min, max].
- * @example
+ * @return a random odd integer in [min, max] inclusive
+ * ```typescript
  * RndOdd(3,8) // return 3, 5 or 7
+ * ```
  */
 function RndOdd(min: number, max: number): number {
     min = Math.ceil((min + 1) / 2);
@@ -156,13 +142,11 @@ globalThis.RndOdd = RndOdd
 
 
 /**
- * Return a random even integer in [min, max] inclusive.
  * @category Random
- * @param {number} min - The min integer.
- * @param {number} max - The max integer.
- * @return {number} A random even integer in [min, max].
- * @example 
+ * @return a random even integer in [min, max] inclusive
+ * ```typescript 
  * RndEven(3,8) // return 4, 6 or 8
+ * ```
  */
 function RndEven(min: number, max: number): number {
     min = Math.ceil(min / 2);
@@ -174,12 +158,11 @@ globalThis.RndEven = RndEven
 
 
 /**
- * Return an array of polynomial coefficients.
  * @category Random
- * @param {...number} coeff - Max value of corresponding coefficients.
- * @return {number[]} An array of integers.
- * @example
+ * @return an array of random polynomial coefficients
+ * ```typescript
  * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)] 
+ * ```
  */
 function RndPoly(...coeff: number[]): number[] {
     return coeff.map((x, i, a) => {
@@ -191,15 +174,12 @@ globalThis.RndPoly = RndPoly
 
 
 /**
- * Return an unique array of nearby values.
  * @category Random
- * @param {number} anchor - The central value.
- * @param {number} range - Allowed deviation from anchor.
- * @param {integer} [n=-1] - The number of distinct values to return. Default to 2*range for integral anchor; and 10 otherwise.
- * @return {number[]} An array of numbers.
- * @example
+ * @return an unique array of n nearby values, around anchor, within range inclusive. default n = 10.
+ * ```typescript
  * RndShake(10,5,3) // equivalent to [10+RndZ(1,5), 10+RndZ(1,5), 10+RndZ(1,5)] 
  * RndShake(10.5,5,2) // equivalent to [10.5+RndR(0,5)*RndU(), 10.5+RndR(0,5)*RndU()] 
+ * ```
  */
 function RndShake(anchor: number, range: number, n = -1): number[] {
     if (IsInteger(anchor)) {
@@ -222,14 +202,13 @@ globalThis.RndShake = RndShake
 
 
 /**
- * Return an array of a Pyth Triple.
  * @category Random
- * @param {number} max - The max length allowed.
- * @return {number[]} An array of Pyth Triple (3 numbers).
- * @example
+ * @return an array of a Pyth Triple
+ * ```typescript
  * RndPyth(10) // may return [3,4,5]
+ * ```
  */
-function RndPyth(max = 100): number[] {
+function RndPyth(max = 100): [number,number,number] {
     let arr = [];
     for (let m = 1; m < 10; m++) {
         for (let n = 1; n < m; n++) {

@@ -1,24 +1,23 @@
-
-
-
-
-
 /**
-* Return a random config of a Combo Options question type.
 * @category Flow
-* @return {object} The random config object.
-* @example
-* RndComboConfig // may return {truth:[true,true,false], choices:["I and II","I only","I and III","I, II and III"],sections:[[1,1],[2,1],[3,0]]}
+* @return a random config of a Combo Options question type.
+* ```typescript
+* RndComboConfig() 
+* // may return {
+* //   truth: [true, true, false], 
+* //   choices: ["I and II", "I only", "I and III", "I, II and III"],
+* //   sections: [[1,1], [2,1], [3,0]]
+* //  }
 * // truth: the true value of the 3 options.
-* // choices: for filling in the 4 answer choices, the 1st one is the correct answer.
-* // sections: the sections object for section versioning, version 0 is the false version, version 1 is the true version.
+* // choices: for filling in the 4 answer choices, the 1st is correct.
+* // sections: the sections object for section versioning, version 0 is false, version 1 is true.
+* ```
 */
 function RndComboConfig(): {
     truth: boolean[],
     choices: string[],
-    sections: any[][]
+    sections: [number, number][]
 } {
-
     function convertBool(n: number): boolean[] {
         if (n === 0) return [false, false, false]
         if (n === 1) return [false, false, true]
@@ -46,7 +45,7 @@ function RndComboConfig(): {
     let truth = codes.map(x => convertBool(x))[0]
     let choices = codes.map(x => convertText(x))
 
-    let sections = []
+    let sections: [number, number][] = []
     sections.push([1, truth[0] ? 1 : 0])
     sections.push([2, truth[1] ? 1 : 0])
     sections.push([3, truth[2] ? 1 : 0])

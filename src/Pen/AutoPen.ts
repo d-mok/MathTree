@@ -189,7 +189,7 @@ class AutoPenCls {
      * @example
      * autoPen.TrigSolution({trig:'sin', k:0.5})
      */
-    TrigSolution({ trig = 'sin', k = 0, scale = 0.7, ratio = 0.7 }: { trig: string, k: number, scale: number, ratio: number }) {
+    TrigSolution({ trig = 'sin', k = 0, scale = 0.7, ratio = 0.7 }: { trig: TrigFunc, k: number, scale: number, ratio: number }) {
 
         if (trig === 'sin' || trig === 'cos') {
             if (k > 2) k = 2
@@ -253,7 +253,8 @@ class AutoPenCls {
         pen.set.weight(1)
 
 
-        function arrow(x: number, y: number, func: string, label = '') {
+        function arrow(x: number|undefined, y: number, func: string, label = '') {
+            if (x === undefined) return
             let anchor = 0
             let skipAnchor = false
 
@@ -276,7 +277,7 @@ class AutoPenCls {
                 if (x > 180 && x < 360) anchor = 180
             }
 
-            if (x === undefined) return
+            
             let P = [x, y]
             let Q = [x, 0]
             let R = [anchor, 0]
@@ -481,7 +482,7 @@ class AutoPenCls {
      * autoPen.Triangle({vertices:[[0,0],[4,0],[0,3]],triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},labels:['A','B','C'],heights :[false, false, false]})
      */
     Triangle({ vertices, triangle = {}, labels = ['', '', ''], heights = [false, false, false], scale = 0.8 }:
-        { vertices: number[][], triangle: any, labels: string[], heights: boolean[], scale: number }) {
+        { vertices: [number,number][], triangle: any, labels: string[], heights: boolean[], scale: number }) {
 
         let A = vertices[0]
         let B = vertices[1]
@@ -520,7 +521,7 @@ class AutoPenCls {
         pen.setup.range([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax])
 
 
-        function drawHeight(vertex: number[], base: number[][]) {
+        function drawHeight(vertex: [number,number], base: [number,number][]) {
             let F = PerpendicularFoot(base[0], base[1], vertex)
             pen.set.dash([5, 5])
             pen.set.strokeColor('grey')
@@ -561,7 +562,7 @@ class AutoPenCls {
 
 
 
-        function writeSide(side: any, start: number[], end: number[]): void {
+        function writeSide(side: any, start: [number,number], end: [number,number]): void {
             if (side) {
                 if (typeof side === 'string' && !(/\d/.test(side)))
                     pen.set.textItalic(true)

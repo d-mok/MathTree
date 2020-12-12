@@ -1,0 +1,8 @@
+{
+    "mode": "file",
+    "categorizeByGroup":false,
+    "theme":"minimal",
+    "excludeNotExported":true,
+    "ignoreCompilerErrors":true,
+    "disableSources":true
+  }
