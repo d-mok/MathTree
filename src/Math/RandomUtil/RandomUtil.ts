@@ -1,4 +1,11 @@
+/**
+ * @ignore
+ */
 var Chance = require('chance');
+
+/**
+ * @ignore
+ */
 var chance = new Chance();
 
 

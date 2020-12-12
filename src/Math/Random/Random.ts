@@ -1,4 +1,11 @@
+/**
+ * @ignore
+ */
 var Chance = require('chance');
+
+/**
+ * @ignore
+ */
 var chance = new Chance();
 
 
@@ -95,7 +102,7 @@ globalThis.RndZ = RndZ
  * RndZs(2,8,3) // may return [5,-3,7]
  * ```
  */
-function RndZs(min: number, max: number, n?:number): number[] {
+function RndZs(min: number, max: number, n?: number): number[] {
     if (!n) n = Min(Math.floor(max - min + 1), 10)
     let arr = chance.unique(() => RndN(min, max), n);
     for (let i = 0; i < arr.length; i++) {
@@ -208,7 +215,7 @@ globalThis.RndShake = RndShake
  * RndPyth(10) // may return [3,4,5]
  * ```
  */
-function RndPyth(max = 100): [number,number,number] {
+function RndPyth(max = 100): [number, number, number] {
     let arr = [];
     for (let m = 1; m < 10; m++) {
         for (let n = 1; n < m; n++) {

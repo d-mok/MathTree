@@ -1,12 +1,28 @@
 
-
+/**
+ * @category DrawingPen
+ */
 class PenCls {
+    /**
+     * @ignore
+     */
     canvas: HTMLCanvasElement
+    /**
+     * @ignore
+     */
     ctx: CanvasRenderingContext2D
+    /**
+     * @ignore
+     */
     frame: FrameCls
+    /**
+     * @ignore
+     */
     imgStore: ImageData | null
 
-
+    /**
+     * @ignore
+     */
     constructor() {
         // create the canvas DOM element
         this.canvas = document.createElement('canvas');
@@ -21,18 +37,23 @@ class PenCls {
 
     /**
      * Setup of canvas.
-     * @namespace setup
-     * @memberof Pen
+     * @category setting
      */
     setup = {
+        /**
+         * @ignore
+         */
         pen: this,
         /**
          * Set the size of the canvas.
-         * @memberof Pen.setup
-         * @param {number} [scale=1] - The scale of the width.
-         * @param {number} [ratio=1] - The height-to-width ratio.
-         * @example
-         * pen.setup.size(0.5,2) // half the standard width, with height-to-width = 2:1
+         * @category setup
+         * @param scale - The scale of the width.
+         * @param  ratio - The height-to-width ratio.
+         * @returns
+         * ```typescript
+         * pen.setup.size(0.5,2) 
+         * // half the standard width, with height-to-width = 2:1
+         * ```
          */
         size(scale = 1, ratio = 1) {
             // REM_PIXEL is the default font size of the browser, usually 16px
@@ -48,10 +69,13 @@ class PenCls {
         },
         /**
          * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
-         * @memberof Pen.setup
-         * @param {number} [scale=1] - The scale of the width.
-         * @example
-         * pen.setup.squareSize(0.5) // half the standard width, with height-to-width defined by coordinates range set.
+         * @category setup
+         * @param scale - The scale of the width.
+         * @returns
+         * ```typescript
+         * pen.setup.squareSize(0.5) 
+         * // half the standard width, with height-to-width defined by coordinates range set.
+         * ```
          */
         squareSize(scale = 1) {
             let xRange = this.pen.frame.xmax - this.pen.frame.xmin
@@ -61,11 +85,14 @@ class PenCls {
         },
         /**
          * Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
-         * @memberof Pen.setup
-         * @param {number} [xPPI=0.1] - The scale per unit x.
-         * @param {number} [yPPI=-1] - The scale per unit y, if not provided, follow x.
-         * @example
-         * pen.setup.resolution(0.1,0.2) // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
+         * @category setup
+         * @param xPPI - The scale per unit x.
+         * @param yPPI - The scale per unit y, if not provided, follow x.
+         * @returns
+         * ```typescript
+         * pen.setup.resolution(0.1,0.2) 
+         * // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
+         * ```
          */
         resolution(xPPI = 0.1, yPPI = -1) {
             if (yPPI === -1) yPPI = xPPI
@@ -77,13 +104,16 @@ class PenCls {
         },
         /**
          * Set the coordinate range of the canvas.
-         * @memberof Pen.setup
-         * @param {number[]} xRange - The range [xmin,xmax].
-         * @param {number[]} yRange - The range [ymin,ymax].
-         * @example
-         * pen.setup.range([-5,5],[-2,4]) // define range -5<x<5 and -2<y<4
+         * @category setup
+         * @param xRange - The range [xmin,xmax].
+         * @param yRange - The range [ymin,ymax].
+         * @returns
+         * ```typescript
+         * pen.setup.range([-5,5],[-2,4]) 
+         * // define range -5<x<5 and -2<y<4
+         * ```
          */
-        range(xRange: number[], yRange: number[]) {
+        range(xRange: [number, number], yRange: [number, number]) {
             [this.pen.frame.xmin, this.pen.frame.xmax] = xRange;
             [this.pen.frame.ymin, this.pen.frame.ymax] = yRange;
         },
@@ -91,28 +121,32 @@ class PenCls {
         /**
          * Set the coordinate range of the canvas with given size and center.
          * Equivalent to pen.range([-size, size], [-size, size]) but shifted center.
-         * @memberof Pen.setup
-         * @param {number} size - The max x and y coordinates in range.
-         * @param {number[]} center - [x,y] coordinates of the center.
-         * @example
+         * @category setup
+         * @param size - The max x and y coordinates in range.
+         * @param center - [x,y] coordinates of the center.
+         * @returns
+         * ```typescript
          * pen.setup.squareRange(5) // define range -5<x<5 and -5<y<5
          * pen.setup.squareRange(5,[1,2]) // define range -4<x<6 and -3<y<7
+         * ```
          */
-        squareRange(size: number, center = [0, 0]) {
+        squareRange(size: number, center: Point = [0, 0]) {
             let [x, y] = center
             this.range([x - size, x + size], [y - size, y + size])
         },
 
         /**
          * Set the coordinate range by specifying in-view points.
-         * @memberof Pen.setup
-         * @param {number[][]} points - An array of in-view points [x,y].
-         * @param {number} [border=0.3] - The percentage to extend the border.
-         * @param {boolean} [origin=true] - Must contain the origin [0,0]
-         * @example
+         * @category setup
+         * @param points - An array of in-view points [x,y].
+         * @param border - The percentage to extend the border.
+         * @param origin - Must contain the origin [0,0]
+         * @returns
+         * ```typescript
          * pen.setup.inView([[1,2],[3,4]]) // the points [0,0], [1,2] and [3,4] must be in-view
+         * ```
          */
-        inView(points: number[][], border = 0.3, origin = true) {
+        inView(points: Point[], border = 0.3, origin = true) {
             let pts = [...points]
             if (origin) pts.push([0, 0]);
             let xmin = pts[0][0];
@@ -138,47 +172,57 @@ class PenCls {
     };
     /**
      * Settings.
-     * @namespace set
-     * @memberof Pen
+     * @category setting
      */
     set = {
+        /**
+         * @ignore
+         */
         pen: this,
         /**
          * Set the weight of the pen (line width).
-         * @memberof Pen.set
-         * @param {number} [weight=1] - The line width.
-         * @example
+         * @category set
+         * @param weight - The line width.
+         * @returns
+         * ```typescript
          * pen.set.weight(2) // set a bold line
+         * ```
          */
         weight(weight = 1) {
             this.pen.ctx.lineWidth = weight * PEN_QUALITY;
         },
         /**
          * Set the color of the pen stroke.
-         * @memberof Pen.set
-         * @param {string} [color="black"] - The line color.
-         * @example
+         * @category set
+         * @param color - The line color.
+         * @returns
+         * ```typescript
          * pen.set.strokeColor('grey') // set grey line
+         * ```
          */
         strokeColor(color = "black") {
             this.pen.ctx.strokeStyle = color;
         },
         /**
          * Set the color of filling.
-         * @memberof Pen.set
-         * @param {string} [color="black"] - The filling color.
-         * @example
+         * @category set
+         * @param color - The filling color.
+         * @returns
+         * ```typescript
          * pen.set.fillColor('grey') // set grey filling
+         * ```
          */
         fillColor(color = "black") {
             this.pen.ctx.fillStyle = color;
         },
         /**
          * Set the color of both filling and stroke.
-         * @memberof Pen.set
-         * @param {string} [color="black"] - The color.
-         * @example
+         * @category set
+         * @param color - The color.
+         * @returns
+         * ```typescript
          * pen.set.color('grey') // set grey filling and stroke
+         * ```
          */
         color(color = "black") {
             this.strokeColor(color);
@@ -186,20 +230,24 @@ class PenCls {
         },
         /**
          * Set the transparency.
-         * @memberof Pen.set
-         * @param {number} [alpha=1] - The alpha value, from 0 to 1. 0 is completely transparent.
-         * @example
+         * @category set
+         * @param alpha - The alpha value, from 0 to 1. 0 is completely transparent.
+         * @returns
+         * ```typescript
          * pen.set.alpha(0.9) // set slightly transparent
+         * ```
          */
         alpha(alpha = 1) {
             this.pen.ctx.globalAlpha = alpha;
         },
         /**
          * Set the dash pattern of line.
-         * @memberof Pen.set
-         * @param {Array|number|boolean} [segments=[]] - The dash pattern, as [5,5] or 5 or true.
-         * @example
+         * @category set
+         * @param segments - The dash pattern, as [5,5] or 5 or true.
+         * @returns
+         * ```typescript
          * pen.set.dash([10,5]) // set dash line
+         * ```
          */
         dash(segments: (number[] | number | boolean) = []) {
             if (Array.isArray(segments))
@@ -211,61 +259,51 @@ class PenCls {
         },
         /**
          * Set the horizontal alignment of text.
-         * @memberof Pen.set
-         * @param {string} [align="center"] - The alignment {'left','right','center'}.
-         * @example
+         * @category set
+         * @param align - The alignment {'left','right','center'}.
+         * @returns
+         * ```typescript
          * pen.set.textAlign('left') // set align to left
+         * ```
          */
         textAlign(align: CanvasTextAlign = "center") {
             this.pen.ctx.textAlign = align;
         },
         /**
          * Set the vertical alignment of text.
-         * @memberof Pen.set
-         * @param {string} [baseline="middle"] - The alignment {'top','bottom','middle'}.
-         * @example
+         * @category set
+         * @param baseline - The alignment {'top','bottom','middle'}.
+         * @returns
+         * ```typescript
          * pen.set.textBaseline('bottom') // set align to bottom
+         * ```
          */
         textBaseline(baseline: CanvasTextBaseline = "middle") {
             this.pen.ctx.textBaseline = baseline;
         },
         /**
          * Set the size of text.
-         * @memberof Pen.set
-         * @param {number} [size=1] - The text size.
-         * @example
+         * @category set
+         * @param size - The text size.
+         * @returns
+         * ```typescript
          * pen.set.textSize(2) // set larger text
+         * ```
          */
         textSize(size = 1) {
             const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
             size = Math.round(size * REM_PIXEL * PEN_QUALITY);
             this.pen.ctx.font = this.pen.ctx.font.replace(/\d+px/g, size + 'px');
         },
-        // /**
-        //  * Set the style of text.
-        //  * @memberof Pen.set
-        //  * @deprecated use textItalic() instead
-        //  * @ignore
-        //  * @param {string} [style='normal'] - The text style {'normal','italic'}.
-        //  * @example
-        //  * pen.set.textStyle('italic') // set italic text
-        //  */
-        // textStyle(style = "normal") {
-        //     if (style == 'normal') {
-        //         this.pen.ctx.font = this.pen.ctx.font.replace('italic ', '');
-        //     }
-        //     if (style == 'italic') {
-        //         if (!this.pen.ctx.font.includes('italic')) {
-        //             this.pen.ctx.font = 'italic ' + this.pen.ctx.font;
-        //         }
-        //     }
-        // },
+
         /**
          * Set italic style of text.
-         * @memberof Pen.set
-         * @param {boolean} [italic=false] - Italic or not.
-         * @example
+         * @category set
+         * @param italic - Italic or not.
+         * @returns
+         * ```typescript
          * pen.set.textItalic(true) // set italic to true
+         * ```
          */
         textItalic(italic = false) {
             if (italic) {
@@ -277,9 +315,11 @@ class PenCls {
         },
         /**
          * Reset all pen settings.
-         * @memberof Pen.set
-         * @example
+         * @category set
+         * @returns
+         * ```typescript
          * pen.reset() // reset
+         * ```
          */
         reset() {
             this.weight();
@@ -295,23 +335,19 @@ class PenCls {
     };
 
     /**
-     * Drawing functions.
-     * @namespace draw
-     * @memberof Pen
-     */
-
-    /**
      * Plot an explicit or parametric function.
-     * @memberof Pen.draw
-     * @param {function} func - The function to plot, either x=>f(x) or t=>[x(t),y(t)].
-     * @param {number} [tStart=xmin] - Start value of t, default to xmin.
-     * @param {number} [tEnd=xmax] - End value of t, default to xmax.
-     * @param {number} [dots=1000] - Number of dots to plot. More dots give finer graph.
-     * @example
+     * @category graph
+     * @param func - The function to plot, either x=>f(x) or t=>[x(t),y(t)].
+     * @param tStart - Start value of t, default to xmin.
+     * @param tEnd - End value of t, default to xmax.
+     * @param dots - Number of dots to plot. More dots give finer graph.
+     * @returns
+     * ```typescript
      * pen.plot(x=>x**2) // plot y=x^2
      * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
+     * ```
      */
-    plot(func: (t: number) => number | number[], tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
+    plot(func: (t: number) => number | Point, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
         const tracer = (t: number) => {
             let result = func(t);
             if (!Array.isArray(result)) result = [t, result];
@@ -352,43 +388,50 @@ class PenCls {
 
     /**
      * Drawing graph of functions.
-     * @namespace graph
-     * @memberof Pen
+     * @category graph
      */
-
     graph = {
+        /**
+         * @ignore
+         */
         pen: this,
         /**
          * Draw a circle (x-h)^2+(y-k)^2 = r^2.
-         * @memberof Pen.graph
-         * @param {number[]} center - The center coordinates [h,k].
-         * @param {number} radius - The radius.
-         * @example
+         * @category graph
+         * @param center - The center coordinates [h,k].
+         * @param radius - The radius.
+         * @returns
+         * ```typescript
          * pen.graph.circle([1,2],3) // draw (x-1)^2+(y-2)^2 = 9.
+         * ```
          */
-        circle(center: number[], radius: number) {
+        circle(center: Point, radius: number) {
             const [h, k] = center
             this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
         },
         /**
          * Draw a quadratic graph y=ax^2+bx+c.
-         * @memberof Pen.graph
-         * @param {number} a - The coeff of x^2.
-         * @param {number} b - The coeff of x.
-         * @param {number} c - The constant.
-         * @example
+         * @category graph
+         * @param a - The coeff of x^2.
+         * @param b - The coeff of x.
+         * @param c - The constant.
+         * @returns
+         * ```typescript
          * pen.graph.quadratic(1,2,3) // draw y=x^2+2x+3.
+         * ```
          */
         quadratic(a: number, b: number, c: number) {
             this.pen.plot(x => a * x * x + b * x + c)
         },
         /**
          * Draw a line y=mx+c.
-         * @memberof Pen.graph
-         * @param {number} m - The slope.
-         * @param {number} c - The y-intercept.
-         * @example
+         * @category graph
+         * @param m - The slope.
+         * @param c - The y-intercept.
+         * @returns
+         * ```typescript
          * pen.graph.line(2,1) // draw the line y=2x+1
+         * ```
          */
         line(m: number, c: number) {
             const [xmin, xmax] = this.pen.frame.xRange();
@@ -397,10 +440,12 @@ class PenCls {
         },
         /**
          * Draw a horizontal line y=constant.
-         * @memberof Pen.graph
-         * @param {number} y - The constant value of y.
-         * @example
+         * @category graph
+         * @param y - The constant value of y.
+         * @returns
+         * ```typescript
          * pen.graph.horizontal(2) // draw the line y=2
+         * ```
          */
         horizontal(y: number) {
             const [xmin, xmax] = this.pen.frame.xRange();
@@ -408,10 +453,12 @@ class PenCls {
         },
         /**
          * Draw a vertical line x=constant.
-         * @memberof Pen.graph
-         * @param {number} x - The constant value of x.
-         * @example
+         * @category graph
+         * @param x - The constant value of x.
+         * @returns
+         * ```typescript
          * pen.graph.vertical(2) // draw the line x=2
+         * ```
          */
         vertical(x: number) {
             const [ymin, ymax] = this.pen.frame.yRange();
@@ -419,12 +466,14 @@ class PenCls {
         },
         /**
          * Draw a line ax+by+c=0.
-         * @memberof Pen.graph
-         * @param {number} a - The coeff of x.
-         * @param {number} b - The coeff of y.
-         * @param {number} c - The constant.
-         * @example
+         * @category graph
+         * @param a - The coeff of x.
+         * @param b - The coeff of y.
+         * @param c - The constant.
+         * @returns
+         * ```typescript
          * pen.graph.linear(1,2,3) // draw the line x+2y+3=0
+         * ```
          */
         linear(a: number, b: number, c: number) {
             if (a === 0 && b !== 0) this.horizontal(-c);
@@ -439,12 +488,14 @@ class PenCls {
 
     /**
      * Draw a point.
-     * @memberof Pen.draw
-     * @param {number[]} position - The coordinates [x,y] to draw.
-     * @example
+     * @category draw
+     * @param position - The coordinates [x,y] to draw.
+     * @returns
+     * ```typescript
      * pen.point([1,2]) // draw a point at [1,2]
+     * ```
      */
-    point(position: number[]) {
+    point(position: Point) {
         const [x, y] = this.frame.toPix(position);
         this.ctx.beginPath();
         this.ctx.arc(x, y, 3 * PEN_QUALITY, 0, 2 * Math.PI, false);
@@ -454,12 +505,14 @@ class PenCls {
 
     /**
      * Draw a horizontal cutter.
-     * @memberof Pen.draw
-     * @param {number[]} position - The coordinates [x,y] to draw.
-     * @example
+     * @category draw
+     * @param position - The coordinates [x,y] to draw.
+     * @returns
+     * ```typescript
      * pen.cutterH([1,2]) // draw a horizontal cutter at [1,2]
+     * ```
      */
-    cutterH(position: number[]) {
+    cutterH(position: Point) {
         const [x, y] = position;
         const offset = this.frame.xOffset();
         this.line([x, y - offset], [x, y + offset]);
@@ -467,12 +520,14 @@ class PenCls {
 
     /**
      * Draw a vertical cutter.
-     * @memberof Pen.draw
-     * @param {number[]} position - The coordinates [x,y] to draw.
-     * @example
+     * @category draw
+     * @param position - The coordinates [x,y] to draw.
+     * @returns
+     * ```typescript
      * pen.cutterV([1,2]) // draw a vertical cutter at [1,2]
+     * ```
      */
-    cutterV(position: number[]) {
+    cutterV(position: Point) {
         const [x, y] = position;
         const offset = this.frame.yOffset();
         this.line([x - offset, y], [x + offset, y]);
@@ -481,16 +536,18 @@ class PenCls {
 
     /**
      * Draw a circle or arc.
-     * @memberof Pen.draw
-     * @param {number[]} center - The coordinates [x,y] of center.
-     * @param {number} radius - The radius in pixel.
-     * @param {number[]} [angles=[0,360]] - The polar angle range [q1,q2].
-     * @param {boolean} [fill=false] - Whether to fill the inside.
-     * @example
-     * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px , 
+     * @category draw
+     * @param center - The coordinates [x,y] of center.
+     * @param radius - The radius in pixel.
+     * @param angles - The polar angle range [q1,q2].
+     * @param fill - Whether to fill the inside.
+     * @returns
+     * ```typescript
+     * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
      * pen.circle([1,2], 10, [0,180]) // draw a upper semi-circle
+     * ```
      */
-    circle(center: number[], radius: number, angles = [0, 360], fill = false) {
+    circle(center: Point, radius: number, angles = [0, 360], fill = false) {
         const [x, y] = this.frame.toPix(center);
         this.ctx.beginPath();
         let [q1, q2] = angles;
@@ -504,15 +561,17 @@ class PenCls {
 
     /**
      * Draw a line between two points.
-     * @memberof Pen.draw
-     * @param {number[]} startPoint - The coordinates [x,y] of the start-point.
-     * @param {number[]} endPoint - The coordinates [x,y] of the end-point.
-     * @param {boolean} [arrow=false] - whether to draw an arrow at the end.
-     * @example
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param arrow - whether to draw an arrow at the end.
+     * @returns
+     * ```typescript
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
      * pen.line([1,2],[3,4],true) //  draw a line from [1,2] to [3,4] with arrow at [3,4]
+     * ```
      */
-    line(startPoint: number[], endPoint: number[], arrow = false) {
+    line(startPoint: Point, endPoint: Point, arrow = false) {
         this.ctx.save();
         const [x0, y0] = this.frame.toPix(startPoint);
         const [x1, y1] = this.frame.toPix(endPoint);
@@ -540,12 +599,14 @@ class PenCls {
 
     /**
      * Draw a polyline given points.
-     * @memberof Pen.draw
-     * @param {...number[]} points - The coordinates [x,y] of all points.
-     * @example
+     * @category draw
+     * @param points - The coordinates [x,y] of all points.
+     * @returns
+     * ```typescript
      * pen.polyline([[0,0],[5,2],[3,4]]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
+     * ```
      */
-    polyline(...points: number[][]) {
+    polyline(...points: Point[]) {
         this.ctx.beginPath();
         let [xStart, yStart] = this.frame.toPix(points[0]);
         this.ctx.moveTo(xStart, yStart);
@@ -558,13 +619,15 @@ class PenCls {
 
     /**
      * Draw a polygon given vertex points.
-     * @memberof Pen.draw
-     * @param {number[][]} points - The coordinates [x,y] of all vetices.
-     * @param {boolean} [fill=false] - whether to fill the interior.
-     * @example
+     * @category draw
+     * @param points - The coordinates [x,y] of all vetices.
+     * @param fill - whether to fill the interior.
+     * @returns
+     * ```typescript
      * pen.polygon([[0,0],[5,2],[3,4]]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
+     * ```
      */
-    polygon(points: number[][], fill = false) {
+    polygon(points: Point[], fill = false) {
         this.ctx.beginPath();
         let [xStart, yStart] = this.frame.toPix(points[0]);
         this.ctx.moveTo(xStart, yStart);
@@ -577,56 +640,6 @@ class PenCls {
         if (fill) this.ctx.fill();
     }
 
-    // /**
-    //  * Drawing straight line.
-    //  * @namespace straight
-    //  * @memberof Pen
-    //  * @deprecated
-    //  */
-    // straight = {
-    //     pen: this,
-    //     /**
-    //      * Draw a line y=mx+c.
-    //      * @memberof Pen.straight
-    //      * @deprecated
-    //      * @param {number} m - The slope.
-    //      * @param {number} c - The y-intercept.
-    //      * @example
-    //      * pen.straight.line(2,1) // draw the line y=2x+1
-    //      */
-    //     line(m: number, c: number) {
-    //         const [xmin, xmax] = this.pen.frame.xRange();
-    //         const y = (x: number) => m * x + c;
-    //         this.pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
-    //     },
-    //     /**
-    //      * Draw a horizontal line y=constant.
-    //      * @memberof Pen.straight
-    //      * @deprecated
-    //      * @param {number} y - The constant value of y.
-    //      * @example
-    //      * pen.straight.horizontal(2) // draw the line y=2
-    //      */
-    //     horizontal(y: number) {
-    //         const [xmin, xmax] = this.pen.frame.xRange();
-    //         this.pen.line([xmin, y], [xmax, y]);
-    //     },
-    //     /**
-    //      * Draw a vertical line x=constant.
-    //      * @memberof Pen.straight
-    //      * @deprecated
-    //      * @param {number} x - The constant value of x.
-    //      * @example
-    //      * pen.straight.vertical(2) // draw the line x=2
-    //      */
-    //     vertical(x: number) {
-    //         const [ymin, ymax] = this.pen.frame.yRange();
-    //         this.pen.line([x, ymin], [x, ymax]);
-    //     }
-    // };
-
-
-
 
 
 
@@ -635,22 +648,26 @@ class PenCls {
 
     /**
      * Geometry Decorator.
-     * @namespace decorator
-     * @memberof Pen
+     * @category decorator
      */
-
     decorate = {
+        /**
+         * @ignore
+         */
         pen: this,
         /**
          * Decorate equal side lengths.
-         * @memberof Pen.decorator
-         * @param {number[]} startPoint - The starting point [x,y].
-         * @param {number[]} endPoint - The ending point [x,y].
-         * @param {number} [tick=1] - The number of ticks.
-         * @example
-         * pen.decorate.equalSide([1,0],[3,2],2) // decorate a double-tick at the mid-pt of [1,0] and [3,2]
+         * @category decorator
+         * @param startPoint - The starting point [x,y].
+         * @param endPoint - The ending point [x,y].
+         * @param tick - The number of ticks.
+         * @returns
+         * ```typescript
+         * pen.decorate.equalSide([1,0],[3,2],2) 
+         * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
+         * ```
          */
-        equalSide(startPoint: number[], endPoint: number[], tick = 1) {
+        equalSide(startPoint: Point, endPoint: Point, tick = 1) {
             let length = 5
             let space = 3
             length = length * PEN_QUALITY;
@@ -688,14 +705,17 @@ class PenCls {
 
         /**
          * Decorate parallel side.
-         * @memberof Pen.decorator
-         * @param {number[]} startPoint - The starting point [x,y].
-         * @param {number[]} endPoint - The ending point [x,y].
-         * @param {number} [tick=1] - The number of ticks.
-         * @example
-         * pen.decorate.parallel([1,0],[3,2],2) // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
+         * @category decorator
+         * @param startPoint - The starting point [x,y].
+         * @param endPoint - The ending point [x,y].
+         * @param tick - The number of ticks.
+         * @returns
+         * ```typescript
+         * pen.decorate.parallel([1,0],[3,2],2) 
+         * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
+         * ```
          */
-        parallel(startPoint: number[], endPoint: number[], tick = 1) {
+        parallel(startPoint: Point, endPoint: Point, tick = 1) {
             let size = 4
             let space = 6
             size = size * PEN_QUALITY;
@@ -726,16 +746,19 @@ class PenCls {
 
         /**
          * Decorate an angle AOB, always in anti-clockwise.
-         * @memberof Pen.decorator
-         * @param {number[]} A - The starting point [x,y].
-         * @param {number[]} O - The vertex point [x,y].
-         * @param {number[]} B - The ending point [x,y].
-         * @param {number} [arc=1] - The number of arcs.
-         * @param {number} [radius=15] - The radius of the angle arc, in pixel.
-         * @example
-         * pen.decorate.angle([1,0],[0,0],[3,2],2) // decorate an angle AOB with double-arc in anti-clockwise.
+         * @category decorator
+         * @param A - The starting point [x,y].
+         * @param O - The vertex point [x,y].
+         * @param B - The ending point [x,y].
+         * @param arc - The number of arcs.
+         * @param radius - The radius of the angle arc, in pixel.
+         * @returns
+         * ```typescript
+         * pen.decorate.angle([1,0],[0,0],[3,2],2) 
+         * // decorate an angle AOB with double-arc in anti-clockwise.
+         * ```
          */
-        angle(A: number[], O: number[], B: number[], arc = 1, radius = 15) {
+        angle(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
             A = this.pen.frame.toPix(A);
             let OPixel = this.pen.frame.toPix(O);
             B = this.pen.frame.toPix(B);
@@ -750,15 +773,18 @@ class PenCls {
 
         /**
          * Decorate a right-angle AOB.
-         * @memberof Pen.decorator
-         * @param {number[]} A - The starting point [x,y].
-         * @param {number[]} O - The vertex point [x,y].
-         * @param {number[]} B - The ending point [x,y]. Interchangeable with A.
-         * @param {number} [size=15] - The size of the mark, in pixel.
-         * @example
-         * pen.decorate.rightAngle([1,0],[0,0],[3,2]) // decorate an right-angle AOB
+         * @category decorator
+         * @param A - The starting point [x,y].
+         * @param O - The vertex point [x,y].
+         * @param B - The ending point [x,y]. Interchangeable with A.
+         * @param size - The size of the mark, in pixel.
+         * @returns
+         * ```typescript
+         * pen.decorate.rightAngle([1,0],[0,0],[3,2]) 
+         * // decorate an right-angle AOB
+         * ```
          */
-        rightAngle(A: number[], O: number[], B: number[], size = 15) {
+        rightAngle(A: Point, O: Point, B: Point, size = 15) {
             size = size * PEN_QUALITY;
             A = this.pen.frame.toPix(A);
             O = this.pen.frame.toPix(O);
@@ -766,11 +792,11 @@ class PenCls {
             let angleA = Math.atan2(A[1] - O[1], A[0] - O[0]);
             let angleB = Math.atan2(B[1] - O[1], B[0] - O[0]);
 
-            let P = [O[0] + size * Math.cos(angleA), O[1] + size * Math.sin(angleA)];
-            let Q = [O[0] + size * Math.cos(angleB), O[1] + size * Math.sin(angleB)];
-            let R = [O[0] + size * Math.cos(angleA) + size * Math.cos(angleB), O[1] + size * Math.sin(angleA) + size * Math.sin(angleB)];
+            let P: Point = [O[0] + size * Math.cos(angleA), O[1] + size * Math.sin(angleA)];
+            let Q: Point = [O[0] + size * Math.cos(angleB), O[1] + size * Math.sin(angleB)];
+            let R: Point = [O[0] + size * Math.cos(angleA) + size * Math.cos(angleB), O[1] + size * Math.sin(angleA) + size * Math.sin(angleB)];
 
-            let draw = (A: number[], B: number[]) => {
+            let draw = (A: Point, B: Point) => {
                 this.pen.ctx.beginPath();
                 this.pen.ctx.moveTo(A[0], A[1]);
                 this.pen.ctx.lineTo(B[0], B[1]);
@@ -783,41 +809,46 @@ class PenCls {
 
 
 
-    /**
-     * Write text
-     * @namespace text
-     * @memberof Pen
-     */
 
     /**
      * Write text.
-     * @memberof Pen.text
-     * @param {number[]} position - The coordinates [x,y] to position the text.
-     * @param {string} text - The string to write.
-     * @example
+     * @category text
+     * @param position - The coordinates [x,y] to position the text.
+     * @param text - The string to write.
+     * @returns
+     * ```typescript
      * pen.write([1,2],'abc') // write 'abc' at [1,2]
+     * ```
      */
-    write(position: number[], text: string) {
+    write(position: Point, text: string) {
         const [x, y] = this.frame.toPix(position);
         this.ctx.fillText(text, x, y);
     }
 
 
-
+    /**
+     * @category text
+     */
     label = {
+        /**
+         * @ignore
+         */
         pen: this,
 
         /**
          * Add a label to a point.
-         * @memberof Pen.text
-         * @param {number[]} position - The coordinates [x,y] of the point to label.
-         * @param {string} text - The string to write.
-         * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
-         * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
-         * @example
-         * pen.label.point([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
+         * @category text
+         * @param position - The coordinates [x,y] of the point to label.
+         * @param text - The string to write.
+         * @param dodgeDirection - The direction to offset, given as a polar angle.
+         * @param offsetPixel - The pixel distance to offset from the position.
+         * @returns
+         * ```typescript
+         * pen.label.point([1,2],'A',180) 
+         * // label the point [1,2] as 'A', place the label on the left (180 degree)
+         * ```
          */
-        point(position: number[], text = '', dodgeDirection = 0, offsetPixel = 15) {
+        point(position: Point, text = '', dodgeDirection = 0, offsetPixel = 15) {
             let [x, y] = this.pen.frame.toPix(position);
             offsetPixel = offsetPixel * PEN_QUALITY;
             x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
@@ -833,15 +864,18 @@ class PenCls {
         },
         /**
          * Add a label to an angle AOB.
-         * @memberof Pen.text
-         * @param {number[][]} anglePoints - An array [A,O,B] for the coordinates of A,O,B.
-         * @param {string} text - The string to write.
-         * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param {number} [offsetPixel=-1] - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
-         * @example
-         * pen.label.angle([[1,2],[0,0],[-2,1]],'x') // label the angle as 'x'
+         * @category text
+         * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
+         * @param text - The string to write.
+         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+         * @returns
+         * ```typescript
+         * pen.label.angle([[1,2],[0,0],[-2,1]],'x') 
+         * // label the angle as 'x'
+         * ```
          */
-        angle(anglePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = -1) {
+        angle(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
             let [A, O, B] = anglePoints;
             let APixel = this.pen.frame.toPix(A);
             let OPixel = this.pen.frame.toPix(O);
@@ -855,15 +889,17 @@ class PenCls {
         },
         /**
          * Add a label to a line AB.
-         * @memberof Pen.text
-         * @param {number[][]} linePoints - An array [A,B] for the coordinates of AB.
-         * @param {string} text - The string to write.
-         * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to the right normal of AB.
-         * @param {number} [offsetPixel=-1] - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
-         * @example
+         * @category text
+         * @param linePoints - An array [A,B] for the coordinates of AB.
+         * @param text - The string to write.
+         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to the right normal of AB.
+         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
+         * @returns
+         * ```typescript
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
+         * ```
          */
-        line(linePoints: [number,number][], text: string, dodgeDirection = 0, offsetPixel = -1) {
+        line(linePoints: [Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
             let [A, B] = linePoints;
             let M = MidPoint(A, B);
             let APixel = this.pen.frame.toPix(A);
@@ -876,14 +912,17 @@ class PenCls {
 
         /**
          * Add a coordinates label to a point.
-         * @memberof Pen.text
-         * @param {number[]} position - The coordinates [x,y] of the point to label.
-         * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
-         * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
-         * @example
-         * pen.label.coordinates([1,2],180) // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
+         * @category text
+         * @param position - The coordinates [x,y] of the point to label.
+         * @param dodgeDirection - The direction to offset, given as a polar angle.
+         * @param offsetPixel - The pixel distance to offset from the position.
+         * @returns
+         * ```typescript
+         * pen.label.coordinates([1,2],180) 
+         * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
+         * ```
          */
-        coordinates(point: number[], dodgeDirection = 0, offsetPixel = 15) {
+        coordinates(point: Point, dodgeDirection = 0, offsetPixel = 15) {
             let text = '(' + Fix(point[0], 1) + ', ' + Fix(point[1], 1) + ')'
             this.point(point, text, dodgeDirection, offsetPixel)
         }
@@ -895,103 +934,24 @@ class PenCls {
 
 
 
-    // /**
-    //  * Add a label to a point.
-    //  * @memberof Pen.text
-    //  * @deprecated
-    //  * @param {number[]} position - The coordinates [x,y] of the point to label.
-    //  * @param {string} text - The string to write.
-    //  * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
-    //  * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
-    //  * @example
-    //  * pen.label([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
-    //  */
-    // label(position: number[], text: string, dodgeDirection = 0, offsetPixel = 15) {
-    //     let [x, y] = this.frame.toPix(position);
-    //     offsetPixel = offsetPixel * PEN_QUALITY;
-    //     x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
-    //     y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
-    //     this.ctx.fillText(text, x, y);
-    // }
-
-    // /**
-    //  * Add a label to a point.
-    //  * @memberof Pen.text
-    //  * @deprecated
-    //  * @param {number[]} position - The coordinates [x,y] of the point to label.
-    //  * @param {string} text - The string to write.
-    //  * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle.
-    //  * @param {number} [offsetPixel=15] - The pixel distance to offset from the position.
-    //  * @example
-    //  * pen.labelPoint([1,2],'A',180) // label the point [1,2] as 'A', place the label on the left (180 degree)
-    //  */
-    // labelPoint(position: number[], text: string, dodgeDirection = 0, offsetPixel = 15) {
-    //     let [x, y] = this.frame.toPix(position);
-    //     offsetPixel = offsetPixel * PEN_QUALITY;
-    //     x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
-    //     y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
-    //     this.ctx.fillText(text, x, y);
-    // }
-
-    // /**
-    //  * Add a label to an angle AOB.
-    //  * @memberof Pen.text
-    //  * @deprecated
-    //  * @param {number[][]} anglePoints - An array [A,O,B] for the coordinates of A,O,B.
-    //  * @param {string} text - The string to write.
-    //  * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-    //  * @param {number} [offsetPixel=30] - The pixel distance to offset from the position.
-    //  * @example
-    //  * pen.labelAngle([[1,2],[0,0],[-2,1]],'x') // label the angle as 'x'
-    //  */
-    // labelAngle(anglePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = 30) {
-    //     let [A, O, B] = anglePoints;
-    //     let APixel = this.frame.toPix(A);
-    //     let OPixel = this.frame.toPix(O);
-    //     let BPixel = this.frame.toPix(B);
-    //     let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
-    //     let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
-    //     if (a2 < a1) a2 = a2 + 360
-    //     this.labelPoint(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
-    // }
-
-    // /**
-    //  * Add a label to a line AB.
-    //  * @memberof Pen.text
-    //  * @deprecated
-    //  * @param {number[][]} linePoints - An array [A,B] for the coordinates of AB.
-    //  * @param {string} text - The string to write.
-    //  * @param {number} [dodgeDirection=0] - The direction to offset, given as a polar angle,relative to the right normal of AB.
-    //  * @param {number} [offsetPixel=25] - The pixel distance to offset from the position.
-    //  * @example
-    //  * pen.labelLine([[0,0],[2,4]],'L') // label the line as 'L'
-    //  */
-    // labelLine(linePoints: number[][], text: string, dodgeDirection = 0, offsetPixel = 25) {
-    //     let [A, B] = linePoints;
-    //     let M = MidPoint(A, B);
-    //     let APixel = this.frame.toPix(A);
-    //     let BPixel = this.frame.toPix(B);
-    //     let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
-    //     this.labelPoint(M, text, q + dodgeDirection, offsetPixel);
-    // }
-
     /**
      * The axis.
-     * @namespace axis
-     * @memberof Pen
+     * @category axis
      */
 
     axis = {
+        /**
+         * @ignore
+         */
         pen: this,
-        // getStyle(label: string): string {
-        //     return label.length === 1 ? "italic" : "normal";
-        // },
         /**
          * Draw x-axis.
-         * @memberof Pen.axis
-         * @param {string} [label='x'] - The axis label.
-         * @example
+         * @category axis
+         * @param label - The axis label.
+         * @returns
+         * ```typescript
          * pen.axis.x('time') // draw the x-axis, label as 'time'
+         * ```
          */
         x(label = "x") {
             const [xmin, xmax] = this.pen.frame.xRange();
@@ -1006,10 +966,12 @@ class PenCls {
         },
         /**
          * Draw y-axis.
-         * @memberof Pen.axis
-         * @param {string} [label='y'] - The axis label.
-         * @example
+         * @category axis
+         * @param label - The axis label.
+         * @returns
+         * ```typescript
          * pen.axis.y('height') // draw the y-axis, label as 'height'
+         * ```
          */
         y(label = "y") {
             const [ymin, ymax] = this.pen.frame.yRange();
@@ -1026,19 +988,22 @@ class PenCls {
 
     /**
      * The axis ticks.
-     * @namespace axisTick
-     * @memberof Pen
+     * @category axis
      */
-
     tick = {
+        /**
+         * @ignore
+         */
         pen: this,
         /**
          * Draw ticks on the x-axis.
-         * @memberof Pen.axisTick
-         * @param {number} [interval=1] - The tick interval.
-         * @param {boolean} [mark=true] - Whether to label number at ticks.
-         * @example
+         * @category axisTick
+         * @param interval - The tick interval.
+         * @param mark - Whether to label number at ticks.
+         * @returns
+         * ```typescript
          * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
+         * ```
          */
         x(interval = 1, mark = true) {
             const offset = this.pen.frame.xOffset();
@@ -1056,11 +1021,13 @@ class PenCls {
         },
         /**
          * Draw ticks on the y-axis.
-         * @memberof Pen.axisTick
-         * @param {number} [interval=1] - The tick interval.
-         * @param {boolean} [mark=true] - Whether to label number at ticks.
-         * @example
+         * @category axisTick
+         * @param interval - The tick interval.
+         * @param mark - Whether to label number at ticks.
+         * @returns
+         * ```typescript
          * pen.tick.y(2) // draw ticks on the y-axis, at interval 2 units
+         * ```
          */
         y(interval = 1, mark = true) {
             const offset = this.pen.frame.yOffset();
@@ -1080,18 +1047,21 @@ class PenCls {
 
     /**
      * The axis gridlines.
-     * @namespace axisGrid
-     * @memberof Pen
+     * @category axis
      */
-
     grid = {
+        /**
+         * @ignore
+         */
         pen: this,
         /**
          * Draw gridlines on the x-axis.
-         * @memberof Pen.axisGrid
-         * @param {number} [interval=1] - The grid interval.
-         * @example
+         * @category axisGrid
+         * @param interval - The grid interval.
+         * @returns
+         * ```typescript
          * pen.grid.x(2) // draw gridlines on the x-axis, at interval 2 units
+         * ```
          */
         x(interval = 1) {
             this.pen.ctx.save();
@@ -1103,10 +1073,12 @@ class PenCls {
         },
         /**
          * Draw gridlines on the y-axis.
-         * @memberof Pen.axisGrid
-         * @param {number} [interval=1] - The grid interval.
-         * @example
+         * @category axisGrid
+         * @param interval - The grid interval.
+         * @returns
+         * ```typescript
          * pen.grid.y(2) // draw gridlines on the y-axis, at interval 2 units
+         * ```
          */
         y(interval = 1) {
             this.pen.ctx.save();
@@ -1119,6 +1091,9 @@ class PenCls {
     };
 
 
+    /**
+     * @ignore
+     */
     autoCrop() {
         var ctx = this.ctx;
         var canvas = ctx.canvas,
@@ -1150,25 +1125,23 @@ class PenCls {
     }
 
 
-
+    /**
+     * @ignore
+     */
     dataURL() {
         return this.canvas.toDataURL();
     }
 
     /**
-     * The export function.
-     * @namespace export
-     * @memberof Pen
-     */
-
-    /**
      * Export the canvas to image tag.
-     * @memberof Pen.export
-     * @param {string} html - The html string to export to.
-     * @param {string} placeholder - The src field of the image tag to export to.
-     * @returns {string} The new html with src field pasted.
-     * @example
-     * question = pen.export(question,'imgQ') // paste the canvas to the image tag with src field 'imgQ'
+     * @category export
+     * @param html - The html string to export to.
+     * @param placeholder - The src field of the image tag to export to.
+     * @returns The new html with src field pasted.
+     * ```typescript
+     * question = pen.export(question,'imgQ') 
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
      */
     export(html: string, placeholder: string) {
         const src = 'src="' + this.dataURL() + '"';
@@ -1182,7 +1155,9 @@ class PenCls {
 
 
 
-
+    /**
+     * @ignore
+     */
     exportCropped(html: string, placeholder: string) {
 
         function cloneCanvas(oldCanvas: HTMLCanvasElement) {
@@ -1240,22 +1215,13 @@ class PenCls {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Clear the canvas.
-     * @memberof Pen.export
-     * @example
+     * @category export
+     * @returns
+     * ```typescript
      * pen.clear() // clear the canvas.
+     * ```
      */
     clear() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -1263,9 +1229,11 @@ class PenCls {
 
     /**
      * Temporarily save the img internally. Can be later restored by restoreImg.
-     * @memberof Pen.export
-     * @example
+     * @category export
+     * @returns
+     * ```typescript
      * pen.saveImg() // save the current canvas image
+     * ```
      */
     saveImg() {
         this.imgStore = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
@@ -1273,9 +1241,11 @@ class PenCls {
 
     /**
      * Restored the previously saved img by saveImg.
-     * @memberof Pen.export
-     * @example
+     * @category export
+     * @returns
+     * ```typescript
      * pen.restoreImg() // restore the previously saved img
+     * ```
      */
     restoreImg() {
         if (this.imgStore !== null)
@@ -1284,10 +1254,8 @@ class PenCls {
 
 };
 
-
+/**
+ * @ignore
+ */
 var Pen = PenCls
 globalThis.Pen = Pen
-
-
-
-

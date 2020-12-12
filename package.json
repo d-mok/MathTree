@@ -9,7 +9,7 @@
     "tsc": "tsc",
     "docs_math": "./node_modules/.bin/jsdoc ./src/Math --configure .jsdoc.json --verbose -d docs_math",
     "docs_pen": "./node_modules/.bin/jsdoc ./src/Pen --configure .jsdoc.json --verbose -d docs_pen",
-    "typedoc_math": "typedoc --out typedoc_math ./src/Math"
+    "typedoc_math": "typedoc --out typedoc_math ./src"
   },
   "repository": {
     "type": "git",
