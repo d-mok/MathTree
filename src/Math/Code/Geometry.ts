@@ -53,17 +53,17 @@ function DivisionPoint(A: Point, B: Point, ratio = 0.5): Point {
 globalThis.DivisionPoint = DivisionPoint
 
 
-/**
- * @category Geometry
- * @ignore
- * To be deleted
- */
-function SumPoint(...points: Point[]): Point {
-    const x = points.map(p => p[0]).reduce((a, b) => a + b)
-    const y = points.map(p => p[1]).reduce((a, b) => a + b)
-    return [x, y];
-}
-globalThis.SumPoint = SumPoint
+// /**
+//  * @category Geometry
+//  * @ignore
+//  * To be deleted
+//  */
+// function SumPoint(...points: Point[]): Point {
+//     const x = points.map(p => p[0]).reduce((a, b) => a + b)
+//     const y = points.map(p => p[1]).reduce((a, b) => a + b)
+//     return [x, y];
+// }
+// globalThis.SumPoint = SumPoint
 
 // /**
 //  * @category Geometry
@@ -78,15 +78,15 @@ globalThis.SumPoint = SumPoint
 // }
 // globalThis.ScalePoint = ScalePoint
 
-/**
- * @category Geometry
- * @ignore
- * To be deleted
- */
-function DiffPoint(O: Point, P: Point): Point {
-    return [P[0] - O[0], P[1] - O[1]];
-}
-globalThis.DiffPoint = DiffPoint
+// /**
+//  * @category Geometry
+//  * @ignore
+//  * To be deleted
+//  */
+// function DiffPoint(O: Point, P: Point): Point {
+//     return [P[0] - O[0], P[1] - O[1]];
+// }
+// globalThis.DiffPoint = DiffPoint
 
 /**
  * @category Geometry
