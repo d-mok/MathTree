@@ -46,6 +46,45 @@ globalThis.VectorMean = VectorMean
 
 
 
+/**
+ * @category Vector
+ * @return length of vector
+ * ```typescript
+ * VectorLength([-3,4]) // 5
+ * VectorLength([0,0]) // 0
+ * VectorLength([1,2]) // sqrt(5)
+ * ```
+ */
+function VectorLength(v: Vector): number {
+    const [x, y] = v
+    return (x * x + y * y) ** 0.5
+}
+globalThis.VectorLength = VectorLength
+
+
+
+
+
+/**
+ * @category Vector
+ * @return length of vector
+ * ```typescript
+ * VectorArg([2,0]) // 0
+ * VectorArg([0,2]) // 90
+ * VectorArg([-2,0]) // 180
+ * VectorArg([0,-2]) // 270
+ * VectorArg([0,0]) // 0
+ * VectorArg([1,1]) // 45
+ * ```
+ */
+function VectorArg(v: Vector): number {
+    const [x, y] = v
+    let arg = Math.atan2(y, x) / Math.PI * 180;
+    if (arg < 0) arg += 360
+    return arg
+}
+globalThis.VectorArg = VectorArg
+
 
 
 
@@ -62,6 +101,62 @@ function VectorScale(v: Vector, k: number): Vector {
     return [k * v[0], k * v[1]];
 }
 globalThis.VectorScale = VectorScale
+
+
+
+
+
+/**
+ * @category Vector
+ * @return the negative of the vector
+ * ```typescript
+ * VectorRev([-3,4]) // [3,-4]
+ * VectorRev([0,0]) // [0,0]
+ * VectorRev([1,2]) // [-1,-2]
+ * ```
+ */
+function VectorRev(v: Vector): Vector {
+    const [x, y] = v
+    return [-x, -y]
+}
+globalThis.VectorRev = VectorRev
+
+
+
+
+/**
+ * @category Vector
+ * @return the unit vector of v
+ * ```typescript
+ * VectorUnit([2,0]) // [1,0]
+ * VectorUnit([0,-2]) // [0,-1]
+ * VectorUnit([1,2]) // [1/sqrt(5),2/sqrt(5)]
+ * ```
+ */
+function VectorUnit(v: Vector): Vector {
+    const [x, y] = v
+    const L = VectorLength(v)
+    return [x / L, y / L]
+}
+globalThis.VectorUnit = VectorUnit
+
+
+
+/**
+ * @category Vector
+ * @return scale the vector to the given length
+ * ```typescript
+ * VectorScaleTo([2,0],10) // [10,0]
+ * VectorScaleTo([0,-2],100) // [0,-100]
+ * VectorScaleTo([-3,4],15) // [-9,12]
+ * ```
+ */
+function VectorScaleTo(v: Vector, length: number): Vector {
+    return VectorScale(VectorUnit(v), length)
+}
+globalThis.VectorScaleTo = VectorScaleTo
+
+
 
 
 

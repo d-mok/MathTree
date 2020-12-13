@@ -96,9 +96,9 @@ globalThis.DiffPoint = DiffPoint
  * ```
  */
 function RotatePoint(P: Point, O: Point, q: number): Point {
-    let D = Vector(O, P);
-    D = [D[0] * cos(q) - D[1] * sin(q), D[0] * sin(q) + D[1] * cos(q)];
-    return VectorAdd(O, D);
+    let v = Vector(O, P);
+    v = VectorRotate(v, q)
+    return VectorAdd(O, v);
 }
 globalThis.RotatePoint = RotatePoint
 
