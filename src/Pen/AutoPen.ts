@@ -554,8 +554,7 @@ class AutoPenCls {
 
         let dmax = Math.max(dx, dy) * 0.8
 
-        let G = SumPoint(A, B, C)
-        G = ScalePoint(G, 1 / 3)
+        let G = VectorMean(A, B, C)
 
         let T = triangle
         let sideA = T.sideA

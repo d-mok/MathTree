@@ -37,23 +37,23 @@ test('DivisionPoint', () => {
 
 
 
-test('SumPoint', () => {
-    expect(SumPoint([1, 2], [3, 4], [5, 6])).toEqual([9, 12]);
-});
+// test('SumPoint', () => {
+//     expect(SumPoint([1, 2], [3, 4], [5, 6])).toEqual([9, 12]);
+// });
 
 
-test('ScalePoint', () => {
-    expect(ScalePoint([1, 2], 2)).toEqual([2, 4]);
-    expect(ScalePoint([1, 2], -2)).toEqual([-2, -4]);
-});
+// test('ScalePoint', () => {
+//     expect(ScalePoint([1, 2], 2)).toEqual([2, 4]);
+//     expect(ScalePoint([1, 2], -2)).toEqual([-2, -4]);
+// });
 
 
 
 
-test('DiffPoint', () => {
-    expect(DiffPoint([1, 2], [10, 5])).toEqual([9, 3]);
-    expect(DiffPoint([1, 2], [1, 2])).toEqual([0, 0]);
-});
+// test('DiffPoint', () => {
+//     expect(DiffPoint([1, 2], [10, 5])).toEqual([9, 3]);
+//     expect(DiffPoint([1, 2], [1, 2])).toEqual([0, 0]);
+// });
 
 
 
@@ -100,7 +100,7 @@ test('Intersection', () => {
 
 
 
-test('Intersection', () => {
+test('TranslatePoint', () => {
     expect(TranslatePoint([1, 2], 90, 3)).toEqual([1, 5]);
     expect(TranslatePoint([1, 2], -90, 3)).toEqual([1, -1]);
     expect(TranslatePoint([1, 2], 180, 3)).toEqual([-2, 2]);

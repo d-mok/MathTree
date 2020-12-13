@@ -1,5 +1,6 @@
 
 type Point = [x: number, y: number]
+type Vector = [x: number, y: number]
 
 
 /**
@@ -51,35 +52,4 @@ type QuadrantCode = 1 | 2 | 3 | 4
 type PolarPoint = [r: number, q: number]
 
 type TrigFunc = 'sin' | 'cos' | 'tan'
-
-
-
-class ABC {
-    /**
-    * @category aaa
-    */
-    public a
-    /**
-    * @category bbb
-    */
-    public b
-    constructor() {
-        this.a = 1
-        this.b = 2
-    }
-    c = {
-        /**
-        * @category a
-        */
-        prop1: 1,
-        /**
-        * @category bbb
-        */
-        method1(): string {
-            return ''
-        }
-    }
-
-
-}
 

@@ -64,7 +64,7 @@ function LinearProgram(constraints: Constraint[], field: Field, bound = [100, 10
             }
         }
 
-        let center = ScalePoint(SumPoint(...vertices), 1 / vertices.length);
+        let center = VectorMean(...vertices);
         vertices.sort((a, b) => Inclination(center, a) - Inclination(center, b));
         return vertices;
     }

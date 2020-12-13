@@ -55,10 +55,8 @@ globalThis.DivisionPoint = DivisionPoint
 
 /**
  * @category Geometry
- * @return vector sum of all points
- * ```typescript
- * SumPoint([1,2],[3,4],[5,6]) // [9,12]
- * ```
+ * @ignore
+ * To be deleted
  */
 function SumPoint(...points: Point[]): Point {
     const x = points.map(p => p[0]).reduce((a, b) => a + b)
@@ -67,25 +65,23 @@ function SumPoint(...points: Point[]): Point {
 }
 globalThis.SumPoint = SumPoint
 
-/**
- * @category Geometry
- * @return find [kx,ky] from [x,y]
- * ```typescript
- * ScalePoint([1,2],2) // [2,4]
- * ScalePoint([1,2],-2) // [-2,-4]
- * ```
- */
-function ScalePoint(P: Point, k = 1): Point {
-    return [k * P[0], k * P[1]];
-}
-globalThis.ScalePoint = ScalePoint
+// /**
+//  * @category Geometry
+//  * @return find [kx,ky] from [x,y]
+//  * ```typescript
+//  * ScalePoint([1,2],2) // [2,4]
+//  * ScalePoint([1,2],-2) // [-2,-4]
+//  * ```
+//  */
+// function ScalePoint(P: Point, k = 1): Point {
+//     return [k * P[0], k * P[1]];
+// }
+// globalThis.ScalePoint = ScalePoint
 
 /**
  * @category Geometry
- * @return the vector OP
- * ```typescript
- * DiffPoint([1,2],[10,5]) // [9,3]
- * ```
+ * @ignore
+ * To be deleted
  */
 function DiffPoint(O: Point, P: Point): Point {
     return [P[0] - O[0], P[1] - O[1]];
@@ -100,9 +96,9 @@ globalThis.DiffPoint = DiffPoint
  * ```
  */
 function RotatePoint(P: Point, O: Point, q: number): Point {
-    let D = DiffPoint(O, P);
+    let D = Vector(O, P);
     D = [D[0] * cos(q) - D[1] * sin(q), D[0] * sin(q) + D[1] * cos(q)];
-    return SumPoint(O, D);
+    return VectorAdd(O, D);
 }
 globalThis.RotatePoint = RotatePoint
 
@@ -148,7 +144,7 @@ globalThis.Normal = Normal
 function PerpendicularFoot(A: Point, B: Point, P: Point): Point {
     let q = Normal(A, B);
     let V = PolToRect([1, q]);
-    let Q = SumPoint(P, V);
+    let Q = VectorAdd(P, V);
     return Intersection(A, B, P, Q);
 }
 globalThis.PerpendicularFoot = PerpendicularFoot
