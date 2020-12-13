@@ -1,41 +1,49 @@
 
+
+function testAssertion(func, truthy, falsy) {
+    const trash = ['2', '-2', '0.5', NaN, Infinity, undefined, null, true, false];
+    falsy = [...falsy, ...trash];
+
+    for (t of truthy) {
+        expect(func(t)).toBe(true);
+    }
+    expect(func(...truthy)).toBe(true);
+    for (f of falsy) {
+        expect(func(f)).toBe(false);
+    }
+    expect(func(...falsy)).toBe(false);
+    expect(func(falsy[0], ...truthy)).toBe(false);
+    expect(func(truthy[1], ...falsy)).toBe(false);
+}
+
+
+
+
+test('IsNum', () => {
+    const T = [0, 4, -2, 1.23, -4.567, 9999999, 1 / 3];
+    const F = [];
+    testAssertion(IsNum, T, F);
+});
+
+
 test('IsInteger', () => {
-    expect(IsInteger(0)).toBe(true);
-    expect(IsInteger(13)).toBe(true);
-    expect(IsInteger(-5)).toBe(true);
-    expect(IsInteger(-1045372)).toBe(true);
-    expect(IsInteger(4721)).toBe(true);
-    expect(IsInteger(1, 2, -3, 4, -5)).toBe(true);
-    expect(IsInteger(0.5)).toBe(false);
-    expect(IsInteger(1.12)).toBe(false);
-    expect(IsInteger(-55.6)).toBe(false);
-    expect(IsInteger(1, 2.3, -3, 4, -5)).toBe(false);
+    const T = [0, 13, -5, -1045372, 4721];
+    const F = [0.5, 1.12, -55.6];
+    testAssertion(IsInteger, T, F);
 });
 
 
 test('IsCoeff', () => {
-    expect(IsCoeff(2)).toBe(true);
-    expect(IsCoeff(3)).toBe(true);
-    expect(IsCoeff(-2)).toBe(true);
-    expect(IsCoeff(-5)).toBe(true);
-    expect(IsCoeff(2, 3, -4)).toBe(true);
-    expect(IsCoeff(1)).toBe(false);
-    expect(IsCoeff(0)).toBe(false);
-    expect(IsCoeff(-1)).toBe(false);
-    expect(IsCoeff(-1, 3, 4, 5)).toBe(false);
+    const T = [2, 3, -2, -5];
+    const F = [-1, 0, 1, 1.23, -0.5];
+    testAssertion(IsCoeff, T, F);
 });
 
 
 test('IsOdd', () => {
-    expect(IsOdd(1)).toBe(true);
-    expect(IsOdd(-1)).toBe(true);
-    expect(IsOdd(3)).toBe(true);
-    expect(IsOdd(99)).toBe(true);
-    expect(IsOdd(3, 5, -7)).toBe(true);
-    expect(IsOdd(2)).toBe(false);
-    expect(IsOdd(0)).toBe(false);
-    expect(IsOdd(-4)).toBe(false);
-    expect(IsOdd(1, 3, 4, 5)).toBe(false);
+    const T = [1, -1, 3, 99];
+    const F = [2, 0, -4, 0.5];
+    testAssertion(IsOdd, T, F);
 });
 
 
@@ -43,15 +51,9 @@ test('IsOdd', () => {
 
 
 test('IsEven', () => {
-    expect(IsEven(2)).toBe(true);
-    expect(IsEven(-2)).toBe(true);
-    expect(IsEven(4)).toBe(true);
-    expect(IsEven(96)).toBe(true);
-    expect(IsEven(2, 4, -6)).toBe(true);
-    expect(IsEven(1)).toBe(false);
-    expect(IsEven(3)).toBe(false);
-    expect(IsEven(-5)).toBe(false);
-    expect(IsEven(2, 3, 4, 8)).toBe(false);
+    const T = [2, -2, 4, 96, 0];
+    const F = [1, 3, -5, 0.5];
+    testAssertion(IsEven, T, F);
 });
 
 
@@ -59,55 +61,32 @@ test('IsEven', () => {
 
 
 test('IsProbability', () => {
-    expect(IsProbability(1)).toBe(true);
-    expect(IsProbability(0)).toBe(true);
-    expect(IsProbability(0.123)).toBe(true);
-    expect(IsProbability(0.678)).toBe(true);
-    expect(IsProbability(1, 0, 0.123)).toBe(true);
-    expect(IsProbability(-0.5)).toBe(false);
-    expect(IsProbability(1.1)).toBe(false);
-    expect(IsProbability(3)).toBe(false);
-    expect(IsProbability(0.1, 0.2, 1.3)).toBe(false);
+    const T = [1, 0, 0.123, 0.678];
+    const F = [-0.5, 1.1, 3];
+    testAssertion(IsProbability, T, F);
 });
 
 
 
 test('IsSquareNum', () => {
-    expect(IsSquareNum(0)).toBe(true);
-    expect(IsSquareNum(1)).toBe(true);
-    expect(IsSquareNum(4)).toBe(true);
-    expect(IsSquareNum(9)).toBe(true);
-    expect(IsSquareNum(1, 4, 16)).toBe(true);
-    expect(IsSquareNum(2)).toBe(false);
-    expect(IsSquareNum(1.5)).toBe(false);
-    expect(IsSquareNum(-4)).toBe(false);
-    expect(IsSquareNum(4, 36, -1)).toBe(false);
+    const T = [0, 1, 4, 9, 16, 25, 36];
+    const F = [2, 1.5, -4, -1];
+    testAssertion(IsSquareNum, T, F);
 });
 
 
 
 test('IsPositive', () => {
-    expect(IsPositive(1)).toBe(true);
-    expect(IsPositive(1.4)).toBe(true);
-    expect(IsPositive(123)).toBe(true);
-    expect(IsPositive(0.001)).toBe(true);
-    expect(IsPositive(0.1, 4, 0.000000001)).toBe(true);
-    expect(IsPositive(0)).toBe(false);
-    expect(IsPositive(-1)).toBe(false);
-    expect(IsPositive(-4.5)).toBe(false);
-    expect(IsPositive(4, 36, -1)).toBe(false);
+    const T = [4, 1, 1.4, 123, 0.001, 0.1, 0.00000001];
+    const F = [0, -1, -4.5];
+    testAssertion(IsPositive, T, F);
 });
 
 
 
 test('IsNonZero', () => {
-    expect(IsNonZero(1)).toBe(true);
-    expect(IsNonZero(1.4)).toBe(true);
-    expect(IsNonZero(-123)).toBe(true);
-    expect(IsNonZero(-0.001)).toBe(true);
-    expect(IsNonZero(0.1, 4, 9)).toBe(true);
-    expect(IsNonZero(0)).toBe(false);
-    expect(IsNonZero(-0)).toBe(false);
-    expect(IsNonZero(0, 36, -1)).toBe(false);
+    const T = [1, 1.4, -123, -0.001, 0.1, 4, 9];
+    const F = [0, -0];
+    testAssertion(IsNonZero, T, F);
 });
 

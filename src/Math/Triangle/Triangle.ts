@@ -3,10 +3,10 @@
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
  * ```typescript
- * CosineLawLength(5,5,60) // return 5
- * CosineLawLength(2,4,30) // return 2.47862735
- * CosineLawLength(1,2,180) // return 3
- * CosineLawLength(4,6,0) // return 2
+ * CosineLawLength(5,5,60) // 5
+ * CosineLawLength(2,4,30) // 2.47862735
+ * CosineLawLength(1,2,180) // 3
+ * CosineLawLength(4,6,0) // 2
  * ```
  */
 function CosineLawLength(a: number, b: number, C: number): number {
@@ -20,9 +20,9 @@ globalThis.CosineLawLength = CosineLawLength
  * @category Triangle
  * @return Find angle C by cosine law. Input sides a,b,c.
  * ```typescript
- * CosineLawAngle(5,5,5) // return 60
- * CosineLawAngle(3,4,5) // return 90
- * CosineLawAngle(7,8,9) // return 73.3984504
+ * CosineLawAngle(5,5,5) // 60
+ * CosineLawAngle(3,4,5) // 90
+ * CosineLawAngle(7,8,9) // 73.3984504
  * ```
  */
 function CosineLawAngle(a: number, b: number, c: number): number {
@@ -35,9 +35,9 @@ globalThis.CosineLawAngle = CosineLawAngle
  * @category Triangle
  * @return Find area by Heron's formula.
  * ```typescript
- * Heron(3,4,5) // return 6
- * Heron(1,1,1) // return 0.433012701
- * Heron(7,8,9) // return 26.83281573
+ * Heron(3,4,5) // 6
+ * Heron(1,1,1) // 0.433012701
+ * Heron(7,8,9) // 26.83281573
  * ```
  */
 function Heron(a: number, b: number, c: number): number {
@@ -52,7 +52,7 @@ globalThis.Heron = Heron
  * @return Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
  * ```typescript
  * TriangleFromVertex([0,0],[4,0],[0,3],false) 
- * // return {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
+ * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
  * ```
  */
 function TriangleFromVertex(A: Point, B: Point, C: Point, fix = true): Triangle {

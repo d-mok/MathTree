@@ -12,10 +12,10 @@ test('Quadrant', () => {
 
 
 test('PolToRect', () => {
-    expect(PolToRect([1, 45])[0]).toBeCloseTo(2 ** -0.5);
-    expect(PolToRect([1, 45])[1]).toBeCloseTo(2 ** -0.5);
-    expect(PolToRect([1, 135])[0]).toBeCloseTo(-(2 ** -0.5));
-    expect(PolToRect([1, 135])[1]).toBeCloseTo(2 ** -0.5);
+    expect(PolToRect([1, 45])[0]).toBeCloseTo(2 ** -0.5,12);
+    expect(PolToRect([1, 45])[1]).toBeCloseTo(2 ** -0.5,12);
+    expect(PolToRect([1, 135])[0]).toBeCloseTo(-(2 ** -0.5),12);
+    expect(PolToRect([1, 135])[1]).toBeCloseTo(2 ** -0.5,12);
     expect(PolToRect([0, 0])).toEqual([0, 0]);
 });
 

@@ -1,14 +1,16 @@
-
 /**
  * @category Algebra
- * @return the solution [x,y] of ax+by=c and px+qy=r.
+ * @return solve [x,y] from ax+by=c and px+qy=r. 
  * ```typescript
- * Crammer(1,1,5,1,-1,1) // Solve x+y=5, x-y=1, return [3,2]
+ * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
+ * Crammer(1,1,3,2,2,6) // [NaN,NaN] solving x+y=3 and 2x+2y=6
  * ```
  */
 function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number] {
-    const x = ((c * q - b * r) / (a * q - b * p));
-    const y = ((a * r - c * p) / (a * q - b * p));
+    const D = a * q - b * p
+    if (D === 0) return [NaN, NaN]
+    const x = (c * q - b * r) / D;
+    const y = (a * r - c * p) / D;
     return [x, y];
 }
 globalThis.Crammer = Crammer
@@ -17,9 +19,9 @@ globalThis.Crammer = Crammer
 
 /**
  * @category Algebra
- * @return {number} the discriminant b^2-4ac.
+ * @return the discriminant b^2-4ac.
  * ```typescript
- * Discriminant(2,3,4) // return -23
+ * Discriminant(2,3,4) // -23
  * ```
  */
 function Discriminant(a: number, b: number, c: number): number {
@@ -30,17 +32,17 @@ globalThis.Discriminant = Discriminant
 
 /**
  * @category Algebra
- * @return the roots of ax^2+bx+c=0 as [r1,r2], or [undefined,undefined] if no real root.
+ * @return the roots [p,q] of ax^2+bx+c=0 where p<=q
  * ```typescript
- * QuadraticRoot(1,2,-3) // return [-3,1]
- * QuadraticRoot(-1,-2,3) // return [-3,1]
- * QuadraticRoot(1,2,1) // return [-1,-1]
- * QuadraticRoot(1,2,3) // return [undefined,undefined]
+ * QuadraticRoot(1,2,-3) // [-3,1]
+ * QuadraticRoot(-1,-2,3) // [-3,1]
+ * QuadraticRoot(1,2,1) // [-1,-1]
+ * QuadraticRoot(1,2,3) // [NaN,NaN] no real root
  * ```
  */
-function QuadraticRoot(a: number, b: number, c: number): [number, number] | [undefined, undefined] {
+function QuadraticRoot(a: number, b: number, c: number): [number, number] {
     const d = Discriminant(a, b, c);
-    if (d < 0) return [undefined, undefined];
+    if (d < 0) return [NaN, NaN];
     const r1 = (-b - Math.sqrt(d)) / (2 * a);
     const r2 = (-b + Math.sqrt(d)) / (2 * a);
     return [Math.min(r1, r2), Math.max(r1, r2)];
@@ -53,10 +55,10 @@ globalThis.QuadraticRoot = QuadraticRoot
  * @category Algebra
  * @return the vertex [h,k] of y=ax^2+bx+c.
  * ```typescript
- * QuadraticVertex(1,2,3) // return [-1,2]
+ * QuadraticVertex(1,2,3) // [-1,2]
  * ```
  */
-function QuadraticVertex(a: number, b: number, c: number): [number, number] {
+function QuadraticVertex(a: number, b: number, c: number): Point {
     const h = -b / (2 * a);
     const k = a * h * h + b * h + c;
     return [h, k];
@@ -69,8 +71,8 @@ globalThis.QuadraticVertex = QuadraticVertex
  * @category Algebra
  * @return the quadratic coeff [a,b,c] from given a and roots p and q.
  * ```typescript
- * QuadraticFromRoot(1,2,3) // return [1,-5,6]
- * QuadraticFromRoot(-2,4,-3) // return [-2,2,24]
+ * QuadraticFromRoot(1,2,3) // [1,-5,6]
+ * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
  * ```
  */
 function QuadraticFromRoot(a: number, p: number, q: number): [number, number, number] {
@@ -85,13 +87,13 @@ globalThis.QuadraticFromRoot = QuadraticFromRoot
  * @category Algebra
  * @return the quadratic coeff [a,b,c] from given a and vertex (h,k).
  * ```typescript
- * QuadraticFromVertex(1,2,3) // return [1,-4,7]
- * QuadraticFromVertex(-2,4,-3) // return [-2,16,-35]
+ * QuadraticFromVertex(1,2,3) // [1,-4,7]
+ * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
  * ```
  */
 function QuadraticFromVertex(a: number, h: number, k: number): [number, number, number] {
-    let b = -2 * a * h
-    let c = k - a * h * h - b * h
+    const b = -2 * a * h
+    const c = k - a * h * h - b * h
     return [a, b, c]
 }
 globalThis.QuadraticFromVertex = QuadraticFromVertex
@@ -105,36 +107,20 @@ globalThis.QuadraticFromVertex = QuadraticFromVertex
  * @category Algebra
  * @return the product of two input polynomials.
  * ```typescript
- * xPolynomial([1,2,3],[4,5]) // return [4,13,22,15]
- * // since (1x^2+2x+3)(4x+5)=4x^3+13x^2+22x+15
+ * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
+ * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
  * ```
  */
 function xPolynomial(poly1: number[], poly2: number[]): number[] {
-    poly1.reverse()
-    poly2.reverse()
-    let result = [];
-    let n = 0;
-    do {
-        let coeff = 0;
-        let count = 0;
-        poly1.forEach((a, i) => {
-            poly2.forEach((b, j) => {
-                if (i + j === n) {
-                    count++;
-                    coeff += a * b;
-                }
-            });
-        });
-        if (count > 0) {
-            result.push(coeff);
-        } else {
-            break;
+    const deg1 = poly1.length - 1
+    const deg2 = poly2.length - 1
+    const deg = deg1 + deg2
+    const result = Array(deg + 1).fill(0)
+    for (let i = 0; i <= deg1; i++) {
+        for (let j = 0; j <= deg2; j++) {
+            result[i + j] += poly1[i] * poly2[j]
         }
-        n++;
-    } while (true);
-    poly1.reverse()
-    poly2.reverse()
-    result.reverse()
-    return result;
+    }
+    return result
 }
 globalThis.xPolynomial = xPolynomial

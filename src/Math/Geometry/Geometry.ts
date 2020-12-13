@@ -3,10 +3,12 @@
  * @category Geometry
  * @return the slope of AB
  * ```typescript
- * Slope([0,0],[1,2]) // return 2
+ * Slope([0,0],[1,2]) // 2
+ * Slope([1,2],[1,2]) // NaN
  * ```
  */
 function Slope(A: Point, B: Point): number {
+    if ((A[0] - B[0]) === 0) return NaN
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
 globalThis.Slope = Slope
@@ -16,7 +18,7 @@ globalThis.Slope = Slope
  * @category Geometry
  * @return the distance AB
  * ```typescript
- * Distance([0,0],[1,2]) // return 2.23606797749979
+ * Distance([0,0],[1,2]) // 2.23606797749979
  * ```
  */
 function Distance(A: Point, B: Point): number {
@@ -28,7 +30,7 @@ globalThis.Distance = Distance
  * @category Geometry
  * @return the mid-pt of AB
  * ```typescript
- * MidPoint([1,2],[3,4]) // return [2,3]
+ * MidPoint([1,2],[3,4]) // [2,3]
  * ```
  */
 function MidPoint(A: Point, B: Point): Point {
@@ -40,7 +42,7 @@ globalThis.MidPoint = MidPoint
  * @category Geometry
  * @return the point P on AB such that AP : PB = ratio : 1-ratio
  * ```typescript
- * DivisionPoint([1,0],[5,0],0.75) // return [4,0]
+ * DivisionPoint([1,0],[5,0],0.75) // [4,0]
  * ```
  */
 function DivisionPoint(A: Point, B: Point, ratio = 0.5): Point {
@@ -55,7 +57,7 @@ globalThis.DivisionPoint = DivisionPoint
  * @category Geometry
  * @return vector sum of all points
  * ```typescript
- * SumPoint([1,2],[3,4],[5,6]) // return [9,12]
+ * SumPoint([1,2],[3,4],[5,6]) // [9,12]
  * ```
  */
 function SumPoint(...points: Point[]): Point {
@@ -69,8 +71,8 @@ globalThis.SumPoint = SumPoint
  * @category Geometry
  * @return find [kx,ky] from [x,y]
  * ```typescript
- * ScalePoint([1,2],2) // return [2,4]
- * ScalePoint([1,2],-2) // return [-2,-4]
+ * ScalePoint([1,2],2) // [2,4]
+ * ScalePoint([1,2],-2) // [-2,-4]
  * ```
  */
 function ScalePoint(P: Point, k = 1): Point {
@@ -82,7 +84,7 @@ globalThis.ScalePoint = ScalePoint
  * @category Geometry
  * @return the vector OP
  * ```typescript
- * DiffPoint([1,2],[10,5]) // return [9,3]
+ * DiffPoint([1,2],[10,5]) // [9,3]
  * ```
  */
 function DiffPoint(O: Point, P: Point): Point {
@@ -94,7 +96,7 @@ globalThis.DiffPoint = DiffPoint
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
  * ```typescript
- * RotatePoint([1,2],[0,0],90) // return [-2,1]
+ * RotatePoint([1,2],[0,0],90) // [-2,1]
  * ```
  */
 function RotatePoint(P: Point, O: Point, q: number): Point {
@@ -109,8 +111,8 @@ globalThis.RotatePoint = RotatePoint
  * @category Geometry
  * @return the polar angle of B if A is the origin within [-180,180].
  * ```typescript
- * Inclination([1,0],[3,2]) // return 45
- * Inclination([3,2],[1,0]) // return -135
+ * Inclination([1,0],[3,2]) // 45
+ * Inclination([3,2],[1,0]) // -135
  * ```
  */
 function Inclination(A: Point, B: Point): number {
@@ -126,8 +128,8 @@ globalThis.Inclination = Inclination
  * @category Geometry
  * @return the polar angle of a normal direction to AB, on the right of AB.
  * ```typescript
- * Normal([1,0],[3,2]) // return -45
- * Normal([3,2],[1,0]) // return 135
+ * Normal([1,0],[3,2]) // -45
+ * Normal([3,2],[1,0]) // 135
  * ```
  */
 function Normal(A: Point, B: Point): number {
@@ -140,7 +142,7 @@ globalThis.Normal = Normal
  * @category Geometry
  * @return the foot of perpendicular from P to AB.
  * ```typescript
- * PerpendicularFoot([-1,-1],[1,1],[-2,2]) // return [0,0]
+ * PerpendicularFoot([-1,-1],[1,1],[-2,2]) // [0,0]
  * ```
  */
 function PerpendicularFoot(A: Point, B: Point, P: Point): Point {
@@ -156,7 +158,7 @@ globalThis.PerpendicularFoot = PerpendicularFoot
  * @category Geometry
  * @return the intersection point of AB and CD.
  * ```typescript
- * Intersection([0,0],[2,2],[2,0],[0,2]) // return [1,1]
+ * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
  * ```
  */
 function Intersection(A: Point, B: Point, C: Point, D: Point): Point {
@@ -182,7 +184,7 @@ globalThis.Intersection = Intersection
  * @category Geometry
  * @return Translate point P in the polar angle q by a distance.
  * ```typescript
- * TranslatePoint([1,2],90,3) // return [1,5]
+ * TranslatePoint([1,2],90,3) // [1,5]
  * ```
  */
 function TranslatePoint(P: Point, q: number | Point, distance: number): Point {

@@ -23,14 +23,15 @@ globalThis.RndN = RndN
 
 /**
  * @category Random
- * @return an array of unique random integer in [min, max] inclusive. default n = 10.
+ * @param n - default to 10
+ * @return an array of n unique random integer in [min, max] inclusive.
  * ```typescript
  * RndNs(2,8,3) // may return [5,3,7]
  * ```
  */
 function RndNs(min: number, max: number, n?: number): number[] {
-    // n = n ?? Math.min(Math.floor(max - min + 1), 10)
-    if (!n) n = Math.min(Math.floor(max - min + 1), 10)
+    n ??= Math.min(Math.floor(max - min + 1), 10)
+    // if (!n) n = Math.min(Math.floor(max - min + 1), 10)
     return chance.unique(() => RndN(min, max), n);
 }
 globalThis.RndNs = RndNs
@@ -97,13 +98,15 @@ globalThis.RndZ = RndZ
 
 /**
  * @category Random
- * @return an array of absolutely unique random integers in [min, max] or [-max, -min] inclusive.
+ * @param n - default to 10
+ * @return an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
  * ```typescript
  * RndZs(2,8,3) // may return [5,-3,7]
  * ```
  */
 function RndZs(min: number, max: number, n?: number): number[] {
-    if (!n) n = Min(Math.floor(max - min + 1), 10)
+    n ??= Min(Math.floor(max - min + 1), 10)
+    // if (!n) n = Min(Math.floor(max - min + 1), 10)
     let arr = chance.unique(() => RndN(min, max), n);
     for (let i = 0; i < arr.length; i++) {
         arr[i] = arr[i] * RndU()
@@ -182,28 +185,27 @@ globalThis.RndPoly = RndPoly
 
 /**
  * @category Random
- * @return an unique array of n nearby values, around anchor, within range inclusive. default n = 10.
+ * @param n - default to 10
+ * @return an unique array of n nearby values, around anchor, within range inclusive.
  * ```typescript
- * RndShake(10,5,3) // equivalent to [10+RndZ(1,5), 10+RndZ(1,5), 10+RndZ(1,5)] 
- * RndShake(10.5,5,2) // equivalent to [10.5+RndR(0,5)*RndU(), 10.5+RndR(0,5)*RndU()] 
+ * RndShake(10,5,3) 
+ * // equivalent to [10+RndZ(1,5), 10+RndZ(1,5), 10+RndZ(1,5)] 
+ * RndShake(10.5,5,2) 
+ * // equivalent to [10.5+RndR(0,5)*RndU(), 10.5+RndR(0,5)*RndU()] 
  * ```
  */
-function RndShake(anchor: number, range: number, n = -1): number[] {
+function RndShake(anchor: number, range: number, n?: number): number[] {
     if (IsInteger(anchor)) {
-        if (n === -1) n = 2 * range;
+        n ??= 2 * range;
+        // if (n === -1) n = 2 * range;
         return chance.unique(() => anchor + RndZ(1, range), n);
     } else {
-        if (n === -1) n = 10;
+        n ??= 10;
+        // if (n === -1) n = 10;
         return chance.unique(() => anchor + (RndR(0, range) * RndU()), n);
     }
 }
 globalThis.RndShake = RndShake
-
-
-
-
-
-
 
 
 

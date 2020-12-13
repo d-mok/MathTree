@@ -2,12 +2,12 @@
 /**
  * @category Trigonometry
  * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
- * @return  the quadrant of a point or angle. The quadrant 'I','II','III' or 'IV'.
+ * @return  the quadrant of a point or angle: 'I','II','III' or 'IV'.
  * ```typescript
- * Quadrant([1,1]) \\ return 'I'
- * Quadrant([-1,1]) \\ return 'II'
- * Quadrant(200) \\ return 'III'
- * Quadrant(350) \\ return 'IV'
+ * Quadrant([1,1]) \\ 'I'
+ * Quadrant([-1,1]) \\ 'II'
+ * Quadrant(200) \\ 'III'
+ * Quadrant(350) \\ 'IV'
  * ```
  */
 function Quadrant(rect: PolarPoint | number): QuadrantName {
@@ -26,7 +26,7 @@ globalThis.Quadrant = Quadrant
  * @category Trigonometry
  * @return the rectangular coordinates [x,y] from a polar coordinates [r,theta].
  * ```typescript
- * PolToRect([1,45]) // return [0.707,0.707]
+ * PolToRect([1,45]) // [0.707,0.707]
  * ```
  */
 function PolToRect([r, q]: PolarPoint): Point {
@@ -38,7 +38,7 @@ globalThis.PolToRect = PolToRect
  * @category Trigonometry
  * @return the polar coordinates [r,theta] of a rectangular coordinates [x,y].
  * ```typescript
- * RectToPol([1,1]) // return [1.414,45]
+ * RectToPol([1,1]) // [1.414,45]
  * ```
  */
 function RectToPol([x, y]: Point): PolarPoint {
@@ -53,8 +53,8 @@ globalThis.RectToPol = RectToPol
  * @category Trigonometry
  * @return the sign from ASTC diagram, 1 or -1, representing positive or negative.
  * ```typescript
- * ASTC(2,'cos') // return -1
- * ASTC('III','tan') // return 1
+ * ASTC(2,'cos') // -1
+ * ASTC('III','tan') // 1
  * ```
  */
 function ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): any {
@@ -76,9 +76,9 @@ globalThis.ASTC = ASTC
  * @category Trigonometry
  * @return the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k. The angles [r1,r2,r3].
  * ```typescript
- * TrigRoot('sin',0) // return [0, 180, 360]
- * TrigRoot('sin',0.5) // return [30, 150, undefined]
- * TrigRoot('sin',1) // return [90, undefined, undefined]
+ * TrigRoot('sin',0) // [0, 180, 360]
+ * TrigRoot('sin',0.5) // [30, 150, undefined]
+ * TrigRoot('sin',1) // [90, undefined, undefined]
  * ```
  */
 function TrigRoot(func: TrigFunc, k: number): [number | undefined, number | undefined, number | undefined] {

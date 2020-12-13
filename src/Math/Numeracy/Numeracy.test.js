@@ -30,6 +30,19 @@ test('Round', () => {
     expect(Round(123.4567, 6)).toBe(123.457);
     expect(Round(123.4567, 7)).toBe(123.4567);
     expect(Round(123.4567, 8)).toBe(123.4567);
+
+    expect(Round(1.005, 1)).toBe(1);
+    expect(Round(1.005, 2)).toBe(1);
+    expect(Round(1.005, 3)).toBe(1.01);
+    expect(Round(1.005, 4)).toBe(1.005);
+    expect(Round(1.005, 5)).toBe(1.005);
+
+    expect(Round(1.555, 1)).toBe(2);
+    expect(Round(1.555, 2)).toBe(1.6);
+    expect(Round(1.555, 3)).toBe(1.56);
+    expect(Round(1.555, 4)).toBe(1.555);
+    expect(Round(1.555, 5)).toBe(1.555);
+
     expect(Round(123.9999, 5)).toBe(124);
 });
 
@@ -44,8 +57,22 @@ test('RoundUp', () => {
     expect(RoundUp(123.4567, 6)).toBe(123.457);
     expect(RoundUp(123.4567, 7)).toBe(123.4567);
     expect(RoundUp(123.4567, 8)).toBe(123.4567);
+
+    expect(RoundUp(1.005, 1)).toBe(2);
+    expect(RoundUp(1.005, 2)).toBe(1.1);
+    expect(RoundUp(1.005, 3)).toBe(1.01);
+    expect(RoundUp(1.005, 4)).toBe(1.005);
+    expect(RoundUp(1.005, 5)).toBe(1.005);
+
+    expect(RoundUp(1.555, 1)).toBe(2);
+    expect(RoundUp(1.555, 2)).toBe(1.6);
+    expect(RoundUp(1.555, 3)).toBe(1.56);
+    expect(RoundUp(1.555, 4)).toBe(1.555);
+    expect(RoundUp(1.555, 5)).toBe(1.555);
+
     expect(RoundUp(123.9999, 5)).toBe(124);
     expect(RoundUp(123.0001, 5)).toBe(123.01);
+    expect(RoundUp(0.1 + 0.2, 1)).toBe(0.3);
 });
 
 
@@ -58,6 +85,19 @@ test('RoundDown', () => {
     expect(RoundDown(123.4567, 6)).toBe(123.456);
     expect(RoundDown(123.4567, 7)).toBe(123.4567);
     expect(RoundDown(123.4567, 8)).toBe(123.4567);
+
+    expect(RoundDown(1.005, 1)).toBe(1);
+    expect(RoundDown(1.005, 2)).toBe(1);
+    expect(RoundDown(1.005, 3)).toBe(1);
+    expect(RoundDown(1.005, 4)).toBe(1.005);
+    expect(RoundDown(1.005, 5)).toBe(1.005);
+
+    expect(RoundDown(1.555, 1)).toBe(1);
+    expect(RoundDown(1.555, 2)).toBe(1.5);
+    expect(RoundDown(1.555, 3)).toBe(1.55);
+    expect(RoundDown(1.555, 4)).toBe(1.555);
+    expect(RoundDown(1.555, 5)).toBe(1.555);
+
     expect(RoundDown(123.9999, 5)).toBe(123.99);
 });
 
@@ -73,7 +113,24 @@ test('Fix', () => {
     expect(Fix(123.4567, 3)).toBe(123.457);
     expect(Fix(123.4567, 4)).toBe(123.4567);
     expect(Fix(123.4567, 5)).toBe(123.4567);
+
+    expect(Fix(1.005, -1)).toBe(0);
+    expect(Fix(1.005, 0)).toBe(1);
+    expect(Fix(1.005, 1)).toBe(1);
+    expect(Fix(1.005, 2)).toBe(1.01);
+    expect(Fix(1.005, 3)).toBe(1.005);
+    expect(Fix(1.005, 4)).toBe(1.005);
+
+    expect(Fix(1.555, -1)).toBe(0);
+    expect(Fix(1.555, 0)).toBe(2);
+    expect(Fix(1.555, 1)).toBe(1.6);
+    expect(Fix(1.555, 2)).toBe(1.56);
+    expect(Fix(1.555, 3)).toBe(1.555);
+    expect(Fix(1.555, 4)).toBe(1.555);
+
     expect(Fix(123.9999, 2)).toBe(124);
+    expect(Fix(1.35499999999, 2)).toBe(1.35);
+
 });
 
 
@@ -87,8 +144,25 @@ test('FixUp', () => {
     expect(FixUp(123.4567, 3)).toBe(123.457);
     expect(FixUp(123.4567, 4)).toBe(123.4567);
     expect(FixUp(123.4567, 5)).toBe(123.4567);
+
+
+    expect(FixUp(1.005, -1)).toBe(10);
+    expect(FixUp(1.005, 0)).toBe(2);
+    expect(FixUp(1.005, 1)).toBe(1.1);
+    expect(FixUp(1.005, 2)).toBe(1.01);
+    expect(FixUp(1.005, 3)).toBe(1.005);
+    expect(FixUp(1.005, 4)).toBe(1.005);
+
+    expect(FixUp(1.555, -1)).toBe(10);
+    expect(FixUp(1.555, 0)).toBe(2);
+    expect(FixUp(1.555, 1)).toBe(1.6);
+    expect(FixUp(1.555, 2)).toBe(1.56);
+    expect(FixUp(1.555, 3)).toBe(1.555);
+    expect(FixUp(1.555, 4)).toBe(1.555);
+
     expect(FixUp(123.9999, 2)).toBe(124);
     expect(FixUp(123.0001, 2)).toBe(123.01);
+    expect(FixUp(0.1 + 0.2, 1)).toBe(0.3);
 });
 
 
@@ -103,6 +177,21 @@ test('FixDown', () => {
     expect(FixDown(123.4567, 3)).toBe(123.456);
     expect(FixDown(123.4567, 4)).toBe(123.4567);
     expect(FixDown(123.4567, 5)).toBe(123.4567);
+
+    expect(FixDown(1.005, -1)).toBe(0);
+    expect(FixDown(1.005, 0)).toBe(1);
+    expect(FixDown(1.005, 1)).toBe(1);
+    expect(FixDown(1.005, 2)).toBe(1);
+    expect(FixDown(1.005, 3)).toBe(1.005);
+    expect(FixDown(1.005, 4)).toBe(1.005);
+
+    expect(FixDown(1.555, -1)).toBe(0);
+    expect(FixDown(1.555, 0)).toBe(1);
+    expect(FixDown(1.555, 1)).toBe(1.5);
+    expect(FixDown(1.555, 2)).toBe(1.55);
+    expect(FixDown(1.555, 3)).toBe(1.555);
+    expect(FixDown(1.555, 4)).toBe(1.555);
+
     expect(FixDown(123.9999, 2)).toBe(123.99);
 });
 
@@ -137,6 +226,7 @@ test('SimpRatio', () => {
     expect(SimpRatio(8, 12, 18)).toEqual([4, 6, 9]);
     expect(SimpRatio(2, -4)).toEqual([1, -2]);
     expect(SimpRatio(8, -12, 18)).toEqual([4, -6, 9]);
+    expect(SimpRatio(0, -2, 3)).toEqual([0, -2, 3]);
 });
 
 
@@ -156,5 +246,18 @@ test('SigFig', () => {
     expect(SigFig(1200.0001)).toBe(8);
     expect(SigFig(1200.0001000)).toBe(8);
     expect(SigFig(-1200.0001)).toBe(8);
+});
+
+
+test('Magnitude', () => {
+    expect(Magnitude(1)).toBe(0);
+    expect(Magnitude(1.001)).toBe(0);
+    expect(Magnitude(0.999)).toBe(-1);
+    expect(Magnitude(10)).toBe(1);
+    expect(Magnitude(10.01)).toBe(1);
+    expect(Magnitude(9.999)).toBe(0);
+    expect(Magnitude(0.1)).toBe(-1);
+    expect(Magnitude(0.10001)).toBe(-1);
+    expect(Magnitude(0.09999)).toBe(-2);
 });
 

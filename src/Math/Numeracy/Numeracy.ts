@@ -4,7 +4,7 @@
  * @category Numeracy
  * @return the absolute value. Equivalent to Math.abs(x).
  * ```typescript
- * Abs(-2) // return 2
+ * Abs(-2) // 2
  * ```
  */
 function Abs(num: number): number {
@@ -17,12 +17,12 @@ globalThis.Abs = Abs
  * @category Numeracy
  * @return the sign of the number as 1,0 or -1.
  * ```typescript
- * Sign(3) // return 1
- * Sign(-4.5) // return -1
- * Sign(0) // return 0
+ * Sign(3) // 1
+ * Sign(-4.5) // -1
+ * Sign(0) // 0
  * ```
  */
-function Sign(num: number): number {
+function Sign(num: number): 1 | -1 | 0 {
     if (num > 0) return 1;
     if (num < 0) return -1;
     return 0;
@@ -35,13 +35,14 @@ globalThis.Sign = Sign
  * @category Numeracy
  * @return the number rounded off to given sigfig.
  * ```typescript
- * Round(1.23456,3) // return 1.23
- * Round(1.23567,3) // return 1.24
+ * Round(1.23456,3) // 1.23
+ * Round(1.23567,3) // 1.24
  * ```
  */
 function Round(num: number, sigfig = 3): number {
     if (sigfig < 1) sigfig = 1;
-    return parseFloat(num.toPrecision(sigfig));
+    let d = -Magnitude(num) + sigfig - 1;
+    return Fix(num, d);
 }
 globalThis.Round = Round
 
@@ -49,13 +50,13 @@ globalThis.Round = Round
  * @category Numeracy
  * @return the number rounded up to given sigfig.
  * ```typescript
- * RoundUp(1.23456,3) // return 1.23
- * RoundUp(1.23567,1) // return 2
+ * RoundUp(1.23456,3) // 1.23
+ * RoundUp(1.23567,1) // 2
  * ```
  */
 function RoundUp(num: number, sigfig = 3): number {
     if (sigfig < 1) sigfig = 1;
-    let d = -Math.floor(Math.log(num) / Math.log(10)) + sigfig - 1;
+    let d = -Magnitude(num) + sigfig - 1;
     return FixUp(num, d);
 }
 globalThis.RoundUp = RoundUp
@@ -64,13 +65,13 @@ globalThis.RoundUp = RoundUp
  * @category Numeracy
  * @return the number rounded down to given sigfig.
  * ```typescript
- * RoundDown(1.23456,5) // return 1.2345
- * RoundDown(1.6789,1) // return 1
+ * RoundDown(1.23456,5) // 1.2345
+ * RoundDown(1.6789,1) // 1
  * ```
  */
 function RoundDown(num: number, sigfig = 3): number {
     if (sigfig < 1) sigfig = 1;
-    let d = -Math.floor(Math.log(num) / Math.log(10)) + sigfig - 1;
+    let d = -Magnitude(num) + sigfig - 1;
     return FixDown(num, d);
 }
 globalThis.RoundDown = RoundDown
@@ -86,6 +87,7 @@ globalThis.RoundDown = RoundDown
  * ```
  */
 function Fix(num: number, dp = 0): number {
+    num += Number.EPSILON
     num = num * (10 ** dp);
     num = Math.round(num);
     num = num / (10 ** dp);
@@ -104,10 +106,9 @@ globalThis.Fix = Fix
  * ```
  */
 function FixUp(num: number, dp = 0): number {
+    num -= Number.EPSILON
     num = num * (10 ** dp);
-    let original = num;
-    num = Math.round(num);
-    if (num < original) num = num + 1;
+    num = Math.ceil(num);
     num = num / (10 ** dp);
     if (dp < 0) num = Fix(num, 1);   // correct for floating point error
     return num;
@@ -126,10 +127,9 @@ globalThis.FixUp = FixUp
  * ```
  */
 function FixDown(num: number, dp = 0): number {
+    num += Number.EPSILON
     num = num * (10 ** dp);
-    let original = num;
-    num = Math.round(num);
-    if (num > original) num = num - 1;
+    num = Math.floor(num);
     num = num / (10 ** dp);
     if (dp < 0) num = Fix(num, 1);   // correct for floating point error
     return num;
@@ -142,9 +142,9 @@ globalThis.FixDown = FixDown
  * @category Numeracy
  * @return the ceiling integer of the number.
  * ```typescript
- * Ceil(1.1) // return 2
- * Ceil(-1.1) // return -1
- * Ceil(2)) // return 2
+ * Ceil(1.1) // 2
+ * Ceil(-1.1) // -1
+ * Ceil(2)) // 2
  * ```
  */
 function Ceil(num: number): number {
@@ -156,9 +156,9 @@ globalThis.Ceil = Ceil
  * @category Numeracy
  * @return the floor integer of the number.
  * ```typescript
- * Floor(1.9) // return 1
- * Floor(-1.9) // return -2
- * Floor(2)) // return 2
+ * Floor(1.9) // 1
+ * Floor(-1.9) // -2
+ * Floor(2)) // 2
  * ```
  */
 function Floor(num: number): number {
@@ -171,10 +171,11 @@ globalThis.Floor = Floor
  * @category Numeracy
  * @return reduce input array to simplest ratio.
  * ```typescript
- * SimpRatio(2,4,6) // return [1,2,3]
+ * SimpRatio(2,4,6) // [1,2,3]
  * ```
  */
 function SimpRatio(...nums: number[]): number[] {
+    if (nums.includes(0)) return nums
     let h = HCF(...nums);
     return nums.map(x => x / h);
 }
@@ -184,9 +185,9 @@ globalThis.SimpRatio = SimpRatio
  * @category Numeracy
  * @return the number of sigfig.
  * ```typescript
- * SigFig(1.234) // return 4
- * SigFig(1200) // return 2
- * SigFig(0.00123) // return 3
+ * SigFig(1.234) // 4
+ * SigFig(1200) // 2
+ * SigFig(0.00123) // 3
  * ```
  */
 function SigFig(value: number): number {
@@ -197,3 +198,22 @@ function SigFig(value: number): number {
         .length;
 };
 globalThis.SigFig = SigFig
+
+
+/**
+ * @category Numeracy
+ * @return the order of magnitude
+ * ```typescript
+ * Magnitude(1) // 0
+ * Magnitude(2) // 0
+ * Magnitude(0.9) // 0
+ * Magnitude(10) // 1
+ * Magnitude(10.1) // 1
+ * Magnitude(0.1) // -1
+ * Magnitude(0.02) // -2
+ * ```
+ */
+function Magnitude(num: number): number {
+    return Math.floor(log(10, num))
+}
+globalThis.Magnitude = Magnitude

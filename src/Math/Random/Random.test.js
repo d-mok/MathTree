@@ -7,128 +7,122 @@ function sample(func, n = 1000) {
 }
 
 
+function checkWithin(arr, min, max) {
+    let a = arr.flat();
+    return a.every(x => x >= min && x <= max);
+}
+
+
+function checkAbsWithin(arr, min, max) {
+    let a = arr.flat();
+    return a.every(x => Abs(x) >= min && Abs(x) <= max);
+}
+
+function checkIsInteger(arr) {
+    let a = arr.flat();
+    return a.every(x => IsInteger(x));
+}
+
+function checkDistinct(arr, count) {
+    let a = arr.flat();
+    return [... new Set(a)].length === count;
+}
+
+function checkDiverse(arr) {
+    let a = arr.flat();
+    return [... new Set(a)].length > 100;
+}
+
+function checkLength(arr, length) {
+    return arr.every(x => x.length === length);
+}
+
+function checkIncluded(arr, allowed) {
+    let a = arr.flat();
+    return a.every(x => allowed.includes(x));
+}
+
+
+function checkIs(arr, func) {
+    let a = arr.flat();
+    return a.every(x => func(x));
+}
+
+function checkUnique(arr) {
+    return arr.every(x => x.length === [... new Set(x)].length);
+}
 
 
 test('RndN', () => {
     let arr = sample(() => RndN(5, 10));
-    let inRange = arr.every(x => x >= 5 && x <= 10);
-    let isInteger = arr.every(x => IsInteger(x));
-    let uniform = [... new Set(arr)].length === 6;
-    expect(inRange).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform).toBe(true);
+    expect(checkWithin(arr, 5, 10)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkDistinct(arr, 6)).toBe(true);
+
 });
-
-
 
 
 test('RndNs', () => {
     let arr = sample(() => RndNs(5, 10, 3));
-    let inRange = arr.flat().every(x => x >= 5 && x <= 10);
-    let isInteger = arr.flat().every(x => IsInteger(x));
-    let uniform = [... new Set(arr.flat())].length === 6;
-    let correctLength = arr.every(x => x.length === 3);
-    expect(inRange).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform).toBe(true);
-    expect(correctLength).toBe(true);
+    expect(checkWithin(arr, 5, 10)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkDistinct(arr, 6)).toBe(true);
+    expect(checkLength(arr, 3)).toBe(true);
 });
-
-
-
 
 
 test('RndR', () => {
-    let arr = sample(() => RndR(5, 10));
-    let inRange = arr.every(x => x >= 5 && x <= 10);
-    expect(inRange).toBe(true);
-    let arr2 = sample(() => RndR(-1, 1));
-    let inRange2 = arr2.every(x => x >= -1 && x <= 1);
-    expect(inRange2).toBe(true);
+    expect(checkWithin(sample(() => RndR(5, 10)), 5, 10)).toBe(true);
+    expect(checkWithin(sample(() => RndR(-1, 1)), -1, 1)).toBe(true);
 });
-
-
 
 
 test('RndU', () => {
     let arr = sample(() => RndU());
-    let inRange = arr.every(x => x === 1 || x === -1);
-    let uniform = [... new Set(arr)].length === 2;
-    expect(inRange).toBe(true);
-    expect(uniform).toBe(true);
+    expect(checkIncluded(arr, [1, -1])).toBe(true);
+    expect(checkDistinct(arr, 2)).toBe(true);
 });
-
-
-
 
 
 test('RndT', () => {
     let arr = sample(() => RndT());
-    let inRange = arr.every(x => x === true || x === false);
-    let uniform = [... new Set(arr)].length === 2;
-    expect(inRange).toBe(true);
-    expect(uniform).toBe(true);
+    expect(checkIncluded(arr, [true, false])).toBe(true);
+    expect(checkDistinct(arr, 2)).toBe(true);
 });
-
-
 
 
 test('RndZ', () => {
     let arr = sample(() => RndZ(5, 10));
-    let inRange = arr.every(x => Math.abs(x) >= 5 && Math.abs(x) <= 10);
-    let isInteger = arr.every(x => IsInteger(x));
-    let uniform = [... new Set(arr)].length === 12;
-    expect(inRange).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform).toBe(true);
+    expect(checkAbsWithin(arr, 5, 10)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkDistinct(arr, 12)).toBe(true);
 });
-
-
-
 
 
 test('RndZs', () => {
     let arr = sample(() => RndZs(5, 10, 3));
-    let inRange = arr.flat().every(x => Math.abs(x) >= 5 && Math.abs(x) <= 10);
-    let isInteger = arr.flat().every(x => IsInteger(x));
-    let uniform = [... new Set(arr.flat())].length === 12;
-    let correctLength = arr.every(x => x.length === 3);
-    expect(inRange).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform).toBe(true);
-    expect(correctLength).toBe(true);
+    expect(checkAbsWithin(arr, 5, 10)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkDistinct(arr, 12)).toBe(true);
+    expect(checkLength(arr, 3)).toBe(true);
 });
-
-
-
-
-
-
-
 
 
 test('RndP', () => {
     let arr = sample(() => RndP(100));
-    let inRange = arr.every(x => x >= 2 && x <= 97);
-    let isInteger = arr.every(x => IsInteger(x));
-    let uniform = [... new Set(arr)].length === 25;
-    expect(inRange).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform).toBe(true);
+    expect(checkWithin(arr, 2, 97)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkDistinct(arr, 25)).toBe(true);
 });
 
 
 
 test('RndOdd', () => {
     let arr = sample(() => RndOdd(5, 10));
-    let inRange = arr.every(x => x >= 5 && x <= 9);
-    let isInteger = arr.every(x => IsInteger(x));
-    let uniform = [... new Set(arr)].length === 3;
-    let isOdd = arr.every(x => x % 2 === 1);
-    expect(inRange).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform).toBe(true);
-    expect(isOdd).toBe(true);
+    expect(checkWithin(arr, 5, 9)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkDistinct(arr, 3)).toBe(true);
+    expect(checkIs(arr, IsOdd)).toBe(true);
 });
 
 
@@ -136,77 +130,60 @@ test('RndOdd', () => {
 
 test('RndEven', () => {
     let arr = sample(() => RndEven(5, 10));
-    let inRange = arr.every(x => x >= 6 && x <= 10);
-    let isInteger = arr.every(x => IsInteger(x));
-    let uniform = [... new Set(arr)].length === 3;
-    let isEven = arr.every(x => x % 2 === 0);
-    expect(inRange).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform).toBe(true);
-    expect(isEven).toBe(true);
+    expect(checkWithin(arr, 6, 10)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkDistinct(arr, 3)).toBe(true);
+    expect(checkIs(arr, IsEven)).toBe(true);
 });
 
 
 
 test('RndPoly', () => {
-    let arr = sample(() => RndPoly(3, 3, 3));
-    let inRange1 = arr.every(x => x[0] >= 1 && x[0] <= 3);
-    let inRange2 = arr.every(x => Math.abs(x[1]) >= 1 && Math.abs(x[0]) <= 3);
-    let inRange3 = arr.every(x => Math.abs(x[2]) >= 1 && Math.abs(x[2]) <= 3);
-    let isInteger = arr.every(x => IsInteger(...x));
-    let uniform1 = [... new Set(arr.map(x => x[0]))].length === 3;
-    let uniform2 = [... new Set(arr.map(x => x[1]))].length === 6;
-    let uniform3 = [... new Set(arr.map(x => x[2]))].length === 6;
-    expect(inRange1).toBe(true);
-    expect(inRange2).toBe(true);
-    expect(inRange3).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform1).toBe(true);
-    expect(uniform2).toBe(true);
-    expect(uniform3).toBe(true);
+    let arr = sample(() => RndPoly(3, 4, 5));
+    let arr0 = arr.map(x => x[0]);
+    let arr1 = arr.map(x => x[1]);
+    let arr2 = arr.map(x => x[2]);
+    expect(checkWithin(arr0, 1, 3)).toBe(true);
+    expect(checkAbsWithin(arr1, 1, 4)).toBe(true);
+    expect(checkAbsWithin(arr2, 1, 5)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkDistinct(arr0, 3)).toBe(true);
+    expect(checkDistinct(arr1, 8)).toBe(true);
+    expect(checkDistinct(arr2, 10)).toBe(true);
+
 });
 
 
 
 test('RndShake:Integer', () => {
     let arr = sample(() => RndShake(5, 3, 4));
-    let inRange = arr.flat().every(x => x >= 2 && x <= 8);
-    let correctLength = arr.every(x => x.length === 4);
-    let isInteger = arr.flat().every(x => IsInteger(x));
-    let uniform = [... new Set(arr.flat())].length === 6;
-    let unique = arr.every(x => [... new Set(x)].length === 4);
-    expect(inRange).toBe(true);
-    expect(correctLength).toBe(true);
-    expect(isInteger).toBe(true);
-    expect(uniform).toBe(true);
-    expect(unique).toBe(true);
+    expect(checkWithin(arr, 2, 8)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkLength(arr, 4)).toBe(true);
+    expect(checkDistinct(arr, 6)).toBe(true);
+    expect(checkUnique(arr)).toBe(true);
 });
 
 
 
 test('RndShake:Float', () => {
     let arr = sample(() => RndShake(2.5, 1, 4));
-    let inRange = arr.flat().every(x => x >= 1.5 && x <= 3.5);
-    let correctLength = arr.every(x => x.length === 4);
-    let isFloat = arr.flat().some(x => !IsInteger(x));
-    let unique = arr.every(x => [... new Set(x)].length === 4);
-    expect(inRange).toBe(true);
-    expect(correctLength).toBe(true);
-    expect(isFloat).toBe(true);
-    expect(unique).toBe(true);
+    expect(checkWithin(arr, 1.5, 3.5)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(false);
+    expect(checkLength(arr, 4)).toBe(true);
+    expect(checkDiverse(arr)).toBe(true);
+    expect(checkUnique(arr)).toBe(true);
 });
 
 
 
 test('RndPyth', () => {
     let arr = sample(() => RndPyth(50));
-    let inRange = arr.flat().every(x => x >= 1 && x <= 50);
-    let isInteger = arr.flat().every(x => IsInteger(x));
-    let correctLength = arr.every(x => x.length === 3);
     let isPyth = arr.every(x => x[0] ** 2 + x[1] ** 2 === x[2] ** 2);
-    expect(inRange).toBe(true);
-    expect(correctLength).toBe(true);
-    expect(isInteger).toBe(true);
+    expect(checkWithin(arr, 1, 50)).toBe(true);
+    expect(checkIsInteger(arr)).toBe(true);
+    expect(checkLength(arr, 3)).toBe(true);
+    expect(checkUnique(arr)).toBe(true);
     expect(isPyth).toBe(true);
 });
 
