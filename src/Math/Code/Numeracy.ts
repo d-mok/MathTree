@@ -175,7 +175,8 @@ globalThis.Floor = Floor
  * ```
  */
 function SimpRatio(...nums: number[]): number[] {
-    if (nums.includes(0)) return nums
+    if (!IsInteger(...nums)) return nums
+    if (!IsNonZero(...nums)) return nums
     let h = HCF(...nums);
     return nums.map(x => x / h);
 }

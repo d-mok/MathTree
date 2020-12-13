@@ -2,6 +2,7 @@
 type Point = [x: number, y: number]
 type Vector = [x: number, y: number]
 
+type Fraction = [numerator: number, denominator: number]
 
 /**
  * ```

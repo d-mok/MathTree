@@ -227,6 +227,7 @@ test('SimpRatio', () => {
     expect(SimpRatio(2, -4)).toEqual([1, -2]);
     expect(SimpRatio(8, -12, 18)).toEqual([4, -6, 9]);
     expect(SimpRatio(0, -2, 3)).toEqual([0, -2, 3]);
+    expect(SimpRatio(2, 4, 6.5)).toEqual([2, 4, 6.5]);
 });
 
 

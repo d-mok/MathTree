@@ -72,7 +72,8 @@ globalThis.IneqSign = IneqSign
 
 /**
 * @category Text
-* @return latex of dfrac p/q like \dfrac{1}{2}. upSign put -ve sign on numerator instead of the front.
+* @param upSign - put -ve sign on numerator instead of the front.
+* @return latex of dfrac p/q like \dfrac{1}{2}.  
 * ```typescript
 * Dfrac(1,2) // '\\dfrac{1}{2}'
 * Dfrac(1,-2) // '\\dfrac{-1}{2}'
@@ -82,15 +83,12 @@ globalThis.IneqSign = IneqSign
 * Dfrac(5,0) // undefined
 * ```
 */
-function Dfrac(numerator: number, denominator: number, upSign: boolean = true): string | undefined {
+function Dfrac(numerator: number, denominator: number, upSign = false): string {
     let p = numerator
     let q = denominator
-    if (q === 0) return undefined
-    if (p === 0) return '0'
-    let s = Math.sign(p / q)
-    p = Math.abs(p) * s
-    q = Math.abs(q);
-    [p, q] = SimpRatio(p, q)
+    if (q === 0) return '\\dfrac{' + p + '}{' + q + '}'
+    if (p === 0) return '0';
+    [p, q] = Frac(p, q)
     if (q === 1) return p.toString()
     if (upSign) {
         return '\\dfrac{' + p + '}{' + q + '}'
