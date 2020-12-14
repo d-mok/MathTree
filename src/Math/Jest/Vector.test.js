@@ -61,9 +61,7 @@ test('VectorRev', () => {
 test('VectorUnit', () => {
     expect(VectorUnit([2, 0])).toEqual([1, 0]);
     expect(VectorUnit([0, -2])).toEqual([0, -1]);
-    let v = VectorUnit([1, 2]);
-    expect(v[0]).toBeCloseTo(1 / (5 ** 0.5), 12);
-    expect(v[1]).toBeCloseTo(2 / (5 ** 0.5), 12);
+    expect(VectorUnit([1, 2])).toBeArrayCloseTo([1 / (5 ** 0.5), 2 / (5 ** 0.5)]);
 });
 
 

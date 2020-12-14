@@ -183,33 +183,6 @@ globalThis.RndPoly = RndPoly
 
 
 
-/**
- * @category Random
- * @param n - default to 10
- * @return an unique array of n nearby values, around anchor, within range inclusive.
- * ```typescript
- * RndShake(10,5,3) 
- * // equivalent to [10+RndZ(1,5), 10+RndZ(1,5), 10+RndZ(1,5)] 
- * RndShake(10.5,5,2) 
- * // equivalent to [10.5+RndR(0,5)*RndU(), 10.5+RndR(0,5)*RndU()] 
- * ```
- */
-function RndShake(anchor: number, range: number, n?: number): number[] {
-    if (IsInteger(anchor)) {
-        n ??= 2 * range;
-        // if (n === -1) n = 2 * range;
-        return chance.unique(() => anchor + RndZ(1, range), n);
-    } else {
-        n ??= 10;
-        // if (n === -1) n = 10;
-        return chance.unique(() => anchor + (RndR(0, range) * RndU()), n);
-    }
-}
-globalThis.RndShake = RndShake
-
-
-
-
 
 
 

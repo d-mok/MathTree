@@ -37,26 +37,6 @@ test('DivisionPoint', () => {
 
 
 
-// test('SumPoint', () => {
-//     expect(SumPoint([1, 2], [3, 4], [5, 6])).toEqual([9, 12]);
-// });
-
-
-// test('ScalePoint', () => {
-//     expect(ScalePoint([1, 2], 2)).toEqual([2, 4]);
-//     expect(ScalePoint([1, 2], -2)).toEqual([-2, -4]);
-// });
-
-
-
-
-// test('DiffPoint', () => {
-//     expect(DiffPoint([1, 2], [10, 5])).toEqual([9, 3]);
-//     expect(DiffPoint([1, 2], [1, 2])).toEqual([0, 0]);
-// });
-
-
-
 
 
 test('RotatePoint', () => {
@@ -82,13 +62,8 @@ test('Normal', () => {
 
 
 test('PerpendicularFoot', () => {
-    const p1 = PerpendicularFoot([-1, -1], [1, 1], [-2, 2]);
-    expect(p1[0]).toBeCloseTo(0);
-    expect(p1[1]).toBeCloseTo(0);
-    const p2 = PerpendicularFoot([-1, -1], [1, 1], [0, 0]);
-    expect(p2[0]).toBeCloseTo(0);
-    expect(p2[1]).toBeCloseTo(0);
-
+    expect(PerpendicularFoot([-1, -1], [1, 1], [-2, 2])).toBeArrayCloseTo([0, 0]);
+    expect(PerpendicularFoot([-1, -1], [1, 1], [0, 0])).toBeArrayCloseTo([0, 0]);
 });
 
 
@@ -105,11 +80,7 @@ test('TranslatePoint', () => {
     expect(TranslatePoint([1, 2], -90, 3)).toEqual([1, -1]);
     expect(TranslatePoint([1, 2], 180, 3)).toEqual([-2, 2]);
     expect(TranslatePoint([1, 2], 0, 3)).toEqual([4, 2]);
-    const p1 = TranslatePoint([1, 2], 30, 3);
-    expect(p1[0]).toBeCloseTo(3.598);
-    expect(p1[1]).toBeCloseTo(3.5);
-    const p2 = TranslatePoint([1, 2], [10, 12], 3);
-    expect(p2[0]).toBeCloseTo(3.00689);
-    expect(p2[1]).toBeCloseTo(4.22988);
+    expect(TranslatePoint([1, 2], 30, 3)).toBeArrayCloseTo([3.598076211, 3.5]);
+    expect(TranslatePoint([1, 2], [10, 12], 3)).toBeArrayCloseTo([3.006894195, 4.229882439]);
 });
 

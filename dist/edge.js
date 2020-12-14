@@ -7913,7 +7913,7 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(27);
+__webpack_require__(28);
 
 
 /***/ }),
@@ -7942,6 +7942,7 @@ __webpack_require__(23);
 __webpack_require__(24);
 __webpack_require__(25);
 __webpack_require__(26);
+__webpack_require__(27);
 
 
 /***/ }),
@@ -9134,30 +9135,6 @@ function RndPoly(...coeff) {
     });
 }
 globalThis.RndPoly = RndPoly;
-/**
- * @category Random
- * @param n - default to 10
- * @return an unique array of n nearby values, around anchor, within range inclusive.
- * ```typescript
- * RndShake(10,5,3)
- * // equivalent to [10+RndZ(1,5), 10+RndZ(1,5), 10+RndZ(1,5)]
- * RndShake(10.5,5,2)
- * // equivalent to [10.5+RndR(0,5)*RndU(), 10.5+RndR(0,5)*RndU()]
- * ```
- */
-function RndShake(anchor, range, n) {
-    if (IsInteger(anchor)) {
-        n !== null && n !== void 0 ? n : (n = 2 * range);
-        // if (n === -1) n = 2 * range;
-        return chance.unique(() => anchor + RndZ(1, range), n);
-    }
-    else {
-        n !== null && n !== void 0 ? n : (n = 10);
-        // if (n === -1) n = 10;
-        return chance.unique(() => anchor + (RndR(0, range) * RndU()), n);
-    }
-}
-globalThis.RndShake = RndShake;
 /**
  * @category Random
  * @return an array of a Pyth Triple
@@ -11273,6 +11250,175 @@ module.exports = Array.isArray || function (arr) {
 "use strict";
 
 /**
+ * @category Random
+ * @param n - default to 10
+ * @return an unique array of n nearby values, around anchor, within range inclusive.
+ * ```typescript
+ * RndShake(10,5,3)
+ * // equivalent to [10+RndZ(1,5), 10+RndZ(1,5), 10+RndZ(1,5)]
+ * RndShake(10.5,5,2)
+ * // equivalent to [10.5+RndR(0,5)*RndU(), 10.5+RndR(0,5)*RndU()]
+ * ```
+ */
+function RndShake(anchor, range, n) {
+    if (IsInteger(anchor)) {
+        n !== null && n !== void 0 ? n : (n = 2 * range);
+        return chance.unique(() => anchor + RndZ(1, range), n);
+    }
+    else {
+        n !== null && n !== void 0 ? n : (n = 10);
+        return chance.unique(() => anchor + (RndR(0, range) * RndU()), n);
+    }
+}
+globalThis.RndShake = RndShake;
+/**
+ * @category Random
+ * @param randomFunc - a function which generate a random item
+ * @param predicate - a condition that the outcome item must satisfy
+ * @param n - max number of trial.
+ * @return a function which return a random item satisfying the predicate when called. If nothing pass the predicate after n trial, throw an error.
+ * ```typescript
+ * let func = Sieve(()=>RndN(1,10),x=>IsOdd(x))
+ * func() // return an odd integer
+ * ```
+ */
+function Sieve(randomFunc, predicate, n = 1000) {
+    function lambda() {
+        for (let i = 1; i <= n; i++) {
+            let item = randomFunc();
+            if (predicate(item))
+                return item;
+        }
+        throw 'No items can pass through Sieve after ' + n + ' trials!';
+    }
+    return lambda;
+}
+globalThis.Sieve = Sieve;
+/**
+ * @category Random
+ * @param anchor - must be integer
+ * @param n - default to 10
+ * @return an unique array of n nearby same-sign integers around anchor, within range inclusive.
+ * ```typescript
+ * RndShakeN(5,2,3)
+ * // return 3 unique integers from [3,4,6,7]
+ * RndShakeN(2,4,3)
+ * // return 3 unique integers from [1,3,4,5,6]
+ * RndShakeN(-2,4,3)
+ * // return 3 unique integers from [-1,-3,-4,-5,-6]
+ * RndShakeN(0,5,3)
+ * // return 3 unique integers from [1,2,3,4,5]
+ * ```
+ */
+function RndShakeN(anchor, range, n) {
+    if (anchor === 0) {
+        n !== null && n !== void 0 ? n : (n = range);
+        return chance.unique(() => RndN(1, range), n);
+    }
+    if (!IsInteger(anchor))
+        return [];
+    // if (anchor === 0) return []
+    let a = Abs(anchor);
+    let max = a + range;
+    let min = Max(a - range, 1);
+    n !== null && n !== void 0 ? n : (n = Min(10, max - min));
+    let func = Sieve(() => RndN(min, max), x => x !== a);
+    let arr = chance.unique(func, n);
+    let s = Sign(anchor);
+    arr = arr.map((x) => s * x);
+    return arr;
+}
+globalThis.RndShakeN = RndShakeN;
+/**
+ * @category Random
+ * @param anchor - must be integer
+ * @param n - default to 10
+ * @return an unique array of n nearby integers around anchor, within range inclusive.
+ * ```typescript
+ * RndShakeZ(5,2,3)
+ * // return 3 unique integers from [3,4,6,7]
+ * RndShakeZ(2,4,3)
+ * // return 3 unique integers from [-2,-1,0,1,3,4,5,6]
+ * RndShakeZ(-2,4,3)
+ * // return 3 unique integers from [2,1,0,-1,-3,-4,-5,-6]
+ * RndShakeZ(0,2,3)
+ * // return 3 unique integers from [-2,-1,1,2]
+ * ```
+ */
+function RndShakeZ(anchor, range, n) {
+    if (!IsInteger(anchor))
+        return [];
+    n !== null && n !== void 0 ? n : (n = Min(10, 2 * range));
+    return chance.unique(() => anchor + RndZ(1, range), n);
+}
+globalThis.RndShakeZ = RndShakeZ;
+/**
+ * @category Random
+ * @param anchor - can be any real number
+ * @param n - default to 10
+ * @return an unique array of n nearby same-sign real number around anchor, within range inclusive.
+ * ```typescript
+ * RndShakeR(3.5,2,3)
+ * // return 3 unique values from [1.5,5.5]
+ * RndShakeR(1.5,2,3)
+ * // return 3 unique values from [0,3.5]
+ * RndShakeR(-1.5,4,3)
+ * // return 3 unique values from [-5.5,0]
+ * RndShakeR(0,2)
+ * // return 10 unique values from [0,2]
+ * ```
+ */
+function RndShakeR(anchor, range, n) {
+    n !== null && n !== void 0 ? n : (n = 10);
+    let func = Sieve(() => anchor + RndR(0, range) * RndU(), x => x * (anchor + Number.EPSILON) >= Number.EPSILON);
+    return chance.unique(func, n);
+}
+globalThis.RndShakeR = RndShakeR;
+/**
+ * @category Random
+ * @param anchor - must be a probability
+ * @param n - default to 10
+ * @return an unique array of n nearby probability around anchor, within range inclusive.
+ * ```typescript
+ * RndShakeProb(0.8,0.1,3)
+ * // return 3 unique values from [0.7,0.9]
+ * RndShakeProb(0.8,0.5,3)
+ * // return 3 unique values from [0.3,1]
+ * RndShakeProb(0.3,0.6,3)
+ * // return 3 unique values from [0,0.9]
+ * RndShakeProb(1.1,2)
+ * // return [] anchor must be a probability 0<=P<=1
+ * ```
+ */
+function RndShakeProb(anchor, range, n) {
+    if (anchor < 0 || anchor > 1)
+        return [];
+    n !== null && n !== void 0 ? n : (n = 10);
+    let func = Sieve(() => anchor + RndR(0, range) * RndU(), x => x > 0 && x < 1);
+    return chance.unique(func, n);
+}
+globalThis.RndShakeProb = RndShakeProb;
+// function RndShakeFrac(anchor: Fraction, range: number, n?: number): Fraction[] {
+//     const [p, q] = Frac(...anchor)
+//     if (!IsInteger(p, q)) return []
+//     const s = p / q
+//     n ??= 10
+//     let func = Sieve(
+//         () => [],
+//         x => x > 0 && x < 1
+//     )
+//     return chance.unique(func, n)
+// }
+// globalThis.RndShakeProb = RndShakeProb
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
  * @ignore
  */
 var Chance = __webpack_require__(0);
@@ -11338,7 +11484,7 @@ globalThis.RndShe = RndShe;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11430,7 +11576,7 @@ globalThis.AreDistantPoint = AreDistantPoint;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11536,7 +11682,7 @@ globalThis.GSequence = GSequence;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11602,7 +11748,7 @@ globalThis.Mean = Mean;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11716,7 +11862,7 @@ globalThis.Dfrac = Dfrac;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11864,7 +12010,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12018,7 +12164,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12081,7 +12227,7 @@ globalThis.LCM = LCM;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12231,19 +12377,19 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(28);
 __webpack_require__(29);
 __webpack_require__(30);
+__webpack_require__(31);
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12341,7 +12487,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13527,7 +13673,7 @@ globalThis.Pen = Pen;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
