@@ -8849,13 +8849,15 @@ globalThis.RoundDown = RoundDown;
  * ```
  */
 function Fix(num, dp = 0) {
+    const sign = Sign(num);
+    num = Abs(num);
     num += Number.EPSILON;
     num = num * (Math.pow(10, dp));
     num = Math.round(num);
     num = num / (Math.pow(10, dp));
     if (dp < 0)
         num = Fix(num, 1); // correct for floating point error
-    return num;
+    return sign * num;
 }
 globalThis.Fix = Fix;
 /**
@@ -8868,13 +8870,16 @@ globalThis.Fix = Fix;
  * ```
  */
 function FixUp(num, dp = 0) {
+    const sign = Sign(num);
+    num = Abs(num);
     num -= Number.EPSILON;
     num = num * (Math.pow(10, dp));
     num = Math.ceil(num);
     num = num / (Math.pow(10, dp));
     if (dp < 0)
         num = Fix(num, 1); // correct for floating point error
-    return num;
+    return sign * num;
+    ;
 }
 globalThis.FixUp = FixUp;
 /**
@@ -8887,13 +8892,16 @@ globalThis.FixUp = FixUp;
  * ```
  */
 function FixDown(num, dp = 0) {
+    const sign = Sign(num);
+    num = Abs(num);
     num += Number.EPSILON;
     num = num * (Math.pow(10, dp));
     num = Math.floor(num);
     num = num / (Math.pow(10, dp));
     if (dp < 0)
         num = Fix(num, 1); // correct for floating point error
-    return num;
+    return sign * num;
+    ;
 }
 globalThis.FixDown = FixDown;
 /**
@@ -8970,7 +8978,7 @@ globalThis.SigFig = SigFig;
  * ```
  */
 function Magnitude(num) {
-    return Math.floor(log(10, num));
+    return Math.floor(log(10, Abs(num)));
 }
 globalThis.Magnitude = Magnitude;
 
