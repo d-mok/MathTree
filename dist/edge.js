@@ -11250,7 +11250,7 @@ module.exports = Array.isArray || function (arr) {
 "use strict";
 
 /**
- * @category Random
+ * @category RandomShake
  * @param n - default to 10
  * @return an unique array of n nearby values, around anchor, within range inclusive.
  * ```typescript
@@ -11272,7 +11272,7 @@ function RndShake(anchor, range, n) {
 }
 globalThis.RndShake = RndShake;
 /**
- * @category Random
+ * @category RandomShake
  * @param randomFunc - a function which generate a random item
  * @param predicate - a condition that the outcome item must satisfy
  * @param n - max number of trial.
@@ -11295,7 +11295,7 @@ function Sieve(randomFunc, predicate, n = 1000) {
 }
 globalThis.Sieve = Sieve;
 /**
- * @category Random
+ * @category RandomShake
  * @param anchor - must be integer
  * @param n - default to 10
  * @return an unique array of n nearby same-sign integers around anchor, within range inclusive.
@@ -11312,7 +11312,7 @@ globalThis.Sieve = Sieve;
  */
 function RndShakeN(anchor, range, n) {
     if (anchor === 0) {
-        n !== null && n !== void 0 ? n : (n = range);
+        n !== null && n !== void 0 ? n : (n = Min(range, 10));
         return chance.unique(() => RndN(1, range), n);
     }
     if (!IsInteger(anchor))
@@ -11330,7 +11330,7 @@ function RndShakeN(anchor, range, n) {
 }
 globalThis.RndShakeN = RndShakeN;
 /**
- * @category Random
+ * @category RandomShake
  * @param anchor - must be integer
  * @param n - default to 10
  * @return an unique array of n nearby integers around anchor, within range inclusive.
@@ -11353,7 +11353,7 @@ function RndShakeZ(anchor, range, n) {
 }
 globalThis.RndShakeZ = RndShakeZ;
 /**
- * @category Random
+ * @category RandomShake
  * @param anchor - can be any real number
  * @param n - default to 10
  * @return an unique array of n nearby same-sign real number around anchor, within range inclusive.
@@ -11375,7 +11375,7 @@ function RndShakeR(anchor, range, n) {
 }
 globalThis.RndShakeR = RndShakeR;
 /**
- * @category Random
+ * @category RandomShake
  * @param anchor - must be a probability
  * @param n - default to 10
  * @return an unique array of n nearby probability around anchor, within range inclusive.
@@ -11398,18 +11398,48 @@ function RndShakeProb(anchor, range, n) {
     return chance.unique(func, n);
 }
 globalThis.RndShakeProb = RndShakeProb;
-// function RndShakeFrac(anchor: Fraction, range: number, n?: number): Fraction[] {
-//     const [p, q] = Frac(...anchor)
-//     if (!IsInteger(p, q)) return []
-//     const s = p / q
-//     n ??= 10
-//     let func = Sieve(
-//         () => [],
-//         x => x > 0 && x < 1
-//     )
-//     return chance.unique(func, n)
-// }
-// globalThis.RndShakeProb = RndShakeProb
+/**
+ * @category RandomShake
+ * @param anchor - must be a fraction
+ * @param range - default to 5
+ * @param n - default to 10
+ * @return an unique array of n nearby same-sign fraction around anchor, by shaking the numerator and denominator (simplest) within range. If input IsProbability, outcome too.
+ * ```typescript
+ * RndShakeFrac([5,6],3,3)
+ * // return 3 unique fractions from [5+-3,6+-3]
+ * RndShakeFrac([6,-5],10,3)
+ * // return 3 unique fractions from [-6+-4,5+-4]
+ * ```
+ */
+function RndShakeFrac(anchor, range, n) {
+    const [p, q] = Frac(...anchor);
+    if (!IsInteger(p, q))
+        return [];
+    range !== null && range !== void 0 ? range : (range = 5);
+    n !== null && n !== void 0 ? n : (n = Min(10, range));
+    let func = Sieve(() => {
+        const h = RndShakeN(p, range, 1)[0];
+        const k = RndShakeN(q, range, 1)[0];
+        return RndPick([h, k], [h, k], [p, k], [h, q]);
+    }, f => {
+        let [a, b] = f;
+        if (!AreCoprime(a, b))
+            return false;
+        if (a === 0 || b === 0)
+            return false;
+        if (b === 1)
+            return false;
+        if (IsProbability(p / q) && !IsProbability(a / b))
+            return false;
+        return true;
+    });
+    return chance.unique(func, n, {
+        comparator: function (arr, val) {
+            return arr.some(x => x[0] / x[1] === val[0] / val[1]);
+        }
+    });
+}
+globalThis.RndShakeFrac = RndShakeFrac;
 
 
 /***/ }),

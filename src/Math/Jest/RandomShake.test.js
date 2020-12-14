@@ -210,3 +210,29 @@ test('RndShakeProb', () => {
     expect(arr).toAllHaveLength(0);
 });
 
+
+
+test('RndShakeFrac', () => {
+    let arr = sample(() => RndShakeFrac([5, 6], 4, 3));
+    let arr0 = arr.map(x => x.map(y => y[0]));
+    let arr1 = arr.map(x => x.map(y => y[1]));
+    expect(arr0).toBeFlatWithin(1, 9);
+    expect(arr0).toBeFlatDistinct(9);
+    expect(arr1).toBeFlatWithin(2, 10);
+    expect(arr1).toBeFlatDistinct(9);
+    expect(arr.flat()).toBeFlatIsInteger();
+    expect(arr).toAllHaveLength(3);
+    expect(arr.flat().map(x => x[0] / x[1])).toBeFlatIs(IsProbability);
+
+    arr = sample(() => RndShakeFrac([6, -5], 10, 3));
+    arr0 = arr.map(x => x.map(y => y[0]));
+    arr1 = arr.map(x => x.map(y => y[1]));
+    expect(arr0).toBeFlatWithin(-16, -1);
+    expect(arr0).toBeFlatDistinct(16);
+    expect(arr1).toBeFlatWithin(2, 15);
+    expect(arr1).toBeFlatDistinct(14);
+    expect(arr.flat()).toBeFlatIsInteger();
+    expect(arr).toAllHaveLength(3);
+    expect(arr.flat().map(x => x[0] / x[1])).not.toBeFlatIs(IsProbability);
+});
+
