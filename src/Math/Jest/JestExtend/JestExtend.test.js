@@ -55,9 +55,9 @@ test('toAllHaveLength', () => {
 
 
 
-test('toBeIncluded', () => {
-  expect([[1, 1, 1], [2, 2, 3], [3, 3, 3], [4, 5, 6]]).toBeIncluded([1, 2, 3, 4, 5, 6]);
-  expect([[7, 1, 1], [2, 2, 3], [3, 3, 3], [4, 5]]).not.toBeIncluded([1, 2, 3, 4, 5, 6]);
+test('toBeFlatIncluded', () => {
+  expect([[1, 1, 1], [2, 2, 3], [3, 3, 3], [4, 5, 6]]).toBeFlatIncluded([1, 2, 3, 4, 5, 6]);
+  expect([[7, 1, 1], [2, 2, 3], [3, 3, 3], [4, 5]]).not.toBeFlatIncluded([1, 2, 3, 4, 5, 6]);
 });
 
 

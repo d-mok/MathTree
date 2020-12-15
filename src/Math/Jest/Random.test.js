@@ -25,14 +25,14 @@ test('RndR', () => {
 
 test('RndU', () => {
     let arr = sample(() => RndU());
-    expect(arr).toBeIncluded([1, -1]);
+    expect(arr).toBeFlatIncluded([1, -1]);
     expect(arr).toBeFlatDistinct(2);
 });
 
 
 test('RndT', () => {
     let arr = sample(() => RndT());
-    expect(arr).toBeIncluded([true, false]);
+    expect(arr).toBeFlatIncluded([true, false]);
     expect(arr).toBeFlatDistinct(2);
 });
 

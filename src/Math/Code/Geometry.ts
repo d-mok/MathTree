@@ -53,41 +53,6 @@ function DivisionPoint(A: Point, B: Point, ratio = 0.5): Point {
 globalThis.DivisionPoint = DivisionPoint
 
 
-// /**
-//  * @category Geometry
-//  * @ignore
-//  * To be deleted
-//  */
-// function SumPoint(...points: Point[]): Point {
-//     const x = points.map(p => p[0]).reduce((a, b) => a + b)
-//     const y = points.map(p => p[1]).reduce((a, b) => a + b)
-//     return [x, y];
-// }
-// globalThis.SumPoint = SumPoint
-
-// /**
-//  * @category Geometry
-//  * @return find [kx,ky] from [x,y]
-//  * ```typescript
-//  * ScalePoint([1,2],2) // [2,4]
-//  * ScalePoint([1,2],-2) // [-2,-4]
-//  * ```
-//  */
-// function ScalePoint(P: Point, k = 1): Point {
-//     return [k * P[0], k * P[1]];
-// }
-// globalThis.ScalePoint = ScalePoint
-
-// /**
-//  * @category Geometry
-//  * @ignore
-//  * To be deleted
-//  */
-// function DiffPoint(O: Point, P: Point): Point {
-//     return [P[0] - O[0], P[1] - O[1]];
-// }
-// globalThis.DiffPoint = DiffPoint
-
 /**
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.

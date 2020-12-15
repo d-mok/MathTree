@@ -39,7 +39,7 @@ globalThis.RndShuffle = RndShuffle
 
 /**
  * @category RandomUtil
- * @return n random unique items from given items
+ * @return n random items from given items, not necessarily unique
  * ```typescript
  * RndPickN([2,4,6],2) // may return [4,2]
  * ```
@@ -48,6 +48,21 @@ function RndPickN<T>(items: T[], n: number): T[] {
     return chance.pickset(items, n);
 }
 globalThis.RndPickN = RndPickN
+
+
+
+/**
+ * @category RandomUtil
+ * @return n random unique items from given items
+ * ```typescript
+ * RndPickUnique([2,4,6],2) // may return [4,2]
+ * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
+ * ```
+ */
+function RndPickUnique<T>(items: T[], n: number): T[] {
+    return chance.unique(() => RndPick(...items), n);
+}
+globalThis.RndPickUnique = RndPickUnique
 
 /**
  * @category RandomUtil

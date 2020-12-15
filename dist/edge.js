@@ -8544,38 +8544,6 @@ function DivisionPoint(A, B, ratio = 0.5) {
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
 }
 globalThis.DivisionPoint = DivisionPoint;
-// /**
-//  * @category Geometry
-//  * @ignore
-//  * To be deleted
-//  */
-// function SumPoint(...points: Point[]): Point {
-//     const x = points.map(p => p[0]).reduce((a, b) => a + b)
-//     const y = points.map(p => p[1]).reduce((a, b) => a + b)
-//     return [x, y];
-// }
-// globalThis.SumPoint = SumPoint
-// /**
-//  * @category Geometry
-//  * @return find [kx,ky] from [x,y]
-//  * ```typescript
-//  * ScalePoint([1,2],2) // [2,4]
-//  * ScalePoint([1,2],-2) // [-2,-4]
-//  * ```
-//  */
-// function ScalePoint(P: Point, k = 1): Point {
-//     return [k * P[0], k * P[1]];
-// }
-// globalThis.ScalePoint = ScalePoint
-// /**
-//  * @category Geometry
-//  * @ignore
-//  * To be deleted
-//  */
-// function DiffPoint(O: Point, P: Point): Point {
-//     return [P[0] - O[0], P[1] - O[1]];
-// }
-// globalThis.DiffPoint = DiffPoint
 /**
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
@@ -11480,7 +11448,7 @@ function RndShuffle(...items) {
 globalThis.RndShuffle = RndShuffle;
 /**
  * @category RandomUtil
- * @return n random unique items from given items
+ * @return n random items from given items, not necessarily unique
  * ```typescript
  * RndPickN([2,4,6],2) // may return [4,2]
  * ```
@@ -11489,6 +11457,18 @@ function RndPickN(items, n) {
     return chance.pickset(items, n);
 }
 globalThis.RndPickN = RndPickN;
+/**
+ * @category RandomUtil
+ * @return n random unique items from given items
+ * ```typescript
+ * RndPickUnique([2,4,6],2) // may return [4,2]
+ * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
+ * ```
+ */
+function RndPickUnique(items, n) {
+    return chance.unique(() => RndPick(...items), n);
+}
+globalThis.RndPickUnique = RndPickUnique;
 /**
  * @category RandomUtil
  * @return a random male name
@@ -11750,6 +11730,17 @@ function Sort(...nums) {
     return nums.sort((a, b) => a - b);
 }
 globalThis.Sort = Sort;
+/**
+ * @category Stat
+ * @return the sorted array of items by giving each item a value.
+ * ```typescript
+ * SortBy([2,3,1],x=>x) // [1,2,3]
+ * ```
+ */
+function SortBy(items, valueFunc) {
+    return items.sort((a, b) => valueFunc(a) - valueFunc(b));
+}
+globalThis.SortBy = SortBy;
 /**
  * @category Stat
  * @return sum of nums

@@ -24,6 +24,8 @@ function Max(...nums: number[]): number {
 }
 globalThis.Max = Max
 
+
+
 /**
  * @category Stat
  * @return the sorted array of numbers.
@@ -35,6 +37,22 @@ function Sort(...nums: number[]): number[] {
     return nums.sort((a, b) => a - b)
 }
 globalThis.Sort = Sort
+
+
+
+/**
+ * @category Stat
+ * @return the sorted array of items by giving each item a value.
+ * ```typescript
+ * SortBy([2,3,1],x=>x) // [1,2,3]
+ * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
+ * ```
+ */
+function SortBy<T>(items: T[], valueFunc: (_: T) => number): T[] {
+    return items.sort((a, b) => valueFunc(a) - valueFunc(b))
+}
+globalThis.SortBy = SortBy
+
 
 
 /**

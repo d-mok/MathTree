@@ -152,7 +152,7 @@ expect.extend({
 
 
 
-  toBeIncluded(received, allowed) {
+  toBeFlatIncluded(received, allowed) {
     const pass = received.flat().every(x => allowed.includes(x));
     if (pass) {
       return {

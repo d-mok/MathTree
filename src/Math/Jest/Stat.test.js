@@ -30,6 +30,19 @@ test('Sort', () => {
 
 
 
+test('SortBy', () => {
+    expect(SortBy([2, 3, 1], x => x)).toEqual([1, 2, 3]);
+    expect(SortBy([2, -3, 1], x => x)).toEqual([-3, 1, 2]);
+    expect(SortBy([4.5, 3, 2, 1], x => x)).toEqual([1, 2, 3, 4.5]);
+    expect(SortBy([3, 2, 2, 0, 1], x => x)).toEqual([0, 1, 2, 2, 3]);
+
+    expect(SortBy([2, 3, 1], x => -x)).toEqual([3, 2, 1]);
+
+    expect(SortBy(["aa", "aaa", "a"], x => x.length)).toEqual(["a", "aa", "aaa"]);
+
+});
+
+
 
 test('Sum', () => {
     expect(Sum(2, 3, 1)).toBe(6);
