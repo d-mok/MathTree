@@ -12056,14 +12056,15 @@ globalThis.Dfrac = Dfrac;
  */
 function ParseDfrac(dfrac) {
     const d = String.raw `-?\d+\.?\d*`;
-    const f = String.raw `\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
+    const f = String.raw `-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
     if (typeof dfrac !== 'string')
         return undefined;
     if (!dfrac.match(new RegExp(f, 'g')))
         return undefined;
     dfrac = dfrac.match(new RegExp(f, 'g'))[0];
     const matches = dfrac.match(new RegExp(d, 'g'));
-    const p = Number(matches[0]);
+    const u = dfrac.charAt(0) === '-' ? -1 : 1;
+    const p = Number(matches[0]) * u;
     const q = Number(matches[1]);
     if (isNaN(p) || isNaN(q))
         return undefined;
