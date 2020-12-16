@@ -11757,24 +11757,33 @@ globalThis.AppendOptions = AppendOptions;
 * ```
 */
 function SmartOptions(question, dict) {
-    function shake(num, range = 10) {
-        // Fraction
-        if (ParseDfrac(num).every(x => !isNaN(x))) {
-            let f = ParseDfrac(num);
-            return Dfrac(...RndShakeFrac(f, range, 1)[0]);
+    function shake(num, range) {
+        if (typeof num === 'string') {
+            // Fraction
+            if (ParseDfrac(num).every(x => !isNaN(x))) {
+                let f = ParseDfrac(num);
+                range !== null && range !== void 0 ? range : (range = 5);
+                return RndShakeFrac(f, range, 3).map(x => Dfrac(...x));
+            }
         }
-        // Integer
-        if (IsInteger(num)) {
-            return RndShakeN(num, range, 1)[0];
+        if (typeof num === 'number') {
+            // Integer
+            if (IsInteger(num)) {
+                range !== null && range !== void 0 ? range : (range = Max(5, num * 0.1));
+                return RndShakeN(num, range, 3);
+            }
+            // Probability
+            if (IsProbability(num)) {
+                range !== null && range !== void 0 ? range : (range = 0.3);
+                return RndShakeProb(num, range, 3);
+            }
+            // Decimal
+            if (IsNum(num)) {
+                range !== null && range !== void 0 ? range : (range = Max(5, num * 0.1));
+                return RndShakeR(num, range, 3);
+            }
         }
-        // Probability
-        if (IsProbability(num)) {
-            return RndShakeProb(num, range, 1)[0];
-        }
-        // Decimal
-        if (IsNum(num)) {
-            return RndShakeR(num, range, 1)[0];
-        }
+        throw '';
     }
     function substitute(html, symbol, num) {
         if (typeof num === 'undefined')
@@ -11786,17 +11795,25 @@ function SmartOptions(question, dict) {
             num = parseFloat(num.toPrecision(5));
         return html.replace(new RegExp("\\*" + symbol, 'g'), num);
     }
-    function mock(mould) {
-        for (let v in dict) {
-            mould = substitute(mould, v, shake(dict[v]));
-        }
+    function mock(mould, i) {
         return mould;
     }
     let options = ExtractOptions(question);
     if (options.length !== 1)
         return question;
     let mould = options[0];
-    let others = [mock(mould), mock(mould), mock(mould)];
+    let shaked = {};
+    for (let v in dict) {
+        shaked[v] = shake(dict[v]);
+    }
+    let others = [];
+    for (let i = 0; i < 3; i++) {
+        let newOpt = mould;
+        for (let v in dict) {
+            newOpt = substitute(newOpt, v, shaked[v][i]);
+        }
+        others.push(newOpt);
+    }
     return AppendOptions(question, others);
 }
 globalThis.SmartOptions = SmartOptions;

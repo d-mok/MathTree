@@ -30,7 +30,6 @@ function AppendOptions(question: string, options: string[]) {
 globalThis.AppendOptions = AppendOptions
 
 
-
 /**
 * @category SmartOptions
 * @return append the array of options to question
@@ -40,25 +39,34 @@ globalThis.AppendOptions = AppendOptions
 * ```
 */
 function SmartOptions(question: string, dict: Dict): string {
-    function shake(num: any, range: number = 10): any {
-        // Fraction
-        if (ParseDfrac(num).every(x => !isNaN(x))) {
-            let f = ParseDfrac(num)
-            return Dfrac(...RndShakeFrac(f, range, 1)[0])
-        }
-        // Integer
-        if (IsInteger(num)) {
-            return RndShakeN(num, range, 1)[0]
-        }
-        // Probability
-        if (IsProbability(num)) {
-            return RndShakeProb(num, range, 1)[0]
-        }
-        // Decimal
-        if (IsNum(num)) {
-            return RndShakeR(num, range, 1)[0]
-        }
 
+    function shake(num: number | string, range?: number): (number | string)[] {
+        if (typeof num === 'string') {
+            // Fraction
+            if (ParseDfrac(num).every(x => !isNaN(x))) {
+                let f = ParseDfrac(num)
+                range ??= 5
+                return RndShakeFrac(f, range, 3).map(x => Dfrac(...x))
+            }
+        }
+        if (typeof num === 'number') {
+            // Integer
+            if (IsInteger(num)) {
+                range ??= Max(5, num * 0.1)
+                return RndShakeN(num, range, 3)
+            }
+            // Probability
+            if (IsProbability(num)) {
+                range ??= 0.3
+                return RndShakeProb(num, range, 3)
+            }
+            // Decimal
+            if (IsNum(num)) {
+                range ??= Max(5, num * 0.1)
+                return RndShakeR(num, range, 3)
+            }
+        }
+        throw ''
     }
 
     function substitute(html: string, symbol: string, num: any) {
@@ -69,17 +77,22 @@ function SmartOptions(question: string, dict: Dict): string {
         return html.replace(new RegExp("\\*" + symbol, 'g'), num);
     }
 
-
-    function mock(mould: string): string {
-        for (let v in dict) {
-            mould = substitute(mould, v, shake(dict[v]))
-        }
-        return mould
-    }
     let options = ExtractOptions(question)
     if (options.length !== 1) return question
     let mould = options[0]
-    let others = [mock(mould), mock(mould), mock(mould)]
+
+    let shaked: { [v: string]: (number | string)[] } = {}
+    for (let v in dict) {
+        shaked[v] = shake(dict[v])
+    }
+    let others = []
+    for (let i = 0; i < 3; i++) {
+        let newOpt: string = mould
+        for (let v in dict) {
+            newOpt = substitute(newOpt, v, shaked[v][i])
+        }
+        others.push(newOpt)
+    }
     return AppendOptions(question, others)
 }
 globalThis.SmartOptions = SmartOptions
