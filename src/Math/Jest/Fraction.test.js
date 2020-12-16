@@ -36,3 +36,11 @@ test('FracMultiply', () => {
     expect(FracMultiply([0, 3], [4, 3])).toEqual([0, 9]);
 });
 
+
+test('ParseDfrac', () => {
+    expect(ParseDfrac('\\dfrac{1}{2}')).toEqual([1, 2]);
+    expect(ParseDfrac('\\dfrac{1.2}{-2}')).toEqual([1.2, -2]);
+    expect(ParseDfrac('\\dfrac{x}{2}')).toEqual([NaN, NaN]);
+    expect(ParseDfrac('\\d{1}{2}')).toEqual([NaN, NaN]);
+});
+

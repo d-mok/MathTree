@@ -8384,6 +8384,29 @@ function FracMultiply(...fractions) {
     return fractions.reduce((a, v) => _FracMultiply(a, v));
 }
 globalThis.FracMultiply = FracMultiply;
+/**
+ * @category Fraction
+ * @return parse a dfrac string into [p,q]
+ * ```typescript
+ * ParseDfrac('\\dfrac{1}{2}') // [1,2]
+ * ParseDfrac('\\dfrac{1.2}{-2}') // [1.2,-2]
+ * ParseDfrac('\\dfrac{x}{2}') // [NaN,NaN]
+ * ```
+ */
+function ParseDfrac(dfrac) {
+    const d = String.raw `-?\d+\.?\d*`;
+    const f = String.raw `\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
+    if (typeof dfrac !== 'string')
+        return [NaN, NaN];
+    if (!dfrac.match(new RegExp(f, 'g')))
+        return [NaN, NaN];
+    dfrac = dfrac.match(new RegExp(f, 'g'))[0];
+    const matches = dfrac.match(new RegExp(d, 'g'));
+    const p = matches[0];
+    const q = matches[1];
+    return [Number(p), Number(q)];
+}
+globalThis.ParseDfrac = ParseDfrac;
 
 
 /***/ }),
@@ -11734,30 +11757,23 @@ globalThis.AppendOptions = AppendOptions;
 * ```
 */
 function SmartOptions(question, dict) {
-    const d = String.raw `-?\d+\.?\d*`;
-    const f = String.raw `\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
-    function shake(num) {
-        // is fraction
-        if (typeof num === 'string' && num.match(new RegExp(f, 'g'))) {
-            let [p, q] = num.match(new RegExp(d, 'g')).map(x => x);
-            return Dfrac(...RndShakeFrac([Number(p), Number(q)], 10, 0)[0]);
+    function shake(num, range = 10) {
+        // Fraction
+        if (ParseDfrac(num).every(x => !isNaN(x))) {
+            let f = ParseDfrac(num);
+            return Dfrac(...RndShakeFrac(f, range, 1)[0]);
         }
-        let n = Number(num);
-        // is not a number, return self
-        if (!IsNum(n))
-            return num;
-        if (!IsInteger(n)) {
-            // is real
-            if (IsProbability(n)) {
-                return RndShakeProb(n, 10, 1)[0];
-            }
-            else {
-                return RndShakeR(n, 10, 1)[0];
-            }
+        // Integer
+        if (IsInteger(num)) {
+            return RndShakeN(num, range, 1)[0];
         }
-        else {
-            // is integer
-            return RndShakeN(n, 10, 1)[0];
+        // Probability
+        if (IsProbability(num)) {
+            return RndShakeProb(num, range, 1)[0];
+        }
+        // Decimal
+        if (IsNum(num)) {
+            return RndShakeR(num, range, 1)[0];
         }
     }
     function substitute(html, symbol, num) {

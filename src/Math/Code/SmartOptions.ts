@@ -40,29 +40,25 @@ globalThis.AppendOptions = AppendOptions
 * ```
 */
 function SmartOptions(question: string, dict: Dict): string {
-    const d = String.raw`-?\d+\.?\d*`
-    const f = String.raw`\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
+    function shake(num: any, range: number = 10): any {
+        // Fraction
+        if (ParseDfrac(num).every(x => !isNaN(x))) {
+            let f = ParseDfrac(num)
+            return Dfrac(...RndShakeFrac(f, range, 1)[0])
+        }
+        // Integer
+        if (IsInteger(num)) {
+            return RndShakeN(num, range, 1)[0]
+        }
+        // Probability
+        if (IsProbability(num)) {
+            return RndShakeProb(num, range, 1)[0]
+        }
+        // Decimal
+        if (IsNum(num)) {
+            return RndShakeR(num, range, 1)[0]
+        }
 
-    function shake(num: any): any {
-        // is fraction
-        if (typeof num === 'string' && num.match(new RegExp(f, 'g'))) {
-            let [p, q] = num.match(new RegExp(d, 'g'))!.map(x => x)
-            return Dfrac(...RndShakeFrac([Number(p), Number(q)], 10, 0)[0])
-        }
-        let n = Number(num)
-        // is not a number, return self
-        if (!IsNum(n)) return num
-        if (!IsInteger(n)) {
-            // is real
-            if (IsProbability(n)) {
-                return RndShakeProb(n, 10, 1)[0]
-            } else {
-                return RndShakeR(n, 10, 1)[0]
-            }
-        } else {
-            // is integer
-            return RndShakeN(n, 10, 1)[0]
-        }
     }
 
     function substitute(html: string, symbol: string, num: any) {
