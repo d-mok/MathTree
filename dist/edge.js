@@ -8248,6 +8248,9 @@ function AutoOptions(dict, question, source) {
                 ];
                 return RndShuffle(...others);
             }
+            if (Number(num)) {
+                num = Number(num);
+            }
         }
         if (typeof num === 'number') {
             // Integer
@@ -8266,7 +8269,7 @@ function AutoOptions(dict, question, source) {
                 return RndShakeR(num, range, 3);
             }
         }
-        throw '';
+        throw 'Fail to shake input in AutoOptions!';
     }
     function substitute(html, symbol, num) {
         if (typeof num === 'undefined')
