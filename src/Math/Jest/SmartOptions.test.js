@@ -5,7 +5,7 @@ test('SmartOptions', () => {
     <ul>
     <li>*x</li>
     </ul>`;
-    question = SmartOptions(question, { x: 10 });
+    question = SmartOptions(question, { y: 10 });
     console.log(question);
     expect(question.split("<li>").length - 1).toBe(4);
 

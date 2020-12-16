@@ -55,13 +55,13 @@ function SmartOptions(question: string, dict: Dict): string {
         if (!IsInteger(n)) {
             // is real
             if (IsProbability(n)) {
-                return RndShakeProb(n, 10, 1)[0].toString()
+                return RndShakeProb(n, 10, 1)[0]
             } else {
-                return RndShakeR(n, 10, 1)[0].toString()
+                return RndShakeR(n, 10, 1)[0]
             }
         } else {
             // is integer
-            return RndShakeN(n, 10, 1)[0].toString()
+            return RndShakeN(n, 10, 1)[0]
         }
     }
 
@@ -73,17 +73,6 @@ function SmartOptions(question: string, dict: Dict): string {
         return html.replace(new RegExp("\\*" + symbol, 'g'), num);
     }
 
-    // function produce(mould: string): string {
-    //     let nums = mould.match(/(\\dfrac{-?\d+\.?\d*}{-?\d+\.?\d*}|-?\d+\.?\d*)/g)?.map(x => x) ?? []
-    //     for (let i = 0; i < nums.length; i++) {
-    //         mould = mould.replace(nums[i], '!!!' + i + '!!!')
-    //     }
-    //     let shaked = nums.map(x => shake(x))
-    //     for (let i = 0; i < nums.length; i++) {
-    //         mould = mould.replace('!!!' + i + '!!!', shaked[i])
-    //     }
-    //     return mould
-    // }
 
     function mock(mould: string): string {
         for (let v in dict) {
