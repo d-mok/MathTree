@@ -8285,8 +8285,14 @@ function AutoOptions(dict, question, source) {
     function negate(item) {
         if (typeof item === 'number')
             return -item;
-        if (typeof item === 'string')
-            return '-' + item;
+        if (typeof item === 'string') {
+            if (item.charAt(0) === '-') {
+                return item.substring(1);
+            }
+            else {
+                return '-' + item;
+            }
+        }
         throw 'Fail to negate input in AutoOptions!';
     }
     let options = ExtractOptions(question);
@@ -12051,6 +12057,8 @@ globalThis.Dfrac = Dfrac;
  * ```typescript
  * ParseDfrac('\\dfrac{1}{2}') // [1,2]
  * ParseDfrac('\\dfrac{1.2}{-2}') // [1.2,-2]
+ * ParseDfrac('-\\dfrac{1.2}{-2}') // [-1.2,-2]
+ * ParseDfrac('-\\dfrac{-1.2}{-2}') // [1.2,-2]
  * ParseDfrac('\\dfrac{x}{2}') // undefined
  * ```
  */

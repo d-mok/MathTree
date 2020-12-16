@@ -94,7 +94,13 @@ function AutoOptions(dict: Partial<Dict>, question: string, source: Dict): strin
 
     function negate(item: number | string): number | string {
         if (typeof item === 'number') return -item
-        if (typeof item === 'string') return '-' + item
+        if (typeof item === 'string') {
+            if (item.charAt(0) === '-') {
+                return item.substring(1)
+            } else {
+                return '-' + item
+            }
+        }
         throw 'Fail to negate input in AutoOptions!'
     }
 
