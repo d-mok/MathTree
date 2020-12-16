@@ -80,7 +80,8 @@ function AutoOptions(dict: Partial<Dict>, question: string, source: Dict): strin
                 return RndShakeR(num, range, 3)
             }
         }
-        throw 'Fail to shake input in AutoOptions!'
+        console.error('Fail to shake input in AutoOptions! Returning original value: ' + num)
+        return [num, num, num]
     }
 
     function substitute(html: string, symbol: string, num: any) {
@@ -107,7 +108,7 @@ function AutoOptions(dict: Partial<Dict>, question: string, source: Dict): strin
                 if (v[0] > 0) { // contain range
                     shaked = shake(source[k], v[0])
                 } else { // indicate sign mode
-                    shaked = [source[k], -source[k], -source[k]]
+                    shaked = RndShuffle(source[k], -source[k], -source[k])
                 }
             }
             else {
