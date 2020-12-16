@@ -11735,6 +11735,7 @@ globalThis.Sort = Sort;
  * @return the sorted array of items by giving each item a value.
  * ```typescript
  * SortBy([2,3,1],x=>x) // [1,2,3]
+ * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
  * ```
  */
 function SortBy(items, valueFunc) {
