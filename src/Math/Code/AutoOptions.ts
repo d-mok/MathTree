@@ -92,6 +92,12 @@ function AutoOptions(dict: Partial<Dict>, question: string, source: Dict): strin
         return html.replace(new RegExp("\\*" + symbol, 'g'), num);
     }
 
+    function negate(item: number | string): number | string {
+        if (typeof item === 'number') return -item
+        if (typeof item === 'string') return '-' + item
+        throw 'Fail to negate input in AutoOptions!'
+    }
+
     let options = ExtractOptions(question)
     if (options.length !== 1) return question
     let mould = options[0]
@@ -108,7 +114,11 @@ function AutoOptions(dict: Partial<Dict>, question: string, source: Dict): strin
                 if (v[0] > 0) { // contain range
                     shaked = shake(source[k], v[0])
                 } else { // indicate sign mode
-                    shaked = RndShuffle(source[k], -source[k], -source[k])
+                    shaked = RndShuffle(
+                        source[k],
+                        negate(source[k]),
+                        negate(source[k])
+                    )
                 }
             }
             else {

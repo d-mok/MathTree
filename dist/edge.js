@@ -8282,6 +8282,13 @@ function AutoOptions(dict, question, source) {
             num = parseFloat(num.toPrecision(5));
         return html.replace(new RegExp("\\*" + symbol, 'g'), num);
     }
+    function negate(item) {
+        if (typeof item === 'number')
+            return -item;
+        if (typeof item === 'string')
+            return '-' + item;
+        throw 'Fail to negate input in AutoOptions!';
+    }
     let options = ExtractOptions(question);
     if (options.length !== 1)
         return question;
@@ -8299,7 +8306,7 @@ function AutoOptions(dict, question, source) {
                     shaked = shake(source[k], v[0]);
                 }
                 else { // indicate sign mode
-                    shaked = RndShuffle(source[k], -source[k], -source[k]);
+                    shaked = RndShuffle(source[k], negate(source[k]), negate(source[k]));
                 }
             }
             else {
