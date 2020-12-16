@@ -97,13 +97,22 @@ function AutoOptions(dict: Partial<Dict>, question: string, source: Dict): strin
         let v: any = dict[k]
         let shaked: any[]
         if (Array.isArray(v)) {
-            // contain array
-            if (v.length === 3) shaked = v
-            // contain range
-            if (v.length === 1) shaked = shake(source[k], v[0])
-            console.error('Incorrect Format of Dict in AutoOptions!')
-            return question
+            if (v.length === 3) { // contain array
+                shaked = v
+            }
+            else if (v.length === 1 && typeof v[0] === 'number') {
+                if (v[0] > 0) { // contain range
+                    shaked = shake(source[k], v[0])
+                } else { // indicate sign mode
+                    shaked = [source[k], -source[k], -source[k]]
+                }
+            }
+            else {
+                console.error('Incorrect Format of Opt Dict in AutoOptions!')
+                return question
+            }
         } else {
+            // no array value provided
             shaked = shake(v)
         }
         for (let i = 0; i < 3; i++) {
