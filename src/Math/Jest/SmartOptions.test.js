@@ -3,10 +3,11 @@ test('SmartOptions', () => {
     let question = `
     this is the question
     <ul>
-    <li>10</li>
+    <li>*x</li>
     </ul>`;
-    question = SmartOptions(question);
-    expect(question.split("li").length - 1).toBe(4);
+    question = SmartOptions(question, { x: 10 });
+    console.log(question);
+    expect(question.split("<li>").length - 1).toBe(4);
 
 });
 

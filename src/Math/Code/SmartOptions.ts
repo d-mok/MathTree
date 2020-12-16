@@ -39,13 +39,13 @@ globalThis.AppendOptions = AppendOptions
 * AppendOptions(question,['3','4']) // 'abc<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>'
 * ```
 */
-function SmartOptions(question: string): string {
+function SmartOptions(question: string, dict: Dict): string {
     const d = String.raw`-?\d+\.?\d*`
     const f = String.raw`\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
 
-    function shake(num: string): string {
+    function shake(num: any): any {
         // is fraction
-        if (num.match(new RegExp(f, 'g'))) {
+        if (typeof num === 'string' && num.match(new RegExp(f, 'g'))) {
             let [p, q] = num.match(new RegExp(d, 'g'))!.map(x => x)
             return Dfrac(...RndShakeFrac([Number(p), Number(q)], 10, 0)[0])
         }
@@ -65,22 +65,36 @@ function SmartOptions(question: string): string {
         }
     }
 
-    function produce(mould: string): string {
-        let nums = mould.match(/(\\dfrac{-?\d+\.?\d*}{-?\d+\.?\d*}|-?\d+\.?\d*)/g)?.map(x => x) ?? []
-        for (let i = 0; i < nums.length; i++) {
-            mould = mould.replace(nums[i], '!!!' + i + '!!!')
-        }
-        let shaked = nums.map(x => shake(x))
-        for (let i = 0; i < nums.length; i++) {
-            mould = mould.replace('!!!' + i + '!!!', shaked[i])
+    function substitute(html: string, symbol: string, num: any) {
+        if (typeof num === 'undefined') return html;
+        // round num to 5 sig. fig.
+        if (typeof num === 'number') num = parseFloat(num.toFixed(10));
+        if (typeof num === 'number' && !Number.isInteger(num)) num = parseFloat(num.toPrecision(5));
+        return html.replace(new RegExp("\\*" + symbol, 'g'), num);
+    }
+
+    // function produce(mould: string): string {
+    //     let nums = mould.match(/(\\dfrac{-?\d+\.?\d*}{-?\d+\.?\d*}|-?\d+\.?\d*)/g)?.map(x => x) ?? []
+    //     for (let i = 0; i < nums.length; i++) {
+    //         mould = mould.replace(nums[i], '!!!' + i + '!!!')
+    //     }
+    //     let shaked = nums.map(x => shake(x))
+    //     for (let i = 0; i < nums.length; i++) {
+    //         mould = mould.replace('!!!' + i + '!!!', shaked[i])
+    //     }
+    //     return mould
+    // }
+
+    function mock(mould: string): string {
+        for (let v in dict) {
+            mould = substitute(mould, v, shake(dict[v]))
         }
         return mould
     }
-
     let options = ExtractOptions(question)
     if (options.length !== 1) return question
     let mould = options[0]
-    let others = [produce(mould), produce(mould), produce(mould)]
+    let others = [mock(mould), mock(mould), mock(mould)]
     return AppendOptions(question, others)
 }
 globalThis.SmartOptions = SmartOptions
