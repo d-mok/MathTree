@@ -1,6 +1,12 @@
 
-test('ListIntegers', () => {
-    expect(ListIntegers(2, 6)).toEqual([2, 3, 4, 5, 6]);
-    expect(ListIntegers(-2, 2)).toEqual([-2, -1, 0, 1, 2]);
+test('SmartOptions', () => {
+    let question = `
+    this is the question
+    <ul>
+    <li>10</li>
+    </ul>`;
+    question = SmartOptions(question);
+    expect(question.split("li").length - 1).toBe(4);
+
 });
 

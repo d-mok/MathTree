@@ -7913,7 +7913,7 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(28);
+__webpack_require__(29);
 
 
 /***/ }),
@@ -7943,6 +7943,7 @@ __webpack_require__(24);
 __webpack_require__(25);
 __webpack_require__(26);
 __webpack_require__(27);
+__webpack_require__(28);
 
 
 /***/ }),
@@ -11698,6 +11699,96 @@ globalThis.GSequence = GSequence;
 "use strict";
 
 /**
+* @category SmartOptions
+* @return get an array of all options in the question
+* ```typescript
+* let question = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
+* ExtractOptions(question) // ['1','2','3']
+* ```
+*/
+function ExtractOptions(question) {
+    let options = question.match(/<li>[\s\S]*?<\/li>/g);
+    if (options === null)
+        return [];
+    return options.map(x => x.replace('<li>', '').replace('</li>', ''));
+}
+globalThis.ExtractOptions = ExtractOptions;
+/**
+* @category SmartOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>1</li><li>2</li></ul>'
+* AppendOptions(question,['3','4']) // 'abc<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>'
+* ```
+*/
+function AppendOptions(question, options) {
+    return question.replace('</ul>', options.map(n => '<li>' + n + '</li>').join('') + '</ul>');
+}
+globalThis.AppendOptions = AppendOptions;
+/**
+* @category SmartOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>1</li><li>2</li></ul>'
+* AppendOptions(question,['3','4']) // 'abc<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>'
+* ```
+*/
+function SmartOptions(question) {
+    const d = String.raw `-?\d+\.?\d*`;
+    const f = String.raw `\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
+    function shake(num) {
+        // is fraction
+        if (num.match(new RegExp(f, 'g'))) {
+            let [p, q] = num.match(new RegExp(d, 'g')).map(x => x);
+            return Dfrac(...RndShakeFrac([Number(p), Number(q)], 10, 0)[0]);
+        }
+        let n = Number(num);
+        // is not a number, return self
+        if (!IsNum(n))
+            return num;
+        if (!IsInteger(n)) {
+            // is real
+            if (IsProbability(n)) {
+                return RndShakeProb(n, 10, 1)[0].toString();
+            }
+            else {
+                return RndShakeR(n, 10, 1)[0].toString();
+            }
+        }
+        else {
+            // is integer
+            return RndShakeN(n, 10, 1)[0].toString();
+        }
+    }
+    function produce(mould) {
+        var _a, _b;
+        let nums = (_b = (_a = mould.match(/(\\dfrac{-?\d+\.?\d*}{-?\d+\.?\d*}|-?\d+\.?\d*)/g)) === null || _a === void 0 ? void 0 : _a.map(x => x)) !== null && _b !== void 0 ? _b : [];
+        for (let i = 0; i < nums.length; i++) {
+            mould = mould.replace(nums[i], '!!!' + i + '!!!');
+        }
+        let shaked = nums.map(x => shake(x));
+        for (let i = 0; i < nums.length; i++) {
+            mould = mould.replace('!!!' + i + '!!!', shaked[i]);
+        }
+        return mould;
+    }
+    let options = ExtractOptions(question);
+    if (options.length !== 1)
+        return question;
+    let mould = options[0];
+    let others = [produce(mould), produce(mould), produce(mould)];
+    return AppendOptions(question, others);
+}
+globalThis.SmartOptions = SmartOptions;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
  * @category Stat
  * @return the minimum value. Equivalent to Math.min().
  * ```typescript
@@ -11770,7 +11861,7 @@ globalThis.Mean = Mean;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11884,7 +11975,7 @@ globalThis.Dfrac = Dfrac;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12032,7 +12123,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12186,7 +12277,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12249,7 +12340,7 @@ globalThis.LCM = LCM;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12399,19 +12490,19 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(29);
 __webpack_require__(30);
 __webpack_require__(31);
+__webpack_require__(32);
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12509,7 +12600,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13695,7 +13786,7 @@ globalThis.Pen = Pen;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
