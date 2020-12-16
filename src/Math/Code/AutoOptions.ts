@@ -39,7 +39,7 @@ globalThis.AppendOptions = AppendOptions
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-function AutoOptions(dict: Dict, question: string, source: Dict): string {
+function AutoOptions(dict: Partial<Dict>, question: string, source: Dict): string {
 
     function shake(num: number | string, range?: number): (number | string)[] {
         if (typeof num === 'string') {
@@ -53,9 +53,9 @@ function AutoOptions(dict: Dict, question: string, source: Dict): string {
             if (ParseIneqSign(num)) {
                 let [g, e] = ParseIneqSign(num)!
                 let others = [
-                    IneqSign(g, !e)[0],
+                    IneqSign(g, e)[0],
                     IneqSign(!g, e)[0],
-                    IneqSign(!g, !e)[0],
+                    IneqSign(!g, e)[0],
                 ]
                 return RndShuffle(...others)
             }

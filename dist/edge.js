@@ -8242,9 +8242,9 @@ function AutoOptions(dict, question, source) {
             if (ParseIneqSign(num)) {
                 let [g, e] = ParseIneqSign(num);
                 let others = [
-                    IneqSign(g, !e)[0],
+                    IneqSign(g, e)[0],
                     IneqSign(!g, e)[0],
-                    IneqSign(!g, !e)[0],
+                    IneqSign(!g, e)[0],
                 ];
                 return RndShuffle(...others);
             }
