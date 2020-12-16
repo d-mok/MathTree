@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
 
 /***/ }),
 /* 1 */
@@ -7933,7 +7933,7 @@ __webpack_require__(9);
 __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
-__webpack_require__(18);
+__webpack_require__(13);
 __webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
@@ -8194,6 +8194,127 @@ globalThis.IsNonZero = IsNonZero;
 "use strict";
 
 /**
+* @category SmartOptions
+* @return get an array of all options in the question
+* ```typescript
+* let question = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
+* ExtractOptions(question) // ['1','2','3']
+* ```
+*/
+function ExtractOptions(question) {
+    let options = question.match(/<li>[\s\S]*?<\/li>/g);
+    if (options === null)
+        return [];
+    return options.map(x => x.replace('<li>', '').replace('</li>', ''));
+}
+globalThis.ExtractOptions = ExtractOptions;
+/**
+* @category SmartOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>1</li><li>2</li></ul>'
+* AppendOptions(question,['3','4']) // 'abc<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>'
+* ```
+*/
+function AppendOptions(question, options) {
+    return question.replace('</ul>', options.map(n => '<li>' + n + '</li>').join('') + '</ul>');
+}
+globalThis.AppendOptions = AppendOptions;
+/**
+* @category AutoOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>*x</li></ul>'
+* AutoOptions(question,{x:3})
+* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
+* ```
+*/
+function AutoOptions(dict, question, source) {
+    function shake(num, range) {
+        if (typeof num === 'string') {
+            // Fraction
+            if (ParseDfrac(num)) {
+                let f = ParseDfrac(num);
+                range !== null && range !== void 0 ? range : (range = 5);
+                return RndShakeFrac(f, range, 3).map(x => Dfrac(...x));
+            }
+            // Inequal Sign
+            if (ParseIneqSign(num)) {
+                let [g, e] = ParseIneqSign(num);
+                let others = [
+                    IneqSign(g, !e)[0],
+                    IneqSign(!g, e)[0],
+                    IneqSign(!g, !e)[0],
+                ];
+                return RndShuffle(...others);
+            }
+        }
+        if (typeof num === 'number') {
+            // Integer
+            if (IsInteger(num)) {
+                range !== null && range !== void 0 ? range : (range = Max(5, Abs(num * 0.1)));
+                return RndShakeN(num, range, 3);
+            }
+            // Probability
+            if (IsProbability(num)) {
+                range !== null && range !== void 0 ? range : (range = 0.3);
+                return RndShakeProb(num, range, 3);
+            }
+            // Decimal
+            if (IsNum(num)) {
+                range !== null && range !== void 0 ? range : (range = Max(5, Abs(num * 0.1)));
+                return RndShakeR(num, range, 3);
+            }
+        }
+        throw '';
+    }
+    function substitute(html, symbol, num) {
+        if (typeof num === 'undefined')
+            return html;
+        // round num to 5 sig. fig.
+        if (typeof num === 'number')
+            num = parseFloat(num.toFixed(10));
+        if (typeof num === 'number' && !Number.isInteger(num))
+            num = parseFloat(num.toPrecision(5));
+        return html.replace(new RegExp("\\*" + symbol, 'g'), num);
+    }
+    let options = ExtractOptions(question);
+    if (options.length !== 1)
+        return question;
+    let mould = options[0];
+    let others = [mould, mould, mould];
+    for (let k in dict) {
+        let v = dict[k];
+        let shaked;
+        if (Array.isArray(v)) {
+            // contain array
+            if (v.length === 3)
+                shaked = v;
+            // contain range
+            if (v.length === 1)
+                shaked = shake(source[k], v[0]);
+            console.error('Incorrect Format of Dict in AutoOptions!');
+            return question;
+        }
+        else {
+            shaked = shake(v);
+        }
+        for (let i = 0; i < 3; i++) {
+            others[i] = substitute(others[i], k, shaked[i]);
+        }
+    }
+    return AppendOptions(question, others);
+}
+globalThis.AutoOptions = AutoOptions;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
  * @category Combinatorics
  * @return the factorial n!
  * ```typescript
@@ -8232,7 +8353,7 @@ globalThis.nPr = nPr;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8300,7 +8421,7 @@ globalThis.RndComboConfig = RndComboConfig;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8384,33 +8505,10 @@ function FracMultiply(...fractions) {
     return fractions.reduce((a, v) => _FracMultiply(a, v));
 }
 globalThis.FracMultiply = FracMultiply;
-/**
- * @category Fraction
- * @return parse a dfrac string into [p,q]
- * ```typescript
- * ParseDfrac('\\dfrac{1}{2}') // [1,2]
- * ParseDfrac('\\dfrac{1.2}{-2}') // [1.2,-2]
- * ParseDfrac('\\dfrac{x}{2}') // [NaN,NaN]
- * ```
- */
-function ParseDfrac(dfrac) {
-    const d = String.raw `-?\d+\.?\d*`;
-    const f = String.raw `\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
-    if (typeof dfrac !== 'string')
-        return [NaN, NaN];
-    if (!dfrac.match(new RegExp(f, 'g')))
-        return [NaN, NaN];
-    dfrac = dfrac.match(new RegExp(f, 'g'))[0];
-    const matches = dfrac.match(new RegExp(d, 'g'));
-    const p = matches[0];
-    const q = matches[1];
-    return [Number(p), Number(q)];
-}
-globalThis.ParseDfrac = ParseDfrac;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8514,7 +8612,7 @@ globalThis.arctan = arctan;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8649,7 +8747,7 @@ globalThis.TranslatePoint = TranslatePoint;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8754,7 +8852,7 @@ globalThis.LinearProgram = LinearProgram;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8977,7 +9075,7 @@ globalThis.Magnitude = Magnitude;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9153,7 +9251,7 @@ globalThis.RndPyth = RndPyth;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9167,9 +9265,9 @@ globalThis.RndPyth = RndPyth;
 
 
 
-var base64 = __webpack_require__(15)
-var ieee754 = __webpack_require__(16)
-var isArray = __webpack_require__(17)
+var base64 = __webpack_require__(16)
+var ieee754 = __webpack_require__(17)
+var isArray = __webpack_require__(18)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -10947,10 +11045,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 var g;
@@ -10976,7 +11074,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11135,7 +11233,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -11225,7 +11323,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -11236,7 +11334,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11435,7 +11533,7 @@ globalThis.RndShakeFrac = RndShakeFrac;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11518,7 +11616,7 @@ globalThis.RndShe = RndShe;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11610,7 +11708,7 @@ globalThis.AreDistantPoint = AreDistantPoint;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11713,110 +11811,6 @@ function GSequence(a, r, n = 10) {
     return arr;
 }
 globalThis.GSequence = GSequence;
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
-* @category SmartOptions
-* @return get an array of all options in the question
-* ```typescript
-* let question = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
-* ExtractOptions(question) // ['1','2','3']
-* ```
-*/
-function ExtractOptions(question) {
-    let options = question.match(/<li>[\s\S]*?<\/li>/g);
-    if (options === null)
-        return [];
-    return options.map(x => x.replace('<li>', '').replace('</li>', ''));
-}
-globalThis.ExtractOptions = ExtractOptions;
-/**
-* @category SmartOptions
-* @return append the array of options to question
-* ```typescript
-* let question = 'abc<ul><li>1</li><li>2</li></ul>'
-* AppendOptions(question,['3','4']) // 'abc<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>'
-* ```
-*/
-function AppendOptions(question, options) {
-    return question.replace('</ul>', options.map(n => '<li>' + n + '</li>').join('') + '</ul>');
-}
-globalThis.AppendOptions = AppendOptions;
-/**
-* @category SmartOptions
-* @return append the array of options to question
-* ```typescript
-* let question = 'abc<ul><li>1</li><li>2</li></ul>'
-* AppendOptions(question,['3','4']) // 'abc<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>'
-* ```
-*/
-function SmartOptions(question, dict) {
-    function shake(num, range) {
-        if (typeof num === 'string') {
-            // Fraction
-            if (ParseDfrac(num).every(x => !isNaN(x))) {
-                let f = ParseDfrac(num);
-                range !== null && range !== void 0 ? range : (range = 5);
-                return RndShakeFrac(f, range, 3).map(x => Dfrac(...x));
-            }
-        }
-        if (typeof num === 'number') {
-            // Integer
-            if (IsInteger(num)) {
-                range !== null && range !== void 0 ? range : (range = Max(5, num * 0.1));
-                return RndShakeN(num, range, 3);
-            }
-            // Probability
-            if (IsProbability(num)) {
-                range !== null && range !== void 0 ? range : (range = 0.3);
-                return RndShakeProb(num, range, 3);
-            }
-            // Decimal
-            if (IsNum(num)) {
-                range !== null && range !== void 0 ? range : (range = Max(5, num * 0.1));
-                return RndShakeR(num, range, 3);
-            }
-        }
-        throw '';
-    }
-    function substitute(html, symbol, num) {
-        if (typeof num === 'undefined')
-            return html;
-        // round num to 5 sig. fig.
-        if (typeof num === 'number')
-            num = parseFloat(num.toFixed(10));
-        if (typeof num === 'number' && !Number.isInteger(num))
-            num = parseFloat(num.toPrecision(5));
-        return html.replace(new RegExp("\\*" + symbol, 'g'), num);
-    }
-    function mock(mould, i) {
-        return mould;
-    }
-    let options = ExtractOptions(question);
-    if (options.length !== 1)
-        return question;
-    let mould = options[0];
-    let shaked = {};
-    for (let v in dict) {
-        shaked[v] = shake(dict[v]);
-    }
-    let others = [];
-    for (let i = 0; i < 3; i++) {
-        let newOpt = mould;
-        for (let v in dict) {
-            newOpt = substitute(newOpt, v, shaked[v][i]);
-        }
-        others.push(newOpt);
-    }
-    return AppendOptions(question, others);
-}
-globalThis.SmartOptions = SmartOptions;
 
 
 /***/ }),
@@ -11975,6 +11969,29 @@ function IneqSign(greater, equal = false) {
 globalThis.IneqSign = IneqSign;
 /**
 * @category Text
+* @return parse an inequality sign to booleans [greater,equal]
+* ```typescript
+* ParseIneqSign('\\ge') // [true,true]
+* ParseIneqSign('\\le') // [false,true]
+* ParseIneqSign('\\gt') // [true,false]
+* ParseIneqSign('\\lt') // [false,false]
+* ParseIneqSign('>=') // [true,true]
+* ParseIneqSign('<=') // [false,true]
+* ParseIneqSign('>') // [true,false]
+* ParseIneqSign('<') // [false,false]
+* ParseIneqSign('abc') // undefined
+* ```
+*/
+function ParseIneqSign(text) {
+    if (!text.match(/[gl\>\<]/g))
+        return undefined;
+    let greater = text.includes('g') || text.includes('>');
+    let equal = text.includes('e') || text.includes('=');
+    return [greater, equal];
+}
+globalThis.ParseIneqSign = ParseIneqSign;
+/**
+* @category Text
 * @param upSign - put -ve sign on numerator instead of the front.
 * @return latex of dfrac p/q like \dfrac{1}{2}.
 * ```typescript
@@ -12009,6 +12026,31 @@ function Dfrac(numerator, denominator, upSign = false) {
     }
 }
 globalThis.Dfrac = Dfrac;
+/**
+ * @category Text
+ * @return parse a dfrac string into [p,q]
+ * ```typescript
+ * ParseDfrac('\\dfrac{1}{2}') // [1,2]
+ * ParseDfrac('\\dfrac{1.2}{-2}') // [1.2,-2]
+ * ParseDfrac('\\dfrac{x}{2}') // undefined
+ * ```
+ */
+function ParseDfrac(dfrac) {
+    const d = String.raw `-?\d+\.?\d*`;
+    const f = String.raw `\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
+    if (typeof dfrac !== 'string')
+        return undefined;
+    if (!dfrac.match(new RegExp(f, 'g')))
+        return undefined;
+    dfrac = dfrac.match(new RegExp(f, 'g'))[0];
+    const matches = dfrac.match(new RegExp(d, 'g'));
+    const p = Number(matches[0]);
+    const q = Number(matches[1]);
+    if (isNaN(p) || isNaN(q))
+        return undefined;
+    return [p, q];
+}
+globalThis.ParseDfrac = ParseDfrac;
 
 
 /***/ }),

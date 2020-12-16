@@ -84,27 +84,3 @@ function FracMultiply(...fractions: Fraction[]): Fraction {
 }
 globalThis.FracMultiply = FracMultiply
 
-
-
-/**
- * @category Fraction
- * @return parse a dfrac string into [p,q]
- * ```typescript
- * ParseDfrac('\\dfrac{1}{2}') // [1,2]
- * ParseDfrac('\\dfrac{1.2}{-2}') // [1.2,-2]
- * ParseDfrac('\\dfrac{x}{2}') // [NaN,NaN]
- * ```
- */
-function ParseDfrac(dfrac: string): Fraction {
-    const d = String.raw`-?\d+\.?\d*`
-    const f = String.raw`\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
-    if (typeof dfrac !== 'string') return [NaN, NaN]
-    if (!dfrac.match(new RegExp(f, 'g'))) return [NaN, NaN]
-    dfrac = dfrac.match(new RegExp(f, 'g'))![0]
-    const matches = dfrac.match(new RegExp(d, 'g'))!
-    const p = matches[0]
-    const q = matches[1]
-    return [Number(p), Number(q)]
-}
-globalThis.ParseDfrac = ParseDfrac
-

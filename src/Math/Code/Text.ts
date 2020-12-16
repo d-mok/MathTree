@@ -70,6 +70,31 @@ globalThis.IneqSign = IneqSign
 
 
 
+
+/**
+* @category Text
+* @return parse an inequality sign to booleans [greater,equal]
+* ```typescript
+* ParseIneqSign('\\ge') // [true,true]
+* ParseIneqSign('\\le') // [false,true]
+* ParseIneqSign('\\gt') // [true,false]
+* ParseIneqSign('\\lt') // [false,false]
+* ParseIneqSign('>=') // [true,true]
+* ParseIneqSign('<=') // [false,true]
+* ParseIneqSign('>') // [true,false]
+* ParseIneqSign('<') // [false,false]
+* ParseIneqSign('abc') // undefined
+* ```
+*/
+function ParseIneqSign(text: string): [greater: boolean, equal: boolean] | undefined {
+    if (!text.match(/[gl\>\<]/g)) return undefined
+    let greater = text.includes('g') || text.includes('>')
+    let equal = text.includes('e') || text.includes('=')
+    return [greater, equal]
+}
+globalThis.ParseIneqSign = ParseIneqSign
+
+
 /**
 * @category Text
 * @param upSign - put -ve sign on numerator instead of the front.
@@ -102,3 +127,30 @@ function Dfrac(numerator: number, denominator: number, upSign = false): string {
 
 }
 globalThis.Dfrac = Dfrac
+
+
+
+
+/**
+ * @category Text
+ * @return parse a dfrac string into [p,q]
+ * ```typescript
+ * ParseDfrac('\\dfrac{1}{2}') // [1,2]
+ * ParseDfrac('\\dfrac{1.2}{-2}') // [1.2,-2]
+ * ParseDfrac('\\dfrac{x}{2}') // undefined
+ * ```
+ */
+function ParseDfrac(dfrac: string): Fraction | undefined {
+    const d = String.raw`-?\d+\.?\d*`
+    const f = String.raw`\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
+    if (typeof dfrac !== 'string') return undefined
+    if (!dfrac.match(new RegExp(f, 'g'))) return undefined
+    dfrac = dfrac.match(new RegExp(f, 'g'))![0]
+    const matches = dfrac.match(new RegExp(d, 'g'))!
+    const p = Number(matches[0])
+    const q = Number(matches[1])
+    if (isNaN(p) || isNaN(q)) return undefined
+    return [p, q]
+}
+globalThis.ParseDfrac = ParseDfrac
+

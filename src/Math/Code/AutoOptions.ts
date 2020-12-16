@@ -31,28 +31,39 @@ globalThis.AppendOptions = AppendOptions
 
 
 /**
-* @category SmartOptions
+* @category AutoOptions
 * @return append the array of options to question
 * ```typescript
-* let question = 'abc<ul><li>1</li><li>2</li></ul>'
-* AppendOptions(question,['3','4']) // 'abc<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>'
+* let question = 'abc<ul><li>*x</li></ul>'
+* AutoOptions(question,{x:3}) 
+* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-function SmartOptions(question: string, dict: Dict): string {
+function AutoOptions(dict: Dict, question: string, source: Dict): string {
 
     function shake(num: number | string, range?: number): (number | string)[] {
         if (typeof num === 'string') {
             // Fraction
-            if (ParseDfrac(num).every(x => !isNaN(x))) {
-                let f = ParseDfrac(num)
+            if (ParseDfrac(num)) {
+                let f = ParseDfrac(num)!
                 range ??= 5
                 return RndShakeFrac(f, range, 3).map(x => Dfrac(...x))
+            }
+            // Inequal Sign
+            if (ParseIneqSign(num)) {
+                let [g, e] = ParseIneqSign(num)!
+                let others = [
+                    IneqSign(g, !e)[0],
+                    IneqSign(!g, e)[0],
+                    IneqSign(!g, !e)[0],
+                ]
+                return RndShuffle(...others)
             }
         }
         if (typeof num === 'number') {
             // Integer
             if (IsInteger(num)) {
-                range ??= Max(5, num * 0.1)
+                range ??= Max(5, Abs(num * 0.1))
                 return RndShakeN(num, range, 3)
             }
             // Probability
@@ -62,7 +73,7 @@ function SmartOptions(question: string, dict: Dict): string {
             }
             // Decimal
             if (IsNum(num)) {
-                range ??= Max(5, num * 0.1)
+                range ??= Max(5, Abs(num * 0.1))
                 return RndShakeR(num, range, 3)
             }
         }
@@ -81,22 +92,24 @@ function SmartOptions(question: string, dict: Dict): string {
     if (options.length !== 1) return question
     let mould = options[0]
 
-    let shaked: { [v: string]: (number | string)[] } = {}
-    for (let v in dict) {
-        shaked[v] = shake(dict[v])
-    }
-    let others = []
-    for (let i = 0; i < 3; i++) {
-        let newOpt: string = mould
-        for (let v in dict) {
-            newOpt = substitute(newOpt, v, shaked[v][i])
+    let others = [mould, mould, mould]
+    for (let k in dict) {
+        let v: any = dict[k]
+        let shaked: any[]
+        if (Array.isArray(v)) {
+            // contain array
+            if (v.length === 3) shaked = v
+            // contain range
+            if (v.length === 1) shaked = shake(source[k], v[0])
+            console.error('Incorrect Format of Dict in AutoOptions!')
+            return question
+        } else {
+            shaked = shake(v)
         }
-        others.push(newOpt)
+        for (let i = 0; i < 3; i++) {
+            others[i] = substitute(others[i], k, shaked[i])
+        }
     }
     return AppendOptions(question, others)
 }
-globalThis.SmartOptions = SmartOptions
-
-
-
-
+globalThis.AutoOptions = AutoOptions
