@@ -4,7 +4,7 @@ test('log', () => {
     expect(log(2, 8)).toBe(3);
     expect(log(3, 81)).toBe(4);
     expect(log(4, 8)).toBe(1.5);
-    expect(log(5, 10)).toBeCloseTo(Math.log(10) / Math.log(5), 12);
+    expect(log(5, 10)).toBeCloseTo(Math.log(10) / Math.log(5), 10);
 });
 
 test('Power', () => {
@@ -24,8 +24,8 @@ test('sin', () => {
     expect(sin(270)).toBe(-1);
     expect(sin(360) + 0).toBe(0);
     expect(sin(30)).toBe(0.5);
-    expect(sin(45)).toBeCloseTo((2 ** 0.5) / 2, 12);
-    expect(sin(60)).toBeCloseTo((3 ** 0.5) / 2, 12);
+    expect(sin(45)).toBeCloseTo((2 ** 0.5) / 2, 10);
+    expect(sin(60)).toBeCloseTo((3 ** 0.5) / 2, 10);
 });
 
 
@@ -35,8 +35,8 @@ test('cos', () => {
     expect(cos(180)).toBe(-1);
     expect(cos(270) + 0).toBe(0);
     expect(cos(360)).toBe(1);
-    expect(cos(30)).toBeCloseTo((3 ** 0.5) / 2, 12);
-    expect(cos(45)).toBeCloseTo((2 ** 0.5) / 2, 12);
+    expect(cos(30)).toBeCloseTo((3 ** 0.5) / 2, 10);
+    expect(cos(45)).toBeCloseTo((2 ** 0.5) / 2, 10);
     expect(cos(60)).toBe(0.5);
 });
 
@@ -46,9 +46,9 @@ test('tan', () => {
     expect(tan(0)).toBe(0);
     expect(tan(180) + 0).toBe(0);
     expect(tan(360) + 0).toBe(0);
-    expect(tan(30)).toBeCloseTo((3 ** 0.5) / 3, 12);
+    expect(tan(30)).toBeCloseTo((3 ** 0.5) / 3, 10);
     expect(tan(45)).toBe(1);
-    expect(tan(60)).toBeCloseTo(3 ** 0.5, 12);
+    expect(tan(60)).toBeCloseTo(3 ** 0.5, 10);
 });
 
 

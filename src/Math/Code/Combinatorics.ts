@@ -8,6 +8,7 @@
  * ```
  */
 function Factorial(n: number): number {
+    n = Blur(n)
     if (!IsInteger(n) || n < 0) return NaN
     return n <= 0 ? 1 : n * Factorial(n - 1)
 }
@@ -21,6 +22,8 @@ globalThis.Factorial = Factorial
  * ```
  */
 function nCr(n: number, r: number): number {
+    n = Blur(n)
+    r = Blur(r)
     return Factorial(n) / (Factorial(r) * Factorial(n - r));
 }
 globalThis.nCr = nCr
@@ -33,6 +36,8 @@ globalThis.nCr = nCr
  * ```
  */
 function nPr(n: number, r: number): number {
+    n = Blur(n)
+    r = Blur(r)
     return nCr(n, r) * Factorial(r);
 }
 globalThis.nPr = nPr

@@ -29,6 +29,7 @@ function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
         }
     }
     if (typeof anchor === 'number' && IsNum(anchor)) {
+        anchor = Blur(anchor)
         // Integer
         if (IsInteger(anchor)) {
             return RndShakeN(anchor, range, n)
@@ -94,6 +95,7 @@ globalThis.Sieve = Sieve
  * ```
  */
 function RndShakeN(anchor: number, range?: number, n?: number): number[] {
+    anchor = Blur(anchor)
     range ??= Max(5, Abs(anchor * 0.1))
     if (anchor === 0) {
         n ??= Min(range, 10)
@@ -131,6 +133,7 @@ globalThis.RndShakeN = RndShakeN
  * ```
  */
 function RndShakeZ(anchor: number, range?: number, n?: number): number[] {
+    anchor = Blur(anchor)
     range ??= Max(5, Abs(anchor * 0.1))
     if (!IsInteger(anchor)) return []
     n ??= Min(2 * range, 10)
@@ -219,7 +222,8 @@ globalThis.RndShakeProb = RndShakeProb
  * ```
  */
 function RndShakeFrac(anchor: Fraction, range?: number, n?: number): Fraction[] {
-    const [p, q] = Frac(...anchor)
+    let [p, q] = Frac(...anchor);
+    [p, q] = Blurs([p, q])
     if (!IsInteger(p, q)) return []
     range ??= 5
     n ??= Min(10, range)

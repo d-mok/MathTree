@@ -12,6 +12,7 @@
  * ```
  */
 function FracSign(p: number, q: number): Fraction {
+    [p,q] = Blurs([p,q])
     if (q === 0) return [p, q]
     const s = Sign(p / q)
     p = Abs(p)
@@ -33,6 +34,7 @@ globalThis.FracSign = FracSign
  * ```
  */
 function Frac(p: number, q: number): Fraction {
+    [p,q] = Blurs([p,q]);
     [p, q] = SimpRatio(p, q)
     return FracSign(p, q)
 }

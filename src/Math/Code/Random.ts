@@ -106,7 +106,6 @@ globalThis.RndZ = RndZ
  */
 function RndZs(min: number, max: number, n?: number): number[] {
     n ??= Min(Math.floor(max - min + 1), 10)
-    // if (!n) n = Min(Math.floor(max - min + 1), 10)
     let arr = chance.unique(() => RndN(min, max), n);
     for (let i = 0; i < arr.length; i++) {
         arr[i] = arr[i] * RndU()

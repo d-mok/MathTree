@@ -8091,7 +8091,7 @@ globalThis.IsNum = IsNum;
  * ```
  */
 function IsInteger(...num) {
-    return num.every(x => Number.isInteger(x));
+    return Blurs(num).every(x => IsNum(x) && Number.isInteger(x));
 }
 globalThis.IsInteger = IsInteger;
 /**
@@ -8115,7 +8115,7 @@ globalThis.IsDecimal = IsDecimal;
  * ```
  */
 function IsCoeff(...num) {
-    return num.every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
+    return Blurs(num).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
 }
 globalThis.IsCoeff = IsCoeff;
 /**
@@ -8128,7 +8128,7 @@ globalThis.IsCoeff = IsCoeff;
  * ```
  */
 function IsOdd(...num) {
-    return num.every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
+    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
 }
 globalThis.IsOdd = IsOdd;
 /**
@@ -8142,7 +8142,7 @@ globalThis.IsOdd = IsOdd;
  * ```
  */
 function IsEven(...num) {
-    return num.every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
+    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
 }
 globalThis.IsEven = IsEven;
 /**
@@ -8169,7 +8169,7 @@ globalThis.IsProbability = IsProbability;
  * ```
  */
 function IsSquareNum(...num) {
-    return num.every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
+    return Blurs(num).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
 }
 globalThis.IsSquareNum = IsSquareNum;
 /**
@@ -8334,6 +8334,7 @@ globalThis.AutoOptions = AutoOptions;
  * ```
  */
 function Factorial(n) {
+    n = Blur(n);
     if (!IsInteger(n) || n < 0)
         return NaN;
     return n <= 0 ? 1 : n * Factorial(n - 1);
@@ -8347,6 +8348,8 @@ globalThis.Factorial = Factorial;
  * ```
  */
 function nCr(n, r) {
+    n = Blur(n);
+    r = Blur(r);
     return Factorial(n) / (Factorial(r) * Factorial(n - r));
 }
 globalThis.nCr = nCr;
@@ -8358,6 +8361,8 @@ globalThis.nCr = nCr;
  * ```
  */
 function nPr(n, r) {
+    n = Blur(n);
+    r = Blur(r);
     return nCr(n, r) * Factorial(r);
 }
 globalThis.nPr = nPr;
@@ -8450,6 +8455,7 @@ globalThis.RndComboConfig = RndComboConfig;
  * ```
  */
 function FracSign(p, q) {
+    [p, q] = Blurs([p, q]);
     if (q === 0)
         return [p, q];
     const s = Sign(p / q);
@@ -8471,6 +8477,7 @@ globalThis.FracSign = FracSign;
  * ```
  */
 function Frac(p, q) {
+    [p, q] = Blurs([p, q]);
     [p, q] = SimpRatio(p, q);
     return FracSign(p, q);
 }
@@ -8533,7 +8540,7 @@ globalThis.FracMultiply = FracMultiply;
  */
 function log(b, N) {
     const v = Math.log(N) / Math.log(b);
-    return parseFloat(v.toFixed(12));
+    return Blur(v);
 }
 globalThis.log = log;
 /**
@@ -8545,7 +8552,7 @@ globalThis.log = log;
  */
 function Power(a, b) {
     const v = Math.pow(a, b);
-    return parseFloat(v.toFixed(12));
+    return Blur(v);
 }
 globalThis.Power = Power;
 /**
@@ -8557,7 +8564,7 @@ globalThis.Power = Power;
  */
 function sin(x) {
     let v = Math.sin(x / 180 * Math.PI);
-    return parseFloat(v.toFixed(12));
+    return Blur(v);
 }
 globalThis.sin = sin;
 /**
@@ -8569,7 +8576,7 @@ globalThis.sin = sin;
  */
 function cos(x) {
     let v = Math.cos(x / 180 * Math.PI);
-    return parseFloat(v.toFixed(12));
+    return Blur(v);
 }
 globalThis.cos = cos;
 /**
@@ -8581,7 +8588,7 @@ globalThis.cos = cos;
  */
 function tan(x) {
     let v = Math.tan(x / 180 * Math.PI);
-    return parseFloat(v.toFixed(12));
+    return Blur(v);
 }
 globalThis.tan = tan;
 /**
@@ -8593,7 +8600,7 @@ globalThis.tan = tan;
  */
 function arcsin(x) {
     let v = Math.asin(x) * 180 / Math.PI;
-    return parseFloat(v.toFixed(12));
+    return Blur(v);
 }
 globalThis.arcsin = arcsin;
 /**
@@ -8605,7 +8612,7 @@ globalThis.arcsin = arcsin;
  */
 function arccos(x) {
     let v = Math.acos(x) * 180 / Math.PI;
-    return parseFloat(v.toFixed(12));
+    return Blur(v);
 }
 globalThis.arccos = arccos;
 /**
@@ -8617,7 +8624,7 @@ globalThis.arccos = arccos;
  */
 function arctan(x) {
     let v = Math.atan(x) * 180 / Math.PI;
-    return parseFloat(v.toFixed(12));
+    return Blur(v);
 }
 globalThis.arctan = arctan;
 
@@ -8637,7 +8644,7 @@ globalThis.arctan = arctan;
  * ```
  */
 function Slope(A, B) {
-    if ((A[0] - B[0]) === 0)
+    if (Blur(A[0] - B[0]) === 0)
         return NaN;
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
@@ -8820,7 +8827,7 @@ globalThis.JoinToHTMLTag = JoinToHTMLTag;
 function PrintVariable(html, symbol, value) {
     let T = typeof value;
     if (T === 'number') {
-        value = Fix(value, 10);
+        value = Blur(value);
         if (IsDecimal(value))
             value = Round(value, 5);
     }
@@ -9115,6 +9122,7 @@ globalThis.Floor = Floor;
  * ```
  */
 function SimpRatio(...nums) {
+    nums = Blurs(nums);
     if (!IsInteger(...nums))
         return nums;
     if (!IsNonZero(...nums))
@@ -9133,7 +9141,7 @@ globalThis.SimpRatio = SimpRatio;
  * ```
  */
 function SigFig(value) {
-    value = parseFloat(value.toFixed(12));
+    value = Blur(value);
     return Math.abs(value)
         .toExponential()
         .replace(/e[\+\-0-9]*$/, '') // remove exponential notation
@@ -9154,7 +9162,7 @@ globalThis.SigFig = SigFig;
  */
 function DecimalPlace(value) {
     var _a, _b;
-    value = parseFloat(value.toFixed(12));
+    value = Blur(value);
     if (IsInteger(value))
         return 0;
     return (_b = (_a = value.toString().split(".")[1]) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
@@ -9178,6 +9186,36 @@ function Magnitude(num) {
     return Math.floor(log(10, Abs(num)));
 }
 globalThis.Magnitude = Magnitude;
+/**
+ * @category Numeracy
+ * @return correct for floating point error
+ * ```typescript
+ * Blur(0.1+0.2) // 0.3
+ * Blur(0.81-1) // -0.19
+ * Blur(1.1**2) // 1.21
+ * ```
+ */
+function Blur(value, accuracy = 12) {
+    if (typeof value !== 'number')
+        return value;
+    if (!isFinite(value))
+        return value;
+    value = parseFloat(value.toFixed(accuracy));
+    value = parseFloat(value.toPrecision(accuracy));
+    return value;
+}
+globalThis.Blur = Blur;
+/**
+ * @category Numeracy
+ * @return correct for floating point error
+ * ```typescript
+ * BlurAll([0.1+0.2,0.81-1]) // [0.3,-0.19]
+ * ```
+ */
+function Blurs(values, accuracy = 12) {
+    return values.map(x => Blur(x, accuracy));
+}
+globalThis.Blurs = Blurs;
 
 
 /***/ }),
@@ -9273,7 +9311,6 @@ globalThis.RndZ = RndZ;
  */
 function RndZs(min, max, n) {
     n !== null && n !== void 0 ? n : (n = Min(Math.floor(max - min + 1), 10));
-    // if (!n) n = Min(Math.floor(max - min + 1), 10)
     let arr = chance.unique(() => RndN(min, max), n);
     for (let i = 0; i < arr.length; i++) {
         arr[i] = arr[i] * RndU();
@@ -11474,6 +11511,7 @@ function RndShake(anchor, range, n) {
         }
     }
     if (typeof anchor === 'number' && IsNum(anchor)) {
+        anchor = Blur(anchor);
         // Integer
         if (IsInteger(anchor)) {
             return RndShakeN(anchor, range, n);
@@ -11532,6 +11570,7 @@ globalThis.Sieve = Sieve;
  * ```
  */
 function RndShakeN(anchor, range, n) {
+    anchor = Blur(anchor);
     range !== null && range !== void 0 ? range : (range = Max(5, Abs(anchor * 0.1)));
     if (anchor === 0) {
         n !== null && n !== void 0 ? n : (n = Min(range, 10));
@@ -11568,6 +11607,7 @@ globalThis.RndShakeN = RndShakeN;
  * ```
  */
 function RndShakeZ(anchor, range, n) {
+    anchor = Blur(anchor);
     range !== null && range !== void 0 ? range : (range = Max(5, Abs(anchor * 0.1)));
     if (!IsInteger(anchor))
         return [];
@@ -11641,7 +11681,8 @@ globalThis.RndShakeProb = RndShakeProb;
  * ```
  */
 function RndShakeFrac(anchor, range, n) {
-    const [p, q] = Frac(...anchor);
+    let [p, q] = Frac(...anchor);
+    [p, q] = Blurs([p, q]);
     if (!IsInteger(p, q))
         return [];
     range !== null && range !== void 0 ? range : (range = 5);
@@ -11876,6 +11917,7 @@ globalThis.AreSameSign = AreSameSign;
  * ```
  */
 function AreCoprime(...nums) {
+    nums = Blurs(nums);
     if (!IsInteger(...nums))
         return true;
     if (!IsNonZero(...nums))
@@ -12591,6 +12633,7 @@ globalThis.TrigRoot = TrigRoot;
  * ```
  */
 function HCF(...nums) {
+    nums = Blurs(nums);
     if (!IsInteger(...nums))
         return NaN;
     if (!IsNonZero(...nums))
@@ -12621,6 +12664,7 @@ globalThis.HCF = HCF;
  * ```
  */
 function LCM(...nums) {
+    nums = Blurs(nums);
     if (!IsInteger(...nums))
         return NaN;
     if (!IsNonZero(...nums))

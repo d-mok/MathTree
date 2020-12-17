@@ -7,7 +7,7 @@
  */
 function log(b: number, N: number): number {
     const v = Math.log(N) / Math.log(b);
-    return parseFloat(v.toFixed(12))
+    return Blur(v)
 }
 globalThis.log = log
 
@@ -20,7 +20,7 @@ globalThis.log = log
  */
 function Power(a: number, b: number): number {
     const v =  Math.pow(a, b);
-    return parseFloat(v.toFixed(12))
+    return Blur(v)
 }
 globalThis.Power = Power
 
@@ -33,7 +33,7 @@ globalThis.Power = Power
  */
 function sin(x: number): number {
     let v = Math.sin(x / 180 * Math.PI);
-    return parseFloat(v.toFixed(12));
+    return Blur(v)
 }
 globalThis.sin = sin
 
@@ -46,7 +46,7 @@ globalThis.sin = sin
  */
 function cos(x: number): number {
     let v = Math.cos(x / 180 * Math.PI);
-    return parseFloat(v.toFixed(12));
+    return Blur(v)
 }
 globalThis.cos = cos
 
@@ -59,7 +59,7 @@ globalThis.cos = cos
  */
 function tan(x: number): number {
     let v = Math.tan(x / 180 * Math.PI);
-    return parseFloat(v.toFixed(12));
+    return Blur(v)
 }
 globalThis.tan = tan
 
@@ -72,7 +72,7 @@ globalThis.tan = tan
  */
 function arcsin(x: number): number {
     let v = Math.asin(x) * 180 / Math.PI;
-    return parseFloat(v.toFixed(12));
+    return Blur(v)
 }
 globalThis.arcsin = arcsin
 
@@ -85,7 +85,7 @@ globalThis.arcsin = arcsin
  */
 function arccos(x: number): number {
     let v = Math.acos(x) * 180 / Math.PI;
-    return parseFloat(v.toFixed(12));
+    return Blur(v)
 }
 globalThis.arccos = arccos
 
@@ -98,6 +98,6 @@ globalThis.arccos = arccos
  */
 function arctan(x: number): number {
     let v = Math.atan(x) * 180 / Math.PI;
-    return parseFloat(v.toFixed(12));
+    return Blur(v)
 }
 globalThis.arctan = arctan

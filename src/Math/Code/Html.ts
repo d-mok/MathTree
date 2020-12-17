@@ -60,10 +60,10 @@ globalThis.JoinToHTMLTag = JoinToHTMLTag
 * PrintVariable(html,'x',2) // '1 + 2 = *y'
 * ```
 */
-function PrintVariable(html: string, symbol: string, value: any):string {
+function PrintVariable(html: string, symbol: string, value: any): string {
     let T = typeof value
     if (T === 'number') {
-        value = Fix(value, 10)
+        value = Blur(value)
         if (IsDecimal(value)) value = Round(value, 5)
     }
     if (T === 'boolean') {

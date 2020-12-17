@@ -28,7 +28,7 @@ test('IsNum', () => {
 
 
 test('IsInteger', () => {
-    const T = [0, 13, -5, -1045372, 4721];
+    const T = [0, 13, -5, -1045372, 4721, (1.1 ** 2) * 100];
     const F = [0.5, 1.12, -55.6];
     testAssertion(IsInteger, T, F);
 });
@@ -51,7 +51,7 @@ test('IsCoeff', () => {
 
 
 test('IsOdd', () => {
-    const T = [1, -1, 3, 99];
+    const T = [1, -1, 3, 99, (1.1 ** 2) * 100];
     const F = [2, 0, -4, 0.5];
     testAssertion(IsOdd, T, F);
 });
@@ -61,7 +61,7 @@ test('IsOdd', () => {
 
 
 test('IsEven', () => {
-    const T = [2, -2, 4, 96, 0];
+    const T = [2, -2, 4, 96, 0, (1.1 ** 2) * 100 - 1];
     const F = [1, 3, -5, 0.5];
     testAssertion(IsEven, T, F);
 });
@@ -79,7 +79,7 @@ test('IsProbability', () => {
 
 
 test('IsSquareNum', () => {
-    const T = [0, 1, 4, 9, 16, 25, 36];
+    const T = [0, 1, 4, 9, 16, 25, 36, ((1.1 ** 2) * 100) ** 2];
     const F = [2, 1.5, -4, -1];
     testAssertion(IsSquareNum, T, F);
 });

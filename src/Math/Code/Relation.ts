@@ -63,6 +63,7 @@ globalThis.AreSameSign = AreSameSign
  * ```
  */
 function AreCoprime(...nums: number[]): boolean {
+    nums = Blurs(nums)
     if (!IsInteger(...nums)) return true
     if (!IsNonZero(...nums)) return true
     for (let i = 0; i < nums.length - 1; i++) {

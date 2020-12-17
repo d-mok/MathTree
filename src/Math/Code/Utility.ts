@@ -12,6 +12,7 @@
  * ```
  */
 function HCF(...nums: number[]): number {
+    nums = Blurs(nums)
     if (!IsInteger(...nums)) return NaN
     if (!IsNonZero(...nums)) return NaN
     function _HCF(n1: number, n2: number): number {
@@ -40,6 +41,7 @@ globalThis.HCF = HCF
  * ```
  */
 function LCM(...nums: number[]): number {
+    nums = Blurs(nums)
     if (!IsInteger(...nums)) return NaN
     if (!IsNonZero(...nums)) return NaN
     function _LCM(n1: number, n2: number) {

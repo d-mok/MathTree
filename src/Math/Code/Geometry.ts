@@ -8,7 +8,7 @@
  * ```
  */
 function Slope(A: Point, B: Point): number {
-    if ((A[0] - B[0]) === 0) return NaN
+    if (Blur(A[0] - B[0]) === 0) return NaN
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
 globalThis.Slope = Slope

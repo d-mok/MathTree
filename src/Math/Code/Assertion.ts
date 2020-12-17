@@ -24,7 +24,7 @@ globalThis.IsNum = IsNum
  * ```
  */
 function IsInteger(...num: number[]): boolean {
-    return num.every(x => Number.isInteger(x));
+    return Blurs(num).every(x => IsNum(x) && Number.isInteger(x));
 }
 globalThis.IsInteger = IsInteger
 
@@ -56,7 +56,7 @@ globalThis.IsDecimal = IsDecimal
  * ```
  */
 function IsCoeff(...num: number[]): boolean {
-    return num.every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
+    return Blurs(num).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
 }
 globalThis.IsCoeff = IsCoeff
 
@@ -75,7 +75,7 @@ globalThis.IsCoeff = IsCoeff
  * ```
  */
 function IsOdd(...num: number[]): boolean {
-    return num.every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
+    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
 }
 globalThis.IsOdd = IsOdd
 
@@ -90,7 +90,7 @@ globalThis.IsOdd = IsOdd
  * ```
  */
 function IsEven(...num: number[]): boolean {
-    return num.every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
+    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
 }
 globalThis.IsEven = IsEven
 
@@ -123,7 +123,7 @@ globalThis.IsProbability = IsProbability
  * ```
  */
 function IsSquareNum(...num: number[]): boolean {
-    return num.every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
+    return Blurs(num).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
 }
 globalThis.IsSquareNum = IsSquareNum
 
