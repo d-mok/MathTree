@@ -30,6 +30,133 @@ function AppendOptions(question: string, options: string[]) {
 globalThis.AppendOptions = AppendOptions
 
 
+function PrintVariable(template: string, symbol: string, value: any) {
+    let T = typeof value
+    if (!['number', 'string', 'boolean'].includes(T)) return template
+    if (T === 'number') {
+        value = parseFloat(value.toFixed(10));
+        if (!Number.isInteger(value)) value = parseFloat(value.toPrecision(5));
+    }
+    if (T === 'boolean') {
+        value = Tick(value)
+    }
+    return template.replace(new RegExp("\\*" + symbol, 'g'), value);
+}
+
+
+function NegateVariable(item: number | string): number | string {
+    if (typeof item === 'number') return -item
+    if (typeof item === 'string') {
+        if (item.charAt(0) === '-') {
+            return item.substring(1)
+        } else {
+            return '-' + item
+        }
+    }
+    throw 'Fail to negate input in AutoOptions!'
+}
+
+
+type Instruction = {
+    negate: boolean
+    shake: boolean
+    range: number | undefined // used in shake
+    assign: any[]
+    ordered: boolean // used in manual
+}
+
+function defaultInstruction({
+    negate = false,
+    shake = true,
+    range = undefined,
+    assign = [],
+    ordered = false
+}: Partial<Instruction>): Instruction {
+    return {
+        negate,
+        shake,
+        range,
+        assign,
+        ordered
+    }
+}
+
+function ParseInstruction(input: any): Instruction {
+    if (typeof input === 'object' && input !== null) {
+        return defaultInstruction(input)
+    }
+    if (Array.isArray(input)) {
+        return defaultInstruction({
+            assign: input
+        })
+    }
+    return defaultInstruction({})
+}
+
+
+function DoInstruction(instruction: Instruction, source: any): (typeof source)[] {
+    let product = instruction.assign
+    if (!instruction.ordered) product = RndShuffle(...product)
+    if (instruction.negate) {
+        let neg = NegateVariable(source)
+        product.push(...RndShuffle(source, neg, neg))
+    } else if (instruction.shake) {
+        product.push(...ShakeVariable(source, instruction.range))
+    }
+    product.length = 3
+    return product
+}
+
+
+
+function ShakeVariable(source: number | string, range?: number): (typeof source)[] {
+    if (typeof source === 'string') {
+        // Fraction
+        if (ParseDfrac(source)) {
+            let f = ParseDfrac(source)!
+            range ??= 5
+            return RndShakeFrac(f, range, 3).map(x => Dfrac(...x))
+        }
+        // Inequal Sign
+        if (ParseIneqSign(source)) {
+            let [g, e] = ParseIneqSign(source)!
+            let others = [
+                IneqSign(g, e)[0],
+                IneqSign(!g, e)[0],
+                IneqSign(!g, e)[0],
+            ]
+            return RndShuffle(...others)
+        }
+        if (Number(source)) {
+            source = Number(source)
+        }
+    }
+    if (typeof source === 'number') {
+        // Integer
+        if (IsInteger(source)) {
+            range ??= Max(5, Abs(source * 0.1))
+            return RndShakeN(source, range, 3)
+        }
+        // Probability
+        if (IsProbability(source)) {
+            range ??= 0.3
+            return RndShakeProb(source, range, 3)
+        }
+        // Decimal
+        if (IsNum(source)) {
+            range ??= Max(5, Abs(source * 0.1))
+            return RndShakeR(source, range, 3)
+        }
+    }
+    console.error('Fail to shake input in AutoOptions! Returning original value: ' + source)
+    return [source, source, source]
+}
+
+
+
+
+
+
 /**
 * @category AutoOptions
 * @return append the array of options to question
@@ -39,106 +166,25 @@ globalThis.AppendOptions = AppendOptions
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-function AutoOptions(dict: Partial<Dict>, question: string, source: Dict): string {
-
-    function shake(num: number | string, range?: number): (number | string)[] {
-        if (typeof num === 'string') {
-            // Fraction
-            if (ParseDfrac(num)) {
-                let f = ParseDfrac(num)!
-                range ??= 5
-                return RndShakeFrac(f, range, 3).map(x => Dfrac(...x))
-            }
-            // Inequal Sign
-            if (ParseIneqSign(num)) {
-                let [g, e] = ParseIneqSign(num)!
-                let others = [
-                    IneqSign(g, e)[0],
-                    IneqSign(!g, e)[0],
-                    IneqSign(!g, e)[0],
-                ]
-                return RndShuffle(...others)
-            }
-            if (Number(num)) {
-                num = Number(num)
-            }
-        }
-        if (typeof num === 'number') {
-            // Integer
-            if (IsInteger(num)) {
-                range ??= Max(5, Abs(num * 0.1))
-                return RndShakeN(num, range, 3)
-            }
-            // Probability
-            if (IsProbability(num)) {
-                range ??= 0.3
-                return RndShakeProb(num, range, 3)
-            }
-            // Decimal
-            if (IsNum(num)) {
-                range ??= Max(5, Abs(num * 0.1))
-                return RndShakeR(num, range, 3)
-            }
-        }
-        console.error('Fail to shake input in AutoOptions! Returning original value: ' + num)
-        return [num, num, num]
-    }
-
-    function substitute(html: string, symbol: string, num: any) {
-        if (typeof num === 'undefined') return html;
-        // round num to 5 sig. fig.
-        if (typeof num === 'number') num = parseFloat(num.toFixed(10));
-        if (typeof num === 'number' && !Number.isInteger(num)) num = parseFloat(num.toPrecision(5));
-        return html.replace(new RegExp("\\*" + symbol, 'g'), num);
-    }
-
-    function negate(item: number | string): number | string {
-        if (typeof item === 'number') return -item
-        if (typeof item === 'string') {
-            if (item.charAt(0) === '-') {
-                return item.substring(1)
-            } else {
-                return '-' + item
-            }
-        }
-        throw 'Fail to negate input in AutoOptions!'
-    }
+function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
 
     let options = ExtractOptions(question)
     if (options.length !== 1) return question
     let mould = options[0]
-
     let others = [mould, mould, mould]
-    for (let k in dict) {
-        let v: any = dict[k]
-        let shaked: any[]
-        if (Array.isArray(v)) {
-            if (v.length === 3) { // contain array
-                shaked = v
-            }
-            else if (v.length === 1 && typeof v[0] === 'number') {
-                if (v[0] > 0) { // contain range
-                    shaked = shake(source[k], v[0])
-                } else { // indicate sign mode
-                    shaked = RndShuffle(
-                        source[k],
-                        negate(source[k]),
-                        negate(source[k])
-                    )
-                }
-            }
-            else {
-                console.error('Incorrect Format of Opt Dict in AutoOptions!')
-                return question
-            }
-        } else {
-            // no array value provided
-            shaked = shake(v)
-        }
+
+    let products: Partial<Dict> = {}
+    for (let k in instructions) {
+        instructions[k] = ParseInstruction(instructions[k])
+        products[k] = DoInstruction(instructions[k], source[k])
+    }
+
+    for (let k in instructions) {
         for (let i = 0; i < 3; i++) {
-            others[i] = substitute(others[i], k, shaked[i])
+            others[i] = PrintVariable(others[i], k, products[k][i])
         }
     }
+
     return AppendOptions(question, others)
 }
 globalThis.AutoOptions = AutoOptions
