@@ -124,7 +124,6 @@ function Dfrac(numerator: number, denominator: number, upSign = false): string {
             return '-\\dfrac{' + Math.abs(p) + '}{' + q + '}'
         }
     }
-
 }
 globalThis.Dfrac = Dfrac
 
