@@ -5,7 +5,7 @@ test('AutoOptions', () => {
     <ul>
     <li>*x</li>
     </ul>`;
-    question = AutoOptions({ x: 10 }, question, { x: 10 });
+    question = AutoOptions({ x: [0,0,0] }, question, { x: 10 }, "");
     console.log(question);
     expect(question.split("<li>").length - 1).toBe(4);
 });

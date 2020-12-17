@@ -82,13 +82,11 @@ function defaultInstruction({
 }
 
 function ParseInstruction(input: any): Instruction {
+    if (Array.isArray(input)) {
+        return defaultInstruction({ assign: input })
+    }
     if (typeof input === 'object' && input !== null) {
         return defaultInstruction(input)
-    }
-    if (Array.isArray(input)) {
-        return defaultInstruction({
-            assign: input
-        })
     }
     return defaultInstruction({})
 }
@@ -153,6 +151,27 @@ function ShakeVariable(source: number | string, range?: number): (typeof source)
 }
 
 
+function ValidateProducts(products: Partial<Dict>, source: Dict, validate: string) {
+    if (validate === "") return true;
+    validate = validate.replace('\n', ' ');
+    let OK = []
+    for (let index = 0; index < 3; index++) {
+        let clone = JSON.parse(JSON.stringify(source))
+        for (let key in products) {
+            clone[key] = products[key][index]
+        }
+        let {
+            a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z,
+            A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+        } = clone;
+
+        OK.push(eval(validate))
+    }
+    return OK.every(x => x)
+}
+
+
+
 
 
 
@@ -166,7 +185,7 @@ function ShakeVariable(source: number | string, range?: number): (typeof source)
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
+function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict, validate: string): string {
 
     let options = ExtractOptions(question)
     if (options.length !== 1) return question
@@ -174,12 +193,21 @@ function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict
     let others = [mould, mould, mould]
 
     let products: Partial<Dict> = {}
-    for (let k in instructions) {
-        instructions[k] = ParseInstruction(instructions[k])
-        products[k] = DoInstruction(instructions[k], source[k])
-    }
+    let counter = 0
+    do {
+        for (let k in instructions) {
+            instructions[k] = ParseInstruction(instructions[k])
+            products[k] = DoInstruction(instructions[k], source[k])
+        }
+        counter++
+        if (counter > 1000)
+            throw {
+                name: "AutoOptionsError",
+                message: "Fail to validate options after 1000 trials!"
+            }
+    } while (!ValidateProducts(products, source, validate))
 
-    for (let k in instructions) {
+    for (let k in products) {
         for (let i = 0; i < 3; i++) {
             others[i] = PrintVariable(others[i], k, products[k][i])
         }
