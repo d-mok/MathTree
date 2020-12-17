@@ -62,22 +62,19 @@ type Instruction = {
     shake: boolean
     range: number | undefined // used in shake
     assign: any[]
-    ordered: boolean // used in manual
 }
 
 function defaultInstruction({
     negate = false,
     shake = true,
     range = undefined,
-    assign = [],
-    ordered = false
+    assign = []
 }: Partial<Instruction>): Instruction {
     return {
         negate,
         shake,
         range,
-        assign,
-        ordered
+        assign
     }
 }
 
@@ -94,7 +91,6 @@ function ParseInstruction(input: any): Instruction {
 
 function DoInstruction(instruction: Instruction, source: any): (typeof source)[] {
     let product = instruction.assign
-    if (!instruction.ordered) product = RndShuffle(...product)
     if (instruction.negate) {
         let neg = NegateVariable(source)
         product.push(...RndShuffle(source, neg, neg))
@@ -102,6 +98,7 @@ function DoInstruction(instruction: Instruction, source: any): (typeof source)[]
         product.push(...ShakeVariable(source, instruction.range))
     }
     product.length = 3
+    product = RndShuffle(...product)
     return product
 }
 

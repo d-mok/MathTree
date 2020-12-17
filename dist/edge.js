@@ -8247,13 +8247,12 @@ function NegateVariable(item) {
     }
     throw 'Fail to negate input in AutoOptions!';
 }
-function defaultInstruction({ negate = false, shake = true, range = undefined, assign = [], ordered = false }) {
+function defaultInstruction({ negate = false, shake = true, range = undefined, assign = [] }) {
     return {
         negate,
         shake,
         range,
-        assign,
-        ordered
+        assign
     };
 }
 function ParseInstruction(input) {
@@ -8267,8 +8266,6 @@ function ParseInstruction(input) {
 }
 function DoInstruction(instruction, source) {
     let product = instruction.assign;
-    if (!instruction.ordered)
-        product = RndShuffle(...product);
     if (instruction.negate) {
         let neg = NegateVariable(source);
         product.push(...RndShuffle(source, neg, neg));
@@ -8277,6 +8274,7 @@ function DoInstruction(instruction, source) {
         product.push(...ShakeVariable(source, instruction.range));
     }
     product.length = 3;
+    product = RndShuffle(...product);
     return product;
 }
 function ShakeVariable(source, range) {
