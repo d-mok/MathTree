@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15).Buffer))
 
 /***/ }),
 /* 1 */
@@ -7913,7 +7913,7 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(29);
+__webpack_require__(30);
 
 
 /***/ }),
@@ -7934,7 +7934,7 @@ __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(19);
+__webpack_require__(14);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -7944,6 +7944,7 @@ __webpack_require__(25);
 __webpack_require__(26);
 __webpack_require__(27);
 __webpack_require__(28);
+__webpack_require__(29);
 
 
 /***/ }),
@@ -8210,6 +8211,50 @@ function IsNonZero(...num) {
     return num.every(x => IsNum(x) && x !== 0);
 }
 globalThis.IsNonZero = IsNonZero;
+/**
+ * @category Assertion
+ * @return check if the item is a string
+ * ```typescript
+ * IsString('abc') // true
+ * IsString('') // true
+ * IsString('1') // true
+ * IsString(1) // false
+ * ```
+ */
+function IsString(...items) {
+    return items.every(x => typeof x === 'string');
+}
+globalThis.IsString = IsString;
+/**
+ * @category Assertion
+ * @return check if the item is an empty object
+ * ```typescript
+ * IsEmptyObject({}) // true
+ * IsEmptyObject(1) // false
+ * IsEmptyObject('abc') // false
+ * IsEmptyObject({x:1}) // false
+ * ```
+ */
+function IsEmptyObject(...items) {
+    return items.every(x => !!x &&
+        Object.keys(x).length === 0 &&
+        x.constructor === Object);
+}
+globalThis.IsEmptyObject = IsEmptyObject;
+/**
+ * @category Assertion
+ * @return check if the item is an array
+ * ```typescript
+ * IsArray([]) // true
+ * IsArray([1,2]) // true
+ * IsArray('abc') // false
+ * IsArray({x:1}) // false
+ * ```
+ */
+function IsArray(...items) {
+    return items.every(x => Array.isArray(x));
+}
+globalThis.IsArray = IsArray;
 
 
 /***/ }),
@@ -8218,52 +8263,11 @@ globalThis.IsNonZero = IsNonZero;
 
 "use strict";
 
-/**
-* @category SmartOptions
-* @return get an array of all options in the question
-* ```typescript
-* let question = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
-* ExtractOptions(question) // ['1','2','3']
-* ```
-*/
-function ExtractOptions(question) {
-    let options = question.match(/<li>[\s\S]*?<\/li>/g);
-    if (options === null)
-        return [];
-    return options.map(x => x.replace('<li>', '').replace('</li>', ''));
-}
-globalThis.ExtractOptions = ExtractOptions;
-/**
-* @category SmartOptions
-* @return append the array of options to question
-* ```typescript
-* let question = 'abc<ul><li>1</li><li>2</li></ul>'
-* AppendOptions(question,['3','4']) // 'abc<ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>'
-* ```
-*/
-function AppendOptions(question, options) {
-    return question.replace('</ul>', options.map(n => '<li>' + n + '</li>').join('') + '</ul>');
-}
-globalThis.AppendOptions = AppendOptions;
-function PrintVariable(template, symbol, value) {
-    let T = typeof value;
-    if (!['number', 'string', 'boolean'].includes(T))
-        return template;
-    if (T === 'number') {
-        value = parseFloat(value.toFixed(10));
-        if (!Number.isInteger(value))
-            value = parseFloat(value.toPrecision(5));
-    }
-    if (T === 'boolean') {
-        value = Tick(value);
-    }
-    return template.replace(new RegExp("\\*" + symbol, 'g'), value);
-}
 class Instruction {
     constructor(input) {
         this.range = undefined;
         this.assign = [];
-        if (Array.isArray(input)) {
+        if (IsArray(input)) {
             this.assign = input;
         }
         else if (typeof input === 'object' && input !== null) {
@@ -8280,18 +8284,17 @@ class Instruction {
 }
 function ValidateProducts(products, source, validate) {
     if (validate === "")
-        return true;
+        return;
     validate = validate.replace('\n', ' ');
-    let OK = [];
     for (let index = 0; index < 3; index++) {
         let clone = Clone(source);
         for (let key in products) {
             clone[key] = products[key][index];
         }
         let { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } = clone;
-        OK.push(eval(validate));
+        if (eval(validate) === false)
+            throw "validate fail";
     }
-    return OK.every(x => x);
 }
 /**
 * @category AutoOptions
@@ -8308,10 +8311,7 @@ function ExecInstructions(instructions, source, validate) {
         let instr = new Instruction(instructions[k]);
         products[k] = instr.do(source[k]);
     }
-    let valid = ValidateProducts(products, source, validate);
-    if (!valid) {
-        throw 'validation fail';
-    }
+    ValidateProducts(products, source, validate);
     return products;
 }
 globalThis.ExecInstructions = ExecInstructions;
@@ -8325,25 +8325,19 @@ globalThis.ExecInstructions = ExecInstructions;
 * ```
 */
 function AutoOptions(instructions, question, source, validate) {
-    if (Object.keys(instructions).length === 0 && instructions.constructor === Object)
-        return { ok: true, question: question };
-    let options = ExtractOptions(question);
+    if (IsEmptyObject(instructions))
+        return question;
+    let options = ExtractHTMLTag(question, 'li');
     if (options.length !== 1)
-        return { ok: true, question: question };
+        return question;
     let others = Array(3).fill(options[0]);
-    let products;
-    try {
-        products = ExecInstructions(instructions, source, validate);
-    }
-    catch (_a) {
-        return { ok: false, question: '' };
-    }
+    let products = ExecInstructions(instructions, source, validate);
     for (let k in products) {
         for (let i = 0; i < 3; i++) {
             others[i] = PrintVariable(others[i], k, products[k][i]);
         }
     }
-    return { ok: true, question: AppendOptions(question, others) };
+    return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
 }
 globalThis.AutoOptions = AutoOptions;
 
@@ -8793,6 +8787,85 @@ globalThis.TranslatePoint = TranslatePoint;
 "use strict";
 
 /**
+* @category Html
+* @return get an array of all nodes of specified tag
+* ```typescript
+* let html = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
+* ExtractHTMLTag(html,'li') // ['1','2','3']
+* ```
+*/
+function ExtractHTMLTag(html, tag) {
+    let startTag = '<' + tag + '>';
+    let endTag = '</' + tag + '>';
+    let r = startTag + '[\\s\\S]*?' + endTag;
+    console.log(r);
+    let nodes = html.match(new RegExp(r, 'g'));
+    console.log(nodes);
+    if (nodes === null)
+        return [];
+    return nodes.map(x => x.replace(startTag, '').replace(endTag, ''));
+}
+globalThis.ExtractHTMLTag = ExtractHTMLTag;
+/**
+* @category Html
+* @return append content to the end of a html tag
+* ```typescript
+* let html = 'abc<ul><li>1</li></ul>'
+* AppendInHTMLTag(html, 'ul', '<li>2</li>') // 'abc<ul><li>1</li><li>2</li></ul>'
+* ```
+*/
+function AppendInHTMLTag(html, tag, content) {
+    let startTag = '<' + tag + '>';
+    let endTag = '</' + tag + '>';
+    return html.replace(endTag, content + endTag);
+}
+globalThis.AppendInHTMLTag = AppendInHTMLTag;
+/**
+* @category Html
+* @return join items into html tags
+* ```typescript
+* let html = 'abc<ul><li>1</li></ul>'
+* JoinToHTMLTag(['a','b'], 'li') // '<li>a</li><li>b</li>'
+* ```
+*/
+function JoinToHTMLTag(items, tag) {
+    let startTag = '<' + tag + '>';
+    let endTag = '</' + tag + '>';
+    return items.map(n => startTag + n + endTag).join('');
+}
+globalThis.JoinToHTMLTag = JoinToHTMLTag;
+/**
+* @category Html
+* @return print a variable (e.g. *x) into the html
+* ```typescript
+* let html = '1 + *x = *y'
+* PrintVariable(html,'x',2) // '1 + 2 = *y'
+* ```
+*/
+function PrintVariable(html, symbol, value) {
+    let T = typeof value;
+    if (!['number', 'string', 'boolean'].includes(T))
+        return html;
+    if (T === 'number') {
+        value = Fix(value, 10);
+        if (IsDecimal(value))
+            value = Round(value, 5);
+    }
+    if (T === 'boolean') {
+        value = Tick(value);
+    }
+    return html.replace(new RegExp("\\*" + symbol, 'g'), value);
+}
+globalThis.PrintVariable = PrintVariable;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
  * @category LinearProgram
  * @return result of linear programming.
  * ```typescript
@@ -8892,7 +8965,7 @@ globalThis.LinearProgram = LinearProgram;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9115,7 +9188,7 @@ globalThis.Magnitude = Magnitude;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9291,7 +9364,7 @@ globalThis.RndPyth = RndPyth;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9305,9 +9378,9 @@ globalThis.RndPyth = RndPyth;
 
 
 
-var base64 = __webpack_require__(16)
-var ieee754 = __webpack_require__(17)
-var isArray = __webpack_require__(18)
+var base64 = __webpack_require__(17)
+var ieee754 = __webpack_require__(18)
+var isArray = __webpack_require__(19)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -11085,10 +11158,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11114,7 +11187,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11273,7 +11346,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -11363,7 +11436,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -11374,7 +11447,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11650,7 +11723,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11750,7 +11823,7 @@ globalThis.RndShe = RndShe;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11842,7 +11915,7 @@ globalThis.AreDistantPoint = AreDistantPoint;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11948,7 +12021,7 @@ globalThis.GSequence = GSequence;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12026,7 +12099,7 @@ globalThis.Mean = Mean;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12191,7 +12264,7 @@ globalThis.ParseDfrac = ParseDfrac;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12339,7 +12412,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12493,7 +12566,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12568,7 +12641,7 @@ globalThis.Clone = Clone;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12718,19 +12791,19 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(30);
 __webpack_require__(31);
 __webpack_require__(32);
+__webpack_require__(33);
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12828,7 +12901,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14014,7 +14087,7 @@ globalThis.Pen = Pen;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

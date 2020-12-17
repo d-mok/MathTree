@@ -1,8 +1,9 @@
 
 
-function testAssertion(func, truthy, falsy) {
+function testAssertion(func, truthy, falsy, withTrash = true) {
     const trash = ['2', '-2', '0.5', NaN, Infinity, undefined, null, true, false];
-    falsy = [...falsy, ...trash];
+    if (withTrash)
+        falsy = [...falsy, ...trash];
 
     for (t of truthy) {
         expect(func(t)).toBe(true);
@@ -110,3 +111,23 @@ test('IsNonZero', () => {
     testAssertion(IsNonZero, T, F);
 });
 
+
+test('IsString', () => {
+    const T = ['', 'abc', '1', '1.23'];
+    const F = [1, -1, NaN, Infinity, undefined, null, true, false];
+    testAssertion(IsString, T, F, false);
+});
+
+test('IsEmptyObject', () => {
+    const T = [{}];
+    const F = [1, '', { x: 1 }, NaN, Infinity, undefined, null, true, false];
+    testAssertion(IsEmptyObject, T, F, false);
+});
+
+
+
+test('IsArray', () => {
+    const T = [[], [1, 2, 3]];
+    const F = [1, '', { x: 1 }, NaN, Infinity, undefined, null, true, false];
+    testAssertion(IsArray, T, F, false);
+});

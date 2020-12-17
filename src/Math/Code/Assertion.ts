@@ -175,3 +175,59 @@ function IsNonZero(...num: number[]): boolean {
     return num.every(x => IsNum(x) && x !== 0);
 }
 globalThis.IsNonZero = IsNonZero
+
+
+
+
+
+/**
+ * @category Assertion
+ * @return check if the item is a string
+ * ```typescript
+ * IsString('abc') // true
+ * IsString('') // true
+ * IsString('1') // true
+ * IsString(1) // false
+ * ```
+ */
+function IsString(...items: string[]): boolean {
+    return items.every(x => typeof x === 'string');
+}
+globalThis.IsString = IsString
+
+
+/**
+ * @category Assertion
+ * @return check if the item is an empty object
+ * ```typescript
+ * IsEmptyObject({}) // true
+ * IsEmptyObject(1) // false
+ * IsEmptyObject('abc') // false
+ * IsEmptyObject({x:1}) // false
+ * ```
+ */
+function IsEmptyObject(...items: any[]): boolean {
+    return items.every(x =>
+        !!x &&
+        Object.keys(x).length === 0 &&
+        x.constructor === Object
+    );
+}
+globalThis.IsEmptyObject = IsEmptyObject
+
+
+/**
+ * @category Assertion
+ * @return check if the item is an array
+ * ```typescript
+ * IsArray([]) // true
+ * IsArray([1,2]) // true
+ * IsArray('abc') // false
+ * IsArray({x:1}) // false
+ * ```
+ */
+function IsArray(...items: any[]): boolean {
+    return items.every(x => Array.isArray(x));
+}
+globalThis.IsArray = IsArray
+
