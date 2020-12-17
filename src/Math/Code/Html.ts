@@ -60,9 +60,8 @@ globalThis.JoinToHTMLTag = JoinToHTMLTag
 * PrintVariable(html,'x',2) // '1 + 2 = *y'
 * ```
 */
-function PrintVariable(html: string, symbol: string, value: any) {
+function PrintVariable(html: string, symbol: string, value: any):string {
     let T = typeof value
-    if (!['number', 'string', 'boolean'].includes(T)) return html
     if (T === 'number') {
         value = Fix(value, 10)
         if (IsDecimal(value)) value = Round(value, 5)

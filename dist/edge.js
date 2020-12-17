@@ -8819,8 +8819,6 @@ globalThis.JoinToHTMLTag = JoinToHTMLTag;
 */
 function PrintVariable(html, symbol, value) {
     let T = typeof value;
-    if (!['number', 'string', 'boolean'].includes(T))
-        return html;
     if (T === 'number') {
         value = Fix(value, 10);
         if (IsDecimal(value))
