@@ -233,7 +233,7 @@ test('RndShakeProb', () => {
     expect(arr).toAllHaveLength(0);
 
     arr = sample(() => RndShakeProb(0.5001));
-    expect(arr).toBeFlatWithin(0.2, 0.8);
+    expect(arr).toBeFlatWithin(0.2001, 0.8001);
     expect(arr).not.toBeFlatWithin(0.21, 0.79);
     expect(arr).toAllHaveLength(5);
     expect(arr).not.toBeFlatIsInteger();

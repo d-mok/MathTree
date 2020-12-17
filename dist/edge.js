@@ -9133,6 +9133,7 @@ globalThis.SimpRatio = SimpRatio;
  * ```
  */
 function SigFig(value) {
+    value = parseFloat(value.toFixed(12));
     return Math.abs(value)
         .toExponential()
         .replace(/e[\+\-0-9]*$/, '') // remove exponential notation
@@ -9153,6 +9154,7 @@ globalThis.SigFig = SigFig;
  */
 function DecimalPlace(value) {
     var _a, _b;
+    value = parseFloat(value.toFixed(12));
     if (IsInteger(value))
         return 0;
     return (_b = (_a = value.toString().split(".")[1]) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
@@ -11569,7 +11571,7 @@ function RndShakeZ(anchor, range, n) {
     range !== null && range !== void 0 ? range : (range = Max(5, Abs(anchor * 0.1)));
     if (!IsInteger(anchor))
         return [];
-    n !== null && n !== void 0 ? n : (n = Min(10, 2 * range));
+    n !== null && n !== void 0 ? n : (n = Min(2 * range, 10));
     return chance.unique(() => anchor + RndZ(1, range), n);
 }
 globalThis.RndShakeZ = RndShakeZ;
@@ -11578,7 +11580,7 @@ globalThis.RndShakeZ = RndShakeZ;
  * @param anchor - can be any real number
  * @param range - default Max(1, anchor * 10%)
  * @param n - default to 5
- * @return nearby same-signed real number
+ * @return nearby same-signed real number with same precision
  * ```typescript
  * RndShakeR(3.5,2,3)
  * // return 3 unique values from [1.5,5.5]
@@ -11603,7 +11605,7 @@ globalThis.RndShakeR = RndShakeR;
  * @param anchor - must be a probability
  * @param range - default to 0.3
  * @param n - default to 5
- * @return nearby probability
+ * @return nearby probability with same precision
  * ```typescript
  * RndShakeProb(0.8,0.1,3)
  * // return 3 unique values from [0.7,0.9]

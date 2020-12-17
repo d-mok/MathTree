@@ -151,6 +151,9 @@
 			<a href="globals.html#crammer" class="tsd-kind-icon">Crammer</a>
 		</li>
 		<li class=" tsd-kind-function">
+			<a href="globals.html#decimalplace" class="tsd-kind-icon">Decimal<wbr>Place</a>
+		</li>
+		<li class=" tsd-kind-function">
 			<a href="globals.html#dfrac" class="tsd-kind-icon">Dfrac</a>
 		</li>
 		<li class=" tsd-kind-function">
@@ -215,6 +218,9 @@
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="globals.html#inclination" class="tsd-kind-icon">Inclination</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="globals.html#indextosurd" class="tsd-kind-icon">Index<wbr>ToSurd</a>
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="globals.html#ineqsign" class="tsd-kind-icon">Ineq<wbr>Sign</a>
@@ -652,6 +658,7 @@
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function"><a href="globals.html#abs" class="tsd-kind-icon">Abs</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#ceil" class="tsd-kind-icon">Ceil</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#decimalplace" class="tsd-kind-icon">Decimal<wbr>Place</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#fix" class="tsd-kind-icon">Fix</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#fixdown" class="tsd-kind-icon">Fix<wbr>Down</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#fixup" class="tsd-kind-icon">Fix<wbr>Up</a></li>
@@ -768,6 +775,7 @@
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function"><a href="globals.html#dfrac" class="tsd-kind-icon">Dfrac</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#grammarjoin" class="tsd-kind-icon">Grammar<wbr>Join</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#indextosurd" class="tsd-kind-icon">Index<wbr>ToSurd</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#ineqsign" class="tsd-kind-icon">Ineq<wbr>Sign</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#parsedfrac" class="tsd-kind-icon">Parse<wbr>Dfrac</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#parseineqsign" class="tsd-kind-icon">Parse<wbr>Ineq<wbr>Sign</a></li>
@@ -2425,6 +2433,33 @@ Ceil(<span class="hljs-number">2</span>)) <span class="hljs-comment">// 2</span>
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="decimalplace" class="tsd-anchor"></a>
+				<h3>Decimal<wbr>Place</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Decimal<wbr>Place<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>value: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						<p>count the decimal places</p>
+						<pre><code class="language-typescript">DecimalPlace(<span class="hljs-number">1.234</span>) <span class="hljs-comment">// 3</span>
+DecimalPlace(<span class="hljs-number">1200</span>) <span class="hljs-comment">// 0</span>
+DecimalPlace(<span class="hljs-number">0.00123</span>) <span class="hljs-comment">// 5</span>
+DecimalPlace(<span class="hljs-number">123.456789</span>) <span class="hljs-comment">// 6</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
 				<a name="fix" class="tsd-anchor"></a>
 				<h3>Fix</h3>
 				<ul class="tsd-signatures tsd-kind-function">
@@ -3650,12 +3685,12 @@ RndShakeN(<span class="hljs-number">0</span>,<span class="hljs-number">5</span>,
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> n: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>default to 10</p>
+									<p>default to 5</p>
 								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
-						<p>nearby probability</p>
+						<p>nearby probability with same precision</p>
 						<pre><code class="language-typescript">RndShakeProb(<span class="hljs-number">0.8</span>,<span class="hljs-number">0.1</span>,<span class="hljs-number">3</span>)
 <span class="hljs-comment">// return 3 unique values from [0.7,0.9]</span>
 RndShakeProb(<span class="hljs-number">0.8</span>,<span class="hljs-number">0.5</span>,<span class="hljs-number">3</span>)
@@ -3696,12 +3731,12 @@ RndShakeProb(<span class="hljs-number">1.1</span>,<span class="hljs-number">2</s
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> n: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>default to 10</p>
+									<p>default to 5</p>
 								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
-						<p>nearby same-signed real number</p>
+						<p>nearby same-signed real number with same precision</p>
 						<pre><code class="language-typescript">RndShakeR(<span class="hljs-number">3.5</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>)
 <span class="hljs-comment">// return 3 unique values from [1.5,5.5]</span>
 RndShakeR(<span class="hljs-number">1.5</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>)
@@ -4645,6 +4680,31 @@ Dfrac(<span class="hljs-number">5</span>,<span class="hljs-number">0</span>) <sp
 						<p>a string of joined elements. [1,2,3] --&gt; &#39;1, 2 and 3&#39;</p>
 						<pre><code class="language-typescript">GrammarJoin(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>) <span class="hljs-comment">// &#x27;1, 2, 3 and 4&#x27;</span>
 GrammarJoin(<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-string">&#x27;b&#x27;</span>,<span class="hljs-string">&#x27;c&#x27;</span>) <span class="hljs-comment">// &#x27;a, b and c&#x27;</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="indextosurd" class="tsd-anchor"></a>
+				<h3>Index<wbr>ToSurd</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Index<wbr>ToSurd<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>text: <span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>convert index katex to surd</p>
+						<pre><code class="language-typescript">IndexToSurd(<span class="hljs-string">&#x27;{x}^{0.5}&#x27;</span>) <span class="hljs-comment">// &#x27;\\sqrt{x}&#x27;</span>
+IndexToSurd(<span class="hljs-string">&#x27;{(y)}^{0.5}&#x27;</span>) <span class="hljs-comment">// &#x27;\\sqrt{y}&#x27;</span></code></pre>
 					</li>
 				</ul>
 			</section>

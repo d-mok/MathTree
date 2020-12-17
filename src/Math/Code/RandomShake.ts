@@ -133,7 +133,7 @@ globalThis.RndShakeN = RndShakeN
 function RndShakeZ(anchor: number, range?: number, n?: number): number[] {
     range ??= Max(5, Abs(anchor * 0.1))
     if (!IsInteger(anchor)) return []
-    n ??= Min(10, 2 * range)
+    n ??= Min(2 * range, 10)
     return chance.unique(() => anchor + RndZ(1, range!), n);
 }
 globalThis.RndShakeZ = RndShakeZ
@@ -147,7 +147,7 @@ globalThis.RndShakeZ = RndShakeZ
  * @param anchor - can be any real number
  * @param range - default Max(1, anchor * 10%)
  * @param n - default to 5
- * @return nearby same-signed real number
+ * @return nearby same-signed real number with same precision
  * ```typescript
  * RndShakeR(3.5,2,3) 
  * // return 3 unique values from [1.5,5.5]
@@ -180,7 +180,7 @@ globalThis.RndShakeR = RndShakeR
  * @param anchor - must be a probability
  * @param range - default to 0.3
  * @param n - default to 5
- * @return nearby probability
+ * @return nearby probability with same precision
  * ```typescript
  * RndShakeProb(0.8,0.1,3) 
  * // return 3 unique values from [0.7,0.9]

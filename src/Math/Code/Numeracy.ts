@@ -198,6 +198,7 @@ globalThis.SimpRatio = SimpRatio
  * ```
  */
 function SigFig(value: number): number {
+    value = parseFloat(value.toFixed(12));
     return Math.abs(value)
         .toExponential()
         .replace(/e[\+\-0-9]*$/, '')  // remove exponential notation
@@ -219,6 +220,7 @@ globalThis.SigFig = SigFig
  * ```
  */
 function DecimalPlace(value: number): number {
+    value = parseFloat(value.toFixed(12));
     if (IsInteger(value)) return 0
     return value.toString().split(".")[1]?.length ?? 0
 };

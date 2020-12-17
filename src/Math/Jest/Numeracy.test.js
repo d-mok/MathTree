@@ -270,6 +270,9 @@ test('SigFig', () => {
     expect(SigFig(1200.0001)).toBe(8);
     expect(SigFig(1200.0001000)).toBe(8);
     expect(SigFig(-1200.0001)).toBe(8);
+
+    expect(SigFig(0.81 - 1)).toBe(2);
+    expect(SigFig(1.1 ** 2)).toBe(3);
 });
 
 
@@ -288,6 +291,9 @@ test('DecimalPlace', () => {
     expect(DecimalPlace(1200.0001)).toBe(4);
     expect(DecimalPlace(1200.0001000)).toBe(4);
     expect(DecimalPlace(-1200.0001)).toBe(4);
+
+    expect(DecimalPlace(0.81 - 1)).toBe(2);
+    expect(DecimalPlace(1.1 ** 2)).toBe(2);
 });
 
 
