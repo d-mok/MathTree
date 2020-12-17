@@ -44,108 +44,27 @@ function PrintVariable(template: string, symbol: string, value: any) {
 }
 
 
-function NegateVariable(item: number | string): number | string {
-    if (typeof item === 'number') return -item
-    if (typeof item === 'string') {
-        if (item.charAt(0) === '-') {
-            return item.substring(1)
-        } else {
-            return '-' + item
+
+class Instruction {
+    range?: number = undefined
+    assign: any[] = []
+    constructor(input: any) {
+        if (Array.isArray(input)) {
+            this.assign = input
+        } else if (typeof input === 'object' && input !== null) {
+            Object.assign(this, input)
         }
     }
-    throw 'Fail to negate input in AutoOptions!'
-}
-
-
-type Instruction = {
-    negate: boolean
-    shake: boolean
-    range: number | undefined // used in shake
-    assign: any[]
-}
-
-function defaultInstruction({
-    negate = false,
-    shake = true,
-    range = undefined,
-    assign = []
-}: Partial<Instruction>): Instruction {
-    return {
-        negate,
-        shake,
-        range,
-        assign
+    do(source: any): (typeof source)[] {
+        let product = Clone(this.assign)
+        product.push(...RndShake(source, this.range, 3))
+        product.length = 3
+        product = RndShuffle(...product)
+        return product
     }
 }
 
-function ParseInstruction(input: any): Instruction {
-    if (Array.isArray(input)) {
-        return defaultInstruction({ assign: input })
-    }
-    if (typeof input === 'object' && input !== null) {
-        return defaultInstruction(input)
-    }
-    return defaultInstruction({})
-}
 
-
-function DoInstruction(instruction: Instruction, source: any): (typeof source)[] {
-    let product = instruction.assign
-    if (instruction.negate) {
-        let neg = NegateVariable(source)
-        product.push(...RndShuffle(source, neg, neg))
-    } else if (instruction.shake) {
-        product.push(...ShakeVariable(source, instruction.range))
-    }
-    product.length = 3
-    product = RndShuffle(...product)
-    return product
-}
-
-
-
-function ShakeVariable(source: number | string, range?: number): (typeof source)[] {
-    if (typeof source === 'string') {
-        // Fraction
-        if (ParseDfrac(source)) {
-            let f = ParseDfrac(source)!
-            range ??= 5
-            return RndShakeFrac(f, range, 3).map(x => Dfrac(...x))
-        }
-        // Inequal Sign
-        if (ParseIneqSign(source)) {
-            let [g, e] = ParseIneqSign(source)!
-            let others = [
-                IneqSign(g, e)[0],
-                IneqSign(!g, e)[0],
-                IneqSign(!g, e)[0],
-            ]
-            return RndShuffle(...others)
-        }
-        if (Number(source)) {
-            source = Number(source)
-        }
-    }
-    if (typeof source === 'number') {
-        // Integer
-        if (IsInteger(source)) {
-            range ??= Max(5, Abs(source * 0.1))
-            return RndShakeN(source, range, 3)
-        }
-        // Probability
-        if (IsProbability(source)) {
-            range ??= 0.3
-            return RndShakeProb(source, range, 3)
-        }
-        // Decimal
-        if (IsNum(source)) {
-            range ??= Max(5, Abs(source * 0.1))
-            return RndShakeR(source, range, 3)
-        }
-    }
-    console.error('Fail to shake input in AutoOptions! Returning original value: ' + source)
-    return [source, source, source]
-}
 
 
 function ValidateProducts(products: Partial<Dict>, source: Dict, validate: string) {
@@ -153,7 +72,7 @@ function ValidateProducts(products: Partial<Dict>, source: Dict, validate: strin
     validate = validate.replace('\n', ' ');
     let OK = []
     for (let index = 0; index < 3; index++) {
-        let clone = JSON.parse(JSON.stringify(source))
+        let clone = Clone(source)
         for (let key in products) {
             clone[key] = products[key][index]
         }
@@ -169,6 +88,36 @@ function ValidateProducts(products: Partial<Dict>, source: Dict, validate: strin
 
 
 
+type Product = {
+    [_: string]: any[]
+}
+
+
+
+/**
+* @category AutoOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>*x</li></ul>'
+* AutoOptions(question,{x:3}) 
+* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
+* ```
+*/
+function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: string): Product {
+    let products: Product = {}
+    for (let k in instructions) {
+        let instr = new Instruction(instructions[k])
+        products[k] = instr.do(source[k])
+    }
+    let valid = ValidateProducts(products, source, validate)
+    if (!valid) {
+        throw 'validation fail'
+    }
+    return products
+}
+globalThis.ExecInstructions = ExecInstructions
+
+
 
 
 
@@ -182,27 +131,18 @@ function ValidateProducts(products: Partial<Dict>, source: Dict, validate: strin
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict, validate: string): string {
-
+function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict, validate: string): { ok: boolean, question: string } {
+    if (Object.keys(instructions).length === 0 && instructions.constructor === Object) return { ok: true, question: question }
     let options = ExtractOptions(question)
-    if (options.length !== 1) return question
-    let mould = options[0]
-    let others = [mould, mould, mould]
+    if (options.length !== 1) return { ok: true, question: question }
+    let others = Array(3).fill(options[0])
 
-    let products: Partial<Dict> = {}
-    let counter = 0
-    do {
-        for (let k in instructions) {
-            instructions[k] = ParseInstruction(instructions[k])
-            products[k] = DoInstruction(instructions[k], source[k])
-        }
-        counter++
-        if (counter > 1000)
-            throw {
-                name: "AutoOptionsError",
-                message: "Fail to validate options after 1000 trials!"
-            }
-    } while (!ValidateProducts(products, source, validate))
+    let products: Product
+    try {
+        products = ExecInstructions(instructions, source, validate)
+    } catch {
+        return { ok: false, question: '' }
+    }
 
     for (let k in products) {
         for (let i = 0; i < 3; i++) {
@@ -210,6 +150,6 @@ function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict
         }
     }
 
-    return AppendOptions(question, others)
+    return  { ok: true, question: AppendOptions(question, others) }
 }
 globalThis.AutoOptions = AutoOptions

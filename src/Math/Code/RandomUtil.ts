@@ -64,6 +64,32 @@ function RndPickUnique<T>(items: T[], n: number): T[] {
 }
 globalThis.RndPickUnique = RndPickUnique
 
+
+
+
+/**
+ * @category RandomUtil
+ * @return n repeated item from items, where occurrences are balanced.
+ * ```typescript
+ * RndBalanced(['a','b'],6) // may return ['a','a','b','b','a','b']
+ * RndBalanced(['a','b'],5) // may return ['a','a','b','b','a']
+ * ```
+ */
+function RndBalanced<T>(items: T[], n: number): T[] {
+    let arr = []
+    for (let i = 0; i <= Math.ceil(n / items.length); i++) {
+        arr.push(...items)
+    }
+    arr.length = n
+    return RndShuffle(...arr)
+}
+globalThis.RndBalanced = RndBalanced
+
+
+
+
+
+
 /**
  * @category RandomUtil
  * @return a random male name

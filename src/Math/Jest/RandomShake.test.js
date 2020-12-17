@@ -12,25 +12,25 @@ test('Sieve', () => {
 
 
 
-test('RndShake:Integer', () => {
-    let arr = sample(() => RndShake(5, 3, 4));
-    expect(arr).toBeFlatWithin(2, 8);
-    expect(arr).toBeFlatIsInteger();
-    expect(arr).toBeFlatDistinct(6);
-    expect(arr).toAllHaveLength(4);
-    expect(arr).toBeUnique();
+test('RndShake', () => {
+    let arr = sample(() => RndShake('\\dfrac{2}{3}'));
+    expect(arr).toBeFlatIs(ParseDfrac);
+
+    arr = sample(() => RndShake('\\ge'));
+    expect(arr).toBeFlatIs(ParseIneqSign);
+
+    arr = sample(() => RndShake(5));
+    expect(arr).toBeFlatIs(IsInteger);
+
+    arr = sample(() => RndShake(0.5));
+    expect(arr).toBeFlatIs(IsProbability);
+
+    arr = sample(() => RndShake(1.5));
+    expect(arr).toBeFlatIs(IsNum);
+    expect(arr).toBeFlatIs(IsPositive);
 });
 
 
-
-test('RndShake:Float', () => {
-    let arr = sample(() => RndShake(2.5, 1, 4));
-    expect(arr).toBeFlatWithin(1.5, 3.5);
-    expect(arr).not.toBeFlatIsInteger();
-    expect(arr).toBeFlatDiverse();
-    expect(arr).toAllHaveLength(4);
-    expect(arr).toBeUnique();
-});
 
 
 
@@ -82,6 +82,13 @@ test('RndShakeN', () => {
 
 
     arr = sample(() => RndShakeN(100, 20));
+    expect(arr).toAllHaveLength(10);
+    expect(arr).toBeUnique();
+
+    arr = sample(() => RndShakeN(100));
+    expect(arr).toBeFlatWithin(90, 110);
+    expect(arr).toBeFlatIsInteger();
+    expect(arr).toBeFlatDistinct(20);
     expect(arr).toAllHaveLength(10);
     expect(arr).toBeUnique();
 });
@@ -139,6 +146,13 @@ test('RndShakeZ', () => {
     expect(arr).toBeFlatDistinct(30);
     expect(arr).toAllHaveLength(10);
     expect(arr).toBeUnique();
+
+    arr = sample(() => RndShakeZ(100));
+    expect(arr).toBeFlatWithin(90, 110);
+    expect(arr).toBeFlatIsInteger();
+    expect(arr).toBeFlatDistinct(20);
+    expect(arr).toAllHaveLength(10);
+    expect(arr).toBeUnique();
 });
 
 
@@ -177,6 +191,15 @@ test('RndShakeR', () => {
     expect(arr).not.toBeFlatIsInteger();
     expect(arr).toBeFlatDiverse();
     expect(arr).toBeUnique();
+
+    arr = sample(() => RndShakeR(100));
+    expect(arr).toBeFlatWithin(90, 110);
+    expect(arr).not.toBeFlatWithin(91, 109);
+    expect(arr).toAllHaveLength(10);
+    expect(arr).not.toBeFlatIsInteger();
+    expect(arr).toBeFlatDiverse();
+    expect(arr).toBeUnique();
+
 });
 
 
@@ -208,6 +231,14 @@ test('RndShakeProb', () => {
 
     arr = sample(() => RndShakeProb(1.1, 2));
     expect(arr).toAllHaveLength(0);
+
+    arr = sample(() => RndShakeProb(0.5));
+    expect(arr).toBeFlatWithin(0.2, 0.8);
+    expect(arr).not.toBeFlatWithin(0.21, 0.79);
+    expect(arr).toAllHaveLength(10);
+    expect(arr).not.toBeFlatIsInteger();
+    expect(arr).toBeFlatDiverse();
+    expect(arr).toBeUnique();
 });
 
 
@@ -234,5 +265,67 @@ test('RndShakeFrac', () => {
     expect(arr.flat()).toBeFlatIsInteger();
     expect(arr).toAllHaveLength(3);
     expect(arr.flat().map(x => x[0] / x[1])).not.toBeFlatIs(IsProbability);
+
+    arr = sample(() => RndShakeFrac([6, -5]));
+    arr0 = arr.map(x => x.map(y => y[0]));
+    arr1 = arr.map(x => x.map(y => y[1]));
+    expect(arr0).toBeFlatWithin(-11, -1);
+    expect(arr0).toBeFlatDistinct(11);
+    expect(arr1).toBeFlatWithin(2, 10);
+    expect(arr1).toBeFlatDistinct(9);
+    expect(arr.flat()).toBeFlatIsInteger();
+    expect(arr).toAllHaveLength(5);
+    expect(arr.flat().map(x => x[0] / x[1])).not.toBeFlatIs(IsProbability);
+});
+
+
+
+test('RndShakeDfrac', () => {
+    let arr = sample(() => RndShakeDfrac('\\dfrac{5}{6}', 4, 3));
+    let arr0 = arr.flat(2).map(x => ParseDfrac(x)[0]);
+    let arr1 = arr.flat(2).map(x => ParseDfrac(x)[1]);
+    expect(arr0).toBeFlatWithin(1, 9);
+    expect(arr0).toBeFlatDistinct(9);
+    expect(arr1).toBeFlatWithin(2, 10);
+    expect(arr1).toBeFlatDistinct(9);
+    expect(arr).toAllHaveLength(3);
+
+    arr = sample(() => RndShakeDfrac('-\\dfrac{6}{5}', 10, 3));
+    arr0 = arr.flat(2).map(x => ParseDfrac(x)[0]);
+    arr1 = arr.flat(2).map(x => ParseDfrac(x)[1]);
+    expect(arr0).toBeFlatWithin(-16, -1);
+    expect(arr0).toBeFlatDistinct(16);
+    expect(arr1).toBeFlatWithin(2, 15);
+    expect(arr1).toBeFlatDistinct(14);
+    expect(arr).toAllHaveLength(3);
+
+    arr = sample(() => RndShakeDfrac('\\dfrac{6}{-5}'));
+    arr0 = arr.flat(2).map(x => ParseDfrac(x)[0]);
+    arr1 = arr.flat(2).map(x => ParseDfrac(x)[1]);
+    expect(arr0).toBeFlatWithin(-11, -1);
+    expect(arr0).toBeFlatDistinct(11);
+    expect(arr1).toBeFlatWithin(2, 10);
+    expect(arr1).toBeFlatDistinct(9);
+    expect(arr).toAllHaveLength(5);
+});
+
+
+
+test('RndShakeIneq', () => {
+    let arr = sample(() => RndShakeIneq('\\ge', 6));
+    expect(arr).toBeFlatDistinct(2);
+    expect(arr).toBeFlatIncluded(['\\ge', '\\le']);
+    expect(arr).toAllHaveLength(6);
+    let nG = arr.flat().filter(x => x === '\\ge').length;
+    let nL = arr.flat().filter(x => x === '\\ge').length;
+    expect(nG).toBe(nL);
+
+    arr = sample(() => RndShakeIneq('\\lt', 19));
+    expect(arr).toBeFlatDistinct(2);
+    expect(arr).toBeFlatIncluded(['\\gt', '\\lt']);
+    expect(arr).toAllHaveLength(19);
+    nG = arr.flat().filter(x => x === '\\gt').length;
+    nL = arr.flat().filter(x => x === '\\lt').length;
+    expect(nG).toBeGreaterThan(nL);
 });
 

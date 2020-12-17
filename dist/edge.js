@@ -8095,6 +8095,18 @@ function IsInteger(...num) {
 globalThis.IsInteger = IsInteger;
 /**
  * @category Assertion
+ * @return check if number is a decimal (non-integer).
+ * ```typescript
+ * IsDecimal(0.5) // true
+ * IsDecimal(5) // false
+ * ```
+ */
+function IsDecimal(...num) {
+    return num.every(x => IsNum(x) && !IsInteger(x));
+}
+globalThis.IsDecimal = IsDecimal;
+/**
+ * @category Assertion
  * @return check if the number is an integer but not -1, 0 or 1.
  * ```typescript
  * IsCoeff(2) // true
@@ -8174,6 +8186,19 @@ function IsPositive(...num) {
 globalThis.IsPositive = IsPositive;
 /**
  * @category Assertion
+ * @return check if the number is negative.
+ * ```typescript
+ * IsNegative(-2) // true
+ * IsNegative(0) // false
+ * IsNegative(2) // false
+ * ```
+ */
+function IsNegative(...num) {
+    return num.every(x => IsNum(x) && x < 0);
+}
+globalThis.IsNegative = IsNegative;
+/**
+ * @category Assertion
  * @return check if the number is non-zero.
  * ```typescript
  * IsNonZero(2) // true
@@ -8234,90 +8259,24 @@ function PrintVariable(template, symbol, value) {
     }
     return template.replace(new RegExp("\\*" + symbol, 'g'), value);
 }
-function NegateVariable(item) {
-    if (typeof item === 'number')
-        return -item;
-    if (typeof item === 'string') {
-        if (item.charAt(0) === '-') {
-            return item.substring(1);
+class Instruction {
+    constructor(input) {
+        this.range = undefined;
+        this.assign = [];
+        if (Array.isArray(input)) {
+            this.assign = input;
         }
-        else {
-            return '-' + item;
-        }
-    }
-    throw 'Fail to negate input in AutoOptions!';
-}
-function defaultInstruction({ negate = false, shake = true, range = undefined, assign = [] }) {
-    return {
-        negate,
-        shake,
-        range,
-        assign
-    };
-}
-function ParseInstruction(input) {
-    if (Array.isArray(input)) {
-        return defaultInstruction({ assign: input });
-    }
-    if (typeof input === 'object' && input !== null) {
-        return defaultInstruction(input);
-    }
-    return defaultInstruction({});
-}
-function DoInstruction(instruction, source) {
-    let product = instruction.assign;
-    if (instruction.negate) {
-        let neg = NegateVariable(source);
-        product.push(...RndShuffle(source, neg, neg));
-    }
-    else if (instruction.shake) {
-        product.push(...ShakeVariable(source, instruction.range));
-    }
-    product.length = 3;
-    product = RndShuffle(...product);
-    return product;
-}
-function ShakeVariable(source, range) {
-    if (typeof source === 'string') {
-        // Fraction
-        if (ParseDfrac(source)) {
-            let f = ParseDfrac(source);
-            range !== null && range !== void 0 ? range : (range = 5);
-            return RndShakeFrac(f, range, 3).map(x => Dfrac(...x));
-        }
-        // Inequal Sign
-        if (ParseIneqSign(source)) {
-            let [g, e] = ParseIneqSign(source);
-            let others = [
-                IneqSign(g, e)[0],
-                IneqSign(!g, e)[0],
-                IneqSign(!g, e)[0],
-            ];
-            return RndShuffle(...others);
-        }
-        if (Number(source)) {
-            source = Number(source);
+        else if (typeof input === 'object' && input !== null) {
+            Object.assign(this, input);
         }
     }
-    if (typeof source === 'number') {
-        // Integer
-        if (IsInteger(source)) {
-            range !== null && range !== void 0 ? range : (range = Max(5, Abs(source * 0.1)));
-            return RndShakeN(source, range, 3);
-        }
-        // Probability
-        if (IsProbability(source)) {
-            range !== null && range !== void 0 ? range : (range = 0.3);
-            return RndShakeProb(source, range, 3);
-        }
-        // Decimal
-        if (IsNum(source)) {
-            range !== null && range !== void 0 ? range : (range = Max(5, Abs(source * 0.1)));
-            return RndShakeR(source, range, 3);
-        }
+    do(source) {
+        let product = Clone(this.assign);
+        product.push(...RndShake(source, this.range, 3));
+        product.length = 3;
+        product = RndShuffle(...product);
+        return product;
     }
-    console.error('Fail to shake input in AutoOptions! Returning original value: ' + source);
-    return [source, source, source];
 }
 function ValidateProducts(products, source, validate) {
     if (validate === "")
@@ -8325,7 +8284,7 @@ function ValidateProducts(products, source, validate) {
     validate = validate.replace('\n', ' ');
     let OK = [];
     for (let index = 0; index < 3; index++) {
-        let clone = JSON.parse(JSON.stringify(source));
+        let clone = Clone(source);
         for (let key in products) {
             clone[key] = products[key][index];
         }
@@ -8343,32 +8302,48 @@ function ValidateProducts(products, source, validate) {
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
+function ExecInstructions(instructions, source, validate) {
+    let products = {};
+    for (let k in instructions) {
+        let instr = new Instruction(instructions[k]);
+        products[k] = instr.do(source[k]);
+    }
+    let valid = ValidateProducts(products, source, validate);
+    if (!valid) {
+        throw 'validation fail';
+    }
+    return products;
+}
+globalThis.ExecInstructions = ExecInstructions;
+/**
+* @category AutoOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>*x</li></ul>'
+* AutoOptions(question,{x:3})
+* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
+* ```
+*/
 function AutoOptions(instructions, question, source, validate) {
+    if (Object.keys(instructions).length === 0 && instructions.constructor === Object)
+        return { ok: true, question: question };
     let options = ExtractOptions(question);
     if (options.length !== 1)
-        return question;
-    let mould = options[0];
-    let others = [mould, mould, mould];
-    let products = {};
-    let counter = 0;
-    do {
-        for (let k in instructions) {
-            instructions[k] = ParseInstruction(instructions[k]);
-            products[k] = DoInstruction(instructions[k], source[k]);
-        }
-        counter++;
-        if (counter > 1000)
-            throw {
-                name: "AutoOptionsError",
-                message: "Fail to validate options after 1000 trials!"
-            };
-    } while (!ValidateProducts(products, source, validate));
+        return { ok: true, question: question };
+    let others = Array(3).fill(options[0]);
+    let products;
+    try {
+        products = ExecInstructions(instructions, source, validate);
+    }
+    catch (_a) {
+        return { ok: false, question: '' };
+    }
     for (let k in products) {
         for (let i = 0; i < 3; i++) {
             others[i] = PrintVariable(others[i], k, products[k][i]);
         }
     }
-    return AppendOptions(question, others);
+    return { ok: true, question: AppendOptions(question, others) };
 }
 globalThis.AutoOptions = AutoOptions;
 
@@ -11407,23 +11382,47 @@ module.exports = Array.isArray || function (arr) {
 /**
  * @category RandomShake
  * @param n - default to 10
- * @return an unique array of n nearby values, around anchor, within range inclusive.
+ * @return an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
  * ```typescript
  * RndShake(10,5,3)
- * // equivalent to [10+RndZ(1,5), 10+RndZ(1,5), 10+RndZ(1,5)]
+ * // equivalent to RndShakeN(10,5,3)
  * RndShake(10.5,5,2)
- * // equivalent to [10.5+RndR(0,5)*RndU(), 10.5+RndR(0,5)*RndU()]
+ * // equivalent to RndShakeR(10.5,5,2)
+ * RndShake(0.5,0.1,2)
+ * // equivalent to RndShakeProb(0.5,0.1,3)
  * ```
  */
 function RndShake(anchor, range, n) {
-    if (IsInteger(anchor)) {
-        n !== null && n !== void 0 ? n : (n = 2 * range);
-        return chance.unique(() => anchor + RndZ(1, range), n);
+    if (typeof anchor === 'string') {
+        // Fraction
+        if (ParseDfrac(anchor)) {
+            return RndShakeDfrac(anchor, range, n);
+        }
+        // Inequal Sign
+        if (ParseIneqSign(anchor)) {
+            return RndShakeIneq(anchor, n);
+        }
+        // else convert to number
+        if (Number(anchor)) {
+            anchor = Number(anchor);
+        }
     }
-    else {
-        n !== null && n !== void 0 ? n : (n = 10);
-        return chance.unique(() => anchor + (RndR(0, range) * RndU()), n);
+    if (typeof anchor === 'number' && IsNum(anchor)) {
+        // Integer
+        if (IsInteger(anchor)) {
+            return RndShakeN(anchor, range, n);
+        }
+        // Probability
+        if (IsProbability(anchor)) {
+            return RndShakeProb(anchor, range, n);
+        }
+        // Decimal
+        if (IsNum(anchor)) {
+            return RndShakeR(anchor, range, n);
+        }
     }
+    console.error('Fail to RndShake: ' + anchor);
+    return [];
 }
 globalThis.RndShake = RndShake;
 /**
@@ -11452,11 +11451,12 @@ globalThis.Sieve = Sieve;
 /**
  * @category RandomShake
  * @param anchor - must be integer
+ * @param range - default Max(5, anchor * 10%)
  * @param n - default to 10
- * @return an unique array of n nearby same-sign integers around anchor, within range inclusive.
+ * @return nearby same-signed integers
  * ```typescript
  * RndShakeN(5,2,3)
- * // return 3 unique integers from [3,4,6,7]
+ * // return 3 unique integers from [3,4,6,7], e.g. [3,7,6]
  * RndShakeN(2,4,3)
  * // return 3 unique integers from [1,3,4,5,6]
  * RndShakeN(-2,4,3)
@@ -11466,13 +11466,13 @@ globalThis.Sieve = Sieve;
  * ```
  */
 function RndShakeN(anchor, range, n) {
+    range !== null && range !== void 0 ? range : (range = Max(5, Abs(anchor * 0.1)));
     if (anchor === 0) {
         n !== null && n !== void 0 ? n : (n = Min(range, 10));
         return chance.unique(() => RndN(1, range), n);
     }
     if (!IsInteger(anchor))
         return [];
-    // if (anchor === 0) return []
     let a = Abs(anchor);
     let max = a + range;
     let min = Max(a - range, 1);
@@ -11487,8 +11487,9 @@ globalThis.RndShakeN = RndShakeN;
 /**
  * @category RandomShake
  * @param anchor - must be integer
+ * @param range - default Max(5, anchor * 10%)
  * @param n - default to 10
- * @return an unique array of n nearby integers around anchor, within range inclusive.
+ * @return nearby integers
  * ```typescript
  * RndShakeZ(5,2,3)
  * // return 3 unique integers from [3,4,6,7]
@@ -11501,6 +11502,7 @@ globalThis.RndShakeN = RndShakeN;
  * ```
  */
 function RndShakeZ(anchor, range, n) {
+    range !== null && range !== void 0 ? range : (range = Max(5, Abs(anchor * 0.1)));
     if (!IsInteger(anchor))
         return [];
     n !== null && n !== void 0 ? n : (n = Min(10, 2 * range));
@@ -11510,8 +11512,9 @@ globalThis.RndShakeZ = RndShakeZ;
 /**
  * @category RandomShake
  * @param anchor - can be any real number
+ * @param range - default Max(1, anchor * 10%)
  * @param n - default to 10
- * @return an unique array of n nearby same-sign real number around anchor, within range inclusive.
+ * @return nearby same-signed real number
  * ```typescript
  * RndShakeR(3.5,2,3)
  * // return 3 unique values from [1.5,5.5]
@@ -11524,6 +11527,7 @@ globalThis.RndShakeZ = RndShakeZ;
  * ```
  */
 function RndShakeR(anchor, range, n) {
+    range !== null && range !== void 0 ? range : (range = Max(1, Abs(anchor * 0.1)));
     n !== null && n !== void 0 ? n : (n = 10);
     let func = Sieve(() => anchor + RndR(0, range) * RndU(), x => x * (anchor + Number.EPSILON) >= Number.EPSILON);
     return chance.unique(func, n);
@@ -11532,8 +11536,9 @@ globalThis.RndShakeR = RndShakeR;
 /**
  * @category RandomShake
  * @param anchor - must be a probability
+ * @param range - default to 0.3
  * @param n - default to 10
- * @return an unique array of n nearby probability around anchor, within range inclusive.
+ * @return nearby probability
  * ```typescript
  * RndShakeProb(0.8,0.1,3)
  * // return 3 unique values from [0.7,0.9]
@@ -11548,6 +11553,7 @@ globalThis.RndShakeR = RndShakeR;
 function RndShakeProb(anchor, range, n) {
     if (anchor < 0 || anchor > 1)
         return [];
+    range !== null && range !== void 0 ? range : (range = 0.3);
     n !== null && n !== void 0 ? n : (n = 10);
     let func = Sieve(() => anchor + RndR(0, range) * RndU(), x => x > 0 && x < 1);
     return chance.unique(func, n);
@@ -11558,12 +11564,12 @@ globalThis.RndShakeProb = RndShakeProb;
  * @param anchor - must be a fraction
  * @param range - default to 5
  * @param n - default to 10
- * @return an unique array of n nearby same-sign fraction around anchor, by shaking the numerator and denominator (simplest) within range. If input IsProbability, outcome too.
+ * @return nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```typescript
  * RndShakeFrac([5,6],3,3)
- * // return 3 unique fractions from [5+-3,6+-3]
+ * // return 3 unique fractions around [5,6] within range 3
  * RndShakeFrac([6,-5],10,3)
- * // return 3 unique fractions from [-6+-4,5+-4]
+ * // return 3 unique fractions around [6,-5] within range 10
  * ```
  */
 function RndShakeFrac(anchor, range, n) {
@@ -11595,6 +11601,52 @@ function RndShakeFrac(anchor, range, n) {
     });
 }
 globalThis.RndShakeFrac = RndShakeFrac;
+/**
+ * @category RandomShake
+ * @param anchor - must be a string of Dfrac
+ * @param range - default to 5
+ * @param n - default to 10
+ * @return nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+ * ```typescript
+ * RndShakeDfrac('\\dfrac{5}{6}',3,3)
+ * // return 3 unique Dfrac around [5,6] within range 3
+ * RndShakeDfrac('-\\dfrac{6}{5}',10,3)
+ * // return 3 unique Dfrac around [6,-5] within range 10
+ * ```
+ */
+function RndShakeDfrac(anchor, range, n) {
+    if (typeof anchor !== 'string')
+        return [];
+    let f = ParseDfrac(anchor);
+    if (!f)
+        return [];
+    range !== null && range !== void 0 ? range : (range = 5);
+    n !== null && n !== void 0 ? n : (n = Min(10, range));
+    return RndShakeFrac(f, range, n).map(x => Dfrac(...x));
+}
+globalThis.RndShakeDfrac = RndShakeDfrac;
+/**
+ * @category RandomShake
+ * @param anchor - must be a string of ineq sign
+ * @param n - default to 3
+ * @return an array of n ineq signs, balanced in number.
+ * ```typescript
+ * RndShakeIneq('\\ge',6)
+ * // may return ['\\ge','\\le','\\ge','\\le','\\le','\\ge']
+ * RndShakeIneq('\\ge',5)
+ * // may return ['\\ge','\\le','\\le','\\le','\\ge']
+ * ```
+ */
+function RndShakeIneq(anchor, n) {
+    if (typeof anchor !== 'string')
+        return [];
+    let f = ParseIneqSign(anchor);
+    if (!f)
+        return [];
+    n !== null && n !== void 0 ? n : (n = 3);
+    return RndBalanced(IneqSign(...f).reverse(), n);
+}
+globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
@@ -11656,6 +11708,23 @@ function RndPickUnique(items, n) {
     return chance.unique(() => RndPick(...items), n);
 }
 globalThis.RndPickUnique = RndPickUnique;
+/**
+ * @category RandomUtil
+ * @return n repeated item from items, where occurrences are balanced.
+ * ```typescript
+ * RndBalanced(['a','b'],6) // may return ['a','a','b','b','a','b']
+ * RndBalanced(['a','b'],5) // may return ['a','a','b','b','a']
+ * ```
+ */
+function RndBalanced(items, n) {
+    let arr = [];
+    for (let i = 0; i <= Math.ceil(n / items.length); i++) {
+        arr.push(...items);
+    }
+    arr.length = n;
+    return RndShuffle(...arr);
+}
+globalThis.RndBalanced = RndBalanced;
 /**
  * @category RandomUtil
  * @return a random male name
@@ -12465,8 +12534,8 @@ globalThis.HCF = HCF;
  * @param nums - Negative integers will be treated as positive.
  * @return The LCM of nums.
  * ```typescript
- * LCM(2,3) // return 6
- * LCM(2,3,5) // return 30
+ * LCM(2,3) // 6
+ * LCM(2,3,5) // 30
  * LCM(0.5,3) // NaN
  * LCM(0,3) // NaN
  * ```
@@ -12484,6 +12553,18 @@ function LCM(...nums) {
     return nums.reduce((a, v) => _LCM(a, v));
 }
 globalThis.LCM = LCM;
+/**
+ * @category Utility
+ * @return a clone of the object
+ * ```typescript
+ * Clone([1,2,3]) // [1,2,3]
+ * Clone({x:1}) // {x:1}
+ * ```
+ */
+function Clone(object) {
+    return JSON.parse(JSON.stringify(object));
+}
+globalThis.Clone = Clone;
 
 
 /***/ }),

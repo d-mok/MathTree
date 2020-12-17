@@ -33,8 +33,8 @@ globalThis.HCF = HCF
  * @param nums - Negative integers will be treated as positive.
  * @return The LCM of nums.
  * ```typescript
- * LCM(2,3) // return 6
- * LCM(2,3,5) // return 30
+ * LCM(2,3) // 6
+ * LCM(2,3,5) // 30
  * LCM(0.5,3) // NaN
  * LCM(0,3) // NaN
  * ```
@@ -50,3 +50,19 @@ function LCM(...nums: number[]): number {
     return nums.reduce((a, v) => _LCM(a, v));
 }
 globalThis.LCM = LCM
+
+
+
+
+/**
+ * @category Utility
+ * @return a clone of the object
+ * ```typescript
+ * Clone([1,2,3]) // [1,2,3]
+ * Clone({x:1}) // {x:1}
+ * ```
+ */
+function Clone<T>(object: T): T {
+    return JSON.parse(JSON.stringify(object))
+}
+globalThis.Clone = Clone

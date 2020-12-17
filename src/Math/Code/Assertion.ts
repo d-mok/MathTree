@@ -29,6 +29,24 @@ function IsInteger(...num: number[]): boolean {
 globalThis.IsInteger = IsInteger
 
 
+
+/**
+ * @category Assertion
+ * @return check if number is a decimal (non-integer).
+ * ```typescript
+ * IsDecimal(0.5) // true
+ * IsDecimal(5) // false
+ * ```
+ */
+function IsDecimal(...num: number[]): boolean {
+    return num.every(x => IsNum(x) && !IsInteger(x));
+}
+globalThis.IsDecimal = IsDecimal
+
+
+
+
+
 /**
  * @category Assertion
  * @return check if the number is an integer but not -1, 0 or 1.
@@ -124,6 +142,24 @@ function IsPositive(...num: number[]): boolean {
     return num.every(x => IsNum(x) && x > 0);
 }
 globalThis.IsPositive = IsPositive
+
+
+
+/**
+ * @category Assertion
+ * @return check if the number is negative.
+ * ```typescript
+ * IsNegative(-2) // true
+ * IsNegative(0) // false
+ * IsNegative(2) // false
+ * ```
+ */
+function IsNegative(...num: number[]): boolean {
+    return num.every(x => IsNum(x) && x < 0);
+}
+globalThis.IsNegative = IsNegative
+
+
 
 
 /**

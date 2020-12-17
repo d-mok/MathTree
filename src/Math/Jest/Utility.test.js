@@ -19,3 +19,8 @@ test('LCM', () => {
     expect(LCM(10, 2.5)).toBeNaN();
     expect(LCM(0, 3)).toBeNaN();
 });
+
+test('Clone', () => {
+    expect(Clone([1, 2, 3])).toEqual([1, 2, 3]);
+    expect(Clone({ x: 1 })).toEqual({ x: 1 });
+});

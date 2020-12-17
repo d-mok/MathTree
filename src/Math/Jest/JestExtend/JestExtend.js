@@ -156,12 +156,12 @@ expect.extend({
     const pass = received.flat().every(x => allowed.includes(x));
     if (pass) {
       return {
-        message: () => `expected ${received} not to all have legnth ${length}`,
+        message: () => `expected ${received} not to be included in ${allowed}`,
         pass: true,
       };
     } else {
       return {
-        message: () => `expected ${received} to all have legnth ${length}`,
+        message: () => `expected ${received} to be included in ${allowed}`,
         pass: false,
       };
     }

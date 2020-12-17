@@ -34,12 +34,34 @@ test('RndPickUnique', () => {
     expect(arr).toBeFlatDistinct(3);
     expect(arr).toBeUnique();
 
-    arr = sample(() => RndPickUnique(["a", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"], 2));
+    arr = sample(() => RndPickUnique(["a", "b", "b", "b"], 2));
     expect(arr).toBeFlatIncluded(["a", "b"]);
     expect(arr).toAllHaveLength(2);
     expect(arr).toBeFlatDistinct(2);
     expect(arr).toBeUnique();
 });
+
+
+
+
+test('RndBalanced', () => {
+    let arr = sample(() => RndBalanced(['a', 'b'], 6));
+    expect(arr).toBeFlatDistinct(2);
+    expect(arr).toBeFlatIncluded(['a', 'b']);
+    expect(arr).toAllHaveLength(6);
+    let nG = arr.flat().filter(x => x === 'a').length;
+    let nL = arr.flat().filter(x => x === 'b').length;
+    expect(nG).toBe(nL);
+
+    arr = sample(() => RndBalanced(['a', 'b'], 19));
+    expect(arr).toBeFlatDistinct(2);
+    expect(arr).toBeFlatIncluded(['a', 'b']);
+    expect(arr).toAllHaveLength(19);
+    nG = arr.flat().filter(x => x === 'a').length;
+    nL = arr.flat().filter(x => x === 'b').length;
+    expect(nG).toBeGreaterThan(nL);
+});
+
 
 
 

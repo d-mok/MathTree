@@ -33,6 +33,15 @@ test('IsInteger', () => {
 });
 
 
+
+test('IsDecimal', () => {
+    const T = [0.5, 1.12, -55.6];
+    const F = [0, 13, -5, -1045372, 4721];
+    testAssertion(IsDecimal, T, F);
+});
+
+
+
 test('IsCoeff', () => {
     const T = [2, 3, -2, -5];
     const F = [-1, 0, 1, 1.23, -0.5];
@@ -81,6 +90,17 @@ test('IsPositive', () => {
     const F = [0, -1, -4.5];
     testAssertion(IsPositive, T, F);
 });
+
+
+
+test('IsNegative', () => {
+    const T = [-4, -1, -1.4, -123, -0.001, -0.1, -0.00000001];
+    const F = [0, 1, 4.5];
+    testAssertion(IsNegative, T, F);
+});
+
+
+
 
 
 
