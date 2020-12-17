@@ -75,15 +75,27 @@ globalThis.ExecInstructions = ExecInstructions
 function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict, validate: string): string {
     if (IsEmptyObject(instructions)) return question
     let options = ExtractHTMLTag(question, 'li')
-    if (options.length !== 1) return question
-    let others = Array(3).fill(options[0])
-
     let products = ExecInstructions(instructions, source, validate)
-    for (let k in products) {
-        for (let i = 0; i < 3; i++) {
-            others[i] = PrintVariable(others[i], k, products[k][i])
+
+    if (options.length === 1) {
+        let others = Array(3).fill(options[0])
+        for (let k in products) {
+            for (let i = 0; i < 3; i++) {
+                others[i] = PrintVariable(others[i], k, products[k][i])
+            }
         }
+        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
     }
-    return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+
+    if (options.length === 2) {
+        let others = [options[0], options[1]]
+        for (let k in products) {
+            others[0] = PrintVariable(others[0], k, products[k][0])
+            others[1] = PrintVariable(others[1], k, products[k][0])
+        }
+        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+    }
+
+    return question
 }
 globalThis.AutoOptions = AutoOptions
