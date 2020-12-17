@@ -181,8 +181,8 @@ globalThis.RndShakeR = RndShakeR
 /**
  * @category RandomShake
  * @param anchor - must be a probability
- * @param range - default to 0.3
- * @param n - default to 5
+ * @param range - default to 0.5
+ * @param n - default to 3
  * @return nearby probability with same precision
  * ```typescript
  * RndShakeProb(0.8,0.1,3) 
@@ -197,8 +197,8 @@ globalThis.RndShakeR = RndShakeR
  */
 function RndShakeProb(anchor: number, range?: number, n?: number): number[] {
     if (anchor < 0 || anchor > 1) return []
-    range ??= 0.3
-    n ??= 5
+    range ??= 0.5
+    n ??= 3
     const dp = Max(DecimalPlace(anchor), 1)
     let func = Sieve(
         () => Fix(anchor + RndR(0, range!) * RndU(), dp),

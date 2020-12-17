@@ -232,10 +232,10 @@ test('RndShakeProb', () => {
     arr = sample(() => RndShakeProb(1.1, 2));
     expect(arr).toAllHaveLength(0);
 
-    arr = sample(() => RndShakeProb(0.5001));
-    expect(arr).toBeFlatWithin(0.2001, 0.8001);
-    expect(arr).not.toBeFlatWithin(0.21, 0.79);
-    expect(arr).toAllHaveLength(5);
+    arr = sample(() => RndShakeProb(0.2));
+    expect(arr).toBeFlatWithin(0, 0.7);
+    expect(arr).not.toBeFlatWithin(0.01, 0.69);
+    expect(arr).toAllHaveLength(3);
     expect(arr).not.toBeFlatIsInteger();
     // expect(arr).toBeFlatDiverse();
     expect(arr).toBeUnique();
