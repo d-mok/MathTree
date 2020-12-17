@@ -8798,9 +8798,7 @@ function ExtractHTMLTag(html, tag) {
     let startTag = '<' + tag + '>';
     let endTag = '</' + tag + '>';
     let r = startTag + '[\\s\\S]*?' + endTag;
-    console.log(r);
     let nodes = html.match(new RegExp(r, 'g'));
-    console.log(nodes);
     if (nodes === null)
         return [];
     return nodes.map(x => x.replace(startTag, '').replace(endTag, ''));
