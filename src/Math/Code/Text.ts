@@ -156,3 +156,16 @@ function ParseDfrac(dfrac: string): Fraction | undefined {
 }
 globalThis.ParseDfrac = ParseDfrac
 
+
+/**
+ * @category Text
+ * @return convert index katex to surd
+ * ```typescript
+ * IndexToSurd('{x}^{0.5}') // '\\sqrt{x}'
+ * IndexToSurd('{(y)}^{0.5}') // '\\sqrt{y}'
+ * ```
+ */
+function IndexToSurd(text: string) {
+    return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}")
+}
+globalThis.IndexToSurd = IndexToSurd

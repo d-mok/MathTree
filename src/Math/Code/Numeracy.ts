@@ -207,6 +207,25 @@ function SigFig(value: number): number {
 globalThis.SigFig = SigFig
 
 
+
+/**
+ * @category Numeracy
+ * @return count the decimal places
+ * ```typescript
+ * DecimalPlace(1.234) // 3
+ * DecimalPlace(1200) // 0
+ * DecimalPlace(0.00123) // 5
+ * DecimalPlace(123.456789) // 6
+ * ```
+ */
+function DecimalPlace(value: number): number {
+    if (IsInteger(value)) return 0
+    return value.toString().split(".")[1]?.length ?? 0
+};
+globalThis.DecimalPlace = DecimalPlace
+
+
+
 /**
  * @category Numeracy
  * @return the order of magnitude

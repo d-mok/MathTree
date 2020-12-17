@@ -146,7 +146,7 @@ globalThis.RndShakeZ = RndShakeZ
  * @category RandomShake
  * @param anchor - can be any real number
  * @param range - default Max(1, anchor * 10%)
- * @param n - default to 10
+ * @param n - default to 5
  * @return nearby same-signed real number
  * ```typescript
  * RndShakeR(3.5,2,3) 
@@ -161,12 +161,14 @@ globalThis.RndShakeZ = RndShakeZ
  */
 function RndShakeR(anchor: number, range?: number, n?: number): number[] {
     range ??= Max(1, Abs(anchor * 0.1))
-    n ??= 10
+    n ??= 5
+    const dp = Max(DecimalPlace(anchor), 1)
     let func = Sieve(
-        () => anchor + RndR(0, range!) * RndU(),
+        () => Fix(anchor + RndR(0, range!) * RndU(), dp),
         x => x * (anchor + Number.EPSILON) >= Number.EPSILON
     )
     return chance.unique(func, n)
+
 }
 globalThis.RndShakeR = RndShakeR
 
@@ -177,7 +179,7 @@ globalThis.RndShakeR = RndShakeR
  * @category RandomShake
  * @param anchor - must be a probability
  * @param range - default to 0.3
- * @param n - default to 10
+ * @param n - default to 5
  * @return nearby probability
  * ```typescript
  * RndShakeProb(0.8,0.1,3) 
@@ -193,9 +195,10 @@ globalThis.RndShakeR = RndShakeR
 function RndShakeProb(anchor: number, range?: number, n?: number): number[] {
     if (anchor < 0 || anchor > 1) return []
     range ??= 0.3
-    n ??= 10
+    n ??= 5
+    const dp = Max(DecimalPlace(anchor), 1)
     let func = Sieve(
-        () => anchor + RndR(0, range!) * RndU(),
+        () => Fix(anchor + RndR(0, range!) * RndU(), dp),
         x => x > 0 && x < 1
     )
     return chance.unique(func, n)

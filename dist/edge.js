@@ -9143,6 +9143,24 @@ function SigFig(value) {
 globalThis.SigFig = SigFig;
 /**
  * @category Numeracy
+ * @return count the decimal places
+ * ```typescript
+ * DecimalPlace(1.234) // 3
+ * DecimalPlace(1200) // 0
+ * DecimalPlace(0.00123) // 5
+ * DecimalPlace(123.456789) // 6
+ * ```
+ */
+function DecimalPlace(value) {
+    var _a, _b;
+    if (IsInteger(value))
+        return 0;
+    return (_b = (_a = value.toString().split(".")[1]) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
+}
+;
+globalThis.DecimalPlace = DecimalPlace;
+/**
+ * @category Numeracy
  * @return the order of magnitude
  * ```typescript
  * Magnitude(1) // 0
@@ -11559,7 +11577,7 @@ globalThis.RndShakeZ = RndShakeZ;
  * @category RandomShake
  * @param anchor - can be any real number
  * @param range - default Max(1, anchor * 10%)
- * @param n - default to 10
+ * @param n - default to 5
  * @return nearby same-signed real number
  * ```typescript
  * RndShakeR(3.5,2,3)
@@ -11574,8 +11592,9 @@ globalThis.RndShakeZ = RndShakeZ;
  */
 function RndShakeR(anchor, range, n) {
     range !== null && range !== void 0 ? range : (range = Max(1, Abs(anchor * 0.1)));
-    n !== null && n !== void 0 ? n : (n = 10);
-    let func = Sieve(() => anchor + RndR(0, range) * RndU(), x => x * (anchor + Number.EPSILON) >= Number.EPSILON);
+    n !== null && n !== void 0 ? n : (n = 5);
+    const dp = Max(DecimalPlace(anchor), 1);
+    let func = Sieve(() => Fix(anchor + RndR(0, range) * RndU(), dp), x => x * (anchor + Number.EPSILON) >= Number.EPSILON);
     return chance.unique(func, n);
 }
 globalThis.RndShakeR = RndShakeR;
@@ -11583,7 +11602,7 @@ globalThis.RndShakeR = RndShakeR;
  * @category RandomShake
  * @param anchor - must be a probability
  * @param range - default to 0.3
- * @param n - default to 10
+ * @param n - default to 5
  * @return nearby probability
  * ```typescript
  * RndShakeProb(0.8,0.1,3)
@@ -11600,8 +11619,9 @@ function RndShakeProb(anchor, range, n) {
     if (anchor < 0 || anchor > 1)
         return [];
     range !== null && range !== void 0 ? range : (range = 0.3);
-    n !== null && n !== void 0 ? n : (n = 10);
-    let func = Sieve(() => anchor + RndR(0, range) * RndU(), x => x > 0 && x < 1);
+    n !== null && n !== void 0 ? n : (n = 5);
+    const dp = Max(DecimalPlace(anchor), 1);
+    let func = Sieve(() => Fix(anchor + RndR(0, range) * RndU(), dp), x => x > 0 && x < 1);
     return chance.unique(func, n);
 }
 globalThis.RndShakeProb = RndShakeProb;
@@ -12234,6 +12254,18 @@ function ParseDfrac(dfrac) {
     return [p, q];
 }
 globalThis.ParseDfrac = ParseDfrac;
+/**
+ * @category Text
+ * @return convert index katex to surd
+ * ```typescript
+ * IndexToSurd('{x}^{0.5}') // '\\sqrt{x}'
+ * IndexToSurd('{(y)}^{0.5}') // '\\sqrt{y}'
+ * ```
+ */
+function IndexToSurd(text) {
+    return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}");
+}
+globalThis.IndexToSurd = IndexToSurd;
 
 
 /***/ }),

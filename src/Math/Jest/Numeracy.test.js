@@ -273,6 +273,25 @@ test('SigFig', () => {
 });
 
 
+test('DecimalPlace', () => {
+    expect(DecimalPlace(1)).toBe(0);
+    expect(DecimalPlace(12)).toBe(0);
+    expect(DecimalPlace(123)).toBe(0);
+    expect(DecimalPlace(123.4)).toBe(1);
+    expect(DecimalPlace(123.45)).toBe(2);
+    expect(DecimalPlace(123.456)).toBe(3);
+    expect(DecimalPlace(0.123)).toBe(3);
+    expect(DecimalPlace(0.00123)).toBe(5);
+    expect(DecimalPlace(0.00001230123)).toBe(11);
+    expect(DecimalPlace(10)).toBe(0);
+    expect(DecimalPlace(1200)).toBe(0);
+    expect(DecimalPlace(1200.0001)).toBe(4);
+    expect(DecimalPlace(1200.0001000)).toBe(4);
+    expect(DecimalPlace(-1200.0001)).toBe(4);
+});
+
+
+
 test('Magnitude', () => {
     expect(Magnitude(1)).toBe(0);
     expect(Magnitude(1.001)).toBe(0);

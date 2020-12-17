@@ -64,3 +64,12 @@ test('ParseDfrac', () => {
     expect(ParseDfrac('\\d{1}{2}')).toBeUndefined();
 });
 
+
+
+
+test('IndexToSurd', () => {
+    expect(IndexToSurd('{x}^{0.5}')).toBe('\\sqrt{x}');
+    expect(IndexToSurd('{(y)}^{0.5}')).toBe('\\sqrt{y}');
+    expect(IndexToSurd('abc')).toBe('abc');
+});
+
