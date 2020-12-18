@@ -136,6 +136,12 @@
 			<a href="globals.html#autooptions" class="tsd-kind-icon">Auto<wbr>Options</a>
 		</li>
 		<li class=" tsd-kind-function">
+			<a href="globals.html#blur" class="tsd-kind-icon">Blur</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="globals.html#blurs" class="tsd-kind-icon">Blurs</a>
+		</li>
+		<li class=" tsd-kind-function">
 			<a href="globals.html#ceil" class="tsd-kind-icon">Ceil</a>
 		</li>
 		<li class=" tsd-kind-function tsd-has-type-parameter">
@@ -656,6 +662,8 @@
 						<h3>Numeracy</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function"><a href="globals.html#abs" class="tsd-kind-icon">Abs</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#blur" class="tsd-kind-icon">Blur</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#blurs" class="tsd-kind-icon">Blurs</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#ceil" class="tsd-kind-icon">Ceil</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#decimalplace" class="tsd-kind-icon">Decimal<wbr>Place</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#fix" class="tsd-kind-icon">Fix</a></li>
@@ -2406,6 +2414,62 @@ PrintVariable(html,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="h
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="blur" class="tsd-anchor"></a>
+				<h3>Blur</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Blur<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, accuracy<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">value</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>value: <span class="tsd-signature-type">any</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> accuracy: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 12</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">value</span></h4>
+						<p>correct for floating point error</p>
+						<pre><code class="language-typescript">Blur(<span class="hljs-number">0.1</span>+<span class="hljs-number">0.2</span>) <span class="hljs-comment">// 0.3</span>
+Blur(<span class="hljs-number">0.81</span>-<span class="hljs-number">1</span>) <span class="hljs-comment">// -0.19</span>
+Blur(<span class="hljs-number">1.1</span>**<span class="hljs-number">2</span>) <span class="hljs-comment">// 1.21</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="blurs" class="tsd-anchor"></a>
+				<h3>Blurs</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Blurs<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, accuracy<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">values</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>values: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> accuracy: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 12</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">values</span></h4>
+						<p>correct for floating point error</p>
+						<pre><code class="language-typescript">BlurAll([<span class="hljs-number">0.1</span>+<span class="hljs-number">0.2</span>,<span class="hljs-number">0.81</span>-<span class="hljs-number">1</span>]) <span class="hljs-comment">// [0.3,-0.19]</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
 				<a name="ceil" class="tsd-anchor"></a>
 				<h3>Ceil</h3>
 				<ul class="tsd-signatures tsd-kind-function">
@@ -3678,13 +3742,13 @@ RndShakeN(<span class="hljs-number">0</span>,<span class="hljs-number">5</span>,
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> range: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>default to 0.3</p>
+									<p>default to 0.5</p>
 								</div>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> n: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>default to 5</p>
+									<p>default to 3</p>
 								</div>
 							</li>
 						</ul>
