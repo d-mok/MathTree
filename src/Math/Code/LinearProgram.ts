@@ -10,7 +10,11 @@
  * // vertexMin: info about the minimum vertex
  * ```
  */
-function LinearProgram(constraints: Constraint[], field: Field, bound = [100, 100]): {
+function LinearProgram(
+    constraints: Constraint[],
+    field: Field,
+    bound = [100, 100]
+): {
     vertex: Point[],
     integral: Point[],
     vertexMin: Optimum,
@@ -19,15 +23,17 @@ function LinearProgram(constraints: Constraint[], field: Field, bound = [100, 10
     integralMax: Optimum
 } {
     function fieldAt(p: Point): number {
-        return field[0] * p[0] + field[1] * p[1] + field[2];
+        const [a, b, c] = field
+        const [x, y] = p
+        return a * x + b * y + c
     }
 
     function isConstrained(constraints: Constraint[], point: Point, strict = true): boolean {
+        const [x, y] = point
         return constraints.every((constraint) => {
             let [a, b, s, c] = constraint;
-            let P = a * point[0] + b * point[1] - c;
-            let greater = s.includes(">") || s.includes("g");
-            let eq = s.includes("=") || s.includes("e");
+            let P = a * x + b * y - c;
+            let [greater, eq] = ParseIneqSign(s)!
             if (strict) {
                 if (greater && eq) return P >= 0;
                 if (greater && !eq) return P > 0;
@@ -37,17 +43,19 @@ function LinearProgram(constraints: Constraint[], field: Field, bound = [100, 10
                 if (greater) return P >= 0;
                 if (!greater) return P <= 0;
             }
-
         });
     }
 
-    function feasiblePolygon(constraints: Constraint[]): Point[] {
-        let cs = [...constraints];
-        cs.push([1, 0, "<", bound[0]]);
-        cs.push([1, 0, ">", -bound[0]]);
-        cs.push([0, 1, "<", bound[1]]);
-        cs.push([0, 1, ">", -bound[1]]);
+    const [xBound, yBound] = bound
+    const boundaryConstraints: Constraint[] = [
+        [1, 0, "<", xBound],
+        [1, 0, ">", -xBound],
+        [0, 1, "<", yBound],
+        [0, 1, ">", -yBound]
+    ]
 
+    function feasiblePolygon(): Point[] {
+        let cs = [...constraints, ...boundaryConstraints];
         let vertices: Point[] = [];
         for (let i = 0; i < cs.length; i++) {
             for (let j = i + 1; j < cs.length; j++) {
@@ -63,22 +71,15 @@ function LinearProgram(constraints: Constraint[], field: Field, bound = [100, 10
                 }
             }
         }
-
-        let center = VectorMean(...vertices);
-        vertices.sort((a, b) => Inclination(center, a) - Inclination(center, b));
+        const center = VectorMean(...vertices);
+        vertices = SortBy(vertices, x => Inclination(center, x))
         return vertices;
     }
 
-    function feasibleIntegral(constraints: Constraint[]): Point[] {
-        let cs = [...constraints];
-        cs.push([1, 0, "<", bound[0]]);
-        cs.push([1, 0, ">", -bound[0]]);
-        cs.push([0, 1, "<", bound[1]]);
-        cs.push([0, 1, ">", -bound[1]]);
-
+    function feasibleIntegral(): Point[] {
         let points: Point[] = [];
-        for (let i = -100; i <= 100; i++) {
-            for (let j = -100; j <= 100; j++) {
+        for (let i = -xBound; i <= xBound; i++) {
+            for (let j = -yBound; j <= yBound; j++) {
                 if (isConstrained(constraints, [i, j])) {
                     points.push([i, j]);
                 }
@@ -87,23 +88,21 @@ function LinearProgram(constraints: Constraint[], field: Field, bound = [100, 10
         return points;
     }
 
-    function OptimizeField(field: Field, feasiblePoints: Point[]): [Point, Point] {
-        let [a, b, c] = field;
-        let f = (p: Point) => a * p[0] + b * p[1] + c;
-        let ps = [...feasiblePoints];
-        ps.sort((p1, p2) => f(p1) - f(p2));
-        return [ps[0], ps[ps.length - 1]];
+    function optimum(p: Point): Optimum {
+        return { point: p, value: fieldAt(p) };
     }
 
-    let vertex = feasiblePolygon(constraints);
-    let [minVertex, maxVertex] = OptimizeField(field, vertex);
-    let vertexMin = { point: minVertex, value: fieldAt(minVertex) };
-    let vertexMax = { point: maxVertex, value: fieldAt(maxVertex) };
+    function OptimizeField(feasiblePoints: Point[]): [min: Optimum, max: Optimum] {
+        let ps = SortBy(feasiblePoints, fieldAt)
+        let [minPoint, maxPoint] = [ps[0], ps[ps.length - 1]]
+        return [optimum(minPoint), optimum(maxPoint)];
+    }
 
-    let integral = feasibleIntegral(constraints);
-    let [minIntegral, maxIntegral] = OptimizeField(field, integral);
-    let integralMin = { point: minIntegral, value: fieldAt(minIntegral) };
-    let integralMax = { point: maxIntegral, value: fieldAt(maxIntegral) };
+    let vertex = feasiblePolygon();
+    let [vertexMin, vertexMax] = OptimizeField(vertex);
+
+    let integral = feasibleIntegral();
+    let [integralMin, integralMax] = OptimizeField(integral);
 
     return { vertex, integral, vertexMin, vertexMax, integralMin, integralMax };
 }

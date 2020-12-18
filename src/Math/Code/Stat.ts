@@ -49,7 +49,7 @@ globalThis.Sort = Sort
  * ```
  */
 function SortBy<T>(items: T[], valueFunc: (_: T) => number): T[] {
-    return items.sort((a, b) => valueFunc(a) - valueFunc(b))
+    return [...items].sort((a, b) => valueFunc(a) - valueFunc(b))
 }
 globalThis.SortBy = SortBy
 

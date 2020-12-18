@@ -25,6 +25,15 @@ type Optimum = {
     value: number
 }
 
+type Highlight = {
+    point: Point,
+    color?: string,
+    circle?: boolean,
+    contour?: boolean,
+    coordinates?: boolean,
+    label?: boolean
+}
+
 
 type Triangle = {
     sideA: number,

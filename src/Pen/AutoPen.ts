@@ -672,33 +672,37 @@ class AutoPenCls {
      * @param field - The target linear function to optimize, [a,b,c] represent ax+by+c.
      * @param contours - The contours to draw, [4,5] represent P=4 and P=5.
      * @param labelConstraints - Constraint to label integral points.
-     * @param highlights - Points to highlight, [[point,color,circle,contour,coordinates,label]].
+     * @param highlights - Points to highlight, [{point,color,circle,contour,coordinates,label}].
      * @param ranges - Range of Canvas.
      * @param resolution - Resolution of Canvas
      * @returns
      * ```typescript
+     * let autoPen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
-     * let field =  [1, -3, 3]
-     * let contours = [4,5]
-     * let labelConstraints = [(x,y)=>y>0]
-     * let highlights = [{point:[0,0]}]
      * autoPen.LinearProgram({
-     * constraints,field,contours,labelConstraints,highlights,
-     * ranges:[[-10,10],[-10,10]],
-     * resolution:0.1,
-     * grid:1,
-     * showLine : true,
-     * showShade : true,
-     * showVertex : true,
-     * showVertexCoordinates : true,
-     * showVertexLabel : true,
-     * showVertexMax : false,
-     * showVertexMin : false,
-     * showIntegral : false,
-     * showIntegralLabel : false,
-     * showIntegralMax : false,
-     * showIntegralMin : false,
-     * contourColor : "grey"})
+     *     constraints,
+     *     field: [1, -3, 3],
+     *     contours: [4,5],
+     *     labelConstraints: [(x,y)=>y>0],
+     *     highlights: [{point:[0,0]}],
+     *     ranges: [[-10,10],[-10,10]],
+     *     resolution: 0.1,
+     *     grid: 0,
+     *     subGrid: 0,
+     *     tick: 0,
+     *     showLine: true,
+     *     showShade: true,
+     *     showVertex: false,
+     *     showVertexCoordinates: false,
+     *     showVertexLabel: false,
+     *     showVertexMax: false,
+     *     showVertexMin: false,
+     *     showIntegral: false,
+     *     showIntegralLabel: false,
+     *     showIntegralMax: false,
+     *     showIntegralMin: false,
+     *     contourColor : "grey"
+     * })
      * ```
      */
     LinearProgram({
@@ -709,13 +713,14 @@ class AutoPenCls {
         highlights = [],
         ranges = [[-10, 10], [-10, 10]],
         resolution = 0.1,
-        grid = 1,
-        tick = 1,
+        grid = 0,
+        subGrid = 0,
+        tick = 0,
         showLine = true,
         showShade = true,
-        showVertex = true,
-        showVertexCoordinates = true,
-        showVertexLabel = true,
+        showVertex = false,
+        showVertexCoordinates = false,
+        showVertexLabel = false,
         showVertexMax = false,
         showVertexMin = false,
         showIntegral = false,
@@ -728,10 +733,11 @@ class AutoPenCls {
         field: Field,
         contours: number[],
         labelConstraints: ((x: number, y: number) => boolean)[],
-        highlights: { point: [number, number], color?: string, circle?: boolean, contour?: boolean, coordinates?: boolean, label?: boolean }[],
+        highlights: Highlight[],
         ranges: [[number, number], [number, number]],
         resolution: number,
         grid: number,
+        subGrid: number,
         tick: number,
         showLine: boolean,
         showShade: boolean,
@@ -748,7 +754,9 @@ class AutoPenCls {
 
     }) {
         function fieldAt(p: Point) {
-            return field[0] * p[0] + field[1] * p[1] + field[2];
+            const [a, b, c] = field
+            const [x, y] = p
+            return Round(a * x + b * y + c, 3)
         }
 
         let LP = LinearProgram(constraints, field);
@@ -774,6 +782,13 @@ class AutoPenCls {
             pen.set.alpha();
         }
 
+        if (subGrid > 0) {
+            pen.set.alpha(0.4);
+            pen.grid.x(grid);
+            pen.grid.y(grid);
+            pen.set.alpha();
+        }
+
         if (tick > 0) {
             pen.set.fillColor("grey");
             pen.set.textSize(0.8);
@@ -786,9 +801,9 @@ class AutoPenCls {
         function drawLines() {
             constraints.forEach((constraint) => {
                 let [a, b, s, c] = constraint;
-                if (!s.includes("=")) pen.set.dash([5, 5]);
+                let [_, eq] = ParseIneqSign(s)!
+                if (!eq) pen.set.dash([5, 5]);
                 pen.graph.linear(a, b, -c);
-
                 pen.set.dash();
             });
         }
@@ -798,16 +813,16 @@ class AutoPenCls {
         labelConstraints.push((x, y) => y > ymin)
         labelConstraints.push((x, y) => y < ymax)
 
+        function labelField(p: Point) {
+            pen.set.textAlign("left")
+            pen.label.point(p, fieldAt(p).toString(), 60, 10);
+            pen.set.textAlign()
+        }
 
         function drawIntegral(label = false) {
             LP.integral.forEach((p) => {
                 pen.point(p);
-                if (label) {
-                    pen.set.textAlign("left")
-                    if (labelConstraints.every((f) => f(...p)))
-                        pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
-                    pen.set.textAlign()
-                }
+                if (label && labelConstraints.every((f) => f(...p))) labelField(p)
             });
         }
 
@@ -815,12 +830,7 @@ class AutoPenCls {
             LP.vertex.forEach((p) => {
                 pen.point(p);
                 if (coordinates) pen.label.coordinates(p, 270);
-                if (label) {
-                    pen.set.textAlign("left")
-                    if (labelConstraints.every((f) => f(...p)))
-                        pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
-                    pen.set.textAlign()
-                }
+                if (label && labelConstraints.every((f) => f(...p))) labelField(p)
             });
         }
 
@@ -836,7 +846,7 @@ class AutoPenCls {
 
         function drawContours(color = contourColor) {
             pen.set.color(color);
-            contours.forEach((c) => drawContour(c));
+            contours.forEach(drawContour);
             pen.set.color();
         }
 
@@ -847,17 +857,13 @@ class AutoPenCls {
             contour = true,
             coordinates = true,
             label = true,
-        }: { point: [number, number], color?: string, circle?: boolean, contour?: boolean, coordinates?: boolean, label?: boolean }) {
+        }: Highlight) {
             pen.set.color(color);
             pen.point(point);
             if (circle) pen.circle(point, 5);
             if (contour) drawContour(fieldAt(point));
             if (coordinates) pen.label.coordinates(point, 270);
-            if (label) {
-                pen.set.textAlign("left")
-                pen.label.point(point, Round(fieldAt(point), 3).toString(), 60, 10);
-                pen.set.textAlign()
-            }
+            if (label) labelField(point)
             pen.set.color();
         }
 

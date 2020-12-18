@@ -8867,14 +8867,16 @@ globalThis.PrintVariable = PrintVariable;
  */
 function LinearProgram(constraints, field, bound = [100, 100]) {
     function fieldAt(p) {
-        return field[0] * p[0] + field[1] * p[1] + field[2];
+        const [a, b, c] = field;
+        const [x, y] = p;
+        return a * x + b * y + c;
     }
     function isConstrained(constraints, point, strict = true) {
+        const [x, y] = point;
         return constraints.every((constraint) => {
             let [a, b, s, c] = constraint;
-            let P = a * point[0] + b * point[1] - c;
-            let greater = s.includes(">") || s.includes("g");
-            let eq = s.includes("=") || s.includes("e");
+            let P = a * x + b * y - c;
+            let [greater, eq] = ParseIneqSign(s);
             if (strict) {
                 if (greater && eq)
                     return P >= 0;
@@ -8893,12 +8895,15 @@ function LinearProgram(constraints, field, bound = [100, 100]) {
             }
         });
     }
-    function feasiblePolygon(constraints) {
-        let cs = [...constraints];
-        cs.push([1, 0, "<", bound[0]]);
-        cs.push([1, 0, ">", -bound[0]]);
-        cs.push([0, 1, "<", bound[1]]);
-        cs.push([0, 1, ">", -bound[1]]);
+    const [xBound, yBound] = bound;
+    const boundaryConstraints = [
+        [1, 0, "<", xBound],
+        [1, 0, ">", -xBound],
+        [0, 1, "<", yBound],
+        [0, 1, ">", -yBound]
+    ];
+    function feasiblePolygon() {
+        let cs = [...constraints, ...boundaryConstraints];
         let vertices = [];
         for (let i = 0; i < cs.length; i++) {
             for (let j = i + 1; j < cs.length; j++) {
@@ -8913,19 +8918,14 @@ function LinearProgram(constraints, field, bound = [100, 100]) {
                 }
             }
         }
-        let center = VectorMean(...vertices);
-        vertices.sort((a, b) => Inclination(center, a) - Inclination(center, b));
+        const center = VectorMean(...vertices);
+        vertices = SortBy(vertices, x => Inclination(center, x));
         return vertices;
     }
-    function feasibleIntegral(constraints) {
-        let cs = [...constraints];
-        cs.push([1, 0, "<", bound[0]]);
-        cs.push([1, 0, ">", -bound[0]]);
-        cs.push([0, 1, "<", bound[1]]);
-        cs.push([0, 1, ">", -bound[1]]);
+    function feasibleIntegral() {
         let points = [];
-        for (let i = -100; i <= 100; i++) {
-            for (let j = -100; j <= 100; j++) {
+        for (let i = -xBound; i <= xBound; i++) {
+            for (let j = -yBound; j <= yBound; j++) {
                 if (isConstrained(constraints, [i, j])) {
                     points.push([i, j]);
                 }
@@ -8933,21 +8933,18 @@ function LinearProgram(constraints, field, bound = [100, 100]) {
         }
         return points;
     }
-    function OptimizeField(field, feasiblePoints) {
-        let [a, b, c] = field;
-        let f = (p) => a * p[0] + b * p[1] + c;
-        let ps = [...feasiblePoints];
-        ps.sort((p1, p2) => f(p1) - f(p2));
-        return [ps[0], ps[ps.length - 1]];
+    function optimum(p) {
+        return { point: p, value: fieldAt(p) };
     }
-    let vertex = feasiblePolygon(constraints);
-    let [minVertex, maxVertex] = OptimizeField(field, vertex);
-    let vertexMin = { point: minVertex, value: fieldAt(minVertex) };
-    let vertexMax = { point: maxVertex, value: fieldAt(maxVertex) };
-    let integral = feasibleIntegral(constraints);
-    let [minIntegral, maxIntegral] = OptimizeField(field, integral);
-    let integralMin = { point: minIntegral, value: fieldAt(minIntegral) };
-    let integralMax = { point: maxIntegral, value: fieldAt(maxIntegral) };
+    function OptimizeField(feasiblePoints) {
+        let ps = SortBy(feasiblePoints, fieldAt);
+        let [minPoint, maxPoint] = [ps[0], ps[ps.length - 1]];
+        return [optimum(minPoint), optimum(maxPoint)];
+    }
+    let vertex = feasiblePolygon();
+    let [vertexMin, vertexMax] = OptimizeField(vertex);
+    let integral = feasibleIntegral();
+    let [integralMin, integralMax] = OptimizeField(integral);
     return { vertex, integral, vertexMin, vertexMax, integralMin, integralMax };
 }
 globalThis.LinearProgram = LinearProgram;
@@ -12114,7 +12111,7 @@ globalThis.Sort = Sort;
  * ```
  */
 function SortBy(items, valueFunc) {
-    return items.sort((a, b) => valueFunc(a) - valueFunc(b));
+    return [...items].sort((a, b) => valueFunc(a) - valueFunc(b));
 }
 globalThis.SortBy = SortBy;
 /**
@@ -14732,38 +14729,44 @@ class AutoPenCls {
      * @param field - The target linear function to optimize, [a,b,c] represent ax+by+c.
      * @param contours - The contours to draw, [4,5] represent P=4 and P=5.
      * @param labelConstraints - Constraint to label integral points.
-     * @param highlights - Points to highlight, [[point,color,circle,contour,coordinates,label]].
+     * @param highlights - Points to highlight, [{point,color,circle,contour,coordinates,label}].
      * @param ranges - Range of Canvas.
      * @param resolution - Resolution of Canvas
      * @returns
      * ```typescript
+     * let autoPen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
-     * let field =  [1, -3, 3]
-     * let contours = [4,5]
-     * let labelConstraints = [(x,y)=>y>0]
-     * let highlights = [{point:[0,0]}]
      * autoPen.LinearProgram({
-     * constraints,field,contours,labelConstraints,highlights,
-     * ranges:[[-10,10],[-10,10]],
-     * resolution:0.1,
-     * grid:1,
-     * showLine : true,
-     * showShade : true,
-     * showVertex : true,
-     * showVertexCoordinates : true,
-     * showVertexLabel : true,
-     * showVertexMax : false,
-     * showVertexMin : false,
-     * showIntegral : false,
-     * showIntegralLabel : false,
-     * showIntegralMax : false,
-     * showIntegralMin : false,
-     * contourColor : "grey"})
+     *     constraints,
+     *     field: [1, -3, 3],
+     *     contours: [4,5],
+     *     labelConstraints: [(x,y)=>y>0],
+     *     highlights: [{point:[0,0]}],
+     *     ranges: [[-10,10],[-10,10]],
+     *     resolution: 0.1,
+     *     grid: 0,
+     *     subGrid: 0,
+     *     tick: 0,
+     *     showLine: true,
+     *     showShade: true,
+     *     showVertex: false,
+     *     showVertexCoordinates: false,
+     *     showVertexLabel: false,
+     *     showVertexMax: false,
+     *     showVertexMin: false,
+     *     showIntegral: false,
+     *     showIntegralLabel: false,
+     *     showIntegralMax: false,
+     *     showIntegralMin: false,
+     *     contourColor : "grey"
+     * })
      * ```
      */
-    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 1, tick = 1, showLine = true, showShade = true, showVertex = true, showVertexCoordinates = true, showVertexLabel = true, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey" }) {
+    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey" }) {
         function fieldAt(p) {
-            return field[0] * p[0] + field[1] * p[1] + field[2];
+            const [a, b, c] = field;
+            const [x, y] = p;
+            return Round(a * x + b * y + c, 3);
         }
         let LP = LinearProgram(constraints, field);
         const pen = new Pen();
@@ -14783,6 +14786,12 @@ class AutoPenCls {
             pen.grid.y(grid);
             pen.set.alpha();
         }
+        if (subGrid > 0) {
+            pen.set.alpha(0.4);
+            pen.grid.x(grid);
+            pen.grid.y(grid);
+            pen.set.alpha();
+        }
         if (tick > 0) {
             pen.set.fillColor("grey");
             pen.set.textSize(0.8);
@@ -14794,7 +14803,8 @@ class AutoPenCls {
         function drawLines() {
             constraints.forEach((constraint) => {
                 let [a, b, s, c] = constraint;
-                if (!s.includes("="))
+                let [_, eq] = ParseIneqSign(s);
+                if (!eq)
                     pen.set.dash([5, 5]);
                 pen.graph.linear(a, b, -c);
                 pen.set.dash();
@@ -14804,15 +14814,16 @@ class AutoPenCls {
         labelConstraints.push((x, y) => x < xmax);
         labelConstraints.push((x, y) => y > ymin);
         labelConstraints.push((x, y) => y < ymax);
+        function labelField(p) {
+            pen.set.textAlign("left");
+            pen.label.point(p, fieldAt(p).toString(), 60, 10);
+            pen.set.textAlign();
+        }
         function drawIntegral(label = false) {
             LP.integral.forEach((p) => {
                 pen.point(p);
-                if (label) {
-                    pen.set.textAlign("left");
-                    if (labelConstraints.every((f) => f(...p)))
-                        pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
-                    pen.set.textAlign();
-                }
+                if (label && labelConstraints.every((f) => f(...p)))
+                    labelField(p);
             });
         }
         function drawVertex(coordinates = false, label = false) {
@@ -14820,12 +14831,8 @@ class AutoPenCls {
                 pen.point(p);
                 if (coordinates)
                     pen.label.coordinates(p, 270);
-                if (label) {
-                    pen.set.textAlign("left");
-                    if (labelConstraints.every((f) => f(...p)))
-                        pen.label.point(p, Round(fieldAt(p), 3).toString(), 60, 10);
-                    pen.set.textAlign();
-                }
+                if (label && labelConstraints.every((f) => f(...p)))
+                    labelField(p);
             });
         }
         function drawShade() {
@@ -14838,7 +14845,7 @@ class AutoPenCls {
         }
         function drawContours(color = contourColor) {
             pen.set.color(color);
-            contours.forEach((c) => drawContour(c));
+            contours.forEach(drawContour);
             pen.set.color();
         }
         function drawHighlight({ point = [0, 0], color = "red", circle = true, contour = true, coordinates = true, label = true, }) {
@@ -14850,11 +14857,8 @@ class AutoPenCls {
                 drawContour(fieldAt(point));
             if (coordinates)
                 pen.label.coordinates(point, 270);
-            if (label) {
-                pen.set.textAlign("left");
-                pen.label.point(point, Round(fieldAt(point), 3).toString(), 60, 10);
-                pen.set.textAlign();
-            }
+            if (label)
+                labelField(point);
             pen.set.color();
         }
         function drawHighlights() {
