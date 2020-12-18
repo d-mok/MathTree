@@ -235,10 +235,19 @@
 			<a href="globals.html#ineqsign" class="tsd-kind-icon">Ineq<wbr>Sign</a>
 		</li>
 		<li class=" tsd-kind-function">
+			<a href="globals.html#intersectangle" class="tsd-kind-icon">Intersect<wbr>Angle</a>
+		</li>
+		<li class=" tsd-kind-function">
 			<a href="globals.html#intersection" class="tsd-kind-icon">Intersection</a>
 		</li>
 		<li class=" tsd-kind-function">
+			<a href="globals.html#isabsbetween" class="tsd-kind-icon">Is<wbr>Abs<wbr>Between</a>
+		</li>
+		<li class=" tsd-kind-function">
 			<a href="globals.html#isarray" class="tsd-kind-icon">Is<wbr>Array</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="globals.html#isbetween" class="tsd-kind-icon">Is<wbr>Between</a>
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="globals.html#iscoeff" class="tsd-kind-icon">Is<wbr>Coeff</a>
@@ -567,7 +576,9 @@
 					<section class="tsd-index-section">
 						<h3>Assertion</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-function"><a href="globals.html#isabsbetween" class="tsd-kind-icon">Is<wbr>Abs<wbr>Between</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#isarray" class="tsd-kind-icon">Is<wbr>Array</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#isbetween" class="tsd-kind-icon">Is<wbr>Between</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#iscoeff" class="tsd-kind-icon">Is<wbr>Coeff</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#isdecimal" class="tsd-kind-icon">Is<wbr>Decimal</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#isemptyobject" class="tsd-kind-icon">Is<wbr>Empty<wbr>Object</a></li>
@@ -638,6 +649,7 @@
 							<li class="tsd-kind-function"><a href="globals.html#distance" class="tsd-kind-icon">Distance</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#divisionpoint" class="tsd-kind-icon">Division<wbr>Point</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#inclination" class="tsd-kind-icon">Inclination</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#intersectangle" class="tsd-kind-icon">Intersect<wbr>Angle</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#intersection" class="tsd-kind-icon">Intersection</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#midpoint" class="tsd-kind-icon">Mid<wbr>Point</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#normal" class="tsd-kind-icon">Normal</a></li>
@@ -1070,6 +1082,35 @@ xPolynomial([<span class="hljs-number">1</span>,<span class="hljs-number">2</spa
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Assertion</h2>
 			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="isabsbetween" class="tsd-anchor"></a>
+				<h3>Is<wbr>Abs<wbr>Between</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Is<wbr>Abs<wbr>Between<span class="tsd-signature-symbol">(</span>min<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, max<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">f</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>min: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>max: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">f</span></h4>
+						<p>check if the abs of num is between min and max inclusive.</p>
+						<pre><code class="language-typescript">IsAbsBetween(<span class="hljs-number">2</span>,<span class="hljs-number">5</span>)(-<span class="hljs-number">3</span>) <span class="hljs-comment">// true</span>
+IsAbsBetween(<span class="hljs-number">2</span>,<span class="hljs-number">5</span>)(-<span class="hljs-number">2</span>) <span class="hljs-comment">// true</span>
+IsAbsBetween(<span class="hljs-number">2</span>,<span class="hljs-number">5</span>)(<span class="hljs-number">1</span>) <span class="hljs-comment">// false</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
 				<a name="isarray" class="tsd-anchor"></a>
 				<h3>Is<wbr>Array</h3>
 				<ul class="tsd-signatures tsd-kind-function">
@@ -1093,6 +1134,35 @@ xPolynomial([<span class="hljs-number">1</span>,<span class="hljs-number">2</spa
 IsArray([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>]) <span class="hljs-comment">// true</span>
 IsArray(<span class="hljs-string">&#x27;abc&#x27;</span>) <span class="hljs-comment">// false</span>
 IsArray({<span class="hljs-attr">x</span>:<span class="hljs-number">1</span>}) <span class="hljs-comment">// false</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="isbetween" class="tsd-anchor"></a>
+				<h3>Is<wbr>Between</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Is<wbr>Between<span class="tsd-signature-symbol">(</span>min<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, max<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">f</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>min: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>max: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">f</span></h4>
+						<p>check if the num is between min and max inclusive.</p>
+						<pre><code class="language-typescript">IsBetween(<span class="hljs-number">2</span>,<span class="hljs-number">5</span>)(<span class="hljs-number">3</span>) <span class="hljs-comment">// true</span>
+IsBetween(<span class="hljs-number">2</span>,<span class="hljs-number">5</span>)(<span class="hljs-number">2</span>) <span class="hljs-comment">// true</span>
+IsBetween(<span class="hljs-number">2</span>,<span class="hljs-number">5</span>)(<span class="hljs-number">1</span>) <span class="hljs-comment">// false</span></code></pre>
 					</li>
 				</ul>
 			</section>
@@ -2004,6 +2074,34 @@ FracSign(-<span class="hljs-number">2</span>,<span class="hljs-number">0</span>)
 						<p>the polar angle of B if A is the origin within [-180,180].</p>
 						<pre><code class="language-typescript">Inclination([<span class="hljs-number">1</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">2</span>]) <span class="hljs-comment">// 45</span>
 Inclination([<span class="hljs-number">3</span>,<span class="hljs-number">2</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">0</span>]) <span class="hljs-comment">// -135</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="intersectangle" class="tsd-anchor"></a>
+				<h3>Intersect<wbr>Angle</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Intersect<wbr>Angle<span class="tsd-signature-symbol">(</span>slope1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, slope2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>slope1: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>slope2: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						<p>angle of intersection between two slopes</p>
+						<pre><code class="language-typescript">IntersectAngle(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>) <span class="hljs-comment">// 45</span>
+IntersectAngle(<span class="hljs-number">1</span>,-<span class="hljs-number">1</span>) <span class="hljs-comment">// 90</span></code></pre>
 					</li>
 				</ul>
 			</section>

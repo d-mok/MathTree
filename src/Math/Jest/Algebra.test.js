@@ -9,6 +9,11 @@ test('Crammer', () => {
     expect(Crammer(1, 1, 2, 2, 2, 5)).toEqual([NaN, NaN]);
 });
 
+
+
+
+
+
 test('Discriminant', () => {
     expect(Discriminant(1, 2, 3)).toBe(-8);
     expect(Discriminant(4, -5, 6)).toBe(-71);
@@ -57,7 +62,7 @@ test('xPolynomial', () => {
     expect(xPolynomial([4, 5], [1, 2, 3])).toEqual([4, 13, 22, 15]);
     expect(xPolynomial([2, 3], [4, -5])).toEqual([8, 2, -15]);
     expect(xPolynomial([2], [4, -5, 10])).toEqual([8, -10, 20]);
-    expect(xPolynomial([1,0,0], [1,0,0,0,0])).toEqual([1,0,0,0,0,0,0]);
+    expect(xPolynomial([1, 0, 0], [1, 0, 0, 0, 0])).toEqual([1, 0, 0, 0, 0, 0, 0]);
 });
 
 

@@ -8255,6 +8255,38 @@ function IsArray(...items) {
     return items.every(x => Array.isArray(x));
 }
 globalThis.IsArray = IsArray;
+/**
+ * @category Assertion
+ * @return check if the num is between min and max inclusive.
+ * ```typescript
+ * IsBetween(2,5)(3) // true
+ * IsBetween(2,5)(2) // true
+ * IsBetween(2,5)(1) // false
+ * ```
+ */
+function IsBetween(min, max) {
+    const f = function (...num) {
+        return num.every(x => IsNum(x) && x >= min && x <= max);
+    };
+    return f;
+}
+globalThis.IsBetween = IsBetween;
+/**
+ * @category Assertion
+ * @return check if the abs of num is between min and max inclusive.
+ * ```typescript
+ * IsAbsBetween(2,5)(-3) // true
+ * IsAbsBetween(2,5)(-2) // true
+ * IsAbsBetween(2,5)(1) // false
+ * ```
+ */
+function IsAbsBetween(min, max) {
+    const f = function (...num) {
+        return num.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
+    };
+    return f;
+}
+globalThis.IsAbsBetween = IsAbsBetween;
 
 
 /***/ }),
@@ -8771,6 +8803,23 @@ function TranslatePoint(P, q, distance) {
     return [x, y];
 }
 globalThis.TranslatePoint = TranslatePoint;
+/**
+ * @category Geometry
+ * @return angle of intersection between two slopes
+ * ```typescript
+ * IntersectAngle(0,1) // 45
+ * IntersectAngle(1,-1) // 90
+ * ```
+ */
+function IntersectAngle(slope1, slope2) {
+    let A1 = arctan(slope1);
+    let A2 = arctan(slope2);
+    let d = Abs(A1 - A2);
+    if (d > 90)
+        d = 180 - d;
+    return d;
+}
+globalThis.IntersectAngle = IntersectAngle;
 
 
 /***/ }),

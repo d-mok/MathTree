@@ -155,3 +155,21 @@ function TranslatePoint(P: Point, q: number | Point, distance: number): Point {
     return [x, y]
 }
 globalThis.TranslatePoint = TranslatePoint
+
+
+/**
+ * @category Geometry
+ * @return angle of intersection between two slopes
+ * ```typescript
+ * IntersectAngle(0,1) // 45
+ * IntersectAngle(1,-1) // 90
+ * ```
+ */
+function IntersectAngle(slope1: number, slope2: number): number {
+    let A1 = arctan(slope1)
+    let A2 = arctan(slope2)
+    let d = Abs(A1 - A2)
+    if (d > 90) d = 180 - d
+    return d
+}
+globalThis.IntersectAngle = IntersectAngle

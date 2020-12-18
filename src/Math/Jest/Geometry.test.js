@@ -84,3 +84,16 @@ test('TranslatePoint', () => {
     expect(TranslatePoint([1, 2], [10, 12], 3)).toBeArrayCloseTo([3.006894195, 4.229882439]);
 });
 
+
+
+test('IntersectAngle', () => {
+    expect(IntersectAngle(0, 1)).toBe(45);
+    expect(IntersectAngle(1, -1)).toBe(90);
+    expect(IntersectAngle(1, -2)).toBeCloseTo(71.56505118);
+    expect(IntersectAngle(-2, 1)).toBeCloseTo(71.56505118);
+    expect(IntersectAngle(2, 3)).toBeCloseTo(8.130102354);
+    expect(IntersectAngle(3, 2)).toBeCloseTo(8.130102354);
+    expect(IntersectAngle(1, 1 / 0)).toBe(45);
+});
+
+

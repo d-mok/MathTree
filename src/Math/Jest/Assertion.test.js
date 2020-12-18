@@ -131,3 +131,22 @@ test('IsArray', () => {
     const F = [1, '', { x: 1 }, NaN, Infinity, undefined, null, true, false];
     testAssertion(IsArray, T, F, false);
 });
+
+
+
+
+test('IsBetween', () => {
+    const T = [2, 3, 4, 5, 2.5, 4.99];
+    const F = [0, 1, 5.001, -1, -3];
+    testAssertion(IsBetween(2, 5), T, F);
+});
+
+
+
+
+test('IsAbsBetween', () => {
+    const T = [2, 3, 4, 5, 2.5, 4.99, -2, -3, -4, -5, -2.5, -4.99];
+    const F = [0, 1, 5.001, -1, -6];
+    testAssertion(IsAbsBetween(2, 5), T, F);
+});
+

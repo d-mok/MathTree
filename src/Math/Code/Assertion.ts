@@ -231,3 +231,43 @@ function IsArray(...items: any[]): boolean {
 }
 globalThis.IsArray = IsArray
 
+
+/**
+ * @category Assertion
+ * @return check if the num is between min and max inclusive.
+ * ```typescript
+ * IsBetween(2,5)(3) // true
+ * IsBetween(2,5)(2) // true
+ * IsBetween(2,5)(1) // false
+ * ```
+ */
+function IsBetween(min: number, max: number) {
+    const f = function (...num: number[]): boolean {
+        return num.every(x => IsNum(x) && x >= min && x <= max);
+    }
+    return f
+}
+globalThis.IsBetween = IsBetween
+
+/**
+ * @category Assertion
+ * @return check if the abs of num is between min and max inclusive.
+ * ```typescript
+ * IsAbsBetween(2,5)(-3) // true
+ * IsAbsBetween(2,5)(-2) // true
+ * IsAbsBetween(2,5)(1) // false
+ * ```
+ */
+function IsAbsBetween(min: number, max: number) {
+    const f = function (...num: number[]): boolean {
+        return num.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
+    }
+    return f
+}
+globalThis.IsAbsBetween = IsAbsBetween
+
+
+
+
+
+
