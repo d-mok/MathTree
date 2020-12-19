@@ -8,11 +8,29 @@ test('LinearProgram', () => {
     ],
         [4, 5, 6]);
 
+    expect(LP.vertex).toHaveLength(4);
+    expect(LP.integral).toHaveLength(14 * 14);
+    expect(LP.vertexMax).toEqual({
+        point: [10, 10],
+        value: 96
+    });
+    expect(LP.vertexMin).toEqual({
+        point: [-5, -5],
+        value: -39
+    });
+    expect(LP.integralMax).toEqual({
+        point: [9, 9],
+        value: 87
+    });
 
-    expect(LP.vertex.length).toBe(4);
-    expect(LP.integral.length).toBe(14 * 14);
-    expect(LP.vertexMin.point).toEqual([-5, -5]);
-    expect(LP.vertexMin.value).toBe(-39);
+    expect(LP.integralMin).toEqual({
+        point: [-4, -4],
+        value: -30
+    });
+
+
+
+
 
     LP = LinearProgram([
         [1, 1, '<', 2],
@@ -54,8 +72,8 @@ test('LinearProgram', () => {
         [1, 1, 0]);
 
 
-    expect(LP.vertex.length).toBe(4);
-    expect(LP.integral.length).toBe(0);
+    expect(LP.vertex).toHaveLength(4);
+    expect(LP.integral).toHaveLength(0);
     expect(LP.vertexMax).toEqual({
         point: [1, 1],
         value: 2
@@ -64,8 +82,21 @@ test('LinearProgram', () => {
         point: [0, 0],
         value: 0
     });
+    expect(LP.integralMax).toBeUndefined();
+    expect(LP.integralMin).toBeUndefined();
 
 
 
+    LP = LinearProgram([
+        [1, 1, '>', 10]
+    ],
+        [2, 1, 0]);
 
+
+    expect(LP.vertex).toHaveLength(3);
+    expect(LP.integral.length).toBeGreaterThan(100);
+    expect(LP.vertexMax).toBeUndefined();
+    expect(LP.vertexMin).toBeUndefined();
+    expect(LP.integralMax).toBeUndefined();
+    expect(LP.integralMin).toBeUndefined();
 });

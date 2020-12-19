@@ -48,10 +48,10 @@ function LinearProgram(
 
     const [xBound, yBound] = bound
     const boundaryConstraints: Constraint[] = [
-        [1, 0, "<", xBound],
-        [1, 0, ">", -xBound],
-        [0, 1, "<", yBound],
-        [0, 1, ">", -yBound]
+        [1, 0, "<=", xBound],
+        [1, 0, ">=", -xBound],
+        [0, 1, "<=", yBound],
+        [0, 1, ">=", -yBound]
     ]
 
     function feasiblePolygon(): Point[] {
@@ -88,14 +88,21 @@ function LinearProgram(
         return points;
     }
 
-    function optimum(p: Point): Optimum | undefined {
+    function onBoundary(p: Point) {
+        let [x, y] = p
+        return Abs(x) >= xBound || Abs(y) >= yBound
+    }
+
+    function optimum(p: Point | undefined): Optimum | undefined {
         if (!p) return undefined
+        if (onBoundary(p)) return undefined
         return { point: p, value: fieldAt(p) };
     }
 
+
     function OptimizeField(feasiblePoints: Point[]): [min: Optimum | undefined, max: Optimum | undefined] {
         let ps = SortBy(feasiblePoints, fieldAt)
-        let [minPoint, maxPoint] = [ps[0], ps[ps.length - 1]]
+        let [minPoint, maxPoint]: [Point | undefined, Point | undefined] = [ps[0], ps[ps.length - 1]]
         return [optimum(minPoint), optimum(maxPoint)];
     }
 
