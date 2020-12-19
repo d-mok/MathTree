@@ -8983,6 +8983,8 @@ function LinearProgram(constraints, field, bound = [100, 100]) {
         return points;
     }
     function optimum(p) {
+        if (!p)
+            return undefined;
         return { point: p, value: fieldAt(p) };
     }
     function OptimizeField(feasiblePoints) {
@@ -12763,6 +12765,7 @@ function Pairs(...items) {
     }
     return arr;
 }
+globalThis.Pairs = Pairs;
 
 
 /***/ }),
@@ -14942,14 +14945,26 @@ class AutoPenCls {
             drawVertex(showVertexCoordinates, showVertexLabel);
         drawHighlights();
         drawContours();
-        if (showVertexMax)
-            drawHighlight({ point: LP.vertexMax.point, color: "red" });
-        if (showVertexMin)
-            drawHighlight({ point: LP.vertexMin.point, color: "blue" });
-        if (showIntegralMax)
-            drawHighlight({ point: LP.integralMax.point, color: "red" });
-        if (showIntegralMin)
-            drawHighlight({ point: LP.integralMin.point, color: "blue" });
+        if (showVertexMax && LP.vertexMax)
+            drawHighlight({
+                point: LP.vertexMax.point,
+                color: "red"
+            });
+        if (showVertexMin && LP.vertexMin)
+            drawHighlight({
+                point: LP.vertexMin.point,
+                color: "blue"
+            });
+        if (showIntegralMax && LP.integralMax)
+            drawHighlight({
+                point: LP.integralMax.point,
+                color: "red"
+            });
+        if (showIntegralMin && LP.integralMin)
+            drawHighlight({
+                point: LP.integralMin.point,
+                color: "blue"
+            });
         this.pen = pen;
     }
 }

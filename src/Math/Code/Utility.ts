@@ -92,4 +92,4 @@ function Pairs<T>(...items: T[]): [T, T][] {
     }
     return arr
 }
-
+globalThis.Pairs = Pairs

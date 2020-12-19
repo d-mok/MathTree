@@ -17,10 +17,10 @@ function LinearProgram(
 ): {
     vertex: Point[],
     integral: Point[],
-    vertexMin: Optimum,
-    vertexMax: Optimum,
-    integralMin: Optimum,
-    integralMax: Optimum
+    vertexMin: Optimum | undefined,
+    vertexMax: Optimum | undefined,
+    integralMin: Optimum | undefined,
+    integralMax: Optimum | undefined
 } {
     function fieldAt(p: Point): number {
         const [a, b, c] = field
@@ -88,11 +88,12 @@ function LinearProgram(
         return points;
     }
 
-    function optimum(p: Point): Optimum {
+    function optimum(p: Point): Optimum | undefined {
+        if (!p) return undefined
         return { point: p, value: fieldAt(p) };
     }
 
-    function OptimizeField(feasiblePoints: Point[]): [min: Optimum, max: Optimum] {
+    function OptimizeField(feasiblePoints: Point[]): [min: Optimum | undefined, max: Optimum | undefined] {
         let ps = SortBy(feasiblePoints, fieldAt)
         let [minPoint, maxPoint] = [ps[0], ps[ps.length - 1]]
         return [optimum(minPoint), optimum(maxPoint)];
