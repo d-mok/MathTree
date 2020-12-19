@@ -34,7 +34,7 @@ globalThis.Max = Max
  * ```
  */
 function Sort(...nums: number[]): number[] {
-    return nums.sort((a, b) => a - b)
+    return [...nums].sort((a, b) => a - b)
 }
 globalThis.Sort = Sort
 

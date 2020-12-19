@@ -68,3 +68,28 @@ function Clone<T>(object: T): T {
     return JSON.parse(JSON.stringify(object))
 }
 globalThis.Clone = Clone
+
+
+
+
+
+
+/**
+ * @category Utility
+ * @return array of combination pairs
+ * ```typescript
+ * Pairs(1,2,3) // [[1,2],[1,3],[2,3]]
+ * Pairs(1) // []
+ * ```
+ */
+function Pairs<T>(...items: T[]): [T, T][] {
+    if (items.length <= 1) return []
+    let arr: [T, T][] = []
+    for (let i = 0; i < items.length; i++) {
+        for (let j = i + 1; j < items.length; j++) {
+            arr.push([items[i], items[j]])
+        }
+    }
+    return arr
+}
+

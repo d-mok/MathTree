@@ -24,3 +24,10 @@ test('Clone', () => {
     expect(Clone([1, 2, 3])).toEqual([1, 2, 3]);
     expect(Clone({ x: 1 })).toEqual({ x: 1 });
 });
+
+
+
+test('Pairs', () => {
+    expect(Pairs(1, 2, 3)).toEqual([[1, 2], [1, 3], [2, 3]]);
+    expect(Pairs(1)).toEqual([]);
+});

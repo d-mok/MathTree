@@ -12148,7 +12148,7 @@ globalThis.Max = Max;
  * ```
  */
 function Sort(...nums) {
-    return nums.sort((a, b) => a - b);
+    return [...nums].sort((a, b) => a - b);
 }
 globalThis.Sort = Sort;
 /**
@@ -12744,6 +12744,25 @@ function Clone(object) {
     return JSON.parse(JSON.stringify(object));
 }
 globalThis.Clone = Clone;
+/**
+ * @category Utility
+ * @return array of combination pairs
+ * ```typescript
+ * Pairs(1,2,3) // [[1,2],[1,3],[2,3]]
+ * Pairs(1) // []
+ * ```
+ */
+function Pairs(...items) {
+    if (items.length <= 1)
+        return [];
+    let arr = [];
+    for (let i = 0; i < items.length; i++) {
+        for (let j = i + 1; j < items.length; j++) {
+            arr.push([items[i], items[j]]);
+        }
+    }
+    return arr;
+}
 
 
 /***/ }),
