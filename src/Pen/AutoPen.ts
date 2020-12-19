@@ -761,8 +761,14 @@ class AutoPenCls {
             return Round(a * x + b * y + c, 3)
         }
 
-        if (LP === undefined) LP = LinearProgram(constraints, field);
+        if (LP === undefined) { 
+            LP = LinearProgram(constraints, field); 
+        }else{
+            // constraints =  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        }
         if (LP === undefined) throw "Linear Program has no solution. Fail to draw!"
+
+
 
         const pen = new Pen();
 

@@ -8904,6 +8904,88 @@ globalThis.PrintVariable = PrintVariable;
 "use strict";
 
 /**
+ *
+ * @category LinearProgram
+ * @return check if point is constrained by cons
+ * ```typescript
+ * isConstrained([
+ *    [1, 1, "<=", 5],
+ *    [1, -1, "<", 4],
+ *    [2, 1, ">=", -5]
+ * ], [0, 0])
+ * // check whether [0,0] satisfies all the constraints
+ * ```
+ */
+function isConstrained(cons, point) {
+    const [x, y] = point;
+    return cons.every(con => {
+        let [a, b, s, c] = con;
+        let P = a * x + b * y - c;
+        let [greater, eq] = ParseIneqSign(s);
+        if (greater && eq)
+            return P >= 0;
+        if (greater && !eq)
+            return P > 0;
+        if (!greater && eq)
+            return P <= 0;
+        if (!greater && !eq)
+            return P < 0;
+    });
+}
+/**
+ *
+ * @category LinearProgram
+ * @return check if point is constrained by cons, treating all cons as 'or equal to'
+ * ```typescript
+ * isLooseConstrained([
+ *    [1, 1, "<=", 5],
+ *    [1, -1, "<", 4],
+ *    [2, 1, ">=", -5]
+ * ], [0, 0])
+ * // check whether [0,0] loosely satisfies all the constraints
+ * ```
+ */
+function isLooseConstrained(cons, point) {
+    const [x, y] = point;
+    return cons.every(con => {
+        let [a, b, s, c] = con;
+        let P = a * x + b * y - c;
+        let [greater, eq] = ParseIneqSign(s);
+        if (greater)
+            return P >= 0;
+        if (!greater)
+            return P <= 0;
+    });
+}
+// function FeasiblePolygon(cons: Constraint[], bound = [100,100]) {
+//     const [xBound, yBound] = bound
+//     const boundaryConstraints: Constraint[] = [
+//         [1, 0, "<=", xBound],
+//         [1, 0, ">=", -xBound],
+//         [0, 1, "<=", yBound],
+//         [0, 1, ">=", -yBound]
+//     ]
+//     let cs = [...cons, ...boundaryConstraints];
+//     let vertices: Point[] = [];
+//     for (let i = 0; i < cs.length; i++) {
+//         for (let j = i + 1; j < cs.length; j++) {
+//             let [a1, b1, s1, c1] = cs[i];
+//             let [a2, b2, s2, c2] = cs[j];
+//             let p = Crammer(a1, b1, c1, a2, b2, c2);
+//             let otherCons = [...cs];
+//             otherCons.splice(j, 1);
+//             otherCons.splice(i, 1);
+//             if (isConstrained(otherCons, p, false)) {
+//                 vertices.push(p);
+//             }
+//         }
+//     }
+//     if (vertices.length <= 2) return vertices;
+//     const center = VectorMean(...vertices);
+//     vertices = SortBy(vertices, x => Inclination(center, x))
+//     return vertices;
+// }
+/**
  * @category LinearProgram
  * @return result of linear programming.
  * ```typescript
@@ -14849,8 +14931,12 @@ class AutoPenCls {
             const [x, y] = p;
             return Round(a * x + b * y + c, 3);
         }
-        if (LP === undefined)
+        if (LP === undefined) {
             LP = LinearProgram(constraints, field);
+        }
+        else {
+            // constraints = 
+        }
         if (LP === undefined)
             throw "Linear Program has no solution. Fail to draw!";
         const pen = new Pen();
