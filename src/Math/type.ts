@@ -25,6 +25,15 @@ type Optimum = {
     value: number
 }
 
+type LinearProgram = {
+    vertex: Point[],
+    integral: Point[],
+    vertexMin: Optimum | undefined,
+    vertexMax: Optimum | undefined,
+    integralMin: Optimum | undefined,
+    integralMax: Optimum | undefined
+}
+
 type Highlight = {
     point: Point,
     color?: string,

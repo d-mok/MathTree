@@ -706,6 +706,7 @@ class AutoPenCls {
      * ```
      */
     LinearProgram({
+        LP = undefined,
         constraints = [],
         field = [0, 0, 0],
         contours = [],
@@ -729,6 +730,7 @@ class AutoPenCls {
         showIntegralMin = false,
         contourColor = "grey"
     }: {
+        LP: LinearProgram | undefined,
         constraints: Constraint[],
         field: Field,
         contours: number[],
@@ -759,7 +761,8 @@ class AutoPenCls {
             return Round(a * x + b * y + c, 3)
         }
 
-        let LP = LinearProgram(constraints, field);
+        if (LP === undefined) LP = LinearProgram(constraints, field);
+        if (LP === undefined) throw "Linear Program has no solution. Fail to draw!"
 
         const pen = new Pen();
 
@@ -820,14 +823,14 @@ class AutoPenCls {
         }
 
         function drawIntegral(label = false) {
-            LP.integral.forEach((p) => {
+            LP!.integral.forEach((p) => {
                 pen.point(p);
                 if (label && labelConstraints.every((f) => f(...p))) labelField(p)
             });
         }
 
         function drawVertex(coordinates = false, label = false) {
-            LP.vertex.forEach((p) => {
+            LP!.vertex.forEach((p) => {
                 pen.point(p);
                 if (coordinates) pen.label.coordinates(p, 270);
                 if (label && labelConstraints.every((f) => f(...p))) labelField(p)
@@ -836,7 +839,7 @@ class AutoPenCls {
 
         function drawShade() {
             pen.set.alpha(0.3);
-            pen.polygon(LP.vertex, true);
+            pen.polygon(LP!.vertex, true);
             pen.set.alpha();
         }
 

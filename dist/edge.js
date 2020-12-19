@@ -8911,7 +8911,7 @@ globalThis.PrintVariable = PrintVariable;
  * // optimize P=2x+3y+4 under [x+y<=5, x-y<4, 2x+y>=5]
  * // vertex: an array of vertex coordinates
  * // integral: an array of feasible integral points
- * // vertexMin: info about the minimum vertex
+ * // vertexMin: info about the minimum vertex, undefined if not exist
  * ```
  */
 function LinearProgram(constraints, field, bound = [100, 100]) {
@@ -8967,6 +8967,8 @@ function LinearProgram(constraints, field, bound = [100, 100]) {
                 }
             }
         }
+        if (vertices.length <= 2)
+            return vertices;
         const center = VectorMean(...vertices);
         vertices = SortBy(vertices, x => Inclination(center, x));
         return vertices;
@@ -8999,6 +9001,8 @@ function LinearProgram(constraints, field, bound = [100, 100]) {
         return [optimum(minPoint), optimum(maxPoint)];
     }
     let vertex = feasiblePolygon();
+    if (vertex.length <= 2)
+        return undefined; // no feasible region found
     let [vertexMin, vertexMax] = OptimizeField(vertex);
     let integral = feasibleIntegral();
     let [integralMin, integralMax] = OptimizeField(integral);
@@ -14839,13 +14843,16 @@ class AutoPenCls {
      * })
      * ```
      */
-    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey" }) {
+    LinearProgram({ LP = undefined, constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey" }) {
         function fieldAt(p) {
             const [a, b, c] = field;
             const [x, y] = p;
             return Round(a * x + b * y + c, 3);
         }
-        let LP = LinearProgram(constraints, field);
+        if (LP === undefined)
+            LP = LinearProgram(constraints, field);
+        if (LP === undefined)
+            throw "Linear Program has no solution. Fail to draw!";
         const pen = new Pen();
         let [[xmin, xmax], [ymin, ymax]] = ranges;
         let bound = 0.7;

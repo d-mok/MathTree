@@ -1,5 +1,6 @@
 
 test('LinearProgram', () => {
+    // test rectangular
     let LP = LinearProgram([
         [1, 0, '<', 10],
         [1, 0, '>', -5],
@@ -31,7 +32,7 @@ test('LinearProgram', () => {
 
 
 
-
+    // test normal
     LP = LinearProgram([
         [1, 1, '<', 2],
         [1, 1, '>', 0],
@@ -62,7 +63,7 @@ test('LinearProgram', () => {
     });
 
 
-
+    // test no integral
     LP = LinearProgram([
         [1, 0, '<', 1],
         [1, 0, '>', 0],
@@ -86,17 +87,23 @@ test('LinearProgram', () => {
     expect(LP.integralMin).toBeUndefined();
 
 
-
+    // test one constraint
     LP = LinearProgram([
         [1, 1, '>', 10]
     ],
         [2, 1, 0]);
-
-
     expect(LP.vertex).toHaveLength(3);
     expect(LP.integral.length).toBeGreaterThan(100);
     expect(LP.vertexMax).toBeUndefined();
     expect(LP.vertexMin).toBeUndefined();
     expect(LP.integralMax).toBeUndefined();
     expect(LP.integralMin).toBeUndefined();
+
+    // test no solution
+    LP = LinearProgram([
+        [1, 1, '>', 10],
+        [1, 1, '<', 0]
+    ],
+        [2, 1, 0]);
+    expect(LP).toBeUndefined();
 });

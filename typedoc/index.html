@@ -318,6 +318,9 @@
 		<li class=" tsd-kind-function">
 			<a href="globals.html#normal" class="tsd-kind-icon">Normal</a>
 		</li>
+		<li class=" tsd-kind-function tsd-has-type-parameter">
+			<a href="globals.html#pairs" class="tsd-kind-icon">Pairs</a>
+		</li>
 		<li class=" tsd-kind-function">
 			<a href="globals.html#parsedfrac" class="tsd-kind-icon">Parse<wbr>Dfrac</a>
 		</li>
@@ -833,6 +836,7 @@
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#clone" class="tsd-kind-icon">Clone</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#hcf" class="tsd-kind-icon">HCF</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#lcm" class="tsd-kind-icon">LCM</a></li>
+							<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#pairs" class="tsd-kind-icon">Pairs</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section">
@@ -2439,7 +2443,7 @@ PrintVariable(html,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="h
 				<a name="linearprogram" class="tsd-anchor"></a>
 				<h3>Linear<wbr>Program</h3>
 				<ul class="tsd-signatures tsd-kind-function">
-					<li class="tsd-signature tsd-kind-icon">Linear<wbr>Program<span class="tsd-signature-symbol">(</span>constraints<span class="tsd-signature-symbol">: </span><a href="globals.html#constraint" class="tsd-signature-type">Constraint</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="globals.html#field" class="tsd-signature-type">Field</a>, bound<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>integral<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>integralMax<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol">; </span>integralMin<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol">; </span>vertex<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>vertexMax<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol">; </span>vertexMin<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> }</span></li>
+					<li class="tsd-signature tsd-kind-icon">Linear<wbr>Program<span class="tsd-signature-symbol">(</span>constraints<span class="tsd-signature-symbol">: </span><a href="globals.html#constraint" class="tsd-signature-type">Constraint</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="globals.html#field" class="tsd-signature-type">Field</a>, bound<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>integral<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>integralMax<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>integralMin<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>vertex<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>vertexMax<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>vertexMin<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> }</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2459,31 +2463,31 @@ PrintVariable(html,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="h
 								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> bound: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [100, 100]</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>integral<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>integralMax<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol">; </span>integralMin<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol">; </span>vertex<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>vertexMax<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol">; </span>vertexMin<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> }</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>integral<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>integralMax<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>integralMin<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>vertex<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>vertexMax<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>vertexMin<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> }</span></h4>
 						<p>result of linear programming.</p>
 						<pre><code class="language-typescript">LinearProgram([[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&quot;&lt;=&quot;</span>, <span class="hljs-number">5</span>], [<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-string">&quot;&lt;&quot;</span>, <span class="hljs-number">4</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&quot;&gt;=&quot;</span>, -<span class="hljs-number">5</span>]], [<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>])
 <span class="hljs-comment">// optimize P=2x+3y+4 under [x+y&lt;=5, x-y&lt;4, 2x+y&gt;=5]</span>
 <span class="hljs-comment">// vertex: an array of vertex coordinates</span>
 <span class="hljs-comment">// integral: an array of feasible integral points</span>
-<span class="hljs-comment">// vertexMin: info about the minimum vertex</span></code></pre>
+<span class="hljs-comment">// vertexMin: info about the minimum vertex, undefined if not exist</span></code></pre>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter">
 								<h5>integral<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 							<li class="tsd-parameter">
-								<h5>integral<wbr>Max<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a></h5>
+								<h5>integral<wbr>Max<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
 							</li>
 							<li class="tsd-parameter">
-								<h5>integral<wbr>Min<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a></h5>
+								<h5>integral<wbr>Min<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
 							</li>
 							<li class="tsd-parameter">
 								<h5>vertex<span class="tsd-signature-symbol">: </span><a href="globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 							<li class="tsd-parameter">
-								<h5>vertex<wbr>Max<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a></h5>
+								<h5>vertex<wbr>Max<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
 							</li>
 							<li class="tsd-parameter">
-								<h5>vertex<wbr>Min<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a></h5>
+								<h5>vertex<wbr>Min<span class="tsd-signature-symbol">: </span><a href="globals.html#optimum" class="tsd-signature-type">Optimum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
 							</li>
 						</ul>
 					</li>
@@ -5461,6 +5465,37 @@ HCF(<span class="hljs-number">0</span>,<span class="hljs-number">3</span>) <span
 LCM(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span>) <span class="hljs-comment">// 30</span>
 LCM(<span class="hljs-number">0.5</span>,<span class="hljs-number">3</span>) <span class="hljs-comment">// NaN</span>
 LCM(<span class="hljs-number">0</span>,<span class="hljs-number">3</span>) <span class="hljs-comment">// NaN</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+				<a name="pairs" class="tsd-anchor"></a>
+				<h3>Pairs</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">Pairs&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>items: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span></h4>
+						<p>array of combination pairs</p>
+						<pre><code class="language-typescript">Pairs(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>) <span class="hljs-comment">// [[1,2],[1,3],[2,3]]</span>
+Pairs(<span class="hljs-number">1</span>) <span class="hljs-comment">// []</span></code></pre>
 					</li>
 				</ul>
 			</section>

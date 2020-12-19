@@ -7,21 +7,14 @@
  * // optimize P=2x+3y+4 under [x+y<=5, x-y<4, 2x+y>=5]
  * // vertex: an array of vertex coordinates
  * // integral: an array of feasible integral points
- * // vertexMin: info about the minimum vertex
+ * // vertexMin: info about the minimum vertex, undefined if not exist
  * ```
  */
 function LinearProgram(
     constraints: Constraint[],
     field: Field,
     bound = [100, 100]
-): {
-    vertex: Point[],
-    integral: Point[],
-    vertexMin: Optimum | undefined,
-    vertexMax: Optimum | undefined,
-    integralMin: Optimum | undefined,
-    integralMax: Optimum | undefined
-} {
+): LinearProgram | undefined {
     function fieldAt(p: Point): number {
         const [a, b, c] = field
         const [x, y] = p
@@ -71,6 +64,7 @@ function LinearProgram(
                 }
             }
         }
+        if (vertices.length <= 2) return vertices;
         const center = VectorMean(...vertices);
         vertices = SortBy(vertices, x => Inclination(center, x))
         return vertices;
@@ -107,6 +101,7 @@ function LinearProgram(
     }
 
     let vertex = feasiblePolygon();
+    if (vertex.length <= 2) return undefined; // no feasible region found
     let [vertexMin, vertexMax] = OptimizeField(vertex);
 
     let integral = feasibleIntegral();
