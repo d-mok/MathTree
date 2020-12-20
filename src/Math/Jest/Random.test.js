@@ -113,3 +113,13 @@ test('RndPyth', () => {
 });
 
 
+
+test('RndLinear', () => {
+    let arr = sample(() => RndLinear(2, 6));
+    let ints = arr.map(L => [-L[2] / L[0], -L[2] / L[1]]);
+    expect(ints).toBeFlatAbsWithin(2, 6);
+    expect(ints).toBeFlatIsInteger();
+    expect(arr).toAllHaveLength(3);
+});
+
+

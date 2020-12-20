@@ -8062,6 +8062,22 @@ function xPolynomial(poly1, poly2) {
     return result;
 }
 globalThis.xPolynomial = xPolynomial;
+/**
+ * @category Algebra
+ * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
+ * ```typescript
+ * LinearFromIntercepts(1,2) // [2,1,-2]
+ * ```
+ */
+function LinearFromIntercepts(xInt, yInt) {
+    Should(IsNonZero(xInt, yInt), 'intercepts cannot be zero');
+    let [a, b, c] = [yInt, xInt, -xInt * yInt];
+    let s = Sign(a);
+    [a, b, c] = [a * s, b * s, c * s];
+    [a, b, c] = SimpRatio(a, b, c);
+    return [a, b, c];
+}
+globalThis.LinearFromIntercepts = LinearFromIntercepts;
 
 
 /***/ }),
@@ -9576,6 +9592,21 @@ function RndPyth(max = 100) {
     return chance.pickone(arr);
 }
 globalThis.RndPyth = RndPyth;
+/**
+ * @category Random
+ * @param min abs of intercept
+ * @param max abs of intercept
+ * @return a linear [a,b,c] in ax+by+c=0
+ * ```typescript
+ * RndLinear(1,5) // may return [2,-3,6]
+ * ```
+ */
+function RndLinear(minInt, maxInt) {
+    let xInt = RndZ(minInt, maxInt);
+    let yInt = RndZ(minInt, maxInt);
+    return LinearFromIntercepts(xInt, yInt);
+}
+globalThis.RndLinear = RndLinear;
 
 
 /***/ }),

@@ -68,3 +68,12 @@ test('xPolynomial', () => {
 
 
 
+
+
+
+test('LinearFromIntercepts', () => {
+    expect(LinearFromIntercepts(1, 2)).toEqual([2, 1, -2]);
+    expect(LinearFromIntercepts(-3, 2)).toEqual([2, -3, 6]);
+    expect(LinearFromIntercepts(4, -2)).toEqual([1, -2, -4]);
+});
+

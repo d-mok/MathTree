@@ -37,7 +37,7 @@ globalThis.Abs = Abs
  * Sign(0) // 0
  * ```
  */
-function Sign(num: number): 1 | -1 | 0 {
+function Sign(num: number): -1 | 0 | 1 {
     if (num > 0) return 1;
     if (num < 0) return -1;
     return 0;

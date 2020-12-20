@@ -211,3 +211,18 @@ function RndPyth(max = 100): [number, number, number] {
 globalThis.RndPyth = RndPyth
 
 
+/**
+ * @category Random
+ * @param min abs of intercept
+ * @param max abs of intercept
+ * @return a linear [a,b,c] in ax+by+c=0
+ * ```typescript
+ * RndLinear(1,5) // may return [2,-3,6]
+ * ```
+ */
+function RndLinear(minInt: number, maxInt: number) {
+    let xInt = RndZ(minInt, maxInt)
+    let yInt = RndZ(minInt, maxInt)
+    return LinearFromIntercepts(xInt, yInt)
+}
+globalThis.RndLinear = RndLinear
