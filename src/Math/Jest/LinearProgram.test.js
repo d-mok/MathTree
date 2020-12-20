@@ -1,125 +1,126 @@
 
 
 
+test('FieldAt', () => {
+    expect(FieldAt([0, 0], [1, 2, 3])).toBe(3);
+    expect(FieldAt([1, 2], [3, -4, 5])).toBe(0);
+});
+
+
+
+
 
 test('isConstrained', () => {
-    // test rectangular
     expect(isConstrained([
         [1, 0, '<', 10],
         [1, 0, '>', -5],
         [0, 1, '<', 10],
         [0, 1, '>', -5],
     ], [0, 0])).toBe(true);
+    expect(isConstrained([
+        [1, 0, '<', 10],
+        [1, 0, '>', -5],
+        [0, 1, '<', 10],
+        [0, 1, '>', -5],
+    ], [20, 20])).toBe(false);
+});
+
+
+
+test('isLooseConstrained', () => {
+    expect(isLooseConstrained([
+        [1, 0, '<', 10],
+        [1, 0, '>', -5],
+        [0, 1, '<', 10],
+        [0, 1, '>', -5],
+    ], [10, 10])).toBe(true);
+    expect(isLooseConstrained([
+        [1, 0, '<', 10],
+        [1, 0, '>', -5],
+        [0, 1, '<', 10],
+        [0, 1, '>', -5],
+    ], [10, 0])).toBe(true);
+});
+
+
+
+test('FeasiblePolygon', () => {
+    expect(FeasiblePolygon([
+        [1, 0, '<', 10],
+        [1, 0, '>', -5],
+        [0, 1, '<', 10],
+        [0, 1, '>', -5],
+    ])).toEqual([[-5, -5], [10, -5], [10, 10], [-5, 10]]);
+    expect(() => FeasiblePolygon([
+        [1, 1, '<', 10],
+        [1, 1, '>', 10],
+    ])).toThrow();
 });
 
 
 
 
-// test('LinearProgram', () => {
-//     // test rectangular
-//     let LP = LinearProgram([
-//         [1, 0, '<', 10],
-//         [1, 0, '>', -5],
-//         [0, 1, '<', 10],
-//         [0, 1, '>', -5],
-//     ],
-//         [4, 5, 6]);
-
-//     expect(LP.vertex).toHaveLength(4);
-//     expect(LP.integral).toHaveLength(14 * 14);
-//     expect(LP.vertexMax).toEqual({
-//         point: [10, 10],
-//         value: 96
-//     });
-//     expect(LP.vertexMin).toEqual({
-//         point: [-5, -5],
-//         value: -39
-//     });
-//     expect(LP.integralMax).toEqual({
-//         point: [9, 9],
-//         value: 87
-//     });
-
-//     expect(LP.integralMin).toEqual({
-//         point: [-4, -4],
-//         value: -30
-//     });
-
-
-
-
-//     // test normal
-//     LP = LinearProgram([
-//         [1, 1, '<', 2],
-//         [1, 1, '>', 0],
-//         [0, 1, '>', 0],
-//         [0, 1, '<', 2],
-//     ],
-//         [1, -1, 0]);
+test('FeasibleIntegral', () => {
+    expect(FeasibleIntegral([
+        [1, 0, '<', 3],
+        [1, 0, '>', 0],
+        [0, 1, '<', 2],
+        [0, 1, '>', 0],
+    ])).toEqual([[1, 1], [2, 1]]);
+    expect(FeasibleIntegral([
+        [1, 1, "<=", 5],
+        [1, -1, "<", 4],
+        [2, 1, ">=", -5],
+        [3, 1, ">", -10]
+    ])).toHaveLength(68);
+    expect(FeasibleIntegral([
+        [1, 0, '<', 10],
+        [1, 0, '>', -5],
+        [0, 1, '<', 10],
+        [0, 1, '>', -5],
+    ])).toHaveLength(14 * 14);
+    expect(FeasibleIntegral([
+        [1, 0, '<', 1],
+        [1, 0, '>', 0],
+        [0, 1, '<', 1],
+        [0, 1, '>', 0],
+    ])).toHaveLength(0);
+    expect(FeasibleIntegral([
+        [1, 1, '<', 1],
+    ]).length).toBeGreaterThan(100);
+    expect(() => FeasibleIntegral([
+        [1, 1, '<', 10],
+        [1, 1, '>', 10],
+    ])).toThrow();
+});
 
 
-//     expect(LP.vertex).toHaveLength(4);
-//     expect(LP.integral).toHaveLength(1);
-//     expect(LP.vertexMax).toEqual({
-//         point: [2, 0],
-//         value: 2
-//     });
-//     expect(LP.vertexMin).toEqual({
-//         point: [-2, 2],
-//         value: -4
-//     });
-//     expect(LP.integralMax).toEqual({
-//         point: [0, 1],
-//         value: -1
-//     });
-
-//     expect(LP.integralMin).toEqual({
-//         point: [0, 1],
-//         value: -1
-//     });
 
 
-//     // test no integral
-//     LP = LinearProgram([
-//         [1, 0, '<', 1],
-//         [1, 0, '>', 0],
-//         [0, 1, '<', 1],
-//         [0, 1, '>', 0],
-//     ],
-//         [1, 1, 0]);
+
+test('MaximizePoint', () => {
+    let points = FeasibleIntegral([
+        [1, 1, "<=", 5],
+        [1, -1, "<", 4],
+        [2, 1, ">=", -5],
+        [3, 1, ">", -10]
+    ]);
+    expect(MaximizePoint(points, [2, 1, 1])).toEqual([4, 1]);
+    expect(() => MaximizePoint(points, [1, 1, 1])).toThrow();
+});
 
 
-//     expect(LP.vertex).toHaveLength(4);
-//     expect(LP.integral).toHaveLength(0);
-//     expect(LP.vertexMax).toEqual({
-//         point: [1, 1],
-//         value: 2
-//     });
-//     expect(LP.vertexMin).toEqual({
-//         point: [0, 0],
-//         value: 0
-//     });
-//     expect(LP.integralMax).toBeUndefined();
-//     expect(LP.integralMin).toBeUndefined();
+
+test('MinimizePoint', () => {
+    let points = FeasibleIntegral([
+        [1, 1, "<=", 5],
+        [1, -1, "<", 4],
+        [2, 1, ">=", -5],
+        [3, 1, ">", -10]
+    ]);
+    expect(MinimizePoint(points, [1, 1, 1])).toEqual([-1, -3]);
+    expect(() => MinimizePoint(points, [2, 1, 1])).toThrow();
+});
 
 
-//     // test one constraint
-//     LP = LinearProgram([
-//         [1, 1, '>', 10]
-//     ],
-//         [2, 1, 0]);
-//     expect(LP.vertex).toHaveLength(3);
-//     expect(LP.integral.length).toBeGreaterThan(100);
-//     expect(LP.vertexMax).toBeUndefined();
-//     expect(LP.vertexMin).toBeUndefined();
-//     expect(LP.integralMax).toBeUndefined();
-//     expect(LP.integralMin).toBeUndefined();
 
-//     // test no solution
-//     LP = LinearProgram([
-//         [1, 1, '>', 10],
-//         [1, 1, '<', 0]
-//     ],
-//         [2, 1, 0]);
-//     expect(LP).toBeUndefined();
-// });

@@ -6,13 +6,22 @@ function onBoundary(p: Point) {
 }
 
 
-
+/**
+ * 
+ * @category LinearProgram
+ * @return the value of field at given point
+ * ```typescript
+ * FieldAt([0,0],[1,2,3]) // 3
+ * FieldAt([1,2],[3,-4,5]) // 0
+ * ```
+ */
 function FieldAt(p: Point, field: Field): number {
     const [a, b, c] = field
     const [x, y] = p
     return a * x + b * y + c
 }
 globalThis.FieldAt = FieldAt
+
 
 /**
  * 
@@ -41,6 +50,7 @@ function isConstrained(cons: Constraint[], point: Point): boolean {
 }
 globalThis.isConstrained = isConstrained
 
+
 /**
  * 
  * @category LinearProgram
@@ -68,6 +78,21 @@ globalThis.isLooseConstrained = isLooseConstrained
 
 
 
+
+/**
+ * 
+ * @category LinearProgram
+ * @return the vertices of the feasible polygon
+ * ```typescript
+ * FeasiblePolygon([
+ *    [1, 0, '<', 10],
+ *    [1, 0, '>', -5],
+ *    [0, 1, '<', 10],
+ *    [0, 1, '>', -5]
+ * ])
+ * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+ * ```
+ */
 function FeasiblePolygon(cons: Constraint[]) {
     const boundaryConstraints: Constraint[] = [
         [1, 0, "<=", LP_BOUND],
@@ -92,6 +117,7 @@ function FeasiblePolygon(cons: Constraint[]) {
             }
         }
     }
+    vertices = Dedupe(vertices)
     Should(vertices.length > 2, 'No feasible region.')
     const center = VectorMean(...vertices);
     vertices = SortBy(vertices, x => Inclination(center, x))
@@ -100,6 +126,21 @@ function FeasiblePolygon(cons: Constraint[]) {
 globalThis.FeasiblePolygon = FeasiblePolygon
 
 
+
+/**
+ * 
+ * @category LinearProgram
+ * @return the integral points inside the feasible polygon
+ * ```typescript
+ * FeasibleIntegral([
+ *    [1, 0, '<', 3],
+ *    [1, 0, '>', 0],
+ *    [0, 1, '<', 2],
+ *    [0, 1, '>', 0]
+ * ])
+ * // [[1,1],[2,1]]
+ * ```
+ */
 function FeasibleIntegral(cons: Constraint[]): Point[] {
     let vertices = FeasiblePolygon(cons)
     let xCoords = vertices.map(p => p[0])
@@ -121,11 +162,23 @@ function FeasibleIntegral(cons: Constraint[]): Point[] {
 globalThis.FeasibleIntegral = FeasibleIntegral
 
 
-
+/**
+ * 
+ * @category LinearProgram
+ * @return the point with the max value of field
+ * ```typescript
+ * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
+ * ```
+ */
 function MaximizePoint(points: Point[], field: Field): Point {
     Should(points.length > 0, 'No feasible point')
-    let point = SortBy(points, x => -FieldAt(x, field))[0]
+    let orderedPoints = SortBy(points, x => -FieldAt(x, field))
+    orderedPoints = Dedupe(orderedPoints)
+    let point = orderedPoints[0]
     Should(!onBoundary(point), 'No max point')
+    if (orderedPoints[1]) {
+        Should(FieldAt(point, field) !== FieldAt(orderedPoints[1], field), 'multiple max points')
+    }
     return point
 }
 globalThis.MaximizePoint = MaximizePoint
@@ -135,8 +188,13 @@ globalThis.MaximizePoint = MaximizePoint
 
 function MinimizePoint(points: Point[], field: Field): Point {
     Should(points.length > 0, 'No feasible point')
-    let point = SortBy(points, x => FieldAt(x, field))[0]
+    let orderedPoints = SortBy(points, x => FieldAt(x, field))
+    orderedPoints = Dedupe(orderedPoints)
+    let point = orderedPoints[0]
     Should(!onBoundary(point), 'No min point')
+    if (orderedPoints[1]) {
+        Should(FieldAt(point, field) !== FieldAt(orderedPoints[1], field), 'multiple min points')
+    }
     return point
 }
 globalThis.MinimizePoint = MinimizePoint

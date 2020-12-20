@@ -8908,6 +8908,15 @@ const LP_BOUND = 100;
 function onBoundary(p) {
     return Abs(p[0]) >= LP_BOUND || Abs(p[1]) >= LP_BOUND;
 }
+/**
+ *
+ * @category LinearProgram
+ * @return the value of field at given point
+ * ```typescript
+ * FieldAt([0,0],[1,2,3]) // 3
+ * FieldAt([1,2],[3,-4,5]) // 0
+ * ```
+ */
 function FieldAt(p, field) {
     const [a, b, c] = field;
     const [x, y] = p;
@@ -8970,6 +8979,20 @@ function isLooseConstrained(cons, point) {
     });
 }
 globalThis.isLooseConstrained = isLooseConstrained;
+/**
+ *
+ * @category LinearProgram
+ * @return the vertices of the feasible polygon
+ * ```typescript
+ * FeasiblePolygon([
+ *    [1, 0, '<', 10],
+ *    [1, 0, '>', -5],
+ *    [0, 1, '<', 10],
+ *    [0, 1, '>', -5]
+ * ])
+ * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+ * ```
+ */
 function FeasiblePolygon(cons) {
     const boundaryConstraints = [
         [1, 0, "<=", LP_BOUND],
@@ -8994,12 +9017,27 @@ function FeasiblePolygon(cons) {
             }
         }
     }
+    vertices = Dedupe(vertices);
     Should(vertices.length > 2, 'No feasible region.');
     const center = VectorMean(...vertices);
     vertices = SortBy(vertices, x => Inclination(center, x));
     return vertices;
 }
 globalThis.FeasiblePolygon = FeasiblePolygon;
+/**
+ *
+ * @category LinearProgram
+ * @return the integral points inside the feasible polygon
+ * ```typescript
+ * FeasibleIntegral([
+ *    [1, 0, '<', 3],
+ *    [1, 0, '>', 0],
+ *    [0, 1, '<', 2],
+ *    [0, 1, '>', 0]
+ * ])
+ * // [[1,1],[2,1]]
+ * ```
+ */
 function FeasibleIntegral(cons) {
     let vertices = FeasiblePolygon(cons);
     let xCoords = vertices.map(p => p[0]);
@@ -9019,17 +9057,39 @@ function FeasibleIntegral(cons) {
     return points;
 }
 globalThis.FeasibleIntegral = FeasibleIntegral;
+/**
+ *
+ * @category LinearProgram
+ * @return the point with the max value of field
+ * ```typescript
+ * FeasibleIntegral([
+ *    [1, 0, '<', 3],
+ *    [1, 0, '>', 0],
+ *    [0, 1, '<', 2],
+ *    [0, 1, '>', 0]
+ * ])
+ * // [[1,1],[2,1]]
+ * ```
+ */
 function MaximizePoint(points, field) {
     Should(points.length > 0, 'No feasible point');
-    let point = SortBy(points, x => -FieldAt(x, field))[0];
+    let orderedPoints = SortBy(points, x => -FieldAt(x, field));
+    let point = orderedPoints[0];
     Should(!onBoundary(point), 'No max point');
+    if (orderedPoints[1]) {
+        Should(FieldAt(point, field) !== FieldAt(orderedPoints[1], field), 'multiple max points');
+    }
     return point;
 }
 globalThis.MaximizePoint = MaximizePoint;
 function MinimizePoint(points, field) {
     Should(points.length > 0, 'No feasible point');
-    let point = SortBy(points, x => FieldAt(x, field))[0];
+    let orderedPoints = SortBy(points, x => FieldAt(x, field));
+    let point = orderedPoints[0];
     Should(!onBoundary(point), 'No min point');
+    if (orderedPoints[1]) {
+        Should(FieldAt(point, field) !== FieldAt(orderedPoints[1], field), 'multiple min points');
+    }
     return point;
 }
 globalThis.MinimizePoint = MinimizePoint;
@@ -12821,6 +12881,33 @@ function Pairs(...items) {
     return arr;
 }
 globalThis.Pairs = Pairs;
+/**
+ * @category Utility
+ * @param arr - array to dedupe
+ * @param keyFunc - map item to this value to compare equality
+ * @return Deduped array
+ * ```typescript
+ * Dedupe([1, 2, 3, 3, 4, 5, 5, 5, 6] // [1, 2, 3, 4, 5, 6]
+ * Dedupe([[1, 2], [1, 2], [1, 3]]) // [[1, 2], [1, 3]]
+ * ```
+ */
+function Dedupe(arr) {
+    let newArr = [];
+    function exist(item) {
+        let k = JSON.stringify(item);
+        for (let t of newArr) {
+            if (k === JSON.stringify(t))
+                return true;
+        }
+        return false;
+    }
+    for (let item of arr) {
+        if (!exist(item))
+            newArr.push(item);
+    }
+    return newArr;
+}
+globalThis.Dedupe = Dedupe;
 
 
 /***/ }),

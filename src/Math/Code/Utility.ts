@@ -93,3 +93,32 @@ function Pairs<T>(...items: T[]): [T, T][] {
     return arr
 }
 globalThis.Pairs = Pairs
+
+
+
+
+/**
+ * @category Utility
+ * @param arr - array to dedupe
+ * @param keyFunc - map item to this value to compare equality
+ * @return Deduped array
+ * ```typescript
+ * Dedupe([1, 2, 3, 3, 4, 5, 5, 5, 6] // [1, 2, 3, 4, 5, 6]
+ * Dedupe([[1, 2], [1, 2], [1, 3]]) // [[1, 2], [1, 3]]
+ * ```
+ */
+function Dedupe<T>(arr: T[]): T[] {
+    let newArr: T[] = []
+    function exist(item: T): boolean {
+        let k = JSON.stringify(item)
+        for (let t of newArr) {
+            if (k === JSON.stringify(t)) return true
+        }
+        return false
+    }
+    for (let item of arr) {
+        if (!exist(item)) newArr.push(item)
+    }
+    return newArr
+}
+globalThis.Dedupe = Dedupe

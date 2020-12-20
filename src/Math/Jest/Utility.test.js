@@ -31,3 +31,9 @@ test('Pairs', () => {
     expect(Pairs(1, 2, 3)).toEqual([[1, 2], [1, 3], [2, 3]]);
     expect(Pairs(1)).toEqual([]);
 });
+
+
+test('Dedupe', () => {
+    expect(Dedupe([1, 2, 3, 3, 4, 5, 5, 5, 6])).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(Dedupe([[1, 2], [1, 2], [1, 3]])).toEqual([[1, 2], [1, 3]]);
+});
