@@ -93,6 +93,13 @@ test('IsPositive', () => {
 });
 
 
+test('IsPositiveInteger', () => {
+    const T = [1, 2, 3, 4, 5, 99];
+    const F = [0, -1, -2, -1.5, 1.5, 0.01];
+    testAssertion(IsPositiveInteger, T, F);
+});
+
+
 
 test('IsNegative', () => {
     const T = [-4, -1, -1.4, -123, -0.001, -0.1, -0.00000001];
@@ -120,18 +127,24 @@ test('IsString', () => {
 
 test('IsEmptyObject', () => {
     const T = [{}];
-    const F = [1, '', { x: 1 }, NaN, Infinity, undefined, null, true, false];
-    testAssertion(IsEmptyObject, T, F, false);
+    const F = [1, '', { x: 1 }];
+    testAssertion(IsEmptyObject, T, F);
 });
 
 
 
 test('IsArray', () => {
     const T = [[], [1, 2, 3]];
-    const F = [1, '', { x: 1 }, NaN, Infinity, undefined, null, true, false];
-    testAssertion(IsArray, T, F, false);
+    const F = [1, '', { x: 1 }];
+    testAssertion(IsArray, T, F);
 });
 
+
+test('IsArrayOfLength', () => {
+    const T = [[1, 2], ['2', '3']];
+    const F = [[], [1], [1, 2, 3], 1, '', { x: 1 }];
+    testAssertion(IsArrayOfLength(2), T, F);
+});
 
 
 
@@ -150,3 +163,28 @@ test('IsAbsBetween', () => {
     testAssertion(IsAbsBetween(2, 5), T, F);
 });
 
+
+
+test('IsPoint', () => {
+    const T = [[2, 5]];
+    const F = [2, [1, 2, 3], [NaN, NaN], ['1', '2']];
+    testAssertion(IsPoint, T, F);
+});
+
+
+
+
+test('IsIneqSign', () => {
+    const T = ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'];
+    const F = [1, 2, '=>', 'abc'];
+    testAssertion(IsIneqSign, T, F);
+});
+
+
+
+
+test('IsConstraint', () => {
+    const T = [[1, 2, '>', 3], [1, 2, '\\ge', -3]];
+    const F = [[1, 2, 3], [1, 2, '=>', 3]];
+    testAssertion(IsConstraint, T, F);
+});

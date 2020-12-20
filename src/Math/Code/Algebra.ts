@@ -7,8 +7,10 @@
  * ```
  */
 function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number] {
+    Must(IsNum(a, b, c, p, q, r), "Crammer: input must be num")
     const D = a * q - b * p
-    if (D === 0) return [NaN, NaN]
+    Should(D !== 0, 'Crammer: no unique solution!')
+    // if (D === 0) return [NaN, NaN]
     const x = (c * q - b * r) / D;
     const y = (a * r - c * p) / D;
     return [x, y];

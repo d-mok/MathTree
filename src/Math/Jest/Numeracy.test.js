@@ -1,4 +1,11 @@
 
+test('Divide', () => {
+    expect(Divide(6, 2)).toBe(3);
+    expect(() => Divide(6, 0)).toThrow();
+});
+
+
+
 test('Abs', () => {
     expect(Abs(0)).toBe(0);
     expect(Abs(12.5)).toBe(12.5);

@@ -83,11 +83,12 @@ globalThis.IneqSign = IneqSign
 * ParseIneqSign('<=') // [false,true]
 * ParseIneqSign('>') // [true,false]
 * ParseIneqSign('<') // [false,false]
-* ParseIneqSign('abc') // undefined
+* ParseIneqSign('abc') // throw
 * ```
 */
-function ParseIneqSign(text: string): [greater: boolean, equal: boolean] | undefined {
-    if (!text.match(/[gl\>\<]/g)) return undefined
+function ParseIneqSign(text: string): IneqSign {
+    Must(IsIneqSign(text), 'ParseIneqSign: input is not IneqSign')
+    // if (!text.match(/[gl\>\<]/g)) return undefined
     let greater = text.includes('g') || text.includes('>')
     let equal = text.includes('e') || text.includes('=')
     return [greater, equal]

@@ -7913,8 +7913,8 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(29);
-__webpack_require__(33);
+__webpack_require__(30);
+__webpack_require__(34);
 
 
 /***/ }),
@@ -7945,6 +7945,7 @@ __webpack_require__(25);
 __webpack_require__(26);
 __webpack_require__(27);
 __webpack_require__(28);
+__webpack_require__(29);
 
 
 /***/ }),
@@ -7962,9 +7963,10 @@ __webpack_require__(28);
  * ```
  */
 function Crammer(a, b, c, p, q, r) {
+    Must(IsNum(a, b, c, p, q, r), "Crammer: input must be num");
     const D = a * q - b * p;
-    if (D === 0)
-        return [NaN, NaN];
+    Should(D !== 0, 'Crammer: no unique solution!');
+    // if (D === 0) return [NaN, NaN]
     const x = (c * q - b * r) / D;
     const y = (a * r - c * p) / D;
     return [x, y];
@@ -8078,8 +8080,8 @@ globalThis.xPolynomial = xPolynomial;
  * IsNum('2') // false
  * ```
  */
-function IsNum(...num) {
-    return num.every(x => typeof x === 'number' && isFinite(x));
+function IsNum(...items) {
+    return items.every(x => typeof x === 'number' && isFinite(x));
 }
 globalThis.IsNum = IsNum;
 /**
@@ -8090,8 +8092,8 @@ globalThis.IsNum = IsNum;
  * IsInteger(0.5) // false
  * ```
  */
-function IsInteger(...num) {
-    return Blurs(num).every(x => IsNum(x) && Number.isInteger(x));
+function IsInteger(...items) {
+    return Blurs(items).every(x => IsNum(x) && Number.isInteger(x));
 }
 globalThis.IsInteger = IsInteger;
 /**
@@ -8102,8 +8104,8 @@ globalThis.IsInteger = IsInteger;
  * IsDecimal(5) // false
  * ```
  */
-function IsDecimal(...num) {
-    return num.every(x => IsNum(x) && !IsInteger(x));
+function IsDecimal(...items) {
+    return Blurs(items).every(x => IsNum(x) && !IsInteger(x));
 }
 globalThis.IsDecimal = IsDecimal;
 /**
@@ -8114,8 +8116,8 @@ globalThis.IsDecimal = IsDecimal;
  * IsCoeff(-1) // false
  * ```
  */
-function IsCoeff(...num) {
-    return Blurs(num).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
+function IsCoeff(...items) {
+    return Blurs(items).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
 }
 globalThis.IsCoeff = IsCoeff;
 /**
@@ -8127,8 +8129,8 @@ globalThis.IsCoeff = IsCoeff;
  * IsOdd(4) // false
  * ```
  */
-function IsOdd(...num) {
-    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
+function IsOdd(...items) {
+    return Blurs(items).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
 }
 globalThis.IsOdd = IsOdd;
 /**
@@ -8141,8 +8143,8 @@ globalThis.IsOdd = IsOdd;
  * IsEven(5) // false
  * ```
  */
-function IsEven(...num) {
-    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
+function IsEven(...items) {
+    return Blurs(items).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
 }
 globalThis.IsEven = IsEven;
 /**
@@ -8155,8 +8157,8 @@ globalThis.IsEven = IsEven;
  * IsProbability(-0.1) // false
  * ```
  */
-function IsProbability(...num) {
-    return num.every(x => IsNum(x) && x >= 0 && x <= 1);
+function IsProbability(...items) {
+    return items.every(x => IsNum(x) && x >= 0 && x <= 1);
 }
 globalThis.IsProbability = IsProbability;
 /**
@@ -8168,8 +8170,8 @@ globalThis.IsProbability = IsProbability;
  * IsSquareNum(-9) // false
  * ```
  */
-function IsSquareNum(...num) {
-    return Blurs(num).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
+function IsSquareNum(...items) {
+    return Blurs(items).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
 }
 globalThis.IsSquareNum = IsSquareNum;
 /**
@@ -8181,10 +8183,24 @@ globalThis.IsSquareNum = IsSquareNum;
  * IsPositive(-2) // false
  * ```
  */
-function IsPositive(...num) {
-    return num.every(x => IsNum(x) && x > 0);
+function IsPositive(...items) {
+    return items.every(x => IsNum(x) && x > 0);
 }
 globalThis.IsPositive = IsPositive;
+/**
+ * @category Assertion
+ * @return check if the number is a positive integer.
+ * ```typescript
+ * IsPositiveInteger(2) // true
+ * IsPositiveInteger(0) // false
+ * IsPositiveInteger(-2) // false
+ * IsPositiveInteger(1.5) // false
+ * ```
+ */
+function IsPositiveInteger(...items) {
+    return items.every(x => IsInteger(x) && x > 0);
+}
+globalThis.IsPositiveInteger = IsPositiveInteger;
 /**
  * @category Assertion
  * @return check if the number is negative.
@@ -8194,8 +8210,8 @@ globalThis.IsPositive = IsPositive;
  * IsNegative(2) // false
  * ```
  */
-function IsNegative(...num) {
-    return num.every(x => IsNum(x) && x < 0);
+function IsNegative(...items) {
+    return items.every(x => IsNum(x) && x < 0);
 }
 globalThis.IsNegative = IsNegative;
 /**
@@ -8207,8 +8223,8 @@ globalThis.IsNegative = IsNegative;
  * IsNonZero(-2) // true
  * ```
  */
-function IsNonZero(...num) {
-    return num.every(x => IsNum(x) && x !== 0);
+function IsNonZero(...items) {
+    return items.every(x => IsNum(x) && x !== 0);
 }
 globalThis.IsNonZero = IsNonZero;
 /**
@@ -8255,6 +8271,14 @@ function IsArray(...items) {
     return items.every(x => Array.isArray(x));
 }
 globalThis.IsArray = IsArray;
+function IsArrayOfLength(length) {
+    Must(IsPositiveInteger(length), 'IsArrayOfLength: length must be positive integer');
+    const f = function (...items) {
+        return items.every(x => IsArray(x) && x.length === length);
+    };
+    return f;
+}
+globalThis.IsArrayOfLength = IsArrayOfLength;
 /**
  * @category Assertion
  * @return check if the num is between min and max inclusive.
@@ -8265,8 +8289,9 @@ globalThis.IsArray = IsArray;
  * ```
  */
 function IsBetween(min, max) {
-    const f = function (...num) {
-        return num.every(x => IsNum(x) && x >= min && x <= max);
+    Must(IsNum(min, max), 'IsBetween: min and max must be number');
+    const f = function (...items) {
+        return items.every(x => IsNum(x) && x >= min && x <= max);
     };
     return f;
 }
@@ -8281,12 +8306,59 @@ globalThis.IsBetween = IsBetween;
  * ```
  */
 function IsAbsBetween(min, max) {
-    const f = function (...num) {
-        return num.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
+    Must(IsNum(min, max), 'IsBetween: min and max must be number');
+    const f = function (...items) {
+        return items.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
     };
     return f;
 }
 globalThis.IsAbsBetween = IsAbsBetween;
+/**
+ * @category Assertion
+ * @return check if the item is a point [num,num]
+ * ```typescript
+ * IsPoint([2,5]) // true
+ * IsPoint(2) // false
+ * IsPoint([1,2,3]) // false
+ * IsPoint([NaN,NaN]) // false
+ * ```
+ */
+function IsPoint(...items) {
+    return items.every(x => IsArrayOfLength(2)(x) && IsNum(x[0], x[1]));
+}
+globalThis.IsPoint = IsPoint;
+/**
+ * @category Assertion
+ * @return check if the item is a IneqSign string
+ * ```typescript
+ * IsIneqSign('>') // true
+ * IsIneqSign('\\ge') // true
+ * IsIneqSign(true) // false
+ * IsIneqSign('=>') // false
+ * ```
+ */
+function IsIneqSign(...items) {
+    return items.every(x => [
+        '>', '<', '>=', '<=',
+        '\\gt', '\\lt', '\\ge', '\\le'
+    ].includes(x));
+}
+globalThis.IsIneqSign = IsIneqSign;
+/**
+ * @category Assertion
+ * @return check if the item is a constraint (LP)
+ * ```typescript
+ * IsConstraint([1,2,'>',3]) // true
+ * IsConstraint([1,2,3]) // false
+ * IsConstraint([1,2,'=>',3]) // false
+ * ```
+ */
+function IsConstraint(...items) {
+    return items.every(x => IsArrayOfLength(4)(x) &&
+        IsNum(x[0], x[1], x[3]) &&
+        IsIneqSign(x[2]));
+}
+globalThis.IsConstraint = IsConstraint;
 
 
 /***/ }),
@@ -8832,6 +8904,16 @@ globalThis.PrintVariable = PrintVariable;
 
 "use strict";
 
+const LP_BOUND = 100;
+function onBoundary(p) {
+    return Abs(p[0]) >= LP_BOUND || Abs(p[1]) >= LP_BOUND;
+}
+function FieldAt(p, field) {
+    const [a, b, c] = field;
+    const [x, y] = p;
+    return a * x + b * y + c;
+}
+globalThis.FieldAt = FieldAt;
 /**
  *
  * @category LinearProgram
@@ -8861,6 +8943,7 @@ function isConstrained(cons, point) {
             return P < 0;
     });
 }
+globalThis.isConstrained = isConstrained;
 /**
  *
  * @category LinearProgram
@@ -8879,147 +8962,77 @@ function isLooseConstrained(cons, point) {
     return cons.every(con => {
         let [a, b, s, c] = con;
         let P = a * x + b * y - c;
-        let [greater, eq] = ParseIneqSign(s);
+        let [greater, _] = ParseIneqSign(s);
         if (greater)
             return P >= 0;
         if (!greater)
             return P <= 0;
     });
 }
-// function FeasiblePolygon(cons: Constraint[], bound = [100,100]) {
-//     const [xBound, yBound] = bound
-//     const boundaryConstraints: Constraint[] = [
-//         [1, 0, "<=", xBound],
-//         [1, 0, ">=", -xBound],
-//         [0, 1, "<=", yBound],
-//         [0, 1, ">=", -yBound]
-//     ]
-//     let cs = [...cons, ...boundaryConstraints];
-//     let vertices: Point[] = [];
-//     for (let i = 0; i < cs.length; i++) {
-//         for (let j = i + 1; j < cs.length; j++) {
-//             let [a1, b1, s1, c1] = cs[i];
-//             let [a2, b2, s2, c2] = cs[j];
-//             let p = Crammer(a1, b1, c1, a2, b2, c2);
-//             let otherCons = [...cs];
-//             otherCons.splice(j, 1);
-//             otherCons.splice(i, 1);
-//             if (isConstrained(otherCons, p, false)) {
-//                 vertices.push(p);
-//             }
-//         }
-//     }
-//     if (vertices.length <= 2) return vertices;
-//     const center = VectorMean(...vertices);
-//     vertices = SortBy(vertices, x => Inclination(center, x))
-//     return vertices;
-// }
-/**
- * @category LinearProgram
- * @return result of linear programming.
- * ```typescript
- * LinearProgram([[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5]], [2,3,4])
- * // optimize P=2x+3y+4 under [x+y<=5, x-y<4, 2x+y>=5]
- * // vertex: an array of vertex coordinates
- * // integral: an array of feasible integral points
- * // vertexMin: info about the minimum vertex, undefined if not exist
- * ```
- */
-function LinearProgram(constraints, field, bound = [100, 100]) {
-    function fieldAt(p) {
-        const [a, b, c] = field;
-        const [x, y] = p;
-        return a * x + b * y + c;
-    }
-    function isConstrained(constraints, point, strict = true) {
-        const [x, y] = point;
-        return constraints.every((constraint) => {
-            let [a, b, s, c] = constraint;
-            let P = a * x + b * y - c;
-            let [greater, eq] = ParseIneqSign(s);
-            if (strict) {
-                if (greater && eq)
-                    return P >= 0;
-                if (greater && !eq)
-                    return P > 0;
-                if (!greater && eq)
-                    return P <= 0;
-                if (!greater && !eq)
-                    return P < 0;
-            }
-            else {
-                if (greater)
-                    return P >= 0;
-                if (!greater)
-                    return P <= 0;
-            }
-        });
-    }
-    const [xBound, yBound] = bound;
+globalThis.isLooseConstrained = isLooseConstrained;
+function FeasiblePolygon(cons) {
     const boundaryConstraints = [
-        [1, 0, "<=", xBound],
-        [1, 0, ">=", -xBound],
-        [0, 1, "<=", yBound],
-        [0, 1, ">=", -yBound]
+        [1, 0, "<=", LP_BOUND],
+        [1, 0, ">=", -LP_BOUND],
+        [0, 1, "<=", LP_BOUND],
+        [0, 1, ">=", -LP_BOUND]
     ];
-    function feasiblePolygon() {
-        let cs = [...constraints, ...boundaryConstraints];
-        let vertices = [];
-        for (let i = 0; i < cs.length; i++) {
-            for (let j = i + 1; j < cs.length; j++) {
-                let [a1, b1, s1, c1] = cs[i];
-                let [a2, b2, s2, c2] = cs[j];
-                let p = Crammer(a1, b1, c1, a2, b2, c2);
-                let otherCons = [...cs];
-                otherCons.splice(j, 1);
-                otherCons.splice(i, 1);
-                if (isConstrained(otherCons, p, false)) {
-                    vertices.push(p);
-                }
+    let cs = [...cons, ...boundaryConstraints];
+    let vertices = [];
+    for (let i = 0; i < cs.length; i++) {
+        for (let j = i + 1; j < cs.length; j++) {
+            let [a1, b1, s1, c1] = cs[i];
+            let [a2, b2, s2, c2] = cs[j];
+            if (a1 / b1 === a2 / b2)
+                continue;
+            let p = Crammer(a1, b1, c1, a2, b2, c2);
+            let otherCons = [...cs];
+            otherCons.splice(j, 1);
+            otherCons.splice(i, 1);
+            if (isLooseConstrained(otherCons, p)) {
+                vertices.push(p);
             }
         }
-        if (vertices.length <= 2)
-            return vertices;
-        const center = VectorMean(...vertices);
-        vertices = SortBy(vertices, x => Inclination(center, x));
-        return vertices;
     }
-    function feasibleIntegral() {
-        let points = [];
-        for (let i = -xBound; i <= xBound; i++) {
-            for (let j = -yBound; j <= yBound; j++) {
-                if (isConstrained(constraints, [i, j])) {
-                    points.push([i, j]);
-                }
-            }
-        }
-        return points;
-    }
-    function onBoundary(p) {
-        let [x, y] = p;
-        return Abs(x) >= xBound || Abs(y) >= yBound;
-    }
-    function optimum(p) {
-        if (!p)
-            return undefined;
-        if (onBoundary(p))
-            return undefined;
-        return { point: p, value: fieldAt(p) };
-    }
-    function OptimizeField(feasiblePoints) {
-        let ps = SortBy(feasiblePoints, fieldAt);
-        let [minPoint, maxPoint] = [ps[0], ps[ps.length - 1]];
-        return [optimum(minPoint), optimum(maxPoint)];
-    }
-    let vertex = feasiblePolygon();
-    if (vertex.length <= 2)
-        return undefined; // no feasible region found
-    let [vertexMin, vertexMax] = OptimizeField(vertex);
-    let integral = feasibleIntegral();
-    let [integralMin, integralMax] = OptimizeField(integral);
-    return { vertex, integral, vertexMin, vertexMax, integralMin, integralMax };
+    Should(vertices.length > 2, 'No feasible region.');
+    const center = VectorMean(...vertices);
+    vertices = SortBy(vertices, x => Inclination(center, x));
+    return vertices;
 }
-globalThis.LinearProgram = LinearProgram;
+globalThis.FeasiblePolygon = FeasiblePolygon;
+function FeasibleIntegral(cons) {
+    let vertices = FeasiblePolygon(cons);
+    let xCoords = vertices.map(p => p[0]);
+    let yCoords = vertices.map(p => p[1]);
+    let xmax = Max(...xCoords);
+    let xmin = Min(...xCoords);
+    let ymax = Max(...yCoords);
+    let ymin = Min(...yCoords);
+    let points = [];
+    for (let i = xmin; i <= xmax; i++) {
+        for (let j = ymin; j <= ymax; j++) {
+            let p = [i, j];
+            if (isConstrained(cons, p))
+                points.push(p);
+        }
+    }
+    return points;
+}
+globalThis.FeasibleIntegral = FeasibleIntegral;
+function MaximizePoint(points, field) {
+    Should(points.length > 0, 'No feasible point');
+    let point = SortBy(points, x => -FieldAt(x, field))[0];
+    Should(!onBoundary(point), 'No max point');
+    return point;
+}
+globalThis.MaximizePoint = MaximizePoint;
+function MinimizePoint(points, field) {
+    Should(points.length > 0, 'No feasible point');
+    let point = SortBy(points, x => FieldAt(x, field))[0];
+    Should(!onBoundary(point), 'No min point');
+    return point;
+}
+globalThis.MinimizePoint = MinimizePoint;
 
 
 /***/ }),
@@ -9028,6 +9041,22 @@ globalThis.LinearProgram = LinearProgram;
 
 "use strict";
 
+/**
+ * @category Numeracy
+ * @return division with x/0 handling
+ * ```typescript
+ * Divide(6,2) // 3
+ * Divide(6,0) // throw error
+ * ```
+ */
+function Divide(dividend, divisor) {
+    if (!IsNum(dividend, divisor))
+        throw DesignError('input must be number');
+    if (divisor === 0)
+        throw MathError('division by 0');
+    return dividend / divisor;
+}
+globalThis.Divide = Divide;
 /**
  * @category Numeracy
  * @return the absolute value. Equivalent to Math.abs(x).
@@ -11580,7 +11609,7 @@ function RndShake(anchor, range, n) {
             return RndShakeDfrac(anchor, range, n);
         }
         // Inequal Sign
-        if (ParseIneqSign(anchor)) {
+        if (IsIneqSign(anchor)) {
             return RndShakeIneq(anchor, n);
         }
         // else convert to number
@@ -12301,12 +12330,12 @@ globalThis.IneqSign = IneqSign;
 * ParseIneqSign('<=') // [false,true]
 * ParseIneqSign('>') // [true,false]
 * ParseIneqSign('<') // [false,false]
-* ParseIneqSign('abc') // undefined
+* ParseIneqSign('abc') // throw
 * ```
 */
 function ParseIneqSign(text) {
-    if (!text.match(/[gl\>\<]/g))
-        return undefined;
+    Must(IsIneqSign(text), 'ParseIneqSign: input is not IneqSign');
+    // if (!text.match(/[gl\>\<]/g)) return undefined
     let greater = text.includes('g') || text.includes('>');
     let equal = text.includes('e') || text.includes('=');
     return [greater, equal];
@@ -12945,14 +12974,58 @@ globalThis.VectorRotate = VectorRotate;
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(30);
-__webpack_require__(31);
-__webpack_require__(32);
+class CustumMathError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "MathError";
+        this.message = "";
+        this.stack = "";
+        this.name = 'MathError';
+    }
+}
+function MathError(message) {
+    return new CustumMathError(message);
+}
+globalThis.MathError = MathError;
+class CustumDesignError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "DesignError";
+        this.message = "";
+        this.stack = "";
+        this.name = 'DesignError';
+    }
+}
+function DesignError(message) {
+    return new CustumDesignError(message);
+}
+globalThis.DesignError = DesignError;
+function Must(condition, msg = "Must condition failed!") {
+    if (!condition)
+        throw DesignError(msg);
+}
+globalThis.Must = Must;
+function Should(condition, msg = "Should condition failed!") {
+    if (!condition)
+        throw MathError(msg);
+}
+globalThis.Should = Should;
 
 
 /***/ }),
 /* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(31);
+__webpack_require__(32);
+__webpack_require__(33);
+
+
+/***/ }),
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13050,7 +13123,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14236,7 +14309,7 @@ globalThis.Pen = Pen;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14854,20 +14927,14 @@ class AutoPenCls {
      * })
      * ```
      */
-    LinearProgram({ LP = undefined, constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey" }) {
+    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey" }) {
         function fieldAt(p) {
             const [a, b, c] = field;
             const [x, y] = p;
             return Round(a * x + b * y + c, 3);
         }
-        if (LP === undefined) {
-            LP = LinearProgram(constraints, field);
-        }
-        else {
-            // constraints =  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        }
-        if (LP === undefined)
-            throw "Linear Program has no solution. Fail to draw!";
+        const vertices = FeasiblePolygon(constraints);
+        const integrals = FeasibleIntegral(constraints);
         const pen = new Pen();
         let [[xmin, xmax], [ymin, ymax]] = ranges;
         let bound = 0.7;
@@ -14919,14 +14986,14 @@ class AutoPenCls {
             pen.set.textAlign();
         }
         function drawIntegral(label = false) {
-            LP.integral.forEach((p) => {
+            integrals.forEach((p) => {
                 pen.point(p);
                 if (label && labelConstraints.every((f) => f(...p)))
                     labelField(p);
             });
         }
         function drawVertex(coordinates = false, label = false) {
-            LP.vertex.forEach((p) => {
+            vertices.forEach((p) => {
                 pen.point(p);
                 if (coordinates)
                     pen.label.coordinates(p, 270);
@@ -14936,7 +15003,7 @@ class AutoPenCls {
         }
         function drawShade() {
             pen.set.alpha(0.3);
-            pen.polygon(LP.vertex, true);
+            pen.polygon(vertices, true);
             pen.set.alpha();
         }
         function drawContour(value) {
@@ -14973,24 +15040,24 @@ class AutoPenCls {
             drawVertex(showVertexCoordinates, showVertexLabel);
         drawHighlights();
         drawContours();
-        if (showVertexMax && LP.vertexMax)
+        if (showVertexMax)
             drawHighlight({
-                point: LP.vertexMax.point,
+                point: MaximizePoint(vertices, field),
                 color: "red"
             });
-        if (showVertexMin && LP.vertexMin)
+        if (showVertexMin)
             drawHighlight({
-                point: LP.vertexMin.point,
+                point: MinimizePoint(vertices, field),
                 color: "blue"
             });
-        if (showIntegralMax && LP.integralMax)
+        if (showIntegralMax)
             drawHighlight({
-                point: LP.integralMax.point,
+                point: MaximizePoint(integrals, field),
                 color: "red"
             });
-        if (showIntegralMin && LP.integralMin)
+        if (showIntegralMin)
             drawHighlight({
-                point: LP.integralMin.point,
+                point: MinimizePoint(integrals, field),
                 color: "blue"
             });
         this.pen = pen;
@@ -15001,13 +15068,13 @@ globalThis.AutoPen = AutoPen;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(34);
+const global_1 = __webpack_require__(35);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -15042,19 +15109,19 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(35);
-const dress_1 = __webpack_require__(36);
-const shuffle_1 = __webpack_require__(37);
-const option_1 = __webpack_require__(38);
-__webpack_require__(39);
-const cls_1 = __webpack_require__(40);
+const section_1 = __webpack_require__(36);
+const dress_1 = __webpack_require__(37);
+const shuffle_1 = __webpack_require__(38);
+const option_1 = __webpack_require__(39);
+__webpack_require__(40);
+const cls_1 = __webpack_require__(41);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -15249,7 +15316,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15284,7 +15351,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15350,7 +15417,7 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15430,7 +15497,7 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15503,7 +15570,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15511,7 +15578,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

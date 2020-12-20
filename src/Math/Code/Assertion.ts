@@ -9,8 +9,10 @@
  * IsNum('2') // false
  * ```
  */
-function IsNum(...num: number[]): boolean {
-    return num.every(x => typeof x === 'number' && isFinite(x));
+function IsNum(...items: any[]): boolean {
+    return items.every(
+        x => typeof x === 'number' && isFinite(x)
+    );
 }
 globalThis.IsNum = IsNum
 
@@ -23,8 +25,10 @@ globalThis.IsNum = IsNum
  * IsInteger(0.5) // false
  * ```
  */
-function IsInteger(...num: number[]): boolean {
-    return Blurs(num).every(x => IsNum(x) && Number.isInteger(x));
+function IsInteger(...items: any[]): boolean {
+    return Blurs(items).every(
+        x => IsNum(x) && Number.isInteger(x)
+    );
 }
 globalThis.IsInteger = IsInteger
 
@@ -38,8 +42,10 @@ globalThis.IsInteger = IsInteger
  * IsDecimal(5) // false
  * ```
  */
-function IsDecimal(...num: number[]): boolean {
-    return num.every(x => IsNum(x) && !IsInteger(x));
+function IsDecimal(...items: any[]): boolean {
+    return Blurs(items).every(
+        x => IsNum(x) && !IsInteger(x)
+    );
 }
 globalThis.IsDecimal = IsDecimal
 
@@ -55,8 +61,10 @@ globalThis.IsDecimal = IsDecimal
  * IsCoeff(-1) // false
  * ```
  */
-function IsCoeff(...num: number[]): boolean {
-    return Blurs(num).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
+function IsCoeff(...items: any[]): boolean {
+    return Blurs(items).every(
+        x => IsInteger(x) && ![-1, 0, 1].includes(x)
+    );
 }
 globalThis.IsCoeff = IsCoeff
 
@@ -74,8 +82,10 @@ globalThis.IsCoeff = IsCoeff
  * IsOdd(4) // false
  * ```
  */
-function IsOdd(...num: number[]): boolean {
-    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
+function IsOdd(...items: any[]): boolean {
+    return Blurs(items).every(
+        x => IsInteger(x) && Math.abs(x) % 2 === 1
+    );
 }
 globalThis.IsOdd = IsOdd
 
@@ -89,8 +99,10 @@ globalThis.IsOdd = IsOdd
  * IsEven(5) // false
  * ```
  */
-function IsEven(...num: number[]): boolean {
-    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
+function IsEven(...items: any[]): boolean {
+    return Blurs(items).every(
+        x => IsInteger(x) && Math.abs(x) % 2 === 0
+    );
 }
 globalThis.IsEven = IsEven
 
@@ -106,8 +118,10 @@ globalThis.IsEven = IsEven
  * IsProbability(-0.1) // false
  * ```
  */
-function IsProbability(...num: number[]): boolean {
-    return num.every(x => IsNum(x) && x >= 0 && x <= 1);
+function IsProbability(...items: any[]): boolean {
+    return items.every(
+        x => IsNum(x) && x >= 0 && x <= 1
+    );
 }
 globalThis.IsProbability = IsProbability
 
@@ -122,8 +136,10 @@ globalThis.IsProbability = IsProbability
  * IsSquareNum(-9) // false
  * ```
  */
-function IsSquareNum(...num: number[]): boolean {
-    return Blurs(num).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
+function IsSquareNum(...items: any[]): boolean {
+    return Blurs(items).every(
+        x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x))
+    );
 }
 globalThis.IsSquareNum = IsSquareNum
 
@@ -138,10 +154,32 @@ globalThis.IsSquareNum = IsSquareNum
  * IsPositive(-2) // false
  * ```
  */
-function IsPositive(...num: number[]): boolean {
-    return num.every(x => IsNum(x) && x > 0);
+function IsPositive(...items: any[]): boolean {
+    return items.every(
+        x => IsNum(x) && x > 0
+    );
 }
 globalThis.IsPositive = IsPositive
+
+
+
+/**
+ * @category Assertion
+ * @return check if the number is a positive integer.
+ * ```typescript
+ * IsPositiveInteger(2) // true
+ * IsPositiveInteger(0) // false
+ * IsPositiveInteger(-2) // false
+ * IsPositiveInteger(1.5) // false
+ * ```
+ */
+function IsPositiveInteger(...items: any[]): boolean {
+    return items.every(
+        x => IsInteger(x) && x > 0
+    );
+}
+globalThis.IsPositiveInteger = IsPositiveInteger
+
 
 
 
@@ -154,8 +192,10 @@ globalThis.IsPositive = IsPositive
  * IsNegative(2) // false
  * ```
  */
-function IsNegative(...num: number[]): boolean {
-    return num.every(x => IsNum(x) && x < 0);
+function IsNegative(...items: any[]): boolean {
+    return items.every(
+        x => IsNum(x) && x < 0
+    );
 }
 globalThis.IsNegative = IsNegative
 
@@ -171,8 +211,10 @@ globalThis.IsNegative = IsNegative
  * IsNonZero(-2) // true
  * ```
  */
-function IsNonZero(...num: number[]): boolean {
-    return num.every(x => IsNum(x) && x !== 0);
+function IsNonZero(...items: any[]): boolean {
+    return items.every(
+        x => IsNum(x) && x !== 0
+    );
 }
 globalThis.IsNonZero = IsNonZero
 
@@ -190,8 +232,10 @@ globalThis.IsNonZero = IsNonZero
  * IsString(1) // false
  * ```
  */
-function IsString(...items: string[]): boolean {
-    return items.every(x => typeof x === 'string');
+function IsString(...items: any[]): boolean {
+    return items.every(
+        x => typeof x === 'string'
+    );
 }
 globalThis.IsString = IsString
 
@@ -227,9 +271,27 @@ globalThis.IsEmptyObject = IsEmptyObject
  * ```
  */
 function IsArray(...items: any[]): boolean {
-    return items.every(x => Array.isArray(x));
+    return items.every(
+        x => Array.isArray(x)
+    );
 }
 globalThis.IsArray = IsArray
+
+
+
+function IsArrayOfLength(length: number) {
+    Must(
+        IsPositiveInteger(length),
+        'IsArrayOfLength: length must be positive integer'
+    )
+    const f = function (...items: any[]): boolean {
+        return items.every(
+            x => IsArray(x) && x.length === length
+        );
+    }
+    return f
+}
+globalThis.IsArrayOfLength = IsArrayOfLength
 
 
 /**
@@ -242,8 +304,11 @@ globalThis.IsArray = IsArray
  * ```
  */
 function IsBetween(min: number, max: number) {
-    const f = function (...num: number[]): boolean {
-        return num.every(x => IsNum(x) && x >= min && x <= max);
+    Must(IsNum(min, max), 'IsBetween: min and max must be number')
+    const f = function (...items: any[]): boolean {
+        return items.every(
+            x => IsNum(x) && x >= min && x <= max
+        );
     }
     return f
 }
@@ -259,15 +324,72 @@ globalThis.IsBetween = IsBetween
  * ```
  */
 function IsAbsBetween(min: number, max: number) {
-    const f = function (...num: number[]): boolean {
-        return num.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
+    Must(IsNum(min, max), 'IsBetween: min and max must be number')
+    const f = function (...items: any[]): boolean {
+        return items.every(
+            x => IsNum(x) && Abs(x) >= min && Abs(x) <= max
+        );
     }
     return f
 }
 globalThis.IsAbsBetween = IsAbsBetween
 
 
+/**
+ * @category Assertion
+ * @return check if the item is a point [num,num]
+ * ```typescript
+ * IsPoint([2,5]) // true
+ * IsPoint(2) // false
+ * IsPoint([1,2,3]) // false
+ * IsPoint([NaN,NaN]) // false
+ * ```
+ */
+function IsPoint(...items: any[]): boolean {
+    return items.every(
+        x => IsArrayOfLength(2)(x) && IsNum(x[0], x[1])
+    );
+}
+globalThis.IsPoint = IsPoint
 
 
 
+/**
+ * @category Assertion
+ * @return check if the item is a IneqSign string
+ * ```typescript
+ * IsIneqSign('>') // true
+ * IsIneqSign('\\ge') // true
+ * IsIneqSign(true) // false
+ * IsIneqSign('=>') // false
+ * ```
+ */
+function IsIneqSign(...items: any[]): boolean {
+    return items.every(
+        x => [
+            '>', '<', '>=', '<=',
+            '\\gt', '\\lt', '\\ge', '\\le'
+        ].includes(x)
+    );
+}
+globalThis.IsIneqSign = IsIneqSign
+
+
+/**
+ * @category Assertion
+ * @return check if the item is a constraint (LP)
+ * ```typescript
+ * IsConstraint([1,2,'>',3]) // true
+ * IsConstraint([1,2,3]) // false
+ * IsConstraint([1,2,'=>',3]) // false
+ * ```
+ */
+function IsConstraint(...items: any[]): boolean {
+    return items.every(
+        x => IsArrayOfLength(4)(x) &&
+            IsNum(x[0], x[1], x[3]) &&
+            IsIneqSign(x[2])
+    );
+}
+globalThis.IsConstraint = IsConstraint
 

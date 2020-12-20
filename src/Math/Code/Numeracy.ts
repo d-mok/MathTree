@@ -1,3 +1,17 @@
+/**
+ * @category Numeracy
+ * @return division with x/0 handling
+ * ```typescript
+ * Divide(6,2) // 3
+ * Divide(6,0) // throw error
+ * ```
+ */
+function Divide(dividend: number, divisor: number): number {
+    if (!IsNum(dividend, divisor)) throw DesignError('input must be number')
+    if (divisor === 0) throw MathError('division by 0')
+    return dividend / divisor
+}
+globalThis.Divide = Divide
 
 
 /**

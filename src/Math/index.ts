@@ -19,3 +19,5 @@ import './Code/Triangle.ts'
 import './Code/Trigonometry.ts'
 import './Code/Utility.ts'
 import './Code/Vector.ts'
+
+import './TypeCheck/TypeCheck.ts'

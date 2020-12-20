@@ -706,7 +706,6 @@ class AutoPenCls {
      * ```
      */
     LinearProgram({
-        LP = undefined,
         constraints = [],
         field = [0, 0, 0],
         contours = [],
@@ -730,7 +729,6 @@ class AutoPenCls {
         showIntegralMin = false,
         contourColor = "grey"
     }: {
-        LP: LinearProgram | undefined,
         constraints: Constraint[],
         field: Field,
         contours: number[],
@@ -755,18 +753,14 @@ class AutoPenCls {
         contourColor: string
 
     }) {
-        function fieldAt(p: Point) {
+        function fieldAt(p: Point): number {
             const [a, b, c] = field
             const [x, y] = p
             return Round(a * x + b * y + c, 3)
         }
 
-        if (LP === undefined) { 
-            LP = LinearProgram(constraints, field); 
-        }else{
-            // constraints =  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        }
-        if (LP === undefined) throw "Linear Program has no solution. Fail to draw!"
+        const vertices = FeasiblePolygon(constraints)
+        const integrals = FeasibleIntegral(constraints)
 
 
 
@@ -810,7 +804,7 @@ class AutoPenCls {
         function drawLines() {
             constraints.forEach((constraint) => {
                 let [a, b, s, c] = constraint;
-                let [_, eq] = ParseIneqSign(s)!
+                let [_, eq] = ParseIneqSign(s)
                 if (!eq) pen.set.dash([5, 5]);
                 pen.graph.linear(a, b, -c);
                 pen.set.dash();
@@ -829,14 +823,14 @@ class AutoPenCls {
         }
 
         function drawIntegral(label = false) {
-            LP!.integral.forEach((p) => {
+            integrals.forEach((p) => {
                 pen.point(p);
                 if (label && labelConstraints.every((f) => f(...p))) labelField(p)
             });
         }
 
         function drawVertex(coordinates = false, label = false) {
-            LP!.vertex.forEach((p) => {
+            vertices.forEach((p) => {
                 pen.point(p);
                 if (coordinates) pen.label.coordinates(p, 270);
                 if (label && labelConstraints.every((f) => f(...p))) labelField(p)
@@ -845,7 +839,7 @@ class AutoPenCls {
 
         function drawShade() {
             pen.set.alpha(0.3);
-            pen.polygon(LP!.vertex, true);
+            pen.polygon(vertices, true);
             pen.set.alpha();
         }
 
@@ -887,20 +881,20 @@ class AutoPenCls {
         drawHighlights();
         drawContours();
 
-        if (showVertexMax && LP.vertexMax) drawHighlight({
-            point: LP.vertexMax.point,
+        if (showVertexMax) drawHighlight({
+            point: MaximizePoint(vertices, field),
             color: "red"
         });
-        if (showVertexMin && LP.vertexMin) drawHighlight({
-            point: LP.vertexMin.point,
+        if (showVertexMin) drawHighlight({
+            point: MinimizePoint(vertices, field),
             color: "blue"
         });
-        if (showIntegralMax && LP.integralMax) drawHighlight({
-            point: LP.integralMax.point,
+        if (showIntegralMax) drawHighlight({
+            point: MaximizePoint(integrals, field),
             color: "red"
         });
-        if (showIntegralMin && LP.integralMin) drawHighlight({
-            point: LP.integralMin.point,
+        if (showIntegralMin) drawHighlight({
+            point: MinimizePoint(integrals, field),
             color: "blue"
         });
 

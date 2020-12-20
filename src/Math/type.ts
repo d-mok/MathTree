@@ -20,19 +20,7 @@ type Constraint = [xCoeff: number, yCoeff: number, ineq: string, constant: numbe
  */
 type Field = [xCoeff: number, yCoeff: number, constant: number]
 
-type Optimum = {
-    point: Point,
-    value: number
-}
 
-type LinearProgram = {
-    vertex: Point[],
-    integral: Point[],
-    vertexMin: Optimum | undefined,
-    vertexMax: Optimum | undefined,
-    integralMin: Optimum | undefined,
-    integralMax: Optimum | undefined
-}
 
 type Highlight = {
     point: Point,
@@ -72,59 +60,4 @@ type PolarPoint = [r: number, q: number]
 
 type TrigFunc = 'sin' | 'cos' | 'tan'
 
-
-// type Dict = {
-//     [_: string]: any
-//     a: any
-//     b: any
-//     c: any
-//     d: any
-//     e: any
-//     f: any
-//     g: any
-//     h: any
-//     i: any
-//     j: any
-//     k: any
-//     l: any
-//     m: any
-//     n: any
-//     o: any
-//     p: any
-//     q: any
-//     r: any
-//     s: any
-//     t: any
-//     u: any
-//     v: any
-//     w: any
-//     x: any
-//     y: any
-//     z: any
-//     A: any
-//     B: any
-//     C: any
-//     D: any
-//     E: any
-//     F: any
-//     G: any
-//     H: any
-//     I: any
-//     J: any
-//     K: any
-//     L: any
-//     M: any
-//     N: any
-//     O: any
-//     P: any
-//     Q: any
-//     R: any
-//     S: any
-//     T: any
-//     U: any
-//     V: any
-//     W: any
-//     X: any
-//     Y: any
-//     Z: any
-// }
+type IneqSign = [greater: boolean, equal: boolean] 

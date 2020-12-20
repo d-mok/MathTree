@@ -20,7 +20,7 @@ function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
             return RndShakeDfrac(anchor, range, n)
         }
         // Inequal Sign
-        if (ParseIneqSign(anchor)) {
+        if (IsIneqSign(anchor)) {
             return RndShakeIneq(anchor, n)
         }
         // else convert to number
