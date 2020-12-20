@@ -84,7 +84,7 @@ test('properly handle when MC option missing', () => {
 
 test('properly check distinct options', () => {
     const seed = new Seed({
-        qn: "asking<ul><li>abc</li>\n<li>abc</li></ul>",
+        qn: "asking<ul><li>abc</li><li>abc</li></ul>",
         sol: "answering",
     });
     expect(seed.runShuffle()).toBe(false)

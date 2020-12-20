@@ -211,7 +211,8 @@ export class Seed {
                 this.runSubstitute();
                 this.runPostprocess();
                 if (!this.runShuffle()) continue
-            } while (false);
+                break
+            } while (true);
             return this.successFruit()
         }
         catch (e) {
