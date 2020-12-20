@@ -9062,18 +9062,13 @@ globalThis.FeasibleIntegral = FeasibleIntegral;
  * @category LinearProgram
  * @return the point with the max value of field
  * ```typescript
- * FeasibleIntegral([
- *    [1, 0, '<', 3],
- *    [1, 0, '>', 0],
- *    [0, 1, '<', 2],
- *    [0, 1, '>', 0]
- * ])
- * // [[1,1],[2,1]]
+ * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
  * ```
  */
 function MaximizePoint(points, field) {
     Should(points.length > 0, 'No feasible point');
     let orderedPoints = SortBy(points, x => -FieldAt(x, field));
+    orderedPoints = Dedupe(orderedPoints);
     let point = orderedPoints[0];
     Should(!onBoundary(point), 'No max point');
     if (orderedPoints[1]) {
@@ -9085,6 +9080,7 @@ globalThis.MaximizePoint = MaximizePoint;
 function MinimizePoint(points, field) {
     Should(points.length > 0, 'No feasible point');
     let orderedPoints = SortBy(points, x => FieldAt(x, field));
+    orderedPoints = Dedupe(orderedPoints);
     let point = orderedPoints[0];
     Should(!onBoundary(point), 'No min point');
     if (orderedPoints[1]) {
@@ -13069,9 +13065,6 @@ globalThis.VectorRotate = VectorRotate;
 class CustumMathError extends Error {
     constructor(message) {
         super(message);
-        this.name = "MathError";
-        this.message = "";
-        this.stack = "";
         this.name = 'MathError';
     }
 }
@@ -13082,9 +13075,6 @@ globalThis.MathError = MathError;
 class CustumDesignError extends Error {
     constructor(message) {
         super(message);
-        this.name = "DesignError";
-        this.message = "";
-        this.stack = "";
         this.name = 'DesignError';
     }
 }

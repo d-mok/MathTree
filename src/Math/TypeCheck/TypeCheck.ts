@@ -2,9 +2,6 @@
 
 
 class CustumMathError extends Error {
-    public name: string = "MathError"
-    public message: string = ""
-    public stack: string = ""
     constructor(message: string) {
         super(message);
         this.name = 'MathError';
@@ -17,9 +14,6 @@ function MathError(message: string) {
 globalThis.MathError = MathError
 
 class CustumDesignError extends Error {
-    public name: string = "DesignError"
-    public message: string = ""
-    public stack: string = ""
     constructor(message: string) {
         super(message);
         this.name = 'DesignError';
