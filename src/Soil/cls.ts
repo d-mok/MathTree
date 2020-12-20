@@ -1,13 +1,14 @@
 
 export class SeedCore {
-    constructor(
-        public readonly qn: string = "",
-        public readonly sol: string = "",
-        public readonly populate: string = "",
-        public readonly validate: string = "",
-        public readonly preprocess: string = "",
-        public readonly postprocess: string = "",
-    ) { }
+    public readonly qn: string = ""
+    public readonly sol: string = ""
+    public readonly populate: string = ""
+    public readonly validate: string = ""
+    public readonly preprocess: string = ""
+    public readonly postprocess: string = ""
+    constructor(partial: Partial<SeedCore> = {}) {
+        Object.assign(this, partial)
+    }
 }
 
 

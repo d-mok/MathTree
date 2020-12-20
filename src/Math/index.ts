@@ -1,6 +1,5 @@
 import './Code/Algebra.ts'
 import './Code/Assertion.ts'
-import './Code/AutoOptions.ts'
 import './Code/Combinatorics.ts'
 import './Code/Flow.ts'
 import './Code/Fraction.ts'

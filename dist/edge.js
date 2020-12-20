@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
 
 /***/ }),
 /* 1 */
@@ -7913,8 +7913,8 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(30);
-__webpack_require__(34);
+__webpack_require__(29);
+__webpack_require__(33);
 
 
 /***/ }),
@@ -7935,7 +7935,7 @@ __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(14);
+__webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -7945,7 +7945,6 @@ __webpack_require__(25);
 __webpack_require__(26);
 __webpack_require__(27);
 __webpack_require__(28);
-__webpack_require__(29);
 
 
 /***/ }),
@@ -8296,95 +8295,6 @@ globalThis.IsAbsBetween = IsAbsBetween;
 
 "use strict";
 
-// class Instruction {
-//     range?: number = undefined
-//     assign: any[] = []
-//     constructor(input: any) {
-//         if (IsArray(input)) {
-//             this.assign = input
-//         } else if (typeof input === 'object' && input !== null) {
-//             Object.assign(this, input)
-//         }
-//     }
-//     do(source: any): (typeof source)[] {
-//         let product = Clone(this.assign)
-//         product.push(...RndShake(source, this.range, 3))
-//         product.length = 3
-//         product = RndShuffle(...product)
-//         return product
-//     }
-// }
-// // function ValidateProducts(products: Partial<Dict>, source: Dict, validate: string) {
-// //     if (validate === "") return;
-// //     validate = validate.replace('\n', ' ');
-// //     for (let index = 0; index < 3; index++) {
-// //         let clone = Clone(source)
-// //         for (let key in products) {
-// //             clone[key] = products[key][index]
-// //         }
-// //         let {
-// //             a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z,
-// //             A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
-// //         } = clone;
-// //         if (eval(validate) === false)
-// //             throw "validate fail"
-// //     }
-// // }
-// type Product = {
-//     [_: string]: any[]
-// }
-// function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: string): Product {
-//     let products: Product = {}
-//     let k: keyof Partial<Dict>
-//     for (k in instructions) {
-//         let instr = new Instruction(instructions[k])
-//         products[k] = instr.do(source[k])
-//     }
-//     // ValidateProducts(products, source, validate)
-//     return products
-// }
-// globalThis.ExecInstructions = ExecInstructions
-// /**
-// * @category AutoOptions
-// * @return append the array of options to question
-// * ```typescript
-// * let question = 'abc<ul><li>*x</li></ul>'
-// * AutoOptions(question,{x:3}) 
-// * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
-// * ```
-// */
-// function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict, validate: string): string {
-//     if (IsEmptyObject(instructions)) return question
-//     let options = ExtractHTMLTag(question, 'li')
-//     let products = ExecInstructions(instructions, source, validate)
-//     if (options.length === 1) {
-//         let others = Array(3).fill(options[0])
-//         for (let k in products) {
-//             for (let i = 0; i < 3; i++) {
-//                 others[i] = PrintVariable(others[i], k, products[k][i])
-//             }
-//         }
-//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-//     }
-//     if (options.length === 2) {
-//         let others = [options[0], options[1]]
-//         for (let k in products) {
-//             others[0] = PrintVariable(others[0], k, products[k][0])
-//             others[1] = PrintVariable(others[1], k, products[k][0])
-//         }
-//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-//     }
-//     return question
-// }
-// globalThis.AutoOptions = AutoOptions
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 /**
  * @category Combinatorics
  * @return the factorial n!
@@ -8429,7 +8339,7 @@ globalThis.nPr = nPr;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8497,7 +8407,7 @@ globalThis.RndComboConfig = RndComboConfig;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8586,7 +8496,7 @@ globalThis.FracMultiply = FracMultiply;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8690,7 +8600,7 @@ globalThis.arctan = arctan;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8842,7 +8752,7 @@ globalThis.IntersectAngle = IntersectAngle;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8917,7 +8827,7 @@ globalThis.PrintVariable = PrintVariable;
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9113,7 +9023,7 @@ globalThis.LinearProgram = LinearProgram;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9387,7 +9297,7 @@ globalThis.Blurs = Blurs;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9562,7 +9472,7 @@ globalThis.RndPyth = RndPyth;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9576,9 +9486,9 @@ globalThis.RndPyth = RndPyth;
 
 
 
-var base64 = __webpack_require__(17)
-var ieee754 = __webpack_require__(18)
-var isArray = __webpack_require__(19)
+var base64 = __webpack_require__(16)
+var ieee754 = __webpack_require__(17)
+var isArray = __webpack_require__(18)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -11356,10 +11266,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11385,7 +11295,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11544,7 +11454,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -11634,7 +11544,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -11645,7 +11555,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11927,7 +11837,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12027,7 +11937,7 @@ globalThis.RndShe = RndShe;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12120,7 +12030,7 @@ globalThis.AreDistantPoint = AreDistantPoint;
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12226,7 +12136,7 @@ globalThis.GSequence = GSequence;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12304,7 +12214,7 @@ globalThis.Mean = Mean;
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12481,7 +12391,7 @@ globalThis.IndexToSurd = IndexToSurd;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12629,7 +12539,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12783,7 +12693,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12880,7 +12790,7 @@ globalThis.Pairs = Pairs;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13030,19 +12940,19 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(30);
 __webpack_require__(31);
 __webpack_require__(32);
-__webpack_require__(33);
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13140,7 +13050,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14326,7 +14236,7 @@ globalThis.Pen = Pen;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15091,17 +15001,16 @@ globalThis.AutoPen = AutoPen;
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(35);
+const global_1 = __webpack_require__(34);
 var MathSoil = {
     _grow(seedContent) {
-        let seed = new global_1.Seed();
-        seed.init(seedContent);
+        let seed = new global_1.Seed(seedContent);
         return seed.grow();
     },
     _growOne(seed) {
@@ -15122,7 +15031,7 @@ var MathSoil = {
         for (let i = 1; i <= 100; i++) {
             this.grow(seed);
             if (!seed.question.success) {
-                return { avg: Mean(...counters), healthy: false };
+                return { avg: 0, healthy: false };
             }
             counters.push(seed.question.counter);
         }
@@ -15133,42 +15042,36 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(36);
-const dress_1 = __webpack_require__(37);
-const shuffle_1 = __webpack_require__(38);
-const option_1 = __webpack_require__(39);
-__webpack_require__(40);
-const cls_1 = __webpack_require__(41);
+const section_1 = __webpack_require__(35);
+const dress_1 = __webpack_require__(36);
+const shuffle_1 = __webpack_require__(37);
+const option_1 = __webpack_require__(38);
+__webpack_require__(39);
+const cls_1 = __webpack_require__(40);
 class Seed {
-    constructor(
-    // get from SeedBank API
-    qn = "", sol = "", populate = "", validate = "", preprocess = "", postprocess = "", 
-    // working variables during growth
-    dict = new cls_1.Dict(), config = new cls_1.Config(), 
-    // state
-    counter = 0, 
-    // copy of core
-    core = new cls_1.SeedCore()) {
-        this.qn = qn;
-        this.sol = sol;
-        this.populate = populate;
-        this.validate = validate;
-        this.preprocess = preprocess;
-        this.postprocess = postprocess;
-        this.dict = dict;
-        this.config = config;
-        this.counter = counter;
-        this.core = core;
-    }
-    init(core) {
-        this.core = core;
+    constructor(core = {}) {
+        // get from SeedBank API
+        this.qn = "";
+        this.sol = "";
+        this.populate = "";
+        this.validate = "";
+        this.preprocess = "";
+        this.postprocess = "";
+        // working variables during growth
+        this.dict = new cls_1.Dict();
+        this.config = new cls_1.Config();
+        // state
+        this.counter = 0;
+        // copy of core
+        this.core = new cls_1.SeedCore();
+        this.core = new cls_1.SeedCore(core);
         this.reset();
     }
     reset() {
@@ -15345,7 +15248,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15380,7 +15283,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15446,7 +15349,7 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15507,7 +15410,7 @@ class OptionShuffler {
     }
     genAns() {
         if (!this.valid)
-            return this.ans;
+            return "X";
         return NewAns(this.ans, this.perm);
     }
     genSol() {
@@ -15515,6 +15418,7 @@ class OptionShuffler {
             return this.sol;
         let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol;
         let ansList = ['A', 'B', 'C', 'D'];
+        ansList.length = this.perm.length;
         for (let x of ansList) {
             newSol = newSol.replace(new RegExp('\{\#' + x + '\}', 'g'), NewAns(x, this.perm));
         }
@@ -15525,7 +15429,7 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15598,7 +15502,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15606,7 +15510,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15614,13 +15518,14 @@ exports.AutoOptions = AutoOptions;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dict = exports.Config = exports.SeedCore = void 0;
 class SeedCore {
-    constructor(qn = "", sol = "", populate = "", validate = "", preprocess = "", postprocess = "") {
-        this.qn = qn;
-        this.sol = sol;
-        this.populate = populate;
-        this.validate = validate;
-        this.preprocess = preprocess;
-        this.postprocess = postprocess;
+    constructor(partial = {}) {
+        this.qn = "";
+        this.sol = "";
+        this.populate = "";
+        this.validate = "";
+        this.preprocess = "";
+        this.postprocess = "";
+        Object.assign(this, partial);
     }
 }
 exports.SeedCore = SeedCore;

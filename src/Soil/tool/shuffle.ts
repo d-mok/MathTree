@@ -60,7 +60,7 @@ export class OptionShuffler {
     }
 
     genAns(): string {
-        if (!this.valid) return this.ans
+        if (!this.valid) return "X"
         return NewAns(this.ans, this.perm)
     }
 
@@ -68,6 +68,7 @@ export class OptionShuffler {
         if (!this.valid) return this.sol
         let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol
         let ansList = ['A', 'B', 'C', 'D'];
+        ansList.length = this.perm.length
         for (let x of ansList) {
             newSol = newSol.replace(new RegExp('\{\#' + x + '\}', 'g'), NewAns(x, this.perm));
         }

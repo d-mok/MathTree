@@ -1,32 +1,30 @@
 import { ExecSection } from './tool/section'
 import { dress } from './tool/dress'
 import { OptionShuffler } from './tool/shuffle'
-import {AutoOptions} from './tool/option'
+import { AutoOptions } from './tool/option'
 import './type'
 import { Dict, Config, SeedCore } from './cls'
 
 
 
 export class Seed {
-    constructor(
-        // get from SeedBank API
-        public qn: string = "",
-        public sol: string = "",
-        public populate: string = "",
-        public validate: string = "",
-        public preprocess: string = "",
-        public postprocess: string = "",
-        // working variables during growth
-        public dict: Dict = new Dict(),
-        public config: Config = new Config(),
-        // state
-        public counter: number = 0,
-        // copy of core
-        public core: SeedCore = new SeedCore()
-    ) { }
+    // get from SeedBank API
+    public qn: string = ""
+    public sol: string = ""
+    public populate: string = ""
+    public validate: string = ""
+    public preprocess: string = ""
+    public postprocess: string = ""
+    // working variables during growth
+    public dict: Dict = new Dict()
+    public config: Config = new Config()
+    // state
+    public counter: number = 0
+    // copy of core
+    public core: SeedCore = new SeedCore()
 
-    init(core: SeedCore) {
-        this.core = core
+    constructor(core: Partial<SeedCore> = {}) {
+        this.core = new SeedCore(core)
         this.reset()
     }
 

@@ -7,8 +7,7 @@
     "build": "webpack",
     "jest": "jest",
     "jest_extend": "jest JestExtend",
-    "docs_math": "./node_modules/.bin/jsdoc ./src/Math --configure .jsdoc.json --verbose -d docs_math",
-    "docs_pen": "./node_modules/.bin/jsdoc ./src/Pen --configure .jsdoc.json --verbose -d docs_pen",
+    "jest_soil": "jest ./src/Soil",
     "typedoc": "typedoc --out typedoc ./src"
   },
   "repository": {

@@ -15,8 +15,7 @@ type Shell = {
 
 var MathSoil = {
     _grow(seedContent: SeedCore): Question {
-        let seed: Seed = new Seed()
-        seed.init(seedContent)
+        let seed: Seed = new Seed(seedContent)
         return seed.grow()
     },
     _growOne(seed: Shell): void {
@@ -37,7 +36,7 @@ var MathSoil = {
         for (let i = 1; i <= 100; i++) {
             this.grow(seed);
             if (!seed.question!.success) {
-                return { avg: Mean(...counters), healthy: false };
+                return { avg: 0, healthy: false };
             }
             counters.push(seed.question!.counter);
         }
