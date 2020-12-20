@@ -93,7 +93,7 @@ globalThis.isLooseConstrained = isLooseConstrained
  * // [[-5,-5],[10,-5],[10,10],[-5,10]]
  * ```
  */
-function FeasiblePolygon(cons: Constraint[]) {
+function FeasiblePolygon(...cons: Constraint[]) {
     const boundaryConstraints: Constraint[] = [
         [1, 0, "<=", LP_BOUND],
         [1, 0, ">=", -LP_BOUND],
@@ -141,8 +141,8 @@ globalThis.FeasiblePolygon = FeasiblePolygon
  * // [[1,1],[2,1]]
  * ```
  */
-function FeasibleIntegral(cons: Constraint[]): Point[] {
-    let vertices = FeasiblePolygon(cons)
+function FeasibleIntegral(...cons: Constraint[]): Point[] {
+    let vertices = FeasiblePolygon(...cons)
     let xCoords = vertices.map(p => p[0])
     let yCoords = vertices.map(p => p[1])
     let xmax = Ceil(Max(...xCoords))

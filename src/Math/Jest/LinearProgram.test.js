@@ -45,53 +45,53 @@ test('isLooseConstrained', () => {
 
 
 test('FeasiblePolygon', () => {
-    expect(FeasiblePolygon([
+    expect(FeasiblePolygon(
         [1, 0, '<', 10],
         [1, 0, '>', -5],
         [0, 1, '<', 10],
-        [0, 1, '>', -5],
-    ])).toEqual([[-5, -5], [10, -5], [10, 10], [-5, 10]]);
-    expect(() => FeasiblePolygon([
+        [0, 1, '>', -5]
+    )).toEqual([[-5, -5], [10, -5], [10, 10], [-5, 10]]);
+    expect(() => FeasiblePolygon(
         [1, 1, '<', 10],
         [1, 1, '>', 10],
-    ])).toThrow();
+    )).toThrow();
 });
 
 
 
 
 test('FeasibleIntegral', () => {
-    expect(FeasibleIntegral([
+    expect(FeasibleIntegral(
         [1, 0, '<', 3],
         [1, 0, '>', 0],
         [0, 1, '<', 2],
         [0, 1, '>', 0],
-    ])).toEqual([[1, 1], [2, 1]]);
-    expect(FeasibleIntegral([
+    )).toEqual([[1, 1], [2, 1]]);
+    expect(FeasibleIntegral(
         [1, 1, "<=", 5],
         [1, -1, "<", 4],
         [2, 1, ">=", -5],
         [3, 1, ">", -10]
-    ])).toHaveLength(68);
-    expect(FeasibleIntegral([
+    )).toHaveLength(68);
+    expect(FeasibleIntegral(
         [1, 0, '<', 10],
         [1, 0, '>', -5],
         [0, 1, '<', 10],
         [0, 1, '>', -5],
-    ])).toHaveLength(14 * 14);
-    expect(FeasibleIntegral([
+    )).toHaveLength(14 * 14);
+    expect(FeasibleIntegral(
         [1, 0, '<', 1],
         [1, 0, '>', 0],
         [0, 1, '<', 1],
         [0, 1, '>', 0],
-    ])).toHaveLength(0);
-    expect(FeasibleIntegral([
+    )).toHaveLength(0);
+    expect(FeasibleIntegral(
         [1, 1, '<', 1],
-    ]).length).toBeGreaterThan(100);
-    expect(() => FeasibleIntegral([
+    ).length).toBeGreaterThan(100);
+    expect(() => FeasibleIntegral(
         [1, 1, '<', 10],
         [1, 1, '>', 10],
-    ])).toThrow();
+    )).toThrow();
 });
 
 
@@ -99,12 +99,12 @@ test('FeasibleIntegral', () => {
 
 
 test('MaximizePoint', () => {
-    let points = FeasibleIntegral([
+    let points = FeasibleIntegral(
         [1, 1, "<=", 5],
         [1, -1, "<", 4],
         [2, 1, ">=", -5],
         [3, 1, ">", -10]
-    ]);
+    );
     expect(MaximizePoint(points, [2, 1, 1])).toEqual([4, 1]);
     expect(() => MaximizePoint(points, [1, 1, 1])).toThrow();
 });
@@ -112,12 +112,12 @@ test('MaximizePoint', () => {
 
 
 test('MinimizePoint', () => {
-    let points = FeasibleIntegral([
+    let points = FeasibleIntegral(
         [1, 1, "<=", 5],
         [1, -1, "<", 4],
         [2, 1, ">=", -5],
         [3, 1, ">", -10]
-    ]);
+    );
     expect(MinimizePoint(points, [1, 1, 1])).toEqual([-1, -3]);
     expect(() => MinimizePoint(points, [2, 1, 1])).toThrow();
 });

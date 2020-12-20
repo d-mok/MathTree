@@ -8993,7 +8993,7 @@ globalThis.isLooseConstrained = isLooseConstrained;
  * // [[-5,-5],[10,-5],[10,10],[-5,10]]
  * ```
  */
-function FeasiblePolygon(cons) {
+function FeasiblePolygon(...cons) {
     const boundaryConstraints = [
         [1, 0, "<=", LP_BOUND],
         [1, 0, ">=", -LP_BOUND],
@@ -9038,8 +9038,8 @@ globalThis.FeasiblePolygon = FeasiblePolygon;
  * // [[1,1],[2,1]]
  * ```
  */
-function FeasibleIntegral(cons) {
-    let vertices = FeasiblePolygon(cons);
+function FeasibleIntegral(...cons) {
+    let vertices = FeasiblePolygon(...cons);
     let xCoords = vertices.map(p => p[0]);
     let yCoords = vertices.map(p => p[1]);
     let xmax = Ceil(Max(...xCoords));
@@ -15015,8 +15015,8 @@ class AutoPenCls {
             const [x, y] = p;
             return Round(a * x + b * y + c, 3);
         }
-        const vertices = FeasiblePolygon(constraints);
-        const integrals = FeasibleIntegral(constraints);
+        const vertices = FeasiblePolygon(...constraints);
+        const integrals = FeasibleIntegral(...constraints);
         const pen = new Pen();
         let [[xmin, xmax], [ymin, ymax]] = ranges;
         let bound = 0.7;
