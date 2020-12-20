@@ -15015,8 +15015,11 @@ class AutoPenCls {
             const [x, y] = p;
             return Round(a * x + b * y + c, 3);
         }
-        const vertices = FeasiblePolygon(...constraints);
-        const integrals = FeasibleIntegral(...constraints);
+        let vertices = FeasiblePolygon(...constraints);
+        let integrals = [];
+        if (showIntegral || showIntegralMax || showIntegralMin) {
+            integrals = FeasibleIntegral(...constraints);
+        }
         const pen = new Pen();
         let [[xmin, xmax], [ymin, ymax]] = ranges;
         let bound = 0.7;

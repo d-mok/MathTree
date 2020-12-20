@@ -759,10 +759,11 @@ class AutoPenCls {
             return Round(a * x + b * y + c, 3)
         }
 
-        const vertices = FeasiblePolygon(...constraints)
-        const integrals = FeasibleIntegral(...constraints)
-
-
+        let vertices = FeasiblePolygon(...constraints)
+        let integrals: Point[] = []
+        if (showIntegral || showIntegralMax || showIntegralMin) {
+            integrals = FeasibleIntegral(...constraints)
+        }
 
         const pen = new Pen();
 
