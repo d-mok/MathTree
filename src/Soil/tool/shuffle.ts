@@ -1,66 +1,78 @@
 
 
 function RndPermutation(n = 4) {
-    return RndShuffle()
+    return RndShuffle(...ListIntegers(0, n - 1))
 }
 
-
-
-
-
-
-
-
-function randomOptions(correctAns: string): [number[], string] {
-    // pure helper function: generate random array of [0,1,2,3] and ans (mapped from A)
-    let ansIndex = ['A', 'B', 'C', 'D'].indexOf(correctAns);
-    let arr = shuffle([0, 1, 2, 3]);
-    let ans = ['A', 'B', 'C', 'D'][arr.indexOf(ansIndex)];
-    return [arr, ans];
-}
-
-function rearrangeOptions(arr: string[], correctAns: string): [string[], string, number[]] {
-    // pure helper function: arrange arr by this.randomOptions
-    const [rndArr, ans] = randomOptions(correctAns);
-    const rearrangedArr = rndArr.map(x => arr[x]);
-    return [rearrangedArr, ans, rndArr];
-}
-
-function splitMC(html: string): [main: string, mc: string] {
-    // pure helper function: split html into [beforeMC, MCOptions] two parts
-    let arr = html.split('<ul>');
-    if (arr.length <= 1) return [html, ""];
-    let mc = arr.pop()!;
-    mc = mc.replace('</ul>', '');
-    let main = arr.join('<ul>')
-    return [main, mc]
-}
-
-function splitOptions(mc: string): string[] {
-    // pure helper function: split into MC options, [<li>...</li> , ... , ....]
-    let m = mc.match(/<li>[\s\S]*?<\/li>/g);
-    if (m === null) m = []
-    return m
-}
-
-export function runShuffle(seed: Seed) {
-    let [main, mc] = splitMC(seed.qn);
-    let options = splitOptions(mc);
-    if (options.length === 0) return;
-    if (!distinct(options)) {
-        seed.success = false
-        seed.errName = "OptionDistinctError"
-        seed.errMsg = "Options Duplicated"
-        return
+function Permute<T>(permutation: number[], items: T[]): T[] {
+    let newItems = []
+    for (let i = 0; i < permutation.length; i++) {
+        newItems.push(items[permutation[i]])
     }
-    let [rearranged, ans, rndArr] = rearrangeOptions(options, seed.config.answer);
-    seed.qn = main + '<ul>' + rearranged.join('') + '</ul>';
-    seed.sol = "<p>Answer: " + ans + "</p><p><b>Solution:</b></p>" + seed.sol;
-    let origArr = ['A', 'B', 'C', 'D'];
-    for (let i = 0; i < 4; i++) {
-        seed.sol = seed.sol.replace(new RegExp('\{\#' + origArr[rndArr[i]] + '\}', 'g'), origArr[i]);
+    return newItems
+}
+
+function AnsToIndex(ans: string) {
+    return ['A', 'B', 'C', 'D'].indexOf(ans);
+}
+
+function IndexToAns(index: number) {
+    return ['A', 'B', 'C', 'D'][index]
+}
+
+function NewAns(oldAns: string, permutation: number[]) {
+    let oldIndex = AnsToIndex(oldAns)
+    let newIndex = permutation.indexOf(oldIndex)
+    return IndexToAns(newIndex)
+}
+
+
+export class OptionShuffler {
+    public ul: string = ""
+    public options: string[] = []
+    public perm: number[] = []
+    public valid: boolean = false
+
+    constructor(
+        public qn: string,
+        public sol: string,
+        public ans: string
+    ) {
+        let uls = ExtractHTMLTag(qn, 'ul')
+        if (uls.length === 0) return // no <ul></ul>
+        this.ul = uls[uls.length - 1]
+        if (this.ul === "") return // blank <ul></ul>
+        this.options = ExtractHTMLTag(this.ul, 'li')
+        if (this.options.length <= 1) return // only 1 or 0 <li></li>
+        this.perm = RndPermutation(this.options.length)
+        this.valid = true
     }
-    seed.ans = ans;
+
+    AreOptionsDuplicated() {
+        return (new Set(this.options)).size !== this.options.length
+    }
+
+    genQn(): string {
+        if (!this.valid) return this.qn
+        let shuffledOptions = Permute(this.perm, this.options)
+        let joined = JoinToHTMLTag(shuffledOptions, 'li')
+        return this.qn.replace(this.ul, joined)
+    }
+
+    genAns(): string {
+        if (!this.valid) return this.ans
+        return NewAns(this.ans, this.perm)
+    }
+
+    genSol(): string {
+        if (!this.valid) return this.sol
+        let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol
+        let ansList = ['A', 'B', 'C', 'D'];
+        for (let x of ansList) {
+            newSol = newSol.replace(new RegExp('\{\#' + x + '\}', 'g'), NewAns(x, this.perm));
+        }
+        return newSol
+    }
 }
 
 

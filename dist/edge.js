@@ -7914,6 +7914,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
 __webpack_require__(30);
+__webpack_require__(34);
 
 
 /***/ }),
@@ -8295,69 +8296,87 @@ globalThis.IsAbsBetween = IsAbsBetween;
 
 "use strict";
 
-class Instruction {
-    constructor(input) {
-        this.range = undefined;
-        this.assign = [];
-        if (IsArray(input)) {
-            this.assign = input;
-        }
-        else if (typeof input === 'object' && input !== null) {
-            Object.assign(this, input);
-        }
-    }
-    do(source) {
-        let product = Clone(this.assign);
-        product.push(...RndShake(source, this.range, 3));
-        product.length = 3;
-        product = RndShuffle(...product);
-        return product;
-    }
-}
-function ExecInstructions(instructions, source, validate) {
-    let products = {};
-    for (let k in instructions) {
-        let instr = new Instruction(instructions[k]);
-        products[k] = instr.do(source[k]);
-    }
-    // ValidateProducts(products, source, validate)
-    return products;
-}
-globalThis.ExecInstructions = ExecInstructions;
-/**
-* @category AutoOptions
-* @return append the array of options to question
-* ```typescript
-* let question = 'abc<ul><li>*x</li></ul>'
-* AutoOptions(question,{x:3})
-* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
-* ```
-*/
-function AutoOptions(instructions, question, source, validate) {
-    if (IsEmptyObject(instructions))
-        return question;
-    let options = ExtractHTMLTag(question, 'li');
-    let products = ExecInstructions(instructions, source, validate);
-    if (options.length === 1) {
-        let others = Array(3).fill(options[0]);
-        for (let k in products) {
-            for (let i = 0; i < 3; i++) {
-                others[i] = PrintVariable(others[i], k, products[k][i]);
-            }
-        }
-        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
-    }
-    if (options.length === 2) {
-        let others = [options[0], options[1]];
-        for (let k in products) {
-            others[0] = PrintVariable(others[0], k, products[k][0]);
-            others[1] = PrintVariable(others[1], k, products[k][0]);
-        }
-        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
-    }
-    return question;
-}
-globalThis.AutoOptions = AutoOptions;
+// class Instruction {
+//     range?: number = undefined
+//     assign: any[] = []
+//     constructor(input: any) {
+//         if (IsArray(input)) {
+//             this.assign = input
+//         } else if (typeof input === 'object' && input !== null) {
+//             Object.assign(this, input)
+//         }
+//     }
+//     do(source: any): (typeof source)[] {
+//         let product = Clone(this.assign)
+//         product.push(...RndShake(source, this.range, 3))
+//         product.length = 3
+//         product = RndShuffle(...product)
+//         return product
+//     }
+// }
+// // function ValidateProducts(products: Partial<Dict>, source: Dict, validate: string) {
+// //     if (validate === "") return;
+// //     validate = validate.replace('\n', ' ');
+// //     for (let index = 0; index < 3; index++) {
+// //         let clone = Clone(source)
+// //         for (let key in products) {
+// //             clone[key] = products[key][index]
+// //         }
+// //         let {
+// //             a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z,
+// //             A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+// //         } = clone;
+// //         if (eval(validate) === false)
+// //             throw "validate fail"
+// //     }
+// // }
+// type Product = {
+//     [_: string]: any[]
+// }
+// function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: string): Product {
+//     let products: Product = {}
+//     let k: keyof Partial<Dict>
+//     for (k in instructions) {
+//         let instr = new Instruction(instructions[k])
+//         products[k] = instr.do(source[k])
+//     }
+//     // ValidateProducts(products, source, validate)
+//     return products
+// }
+// globalThis.ExecInstructions = ExecInstructions
+// /**
+// * @category AutoOptions
+// * @return append the array of options to question
+// * ```typescript
+// * let question = 'abc<ul><li>*x</li></ul>'
+// * AutoOptions(question,{x:3}) 
+// * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
+// * ```
+// */
+// function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict, validate: string): string {
+//     if (IsEmptyObject(instructions)) return question
+//     let options = ExtractHTMLTag(question, 'li')
+//     let products = ExecInstructions(instructions, source, validate)
+//     if (options.length === 1) {
+//         let others = Array(3).fill(options[0])
+//         for (let k in products) {
+//             for (let i = 0; i < 3; i++) {
+//                 others[i] = PrintVariable(others[i], k, products[k][i])
+//             }
+//         }
+//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+//     }
+//     if (options.length === 2) {
+//         let others = [options[0], options[1]]
+//         for (let k in products) {
+//             others[0] = PrintVariable(others[0], k, products[k][0])
+//             others[1] = PrintVariable(others[1], k, products[k][0])
+//         }
+//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+//     }
+//     return question
+// }
+// globalThis.AutoOptions = AutoOptions
 
 
 /***/ }),
@@ -14935,7 +14954,7 @@ class AutoPenCls {
             LP = LinearProgram(constraints, field);
         }
         else {
-            // constraints = 
+            // constraints =  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         }
         if (LP === undefined)
             throw "Linear Program has no solution. Fail to draw!";
@@ -15069,6 +15088,637 @@ class AutoPenCls {
 }
 var AutoPen = AutoPenCls;
 globalThis.AutoPen = AutoPen;
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const global_1 = __webpack_require__(35);
+var MathSoil = {
+    _grow(seedContent) {
+        let seed = new global_1.Seed();
+        seed.init(seedContent);
+        return seed.grow();
+    },
+    _growOne(seed) {
+        seed.question = this._grow(seed.content);
+    },
+    grow(seeds) {
+        // grow one seed or array of seeds, append Question to them
+        if (Array.isArray(seeds)) {
+            seeds.forEach(x => this._growOne(x));
+        }
+        else {
+            this._growOne(seeds);
+        }
+    },
+    test(seed) {
+        // test the seed's health, find the avg trial to success
+        let counters = [];
+        for (let i = 1; i <= 100; i++) {
+            this.grow(seed);
+            if (!seed.question.success) {
+                return { avg: Mean(...counters), healthy: false };
+            }
+            counters.push(seed.question.counter);
+        }
+        return { avg: Mean(...counters), healthy: true };
+    }
+};
+globalThis.MathSoil = MathSoil;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Seed = void 0;
+const section_1 = __webpack_require__(36);
+const dress_1 = __webpack_require__(37);
+const shuffle_1 = __webpack_require__(38);
+const option_1 = __webpack_require__(39);
+__webpack_require__(40);
+const cls_1 = __webpack_require__(41);
+class Seed {
+    constructor(
+    // get from SeedBank API
+    qn = "", sol = "", populate = "", validate = "", preprocess = "", postprocess = "", 
+    // working variables during growth
+    dict = new cls_1.Dict(), config = new cls_1.Config(), 
+    // state
+    counter = 0, 
+    // copy of core
+    core = new cls_1.SeedCore()) {
+        this.qn = qn;
+        this.sol = sol;
+        this.populate = populate;
+        this.validate = validate;
+        this.preprocess = preprocess;
+        this.postprocess = postprocess;
+        this.dict = dict;
+        this.config = config;
+        this.counter = counter;
+        this.core = core;
+    }
+    init(core) {
+        this.core = core;
+        this.reset();
+    }
+    reset() {
+        this.qn = this.core.qn;
+        this.sol = this.core.sol;
+        this.populate = this.core.populate;
+        let v = this.core.validate;
+        if (v === "")
+            v = 'true';
+        v = v.replace('\n', ' ');
+        this.validate = v;
+        this.preprocess = this.core.preprocess;
+        this.postprocess = this.core.postprocess;
+        this.dict = new cls_1.Dict();
+        this.config = new cls_1.Config();
+    }
+    evalCode(code) {
+        // injectables
+        let { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } = this.dict;
+        let sections = this.config.sections;
+        let answer = this.config.answer;
+        let options = this.config.options;
+        let question = this.qn;
+        let solution = this.sol;
+        // execute
+        const result = eval(code);
+        //retrieve
+        this.dict.update({
+            a, b, c, d, e, f, g, h, i, j, k, l, m, n,
+            o, p, q, r, s, t, u, v, w, x, y, z,
+            A, B, C, D, E, F, G, H, I, J, K, L, M, N,
+            O, P, Q, R, S, T, U, V, W, X, Y, Z
+        });
+        this.config = {
+            sections: sections,
+            answer: answer,
+            options: options
+        };
+        this.qn = question;
+        this.sol = solution;
+        return result;
+    }
+    pushDict() {
+        this.evalCode(this.populate);
+        this.counter++;
+    }
+    isValidated() {
+        return this.evalCode(this.validate) === true;
+    }
+    cropSection() {
+        this.qn = section_1.ExecSection(this.qn, this.config.sections);
+        this.sol = section_1.ExecSection(this.sol, this.config.sections);
+    }
+    doPreprocess() {
+        this.evalCode(this.preprocess);
+    }
+    doPostprocess() {
+        this.evalCode(this.postprocess);
+    }
+    fillOptions() {
+        this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict, this.validate);
+    }
+    pour() {
+        this.qn = this.dict.substitute(this.qn);
+        this.sol = this.dict.substitute(this.sol);
+    }
+    dress() {
+        this.qn = dress_1.dress(this.qn);
+        this.sol = dress_1.dress(this.sol);
+    }
+    runPopulate() {
+        while (this.counter <= 1000) {
+            try {
+                this.pushDict();
+            }
+            catch (e) {
+                if (e.name === 'MathError') {
+                    continue;
+                }
+                else {
+                    throw e;
+                }
+            }
+            if (this.isValidated())
+                return true; // done if validated
+        }
+        ;
+        // throw error after 1000 failed trials
+        throw Error("No population found after 1000 trials!");
+    }
+    runSection() {
+        this.cropSection();
+        return true;
+    }
+    runPreprocess() {
+        this.doPreprocess();
+        return true;
+    }
+    runOption() {
+        let nTrial = 0;
+        while (nTrial <= 10) {
+            try {
+                this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict, this.validate);
+                return true;
+            }
+            catch (e) {
+                continue;
+            }
+        }
+        ;
+        // throw error after 10 failed trials
+        throw Error("No valid option generated after 10 trials!");
+    }
+    runSubstitute() {
+        this.pour();
+        this.dress();
+        return true;
+    }
+    runPostprocess() {
+        this.doPostprocess();
+        return true;
+    }
+    runShuffle() {
+        let shuffler = new shuffle_1.OptionShuffler(this.qn, this.sol, this.config.answer);
+        if (shuffler.AreOptionsDuplicated())
+            return false;
+        this.qn = shuffler.genQn();
+        this.sol = shuffler.genSol();
+        this.config.answer = shuffler.genAns();
+        return true;
+    }
+    successFruit() {
+        return {
+            qn: this.qn,
+            sol: this.sol,
+            ans: this.config.answer,
+            counter: this.counter,
+            success: true
+        };
+    }
+    errorFruit(e) {
+        return {
+            qn: "Error! " + e.name,
+            sol: e.message,
+            ans: "X",
+            counter: this.counter,
+            success: false
+        };
+    }
+    grow() {
+        try {
+            do {
+                this.reset();
+                this.runPopulate();
+                this.runSection();
+                this.runPreprocess();
+                this.runOption();
+                this.runSubstitute();
+                this.runPostprocess();
+                if (!this.runShuffle())
+                    continue;
+            } while (false);
+            return this.successFruit();
+        }
+        catch (e) {
+            console.error("[MathSoil] Error!\n" + e.name);
+            console.error(e.message);
+            console.error(e.stack);
+            return this.errorFruit(e);
+        }
+    }
+}
+exports.Seed = Seed;
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExecSection = void 0;
+function DropVersion(html, section, version) {
+    let id = section + '.' + version;
+    return html.replace(new RegExp('<[^#<]*##' + id + '[^#]*##[^#>]*>', 'g'), '');
+}
+function DropTags(html) {
+    html = html.replace(new RegExp('<[^#<]*##[^#>]*>', 'g'), '');
+    return html;
+}
+function KeepVersion(html, section, version) {
+    for (let i = 0; i < 10; i++) {
+        if (i === version)
+            continue;
+        html = DropVersion(html, section, i);
+    }
+    return html;
+}
+function ExecSection(html, sections) {
+    for (let i = 0; i < sections.length; i++) {
+        let [section, version] = sections[i];
+        html = KeepVersion(html, section.toString(), version);
+    }
+    html = DropTags(html);
+    return html;
+}
+exports.ExecSection = ExecSection;
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.dress = void 0;
+function or(...reg) {
+    return '(' + reg.join('|') + ')';
+}
+// function inTag(input: string): string {
+//     return input + String.raw``
+// }
+const s = String.raw `(?:\s|&nbsp;)*`;
+const p = String.raw `\+`;
+const m = String.raw `\-`;
+const e = String.raw `(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
+const l = String.raw `[\(\[\{]`;
+const r = String.raw `[\)\]\}]`;
+const c = String.raw `\,`;
+const v = String.raw `(?:[A-Za-z]|\\alpha|\\beta|\\sigma|\\mu)`;
+const sl = String.raw `\\`;
+const left = String.raw `\\left`;
+const sq = String.raw `\\sqrt`;
+const endtag = String.raw `(?=[^<>]*</span>)`;
+function regReplace(input, reg, replace) {
+    return input.replace(new RegExp(reg, 'g'), replace);
+}
+function handleSigns(input) {
+    input = regReplace(input, p + s + m, '-');
+    input = regReplace(input, m + s + p, '-');
+    input = regReplace(input, or(l, e, c) + s + m + s + m, '$1');
+    input = regReplace(input, '(\,)' + s + m + s + m, '$1');
+    input = regReplace(input, m + s + m, '+');
+    input = regReplace(input, m + s + m, '+');
+    return input;
+}
+function handlePower(input) {
+    input = regReplace(input, String.raw `\^\{1\}`, '');
+    return input;
+}
+function handleSqrt(input) {
+    input = regReplace(input, String.raw `\\sqrt\[2\]`, '\\sqrt');
+    return input;
+}
+function handleCoeff(input) {
+    input = regReplace(input, or(p, m, e, l, sl, r, c) + s + 1 + s + or(v, l, left, sq) + endtag, '$1$2');
+    return input;
+}
+function handlePrime(input) {
+    input = regReplace(input, '(' + v + ')' + "'" + endtag, '$1 \\prime ');
+    return input;
+}
+function dress(html) {
+    html = handleSigns(html);
+    html = handlePower(html);
+    html = handleSqrt(html);
+    html = handleCoeff(html);
+    html = handlePrime(html);
+    return html;
+}
+exports.dress = dress;
+// .replace(/(?<=<span class="math-tex">[^<>]*)([\+\-\=\(\[\{\\\)\]\}\,])(\s|&nbsp;)*1(\s|&nbsp;)*(?=[A-Za-z\(\[][^<>]*<\/span>)/g, '$1')
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OptionShuffler = void 0;
+function RndPermutation(n = 4) {
+    return RndShuffle(...ListIntegers(0, n - 1));
+}
+function Permute(permutation, items) {
+    let newItems = [];
+    for (let i = 0; i < permutation.length; i++) {
+        newItems.push(items[permutation[i]]);
+    }
+    return newItems;
+}
+function AnsToIndex(ans) {
+    return ['A', 'B', 'C', 'D'].indexOf(ans);
+}
+function IndexToAns(index) {
+    return ['A', 'B', 'C', 'D'][index];
+}
+function NewAns(oldAns, permutation) {
+    let oldIndex = AnsToIndex(oldAns);
+    let newIndex = permutation.indexOf(oldIndex);
+    return IndexToAns(newIndex);
+}
+class OptionShuffler {
+    constructor(qn, sol, ans) {
+        this.qn = qn;
+        this.sol = sol;
+        this.ans = ans;
+        this.ul = "";
+        this.options = [];
+        this.perm = [];
+        this.valid = false;
+        let uls = ExtractHTMLTag(qn, 'ul');
+        if (uls.length === 0)
+            return; // no <ul></ul>
+        this.ul = uls[uls.length - 1];
+        if (this.ul === "")
+            return; // blank <ul></ul>
+        this.options = ExtractHTMLTag(this.ul, 'li');
+        if (this.options.length <= 1)
+            return; // only 1 or 0 <li></li>
+        this.perm = RndPermutation(this.options.length);
+        this.valid = true;
+    }
+    AreOptionsDuplicated() {
+        return (new Set(this.options)).size !== this.options.length;
+    }
+    genQn() {
+        if (!this.valid)
+            return this.qn;
+        let shuffledOptions = Permute(this.perm, this.options);
+        let joined = JoinToHTMLTag(shuffledOptions, 'li');
+        return this.qn.replace(this.ul, joined);
+    }
+    genAns() {
+        if (!this.valid)
+            return this.ans;
+        return NewAns(this.ans, this.perm);
+    }
+    genSol() {
+        if (!this.valid)
+            return this.sol;
+        let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol;
+        let ansList = ['A', 'B', 'C', 'D'];
+        for (let x of ansList) {
+            newSol = newSol.replace(new RegExp('\{\#' + x + '\}', 'g'), NewAns(x, this.perm));
+        }
+        return newSol;
+    }
+}
+exports.OptionShuffler = OptionShuffler;
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AutoOptions = void 0;
+class Instruction {
+    constructor(input) {
+        this.range = undefined;
+        this.assign = [];
+        if (IsArray(input)) {
+            this.assign = input;
+        }
+        else if (typeof input === 'object' && input !== null) {
+            Object.assign(this, input);
+        }
+    }
+    do(source) {
+        let product = Clone(this.assign);
+        product.push(...RndShake(source, this.range, 3));
+        product.length = 3;
+        product = RndShuffle(...product);
+        return product;
+    }
+}
+function ExecInstructions(instructions, source, validate) {
+    let products = {};
+    let k;
+    for (k in instructions) {
+        let instr = new Instruction(instructions[k]);
+        products[k] = instr.do(source[k]);
+    }
+    // ValidateProducts(products, source, validate)
+    return products;
+}
+/**
+* @category AutoOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>*x</li></ul>'
+* AutoOptions(question,{x:3})
+* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
+* ```
+*/
+function AutoOptions(instructions, question, source, validate) {
+    if (IsEmptyObject(instructions))
+        return question;
+    let options = ExtractHTMLTag(question, 'li');
+    let products = ExecInstructions(instructions, source, validate);
+    if (options.length === 1) {
+        let others = Array(3).fill(options[0]);
+        for (let k in products) {
+            for (let i = 0; i < 3; i++) {
+                others[i] = PrintVariable(others[i], k, products[k][i]);
+            }
+        }
+        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
+    }
+    if (options.length === 2) {
+        let others = [options[0], options[1]];
+        for (let k in products) {
+            others[0] = PrintVariable(others[0], k, products[k][0]);
+            others[1] = PrintVariable(others[1], k, products[k][0]);
+        }
+        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
+    }
+    return question;
+}
+exports.AutoOptions = AutoOptions;
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Dict = exports.Config = exports.SeedCore = void 0;
+class SeedCore {
+    constructor(qn = "", sol = "", populate = "", validate = "", preprocess = "", postprocess = "") {
+        this.qn = qn;
+        this.sol = sol;
+        this.populate = populate;
+        this.validate = validate;
+        this.preprocess = preprocess;
+        this.postprocess = postprocess;
+    }
+}
+exports.SeedCore = SeedCore;
+class Config {
+    constructor(sections = [], answer = "A", options = {}) {
+        this.sections = sections;
+        this.answer = answer;
+        this.options = options;
+    }
+}
+exports.Config = Config;
+class Dict {
+    constructor(a = undefined, b = undefined, c = undefined, d = undefined, e = undefined, f = undefined, g = undefined, h = undefined, i = undefined, j = undefined, k = undefined, l = undefined, m = undefined, n = undefined, o = undefined, p = undefined, q = undefined, r = undefined, s = undefined, t = undefined, u = undefined, v = undefined, w = undefined, x = undefined, y = undefined, z = undefined, A = undefined, B = undefined, C = undefined, D = undefined, E = undefined, F = undefined, G = undefined, H = undefined, I = undefined, J = undefined, K = undefined, L = undefined, M = undefined, N = undefined, O = undefined, P = undefined, Q = undefined, R = undefined, S = undefined, T = undefined, U = undefined, V = undefined, W = undefined, X = undefined, Y = undefined, Z = undefined) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+        this.g = g;
+        this.h = h;
+        this.i = i;
+        this.j = j;
+        this.k = k;
+        this.l = l;
+        this.m = m;
+        this.n = n;
+        this.o = o;
+        this.p = p;
+        this.q = q;
+        this.r = r;
+        this.s = s;
+        this.t = t;
+        this.u = u;
+        this.v = v;
+        this.w = w;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.A = A;
+        this.B = B;
+        this.C = C;
+        this.D = D;
+        this.E = E;
+        this.F = F;
+        this.G = G;
+        this.H = H;
+        this.I = I;
+        this.J = J;
+        this.K = K;
+        this.L = L;
+        this.M = M;
+        this.N = N;
+        this.O = O;
+        this.P = P;
+        this.Q = Q;
+        this.R = R;
+        this.S = S;
+        this.T = T;
+        this.U = U;
+        this.V = V;
+        this.W = W;
+        this.X = X;
+        this.Y = Y;
+        this.Z = Z;
+        this.variables = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+            'i', 'j', 'k', 'l', 'm', 'n', 'o',
+            'p', 'q', 'r', 's', 't', 'u', 'v',
+            'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+            'I', 'J', 'K', 'L', 'M', 'N', 'O',
+            'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+            'W', 'X', 'Y', 'Z'
+        ];
+    }
+    update(other) {
+        for (let key of this.variables) {
+            if (key in other)
+                this[key] = other[key];
+        }
+    }
+    blur() {
+        for (let key of this.variables) {
+            this[key] = Blur(this[key]);
+        }
+    }
+    substitute(text) {
+        for (let key of this.variables) {
+            let num = this[key];
+            if (typeof num === 'undefined')
+                continue;
+            text = PrintVariable(text, key, num);
+        }
+        return text;
+    }
+}
+exports.Dict = Dict;
 
 
 /***/ })

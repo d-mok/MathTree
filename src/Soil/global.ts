@@ -1,16 +1,13 @@
 import { ExecSection } from './tool/section'
 import { dress } from './tool/dress'
+import { OptionShuffler } from './tool/shuffle'
+import {AutoOptions} from './tool/option'
+import './type'
+import { Dict, Config, SeedCore } from './cls'
 
 
 
-
-export function clone<T>(obj: T): T {
-    // clone object
-    return JSON.parse(JSON.stringify(obj));
-}
-
-
-class Seed {
+export class Seed {
     constructor(
         // get from SeedBank API
         public qn: string = "",
@@ -23,7 +20,6 @@ class Seed {
         public dict: Dict = new Dict(),
         public config: Config = new Config(),
         // state
-        public ans: string | undefined = undefined,
         public counter: number = 0,
         // copy of core
         public core: SeedCore = new SeedCore()
@@ -46,7 +42,6 @@ class Seed {
         this.postprocess = this.core.postprocess
         this.dict = new Dict()
         this.config = new Config()
-        this.ans = undefined
     }
 
     evalCode(code: string): any {
@@ -84,12 +79,12 @@ class Seed {
         return result
     }
 
-    pushDict(): void {
+    pushDict() {
         this.evalCode(this.populate)
         this.counter++
     }
 
-    validateDict() {
+    isValidated() {
         return this.evalCode(this.validate) === true
     }
 
@@ -121,6 +116,111 @@ class Seed {
     }
 
 
+    runPopulate(): boolean {
+        while (this.counter <= 1000) {
+            try {
+                this.pushDict()
+            } catch (e) {
+                if (e.name === 'MathError') {
+                    continue
+                } else {
+                    throw e
+                }
+            }
+            if (this.isValidated()) return true; // done if validated
+        };
+        // throw error after 1000 failed trials
+        throw Error("No population found after 1000 trials!")
+    }
+
+    runSection(): boolean {
+        this.cropSection()
+        return true
+    }
+
+    runPreprocess() {
+        this.doPreprocess()
+        return true
+    }
+
+    runOption(): boolean {
+        let nTrial = 0
+        while (nTrial <= 10) {
+            try {
+                this.qn = AutoOptions(this.config.options, this.qn, this.dict, this.validate)
+                return true
+            } catch (e) {
+                continue
+            }
+        };
+        // throw error after 10 failed trials
+        throw Error("No valid option generated after 10 trials!")
+    }
 
 
+    runSubstitute(): boolean {
+        this.pour()
+        this.dress()
+        return true
+    }
+
+    runPostprocess(): boolean {
+        this.doPostprocess()
+        return true
+    }
+
+    runShuffle(): boolean {
+        let shuffler = new OptionShuffler(
+            this.qn,
+            this.sol,
+            this.config.answer
+        )
+        if (shuffler.AreOptionsDuplicated()) return false
+        this.qn = shuffler.genQn()
+        this.sol = shuffler.genSol()
+        this.config.answer = shuffler.genAns()
+        return true
+    }
+
+    successFruit(): Question {
+        return {
+            qn: this.qn,
+            sol: this.sol,
+            ans: this.config.answer,
+            counter: this.counter,
+            success: true
+        }
+    }
+
+    errorFruit(e: Error): Question {
+        return {
+            qn: "Error! " + e.name,
+            sol: e.message,
+            ans: "X",
+            counter: this.counter,
+            success: false
+        }
+    }
+
+    grow(): Question {
+        try {
+            do {
+                this.reset()
+                this.runPopulate()
+                this.runSection();
+                this.runPreprocess();
+                this.runOption()
+                this.runSubstitute();
+                this.runPostprocess();
+                if (!this.runShuffle()) continue
+            } while (false);
+            return this.successFruit()
+        }
+        catch (e) {
+            console.error("[MathSoil] Error!\n" + e.name);
+            console.error(e.message);
+            console.error(e.stack);
+            return this.errorFruit(e)
+        }
+    }
 }
