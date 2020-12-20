@@ -8359,6 +8359,23 @@ function IsConstraint(...items) {
         IsIneqSign(x[2]));
 }
 globalThis.IsConstraint = IsConstraint;
+/**
+ * @category Assertion
+ * @return Check if the points are pairwise distant apart.
+ * ```typescript
+ * IsAroundPoint([0,0],2)([1,0]) // true
+ * IsAroundPoint([0,0],2)([3,0]) // false
+ * IsAroundPoint([0,0],2)([1,0],[3,0]) // false
+ * ```
+ */
+function IsAroundPoint(anchor, range) {
+    const f = function (...points) {
+        let ranges = points.map(p => Max(Abs(p[0] - anchor[0]), Abs(p[1] - anchor[1])));
+        return ranges.every(x => x <= range);
+    };
+    return f;
+}
+globalThis.IsAroundPoint = IsAroundPoint;
 
 
 /***/ }),
@@ -12103,18 +12120,17 @@ globalThis.AreCoprime = AreCoprime;
  * @category Relation
  * @return Check if the points are pairwise distant apart.
  * ```typescript
- * AreDistantPoint([[0,0],[3,0]],2) // true
- * AreDistantPoint([[0,0],[1,0]],2) // false
+ * AreDistantPoint(2)([0,0],[3,0]) // true
+ * AreDistantPoint(2)([0,0],[1,0]) // false
  * ```
  */
-function AreDistantPoint(points, distance) {
-    for (let i = 0; i < points.length - 1; i++) {
-        for (let j = i + 1; j < points.length; j++) {
-            if (Distance(points[i], points[j]) < distance)
-                return false;
-        }
-    }
-    return true;
+function AreDistantPoint(distance) {
+    const f = function (...points) {
+        let pairs = Pairs(...points);
+        let distances = pairs.map(ps => Distance(ps[0], ps[1]));
+        return distances.every(x => x > distance);
+    };
+    return f;
 }
 globalThis.AreDistantPoint = AreDistantPoint;
 

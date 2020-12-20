@@ -60,7 +60,7 @@ test('AreCoprime', () => {
 
 
 test('AreDistantPoint', () => {
-    expect(AreDistantPoint([[0, 0], [3, 0]], 2)).toBe(true);
-    expect(AreDistantPoint([[0, 0], [1, 0]], 2)).toBe(false);
+    expect(AreDistantPoint(2)([0, 0], [3, 0])).toBe(true);
+    expect(AreDistantPoint(2)([0, 0], [1, 0])).toBe(false);
 });
 

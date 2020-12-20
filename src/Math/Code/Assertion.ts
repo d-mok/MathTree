@@ -393,3 +393,32 @@ function IsConstraint(...items: any[]): boolean {
 }
 globalThis.IsConstraint = IsConstraint
 
+
+
+
+
+/**
+ * @category Assertion
+ * @return Check if the points are pairwise distant apart.
+ * ```typescript
+ * IsAroundPoint([0,0],2)([1,0]) // true
+ * IsAroundPoint([0,0],2)([3,0]) // false
+ * IsAroundPoint([0,0],2)([1,0],[3,0]) // false
+ * ```
+ */
+function IsAroundPoint(anchor: Point, range: number) {
+    const f = function (...points: Point[]): boolean {
+        let ranges = points.map(
+            p => Max(Abs(p[0] - anchor[0]), Abs(p[1] - anchor[1]))
+        )
+        return ranges.every(
+            x => x <= range
+        );
+    }
+    return f
+}
+globalThis.IsAroundPoint = IsAroundPoint
+
+
+
+

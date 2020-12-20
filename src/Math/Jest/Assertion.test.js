@@ -188,3 +188,12 @@ test('IsConstraint', () => {
     const F = [[1, 2, 3], [1, 2, '=>', 3]];
     testAssertion(IsConstraint, T, F);
 });
+
+
+
+
+test('IsAroundPoint', () => {
+    const T = [[1, 0], [2, 0], [0, -2],];
+    const F = [[3, 0], [4, 0], [0, -3]];
+    testAssertion(IsAroundPoint([0, 0], 2), T, F, false);
+});
