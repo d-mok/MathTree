@@ -1,0 +1,80 @@
+.katex {
+    font-size: 1em;
+    font-family: "Times New Roman", Times, serif  !important;
+}
+
+.katex .mathdefault {
+    font-size: 1em;
+    font-family: "Times New Roman", Times, serif  !important;
+}
+
+
+.qs {
+    font-family: "Times New Roman", Times, serif;
+}
+
+.qs ul {
+    margin-left: 0px;
+    padding-left: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.qs li {
+    margin-left: 0px;
+    padding-left: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.mc ul {
+    counter-reset: list;
+}
+
+.mc ul > li {
+    list-style: none;
+    position: relative;
+}
+
+.mc ul > li:before {
+    counter-increment: list;
+    content: counter(list, upper-alpha) ". ";
+    position: absolute;
+    left: -20px;
+}
+
+.qs p {
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin-top: 0px;
+    margin-bottom: 10px !important;
+  }
+
+
+
+/* To resolve .overlone conflict between vuetify and katex */
+/* vuetify auto capitalize all .overline */
+.qs .katex .overline {
+    text-transform: none !important;
+    font-size: 1em !important;
+    letter-spacing: normal !important;
+    font-family: "Times New Roman", Times, serif  !important;
+}
+
+
+/* To resolve .accent conflict between vuetify and katex */
+/* vuetify auto set all .accent to pale blue background-color */
+.qs .katex .accent {
+    background-color: inherit !important;
+  }
+  
+
+
+/* Fix wrapping of ckeditor source box */
+.cke_source {
+    white-space: pre-wrap !important; 
+  }
