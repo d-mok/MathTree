@@ -9004,10 +9004,10 @@ function FeasibleIntegral(cons) {
     let vertices = FeasiblePolygon(cons);
     let xCoords = vertices.map(p => p[0]);
     let yCoords = vertices.map(p => p[1]);
-    let xmax = Max(...xCoords);
-    let xmin = Min(...xCoords);
-    let ymax = Max(...yCoords);
-    let ymin = Min(...yCoords);
+    let xmax = Ceil(Max(...xCoords));
+    let xmin = Floor(Min(...xCoords));
+    let ymax = Ceil(Max(...yCoords));
+    let ymin = Floor(Min(...yCoords));
     let points = [];
     for (let i = xmin; i <= xmax; i++) {
         for (let j = ymin; j <= ymax; j++) {

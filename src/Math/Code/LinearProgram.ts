@@ -104,10 +104,10 @@ function FeasibleIntegral(cons: Constraint[]): Point[] {
     let vertices = FeasiblePolygon(cons)
     let xCoords = vertices.map(p => p[0])
     let yCoords = vertices.map(p => p[1])
-    let xmax = Max(...xCoords)
-    let xmin = Min(...xCoords)
-    let ymax = Max(...yCoords)
-    let ymin = Min(...yCoords)
+    let xmax = Ceil(Max(...xCoords))
+    let xmin = Floor(Min(...xCoords))
+    let ymax = Ceil(Max(...yCoords))
+    let ymin = Floor(Min(...yCoords))
 
     let points: Point[] = [];
     for (let i = xmin; i <= xmax; i++) {
