@@ -55,6 +55,7 @@ globalThis.Sign = Sign
  * ```
  */
 function Round(num: number, sigfig = 3): number {
+    if (num === 0) return 0
     if (sigfig < 1) sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
     return Fix(num, d);
@@ -70,6 +71,7 @@ globalThis.Round = Round
  * ```
  */
 function RoundUp(num: number, sigfig = 3): number {
+    if (num === 0) return 0
     if (sigfig < 1) sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
     return FixUp(num, d);
@@ -85,6 +87,7 @@ globalThis.RoundUp = RoundUp
  * ```
  */
 function RoundDown(num: number, sigfig = 3): number {
+    if (num === 0) return 0
     if (sigfig < 1) sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
     return FixDown(num, d);

@@ -54,6 +54,9 @@ test('Round', () => {
 
     expect(Round(-123.4567, 3)).toBe(-123);
     expect(Round(-123.4567, 4)).toBe(-123.5);
+
+    expect(Round(0, 1)).toBe(0);
+    expect(Round(0, 2)).toBe(0);
 });
 
 
@@ -87,6 +90,9 @@ test('RoundUp', () => {
 
     expect(RoundUp(-123.4567, 3)).toBe(-124);
     expect(RoundUp(-123.4567, 4)).toBe(-123.5);
+
+    expect(RoundUp(0, 1)).toBe(0);
+    expect(RoundUp(0, 2)).toBe(0);
 });
 
 
@@ -117,6 +123,9 @@ test('RoundDown', () => {
 
     expect(RoundDown(-123.4567, 3)).toBe(-123);
     expect(RoundDown(-123.4567, 4)).toBe(-123.4);
+
+    expect(RoundDown(0, 1)).toBe(0);
+    expect(RoundDown(0, 2)).toBe(0);
 });
 
 
@@ -155,6 +164,8 @@ test('Fix', () => {
 
     expect(Fix(-0.5, 0)).toBe(-1);
 
+    expect(Fix(0, 1)).toBe(0);
+    expect(Fix(0, 2)).toBe(0);
 });
 
 
@@ -190,6 +201,9 @@ test('FixUp', () => {
 
     expect(FixUp(-123.4567, 0)).toBe(-124);
     expect(FixUp(-123.4567, 1)).toBe(-123.5);
+
+    expect(FixUp(0, 1)).toBe(-0);
+    expect(FixUp(0, 2)).toBe(-0);
 });
 
 
@@ -223,6 +237,9 @@ test('FixDown', () => {
 
     expect(FixDown(-123.4567, 0)).toBe(-123);
     expect(FixDown(-123.4567, 1)).toBe(-123.4);
+
+    expect(FixDown(0, 1)).toBe(0);
+    expect(FixDown(0, 2)).toBe(0);
 });
 
 

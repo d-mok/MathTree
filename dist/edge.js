@@ -9093,6 +9093,8 @@ globalThis.Sign = Sign;
  * ```
  */
 function Round(num, sigfig = 3) {
+    if (num === 0)
+        return 0;
     if (sigfig < 1)
         sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
@@ -9108,6 +9110,8 @@ globalThis.Round = Round;
  * ```
  */
 function RoundUp(num, sigfig = 3) {
+    if (num === 0)
+        return 0;
     if (sigfig < 1)
         sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
@@ -9123,6 +9127,8 @@ globalThis.RoundUp = RoundUp;
  * ```
  */
 function RoundDown(num, sigfig = 3) {
+    if (num === 0)
+        return 0;
     if (sigfig < 1)
         sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
