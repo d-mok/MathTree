@@ -7,8 +7,9 @@
  * ```
  */
 function Divide(dividend: number, divisor: number): number {
-    if (!IsNum(dividend, divisor)) throw DesignError('input must be number')
-    if (divisor === 0) throw MathError('division by 0')
+    // if (!IsNum(dividend, divisor)) throw DesignError('input must be number')
+    // if (divisor === 0) throw MathError('division by 0')
+    Should(divisor !== 0, 'division by 0')
     return dividend / divisor
 }
 globalThis.Divide = Divide

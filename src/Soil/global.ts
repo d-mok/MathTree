@@ -78,8 +78,8 @@ export class Seed {
     }
 
     pushDict() {
-        this.evalCode(this.populate)
         this.counter++
+        this.evalCode(this.populate)
     }
 
     isValidated() {
@@ -118,14 +118,10 @@ export class Seed {
         while (this.counter <= 1000) {
             try {
                 this.pushDict()
+                if (this.isValidated()) return true; // done if validated
             } catch (e) {
-                if (e.name === 'MathError') {
-                    continue
-                } else {
-                    throw e
-                }
+                if (e.name !== 'MathError') throw e
             }
-            if (this.isValidated()) return true; // done if validated
         };
         // throw error after 1000 failed trials
         throw Error("No population found after 1000 trials!")
@@ -134,7 +130,7 @@ export class Seed {
     runSection(): boolean {
         this.cropSection()
         return true
-    }
+    } 
 
     runPreprocess() {
         this.doPreprocess()

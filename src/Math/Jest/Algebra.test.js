@@ -5,8 +5,8 @@ test('Crammer', () => {
     expect(Crammer(1, 1, 5, 1, -1, 1)).toEqual([3, 2]);
     expect(Crammer(2, 3, 23, 4, -5, -9)).toEqual([4, 5]);
     // NaN Test
-    expect(Crammer(1, 1, 2, 2, 2, 4)).toEqual([NaN, NaN]);
-    expect(Crammer(1, 1, 2, 2, 2, 5)).toEqual([NaN, NaN]);
+    expect(() => Crammer(1, 1, 2, 2, 2, 4)).toThrow();
+    expect(() => Crammer(1, 1, 2, 2, 2, 5)).toThrow();
 });
 
 

@@ -67,3 +67,13 @@ test('properly define answer', () => {
     expect(seed.config.answer).toBe("B")
 });
 
+
+
+test('properly fail MathError', () => {
+    const seed = new Seed({
+        populate: "Divide(1,0)",
+        validate: ""
+    });
+    expect(() => seed.runPopulate()).toThrow()
+});
+

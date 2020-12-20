@@ -9050,10 +9050,9 @@ globalThis.MinimizePoint = MinimizePoint;
  * ```
  */
 function Divide(dividend, divisor) {
-    if (!IsNum(dividend, divisor))
-        throw DesignError('input must be number');
-    if (divisor === 0)
-        throw MathError('division by 0');
+    // if (!IsNum(dividend, divisor)) throw DesignError('input must be number')
+    // if (divisor === 0) throw MathError('division by 0')
+    Should(divisor !== 0, 'division by 0');
     return dividend / divisor;
 }
 globalThis.Divide = Divide;
@@ -15182,8 +15181,8 @@ class Seed {
         return result;
     }
     pushDict() {
-        this.evalCode(this.populate);
         this.counter++;
+        this.evalCode(this.populate);
     }
     isValidated() {
         return this.evalCode(this.validate) === true;
@@ -15213,17 +15212,13 @@ class Seed {
         while (this.counter <= 1000) {
             try {
                 this.pushDict();
+                if (this.isValidated())
+                    return true; // done if validated
             }
             catch (e) {
-                if (e.name === 'MathError') {
-                    continue;
-                }
-                else {
+                if (e.name !== 'MathError')
                     throw e;
-                }
             }
-            if (this.isValidated())
-                return true; // done if validated
         }
         ;
         // throw error after 1000 failed trials

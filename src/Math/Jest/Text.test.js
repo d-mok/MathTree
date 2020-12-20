@@ -37,7 +37,7 @@ test('ParseIneqSign', () => {
     expect(ParseIneqSign('<=')).toEqual([false, true]);
     expect(ParseIneqSign('>')).toEqual([true, false]);
     expect(ParseIneqSign('<')).toEqual([false, false]);
-    expect(ParseIneqSign('abc')).toBeUndefined();
+    expect(()=>ParseIneqSign('abc')).toThrow();
 });
 
 
