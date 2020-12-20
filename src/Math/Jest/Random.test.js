@@ -123,3 +123,14 @@ test('RndLinear', () => {
 });
 
 
+
+test('RndPoint', () => {
+    let arr = sample(() => RndPoint([1, 4], [10, 14]));
+    let xs = arr.map(p => p[0]);
+    let ys = arr.map(p => p[1]);
+    expect(xs).toBeFlatWithin(1, 4);
+    expect(ys).toBeFlatWithin(10, 14);
+    expect(xs).toBeFlatIsInteger();
+    expect(ys).toBeFlatIsInteger();
+    expect(arr).toAllHaveLength(2);
+});

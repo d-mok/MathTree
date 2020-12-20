@@ -145,3 +145,27 @@ function LinearFromIntercepts(xInt: number, yInt: number): [number, number, numb
 }
 globalThis.LinearFromIntercepts = LinearFromIntercepts
 
+
+
+
+
+/**
+ * @category Algebra
+ * @return the coeff [a,b,c] in ax+by+c=0 from two given points
+ * ```typescript
+ * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+ * ```
+ */
+function LinearFromTwoPoints(point1: Point, point2: Point) {
+    let [x1, y1] = point1
+    let [x2, y2] = point2
+    Should(x1 !== x2 || y1 !== y2, 'two points equal')
+    let dx = x1 - x2
+    let dy = y1 - y2
+    let [a, b, c] = [dy, -dx, dx * y1 - dy * x1]
+    let s = Sign(a);
+    [a, b, c] = [a * s, b * s, c * s];
+    [a, b, c] = SimpRatio(a, b, c)
+    return [a, b, c]
+}
+globalThis.LinearFromTwoPoints = LinearFromTwoPoints

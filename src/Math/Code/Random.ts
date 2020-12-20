@@ -226,3 +226,19 @@ function RndLinear(minInt: number, maxInt: number) {
     return LinearFromIntercepts(xInt, yInt)
 }
 globalThis.RndLinear = RndLinear
+
+
+/**
+ * @category Random
+ * @return a point within given range
+ * ```typescript
+ * RndPoint([1,4],[10,14]) // may return [2,12]
+ * // equivalent to [RndN(...xRange),Range(yRange)]
+ * ```
+ */
+function RndPoint(xRange: [number, number], yRange: [number, number]): Point {
+    let x = RndN(...xRange)
+    let y = RndN(...yRange)
+    return [x, y]
+}
+globalThis.RndPoint = RndPoint

@@ -77,3 +77,10 @@ test('LinearFromIntercepts', () => {
     expect(LinearFromIntercepts(4, -2)).toEqual([1, -2, -4]);
 });
 
+
+
+test('LinearFromIntercepts', () => {
+    expect(LinearFromTwoPoints([1, 2], [3, 4])).toEqual([1, -1, 1]);
+    expect(LinearFromTwoPoints([0, 0], [3, 4])).toEqual([4, -3, 0]);
+});
+
