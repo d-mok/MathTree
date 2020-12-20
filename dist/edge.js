@@ -13709,9 +13709,9 @@ class PenCls {
              */
             linear(a, b, c) {
                 if (a === 0 && b !== 0)
-                    this.horizontal(-c);
+                    this.horizontal(-c / b);
                 if (b == 0 && a !== 0)
-                    this.vertical(-c);
+                    this.vertical(-c / a);
                 if (a !== 0 && b !== 0)
                     this.line(-a / b, -c / b);
             }
