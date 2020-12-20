@@ -97,3 +97,25 @@ function AreDistantPoint(distance: number) {
 globalThis.AreDistantPoint = AreDistantPoint
 
 
+
+/**
+ * @category Relation
+ * @return Check if 
+ * ```typescript
+ * AreOblique(40)(0,1) // true
+ * AreOblique(40)(0,0.5) // false
+ * ```
+ */
+function AreOblique(minAngle: number) {
+    const f = function (...slopes: number[]): boolean {
+        let pairs = Pairs(...slopes)
+        let angles = pairs.map(ps => IntersectAngle(ps[0], ps[1]))
+        return angles.every(
+            x => x > minAngle
+        );
+    }
+    return f
+}
+globalThis.AreOblique = AreOblique
+
+

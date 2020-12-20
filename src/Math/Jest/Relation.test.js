@@ -64,3 +64,9 @@ test('AreDistantPoint', () => {
     expect(AreDistantPoint(2)([0, 0], [1, 0])).toBe(false);
 });
 
+
+test('AreOblique', () => {
+    expect(AreOblique(40)(0, 1)).toBe(true);
+    expect(AreOblique(40)(0, 0.5)).toBe(false);
+});
+
