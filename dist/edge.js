@@ -15233,11 +15233,12 @@ class AutoPenCls {
      *     showIntegralLabel: false,
      *     showIntegralMax: false,
      *     showIntegralMin: false,
-     *     contourColor : "grey"
+     *     contourColor : "grey",
+     *     constraintColors = ['black','black']
      * })
      * ```
      */
-    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey" }) {
+    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey", constraintColors = [], }) {
         function fieldAt(p) {
             const [a, b, c] = field;
             const [x, y] = p;
@@ -15280,14 +15281,17 @@ class AutoPenCls {
             pen.set.textSize();
         }
         function drawLines() {
-            constraints.forEach((constraint) => {
-                let [a, b, s, c] = constraint;
+            var _a;
+            for (let i = 0; i < constraints.length; i++) {
+                let [a, b, s, c] = constraints[i];
                 let [_, eq] = ParseIneqSign(s);
                 if (!eq)
                     pen.set.dash([5, 5]);
+                pen.set.color((_a = constraintColors[i]) !== null && _a !== void 0 ? _a : 'black');
                 pen.graph.linear(a, b, -c);
+                pen.set.color();
                 pen.set.dash();
-            });
+            }
         }
         labelConstraints.push((x, y) => x > xmin);
         labelConstraints.push((x, y) => x < xmax);

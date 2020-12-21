@@ -701,7 +701,8 @@ class AutoPenCls {
      *     showIntegralLabel: false,
      *     showIntegralMax: false,
      *     showIntegralMin: false,
-     *     contourColor : "grey"
+     *     contourColor : "grey",
+     *     constraintColors = ['black','black']
      * })
      * ```
      */
@@ -727,7 +728,8 @@ class AutoPenCls {
         showIntegralLabel = false,
         showIntegralMax = false,
         showIntegralMin = false,
-        contourColor = "grey"
+        contourColor = "grey",
+        constraintColors = [],
     }: {
         constraints: Constraint[],
         field: Field,
@@ -750,7 +752,8 @@ class AutoPenCls {
         showIntegralLabel: boolean,
         showIntegralMax: boolean,
         showIntegralMin: boolean,
-        contourColor: string
+        contourColor: string,
+        constraintColors: string[]
 
     }) {
         function fieldAt(p: Point): number {
@@ -803,13 +806,15 @@ class AutoPenCls {
         }
 
         function drawLines() {
-            constraints.forEach((constraint) => {
-                let [a, b, s, c] = constraint;
+            for (let i = 0; i < constraints.length; i++) {
+                let [a, b, s, c] = constraints[i];
                 let [_, eq] = ParseIneqSign(s)
                 if (!eq) pen.set.dash([5, 5]);
+                pen.set.color(constraintColors[i] ?? 'black')
                 pen.graph.linear(a, b, -c);
+                pen.set.color()
                 pen.set.dash();
-            });
+            }
         }
 
         labelConstraints.push((x, y) => x > xmin)
