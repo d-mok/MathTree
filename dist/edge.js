@@ -12312,7 +12312,7 @@ function AreDistantPoint(distance) {
     const f = function (...points) {
         let pairs = Pairs(...points);
         let distances = pairs.map(ps => Distance(ps[0], ps[1]));
-        return distances.every(x => x > distance);
+        return distances.every(x => x >= distance);
     };
     return f;
 }

@@ -89,7 +89,7 @@ function AreDistantPoint(distance: number) {
         let pairs = Pairs(...points)
         let distances = pairs.map(ps => Distance(ps[0], ps[1]))
         return distances.every(
-            x => x > distance
+            x => x >= distance
         );
     }
     return f
