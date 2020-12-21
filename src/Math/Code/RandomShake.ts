@@ -44,7 +44,7 @@ function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
         }
     }
     // console.error('Fail to RndShake: ' + anchor)
-    Must(true, 'Fail to RndShake: ' + anchor)
+    Must(false, 'Fail to RndShake: ' + anchor)
     return []
 }
 globalThis.RndShake = RndShake
