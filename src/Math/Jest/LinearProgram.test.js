@@ -124,3 +124,16 @@ test('MinimizePoint', () => {
 
 
 
+
+test('OptimizePoint', () => {
+    let points = FeasibleIntegral(
+        [1, 1, "<=", 5],
+        [1, -1, "<", 4],
+        [2, 1, ">=", -5],
+        [3, 1, ">", -10]
+    );
+    expect(OptimizePoint(points, [2, 1, 1], true)).toEqual([4, 1]);
+    expect(OptimizePoint(points, [1, 1, 1], false)).toEqual([-1, -3]);
+    expect(() => OptimizePoint(points, [2, 1, 1], false)).toThrow();
+});
+

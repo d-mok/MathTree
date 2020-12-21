@@ -185,7 +185,14 @@ globalThis.MaximizePoint = MaximizePoint
 
 
 
-
+/**
+ * 
+ * @category LinearProgram
+ * @return the point with the min value of field
+ * ```typescript
+ * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
+ * ```
+ */
 function MinimizePoint(points: Point[], field: Field): Point {
     Should(points.length > 0, 'No feasible point')
     let orderedPoints = SortBy(points, x => FieldAt(x, field))
@@ -198,4 +205,24 @@ function MinimizePoint(points: Point[], field: Field): Point {
     return point
 }
 globalThis.MinimizePoint = MinimizePoint
+
+
+
+/**
+ * 
+ * @category LinearProgram
+ * @return the point with the min/max value of field
+ * ```typescript
+ * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [10,10]
+ * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
+ * ```
+ */
+function OptimizePoint(points: Point[], field: Field, max: boolean): Point {
+    if (max) {
+        return MaximizePoint(points, field)
+    } else {
+        return MinimizePoint(points, field)
+    }
+}
+globalThis.OptimizePoint = OptimizePoint
 
