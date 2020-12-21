@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
 
 /***/ }),
 /* 1 */
@@ -7914,6 +7914,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
 __webpack_require__(30);
+__webpack_require__(34);
 
 
 /***/ }),
@@ -7934,7 +7935,7 @@ __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(14);
+__webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -7962,9 +7963,10 @@ __webpack_require__(29);
  * ```
  */
 function Crammer(a, b, c, p, q, r) {
+    Must(IsNum(a, b, c, p, q, r), "Crammer: input must be num");
     const D = a * q - b * p;
-    if (D === 0)
-        return [NaN, NaN];
+    Should(D !== 0, 'Crammer: no unique solution!');
+    // if (D === 0) return [NaN, NaN]
     const x = (c * q - b * r) / D;
     const y = (a * r - c * p) / D;
     return [x, y];
@@ -8060,6 +8062,42 @@ function xPolynomial(poly1, poly2) {
     return result;
 }
 globalThis.xPolynomial = xPolynomial;
+/**
+ * @category Algebra
+ * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
+ * ```typescript
+ * LinearFromIntercepts(1,2) // [2,1,-2]
+ * ```
+ */
+function LinearFromIntercepts(xInt, yInt) {
+    Should(IsNonZero(xInt, yInt), 'intercepts cannot be zero');
+    let [a, b, c] = [yInt, xInt, -xInt * yInt];
+    let s = Sign(a);
+    [a, b, c] = [a * s, b * s, c * s];
+    [a, b, c] = SimpRatio(a, b, c);
+    return [a, b, c];
+}
+globalThis.LinearFromIntercepts = LinearFromIntercepts;
+/**
+ * @category Algebra
+ * @return the coeff [a,b,c] in ax+by+c=0 from two given points
+ * ```typescript
+ * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+ * ```
+ */
+function LinearFromTwoPoints(point1, point2) {
+    let [x1, y1] = point1;
+    let [x2, y2] = point2;
+    Should(x1 !== x2 || y1 !== y2, 'two points equal');
+    let dx = x1 - x2;
+    let dy = y1 - y2;
+    let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
+    let s = Sign(a);
+    [a, b, c] = [a * s, b * s, c * s];
+    [a, b, c] = SimpRatio(a, b, c);
+    return [a, b, c];
+}
+globalThis.LinearFromTwoPoints = LinearFromTwoPoints;
 
 
 /***/ }),
@@ -8078,8 +8116,8 @@ globalThis.xPolynomial = xPolynomial;
  * IsNum('2') // false
  * ```
  */
-function IsNum(...num) {
-    return num.every(x => typeof x === 'number' && isFinite(x));
+function IsNum(...items) {
+    return items.every(x => typeof x === 'number' && isFinite(x));
 }
 globalThis.IsNum = IsNum;
 /**
@@ -8090,8 +8128,8 @@ globalThis.IsNum = IsNum;
  * IsInteger(0.5) // false
  * ```
  */
-function IsInteger(...num) {
-    return Blurs(num).every(x => IsNum(x) && Number.isInteger(x));
+function IsInteger(...items) {
+    return Blurs(items).every(x => IsNum(x) && Number.isInteger(x));
 }
 globalThis.IsInteger = IsInteger;
 /**
@@ -8102,8 +8140,8 @@ globalThis.IsInteger = IsInteger;
  * IsDecimal(5) // false
  * ```
  */
-function IsDecimal(...num) {
-    return num.every(x => IsNum(x) && !IsInteger(x));
+function IsDecimal(...items) {
+    return Blurs(items).every(x => IsNum(x) && !IsInteger(x));
 }
 globalThis.IsDecimal = IsDecimal;
 /**
@@ -8114,8 +8152,8 @@ globalThis.IsDecimal = IsDecimal;
  * IsCoeff(-1) // false
  * ```
  */
-function IsCoeff(...num) {
-    return Blurs(num).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
+function IsCoeff(...items) {
+    return Blurs(items).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
 }
 globalThis.IsCoeff = IsCoeff;
 /**
@@ -8127,8 +8165,8 @@ globalThis.IsCoeff = IsCoeff;
  * IsOdd(4) // false
  * ```
  */
-function IsOdd(...num) {
-    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
+function IsOdd(...items) {
+    return Blurs(items).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
 }
 globalThis.IsOdd = IsOdd;
 /**
@@ -8141,8 +8179,8 @@ globalThis.IsOdd = IsOdd;
  * IsEven(5) // false
  * ```
  */
-function IsEven(...num) {
-    return Blurs(num).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
+function IsEven(...items) {
+    return Blurs(items).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
 }
 globalThis.IsEven = IsEven;
 /**
@@ -8155,8 +8193,8 @@ globalThis.IsEven = IsEven;
  * IsProbability(-0.1) // false
  * ```
  */
-function IsProbability(...num) {
-    return num.every(x => IsNum(x) && x >= 0 && x <= 1);
+function IsProbability(...items) {
+    return items.every(x => IsNum(x) && x >= 0 && x <= 1);
 }
 globalThis.IsProbability = IsProbability;
 /**
@@ -8168,8 +8206,8 @@ globalThis.IsProbability = IsProbability;
  * IsSquareNum(-9) // false
  * ```
  */
-function IsSquareNum(...num) {
-    return Blurs(num).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
+function IsSquareNum(...items) {
+    return Blurs(items).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
 }
 globalThis.IsSquareNum = IsSquareNum;
 /**
@@ -8181,10 +8219,24 @@ globalThis.IsSquareNum = IsSquareNum;
  * IsPositive(-2) // false
  * ```
  */
-function IsPositive(...num) {
-    return num.every(x => IsNum(x) && x > 0);
+function IsPositive(...items) {
+    return items.every(x => IsNum(x) && x > 0);
 }
 globalThis.IsPositive = IsPositive;
+/**
+ * @category Assertion
+ * @return check if the number is a positive integer.
+ * ```typescript
+ * IsPositiveInteger(2) // true
+ * IsPositiveInteger(0) // false
+ * IsPositiveInteger(-2) // false
+ * IsPositiveInteger(1.5) // false
+ * ```
+ */
+function IsPositiveInteger(...items) {
+    return items.every(x => IsInteger(x) && x > 0);
+}
+globalThis.IsPositiveInteger = IsPositiveInteger;
 /**
  * @category Assertion
  * @return check if the number is negative.
@@ -8194,8 +8246,8 @@ globalThis.IsPositive = IsPositive;
  * IsNegative(2) // false
  * ```
  */
-function IsNegative(...num) {
-    return num.every(x => IsNum(x) && x < 0);
+function IsNegative(...items) {
+    return items.every(x => IsNum(x) && x < 0);
 }
 globalThis.IsNegative = IsNegative;
 /**
@@ -8207,8 +8259,8 @@ globalThis.IsNegative = IsNegative;
  * IsNonZero(-2) // true
  * ```
  */
-function IsNonZero(...num) {
-    return num.every(x => IsNum(x) && x !== 0);
+function IsNonZero(...items) {
+    return items.every(x => IsNum(x) && x !== 0);
 }
 globalThis.IsNonZero = IsNonZero;
 /**
@@ -8255,6 +8307,14 @@ function IsArray(...items) {
     return items.every(x => Array.isArray(x));
 }
 globalThis.IsArray = IsArray;
+function IsArrayOfLength(length) {
+    Must(IsPositiveInteger(length), 'IsArrayOfLength: length must be positive integer');
+    const f = function (...items) {
+        return items.every(x => IsArray(x) && x.length === length);
+    };
+    return f;
+}
+globalThis.IsArrayOfLength = IsArrayOfLength;
 /**
  * @category Assertion
  * @return check if the num is between min and max inclusive.
@@ -8265,8 +8325,9 @@ globalThis.IsArray = IsArray;
  * ```
  */
 function IsBetween(min, max) {
-    const f = function (...num) {
-        return num.every(x => IsNum(x) && x >= min && x <= max);
+    Must(IsNum(min, max), 'IsBetween: min and max must be number');
+    const f = function (...items) {
+        return items.every(x => IsNum(x) && x >= min && x <= max);
     };
     return f;
 }
@@ -8281,87 +8342,80 @@ globalThis.IsBetween = IsBetween;
  * ```
  */
 function IsAbsBetween(min, max) {
-    const f = function (...num) {
-        return num.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
+    Must(IsNum(min, max), 'IsBetween: min and max must be number');
+    const f = function (...items) {
+        return items.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
     };
     return f;
 }
 globalThis.IsAbsBetween = IsAbsBetween;
+/**
+ * @category Assertion
+ * @return check if the item is a point [num,num]
+ * ```typescript
+ * IsPoint([2,5]) // true
+ * IsPoint(2) // false
+ * IsPoint([1,2,3]) // false
+ * IsPoint([NaN,NaN]) // false
+ * ```
+ */
+function IsPoint(...items) {
+    return items.every(x => IsArrayOfLength(2)(x) && IsNum(x[0], x[1]));
+}
+globalThis.IsPoint = IsPoint;
+/**
+ * @category Assertion
+ * @return check if the item is a IneqSign string
+ * ```typescript
+ * IsIneqSign('>') // true
+ * IsIneqSign('\\ge') // true
+ * IsIneqSign(true) // false
+ * IsIneqSign('=>') // false
+ * ```
+ */
+function IsIneqSign(...items) {
+    return items.every(x => [
+        '>', '<', '>=', '<=',
+        '\\gt', '\\lt', '\\ge', '\\le'
+    ].includes(x));
+}
+globalThis.IsIneqSign = IsIneqSign;
+/**
+ * @category Assertion
+ * @return check if the item is a constraint (LP)
+ * ```typescript
+ * IsConstraint([1,2,'>',3]) // true
+ * IsConstraint([1,2,3]) // false
+ * IsConstraint([1,2,'=>',3]) // false
+ * ```
+ */
+function IsConstraint(...items) {
+    return items.every(x => IsArrayOfLength(4)(x) &&
+        IsNum(x[0], x[1], x[3]) &&
+        IsIneqSign(x[2]));
+}
+globalThis.IsConstraint = IsConstraint;
+/**
+ * @category Assertion
+ * @return Check if the points are pairwise distant apart.
+ * ```typescript
+ * IsAroundPoint([0,0],2)([1,0]) // true
+ * IsAroundPoint([0,0],2)([3,0]) // false
+ * IsAroundPoint([0,0],2)([1,0],[3,0]) // false
+ * ```
+ */
+function IsAroundPoint(anchor, range) {
+    const f = function (...points) {
+        let ranges = points.map(p => Max(Abs(p[0] - anchor[0]), Abs(p[1] - anchor[1])));
+        return ranges.every(x => x <= range);
+    };
+    return f;
+}
+globalThis.IsAroundPoint = IsAroundPoint;
 
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-class Instruction {
-    constructor(input) {
-        this.range = undefined;
-        this.assign = [];
-        if (IsArray(input)) {
-            this.assign = input;
-        }
-        else if (typeof input === 'object' && input !== null) {
-            Object.assign(this, input);
-        }
-    }
-    do(source) {
-        let product = Clone(this.assign);
-        product.push(...RndShake(source, this.range, 3));
-        product.length = 3;
-        product = RndShuffle(...product);
-        return product;
-    }
-}
-function ExecInstructions(instructions, source, validate) {
-    let products = {};
-    for (let k in instructions) {
-        let instr = new Instruction(instructions[k]);
-        products[k] = instr.do(source[k]);
-    }
-    // ValidateProducts(products, source, validate)
-    return products;
-}
-globalThis.ExecInstructions = ExecInstructions;
-/**
-* @category AutoOptions
-* @return append the array of options to question
-* ```typescript
-* let question = 'abc<ul><li>*x</li></ul>'
-* AutoOptions(question,{x:3})
-* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
-* ```
-*/
-function AutoOptions(instructions, question, source, validate) {
-    if (IsEmptyObject(instructions))
-        return question;
-    let options = ExtractHTMLTag(question, 'li');
-    let products = ExecInstructions(instructions, source, validate);
-    if (options.length === 1) {
-        let others = Array(3).fill(options[0]);
-        for (let k in products) {
-            for (let i = 0; i < 3; i++) {
-                others[i] = PrintVariable(others[i], k, products[k][i]);
-            }
-        }
-        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
-    }
-    if (options.length === 2) {
-        let others = [options[0], options[1]];
-        for (let k in products) {
-            others[0] = PrintVariable(others[0], k, products[k][0]);
-            others[1] = PrintVariable(others[1], k, products[k][0]);
-        }
-        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
-    }
-    return question;
-}
-globalThis.AutoOptions = AutoOptions;
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8410,7 +8464,7 @@ globalThis.nPr = nPr;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8478,7 +8532,7 @@ globalThis.RndComboConfig = RndComboConfig;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8567,7 +8621,7 @@ globalThis.FracMultiply = FracMultiply;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8671,7 +8725,7 @@ globalThis.arctan = arctan;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8823,7 +8877,7 @@ globalThis.IntersectAngle = IntersectAngle;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8898,113 +8952,301 @@ globalThis.PrintVariable = PrintVariable;
 
 
 /***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const LP_BOUND = 100;
+function onBoundary(p) {
+    return Abs(p[0]) >= LP_BOUND || Abs(p[1]) >= LP_BOUND;
+}
+/**
+ *
+ * @category LinearProgram
+ * @return the value of field at given point
+ * ```typescript
+ * FieldAt([0,0],[1,2,3]) // 3
+ * FieldAt([1,2],[3,-4,5]) // 0
+ * ```
+ */
+function FieldAt(p, field) {
+    const [a, b, c] = field;
+    const [x, y] = p;
+    return a * x + b * y + c;
+}
+globalThis.FieldAt = FieldAt;
+/**
+ *
+ * @category LinearProgram
+ * @return check if point is constrained by cons
+ * ```typescript
+ * isConstrained([
+ *    [1, 1, "<=", 5],
+ *    [1, -1, "<", 4],
+ *    [2, 1, ">=", -5]
+ * ], [0, 0])
+ * // check whether [0,0] satisfies all the constraints
+ * ```
+ */
+function isConstrained(cons, point) {
+    const [x, y] = point;
+    return cons.every(con => {
+        let [a, b, s, c] = con;
+        let P = a * x + b * y - c;
+        let [greater, eq] = ParseIneqSign(s);
+        if (greater && eq)
+            return P >= 0;
+        if (greater && !eq)
+            return P > 0;
+        if (!greater && eq)
+            return P <= 0;
+        if (!greater && !eq)
+            return P < 0;
+    });
+}
+globalThis.isConstrained = isConstrained;
+/**
+ *
+ * @category LinearProgram
+ * @return check if point is constrained by cons, treating all cons as 'or equal to'
+ * ```typescript
+ * isLooseConstrained([
+ *    [1, 1, "<=", 5],
+ *    [1, -1, "<", 4],
+ *    [2, 1, ">=", -5]
+ * ], [0, 0])
+ * // check whether [0,0] loosely satisfies all the constraints
+ * ```
+ */
+function isLooseConstrained(cons, point) {
+    const [x, y] = point;
+    return cons.every(con => {
+        let [a, b, s, c] = con;
+        let P = a * x + b * y - c;
+        let [greater, _] = ParseIneqSign(s);
+        if (greater)
+            return P >= 0;
+        if (!greater)
+            return P <= 0;
+    });
+}
+globalThis.isLooseConstrained = isLooseConstrained;
+/**
+ *
+ * @category LinearProgram
+ * @return the vertices of the feasible polygon
+ * ```typescript
+ * FeasiblePolygon([
+ *    [1, 0, '<', 10],
+ *    [1, 0, '>', -5],
+ *    [0, 1, '<', 10],
+ *    [0, 1, '>', -5]
+ * ])
+ * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+ * ```
+ */
+function FeasiblePolygon(...cons) {
+    const boundaryConstraints = [
+        [1, 0, "<=", LP_BOUND],
+        [1, 0, ">=", -LP_BOUND],
+        [0, 1, "<=", LP_BOUND],
+        [0, 1, ">=", -LP_BOUND]
+    ];
+    let cs = [...cons, ...boundaryConstraints];
+    let vertices = [];
+    for (let i = 0; i < cs.length; i++) {
+        for (let j = i + 1; j < cs.length; j++) {
+            let [a1, b1, s1, c1] = cs[i];
+            let [a2, b2, s2, c2] = cs[j];
+            if (a1 / b1 === a2 / b2)
+                continue;
+            let p = Crammer(a1, b1, c1, a2, b2, c2);
+            let otherCons = [...cs];
+            otherCons.splice(j, 1);
+            otherCons.splice(i, 1);
+            if (isLooseConstrained(otherCons, p)) {
+                vertices.push(p);
+            }
+        }
+    }
+    vertices = Dedupe(vertices);
+    Should(vertices.length > 2, 'No feasible region.');
+    const center = VectorMean(...vertices);
+    vertices = SortBy(vertices, x => Inclination(center, x));
+    return vertices;
+}
+globalThis.FeasiblePolygon = FeasiblePolygon;
+/**
+ *
+ * @category LinearProgram
+ * @return the vertices of the feasible polygon
+ * ```typescript
+ * FeasiblePolygon([
+ *    [1, 0, '<', 10],
+ *    [1, 0, '>', -5],
+ *    [0, 1, '<', 10],
+ *    [0, 1, '>', -5]
+ * ])
+ * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+ * ```
+ */
+function FeasibleVertices(...cons) {
+    let vertices = FeasiblePolygon(...cons).filter(v => !onBoundary(v));
+    Should(vertices.length > 0, 'no feasible vertex');
+    return vertices;
+}
+globalThis.FeasibleVertices = FeasibleVertices;
+/**
+ *
+ * @category LinearProgram
+ * @return check if the feasible region is bounded
+ * ```typescript
+ * FeasibleIsBounded([
+ *    [1, 0, '<', 10],
+ *    [1, 0, '>', -5],
+ *    [0, 1, '<', 10],
+ *    [0, 1, '>', -5]
+ * ])
+ * // true
+ * FeasibleIsBounded([
+ *    [1, 0, '<', 10],
+ * ])
+ * // false
+ * ```
+ */
+function FeasibleIsBounded(...cons) {
+    return FeasiblePolygon(...cons).every(v => !onBoundary(v));
+}
+globalThis.FeasibleIsBounded = FeasibleIsBounded;
+/**
+ *
+ * @category LinearProgram
+ * @return the integral points inside the feasible polygon
+ * ```typescript
+ * FeasibleIntegral([
+ *    [1, 0, '<', 3],
+ *    [1, 0, '>', 0],
+ *    [0, 1, '<', 2],
+ *    [0, 1, '>', 0]
+ * ])
+ * // [[1,1],[2,1]]
+ * ```
+ */
+function FeasibleIntegral(...cons) {
+    let vertices = FeasiblePolygon(...cons);
+    let xCoords = vertices.map(p => p[0]);
+    let yCoords = vertices.map(p => p[1]);
+    let xmax = Ceil(Max(...xCoords));
+    let xmin = Floor(Min(...xCoords));
+    let ymax = Ceil(Max(...yCoords));
+    let ymin = Floor(Min(...yCoords));
+    let points = [];
+    for (let i = xmin; i <= xmax; i++) {
+        for (let j = ymin; j <= ymax; j++) {
+            let p = [i, j];
+            if (isConstrained(cons, p))
+                points.push(p);
+        }
+    }
+    return points;
+}
+globalThis.FeasibleIntegral = FeasibleIntegral;
+/**
+ *
+ * @category LinearProgram
+ * @return the point with the max value of field
+ * ```typescript
+ * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
+ * ```
+ */
+function MaximizePoint(points, field) {
+    Should(points.length > 0, 'No feasible point');
+    let orderedPoints = SortBy(points, x => -FieldAt(x, field));
+    orderedPoints = Dedupe(orderedPoints);
+    let point = orderedPoints[0];
+    Should(!onBoundary(point), 'No max point');
+    if (orderedPoints[1]) {
+        Should(FieldAt(point, field) !== FieldAt(orderedPoints[1], field), 'multiple max points');
+    }
+    return point;
+}
+globalThis.MaximizePoint = MaximizePoint;
+/**
+ *
+ * @category LinearProgram
+ * @return the point with the min value of field
+ * ```typescript
+ * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
+ * ```
+ */
+function MinimizePoint(points, field) {
+    Should(points.length > 0, 'No feasible point');
+    let orderedPoints = SortBy(points, x => FieldAt(x, field));
+    orderedPoints = Dedupe(orderedPoints);
+    let point = orderedPoints[0];
+    Should(!onBoundary(point), 'No min point');
+    if (orderedPoints[1]) {
+        Should(FieldAt(point, field) !== FieldAt(orderedPoints[1], field), 'multiple min points');
+    }
+    return point;
+}
+globalThis.MinimizePoint = MinimizePoint;
+/**
+ *
+ * @category LinearProgram
+ * @return the point with the min/max value of field
+ * ```typescript
+ * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [10,10]
+ * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
+ * ```
+ */
+function OptimizePoint(points, field, max) {
+    if (max) {
+        return MaximizePoint(points, field);
+    }
+    else {
+        return MinimizePoint(points, field);
+    }
+}
+globalThis.OptimizePoint = OptimizePoint;
+/**
+ *
+ * @category LinearProgram
+ * @return the min/max value of field
+ * ```typescript
+ * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
+ * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
+ * ```
+ */
+function OptimizeField(points, field, max) {
+    let point = OptimizePoint(points, field, max);
+    return FieldAt(point, field);
+}
+globalThis.OptimizeField = OptimizeField;
+
+
+/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /**
- * @category LinearProgram
- * @return result of linear programming.
+ * @category Numeracy
+ * @return division with x/0 handling
  * ```typescript
- * LinearProgram([[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5]], [2,3,4])
- * // optimize P=2x+3y+4 under [x+y<=5, x-y<4, 2x+y>=5]
- * // vertex: an array of vertex coordinates
- * // integral: an array of feasible integral points
- * // vertexMin: info about the minimum vertex
+ * Divide(6,2) // 3
+ * Divide(6,0) // throw error
  * ```
  */
-function LinearProgram(constraints, field, bound = [100, 100]) {
-    function fieldAt(p) {
-        const [a, b, c] = field;
-        const [x, y] = p;
-        return a * x + b * y + c;
-    }
-    function isConstrained(constraints, point, strict = true) {
-        const [x, y] = point;
-        return constraints.every((constraint) => {
-            let [a, b, s, c] = constraint;
-            let P = a * x + b * y - c;
-            let [greater, eq] = ParseIneqSign(s);
-            if (strict) {
-                if (greater && eq)
-                    return P >= 0;
-                if (greater && !eq)
-                    return P > 0;
-                if (!greater && eq)
-                    return P <= 0;
-                if (!greater && !eq)
-                    return P < 0;
-            }
-            else {
-                if (greater)
-                    return P >= 0;
-                if (!greater)
-                    return P <= 0;
-            }
-        });
-    }
-    const [xBound, yBound] = bound;
-    const boundaryConstraints = [
-        [1, 0, "<", xBound],
-        [1, 0, ">", -xBound],
-        [0, 1, "<", yBound],
-        [0, 1, ">", -yBound]
-    ];
-    function feasiblePolygon() {
-        let cs = [...constraints, ...boundaryConstraints];
-        let vertices = [];
-        for (let i = 0; i < cs.length; i++) {
-            for (let j = i + 1; j < cs.length; j++) {
-                let [a1, b1, s1, c1] = cs[i];
-                let [a2, b2, s2, c2] = cs[j];
-                let p = Crammer(a1, b1, c1, a2, b2, c2);
-                let otherCons = [...cs];
-                otherCons.splice(j, 1);
-                otherCons.splice(i, 1);
-                if (isConstrained(otherCons, p, false)) {
-                    vertices.push(p);
-                }
-            }
-        }
-        const center = VectorMean(...vertices);
-        vertices = SortBy(vertices, x => Inclination(center, x));
-        return vertices;
-    }
-    function feasibleIntegral() {
-        let points = [];
-        for (let i = -xBound; i <= xBound; i++) {
-            for (let j = -yBound; j <= yBound; j++) {
-                if (isConstrained(constraints, [i, j])) {
-                    points.push([i, j]);
-                }
-            }
-        }
-        return points;
-    }
-    function optimum(p) {
-        return { point: p, value: fieldAt(p) };
-    }
-    function OptimizeField(feasiblePoints) {
-        let ps = SortBy(feasiblePoints, fieldAt);
-        let [minPoint, maxPoint] = [ps[0], ps[ps.length - 1]];
-        return [optimum(minPoint), optimum(maxPoint)];
-    }
-    let vertex = feasiblePolygon();
-    let [vertexMin, vertexMax] = OptimizeField(vertex);
-    let integral = feasibleIntegral();
-    let [integralMin, integralMax] = OptimizeField(integral);
-    return { vertex, integral, vertexMin, vertexMax, integralMin, integralMax };
+function Divide(dividend, divisor) {
+    // if (!IsNum(dividend, divisor)) throw DesignError('input must be number')
+    // if (divisor === 0) throw MathError('division by 0')
+    Should(divisor !== 0, 'division by 0');
+    return dividend / divisor;
 }
-globalThis.LinearProgram = LinearProgram;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+globalThis.Divide = Divide;
 /**
  * @category Numeracy
  * @return the absolute value. Equivalent to Math.abs(x).
@@ -9042,6 +9284,8 @@ globalThis.Sign = Sign;
  * ```
  */
 function Round(num, sigfig = 3) {
+    if (num === 0)
+        return 0;
     if (sigfig < 1)
         sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
@@ -9057,6 +9301,8 @@ globalThis.Round = Round;
  * ```
  */
 function RoundUp(num, sigfig = 3) {
+    if (num === 0)
+        return 0;
     if (sigfig < 1)
         sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
@@ -9072,6 +9318,8 @@ globalThis.RoundUp = RoundUp;
  * ```
  */
 function RoundDown(num, sigfig = 3) {
+    if (num === 0)
+        return 0;
     if (sigfig < 1)
         sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
@@ -9274,7 +9522,7 @@ globalThis.Blurs = Blurs;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9446,10 +9694,76 @@ function RndPyth(max = 100) {
     return chance.pickone(arr);
 }
 globalThis.RndPyth = RndPyth;
+/**
+ * @category Random
+ * @param min abs of intercept
+ * @param max abs of intercept
+ * @return a linear [a,b,c] in ax+by+c=0
+ * ```typescript
+ * RndLinear(1,5) // may return [2,-3,6]
+ * ```
+ */
+function RndLinear(minInt, maxInt) {
+    let xInt = RndZ(minInt, maxInt);
+    let yInt = RndZ(minInt, maxInt);
+    return LinearFromIntercepts(xInt, yInt);
+}
+globalThis.RndLinear = RndLinear;
+/**
+ * @category Random
+ * @return a point within given range
+ * ```typescript
+ * RndPoint([1,4],[10,14]) // may return [2,12]
+ * // equivalent to [RndN(...xRange),Range(yRange)]
+ * ```
+ */
+function RndPoint(xRange, yRange) {
+    let x = RndN(...xRange);
+    let y = RndN(...yRange);
+    return [x, y];
+}
+globalThis.RndPoint = RndPoint;
+/**
+ * @category Random
+ * @return n angles in [0,360] cyclic at least separated by separation
+ * ```typescript
+ * RndAngles(3,50) // may return [30,90,200]
+ * ```
+ */
+function RndAngles(n, separation) {
+    let f = () => Sort(...RndNs(0, 360, n));
+    let p = (arr) => {
+        for (let i = 0; i < arr.length - 1; i++) {
+            if (arr[i + 1] - arr[i] < separation)
+                return false;
+        }
+        if (arr[0] + 360 - arr[arr.length - 1] < separation)
+            return false;
+        return true;
+    };
+    return Sieve(f, p)();
+}
+globalThis.RndAngles = RndAngles;
+/**
+ * @category Random
+ * @return n vertices of a convex polygon generated by rounding a cyclic polygon
+ * ```typescript
+ * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
+ * ```
+ */
+function RndConvexPolygon(n, center, radius, separation) {
+    let [h, k] = center;
+    let r = radius;
+    let angles = RndAngles(n, separation);
+    let vertices = angles.map(a => [h + r * cos(a), k + r * sin(a)]);
+    vertices = vertices.map(v => [Fix(v[0]), Fix(v[1])]);
+    return vertices;
+}
+globalThis.RndConvexPolygon = RndConvexPolygon;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9463,9 +9777,9 @@ globalThis.RndPyth = RndPyth;
 
 
 
-var base64 = __webpack_require__(17)
-var ieee754 = __webpack_require__(18)
-var isArray = __webpack_require__(19)
+var base64 = __webpack_require__(16)
+var ieee754 = __webpack_require__(17)
+var isArray = __webpack_require__(18)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -11243,10 +11557,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11272,7 +11586,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11431,7 +11745,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -11521,7 +11835,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -11532,7 +11846,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11557,7 +11871,7 @@ function RndShake(anchor, range, n) {
             return RndShakeDfrac(anchor, range, n);
         }
         // Inequal Sign
-        if (ParseIneqSign(anchor)) {
+        if (IsIneqSign(anchor)) {
             return RndShakeIneq(anchor, n);
         }
         // else convert to number
@@ -11579,8 +11893,12 @@ function RndShake(anchor, range, n) {
         if (IsNum(anchor)) {
             return RndShakeR(anchor, range, n);
         }
+        if (isNaN(anchor)) {
+            return [];
+        }
     }
-    console.error('Fail to RndShake: ' + anchor);
+    // console.error('Fail to RndShake: ' + anchor)
+    Must(false, 'Fail to RndShake: ' + anchor);
     return [];
 }
 globalThis.RndShake = RndShake;
@@ -11814,7 +12132,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11914,7 +12232,7 @@ globalThis.RndShe = RndShe;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11990,24 +12308,40 @@ globalThis.AreCoprime = AreCoprime;
  * @category Relation
  * @return Check if the points are pairwise distant apart.
  * ```typescript
- * AreDistantPoint([[0,0],[3,0]],2) // true
- * AreDistantPoint([[0,0],[1,0]],2) // false
+ * AreDistantPoint(2)([0,0],[3,0]) // true
+ * AreDistantPoint(2)([0,0],[1,0]) // false
  * ```
  */
-function AreDistantPoint(points, distance) {
-    for (let i = 0; i < points.length - 1; i++) {
-        for (let j = i + 1; j < points.length; j++) {
-            if (Distance(points[i], points[j]) < distance)
-                return false;
-        }
-    }
-    return true;
+function AreDistantPoint(distance) {
+    const f = function (...points) {
+        let pairs = Pairs(...points);
+        let distances = pairs.map(ps => Distance(ps[0], ps[1]));
+        return distances.every(x => x >= distance);
+    };
+    return f;
 }
 globalThis.AreDistantPoint = AreDistantPoint;
+/**
+ * @category Relation
+ * @return Check if
+ * ```typescript
+ * AreOblique(40)(0,1) // true
+ * AreOblique(40)(0,0.5) // false
+ * ```
+ */
+function AreOblique(minAngle) {
+    const f = function (...slopes) {
+        let pairs = Pairs(...slopes);
+        let angles = pairs.map(ps => IntersectAngle(ps[0], ps[1]));
+        return angles.every(x => x > minAngle);
+    };
+    return f;
+}
+globalThis.AreOblique = AreOblique;
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12113,7 +12447,7 @@ globalThis.GSequence = GSequence;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12148,7 +12482,7 @@ globalThis.Max = Max;
  * ```
  */
 function Sort(...nums) {
-    return nums.sort((a, b) => a - b);
+    return [...nums].sort((a, b) => a - b);
 }
 globalThis.Sort = Sort;
 /**
@@ -12191,7 +12525,7 @@ globalThis.Mean = Mean;
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12278,12 +12612,12 @@ globalThis.IneqSign = IneqSign;
 * ParseIneqSign('<=') // [false,true]
 * ParseIneqSign('>') // [true,false]
 * ParseIneqSign('<') // [false,false]
-* ParseIneqSign('abc') // undefined
+* ParseIneqSign('abc') // throw
 * ```
 */
 function ParseIneqSign(text) {
-    if (!text.match(/[gl\>\<]/g))
-        return undefined;
+    Must(IsIneqSign(text), 'ParseIneqSign: input is not IneqSign');
+    // if (!text.match(/[gl\>\<]/g)) return undefined
     let greater = text.includes('g') || text.includes('>');
     let equal = text.includes('e') || text.includes('=');
     return [greater, equal];
@@ -12365,10 +12699,21 @@ function IndexToSurd(text) {
     return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}");
 }
 globalThis.IndexToSurd = IndexToSurd;
+/**
+ * @category Text
+ * @return the coordinates '(a, b)' of point [a,b]
+ * ```typescript
+ * Coord([1,2]) // '(1, 2)'
+ * ```
+ */
+function Coord(point) {
+    return '(' + Blur(point[0]) + ', ' + Blur(point[1]) + ')';
+}
+globalThis.Coord = Coord;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12516,7 +12861,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12670,7 +13015,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12744,10 +13089,57 @@ function Clone(object) {
     return JSON.parse(JSON.stringify(object));
 }
 globalThis.Clone = Clone;
+/**
+ * @category Utility
+ * @return array of combination pairs
+ * ```typescript
+ * Pairs(1,2,3) // [[1,2],[1,3],[2,3]]
+ * Pairs(1) // []
+ * ```
+ */
+function Pairs(...items) {
+    if (items.length <= 1)
+        return [];
+    let arr = [];
+    for (let i = 0; i < items.length; i++) {
+        for (let j = i + 1; j < items.length; j++) {
+            arr.push([items[i], items[j]]);
+        }
+    }
+    return arr;
+}
+globalThis.Pairs = Pairs;
+/**
+ * @category Utility
+ * @param arr - array to dedupe
+ * @param keyFunc - map item to this value to compare equality
+ * @return Deduped array
+ * ```typescript
+ * Dedupe([1, 2, 3, 3, 4, 5, 5, 5, 6] // [1, 2, 3, 4, 5, 6]
+ * Dedupe([[1, 2], [1, 2], [1, 3]]) // [[1, 2], [1, 3]]
+ * ```
+ */
+function Dedupe(arr) {
+    let newArr = [];
+    function exist(item) {
+        let k = JSON.stringify(item);
+        for (let t of newArr) {
+            if (k === JSON.stringify(t))
+                return true;
+        }
+        return false;
+    }
+    for (let item of arr) {
+        if (!exist(item))
+            newArr.push(item);
+    }
+    return newArr;
+}
+globalThis.Dedupe = Dedupe;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12894,6 +13286,44 @@ function VectorRotate(v, angle) {
     return [x1, y1];
 }
 globalThis.VectorRotate = VectorRotate;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+class CustumMathError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'MathError';
+    }
+}
+function MathError(message) {
+    return new CustumMathError(message);
+}
+globalThis.MathError = MathError;
+class CustumDesignError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'DesignError';
+    }
+}
+function DesignError(message) {
+    return new CustumDesignError(message);
+}
+globalThis.DesignError = DesignError;
+function Must(condition, msg = "Must condition failed!") {
+    if (!condition)
+        throw DesignError(msg);
+}
+globalThis.Must = Must;
+function Should(condition, msg = "Should condition failed!") {
+    if (!condition)
+        throw MathError(msg);
+}
+globalThis.Should = Should;
 
 
 /***/ }),
@@ -13413,9 +13843,9 @@ class PenCls {
              */
             linear(a, b, c) {
                 if (a === 0 && b !== 0)
-                    this.horizontal(-c);
+                    this.horizontal(-c / b);
                 if (b == 0 && a !== 0)
-                    this.vertical(-c);
+                    this.vertical(-c / a);
                 if (a !== 0 && b !== 0)
                     this.line(-a / b, -c / b);
             }
@@ -14807,17 +15237,22 @@ class AutoPenCls {
      *     showIntegralLabel: false,
      *     showIntegralMax: false,
      *     showIntegralMin: false,
-     *     contourColor : "grey"
+     *     contourColor : "grey",
+     *     constraintColors = ['black','black']
      * })
      * ```
      */
-    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey" }) {
+    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey", constraintColors = [], }) {
         function fieldAt(p) {
             const [a, b, c] = field;
             const [x, y] = p;
-            return Round(a * x + b * y + c, 3);
+            return Fix(a * x + b * y + c, 1);
         }
-        let LP = LinearProgram(constraints, field);
+        let vertices = FeasiblePolygon(...constraints);
+        let integrals = [];
+        if (showIntegral || showIntegralMax || showIntegralMin) {
+            integrals = FeasibleIntegral(...constraints);
+        }
         const pen = new Pen();
         let [[xmin, xmax], [ymin, ymax]] = ranges;
         let bound = 0.7;
@@ -14850,14 +15285,17 @@ class AutoPenCls {
             pen.set.textSize();
         }
         function drawLines() {
-            constraints.forEach((constraint) => {
-                let [a, b, s, c] = constraint;
+            var _a;
+            for (let i = 0; i < constraints.length; i++) {
+                let [a, b, s, c] = constraints[i];
                 let [_, eq] = ParseIneqSign(s);
                 if (!eq)
                     pen.set.dash([5, 5]);
+                pen.set.color((_a = constraintColors[i]) !== null && _a !== void 0 ? _a : 'black');
                 pen.graph.linear(a, b, -c);
+                pen.set.color();
                 pen.set.dash();
-            });
+            }
         }
         labelConstraints.push((x, y) => x > xmin);
         labelConstraints.push((x, y) => x < xmax);
@@ -14869,14 +15307,14 @@ class AutoPenCls {
             pen.set.textAlign();
         }
         function drawIntegral(label = false) {
-            LP.integral.forEach((p) => {
+            integrals.forEach((p) => {
                 pen.point(p);
                 if (label && labelConstraints.every((f) => f(...p)))
                     labelField(p);
             });
         }
         function drawVertex(coordinates = false, label = false) {
-            LP.vertex.forEach((p) => {
+            vertices.forEach((p) => {
                 pen.point(p);
                 if (coordinates)
                     pen.label.coordinates(p, 270);
@@ -14886,7 +15324,7 @@ class AutoPenCls {
         }
         function drawShade() {
             pen.set.alpha(0.3);
-            pen.polygon(LP.vertex, true);
+            pen.polygon(vertices, true);
             pen.set.alpha();
         }
         function drawContour(value) {
@@ -14924,18 +15362,653 @@ class AutoPenCls {
         drawHighlights();
         drawContours();
         if (showVertexMax)
-            drawHighlight({ point: LP.vertexMax.point, color: "red" });
+            drawHighlight({
+                point: MaximizePoint(vertices, field),
+                color: "red"
+            });
         if (showVertexMin)
-            drawHighlight({ point: LP.vertexMin.point, color: "blue" });
+            drawHighlight({
+                point: MinimizePoint(vertices, field),
+                color: "blue"
+            });
         if (showIntegralMax)
-            drawHighlight({ point: LP.integralMax.point, color: "red" });
+            drawHighlight({
+                point: MaximizePoint(integrals, field),
+                color: "red"
+            });
         if (showIntegralMin)
-            drawHighlight({ point: LP.integralMin.point, color: "blue" });
+            drawHighlight({
+                point: MinimizePoint(integrals, field),
+                color: "blue"
+            });
         this.pen = pen;
     }
 }
 var AutoPen = AutoPenCls;
 globalThis.AutoPen = AutoPen;
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const global_1 = __webpack_require__(35);
+var MathSoil = {
+    _grow(seedContent) {
+        let seed = new global_1.Seed(seedContent);
+        return seed.grow();
+    },
+    _growOne(seed) {
+        seed.question = this._grow(seed.content);
+    },
+    grow(seeds) {
+        // grow one seed or array of seeds, append Question to them
+        if (Array.isArray(seeds)) {
+            seeds.forEach(x => this._growOne(x));
+        }
+        else {
+            this._growOne(seeds);
+        }
+    },
+    test(seed) {
+        // test the seed's health, find the avg trial to success
+        let counters = [];
+        for (let i = 1; i <= 100; i++) {
+            this.grow(seed);
+            if (!seed.question.success) {
+                return { avg: 0, healthy: false };
+            }
+            counters.push(seed.question.counter);
+        }
+        return { avg: Mean(...counters), healthy: true };
+    }
+};
+globalThis.MathSoil = MathSoil;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Seed = void 0;
+const section_1 = __webpack_require__(36);
+const dress_1 = __webpack_require__(37);
+const shuffle_1 = __webpack_require__(38);
+const option_1 = __webpack_require__(39);
+__webpack_require__(40);
+const cls_1 = __webpack_require__(41);
+class Seed {
+    constructor(core = {}) {
+        // get from SeedBank API
+        this.qn = "";
+        this.sol = "";
+        this.populate = "";
+        this.validate = "";
+        this.preprocess = "";
+        this.postprocess = "";
+        // working variables during growth
+        this.dict = new cls_1.Dict();
+        this.config = new cls_1.Config();
+        // state
+        this.counter = 0;
+        // copy of core
+        this.core = new cls_1.SeedCore();
+        this.core = new cls_1.SeedCore(core);
+        this.reset();
+    }
+    reset() {
+        this.qn = this.core.qn;
+        this.sol = this.core.sol;
+        this.populate = this.core.populate;
+        let v = this.core.validate;
+        if (v === "")
+            v = 'true';
+        v = v.replace('\n', ' ');
+        this.validate = v;
+        this.preprocess = this.core.preprocess;
+        this.postprocess = this.core.postprocess;
+        this.dict = new cls_1.Dict();
+        this.config = new cls_1.Config();
+    }
+    evalCode(code) {
+        // injectables
+        let { a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } = this.dict;
+        let sections = this.config.sections;
+        let answer = this.config.answer;
+        let options = this.config.options;
+        let question = this.qn;
+        let solution = this.sol;
+        // execute
+        const result = eval(code);
+        //retrieve
+        this.dict.update({
+            a, b, c, d, e, f, g, h, i, j, k, l, m, n,
+            o, p, q, r, s, t, u, v, w, x, y, z,
+            A, B, C, D, E, F, G, H, I, J, K, L, M, N,
+            O, P, Q, R, S, T, U, V, W, X, Y, Z
+        });
+        this.config = {
+            sections: sections,
+            answer: answer,
+            options: options
+        };
+        this.qn = question;
+        this.sol = solution;
+        return result;
+    }
+    pushDict() {
+        this.counter++;
+        this.evalCode(this.populate);
+    }
+    isValidated() {
+        return this.evalCode(this.validate) === true;
+    }
+    cropSection() {
+        this.qn = section_1.ExecSection(this.qn, this.config.sections);
+        this.sol = section_1.ExecSection(this.sol, this.config.sections);
+    }
+    doPreprocess() {
+        this.evalCode(this.preprocess);
+    }
+    doPostprocess() {
+        this.evalCode(this.postprocess);
+    }
+    fillOptions() {
+        this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict, this.validate);
+    }
+    pour() {
+        this.qn = this.dict.substitute(this.qn);
+        this.sol = this.dict.substitute(this.sol);
+    }
+    dress() {
+        this.qn = dress_1.dress(this.qn);
+        this.sol = dress_1.dress(this.sol);
+    }
+    runPopulate() {
+        while (this.counter <= 1000) {
+            try {
+                this.pushDict();
+                if (this.isValidated())
+                    return true; // done if validated
+            }
+            catch (e) {
+                if (e.name !== 'MathError')
+                    throw e;
+            }
+        }
+        ;
+        // throw error after 1000 failed trials
+        throw Error("No population found after 1000 trials!");
+    }
+    runSection() {
+        this.cropSection();
+        return true;
+    }
+    runPreprocess() {
+        this.doPreprocess();
+        return true;
+    }
+    runOption() {
+        let nTrial = 0;
+        while (nTrial <= 10) {
+            try {
+                this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict, this.validate);
+                return true;
+            }
+            catch (e) {
+                continue;
+            }
+        }
+        ;
+        // throw error after 10 failed trials
+        throw Error("No valid option generated after 10 trials!");
+    }
+    runSubstitute() {
+        this.pour();
+        this.dress();
+        return true;
+    }
+    runPostprocess() {
+        this.doPostprocess();
+        return true;
+    }
+    runShuffle() {
+        let shuffler = new shuffle_1.OptionShuffler(this.qn, this.sol, this.config.answer);
+        if (shuffler.AreOptionsDuplicated())
+            return false;
+        this.qn = shuffler.genQn();
+        this.sol = shuffler.genSol();
+        this.config.answer = shuffler.genAns();
+        return true;
+    }
+    successFruit() {
+        return {
+            qn: this.qn,
+            sol: this.sol,
+            ans: this.config.answer,
+            counter: this.counter,
+            success: true
+        };
+    }
+    errorFruit(e) {
+        return {
+            qn: "Error! " + e.name,
+            sol: e.message,
+            ans: "X",
+            counter: this.counter,
+            success: false
+        };
+    }
+    grow() {
+        try {
+            do {
+                this.reset();
+                this.runPopulate();
+                this.runSection();
+                this.runPreprocess();
+                this.runOption();
+                this.runSubstitute();
+                this.runPostprocess();
+                if (!this.runShuffle())
+                    continue;
+                break;
+            } while (true);
+            return this.successFruit();
+        }
+        catch (e) {
+            console.error("[MathSoil] Error!\n" + e.name);
+            console.error(e.message);
+            console.error(e.stack);
+            return this.errorFruit(e);
+        }
+    }
+}
+exports.Seed = Seed;
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExecSection = void 0;
+function DropVersion(html, section, version) {
+    let id = section + '.' + version;
+    return html.replace(new RegExp('<[^#<]*##' + id + '[^#]*##[^#>]*>', 'g'), '');
+}
+function DropTags(html) {
+    html = html.replace(new RegExp('<[^#<]*##[^#>]*>', 'g'), '');
+    return html;
+}
+function KeepVersion(html, section, version) {
+    for (let i = 0; i < 10; i++) {
+        if (i === version)
+            continue;
+        html = DropVersion(html, section, i);
+    }
+    return html;
+}
+function ExecSection(html, sections) {
+    for (let i = 0; i < sections.length; i++) {
+        let [section, version] = sections[i];
+        html = KeepVersion(html, section.toString(), version);
+    }
+    html = DropTags(html);
+    return html;
+}
+exports.ExecSection = ExecSection;
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.dress = void 0;
+function or(...reg) {
+    return '(' + reg.join('|') + ')';
+}
+// function inTag(input: string): string {
+//     return input + String.raw``
+// }
+const s = String.raw `(?:\s|&nbsp;)*`;
+const p = String.raw `\+`;
+const m = String.raw `\-`;
+const e = String.raw `(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
+const l = String.raw `[\(\[\{]`;
+const r = String.raw `[\)\]\}]`;
+const c = String.raw `\,`;
+const v = String.raw `(?:[A-Za-z]|\\alpha|\\beta|\\sigma|\\mu)`;
+const sl = String.raw `\\`;
+const left = String.raw `\\left`;
+const sq = String.raw `\\sqrt`;
+const endtag = String.raw `(?=[^<>]*</span>)`;
+function regReplace(input, reg, replace) {
+    return input.replace(new RegExp(reg, 'g'), replace);
+}
+function handleSigns(input) {
+    input = regReplace(input, p + s + m, '-');
+    input = regReplace(input, m + s + p, '-');
+    input = regReplace(input, or(l, e, c) + s + m + s + m, '$1');
+    input = regReplace(input, '(\,)' + s + m + s + m, '$1');
+    input = regReplace(input, m + s + m, '+');
+    input = regReplace(input, m + s + m, '+');
+    return input;
+}
+function handlePower(input) {
+    input = regReplace(input, String.raw `\^\{1\}`, '');
+    return input;
+}
+function handleSqrt(input) {
+    input = regReplace(input, String.raw `\\sqrt\[2\]`, '\\sqrt');
+    return input;
+}
+function handleCoeff(input) {
+    input = regReplace(input, or(p, m, e, l, sl, r, c) + s + 1 + s + or(v, l, left, sq) + endtag, '$1$2');
+    return input;
+}
+function handlePrime(input) {
+    input = regReplace(input, '(' + v + ')' + "'" + endtag, '$1 \\prime ');
+    return input;
+}
+function dress(html) {
+    html = handleSigns(html);
+    html = handlePower(html);
+    html = handleSqrt(html);
+    html = handleCoeff(html);
+    html = handlePrime(html);
+    return html;
+}
+exports.dress = dress;
+// .replace(/(?<=<span class="math-tex">[^<>]*)([\+\-\=\(\[\{\\\)\]\}\,])(\s|&nbsp;)*1(\s|&nbsp;)*(?=[A-Za-z\(\[][^<>]*<\/span>)/g, '$1')
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OptionShuffler = void 0;
+function RndPermutation(n = 4) {
+    return RndShuffle(...ListIntegers(0, n - 1));
+}
+function Permute(permutation, items) {
+    let newItems = [];
+    for (let i = 0; i < permutation.length; i++) {
+        newItems.push(items[permutation[i]]);
+    }
+    return newItems;
+}
+function AnsToIndex(ans) {
+    return ['A', 'B', 'C', 'D'].indexOf(ans);
+}
+function IndexToAns(index) {
+    return ['A', 'B', 'C', 'D'][index];
+}
+function NewAns(oldAns, permutation) {
+    let oldIndex = AnsToIndex(oldAns);
+    let newIndex = permutation.indexOf(oldIndex);
+    return IndexToAns(newIndex);
+}
+class OptionShuffler {
+    constructor(qn, sol, ans) {
+        this.qn = qn;
+        this.sol = sol;
+        this.ans = ans;
+        this.ul = "";
+        this.options = [];
+        this.perm = [];
+        this.valid = false;
+        let uls = ExtractHTMLTag(qn, 'ul');
+        if (uls.length === 0)
+            return; // no <ul></ul>
+        this.ul = uls[uls.length - 1];
+        if (this.ul === "")
+            return; // blank <ul></ul>
+        this.options = ExtractHTMLTag(this.ul, 'li');
+        if (this.options.length <= 1)
+            return; // only 1 or 0 <li></li>
+        this.perm = RndPermutation(this.options.length);
+        this.valid = true;
+    }
+    AreOptionsDuplicated() {
+        return (new Set(this.options)).size !== this.options.length;
+    }
+    genQn() {
+        if (!this.valid)
+            return this.qn;
+        let shuffledOptions = Permute(this.perm, this.options);
+        let joined = JoinToHTMLTag(shuffledOptions, 'li');
+        return this.qn.replace(this.ul, joined);
+    }
+    genAns() {
+        if (!this.valid)
+            return "X";
+        return NewAns(this.ans, this.perm);
+    }
+    genSol() {
+        if (!this.valid)
+            return this.sol;
+        let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol;
+        let ansList = ['A', 'B', 'C', 'D'];
+        ansList.length = this.perm.length;
+        for (let x of ansList) {
+            newSol = newSol.replace(new RegExp('\{\#' + x + '\}', 'g'), NewAns(x, this.perm));
+        }
+        return newSol;
+    }
+}
+exports.OptionShuffler = OptionShuffler;
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AutoOptions = void 0;
+class Instruction {
+    constructor(input) {
+        this.range = undefined;
+        this.assign = [];
+        if (IsArray(input)) {
+            this.assign = input;
+        }
+        else if (typeof input === 'object' && input !== null) {
+            Object.assign(this, input);
+        }
+    }
+    do(source) {
+        let product = Clone(this.assign);
+        product.push(...RndShake(source, this.range, 3));
+        product.length = 3;
+        product = RndShuffle(...product);
+        return product;
+    }
+}
+function ExecInstructions(instructions, source, validate) {
+    let products = {};
+    let k;
+    for (k in instructions) {
+        let instr = new Instruction(instructions[k]);
+        products[k] = instr.do(source[k]);
+    }
+    // ValidateProducts(products, source, validate)
+    return products;
+}
+/**
+* @category AutoOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>*x</li></ul>'
+* AutoOptions(question,{x:3})
+* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
+* ```
+*/
+function AutoOptions(instructions, question, source, validate) {
+    if (IsEmptyObject(instructions))
+        return question;
+    let options = ExtractHTMLTag(question, 'li');
+    let products = ExecInstructions(instructions, source, validate);
+    if (options.length === 1) {
+        let others = Array(3).fill(options[0]);
+        for (let k in products) {
+            for (let i = 0; i < 3; i++) {
+                others[i] = PrintVariable(others[i], k, products[k][i]);
+            }
+        }
+        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
+    }
+    if (options.length === 2) {
+        let others = [options[0], options[1]];
+        for (let k in products) {
+            others[0] = PrintVariable(others[0], k, products[k][0]);
+            others[1] = PrintVariable(others[1], k, products[k][0]);
+        }
+        return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'));
+    }
+    return question;
+}
+exports.AutoOptions = AutoOptions;
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Dict = exports.Config = exports.SeedCore = void 0;
+class SeedCore {
+    constructor(partial = {}) {
+        this.qn = "";
+        this.sol = "";
+        this.populate = "";
+        this.validate = "";
+        this.preprocess = "";
+        this.postprocess = "";
+        Object.assign(this, partial);
+    }
+}
+exports.SeedCore = SeedCore;
+class Config {
+    constructor(sections = [], answer = "A", options = {}) {
+        this.sections = sections;
+        this.answer = answer;
+        this.options = options;
+    }
+}
+exports.Config = Config;
+class Dict {
+    constructor(a = undefined, b = undefined, c = undefined, d = undefined, e = undefined, f = undefined, g = undefined, h = undefined, i = undefined, j = undefined, k = undefined, l = undefined, m = undefined, n = undefined, o = undefined, p = undefined, q = undefined, r = undefined, s = undefined, t = undefined, u = undefined, v = undefined, w = undefined, x = undefined, y = undefined, z = undefined, A = undefined, B = undefined, C = undefined, D = undefined, E = undefined, F = undefined, G = undefined, H = undefined, I = undefined, J = undefined, K = undefined, L = undefined, M = undefined, N = undefined, O = undefined, P = undefined, Q = undefined, R = undefined, S = undefined, T = undefined, U = undefined, V = undefined, W = undefined, X = undefined, Y = undefined, Z = undefined) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+        this.g = g;
+        this.h = h;
+        this.i = i;
+        this.j = j;
+        this.k = k;
+        this.l = l;
+        this.m = m;
+        this.n = n;
+        this.o = o;
+        this.p = p;
+        this.q = q;
+        this.r = r;
+        this.s = s;
+        this.t = t;
+        this.u = u;
+        this.v = v;
+        this.w = w;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.A = A;
+        this.B = B;
+        this.C = C;
+        this.D = D;
+        this.E = E;
+        this.F = F;
+        this.G = G;
+        this.H = H;
+        this.I = I;
+        this.J = J;
+        this.K = K;
+        this.L = L;
+        this.M = M;
+        this.N = N;
+        this.O = O;
+        this.P = P;
+        this.Q = Q;
+        this.R = R;
+        this.S = S;
+        this.T = T;
+        this.U = U;
+        this.V = V;
+        this.W = W;
+        this.X = X;
+        this.Y = Y;
+        this.Z = Z;
+        this.variables = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+            'i', 'j', 'k', 'l', 'm', 'n', 'o',
+            'p', 'q', 'r', 's', 't', 'u', 'v',
+            'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+            'I', 'J', 'K', 'L', 'M', 'N', 'O',
+            'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+            'W', 'X', 'Y', 'Z'
+        ];
+    }
+    update(other) {
+        for (let key of this.variables) {
+            if (key in other)
+                this[key] = other[key];
+        }
+    }
+    blur() {
+        for (let key of this.variables) {
+            this[key] = Blur(this[key]);
+        }
+    }
+    substitute(text) {
+        for (let key of this.variables) {
+            let num = this[key];
+            if (typeof num === 'undefined')
+                continue;
+            text = PrintVariable(text, key, num);
+        }
+        return text;
+    }
+}
+exports.Dict = Dict;
 
 
 /***/ })
