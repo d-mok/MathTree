@@ -110,7 +110,26 @@ test('FeasibleVertices', () => {
     expect(FeasibleVertices(
         [1, 1, '<', 0],
         [1, -1, '<', 0],
-    )).toEqual([[0, 0]]);
+    )).toEqual([[0, -0]]);
+});
+
+
+
+
+test('FeasibleIsBounded', () => {
+    expect(FeasibleIsBounded(
+        [1, 0, '<', 10],
+        [1, 0, '>', -5],
+        [0, 1, '<', 10],
+        [0, 1, '>', -5]
+    )).toBe(true);
+    expect(FeasibleIsBounded(
+        [1, 1, '<', 10],
+    )).toBe(false);
+    expect(FeasibleIsBounded(
+        [1, 1, '<', 0],
+        [1, -1, '<', 0],
+    )).toBe(false);
 });
 
 

@@ -9100,6 +9100,28 @@ globalThis.FeasibleVertices = FeasibleVertices;
 /**
  *
  * @category LinearProgram
+ * @return check if the feasible region is bounded
+ * ```typescript
+ * FeasibleIsBounded([
+ *    [1, 0, '<', 10],
+ *    [1, 0, '>', -5],
+ *    [0, 1, '<', 10],
+ *    [0, 1, '>', -5]
+ * ])
+ * // true
+ * FeasibleIsBounded([
+ *    [1, 0, '<', 10],
+ * ])
+ * // false
+ * ```
+ */
+function FeasibleIsBounded(...cons) {
+    return FeasiblePolygon(...cons).every(v => !onBoundary(v));
+}
+globalThis.FeasibleIsBounded = FeasibleIsBounded;
+/**
+ *
+ * @category LinearProgram
  * @return the integral points inside the feasible polygon
  * ```typescript
  * FeasibleIntegral([
