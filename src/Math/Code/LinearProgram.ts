@@ -173,7 +173,6 @@ globalThis.FeasibleVertices = FeasibleVertices
  */
 function FeasibleIsBounded(...cons: Constraint[]) {
     return FeasiblePolygon(...cons).every(v => !onBoundary(v))
-
 }
 globalThis.FeasibleIsBounded = FeasibleIsBounded
 
@@ -279,4 +278,21 @@ function OptimizePoint(points: Point[], field: Field, max: boolean): Point {
     }
 }
 globalThis.OptimizePoint = OptimizePoint
+
+
+
+/**
+ * 
+ * @category LinearProgram
+ * @return the min/max value of field
+ * ```typescript
+ * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
+ * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
+ * ```
+ */
+function OptimizeField(points: Point[], field: Field, max: boolean): number {
+    let point = OptimizePoint(points, field, max)
+    return FieldAt(point, field)
+}
+globalThis.OptimizeField = OptimizeField
 

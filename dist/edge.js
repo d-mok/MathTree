@@ -9210,6 +9210,20 @@ function OptimizePoint(points, field, max) {
     }
 }
 globalThis.OptimizePoint = OptimizePoint;
+/**
+ *
+ * @category LinearProgram
+ * @return the min/max value of field
+ * ```typescript
+ * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
+ * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
+ * ```
+ */
+function OptimizeField(points, field, max) {
+    let point = OptimizePoint(points, field, max);
+    return FieldAt(point, field);
+}
+globalThis.OptimizeField = OptimizeField;
 
 
 /***/ }),
@@ -15227,7 +15241,7 @@ class AutoPenCls {
         function fieldAt(p) {
             const [a, b, c] = field;
             const [x, y] = p;
-            return Round(a * x + b * y + c, 3);
+            return Fix(a * x + b * y + c, 1);
         }
         let vertices = FeasiblePolygon(...constraints);
         let integrals = [];

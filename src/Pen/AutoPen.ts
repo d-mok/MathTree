@@ -756,7 +756,7 @@ class AutoPenCls {
         function fieldAt(p: Point): number {
             const [a, b, c] = field
             const [x, y] = p
-            return Round(a * x + b * y + c, 3)
+            return Fix(a * x + b * y + c, 1)
         }
 
         let vertices = FeasiblePolygon(...constraints)

@@ -175,3 +175,17 @@ test('OptimizePoint', () => {
     expect(() => OptimizePoint(points, [2, 1, 1], false)).toThrow();
 });
 
+
+
+test('OptimizeField', () => {
+    let points = FeasibleIntegral(
+        [1, 1, "<=", 5],
+        [1, -1, "<", 4],
+        [2, 1, ">=", -5],
+        [3, 1, ">", -10]
+    );
+    expect(OptimizeField(points, [2, 1, 1], true)).toBe(33);
+    expect(OptimizeField(points, [1, 1, 1], false)).toBe(3);
+    expect(() => OptimizeField(points, [2, 1, 1], false)).toThrow();
+});
+
