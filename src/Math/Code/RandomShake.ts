@@ -42,6 +42,9 @@ function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
         if (IsNum(anchor)) {
             return RndShakeR(anchor, range, n)
         }
+        if (isNaN(anchor)) {
+            return []
+        }
     }
     // console.error('Fail to RndShake: ' + anchor)
     Must(false, 'Fail to RndShake: ' + anchor)
