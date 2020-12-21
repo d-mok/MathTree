@@ -134,3 +134,30 @@ test('RndPoint', () => {
     expect(ys).toBeFlatIsInteger();
     expect(arr).toAllHaveLength(2);
 });
+
+
+
+test('RndAngles', () => {
+    let arr = sample(() => RndAngles(3, 50));
+    let d1 = arr.map(x => x[1] - x[0]);
+    let d2 = arr.map(x => x[2] - x[1]);
+    let d3 = arr.map(x => x[0] + 360 - x[2]);
+    expect(arr).toBeFlatWithin(0, 360);
+    expect([...d1, ...d2, ...d3]).toBeFlatWithin(50, 360);
+    expect(arr).toBeFlatIsInteger();
+    expect(arr).toAllHaveLength(3);
+    expect(arr).toBeUnique();
+});
+
+
+test('RndConvexPolygon', () => {
+    let arr = sample(() => RndConvexPolygon(3, [0, 0], 10, 50));
+    let vertices = arr.flat();
+    let xs = vertices.map(v => v[0]);
+    let ys = vertices.map(v => v[1]);
+    expect(xs).toBeFlatWithin(-10, 10);
+    expect(ys).toBeFlatWithin(-10, 10);
+    expect(arr.flat()).toBeFlatIsInteger();
+    expect(arr).toAllHaveLength(3);
+    expect(arr.flat()).toAllHaveLength(2);
+});
