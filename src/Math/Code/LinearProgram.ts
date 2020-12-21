@@ -127,6 +127,31 @@ globalThis.FeasiblePolygon = FeasiblePolygon
 
 
 
+
+/**
+ * 
+ * @category LinearProgram
+ * @return the vertices of the feasible polygon
+ * ```typescript
+ * FeasiblePolygon([
+ *    [1, 0, '<', 10],
+ *    [1, 0, '>', -5],
+ *    [0, 1, '<', 10],
+ *    [0, 1, '>', -5]
+ * ])
+ * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+ * ```
+ */
+function FeasibleVertices(...cons: Constraint[]) {
+    let vertices = FeasiblePolygon(...cons).filter(v => !onBoundary(v))
+    Should(vertices.length > 0, 'no feasible vertex')
+    return vertices
+}
+globalThis.FeasibleVertices = FeasibleVertices
+
+
+
+
 /**
  * 
  * @category LinearProgram

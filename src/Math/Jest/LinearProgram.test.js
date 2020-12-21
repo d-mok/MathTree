@@ -97,6 +97,25 @@ test('FeasibleIntegral', () => {
 
 
 
+test('FeasibleVertices', () => {
+    expect(FeasibleVertices(
+        [1, 0, '<', 10],
+        [1, 0, '>', -5],
+        [0, 1, '<', 10],
+        [0, 1, '>', -5]
+    )).toEqual([[-5, -5], [10, -5], [10, 10], [-5, 10]]);
+    expect(() => FeasibleVertices(
+        [1, 1, '<', 10],
+    )).toThrow();
+    expect(FeasibleVertices(
+        [1, 1, '<', 0],
+        [1, -1, '<', 0],
+    )).toEqual([[0, 0]]);
+});
+
+
+
+
 
 test('MaximizePoint', () => {
     let points = FeasibleIntegral(
