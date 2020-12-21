@@ -37,7 +37,7 @@ test('ParseIneqSign', () => {
     expect(ParseIneqSign('<=')).toEqual([false, true]);
     expect(ParseIneqSign('>')).toEqual([true, false]);
     expect(ParseIneqSign('<')).toEqual([false, false]);
-    expect(()=>ParseIneqSign('abc')).toThrow();
+    expect(() => ParseIneqSign('abc')).toThrow();
 });
 
 
@@ -71,5 +71,14 @@ test('IndexToSurd', () => {
     expect(IndexToSurd('{x}^{0.5}')).toBe('\\sqrt{x}');
     expect(IndexToSurd('{(y)}^{0.5}')).toBe('\\sqrt{y}');
     expect(IndexToSurd('abc')).toBe('abc');
+});
+
+
+
+test('Coord', () => {
+    expect(Coord([1, 2])).toBe('(1, 2)');
+    expect(Coord([1, -2])).toBe('(1, -2)');
+    expect(Coord([-6.5, 0.123])).toBe('(-6.5, 0.123)');
+    expect(Coord([0.1 + 0.2, 0])).toBe('(0.3, 0)');
 });
 

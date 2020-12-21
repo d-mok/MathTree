@@ -170,3 +170,20 @@ function IndexToSurd(text: string) {
     return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}")
 }
 globalThis.IndexToSurd = IndexToSurd
+
+
+
+
+/**
+ * @category Text
+ * @return the coordinates '(a, b)' of point [a,b]
+ * ```typescript
+ * Coord([1,2]) // '(1, 2)'
+ * ```
+ */
+function Coord(point: Point): string {
+    return '(' + Blur(point[0]) + ', ' + Blur(point[1]) + ')'
+}
+globalThis.Coord = Coord
+
+
