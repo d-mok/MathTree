@@ -11894,7 +11894,8 @@ function RndShake(anchor, range, n) {
             return RndShakeR(anchor, range, n);
         }
     }
-    console.error('Fail to RndShake: ' + anchor);
+    // console.error('Fail to RndShake: ' + anchor)
+    Must(true, 'Fail to RndShake: ' + anchor);
     return [];
 }
 globalThis.RndShake = RndShake;
