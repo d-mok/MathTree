@@ -11898,6 +11898,8 @@ function RndShake(anchor, range, n) {
         }
     }
     // console.error('Fail to RndShake: ' + anchor)
+    if (anchor === undefined)
+        return [];
     Must(false, 'Fail to RndShake: ' + anchor);
     return [];
 }
