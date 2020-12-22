@@ -14480,32 +14480,31 @@ class PenCls {
      * @ignore
      */
     autoCrop() {
-        var ctx = this.ctx;
-        var canvas = ctx.canvas, w = canvas.width, h = canvas.height, pix = { x: [], y: [] }, imageData = ctx.getImageData(0, 0, canvas.width, canvas.height), x, y, index;
-        for (y = 0; y < h; y++) {
-            for (x = 0; x < w; x++) {
-                index = (y * w + x) * 4;
-                if (imageData.data[index + 3] > 0) {
-                    pix.x.push(x);
-                    pix.y.push(y);
-                }
-            }
-        }
-        pix.x.sort(function (a, b) { return a - b; });
-        pix.y.sort(function (a, b) { return a - b; });
-        var n = pix.x.length - 1;
-        w = 1 + pix.x[n] - pix.x[0];
-        h = 1 + pix.y[n] - pix.y[0];
-        var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
-        canvas.width = w;
-        canvas.height = h;
-        ctx.putImageData(cut, 0, 0);
-    }
-    /**
-     * @ignore
-     */
-    dataURL() {
-        return this.canvas.toDataURL();
+        trimCanvas(this.canvas);
+        // var ctx = this.ctx;
+        // var canvas = ctx.canvas,
+        //     w = canvas.width, h = canvas.height,
+        //     pix: { x: number[], y: number[] } = { x: [], y: [] },
+        //     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height),
+        //     x, y, index;
+        // for (y = 0; y < h; y++) {
+        //     for (x = 0; x < w; x++) {
+        //         index = (y * w + x) * 4;
+        //         if (imageData.data[index + 3] > 0) {
+        //             pix.x.push(x);
+        //             pix.y.push(y);
+        //         }
+        //     }
+        // }
+        // pix.x.sort(function (a, b) { return a - b; });
+        // pix.y.sort(function (a, b) { return a - b; });
+        // var n = pix.x.length - 1;
+        // w = 1 + pix.x[n] - pix.x[0];
+        // h = 1 + pix.y[n] - pix.y[0];
+        // var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
+        // canvas.width = w;
+        // canvas.height = h;
+        // ctx.putImageData(cut, 0, 0);
     }
     /**
      * Export the canvas to image tag.
@@ -14519,7 +14518,7 @@ class PenCls {
      * ```
      */
     export(html, placeholder) {
-        const src = 'src="' + this.dataURL() + '"';
+        const src = 'src="' + this.canvas.toDataURL() + '"';
         const width = ' width="' + Math.floor(this.canvas.width / PEN_QUALITY) + '"';
         const height = ' height="' + Math.floor(this.canvas.height / PEN_QUALITY) + '"';
         return html.replace('src="' + placeholder + '"', src + width + height);
