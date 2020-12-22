@@ -14526,51 +14526,19 @@ class PenCls {
     }
     ;
     /**
-     * @ignore
+     * Export the canvas to image tag, with white space trimmed.
+     * @category export
+     * @param html - The html string to export to.
+     * @param placeholder - The src field of the image tag to export to.
+     * @returns The new html with src field pasted.
+     * ```typescript
+     * question = pen.exportTrim(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
      */
-    exportCropped(html, placeholder) {
-        function cloneCanvas(oldCanvas) {
-            //create a new canvas
-            let newCanvas = document.createElement('canvas');
-            let context = newCanvas.getContext('2d');
-            //set dimensions
-            newCanvas.width = oldCanvas.width;
-            newCanvas.height = oldCanvas.height;
-            //apply the old canvas to the new one
-            context.drawImage(oldCanvas, 0, 0);
-            //return the new canvas
-            return newCanvas;
-        }
-        function autoCrop(canvas) {
-            let ctx = canvas.getContext("2d");
-            let w = canvas.width;
-            let h = canvas.height;
-            let pix = { x: [], y: [] };
-            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            let x;
-            let y;
-            let index;
-            for (y = 0; y < h; y++) {
-                for (x = 0; x < w; x++) {
-                    index = (y * w + x) * 4;
-                    if (imageData.data[index + 3] > 0) {
-                        pix.x.push(x);
-                        pix.y.push(y);
-                    }
-                }
-            }
-            pix.x.sort((a, b) => a - b);
-            pix.y.sort((a, b) => a - b);
-            let n = pix.x.length - 1;
-            w = 1 + pix.x[n] - pix.x[0];
-            h = 1 + pix.y[n] - pix.y[0];
-            let cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
-            canvas.width = w;
-            canvas.height = h;
-            ctx.putImageData(cut, 0, 0);
-        }
+    exportTrim(html, placeholder) {
         let clone = cloneCanvas(this.canvas);
-        autoCrop(clone);
+        trimCanvas(clone);
         const src = 'src="' + clone.toDataURL() + '"';
         const w = Math.floor(clone.width / PEN_QUALITY);
         const h = Math.floor(clone.height / PEN_QUALITY);
@@ -14620,6 +14588,78 @@ class PenCls {
  */
 var Pen = PenCls;
 globalThis.Pen = Pen;
+function cloneCanvas(oldCanvas) {
+    //create a new canvas
+    let newCanvas = document.createElement('canvas');
+    let context = newCanvas.getContext('2d');
+    //set dimensions
+    newCanvas.width = oldCanvas.width;
+    newCanvas.height = oldCanvas.height;
+    //apply the old canvas to the new one
+    context.drawImage(oldCanvas, 0, 0);
+    //return the new canvas
+    return newCanvas;
+}
+function trimCanvas(canvas) {
+    function rowBlank(imageData, width, y) {
+        for (var x = 0; x < width; ++x) {
+            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
+                return false;
+        }
+        return true;
+    }
+    function columnBlank(imageData, width, x, top, bottom) {
+        for (var y = top; y < bottom; ++y) {
+            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
+                return false;
+        }
+        return true;
+    }
+    var ctx = canvas.getContext("2d");
+    var width = canvas.width;
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var top = 0, bottom = imageData.height, left = 0, right = imageData.width;
+    while (top < bottom && rowBlank(imageData, width, top))
+        ++top;
+    while (bottom - 1 > top && rowBlank(imageData, width, bottom - 1))
+        --bottom;
+    while (left < right && columnBlank(imageData, width, left, top, bottom))
+        ++left;
+    while (right - 1 > left && columnBlank(imageData, width, right - 1, top, bottom))
+        --right;
+    var trimmed = ctx.getImageData(left, top, right - left, bottom - top);
+    canvas.width = trimmed.width;
+    canvas.height = trimmed.height;
+    ctx.putImageData(trimmed, 0, 0);
+}
+// function autoCrop(canvas: HTMLCanvasElement) {
+//     let ctx = canvas.getContext("2d")!;
+//     let w = canvas.width;
+//     let h = canvas.height;
+//     let pix: { x: number[], y: number[] } = { x: [], y: [] };
+//     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+//     let x;
+//     let y;
+//     let index;
+//     for (y = 0; y < h; y++) {
+//         for (x = 0; x < w; x++) {
+//             index = (y * w + x) * 4;
+//             if (imageData.data[index + 3] > 0) {
+//                 pix.x.push(x);
+//                 pix.y.push(y);
+//             }
+//         }
+//     }
+//     pix.x.sort((a, b) => a - b);
+//     pix.y.sort((a, b) => a - b);
+//     let n = pix.x.length - 1;
+//     w = 1 + pix.x[n] - pix.x[0];
+//     h = 1 + pix.y[n] - pix.y[0];
+//     let cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
+//     canvas.width = w;
+//     canvas.height = h;
+//     ctx.putImageData(cut, 0, 0);
+// }
 
 
 /***/ }),
