@@ -410,7 +410,13 @@ class AutoPenCls {
         let greater = sign.includes('>') || sign.includes('g');
         let equal = sign.includes('=') || sign.includes('e');
 
-        let [p, q] = QuadraticRoot(a, b, c);
+        let p: number | undefined
+        let q: number | undefined
+        try {
+            [p, q] = QuadraticRoot(a, b, c);
+        } catch {
+            [p, q] = [undefined, undefined]
+        }
         if (p !== undefined && q !== undefined) {
             [p, q] = [Max(p, q), Min(p, q)]
             p = Fix(p, 2)
