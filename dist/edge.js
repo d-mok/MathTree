@@ -15915,7 +15915,6 @@ class Seed {
             }
             catch (e) {
                 if (e.name === 'MathError') {
-                    console.log('[MathError]');
                     console.log(e.stack);
                 }
                 else {
