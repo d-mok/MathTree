@@ -14619,7 +14619,13 @@ class PenCls {
      */
     plot(func, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
         const tracer = (t) => {
-            let result = func(t);
+            let result;
+            try {
+                result = func(t);
+            }
+            catch (_a) {
+                return [NaN, NaN];
+            }
             if (!Array.isArray(result))
                 result = [t, result];
             let [x, y] = this.frame.toPix(result);

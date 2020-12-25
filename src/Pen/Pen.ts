@@ -349,7 +349,12 @@ class PenCls {
      */
     plot(func: (t: number) => number | Point, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
         const tracer = (t: number) => {
-            let result = func(t);
+            let result: number | Point
+            try {
+                result = func(t);
+            } catch {
+                return [NaN, NaN]
+            }
             if (!Array.isArray(result)) result = [t, result];
             let [x, y] = this.frame.toPix(result);
             if (Math.abs(x) > 10000) x = Math.sign(x) * 10000;
