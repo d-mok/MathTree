@@ -8,7 +8,7 @@
  * ```
  */
 function Slope(A: Point, B: Point): number {
-    Must(IsPoint(A, B), 'input must be point')
+    Should(IsPoint(A, B), 'input must be point')
     Should(Blur(A[0] - B[0]) !== 0, 'slope is infinite')
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
@@ -23,7 +23,7 @@ globalThis.Slope = Slope
  * ```
  */
 function Distance(A: Point, B: Point): number {
-    Must(IsPoint(A, B), 'input must be point')
+    Should(IsPoint(A, B), 'input must be point')
     return ((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2) ** 0.5;
 }
 globalThis.Distance = Distance
@@ -38,7 +38,7 @@ globalThis.Distance = Distance
  * ```
  */
 function ChessboardDistance(A: Point, B: Point): number {
-    Must(IsPoint(A, B), 'input must be point')
+    Should(IsPoint(A, B), 'input must be point')
     let x = Abs(A[0] - B[0])
     let y = Abs(A[1] - B[1])
     return Max(x, y)
@@ -53,7 +53,7 @@ globalThis.ChessboardDistance = ChessboardDistance
  * ```
  */
 function MidPoint(A: Point, B: Point): Point {
-    Must(IsPoint(A, B), 'input must be point')
+    Should(IsPoint(A, B), 'input must be point')
     return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
 }
 globalThis.MidPoint = MidPoint
@@ -66,8 +66,8 @@ globalThis.MidPoint = MidPoint
  * ```
  */
 function DivisionPoint(A: Point, B: Point, ratio = 0.5): Point {
-    Must(IsPoint(A, B), 'input must be point')
-    Must(IsNum(ratio), 'ratio must be num')
+    Should(IsPoint(A, B), 'input must be point')
+    Should(IsNum(ratio), 'ratio must be num')
     let r = ratio;
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
@@ -83,8 +83,8 @@ globalThis.DivisionPoint = DivisionPoint
  * ```
  */
 function RotatePoint(P: Point, O: Point, q: number): Point {
-    Must(IsPoint(P, O), 'input must be point')
-    Must(IsNum(q), 'q must be num')
+    Should(IsPoint(P, O), 'input must be point')
+    Should(IsNum(q), 'q must be num')
     let v = Vector(O, P);
     v = VectorRotate(v, q)
     return VectorAdd(O, v);
@@ -101,7 +101,7 @@ globalThis.RotatePoint = RotatePoint
  * ```
  */
 function Inclination(A: Point, B: Point): number {
-    Must(IsPoint(A, B), 'input must be point')
+    Should(IsPoint(A, B), 'input must be point')
     Should(AreDistinctPoint(A, B), 'A,B should be distinct')
     return VectorArg(Vector(A, B))
 }
@@ -120,7 +120,7 @@ globalThis.Inclination = Inclination
  * ```
  */
 function Normal(A: Point, B: Point): number {
-    Must(IsPoint(A, B), 'input must be point')
+    Should(IsPoint(A, B), 'input must be point')
     Should(AreDistinctPoint(A, B), 'A,B should be distinct')
     let R = RotatePoint(B, A, -90);
     return Inclination(A, R);
@@ -135,7 +135,7 @@ globalThis.Normal = Normal
  * ```
  */
 function PerpendicularFoot(A: Point, B: Point, P: Point): Point {
-    Must(IsPoint(A, B, P), 'input must be point')
+    Should(IsPoint(A, B, P), 'input must be point')
     Should(AreDistinctPoint(A, B), 'A,B should be distinct')
     let q = Normal(A, B);
     let V = PolToRect([1, q]);
@@ -153,7 +153,7 @@ globalThis.PerpendicularFoot = PerpendicularFoot
  * ```
  */
 function Intersection(A: Point, B: Point, C: Point, D: Point): Point {
-    Must(IsPoint(A, B, C, D), 'input must be point')
+    Should(IsPoint(A, B, C, D), 'input must be point')
     Should(AreDistinctPoint(A, B), 'A,B should be distinct')
     Should(AreDistinctPoint(C, D), 'C,D should be distinct')
     return Crammer(
@@ -176,9 +176,9 @@ globalThis.Intersection = Intersection
  * ```
  */
 function TranslatePoint(P: Point, q: number | Point, distance: number): Point {
-    Must(IsPoint(P), "P must be point")
-    Must(IsPoint(q) || IsNum(q), "q must be point or num")
-    Must(IsNum(distance), "distance must be num")
+    Should(IsPoint(P), "P must be point")
+    Should(IsPoint(q) || IsNum(q), "q must be point or num")
+    Should(IsNum(distance), "distance must be num")
     if (Array.isArray(q)) q = Inclination(P, q)
     let x = P[0] + distance * cos(q)
     let y = P[1] + distance * sin(q)
@@ -196,7 +196,7 @@ globalThis.TranslatePoint = TranslatePoint
  * ```
  */
 function IntersectAngle(slope1: number, slope2: number): number {
-    Must(IsNum(slope1, slope2), 'slopes must be num')
+    Should(IsNum(slope1, slope2), 'slopes must be num')
     let A1 = arctan(slope1)
     let A2 = arctan(slope2)
     let d = Abs(A1 - A2)
@@ -217,7 +217,7 @@ globalThis.IntersectAngle = IntersectAngle
  * ```
  */
 function Angle(A: Point, O: Point, B: Point): number {
-    Must(IsPoint(A, O, B), 'input must be point')
+    Should(IsPoint(A, O, B), 'input must be point')
     Should(AreDistinctPoint(A, O, B), 'input points should be distinct')
     let sideO = Distance(A, B)
     let sideA = Distance(B, O)
@@ -239,7 +239,7 @@ globalThis.Angle = Angle
  * ```
  */
 function AnglePolar(A: Point, O: Point, B: Point): number {
-    Must(IsPoint(A, O, B), 'input must be point')
+    Should(IsPoint(A, O, B), 'input must be point')
     Should(AreDistinctPoint(A, O, B), 'input points should be distinct')
     let a = VectorArg(Vector(O, A))
     let b = VectorArg(Vector(O, B))
@@ -259,7 +259,7 @@ globalThis.AnglePolar = AnglePolar
  * ```
  */
 function IsReflex(A: Point, O: Point, B: Point): boolean {
-    Must(IsPoint(A, O, B), 'input must be point')
+    Should(IsPoint(A, O, B), 'input must be point')
     let angle = AnglePolar(A, O, B)
     return angle >= 180
 }

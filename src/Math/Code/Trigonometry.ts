@@ -12,13 +12,13 @@
  */
 function Quadrant(rect: PolarPoint | number): QuadrantName {
     if (!Array.isArray(rect)) rect = PolToRect([1, rect]);
-    Must(IsPoint(rect), 'rect must be polarpoint or number')
+    Should(IsPoint(rect), 'rect must be polarpoint or number')
     const q = RectToPol(rect)[1];
     if (q >= 0 && q < 90) return "I";
     if (q >= 90 && q < 180) return "II";
     if (q >= 180 && q < 270) return "III";
     if (q >= 270 && q < 360) return "IV";
-    Must(false, 'fail to parse quadrant!')
+    Should(false, 'fail to parse quadrant!')
     throw ''
 }
 globalThis.Quadrant = Quadrant
@@ -32,7 +32,7 @@ globalThis.Quadrant = Quadrant
  * ```
  */
 function PolToRect([r, q]: PolarPoint): Point {
-    Must(IsPoint([r, q]), 'input must be point')
+    Should(IsPoint([r, q]), 'input must be point')
     return [r * cos(q), r * sin(q)];
 }
 globalThis.PolToRect = PolToRect
@@ -45,7 +45,7 @@ globalThis.PolToRect = PolToRect
  * ```
  */
 function RectToPol([x, y]: Point): PolarPoint {
-    Must(IsPoint([x, y]), 'input must be point')
+    Should(IsPoint([x, y]), 'input must be point')
     const r = Math.sqrt(x * x + y * y);
     let q = Math.atan2(y, x) * 180 / Math.PI;
     if (q < 0) q = q + 360;
@@ -66,8 +66,8 @@ function ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): -1 | 0 | 1
     if (quadrant == "II") quadrant = 2;
     if (quadrant == "III") quadrant = 3;
     if (quadrant == "IV") quadrant = 4;
-    Must([1, 2, 3, 4].includes(quadrant),'cannot parse quadrant')
-    Must(['sin', 'cos', 'tan'].includes(func),'cannot parse TrigFunc')
+    Should([1, 2, 3, 4].includes(quadrant), 'cannot parse quadrant')
+    Should(['sin', 'cos', 'tan'].includes(func), 'cannot parse TrigFunc')
     if (quadrant == 1) return 1;
     if (quadrant == 2) return func == 'sin' ? 1 : -1;
     if (quadrant == 3) return func == 'tan' ? 1 : -1;

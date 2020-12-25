@@ -9,7 +9,7 @@
  * ```
  */
 function AreDistinct(...nums: number[]): boolean {
-    Must(IsNum(...nums), 'input must be num')
+    Should(IsNum(...nums), 'input must be num')
     return (new Set(nums)).size === nums.length;
 }
 globalThis.AreDistinct = AreDistinct
@@ -27,7 +27,7 @@ globalThis.AreDistinct = AreDistinct
  * ```
  */
 function AreAbsDistinct(...nums: number[]): boolean {
-    Must(IsNum(...nums), 'input must be num')
+    Should(IsNum(...nums), 'input must be num')
     return AreDistinct(...nums.map(x => Math.abs(x)));
 }
 globalThis.AreAbsDistinct = AreAbsDistinct
@@ -45,7 +45,7 @@ globalThis.AreAbsDistinct = AreAbsDistinct
  * ```
  */
 function AreSameSign(...nums: number[]): boolean {
-    Must(IsNum(...nums), 'input must be num')
+    Should(IsNum(...nums), 'input must be num')
     nums = nums.map(x => Math.sign(x));
     nums = [...new Set(nums)];
     return nums.length === 1;
@@ -66,7 +66,7 @@ globalThis.AreSameSign = AreSameSign
  * ```
  */
 function AreCoprime(...nums: number[]): boolean {
-    Must(IsNum(...nums), 'input must be num')
+    Should(IsNum(...nums), 'input must be num')
     nums = Blurs(nums)
     if (!IsInteger(...nums)) return true
     if (!IsNonZero(...nums)) return true
@@ -89,7 +89,7 @@ globalThis.AreCoprime = AreCoprime
  * ```
  */
 function AreDistinctPoint(...points: Point[]) {
-    Must(IsPoint(...points), 'input must be point')
+    Should(IsPoint(...points), 'input must be point')
     let predicate = (p1: Point, p2: Point) => {
         return p1[0] !== p2[0] || p1[1] !== p2[1]
     }
@@ -107,9 +107,9 @@ globalThis.AreDistinctPoint = AreDistinctPoint
  * ```
  */
 function AreDistantPoint(distance: number) {
-    Must(IsPositive(distance), 'distance must be positive')
+    Should(IsPositive(distance), 'distance must be positive')
     return function (...points: Point[]): boolean {
-        Must(IsPoint(...points), 'input must be point')
+        Should(IsPoint(...points), 'input must be point')
         let predicate = (p1: Point, p2: Point) => Distance(p1, p2) >= distance
         return PairsEvery(predicate)(...points)
     }
@@ -127,9 +127,9 @@ globalThis.AreDistantPoint = AreDistantPoint
  * ```
  */
 function AreOblique(minAngle: number) {
-    Must(IsPositive(minAngle), 'minAngle must be positive')
+    Should(IsPositive(minAngle), 'minAngle must be positive')
     return function (...slopes: number[]): boolean {
-        Must(IsNum(...slopes), 'slopes must be nums')
+        Should(IsNum(...slopes), 'slopes must be nums')
         let predicate = (m1: number, m2: number) => IntersectAngle(m1, m2) >= minAngle
         return PairsEvery(predicate)(...slopes)
     }

@@ -7,7 +7,7 @@
  * ```
  */
 function Min(...nums: number[]): number {
-    Must(IsNum(...nums), 'input must be num')
+    Should(IsNum(...nums), 'input must be num')
     return Math.min(...nums);
 }
 globalThis.Min = Min
@@ -21,7 +21,7 @@ globalThis.Min = Min
  * ```
  */
 function Max(...nums: number[]): number {
-    Must(IsNum(...nums), 'input must be num')
+    Should(IsNum(...nums), 'input must be num')
     return Math.max(...nums);
 }
 globalThis.Max = Max
@@ -36,7 +36,7 @@ globalThis.Max = Max
  * ```
  */
 function Sort(...nums: number[]): number[] {
-    Must(IsNum(...nums), 'input must be num')
+    Should(IsNum(...nums), 'input must be num')
     return [...nums].sort((a, b) => a - b)
 }
 globalThis.Sort = Sort
@@ -67,7 +67,7 @@ globalThis.SortBy = SortBy
  * ```
  */
 function Sum(...nums: number[]): number {
-    Must(IsNum(...nums), 'input must be num')
+    Should(IsNum(...nums), 'input must be num')
     return nums.reduce((a, b) => a + b, 0)
 }
 globalThis.Sum = Sum
@@ -84,8 +84,8 @@ globalThis.Sum = Sum
  * ```
  */
 function Mean(...nums: number[]): number {
-    Must(IsNum(...nums), 'input must be num')
-    Must(nums.length > 0, 'nums.length must be >0')
+    Should(IsNum(...nums), 'input must be num')
+    Should(nums.length > 0, 'nums.length must be >0')
     const sum = nums.reduce((a, b) => a + b)
     return sum / nums.length
 }

@@ -6,7 +6,7 @@
  * ```
  */
 function log(b: number, N: number): number {
-    Must(IsPositive(b, N), 'input must be positive')
+    Should(IsPositive(b, N), 'input must be positive')
     const v = Math.log(N) / Math.log(b);
     return Blur(v)
 }
@@ -20,7 +20,7 @@ globalThis.log = log
  * ```
  */
 function Power(a: number, b: number): number {
-    Must(IsNum(a, b), 'input must be num')
+    Should(IsNum(a, b), 'input must be num')
     const v = Math.pow(a, b);
     return Blur(v)
 }
@@ -34,7 +34,7 @@ globalThis.Power = Power
  * ```
  */
 function sin(x: number): number {
-    Must(IsNum(x), 'input must be num')
+    Should(IsNum(x), 'input must be num')
     let v = Math.sin(x / 180 * Math.PI);
     return Blur(v)
 }
@@ -48,7 +48,7 @@ globalThis.sin = sin
  * ```
  */
 function cos(x: number): number {
-    Must(IsNum(x), 'input must be num')
+    Should(IsNum(x), 'input must be num')
     let v = Math.cos(x / 180 * Math.PI);
     return Blur(v)
 }
@@ -62,7 +62,7 @@ globalThis.cos = cos
  * ```
  */
 function tan(x: number): number {
-    Must(IsNum(x), 'input must be num')
+    Should(IsNum(x), 'input must be num')
     let v = Math.tan(x / 180 * Math.PI);
     return Blur(v)
 }
@@ -76,7 +76,7 @@ globalThis.tan = tan
  * ```
  */
 function arcsin(x: number): number {
-    Must(IsNum(x), 'input must be num')
+    Should(IsNum(x), 'input must be num')
     Should(Abs(x) <= 1, 'input should be between 1 and -1')
     let v = Math.asin(x) * 180 / Math.PI;
     return Blur(v)
@@ -91,7 +91,7 @@ globalThis.arcsin = arcsin
  * ```
  */
 function arccos(x: number): number {
-    Must(IsNum(x), 'input must be num')
+    Should(IsNum(x), 'input must be num')
     Should(Abs(x) <= 1, 'input should be between 1 and -1')
     let v = Math.acos(x) * 180 / Math.PI;
     return Blur(v)
@@ -106,7 +106,7 @@ globalThis.arccos = arccos
  * ```
  */
 function arctan(x: number): number {
-    Must(IsNum(x), 'input must be num')
+    Should(IsNum(x), 'input must be num')
     let v = Math.atan(x) * 180 / Math.PI;
     return Blur(v)
 }

@@ -7963,7 +7963,7 @@ __webpack_require__(29);
  * ```
  */
 function Crammer(a, b, c, p, q, r) {
-    Must(IsNum(a, b, c, p, q, r), "input must be num");
+    Should(IsNum(a, b, c, p, q, r), "input must be num");
     const D = a * q - b * p;
     Should(IsNonZero(D), 'no unique solution');
     const x = (c * q - b * r) / D;
@@ -7979,7 +7979,7 @@ globalThis.Crammer = Crammer;
  * ```
  */
 function Discriminant(a, b, c) {
-    Must(IsNum(a, b, c), "input must be num");
+    Should(IsNum(a, b, c), "input must be num");
     return b * b - 4 * a * c;
 }
 globalThis.Discriminant = Discriminant;
@@ -7995,7 +7995,7 @@ globalThis.Discriminant = Discriminant;
  * ```
  */
 function QuadraticRoot(a, b, c) {
-    Must(IsNum(a, b, c), "input must be num");
+    Should(IsNum(a, b, c), "input must be num");
     const d = Discriminant(a, b, c);
     Should(d >= 0, 'no real root');
     const r1 = Divide(-b - Math.sqrt(d), 2 * a);
@@ -8012,7 +8012,7 @@ globalThis.QuadraticRoot = QuadraticRoot;
  * ```
  */
 function QuadraticVertex(a, b, c) {
-    Must(IsNum(a, b, c), "input must be num");
+    Should(IsNum(a, b, c), "input must be num");
     const h = Divide(-b, 2 * a);
     const k = a * h * h + b * h + c;
     return [h, k];
@@ -8028,7 +8028,7 @@ globalThis.QuadraticVertex = QuadraticVertex;
  * ```
  */
 function QuadraticFromRoot(a, p, q) {
-    Must(IsNum(a, p, q), "input must be num");
+    Should(IsNum(a, p, q), "input must be num");
     Should(IsNonZero(a), 'a should not be zero');
     return [a, -a * (p + q), a * p * q];
 }
@@ -8043,7 +8043,7 @@ globalThis.QuadraticFromRoot = QuadraticFromRoot;
  * ```
  */
 function QuadraticFromVertex(a, h, k) {
-    Must(IsNum(a, h, k), "input must be num");
+    Should(IsNum(a, h, k), "input must be num");
     Should(IsNonZero(a), 'a should not be zero');
     const b = -2 * a * h;
     const c = k - a * h * h - b * h;
@@ -8362,7 +8362,7 @@ function IsArray(...items) {
 }
 globalThis.IsArray = IsArray;
 function IsArrayOfLength(length) {
-    Must(IsPositiveInteger(length), 'length must be positive integer');
+    Should(IsPositiveInteger(length), 'length must be positive integer');
     const f = function (...items) {
         return items.every(x => IsArray(x) && x.length === length);
     };
@@ -8379,7 +8379,7 @@ globalThis.IsArrayOfLength = IsArrayOfLength;
  * ```
  */
 function IsBetween(min, max) {
-    Must(IsNum(min, max), 'min and max must be number');
+    Should(IsNum(min, max), 'min and max must be number');
     const f = function (...items) {
         return items.every(x => IsNum(x) && x >= min && x <= max);
     };
@@ -8396,7 +8396,7 @@ globalThis.IsBetween = IsBetween;
  * ```
  */
 function IsAbsBetween(min, max) {
-    Must(IsPositive(min, max), 'min and max must be positive number');
+    Should(IsPositive(min, max), 'min and max must be positive number');
     return function (...items) {
         return items.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
     };
@@ -8499,8 +8499,8 @@ globalThis.IsConstraint = IsConstraint;
  * ```
  */
 function IsAroundPoint(anchor, range) {
-    Must(IsPoint(anchor), 'anchor must be a point');
-    Must(IsPositive(range), 'range must be a positive number');
+    Should(IsPoint(anchor), 'anchor must be a point');
+    Should(IsPositive(range), 'range must be a positive number');
     return function (...points) {
         return points.every(p => ChessboardDistance(anchor, p) <= range);
     };
@@ -8550,7 +8550,7 @@ globalThis.IsTriangle = IsTriangle;
  * ```
  */
 function Factorial(n) {
-    Must(IsNonNegativeInteger(n), 'n must be non-negative integer');
+    Should(IsNonNegativeInteger(n), 'n must be non-negative integer');
     n = Blur(n);
     return n <= 0 ? 1 : n * Factorial(n - 1);
 }
@@ -8563,8 +8563,8 @@ globalThis.Factorial = Factorial;
  * ```
  */
 function nCr(n, r) {
-    Must(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
-    Must(n >= r, 'n >= r required');
+    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
+    Should(n >= r, 'n >= r required');
     n = Blur(n);
     r = Blur(r);
     return Factorial(n) / (Factorial(r) * Factorial(n - r));
@@ -8578,8 +8578,8 @@ globalThis.nCr = nCr;
  * ```
  */
 function nPr(n, r) {
-    Must(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
-    Must(n >= r, 'n >= r required');
+    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
+    Should(n >= r, 'n >= r required');
     n = Blur(n);
     r = Blur(r);
     return nCr(n, r) * Factorial(r);
@@ -8674,7 +8674,7 @@ globalThis.RndComboConfig = RndComboConfig;
  * ```
  */
 function FracSign(p, q) {
-    Must(IsNum(p, q), 'input must be num');
+    Should(IsNum(p, q), 'input must be num');
     Should(IsNonZero(q), 'q should not be zero');
     [p, q] = Blurs([p, q]);
     const s = Sign(p / q);
@@ -8696,7 +8696,7 @@ globalThis.FracSign = FracSign;
  * ```
  */
 function Frac(p, q) {
-    Must(IsNum(p, q), 'input must be num');
+    Should(IsNum(p, q), 'input must be num');
     Should(IsNonZero(q), 'q should not be zero');
     [p, q] = Blurs([p, q]);
     [p, q] = SimpRatio(p, q);
@@ -8714,7 +8714,7 @@ globalThis.Frac = Frac;
  * ```
  */
 function FracAdd(...fractions) {
-    Must(IsFraction(...fractions), 'input must be fractions');
+    Should(IsFraction(...fractions), 'input must be fractions');
     function _FracAdd(A, B) {
         let [p1, q1] = A;
         let [p2, q2] = B;
@@ -8736,7 +8736,7 @@ globalThis.FracAdd = FracAdd;
  * ```
  */
 function FracMultiply(...fractions) {
-    Must(IsFraction(...fractions), 'input must be fractions');
+    Should(IsFraction(...fractions), 'input must be fractions');
     function _FracMultiply(A, B) {
         let [p1, q1] = A;
         let [p2, q2] = B;
@@ -8762,7 +8762,7 @@ globalThis.FracMultiply = FracMultiply;
  * ```
  */
 function log(b, N) {
-    Must(IsPositive(b, N), 'input must be positive');
+    Should(IsPositive(b, N), 'input must be positive');
     const v = Math.log(N) / Math.log(b);
     return Blur(v);
 }
@@ -8775,7 +8775,7 @@ globalThis.log = log;
  * ```
  */
 function Power(a, b) {
-    Must(IsNum(a, b), 'input must be num');
+    Should(IsNum(a, b), 'input must be num');
     const v = Math.pow(a, b);
     return Blur(v);
 }
@@ -8788,7 +8788,7 @@ globalThis.Power = Power;
  * ```
  */
 function sin(x) {
-    Must(IsNum(x), 'input must be num');
+    Should(IsNum(x), 'input must be num');
     let v = Math.sin(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8801,7 +8801,7 @@ globalThis.sin = sin;
  * ```
  */
 function cos(x) {
-    Must(IsNum(x), 'input must be num');
+    Should(IsNum(x), 'input must be num');
     let v = Math.cos(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8814,7 +8814,7 @@ globalThis.cos = cos;
  * ```
  */
 function tan(x) {
-    Must(IsNum(x), 'input must be num');
+    Should(IsNum(x), 'input must be num');
     let v = Math.tan(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8827,7 +8827,7 @@ globalThis.tan = tan;
  * ```
  */
 function arcsin(x) {
-    Must(IsNum(x), 'input must be num');
+    Should(IsNum(x), 'input must be num');
     Should(Abs(x) <= 1, 'input should be between 1 and -1');
     let v = Math.asin(x) * 180 / Math.PI;
     return Blur(v);
@@ -8841,7 +8841,7 @@ globalThis.arcsin = arcsin;
  * ```
  */
 function arccos(x) {
-    Must(IsNum(x), 'input must be num');
+    Should(IsNum(x), 'input must be num');
     Should(Abs(x) <= 1, 'input should be between 1 and -1');
     let v = Math.acos(x) * 180 / Math.PI;
     return Blur(v);
@@ -8855,7 +8855,7 @@ globalThis.arccos = arccos;
  * ```
  */
 function arctan(x) {
-    Must(IsNum(x), 'input must be num');
+    Should(IsNum(x), 'input must be num');
     let v = Math.atan(x) * 180 / Math.PI;
     return Blur(v);
 }
@@ -8877,7 +8877,7 @@ globalThis.arctan = arctan;
  * ```
  */
 function Slope(A, B) {
-    Must(IsPoint(A, B), 'input must be point');
+    Should(IsPoint(A, B), 'input must be point');
     Should(Blur(A[0] - B[0]) !== 0, 'slope is infinite');
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
@@ -8890,7 +8890,7 @@ globalThis.Slope = Slope;
  * ```
  */
 function Distance(A, B) {
-    Must(IsPoint(A, B), 'input must be point');
+    Should(IsPoint(A, B), 'input must be point');
     return Math.pow((Math.pow((A[0] - B[0]), 2) + Math.pow((A[1] - B[1]), 2)), 0.5);
 }
 globalThis.Distance = Distance;
@@ -8903,7 +8903,7 @@ globalThis.Distance = Distance;
  * ```
  */
 function ChessboardDistance(A, B) {
-    Must(IsPoint(A, B), 'input must be point');
+    Should(IsPoint(A, B), 'input must be point');
     let x = Abs(A[0] - B[0]);
     let y = Abs(A[1] - B[1]);
     return Max(x, y);
@@ -8917,7 +8917,7 @@ globalThis.ChessboardDistance = ChessboardDistance;
  * ```
  */
 function MidPoint(A, B) {
-    Must(IsPoint(A, B), 'input must be point');
+    Should(IsPoint(A, B), 'input must be point');
     return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
 }
 globalThis.MidPoint = MidPoint;
@@ -8929,8 +8929,8 @@ globalThis.MidPoint = MidPoint;
  * ```
  */
 function DivisionPoint(A, B, ratio = 0.5) {
-    Must(IsPoint(A, B), 'input must be point');
-    Must(IsNum(ratio), 'ratio must be num');
+    Should(IsPoint(A, B), 'input must be point');
+    Should(IsNum(ratio), 'ratio must be num');
     let r = ratio;
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
@@ -8944,8 +8944,8 @@ globalThis.DivisionPoint = DivisionPoint;
  * ```
  */
 function RotatePoint(P, O, q) {
-    Must(IsPoint(P, O), 'input must be point');
-    Must(IsNum(q), 'q must be num');
+    Should(IsPoint(P, O), 'input must be point');
+    Should(IsNum(q), 'q must be num');
     let v = Vector(O, P);
     v = VectorRotate(v, q);
     return VectorAdd(O, v);
@@ -8960,7 +8960,7 @@ globalThis.RotatePoint = RotatePoint;
  * ```
  */
 function Inclination(A, B) {
-    Must(IsPoint(A, B), 'input must be point');
+    Should(IsPoint(A, B), 'input must be point');
     Should(AreDistinctPoint(A, B), 'A,B should be distinct');
     return VectorArg(Vector(A, B));
 }
@@ -8974,7 +8974,7 @@ globalThis.Inclination = Inclination;
  * ```
  */
 function Normal(A, B) {
-    Must(IsPoint(A, B), 'input must be point');
+    Should(IsPoint(A, B), 'input must be point');
     Should(AreDistinctPoint(A, B), 'A,B should be distinct');
     let R = RotatePoint(B, A, -90);
     return Inclination(A, R);
@@ -8988,7 +8988,7 @@ globalThis.Normal = Normal;
  * ```
  */
 function PerpendicularFoot(A, B, P) {
-    Must(IsPoint(A, B, P), 'input must be point');
+    Should(IsPoint(A, B, P), 'input must be point');
     Should(AreDistinctPoint(A, B), 'A,B should be distinct');
     let q = Normal(A, B);
     let V = PolToRect([1, q]);
@@ -9004,7 +9004,7 @@ globalThis.PerpendicularFoot = PerpendicularFoot;
  * ```
  */
 function Intersection(A, B, C, D) {
-    Must(IsPoint(A, B, C, D), 'input must be point');
+    Should(IsPoint(A, B, C, D), 'input must be point');
     Should(AreDistinctPoint(A, B), 'A,B should be distinct');
     Should(AreDistinctPoint(C, D), 'C,D should be distinct');
     return Crammer(B[1] - A[1], A[0] - B[0], A[0] * B[1] - B[0] * A[1], D[1] - C[1], C[0] - D[0], C[0] * D[1] - D[0] * C[1]);
@@ -9018,9 +9018,9 @@ globalThis.Intersection = Intersection;
  * ```
  */
 function TranslatePoint(P, q, distance) {
-    Must(IsPoint(P), "P must be point");
-    Must(IsPoint(q) || IsNum(q), "q must be point or num");
-    Must(IsNum(distance), "distance must be num");
+    Should(IsPoint(P), "P must be point");
+    Should(IsPoint(q) || IsNum(q), "q must be point or num");
+    Should(IsNum(distance), "distance must be num");
     if (Array.isArray(q))
         q = Inclination(P, q);
     let x = P[0] + distance * cos(q);
@@ -9037,7 +9037,7 @@ globalThis.TranslatePoint = TranslatePoint;
  * ```
  */
 function IntersectAngle(slope1, slope2) {
-    Must(IsNum(slope1, slope2), 'slopes must be num');
+    Should(IsNum(slope1, slope2), 'slopes must be num');
     let A1 = arctan(slope1);
     let A2 = arctan(slope2);
     let d = Abs(A1 - A2);
@@ -9056,7 +9056,7 @@ globalThis.IntersectAngle = IntersectAngle;
  * ```
  */
 function Angle(A, O, B) {
-    Must(IsPoint(A, O, B), 'input must be point');
+    Should(IsPoint(A, O, B), 'input must be point');
     Should(AreDistinctPoint(A, O, B), 'input points should be distinct');
     let sideO = Distance(A, B);
     let sideA = Distance(B, O);
@@ -9074,7 +9074,7 @@ globalThis.Angle = Angle;
  * ```
  */
 function AnglePolar(A, O, B) {
-    Must(IsPoint(A, O, B), 'input must be point');
+    Should(IsPoint(A, O, B), 'input must be point');
     Should(AreDistinctPoint(A, O, B), 'input points should be distinct');
     let a = VectorArg(Vector(O, A));
     let b = VectorArg(Vector(O, B));
@@ -9091,7 +9091,7 @@ globalThis.AnglePolar = AnglePolar;
  * ```
  */
 function IsReflex(A, O, B) {
-    Must(IsPoint(A, O, B), 'input must be point');
+    Should(IsPoint(A, O, B), 'input must be point');
     let angle = AnglePolar(A, O, B);
     return angle >= 180;
 }
@@ -9463,7 +9463,7 @@ globalThis.OptimizeField = OptimizeField;
  * ```
  */
 function Divide(dividend, divisor) {
-    Must(IsNum(dividend, divisor), 'input must be num');
+    Should(IsNum(dividend, divisor), 'input must be num');
     Should(divisor !== 0, 'division by 0');
     return dividend / divisor;
 }
@@ -9476,7 +9476,7 @@ globalThis.Divide = Divide;
  * ```
  */
 function Abs(num) {
-    Must(IsNum(num), 'input must be num');
+    Should(IsNum(num), 'input must be num');
     return Math.abs(num);
 }
 globalThis.Abs = Abs;
@@ -9490,7 +9490,7 @@ globalThis.Abs = Abs;
  * ```
  */
 function Sign(num) {
-    Must(IsNum(num), 'input must be num');
+    Should(IsNum(num), 'input must be num');
     if (num > 0)
         return 1;
     if (num < 0)
@@ -9507,8 +9507,8 @@ globalThis.Sign = Sign;
  * ```
  */
 function Round(num, sigfig = 3) {
-    Must(IsNum(num), 'input must be num');
-    Must(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
+    Should(IsNum(num), 'input must be num');
+    Should(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
     if (num === 0)
         return 0;
     if (sigfig < 1)
@@ -9526,8 +9526,8 @@ globalThis.Round = Round;
  * ```
  */
 function RoundUp(num, sigfig = 3) {
-    Must(IsNum(num), 'input must be num');
-    Must(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
+    Should(IsNum(num), 'input must be num');
+    Should(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
     if (num === 0)
         return 0;
     if (sigfig < 1)
@@ -9545,8 +9545,8 @@ globalThis.RoundUp = RoundUp;
  * ```
  */
 function RoundDown(num, sigfig = 3) {
-    Must(IsNum(num), 'input must be num');
-    Must(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
+    Should(IsNum(num), 'input must be num');
+    Should(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
     if (num === 0)
         return 0;
     if (sigfig < 1)
@@ -9565,8 +9565,8 @@ globalThis.RoundDown = RoundDown;
  * ```
  */
 function Fix(num, dp = 0) {
-    Must(IsNum(num), 'input must be num');
-    Must(IsInteger(dp), 'dp must be integer');
+    Should(IsNum(num), 'input must be num');
+    Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
     num += Number.EPSILON;
@@ -9588,8 +9588,8 @@ globalThis.Fix = Fix;
  * ```
  */
 function FixUp(num, dp = 0) {
-    Must(IsNum(num), 'input must be num');
-    Must(IsInteger(dp), 'dp must be integer');
+    Should(IsNum(num), 'input must be num');
+    Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
     num -= Number.EPSILON;
@@ -9612,8 +9612,8 @@ globalThis.FixUp = FixUp;
  * ```
  */
 function FixDown(num, dp = 0) {
-    Must(IsNum(num), 'input must be num');
-    Must(IsInteger(dp), 'dp must be integer');
+    Should(IsNum(num), 'input must be num');
+    Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
     num += Number.EPSILON;
@@ -9636,7 +9636,7 @@ globalThis.FixDown = FixDown;
  * ```
  */
 function Ceil(num) {
-    Must(IsNum(num), 'input must be num');
+    Should(IsNum(num), 'input must be num');
     return Math.ceil(num);
 }
 globalThis.Ceil = Ceil;
@@ -9650,7 +9650,7 @@ globalThis.Ceil = Ceil;
  * ```
  */
 function Floor(num) {
-    Must(IsNum(num), 'input must be num');
+    Should(IsNum(num), 'input must be num');
     return Math.floor(num);
 }
 globalThis.Floor = Floor;
@@ -9664,7 +9664,7 @@ globalThis.Floor = Floor;
  * ```
  */
 function SimpRatio(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     nums = Blurs(nums);
     if (!IsInteger(...nums))
         return nums;
@@ -9684,7 +9684,7 @@ globalThis.SimpRatio = SimpRatio;
  * ```
  */
 function SigFig(value) {
-    Must(IsNum(value), 'input must be num');
+    Should(IsNum(value), 'input must be num');
     value = Blur(value);
     return Math.abs(value)
         .toExponential()
@@ -9706,7 +9706,7 @@ globalThis.SigFig = SigFig;
  */
 function DecimalPlace(value) {
     var _a, _b;
-    Must(IsNum(value), 'input must be num');
+    Should(IsNum(value), 'input must be num');
     value = Blur(value);
     if (IsInteger(value))
         return 0;
@@ -9728,7 +9728,7 @@ globalThis.DecimalPlace = DecimalPlace;
  * ```
  */
 function Magnitude(num) {
-    Must(IsNum(num), 'input must be num');
+    Should(IsNum(num), 'input must be num');
     return Math.floor(log(10, Abs(num)));
 }
 globalThis.Magnitude = Magnitude;
@@ -9786,7 +9786,7 @@ var chance = new Chance();
  * ```
  */
 function RndN(min, max) {
-    Must(IsNum(min, max), 'input must be num');
+    Should(IsNum(min, max), 'input must be num');
     return chance.integer({ min, max });
 }
 globalThis.RndN = RndN;
@@ -9799,9 +9799,9 @@ globalThis.RndN = RndN;
  * ```
  */
 function RndNs(min, max, n) {
-    Must(IsNum(min, max), 'input must be num');
+    Should(IsNum(min, max), 'input must be num');
     n !== null && n !== void 0 ? n : (n = Math.min(Math.floor(max - min + 1), 10));
-    Must(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     // if (!n) n = Math.min(Math.floor(max - min + 1), 10)
     return chance.unique(() => RndN(min, max), n);
 }
@@ -9814,7 +9814,7 @@ globalThis.RndNs = RndNs;
  * ```
  */
 function RndR(min, max) {
-    Must(IsNum(min, max), 'input must be num');
+    Should(IsNum(min, max), 'input must be num');
     return chance.floating({ min, max, fixed: 8 });
 }
 globalThis.RndR = RndR;
@@ -9848,7 +9848,7 @@ globalThis.RndT = RndT;
  * ```
  */
 function RndZ(min, max) {
-    Must(IsNum(min, max), 'input must be num');
+    Should(IsNum(min, max), 'input must be num');
     return RndN(min, max) * RndU();
 }
 globalThis.RndZ = RndZ;
@@ -9861,9 +9861,9 @@ globalThis.RndZ = RndZ;
  * ```
  */
 function RndZs(min, max, n) {
-    Must(IsNum(min, max), 'input must be num');
+    Should(IsNum(min, max), 'input must be num');
     n !== null && n !== void 0 ? n : (n = Min(Math.floor(max - min + 1), 10));
-    Must(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     let arr = chance.unique(() => RndN(min, max), n);
     for (let i = 0; i < arr.length; i++) {
         arr[i] = arr[i] * RndU();
@@ -9879,7 +9879,7 @@ globalThis.RndZs = RndZs;
  * ```
  */
 function RndP(max) {
-    Must(IsNum(max), 'input must be num');
+    Should(IsNum(max), 'input must be num');
     return chance.prime({ min: 2, max: max });
 }
 globalThis.RndP = RndP;
@@ -9891,7 +9891,7 @@ globalThis.RndP = RndP;
  * ```
  */
 function RndOdd(min, max) {
-    Must(IsNum(min, max), 'input must be num');
+    Should(IsNum(min, max), 'input must be num');
     min = Math.ceil((min + 1) / 2);
     max = Math.floor((max + 1) / 2);
     return 2 * RndN(min, max) - 1;
@@ -9905,7 +9905,7 @@ globalThis.RndOdd = RndOdd;
  * ```
  */
 function RndEven(min, max) {
-    Must(IsNum(min, max), 'input must be num');
+    Should(IsNum(min, max), 'input must be num');
     min = Math.ceil(min / 2);
     max = Math.floor(max / 2);
     return 2 * RndN(min, max);
@@ -9919,7 +9919,7 @@ globalThis.RndEven = RndEven;
  * ```
  */
 function RndPoly(...coeff) {
-    Must(IsNum(...coeff), 'input must be num');
+    Should(IsNum(...coeff), 'input must be num');
     return coeff.map((x, i, a) => {
         return i === 0 ? RndN(1, x) : RndZ(1, x);
     });
@@ -9933,7 +9933,7 @@ globalThis.RndPoly = RndPoly;
  * ```
  */
 function RndPyth(max = 100) {
-    Must(IsNum(max), 'input must be num');
+    Should(IsNum(max), 'input must be num');
     let arr = [];
     for (let m = 1; m < 10; m++) {
         for (let n = 1; n < m; n++) {
@@ -9959,7 +9959,7 @@ globalThis.RndPyth = RndPyth;
  * ```
  */
 function RndLinearFromInt(minInt, maxInt) {
-    Must(IsPositive(minInt, maxInt), 'input must be positive num');
+    Should(IsPositive(minInt, maxInt), 'input must be positive num');
     let xInt = RndZ(minInt, maxInt);
     let yInt = RndZ(minInt, maxInt);
     return LinearFromIntercepts(xInt, yInt);
@@ -9974,8 +9974,8 @@ globalThis.RndLinearFromInt = RndLinearFromInt;
  * ```
  */
 function RndPoint(xRange, yRange) {
-    Must(IsArrayOfLength(2)(xRange, yRange), 'input must be range');
-    Must(IsNum(...xRange, ...yRange), 'input must be num');
+    Should(IsArrayOfLength(2)(xRange, yRange), 'input must be range');
+    Should(IsNum(...xRange, ...yRange), 'input must be num');
     let x = RndN(...xRange);
     let y = RndN(...yRange);
     return [x, y];
@@ -9989,8 +9989,8 @@ globalThis.RndPoint = RndPoint;
  * ```
  */
 function RndAngles(n, separation) {
-    Must(IsPositiveInteger(n), 'n must be positive integer');
-    Must(IsPositive(separation), 'separation must be positive num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsPositive(separation), 'separation must be positive num');
     let f = () => Sort(...RndNs(0, 360, n));
     let p = (arr) => {
         for (let i = 0; i < arr.length - 1; i++) {
@@ -10012,10 +10012,10 @@ globalThis.RndAngles = RndAngles;
  * ```
  */
 function RndConvexPolygon(n, center, radius, separation) {
-    Must(IsPositiveInteger(n), 'n must be positive integer');
-    Must(IsPoint(center), 'center must be point');
-    Must(IsPositive(radius), 'radius must be positive num');
-    Must(IsPositive(separation), 'separation must be positive num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsPoint(center), 'center must be point');
+    Should(IsPositive(radius), 'radius must be positive num');
+    Should(IsPositive(separation), 'separation must be positive num');
     let [h, k] = center;
     let r = radius;
     let angles = RndAngles(n, separation);
@@ -12164,7 +12164,7 @@ function RndShake(anchor, range, n) {
     // console.error('Fail to RndShake: ' + anchor)
     if (anchor === undefined)
         return [];
-    Must(false, 'Fail to RndShake: ' + anchor);
+    Should(false, 'Fail to RndShake: ' + anchor);
     return [];
 }
 globalThis.RndShake = RndShake;
@@ -12512,7 +12512,7 @@ globalThis.RndShe = RndShe;
  * ```
  */
 function AreDistinct(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     return (new Set(nums)).size === nums.length;
 }
 globalThis.AreDistinct = AreDistinct;
@@ -12526,7 +12526,7 @@ globalThis.AreDistinct = AreDistinct;
  * ```
  */
 function AreAbsDistinct(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     return AreDistinct(...nums.map(x => Math.abs(x)));
 }
 globalThis.AreAbsDistinct = AreAbsDistinct;
@@ -12540,7 +12540,7 @@ globalThis.AreAbsDistinct = AreAbsDistinct;
  * ```
  */
 function AreSameSign(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     nums = nums.map(x => Math.sign(x));
     nums = [...new Set(nums)];
     return nums.length === 1;
@@ -12559,7 +12559,7 @@ globalThis.AreSameSign = AreSameSign;
  * ```
  */
 function AreCoprime(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     nums = Blurs(nums);
     if (!IsInteger(...nums))
         return true;
@@ -12583,7 +12583,7 @@ globalThis.AreCoprime = AreCoprime;
  * ```
  */
 function AreDistinctPoint(...points) {
-    Must(IsPoint(...points), 'input must be point');
+    Should(IsPoint(...points), 'input must be point');
     let predicate = (p1, p2) => {
         return p1[0] !== p2[0] || p1[1] !== p2[1];
     };
@@ -12599,9 +12599,9 @@ globalThis.AreDistinctPoint = AreDistinctPoint;
  * ```
  */
 function AreDistantPoint(distance) {
-    Must(IsPositive(distance), 'distance must be positive');
+    Should(IsPositive(distance), 'distance must be positive');
     return function (...points) {
-        Must(IsPoint(...points), 'input must be point');
+        Should(IsPoint(...points), 'input must be point');
         let predicate = (p1, p2) => Distance(p1, p2) >= distance;
         return PairsEvery(predicate)(...points);
     };
@@ -12616,9 +12616,9 @@ globalThis.AreDistantPoint = AreDistantPoint;
  * ```
  */
 function AreOblique(minAngle) {
-    Must(IsPositive(minAngle), 'minAngle must be positive');
+    Should(IsPositive(minAngle), 'minAngle must be positive');
     return function (...slopes) {
-        Must(IsNum(...slopes), 'slopes must be nums');
+        Should(IsNum(...slopes), 'slopes must be nums');
         let predicate = (m1, m2) => IntersectAngle(m1, m2) >= minAngle;
         return PairsEvery(predicate)(...slopes);
     };
@@ -12641,8 +12641,8 @@ globalThis.AreOblique = AreOblique;
 * ```
 */
 function ListIntegers(start, end) {
-    Must(IsNum(start, end), 'input must be num');
-    Must(start < end, 'start < end required');
+    Should(IsNum(start, end), 'input must be num');
+    Should(start < end, 'start < end required');
     let arr = [];
     for (let i = start; i <= end; i++) {
         arr.push(i);
@@ -12659,8 +12659,8 @@ globalThis.ListIntegers = ListIntegers;
 * ```
 */
 function ASterm(a, d, n) {
-    Must(IsNum(a, d), 'a,d must be num');
-    Must(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsNum(a, d), 'a,d must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     return a + (n - 1) * d;
 }
 globalThis.ASterm = ASterm;
@@ -12673,8 +12673,8 @@ globalThis.ASterm = ASterm;
 * ```
 */
 function ASsum(a, d, n) {
-    Must(IsNum(a, d), 'a,d must be num');
-    Must(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsNum(a, d), 'a,d must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     return 0.5 * n * (2 * a + (n - 1) * d);
 }
 globalThis.ASsum = ASsum;
@@ -12687,8 +12687,8 @@ globalThis.ASsum = ASsum;
 * ```
 */
 function ASequence(a, d, n = 10) {
-    Must(IsNum(a, d), 'a,d must be num');
-    Must(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsNum(a, d), 'a,d must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     let arr = [];
     for (let i = 1; i <= n; i++) {
         arr.push(ASterm(a, d, i));
@@ -12705,8 +12705,8 @@ globalThis.ASequence = ASequence;
 * ```
 */
 function GSterm(a, r, n) {
-    Must(IsNum(a, r), 'a,r must be num');
-    Must(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsNum(a, r), 'a,r must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     return a * (Math.pow(r, (n - 1)));
 }
 globalThis.GSterm = GSterm;
@@ -12721,8 +12721,8 @@ globalThis.GSterm = GSterm;
 * ```
 */
 function GSsum(a, r, n) {
-    Must(IsNum(a, r), 'a,r must be num');
-    Must(IsPositiveInteger(n) || n === undefined, 'n must be positive integer or undefined');
+    Should(IsNum(a, r), 'a,r must be num');
+    Should(IsPositiveInteger(n) || n === undefined, 'n must be positive integer or undefined');
     return n ? a * (Math.pow(r, n) - 1) / (r - 1) : a / (1 - r);
 }
 globalThis.GSsum = GSsum;
@@ -12735,8 +12735,8 @@ globalThis.GSsum = GSsum;
 * ```
 */
 function GSequence(a, r, n = 10) {
-    Must(IsNum(a, r), 'a,r must be num');
-    Must(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsNum(a, r), 'a,r must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     let arr = [];
     for (let i = 1; i <= n; i++) {
         arr.push(GSterm(a, r, i));
@@ -12760,7 +12760,7 @@ globalThis.GSequence = GSequence;
  * ```
  */
 function Min(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     return Math.min(...nums);
 }
 globalThis.Min = Min;
@@ -12772,7 +12772,7 @@ globalThis.Min = Min;
  * ```
  */
 function Max(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     return Math.max(...nums);
 }
 globalThis.Max = Max;
@@ -12784,7 +12784,7 @@ globalThis.Max = Max;
  * ```
  */
 function Sort(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     return [...nums].sort((a, b) => a - b);
 }
 globalThis.Sort = Sort;
@@ -12809,7 +12809,7 @@ globalThis.SortBy = SortBy;
  * ```
  */
 function Sum(...nums) {
-    Must(IsNum(...nums), 'input must be num');
+    Should(IsNum(...nums), 'input must be num');
     return nums.reduce((a, b) => a + b, 0);
 }
 globalThis.Sum = Sum;
@@ -12822,8 +12822,8 @@ globalThis.Sum = Sum;
  * ```
  */
 function Mean(...nums) {
-    Must(IsNum(...nums), 'input must be num');
-    Must(nums.length > 0, 'nums.length must be >0');
+    Should(IsNum(...nums), 'input must be num');
+    Should(nums.length > 0, 'nums.length must be >0');
     const sum = nums.reduce((a, b) => a + b);
     return sum / nums.length;
 }
@@ -12866,7 +12866,7 @@ globalThis.GrammarJoin = GrammarJoin;
 * ```
 */
 function Tick(bool) {
-    Must(IsBoolean(bool), 'bool must be boolean');
+    Should(IsBoolean(bool), 'bool must be boolean');
     return bool ? '✔' : '✘';
 }
 globalThis.Tick = Tick;
@@ -12878,7 +12878,7 @@ globalThis.Tick = Tick;
 * ```
 */
 function Ticks(...bools) {
-    Must(IsBoolean(...bools), 'bools must be boolean');
+    Should(IsBoolean(...bools), 'bools must be boolean');
     return bools.map(x => Tick(x));
 }
 globalThis.Ticks = Ticks;
@@ -12893,7 +12893,7 @@ globalThis.Ticks = Ticks;
 * ```
 */
 function IneqSign(greater, equal = false) {
-    Must(IsBoolean(greater, equal), 'input must be boolean');
+    Should(IsBoolean(greater, equal), 'input must be boolean');
     if (greater && equal) {
         return ['\\ge', '\\le'];
     }
@@ -12925,7 +12925,7 @@ globalThis.IneqSign = IneqSign;
 * ```
 */
 function ParseIneqSign(text) {
-    Must(IsIneqSign(text), 'input is not IneqSign');
+    Should(IsIneqSign(text), 'input is not IneqSign');
     let greater = text.includes('g') || text.includes('>');
     let equal = text.includes('e') || text.includes('=');
     return [greater, equal];
@@ -12945,8 +12945,8 @@ globalThis.ParseIneqSign = ParseIneqSign;
 * ```
 */
 function Dfrac(numerator, denominator, upSign = false) {
-    Must(IsNum(numerator, denominator), 'input must be num');
-    Must(IsBoolean(upSign), 'upSign must be boolean');
+    Should(IsNum(numerator, denominator), 'input must be num');
+    Should(IsBoolean(upSign), 'upSign must be boolean');
     let p = numerator;
     let q = denominator;
     if (q === 0)
@@ -12983,13 +12983,13 @@ globalThis.Dfrac = Dfrac;
 function ParseDfrac(dfrac) {
     const d = String.raw `-?\d+\.?\d*`;
     const f = String.raw `-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
-    Must(IsDfrac(dfrac), 'input is not dfrac');
+    Should(IsDfrac(dfrac), 'input is not dfrac');
     dfrac = dfrac.match(new RegExp(f, 'g'))[0];
     const matches = dfrac.match(new RegExp(d, 'g'));
     const u = dfrac.charAt(0) === '-' ? -1 : 1;
     const p = Number(matches[0]) * u;
     const q = Number(matches[1]);
-    Must(IsNum(p, q), 'fail to parse dfrac');
+    Should(IsNum(p, q), 'fail to parse dfrac');
     return [p, q];
 }
 globalThis.ParseDfrac = ParseDfrac;
@@ -13002,7 +13002,7 @@ globalThis.ParseDfrac = ParseDfrac;
  * ```
  */
 function IndexToSurd(text) {
-    Must(IsString(text), 'input must be string');
+    Should(IsString(text), 'input must be string');
     return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}");
 }
 globalThis.IndexToSurd = IndexToSurd;
@@ -13014,7 +13014,7 @@ globalThis.IndexToSurd = IndexToSurd;
  * ```
  */
 function Coord(point) {
-    Must(IsPoint(point), 'input must be point');
+    Should(IsPoint(point), 'input must be point');
     return '(' + Blur(point[0]) + ', ' + Blur(point[1]) + ')';
 }
 globalThis.Coord = Coord;
@@ -13037,8 +13037,8 @@ globalThis.Coord = Coord;
  * ```
  */
 function CosineLawLength(a, b, C) {
-    Must(IsPositive(a, b, C), 'input must be positive num');
-    Must(C <= 180, 'angle C must be between 0 and 180');
+    Should(IsPositive(a, b, C), 'input must be positive num');
+    Should(C <= 180, 'angle C must be between 0 and 180');
     return Math.pow((Math.pow(a, 2) + Math.pow(b, 2) - 2 * a * b * cos(C)), 0.5);
 }
 globalThis.CosineLawLength = CosineLawLength;
@@ -13052,7 +13052,7 @@ globalThis.CosineLawLength = CosineLawLength;
  * ```
  */
 function CosineLawAngle(a, b, c) {
-    Must(IsPositive(a, b, c), 'input must be positive num');
+    Should(IsPositive(a, b, c), 'input must be positive num');
     return arccos((Math.pow(c, 2) - Math.pow(a, 2) - Math.pow(b, 2)) / (-2 * a * b));
 }
 globalThis.CosineLawAngle = CosineLawAngle;
@@ -13066,7 +13066,7 @@ globalThis.CosineLawAngle = CosineLawAngle;
  * ```
  */
 function Heron(a, b, c) {
-    Must(IsPositive(a, b, c), 'input must be positive num');
+    Should(IsPositive(a, b, c), 'input must be positive num');
     let s = (a + b + c) / 2;
     return Math.pow((s * (s - a) * (s - b) * (s - c)), 0.5);
 }
@@ -13081,8 +13081,8 @@ globalThis.Heron = Heron;
  * ```
  */
 function TriangleFromVertex(A, B, C, fix = true) {
-    Must(IsPoint(A, B, C), 'input must be point');
-    Must(IsBoolean(fix), 'fix must be boolean');
+    Should(IsPoint(A, B, C), 'input must be point');
+    Should(IsBoolean(fix), 'fix must be boolean');
     let sideC = Distance(A, B);
     let sideA = Distance(B, C);
     let sideB = Distance(C, A);
@@ -13169,7 +13169,7 @@ function SolveTriangle({ sideA = null, sideB = null, sideC = null, angleA = null
         SAS();
         AAS();
     }
-    Must(false, 'Solve Triangle Fail!');
+    Should(false, 'Solve Triangle Fail!');
     throw '';
 }
 globalThis.SolveTriangle = SolveTriangle;
@@ -13195,7 +13195,7 @@ globalThis.SolveTriangle = SolveTriangle;
 function Quadrant(rect) {
     if (!Array.isArray(rect))
         rect = PolToRect([1, rect]);
-    Must(IsPoint(rect), 'rect must be polarpoint or number');
+    Should(IsPoint(rect), 'rect must be polarpoint or number');
     const q = RectToPol(rect)[1];
     if (q >= 0 && q < 90)
         return "I";
@@ -13205,7 +13205,7 @@ function Quadrant(rect) {
         return "III";
     if (q >= 270 && q < 360)
         return "IV";
-    Must(false, 'fail to parse quadrant!');
+    Should(false, 'fail to parse quadrant!');
     throw '';
 }
 globalThis.Quadrant = Quadrant;
@@ -13217,7 +13217,7 @@ globalThis.Quadrant = Quadrant;
  * ```
  */
 function PolToRect([r, q]) {
-    Must(IsPoint([r, q]), 'input must be point');
+    Should(IsPoint([r, q]), 'input must be point');
     return [r * cos(q), r * sin(q)];
 }
 globalThis.PolToRect = PolToRect;
@@ -13229,7 +13229,7 @@ globalThis.PolToRect = PolToRect;
  * ```
  */
 function RectToPol([x, y]) {
-    Must(IsPoint([x, y]), 'input must be point');
+    Should(IsPoint([x, y]), 'input must be point');
     const r = Math.sqrt(x * x + y * y);
     let q = Math.atan2(y, x) * 180 / Math.PI;
     if (q < 0)
@@ -13254,8 +13254,8 @@ function ASTC(quadrant, func) {
         quadrant = 3;
     if (quadrant == "IV")
         quadrant = 4;
-    Must([1, 2, 3, 4].includes(quadrant), 'cannot parse quadrant');
-    Must(['sin', 'cos', 'tan'].includes(func), 'cannot parse TrigFunc');
+    Should([1, 2, 3, 4].includes(quadrant), 'cannot parse quadrant');
+    Should(['sin', 'cos', 'tan'].includes(func), 'cannot parse TrigFunc');
     if (quadrant == 1)
         return 1;
     if (quadrant == 2)
@@ -13350,7 +13350,7 @@ globalThis.TrigRoot = TrigRoot;
  * ```
  */
 function HCF(...nums) {
-    Must(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer');
+    Should(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer');
     nums = Blurs(nums);
     nums = nums.map(x => Abs(x));
     function _HCF(n1, n2) {
@@ -13379,7 +13379,7 @@ globalThis.HCF = HCF;
  * ```
  */
 function LCM(...nums) {
-    Must(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer');
+    Should(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer');
     nums = Blurs(nums);
     function _LCM(n1, n2) {
         n1 = Abs(n1);
@@ -13477,7 +13477,7 @@ globalThis.Dedupe = Dedupe;
  * ```
  */
 function Vector(O, P) {
-    Must(IsPoint(O, P), 'input must be point');
+    Should(IsPoint(O, P), 'input must be point');
     return [P[0] - O[0], P[1] - O[1]];
 }
 globalThis.Vector = Vector;
@@ -13489,7 +13489,7 @@ globalThis.Vector = Vector;
  * ```
  */
 function VectorAdd(...vectors) {
-    Must(IsVector(...vectors), 'input must be vector');
+    Should(IsVector(...vectors), 'input must be vector');
     const x = Sum(...vectors.map(p => p[0]));
     const y = Sum(...vectors.map(p => p[1]));
     return [x, y];
@@ -13504,7 +13504,7 @@ globalThis.VectorAdd = VectorAdd;
  * ```
  */
 function VectorMean(...vectors) {
-    Must(IsVector(...vectors), 'input must be vector');
+    Should(IsVector(...vectors), 'input must be vector');
     const x = Sum(...vectors.map(p => p[0])) / vectors.length;
     const y = Sum(...vectors.map(p => p[1])) / vectors.length;
     return [x, y];
@@ -13520,7 +13520,7 @@ globalThis.VectorMean = VectorMean;
  * ```
  */
 function VectorLength(v) {
-    Must(IsVector(v), 'input must be vector');
+    Should(IsVector(v), 'input must be vector');
     const [x, y] = v;
     return Math.pow((x * x + y * y), 0.5);
 }
@@ -13538,7 +13538,7 @@ globalThis.VectorLength = VectorLength;
  * ```
  */
 function VectorArg(v) {
-    Must(IsVector(v), 'input must be vector');
+    Should(IsVector(v), 'input must be vector');
     const [x, y] = v;
     let arg = Math.atan2(y, x) / Math.PI * 180;
     if (arg < 0)
@@ -13555,8 +13555,8 @@ globalThis.VectorArg = VectorArg;
  * ```
  */
 function VectorScale(v, k) {
-    Must(IsVector(v), 'input must be vector');
-    Must(IsNum(k), 'k must be num');
+    Should(IsVector(v), 'input must be vector');
+    Should(IsNum(k), 'k must be num');
     return [k * v[0], k * v[1]];
 }
 globalThis.VectorScale = VectorScale;
@@ -13570,7 +13570,7 @@ globalThis.VectorScale = VectorScale;
  * ```
  */
 function VectorRev(v) {
-    Must(IsVector(v), 'input must be vector');
+    Should(IsVector(v), 'input must be vector');
     const [x, y] = v;
     return [-x, -y];
 }
@@ -13585,7 +13585,7 @@ globalThis.VectorRev = VectorRev;
  * ```
  */
 function VectorUnit(v) {
-    Must(IsVector(v), 'input must be vector');
+    Should(IsVector(v), 'input must be vector');
     const [x, y] = v;
     const L = VectorLength(v);
     return [x / L, y / L];
@@ -13601,8 +13601,8 @@ globalThis.VectorUnit = VectorUnit;
  * ```
  */
 function VectorScaleTo(v, length) {
-    Must(IsVector(v), 'input must be vector');
-    Must(IsNum(length), 'length must be num');
+    Should(IsVector(v), 'input must be vector');
+    Should(IsNum(length), 'length must be num');
     return VectorScale(VectorUnit(v), length);
 }
 globalThis.VectorScaleTo = VectorScaleTo;
@@ -13614,8 +13614,8 @@ globalThis.VectorScaleTo = VectorScaleTo;
  * ```
  */
 function VectorRotate(v, angle) {
-    Must(IsVector(v), 'input must be vector');
-    Must(IsNum(angle), 'angle must be num');
+    Should(IsVector(v), 'input must be vector');
+    Should(IsNum(angle), 'angle must be num');
     const [x, y] = v;
     const S = sin(angle);
     const C = cos(angle);
@@ -13642,21 +13642,20 @@ function MathError(message) {
     return new CustumMathError(message);
 }
 globalThis.MathError = MathError;
-class CustumDesignError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'DesignError';
-    }
-}
-function DesignError(message) {
-    return new CustumDesignError(message);
-}
-globalThis.DesignError = DesignError;
-function Must(condition, msg = "Must condition failed!") {
-    if (!condition)
-        throw DesignError(msg);
-}
-globalThis.Must = Must;
+// class CustumDesignError extends Error {
+//     constructor(message: string) {
+//         super(message);
+//         this.name = 'DesignError';
+//     }
+// }
+// function DesignError(message: string) {
+//     return new CustumDesignError(message)
+// }
+// globalThis.DesignError = DesignError
+// function Must(condition: boolean, msg: string = "Must condition failed!") {
+//     if (!condition) throw DesignError(msg)
+// }
+// globalThis.Must = Must
 function Should(condition, msg = "Should condition failed!") {
     if (!condition)
         throw MathError(msg);
@@ -15915,8 +15914,13 @@ class Seed {
                     return true; // done if validated
             }
             catch (e) {
-                if (e.name !== 'MathError')
+                if (e.name === 'MathError') {
+                    console.log('[MathError]');
+                    console.log(e.stack);
+                }
+                else {
                     throw e;
+                }
             }
         }
         ;

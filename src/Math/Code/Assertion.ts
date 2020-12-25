@@ -324,7 +324,7 @@ globalThis.IsArray = IsArray
 
 
 function IsArrayOfLength(length: number) {
-    Must(
+    Should(
         IsPositiveInteger(length),
         'length must be positive integer'
     )
@@ -348,7 +348,7 @@ globalThis.IsArrayOfLength = IsArrayOfLength
  * ```
  */
 function IsBetween(min: number, max: number) {
-    Must(IsNum(min, max), 'min and max must be number')
+    Should(IsNum(min, max), 'min and max must be number')
     const f = function (...items: any[]): boolean {
         return items.every(
             x => IsNum(x) && x >= min && x <= max
@@ -368,7 +368,7 @@ globalThis.IsBetween = IsBetween
  * ```
  */
 function IsAbsBetween(min: number, max: number) {
-    Must(IsPositive(min, max), 'min and max must be positive number')
+    Should(IsPositive(min, max), 'min and max must be positive number')
     return function (...items: any[]): boolean {
         return items.every(
             x => IsNum(x) && Abs(x) >= min && Abs(x) <= max
@@ -505,8 +505,8 @@ globalThis.IsConstraint = IsConstraint
  * ```
  */
 function IsAroundPoint(anchor: Point, range: number) {
-    Must(IsPoint(anchor), 'anchor must be a point')
-    Must(IsPositive(range), 'range must be a positive number')
+    Should(IsPoint(anchor), 'anchor must be a point')
+    Should(IsPositive(range), 'range must be a positive number')
     return function (...points: Point[]): boolean {
         return points.every(
             p => ChessboardDistance(anchor, p) <= range

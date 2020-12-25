@@ -120,7 +120,12 @@ export class Seed {
                 this.pushDict()
                 if (this.isValidated()) return true; // done if validated
             } catch (e) {
-                if (e.name !== 'MathError') throw e
+                if (e.name === 'MathError') {
+                    console.log('[MathError]')
+                    console.log(e.stack)
+                } else {
+                    throw e
+                }
             }
         };
         // throw error after 1000 failed trials
@@ -130,7 +135,7 @@ export class Seed {
     runSection(): boolean {
         this.cropSection()
         return true
-    } 
+    }
 
     runPreprocess() {
         this.doPreprocess()

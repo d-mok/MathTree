@@ -8,7 +8,7 @@
  * ```
  */
 function Factorial(n: number): number {
-    Must(IsNonNegativeInteger(n), 'n must be non-negative integer')
+    Should(IsNonNegativeInteger(n), 'n must be non-negative integer')
     n = Blur(n)
     return n <= 0 ? 1 : n * Factorial(n - 1)
 }
@@ -22,8 +22,8 @@ globalThis.Factorial = Factorial
  * ```
  */
 function nCr(n: number, r: number): number {
-    Must(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer')
-    Must(n >= r, 'n >= r required')
+    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer')
+    Should(n >= r, 'n >= r required')
     n = Blur(n)
     r = Blur(r)
     return Factorial(n) / (Factorial(r) * Factorial(n - r));
@@ -38,8 +38,8 @@ globalThis.nCr = nCr
  * ```
  */
 function nPr(n: number, r: number): number {
-    Must(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer')
-    Must(n >= r, 'n >= r required')
+    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer')
+    Should(n >= r, 'n >= r required')
     n = Blur(n)
     r = Blur(r)
     return nCr(n, r) * Factorial(r);

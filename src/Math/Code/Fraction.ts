@@ -12,7 +12,7 @@
  * ```
  */
 function FracSign(p: number, q: number): Fraction {
-    Must(IsNum(p, q), 'input must be num');
+    Should(IsNum(p, q), 'input must be num');
     Should(IsNonZero(q), 'q should not be zero');
     [p, q] = Blurs([p, q])
     const s = Sign(p / q)
@@ -35,7 +35,7 @@ globalThis.FracSign = FracSign
  * ```
  */
 function Frac(p: number, q: number): Fraction {
-    Must(IsNum(p, q), 'input must be num');
+    Should(IsNum(p, q), 'input must be num');
     Should(IsNonZero(q), 'q should not be zero');
     [p, q] = Blurs([p, q]);
     [p, q] = SimpRatio(p, q)
@@ -54,7 +54,7 @@ globalThis.Frac = Frac
  * ```
  */
 function FracAdd(...fractions: Fraction[]): Fraction {
-    Must(IsFraction(...fractions), 'input must be fractions')
+    Should(IsFraction(...fractions), 'input must be fractions')
     function _FracAdd(A: Fraction, B: Fraction): Fraction {
         let [p1, q1] = A
         let [p2, q2] = B
@@ -80,7 +80,7 @@ globalThis.FracAdd = FracAdd
  * ```
  */
 function FracMultiply(...fractions: Fraction[]): Fraction {
-    Must(IsFraction(...fractions), 'input must be fractions')
+    Should(IsFraction(...fractions), 'input must be fractions')
     function _FracMultiply(A: Fraction, B: Fraction): Fraction {
         let [p1, q1] = A
         let [p2, q2] = B

@@ -7,7 +7,7 @@
  * ```
  */
 function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number] {
-    Must(IsNum(a, b, c, p, q, r), "input must be num")
+    Should(IsNum(a, b, c, p, q, r), "input must be num")
     const D = a * q - b * p
     Should(IsNonZero(D), 'no unique solution')
     const x = (c * q - b * r) / D;
@@ -26,7 +26,7 @@ globalThis.Crammer = Crammer
  * ```
  */
 function Discriminant(a: number, b: number, c: number): number {
-    Must(IsNum(a, b, c), "input must be num")
+    Should(IsNum(a, b, c), "input must be num")
     return b * b - 4 * a * c;
 }
 globalThis.Discriminant = Discriminant
@@ -44,7 +44,7 @@ globalThis.Discriminant = Discriminant
  * ```
  */
 function QuadraticRoot(a: number, b: number, c: number): [number, number] {
-    Must(IsNum(a, b, c), "input must be num")
+    Should(IsNum(a, b, c), "input must be num")
     const d = Discriminant(a, b, c);
     Should(d >= 0, 'no real root')
     const r1 = Divide(-b - Math.sqrt(d), 2 * a);
@@ -64,7 +64,7 @@ globalThis.QuadraticRoot = QuadraticRoot
  * ```
  */
 function QuadraticVertex(a: number, b: number, c: number): Point {
-    Must(IsNum(a, b, c), "input must be num")
+    Should(IsNum(a, b, c), "input must be num")
     const h = Divide(-b, 2 * a)
     const k = a * h * h + b * h + c;
     return [h, k];
@@ -83,7 +83,7 @@ globalThis.QuadraticVertex = QuadraticVertex
  * ```
  */
 function QuadraticFromRoot(a: number, p: number, q: number): Quadratic {
-    Must(IsNum(a, p, q), "input must be num")
+    Should(IsNum(a, p, q), "input must be num")
     Should(IsNonZero(a), 'a should not be zero')
     return [a, -a * (p + q), a * p * q]
 }
@@ -102,7 +102,7 @@ globalThis.QuadraticFromRoot = QuadraticFromRoot
  * ```
  */
 function QuadraticFromVertex(a: number, h: number, k: number): Quadratic {
-    Must(IsNum(a, h, k), "input must be num")
+    Should(IsNum(a, h, k), "input must be num")
     Should(IsNonZero(a), 'a should not be zero')
     const b = -2 * a * h
     const c = k - a * h * h - b * h
