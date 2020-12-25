@@ -3,12 +3,11 @@
  * @return division with x/0 handling
  * ```typescript
  * Divide(6,2) // 3
- * Divide(6,0) // throw error
+ * Divide(6,0) // throw
  * ```
  */
 function Divide(dividend: number, divisor: number): number {
-    // if (!IsNum(dividend, divisor)) throw DesignError('input must be number')
-    // if (divisor === 0) throw MathError('division by 0')
+    Must(IsNum(dividend, divisor), 'input must be num')
     Should(divisor !== 0, 'division by 0')
     return dividend / divisor
 }
@@ -23,6 +22,7 @@ globalThis.Divide = Divide
  * ```
  */
 function Abs(num: number): number {
+    Must(IsNum(num), 'input must be num')
     return Math.abs(num);
 }
 globalThis.Abs = Abs
@@ -38,6 +38,7 @@ globalThis.Abs = Abs
  * ```
  */
 function Sign(num: number): -1 | 0 | 1 {
+    Must(IsNum(num), 'input must be num')
     if (num > 0) return 1;
     if (num < 0) return -1;
     return 0;
@@ -55,6 +56,8 @@ globalThis.Sign = Sign
  * ```
  */
 function Round(num: number, sigfig = 3): number {
+    Must(IsNum(num), 'input must be num')
+    Must(IsPositiveInteger(sigfig), 'sigfig must be positive integer')
     if (num === 0) return 0
     if (sigfig < 1) sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
@@ -71,6 +74,8 @@ globalThis.Round = Round
  * ```
  */
 function RoundUp(num: number, sigfig = 3): number {
+    Must(IsNum(num), 'input must be num')
+    Must(IsPositiveInteger(sigfig), 'sigfig must be positive integer')
     if (num === 0) return 0
     if (sigfig < 1) sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
@@ -87,6 +92,8 @@ globalThis.RoundUp = RoundUp
  * ```
  */
 function RoundDown(num: number, sigfig = 3): number {
+    Must(IsNum(num), 'input must be num')
+    Must(IsPositiveInteger(sigfig), 'sigfig must be positive integer')
     if (num === 0) return 0
     if (sigfig < 1) sigfig = 1;
     let d = -Magnitude(num) + sigfig - 1;
@@ -105,6 +112,8 @@ globalThis.RoundDown = RoundDown
  * ```
  */
 function Fix(num: number, dp = 0): number {
+    Must(IsNum(num), 'input must be num')
+    Must(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
     num += Number.EPSILON
@@ -126,6 +135,8 @@ globalThis.Fix = Fix
  * ```
  */
 function FixUp(num: number, dp = 0): number {
+    Must(IsNum(num), 'input must be num')
+    Must(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
     num -= Number.EPSILON
@@ -149,6 +160,8 @@ globalThis.FixUp = FixUp
  * ```
  */
 function FixDown(num: number, dp = 0): number {
+    Must(IsNum(num), 'input must be num')
+    Must(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
     num += Number.EPSILON
@@ -172,6 +185,7 @@ globalThis.FixDown = FixDown
  * ```
  */
 function Ceil(num: number): number {
+    Must(IsNum(num), 'input must be num')
     return Math.ceil(num);
 }
 globalThis.Ceil = Ceil
@@ -186,6 +200,7 @@ globalThis.Ceil = Ceil
  * ```
  */
 function Floor(num: number): number {
+    Must(IsNum(num), 'input must be num')
     return Math.floor(num);
 }
 globalThis.Floor = Floor
@@ -196,13 +211,17 @@ globalThis.Floor = Floor
  * @return reduce input array to simplest ratio.
  * ```typescript
  * SimpRatio(2,4,6) // [1,2,3]
+ * SimpRatio(0,4,6) // [0,2,3]
+ * SimpRatio(0,4) // [0,1]
  * ```
  */
 function SimpRatio(...nums: number[]): number[] {
+    Must(IsNum(...nums), 'input must be num')
     nums = Blurs(nums)
     if (!IsInteger(...nums)) return nums
-    if (!IsNonZero(...nums)) return nums
-    let h = HCF(...nums);
+    let nonzeros = nums.filter(x => IsNonZero(x))
+    Should(nonzeros.length > 0, 'at least one non-zero num')
+    let h = HCF(...nonzeros);
     return nums.map(x => x / h);
 }
 globalThis.SimpRatio = SimpRatio
@@ -217,6 +236,7 @@ globalThis.SimpRatio = SimpRatio
  * ```
  */
 function SigFig(value: number): number {
+    Must(IsNum(value), 'input must be num')
     value = Blur(value)
     return Math.abs(value)
         .toExponential()
@@ -239,6 +259,7 @@ globalThis.SigFig = SigFig
  * ```
  */
 function DecimalPlace(value: number): number {
+    Must(IsNum(value), 'input must be num')
     value = Blur(value)
     if (IsInteger(value)) return 0
     return value.toString().split(".")[1]?.length ?? 0
@@ -261,6 +282,7 @@ globalThis.DecimalPlace = DecimalPlace
  * ```
  */
 function Magnitude(num: number): number {
+    Must(IsNum(num), 'input must be num')
     return Math.floor(log(10, Abs(num)))
 }
 globalThis.Magnitude = Magnitude

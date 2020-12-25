@@ -4,8 +4,8 @@ test('Slope', () => {
     expect(Slope([0, 0], [1, 2])).toBe(2);
     expect(Slope([1, 2], [0, 0])).toBe(2);
     expect(Slope([3, 4], [6, -5])).toBe(-3);
-    expect(Slope([3, 4], [3, 3])).toBeNaN();
-    expect(Slope([3, 3], [3, 3])).toBeNaN();
+    expect(() => Slope([3, 4], [3, 3])).toThrow();
+    expect(() => Slope([3, 3], [3, 3])).toThrow();
 });
 
 
@@ -17,6 +17,15 @@ test('Distance', () => {
     expect(Distance([10, 5], [10, 5])).toBe(0);
     expect(Distance([10, 5], [-10, 5])).toBe(20);
 });
+
+
+
+
+test('ChessboardDistance', () => {
+    expect(ChessboardDistance([0, 0], [1, 2])).toBe(2);
+    expect(ChessboardDistance([0, 0], [3, 2])).toBe(3);
+});
+
 
 
 
@@ -49,14 +58,15 @@ test('RotatePoint', () => {
 
 test('Inclination', () => {
     expect(Inclination([1, 0], [3, 2])).toBe(45);
-    expect(Inclination([3, 2], [1, 0])).toBe(-135);
+    expect(Inclination([3, 2], [1, 0])).toBe(225);
+    expect(() => Inclination([3, 2], [3, 2])).toThrow();
 });
 
 
 
 
 test('Normal', () => {
-    expect(Normal([1, 0], [3, 2])).toBe(-45);
+    expect(Normal([1, 0], [3, 2])).toBe(315);
     expect(Normal([3, 2], [1, 0])).toBe(135);
 });
 
@@ -70,7 +80,7 @@ test('PerpendicularFoot', () => {
 test('Intersection', () => {
     expect(Intersection([0, 0], [2, 2], [2, 0], [0, 2])).toEqual([1, 1]);
     expect(Intersection([2, 1], [-1, 1], [1, -1], [1, 2])).toEqual([1, 1]);
-    expect(()=>Intersection([0, 0], [2, 2], [0, 0], [2, 2])).toThrow();
+    expect(() => Intersection([0, 0], [2, 2], [0, 0], [2, 2])).toThrow();
 });
 
 
@@ -93,7 +103,31 @@ test('IntersectAngle', () => {
     expect(IntersectAngle(-2, 1)).toBeCloseTo(71.56505118);
     expect(IntersectAngle(2, 3)).toBeCloseTo(8.130102354);
     expect(IntersectAngle(3, 2)).toBeCloseTo(8.130102354);
-    expect(IntersectAngle(1, 1 / 0)).toBe(45);
+    // expect(IntersectAngle(1, 1 / 0)).toBe(45);
+});
+
+
+
+test('Angle', () => {
+    expect(Angle([1, 0], [0, 0], [0, 2])).toBe(90);
+    expect(Angle([2, 2], [1, 1], [1, 3])).toBe(45);
+    expect(Angle([1, 3], [1, 1], [2, 2])).toBe(45);
+});
+
+
+
+test('AnglePolar', () => {
+    expect(AnglePolar([1, 0], [0, 0], [0, 2])).toBe(90);
+    expect(AnglePolar([2, 2], [1, 1], [1, 3])).toBe(45);
+    expect(AnglePolar([1, 3], [1, 1], [2, 2])).toBe(315);
+});
+
+
+
+test('IsReflex', () => {
+    expect(IsReflex([1, 0], [0, 0], [0, 2])).toBe(false);
+    expect(IsReflex([2, 2], [1, 1], [1, 3])).toBe(false);
+    expect(IsReflex([1, 3], [1, 1], [2, 2])).toBe(true);
 });
 
 

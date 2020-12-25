@@ -10,6 +10,8 @@
  * ```
  */
 function CosineLawLength(a: number, b: number, C: number): number {
+    Must(IsPositive(a, b, C), 'input must be positive num')
+    Must(C <= 180, 'angle C must be between 0 and 180')
     return (a ** 2 + b ** 2 - 2 * a * b * cos(C)) ** 0.5
 }
 globalThis.CosineLawLength = CosineLawLength
@@ -26,6 +28,7 @@ globalThis.CosineLawLength = CosineLawLength
  * ```
  */
 function CosineLawAngle(a: number, b: number, c: number): number {
+    Must(IsPositive(a, b, c), 'input must be positive num')
     return arccos((c ** 2 - a ** 2 - b ** 2) / (-2 * a * b))
 }
 globalThis.CosineLawAngle = CosineLawAngle
@@ -41,6 +44,7 @@ globalThis.CosineLawAngle = CosineLawAngle
  * ```
  */
 function Heron(a: number, b: number, c: number): number {
+    Must(IsPositive(a, b, c), 'input must be positive num')
     let s = (a + b + c) / 2
     return (s * (s - a) * (s - b) * (s - c)) ** 0.5
 }
@@ -56,6 +60,8 @@ globalThis.Heron = Heron
  * ```
  */
 function TriangleFromVertex(A: Point, B: Point, C: Point, fix = true): Triangle {
+    Must(IsPoint(A, B, C), 'input must be point')
+    Must(IsBoolean(fix), 'fix must be boolean')
     let sideC = Distance(A, B)
     let sideA = Distance(B, C)
     let sideB = Distance(C, A)
@@ -145,7 +151,7 @@ function SolveTriangle(
         SAS()
         AAS()
     }
-    throw 'Solve Triangle Fail!'
-
+    Must(false, 'Solve Triangle Fail!')
+    throw ''
 }
 globalThis.SolveTriangle = SolveTriangle

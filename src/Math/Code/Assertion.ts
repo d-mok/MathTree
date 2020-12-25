@@ -181,6 +181,25 @@ function IsPositiveInteger(...items: any[]): boolean {
 globalThis.IsPositiveInteger = IsPositiveInteger
 
 
+/**
+ * @category Assertion
+ * @return check if the number is a non-negative integer.
+ * ```typescript
+ * IsNonNegativeInteger(2) // true
+ * IsNonNegativeInteger(0) // true
+ * IsNonNegativeInteger(-2) // false
+ * IsNonNegativeInteger(1.5) // false
+ * ```
+ */
+function IsNonNegativeInteger(...items: any[]): boolean {
+    return items.every(
+        x => IsInteger(x) && x >= 0
+    );
+}
+globalThis.IsNonNegativeInteger = IsNonNegativeInteger
+
+
+
 
 
 /**
@@ -240,6 +259,29 @@ function IsString(...items: any[]): boolean {
 globalThis.IsString = IsString
 
 
+
+
+/**
+ * @category Assertion
+ * @return check if the item is a boolean
+ * ```typescript
+ * IsBoolean(true) // true
+ * IsBoolean(false) // true
+ * IsBoolean('') // false
+ * IsBoolean('1') // false
+ * IsBoolean(1) // false
+ * ```
+ */
+function IsBoolean(...items: any[]): boolean {
+    return items.every(
+        x => typeof x === 'boolean'
+    )
+}
+globalThis.IsBoolean = IsBoolean
+
+
+
+
 /**
  * @category Assertion
  * @return check if the item is an empty object
@@ -258,6 +300,8 @@ function IsEmptyObject(...items: any[]): boolean {
     );
 }
 globalThis.IsEmptyObject = IsEmptyObject
+
+
 
 
 /**
@@ -282,7 +326,7 @@ globalThis.IsArray = IsArray
 function IsArrayOfLength(length: number) {
     Must(
         IsPositiveInteger(length),
-        'IsArrayOfLength: length must be positive integer'
+        'length must be positive integer'
     )
     const f = function (...items: any[]): boolean {
         return items.every(
@@ -304,7 +348,7 @@ globalThis.IsArrayOfLength = IsArrayOfLength
  * ```
  */
 function IsBetween(min: number, max: number) {
-    Must(IsNum(min, max), 'IsBetween: min and max must be number')
+    Must(IsNum(min, max), 'min and max must be number')
     const f = function (...items: any[]): boolean {
         return items.every(
             x => IsNum(x) && x >= min && x <= max
@@ -324,13 +368,12 @@ globalThis.IsBetween = IsBetween
  * ```
  */
 function IsAbsBetween(min: number, max: number) {
-    Must(IsNum(min, max), 'IsBetween: min and max must be number')
-    const f = function (...items: any[]): boolean {
+    Must(IsPositive(min, max), 'min and max must be positive number')
+    return function (...items: any[]): boolean {
         return items.every(
             x => IsNum(x) && Abs(x) >= min && Abs(x) <= max
         );
     }
-    return f
 }
 globalThis.IsAbsBetween = IsAbsBetween
 
@@ -354,6 +397,44 @@ globalThis.IsPoint = IsPoint
 
 
 
+
+/**
+ * @category Assertion
+ * @return check if the item is a fraction [num,num]
+ * ```typescript
+ * IsFraction([2,5]) // true
+ * IsFraction(2) // false
+ * IsFraction([1,2,3]) // false
+ * IsFraction([NaN,NaN]) // false
+ * ```
+ */
+function IsFraction(...items: any[]): boolean {
+    return IsPoint(...items)
+}
+globalThis.IsFraction = IsFraction
+
+
+
+
+
+/**
+ * @category Assertion
+ * @return check if the item is a vector [num,num]
+ * ```typescript
+ * IsVector([2,5]) // true
+ * IsVector(2) // false
+ * IsVector([1,2,3]) // false
+ * IsVector([NaN,NaN]) // false
+ * ```
+ */
+function IsVector(...items: any[]): boolean {
+    return IsPoint(...items)
+}
+globalThis.IsVector = IsVector
+
+
+
+
 /**
  * @category Assertion
  * @return check if the item is a IneqSign string
@@ -373,6 +454,24 @@ function IsIneqSign(...items: any[]): boolean {
     );
 }
 globalThis.IsIneqSign = IsIneqSign
+
+
+
+
+/**
+ * @category Assertion
+ * @return check if the item is a Dfrac string
+ * ```typescript
+ * IsDfrac('\\dfrac{1}{2}') // true
+ * IsDfrac('\\dfrac{x}{2}') // false
+ * ```
+ */
+function IsDfrac(...items: any[]): boolean {
+    const d = String.raw`-?\d+\.?\d*`
+    const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
+    return items.every(x => IsString(x) && x.match(new RegExp(f, 'g')))
+}
+globalThis.IsDfrac = IsDfrac
 
 
 /**
@@ -399,26 +498,44 @@ globalThis.IsConstraint = IsConstraint
 
 /**
  * @category Assertion
- * @return Check if the points are pairwise distant apart.
+ * @return Check if the points are chessboard around anchor.
  * ```typescript
- * IsAroundPoint([0,0],2)([1,0]) // true
+ * IsAroundPoint([0,0],2)([2,2]) // true
  * IsAroundPoint([0,0],2)([3,0]) // false
- * IsAroundPoint([0,0],2)([1,0],[3,0]) // false
  * ```
  */
 function IsAroundPoint(anchor: Point, range: number) {
-    const f = function (...points: Point[]): boolean {
-        let ranges = points.map(
-            p => Max(Abs(p[0] - anchor[0]), Abs(p[1] - anchor[1]))
-        )
-        return ranges.every(
-            x => x <= range
+    Must(IsPoint(anchor), 'anchor must be a point')
+    Must(IsPositive(range), 'range must be a positive number')
+    return function (...points: Point[]): boolean {
+        return points.every(
+            p => ChessboardDistance(anchor, p) <= range
         );
     }
-    return f
 }
 globalThis.IsAroundPoint = IsAroundPoint
 
 
 
-
+/**
+ * @category Assertion
+ * @return Check if the array of legnths can form a triangle
+ * ```typescript
+ * IsTriangle([1,1,1]) // true
+ * IsTriangle([6,7,8]) // true
+ * IsTriangle([1,2,3]) // false
+ * IsTriangle([6,14,8]) // false
+ * ```
+ */
+function IsTriangle(...triangles: [number, number, number][]): boolean {
+    return triangles.every(t => {
+        if (!IsArrayOfLength(3)(t)) return false
+        let [a, b, c] = t
+        if (!IsPositive(a, b, c)) return false
+        if (a + b <= c) return false
+        if (b + c <= a) return false
+        if (c + a <= b) return false
+        return true
+    })
+}
+globalThis.IsTriangle = IsTriangle

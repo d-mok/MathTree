@@ -3,14 +3,13 @@
  * @return solve [x,y] from ax+by=c and px+qy=r. 
  * ```typescript
  * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
- * Crammer(1,1,3,2,2,6) // [NaN,NaN] solving x+y=3 and 2x+2y=6
+ * Crammer(1,1,3,2,2,6) // throw
  * ```
  */
 function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number] {
-    Must(IsNum(a, b, c, p, q, r), "Crammer: input must be num")
+    Must(IsNum(a, b, c, p, q, r), "input must be num")
     const D = a * q - b * p
-    Should(D !== 0, 'Crammer: no unique solution!')
-    // if (D === 0) return [NaN, NaN]
+    Should(IsNonZero(D), 'no unique solution')
     const x = (c * q - b * r) / D;
     const y = (a * r - c * p) / D;
     return [x, y];
@@ -27,6 +26,7 @@ globalThis.Crammer = Crammer
  * ```
  */
 function Discriminant(a: number, b: number, c: number): number {
+    Must(IsNum(a, b, c), "input must be num")
     return b * b - 4 * a * c;
 }
 globalThis.Discriminant = Discriminant
@@ -39,15 +39,17 @@ globalThis.Discriminant = Discriminant
  * QuadraticRoot(1,2,-3) // [-3,1]
  * QuadraticRoot(-1,-2,3) // [-3,1]
  * QuadraticRoot(1,2,1) // [-1,-1]
- * QuadraticRoot(1,2,3) // [NaN,NaN] no real root
+ * QuadraticRoot(1,2,3) // throw
+ * QuadraticRoot(0,2,3) // throw
  * ```
  */
 function QuadraticRoot(a: number, b: number, c: number): [number, number] {
+    Must(IsNum(a, b, c), "input must be num")
     const d = Discriminant(a, b, c);
-    if (d < 0) return [NaN, NaN];
-    const r1 = (-b - Math.sqrt(d)) / (2 * a);
-    const r2 = (-b + Math.sqrt(d)) / (2 * a);
-    return [Math.min(r1, r2), Math.max(r1, r2)];
+    Should(d >= 0, 'no real root')
+    const r1 = Divide(-b - Math.sqrt(d), 2 * a);
+    const r2 = Divide(-b + Math.sqrt(d), 2 * a);
+    return [Min(r1, r2), Max(r1, r2)];
 }
 globalThis.QuadraticRoot = QuadraticRoot
 
@@ -58,10 +60,12 @@ globalThis.QuadraticRoot = QuadraticRoot
  * @return the vertex [h,k] of y=ax^2+bx+c.
  * ```typescript
  * QuadraticVertex(1,2,3) // [-1,2]
+ * QuadraticVertex(0,2,3) // throw
  * ```
  */
 function QuadraticVertex(a: number, b: number, c: number): Point {
-    const h = -b / (2 * a);
+    Must(IsNum(a, b, c), "input must be num")
+    const h = Divide(-b, 2 * a)
     const k = a * h * h + b * h + c;
     return [h, k];
 }
@@ -75,9 +79,12 @@ globalThis.QuadraticVertex = QuadraticVertex
  * ```typescript
  * QuadraticFromRoot(1,2,3) // [1,-5,6]
  * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
+ * QuadraticFromRoot(0,4,-3) // throw
  * ```
  */
-function QuadraticFromRoot(a: number, p: number, q: number): [number, number, number] {
+function QuadraticFromRoot(a: number, p: number, q: number): Quadratic {
+    Must(IsNum(a, p, q), "input must be num")
+    Should(IsNonZero(a), 'a should not be zero')
     return [a, -a * (p + q), a * p * q]
 }
 globalThis.QuadraticFromRoot = QuadraticFromRoot
@@ -91,9 +98,12 @@ globalThis.QuadraticFromRoot = QuadraticFromRoot
  * ```typescript
  * QuadraticFromVertex(1,2,3) // [1,-4,7]
  * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
+ * QuadraticFromVertex(0,4,-3) // throw
  * ```
  */
-function QuadraticFromVertex(a: number, h: number, k: number): [number, number, number] {
+function QuadraticFromVertex(a: number, h: number, k: number): Quadratic {
+    Must(IsNum(a, h, k), "input must be num")
+    Should(IsNonZero(a), 'a should not be zero')
     const b = -2 * a * h
     const c = k - a * h * h - b * h
     return [a, b, c]
@@ -114,6 +124,7 @@ globalThis.QuadraticFromVertex = QuadraticFromVertex
  * ```
  */
 function xPolynomial(poly1: number[], poly2: number[]): number[] {
+    Should(IsNonZero(poly1[0], poly2[0]), 'leading coeff should be non-zero')
     const deg1 = poly1.length - 1
     const deg2 = poly2.length - 1
     const deg = deg1 + deg2
@@ -128,14 +139,34 @@ function xPolynomial(poly1: number[], poly2: number[]): number[] {
 globalThis.xPolynomial = xPolynomial
 
 
+
+/**
+ * @category Algebra
+ * @return [x-int, y-int,slope] of ax+by+c=0
+ * ```typescript
+ * LinearFeature(2,4,6) // [-3,-2,-0.5]
+ * LinearFeature(0,4,6) // throw
+ * ```
+ */
+function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number] {
+    Should(IsNonZero(a, b), 'x and y term should be non-zero')
+    return [-c / a, -c / b, -a / b]
+}
+globalThis.LinearFeature = LinearFeature
+
+
+
+
+
 /**
  * @category Algebra
  * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
  * ```typescript
  * LinearFromIntercepts(1,2) // [2,1,-2]
+ * LinearFromIntercepts(0,2) // throw
  * ```
  */
-function LinearFromIntercepts(xInt: number, yInt: number): [number, number, number] {
+function LinearFromIntercepts(xInt: number, yInt: number): Linear {
     Should(IsNonZero(xInt, yInt), 'intercepts cannot be zero')
     let [a, b, c] = [yInt, xInt, -xInt * yInt]
     let s = Sign(a);
@@ -154,12 +185,13 @@ globalThis.LinearFromIntercepts = LinearFromIntercepts
  * @return the coeff [a,b,c] in ax+by+c=0 from two given points
  * ```typescript
  * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+ * LinearFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-function LinearFromTwoPoints(point1: Point, point2: Point) {
+function LinearFromTwoPoints(point1: Point, point2: Point): Linear {
+    Should(AreDistinctPoint(point1, point2), 'two points should not be equal')
     let [x1, y1] = point1
     let [x2, y2] = point2
-    Should(x1 !== x2 || y1 !== y2, 'two points equal')
     let dx = x1 - x2
     let dy = y1 - y2
     let [a, b, c] = [dy, -dx, dx * y1 - dy * x1]
@@ -169,3 +201,4 @@ function LinearFromTwoPoints(point1: Point, point2: Point) {
     return [a, b, c]
 }
 globalThis.LinearFromTwoPoints = LinearFromTwoPoints
+

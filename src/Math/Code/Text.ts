@@ -30,6 +30,7 @@ globalThis.GrammarJoin = GrammarJoin
 * ```
 */
 function Tick(bool: boolean): string {
+    Must(IsBoolean(bool), 'bool must be boolean')
     return bool ? '✔' : '✘'
 }
 globalThis.Tick = Tick
@@ -43,6 +44,7 @@ globalThis.Tick = Tick
 * ```
 */
 function Ticks(...bools: boolean[]): string[] {
+    Must(IsBoolean(...bools), 'bools must be boolean')
     return bools.map(x => Tick(x))
 }
 globalThis.Ticks = Ticks
@@ -60,6 +62,7 @@ globalThis.Ticks = Ticks
 * ```
 */
 function IneqSign(greater: boolean, equal: boolean = false): [string, string] {
+    Must(IsBoolean(greater, equal), 'input must be boolean')
     if (greater && equal) { return ['\\ge', '\\le'] }
     if (greater && !equal) { return ['\\gt', '\\lt'] }
     if (!greater && equal) { return ['\\le', '\\ge'] }
@@ -87,8 +90,7 @@ globalThis.IneqSign = IneqSign
 * ```
 */
 function ParseIneqSign(text: string): IneqSign {
-    Must(IsIneqSign(text), 'ParseIneqSign: input is not IneqSign')
-    // if (!text.match(/[gl\>\<]/g)) return undefined
+    Must(IsIneqSign(text), 'input is not IneqSign')
     let greater = text.includes('g') || text.includes('>')
     let equal = text.includes('e') || text.includes('=')
     return [greater, equal]
@@ -110,6 +112,8 @@ globalThis.ParseIneqSign = ParseIneqSign
 * ```
 */
 function Dfrac(numerator: number, denominator: number, upSign = false): string {
+    Must(IsNum(numerator, denominator), 'input must be num')
+    Must(IsBoolean(upSign), 'upSign must be boolean')
     let p = numerator
     let q = denominator
     if (q === 0) return '\\dfrac{' + p + '}{' + q + '}'
@@ -142,17 +146,16 @@ globalThis.Dfrac = Dfrac
  * ParseDfrac('\\dfrac{x}{2}') // undefined
  * ```
  */
-function ParseDfrac(dfrac: string): Fraction | undefined {
+function ParseDfrac(dfrac: string): Fraction {
     const d = String.raw`-?\d+\.?\d*`
     const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
-    if (typeof dfrac !== 'string') return undefined
-    if (!dfrac.match(new RegExp(f, 'g'))) return undefined
+    Must(IsDfrac(dfrac), 'input is not dfrac')
     dfrac = dfrac.match(new RegExp(f, 'g'))![0]
     const matches = dfrac.match(new RegExp(d, 'g'))!
     const u = dfrac.charAt(0) === '-' ? -1 : 1
     const p = Number(matches[0]) * u
     const q = Number(matches[1])
-    if (isNaN(p) || isNaN(q)) return undefined
+    Must(IsNum(p, q), 'fail to parse dfrac')
     return [p, q]
 }
 globalThis.ParseDfrac = ParseDfrac
@@ -167,6 +170,7 @@ globalThis.ParseDfrac = ParseDfrac
  * ```
  */
 function IndexToSurd(text: string) {
+    Must(IsString(text), 'input must be string')
     return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}")
 }
 globalThis.IndexToSurd = IndexToSurd
@@ -182,6 +186,7 @@ globalThis.IndexToSurd = IndexToSurd
  * ```
  */
 function Coord(point: Point): string {
+    Must(IsPoint(point), 'input must be point')
     return '(' + Blur(point[0]) + ', ' + Blur(point[1]) + ')'
 }
 globalThis.Coord = Coord

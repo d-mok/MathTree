@@ -1,4 +1,20 @@
 
+/**
+ * ```
+ * // linear equation of straigth line
+ * [1,2,3] // x+2y+3=0
+ * ```
+ */
+type Linear = [a: number, b: number, c: number]
+
+/**
+ * ```
+ * // quadratic form
+ * [1,2,3] // x^2+2x+3
+ * ```
+ */
+type Quadratic = [a: number, b: number, c: number]
+
 type Point = [x: number, y: number]
 type Vector = [x: number, y: number]
 

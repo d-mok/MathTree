@@ -59,6 +59,15 @@ test('AreCoprime', () => {
 
 
 
+
+test('AreDistinctPoint', () => {
+    expect(AreDistinctPoint([1, 2], [3, 4])).toBe(true);
+    expect(AreDistinctPoint([1, 2], [1, 4])).toBe(true);
+    expect(AreDistinctPoint([1, 2], [1, 2])).toBe(false);
+    expect(AreDistinctPoint([1, 2], [1, 2], [3, 4])).toBe(false);
+});
+
+
 test('AreDistantPoint', () => {
     expect(AreDistantPoint(2)([0, 0], [3, 0])).toBe(true);
     expect(AreDistantPoint(2)([0, 0], [1, 0])).toBe(false);

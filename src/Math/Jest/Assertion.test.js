@@ -100,6 +100,14 @@ test('IsPositiveInteger', () => {
 });
 
 
+test('IsNonNegativeInteger', () => {
+    const T = [0, 1, 2, 3, 4, 5, 99];
+    const F = [-1, -2, -1.5, 1.5, 0.01];
+    testAssertion(IsNonNegativeInteger, T, F);
+});
+
+
+
 
 test('IsNegative', () => {
     const T = [-4, -1, -1.4, -123, -0.001, -0.1, -0.00000001];
@@ -124,6 +132,15 @@ test('IsString', () => {
     const F = [1, -1, NaN, Infinity, undefined, null, true, false];
     testAssertion(IsString, T, F, false);
 });
+
+
+
+test('IsBoolean', () => {
+    const T = [true, false];
+    const F = [0, 1, -1, '1', NaN, Infinity, undefined, null];
+    testAssertion(IsBoolean, T, F, false);
+});
+
 
 test('IsEmptyObject', () => {
     const T = [{}];
@@ -172,6 +189,20 @@ test('IsPoint', () => {
 });
 
 
+test('IsFraction', () => {
+    const T = [[2, 5]];
+    const F = [2, [1, 2, 3], [NaN, NaN], ['1', '2']];
+    testAssertion(IsFraction, T, F);
+});
+
+
+test('IsVector', () => {
+    const T = [[2, 5]];
+    const F = [2, [1, 2, 3], [NaN, NaN], ['1', '2']];
+    testAssertion(IsVector, T, F);
+});
+
+
 
 
 test('IsIneqSign', () => {
@@ -179,6 +210,16 @@ test('IsIneqSign', () => {
     const F = [1, 2, '=>', 'abc'];
     testAssertion(IsIneqSign, T, F);
 });
+
+
+
+test('IsDfrac', () => {
+    const T = ['\\dfrac{1}{2}', '\\dfrac{-1}{2}', '\\dfrac{3}{2}'];
+    const F = [1, 2, '-3', '0', '\\dfrac{1}{x}'];
+    testAssertion(IsDfrac, T, F);
+});
+
+
 
 
 
@@ -193,7 +234,15 @@ test('IsConstraint', () => {
 
 
 test('IsAroundPoint', () => {
-    const T = [[1, 0], [2, 0], [0, -2],];
-    const F = [[3, 0], [4, 0], [0, -3]];
+    const T = [[1, 0], [2, 0], [0, -2], [2, 2]];
+    const F = [[3, 0], [4, 0], [0, -3], [2.01, 0]];
     testAssertion(IsAroundPoint([0, 0], 2), T, F, false);
+});
+
+
+
+test('IsTriangle', () => {
+    const T = [[1, 1, 1], [6, 7, 8]];
+    const F = [[1, 2, 3], [6, 14, 8]];
+    testAssertion(IsTriangle, T, F, false);
 });

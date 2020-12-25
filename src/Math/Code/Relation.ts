@@ -9,6 +9,7 @@
  * ```
  */
 function AreDistinct(...nums: number[]): boolean {
+    Must(IsNum(...nums), 'input must be num')
     return (new Set(nums)).size === nums.length;
 }
 globalThis.AreDistinct = AreDistinct
@@ -26,6 +27,7 @@ globalThis.AreDistinct = AreDistinct
  * ```
  */
 function AreAbsDistinct(...nums: number[]): boolean {
+    Must(IsNum(...nums), 'input must be num')
     return AreDistinct(...nums.map(x => Math.abs(x)));
 }
 globalThis.AreAbsDistinct = AreAbsDistinct
@@ -43,6 +45,7 @@ globalThis.AreAbsDistinct = AreAbsDistinct
  * ```
  */
 function AreSameSign(...nums: number[]): boolean {
+    Must(IsNum(...nums), 'input must be num')
     nums = nums.map(x => Math.sign(x));
     nums = [...new Set(nums)];
     return nums.length === 1;
@@ -63,6 +66,7 @@ globalThis.AreSameSign = AreSameSign
  * ```
  */
 function AreCoprime(...nums: number[]): boolean {
+    Must(IsNum(...nums), 'input must be num')
     nums = Blurs(nums)
     if (!IsInteger(...nums)) return true
     if (!IsNonZero(...nums)) return true
@@ -78,6 +82,24 @@ globalThis.AreCoprime = AreCoprime
 
 /**
  * @category Relation
+ * @return Check if the points are all distinct.
+ * ```typescript
+ * AreDistinctPoint([1,2],[3,4]) // true
+ * AreDistinctPoint([1,2],[1,2]) // false
+ * ```
+ */
+function AreDistinctPoint(...points: Point[]) {
+    Must(IsPoint(...points), 'input must be point')
+    let predicate = (p1: Point, p2: Point) => {
+        return p1[0] !== p2[0] || p1[1] !== p2[1]
+    }
+    return PairsEvery(predicate)(...points)
+}
+globalThis.AreDistinctPoint = AreDistinctPoint
+
+
+/**
+ * @category Relation
  * @return Check if the points are pairwise distant apart.
  * ```typescript
  * AreDistantPoint(2)([0,0],[3,0]) // true
@@ -85,14 +107,12 @@ globalThis.AreCoprime = AreCoprime
  * ```
  */
 function AreDistantPoint(distance: number) {
-    const f = function (...points: Point[]): boolean {
-        let pairs = Pairs(...points)
-        let distances = pairs.map(ps => Distance(ps[0], ps[1]))
-        return distances.every(
-            x => x >= distance
-        );
+    Must(IsPositive(distance), 'distance must be positive')
+    return function (...points: Point[]): boolean {
+        Must(IsPoint(...points), 'input must be point')
+        let predicate = (p1: Point, p2: Point) => Distance(p1, p2) >= distance
+        return PairsEvery(predicate)(...points)
     }
-    return f
 }
 globalThis.AreDistantPoint = AreDistantPoint
 
@@ -100,21 +120,19 @@ globalThis.AreDistantPoint = AreDistantPoint
 
 /**
  * @category Relation
- * @return Check if 
+ * @return Check if slopes are at least oblique at minAngle
  * ```typescript
  * AreOblique(40)(0,1) // true
  * AreOblique(40)(0,0.5) // false
  * ```
  */
 function AreOblique(minAngle: number) {
-    const f = function (...slopes: number[]): boolean {
-        let pairs = Pairs(...slopes)
-        let angles = pairs.map(ps => IntersectAngle(ps[0], ps[1]))
-        return angles.every(
-            x => x > minAngle
-        );
+    Must(IsPositive(minAngle), 'minAngle must be positive')
+    return function (...slopes: number[]): boolean {
+        Must(IsNum(...slopes), 'slopes must be nums')
+        let predicate = (m1: number, m2: number) => IntersectAngle(m1, m2) >= minAngle
+        return PairsEvery(predicate)(...slopes)
     }
-    return f
 }
 globalThis.AreOblique = AreOblique
 

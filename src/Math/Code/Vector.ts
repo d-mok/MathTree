@@ -7,6 +7,7 @@
  * ```
  */
 function Vector(O: Point, P: Point): Vector {
+    Must(IsPoint(O, P), 'input must be point')
     return [P[0] - O[0], P[1] - O[1]];
 }
 globalThis.Vector = Vector
@@ -21,6 +22,7 @@ globalThis.Vector = Vector
  * ```
  */
 function VectorAdd(...vectors: Vector[]): Vector {
+    Must(IsVector(...vectors), 'input must be vector')
     const x = Sum(...vectors.map(p => p[0]))
     const y = Sum(...vectors.map(p => p[1]))
     return [x, y];
@@ -38,6 +40,7 @@ globalThis.VectorAdd = VectorAdd
  * ```
  */
 function VectorMean(...vectors: Vector[]): Vector {
+    Must(IsVector(...vectors), 'input must be vector')
     const x = Sum(...vectors.map(p => p[0])) / vectors.length
     const y = Sum(...vectors.map(p => p[1])) / vectors.length
     return [x, y];
@@ -56,6 +59,7 @@ globalThis.VectorMean = VectorMean
  * ```
  */
 function VectorLength(v: Vector): number {
+    Must(IsVector(v), 'input must be vector')
     const [x, y] = v
     return (x * x + y * y) ** 0.5
 }
@@ -78,6 +82,7 @@ globalThis.VectorLength = VectorLength
  * ```
  */
 function VectorArg(v: Vector): number {
+    Must(IsVector(v), 'input must be vector')
     const [x, y] = v
     let arg = Math.atan2(y, x) / Math.PI * 180;
     if (arg < 0) arg += 360
@@ -98,6 +103,8 @@ globalThis.VectorArg = VectorArg
  * ```
  */
 function VectorScale(v: Vector, k: number): Vector {
+    Must(IsVector(v), 'input must be vector')
+    Must(IsNum(k), 'k must be num')
     return [k * v[0], k * v[1]];
 }
 globalThis.VectorScale = VectorScale
@@ -116,6 +123,7 @@ globalThis.VectorScale = VectorScale
  * ```
  */
 function VectorRev(v: Vector): Vector {
+    Must(IsVector(v), 'input must be vector')
     const [x, y] = v
     return [-x, -y]
 }
@@ -134,6 +142,7 @@ globalThis.VectorRev = VectorRev
  * ```
  */
 function VectorUnit(v: Vector): Vector {
+    Must(IsVector(v), 'input must be vector')
     const [x, y] = v
     const L = VectorLength(v)
     return [x / L, y / L]
@@ -152,6 +161,8 @@ globalThis.VectorUnit = VectorUnit
  * ```
  */
 function VectorScaleTo(v: Vector, length: number): Vector {
+    Must(IsVector(v), 'input must be vector')
+    Must(IsNum(length), 'length must be num')
     return VectorScale(VectorUnit(v), length)
 }
 globalThis.VectorScaleTo = VectorScaleTo
@@ -170,6 +181,8 @@ globalThis.VectorScaleTo = VectorScaleTo
  * ```
  */
 function VectorRotate(v: Vector, angle: number): Vector {
+    Must(IsVector(v), 'input must be vector')
+    Must(IsNum(angle), 'angle must be num')
     const [x, y] = v
     const S = sin(angle)
     const C = cos(angle)

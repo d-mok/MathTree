@@ -49,6 +49,7 @@ test('Sum', () => {
     expect(Sum(2, -3, 1)).toBe(0);
     expect(Sum(4.5, 3, 2, 1)).toBe(10.5);
     expect(Sum(3, 2, 2, 0, 1)).toBe(8);
+    expect(Sum()).toBe(0);
 });
 
 
@@ -59,5 +60,6 @@ test('Mean', () => {
     expect(Mean(2, -3, 1)).toBe(0);
     expect(Mean(4.5, 3, 2, 1)).toBe(2.625);
     expect(Mean(3, 2, 2, 0, 1)).toBe(1.6);
+    expect(() => Mean()).toThrow();
 });
 

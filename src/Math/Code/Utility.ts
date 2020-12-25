@@ -7,17 +7,17 @@
  * HCF(6,8) // 2
  * HCF(6,8,9) // 1
  * HCF(1,3) // 1
- * HCF(0.5,3) // NaN
- * HCF(0,3) // NaN
+ * HCF(0.5,3) // throw
+ * HCF(0,3) // throw
  * ```
  */
 function HCF(...nums: number[]): number {
+    Must(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer')
     nums = Blurs(nums)
-    if (!IsInteger(...nums)) return NaN
-    if (!IsNonZero(...nums)) return NaN
+    nums = nums.map(x => Abs(x))
     function _HCF(n1: number, n2: number): number {
-        n1 = Math.abs(n1);
-        n2 = Math.abs(n2);
+        n1 = Abs(n1);
+        n2 = Abs(n2);
         while (n1 !== n2) {
             if (n1 > n2) n1 = n1 - n2;
             if (n2 > n1) n2 = n2 - n1;
@@ -36,18 +36,17 @@ globalThis.HCF = HCF
  * ```typescript
  * LCM(2,3) // 6
  * LCM(2,3,5) // 30
- * LCM(0.5,3) // NaN
- * LCM(0,3) // NaN
+ * LCM(0.5,3) // throw
+ * LCM(0,3) // throw
  * ```
  */
 function LCM(...nums: number[]): number {
+    Must(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer')
     nums = Blurs(nums)
-    if (!IsInteger(...nums)) return NaN
-    if (!IsNonZero(...nums)) return NaN
     function _LCM(n1: number, n2: number) {
-        n1 = Math.abs(n1);
-        n2 = Math.abs(n2);
-        return Math.abs(n1 * n2 / HCF(n1, n2));
+        n1 = Abs(n1);
+        n2 = Abs(n2);
+        return Abs(n1 * n2 / HCF(n1, n2));
     }
     return nums.reduce((a, v) => _LCM(a, v));
 }
@@ -95,6 +94,19 @@ function Pairs<T>(...items: T[]): [T, T][] {
 globalThis.Pairs = Pairs
 
 
+/**
+ * @category Utility
+ * @return check if every pairs satisfy the predicate
+ * ```typescript
+ * PairsEvery(AreDistinct)(1,2,3) // true
+ * ```
+ */
+function PairsEvery<T>(predicate: (x: T, y: T) => boolean) {
+    return function (...items: T[]): boolean {
+        return Pairs(...items).every(p => predicate(p[0], p[1]))
+    }
+}
+globalThis.PairsEvery = PairsEvery
 
 
 

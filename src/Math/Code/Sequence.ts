@@ -7,6 +7,8 @@
 * ```
 */
 function ListIntegers(start: number, end: number): number[] {
+    Must(IsNum(start, end), 'input must be num')
+    Must(start < end, 'start < end required')
     let arr = [];
     for (let i = start; i <= end; i++) {
         arr.push(i);
@@ -27,6 +29,8 @@ globalThis.ListIntegers = ListIntegers
 * ```
 */
 function ASterm(a: number, d: number, n: number): number {
+    Must(IsNum(a, d), 'a,d must be num')
+    Must(IsPositiveInteger(n), 'n must be positive integer')
     return a + (n - 1) * d
 }
 globalThis.ASterm = ASterm
@@ -42,6 +46,8 @@ globalThis.ASterm = ASterm
 * ```
 */
 function ASsum(a: number, d: number, n: number): number {
+    Must(IsNum(a, d), 'a,d must be num')
+    Must(IsPositiveInteger(n), 'n must be positive integer')
     return 0.5 * n * (2 * a + (n - 1) * d)
 }
 globalThis.ASsum = ASsum
@@ -56,6 +62,8 @@ globalThis.ASsum = ASsum
 * ```
 */
 function ASequence(a: number, d: number, n = 10): number[] {
+    Must(IsNum(a, d), 'a,d must be num')
+    Must(IsPositiveInteger(n), 'n must be positive integer')
     let arr = []
     for (let i = 1; i <= n; i++) {
         arr.push(ASterm(a, d, i))
@@ -75,6 +83,8 @@ globalThis.ASequence = ASequence
 * ```
 */
 function GSterm(a: number, r: number, n: number): number {
+    Must(IsNum(a, r), 'a,r must be num')
+    Must(IsPositiveInteger(n), 'n must be positive integer')
     return a * (r ** (n - 1))
 }
 globalThis.GSterm = GSterm
@@ -92,6 +102,8 @@ globalThis.GSterm = GSterm
 * ```
 */
 function GSsum(a: number, r: number, n?: number): number {
+    Must(IsNum(a, r), 'a,r must be num')
+    Must(IsPositiveInteger(n) || n === undefined, 'n must be positive integer or undefined')
     return n ? a * (r ** n - 1) / (r - 1) : a / (1 - r)
 }
 globalThis.GSsum = GSsum
@@ -105,6 +117,8 @@ globalThis.GSsum = GSsum
 * ```
 */
 function GSequence(a: number, r: number, n = 10): number[] {
+    Must(IsNum(a, r), 'a,r must be num')
+    Must(IsPositiveInteger(n), 'n must be positive integer')
     let arr = []
     for (let i = 1; i <= n; i++) {
         arr.push(GSterm(a, r, i))

@@ -17,6 +17,7 @@ var chance = new Chance();
  * ```
  */
 function RndN(min: number, max: number): number {
+    Must(IsNum(min, max), 'input must be num')
     return chance.integer({ min, max });
 }
 globalThis.RndN = RndN
@@ -30,7 +31,9 @@ globalThis.RndN = RndN
  * ```
  */
 function RndNs(min: number, max: number, n?: number): number[] {
+    Must(IsNum(min, max), 'input must be num')
     n ??= Math.min(Math.floor(max - min + 1), 10)
+    Must(IsPositiveInteger(n), 'n must be positive integer')
     // if (!n) n = Math.min(Math.floor(max - min + 1), 10)
     return chance.unique(() => RndN(min, max), n);
 }
@@ -47,6 +50,7 @@ globalThis.RndNs = RndNs
  * ```
  */
 function RndR(min: number, max: number): number {
+    Must(IsNum(min, max), 'input must be num')
     return chance.floating({ min, max, fixed: 8 });
 }
 globalThis.RndR = RndR
@@ -89,6 +93,7 @@ globalThis.RndT = RndT
  * ```
  */
 function RndZ(min: number, max: number): number {
+    Must(IsNum(min, max), 'input must be num')
     return RndN(min, max) * RndU();
 }
 globalThis.RndZ = RndZ
@@ -105,7 +110,9 @@ globalThis.RndZ = RndZ
  * ```
  */
 function RndZs(min: number, max: number, n?: number): number[] {
+    Must(IsNum(min, max), 'input must be num')
     n ??= Min(Math.floor(max - min + 1), 10)
+    Must(IsPositiveInteger(n), 'n must be positive integer')
     let arr = chance.unique(() => RndN(min, max), n);
     for (let i = 0; i < arr.length; i++) {
         arr[i] = arr[i] * RndU()
@@ -126,6 +133,7 @@ globalThis.RndZs = RndZs
  * ```
  */
 function RndP(max: number): number {
+    Must(IsNum(max), 'input must be num')
     return chance.prime({ min: 2, max: max });
 }
 globalThis.RndP = RndP
@@ -142,6 +150,7 @@ globalThis.RndP = RndP
  * ```
  */
 function RndOdd(min: number, max: number): number {
+    Must(IsNum(min, max), 'input must be num')
     min = Math.ceil((min + 1) / 2);
     max = Math.floor((max + 1) / 2);
     return 2 * RndN(min, max) - 1;
@@ -158,6 +167,7 @@ globalThis.RndOdd = RndOdd
  * ```
  */
 function RndEven(min: number, max: number): number {
+    Must(IsNum(min, max), 'input must be num')
     min = Math.ceil(min / 2);
     max = Math.floor(max / 2);
     return 2 * RndN(min, max);
@@ -174,6 +184,7 @@ globalThis.RndEven = RndEven
  * ```
  */
 function RndPoly(...coeff: number[]): number[] {
+    Must(IsNum(...coeff), 'input must be num')
     return coeff.map((x, i, a) => {
         return i === 0 ? RndN(1, x) : RndZ(1, x);
     });
@@ -195,6 +206,7 @@ globalThis.RndPoly = RndPoly
  * ```
  */
 function RndPyth(max = 100): [number, number, number] {
+    Must(IsNum(max), 'input must be num')
     let arr = [];
     for (let m = 1; m < 10; m++) {
         for (let n = 1; n < m; n++) {
@@ -217,15 +229,16 @@ globalThis.RndPyth = RndPyth
  * @param max abs of intercept
  * @return a linear [a,b,c] in ax+by+c=0
  * ```typescript
- * RndLinear(1,5) // may return [2,-3,6]
+ * RndLinearFromIntercept(1,5) // may return [2,-3,6]
  * ```
  */
-function RndLinear(minInt: number, maxInt: number) {
+function RndLinearFromInt(minInt: number, maxInt: number) {
+    Must(IsPositive(minInt, maxInt), 'input must be positive num')
     let xInt = RndZ(minInt, maxInt)
     let yInt = RndZ(minInt, maxInt)
     return LinearFromIntercepts(xInt, yInt)
 }
-globalThis.RndLinear = RndLinear
+globalThis.RndLinearFromInt = RndLinearFromInt
 
 
 /**
@@ -233,10 +246,12 @@ globalThis.RndLinear = RndLinear
  * @return a point within given range
  * ```typescript
  * RndPoint([1,4],[10,14]) // may return [2,12]
- * // equivalent to [RndN(...xRange),Range(yRange)]
+ * // equivalent to [RndN(...xRange),Range(...yRange)]
  * ```
  */
 function RndPoint(xRange: [number, number], yRange: [number, number]): Point {
+    Must(IsArrayOfLength(2)(xRange, yRange), 'input must be range')
+    Must(IsNum(...xRange, ...yRange), 'input must be num')
     let x = RndN(...xRange)
     let y = RndN(...yRange)
     return [x, y]
@@ -246,12 +261,14 @@ globalThis.RndPoint = RndPoint
 
 /**
  * @category Random
- * @return n angles in [0,360] cyclic at least separated by separation
+ * @return n angles in [0,360] at least cyclic separated by separation
  * ```typescript
  * RndAngles(3,50) // may return [30,90,200]
  * ```
  */
 function RndAngles(n: number, separation: number): number[] {
+    Must(IsPositiveInteger(n), 'n must be positive integer')
+    Must(IsPositive(separation), 'separation must be positive num')
     let f = () => Sort(...RndNs(0, 360, n))
     let p = (arr: number[]) => {
         for (let i = 0; i < arr.length - 1; i++) {
@@ -273,6 +290,10 @@ globalThis.RndAngles = RndAngles
  * ```
  */
 function RndConvexPolygon(n: number, center: Point, radius: number, separation: number): Point[] {
+    Must(IsPositiveInteger(n), 'n must be positive integer')
+    Must(IsPoint(center), 'center must be point')
+    Must(IsPositive(radius), 'radius must be positive num')
+    Must(IsPositive(separation), 'separation must be positive num')
     let [h, k] = center
     let r = radius
     let angles = RndAngles(n, separation)

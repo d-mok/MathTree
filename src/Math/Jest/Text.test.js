@@ -60,8 +60,8 @@ test('ParseDfrac', () => {
     expect(ParseDfrac('-\\dfrac{1.2}{2}')).toEqual([-1.2, 2]);
     expect(ParseDfrac('-\\dfrac{-1.2}{2}')).toEqual([1.2, 2]);
     expect(ParseDfrac('-\\dfrac{-1.2}{-2}')).toEqual([1.2, -2]);
-    expect(ParseDfrac('\\dfrac{x}{2}')).toBeUndefined();
-    expect(ParseDfrac('\\d{1}{2}')).toBeUndefined();
+    expect(() => ParseDfrac('\\dfrac{x}{2}')).toThrow();
+    expect(() => ParseDfrac('\\d{1}{2}')).toThrow();
 });
 
 

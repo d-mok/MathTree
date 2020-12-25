@@ -3,7 +3,7 @@ test('CosineLawLength', () => {
     expect(CosineLawLength(5, 5, 60)).toBeCloseTo(5);
     expect(CosineLawLength(2, 4, 30)).toBeCloseTo(2.47862735);
     expect(CosineLawLength(1, 2, 180)).toBeCloseTo(3);
-    expect(CosineLawLength(4, 6, 0)).toBeCloseTo(2);
+    expect(() => CosineLawLength(4, 6, 0)).toThrow();
 });
 
 

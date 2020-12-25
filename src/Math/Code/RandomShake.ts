@@ -16,7 +16,7 @@
 function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
     if (typeof anchor === 'string') {
         // Fraction
-        if (ParseDfrac(anchor)) {
+        if (IsDfrac(anchor)) {
             return RndShakeDfrac(anchor, range, n)
         }
         // Inequal Sign
