@@ -14993,6 +14993,63 @@ class PenCls {
             this.ctx.fill();
     }
     /**
+     * Draw an angle with label, non-reflex
+     * @category draw
+     * @param A - The starting point [x,y].
+     * @param O - The vertex point [x,y].
+     * @param B - The ending point [x,y].
+     * @param label - The label
+     * @param arc - The number of arcs.
+     * @param radius - The radius of the angle arc, in pixel.
+     * @returns
+     * ```typescript
+     * pen.angle([0,0],[5,2],[3,4],'x')
+     * ```
+     */
+    angle(A, O, B, label, arc = 1, radius = 15) {
+        this.decorate.angle(A, O, B, arc, radius);
+        if (label !== undefined)
+            this.label.angle([A, O, B], label);
+    }
+    /**
+     * Draw an angle with label, anticlockwise
+     * @category draw
+     * @param A - The starting point [x,y].
+     * @param O - The vertex point [x,y].
+     * @param B - The ending point [x,y].
+     * @param label - The label
+     * @param arc - The number of arcs.
+     * @param radius - The radius of the angle arc, in pixel.
+     * @returns
+     * ```typescript
+     * pen.anglePolar([0,0],[5,2],[3,4],'x')
+     * ```
+     */
+    anglePolar(A, O, B, label, arc = 1, radius = 15) {
+        this.decorate.anglePolar(A, O, B, arc, radius);
+        if (label !== undefined)
+            this.label.anglePolar([A, O, B], label);
+    }
+    /**
+     * Draw an angle with label, reflex
+     * @category draw
+     * @param A - The starting point [x,y].
+     * @param O - The vertex point [x,y].
+     * @param B - The ending point [x,y].
+     * @param label - The label
+     * @param arc - The number of arcs.
+     * @param radius - The radius of the angle arc, in pixel.
+     * @returns
+     * ```typescript
+     * pen.angleReflex([0,0],[5,2],[3,4],'x')
+     * ```
+     */
+    angleReflex(A, O, B, label, arc = 1, radius = 15) {
+        this.decorate.angleReflex(A, O, B, arc, radius);
+        if (label !== undefined)
+            this.label.angleReflex([A, O, B], label);
+    }
+    /**
      * Write text.
      * @category text
      * @param position - The coordinates [x,y] to position the text.
