@@ -918,10 +918,10 @@ class PenCls {
             offsetPixel = offsetPixel * PEN_QUALITY;
             if (dodgeDirection === undefined) {
                 let center = this.pen.set.LABEL_CENTER
-                if (center === undefined) {
-                    dodgeDirection = 0
-                } else {
+                if (center !== undefined && AreDistinctPoint(center, position)) {
                     dodgeDirection = Inclination(center, position)
+                } else {
+                    dodgeDirection = 0
                 }
             }
             x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
