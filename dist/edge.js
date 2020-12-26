@@ -14370,7 +14370,7 @@ class PenCls {
              * @param radius - The radius of the angle arc, in pixel.
              * @returns
              * ```typescript
-             * pen.decorate.angle([1,0],[0,0],[3,2],2)
+             * pen.decorate.anglePolar([1,0],[0,0],[3,2],2)
              * // decorate an angle AOB with double-arc in anti-clockwise.
              * ```
              */
@@ -14387,7 +14387,7 @@ class PenCls {
                 }
             },
             /**
-             * Decorate an angle AOB, always in anti-clockwise.
+             * Decorate an angle AOB, always non-reflex.
              * @category decorator
              * @param A - The starting point [x,y].
              * @param O - The vertex point [x,y].
@@ -14397,7 +14397,7 @@ class PenCls {
              * @returns
              * ```typescript
              * pen.decorate.angle([1,0],[0,0],[3,2],2)
-             * // decorate an angle AOB with double-arc in anti-clockwise.
+             * // decorate an angle AOB with double-arc.
              * ```
              */
             angle(A, O, B, arc = 1, radius = 15) {
@@ -14406,7 +14406,7 @@ class PenCls {
                 this.anglePolar(A, O, B, arc, radius);
             },
             /**
-             * Decorate an angle AOB, always in anti-clockwise.
+             * Decorate an angle AOB, always reflex.
              * @category decorator
              * @param A - The starting point [x,y].
              * @param O - The vertex point [x,y].
@@ -14415,8 +14415,8 @@ class PenCls {
              * @param radius - The radius of the angle arc, in pixel.
              * @returns
              * ```typescript
-             * pen.decorate.angle([1,0],[0,0],[3,2],2)
-             * // decorate an angle AOB with double-arc in anti-clockwise.
+             * pen.decorate.angleReflex([1,0],[0,0],[3,2],2)
+             * // decorate a reflex angle AOB with double-arc.
              * ```
              */
             angleReflex(A, O, B, arc = 1, radius = 15) {
@@ -14516,6 +14516,20 @@ class PenCls {
                 if (offsetPixel < 0)
                     offsetPixel = text.length <= 2 ? 25 : 30;
                 this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
+            },
+            angle2(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
+                if (IsReflex(...anglePoints)) {
+                    let [A, O, B] = anglePoints;
+                    anglePoints = [B, O, A];
+                }
+                this.angle(anglePoints, text, dodgeDirection, offsetPixel);
+            },
+            angleReflex(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
+                if (!IsReflex(...anglePoints)) {
+                    let [A, O, B] = anglePoints;
+                    anglePoints = [B, O, A];
+                }
+                this.angle(anglePoints, text, dodgeDirection, offsetPixel);
             },
             /**
              * Add a label to a line AB.
