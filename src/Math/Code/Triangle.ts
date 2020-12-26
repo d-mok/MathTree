@@ -28,7 +28,7 @@ globalThis.CosineLawLength = CosineLawLength
  * ```
  */
 function CosineLawAngle(a: number, b: number, c: number): number {
-    Should(IsPositive(a, b, c), 'input must be positive num')
+    Should(IsTriangle([a, b, c]), 'input not satisfy triangle ineq')
     return arccos((c ** 2 - a ** 2 - b ** 2) / (-2 * a * b))
 }
 globalThis.CosineLawAngle = CosineLawAngle
@@ -44,7 +44,7 @@ globalThis.CosineLawAngle = CosineLawAngle
  * ```
  */
 function Heron(a: number, b: number, c: number): number {
-    Should(IsPositive(a, b, c), 'input must be positive num')
+    Should(IsTriangle([a, b, c]), 'input not satisfy triangle ineq')
     let s = (a + b + c) / 2
     return (s * (s - a) * (s - b) * (s - c)) ** 0.5
 }

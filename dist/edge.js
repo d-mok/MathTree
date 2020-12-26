@@ -8059,6 +8059,8 @@ globalThis.QuadraticFromVertex = QuadraticFromVertex;
  * ```
  */
 function xPolynomial(poly1, poly2) {
+    Should(IsArray(poly1, poly2), "input must be array");
+    Should(IsNum(...poly1, ...poly2), 'input must be number array');
     Should(IsNonZero(poly1[0], poly2[0]), 'leading coeff should be non-zero');
     const deg1 = poly1.length - 1;
     const deg2 = poly2.length - 1;
@@ -8081,6 +8083,7 @@ globalThis.xPolynomial = xPolynomial;
  * ```
  */
 function LinearFeature(a, b, c) {
+    Should(IsNum(a, b, c), "input must be num");
     Should(IsNonZero(a, b), 'x and y term should be non-zero');
     return [-c / a, -c / b, -a / b];
 }
@@ -8094,6 +8097,7 @@ globalThis.LinearFeature = LinearFeature;
  * ```
  */
 function LinearFromIntercepts(xInt, yInt) {
+    Should(IsNum(xInt, yInt), "input must be num");
     Should(IsNonZero(xInt, yInt), 'intercepts cannot be zero');
     let [a, b, c] = [yInt, xInt, -xInt * yInt];
     let s = Sign(a);
@@ -8111,7 +8115,8 @@ globalThis.LinearFromIntercepts = LinearFromIntercepts;
  * ```
  */
 function LinearFromTwoPoints(point1, point2) {
-    Should(AreDistinctPoint(point1, point2), 'two points should not be equal');
+    Should(IsPoint(point1, point2), 'input must be point');
+    Should(AreDistinctPoint(point1, point2), 'two points should be distinct');
     let [x1, y1] = point1;
     let [x2, y2] = point2;
     let dx = x1 - x2;
@@ -8550,8 +8555,8 @@ globalThis.IsTriangle = IsTriangle;
  * ```
  */
 function Factorial(n) {
-    Should(IsNonNegativeInteger(n), 'n must be non-negative integer');
     n = Blur(n);
+    Should(IsNonNegativeInteger(n), 'n must be non-negative integer');
     return n <= 0 ? 1 : n * Factorial(n - 1);
 }
 globalThis.Factorial = Factorial;
@@ -8563,10 +8568,10 @@ globalThis.Factorial = Factorial;
  * ```
  */
 function nCr(n, r) {
-    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
-    Should(n >= r, 'n >= r required');
     n = Blur(n);
     r = Blur(r);
+    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
+    Should(n >= r, 'n >= r required');
     return Factorial(n) / (Factorial(r) * Factorial(n - r));
 }
 globalThis.nCr = nCr;
@@ -8578,10 +8583,10 @@ globalThis.nCr = nCr;
  * ```
  */
 function nPr(n, r) {
-    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
-    Should(n >= r, 'n >= r required');
     n = Blur(n);
     r = Blur(r);
+    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
+    Should(n >= r, 'n >= r required');
     return nCr(n, r) * Factorial(r);
 }
 globalThis.nPr = nPr;
@@ -8780,6 +8785,49 @@ function Power(a, b) {
     return Blur(v);
 }
 globalThis.Power = Power;
+/**
+ * @category Function
+ * @return square root of x
+ * ```typescript
+ * Sqrt(4) // 2
+ * ```
+ */
+function Sqrt(x) {
+    Should(IsNum(x) && x >= 0, 'input must be non-negative num');
+    const v = Math.sqrt(x);
+    return Blur(v);
+}
+globalThis.Sqrt = Sqrt;
+/**
+ * @category Function
+ * @return the radian of the degree
+ * ```typescript
+ * Radian(180) // pi
+ * Radian(90) // pi/2
+ * Radian(30) // PI/6
+ * ```
+ */
+function Radian(degree) {
+    Should(IsNum(degree), 'degree must be num');
+    const v = degree / 180 * Math.PI;
+    return Blur(v);
+}
+globalThis.Radian = Radian;
+/**
+ * @category Function
+ * @return the degree of the radian
+ * ```typescript
+ * Degree(Math.PI) // 180
+ * Degree(Math.PI/2) // 90
+ * Degree(Math.PI/6) // 30
+ * ```
+ */
+function Degree(radian) {
+    Should(IsNum(radian), 'degree must be num');
+    const v = radian * 180 / Math.PI;
+    return Blur(v);
+}
+globalThis.Degree = Degree;
 /**
  * @category Function
  * @return sin(x).
@@ -9755,7 +9803,7 @@ globalThis.Blur = Blur;
  * @category Numeracy
  * @return correct for floating point error
  * ```typescript
- * BlurAll([0.1+0.2,0.81-1]) // [0.3,-0.19]
+ * Blurs([0.1+0.2,0.81-1]) // [0.3,-0.19]
  * ```
  */
 function Blurs(values, accuracy = 12) {
@@ -12949,8 +12997,7 @@ function Dfrac(numerator, denominator, upSign = false) {
     Should(IsBoolean(upSign), 'upSign must be boolean');
     let p = numerator;
     let q = denominator;
-    if (q === 0)
-        return '\\dfrac{' + p + '}{' + q + '}';
+    Should(q !== 0, 'denominator should not be zero');
     if (p === 0)
         return '0';
     [p, q] = Frac(p, q);
@@ -13052,7 +13099,7 @@ globalThis.CosineLawLength = CosineLawLength;
  * ```
  */
 function CosineLawAngle(a, b, c) {
-    Should(IsPositive(a, b, c), 'input must be positive num');
+    Should(IsTriangle([a, b, c]), 'input not satisfy triangle ineq');
     return arccos((Math.pow(c, 2) - Math.pow(a, 2) - Math.pow(b, 2)) / (-2 * a * b));
 }
 globalThis.CosineLawAngle = CosineLawAngle;
@@ -13066,7 +13113,7 @@ globalThis.CosineLawAngle = CosineLawAngle;
  * ```
  */
 function Heron(a, b, c) {
-    Should(IsPositive(a, b, c), 'input must be positive num');
+    Should(IsTriangle([a, b, c]), 'input not satisfy triangle ineq');
     let s = (a + b + c) / 2;
     return Math.pow((s * (s - a) * (s - b) * (s - c)), 0.5);
 }
@@ -13389,6 +13436,37 @@ function LCM(...nums) {
     return nums.reduce((a, v) => _LCM(a, v));
 }
 globalThis.LCM = LCM;
+/**
+ * @category Utility
+ * @param num - from 1 to 10
+ * @return roman number
+ * ```typescript
+ * Romanize(1) // "I"
+ * Romanize(2) // "II"
+ * ```
+ */
+function Romanize(num) {
+    Should(IsNum(num), 'input must be number');
+    Should(num > 0 && num <= 10, 'input must be 1-10');
+    return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1];
+}
+globalThis.Romanize = Romanize;
+/**
+ * @category Utility
+ * @param roman - from I to X
+ * @return arabic number
+ * ```typescript
+ * DeRomanize("I") // 1
+ * DeRomanize("II") // 2
+ * ```
+ */
+function DeRomanize(roman) {
+    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+    Should(IsString(roman), 'input must be string');
+    Should(romans.includes(roman), 'roman out of range');
+    return romans.indexOf(roman) + 1;
+}
+globalThis.DeRomanize = DeRomanize;
 /**
  * @category Utility
  * @return a clone of the object
@@ -14297,6 +14375,35 @@ class PenCls {
              * ```
              */
             angle(A, O, B, arc = 1, radius = 15) {
+                A = this.pen.frame.toPix(A);
+                let OPixel = this.pen.frame.toPix(O);
+                B = this.pen.frame.toPix(B);
+                let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
+                let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
+                let space = 3;
+                let outset = arc > 1 ? space / 2 : 0;
+                for (let i = 0; i < arc; i++) {
+                    this.pen.circle(O, radius + outset - i * space, [a1, a2]);
+                }
+            },
+            /**
+             * Decorate an angle AOB, always in anti-clockwise.
+             * @category decorator
+             * @param A - The starting point [x,y].
+             * @param O - The vertex point [x,y].
+             * @param B - The ending point [x,y].
+             * @param arc - The number of arcs.
+             * @param radius - The radius of the angle arc, in pixel.
+             * @returns
+             * ```typescript
+             * pen.decorate.angle([1,0],[0,0],[3,2],2)
+             * // decorate an angle AOB with double-arc in anti-clockwise.
+             * ```
+             */
+            angle2(A, O, B, arc = 1, radius = 15) {
+                if (IsReflex(A, O, B)) {
+                    [A, B] = [B, A];
+                }
                 A = this.pen.frame.toPix(A);
                 let OPixel = this.pen.frame.toPix(O);
                 B = this.pen.frame.toPix(B);

@@ -17,6 +17,42 @@ test('Power', () => {
 });
 
 
+
+test('Sqrt', () => {
+    expect(Sqrt(0)).toBe(0);
+    expect(Sqrt(1)).toBe(1);
+    expect(Sqrt(4)).toBe(2);
+    expect(Sqrt(9)).toBe(3);
+    expect(Sqrt(16)).toBe(4);
+    expect(Sqrt(25)).toBe(5);
+    expect(Sqrt(10)).toBeCloseTo(3.16227766);
+    expect(() => Sqrt(-1)).toThrow();
+});
+
+
+
+test('Radian', () => {
+    expect(Radian(0)).toBe(0);
+    expect(Radian(180)).toBeCloseTo(Math.PI);
+    expect(Radian(90)).toBeCloseTo(Math.PI / 2);
+    expect(Radian(45)).toBeCloseTo(Math.PI / 4);
+    expect(Radian(30)).toBeCloseTo(Math.PI / 6);
+    expect(Radian(390)).toBeCloseTo(13 * Math.PI / 6);
+});
+
+
+
+
+test('Degree', () => {
+    expect(Degree(0)).toBe(0);
+    expect(Degree(Math.PI)).toBe(180);
+    expect(Degree(Math.PI / 2)).toBe(90);
+    expect(Degree(Math.PI / 4)).toBe(45);
+    expect(Degree(Math.PI / 6)).toBe(30);
+    expect(Degree(13 * Math.PI / 6)).toBe(390);
+});
+
+
 test('sin', () => {
     expect(sin(0)).toBe(0);
     expect(sin(90)).toBe(1);

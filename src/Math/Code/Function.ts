@@ -28,6 +28,56 @@ globalThis.Power = Power
 
 /**
  * @category Function
+ * @return square root of x
+ * ```typescript
+ * Sqrt(4) // 2
+ * ```
+ */
+function Sqrt(x: number): number {
+    Should(IsNum(x) && x >= 0, 'input must be non-negative num')
+    const v = Math.sqrt(x)
+    return Blur(v)
+}
+globalThis.Sqrt = Sqrt
+
+/**
+ * @category Function
+ * @return the radian of the degree
+ * ```typescript
+ * Radian(180) // pi
+ * Radian(90) // pi/2
+ * Radian(30) // PI/6
+ * ```
+ */
+function Radian(degree: number): number {
+    Should(IsNum(degree), 'degree must be num')
+    const v =  degree / 180 * Math.PI
+    return Blur(v)
+}
+globalThis.Radian = Radian
+
+
+
+/**
+ * @category Function
+ * @return the degree of the radian
+ * ```typescript
+ * Degree(Math.PI) // 180
+ * Degree(Math.PI/2) // 90
+ * Degree(Math.PI/6) // 30
+ * ```
+ */
+function Degree(radian: number): number {
+    Should(IsNum(radian), 'degree must be num')
+    const v =  radian * 180 / Math.PI
+    return Blur(v)
+}
+globalThis.Degree = Degree
+
+
+
+/**
+ * @category Function
  * @return sin(x).
  * ```typescript
  * sin(30) // 0.5

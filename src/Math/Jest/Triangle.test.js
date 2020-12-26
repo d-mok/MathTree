@@ -12,6 +12,7 @@ test('CosineLawAngle', () => {
     expect(CosineLawAngle(5, 5, 5)).toBeCloseTo(60);
     expect(CosineLawAngle(3, 4, 5)).toBeCloseTo(90);
     expect(CosineLawAngle(7, 8, 9)).toBeCloseTo(73.3984504);
+    expect(() => CosineLawAngle(1, 1, 3)).toThrow();
 });
 
 
@@ -19,6 +20,7 @@ test('Heron', () => {
     expect(Heron(3, 4, 5)).toBeCloseTo(6);
     expect(Heron(1, 1, 1)).toBeCloseTo(0.433012701);
     expect(Heron(7, 8, 9)).toBeCloseTo(26.83281573);
+    expect(() => Heron(1, 1, 3)).toThrow();
 });
 
 

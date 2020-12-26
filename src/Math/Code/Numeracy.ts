@@ -226,6 +226,7 @@ function SimpRatio(...nums: number[]): number[] {
 }
 globalThis.SimpRatio = SimpRatio
 
+
 /**
  * @category Numeracy
  * @return the number of sigfig.
@@ -312,7 +313,7 @@ globalThis.Blur = Blur
  * @category Numeracy
  * @return correct for floating point error
  * ```typescript
- * BlurAll([0.1+0.2,0.81-1]) // [0.3,-0.19]
+ * Blurs([0.1+0.2,0.81-1]) // [0.3,-0.19]
  * ```
  */
 function Blurs(values: any[], accuracy = 12): (typeof values) {

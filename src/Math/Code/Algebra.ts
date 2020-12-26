@@ -124,6 +124,8 @@ globalThis.QuadraticFromVertex = QuadraticFromVertex
  * ```
  */
 function xPolynomial(poly1: number[], poly2: number[]): number[] {
+    Should(IsArray(poly1, poly2), "input must be array")
+    Should(IsNum(...poly1, ...poly2), 'input must be number array')
     Should(IsNonZero(poly1[0], poly2[0]), 'leading coeff should be non-zero')
     const deg1 = poly1.length - 1
     const deg2 = poly2.length - 1
@@ -149,6 +151,7 @@ globalThis.xPolynomial = xPolynomial
  * ```
  */
 function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number] {
+    Should(IsNum(a, b, c), "input must be num")
     Should(IsNonZero(a, b), 'x and y term should be non-zero')
     return [-c / a, -c / b, -a / b]
 }
@@ -167,6 +170,7 @@ globalThis.LinearFeature = LinearFeature
  * ```
  */
 function LinearFromIntercepts(xInt: number, yInt: number): Linear {
+    Should(IsNum(xInt, yInt), "input must be num")
     Should(IsNonZero(xInt, yInt), 'intercepts cannot be zero')
     let [a, b, c] = [yInt, xInt, -xInt * yInt]
     let s = Sign(a);
@@ -189,7 +193,8 @@ globalThis.LinearFromIntercepts = LinearFromIntercepts
  * ```
  */
 function LinearFromTwoPoints(point1: Point, point2: Point): Linear {
-    Should(AreDistinctPoint(point1, point2), 'two points should not be equal')
+    Should(IsPoint(point1, point2), 'input must be point')
+    Should(AreDistinctPoint(point1, point2), 'two points should be distinct')
     let [x1, y1] = point1
     let [x2, y2] = point2
     let dx = x1 - x2

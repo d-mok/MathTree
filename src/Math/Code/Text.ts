@@ -116,7 +116,7 @@ function Dfrac(numerator: number, denominator: number, upSign = false): string {
     Should(IsBoolean(upSign), 'upSign must be boolean')
     let p = numerator
     let q = denominator
-    if (q === 0) return '\\dfrac{' + p + '}{' + q + '}'
+    Should(q !== 0, 'denominator should not be zero')
     if (p === 0) return '0';
     [p, q] = Frac(p, q)
     if (q === 1) return p.toString()

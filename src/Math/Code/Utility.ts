@@ -55,6 +55,45 @@ globalThis.LCM = LCM
 
 
 
+
+/**
+ * @category Utility
+ * @param num - from 1 to 10
+ * @return roman number
+ * ```typescript
+ * Romanize(1) // "I"
+ * Romanize(2) // "II"
+ * ```
+ */
+function Romanize(num: number): string {
+    Should(IsNum(num), 'input must be number')
+    Should(num > 0 && num <= 10, 'input must be 1-10')
+    return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1]
+}
+globalThis.Romanize = Romanize
+
+
+
+
+/**
+ * @category Utility
+ * @param roman - from I to X
+ * @return arabic number
+ * ```typescript
+ * DeRomanize("I") // 1
+ * DeRomanize("II") // 2
+ * ```
+ */
+function DeRomanize(roman: string): number {
+    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+    Should(IsString(roman), 'input must be string')
+    Should(romans.includes(roman), 'roman out of range')
+    return romans.indexOf(roman) + 1
+}
+globalThis.DeRomanize = DeRomanize
+
+
+
 /**
  * @category Utility
  * @return a clone of the object

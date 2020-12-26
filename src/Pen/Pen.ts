@@ -777,6 +777,38 @@ class PenCls {
         },
 
         /**
+         * Decorate an angle AOB, always in anti-clockwise.
+         * @category decorator
+         * @param A - The starting point [x,y].
+         * @param O - The vertex point [x,y].
+         * @param B - The ending point [x,y].
+         * @param arc - The number of arcs.
+         * @param radius - The radius of the angle arc, in pixel.
+         * @returns
+         * ```typescript
+         * pen.decorate.angle([1,0],[0,0],[3,2],2) 
+         * // decorate an angle AOB with double-arc in anti-clockwise.
+         * ```
+         */
+        angle2(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
+            if (IsReflex(A, O, B)) {
+                [A, B] = [B, A]
+            }
+            A = this.pen.frame.toPix(A);
+            let OPixel = this.pen.frame.toPix(O);
+            B = this.pen.frame.toPix(B);
+            let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
+            let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
+            let space = 3
+            let outset = arc > 1 ? space / 2 : 0
+            for (let i = 0; i < arc; i++) {
+                this.pen.circle(O, radius + outset - i * space, [a1, a2]);
+            }
+        },
+
+
+
+        /**
          * Decorate a right-angle AOB.
          * @category decorator
          * @param A - The starting point [x,y].
