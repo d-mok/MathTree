@@ -918,7 +918,7 @@ class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        angle(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
+        anglePolar(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
             let [A, O, B] = anglePoints;
             let APixel = this.pen.frame.toPix(A);
             let OPixel = this.pen.frame.toPix(O);
@@ -943,12 +943,12 @@ class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        angle2(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
+        angle(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
             if (IsReflex(...anglePoints)) {
                 let [A, O, B] = anglePoints
                 anglePoints = [B, O, A]
             }
-            this.angle(anglePoints, text, dodgeDirection, offsetPixel)
+            this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel)
         },
 
         /**
@@ -969,7 +969,7 @@ class PenCls {
                 let [A, O, B] = anglePoints
                 anglePoints = [B, O, A]
             }
-            this.angle(anglePoints, text, dodgeDirection, offsetPixel)
+            this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel)
         },
 
         /**

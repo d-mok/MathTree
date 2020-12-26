@@ -643,10 +643,10 @@ class AutoPenCls {
                 if (typeof angle === 'number') angle = angle + '°'
                 if (anticlockwise) {
                     pen.decorate.anglePolar(P, O, Q)
-                    pen.label.angle([P, O, Q], angle)
+                    pen.label.anglePolar([P, O, Q], angle)
                 } else {
                     pen.decorate.anglePolar(Q, O, P)
-                    pen.label.angle([Q, O, P], angle)
+                    pen.label.anglePolar([Q, O, P], angle)
                 }
                 pen.set.textItalic()
             }

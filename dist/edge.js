@@ -14492,7 +14492,7 @@ class PenCls {
                 this.pen.ctx.restore();
             },
             /**
-             * Add a label to an angle AOB.
+             * Add a label to an angle AOB, in anticlockwise.
              * @category text
              * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
              * @param text - The string to write.
@@ -14500,11 +14500,11 @@ class PenCls {
              * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
              * @returns
              * ```typescript
-             * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
+             * pen.label.anglePolar([[1,2],[0,0],[-2,1]],'x')
              * // label the angle as 'x'
              * ```
              */
-            angle(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
+            anglePolar(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
                 let [A, O, B] = anglePoints;
                 let APixel = this.pen.frame.toPix(A);
                 let OPixel = this.pen.frame.toPix(O);
@@ -14517,19 +14517,45 @@ class PenCls {
                     offsetPixel = text.length <= 2 ? 25 : 30;
                 this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
             },
-            angle2(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
+            /**
+             * Add a label to an angle AOB, non-reflex.
+             * @category text
+             * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
+             * @param text - The string to write.
+             * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+             * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+             * @returns
+             * ```typescript
+             * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
+             * // label the angle as 'x'
+             * ```
+             */
+            angle(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
                 if (IsReflex(...anglePoints)) {
                     let [A, O, B] = anglePoints;
                     anglePoints = [B, O, A];
                 }
-                this.angle(anglePoints, text, dodgeDirection, offsetPixel);
+                this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel);
             },
+            /**
+             * Add a label to an angle AOB, reflex.
+             * @category text
+             * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
+             * @param text - The string to write.
+             * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+             * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+             * @returns
+             * ```typescript
+             * pen.label.angleReflex([[1,2],[0,0],[-2,1]],'x')
+             * // label the angle as 'x'
+             * ```
+             */
             angleReflex(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
                 if (!IsReflex(...anglePoints)) {
                     let [A, O, B] = anglePoints;
                     anglePoints = [B, O, A];
                 }
-                this.angle(anglePoints, text, dodgeDirection, offsetPixel);
+                this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel);
             },
             /**
              * Add a label to a line AB.
@@ -15653,11 +15679,11 @@ class AutoPenCls {
                     angle = angle + '°';
                 if (anticlockwise) {
                     pen.decorate.anglePolar(P, O, Q);
-                    pen.label.angle([P, O, Q], angle);
+                    pen.label.anglePolar([P, O, Q], angle);
                 }
                 else {
                     pen.decorate.anglePolar(Q, O, P);
-                    pen.label.angle([Q, O, P], angle);
+                    pen.label.anglePolar([Q, O, P], angle);
                 }
                 pen.set.textItalic();
             }

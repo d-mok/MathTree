@@ -14370,7 +14370,7 @@ class PenCls {
              * @param radius - The radius of the angle arc, in pixel.
              * @returns
              * ```typescript
-             * pen.decorate.angle([1,0],[0,0],[3,2],2)
+             * pen.decorate.anglePolar([1,0],[0,0],[3,2],2)
              * // decorate an angle AOB with double-arc in anti-clockwise.
              * ```
              */
@@ -14387,7 +14387,7 @@ class PenCls {
                 }
             },
             /**
-             * Decorate an angle AOB, always in anti-clockwise.
+             * Decorate an angle AOB, always non-reflex.
              * @category decorator
              * @param A - The starting point [x,y].
              * @param O - The vertex point [x,y].
@@ -14397,7 +14397,7 @@ class PenCls {
              * @returns
              * ```typescript
              * pen.decorate.angle([1,0],[0,0],[3,2],2)
-             * // decorate an angle AOB with double-arc in anti-clockwise.
+             * // decorate an angle AOB with double-arc.
              * ```
              */
             angle(A, O, B, arc = 1, radius = 15) {
@@ -14406,7 +14406,7 @@ class PenCls {
                 this.anglePolar(A, O, B, arc, radius);
             },
             /**
-             * Decorate an angle AOB, always in anti-clockwise.
+             * Decorate an angle AOB, always reflex.
              * @category decorator
              * @param A - The starting point [x,y].
              * @param O - The vertex point [x,y].
@@ -14415,8 +14415,8 @@ class PenCls {
              * @param radius - The radius of the angle arc, in pixel.
              * @returns
              * ```typescript
-             * pen.decorate.angle([1,0],[0,0],[3,2],2)
-             * // decorate an angle AOB with double-arc in anti-clockwise.
+             * pen.decorate.angleReflex([1,0],[0,0],[3,2],2)
+             * // decorate a reflex angle AOB with double-arc.
              * ```
              */
             angleReflex(A, O, B, arc = 1, radius = 15) {
@@ -14492,7 +14492,33 @@ class PenCls {
                 this.pen.ctx.restore();
             },
             /**
-             * Add a label to an angle AOB.
+             * Add a label to an angle AOB, in anticlockwise.
+             * @category text
+             * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
+             * @param text - The string to write.
+             * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+             * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+             * @returns
+             * ```typescript
+             * pen.label.anglePolar([[1,2],[0,0],[-2,1]],'x')
+             * // label the angle as 'x'
+             * ```
+             */
+            anglePolar(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
+                let [A, O, B] = anglePoints;
+                let APixel = this.pen.frame.toPix(A);
+                let OPixel = this.pen.frame.toPix(O);
+                let BPixel = this.pen.frame.toPix(B);
+                let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
+                let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
+                if (a2 < a1)
+                    a2 = a2 + 360;
+                if (offsetPixel < 0)
+                    offsetPixel = text.length <= 2 ? 25 : 30;
+                this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
+            },
+            /**
+             * Add a label to an angle AOB, non-reflex.
              * @category text
              * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
              * @param text - The string to write.
@@ -14505,17 +14531,31 @@ class PenCls {
              * ```
              */
             angle(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
-                let [A, O, B] = anglePoints;
-                let APixel = this.pen.frame.toPix(A);
-                let OPixel = this.pen.frame.toPix(O);
-                let BPixel = this.pen.frame.toPix(B);
-                let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
-                let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
-                if (a2 < a1)
-                    a2 = a2 + 360;
-                if (offsetPixel < 0)
-                    offsetPixel = text.length <= 2 ? 25 : 30;
-                this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
+                if (IsReflex(...anglePoints)) {
+                    let [A, O, B] = anglePoints;
+                    anglePoints = [B, O, A];
+                }
+                this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel);
+            },
+            /**
+             * Add a label to an angle AOB, reflex.
+             * @category text
+             * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
+             * @param text - The string to write.
+             * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+             * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+             * @returns
+             * ```typescript
+             * pen.label.angleReflex([[1,2],[0,0],[-2,1]],'x')
+             * // label the angle as 'x'
+             * ```
+             */
+            angleReflex(anglePoints, text, dodgeDirection = 0, offsetPixel = -1) {
+                if (!IsReflex(...anglePoints)) {
+                    let [A, O, B] = anglePoints;
+                    anglePoints = [B, O, A];
+                }
+                this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel);
             },
             /**
              * Add a label to a line AB.
@@ -15639,11 +15679,11 @@ class AutoPenCls {
                     angle = angle + '°';
                 if (anticlockwise) {
                     pen.decorate.anglePolar(P, O, Q);
-                    pen.label.angle([P, O, Q], angle);
+                    pen.label.anglePolar([P, O, Q], angle);
                 }
                 else {
                     pen.decorate.anglePolar(Q, O, P);
-                    pen.label.angle([Q, O, P], angle);
+                    pen.label.anglePolar([Q, O, P], angle);
                 }
                 pen.set.textItalic();
             }
