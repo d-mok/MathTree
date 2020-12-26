@@ -121,7 +121,7 @@ export class Seed {
                 if (this.isValidated()) return true; // done if validated
             } catch (e) {
                 if (e.name === 'MathError') {
-                    console.log(e.stack)
+                    if (SHOULD_LOG) console.log(e.stack)
                 } else {
                     throw e
                 }

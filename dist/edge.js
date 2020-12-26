@@ -13710,6 +13710,8 @@ globalThis.VectorRotate = VectorRotate;
 
 "use strict";
 
+var SHOULD_LOG = false;
+globalThis.SHOULD_LOG = SHOULD_LOG;
 class CustumMathError extends Error {
     constructor(message) {
         super(message);
@@ -13720,20 +13722,6 @@ function MathError(message) {
     return new CustumMathError(message);
 }
 globalThis.MathError = MathError;
-// class CustumDesignError extends Error {
-//     constructor(message: string) {
-//         super(message);
-//         this.name = 'DesignError';
-//     }
-// }
-// function DesignError(message: string) {
-//     return new CustumDesignError(message)
-// }
-// globalThis.DesignError = DesignError
-// function Must(condition: boolean, msg: string = "Must condition failed!") {
-//     if (!condition) throw DesignError(msg)
-// }
-// globalThis.Must = Must
 function Should(condition, msg = "Should condition failed!") {
     if (!condition)
         throw MathError(msg);
@@ -16162,7 +16150,8 @@ class Seed {
             }
             catch (e) {
                 if (e.name === 'MathError') {
-                    console.log(e.stack);
+                    if (SHOULD_LOG)
+                        console.log(e.stack);
                 }
                 else {
                     throw e;
