@@ -791,22 +791,28 @@ class PenCls {
          * ```
          */
         angle2(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
-            if (IsReflex(A, O, B)) {
-                [A, B] = [B, A]
-            }
-            A = this.pen.frame.toPix(A);
-            let OPixel = this.pen.frame.toPix(O);
-            B = this.pen.frame.toPix(B);
-            let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
-            let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
-            let space = 3
-            let outset = arc > 1 ? space / 2 : 0
-            for (let i = 0; i < arc; i++) {
-                this.pen.circle(O, radius + outset - i * space, [a1, a2]);
-            }
+            if (IsReflex(A, O, B)) [A, B] = [B, A]
+            this.angle(A, O, B, arc, radius)
         },
 
-
+        /**
+         * Decorate an angle AOB, always in anti-clockwise.
+         * @category decorator
+         * @param A - The starting point [x,y].
+         * @param O - The vertex point [x,y].
+         * @param B - The ending point [x,y].
+         * @param arc - The number of arcs.
+         * @param radius - The radius of the angle arc, in pixel.
+         * @returns
+         * ```typescript
+         * pen.decorate.angle([1,0],[0,0],[3,2],2) 
+         * // decorate an angle AOB with double-arc in anti-clockwise.
+         * ```
+         */
+        angleReflex(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
+            if (!IsReflex(A, O, B)) [A, B] = [B, A]
+            this.angle(A, O, B, arc, radius)
+        },
 
         /**
          * Decorate a right-angle AOB.
@@ -1133,33 +1139,6 @@ class PenCls {
      */
     autoCrop() {
         trimCanvas(this.canvas)
-        // var ctx = this.ctx;
-        // var canvas = ctx.canvas,
-        //     w = canvas.width, h = canvas.height,
-        //     pix: { x: number[], y: number[] } = { x: [], y: [] },
-        //     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height),
-        //     x, y, index;
-
-        // for (y = 0; y < h; y++) {
-        //     for (x = 0; x < w; x++) {
-        //         index = (y * w + x) * 4;
-        //         if (imageData.data[index + 3] > 0) {
-        //             pix.x.push(x);
-        //             pix.y.push(y);
-        //         }
-        //     }
-        // }
-        // pix.x.sort(function (a, b) { return a - b; });
-        // pix.y.sort(function (a, b) { return a - b; });
-        // var n = pix.x.length - 1;
-
-        // w = 1 + pix.x[n] - pix.x[0];
-        // h = 1 + pix.y[n] - pix.y[0];
-        // var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
-
-        // canvas.width = w;
-        // canvas.height = h;
-        // ctx.putImageData(cut, 0, 0);
     }
 
 
@@ -1302,34 +1281,3 @@ function trimCanvas(canvas: HTMLCanvasElement) {
     ctx.putImageData(trimmed, 0, 0);
 }
 
-
-
-
-// function autoCrop(canvas: HTMLCanvasElement) {
-//     let ctx = canvas.getContext("2d")!;
-//     let w = canvas.width;
-//     let h = canvas.height;
-//     let pix: { x: number[], y: number[] } = { x: [], y: [] };
-//     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-//     let x;
-//     let y;
-//     let index;
-//     for (y = 0; y < h; y++) {
-//         for (x = 0; x < w; x++) {
-//             index = (y * w + x) * 4;
-//             if (imageData.data[index + 3] > 0) {
-//                 pix.x.push(x);
-//                 pix.y.push(y);
-//             }
-//         }
-//     }
-//     pix.x.sort((a, b) => a - b);
-//     pix.y.sort((a, b) => a - b);
-//     let n = pix.x.length - 1;
-//     w = 1 + pix.x[n] - pix.x[0];
-//     h = 1 + pix.y[n] - pix.y[0];
-//     let cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
-//     canvas.width = w;
-//     canvas.height = h;
-//     ctx.putImageData(cut, 0, 0);
-// }

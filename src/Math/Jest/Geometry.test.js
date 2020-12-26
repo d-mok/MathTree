@@ -112,6 +112,8 @@ test('Angle', () => {
     expect(Angle([1, 0], [0, 0], [0, 2])).toBe(90);
     expect(Angle([2, 2], [1, 1], [1, 3])).toBe(45);
     expect(Angle([1, 3], [1, 1], [2, 2])).toBe(45);
+    expect(Angle([1, 3], [1, 1], [1, 3])).toBe(0);
+    expect(Angle([1, 0], [0, 0], [-1, 0])).toBe(180);
 });
 
 
@@ -120,6 +122,8 @@ test('AnglePolar', () => {
     expect(AnglePolar([1, 0], [0, 0], [0, 2])).toBe(90);
     expect(AnglePolar([2, 2], [1, 1], [1, 3])).toBe(45);
     expect(AnglePolar([1, 3], [1, 1], [2, 2])).toBe(315);
+    expect(AnglePolar([1, 3], [1, 1], [1, 3])).toBe(0);
+    expect(AnglePolar([1, 0], [0, 0], [-1, 0])).toBe(180);
 });
 
 
@@ -128,6 +132,8 @@ test('IsReflex', () => {
     expect(IsReflex([1, 0], [0, 0], [0, 2])).toBe(false);
     expect(IsReflex([2, 2], [1, 1], [1, 3])).toBe(false);
     expect(IsReflex([1, 3], [1, 1], [2, 2])).toBe(true);
+    expect(IsReflex([1, 3], [1, 1], [1, 3])).toBe(false);
+    expect(IsReflex([1, 0], [0, 0], [-1, 0])).toBe(false);
 });
 
 
