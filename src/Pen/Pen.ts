@@ -180,6 +180,10 @@ class PenCls {
          */
         pen: this,
         /**
+         * @ignore
+         */
+        LABEL_CENTER: undefined as Point | undefined,
+        /**
          * Set the weight of the pen (line width).
          * @category set
          * @param weight - The line width.
@@ -313,6 +317,23 @@ class PenCls {
                 this.pen.ctx.font = this.pen.ctx.font.replace('italic ', '');
             }
         },
+
+        /**
+         * Set the center for label dodge. If undefined, dodge right by default.
+         * @category set
+         * @param center - the center coordinate
+         * @returns
+         * ```typescript
+         * pen.set.labelCenter([0,0]) // set center to be [0,0]
+         * ```
+         */
+        labelCenter(center?: Point) {
+            if (center) {
+                this.LABEL_CENTER = center
+            } else {
+                this.LABEL_CENTER = undefined
+            }
+        },
         /**
          * Reset all pen settings.
          * @category set
@@ -331,6 +352,7 @@ class PenCls {
             this.pen.ctx.font = 'normal 10px Times New Roman';
             this.textSize();
             this.textItalic();
+            this.labelCenter()
         }
     };
 
@@ -891,9 +913,17 @@ class PenCls {
          * // label the point [1,2] as 'A', place the label on the left (180 degree)
          * ```
          */
-        point(position: Point, text = '', dodgeDirection = 0, offsetPixel = 15) {
+        point(position: Point, text = '', dodgeDirection?: number, offsetPixel = 15) {
             let [x, y] = this.pen.frame.toPix(position);
             offsetPixel = offsetPixel * PEN_QUALITY;
+            if (dodgeDirection === undefined) {
+                let center = this.pen.set.LABEL_CENTER
+                if (center === undefined) {
+                    dodgeDirection = 0
+                } else {
+                    dodgeDirection = Inclination(center, position)
+                }
+            }
             x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
             y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
 
@@ -1007,7 +1037,7 @@ class PenCls {
          * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
          * ```
          */
-        coordinates(point: Point, dodgeDirection = 0, offsetPixel = 15) {
+        coordinates(point: Point, dodgeDirection = 90, offsetPixel = 15) {
             let text = '(' + Fix(point[0], 1) + ', ' + Fix(point[1], 1) + ')'
             this.point(point, text, dodgeDirection, offsetPixel)
         }
