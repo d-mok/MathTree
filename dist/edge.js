@@ -7914,7 +7914,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
 __webpack_require__(30);
-__webpack_require__(34);
+__webpack_require__(35);
 
 
 /***/ }),
@@ -13751,6 +13751,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
+__webpack_require__(34);
 
 
 /***/ }),
@@ -15975,8 +15976,49 @@ globalThis.AutoPen = AutoPen;
 
 "use strict";
 
+/**
+ * @ignore
+ */
+var PROJ_ANGLE = 60;
+/**
+ * @ignore
+ */
+var PROJ_DEPTH = 0.5;
+/**
+* @category 3DPen
+* @return projection of 3D point to 2D plane
+* ```typescript
+* proj(1,1,0) // [1.25, 0.433012701892]
+* ```
+*/
+function proj(x, y, z) {
+    let x_new = x + PROJ_DEPTH * y * cos(PROJ_ANGLE);
+    let y_new = z + PROJ_DEPTH * y * sin(PROJ_ANGLE);
+    return [x_new, y_new];
+}
+globalThis.proj = proj;
+/**
+* @category 3DPen
+* @return set the angle and depth of projection
+* ```typescript
+* projSetting(45,0.6) // set the angle to 45 and depth to 0.5
+* ```
+*/
+function projSetting(angle = 60, depth = 0.5) {
+    PROJ_ANGLE = angle;
+    PROJ_DEPTH = depth;
+}
+globalThis.projSetting = projSetting;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(35);
+const global_1 = __webpack_require__(36);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -16011,19 +16053,19 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(36);
-const dress_1 = __webpack_require__(37);
-const shuffle_1 = __webpack_require__(38);
-const option_1 = __webpack_require__(39);
-__webpack_require__(40);
-const cls_1 = __webpack_require__(41);
+const section_1 = __webpack_require__(37);
+const dress_1 = __webpack_require__(38);
+const shuffle_1 = __webpack_require__(39);
+const option_1 = __webpack_require__(40);
+__webpack_require__(41);
+const cls_1 = __webpack_require__(42);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -16218,7 +16260,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16253,7 +16295,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16319,7 +16361,7 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16399,7 +16441,7 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16472,7 +16514,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16480,7 +16522,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
