@@ -763,7 +763,7 @@ class PenCls {
          * // decorate an angle AOB with double-arc in anti-clockwise.
          * ```
          */
-        angle(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
+        anglePolar(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
             A = this.pen.frame.toPix(A);
             let OPixel = this.pen.frame.toPix(O);
             B = this.pen.frame.toPix(B);
@@ -790,9 +790,9 @@ class PenCls {
          * // decorate an angle AOB with double-arc in anti-clockwise.
          * ```
          */
-        angle2(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
+        angle(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
             if (IsReflex(A, O, B)) [A, B] = [B, A]
-            this.angle(A, O, B, arc, radius)
+            this.anglePolar(A, O, B, arc, radius)
         },
 
         /**
@@ -811,7 +811,7 @@ class PenCls {
          */
         angleReflex(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
             if (!IsReflex(A, O, B)) [A, B] = [B, A]
-            this.angle(A, O, B, arc, radius)
+            this.anglePolar(A, O, B, arc, radius)
         },
 
         /**

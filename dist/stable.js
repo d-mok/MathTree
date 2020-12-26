@@ -7959,14 +7959,13 @@ __webpack_require__(29);
  * @return solve [x,y] from ax+by=c and px+qy=r.
  * ```typescript
  * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
- * Crammer(1,1,3,2,2,6) // [NaN,NaN] solving x+y=3 and 2x+2y=6
+ * Crammer(1,1,3,2,2,6) // throw
  * ```
  */
 function Crammer(a, b, c, p, q, r) {
-    Must(IsNum(a, b, c, p, q, r), "Crammer: input must be num");
+    Should(IsNum(a, b, c, p, q, r), "input must be num");
     const D = a * q - b * p;
-    Should(D !== 0, 'Crammer: no unique solution!');
-    // if (D === 0) return [NaN, NaN]
+    Should(IsNonZero(D), 'no unique solution');
     const x = (c * q - b * r) / D;
     const y = (a * r - c * p) / D;
     return [x, y];
@@ -7980,6 +7979,7 @@ globalThis.Crammer = Crammer;
  * ```
  */
 function Discriminant(a, b, c) {
+    Should(IsNum(a, b, c), "input must be num");
     return b * b - 4 * a * c;
 }
 globalThis.Discriminant = Discriminant;
@@ -7990,16 +7990,17 @@ globalThis.Discriminant = Discriminant;
  * QuadraticRoot(1,2,-3) // [-3,1]
  * QuadraticRoot(-1,-2,3) // [-3,1]
  * QuadraticRoot(1,2,1) // [-1,-1]
- * QuadraticRoot(1,2,3) // [NaN,NaN] no real root
+ * QuadraticRoot(1,2,3) // throw
+ * QuadraticRoot(0,2,3) // throw
  * ```
  */
 function QuadraticRoot(a, b, c) {
+    Should(IsNum(a, b, c), "input must be num");
     const d = Discriminant(a, b, c);
-    if (d < 0)
-        return [NaN, NaN];
-    const r1 = (-b - Math.sqrt(d)) / (2 * a);
-    const r2 = (-b + Math.sqrt(d)) / (2 * a);
-    return [Math.min(r1, r2), Math.max(r1, r2)];
+    Should(d >= 0, 'no real root');
+    const r1 = Divide(-b - Math.sqrt(d), 2 * a);
+    const r2 = Divide(-b + Math.sqrt(d), 2 * a);
+    return [Min(r1, r2), Max(r1, r2)];
 }
 globalThis.QuadraticRoot = QuadraticRoot;
 /**
@@ -8007,10 +8008,12 @@ globalThis.QuadraticRoot = QuadraticRoot;
  * @return the vertex [h,k] of y=ax^2+bx+c.
  * ```typescript
  * QuadraticVertex(1,2,3) // [-1,2]
+ * QuadraticVertex(0,2,3) // throw
  * ```
  */
 function QuadraticVertex(a, b, c) {
-    const h = -b / (2 * a);
+    Should(IsNum(a, b, c), "input must be num");
+    const h = Divide(-b, 2 * a);
     const k = a * h * h + b * h + c;
     return [h, k];
 }
@@ -8021,9 +8024,12 @@ globalThis.QuadraticVertex = QuadraticVertex;
  * ```typescript
  * QuadraticFromRoot(1,2,3) // [1,-5,6]
  * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
+ * QuadraticFromRoot(0,4,-3) // throw
  * ```
  */
 function QuadraticFromRoot(a, p, q) {
+    Should(IsNum(a, p, q), "input must be num");
+    Should(IsNonZero(a), 'a should not be zero');
     return [a, -a * (p + q), a * p * q];
 }
 globalThis.QuadraticFromRoot = QuadraticFromRoot;
@@ -8033,9 +8039,12 @@ globalThis.QuadraticFromRoot = QuadraticFromRoot;
  * ```typescript
  * QuadraticFromVertex(1,2,3) // [1,-4,7]
  * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
+ * QuadraticFromVertex(0,4,-3) // throw
  * ```
  */
 function QuadraticFromVertex(a, h, k) {
+    Should(IsNum(a, h, k), "input must be num");
+    Should(IsNonZero(a), 'a should not be zero');
     const b = -2 * a * h;
     const c = k - a * h * h - b * h;
     return [a, b, c];
@@ -8050,6 +8059,9 @@ globalThis.QuadraticFromVertex = QuadraticFromVertex;
  * ```
  */
 function xPolynomial(poly1, poly2) {
+    Should(IsArray(poly1, poly2), "input must be array");
+    Should(IsNum(...poly1, ...poly2), 'input must be number array');
+    Should(IsNonZero(poly1[0], poly2[0]), 'leading coeff should be non-zero');
     const deg1 = poly1.length - 1;
     const deg2 = poly2.length - 1;
     const deg = deg1 + deg2;
@@ -8064,12 +8076,28 @@ function xPolynomial(poly1, poly2) {
 globalThis.xPolynomial = xPolynomial;
 /**
  * @category Algebra
+ * @return [x-int, y-int,slope] of ax+by+c=0
+ * ```typescript
+ * LinearFeature(2,4,6) // [-3,-2,-0.5]
+ * LinearFeature(0,4,6) // throw
+ * ```
+ */
+function LinearFeature(a, b, c) {
+    Should(IsNum(a, b, c), "input must be num");
+    Should(IsNonZero(a, b), 'x and y term should be non-zero');
+    return [-c / a, -c / b, -a / b];
+}
+globalThis.LinearFeature = LinearFeature;
+/**
+ * @category Algebra
  * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
  * ```typescript
  * LinearFromIntercepts(1,2) // [2,1,-2]
+ * LinearFromIntercepts(0,2) // throw
  * ```
  */
 function LinearFromIntercepts(xInt, yInt) {
+    Should(IsNum(xInt, yInt), "input must be num");
     Should(IsNonZero(xInt, yInt), 'intercepts cannot be zero');
     let [a, b, c] = [yInt, xInt, -xInt * yInt];
     let s = Sign(a);
@@ -8083,12 +8111,14 @@ globalThis.LinearFromIntercepts = LinearFromIntercepts;
  * @return the coeff [a,b,c] in ax+by+c=0 from two given points
  * ```typescript
  * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+ * LinearFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
 function LinearFromTwoPoints(point1, point2) {
+    Should(IsPoint(point1, point2), 'input must be point');
+    Should(AreDistinctPoint(point1, point2), 'two points should be distinct');
     let [x1, y1] = point1;
     let [x2, y2] = point2;
-    Should(x1 !== x2 || y1 !== y2, 'two points equal');
     let dx = x1 - x2;
     let dy = y1 - y2;
     let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
@@ -8239,6 +8269,20 @@ function IsPositiveInteger(...items) {
 globalThis.IsPositiveInteger = IsPositiveInteger;
 /**
  * @category Assertion
+ * @return check if the number is a non-negative integer.
+ * ```typescript
+ * IsNonNegativeInteger(2) // true
+ * IsNonNegativeInteger(0) // true
+ * IsNonNegativeInteger(-2) // false
+ * IsNonNegativeInteger(1.5) // false
+ * ```
+ */
+function IsNonNegativeInteger(...items) {
+    return items.every(x => IsInteger(x) && x >= 0);
+}
+globalThis.IsNonNegativeInteger = IsNonNegativeInteger;
+/**
+ * @category Assertion
  * @return check if the number is negative.
  * ```typescript
  * IsNegative(-2) // true
@@ -8279,6 +8323,21 @@ function IsString(...items) {
 globalThis.IsString = IsString;
 /**
  * @category Assertion
+ * @return check if the item is a boolean
+ * ```typescript
+ * IsBoolean(true) // true
+ * IsBoolean(false) // true
+ * IsBoolean('') // false
+ * IsBoolean('1') // false
+ * IsBoolean(1) // false
+ * ```
+ */
+function IsBoolean(...items) {
+    return items.every(x => typeof x === 'boolean');
+}
+globalThis.IsBoolean = IsBoolean;
+/**
+ * @category Assertion
  * @return check if the item is an empty object
  * ```typescript
  * IsEmptyObject({}) // true
@@ -8308,7 +8367,7 @@ function IsArray(...items) {
 }
 globalThis.IsArray = IsArray;
 function IsArrayOfLength(length) {
-    Must(IsPositiveInteger(length), 'IsArrayOfLength: length must be positive integer');
+    Should(IsPositiveInteger(length), 'length must be positive integer');
     const f = function (...items) {
         return items.every(x => IsArray(x) && x.length === length);
     };
@@ -8325,7 +8384,7 @@ globalThis.IsArrayOfLength = IsArrayOfLength;
  * ```
  */
 function IsBetween(min, max) {
-    Must(IsNum(min, max), 'IsBetween: min and max must be number');
+    Should(IsNum(min, max), 'min and max must be number');
     const f = function (...items) {
         return items.every(x => IsNum(x) && x >= min && x <= max);
     };
@@ -8342,11 +8401,10 @@ globalThis.IsBetween = IsBetween;
  * ```
  */
 function IsAbsBetween(min, max) {
-    Must(IsNum(min, max), 'IsBetween: min and max must be number');
-    const f = function (...items) {
+    Should(IsPositive(min, max), 'min and max must be positive number');
+    return function (...items) {
         return items.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
     };
-    return f;
 }
 globalThis.IsAbsBetween = IsAbsBetween;
 /**
@@ -8363,6 +8421,34 @@ function IsPoint(...items) {
     return items.every(x => IsArrayOfLength(2)(x) && IsNum(x[0], x[1]));
 }
 globalThis.IsPoint = IsPoint;
+/**
+ * @category Assertion
+ * @return check if the item is a fraction [num,num]
+ * ```typescript
+ * IsFraction([2,5]) // true
+ * IsFraction(2) // false
+ * IsFraction([1,2,3]) // false
+ * IsFraction([NaN,NaN]) // false
+ * ```
+ */
+function IsFraction(...items) {
+    return IsPoint(...items);
+}
+globalThis.IsFraction = IsFraction;
+/**
+ * @category Assertion
+ * @return check if the item is a vector [num,num]
+ * ```typescript
+ * IsVector([2,5]) // true
+ * IsVector(2) // false
+ * IsVector([1,2,3]) // false
+ * IsVector([NaN,NaN]) // false
+ * ```
+ */
+function IsVector(...items) {
+    return IsPoint(...items);
+}
+globalThis.IsVector = IsVector;
 /**
  * @category Assertion
  * @return check if the item is a IneqSign string
@@ -8382,6 +8468,20 @@ function IsIneqSign(...items) {
 globalThis.IsIneqSign = IsIneqSign;
 /**
  * @category Assertion
+ * @return check if the item is a Dfrac string
+ * ```typescript
+ * IsDfrac('\\dfrac{1}{2}') // true
+ * IsDfrac('\\dfrac{x}{2}') // false
+ * ```
+ */
+function IsDfrac(...items) {
+    const d = String.raw `-?\d+\.?\d*`;
+    const f = String.raw `-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
+    return items.every(x => IsString(x) && x.match(new RegExp(f, 'g')));
+}
+globalThis.IsDfrac = IsDfrac;
+/**
+ * @category Assertion
  * @return check if the item is a constraint (LP)
  * ```typescript
  * IsConstraint([1,2,'>',3]) // true
@@ -8397,21 +8497,47 @@ function IsConstraint(...items) {
 globalThis.IsConstraint = IsConstraint;
 /**
  * @category Assertion
- * @return Check if the points are pairwise distant apart.
+ * @return Check if the points are chessboard around anchor.
  * ```typescript
- * IsAroundPoint([0,0],2)([1,0]) // true
+ * IsAroundPoint([0,0],2)([2,2]) // true
  * IsAroundPoint([0,0],2)([3,0]) // false
- * IsAroundPoint([0,0],2)([1,0],[3,0]) // false
  * ```
  */
 function IsAroundPoint(anchor, range) {
-    const f = function (...points) {
-        let ranges = points.map(p => Max(Abs(p[0] - anchor[0]), Abs(p[1] - anchor[1])));
-        return ranges.every(x => x <= range);
+    Should(IsPoint(anchor), 'anchor must be a point');
+    Should(IsPositive(range), 'range must be a positive number');
+    return function (...points) {
+        return points.every(p => ChessboardDistance(anchor, p) <= range);
     };
-    return f;
 }
 globalThis.IsAroundPoint = IsAroundPoint;
+/**
+ * @category Assertion
+ * @return Check if the array of legnths can form a triangle
+ * ```typescript
+ * IsTriangle([1,1,1]) // true
+ * IsTriangle([6,7,8]) // true
+ * IsTriangle([1,2,3]) // false
+ * IsTriangle([6,14,8]) // false
+ * ```
+ */
+function IsTriangle(...triangles) {
+    return triangles.every(t => {
+        if (!IsArrayOfLength(3)(t))
+            return false;
+        let [a, b, c] = t;
+        if (!IsPositive(a, b, c))
+            return false;
+        if (a + b <= c)
+            return false;
+        if (b + c <= a)
+            return false;
+        if (c + a <= b)
+            return false;
+        return true;
+    });
+}
+globalThis.IsTriangle = IsTriangle;
 
 
 /***/ }),
@@ -8425,13 +8551,12 @@ globalThis.IsAroundPoint = IsAroundPoint;
  * @return the factorial n!
  * ```typescript
  * Factorial(5) // 120
- * Factorial(1.5) // NaN
+ * Factorial(1.5) // throw
  * ```
  */
 function Factorial(n) {
     n = Blur(n);
-    if (!IsInteger(n) || n < 0)
-        return NaN;
+    Should(IsNonNegativeInteger(n), 'n must be non-negative integer');
     return n <= 0 ? 1 : n * Factorial(n - 1);
 }
 globalThis.Factorial = Factorial;
@@ -8445,6 +8570,8 @@ globalThis.Factorial = Factorial;
 function nCr(n, r) {
     n = Blur(n);
     r = Blur(r);
+    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
+    Should(n >= r, 'n >= r required');
     return Factorial(n) / (Factorial(r) * Factorial(n - r));
 }
 globalThis.nCr = nCr;
@@ -8458,6 +8585,8 @@ globalThis.nCr = nCr;
 function nPr(n, r) {
     n = Blur(n);
     r = Blur(r);
+    Should(IsNonNegativeInteger(n, r), 'n, r must be non-negative integer');
+    Should(n >= r, 'n >= r required');
     return nCr(n, r) * Factorial(r);
 }
 globalThis.nPr = nPr;
@@ -8550,9 +8679,9 @@ globalThis.RndComboConfig = RndComboConfig;
  * ```
  */
 function FracSign(p, q) {
+    Should(IsNum(p, q), 'input must be num');
+    Should(IsNonZero(q), 'q should not be zero');
     [p, q] = Blurs([p, q]);
-    if (q === 0)
-        return [p, q];
     const s = Sign(p / q);
     p = Abs(p);
     q = Abs(q);
@@ -8572,6 +8701,8 @@ globalThis.FracSign = FracSign;
  * ```
  */
 function Frac(p, q) {
+    Should(IsNum(p, q), 'input must be num');
+    Should(IsNonZero(q), 'q should not be zero');
     [p, q] = Blurs([p, q]);
     [p, q] = SimpRatio(p, q);
     return FracSign(p, q);
@@ -8588,6 +8719,7 @@ globalThis.Frac = Frac;
  * ```
  */
 function FracAdd(...fractions) {
+    Should(IsFraction(...fractions), 'input must be fractions');
     function _FracAdd(A, B) {
         let [p1, q1] = A;
         let [p2, q2] = B;
@@ -8609,6 +8741,7 @@ globalThis.FracAdd = FracAdd;
  * ```
  */
 function FracMultiply(...fractions) {
+    Should(IsFraction(...fractions), 'input must be fractions');
     function _FracMultiply(A, B) {
         let [p1, q1] = A;
         let [p2, q2] = B;
@@ -8634,6 +8767,7 @@ globalThis.FracMultiply = FracMultiply;
  * ```
  */
 function log(b, N) {
+    Should(IsPositive(b, N), 'input must be positive');
     const v = Math.log(N) / Math.log(b);
     return Blur(v);
 }
@@ -8646,10 +8780,54 @@ globalThis.log = log;
  * ```
  */
 function Power(a, b) {
+    Should(IsNum(a, b), 'input must be num');
     const v = Math.pow(a, b);
     return Blur(v);
 }
 globalThis.Power = Power;
+/**
+ * @category Function
+ * @return square root of x
+ * ```typescript
+ * Sqrt(4) // 2
+ * ```
+ */
+function Sqrt(x) {
+    Should(IsNum(x) && x >= 0, 'input must be non-negative num');
+    const v = Math.sqrt(x);
+    return Blur(v);
+}
+globalThis.Sqrt = Sqrt;
+/**
+ * @category Function
+ * @return the radian of the degree
+ * ```typescript
+ * Radian(180) // pi
+ * Radian(90) // pi/2
+ * Radian(30) // PI/6
+ * ```
+ */
+function Radian(degree) {
+    Should(IsNum(degree), 'degree must be num');
+    const v = degree / 180 * Math.PI;
+    return Blur(v);
+}
+globalThis.Radian = Radian;
+/**
+ * @category Function
+ * @return the degree of the radian
+ * ```typescript
+ * Degree(Math.PI) // 180
+ * Degree(Math.PI/2) // 90
+ * Degree(Math.PI/6) // 30
+ * ```
+ */
+function Degree(radian) {
+    Should(IsNum(radian), 'degree must be num');
+    const v = radian * 180 / Math.PI;
+    return Blur(v);
+}
+globalThis.Degree = Degree;
 /**
  * @category Function
  * @return sin(x).
@@ -8658,6 +8836,7 @@ globalThis.Power = Power;
  * ```
  */
 function sin(x) {
+    Should(IsNum(x), 'input must be num');
     let v = Math.sin(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8670,6 +8849,7 @@ globalThis.sin = sin;
  * ```
  */
 function cos(x) {
+    Should(IsNum(x), 'input must be num');
     let v = Math.cos(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8682,6 +8862,7 @@ globalThis.cos = cos;
  * ```
  */
 function tan(x) {
+    Should(IsNum(x), 'input must be num');
     let v = Math.tan(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8694,6 +8875,8 @@ globalThis.tan = tan;
  * ```
  */
 function arcsin(x) {
+    Should(IsNum(x), 'input must be num');
+    Should(Abs(x) <= 1, 'input should be between 1 and -1');
     let v = Math.asin(x) * 180 / Math.PI;
     return Blur(v);
 }
@@ -8706,6 +8889,8 @@ globalThis.arcsin = arcsin;
  * ```
  */
 function arccos(x) {
+    Should(IsNum(x), 'input must be num');
+    Should(Abs(x) <= 1, 'input should be between 1 and -1');
     let v = Math.acos(x) * 180 / Math.PI;
     return Blur(v);
 }
@@ -8718,6 +8903,7 @@ globalThis.arccos = arccos;
  * ```
  */
 function arctan(x) {
+    Should(IsNum(x), 'input must be num');
     let v = Math.atan(x) * 180 / Math.PI;
     return Blur(v);
 }
@@ -8739,8 +8925,8 @@ globalThis.arctan = arctan;
  * ```
  */
 function Slope(A, B) {
-    if (Blur(A[0] - B[0]) === 0)
-        return NaN;
+    Should(IsPoint(A, B), 'input must be point');
+    Should(Blur(A[0] - B[0]) !== 0, 'slope is infinite');
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
 globalThis.Slope = Slope;
@@ -8752,9 +8938,25 @@ globalThis.Slope = Slope;
  * ```
  */
 function Distance(A, B) {
+    Should(IsPoint(A, B), 'input must be point');
     return Math.pow((Math.pow((A[0] - B[0]), 2) + Math.pow((A[1] - B[1]), 2)), 0.5);
 }
 globalThis.Distance = Distance;
+/**
+ * @category Geometry
+ * @return the chessboard distance AB, max(horizontal,vertical)
+ * ```typescript
+ * ChessboardDistance([0,0],[1,2]) // 2
+ * ChessboardDistance([0,0],[3,2]) // 3
+ * ```
+ */
+function ChessboardDistance(A, B) {
+    Should(IsPoint(A, B), 'input must be point');
+    let x = Abs(A[0] - B[0]);
+    let y = Abs(A[1] - B[1]);
+    return Max(x, y);
+}
+globalThis.ChessboardDistance = ChessboardDistance;
 /**
  * @category Geometry
  * @return the mid-pt of AB
@@ -8763,6 +8965,7 @@ globalThis.Distance = Distance;
  * ```
  */
 function MidPoint(A, B) {
+    Should(IsPoint(A, B), 'input must be point');
     return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
 }
 globalThis.MidPoint = MidPoint;
@@ -8774,6 +8977,8 @@ globalThis.MidPoint = MidPoint;
  * ```
  */
 function DivisionPoint(A, B, ratio = 0.5) {
+    Should(IsPoint(A, B), 'input must be point');
+    Should(IsNum(ratio), 'ratio must be num');
     let r = ratio;
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
@@ -8787,6 +8992,8 @@ globalThis.DivisionPoint = DivisionPoint;
  * ```
  */
 function RotatePoint(P, O, q) {
+    Should(IsPoint(P, O), 'input must be point');
+    Should(IsNum(q), 'q must be num');
     let v = Vector(O, P);
     v = VectorRotate(v, q);
     return VectorAdd(O, v);
@@ -8794,25 +9001,29 @@ function RotatePoint(P, O, q) {
 globalThis.RotatePoint = RotatePoint;
 /**
  * @category Geometry
- * @return the polar angle of B if A is the origin within [-180,180].
+ * @return the polar angle of B if A is the origin within [0,360].
  * ```typescript
  * Inclination([1,0],[3,2]) // 45
- * Inclination([3,2],[1,0]) // -135
+ * Inclination([3,2],[1,0]) // 225
  * ```
  */
 function Inclination(A, B) {
-    return Math.atan2(B[1] - A[1], B[0] - A[0]) / Math.PI * 180;
+    Should(IsPoint(A, B), 'input must be point');
+    Should(AreDistinctPoint(A, B), 'A,B should be distinct');
+    return VectorArg(Vector(A, B));
 }
 globalThis.Inclination = Inclination;
 /**
  * @category Geometry
  * @return the polar angle of a normal direction to AB, on the right of AB.
  * ```typescript
- * Normal([1,0],[3,2]) // -45
+ * Normal([1,0],[3,2]) // 315
  * Normal([3,2],[1,0]) // 135
  * ```
  */
 function Normal(A, B) {
+    Should(IsPoint(A, B), 'input must be point');
+    Should(AreDistinctPoint(A, B), 'A,B should be distinct');
     let R = RotatePoint(B, A, -90);
     return Inclination(A, R);
 }
@@ -8825,6 +9036,8 @@ globalThis.Normal = Normal;
  * ```
  */
 function PerpendicularFoot(A, B, P) {
+    Should(IsPoint(A, B, P), 'input must be point');
+    Should(AreDistinctPoint(A, B), 'A,B should be distinct');
     let q = Normal(A, B);
     let V = PolToRect([1, q]);
     let Q = VectorAdd(P, V);
@@ -8839,6 +9052,9 @@ globalThis.PerpendicularFoot = PerpendicularFoot;
  * ```
  */
 function Intersection(A, B, C, D) {
+    Should(IsPoint(A, B, C, D), 'input must be point');
+    Should(AreDistinctPoint(A, B), 'A,B should be distinct');
+    Should(AreDistinctPoint(C, D), 'C,D should be distinct');
     return Crammer(B[1] - A[1], A[0] - B[0], A[0] * B[1] - B[0] * A[1], D[1] - C[1], C[0] - D[0], C[0] * D[1] - D[0] * C[1]);
 }
 globalThis.Intersection = Intersection;
@@ -8850,6 +9066,9 @@ globalThis.Intersection = Intersection;
  * ```
  */
 function TranslatePoint(P, q, distance) {
+    Should(IsPoint(P), "P must be point");
+    Should(IsPoint(q) || IsNum(q), "q must be point or num");
+    Should(IsNum(distance), "distance must be num");
     if (Array.isArray(q))
         q = Inclination(P, q);
     let x = P[0] + distance * cos(q);
@@ -8866,6 +9085,7 @@ globalThis.TranslatePoint = TranslatePoint;
  * ```
  */
 function IntersectAngle(slope1, slope2) {
+    Should(IsNum(slope1, slope2), 'slopes must be num');
     let A1 = arctan(slope1);
     let A2 = arctan(slope2);
     let d = Abs(A1 - A2);
@@ -8874,6 +9094,56 @@ function IntersectAngle(slope1, slope2) {
     return d;
 }
 globalThis.IntersectAngle = IntersectAngle;
+/**
+ * @category Geometry
+ * @return angle AOB, non-reflex
+ * ```typescript
+ * Angle([1,0],[0,0],[0,2]) // 90
+ * Angle([2,2],[1,1],[1,3]) // 45
+ * Angle([1,3],[1,1],[2,2]) // 45
+ * ```
+ */
+function Angle(A, O, B) {
+    Should(IsPoint(A, O, B), 'input must be point');
+    Should(AreDistinctPoint(A, O), 'A, O should be distinct');
+    Should(AreDistinctPoint(B, O), 'A, O should be distinct');
+    let anglePolar = AnglePolar(A, O, B);
+    return IsReflex(A, O, B) ? 360 - anglePolar : anglePolar;
+}
+globalThis.Angle = Angle;
+/**
+ * @category Geometry
+ * @return angle AOB, measured anticlockwise
+ * ```typescript
+ * AnglePolar([1,0],[0,0],[0,2]) // 90
+ * AnglePolar([2,2],[1,1],[1,3]) // 45
+ * AnglePolar([1,3],[1,1],[2,2]) // 315
+ * ```
+ */
+function AnglePolar(A, O, B) {
+    Should(IsPoint(A, O, B), 'input must be point');
+    Should(AreDistinctPoint(A, O), 'A, O should be distinct');
+    Should(AreDistinctPoint(B, O), 'A, O should be distinct');
+    let a = VectorArg(Vector(O, A));
+    let b = VectorArg(Vector(O, B));
+    return a <= b ? b - a : 360 + b - a;
+}
+globalThis.AnglePolar = AnglePolar;
+/**
+ * @category Geometry
+ * @return check if the polar angle AOB is reflex
+ * ```typescript
+ * IsReflex([1,0],[0,0],[0,2]) // false
+ * IsReflex([2,2],[1,1],[1,3]) // false
+ * IsReflex([1,3],[1,1],[2,2]) // true
+ * ```
+ */
+function IsReflex(A, O, B) {
+    Should(IsPoint(A, O, B), 'input must be point');
+    let angle = AnglePolar(A, O, B);
+    return angle > 180;
+}
+globalThis.IsReflex = IsReflex;
 
 
 /***/ }),
@@ -9237,12 +9507,11 @@ globalThis.OptimizeField = OptimizeField;
  * @return division with x/0 handling
  * ```typescript
  * Divide(6,2) // 3
- * Divide(6,0) // throw error
+ * Divide(6,0) // throw
  * ```
  */
 function Divide(dividend, divisor) {
-    // if (!IsNum(dividend, divisor)) throw DesignError('input must be number')
-    // if (divisor === 0) throw MathError('division by 0')
+    Should(IsNum(dividend, divisor), 'input must be num');
     Should(divisor !== 0, 'division by 0');
     return dividend / divisor;
 }
@@ -9255,6 +9524,7 @@ globalThis.Divide = Divide;
  * ```
  */
 function Abs(num) {
+    Should(IsNum(num), 'input must be num');
     return Math.abs(num);
 }
 globalThis.Abs = Abs;
@@ -9268,6 +9538,7 @@ globalThis.Abs = Abs;
  * ```
  */
 function Sign(num) {
+    Should(IsNum(num), 'input must be num');
     if (num > 0)
         return 1;
     if (num < 0)
@@ -9284,6 +9555,8 @@ globalThis.Sign = Sign;
  * ```
  */
 function Round(num, sigfig = 3) {
+    Should(IsNum(num), 'input must be num');
+    Should(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
     if (num === 0)
         return 0;
     if (sigfig < 1)
@@ -9301,6 +9574,8 @@ globalThis.Round = Round;
  * ```
  */
 function RoundUp(num, sigfig = 3) {
+    Should(IsNum(num), 'input must be num');
+    Should(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
     if (num === 0)
         return 0;
     if (sigfig < 1)
@@ -9318,6 +9593,8 @@ globalThis.RoundUp = RoundUp;
  * ```
  */
 function RoundDown(num, sigfig = 3) {
+    Should(IsNum(num), 'input must be num');
+    Should(IsPositiveInteger(sigfig), 'sigfig must be positive integer');
     if (num === 0)
         return 0;
     if (sigfig < 1)
@@ -9336,6 +9613,8 @@ globalThis.RoundDown = RoundDown;
  * ```
  */
 function Fix(num, dp = 0) {
+    Should(IsNum(num), 'input must be num');
+    Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
     num += Number.EPSILON;
@@ -9357,6 +9636,8 @@ globalThis.Fix = Fix;
  * ```
  */
 function FixUp(num, dp = 0) {
+    Should(IsNum(num), 'input must be num');
+    Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
     num -= Number.EPSILON;
@@ -9379,6 +9660,8 @@ globalThis.FixUp = FixUp;
  * ```
  */
 function FixDown(num, dp = 0) {
+    Should(IsNum(num), 'input must be num');
+    Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
     num += Number.EPSILON;
@@ -9401,6 +9684,7 @@ globalThis.FixDown = FixDown;
  * ```
  */
 function Ceil(num) {
+    Should(IsNum(num), 'input must be num');
     return Math.ceil(num);
 }
 globalThis.Ceil = Ceil;
@@ -9414,6 +9698,7 @@ globalThis.Ceil = Ceil;
  * ```
  */
 function Floor(num) {
+    Should(IsNum(num), 'input must be num');
     return Math.floor(num);
 }
 globalThis.Floor = Floor;
@@ -9422,15 +9707,18 @@ globalThis.Floor = Floor;
  * @return reduce input array to simplest ratio.
  * ```typescript
  * SimpRatio(2,4,6) // [1,2,3]
+ * SimpRatio(0,4,6) // [0,2,3]
+ * SimpRatio(0,4) // [0,1]
  * ```
  */
 function SimpRatio(...nums) {
+    Should(IsNum(...nums), 'input must be num');
     nums = Blurs(nums);
     if (!IsInteger(...nums))
         return nums;
-    if (!IsNonZero(...nums))
-        return nums;
-    let h = HCF(...nums);
+    let nonzeros = nums.filter(x => IsNonZero(x));
+    Should(nonzeros.length > 0, 'at least one non-zero num');
+    let h = HCF(...nonzeros);
     return nums.map(x => x / h);
 }
 globalThis.SimpRatio = SimpRatio;
@@ -9444,6 +9732,7 @@ globalThis.SimpRatio = SimpRatio;
  * ```
  */
 function SigFig(value) {
+    Should(IsNum(value), 'input must be num');
     value = Blur(value);
     return Math.abs(value)
         .toExponential()
@@ -9465,6 +9754,7 @@ globalThis.SigFig = SigFig;
  */
 function DecimalPlace(value) {
     var _a, _b;
+    Should(IsNum(value), 'input must be num');
     value = Blur(value);
     if (IsInteger(value))
         return 0;
@@ -9486,6 +9776,7 @@ globalThis.DecimalPlace = DecimalPlace;
  * ```
  */
 function Magnitude(num) {
+    Should(IsNum(num), 'input must be num');
     return Math.floor(log(10, Abs(num)));
 }
 globalThis.Magnitude = Magnitude;
@@ -9512,7 +9803,7 @@ globalThis.Blur = Blur;
  * @category Numeracy
  * @return correct for floating point error
  * ```typescript
- * BlurAll([0.1+0.2,0.81-1]) // [0.3,-0.19]
+ * Blurs([0.1+0.2,0.81-1]) // [0.3,-0.19]
  * ```
  */
 function Blurs(values, accuracy = 12) {
@@ -9543,6 +9834,7 @@ var chance = new Chance();
  * ```
  */
 function RndN(min, max) {
+    Should(IsNum(min, max), 'input must be num');
     return chance.integer({ min, max });
 }
 globalThis.RndN = RndN;
@@ -9555,7 +9847,9 @@ globalThis.RndN = RndN;
  * ```
  */
 function RndNs(min, max, n) {
+    Should(IsNum(min, max), 'input must be num');
     n !== null && n !== void 0 ? n : (n = Math.min(Math.floor(max - min + 1), 10));
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     // if (!n) n = Math.min(Math.floor(max - min + 1), 10)
     return chance.unique(() => RndN(min, max), n);
 }
@@ -9568,6 +9862,7 @@ globalThis.RndNs = RndNs;
  * ```
  */
 function RndR(min, max) {
+    Should(IsNum(min, max), 'input must be num');
     return chance.floating({ min, max, fixed: 8 });
 }
 globalThis.RndR = RndR;
@@ -9601,6 +9896,7 @@ globalThis.RndT = RndT;
  * ```
  */
 function RndZ(min, max) {
+    Should(IsNum(min, max), 'input must be num');
     return RndN(min, max) * RndU();
 }
 globalThis.RndZ = RndZ;
@@ -9613,7 +9909,9 @@ globalThis.RndZ = RndZ;
  * ```
  */
 function RndZs(min, max, n) {
+    Should(IsNum(min, max), 'input must be num');
     n !== null && n !== void 0 ? n : (n = Min(Math.floor(max - min + 1), 10));
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     let arr = chance.unique(() => RndN(min, max), n);
     for (let i = 0; i < arr.length; i++) {
         arr[i] = arr[i] * RndU();
@@ -9629,6 +9927,7 @@ globalThis.RndZs = RndZs;
  * ```
  */
 function RndP(max) {
+    Should(IsNum(max), 'input must be num');
     return chance.prime({ min: 2, max: max });
 }
 globalThis.RndP = RndP;
@@ -9640,6 +9939,7 @@ globalThis.RndP = RndP;
  * ```
  */
 function RndOdd(min, max) {
+    Should(IsNum(min, max), 'input must be num');
     min = Math.ceil((min + 1) / 2);
     max = Math.floor((max + 1) / 2);
     return 2 * RndN(min, max) - 1;
@@ -9653,6 +9953,7 @@ globalThis.RndOdd = RndOdd;
  * ```
  */
 function RndEven(min, max) {
+    Should(IsNum(min, max), 'input must be num');
     min = Math.ceil(min / 2);
     max = Math.floor(max / 2);
     return 2 * RndN(min, max);
@@ -9666,6 +9967,7 @@ globalThis.RndEven = RndEven;
  * ```
  */
 function RndPoly(...coeff) {
+    Should(IsNum(...coeff), 'input must be num');
     return coeff.map((x, i, a) => {
         return i === 0 ? RndN(1, x) : RndZ(1, x);
     });
@@ -9679,6 +9981,7 @@ globalThis.RndPoly = RndPoly;
  * ```
  */
 function RndPyth(max = 100) {
+    Should(IsNum(max), 'input must be num');
     let arr = [];
     for (let m = 1; m < 10; m++) {
         for (let n = 1; n < m; n++) {
@@ -9700,24 +10003,27 @@ globalThis.RndPyth = RndPyth;
  * @param max abs of intercept
  * @return a linear [a,b,c] in ax+by+c=0
  * ```typescript
- * RndLinear(1,5) // may return [2,-3,6]
+ * RndLinearFromIntercept(1,5) // may return [2,-3,6]
  * ```
  */
-function RndLinear(minInt, maxInt) {
+function RndLinearFromInt(minInt, maxInt) {
+    Should(IsPositive(minInt, maxInt), 'input must be positive num');
     let xInt = RndZ(minInt, maxInt);
     let yInt = RndZ(minInt, maxInt);
     return LinearFromIntercepts(xInt, yInt);
 }
-globalThis.RndLinear = RndLinear;
+globalThis.RndLinearFromInt = RndLinearFromInt;
 /**
  * @category Random
  * @return a point within given range
  * ```typescript
  * RndPoint([1,4],[10,14]) // may return [2,12]
- * // equivalent to [RndN(...xRange),Range(yRange)]
+ * // equivalent to [RndN(...xRange),Range(...yRange)]
  * ```
  */
 function RndPoint(xRange, yRange) {
+    Should(IsArrayOfLength(2)(xRange, yRange), 'input must be range');
+    Should(IsNum(...xRange, ...yRange), 'input must be num');
     let x = RndN(...xRange);
     let y = RndN(...yRange);
     return [x, y];
@@ -9725,12 +10031,14 @@ function RndPoint(xRange, yRange) {
 globalThis.RndPoint = RndPoint;
 /**
  * @category Random
- * @return n angles in [0,360] cyclic at least separated by separation
+ * @return n angles in [0,360] at least cyclic separated by separation
  * ```typescript
  * RndAngles(3,50) // may return [30,90,200]
  * ```
  */
 function RndAngles(n, separation) {
+    Should(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsPositive(separation), 'separation must be positive num');
     let f = () => Sort(...RndNs(0, 360, n));
     let p = (arr) => {
         for (let i = 0; i < arr.length - 1; i++) {
@@ -9752,6 +10060,10 @@ globalThis.RndAngles = RndAngles;
  * ```
  */
 function RndConvexPolygon(n, center, radius, separation) {
+    Should(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsPoint(center), 'center must be point');
+    Should(IsPositive(radius), 'radius must be positive num');
+    Should(IsPositive(separation), 'separation must be positive num');
     let [h, k] = center;
     let r = radius;
     let angles = RndAngles(n, separation);
@@ -11867,7 +12179,7 @@ module.exports = Array.isArray || function (arr) {
 function RndShake(anchor, range, n) {
     if (typeof anchor === 'string') {
         // Fraction
-        if (ParseDfrac(anchor)) {
+        if (IsDfrac(anchor)) {
             return RndShakeDfrac(anchor, range, n);
         }
         // Inequal Sign
@@ -11898,7 +12210,9 @@ function RndShake(anchor, range, n) {
         }
     }
     // console.error('Fail to RndShake: ' + anchor)
-    Must(false, 'Fail to RndShake: ' + anchor);
+    if (anchor === undefined)
+        return [];
+    Should(false, 'Fail to RndShake: ' + anchor);
     return [];
 }
 globalThis.RndShake = RndShake;
@@ -12246,6 +12560,7 @@ globalThis.RndShe = RndShe;
  * ```
  */
 function AreDistinct(...nums) {
+    Should(IsNum(...nums), 'input must be num');
     return (new Set(nums)).size === nums.length;
 }
 globalThis.AreDistinct = AreDistinct;
@@ -12259,6 +12574,7 @@ globalThis.AreDistinct = AreDistinct;
  * ```
  */
 function AreAbsDistinct(...nums) {
+    Should(IsNum(...nums), 'input must be num');
     return AreDistinct(...nums.map(x => Math.abs(x)));
 }
 globalThis.AreAbsDistinct = AreAbsDistinct;
@@ -12272,6 +12588,7 @@ globalThis.AreAbsDistinct = AreAbsDistinct;
  * ```
  */
 function AreSameSign(...nums) {
+    Should(IsNum(...nums), 'input must be num');
     nums = nums.map(x => Math.sign(x));
     nums = [...new Set(nums)];
     return nums.length === 1;
@@ -12290,6 +12607,7 @@ globalThis.AreSameSign = AreSameSign;
  * ```
  */
 function AreCoprime(...nums) {
+    Should(IsNum(...nums), 'input must be num');
     nums = Blurs(nums);
     if (!IsInteger(...nums))
         return true;
@@ -12306,6 +12624,22 @@ function AreCoprime(...nums) {
 globalThis.AreCoprime = AreCoprime;
 /**
  * @category Relation
+ * @return Check if the points are all distinct.
+ * ```typescript
+ * AreDistinctPoint([1,2],[3,4]) // true
+ * AreDistinctPoint([1,2],[1,2]) // false
+ * ```
+ */
+function AreDistinctPoint(...points) {
+    Should(IsPoint(...points), 'input must be point');
+    let predicate = (p1, p2) => {
+        return p1[0] !== p2[0] || p1[1] !== p2[1];
+    };
+    return PairsEvery(predicate)(...points);
+}
+globalThis.AreDistinctPoint = AreDistinctPoint;
+/**
+ * @category Relation
  * @return Check if the points are pairwise distant apart.
  * ```typescript
  * AreDistantPoint(2)([0,0],[3,0]) // true
@@ -12313,29 +12647,29 @@ globalThis.AreCoprime = AreCoprime;
  * ```
  */
 function AreDistantPoint(distance) {
-    const f = function (...points) {
-        let pairs = Pairs(...points);
-        let distances = pairs.map(ps => Distance(ps[0], ps[1]));
-        return distances.every(x => x >= distance);
+    Should(IsPositive(distance), 'distance must be positive');
+    return function (...points) {
+        Should(IsPoint(...points), 'input must be point');
+        let predicate = (p1, p2) => Distance(p1, p2) >= distance;
+        return PairsEvery(predicate)(...points);
     };
-    return f;
 }
 globalThis.AreDistantPoint = AreDistantPoint;
 /**
  * @category Relation
- * @return Check if
+ * @return Check if slopes are at least oblique at minAngle
  * ```typescript
  * AreOblique(40)(0,1) // true
  * AreOblique(40)(0,0.5) // false
  * ```
  */
 function AreOblique(minAngle) {
-    const f = function (...slopes) {
-        let pairs = Pairs(...slopes);
-        let angles = pairs.map(ps => IntersectAngle(ps[0], ps[1]));
-        return angles.every(x => x > minAngle);
+    Should(IsPositive(minAngle), 'minAngle must be positive');
+    return function (...slopes) {
+        Should(IsNum(...slopes), 'slopes must be nums');
+        let predicate = (m1, m2) => IntersectAngle(m1, m2) >= minAngle;
+        return PairsEvery(predicate)(...slopes);
     };
-    return f;
 }
 globalThis.AreOblique = AreOblique;
 
@@ -12355,6 +12689,8 @@ globalThis.AreOblique = AreOblique;
 * ```
 */
 function ListIntegers(start, end) {
+    Should(IsNum(start, end), 'input must be num');
+    Should(start < end, 'start < end required');
     let arr = [];
     for (let i = start; i <= end; i++) {
         arr.push(i);
@@ -12371,6 +12707,8 @@ globalThis.ListIntegers = ListIntegers;
 * ```
 */
 function ASterm(a, d, n) {
+    Should(IsNum(a, d), 'a,d must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     return a + (n - 1) * d;
 }
 globalThis.ASterm = ASterm;
@@ -12383,6 +12721,8 @@ globalThis.ASterm = ASterm;
 * ```
 */
 function ASsum(a, d, n) {
+    Should(IsNum(a, d), 'a,d must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     return 0.5 * n * (2 * a + (n - 1) * d);
 }
 globalThis.ASsum = ASsum;
@@ -12395,6 +12735,8 @@ globalThis.ASsum = ASsum;
 * ```
 */
 function ASequence(a, d, n = 10) {
+    Should(IsNum(a, d), 'a,d must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     let arr = [];
     for (let i = 1; i <= n; i++) {
         arr.push(ASterm(a, d, i));
@@ -12411,6 +12753,8 @@ globalThis.ASequence = ASequence;
 * ```
 */
 function GSterm(a, r, n) {
+    Should(IsNum(a, r), 'a,r must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     return a * (Math.pow(r, (n - 1)));
 }
 globalThis.GSterm = GSterm;
@@ -12425,6 +12769,8 @@ globalThis.GSterm = GSterm;
 * ```
 */
 function GSsum(a, r, n) {
+    Should(IsNum(a, r), 'a,r must be num');
+    Should(IsPositiveInteger(n) || n === undefined, 'n must be positive integer or undefined');
     return n ? a * (Math.pow(r, n) - 1) / (r - 1) : a / (1 - r);
 }
 globalThis.GSsum = GSsum;
@@ -12437,6 +12783,8 @@ globalThis.GSsum = GSsum;
 * ```
 */
 function GSequence(a, r, n = 10) {
+    Should(IsNum(a, r), 'a,r must be num');
+    Should(IsPositiveInteger(n), 'n must be positive integer');
     let arr = [];
     for (let i = 1; i <= n; i++) {
         arr.push(GSterm(a, r, i));
@@ -12460,6 +12808,7 @@ globalThis.GSequence = GSequence;
  * ```
  */
 function Min(...nums) {
+    Should(IsNum(...nums), 'input must be num');
     return Math.min(...nums);
 }
 globalThis.Min = Min;
@@ -12471,6 +12820,7 @@ globalThis.Min = Min;
  * ```
  */
 function Max(...nums) {
+    Should(IsNum(...nums), 'input must be num');
     return Math.max(...nums);
 }
 globalThis.Max = Max;
@@ -12482,6 +12832,7 @@ globalThis.Max = Max;
  * ```
  */
 function Sort(...nums) {
+    Should(IsNum(...nums), 'input must be num');
     return [...nums].sort((a, b) => a - b);
 }
 globalThis.Sort = Sort;
@@ -12506,7 +12857,8 @@ globalThis.SortBy = SortBy;
  * ```
  */
 function Sum(...nums) {
-    return nums.reduce((a, b) => a + b);
+    Should(IsNum(...nums), 'input must be num');
+    return nums.reduce((a, b) => a + b, 0);
 }
 globalThis.Sum = Sum;
 /**
@@ -12518,6 +12870,8 @@ globalThis.Sum = Sum;
  * ```
  */
 function Mean(...nums) {
+    Should(IsNum(...nums), 'input must be num');
+    Should(nums.length > 0, 'nums.length must be >0');
     const sum = nums.reduce((a, b) => a + b);
     return sum / nums.length;
 }
@@ -12560,6 +12914,7 @@ globalThis.GrammarJoin = GrammarJoin;
 * ```
 */
 function Tick(bool) {
+    Should(IsBoolean(bool), 'bool must be boolean');
     return bool ? '✔' : '✘';
 }
 globalThis.Tick = Tick;
@@ -12571,6 +12926,7 @@ globalThis.Tick = Tick;
 * ```
 */
 function Ticks(...bools) {
+    Should(IsBoolean(...bools), 'bools must be boolean');
     return bools.map(x => Tick(x));
 }
 globalThis.Ticks = Ticks;
@@ -12585,6 +12941,7 @@ globalThis.Ticks = Ticks;
 * ```
 */
 function IneqSign(greater, equal = false) {
+    Should(IsBoolean(greater, equal), 'input must be boolean');
     if (greater && equal) {
         return ['\\ge', '\\le'];
     }
@@ -12616,8 +12973,7 @@ globalThis.IneqSign = IneqSign;
 * ```
 */
 function ParseIneqSign(text) {
-    Must(IsIneqSign(text), 'ParseIneqSign: input is not IneqSign');
-    // if (!text.match(/[gl\>\<]/g)) return undefined
+    Should(IsIneqSign(text), 'input is not IneqSign');
     let greater = text.includes('g') || text.includes('>');
     let equal = text.includes('e') || text.includes('=');
     return [greater, equal];
@@ -12637,10 +12993,11 @@ globalThis.ParseIneqSign = ParseIneqSign;
 * ```
 */
 function Dfrac(numerator, denominator, upSign = false) {
+    Should(IsNum(numerator, denominator), 'input must be num');
+    Should(IsBoolean(upSign), 'upSign must be boolean');
     let p = numerator;
     let q = denominator;
-    if (q === 0)
-        return '\\dfrac{' + p + '}{' + q + '}';
+    Should(q !== 0, 'denominator should not be zero');
     if (p === 0)
         return '0';
     [p, q] = Frac(p, q);
@@ -12673,17 +13030,13 @@ globalThis.Dfrac = Dfrac;
 function ParseDfrac(dfrac) {
     const d = String.raw `-?\d+\.?\d*`;
     const f = String.raw `-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
-    if (typeof dfrac !== 'string')
-        return undefined;
-    if (!dfrac.match(new RegExp(f, 'g')))
-        return undefined;
+    Should(IsDfrac(dfrac), 'input is not dfrac');
     dfrac = dfrac.match(new RegExp(f, 'g'))[0];
     const matches = dfrac.match(new RegExp(d, 'g'));
     const u = dfrac.charAt(0) === '-' ? -1 : 1;
     const p = Number(matches[0]) * u;
     const q = Number(matches[1]);
-    if (isNaN(p) || isNaN(q))
-        return undefined;
+    Should(IsNum(p, q), 'fail to parse dfrac');
     return [p, q];
 }
 globalThis.ParseDfrac = ParseDfrac;
@@ -12696,6 +13049,7 @@ globalThis.ParseDfrac = ParseDfrac;
  * ```
  */
 function IndexToSurd(text) {
+    Should(IsString(text), 'input must be string');
     return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}");
 }
 globalThis.IndexToSurd = IndexToSurd;
@@ -12707,6 +13061,7 @@ globalThis.IndexToSurd = IndexToSurd;
  * ```
  */
 function Coord(point) {
+    Should(IsPoint(point), 'input must be point');
     return '(' + Blur(point[0]) + ', ' + Blur(point[1]) + ')';
 }
 globalThis.Coord = Coord;
@@ -12729,6 +13084,8 @@ globalThis.Coord = Coord;
  * ```
  */
 function CosineLawLength(a, b, C) {
+    Should(IsPositive(a, b, C), 'input must be positive num');
+    Should(C <= 180, 'angle C must be between 0 and 180');
     return Math.pow((Math.pow(a, 2) + Math.pow(b, 2) - 2 * a * b * cos(C)), 0.5);
 }
 globalThis.CosineLawLength = CosineLawLength;
@@ -12742,6 +13099,7 @@ globalThis.CosineLawLength = CosineLawLength;
  * ```
  */
 function CosineLawAngle(a, b, c) {
+    Should(IsTriangle([a, b, c]), 'input not satisfy triangle ineq');
     return arccos((Math.pow(c, 2) - Math.pow(a, 2) - Math.pow(b, 2)) / (-2 * a * b));
 }
 globalThis.CosineLawAngle = CosineLawAngle;
@@ -12755,6 +13113,7 @@ globalThis.CosineLawAngle = CosineLawAngle;
  * ```
  */
 function Heron(a, b, c) {
+    Should(IsTriangle([a, b, c]), 'input not satisfy triangle ineq');
     let s = (a + b + c) / 2;
     return Math.pow((s * (s - a) * (s - b) * (s - c)), 0.5);
 }
@@ -12769,6 +13128,8 @@ globalThis.Heron = Heron;
  * ```
  */
 function TriangleFromVertex(A, B, C, fix = true) {
+    Should(IsPoint(A, B, C), 'input must be point');
+    Should(IsBoolean(fix), 'fix must be boolean');
     let sideC = Distance(A, B);
     let sideA = Distance(B, C);
     let sideB = Distance(C, A);
@@ -12855,7 +13216,8 @@ function SolveTriangle({ sideA = null, sideB = null, sideC = null, angleA = null
         SAS();
         AAS();
     }
-    throw 'Solve Triangle Fail!';
+    Should(false, 'Solve Triangle Fail!');
+    throw '';
 }
 globalThis.SolveTriangle = SolveTriangle;
 
@@ -12880,6 +13242,7 @@ globalThis.SolveTriangle = SolveTriangle;
 function Quadrant(rect) {
     if (!Array.isArray(rect))
         rect = PolToRect([1, rect]);
+    Should(IsPoint(rect), 'rect must be polarpoint or number');
     const q = RectToPol(rect)[1];
     if (q >= 0 && q < 90)
         return "I";
@@ -12889,7 +13252,8 @@ function Quadrant(rect) {
         return "III";
     if (q >= 270 && q < 360)
         return "IV";
-    throw 'fail to parse quadrant!';
+    Should(false, 'fail to parse quadrant!');
+    throw '';
 }
 globalThis.Quadrant = Quadrant;
 /**
@@ -12900,6 +13264,7 @@ globalThis.Quadrant = Quadrant;
  * ```
  */
 function PolToRect([r, q]) {
+    Should(IsPoint([r, q]), 'input must be point');
     return [r * cos(q), r * sin(q)];
 }
 globalThis.PolToRect = PolToRect;
@@ -12911,6 +13276,7 @@ globalThis.PolToRect = PolToRect;
  * ```
  */
 function RectToPol([x, y]) {
+    Should(IsPoint([x, y]), 'input must be point');
     const r = Math.sqrt(x * x + y * y);
     let q = Math.atan2(y, x) * 180 / Math.PI;
     if (q < 0)
@@ -12935,10 +13301,8 @@ function ASTC(quadrant, func) {
         quadrant = 3;
     if (quadrant == "IV")
         quadrant = 4;
-    if (![1, 2, 3, 4].includes(quadrant))
-        return 0;
-    if (!['sin', 'cos', 'tan'].includes(func))
-        return 0;
+    Should([1, 2, 3, 4].includes(quadrant), 'cannot parse quadrant');
+    Should(['sin', 'cos', 'tan'].includes(func), 'cannot parse TrigFunc');
     if (quadrant == 1)
         return 1;
     if (quadrant == 2)
@@ -13028,19 +13392,17 @@ globalThis.TrigRoot = TrigRoot;
  * HCF(6,8) // 2
  * HCF(6,8,9) // 1
  * HCF(1,3) // 1
- * HCF(0.5,3) // NaN
- * HCF(0,3) // NaN
+ * HCF(0.5,3) // throw
+ * HCF(0,3) // throw
  * ```
  */
 function HCF(...nums) {
+    Should(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer');
     nums = Blurs(nums);
-    if (!IsInteger(...nums))
-        return NaN;
-    if (!IsNonZero(...nums))
-        return NaN;
+    nums = nums.map(x => Abs(x));
     function _HCF(n1, n2) {
-        n1 = Math.abs(n1);
-        n2 = Math.abs(n2);
+        n1 = Abs(n1);
+        n2 = Abs(n2);
         while (n1 !== n2) {
             if (n1 > n2)
                 n1 = n1 - n2;
@@ -13059,24 +13421,52 @@ globalThis.HCF = HCF;
  * ```typescript
  * LCM(2,3) // 6
  * LCM(2,3,5) // 30
- * LCM(0.5,3) // NaN
- * LCM(0,3) // NaN
+ * LCM(0.5,3) // throw
+ * LCM(0,3) // throw
  * ```
  */
 function LCM(...nums) {
+    Should(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer');
     nums = Blurs(nums);
-    if (!IsInteger(...nums))
-        return NaN;
-    if (!IsNonZero(...nums))
-        return NaN;
     function _LCM(n1, n2) {
-        n1 = Math.abs(n1);
-        n2 = Math.abs(n2);
-        return Math.abs(n1 * n2 / HCF(n1, n2));
+        n1 = Abs(n1);
+        n2 = Abs(n2);
+        return Abs(n1 * n2 / HCF(n1, n2));
     }
     return nums.reduce((a, v) => _LCM(a, v));
 }
 globalThis.LCM = LCM;
+/**
+ * @category Utility
+ * @param num - from 1 to 10
+ * @return roman number
+ * ```typescript
+ * Romanize(1) // "I"
+ * Romanize(2) // "II"
+ * ```
+ */
+function Romanize(num) {
+    Should(IsNum(num), 'input must be number');
+    Should(num > 0 && num <= 10, 'input must be 1-10');
+    return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1];
+}
+globalThis.Romanize = Romanize;
+/**
+ * @category Utility
+ * @param roman - from I to X
+ * @return arabic number
+ * ```typescript
+ * DeRomanize("I") // 1
+ * DeRomanize("II") // 2
+ * ```
+ */
+function DeRomanize(roman) {
+    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+    Should(IsString(roman), 'input must be string');
+    Should(romans.includes(roman), 'roman out of range');
+    return romans.indexOf(roman) + 1;
+}
+globalThis.DeRomanize = DeRomanize;
 /**
  * @category Utility
  * @return a clone of the object
@@ -13109,6 +13499,19 @@ function Pairs(...items) {
     return arr;
 }
 globalThis.Pairs = Pairs;
+/**
+ * @category Utility
+ * @return check if every pairs satisfy the predicate
+ * ```typescript
+ * PairsEvery(AreDistinct)(1,2,3) // true
+ * ```
+ */
+function PairsEvery(predicate) {
+    return function (...items) {
+        return Pairs(...items).every(p => predicate(p[0], p[1]));
+    };
+}
+globalThis.PairsEvery = PairsEvery;
 /**
  * @category Utility
  * @param arr - array to dedupe
@@ -13152,6 +13555,7 @@ globalThis.Dedupe = Dedupe;
  * ```
  */
 function Vector(O, P) {
+    Should(IsPoint(O, P), 'input must be point');
     return [P[0] - O[0], P[1] - O[1]];
 }
 globalThis.Vector = Vector;
@@ -13163,6 +13567,7 @@ globalThis.Vector = Vector;
  * ```
  */
 function VectorAdd(...vectors) {
+    Should(IsVector(...vectors), 'input must be vector');
     const x = Sum(...vectors.map(p => p[0]));
     const y = Sum(...vectors.map(p => p[1]));
     return [x, y];
@@ -13177,6 +13582,7 @@ globalThis.VectorAdd = VectorAdd;
  * ```
  */
 function VectorMean(...vectors) {
+    Should(IsVector(...vectors), 'input must be vector');
     const x = Sum(...vectors.map(p => p[0])) / vectors.length;
     const y = Sum(...vectors.map(p => p[1])) / vectors.length;
     return [x, y];
@@ -13192,6 +13598,7 @@ globalThis.VectorMean = VectorMean;
  * ```
  */
 function VectorLength(v) {
+    Should(IsVector(v), 'input must be vector');
     const [x, y] = v;
     return Math.pow((x * x + y * y), 0.5);
 }
@@ -13209,6 +13616,7 @@ globalThis.VectorLength = VectorLength;
  * ```
  */
 function VectorArg(v) {
+    Should(IsVector(v), 'input must be vector');
     const [x, y] = v;
     let arg = Math.atan2(y, x) / Math.PI * 180;
     if (arg < 0)
@@ -13225,6 +13633,8 @@ globalThis.VectorArg = VectorArg;
  * ```
  */
 function VectorScale(v, k) {
+    Should(IsVector(v), 'input must be vector');
+    Should(IsNum(k), 'k must be num');
     return [k * v[0], k * v[1]];
 }
 globalThis.VectorScale = VectorScale;
@@ -13238,6 +13648,7 @@ globalThis.VectorScale = VectorScale;
  * ```
  */
 function VectorRev(v) {
+    Should(IsVector(v), 'input must be vector');
     const [x, y] = v;
     return [-x, -y];
 }
@@ -13252,6 +13663,7 @@ globalThis.VectorRev = VectorRev;
  * ```
  */
 function VectorUnit(v) {
+    Should(IsVector(v), 'input must be vector');
     const [x, y] = v;
     const L = VectorLength(v);
     return [x / L, y / L];
@@ -13267,6 +13679,8 @@ globalThis.VectorUnit = VectorUnit;
  * ```
  */
 function VectorScaleTo(v, length) {
+    Should(IsVector(v), 'input must be vector');
+    Should(IsNum(length), 'length must be num');
     return VectorScale(VectorUnit(v), length);
 }
 globalThis.VectorScaleTo = VectorScaleTo;
@@ -13278,6 +13692,8 @@ globalThis.VectorScaleTo = VectorScaleTo;
  * ```
  */
 function VectorRotate(v, angle) {
+    Should(IsVector(v), 'input must be vector');
+    Should(IsNum(angle), 'angle must be num');
     const [x, y] = v;
     const S = sin(angle);
     const C = cos(angle);
@@ -13304,21 +13720,20 @@ function MathError(message) {
     return new CustumMathError(message);
 }
 globalThis.MathError = MathError;
-class CustumDesignError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'DesignError';
-    }
-}
-function DesignError(message) {
-    return new CustumDesignError(message);
-}
-globalThis.DesignError = DesignError;
-function Must(condition, msg = "Must condition failed!") {
-    if (!condition)
-        throw DesignError(msg);
-}
-globalThis.Must = Must;
+// class CustumDesignError extends Error {
+//     constructor(message: string) {
+//         super(message);
+//         this.name = 'DesignError';
+//     }
+// }
+// function DesignError(message: string) {
+//     return new CustumDesignError(message)
+// }
+// globalThis.DesignError = DesignError
+// function Must(condition: boolean, msg: string = "Must condition failed!") {
+//     if (!condition) throw DesignError(msg)
+// }
+// globalThis.Must = Must
 function Should(condition, msg = "Should condition failed!") {
     if (!condition)
         throw MathError(msg);
@@ -13959,7 +14374,7 @@ class PenCls {
              * // decorate an angle AOB with double-arc in anti-clockwise.
              * ```
              */
-            angle(A, O, B, arc = 1, radius = 15) {
+            anglePolar(A, O, B, arc = 1, radius = 15) {
                 A = this.pen.frame.toPix(A);
                 let OPixel = this.pen.frame.toPix(O);
                 B = this.pen.frame.toPix(B);
@@ -13970,6 +14385,44 @@ class PenCls {
                 for (let i = 0; i < arc; i++) {
                     this.pen.circle(O, radius + outset - i * space, [a1, a2]);
                 }
+            },
+            /**
+             * Decorate an angle AOB, always in anti-clockwise.
+             * @category decorator
+             * @param A - The starting point [x,y].
+             * @param O - The vertex point [x,y].
+             * @param B - The ending point [x,y].
+             * @param arc - The number of arcs.
+             * @param radius - The radius of the angle arc, in pixel.
+             * @returns
+             * ```typescript
+             * pen.decorate.angle([1,0],[0,0],[3,2],2)
+             * // decorate an angle AOB with double-arc in anti-clockwise.
+             * ```
+             */
+            angle(A, O, B, arc = 1, radius = 15) {
+                if (IsReflex(A, O, B))
+                    [A, B] = [B, A];
+                this.anglePolar(A, O, B, arc, radius);
+            },
+            /**
+             * Decorate an angle AOB, always in anti-clockwise.
+             * @category decorator
+             * @param A - The starting point [x,y].
+             * @param O - The vertex point [x,y].
+             * @param B - The ending point [x,y].
+             * @param arc - The number of arcs.
+             * @param radius - The radius of the angle arc, in pixel.
+             * @returns
+             * ```typescript
+             * pen.decorate.angle([1,0],[0,0],[3,2],2)
+             * // decorate an angle AOB with double-arc in anti-clockwise.
+             * ```
+             */
+            angleReflex(A, O, B, arc = 1, radius = 15) {
+                if (!IsReflex(A, O, B))
+                    [A, B] = [B, A];
+                this.anglePolar(A, O, B, arc, radius);
             },
             /**
              * Decorate a right-angle AOB.
@@ -14282,7 +14735,13 @@ class PenCls {
      */
     plot(func, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
         const tracer = (t) => {
-            let result = func(t);
+            let result;
+            try {
+                result = func(t);
+            }
+            catch (_a) {
+                return [NaN, NaN];
+            }
             if (!Array.isArray(result))
                 result = [t, result];
             let [x, y] = this.frame.toPix(result);
@@ -14480,32 +14939,7 @@ class PenCls {
      * @ignore
      */
     autoCrop() {
-        var ctx = this.ctx;
-        var canvas = ctx.canvas, w = canvas.width, h = canvas.height, pix = { x: [], y: [] }, imageData = ctx.getImageData(0, 0, canvas.width, canvas.height), x, y, index;
-        for (y = 0; y < h; y++) {
-            for (x = 0; x < w; x++) {
-                index = (y * w + x) * 4;
-                if (imageData.data[index + 3] > 0) {
-                    pix.x.push(x);
-                    pix.y.push(y);
-                }
-            }
-        }
-        pix.x.sort(function (a, b) { return a - b; });
-        pix.y.sort(function (a, b) { return a - b; });
-        var n = pix.x.length - 1;
-        w = 1 + pix.x[n] - pix.x[0];
-        h = 1 + pix.y[n] - pix.y[0];
-        var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
-        canvas.width = w;
-        canvas.height = h;
-        ctx.putImageData(cut, 0, 0);
-    }
-    /**
-     * @ignore
-     */
-    dataURL() {
-        return this.canvas.toDataURL();
+        trimCanvas(this.canvas);
     }
     /**
      * Export the canvas to image tag.
@@ -14519,58 +14953,26 @@ class PenCls {
      * ```
      */
     export(html, placeholder) {
-        const src = 'src="' + this.dataURL() + '"';
+        const src = 'src="' + this.canvas.toDataURL() + '"';
         const width = ' width="' + Math.floor(this.canvas.width / PEN_QUALITY) + '"';
         const height = ' height="' + Math.floor(this.canvas.height / PEN_QUALITY) + '"';
         return html.replace('src="' + placeholder + '"', src + width + height);
     }
     ;
     /**
-     * @ignore
+     * Export the canvas to image tag, with white space trimmed.
+     * @category export
+     * @param html - The html string to export to.
+     * @param placeholder - The src field of the image tag to export to.
+     * @returns The new html with src field pasted.
+     * ```typescript
+     * question = pen.exportTrim(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
      */
-    exportCropped(html, placeholder) {
-        function cloneCanvas(oldCanvas) {
-            //create a new canvas
-            let newCanvas = document.createElement('canvas');
-            let context = newCanvas.getContext('2d');
-            //set dimensions
-            newCanvas.width = oldCanvas.width;
-            newCanvas.height = oldCanvas.height;
-            //apply the old canvas to the new one
-            context.drawImage(oldCanvas, 0, 0);
-            //return the new canvas
-            return newCanvas;
-        }
-        function autoCrop(canvas) {
-            let ctx = canvas.getContext("2d");
-            let w = canvas.width;
-            let h = canvas.height;
-            let pix = { x: [], y: [] };
-            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            let x;
-            let y;
-            let index;
-            for (y = 0; y < h; y++) {
-                for (x = 0; x < w; x++) {
-                    index = (y * w + x) * 4;
-                    if (imageData.data[index + 3] > 0) {
-                        pix.x.push(x);
-                        pix.y.push(y);
-                    }
-                }
-            }
-            pix.x.sort((a, b) => a - b);
-            pix.y.sort((a, b) => a - b);
-            let n = pix.x.length - 1;
-            w = 1 + pix.x[n] - pix.x[0];
-            h = 1 + pix.y[n] - pix.y[0];
-            let cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
-            canvas.width = w;
-            canvas.height = h;
-            ctx.putImageData(cut, 0, 0);
-        }
+    exportTrim(html, placeholder) {
         let clone = cloneCanvas(this.canvas);
-        autoCrop(clone);
+        trimCanvas(clone);
         const src = 'src="' + clone.toDataURL() + '"';
         const w = Math.floor(clone.width / PEN_QUALITY);
         const h = Math.floor(clone.height / PEN_QUALITY);
@@ -14620,6 +15022,50 @@ class PenCls {
  */
 var Pen = PenCls;
 globalThis.Pen = Pen;
+function cloneCanvas(oldCanvas) {
+    //create a new canvas
+    let newCanvas = document.createElement('canvas');
+    let context = newCanvas.getContext('2d');
+    //set dimensions
+    newCanvas.width = oldCanvas.width;
+    newCanvas.height = oldCanvas.height;
+    //apply the old canvas to the new one
+    context.drawImage(oldCanvas, 0, 0);
+    //return the new canvas
+    return newCanvas;
+}
+function trimCanvas(canvas) {
+    function rowBlank(imageData, width, y) {
+        for (var x = 0; x < width; ++x) {
+            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
+                return false;
+        }
+        return true;
+    }
+    function columnBlank(imageData, width, x, top, bottom) {
+        for (var y = top; y < bottom; ++y) {
+            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
+                return false;
+        }
+        return true;
+    }
+    var ctx = canvas.getContext("2d");
+    var width = canvas.width;
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var top = 0, bottom = imageData.height, left = 0, right = imageData.width;
+    while (top < bottom && rowBlank(imageData, width, top))
+        ++top;
+    while (bottom - 1 > top && rowBlank(imageData, width, bottom - 1))
+        --bottom;
+    while (left < right && columnBlank(imageData, width, left, top, bottom))
+        ++left;
+    while (right - 1 > left && columnBlank(imageData, width, right - 1, top, bottom))
+        --right;
+    var trimmed = ctx.getImageData(left, top, right - left, bottom - top);
+    canvas.width = trimmed.width;
+    canvas.height = trimmed.height;
+    ctx.putImageData(trimmed, 0, 0);
+}
 
 
 /***/ }),
@@ -14987,7 +15433,14 @@ class AutoPenCls {
         let c = quadratic[2];
         let greater = sign.includes('>') || sign.includes('g');
         let equal = sign.includes('=') || sign.includes('e');
-        let [p, q] = QuadraticRoot(a, b, c);
+        let p;
+        let q;
+        try {
+            [p, q] = QuadraticRoot(a, b, c);
+        }
+        catch (_a) {
+            [p, q] = [undefined, undefined];
+        }
         if (p !== undefined && q !== undefined) {
             [p, q] = [Max(p, q), Min(p, q)];
             p = Fix(p, 2);
@@ -15185,11 +15638,11 @@ class AutoPenCls {
                 if (typeof angle === 'number')
                     angle = angle + '°';
                 if (anticlockwise) {
-                    pen.decorate.angle(P, O, Q);
+                    pen.decorate.anglePolar(P, O, Q);
                     pen.label.angle([P, O, Q], angle);
                 }
                 else {
-                    pen.decorate.angle(Q, O, P);
+                    pen.decorate.anglePolar(Q, O, P);
                     pen.label.angle([Q, O, P], angle);
                 }
                 pen.set.textItalic();
@@ -15538,8 +15991,12 @@ class Seed {
                     return true; // done if validated
             }
             catch (e) {
-                if (e.name !== 'MathError')
+                if (e.name === 'MathError') {
+                    console.log(e.stack);
+                }
+                else {
                     throw e;
+                }
             }
         }
         ;
