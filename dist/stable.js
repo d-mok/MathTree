@@ -7914,7 +7914,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
 __webpack_require__(30);
-__webpack_require__(34);
+__webpack_require__(35);
 
 
 /***/ }),
@@ -12543,6 +12543,16 @@ function RndShe() {
     return chance.first({ gender: 'female', nationality: 'en' });
 }
 globalThis.RndShe = RndShe;
+/**
+ * @category RandomUtil
+ * @return a random 3-letters array
+ * ```typescript
+ * RndLetters() // may return ['a','b','c'] or ['x','y','z'] or etc
+ */
+function RndLetters() {
+    return RndPick(['a', 'b', 'c'], ['h', 'k', 'l'], ['m', 'n', 'l'], ['p', 'q', 'r'], ['r', 's', 't'], ['u', 'v', 'w'], ['x', 'y', 'z']);
+}
+globalThis.RndLetters = RndLetters;
 
 
 /***/ }),
@@ -12792,6 +12802,40 @@ function GSequence(a, r, n = 10) {
     return arr;
 }
 globalThis.GSequence = GSequence;
+/**
+* @category Sequence
+* @return the nth term in a quadratic sequence, 1st term = a, P_n+1=P_n + pn+q
+* ```typescript
+* QuadraticSequence(1,2,3,4) //
+* ```
+*/
+function QuadraticSequence(a, p, q, n) {
+    let c = a;
+    for (let i = 2; i <= n; i++) {
+        c += p * (i - 1) + q;
+    }
+    return c;
+}
+globalThis.QuadraticSequence = QuadraticSequence;
+/**
+* @category Sequence
+* @return the nth term in a lucas sequence, a_n = p*a_{n-1} + q*a_{n-2}
+* ```typescript
+* LucasSequence(1,2,3,4,5) //
+* ```
+*/
+function LucasSequence(first, second, p, q, n) {
+    if (n === 1)
+        return first;
+    if (n === 2)
+        return second;
+    let S = [first, second];
+    for (let i = 3; i <= n; i++) {
+        S.push(p * S[i - 2] + q * S[i - 3]);
+    }
+    return S[n - 1];
+}
+globalThis.LucasSequence = LucasSequence;
 
 
 /***/ }),
@@ -13065,6 +13109,25 @@ function Coord(point) {
     return '(' + Blur(point[0]) + ', ' + Blur(point[1]) + ')';
 }
 globalThis.Coord = Coord;
+/**
+ * @category Text
+ * @return the scientific notation of number
+ * ```typescript
+ * Sci(123.45) // '1.2345 x 10^{2}'
+ * Sci(1.2345) // '1.2345'
+ * ```
+ */
+function Sci(num) {
+    Should(IsNum(num), 'input must be num');
+    if (num === 0)
+        return '0';
+    let m = Magnitude(num);
+    if (m === 0)
+        return num.toString();
+    num = num / (Math.pow(10, m));
+    return num.toString() + ' \\times ' + '10^{' + m + '}';
+}
+globalThis.Sci = Sci;
 
 
 /***/ }),
@@ -13710,6 +13773,8 @@ globalThis.VectorRotate = VectorRotate;
 
 "use strict";
 
+var SHOULD_LOG = false;
+globalThis.SHOULD_LOG = SHOULD_LOG;
 class CustumMathError extends Error {
     constructor(message) {
         super(message);
@@ -13720,20 +13785,6 @@ function MathError(message) {
     return new CustumMathError(message);
 }
 globalThis.MathError = MathError;
-// class CustumDesignError extends Error {
-//     constructor(message: string) {
-//         super(message);
-//         this.name = 'DesignError';
-//     }
-// }
-// function DesignError(message: string) {
-//     return new CustumDesignError(message)
-// }
-// globalThis.DesignError = DesignError
-// function Must(condition: boolean, msg: string = "Must condition failed!") {
-//     if (!condition) throw DesignError(msg)
-// }
-// globalThis.Must = Must
 function Should(condition, msg = "Should condition failed!") {
     if (!condition)
         throw MathError(msg);
@@ -13751,6 +13802,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
+__webpack_require__(34);
 
 
 /***/ }),
@@ -14014,6 +14066,10 @@ class PenCls {
              */
             pen: this,
             /**
+             * @ignore
+             */
+            LABEL_CENTER: undefined,
+            /**
              * Set the weight of the pen (line width).
              * @category set
              * @param weight - The line width.
@@ -14148,6 +14204,23 @@ class PenCls {
                 }
             },
             /**
+             * Set the center for label dodge. If undefined, dodge right by default.
+             * @category set
+             * @param center - the center coordinate
+             * @returns
+             * ```typescript
+             * pen.set.labelCenter([0,0]) // set center to be [0,0]
+             * ```
+             */
+            labelCenter(center) {
+                if (center) {
+                    this.LABEL_CENTER = center;
+                }
+                else {
+                    this.LABEL_CENTER = undefined;
+                }
+            },
+            /**
              * Reset all pen settings.
              * @category set
              * @returns
@@ -14165,6 +14238,7 @@ class PenCls {
                 this.pen.ctx.font = 'normal 10px Times New Roman';
                 this.textSize();
                 this.textItalic();
+                this.labelCenter();
             }
         };
         /**
@@ -14478,9 +14552,18 @@ class PenCls {
              * // label the point [1,2] as 'A', place the label on the left (180 degree)
              * ```
              */
-            point(position, text = '', dodgeDirection = 0, offsetPixel = 15) {
+            point(position, text = '', dodgeDirection, offsetPixel = 15) {
                 let [x, y] = this.pen.frame.toPix(position);
                 offsetPixel = offsetPixel * PEN_QUALITY;
+                if (dodgeDirection === undefined) {
+                    let center = this.pen.set.LABEL_CENTER;
+                    if (center !== undefined && AreDistinctPoint(center, position)) {
+                        dodgeDirection = Inclination(center, position);
+                    }
+                    else {
+                        dodgeDirection = 0;
+                    }
+                }
                 x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
                 y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
                 this.pen.ctx.save();
@@ -14591,7 +14674,7 @@ class PenCls {
              * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
              * ```
              */
-            coordinates(point, dodgeDirection = 0, offsetPixel = 15) {
+            coordinates(point, dodgeDirection = 90, offsetPixel = 15) {
                 let text = '(' + Fix(point[0], 1) + ', ' + Fix(point[1], 1) + ')';
                 this.point(point, text, dodgeDirection, offsetPixel);
             }
@@ -14960,6 +15043,63 @@ class PenCls {
         this.ctx.stroke();
         if (fill)
             this.ctx.fill();
+    }
+    /**
+     * Draw an angle with label, non-reflex
+     * @category draw
+     * @param A - The starting point [x,y].
+     * @param O - The vertex point [x,y].
+     * @param B - The ending point [x,y].
+     * @param label - The label
+     * @param arc - The number of arcs.
+     * @param radius - The radius of the angle arc, in pixel.
+     * @returns
+     * ```typescript
+     * pen.angle([0,0],[5,2],[3,4],'x')
+     * ```
+     */
+    angle(A, O, B, label, arc = 1, radius = 15) {
+        this.decorate.angle(A, O, B, arc, radius);
+        if (label !== undefined)
+            this.label.angle([A, O, B], label);
+    }
+    /**
+     * Draw an angle with label, anticlockwise
+     * @category draw
+     * @param A - The starting point [x,y].
+     * @param O - The vertex point [x,y].
+     * @param B - The ending point [x,y].
+     * @param label - The label
+     * @param arc - The number of arcs.
+     * @param radius - The radius of the angle arc, in pixel.
+     * @returns
+     * ```typescript
+     * pen.anglePolar([0,0],[5,2],[3,4],'x')
+     * ```
+     */
+    anglePolar(A, O, B, label, arc = 1, radius = 15) {
+        this.decorate.anglePolar(A, O, B, arc, radius);
+        if (label !== undefined)
+            this.label.anglePolar([A, O, B], label);
+    }
+    /**
+     * Draw an angle with label, reflex
+     * @category draw
+     * @param A - The starting point [x,y].
+     * @param O - The vertex point [x,y].
+     * @param B - The ending point [x,y].
+     * @param label - The label
+     * @param arc - The number of arcs.
+     * @param radius - The radius of the angle arc, in pixel.
+     * @returns
+     * ```typescript
+     * pen.angleReflex([0,0],[5,2],[3,4],'x')
+     * ```
+     */
+    angleReflex(A, O, B, label, arc = 1, radius = 15) {
+        this.decorate.angleReflex(A, O, B, arc, radius);
+        if (label !== undefined)
+            this.label.angleReflex([A, O, B], label);
     }
     /**
      * Write text.
@@ -15876,6 +16016,45 @@ class AutoPenCls {
             });
         this.pen = pen;
     }
+    /**
+     * A dot pattern
+     * @category tool
+     * @param a - no. of dot of 1st pattern
+     * @param p - P_n+1 = P_n + (pn+q)
+     * @param q - P_n+1 = P_n + (pn+q)
+     * @param n - the pattern required
+     * @param offset - offset of initial position
+     * @returns
+     * ```typescript
+     * autoPen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
+     * ```
+     */
+    DotPattern({ a, p, q, n, offset }) {
+        const pen = new Pen();
+        pen.setup.range([-2, 30], [-4, 10]);
+        pen.setup.resolution(0.03);
+        function drawRow(n, j, offset = 0) {
+            for (let i = 1 + offset; i <= n + offset; i++) {
+                pen.point([i, j]);
+            }
+        }
+        drawRow(a + (n - 1) * p, 1);
+        for (let j = 2; j <= n; j++) {
+            drawRow(q + (n - j) * p, j, (j - 1) * offset);
+        }
+        let m = "";
+        if (n === 1)
+            m = '1st';
+        if (n === 2)
+            m = '2nd';
+        if (n === 3)
+            m = '3rd';
+        if (n >= 3)
+            m = n + 'th';
+        pen.write([(1 + a + (n - 1) * p) / 2, -1], m + ' pattern');
+        pen.autoCrop();
+        this.pen = pen;
+    }
 }
 var AutoPen = AutoPenCls;
 globalThis.AutoPen = AutoPen;
@@ -15887,8 +16066,49 @@ globalThis.AutoPen = AutoPen;
 
 "use strict";
 
+/**
+ * @ignore
+ */
+var PROJ_ANGLE = 60;
+/**
+ * @ignore
+ */
+var PROJ_DEPTH = 0.5;
+/**
+* @category 3DPen
+* @return projection of 3D point to 2D plane
+* ```typescript
+* proj(1,1,0) // [1.25, 0.433012701892]
+* ```
+*/
+function proj(x, y, z) {
+    let x_new = x + PROJ_DEPTH * y * cos(PROJ_ANGLE);
+    let y_new = z + PROJ_DEPTH * y * sin(PROJ_ANGLE);
+    return [x_new, y_new];
+}
+globalThis.proj = proj;
+/**
+* @category 3DPen
+* @return set the angle and depth of projection
+* ```typescript
+* projSetting(45,0.6) // set the angle to 45 and depth to 0.5
+* ```
+*/
+function projSetting(angle = 60, depth = 0.5) {
+    PROJ_ANGLE = angle;
+    PROJ_DEPTH = depth;
+}
+globalThis.projSetting = projSetting;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(35);
+const global_1 = __webpack_require__(36);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -15923,19 +16143,19 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(36);
-const dress_1 = __webpack_require__(37);
-const shuffle_1 = __webpack_require__(38);
-const option_1 = __webpack_require__(39);
-__webpack_require__(40);
-const cls_1 = __webpack_require__(41);
+const section_1 = __webpack_require__(37);
+const dress_1 = __webpack_require__(38);
+const shuffle_1 = __webpack_require__(39);
+const option_1 = __webpack_require__(40);
+__webpack_require__(41);
+const cls_1 = __webpack_require__(42);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -16032,7 +16252,8 @@ class Seed {
             }
             catch (e) {
                 if (e.name === 'MathError') {
-                    console.log(e.stack);
+                    if (SHOULD_LOG)
+                        console.log(e.stack);
                 }
                 else {
                     throw e;
@@ -16130,7 +16351,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16165,7 +16386,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16231,7 +16452,7 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16311,7 +16532,7 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16384,7 +16605,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16392,7 +16613,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
