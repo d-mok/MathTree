@@ -49,6 +49,9 @@
 			<a href="autopencls.html" class="tsd-kind-icon">Auto<wbr>Pen<wbr>Cls</a>
 			<ul>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="autopencls.html#dotpattern" class="tsd-kind-icon">Dot<wbr>Pattern</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="autopencls.html#inequalities" class="tsd-kind-icon">Inequalities</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -100,6 +103,7 @@
 					<section class="tsd-index-section">
 						<h3>tool</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="autopencls.html#dotpattern" class="tsd-kind-icon">Dot<wbr>Pattern</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="autopencls.html#inequalities" class="tsd-kind-icon">Inequalities</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="autopencls.html#linearprogram" class="tsd-kind-icon">Linear<wbr>Program</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="autopencls.html#primefactorization" class="tsd-kind-icon">Prime<wbr>Factorization</a></li>
@@ -153,6 +157,64 @@
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>tool</h2>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="dotpattern" class="tsd-anchor"></a>
+				<h3>Dot<wbr>Pattern</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">Dot<wbr>Pattern<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>offset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>q<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A dot pattern</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>offset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>q<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter">
+										<h5>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>no. of dot of 1st pattern</p>
+										</div>
+									</li>
+									<li class="tsd-parameter">
+										<h5>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>the pattern required</p>
+										</div>
+									</li>
+									<li class="tsd-parameter">
+										<h5>offset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>offset of initial position</p>
+										</div>
+									</li>
+									<li class="tsd-parameter">
+										<h5>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>P_n+1 = P_n + (pn+q)</p>
+										</div>
+									</li>
+									<li class="tsd-parameter">
+										<h5>q<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<p>P_n+1 = P_n + (pn+q)</p>
+										</div>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						<pre><code class="language-typescript">autoPen.DotPattern({<span class="hljs-attr">a</span>:<span class="hljs-number">3</span>, <span class="hljs-attr">p</span>:<span class="hljs-number">3</span>, <span class="hljs-attr">q</span>:<span class="hljs-number">2</span>, <span class="hljs-attr">n</span>:<span class="hljs-number">4</span>, <span class="hljs-attr">offset</span>:<span class="hljs-number">1</span>})</code></pre>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="inequalities" class="tsd-anchor"></a>
 				<h3>Inequalities</h3>

@@ -913,6 +913,47 @@ class AutoPenCls {
         this.pen = pen;
     }
 
+
+    /**
+     * A dot pattern
+     * @category tool
+     * @param a - no. of dot of 1st pattern
+     * @param p - P_n+1 = P_n + (pn+q)
+     * @param q - P_n+1 = P_n + (pn+q)
+     * @param n - the pattern required
+     * @param offset - offset of initial position
+     * @returns
+     * ```typescript
+     * autoPen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
+     * ```
+     */
+    DotPattern({ a, p, q, n, offset }:
+        { a: number, p: number, q: number, n: number, offset: number }) {
+
+        const pen = new Pen();
+        pen.setup.range([-20, 20], [-20, 20]);
+        pen.setup.resolution(0.03)
+
+        function drawRow(n: number, j: number, offset = 0) {
+            for (let i = 1 + offset; i <= n + offset; i++) {
+                pen.point([i, j])
+            }
+        }
+        drawRow(a + (n - 1) * p, 1)
+        for (let j = 2; j <= n; j++) {
+            drawRow(q + (n - j) * p, j, (j - 1) * offset)
+        }
+        let m = ""
+        if (n === 1) m = '1st'
+        if (n === 2) m = '2nd'
+        if (n === 3) m = '3rd'
+        if (n >= 3) m = n + 'th'
+        pen.write([(1 + a + (n - 1) * p) / 2, -1], m + ' pattern')
+        pen.autoCrop();
+        this.pen = pen;
+    }
+
+
 }
 
 
