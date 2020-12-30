@@ -43,3 +43,21 @@ test('GSequence', () => {
     expect(GSequence(5, -2, 3)).toEqual([5, -10, 20]);
 });
 
+
+test('QuadraticSequence', () => {
+    expect(QuadraticSequence(1, 2, 3, 1)).toBe(1);
+    expect(QuadraticSequence(1, 2, 3, 2)).toBe(6);
+    expect(QuadraticSequence(1, 2, 3, 3)).toBe(13);
+    expect(QuadraticSequence(1, 2, 3, 4)).toBe(22);
+});
+
+
+
+test('LucasSequence', () => {
+    expect(LucasSequence(1, 2, 3, 4, 1)).toBe(1);
+    expect(LucasSequence(1, 2, 3, 4, 2)).toBe(2);
+    expect(LucasSequence(1, 2, 3, 4, 3)).toBe(10);
+    expect(LucasSequence(1, 2, 3, 4, 4)).toBe(38);
+    expect(LucasSequence(1, 2, 3, 4, 5)).toBe(154);
+});
+

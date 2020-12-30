@@ -12802,6 +12802,40 @@ function GSequence(a, r, n = 10) {
     return arr;
 }
 globalThis.GSequence = GSequence;
+/**
+* @category Sequence
+* @return the nth term in a quadratic sequence, 1st term = a, P_n+1=P_n + pn+q
+* ```typescript
+* QuadraticSequence(1,2,3,4) //
+* ```
+*/
+function QuadraticSequence(a, p, q, n) {
+    let c = a;
+    for (let i = 2; i <= n; i++) {
+        c += p * (i - 1) + q;
+    }
+    return c;
+}
+globalThis.QuadraticSequence = QuadraticSequence;
+/**
+* @category Sequence
+* @return the nth term in a lucas sequence, a_n = p*a_{n-1} + q*a_{n-2}
+* ```typescript
+* LucasSequence(1,2,3,4,5) //
+* ```
+*/
+function LucasSequence(first, second, p, q, n) {
+    if (n === 1)
+        return first;
+    if (n === 2)
+        return second;
+    let S = [first, second];
+    for (let i = 3; i <= n; i++) {
+        S.push(p * S[i - 2] + q * S[i - 3]);
+    }
+    return S[n - 1];
+}
+globalThis.LucasSequence = LucasSequence;
 
 
 /***/ }),
