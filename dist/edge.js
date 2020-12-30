@@ -12543,6 +12543,16 @@ function RndShe() {
     return chance.first({ gender: 'female', nationality: 'en' });
 }
 globalThis.RndShe = RndShe;
+/**
+ * @category RandomUtil
+ * @return a random 3-letters array
+ * ```typescript
+ * RndLetters() // may return ['a','b','c'] or ['x','y','z'] or etc
+ */
+function RndLetters() {
+    return RndPick(['a', 'b', 'c'], ['h', 'k', 'l'], ['m', 'n', 'l'], ['p', 'q', 'r'], ['r', 's', 't'], ['u', 'v', 'w'], ['x', 'y', 'z']);
+}
+globalThis.RndLetters = RndLetters;
 
 
 /***/ }),
@@ -13065,6 +13075,25 @@ function Coord(point) {
     return '(' + Blur(point[0]) + ', ' + Blur(point[1]) + ')';
 }
 globalThis.Coord = Coord;
+/**
+ * @category Text
+ * @return the scientific notation of number
+ * ```typescript
+ * Sci(123.45) // '1.2345 x 10^{2}'
+ * Sci(1.2345) // '1.2345'
+ * ```
+ */
+function Sci(num) {
+    Should(IsNum(num), 'input must be num');
+    if (num === 0)
+        return '0';
+    let m = Magnitude(num);
+    if (m === 0)
+        return num.toString();
+    num = num / (Math.pow(10, m));
+    return num.toString() + ' \\times ' + '10^{' + m + '}';
+}
+globalThis.Sci = Sci;
 
 
 /***/ }),

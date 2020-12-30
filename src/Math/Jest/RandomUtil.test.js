@@ -77,3 +77,10 @@ test('RndShe', () => {
     expect(arr).toBeFlatIs(x => typeof x === 'string');
 });
 
+
+test('RndLetters', () => {
+    let arr = sample(() => RndLetters());
+    expect(arr).toBeFlatIs(x => typeof x === 'string');
+    expect(arr).toAllHaveLength(3);
+});
+

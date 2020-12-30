@@ -116,3 +116,27 @@ function RndShe(): string {
 }
 globalThis.RndShe = RndShe
 
+
+
+/**
+ * @category RandomUtil
+ * @return a random 3-letters array
+ * ```typescript
+ * RndLetters() // may return ['a','b','c'] or ['x','y','z'] or etc
+ */
+function RndLetters(): string[] {
+    return RndPick(
+        ['a', 'b', 'c'],
+        ['h', 'k', 'l'],
+        ['m', 'n', 'l'],
+        ['p', 'q', 'r'],
+        ['r', 's', 't'],
+        ['u', 'v', 'w'],
+        ['x', 'y', 'z'],
+    )
+}
+globalThis.RndLetters = RndLetters
+
+
+
+

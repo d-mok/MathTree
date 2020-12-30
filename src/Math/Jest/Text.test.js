@@ -82,3 +82,15 @@ test('Coord', () => {
     expect(Coord([0.1 + 0.2, 0])).toBe('(0.3, 0)');
 });
 
+
+test('Sci', () => {
+    expect(Sci(123.45)).toBe('1.2345 \\times 10^{2}');
+    expect(Sci(-123.45)).toBe('-1.2345 \\times 10^{2}');
+    expect(Sci(0.123)).toBe('1.23 \\times 10^{-1}');
+    expect(Sci(-0.123)).toBe('-1.23 \\times 10^{-1}');
+    expect(Sci(0)).toBe('0');
+    expect(Sci(2)).toBe('2');
+    expect(Sci(1.23)).toBe('1.23');
+    expect(Sci(100)).toBe('1 \\times 10^{2}');
+});
+
