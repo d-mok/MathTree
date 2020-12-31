@@ -196,7 +196,7 @@ globalThis.Coord = Coord
  * @category Text
  * @return the scientific notation of number
  * ```typescript
- * Sci(123.45) // '1.2345 x 10^{2}'
+ * Sci(123.45) // '1.2345 x 10^{ 2}'
  * Sci(1.2345) // '1.2345'
  * ```
  */
@@ -206,6 +206,6 @@ function Sci(num: number): string {
     let m = Magnitude(num)
     if (m === 0) return num.toString()
     num = num / (10 ** m)
-    return num.toString() + ' \\times ' + '10^{' + m + '}'
+    return num.toString() + ' \\times ' + '10^{ ' + m + '}'
 }
 globalThis.Sci = Sci

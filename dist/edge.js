@@ -13125,7 +13125,7 @@ function Sci(num) {
     if (m === 0)
         return num.toString();
     num = num / (Math.pow(10, m));
-    return num.toString() + ' \\times ' + '10^{' + m + '}';
+    return num.toString() + ' \\times ' + '10^{ ' + m + '}';
 }
 globalThis.Sci = Sci;
 
