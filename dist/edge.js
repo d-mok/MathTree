@@ -13113,7 +13113,7 @@ globalThis.Coord = Coord;
  * @category Text
  * @return the scientific notation of number
  * ```typescript
- * Sci(123.45) // '1.2345 x 10^{2}'
+ * Sci(123.45) // '1.2345 x 10^{ 2}'
  * Sci(1.2345) // '1.2345'
  * ```
  */
@@ -13125,6 +13125,7 @@ function Sci(num) {
     if (m === 0)
         return num.toString();
     num = num / (Math.pow(10, m));
+    num = Blur(num);
     return num.toString() + ' \\times ' + '10^{ ' + m + '}';
 }
 globalThis.Sci = Sci;

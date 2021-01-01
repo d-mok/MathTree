@@ -206,6 +206,7 @@ function Sci(num: number): string {
     let m = Magnitude(num)
     if (m === 0) return num.toString()
     num = num / (10 ** m)
+    num = Blur(num)
     return num.toString() + ' \\times ' + '10^{ ' + m + '}'
 }
 globalThis.Sci = Sci
