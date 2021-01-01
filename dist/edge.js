@@ -9617,8 +9617,8 @@ function Fix(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
-    num += Number.EPSILON;
     num = num * (Math.pow(10, dp));
+    num += Number.EPSILON;
     num = Math.round(num);
     num = num / (Math.pow(10, dp));
     if (dp < 0)

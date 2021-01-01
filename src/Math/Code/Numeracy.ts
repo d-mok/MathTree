@@ -116,8 +116,8 @@ function Fix(num: number, dp = 0): number {
     Should(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
-    num += Number.EPSILON
     num = num * (10 ** dp);
+    num += Number.EPSILON
     num = Math.round(num);
     num = num / (10 ** dp);
     if (dp < 0) num = Fix(num, 1);   // correct for floating point error
