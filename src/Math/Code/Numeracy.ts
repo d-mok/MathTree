@@ -307,7 +307,7 @@ globalThis.Magnitude = Magnitude
 function Blur(value: any, accuracy = 12): (typeof value) {
     if (typeof value !== 'number') return value
     if (!isFinite(value)) return value
-    value = parseFloat(value.toFixed(accuracy));
+    // value = parseFloat(value.toFixed(accuracy));
     value = parseFloat(value.toPrecision(accuracy));
     return value
 }
