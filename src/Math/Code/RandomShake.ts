@@ -173,11 +173,12 @@ function RndShakeR(anchor: number, range?: number, n?: number): number[] {
     range ??= Abs(anchor * 0.5)
     n ??= 5
     let dp = Max(DecimalPlace(anchor), 1)
-    if (SigFig(anchor) === 1) dp++
+    if (SigFig(anchor) === 1 && DecimalPlace(anchor) > 0) dp++
     let func = Sieve(
         () => Fix(anchor + RndR(0, range!) * RndU(), dp),
         x => (x * (anchor + Number.EPSILON) >= Number.EPSILON) &&
-            (Magnitude(x) === Magnitude(anchor))
+            (Magnitude(x) === Magnitude(anchor)) &&
+            (x !== anchor)
     )
     return chance.unique(func, n)
 
