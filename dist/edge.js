@@ -8837,6 +8837,8 @@ globalThis.Degree = Degree;
  */
 function sin(x) {
     Should(IsNum(x), 'input must be num');
+    if (x % 180 === 0)
+        return 0;
     let v = Math.sin(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8850,6 +8852,8 @@ globalThis.sin = sin;
  */
 function cos(x) {
     Should(IsNum(x), 'input must be num');
+    if ((x - 90) % 180 === 0)
+        return 0;
     let v = Math.cos(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8863,6 +8867,8 @@ globalThis.cos = cos;
  */
 function tan(x) {
     Should(IsNum(x), 'input must be num');
+    if (x % 180 === 0)
+        return 0;
     let v = Math.tan(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -9210,6 +9216,10 @@ function PrintVariable(html, symbol, value) {
     let T = typeof value;
     if (T === 'number') {
         value = Blur(value);
+        if (Abs(value) >= 1e6 || Abs(value) <= 1e-6) {
+            value = Round(value, 3);
+            value = Sci(value);
+        }
         if (IsDecimal(value))
             value = Round(value, 5);
     }
@@ -9617,12 +9627,10 @@ function Fix(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
-    num = num * (Math.pow(10, dp));
+    num = AddMagnitude(num, dp);
     num += Number.EPSILON;
     num = Math.round(num);
-    num = num / (Math.pow(10, dp));
-    if (dp < 0)
-        num = Fix(num, 1); // correct for floating point error
+    num = AddMagnitude(num, -dp);
     return sign * num;
 }
 globalThis.Fix = Fix;
@@ -9640,12 +9648,10 @@ function FixUp(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
+    num = AddMagnitude(num, dp);
     num -= Number.EPSILON;
-    num = num * (Math.pow(10, dp));
     num = Math.ceil(num);
-    num = num / (Math.pow(10, dp));
-    if (dp < 0)
-        num = Fix(num, 1); // correct for floating point error
+    num = AddMagnitude(num, -dp);
     return sign * num;
     ;
 }
@@ -9664,12 +9670,10 @@ function FixDown(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
+    num = AddMagnitude(num, dp);
     num += Number.EPSILON;
-    num = num * (Math.pow(10, dp));
     num = Math.floor(num);
-    num = num / (Math.pow(10, dp));
-    if (dp < 0)
-        num = Fix(num, 1); // correct for floating point error
+    num = AddMagnitude(num, -dp);
     return sign * num;
     ;
 }
@@ -9768,7 +9772,7 @@ globalThis.DecimalPlace = DecimalPlace;
  * ```typescript
  * Magnitude(1) // 0
  * Magnitude(2) // 0
- * Magnitude(0.9) // 0
+ * Magnitude(0.9) // -1
  * Magnitude(10) // 1
  * Magnitude(10.1) // 1
  * Magnitude(0.1) // -1
@@ -9776,10 +9780,38 @@ globalThis.DecimalPlace = DecimalPlace;
  * ```
  */
 function Magnitude(num) {
-    Should(IsNum(num), 'input must be num');
-    return Math.floor(log(10, Abs(num)));
+    // Should(IsNum(num), 'input must be num')
+    return Number(num.toExponential().split('e')[1]);
 }
 globalThis.Magnitude = Magnitude;
+/**
+ * @category Numeracy
+ * @return the mantissa
+ * ```typescript
+ * Mantissa(1.23) // 1.23
+ * Mantissa(123) // 1.23
+ * Mantissa(0.123) // 1.23
+ * ```
+ */
+function Mantissa(num) {
+    return Number(num.toExponential().split('e')[0]);
+}
+globalThis.Mantissa = Mantissa;
+/**
+ * @category Numeracy
+ * @return add a constant to the magnitude
+ * ```typescript
+ * AddMagnitude(12.34,1) // 123.4
+ * AddMagnitude(12.34,-1) // 1.234
+ * ```
+ */
+function AddMagnitude(num, add) {
+    let exp = Magnitude(num);
+    let mantissa = Mantissa(num);
+    exp += add;
+    return Number(mantissa + 'e' + exp);
+}
+globalThis.AddMagnitude = AddMagnitude;
 /**
  * @category Numeracy
  * @return correct for floating point error
@@ -12198,7 +12230,7 @@ function RndShake(anchor, range, n) {
             return RndShakeN(anchor, range, n);
         }
         // Probability
-        if (IsProbability(anchor)) {
+        if (anchor > 0.01 && anchor <= 1) {
             return RndShakeProb(anchor, range, n);
         }
         // Decimal
@@ -12266,10 +12298,10 @@ function RndShakeN(anchor, range, n) {
     if (!IsInteger(anchor))
         return [];
     let a = Abs(anchor);
-    let max = a + range;
-    let min = Max(a - range, 1);
+    let max = Min(a + range, Math.pow(10, (Magnitude(anchor) + 1)) - 1);
+    let min = Max(a - range, 1, Math.pow(10, (Magnitude(anchor))));
     n !== null && n !== void 0 ? n : (n = Min(10, max - min));
-    let func = Sieve(() => RndN(min, max), x => x !== a);
+    let func = Sieve(() => RndN(min, max), x => (x !== a) && (Magnitude(x) === Magnitude(anchor)));
     let arr = chance.unique(func, n);
     let s = Sign(anchor);
     arr = arr.map((x) => s * x);
@@ -12320,10 +12352,13 @@ globalThis.RndShakeZ = RndShakeZ;
  * ```
  */
 function RndShakeR(anchor, range, n) {
-    range !== null && range !== void 0 ? range : (range = Max(1, Abs(anchor * 0.1)));
+    range !== null && range !== void 0 ? range : (range = Abs(anchor * 0.5));
     n !== null && n !== void 0 ? n : (n = 5);
-    const dp = Max(DecimalPlace(anchor), 1);
-    let func = Sieve(() => Fix(anchor + RndR(0, range) * RndU(), dp), x => x * (anchor + Number.EPSILON) >= Number.EPSILON);
+    let dp = Max(DecimalPlace(anchor), 1);
+    if (SigFig(anchor) === 1)
+        dp++;
+    let func = Sieve(() => Fix(anchor + RndR(0, range) * RndU(), dp), x => (x * (anchor + Number.EPSILON) >= Number.EPSILON) &&
+        (Magnitude(x) === Magnitude(anchor)));
     return chance.unique(func, n);
 }
 globalThis.RndShakeR = RndShakeR;

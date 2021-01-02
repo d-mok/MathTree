@@ -86,11 +86,17 @@ test('RndShakeN', () => {
     expect(arr).toBeUnique();
 
     arr = sample(() => RndShakeN(100));
-    expect(arr).toBeFlatWithin(90, 110);
+    expect(arr).toBeFlatWithin(101, 110);
     expect(arr).toBeFlatIsInteger();
-    expect(arr).toBeFlatDistinct(20);
+    expect(arr).toBeFlatDistinct(10);
     expect(arr).toAllHaveLength(10);
     expect(arr).toBeUnique();
+
+    arr = sample(() => RndShakeN(5));
+
+    for (let i = 0; i <= 100; i++) {
+        RndShakeN(i);
+    }
 });
 
 
@@ -193,7 +199,7 @@ test('RndShakeR', () => {
     expect(arr).toBeUnique();
 
     arr = sample(() => RndShakeR(100));
-    expect(arr).toBeFlatWithin(90, 110);
+    expect(arr).toBeFlatWithin(50, 150);
     expect(arr).not.toBeFlatWithin(91, 109);
     expect(arr).toAllHaveLength(5);
     expect(arr).not.toBeFlatIsInteger();
@@ -247,10 +253,10 @@ test('RndShakeFrac', () => {
     let arr = sample(() => RndShakeFrac([5, 6], 4, 3));
     let arr0 = arr.map(x => x.map(y => y[0]));
     let arr1 = arr.map(x => x.map(y => y[1]));
-    expect(arr0).toBeFlatWithin(1, 9);
-    expect(arr0).toBeFlatDistinct(9);
-    expect(arr1).toBeFlatWithin(2, 10);
-    expect(arr1).toBeFlatDistinct(9);
+    expect(arr0).toBeFlatWithin(1, 8);
+    expect(arr0).toBeFlatDistinct(8);
+    expect(arr1).toBeFlatWithin(2, 9);
+    expect(arr1).toBeFlatDistinct(8);
     expect(arr.flat()).toBeFlatIsInteger();
     expect(arr).toAllHaveLength(3);
     expect(arr.flat().map(x => x[0] / x[1])).toBeFlatIs(IsProbability);
@@ -258,10 +264,10 @@ test('RndShakeFrac', () => {
     arr = sample(() => RndShakeFrac([6, -5], 10, 3));
     arr0 = arr.map(x => x.map(y => y[0]));
     arr1 = arr.map(x => x.map(y => y[1]));
-    expect(arr0).toBeFlatWithin(-16, -1);
-    expect(arr0).toBeFlatDistinct(16);
-    expect(arr1).toBeFlatWithin(2, 15);
-    expect(arr1).toBeFlatDistinct(14);
+    expect(arr0).toBeFlatWithin(-9, -1);
+    expect(arr0).toBeFlatDistinct(9);
+    expect(arr1).toBeFlatWithin(2, 9);
+    expect(arr1).toBeFlatDistinct(8);
     expect(arr.flat()).toBeFlatIsInteger();
     expect(arr).toAllHaveLength(3);
     expect(arr.flat().map(x => x[0] / x[1])).not.toBeFlatIs(IsProbability);
@@ -269,10 +275,10 @@ test('RndShakeFrac', () => {
     arr = sample(() => RndShakeFrac([6, -5]));
     arr0 = arr.map(x => x.map(y => y[0]));
     arr1 = arr.map(x => x.map(y => y[1]));
-    expect(arr0).toBeFlatWithin(-11, -1);
-    expect(arr0).toBeFlatDistinct(11);
-    expect(arr1).toBeFlatWithin(2, 10);
-    expect(arr1).toBeFlatDistinct(9);
+    expect(arr0).toBeFlatWithin(-9, -1);
+    expect(arr0).toBeFlatDistinct(9);
+    expect(arr1).toBeFlatWithin(2, 9);
+    expect(arr1).toBeFlatDistinct(8);
     expect(arr.flat()).toBeFlatIsInteger();
     expect(arr).toAllHaveLength(5);
     expect(arr.flat().map(x => x[0] / x[1])).not.toBeFlatIs(IsProbability);
@@ -284,28 +290,28 @@ test('RndShakeDfrac', () => {
     let arr = sample(() => RndShakeDfrac('\\dfrac{5}{6}', 4, 3));
     let arr0 = arr.flat(2).map(x => ParseDfrac(x)[0]);
     let arr1 = arr.flat(2).map(x => ParseDfrac(x)[1]);
-    expect(arr0).toBeFlatWithin(1, 9);
-    expect(arr0).toBeFlatDistinct(9);
-    expect(arr1).toBeFlatWithin(2, 10);
-    expect(arr1).toBeFlatDistinct(9);
+    expect(arr0).toBeFlatWithin(1, 8);
+    expect(arr0).toBeFlatDistinct(8);
+    expect(arr1).toBeFlatWithin(2, 9);
+    expect(arr1).toBeFlatDistinct(8);
     expect(arr).toAllHaveLength(3);
 
     arr = sample(() => RndShakeDfrac('-\\dfrac{6}{5}', 10, 3));
     arr0 = arr.flat(2).map(x => ParseDfrac(x)[0]);
     arr1 = arr.flat(2).map(x => ParseDfrac(x)[1]);
-    expect(arr0).toBeFlatWithin(-16, -1);
-    expect(arr0).toBeFlatDistinct(16);
-    expect(arr1).toBeFlatWithin(2, 15);
-    expect(arr1).toBeFlatDistinct(14);
+    expect(arr0).toBeFlatWithin(-9, -1);
+    expect(arr0).toBeFlatDistinct(9);
+    expect(arr1).toBeFlatWithin(2, 9);
+    expect(arr1).toBeFlatDistinct(8);
     expect(arr).toAllHaveLength(3);
 
     arr = sample(() => RndShakeDfrac('\\dfrac{6}{-5}'));
     arr0 = arr.flat(2).map(x => ParseDfrac(x)[0]);
     arr1 = arr.flat(2).map(x => ParseDfrac(x)[1]);
-    expect(arr0).toBeFlatWithin(-11, -1);
-    expect(arr0).toBeFlatDistinct(11);
-    expect(arr1).toBeFlatWithin(2, 10);
-    expect(arr1).toBeFlatDistinct(9);
+    expect(arr0).toBeFlatWithin(-9, -1);
+    expect(arr0).toBeFlatDistinct(9);
+    expect(arr1).toBeFlatWithin(2, 9);
+    expect(arr1).toBeFlatDistinct(8);
     expect(arr).toAllHaveLength(5);
 });
 

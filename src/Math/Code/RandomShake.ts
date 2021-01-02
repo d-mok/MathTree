@@ -35,7 +35,7 @@ function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
             return RndShakeN(anchor, range, n)
         }
         // Probability
-        if (IsProbability(anchor)) {
+        if (anchor > 0.01 && anchor <= 1) {
             return RndShakeProb(anchor, range, n)
         }
         // Decimal
@@ -108,10 +108,12 @@ function RndShakeN(anchor: number, range?: number, n?: number): number[] {
     }
     if (!IsInteger(anchor)) return []
     let a = Abs(anchor)
-    let max = a + range
-    let min = Max(a - range, 1)
+    let max = Min(a + range, 10 ** (Magnitude(anchor) + 1) - 1)
+    let min = Max(a - range, 1, 10 ** (Magnitude(anchor)))
     n ??= Min(10, max - min)
-    let func = Sieve(() => RndN(min, max), x => x !== a)
+    let func = Sieve(() => RndN(min, max),
+        x => (x !== a) && (Magnitude(x) === Magnitude(anchor))
+    )
     let arr = chance.unique(func, n)
     let s = Sign(anchor)
     arr = arr.map((x: number) => s * x)
@@ -168,12 +170,14 @@ globalThis.RndShakeZ = RndShakeZ
  * ```
  */
 function RndShakeR(anchor: number, range?: number, n?: number): number[] {
-    range ??= Max(1, Abs(anchor * 0.1))
+    range ??= Abs(anchor * 0.5)
     n ??= 5
-    const dp = Max(DecimalPlace(anchor), 1)
+    let dp = Max(DecimalPlace(anchor), 1)
+    if (SigFig(anchor) === 1) dp++
     let func = Sieve(
         () => Fix(anchor + RndR(0, range!) * RndU(), dp),
-        x => x * (anchor + Number.EPSILON) >= Number.EPSILON
+        x => (x * (anchor + Number.EPSILON) >= Number.EPSILON) &&
+            (Magnitude(x) === Magnitude(anchor))
     )
     return chance.unique(func, n)
 

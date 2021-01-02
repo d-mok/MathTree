@@ -57,6 +57,8 @@ test('Round', () => {
 
     expect(Round(0, 1)).toBe(0);
     expect(Round(0, 2)).toBe(0);
+
+    expect(Round(1.23455e-30, 5)).toBe(1.2346e-30);
 });
 
 
@@ -166,6 +168,8 @@ test('Fix', () => {
 
     expect(Fix(0, 1)).toBe(0);
     expect(Fix(0, 2)).toBe(0);
+
+    expect(Fix(1.23455e-30, 34)).toBe(1.2346e-30);
 });
 
 
@@ -202,8 +206,8 @@ test('FixUp', () => {
     expect(FixUp(-123.4567, 0)).toBe(-124);
     expect(FixUp(-123.4567, 1)).toBe(-123.5);
 
-    expect(FixUp(0, 1)).toBe(-0);
-    expect(FixUp(0, 2)).toBe(-0);
+    expect(FixUp(0, 1)).toBe(0);
+    expect(FixUp(0, 2)).toBe(0);
 });
 
 
@@ -339,6 +343,31 @@ test('Magnitude', () => {
     expect(Magnitude(-1.001)).toBe(0);
     expect(Magnitude(-0.999)).toBe(-1);
 });
+
+
+test('Mantissa', () => {
+    expect(Mantissa(1.234)).toBe(1.234);
+    expect(Mantissa(1234)).toBe(1.234);
+    expect(Mantissa(0.1234)).toBe(1.234);
+    expect(Mantissa(0)).toBe(0);
+    expect(Mantissa(-0.1234)).toBe(-1.234);
+
+});
+
+
+test('AddMagnitude', () => {
+    expect(AddMagnitude(12.34, 1)).toBe(123.4);
+    expect(AddMagnitude(12.34, -1)).toBe(1.234);
+    expect(AddMagnitude(-12.34, -1)).toBe(-1.234);
+    expect(AddMagnitude(0, 5)).toBe(0);
+    expect(AddMagnitude(1.234e-17, 5)).toBe(1.234e-12);
+});
+
+
+
+
+
+
 
 
 test('Blur', () => {

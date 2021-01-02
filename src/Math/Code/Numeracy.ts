@@ -116,11 +116,10 @@ function Fix(num: number, dp = 0): number {
     Should(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
-    num = num * (10 ** dp);
+    num = AddMagnitude(num, dp)
     num += Number.EPSILON
     num = Math.round(num);
-    num = num / (10 ** dp);
-    if (dp < 0) num = Fix(num, 1);   // correct for floating point error
+    num = AddMagnitude(num, -dp)
     return sign * num;
 }
 globalThis.Fix = Fix
@@ -139,11 +138,10 @@ function FixUp(num: number, dp = 0): number {
     Should(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
+    num = AddMagnitude(num, dp)
     num -= Number.EPSILON
-    num = num * (10 ** dp);
     num = Math.ceil(num);
-    num = num / (10 ** dp);
-    if (dp < 0) num = Fix(num, 1);   // correct for floating point error
+    num = AddMagnitude(num, -dp)
     return sign * num;;
 }
 globalThis.FixUp = FixUp
@@ -164,11 +162,10 @@ function FixDown(num: number, dp = 0): number {
     Should(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
+    num = AddMagnitude(num, dp)
     num += Number.EPSILON
-    num = num * (10 ** dp);
     num = Math.floor(num);
-    num = num / (10 ** dp);
-    if (dp < 0) num = Fix(num, 1);   // correct for floating point error
+    num = AddMagnitude(num, -dp)
     return sign * num;;
 }
 globalThis.FixDown = FixDown
@@ -275,7 +272,7 @@ globalThis.DecimalPlace = DecimalPlace
  * ```typescript
  * Magnitude(1) // 0
  * Magnitude(2) // 0
- * Magnitude(0.9) // 0
+ * Magnitude(0.9) // -1
  * Magnitude(10) // 1
  * Magnitude(10.1) // 1
  * Magnitude(0.1) // -1
@@ -283,15 +280,44 @@ globalThis.DecimalPlace = DecimalPlace
  * ```
  */
 function Magnitude(num: number): number {
-    Should(IsNum(num), 'input must be num')
-    return Math.floor(log(10, Abs(num)))
+    // Should(IsNum(num), 'input must be num')
+    return Number(num.toExponential().split('e')[1])
 }
 globalThis.Magnitude = Magnitude
 
 
 
+/**
+ * @category Numeracy
+ * @return the mantissa
+ * ```typescript
+ * Mantissa(1.23) // 1.23
+ * Mantissa(123) // 1.23
+ * Mantissa(0.123) // 1.23
+ * ```
+ */
+function Mantissa(num: number): number {
+    return Number(num.toExponential().split('e')[0])
+}
+globalThis.Mantissa = Mantissa
 
 
+
+/**
+ * @category Numeracy
+ * @return add a constant to the magnitude
+ * ```typescript
+ * AddMagnitude(12.34,1) // 123.4
+ * AddMagnitude(12.34,-1) // 1.234
+ * ```
+ */
+function AddMagnitude(num: number, add: number) {
+    let exp = Magnitude(num)
+    let mantissa = Mantissa(num)
+    exp += add
+    return Number(mantissa + 'e' + exp)
+}
+globalThis.AddMagnitude = AddMagnitude
 
 
 

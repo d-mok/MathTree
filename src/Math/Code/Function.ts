@@ -51,7 +51,7 @@ globalThis.Sqrt = Sqrt
  */
 function Radian(degree: number): number {
     Should(IsNum(degree), 'degree must be num')
-    const v =  degree / 180 * Math.PI
+    const v = degree / 180 * Math.PI
     return Blur(v)
 }
 globalThis.Radian = Radian
@@ -69,7 +69,7 @@ globalThis.Radian = Radian
  */
 function Degree(radian: number): number {
     Should(IsNum(radian), 'degree must be num')
-    const v =  radian * 180 / Math.PI
+    const v = radian * 180 / Math.PI
     return Blur(v)
 }
 globalThis.Degree = Degree
@@ -85,6 +85,7 @@ globalThis.Degree = Degree
  */
 function sin(x: number): number {
     Should(IsNum(x), 'input must be num')
+    if (x % 180 === 0) return 0
     let v = Math.sin(x / 180 * Math.PI);
     return Blur(v)
 }
@@ -99,6 +100,7 @@ globalThis.sin = sin
  */
 function cos(x: number): number {
     Should(IsNum(x), 'input must be num')
+    if ((x - 90) % 180 === 0) return 0
     let v = Math.cos(x / 180 * Math.PI);
     return Blur(v)
 }
@@ -113,6 +115,7 @@ globalThis.cos = cos
  */
 function tan(x: number): number {
     Should(IsNum(x), 'input must be num')
+    if (x % 180 === 0) return 0
     let v = Math.tan(x / 180 * Math.PI);
     return Blur(v)
 }

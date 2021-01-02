@@ -64,6 +64,10 @@ function PrintVariable(html: string, symbol: string, value: any): string {
     let T = typeof value
     if (T === 'number') {
         value = Blur(value)
+        if (Abs(value) >= 1e6 || Abs(value) <= 1e-6) {
+            value = Round(value, 3)
+            value = Sci(value)
+        }
         if (IsDecimal(value)) value = Round(value, 5)
     }
     if (T === 'boolean') {
