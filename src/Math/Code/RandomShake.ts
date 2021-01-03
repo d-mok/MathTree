@@ -76,7 +76,8 @@ function Sieve<T>(randomFunc: () => T, predicate: (x: T) => boolean, n = 1000): 
             let item = randomFunc()
             if (predicate(item)) return item
         }
-        throw 'No items can pass through Sieve after ' + n + ' trials!'
+        Should(false, 'No items can pass through Sieve after ' + n + ' trials!')
+        throw 'never'
     }
     return lambda
 }
