@@ -355,12 +355,32 @@ test('Mantissa', () => {
 });
 
 
-test('AddMagnitude', () => {
-    expect(AddMagnitude(12.34, 1)).toBe(123.4);
-    expect(AddMagnitude(12.34, -1)).toBe(1.234);
-    expect(AddMagnitude(-12.34, -1)).toBe(-1.234);
-    expect(AddMagnitude(0, 5)).toBe(0);
-    expect(AddMagnitude(1.234e-17, 5)).toBe(1.234e-12);
+
+test('LogCeil', () => {
+    expect(LogCeil(5)).toBe(10);
+    expect(LogCeil(23)).toBe(100);
+    expect(LogCeil(0.456)).toBe(1);
+    expect(LogCeil(0.00235)).toBe(0.01);
+});
+
+
+
+test('LogFloor', () => {
+    expect(LogFloor(5)).toBe(1);
+    expect(LogFloor(23)).toBe(10);
+    expect(LogFloor(0.456)).toBe(0.1);
+    expect(LogFloor(0.00235)).toBe(0.001);
+});
+
+
+
+
+test('Raise', () => {
+    expect(Raise(12.34, 1)).toBe(123.4);
+    expect(Raise(12.34, -1)).toBe(1.234);
+    expect(Raise(-12.34, -1)).toBe(-1.234);
+    expect(Raise(0, 5)).toBe(0);
+    expect(Raise(1.234e-17, 5)).toBe(1.234e-12);
 });
 
 

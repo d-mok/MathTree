@@ -108,11 +108,11 @@ function RndShakeN(anchor: number, range?: number, n?: number): number[] {
     }
     if (!IsInteger(anchor)) return []
     let a = Abs(anchor)
-    let max = Min(a + range, 10 ** (Magnitude(anchor) + 1) - 1)
-    let min = Max(a - range, 1, 10 ** (Magnitude(anchor)))
+    let max = Min(a + range, LogCeil(a) - 1)
+    let min = Max(a - range, 1, LogFloor(a))
     n ??= Min(10, max - min)
     let func = Sieve(() => RndN(min, max),
-        x => (x !== a) && (Magnitude(x) === Magnitude(anchor))
+        x => (x !== a)
     )
     let arr = chance.unique(func, n)
     let s = Sign(anchor)
@@ -122,31 +122,31 @@ function RndShakeN(anchor: number, range?: number, n?: number): number[] {
 globalThis.RndShakeN = RndShakeN
 
 
-/**
- * @category RandomShake
- * @param anchor - must be integer
- * @param range - default Max(5, anchor * 10%)
- * @param n - default to 10
- * @return nearby integers
- * ```typescript
- * RndShakeZ(5,2,3) 
- * // return 3 unique integers from [3,4,6,7]
- * RndShakeZ(2,4,3) 
- * // return 3 unique integers from [-2,-1,0,1,3,4,5,6]
- * RndShakeZ(-2,4,3) 
- * // return 3 unique integers from [2,1,0,-1,-3,-4,-5,-6]
- * RndShakeZ(0,2,3) 
- * // return 3 unique integers from [-2,-1,1,2]
- * ```
- */
-function RndShakeZ(anchor: number, range?: number, n?: number): number[] {
-    anchor = Blur(anchor)
-    range ??= Max(5, Abs(anchor * 0.1))
-    if (!IsInteger(anchor)) return []
-    n ??= Min(2 * range, 10)
-    return chance.unique(() => anchor + RndZ(1, range!), n);
-}
-globalThis.RndShakeZ = RndShakeZ
+// /**
+//  * @category RandomShake
+//  * @param anchor - must be integer
+//  * @param range - default Max(5, anchor * 10%)
+//  * @param n - default to 10
+//  * @return nearby integers
+//  * ```typescript
+//  * RndShakeZ(5,2,3) 
+//  * // return 3 unique integers from [3,4,6,7]
+//  * RndShakeZ(2,4,3) 
+//  * // return 3 unique integers from [-2,-1,0,1,3,4,5,6]
+//  * RndShakeZ(-2,4,3) 
+//  * // return 3 unique integers from [2,1,0,-1,-3,-4,-5,-6]
+//  * RndShakeZ(0,2,3) 
+//  * // return 3 unique integers from [-2,-1,1,2]
+//  * ```
+//  */
+// function RndShakeZ(anchor: number, range?: number, n?: number): number[] {
+//     anchor = Blur(anchor)
+//     range ??= Max(5, Abs(anchor * 0.1))
+//     if (!IsInteger(anchor)) return []
+//     n ??= Min(2 * range, 10)
+//     return chance.unique(() => anchor + RndZ(1, range!), n);
+// }
+// globalThis.RndShakeZ = RndShakeZ
 
 
 
@@ -155,7 +155,7 @@ globalThis.RndShakeZ = RndShakeZ
 /**
  * @category RandomShake
  * @param anchor - can be any real number
- * @param range - default Max(1, anchor * 10%)
+ * @param range - default anchor * 10%
  * @param n - default to 5
  * @return nearby same-signed real number with same precision
  * ```typescript
@@ -165,23 +165,23 @@ globalThis.RndShakeZ = RndShakeZ
  * // return 3 unique values from [0,3.5]
  * RndShakeR(-1.5,4,3) 
  * // return 3 unique values from [-5.5,0]
- * RndShakeR(0,2) 
- * // return 10 unique values from [0,2]
  * ```
  */
 function RndShakeR(anchor: number, range?: number, n?: number): number[] {
+    Should(IsNonZero(anchor), 'anchor must be non-zero')
     range ??= Abs(anchor * 0.5)
     n ??= 5
-    let dp = Max(DecimalPlace(anchor), 1)
-    if (SigFig(anchor) === 1 && DecimalPlace(anchor) > 0) dp++
+    let percent = range / Abs(anchor)
+    let [mant, exp] = anchor.toExponential().split('e').map(x => Number(x))
+    let dp = Max(DecimalPlace(mant), 1)
     let func = Sieve(
-        () => Fix(anchor + RndR(0, range!) * RndU(), dp),
-        x => (x * (anchor + Number.EPSILON) >= Number.EPSILON) &&
-            (Magnitude(x) === Magnitude(anchor)) &&
-            (x !== anchor)
+        () => Fix(mant * (1 + RndR(0, percent) * RndU()), dp),
+        x => (x * (mant + Number.EPSILON) >= Number.EPSILON) &&
+            (Magnitude(x) === Magnitude(mant)) &&
+            (x !== mant)
     )
-    return chance.unique(func, n)
-
+    let arr: number[] = chance.unique(func, n)
+    return arr.map(x => Number(x + "e" + exp))
 }
 globalThis.RndShakeR = RndShakeR
 
@@ -206,7 +206,7 @@ globalThis.RndShakeR = RndShakeR
  * ```
  */
 function RndShakeProb(anchor: number, range?: number, n?: number): number[] {
-    if (anchor < 0 || anchor > 1) return []
+    Should(anchor >= 0 && anchor <= 1, 'anchor must between 0 and 1')
     range ??= 0.5
     n ??= 3
     const dp = Max(DecimalPlace(anchor), 1)

@@ -9627,10 +9627,9 @@ function Fix(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
-    num = AddMagnitude(num, dp);
-    num += Number.EPSILON;
-    num = Math.round(num);
-    num = AddMagnitude(num, -dp);
+    num = Raise(num, dp);
+    num = Math.round(num + Number.EPSILON);
+    num = Raise(num, -dp);
     return sign * num;
 }
 globalThis.Fix = Fix;
@@ -9648,10 +9647,9 @@ function FixUp(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
-    num = AddMagnitude(num, dp);
-    num -= Number.EPSILON;
-    num = Math.ceil(num);
-    num = AddMagnitude(num, -dp);
+    num = Raise(num, dp);
+    num = Math.ceil(num - Number.EPSILON);
+    num = Raise(num, -dp);
     return sign * num;
     ;
 }
@@ -9670,10 +9668,9 @@ function FixDown(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
-    num = AddMagnitude(num, dp);
-    num += Number.EPSILON;
-    num = Math.floor(num);
-    num = AddMagnitude(num, -dp);
+    num = Raise(num, dp);
+    num = Math.floor(num + Number.EPSILON);
+    num = Raise(num, -dp);
     return sign * num;
     ;
 }
@@ -9799,19 +9796,49 @@ function Mantissa(num) {
 globalThis.Mantissa = Mantissa;
 /**
  * @category Numeracy
- * @return add a constant to the magnitude
+ * @return the lowest number with the next order of magnitude
  * ```typescript
- * AddMagnitude(12.34,1) // 123.4
- * AddMagnitude(12.34,-1) // 1.234
+ * LogCeil(5) // 10
+ * LogCeil(23) // 100
+ * LogCeil(0.456) // 1
+ * LogCeil(0.00235) // 0.01
  * ```
  */
-function AddMagnitude(num, add) {
+function LogCeil(num) {
+    let exp = Magnitude(num) + 1;
+    return Number('1e' + exp);
+}
+globalThis.LogCeil = LogCeil;
+/**
+ * @category Numeracy
+ * @return the lowest number with the same order of magnitude
+ * ```typescript
+ * LogFloor(5) // 1
+ * LogFloor(23) // 10
+ * LogFloor(0.456) // 0.1
+ * LogFloor(0.00235) // 0.001
+ * ```
+ */
+function LogFloor(num) {
+    let exp = Magnitude(num);
+    return Number('1e' + exp);
+}
+globalThis.LogFloor = LogFloor;
+/**
+ * @category Numeracy
+ * @return add a constant to the magnitude
+ * ```typescript
+ * Raise(12.34,1) // 123.4
+ * Raise(12.34,-1) // 1.234
+ * ```
+ */
+function Raise(num, add) {
     let exp = Magnitude(num);
     let mantissa = Mantissa(num);
     exp += add;
     return Number(mantissa + 'e' + exp);
 }
-globalThis.AddMagnitude = AddMagnitude;
+globalThis.Raise = Raise;
 /**
  * @category Numeracy
  * @return correct for floating point error
@@ -12298,46 +12325,45 @@ function RndShakeN(anchor, range, n) {
     if (!IsInteger(anchor))
         return [];
     let a = Abs(anchor);
-    let max = Min(a + range, Math.pow(10, (Magnitude(anchor) + 1)) - 1);
-    let min = Max(a - range, 1, Math.pow(10, (Magnitude(anchor))));
+    let max = Min(a + range, LogCeil(a) - 1);
+    let min = Max(a - range, 1, LogFloor(a));
     n !== null && n !== void 0 ? n : (n = Min(10, max - min));
-    let func = Sieve(() => RndN(min, max), x => (x !== a) && (Magnitude(x) === Magnitude(anchor)));
+    let func = Sieve(() => RndN(min, max), x => (x !== a));
     let arr = chance.unique(func, n);
     let s = Sign(anchor);
     arr = arr.map((x) => s * x);
     return arr;
 }
 globalThis.RndShakeN = RndShakeN;
-/**
- * @category RandomShake
- * @param anchor - must be integer
- * @param range - default Max(5, anchor * 10%)
- * @param n - default to 10
- * @return nearby integers
- * ```typescript
- * RndShakeZ(5,2,3)
- * // return 3 unique integers from [3,4,6,7]
- * RndShakeZ(2,4,3)
- * // return 3 unique integers from [-2,-1,0,1,3,4,5,6]
- * RndShakeZ(-2,4,3)
- * // return 3 unique integers from [2,1,0,-1,-3,-4,-5,-6]
- * RndShakeZ(0,2,3)
- * // return 3 unique integers from [-2,-1,1,2]
- * ```
- */
-function RndShakeZ(anchor, range, n) {
-    anchor = Blur(anchor);
-    range !== null && range !== void 0 ? range : (range = Max(5, Abs(anchor * 0.1)));
-    if (!IsInteger(anchor))
-        return [];
-    n !== null && n !== void 0 ? n : (n = Min(2 * range, 10));
-    return chance.unique(() => anchor + RndZ(1, range), n);
-}
-globalThis.RndShakeZ = RndShakeZ;
+// /**
+//  * @category RandomShake
+//  * @param anchor - must be integer
+//  * @param range - default Max(5, anchor * 10%)
+//  * @param n - default to 10
+//  * @return nearby integers
+//  * ```typescript
+//  * RndShakeZ(5,2,3) 
+//  * // return 3 unique integers from [3,4,6,7]
+//  * RndShakeZ(2,4,3) 
+//  * // return 3 unique integers from [-2,-1,0,1,3,4,5,6]
+//  * RndShakeZ(-2,4,3) 
+//  * // return 3 unique integers from [2,1,0,-1,-3,-4,-5,-6]
+//  * RndShakeZ(0,2,3) 
+//  * // return 3 unique integers from [-2,-1,1,2]
+//  * ```
+//  */
+// function RndShakeZ(anchor: number, range?: number, n?: number): number[] {
+//     anchor = Blur(anchor)
+//     range ??= Max(5, Abs(anchor * 0.1))
+//     if (!IsInteger(anchor)) return []
+//     n ??= Min(2 * range, 10)
+//     return chance.unique(() => anchor + RndZ(1, range!), n);
+// }
+// globalThis.RndShakeZ = RndShakeZ
 /**
  * @category RandomShake
  * @param anchor - can be any real number
- * @param range - default Max(1, anchor * 10%)
+ * @param range - default anchor * 10%
  * @param n - default to 5
  * @return nearby same-signed real number with same precision
  * ```typescript
@@ -12347,20 +12373,20 @@ globalThis.RndShakeZ = RndShakeZ;
  * // return 3 unique values from [0,3.5]
  * RndShakeR(-1.5,4,3)
  * // return 3 unique values from [-5.5,0]
- * RndShakeR(0,2)
- * // return 10 unique values from [0,2]
  * ```
  */
 function RndShakeR(anchor, range, n) {
+    Should(IsNonZero(anchor), 'anchor must be non-zero');
     range !== null && range !== void 0 ? range : (range = Abs(anchor * 0.5));
     n !== null && n !== void 0 ? n : (n = 5);
-    let dp = Max(DecimalPlace(anchor), 1);
-    if (SigFig(anchor) === 1 && DecimalPlace(anchor) > 0)
-        dp++;
-    let func = Sieve(() => Fix(anchor + RndR(0, range) * RndU(), dp), x => (x * (anchor + Number.EPSILON) >= Number.EPSILON) &&
-        (Magnitude(x) === Magnitude(anchor)) &&
-        (x !== anchor));
-    return chance.unique(func, n);
+    let percent = range / Abs(anchor);
+    let [mant, exp] = anchor.toExponential().split('e').map(x => Number(x));
+    let dp = Max(DecimalPlace(mant), 1);
+    let func = Sieve(() => Fix(mant * (1 + RndR(0, percent) * RndU()), dp), x => (x * (mant + Number.EPSILON) >= Number.EPSILON) &&
+        (Magnitude(x) === Magnitude(mant)) &&
+        (x !== mant));
+    let arr = chance.unique(func, n);
+    return arr.map(x => Number(x + "e" + exp));
 }
 globalThis.RndShakeR = RndShakeR;
 /**
@@ -12381,8 +12407,7 @@ globalThis.RndShakeR = RndShakeR;
  * ```
  */
 function RndShakeProb(anchor, range, n) {
-    if (anchor < 0 || anchor > 1)
-        return [];
+    Should(anchor >= 0 && anchor <= 1, 'anchor must between 0 and 1');
     range !== null && range !== void 0 ? range : (range = 0.5);
     n !== null && n !== void 0 ? n : (n = 3);
     const dp = Max(DecimalPlace(anchor), 1);

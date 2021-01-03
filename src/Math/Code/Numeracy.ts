@@ -116,10 +116,9 @@ function Fix(num: number, dp = 0): number {
     Should(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
-    num = AddMagnitude(num, dp)
-    num += Number.EPSILON
-    num = Math.round(num);
-    num = AddMagnitude(num, -dp)
+    num = Raise(num, dp)
+    num = Math.round(num + Number.EPSILON);
+    num = Raise(num, -dp)
     return sign * num;
 }
 globalThis.Fix = Fix
@@ -138,10 +137,9 @@ function FixUp(num: number, dp = 0): number {
     Should(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
-    num = AddMagnitude(num, dp)
-    num -= Number.EPSILON
-    num = Math.ceil(num);
-    num = AddMagnitude(num, -dp)
+    num = Raise(num, dp)
+    num = Math.ceil(num - Number.EPSILON);
+    num = Raise(num, -dp)
     return sign * num;;
 }
 globalThis.FixUp = FixUp
@@ -162,10 +160,9 @@ function FixDown(num: number, dp = 0): number {
     Should(IsInteger(dp), 'dp must be integer')
     const sign = Sign(num)
     num = Abs(num)
-    num = AddMagnitude(num, dp)
-    num += Number.EPSILON
-    num = Math.floor(num);
-    num = AddMagnitude(num, -dp)
+    num = Raise(num, dp)
+    num = Math.floor(num + Number.EPSILON);
+    num = Raise(num, -dp)
     return sign * num;;
 }
 globalThis.FixDown = FixDown
@@ -302,22 +299,58 @@ function Mantissa(num: number): number {
 globalThis.Mantissa = Mantissa
 
 
+/**
+ * @category Numeracy
+ * @return the lowest number with the next order of magnitude
+ * ```typescript
+ * LogCeil(5) // 10
+ * LogCeil(23) // 100
+ * LogCeil(0.456) // 1
+ * LogCeil(0.00235) // 0.01
+ * ```
+ */
+function LogCeil(num: number): number {
+    let exp = Magnitude(num) + 1
+    return Number('1e' + exp)
+}
+globalThis.LogCeil = LogCeil
+
+
+/**
+ * @category Numeracy
+ * @return the lowest number with the same order of magnitude
+ * ```typescript
+ * LogFloor(5) // 1
+ * LogFloor(23) // 10
+ * LogFloor(0.456) // 0.1
+ * LogFloor(0.00235) // 0.001
+ * ```
+ */
+function LogFloor(num: number): number {
+    let exp = Magnitude(num)
+    return Number('1e' + exp)
+}
+globalThis.LogFloor = LogFloor
+
+
+
+
 
 /**
  * @category Numeracy
  * @return add a constant to the magnitude
  * ```typescript
- * AddMagnitude(12.34,1) // 123.4
- * AddMagnitude(12.34,-1) // 1.234
+ * Raise(12.34,1) // 123.4
+ * Raise(12.34,-1) // 1.234
  * ```
  */
-function AddMagnitude(num: number, add: number) {
+function Raise(num: number, add: number) {
     let exp = Magnitude(num)
     let mantissa = Mantissa(num)
     exp += add
     return Number(mantissa + 'e' + exp)
 }
-globalThis.AddMagnitude = AddMagnitude
+globalThis.Raise = Raise
 
 
 
