@@ -35,7 +35,7 @@ function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
             return RndShakeN(anchor, range, n)
         }
         // Probability
-        if (anchor > 0.01 && anchor <= 1) {
+        if (anchor >= 0.1 && anchor < 1) {
             return RndShakeProb(anchor, range, n)
         }
         // Decimal
