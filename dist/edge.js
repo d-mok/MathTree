@@ -9215,13 +9215,19 @@ globalThis.JoinToHTMLTag = JoinToHTMLTag;
 function PrintVariable(html, symbol, value) {
     let T = typeof value;
     if (T === 'number') {
-        let sci = Sci(Blur(Round(value, 3)));
-        html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+        let v = Blur(Round(value, 3));
+        if (v >= 10000 || v <= 0.01) {
+            let sci = Sci(v);
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+        }
+        else {
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
+        }
     }
     if (T === 'number') {
         value = Blur(value);
         if (IsDecimal(value))
-            value = Round(value, 3);
+            value = Round(value, 5);
     }
     if (T === 'boolean') {
         value = Tick(value);
@@ -16140,15 +16146,16 @@ class AutoPenCls {
      *   categories: ['a','b','c','d','e'],
      *   labels: ['10%','20%','30%','40%',''],
      *   angles: [45,135,60,50,70],
-     *   angleLabels: [null,'x',null,null,'']
+     *   angleLabels: [null,'x',null,null,''],
+     *   size:1.5
      * })
      * ```
      */
-    PieChart({ categories, labels, angles, angleLabels }) {
+    PieChart({ categories, labels, angles, angleLabels, size = 1.5 }) {
         var _a;
         const pen = new Pen();
-        pen.setup.size(1);
-        pen.setup.range([-2, 2], [-2, 2]);
+        pen.setup.size(size);
+        pen.setup.range([-1.2, 1.2], [-1.2, 1.2]);
         pen.graph.circle([0, 0], 1);
         let O = [0, 0];
         pen.line(O, [1, 0]);

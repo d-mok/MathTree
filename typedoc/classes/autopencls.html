@@ -505,7 +505,7 @@ pen.LinearProgram({
 				<a name="piechart" class="tsd-anchor"></a>
 				<h3>Pie<wbr>Chart</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">Pie<wbr>Chart<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>angleLabels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>angles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>categories<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>labels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					<li class="tsd-signature tsd-kind-icon">Pie<wbr>Chart<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>angleLabels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>angles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>categories<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>labels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -519,7 +519,7 @@ pen.LinearProgram({
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>angleLabels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>angles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>categories<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>labels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></h5>
+								<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>angleLabels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>angles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>categories<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>labels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></h5>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter">
 										<h5>angle<wbr>Labels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
@@ -533,6 +533,9 @@ pen.LinearProgram({
 									<li class="tsd-parameter">
 										<h5>labels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 									</li>
+									<li class="tsd-parameter">
+										<h5>size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+									</li>
 								</ul>
 							</li>
 						</ul>
@@ -542,7 +545,8 @@ pen.PieChart({
   <span class="hljs-attr">categories</span>: [<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-string">&#x27;b&#x27;</span>,<span class="hljs-string">&#x27;c&#x27;</span>,<span class="hljs-string">&#x27;d&#x27;</span>,<span class="hljs-string">&#x27;e&#x27;</span>],
   <span class="hljs-attr">labels</span>: [<span class="hljs-string">&#x27;10%&#x27;</span>,<span class="hljs-string">&#x27;20%&#x27;</span>,<span class="hljs-string">&#x27;30%&#x27;</span>,<span class="hljs-string">&#x27;40%&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>],
   <span class="hljs-attr">angles</span>: [<span class="hljs-number">45</span>,<span class="hljs-number">135</span>,<span class="hljs-number">60</span>,<span class="hljs-number">50</span>,<span class="hljs-number">70</span>],
-  <span class="hljs-attr">angleLabels</span>: [<span class="hljs-literal">null</span>,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="hljs-literal">null</span>,<span class="hljs-literal">null</span>,<span class="hljs-string">&#x27;&#x27;</span>]
+  <span class="hljs-attr">angleLabels</span>: [<span class="hljs-literal">null</span>,<span class="hljs-string">&#x27;x&#x27;</span>,<span class="hljs-literal">null</span>,<span class="hljs-literal">null</span>,<span class="hljs-string">&#x27;&#x27;</span>],
+  <span class="hljs-attr">size</span>:<span class="hljs-number">1.5</span>
 })</code></pre>
 					</li>
 				</ul>

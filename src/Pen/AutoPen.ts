@@ -970,19 +970,21 @@ class AutoPenCls {
      *   categories: ['a','b','c','d','e'],
      *   labels: ['10%','20%','30%','40%',''],
      *   angles: [45,135,60,50,70],
-     *   angleLabels: [null,'x',null,null,'']
+     *   angleLabels: [null,'x',null,null,''],
+     *   size:1.5
      * })
      * ```
      */
-    PieChart({ categories, labels, angles, angleLabels }: {
+    PieChart({ categories, labels, angles, angleLabels, size = 1.5 }: {
         categories: string[],
         labels: string[],
         angles: number[],
-        angleLabels: string[]
+        angleLabels: string[],
+        size: number
     }) {
         const pen = new Pen();
-        pen.setup.size(1);
-        pen.setup.range([-2, 2], [-2, 2]);
+        pen.setup.size(size);
+        pen.setup.range([-1.2, 1.2], [-1.2, 1.2]);
         pen.graph.circle([0, 0], 1)
 
         let O: Point = [0, 0]

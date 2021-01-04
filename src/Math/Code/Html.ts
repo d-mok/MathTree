@@ -64,13 +64,18 @@ function PrintVariable(html: string, symbol: string, value: any): string {
     let T = typeof value
 
     if (T === 'number') {
-        let sci = Sci(Blur(Round(value, 3)))
-        html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+        let v = Blur(Round(value, 3))
+        if (v >= 10000 || v <= 0.01) {
+            let sci = Sci(v)
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+        } else {
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
+        }
     }
 
     if (T === 'number') {
         value = Blur(value)
-        if (IsDecimal(value)) value = Round(value, 3)
+        if (IsDecimal(value)) value = Round(value, 5)
     }
     if (T === 'boolean') {
         value = Tick(value)
