@@ -143,7 +143,7 @@ globalThis.Dfrac = Dfrac
  * ParseDfrac('\\dfrac{1.2}{-2}') // [1.2,-2]
  * ParseDfrac('-\\dfrac{1.2}{-2}') // [-1.2,-2]
  * ParseDfrac('-\\dfrac{-1.2}{-2}') // [1.2,-2]
- * ParseDfrac('\\dfrac{x}{2}') // undefined
+ * ParseDfrac('\\dfrac{x}{2}') // throw
  * ```
  */
 function ParseDfrac(dfrac: string): Fraction {

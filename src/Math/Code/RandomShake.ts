@@ -13,15 +13,15 @@
  * // equivalent to RndShakeProb(0.5,0.1,3) 
  * ```
  */
-function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
+function RndShake(anchor: any): (typeof anchor)[] {
     if (typeof anchor === 'string') {
         // Fraction
         if (IsDfrac(anchor)) {
-            return RndShakeDfrac(anchor, range, n)
+            return RndShakeDfrac(anchor)
         }
         // Inequal Sign
         if (IsIneqSign(anchor)) {
-            return RndShakeIneq(anchor, n)
+            return RndShakeIneq(anchor)
         }
         // else convert to number
         if (Number(anchor)) {
@@ -32,24 +32,18 @@ function RndShake(anchor: any, range?: number, n?: number): (typeof anchor)[] {
         anchor = Blur(anchor)
         // Integer
         if (IsInteger(anchor)) {
-            return RndShakeN(anchor, range, n)
-        }
-        // Probability
-        if (anchor >= 0.1 && anchor < 1) {
-            return RndShakeProb(anchor, range, n)
+            return RndShakeN(anchor)
         }
         // Decimal
         if (IsNum(anchor)) {
-            return RndShakeR(anchor, range, n)
+            return RndShakeR(anchor)
         }
         if (isNaN(anchor)) {
             return []
         }
     }
-    // console.error('Fail to RndShake: ' + anchor)
     if (anchor === undefined) return []
-    Should(false, 'Fail to RndShake: ' + anchor)
-    return []
+    throw MathError('Fail to RndShake: ' + anchor)
 }
 globalThis.RndShake = RndShake
 
@@ -76,46 +70,35 @@ function Sieve<T>(randomFunc: () => T, predicate: (x: T) => boolean, n = 1000): 
             let item = randomFunc()
             if (predicate(item)) return item
         }
-        Should(false, 'No items can pass through Sieve after ' + n + ' trials!')
-        throw 'never'
+        throw MathError('No items can pass through Sieve after ' + n + ' trials!')
     }
     return lambda
 }
 globalThis.Sieve = Sieve
 
+
+
+
+
 /**
  * @category RandomShake
- * @param anchor - must be integer
- * @param range - default Max(5, anchor * 10%)
- * @param n - default to 10
- * @return nearby same-signed integers
+ * @return 3 nearby same-signed integers, range = Max(5, anchor * 10%)
  * ```typescript
- * RndShakeN(5,2,3) 
- * // return 3 unique integers from [3,4,6,7], e.g. [3,7,6]
- * RndShakeN(2,4,3) 
- * // return 3 unique integers from [1,3,4,5,6]
- * RndShakeN(-2,4,3) 
- * // return 3 unique integers from [-1,-3,-4,-5,-6]
- * RndShakeN(0,5,3) 
- * // return 3 unique integers from [1,2,3,4,5]
+ * RndShakeN(5) // return 3 unique integers from 1-10
  * ```
  */
-function RndShakeN(anchor: number, range?: number, n?: number): number[] {
+function RndShakeN(anchor: number): [number, number, number] {
+    Should(IsInteger(anchor), 'anchor must be integer')
     anchor = Blur(anchor)
-    range ??= Max(5, Abs(anchor * 0.1))
-    if (anchor === 0) {
-        n ??= Min(range, 10)
-        return chance.unique(() => RndN(1, range!), n);
-    }
-    if (!IsInteger(anchor)) return []
     let a = Abs(anchor)
-    let max = Min(a + range, LogCeil(a) - 1)
-    let min = Max(a - range, 1, LogFloor(a))
-    n ??= Min(10, max - min)
-    let func = Sieve(() => RndN(min, max),
-        x => (x !== a)
-    )
-    let arr = chance.unique(func, n)
+    let range = Max(3, a * 0.1)
+    if (anchor === 0) {
+        return chance.unique(() => RndN(1, 3), 3);
+    }
+    let max = Min(Floor(a + range), LogCeil(a) - 1)
+    let min = Max(Ceil(a - range), 1, LogFloor(a))
+    let func = Sieve(() => RndN(min, max), x => (x !== a))
+    let arr = chance.unique(func, 3)
     let s = Sign(anchor)
     arr = arr.map((x: number) => s * x)
     return arr
@@ -123,65 +106,33 @@ function RndShakeN(anchor: number, range?: number, n?: number): number[] {
 globalThis.RndShakeN = RndShakeN
 
 
-// /**
-//  * @category RandomShake
-//  * @param anchor - must be integer
-//  * @param range - default Max(5, anchor * 10%)
-//  * @param n - default to 10
-//  * @return nearby integers
-//  * ```typescript
-//  * RndShakeZ(5,2,3) 
-//  * // return 3 unique integers from [3,4,6,7]
-//  * RndShakeZ(2,4,3) 
-//  * // return 3 unique integers from [-2,-1,0,1,3,4,5,6]
-//  * RndShakeZ(-2,4,3) 
-//  * // return 3 unique integers from [2,1,0,-1,-3,-4,-5,-6]
-//  * RndShakeZ(0,2,3) 
-//  * // return 3 unique integers from [-2,-1,1,2]
-//  * ```
-//  */
-// function RndShakeZ(anchor: number, range?: number, n?: number): number[] {
-//     anchor = Blur(anchor)
-//     range ??= Max(5, Abs(anchor * 0.1))
-//     if (!IsInteger(anchor)) return []
-//     n ??= Min(2 * range, 10)
-//     return chance.unique(() => anchor + RndZ(1, range!), n);
-// }
-// globalThis.RndShakeZ = RndShakeZ
-
-
 
 
 
 /**
  * @category RandomShake
- * @param anchor - can be any real number
- * @param range - default anchor * 10%
- * @param n - default to 5
- * @return nearby same-signed real number with same precision
+ * @return 3 nearby same-signed real number with same precision, range = anchor * 50%
  * ```typescript
- * RndShakeR(3.5,2,3) 
- * // return 3 unique values from [1.5,5.5]
- * RndShakeR(1.5,2,3) 
- * // return 3 unique values from [0,3.5]
- * RndShakeR(-1.5,4,3) 
- * // return 3 unique values from [-5.5,0]
+ * RndShakeR(3.5) // return 3 unique values from [1.8,5.2]
  * ```
  */
-function RndShakeR(anchor: number, range?: number, n?: number): number[] {
+function RndShakeR(anchor: number): number[] {
     Should(IsNonZero(anchor), 'anchor must be non-zero')
-    range ??= Abs(anchor * 0.5)
-    n ??= 5
-    let percent = range / Abs(anchor)
     let [mant, exp] = anchor.toExponential().split('e').map(x => Number(x))
-    let dp = Max(DecimalPlace(mant), 1)
-    let func = Sieve(
-        () => Fix(mant * (1 + RndR(0, percent) * RndU()), dp),
-        x => (x * (mant + Number.EPSILON) >= Number.EPSILON) &&
-            (Magnitude(x) === Magnitude(mant)) &&
-            (x !== mant)
-    )
-    let arr: number[] = chance.unique(func, n)
+    mant = Blur(mant)
+    let arr: number[]
+    if (IsInteger(mant)) {
+        arr = RndShakeN(mant)
+    } else {
+        let dp = DecimalPlace(mant)
+        let func = Sieve(
+            () => Fix(mant * (1 + RndR(0, 0.5) * RndU()), dp),
+            x => (x * mant > 0) &&
+                (Magnitude(x) === Magnitude(mant)) &&
+                (x !== mant)
+        )
+        arr = chance.unique(func, 3)
+    }
     return arr.map(x => Number(x + "e" + exp))
 }
 globalThis.RndShakeR = RndShakeR
@@ -191,57 +142,22 @@ globalThis.RndShakeR = RndShakeR
 
 /**
  * @category RandomShake
- * @param anchor - must be a probability
- * @param range - default to 0.5
- * @param n - default to 3
- * @return nearby probability with same precision
+ * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```typescript
- * RndShakeProb(0.8,0.1,3) 
- * // return 3 unique values from [0.7,0.9]
- * RndShakeProb(0.8,0.5,3) 
- * // return 3 unique values from [0.3,1]
- * RndShakeProb(0.3,0.6,3) 
- * // return 3 unique values from [0,0.9]
- * RndShakeProb(1.1,2) 
- * // return [] anchor must be a probability 0<=P<=1
+ * RndShakeFrac([5,6]) 
+ * // return 3 unique fractions around [5,6]
+ * RndShakeFrac([6,-5])
+ * // return 3 unique fractions around [6,-5]
  * ```
  */
-function RndShakeProb(anchor: number, range?: number, n?: number): number[] {
-    Should(anchor >= 0 && anchor <= 1, 'anchor must between 0 and 1')
-    range ??= 0.5
-    n ??= 3
-    const dp = Max(DecimalPlace(anchor), 1)
-    let func = Sieve(
-        () => Fix(anchor + RndR(0, range!) * RndU(), dp),
-        x => x > 0 && x < 1
-    )
-    return chance.unique(func, n)
-}
-globalThis.RndShakeProb = RndShakeProb
-
-/**
- * @category RandomShake
- * @param anchor - must be a fraction
- * @param range - default to 5
- * @param n - default to 10
- * @return nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```typescript
- * RndShakeFrac([5,6],3,3) 
- * // return 3 unique fractions around [5,6] within range 3
- * RndShakeFrac([6,-5],10,3)
- * // return 3 unique fractions around [6,-5] within range 10
- * ```
- */
-function RndShakeFrac(anchor: Fraction, range?: number, n?: number): Fraction[] {
+function RndShakeFrac(anchor: Fraction): Fraction[] {
     let [p, q] = Frac(...anchor);
     [p, q] = Blurs([p, q])
-    if (!IsInteger(p, q)) return []
-    range ??= 5
-    n ??= Min(10, range)
+    Should(IsInteger(p, q), 'input should be integral fraction')
     let func = Sieve(
         () => {
-            const h = RndShakeN(p, range, 1)[0]
-            const k = RndShakeN(q, range, 1)[0]
+            const h = RndShakeN(p)[0]
+            const k = RndShakeN(q)[0]
             return RndPick([h, k], [h, k], [p, k], [h, q])
         },
         f => {
@@ -252,7 +168,7 @@ function RndShakeFrac(anchor: Fraction, range?: number, n?: number): Fraction[] 
             if (IsProbability(p / q) && !IsProbability(a / b)) return false
             return true
         })
-    return chance.unique(func, n, {
+    return chance.unique(func, 3, {
         comparator: function (arr: Fraction[], val: Fraction) {
             return arr.some(x => x[0] / x[1] === val[0] / val[1])
         }
@@ -263,24 +179,18 @@ globalThis.RndShakeFrac = RndShakeFrac
 
 /**
  * @category RandomShake
- * @param anchor - must be a string of Dfrac
- * @param range - default to 5
- * @param n - default to 10
- * @return nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+ * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```typescript
- * RndShakeDfrac('\\dfrac{5}{6}',3,3) 
- * // return 3 unique Dfrac around [5,6] within range 3
- * RndShakeDfrac('-\\dfrac{6}{5}',10,3)
- * // return 3 unique Dfrac around [6,-5] within range 10
+ * RndShakeDfrac('\\dfrac{5}{6}') 
+ * // return 3 unique Dfrac around [5,6]
+ * RndShakeDfrac('-\\dfrac{6}{5}')
+ * // return 3 unique Dfrac around [6,-5]
  * ```
  */
-function RndShakeDfrac(anchor: string, range?: number, n?: number): string[] {
-    if (typeof anchor !== 'string') return []
+function RndShakeDfrac(anchor: string): string[] {
+    Should(IsString(anchor), 'input must be string')
     let f = ParseDfrac(anchor)
-    if (!f) return []
-    range ??= 5
-    n ??= Min(10, range)
-    return RndShakeFrac(f, range, n).map(x => Dfrac(...x))
+    return RndShakeFrac(f).map(x => Dfrac(...x))
 }
 globalThis.RndShakeDfrac = RndShakeDfrac
 
@@ -290,21 +200,16 @@ globalThis.RndShakeDfrac = RndShakeDfrac
 /**
  * @category RandomShake
  * @param anchor - must be a string of ineq sign
- * @param n - default to 3
- * @return an array of n ineq signs, balanced in number.
+ * @return an array of 3 ineq signs, balanced in number.
  * ```typescript
- * RndShakeIneq('\\ge',6) 
- * // may return ['\\ge','\\le','\\ge','\\le','\\le','\\ge']
- * RndShakeIneq('\\ge',5) 
- * // may return ['\\ge','\\le','\\le','\\le','\\ge']
+ * RndShakeIneq('\\ge') 
+ * // may return ['\\ge','\\le','\\le']
  * ```
  */
-function RndShakeIneq(anchor: string, n?: number) {
-    if (typeof anchor !== 'string') return []
+function RndShakeIneq(anchor: string): string[] {
+    Should(IsString(anchor), 'input must be string')
     let f = ParseIneqSign(anchor)
-    if (!f) return []
-    n ??= 3
-    return RndBalanced(IneqSign(...f).reverse(), n)
+    return RndBalanced(IneqSign(...f).reverse(), 3)
 }
 globalThis.RndShakeIneq = RndShakeIneq
 

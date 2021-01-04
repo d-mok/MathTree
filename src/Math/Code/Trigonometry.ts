@@ -18,8 +18,7 @@ function Quadrant(rect: PolarPoint | number): QuadrantName {
     if (q >= 90 && q < 180) return "II";
     if (q >= 180 && q < 270) return "III";
     if (q >= 270 && q < 360) return "IV";
-    Should(false, 'fail to parse quadrant!')
-    throw ''
+    throw MathError( 'fail to parse quadrant!')
 }
 globalThis.Quadrant = Quadrant
 

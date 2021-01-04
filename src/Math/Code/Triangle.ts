@@ -151,7 +151,6 @@ function SolveTriangle(
         SAS()
         AAS()
     }
-    Should(false, 'Solve Triangle Fail!')
-    throw ''
+    throw MathError( 'Solve Triangle Fail!')
 }
 globalThis.SolveTriangle = SolveTriangle
