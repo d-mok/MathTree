@@ -79,12 +79,9 @@ test('RndShakeR', () => {
     run(4.567e-20, 2.284e-20, 6.850e-20, 0.001e-20);
     run(-4.567e-20, -6.850e-20, -2.284e-20, 0.001e-20);
 
-
     for (let i = 0; i <= 100; i++) {
         RndShakeR(RndR(-1000, 1000));
     }
-
-
     for (let i = 0; i <= 100; i++) {
         let num = Number(RndR(-1, 1) + 'e' + RndZ(-1, 100));
         RndShakeR(RndR(-1, 1));

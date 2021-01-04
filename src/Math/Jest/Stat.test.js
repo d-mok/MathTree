@@ -63,3 +63,46 @@ test('Mean', () => {
     expect(() => Mean()).toThrow();
 });
 
+
+
+
+
+
+test('Median', () => {
+    expect(Median(1, 2, 3, 4, 50)).toBe(3);
+    expect(Median(1, 2, 3, 4, 5, 7)).toBe(3.5);
+    expect(Median(4, 5, 7, 1, 2, 3)).toBe(3.5);
+    expect(Median(11, 23, 45, 67, 89, 134, 457, 688)).toBe(78);
+});
+
+
+
+
+test('LowerQ', () => {
+    expect(LowerQ(1, 2, 3, 4, 50)).toBe(1.5);
+    expect(LowerQ(1, 2, 3, 4, 5, 7)).toBe(2);
+    expect(LowerQ(1, 2, 3, 4, 5, 7, 10)).toBe(2);
+    expect(LowerQ(1, 2, 3, 4, 5, 7, 10, 20)).toBe(2.5);
+});
+
+
+
+test('UpperQ', () => {
+    expect(UpperQ(1, 2, 3, 4, 50)).toBe(27);
+    expect(UpperQ(1, 2, 3, 4, 5, 7)).toBe(5);
+    expect(UpperQ(1, 2, 3, 4, 5, 7, 10)).toBe(7);
+    expect(UpperQ(1, 2, 3, 4, 5, 7, 10, 20)).toBe(8.5);
+});
+
+
+
+test('Frequency', () => {
+    expect(Frequency(1)(2, 3, 4, 1, 5, 1, 1, 4, 5)).toBe(3);
+});
+
+
+test('Mode', () => {
+    expect(Mode(1, 2, 3, 2, 2, 3, 4)).toBe(2);
+    expect(Mode(1, 1, 2, 2, 3)).toBeNaN();
+});
+

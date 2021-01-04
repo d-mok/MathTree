@@ -302,3 +302,33 @@ function RndConvexPolygon(n: number, center: Point, radius: number, separation: 
     return vertices
 }
 globalThis.RndConvexPolygon = RndConvexPolygon
+
+
+
+
+
+
+
+
+
+/**
+ * @category Random
+ * @return n integers from [min, max]
+ * ```typescript
+ * RndData(10,15,5) // may return [11,11,12,13,15]
+ * ```
+ */
+function RndData(min: number, max: number, n: number): number[] {
+    let arr = []
+    let trials = 10 * n
+    for (let i = 0; i < trials; i++) {
+        arr.unshift(RndN(min, max))
+        if (arr.length > n)
+            arr.length = n
+        if (arr.length === n && IsNum(Mode(...arr)))
+            return Sort(...arr)
+    }
+    throw 'fail'
+}
+globalThis.RndData = RndData
+

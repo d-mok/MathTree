@@ -36,7 +36,8 @@ class AutoPenCls {
      * @param numbers - The array of numbers to factorize.
      * @returns
      * ```typescript
-     * autoPen.PrimeFactorization({numbers:[12,24]})
+     * let pen = new AutoPen()
+     * pen.PrimeFactorization({numbers:[12,24]})
      * ```
      */
     PrimeFactorization({ numbers }: { numbers: number[] }) {
@@ -96,7 +97,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.Inequalities({
+     * let pen = new AutoPen()
+     * pen.Inequalities({
      *    items:[
      *       { position: 0.3, sign: "\\ge", num: 5,vertical:true },
      *       { position: 0.7, sign: "<", num: "k" }
@@ -201,7 +203,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.TrigSolution({trig:'sin', k:0.5})
+     * let pen = new AutoPen()
+     * pen.TrigSolution({trig:'sin', k:0.5})
      * ```
      */
     TrigSolution({
@@ -389,7 +392,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
+     * let pen = new AutoPen()
+     * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
      * ```
      */
     QuadraticInequality({
@@ -521,7 +525,8 @@ class AutoPenCls {
      * @param scale - scale for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.Triangle({
+     * let pen = new AutoPen()
+     * pen.Triangle({
      *   vertices:[[0,0],[4,0],[0,3]],
      *   triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},
      *   labels:['A','B','C'],
@@ -683,9 +688,9 @@ class AutoPenCls {
      * @param resolution - Resolution of Canvas
      * @returns
      * ```typescript
-     * let autoPen = new AutoPen()
+     * let pen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
-     * autoPen.LinearProgram({
+     * pen.LinearProgram({
      *     constraints,
      *     field: [1, -3, 3],
      *     contours: [4,5],
@@ -924,7 +929,8 @@ class AutoPenCls {
      * @param offset - offset of initial position
      * @returns
      * ```typescript
-     * autoPen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
+     * let pen = new AutoPen()
+     * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
      * ```
      */
     DotPattern({ a, p, q, n, offset }:
@@ -952,6 +958,253 @@ class AutoPenCls {
         pen.autoCrop();
         this.pen = pen;
     }
+
+
+    /**
+     * A pie chart
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.PieChart({
+     *   categories: ['a','b','c','d','e'],
+     *   labels: ['10%','20%','30%','40%',''],
+     *   angles: [45,135,60,50,70],
+     *   angleLabels: [null,'x',null,null,'']
+     * })
+     * ```
+     */
+    PieChart({ categories, labels, angles, angleLabels }: {
+        categories: string[],
+        labels: string[],
+        angles: number[],
+        angleLabels: string[]
+    }) {
+        const pen = new Pen();
+        pen.setup.size(1);
+        pen.setup.range([-2, 2], [-2, 2]);
+        pen.graph.circle([0, 0], 1)
+
+        let O: Point = [0, 0]
+        pen.line(O, [1, 0])
+        let current = 0
+        for (let i = 0; i < angles.length; i++) {
+            let a = angles[i]
+            let next = current + a
+            let mid = current + a / 2
+            pen.line(O, PolToRect([1, next]))
+            pen.label.point(PolToRect([0.7, mid]), categories[i], 90, 10)
+            pen.label.point(PolToRect([0.7, mid]), labels[i], 270, 10)
+            pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), angleLabels[i] ?? angles[i] + "°")
+            current += a
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * A bar chart / line chart / histogram / frequency polygon / cf polygon
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.HeightChart({
+     *   categories: ['a','b','c','d','e'],
+     *   data:[7,47,15,3,7],
+     *   xLabel:'x-axis',
+     *   yLabel:'y-axis',
+     *   interval:5,
+     *   subInterval:1,
+     *   barWidth:1,
+     *   barGap:1,
+     *   showBar:true,
+     *   showLine:true
+     * })
+     * ```
+     */
+    HeightChart({
+        categories,
+        data,
+        xLabel = "",
+        yLabel = "",
+        interval = 5,
+        subInterval = 1,
+        barWidth = 1,
+        barGap = 1,
+        showBar = false,
+        showLine = false }: {
+            categories: string[],
+            data: number[],
+            xLabel: string,
+            yLabel: string,
+            interval: number,
+            subInterval: number,
+            barWidth: number,
+            barGap: number,
+            showBar: boolean,
+            showLine: boolean
+        }) {
+        const pen = new Pen();
+        let endGap = barWidth + barGap / 2
+        let width = endGap + categories.length * (barWidth + barGap) + endGap
+        let max = Max(...data)
+        let maxUnit = Ceil(max / interval)
+        let maxSubUnit = maxUnit * (interval / subInterval)
+        let height = (maxUnit + 1) * interval
+
+        pen.setup.range([-width * 0.2, width], [-height * 0.2, height]);
+        pen.setup.resolution(0.1, 1 / height)
+
+        pen.line([0, 0], [width, 0])
+        pen.line([0, 0], [0, height], true)
+
+        pen.ctx.save()
+        pen.ctx.translate(...pen.frame.toPix([-1.5, height / 2]))
+        pen.ctx.rotate(-Math.PI / 2);
+        pen.ctx.fillText(yLabel, 0, 0)
+        pen.ctx.restore()
+
+        pen.label.point([width / 2, -2], xLabel, 270, 25)
+
+        function grid(y: number) {
+            pen.line([0, y], [width, y])
+        }
+
+        for (let y = 1; y <= maxUnit; y++) {
+            let h = y * interval
+            pen.set.alpha(0.2)
+            grid(h)
+            pen.cutterV([0, h])
+            pen.set.alpha()
+            pen.label.point([0, h], h.toString(), 180)
+        }
+
+
+        for (let y = 1; y <= maxSubUnit; y++) {
+            pen.set.alpha(0.1)
+            grid(y * subInterval)
+            pen.set.alpha()
+        }
+
+        function bar(x: number, w: number, h: number) {
+            pen.set.color('grey')
+            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]], true)
+            pen.set.color()
+            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]])
+        }
+
+        function writeCat(x: number, w: number, text: string) {
+            pen.label.point([x + w / 2, 0], text, 270, 15)
+        }
+
+
+        if (showBar) {
+            for (let i = 0; i < categories.length; i++) {
+                let x = endGap + i * (barWidth + barGap) + barGap / 2
+                bar(x, barWidth, data[i])
+                writeCat(x, barWidth, categories[i])
+            }
+        }
+
+        if (showLine) {
+            let points: Point[] = []
+            for (let i = 0; i < categories.length; i++) {
+                let x = endGap + i * (barWidth + barGap) + barGap / 2
+                let p: Point = [x + barWidth / 2, data[i]]
+                pen.point(p)
+                points.push(p)
+                writeCat(x, barWidth, categories[i])
+            }
+            pen.set.weight(2)
+            pen.polyline(...points)
+            pen.set.weight()
+        }
+
+        pen.autoCrop();
+        this.pen = pen;
+    }
+
+
+
+
+
+
+    /**
+     * A pie chart
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.StemAndLeaf({
+     *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+     *   labels: [2,'x',6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+     *   stemTitle: "Stem (10 units)",
+     *   leafTitle: "Leaf (1 unit)"
+     * })
+     * ```
+     */
+    StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }: {
+        data: number[],
+        labels?: string[],
+        stemTitle: string,
+        leafTitle: string
+    }) {
+        const pen = new Pen();
+
+        labels ??= [...data].map(x => x.toString())
+        labels = labels.map(x => x.toString().split('').reverse()[0])
+
+        let width = data.length + 2
+        let height = Ceil(Max(...data) / 10) + 2
+
+        pen.setup.range([-5, width], [-height, 2]);
+        pen.setup.resolution(0.07)
+
+        pen.line([0, -1], [0, 2])
+        pen.line([-5, 0], [1, 0])
+
+        pen.set.textAlign('left')
+        pen.write([0.5, 1], leafTitle)
+
+        pen.set.textAlign('right')
+        pen.write([-0.5, 1], stemTitle)
+        pen.set.textAlign()
+
+        let initTen = Floor(Min(...data) / 10)
+        let endTen = Floor(Max(...data) / 10)
+
+        let ten = initTen
+        for (let j = -1; ten <= endTen; j--) {
+            pen.write([-1, j], ten.toString())
+            pen.line([0, j], [0, j - 1])
+
+            let i = 1
+            for (let m = 0; m < data.length; m++) {
+                if (Floor(data[m] / 10) === ten) {
+                    if (!IsNum(Number(labels[m])))
+                        pen.set.textItalic(true)
+                    pen.write([i, j], labels[m])
+                    pen.set.textItalic()
+                    pen.line([i, 0], [i + 1, 0])
+                    i++
+                }
+            }
+            ten += 1
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
+
+
+
 
 
 }

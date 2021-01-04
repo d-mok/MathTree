@@ -92,3 +92,96 @@ function Mean(...nums: number[]): number {
 globalThis.Mean = Mean
 
 
+
+
+
+/**
+ * @category Stat
+ * @return median of nums
+ * ```typescript
+ * Median(1,2,3,4,50) // 3
+ * Median(1,2,3,4,5,7) // 3.5
+ * ```
+ */
+function Median(...nums: number[]): number {
+    nums = Sort(...nums)
+    let n = nums.length
+    if (IsOdd(n)) {
+        let m = Ceil(n / 2)
+        return nums[m - 1]
+    } else {
+        let m = n / 2
+        return (nums[m - 1] + nums[m]) / 2
+    }
+}
+globalThis.Median = Median
+
+
+/**
+ * @category Stat
+ * @return lower quartile of nums
+ * ```typescript
+ * LowerQ(1,2,3,4,5) // 1.5
+ * LowerQ(1,2,3,4,5,7) // 2
+ * ```
+ */
+function LowerQ(...nums: number[]): number {
+    nums = Sort(...nums)
+    let n = nums.length
+    let m = IsOdd(n) ? Floor(n / 2) : n / 2
+    nums.length = m
+    return Median(...nums)
+}
+globalThis.LowerQ = LowerQ
+
+/**
+ * @category Stat
+ * @return lower quartile of nums
+ * ```typescript
+ * UpperQ(1,2,3,4,5) // 4.5
+ * UpperQ(1,2,3,4,5,7) // 5
+ * ```
+ */
+function UpperQ(...nums: number[]): number {
+    nums = Sort(...nums).reverse()
+    let n = nums.length
+    let m = IsOdd(n) ? Floor(n / 2) : n / 2
+    nums.length = m
+    return Median(...nums)
+}
+globalThis.UpperQ = UpperQ
+
+
+/**
+ * @category Stat
+ * @return count frequency of item in array
+ * ```typescript
+ * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
+ * ```
+ */
+function Frequency(item: any) {
+    return function (...items: (typeof item)[]) {
+        return items.filter(x => x === item).length
+    }
+}
+globalThis.Frequency = Frequency
+
+
+/**
+ * @category Stat
+ * @return mode of nums
+ * ```typescript
+ * Mode(1,2,3,2,2,3,4) \\ 2
+ * Mode(1,1,2,2,3) \\ NaN
+ * ```
+ */
+function Mode(...nums: number[]): number {
+    let s = [...new Set(nums)]
+    let counts = s.map(x => Frequency(x)(...nums))
+    let maxCount = Max(...counts)
+    if (Frequency(maxCount)(...counts) > 1) {
+        return NaN
+    }
+    return s.find(x => Frequency(x)(...nums) === maxCount)!
+}
+globalThis.Mode = Mode

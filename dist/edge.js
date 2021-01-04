@@ -10131,6 +10131,26 @@ function RndConvexPolygon(n, center, radius, separation) {
     return vertices;
 }
 globalThis.RndConvexPolygon = RndConvexPolygon;
+/**
+ * @category Random
+ * @return n integers from [min, max]
+ * ```typescript
+ * RndData(10,15,5) // may return [11,11,12,13,15]
+ * ```
+ */
+function RndData(min, max, n) {
+    let arr = [];
+    let trials = 10 * n;
+    for (let i = 0; i < trials; i++) {
+        arr.unshift(RndN(min, max));
+        if (arr.length > n)
+            arr.length = n;
+        if (arr.length === n && IsNum(Mode(...arr)))
+            return Sort(...arr);
+    }
+    throw 'fail';
+}
+globalThis.RndData = RndData;
 
 
 /***/ }),
@@ -12235,7 +12255,7 @@ module.exports = Array.isArray || function (arr) {
  * // equivalent to RndShakeProb(0.5,0.1,3)
  * ```
  */
-function RndShake(anchor, range, n) {
+function RndShake(anchor) {
     if (typeof anchor === 'string') {
         // Fraction
         if (IsDfrac(anchor)) {
@@ -12296,8 +12316,7 @@ globalThis.Sieve = Sieve;
  * @category RandomShake
  * @return 3 nearby same-signed integers, range = Max(5, anchor * 10%)
  * ```typescript
- * RndShakeN(5)
- * // return 3 unique integers from 1-10
+ * RndShakeN(5) // return 3 unique integers from 1-10
  * ```
  */
 function RndShakeN(anchor) {
@@ -12319,10 +12338,9 @@ function RndShakeN(anchor) {
 globalThis.RndShakeN = RndShakeN;
 /**
  * @category RandomShake
- * @return nearby same-signed real number with same precision, range = anchor * 50%
+ * @return 3 nearby same-signed real number with same precision, range = anchor * 50%
  * ```typescript
- * RndShakeR(3.5)
- * // return 3 unique values from [1.75,5.25]
+ * RndShakeR(3.5) // return 3 unique values from [1.8,5.2]
  * ```
  */
 function RndShakeR(anchor) {
@@ -12345,15 +12363,12 @@ function RndShakeR(anchor) {
 globalThis.RndShakeR = RndShakeR;
 /**
  * @category RandomShake
- * @param anchor - must be a fraction
- * @param range - default to 5
- * @param n - default to 10
- * @return nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+ * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```typescript
- * RndShakeFrac([5,6],3,3)
- * // return 3 unique fractions around [5,6] within range 3
- * RndShakeFrac([6,-5],10,3)
- * // return 3 unique fractions around [6,-5] within range 10
+ * RndShakeFrac([5,6])
+ * // return 3 unique fractions around [5,6]
+ * RndShakeFrac([6,-5])
+ * // return 3 unique fractions around [6,-5]
  * ```
  */
 function RndShakeFrac(anchor) {
@@ -12385,15 +12400,12 @@ function RndShakeFrac(anchor) {
 globalThis.RndShakeFrac = RndShakeFrac;
 /**
  * @category RandomShake
- * @param anchor - must be a string of Dfrac
- * @param range - default to 5
- * @param n - default to 10
- * @return nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+ * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```typescript
- * RndShakeDfrac('\\dfrac{5}{6}',3,3)
- * // return 3 unique Dfrac around [5,6] within range 3
- * RndShakeDfrac('-\\dfrac{6}{5}',10,3)
- * // return 3 unique Dfrac around [6,-5] within range 10
+ * RndShakeDfrac('\\dfrac{5}{6}')
+ * // return 3 unique Dfrac around [5,6]
+ * RndShakeDfrac('-\\dfrac{6}{5}')
+ * // return 3 unique Dfrac around [6,-5]
  * ```
  */
 function RndShakeDfrac(anchor) {
@@ -12405,13 +12417,10 @@ globalThis.RndShakeDfrac = RndShakeDfrac;
 /**
  * @category RandomShake
  * @param anchor - must be a string of ineq sign
- * @param n - default to 3
- * @return an array of n ineq signs, balanced in number.
+ * @return an array of 3 ineq signs, balanced in number.
  * ```typescript
- * RndShakeIneq('\\ge',6)
- * // may return ['\\ge','\\le','\\ge','\\le','\\le','\\ge']
- * RndShakeIneq('\\ge',5)
- * // may return ['\\ge','\\le','\\le','\\le','\\ge']
+ * RndShakeIneq('\\ge')
+ * // may return ['\\ge','\\le','\\le']
  * ```
  */
 function RndShakeIneq(anchor) {
@@ -12897,6 +12906,90 @@ function Mean(...nums) {
     return sum / nums.length;
 }
 globalThis.Mean = Mean;
+/**
+ * @category Stat
+ * @return median of nums
+ * ```typescript
+ * Median(1,2,3,4,50) // 3
+ * Median(1,2,3,4,5,7) // 3.5
+ * ```
+ */
+function Median(...nums) {
+    nums = Sort(...nums);
+    let n = nums.length;
+    if (IsOdd(n)) {
+        let m = Ceil(n / 2);
+        return nums[m - 1];
+    }
+    else {
+        let m = n / 2;
+        return (nums[m - 1] + nums[m]) / 2;
+    }
+}
+globalThis.Median = Median;
+/**
+ * @category Stat
+ * @return lower quartile of nums
+ * ```typescript
+ * LowerQ(1,2,3,4,5) // 1.5
+ * LowerQ(1,2,3,4,5,7) // 2
+ * ```
+ */
+function LowerQ(...nums) {
+    nums = Sort(...nums);
+    let n = nums.length;
+    let m = IsOdd(n) ? Floor(n / 2) : n / 2;
+    nums.length = m;
+    return Median(...nums);
+}
+globalThis.LowerQ = LowerQ;
+/**
+ * @category Stat
+ * @return lower quartile of nums
+ * ```typescript
+ * UpperQ(1,2,3,4,5) // 4.5
+ * UpperQ(1,2,3,4,5,7) // 5
+ * ```
+ */
+function UpperQ(...nums) {
+    nums = Sort(...nums).reverse();
+    let n = nums.length;
+    let m = IsOdd(n) ? Floor(n / 2) : n / 2;
+    nums.length = m;
+    return Median(...nums);
+}
+globalThis.UpperQ = UpperQ;
+/**
+ * @category Stat
+ * @return count frequency of item in array
+ * ```typescript
+ * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
+ * ```
+ */
+function Frequency(item) {
+    return function (...items) {
+        return items.filter(x => x === item).length;
+    };
+}
+globalThis.Frequency = Frequency;
+/**
+ * @category Stat
+ * @return mode of nums
+ * ```typescript
+ * Mode(1,2,3,2,2,3,4) \\ 2
+ * Mode(1,1,2,2,3) \\ NaN
+ * ```
+ */
+function Mode(...nums) {
+    let s = [...new Set(nums)];
+    let counts = s.map(x => Frequency(x)(...nums));
+    let maxCount = Max(...counts);
+    if (Frequency(maxCount)(...counts) > 1) {
+        return NaN;
+    }
+    return s.find(x => Frequency(x)(...nums) === maxCount);
+}
+globalThis.Mode = Mode;
 
 
 /***/ }),
@@ -13257,8 +13350,7 @@ function SolveTriangle({ sideA = null, sideB = null, sideC = null, angleA = null
         SAS();
         AAS();
     }
-    Should(false, 'Solve Triangle Fail!');
-    throw '';
+    throw MathError('Solve Triangle Fail!');
 }
 globalThis.SolveTriangle = SolveTriangle;
 
@@ -13293,8 +13385,7 @@ function Quadrant(rect) {
         return "III";
     if (q >= 270 && q < 360)
         return "IV";
-    Should(false, 'fail to parse quadrant!');
-    throw '';
+    throw MathError('fail to parse quadrant!');
 }
 globalThis.Quadrant = Quadrant;
 /**
@@ -15262,7 +15353,8 @@ class AutoPenCls {
      * @param numbers - The array of numbers to factorize.
      * @returns
      * ```typescript
-     * autoPen.PrimeFactorization({numbers:[12,24]})
+     * let pen = new AutoPen()
+     * pen.PrimeFactorization({numbers:[12,24]})
      * ```
      */
     PrimeFactorization({ numbers }) {
@@ -15322,7 +15414,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.Inequalities({
+     * let pen = new AutoPen()
+     * pen.Inequalities({
      *    items:[
      *       { position: 0.3, sign: "\\ge", num: 5,vertical:true },
      *       { position: 0.7, sign: "<", num: "k" }
@@ -15398,7 +15491,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.TrigSolution({trig:'sin', k:0.5})
+     * let pen = new AutoPen()
+     * pen.TrigSolution({trig:'sin', k:0.5})
      * ```
      */
     TrigSolution({ trig = 'sin', k = 0, scale = 0.7, ratio = 0.7 }) {
@@ -15582,7 +15676,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
+     * let pen = new AutoPen()
+     * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
      * ```
      */
     QuadraticInequality({ quadratic, sign, scale = 0.5, ratio = 0.8 }) {
@@ -15700,7 +15795,8 @@ class AutoPenCls {
      * @param scale - scale for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.Triangle({
+     * let pen = new AutoPen()
+     * pen.Triangle({
      *   vertices:[[0,0],[4,0],[0,3]],
      *   triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},
      *   labels:['A','B','C'],
@@ -15824,9 +15920,9 @@ class AutoPenCls {
      * @param resolution - Resolution of Canvas
      * @returns
      * ```typescript
-     * let autoPen = new AutoPen()
+     * let pen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
-     * autoPen.LinearProgram({
+     * pen.LinearProgram({
      *     constraints,
      *     field: [1, -3, 3],
      *     contours: [4,5],
@@ -16004,7 +16100,8 @@ class AutoPenCls {
      * @param offset - offset of initial position
      * @returns
      * ```typescript
-     * autoPen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
+     * let pen = new AutoPen()
+     * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
      * ```
      */
     DotPattern({ a, p, q, n, offset }) {
@@ -16033,6 +16130,179 @@ class AutoPenCls {
         pen.autoCrop();
         this.pen = pen;
     }
+    /**
+     * A pie chart
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.PieChart({
+     *   categories: ['a','b','c','d','e'],
+     *   labels: ['10%','20%','30%','40%',''],
+     *   angles: [45,135,60,50,70],
+     *   angleLabels: [null,'x',null,null,'']
+     * })
+     * ```
+     */
+    PieChart({ categories, labels, angles, angleLabels }) {
+        var _a;
+        const pen = new Pen();
+        pen.setup.size(1);
+        pen.setup.range([-2, 2], [-2, 2]);
+        pen.graph.circle([0, 0], 1);
+        let O = [0, 0];
+        pen.line(O, [1, 0]);
+        let current = 0;
+        for (let i = 0; i < angles.length; i++) {
+            let a = angles[i];
+            let next = current + a;
+            let mid = current + a / 2;
+            pen.line(O, PolToRect([1, next]));
+            pen.label.point(PolToRect([0.7, mid]), categories[i], 90, 10);
+            pen.label.point(PolToRect([0.7, mid]), labels[i], 270, 10);
+            pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), (_a = angleLabels[i]) !== null && _a !== void 0 ? _a : angles[i] + "°");
+            current += a;
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
+    /**
+     * A bar chart / line chart / histogram / frequency polygon / cf polygon
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.HeightChart({
+     *   categories: ['a','b','c','d','e'],
+     *   data:[7,47,15,3,7],
+     *   xLabel:'x-axis',
+     *   yLabel:'y-axis',
+     *   interval:5,
+     *   subInterval:1,
+     *   barWidth:1,
+     *   barGap:1,
+     *   showBar:true,
+     *   showLine:true
+     * })
+     * ```
+     */
+    HeightChart({ categories, data, xLabel = "", yLabel = "", interval = 5, subInterval = 1, barWidth = 1, barGap = 1, showBar = false, showLine = false }) {
+        const pen = new Pen();
+        let endGap = barWidth + barGap / 2;
+        let width = endGap + categories.length * (barWidth + barGap) + endGap;
+        let max = Max(...data);
+        let maxUnit = Ceil(max / interval);
+        let maxSubUnit = maxUnit * (interval / subInterval);
+        let height = (maxUnit + 1) * interval;
+        pen.setup.range([-width * 0.2, width], [-height * 0.2, height]);
+        pen.setup.resolution(0.1, 1 / height);
+        pen.line([0, 0], [width, 0]);
+        pen.line([0, 0], [0, height], true);
+        pen.ctx.save();
+        pen.ctx.translate(...pen.frame.toPix([-1.5, height / 2]));
+        pen.ctx.rotate(-Math.PI / 2);
+        pen.ctx.fillText(yLabel, 0, 0);
+        pen.ctx.restore();
+        pen.label.point([width / 2, -2], xLabel, 270, 25);
+        function grid(y) {
+            pen.line([0, y], [width, y]);
+        }
+        for (let y = 1; y <= maxUnit; y++) {
+            let h = y * interval;
+            pen.set.alpha(0.2);
+            grid(h);
+            pen.cutterV([0, h]);
+            pen.set.alpha();
+            pen.label.point([0, h], h.toString(), 180);
+        }
+        for (let y = 1; y <= maxSubUnit; y++) {
+            pen.set.alpha(0.1);
+            grid(y * subInterval);
+            pen.set.alpha();
+        }
+        function bar(x, w, h) {
+            pen.set.color('grey');
+            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]], true);
+            pen.set.color();
+            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]]);
+        }
+        function writeCat(x, w, text) {
+            pen.label.point([x + w / 2, 0], text, 270, 15);
+        }
+        if (showBar) {
+            for (let i = 0; i < categories.length; i++) {
+                let x = endGap + i * (barWidth + barGap) + barGap / 2;
+                bar(x, barWidth, data[i]);
+                writeCat(x, barWidth, categories[i]);
+            }
+        }
+        if (showLine) {
+            let points = [];
+            for (let i = 0; i < categories.length; i++) {
+                let x = endGap + i * (barWidth + barGap) + barGap / 2;
+                let p = [x + barWidth / 2, data[i]];
+                pen.point(p);
+                points.push(p);
+                writeCat(x, barWidth, categories[i]);
+            }
+            pen.set.weight(2);
+            pen.polyline(...points);
+            pen.set.weight();
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
+    /**
+     * A pie chart
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.StemAndLeaf({
+     *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+     *   labels: [2,'x',6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+     *   stemTitle: "Stem (10 units)",
+     *   leafTitle: "Leaf (1 unit)"
+     * })
+     * ```
+     */
+    StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }) {
+        const pen = new Pen();
+        labels !== null && labels !== void 0 ? labels : (labels = [...data].map(x => x.toString()));
+        labels = labels.map(x => x.toString().split('').reverse()[0]);
+        let width = data.length + 2;
+        let height = Ceil(Max(...data) / 10) + 2;
+        pen.setup.range([-5, width], [-height, 2]);
+        pen.setup.resolution(0.07);
+        pen.line([0, -1], [0, 2]);
+        pen.line([-5, 0], [1, 0]);
+        pen.set.textAlign('left');
+        pen.write([0.5, 1], leafTitle);
+        pen.set.textAlign('right');
+        pen.write([-0.5, 1], stemTitle);
+        pen.set.textAlign();
+        let initTen = Floor(Min(...data) / 10);
+        let endTen = Floor(Max(...data) / 10);
+        let ten = initTen;
+        for (let j = -1; ten <= endTen; j--) {
+            pen.write([-1, j], ten.toString());
+            pen.line([0, j], [0, j - 1]);
+            let i = 1;
+            for (let m = 0; m < data.length; m++) {
+                if (Floor(data[m] / 10) === ten) {
+                    if (!IsNum(Number(labels[m])))
+                        pen.set.textItalic(true);
+                    pen.write([i, j], labels[m]);
+                    pen.set.textItalic();
+                    pen.line([i, 0], [i + 1, 0]);
+                    i++;
+                }
+            }
+            ten += 1;
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
 }
 var AutoPen = AutoPenCls;
 globalThis.AutoPen = AutoPen;
@@ -16045,38 +16315,21 @@ globalThis.AutoPen = AutoPen;
 "use strict";
 
 /**
- * @ignore
- */
-var PROJ_ANGLE = 60;
-/**
- * @ignore
- */
-var PROJ_DEPTH = 0.5;
-/**
 * @category 3DPen
 * @return projection of 3D point to 2D plane
 * ```typescript
-* proj(1,1,0) // [1.25, 0.433012701892]
+* const pj = Projector(60,0.5) // create a 3D projector function
+* pj(1,1,0) // [1.25, 0.433012701892]
 * ```
 */
-function proj(x, y, z) {
-    let x_new = x + PROJ_DEPTH * y * cos(PROJ_ANGLE);
-    let y_new = z + PROJ_DEPTH * y * sin(PROJ_ANGLE);
-    return [x_new, y_new];
+function Projector(angle = 60, depth = 0.5) {
+    return function (x, y, z) {
+        let x_new = x + depth * y * cos(angle);
+        let y_new = z + depth * y * sin(angle);
+        return [x_new, y_new];
+    };
 }
-globalThis.proj = proj;
-/**
-* @category 3DPen
-* @return set the angle and depth of projection
-* ```typescript
-* projSetting(45,0.6) // set the angle to 45 and depth to 0.5
-* ```
-*/
-function projSetting(angle = 60, depth = 0.5) {
-    PROJ_ANGLE = angle;
-    PROJ_DEPTH = depth;
-}
-globalThis.projSetting = projSetting;
+globalThis.Projector = Projector;
 
 
 /***/ }),
@@ -16517,31 +16770,20 @@ exports.OptionShuffler = OptionShuffler;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AutoOptions = void 0;
-class Instruction {
-    constructor(input) {
-        this.range = undefined;
-        this.assign = [];
-        if (IsArray(input)) {
-            this.assign = input;
-        }
-        else if (typeof input === 'object' && input !== null) {
-            Object.assign(this, input);
-        }
-    }
-    do(source) {
-        let product = Clone(this.assign);
-        product.push(...RndShake(source, this.range, 3));
+function ExecInstructions(instructions, source, validate) {
+    function Produce(source, assigned) {
+        let product = [];
+        if (IsArray(assigned))
+            product = Clone(assigned);
+        product.push(...RndShake(source));
         product.length = 3;
         product = RndShuffle(...product);
         return product;
     }
-}
-function ExecInstructions(instructions, source, validate) {
     let products = {};
     let k;
     for (k in instructions) {
-        let instr = new Instruction(instructions[k]);
-        products[k] = instr.do(source[k]);
+        products[k] = Produce(source[k], instructions[k]);
     }
     // ValidateProducts(products, source, validate)
     return products;
@@ -16561,7 +16803,7 @@ function AutoOptions(instructions, question, source, validate) {
     let options = ExtractHTMLTag(question, 'li');
     let products = ExecInstructions(instructions, source, validate);
     if (options.length === 1) {
-        let others = Array(3).fill(options[0]);
+        let others = [options[0], options[0], options[0]];
         for (let k in products) {
             for (let i = 0; i < 3; i++) {
                 others[i] = PrintVariable(others[i], k, products[k][i]);

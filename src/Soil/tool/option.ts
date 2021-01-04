@@ -1,23 +1,22 @@
 import { Dict, Config, SeedCore } from '../cls'
 
-class Instruction {
-    range?: number = undefined
-    assign: any[] = []
-    constructor(input: any) {
-        if (IsArray(input)) {
-            this.assign = input
-        } else if (typeof input === 'object' && input !== null) {
-            Object.assign(this, input)
-        }
-    }
-    do(source: any): (typeof source)[] {
-        let product = Clone(this.assign)
-        product.push(...RndShake(source, this.range, 3))
-        product.length = 3
-        product = RndShuffle(...product)
-        return product
-    }
-}
+// class Instruction {
+//     assign: any[] = []
+//     constructor(input: any) {
+//         if (IsArray(input)) {
+//             this.assign = input
+//         } else if (typeof input === 'object' && input !== null) {
+//             Object.assign(this, input)
+//         }
+//     }
+//     do(source: any): (typeof source)[] {
+//         let product = Clone(this.assign)
+//         product.push(...RndShake(source))
+//         product.length = 3
+//         product = RndShuffle(...product)
+//         return product
+//     }
+// }
 
 
 
@@ -48,11 +47,19 @@ type Product = {
 
 
 function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: string): Product {
+    function Produce(source: any, assigned: any[]) {
+        let product = []
+        if (IsArray(assigned)) product = Clone(assigned)
+        product.push(...RndShake(source))
+        product.length = 3
+        product = RndShuffle(...product)
+        return product
+    }
+
     let products: Product = {}
     let k: keyof Partial<Dict>
     for (k in instructions) {
-        let instr = new Instruction(instructions[k])
-        products[k] = instr.do(source[k])
+        products[k] = Produce(source[k], instructions[k])
     }
     // ValidateProducts(products, source, validate)
     return products
@@ -78,7 +85,7 @@ export function AutoOptions(instructions: Partial<Dict>, question: string, sourc
     let products = ExecInstructions(instructions, source, validate)
 
     if (options.length === 1) {
-        let others = Array(3).fill(options[0])
+        let others = [options[0], options[0], options[0]]
         for (let k in products) {
             for (let i = 0; i < 3; i++) {
                 others[i] = PrintVariable(others[i], k, products[k][i])

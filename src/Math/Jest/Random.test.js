@@ -161,3 +161,13 @@ test('RndConvexPolygon', () => {
     expect(arr).toAllHaveLength(3);
     expect(arr.flat()).toAllHaveLength(2);
 });
+
+
+
+test('RndData', () => {
+    let arr = sample(() => RndData(10, 15, 5));
+    expect(arr).toBeFlatAbsWithin(10, 15);
+    expect(arr).toBeFlatIsInteger();
+    expect(arr).toAllHaveLength(5);
+    expect(arr.every(a => IsNum(Mode(...a)))).toBe(true);
+});
