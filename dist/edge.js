@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15).Buffer))
 
 /***/ }),
 /* 1 */
@@ -7913,8 +7913,8 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(30);
-__webpack_require__(35);
+__webpack_require__(31);
+__webpack_require__(36);
 
 
 /***/ }),
@@ -7935,7 +7935,7 @@ __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(19);
+__webpack_require__(14);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -7946,6 +7946,7 @@ __webpack_require__(26);
 __webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
+__webpack_require__(30);
 
 
 /***/ }),
@@ -9883,6 +9884,32 @@ globalThis.Blurs = Blurs;
 
 "use strict";
 
+var PhyConst = {
+    R: 8.31,
+    N_A: 6.02e23,
+    g: 9.81,
+    G: 6.67e-11,
+    c: 3.00e8,
+    e: 1.60e-19,
+    m_e: 9.11e-31,
+    epsilon_0: 8.85e-12,
+    mu_0: 4 * Math.PI * (1e-7),
+    m_u: 1.661e-27,
+    au: 1.50e11,
+    light_year: 9.46e15,
+    parsec: 3.09e16,
+    sigma: 5.67e-8,
+    h: 6.63e-34,
+};
+globalThis.PhyConst = PhyConst;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 /**
  * @ignore
  */
@@ -10160,7 +10187,7 @@ globalThis.RndData = RndData;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10174,9 +10201,9 @@ globalThis.RndData = RndData;
 
 
 
-var base64 = __webpack_require__(16)
-var ieee754 = __webpack_require__(17)
-var isArray = __webpack_require__(18)
+var base64 = __webpack_require__(17)
+var ieee754 = __webpack_require__(18)
+var isArray = __webpack_require__(19)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -11954,10 +11981,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11983,7 +12010,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12142,7 +12169,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -12232,7 +12259,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -12243,7 +12270,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12438,7 +12465,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12548,7 +12575,7 @@ globalThis.RndLetters = RndLetters;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12677,7 +12704,7 @@ globalThis.AreOblique = AreOblique;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12831,7 +12858,7 @@ globalThis.LucasSequence = LucasSequence;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12999,7 +13026,7 @@ globalThis.Mode = Mode;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13208,7 +13235,7 @@ globalThis.Sci = Sci;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13362,7 +13389,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13517,7 +13544,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13680,7 +13707,7 @@ globalThis.Dedupe = Dedupe;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13843,7 +13870,7 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13868,20 +13895,20 @@ globalThis.Should = Should;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
 __webpack_require__(34);
+__webpack_require__(35);
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13979,7 +14006,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15324,7 +15351,7 @@ function trimCanvas(canvas) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16316,7 +16343,7 @@ globalThis.AutoPen = AutoPen;
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16340,13 +16367,13 @@ globalThis.Projector = Projector;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(36);
+const global_1 = __webpack_require__(37);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -16381,19 +16408,19 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(37);
-const dress_1 = __webpack_require__(38);
-const shuffle_1 = __webpack_require__(39);
-const option_1 = __webpack_require__(40);
-__webpack_require__(41);
-const cls_1 = __webpack_require__(42);
+const section_1 = __webpack_require__(38);
+const dress_1 = __webpack_require__(39);
+const shuffle_1 = __webpack_require__(40);
+const option_1 = __webpack_require__(41);
+__webpack_require__(42);
+const cls_1 = __webpack_require__(43);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -16589,7 +16616,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16624,7 +16651,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16690,7 +16717,7 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16770,7 +16797,7 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16832,7 +16859,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16840,7 +16867,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

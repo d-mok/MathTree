@@ -1,0 +1,19 @@
+
+var PhyConst = {
+    R: 8.31,
+    N_A: 6.02e23,
+    g: 9.81,
+    G: 6.67e-11,
+    c: 3.00e8,
+    e: 1.60e-19,
+    m_e: 9.11e-31,
+    epsilon_0: 8.85e-12,
+    mu_0: 4 * Math.PI * (1e-7),
+    m_u: 1.661e-27,
+    au: 1.50e11,
+    light_year: 9.46e15,
+    parsec: 3.09e16,
+    sigma: 5.67e-8,
+    h: 6.63e-34,
+}
+globalThis.PhyConst = PhyConst

@@ -323,10 +323,8 @@ function RndData(min: number, max: number, n: number): number[] {
     let trials = 10 * n
     for (let i = 0; i < trials; i++) {
         arr.unshift(RndN(min, max))
-        if (arr.length > n)
-            arr.length = n
-        if (arr.length === n && IsNum(Mode(...arr)))
-            return Sort(...arr)
+        if (arr.length > n) arr.length = n
+        if (arr.length === n && IsNum(Mode(...arr))) return Sort(...arr)
     }
     throw 'fail'
 }
