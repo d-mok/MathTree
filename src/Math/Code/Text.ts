@@ -251,8 +251,8 @@ function LongDivision(dividend: number[], divisor: number[]): string {
             if (v === null) arr.push(dividend[i] + xTerm(i))
         })
         let T = arr.reverse().join("+")
-        if (T.length > 0) T = "+" + T
-        return "\\phantom{" + T + "}"
+        if (T.length === 0) return ""
+        return "\\phantom{" + "+" + T + "}"
     }
 
     function writeSolid(poly: (number | null)[]) {
