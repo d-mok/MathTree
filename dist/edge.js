@@ -13317,6 +13317,8 @@ function LongDivision(dividend, divisor) {
                 break;
         }
         quotient.reverse();
+        for (let i = 1; i <= dividend.length - quotient.length; i++)
+            quotient.unshift(null);
         T += "\\end{array}";
         T = T.replace('QUOTIENT', writeSolid(quotient));
         return T;

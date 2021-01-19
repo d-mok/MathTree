@@ -271,8 +271,9 @@ function LongDivision(dividend: number[], divisor: number[]): string {
 
     function step(current: number[], divisor: number[]) {
         let q = pushDivide(current, divisor)
-        let under:(number|null)[] = divisor.map(x => x * q)
-        for (let i = 1; i <= current.length - divisor.length; i++) under.unshift(null)
+        let under: (number | null)[] = divisor.map(x => x * q)
+        for (let i = 1; i <= current.length - divisor.length; i++)
+            under.unshift(null)
         let next: number[] = []
         for (let i = 0; i < current.length - 1; i++)
             next.push(current[i] - Number(under[i]))
@@ -303,6 +304,8 @@ function LongDivision(dividend: number[], divisor: number[]): string {
         }
 
         quotient.reverse()
+        for (let i = 1; i <= dividend.length - quotient.length; i++)
+            quotient.unshift(null)
         T += "\\end{array}"
         T = T.replace('QUOTIENT', writeSolid(quotient))
         return T
