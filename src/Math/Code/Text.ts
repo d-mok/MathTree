@@ -210,3 +210,105 @@ function Sci(num: number): string {
     return num.toString() + ' \\times ' + '10^{ ' + m + '}'
 }
 globalThis.Sci = Sci
+
+
+
+
+/**
+ * @category Text
+ * @return the katex of long division
+ * ```typescript
+ * LongDivision([1,2,3,4],[1,2]) //
+ * LongDivision([1,2,3,4],[1,2]) //
+ * ```
+ */
+function LongDivision(dividend: number[], divisor: number[]): string {
+
+    dividend = dividend.reverse()
+    divisor = divisor.reverse()
+
+    function xTerm(power: number): string {
+        if (power === 0) return ""
+        if (power === 1) return "x"
+        return "x^" + power
+    }
+
+    function printSolid(poly: (number | null)[]) {
+        let arr: string[] = []
+        poly.forEach((v, i) => {
+            if (v !== null) arr.push(v + xTerm(i))
+        })
+        return arr.reverse().join("+")
+    }
+
+    function printUnderline(poly: (number | null)[]) {
+        return "\\underline{" + printSolid(poly) + "}"
+    }
+
+    function printPhantom(poly: (number | null)[]) {
+        let arr: string[] = []
+        poly.forEach((v, i) => {
+            if (v === null) arr.push(dividend[i] + xTerm(i))
+        })
+        let T = arr.reverse().join("+")
+        if (T.length > 0) T = "+" + T
+        return "\\phantom{" + T + "}"
+    }
+
+    function writeSolid(poly: (number | null)[]) {
+        return printSolid(poly) + printPhantom(poly)
+    }
+
+    function writeUnderline(poly: (number | null)[]) {
+        return printUnderline(poly) + printPhantom(poly)
+    }
+
+    function pushDivide(dividend: number[], divisor: number[]) {
+        let t1 = dividend[dividend.length - 1]
+        let t2 = divisor[divisor.length - 1]
+        return t1 / t2
+    }
+
+    function step(current: number[], divisor: number[]) {
+        let q = pushDivide(current, divisor)
+        let under:(number|null)[] = divisor.map(x => x * q)
+        for (let i = 1; i <= current.length - divisor.length; i++) under.unshift(null)
+        let next: number[] = []
+        for (let i = 0; i < current.length - 1; i++)
+            next.push(current[i] - Number(under[i]))
+        let nextPrint: (number | null)[] = [...next].reverse()
+        for (let i = 0; i < nextPrint.length; i++)
+            if (i > divisor.length - 1) nextPrint[i] = null
+        nextPrint.reverse()
+        return { next, nextPrint, under, q }
+    }
+
+    function compose(dividend: number[], divisor: number[]) {
+        let T = "\\begin{array}{r}"
+        T += "QUOTIENT \\\\"
+        T += writeSolid(divisor)
+        T += "{\\overline{\\smash{\\big)}"
+        T += writeSolid(dividend)
+        T += "}}\\\\"
+        let current: number[] = dividend
+        let quotient = []
+
+        while (true) {
+            let { next, nextPrint, under, q } = step(current, divisor)
+            T += writeUnderline(under) + "\\\\"
+            T += writeSolid(nextPrint) + "\\\\"
+            current = next
+            quotient.push(q)
+            if (current.length < divisor.length) break
+        }
+
+        quotient.reverse()
+        T += "\\end{array}"
+        T = T.replace('QUOTIENT', writeSolid(quotient))
+        return T
+    }
+    return compose(dividend, divisor)
+}
+globalThis.LongDivision = LongDivision
+
+
