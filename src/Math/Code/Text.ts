@@ -304,8 +304,7 @@ function LongDivision(dividend: number[], divisor: number[]): string {
         }
         T += "\\end{array}"
         quotient.reverse()
-        let shadow = [...dividend]
-        shadow.length = dividend.length - quotient.length
+        let shadow = Array(dividend.length - quotient.length).fill(null)
         T = T.replace('QUOTIENT', writeSolid(quotient) + printPhantom(shadow))
         return T
     }
