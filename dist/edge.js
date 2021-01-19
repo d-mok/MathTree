@@ -13316,11 +13316,11 @@ function LongDivision(dividend, divisor) {
             if (current.length < divisor.length)
                 break;
         }
-        quotient.reverse();
-        for (let i = 1; i <= dividend.length - quotient.length; i++)
-            quotient.unshift(null);
         T += "\\end{array}";
-        T = T.replace('QUOTIENT', writeSolid(quotient));
+        quotient.reverse();
+        let shadow = [...dividend];
+        shadow.length = dividend.length - quotient.length;
+        T = T.replace('QUOTIENT', writeSolid(quotient) + printPhantom(shadow));
         return T;
     }
     return compose(dividend, divisor);
