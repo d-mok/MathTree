@@ -153,7 +153,7 @@ export class Seed {
             }
         };
         // throw error after 100 failed trials
-        throw Error("No valid option generated after 10 trials!")
+        throw Error("No valid option generated after 100 trials!")
     }
 
 

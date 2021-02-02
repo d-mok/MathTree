@@ -16643,7 +16643,7 @@ class Seed {
         }
         ;
         // throw error after 100 failed trials
-        throw Error("No valid option generated after 10 trials!");
+        throw Error("No valid option generated after 100 trials!");
     }
     runSubstitute() {
         this.pour();
@@ -16902,15 +16902,17 @@ exports.AutoOptions = void 0;
 function ExecInstructions(instructions, source, validate) {
     function Produce(source, assigned) {
         let product = [];
-        if (IsArray(assigned))
+        if (IsArray(assigned)) {
             product = Clone(assigned);
-        try {
-            product.push(...RndShake(source));
+            product = RndShuffle(...product);
         }
-        catch (_a) {
+        else {
+            try {
+                product.push(...RndShake(source));
+            }
+            catch (_a) {
+            }
         }
-        product.length = 3;
-        product = RndShuffle(...product);
         return product;
     }
     let products = {};

@@ -49,13 +49,15 @@ type Product = {
 function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: string): Product {
     function Produce(source: any, assigned: any[]) {
         let product = []
-        if (IsArray(assigned)) product = Clone(assigned)
-        try {
-            product.push(...RndShake(source))
-        } catch {
+        if (IsArray(assigned)) {
+            product = Clone(assigned)
+            product = RndShuffle(...product)
+        } else {
+            try {
+                product.push(...RndShake(source))
+            } catch {
+            }
         }
-        product.length = 3
-        product = RndShuffle(...product)
         return product
     }
 
