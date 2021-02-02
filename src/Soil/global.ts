@@ -143,7 +143,8 @@ export class Seed {
 
     runOption(): boolean {
         let nTrial = 0
-        while (nTrial <= 10) {
+        while (nTrial <= 100) {
+            nTrial++
             try {
                 this.qn = AutoOptions(this.config.options, this.qn, this.dict, this.validate)
                 return true
@@ -151,7 +152,7 @@ export class Seed {
                 continue
             }
         };
-        // throw error after 10 failed trials
+        // throw error after 100 failed trials
         throw Error("No valid option generated after 10 trials!")
     }
 

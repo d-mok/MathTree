@@ -16631,7 +16631,8 @@ class Seed {
     }
     runOption() {
         let nTrial = 0;
-        while (nTrial <= 10) {
+        while (nTrial <= 100) {
+            nTrial++;
             try {
                 this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict, this.validate);
                 return true;
@@ -16641,7 +16642,7 @@ class Seed {
             }
         }
         ;
-        // throw error after 10 failed trials
+        // throw error after 100 failed trials
         throw Error("No valid option generated after 10 trials!");
     }
     runSubstitute() {
@@ -16903,7 +16904,11 @@ function ExecInstructions(instructions, source, validate) {
         let product = [];
         if (IsArray(assigned))
             product = Clone(assigned);
-        product.push(...RndShake(source));
+        try {
+            product.push(...RndShake(source));
+        }
+        catch (_a) {
+        }
         product.length = 3;
         product = RndShuffle(...product);
         return product;

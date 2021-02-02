@@ -50,7 +50,10 @@ function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: s
     function Produce(source: any, assigned: any[]) {
         let product = []
         if (IsArray(assigned)) product = Clone(assigned)
-        product.push(...RndShake(source))
+        try {
+            product.push(...RndShake(source))
+        } catch {
+        }
         product.length = 3
         product = RndShuffle(...product)
         return product
