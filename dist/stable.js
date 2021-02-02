@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15).Buffer))
 
 /***/ }),
 /* 1 */
@@ -7913,8 +7913,8 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(30);
-__webpack_require__(35);
+__webpack_require__(31);
+__webpack_require__(36);
 
 
 /***/ }),
@@ -7935,7 +7935,7 @@ __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(19);
+__webpack_require__(14);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -7946,6 +7946,7 @@ __webpack_require__(26);
 __webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
+__webpack_require__(30);
 
 
 /***/ }),
@@ -8837,6 +8838,8 @@ globalThis.Degree = Degree;
  */
 function sin(x) {
     Should(IsNum(x), 'input must be num');
+    if (x % 180 === 0)
+        return 0;
     let v = Math.sin(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8850,6 +8853,8 @@ globalThis.sin = sin;
  */
 function cos(x) {
     Should(IsNum(x), 'input must be num');
+    if ((x - 90) % 180 === 0)
+        return 0;
     let v = Math.cos(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -8863,6 +8868,8 @@ globalThis.cos = cos;
  */
 function tan(x) {
     Should(IsNum(x), 'input must be num');
+    if (x % 180 === 0)
+        return 0;
     let v = Math.tan(x / 180 * Math.PI);
     return Blur(v);
 }
@@ -9208,6 +9215,16 @@ globalThis.JoinToHTMLTag = JoinToHTMLTag;
 */
 function PrintVariable(html, symbol, value) {
     let T = typeof value;
+    if (T === 'number') {
+        let v = Blur(Round(value, 3));
+        if (v >= 10000 || v <= 0.01) {
+            let sci = Sci(v);
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+        }
+        else {
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
+        }
+    }
     if (T === 'number') {
         value = Blur(value);
         if (IsDecimal(value))
@@ -9617,12 +9634,9 @@ function Fix(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
-    num += Number.EPSILON;
-    num = num * (Math.pow(10, dp));
-    num = Math.round(num);
-    num = num / (Math.pow(10, dp));
-    if (dp < 0)
-        num = Fix(num, 1); // correct for floating point error
+    num = Raise(num, dp);
+    num = Math.round(num + Number.EPSILON);
+    num = Raise(num, -dp);
     return sign * num;
 }
 globalThis.Fix = Fix;
@@ -9640,12 +9654,9 @@ function FixUp(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
-    num -= Number.EPSILON;
-    num = num * (Math.pow(10, dp));
-    num = Math.ceil(num);
-    num = num / (Math.pow(10, dp));
-    if (dp < 0)
-        num = Fix(num, 1); // correct for floating point error
+    num = Raise(num, dp);
+    num = Math.ceil(num - Number.EPSILON);
+    num = Raise(num, -dp);
     return sign * num;
     ;
 }
@@ -9664,12 +9675,9 @@ function FixDown(num, dp = 0) {
     Should(IsInteger(dp), 'dp must be integer');
     const sign = Sign(num);
     num = Abs(num);
-    num += Number.EPSILON;
-    num = num * (Math.pow(10, dp));
-    num = Math.floor(num);
-    num = num / (Math.pow(10, dp));
-    if (dp < 0)
-        num = Fix(num, 1); // correct for floating point error
+    num = Raise(num, dp);
+    num = Math.floor(num + Number.EPSILON);
+    num = Raise(num, -dp);
     return sign * num;
     ;
 }
@@ -9768,7 +9776,7 @@ globalThis.DecimalPlace = DecimalPlace;
  * ```typescript
  * Magnitude(1) // 0
  * Magnitude(2) // 0
- * Magnitude(0.9) // 0
+ * Magnitude(0.9) // -1
  * Magnitude(10) // 1
  * Magnitude(10.1) // 1
  * Magnitude(0.1) // -1
@@ -9776,10 +9784,68 @@ globalThis.DecimalPlace = DecimalPlace;
  * ```
  */
 function Magnitude(num) {
-    Should(IsNum(num), 'input must be num');
-    return Math.floor(log(10, Abs(num)));
+    // Should(IsNum(num), 'input must be num')
+    return Number(num.toExponential().split('e')[1]);
 }
 globalThis.Magnitude = Magnitude;
+/**
+ * @category Numeracy
+ * @return the mantissa
+ * ```typescript
+ * Mantissa(1.23) // 1.23
+ * Mantissa(123) // 1.23
+ * Mantissa(0.123) // 1.23
+ * ```
+ */
+function Mantissa(num) {
+    return Number(num.toExponential().split('e')[0]);
+}
+globalThis.Mantissa = Mantissa;
+/**
+ * @category Numeracy
+ * @return the lowest number with the next order of magnitude
+ * ```typescript
+ * LogCeil(5) // 10
+ * LogCeil(23) // 100
+ * LogCeil(0.456) // 1
+ * LogCeil(0.00235) // 0.01
+ * ```
+ */
+function LogCeil(num) {
+    let exp = Magnitude(num) + 1;
+    return Number('1e' + exp);
+}
+globalThis.LogCeil = LogCeil;
+/**
+ * @category Numeracy
+ * @return the lowest number with the same order of magnitude
+ * ```typescript
+ * LogFloor(5) // 1
+ * LogFloor(23) // 10
+ * LogFloor(0.456) // 0.1
+ * LogFloor(0.00235) // 0.001
+ * ```
+ */
+function LogFloor(num) {
+    let exp = Magnitude(num);
+    return Number('1e' + exp);
+}
+globalThis.LogFloor = LogFloor;
+/**
+ * @category Numeracy
+ * @return add a constant to the magnitude
+ * ```typescript
+ * Raise(12.34,1) // 123.4
+ * Raise(12.34,-1) // 1.234
+ * ```
+ */
+function Raise(num, add) {
+    let exp = Magnitude(num);
+    let mantissa = Mantissa(num);
+    exp += add;
+    return Number(mantissa + 'e' + exp);
+}
+globalThis.Raise = Raise;
 /**
  * @category Numeracy
  * @return correct for floating point error
@@ -9794,7 +9860,7 @@ function Blur(value, accuracy = 12) {
         return value;
     if (!isFinite(value))
         return value;
-    value = parseFloat(value.toFixed(accuracy));
+    // value = parseFloat(value.toFixed(accuracy));
     value = parseFloat(value.toPrecision(accuracy));
     return value;
 }
@@ -9814,6 +9880,32 @@ globalThis.Blurs = Blurs;
 
 /***/ }),
 /* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var PhyConst = {
+    R: 8.31,
+    N_A: 6.02e23,
+    g: 9.81,
+    G: 6.67e-11,
+    c: 3.00e8,
+    e: 1.60e-19,
+    m_e: 9.11e-31,
+    epsilon_0: 8.85e-12,
+    mu_0: 4 * Math.PI * (1e-7),
+    m_u: 1.661e-27,
+    au: 1.50e11,
+    light_year: 9.46e15,
+    parsec: 3.09e16,
+    sigma: 5.67e-8,
+    h: 6.63e-34,
+};
+globalThis.PhyConst = PhyConst;
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10072,10 +10164,30 @@ function RndConvexPolygon(n, center, radius, separation) {
     return vertices;
 }
 globalThis.RndConvexPolygon = RndConvexPolygon;
+/**
+ * @category Random
+ * @return n integers from [min, max]
+ * ```typescript
+ * RndData(10,15,5) // may return [11,11,12,13,15]
+ * ```
+ */
+function RndData(min, max, n) {
+    let arr = [];
+    let trials = 10 * n;
+    for (let i = 0; i < trials; i++) {
+        arr.unshift(RndN(min, max));
+        if (arr.length > n)
+            arr.length = n;
+        if (arr.length === n && IsNum(Mode(...arr)))
+            return Sort(...arr);
+    }
+    throw 'fail';
+}
+globalThis.RndData = RndData;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10089,9 +10201,9 @@ globalThis.RndConvexPolygon = RndConvexPolygon;
 
 
 
-var base64 = __webpack_require__(16)
-var ieee754 = __webpack_require__(17)
-var isArray = __webpack_require__(18)
+var base64 = __webpack_require__(17)
+var ieee754 = __webpack_require__(18)
+var isArray = __webpack_require__(19)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -11869,10 +11981,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11898,7 +12010,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12057,7 +12169,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -12147,7 +12259,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -12158,7 +12270,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12176,15 +12288,15 @@ module.exports = Array.isArray || function (arr) {
  * // equivalent to RndShakeProb(0.5,0.1,3)
  * ```
  */
-function RndShake(anchor, range, n) {
+function RndShake(anchor) {
     if (typeof anchor === 'string') {
         // Fraction
         if (IsDfrac(anchor)) {
-            return RndShakeDfrac(anchor, range, n);
+            return RndShakeDfrac(anchor);
         }
         // Inequal Sign
         if (IsIneqSign(anchor)) {
-            return RndShakeIneq(anchor, n);
+            return RndShakeIneq(anchor);
         }
         // else convert to number
         if (Number(anchor)) {
@@ -12195,25 +12307,19 @@ function RndShake(anchor, range, n) {
         anchor = Blur(anchor);
         // Integer
         if (IsInteger(anchor)) {
-            return RndShakeN(anchor, range, n);
-        }
-        // Probability
-        if (IsProbability(anchor)) {
-            return RndShakeProb(anchor, range, n);
+            return RndShakeN(anchor);
         }
         // Decimal
         if (IsNum(anchor)) {
-            return RndShakeR(anchor, range, n);
+            return RndShakeR(anchor);
         }
         if (isNaN(anchor)) {
             return [];
         }
     }
-    // console.error('Fail to RndShake: ' + anchor)
     if (anchor === undefined)
         return [];
-    Should(false, 'Fail to RndShake: ' + anchor);
-    return [];
+    throw MathError('Fail to RndShake: ' + anchor);
 }
 globalThis.RndShake = RndShake;
 /**
@@ -12234,43 +12340,30 @@ function Sieve(randomFunc, predicate, n = 1000) {
             if (predicate(item))
                 return item;
         }
-        throw 'No items can pass through Sieve after ' + n + ' trials!';
+        throw MathError('No items can pass through Sieve after ' + n + ' trials!');
     }
     return lambda;
 }
 globalThis.Sieve = Sieve;
 /**
  * @category RandomShake
- * @param anchor - must be integer
- * @param range - default Max(5, anchor * 10%)
- * @param n - default to 10
- * @return nearby same-signed integers
+ * @return 3 nearby same-signed integers, range = Max(5, anchor * 10%)
  * ```typescript
- * RndShakeN(5,2,3)
- * // return 3 unique integers from [3,4,6,7], e.g. [3,7,6]
- * RndShakeN(2,4,3)
- * // return 3 unique integers from [1,3,4,5,6]
- * RndShakeN(-2,4,3)
- * // return 3 unique integers from [-1,-3,-4,-5,-6]
- * RndShakeN(0,5,3)
- * // return 3 unique integers from [1,2,3,4,5]
+ * RndShakeN(5) // return 3 unique integers from 1-10
  * ```
  */
-function RndShakeN(anchor, range, n) {
+function RndShakeN(anchor) {
+    Should(IsInteger(anchor), 'anchor must be integer');
     anchor = Blur(anchor);
-    range !== null && range !== void 0 ? range : (range = Max(5, Abs(anchor * 0.1)));
-    if (anchor === 0) {
-        n !== null && n !== void 0 ? n : (n = Min(range, 10));
-        return chance.unique(() => RndN(1, range), n);
-    }
-    if (!IsInteger(anchor))
-        return [];
     let a = Abs(anchor);
-    let max = a + range;
-    let min = Max(a - range, 1);
-    n !== null && n !== void 0 ? n : (n = Min(10, max - min));
-    let func = Sieve(() => RndN(min, max), x => x !== a);
-    let arr = chance.unique(func, n);
+    let range = Max(3, a * 0.1);
+    if (anchor === 0) {
+        return chance.unique(() => RndN(1, 3), 3);
+    }
+    let max = Min(Floor(a + range), LogCeil(a) - 1);
+    let min = Max(Ceil(a - range), 1, LogFloor(a));
+    let func = Sieve(() => RndN(min, max), x => (x !== a));
+    let arr = chance.unique(func, 3);
     let s = Sign(anchor);
     arr = arr.map((x) => s * x);
     return arr;
@@ -12278,105 +12371,46 @@ function RndShakeN(anchor, range, n) {
 globalThis.RndShakeN = RndShakeN;
 /**
  * @category RandomShake
- * @param anchor - must be integer
- * @param range - default Max(5, anchor * 10%)
- * @param n - default to 10
- * @return nearby integers
+ * @return 3 nearby same-signed real number with same precision, range = anchor * 50%
  * ```typescript
- * RndShakeZ(5,2,3)
- * // return 3 unique integers from [3,4,6,7]
- * RndShakeZ(2,4,3)
- * // return 3 unique integers from [-2,-1,0,1,3,4,5,6]
- * RndShakeZ(-2,4,3)
- * // return 3 unique integers from [2,1,0,-1,-3,-4,-5,-6]
- * RndShakeZ(0,2,3)
- * // return 3 unique integers from [-2,-1,1,2]
+ * RndShakeR(3.5) // return 3 unique values from [1.8,5.2]
  * ```
  */
-function RndShakeZ(anchor, range, n) {
-    anchor = Blur(anchor);
-    range !== null && range !== void 0 ? range : (range = Max(5, Abs(anchor * 0.1)));
-    if (!IsInteger(anchor))
-        return [];
-    n !== null && n !== void 0 ? n : (n = Min(2 * range, 10));
-    return chance.unique(() => anchor + RndZ(1, range), n);
-}
-globalThis.RndShakeZ = RndShakeZ;
-/**
- * @category RandomShake
- * @param anchor - can be any real number
- * @param range - default Max(1, anchor * 10%)
- * @param n - default to 5
- * @return nearby same-signed real number with same precision
- * ```typescript
- * RndShakeR(3.5,2,3)
- * // return 3 unique values from [1.5,5.5]
- * RndShakeR(1.5,2,3)
- * // return 3 unique values from [0,3.5]
- * RndShakeR(-1.5,4,3)
- * // return 3 unique values from [-5.5,0]
- * RndShakeR(0,2)
- * // return 10 unique values from [0,2]
- * ```
- */
-function RndShakeR(anchor, range, n) {
-    range !== null && range !== void 0 ? range : (range = Max(1, Abs(anchor * 0.1)));
-    n !== null && n !== void 0 ? n : (n = 5);
-    const dp = Max(DecimalPlace(anchor), 1);
-    let func = Sieve(() => Fix(anchor + RndR(0, range) * RndU(), dp), x => x * (anchor + Number.EPSILON) >= Number.EPSILON);
-    return chance.unique(func, n);
+function RndShakeR(anchor) {
+    Should(IsNonZero(anchor), 'anchor must be non-zero');
+    let [mant, exp] = anchor.toExponential().split('e').map(x => Number(x));
+    mant = Blur(mant);
+    let arr;
+    if (IsInteger(mant)) {
+        arr = RndShakeN(mant);
+    }
+    else {
+        let dp = DecimalPlace(mant);
+        let func = Sieve(() => Fix(mant * (1 + RndR(0, 0.5) * RndU()), dp), x => (x * mant > 0) &&
+            (Magnitude(x) === Magnitude(mant)) &&
+            (x !== mant));
+        arr = chance.unique(func, 3);
+    }
+    return arr.map(x => Number(x + "e" + exp));
 }
 globalThis.RndShakeR = RndShakeR;
 /**
  * @category RandomShake
- * @param anchor - must be a probability
- * @param range - default to 0.5
- * @param n - default to 3
- * @return nearby probability with same precision
+ * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```typescript
- * RndShakeProb(0.8,0.1,3)
- * // return 3 unique values from [0.7,0.9]
- * RndShakeProb(0.8,0.5,3)
- * // return 3 unique values from [0.3,1]
- * RndShakeProb(0.3,0.6,3)
- * // return 3 unique values from [0,0.9]
- * RndShakeProb(1.1,2)
- * // return [] anchor must be a probability 0<=P<=1
+ * RndShakeFrac([5,6])
+ * // return 3 unique fractions around [5,6]
+ * RndShakeFrac([6,-5])
+ * // return 3 unique fractions around [6,-5]
  * ```
  */
-function RndShakeProb(anchor, range, n) {
-    if (anchor < 0 || anchor > 1)
-        return [];
-    range !== null && range !== void 0 ? range : (range = 0.5);
-    n !== null && n !== void 0 ? n : (n = 3);
-    const dp = Max(DecimalPlace(anchor), 1);
-    let func = Sieve(() => Fix(anchor + RndR(0, range) * RndU(), dp), x => x > 0 && x < 1);
-    return chance.unique(func, n);
-}
-globalThis.RndShakeProb = RndShakeProb;
-/**
- * @category RandomShake
- * @param anchor - must be a fraction
- * @param range - default to 5
- * @param n - default to 10
- * @return nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```typescript
- * RndShakeFrac([5,6],3,3)
- * // return 3 unique fractions around [5,6] within range 3
- * RndShakeFrac([6,-5],10,3)
- * // return 3 unique fractions around [6,-5] within range 10
- * ```
- */
-function RndShakeFrac(anchor, range, n) {
+function RndShakeFrac(anchor) {
     let [p, q] = Frac(...anchor);
     [p, q] = Blurs([p, q]);
-    if (!IsInteger(p, q))
-        return [];
-    range !== null && range !== void 0 ? range : (range = 5);
-    n !== null && n !== void 0 ? n : (n = Min(10, range));
+    Should(IsInteger(p, q), 'input should be integral fraction');
     let func = Sieve(() => {
-        const h = RndShakeN(p, range, 1)[0];
-        const k = RndShakeN(q, range, 1)[0];
+        const h = RndShakeN(p)[0];
+        const k = RndShakeN(q)[0];
         return RndPick([h, k], [h, k], [p, k], [h, q]);
     }, f => {
         let [a, b] = f;
@@ -12390,7 +12424,7 @@ function RndShakeFrac(anchor, range, n) {
             return false;
         return true;
     });
-    return chance.unique(func, n, {
+    return chance.unique(func, 3, {
         comparator: function (arr, val) {
             return arr.some(x => x[0] / x[1] === val[0] / val[1]);
         }
@@ -12399,54 +12433,39 @@ function RndShakeFrac(anchor, range, n) {
 globalThis.RndShakeFrac = RndShakeFrac;
 /**
  * @category RandomShake
- * @param anchor - must be a string of Dfrac
- * @param range - default to 5
- * @param n - default to 10
- * @return nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+ * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```typescript
- * RndShakeDfrac('\\dfrac{5}{6}',3,3)
- * // return 3 unique Dfrac around [5,6] within range 3
- * RndShakeDfrac('-\\dfrac{6}{5}',10,3)
- * // return 3 unique Dfrac around [6,-5] within range 10
+ * RndShakeDfrac('\\dfrac{5}{6}')
+ * // return 3 unique Dfrac around [5,6]
+ * RndShakeDfrac('-\\dfrac{6}{5}')
+ * // return 3 unique Dfrac around [6,-5]
  * ```
  */
-function RndShakeDfrac(anchor, range, n) {
-    if (typeof anchor !== 'string')
-        return [];
+function RndShakeDfrac(anchor) {
+    Should(IsString(anchor), 'input must be string');
     let f = ParseDfrac(anchor);
-    if (!f)
-        return [];
-    range !== null && range !== void 0 ? range : (range = 5);
-    n !== null && n !== void 0 ? n : (n = Min(10, range));
-    return RndShakeFrac(f, range, n).map(x => Dfrac(...x));
+    return RndShakeFrac(f).map(x => Dfrac(...x));
 }
 globalThis.RndShakeDfrac = RndShakeDfrac;
 /**
  * @category RandomShake
  * @param anchor - must be a string of ineq sign
- * @param n - default to 3
- * @return an array of n ineq signs, balanced in number.
+ * @return an array of 3 ineq signs, balanced in number.
  * ```typescript
- * RndShakeIneq('\\ge',6)
- * // may return ['\\ge','\\le','\\ge','\\le','\\le','\\ge']
- * RndShakeIneq('\\ge',5)
- * // may return ['\\ge','\\le','\\le','\\le','\\ge']
+ * RndShakeIneq('\\ge')
+ * // may return ['\\ge','\\le','\\le']
  * ```
  */
-function RndShakeIneq(anchor, n) {
-    if (typeof anchor !== 'string')
-        return [];
+function RndShakeIneq(anchor) {
+    Should(IsString(anchor), 'input must be string');
     let f = ParseIneqSign(anchor);
-    if (!f)
-        return [];
-    n !== null && n !== void 0 ? n : (n = 3);
-    return RndBalanced(IneqSign(...f).reverse(), n);
+    return RndBalanced(IneqSign(...f).reverse(), 3);
 }
 globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12556,7 +12575,7 @@ globalThis.RndLetters = RndLetters;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12685,7 +12704,7 @@ globalThis.AreOblique = AreOblique;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12839,7 +12858,7 @@ globalThis.LucasSequence = LucasSequence;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12920,10 +12939,94 @@ function Mean(...nums) {
     return sum / nums.length;
 }
 globalThis.Mean = Mean;
+/**
+ * @category Stat
+ * @return median of nums
+ * ```typescript
+ * Median(1,2,3,4,50) // 3
+ * Median(1,2,3,4,5,7) // 3.5
+ * ```
+ */
+function Median(...nums) {
+    nums = Sort(...nums);
+    let n = nums.length;
+    if (IsOdd(n)) {
+        let m = Ceil(n / 2);
+        return nums[m - 1];
+    }
+    else {
+        let m = n / 2;
+        return (nums[m - 1] + nums[m]) / 2;
+    }
+}
+globalThis.Median = Median;
+/**
+ * @category Stat
+ * @return lower quartile of nums
+ * ```typescript
+ * LowerQ(1,2,3,4,5) // 1.5
+ * LowerQ(1,2,3,4,5,7) // 2
+ * ```
+ */
+function LowerQ(...nums) {
+    nums = Sort(...nums);
+    let n = nums.length;
+    let m = IsOdd(n) ? Floor(n / 2) : n / 2;
+    nums.length = m;
+    return Median(...nums);
+}
+globalThis.LowerQ = LowerQ;
+/**
+ * @category Stat
+ * @return lower quartile of nums
+ * ```typescript
+ * UpperQ(1,2,3,4,5) // 4.5
+ * UpperQ(1,2,3,4,5,7) // 5
+ * ```
+ */
+function UpperQ(...nums) {
+    nums = Sort(...nums).reverse();
+    let n = nums.length;
+    let m = IsOdd(n) ? Floor(n / 2) : n / 2;
+    nums.length = m;
+    return Median(...nums);
+}
+globalThis.UpperQ = UpperQ;
+/**
+ * @category Stat
+ * @return count frequency of item in array
+ * ```typescript
+ * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
+ * ```
+ */
+function Frequency(item) {
+    return function (...items) {
+        return items.filter(x => x === item).length;
+    };
+}
+globalThis.Frequency = Frequency;
+/**
+ * @category Stat
+ * @return mode of nums
+ * ```typescript
+ * Mode(1,2,3,2,2,3,4) \\ 2
+ * Mode(1,1,2,2,3) \\ NaN
+ * ```
+ */
+function Mode(...nums) {
+    let s = [...new Set(nums)];
+    let counts = s.map(x => Frequency(x)(...nums));
+    let maxCount = Max(...counts);
+    if (Frequency(maxCount)(...counts) > 1) {
+        return NaN;
+    }
+    return s.find(x => Frequency(x)(...nums) === maxCount);
+}
+globalThis.Mode = Mode;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13068,7 +13171,7 @@ globalThis.Dfrac = Dfrac;
  * ParseDfrac('\\dfrac{1.2}{-2}') // [1.2,-2]
  * ParseDfrac('-\\dfrac{1.2}{-2}') // [-1.2,-2]
  * ParseDfrac('-\\dfrac{-1.2}{-2}') // [1.2,-2]
- * ParseDfrac('\\dfrac{x}{2}') // undefined
+ * ParseDfrac('\\dfrac{x}{2}') // throw
  * ```
  */
 function ParseDfrac(dfrac) {
@@ -13113,7 +13216,7 @@ globalThis.Coord = Coord;
  * @category Text
  * @return the scientific notation of number
  * ```typescript
- * Sci(123.45) // '1.2345 x 10^{2}'
+ * Sci(123.45) // '1.2345 x 10^{ 2}'
  * Sci(1.2345) // '1.2345'
  * ```
  */
@@ -13125,13 +13228,106 @@ function Sci(num) {
     if (m === 0)
         return num.toString();
     num = num / (Math.pow(10, m));
-    return num.toString() + ' \\times ' + '10^{' + m + '}';
+    num = Blur(num);
+    return num.toString() + ' \\times ' + '10^{ ' + m + '}';
 }
 globalThis.Sci = Sci;
+/**
+ * @category Text
+ * @return the katex of long division
+ * ```typescript
+ * LongDivision([1,2,3,4],[1,2]) //
+ * LongDivision([1,2,3,4],[1,2]) //
+ * ```
+ */
+function LongDivision(dividend, divisor) {
+    dividend = dividend.reverse();
+    divisor = divisor.reverse();
+    function xTerm(power) {
+        if (power === 0)
+            return "";
+        if (power === 1)
+            return "x";
+        return "x^" + power;
+    }
+    function printSolid(poly) {
+        let arr = [];
+        poly.forEach((v, i) => {
+            if (v !== null)
+                arr.push(v + xTerm(i));
+        });
+        return arr.reverse().join("+");
+    }
+    function printUnderline(poly) {
+        return "\\underline{" + printSolid(poly) + "}";
+    }
+    function printPhantom(poly) {
+        let arr = [];
+        poly.forEach((v, i) => {
+            if (v === null)
+                arr.push(dividend[i] + xTerm(i));
+        });
+        let T = arr.reverse().join("+");
+        if (T.length === 0)
+            return "";
+        return "\\phantom{" + "+" + T + "}";
+    }
+    function writeSolid(poly) {
+        return printSolid(poly) + printPhantom(poly);
+    }
+    function writeUnderline(poly) {
+        return printUnderline(poly) + printPhantom(poly);
+    }
+    function pushDivide(dividend, divisor) {
+        let t1 = dividend[dividend.length - 1];
+        let t2 = divisor[divisor.length - 1];
+        return t1 / t2;
+    }
+    function step(current, divisor) {
+        let q = pushDivide(current, divisor);
+        let under = divisor.map(x => x * q);
+        for (let i = 1; i <= current.length - divisor.length; i++)
+            under.unshift(null);
+        let next = [];
+        for (let i = 0; i < current.length - 1; i++)
+            next.push(current[i] - Number(under[i]));
+        let nextPrint = [...next].reverse();
+        for (let i = 0; i < nextPrint.length; i++)
+            if (i > divisor.length - 1)
+                nextPrint[i] = null;
+        nextPrint.reverse();
+        return { next, nextPrint, under, q };
+    }
+    function compose(dividend, divisor) {
+        let T = "\\begin{array}{r}";
+        T += "QUOTIENT \\\\";
+        T += writeSolid(divisor);
+        T += "{\\overline{\\smash{\\big)}";
+        T += writeSolid(dividend);
+        T += "}}\\\\";
+        let current = dividend;
+        let quotient = [];
+        while (true) {
+            let { next, nextPrint, under, q } = step(current, divisor);
+            T += writeUnderline(under) + "\\\\";
+            T += writeSolid(nextPrint) + "\\\\";
+            current = next;
+            quotient.push(q);
+            if (current.length < divisor.length)
+                break;
+        }
+        T += "\\end{array}";
+        quotient.reverse();
+        T = T.replace('QUOTIENT', writeSolid(quotient));
+        return T;
+    }
+    return compose(dividend, divisor);
+}
+globalThis.LongDivision = LongDivision;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13279,14 +13475,13 @@ function SolveTriangle({ sideA = null, sideB = null, sideC = null, angleA = null
         SAS();
         AAS();
     }
-    Should(false, 'Solve Triangle Fail!');
-    throw '';
+    throw MathError('Solve Triangle Fail!');
 }
 globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13315,8 +13510,7 @@ function Quadrant(rect) {
         return "III";
     if (q >= 270 && q < 360)
         return "IV";
-    Should(false, 'fail to parse quadrant!');
-    throw '';
+    throw MathError('fail to parse quadrant!');
 }
 globalThis.Quadrant = Quadrant;
 /**
@@ -13442,7 +13636,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13605,7 +13799,7 @@ globalThis.Dedupe = Dedupe;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13768,7 +13962,7 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13793,20 +13987,20 @@ globalThis.Should = Should;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
 __webpack_require__(34);
+__webpack_require__(35);
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13904,7 +14098,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15249,7 +15443,7 @@ function trimCanvas(canvas) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15284,7 +15478,8 @@ class AutoPenCls {
      * @param numbers - The array of numbers to factorize.
      * @returns
      * ```typescript
-     * autoPen.PrimeFactorization({numbers:[12,24]})
+     * let pen = new AutoPen()
+     * pen.PrimeFactorization({numbers:[12,24]})
      * ```
      */
     PrimeFactorization({ numbers }) {
@@ -15344,7 +15539,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.Inequalities({
+     * let pen = new AutoPen()
+     * pen.Inequalities({
      *    items:[
      *       { position: 0.3, sign: "\\ge", num: 5,vertical:true },
      *       { position: 0.7, sign: "<", num: "k" }
@@ -15420,7 +15616,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.TrigSolution({trig:'sin', k:0.5})
+     * let pen = new AutoPen()
+     * pen.TrigSolution({trig:'sin', k:0.5})
      * ```
      */
     TrigSolution({ trig = 'sin', k = 0, scale = 0.7, ratio = 0.7 }) {
@@ -15604,7 +15801,8 @@ class AutoPenCls {
      * @param ratio - ratio for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
+     * let pen = new AutoPen()
+     * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
      * ```
      */
     QuadraticInequality({ quadratic, sign, scale = 0.5, ratio = 0.8 }) {
@@ -15722,7 +15920,8 @@ class AutoPenCls {
      * @param scale - scale for pen.setup.size()
      * @returns
      * ```typescript
-     * autoPen.Triangle({
+     * let pen = new AutoPen()
+     * pen.Triangle({
      *   vertices:[[0,0],[4,0],[0,3]],
      *   triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},
      *   labels:['A','B','C'],
@@ -15846,9 +16045,9 @@ class AutoPenCls {
      * @param resolution - Resolution of Canvas
      * @returns
      * ```typescript
-     * let autoPen = new AutoPen()
+     * let pen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
-     * autoPen.LinearProgram({
+     * pen.LinearProgram({
      *     constraints,
      *     field: [1, -3, 3],
      *     contours: [4,5],
@@ -16026,7 +16225,8 @@ class AutoPenCls {
      * @param offset - offset of initial position
      * @returns
      * ```typescript
-     * autoPen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
+     * let pen = new AutoPen()
+     * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
      * ```
      */
     DotPattern({ a, p, q, n, offset }) {
@@ -16055,50 +16255,183 @@ class AutoPenCls {
         pen.autoCrop();
         this.pen = pen;
     }
+    /**
+     * A pie chart
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.PieChart({
+     *   categories: ['a','b','c','d','e'],
+     *   labels: ['10%','20%','30%','40%',''],
+     *   angles: [45,135,60,50,70],
+     *   angleLabels: [null,'x',null,null,''],
+     *   size:1.5
+     * })
+     * ```
+     */
+    PieChart({ categories, labels, angles, angleLabels, size = 1.5 }) {
+        var _a;
+        const pen = new Pen();
+        pen.setup.size(size);
+        pen.setup.range([-1.2, 1.2], [-1.2, 1.2]);
+        pen.graph.circle([0, 0], 1);
+        let O = [0, 0];
+        pen.line(O, [1, 0]);
+        let current = 0;
+        for (let i = 0; i < angles.length; i++) {
+            let a = angles[i];
+            let next = current + a;
+            let mid = current + a / 2;
+            pen.line(O, PolToRect([1, next]));
+            pen.label.point(PolToRect([0.7, mid]), categories[i], 90, 10);
+            pen.label.point(PolToRect([0.7, mid]), labels[i], 270, 10);
+            pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), (_a = angleLabels[i]) !== null && _a !== void 0 ? _a : angles[i] + "°");
+            current += a;
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
+    /**
+     * A bar chart / line chart / histogram / frequency polygon / cf polygon
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.HeightChart({
+     *   categories: ['a','b','c','d','e'],
+     *   data:[7,47,15,3,7],
+     *   xLabel:'x-axis',
+     *   yLabel:'y-axis',
+     *   interval:5,
+     *   subInterval:1,
+     *   barWidth:1,
+     *   barGap:1,
+     *   showBar:true,
+     *   showLine:true
+     * })
+     * ```
+     */
+    HeightChart({ categories, data, xLabel = "", yLabel = "", interval = 5, subInterval = 1, barWidth = 1, barGap = 1, showBar = false, showLine = false }) {
+        const pen = new Pen();
+        let endGap = barWidth + barGap / 2;
+        let width = endGap + categories.length * (barWidth + barGap) + endGap;
+        let max = Max(...data);
+        let maxUnit = Ceil(max / interval);
+        let maxSubUnit = maxUnit * (interval / subInterval);
+        let height = (maxUnit + 1) * interval;
+        pen.setup.range([-width * 0.2, width], [-height * 0.2, height]);
+        pen.setup.resolution(0.1, 1 / height);
+        pen.line([0, 0], [width, 0]);
+        pen.line([0, 0], [0, height], true);
+        pen.ctx.save();
+        pen.ctx.translate(...pen.frame.toPix([-1.5, height / 2]));
+        pen.ctx.rotate(-Math.PI / 2);
+        pen.ctx.fillText(yLabel, 0, 0);
+        pen.ctx.restore();
+        pen.label.point([width / 2, -2], xLabel, 270, 25);
+        function grid(y) {
+            pen.line([0, y], [width, y]);
+        }
+        for (let y = 1; y <= maxUnit; y++) {
+            let h = y * interval;
+            pen.set.alpha(0.2);
+            grid(h);
+            pen.cutterV([0, h]);
+            pen.set.alpha();
+            pen.label.point([0, h], h.toString(), 180);
+        }
+        for (let y = 1; y <= maxSubUnit; y++) {
+            pen.set.alpha(0.1);
+            grid(y * subInterval);
+            pen.set.alpha();
+        }
+        function bar(x, w, h) {
+            pen.set.color('grey');
+            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]], true);
+            pen.set.color();
+            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]]);
+        }
+        function writeCat(x, w, text) {
+            pen.label.point([x + w / 2, 0], text, 270, 15);
+        }
+        if (showBar) {
+            for (let i = 0; i < categories.length; i++) {
+                let x = endGap + i * (barWidth + barGap) + barGap / 2;
+                bar(x, barWidth, data[i]);
+                writeCat(x, barWidth, categories[i]);
+            }
+        }
+        if (showLine) {
+            let points = [];
+            for (let i = 0; i < categories.length; i++) {
+                let x = endGap + i * (barWidth + barGap) + barGap / 2;
+                let p = [x + barWidth / 2, data[i]];
+                pen.point(p);
+                points.push(p);
+                writeCat(x, barWidth, categories[i]);
+            }
+            pen.set.weight(2);
+            pen.polyline(...points);
+            pen.set.weight();
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
+    /**
+     * A pie chart
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.StemAndLeaf({
+     *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+     *   labels: [2,'x',6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+     *   stemTitle: "Stem (10 units)",
+     *   leafTitle: "Leaf (1 unit)"
+     * })
+     * ```
+     */
+    StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }) {
+        const pen = new Pen();
+        labels !== null && labels !== void 0 ? labels : (labels = [...data].map(x => x.toString()));
+        labels = labels.map(x => x.toString().split('').reverse()[0]);
+        let width = data.length + 2;
+        let height = Ceil(Max(...data) / 10) + 2;
+        pen.setup.range([-5, width], [-height, 2]);
+        pen.setup.resolution(0.07);
+        pen.line([0, -1], [0, 2]);
+        pen.line([-5, 0], [1, 0]);
+        pen.set.textAlign('left');
+        pen.write([0.5, 1], leafTitle);
+        pen.set.textAlign('right');
+        pen.write([-0.5, 1], stemTitle);
+        pen.set.textAlign();
+        let initTen = Floor(Min(...data) / 10);
+        let endTen = Floor(Max(...data) / 10);
+        let ten = initTen;
+        for (let j = -1; ten <= endTen; j--) {
+            pen.write([-1, j], ten.toString());
+            pen.line([0, j], [0, j - 1]);
+            let i = 1;
+            for (let m = 0; m < data.length; m++) {
+                if (Floor(data[m] / 10) === ten) {
+                    if (!IsNum(Number(labels[m])))
+                        pen.set.textItalic(true);
+                    pen.write([i, j], labels[m]);
+                    pen.set.textItalic();
+                    pen.line([i, 0], [i + 1, 0]);
+                    i++;
+                }
+            }
+            ten += 1;
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
 }
 var AutoPen = AutoPenCls;
 globalThis.AutoPen = AutoPen;
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * @ignore
- */
-var PROJ_ANGLE = 60;
-/**
- * @ignore
- */
-var PROJ_DEPTH = 0.5;
-/**
-* @category 3DPen
-* @return projection of 3D point to 2D plane
-* ```typescript
-* proj(1,1,0) // [1.25, 0.433012701892]
-* ```
-*/
-function proj(x, y, z) {
-    let x_new = x + PROJ_DEPTH * y * cos(PROJ_ANGLE);
-    let y_new = z + PROJ_DEPTH * y * sin(PROJ_ANGLE);
-    return [x_new, y_new];
-}
-globalThis.proj = proj;
-/**
-* @category 3DPen
-* @return set the angle and depth of projection
-* ```typescript
-* projSetting(45,0.6) // set the angle to 45 and depth to 0.5
-* ```
-*/
-function projSetting(angle = 60, depth = 0.5) {
-    PROJ_ANGLE = angle;
-    PROJ_DEPTH = depth;
-}
-globalThis.projSetting = projSetting;
 
 
 /***/ }),
@@ -16107,8 +16440,32 @@ globalThis.projSetting = projSetting;
 
 "use strict";
 
+/**
+* @category 3DPen
+* @return projection of 3D point to 2D plane
+* ```typescript
+* const pj = Projector(60,0.5) // create a 3D projector function
+* pj(1,1,0) // [1.25, 0.433012701892]
+* ```
+*/
+function Projector(angle = 60, depth = 0.5) {
+    return function (x, y, z) {
+        let x_new = x + depth * y * cos(angle);
+        let y_new = z + depth * y * sin(angle);
+        return [x_new, y_new];
+    };
+}
+globalThis.Projector = Projector;
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(36);
+const global_1 = __webpack_require__(37);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -16143,19 +16500,19 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(37);
-const dress_1 = __webpack_require__(38);
-const shuffle_1 = __webpack_require__(39);
-const option_1 = __webpack_require__(40);
-__webpack_require__(41);
-const cls_1 = __webpack_require__(42);
+const section_1 = __webpack_require__(38);
+const dress_1 = __webpack_require__(39);
+const shuffle_1 = __webpack_require__(40);
+const option_1 = __webpack_require__(41);
+__webpack_require__(42);
+const cls_1 = __webpack_require__(43);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -16274,7 +16631,8 @@ class Seed {
     }
     runOption() {
         let nTrial = 0;
-        while (nTrial <= 10) {
+        while (nTrial <= 100) {
+            nTrial++;
             try {
                 this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict, this.validate);
                 return true;
@@ -16284,8 +16642,8 @@ class Seed {
             }
         }
         ;
-        // throw error after 10 failed trials
-        throw Error("No valid option generated after 10 trials!");
+        // throw error after 100 failed trials
+        throw Error("No valid option generated after 100 trials!");
     }
     runSubstitute() {
         this.pour();
@@ -16351,7 +16709,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16386,7 +16744,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16405,6 +16763,8 @@ const m = String.raw `\-`;
 const e = String.raw `(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
 const l = String.raw `[\(\[\{]`;
 const r = String.raw `[\)\]\}]`;
+const pl = String.raw `[\(\[]`;
+const pr = String.raw `[\)\]]`;
 const c = String.raw `\,`;
 const v = String.raw `(?:[A-Za-z]|\\alpha|\\beta|\\sigma|\\mu)`;
 const sl = String.raw `\\`;
@@ -16432,7 +16792,7 @@ function handleSqrt(input) {
     return input;
 }
 function handleCoeff(input) {
-    input = regReplace(input, or(p, m, e, l, sl, r, c) + s + 1 + s + or(v, l, left, sq) + endtag, '$1$2');
+    input = regReplace(input, or(p, m, e, l, sl, r, c) + s + 1 + s + or(v, pl, left, sq) + endtag, '$1$2');
     return input;
 }
 function handlePrime(input) {
@@ -16452,7 +16812,7 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16532,38 +16892,33 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AutoOptions = void 0;
-class Instruction {
-    constructor(input) {
-        this.range = undefined;
-        this.assign = [];
-        if (IsArray(input)) {
-            this.assign = input;
+function ExecInstructions(instructions, source, validate) {
+    function Produce(source, assigned) {
+        let product = [];
+        if (IsArray(assigned)) {
+            product = Clone(assigned);
+            product = RndShuffle(...product);
         }
-        else if (typeof input === 'object' && input !== null) {
-            Object.assign(this, input);
+        else {
+            try {
+                product.push(...RndShake(source));
+            }
+            catch (_a) {
+            }
         }
-    }
-    do(source) {
-        let product = Clone(this.assign);
-        product.push(...RndShake(source, this.range, 3));
-        product.length = 3;
-        product = RndShuffle(...product);
         return product;
     }
-}
-function ExecInstructions(instructions, source, validate) {
     let products = {};
     let k;
     for (k in instructions) {
-        let instr = new Instruction(instructions[k]);
-        products[k] = instr.do(source[k]);
+        products[k] = Produce(source[k], instructions[k]);
     }
     // ValidateProducts(products, source, validate)
     return products;
@@ -16583,7 +16938,7 @@ function AutoOptions(instructions, question, source, validate) {
     let options = ExtractHTMLTag(question, 'li');
     let products = ExecInstructions(instructions, source, validate);
     if (options.length === 1) {
-        let others = Array(3).fill(options[0]);
+        let others = [options[0], options[0], options[0]];
         for (let k in products) {
             for (let i = 0; i < 3; i++) {
                 others[i] = PrintVariable(others[i], k, products[k][i]);
@@ -16605,7 +16960,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16613,7 +16968,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
