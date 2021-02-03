@@ -368,7 +368,7 @@ globalThis.IsBetween = IsBetween
  * ```
  */
 function IsAbsBetween(min: number, max: number) {
-    Should(IsPositive(min, max), 'min and max must be positive number')
+    Should(IsNum(min, max), 'min and max must be number')
     return function (...items: any[]): boolean {
         return items.every(
             x => IsNum(x) && Abs(x) >= min && Abs(x) <= max
