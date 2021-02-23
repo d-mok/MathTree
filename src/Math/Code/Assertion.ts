@@ -89,6 +89,9 @@ function IsOdd(...items: any[]): boolean {
 }
 globalThis.IsOdd = IsOdd
 
+
+
+
 /**
  * @category Assertion
  * @return check if the number is an even integer.
