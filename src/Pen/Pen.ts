@@ -54,7 +54,7 @@ class PenCls {
          * pen.setupRange.range([-5,5],[-2,4]) // -5<x<5 and -2<y<4
          * ```
          */
-        range(xRange: [number, number], yRange: [number, number]) {
+        range(xRange: [number, number], yRange: [number, number] = xRange) {
             [this.pen.frame.xmin, this.pen.frame.xmax] = xRange;
             [this.pen.frame.ymin, this.pen.frame.ymax] = yRange;
         },
@@ -687,7 +687,7 @@ class PenCls {
     point(position: Point, label?: string) {
         const [x, y] = this.frame.toPix(position);
         this.ctx.beginPath();
-        this.ctx.arc(x, y, 3 * PEN_QUALITY, 0, 2 * Math.PI, false);
+        this.ctx.arc(x, y, 2 * PEN_QUALITY, 0, 2 * Math.PI, false);
         this.ctx.fill();
         if (label !== undefined) this.label.point(position, label)
     }
