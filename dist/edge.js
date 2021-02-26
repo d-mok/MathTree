@@ -15365,6 +15365,7 @@ class PenCls {
      * Draw a point.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
+     * @param label - The label of the point.
      * @returns
      * ```typescript
      * pen.point([1,2]) // draw a point at [1,2]
@@ -15383,29 +15384,35 @@ class PenCls {
      * Draw a horizontal cutter.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
+     * @param label - The label of the point.
      * @returns
      * ```typescript
      * pen.cutterH([1,2]) // draw a horizontal cutter at [1,2]
      * ```
      */
-    cutterH(position) {
+    cutterH(position, label) {
         const [x, y] = position;
         const offset = this.frame.xOffset();
         this.line([x, y - offset], [x, y + offset]);
+        if (label !== undefined)
+            this.label.point(position, label);
     }
     /**
      * Draw a vertical cutter.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
+     * @param label - The label of the point.
      * @returns
      * ```typescript
      * pen.cutterV([1,2]) // draw a vertical cutter at [1,2]
      * ```
      */
-    cutterV(position) {
+    cutterV(position, label) {
         const [x, y] = position;
         const offset = this.frame.yOffset();
         this.line([x - offset, y], [x + offset, y]);
+        if (label !== undefined)
+            this.label.point(position, label);
     }
     /**
      * Draw a circle or arc.
