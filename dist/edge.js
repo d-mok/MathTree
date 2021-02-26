@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
 
 /***/ }),
 /* 1 */
@@ -7913,8 +7913,8 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(31);
-__webpack_require__(36);
+__webpack_require__(34);
+__webpack_require__(39);
 
 
 /***/ }),
@@ -7935,7 +7935,7 @@ __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(14);
+__webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -7947,192 +7947,13 @@ __webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
 __webpack_require__(30);
+__webpack_require__(31);
+__webpack_require__(32);
+__webpack_require__(33);
 
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * @category Algebra
- * @return solve [x,y] from ax+by=c and px+qy=r.
- * ```typescript
- * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
- * Crammer(1,1,3,2,2,6) // throw
- * ```
- */
-function Crammer(a, b, c, p, q, r) {
-    Should(IsNum(a, b, c, p, q, r), "input must be num");
-    const D = a * q - b * p;
-    Should(IsNonZero(D), 'no unique solution');
-    const x = (c * q - b * r) / D;
-    const y = (a * r - c * p) / D;
-    return [x, y];
-}
-globalThis.Crammer = Crammer;
-/**
- * @category Algebra
- * @return the discriminant b^2-4ac.
- * ```typescript
- * Discriminant(2,3,4) // -23
- * ```
- */
-function Discriminant(a, b, c) {
-    Should(IsNum(a, b, c), "input must be num");
-    return b * b - 4 * a * c;
-}
-globalThis.Discriminant = Discriminant;
-/**
- * @category Algebra
- * @return the roots [p,q] of ax^2+bx+c=0 where p<=q
- * ```typescript
- * QuadraticRoot(1,2,-3) // [-3,1]
- * QuadraticRoot(-1,-2,3) // [-3,1]
- * QuadraticRoot(1,2,1) // [-1,-1]
- * QuadraticRoot(1,2,3) // throw
- * QuadraticRoot(0,2,3) // throw
- * ```
- */
-function QuadraticRoot(a, b, c) {
-    Should(IsNum(a, b, c), "input must be num");
-    const d = Discriminant(a, b, c);
-    Should(d >= 0, 'no real root');
-    const r1 = Divide(-b - Math.sqrt(d), 2 * a);
-    const r2 = Divide(-b + Math.sqrt(d), 2 * a);
-    return [Min(r1, r2), Max(r1, r2)];
-}
-globalThis.QuadraticRoot = QuadraticRoot;
-/**
- * @category Algebra
- * @return the vertex [h,k] of y=ax^2+bx+c.
- * ```typescript
- * QuadraticVertex(1,2,3) // [-1,2]
- * QuadraticVertex(0,2,3) // throw
- * ```
- */
-function QuadraticVertex(a, b, c) {
-    Should(IsNum(a, b, c), "input must be num");
-    const h = Divide(-b, 2 * a);
-    const k = a * h * h + b * h + c;
-    return [h, k];
-}
-globalThis.QuadraticVertex = QuadraticVertex;
-/**
- * @category Algebra
- * @return the quadratic coeff [a,b,c] from given a and roots p and q.
- * ```typescript
- * QuadraticFromRoot(1,2,3) // [1,-5,6]
- * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
- * QuadraticFromRoot(0,4,-3) // throw
- * ```
- */
-function QuadraticFromRoot(a, p, q) {
-    Should(IsNum(a, p, q), "input must be num");
-    Should(IsNonZero(a), 'a should not be zero');
-    return [a, -a * (p + q), a * p * q];
-}
-globalThis.QuadraticFromRoot = QuadraticFromRoot;
-/**
- * @category Algebra
- * @return the quadratic coeff [a,b,c] from given a and vertex (h,k).
- * ```typescript
- * QuadraticFromVertex(1,2,3) // [1,-4,7]
- * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
- * QuadraticFromVertex(0,4,-3) // throw
- * ```
- */
-function QuadraticFromVertex(a, h, k) {
-    Should(IsNum(a, h, k), "input must be num");
-    Should(IsNonZero(a), 'a should not be zero');
-    const b = -2 * a * h;
-    const c = k - a * h * h - b * h;
-    return [a, b, c];
-}
-globalThis.QuadraticFromVertex = QuadraticFromVertex;
-/**
- * @category Algebra
- * @return the product of two input polynomials.
- * ```typescript
- * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
- * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
- * ```
- */
-function xPolynomial(poly1, poly2) {
-    Should(IsArray(poly1, poly2), "input must be array");
-    Should(IsNum(...poly1, ...poly2), 'input must be number array');
-    Should(IsNonZero(poly1[0], poly2[0]), 'leading coeff should be non-zero');
-    const deg1 = poly1.length - 1;
-    const deg2 = poly2.length - 1;
-    const deg = deg1 + deg2;
-    const result = Array(deg + 1).fill(0);
-    for (let i = 0; i <= deg1; i++) {
-        for (let j = 0; j <= deg2; j++) {
-            result[i + j] += poly1[i] * poly2[j];
-        }
-    }
-    return result;
-}
-globalThis.xPolynomial = xPolynomial;
-/**
- * @category Algebra
- * @return [x-int, y-int,slope] of ax+by+c=0
- * ```typescript
- * LinearFeature(2,4,6) // [-3,-2,-0.5]
- * LinearFeature(0,4,6) // throw
- * ```
- */
-function LinearFeature(a, b, c) {
-    Should(IsNum(a, b, c), "input must be num");
-    Should(IsNonZero(a, b), 'x and y term should be non-zero');
-    return [-c / a, -c / b, -a / b];
-}
-globalThis.LinearFeature = LinearFeature;
-/**
- * @category Algebra
- * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
- * ```typescript
- * LinearFromIntercepts(1,2) // [2,1,-2]
- * LinearFromIntercepts(0,2) // throw
- * ```
- */
-function LinearFromIntercepts(xInt, yInt) {
-    Should(IsNum(xInt, yInt), "input must be num");
-    Should(IsNonZero(xInt, yInt), 'intercepts cannot be zero');
-    let [a, b, c] = [yInt, xInt, -xInt * yInt];
-    let s = Sign(a);
-    [a, b, c] = [a * s, b * s, c * s];
-    [a, b, c] = SimpRatio(a, b, c);
-    return [a, b, c];
-}
-globalThis.LinearFromIntercepts = LinearFromIntercepts;
-/**
- * @category Algebra
- * @return the coeff [a,b,c] in ax+by+c=0 from two given points
- * ```typescript
- * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
- * LinearFromTwoPoints([1,2],[1,2]) // throw
- * ```
- */
-function LinearFromTwoPoints(point1, point2) {
-    Should(IsPoint(point1, point2), 'input must be point');
-    Should(AreDistinctPoint(point1, point2), 'two points should be distinct');
-    let [x1, y1] = point1;
-    let [x2, y2] = point2;
-    let dx = x1 - x2;
-    let dy = y1 - y2;
-    let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
-    let s = Sign(a);
-    [a, b, c] = [a * s, b * s, c * s];
-    [a, b, c] = SimpRatio(a, b, c);
-    return [a, b, c];
-}
-globalThis.LinearFromTwoPoints = LinearFromTwoPoints;
-
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8542,7 +8363,7 @@ globalThis.IsTriangle = IsTriangle;
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8594,7 +8415,7 @@ globalThis.nPr = nPr;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8662,7 +8483,7 @@ globalThis.RndComboConfig = RndComboConfig;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8755,7 +8576,7 @@ globalThis.FracMultiply = FracMultiply;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8918,7 +8739,7 @@ globalThis.arctan = arctan;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9154,7 +8975,7 @@ globalThis.IsReflex = IsReflex;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9239,7 +9060,7 @@ globalThis.PrintVariable = PrintVariable;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9514,7 +9335,7 @@ globalThis.OptimizeField = OptimizeField;
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9732,6 +9553,31 @@ function SimpRatio(...nums) {
 globalThis.SimpRatio = SimpRatio;
 /**
  * @category Numeracy
+ * @return reduce input array to integral ratio.
+ * ```typescript
+ * IntegerRatio(2,4,6) // [1,2,3]
+ * IntegerRatio(0,4,6) // [0,2,3]
+ * IntegerRatio(0,4) // [0,1]
+ * IntegerRatio(1/3,1/2,1/4) // [4,6,3]
+ * IntegerRatio(Math.sqrt(2),1/2,1/4) // throw
+ * ```
+ */
+function IntegerRatio(...nums) {
+    Should(IsNum(...nums), 'input must be num');
+    let ns = [...nums];
+    for (let i = 1; i <= 1000; i++) {
+        let temp = Blurs(nums.map(x => x * i));
+        if (IsInteger(...temp)) {
+            ns = temp;
+            break;
+        }
+    }
+    Should(IsInteger(...ns), 'fail to find integer ratio');
+    return SimpRatio(...ns);
+}
+globalThis.IntegerRatio = IntegerRatio;
+/**
+ * @category Numeracy
  * @return the number of sigfig.
  * ```typescript
  * SigFig(1.234) // 4
@@ -9879,7 +9725,7 @@ globalThis.Blurs = Blurs;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9905,7 +9751,7 @@ globalThis.PhyConst = PhyConst;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10187,7 +10033,7 @@ globalThis.RndData = RndData;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10201,9 +10047,9 @@ globalThis.RndData = RndData;
 
 
 
-var base64 = __webpack_require__(17)
-var ieee754 = __webpack_require__(18)
-var isArray = __webpack_require__(19)
+var base64 = __webpack_require__(16)
+var ieee754 = __webpack_require__(17)
+var isArray = __webpack_require__(18)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -11981,10 +11827,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 var g;
@@ -12010,7 +11856,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12169,7 +12015,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -12259,7 +12105,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -12270,7 +12116,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12465,7 +12311,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12575,7 +12421,7 @@ globalThis.RndLetters = RndLetters;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12704,7 +12550,7 @@ globalThis.AreOblique = AreOblique;
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12858,7 +12704,7 @@ globalThis.LucasSequence = LucasSequence;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13026,7 +12872,7 @@ globalThis.Mode = Mode;
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13327,7 +13173,7 @@ globalThis.LongDivision = LongDivision;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13481,7 +13327,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13636,7 +13482,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13799,7 +13645,7 @@ globalThis.Dedupe = Dedupe;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13962,7 +13808,430 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Algebra
+ * @return solve [x,y] from ax+by=c and px+qy=r.
+ * ```typescript
+ * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
+ * Crammer(1,1,3,2,2,6) // throw
+ * ```
+ */
+function Crammer(a, b, c, p, q, r) {
+    Should(IsNum(a, b, c, p, q, r), "input must be num");
+    const D = a * q - b * p;
+    Should(IsNonZero(D), 'no unique solution');
+    const x = (c * q - b * r) / D;
+    const y = (a * r - c * p) / D;
+    return [x, y];
+}
+globalThis.Crammer = Crammer;
+/**
+ * @category Algebra
+ * @return the product of two input polynomials.
+ * ```typescript
+ * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
+ * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+ * ```
+ */
+function xPolynomial(poly1, poly2) {
+    Should(IsArray(poly1, poly2), "input must be array");
+    Should(IsNum(...poly1, ...poly2), 'input must be number array');
+    Should(IsNonZero(poly1[0], poly2[0]), 'leading coeff should be non-zero');
+    const deg1 = poly1.length - 1;
+    const deg2 = poly2.length - 1;
+    const deg = deg1 + deg2;
+    const result = Array(deg + 1).fill(0);
+    for (let i = 0; i <= deg1; i++) {
+        for (let j = 0; j <= deg2; j++) {
+            result[i + j] += poly1[i] * poly2[j];
+        }
+    }
+    return result;
+}
+globalThis.xPolynomial = xPolynomial;
+
+
+/***/ }),
 /* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Circle
+ * @return D,E,F of circle general form
+ * ```typescript
+ * CircleGeneral([2,3],5) // [-4,-6,-12]
+ * ```
+ */
+function CircleGeneral(centre, radius) {
+    Should(IsPositive(radius), "radius must be positive");
+    let [h, k] = centre;
+    let r = radius;
+    let D = -2 * h;
+    let E = -2 * k;
+    let F = Math.pow(h, 2) + Math.pow(k, 2) - Math.pow(r, 2);
+    return [D, E, F];
+}
+globalThis.CircleGeneral = CircleGeneral;
+/**
+ * @category Circle
+ * @return centre and radius from general form
+ * ```typescript
+ * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
+ * ```
+ */
+function CircleFromGeneral(D, E, F) {
+    let [h, k] = [-D / 2, -E / 2];
+    let R = Math.pow((D / 2), 2) + Math.pow((E / 2), 2) - F;
+    Should(R >= 0, "radius should be real");
+    let r = Math.pow(R, 0.5);
+    return [[h, k], r];
+}
+globalThis.CircleFromGeneral = CircleFromGeneral;
+/**
+ * @category Circle
+ * @return all integral points on the circle
+ * ```typescript
+ * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
+ * ```
+ */
+function IntegralOnCircle(centre, radius) {
+    let [h, k] = centre;
+    let r = radius;
+    let [xmin, xmax] = [Floor(h - r), Ceil(h + r)];
+    let [ymin, ymax] = [Floor(k - r), Ceil(k + r)];
+    let arr = [];
+    for (let x = xmin; x <= xmax; x++) {
+        for (let y = ymin; y <= ymax; y++) {
+            let P = [x, y];
+            if (Abs(Math.pow(Distance(centre, P), 2) - Math.pow(r, 2)) <= 10 * Number.EPSILON)
+                arr.push(P);
+        }
+    }
+    arr = SortBy(arr, (p) => VectorArg(Vector([h, k], p)));
+    let order = arr.length / 4;
+    let arr2 = [];
+    for (let i = 0; i < order; i++) {
+        let temp = [];
+        for (let j = 0; j < 4; j++) {
+            temp.push(arr[i + order * j]);
+        }
+        arr2.push(temp);
+    }
+    return arr2;
+}
+globalThis.IntegralOnCircle = IntegralOnCircle;
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Quadratic
+ * @return the discriminant b^2-4ac.
+ * ```typescript
+ * Discriminant(2,3,4) // -23
+ * ```
+ */
+function Discriminant(a, b, c) {
+    Should(IsNum(a, b, c), "input must be num");
+    Should(a !== 0, "a must be non-zero");
+    return b * b - 4 * a * c;
+}
+globalThis.Discriminant = Discriminant;
+/**
+ * @category Quadratic
+ * @return the roots [p,q] of ax^2+bx+c=0 where p<=q
+ * ```typescript
+ * QuadraticRoot(1,2,-3) // [-3,1]
+ * QuadraticRoot(1,2,3) // throw when no real root
+ * ```
+ */
+function QuadraticRoot(a, b, c) {
+    Should(IsNum(a, b, c), "input must be num");
+    Should(a !== 0, "a must be non-zero");
+    const d = Discriminant(a, b, c);
+    Should(d >= 0, 'no real root');
+    const s = Math.sqrt(d);
+    const r1 = Divide(-b - s, 2 * a);
+    const r2 = Divide(-b + s, 2 * a);
+    return [Min(r1, r2), Max(r1, r2)];
+}
+globalThis.QuadraticRoot = QuadraticRoot;
+/**
+ * @category Quadratic
+ * @return the vertex [h,k] of y=ax^2+bx+c.
+ * ```typescript
+ * QuadraticVertex(1,2,3) // [-1,2]
+ * ```
+ */
+function QuadraticVertex(a, b, c) {
+    Should(IsNum(a, b, c), "input must be num");
+    Should(a !== 0, "a must be non-zero");
+    const h = Divide(-b, 2 * a);
+    const k = a * h * h + b * h + c;
+    return [h, k];
+}
+globalThis.QuadraticVertex = QuadraticVertex;
+/**
+ * @category Quadratic
+ * @return the quadratic coeff [a,b,c] from given a and roots p and q.
+ * ```typescript
+ * QuadraticFromRoot(1,2,3) // [1,-5,6]
+ * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
+ * ```
+ */
+function QuadraticFromRoot(a, p, q) {
+    Should(IsNum(a, p, q), "input must be num");
+    Should(a !== 0, "a must be non-zero");
+    return [a, -a * (p + q), a * p * q];
+}
+globalThis.QuadraticFromRoot = QuadraticFromRoot;
+/**
+ * @category Quadratic
+ * @return the quadratic coeff [a,b,c] from given a and vertex (h,k).
+ * ```typescript
+ * QuadraticFromVertex(1,2,3) // [1,-4,7]
+ * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
+ * ```
+ */
+function QuadraticFromVertex(a, h, k) {
+    Should(IsNum(a, h, k), "input must be num");
+    Should(a !== 0, "a must be non-zero");
+    const b = -2 * a * h;
+    const c = k - a * h * h - b * h;
+    return [a, b, c];
+}
+globalThis.QuadraticFromVertex = QuadraticFromVertex;
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Linear
+ * @return [x-int, y-int,slope] of ax+by+c=0
+ * ```typescript
+ * LinearFeature(2,4,6) // [-3,-1.5,-0.5]
+ * LinearFeature(0,4,6) // throw
+ * ```
+ */
+function LinearFeature(a, b, c) {
+    Should(IsNum(a, b, c), "input must be num");
+    Should(IsNonZero(a, b), 'x and y term should be non-zero');
+    return [-c / a, -c / b, -a / b];
+}
+globalThis.LinearFeature = LinearFeature;
+/**
+ * @category Linear
+ * @return [slope,yInt] from ax+by+c=0
+ * ```typescript
+ * LineFromLinear(2,4,6) // [-0.5,-1.5]
+ * LineFromLinear(0,4,6) // [0,-1.5]
+ * ```
+ */
+function LineFromLinear(a, b, c) {
+    Should(IsNonZero(b), 'b should be non-zero');
+    return [-a / b, -c / b];
+}
+globalThis.LineFromLinear = LineFromLinear;
+/**
+ * @category Linear
+ * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
+ * ```typescript
+ * LinearFromIntercepts(1,2) // [2,1,-2]
+ * LinearFromIntercepts(0,2) // throw
+ * ```
+ */
+function LinearFromIntercepts(xInt, yInt) {
+    let L = new LinearEquation();
+    L.byIntercepts(xInt, yInt);
+    return L.linear;
+}
+globalThis.LinearFromIntercepts = LinearFromIntercepts;
+/**
+ * @category Linear
+ * @return the coeff [a,b,c] in ax+by+c=0 from two given points
+ * ```typescript
+ * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+ * LinearFromTwoPoints([1,2],[1,2]) // throw
+ * ```
+ */
+function LinearFromTwoPoints(point1, point2) {
+    let L = new LinearEquation();
+    L.byTwoPoints(point1, point2);
+    return L.linear;
+}
+globalThis.LinearFromTwoPoints = LinearFromTwoPoints;
+/**
+ * @category Linear
+ * @return the coeff [a,b,c] in ax+by+c=0 from point and slope
+ * ```typescript
+ * LinearFromPointSlope([1,2],3) // [3,-1,-1]
+ * LinearFromPointSlope([1,2],0) // [0,1,-2]
+ * ```
+ */
+function LinearFromPointSlope(point, slope) {
+    let L = new LinearEquation();
+    L.byPointSlope(point, slope);
+    return L.linear;
+}
+globalThis.LinearFromPointSlope = LinearFromPointSlope;
+/**
+ * @category Linear
+ * @return the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
+ * ```typescript
+ * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
+ * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
+ * ```
+ */
+function LinearFromBisector(A, B) {
+    let L = new LinearEquation();
+    L.byBisector(A, B);
+    return L.linear;
+}
+globalThis.LinearFromBisector = LinearFromBisector;
+/**
+ * @category Linear
+ * @return [slope,yInt] from given intercepts
+ * ```typescript
+ * LineFromIntercepts(1,2) // [-2,2]
+ * LineFromIntercepts(0,2) // throw
+ * ```
+ */
+function LineFromIntercepts(xInt, yInt) {
+    let L = new LinearEquation();
+    L.byIntercepts(xInt, yInt);
+    return LineFromLinear(...L.linear);
+}
+globalThis.LineFromIntercepts = LineFromIntercepts;
+/**
+ * @category Linear
+ * @return [slope,yInt] from two given points
+ * ```typescript
+ * LineFromTwoPoints([1,2],[3,4]) // [1,1]
+ * LineFromTwoPoints([1,2],[1,2]) // throw
+ * ```
+ */
+function LineFromTwoPoints(point1, point2) {
+    let L = new LinearEquation();
+    L.byTwoPoints(point1, point2);
+    return LineFromLinear(...L.linear);
+}
+globalThis.LineFromTwoPoints = LineFromTwoPoints;
+/**
+ * @category Linear
+ * @return [slope,yInt] from point and slope
+ * ```typescript
+ * LineFromPointSlope([1,2],3) // [3,-1]
+ * LineFromPointSlope([1,2],0) // [0,2]
+ * ```
+ */
+function LineFromPointSlope(point, slope) {
+    let L = new LinearEquation();
+    L.byPointSlope(point, slope);
+    return LineFromLinear(...L.linear);
+}
+globalThis.LineFromPointSlope = LineFromPointSlope;
+/**
+ * @category Linear
+ * @return [slope,yInt] from perpendicular bisector of AB
+ * ```typescript
+ * LineFromBisector([1,2],[3,4]) // [-1,5]
+ * LineFromBisector([1,2],[1,4]) // [0,3]
+ * ```
+ */
+function LineFromBisector(A, B) {
+    let L = new LinearEquation();
+    L.byBisector(A, B);
+    return LineFromLinear(...L.linear);
+}
+globalThis.LineFromBisector = LineFromBisector;
+/**
+ * @ignore
+ */
+class LinearEquation {
+    constructor() {
+        this.linear = [NaN, NaN, NaN];
+        this.slope = NaN;
+        this.xInt = NaN;
+        this.yInt = NaN;
+    }
+    // define
+    byTwoPoints(p1, p2) {
+        Should(IsPoint(p1, p2), 'input must be point');
+        Should(AreDistinctPoint(p1, p2), 'two points should be distinct');
+        let [x1, y1] = p1;
+        let [x2, y2] = p2;
+        let dx = x1 - x2;
+        let dy = y1 - y2;
+        let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
+        let s = Sign(a);
+        if (s === 0)
+            s = Sign(b);
+        if (s === 0)
+            s = 1;
+        [a, b, c] = [a * s, b * s, c * s];
+        try {
+            [a, b, c] = IntegerRatio(a, b, c);
+        }
+        catch (_a) {
+        }
+        this.linear = [a, b, c];
+        this.refresh();
+    }
+    byPointSlope(p, m) {
+        Should(IsPoint(p), 'input must be point');
+        let p2 = [p[0] + 1, p[1] + m];
+        this.byTwoPoints(p, p2);
+    }
+    byIntercepts(x, y) {
+        Should(IsNum(x, y), "input must be num");
+        Should(IsNonZero(x, y), 'intercepts cannot be zero');
+        this.byTwoPoints([x, 0], [0, y]);
+    }
+    byBisector(A, B) {
+        if (A[0] === B[0]) {
+            this.linear = [0, 1, -(A[1] + B[1]) / 2];
+            this.refresh();
+        }
+        else if (A[1] === B[1]) {
+            this.linear = [1, 0, -(A[0] + B[0]) / 2];
+            this.refresh();
+        }
+        else {
+            let m = -1 / Slope(A, B);
+            let M = MidPoint(A, B);
+            this.byPointSlope(M, m);
+        }
+    }
+    byLinear(linear) {
+        this.linear = linear;
+        this.refresh();
+    }
+    refresh() {
+        let [a, b, c] = this.linear;
+        this.slope = -a / b;
+        this.xInt = -c / a;
+        this.yInt = -c / b;
+    }
+}
+
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13987,20 +14256,20 @@ globalThis.Should = Should;
 
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(32);
-__webpack_require__(33);
-__webpack_require__(34);
 __webpack_require__(35);
+__webpack_require__(36);
+__webpack_require__(37);
+__webpack_require__(38);
 
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14098,7 +14367,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15443,7 +15712,7 @@ function trimCanvas(canvas) {
 
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16435,7 +16704,7 @@ globalThis.AutoPen = AutoPen;
 
 
 /***/ }),
-/* 35 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16459,13 +16728,13 @@ globalThis.Projector = Projector;
 
 
 /***/ }),
-/* 36 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(37);
+const global_1 = __webpack_require__(40);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -16500,19 +16769,19 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 37 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(38);
-const dress_1 = __webpack_require__(39);
-const shuffle_1 = __webpack_require__(40);
-const option_1 = __webpack_require__(41);
-__webpack_require__(42);
-const cls_1 = __webpack_require__(43);
+const section_1 = __webpack_require__(41);
+const dress_1 = __webpack_require__(42);
+const shuffle_1 = __webpack_require__(43);
+const option_1 = __webpack_require__(44);
+__webpack_require__(45);
+const cls_1 = __webpack_require__(46);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -16709,7 +16978,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 38 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16744,7 +17013,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 39 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16812,7 +17081,7 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16892,7 +17161,7 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16960,7 +17229,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16968,7 +17237,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

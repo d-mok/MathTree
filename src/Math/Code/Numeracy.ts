@@ -221,6 +221,34 @@ function SimpRatio(...nums: number[]): number[] {
 globalThis.SimpRatio = SimpRatio
 
 
+
+/**
+ * @category Numeracy
+ * @return reduce input array to integral ratio.
+ * ```typescript
+ * IntegerRatio(2,4,6) // [1,2,3]
+ * IntegerRatio(0,4,6) // [0,2,3]
+ * IntegerRatio(0,4) // [0,1]
+ * IntegerRatio(1/3,1/2,1/4) // [4,6,3]
+ * IntegerRatio(Math.sqrt(2),1/2,1/4) // throw
+ * ```
+ */
+function IntegerRatio(...nums: number[]): number[] {
+    Should(IsNum(...nums), 'input must be num')
+    let ns = [...nums]
+    for (let i = 1; i <= 1000; i++) {
+        let temp = Blurs(nums.map(x => x * i))
+        if (IsInteger(...temp)) {
+            ns = temp
+            break
+        }
+    }
+    Should(IsInteger(...ns), 'fail to find integer ratio')
+    return SimpRatio(...ns)
+}
+globalThis.IntegerRatio = IntegerRatio
+
+
 /**
  * @category Numeracy
  * @return the number of sigfig.

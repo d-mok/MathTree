@@ -1,4 +1,3 @@
-import './Code/Algebra.ts'
 import './Code/Assertion.ts'
 import './Code/Combinatorics.ts'
 import './Code/Flow.ts'
@@ -20,5 +19,11 @@ import './Code/Triangle.ts'
 import './Code/Trigonometry.ts'
 import './Code/Utility.ts'
 import './Code/Vector.ts'
+
+import './Algebra/Algebra.ts'
+import './Algebra/Circle.ts'
+import './Algebra/Quadratic.ts'
+import './Algebra/Linear.ts'
+
 
 import './TypeCheck/TypeCheck.ts'

@@ -274,6 +274,8 @@ test('Floor', () => {
 
 test('SimpRatio', () => {
     expect(SimpRatio(2, 4)).toEqual([1, 2]);
+    expect(SimpRatio(2, 4, 6)).toEqual([1, 2, 3]);
+    expect(SimpRatio(0, 4, 6)).toEqual([0, 2, 3]);
     expect(SimpRatio(8, 12, 18)).toEqual([4, 6, 9]);
     expect(SimpRatio(2, -4)).toEqual([1, -2]);
     expect(SimpRatio(8, -12, 18)).toEqual([4, -6, 9]);
@@ -282,6 +284,25 @@ test('SimpRatio', () => {
     expect(SimpRatio(0, 4)).toEqual([0, 1]);
     expect(SimpRatio(0, -4)).toEqual([0, -1]);
     expect(SimpRatio(2, 4, 6.5)).toEqual([2, 4, 6.5]);
+});
+
+
+
+test('IntegerRatio', () => {
+    expect(IntegerRatio(2, 4)).toEqual([1, 2]);
+    expect(IntegerRatio(2, 4, 6)).toEqual([1, 2, 3]);
+    expect(IntegerRatio(0, 4, 6)).toEqual([0, 2, 3]);
+    expect(IntegerRatio(8, 12, 18)).toEqual([4, 6, 9]);
+    expect(IntegerRatio(2, -4)).toEqual([1, -2]);
+    expect(IntegerRatio(8, -12, 18)).toEqual([4, -6, 9]);
+    expect(IntegerRatio(0, -2, 3)).toEqual([0, -2, 3]);
+    expect(IntegerRatio(0, -2, 4)).toEqual([0, -1, 2]);
+    expect(IntegerRatio(0, 4)).toEqual([0, 1]);
+    expect(IntegerRatio(0, -4)).toEqual([0, -1]);
+    expect(IntegerRatio(2, 4, 6.5)).toEqual([4, 8, 13]);
+    expect(IntegerRatio(1 / 3, 1 / 2, 1 / 4)).toEqual([4, 6, 3]);
+    expect(() => IntegerRatio(Math.sqrt(2), 1 / 2, 1 / 4)).toThrow();
+
 });
 
 
