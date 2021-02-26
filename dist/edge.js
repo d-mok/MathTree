@@ -14381,6 +14381,164 @@ class PenCls {
      */
     constructor() {
         /**
+         * Setup of canvas coordinate range.
+         * @category setting
+         */
+        this.setupRange = {
+            /**
+             * @ignore
+             */
+            pen: this,
+            /**
+             * Set the coordinate range of the canvas.
+             * @category SetupRange
+             * @param xRange - The range [xmin,xmax].
+             * @param yRange - The range [ymin,ymax].
+             * @returns
+             * ```typescript
+             * pen.setupRange.range([-5,5],[-2,4]) // -5<x<5 and -2<y<4
+             * ```
+             */
+            range(xRange, yRange) {
+                [this.pen.frame.xmin, this.pen.frame.xmax] = xRange;
+                [this.pen.frame.ymin, this.pen.frame.ymax] = yRange;
+            },
+            /**
+             * Set the coordinate range of the canvas with given size and center.
+             * Equivalent to pen.setupRange.range([-size, size], [-size, size]) but shifted center.
+             * @category SetupRange
+             * @param size - The max x and y coordinates in range.
+             * @param center - [x,y] coordinates of the center.
+             * @returns
+             * ```typescript
+             * pen.setupRange.square(5) // define range -5<x<5 and -5<y<5
+             * pen.setupRange.square(5,[1,2]) // define range -4<x<6 and -3<y<7
+             * ```
+             */
+            square(size, center = [0, 0]) {
+                let [x, y] = center;
+                this.range([x - size, x + size], [y - size, y + size]);
+            },
+            /**
+             * Set the coordinate range by specifying in-view points.
+             * @category SetupRange
+             * @param points - An array of in-view points [x,y].
+             * @returns
+             * ```typescript
+             * pen.setupRange.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
+             * ```
+             */
+            capture(...points) {
+                let border = 0.3;
+                let pts = [...points];
+                let xmin = pts[0][0];
+                let xmax = pts[0][0];
+                let ymin = pts[0][1];
+                let ymax = pts[0][1];
+                for (let i = 0; i < pts.length; i++) {
+                    let x = pts[i][0];
+                    let y = pts[i][1];
+                    if (x < xmin)
+                        xmin = x;
+                    if (x > xmax)
+                        xmax = x;
+                    if (y < ymin)
+                        ymin = y;
+                    if (y > ymax)
+                        ymax = y;
+                }
+                let xSize = xmax - xmin;
+                let ySize = ymax - ymin;
+                if (xSize === 0 && ySize === 0) {
+                    xmax++;
+                    xmin--;
+                    ymax++;
+                    ymin--;
+                }
+                if (xSize === 0 && ySize !== 0) {
+                    xmax += ySize / 2;
+                    xmin -= ySize / 2;
+                }
+                if (xSize !== 0 && ySize === 0) {
+                    ymax += xSize / 2;
+                    ymin -= xSize / 2;
+                }
+                let xBorder = (xmax - xmin) * border;
+                let yBorder = (ymax - ymin) * border;
+                xmin -= xBorder;
+                xmax += xBorder;
+                ymin -= yBorder;
+                ymax += yBorder;
+                this.range([xmin, xmax], [ymin, ymax]);
+            }
+        };
+        /**
+         * Setup of canvas coordinate range.
+         * @category setting
+         */
+        this.setupSize = {
+            /**
+             * @ignore
+             */
+            pen: this,
+            /**
+             * Set the size of the canvas.
+             * @category SetupSize
+             * @param width - The scale of the width.
+             * @param height - The scale of the height.
+             * @returns
+             * ```typescript
+             * pen.setupSize.size(0.5,2)
+             * // half the standard width, double the standard height
+             * ```
+             */
+            size(width = 1, height = width) {
+                // REM_PIXEL is the default font size of the browser, usually 16px
+                const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+                const wPixel = width * 10 * REM_PIXEL;
+                const hPixel = height * 10 * REM_PIXEL;
+                // create a canvas of higher resolution (PEN_QUALITY)
+                this.pen.canvas.width = wPixel * PEN_QUALITY;
+                this.pen.canvas.height = hPixel * PEN_QUALITY;
+                this.pen.frame.wPixel = wPixel * PEN_QUALITY;
+                this.pen.frame.hPixel = hPixel * PEN_QUALITY;
+                this.pen.set.reset();
+            },
+            /**
+             * Set the size of the canvas by resolution.
+             * @category SetupSize
+             * @param xPPI - The scale per unit x.
+             * @param yPPI - The scale per unit y, if not provided, follow x.
+             * @returns
+             * ```typescript
+             * pen.setupSize.resolution(0.1,0.2)
+             * // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
+             * ```
+             */
+            resolution(xPPI = 0.1, yPPI = xPPI) {
+                let xRange = this.pen.frame.xmax - this.pen.frame.xmin;
+                let yRange = this.pen.frame.ymax - this.pen.frame.ymin;
+                let xScale = xRange * xPPI;
+                let yScale = yRange * yPPI;
+                this.size(xScale, yScale);
+            },
+            /**
+             * Set the size of the canvas, lock xy ratio.
+             * @category SetupSize
+             * @param width - The scale of the width.
+             * @returns
+             * ```typescript
+             * pen.setupSize.lock(0.5) // half the standard width, with yPPI = xPPI.
+             * ```
+             */
+            lock(width = 1) {
+                let xRange = this.pen.frame.xmax - this.pen.frame.xmin;
+                let yRange = this.pen.frame.ymax - this.pen.frame.ymin;
+                let ratio = yRange / xRange;
+                this.size(width, width * ratio);
+            },
+        };
+        /**
          * Setup of canvas.
          * @category setting
          */
