@@ -904,7 +904,7 @@ class PenCls {
          * // decorate an right-angle AOB
          * ```
          */
-        rightAngle(A: Point, O: Point, B: Point, size = 15) {
+        rightAngle(A: Point, O: Point, B: Point = RotatePoint(A, O, 90), size = 12) {
             size = size * PEN_QUALITY;
             A = this.pen.frame.toPix(A);
             O = this.pen.frame.toPix(O);
