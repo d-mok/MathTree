@@ -520,13 +520,15 @@ class PenCls {
      * @returns
      * ```typescript
      * pen.point([1,2]) // draw a point at [1,2]
+     * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
      * ```
      */
-    point(position: Point) {
+    point(position: Point, label?: string) {
         const [x, y] = this.frame.toPix(position);
         this.ctx.beginPath();
         this.ctx.arc(x, y, 3 * PEN_QUALITY, 0, 2 * Math.PI, false);
         this.ctx.fill();
+        if (label !== undefined) this.label.point(position, label)
     }
 
 
