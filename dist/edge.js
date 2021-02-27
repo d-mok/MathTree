@@ -15554,6 +15554,24 @@ class PenCls {
             this.label.point(position, label);
     }
     /**
+     * Draw a point.
+     * @category draw
+     * @param positions - {label:position}
+     * @param label - whether to label the points
+     * @returns
+     * ```typescript
+     * pen.points({A,B}) // mark and label point A as 'A', point B as 'B'
+     * pen.points({A,B},false) // mark point A and B, without label
+     * ```
+     */
+    points(positions, label = true) {
+        for (let k in positions) {
+            this.point(positions[k]);
+            if (label)
+                this.label.point(positions[k], k);
+        }
+    }
+    /**
      * Draw a horizontal cutter.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
