@@ -603,7 +603,7 @@ class AutoPenCls {
         if (heights[2]) drawHeight(C, [A, B])
 
 
-        pen.polyshape(A, B, C)
+        pen.polygon(A, B, C)
 
         pen.set.textItalic(true)
         if (labelA) pen.label.point(A, labelA.toString(), Inclination(G, A))
@@ -1092,7 +1092,7 @@ class AutoPenCls {
             pen.set.color('grey')
             pen.polyfill([x, 0], [x, h], [x + w, h], [x + w, 0])
             pen.set.color()
-            pen.polyshape([x, 0], [x, h], [x + w, h], [x + w, 0])
+            pen.polygon([x, 0], [x, h], [x + w, h], [x + w, 0])
         }
 
         function writeCat(x: number, w: number, text: string) {

@@ -15703,10 +15703,10 @@ class PenCls {
      * @param points - The coordinates [x,y] of all points.
      * @returns
      * ```typescript
-     * pen.polyshape([0,0],[5,2],[3,4]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
+     * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyshape(...points) {
+    polygon(...points) {
         this._polygon(points, { close: true, stroke: true });
     }
     /**
@@ -15733,29 +15733,28 @@ class PenCls {
     polyshade(...points) {
         this._polygon(points, { close: true, shade: true });
     }
-    /**
-     * Draw a polygon given vertex points.
-     * @category draw
-     * @param points - The coordinates [x,y] of all vetices.
-     * @param fill - whether to fill the interior.
-     * @returns
-     * ```typescript
-     * pen.polygon([[0,0],[5,2],[3,4]]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
-     * ```
-     */
-    polygon(points, fill = false) {
-        this.ctx.beginPath();
-        let [xStart, yStart] = this.frame.toPix(points[0]);
-        this.ctx.moveTo(xStart, yStart);
-        for (let i = 1; i < points.length; i++) {
-            let [x, y] = this.frame.toPix(points[i]);
-            this.ctx.lineTo(x, y);
-        }
-        this.ctx.closePath();
-        this.ctx.stroke();
-        if (fill)
-            this.ctx.fill();
-    }
+    // /**
+    //  * Draw a polygon given vertex points.
+    //  * @category draw
+    //  * @param points - The coordinates [x,y] of all vetices.
+    //  * @param fill - whether to fill the interior.
+    //  * @returns
+    //  * ```typescript
+    //  * pen.polygon([[0,0],[5,2],[3,4]]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
+    //  * ```
+    //  */
+    // polygon(points: Point[], fill = false) {
+    //     this.ctx.beginPath();
+    //     let [xStart, yStart] = this.frame.toPix(points[0]);
+    //     this.ctx.moveTo(xStart, yStart);
+    //     for (let i = 1; i < points.length; i++) {
+    //         let [x, y] = this.frame.toPix(points[i]);
+    //         this.ctx.lineTo(x, y);
+    //     }
+    //     this.ctx.closePath();
+    //     this.ctx.stroke();
+    //     if (fill) this.ctx.fill();
+    // }
     /**
      * Draw an angle with label, non-reflex
      * @category draw
@@ -16494,7 +16493,7 @@ class AutoPenCls {
             drawHeight(B, [C, A]);
         if (heights[2])
             drawHeight(C, [A, B]);
-        pen.polyshape(A, B, C);
+        pen.polygon(A, B, C);
         pen.set.textItalic(true);
         if (labelA)
             pen.label.point(A, labelA.toString(), Inclination(G, A));
@@ -16860,7 +16859,7 @@ class AutoPenCls {
             pen.set.color('grey');
             pen.polyfill([x, 0], [x, h], [x + w, h], [x + w, 0]);
             pen.set.color();
-            pen.polyshape([x, 0], [x, h], [x + w, h], [x + w, 0]);
+            pen.polygon([x, 0], [x, h], [x + w, h], [x + w, 0]);
         }
         function writeCat(x, w, text) {
             pen.label.point([x + w / 2, 0], text, 270, 15);

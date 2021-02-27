@@ -100,9 +100,6 @@
 					<a href="pencls.html#polyshade" class="tsd-kind-icon">polyshade</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="pencls.html#polyshape" class="tsd-kind-icon">polyshape</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="pencls.html#restoreimg" class="tsd-kind-icon">restore<wbr>Img</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -190,7 +187,6 @@
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#polygon" class="tsd-kind-icon">polygon</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#polyline" class="tsd-kind-icon">polyline</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#polyshade" class="tsd-kind-icon">polyshade</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#polyshape" class="tsd-kind-icon">polyshape</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section">
@@ -1199,7 +1195,7 @@ pen.point([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>
 				<a name="polygon" class="tsd-anchor"></a>
 				<h3>polygon</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">polygon<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span>, fill<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					<li class="tsd-signature tsd-kind-icon">polygon<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>points<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -1207,26 +1203,20 @@ pen.point([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Draw a polygon given vertex points.</p>
+								<p>Draw a polygon given points.</p>
 							</div>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>points: <a href="../globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span></h5>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>points: <a href="../globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>The coordinates [x,y] of all vetices.</p>
-								</div>
-							</li>
-							<li>
-								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> fill: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>whether to fill the interior.</p>
+									<p>The coordinates [x,y] of all points.</p>
 								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						<pre><code class="language-typescript">pen.polygon([[<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">5</span>,<span class="hljs-number">2</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]]) <span class="hljs-comment">// draw a triangle with vertices [0,0], [5,2] and [3,4]</span></code></pre>
+						<pre><code class="language-typescript">pen.polygon([<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">5</span>,<span class="hljs-number">2</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]) <span class="hljs-comment">// draw a triangle with vertices [0,0], [5,2] and [3,4]</span></code></pre>
 					</li>
 				</ul>
 			</section>
@@ -1285,35 +1275,6 @@ pen.point([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						<pre><code class="language-typescript">pen.polyshade([<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">5</span>,<span class="hljs-number">2</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]) <span class="hljs-comment">// shade a triangle with vertices [0,0], [5,2] and [3,4]</span></code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="polyshape" class="tsd-anchor"></a>
-				<h3>polyshape</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">polyshape<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>points<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Draw a polygon given points.</p>
-							</div>
-						</div>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>points: <a href="../globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The coordinates [x,y] of all points.</p>
-								</div>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						<pre><code class="language-typescript">pen.polyshape([<span class="hljs-number">0</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">5</span>,<span class="hljs-number">2</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]) <span class="hljs-comment">// draw a triangle with vertices [0,0], [5,2] and [3,4]</span></code></pre>
 					</li>
 				</ul>
 			</section>
