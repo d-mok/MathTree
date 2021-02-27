@@ -15733,22 +15733,6 @@ class PenCls {
      */
     line(startPoint, endPoint, label) {
         this._line(startPoint, endPoint, {});
-        // this.ctx.save();
-        // const [x0, y0] = this.frame.toPix(startPoint);
-        // const [x1, y1] = this.frame.toPix(endPoint);
-        // const dx = x1 - x0;
-        // const dy = y1 - y0;
-        // const angle = Math.atan2(dy, dx);
-        // const length = Math.sqrt(dx * dx + dy * dy);
-        // //
-        // this.ctx.translate(x0, y0);
-        // this.ctx.rotate(angle);
-        // this.ctx.beginPath();
-        // this.ctx.moveTo(0, 0);
-        // this.ctx.lineTo(length, 0);
-        // this.ctx.stroke();
-        // this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-        // this.ctx.restore();
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
     }
@@ -15781,29 +15765,6 @@ class PenCls {
      */
     arrow(startPoint, endPoint) {
         this._line(startPoint, endPoint, { arrow: true });
-        // this.ctx.save();
-        // const [x0, y0] = this.frame.toPix(startPoint);
-        // const [x1, y1] = this.frame.toPix(endPoint);
-        // const dx = x1 - x0;
-        // const dy = y1 - y0;
-        // const angle = Math.atan2(dy, dx);
-        // const length = Math.sqrt(dx * dx + dy * dy);
-        // const aLength = this.ctx.lineWidth * 10;
-        // const aWidth = aLength / 2;
-        // //
-        // this.ctx.translate(x0, y0);
-        // this.ctx.rotate(angle);
-        // this.ctx.beginPath();
-        // this.ctx.moveTo(0, 0);
-        // this.ctx.lineTo(length, 0);
-        // //arrow
-        // this.ctx.moveTo(length - aLength, -aWidth);
-        // this.ctx.lineTo(length, 0);
-        // this.ctx.lineTo(length - aLength, aWidth);
-        // //
-        // this.ctx.stroke();
-        // this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-        // this.ctx.restore();
     }
     /**
      * @ignore
