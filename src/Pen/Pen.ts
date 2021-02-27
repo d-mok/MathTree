@@ -758,14 +758,13 @@ class PenCls {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param arrow - whether to draw an arrow at the end.
      * @returns
      * ```typescript
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
      * pen.line([1,2],[3,4],true) //  draw a line from [1,2] to [3,4] with arrow at [3,4]
      * ```
      */
-    line(startPoint: Point, endPoint: Point, arrow = false) {
+    line(startPoint: Point, endPoint: Point) {
         this.ctx.save();
         const [x0, y0] = this.frame.toPix(startPoint);
         const [x1, y1] = this.frame.toPix(endPoint);
@@ -773,19 +772,12 @@ class PenCls {
         const dy = y1 - y0;
         const angle = Math.atan2(dy, dx);
         const length = Math.sqrt(dx * dx + dy * dy);
-        const aLength = this.ctx.lineWidth * 10;
-        const aWidth = aLength / 2;
         //
         this.ctx.translate(x0, y0);
         this.ctx.rotate(angle);
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
         this.ctx.lineTo(length, 0);
-        if (arrow) {
-            this.ctx.moveTo(length - aLength, -aWidth);
-            this.ctx.lineTo(length, 0);
-            this.ctx.lineTo(length - aLength, aWidth);
-        }
         this.ctx.stroke();
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.restore();
@@ -830,15 +822,9 @@ class PenCls {
 
 
     /**
-     * Draw a polyline given points.
-     * @category draw
-     * @param points - The coordinates [x,y] of all points.
-     * @returns
-     * ```typescript
-     * pen.polyline([[0,0],[5,2],[3,4]]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
-     * ```
+     * @ignore
      */
-    polyline(...points: Point[]) {
+    private _polygon(points: Point[], { close = false, stroke = false, fill = false, shade = false }) {
         this.ctx.beginPath();
         let [xStart, yStart] = this.frame.toPix(points[0]);
         this.ctx.moveTo(xStart, yStart);
@@ -846,7 +832,69 @@ class PenCls {
             let [x, y] = this.frame.toPix(points[i]);
             this.ctx.lineTo(x, y);
         }
-        this.ctx.stroke();
+        if (close) this.ctx.closePath();
+        if (stroke) this.ctx.stroke();
+        if (fill) this.ctx.fill();
+        if (shade) {
+            let alpha = this.ctx.globalAlpha;
+            this.set.alpha(0.5)
+            this.ctx.fill();
+            this.set.alpha(alpha)
+        }
+    }
+
+
+    /**
+     * Draw a polyline given points.
+     * @category draw
+     * @param points - The coordinates [x,y] of all points.
+     * @returns
+     * ```typescript
+     * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
+     * ```
+     */
+    polyline(...points: Point[]) {
+        this._polygon(points, { stroke: true })
+    }
+
+
+    /**
+     * Draw a polygon given points.
+     * @category draw
+     * @param points - The coordinates [x,y] of all points.
+     * @returns
+     * ```typescript
+     * pen.polyshape([0,0],[5,2],[3,4]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
+     * ```
+     */
+    polyshape(...points: Point[]) {
+        this._polygon(points, { close: true, stroke: true })
+    }
+
+    /**
+     * Fill a polygon given points.
+     * @category draw
+     * @param points - The coordinates [x,y] of all points.
+     * @returns
+     * ```typescript
+     * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle with vertices [0,0], [5,2] and [3,4]
+     * ```
+     */
+    polyfill(...points: Point[]) {
+        this._polygon(points, { close: true, fill: true })
+    }
+
+    /**
+     * Shade a polygon given points.
+     * @category draw
+     * @param points - The coordinates [x,y] of all points.
+     * @returns
+     * ```typescript
+     * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle with vertices [0,0], [5,2] and [3,4]
+     * ```
+     */
+    polyshade(...points: Point[]) {
+        this._polygon(points, { close: true, shade: true })
     }
 
     /**
@@ -871,6 +919,8 @@ class PenCls {
         this.ctx.stroke();
         if (fill) this.ctx.fill();
     }
+
+
 
     /**
      * Draw an angle with label, non-reflex
@@ -1331,7 +1381,7 @@ class PenCls {
         x(label = "x") {
             const [xmin, xmax] = this.pen.frame.xRange();
             const offset = 3 * this.pen.frame.xOffset();
-            this.pen.line([xmin, 0], [xmax, 0], true);
+            this.pen.arrow([xmin, 0], [xmax, 0]);
             this.pen.ctx.save();
             this.pen.set.textItalic(label.length === 1);
             this.pen.set.textAlign("right");
@@ -1351,7 +1401,7 @@ class PenCls {
         y(label = "y") {
             const [ymin, ymax] = this.pen.frame.yRange();
             const offset = 3 * this.pen.frame.yOffset();
-            this.pen.line([0, ymin], [0, ymax], true);
+            this.pen.arrow([0, ymin], [0, ymax]);
             this.pen.ctx.save();
             this.pen.set.textItalic(label.length === 1);
             this.pen.set.textAlign("left");

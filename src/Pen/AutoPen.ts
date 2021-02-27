@@ -158,9 +158,9 @@ class AutoPenCls {
             pen.set.strokeColor('black');
             pen.set.fillColor('black');
 
-            pen.line([-width, base], [width, base], true);
+            pen.arrow([-width, base], [width, base]);
             pen.line(B, T);
-            pen.line(T, E, true);
+            pen.arrow(T, E);
             pen.set.fillColor(solid ? 'black' : 'white');
             pen.set.weight(3);
             pen.circle(T, 3, [0, 360], true);
@@ -312,7 +312,7 @@ class AutoPenCls {
             pen.set.fillColor()
             pen.point(P)
             pen.set.fillColor('red')
-            if (y !== 0) { pen.line(P, Q, true) }
+            if (y !== 0) { pen.arrow(P, Q) }
             if (y >= 0) { pen.label.point(Q, label, 270) }
             if (y < 0) { pen.label.point(Q, label, 90) }
 
@@ -1066,7 +1066,7 @@ class AutoPenCls {
         pen.setup.resolution(0.1, 1 / height)
 
         pen.line([0, 0], [width, 0])
-        pen.line([0, 0], [0, height], true)
+        pen.arrow([0, 0], [0, height])
 
         pen.ctx.save()
         pen.ctx.translate(...pen.frame.toPix([-1.5, height / 2]))
