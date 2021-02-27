@@ -73,6 +73,9 @@
 					<a href="pencls.html#cutterv" class="tsd-kind-icon">cutterV</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="pencls.html#dash" class="tsd-kind-icon">dash</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="pencls.html#export" class="tsd-kind-icon">export</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -184,6 +187,7 @@
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#circle" class="tsd-kind-icon">circle</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#cutterh" class="tsd-kind-icon">cutterH</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#cutterv" class="tsd-kind-icon">cutterV</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#dash" class="tsd-kind-icon">dash</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#line" class="tsd-kind-icon">line</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#point" class="tsd-kind-icon">point</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#points" class="tsd-kind-icon">points</a></li>
@@ -271,6 +275,41 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="axis.xy" class="tsd-anchor"></a>
+					<h3>xy</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">xy<span class="tsd-signature-symbol">(</span>xlabel<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, ylabel<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw both axis.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> xlabel: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;x&quot;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x-axis label.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> ylabel: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;y&quot;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y-axis label.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.axis.xy(<span class="hljs-string">&#x27;x&#x27;</span>,<span class="hljs-string">&#x27;y&#x27;</span>) <span class="hljs-comment">// draw both axis, label as &#x27;x&#x27; and &#x27;y&#x27;</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
 					<a name="axis.y" class="tsd-anchor"></a>
 					<h3>y</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
@@ -337,6 +376,35 @@
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 							<pre><code class="language-typescript">pen.grid.x(<span class="hljs-number">2</span>) <span class="hljs-comment">// draw gridlines on the x-axis, at interval 2 units</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="grid.xy-1" class="tsd-anchor"></a>
+					<h3>xy</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">xy<span class="tsd-signature-symbol">(</span>interval<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw gridlines on both axis.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> interval: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The grid interval.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.grid.xy(<span class="hljs-number">2</span>) <span class="hljs-comment">// draw gridlines on both axis, at interval 2 units</span></code></pre>
 						</li>
 					</ul>
 				</section>
@@ -413,6 +481,41 @@
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 							<pre><code class="language-typescript">pen.tick.x(<span class="hljs-number">2</span>) <span class="hljs-comment">// draw ticks on the x-axis, at interval 2 units</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="tick.xy-2" class="tsd-anchor"></a>
+					<h3>xy</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">xy<span class="tsd-signature-symbol">(</span>interval<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, mark<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw ticks on both axis.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> interval: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The tick interval.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> mark: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Whether to label number at ticks.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.tick.xy(<span class="hljs-number">2</span>) <span class="hljs-comment">// draw ticks on both axis, at interval 2 units</span></code></pre>
 						</li>
 					</ul>
 				</section>
@@ -1091,6 +1194,48 @@ pen.circle([<span class="hljs-number">1</span>,<span class="hljs-number">2</span
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						<pre><code class="language-typescript">pen.cutterV([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>]) <span class="hljs-comment">// draw a vertical cutter at [1,2]</span></code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="dash" class="tsd-anchor"></a>
+				<h3>dash</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">dash<span class="tsd-signature-symbol">(</span>startPoint<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, endPoint<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, label<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Draw a dash line between two points.</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>startPoint: <a href="../globals.html#point" class="tsd-signature-type">Point</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>The coordinates [x,y] of the start-point.</p>
+								</div>
+							</li>
+							<li>
+								<h5>endPoint: <a href="../globals.html#point" class="tsd-signature-type">Point</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>The coordinates [x,y] of the end-point.</p>
+								</div>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> label: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>The label of the point.</p>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						<pre><code class="language-typescript">pen.dash([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]) <span class="hljs-comment">// draw a dash line from [1,2] to [3,4]</span>
+pen.dash([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">4</span>],<span class="hljs-string">&#x27;10&#x27;</span>) <span class="hljs-comment">//  draw a dash line from [1,2] to [3,4] with label &#x27;10&#x27;</span></code></pre>
 					</li>
 				</ul>
 			</section>
@@ -1801,6 +1946,36 @@ pen.plot(<span class="hljs-function"><span class="hljs-params">t</span>=&gt;</sp
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="range.extend" class="tsd-anchor"></a>
+					<h3>extend</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">extend<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>points<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set the coordinate range by specifying in-view points, include O(0,0).</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>points: <a href="../globals.html#point" class="tsd-signature-type">Point</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>An array of in-view points [x,y].</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.range.extend([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]) <span class="hljs-comment">//  [0,0], [1,2], [3,4] must be in-view</span>
+<span class="hljs-comment">// equivalent to pen.range.capture([0,0],[1,2],[3,4])</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
 					<a name="range.set" class="tsd-anchor"></a>
 					<h3>set</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
@@ -1943,7 +2118,7 @@ pen.range.square(<span class="hljs-number">5</span>,[<span class="hljs-number">1
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
-					<a name="set-1.dash" class="tsd-anchor"></a>
+					<a name="set-1.dash-1" class="tsd-anchor"></a>
 					<h3>dash</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 						<li class="tsd-signature tsd-kind-icon">dash<span class="tsd-signature-symbol">(</span>segments<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
