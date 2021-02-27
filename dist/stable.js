@@ -14384,7 +14384,7 @@ class PenCls {
          * Setup of canvas coordinate range.
          * @category setting
          */
-        this.setupRange = {
+        this.range = {
             /**
              * @ignore
              */
@@ -14396,28 +14396,28 @@ class PenCls {
              * @param yRange - The range [ymin,ymax].
              * @returns
              * ```typescript
-             * pen.setupRange.range([-5,5],[-2,4]) // -5<x<5 and -2<y<4
+             * pen.range.set([-5,5],[-2,4]) // -5<x<5 and -2<y<4
              * ```
              */
-            range(xRange, yRange = xRange) {
+            set(xRange, yRange = xRange) {
                 [this.pen.frame.xmin, this.pen.frame.xmax] = xRange;
                 [this.pen.frame.ymin, this.pen.frame.ymax] = yRange;
             },
             /**
              * Set the coordinate range of the canvas with given size and center.
-             * Equivalent to pen.setupRange.range([-size, size], [-size, size]) but shifted center.
+             * Equivalent to pen.range.range([-size, size], [-size, size]) but shifted center.
              * @category SetupRange
              * @param size - The max x and y coordinates in range.
              * @param center - [x,y] coordinates of the center.
              * @returns
              * ```typescript
-             * pen.setupRange.square(5) // define range -5<x<5 and -5<y<5
-             * pen.setupRange.square(5,[1,2]) // define range -4<x<6 and -3<y<7
+             * pen.range.square(5) // define range -5<x<5 and -5<y<5
+             * pen.range.square(5,[1,2]) // define range -4<x<6 and -3<y<7
              * ```
              */
             square(size, center = [0, 0]) {
                 let [x, y] = center;
-                this.range([x - size, x + size], [y - size, y + size]);
+                this.set([x - size, x + size], [y - size, y + size]);
             },
             /**
              * Set the coordinate range by specifying in-view points.
@@ -14425,7 +14425,7 @@ class PenCls {
              * @param points - An array of in-view points [x,y].
              * @returns
              * ```typescript
-             * pen.setupRange.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
+             * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
              * ```
              */
             capture(...points) {
@@ -14469,14 +14469,27 @@ class PenCls {
                 xmax += xBorder;
                 ymin -= yBorder;
                 ymax += yBorder;
-                this.range([xmin, xmax], [ymin, ymax]);
+                this.set([xmin, xmax], [ymin, ymax]);
+            },
+            /**
+             * Set the coordinate range by specifying in-view points, include O(0,0).
+             * @category SetupRange
+             * @param points - An array of in-view points [x,y].
+             * @returns
+             * ```typescript
+             * pen.range.extend([1,2],[3,4]) //  [0,0], [1,2], [3,4] must be in-view
+             * // equivalent to pen.range.capture([0,0],[1,2],[3,4])
+             * ```
+             */
+            extend(...points) {
+                this.capture([0, 0], ...points);
             }
         };
         /**
-         * Setup of canvas coordinate range.
+         * Setup of canvas size.
          * @category setting
          */
-        this.setupSize = {
+        this.size = {
             /**
              * @ignore
              */
@@ -14488,11 +14501,11 @@ class PenCls {
              * @param height - The scale of the height.
              * @returns
              * ```typescript
-             * pen.setupSize.size(0.5,2)
+             * pen.size.set(0.5,2)
              * // half the standard width, double the standard height
              * ```
              */
-            size(width = 1, height = width) {
+            set(width = 1, height = width) {
                 // REM_PIXEL is the default font size of the browser, usually 16px
                 const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
                 const wPixel = width * 10 * REM_PIXEL;
@@ -14511,7 +14524,7 @@ class PenCls {
              * @param yPPI - The scale per unit y, if not provided, follow x.
              * @returns
              * ```typescript
-             * pen.setupSize.resolution(0.1,0.2)
+             * pen.size.resolution(0.1,0.2)
              * // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
              * ```
              */
@@ -14520,7 +14533,7 @@ class PenCls {
                 let yRange = this.pen.frame.ymax - this.pen.frame.ymin;
                 let xScale = xRange * xPPI;
                 let yScale = yRange * yPPI;
-                this.size(xScale, yScale);
+                this.set(xScale, yScale);
             },
             /**
              * Set the size of the canvas, lock xy ratio.
@@ -14528,14 +14541,14 @@ class PenCls {
              * @param width - The scale of the width.
              * @returns
              * ```typescript
-             * pen.setupSize.lock(0.5) // half the standard width, with yPPI = xPPI.
+             * pen.size.lock(0.5) // half the standard width, with yPPI = xPPI.
              * ```
              */
             lock(width = 1) {
                 let xRange = this.pen.frame.xmax - this.pen.frame.xmin;
                 let yRange = this.pen.frame.ymax - this.pen.frame.ymin;
                 let ratio = yRange / xRange;
-                this.size(width, width * ratio);
+                this.set(width, width * ratio);
             },
         };
         /**
@@ -15197,6 +15210,20 @@ class PenCls {
                 this.pen.ctx.restore();
             },
             /**
+             * Add a label to points, using index as text.
+             * @category text
+             * @param positions - {label:position}.
+             * @returns
+             * ```typescript
+             * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
+             * ```
+             */
+            points(positions) {
+                for (let k in positions) {
+                    this.point(positions[k], k);
+                }
+            },
+            /**
              * Add a label to an angle AOB, in anticlockwise.
              * @category text
              * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
@@ -15349,7 +15376,21 @@ class PenCls {
                 this.pen.set.textBaseline("top");
                 this.pen.write([offset, ymax], label);
                 this.pen.ctx.restore();
-            }
+            },
+            /**
+             * Draw both axis.
+             * @category axis
+             * @param xlabel - The x-axis label.
+             * @param ylabel - The y-axis label.
+             * @returns
+             * ```typescript
+             * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
+             * ```
+             */
+            xy(xlabel = "x", ylabel = "y") {
+                this.x(xlabel);
+                this.y(ylabel);
+            },
         };
         /**
          * The axis ticks.
@@ -15409,6 +15450,20 @@ class PenCls {
                     }
                     ;
                 }
+            },
+            /**
+             * Draw ticks on both axis.
+             * @category axisTick
+             * @param interval - The tick interval.
+             * @param mark - Whether to label number at ticks.
+             * @returns
+             * ```typescript
+             * pen.tick.xy(2) // draw ticks on both axis, at interval 2 units
+             * ```
+             */
+            xy(interval = 1, mark = true) {
+                this.x(interval, mark);
+                this.y(interval, mark);
             }
         };
         /**
@@ -15453,6 +15508,19 @@ class PenCls {
                     this.pen.graph.horizontal(y);
                 }
                 this.pen.ctx.restore();
+            },
+            /**
+             * Draw gridlines on both axis.
+             * @category axisGrid
+             * @param interval - The grid interval.
+             * @returns
+             * ```typescript
+             * pen.grid.xy(2) // draw gridlines on both axis, at interval 2 units
+             * ```
+             */
+            xy(interval = 1) {
+                this.x(interval);
+                this.y(interval);
             }
         };
         // create the canvas DOM element
@@ -15540,6 +15608,24 @@ class PenCls {
             this.label.point(position, label);
     }
     /**
+     * Draw a point.
+     * @category draw
+     * @param positions - {label:position}
+     * @param label - whether to label the points
+     * @returns
+     * ```typescript
+     * pen.points({A,B}) // mark and label point A as 'A', point B as 'B'
+     * pen.points({A,B},false) // mark point A and B, without label
+     * ```
+     */
+    points(positions, label = true) {
+        for (let k in positions) {
+            this.point(positions[k]);
+            if (label)
+                this.label.point(positions[k], k);
+        }
+    }
+    /**
      * Draw a horizontal cutter.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
@@ -15598,45 +15684,9 @@ class PenCls {
             this.ctx.fill();
     }
     /**
-     * Draw a line between two points.
-     * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @returns
-     * ```typescript
-     * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
-     * pen.line([1,2],[3,4],true) //  draw a line from [1,2] to [3,4] with arrow at [3,4]
-     * ```
+     * @ignore
      */
-    line(startPoint, endPoint) {
-        this.ctx.save();
-        const [x0, y0] = this.frame.toPix(startPoint);
-        const [x1, y1] = this.frame.toPix(endPoint);
-        const dx = x1 - x0;
-        const dy = y1 - y0;
-        const angle = Math.atan2(dy, dx);
-        const length = Math.sqrt(dx * dx + dy * dy);
-        //
-        this.ctx.translate(x0, y0);
-        this.ctx.rotate(angle);
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, 0);
-        this.ctx.lineTo(length, 0);
-        this.ctx.stroke();
-        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-        this.ctx.restore();
-    }
-    /**
-     * Draw an arrow between two points.
-     * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @returns
-     * ```typescript
-     * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
-     * ```
-     */
-    arrow(startPoint, endPoint) {
+    _line(startPoint, endPoint, { arrow = false, dash = false }) {
         this.ctx.save();
         const [x0, y0] = this.frame.toPix(startPoint);
         const [x1, y1] = this.frame.toPix(endPoint);
@@ -15652,14 +15702,108 @@ class PenCls {
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
         this.ctx.lineTo(length, 0);
-        //arrow
-        this.ctx.moveTo(length - aLength, -aWidth);
-        this.ctx.lineTo(length, 0);
-        this.ctx.lineTo(length - aLength, aWidth);
-        //
-        this.ctx.stroke();
+        if (arrow) {
+            this.ctx.moveTo(length - aLength, -aWidth);
+            this.ctx.lineTo(length, 0);
+            this.ctx.lineTo(length - aLength, aWidth);
+        }
+        if (dash) {
+            this.ctx.save();
+            this.set.dash(true);
+            this.ctx.stroke();
+            this.ctx.restore();
+        }
+        else {
+            this.ctx.stroke();
+        }
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.restore();
+    }
+    /**
+     * Draw a line between two points.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the point.
+     * @returns
+     * ```typescript
+     * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
+     * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
+     * ```
+     */
+    line(startPoint, endPoint, label) {
+        this._line(startPoint, endPoint, {});
+        // this.ctx.save();
+        // const [x0, y0] = this.frame.toPix(startPoint);
+        // const [x1, y1] = this.frame.toPix(endPoint);
+        // const dx = x1 - x0;
+        // const dy = y1 - y0;
+        // const angle = Math.atan2(dy, dx);
+        // const length = Math.sqrt(dx * dx + dy * dy);
+        // //
+        // this.ctx.translate(x0, y0);
+        // this.ctx.rotate(angle);
+        // this.ctx.beginPath();
+        // this.ctx.moveTo(0, 0);
+        // this.ctx.lineTo(length, 0);
+        // this.ctx.stroke();
+        // this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        // this.ctx.restore();
+        if (label !== undefined)
+            this.label.line([startPoint, endPoint], label);
+    }
+    /**
+     * Draw a dash line between two points.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the point.
+     * @returns
+     * ```typescript
+     * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
+     * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
+     * ```
+     */
+    dash(startPoint, endPoint, label) {
+        this._line(startPoint, endPoint, { dash: true });
+        if (label !== undefined)
+            this.label.line([startPoint, endPoint], label);
+    }
+    /**
+     * Draw an arrow between two points.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @returns
+     * ```typescript
+     * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
+     * ```
+     */
+    arrow(startPoint, endPoint) {
+        this._line(startPoint, endPoint, { arrow: true });
+        // this.ctx.save();
+        // const [x0, y0] = this.frame.toPix(startPoint);
+        // const [x1, y1] = this.frame.toPix(endPoint);
+        // const dx = x1 - x0;
+        // const dy = y1 - y0;
+        // const angle = Math.atan2(dy, dx);
+        // const length = Math.sqrt(dx * dx + dy * dy);
+        // const aLength = this.ctx.lineWidth * 10;
+        // const aWidth = aLength / 2;
+        // //
+        // this.ctx.translate(x0, y0);
+        // this.ctx.rotate(angle);
+        // this.ctx.beginPath();
+        // this.ctx.moveTo(0, 0);
+        // this.ctx.lineTo(length, 0);
+        // //arrow
+        // this.ctx.moveTo(length - aLength, -aWidth);
+        // this.ctx.lineTo(length, 0);
+        // this.ctx.lineTo(length - aLength, aWidth);
+        // //
+        // this.ctx.stroke();
+        // this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        // this.ctx.restore();
     }
     /**
      * @ignore
@@ -15733,28 +15877,6 @@ class PenCls {
     polyshade(...points) {
         this._polygon(points, { close: true, shade: true });
     }
-    // /**
-    //  * Draw a polygon given vertex points.
-    //  * @category draw
-    //  * @param points - The coordinates [x,y] of all vetices.
-    //  * @param fill - whether to fill the interior.
-    //  * @returns
-    //  * ```typescript
-    //  * pen.polygon([[0,0],[5,2],[3,4]]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
-    //  * ```
-    //  */
-    // polygon(points: Point[], fill = false) {
-    //     this.ctx.beginPath();
-    //     let [xStart, yStart] = this.frame.toPix(points[0]);
-    //     this.ctx.moveTo(xStart, yStart);
-    //     for (let i = 1; i < points.length; i++) {
-    //         let [x, y] = this.frame.toPix(points[i]);
-    //         this.ctx.lineTo(x, y);
-    //     }
-    //     this.ctx.closePath();
-    //     this.ctx.stroke();
-    //     if (fill) this.ctx.fill();
-    // }
     /**
      * Draw an angle with label, non-reflex
      * @category draw
