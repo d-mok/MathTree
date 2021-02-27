@@ -14539,7 +14539,7 @@ class PenCls {
             },
         };
         /**
-         * Setup of canvas.
+         * Setup of canvas. Deprecated.
          * @ignore
          * @category setting
          */
@@ -15630,6 +15630,41 @@ class PenCls {
             this.ctx.lineTo(length, 0);
             this.ctx.lineTo(length - aLength, aWidth);
         }
+        this.ctx.stroke();
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        this.ctx.restore();
+    }
+    /**
+     * Draw an arrow between two points.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @returns
+     * ```typescript
+     * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
+     * ```
+     */
+    arrow(startPoint, endPoint) {
+        this.ctx.save();
+        const [x0, y0] = this.frame.toPix(startPoint);
+        const [x1, y1] = this.frame.toPix(endPoint);
+        const dx = x1 - x0;
+        const dy = y1 - y0;
+        const angle = Math.atan2(dy, dx);
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const aLength = this.ctx.lineWidth * 10;
+        const aWidth = aLength / 2;
+        //
+        this.ctx.translate(x0, y0);
+        this.ctx.rotate(angle);
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.lineTo(length, 0);
+        //arrow
+        this.ctx.moveTo(length - aLength, -aWidth);
+        this.ctx.lineTo(length, 0);
+        this.ctx.lineTo(length - aLength, aWidth);
+        //
         this.ctx.stroke();
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.restore();
