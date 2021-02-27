@@ -693,6 +693,7 @@ class PenCls {
     }
 
 
+
     /**
      * Draw a horizontal cutter.
      * @category draw
@@ -758,13 +759,14 @@ class PenCls {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the point.
      * @returns
      * ```typescript
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
-     * pen.line([1,2],[3,4],true) //  draw a line from [1,2] to [3,4] with arrow at [3,4]
+     * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
      * ```
      */
-    line(startPoint: Point, endPoint: Point) {
+    line(startPoint: Point, endPoint: Point, label?: string) {
         this.ctx.save();
         const [x0, y0] = this.frame.toPix(startPoint);
         const [x1, y1] = this.frame.toPix(endPoint);
@@ -781,6 +783,7 @@ class PenCls {
         this.ctx.stroke();
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.restore();
+        if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
 
@@ -896,30 +899,6 @@ class PenCls {
     polyshade(...points: Point[]) {
         this._polygon(points, { close: true, shade: true })
     }
-
-    // /**
-    //  * Draw a polygon given vertex points.
-    //  * @category draw
-    //  * @param points - The coordinates [x,y] of all vetices.
-    //  * @param fill - whether to fill the interior.
-    //  * @returns
-    //  * ```typescript
-    //  * pen.polygon([[0,0],[5,2],[3,4]]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
-    //  * ```
-    //  */
-    // polygon(points: Point[], fill = false) {
-    //     this.ctx.beginPath();
-    //     let [xStart, yStart] = this.frame.toPix(points[0]);
-    //     this.ctx.moveTo(xStart, yStart);
-    //     for (let i = 1; i < points.length; i++) {
-    //         let [x, y] = this.frame.toPix(points[i]);
-    //         this.ctx.lineTo(x, y);
-    //     }
-    //     this.ctx.closePath();
-    //     this.ctx.stroke();
-    //     if (fill) this.ctx.fill();
-    // }
-
 
 
     /**
@@ -1245,6 +1224,23 @@ class PenCls {
             this.pen.ctx.fillText(text, x, y);
             this.pen.ctx.restore();
         },
+
+        /**
+         * Add a label to points, using index as text.
+         * @category text
+         * @param positions - {label:position}.
+         * @returns
+         * ```typescript
+         * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
+         * ```
+         */
+        points(positions: { [k: string]: Point }) {
+            for (let k in positions) {
+                this.point(positions[k], k)
+            }
+        },
+
+
         /**
          * Add a label to an angle AOB, in anticlockwise.
          * @category text
