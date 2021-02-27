@@ -15661,6 +15661,9 @@ class PenCls {
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.restore();
     }
+    /**
+     * @ignore
+     */
     _polygon(points, { close = false, stroke = false, fill = false, shade = false }) {
         this.ctx.beginPath();
         let [xStart, yStart] = this.frame.toPix(points[0]);
@@ -15677,7 +15680,7 @@ class PenCls {
             this.ctx.fill();
         if (shade) {
             let alpha = this.ctx.globalAlpha;
-            this.set.alpha(0.5);
+            this.set.alpha(0.2);
             this.ctx.fill();
             this.set.alpha(alpha);
         }
@@ -16090,13 +16093,7 @@ class AutoPenCls {
                 pen.set.strokeColor();
                 pen.set.dash();
             }
-            pen.set.fillColor('black');
-            pen.set.alpha(0.1);
-            pen.set.strokeColor('white');
-            pen.polygon([B, T, E1, E2], true);
-            pen.set.alpha();
-            pen.set.strokeColor('black');
-            pen.set.fillColor('black');
+            pen.polyshade(B, T, E1, E2);
             pen.arrow([-width, base], [width, base]);
             pen.line(B, T);
             pen.arrow(T, E);
@@ -16497,7 +16494,7 @@ class AutoPenCls {
             drawHeight(B, [C, A]);
         if (heights[2])
             drawHeight(C, [A, B]);
-        pen.polygon([A, B, C]);
+        pen.polyshape(A, B, C);
         pen.set.textItalic(true);
         if (labelA)
             pen.label.point(A, labelA.toString(), Inclination(G, A));
@@ -16670,9 +16667,7 @@ class AutoPenCls {
             });
         }
         function drawShade() {
-            pen.set.alpha(0.3);
-            pen.polygon(vertices, true);
-            pen.set.alpha();
+            pen.polyshade(...vertices);
         }
         function drawContour(value) {
             pen.graph.linear(field[0], field[1], field[2] - value);
@@ -16863,9 +16858,9 @@ class AutoPenCls {
         }
         function bar(x, w, h) {
             pen.set.color('grey');
-            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]], true);
+            pen.polyfill([x, 0], [x, h], [x + w, h], [x + w, 0]);
             pen.set.color();
-            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]]);
+            pen.polyshape([x, 0], [x, h], [x + w, h], [x + w, 0]);
         }
         function writeCat(x, w, text) {
             pen.label.point([x + w / 2, 0], text, 270, 15);

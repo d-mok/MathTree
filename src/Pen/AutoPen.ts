@@ -150,13 +150,7 @@ class AutoPenCls {
                 pen.set.dash();
             }
 
-            pen.set.fillColor('black');
-            pen.set.alpha(0.1);
-            pen.set.strokeColor('white');
-            pen.polygon([B, T, E1, E2], true);
-            pen.set.alpha();
-            pen.set.strokeColor('black');
-            pen.set.fillColor('black');
+            pen.polyshade(B, T, E1, E2);
 
             pen.arrow([-width, base], [width, base]);
             pen.line(B, T);
@@ -609,7 +603,7 @@ class AutoPenCls {
         if (heights[2]) drawHeight(C, [A, B])
 
 
-        pen.polygon([A, B, C])
+        pen.polyshape(A, B, C)
 
         pen.set.textItalic(true)
         if (labelA) pen.label.point(A, labelA.toString(), Inclination(G, A))
@@ -855,9 +849,7 @@ class AutoPenCls {
         }
 
         function drawShade() {
-            pen.set.alpha(0.3);
-            pen.polygon(vertices, true);
-            pen.set.alpha();
+            pen.polyshade(...vertices);
         }
 
         function drawContour(value: number) {
@@ -1098,9 +1090,9 @@ class AutoPenCls {
 
         function bar(x: number, w: number, h: number) {
             pen.set.color('grey')
-            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]], true)
+            pen.polyfill([x, 0], [x, h], [x + w, h], [x + w, 0])
             pen.set.color()
-            pen.polygon([[x, 0], [x, h], [x + w, h], [x + w, 0]])
+            pen.polyshape([x, 0], [x, h], [x + w, h], [x + w, 0])
         }
 
         function writeCat(x: number, w: number, text: string) {

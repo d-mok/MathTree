@@ -837,7 +837,7 @@ class PenCls {
         if (fill) this.ctx.fill();
         if (shade) {
             let alpha = this.ctx.globalAlpha;
-            this.set.alpha(0.5)
+            this.set.alpha(0.2)
             this.ctx.fill();
             this.set.alpha(alpha)
         }
