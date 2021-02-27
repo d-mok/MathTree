@@ -15363,7 +15363,21 @@ class PenCls {
                 this.pen.set.textBaseline("top");
                 this.pen.write([offset, ymax], label);
                 this.pen.ctx.restore();
-            }
+            },
+            /**
+             * Draw both axis.
+             * @category axis
+             * @param xlabel - The x-axis label.
+             * @param ylabel - The y-axis label.
+             * @returns
+             * ```typescript
+             * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
+             * ```
+             */
+            xy(xlabel = "x", ylabel = "y") {
+                this.x(xlabel);
+                this.y(ylabel);
+            },
         };
         /**
          * The axis ticks.
@@ -15423,6 +15437,20 @@ class PenCls {
                     }
                     ;
                 }
+            },
+            /**
+             * Draw ticks on both axis.
+             * @category axisTick
+             * @param interval - The tick interval.
+             * @param mark - Whether to label number at ticks.
+             * @returns
+             * ```typescript
+             * pen.tick.xy(2) // draw ticks on both axis, at interval 2 units
+             * ```
+             */
+            xy(interval = 1, mark = true) {
+                this.x(interval, mark);
+                this.y(interval, mark);
             }
         };
         /**
@@ -15467,6 +15495,19 @@ class PenCls {
                     this.pen.graph.horizontal(y);
                 }
                 this.pen.ctx.restore();
+            },
+            /**
+             * Draw gridlines on both axis.
+             * @category axisGrid
+             * @param interval - The grid interval.
+             * @returns
+             * ```typescript
+             * pen.grid.xy(2) // draw gridlines on both axis, at interval 2 units
+             * ```
+             */
+            xy(interval = 1) {
+                this.x(interval);
+                this.y(interval);
             }
         };
         // create the canvas DOM element
