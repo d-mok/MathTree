@@ -15695,9 +15695,10 @@ class PenCls {
             this.ctx.lineTo(length - aLength, aWidth);
         }
         if (dash) {
+            this.ctx.save();
             this.set.dash(true);
             this.ctx.stroke();
-            this.set.dash();
+            this.ctx.restore();
         }
         else {
             this.ctx.stroke();
