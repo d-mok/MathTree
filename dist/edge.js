@@ -15630,48 +15630,9 @@ class PenCls {
             this.ctx.fill();
     }
     /**
-     * Draw a line between two points.
-     * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the point.
-     * @returns
-     * ```typescript
-     * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
-     * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
-     * ```
+     * @ignore
      */
-    line(startPoint, endPoint, label) {
-        this.ctx.save();
-        const [x0, y0] = this.frame.toPix(startPoint);
-        const [x1, y1] = this.frame.toPix(endPoint);
-        const dx = x1 - x0;
-        const dy = y1 - y0;
-        const angle = Math.atan2(dy, dx);
-        const length = Math.sqrt(dx * dx + dy * dy);
-        //
-        this.ctx.translate(x0, y0);
-        this.ctx.rotate(angle);
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, 0);
-        this.ctx.lineTo(length, 0);
-        this.ctx.stroke();
-        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-        this.ctx.restore();
-        if (label !== undefined)
-            this.label.line([startPoint, endPoint], label);
-    }
-    /**
-     * Draw an arrow between two points.
-     * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @returns
-     * ```typescript
-     * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
-     * ```
-     */
-    arrow(startPoint, endPoint) {
+    _line(startPoint, endPoint, { arrow = false, dash = false }) {
         this.ctx.save();
         const [x0, y0] = this.frame.toPix(startPoint);
         const [x1, y1] = this.frame.toPix(endPoint);
@@ -15687,14 +15648,107 @@ class PenCls {
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
         this.ctx.lineTo(length, 0);
-        //arrow
-        this.ctx.moveTo(length - aLength, -aWidth);
-        this.ctx.lineTo(length, 0);
-        this.ctx.lineTo(length - aLength, aWidth);
-        //
-        this.ctx.stroke();
+        if (arrow) {
+            this.ctx.moveTo(length - aLength, -aWidth);
+            this.ctx.lineTo(length, 0);
+            this.ctx.lineTo(length - aLength, aWidth);
+        }
+        if (dash) {
+            this.set.dash(true);
+            this.ctx.stroke();
+            this.set.dash();
+        }
+        else {
+            this.ctx.stroke();
+        }
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.restore();
+    }
+    /**
+     * Draw a line between two points.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the point.
+     * @returns
+     * ```typescript
+     * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
+     * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
+     * ```
+     */
+    line(startPoint, endPoint, label) {
+        this._line(startPoint, endPoint, {});
+        // this.ctx.save();
+        // const [x0, y0] = this.frame.toPix(startPoint);
+        // const [x1, y1] = this.frame.toPix(endPoint);
+        // const dx = x1 - x0;
+        // const dy = y1 - y0;
+        // const angle = Math.atan2(dy, dx);
+        // const length = Math.sqrt(dx * dx + dy * dy);
+        // //
+        // this.ctx.translate(x0, y0);
+        // this.ctx.rotate(angle);
+        // this.ctx.beginPath();
+        // this.ctx.moveTo(0, 0);
+        // this.ctx.lineTo(length, 0);
+        // this.ctx.stroke();
+        // this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        // this.ctx.restore();
+        if (label !== undefined)
+            this.label.line([startPoint, endPoint], label);
+    }
+    /**
+     * Draw a dash line between two points.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the point.
+     * @returns
+     * ```typescript
+     * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
+     * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
+     * ```
+     */
+    dash(startPoint, endPoint, label) {
+        this._line(startPoint, endPoint, { dash: true });
+        if (label !== undefined)
+            this.label.line([startPoint, endPoint], label);
+    }
+    /**
+     * Draw an arrow between two points.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @returns
+     * ```typescript
+     * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
+     * ```
+     */
+    arrow(startPoint, endPoint) {
+        this._line(startPoint, endPoint, { arrow: true });
+        // this.ctx.save();
+        // const [x0, y0] = this.frame.toPix(startPoint);
+        // const [x1, y1] = this.frame.toPix(endPoint);
+        // const dx = x1 - x0;
+        // const dy = y1 - y0;
+        // const angle = Math.atan2(dy, dx);
+        // const length = Math.sqrt(dx * dx + dy * dy);
+        // const aLength = this.ctx.lineWidth * 10;
+        // const aWidth = aLength / 2;
+        // //
+        // this.ctx.translate(x0, y0);
+        // this.ctx.rotate(angle);
+        // this.ctx.beginPath();
+        // this.ctx.moveTo(0, 0);
+        // this.ctx.lineTo(length, 0);
+        // //arrow
+        // this.ctx.moveTo(length - aLength, -aWidth);
+        // this.ctx.lineTo(length, 0);
+        // this.ctx.lineTo(length - aLength, aWidth);
+        // //
+        // this.ctx.stroke();
+        // this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        // this.ctx.restore();
     }
     /**
      * @ignore
