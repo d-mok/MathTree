@@ -8,7 +8,7 @@
     "jest": "jest ./src/Math",
     "jest_extend": "jest JestExtend",
     "jest_soil": "jest ./src/Soil -debug",
-    "typedoc": "typedoc --out typedoc ./src"
+    "typedoc": "typedoc --out typedoc ./src/Math ./src/Pen"
   },
   "repository": {
     "type": "git",
