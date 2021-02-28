@@ -94,3 +94,12 @@ test('Sci', () => {
     expect(Sci(100)).toBe('1 \\times 10^{ 2}');
 });
 
+
+
+test('LongDivision', () => {
+    expect(LongDivision([4, -5, 5, -4], [4, -1])).toBe('\\begin{array}{r}1x^2+-1x+1 \\\\4x+-1{\\overline{\\smash{\\big)}4x^3+-5x^2+5x+-4}}\\\\\\underline{4x^3+-1x^2}\\phantom{+5x+-4}\\\\-4x^2+5x\\phantom{+-4}\\\\\\underline{-4x^2+1x}\\phantom{+-4}\\\\4x+-4\\\\\\underline{4x+-1}\\\\-3\\\\\\end{array}');
+    expect(LongDivision([16, 12, -28, -11], [4, -3, -3])).toBe('\\begin{array}{r}4x+6 \\\\4x^2+-3x+-3{\\overline{\\smash{\\big)}16x^3+12x^2+-28x+-11}}\\\\\\underline{16x^3+-12x^2+-12x}\\phantom{+-11}\\\\24x^2+-16x+-11\\\\\\underline{24x^2+-18x+-18}\\\\2x+7\\\\\\end{array}');
+});
+
+
+
