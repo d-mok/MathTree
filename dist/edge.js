@@ -159,6 +159,10 @@ function PrintVariable(html, symbol, value) {
         }
     }
     if (T === 'number') {
+        let [p, q] = ToFrac(value);
+        html.replace(new RegExp("\\*\\%" + symbol, 'g'), Dfrac(p, q));
+    }
+    if (T === 'number') {
         value = Blur(value);
         if (IsDecimal(value))
             value = Round(value, 5);
@@ -8678,6 +8682,29 @@ function FracMultiply(...fractions) {
     return fractions.reduce((a, v) => _FracMultiply(a, v));
 }
 globalThis.FracMultiply = FracMultiply;
+/**
+ * @category Fraction
+ * @return convert num to fraction
+ * ```typescript
+ * ToFrac(0.5) // [1,2]
+ * ToFrac(-456/123) // [-152,41]
+ * ```
+ */
+function ToFrac(num, maxDenominator = 1000) {
+    Should(IsNum(num), 'input must be num');
+    let sign = Sign(num);
+    num = Abs(num);
+    let integer = Math.floor(num);
+    let decimal = num - integer;
+    for (let q = 1; q <= maxDenominator; q++) {
+        let p = decimal * q;
+        if (IsInteger(p))
+            return [(integer * q + Blur(p)) * sign, q];
+    }
+    Should(false, 'cannot find fraction form');
+    throw '';
+}
+globalThis.ToFrac = ToFrac;
 
 
 /***/ }),
@@ -17209,7 +17236,7 @@ class AutoPenCls {
      * ```typescript
      * let pen = new AutoPen()
      * pen.Boxplot({
-     *   summary: [41,45,48,52,55]
+     *   summary: [41,45,48,52,55],
      *   labels: [null,null,'x',null,'y'],
      *   size: 2,
      *   tick: 1,

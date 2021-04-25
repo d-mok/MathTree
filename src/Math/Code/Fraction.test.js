@@ -39,3 +39,22 @@ test('FracMultiply', () => {
     expect(() => FracMultiply([2, 0], [4, 3])).toThrow();
 });
 
+
+
+
+test('ToFrac', () => {
+    expect(ToFrac(0.5)).toEqual([1, 2]);
+    expect(ToFrac(-456 / 123)).toEqual([-152, 41]);
+
+    for (let i = 0; i <= 100; i++) {
+        for (let j = 1; j <= 100; j++) {
+            I = i * RndU();
+            let v = I / j;
+            let [p, q] = ToFrac(v);
+            expect(I * q - p * j === 0).toBe(true);
+        }
+    }
+});
+
+
+

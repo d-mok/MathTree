@@ -60,6 +60,7 @@ export function JoinToHTMLTag(items: string[], tag: string): string {
 export function PrintVariable(html: string, symbol: string, value: any): string {
     let T = typeof value
 
+    // print **x as sci notation
     if (T === 'number') {
         let v = Blur(Round(value, 3))
         if (v >= 10000 || v <= 0.01) {
@@ -70,6 +71,13 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
         }
     }
 
+    // print *%x as fraction
+    if (T === 'number') {
+        let [p, q] = ToFrac(value)
+        html.replace(new RegExp("\\*\\%" + symbol, 'g'), Dfrac(p, q));
+    }
+
+    // print *x as normal
     if (T === 'number') {
         value = Blur(value)
         if (IsDecimal(value)) value = Round(value, 5)
