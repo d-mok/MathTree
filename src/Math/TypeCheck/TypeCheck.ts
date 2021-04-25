@@ -18,8 +18,8 @@ globalThis.MathError = MathError
 
 
 function Should(condition: boolean, msg: string = "Should condition failed!") {
-    let caller = arguments.callee.caller.name
-    if (!condition) throw MathError('[Function ' + caller + '] ' + msg)
+    // let caller = arguments.callee.caller.name
+    if (!condition) throw MathError(msg)
 }
 globalThis.Should = Should
 
