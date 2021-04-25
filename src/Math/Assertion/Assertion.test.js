@@ -1,28 +1,6 @@
-
-
-function testAssertion(func, truthy, falsy, withTrash = true) {
-    const trash = ['2', '-2', '0.5', NaN, Infinity, undefined, null, true, false];
-    if (withTrash)
-        falsy = [...falsy, ...trash];
-
-    for (t of truthy) {
-        expect(func(t)).toBe(true);
-    }
-    expect(func(...truthy)).toBe(true);
-    for (f of falsy) {
-        expect(func(f)).toBe(false);
-    }
-    expect(func(...falsy)).toBe(false);
-    expect(func(falsy[0], ...truthy)).toBe(false);
-    expect(func(truthy[1], ...falsy)).toBe(false);
-}
-
-
-
-
 test('IsNum', () => {
     const T = [0, 4, -2, 1.23, -4.567, 9999999, 1 / 3];
-    const F = [];
+    const F = [NaN, Infinity, '2'];
     testAssertion(IsNum, T, F);
 });
 
@@ -93,6 +71,13 @@ test('IsPositive', () => {
 });
 
 
+test('IsNonNegative', () => {
+    const T = [0, 4, 1, 1.4, 123, 0.001, 0.1, 0.00000001];
+    const F = [-1, -4.5];
+    testAssertion(IsNonNegative, T, F);
+});
+
+
 test('IsPositiveInteger', () => {
     const T = [1, 2, 3, 4, 5, 99];
     const F = [0, -1, -2, -1.5, 1.5, 0.01];
@@ -127,42 +112,6 @@ test('IsNonZero', () => {
 });
 
 
-test('IsString', () => {
-    const T = ['', 'abc', '1', '1.23'];
-    const F = [1, -1, NaN, Infinity, undefined, null, true, false];
-    testAssertion(IsString, T, F, false);
-});
-
-
-
-test('IsBoolean', () => {
-    const T = [true, false];
-    const F = [0, 1, -1, '1', NaN, Infinity, undefined, null];
-    testAssertion(IsBoolean, T, F, false);
-});
-
-
-test('IsEmptyObject', () => {
-    const T = [{}];
-    const F = [1, '', { x: 1 }];
-    testAssertion(IsEmptyObject, T, F);
-});
-
-
-
-test('IsArray', () => {
-    const T = [[], [1, 2, 3]];
-    const F = [1, '', { x: 1 }];
-    testAssertion(IsArray, T, F);
-});
-
-
-test('IsArrayOfLength', () => {
-    const T = [[1, 2], ['2', '3']];
-    const F = [[], [1], [1, 2, 3], 1, '', { x: 1 }];
-    testAssertion(IsArrayOfLength(2), T, F);
-});
-
 
 
 test('IsBetween', () => {
@@ -180,55 +129,6 @@ test('IsAbsBetween', () => {
     testAssertion(IsAbsBetween(2, 5), T, F);
 });
 
-
-
-test('IsPoint', () => {
-    const T = [[2, 5]];
-    const F = [2, [1, 2, 3], [NaN, NaN], ['1', '2']];
-    testAssertion(IsPoint, T, F);
-});
-
-
-test('IsFraction', () => {
-    const T = [[2, 5]];
-    const F = [2, [1, 2, 3], [NaN, NaN], ['1', '2']];
-    testAssertion(IsFraction, T, F);
-});
-
-
-test('IsVector', () => {
-    const T = [[2, 5]];
-    const F = [2, [1, 2, 3], [NaN, NaN], ['1', '2']];
-    testAssertion(IsVector, T, F);
-});
-
-
-
-
-test('IsIneqSign', () => {
-    const T = ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'];
-    const F = [1, 2, '=>', 'abc'];
-    testAssertion(IsIneqSign, T, F);
-});
-
-
-
-test('IsDfrac', () => {
-    const T = ['\\dfrac{1}{2}', '\\dfrac{-1}{2}', '\\dfrac{3}{2}'];
-    const F = [1, 2, '-3', '0', '\\dfrac{1}{x}'];
-    testAssertion(IsDfrac, T, F);
-});
-
-
-
-
-
-
-test('IsConstraint', () => {
-    const T = [[1, 2, '>', 3], [1, 2, '\\ge', -3]];
-    const F = [[1, 2, 3], [1, 2, '=>', 3]];
-    testAssertion(IsConstraint, T, F);
-});
 
 
 

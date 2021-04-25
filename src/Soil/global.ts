@@ -115,13 +115,22 @@ export class Seed {
 
 
     runPopulate(): boolean {
+        let errors: Set<string> = new Set()
         while (this.counter <= 1000) {
             try {
                 this.pushDict()
-                if (this.dict.checked() && this.isValidated())
-                    return true; // done if validated
+                if (!this.dict.checked()) {
+                    console.log('[MATHSOIL POPULATE] dict check fail')
+                    continue
+                }
+                if (!this.isValidated()) {
+                    console.log('[MATHSOIL POPULATE] validation fail')
+                    continue
+                }
+                return true; // done if validated
             } catch (e) {
                 if (e.name === 'MathError') {
+                    errors.add(e.message)
                     if (SHOULD_LOG) console.log(e.stack)
                 } else {
                     throw e
@@ -129,7 +138,7 @@ export class Seed {
             }
         };
         // throw error after 1000 failed trials
-        throw Error("No population found after 1000 trials!")
+        throw Error("No population found after 1000 trials!\n" + [...errors].join('\n'))
     }
 
     runSection(): boolean {

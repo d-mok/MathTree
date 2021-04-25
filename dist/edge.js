@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13).Buffer))
 
 /***/ }),
 /* 1 */
@@ -7913,8 +7913,8 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(2);
-__webpack_require__(34);
-__webpack_require__(39);
+__webpack_require__(37);
+__webpack_require__(42);
 
 
 /***/ }),
@@ -7924,6 +7924,7 @@ __webpack_require__(39);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+// import './Code/Assertion.ts'
 __webpack_require__(3);
 __webpack_require__(4);
 __webpack_require__(5);
@@ -7934,8 +7935,9 @@ __webpack_require__(9);
 __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
-__webpack_require__(13);
+__webpack_require__(18);
 __webpack_require__(19);
+// import './Code/Relation.ts'
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -7950,420 +7952,13 @@ __webpack_require__(30);
 __webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
+__webpack_require__(34);
+__webpack_require__(35);
+__webpack_require__(36);
 
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * @category Assertion
- * @return check if input is a number.
- * ```typescript
- * IsNum(1.23) // true
- * IsNum(NaN) // false
- * IsNum(Infinity) // false
- * IsNum('2') // false
- * ```
- */
-function IsNum(...items) {
-    return items.every(x => typeof x === 'number' && isFinite(x));
-}
-globalThis.IsNum = IsNum;
-/**
- * @category Assertion
- * @return check if number is an integer.
- * ```typescript
- * IsInteger(5) // true
- * IsInteger(0.5) // false
- * ```
- */
-function IsInteger(...items) {
-    return Blurs(items).every(x => IsNum(x) && Number.isInteger(x));
-}
-globalThis.IsInteger = IsInteger;
-/**
- * @category Assertion
- * @return check if number is a decimal (non-integer).
- * ```typescript
- * IsDecimal(0.5) // true
- * IsDecimal(5) // false
- * ```
- */
-function IsDecimal(...items) {
-    return Blurs(items).every(x => IsNum(x) && !IsInteger(x));
-}
-globalThis.IsDecimal = IsDecimal;
-/**
- * @category Assertion
- * @return check if the number is an integer but not -1, 0 or 1.
- * ```typescript
- * IsCoeff(2) // true
- * IsCoeff(-1) // false
- * ```
- */
-function IsCoeff(...items) {
-    return Blurs(items).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
-}
-globalThis.IsCoeff = IsCoeff;
-/**
- * @category Assertion
- * @return check if the number is an odd integer.
- * ```typescript
- * IsOdd(5) // true
- * IsOdd(-5) // true
- * IsOdd(4) // false
- * ```
- */
-function IsOdd(...items) {
-    return Blurs(items).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
-}
-globalThis.IsOdd = IsOdd;
-/**
- * @category Assertion
- * @return check if the number is an even integer.
- * ```typescript
- * IsEven(4) // true
- * IsEven(-4) // true
- * IsEven(0) // true
- * IsEven(5) // false
- * ```
- */
-function IsEven(...items) {
-    return Blurs(items).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
-}
-globalThis.IsEven = IsEven;
-/**
- * @category Assertion
- * @return check if the number is in [0,1].
- * ```typescript
- * IsProbability(0) // true
- * IsProbability(0.5467) // true
- * IsProbability(1.1) // false
- * IsProbability(-0.1) // false
- * ```
- */
-function IsProbability(...items) {
-    return items.every(x => IsNum(x) && x >= 0 && x <= 1);
-}
-globalThis.IsProbability = IsProbability;
-/**
- * @category Assertion
- * @return check if the number is a square number.
- * ```typescript
- * IsSquareNum(9) // true
- * IsSquareNum(10) // false
- * IsSquareNum(-9) // false
- * ```
- */
-function IsSquareNum(...items) {
-    return Blurs(items).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
-}
-globalThis.IsSquareNum = IsSquareNum;
-/**
- * @category Assertion
- * @return check if the number is positive.
- * ```typescript
- * IsPositive(2) // true
- * IsPositive(0) // false
- * IsPositive(-2) // false
- * ```
- */
-function IsPositive(...items) {
-    return items.every(x => IsNum(x) && x > 0);
-}
-globalThis.IsPositive = IsPositive;
-/**
- * @category Assertion
- * @return check if the number is a positive integer.
- * ```typescript
- * IsPositiveInteger(2) // true
- * IsPositiveInteger(0) // false
- * IsPositiveInteger(-2) // false
- * IsPositiveInteger(1.5) // false
- * ```
- */
-function IsPositiveInteger(...items) {
-    return items.every(x => IsInteger(x) && x > 0);
-}
-globalThis.IsPositiveInteger = IsPositiveInteger;
-/**
- * @category Assertion
- * @return check if the number is a non-negative integer.
- * ```typescript
- * IsNonNegativeInteger(2) // true
- * IsNonNegativeInteger(0) // true
- * IsNonNegativeInteger(-2) // false
- * IsNonNegativeInteger(1.5) // false
- * ```
- */
-function IsNonNegativeInteger(...items) {
-    return items.every(x => IsInteger(x) && x >= 0);
-}
-globalThis.IsNonNegativeInteger = IsNonNegativeInteger;
-/**
- * @category Assertion
- * @return check if the number is negative.
- * ```typescript
- * IsNegative(-2) // true
- * IsNegative(0) // false
- * IsNegative(2) // false
- * ```
- */
-function IsNegative(...items) {
-    return items.every(x => IsNum(x) && x < 0);
-}
-globalThis.IsNegative = IsNegative;
-/**
- * @category Assertion
- * @return check if the number is non-zero.
- * ```typescript
- * IsNonZero(2) // true
- * IsNonZero(0) // false
- * IsNonZero(-2) // true
- * ```
- */
-function IsNonZero(...items) {
-    return items.every(x => IsNum(x) && x !== 0);
-}
-globalThis.IsNonZero = IsNonZero;
-/**
- * @category Assertion
- * @return check if the item is a string
- * ```typescript
- * IsString('abc') // true
- * IsString('') // true
- * IsString('1') // true
- * IsString(1) // false
- * ```
- */
-function IsString(...items) {
-    return items.every(x => typeof x === 'string');
-}
-globalThis.IsString = IsString;
-/**
- * @category Assertion
- * @return check if the item is a boolean
- * ```typescript
- * IsBoolean(true) // true
- * IsBoolean(false) // true
- * IsBoolean('') // false
- * IsBoolean('1') // false
- * IsBoolean(1) // false
- * ```
- */
-function IsBoolean(...items) {
-    return items.every(x => typeof x === 'boolean');
-}
-globalThis.IsBoolean = IsBoolean;
-/**
- * @category Assertion
- * @return check if the item is an empty object
- * ```typescript
- * IsEmptyObject({}) // true
- * IsEmptyObject(1) // false
- * IsEmptyObject('abc') // false
- * IsEmptyObject({x:1}) // false
- * ```
- */
-function IsEmptyObject(...items) {
-    return items.every(x => !!x &&
-        Object.keys(x).length === 0 &&
-        x.constructor === Object);
-}
-globalThis.IsEmptyObject = IsEmptyObject;
-/**
- * @category Assertion
- * @return check if the item is an array
- * ```typescript
- * IsArray([]) // true
- * IsArray([1,2]) // true
- * IsArray('abc') // false
- * IsArray({x:1}) // false
- * ```
- */
-function IsArray(...items) {
-    return items.every(x => Array.isArray(x));
-}
-globalThis.IsArray = IsArray;
-function IsArrayOfLength(length) {
-    Should(IsPositiveInteger(length), 'length must be positive integer');
-    const f = function (...items) {
-        return items.every(x => IsArray(x) && x.length === length);
-    };
-    return f;
-}
-globalThis.IsArrayOfLength = IsArrayOfLength;
-/**
- * @category Assertion
- * @return check if the num is between min and max inclusive.
- * ```typescript
- * IsBetween(2,5)(3) // true
- * IsBetween(2,5)(2) // true
- * IsBetween(2,5)(1) // false
- * ```
- */
-function IsBetween(min, max) {
-    Should(IsNum(min, max), 'min and max must be number');
-    const f = function (...items) {
-        return items.every(x => IsNum(x) && x >= min && x <= max);
-    };
-    return f;
-}
-globalThis.IsBetween = IsBetween;
-/**
- * @category Assertion
- * @return check if the abs of num is between min and max inclusive.
- * ```typescript
- * IsAbsBetween(2,5)(-3) // true
- * IsAbsBetween(2,5)(-2) // true
- * IsAbsBetween(2,5)(1) // false
- * ```
- */
-function IsAbsBetween(min, max) {
-    Should(IsNum(min, max), 'min and max must be number');
-    return function (...items) {
-        return items.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
-    };
-}
-globalThis.IsAbsBetween = IsAbsBetween;
-/**
- * @category Assertion
- * @return check if the item is a point [num,num]
- * ```typescript
- * IsPoint([2,5]) // true
- * IsPoint(2) // false
- * IsPoint([1,2,3]) // false
- * IsPoint([NaN,NaN]) // false
- * ```
- */
-function IsPoint(...items) {
-    return items.every(x => IsArrayOfLength(2)(x) && IsNum(x[0], x[1]));
-}
-globalThis.IsPoint = IsPoint;
-/**
- * @category Assertion
- * @return check if the item is a fraction [num,num]
- * ```typescript
- * IsFraction([2,5]) // true
- * IsFraction(2) // false
- * IsFraction([1,2,3]) // false
- * IsFraction([NaN,NaN]) // false
- * ```
- */
-function IsFraction(...items) {
-    return IsPoint(...items);
-}
-globalThis.IsFraction = IsFraction;
-/**
- * @category Assertion
- * @return check if the item is a vector [num,num]
- * ```typescript
- * IsVector([2,5]) // true
- * IsVector(2) // false
- * IsVector([1,2,3]) // false
- * IsVector([NaN,NaN]) // false
- * ```
- */
-function IsVector(...items) {
-    return IsPoint(...items);
-}
-globalThis.IsVector = IsVector;
-/**
- * @category Assertion
- * @return check if the item is a IneqSign string
- * ```typescript
- * IsIneqSign('>') // true
- * IsIneqSign('\\ge') // true
- * IsIneqSign(true) // false
- * IsIneqSign('=>') // false
- * ```
- */
-function IsIneqSign(...items) {
-    return items.every(x => [
-        '>', '<', '>=', '<=',
-        '\\gt', '\\lt', '\\ge', '\\le'
-    ].includes(x));
-}
-globalThis.IsIneqSign = IsIneqSign;
-/**
- * @category Assertion
- * @return check if the item is a Dfrac string
- * ```typescript
- * IsDfrac('\\dfrac{1}{2}') // true
- * IsDfrac('\\dfrac{x}{2}') // false
- * ```
- */
-function IsDfrac(...items) {
-    const d = String.raw `-?\d+\.?\d*`;
-    const f = String.raw `-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
-    return items.every(x => IsString(x) && x.match(new RegExp(f, 'g')));
-}
-globalThis.IsDfrac = IsDfrac;
-/**
- * @category Assertion
- * @return check if the item is a constraint (LP)
- * ```typescript
- * IsConstraint([1,2,'>',3]) // true
- * IsConstraint([1,2,3]) // false
- * IsConstraint([1,2,'=>',3]) // false
- * ```
- */
-function IsConstraint(...items) {
-    return items.every(x => IsArrayOfLength(4)(x) &&
-        IsNum(x[0], x[1], x[3]) &&
-        IsIneqSign(x[2]));
-}
-globalThis.IsConstraint = IsConstraint;
-/**
- * @category Assertion
- * @return Check if the points are chessboard around anchor.
- * ```typescript
- * IsAroundPoint([0,0],2)([2,2]) // true
- * IsAroundPoint([0,0],2)([3,0]) // false
- * ```
- */
-function IsAroundPoint(anchor, range) {
-    Should(IsPoint(anchor), 'anchor must be a point');
-    Should(IsPositive(range), 'range must be a positive number');
-    return function (...points) {
-        return points.every(p => ChessboardDistance(anchor, p) <= range);
-    };
-}
-globalThis.IsAroundPoint = IsAroundPoint;
-/**
- * @category Assertion
- * @return Check if the array of legnths can form a triangle
- * ```typescript
- * IsTriangle([1,1,1]) // true
- * IsTriangle([6,7,8]) // true
- * IsTriangle([1,2,3]) // false
- * IsTriangle([6,14,8]) // false
- * ```
- */
-function IsTriangle(...triangles) {
-    return triangles.every(t => {
-        if (!IsArrayOfLength(3)(t))
-            return false;
-        let [a, b, c] = t;
-        if (!IsPositive(a, b, c))
-            return false;
-        if (a + b <= c)
-            return false;
-        if (b + c <= a)
-            return false;
-        if (c + a <= b)
-            return false;
-        return true;
-    });
-}
-globalThis.IsTriangle = IsTriangle;
-
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8415,7 +8010,7 @@ globalThis.nPr = nPr;
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8483,7 +8078,7 @@ globalThis.RndComboConfig = RndComboConfig;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8576,7 +8171,7 @@ globalThis.FracMultiply = FracMultiply;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8739,7 +8334,7 @@ globalThis.arctan = arctan;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8975,7 +8570,7 @@ globalThis.IsReflex = IsReflex;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9060,7 +8655,7 @@ globalThis.PrintVariable = PrintVariable;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9335,7 +8930,7 @@ globalThis.OptimizeField = OptimizeField;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9725,7 +9320,7 @@ globalThis.Blurs = Blurs;
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9751,7 +9346,7 @@ globalThis.PhyConst = PhyConst;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10033,7 +9628,7 @@ globalThis.RndData = RndData;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10047,9 +9642,9 @@ globalThis.RndData = RndData;
 
 
 
-var base64 = __webpack_require__(16)
-var ieee754 = __webpack_require__(17)
-var isArray = __webpack_require__(18)
+var base64 = __webpack_require__(15)
+var ieee754 = __webpack_require__(16)
+var isArray = __webpack_require__(17)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -11827,10 +11422,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11856,7 +11451,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12015,7 +11610,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -12105,7 +11700,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -12116,7 +11711,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12311,7 +11906,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12421,136 +12016,7 @@ globalThis.RndLetters = RndLetters;
 
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * @category Relation
- * @return Check if the numbers are all distinct.
- * ```typescript
- * AreDistinct(1,2,3) // true
- * AreDistinct(1,2,2) // false
- * ```
- */
-function AreDistinct(...nums) {
-    Should(IsNum(...nums), 'input must be num');
-    return (new Set(nums)).size === nums.length;
-}
-globalThis.AreDistinct = AreDistinct;
-/**
- * @category Relation
- * @return Check if the absolute values of the numbers are all distinct.
- * ```typescript
- * AreAbsDistinct(1,2,3) // true
- * AreAbsDistinct(1,2,2) // false
- * AreAbsDistinct(1,2,-2) // false
- * ```
- */
-function AreAbsDistinct(...nums) {
-    Should(IsNum(...nums), 'input must be num');
-    return AreDistinct(...nums.map(x => Math.abs(x)));
-}
-globalThis.AreAbsDistinct = AreAbsDistinct;
-/**
- * @category Relation
- * @return Check if the numbers all have the same sign.
- * ```typescript
- * AreSameSign(1,2,3) // true
- * AreSameSign(1,2,-3) // false
- * AreSameSign(1,2,0) // false
- * ```
- */
-function AreSameSign(...nums) {
-    Should(IsNum(...nums), 'input must be num');
-    nums = nums.map(x => Math.sign(x));
-    nums = [...new Set(nums)];
-    return nums.length === 1;
-}
-globalThis.AreSameSign = AreSameSign;
-/**
- * @category Relation
- * @return Check if the numbers all pairwise coprime.
- * ```typescript
- * AreCoprime(2,3) // true
- * AreCoprime(2,6) // false
- * AreCoprime(1,2) // true
- * AreCoprime(2,3,6) // true
- * AreCoprime(1.5,3) // true
- * AreCoprime(0,3) // true
- * ```
- */
-function AreCoprime(...nums) {
-    Should(IsNum(...nums), 'input must be num');
-    nums = Blurs(nums);
-    if (!IsInteger(...nums))
-        return true;
-    if (!IsNonZero(...nums))
-        return true;
-    for (let i = 0; i < nums.length - 1; i++) {
-        for (let j = i + 1; j < nums.length; j++) {
-            if (HCF(nums[i], nums[j]) !== 1)
-                return false;
-        }
-    }
-    return true;
-}
-globalThis.AreCoprime = AreCoprime;
-/**
- * @category Relation
- * @return Check if the points are all distinct.
- * ```typescript
- * AreDistinctPoint([1,2],[3,4]) // true
- * AreDistinctPoint([1,2],[1,2]) // false
- * ```
- */
-function AreDistinctPoint(...points) {
-    Should(IsPoint(...points), 'input must be point');
-    let predicate = (p1, p2) => {
-        return p1[0] !== p2[0] || p1[1] !== p2[1];
-    };
-    return PairsEvery(predicate)(...points);
-}
-globalThis.AreDistinctPoint = AreDistinctPoint;
-/**
- * @category Relation
- * @return Check if the points are pairwise distant apart.
- * ```typescript
- * AreDistantPoint(2)([0,0],[3,0]) // true
- * AreDistantPoint(2)([0,0],[1,0]) // false
- * ```
- */
-function AreDistantPoint(distance) {
-    Should(IsPositive(distance), 'distance must be positive');
-    return function (...points) {
-        Should(IsPoint(...points), 'input must be point');
-        let predicate = (p1, p2) => Distance(p1, p2) >= distance;
-        return PairsEvery(predicate)(...points);
-    };
-}
-globalThis.AreDistantPoint = AreDistantPoint;
-/**
- * @category Relation
- * @return Check if slopes are at least oblique at minAngle
- * ```typescript
- * AreOblique(40)(0,1) // true
- * AreOblique(40)(0,0.5) // false
- * ```
- */
-function AreOblique(minAngle) {
-    Should(IsPositive(minAngle), 'minAngle must be positive');
-    return function (...slopes) {
-        Should(IsNum(...slopes), 'slopes must be nums');
-        let predicate = (m1, m2) => IntersectAngle(m1, m2) >= minAngle;
-        return PairsEvery(predicate)(...slopes);
-    };
-}
-globalThis.AreOblique = AreOblique;
-
-
-/***/ }),
-/* 22 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12704,7 +12170,7 @@ globalThis.LucasSequence = LucasSequence;
 
 
 /***/ }),
-/* 23 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12872,7 +12338,7 @@ globalThis.Mode = Mode;
 
 
 /***/ }),
-/* 24 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13173,7 +12639,7 @@ globalThis.LongDivision = LongDivision;
 
 
 /***/ }),
-/* 25 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13327,7 +12793,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 26 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13482,7 +12948,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 27 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13645,7 +13111,7 @@ globalThis.Dedupe = Dedupe;
 
 
 /***/ }),
-/* 28 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13808,7 +13274,7 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 29 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13822,7 +13288,7 @@ globalThis.VectorRotate = VectorRotate;
  * ```
  */
 function Crammer(a, b, c, p, q, r) {
-    Should(IsNum(a, b, c, p, q, r), "input must be num");
+    Should(IsNum(a, b, c, p, q, r), 'input must be number');
     const D = a * q - b * p;
     Should(IsNonZero(D), 'no unique solution');
     const x = (c * q - b * r) / D;
@@ -13857,7 +13323,7 @@ globalThis.xPolynomial = xPolynomial;
 
 
 /***/ }),
-/* 30 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13930,7 +13396,7 @@ globalThis.IntegralOnCircle = IntegralOnCircle;
 
 
 /***/ }),
-/* 31 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14015,7 +13481,7 @@ globalThis.QuadraticFromVertex = QuadraticFromVertex;
 
 
 /***/ }),
-/* 32 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14231,7 +13697,579 @@ class LinearEquation {
 
 
 /***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Assertion
+ * @return check if the item is an array
+ * ```typescript
+ * IsArray([]) // true
+ * IsArray([1,2]) // true
+ * IsArray('abc') // false
+ * IsArray({x:1}) // false
+ * ```
+ */
+function IsArray(...items) {
+    return items.every(x => Array.isArray(x));
+}
+globalThis.IsArray = IsArray;
+function IsArrayOfLength(length) {
+    Should(IsPositiveInteger(length), 'length must be positive integer');
+    const f = function (...items) {
+        return items.every(x => IsArray(x) && x.length === length);
+    };
+    return f;
+}
+globalThis.IsArrayOfLength = IsArrayOfLength;
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Assertion
+ * @return check is a finite number.
+ * ```typescript
+ * IsNum(1.23) // true
+ * IsNum(NaN) // false
+ * IsNum(Infinity) // false
+ * IsNum('2') // false
+ * ```
+ */
+function IsNum(...items) {
+    return items.every(x => Number.isFinite(x));
+}
+globalThis.IsNum = IsNum;
+/**
+ * @category Assertion
+ * @return check is an integer.
+ * ```typescript
+ * IsInteger(5) // true
+ * IsInteger(0.5) // false
+ * ```
+ */
+function IsInteger(...items) {
+    return Blurs(items).every(x => Number.isInteger(x));
+}
+globalThis.IsInteger = IsInteger;
+/**
+ * @category Assertion
+ * @return check is a decimal (non-integer).
+ * ```typescript
+ * IsDecimal(0.5) // true
+ * IsDecimal(5) // false
+ * ```
+ */
+function IsDecimal(...items) {
+    return Blurs(items).every(x => IsNum(x) && !IsInteger(x));
+}
+globalThis.IsDecimal = IsDecimal;
+/**
+ * @category Assertion
+ * @ignore
+ * @deprecated
+ * @return check is an integer but not -1, 0 or 1.
+ * ```typescript
+ * IsCoeff(2) // true
+ * IsCoeff(-1) // false
+ * ```
+ */
+function IsCoeff(...items) {
+    return Blurs(items).every(x => IsInteger(x) && ![-1, 0, 1].includes(x));
+}
+globalThis.IsCoeff = IsCoeff;
+/**
+ * @category Assertion
+ * @return check is an odd integer.
+ * ```typescript
+ * IsOdd(5) // true
+ * IsOdd(-5) // true
+ * IsOdd(4) // false
+ * ```
+ */
+function IsOdd(...items) {
+    return Blurs(items).every(x => IsInteger(x) && Math.abs(x) % 2 === 1);
+}
+globalThis.IsOdd = IsOdd;
+/**
+ * @category Assertion
+ * @return check is an even integer.
+ * ```typescript
+ * IsEven(4) // true
+ * IsEven(-4) // true
+ * IsEven(0) // true
+ * IsEven(5) // false
+ * ```
+ */
+function IsEven(...items) {
+    return Blurs(items).every(x => IsInteger(x) && Math.abs(x) % 2 === 0);
+}
+globalThis.IsEven = IsEven;
+/**
+ * @category Assertion
+ * @return check is in range [0,1].
+ * ```typescript
+ * IsProbability(0) // true
+ * IsProbability(0.5467) // true
+ * IsProbability(1.1) // false
+ * IsProbability(-0.1) // false
+ * ```
+ */
+function IsProbability(...items) {
+    return items.every(x => IsNum(x) && x >= 0 && x <= 1);
+}
+globalThis.IsProbability = IsProbability;
+/**
+ * @category Assertion
+ * @return check is a square number.
+ * ```typescript
+ * IsSquareNum(9) // true
+ * IsSquareNum(10) // false
+ * IsSquareNum(-9) // false
+ * ```
+ */
+function IsSquareNum(...items) {
+    return Blurs(items).every(x => IsInteger(x) && x >= 0 && IsInteger(Math.sqrt(x)));
+}
+globalThis.IsSquareNum = IsSquareNum;
+/**
+ * @category Assertion
+ * @return check is positive.
+ * ```typescript
+ * IsPositive(2) // true
+ * IsPositive(0) // false
+ * IsPositive(-2) // false
+ * ```
+ */
+function IsPositive(...items) {
+    return items.every(x => IsNum(x) && x > 0);
+}
+globalThis.IsPositive = IsPositive;
+/**
+ * @category Assertion
+ * @return check is non-negative.
+ * ```typescript
+ * IsNonNegative(2) // true
+ * IsNonNegative(0) // true
+ * IsNonNegative(-2) // false
+ * IsNonNegative(1.5) // true
+ * ```
+ */
+function IsNonNegative(...items) {
+    return items.every(x => IsNum(x) && x >= 0);
+}
+globalThis.IsNonNegative = IsNonNegative;
+/**
+ * @category Assertion
+ * @return check is a positive integer.
+ * ```typescript
+ * IsPositiveInteger(2) // true
+ * IsPositiveInteger(0) // false
+ * IsPositiveInteger(-2) // false
+ * IsPositiveInteger(1.5) // false
+ * ```
+ */
+function IsPositiveInteger(...items) {
+    return items.every(x => IsInteger(x) && x > 0);
+}
+globalThis.IsPositiveInteger = IsPositiveInteger;
+/**
+ * @category Assertion
+ * @return check is a non-negative integer.
+ * ```typescript
+ * IsNonNegativeInteger(2) // true
+ * IsNonNegativeInteger(0) // true
+ * IsNonNegativeInteger(-2) // false
+ * IsNonNegativeInteger(1.5) // false
+ * ```
+ */
+function IsNonNegativeInteger(...items) {
+    return items.every(x => IsInteger(x) && x >= 0);
+}
+globalThis.IsNonNegativeInteger = IsNonNegativeInteger;
+/**
+ * @category Assertion
+ * @return check is negative.
+ * ```typescript
+ * IsNegative(-2) // true
+ * IsNegative(0) // false
+ * IsNegative(2) // false
+ * ```
+ */
+function IsNegative(...items) {
+    return items.every(x => IsNum(x) && x < 0);
+}
+globalThis.IsNegative = IsNegative;
+/**
+ * @category Assertion
+ * @return check is non-zero finite number.
+ * ```typescript
+ * IsNonZero(2) // true
+ * IsNonZero(0) // false
+ * IsNonZero(-2) // true
+ * ```
+ */
+function IsNonZero(...items) {
+    return items.every(x => IsNum(x) && x !== 0);
+}
+globalThis.IsNonZero = IsNonZero;
+/**
+ * @category Assertion
+ * @return check is between min and max inclusive.
+ * ```typescript
+ * IsBetween(2,5)(3) // true
+ * IsBetween(2,5)(2) // true
+ * IsBetween(2,5)(1) // false
+ * ```
+ */
+function IsBetween(min, max) {
+    return (...items) => items.every(x => IsNum(x) && x >= min && x <= max);
+}
+globalThis.IsBetween = IsBetween;
+/**
+ * @category Assertion
+ * @return check if its abs is between min and max inclusive.
+ * ```typescript
+ * IsAbsBetween(2,5)(-3) // true
+ * IsAbsBetween(2,5)(-2) // true
+ * IsAbsBetween(2,5)(1) // false
+ * ```
+ */
+function IsAbsBetween(min, max) {
+    return (...items) => items.every(x => IsNum(x) && Abs(x) >= min && Abs(x) <= max);
+}
+globalThis.IsAbsBetween = IsAbsBetween;
+/**
+ * @category Assertion
+ * @return Check if the points are chessboard around anchor.
+ * ```typescript
+ * IsAroundPoint([0,0],2)([2,2]) // true
+ * IsAroundPoint([0,0],2)([3,0]) // false
+ * ```
+ */
+function IsAroundPoint(anchor, range) {
+    Should(IsPoint(anchor), 'anchor must be a point');
+    Should(IsPositive(range), 'range must be a positive number');
+    return function (...points) {
+        return points.every(p => ChessboardDistance(anchor, p) <= range);
+    };
+}
+globalThis.IsAroundPoint = IsAroundPoint;
+/**
+ * @category Assertion
+ * @return Check if the array of legnths can form a triangle
+ * ```typescript
+ * IsTriangle([1,1,1]) // true
+ * IsTriangle([6,7,8]) // true
+ * IsTriangle([1,2,3]) // false
+ * IsTriangle([6,14,8]) // false
+ * ```
+ */
+function IsTriangle(...triangles) {
+    return triangles.every(t => {
+        if (!IsArrayOfLength(3)(t))
+            return false;
+        let [a, b, c] = t;
+        if (!IsPositive(a, b, c))
+            return false;
+        if (a + b <= c)
+            return false;
+        if (b + c <= a)
+            return false;
+        if (c + a <= b)
+            return false;
+        return true;
+    });
+}
+globalThis.IsTriangle = IsTriangle;
+
+
+/***/ }),
 /* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Assertion
+ * @return check if the item is a string
+ * ```typescript
+ * IsString('abc') // true
+ * IsString('') // true
+ * IsString('1') // true
+ * IsString(1) // false
+ * ```
+ */
+function IsString(...items) {
+    return items.every(x => typeof x === 'string');
+}
+globalThis.IsString = IsString;
+/**
+ * @category Assertion
+ * @return check if the item is a boolean
+ * ```typescript
+ * IsBoolean(true) // true
+ * IsBoolean(false) // true
+ * IsBoolean('') // false
+ * IsBoolean('1') // false
+ * IsBoolean(1) // false
+ * ```
+ */
+function IsBoolean(...items) {
+    return items.every(x => typeof x === 'boolean');
+}
+globalThis.IsBoolean = IsBoolean;
+/**
+ * @category Assertion
+ * @return check if the item is an empty object
+ * ```typescript
+ * IsEmptyObject({}) // true
+ * IsEmptyObject(1) // false
+ * IsEmptyObject('abc') // false
+ * IsEmptyObject({x:1}) // false
+ * ```
+ */
+function IsEmptyObject(...items) {
+    return items.every(x => !!x &&
+        Object.keys(x).length === 0 &&
+        x.constructor === Object);
+}
+globalThis.IsEmptyObject = IsEmptyObject;
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Assertion
+ * @return check if the item is a point [num,num]
+ * ```typescript
+ * IsPoint([2,5]) // true
+ * IsPoint(2) // false
+ * IsPoint([1,2,3]) // false
+ * IsPoint([NaN,NaN]) // false
+ * ```
+ */
+function IsPoint(...items) {
+    return items.every(x => IsArrayOfLength(2)(x) && IsNum(x[0], x[1]));
+}
+globalThis.IsPoint = IsPoint;
+/**
+ * @category Assertion
+ * @return check if the item is a fraction [num,num]
+ * ```typescript
+ * IsFraction([2,5]) // true
+ * IsFraction(2) // false
+ * IsFraction([1,2,3]) // false
+ * IsFraction([NaN,NaN]) // false
+ * ```
+ */
+function IsFraction(...items) {
+    return IsPoint(...items);
+}
+globalThis.IsFraction = IsFraction;
+/**
+ * @category Assertion
+ * @return check if the item is a vector [num,num]
+ * ```typescript
+ * IsVector([2,5]) // true
+ * IsVector(2) // false
+ * IsVector([1,2,3]) // false
+ * IsVector([NaN,NaN]) // false
+ * ```
+ */
+function IsVector(...items) {
+    return IsPoint(...items);
+}
+globalThis.IsVector = IsVector;
+/**
+ * @category Assertion
+ * @return check if the item is a IneqSign string
+ * ```typescript
+ * IsIneqSign('>') // true
+ * IsIneqSign('\\ge') // true
+ * IsIneqSign(true) // false
+ * IsIneqSign('=>') // false
+ * ```
+ */
+function IsIneqSign(...items) {
+    return items.every(x => [
+        '>', '<', '>=', '<=',
+        '\\gt', '\\lt', '\\ge', '\\le'
+    ].includes(x));
+}
+globalThis.IsIneqSign = IsIneqSign;
+/**
+ * @category Assertion
+ * @return check if the item is a Dfrac string
+ * ```typescript
+ * IsDfrac('\\dfrac{1}{2}') // true
+ * IsDfrac('\\dfrac{x}{2}') // false
+ * ```
+ */
+function IsDfrac(...items) {
+    const d = String.raw `-?\d+\.?\d*`;
+    const f = String.raw `-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
+    return items.every(x => IsString(x) && x.match(new RegExp(f, 'g')));
+}
+globalThis.IsDfrac = IsDfrac;
+/**
+ * @category Assertion
+ * @return check if the item is a constraint (LP)
+ * ```typescript
+ * IsConstraint([1,2,'>',3]) // true
+ * IsConstraint([1,2,3]) // false
+ * IsConstraint([1,2,'=>',3]) // false
+ * ```
+ */
+function IsConstraint(...items) {
+    return items.every(x => IsArrayOfLength(4)(x) &&
+        IsNum(x[0], x[1], x[3]) &&
+        IsIneqSign(x[2]));
+}
+globalThis.IsConstraint = IsConstraint;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @category Relation
+ * @return Check if the numbers are all distinct.
+ * ```typescript
+ * AreDistinct(1,2,3) // true
+ * AreDistinct(1,2,2) // false
+ * ```
+ */
+function AreDistinct(...nums) {
+    Should(IsNum(...nums), 'input must be num');
+    return (new Set(nums)).size === nums.length;
+}
+globalThis.AreDistinct = AreDistinct;
+/**
+ * @category Relation
+ * @return Check if the absolute values of the numbers are all distinct.
+ * ```typescript
+ * AreAbsDistinct(1,2,3) // true
+ * AreAbsDistinct(1,2,2) // false
+ * AreAbsDistinct(1,2,-2) // false
+ * ```
+ */
+function AreAbsDistinct(...nums) {
+    Should(IsNum(...nums), 'input must be num');
+    return AreDistinct(...nums.map(x => Math.abs(x)));
+}
+globalThis.AreAbsDistinct = AreAbsDistinct;
+/**
+ * @category Relation
+ * @return Check if the numbers all have the same sign.
+ * ```typescript
+ * AreSameSign(1,2,3) // true
+ * AreSameSign(1,2,-3) // false
+ * AreSameSign(1,2,0) // false
+ * ```
+ */
+function AreSameSign(...nums) {
+    Should(IsNum(...nums), 'input must be num');
+    nums = nums.map(x => Math.sign(x));
+    nums = [...new Set(nums)];
+    return nums.length === 1;
+}
+globalThis.AreSameSign = AreSameSign;
+/**
+ * @category Relation
+ * @return Check if the numbers all pairwise coprime.
+ * ```typescript
+ * AreCoprime(2,3) // true
+ * AreCoprime(2,6) // false
+ * AreCoprime(1,2) // true
+ * AreCoprime(2,3,6) // true
+ * AreCoprime(1.5,3) // true
+ * AreCoprime(0,3) // true
+ * ```
+ */
+function AreCoprime(...nums) {
+    Should(IsNum(...nums), 'input must be num');
+    nums = Blurs(nums);
+    if (!IsInteger(...nums))
+        return true;
+    if (!IsNonZero(...nums))
+        return true;
+    for (let i = 0; i < nums.length - 1; i++) {
+        for (let j = i + 1; j < nums.length; j++) {
+            if (HCF(nums[i], nums[j]) !== 1)
+                return false;
+        }
+    }
+    return true;
+}
+globalThis.AreCoprime = AreCoprime;
+/**
+ * @category Relation
+ * @return Check if the points are all distinct.
+ * ```typescript
+ * AreDistinctPoint([1,2],[3,4]) // true
+ * AreDistinctPoint([1,2],[1,2]) // false
+ * ```
+ */
+function AreDistinctPoint(...points) {
+    Should(IsPoint(...points), 'input must be point');
+    let predicate = (p1, p2) => {
+        return p1[0] !== p2[0] || p1[1] !== p2[1];
+    };
+    return PairsEvery(predicate)(...points);
+}
+globalThis.AreDistinctPoint = AreDistinctPoint;
+/**
+ * @category Relation
+ * @return Check if the points are pairwise distant apart.
+ * ```typescript
+ * AreDistantPoint(2)([0,0],[3,0]) // true
+ * AreDistantPoint(2)([0,0],[1,0]) // false
+ * ```
+ */
+function AreDistantPoint(distance) {
+    Should(IsPositive(distance), 'distance must be positive');
+    return function (...points) {
+        Should(IsPoint(...points), 'input must be point');
+        let predicate = (p1, p2) => Distance(p1, p2) >= distance;
+        return PairsEvery(predicate)(...points);
+    };
+}
+globalThis.AreDistantPoint = AreDistantPoint;
+/**
+ * @category Relation
+ * @return Check if slopes are at least oblique at minAngle
+ * ```typescript
+ * AreOblique(40)(0,1) // true
+ * AreOblique(40)(0,0.5) // false
+ * ```
+ */
+function AreOblique(minAngle) {
+    Should(IsPositive(minAngle), 'minAngle must be positive');
+    return function (...slopes) {
+        Should(IsNum(...slopes), 'slopes must be nums');
+        let predicate = (m1, m2) => IntersectAngle(m1, m2) >= minAngle;
+        return PairsEvery(predicate)(...slopes);
+    };
+}
+globalThis.AreOblique = AreOblique;
+
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14249,27 +14287,28 @@ function MathError(message) {
 }
 globalThis.MathError = MathError;
 function Should(condition, msg = "Should condition failed!") {
+    let caller = arguments.callee.caller.name;
     if (!condition)
-        throw MathError(msg);
+        throw MathError('[Function ' + caller + '] ' + msg);
 }
 globalThis.Should = Should;
 
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(35);
-__webpack_require__(36);
-__webpack_require__(37);
 __webpack_require__(38);
+__webpack_require__(39);
+__webpack_require__(40);
+__webpack_require__(41);
 
 
 /***/ }),
-/* 35 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14367,7 +14406,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 36 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16043,7 +16082,7 @@ function trimCanvas(canvas) {
 
 
 /***/ }),
-/* 37 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17027,7 +17066,7 @@ globalThis.AutoPen = AutoPen;
 
 
 /***/ }),
-/* 38 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17051,13 +17090,13 @@ globalThis.Projector = Projector;
 
 
 /***/ }),
-/* 39 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(40);
+const global_1 = __webpack_require__(43);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -17092,19 +17131,19 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(41);
-const dress_1 = __webpack_require__(42);
-const shuffle_1 = __webpack_require__(43);
-const option_1 = __webpack_require__(44);
-__webpack_require__(45);
-const cls_1 = __webpack_require__(46);
+const section_1 = __webpack_require__(44);
+const dress_1 = __webpack_require__(45);
+const shuffle_1 = __webpack_require__(46);
+const option_1 = __webpack_require__(47);
+__webpack_require__(48);
+const cls_1 = __webpack_require__(49);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -17193,14 +17232,23 @@ class Seed {
         this.sol = dress_1.dress(this.sol);
     }
     runPopulate() {
+        let errors = new Set();
         while (this.counter <= 1000) {
             try {
                 this.pushDict();
-                if (this.dict.checked() && this.isValidated())
-                    return true; // done if validated
+                if (!this.dict.checked()) {
+                    console.log('[MATHSOIL POPULATE] dict check fail');
+                    continue;
+                }
+                if (!this.isValidated()) {
+                    console.log('[MATHSOIL POPULATE] validation fail');
+                    continue;
+                }
+                return true; // done if validated
             }
             catch (e) {
                 if (e.name === 'MathError') {
+                    errors.add(e.message);
                     if (SHOULD_LOG)
                         console.log(e.stack);
                 }
@@ -17211,7 +17259,7 @@ class Seed {
         }
         ;
         // throw error after 1000 failed trials
-        throw Error("No population found after 1000 trials!");
+        throw Error("No population found after 1000 trials!\n" + [...errors].join('\n'));
     }
     runSection() {
         this.cropSection();
@@ -17301,7 +17349,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17336,7 +17384,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17404,7 +17452,7 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17484,7 +17532,7 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17552,7 +17600,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17560,7 +17608,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

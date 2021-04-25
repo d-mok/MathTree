@@ -7,7 +7,7 @@
  * ```
  */
 function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number] {
-    Should(IsNum(a, b, c, p, q, r), "input must be num")
+    Should(IsNum(a, b, c, p, q, r), 'input must be number')
     const D = a * q - b * p
     Should(IsNonZero(D), 'no unique solution')
     const x = (c * q - b * r) / D;
