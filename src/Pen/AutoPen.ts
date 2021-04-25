@@ -1067,7 +1067,7 @@ class AutoPenCls {
         pen.ctx.restore()
 
         // pen.label.point([width / 2, -height * 0.1], xLabel, 270, 25)
-        pen.label.point([width / 2, 0], xLabel, 270, 50)
+        pen.label.point([width / 2, 0], xLabel, 270, 40)
 
         function grid(y: number) {
             pen.line([0, y], [width, y])

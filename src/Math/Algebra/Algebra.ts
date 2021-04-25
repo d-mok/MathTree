@@ -45,3 +45,33 @@ function xPolynomial(poly1: number[], poly2: number[]): number[] {
 }
 globalThis.xPolynomial = xPolynomial
 
+
+
+
+/**
+ * @category Algebra
+ * @return the points along the parametric curve
+ * ```typescript
+ * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * ```
+ */
+function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number, dots = 1000) {
+    const tracer = (t: number): Point => {
+        let result: number | Point
+        try {
+            result = func(t);
+        } catch {
+            return [NaN, NaN]
+        }
+        if (!Array.isArray(result)) result = [t, result];
+        return result
+    };
+    const step = (tEnd - tStart) / (dots - 1);
+    let points: Point[] = []
+    for (let t = tStart; t <= tEnd; t += step) {
+        points.push(tracer(t))
+    }
+    return points
+}
+globalThis.Trace = Trace

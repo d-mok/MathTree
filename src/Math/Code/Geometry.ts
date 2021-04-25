@@ -102,7 +102,7 @@ globalThis.RotatePoint = RotatePoint
  */
 function Inclination(A: Point, B: Point): number {
     Should(IsPoint(A, B), 'input must be point')
-    Should(AreDistinctPoint(A, B), 'A,B should be distinct')
+    Should(AreDistinctPoint(A, B), 'A, B should be distinct')
     return VectorArg(Vector(A, B))
 }
 globalThis.Inclination = Inclination
@@ -121,7 +121,7 @@ globalThis.Inclination = Inclination
  */
 function Normal(A: Point, B: Point): number {
     Should(IsPoint(A, B), 'input must be point')
-    Should(AreDistinctPoint(A, B), 'A,B should be distinct')
+    Should(AreDistinctPoint(A, B), 'A, B should be distinct')
     let R = RotatePoint(B, A, -90);
     return Inclination(A, R);
 }
@@ -170,9 +170,10 @@ globalThis.Intersection = Intersection
 
 /**
  * @category Geometry
- * @return Translate point P in the polar angle q by a distance.
+ * @return Translate point P in the polar angle q (or the direction of point q) by a distance.
  * ```typescript
  * TranslatePoint([1,2],90,3) // [1,5]
+ * TranslatePoint([1,2],[10, 12],3) // [3.006894195, 4.229882439]
  * ```
  */
 function TranslatePoint(P: Point, q: number | Point, distance: number): Point {

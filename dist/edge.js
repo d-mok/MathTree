@@ -8942,7 +8942,7 @@ globalThis.RotatePoint = RotatePoint;
  */
 function Inclination(A, B) {
     Should(IsPoint(A, B), 'input must be point');
-    Should(AreDistinctPoint(A, B), 'A,B should be distinct');
+    Should(AreDistinctPoint(A, B), 'A, B should be distinct');
     return VectorArg(Vector(A, B));
 }
 globalThis.Inclination = Inclination;
@@ -8956,7 +8956,7 @@ globalThis.Inclination = Inclination;
  */
 function Normal(A, B) {
     Should(IsPoint(A, B), 'input must be point');
-    Should(AreDistinctPoint(A, B), 'A,B should be distinct');
+    Should(AreDistinctPoint(A, B), 'A, B should be distinct');
     let R = RotatePoint(B, A, -90);
     return Inclination(A, R);
 }
@@ -8993,9 +8993,10 @@ function Intersection(A, B, C, D) {
 globalThis.Intersection = Intersection;
 /**
  * @category Geometry
- * @return Translate point P in the polar angle q by a distance.
+ * @return Translate point P in the polar angle q (or the direction of point q) by a distance.
  * ```typescript
  * TranslatePoint([1,2],90,3) // [1,5]
+ * TranslatePoint([1,2],[10, 12],3) // [3.006894195, 4.229882439]
  * ```
  */
 function TranslatePoint(P, q, distance) {
@@ -13876,6 +13877,35 @@ function xPolynomial(poly1, poly2) {
     return result;
 }
 globalThis.xPolynomial = xPolynomial;
+/**
+ * @category Algebra
+ * @return the points along the parametric curve
+ * ```typescript
+ * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * ```
+ */
+function Trace(func, tStart, tEnd, dots = 1000) {
+    const tracer = (t) => {
+        let result;
+        try {
+            result = func(t);
+        }
+        catch (_a) {
+            return [NaN, NaN];
+        }
+        if (!Array.isArray(result))
+            result = [t, result];
+        return result;
+    };
+    const step = (tEnd - tStart) / (dots - 1);
+    let points = [];
+    for (let t = tStart; t <= tEnd; t += step) {
+        points.push(tracer(t));
+    }
+    return points;
+}
+globalThis.Trace = Trace;
 
 
 /***/ }),
@@ -15580,31 +15610,34 @@ class PenCls {
      * ```
      */
     plot(func, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
-        const tracer = (t) => {
-            let result;
-            try {
-                result = func(t);
-            }
-            catch (_a) {
-                return [NaN, NaN];
-            }
-            if (!Array.isArray(result))
-                result = [t, result];
-            let [x, y] = this.frame.toPix(result);
-            if (Math.abs(x) > 10000)
-                x = Math.sign(x) * 10000;
-            if (Math.abs(y) > 10000)
-                y = Math.sign(y) * 10000;
-            return [x, y];
-        };
-        const [xStart, yStart] = tracer(tStart);
-        const step = (tEnd - tStart) / dots;
+        let points = Trace(func, tStart, tEnd, dots).map(x => this.frame.toPix(x));
+        // const tracer = (t: number) => {
+        //     let result: number | Point
+        //     try {
+        //         result = func(t);
+        //     } catch {
+        //         return [NaN, NaN]
+        //     }
+        //     if (!Array.isArray(result)) result = [t, result];
+        //     let [x, y] = this.frame.toPix(result);
+        //     if (Math.abs(x) > 10000) x = Math.sign(x) * 10000;
+        //     if (Math.abs(y) > 10000) y = Math.sign(y) * 10000;
+        //     return [x, y];
+        // };
+        // const [xStart, yStart] = tracer(tStart);
+        const [xStart, yStart] = points[0];
+        // const step = (tEnd - tStart) / dots;
         this.ctx.beginPath();
         this.ctx.moveTo(xStart, yStart);
         let active = true;
-        let outside = (x, y) => (x > this.frame.wPixel + 2000 || y > this.frame.hPixel + 2000 || x < -2000 || y < -2000);
-        for (let t = tStart; t <= tEnd; t += step) {
-            let [x, y] = tracer(t);
+        let outside = (x, y) => (x > this.frame.wPixel + 2000 ||
+            y > this.frame.hPixel + 2000 ||
+            x < -2000 ||
+            y < -2000 ||
+            Number.isNaN(x) ||
+            Number.isNaN(y));
+        for (let p of points) {
+            let [x, y] = p;
             if (outside(x, y)) {
                 if (active) {
                     this.ctx.stroke();
@@ -16955,7 +16988,7 @@ class AutoPenCls {
         pen.ctx.fillText(yLabel, 0, 0);
         pen.ctx.restore();
         // pen.label.point([width / 2, -height * 0.1], xLabel, 270, 25)
-        pen.label.point([width / 2, 0], xLabel, 270, 50);
+        pen.label.point([width / 2, 0], xLabel, 270, 40);
         function grid(y) {
             pen.line([0, y], [width, y]);
         }

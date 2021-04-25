@@ -23,3 +23,10 @@ test('xPolynomial', () => {
     expect(() => xPolynomial([0, 1], [1, 1])).toThrow();
 });
 
+
+
+test('Trace', () => {
+    expect(Trace(x => x ** 2, 0, 4, 5)).toEqual([[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]);
+    expect(Trace(t => [t, t ** 2], 0, 4, 5)).toEqual([[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]);
+});
+

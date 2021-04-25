@@ -544,29 +544,38 @@ class PenCls {
      * ```
      */
     plot(func: (t: number) => number | Point, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
-        const tracer = (t: number) => {
-            let result: number | Point
-            try {
-                result = func(t);
-            } catch {
-                return [NaN, NaN]
-            }
-            if (!Array.isArray(result)) result = [t, result];
-            let [x, y] = this.frame.toPix(result);
-            if (Math.abs(x) > 10000) x = Math.sign(x) * 10000;
-            if (Math.abs(y) > 10000) y = Math.sign(y) * 10000;
-            return [x, y];
-        };
-        const [xStart, yStart] = tracer(tStart);
-        const step = (tEnd - tStart) / dots;
+        let points: Point[] = Trace(func, tStart, tEnd, dots).map(x => this.frame.toPix(x))
+        // const tracer = (t: number) => {
+        //     let result: number | Point
+        //     try {
+        //         result = func(t);
+        //     } catch {
+        //         return [NaN, NaN]
+        //     }
+        //     if (!Array.isArray(result)) result = [t, result];
+        //     let [x, y] = this.frame.toPix(result);
+        //     if (Math.abs(x) > 10000) x = Math.sign(x) * 10000;
+        //     if (Math.abs(y) > 10000) y = Math.sign(y) * 10000;
+        //     return [x, y];
+        // };
+        // const [xStart, yStart] = tracer(tStart);
+        const [xStart, yStart] = points[0]
+        // const step = (tEnd - tStart) / dots;
         this.ctx.beginPath();
         this.ctx.moveTo(xStart, yStart);
 
         let active = true;
-        let outside = (x: number, y: number) => (x > this.frame.wPixel + 2000 || y > this.frame.hPixel + 2000 || x < -2000 || y < -2000);
+        let outside = (x: number, y: number) => (
+            x > this.frame.wPixel + 2000 ||
+            y > this.frame.hPixel + 2000 ||
+            x < -2000 ||
+            y < -2000 ||
+            Number.isNaN(x) ||
+            Number.isNaN(y)
+        );
 
-        for (let t = tStart; t <= tEnd; t += step) {
-            let [x, y] = tracer(t);
+        for (let p of points) {
+            let [x, y] = p
             if (outside(x, y)) {
                 if (active) {
                     this.ctx.stroke();
