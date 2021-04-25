@@ -121,6 +121,9 @@
 					<a href="pencls.html#decorate" class="tsd-kind-icon">decorate</a>
 				</li>
 				<li class=" tsd-kind-object-literal tsd-parent-kind-class">
+					<a href="pencls.html#fill" class="tsd-kind-icon">fill</a>
+				</li>
+				<li class=" tsd-kind-object-literal tsd-parent-kind-class">
 					<a href="pencls.html#graph" class="tsd-kind-icon">graph</a>
 				</li>
 				<li class=" tsd-kind-object-literal tsd-parent-kind-class">
@@ -205,6 +208,12 @@
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#exporttrim" class="tsd-kind-icon">export<wbr>Trim</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#restoreimg" class="tsd-kind-icon">restore<wbr>Img</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pencls.html#saveimg" class="tsd-kind-icon">save<wbr>Img</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section">
+						<h3>fill</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-object-literal tsd-parent-kind-class"><a href="pencls.html#fill" class="tsd-kind-icon">fill</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section">
@@ -1613,6 +1622,150 @@ pen.points({A,B},<span class="hljs-literal">false</span>) <span class="hljs-comm
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
+			<h2>fill</h2>
+			<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-class">
+				<a name="fill" class="tsd-anchor"></a>
+				<h3>fill</h3>
+				<div class="tsd-signature tsd-kind-icon">fill<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<aside class="tsd-sources">
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Fill a shape.</p>
+					</div>
+				</div>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="fill.circle-1" class="tsd-anchor"></a>
+					<h3>circle</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">circle<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Fill a circle (x-h)^2+(y-k)^2 = r^2.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>center: <a href="../globals.html#point" class="tsd-signature-type">Point</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The center coordinates [h,k].</p>
+									</div>
+								</li>
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The radius.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.fill.circle([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],<span class="hljs-number">3</span>) <span class="hljs-comment">// fill (x-1)^2+(y-2)^2 = 9.</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="fill.sector" class="tsd-anchor"></a>
+					<h3>sector</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">sector<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qStart<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qEnd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Fill a sector (x-h)^2+(y-k)^2 = r^2.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>center: <a href="../globals.html#point" class="tsd-signature-type">Point</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The center coordinates [h,k].</p>
+									</div>
+								</li>
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The radius.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qStart: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The starting polar angle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qEnd: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The ending polar angle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.fill.sector([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],<span class="hljs-number">3</span>,<span class="hljs-number">0</span>,<span class="hljs-number">90</span>) <span class="hljs-comment">// fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="fill.segment" class="tsd-anchor"></a>
+					<h3>segment</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">segment<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qStart<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qEnd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Fill a segment (x-h)^2+(y-k)^2 = r^2.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>center: <a href="../globals.html#point" class="tsd-signature-type">Point</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The center coordinates [h,k].</p>
+									</div>
+								</li>
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The radius.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qStart: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The starting polar angle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qEnd: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The ending polar angle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.fill.segment([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],<span class="hljs-number">3</span>,<span class="hljs-number">0</span>,<span class="hljs-number">90</span>) <span class="hljs-comment">// fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.</span></code></pre>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
 			<h2>graph</h2>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="plot" class="tsd-anchor"></a>
@@ -1692,7 +1845,54 @@ pen.plot(<span class="hljs-function"><span class="hljs-params">t</span>=&gt;</sp
 					</div>
 				</div>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
-					<a name="graph.circle-1" class="tsd-anchor"></a>
+					<a name="graph.arc" class="tsd-anchor"></a>
+					<h3>arc</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">arc<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qStart<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qEnd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw an arc of (x-h)^2+(y-k)^2 = r^2.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>center: <a href="../globals.html#point" class="tsd-signature-type">Point</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The center coordinates [h,k].</p>
+									</div>
+								</li>
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The radius.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qStart: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The starting polar angle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qEnd: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The ending polar angle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.graph.arc([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],<span class="hljs-number">3</span>,<span class="hljs-number">0</span>,<span class="hljs-number">180</span>) <span class="hljs-comment">// draw upper semi-circle (x-1)^2+(y-2)^2 = 9.</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="graph.circle-2" class="tsd-anchor"></a>
 					<h3>circle</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 						<li class="tsd-signature tsd-kind-icon">circle<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
@@ -1869,6 +2069,100 @@ pen.plot(<span class="hljs-function"><span class="hljs-params">t</span>=&gt;</sp
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 							<pre><code class="language-typescript">pen.graph.quadratic(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>) <span class="hljs-comment">// draw y=x^2+2x+3.</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="graph.sector-1" class="tsd-anchor"></a>
+					<h3>sector</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">sector<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qStart<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qEnd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw a sector of (x-h)^2+(y-k)^2 = r^2.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>center: <a href="../globals.html#point" class="tsd-signature-type">Point</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The center coordinates [h,k].</p>
+									</div>
+								</li>
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The radius.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qStart: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The starting polar angle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qEnd: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The ending polar angle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.graph.sector([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],<span class="hljs-number">3</span>,<span class="hljs-number">0</span>,<span class="hljs-number">90</span>) <span class="hljs-comment">// draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.</span></code></pre>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+					<a name="graph.segment-1" class="tsd-anchor"></a>
+					<h3>segment</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+						<li class="tsd-signature tsd-kind-icon">segment<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../globals.html#point" class="tsd-signature-type">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qStart<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, qEnd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw an segment of (x-h)^2+(y-k)^2 = r^2.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>center: <a href="../globals.html#point" class="tsd-signature-type">Point</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The center coordinates [h,k].</p>
+									</div>
+								</li>
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The radius.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qStart: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The starting polar angle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>qEnd: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The ending polar angle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<pre><code class="language-typescript">pen.graph.segment([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>],<span class="hljs-number">3</span>,<span class="hljs-number">0</span>,<span class="hljs-number">90</span>) <span class="hljs-comment">// draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.</span></code></pre>
 						</li>
 					</ul>
 				</section>

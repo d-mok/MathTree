@@ -1207,7 +1207,7 @@ class AutoPenCls {
      * ```typescript
      * let pen = new AutoPen()
      * pen.Boxplot({
-     *   summary: [41,45,48,52,55]
+     *   summary: [41,45,48,52,55],
      *   labels: [null,null,'x',null,'y'],
      *   size: 2,
      *   tick: 1,
