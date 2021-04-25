@@ -74,7 +74,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     // print *%x as fraction
     if (T === 'number') {
         let [p, q] = ToFrac(value)
-        html.replace(new RegExp("\\*\\%" + symbol, 'g'), Dfrac(p, q));
+        html = html.replace(new RegExp("\\*\\%" + symbol, 'g'), Dfrac(p, q));
     }
 
     // print *x as normal
@@ -85,5 +85,6 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     if (T === 'boolean') {
         value = Tick(value)
     }
-    return html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    return html
 }

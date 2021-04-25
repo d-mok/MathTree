@@ -148,6 +148,7 @@ exports.JoinToHTMLTag = JoinToHTMLTag;
 */
 function PrintVariable(html, symbol, value) {
     let T = typeof value;
+    // print **x as sci notation
     if (T === 'number') {
         let v = Blur(Round(value, 3));
         if (v >= 10000 || v <= 0.01) {
@@ -158,10 +159,12 @@ function PrintVariable(html, symbol, value) {
             html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
         }
     }
+    // print *%x as fraction
     if (T === 'number') {
         let [p, q] = ToFrac(value);
-        html.replace(new RegExp("\\*\\%" + symbol, 'g'), Dfrac(p, q));
+        html = html.replace(new RegExp("\\*\\%" + symbol, 'g'), Dfrac(p, q));
     }
+    // print *x as normal
     if (T === 'number') {
         value = Blur(value);
         if (IsDecimal(value))
