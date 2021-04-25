@@ -16944,7 +16944,7 @@ class AutoPenCls {
         let max = Max(...data);
         let maxUnit = Ceil(max / interval);
         let maxSubUnit = maxUnit * (interval / subInterval);
-        let height = (maxUnit + 1) * interval;
+        let height = (maxUnit) * interval * 1.05;
         pen.range.set([-width * 0.2, width], [-height, height]);
         pen.size.resolution(0.2, 1.4 / height);
         pen.line([0, 0], [width, 0]);
@@ -16954,7 +16954,7 @@ class AutoPenCls {
         pen.ctx.rotate(-Math.PI / 2);
         pen.ctx.fillText(yLabel, 0, 0);
         pen.ctx.restore();
-        pen.label.point([width / 2, -height * 0.1], xLabel, 270, 25);
+        // pen.label.point([width / 2, -height * 0.1], xLabel, 270, 25)
         pen.label.point([width / 2, 0], xLabel, 270, 30);
         function grid(y) {
             pen.line([0, y], [width, y]);
