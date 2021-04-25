@@ -162,7 +162,7 @@ function PrintVariable(html, symbol, value) {
     // print *%x as fraction
     if (T === 'number') {
         let [p, q] = ToFrac(value);
-        html = html.replace(new RegExp("\\*\\%" + symbol, 'g'), Dfrac(p, q));
+        html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
     }
     // print *x as normal
     if (T === 'number') {
@@ -173,7 +173,8 @@ function PrintVariable(html, symbol, value) {
     if (T === 'boolean') {
         value = Tick(value);
     }
-    return html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    return html;
 }
 exports.PrintVariable = PrintVariable;
 
