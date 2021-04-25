@@ -14287,9 +14287,10 @@ function MathError(message) {
 }
 globalThis.MathError = MathError;
 function Should(condition, msg = "Should condition failed!") {
-    // let caller = arguments.callee.caller.name
+    let caller = (new Error()).stack.split("\n")[2].trim().split(" ")[1];
+    caller = caller !== null && caller !== void 0 ? caller : 'Anonymous ';
     if (!condition)
-        throw MathError(msg);
+        throw MathError('[Function ' + caller + '] ' + msg);
 }
 globalThis.Should = Should;
 
