@@ -14963,6 +14963,59 @@ class PenCls {
                 this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360);
             },
             /**
+             * Draw an arc of (x-h)^2+(y-k)^2 = r^2.
+             * @category graph
+             * @param center - The center coordinates [h,k].
+             * @param radius - The radius.
+             * @param qStart - The starting polar angle.
+             * @param qEnd - The ending polar angle.
+             * @returns
+             * ```typescript
+             * pen.graph.arc([1,2],3,0,180) // draw upper semi-circle (x-1)^2+(y-2)^2 = 9.
+             * ```
+             */
+            arc(center, radius, qStart, qEnd) {
+                const [h, k] = center;
+                this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd);
+            },
+            /**
+             * Draw a sector of (x-h)^2+(y-k)^2 = r^2.
+             * @category graph
+             * @param center - The center coordinates [h,k].
+             * @param radius - The radius.
+             * @param qStart - The starting polar angle.
+             * @param qEnd - The ending polar angle.
+             * @returns
+             * ```typescript
+             * pen.graph.sector([1,2],3,0,90) // draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.
+             * ```
+             */
+            sector(center, radius, qStart, qEnd) {
+                this.arc(center, radius, qStart, qEnd);
+                let A = TranslatePoint(center, qStart, radius);
+                let B = TranslatePoint(center, qEnd, radius);
+                this.pen.line(A, center);
+                this.pen.line(B, center);
+            },
+            /**
+             * Draw an segment of (x-h)^2+(y-k)^2 = r^2.
+             * @category graph
+             * @param center - The center coordinates [h,k].
+             * @param radius - The radius.
+             * @param qStart - The starting polar angle.
+             * @param qEnd - The ending polar angle.
+             * @returns
+             * ```typescript
+             * pen.graph.segment([1,2],3,0,90) // draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
+             * ```
+             */
+            segment(center, radius, qStart, qEnd) {
+                this.arc(center, radius, qStart, qEnd);
+                let A = TranslatePoint(center, qStart, radius);
+                let B = TranslatePoint(center, qEnd, radius);
+                this.pen.line(A, B);
+            },
+            /**
              * Draw a quadratic graph y=ax^2+bx+c.
              * @category graph
              * @param a - The coeff of x^2.
@@ -15036,6 +15089,65 @@ class PenCls {
                 if (a !== 0 && b !== 0)
                     this.line(-a / b, -c / b);
             }
+        };
+        /**
+         * Fill a shape.
+         * @category fill
+         */
+        this.fill = {
+            /**
+             * @ignore
+             */
+            pen: this,
+            /**
+             * Fill a circle (x-h)^2+(y-k)^2 = r^2.
+             * @category fill
+             * @param center - The center coordinates [h,k].
+             * @param radius - The radius.
+             * @returns
+             * ```typescript
+             * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
+             * ```
+             */
+            circle(center, radius) {
+                const [h, k] = center;
+                let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360);
+                this.pen.polyfill(...points);
+            },
+            /**
+             * Fill a sector (x-h)^2+(y-k)^2 = r^2.
+             * @category fill
+             * @param center - The center coordinates [h,k].
+             * @param radius - The radius.
+             * @param qStart - The starting polar angle.
+             * @param qEnd - The ending polar angle.
+             * @returns
+             * ```typescript
+             * pen.fill.sector([1,2],3,0,90) // fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.
+             * ```
+             */
+            sector(center, radius, qStart, qEnd) {
+                const [h, k] = center;
+                let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd);
+                this.pen.polyfill(center, ...points);
+            },
+            /**
+             * Fill a segment (x-h)^2+(y-k)^2 = r^2.
+             * @category fill
+             * @param center - The center coordinates [h,k].
+             * @param radius - The radius.
+             * @param qStart - The starting polar angle.
+             * @param qEnd - The ending polar angle.
+             * @returns
+             * ```typescript
+             * pen.fill.segment([1,2],3,0,90) // fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
+             * ```
+             */
+            segment(center, radius, qStart, qEnd) {
+                const [h, k] = center;
+                let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd);
+                this.pen.polyfill(...points);
+            },
         };
         /**
          * Geometry Decorator.
