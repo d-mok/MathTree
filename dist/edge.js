@@ -17238,11 +17238,11 @@ class Seed {
             try {
                 this.pushDict();
                 if (!this.dict.checked()) {
-                    console.log('[MATHSOIL POPULATE] dict check fail');
+                    errors.add('[POPULATE] dict check fail');
                     continue;
                 }
                 if (!this.isValidated()) {
-                    console.log('[MATHSOIL POPULATE] validation fail');
+                    errors.add('[POPULATE] validation fail');
                     continue;
                 }
                 return true; // done if validated
@@ -17260,7 +17260,7 @@ class Seed {
         }
         ;
         // throw error after 1000 failed trials
-        throw Error("No population found after 1000 trials!\n" + [...errors].join('\n'));
+        throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'));
     }
     runSection() {
         this.cropSection();
