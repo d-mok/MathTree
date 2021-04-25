@@ -35,58 +35,58 @@ export class Dict {
         'W', 'X', 'Y', 'Z'
     ]
     constructor(
-        public a: any = undefined,
-        public b: any = undefined,
-        public c: any = undefined,
-        public d: any = undefined,
-        public e: any = undefined,
-        public f: any = undefined,
-        public g: any = undefined,
-        public h: any = undefined,
-        public i: any = undefined,
-        public j: any = undefined,
-        public k: any = undefined,
-        public l: any = undefined,
-        public m: any = undefined,
-        public n: any = undefined,
-        public o: any = undefined,
-        public p: any = undefined,
-        public q: any = undefined,
-        public r: any = undefined,
-        public s: any = undefined,
-        public t: any = undefined,
-        public u: any = undefined,
-        public v: any = undefined,
-        public w: any = undefined,
-        public x: any = undefined,
-        public y: any = undefined,
-        public z: any = undefined,
-        public A: any = undefined,
-        public B: any = undefined,
-        public C: any = undefined,
-        public D: any = undefined,
-        public E: any = undefined,
-        public F: any = undefined,
-        public G: any = undefined,
-        public H: any = undefined,
-        public I: any = undefined,
-        public J: any = undefined,
-        public K: any = undefined,
-        public L: any = undefined,
-        public M: any = undefined,
-        public N: any = undefined,
-        public O: any = undefined,
-        public P: any = undefined,
-        public Q: any = undefined,
-        public R: any = undefined,
-        public S: any = undefined,
-        public T: any = undefined,
-        public U: any = undefined,
-        public V: any = undefined,
-        public W: any = undefined,
-        public X: any = undefined,
-        public Y: any = undefined,
-        public Z: any = undefined,
+        public a: any = Symbol(),
+        public b: any = Symbol(),
+        public c: any = Symbol(),
+        public d: any = Symbol(),
+        public e: any = Symbol(),
+        public f: any = Symbol(),
+        public g: any = Symbol(),
+        public h: any = Symbol(),
+        public i: any = Symbol(),
+        public j: any = Symbol(),
+        public k: any = Symbol(),
+        public l: any = Symbol(),
+        public m: any = Symbol(),
+        public n: any = Symbol(),
+        public o: any = Symbol(),
+        public p: any = Symbol(),
+        public q: any = Symbol(),
+        public r: any = Symbol(),
+        public s: any = Symbol(),
+        public t: any = Symbol(),
+        public u: any = Symbol(),
+        public v: any = Symbol(),
+        public w: any = Symbol(),
+        public x: any = Symbol(),
+        public y: any = Symbol(),
+        public z: any = Symbol(),
+        public A: any = Symbol(),
+        public B: any = Symbol(),
+        public C: any = Symbol(),
+        public D: any = Symbol(),
+        public E: any = Symbol(),
+        public F: any = Symbol(),
+        public G: any = Symbol(),
+        public H: any = Symbol(),
+        public I: any = Symbol(),
+        public J: any = Symbol(),
+        public K: any = Symbol(),
+        public L: any = Symbol(),
+        public M: any = Symbol(),
+        public N: any = Symbol(),
+        public O: any = Symbol(),
+        public P: any = Symbol(),
+        public Q: any = Symbol(),
+        public R: any = Symbol(),
+        public S: any = Symbol(),
+        public T: any = Symbol(),
+        public U: any = Symbol(),
+        public V: any = Symbol(),
+        public W: any = Symbol(),
+        public X: any = Symbol(),
+        public Y: any = Symbol(),
+        public Z: any = Symbol(),
     ) { }
     update(other: Partial<Dict>) {
         for (let key of this.variables) {
@@ -98,10 +98,21 @@ export class Dict {
             this[key] = Blur(this[key])
         }
     }
+    checked() {
+        for (let key of this.variables) {
+            let v = this[key]
+            if (
+                v === undefined ||
+                // v === null ||
+                (typeof v === 'number' && !Number.isFinite(v))
+            ) return false
+        }
+        return true
+    }
     substitute(text: string): string {
         for (let key of this.variables) {
             let num = this[key]
-            if (typeof num === 'undefined') continue;
+            if (typeof num === 'symbol') continue;
             text = PrintVariable(text, key, num)
         }
         return text

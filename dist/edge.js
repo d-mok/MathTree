@@ -17196,7 +17196,7 @@ class Seed {
         while (this.counter <= 1000) {
             try {
                 this.pushDict();
-                if (this.isValidated())
+                if (this.dict.checked() && this.isValidated())
                     return true; // done if validated
             }
             catch (e) {
@@ -17588,7 +17588,7 @@ class Config {
 }
 exports.Config = Config;
 class Dict {
-    constructor(a = undefined, b = undefined, c = undefined, d = undefined, e = undefined, f = undefined, g = undefined, h = undefined, i = undefined, j = undefined, k = undefined, l = undefined, m = undefined, n = undefined, o = undefined, p = undefined, q = undefined, r = undefined, s = undefined, t = undefined, u = undefined, v = undefined, w = undefined, x = undefined, y = undefined, z = undefined, A = undefined, B = undefined, C = undefined, D = undefined, E = undefined, F = undefined, G = undefined, H = undefined, I = undefined, J = undefined, K = undefined, L = undefined, M = undefined, N = undefined, O = undefined, P = undefined, Q = undefined, R = undefined, S = undefined, T = undefined, U = undefined, V = undefined, W = undefined, X = undefined, Y = undefined, Z = undefined) {
+    constructor(a = Symbol(), b = Symbol(), c = Symbol(), d = Symbol(), e = Symbol(), f = Symbol(), g = Symbol(), h = Symbol(), i = Symbol(), j = Symbol(), k = Symbol(), l = Symbol(), m = Symbol(), n = Symbol(), o = Symbol(), p = Symbol(), q = Symbol(), r = Symbol(), s = Symbol(), t = Symbol(), u = Symbol(), v = Symbol(), w = Symbol(), x = Symbol(), y = Symbol(), z = Symbol(), A = Symbol(), B = Symbol(), C = Symbol(), D = Symbol(), E = Symbol(), F = Symbol(), G = Symbol(), H = Symbol(), I = Symbol(), J = Symbol(), K = Symbol(), L = Symbol(), M = Symbol(), N = Symbol(), O = Symbol(), P = Symbol(), Q = Symbol(), R = Symbol(), S = Symbol(), T = Symbol(), U = Symbol(), V = Symbol(), W = Symbol(), X = Symbol(), Y = Symbol(), Z = Symbol()) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -17663,10 +17663,20 @@ class Dict {
             this[key] = Blur(this[key]);
         }
     }
+    checked() {
+        for (let key of this.variables) {
+            let v = this[key];
+            if (v === undefined ||
+                // v === null ||
+                (typeof v === 'number' && !Number.isFinite(v)))
+                return false;
+        }
+        return true;
+    }
     substitute(text) {
         for (let key of this.variables) {
             let num = this[key];
-            if (typeof num === 'undefined')
+            if (typeof num === 'symbol')
                 continue;
             text = PrintVariable(text, key, num);
         }

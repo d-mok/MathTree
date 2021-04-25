@@ -118,7 +118,8 @@ export class Seed {
         while (this.counter <= 1000) {
             try {
                 this.pushDict()
-                if (this.isValidated()) return true; // done if validated
+                if (this.dict.checked() && this.isValidated())
+                    return true; // done if validated
             } catch (e) {
                 if (e.name === 'MathError') {
                     if (SHOULD_LOG) console.log(e.stack)
