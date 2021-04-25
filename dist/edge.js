@@ -17202,6 +17202,85 @@ class AutoPenCls {
         pen.autoCrop();
         this.pen = pen;
     }
+    /**
+     * A boxplot
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.Boxplot({
+     *   summary: [41,45,48,52,55]
+     *   labels: [null,null,'x',null,'y'],
+     *   size: 2,
+     *   tick: 1,
+     *   start: 38,
+     *   end: 60,
+     *   showDash: false,
+     *   showValue: false,
+     *   showTick: false
+     * })
+     * ```
+     */
+    Boxplot({ summary = [0, 0, 0, 0, 0], labels = [null, null, null, null, null], size = 2, tick = 1, start, end, showDash = false, showValue = false, showTick = false }) {
+        var _a, _b, _c, _d, _e;
+        const pen = new Pen();
+        let [Q0, Q1, Q2, Q3, Q4] = summary;
+        let height = showDash ? 1 : 0.5;
+        let thickness = 1;
+        let b = height;
+        let t = b + thickness;
+        let m = (b + t) / 2;
+        let L = [Q0, m];
+        let R = [Q4, m];
+        let A1 = [Q1, t];
+        let A2 = [Q1, b];
+        let Am = [Q1, m];
+        let B1 = [Q2, t];
+        let B2 = [Q2, b];
+        let C1 = [Q3, t];
+        let C2 = [Q3, b];
+        let Cm = [Q3, m];
+        let L_ = [Q0, 0];
+        let R_ = [Q4, 0];
+        let A_ = [Q1, 0];
+        let B_ = [Q2, 0];
+        let C_ = [Q3, 0];
+        if (start === undefined)
+            start = Q0 - (Q4 - Q0) * 0.2;
+        if (end === undefined)
+            end = Q4 + (Q4 - Q0) * 0.2;
+        pen.range.set([start, end], [-(t + 1), t + 1]);
+        pen.size.set(size, 1);
+        if (showTick) {
+            pen.tick.x(tick);
+        }
+        pen.axis.x('');
+        pen.polygon(A1, A2, C2, C1);
+        pen.line(B1, B2);
+        pen.line(L, Am);
+        pen.line(R, Cm);
+        if (showDash) {
+            pen.dash(L, L_);
+            pen.dash(A2, A_);
+            pen.dash(B2, B_);
+            pen.dash(C2, C_);
+            pen.dash(R, R_);
+        }
+        if (showValue) {
+            pen.cutterH(L_);
+            pen.label.point(L_, (_a = labels[0]) !== null && _a !== void 0 ? _a : String(Q0), 270);
+            pen.cutterH(A_);
+            pen.label.point(A_, (_b = labels[1]) !== null && _b !== void 0 ? _b : String(Q1), 270);
+            pen.cutterH(B_);
+            pen.label.point(B_, (_c = labels[2]) !== null && _c !== void 0 ? _c : String(Q2), 270);
+            pen.cutterH(C_);
+            pen.label.point(C_, (_d = labels[3]) !== null && _d !== void 0 ? _d : String(Q3), 270);
+            pen.cutterH(R_);
+            pen.label.point(R_, (_e = labels[4]) !== null && _e !== void 0 ? _e : String(Q4), 270);
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
 }
 var AutoPen = AutoPenCls;
 globalThis.AutoPen = AutoPen;
@@ -17215,7 +17294,7 @@ globalThis.AutoPen = AutoPen;
 
 /**
 * @category 3DPen
-* @return projection of 3D point to 2D plane
+* @return projector function from 3D point to 2D plane
 * ```typescript
 * const pj = Projector(60,0.5) // create a 3D projector function
 * pj(1,1,0) // [1.25, 0.433012701892]

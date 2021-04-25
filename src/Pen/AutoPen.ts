@@ -1200,6 +1200,123 @@ class AutoPenCls {
 
 
 
+    /**
+     * A boxplot
+     * @category tool
+     * @returns
+     * ```typescript
+     * let pen = new AutoPen()
+     * pen.Boxplot({
+     *   summary: [41,45,48,52,55]
+     *   labels: [null,null,'x',null,'y'],
+     *   size: 2,
+     *   tick: 1,
+     *   start: 38,
+     *   end: 60,
+     *   showDash: false,
+     *   showValue: false,
+     *   showTick: false
+     * })
+     * ```
+     */
+    Boxplot({
+        summary = [0, 0, 0, 0, 0],
+        labels = [null, null, null, null, null],
+        size = 2,
+        tick = 1,
+        start,
+        end,
+        showDash = false,
+        showValue = false,
+        showTick = false
+    }: {
+        summary: number[],
+        labels: (string | null)[],
+        size: number,
+        tick: number,
+        start?: number,
+        end?: number,
+        showDash: boolean,
+        showValue: boolean,
+        showTick: boolean,
+    }) {
+        const pen = new Pen();
+        let [Q0, Q1, Q2, Q3, Q4] = summary
+
+        let height = showDash ? 1 : 0.5
+        let thickness = 1
+
+        let b = height
+        let t = b + thickness
+        let m = (b + t) / 2
+
+        let L: Point = [Q0, m]
+        let R: Point = [Q4, m]
+        let A1: Point = [Q1, t]
+        let A2: Point = [Q1, b]
+        let Am: Point = [Q1, m]
+
+        let B1: Point = [Q2, t]
+        let B2: Point = [Q2, b]
+        let C1: Point = [Q3, t]
+        let C2: Point = [Q3, b]
+        let Cm: Point = [Q3, m]
+
+        let L_: Point = [Q0, 0]
+        let R_: Point = [Q4, 0]
+        let A_: Point = [Q1, 0]
+        let B_: Point = [Q2, 0]
+        let C_: Point = [Q3, 0]
+
+
+        if (start === undefined) start = Q0 - (Q4 - Q0) * 0.2
+        if (end === undefined) end = Q4 + (Q4 - Q0) * 0.2
+
+        pen.range.set([start, end], [-(t + 1), t + 1]);
+        pen.size.set(size, 1)
+
+        if (showTick) {
+            pen.tick.x(tick);
+        }
+
+        pen.axis.x('');
+
+        pen.polygon(A1, A2, C2, C1)
+        pen.line(B1, B2)
+        pen.line(L, Am)
+        pen.line(R, Cm)
+
+        if (showDash) {
+            pen.dash(L, L_)
+            pen.dash(A2, A_)
+            pen.dash(B2, B_)
+            pen.dash(C2, C_)
+            pen.dash(R, R_)
+        }
+
+        if (showValue) {
+            pen.cutterH(L_)
+            pen.label.point(L_, labels[0] ?? String(Q0), 270)
+            pen.cutterH(A_)
+            pen.label.point(A_, labels[1] ?? String(Q1), 270)
+            pen.cutterH(B_)
+            pen.label.point(B_, labels[2] ?? String(Q2), 270)
+            pen.cutterH(C_)
+            pen.label.point(C_, labels[3] ?? String(Q3), 270)
+            pen.cutterH(R_)
+            pen.label.point(R_, labels[4] ?? String(Q4), 270)
+        }
+
+        pen.autoCrop();
+        this.pen = pen;
+    }
+
+
+
+
+
+
+
 
 
 }
