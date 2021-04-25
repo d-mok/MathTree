@@ -185,3 +185,20 @@ function Mode(...nums: number[]): number {
     return s.find(x => Frequency(x)(...nums) === maxCount)!
 }
 globalThis.Mode = Mode
+
+
+/**
+ * @category Stat
+ * @return SD of nums
+ * ```typescript
+ * StdDev(1,2,3,2,2,3,4) \\ 0.903507902
+ * StdDev(1,1,2,2,3) \\ 0.748331477
+ * ```
+ */
+function StdDev(...nums: number[]): number {
+    let m = Mean(...nums)
+    nums = nums.map(x => (x - m) ** 2)
+    let a = Mean(...nums)
+    return a ** 0.5
+}
+globalThis.StdDev = StdDev

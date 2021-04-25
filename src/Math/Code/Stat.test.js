@@ -106,3 +106,9 @@ test('Mode', () => {
     expect(Mode(1, 1, 2, 2, 3)).toBeNaN();
 });
 
+
+test('StdDev', () => {
+    expect(StdDev(1, 2, 3, 2, 2, 3, 4)).toBeCloseTo(0.903507902);
+    expect(StdDev(1, 1, 2, 2, 3)).toBeCloseTo(0.748331477);
+});
+

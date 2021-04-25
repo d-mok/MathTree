@@ -8705,7 +8705,7 @@ function ToFrac(num, maxDenominator = 1000) {
         if (IsInteger(p))
             return [(integer * q + Blur(p)) * sign, q];
     }
-    Should(false, 'cannot find fraction form');
+    Should(false, 'cannot find fraction form: ' + num);
     throw '';
 }
 globalThis.ToFrac = ToFrac;
@@ -12921,6 +12921,21 @@ function Mode(...nums) {
     return s.find(x => Frequency(x)(...nums) === maxCount);
 }
 globalThis.Mode = Mode;
+/**
+ * @category Stat
+ * @return SD of nums
+ * ```typescript
+ * StdDev(1,2,3,2,2,3,4) \\ 0.903507902
+ * StdDev(1,1,2,2,3) \\ 0.748331477
+ * ```
+ */
+function StdDev(...nums) {
+    let m = Mean(...nums);
+    nums = nums.map(x => Math.pow((x - m), 2));
+    let a = Mean(...nums);
+    return Math.pow(a, 0.5);
+}
+globalThis.StdDev = StdDev;
 
 
 /***/ }),

@@ -113,7 +113,7 @@ function ToFrac(num: number, maxDenominator = 1000): Fraction {
         let p = decimal * q
         if (IsInteger(p)) return [(integer * q + Blur(p)) * sign, q]
     }
-    Should(false, 'cannot find fraction form')
+    Should(false, 'cannot find fraction form: ' + num)
     throw ''
 }
 globalThis.ToFrac = ToFrac
