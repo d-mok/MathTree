@@ -73,8 +73,10 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
 
     // print *%x as fraction
     if (T === 'number') {
-        let [p, q] = ToFrac(value)
-        html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
+        if (html.search("\\*\\/" + symbol) > -1) {
+            let [p, q] = ToFrac(value)
+            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
+        }
     }
 
     // print *x as normal
