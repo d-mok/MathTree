@@ -219,7 +219,7 @@ globalThis.IntersectAngle = IntersectAngle
 function Angle(A: Point, O: Point, B: Point): number {
     Should(IsPoint(A, O, B), 'input must be point')
     Should(AreDistinctPoint(A, O), 'A, O should be distinct')
-    Should(AreDistinctPoint(B, O), 'A, O should be distinct')
+    Should(AreDistinctPoint(B, O), 'B, O should be distinct')
     let anglePolar = AnglePolar(A, O, B)
     return IsReflex(A, O, B) ? 360 - anglePolar : anglePolar
 }
@@ -240,7 +240,7 @@ globalThis.Angle = Angle
 function AnglePolar(A: Point, O: Point, B: Point): number {
     Should(IsPoint(A, O, B), 'input must be point')
     Should(AreDistinctPoint(A, O), 'A, O should be distinct')
-    Should(AreDistinctPoint(B, O), 'A, O should be distinct')
+    Should(AreDistinctPoint(B, O), 'B, O should be distinct')
     let a = VectorArg(Vector(O, A))
     let b = VectorArg(Vector(O, B))
     return a <= b ? b - a : 360 + b - a

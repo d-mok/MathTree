@@ -12,7 +12,8 @@
  * ```
  */
 function HCF(...nums: number[]): number {
-    Should(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer')
+    Should(IsInteger(...nums), 'input must be integer')
+    Should(IsNonZero(...nums), 'input must be non-zero')
     nums = Blurs(nums)
     nums = nums.map(x => Abs(x))
     function _HCF(n1: number, n2: number): number {
@@ -41,7 +42,8 @@ globalThis.HCF = HCF
  * ```
  */
 function LCM(...nums: number[]): number {
-    Should(IsInteger(...nums) && IsNonZero(...nums), 'input must be non-zero integer')
+    Should(IsInteger(...nums), 'input must be integer')
+    Should(IsNonZero(...nums), 'input must be non-zero')
     nums = Blurs(nums)
     function _LCM(n1: number, n2: number) {
         n1 = Abs(n1);

@@ -2,7 +2,7 @@
 
 /**
  * @category Linear
- * @return [x-int, y-int,slope] of ax+by+c=0
+ * @return [x-int,y-int,slope] of ax+by+c=0
  * ```typescript
  * LinearFeature(2,4,6) // [-3,-1.5,-0.5]
  * LinearFeature(0,4,6) // throw
@@ -11,7 +11,10 @@
 function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number] {
     Should(IsNum(a, b, c), "input must be num")
     Should(IsNonZero(a, b), 'x and y term should be non-zero')
-    return [-c / a, -c / b, -a / b]
+    let x = -c / a
+    let y = -c / b
+    let m = -a / b
+    return [x, y, m]
 }
 globalThis.LinearFeature = LinearFeature
 
@@ -24,9 +27,12 @@ globalThis.LinearFeature = LinearFeature
  * LineFromLinear(0,4,6) // [0,-1.5]
  * ```
  */
-function LineFromLinear(a: number, b: number, c: number): [number, number] {
+function LineFromLinear(a: number, b: number, c: number): Line {
+    Should(IsNum(a, b, c), "input must be num")
     Should(IsNonZero(b), 'b should be non-zero')
-    return [-a / b, -c / b]
+    let m = -a / b
+    let y = -c / b
+    return [m, y]
 }
 globalThis.LineFromLinear = LineFromLinear
 
@@ -41,13 +47,9 @@ globalThis.LineFromLinear = LineFromLinear
  * ```
  */
 function LinearFromIntercepts(xInt: number, yInt: number): Linear {
-    let L = new LinearEquation()
-    L.byIntercepts(xInt, yInt)
-    return L.linear
+    return (new LinearEquation()).byIntercepts(xInt, yInt).linear()
 }
 globalThis.LinearFromIntercepts = LinearFromIntercepts
-
-
 
 
 
@@ -60,9 +62,7 @@ globalThis.LinearFromIntercepts = LinearFromIntercepts
  * ```
  */
 function LinearFromTwoPoints(point1: Point, point2: Point): Linear {
-    let L = new LinearEquation()
-    L.byTwoPoints(point1, point2)
-    return L.linear
+    return (new LinearEquation()).byTwoPoints(point1, point2).linear()
 }
 globalThis.LinearFromTwoPoints = LinearFromTwoPoints
 
@@ -77,9 +77,7 @@ globalThis.LinearFromTwoPoints = LinearFromTwoPoints
  * ```
  */
 function LinearFromPointSlope(point: Point, slope: number): Linear {
-    let L = new LinearEquation()
-    L.byPointSlope(point, slope)
-    return L.linear
+    return (new LinearEquation()).byPointSlope(point, slope).linear()
 }
 globalThis.LinearFromPointSlope = LinearFromPointSlope
 
@@ -94,13 +92,9 @@ globalThis.LinearFromPointSlope = LinearFromPointSlope
  * ```
  */
 function LinearFromBisector(A: Point, B: Point): Linear {
-    let L = new LinearEquation()
-    L.byBisector(A, B)
-    return L.linear
+    return (new LinearEquation()).byBisector(A, B).linear()
 }
 globalThis.LinearFromBisector = LinearFromBisector
-
-
 
 
 
@@ -112,10 +106,8 @@ globalThis.LinearFromBisector = LinearFromBisector
  * LineFromIntercepts(0,2) // throw
  * ```
  */
-function LineFromIntercepts(xInt: number, yInt: number): [number, number] {
-    let L = new LinearEquation()
-    L.byIntercepts(xInt, yInt)
-    return LineFromLinear(...L.linear)
+function LineFromIntercepts(xInt: number, yInt: number): Line {
+    return (new LinearEquation()).byIntercepts(xInt, yInt).line()
 }
 globalThis.LineFromIntercepts = LineFromIntercepts
 
@@ -131,10 +123,8 @@ globalThis.LineFromIntercepts = LineFromIntercepts
  * LineFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-function LineFromTwoPoints(point1: Point, point2: Point): [number, number] {
-    let L = new LinearEquation()
-    L.byTwoPoints(point1, point2)
-    return LineFromLinear(...L.linear)
+function LineFromTwoPoints(point1: Point, point2: Point): Line {
+    return (new LinearEquation()).byTwoPoints(point1, point2).line()
 }
 globalThis.LineFromTwoPoints = LineFromTwoPoints
 
@@ -148,10 +138,8 @@ globalThis.LineFromTwoPoints = LineFromTwoPoints
  * LineFromPointSlope([1,2],0) // [0,2]
  * ```
  */
-function LineFromPointSlope(point: Point, slope: number): [number, number] {
-    let L = new LinearEquation()
-    L.byPointSlope(point, slope)
-    return LineFromLinear(...L.linear)
+function LineFromPointSlope(point: Point, slope: number): Line {
+    return (new LinearEquation()).byPointSlope(point, slope).line()
 }
 globalThis.LineFromPointSlope = LineFromPointSlope
 
@@ -166,10 +154,8 @@ globalThis.LineFromPointSlope = LineFromPointSlope
  * LineFromBisector([1,2],[1,4]) // [0,3]
  * ```
  */
-function LineFromBisector(A: Point, B: Point): [number, number] {
-    let L = new LinearEquation()
-    L.byBisector(A, B)
-    return LineFromLinear(...L.linear)
+function LineFromBisector(A: Point, B: Point): Line {
+    return (new LinearEquation()).byBisector(A, B).line()
 }
 globalThis.LineFromBisector = LineFromBisector
 
@@ -182,10 +168,10 @@ globalThis.LineFromBisector = LineFromBisector
  * @ignore
  */
 class LinearEquation {
-    public linear: Linear = [NaN, NaN, NaN]
-    public slope: number = NaN
-    public xInt: number = NaN
-    public yInt: number = NaN
+    private _linear: Linear = [NaN, NaN, NaN]
+    private _slope: number = NaN
+    private _xInt: number = NaN
+    private _yInt: number = NaN
 
     // define
     byTwoPoints(p1: Point, p2: Point) {
@@ -204,46 +190,61 @@ class LinearEquation {
             [a, b, c] = IntegerRatio(a, b, c)
         } catch {
         }
-        this.linear = [a, b, c]
+        this._linear = [a, b, c]
         this.refresh()
+        return this
     }
 
     byPointSlope(p: Point, m: number) {
         Should(IsPoint(p), 'input must be point')
         let p2: Point = [p[0] + 1, p[1] + m]
         this.byTwoPoints(p, p2)
+        return this
     }
 
     byIntercepts(x: number, y: number) {
         Should(IsNum(x, y), "input must be num")
         Should(IsNonZero(x, y), 'intercepts cannot be zero')
         this.byTwoPoints([x, 0], [0, y])
+        return this
     }
 
     byBisector(A: Point, B: Point) {
+        Should(IsPoint(A, B), 'input must be point')
+        Should(AreDistinctPoint(A, B), 'two points should be distinct')
         if (A[0] === B[0]) {
-            this.linear = [0, 1, -(A[1] + B[1]) / 2]
+            this._linear = [0, 1, -(A[1] + B[1]) / 2]
             this.refresh()
         } else if (A[1] === B[1]) {
-            this.linear = [1, 0, -(A[0] + B[0]) / 2]
+            this._linear = [1, 0, -(A[0] + B[0]) / 2]
             this.refresh()
         } else {
             let m = -1 / Slope(A, B)
             let M = MidPoint(A, B)
             this.byPointSlope(M, m)
         }
+        return this
     }
 
     byLinear(linear: Linear) {
-        this.linear = linear
+        this._linear = linear
         this.refresh()
+        return this
     }
 
-    refresh() {
-        let [a, b, c] = this.linear!
-        this.slope = -a / b
-        this.xInt = -c / a
-        this.yInt = -c / b
+    private refresh() {
+        let [a, b, c] = this._linear!
+        this._slope = -a / b
+        this._xInt = -c / a
+        this._yInt = -c / b
+    }
+
+    linear(): Linear {
+        return this._linear
+    }
+
+    line(): Line {
+        return LineFromLinear(...this.linear())
     }
 
 }

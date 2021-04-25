@@ -1,4 +1,5 @@
 import { Dict, Config, SeedCore } from '../cls'
+import { AppendInHTMLTag, ExtractHTMLTag, JoinToHTMLTag, PrintVariable } from './html'
 
 // class Instruction {
 //     assign: any[] = []

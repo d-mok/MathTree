@@ -7,6 +7,7 @@
  * ```
  */
 function CircleGeneral(centre: Point, radius: number): [D: number, E: number, F: number] {
+    Should(IsPoint(centre), "centre must be a point")
     Should(IsPositive(radius), "radius must be positive")
     let [h, k] = centre
     let r = radius
@@ -28,6 +29,7 @@ globalThis.CircleGeneral = CircleGeneral
  * ```
  */
 function CircleFromGeneral(D: number, E: number, F: number): [Point, number] {
+    Should(IsNum(D, E, F), "input must be num")
     let [h, k] = [-D / 2, -E / 2]
     let R = (D / 2) ** 2 + (E / 2) ** 2 - F
     Should(R >= 0, "radius should be real")
@@ -46,6 +48,9 @@ globalThis.CircleFromGeneral = CircleFromGeneral
  * ```
  */
 function IntegralOnCircle(centre: Point, radius: number): Point[][] {
+    Should(IsPoint(centre), "centre must be a point")
+    Should(IsPositive(radius), "radius must be positive")
+    
     let [h, k] = centre
     let r = radius
 

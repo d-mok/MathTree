@@ -1,3 +1,4 @@
+import { ExtractHTMLTag, JoinToHTMLTag } from "./html";
 
 
 function RndPermutation(n = 4) {

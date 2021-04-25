@@ -6,7 +6,7 @@
 * ExtractHTMLTag(html,'li') // ['1','2','3']
 * ```
 */
-function ExtractHTMLTag(html: string, tag: string): string[] {
+export function ExtractHTMLTag(html: string, tag: string): string[] {
     let startTag = '<' + tag + '>'
     let endTag = '</' + tag + '>'
     let r = startTag + '[\\s\\S]*?' + endTag
@@ -14,7 +14,6 @@ function ExtractHTMLTag(html: string, tag: string): string[] {
     if (nodes === null) return []
     return nodes.map(x => x.replace(startTag, '').replace(endTag, ''))
 }
-globalThis.ExtractHTMLTag = ExtractHTMLTag
 
 
 /**
@@ -25,12 +24,11 @@ globalThis.ExtractHTMLTag = ExtractHTMLTag
 * AppendInHTMLTag(html, 'ul', '<li>2</li>') // 'abc<ul><li>1</li><li>2</li></ul>'
 * ```
 */
-function AppendInHTMLTag(html: string, tag: string, content: string): string {
+export function AppendInHTMLTag(html: string, tag: string, content: string): string {
     let startTag = '<' + tag + '>'
     let endTag = '</' + tag + '>'
     return html.replace(endTag, content + endTag)
 }
-globalThis.AppendInHTMLTag = AppendInHTMLTag
 
 
 /**
@@ -41,12 +39,11 @@ globalThis.AppendInHTMLTag = AppendInHTMLTag
 * JoinToHTMLTag(['a','b'], 'li') // '<li>a</li><li>b</li>'
 * ```
 */
-function JoinToHTMLTag(items: string[], tag: string): string {
+export function JoinToHTMLTag(items: string[], tag: string): string {
     let startTag = '<' + tag + '>'
     let endTag = '</' + tag + '>'
     return items.map(n => startTag + n + endTag).join('')
 }
-globalThis.JoinToHTMLTag = JoinToHTMLTag
 
 
 
@@ -60,7 +57,7 @@ globalThis.JoinToHTMLTag = JoinToHTMLTag
 * PrintVariable(html,'x',2) // '1 + 2 = *y'
 * ```
 */
-function PrintVariable(html: string, symbol: string, value: any): string {
+export function PrintVariable(html: string, symbol: string, value: any): string {
     let T = typeof value
 
     if (T === 'number') {
@@ -82,4 +79,3 @@ function PrintVariable(html: string, symbol: string, value: any): string {
     }
     return html.replace(new RegExp("\\*" + symbol, 'g'), value);
 }
-globalThis.PrintVariable = PrintVariable

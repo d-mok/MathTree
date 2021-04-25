@@ -18,9 +18,12 @@ globalThis.MathError = MathError
 
 
 function Should(condition: boolean, msg: string = "Should condition failed!") {
-    let caller = (new Error()).stack!.split("\n")[2].trim().split(" ")[1]
-    caller = caller ?? 'Anonymous '
-    if (!condition) throw MathError('[Function ' + caller + '] ' + msg)
+    if (!condition) {
+        let caller = (new Error()).stack!.split("\n")[2].trim().split(" ")[1]
+        // let caller = 'function'
+        caller = caller ?? 'Anonymous '
+        throw MathError('[Function ' + caller + '] ' + msg)
+    }
 }
 globalThis.Should = Should
 

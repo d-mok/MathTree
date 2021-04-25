@@ -1,3 +1,4 @@
+import { PrintVariable } from "./tool/html"
 
 export class SeedCore {
     public readonly qn: string = ""
