@@ -15662,6 +15662,7 @@ class PenCls {
             x(interval = 1) {
                 this.pen.ctx.save();
                 this.pen.ctx.strokeStyle = "#d3d5db";
+                this.pen.graph.vertical(0);
                 for (let x of this.pen.frame.xTicks(interval)) {
                     this.pen.graph.vertical(x);
                 }
@@ -15679,6 +15680,7 @@ class PenCls {
             y(interval = 1) {
                 this.pen.ctx.save();
                 this.pen.ctx.strokeStyle = "#d3d5db";
+                this.pen.graph.horizontal(0);
                 for (let y of this.pen.frame.yTicks(interval)) {
                     this.pen.graph.horizontal(y);
                 }
