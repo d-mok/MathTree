@@ -16946,7 +16946,7 @@ class AutoPenCls {
         let maxSubUnit = maxUnit * (interval / subInterval);
         let height = (maxUnit + 1) * interval;
         pen.range.set([-width * 0.2, width], [-height * 0.2, height]);
-        pen.size.resolution(0.2, 0.8 / height);
+        pen.size.resolution(0.2, 1.4 / height);
         pen.line([0, 0], [width, 0]);
         pen.arrow([0, 0], [0, height]);
         pen.ctx.save();

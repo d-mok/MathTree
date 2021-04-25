@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "jest": "jest ./src/Math --verbose",
+    "jest": "jest ./src/Math",
     "jest_extend": "jest JestExtend",
     "jest_soil": "jest ./src/Soil -debug",
     "typedoc": "typedoc --out typedoc ./src/Math ./src/Pen"

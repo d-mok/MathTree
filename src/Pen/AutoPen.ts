@@ -1055,7 +1055,7 @@ class AutoPenCls {
         let height = (maxUnit + 1) * interval
 
         pen.range.set([-width * 0.2, width], [-height * 0.2, height]);
-        pen.size.resolution(0.2, 0.8 / height)
+        pen.size.resolution(0.2, 1.4 / height)
 
         pen.line([0, 0], [width, 0])
         pen.arrow([0, 0], [0, height])
@@ -1067,6 +1067,7 @@ class AutoPenCls {
         pen.ctx.restore()
 
         pen.label.point([width / 2, -height * 0.1], xLabel, 270, 25)
+        pen.label.point([width / 2, 0], xLabel, 270, 30)
 
         function grid(y: number) {
             pen.line([0, y], [width, y])
