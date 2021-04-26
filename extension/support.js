@@ -3,6 +3,7 @@
 
 
 // katex
+// to be deleted
 function katex_render(element = document.body) {
     if (typeof renderMathInElement !== "undefined") {
         renderMathInElement(element);
@@ -13,7 +14,7 @@ function katex_render(element = document.body) {
 }
 
 
-
+// to be deleted
 function katex_typeset(element = document.body, delay = 0) {
     if (delay == 0) {
         katex_render(element);

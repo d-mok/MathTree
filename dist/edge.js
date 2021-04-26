@@ -17486,8 +17486,6 @@ const shuffle_1 = __webpack_require__(43);
 const option_1 = __webpack_require__(44);
 __webpack_require__(45);
 const cls_1 = __webpack_require__(46);
-// @ts-ignore
-// import renderMathInElement from 'katex/contrib/auto-render/auto-render.js'
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -17588,6 +17586,15 @@ class Seed {
         this.qn = dress_1.dress(this.qn);
         this.sol = dress_1.dress(this.sol);
     }
+    katex(html) {
+        let ele = document.createElement('div');
+        ele.innerHTML = html;
+        // @ts-ignore
+        renderMathInElement(ele); // katex is loaded on client-side
+        let T = ele.innerHTML;
+        ele.remove();
+        return T;
+    }
     runPopulate() {
         while (this.counter <= 1000) {
             try {
@@ -17662,18 +17669,8 @@ class Seed {
         return true;
     }
     runKatex() {
-        let Q = document.createElement('div');
-        Q.innerHTML = this.qn;
-        // @ts-ignore
-        renderMathInElement(Q);
-        this.qn = Q.innerHTML;
-        Q.remove();
-        let S = document.createElement('div');
-        S.innerHTML = this.sol;
-        // @ts-ignore
-        renderMathInElement(S);
-        this.sol = S.innerHTML;
-        S.remove();
+        this.qn = this.katex(this.qn);
+        this.sol = this.katex(this.sol);
         return true;
     }
     successFruit() {

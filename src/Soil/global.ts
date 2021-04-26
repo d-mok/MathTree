@@ -5,11 +5,6 @@ import { AutoOptions } from './tool/option'
 import './type'
 import { Dict, Config, SeedCore } from './cls'
 
-import katex from 'katex';
-// @ts-ignore
-// import renderMathInElement from 'katex/contrib/auto-render/auto-render.js'
-
-
 export class Seed {
     // get from SeedBank API
     public qn: string = ""
@@ -130,6 +125,16 @@ export class Seed {
         this.sol = dress(this.sol);
     }
 
+    katex(html: string) {
+        let ele = document.createElement('div')
+        ele.innerHTML = html
+        // @ts-ignore
+        renderMathInElement(ele) // katex is loaded on client-side
+        let T = ele.innerHTML
+        ele.remove()
+        return T
+    }
+
 
     runPopulate(): boolean {
         while (this.counter <= 1000) {
@@ -215,18 +220,8 @@ export class Seed {
     }
 
     runKatex(): boolean {
-        let Q = document.createElement('div')
-        Q.innerHTML = this.qn
-        // @ts-ignore
-        renderMathInElement(Q)
-        this.qn = Q.innerHTML
-        Q.remove()
-        let S = document.createElement('div')
-        S.innerHTML = this.sol
-        // @ts-ignore
-        renderMathInElement(S)
-        this.sol = S.innerHTML
-        S.remove()
+        this.qn = this.katex(this.qn)
+        this.sol = this.katex(this.sol)
         return true
     }
 
