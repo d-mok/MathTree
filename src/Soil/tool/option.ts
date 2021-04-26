@@ -1,6 +1,7 @@
 import { Dict, Config, SeedCore } from '../cls'
 import { AppendInHTMLTag, ExtractHTMLTag, JoinToHTMLTag, PrintVariable } from './html'
 
+import { QuestionHTML } from './html/index'
 
 type Product = {
     [_: string]: any[]
@@ -41,7 +42,7 @@ function ExecInstructions(instructions: Partial<Dict>, source: Dict): Product {
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
+export function AutoOptions2(instructions: Partial<Dict>, question: string, source: Dict): string {
     if (IsEmptyObject(instructions)) return question
     let options = ExtractHTMLTag(question, 'li')
     let products = ExecInstructions(instructions, source)
@@ -66,4 +67,39 @@ export function AutoOptions(instructions: Partial<Dict>, question: string, sourc
     }
 
     return question
+}
+
+
+
+export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
+    let Qn = new QuestionHTML(question)
+    if (IsEmptyObject(instructions)) return question
+    // let options = ExtractHTMLTag(Qn, 'li')
+    let products = ExecInstructions(instructions, source)
+
+    if (Qn.li.length === 1) {
+        Qn.cloneLi(0)
+        Qn.cloneLi(0)
+        Qn.cloneLi(0)
+        // let others = [options[0], options[0], options[0]]
+        for (let k in products) {
+            for (let i = 1; i <= 3; i++) {
+                Qn.printInLi(i, k, products[k][i])
+                // others[i] = PrintVariable(others[i], k, products[k][i])
+            }
+        }
+        // return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+    }
+
+    // if (options.length === 2) {
+    //     let others = [options[0], options[1]]
+    //     for (let k in products) {
+    //         others[0] = PrintVariable(others[0], k, products[k][0])
+    //         others[1] = PrintVariable(others[1], k, products[k][0])
+    //     }
+    //     return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+    // }
+
+    // return question
+    return Qn.export()
 }

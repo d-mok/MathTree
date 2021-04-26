@@ -5,6 +5,8 @@ import { AutoOptions } from './tool/option'
 import './type'
 import { Dict, Config, SeedCore } from './cls'
 
+import { QuestionHTML } from './tool/html/index'
+
 
 
 export class Seed {
@@ -63,7 +65,6 @@ export class Seed {
         let solution: string = this.sol
 
         // execute
-
         let result: any
         try {
             result = eval(code)
@@ -120,10 +121,6 @@ export class Seed {
         this.evalCode(this.postprocess)
     }
 
-    // fillOptions() {
-    //     this.qn = AutoOptions(this.config.options, this.qn, this.dict, this.validate)
-    // }
-
     pour() {
         this.qn = this.dict.substitute(this.qn)
         this.sol = this.dict.substitute(this.sol)
@@ -143,7 +140,7 @@ export class Seed {
                     throw CustomError('PopulationError', 'Dict Check Failed.')
                 if (!this.isValidated())
                     throw CustomError('PopulationError', 'Cannot pass validate.')
-                return true; // done if validated
+                return true;
             } catch (e) {
                 switch (e.name) {
                     case 'MathError':
@@ -158,7 +155,6 @@ export class Seed {
                 }
             }
         };
-        // throw error after 1000 failed trials
         throw CustomError('PopulationError', "No population found after 1000 trials!")
     }
 
@@ -185,7 +181,6 @@ export class Seed {
                 continue
             }
         };
-        // throw error after 100 failed trials
         throw CustomError('OptionError', "No valid option generated after 100 trials")
     }
 

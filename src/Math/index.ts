@@ -25,4 +25,4 @@ import './Algebra/Quadratic.ts'
 import './Algebra/Linear.ts'
 
 
-import './TypeCheck/TypeCheck.ts'
+import './should.ts'

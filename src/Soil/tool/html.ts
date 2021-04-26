@@ -71,7 +71,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
         }
     }
 
-    // print *%x as fraction
+    // print */x as fraction
     if (T === 'number') {
         if (html.search("\\*\\/" + symbol) > -1) {
             let [p, q] = ToFrac(value)

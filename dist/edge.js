@@ -159,7 +159,7 @@ function PrintVariable(html, symbol, value) {
             html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
         }
     }
-    // print *%x as fraction
+    // print */x as fraction
     if (T === 'number') {
         if (html.search("\\*\\/" + symbol) > -1) {
             let [p, q] = ToFrac(value);
@@ -17454,8 +17454,8 @@ const section_1 = __webpack_require__(41);
 const dress_1 = __webpack_require__(42);
 const shuffle_1 = __webpack_require__(43);
 const option_1 = __webpack_require__(44);
-__webpack_require__(45);
-const cls_1 = __webpack_require__(46);
+__webpack_require__(47);
+const cls_1 = __webpack_require__(48);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -17548,9 +17548,6 @@ class Seed {
     doPostprocess() {
         this.evalCode(this.postprocess);
     }
-    // fillOptions() {
-    //     this.qn = AutoOptions(this.config.options, this.qn, this.dict, this.validate)
-    // }
     pour() {
         this.qn = this.dict.substitute(this.qn);
         this.sol = this.dict.substitute(this.sol);
@@ -17567,7 +17564,7 @@ class Seed {
                     throw CustomError('PopulationError', 'Dict Check Failed.');
                 if (!this.isValidated())
                     throw CustomError('PopulationError', 'Cannot pass validate.');
-                return true; // done if validated
+                return true;
             }
             catch (e) {
                 switch (e.name) {
@@ -17585,7 +17582,6 @@ class Seed {
             }
         }
         ;
-        // throw error after 1000 failed trials
         throw CustomError('PopulationError', "No population found after 1000 trials!");
     }
     runSection() {
@@ -17611,7 +17607,6 @@ class Seed {
             }
         }
         ;
-        // throw error after 100 failed trials
         throw CustomError('OptionError', "No valid option generated after 100 trials");
     }
     runSubstitute() {
@@ -17872,8 +17867,9 @@ exports.OptionShuffler = OptionShuffler;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AutoOptions = void 0;
+exports.AutoOptions = exports.AutoOptions2 = void 0;
 const html_1 = __webpack_require__(0);
+const index_1 = __webpack_require__(45);
 function ExecInstructions(instructions, source) {
     function Produce(source, assigned) {
         let product = [];
@@ -17906,7 +17902,7 @@ function ExecInstructions(instructions, source) {
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-function AutoOptions(instructions, question, source) {
+function AutoOptions2(instructions, question, source) {
     if (IsEmptyObject(instructions))
         return question;
     let options = html_1.ExtractHTMLTag(question, 'li');
@@ -17930,6 +17926,37 @@ function AutoOptions(instructions, question, source) {
     }
     return question;
 }
+exports.AutoOptions2 = AutoOptions2;
+function AutoOptions(instructions, question, source) {
+    let Qn = new index_1.QuestionHTML(question);
+    if (IsEmptyObject(instructions))
+        return question;
+    // let options = ExtractHTMLTag(Qn, 'li')
+    let products = ExecInstructions(instructions, source);
+    if (Qn.li.length === 1) {
+        Qn.cloneLi(0);
+        Qn.cloneLi(0);
+        Qn.cloneLi(0);
+        // let others = [options[0], options[0], options[0]]
+        for (let k in products) {
+            for (let i = 1; i <= 3; i++) {
+                Qn.printInLi(i, k, products[k][i]);
+                // others[i] = PrintVariable(others[i], k, products[k][i])
+            }
+        }
+        // return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+    }
+    // if (options.length === 2) {
+    //     let others = [options[0], options[1]]
+    //     for (let k in products) {
+    //         others[0] = PrintVariable(others[0], k, products[k][0])
+    //         others[1] = PrintVariable(others[1], k, products[k][0])
+    //     }
+    //     return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+    // }
+    // return question
+    return Qn.export();
+}
 exports.AutoOptions = AutoOptions;
 
 
@@ -17939,10 +17966,113 @@ exports.AutoOptions = AutoOptions;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.QuestionHTML = void 0;
+const print_1 = __webpack_require__(46);
+// class HTMLWizard {
+//     public body: HTMLBodyElement
+//     constructor(html: string = '') {
+//         this.body = (new DOMParser()).parseFromString(html, 'text/html').getElementsByTagName('body')[0]
+//     }
+//     get(tag: string): Element[] {
+//         return [...this.body.getElementsByTagName(tag)]
+//     }
+//     remove(tag: string) {
+//         this.get(tag).forEach(x => x.remove())
+//     }
+// }
+class QuestionHTML {
+    // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
+    // there must be no ul or li tags except the answer options
+    constructor(html = '') {
+        this.body = (new DOMParser())
+            .parseFromString(html, 'text/html')
+            .getElementsByTagName('body')[0];
+    }
+    export() {
+        return this.body.innerHTML;
+    }
+    get li() {
+        return [...this.body.getElementsByTagName('li')];
+    }
+    get ul() {
+        return this.body.getElementsByTagName('ul')[0];
+    }
+    cloneLi(sourceIndex) {
+        this.ul.appendChild(this.li[sourceIndex]);
+    }
+    printInWhole(symbol, value) {
+        this.body.innerHTML = print_1.PrintVariable(this.body.innerHTML, symbol, value);
+    }
+    printInLi(index, symbol, value) {
+        let li = this.li[index];
+        li.innerHTML = print_1.PrintVariable(li.innerHTML, symbol, value);
+    }
+}
+exports.QuestionHTML = QuestionHTML;
 
 
 /***/ }),
 /* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PrintVariable = void 0;
+/**
+* @category Html
+* @return print a variable (e.g. *x) into the html
+* ```typescript
+* let html = '1 + *x = *y'
+* PrintVariable(html,'x',2) // '1 + 2 = *y'
+* ```
+*/
+function PrintVariable(html, symbol, value) {
+    let T = typeof value;
+    // print **x as sci notation
+    if (T === 'number') {
+        let v = Blur(Round(value, 3));
+        if (v >= 10000 || v <= 0.01) {
+            let sci = Sci(v);
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+        }
+        else {
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
+        }
+    }
+    // print */x as fraction
+    if (T === 'number') {
+        if (html.search("\\*\\/" + symbol) > -1) {
+            let [p, q] = ToFrac(value);
+            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
+        }
+    }
+    // print *x as normal
+    if (T === 'number') {
+        value = Blur(value);
+        if (IsDecimal(value))
+            value = Round(value, 5);
+    }
+    if (T === 'boolean') {
+        value = Tick(value);
+    }
+    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    return html;
+}
+exports.PrintVariable = PrintVariable;
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+/***/ }),
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

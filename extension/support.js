@@ -25,9 +25,9 @@ function katex_typeset(element = document.body, delay = 0) {
 }
 
 
-// implement string.replaceAll, waiting for ES adoption
+// // implement string.replaceAll, waiting for ES adoption
 
-String.prototype.replaceAll = function (oldSubstring, newSubstring) {
-    return this.split(oldSubstring).join(newSubstring);
-};
+// String.prototype.replaceAll = function (oldSubstring, newSubstring) {
+//     return this.split(oldSubstring).join(newSubstring);
+// };
 
