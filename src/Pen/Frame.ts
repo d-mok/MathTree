@@ -58,7 +58,7 @@ class FrameCls {
         const y = this.ymax - yPixel / this.yUnit();
         return [x, y];
     }
-    _ticks(min: number, max: number, interval: number): number[] {
+    private _ticks(min: number, max: number, interval: number): number[] {
         // a pure function, return array of numbers at interval within [min,max]
         const start = Math.floor(min / interval) * interval;
         const arr = [];

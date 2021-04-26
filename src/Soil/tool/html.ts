@@ -73,12 +73,9 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     if (T === 'number') {
         let v = Blur(Round(value, 3))
         if (v >= 10000 || v <= 0.01) {
-            // let sci = Sci(v)
             print("\\*\\*", Sci(v))
-            // html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
         } else {
             print("\\*\\*", v)
-            // html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
         }
     }
 
@@ -87,7 +84,6 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
         if (html.search("\\*\\/" + symbol) > -1) {
             let [p, q] = ToFrac(value)
             print("\\*\\/", Dfrac(p, q))
-            // html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
         }
     }
 
@@ -102,8 +98,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     if (IsPoint(value)) {
         value = Coord(value)
     }
-    
+
     print("\\*", value)
-    // html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
     return html
 }

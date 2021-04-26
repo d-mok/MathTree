@@ -6,7 +6,7 @@ class PenCls {
     /**
      * @ignore
      */
-    canvas: HTMLCanvasElement
+    private canvas: HTMLCanvasElement
     /**
      * @ignore
      */
@@ -18,7 +18,7 @@ class PenCls {
     /**
      * @ignore
      */
-    imgStore: ImageData | null
+    private imgStore: ImageData | null
 
     /**
      * @ignore
