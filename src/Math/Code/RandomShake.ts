@@ -2,15 +2,12 @@
 
 /**
  * @category RandomShake
- * @param n - default to 10
  * @return an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
  * ```typescript
- * RndShake(10,5,3) 
- * // equivalent to RndShakeN(10,5,3) 
- * RndShake(10.5,5,2) 
- * // equivalent to RndShakeR(10.5,5,2) 
- * RndShake(0.5,0.1,2) 
- * // equivalent to RndShakeProb(0.5,0.1,3) 
+ * RndShake(10) 
+ * // equivalent to RndShakeN(10) 
+ * RndShake(10.5) 
+ * // equivalent to RndShakeR(10.5) 
  * ```
  */
 function RndShake(anchor: any): (typeof anchor)[] {
@@ -27,6 +24,10 @@ function RndShake(anchor: any): (typeof anchor)[] {
         if (Number(anchor)) {
             anchor = Number(anchor)
         }
+    }
+    if (IsPoint(anchor)) {
+        // Point
+        return RndShakePoint(anchor)
     }
     if (typeof anchor === 'number' && IsNum(anchor)) {
         anchor = Blur(anchor)
@@ -229,4 +230,31 @@ function RndShakeIneq(anchor: string): string[] {
     return RndBalanced(IneqSign(...f).reverse(), 3)
 }
 globalThis.RndShakeIneq = RndShakeIneq
+
+
+
+/**
+ * @category RandomShake
+ * @param anchor - must be a point
+ * @return an array of 3 point
+ * ```typescript
+ * RndShakePoint([3,4]) 
+ * // may return [[2,5],[1,6],[4,2]]
+ * ```
+ */
+function RndShakePoint(anchor: Point): Point[] {
+    Should(IsPoint(anchor), 'input must be point')
+    let [x, y] = anchor
+    let func = () => {
+        const h = IsInteger(x) ? RndShakeN(x)[0] : RndShakeR(x)[0]
+        const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0]
+        return [h, k]
+    }
+    return chance.unique(func, 3, {
+        comparator: function (arr: Point[], val: Point) {
+            return arr.some(p => p[0] === val[0] || p[1] === val[1])
+        }
+    })
+}
+globalThis.RndShakePoint = RndShakePoint
 

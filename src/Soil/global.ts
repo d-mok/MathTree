@@ -5,7 +5,6 @@ import { AutoOptions } from './tool/option'
 import './type'
 import { Dict, Config, SeedCore } from './cls'
 
-import { QuestionHTML } from './tool/html/index'
 
 
 
@@ -37,7 +36,7 @@ export class Seed {
         this.populate = this.core.populate
         let v = this.core.validate
         if (v === "") v = 'true'
-        v = v.replace('\n', ' ')
+        v = v.replace('\n', ' ') //is it a bug? only once?
         this.validate = v
         this.preprocess = this.core.preprocess
         this.postprocess = this.core.postprocess
@@ -78,8 +77,6 @@ export class Seed {
                 throw e
             }
         }
-
-
 
         //retrieve
         this.dict.update({
@@ -226,9 +223,7 @@ export class Seed {
     }
 
     errorFruit(e: Error): Question {
-        function printError(x: Error) {
-            return '[' + x.name + '] ' + x.message
-        }
+        let printError = (x: Error) => '[' + x.name + '] ' + x.message
         let stack = this.errorPile.map(printError).join('<br/>')
         return {
             qn: "An Error Occurred!<br/>" + e.name,

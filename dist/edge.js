@@ -81,11 +81,104 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PrintVariable = exports.QuestionHTML = void 0;
+class QuestionHTML {
+    // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
+    // there must be no ul or li tags except the answer options
+    constructor(html = '') {
+        this.body = (new DOMParser())
+            .parseFromString(html, 'text/html')
+            .getElementsByTagName('body')[0];
+    }
+    export() {
+        return this.body.innerHTML;
+    }
+    get li() {
+        return [...this.body.getElementsByTagName('li')];
+    }
+    get ul() {
+        return this.body.getElementsByTagName('ul')[0];
+    }
+    cloneLi(sourceIndex, repeat = 1) {
+        for (let i = 1; i <= repeat; i++) {
+            this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
+        }
+    }
+    printInWhole(symbol, value) {
+        this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value);
+    }
+    printInLi(index, symbol, value) {
+        let li = this.li[index];
+        li.innerHTML = PrintVariable(li.innerHTML, symbol, value);
+    }
+    isLiDuplicated() {
+        let htmls = this.li.map(x => x.innerHTML);
+        return (new Set(htmls)).size !== htmls.length;
+    }
+    shuffleLi() {
+        let oldHTMLs = this.li.map(x => x.innerHTML);
+        let newHTMLs = RndShuffle(...oldHTMLs);
+        for (let i = 0; i < newHTMLs.length; i++) {
+            this.li[i].innerHTML = newHTMLs[i];
+        }
+        return oldHTMLs.map(x => newHTMLs.indexOf(x));
+    }
+}
+exports.QuestionHTML = QuestionHTML;
+/**
+* print a variable (e.g. *x) into the html
+* ```typescript
+* let html = '1 + *x = *y'
+* PrintVariable(html,'x',2) // '1 + 2 = *y'
+* ```
+*/
+function PrintVariable(html, symbol, value) {
+    let T = typeof value;
+    // print **x as sci notation
+    if (T === 'number') {
+        let v = Blur(Round(value, 3));
+        if (v >= 10000 || v <= 0.01) {
+            let sci = Sci(v);
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+        }
+        else {
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
+        }
+    }
+    // print */x as fraction
+    if (T === 'number') {
+        if (html.search("\\*\\/" + symbol) > -1) {
+            let [p, q] = ToFrac(value);
+            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
+        }
+    }
+    // print *x as normal
+    if (T === 'number') {
+        value = Blur(value);
+        if (IsDecimal(value))
+            value = Round(value, 5);
+    }
+    if (T === 'boolean') {
+        value = Tick(value);
+    }
+    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    return html;
+}
+exports.PrintVariable = PrintVariable;
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//  Chance.js 1.1.7
@@ -7903,104 +7996,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15).Buffer))
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrintVariable = exports.JoinToHTMLTag = exports.AppendInHTMLTag = exports.ExtractHTMLTag = void 0;
-/**
-* @category Html
-* @return get an array of all nodes of specified tag
-* ```typescript
-* let html = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
-* ExtractHTMLTag(html,'li') // ['1','2','3']
-* ```
-*/
-function ExtractHTMLTag(html, tag) {
-    let startTag = '<' + tag + '>';
-    let endTag = '</' + tag + '>';
-    let r = startTag + '[\\s\\S]*?' + endTag;
-    let nodes = html.match(new RegExp(r, 'g'));
-    if (nodes === null)
-        return [];
-    return nodes.map(x => x.replace(startTag, '').replace(endTag, ''));
-}
-exports.ExtractHTMLTag = ExtractHTMLTag;
-/**
-* @category Html
-* @return append content to the end of a html tag
-* ```typescript
-* let html = 'abc<ul><li>1</li></ul>'
-* AppendInHTMLTag(html, 'ul', '<li>2</li>') // 'abc<ul><li>1</li><li>2</li></ul>'
-* ```
-*/
-function AppendInHTMLTag(html, tag, content) {
-    let startTag = '<' + tag + '>';
-    let endTag = '</' + tag + '>';
-    return html.replace(endTag, content + endTag);
-}
-exports.AppendInHTMLTag = AppendInHTMLTag;
-/**
-* @category Html
-* @return join items into html tags
-* ```typescript
-* let html = 'abc<ul><li>1</li></ul>'
-* JoinToHTMLTag(['a','b'], 'li') // '<li>a</li><li>b</li>'
-* ```
-*/
-function JoinToHTMLTag(items, tag) {
-    let startTag = '<' + tag + '>';
-    let endTag = '</' + tag + '>';
-    return items.map(n => startTag + n + endTag).join('');
-}
-exports.JoinToHTMLTag = JoinToHTMLTag;
-/**
-* @category Html
-* @return print a variable (e.g. *x) into the html
-* ```typescript
-* let html = '1 + *x = *y'
-* PrintVariable(html,'x',2) // '1 + 2 = *y'
-* ```
-*/
-function PrintVariable(html, symbol, value) {
-    let T = typeof value;
-    // print **x as sci notation
-    if (T === 'number') {
-        let v = Blur(Round(value, 3));
-        if (v >= 10000 || v <= 0.01) {
-            let sci = Sci(v);
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
-        }
-        else {
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
-        }
-    }
-    // print */x as fraction
-    if (T === 'number') {
-        if (html.search("\\*\\/" + symbol) > -1) {
-            let [p, q] = ToFrac(value);
-            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
-        }
-    }
-    // print *x as normal
-    if (T === 'number') {
-        value = Blur(value);
-        if (IsDecimal(value))
-            value = Round(value, 5);
-    }
-    if (T === 'boolean') {
-        value = Tick(value);
-    }
-    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
-    return html;
-}
-exports.PrintVariable = PrintVariable;
-
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
 
 /***/ }),
 /* 2 */
@@ -8009,106 +8005,9 @@ exports.PrintVariable = PrintVariable;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QuestionHTML = void 0;
-const print_1 = __webpack_require__(45);
-// class HTMLWizard {
-//     public body: HTMLBodyElement
-//     constructor(html: string = '') {
-//         this.body = (new DOMParser()).parseFromString(html, 'text/html').getElementsByTagName('body')[0]
-//     }
-//     get(tag: string): Element[] {
-//         return [...this.body.getElementsByTagName(tag)]
-//     }
-//     remove(tag: string) {
-//         this.get(tag).forEach(x => x.remove())
-//     }
-// }
-class QuestionHTML {
-    // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
-    // there must be no ul or li tags except the answer options
-    constructor(html = '') {
-        this.body = (new DOMParser())
-            .parseFromString(html, 'text/html')
-            .getElementsByTagName('body')[0];
-    }
-    export() {
-        return this.body.innerHTML;
-    }
-    get li() {
-        return [...this.body.getElementsByTagName('li')];
-    }
-    get ul() {
-        return this.body.getElementsByTagName('ul')[0];
-    }
-    cloneLi(sourceIndex, repeat = 1) {
-        for (let i = 1; i <= repeat; i++) {
-            this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
-        }
-    }
-    printInWhole(symbol, value) {
-        this.body.innerHTML = print_1.PrintVariable(this.body.innerHTML, symbol, value);
-    }
-    printInLi(index, symbol, value) {
-        let li = this.li[index];
-        li.innerHTML = print_1.PrintVariable(li.innerHTML, symbol, value);
-    }
-    isLiDuplicated() {
-        let htmls = this.li.map(x => x.innerHTML);
-        return (new Set(htmls)).size !== htmls.length;
-    }
-    shuffleLi() {
-        let oldHTMLs = this.li.map(x => x.innerHTML);
-        let newHTMLs = RndShuffle(...oldHTMLs);
-        for (let i = 0; i < newHTMLs.length; i++) {
-            this.li[i].innerHTML = newHTMLs[i];
-        }
-        return oldHTMLs.map(x => newHTMLs.indexOf(x));
-    }
-}
-exports.QuestionHTML = QuestionHTML;
-// export class SolutionHTML {
-//     private body: HTMLBodyElement
-//     // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
-//     // there must be no ul or li tags except the answer options
-//     constructor(html: string = '') {
-//         this.body = (new DOMParser())
-//             .parseFromString(html, 'text/html')
-//             .getElementsByTagName('body')[0]
-//     }
-//     export() {
-//         return this.body.innerHTML
-//     }
-//     get li(): HTMLLIElement[] {
-//         return [...this.body.getElementsByTagName('li')]
-//     }
-//     get ul(): HTMLUListElement {
-//         return this.body.getElementsByTagName('ul')[0]
-//     }
-//     cloneLi(sourceIndex: number, repeat = 1) {
-//         for (let i = 1; i <= repeat; i++) {
-//             this.ul.appendChild(this.li[sourceIndex].cloneNode(true))
-//         }
-//     }
-//     printInWhole(symbol: string, value: any) {
-//         this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value)
-//     }
-//     printInLi(index: number, symbol: string, value: any) {
-//         let li = this.li[index]
-//         li.innerHTML = PrintVariable(li.innerHTML, symbol, value)
-//     }
-//     isLiDuplicated(): boolean {
-//         let htmls: string[] = this.li.map(x => x.innerHTML)
-//         return (new Set(htmls)).size !== htmls.length
-//     }
-//     shuffleLi() {
-//         let oldHTMLs: string[] = this.li.map(x => x.innerHTML)
-//         let newHTMLs: string[] = RndShuffle(...oldHTMLs)
-//         for (let i = 0; i < newHTMLs.length; i++) {
-//             this.li[i].innerHTML = newHTMLs[i]
-//         }
-//         return oldHTMLs.map(x => newHTMLs.indexOf(x))
-//     }
-// }
+__webpack_require__(3);
+__webpack_require__(34);
+__webpack_require__(39);
 
 
 /***/ }),
@@ -8119,17 +8018,6 @@ exports.QuestionHTML = QuestionHTML;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(4);
-__webpack_require__(35);
-__webpack_require__(40);
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(7);
@@ -8139,7 +8027,7 @@ __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(14);
+__webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -8154,11 +8042,10 @@ __webpack_require__(30);
 __webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
-__webpack_require__(34);
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8610,7 +8497,7 @@ globalThis.IsArrayOfLength = IsArrayOfLength;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8662,7 +8549,7 @@ globalThis.nPr = nPr;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8730,7 +8617,7 @@ globalThis.RndComboConfig = RndComboConfig;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8846,7 +8733,7 @@ globalThis.ToFrac = ToFrac;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9009,7 +8896,7 @@ globalThis.arctan = arctan;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9246,7 +9133,7 @@ globalThis.IsReflex = IsReflex;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9521,7 +9408,7 @@ globalThis.OptimizeField = OptimizeField;
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9911,7 +9798,7 @@ globalThis.Blurs = Blurs;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9937,7 +9824,7 @@ globalThis.PhyConst = PhyConst;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9945,7 +9832,7 @@ globalThis.PhyConst = PhyConst;
 /**
  * @ignore
  */
-var Chance = __webpack_require__(0);
+var Chance = __webpack_require__(1);
 /**
  * @ignore
  */
@@ -10219,7 +10106,7 @@ globalThis.RndData = RndData;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10233,9 +10120,9 @@ globalThis.RndData = RndData;
 
 
 
-var base64 = __webpack_require__(17)
-var ieee754 = __webpack_require__(18)
-var isArray = __webpack_require__(19)
+var base64 = __webpack_require__(16)
+var ieee754 = __webpack_require__(17)
+var isArray = __webpack_require__(18)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -12013,10 +11900,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 var g;
@@ -12042,7 +11929,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12173,9 +12060,7 @@ function fromByteArray (uint8) {
 
   // go through the array every three bytes, we'll deal with trailing stuff later
   for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(
-      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
-    ))
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
   }
 
   // pad the end with zeros, but make sure to not forget the extra bytes
@@ -12201,9 +12086,10 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -12291,7 +12177,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -12302,22 +12188,19 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 /**
  * @category RandomShake
- * @param n - default to 10
  * @return an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
  * ```typescript
- * RndShake(10,5,3)
- * // equivalent to RndShakeN(10,5,3)
- * RndShake(10.5,5,2)
- * // equivalent to RndShakeR(10.5,5,2)
- * RndShake(0.5,0.1,2)
- * // equivalent to RndShakeProb(0.5,0.1,3)
+ * RndShake(10)
+ * // equivalent to RndShakeN(10)
+ * RndShake(10.5)
+ * // equivalent to RndShakeR(10.5)
  * ```
  */
 function RndShake(anchor) {
@@ -12334,6 +12217,10 @@ function RndShake(anchor) {
         if (Number(anchor)) {
             anchor = Number(anchor);
         }
+    }
+    if (IsPoint(anchor)) {
+        // Point
+        return RndShakePoint(anchor);
     }
     if (typeof anchor === 'number' && IsNum(anchor)) {
         anchor = Blur(anchor);
@@ -12510,10 +12397,34 @@ function RndShakeIneq(anchor) {
     return RndBalanced(IneqSign(...f).reverse(), 3);
 }
 globalThis.RndShakeIneq = RndShakeIneq;
+/**
+ * @category RandomShake
+ * @param anchor - must be a point
+ * @return an array of 3 point
+ * ```typescript
+ * RndShakePoint([3,4])
+ * // may return [[2,5],[1,6],[4,2]]
+ * ```
+ */
+function RndShakePoint(anchor) {
+    Should(IsPoint(anchor), 'input must be point');
+    let [x, y] = anchor;
+    let func = () => {
+        const h = IsInteger(x) ? RndShakeN(x)[0] : RndShakeR(x)[0];
+        const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0];
+        return [h, k];
+    };
+    return chance.unique(func, 3, {
+        comparator: function (arr, val) {
+            return arr.some(p => p[0] === val[0] || p[1] === val[1]);
+        }
+    });
+}
+globalThis.RndShakePoint = RndShakePoint;
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12521,7 +12432,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 /**
  * @ignore
  */
-var Chance = __webpack_require__(0);
+var Chance = __webpack_require__(1);
 /**
  * @ignore
  */
@@ -12623,7 +12534,7 @@ globalThis.RndLetters = RndLetters;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12752,7 +12663,7 @@ globalThis.AreOblique = AreOblique;
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12906,7 +12817,7 @@ globalThis.LucasSequence = LucasSequence;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13089,7 +13000,7 @@ globalThis.StdDev = StdDev;
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13390,7 +13301,7 @@ globalThis.LongDivision = LongDivision;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13544,7 +13455,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13699,7 +13610,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13864,7 +13775,7 @@ globalThis.Dedupe = Dedupe;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14027,7 +13938,7 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14105,7 +14016,7 @@ globalThis.Trace = Trace;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14182,7 +14093,7 @@ globalThis.IntegralOnCircle = IntegralOnCircle;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14267,7 +14178,7 @@ globalThis.QuadraticFromVertex = QuadraticFromVertex;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14486,7 +14397,7 @@ class LinearEquation {
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14519,20 +14430,20 @@ globalThis.Should = Should;
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
 __webpack_require__(38);
-__webpack_require__(39);
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14630,7 +14541,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16423,7 +16334,7 @@ function trimCanvas(canvas) {
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17487,7 +17398,7 @@ globalThis.AutoPen = AutoPen;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17511,13 +17422,13 @@ globalThis.Projector = Projector;
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(41);
+const global_1 = __webpack_require__(40);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -17552,19 +17463,19 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(42);
-const dress_1 = __webpack_require__(43);
-const shuffle_1 = __webpack_require__(44);
-const option_1 = __webpack_require__(46);
-__webpack_require__(47);
-const cls_1 = __webpack_require__(48);
+const section_1 = __webpack_require__(41);
+const dress_1 = __webpack_require__(42);
+const shuffle_1 = __webpack_require__(43);
+const option_1 = __webpack_require__(44);
+__webpack_require__(45);
+const cls_1 = __webpack_require__(46);
 class Seed {
     constructor(core = {}) {
         // get from SeedBank API
@@ -17592,7 +17503,7 @@ class Seed {
         let v = this.core.validate;
         if (v === "")
             v = 'true';
-        v = v.replace('\n', ' ');
+        v = v.replace('\n', ' '); //is it a bug? only once?
         this.validate = v;
         this.preprocess = this.core.preprocess;
         this.postprocess = this.core.postprocess;
@@ -17748,9 +17659,7 @@ class Seed {
         };
     }
     errorFruit(e) {
-        function printError(x) {
-            return '[' + x.name + '] ' + x.message;
-        }
+        let printError = (x) => '[' + x.name + '] ' + x.message;
         let stack = this.errorPile.map(printError).join('<br/>');
         return {
             qn: "An Error Occurred!<br/>" + e.name,
@@ -17786,7 +17695,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17821,7 +17730,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17889,102 +17798,26 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OptionShuffler = exports.OptionShuffler2 = void 0;
-const html_1 = __webpack_require__(1);
-const index_1 = __webpack_require__(2);
-function RndPermutation(n = 4) {
-    return RndShuffle(...ListIntegers(0, n - 1));
-}
-function Permute(permutation, items) {
-    let newItems = [];
-    for (let i = 0; i < permutation.length; i++) {
-        newItems.push(items[permutation[i]]);
-    }
-    return newItems;
-}
-function AnsToIndex(ans) {
-    return ['A', 'B', 'C', 'D'].indexOf(ans);
-}
-function IndexToAns(index) {
-    return ['A', 'B', 'C', 'D'][index];
-}
-function NewAns(oldAns, permutation) {
-    let oldIndex = AnsToIndex(oldAns);
-    let newIndex = permutation.indexOf(oldIndex);
-    return IndexToAns(newIndex);
-}
-class OptionShuffler2 {
-    constructor(qn, sol, ans) {
-        this.qn = qn;
-        this.sol = sol;
-        this.ans = ans;
-        this.ul = "";
-        this.options = [];
-        this.perm = [];
-        this.valid = false;
-        let uls = html_1.ExtractHTMLTag(qn, 'ul');
-        if (uls.length === 0)
-            return; // no <ul></ul>
-        this.ul = uls[uls.length - 1];
-        if (this.ul === "")
-            return; // blank <ul></ul>
-        this.options = html_1.ExtractHTMLTag(this.ul, 'li');
-        if (this.options.length <= 1)
-            return; // only 1 or 0 <li></li>
-        this.perm = RndPermutation(this.options.length);
-        this.valid = true;
-    }
-    AreOptionsDuplicated() {
-        return (new Set(this.options)).size !== this.options.length;
-    }
-    genQn() {
-        if (!this.valid)
-            return this.qn;
-        let shuffledOptions = Permute(this.perm, this.options);
-        let joined = html_1.JoinToHTMLTag(shuffledOptions, 'li');
-        return this.qn.replace(this.ul, joined);
-    }
-    genAns() {
-        if (!this.valid)
-            return "X";
-        return NewAns(this.ans, this.perm);
-    }
-    genSol() {
-        if (!this.valid)
-            return this.sol;
-        let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol;
-        let ansList = ['A', 'B', 'C', 'D'];
-        ansList.length = this.perm.length;
-        for (let x of ansList) {
-            newSol = newSol.replace(new RegExp('\{\#' + x + '\}', 'g'), NewAns(x, this.perm));
-        }
-        return newSol;
-    }
-}
-exports.OptionShuffler2 = OptionShuffler2;
+exports.OptionShuffler = void 0;
+const html_1 = __webpack_require__(0);
 class OptionShuffler {
     constructor(qn, sol, ans) {
         this.qn = qn;
         this.sol = sol;
         this.ans = ans;
-        // public ul: string = ""
-        // public options: string[] = []
         this.perm = [];
         this.valid = false;
-        this.Qn = new index_1.QuestionHTML(qn);
-        // let uls = ExtractHTMLTag(qn, 'ul')
+        this.Qn = new html_1.QuestionHTML(qn);
         if (!this.Qn.ul)
             return; // no <ul></ul>
         if (this.Qn.li.length === 0)
             return; // blank <ul></ul>
-        // if (this.options.length <= 1) return // only 1 or 0 <li></li>
-        // this.perm = RndPermutation(this.options.length)
         this.valid = true;
     }
     AreOptionsDuplicated() {
@@ -17994,9 +17827,6 @@ class OptionShuffler {
         if (!this.valid)
             return this.qn;
         this.perm = this.Qn.shuffleLi();
-        // let shuffledOptions = Permute(this.perm, this.options)
-        // let joined = JoinToHTMLTag(shuffledOptions, 'li')
-        // return this.qn.replace(this.ul, joined)
         return this.Qn.export();
     }
     mapLetter(oldLetter) {
@@ -18012,7 +17842,10 @@ class OptionShuffler {
     genSol() {
         if (!this.valid)
             return this.sol;
-        let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol;
+        let newSol = "<p>Answer: "
+            + this.genAns()
+            + "</p><p><b>Solution:</b></p>"
+            + this.sol;
         let ansList = ['A', 'B', 'C', 'D', 'E', 'F'];
         ansList.length = this.perm.length;
         for (let x of ansList) {
@@ -18025,76 +17858,18 @@ exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrintVariable = void 0;
-/**
-* @category Html
-* @return print a variable (e.g. *x) into the html
-* ```typescript
-* let html = '1 + *x = *y'
-* PrintVariable(html,'x',2) // '1 + 2 = *y'
-* ```
-*/
-function PrintVariable(html, symbol, value) {
-    let T = typeof value;
-    // print **x as sci notation
-    if (T === 'number') {
-        let v = Blur(Round(value, 3));
-        if (v >= 10000 || v <= 0.01) {
-            let sci = Sci(v);
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
-        }
-        else {
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
-        }
-    }
-    // print */x as fraction
-    if (T === 'number') {
-        if (html.search("\\*\\/" + symbol) > -1) {
-            let [p, q] = ToFrac(value);
-            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
-        }
-    }
-    // print *x as normal
-    if (T === 'number') {
-        value = Blur(value);
-        if (IsDecimal(value))
-            value = Round(value, 5);
-    }
-    if (T === 'boolean') {
-        value = Tick(value);
-    }
-    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
-    return html;
-}
-exports.PrintVariable = PrintVariable;
-
-
-/***/ }),
-/* 46 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AutoOptions = void 0;
-const index_1 = __webpack_require__(2);
+const html_1 = __webpack_require__(0);
 function Produce(source, assigned) {
-    // let product = []
-    // if (Array.isArray(assigned)) {
-    //     // if supplied, then use supplied
-    //     product = RndShuffle(...assigned)
-    // } else {
-    //     // else, use shake
-    //     product.push(...RndShake(source))
-    // }
-    return Array.isArray(assigned) ? RndShuffle(...assigned) : RndShake(source);
-    // return product
+    return Array.isArray(assigned) && assigned !== source
+        ? RndShuffle(...assigned)
+        : RndShake(source);
 }
 function ExecInstructions(instructions, source) {
     let products = {};
@@ -18105,48 +17880,24 @@ function ExecInstructions(instructions, source) {
     return products;
 }
 /**
-* @category AutoOptions
-* @return append the array of options to question
+* append the array of options to question
 * ```typescript
 * let question = 'abc<ul><li>*x</li></ul>'
 * AutoOptions(question,{x:3})
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-// export function AutoOptions2(instructions: Partial<Dict>, question: string, source: Dict): string {
-//     if (IsEmptyObject(instructions)) return question
-//     let options = ExtractHTMLTag(question, 'li')
-//     let products = ExecInstructions(instructions, source)
-//     if (options.length === 1) {
-//         let others = [options[0], options[0], options[0]]
-//         for (let k in products) {
-//             for (let i = 0; i < 3; i++) {
-//                 others[i] = PrintVariable(others[i], k, products[k as keyof Dict][i])
-//             }
-//         }
-//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-//     }
-//     if (options.length === 2) {
-//         let others = [options[0], options[1]]
-//         for (let k in products) {
-//             others[0] = PrintVariable(others[0], k, products[k as keyof Dict][0])
-//             others[1] = PrintVariable(others[1], k, products[k as keyof Dict][0])
-//         }
-//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-//     }
-//     return question
-// }
 function AutoOptions(instructions, question, source) {
-    let Qn = new index_1.QuestionHTML(question);
     if (IsEmptyObject(instructions))
         return question;
+    let Qn = new html_1.QuestionHTML(question);
     let products = ExecInstructions(instructions, source);
     if (Qn.li.length === 1) {
         Qn.cloneLi(0, 3);
         for (let k in products) {
-            for (let i = 0; i <= 2; i++) {
-                Qn.printInLi(i + 1, k, products[k][i]);
-            }
+            Qn.printInLi(1, k, products[k][0]);
+            Qn.printInLi(2, k, products[k][1]);
+            Qn.printInLi(3, k, products[k][2]);
         }
         return Qn.export();
     }
@@ -18165,7 +17916,7 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 47 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18173,14 +17924,14 @@ exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
-/* 48 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dict = exports.Config = exports.SeedCore = void 0;
-const html_1 = __webpack_require__(1);
+const html_1 = __webpack_require__(0);
 class SeedCore {
     constructor(partial = {}) {
         this.qn = "";

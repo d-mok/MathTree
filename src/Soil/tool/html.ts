@@ -1,57 +1,65 @@
-/**
-* @category Html
-* @return get an array of all nodes of specified tag
-* ```typescript
-* let html = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
-* ExtractHTMLTag(html,'li') // ['1','2','3']
-* ```
-*/
-export function ExtractHTMLTag(html: string, tag: string): string[] {
-    let startTag = '<' + tag + '>'
-    let endTag = '</' + tag + '>'
-    let r = startTag + '[\\s\\S]*?' + endTag
-    let nodes = html.match(new RegExp(r, 'g'))
-    if (nodes === null) return []
-    return nodes.map(x => x.replace(startTag, '').replace(endTag, ''))
+export class QuestionHTML {
+    private body: HTMLBodyElement
+    // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
+    // there must be no ul or li tags except the answer options
+
+    constructor(html: string = '') {
+        this.body = (new DOMParser())
+            .parseFromString(html, 'text/html')
+            .getElementsByTagName('body')[0]
+    }
+
+    export() {
+        return this.body.innerHTML
+    }
+
+    get li(): HTMLLIElement[] {
+        return [...this.body.getElementsByTagName('li')]
+    }
+
+    get ul(): HTMLUListElement {
+        return this.body.getElementsByTagName('ul')[0]
+    }
+
+    cloneLi(sourceIndex: number, repeat = 1) {
+        for (let i = 1; i <= repeat; i++) {
+            this.ul.appendChild(this.li[sourceIndex].cloneNode(true))
+        }
+    }
+
+    printInWhole(symbol: string, value: any) {
+        this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value)
+    }
+
+    printInLi(index: number, symbol: string, value: any) {
+        let li = this.li[index]
+        li.innerHTML = PrintVariable(li.innerHTML, symbol, value)
+    }
+
+    isLiDuplicated(): boolean {
+        let htmls: string[] = this.li.map(x => x.innerHTML)
+        return (new Set(htmls)).size !== htmls.length
+    }
+
+    shuffleLi(): number[] {
+        let oldHTMLs: string[] = this.li.map(x => x.innerHTML)
+        let newHTMLs: string[] = RndShuffle(...oldHTMLs)
+        for (let i = 0; i < newHTMLs.length; i++) {
+            this.li[i].innerHTML = newHTMLs[i]
+        }
+        return oldHTMLs.map(x => newHTMLs.indexOf(x))
+    }
 }
 
 
-/**
-* @category Html
-* @return append content to the end of a html tag
-* ```typescript
-* let html = 'abc<ul><li>1</li></ul>'
-* AppendInHTMLTag(html, 'ul', '<li>2</li>') // 'abc<ul><li>1</li><li>2</li></ul>'
-* ```
-*/
-export function AppendInHTMLTag(html: string, tag: string, content: string): string {
-    let startTag = '<' + tag + '>'
-    let endTag = '</' + tag + '>'
-    return html.replace(endTag, content + endTag)
-}
-
-
-/**
-* @category Html
-* @return join items into html tags
-* ```typescript
-* let html = 'abc<ul><li>1</li></ul>'
-* JoinToHTMLTag(['a','b'], 'li') // '<li>a</li><li>b</li>'
-* ```
-*/
-export function JoinToHTMLTag(items: string[], tag: string): string {
-    let startTag = '<' + tag + '>'
-    let endTag = '</' + tag + '>'
-    return items.map(n => startTag + n + endTag).join('')
+function print(html:string,prefix:string){
+    
 }
 
 
 
-
-
 /**
-* @category Html
-* @return print a variable (e.g. *x) into the html
+* print a variable (e.g. *x) into the html
 * ```typescript
 * let html = '1 + *x = *y'
 * PrintVariable(html,'x',2) // '1 + 2 = *y'

@@ -91,7 +91,7 @@ test('RndShakeR', () => {
 
 
 test('RndShakeQ', () => {
-    
+
     function run(anchor, isPositive, isProb) {
         let arr = sample(() => RndShakeQ(anchor));
         if (isPositive) {
@@ -104,8 +104,8 @@ test('RndShakeQ', () => {
             expect(arr).toBeFlatIs(IsProbability);
     }
 
-    run(5/ 6, true, true);
-    run(6/-5, false, false);
+    run(5 / 6, true, true);
+    run(6 / -5, false, false);
 });
 
 
@@ -172,3 +172,31 @@ test('RndShakeIneq', () => {
     expect(nG).toBeGreaterThan(nL);
 });
 
+
+
+
+test('RndShakePoint', () => {
+
+    function run(anchor, isXPositive, isYPositive) {
+        let arr = sample(() => RndShakePoint(anchor));
+        let arr0 = arr.map(x => x.map(y => y[0]));
+        let arr1 = arr.map(x => x.map(y => y[1]));
+        expect(arr.flat()).toBeFlatIsInteger();
+        if (isXPositive) {
+            expect(arr0).toBeFlatIs(x => x > 0);
+        } else {
+            expect(arr0).toBeFlatIs(x => x < 0);
+        }
+        if (isYPositive) {
+            expect(arr1).toBeFlatIs(x => x > 0);
+        } else {
+            expect(arr1).toBeFlatIs(x => x < 0);
+        }
+        expect(arr).toAllHaveLength(3);
+    }
+
+    run([5, 6], true, true);
+    run([6, -5], true, false);
+    run([-3, 12], false, true);
+    run([-3, -12], false, false);
+});
