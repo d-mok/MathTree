@@ -7,7 +7,7 @@ import { Dict, Config, SeedCore } from './cls'
 
 import katex from 'katex';
 // @ts-ignore
-import renderMathInElement from 'katex/contrib/auto-render/auto-render.js'
+// import renderMathInElement from 'katex/contrib/auto-render/auto-render.js'
 
 
 export class Seed {
@@ -217,11 +217,13 @@ export class Seed {
     runKatex(): boolean {
         let Q = document.createElement('div')
         Q.innerHTML = this.qn
+        // @ts-ignore
         renderMathInElement(Q)
         this.qn = Q.innerHTML
         Q.remove()
         let S = document.createElement('div')
         S.innerHTML = this.sol
+        // @ts-ignore
         renderMathInElement(S)
         this.sol = S.innerHTML
         S.remove()
