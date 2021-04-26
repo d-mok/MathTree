@@ -14345,14 +14345,20 @@ class LinearEquation {
 
 var SHOULD_LOG = false;
 globalThis.SHOULD_LOG = SHOULD_LOG;
-class CustumMathError extends Error {
+class CustomError extends Error {
+    constructor(name, message) {
+        super(message);
+        this.name = name;
+    }
+}
+class CustomMathError extends Error {
     constructor(message) {
         super(message);
         this.name = 'MathError';
     }
 }
 function MathError(message) {
-    return new CustumMathError(message);
+    return new CustomMathError(message);
 }
 globalThis.MathError = MathError;
 function Should(condition, msg = "Should condition failed!") {
@@ -17528,7 +17534,8 @@ class Seed {
         }
         ;
         // throw error after 1000 failed trials
-        throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'));
+        throw new CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'));
+        // throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'))
     }
     runSection() {
         this.cropSection();
@@ -17583,8 +17590,8 @@ class Seed {
     }
     errorFruit(e) {
         return {
-            qn: "Error! " + e.name,
-            sol: e.message,
+            qn: "Error:<br/>" + e.name,
+            sol: e.message.replace(new RegExp('\\n', 'g'), '<br/>'),
             ans: "X",
             counter: this.counter,
             success: false
@@ -17607,7 +17614,7 @@ class Seed {
             return this.successFruit();
         }
         catch (e) {
-            console.error("[MathSoil] Error!\n" + e.name);
+            console.error("[MathSoil Error]\n" + e.name);
             console.error(e.message);
             console.error(e.stack);
             return this.errorFruit(e);

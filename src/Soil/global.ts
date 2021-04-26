@@ -138,7 +138,8 @@ export class Seed {
             }
         };
         // throw error after 1000 failed trials
-        throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'))
+        throw new CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'))
+        // throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'))
     }
 
     runSection(): boolean {
@@ -146,7 +147,7 @@ export class Seed {
         return true
     }
 
-    runPreprocess() {
+    runPreprocess(): boolean {
         this.doPreprocess()
         return true
     }
@@ -203,8 +204,8 @@ export class Seed {
 
     errorFruit(e: Error): Question {
         return {
-            qn: "Error! " + e.name,
-            sol: e.message,
+            qn: "Error:<br/>" + e.name,
+            sol: e.message.replace(new RegExp('\\n', 'g'), '<br/>'),
             ans: "X",
             counter: this.counter,
             success: false
@@ -227,7 +228,7 @@ export class Seed {
             return this.successFruit()
         }
         catch (e) {
-            console.error("[MathSoil] Error!\n" + e.name);
+            console.error("[MathSoil Error]\n" + e.name);
             console.error(e.message);
             console.error(e.stack);
             return this.errorFruit(e)
