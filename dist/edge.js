@@ -10042,7 +10042,11 @@ globalThis.RndLinearFromInt = RndLinearFromInt;
  * // equivalent to [RndN(...xRange),Range(...yRange)]
  * ```
  */
-function RndPoint(xRange, yRange) {
+function RndPoint(xRange, yRange = xRange) {
+    if (typeof xRange === 'number')
+        xRange = [-xRange, xRange];
+    if (typeof yRange === 'number')
+        yRange = [-yRange, yRange];
     Should(IsArrayOfLength(2)(xRange, yRange), 'input must be range');
     Should(IsNum(...xRange, ...yRange), 'input must be num');
     let x = RndN(...xRange);
