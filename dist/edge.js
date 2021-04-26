@@ -177,6 +177,9 @@ function PrintVariable(html, symbol, value) {
     if (T === 'boolean') {
         value = Tick(value);
     }
+    if (IsPoint(value)) {
+        value = Coord(value);
+    }
     print("\\*", value);
     // html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
     return html;
