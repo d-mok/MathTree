@@ -4,18 +4,17 @@ import { AppendInHTMLTag, ExtractHTMLTag, JoinToHTMLTag, PrintVariable } from '.
 import { QuestionHTML } from './html/index'
 
 function Produce<T>(source: T, assigned: any) {
-    let product = []
-    if (Array.isArray(assigned)) {
-        // if supplied, then use supplied
-        product = RndShuffle(...assigned)
-    } else {
-        // else, use shake
-        // try {
-        product.push(...RndShake(source))
-        // } catch {
-        // }
-    }
-    return product
+    // let product = []
+    // if (Array.isArray(assigned)) {
+    //     // if supplied, then use supplied
+    //     product = RndShuffle(...assigned)
+    // } else {
+    //     // else, use shake
+    //     product.push(...RndShake(source))
+    // }
+    return Array.isArray(assigned) ? RndShuffle(...assigned) : RndShake(source)
+    // return product
+
 }
 
 function ExecInstructions(instructions: Partial<Dict>, source: Dict): Partial<Dict> {
@@ -69,35 +68,26 @@ function ExecInstructions(instructions: Partial<Dict>, source: Dict): Partial<Di
 export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
     let Qn = new QuestionHTML(question)
     if (IsEmptyObject(instructions)) return question
-    // let options = ExtractHTMLTag(Qn, 'li')
     let products = ExecInstructions(instructions, source)
 
     if (Qn.li.length === 1) {
         Qn.cloneLi(0, 3)
-        // let others = [options[0], options[0], options[0]]
         for (let k in products) {
             for (let i = 0; i <= 2; i++) {
-                // console.log(Qn.li[i].innerHTML)
                 Qn.printInLi(i + 1, k, products[k as keyof Dict][i])
-                // others[i] = PrintVariable(others[i], k, products[k][i])
             }
         }
-        // return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+        return Qn.export()
     }
 
     if (Qn.li.length === 2) {
         Qn.cloneLi(0)
         Qn.cloneLi(1)
-        // let others = [options[0], options[1]]
         for (let k in products) {
             Qn.printInLi(2, k, products[k as keyof Dict][0])
             Qn.printInLi(3, k, products[k as keyof Dict][0])
-            // others[0] = PrintVariable(others[0], k, products[k][0])
-            // others[1] = PrintVariable(others[1], k, products[k][0])
         }
-        // return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+        return Qn.export()
     }
-
-    // return question
-    return Qn.export()
+    return question
 }

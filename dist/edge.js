@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7903,7 +7903,7 @@
     }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15).Buffer))
 
 /***/ }),
 /* 1 */
@@ -8009,9 +8009,106 @@ exports.PrintVariable = PrintVariable;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(3);
-__webpack_require__(34);
-__webpack_require__(39);
+exports.QuestionHTML = void 0;
+const print_1 = __webpack_require__(45);
+// class HTMLWizard {
+//     public body: HTMLBodyElement
+//     constructor(html: string = '') {
+//         this.body = (new DOMParser()).parseFromString(html, 'text/html').getElementsByTagName('body')[0]
+//     }
+//     get(tag: string): Element[] {
+//         return [...this.body.getElementsByTagName(tag)]
+//     }
+//     remove(tag: string) {
+//         this.get(tag).forEach(x => x.remove())
+//     }
+// }
+class QuestionHTML {
+    // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
+    // there must be no ul or li tags except the answer options
+    constructor(html = '') {
+        this.body = (new DOMParser())
+            .parseFromString(html, 'text/html')
+            .getElementsByTagName('body')[0];
+    }
+    export() {
+        return this.body.innerHTML;
+    }
+    get li() {
+        return [...this.body.getElementsByTagName('li')];
+    }
+    get ul() {
+        return this.body.getElementsByTagName('ul')[0];
+    }
+    cloneLi(sourceIndex, repeat = 1) {
+        for (let i = 1; i <= repeat; i++) {
+            this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
+        }
+    }
+    printInWhole(symbol, value) {
+        this.body.innerHTML = print_1.PrintVariable(this.body.innerHTML, symbol, value);
+    }
+    printInLi(index, symbol, value) {
+        let li = this.li[index];
+        li.innerHTML = print_1.PrintVariable(li.innerHTML, symbol, value);
+    }
+    isLiDuplicated() {
+        let htmls = this.li.map(x => x.innerHTML);
+        return (new Set(htmls)).size !== htmls.length;
+    }
+    shuffleLi() {
+        let oldHTMLs = this.li.map(x => x.innerHTML);
+        let newHTMLs = RndShuffle(...oldHTMLs);
+        for (let i = 0; i < newHTMLs.length; i++) {
+            this.li[i].innerHTML = newHTMLs[i];
+        }
+        return oldHTMLs.map(x => newHTMLs.indexOf(x));
+    }
+}
+exports.QuestionHTML = QuestionHTML;
+// export class SolutionHTML {
+//     private body: HTMLBodyElement
+//     // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
+//     // there must be no ul or li tags except the answer options
+//     constructor(html: string = '') {
+//         this.body = (new DOMParser())
+//             .parseFromString(html, 'text/html')
+//             .getElementsByTagName('body')[0]
+//     }
+//     export() {
+//         return this.body.innerHTML
+//     }
+//     get li(): HTMLLIElement[] {
+//         return [...this.body.getElementsByTagName('li')]
+//     }
+//     get ul(): HTMLUListElement {
+//         return this.body.getElementsByTagName('ul')[0]
+//     }
+//     cloneLi(sourceIndex: number, repeat = 1) {
+//         for (let i = 1; i <= repeat; i++) {
+//             this.ul.appendChild(this.li[sourceIndex].cloneNode(true))
+//         }
+//     }
+//     printInWhole(symbol: string, value: any) {
+//         this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value)
+//     }
+//     printInLi(index: number, symbol: string, value: any) {
+//         let li = this.li[index]
+//         li.innerHTML = PrintVariable(li.innerHTML, symbol, value)
+//     }
+//     isLiDuplicated(): boolean {
+//         let htmls: string[] = this.li.map(x => x.innerHTML)
+//         return (new Set(htmls)).size !== htmls.length
+//     }
+//     shuffleLi() {
+//         let oldHTMLs: string[] = this.li.map(x => x.innerHTML)
+//         let newHTMLs: string[] = RndShuffle(...oldHTMLs)
+//         for (let i = 0; i < newHTMLs.length; i++) {
+//             this.li[i].innerHTML = newHTMLs[i]
+//         }
+//         return oldHTMLs.map(x => newHTMLs.indexOf(x))
+//     }
+// }
 
 
 /***/ }),
@@ -8022,6 +8119,17 @@ __webpack_require__(39);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(4);
+__webpack_require__(35);
+__webpack_require__(40);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(7);
@@ -8031,7 +8139,7 @@ __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(19);
+__webpack_require__(14);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
@@ -8046,10 +8154,11 @@ __webpack_require__(30);
 __webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
+__webpack_require__(34);
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8501,7 +8610,7 @@ globalThis.IsArrayOfLength = IsArrayOfLength;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8553,7 +8662,7 @@ globalThis.nPr = nPr;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8621,7 +8730,7 @@ globalThis.RndComboConfig = RndComboConfig;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8737,7 +8846,7 @@ globalThis.ToFrac = ToFrac;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8900,7 +9009,7 @@ globalThis.arctan = arctan;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9137,7 +9246,7 @@ globalThis.IsReflex = IsReflex;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9412,7 +9521,7 @@ globalThis.OptimizeField = OptimizeField;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9802,7 +9911,7 @@ globalThis.Blurs = Blurs;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9828,7 +9937,7 @@ globalThis.PhyConst = PhyConst;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10110,7 +10219,7 @@ globalThis.RndData = RndData;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10124,9 +10233,9 @@ globalThis.RndData = RndData;
 
 
 
-var base64 = __webpack_require__(16)
-var ieee754 = __webpack_require__(17)
-var isArray = __webpack_require__(18)
+var base64 = __webpack_require__(17)
+var ieee754 = __webpack_require__(18)
+var isArray = __webpack_require__(19)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -11904,10 +12013,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11933,7 +12042,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12092,7 +12201,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -12182,7 +12291,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -12193,7 +12302,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12404,7 +12513,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12514,7 +12623,7 @@ globalThis.RndLetters = RndLetters;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12643,7 +12752,7 @@ globalThis.AreOblique = AreOblique;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12797,7 +12906,7 @@ globalThis.LucasSequence = LucasSequence;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12980,7 +13089,7 @@ globalThis.StdDev = StdDev;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13281,7 +13390,7 @@ globalThis.LongDivision = LongDivision;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13435,7 +13544,7 @@ globalThis.SolveTriangle = SolveTriangle;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13590,7 +13699,7 @@ globalThis.TrigRoot = TrigRoot;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13755,7 +13864,7 @@ globalThis.Dedupe = Dedupe;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13918,7 +14027,7 @@ globalThis.VectorRotate = VectorRotate;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13996,7 +14105,7 @@ globalThis.Trace = Trace;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14073,7 +14182,7 @@ globalThis.IntegralOnCircle = IntegralOnCircle;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14158,7 +14267,7 @@ globalThis.QuadraticFromVertex = QuadraticFromVertex;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14377,7 +14486,7 @@ class LinearEquation {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14410,20 +14519,20 @@ globalThis.Should = Should;
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
 __webpack_require__(38);
+__webpack_require__(39);
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14521,7 +14630,7 @@ globalThis.Frame = Frame;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16314,7 +16423,7 @@ function trimCanvas(canvas) {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17378,7 +17487,7 @@ globalThis.AutoPen = AutoPen;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17402,13 +17511,13 @@ globalThis.Projector = Projector;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(40);
+const global_1 = __webpack_require__(41);
 var MathSoil = {
     _grow(seedContent) {
         let seed = new global_1.Seed(seedContent);
@@ -17443,17 +17552,17 @@ globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Seed = void 0;
-const section_1 = __webpack_require__(41);
-const dress_1 = __webpack_require__(42);
-const shuffle_1 = __webpack_require__(43);
-const option_1 = __webpack_require__(44);
+const section_1 = __webpack_require__(42);
+const dress_1 = __webpack_require__(43);
+const shuffle_1 = __webpack_require__(44);
+const option_1 = __webpack_require__(46);
 __webpack_require__(47);
 const cls_1 = __webpack_require__(48);
 class Seed {
@@ -17677,7 +17786,7 @@ exports.Seed = Seed;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17712,7 +17821,7 @@ exports.ExecSection = ExecSection;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17780,14 +17889,15 @@ exports.dress = dress;
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OptionShuffler = void 0;
+exports.OptionShuffler = exports.OptionShuffler2 = void 0;
 const html_1 = __webpack_require__(1);
+const index_1 = __webpack_require__(2);
 function RndPermutation(n = 4) {
     return RndShuffle(...ListIntegers(0, n - 1));
 }
@@ -17809,7 +17919,7 @@ function NewAns(oldAns, permutation) {
     let newIndex = permutation.indexOf(oldIndex);
     return IndexToAns(newIndex);
 }
-class OptionShuffler {
+class OptionShuffler2 {
     constructor(qn, sol, ans) {
         this.qn = qn;
         this.sol = sol;
@@ -17857,179 +17967,65 @@ class OptionShuffler {
         return newSol;
     }
 }
+exports.OptionShuffler2 = OptionShuffler2;
+class OptionShuffler {
+    constructor(qn, sol, ans) {
+        this.qn = qn;
+        this.sol = sol;
+        this.ans = ans;
+        // public ul: string = ""
+        // public options: string[] = []
+        this.perm = [];
+        this.valid = false;
+        this.Qn = new index_1.QuestionHTML(qn);
+        // let uls = ExtractHTMLTag(qn, 'ul')
+        if (!this.Qn.ul)
+            return; // no <ul></ul>
+        if (this.Qn.li.length === 0)
+            return; // blank <ul></ul>
+        // if (this.options.length <= 1) return // only 1 or 0 <li></li>
+        // this.perm = RndPermutation(this.options.length)
+        this.valid = true;
+    }
+    AreOptionsDuplicated() {
+        return this.Qn.isLiDuplicated();
+    }
+    genQn() {
+        if (!this.valid)
+            return this.qn;
+        this.perm = this.Qn.shuffleLi();
+        // let shuffledOptions = Permute(this.perm, this.options)
+        // let joined = JoinToHTMLTag(shuffledOptions, 'li')
+        // return this.qn.replace(this.ul, joined)
+        return this.Qn.export();
+    }
+    mapLetter(oldLetter) {
+        let oldIndex = ['A', 'B', 'C', 'D', 'E', 'F'].indexOf(oldLetter);
+        let newIndex = this.perm[oldIndex];
+        return ['A', 'B', 'C', 'D', 'E', 'F'][newIndex];
+    }
+    genAns() {
+        if (!this.valid)
+            return "X";
+        return this.mapLetter(this.ans);
+    }
+    genSol() {
+        if (!this.valid)
+            return this.sol;
+        let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol;
+        let ansList = ['A', 'B', 'C', 'D', 'E', 'F'];
+        ansList.length = this.perm.length;
+        for (let x of ansList) {
+            newSol = newSol.replace(new RegExp('\{\#' + x + '\}', 'g'), this.mapLetter(x));
+        }
+        return newSol;
+    }
+}
 exports.OptionShuffler = OptionShuffler;
 
 
 /***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AutoOptions = void 0;
-const index_1 = __webpack_require__(45);
-function Produce(source, assigned) {
-    let product = [];
-    if (Array.isArray(assigned)) {
-        // if supplied, then use supplied
-        product = RndShuffle(...assigned);
-    }
-    else {
-        // else, use shake
-        // try {
-        product.push(...RndShake(source));
-        // } catch {
-        // }
-    }
-    return product;
-}
-function ExecInstructions(instructions, source) {
-    let products = {};
-    let k;
-    for (k in instructions) {
-        products[k] = Produce(source[k], instructions[k]);
-    }
-    return products;
-}
-/**
-* @category AutoOptions
-* @return append the array of options to question
-* ```typescript
-* let question = 'abc<ul><li>*x</li></ul>'
-* AutoOptions(question,{x:3})
-* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
-* ```
-*/
-// export function AutoOptions2(instructions: Partial<Dict>, question: string, source: Dict): string {
-//     if (IsEmptyObject(instructions)) return question
-//     let options = ExtractHTMLTag(question, 'li')
-//     let products = ExecInstructions(instructions, source)
-//     if (options.length === 1) {
-//         let others = [options[0], options[0], options[0]]
-//         for (let k in products) {
-//             for (let i = 0; i < 3; i++) {
-//                 others[i] = PrintVariable(others[i], k, products[k as keyof Dict][i])
-//             }
-//         }
-//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-//     }
-//     if (options.length === 2) {
-//         let others = [options[0], options[1]]
-//         for (let k in products) {
-//             others[0] = PrintVariable(others[0], k, products[k as keyof Dict][0])
-//             others[1] = PrintVariable(others[1], k, products[k as keyof Dict][0])
-//         }
-//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-//     }
-//     return question
-// }
-function AutoOptions(instructions, question, source) {
-    let Qn = new index_1.QuestionHTML(question);
-    if (IsEmptyObject(instructions))
-        return question;
-    // let options = ExtractHTMLTag(Qn, 'li')
-    let products = ExecInstructions(instructions, source);
-    if (Qn.li.length === 1) {
-        Qn.cloneLi(0, 3);
-        // let others = [options[0], options[0], options[0]]
-        for (let k in products) {
-            for (let i = 0; i <= 2; i++) {
-                // console.log(Qn.li[i].innerHTML)
-                Qn.printInLi(i + 1, k, products[k][i]);
-                // others[i] = PrintVariable(others[i], k, products[k][i])
-            }
-        }
-        // return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-    }
-    if (Qn.li.length === 2) {
-        Qn.cloneLi(0);
-        Qn.cloneLi(1);
-        // let others = [options[0], options[1]]
-        for (let k in products) {
-            Qn.printInLi(2, k, products[k][0]);
-            Qn.printInLi(3, k, products[k][0]);
-            // others[0] = PrintVariable(others[0], k, products[k][0])
-            // others[1] = PrintVariable(others[1], k, products[k][0])
-        }
-        // return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-    }
-    // return question
-    return Qn.export();
-}
-exports.AutoOptions = AutoOptions;
-
-
-/***/ }),
 /* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.QuestionHTML = void 0;
-const print_1 = __webpack_require__(46);
-// class HTMLWizard {
-//     public body: HTMLBodyElement
-//     constructor(html: string = '') {
-//         this.body = (new DOMParser()).parseFromString(html, 'text/html').getElementsByTagName('body')[0]
-//     }
-//     get(tag: string): Element[] {
-//         return [...this.body.getElementsByTagName(tag)]
-//     }
-//     remove(tag: string) {
-//         this.get(tag).forEach(x => x.remove())
-//     }
-// }
-class QuestionHTML {
-    // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
-    // there must be no ul or li tags except the answer options
-    constructor(html = '', ansIndex = 0) {
-        this.body = (new DOMParser())
-            .parseFromString(html, 'text/html')
-            .getElementsByTagName('body')[0];
-        this.ansIndex = ansIndex;
-    }
-    export() {
-        return this.body.innerHTML;
-    }
-    get li() {
-        return [...this.body.getElementsByTagName('li')];
-    }
-    get ul() {
-        return this.body.getElementsByTagName('ul')[0];
-    }
-    cloneLi(sourceIndex, repeat = 1) {
-        for (let i = 1; i <= repeat; i++) {
-            this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
-        }
-    }
-    printInWhole(symbol, value) {
-        this.body.innerHTML = print_1.PrintVariable(this.body.innerHTML, symbol, value);
-    }
-    printInLi(index, symbol, value) {
-        let li = this.li[index];
-        li.innerHTML = print_1.PrintVariable(li.innerHTML, symbol, value);
-    }
-    isLiDuplicated() {
-        let htmls = this.li.map(x => x.innerHTML);
-        return (new Set(htmls)).size !== htmls.length;
-    }
-    shuffleLi() {
-        let htmls = this.li.map(x => x.innerHTML);
-        let ansHTML = htmls[this.ansIndex];
-        htmls = RndShuffle(...htmls);
-        for (let i = 0; i < htmls.length; i++) {
-            this.li[i].innerHTML = htmls[i];
-        }
-        this.ansIndex = htmls.indexOf(ansHTML);
-    }
-}
-exports.QuestionHTML = QuestionHTML;
-
-
-/***/ }),
-/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18077,6 +18073,95 @@ function PrintVariable(html, symbol, value) {
     return html;
 }
 exports.PrintVariable = PrintVariable;
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AutoOptions = void 0;
+const index_1 = __webpack_require__(2);
+function Produce(source, assigned) {
+    // let product = []
+    // if (Array.isArray(assigned)) {
+    //     // if supplied, then use supplied
+    //     product = RndShuffle(...assigned)
+    // } else {
+    //     // else, use shake
+    //     product.push(...RndShake(source))
+    // }
+    return Array.isArray(assigned) ? RndShuffle(...assigned) : RndShake(source);
+    // return product
+}
+function ExecInstructions(instructions, source) {
+    let products = {};
+    let k;
+    for (k in instructions) {
+        products[k] = Produce(source[k], instructions[k]);
+    }
+    return products;
+}
+/**
+* @category AutoOptions
+* @return append the array of options to question
+* ```typescript
+* let question = 'abc<ul><li>*x</li></ul>'
+* AutoOptions(question,{x:3})
+* // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
+* ```
+*/
+// export function AutoOptions2(instructions: Partial<Dict>, question: string, source: Dict): string {
+//     if (IsEmptyObject(instructions)) return question
+//     let options = ExtractHTMLTag(question, 'li')
+//     let products = ExecInstructions(instructions, source)
+//     if (options.length === 1) {
+//         let others = [options[0], options[0], options[0]]
+//         for (let k in products) {
+//             for (let i = 0; i < 3; i++) {
+//                 others[i] = PrintVariable(others[i], k, products[k as keyof Dict][i])
+//             }
+//         }
+//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+//     }
+//     if (options.length === 2) {
+//         let others = [options[0], options[1]]
+//         for (let k in products) {
+//             others[0] = PrintVariable(others[0], k, products[k as keyof Dict][0])
+//             others[1] = PrintVariable(others[1], k, products[k as keyof Dict][0])
+//         }
+//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+//     }
+//     return question
+// }
+function AutoOptions(instructions, question, source) {
+    let Qn = new index_1.QuestionHTML(question);
+    if (IsEmptyObject(instructions))
+        return question;
+    let products = ExecInstructions(instructions, source);
+    if (Qn.li.length === 1) {
+        Qn.cloneLi(0, 3);
+        for (let k in products) {
+            for (let i = 0; i <= 2; i++) {
+                Qn.printInLi(i + 1, k, products[k][i]);
+            }
+        }
+        return Qn.export();
+    }
+    if (Qn.li.length === 2) {
+        Qn.cloneLi(0);
+        Qn.cloneLi(1);
+        for (let k in products) {
+            Qn.printInLi(2, k, products[k][0]);
+            Qn.printInLi(3, k, products[k][0]);
+        }
+        return Qn.export();
+    }
+    return question;
+}
+exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
