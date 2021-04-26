@@ -8730,7 +8730,7 @@ function ToFrac(num, maxDenominator = 1000) {
         if (IsInteger(p))
             return [(integer * q + Blur(p)) * sign, q];
     }
-    Should(false, 'cannot find fraction form: ' + num);
+    Should(false, 'cannot convert to fraction');
     throw '';
 }
 globalThis.ToFrac = ToFrac;
@@ -14394,12 +14394,6 @@ function CustomError(name, message) {
     return new CustomErrorCls(name, message);
 }
 globalThis.CustomError = CustomError;
-// class CustomMathError extends Error {
-//     constructor(message: string) {
-//         super(message);
-//         this.name = 'MathError';
-//     }
-// }
 function MathError(message) {
     return new CustomErrorCls('MathError', message);
 }
@@ -14409,7 +14403,7 @@ function Should(condition, msg = "Should condition failed!") {
         let caller = (new Error()).stack.split("\n")[2].trim().split(" ")[1];
         // let caller = 'function'
         caller = caller !== null && caller !== void 0 ? caller : 'Anonymous ';
-        throw MathError('[Function ' + caller + '] ' + msg);
+        throw MathError(caller + ': ' + msg);
     }
 }
 globalThis.Should = Should;

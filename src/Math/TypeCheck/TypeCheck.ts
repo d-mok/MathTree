@@ -15,13 +15,6 @@ function CustomError(name: string, message: string) {
 }
 globalThis.CustomError = CustomError
 
-// class CustomMathError extends Error {
-//     constructor(message: string) {
-//         super(message);
-//         this.name = 'MathError';
-//     }
-// }
-
 function MathError(message: string) {
     return new CustomErrorCls('MathError', message)
 }
@@ -33,7 +26,7 @@ function Should(condition: boolean, msg: string = "Should condition failed!") {
         let caller = (new Error()).stack!.split("\n")[2].trim().split(" ")[1]
         // let caller = 'function'
         caller = caller ?? 'Anonymous '
-        throw MathError('[Function ' + caller + '] ' + msg)
+        throw MathError(caller + ': ' + msg)
     }
 }
 globalThis.Should = Should
