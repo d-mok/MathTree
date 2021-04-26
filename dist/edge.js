@@ -17945,14 +17945,18 @@ function AutoOptions(instructions, question, source) {
         }
         // return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
     }
-    // if (options.length === 2) {
-    //     let others = [options[0], options[1]]
-    //     for (let k in products) {
-    //         others[0] = PrintVariable(others[0], k, products[k][0])
-    //         others[1] = PrintVariable(others[1], k, products[k][0])
-    //     }
-    //     return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
-    // }
+    if (Qn.li.length === 2) {
+        Qn.cloneLi(0);
+        Qn.cloneLi(1);
+        // let others = [options[0], options[1]]
+        for (let k in products) {
+            Qn.printInLi(2, k, products[k][0]);
+            Qn.printInLi(3, k, products[k][0]);
+            // others[0] = PrintVariable(others[0], k, products[k][0])
+            // others[1] = PrintVariable(others[1], k, products[k][0])
+        }
+        // return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+    }
     // return question
     return Qn.export();
 }
