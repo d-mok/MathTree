@@ -114,9 +114,9 @@ export class Seed {
         this.evalCode(this.postprocess)
     }
 
-    fillOptions() {
-        this.qn = AutoOptions(this.config.options, this.qn, this.dict, this.validate)
-    }
+    // fillOptions() {
+    //     this.qn = AutoOptions(this.config.options, this.qn, this.dict, this.validate)
+    // }
 
     pour() {
         this.qn = this.dict.substitute(this.qn)
@@ -171,7 +171,7 @@ export class Seed {
         while (nTrial <= 100) {
             nTrial++
             try {
-                this.qn = AutoOptions(this.config.options, this.qn, this.dict, this.validate)
+                this.qn = AutoOptions(this.config.options, this.qn, this.dict)
                 return true
             } catch (e) {
                 continue

@@ -12211,13 +12211,13 @@ function RndShake(anchor) {
         }
         // Decimal      
         if (IsNum(anchor)) {
-            try {
-                let f = ToFrac(anchor);
-                return RndShakeFrac(f).map((f) => f[0] / f[1]);
-            }
-            catch (e) {
-                return RndShakeR(anchor);
-            }
+            return RndShakeR(anchor);
+            // try {
+            //     let f = ToFrac(anchor)
+            //     return RndShakeFrac(f).map((f: Fraction): number => f[0] / f[1])
+            // } catch (e) {
+            //     return RndShakeR(anchor)
+            // }
         }
         if (isNaN(anchor)) {
             return [];
@@ -17516,9 +17516,9 @@ class Seed {
     doPostprocess() {
         this.evalCode(this.postprocess);
     }
-    fillOptions() {
-        this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict, this.validate);
-    }
+    // fillOptions() {
+    //     this.qn = AutoOptions(this.config.options, this.qn, this.dict, this.validate)
+    // }
     pour() {
         this.qn = this.dict.substitute(this.qn);
         this.sol = this.dict.substitute(this.sol);
@@ -17570,7 +17570,7 @@ class Seed {
         while (nTrial <= 100) {
             nTrial++;
             try {
-                this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict, this.validate);
+                this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict);
                 return true;
             }
             catch (e) {
@@ -17837,7 +17837,7 @@ exports.OptionShuffler = OptionShuffler;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AutoOptions = void 0;
 const html_1 = __webpack_require__(0);
-function ExecInstructions(instructions, source, validate) {
+function ExecInstructions(instructions, source) {
     function Produce(source, assigned) {
         let product = [];
         if (IsArray(assigned)) {
@@ -17858,7 +17858,6 @@ function ExecInstructions(instructions, source, validate) {
     for (k in instructions) {
         products[k] = Produce(source[k], instructions[k]);
     }
-    // ValidateProducts(products, source, validate)
     return products;
 }
 /**
@@ -17870,11 +17869,17 @@ function ExecInstructions(instructions, source, validate) {
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-function AutoOptions(instructions, question, source, validate) {
+function AutoOptions(instructions, question, source) {
     if (IsEmptyObject(instructions))
         return question;
     let options = html_1.ExtractHTMLTag(question, 'li');
-    let products = ExecInstructions(instructions, source, validate);
+    // transform source
+    for (let k in instructions) {
+        if (options.join('').search('\\*\\/' + k) >= 0) {
+            source[k] = Dfrac(...ToFrac(source[k]));
+        }
+    }
+    let products = ExecInstructions(instructions, source);
     if (options.length === 1) {
         let others = [options[0], options[0], options[0]];
         for (let k in products) {

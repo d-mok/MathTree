@@ -1,45 +1,6 @@
 import { Dict, Config, SeedCore } from '../cls'
 import { AppendInHTMLTag, ExtractHTMLTag, JoinToHTMLTag, PrintVariable } from './html'
 
-// class Instruction {
-//     assign: any[] = []
-//     constructor(input: any) {
-//         if (IsArray(input)) {
-//             this.assign = input
-//         } else if (typeof input === 'object' && input !== null) {
-//             Object.assign(this, input)
-//         }
-//     }
-//     do(source: any): (typeof source)[] {
-//         let product = Clone(this.assign)
-//         product.push(...RndShake(source))
-//         product.length = 3
-//         product = RndShuffle(...product)
-//         return product
-//     }
-// }
-
-
-
-
-// function ValidateProducts(products: Partial<Dict>, source: Dict, validate: string) {
-//     if (validate === "") return;
-//     validate = validate.replace('\n', ' ');
-//     for (let index = 0; index < 3; index++) {
-//         let clone = Clone(source)
-//         for (let key in products) {
-//             clone[key] = products[key][index]
-//         }
-//         let {
-//             a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z,
-//             A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
-//         } = clone;
-//         if (eval(validate) === false)
-//             throw "validate fail"
-//     }
-// }
-
-
 
 type Product = {
     [_: string]: any[]
@@ -47,7 +8,7 @@ type Product = {
 
 
 
-function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: string): Product {
+function ExecInstructions(instructions: Partial<Dict>, source: Dict): Product {
     function Produce(source: any, assigned: any[]) {
         let product = []
         if (IsArray(assigned)) {
@@ -67,7 +28,6 @@ function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: s
     for (k in instructions) {
         products[k] = Produce(source[k], instructions[k])
     }
-    // ValidateProducts(products, source, validate)
     return products
 }
 
@@ -85,10 +45,19 @@ function ExecInstructions(instructions: Partial<Dict>, source: Dict, validate: s
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict, validate: string): string {
+export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
     if (IsEmptyObject(instructions)) return question
     let options = ExtractHTMLTag(question, 'li')
-    let products = ExecInstructions(instructions, source, validate)
+
+    // transform source
+    for (let k in instructions) {
+        if (options.join('').search('\\*\\/' + k) >= 0) {
+            source[k as keyof Dict] = Dfrac(...ToFrac(source[k as keyof Dict]))
+        }
+    }
+
+
+    let products = ExecInstructions(instructions, source)
 
     if (options.length === 1) {
         let others = [options[0], options[0], options[0]]

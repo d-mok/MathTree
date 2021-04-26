@@ -36,12 +36,13 @@ function RndShake(anchor: any): (typeof anchor)[] {
         }
         // Decimal      
         if (IsNum(anchor)) {
-            try {
-                let f = ToFrac(anchor)
-                return RndShakeFrac(f).map((f: Fraction): number => f[0] / f[1])
-            } catch (e) {
-                return RndShakeR(anchor)
-            }
+            return RndShakeR(anchor)
+            // try {
+            //     let f = ToFrac(anchor)
+            //     return RndShakeFrac(f).map((f: Fraction): number => f[0] / f[1])
+            // } catch (e) {
+            //     return RndShakeR(anchor)
+            // }
         }
         if (isNaN(anchor)) {
             return []
