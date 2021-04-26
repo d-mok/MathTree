@@ -12209,9 +12209,15 @@ function RndShake(anchor) {
         if (IsInteger(anchor)) {
             return RndShakeN(anchor);
         }
-        // Decimal
+        // Decimal      
         if (IsNum(anchor)) {
-            return RndShakeR(anchor);
+            try {
+                let f = ToFrac(anchor);
+                return RndShakeFrac(f).map((f) => f[0] / f[1]);
+            }
+            catch (e) {
+                return RndShakeR(anchor);
+            }
         }
         if (isNaN(anchor)) {
             return [];
@@ -17550,7 +17556,6 @@ class Seed {
         ;
         // throw error after 1000 failed trials
         throw CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'));
-        // throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'))
     }
     runSection() {
         this.cropSection();
@@ -17605,7 +17610,7 @@ class Seed {
     }
     errorFruit(e) {
         return {
-            qn: "Error:<br/>" + e.name,
+            qn: "An Error Occurred!<br/>" + e.name,
             sol: e.message.replace(new RegExp('\\n', 'g'), '<br/>'),
             ans: "X",
             counter: this.counter,

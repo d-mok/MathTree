@@ -154,7 +154,6 @@ export class Seed {
         };
         // throw error after 1000 failed trials
         throw CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'))
-        // throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'))
     }
 
     runSection(): boolean {
@@ -219,7 +218,7 @@ export class Seed {
 
     errorFruit(e: Error): Question {
         return {
-            qn: "Error:<br/>" + e.name,
+            qn: "An Error Occurred!<br/>" + e.name,
             sol: e.message.replace(new RegExp('\\n', 'g'), '<br/>'),
             ans: "X",
             counter: this.counter,
