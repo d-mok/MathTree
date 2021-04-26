@@ -181,6 +181,7 @@ export class Seed {
                 return true
             } catch (e) {
                 this.recordError(e)
+                console.log(e.stack)
                 continue
             }
         };
@@ -224,12 +225,13 @@ export class Seed {
     }
 
     errorFruit(e: Error): Question {
-        let stack = this.errorPile.map(x =>
-            '[' + x.name + '] ' + x.message
-        ).join('<br/>')
+        function printError(x: Error) {
+            return '[' + x.name + '] ' + x.message
+        }
+        let stack = this.errorPile.map(printError).join('<br/>')
         return {
             qn: "An Error Occurred!<br/>" + e.name,
-            sol: e.message + '<br/>' + stack,
+            sol: printError(e) + '<br/>' + stack,
             ans: "X",
             counter: this.counter,
             success: false

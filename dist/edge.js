@@ -17612,6 +17612,7 @@ class Seed {
             }
             catch (e) {
                 this.recordError(e);
+                console.log(e.stack);
                 continue;
             }
         }
@@ -17647,10 +17648,13 @@ class Seed {
         };
     }
     errorFruit(e) {
-        let stack = this.errorPile.map(x => '[' + x.name + '] ' + x.message).join('<br/>');
+        function printError(x) {
+            return '[' + x.name + '] ' + x.message;
+        }
+        let stack = this.errorPile.map(printError).join('<br/>');
         return {
             qn: "An Error Occurred!<br/>" + e.name,
-            sol: e.message + '<br/>' + stack,
+            sol: printError(e) + '<br/>' + stack,
             ans: "X",
             counter: this.counter,
             success: false
