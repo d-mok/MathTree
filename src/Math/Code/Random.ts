@@ -247,6 +247,7 @@ globalThis.RndLinearFromInt = RndLinearFromInt
  * ```typescript
  * RndPoint([1,4],[10,14]) // may return [2,12]
  * // equivalent to [RndN(...xRange),Range(...yRange)]
+ * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
  * ```
  */
 function RndPoint(xRange: number | [number, number], yRange: number | [number, number] = xRange): Point {
