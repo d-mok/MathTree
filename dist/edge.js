@@ -17934,9 +17934,7 @@ function AutoOptions(instructions, question, source) {
     // let options = ExtractHTMLTag(Qn, 'li')
     let products = ExecInstructions(instructions, source);
     if (Qn.li.length === 1) {
-        Qn.cloneLi(0);
-        Qn.cloneLi(0);
-        Qn.cloneLi(0);
+        Qn.cloneLi(0, 3);
         // let others = [options[0], options[0], options[0]]
         for (let k in products) {
             for (let i = 1; i <= 3; i++) {
@@ -17998,8 +17996,10 @@ class QuestionHTML {
     get ul() {
         return this.body.getElementsByTagName('ul')[0];
     }
-    cloneLi(sourceIndex) {
-        this.ul.appendChild(this.li[sourceIndex]);
+    cloneLi(sourceIndex, repeat = 1) {
+        for (let i = 1; i <= repeat; i++) {
+            this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
+        }
     }
     printInWhole(symbol, value) {
         this.body.innerHTML = print_1.PrintVariable(this.body.innerHTML, symbol, value);
@@ -18007,6 +18007,17 @@ class QuestionHTML {
     printInLi(index, symbol, value) {
         let li = this.li[index];
         li.innerHTML = print_1.PrintVariable(li.innerHTML, symbol, value);
+    }
+    isLiDuplicated() {
+        let htmls = this.li.map(x => x.innerHTML);
+        return (new Set(htmls)).size !== htmls.length;
+    }
+    shuffleLi() {
+        let htmls = this.li.map(x => x.innerHTML);
+        htmls = RndShuffle(...htmls);
+        for (let i = 0; i < htmls.length; i++) {
+            this.li[i].innerHTML = htmls[i];
+        }
     }
 }
 exports.QuestionHTML = QuestionHTML;
