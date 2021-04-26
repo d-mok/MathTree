@@ -143,23 +143,29 @@ exports.QuestionHTML = QuestionHTML;
 * ```
 */
 function PrintVariable(html, symbol, value) {
+    let print = (prefix, value) => {
+        html = html.replace(new RegExp(prefix + symbol, 'g'), value);
+    };
     let T = typeof value;
     // print **x as sci notation
     if (T === 'number') {
         let v = Blur(Round(value, 3));
         if (v >= 10000 || v <= 0.01) {
-            let sci = Sci(v);
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+            // let sci = Sci(v)
+            print("\\*\\*", Sci(v));
+            // html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
         }
         else {
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
+            print("\\*\\*", v);
+            // html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
         }
     }
     // print */x as fraction
     if (T === 'number') {
         if (html.search("\\*\\/" + symbol) > -1) {
             let [p, q] = ToFrac(value);
-            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
+            print("\\*\\/", Dfrac(p, q));
+            // html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
         }
     }
     // print *x as normal
@@ -171,7 +177,8 @@ function PrintVariable(html, symbol, value) {
     if (T === 'boolean') {
         value = Tick(value);
     }
-    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    print("\\*", value);
+    // html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
     return html;
 }
 exports.PrintVariable = PrintVariable;

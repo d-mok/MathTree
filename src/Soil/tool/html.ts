@@ -52,10 +52,6 @@ export class QuestionHTML {
 }
 
 
-function print(html:string,prefix:string){
-    
-}
-
 
 
 /**
@@ -66,16 +62,23 @@ function print(html:string,prefix:string){
 * ```
 */
 export function PrintVariable(html: string, symbol: string, value: any): string {
+
+    let print = (prefix: string, value: any) => {
+        html = html.replace(new RegExp(prefix + symbol, 'g'), value);
+    }
+
     let T = typeof value
 
     // print **x as sci notation
     if (T === 'number') {
         let v = Blur(Round(value, 3))
         if (v >= 10000 || v <= 0.01) {
-            let sci = Sci(v)
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+            // let sci = Sci(v)
+            print("\\*\\*", Sci(v))
+            // html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
         } else {
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
+            print("\\*\\*", v)
+            // html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
         }
     }
 
@@ -83,7 +86,8 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     if (T === 'number') {
         if (html.search("\\*\\/" + symbol) > -1) {
             let [p, q] = ToFrac(value)
-            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
+            print("\\*\\/", Dfrac(p, q))
+            // html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
         }
     }
 
@@ -95,6 +99,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     if (T === 'boolean') {
         value = Tick(value)
     }
-    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    print("\\*", value)
+    // html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
     return html
 }
