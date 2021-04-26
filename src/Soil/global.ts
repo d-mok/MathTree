@@ -207,7 +207,13 @@ export class Seed {
             this.sol,
             this.config.answer
         )
-        if (shuffler.AreOptionsDuplicated()) return false
+        if (shuffler.AreOptionsDuplicated()) {
+            this.recordError(CustomError(
+                'ShuffleError',
+                'Duplicated options found!'
+            ))
+            return false
+        }
         this.qn = shuffler.genQn()
         this.sol = shuffler.genSol()
         this.config.answer = shuffler.genAns()
@@ -254,9 +260,7 @@ export class Seed {
             return this.successFruit()
         }
         catch (e) {
-            console.error("[MathSoil Error]\n" + e.name);
-            console.error(e.message);
-            console.error(e.stack);
+            console.error("[MathSoil Error]\n" + e.stack);
             return this.errorFruit(e)
         }
     }

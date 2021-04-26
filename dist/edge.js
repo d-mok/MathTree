@@ -17625,8 +17625,10 @@ class Seed {
     }
     runShuffle() {
         let shuffler = new shuffle_1.OptionShuffler(this.qn, this.sol, this.config.answer);
-        if (shuffler.AreOptionsDuplicated())
+        if (shuffler.AreOptionsDuplicated()) {
+            this.recordError(CustomError('ShuffleError', 'Duplicated options found!'));
             return false;
+        }
         this.qn = shuffler.genQn();
         this.sol = shuffler.genSol();
         this.config.answer = shuffler.genAns();
@@ -17671,9 +17673,7 @@ class Seed {
             return this.successFruit();
         }
         catch (e) {
-            console.error("[MathSoil Error]\n" + e.name);
-            console.error(e.message);
-            console.error(e.stack);
+            console.error("[MathSoil Error]\n" + e.stack);
             return this.errorFruit(e);
         }
     }
@@ -17910,12 +17910,6 @@ function AutoOptions(instructions, question, source) {
     if (IsEmptyObject(instructions))
         return question;
     let options = html_1.ExtractHTMLTag(question, 'li');
-    // // transform source
-    // for (let k in instructions) {
-    //     if (options.join('').search('\\*\\/' + k) >= 0) {
-    //         source[k as keyof Dict] = Dfrac(...ToFrac(source[k as keyof Dict]))
-    //     }
-    // }
     let products = ExecInstructions(instructions, source);
     if (options.length === 1) {
         let others = [options[0], options[0], options[0]];

@@ -32,10 +32,6 @@ function ExecInstructions(instructions: Partial<Dict>, source: Dict): Product {
 }
 
 
-
-
-
-
 /**
 * @category AutoOptions
 * @return append the array of options to question
@@ -48,16 +44,6 @@ function ExecInstructions(instructions: Partial<Dict>, source: Dict): Product {
 export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
     if (IsEmptyObject(instructions)) return question
     let options = ExtractHTMLTag(question, 'li')
-
-    
-    // // transform source
-    // for (let k in instructions) {
-    //     if (options.join('').search('\\*\\/' + k) >= 0) {
-    //         source[k as keyof Dict] = Dfrac(...ToFrac(source[k as keyof Dict]))
-    //     }
-    // }
-
-
     let products = ExecInstructions(instructions, source)
 
     if (options.length === 1) {
