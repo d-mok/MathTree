@@ -17476,6 +17476,7 @@ class Seed {
         this.config = new cls_1.Config();
         // state
         this.counter = 0;
+        this.errorPile = [];
         // copy of core
         this.core = new cls_1.SeedCore();
         this.core = new cls_1.SeedCore(core);
@@ -17494,6 +17495,10 @@ class Seed {
         this.postprocess = this.core.postprocess;
         this.dict = new cls_1.Dict();
         this.config = new cls_1.Config();
+    }
+    recordError(e) {
+        if (!this.errorPile.map(x => x.message).includes(e.message))
+            this.errorPile.push(e);
     }
     evalCode(code) {
         // injectables
@@ -17561,34 +17566,33 @@ class Seed {
         this.sol = dress_1.dress(this.sol);
     }
     runPopulate() {
-        let errors = new Set();
         while (this.counter <= 1000) {
             try {
                 this.pushDict();
-                if (!this.dict.checked()) {
-                    errors.add('[POPULATE] dict check fail');
-                    continue;
-                }
-                if (!this.isValidated()) {
-                    errors.add('[POPULATE] validation fail');
-                    continue;
-                }
+                if (!this.dict.checked())
+                    throw CustomError('PopulationError', 'Dict Check Failed.');
+                if (!this.isValidated())
+                    throw CustomError('PopulationError', 'Cannot pass validate.');
                 return true; // done if validated
             }
             catch (e) {
-                if (e.name === 'MathError') {
-                    errors.add(e.message);
-                    if (SHOULD_LOG)
-                        console.log(e.stack);
-                }
-                else {
-                    throw e;
+                switch (e.name) {
+                    case 'MathError':
+                        this.recordError(e);
+                        if (SHOULD_LOG)
+                            console.log(e.stack);
+                        break;
+                    case 'PopulationError':
+                        this.recordError(e);
+                        break;
+                    default:
+                        throw e;
                 }
             }
         }
         ;
         // throw error after 1000 failed trials
-        throw CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'));
+        throw CustomError('PopulationError', "No population found after 1000 trials!");
     }
     runSection() {
         this.cropSection();
@@ -17607,12 +17611,13 @@ class Seed {
                 return true;
             }
             catch (e) {
+                this.recordError(e);
                 continue;
             }
         }
         ;
         // throw error after 100 failed trials
-        throw Error("No valid option generated after 100 trials!");
+        throw CustomError('OptionError', "No valid option generated after 100 trials");
     }
     runSubstitute() {
         this.pour();
@@ -17642,9 +17647,10 @@ class Seed {
         };
     }
     errorFruit(e) {
+        let stack = this.errorPile.map(x => '[' + x.name + '] ' + x.message).join('<br/>');
         return {
             qn: "An Error Occurred!<br/>" + e.name,
-            sol: e.message.replace(new RegExp('\\n', 'g'), '<br/>'),
+            sol: e.message + '<br/>' + stack,
             ans: "X",
             counter: this.counter,
             success: false

@@ -20,6 +20,7 @@ export class Seed {
     public config: Config = new Config()
     // state
     public counter: number = 0
+    public errorPile: Error[] = []
     // copy of core
     public core: SeedCore = new SeedCore()
 
@@ -40,6 +41,11 @@ export class Seed {
         this.postprocess = this.core.postprocess
         this.dict = new Dict()
         this.config = new Config()
+    }
+
+    recordError(e: Error) {
+        if (!this.errorPile.map(x => x.message).includes(e.message))
+            this.errorPile.push(e)
     }
 
     evalCode(code: string): any {
@@ -130,30 +136,30 @@ export class Seed {
 
 
     runPopulate(): boolean {
-        let errors: Set<string> = new Set()
         while (this.counter <= 1000) {
             try {
                 this.pushDict()
-                if (!this.dict.checked()) {
-                    errors.add('[POPULATE] dict check fail')
-                    continue
-                }
-                if (!this.isValidated()) {
-                    errors.add('[POPULATE] validation fail')
-                    continue
-                }
+                if (!this.dict.checked())
+                    throw CustomError('PopulationError', 'Dict Check Failed.')
+                if (!this.isValidated())
+                    throw CustomError('PopulationError', 'Cannot pass validate.')
                 return true; // done if validated
             } catch (e) {
-                if (e.name === 'MathError') {
-                    errors.add(e.message)
-                    if (SHOULD_LOG) console.log(e.stack)
-                } else {
-                    throw e
+                switch (e.name) {
+                    case 'MathError':
+                        this.recordError(e)
+                        if (SHOULD_LOG) console.log(e.stack)
+                        break;
+                    case 'PopulationError':
+                        this.recordError(e)
+                        break;
+                    default:
+                        throw e
                 }
             }
         };
         // throw error after 1000 failed trials
-        throw CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'))
+        throw CustomError('PopulationError', "No population found after 1000 trials!")
     }
 
     runSection(): boolean {
@@ -174,11 +180,12 @@ export class Seed {
                 this.qn = AutoOptions(this.config.options, this.qn, this.dict)
                 return true
             } catch (e) {
+                this.recordError(e)
                 continue
             }
         };
         // throw error after 100 failed trials
-        throw Error("No valid option generated after 100 trials!")
+        throw CustomError('OptionError', "No valid option generated after 100 trials")
     }
 
 
@@ -217,9 +224,12 @@ export class Seed {
     }
 
     errorFruit(e: Error): Question {
+        let stack = this.errorPile.map(x =>
+            '[' + x.name + '] ' + x.message
+        ).join('<br/>')
         return {
             qn: "An Error Occurred!<br/>" + e.name,
-            sol: e.message.replace(new RegExp('\\n', 'g'), '<br/>'),
+            sol: e.message + '<br/>' + stack,
             ans: "X",
             counter: this.counter,
             success: false
