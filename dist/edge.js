@@ -88,103 +88,6 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrintVariable = exports.JoinToHTMLTag = exports.AppendInHTMLTag = exports.ExtractHTMLTag = void 0;
-/**
-* @category Html
-* @return get an array of all nodes of specified tag
-* ```typescript
-* let html = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
-* ExtractHTMLTag(html,'li') // ['1','2','3']
-* ```
-*/
-function ExtractHTMLTag(html, tag) {
-    let startTag = '<' + tag + '>';
-    let endTag = '</' + tag + '>';
-    let r = startTag + '[\\s\\S]*?' + endTag;
-    let nodes = html.match(new RegExp(r, 'g'));
-    if (nodes === null)
-        return [];
-    return nodes.map(x => x.replace(startTag, '').replace(endTag, ''));
-}
-exports.ExtractHTMLTag = ExtractHTMLTag;
-/**
-* @category Html
-* @return append content to the end of a html tag
-* ```typescript
-* let html = 'abc<ul><li>1</li></ul>'
-* AppendInHTMLTag(html, 'ul', '<li>2</li>') // 'abc<ul><li>1</li><li>2</li></ul>'
-* ```
-*/
-function AppendInHTMLTag(html, tag, content) {
-    let startTag = '<' + tag + '>';
-    let endTag = '</' + tag + '>';
-    return html.replace(endTag, content + endTag);
-}
-exports.AppendInHTMLTag = AppendInHTMLTag;
-/**
-* @category Html
-* @return join items into html tags
-* ```typescript
-* let html = 'abc<ul><li>1</li></ul>'
-* JoinToHTMLTag(['a','b'], 'li') // '<li>a</li><li>b</li>'
-* ```
-*/
-function JoinToHTMLTag(items, tag) {
-    let startTag = '<' + tag + '>';
-    let endTag = '</' + tag + '>';
-    return items.map(n => startTag + n + endTag).join('');
-}
-exports.JoinToHTMLTag = JoinToHTMLTag;
-/**
-* @category Html
-* @return print a variable (e.g. *x) into the html
-* ```typescript
-* let html = '1 + *x = *y'
-* PrintVariable(html,'x',2) // '1 + 2 = *y'
-* ```
-*/
-function PrintVariable(html, symbol, value) {
-    let T = typeof value;
-    // print **x as sci notation
-    if (T === 'number') {
-        let v = Blur(Round(value, 3));
-        if (v >= 10000 || v <= 0.01) {
-            let sci = Sci(v);
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
-        }
-        else {
-            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
-        }
-    }
-    // print */x as fraction
-    if (T === 'number') {
-        if (html.search("\\*\\/" + symbol) > -1) {
-            let [p, q] = ToFrac(value);
-            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
-        }
-    }
-    // print *x as normal
-    if (T === 'number') {
-        value = Blur(value);
-        if (IsDecimal(value))
-            value = Round(value, 5);
-    }
-    if (T === 'boolean') {
-        value = Tick(value);
-    }
-    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
-    return html;
-}
-exports.PrintVariable = PrintVariable;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
 /* WEBPACK VAR INJECTION */(function(Buffer) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//  Chance.js 1.1.7
 //  http://chancejs.com
 //  (c) 2013 Victor Quinn
@@ -8003,6 +7906,103 @@ exports.PrintVariable = PrintVariable;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14).Buffer))
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PrintVariable = exports.JoinToHTMLTag = exports.AppendInHTMLTag = exports.ExtractHTMLTag = void 0;
+/**
+* @category Html
+* @return get an array of all nodes of specified tag
+* ```typescript
+* let html = 'abc<ul><li>1</li><li>2</li><li>3</li></ul>'
+* ExtractHTMLTag(html,'li') // ['1','2','3']
+* ```
+*/
+function ExtractHTMLTag(html, tag) {
+    let startTag = '<' + tag + '>';
+    let endTag = '</' + tag + '>';
+    let r = startTag + '[\\s\\S]*?' + endTag;
+    let nodes = html.match(new RegExp(r, 'g'));
+    if (nodes === null)
+        return [];
+    return nodes.map(x => x.replace(startTag, '').replace(endTag, ''));
+}
+exports.ExtractHTMLTag = ExtractHTMLTag;
+/**
+* @category Html
+* @return append content to the end of a html tag
+* ```typescript
+* let html = 'abc<ul><li>1</li></ul>'
+* AppendInHTMLTag(html, 'ul', '<li>2</li>') // 'abc<ul><li>1</li><li>2</li></ul>'
+* ```
+*/
+function AppendInHTMLTag(html, tag, content) {
+    let startTag = '<' + tag + '>';
+    let endTag = '</' + tag + '>';
+    return html.replace(endTag, content + endTag);
+}
+exports.AppendInHTMLTag = AppendInHTMLTag;
+/**
+* @category Html
+* @return join items into html tags
+* ```typescript
+* let html = 'abc<ul><li>1</li></ul>'
+* JoinToHTMLTag(['a','b'], 'li') // '<li>a</li><li>b</li>'
+* ```
+*/
+function JoinToHTMLTag(items, tag) {
+    let startTag = '<' + tag + '>';
+    let endTag = '</' + tag + '>';
+    return items.map(n => startTag + n + endTag).join('');
+}
+exports.JoinToHTMLTag = JoinToHTMLTag;
+/**
+* @category Html
+* @return print a variable (e.g. *x) into the html
+* ```typescript
+* let html = '1 + *x = *y'
+* PrintVariable(html,'x',2) // '1 + 2 = *y'
+* ```
+*/
+function PrintVariable(html, symbol, value) {
+    let T = typeof value;
+    // print **x as sci notation
+    if (T === 'number') {
+        let v = Blur(Round(value, 3));
+        if (v >= 10000 || v <= 0.01) {
+            let sci = Sci(v);
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
+        }
+        else {
+            html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
+        }
+    }
+    // print */x as fraction
+    if (T === 'number') {
+        if (html.search("\\*\\/" + symbol) > -1) {
+            let [p, q] = ToFrac(value);
+            html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
+        }
+    }
+    // print *x as normal
+    if (T === 'number') {
+        value = Blur(value);
+        if (IsDecimal(value))
+            value = Round(value, 5);
+    }
+    if (T === 'boolean') {
+        value = Tick(value);
+    }
+    html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
+    return html;
+}
+exports.PrintVariable = PrintVariable;
+
+
+/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9836,7 +9836,7 @@ globalThis.PhyConst = PhyConst;
 /**
  * @ignore
  */
-var Chance = __webpack_require__(1);
+var Chance = __webpack_require__(0);
 /**
  * @ignore
  */
@@ -12412,7 +12412,7 @@ globalThis.RndShakeIneq = RndShakeIneq;
 /**
  * @ignore
  */
-var Chance = __webpack_require__(1);
+var Chance = __webpack_require__(0);
 /**
  * @ignore
  */
@@ -17787,7 +17787,7 @@ exports.dress = dress;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OptionShuffler = void 0;
-const html_1 = __webpack_require__(0);
+const html_1 = __webpack_require__(1);
 function RndPermutation(n = 4) {
     return RndShuffle(...ListIntegers(0, n - 1));
 }
@@ -17867,25 +17867,24 @@ exports.OptionShuffler = OptionShuffler;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AutoOptions = exports.AutoOptions2 = void 0;
-const html_1 = __webpack_require__(0);
+exports.AutoOptions = void 0;
 const index_1 = __webpack_require__(45);
-function ExecInstructions(instructions, source) {
-    function Produce(source, assigned) {
-        let product = [];
-        if (IsArray(assigned)) {
-            product = Clone(assigned);
-            product = RndShuffle(...product);
-        }
-        else {
-            try {
-                product.push(...RndShake(source));
-            }
-            catch (_a) {
-            }
-        }
-        return product;
+function Produce(source, assigned) {
+    let product = [];
+    if (Array.isArray(assigned)) {
+        // if supplied, then use supplied
+        product = RndShuffle(...assigned);
     }
+    else {
+        // else, use shake
+        // try {
+        product.push(...RndShake(source));
+        // } catch {
+        // }
+    }
+    return product;
+}
+function ExecInstructions(instructions, source) {
     let products = {};
     let k;
     for (k in instructions) {
@@ -17902,31 +17901,29 @@ function ExecInstructions(instructions, source) {
 * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
 * ```
 */
-function AutoOptions2(instructions, question, source) {
-    if (IsEmptyObject(instructions))
-        return question;
-    let options = html_1.ExtractHTMLTag(question, 'li');
-    let products = ExecInstructions(instructions, source);
-    if (options.length === 1) {
-        let others = [options[0], options[0], options[0]];
-        for (let k in products) {
-            for (let i = 0; i < 3; i++) {
-                others[i] = html_1.PrintVariable(others[i], k, products[k][i]);
-            }
-        }
-        return html_1.AppendInHTMLTag(question, 'ul', html_1.JoinToHTMLTag(others, 'li'));
-    }
-    if (options.length === 2) {
-        let others = [options[0], options[1]];
-        for (let k in products) {
-            others[0] = html_1.PrintVariable(others[0], k, products[k][0]);
-            others[1] = html_1.PrintVariable(others[1], k, products[k][0]);
-        }
-        return html_1.AppendInHTMLTag(question, 'ul', html_1.JoinToHTMLTag(others, 'li'));
-    }
-    return question;
-}
-exports.AutoOptions2 = AutoOptions2;
+// export function AutoOptions2(instructions: Partial<Dict>, question: string, source: Dict): string {
+//     if (IsEmptyObject(instructions)) return question
+//     let options = ExtractHTMLTag(question, 'li')
+//     let products = ExecInstructions(instructions, source)
+//     if (options.length === 1) {
+//         let others = [options[0], options[0], options[0]]
+//         for (let k in products) {
+//             for (let i = 0; i < 3; i++) {
+//                 others[i] = PrintVariable(others[i], k, products[k as keyof Dict][i])
+//             }
+//         }
+//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+//     }
+//     if (options.length === 2) {
+//         let others = [options[0], options[1]]
+//         for (let k in products) {
+//             others[0] = PrintVariable(others[0], k, products[k as keyof Dict][0])
+//             others[1] = PrintVariable(others[1], k, products[k as keyof Dict][0])
+//         }
+//         return AppendInHTMLTag(question, 'ul', JoinToHTMLTag(others, 'li'))
+//     }
+//     return question
+// }
 function AutoOptions(instructions, question, source) {
     let Qn = new index_1.QuestionHTML(question);
     if (IsEmptyObject(instructions))
@@ -18098,7 +18095,7 @@ exports.PrintVariable = PrintVariable;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dict = exports.Config = exports.SeedCore = void 0;
-const html_1 = __webpack_require__(0);
+const html_1 = __webpack_require__(1);
 class SeedCore {
     constructor(partial = {}) {
         this.qn = "";
