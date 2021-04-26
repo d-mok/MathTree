@@ -138,7 +138,7 @@ export class Seed {
             }
         };
         // throw error after 1000 failed trials
-        throw new CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'))
+        throw CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'))
         // throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'))
     }
 

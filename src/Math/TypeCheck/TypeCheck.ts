@@ -3,23 +3,27 @@ var SHOULD_LOG = false
 globalThis.SHOULD_LOG = SHOULD_LOG
 
 
-class CustomError extends Error {
+class CustomErrorCls extends Error {
     constructor(name: string, message: string) {
         super(message);
         this.name = name
     }
 }
 
-
-class CustomMathError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'MathError';
-    }
+function CustomError(name: string, message: string) {
+    return new CustomErrorCls(name, message)
 }
+globalThis.CustomError = CustomError
+
+// class CustomMathError extends Error {
+//     constructor(message: string) {
+//         super(message);
+//         this.name = 'MathError';
+//     }
+// }
 
 function MathError(message: string) {
-    return new CustomMathError(message)
+    return new CustomErrorCls('MathError', message)
 }
 globalThis.MathError = MathError
 

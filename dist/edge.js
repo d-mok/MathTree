@@ -14345,20 +14345,24 @@ class LinearEquation {
 
 var SHOULD_LOG = false;
 globalThis.SHOULD_LOG = SHOULD_LOG;
-class CustomError extends Error {
+class CustomErrorCls extends Error {
     constructor(name, message) {
         super(message);
         this.name = name;
     }
 }
-class CustomMathError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'MathError';
-    }
+function CustomError(name, message) {
+    return new CustomErrorCls(name, message);
 }
+globalThis.CustomError = CustomError;
+// class CustomMathError extends Error {
+//     constructor(message: string) {
+//         super(message);
+//         this.name = 'MathError';
+//     }
+// }
 function MathError(message) {
-    return new CustomMathError(message);
+    return new CustomErrorCls('MathError', message);
 }
 globalThis.MathError = MathError;
 function Should(condition, msg = "Should condition failed!") {
@@ -17534,7 +17538,7 @@ class Seed {
         }
         ;
         // throw error after 1000 failed trials
-        throw new CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'));
+        throw CustomError('PopulationError', "No population found after 1000 trials!\n" + [...errors].join('\n'));
         // throw Error("No population found after 1000 trials!<br/>" + [...errors].join('<br/>'))
     }
     runSection() {
