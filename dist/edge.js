@@ -17938,6 +17938,7 @@ function AutoOptions(instructions, question, source) {
         // let others = [options[0], options[0], options[0]]
         for (let k in products) {
             for (let i = 1; i <= 3; i++) {
+                console.log(Qn.li[i].innerHTML);
                 Qn.printInLi(i, k, products[k][i]);
                 // others[i] = PrintVariable(others[i], k, products[k][i])
             }
@@ -17982,10 +17983,11 @@ const print_1 = __webpack_require__(46);
 class QuestionHTML {
     // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
     // there must be no ul or li tags except the answer options
-    constructor(html = '') {
+    constructor(html = '', ansIndex = 0) {
         this.body = (new DOMParser())
             .parseFromString(html, 'text/html')
             .getElementsByTagName('body')[0];
+        this.ansIndex = ansIndex;
     }
     export() {
         return this.body.innerHTML;
@@ -18014,10 +18016,12 @@ class QuestionHTML {
     }
     shuffleLi() {
         let htmls = this.li.map(x => x.innerHTML);
+        let ansHTML = htmls[this.ansIndex];
         htmls = RndShuffle(...htmls);
         for (let i = 0; i < htmls.length; i++) {
             this.li[i].innerHTML = htmls[i];
         }
+        this.ansIndex = htmls.indexOf(ansHTML);
     }
 }
 exports.QuestionHTML = QuestionHTML;

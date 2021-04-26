@@ -24,14 +24,16 @@ import { PrintVariable } from './print'
 // }
 
 export class QuestionHTML {
-    public body: HTMLBodyElement
+    private body: HTMLBodyElement
+    private ansIndex: number
     // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
     // there must be no ul or li tags except the answer options
 
-    constructor(html: string = '') {
+    constructor(html: string = '', ansIndex: number=0) {
         this.body = (new DOMParser())
             .parseFromString(html, 'text/html')
             .getElementsByTagName('body')[0]
+        this.ansIndex = ansIndex
     }
 
     export() {
@@ -68,10 +70,12 @@ export class QuestionHTML {
 
     shuffleLi() {
         let htmls: string[] = this.li.map(x => x.innerHTML)
+        let ansHTML = htmls[this.ansIndex]
         htmls = RndShuffle(...htmls)
         for (let i = 0; i < htmls.length; i++) {
             this.li[i].innerHTML = htmls[i]
         }
+        this.ansIndex = htmls.indexOf(ansHTML)
     }
 
 
