@@ -57,7 +57,22 @@ export class Seed {
         let solution: string = this.sol
 
         // execute
-        const result: any = eval(code)
+
+        let result: any
+        try {
+            result = eval(code)
+        } catch (e) {
+            if (e.message === 'Cannot convert a Symbol value to a number') {
+                throw CustomError(
+                    'VariableError',
+                    "A variable is used before a value is given."
+                )
+            } else {
+                throw e
+            }
+        }
+
+
 
         //retrieve
         this.dict.update({

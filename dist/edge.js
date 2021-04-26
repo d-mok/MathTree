@@ -17465,7 +17465,18 @@ class Seed {
         let question = this.qn;
         let solution = this.sol;
         // execute
-        const result = eval(code);
+        let result;
+        try {
+            result = eval(code);
+        }
+        catch (e) {
+            if (e.message === 'Cannot convert a Symbol value to a number') {
+                throw CustomError('VariableError', "A variable is used before a value is given.");
+            }
+            else {
+                throw e;
+            }
+        }
         //retrieve
         this.dict.update({
             a, b, c, d, e, f, g, h, i, j, k, l, m, n,
