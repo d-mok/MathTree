@@ -37,12 +37,6 @@ function RndShake(anchor: any): (typeof anchor)[] {
         // Decimal      
         if (IsNum(anchor)) {
             return RndShakeR(anchor)
-            // try {
-            //     let f = ToFrac(anchor)
-            //     return RndShakeFrac(f).map((f: Fraction): number => f[0] / f[1])
-            // } catch (e) {
-            //     return RndShakeR(anchor)
-            // }
         }
         if (isNaN(anchor)) {
             return []
@@ -143,6 +137,23 @@ function RndShakeR(anchor: number): number[] {
 }
 globalThis.RndShakeR = RndShakeR
 
+
+/**
+ * @category RandomShake
+ * @return 3 nearby same-sign rational by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+ * ```typescript
+ * RndShakeQ(5/6) 
+ * // return 3 unique fractions around [5,6]
+ * RndShakeQ(6/-5)
+ * // return 3 unique fractions around [6,-5]
+ * ```
+ */
+function RndShakeQ(anchor: number): number[] {
+    Should(IsRational(anchor), 'anchor must be rational')
+    let f: Fraction = ToFrac(anchor)
+    return RndShakeFrac(f).map((x: Fraction): number => x[0] / x[1])
+}
+globalThis.RndShakeQ = RndShakeQ
 
 
 

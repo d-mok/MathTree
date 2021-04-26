@@ -20,6 +20,14 @@ test('IsDecimal', () => {
 });
 
 
+test('IsRational', () => {
+    const T = [0.5, 1.12, -55.6, 0, 123 / 456, -1 / 999, 123456 / 321];
+    const F = [2 ** 0.5, 3 ** 0.5, Math.sin(0.1)];
+    testAssertion(IsRational, T, F);
+});
+
+
+
 
 test('IsCoeff', () => {
     const T = [2, 3, -2, -5];

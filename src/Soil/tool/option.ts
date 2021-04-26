@@ -49,12 +49,13 @@ export function AutoOptions(instructions: Partial<Dict>, question: string, sourc
     if (IsEmptyObject(instructions)) return question
     let options = ExtractHTMLTag(question, 'li')
 
-    // transform source
-    for (let k in instructions) {
-        if (options.join('').search('\\*\\/' + k) >= 0) {
-            source[k as keyof Dict] = Dfrac(...ToFrac(source[k as keyof Dict]))
-        }
-    }
+    
+    // // transform source
+    // for (let k in instructions) {
+    //     if (options.join('').search('\\*\\/' + k) >= 0) {
+    //         source[k as keyof Dict] = Dfrac(...ToFrac(source[k as keyof Dict]))
+    //     }
+    // }
 
 
     let products = ExecInstructions(instructions, source)

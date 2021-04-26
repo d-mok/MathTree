@@ -51,6 +51,29 @@ globalThis.IsDecimal = IsDecimal
 
 
 
+/**
+ * @category Assertion
+ * @return check is a rational number with denominator <= 1000.
+ * ```typescript
+ * IsRational(0.5) // true
+ * IsRational(-5) // true
+ * IsRational(Math.sqrt(2)) // false
+ * ```
+ */
+function IsRational(...items: any[]): boolean {
+    return items.every(
+        x => {
+            if (!IsNum(x)) return false
+            try {
+                ToFrac(x,1000)
+            } catch (e) {
+                return false
+            }
+            return true
+        }
+    );
+}
+globalThis.IsRational = IsRational
 
 
 /**
@@ -367,7 +390,7 @@ globalThis.IsTriangle = IsTriangle
  * IsPoint([NaN,NaN]) // false
  * ```
  */
- function IsPoint(...items: any[]): boolean {
+function IsPoint(...items: any[]): boolean {
     return items.every(
         x => IsArrayOfLength(2)(x) && IsNum(x[0], x[1])
     );
@@ -484,7 +507,7 @@ globalThis.IsConstraint = IsConstraint
  * IsString(1) // false
  * ```
  */
- function IsString(...items: any[]): boolean {
+function IsString(...items: any[]): boolean {
     return items.every(
         x => typeof x === 'string'
     );
@@ -549,7 +572,7 @@ globalThis.IsEmptyObject = IsEmptyObject
  * IsArray({x:1}) // false
  * ```
  */
- function IsArray(...items: any[]): boolean {
+function IsArray(...items: any[]): boolean {
     return items.every(
         x => Array.isArray(x)
     );

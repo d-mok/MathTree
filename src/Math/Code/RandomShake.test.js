@@ -90,6 +90,24 @@ test('RndShakeR', () => {
 
 
 
+test('RndShakeQ', () => {
+    
+    function run(anchor, isPositive, isProb) {
+        let arr = sample(() => RndShakeQ(anchor));
+        if (isPositive) {
+            expect(arr).toBeFlatIs(x => x > 0);
+        } else {
+            expect(arr).toBeFlatIs(x => x < 0);
+        }
+        expect(arr).toAllHaveLength(3);
+        if (isProb)
+            expect(arr).toBeFlatIs(IsProbability);
+    }
+
+    run(5/ 6, true, true);
+    run(6/-5, false, false);
+});
+
 
 test('RndShakeFrac', () => {
 

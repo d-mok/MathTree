@@ -8094,6 +8094,29 @@ function IsDecimal(...items) {
 globalThis.IsDecimal = IsDecimal;
 /**
  * @category Assertion
+ * @return check is a rational number with denominator <= 1000.
+ * ```typescript
+ * IsRational(0.5) // true
+ * IsRational(-5) // true
+ * IsRational(Math.sqrt(2)) // false
+ * ```
+ */
+function IsRational(...items) {
+    return items.every(x => {
+        if (!IsNum(x))
+            return false;
+        try {
+            ToFrac(x, 1000);
+        }
+        catch (e) {
+            return false;
+        }
+        return true;
+    });
+}
+globalThis.IsRational = IsRational;
+/**
+ * @category Assertion
  * @ignore
  * @deprecated
  * @return check is an integer but not -1, 0 or 1.
@@ -12212,12 +12235,6 @@ function RndShake(anchor) {
         // Decimal      
         if (IsNum(anchor)) {
             return RndShakeR(anchor);
-            // try {
-            //     let f = ToFrac(anchor)
-            //     return RndShakeFrac(f).map((f: Fraction): number => f[0] / f[1])
-            // } catch (e) {
-            //     return RndShakeR(anchor)
-            // }
         }
         if (isNaN(anchor)) {
             return [];
@@ -12300,6 +12317,22 @@ function RndShakeR(anchor) {
     return arr.map(x => Number(x + "e" + exp));
 }
 globalThis.RndShakeR = RndShakeR;
+/**
+ * @category RandomShake
+ * @return 3 nearby same-sign rational by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+ * ```typescript
+ * RndShakeQ(5/6)
+ * // return 3 unique fractions around [5,6]
+ * RndShakeQ(6/-5)
+ * // return 3 unique fractions around [6,-5]
+ * ```
+ */
+function RndShakeQ(anchor) {
+    Should(IsRational(anchor), 'anchor must be rational');
+    let f = ToFrac(anchor);
+    return RndShakeFrac(f).map((x) => x[0] / x[1]);
+}
+globalThis.RndShakeQ = RndShakeQ;
 /**
  * @category RandomShake
  * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
@@ -17873,12 +17906,12 @@ function AutoOptions(instructions, question, source) {
     if (IsEmptyObject(instructions))
         return question;
     let options = html_1.ExtractHTMLTag(question, 'li');
-    // transform source
-    for (let k in instructions) {
-        if (options.join('').search('\\*\\/' + k) >= 0) {
-            source[k] = Dfrac(...ToFrac(source[k]));
-        }
-    }
+    // // transform source
+    // for (let k in instructions) {
+    //     if (options.join('').search('\\*\\/' + k) >= 0) {
+    //         source[k as keyof Dict] = Dfrac(...ToFrac(source[k as keyof Dict]))
+    //     }
+    // }
     let products = ExecInstructions(instructions, source);
     if (options.length === 1) {
         let others = [options[0], options[0], options[0]];
