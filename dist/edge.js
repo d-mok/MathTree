@@ -151,13 +151,10 @@ function PrintVariable(html, symbol, value) {
     if (T === 'number') {
         let v = Blur(Round(value, 3));
         if (v >= 10000 || v <= 0.01) {
-            // let sci = Sci(v)
             print("\\*\\*", Sci(v));
-            // html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), sci);
         }
         else {
             print("\\*\\*", v);
-            // html = html.replace(new RegExp("\\*\\*" + symbol, 'g'), v);
         }
     }
     // print */x as fraction
@@ -165,7 +162,6 @@ function PrintVariable(html, symbol, value) {
         if (html.search("\\*\\/" + symbol) > -1) {
             let [p, q] = ToFrac(value);
             print("\\*\\/", Dfrac(p, q));
-            // html = html.replace(new RegExp("\\*\\/" + symbol, 'g'), Dfrac(p, q));
         }
     }
     // print *x as normal
@@ -181,7 +177,6 @@ function PrintVariable(html, symbol, value) {
         value = Coord(value);
     }
     print("\\*", value);
-    // html = html.replace(new RegExp("\\*" + symbol, 'g'), value);
     return html;
 }
 exports.PrintVariable = PrintVariable;
@@ -10040,6 +10035,7 @@ globalThis.RndLinearFromInt = RndLinearFromInt;
  * ```typescript
  * RndPoint([1,4],[10,14]) // may return [2,12]
  * // equivalent to [RndN(...xRange),Range(...yRange)]
+ * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
  * ```
  */
 function RndPoint(xRange, yRange = xRange) {
@@ -17663,6 +17659,19 @@ class Seed {
         this.config.answer = shuffler.genAns();
         return true;
     }
+    runKatex() {
+        let Q = document.createElement('div');
+        Q.innerHTML = this.qn;
+        // @ts-ignore
+        renderMathInElement(Q);
+        this.qn = Q.innerHTML;
+        let S = document.createElement('div');
+        S.innerHTML = this.sol;
+        // @ts-ignore
+        renderMathInElement(S);
+        this.sol = S.innerHTML;
+        return true;
+    }
     successFruit() {
         return {
             qn: this.qn,
@@ -17695,6 +17704,7 @@ class Seed {
                 this.runPostprocess();
                 if (!this.runShuffle())
                     continue;
+                this.runKatex();
                 break;
             } while (true);
             return this.successFruit();

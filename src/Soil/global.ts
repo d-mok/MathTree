@@ -5,6 +5,7 @@ import { AutoOptions } from './tool/option'
 import './type'
 import { Dict, Config, SeedCore } from './cls'
 
+import katex from 'katex';
 
 
 
@@ -212,6 +213,20 @@ export class Seed {
         return true
     }
 
+    runKatex(): boolean {
+        let Q = document.createElement('div')
+        Q.innerHTML = this.qn
+        // @ts-ignore
+        renderMathInElement(Q)
+        this.qn = Q.innerHTML
+        let S = document.createElement('div')
+        S.innerHTML = this.sol
+        // @ts-ignore
+        renderMathInElement(S)
+        this.sol = S.innerHTML
+        return true
+    }
+
     successFruit(): Question {
         return {
             qn: this.qn,
@@ -245,6 +260,7 @@ export class Seed {
                 this.runSubstitute();
                 this.runPostprocess();
                 if (!this.runShuffle()) continue
+                this.runKatex()
                 break
             } while (true);
             return this.successFruit()
