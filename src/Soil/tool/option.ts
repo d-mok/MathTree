@@ -81,9 +81,9 @@ export function AutoOptions(instructions: Partial<Dict>, question: string, sourc
         Qn.cloneLi(0, 3)
         // let others = [options[0], options[0], options[0]]
         for (let k in products) {
-            for (let i = 1; i <= 3; i++) {
-                console.log(Qn.li[i].innerHTML)
-                Qn.printInLi(i, k, products[k][i])
+            for (let i = 0; i <= 2; i++) {
+                // console.log(Qn.li[i].innerHTML)
+                Qn.printInLi(i + 1, k, products[k][i])
                 // others[i] = PrintVariable(others[i], k, products[k][i])
             }
         }
