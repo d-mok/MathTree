@@ -1,7 +1,7 @@
-import { Seed } from '../global'
+import { Soil } from '../global'
 
 test('properly populate and validate a seed', () => {
-    const seed = new Seed({
+    const seed = new Soil({
         qn: 'this is the question<ul><li>*x</li></ul>',
         populate: "x=10;options={x:[0,0,0]}",
         validate: ""

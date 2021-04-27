@@ -1,16 +1,9 @@
 import { PrintVariable } from "./tool/html"
 
-export class SeedCore {
-    public readonly qn: string = ""
-    public readonly sol: string = ""
-    public readonly populate: string = ""
-    public readonly validate: string = ""
-    public readonly preprocess: string = ""
-    public readonly postprocess: string = ""
-    constructor(partial: Partial<SeedCore> = {}) {
-        Object.assign(this, partial)
-    }
-}
+
+
+
+
 
 
 export class Config {
@@ -94,11 +87,11 @@ export class Dict {
             if (key in other) this[key] = other[key]
         }
     }
-    blur() {
-        for (let key of this.variables) {
-            this[key] = Blur(this[key])
-        }
-    }
+    // blur() {
+    //     for (let key of this.variables) {
+    //         this[key] = Blur(this[key])
+    //     }
+    // }
     checked() {
         for (let key of this.variables) {
             let v = this[key]

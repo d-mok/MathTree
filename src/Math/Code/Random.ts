@@ -1,15 +1,4 @@
 /**
- * @ignore
- */
-var Chance = require('chance');
-
-/**
- * @ignore
- */
-var chance = new Chance();
-
-
-/**
  * @category Random
  * @return a random integer in [min, max] inclusive.
  * ```typescript
@@ -207,7 +196,7 @@ globalThis.RndPoly = RndPoly
  */
 function RndPyth(max = 100): [number, number, number] {
     Should(IsNum(max), 'input must be num')
-    let arr = [];
+    let arr: [number, number, number][] = [];
     for (let m = 1; m < 10; m++) {
         for (let n = 1; n < m; n++) {
             for (let k = 1; k < 10; k++) {

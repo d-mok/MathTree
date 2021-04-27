@@ -1,16 +1,19 @@
-
-
-
-
-
 type section = [number | string, number]
 
-
-
-type Question = {
-    qn: string,
-    sol: string,
-    ans: string | undefined,
+type Fruit = {
+    readonly qn: string,
+    readonly sol: string,
+    readonly ans: string | undefined,
     counter: number,
-    success: boolean
+    readonly success: boolean
+}
+
+
+type Gene = {
+    readonly qn: string
+    readonly sol: string
+    readonly populate: string
+    readonly validate: string
+    readonly preprocess: string
+    readonly postprocess: string
 }

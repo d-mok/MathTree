@@ -16,8 +16,8 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        filename: 'edge.js',
-        path: path.resolve(__dirname, 'dist'),
+        filename: 'mathtree.js',
+        path: path.resolve(__dirname, 'dist/edge'),
     },
     optimization: {
         minimize: false

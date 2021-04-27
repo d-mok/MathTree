@@ -94,14 +94,14 @@ function RndShakeN(anchor: number): [number, number, number] {
     let a = Abs(anchor)
     let range = Max(3, a * 0.1)
     if (anchor === 0) {
-        return chance.unique(() => RndN(1, 3), 3);
+        return chance.unique(() => RndN(1, 3), 3) as [number, number, number];
     }
     let max = Min(Floor(a + range), LogCeil(a) - 1)
     let min = Max(Ceil(a - range), 1, LogFloor(a))
     let func = Sieve(() => RndN(min, max), x => (x !== a))
-    let arr = chance.unique(func, 3)
+    let arr: [number, number, number] = chance.unique(func, 3) as [number, number, number]
     let s = Sign(anchor)
-    arr = arr.map((x: number) => s * x)
+    arr = arr.map((x: number) => s * x) as [number, number, number]
     return arr
 }
 globalThis.RndShakeN = RndShakeN
@@ -173,7 +173,7 @@ function RndShakeFrac(anchor: Fraction): Fraction[] {
     [p, q] = Blurs([p, q])
     Should(IsInteger(p, q), 'input should be integral fraction')
     let func = Sieve(
-        () => {
+        (): Fraction => {
             const h = RndShakeN(p)[0]
             const k = RndShakeN(q)[0]
             return RndPick([h, k], [h, k], [p, k], [h, q])
@@ -245,7 +245,7 @@ globalThis.RndShakeIneq = RndShakeIneq
 function RndShakePoint(anchor: Point): Point[] {
     Should(IsPoint(anchor), 'input must be point')
     let [x, y] = anchor
-    let func = () => {
+    let func = (): Point => {
         const h = IsInteger(x) ? RndShakeN(x)[0] : RndShakeR(x)[0]
         const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0]
         return [h, k]

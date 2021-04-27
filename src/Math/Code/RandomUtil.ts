@@ -1,16 +1,4 @@
 /**
- * @ignore
- */
-var Chance = require('chance');
-
-/**
- * @ignore
- */
-var chance = new Chance();
-
-
-
-/**
  * @category RandomUtil
  * @return a random item from the given items
  * ```typescript
@@ -18,7 +6,7 @@ var chance = new Chance();
  * ```
  */
 function RndPick<T>(...items: T[]): T {
-    return chance.pickone(items);
+    return chance.pickone(items)
 }
 globalThis.RndPick = RndPick
 

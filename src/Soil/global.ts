@@ -2,51 +2,49 @@ import { ExecSection } from './tool/section'
 import { dress } from './tool/dress'
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
-import './type'
-import { Dict, Config, SeedCore } from './cls'
+import { Dict, Config } from './cls'
 
-export class Seed {
+export class Soil {
     // get from SeedBank API
-    public qn: string = ""
-    public sol: string = ""
-    public populate: string = ""
-    public validate: string = ""
-    public preprocess: string = ""
-    public postprocess: string = ""
+    private qn: string = ""
+    private sol: string = ""
+    // public populate: string = ""
+    // public validate: string = ""
+    // public preprocess: string = ""
+    // public postprocess: string = ""
     // working variables during growth
-    public dict: Dict = new Dict()
-    public config: Config = new Config()
+    private dict: Dict = new Dict()
+    private config: Config = new Config()
     // state
-    public counter: number = 0
-    public errorPile: Error[] = []
-    // copy of core
-    public core: SeedCore = new SeedCore()
+    private counter: number = 0
+    private errorPile: Error[] = []
 
-    constructor(core: Partial<SeedCore> = {}) {
-        this.core = new SeedCore(core)
+    constructor(
+        private readonly gene: Gene
+    ) {
         this.reset()
     }
 
-    reset() {
-        this.qn = this.core.qn
-        this.sol = this.core.sol
-        this.populate = this.core.populate
-        let v = this.core.validate
-        if (v === "") v = 'true'
-        v = v.replace('\n', ' ') //is it a bug? only once?
-        this.validate = v
-        this.preprocess = this.core.preprocess
-        this.postprocess = this.core.postprocess
+    private reset() {
+        this.qn = this.gene.qn
+        this.sol = this.gene.sol
+        // this.populate = this.gene.populate
+        // let v = this.gene.validate
+        // if (v === "") v = 'true'
+        // v = v.replace('\n', ' ') //is it a bug? only once?
+        // this.validate = v
+        // this.preprocess = this.gene.preprocess
+        // this.postprocess = this.gene.postprocess
         this.dict = new Dict()
         this.config = new Config()
     }
 
-    recordError(e: Error) {
+    private recordError(e: Error) {
         if (!this.errorPile.map(x => x.message).includes(e.message))
             this.errorPile.push(e)
     }
 
-    evalCode(code: string): any {
+    private evalCode(code: string): any {
         // injectables
         let {
             a, b, c, d, e, f, g, h, i, j, k, l, m, n,
@@ -93,39 +91,42 @@ export class Seed {
         return result
     }
 
-    pushDict() {
+    private pushDict() {
         this.counter++
-        this.evalCode(this.populate)
+        this.evalCode(this.gene.populate)
     }
 
-    isValidated() {
-        return this.evalCode(this.validate) === true
+    private isValidated() {
+        let v = this.gene.validate
+        if (v === "") return true
+        v = v.replace('\n', ' ') //is it a bug? only once?
+        return this.evalCode(v) === true
     }
 
-    cropSection() {
-        this.qn = ExecSection(this.qn, this.config.sections);
-        this.sol = ExecSection(this.sol, this.config.sections);
-    }
+    // cropSection() {
+    //     this.qn = ExecSection(this.qn, this.config.sections);
+    //     this.sol = ExecSection(this.sol, this.config.sections);
+    // }
 
-    doPreprocess() {
-        this.evalCode(this.preprocess)
-    }
+    // doPreprocess() {
+    //     this.evalCode(this.gene.preprocess)
+    // }
 
-    doPostprocess() {
-        this.evalCode(this.postprocess)
-    }
+    // doPostprocess() {
+    //     this.evalCode(this.gene.postprocess)
+    // }
 
-    pour() {
-        this.qn = this.dict.substitute(this.qn)
-        this.sol = this.dict.substitute(this.sol)
-    }
+    // pour() {
+    //     this.qn = this.dict.substitute(this.qn)
+    //     this.sol = this.dict.substitute(this.sol)
+    // }
 
-    dress() {
-        this.qn = dress(this.qn);
-        this.sol = dress(this.sol);
-    }
+    // dress() {
+    //     this.qn = dress(this.qn);
+    //     this.sol = dress(this.sol);
+    // }
 
-    katex(html: string) {
+    private katex(html: string): string {
         let ele = document.createElement('div')
         ele.innerHTML = html
         // @ts-ignore
@@ -136,7 +137,7 @@ export class Seed {
     }
 
 
-    runPopulate(): boolean {
+    private runPopulate(): boolean {
         while (this.counter <= 1000) {
             try {
                 this.pushDict()
@@ -162,17 +163,19 @@ export class Seed {
         throw CustomError('PopulationError', "No population found after 1000 trials!")
     }
 
-    runSection(): boolean {
-        this.cropSection()
+    private runSection(): boolean {
+        // crop section
+        this.qn = ExecSection(this.qn, this.config.sections);
+        this.sol = ExecSection(this.sol, this.config.sections);
         return true
     }
 
-    runPreprocess(): boolean {
-        this.doPreprocess()
+    private runPreprocess(): boolean {
+        this.evalCode(this.gene.preprocess)
         return true
     }
 
-    runOption(): boolean {
+    private runOption(): boolean {
         let nTrial = 0
         while (nTrial <= 100) {
             nTrial++
@@ -189,18 +192,22 @@ export class Seed {
     }
 
 
-    runSubstitute(): boolean {
-        this.pour()
-        this.dress()
+    private runSubstitute(): boolean {
+        // pour
+        this.qn = this.dict.substitute(this.qn)
+        this.sol = this.dict.substitute(this.sol)
+        // dress
+        this.qn = dress(this.qn);
+        this.sol = dress(this.sol);
         return true
     }
 
-    runPostprocess(): boolean {
-        this.doPostprocess()
+    private runPostprocess(): boolean {
+        this.evalCode(this.gene.postprocess)
         return true
     }
 
-    runShuffle(): boolean {
+    private runShuffle(): boolean {
         let shuffler = new OptionShuffler(
             this.qn,
             this.sol,
@@ -219,13 +226,13 @@ export class Seed {
         return true
     }
 
-    runKatex(): boolean {
+    private runKatex(): boolean {
         this.qn = this.katex(this.qn)
         this.sol = this.katex(this.sol)
         return true
     }
 
-    successFruit(): Question {
+    private successFruit(): Fruit {
         return {
             qn: this.qn,
             sol: this.sol,
@@ -235,7 +242,7 @@ export class Seed {
         }
     }
 
-    errorFruit(e: Error): Question {
+    private errorFruit(e: Error): Fruit {
         let printError = (x: Error) => '[' + x.name + '] ' + x.message
         let stack = this.errorPile.map(printError).join('<br/>')
         return {
@@ -247,7 +254,7 @@ export class Seed {
         }
     }
 
-    grow(): Question {
+    nurture(): Fruit {
         try {
             do {
                 this.reset()

@@ -26,3 +26,4 @@ import './Algebra/Linear.ts'
 
 
 import './should.ts'
+import './chance.ts'

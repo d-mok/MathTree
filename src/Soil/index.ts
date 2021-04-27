@@ -1,47 +1,42 @@
 
-import { Seed } from './global'
-import { Dict, Config, SeedCore } from './cls'
+import { Soil } from './global'
 
 declare global {
     var MathSoil: any
 }
 
-type Shell = {
-    content: SeedCore
-    question?: Question
+
+type Seed = {
+    id: string
+    bank: string
+    folder: string
+    gene: Gene
+    fruit?: Fruit
 }
 
 
+class MathSoilCls {
 
-var MathSoil = {
-    _grow(seedContent: SeedCore): Question {
-        let seed: Seed = new Seed(seedContent)
-        return seed.grow()
-    },
-    _growOne(seed: Shell): void {
-        seed.question = this._grow(seed.content);
-    },
-    grow(seeds: Shell | Shell[]): void {
-        // grow one seed or array of seeds, append Question to them
-        if (Array.isArray(seeds)) {
-            seeds.forEach(x => this._growOne(x))
-        }
-        else {
-            this._growOne(seeds)
-        }
-    },
-    test(seed: Shell) {
-        // test the seed's health, find the avg trial to success
+    public grow(seed: Seed): void {
+        let soil = new Soil(seed.gene)
+        seed.fruit = soil.nurture()
+    }
+
+    public growAll(seeds: Seed[]): void {
+        seeds.forEach(x => this.grow(x))
+    }
+
+    public test(seed: Seed): void {
         let counters = [];
         for (let i = 1; i <= 100; i++) {
             this.grow(seed);
-            if (!seed.question!.success) {
-                return { avg: 0, healthy: false };
-            }
-            counters.push(seed.question!.counter);
+            if (!seed.fruit!.success) return
+            counters.push(seed.fruit!.counter);
         }
-        return { avg: Mean(...counters), healthy: true };
+        seed.fruit!.counter = Mean(...counters)
     }
-};
 
+}
+
+var MathSoil = new MathSoilCls()
 globalThis.MathSoil = MathSoil
