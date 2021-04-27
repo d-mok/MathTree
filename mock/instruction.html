@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <h3>Content Editing</h3>
+    <ol>
+        <li>
+            The content editor can be used as
+            <b>MSWord</b>.
+        </li>
+        <li>
+            The symbol '*' signify a
+            <b>variable</b>. e.g. '*x' will be substituted by the value of
+            <code>x</code> from code.
+        </li>
+        <li>
+            <b>LaTex</b> is used in equation objects. See
+            <a
+                href="https://katex.org/docs/supported.html"
+            >KaTeX</a> for a list of supported syntax.
+        </li>
+        <li>
+            <b>Answer options</b> in MC must be listed as bullet points. e.g.
+            <ul>
+                <li>I only</li>
+                <li>I and II only</li>
+                <li>I and III only</li>
+                <li>I, II and III only</li>
+            </ul>The
+            <b>first option</b> must be the
+            <b>correct answer</b>.
+        </li>
+    </ol>
+    <br />
+    <h3>Variable: Populate Code</h3>
+    <ol>
+        <li>
+            All
+            <b>variables</b> must be defined here.
+        </li>
+        <li>
+            All
+            <b>alphabets</b> (a-z,A-Z) are pre-declared as variables. Once defined, their values will be substituted in the content.
+        </li>
+        <li>Variables can be number or string. Decimals will be rounded to 5 sig. fig. before substitution.</li>
+        <li>
+            Each line should end with a
+            <b>semicolon</b> ';'.
+        </li>
+    </ol>
+    <br />
+    <h3>Variable: Validate Code</h3>
+    <ol>
+        <li>
+            All variables
+            <b>validation</b> should be done here.
+        </li>
+        <li>
+            The code here must be a
+            <b>single boolean expression</b>, no matter how complex.
+        </li>
+        <li>
+            The code here can access the
+            <b>alphabet variables</b> (a-z,A-Z) defined earlier.
+        </li>
+        <li>
+            <b>One line</b> should contain only
+            <b>one condition</b> for clarity.
+        </li>
+        <li>If no validation is needed, just left it blank.</li>
+        <li>
+            Some common
+            <b>logical operators</b>:
+            <ul>
+                <li>
+                    and:
+                    <code>x && y</code>
+                </li>
+                <li>
+                    or:
+                    <code>x || y</code>
+                </li>
+                <li>
+                    not:
+                    <code>!x</code>
+                </li>
+                <li>
+                    equal:
+                    <code>x === y</code>
+                </li>
+                <li>
+                    unequal:
+                    <code>x !== y</code>
+                </li>
+            </ul>
+        </li>
+    </ol>
+    <br />
+    <h3>Processing Code</h3>
+    <ol>
+        <li>
+            This code is for
+            <b>manipulating the content as html strings</b>.
+        </li>
+        <li>This code can access the alphabet variables (a-z,A-Z) defined earlier.</li>
+        <li>
+            This code can access the
+            <b>question html string</b> as
+            <code>question</code>.
+        </li>
+        <li>
+            This code can access the
+            <b>solution html string</b> as
+            <code>solution</code>.
+        </li>
+        <li>
+            <b>Preprocess</b> code are executed
+            <b>before</b> substituting alphabet varaibles.
+        </li>
+        <li>
+            <b>Postprocess</b> code are executed
+            <b>after</b> substituting alphabet varaibles.
+        </li>
+    </ol>
+    <br />
+    <h3>Code Execution Flow</h3>
+    <ol>
+        <li>
+            Run the
+            <b>population code</b> to define to variables.
+        </li>
+        <li>
+            Run the
+            <b>validation code</b>.
+            <br />If failed, populate again and again until validation passed. The execution will stop after 1000 failed trials.
+        </li>
+        <li>
+            Run the
+            <b>preprocess code</b>.
+        </li>
+        <li>
+            <b>Substitute</b> the variables, and do some smart adjustment:
+            <ul>
+                <li>Round all decimal variables to 5 significant figures.</li>
+                <li>Correct minus signs, e.g. x--y become x+y.</li>
+                <li>Correct unit coefficient, e.g. x+1y become x+y.</li>
+            </ul>
+        </li>
+        <li>
+            Run the
+            <b>postprocess code</b>.
+        </li>
+        <li>
+            <b>Shuffle</b> the answer options.
+            <br />If duplicated options are found, the whole execution will restart from step 1. The execution will stop after 1000 failed trials.
+        </li>
+    </ol>
+    <br />
+    <h3>Common Javascript</h3>
+    <ol>
+        <li>
+            Declare variable:
+            <code>let myVariable = 1</code>
+        </li>
+        <li>
+            If Block:
+            <code>if(condition){DoSomething}</code>
+        </li>
+        <li>
+            Loop:
+            <!-- <code>for(let i=1; i<=10; i++){x=x+i}</code> -->
+        </li>
+        <li>
+            Array Element:
+            <code>x = arr[0]; y = arr[1];</code>
+        </li>
+        <li>
+            Array Deconstruction:
+            <code>[a,b,c]=[1,2,3]</code> (same as
+            <code>a=1;b=2;c=3;</code>)
+        </li>
+        <li>
+            Print Debug:
+            <code>console.log(x)</code>
+        </li>
+    </ol>
+    <br />
+    <h3>Common LaTex</h3>
+    <ol>
+        <li>
+            Superscript: \(a^{b}\)
+            <br />
+            a^{b}
+        </li>
+        <li>
+            Subscript: \(a_{b}\)
+            <br />
+            a_{b}
+        </li>
+        <li>
+            Fraction: \(\dfrac{a}{b}\)
+            <br />
+            \dfrac{a}{b}
+        </li>
+        <li>
+            Small Fraction: \(\frac{a}{b}\)
+            <br />
+            \frac{a}{b}
+        </li>
+        <li>
+            Square Root: \(\sqrt{x}\)
+            <br />
+            \sqrt{x}
+        </li>
+        <li>
+            Equation Alignment: \(\begin{aligned}
+            2x-4&=10 \\
+            x&=7
+            \end{aligned}\)
+            <br />
+            \begin{aligned}
+            <br />2x-4&=10 \\
+            <br />x&=7
+            <br />
+            \end{aligned}
+            <br />
+        </li>
+    </ol>
+</body>
+</html>

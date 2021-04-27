@@ -17435,18 +17435,18 @@ globalThis.Projector = Projector;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const global_1 = __webpack_require__(41);
+const soil_1 = __webpack_require__(41);
 class MathSoilCls {
     grow(seed) {
-        let soil = new global_1.Soil(seed.gene);
+        let soil = new soil_1.Soil(seed.gene);
         seed.fruit = soil.nurture();
     }
     growAll(seeds) {
         seeds.forEach(x => this.grow(x));
     }
-    test(seed) {
+    test(seed, repeat = 100) {
         let counters = [];
-        for (let i = 1; i <= 100; i++) {
+        for (let i = 1; i <= repeat; i++) {
             this.grow(seed);
             if (!seed.fruit.success)
                 return;

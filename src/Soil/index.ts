@@ -1,5 +1,5 @@
 
-import { Soil } from './global'
+import { Soil } from './soil'
 
 declare global {
     var MathSoil: any
@@ -26,9 +26,9 @@ class MathSoilCls {
         seeds.forEach(x => this.grow(x))
     }
 
-    public test(seed: Seed): void {
+    public test(seed: Seed, repeat = 100): void {
         let counters = [];
-        for (let i = 1; i <= 100; i++) {
+        for (let i = 1; i <= repeat; i++) {
             this.grow(seed);
             if (!seed.fruit!.success) return
             counters.push(seed.fruit!.counter);
