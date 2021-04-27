@@ -10,17 +10,27 @@
 </head>
 
 <body>
-    <a href="https://d-mok.github.io/MathTree/typedoc/">Doc Link</a>
-    <textarea id="code" rows="40" cols="100" spellcheck="false">
-    </textarea>
-    <div>
-        <button type="button" onClick="draw()">Draw</button>
-        <button type="button" onClick="run()">Run</button>
-        <button type="button" onClick="store()">Store</button>
-        <button type="button" onClick="retrieve()">Retrieve</button>
+    <div id="container">
+
+        <div id="leftThing">
+            <div> <a href="https://d-mok.github.io/MathTree/typedoc/" target="_blank">Doc Link</a></div>
+            <textarea id="code" rows="40" style="width:80%" spellcheck="false">
+            </textarea>
+            <div>
+                <button type="button" onClick="draw()">Draw</button>
+                <button type="button" onClick="run()">Run</button>
+                <button type="button" onClick="store()">Store</button>
+                <button type="button" onClick="retrieve()">Retrieve</button>
+            </div>
+        </div>
+
+        <div id="rightThing">
+            <div id="img"></div>
+        </div>
+
     </div>
 
-    <div id="img"></div>
+
 
     <script>
         let template = `const pen = new Pen();
@@ -42,7 +52,7 @@ pen.tick.y();`
         }
 
         function draw() {
-            let q = '<img src="img" style="border:1px solid #000000" />';
+            let q = '<img src="img"/>';
             eval(code() + '\n document.getElementById("img").innerHTML = pen.export(q,"img")');
         }
 
@@ -57,13 +67,28 @@ pen.tick.y();`
         }
 
         function retrieve() {
-            localStorage.getItem('devCode')
+            document.getElementById("code").value = localStorage.getItem('devCode')
         }
 
 
     </script>
 
 
+    <style>
+        #container {
+            height: 100%;
+            width: 100%;
+            display: flex;
+        }
+
+        #leftThing {
+            width: 50%;
+        }
+
+        #rightThing {
+            width: 50%;
+        }
+    </style>
 
 </body>
 
