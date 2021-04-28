@@ -1,5 +1,5 @@
 const path = require('path');
-
+const WebpackConcatPlugin = require('webpack-concat-files-plugin');
 module.exports = {
     entry: './src/index.ts',
     mode: 'production',
@@ -17,9 +17,21 @@ module.exports = {
     },
     output: {
         filename: 'mathtree.js',
-        path: path.resolve(__dirname, 'dist/dev'),
+        path: path.resolve(__dirname, 'dist/type'),
+        clean: true
     },
     optimization: {
         minimize: false
-    }
+    },
+    plugins: [
+        new WebpackConcatPlugin({
+            bundles: [
+                {
+                    dest: './dist/type/mathtree.d.ts',
+                    src: './dist/type/**/*.d.ts',
+                },
+            ],
+        }),
+    ],
+
 };
