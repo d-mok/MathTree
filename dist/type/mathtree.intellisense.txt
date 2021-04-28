@@ -33,9 +33,6 @@ declare global {
 
 
 
-
-
-
 declare var SHOULD_LOG: boolean;
 declare class CustomErrorCls extends Error {
     constructor(name: string, message: string);

@@ -27,7 +27,7 @@ module.exports = {
         new WebpackConcatPlugin({
             bundles: [
                 {
-                    dest: './dist/type/mathtree.d.ts',
+                    dest: './dist/type/mathtree.intellisense.txt',
                     src: './dist/type/declaration/Math/**/*.d.ts',
                     transforms: {
                         after: (code) => code.replace(new RegExp('import.*', 'g'), '')
