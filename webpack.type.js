@@ -31,6 +31,9 @@ module.exports = {
                     src: [
                         './dist/type/declaration/Math/Code/**/*.d.ts',
                         './dist/type/declaration/Math/Algebra/**/*.d.ts',
+                        './dist/type/declaration/Pen/Pen.d.ts',
+                        './dist/type/declaration/Pen/AutoPen.d.ts',
+                        './dist/type/declaration/Pen/3D.d.ts',
                     ],
                     transforms: {
                         after: (code) => code.replace(new RegExp('import.*', 'g'), '')
