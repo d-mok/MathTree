@@ -28,7 +28,7 @@ module.exports = {
             bundles: [
                 {
                     dest: './dist/type/mathtree.d.ts',
-                    src: './dist/type/**/*.d.ts',
+                    src: './dist/type/declaration/**/*.d.ts',
                 },
             ],
         }),
