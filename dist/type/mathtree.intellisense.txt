@@ -1,319 +1,3 @@
-declare global {
-    namespace Chance {
-        interface Chance {
-            prime: (opt: {
-                min: number;
-                max: number;
-            }) => number;
-        }
-    }
-    var chance: Chance.Chance;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-declare var SHOULD_LOG: boolean;
-declare class CustomErrorCls extends Error {
-    constructor(name: string, message: string);
-}
-declare function CustomError(name: string, message: string): CustomErrorCls;
-declare function MathError(message: string): CustomErrorCls;
-declare function Should(condition: boolean, msg?: string): void;
-
-/**
- * ```
- * // linear equation of straight line
- * [1,2,3] // x+2y+3=0
- * ```
- */
-declare type Linear = [a: number, b: number, c: number];
-/**
- * ```
- * // slope-intercept form of straight line
- * [2,3] // y=2x+3
- * ```
- */
-declare type Line = [slope: number, yInt: number];
-/**
- * ```
- * // quadratic form
- * [1,2,3] // x^2+2x+3
- * ```
- */
-declare type Quadratic = [a: number, b: number, c: number];
-declare type Point = [x: number, y: number];
-declare type Vector = [x: number, y: number];
-declare type Fraction = [numerator: number, denominator: number];
-/**
- * ```
- * // used in linear programming
- * [1,2,"<=",3] // x+2y <= 3
- * ```
- */
-declare type Constraint = [xCoeff: number, yCoeff: number, ineq: string, constant: number];
-/**
- * ```
- * // used in linear programming
- * [1,2,3] // x+2y+3
- * ```
- */
-declare type Field = [xCoeff: number, yCoeff: number, constant: number];
-declare type Highlight = {
-    point: Point;
-    color?: string;
-    circle?: boolean;
-    contour?: boolean;
-    coordinates?: boolean;
-    label?: boolean;
-};
-declare type Triangle = {
-    sideA: number;
-    sideB: number;
-    sideC: number;
-    angleA: number;
-    angleB: number;
-    angleC: number;
-};
-declare type PartialTriangle = {
-    sideA: number | null;
-    sideB: number | null;
-    sideC: number | null;
-    angleA: number | null;
-    angleB: number | null;
-    angleC: number | null;
-};
-declare type QuadrantName = "I" | "II" | "III" | "IV";
-declare type QuadrantCode = 1 | 2 | 3 | 4;
-declare type PolarPoint = [r: number, q: number];
-declare type TrigFunc = 'sin' | 'cos' | 'tan';
-declare type IneqSign = [greater: boolean, equal: boolean];
-
-/**
- * @category Algebra
- * @return solve [x,y] from ax+by=c and px+qy=r.
- * ```typescript
- * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
- * Crammer(1,1,3,2,2,6) // throw
- * ```
- */
-declare function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
-/**
- * @category Algebra
- * @return the product of two input polynomials.
- * ```typescript
- * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
- * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
- * ```
- */
-declare function xPolynomial(poly1: number[], poly2: number[]): number[];
-/**
- * @category Algebra
- * @return the points along the parametric curve
- * ```typescript
- * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
- * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
- * ```
- */
-declare function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number, dots?: number): Point[];
-
-/**
- * @category Circle
- * @return D,E,F of circle general form
- * ```typescript
- * CircleGeneral([2,3],5) // [-4,-6,-12]
- * ```
- */
-declare function CircleGeneral(centre: Point, radius: number): [D: number, E: number, F: number];
-/**
- * @category Circle
- * @return centre and radius from general form
- * ```typescript
- * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
- * ```
- */
-declare function CircleFromGeneral(D: number, E: number, F: number): [Point, number];
-/**
- * @category Circle
- * @return all integral points on the circle
- * ```typescript
- * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
- * ```
- */
-declare function IntegralOnCircle(centre: Point, radius: number): Point[][];
-
-/**
- * @category Linear
- * @return [x-int,y-int,slope] of ax+by+c=0
- * ```typescript
- * LinearFeature(2,4,6) // [-3,-1.5,-0.5]
- * LinearFeature(0,4,6) // throw
- * ```
- */
-declare function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number];
-/**
- * @category Linear
- * @return [slope,yInt] from ax+by+c=0
- * ```typescript
- * LineFromLinear(2,4,6) // [-0.5,-1.5]
- * LineFromLinear(0,4,6) // [0,-1.5]
- * ```
- */
-declare function LineFromLinear(a: number, b: number, c: number): Line;
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
- * ```typescript
- * LinearFromIntercepts(1,2) // [2,1,-2]
- * LinearFromIntercepts(0,2) // throw
- * ```
- */
-declare function LinearFromIntercepts(xInt: number, yInt: number): Linear;
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from two given points
- * ```typescript
- * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
- * LinearFromTwoPoints([1,2],[1,2]) // throw
- * ```
- */
-declare function LinearFromTwoPoints(point1: Point, point2: Point): Linear;
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from point and slope
- * ```typescript
- * LinearFromPointSlope([1,2],3) // [3,-1,-1]
- * LinearFromPointSlope([1,2],0) // [0,1,-2]
- * ```
- */
-declare function LinearFromPointSlope(point: Point, slope: number): Linear;
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
- * ```typescript
- * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
- * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
- * ```
- */
-declare function LinearFromBisector(A: Point, B: Point): Linear;
-/**
- * @category Linear
- * @return [slope,yInt] from given intercepts
- * ```typescript
- * LineFromIntercepts(1,2) // [-2,2]
- * LineFromIntercepts(0,2) // throw
- * ```
- */
-declare function LineFromIntercepts(xInt: number, yInt: number): Line;
-/**
- * @category Linear
- * @return [slope,yInt] from two given points
- * ```typescript
- * LineFromTwoPoints([1,2],[3,4]) // [1,1]
- * LineFromTwoPoints([1,2],[1,2]) // throw
- * ```
- */
-declare function LineFromTwoPoints(point1: Point, point2: Point): Line;
-/**
- * @category Linear
- * @return [slope,yInt] from point and slope
- * ```typescript
- * LineFromPointSlope([1,2],3) // [3,-1]
- * LineFromPointSlope([1,2],0) // [0,2]
- * ```
- */
-declare function LineFromPointSlope(point: Point, slope: number): Line;
-/**
- * @category Linear
- * @return [slope,yInt] from perpendicular bisector of AB
- * ```typescript
- * LineFromBisector([1,2],[3,4]) // [-1,5]
- * LineFromBisector([1,2],[1,4]) // [0,3]
- * ```
- */
-declare function LineFromBisector(A: Point, B: Point): Line;
-/**
- * @ignore
- */
-declare class LinearEquation {
-    private _linear;
-    private _slope;
-    private _xInt;
-    private _yInt;
-    byTwoPoints(p1: Point, p2: Point): this;
-    byPointSlope(p: Point, m: number): this;
-    byIntercepts(x: number, y: number): this;
-    byBisector(A: Point, B: Point): this;
-    byLinear(linear: Linear): this;
-    private refresh;
-    linear(): Linear;
-    line(): Line;
-}
-
-/**
- * @category Quadratic
- * @return the discriminant b^2-4ac.
- * ```typescript
- * Discriminant(2,3,4) // -23
- * ```
- */
-declare function Discriminant(a: number, b: number, c: number): number;
-/**
- * @category Quadratic
- * @return the roots [p,q] of ax^2+bx+c=0 where p<=q
- * ```typescript
- * QuadraticRoot(1,2,-3) // [-3,1]
- * QuadraticRoot(1,2,3) // throw when no real root
- * ```
- */
-declare function QuadraticRoot(a: number, b: number, c: number): [number, number];
-/**
- * @category Quadratic
- * @return the vertex [h,k] of y=ax^2+bx+c.
- * ```typescript
- * QuadraticVertex(1,2,3) // [-1,2]
- * ```
- */
-declare function QuadraticVertex(a: number, b: number, c: number): Point;
-/**
- * @category Quadratic
- * @return the quadratic coeff [a,b,c] from given a and roots p and q.
- * ```typescript
- * QuadraticFromRoot(1,2,3) // [1,-5,6]
- * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
- * ```
- */
-declare function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
-/**
- * @category Quadratic
- * @return the quadratic coeff [a,b,c] from given a and vertex (h,k).
- * ```typescript
- * QuadraticFromVertex(1,2,3) // [1,-4,7]
- * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
- * ```
- */
-declare function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
-
 /**
  * @category Assertion
  * @return check is a finite number.
@@ -2302,3 +1986,208 @@ declare function VectorScaleTo(v: Vector, length: number): Vector;
  * ```
  */
 declare function VectorRotate(v: Vector, angle: number): Vector;
+
+/**
+ * @category Algebra
+ * @return solve [x,y] from ax+by=c and px+qy=r.
+ * ```typescript
+ * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
+ * Crammer(1,1,3,2,2,6) // throw
+ * ```
+ */
+declare function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
+/**
+ * @category Algebra
+ * @return the product of two input polynomials.
+ * ```typescript
+ * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
+ * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+ * ```
+ */
+declare function xPolynomial(poly1: number[], poly2: number[]): number[];
+/**
+ * @category Algebra
+ * @return the points along the parametric curve
+ * ```typescript
+ * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * ```
+ */
+declare function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number, dots?: number): Point[];
+
+/**
+ * @category Circle
+ * @return D,E,F of circle general form
+ * ```typescript
+ * CircleGeneral([2,3],5) // [-4,-6,-12]
+ * ```
+ */
+declare function CircleGeneral(centre: Point, radius: number): [D: number, E: number, F: number];
+/**
+ * @category Circle
+ * @return centre and radius from general form
+ * ```typescript
+ * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
+ * ```
+ */
+declare function CircleFromGeneral(D: number, E: number, F: number): [Point, number];
+/**
+ * @category Circle
+ * @return all integral points on the circle
+ * ```typescript
+ * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
+ * ```
+ */
+declare function IntegralOnCircle(centre: Point, radius: number): Point[][];
+
+/**
+ * @category Linear
+ * @return [x-int,y-int,slope] of ax+by+c=0
+ * ```typescript
+ * LinearFeature(2,4,6) // [-3,-1.5,-0.5]
+ * LinearFeature(0,4,6) // throw
+ * ```
+ */
+declare function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number];
+/**
+ * @category Linear
+ * @return [slope,yInt] from ax+by+c=0
+ * ```typescript
+ * LineFromLinear(2,4,6) // [-0.5,-1.5]
+ * LineFromLinear(0,4,6) // [0,-1.5]
+ * ```
+ */
+declare function LineFromLinear(a: number, b: number, c: number): Line;
+/**
+ * @category Linear
+ * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
+ * ```typescript
+ * LinearFromIntercepts(1,2) // [2,1,-2]
+ * LinearFromIntercepts(0,2) // throw
+ * ```
+ */
+declare function LinearFromIntercepts(xInt: number, yInt: number): Linear;
+/**
+ * @category Linear
+ * @return the coeff [a,b,c] in ax+by+c=0 from two given points
+ * ```typescript
+ * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+ * LinearFromTwoPoints([1,2],[1,2]) // throw
+ * ```
+ */
+declare function LinearFromTwoPoints(point1: Point, point2: Point): Linear;
+/**
+ * @category Linear
+ * @return the coeff [a,b,c] in ax+by+c=0 from point and slope
+ * ```typescript
+ * LinearFromPointSlope([1,2],3) // [3,-1,-1]
+ * LinearFromPointSlope([1,2],0) // [0,1,-2]
+ * ```
+ */
+declare function LinearFromPointSlope(point: Point, slope: number): Linear;
+/**
+ * @category Linear
+ * @return the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
+ * ```typescript
+ * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
+ * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
+ * ```
+ */
+declare function LinearFromBisector(A: Point, B: Point): Linear;
+/**
+ * @category Linear
+ * @return [slope,yInt] from given intercepts
+ * ```typescript
+ * LineFromIntercepts(1,2) // [-2,2]
+ * LineFromIntercepts(0,2) // throw
+ * ```
+ */
+declare function LineFromIntercepts(xInt: number, yInt: number): Line;
+/**
+ * @category Linear
+ * @return [slope,yInt] from two given points
+ * ```typescript
+ * LineFromTwoPoints([1,2],[3,4]) // [1,1]
+ * LineFromTwoPoints([1,2],[1,2]) // throw
+ * ```
+ */
+declare function LineFromTwoPoints(point1: Point, point2: Point): Line;
+/**
+ * @category Linear
+ * @return [slope,yInt] from point and slope
+ * ```typescript
+ * LineFromPointSlope([1,2],3) // [3,-1]
+ * LineFromPointSlope([1,2],0) // [0,2]
+ * ```
+ */
+declare function LineFromPointSlope(point: Point, slope: number): Line;
+/**
+ * @category Linear
+ * @return [slope,yInt] from perpendicular bisector of AB
+ * ```typescript
+ * LineFromBisector([1,2],[3,4]) // [-1,5]
+ * LineFromBisector([1,2],[1,4]) // [0,3]
+ * ```
+ */
+declare function LineFromBisector(A: Point, B: Point): Line;
+/**
+ * @ignore
+ */
+declare class LinearEquation {
+    private _linear;
+    private _slope;
+    private _xInt;
+    private _yInt;
+    byTwoPoints(p1: Point, p2: Point): this;
+    byPointSlope(p: Point, m: number): this;
+    byIntercepts(x: number, y: number): this;
+    byBisector(A: Point, B: Point): this;
+    byLinear(linear: Linear): this;
+    private refresh;
+    linear(): Linear;
+    line(): Line;
+}
+
+/**
+ * @category Quadratic
+ * @return the discriminant b^2-4ac.
+ * ```typescript
+ * Discriminant(2,3,4) // -23
+ * ```
+ */
+declare function Discriminant(a: number, b: number, c: number): number;
+/**
+ * @category Quadratic
+ * @return the roots [p,q] of ax^2+bx+c=0 where p<=q
+ * ```typescript
+ * QuadraticRoot(1,2,-3) // [-3,1]
+ * QuadraticRoot(1,2,3) // throw when no real root
+ * ```
+ */
+declare function QuadraticRoot(a: number, b: number, c: number): [number, number];
+/**
+ * @category Quadratic
+ * @return the vertex [h,k] of y=ax^2+bx+c.
+ * ```typescript
+ * QuadraticVertex(1,2,3) // [-1,2]
+ * ```
+ */
+declare function QuadraticVertex(a: number, b: number, c: number): Point;
+/**
+ * @category Quadratic
+ * @return the quadratic coeff [a,b,c] from given a and roots p and q.
+ * ```typescript
+ * QuadraticFromRoot(1,2,3) // [1,-5,6]
+ * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
+ * ```
+ */
+declare function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
+/**
+ * @category Quadratic
+ * @return the quadratic coeff [a,b,c] from given a and vertex (h,k).
+ * ```typescript
+ * QuadraticFromVertex(1,2,3) // [1,-4,7]
+ * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
+ * ```
+ */
+declare function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;

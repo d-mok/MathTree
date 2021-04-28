@@ -43,7 +43,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Set the coordinate range of the canvas.
          * @category SetupRange
@@ -148,7 +148,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Set the size of the canvas.
          * @category SetupSize
@@ -216,7 +216,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Set the size of the canvas.
          * @category setup
@@ -352,7 +352,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * @ignore
          */
@@ -604,7 +604,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Draw a circle (x-h)^2+(y-k)^2 = r^2.
          * @category graph
@@ -1021,7 +1021,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Fill a circle (x-h)^2+(y-k)^2 = r^2.
          * @category fill
@@ -1146,7 +1146,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Decorate equal side lengths.
          * @category decorator
@@ -1363,7 +1363,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
 
         /**
          * Add a label to a point.
@@ -1540,7 +1540,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Draw x-axis.
          * @category axis
@@ -1605,7 +1605,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Draw ticks on the x-axis.
          * @category axisTick
@@ -1678,7 +1678,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this,
+        pen: this as PenCls,
         /**
          * Draw gridlines on the x-axis.
          * @category axisGrid

@@ -28,7 +28,10 @@ module.exports = {
             bundles: [
                 {
                     dest: './dist/type/mathtree.intellisense.txt',
-                    src: './dist/type/declaration/Math/**/*.d.ts',
+                    src: [
+                        './dist/type/declaration/Math/Code/**/*.d.ts',
+                        './dist/type/declaration/Math/Algebra/**/*.d.ts',
+                    ],
                     transforms: {
                         after: (code) => code.replace(new RegExp('import.*', 'g'), '')
                     },
