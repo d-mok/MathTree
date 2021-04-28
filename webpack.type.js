@@ -28,7 +28,10 @@ module.exports = {
             bundles: [
                 {
                     dest: './dist/type/mathtree.d.ts',
-                    src: './dist/type/declaration/**/*.d.ts',
+                    src: './dist/type/declaration/Math/**/*.d.ts',
+                    transforms: {
+                        after: (code) => code.replace(new RegExp('import.*', 'g'), '')
+                    },
                 },
             ],
         }),
