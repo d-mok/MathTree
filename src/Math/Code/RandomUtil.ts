@@ -111,6 +111,7 @@ globalThis.RndShe = RndShe
  * @return a random 3-letters array
  * ```typescript
  * RndLetters() // may return ['a','b','c'] or ['x','y','z'] or etc
+ * ```
  */
 function RndLetters(): string[] {
     return RndPick(
