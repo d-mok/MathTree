@@ -3,15 +3,12 @@ import { dress } from './tool/dress'
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Dict, Config } from './cls'
+import renderMathInElement from 'katex/dist/contrib/auto-render'
 
 export class Soil {
     // get from SeedBank API
     private qn: string = ""
     private sol: string = ""
-    // public populate: string = ""
-    // public validate: string = ""
-    // public preprocess: string = ""
-    // public postprocess: string = ""
     // working variables during growth
     private dict: Dict = new Dict()
     private config: Config = new Config()
@@ -28,13 +25,6 @@ export class Soil {
     private reset() {
         this.qn = this.gene.qn
         this.sol = this.gene.sol
-        // this.populate = this.gene.populate
-        // let v = this.gene.validate
-        // if (v === "") v = 'true'
-        // v = v.replace('\n', ' ') //is it a bug? only once?
-        // this.validate = v
-        // this.preprocess = this.gene.preprocess
-        // this.postprocess = this.gene.postprocess
         this.dict = new Dict()
         this.config = new Config()
     }
@@ -103,34 +93,11 @@ export class Soil {
         return this.evalCode(v) === true
     }
 
-    // cropSection() {
-    //     this.qn = ExecSection(this.qn, this.config.sections);
-    //     this.sol = ExecSection(this.sol, this.config.sections);
-    // }
-
-    // doPreprocess() {
-    //     this.evalCode(this.gene.preprocess)
-    // }
-
-    // doPostprocess() {
-    //     this.evalCode(this.gene.postprocess)
-    // }
-
-    // pour() {
-    //     this.qn = this.dict.substitute(this.qn)
-    //     this.sol = this.dict.substitute(this.sol)
-    // }
-
-    // dress() {
-    //     this.qn = dress(this.qn);
-    //     this.sol = dress(this.sol);
-    // }
 
     private katex(html: string): string {
         let ele = document.createElement('div')
         ele.innerHTML = html
-        // @ts-ignore
-        renderMathInElement(ele) // katex is loaded on client-side
+        renderMathInElement(ele) 
         let T = ele.innerHTML
         ele.remove()
         return T

@@ -3,11 +3,17 @@
     font-family: "Times New Roman", Times, serif  !important;
 }
 
+/* for old version of katex */
 .katex .mathdefault {
     font-size: 1em;
     font-family: "Times New Roman", Times, serif  !important;
 }
 
+/* for new version of katex */
+.katex .mathnormal {
+    font-size: 1em;
+    font-family: "Times New Roman", Times, serif  !important;
+}
 
 .qs {
     font-family: "Times New Roman", Times, serif;
