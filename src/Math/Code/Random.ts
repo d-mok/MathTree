@@ -1,3 +1,5 @@
+// import * as Dice from '../../Core/Dice/index'
+
 /**
  * @category Random
  * @return a random integer in [min, max] inclusive.
@@ -7,7 +9,7 @@
  */
 function RndN(min: number, max: number): number {
     Should(IsNum(min, max), 'input must be num')
-    return chance.integer({ min, max });
+    return Dice.integer(min, max);
 }
 globalThis.RndN = RndN
 

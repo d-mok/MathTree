@@ -1,0 +1,272 @@
+"use strict";
+/**
+ * @category Random
+ * @return a random integer in [min, max] inclusive.
+ * ```typescript
+ * RndN(2,5) // may return 2, 3, 4 or 5
+ * ```
+ */
+function RndN(min, max) {
+    Should(IsNum(min, max), 'input must be num');
+    return chance.integer({ min, max });
+}
+globalThis.RndN = RndN;
+/**
+ * @category Random
+ * @param n - default to 10
+ * @return an array of n unique random integer in [min, max] inclusive.
+ * ```typescript
+ * RndNs(2,8,3) // may return [5,3,7]
+ * ```
+ */
+function RndNs(min, max, n) {
+    Should(IsNum(min, max), 'input must be num');
+    n !== null && n !== void 0 ? n : (n = Math.min(Math.floor(max - min + 1), 10));
+    Should(IsPositiveInteger(n), 'n must be positive integer');
+    // if (!n) n = Math.min(Math.floor(max - min + 1), 10)
+    return chance.unique(() => RndN(min, max), n);
+}
+globalThis.RndNs = RndNs;
+/**
+ * @category Random
+ * @return a random real number in [min, max] inclusive
+ * ```typescript
+ * RndR(1,2) // may return 1.242574363
+ * ```
+ */
+function RndR(min, max) {
+    Should(IsNum(min, max), 'input must be num');
+    return chance.floating({ min, max, fixed: 8 });
+}
+globalThis.RndR = RndR;
+/**
+ * @category Random
+ * @return 1 or -1
+ * ```typescript
+ * RndU() // may return 1 or -1
+ * ```
+ */
+function RndU() {
+    return chance.pickone([-1, 1]);
+}
+globalThis.RndU = RndU;
+/**
+ * @category Random
+ * @return true or false.
+ * ```typescript
+ * RndT() // may return true or false
+ * ```
+ */
+function RndT() {
+    return chance.pickone([true, false]);
+}
+globalThis.RndT = RndT;
+/**
+ * @category Random
+ * @return a random integer in [min, max] or [-max, -min] inclusive.
+ * ```typescript
+ * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
+ * ```
+ */
+function RndZ(min, max) {
+    Should(IsNum(min, max), 'input must be num');
+    return RndN(min, max) * RndU();
+}
+globalThis.RndZ = RndZ;
+/**
+ * @category Random
+ * @param n - default to 10
+ * @return an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
+ * ```typescript
+ * RndZs(2,8,3) // may return [5,-3,7]
+ * ```
+ */
+function RndZs(min, max, n) {
+    Should(IsNum(min, max), 'input must be num');
+    n !== null && n !== void 0 ? n : (n = Min(Math.floor(max - min + 1), 10));
+    Should(IsPositiveInteger(n), 'n must be positive integer');
+    let arr = chance.unique(() => RndN(min, max), n);
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = arr[i] * RndU();
+    }
+    return arr;
+}
+globalThis.RndZs = RndZs;
+/**
+ * @category Random
+ * @return a random prime number less than or equal to max.
+ * ```typescript
+ * RndP(10) // may return 2, 3, 5 or 7
+ * ```
+ */
+function RndP(max) {
+    Should(IsNum(max), 'input must be num');
+    return chance.prime({ min: 2, max: max });
+}
+globalThis.RndP = RndP;
+/**
+ * @category Random
+ * @return a random odd integer in [min, max] inclusive
+ * ```typescript
+ * RndOdd(3,8) // return 3, 5 or 7
+ * ```
+ */
+function RndOdd(min, max) {
+    Should(IsNum(min, max), 'input must be num');
+    min = Math.ceil((min + 1) / 2);
+    max = Math.floor((max + 1) / 2);
+    return 2 * RndN(min, max) - 1;
+}
+globalThis.RndOdd = RndOdd;
+/**
+ * @category Random
+ * @return a random even integer in [min, max] inclusive
+ * ```typescript
+ * RndEven(3,8) // return 4, 6 or 8
+ * ```
+ */
+function RndEven(min, max) {
+    Should(IsNum(min, max), 'input must be num');
+    min = Math.ceil(min / 2);
+    max = Math.floor(max / 2);
+    return 2 * RndN(min, max);
+}
+globalThis.RndEven = RndEven;
+/**
+ * @category Random
+ * @return an array of random polynomial coefficients
+ * ```typescript
+ * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
+ * ```
+ */
+function RndPoly(...coeff) {
+    Should(IsNum(...coeff), 'input must be num');
+    return coeff.map((x, i, a) => {
+        return i === 0 ? RndN(1, x) : RndZ(1, x);
+    });
+}
+globalThis.RndPoly = RndPoly;
+/**
+ * @category Random
+ * @return an array of a Pyth Triple
+ * ```typescript
+ * RndPyth(10) // may return [3,4,5]
+ * ```
+ */
+function RndPyth(max = 100) {
+    Should(IsNum(max), 'input must be num');
+    let arr = [];
+    for (let m = 1; m < 10; m++) {
+        for (let n = 1; n < m; n++) {
+            for (let k = 1; k < 10; k++) {
+                let a = m * m - n * n;
+                let b = 2 * m * n;
+                let c = m * m + n * n;
+                if (c <= max)
+                    arr.push([a, b, c]);
+            }
+        }
+    }
+    return chance.pickone(arr);
+}
+globalThis.RndPyth = RndPyth;
+/**
+ * @category Random
+ * @param min abs of intercept
+ * @param max abs of intercept
+ * @return a linear [a,b,c] in ax+by+c=0
+ * ```typescript
+ * RndLinearFromIntercept(1,5) // may return [2,-3,6]
+ * ```
+ */
+function RndLinearFromInt(minInt, maxInt) {
+    Should(IsPositive(minInt, maxInt), 'input must be positive num');
+    let xInt = RndZ(minInt, maxInt);
+    let yInt = RndZ(minInt, maxInt);
+    return LinearFromIntercepts(xInt, yInt);
+}
+globalThis.RndLinearFromInt = RndLinearFromInt;
+/**
+ * @category Random
+ * @return a point within given range
+ * ```typescript
+ * RndPoint([1,4],[10,14]) // may return [2,12]
+ * // equivalent to [RndN(...xRange),Range(...yRange)]
+ * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
+ * ```
+ */
+function RndPoint(xRange, yRange = xRange) {
+    if (typeof xRange === 'number')
+        xRange = [-xRange, xRange];
+    if (typeof yRange === 'number')
+        yRange = [-yRange, yRange];
+    Should(IsArrayOfLength(2)(xRange, yRange), 'input must be range');
+    Should(IsNum(...xRange, ...yRange), 'input must be num');
+    let x = RndN(...xRange);
+    let y = RndN(...yRange);
+    return [x, y];
+}
+globalThis.RndPoint = RndPoint;
+/**
+ * @category Random
+ * @return n angles in [0,360] at least cyclic separated by separation
+ * ```typescript
+ * RndAngles(3,50) // may return [30,90,200]
+ * ```
+ */
+function RndAngles(n, separation) {
+    Should(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsPositive(separation), 'separation must be positive num');
+    let f = () => Sort(...RndNs(0, 360, n));
+    let p = (arr) => {
+        for (let i = 0; i < arr.length - 1; i++) {
+            if (arr[i + 1] - arr[i] < separation)
+                return false;
+        }
+        if (arr[0] + 360 - arr[arr.length - 1] < separation)
+            return false;
+        return true;
+    };
+    return Sieve(f, p)();
+}
+globalThis.RndAngles = RndAngles;
+/**
+ * @category Random
+ * @return n vertices of a convex polygon generated by rounding a cyclic polygon
+ * ```typescript
+ * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
+ * ```
+ */
+function RndConvexPolygon(n, center, radius, separation) {
+    Should(IsPositiveInteger(n), 'n must be positive integer');
+    Should(IsPoint(center), 'center must be point');
+    Should(IsPositive(radius), 'radius must be positive num');
+    Should(IsPositive(separation), 'separation must be positive num');
+    let [h, k] = center;
+    let r = radius;
+    let angles = RndAngles(n, separation);
+    let vertices = angles.map(a => [h + r * cos(a), k + r * sin(a)]);
+    vertices = vertices.map(v => [Fix(v[0]), Fix(v[1])]);
+    return vertices;
+}
+globalThis.RndConvexPolygon = RndConvexPolygon;
+/**
+ * @category Random
+ * @return n integers from [min, max]
+ * ```typescript
+ * RndData(10,15,5) // may return [11,11,12,13,15]
+ * ```
+ */
+function RndData(min, max, n) {
+    let arr = [];
+    let trials = 10 * n;
+    for (let i = 0; i < trials; i++) {
+        arr.unshift(RndN(min, max));
+        if (arr.length > n)
+            arr.length = n;
+        if (arr.length === n && IsNum(Mode(...arr)))
+            return Sort(...arr);
+    }
+    throw 'fail';
+}
+globalThis.RndData = RndData;

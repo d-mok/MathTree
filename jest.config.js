@@ -1,5 +1,5 @@
 module.exports = {
-    "setupFiles": ["./dist/edge.js",],
+    "setupFiles": ["./dist/dev/mathtree.js",],
     setupFilesAfterEnv: ["./src/Math/Jest/JestExtend.js"],
     "transform": {
         "^.+\\.(ts|tsx)$": "ts-jest"
