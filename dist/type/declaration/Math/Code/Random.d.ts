@@ -5,7 +5,7 @@
  * RndN(2,5) // may return 2, 3, 4 or 5
  * ```
  */
-declare function RndN(min: number, max: number): number;
+declare var RndN: (min: number, max: number) => number;
 /**
  * @category Random
  * @param n - default to 10

@@ -1,6 +1,11 @@
 import { Chance } from 'chance'
 
 
+function DiceBlood(message: string): Blood {
+    return new Blood('Dice', message)
+}
+
+
 declare global {
     namespace Chance {
         interface Chance {
@@ -75,8 +80,6 @@ export function unique<T>(func: randomFunc<T>, length: number, key?: keyFunc<T>)
         throw e
     }
 }
-
-
 
 
 export function pick<T>(...items: T[]) {

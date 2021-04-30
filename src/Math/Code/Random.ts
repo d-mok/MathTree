@@ -7,10 +7,10 @@
  * RndN(2,5) // may return 2, 3, 4 or 5
  * ```
  */
-function RndN(min: number, max: number): number {
-    Should(IsNum(min, max), 'input must be num')
-    return Dice.integer(min, max);
+var RndN = function (min: number, max: number): number {
+    return dice.integer(min, max);
 }
+RndN = contract(RndN).sign([owl.num], owl.int)
 globalThis.RndN = RndN
 
 /**
@@ -25,8 +25,7 @@ function RndNs(min: number, max: number, n?: number): number[] {
     Should(IsNum(min, max), 'input must be num')
     n ??= Math.min(Math.floor(max - min + 1), 10)
     Should(IsPositiveInteger(n), 'n must be positive integer')
-    // if (!n) n = Math.min(Math.floor(max - min + 1), 10)
-    return chance.unique(() => RndN(min, max), n);
+    return dice.unique(() => RndN(min, max), n);
 }
 globalThis.RndNs = RndNs
 
@@ -42,7 +41,7 @@ globalThis.RndNs = RndNs
  */
 function RndR(min: number, max: number): number {
     Should(IsNum(min, max), 'input must be num')
-    return chance.floating({ min, max, fixed: 8 });
+    return dice.real(min, max);
 }
 globalThis.RndR = RndR
 
@@ -56,7 +55,7 @@ globalThis.RndR = RndR
  * ```
  */
 function RndU(): 1 | -1 {
-    return chance.pickone([-1, 1]);
+    return dice.pick<1 | -1>(-1, 1).one();
 }
 globalThis.RndU = RndU
 
@@ -69,7 +68,7 @@ globalThis.RndU = RndU
  * ```
  */
 function RndT(): boolean {
-    return chance.pickone([true, false]);
+    return dice.pick(true, false).one();
 }
 globalThis.RndT = RndT
 
@@ -104,11 +103,11 @@ function RndZs(min: number, max: number, n?: number): number[] {
     Should(IsNum(min, max), 'input must be num')
     n ??= Min(Math.floor(max - min + 1), 10)
     Should(IsPositiveInteger(n), 'n must be positive integer')
-    let arr = chance.unique(() => RndN(min, max), n);
-    for (let i = 0; i < arr.length; i++) {
-        arr[i] = arr[i] * RndU()
-    }
-    return arr
+    let arr = dice.unique(() => RndN(min, max), n);
+    // for (let i = 0; i < arr.length; i++) {
+    //     arr[i] = arr[i] * RndU()
+    // }
+    return arr.map(x => x * RndU())
 }
 globalThis.RndZs = RndZs
 
@@ -125,7 +124,7 @@ globalThis.RndZs = RndZs
  */
 function RndP(max: number): number {
     Should(IsNum(max), 'input must be num')
-    return chance.prime({ min: 2, max: max });
+    return dice.prime(2, max);
 }
 globalThis.RndP = RndP
 
@@ -176,9 +175,12 @@ globalThis.RndEven = RndEven
  */
 function RndPoly(...coeff: number[]): number[] {
     Should(IsNum(...coeff), 'input must be num')
-    return coeff.map((x, i, a) => {
-        return i === 0 ? RndN(1, x) : RndZ(1, x);
-    });
+    let arr = coeff.map(x => RndZ(1, x))
+    arr[0] = Math.abs(arr[0])
+    return arr
+    // return coeff.map((x, i, a) => {
+    //     return i === 0 ? RndN(1, x) : RndZ(1, x);
+    // });
 }
 globalThis.RndPoly = RndPoly
 

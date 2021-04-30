@@ -1,6 +1,6 @@
 module.exports = {
     "setupFiles": ["./dist/dev/mathtree.js",],
-    setupFilesAfterEnv: ["./src/Math/Jest/JestExtend.js"],
+    setupFilesAfterEnv: ["jest-extended", "./src/Math/Jest/JestExtend.js"],
     "transform": {
         "^.+\\.(ts|tsx)$": "ts-jest"
     },

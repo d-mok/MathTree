@@ -28479,6 +28479,7 @@ globalThis.PhyConst = PhyConst;
 
 "use strict";
 
+// import * as Dice from '../../Core/Dice/index'
 /**
  * @category Random
  * @return a random integer in [min, max] inclusive.
@@ -28486,10 +28487,11 @@ globalThis.PhyConst = PhyConst;
  * RndN(2,5) // may return 2, 3, 4 or 5
  * ```
  */
-function RndN(min, max) {
-    Should(IsNum(min, max), 'input must be num');
-    return chance.integer({ min, max });
-}
+var RndN = function (min, max) {
+    // Should(IsNum(min, max), 'input must be num')
+    return dice.integer(min, max);
+};
+RndN = contract(RndN).sign([owl.num], owl.int);
 globalThis.RndN = RndN;
 /**
  * @category Random
@@ -28503,8 +28505,7 @@ function RndNs(min, max, n) {
     Should(IsNum(min, max), 'input must be num');
     n !== null && n !== void 0 ? n : (n = Math.min(Math.floor(max - min + 1), 10));
     Should(IsPositiveInteger(n), 'n must be positive integer');
-    // if (!n) n = Math.min(Math.floor(max - min + 1), 10)
-    return chance.unique(() => RndN(min, max), n);
+    return dice.unique(() => RndN(min, max), n);
 }
 globalThis.RndNs = RndNs;
 /**
@@ -28516,7 +28517,7 @@ globalThis.RndNs = RndNs;
  */
 function RndR(min, max) {
     Should(IsNum(min, max), 'input must be num');
-    return chance.floating({ min, max, fixed: 8 });
+    return dice.real(min, max);
 }
 globalThis.RndR = RndR;
 /**
@@ -28527,7 +28528,7 @@ globalThis.RndR = RndR;
  * ```
  */
 function RndU() {
-    return chance.pickone([-1, 1]);
+    return dice.pick(-1, 1).one();
 }
 globalThis.RndU = RndU;
 /**
@@ -28538,7 +28539,7 @@ globalThis.RndU = RndU;
  * ```
  */
 function RndT() {
-    return chance.pickone([true, false]);
+    return dice.pick(true, false).one();
 }
 globalThis.RndT = RndT;
 /**
@@ -28565,11 +28566,11 @@ function RndZs(min, max, n) {
     Should(IsNum(min, max), 'input must be num');
     n !== null && n !== void 0 ? n : (n = Min(Math.floor(max - min + 1), 10));
     Should(IsPositiveInteger(n), 'n must be positive integer');
-    let arr = chance.unique(() => RndN(min, max), n);
-    for (let i = 0; i < arr.length; i++) {
-        arr[i] = arr[i] * RndU();
-    }
-    return arr;
+    let arr = dice.unique(() => RndN(min, max), n);
+    // for (let i = 0; i < arr.length; i++) {
+    //     arr[i] = arr[i] * RndU()
+    // }
+    return arr.map(x => x * RndU());
 }
 globalThis.RndZs = RndZs;
 /**
@@ -28581,7 +28582,7 @@ globalThis.RndZs = RndZs;
  */
 function RndP(max) {
     Should(IsNum(max), 'input must be num');
-    return chance.prime({ min: 2, max: max });
+    return dice.prime(2, max);
 }
 globalThis.RndP = RndP;
 /**
@@ -28621,9 +28622,12 @@ globalThis.RndEven = RndEven;
  */
 function RndPoly(...coeff) {
     Should(IsNum(...coeff), 'input must be num');
-    return coeff.map((x, i, a) => {
-        return i === 0 ? RndN(1, x) : RndZ(1, x);
-    });
+    let arr = coeff.map(x => RndZ(1, x));
+    arr[0] = Math.abs(arr[0]);
+    return arr;
+    // return coeff.map((x, i, a) => {
+    //     return i === 0 ? RndN(1, x) : RndZ(1, x);
+    // });
 }
 globalThis.RndPoly = RndPoly;
 /**
@@ -30503,55 +30507,6 @@ function VectorRotate(v, angle) {
     return [x1, y1];
 }
 globalThis.VectorRotate = VectorRotate;
-
-
-/***/ }),
-
-/***/ 635:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const chance_1 = __webpack_require__(714);
-var chance = new chance_1.Chance();
-globalThis.chance = chance;
-
-
-/***/ }),
-
-/***/ 221:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-__webpack_require__(4);
-__webpack_require__(315);
-__webpack_require__(648);
-__webpack_require__(141);
-__webpack_require__(27);
-__webpack_require__(202);
-__webpack_require__(426);
-__webpack_require__(931);
-__webpack_require__(307);
-__webpack_require__(113);
-__webpack_require__(348);
-__webpack_require__(759);
-__webpack_require__(7);
-__webpack_require__(188);
-__webpack_require__(701);
-__webpack_require__(730);
-__webpack_require__(561);
-__webpack_require__(812);
-__webpack_require__(384);
-__webpack_require__(779);
-__webpack_require__(53);
-__webpack_require__(126);
-__webpack_require__(286);
-__webpack_require__(401);
-__webpack_require__(414);
-__webpack_require__(635);
 
 
 /***/ }),
@@ -33573,28 +33528,16 @@ function trimCanvas(canvas) {
 
 /***/ }),
 
-/***/ 370:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-__webpack_require__(577);
-__webpack_require__(377);
-__webpack_require__(336);
-__webpack_require__(742);
-
-
-/***/ }),
-
 /***/ 476:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "D": () => (/* binding */ Config),
+/* harmony export */   "M": () => (/* binding */ Dict)
+/* harmony export */ });
+/* harmony import */ var _tool_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(870);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Dict = exports.Config = void 0;
-const html_1 = __webpack_require__(870);
 class Config {
     constructor(sections = [], answer = "A", options = {}) {
         this.sections = sections;
@@ -33602,7 +33545,6 @@ class Config {
         this.options = options;
     }
 }
-exports.Config = Config;
 class Dict {
     constructor(a = Symbol(), b = Symbol(), c = Symbol(), d = Symbol(), e = Symbol(), f = Symbol(), g = Symbol(), h = Symbol(), i = Symbol(), j = Symbol(), k = Symbol(), l = Symbol(), m = Symbol(), n = Symbol(), o = Symbol(), p = Symbol(), q = Symbol(), r = Symbol(), s = Symbol(), t = Symbol(), u = Symbol(), v = Symbol(), w = Symbol(), x = Symbol(), y = Symbol(), z = Symbol(), A = Symbol(), B = Symbol(), C = Symbol(), D = Symbol(), E = Symbol(), F = Symbol(), G = Symbol(), H = Symbol(), I = Symbol(), J = Symbol(), K = Symbol(), L = Symbol(), M = Symbol(), N = Symbol(), O = Symbol(), P = Symbol(), Q = Symbol(), R = Symbol(), S = Symbol(), T = Symbol(), U = Symbol(), V = Symbol(), W = Symbol(), X = Symbol(), Y = Symbol(), Z = Symbol()) {
         this.a = a;
@@ -33694,64 +33636,35 @@ class Dict {
             let num = this[key];
             if (typeof num === 'symbol')
                 continue;
-            text = html_1.PrintVariable(text, key, num);
+            text = (0,_tool_html__WEBPACK_IMPORTED_MODULE_0__/* .PrintVariable */ .P)(text, key, num);
         }
         return text;
     }
 }
-exports.Dict = Dict;
-
-
-/***/ }),
-
-/***/ 183:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const soil_1 = __webpack_require__(842);
-class MathSoilCls {
-    grow(seed) {
-        let soil = new soil_1.Soil(seed.gene);
-        seed.fruit = soil.nurture();
-    }
-    growAll(seeds) {
-        seeds.forEach(x => this.grow(x));
-    }
-    test(seed, repeat = 100) {
-        let counters = [];
-        for (let i = 1; i <= repeat; i++) {
-            this.grow(seed);
-            if (!seed.fruit.success)
-                return;
-            counters.push(seed.fruit.counter);
-        }
-        seed.fruit.counter = Mean(...counters);
-    }
-}
-var MathSoil = new MathSoilCls();
-globalThis.MathSoil = MathSoil;
 
 
 /***/ }),
 
 /***/ 842:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "u": () => (/* binding */ Soil)
+/* harmony export */ });
+/* harmony import */ var _tool_section__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(646);
+/* harmony import */ var _tool_dress__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(752);
+/* harmony import */ var _tool_shuffle__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(660);
+/* harmony import */ var _tool_option__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(84);
+/* harmony import */ var _cls__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(476);
+/* harmony import */ var katex_dist_contrib_auto_render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(116);
+/* harmony import */ var katex_dist_contrib_auto_render__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(katex_dist_contrib_auto_render__WEBPACK_IMPORTED_MODULE_0__);
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Soil = void 0;
-const section_1 = __webpack_require__(646);
-const dress_1 = __webpack_require__(752);
-const shuffle_1 = __webpack_require__(660);
-const option_1 = __webpack_require__(84);
-const cls_1 = __webpack_require__(476);
-const auto_render_1 = __importDefault(__webpack_require__(116));
+
+
+
+
+
 class Soil {
     constructor(gene) {
         this.gene = gene;
@@ -33759,8 +33672,8 @@ class Soil {
         this.qn = "";
         this.sol = "";
         // working variables during growth
-        this.dict = new cls_1.Dict();
-        this.config = new cls_1.Config();
+        this.dict = new _cls__WEBPACK_IMPORTED_MODULE_1__/* .Dict */ .M();
+        this.config = new _cls__WEBPACK_IMPORTED_MODULE_1__/* .Config */ .D();
         // state
         this.counter = 0;
         this.errorPile = [];
@@ -33769,8 +33682,8 @@ class Soil {
     reset() {
         this.qn = this.gene.qn;
         this.sol = this.gene.sol;
-        this.dict = new cls_1.Dict();
-        this.config = new cls_1.Config();
+        this.dict = new _cls__WEBPACK_IMPORTED_MODULE_1__/* .Dict */ .M();
+        this.config = new _cls__WEBPACK_IMPORTED_MODULE_1__/* .Config */ .D();
     }
     recordError(e) {
         if (!this.errorPile.map(x => x.message).includes(e.message))
@@ -33827,7 +33740,7 @@ class Soil {
     katex(html) {
         let ele = document.createElement('div');
         ele.innerHTML = html;
-        auto_render_1.default(ele);
+        katex_dist_contrib_auto_render__WEBPACK_IMPORTED_MODULE_0___default()(ele);
         let T = ele.innerHTML;
         ele.remove();
         return T;
@@ -33862,8 +33775,8 @@ class Soil {
     }
     runSection() {
         // crop section
-        this.qn = section_1.ExecSection(this.qn, this.config.sections);
-        this.sol = section_1.ExecSection(this.sol, this.config.sections);
+        this.qn = (0,_tool_section__WEBPACK_IMPORTED_MODULE_2__/* .ExecSection */ .D)(this.qn, this.config.sections);
+        this.sol = (0,_tool_section__WEBPACK_IMPORTED_MODULE_2__/* .ExecSection */ .D)(this.sol, this.config.sections);
         return true;
     }
     runPreprocess() {
@@ -33875,7 +33788,7 @@ class Soil {
         while (nTrial <= 100) {
             nTrial++;
             try {
-                this.qn = option_1.AutoOptions(this.config.options, this.qn, this.dict);
+                this.qn = (0,_tool_option__WEBPACK_IMPORTED_MODULE_3__/* .AutoOptions */ .r)(this.config.options, this.qn, this.dict);
                 return true;
             }
             catch (e) {
@@ -33892,8 +33805,8 @@ class Soil {
         this.qn = this.dict.substitute(this.qn);
         this.sol = this.dict.substitute(this.sol);
         // dress
-        this.qn = dress_1.dress(this.qn);
-        this.sol = dress_1.dress(this.sol);
+        this.qn = (0,_tool_dress__WEBPACK_IMPORTED_MODULE_4__/* .dress */ .b)(this.qn);
+        this.sol = (0,_tool_dress__WEBPACK_IMPORTED_MODULE_4__/* .dress */ .b)(this.sol);
         return true;
     }
     runPostprocess() {
@@ -33901,7 +33814,7 @@ class Soil {
         return true;
     }
     runShuffle() {
-        let shuffler = new shuffle_1.OptionShuffler(this.qn, this.sol, this.config.answer);
+        let shuffler = new _tool_shuffle__WEBPACK_IMPORTED_MODULE_5__/* .OptionShuffler */ .c(this.qn, this.sol, this.config.answer);
         if (shuffler.AreOptionsDuplicated()) {
             this.recordError(CustomError('ShuffleError', 'Duplicated options found!'));
             return false;
@@ -33959,18 +33872,17 @@ class Soil {
         }
     }
 }
-exports.Soil = Soil;
 
 
 /***/ }),
 
 /***/ 752:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.dress = void 0;
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "b": () => (/* binding */ dress)
+/* harmony export */ });
 function or(...reg) {
     return '(' + reg.join('|') + ')';
 }
@@ -34027,19 +33939,19 @@ function dress(html) {
     html = handlePrime(html);
     return html;
 }
-exports.dress = dress;
 // .replace(/(?<=<span class="math-tex">[^<>]*)([\+\-\=\(\[\{\\\)\]\}\,])(\s|&nbsp;)*1(\s|&nbsp;)*(?=[A-Za-z\(\[][^<>]*<\/span>)/g, '$1')
 
 
 /***/ }),
 
 /***/ 870:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PrintVariable = exports.QuestionHTML = void 0;
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "T": () => (/* binding */ QuestionHTML),
+/* harmony export */   "P": () => (/* binding */ PrintVariable)
+/* harmony export */ });
 class QuestionHTML {
     // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
     // there must be no ul or li tags except the answer options
@@ -34082,7 +33994,6 @@ class QuestionHTML {
         return oldHTMLs.map(x => newHTMLs.indexOf(x));
     }
 }
-exports.QuestionHTML = QuestionHTML;
 /**
 * print a variable (e.g. *x) into the html
 * ```typescript
@@ -34127,19 +34038,19 @@ function PrintVariable(html, symbol, value) {
     print("\\*", value);
     return html;
 }
-exports.PrintVariable = PrintVariable;
 
 
 /***/ }),
 
 /***/ 84:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "r": () => (/* binding */ AutoOptions)
+/* harmony export */ });
+/* harmony import */ var _html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(870);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AutoOptions = void 0;
-const html_1 = __webpack_require__(870);
 function Produce(source, assigned) {
     return Array.isArray(assigned) && assigned !== source
         ? RndShuffle(...assigned)
@@ -34164,7 +34075,7 @@ function ExecInstructions(instructions, source) {
 function AutoOptions(instructions, question, source) {
     if (IsEmptyObject(instructions))
         return question;
-    let Qn = new html_1.QuestionHTML(question);
+    let Qn = new _html__WEBPACK_IMPORTED_MODULE_0__/* .QuestionHTML */ .T(question);
     let products = ExecInstructions(instructions, source);
     if (Qn.li.length === 1) {
         Qn.cloneLi(0, 3);
@@ -34186,18 +34097,17 @@ function AutoOptions(instructions, question, source) {
     }
     return question;
 }
-exports.AutoOptions = AutoOptions;
 
 
 /***/ }),
 
 /***/ 646:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ExecSection = void 0;
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "D": () => (/* binding */ ExecSection)
+/* harmony export */ });
 function DropVersion(html, section, version) {
     let id = section + '.' + version;
     return html.replace(new RegExp('<[^#<]*##' + id + '[^#]*##[^#>]*>', 'g'), '');
@@ -34222,19 +34132,19 @@ function ExecSection(html, sections) {
     html = DropTags(html);
     return html;
 }
-exports.ExecSection = ExecSection;
 
 
 /***/ }),
 
 /***/ 660:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "c": () => (/* binding */ OptionShuffler)
+/* harmony export */ });
+/* harmony import */ var _html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(870);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OptionShuffler = void 0;
-const html_1 = __webpack_require__(870);
 class OptionShuffler {
     constructor(qn, sol, ans) {
         this.qn = qn;
@@ -34242,7 +34152,7 @@ class OptionShuffler {
         this.ans = ans;
         this.perm = [];
         this.valid = false;
-        this.Qn = new html_1.QuestionHTML(qn);
+        this.Qn = new _html__WEBPACK_IMPORTED_MODULE_0__/* .QuestionHTML */ .T(qn);
         if (!this.Qn.ul)
             return; // no <ul></ul>
         if (this.Qn.li.length === 0)
@@ -34283,7 +34193,6 @@ class OptionShuffler {
         return newSol;
     }
 }
-exports.OptionShuffler = OptionShuffler;
 
 
 /***/ })
@@ -34315,17 +34224,530 @@ exports.OptionShuffler = OptionShuffler;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-var exports = __webpack_exports__;
-var __webpack_unused_export__;
 
-__webpack_unused_export__ = ({ value: true });
-__webpack_require__(221);
-__webpack_require__(370);
-__webpack_require__(183);
+// NAMESPACE OBJECT: ./src/Core/Dice/index.ts
+var Dice_namespaceObject = {};
+__webpack_require__.r(Dice_namespaceObject);
+__webpack_require__.d(Dice_namespaceObject, {
+  "brute": () => (brute),
+  "he": () => (he),
+  "integer": () => (integer),
+  "pick": () => (pick),
+  "prime": () => (prime),
+  "real": () => (real),
+  "sample": () => (sample),
+  "she": () => (she),
+  "shield": () => (shield),
+  "shuffle": () => (shuffle),
+  "unique": () => (unique)
+});
+
+// NAMESPACE OBJECT: ./src/Core/Owl/index.ts
+var Owl_namespaceObject = {};
+__webpack_require__.r(Owl_namespaceObject);
+__webpack_require__.d(Owl_namespaceObject, {
+  "and": () => (and),
+  "array": () => (array),
+  "arrayOfLength": () => (arrayOfLength),
+  "arrayWith": () => (arrayWith),
+  "between": () => (between),
+  "bool": () => (bool),
+  "couple": () => (couple),
+  "dec": () => (dec),
+  "emptyObject": () => (emptyObject),
+  "even": () => (even),
+  "fail": () => (fail),
+  "fraction": () => (fraction),
+  "int": () => (Owl_int),
+  "negative": () => (negative),
+  "negativeInt": () => (negativeInt),
+  "nonNegative": () => (nonNegative),
+  "nonNegativeInt": () => (nonNegativeInt),
+  "nonPositive": () => (nonPositive),
+  "nonPositiveInt": () => (nonPositiveInt),
+  "nonZero": () => (nonZero),
+  "not": () => (not),
+  "num": () => (num),
+  "odd": () => (odd),
+  "or": () => (or),
+  "pass": () => (pass),
+  "point": () => (point),
+  "positive": () => (positive),
+  "positiveInt": () => (positiveInt),
+  "prob": () => (prob),
+  "properFraction": () => (properFraction),
+  "sq": () => (sq),
+  "str": () => (str),
+  "vector": () => (vector),
+  "whole": () => (whole)
+});
+
+// EXTERNAL MODULE: ./node_modules/chance/chance.js
+var chance = __webpack_require__(714);
+;// CONCATENATED MODULE: ./src/Core/Dice/index.ts
+
+function DiceBlood(message) {
+    return new Blood('Dice', message);
+}
+const Dice_chance = new chance.Chance();
+function integer(minInt, maxInt) {
+    return Dice_chance.integer({ min: minInt, max: maxInt });
+}
+function real(min, max) {
+    return Dice_chance.floating({ min, max, fixed: 10 });
+}
+function prime(min, max) {
+    return Dice_chance.prime({ min, max });
+}
+function he() {
+    return Dice_chance.first({ gender: 'male', nationality: 'en' });
+}
+function she() {
+    return Dice_chance.first({ gender: 'female', nationality: 'en' });
+}
+function brute(func, predicate, trials = 1000) {
+    for (let i = 1; i <= trials; i++) {
+        let item = func();
+        if (predicate(item))
+            return item;
+    }
+    throw DiceBlood('No items can satisfy predicate after ' + trials + ' trials!');
+}
+function shield(func, predicate, trials = 1000) {
+    return () => brute(func, predicate, trials);
+}
+function sample(func, length) {
+    return Dice_chance.n(func, length);
+}
+function unique(func, length, key) {
+    try {
+        if (key) {
+            return Dice_chance.unique(func, length, { comparator: (arr, val) => arr.some(x => key(x) === key(val)) });
+        }
+        else {
+            return Dice_chance.unique(func, length);
+        }
+    }
+    catch (e) {
+        if (e.message === 'num is likely too large for sample set')
+            throw DiceBlood('num is likely too large for sample set');
+        throw e;
+    }
+}
+function pick(...items) {
+    return {
+        one() {
+            return Dice_chance.pickone(items);
+        },
+        sample(length) {
+            return sample(() => this.one(), length);
+        },
+        unique(length) {
+            return unique(() => this.one(), length);
+        },
+    };
+}
+function shuffle(...items) {
+    return Dice_chance.shuffle(items);
+}
+
+;// CONCATENATED MODULE: ./src/Core/Owl/index.ts
+/**
+ * @category Numeracy
+ * @return correct for floating point error
+ * ```typescript
+ * Blur(0.1+0.2) // 0.3
+ * Blur(0.81-1) // -0.19
+ * Blur(1.1**2) // 1.21
+ * ```
+ */
+function Blur(value, accuracy = 12) {
+    if (typeof value !== 'number')
+        return value;
+    if (!isFinite(value))
+        return value;
+    // value = parseFloat(value.toFixed(accuracy));
+    value = parseFloat(value.toPrecision(accuracy));
+    return value;
+}
+globalThis.Blur = Blur;
+const num = (_) => Number.isFinite(_);
+const whole = (_) => Number.isInteger(_);
+const Owl_int = (_) => Number.isInteger(Blur(_));
+const dec = (_) => num(_) && !Owl_int(_);
+const odd = (_) => Owl_int(_) && Math.abs(_) % 2 === 1;
+const even = (_) => Owl_int(_) && Math.abs(_) % 2 === 0;
+const prob = (_) => num(_) && _ >= 0 && _ <= 1;
+const sq = (_) => Owl_int(_) && Owl_int(Math.sqrt(_));
+const positive = (_) => num(_) && _ > 0;
+const positiveInt = (_) => Owl_int(_) && _ > 0;
+const nonNegative = (_) => num(_) && _ >= 0;
+const nonNegativeInt = (_) => Owl_int(_) && _ >= 0;
+const negative = (_) => num(_) && _ < 0;
+const negativeInt = (_) => Owl_int(_) && _ < 0;
+const nonPositive = (_) => num(_) && _ <= 0;
+const nonPositiveInt = (_) => Owl_int(_) && _ <= 0;
+const nonZero = (_) => num(_) && _ !== 0;
+const between = (min, max) => (_) => num(_) && _ >= min && _ <= max;
+// JS native type
+const str = (_) => typeof _ === 'string';
+const bool = (_) => typeof _ === 'boolean';
+const emptyObject = (_) => !!_ && _.constructor === Object && Object.keys(_).length === 0;
+const array = (_) => Array.isArray(_);
+const arrayOfLength = (length) => (_) => array(_) && _.length === length;
+const arrayWith = (predicate) => (_) => array(_) && _.every(predicate);
+// Math Types
+const couple = (_) => arrayOfLength(2)(_) && arrayWith(num)(_);
+const point = (_) => couple(_);
+const fraction = (_) => couple(_);
+const properFraction = (_) => fraction(_) && _[1] !== 0;
+const vector = (_) => couple(_);
+// compose
+const and = (...predicates) => (_) => predicates.every(p => p(_));
+const or = (...predicates) => (_) => predicates.some(p => p(_));
+const not = (predicate) => (_) => !predicate(_);
+// trivial
+const pass = (_) => true;
+const fail = (_) => false;
+// /**
+//  * @category Assertion
+//  * @return check if the item is a IneqSign string
+//  * ```typescript
+//  * IsIneqSign('>') // true
+//  * IsIneqSign('\\ge') // true
+//  * IsIneqSign(true) // false
+//  * IsIneqSign('=>') // false
+//  * ```
+//  */
+// function IsIneqSign(...items: any[]): boolean {
+//     return items.every(
+//         x => [
+//             '>', '<', '>=', '<=',
+//             '\\gt', '\\lt', '\\ge', '\\le'
+//         ].includes(x)
+//     );
+// }
+// globalThis.IsIneqSign = IsIneqSign
+// /**
+//  * @category Assertion
+//  * @return check if the item is a Dfrac string
+//  * ```typescript
+//  * IsDfrac('\\dfrac{1}{2}') // true
+//  * IsDfrac('\\dfrac{x}{2}') // false
+//  * ```
+//  */
+// function IsDfrac(...items: any[]): boolean {
+//     const d = String.raw`-?\d+\.?\d*`
+//     const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
+//     return items.every(x => IsString(x) && x.match(new RegExp(f, 'g')))
+// }
+// globalThis.IsDfrac = IsDfrac
+// /**
+//  * @category Assertion
+//  * @return check if the item is a constraint (LP)
+//  * ```typescript
+//  * IsConstraint([1,2,'>',3]) // true
+//  * IsConstraint([1,2,3]) // false
+//  * IsConstraint([1,2,'=>',3]) // false
+//  * ```
+//  */
+// function IsConstraint(...items: any[]): boolean {
+//     return items.every(
+//         x => IsArrayOfLength(4)(x) &&
+//             IsNum(x[0], x[1], x[3]) &&
+//             IsIneqSign(x[2])
+//     );
+// }
+// globalThis.IsConstraint = IsConstraint
+
+;// CONCATENATED MODULE: ./src/Core/Contract/index.ts
+function ArgBlood(fname, fargs, argIndex, argValue, predicate) {
+    let i = String(argIndex);
+    let v = argValue.toString();
+    let p = predicate.name || predicate.toString();
+    return new Blood('Contract', '(' + fname + ') arg(' + fargs + ')[' + i + '] = ' + v + ' violate: ' + p);
+}
+function ReturnBlood(fname, returnValue, predicate) {
+    let v = returnValue;
+    let p = predicate.name || predicate.toString();
+    return new Blood('Contract', '(' + fname + ') return = ' + v + ' violate: ' + p);
+}
+function CatchBlood(fname, e) {
+    return new Blood('Contract', '(' + fname + ') thrown ' + e.name + ' with message:\n' + e.message);
+}
+function toRule(source) {
+    return Array.isArray(source) ? source : [source];
+}
+function validateArgs(f, rules, fname, fargs) {
+    let policy = rules.map(toRule);
+    function rule(index) {
+        // use the last rule for the rest
+        const n = policy.length - 1;
+        return policy[Math.min(index, n)];
+    }
+    const newFunc = (...args) => {
+        for (let i = 0; i < args.length; i++) {
+            const arg = args[i];
+            for (let pd of rule(i)) {
+                if (!pd(arg))
+                    throw ArgBlood(fname, fargs, i, arg, pd);
+            }
+        }
+        return f(...args);
+    };
+    return newFunc;
+}
+function validateReturn(f, rule, fname) {
+    let r = toRule(rule);
+    const newFunc = (...args) => {
+        const result = f(...args);
+        for (let pd of r) {
+            if (!pd(result))
+                throw ReturnBlood(fname, result, pd);
+        }
+        return result;
+    };
+    return newFunc;
+}
+function validateCatch(f, fname) {
+    const newFunc = (...args) => {
+        let result;
+        try {
+            result = f(...args);
+        }
+        catch (e) {
+            throw CatchBlood(fname, e);
+        }
+        return result;
+    };
+    return newFunc;
+}
+function getFuncArgs(func) {
+    var fnStr = func.toString();
+    return fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'));
+}
+function contract(f) {
+    return {
+        sign(argsRules, returnRule) {
+            const name = f.name;
+            const fargs = getFuncArgs(f);
+            f = validateCatch(f, name);
+            f = validateReturn(f, returnRule, name);
+            f = validateArgs(f, argsRules, name, fargs);
+            return f;
+        }
+    };
+}
+
+;// CONCATENATED MODULE: ./src/Core/Blood/index.ts
+class Blood_Blood extends Error {
+    constructor(name, message) {
+        super(message);
+        this.name = name + 'Error';
+    }
+}
+globalThis.Blood = Blood_Blood;
+
+// function CustomError(name: string, message: string) {
+//     return new CustomErrorCls(name, message)
+// }
+// globalThis.CustomError = CustomError
+// function MathError(message: string) {
+//     return new CustomErrorCls('MathError', message)
+// }
+// globalThis.MathError = MathError
+// function Should(condition: boolean, msg: string = "Should condition failed!") {
+//     if (!condition) {
+//         let caller = (new Error()).stack!.split("\n")[2].trim().split(" ")[1]
+//         // let caller = 'function'
+//         caller = caller ?? 'Anonymous '
+//         throw MathError(caller + ': ' + msg)
+//     }
+// }
+// globalThis.Should = Should
+
+;// CONCATENATED MODULE: ./src/Core/index.ts
+
+globalThis.dice = Dice_namespaceObject;
+
+globalThis.owl = Owl_namespaceObject;
+
+globalThis.contract = contract;
+
+
+// EXTERNAL MODULE: ./src/Math/Code/Assertion.ts
+var Assertion = __webpack_require__(4);
+// EXTERNAL MODULE: ./src/Math/Code/Combinatorics.ts
+var Combinatorics = __webpack_require__(315);
+// EXTERNAL MODULE: ./src/Math/Code/Flow.ts
+var Flow = __webpack_require__(648);
+// EXTERNAL MODULE: ./src/Math/Code/Fraction.ts
+var Fraction = __webpack_require__(141);
+// EXTERNAL MODULE: ./src/Math/Code/Function.ts
+var Function = __webpack_require__(27);
+// EXTERNAL MODULE: ./src/Math/Code/Geometry.ts
+var Geometry = __webpack_require__(202);
+// EXTERNAL MODULE: ./src/Math/Code/LinearProgram.ts
+var LinearProgram = __webpack_require__(426);
+// EXTERNAL MODULE: ./src/Math/Code/Numeracy.ts
+var Numeracy = __webpack_require__(931);
+// EXTERNAL MODULE: ./src/Math/Code/PhyConst.ts
+var PhyConst = __webpack_require__(307);
+// EXTERNAL MODULE: ./src/Math/Code/Random.ts
+var Random = __webpack_require__(113);
+// EXTERNAL MODULE: ./src/Math/Code/RandomShake.ts
+var RandomShake = __webpack_require__(348);
+// EXTERNAL MODULE: ./src/Math/Code/RandomUtil.ts
+var RandomUtil = __webpack_require__(759);
+// EXTERNAL MODULE: ./src/Math/Code/Relation.ts
+var Relation = __webpack_require__(7);
+// EXTERNAL MODULE: ./src/Math/Code/Sequence.ts
+var Sequence = __webpack_require__(188);
+// EXTERNAL MODULE: ./src/Math/Code/Stat.ts
+var Stat = __webpack_require__(701);
+// EXTERNAL MODULE: ./src/Math/Code/Text.ts
+var Text = __webpack_require__(730);
+// EXTERNAL MODULE: ./src/Math/Code/Triangle.ts
+var Triangle = __webpack_require__(561);
+// EXTERNAL MODULE: ./src/Math/Code/Trigonometry.ts
+var Trigonometry = __webpack_require__(812);
+// EXTERNAL MODULE: ./src/Math/Code/Utility.ts
+var Utility = __webpack_require__(384);
+// EXTERNAL MODULE: ./src/Math/Code/Vector.ts
+var Vector = __webpack_require__(779);
+// EXTERNAL MODULE: ./src/Math/Algebra/Algebra.ts
+var Algebra = __webpack_require__(53);
+// EXTERNAL MODULE: ./src/Math/Algebra/Circle.ts
+var Circle = __webpack_require__(126);
+// EXTERNAL MODULE: ./src/Math/Algebra/Quadratic.ts
+var Quadratic = __webpack_require__(286);
+// EXTERNAL MODULE: ./src/Math/Algebra/Linear.ts
+var Linear = __webpack_require__(401);
+// EXTERNAL MODULE: ./src/Math/should.ts
+var should = __webpack_require__(414);
+;// CONCATENATED MODULE: ./src/Math/chance.ts
+
+var chance_chance = new chance.Chance();
+globalThis.chance = chance_chance;
+
+;// CONCATENATED MODULE: ./src/Math/index.ts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// EXTERNAL MODULE: ./src/Pen/Frame.ts
+var Frame = __webpack_require__(577);
+// EXTERNAL MODULE: ./src/Pen/Pen.ts
+var Pen = __webpack_require__(377);
+// EXTERNAL MODULE: ./src/Pen/AutoPen.ts
+var AutoPen = __webpack_require__(336);
+// EXTERNAL MODULE: ./src/Pen/3D.ts
+var _3D = __webpack_require__(742);
+;// CONCATENATED MODULE: ./src/Pen/index.ts
+
+
+
+
+
+// EXTERNAL MODULE: ./src/Soil/soil.ts
+var Soil_soil = __webpack_require__(842);
+;// CONCATENATED MODULE: ./src/Soil/index.ts
+
+class MathSoilCls {
+    grow(seed) {
+        let soil = new Soil_soil/* Soil */.u(seed.gene);
+        seed.fruit = soil.nurture();
+    }
+    growAll(seeds) {
+        seeds.forEach(x => this.grow(x));
+    }
+    test(seed, repeat = 100) {
+        let counters = [];
+        for (let i = 1; i <= repeat; i++) {
+            this.grow(seed);
+            if (!seed.fruit.success)
+                return;
+            counters.push(seed.fruit.counter);
+        }
+        seed.fruit.counter = Mean(...counters);
+    }
+}
+var MathSoil = new MathSoilCls();
+globalThis.MathSoil = MathSoil;
+
+;// CONCATENATED MODULE: ./src/index.ts
+
+
+
+
 
 })();
 

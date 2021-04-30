@@ -8,9 +8,17 @@ class Blood extends Error {
 }
 
 
-function DiceBlood(message: string): Blood {
-    return new Blood('Dice', message)
+
+type alias = Blood
+type TypeOfFolder = typeof Blood
+
+declare global {
+    type Blood = alias
+    var Blood: TypeOfFolder
 }
+globalThis.Blood = Blood
+
+export { }
 
 // function CustomError(name: string, message: string) {
 //     return new CustomErrorCls(name, message)
