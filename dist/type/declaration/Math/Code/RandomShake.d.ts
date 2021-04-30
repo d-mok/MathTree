@@ -24,7 +24,7 @@ declare function Sieve<T>(randomFunc: () => T, predicate: (x: T) => boolean, n?:
 /**
  * @category RandomShake
  * @return 3 nearby same-signed integers, range = Max(5, anchor * 10%)
- * ```typescript
+ * ```
  * RndShakeN(5) // return 3 unique integers from 1-10
  * ```
  */

@@ -78,6 +78,7 @@ export const arrayWith = (predicate: (_: any) => boolean) => (_: any) => array(_
 
 export const couple = (_: any) => arrayOfLength(2)(_) && arrayWith(num)(_)
 
+export const interval = (_: any) => couple(_) && _[0] <= _[1]
 
 export const point = (_: any) => couple(_)
 

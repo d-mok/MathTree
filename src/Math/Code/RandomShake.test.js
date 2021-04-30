@@ -83,7 +83,7 @@ test('RndShakeR', () => {
         RndShakeR(RndR(-1000, 1000));
     }
     for (let i = 0; i <= 100; i++) {
-        let num = Number(RndR(-1, 1) + 'e' + RndZ(-1, 100));
+        let num = Number(RndR(-1, 1) + 'e' + RndZ(1, 100));
         RndShakeR(RndR(-1, 1));
     }
 });

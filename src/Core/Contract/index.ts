@@ -11,20 +11,22 @@ function ArgBlood(fname: string, fargs: string, argIndex: number, argValue: any,
 }
 
 
-function ReturnBlood(fname: string, returnValue: any, predicate: predicate): Blood {
+function ReturnBlood(fname: string, fargs: string, argValues: any[], returnValue: any, predicate: predicate): Blood {
     let v = returnValue
+    let a = argValues.join(',')
     let p = predicate.name || predicate.toString()
     return new Blood(
         'Contract',
-        '(' + fname + ') return = ' + v + ' violate: ' + p
+        '(' + fname + ') from arg(' + fargs + ') = (' + a + ') => return = ' + v + ' violate: ' + p
     )
 }
 
 
-function CatchBlood(fname: string, e: Error): Blood {
+function CatchBlood(fname: string, fargs: string, argValues: any[], e: Error): Blood {
+    let a = argValues.join(',')
     return new Blood(
         'Contract',
-        '(' + fname + ') thrown ' + e.name + ' with message:\n' + e.message
+        '(' + fname + ') from arg(' + fargs + ') = (' + a + ') throw ' + e.name + ' with message:\n' + e.message
     )
 }
 
@@ -57,46 +59,46 @@ function validateArgs<F extends Function>(f: F, rules: (predicate | rule)[], fna
     return newFunc as any as F
 }
 
-function validateReturn<F extends Function>(f: F, rule: rule | predicate, fname: string): F {
+function validateReturn<F extends Function>(f: F, rule: rule | predicate, fname: string, fargs: string): F {
     let r = toRule(rule)
     const newFunc = (...args: any[]) => {
         const result = f(...args)
         for (let pd of r) {
-            if (!pd(result)) throw ReturnBlood(fname, result, pd)
+            if (!pd(result)) throw ReturnBlood(fname, fargs, args, result, pd)
         }
         return result
     }
     return newFunc as any as F
 }
 
-function validateCatch<F extends Function>(f: F, fname: string): F {
+function validateCatch<F extends Function>(f: F, fname: string, fargs: string): F {
     const newFunc = (...args: any[]) => {
         let result: any
         try {
             result = f(...args)
         } catch (e) {
-            throw CatchBlood(fname, e)
+            throw CatchBlood(fname, fargs, args, e)
         }
         return result
     }
     return newFunc as any as F
 }
 
-function getFuncArgs(func: Function) {
+function getFuncArgs(func: Function): string {
     var fnStr = func.toString()
     return fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
 }
 
 
-export function contract<F extends Function>(f: F){
+export function contract<F extends Function>(f: F) {
     return {
-        sign(argsRules: (predicate | rule)[], returnRule: predicate | rule): F {
+        sign(argsRules: (predicate | rule)[], returnRule?: predicate | rule): F {
             const name = f.name
             const fargs = getFuncArgs(f)
-            f = validateCatch(f, name)
-            f = validateReturn(f, returnRule, name)
-            f = validateArgs(f, argsRules, name, fargs)
+            f = validateCatch(f, name, fargs)
+            if (returnRule !== undefined) f = validateReturn(f, returnRule, name, fargs)
+            if (argsRules.length > 0) f = validateArgs(f, argsRules, name, fargs)
             return f
-        }        
+        }
     }
 }

@@ -21,6 +21,7 @@ declare type Line = [slope: number, yInt: number];
 declare type Quadratic = [a: number, b: number, c: number];
 declare type Point = [x: number, y: number];
 declare type Vector = [x: number, y: number];
+declare type interval = [min: number, max: number];
 declare type Fraction = [numerator: number, denominator: number];
 /**
  * ```

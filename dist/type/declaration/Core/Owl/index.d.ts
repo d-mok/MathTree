@@ -23,6 +23,7 @@ export declare const array: (_: any) => boolean;
 export declare const arrayOfLength: (length: number) => (_: any) => boolean;
 export declare const arrayWith: (predicate: (_: any) => boolean) => (_: any) => any;
 export declare const couple: (_: any) => any;
+export declare const interval: (_: any) => any;
 export declare const point: (_: any) => any;
 export declare const fraction: (_: any) => any;
 export declare const properFraction: (_: any) => any;

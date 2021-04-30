@@ -26,6 +26,7 @@ type Quadratic = [a: number, b: number, c: number]
 
 type Point = [x: number, y: number]
 type Vector = [x: number, y: number]
+type interval = [min: number, max: number]
 
 type Fraction = [numerator: number, denominator: number]
 

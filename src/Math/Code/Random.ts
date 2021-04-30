@@ -1,56 +1,47 @@
-// import * as Dice from '../../Core/Dice/index'
-
 /**
  * @category Random
  * @return a random integer in [min, max] inclusive.
- * ```typescript
+ * ```
  * RndN(2,5) // may return 2, 3, 4 or 5
  * ```
  */
-var RndN = function (min: number, max: number): number {
+function RndN(min: number, max: number): number {
     return dice.integer(min, max);
 }
-RndN = contract(RndN).sign([owl.num], owl.int)
-globalThis.RndN = RndN
+globalThis.RndN = contract(RndN).sign([owl.num])
 
 /**
  * @category Random
- * @param n - default to 10
  * @return an array of n unique random integer in [min, max] inclusive.
- * ```typescript
+ * ```
  * RndNs(2,8,3) // may return [5,3,7]
  * ```
  */
-function RndNs(min: number, max: number, n?: number): number[] {
-    Should(IsNum(min, max), 'input must be num')
-    n ??= Math.min(Math.floor(max - min + 1), 10)
-    Should(IsPositiveInteger(n), 'n must be positive integer')
+function RndNs(min: number, max: number, n: number = 10): number[] {
+    n = Math.min(Math.floor(max - min + 1), n)
     return dice.unique(() => RndN(min, max), n);
 }
-globalThis.RndNs = RndNs
-
-
+globalThis.RndNs = contract(RndNs).sign([owl.num, owl.num, owl.positiveInt])
 
 
 /**
  * @category Random
  * @return a random real number in [min, max] inclusive
- * ```typescript
+ * ```
  * RndR(1,2) // may return 1.242574363
  * ```
  */
 function RndR(min: number, max: number): number {
-    Should(IsNum(min, max), 'input must be num')
     return dice.real(min, max);
 }
-globalThis.RndR = RndR
+globalThis.RndR = contract(RndR).sign([owl.num])
 
 
 
 /**
  * @category Random
  * @return 1 or -1
- * ```typescript
+ * ```
  * RndU() // may return 1 or -1
  * ```
  */
@@ -63,7 +54,7 @@ globalThis.RndU = RndU
 /**
  * @category Random
  * @return true or false.
- * ```typescript
+ * ```
  * RndT() // may return true or false
  * ```
  */
@@ -78,15 +69,14 @@ globalThis.RndT = RndT
 /**
  * @category Random
  * @return a random integer in [min, max] or [-max, -min] inclusive.
- * ```typescript
+ * ```
  * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
  * ```
  */
 function RndZ(min: number, max: number): number {
-    Should(IsNum(min, max), 'input must be num')
     return RndN(min, max) * RndU();
 }
-globalThis.RndZ = RndZ
+globalThis.RndZ = contract(RndZ).sign([owl.nonNegative])
 
 
 
@@ -95,21 +85,15 @@ globalThis.RndZ = RndZ
  * @category Random
  * @param n - default to 10
  * @return an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
- * ```typescript
+ * ```
  * RndZs(2,8,3) // may return [5,-3,7]
  * ```
  */
-function RndZs(min: number, max: number, n?: number): number[] {
-    Should(IsNum(min, max), 'input must be num')
-    n ??= Min(Math.floor(max - min + 1), 10)
-    Should(IsPositiveInteger(n), 'n must be positive integer')
-    let arr = dice.unique(() => RndN(min, max), n);
-    // for (let i = 0; i < arr.length; i++) {
-    //     arr[i] = arr[i] * RndU()
-    // }
-    return arr.map(x => x * RndU())
+function RndZs(min: number, max: number, n: number = 10): number[] {
+    n = Math.min(Math.floor(max - min + 1), n)
+    return dice.unique(() => RndN(min, max), n).map(x => x * RndU());
 }
-globalThis.RndZs = RndZs
+globalThis.RndZs = contract(RndZs).sign([owl.nonNegative, owl.nonNegative, owl.positiveInt])
 
 
 
@@ -118,15 +102,14 @@ globalThis.RndZs = RndZs
 /**
  * @category Random
  * @return a random prime number less than or equal to max.
- * ```typescript
+ * ```
  * RndP(10) // may return 2, 3, 5 or 7
  * ```
  */
 function RndP(max: number): number {
-    Should(IsNum(max), 'input must be num')
     return dice.prime(2, max);
 }
-globalThis.RndP = RndP
+globalThis.RndP = contract(RndP).sign([owl.positive])
 
 
 
@@ -135,58 +118,48 @@ globalThis.RndP = RndP
 /**
  * @category Random
  * @return a random odd integer in [min, max] inclusive
- * ```typescript
+ * ```
  * RndOdd(3,8) // return 3, 5 or 7
  * ```
  */
 function RndOdd(min: number, max: number): number {
-    Should(IsNum(min, max), 'input must be num')
     min = Math.ceil((min + 1) / 2);
     max = Math.floor((max + 1) / 2);
     return 2 * RndN(min, max) - 1;
 }
-globalThis.RndOdd = RndOdd
+globalThis.RndOdd = contract(RndOdd).sign([owl.num])
 
 
 
 /**
  * @category Random
  * @return a random even integer in [min, max] inclusive
- * ```typescript 
+ * ``` 
  * RndEven(3,8) // return 4, 6 or 8
  * ```
  */
 function RndEven(min: number, max: number): number {
-    Should(IsNum(min, max), 'input must be num')
     min = Math.ceil(min / 2);
     max = Math.floor(max / 2);
     return 2 * RndN(min, max);
 }
-globalThis.RndEven = RndEven
+globalThis.RndEven = contract(RndEven).sign([owl.num])
 
 
 
 /**
  * @category Random
  * @return an array of random polynomial coefficients
- * ```typescript
+ * ```
  * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)] 
  * ```
  */
 function RndPoly(...coeff: number[]): number[] {
-    Should(IsNum(...coeff), 'input must be num')
     let arr = coeff.map(x => RndZ(1, x))
     arr[0] = Math.abs(arr[0])
     return arr
-    // return coeff.map((x, i, a) => {
-    //     return i === 0 ? RndN(1, x) : RndZ(1, x);
-    // });
 }
-globalThis.RndPoly = RndPoly
-
-
-
-
+globalThis.RndPoly = contract(RndPoly).sign([owl.nonNegative])
 
 
 
@@ -194,12 +167,11 @@ globalThis.RndPoly = RndPoly
 /**
  * @category Random
  * @return an array of a Pyth Triple
- * ```typescript
+ * ```
  * RndPyth(10) // may return [3,4,5]
  * ```
  */
 function RndPyth(max = 100): [number, number, number] {
-    Should(IsNum(max), 'input must be num')
     let arr: [number, number, number][] = [];
     for (let m = 1; m < 10; m++) {
         for (let n = 1; n < m; n++) {
@@ -211,60 +183,53 @@ function RndPyth(max = 100): [number, number, number] {
             }
         }
     }
-    return chance.pickone(arr);
+    return dice.pick(...arr).one()
 }
-globalThis.RndPyth = RndPyth
+globalThis.RndPyth = contract(RndPyth).sign([owl.positive])
 
 
 /**
  * @category Random
- * @param min abs of intercept
- * @param max abs of intercept
  * @return a linear [a,b,c] in ax+by+c=0
- * ```typescript
+ * ```
  * RndLinearFromIntercept(1,5) // may return [2,-3,6]
  * ```
  */
-function RndLinearFromInt(minInt: number, maxInt: number) {
-    Should(IsPositive(minInt, maxInt), 'input must be positive num')
-    let xInt = RndZ(minInt, maxInt)
-    let yInt = RndZ(minInt, maxInt)
+function RndLinearFromInt(minAbsIntercept: number, maxAbsIntercept: number) {
+    let xInt = RndZ(minAbsIntercept, maxAbsIntercept)
+    let yInt = RndZ(minAbsIntercept, maxAbsIntercept)
     return LinearFromIntercepts(xInt, yInt)
 }
-globalThis.RndLinearFromInt = RndLinearFromInt
+globalThis.RndLinearFromInt = contract(RndLinearFromInt).sign([owl.nonNegative])
 
 
 /**
  * @category Random
  * @return a point within given range
- * ```typescript
+ * ```
  * RndPoint([1,4],[10,14]) // may return [2,12]
  * // equivalent to [RndN(...xRange),Range(...yRange)]
  * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
  * ```
  */
-function RndPoint(xRange: number | [number, number], yRange: number | [number, number] = xRange): Point {
+function RndPoint(xRange: number | interval, yRange: number | interval = xRange): Point {
     if (typeof xRange === 'number') xRange = [-xRange, xRange]
     if (typeof yRange === 'number') yRange = [-yRange, yRange]
-    Should(IsArrayOfLength(2)(xRange, yRange), 'input must be range')
-    Should(IsNum(...xRange, ...yRange), 'input must be num')
     let x = RndN(...xRange)
     let y = RndN(...yRange)
     return [x, y]
 }
-globalThis.RndPoint = RndPoint
+globalThis.RndPoint = contract(RndPoint).sign([_ => owl.num(_) || owl.interval(_)])
 
 
 /**
  * @category Random
  * @return n angles in [0,360] at least cyclic separated by separation
- * ```typescript
+ * ```
  * RndAngles(3,50) // may return [30,90,200]
  * ```
  */
 function RndAngles(n: number, separation: number): number[] {
-    Should(IsPositiveInteger(n), 'n must be positive integer')
-    Should(IsPositive(separation), 'separation must be positive num')
     let f = () => Sort(...RndNs(0, 360, n))
     let p = (arr: number[]) => {
         for (let i = 0; i < arr.length - 1; i++) {
@@ -273,23 +238,19 @@ function RndAngles(n: number, separation: number): number[] {
         if (arr[0] + 360 - arr[arr.length - 1] < separation) return false
         return true
     }
-    return Sieve(f, p)()
+    return dice.brute(f, p)
 }
-globalThis.RndAngles = RndAngles
+globalThis.RndAngles = contract(RndAngles).sign([owl.positiveInt, owl.positive])
 
 
 /**
  * @category Random
  * @return n vertices of a convex polygon generated by rounding a cyclic polygon
- * ```typescript
+ * ```
  * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
  * ```
  */
 function RndConvexPolygon(n: number, center: Point, radius: number, separation: number): Point[] {
-    Should(IsPositiveInteger(n), 'n must be positive integer')
-    Should(IsPoint(center), 'center must be point')
-    Should(IsPositive(radius), 'radius must be positive num')
-    Should(IsPositive(separation), 'separation must be positive num')
     let [h, k] = center
     let r = radius
     let angles = RndAngles(n, separation)
@@ -297,12 +258,8 @@ function RndConvexPolygon(n: number, center: Point, radius: number, separation: 
     vertices = vertices.map(v => [Fix(v[0]), Fix(v[1])])
     return vertices
 }
-globalThis.RndConvexPolygon = RndConvexPolygon
-
-
-
-
-
+globalThis.RndConvexPolygon = contract(RndConvexPolygon)
+    .sign([owl.positiveInt, owl.point, owl.positive, owl.positive])
 
 
 
@@ -310,19 +267,14 @@ globalThis.RndConvexPolygon = RndConvexPolygon
 /**
  * @category Random
  * @return n integers from [min, max]
- * ```typescript
+ * ```
  * RndData(10,15,5) // may return [11,11,12,13,15]
  * ```
  */
 function RndData(min: number, max: number, n: number): number[] {
-    let arr = []
-    let trials = 10 * n
-    for (let i = 0; i < trials; i++) {
-        arr.unshift(RndN(min, max))
-        if (arr.length > n) arr.length = n
-        if (arr.length === n && IsNum(Mode(...arr))) return Sort(...arr)
-    }
-    throw 'fail'
+    let f = () => dice.sample(() => RndN(min, max), n)
+    let p = (arr: number[]) => IsNum(Mode(...arr))
+    return Sort(...dice.brute(f, p))
 }
-globalThis.RndData = RndData
+globalThis.RndData = contract(RndData).sign([owl.num, owl.num, owl.positiveInt])
 
