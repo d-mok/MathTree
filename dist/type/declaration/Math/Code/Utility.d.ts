@@ -43,23 +43,6 @@ declare function Romanize(num: number): string;
 declare function DeRomanize(roman: string): number;
 /**
  * @category Utility
- * @return array of combination pairs
- * ```typescript
- * Pairs(1,2,3) // [[1,2],[1,3],[2,3]]
- * Pairs(1) // []
- * ```
- */
-declare function Pairs<T>(...items: T[]): [T, T][];
-/**
- * @category Utility
- * @return check if every pairs satisfy the predicate
- * ```typescript
- * PairsEvery(AreDistinct)(1,2,3) // true
- * ```
- */
-declare function PairsEvery<T>(predicate: (x: T, y: T) => boolean): (...items: T[]) => boolean;
-/**
- * @category Utility
  * @param arr - array to dedupe
  * @param keyFunc - map item to this value to compare equality
  * @return Deduped array

@@ -47,32 +47,3 @@ test('DeRomanize', () => {
 });
 
 
-
-// test('Clone', () => {
-//     expect(Clone([1, 2, 3])).toEqual([1, 2, 3]);
-//     expect(Clone({ x: 1 })).toEqual({ x: 1 });
-// });
-
-
-
-test('Pairs', () => {
-    expect(Pairs(1, 2, 3)).toEqual([[1, 2], [1, 3], [2, 3]]);
-    expect(Pairs(1)).toEqual([]);
-});
-
-
-
-test('PairsEvery', () => {
-    expect(PairsEvery(AreDistinct)(1, 2, 3)).toBe(true);
-    expect(PairsEvery((a, b) => a + b > 5)(3, 3, 4)).toBe(true);
-    expect(PairsEvery((a, b) => a + b > 5)(3, 3, 2)).toBe(false);
-});
-
-
-
-
-
-test('Dedupe', () => {
-    expect(Dedupe([1, 2, 3, 3, 4, 5, 5, 5, 6])).toEqual([1, 2, 3, 4, 5, 6]);
-    expect(Dedupe([[1, 2], [1, 2], [1, 3]])).toEqual([[1, 2], [1, 3]]);
-});

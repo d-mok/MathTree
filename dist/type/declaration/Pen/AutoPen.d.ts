@@ -5,7 +5,7 @@ declare class AutoPenCls {
     /**
      * @ignore
      */
-    pen: PenCls;
+    private pen;
     /**
      * @ignore
      */
