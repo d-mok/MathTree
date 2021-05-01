@@ -61,16 +61,15 @@ globalThis.SortBy = SortBy
 /**
  * @category Stat
  * @return sum of nums
- * ```typescript
+ * ```
  * Sum(1,2,3) // 6
  * Sum(-1,2,3,4,5) // 13
  * ```
  */
 function Sum(...nums: number[]): number {
-    Should(IsNum(...nums), 'input must be num')
-    return nums.reduce((a, b) => a + b, 0)
+    return ant.sum(...nums)
 }
-globalThis.Sum = Sum
+globalThis.Sum = contract(Sum).sign([owl.num])
 
 
 
@@ -84,12 +83,9 @@ globalThis.Sum = Sum
  * ```
  */
 function Mean(...nums: number[]): number {
-    Should(IsNum(...nums), 'input must be num')
-    Should(nums.length > 0, 'nums.length must be >0')
-    const sum = nums.reduce((a, b) => a + b)
-    return sum / nums.length
+    return ant.mean(...nums)
 }
-globalThis.Mean = Mean
+globalThis.Mean = contract(Mean).sign([owl.num])
 
 
 
@@ -104,17 +100,9 @@ globalThis.Mean = Mean
  * ```
  */
 function Median(...nums: number[]): number {
-    nums = Sort(...nums)
-    let n = nums.length
-    if (IsOdd(n)) {
-        let m = Ceil(n / 2)
-        return nums[m - 1]
-    } else {
-        let m = n / 2
-        return (nums[m - 1] + nums[m]) / 2
-    }
+    return ant.median(...nums)
 }
-globalThis.Median = Median
+globalThis.Median = contract(Median).sign([owl.num])
 
 
 /**
@@ -170,35 +158,26 @@ globalThis.Frequency = Frequency
 /**
  * @category Stat
  * @return mode of nums
- * ```typescript
- * Mode(1,2,3,2,2,3,4) \\ 2
- * Mode(1,1,2,2,3) \\ NaN
+ * ```
+ * Mode(1,2,3,2,2,3,4) \\ [2]
+ * Mode(1,1,2,2,3) \\ []
  * ```
  */
-function Mode(...nums: number[]): number {
-    let s = [...new Set(nums)]
-    let counts = s.map(x => Frequency(x)(...nums))
-    let maxCount = Max(...counts)
-    if (Frequency(maxCount)(...counts) > 1) {
-        return NaN
-    }
-    return s.find(x => Frequency(x)(...nums) === maxCount)!
+function Mode(...nums: number[]): number[] {
+    return ant.mode(...nums)
 }
-globalThis.Mode = Mode
+globalThis.Mode = contract(Mode).sign([owl.num])
 
 
 /**
  * @category Stat
  * @return SD of nums
- * ```typescript
+ * ```
  * StdDev(1,2,3,2,2,3,4) \\ 0.903507902
  * StdDev(1,1,2,2,3) \\ 0.748331477
  * ```
  */
 function StdDev(...nums: number[]): number {
-    let m = Mean(...nums)
-    nums = nums.map(x => (x - m) ** 2)
-    let a = Mean(...nums)
-    return a ** 0.5
+    return ant.sd(...nums)
 }
-globalThis.StdDev = StdDev
+globalThis.StdDev = contract(StdDev).sign([owl.num])

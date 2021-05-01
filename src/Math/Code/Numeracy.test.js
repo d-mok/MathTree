@@ -95,6 +95,8 @@ test('RoundUp', () => {
 
     expect(RoundUp(0, 1)).toBe(0);
     expect(RoundUp(0, 2)).toBe(0);
+
+    expect(RoundUp(1.2345e-30, 5)).toBe(1.2345e-30);
 });
 
 
@@ -128,6 +130,8 @@ test('RoundDown', () => {
 
     expect(RoundDown(0, 1)).toBe(0);
     expect(RoundDown(0, 2)).toBe(0);
+
+    expect(RoundDown(1.2345e-30, 5)).toBe(1.2345e-30);
 });
 
 
@@ -208,6 +212,8 @@ test('FixUp', () => {
 
     expect(FixUp(0, 1)).toBe(0);
     expect(FixUp(0, 2)).toBe(0);
+
+    expect(FixUp(1.2345e-30, 34)).toBe(1.2345e-30);
 });
 
 
@@ -244,6 +250,8 @@ test('FixDown', () => {
 
     expect(FixDown(0, 1)).toBe(0);
     expect(FixDown(0, 2)).toBe(0);
+
+    expect(FixDown(1.2345e-30, 34)).toBe(1.2345e-30);
 });
 
 
@@ -307,103 +315,91 @@ test('IntegerRatio', () => {
 
 
 
-test('SigFig', () => {
-    expect(SigFig(1)).toBe(1);
-    expect(SigFig(12)).toBe(2);
-    expect(SigFig(123)).toBe(3);
-    expect(SigFig(123.4)).toBe(4);
-    expect(SigFig(123.45)).toBe(5);
-    expect(SigFig(123.456)).toBe(6);
-    expect(SigFig(0.123)).toBe(3);
-    expect(SigFig(0.00123)).toBe(3);
-    expect(SigFig(0.00001230123)).toBe(7);
-    expect(SigFig(10)).toBe(1);
-    expect(SigFig(1200)).toBe(2);
-    expect(SigFig(1200.0001)).toBe(8);
-    expect(SigFig(1200.0001000)).toBe(8);
-    expect(SigFig(-1200.0001)).toBe(8);
+// test('SigFig', () => {
+//     expect(SigFig(1)).toBe(1);
+//     expect(SigFig(12)).toBe(2);
+//     expect(SigFig(123)).toBe(3);
+//     expect(SigFig(123.4)).toBe(4);
+//     expect(SigFig(123.45)).toBe(5);
+//     expect(SigFig(123.456)).toBe(6);
+//     expect(SigFig(0.123)).toBe(3);
+//     expect(SigFig(0.00123)).toBe(3);
+//     expect(SigFig(0.00001230123)).toBe(7);
+//     expect(SigFig(10)).toBe(1);
+//     expect(SigFig(1200)).toBe(2);
+//     expect(SigFig(1200.0001)).toBe(8);
+//     expect(SigFig(1200.0001000)).toBe(8);
+//     expect(SigFig(-1200.0001)).toBe(8);
 
-    expect(SigFig(0.81 - 1)).toBe(2);
-    expect(SigFig(1.1 ** 2)).toBe(3);
-});
-
-
-test('DecimalPlace', () => {
-    expect(DecimalPlace(1)).toBe(0);
-    expect(DecimalPlace(12)).toBe(0);
-    expect(DecimalPlace(123)).toBe(0);
-    expect(DecimalPlace(123.4)).toBe(1);
-    expect(DecimalPlace(123.45)).toBe(2);
-    expect(DecimalPlace(123.456)).toBe(3);
-    expect(DecimalPlace(0.123)).toBe(3);
-    expect(DecimalPlace(0.00123)).toBe(5);
-    expect(DecimalPlace(0.00001230123)).toBe(11);
-    expect(DecimalPlace(10)).toBe(0);
-    expect(DecimalPlace(1200)).toBe(0);
-    expect(DecimalPlace(1200.0001)).toBe(4);
-    expect(DecimalPlace(1200.0001000)).toBe(4);
-    expect(DecimalPlace(-1200.0001)).toBe(4);
-
-    expect(DecimalPlace(0.81 - 1)).toBe(2);
-    expect(DecimalPlace(1.1 ** 2)).toBe(2);
-});
+//     expect(SigFig(0.81 - 1)).toBe(2);
+//     expect(SigFig(1.1 ** 2)).toBe(3);
+// });
 
 
+// test('DecimalPlace', () => {
+//     expect(DecimalPlace(1)).toBe(0);
+//     expect(DecimalPlace(12)).toBe(0);
+//     expect(DecimalPlace(123)).toBe(0);
+//     expect(DecimalPlace(123.4)).toBe(1);
+//     expect(DecimalPlace(123.45)).toBe(2);
+//     expect(DecimalPlace(123.456)).toBe(3);
+//     expect(DecimalPlace(0.123)).toBe(3);
+//     expect(DecimalPlace(0.00123)).toBe(5);
+//     expect(DecimalPlace(0.00001230123)).toBe(11);
+//     expect(DecimalPlace(10)).toBe(0);
+//     expect(DecimalPlace(1200)).toBe(0);
+//     expect(DecimalPlace(1200.0001)).toBe(4);
+//     expect(DecimalPlace(1200.0001000)).toBe(4);
+//     expect(DecimalPlace(-1200.0001)).toBe(4);
 
-test('Magnitude', () => {
-    expect(Magnitude(1)).toBe(0);
-    expect(Magnitude(1.001)).toBe(0);
-    expect(Magnitude(0.999)).toBe(-1);
-    expect(Magnitude(10)).toBe(1);
-    expect(Magnitude(10.01)).toBe(1);
-    expect(Magnitude(9.999)).toBe(0);
-    expect(Magnitude(0.1)).toBe(-1);
-    expect(Magnitude(0.10001)).toBe(-1);
-    expect(Magnitude(0.09999)).toBe(-2);
-
-    expect(Magnitude(-1.001)).toBe(0);
-    expect(Magnitude(-0.999)).toBe(-1);
-});
-
-
-test('Mantissa', () => {
-    expect(Mantissa(1.234)).toBe(1.234);
-    expect(Mantissa(1234)).toBe(1.234);
-    expect(Mantissa(0.1234)).toBe(1.234);
-    expect(Mantissa(0)).toBe(0);
-    expect(Mantissa(-0.1234)).toBe(-1.234);
-
-});
+//     expect(DecimalPlace(0.81 - 1)).toBe(2);
+//     expect(DecimalPlace(1.1 ** 2)).toBe(2);
+// });
 
 
 
-test('LogCeil', () => {
-    expect(LogCeil(5)).toBe(10);
-    expect(LogCeil(23)).toBe(100);
-    expect(LogCeil(0.456)).toBe(1);
-    expect(LogCeil(0.00235)).toBe(0.01);
-});
+// test('Magnitude', () => {
+//     expect(Magnitude(1)).toBe(0);
+//     expect(Magnitude(1.001)).toBe(0);
+//     expect(Magnitude(0.999)).toBe(-1);
+//     expect(Magnitude(10)).toBe(1);
+//     expect(Magnitude(10.01)).toBe(1);
+//     expect(Magnitude(9.999)).toBe(0);
+//     expect(Magnitude(0.1)).toBe(-1);
+//     expect(Magnitude(0.10001)).toBe(-1);
+//     expect(Magnitude(0.09999)).toBe(-2);
+
+//     expect(Magnitude(-1.001)).toBe(0);
+//     expect(Magnitude(-0.999)).toBe(-1);
+// });
+
+
+// test('Mantissa', () => {
+//     expect(Mantissa(1.234)).toBe(1.234);
+//     expect(Mantissa(1234)).toBe(1.234);
+//     expect(Mantissa(0.1234)).toBe(1.234);
+//     expect(Mantissa(0)).toBe(0);
+//     expect(Mantissa(-0.1234)).toBe(-1.234);
+
+// });
 
 
 
-test('LogFloor', () => {
-    expect(LogFloor(5)).toBe(1);
-    expect(LogFloor(23)).toBe(10);
-    expect(LogFloor(0.456)).toBe(0.1);
-    expect(LogFloor(0.00235)).toBe(0.001);
-});
+// test('LogCeil', () => {
+//     expect(LogCeil(5)).toBe(10);
+//     expect(LogCeil(23)).toBe(100);
+//     expect(LogCeil(0.456)).toBe(1);
+//     expect(LogCeil(0.00235)).toBe(0.01);
+// });
 
 
 
-
-test('Raise', () => {
-    expect(Raise(12.34, 1)).toBe(123.4);
-    expect(Raise(12.34, -1)).toBe(1.234);
-    expect(Raise(-12.34, -1)).toBe(-1.234);
-    expect(Raise(0, 5)).toBe(0);
-    expect(Raise(1.234e-17, 5)).toBe(1.234e-12);
-});
-
+// test('LogFloor', () => {
+//     expect(LogFloor(5)).toBe(1);
+//     expect(LogFloor(23)).toBe(10);
+//     expect(LogFloor(0.456)).toBe(0.1);
+//     expect(LogFloor(0.00235)).toBe(0.001);
+// });
 
 
 

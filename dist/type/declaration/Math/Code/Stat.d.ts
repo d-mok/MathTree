@@ -34,7 +34,7 @@ declare function SortBy<T>(items: T[], valueFunc: (_: T) => number): T[];
 /**
  * @category Stat
  * @return sum of nums
- * ```typescript
+ * ```
  * Sum(1,2,3) // 6
  * Sum(-1,2,3,4,5) // 13
  * ```
@@ -87,16 +87,16 @@ declare function Frequency(item: any): (...items: (typeof item)[]) => number;
 /**
  * @category Stat
  * @return mode of nums
- * ```typescript
- * Mode(1,2,3,2,2,3,4) \\ 2
- * Mode(1,1,2,2,3) \\ NaN
+ * ```
+ * Mode(1,2,3,2,2,3,4) \\ [2]
+ * Mode(1,1,2,2,3) \\ []
  * ```
  */
-declare function Mode(...nums: number[]): number;
+declare function Mode(...nums: number[]): number[];
 /**
  * @category Stat
  * @return SD of nums
- * ```typescript
+ * ```
  * StdDev(1,2,3,2,2,3,4) \\ 0.903507902
  * StdDev(1,1,2,2,3) \\ 0.748331477
  * ```

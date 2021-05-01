@@ -1,9 +1,8 @@
 
 /**
  * @category Utility
- * @param nums - Negative integers will be treated as positive.
  * @return The HCF of nums.
- * ```typescript
+ * ```
  * HCF(6,8) // 2
  * HCF(6,8,9) // 1
  * HCF(1,3) // 1
@@ -12,29 +11,16 @@
  * ```
  */
 function HCF(...nums: number[]): number {
-    Should(IsInteger(...nums), 'input must be integer')
-    Should(IsNonZero(...nums), 'input must be non-zero')
-    nums = Blurs(nums)
-    nums = nums.map(x => Abs(x))
-    function _HCF(n1: number, n2: number): number {
-        n1 = Abs(n1);
-        n2 = Abs(n2);
-        while (n1 !== n2) {
-            if (n1 > n2) n1 = n1 - n2;
-            if (n2 > n1) n2 = n2 - n1;
-        }
-        return n2;
-    }
-    return nums.reduce((a, v) => _HCF(a, v));
+    nums = nums.map(ant.blur)
+    return ant.hcf(...nums)
 }
-globalThis.HCF = HCF
+globalThis.HCF = contract(HCF).sign([owl.nonZeroInt])
 
 
 /**
  * @category Utility
- * @param nums - Negative integers will be treated as positive.
  * @return The LCM of nums.
- * ```typescript
+ * ```
  * LCM(2,3) // 6
  * LCM(2,3,5) // 30
  * LCM(0.5,3) // throw
@@ -42,17 +28,10 @@ globalThis.HCF = HCF
  * ```
  */
 function LCM(...nums: number[]): number {
-    Should(IsInteger(...nums), 'input must be integer')
-    Should(IsNonZero(...nums), 'input must be non-zero')
-    nums = Blurs(nums)
-    function _LCM(n1: number, n2: number) {
-        n1 = Abs(n1);
-        n2 = Abs(n2);
-        return Abs(n1 * n2 / HCF(n1, n2));
-    }
-    return nums.reduce((a, v) => _LCM(a, v));
+    nums = nums.map(ant.blur)
+    return ant.lcm(...nums)
 }
-globalThis.LCM = LCM
+globalThis.LCM = contract(LCM).sign([owl.nonZeroInt])
 
 
 
@@ -96,18 +75,18 @@ globalThis.DeRomanize = DeRomanize
 
 
 
-/**
- * @category Utility
- * @return a clone of the object
- * ```typescript
- * Clone([1,2,3]) // [1,2,3]
- * Clone({x:1}) // {x:1}
- * ```
- */
-function Clone<T>(object: T): T {
-    return JSON.parse(JSON.stringify(object))
-}
-globalThis.Clone = Clone
+// /**
+//  * @category Utility
+//  * @return a clone of the object
+//  * ```typescript
+//  * Clone([1,2,3]) // [1,2,3]
+//  * Clone({x:1}) // {x:1}
+//  * ```
+//  */
+// function Clone<T>(object: T): T {
+//     return JSON.parse(JSON.stringify(object))
+// }
+// globalThis.Clone = Clone
 
 
 

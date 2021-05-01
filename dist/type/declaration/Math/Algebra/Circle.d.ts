@@ -1,7 +1,7 @@
 /**
  * @category Circle
  * @return D,E,F of circle general form
- * ```typescript
+ * ```
  * CircleGeneral([2,3],5) // [-4,-6,-12]
  * ```
  */
@@ -9,7 +9,7 @@ declare function CircleGeneral(centre: Point, radius: number): [D: number, E: nu
 /**
  * @category Circle
  * @return centre and radius from general form
- * ```typescript
+ * ```
  * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
  * ```
  */

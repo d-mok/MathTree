@@ -169,5 +169,5 @@ test('RndData', () => {
     expect(arr).toBeFlatAbsWithin(10, 15);
     expect(arr).toBeFlatIsInteger();
     expect(arr).toAllHaveLength(5);
-    expect(arr.every(a => IsNum(Mode(...a)))).toBe(true);
+    expect(arr.every(a => Mode(...a).length === 1)).toBe(true);
 });

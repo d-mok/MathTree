@@ -11,18 +11,6 @@
 declare function RndShake(anchor: any): (typeof anchor)[];
 /**
  * @category RandomShake
- * @param randomFunc - a function which generate a random item
- * @param predicate - a condition that the outcome item must satisfy
- * @param n - max number of trial.
- * @return a function which return a random item satisfying the predicate when called. If nothing pass the predicate after n trial, throw an error.
- * ```typescript
- * let func = Sieve(()=>RndN(1,10),x=>IsOdd(x))
- * func() // return an odd integer
- * ```
- */
-declare function Sieve<T>(randomFunc: () => T, predicate: (x: T) => boolean, n?: number): () => T;
-/**
- * @category RandomShake
  * @return 3 nearby same-signed integers, range = Max(5, anchor * 10%)
  * ```
  * RndShakeN(5) // return 3 unique integers from 1-10

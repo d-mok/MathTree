@@ -1,13 +1,13 @@
 
 
-test('Sieve', () => {
-    let func = Sieve(() => RndN(1, 10), x => IsOdd(x));
-    let arr = sample(func);
-    expect(arr).toBeFlatAbsWithin(1, 9);
-    expect(arr).toBeFlatIsInteger();
-    expect(arr).toBeFlatDistinct(5);
-    expect(arr).toBeFlatIs(IsOdd);
-});
+// test('Sieve', () => {
+//     let func = Sieve(() => RndN(1, 10), x => IsOdd(x));
+//     let arr = sample(func);
+//     expect(arr).toBeFlatAbsWithin(1, 9);
+//     expect(arr).toBeFlatIsInteger();
+//     expect(arr).toBeFlatDistinct(5);
+//     expect(arr).toBeFlatIs(IsOdd);
+// });
 
 
 

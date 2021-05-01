@@ -203,7 +203,7 @@ globalThis.Coord = Coord
 function Sci(num: number): string {
     Should(IsNum(num), 'input must be num')
     if (num === 0) return '0'
-    let m = Magnitude(num)
+    let m = ant.e(ant.blur(num))
     if (m === 0) return num.toString()
     num = num / (10 ** m)
     num = Blur(num)

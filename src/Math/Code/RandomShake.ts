@@ -54,28 +54,29 @@ globalThis.RndShake = RndShake
 
 
 
-/**
- * @category RandomShake
- * @param randomFunc - a function which generate a random item
- * @param predicate - a condition that the outcome item must satisfy
- * @param n - max number of trial.
- * @return a function which return a random item satisfying the predicate when called. If nothing pass the predicate after n trial, throw an error.
- * ```typescript
- * let func = Sieve(()=>RndN(1,10),x=>IsOdd(x))
- * func() // return an odd integer
- * ```
- */
-function Sieve<T>(randomFunc: () => T, predicate: (x: T) => boolean, n = 1000): () => T {
-    function lambda() {
-        for (let i = 1; i <= n; i++) {
-            let item = randomFunc()
-            if (predicate(item)) return item
-        }
-        throw MathError('No items can pass through Sieve after ' + n + ' trials!')
-    }
-    return lambda
-}
-globalThis.Sieve = Sieve
+// /**
+//  * @deprecated
+//  * @category RandomShake
+//  * @param randomFunc - a function which generate a random item
+//  * @param predicate - a condition that the outcome item must satisfy
+//  * @param n - max number of trial.
+//  * @return a function which return a random item satisfying the predicate when called. If nothing pass the predicate after n trial, throw an error.
+//  * ```typescript
+//  * let func = Sieve(()=>RndN(1,10),x=>IsOdd(x))
+//  * func() // return an odd integer
+//  * ```
+//  */
+// function Sieve<T>(randomFunc: () => T, predicate: (x: T) => boolean, n = 1000): () => T {
+//     function lambda() {
+//         for (let i = 1; i <= n; i++) {
+//             let item = randomFunc()
+//             if (predicate(item)) return item
+//         }
+//         throw MathError('No items can pass through Sieve after ' + n + ' trials!')
+//     }
+//     return lambda
+// }
+// globalThis.Sieve = Sieve
 
 
 
@@ -96,8 +97,8 @@ function RndShakeN(anchor: number): [number, number, number] {
     if (anchor === 0) {
         return dice.unique(() => RndN(1, 3), 3) as [number, number, number];
     }
-    let max = Min(Floor(a + range), LogCeil(a) - 1)
-    let min = Max(Ceil(a - range), 1, LogFloor(a))
+    let max = Min(Floor(a + range), ant.logCeil(a) - 1)
+    let min = Max(Ceil(a - range), 1, ant.logFloor(a))
     let func = dice.shield(() => RndN(min, max), x => (x !== a))
     let arr: [number, number, number] = dice.unique(func, 3) as [number, number, number]
     let s = Sign(anchor)
@@ -125,11 +126,11 @@ function RndShakeR(anchor: number): number[] {
     if (IsInteger(mant)) {
         arr = RndShakeN(mant)
     } else {
-        let dp = DecimalPlace(mant)
+        let dp = ant.dp(mant)
         let func = dice.shield(
             () => Fix(mant * (1 + RndR(0, 0.5) * RndU()), dp),
             x => (x * mant > 0) &&
-                (Magnitude(x) === Magnitude(mant)) &&
+                (ant.e(ant.blur(x)) === ant.e(ant.blur(mant))) &&
                 (x !== mant)
         )
         arr = dice.unique(func, 3)
@@ -172,7 +173,7 @@ function RndShakeFrac(anchor: Fraction): Fraction[] {
     let [p, q] = Frac(...anchor);
     [p, q] = Blurs([p, q])
     Should(IsInteger(p, q), 'input should be integral fraction')
-    let func = Sieve(
+    let func = dice.shield(
         (): Fraction => {
             const h = RndShakeN(p)[0]
             const k = RndShakeN(q)[0]

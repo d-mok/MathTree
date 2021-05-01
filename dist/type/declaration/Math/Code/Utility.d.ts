@@ -1,8 +1,7 @@
 /**
  * @category Utility
- * @param nums - Negative integers will be treated as positive.
  * @return The HCF of nums.
- * ```typescript
+ * ```
  * HCF(6,8) // 2
  * HCF(6,8,9) // 1
  * HCF(1,3) // 1
@@ -13,9 +12,8 @@
 declare function HCF(...nums: number[]): number;
 /**
  * @category Utility
- * @param nums - Negative integers will be treated as positive.
  * @return The LCM of nums.
- * ```typescript
+ * ```
  * LCM(2,3) // 6
  * LCM(2,3,5) // 30
  * LCM(0.5,3) // throw
@@ -43,15 +41,6 @@ declare function Romanize(num: number): string;
  * ```
  */
 declare function DeRomanize(roman: string): number;
-/**
- * @category Utility
- * @return a clone of the object
- * ```typescript
- * Clone([1,2,3]) // [1,2,3]
- * Clone({x:1}) // {x:1}
- * ```
- */
-declare function Clone<T>(object: T): T;
 /**
  * @category Utility
  * @return array of combination pairs

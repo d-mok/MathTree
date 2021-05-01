@@ -3,16 +3,15 @@
 /**
  * @category Relation
  * @return Check if the numbers are all distinct.
- * ```typescript
+ * ```
  * AreDistinct(1,2,3) // true
  * AreDistinct(1,2,2) // false
  * ```
  */
 function AreDistinct(...nums: number[]): boolean {
-    Should(IsNum(...nums), 'input must be num')
     return (new Set(nums)).size === nums.length;
 }
-globalThis.AreDistinct = AreDistinct
+globalThis.AreDistinct = contract(AreDistinct).sign([owl.num])
 
 
 
@@ -20,17 +19,16 @@ globalThis.AreDistinct = AreDistinct
 /**
  * @category Relation
  * @return Check if the absolute values of the numbers are all distinct.
- * ```typescript
+ * ```
  * AreAbsDistinct(1,2,3) // true
  * AreAbsDistinct(1,2,2) // false
  * AreAbsDistinct(1,2,-2) // false
  * ```
  */
 function AreAbsDistinct(...nums: number[]): boolean {
-    Should(IsNum(...nums), 'input must be num')
-    return AreDistinct(...nums.map(x => Math.abs(x)));
+    return AreDistinct(...nums.map(Math.abs))
 }
-globalThis.AreAbsDistinct = AreAbsDistinct
+globalThis.AreAbsDistinct = contract(AreAbsDistinct).sign([owl.num])
 
 
 
@@ -38,25 +36,22 @@ globalThis.AreAbsDistinct = AreAbsDistinct
 /**
  * @category Relation
  * @return Check if the numbers all have the same sign.
- * ```typescript
+ * ```
  * AreSameSign(1,2,3) // true
  * AreSameSign(1,2,-3) // false
  * AreSameSign(1,2,0) // false
  * ```
  */
 function AreSameSign(...nums: number[]): boolean {
-    Should(IsNum(...nums), 'input must be num')
-    nums = nums.map(x => Math.sign(x));
-    nums = [...new Set(nums)];
-    return nums.length === 1;
+    return [...new Set(nums.map(Math.sign))].length === 1;
 }
-globalThis.AreSameSign = AreSameSign
+globalThis.AreSameSign = contract(AreSameSign).sign([owl.num])
 
 
 /**
  * @category Relation
  * @return Check if the numbers all pairwise coprime.
- * ```typescript
+ * ```
  * AreCoprime(2,3) // true
  * AreCoprime(2,6) // false
  * AreCoprime(1,2) // true
@@ -66,74 +61,65 @@ globalThis.AreSameSign = AreSameSign
  * ```
  */
 function AreCoprime(...nums: number[]): boolean {
-    Should(IsNum(...nums), 'input must be num')
-    nums = Blurs(nums)
+    nums = nums.map(ant.blur)
     if (!IsInteger(...nums)) return true
     if (!IsNonZero(...nums)) return true
-    for (let i = 0; i < nums.length - 1; i++) {
-        for (let j = i + 1; j < nums.length; j++) {
-            if (HCF(nums[i], nums[j]) !== 1) return false;
-        }
-    }
-    return true;
+    return List(nums).pairsEvery((a: number, b: number) => HCF(a, b) === 1)
 }
-globalThis.AreCoprime = AreCoprime
+globalThis.AreCoprime = contract(AreCoprime).sign([owl.num])
 
 
 /**
  * @category Relation
  * @return Check if the points are all distinct.
- * ```typescript
+ * ```
  * AreDistinctPoint([1,2],[3,4]) // true
  * AreDistinctPoint([1,2],[1,2]) // false
  * ```
  */
 function AreDistinctPoint(...points: Point[]) {
-    Should(IsPoint(...points), 'input must be point')
-    let predicate = (p1: Point, p2: Point) => {
-        return p1[0] !== p2[0] || p1[1] !== p2[1]
-    }
-    return PairsEvery(predicate)(...points)
+    return List(points).isDistinct()
+    // return (new List(points)).pairsEvery((a, b) => owl.distinct(a, b))
+    // let predicate = (p1: Point, p2: Point) => {
+    //     return p1[0] !== p2[0] || p1[1] !== p2[1]
+    // }
+    // return PairsEvery(predicate)(...points)
 }
-globalThis.AreDistinctPoint = AreDistinctPoint
+globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point])
 
 
 /**
  * @category Relation
  * @return Check if the points are pairwise distant apart.
- * ```typescript
+ * ```
  * AreDistantPoint(2)([0,0],[3,0]) // true
  * AreDistantPoint(2)([0,0],[1,0]) // false
  * ```
  */
 function AreDistantPoint(distance: number) {
-    Should(IsPositive(distance), 'distance must be positive')
-    return function (...points: Point[]): boolean {
-        Should(IsPoint(...points), 'input must be point')
-        let predicate = (p1: Point, p2: Point) => Distance(p1, p2) >= distance
-        return PairsEvery(predicate)(...points)
+    let AreDistant = function (...points: Point[]): boolean {
+        return List(points).pairsEvery((a, b) => Distance(a, b) >= distance)
     }
+    return contract(AreDistant).sign([owl.point])
 }
-globalThis.AreDistantPoint = AreDistantPoint
+globalThis.AreDistantPoint = contract(AreDistantPoint).sign([owl.positive])
 
 
 
 /**
  * @category Relation
  * @return Check if slopes are at least oblique at minAngle
- * ```typescript
+ * ```
  * AreOblique(40)(0,1) // true
  * AreOblique(40)(0,0.5) // false
  * ```
  */
 function AreOblique(minAngle: number) {
-    Should(IsPositive(minAngle), 'minAngle must be positive')
-    return function (...slopes: number[]): boolean {
-        Should(IsNum(...slopes), 'slopes must be nums')
-        let predicate = (m1: number, m2: number) => IntersectAngle(m1, m2) >= minAngle
-        return PairsEvery(predicate)(...slopes)
+    let areOblique = function (...slopes: number[]): boolean {
+        return List(slopes).pairsEvery((a, b) => IntersectAngle(a, b) >= minAngle)
     }
+    return contract(areOblique).sign([owl.num])
 }
-globalThis.AreOblique = AreOblique
+globalThis.AreOblique = contract(AreOblique).sign([owl.positive])
 
 

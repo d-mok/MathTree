@@ -21,25 +21,6 @@ test('Frac', () => {
 });
 
 
-test('FracAdd', () => {
-    expect(FracAdd([1, 2], [1, 3])).toEqual([5, 6]);
-    expect(FracAdd([1, 2], [-1, 3])).toEqual([1, 6]);
-    expect(FracAdd([2, 3], [3, 4], [4, 5])).toEqual([133, 60]);
-    expect(FracAdd([2, 3], [4, 3])).toEqual([2, 1]);
-    expect(() => FracAdd([2, 0], [4, 3])).toThrow();
-});
-
-
-test('FracMultiply', () => {
-    expect(FracMultiply([1, 2], [1, 3])).toEqual([1, 6]);
-    expect(FracMultiply([1, 2], [-1, 3])).toEqual([-1, 6]);
-    expect(FracMultiply([2, 3], [3, 4], [4, 5])).toEqual([2, 5]);
-    expect(FracMultiply([2, 3], [4, 3])).toEqual([8, 9]);
-    expect(FracMultiply([0, 3], [4, 3])).toEqual([0, 1]);
-    expect(() => FracMultiply([2, 0], [4, 3])).toThrow();
-});
-
-
 
 
 test('ToFrac', () => {

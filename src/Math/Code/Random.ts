@@ -273,7 +273,7 @@ globalThis.RndConvexPolygon = contract(RndConvexPolygon)
  */
 function RndData(min: number, max: number, n: number): number[] {
     let f = () => dice.sample(() => RndN(min, max), n)
-    let p = (arr: number[]) => IsNum(Mode(...arr))
+    let p = (arr: number[]) => Mode(...arr).length === 1
     return Sort(...dice.brute(f, p))
 }
 globalThis.RndData = contract(RndData).sign([owl.num, owl.num, owl.positiveInt])

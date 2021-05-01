@@ -102,8 +102,8 @@ test('Frequency', () => {
 
 
 test('Mode', () => {
-    expect(Mode(1, 2, 3, 2, 2, 3, 4)).toBe(2);
-    expect(Mode(1, 1, 2, 2, 3)).toBeNaN();
+    expect(Mode(1, 2, 3, 2, 2, 3, 4)).toEqual([2]);
+    expect(Mode(1, 1, 2, 2, 3)).toEqual([1, 2]);
 });
 
 

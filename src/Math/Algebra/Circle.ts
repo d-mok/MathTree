@@ -2,13 +2,11 @@
 /**
  * @category Circle
  * @return D,E,F of circle general form
- * ```typescript
+ * ```
  * CircleGeneral([2,3],5) // [-4,-6,-12]
  * ```
  */
 function CircleGeneral(centre: Point, radius: number): [D: number, E: number, F: number] {
-    Should(IsPoint(centre), "centre must be a point")
-    Should(IsPositive(radius), "radius must be positive")
     let [h, k] = centre
     let r = radius
     let D = -2 * h
@@ -16,7 +14,7 @@ function CircleGeneral(centre: Point, radius: number): [D: number, E: number, F:
     let F = h ** 2 + k ** 2 - r ** 2
     return [D, E, F];
 }
-globalThis.CircleGeneral = CircleGeneral
+globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point, owl.positive])
 
 
 
@@ -24,33 +22,29 @@ globalThis.CircleGeneral = CircleGeneral
 /**
  * @category Circle
  * @return centre and radius from general form
- * ```typescript
+ * ```
  * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
  * ```
  */
 function CircleFromGeneral(D: number, E: number, F: number): [Point, number] {
-    Should(IsNum(D, E, F), "input must be num")
     let [h, k] = [-D / 2, -E / 2]
     let R = (D / 2) ** 2 + (E / 2) ** 2 - F
     Should(R >= 0, "radius should be real")
     let r = R ** 0.5
     return [[h, k], r]
 }
-globalThis.CircleFromGeneral = CircleFromGeneral
+globalThis.CircleFromGeneral = contract(CircleFromGeneral).sign([owl.num])
 
 
 
 /**
  * @category Circle
  * @return all integral points on the circle
- * ```typescript
+ * ```
  * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
  * ```
  */
 function IntegralOnCircle(centre: Point, radius: number): Point[][] {
-    Should(IsPoint(centre), "centre must be a point")
-    Should(IsPositive(radius), "radius must be positive")
-    
     let [h, k] = centre
     let r = radius
 
@@ -78,4 +72,4 @@ function IntegralOnCircle(centre: Point, radius: number): Point[][] {
     }
     return arr2
 }
-globalThis.IntegralOnCircle = IntegralOnCircle
+globalThis.IntegralOnCircle = contract(IntegralOnCircle).sign([owl.point, owl.positive])

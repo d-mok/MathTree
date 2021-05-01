@@ -10,11 +10,11 @@ class Blood extends Error {
 
 
 type alias = Blood
-type TypeOfFolder = typeof Blood
+type TypeOfBlood = typeof Blood
 
 declare global {
     type Blood = alias
-    var Blood: TypeOfFolder
+    var Blood: TypeOfBlood
 }
 globalThis.Blood = Blood
 
