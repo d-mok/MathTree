@@ -6,7 +6,7 @@ class AutoPenCls {
     /**
      * @ignore
      */
-    pen: PenCls
+    private pen: PenCls
 
     /**
      * @ignore
@@ -1060,13 +1060,8 @@ class AutoPenCls {
         pen.line([0, 0], [width, 0])
         pen.arrow([0, 0], [0, height])
 
-        pen.ctx.save()
-        pen.ctx.translate(...pen.frame.toPix([-1.5, height / 2]))
-        pen.ctx.rotate(-Math.PI / 2);
-        pen.ctx.fillText(yLabel, 0, 0)
-        pen.ctx.restore()
+        pen.writeV([-1.5, height / 2], yLabel)
 
-        // pen.label.point([width / 2, -height * 0.1], xLabel, 270, 25)
         pen.label.point([width / 2, 0], xLabel, 270, 40)
 
         function grid(y: number) {

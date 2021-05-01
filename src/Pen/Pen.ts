@@ -10,11 +10,11 @@ class PenCls {
     /**
      * @ignore
      */
-    ctx: CanvasRenderingContext2D
+    private ctx: CanvasRenderingContext2D
     /**
      * @ignore
      */
-    frame: FrameCls
+    private frame: FrameCls
     /**
      * @ignore
      */
@@ -43,7 +43,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Set the coordinate range of the canvas.
          * @category SetupRange
@@ -55,8 +55,8 @@ class PenCls {
          * ```
          */
         set(xRange: [number, number], yRange: [number, number] = xRange) {
-            [this.pen.frame.xmin, this.pen.frame.xmax] = xRange;
-            [this.pen.frame.ymin, this.pen.frame.ymax] = yRange;
+            [this._pen.frame.xmin, this._pen.frame.xmax] = xRange;
+            [this._pen.frame.ymin, this._pen.frame.ymax] = yRange;
         },
 
         /**
@@ -148,7 +148,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Set the size of the canvas.
          * @category SetupSize
@@ -166,11 +166,11 @@ class PenCls {
             const wPixel = width * 10 * REM_PIXEL;
             const hPixel = height * 10 * REM_PIXEL;
             // create a canvas of higher resolution (PEN_QUALITY)
-            this.pen.canvas.width = wPixel * PEN_QUALITY;
-            this.pen.canvas.height = hPixel * PEN_QUALITY;
-            this.pen.frame.wPixel = wPixel * PEN_QUALITY;
-            this.pen.frame.hPixel = hPixel * PEN_QUALITY;
-            this.pen.set.reset();
+            this._pen.canvas.width = wPixel * PEN_QUALITY;
+            this._pen.canvas.height = hPixel * PEN_QUALITY;
+            this._pen.frame.wPixel = wPixel * PEN_QUALITY;
+            this._pen.frame.hPixel = hPixel * PEN_QUALITY;
+            this._pen.set.reset();
         },
         /**
          * Set the size of the canvas by resolution.
@@ -184,8 +184,8 @@ class PenCls {
          * ```
          */
         resolution(xPPI = 0.1, yPPI = xPPI) {
-            let xRange = this.pen.frame.xmax - this.pen.frame.xmin
-            let yRange = this.pen.frame.ymax - this.pen.frame.ymin
+            let xRange = this._pen.frame.xmax - this._pen.frame.xmin
+            let yRange = this._pen.frame.ymax - this._pen.frame.ymin
             let xScale = xRange * xPPI
             let yScale = yRange * yPPI
             this.set(xScale, yScale)
@@ -200,8 +200,8 @@ class PenCls {
          * ```
          */
         lock(width = 1) {
-            let xRange = this.pen.frame.xmax - this.pen.frame.xmin
-            let yRange = this.pen.frame.ymax - this.pen.frame.ymin
+            let xRange = this._pen.frame.xmax - this._pen.frame.xmin
+            let yRange = this._pen.frame.ymax - this._pen.frame.ymin
             let ratio = yRange / xRange
             this.set(width, width * ratio)
         },
@@ -216,7 +216,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Set the size of the canvas.
          * @category setup
@@ -234,11 +234,11 @@ class PenCls {
             const wPixel = scale * 25 * REM_PIXEL;
             const hPixel = wPixel * ratio;
             // create a canvas of higher resolution (PEN_QUALITY)
-            this.pen.canvas.width = wPixel * PEN_QUALITY;
-            this.pen.canvas.height = hPixel * PEN_QUALITY;
-            this.pen.frame.wPixel = wPixel * PEN_QUALITY;
-            this.pen.frame.hPixel = hPixel * PEN_QUALITY;
-            this.pen.set.reset();
+            this._pen.canvas.width = wPixel * PEN_QUALITY;
+            this._pen.canvas.height = hPixel * PEN_QUALITY;
+            this._pen.frame.wPixel = wPixel * PEN_QUALITY;
+            this._pen.frame.hPixel = hPixel * PEN_QUALITY;
+            this._pen.set.reset();
         },
         /**
          * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
@@ -251,8 +251,8 @@ class PenCls {
          * ```
          */
         squareSize(scale = 1) {
-            let xRange = this.pen.frame.xmax - this.pen.frame.xmin
-            let yRange = this.pen.frame.ymax - this.pen.frame.ymin
+            let xRange = this._pen.frame.xmax - this._pen.frame.xmin
+            let yRange = this._pen.frame.ymax - this._pen.frame.ymin
             let ratio = yRange / xRange
             this.size(scale, ratio)
         },
@@ -269,8 +269,8 @@ class PenCls {
          */
         resolution(xPPI = 0.1, yPPI = -1) {
             if (yPPI === -1) yPPI = xPPI
-            let xRange = this.pen.frame.xmax - this.pen.frame.xmin
-            let yRange = this.pen.frame.ymax - this.pen.frame.ymin
+            let xRange = this._pen.frame.xmax - this._pen.frame.xmin
+            let yRange = this._pen.frame.ymax - this._pen.frame.ymin
             let xScale = xRange * xPPI
             let yScale = yRange * yPPI
             this.size(xScale, yScale / xScale)
@@ -287,8 +287,8 @@ class PenCls {
          * ```
          */
         range(xRange: [number, number], yRange: [number, number]) {
-            [this.pen.frame.xmin, this.pen.frame.xmax] = xRange;
-            [this.pen.frame.ymin, this.pen.frame.ymax] = yRange;
+            [this._pen.frame.xmin, this._pen.frame.xmax] = xRange;
+            [this._pen.frame.ymin, this._pen.frame.ymax] = yRange;
         },
 
         /**
@@ -352,7 +352,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * @ignore
          */
@@ -367,7 +367,7 @@ class PenCls {
          * ```
          */
         weight(weight = 1) {
-            this.pen.ctx.lineWidth = weight * PEN_QUALITY;
+            this._pen.ctx.lineWidth = weight * PEN_QUALITY;
         },
         /**
          * Set the color of the pen stroke.
@@ -379,7 +379,7 @@ class PenCls {
          * ```
          */
         strokeColor(color = "black") {
-            this.pen.ctx.strokeStyle = color;
+            this._pen.ctx.strokeStyle = color;
         },
         /**
          * Set the color of filling.
@@ -391,7 +391,7 @@ class PenCls {
          * ```
          */
         fillColor(color = "black") {
-            this.pen.ctx.fillStyle = color;
+            this._pen.ctx.fillStyle = color;
         },
         /**
          * Set the color of both filling and stroke.
@@ -416,7 +416,7 @@ class PenCls {
          * ```
          */
         alpha(alpha = 1) {
-            this.pen.ctx.globalAlpha = alpha;
+            this._pen.ctx.globalAlpha = alpha;
         },
         /**
          * Set the dash pattern of line.
@@ -429,7 +429,7 @@ class PenCls {
          */
         dash(segments: (number[] | number | boolean) = []) {
             if (Array.isArray(segments))
-                this.pen.ctx.setLineDash(segments.map(x => x * PEN_QUALITY));
+                this._pen.ctx.setLineDash(segments.map(x => x * PEN_QUALITY));
             if (typeof segments === 'number')
                 this.dash([segments, segments])
             if (typeof segments === 'boolean')
@@ -445,7 +445,7 @@ class PenCls {
          * ```
          */
         textAlign(align: CanvasTextAlign = "center") {
-            this.pen.ctx.textAlign = align;
+            this._pen.ctx.textAlign = align;
         },
         /**
          * Set the vertical alignment of text.
@@ -457,7 +457,7 @@ class PenCls {
          * ```
          */
         textBaseline(baseline: CanvasTextBaseline = "middle") {
-            this.pen.ctx.textBaseline = baseline;
+            this._pen.ctx.textBaseline = baseline;
         },
         /**
          * Set the size of text.
@@ -471,7 +471,7 @@ class PenCls {
         textSize(size = 1) {
             const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
             size = Math.round(size * REM_PIXEL * PEN_QUALITY);
-            this.pen.ctx.font = this.pen.ctx.font.replace(/\d+px/g, size + 'px');
+            this._pen.ctx.font = this._pen.ctx.font.replace(/\d+px/g, size + 'px');
         },
 
         /**
@@ -485,10 +485,10 @@ class PenCls {
          */
         textItalic(italic = false) {
             if (italic) {
-                if (!this.pen.ctx.font.includes('italic'))
-                    this.pen.ctx.font = 'italic ' + this.pen.ctx.font;
+                if (!this._pen.ctx.font.includes('italic'))
+                    this._pen.ctx.font = 'italic ' + this._pen.ctx.font;
             } else {
-                this.pen.ctx.font = this.pen.ctx.font.replace('italic ', '');
+                this._pen.ctx.font = this._pen.ctx.font.replace('italic ', '');
             }
         },
 
@@ -523,7 +523,7 @@ class PenCls {
             this.dash();
             this.textAlign();
             this.textBaseline();
-            this.pen.ctx.font = 'normal 10px Times New Roman';
+            this._pen.ctx.font = 'normal 10px Times New Roman';
             this.textSize();
             this.textItalic();
             this.labelCenter()
@@ -604,7 +604,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Draw a circle (x-h)^2+(y-k)^2 = r^2.
          * @category graph
@@ -617,7 +617,7 @@ class PenCls {
          */
         circle(center: Point, radius: number) {
             const [h, k] = center
-            this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
+            this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
         },
         /**
          * Draw an arc of (x-h)^2+(y-k)^2 = r^2.
@@ -633,7 +633,7 @@ class PenCls {
          */
         arc(center: Point, radius: number, qStart: number, qEnd: number) {
             const [h, k] = center
-            this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
+            this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
         },
         /**
          * Draw a sector of (x-h)^2+(y-k)^2 = r^2.
@@ -651,8 +651,8 @@ class PenCls {
             this.arc(center, radius, qStart, qEnd)
             let A = TranslatePoint(center, qStart, radius)
             let B = TranslatePoint(center, qEnd, radius)
-            this.pen.line(A, center)
-            this.pen.line(B, center)
+            this._pen.line(A, center)
+            this._pen.line(B, center)
         },
         /**
          * Draw an segment of (x-h)^2+(y-k)^2 = r^2.
@@ -670,7 +670,7 @@ class PenCls {
             this.arc(center, radius, qStart, qEnd)
             let A = TranslatePoint(center, qStart, radius)
             let B = TranslatePoint(center, qEnd, radius)
-            this.pen.line(A, B)
+            this._pen.line(A, B)
         },
         /**
          * Draw a quadratic graph y=ax^2+bx+c.
@@ -684,7 +684,7 @@ class PenCls {
          * ```
          */
         quadratic(a: number, b: number, c: number) {
-            this.pen.plot(x => a * x * x + b * x + c)
+            this._pen.plot(x => a * x * x + b * x + c)
         },
         /**
          * Draw a line y=mx+c.
@@ -697,9 +697,9 @@ class PenCls {
          * ```
          */
         line(m: number, c: number) {
-            const [xmin, xmax] = this.pen.frame.xRange();
+            const [xmin, xmax] = this._pen.frame.xRange();
             const y = (x: number) => m * x + c;
-            this.pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
+            this._pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
         },
         /**
          * Draw a horizontal line y=constant.
@@ -711,8 +711,8 @@ class PenCls {
          * ```
          */
         horizontal(y: number) {
-            const [xmin, xmax] = this.pen.frame.xRange();
-            this.pen.line([xmin, y], [xmax, y]);
+            const [xmin, xmax] = this._pen.frame.xRange();
+            this._pen.line([xmin, y], [xmax, y]);
         },
         /**
          * Draw a vertical line x=constant.
@@ -724,8 +724,8 @@ class PenCls {
          * ```
          */
         vertical(x: number) {
-            const [ymin, ymax] = this.pen.frame.yRange();
-            this.pen.line([x, ymin], [x, ymax]);
+            const [ymin, ymax] = this._pen.frame.yRange();
+            this._pen.line([x, ymin], [x, ymax]);
         },
         /**
          * Draw a line ax+by+c=0.
@@ -1021,7 +1021,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Fill a circle (x-h)^2+(y-k)^2 = r^2.
          * @category fill
@@ -1035,7 +1035,7 @@ class PenCls {
         circle(center: Point, radius: number) {
             const [h, k] = center
             let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
-            this.pen.polyfill(...points)
+            this._pen.polyfill(...points)
         },
         /**
          * Fill a sector (x-h)^2+(y-k)^2 = r^2.
@@ -1052,7 +1052,7 @@ class PenCls {
         sector(center: Point, radius: number, qStart: number, qEnd: number) {
             const [h, k] = center
             let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
-            this.pen.polyfill(center, ...points)
+            this._pen.polyfill(center, ...points)
         },
         /**
          * Fill a segment (x-h)^2+(y-k)^2 = r^2.
@@ -1069,7 +1069,7 @@ class PenCls {
         segment(center: Point, radius: number, qStart: number, qEnd: number) {
             const [h, k] = center
             let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
-            this.pen.polyfill(...points)
+            this._pen.polyfill(...points)
         },
     };
 
@@ -1146,7 +1146,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Decorate equal side lengths.
          * @category decorator
@@ -1164,22 +1164,22 @@ class PenCls {
             let space = 3
             length = length * PEN_QUALITY;
             space = space * PEN_QUALITY;
-            startPoint = this.pen.frame.toPix(startPoint);
-            endPoint = this.pen.frame.toPix(endPoint);
+            startPoint = this._pen.frame.toPix(startPoint);
+            endPoint = this._pen.frame.toPix(endPoint);
             let [x, y] = [(startPoint[0] + endPoint[0]) / 2, (startPoint[1] + endPoint[1]) / 2];
             let dy = endPoint[1] - startPoint[1];
             let dx = endPoint[0] - startPoint[0];
             let angle = Math.atan2(dy, dx);
 
             let mark = (position: number) => {
-                this.pen.ctx.save();
-                this.pen.ctx.translate(x, y);
-                this.pen.ctx.rotate(angle);
-                this.pen.ctx.beginPath();
-                this.pen.ctx.moveTo(position, -length);
-                this.pen.ctx.lineTo(position, length);
-                this.pen.ctx.stroke();
-                this.pen.ctx.restore();
+                this._pen.ctx.save();
+                this._pen.ctx.translate(x, y);
+                this._pen.ctx.rotate(angle);
+                this._pen.ctx.beginPath();
+                this._pen.ctx.moveTo(position, -length);
+                this._pen.ctx.lineTo(position, length);
+                this._pen.ctx.stroke();
+                this._pen.ctx.restore();
             };
             if (tick % 2 === 1) {
                 mark(0);
@@ -1212,24 +1212,24 @@ class PenCls {
             let space = 6
             size = size * PEN_QUALITY;
             space = space * PEN_QUALITY;
-            startPoint = this.pen.frame.toPix(startPoint);
-            endPoint = this.pen.frame.toPix(endPoint);
+            startPoint = this._pen.frame.toPix(startPoint);
+            endPoint = this._pen.frame.toPix(endPoint);
             let [x, y] = [(startPoint[0] + endPoint[0]) / 2, (startPoint[1] + endPoint[1]) / 2];
             let dy = endPoint[1] - startPoint[1];
             let dx = endPoint[0] - startPoint[0];
             let angle = Math.atan2(dy, dx);
 
             let mark = (position: number) => {
-                this.pen.ctx.save();
-                this.pen.ctx.translate(x, y);
-                this.pen.ctx.rotate(angle);
-                this.pen.ctx.beginPath();
-                this.pen.ctx.moveTo(position, 0);
-                this.pen.ctx.lineTo(position - size * 2, -size);
-                this.pen.ctx.moveTo(position, 0);
-                this.pen.ctx.lineTo(position - size * 2, size);
-                this.pen.ctx.stroke();
-                this.pen.ctx.restore();
+                this._pen.ctx.save();
+                this._pen.ctx.translate(x, y);
+                this._pen.ctx.rotate(angle);
+                this._pen.ctx.beginPath();
+                this._pen.ctx.moveTo(position, 0);
+                this._pen.ctx.lineTo(position - size * 2, -size);
+                this._pen.ctx.moveTo(position, 0);
+                this._pen.ctx.lineTo(position - size * 2, size);
+                this._pen.ctx.stroke();
+                this._pen.ctx.restore();
             };
             for (let i = 0; i < tick; i++) {
                 mark(i * space);
@@ -1251,15 +1251,15 @@ class PenCls {
          * ```
          */
         anglePolar(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
-            A = this.pen.frame.toPix(A);
-            let OPixel = this.pen.frame.toPix(O);
-            B = this.pen.frame.toPix(B);
+            A = this._pen.frame.toPix(A);
+            let OPixel = this._pen.frame.toPix(O);
+            B = this._pen.frame.toPix(B);
             let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
             let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
             let space = 3
             let outset = arc > 1 ? space / 2 : 0
             for (let i = 0; i < arc; i++) {
-                this.pen.circle(O, radius + outset - i * space, [a1, a2]);
+                this._pen.circle(O, radius + outset - i * space, [a1, a2]);
             }
         },
 
@@ -1316,9 +1316,9 @@ class PenCls {
          */
         rightAngle(A: Point, O: Point, B: Point = RotatePoint(A, O, 90), size = 12) {
             size = size * PEN_QUALITY;
-            A = this.pen.frame.toPix(A);
-            O = this.pen.frame.toPix(O);
-            B = this.pen.frame.toPix(B);
+            A = this._pen.frame.toPix(A);
+            O = this._pen.frame.toPix(O);
+            B = this._pen.frame.toPix(B);
             let angleA = Math.atan2(A[1] - O[1], A[0] - O[0]);
             let angleB = Math.atan2(B[1] - O[1], B[0] - O[0]);
 
@@ -1327,10 +1327,10 @@ class PenCls {
             let R: Point = [O[0] + size * Math.cos(angleA) + size * Math.cos(angleB), O[1] + size * Math.sin(angleA) + size * Math.sin(angleB)];
 
             let draw = (A: Point, B: Point) => {
-                this.pen.ctx.beginPath();
-                this.pen.ctx.moveTo(A[0], A[1]);
-                this.pen.ctx.lineTo(B[0], B[1]);
-                this.pen.ctx.stroke();
+                this._pen.ctx.beginPath();
+                this._pen.ctx.moveTo(A[0], A[1]);
+                this._pen.ctx.lineTo(B[0], B[1]);
+                this._pen.ctx.stroke();
             };
             draw(P, R);
             draw(Q, R);
@@ -1357,13 +1357,33 @@ class PenCls {
 
 
     /**
+     * Write text vertically
+     * @category text
+     * @param position - The coordinates [x,y] to position the text.
+     * @param text - The string to write.
+     * @returns
+     * ```typescript
+     * pen.writeVertical([1,2],'abc') // write 'abc' at [1,2] vertically
+     * ```
+     */
+    writeV(position: Point, text: string) {
+        const [x, y] = this.frame.toPix(position);
+        this.ctx.save()
+        this.ctx.translate(x, y)
+        this.ctx.rotate(-Math.PI / 2);
+        this.ctx.fillText(text, 0, 0)
+        this.ctx.restore()
+    }
+
+
+    /**
      * @category text
      */
     label = {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
 
         /**
          * Add a label to a point.
@@ -1379,10 +1399,10 @@ class PenCls {
          * ```
          */
         point(position: Point, text = '', dodgeDirection?: number, offsetPixel = 15) {
-            let [x, y] = this.pen.frame.toPix(position);
+            let [x, y] = this._pen.frame.toPix(position);
             offsetPixel = offsetPixel * PEN_QUALITY;
             if (dodgeDirection === undefined) {
-                let center = this.pen.set.LABEL_CENTER
+                let center = this._pen.set.LABEL_CENTER
                 if (center !== undefined && AreDistinctPoint(center, position)) {
                     dodgeDirection = Inclination(center, position)
                 } else {
@@ -1392,13 +1412,13 @@ class PenCls {
             x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
             y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
 
-            this.pen.ctx.save();
+            this._pen.ctx.save();
             if (!isNaN(Number(text)))
-                this.pen.set.textItalic(false)
+                this._pen.set.textItalic(false)
             if (text.length === 1 && (text.toLowerCase() !== text.toUpperCase()))
-                this.pen.set.textItalic(true)
-            this.pen.ctx.fillText(text, x, y);
-            this.pen.ctx.restore();
+                this._pen.set.textItalic(true)
+            this._pen.ctx.fillText(text, x, y);
+            this._pen.ctx.restore();
         },
 
         /**
@@ -1432,9 +1452,9 @@ class PenCls {
          */
         anglePolar(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
             let [A, O, B] = anglePoints;
-            let APixel = this.pen.frame.toPix(A);
-            let OPixel = this.pen.frame.toPix(O);
-            let BPixel = this.pen.frame.toPix(B);
+            let APixel = this._pen.frame.toPix(A);
+            let OPixel = this._pen.frame.toPix(O);
+            let BPixel = this._pen.frame.toPix(B);
             let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
             let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
             if (a2 < a1) a2 = a2 + 360
@@ -1499,8 +1519,8 @@ class PenCls {
         line(linePoints: [Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
             let [A, B] = linePoints;
             let M = MidPoint(A, B);
-            let APixel = this.pen.frame.toPix(A);
-            let BPixel = this.pen.frame.toPix(B);
+            let APixel = this._pen.frame.toPix(A);
+            let BPixel = this._pen.frame.toPix(B);
             let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
             if (offsetPixel < 0)
                 offsetPixel = text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25
@@ -1540,7 +1560,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Draw x-axis.
          * @category axis
@@ -1551,15 +1571,15 @@ class PenCls {
          * ```
          */
         x(label = "x") {
-            const [xmin, xmax] = this.pen.frame.xRange();
-            const offset = 3 * this.pen.frame.xOffset();
-            this.pen.arrow([xmin, 0], [xmax, 0]);
-            this.pen.ctx.save();
-            this.pen.set.textItalic(label.length === 1);
-            this.pen.set.textAlign("right");
-            this.pen.set.textBaseline("middle");
-            this.pen.write([xmax, offset], label);
-            this.pen.ctx.restore();
+            const [xmin, xmax] = this._pen.frame.xRange();
+            const offset = 3 * this._pen.frame.xOffset();
+            this._pen.arrow([xmin, 0], [xmax, 0]);
+            this._pen.ctx.save();
+            this._pen.set.textItalic(label.length === 1);
+            this._pen.set.textAlign("right");
+            this._pen.set.textBaseline("middle");
+            this._pen.write([xmax, offset], label);
+            this._pen.ctx.restore();
         },
         /**
          * Draw y-axis.
@@ -1571,15 +1591,15 @@ class PenCls {
          * ```
          */
         y(label = "y") {
-            const [ymin, ymax] = this.pen.frame.yRange();
-            const offset = 3 * this.pen.frame.yOffset();
-            this.pen.arrow([0, ymin], [0, ymax]);
-            this.pen.ctx.save();
-            this.pen.set.textItalic(label.length === 1);
-            this.pen.set.textAlign("left");
-            this.pen.set.textBaseline("top");
-            this.pen.write([offset, ymax], label);
-            this.pen.ctx.restore();
+            const [ymin, ymax] = this._pen.frame.yRange();
+            const offset = 3 * this._pen.frame.yOffset();
+            this._pen.arrow([0, ymin], [0, ymax]);
+            this._pen.ctx.save();
+            this._pen.set.textItalic(label.length === 1);
+            this._pen.set.textAlign("left");
+            this._pen.set.textBaseline("top");
+            this._pen.write([offset, ymax], label);
+            this._pen.ctx.restore();
         },
         /**
          * Draw both axis.
@@ -1605,7 +1625,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Draw ticks on the x-axis.
          * @category axisTick
@@ -1617,16 +1637,16 @@ class PenCls {
          * ```
          */
         x(interval = 1, mark = true) {
-            const offset = this.pen.frame.xOffset();
-            for (let x of this.pen.frame.xTicks(interval)) {
-                this.pen.line([x, -offset], [x, offset]);
+            const offset = this._pen.frame.xOffset();
+            for (let x of this._pen.frame.xTicks(interval)) {
+                this._pen.line([x, -offset], [x, offset]);
                 if (mark) {
-                    this.pen.ctx.save();
-                    this.pen.set.textItalic();
-                    this.pen.set.textAlign("center");
-                    this.pen.set.textBaseline("middle");
-                    this.pen.write([x, -3 * offset], x.toString());
-                    this.pen.ctx.restore();
+                    this._pen.ctx.save();
+                    this._pen.set.textItalic();
+                    this._pen.set.textAlign("center");
+                    this._pen.set.textBaseline("middle");
+                    this._pen.write([x, -3 * offset], x.toString());
+                    this._pen.ctx.restore();
                 };
             }
         },
@@ -1641,16 +1661,16 @@ class PenCls {
          * ```
          */
         y(interval = 1, mark = true) {
-            const offset = this.pen.frame.yOffset();
-            for (let y of this.pen.frame.yTicks(interval)) {
-                this.pen.line([-offset, y], [offset, y]);
+            const offset = this._pen.frame.yOffset();
+            for (let y of this._pen.frame.yTicks(interval)) {
+                this._pen.line([-offset, y], [offset, y]);
                 if (mark) {
-                    this.pen.ctx.save();
-                    this.pen.set.textItalic();
-                    this.pen.set.textAlign("right");
-                    this.pen.set.textBaseline("middle");
-                    this.pen.write([-2 * offset, y], y.toString());
-                    this.pen.ctx.restore();
+                    this._pen.ctx.save();
+                    this._pen.set.textItalic();
+                    this._pen.set.textAlign("right");
+                    this._pen.set.textBaseline("middle");
+                    this._pen.write([-2 * offset, y], y.toString());
+                    this._pen.ctx.restore();
                 };
             }
         },
@@ -1678,7 +1698,7 @@ class PenCls {
         /**
          * @ignore
          */
-        pen: this as PenCls,
+        _pen: this as PenCls,
         /**
          * Draw gridlines on the x-axis.
          * @category axisGrid
@@ -1689,13 +1709,13 @@ class PenCls {
          * ```
          */
         x(interval = 1) {
-            this.pen.ctx.save();
-            this.pen.ctx.strokeStyle = "#d3d5db";
-            this.pen.graph.vertical(0);
-            for (let x of this.pen.frame.xTicks(interval)) {
-                this.pen.graph.vertical(x);
+            this._pen.ctx.save();
+            this._pen.ctx.strokeStyle = "#d3d5db";
+            this._pen.graph.vertical(0);
+            for (let x of this._pen.frame.xTicks(interval)) {
+                this._pen.graph.vertical(x);
             }
-            this.pen.ctx.restore();
+            this._pen.ctx.restore();
         },
         /**
          * Draw gridlines on the y-axis.
@@ -1707,13 +1727,13 @@ class PenCls {
          * ```
          */
         y(interval = 1) {
-            this.pen.ctx.save();
-            this.pen.ctx.strokeStyle = "#d3d5db";
-            this.pen.graph.horizontal(0);
-            for (let y of this.pen.frame.yTicks(interval)) {
-                this.pen.graph.horizontal(y);
+            this._pen.ctx.save();
+            this._pen.ctx.strokeStyle = "#d3d5db";
+            this._pen.graph.horizontal(0);
+            for (let y of this._pen.frame.yTicks(interval)) {
+                this._pen.graph.horizontal(y);
             }
-            this.pen.ctx.restore();
+            this._pen.ctx.restore();
         },
         /**
          * Draw gridlines on both axis.

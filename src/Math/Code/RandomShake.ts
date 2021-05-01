@@ -90,20 +90,16 @@ globalThis.RndShake = RndShake
  * ```
  */
 function RndShakeN(anchor: number): [number, number, number] {
-    // Should(IsInteger(anchor), 'anchor must be integer')
-    anchor = Blur(anchor)
-    let a = Abs(anchor)
-    let range = Max(3, a * 0.1)
-    if (anchor === 0) {
-        return dice.unique(() => RndN(1, 3), 3) as [number, number, number];
+    function N(): number {
+        anchor = ant.blur(anchor)
+        if (anchor === 0) return RndN(1, 3)
+        let a = Abs(anchor)
+        let range = Max(3, a * 0.1)
+        let max = Min(Floor(a + range), ant.logCeil(a) - 1)
+        let min = Max(Ceil(a - range), 1, ant.logFloor(a))
+        return dice.brute(() => RndN(min, max), x => (x !== a)) * Sign(anchor)
     }
-    let max = Min(Floor(a + range), ant.logCeil(a) - 1)
-    let min = Max(Ceil(a - range), 1, ant.logFloor(a))
-    let func = dice.shield(() => RndN(min, max), x => (x !== a))
-    let arr: [number, number, number] = dice.unique(func, 3) as [number, number, number]
-    let s = Sign(anchor)
-    arr = arr.map((x: number) => s * x) as [number, number, number]
-    return arr
+    return dice.unique(N, 3) as [number, number, number]
 }
 globalThis.RndShakeN = contract(RndShakeN).sign([owl.int])
 
@@ -119,23 +115,18 @@ globalThis.RndShakeN = contract(RndShakeN).sign([owl.int])
  * ```
  */
 function RndShakeR(anchor: number): number[] {
-    // Should(IsNonZero(anchor), 'anchor must be non-zero')
-    let [mant, exp] = anchor.toExponential().split('e').map(x => Number(x))
-    mant = Blur(mant)
-    let arr: number[]
-    if (IsInteger(mant)) {
-        arr = RndShakeN(mant)
-    } else {
-        let dp = ant.dp(mant)
-        let func = dice.shield(
-            () => Fix(mant * (1 + RndR(0, 0.5) * RndU()), dp),
-            x => (x * mant > 0) &&
-                (ant.e(ant.blur(x)) === ant.e(ant.blur(mant))) &&
-                (x !== mant)
-        )
-        arr = dice.unique(func, 3)
-    }
-    return arr.map(x => Number(x + "e" + exp))
+    let exp = ant.e(anchor)
+    let m = ant.blur(ant.mantissa(anchor))
+    if (IsInteger(m)) return RndShakeN(m).map(x => Number(x + "e" + exp))
+    let dp = ant.dp(m)
+    let func = dice.shield(
+        () => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp),
+        x => (x * m > 0) &&
+            (ant.e(x) === ant.e(m)) &&
+            (x !== m)
+    )
+    return dice.unique(func, 3).map(x => Number(x + "e" + exp))
+
 }
 globalThis.RndShakeR = contract(RndShakeR).sign([owl.nonZero])
 

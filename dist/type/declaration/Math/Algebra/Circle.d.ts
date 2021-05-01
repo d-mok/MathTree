@@ -17,7 +17,7 @@ declare function CircleFromGeneral(D: number, E: number, F: number): [Point, num
 /**
  * @category Circle
  * @return all integral points on the circle
- * ```typescript
+ * ```
  * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
  * ```
  */

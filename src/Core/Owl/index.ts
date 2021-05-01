@@ -6,7 +6,7 @@ export const num = (_: any) => Number.isFinite(_)
 
 export const whole = (_: any) => Number.isInteger(_)
 
-export const int = (_: any) => Number.isInteger(ant.blur(_))
+export const int = (_: any) => Number.isInteger(ant.correct(_))
 
 export const dec = (_: any) => num(_) && !int(_)
 

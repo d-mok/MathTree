@@ -9,11 +9,11 @@ declare class PenCls {
     /**
      * @ignore
      */
-    ctx: CanvasRenderingContext2D;
+    private ctx;
     /**
      * @ignore
      */
-    frame: FrameCls;
+    private frame;
     /**
      * @ignore
      */
@@ -30,7 +30,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Set the coordinate range of the canvas.
          * @category SetupRange
@@ -85,7 +85,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Set the size of the canvas.
          * @category SetupSize
@@ -130,7 +130,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Set the size of the canvas.
          * @category setup
@@ -212,7 +212,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * @ignore
          */
@@ -359,7 +359,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Draw a circle (x-h)^2+(y-k)^2 = r^2.
          * @category graph
@@ -621,7 +621,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Fill a circle (x-h)^2+(y-k)^2 = r^2.
          * @category fill
@@ -713,7 +713,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Decorate equal side lengths.
          * @category decorator
@@ -812,13 +812,24 @@ declare class PenCls {
      */
     write(position: Point, text: string): void;
     /**
+     * Write text vertically
+     * @category text
+     * @param position - The coordinates [x,y] to position the text.
+     * @param text - The string to write.
+     * @returns
+     * ```typescript
+     * pen.writeVertical([1,2],'abc') // write 'abc' at [1,2] vertically
+     * ```
+     */
+    writeV(position: Point, text: string): void;
+    /**
      * @category text
      */
     label: {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Add a label to a point.
          * @category text
@@ -922,7 +933,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Draw x-axis.
          * @category axis
@@ -963,7 +974,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Draw ticks on the x-axis.
          * @category axisTick
@@ -1006,7 +1017,7 @@ declare class PenCls {
         /**
          * @ignore
          */
-        pen: PenCls;
+        _pen: PenCls;
         /**
          * Draw gridlines on the x-axis.
          * @category axisGrid
