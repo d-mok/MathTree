@@ -27,6 +27,8 @@ class MathSoilCls {
     }
 
     public test(seed: Seed, repeat = 100): void {
+        const log = SHOULD_LOG
+        SHOULD_LOG = false
         let counters = [];
         for (let i = 1; i <= repeat; i++) {
             this.grow(seed);
@@ -34,6 +36,7 @@ class MathSoilCls {
             counters.push(seed.fruit!.counter);
         }
         seed.fruit!.counter = Mean(...counters)
+        SHOULD_LOG = log
     }
 
 }
