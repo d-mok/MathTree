@@ -30,8 +30,14 @@ export class Soil {
     }
 
     private recordError(e: Error) {
-        if (!this.errorPile.map(x => x.message).includes(e.message))
-            this.errorPile.push(e)
+        this.errorPile.push(e)
+    }
+
+    private printError(delimiter: string = "<br/><br/>"): string {
+        let print = (x: Error) => '[' + x.name + '] ' + x.message
+        let stack = this.errorPile.map(print).join(delimiter)
+        if (stack.length > 1000) stack = stack.substring(0, 1000) + ` ... (${stack.length} chars)`;
+        return stack
     }
 
     private evalCode(code: string): any {
@@ -117,10 +123,9 @@ export class Soil {
                 switch (e.name) {
                     case 'ContractError':
                         this.recordError(e)
-                        if (SHOULD_LOG) console.log(e.message)
+                        break;
                     case 'MathError':
                         this.recordError(e)
-                        if (SHOULD_LOG) console.log(e.stack)
                         break;
                     case 'PopulationError':
                         this.recordError(e)
@@ -154,7 +159,6 @@ export class Soil {
                 return true
             } catch (e) {
                 this.recordError(e)
-                console.log(e.stack)
                 continue
             }
         };
@@ -213,12 +217,9 @@ export class Soil {
     }
 
     private errorFruit(e: Error): Fruit {
-        let printError = (x: Error) => '[' + x.name + '] ' + x.message
-        let stack = this.errorPile.map(printError).join('<br/>')
-        if (stack.length > 500) stack = stack.substring(0, 500) + ` ... (${stack.length} chars)`;
         return {
-            qn: "An Error Occurred!<br/>" + e.name,
-            sol: printError(e) + '<br/>' + stack,
+            qn: "An Error Occurred!<br/>" + '[' + e.name + '] ' + e.message,
+            sol: this.printError(),
             ans: "X",
             counter: this.counter,
             success: false
@@ -239,6 +240,7 @@ export class Soil {
                 this.runKatex()
                 break
             } while (true);
+            if (SHOULD_LOG) console.log(this.printError('\n'))
             return this.successFruit()
         }
         catch (e) {
