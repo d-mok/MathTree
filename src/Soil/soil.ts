@@ -33,10 +33,12 @@ export class Soil {
         this.errorPile.push(e)
     }
 
-    private printError(delimiter: string = "<br/><br/>"): string {
+    private printError(delimiter: string, cut = true): string {
         let print = (x: Error) => '[' + x.name + '] ' + x.message
         let stack = this.errorPile.map(print).join(delimiter)
-        if (stack.length > 1000) stack = stack.substring(0, 1000) + ` ... (${stack.length} chars)`;
+        if (cut) {
+            if (stack.length > 1000) stack = stack.substring(0, 1000) + ` ... (${stack.length} chars)`;
+        }
         return stack
     }
 
@@ -219,7 +221,7 @@ export class Soil {
     private errorFruit(e: Error): Fruit {
         return {
             qn: "An Error Occurred!<br/>" + '[' + e.name + '] ' + e.message,
-            sol: this.printError(),
+            sol: this.printError("<br/><br/>", true),
             ans: "X",
             counter: this.counter,
             success: false
@@ -240,11 +242,11 @@ export class Soil {
                 this.runKatex()
                 break
             } while (true);
-            if (SHOULD_LOG) console.log(this.printError('\n'))
+            if (SHOULD_LOG) console.log(this.printError('\n', false))
             return this.successFruit()
         }
         catch (e) {
-            console.error("[MathSoil Error]\n" + e.stack);
+            if (SHOULD_LOG) console.log(this.printError('\n', false))
             return this.errorFruit(e)
         }
     }
