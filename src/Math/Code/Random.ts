@@ -76,7 +76,7 @@ globalThis.RndT = RndT
 function RndZ(min: number, max: number): number {
     return RndN(min, max) * RndU();
 }
-globalThis.RndZ = contract(RndZ).sign([owl.nonNegative])
+globalThis.RndZ = contract(RndZ).sign([owl.num])
 
 
 
