@@ -1,20 +1,4 @@
 
-/**
- * ```
- * // linear equation of straight line
- * [1,2,3] // x+2y+3=0
- * ```
- */
-type Linear = [a: number, b: number, c: number]
-
-/**
- * ```
- * // slope-intercept form of straight line
- * [2,3] // y=2x+3
- * ```
- */
-type Line = [slope: number, yInt: number]
-
 
 /**
  * ```
@@ -75,7 +59,6 @@ type PartialTriangle = {
     angleB: number | null,
     angleC: number | null,
 }
-
 
 
 

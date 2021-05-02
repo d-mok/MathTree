@@ -256,20 +256,6 @@ declare function MathError(message: string): CustomErrorCls;
 declare function Should(condition: boolean, msg?: string): void;
 /**
  * ```
- * // linear equation of straight line
- * [1,2,3] // x+2y+3=0
- * ```
- */
-declare type Linear = [a: number, b: number, c: number];
-/**
- * ```
- * // slope-intercept form of straight line
- * [2,3] // y=2x+3
- * ```
- */
-declare type Line = [slope: number, yInt: number];
-/**
- * ```
  * // quadratic form
  * [1,2,3] // x^2+2x+3
  * ```
@@ -390,7 +376,7 @@ declare function LinearFeature(a: number, b: number, c: number): [xInt: number, 
  * LineFromLinear(0,4,6) // [0,-1.5]
  * ```
  */
-declare function LineFromLinear(a: number, b: number, c: number): Line;
+declare function LineFromLinear(a: number, b: number, c: number): [slope: number, yInt: number];
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
@@ -399,7 +385,7 @@ declare function LineFromLinear(a: number, b: number, c: number): Line;
  * LinearFromIntercepts(0,2) // throw
  * ```
  */
-declare function LinearFromIntercepts(xInt: number, yInt: number): Linear;
+declare function LinearFromIntercepts(xInt: number, yInt: number): [a: number, b: number, c: number];
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from two given points
@@ -408,7 +394,7 @@ declare function LinearFromIntercepts(xInt: number, yInt: number): Linear;
  * LinearFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-declare function LinearFromTwoPoints(point1: Point, point2: Point): Linear;
+declare function LinearFromTwoPoints(point1: Point, point2: Point): [a: number, b: number, c: number];
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from point and slope
@@ -417,7 +403,7 @@ declare function LinearFromTwoPoints(point1: Point, point2: Point): Linear;
  * LinearFromPointSlope([1,2],0) // [0,1,-2]
  * ```
  */
-declare function LinearFromPointSlope(point: Point, slope: number): Linear;
+declare function LinearFromPointSlope(point: Point, slope: number): [a: number, b: number, c: number];
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
@@ -426,7 +412,7 @@ declare function LinearFromPointSlope(point: Point, slope: number): Linear;
  * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
  * ```
  */
-declare function LinearFromBisector(A: Point, B: Point): Linear;
+declare function LinearFromBisector(A: Point, B: Point): [a: number, b: number, c: number];
 /**
  * @category Linear
  * @return [slope,yInt] from given intercepts
@@ -435,7 +421,7 @@ declare function LinearFromBisector(A: Point, B: Point): Linear;
  * LineFromIntercepts(0,2) // throw
  * ```
  */
-declare function LineFromIntercepts(xInt: number, yInt: number): Line;
+declare function LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number];
 /**
  * @category Linear
  * @return [slope,yInt] from two given points
@@ -444,7 +430,7 @@ declare function LineFromIntercepts(xInt: number, yInt: number): Line;
  * LineFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-declare function LineFromTwoPoints(point1: Point, point2: Point): Line;
+declare function LineFromTwoPoints(point1: Point, point2: Point): [slope: number, yInt: number];
 /**
  * @category Linear
  * @return [slope,yInt] from point and slope
@@ -453,7 +439,7 @@ declare function LineFromTwoPoints(point1: Point, point2: Point): Line;
  * LineFromPointSlope([1,2],0) // [0,2]
  * ```
  */
-declare function LineFromPointSlope(point: Point, slope: number): Line;
+declare function LineFromPointSlope(point: Point, slope: number): [slope: number, yInt: number];
 /**
  * @category Linear
  * @return [slope,yInt] from perpendicular bisector of AB
@@ -462,7 +448,7 @@ declare function LineFromPointSlope(point: Point, slope: number): Line;
  * LineFromBisector([1,2],[1,4]) // [0,3]
  * ```
  */
-declare function LineFromBisector(A: Point, B: Point): Line;
+declare function LineFromBisector(A: Point, B: Point): [slope: number, yInt: number];
 /**
  * @ignore
  */
@@ -472,10 +458,10 @@ declare class LinearFunction {
     byPointSlope(p: Point, m: number): this;
     byIntercepts(x: number, y: number): this;
     byBisector(A: Point, B: Point): this;
-    byLinear(linear: Linear): this;
+    byLinear(linear: [a: number, b: number, c: number]): this;
     private refresh;
-    linear(): Linear;
-    line(): Line;
+    linear(): [a: number, b: number, c: number];
+    line(): [slope: number, yInt: number];
 }
 /**
  * @ignore
@@ -1388,7 +1374,7 @@ declare function RndPyth(max?: number): [number, number, number];
  * RndLinearFromIntercept(1,5) // may return [2,-3,6]
  * ```
  */
-declare function RndLinearFromInt(minAbsIntercept: number, maxAbsIntercept: number): Linear;
+declare function RndLinearFromInt(minAbsIntercept: number, maxAbsIntercept: number): [a: number, b: number, c: number];
 /**
  * @category Random
  * @return a point within given range

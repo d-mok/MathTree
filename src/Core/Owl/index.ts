@@ -171,5 +171,3 @@ export function every(pd: predicate, name?: string): predicate {
     name ??= '(every.' + pd.name + ')'
     return build(name, (_: any) => _.every(pd))
 }
-
-// let nums = every(num)

@@ -97,7 +97,7 @@ export class Soil {
     private katex(html: string): string {
         let ele = document.createElement('div')
         ele.innerHTML = html
-        renderMathInElement(ele) 
+        renderMathInElement(ele)
         let T = ele.innerHTML
         ele.remove()
         return T
@@ -115,6 +115,9 @@ export class Soil {
                 return true;
             } catch (e) {
                 switch (e.name) {
+                    case 'ContractError':
+                        this.recordError(e)
+                        if (SHOULD_LOG) console.log(e.message)
                     case 'MathError':
                         this.recordError(e)
                         if (SHOULD_LOG) console.log(e.stack)
@@ -212,6 +215,7 @@ export class Soil {
     private errorFruit(e: Error): Fruit {
         let printError = (x: Error) => '[' + x.name + '] ' + x.message
         let stack = this.errorPile.map(printError).join('<br/>')
+        if (stack.length > 500) stack = stack.substring(0, 500) + ` ... (${stack.length} chars)`;
         return {
             qn: "An Error Occurred!<br/>" + e.name,
             sol: printError(e) + '<br/>' + stack,

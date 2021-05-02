@@ -25,7 +25,7 @@ globalThis.LinearFeature = contract(LinearFeature).sign([owl.nonZero, owl.nonZer
  * LineFromLinear(0,4,6) // [0,-1.5]
  * ```
  */
-function LineFromLinear(a: number, b: number, c: number): Line {
+function LineFromLinear(a: number, b: number, c: number): [slope: number, yInt: number] {
     let m = -a / b
     let y = -c / b
     return [m, y]
@@ -42,7 +42,7 @@ globalThis.LineFromLinear = contract(LineFromLinear).sign([owl.num, owl.nonZero,
  * LinearFromIntercepts(0,2) // throw
  * ```
  */
-function LinearFromIntercepts(xInt: number, yInt: number): Linear {
+function LinearFromIntercepts(xInt: number, yInt: number): [a: number, b: number, c: number] {
     return LF().byIntercepts(xInt, yInt).linear()
 }
 globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign()
@@ -57,7 +57,7 @@ globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign()
  * LinearFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-function LinearFromTwoPoints(point1: Point, point2: Point): Linear {
+function LinearFromTwoPoints(point1: Point, point2: Point): [a: number, b: number, c: number] {
     return LF().byTwoPoints(point1, point2).linear()
 }
 globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).sign()
@@ -72,7 +72,7 @@ globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).sign()
  * LinearFromPointSlope([1,2],0) // [0,1,-2]
  * ```
  */
-function LinearFromPointSlope(point: Point, slope: number): Linear {
+function LinearFromPointSlope(point: Point, slope: number): [a: number, b: number, c: number] {
     return LF().byPointSlope(point, slope).linear()
 }
 globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign()
@@ -87,7 +87,7 @@ globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign()
  * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
  * ```
  */
-function LinearFromBisector(A: Point, B: Point): Linear {
+function LinearFromBisector(A: Point, B: Point): [a: number, b: number, c: number] {
     return LF().byBisector(A, B).linear()
 }
 globalThis.LinearFromBisector = contract(LinearFromBisector).sign()
@@ -102,7 +102,7 @@ globalThis.LinearFromBisector = contract(LinearFromBisector).sign()
  * LineFromIntercepts(0,2) // throw
  * ```
  */
-function LineFromIntercepts(xInt: number, yInt: number): Line {
+function LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number] {
     return LF().byIntercepts(xInt, yInt).line()
 }
 globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign()
@@ -119,7 +119,7 @@ globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign()
  * LineFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-function LineFromTwoPoints(point1: Point, point2: Point): Line {
+function LineFromTwoPoints(point1: Point, point2: Point): [slope: number, yInt: number] {
     return LF().byTwoPoints(point1, point2).line()
 }
 globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign()
@@ -134,7 +134,7 @@ globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign()
  * LineFromPointSlope([1,2],0) // [0,2]
  * ```
  */
-function LineFromPointSlope(point: Point, slope: number): Line {
+function LineFromPointSlope(point: Point, slope: number): [slope: number, yInt: number] {
     return LF().byPointSlope(point, slope).line()
 }
 globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign()
@@ -150,7 +150,7 @@ globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign()
  * LineFromBisector([1,2],[1,4]) // [0,3]
  * ```
  */
-function LineFromBisector(A: Point, B: Point): Line {
+function LineFromBisector(A: Point, B: Point): [slope: number, yInt: number] {
     return LF().byBisector(A, B).line()
 }
 globalThis.LineFromBisector = contract(LineFromBisector).sign()
@@ -164,7 +164,7 @@ globalThis.LineFromBisector = contract(LineFromBisector).sign()
  * @ignore
  */
 class LinearFunction {
-    private _linear: Linear = [NaN, NaN, NaN]
+    private _linear: [a: number, b: number, c: number] = [NaN, NaN, NaN]
 
     // define
     byTwoPoints(p1: Point, p2: Point) {
@@ -219,7 +219,7 @@ class LinearFunction {
         return this
     }
 
-    byLinear(linear: Linear) {
+    byLinear(linear: [a: number, b: number, c: number]) {
         this._linear = linear
         this.refresh()
         return this
@@ -229,11 +229,11 @@ class LinearFunction {
         let [a, b, c] = this._linear!
     }
 
-    linear(): Linear {
+    linear(): [a: number, b: number, c: number] {
         return this._linear
     }
 
-    line(): Line {
+    line(): [slope: number, yInt: number] {
         return LineFromLinear(...this.linear())
     }
 
