@@ -53,7 +53,8 @@ class ListCls<T> extends Array<T>{
 
 }
 
-function List<T>(
+// strange name to avoid conflist with frontend
+function newList<T>(
     arr: T[],
     keyFunc: (_: T) => any = x => JSON.stringify(x)
 ): ListCls<T> {
@@ -66,8 +67,8 @@ type alias<T> = ListCls<T>
 
 declare global {
     type List<T> = alias<T>
-    var List: <T>(arr: T[], keyFunc?: (_: T) => any) => ListCls<T>
+    var newList: <T>(arr: T[], keyFunc?: (_: T) => any) => ListCls<T>
 }
-globalThis.List = List
+globalThis.newList = newList
 
 export { }

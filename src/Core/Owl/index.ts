@@ -117,11 +117,11 @@ export const fail = (_: any) => false
 
 // relation
 
-export const distinct = (_: any[]) => List(_).isDistinct()
+export const distinct = (_: any[]) => newList(_).isDistinct()
 
 export const distinctBy = (keyFunc: (_: any) => any) =>
     build('distinctBy_' + (keyFunc.name || keyFunc.toString()),
-        (..._: any[]) => List(_, keyFunc).isDistinct()
+        (..._: any[]) => newList(_, keyFunc).isDistinct()
     )
 
 // special text

@@ -64,7 +64,7 @@ function AreCoprime(...nums: number[]): boolean {
     nums = nums.map(ant.blur)
     if (!IsInteger(...nums)) return true
     if (!IsNonZero(...nums)) return true
-    return List(nums).pairsEvery((a: number, b: number) => HCF(a, b) === 1)
+    return newList(nums).pairsEvery((a: number, b: number) => HCF(a, b) === 1)
 }
 globalThis.AreCoprime = contract(AreCoprime).sign([owl.num])
 
@@ -78,7 +78,7 @@ globalThis.AreCoprime = contract(AreCoprime).sign([owl.num])
  * ```
  */
 function AreDistinctPoint(...points: Point[]) {
-    return List(points).isDistinct()
+    return newList(points).isDistinct()
 }
 globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point])
 
@@ -93,7 +93,7 @@ globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point])
  */
 function AreDistantPoint(distance: number) {
     let AreDistant = function (...points: Point[]): boolean {
-        return List(points).pairsEvery((a, b) => Distance(a, b) >= distance)
+        return newList(points).pairsEvery((a, b) => Distance(a, b) >= distance)
     }
     return contract(AreDistant).sign([owl.point])
 }
@@ -111,7 +111,7 @@ globalThis.AreDistantPoint = contract(AreDistantPoint).sign([owl.positive])
  */
 function AreOblique(minAngle: number) {
     let areOblique = function (...slopes: number[]): boolean {
-        return List(slopes).pairsEvery((a, b) => IntersectAngle(a, b) >= minAngle)
+        return newList(slopes).pairsEvery((a, b) => IntersectAngle(a, b) >= minAngle)
     }
     return contract(areOblique).sign([owl.num])
 }

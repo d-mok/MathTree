@@ -117,7 +117,7 @@ function FeasiblePolygon(...cons: Constraint[]) {
             }
         }
     }
-    vertices = List(vertices).distinct()
+    vertices = newList(vertices).distinct()
     Should(vertices.length > 2, 'No feasible region.')
     const center = VectorMean(...vertices);
     vertices = SortBy(vertices, x => Inclination(center, x))
@@ -226,7 +226,7 @@ globalThis.FeasibleIntegral = FeasibleIntegral
 function MaximizePoint(points: Point[], field: Field): Point {
     Should(points.length > 0, 'No feasible point')
     let orderedPoints = SortBy(points, x => -FieldAt(x, field))
-    orderedPoints = List(orderedPoints).distinct()
+    orderedPoints = newList(orderedPoints).distinct()
     let point = orderedPoints[0]
     Should(!onBoundary(point), 'No max point')
     if (orderedPoints[1]) {
@@ -249,7 +249,7 @@ globalThis.MaximizePoint = MaximizePoint
 function MinimizePoint(points: Point[], field: Field): Point {
     Should(points.length > 0, 'No feasible point')
     let orderedPoints = SortBy(points, x => FieldAt(x, field))
-    orderedPoints = List(orderedPoints).distinct()
+    orderedPoints = newList(orderedPoints).distinct()
     let point = orderedPoints[0]
     Should(!onBoundary(point), 'No min point')
     if (orderedPoints[1]) {
