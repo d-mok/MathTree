@@ -1,166 +1,155 @@
 /**
  * @category Function
  * @return log(b,N)
- * ```typescript
+ * ```
  * log(2,8) // 3
  * ```
  */
 function log(b: number, N: number): number {
-    Should(IsPositive(b, N), 'input must be positive')
     const v = Math.log(N) / Math.log(b);
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.log = log
+globalThis.log = contract(log).sign([owl.positive])
 
 /**
+ * @deprecated
+ * @ignore
  * @category Function
  * @return a**b, a to the power of b.
- * ```typescript
+ * ```
  * Power(2,3) // 8
  * ```
  */
 function Power(a: number, b: number): number {
-    Should(IsNum(a, b), 'input must be num')
     const v = Math.pow(a, b);
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.Power = Power
+globalThis.Power = contract(Power).sign([owl.num])
 
 /**
  * @category Function
  * @return square root of x
- * ```typescript
+ * ```
  * Sqrt(4) // 2
  * ```
  */
 function Sqrt(x: number): number {
-    Should(IsNum(x) && x >= 0, 'input must be non-negative num')
     const v = Math.sqrt(x)
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.Sqrt = Sqrt
+globalThis.Sqrt = contract(Sqrt).sign([owl.nonNegative])
 
 /**
  * @category Function
  * @return the radian of the degree
- * ```typescript
+ * ```
  * Radian(180) // pi
  * Radian(90) // pi/2
  * Radian(30) // PI/6
  * ```
  */
 function Radian(degree: number): number {
-    Should(IsNum(degree), 'degree must be num')
     const v = degree / 180 * Math.PI
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.Radian = Radian
+globalThis.Radian = contract(Radian).sign([owl.num])
 
 
 
 /**
  * @category Function
  * @return the degree of the radian
- * ```typescript
+ * ```
  * Degree(Math.PI) // 180
  * Degree(Math.PI/2) // 90
  * Degree(Math.PI/6) // 30
  * ```
  */
 function Degree(radian: number): number {
-    Should(IsNum(radian), 'degree must be num')
     const v = radian * 180 / Math.PI
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.Degree = Degree
+globalThis.Degree = contract(Degree).sign([owl.num])
 
 
 
 /**
  * @category Function
  * @return sin(x).
- * ```typescript
+ * ```
  * sin(30) // 0.5
  * ```
  */
 function sin(x: number): number {
-    Should(IsNum(x), 'input must be num')
     if (x % 180 === 0) return 0
     let v = Math.sin(x / 180 * Math.PI);
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.sin = sin
+globalThis.sin = contract(sin).sign([owl.num])
 
 /**
  * @category Function
  * @return cos(x).
- * ```typescript
+ * ```
  * cos(60) // 0.5
  * ```
  */
 function cos(x: number): number {
-    Should(IsNum(x), 'input must be num')
     if ((x - 90) % 180 === 0) return 0
     let v = Math.cos(x / 180 * Math.PI);
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.cos = cos
+globalThis.cos = contract(cos).sign([owl.num])
 
 /**
  * @category Function
  * @return tan(x).
- * ```typescript
+ * ```
  * tan(45) // 1
  * ```
  */
 function tan(x: number): number {
-    Should(IsNum(x), 'input must be num')
     if (x % 180 === 0) return 0
     let v = Math.tan(x / 180 * Math.PI);
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.tan = tan
+globalThis.tan = contract(tan).sign([owl.num])
 
 /**
  * @category Function
  * @return arcsin(x) between -90 and 90.
- * ```typescript
+ * ```
  * arcsin(0.5) // 30
  * ```
  */
 function arcsin(x: number): number {
-    Should(IsNum(x), 'input must be num')
-    Should(Abs(x) <= 1, 'input should be between 1 and -1')
     let v = Math.asin(x) * 180 / Math.PI;
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.arcsin = arcsin
+globalThis.arcsin = contract(arcsin).sign([owl.between(-1, 1)])
 
 /**
  * @category Function
  * @return arccos(x) between 0 and 180.
- * ```typescript
+ * ```
  * arccos(0.5) // 60
  * ```
  */
 function arccos(x: number): number {
-    Should(IsNum(x), 'input must be num')
-    Should(Abs(x) <= 1, 'input should be between 1 and -1')
     let v = Math.acos(x) * 180 / Math.PI;
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.arccos = arccos
+globalThis.arccos = contract(arccos).sign([owl.between(-1, 1)])
 
 /**
  * @category Function
  * @return arctan(x) between -90 and 90.
- * ```typescript
+ * ```
  * arctan(1) // 45
  * ```
  */
 function arctan(x: number): number {
-    Should(IsNum(x), 'input must be num')
     let v = Math.atan(x) * 180 / Math.PI;
-    return Blur(v)
+    return ant.blur(v)
 }
-globalThis.arctan = arctan
+globalThis.arctan = contract(arctan).sign([owl.num])

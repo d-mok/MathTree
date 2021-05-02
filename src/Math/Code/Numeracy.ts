@@ -175,7 +175,7 @@ globalThis.Floor = contract(Floor).sign([owl.num])
  * ```
  */
 function SimpRatio(...nums: number[]): number[] {
-    nums = Blurs(nums)
+    nums = nums.map(ant.blur)
     if (!IsInteger(...nums)) return nums
     let nonzeros = nums.filter(x => IsNonZero(x))
     Should(nonzeros.length > 0, 'at least one non-zero num')
@@ -204,37 +204,3 @@ globalThis.IntegerRatio = contract(IntegerRatio).sign([owl.rational])
 
 
 
-
-
-/**
- * @deprecated
- * @category Numeracy
- * @return correct for floating point error
- * ```typescript
- * Blur(0.1+0.2) // 0.3
- * Blur(0.81-1) // -0.19
- * Blur(1.1**2) // 1.21
- * ```
- */
-function Blur(value: any, accuracy = 12): (typeof value) {
-    if (typeof value !== 'number') return value
-    if (!isFinite(value)) return value
-    // value = parseFloat(value.toFixed(accuracy));
-    value = parseFloat(value.toPrecision(accuracy));
-    return value
-}
-globalThis.Blur = Blur
-
-
-/**
- * @deprecated
- * @category Numeracy
- * @return correct for floating point error
- * ```typescript
- * Blurs([0.1+0.2,0.81-1]) // [0.3,-0.19]
- * ```
- */
-function Blurs(values: any[], accuracy = 12): (typeof values) {
-    return values.map(x => Blur(x, accuracy))
-}
-globalThis.Blurs = Blurs

@@ -105,9 +105,6 @@ export function sd(...nums: number[]): number {
     return std(nums, 'uncorrected')
 }
 
-/**
- * find the approximate fraction under maxDenominator
- */
 export function nearFrac(num: number, maxDenominator = 1000): Fraction {
     let f = (new Decimal(num)).toFraction(maxDenominator)
     return [f[0].toNumber(), f[1].toNumber()]
@@ -129,6 +126,10 @@ export function ratio<T extends number[]>(...rationals: T): T {
     let h = hcf(...ns)
     ns = ns.map(_ => _ / h)
     return ns.map(blur) as T
+}
+
+export function simpFrac(p: number, q: number): Fraction {
+    return nearFrac(p / q, q + 10)
 }
 
 

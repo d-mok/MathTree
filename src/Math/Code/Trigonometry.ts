@@ -3,59 +3,58 @@
  * @category Trigonometry
  * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
  * @return  the quadrant of a point or angle: 'I','II','III' or 'IV'.
- * ```typescript
+ * ```
  * Quadrant([1,1]) \\ 'I'
  * Quadrant([-1,1]) \\ 'II'
  * Quadrant(200) \\ 'III'
  * Quadrant(350) \\ 'IV'
  * ```
  */
-function Quadrant(rect: PolarPoint | number): QuadrantName {
+function Quadrant(rect: Point | number): QuadrantName {
     if (!Array.isArray(rect)) rect = PolToRect([1, rect]);
-    Should(IsPoint(rect), 'rect must be polarpoint or number')
     const q = RectToPol(rect)[1];
     if (q >= 0 && q < 90) return "I";
     if (q >= 90 && q < 180) return "II";
     if (q >= 180 && q < 270) return "III";
     if (q >= 270 && q < 360) return "IV";
-    throw MathError( 'fail to parse quadrant!')
+    Should(false, 'fail to parse quadrant!')
+    throw 'never'
 }
-globalThis.Quadrant = Quadrant
+globalThis.Quadrant = contract(Quadrant).sign([owl.or([owl.point, owl.num])])
 
 
 /**
  * @category Trigonometry
  * @return the rectangular coordinates [x,y] from a polar coordinates [r,theta].
- * ```typescript
+ * ```
  * PolToRect([1,45]) // [0.707,0.707]
  * ```
  */
 function PolToRect([r, q]: PolarPoint): Point {
-    Should(IsPoint([r, q]), 'input must be point')
     return [r * cos(q), r * sin(q)];
 }
-globalThis.PolToRect = PolToRect
+globalThis.PolToRect = contract(PolToRect).sign([owl.polar])
+
 
 /**
  * @category Trigonometry
  * @return the polar coordinates [r,theta] of a rectangular coordinates [x,y].
- * ```typescript
+ * ```
  * RectToPol([1,1]) // [1.414,45]
  * ```
  */
 function RectToPol([x, y]: Point): PolarPoint {
-    Should(IsPoint([x, y]), 'input must be point')
     const r = Math.sqrt(x * x + y * y);
     let q = Math.atan2(y, x) * 180 / Math.PI;
     if (q < 0) q = q + 360;
     return [r, q];
 }
-globalThis.RectToPol = RectToPol
+globalThis.RectToPol = contract(RectToPol).sign([owl.point])
 
 /**
  * @category Trigonometry
  * @return the sign from ASTC diagram, 1 or -1, representing positive or negative.
- * ```typescript
+ * ```
  * ASTC(2,'cos') // -1
  * ASTC('III','tan') // 1
  * ```
@@ -65,20 +64,19 @@ function ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): -1 | 0 | 1
     if (quadrant == "II") quadrant = 2;
     if (quadrant == "III") quadrant = 3;
     if (quadrant == "IV") quadrant = 4;
-    Should([1, 2, 3, 4].includes(quadrant), 'cannot parse quadrant')
-    Should(['sin', 'cos', 'tan'].includes(func), 'cannot parse TrigFunc')
     if (quadrant == 1) return 1;
-    if (quadrant == 2) return func == 'sin' ? 1 : -1;
-    if (quadrant == 3) return func == 'tan' ? 1 : -1;
-    if (quadrant == 4) return func == 'cos' ? 1 : -1;
+    if (quadrant == 2) return func === 'sin' ? 1 : -1;
+    if (quadrant == 3) return func === 'tan' ? 1 : -1;
+    if (quadrant == 4) return func === 'cos' ? 1 : -1;
     return 0
 }
-globalThis.ASTC = ASTC
+globalThis.ASTC = contract(ASTC).sign([owl.quadrant, owl.trig])
+
 
 /**
  * @category Trigonometry
  * @return the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k. The angles [r1,r2,r3].
- * ```typescript
+ * ```
  * TrigRoot('sin',0) // [0, 180, 360]
  * TrigRoot('sin',0.5) // [30, 150, undefined]
  * TrigRoot('sin',1) // [90, undefined, undefined]
@@ -127,7 +125,7 @@ function TrigRoot(func: TrigFunc, k: number): [number | undefined, number | unde
     }
     return [undefined, undefined, undefined];
 }
-globalThis.TrigRoot = TrigRoot
+globalThis.TrigRoot = contract(TrigRoot).sign([owl.trig, owl.num])
 
 
 

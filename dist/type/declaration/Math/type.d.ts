@@ -29,7 +29,7 @@ declare type Fraction = [numerator: number, denominator: number];
  * [1,2,"<=",3] // x+2y <= 3
  * ```
  */
-declare type Constraint = [xCoeff: number, yCoeff: number, ineq: string, constant: number];
+declare type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number];
 /**
  * ```
  * // used in linear programming
@@ -65,4 +65,4 @@ declare type QuadrantName = "I" | "II" | "III" | "IV";
 declare type QuadrantCode = 1 | 2 | 3 | 4;
 declare type PolarPoint = [r: number, q: number];
 declare type TrigFunc = 'sin' | 'cos' | 'tan';
-declare type IneqSign = [greater: boolean, equal: boolean];
+declare type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';

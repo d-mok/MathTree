@@ -318,23 +318,23 @@ test('IntegerRatio', () => {
 
 
 
-test('Blur', () => {
-    expect(Blur(0.1 + 0.2)).toBe(0.3);
-    expect(Blur(0.81 - 1)).toBe(-0.19);
-    expect(Blur(1.1 ** 2)).toBe(1.21);
-    expect(Blur('abc')).toBe('abc');
-    expect(Blur(true)).toBe(true);
-    expect(Blur(false)).toBe(false);
-    expect(Blur([1.12])).toEqual([1.12]);
-    expect(Blur({ x: 1 })).toEqual({ x: 1 });
-    expect(Blur(NaN)).toBeNaN();
-    expect(Blur(undefined)).toBeUndefined();
-    expect(Blur(null)).toBeNull();
-});
+// test('Blur', () => {
+//     expect(Blur(0.1 + 0.2)).toBe(0.3);
+//     expect(Blur(0.81 - 1)).toBe(-0.19);
+//     expect(Blur(1.1 ** 2)).toBe(1.21);
+//     expect(Blur('abc')).toBe('abc');
+//     expect(Blur(true)).toBe(true);
+//     expect(Blur(false)).toBe(false);
+//     expect(Blur([1.12])).toEqual([1.12]);
+//     expect(Blur({ x: 1 })).toEqual({ x: 1 });
+//     expect(Blur(NaN)).toBeNaN();
+//     expect(Blur(undefined)).toBeUndefined();
+//     expect(Blur(null)).toBeNull();
+// });
 
 
-test('Blurs', () => {
-    expect(Blurs([0.1 + 0.2, 0.81 - 1])).toEqual([0.3, -0.19]);
-    expect(Blurs([1.1 ** 2, 'abc'])).toEqual([1.21, 'abc']);
-});
+// test('Blurs', () => {
+//     expect(Blurs([0.1 + 0.2, 0.81 - 1])).toEqual([0.3, -0.19]);
+//     expect(Blurs([1.1 ** 2, 'abc'])).toEqual([1.21, 'abc']);
+// });
 

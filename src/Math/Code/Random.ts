@@ -19,7 +19,7 @@ globalThis.RndN = contract(RndN).sign([owl.num])
  */
 function RndNs(min: number, max: number, n: number = 10): number[] {
     n = Math.min(Math.floor(max - min + 1), n)
-    return dice.unique(() => RndN(min, max), n);
+    return dice.roll(() => RndN(min, max)).unique(n);
 }
 globalThis.RndNs = contract(RndNs).sign([owl.num, owl.num, owl.positiveInt])
 
@@ -46,7 +46,7 @@ globalThis.RndR = contract(RndR).sign([owl.num])
  * ```
  */
 function RndU(): 1 | -1 {
-    return dice.pick<1 | -1>(-1, 1).one();
+    return dice.array<1 | -1>([-1, 1]).one();
 }
 globalThis.RndU = RndU
 
@@ -59,7 +59,7 @@ globalThis.RndU = RndU
  * ```
  */
 function RndT(): boolean {
-    return dice.pick(true, false).one();
+    return dice.array([true, false]).one();
 }
 globalThis.RndT = RndT
 
@@ -91,7 +91,7 @@ globalThis.RndZ = contract(RndZ).sign([owl.nonNegative])
  */
 function RndZs(min: number, max: number, n: number = 10): number[] {
     n = Math.min(Math.floor(max - min + 1), n)
-    return dice.unique(() => RndN(min, max), n).map(x => x * RndU());
+    return dice.roll(() => RndN(min, max)).unique(n).map(x => x * RndU());
 }
 globalThis.RndZs = contract(RndZs).sign([owl.nonNegative, owl.nonNegative, owl.positiveInt])
 
@@ -159,7 +159,7 @@ function RndPoly(...coeff: number[]): number[] {
     arr[0] = Math.abs(arr[0])
     return arr
 }
-globalThis.RndPoly = contract(RndPoly).sign([owl.nonNegative])
+globalThis.RndPoly = contract(RndPoly).sign([owl.positive])
 
 
 
@@ -183,7 +183,7 @@ function RndPyth(max = 100): [number, number, number] {
             }
         }
     }
-    return dice.pick(...arr).one()
+    return dice.array(arr).one()
 }
 globalThis.RndPyth = contract(RndPyth).sign([owl.positive])
 
@@ -219,7 +219,7 @@ function RndPoint(xRange: number | interval, yRange: number | interval = xRange)
     let y = RndN(...yRange)
     return [x, y]
 }
-globalThis.RndPoint = contract(RndPoint).sign([_ => owl.num(_) || owl.interval(_)])
+globalThis.RndPoint = contract(RndPoint).sign([owl.or([owl.num, owl.interval])])
 
 
 /**
@@ -238,7 +238,7 @@ function RndAngles(n: number, separation: number): number[] {
         if (arr[0] + 360 - arr[arr.length - 1] < separation) return false
         return true
     }
-    return dice.brute(f, p)
+    return dice.roll(f).brute(p)
 }
 globalThis.RndAngles = contract(RndAngles).sign([owl.positiveInt, owl.positive])
 
@@ -272,9 +272,9 @@ globalThis.RndConvexPolygon = contract(RndConvexPolygon)
  * ```
  */
 function RndData(min: number, max: number, n: number): number[] {
-    let f = () => dice.sample(() => RndN(min, max), n)
+    let f = () => dice.roll(() => RndN(min, max)).sample(n)
     let p = (arr: number[]) => Mode(...arr).length === 1
-    return Sort(...dice.brute(f, p))
+    return Sort(...dice.roll(f).brute(p))
 }
 globalThis.RndData = contract(RndData).sign([owl.num, owl.num, owl.positiveInt])
 

@@ -14,10 +14,10 @@
 
 test('RndShake', () => {
     let arr = sample(() => RndShake('\\dfrac{2}{3}'));
-    expect(arr).toBeFlatIs(ParseDfrac);
+    expect(arr).toBeFlatIs(owl.dfrac);
 
     arr = sample(() => RndShake('\\ge'));
-    expect(arr).toBeFlatIs(ParseIneqSign);
+    expect(arr).toBeFlatIs(owl.ineq);
 
     arr = sample(() => RndShake(5));
     expect(arr).toBeFlatIs(IsInteger);
@@ -136,8 +136,8 @@ test('RndShakeFrac', () => {
 test('RndShakeDfrac', () => {
     function run(anchor, isPositive) {
         let arr = sample(() => RndShakeDfrac(anchor));
-        let arr0 = arr.flat(2).map(x => ParseDfrac(x)[0]);
-        let arr1 = arr.flat(2).map(x => ParseDfrac(x)[1]);
+        let arr0 = arr.flat(2).map(x => ink.parseDfrac(x)[0]);
+        let arr1 = arr.flat(2).map(x => ink.parseDfrac(x)[1]);
         expect(arr0).toBeFlatIsInteger();
         expect(arr1).toBeFlatIsInteger();
         if (isPositive) {

@@ -79,11 +79,6 @@ globalThis.AreCoprime = contract(AreCoprime).sign([owl.num])
  */
 function AreDistinctPoint(...points: Point[]) {
     return List(points).isDistinct()
-    // return (new List(points)).pairsEvery((a, b) => owl.distinct(a, b))
-    // let predicate = (p1: Point, p2: Point) => {
-    //     return p1[0] !== p2[0] || p1[1] !== p2[1]
-    // }
-    // return PairsEvery(predicate)(...points)
 }
 globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point])
 

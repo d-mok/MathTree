@@ -71,7 +71,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
 
     // print **x as sci notation
     if (T === 'number') {
-        let v = Blur(Round(value, 3))
+        let v = ant.blur(Round(value, 3))
         if (v >= 10000 || v <= 0.01) {
             print("\\*\\*", Sci(v))
         } else {
@@ -89,13 +89,13 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
 
     // print *x as normal
     if (T === 'number') {
-        value = Blur(value)
+        value = ant.blur(value)
         if (IsDecimal(value)) value = Round(value, 5)
     }
     if (T === 'boolean') {
         value = Tick(value)
     }
-    if (IsPoint(value)) {
+    if (owl.point(value)) {
         value = Coord(value)
     }
 

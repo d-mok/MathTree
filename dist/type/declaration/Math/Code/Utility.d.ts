@@ -25,7 +25,7 @@ declare function LCM(...nums: number[]): number;
  * @category Utility
  * @param num - from 1 to 10
  * @return roman number
- * ```typescript
+ * ```
  * Romanize(1) // "I"
  * Romanize(2) // "II"
  * ```
@@ -35,20 +35,9 @@ declare function Romanize(num: number): string;
  * @category Utility
  * @param roman - from I to X
  * @return arabic number
- * ```typescript
+ * ```
  * DeRomanize("I") // 1
  * DeRomanize("II") // 2
  * ```
  */
 declare function DeRomanize(roman: string): number;
-/**
- * @category Utility
- * @param arr - array to dedupe
- * @param keyFunc - map item to this value to compare equality
- * @return Deduped array
- * ```typescript
- * Dedupe([1, 2, 3, 3, 4, 5, 5, 5, 6] // [1, 2, 3, 4, 5, 6]
- * Dedupe([[1, 2], [1, 2], [1, 3]]) // [[1, 2], [1, 3]]
- * ```
- */
-declare function Dedupe<T>(arr: T[]): T[];

@@ -124,23 +124,3 @@ declare function SimpRatio(...nums: number[]): number[];
  * ```
  */
 declare function IntegerRatio(...nums: number[]): number[];
-/**
- * @deprecated
- * @category Numeracy
- * @return correct for floating point error
- * ```typescript
- * Blur(0.1+0.2) // 0.3
- * Blur(0.81-1) // -0.19
- * Blur(1.1**2) // 1.21
- * ```
- */
-declare function Blur(value: any, accuracy?: number): (typeof value);
-/**
- * @deprecated
- * @category Numeracy
- * @return correct for floating point error
- * ```typescript
- * Blurs([0.1+0.2,0.81-1]) // [0.3,-0.19]
- * ```
- */
-declare function Blurs(values: any[], accuracy?: number): (typeof values);

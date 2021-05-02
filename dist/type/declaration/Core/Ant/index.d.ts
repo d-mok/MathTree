@@ -29,12 +29,10 @@ export declare function mean(...nums: number[]): number;
 export declare function mode(...nums: number[]): number[];
 export declare function median(...nums: number[]): number;
 export declare function sd(...nums: number[]): number;
-/**
- * find the approximate fraction under maxDenominator
- */
 export declare function nearFrac(num: number, maxDenominator?: number): Fraction;
 export declare function fracable(num: number, maxDenominator?: number): boolean;
 export declare function ratio<T extends number[]>(...rationals: T): T;
+export declare function simpFrac(p: number, q: number): Fraction;
 export declare function e(num: number): number;
 export declare function mantissa(num: number): number;
 export declare function logCeil(num: number): number;

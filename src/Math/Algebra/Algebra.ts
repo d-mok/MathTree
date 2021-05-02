@@ -72,4 +72,4 @@ function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number
     }
     return points
 }
-globalThis.Trace = Trace
+globalThis.Trace = contract(Trace).sign([owl.pass, owl.num, owl.num, owl.positiveInt])

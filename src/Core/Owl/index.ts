@@ -6,7 +6,7 @@ export const num = (_: any) => Number.isFinite(_)
 
 export const whole = (_: any) => Number.isInteger(_)
 
-export const int = (_: any) => Number.isInteger(ant.correct(_))
+export const int = (_: any) => num(_) && Number.isInteger(ant.correct(_))
 
 export const dec = (_: any) => num(_) && !int(_)
 
@@ -14,9 +14,9 @@ export const rational = (_: any) => num(_) && ant.fracable(_)
 
 export const irrational = (_: any) => num(_) && !ant.fracable(_)
 
-export const odd = (_: any) => int(_) && Math.abs(_) % 2 === 1
+export const odd = (_: any) => int(_) && Math.abs(ant.correct(_)) % 2 === 1
 
-export const even = (_: any) => int(_) && Math.abs(_) % 2 === 0
+export const even = (_: any) => int(_) && Math.abs(ant.correct(_)) % 2 === 0
 
 export const prob = (_: any) => num(_) && _ >= 0 && _ <= 1
 
@@ -42,7 +42,17 @@ export const nonZero = (_: any) => num(_) && _ !== 0
 
 export const nonZeroInt = (_: any) => int(_) && _ !== 0
 
-export const between = (min: number, max: number) => (_: any) => num(_) && _ >= min && _ <= max
+export const between = (min: number, max: number) => build(`between(${min},${max})`,
+    (_: any) => num(_) && _ >= min && _ <= max
+)
+
+
+export const absBetween = (min: number, max: number) => build(`absBetween(${min},${max})`,
+    (_: any) => num(_) && Math.abs(_) >= min && Math.abs(_) <= max
+)
+
+
+
 
 
 // JS native type
@@ -57,9 +67,14 @@ export const emptyObject = (_: any) => !!_ && _.constructor === Object && Object
 
 export const array = (_: any) => Array.isArray(_)
 
-export const arrayOfLength = (length: number) => (_: any) => array(_) && _.length === length
+export const arrayOfLength = (length: number) => build(`arrayOfLength(${length})`,
+    (_: any) => array(_) && _.length === length
+)
 
-export const arrayWith = (predicate: (_: any) => boolean) => (_: any) => array(_) && _.every(predicate)
+
+export const arrayWith = (predicate: (_: any) => boolean) => build(`arrayWith(${predicate.name})`,
+    (_: any) => array(_) && _.every(predicate)
+)
 
 
 
@@ -75,12 +90,22 @@ export const interval = (_: any) => couple(_) && _[0] <= _[1]
 
 export const point = (_: any) => couple(_)
 
+export const polar = (_: any) => couple(_) && _[0] >= 0
+
 export const fraction = (_: any) => couple(_)
 
 export const properFraction = (_: any) => fraction(_) && _[1] !== 0
 
 export const vector = (_: any) => couple(_)
 
+export const triangleSides = (_: any) => {
+    let [a, b, c] = _
+    return triple(_) &&
+        _.every(positive) &&
+        a + b > c &&
+        b + c > a &&
+        c + a > b
+}
 
 // trivial
 
@@ -92,22 +117,59 @@ export const fail = (_: any) => false
 
 // relation
 
-export const distinct = (..._: any[]) => List(_).isDistinct()
+export const distinct = (_: any[]) => List(_).isDistinct()
 
-export const distinctBy = (keyFunc: (_: any) => any) => (..._: any[]) => List(_, keyFunc).isDistinct()
+export const distinctBy = (keyFunc: (_: any) => any) =>
+    build('distinctBy_' + (keyFunc.name || keyFunc.toString()),
+        (..._: any[]) => List(_, keyFunc).isDistinct()
+    )
 
 // special text
 
-export const ineqSign = (_: any) => ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'].includes(_)
+export const ineq = (_: any): _ is Ineq => ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'].includes(_)
 
 export const dfrac = (_: any) => {
-    const d = String.raw`-?\d+\.?\d*`
     const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
     return str(_) && _.match(new RegExp(f, 'g'))
 }
 
-export const constraint = (_: any) => arrayOfLength(4)(_) && num(_[0]) && num(_[1]) && ineqSign(_[2]) && num(_[3])
+export const constraint = (_: any) => arrayOfLength(4)(_) && num(_[0]) && num(_[1]) && ineq(_[2]) && num(_[3])
+
+export const quadrantCode = (_: any) => [1, 2, 3, 4].includes(_)
+
+export const quadrantName = (_: any) => ['I', 'II', 'III', 'IV'].includes(_)
+
+export const quadrant = (_: any) => quadrantCode(_) || quadrantName(_)
+
+export const trig = (_: any) => ['sin', 'cos', 'tan'].includes(_)
+
+export const roman = (_: any) => ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'].includes(_)
+
+// functor
 
 
 
+function build<F extends (...args: any[]) => any>(funcName: string, func: F): F {
+    const holder = { [funcName](...args: any[]) { return func(...args) } }
+    return holder[funcName] as F
+}
 
+
+
+export function and(pds: predicate[], name?: string): predicate {
+    name ??= '(' + pds.map(f => f.name).join(' && ') + ')'
+    return build(name, (_: any) => pds.every(p => p(_)))
+}
+
+
+export function or(pds: predicate[], name?: string): predicate {
+    name ??= '(' + pds.map(f => f.name).join(' || ') + ')'
+    return build(name, (_: any) => pds.some(p => p(_)))
+}
+
+export function every(pd: predicate, name?: string): predicate {
+    name ??= '(every.' + pd.name + ')'
+    return build(name, (_: any) => _.every(pd))
+}
+
+// let nums = every(num)

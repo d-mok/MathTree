@@ -2,7 +2,7 @@
 /**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
- * ```typescript
+ * ```
  * CosineLawLength(5,5,60) // 5
  * CosineLawLength(2,4,30) // 2.47862735
  * CosineLawLength(1,2,180) // 3
@@ -10,58 +10,60 @@
  * ```
  */
 function CosineLawLength(a: number, b: number, C: number): number {
-    Should(IsPositive(a, b, C), 'input must be positive num')
-    Should(C <= 180, 'angle C must be between 0 and 180')
     return (a ** 2 + b ** 2 - 2 * a * b * cos(C)) ** 0.5
 }
-globalThis.CosineLawLength = CosineLawLength
+globalThis.CosineLawLength = contract(CosineLawLength).sign(
+    [owl.positive, owl.positive, [owl.positive, owl.between(0, 180)]]
+)
 
 
 
 /**
  * @category Triangle
  * @return Find angle C by cosine law. Input sides a,b,c.
- * ```typescript
+ * ```
  * CosineLawAngle(5,5,5) // 60
  * CosineLawAngle(3,4,5) // 90
  * CosineLawAngle(7,8,9) // 73.3984504
  * ```
  */
 function CosineLawAngle(a: number, b: number, c: number): number {
-    Should(IsTriangle([a, b, c]), 'input not satisfy triangle ineq')
     return arccos((c ** 2 - a ** 2 - b ** 2) / (-2 * a * b))
 }
-globalThis.CosineLawAngle = CosineLawAngle
+globalThis.CosineLawAngle = contract(CosineLawAngle).seal({
+    arg: [owl.positive],
+    args: function triangle_ineq(a, b, c) { return owl.triangleSides([a, b, c]) }
+})
 
 
 /**
  * @category Triangle
  * @return Find area by Heron's formula.
- * ```typescript
+ * ```
  * Heron(3,4,5) // 6
  * Heron(1,1,1) // 0.433012701
  * Heron(7,8,9) // 26.83281573
  * ```
  */
 function Heron(a: number, b: number, c: number): number {
-    Should(IsTriangle([a, b, c]), 'input not satisfy triangle ineq')
     let s = (a + b + c) / 2
     return (s * (s - a) * (s - b) * (s - c)) ** 0.5
 }
-globalThis.Heron = Heron
+globalThis.Heron = contract(Heron).seal({
+    arg: [owl.positive],
+    args: function triangle_ineq(a, b, c) { return owl.triangleSides([a, b, c]) }
+})
 
 /**
  * @category Triangle
  * @param fix - Round all return values to integer.
  * @return Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
- * ```typescript
+ * ```
  * TriangleFromVertex([0,0],[4,0],[0,3],false) 
  * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
  * ```
  */
 function TriangleFromVertex(A: Point, B: Point, C: Point, fix = true): Triangle {
-    Should(IsPoint(A, B, C), 'input must be point')
-    Should(IsBoolean(fix), 'fix must be boolean')
     let sideC = Distance(A, B)
     let sideA = Distance(B, C)
     let sideB = Distance(C, A)
@@ -78,14 +80,14 @@ function TriangleFromVertex(A: Point, B: Point, C: Point, fix = true): Triangle 
     }
     return { sideC, angleB, sideA, angleC, sideB, angleA }
 }
-globalThis.TriangleFromVertex = TriangleFromVertex
+globalThis.TriangleFromVertex = contract(TriangleFromVertex).sign([owl.point, owl.point, owl.point, owl.bool])
 
 
 /**
  * @category Triangle
  * @param triangle - unknown elements are null.
  * @return Solve a triangle. return the triangle object solved.
- * ```typescript
+ * ```
  * SolveTriangle({sideC:2, sideA:2, sideB:2}) 
  * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
  * SolveTriangle({sideC:3, angleB:90, sideA:4})
@@ -151,6 +153,7 @@ function SolveTriangle(
         SAS()
         AAS()
     }
-    throw MathError( 'Solve Triangle Fail!')
+    Should(false, 'Solve Triangle Fail!')
+    throw 'never'
 }
-globalThis.SolveTriangle = SolveTriangle
+globalThis.SolveTriangle = contract(SolveTriangle).sign()

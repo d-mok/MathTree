@@ -10,7 +10,7 @@ describe('contract', () => {
     }
     add = contract(add).seal({
         arg: [owl.positive, owl.negative],
-        args: owl.distinct,
+        args: function distinct(a, b, c) { return owl.distinct([a, b, c]) },
         ret: owl.positive
     })
 

@@ -26,7 +26,7 @@ function ExecInstructions(instructions: Partial<Dict>, source: Dict): Partial<Di
 * ```
 */
 export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
-    if (IsEmptyObject(instructions)) return question
+    if (owl.emptyObject(instructions)) return question
     let Qn = new QuestionHTML(question)
     let products = ExecInstructions(instructions, source)
 

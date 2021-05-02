@@ -1,6 +1,13 @@
 import { Chance } from 'chance'
 
 
+
+type roll<T> = () => T
+
+
+
+
+
 function DiceBlood(message: string): Blood {
     return new Blood('Dice', message)
 }
@@ -16,7 +23,6 @@ declare global {
 
 const chance = new Chance()
 
-type randomFunc<T> = () => T
 type predicate<T> = (item: T) => boolean
 type keyFunc<T> = (item: T) => number | string
 
@@ -44,60 +50,69 @@ export function she(): string {
 }
 
 
-export function brute<T>(func: randomFunc<T>, predicate: predicate<T>, trials = 1000): T {
-    for (let i = 1; i <= trials; i++) {
-        let item = func()
-        if (predicate(item)) return item
-    }
-    throw DiceBlood('No items can satisfy predicate after ' + trials + ' trials!')
-}
 
 
-export function shield<T>(func: randomFunc<T>, predicate: predicate<T>, trials = 1000): randomFunc<T> {
-    return () => brute(func, predicate, trials)
-}
 
-
-export function sample<T>(func: randomFunc<T>, length: number): T[] {
-    return chance.n(func, length)
-}
-
-
-export function unique<T>(func: randomFunc<T>, length: number, key?: keyFunc<T>): T[] {
-    try {
-        if (key) {
-            return chance.unique(
-                func,
-                length,
-                { comparator: (arr: T[], val: T) => arr.some(x => key(x) === key(val)) }
-            )
-        } else {
-            return chance.unique(func, length)
+export function roll<T>(func: roll<T>) {
+    const TRIAL = 1000
+    return {
+        brute(predicate: predicate<T>): T {
+            for (let i = 1; i <= TRIAL; i++) {
+                let item = func()
+                if (predicate(item)) return item
+            }
+            throw DiceBlood('No items can satisfy predicate after ' + TRIAL + ' trials!')
+        },
+        shield(predicate: predicate<T>): roll<T> {
+            return () => this.brute(predicate)
+        },
+        sample(length: number): T[] {
+            return chance.n(func, length)
+        },
+        unique(length: number, key?: keyFunc<T>): T[] {
+            try {
+                if (key) {
+                    return chance.unique(
+                        func,
+                        length,
+                        { comparator: (arr: T[], val: T) => arr.some(x => key(x) === key(val)) }
+                    )
+                } else {
+                    return chance.unique(func, length)
+                }
+            } catch (e) {
+                if (e.message === 'num is likely too large for sample set')
+                    throw DiceBlood('num is likely too large for sample set')
+                throw e
+            }
         }
-    } catch (e) {
-        if (e.message === 'num is likely too large for sample set')
-            throw DiceBlood('num is likely too large for sample set')
-        throw e
     }
 }
 
 
-export function pick<T>(...items: T[]) {
+
+export function array<T>(items: T[]) {
     return {
         one(): T {
             return chance.pickone(items)
         },
         sample(length: number): T[] {
-            return sample(() => this.one(), length)
+            return roll(() => this.one()).sample(length)
         },
         unique(length: number): T[] {
-            return unique(() => this.one(), length)
+            return roll(() => this.one()).unique(length)
         },
+        shuffle(): T[] {
+            return chance.shuffle(items);
+        },
+        balanced(length: number): T[] {
+            let arr = []
+            for (let i = 0; i <= Math.ceil(length / items.length); i++) {
+                arr.push(...items)
+            }
+            arr.length = length
+            return array(arr).shuffle()
+        }
     }
-}
-
-
-export function shuffle<T>(...items: T[]): T[] {
-    return chance.shuffle(items);
 }
 

@@ -1,7 +1,4 @@
-declare type func = (...args: any[]) => any;
-declare type relation<F extends func> = (...args: Parameters<F>) => boolean;
-declare type relationship<F extends func> = relation<F> | relation<F>[];
-declare class Contract<F extends (...args: any[]) => any> {
+declare class Contract<F extends func> {
     private host;
     private Err;
     constructor(host: F);
@@ -9,10 +6,10 @@ declare class Contract<F extends (...args: any[]) => any> {
     private validateArgGrp;
     private validateReturn;
     private validateCatch;
-    sign(arg: rule[], ret?: rule): F;
+    sign(arg?: rule[], ret?: rule): F;
     seal({ arg, args, ret }: {
         arg?: rule[];
-        args?: relationship<F>;
+        args?: argRule<F>;
         ret?: rule;
     }): F;
 }

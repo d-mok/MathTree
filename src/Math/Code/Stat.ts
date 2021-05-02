@@ -2,51 +2,48 @@
 /**
  * @category Stat
  * @return the minimum value. Equivalent to Math.min().
- * ```typescript
+ * ```
  * Min(2,3,4) // 2
  * ```
  */
 function Min(...nums: number[]): number {
-    Should(IsNum(...nums), 'input must be num')
     return Math.min(...nums);
 }
-globalThis.Min = Min
+globalThis.Min = contract(Min).sign([owl.num])
 
 
 /**
  * @category Stat
  * @return the maximum value. Equivalent to Math.max().
- * ```typescript
+ * ```
  * Max(2,3,4) // 4
  * ```
  */
 function Max(...nums: number[]): number {
-    Should(IsNum(...nums), 'input must be num')
     return Math.max(...nums);
 }
-globalThis.Max = Max
+globalThis.Max = contract(Max).sign([owl.num])
 
 
 
 /**
  * @category Stat
  * @return the sorted array of numbers.
- * ```typescript
+ * ```
  * Sort(2,3,1) // [1,2,3]
  * ```
  */
 function Sort(...nums: number[]): number[] {
-    Should(IsNum(...nums), 'input must be num')
     return [...nums].sort((a, b) => a - b)
 }
-globalThis.Sort = Sort
+globalThis.Sort = contract(Sort).sign([owl.num])
 
 
 
 /**
  * @category Stat
  * @return the sorted array of items by giving each item a value.
- * ```typescript
+ * ```
  * SortBy([2,3,1],x=>x) // [1,2,3]
  * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
  * ```
@@ -54,7 +51,7 @@ globalThis.Sort = Sort
 function SortBy<T>(items: T[], valueFunc: (_: T) => number): T[] {
     return [...items].sort((a, b) => valueFunc(a) - valueFunc(b))
 }
-globalThis.SortBy = SortBy
+globalThis.SortBy = contract(SortBy).sign([owl.array, owl.pass])
 
 
 
@@ -77,7 +74,7 @@ globalThis.Sum = contract(Sum).sign([owl.num])
 /**
  * @category Stat
  * @return mean of nums
- * ```typescript
+ * ```
  * Mean(1,2,3) // 2
  * Mean(-1,2,3,4,5) // 2.6
  * ```
@@ -94,7 +91,7 @@ globalThis.Mean = contract(Mean).sign([owl.num])
 /**
  * @category Stat
  * @return median of nums
- * ```typescript
+ * ```
  * Median(1,2,3,4,50) // 3
  * Median(1,2,3,4,5,7) // 3.5
  * ```
@@ -108,7 +105,7 @@ globalThis.Median = contract(Median).sign([owl.num])
 /**
  * @category Stat
  * @return lower quartile of nums
- * ```typescript
+ * ```
  * LowerQ(1,2,3,4,5) // 1.5
  * LowerQ(1,2,3,4,5,7) // 2
  * ```
@@ -120,12 +117,12 @@ function LowerQ(...nums: number[]): number {
     nums.length = m
     return Median(...nums)
 }
-globalThis.LowerQ = LowerQ
+globalThis.LowerQ = contract(LowerQ).sign([owl.num])
 
 /**
  * @category Stat
  * @return lower quartile of nums
- * ```typescript
+ * ```
  * UpperQ(1,2,3,4,5) // 4.5
  * UpperQ(1,2,3,4,5,7) // 5
  * ```
@@ -137,20 +134,19 @@ function UpperQ(...nums: number[]): number {
     nums.length = m
     return Median(...nums)
 }
-globalThis.UpperQ = UpperQ
+globalThis.UpperQ = contract(UpperQ).sign([owl.num])
+
 
 
 /**
  * @category Stat
  * @return count frequency of item in array
- * ```typescript
+ * ```
  * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
  * ```
  */
-function Frequency(item: any) {
-    return function (...items: (typeof item)[]) {
-        return items.filter(x => x === item).length
-    }
+function Frequency<T>(item: T) {
+    return (...items: T[]) => items.filter(x => x === item).length
 }
 globalThis.Frequency = Frequency
 

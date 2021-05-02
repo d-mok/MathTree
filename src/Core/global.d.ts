@@ -2,5 +2,6 @@
 type predicate = (_: any) => boolean
 type rule = predicate | predicate[]
 
-// type relation = (..._: any[]) => boolean
-// type relationship = relation | relation[]
+type func = (...args: any[]) => any
+type argPredicate<F extends func> = (...args: Parameters<F>) => boolean
+type argRule<F extends func> = argPredicate<F> | argPredicate<F>[]

@@ -41,7 +41,7 @@ function isConstrained(cons: Constraint[], point: Point): boolean {
     return cons.every(con => {
         let [a, b, s, c] = con;
         let P = a * x + b * y - c;
-        let [greater, eq] = ParseIneqSign(s)
+        let [greater, eq] = ink.parseIneq(s)
         if (greater && eq) return P >= 0;
         if (greater && !eq) return P > 0;
         if (!greater && eq) return P <= 0;
@@ -69,7 +69,7 @@ function isLooseConstrained(cons: Constraint[], point: Point): boolean {
     return cons.every(con => {
         let [a, b, s, c] = con;
         let P = a * x + b * y - c;
-        let [greater, _] = ParseIneqSign(s)
+        let [greater, _] = ink.parseIneq(s)
         if (greater) return P >= 0;
         if (!greater) return P <= 0;
     });

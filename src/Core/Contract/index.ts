@@ -1,16 +1,9 @@
-type func = (...args: any[]) => any
-type relation<F extends func> = (...args: Parameters<F>) => boolean
-type relationship<F extends func> = relation<F> | relation<F>[]
 
 
-
-
-class ContractErrorFactory {
-    // private host: Function
+class ContractErrorFactory<F extends func> {
     private name: string
     private signature: string
-    constructor(host: func) {
-        // this.host = host;
+    constructor(host: F) {
         this.name = host.name
         this.signature = this.getSignature(host)
     }
@@ -21,7 +14,7 @@ class ContractErrorFactory {
         return fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
     }
 
-    ArgBlood(argIndex: number, argValue: any, predicate: predicate): Blood {
+    ArgBlood(argIndex: number, argValue: unknown, predicate: predicate): Blood {
         let i = String(argIndex)
         let v = JSON.stringify(argValue)
         let p = predicate.name || predicate.toString()
@@ -32,17 +25,17 @@ class ContractErrorFactory {
     }
 
 
-    ArgGrpBlood(argValues: any[], relation: func): Blood {
+    ArgGrpBlood(argValues: Parameters<F>, predicate: argPredicate<F>): Blood {
         let a = argValues.map(_ => JSON.stringify(_)).join(',')
-        let r = relation.name || relation.toString()
+        let p = predicate.name || predicate.toString()
         return new Blood(
             'Contract',
-            '(' + this.name + ') arg(' + this.signature + ') = (' + a + ') violate: ' + r
+            '(' + this.name + ') arg(' + this.signature + ') = (' + a + ') violate: ' + p
         )
     }
 
 
-    ReturnBlood(argValues: any[], returnValue: any, predicate: predicate): Blood {
+    ReturnBlood(argValues: Parameters<F>, returnValue: unknown, predicate: predicate): Blood {
         let v = returnValue
         let a = argValues.map(_ => JSON.stringify(_)).join(',')
         let p = predicate.name || predicate.toString()
@@ -52,7 +45,7 @@ class ContractErrorFactory {
         )
     }
 
-    CatchBlood(argValues: any[], e: Error): Blood {
+    CatchBlood(argValues: Parameters<F>, e: Error): Blood {
         let a = argValues.map(_ => JSON.stringify(_)).join(',')
         return new Blood(
             'Contract',
@@ -62,9 +55,9 @@ class ContractErrorFactory {
 }
 
 
-class Contract<F extends (...args: any[]) => any>{
+class Contract<F extends func>{
     private host: F
-    private Err: ContractErrorFactory
+    private Err: ContractErrorFactory<F>
     constructor(host: F) {
         this.host = host;
         this.Err = new ContractErrorFactory(host)
@@ -77,7 +70,7 @@ class Contract<F extends (...args: any[]) => any>{
             const n = policy.length - 1
             return policy[Math.min(index, n)]
         }
-        const newFunc = (...args: any[]) => {
+        const newFunc = (...args: Parameters<F>) => {
             for (let i = 0; i < args.length; i++) {
                 const arg = args[i]
                 for (let pd of rule(i)) {
@@ -86,56 +79,51 @@ class Contract<F extends (...args: any[]) => any>{
             }
             return f(...args)
         }
-        return newFunc as any as F
+        return newFunc as unknown as F
     }
 
-    private validateArgGrp(f: F, relationship: relationship<F>): F {
-        let r = shieldArray(relationship)
+    private validateArgGrp(f: F, argRule: argRule<F>): F {
+        let r = shieldArray(argRule)
         const newFunc = (...args: Parameters<F>) => {
-            for (let rel of r) {
-                if (!rel(...args)) throw this.Err.ArgGrpBlood(args, rel)
+            for (let pd of r) {
+                if (!pd(...args)) throw this.Err.ArgGrpBlood(args, pd)
             }
             return f(...args)
         }
-        return newFunc as any as F
+        return newFunc as unknown as F
     }
-
-
 
     private validateReturn(f: F, rule: rule): F {
         let r = shieldArray(rule)
-        const newFunc = (...args: any[]) => {
+        const newFunc = (...args: Parameters<F>) => {
             const result = f(...args)
             for (let pd of r) {
                 if (!pd(result)) throw this.Err.ReturnBlood(args, result, pd)
             }
             return result
         }
-        return newFunc as any as F
+        return newFunc as unknown as F
     }
 
 
-
     private validateCatch(f: F): F {
-        const newFunc = (...args: any[]) => {
+        const newFunc = (...args: Parameters<F>) => {
             try {
                 return f(...args)
             } catch (e) {
                 throw this.Err.CatchBlood(args, e)
             }
         }
-        return newFunc as any as F
+        return newFunc as unknown as F
     }
 
-
-
-    sign(arg: rule[], ret?: rule): F {
+    sign(arg?: rule[], ret?: rule): F {
         return this.seal({ arg, ret })
     }
 
     seal({ arg, args, ret }: {
         arg?: rule[],
-        args?: relationship<F>,
+        args?: argRule<F>,
         ret?: rule
     }): F {
         let f = this.host

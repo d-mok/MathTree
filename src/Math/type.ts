@@ -36,7 +36,7 @@ type Fraction = [numerator: number, denominator: number]
  * [1,2,"<=",3] // x+2y <= 3
  * ```
  */
-type Constraint = [xCoeff: number, yCoeff: number, ineq: string, constant: number]
+type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number]
 
 /**
  * ```
@@ -86,4 +86,4 @@ type PolarPoint = [r: number, q: number]
 
 type TrigFunc = 'sin' | 'cos' | 'tan'
 
-type IneqSign = [greater: boolean, equal: boolean]
+type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<'
