@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
-    "build-type": "webpack --config webpack.type.js && webpack --config webpack.type.js",
+    "build-type":"npx tsc --project tsconfig.d.json",
+    "build-type2": "webpack --config webpack.type.js && webpack --config webpack.type.js",
     "jest": "jest ./src/Math",
     "jest_extend": "jest JestExtend",
     "jest_soil": "jest ./src/Soil -debug",
