@@ -58,11 +58,13 @@ export function dp(num: number): number {
 
 
 export function hcf(...integers: number[]): number {
+    if (integers.length === 1) return integers[0]
     return gcd(...integers)
 }
 
 
 export function lcm(...integers: number[]): number {
+    if (integers.length === 1) return integers[0]
     // wrong @type file
     // @ts-ignore
     return math_lcm(...integers)
