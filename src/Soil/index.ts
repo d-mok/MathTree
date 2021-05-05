@@ -12,12 +12,15 @@ type Seed = {
     folder: string
     gene: Gene
     fruit?: Fruit
+
+    content?: any
 }
 
 
 class MathSoilCls {
 
     public grow(seed: Seed): void {
+        if ('content' in seed) seed.gene = seed.content
         let soil = new Soil(seed.gene)
         seed.fruit = soil.nurture()
     }
