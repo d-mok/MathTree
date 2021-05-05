@@ -63,8 +63,8 @@ export class QuestionHTML {
 */
 export function PrintVariable(html: string, symbol: string, value: any): string {
 
-    let print = (prefix: string, value: any) => {
-        html = html.replace(new RegExp(prefix + symbol, 'g'), value);
+    let print = (prefix: string, value: any, suffix: string = "") => {
+        html = html.replace(new RegExp(prefix + symbol + suffix, 'g'), value);
     }
 
     let T = typeof value
@@ -90,12 +90,13 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     // print *(x) as bracket if negative
     if (T === 'number') {
         let v = ant.blur(value)
-        print("\\*\\(" + symbol + "\\)", v >= 0 ? v : '(' + v + ')')
+        if (IsDecimal(v)) v = Round(v, 5)
+        print("\\*\\(", v >= 0 ? v : '(' + v + ')', "\\)")
     }
 
     // print *+x as sign of x
     if (T === 'number') {
-        print("\\*\\+" + symbol, value >= 0 ? '+' : '-')
+        print("\\*\\+", value >= 0 ? '+' : '-')
     }
 
 

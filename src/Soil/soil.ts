@@ -102,7 +102,10 @@ export class Soil {
             return html.replace(/\*\|[^\|]*\|/g, x => {
                 let code = x.substring(2, x.length - 1)
                 let result = eval(code)
-                if (typeof result === 'number') result = ant.blur(result)
+                if (typeof result === 'number') {
+                    result = ant.blur(result)
+                    if (IsDecimal(result)) result = Round(result, 5)
+                }
                 return result
             })
         } catch (e) {
