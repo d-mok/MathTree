@@ -44,6 +44,24 @@ globalThis.Sign = contract(Sign).sign([owl.num])
 
 
 /**
+ * @deprecated
+ * @category Numeracy
+ * @return the sign of the number as 1,0 or -1.
+ * ```
+ * SigFig(123.45) // 5 
+ * ```
+ */
+function SigFig(num: number): number {
+    return ant.sigfig(ant.blur(num))
+}
+globalThis.SigFig = contract(SigFig).sign([owl.num])
+
+
+
+
+
+
+/**
  * @category Numeracy
  * @return the number rounded off to given sigfig.
  * ```

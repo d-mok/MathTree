@@ -1165,6 +1165,15 @@ declare function Abs(num: number): number;
  */
 declare function Sign(num: number): -1 | 0 | 1;
 /**
+ * @deprecated
+ * @category Numeracy
+ * @return the sign of the number as 1,0 or -1.
+ * ```
+ * SigFig(123.45) // 5
+ * ```
+ */
+declare function SigFig(num: number): number;
+/**
  * @category Numeracy
  * @return the number rounded off to given sigfig.
  * ```
