@@ -210,6 +210,7 @@ class PenCls {
     /**
      * Setup of canvas. Deprecated.
      * @ignore
+     * @deprecated
      * @category setting
      */
     setup = {
@@ -220,6 +221,7 @@ class PenCls {
         /**
          * Set the size of the canvas.
          * @category setup
+         * @deprecated
          * @param scale - The scale of the width.
          * @param  ratio - The height-to-width ratio.
          * @returns void
@@ -243,6 +245,7 @@ class PenCls {
         /**
          * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
          * @category setup
+         * @deprecated
          * @param scale - The scale of the width.
          * @returns void
          * ```
@@ -259,6 +262,7 @@ class PenCls {
         /**
          * Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
          * @category setup
+         * @deprecated
          * @param xPPI - The scale per unit x.
          * @param yPPI - The scale per unit y, if not provided, follow x.
          * @returns void
@@ -278,6 +282,7 @@ class PenCls {
         /**
          * Set the coordinate range of the canvas.
          * @category setup
+         * @deprecated
          * @param xRange - The range [xmin,xmax].
          * @param yRange - The range [ymin,ymax].
          * @returns void
@@ -295,6 +300,7 @@ class PenCls {
          * Set the coordinate range of the canvas with given size and center.
          * Equivalent to pen.range([-size, size], [-size, size]) but shifted center.
          * @category setup
+         * @deprecated
          * @param size - The max x and y coordinates in range.
          * @param center - [x,y] coordinates of the center.
          * @returns void
@@ -311,6 +317,7 @@ class PenCls {
         /**
          * Set the coordinate range by specifying in-view points.
          * @category setup
+         * @deprecated
          * @param points - An array of in-view points [x,y].
          * @param border - The percentage to extend the border.
          * @param origin - Must contain the origin [0,0]
@@ -353,6 +360,10 @@ class PenCls {
          * @ignore
          */
         _pen: this as PenCls,
+        /**
+         * @ignore
+         */
+        TEXT_SIZE: 1,
         /**
          * @ignore
          */
@@ -469,6 +480,7 @@ class PenCls {
          * ```
          */
         textSize(size = 1) {
+            this.TEXT_SIZE = size
             const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
             size = Math.round(size * REM_PIXEL * PEN_QUALITY);
             this._pen.ctx.font = this._pen.ctx.font.replace(/\d+px/g, size + 'px');
@@ -1376,6 +1388,31 @@ class PenCls {
     }
 
 
+
+    /**
+     * Write latex
+     * @category text
+     * @param position - The coordinates [x,y] to position the text.
+     * @param latex - The latex to write.
+     * @returns void
+     * ```
+     * pen.writeLatex([1,2],'x+y=1') // write 'x+y=1' at [1,2]
+     * ```
+     */
+    writeLatex(position: Point, latex: string) {
+        const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        let size = Math.round(this.set.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
+        // @ts-ignore
+        const widget = new CanvasLatex.default(latex, { displayMode: true, debugBounds: false, baseSize: size });
+        let [px, py] = this.frame.toPix(position)
+        const bounds = widget.getBounds();
+        this.ctx.save()
+        this.ctx.translate(2 + px - bounds.width / 2 - bounds.x, -2 + py - bounds.y / 2)
+        widget.draw(this.ctx)
+        this.ctx.restore()
+    }
+
+
     /**
      * @category text
      */
@@ -1898,3 +1935,9 @@ function trimCanvas(canvas: HTMLCanvasElement) {
     ctx.putImageData(trimmed, 0, 0);
 }
 
+
+function sleep(ms: number) {
+    const start = new Date().getTime(), expire = start + ms;
+    while (new Date().getTime() < expire) { }
+    return;
+}

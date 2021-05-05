@@ -207,19 +207,6 @@ declare module "Core/index" {
 }
 declare module "Core/Ant/ant.test" { }
 declare module "Core/Contract/contract.test" { }
-declare module "Math/chance" {
-    global {
-        namespace Chance {
-            interface Chance {
-                prime: (opt: {
-                    min: number;
-                    max: number;
-                }) => number;
-            }
-        }
-        var chance: Chance.Chance;
-    }
-}
 declare module "Math/index" {
     import './Code/Assertion.ts';
     import './Code/Combinatorics.ts';
@@ -2640,6 +2627,7 @@ declare class PenCls {
     /**
      * Setup of canvas. Deprecated.
      * @ignore
+     * @deprecated
      * @category setting
      */
     setup: {
@@ -2650,6 +2638,7 @@ declare class PenCls {
         /**
          * Set the size of the canvas.
          * @category setup
+         * @deprecated
          * @param scale - The scale of the width.
          * @param  ratio - The height-to-width ratio.
          * @returns void
@@ -2662,6 +2651,7 @@ declare class PenCls {
         /**
          * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
          * @category setup
+         * @deprecated
          * @param scale - The scale of the width.
          * @returns void
          * ```
@@ -2673,6 +2663,7 @@ declare class PenCls {
         /**
          * Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
          * @category setup
+         * @deprecated
          * @param xPPI - The scale per unit x.
          * @param yPPI - The scale per unit y, if not provided, follow x.
          * @returns void
@@ -2685,6 +2676,7 @@ declare class PenCls {
         /**
          * Set the coordinate range of the canvas.
          * @category setup
+         * @deprecated
          * @param xRange - The range [xmin,xmax].
          * @param yRange - The range [ymin,ymax].
          * @returns void
@@ -2698,6 +2690,7 @@ declare class PenCls {
          * Set the coordinate range of the canvas with given size and center.
          * Equivalent to pen.range([-size, size], [-size, size]) but shifted center.
          * @category setup
+         * @deprecated
          * @param size - The max x and y coordinates in range.
          * @param center - [x,y] coordinates of the center.
          * @returns void
@@ -2710,6 +2703,7 @@ declare class PenCls {
         /**
          * Set the coordinate range by specifying in-view points.
          * @category setup
+         * @deprecated
          * @param points - An array of in-view points [x,y].
          * @param border - The percentage to extend the border.
          * @param origin - Must contain the origin [0,0]
@@ -2729,6 +2723,10 @@ declare class PenCls {
          * @ignore
          */
         _pen: PenCls;
+        /**
+         * @ignore
+         */
+        TEXT_SIZE: number;
         /**
          * @ignore
          */
@@ -3339,6 +3337,17 @@ declare class PenCls {
      */
     writeV(position: Point, text: string): void;
     /**
+     * Write latex
+     * @category text
+     * @param position - The coordinates [x,y] to position the text.
+     * @param latex - The latex to write.
+     * @returns void
+     * ```
+     * pen.writeLatex([1,2],'x+y=1') // write 'x+y=1' at [1,2]
+     * ```
+     */
+    writeLatex(position: Point, latex: string): void;
+    /**
      * @category text
      */
     label: {
@@ -3627,6 +3636,7 @@ declare class PenCls {
 declare var Pen: typeof PenCls;
 declare function cloneCanvas(oldCanvas: HTMLCanvasElement): HTMLCanvasElement;
 declare function trimCanvas(canvas: HTMLCanvasElement): void;
+declare function sleep(ms: number): void;
 declare module "Pen/index" {
     import './Frame.ts';
     import './Pen.ts';
@@ -3827,6 +3837,7 @@ declare module "Soil/soil" {
         private recordError;
         private printError;
         private evalCode;
+        private intrapolateCode;
         private pushDict;
         private isValidated;
         private katex;
@@ -3834,6 +3845,7 @@ declare module "Soil/soil" {
         private runSection;
         private runPreprocess;
         private runOption;
+        private runIntrapolate;
         private runSubstitute;
         private runPostprocess;
         private runShuffle;

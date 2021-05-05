@@ -89,6 +89,29 @@ export class Soil {
         return result
     }
 
+    private intrapolateCode(html: string) {
+        let {
+            a, b, c, d, e, f, g, h, i, j, k, l, m, n,
+            o, p, q, r, s, t, u, v, w, x, y, z,
+            A, B, C, D, E, F, G, H, I, J, K, L, M, N,
+            O, P, Q, R, S, T, U, V, W, X, Y, Z
+        } = this.dict;
+
+        // execute
+        try {
+            return html.replace(/\*{[^\{\}]*}/g, x => eval(x.substring(2, x.length - 1)))
+        } catch (e) {
+            if (e.message === 'Cannot convert a Symbol value to a number') {
+                throw CustomError(
+                    'VariableError',
+                    "A variable is used before a value is given."
+                )
+            } else {
+                throw e
+            }
+        }
+    }
+
     private pushDict() {
         this.counter++
         this.evalCode(this.gene.populate)
@@ -167,6 +190,11 @@ export class Soil {
         throw CustomError('OptionError', "No valid option generated after 100 trials")
     }
 
+    private runIntrapolate(): boolean {
+        this.qn = this.intrapolateCode(this.qn)
+        this.sol = this.intrapolateCode(this.sol)
+        return true
+    }
 
     private runSubstitute(): boolean {
         // pour
@@ -236,6 +264,7 @@ export class Soil {
                 this.runSection();
                 this.runPreprocess();
                 this.runOption()
+                this.runIntrapolate()
                 this.runSubstitute();
                 this.runPostprocess();
                 if (!this.runShuffle()) continue

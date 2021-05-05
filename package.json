@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "publish":"npm run build-dev && npm run build && npm run build-type && npm run typedoc && npm run jest",
     "build": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
-    "build-type":"npx tsc --project tsconfig.d.json",
+    "build-type": "npx tsc --project tsconfig.d.json",
     "build-type2": "webpack --config webpack.type.js && webpack --config webpack.type.js",
     "jest": "jest ./src/Math",
     "jest_extend": "jest JestExtend",
