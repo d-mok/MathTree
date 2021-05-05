@@ -20,6 +20,14 @@ test('IsDecimal', () => {
 });
 
 
+
+test('IsTerminating', () => {
+    const T = [1 / 2, 1 / 4, 1 / 8, 1 / 16, 12.3456789, -123.456789, 0];
+    const F = [1 / 3, 3 / 13, 2 ** 0.5];
+    testAssertion(IsTerminating, T, F);
+});
+
+
 test('IsRational', () => {
     const T = [0.5, 1.12, -55.6, 0, 123 / 456, -1 / 999, 123456 / 321];
     const F = [2 ** 0.5, 3 ** 0.5, Math.sin(0.1)];

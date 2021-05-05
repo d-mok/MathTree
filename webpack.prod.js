@@ -20,6 +20,6 @@ module.exports = {
         path: path.resolve(__dirname, 'dist/edge'),
     },
     optimization: {
-        minimize: false
+        minimize: true
     },
 };

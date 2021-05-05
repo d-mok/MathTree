@@ -46,6 +46,21 @@ globalThis.IsDecimal = IsDecimal
 
 /**
  * @category Assertion
+ * @return check is a terminating decimal (or integer)
+ * ```
+ * IsTerminating(1/4) // true
+ * IsTerminating(5) // false
+ * ```
+ */
+function IsTerminating(...items: any[]): boolean {
+    return items.every(owl.terminating);
+}
+globalThis.IsTerminating = IsTerminating
+
+
+
+/**
+ * @category Assertion
  * @return check is a rational number with denominator <= 1000.
  * ```
  * IsRational(0.5) // true

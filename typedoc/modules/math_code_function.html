@@ -2708,9 +2708,6 @@ img {
 			<a href="math_code_function.html#degree" class="tsd-kind-icon">Degree</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_function.html#power" class="tsd-kind-icon">Power</a>
-		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_function.html#radian" class="tsd-kind-icon">Radian</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2749,7 +2746,6 @@ img {
 						<h3>Function</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_function.html#degree" class="tsd-kind-icon">Degree</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_function.html#power" class="tsd-kind-icon">Power</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_function.html#radian" class="tsd-kind-icon">Radian</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_function.html#sqrt" class="tsd-kind-icon">Sqrt</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_function.html#arccos" class="tsd-kind-icon">arccos</a></li>
@@ -2784,35 +2780,9 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>the degree of the radian</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">Degree</span><span style="color: #000000">(</span><span style="color: #267F99">Math</span><span style="color: #000000">.PI) </span><span style="color: #008000">// 180</span>
+						<pre><code><span style="color: #795E26">Degree</span><span style="color: #000000">(</span><span style="color: #267F99">Math</span><span style="color: #000000">.PI) </span><span style="color: #008000">// 180</span>
 <span style="color: #795E26">Degree</span><span style="color: #000000">(</span><span style="color: #267F99">Math</span><span style="color: #000000">.PI/</span><span style="color: #098658">2</span><span style="color: #000000">) </span><span style="color: #008000">// 90</span>
 <span style="color: #795E26">Degree</span><span style="color: #000000">(</span><span style="color: #267F99">Math</span><span style="color: #000000">.PI/</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// 30</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="power" class="tsd-anchor"></a>
-				<h3>Power</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Power<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>a: <span class="tsd-signature-type">number</span></h5>
-							</li>
-							<li>
-								<h5>b: <span class="tsd-signature-type">number</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						<p>a**b, a to the power of b.</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">Power</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// 8</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2835,7 +2805,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>the radian of the degree</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">Radian</span><span style="color: #000000">(</span><span style="color: #098658">180</span><span style="color: #000000">) </span><span style="color: #008000">// pi</span>
+						<pre><code><span style="color: #795E26">Radian</span><span style="color: #000000">(</span><span style="color: #098658">180</span><span style="color: #000000">) </span><span style="color: #008000">// pi</span>
 <span style="color: #795E26">Radian</span><span style="color: #000000">(</span><span style="color: #098658">90</span><span style="color: #000000">) </span><span style="color: #008000">// pi/2</span>
 <span style="color: #795E26">Radian</span><span style="color: #000000">(</span><span style="color: #098658">30</span><span style="color: #000000">) </span><span style="color: #008000">// PI/6</span>
 </code></pre>
@@ -2860,7 +2830,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>square root of x</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">Sqrt</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// 2</span>
+						<pre><code><span style="color: #795E26">Sqrt</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// 2</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2883,7 +2853,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>arccos(x) between 0 and 180.</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">arccos</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// 60</span>
+						<pre><code><span style="color: #795E26">arccos</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// 60</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2906,7 +2876,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>arcsin(x) between -90 and 90.</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">arcsin</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// 30</span>
+						<pre><code><span style="color: #795E26">arcsin</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// 30</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2929,7 +2899,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>arctan(x) between -90 and 90.</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">arctan</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">) </span><span style="color: #008000">// 45</span>
+						<pre><code><span style="color: #795E26">arctan</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">) </span><span style="color: #008000">// 45</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2952,7 +2922,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>cos(x).</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">cos</span><span style="color: #000000">(</span><span style="color: #098658">60</span><span style="color: #000000">) </span><span style="color: #008000">// 0.5</span>
+						<pre><code><span style="color: #795E26">cos</span><span style="color: #000000">(</span><span style="color: #098658">60</span><span style="color: #000000">) </span><span style="color: #008000">// 0.5</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2978,7 +2948,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>log(b,N)</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">8</span><span style="color: #000000">) </span><span style="color: #008000">// 3</span>
+						<pre><code><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">8</span><span style="color: #000000">) </span><span style="color: #008000">// 3</span>
 </code></pre>
 					</li>
 				</ul>
@@ -3001,7 +2971,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>sin(x).</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">sin</span><span style="color: #000000">(</span><span style="color: #098658">30</span><span style="color: #000000">) </span><span style="color: #008000">// 0.5</span>
+						<pre><code><span style="color: #795E26">sin</span><span style="color: #000000">(</span><span style="color: #098658">30</span><span style="color: #000000">) </span><span style="color: #008000">// 0.5</span>
 </code></pre>
 					</li>
 				</ul>
@@ -3024,7 +2994,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>tan(x).</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">tan</span><span style="color: #000000">(</span><span style="color: #098658">45</span><span style="color: #000000">) </span><span style="color: #008000">// 1</span>
+						<pre><code><span style="color: #795E26">tan</span><span style="color: #000000">(</span><span style="color: #098658">45</span><span style="color: #000000">) </span><span style="color: #008000">// 1</span>
 </code></pre>
 					</li>
 				</ul>

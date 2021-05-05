@@ -9,6 +9,8 @@ test('AreDistinct', () => {
     expect(AreDistinct(1, 1, 2)).toBe(false);
     expect(AreDistinct(0, -0)).toBe(false);
     expect(AreDistinct(55, 98, 55, 34)).toBe(false);
+
+    expect(AreDistinct(0.1 + 0.2, 0.3)).toBe(false);
 });
 
 
@@ -21,6 +23,8 @@ test('AreAbsDistinct', () => {
     expect(AreAbsDistinct(1, 1, 2)).toBe(false);
     expect(AreAbsDistinct(1, -1)).toBe(false);
     expect(AreAbsDistinct(55, 98, -55, 34)).toBe(false);
+
+    expect(AreAbsDistinct(0.1 + 0.2, -0.3)).toBe(false);
 });
 
 

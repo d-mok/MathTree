@@ -2705,18 +2705,6 @@ img {
 <nav class="tsd-navigation secondary">
 	<ul>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_fraction.html#frac" class="tsd-kind-icon">Frac</a>
-		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_fraction.html#fracadd" class="tsd-kind-icon">Frac<wbr>Add</a>
-		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_fraction.html#fracmultiply" class="tsd-kind-icon">Frac<wbr>Multiply</a>
-		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_fraction.html#fracsign" class="tsd-kind-icon">Frac<wbr>Sign</a>
-		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_fraction.html#tofrac" class="tsd-kind-icon">To<wbr>Frac</a>
 		</li>
 	</ul>
@@ -2730,10 +2718,6 @@ img {
 					<section class="tsd-index-section">
 						<h3>Fraction</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_fraction.html#frac" class="tsd-kind-icon">Frac</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_fraction.html#fracadd" class="tsd-kind-icon">Frac<wbr>Add</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_fraction.html#fracmultiply" class="tsd-kind-icon">Frac<wbr>Multiply</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_fraction.html#fracsign" class="tsd-kind-icon">Frac<wbr>Sign</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_fraction.html#tofrac" class="tsd-kind-icon">To<wbr>Frac</a></li>
 						</ul>
 					</section>
@@ -2742,121 +2726,6 @@ img {
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Fraction</h2>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="frac" class="tsd-anchor"></a>
-				<h3>Frac</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Frac<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, q<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>p: <span class="tsd-signature-type">number</span></h5>
-							</li>
-							<li>
-								<h5>q: <span class="tsd-signature-type">number</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></h4>
-						<p>simplified fraction p/q</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">Frac</span><span style="color: #000000">(</span><span style="color: #098658">6</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// [3,2]</span>
-<span style="color: #795E26">Frac</span><span style="color: #000000">(-</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">) </span><span style="color: #008000">// [-2,1]</span>
-<span style="color: #795E26">Frac</span><span style="color: #000000">(</span><span style="color: #098658">18</span><span style="color: #000000">,-</span><span style="color: #098658">12</span><span style="color: #000000">) </span><span style="color: #008000">// [-3,2]</span>
-<span style="color: #795E26">Frac</span><span style="color: #000000">(-</span><span style="color: #098658">10</span><span style="color: #000000">,-</span><span style="color: #098658">20</span><span style="color: #000000">) </span><span style="color: #008000">// [1,2]</span>
-<span style="color: #795E26">Frac</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">) </span><span style="color: #008000">// [0,2]</span>
-<span style="color: #795E26">Frac</span><span style="color: #000000">(</span><span style="color: #098658">1.5</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">) </span><span style="color: #008000">// [-1.5,2]</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="fracadd" class="tsd-anchor"></a>
-				<h3>Frac<wbr>Add</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Frac<wbr>Add<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>fractions<span class="tsd-signature-symbol">: </span><a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>fractions: <a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></h4>
-						<p>add fractions</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">FracAdd</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [5,6]</span>
-<span style="color: #795E26">FracAdd</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[-</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [1,6]</span>
-<span style="color: #795E26">FracAdd</span><span style="color: #000000">([</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],[</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">]) </span><span style="color: #008000">// [133,60]</span>
-<span style="color: #795E26">FracAdd</span><span style="color: #000000">([</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [2,1]</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="fracmultiply" class="tsd-anchor"></a>
-				<h3>Frac<wbr>Multiply</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Frac<wbr>Multiply<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>fractions<span class="tsd-signature-symbol">: </span><a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>fractions: <a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></h4>
-						<p>add fractions</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">FracMultiply</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [1,6]</span>
-<span style="color: #795E26">FracMultiply</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[-</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [-1,6]</span>
-<span style="color: #795E26">FracMultiply</span><span style="color: #000000">([</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],[</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">]) </span><span style="color: #008000">// [2,5]</span>
-<span style="color: #795E26">FracMultiply</span><span style="color: #000000">([</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [8,9]</span>
-<span style="color: #795E26">FracMultiply</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [0,9]</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="fracsign" class="tsd-anchor"></a>
-				<h3>Frac<wbr>Sign</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Frac<wbr>Sign<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, q<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>p: <span class="tsd-signature-type">number</span></h5>
-							</li>
-							<li>
-								<h5>q: <span class="tsd-signature-type">number</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></h4>
-						<p>normalize the sign of a fraction p/q</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">FracSign</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [2,3]</span>
-<span style="color: #795E26">FracSign</span><span style="color: #000000">(-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [-2,3]</span>
-<span style="color: #795E26">FracSign</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,-</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [-2,3]</span>
-<span style="color: #795E26">FracSign</span><span style="color: #000000">(-</span><span style="color: #098658">2</span><span style="color: #000000">,-</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [2,3]</span>
-<span style="color: #795E26">FracSign</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">) </span><span style="color: #008000">// [0,2]</span>
-<span style="color: #795E26">FracSign</span><span style="color: #000000">(-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">) </span><span style="color: #008000">// [-2,0]</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 				<a name="tofrac" class="tsd-anchor"></a>
 				<h3>To<wbr>Frac</h3>
@@ -2878,7 +2747,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="math_type.html#fraction" class="tsd-signature-type" data-tsd-kind="Type alias">Fraction</a></h4>
 						<p>convert num to fraction</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">ToFrac</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// [1,2]</span>
+						<pre><code><span style="color: #795E26">ToFrac</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// [1,2]</span>
 <span style="color: #795E26">ToFrac</span><span style="color: #000000">(-</span><span style="color: #098658">456</span><span style="color: #000000">/</span><span style="color: #098658">123</span><span style="color: #000000">) </span><span style="color: #008000">// [-152,41]</span>
 </code></pre>
 					</li>

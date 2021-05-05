@@ -2782,7 +2782,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
 						<p>an array of the first n terms in an arithmetic sequence.</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">ASequence</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// [2,5,8,11,14]</span>
+						<pre><code><span style="color: #795E26">ASequence</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// [2,5,8,11,14]</span>
 <span style="color: #795E26">ASequence</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [5,3,1]</span>
 </code></pre>
 					</li>
@@ -2812,7 +2812,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">ASsum</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">) </span><span style="color: #008000">// 155</span>
+						<pre><code><span style="color: #795E26">ASsum</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">) </span><span style="color: #008000">// 155</span>
 <span style="color: #795E26">ASsum</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// 0</span>
 </code></pre>
 					</li>
@@ -2842,7 +2842,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>Tn in an arithmetic sequence: a+(n-1)d</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">ASterm</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">) </span><span style="color: #008000">// 29</span>
+						<pre><code><span style="color: #795E26">ASterm</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">) </span><span style="color: #008000">// 29</span>
 <span style="color: #795E26">ASterm</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// -5</span>
 </code></pre>
 					</li>
@@ -2872,7 +2872,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
 						<p>an array of the first n terms in a geometric sequence.</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">GSequence</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// return [2,6,18,54,162]</span>
+						<pre><code><span style="color: #795E26">GSequence</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// return [2,6,18,54,162]</span>
 <span style="color: #795E26">GSequence</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// return [5,-10,20]</span>
 </code></pre>
 					</li>
@@ -2897,17 +2897,14 @@ img {
 								<h5>r: <span class="tsd-signature-type">number</span></h5>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> n: <span class="tsd-signature-type">number</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>number of terms. if omitted, sum to infinity.</p>
-								</div>
+								<h5>n: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = -1</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>Sn in a geometric sequence: a*(r*n-1)/(r-1)</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">GSsum</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// 80</span>
+						<pre><code><span style="color: #795E26">GSsum</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// 80</span>
 <span style="color: #795E26">GSsum</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// 15</span>
-<span style="color: #795E26">GSsum</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// 6</span>
+<span style="color: #795E26">GSsum</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// 6 , sum to inf if omit n</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2936,7 +2933,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>Tn in a geometric sequence: ar**(n-1)</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">GSterm</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// 54</span>
+						<pre><code><span style="color: #795E26">GSterm</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// 54</span>
 <span style="color: #795E26">GSterm</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// -160</span>
 </code></pre>
 					</li>
@@ -2963,7 +2960,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
 						<p>an array of integers from start to end inclusive.</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">ListIntegers</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// [2,3,4,5,6]</span>
+						<pre><code><span style="color: #795E26">ListIntegers</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// [2,3,4,5,6]</span>
 <span style="color: #795E26">ListIntegers</span><span style="color: #000000">(-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">) </span><span style="color: #008000">// [-2,-1,0,1]</span>
 </code></pre>
 					</li>
@@ -2998,8 +2995,8 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						<p>the nth term in a lucas sequence, a_n = p<em>a_{n-1} + q</em>a_{n-2}</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">LucasSequence</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// </span>
+						<p>the nth term in a lucas sequence, a_i = p<em>a_{i-1} + q</em>a_{i-2}</p>
+						<pre><code><span style="color: #795E26">LucasSequence</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// </span>
 </code></pre>
 					</li>
 				</ul>
@@ -3030,8 +3027,8 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						<p>the nth term in a quadratic sequence, 1st term = a, P_n+1=P_n + pn+q</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">QuadraticSequence</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// </span>
+						<p>the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q</p>
+						<pre><code><span style="color: #795E26">QuadraticSequence</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// </span>
 </code></pre>
 					</li>
 				</ul>

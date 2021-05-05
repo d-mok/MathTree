@@ -10,6 +10,8 @@ export const int = (_: any) => num(_) && Number.isInteger(ant.correct(_))
 
 export const dec = (_: any) => num(_) && !int(_)
 
+export const terminating = (_: any) => num(_) && ant.sigfig(_) < 10
+
 export const rational = (_: any) => num(_) && ant.fracable(_)
 
 export const irrational = (_: any) => num(_) && !ant.fracable(_)
@@ -145,15 +147,17 @@ export const trig = (_: any) => ['sin', 'cos', 'tan'].includes(_)
 
 export const roman = (_: any) => ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'].includes(_)
 
+
+
+
+
+
 // functor
-
-
 
 function build<F extends (...args: any[]) => any>(funcName: string, func: F): F {
     const holder = { [funcName](...args: any[]) { return func(...args) } }
     return holder[funcName] as F
 }
-
 
 
 export function and(pds: predicate[], name?: string): predicate {

@@ -9,6 +9,7 @@
  * ```
  */
 function AreDistinct(...nums: number[]): boolean {
+    nums = nums.map(ant.blur)
     return (new Set(nums)).size === nums.length;
 }
 globalThis.AreDistinct = contract(AreDistinct).sign([owl.num])
