@@ -1,5 +1,5 @@
 .katex {
-    font-size: 1em;
+    font-size: 1em  !important;
     font-family: "Times New Roman", Times, serif  !important;
 }
 
