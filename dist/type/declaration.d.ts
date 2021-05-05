@@ -42,6 +42,7 @@ declare module "Core/Owl/index" {
     export const whole: (_: any) => boolean;
     export const int: (_: any) => boolean;
     export const dec: (_: any) => boolean;
+    export const terminating: (_: any) => boolean;
     export const rational: (_: any) => boolean;
     export const irrational: (_: any) => boolean;
     export const odd: (_: any) => boolean;
@@ -184,7 +185,7 @@ declare module "Core/List/index" {
     type alias<T> = ListCls<T>;
     global {
         type List<T> = alias<T>;
-        var List: <T>(arr: T[], keyFunc?: (_: T) => any) => ListCls<T>;
+        var newList: <T>(arr: T[], keyFunc?: (_: T) => any) => ListCls<T>;
     }
     export {};
 }
@@ -539,6 +540,15 @@ declare function IsInteger(...items: any[]): boolean;
  * ```
  */
 declare function IsDecimal(...items: any[]): boolean;
+/**
+ * @category Assertion
+ * @return check is a terminating decimal (or integer)
+ * ```
+ * IsTerminating(1/4) // true
+ * IsTerminating(5) // false
+ * ```
+ */
+declare function IsTerminating(...items: any[]): boolean;
 /**
  * @category Assertion
  * @return check is a rational number with denominator <= 1000.
@@ -3806,6 +3816,7 @@ declare module "Soil/soil" {
         constructor(gene: Gene);
         private reset;
         private recordError;
+        private printError;
         private evalCode;
         private pushDict;
         private isValidated;
