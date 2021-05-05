@@ -99,7 +99,12 @@ export class Soil {
 
         // execute
         try {
-            return html.replace(/\*{[^\{\}]*}/g, x => eval(x.substring(2, x.length - 1)))
+            return html.replace(/\*\|[^\|]*\|/g, x => {
+                let code = x.substring(2, x.length - 1)
+                let result = eval(code)
+                if (typeof result === 'number') result = ant.blur(result)
+                return result
+            })
         } catch (e) {
             if (e.message === 'Cannot convert a Symbol value to a number') {
                 throw CustomError(

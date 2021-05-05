@@ -87,6 +87,19 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
         }
     }
 
+    // print *(x) as bracket if negative
+    if (T === 'number') {
+        let v = ant.blur(value)
+        print("\\*\\(" + symbol + "\\)", v >= 0 ? v : '(' + v + ')')
+    }
+
+    // print *+x as sign of x
+    if (T === 'number') {
+        print("\\*\\+" + symbol, value >= 0 ? '+' : '-')
+    }
+
+
+
     // print *x as normal
     if (T === 'number') {
         value = ant.blur(value)
