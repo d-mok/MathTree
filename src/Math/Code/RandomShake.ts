@@ -141,7 +141,8 @@ function RndShakeFrac(anchor: Fraction): Fraction[] {
             (): Fraction => {
                 const h = RndShakeN(p)[0]
                 const k = RndShakeN(q)[0]
-                return RndPick([h, k], [h, k], [p, k], [h, q])
+                return [h, k]
+                // return RndPick([h, k], [h, k], [p, k], [h, q])
             })
         .shield(
             f => {
