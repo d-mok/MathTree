@@ -85,6 +85,20 @@ export function roll<T>(func: roll<T>) {
                     throw DiceBlood('num is likely too large for sample set')
                 throw e
             }
+        },
+        distinct(length: number, comparer: (a: T, b: T) => boolean) {
+            try {
+                return chance.unique(
+                    func,
+                    length,
+                    { comparator: (arr: T[], val: T) => arr.some(x => comparer(x, val)) }
+                )
+
+            } catch (e) {
+                if (e.message === 'num is likely too large for sample set')
+                    throw DiceBlood('num is likely too large for sample set')
+                throw e
+            }
         }
     }
 }

@@ -123,6 +123,7 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
 
 /**
  * @category RandomShake
+ * @deprecated
  * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```
  * RndShakeFrac([5,6]) 
@@ -159,6 +160,7 @@ globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction])
 
 /**
  * @category RandomShake
+ * @deprecated
  * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```
  * RndShakeDfrac('\\dfrac{5}{6}') 
@@ -178,7 +180,6 @@ globalThis.RndShakeDfrac = contract(RndShakeDfrac).sign([owl.dfrac])
 
 /**
  * @category RandomShake
- * @param anchor - must be a string of ineq sign
  * @return an array of 3 ineq signs, balanced in number.
  * ```
  * RndShakeIneq('\\ge') 
@@ -195,7 +196,6 @@ globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq])
 
 /**
  * @category RandomShake
- * @param anchor - must be a point
  * @return an array of 3 point
  * ```
  * RndShakePoint([3,4]) 
@@ -209,7 +209,7 @@ function RndShakePoint(anchor: Point): Point[] {
         const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0]
         return [h, k]
     }
-    return dice.roll(func).unique(3)
+    return dice.roll(func).distinct(3, (a, b) => a[0] === b[0] || a[1] === b[1])
 }
 globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point])
 
