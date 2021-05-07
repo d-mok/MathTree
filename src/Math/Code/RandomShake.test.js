@@ -100,6 +100,7 @@ test('RndShakeQ', () => {
             expect(arr).toBeFlatIs(x => x < 0);
         }
         expect(arr).toAllHaveLength(3);
+        expect(arr).toBeFlatIs(owl.rational);
         if (isProb)
             expect(arr).toBeFlatIs(IsProbability);
     }

@@ -13,14 +13,14 @@ type Seed = {
     gene: Gene
     fruit?: Fruit
 
-    content?: any
+    content?: any // for backward compatible
 }
 
 
 class MathSoilCls {
 
     public grow(seed: Seed): void {
-        if ('content' in seed) seed.gene = seed.content
+        if ('content' in seed) seed.gene = seed.content // for backward compatible
         let soil = new Soil(seed.gene)
         seed.fruit = soil.nurture()
     }

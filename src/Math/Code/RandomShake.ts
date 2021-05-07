@@ -117,7 +117,7 @@ function RndShakeQ(anchor: number): number[] {
     let f: Fraction = ToFrac(anchor)
     return RndShakeFrac(f).map((x: Fraction): number => x[0] / x[1])
 }
-globalThis.RndShakeQ = contract(RndShakeR).sign([owl.rational])
+globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
 
 
 

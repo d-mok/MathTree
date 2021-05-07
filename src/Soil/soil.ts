@@ -97,10 +97,23 @@ export class Soil {
             O, P, Q, R, S, T, U, V, W, X, Y, Z
         } = this.dict;
 
+        const htmlDecode = (str: string) =>
+            str.replace(
+                /&amp;|&lt;|&gt;|&#39;|&quot;/g,
+                (tag: string) => ({
+                    '&amp;': '&',
+                    '&lt;': '<',
+                    '&gt;': '>',
+                    '&#39;': "'",
+                    '&quot;': '"'
+                }[tag] || tag)
+            );
+
         // execute
         try {
             return html.replace(/\*\|[^\|]*\|/g, x => {
                 let code = x.substring(2, x.length - 1)
+                code = htmlDecode(code)
                 let result = eval(code)
                 if (typeof result === 'number') {
                     result = ant.blur(result)
