@@ -28,6 +28,7 @@ declare module "Core/Dice/index" {
         shield(predicate: predicate<T>): roll<T>;
         sample(length: number): T[];
         unique(length: number, key?: keyFunc<T> | undefined): T[];
+        distinct(length: number, comparer: (a: T, b: T) => boolean): T[];
     };
     export function array<T>(items: T[]): {
         one(): T;
@@ -1417,6 +1418,7 @@ declare function RndConvexPolygon(n: number, center: Point, radius: number, sepa
 declare function RndData(min: number, max: number, n: number): number[];
 /**
  * @category RandomShake
+ * @deprecated
  * @return an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
  * ```
  * RndShake(10)
@@ -1455,6 +1457,7 @@ declare function RndShakeR(anchor: number): number[];
 declare function RndShakeQ(anchor: number): number[];
 /**
  * @category RandomShake
+ * @deprecated
  * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```
  * RndShakeFrac([5,6])
@@ -1466,6 +1469,7 @@ declare function RndShakeQ(anchor: number): number[];
 declare function RndShakeFrac(anchor: Fraction): Fraction[];
 /**
  * @category RandomShake
+ * @deprecated
  * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```
  * RndShakeDfrac('\\dfrac{5}{6}')
@@ -1477,7 +1481,6 @@ declare function RndShakeFrac(anchor: Fraction): Fraction[];
 declare function RndShakeDfrac(anchor: string): string[];
 /**
  * @category RandomShake
- * @param anchor - must be a string of ineq sign
  * @return an array of 3 ineq signs, balanced in number.
  * ```
  * RndShakeIneq('\\ge')
@@ -1487,7 +1490,6 @@ declare function RndShakeDfrac(anchor: string): string[];
 declare function RndShakeIneq(anchor: Ineq): string[];
 /**
  * @category RandomShake
- * @param anchor - must be a point
  * @return an array of 3 point
  * ```
  * RndShakePoint([3,4])

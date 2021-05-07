@@ -2,6 +2,7 @@
 
 /**
  * @category RandomShake
+ * @deprecated
  * @return an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
  * ```
  * RndShake(10) 
@@ -98,7 +99,6 @@ function RndShakeR(anchor: number): number[] {
                 (x !== m)
         )
     return dice.roll(func).unique(3).map(x => Number(x + "e" + exp))
-
 }
 globalThis.RndShakeR = contract(RndShakeR).sign([owl.nonZero])
 
