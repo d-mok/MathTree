@@ -114,6 +114,7 @@ globalThis.RndShakeR = contract(RndShakeR).sign([owl.nonZero])
  * ```
  */
 function RndShakeQ(anchor: number): number[] {
+    if (owl.int(anchor)) return RndShakeN(anchor)
     let f: Fraction = ToFrac(anchor)
     return RndShakeFrac(f).map((x: Fraction): number => x[0] / x[1])
 }
@@ -141,8 +142,10 @@ function RndShakeFrac(anchor: Fraction): Fraction[] {
             (): Fraction => {
                 const h = RndShakeN(p)[0]
                 const k = RndShakeN(q)[0]
-                return [h, k]
-                // return RndPick([h, k], [h, k], [p, k], [h, q])
+                let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h
+                let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k
+                if (a === p && b === q) return [h, k]
+                return [a, b]
             })
         .shield(
             f => {
