@@ -99,9 +99,14 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
         print("\\*\\+", value >= 0 ? '+' : '-')
     }
 
-
-
     // print *x as normal
+    print("\\*", ParseForPrint(value))
+    return html
+}
+
+
+export function ParseForPrint(value: any): any {
+    let T = typeof value
     if (T === 'number') {
         value = ant.blur(value)
         if (IsDecimal(value)) value = Round(value, 5)
@@ -112,7 +117,6 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     if (owl.point(value)) {
         value = Coord(value)
     }
-
-    print("\\*", value)
-    return html
+    return value
 }
+

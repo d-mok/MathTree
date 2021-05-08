@@ -2,8 +2,51 @@ import { ExecSection } from './tool/section'
 import { dress } from './tool/dress'
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
+import { ParseForPrint } from './tool/html'
 import { Dict, Config } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
+
+// util functions
+
+function evaluate(code: string): any {
+    try {
+        return eval(code)
+    } catch (e) {
+        if (e.message === 'Cannot convert a Symbol value to a number') {
+            throw CustomError(
+                'VariableError',
+                "A variable is used before a value is given."
+            )
+        } else {
+            throw e
+        }
+    }
+}
+
+function htmlDecode(str: string) {
+    return str.replace(
+        /&amp;|&lt;|&gt;|&#39;|&quot;/g,
+        (tag: string) => ({
+            '&amp;': '&',
+            '&lt;': '<',
+            '&gt;': '>',
+            '&#39;': "'",
+            '&quot;': '"'
+        }[tag] || tag)
+    );
+}
+
+
+function katex(html: string): string {
+    let ele = document.createElement('div')
+    ele.innerHTML = html
+    renderMathInElement(ele)
+    let T = ele.innerHTML
+    ele.remove()
+    return T
+}
+
+
 
 export class Soil {
     // get from SeedBank API
@@ -57,19 +100,7 @@ export class Soil {
         let solution: string = this.sol
 
         // execute
-        let result: any
-        try {
-            result = eval(code)
-        } catch (e) {
-            if (e.message === 'Cannot convert a Symbol value to a number') {
-                throw CustomError(
-                    'VariableError',
-                    "A variable is used before a value is given."
-                )
-            } else {
-                throw e
-            }
-        }
+        let result = evaluate(code)
 
         //retrieve
         this.dict.update({
@@ -97,51 +128,20 @@ export class Soil {
             O, P, Q, R, S, T, U, V, W, X, Y, Z
         } = this.dict;
 
-        const htmlDecode = (str: string) =>
-            str.replace(
-                /&amp;|&lt;|&gt;|&#39;|&quot;/g,
-                (tag: string) => ({
-                    '&amp;': '&',
-                    '&lt;': '<',
-                    '&gt;': '>',
-                    '&#39;': "'",
-                    '&quot;': '"'
-                }[tag] || tag)
-            );
-
         // execute
-        try {
-            html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
-                let code = x.substring(3, x.length - 2)
-                code = htmlDecode(code)
-                let result = eval(code)
-                if (typeof result === 'number') {
-                    result = ant.blur(result)
-                    if (IsDecimal(result)) result = Round(result, 5)
-                }
-                return result
-            })
-            html = html.replace(/\*\{[^\{\}]*\}/g, x => {
-                let code = x.substring(2, x.length - 1)
-                code = htmlDecode(code)
-                let result = eval(code)
-                if (typeof result === 'number') {
-                    result = ant.blur(result)
-                    if (IsDecimal(result)) result = Round(result, 5)
-                }
-                return result
-            })
-            return html
-        } catch (e) {
-            if (e.message === 'Cannot convert a Symbol value to a number') {
-                throw CustomError(
-                    'VariableError',
-                    "A variable is used before a value is given."
-                )
-            } else {
-                throw e
-            }
-        }
+        html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
+            let code = x.substring(3, x.length - 2)
+            code = htmlDecode(code)
+            let result = evaluate(code)
+            return ParseForPrint(result)
+        })
+        html = html.replace(/\*\{[^\{\}]*\}/g, x => {
+            let code = x.substring(2, x.length - 1)
+            code = htmlDecode(code)
+            let result = evaluate(code)
+            return ParseForPrint(result)
+        })
+        return html
     }
 
     private pushDict() {
@@ -154,16 +154,6 @@ export class Soil {
         if (v === "") return true
         v = v.replace('\n', ' ') //is it a bug? only once?
         return this.evalCode(v) === true
-    }
-
-
-    private katex(html: string): string {
-        let ele = document.createElement('div')
-        ele.innerHTML = html
-        renderMathInElement(ele)
-        let T = ele.innerHTML
-        ele.remove()
-        return T
     }
 
 
@@ -263,8 +253,8 @@ export class Soil {
     }
 
     private runKatex(): boolean {
-        this.qn = this.katex(this.qn)
-        this.sol = this.katex(this.sol)
+        this.qn = katex(this.qn)
+        this.sol = katex(this.sol)
         return true
     }
 
