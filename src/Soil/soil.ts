@@ -131,16 +131,6 @@ export class Soil {
                 }
                 return result
             })
-            html = html.replace(/\*\|[^\|]*\|/g, x => {
-                let code = x.substring(2, x.length - 1)
-                code = htmlDecode(code)
-                let result = eval(code)
-                if (typeof result === 'number') {
-                    result = ant.blur(result)
-                    if (IsDecimal(result)) result = Round(result, 5)
-                }
-                return result
-            })
             return html
         } catch (e) {
             if (e.message === 'Cannot convert a Symbol value to a number') {
