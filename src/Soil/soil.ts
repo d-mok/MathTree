@@ -42,6 +42,7 @@ export class Soil {
     private config: Config = new Config()
     // state
     private counter: number = 0
+    private time: number = Date.now()
     private errorPile: Error[] = []
 
     constructor(
@@ -55,6 +56,13 @@ export class Soil {
         this.sol = this.gene.sol
         this.dict = new Dict()
         this.config = new Config()
+    }
+
+    private checkTime() {
+        let allow = 5
+        if (Date.now() - this.time > allow * 1000) {
+            throw CustomError('TimeoutError', 'taking too long to run: >' + allow + 's')
+        }
     }
 
     private recordError(e: Error) {
@@ -168,6 +176,7 @@ export class Soil {
 
     private runPopulate(): boolean {
         while (this.counter <= 1000) {
+            this.checkTime()
             try {
                 this.pushDict()
                 if (!this.dict.checked())
