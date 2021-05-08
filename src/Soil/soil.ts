@@ -8,21 +8,6 @@ import renderMathInElement from 'katex/dist/contrib/auto-render'
 
 // util functions
 
-function evaluate(code: string): any {
-    try {
-        return eval(code)
-    } catch (e) {
-        if (e.message === 'Cannot convert a Symbol value to a number') {
-            throw CustomError(
-                'VariableError',
-                "A variable is used before a value is given."
-            )
-        } else {
-            throw e
-        }
-    }
-}
-
 function htmlDecode(str: string) {
     return str.replace(
         /&amp;|&lt;|&gt;|&#39;|&quot;/g,
@@ -100,7 +85,19 @@ export class Soil {
         let solution: string = this.sol
 
         // execute
-        let result = evaluate(code)
+        let result: any
+        try {
+            result = eval(code)
+        } catch (e) {
+            if (e.message === 'Cannot convert a Symbol value to a number') {
+                throw CustomError(
+                    'VariableError',
+                    "A variable is used before a value is given."
+                )
+            } else {
+                throw e
+            }
+        }
 
         //retrieve
         this.dict.update({
@@ -129,19 +126,31 @@ export class Soil {
         } = this.dict;
 
         // execute
-        html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
-            let code = x.substring(3, x.length - 2)
-            code = htmlDecode(code)
-            let result = evaluate(code)
-            return ParseForPrint(result)
-        })
-        html = html.replace(/\*\{[^\{\}]*\}/g, x => {
-            let code = x.substring(2, x.length - 1)
-            code = htmlDecode(code)
-            let result = evaluate(code)
-            return ParseForPrint(result)
-        })
-        return html
+        try {
+            html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
+                let code = x.substring(3, x.length - 2)
+                code = htmlDecode(code)
+                let result = eval(code)
+                return ParseForPrint(result)
+            })
+            html = html.replace(/\*\{[^\{\}]*\}/g, x => {
+                let code = x.substring(2, x.length - 1)
+                code = htmlDecode(code)
+                let result = eval(code)
+                return ParseForPrint(result)
+            })
+            return html
+        } catch (e) {
+            if (e.message === 'Cannot convert a Symbol value to a number') {
+                throw CustomError(
+                    'VariableError',
+                    "A variable is used before a value is given."
+                )
+            } else {
+                throw e
+            }
+        }
+
     }
 
     private pushDict() {
