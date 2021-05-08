@@ -59,7 +59,7 @@ export class Soil {
     }
 
     private checkTime() {
-        let allow = 5
+        let allow = 10
         if (Date.now() - this.time > allow * 1000) {
             throw CustomError('TimeoutError', 'taking too long to run: >' + allow + 's')
         }

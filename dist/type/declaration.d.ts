@@ -3666,6 +3666,7 @@ declare module "Soil/tool/html" {
     * ```
     */
     export function PrintVariable(html: string, symbol: string, value: any): string;
+    export function ParseForPrint(value: any): any;
 }
 declare module "Soil/cls" {
     export class Config {
@@ -3833,16 +3834,17 @@ declare module "Soil/soil" {
         private dict;
         private config;
         private counter;
+        private time;
         private errorPile;
         constructor(gene: Gene);
         private reset;
+        private checkTime;
         private recordError;
         private printError;
         private evalCode;
         private intrapolateCode;
         private pushDict;
         private isValidated;
-        private katex;
         private runPopulate;
         private runSection;
         private runPreprocess;
