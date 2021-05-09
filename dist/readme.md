@@ -91,12 +91,14 @@
 |boolean| `a = true`	| `*a` | ✓ |
 |boolean| `a = false`	| `*a` | ✕ |
 |coordinates| `a = [1,2]`	| `*a` | (1, 2) |
+|combo|`a = [true,true,false]`|`*a`|I and II only|
 |fraction| `a = 0.5`	| `*/a` | \dfrac{1}{2} |
 | sci notation |`a = 0.0000123`	| `**a` | 1.23 \times 10^{-5} |
 | bracket negative|`a = -2`|`*(a)`| (-2)|
 | bracket negative|`a = 2`|`*(a)`| 2|
 |sign|`a = 5`|`*+a`|+|
 |sign|`a = -5`|`*+a`|-|
+
 
 # 3. Advance Functions
 

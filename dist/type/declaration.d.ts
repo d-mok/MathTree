@@ -70,6 +70,7 @@ declare module "Core/Owl/index" {
     export const arrayWith: (predicate: (_: any) => boolean) => (_: any) => any;
     export const couple: (_: any) => any;
     export const triple: (_: any) => any;
+    export const combo: (_: any) => any;
     export const ntuple: (_: any) => any;
     export const interval: (_: any) => any;
     export const point: (_: any) => any;
@@ -158,6 +159,7 @@ declare module "Core/Ink/index" {
     export function parseIneq(text: Ineq): [greater: boolean, equal: boolean];
     export function printDfrac(numerator: number, denominator: number, upSign?: boolean): string;
     export function parseDfrac(dfrac: string): Fraction;
+    export function printCombo(combo: [boolean, boolean, boolean]): "I, II and III" | "I and II only" | "I and III only" | "I only" | "II and III only" | "II only" | "III only" | "None of the above" | undefined;
 }
 declare module "Core/Blood/index" {
     class Blood extends Error {
@@ -730,6 +732,7 @@ declare function nCr(n: number, r: number): number;
 declare function nPr(n: number, r: number): number;
 /**
 * @category Flow
+* @deprecated
 * @return a random config of a Combo Options question type.
 * ```typescript
 * RndComboConfig()
@@ -1498,6 +1501,15 @@ declare function RndShakeIneq(anchor: Ineq): string[];
  */
 declare function RndShakePoint(anchor: Point): Point[];
 /**
+ * @category RandomShake
+ * @return an array of 3 combo
+ * ```
+ * RndShakeCombo([true,true,true])
+ * // may return [[true,false,true],[false,true,false],[false,true,true]]
+ * ```
+ */
+declare function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, boolean][];
+/**
  * @category RandomUtil
  * @return a random item from the given items
  * ```
@@ -1818,6 +1830,7 @@ declare function StdDev(...nums: number[]): number;
 declare function GrammarJoin(...items: unknown[]): string;
 /**
 * @category Text
+* @deprecated
 * @return '✔' or '✘'.
 * ```
 * Tick(true) // '✔'
@@ -1827,6 +1840,7 @@ declare function GrammarJoin(...items: unknown[]): string;
 declare function Tick(bool: boolean): string;
 /**
 * @category Text
+* @deprecated
 * @return Array of '✔' or '✘'.
 * ```
 * Ticks(true,false) // ['✔','✘']
@@ -1846,6 +1860,7 @@ declare function Ticks(...bools: boolean[]): string[];
 declare function IneqSign(greater: boolean, equal?: boolean): [string, string];
 /**
 * @category Text
+* @deprecated
 * @param upSign - put -ve sign on numerator instead of the front.
 * @return latex of dfrac p/q like \dfrac{1}{2}.
 * ```
@@ -1869,6 +1884,7 @@ declare function Dfrac(numerator: number, denominator: number, upSign?: boolean)
 declare function IndexToSurd(text: string): string;
 /**
  * @category Text
+ * @deprecated
  * @return the coordinates '(a, b)' of point [a,b]
  * ```
  * Coord([1,2]) // '(1, 2)'
@@ -3792,8 +3808,25 @@ declare var answer: string;
 declare var options: object;
 declare var question: string;
 declare var solution: string;
+declare module "Soil/tool/eval" {
+    import { Dict } from "Soil/cls";
+    type Context = {
+        dict: Dict;
+        sections: section[];
+        answer: string;
+        options: Partial<Dict>;
+        qn: string;
+        sol: string;
+    };
+    export function evaluate(code: string, context: Context): {
+        result: any;
+        context: Context;
+    };
+    export function evalInline(code: string, dict: Dict): any;
+}
 declare module "Soil/tool/section" {
-    export function ExecSection(html: string, sections: section[]): string;
+    import { Dict } from "Soil/cls";
+    export function ExecSection(html: string, sections: section[], dict: Dict): string;
 }
 declare module "Soil/tool/dress" {
     export function dress(html: string): string;

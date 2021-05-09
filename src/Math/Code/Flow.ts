@@ -1,5 +1,6 @@
 /**
 * @category Flow
+* @deprecated
 * @return a random config of a Combo Options question type.
 * ```typescript
 * RndComboConfig() 
