@@ -4,6 +4,7 @@ import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { ParseForPrint } from './tool/html'
 import { Dict, Config } from './cls'
+import { evaluate, evalInline } from './tool/eval'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 
 // util functions
@@ -60,9 +61,8 @@ export class Soil {
 
     private checkTime() {
         let allow = 10
-        if (Date.now() - this.time > allow * 1000) {
+        if (Date.now() - this.time > allow * 1000)
             throw CustomError('TimeoutError', 'taking too long to run: >' + allow + 's')
-        }
     }
 
     private recordError(e: Error) {
@@ -79,85 +79,108 @@ export class Soil {
     }
 
     private evalCode(code: string): any {
-        // injectables
-        let {
-            a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-            o, p, q, r, s, t, u, v, w, x, y, z,
-            A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-            O, P, Q, R, S, T, U, V, W, X, Y, Z
-        } = this.dict;
-        let sections: section[] = this.config.sections
-        let answer: string = this.config.answer
-        let options: Partial<Dict> = this.config.options
-        let question: string = this.qn
-        let solution: string = this.sol
 
-        // execute
-        let result: any
-        try {
-            result = eval(code)
-        } catch (e) {
-            if (e.message === 'Cannot convert a Symbol value to a number') {
-                throw CustomError(
-                    'VariableError',
-                    "A variable is used before a value is given."
-                )
-            } else {
-                throw e
-            }
-        }
-
-        //retrieve
-        this.dict.update({
-            a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-            o, p, q, r, s, t, u, v, w, x, y, z,
-            A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-            O, P, Q, R, S, T, U, V, W, X, Y, Z
+        let { result, context } = evaluate(code, {
+            dict: this.dict,
+            sections: this.config.sections,
+            answer: this.config.answer,
+            options: this.config.options,
+            qn: this.qn,
+            sol: this.sol
         })
+
+        this.dict = context.dict
         this.config = {
-            sections: sections,
-            answer: answer,
-            options: options
+            sections: context.sections,
+            answer: context.answer,
+            options: context.options
         }
-        this.qn = question
-        this.sol = solution
+        this.qn = context.qn
+        this.sol = context.sol
 
         return result
+
+
+
+        // // injectables
+        // let {
+        //     a, b, c, d, e, f, g, h, i, j, k, l, m, n,
+        //     o, p, q, r, s, t, u, v, w, x, y, z,
+        //     A, B, C, D, E, F, G, H, I, J, K, L, M, N,
+        //     O, P, Q, R, S, T, U, V, W, X, Y, Z
+        // } = this.dict;
+        // let sections: section[] = this.config.sections
+        // let answer: string = this.config.answer
+        // let options: Partial<Dict> = this.config.options
+        // let question: string = this.qn
+        // let solution: string = this.sol
+
+        // // execute
+        // let result: any
+        // try {
+        //     result = eval(code)
+        // } catch (e) {
+        //     if (e.message === 'Cannot convert a Symbol value to a number') {
+        //         throw CustomError(
+        //             'VariableError',
+        //             "A variable is used before a value is given."
+        //         )
+        //     } else {
+        //         throw e
+        //     }
+        // }
+
+        // //retrieve
+        // this.dict.update({
+        //     a, b, c, d, e, f, g, h, i, j, k, l, m, n,
+        //     o, p, q, r, s, t, u, v, w, x, y, z,
+        //     A, B, C, D, E, F, G, H, I, J, K, L, M, N,
+        //     O, P, Q, R, S, T, U, V, W, X, Y, Z
+        // })
+        // this.config = {
+        //     sections: sections,
+        //     answer: answer,
+        //     options: options
+        // }
+        // this.qn = question
+        // this.sol = solution
+
+        // return result
     }
 
     private intrapolateCode(html: string) {
-        let {
-            a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-            o, p, q, r, s, t, u, v, w, x, y, z,
-            A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-            O, P, Q, R, S, T, U, V, W, X, Y, Z
-        } = this.dict;
+        // let {
+        //     a, b, c, d, e, f, g, h, i, j, k, l, m, n,
+        //     o, p, q, r, s, t, u, v, w, x, y, z,
+        //     A, B, C, D, E, F, G, H, I, J, K, L, M, N,
+        //     O, P, Q, R, S, T, U, V, W, X, Y, Z
+        // } = this.dict;
 
         // execute
-        try {
-            html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
-                let code = x.substring(3, x.length - 2)
-                code = htmlDecode(code)
-                let result = eval(code)
-                return ParseForPrint(result)
-            })
-            html = html.replace(/\*\{[^\{\}]*\}/g, x => {
-                let code = x.substring(2, x.length - 1)
-                code = htmlDecode(code)
-                let result = eval(code)
-                return ParseForPrint(result)
-            })
-            return html
-        } catch (e) {
-            if (e.message === 'Cannot convert a Symbol value to a number') {
-                throw CustomError(
-                    'VariableError',
-                    "A variable is used before a value is given."
-                )
-            } else {
-                throw e
-            }
-        }
+        // try {
+        html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
+            let code = x.substring(3, x.length - 2)
+            // code = htmlDecode(code)
+            let result = evalInline(code, this.dict)
+            return ParseForPrint(result)
+        })
+        html = html.replace(/\*\{[^\{\}]*\}/g, x => {
+            let code = x.substring(2, x.length - 1)
+            // code = htmlDecode(code)
+            let result = evalInline(code, this.dict)
+            return ParseForPrint(result)
+        })
+        return html
+        // } catch (e) {
+        //     if (e.message === 'Cannot convert a Symbol value to a number') {
+        //         throw CustomError(
+        //             'VariableError',
+        //             "A variable is used before a value is given."
+        //         )
+        //     } else {
+        //         throw e
+        //     }
+        // }
 
     }
 

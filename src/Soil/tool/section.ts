@@ -1,6 +1,6 @@
 
 import { Dict, Config } from '../cls'
-
+import { evalInline } from './eval'
 
 function DropVersion(html: string, section: string, version: number) {
     let id = section + '.' + version;
@@ -37,26 +37,6 @@ export function ExecSection(html: string, sections: section[], dict: Dict) {
 function DropCondition(html: string, dict: Dict): string {
     return html.replace(
         new RegExp('<[^#<]*##\{([^\{\}]*)\}[^#]*##[^#>]*>', 'g'),
-        (match: string, p1: string) => {
-            let {
-                a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-                o, p, q, r, s, t, u, v, w, x, y, z,
-                A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-                O, P, Q, R, S, T, U, V, W, X, Y, Z
-            } = dict;
-            let result: boolean
-            try {
-                result = eval(p1)
-            } catch (e) {
-                if (e.message === 'Cannot convert a Symbol value to a number') {
-                    throw CustomError(
-                        'VariableError',
-                        "A variable is used before a value is given."
-                    )
-                } else {
-                    throw e
-                }
-            }
-            return result ? match : ""
-        });
+        (match, p1) => evalInline(p1, dict) ? match : ""
+    );
 }

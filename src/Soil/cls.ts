@@ -87,11 +87,6 @@ export class Dict {
             if (key in other) this[key] = other[key]
         }
     }
-    // blur() {
-    //     for (let key of this.variables) {
-    //         this[key] = Blur(this[key])
-    //     }
-    // }
     checked() {
         for (let key of this.variables) {
             let v = this[key]

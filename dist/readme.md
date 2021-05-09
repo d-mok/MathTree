@@ -168,3 +168,6 @@ so that the second option is the correct answer.
 
 To get the answer option key after shuffling, use `{#A}`.
 For example, if option A is shuffled to C, then `{#A}` will print `C`.
+
+
+### This page is rendered by https://stackedit.io/
