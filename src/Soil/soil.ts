@@ -205,8 +205,8 @@ export class Soil {
 
     private runSection(): boolean {
         // crop section
-        this.qn = ExecSection(this.qn, this.config.sections);
-        this.sol = ExecSection(this.sol, this.config.sections);
+        this.qn = ExecSection(this.qn, this.config.sections, this.dict);
+        this.sol = ExecSection(this.sol, this.config.sections, this.dict);
         return true
     }
 
