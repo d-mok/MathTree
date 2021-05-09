@@ -201,3 +201,17 @@ test('RndShakePoint', () => {
     run([-3, 12], false, true);
     run([-3, -12], false, false);
 });
+
+
+
+
+test('RndShakeCombo', () => {
+
+    function run(anchor) {
+        let arr = sample(() => RndShakeCombo(anchor));
+        expect(arr).toBeFlatIs(owl.combo);
+        expect(arr).toAllHaveLength(3);
+    }
+    
+    run([true, true, true]);
+});

@@ -42,3 +42,15 @@ export function parseDfrac(dfrac: string): Fraction {
     if (!(owl.num(p) && owl.num(q))) throw 'fail to parse dfrac'
     return [p, q]
 }
+
+export function printCombo(combo: [boolean, boolean, boolean]) {
+    let [a, b, c] = combo
+    if (a && b && c) return 'I, II and III'
+    if (a && b && !c) return 'I and II only'
+    if (a && !b && c) return 'I and III only'
+    if (a && !b && !c) return 'I only'
+    if (!a && b && c) return 'II and III only'
+    if (!a && b && !c) return 'II only'
+    if (!a && !b && c) return 'III only'
+    if (!a && !b && !c) return 'None of the above'
+}

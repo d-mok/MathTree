@@ -117,6 +117,9 @@ export function ParseForPrint(value: any): any {
     if (owl.point(value)) {
         value = Coord(value)
     }
+    if (owl.combo(value)) {
+        value = ink.printCombo(value)
+    }
     return value
 }
 

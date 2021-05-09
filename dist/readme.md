@@ -67,7 +67,8 @@
 | Loop	| `for(let i=1; i<10; i++){DoSomething}` |
 | Array | `arr = [1,2,3];` |
 | Array Element	| `x = arr[0]; y = arr[1];` |
-| Array Deconstruction	| `[a,b,c]=[1,2,3]`  (same as  `a=1;b=2;c=3;`) |
+| Array Deconstruction	| `[a,b,c]=[1,2,3]`  (same as  `a=1; b=2; c=3;`) |
+| Array Spreading	| `sum(...[1,2,3])` (same as `sum(1,2,3)`) |
 | Print Debug	| `console.log(x)` |
 
 
@@ -108,14 +109,26 @@ For example, `*{1+1}` will print `2`.
 ## Sections
 **Sections** can be used in **content**:
 
-> \#\#1.1
-> section 1.1 here.
-> \#\#
-> \#\#1.2
-> section 1.2 here.
+> \#\#1.1  
+> section 1.1 here.  
+> \#\#  
+> \#\#1.2  
+> section 1.2 here.  
 > \#\#
 
 If `sections = [[1,2]]` is defined in **populate**, only section 1.2 will be shown.
+
+## Conditional Sections
+
+We can decide whether to show a section or not by a condition: `##{condition}`
+
+> \#\#{true}  
+> This will be shown.  
+> \#\#
+
+> \#\#{false}  
+> This will NOT be shown.  
+> \#\#
 
 ## Options
 

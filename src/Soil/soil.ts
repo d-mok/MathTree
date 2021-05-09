@@ -9,19 +9,6 @@ import renderMathInElement from 'katex/dist/contrib/auto-render'
 
 // util functions
 
-function htmlDecode(str: string) {
-    return str.replace(
-        /&amp;|&lt;|&gt;|&#39;|&quot;/g,
-        (tag: string) => ({
-            '&amp;': '&',
-            '&lt;': '<',
-            '&gt;': '>',
-            '&#39;': "'",
-            '&quot;': '"'
-        }[tag] || tag)
-    );
-}
-
 
 function katex(html: string): string {
     let ele = document.createElement('div')
@@ -99,89 +86,20 @@ export class Soil {
         this.sol = context.sol
 
         return result
-
-
-
-        // // injectables
-        // let {
-        //     a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-        //     o, p, q, r, s, t, u, v, w, x, y, z,
-        //     A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-        //     O, P, Q, R, S, T, U, V, W, X, Y, Z
-        // } = this.dict;
-        // let sections: section[] = this.config.sections
-        // let answer: string = this.config.answer
-        // let options: Partial<Dict> = this.config.options
-        // let question: string = this.qn
-        // let solution: string = this.sol
-
-        // // execute
-        // let result: any
-        // try {
-        //     result = eval(code)
-        // } catch (e) {
-        //     if (e.message === 'Cannot convert a Symbol value to a number') {
-        //         throw CustomError(
-        //             'VariableError',
-        //             "A variable is used before a value is given."
-        //         )
-        //     } else {
-        //         throw e
-        //     }
-        // }
-
-        // //retrieve
-        // this.dict.update({
-        //     a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-        //     o, p, q, r, s, t, u, v, w, x, y, z,
-        //     A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-        //     O, P, Q, R, S, T, U, V, W, X, Y, Z
-        // })
-        // this.config = {
-        //     sections: sections,
-        //     answer: answer,
-        //     options: options
-        // }
-        // this.qn = question
-        // this.sol = solution
-
-        // return result
     }
 
     private intrapolateCode(html: string) {
-        // let {
-        //     a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-        //     o, p, q, r, s, t, u, v, w, x, y, z,
-        //     A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-        //     O, P, Q, R, S, T, U, V, W, X, Y, Z
-        // } = this.dict;
-
-        // execute
-        // try {
         html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
             let code = x.substring(3, x.length - 2)
-            // code = htmlDecode(code)
             let result = evalInline(code, this.dict)
             return ParseForPrint(result)
         })
         html = html.replace(/\*\{[^\{\}]*\}/g, x => {
             let code = x.substring(2, x.length - 1)
-            // code = htmlDecode(code)
             let result = evalInline(code, this.dict)
             return ParseForPrint(result)
         })
         return html
-        // } catch (e) {
-        //     if (e.message === 'Cannot convert a Symbol value to a number') {
-        //         throw CustomError(
-        //             'VariableError',
-        //             "A variable is used before a value is given."
-        //         )
-        //     } else {
-        //         throw e
-        //     }
-        // }
-
     }
 
     private pushDict() {

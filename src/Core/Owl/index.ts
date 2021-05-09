@@ -86,6 +86,8 @@ export const couple = (_: any) => arrayOfLength(2)(_) && arrayWith(num)(_)
 
 export const triple = (_: any) => arrayOfLength(3)(_) && arrayWith(num)(_)
 
+export const combo = (_: any) => arrayOfLength(3)(_) && arrayWith(bool)(_)
+
 export const ntuple = (_: any) => arrayWith(num)(_)
 
 export const interval = (_: any) => couple(_) && _[0] <= _[1]

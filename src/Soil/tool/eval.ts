@@ -11,6 +11,14 @@ type Context = {
 
 
 
+function detectVarErr(e: Error) {
+    let isVarErr = e.message === 'Cannot convert a Symbol value to a number'
+    if (isVarErr) {
+        return CustomError('VariableError', "A variable is used before a value is defined.")
+    } else {
+        return e
+    }
+}
 
 export function evaluate(code: string, context: Context) {
     // injectables
@@ -31,14 +39,7 @@ export function evaluate(code: string, context: Context) {
     try {
         result = eval(code)
     } catch (e) {
-        if (e.message === 'Cannot convert a Symbol value to a number') {
-            throw CustomError(
-                'VariableError',
-                "A variable is used before a value is defined."
-            )
-        } else {
-            throw e
-        }
+        throw detectVarErr(e)
     }
 
     //retrieve
@@ -77,7 +78,7 @@ function htmlDecode(str: string) {
 
 
 export function evalInline(code: string, dict: Dict) {
-    
+
     code = htmlDecode(code)
 
     // injectables
@@ -89,19 +90,9 @@ export function evalInline(code: string, dict: Dict) {
     } = dict;
 
     // execute
-    let result: any
     try {
-        result = eval(code)
+        return eval(code)
     } catch (e) {
-        if (e.message === 'Cannot convert a Symbol value to a number') {
-            throw CustomError(
-                'VariableError',
-                "A variable is used before a value is defined."
-            )
-        } else {
-            throw e
-        }
+        throw detectVarErr(e)
     }
-
-    return result
 }

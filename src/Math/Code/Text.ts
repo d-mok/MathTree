@@ -23,6 +23,7 @@ globalThis.GrammarJoin = GrammarJoin
 
 /**
 * @category Text
+* @deprecated
 * @return '✔' or '✘'.
 * ```
 * Tick(true) // '✔'
@@ -37,6 +38,7 @@ globalThis.Tick = contract(Tick).sign([owl.bool])
 
 /**
 * @category Text
+* @deprecated
 * @return Array of '✔' or '✘'.
 * ```
 * Ticks(true,false) // ['✔','✘']
@@ -73,6 +75,7 @@ globalThis.IneqSign = contract(IneqSign).sign([owl.bool, owl.bool])
 
 /**
 * @category Text
+* @deprecated
 * @param upSign - put -ve sign on numerator instead of the front.
 * @return latex of dfrac p/q like \dfrac{1}{2}.  
 * ```
@@ -112,6 +115,7 @@ globalThis.IndexToSurd = contract(IndexToSurd).sign([owl.str])
 
 /**
  * @category Text
+ * @deprecated
  * @return the coordinates '(a, b)' of point [a,b]
  * ```
  * Coord([1,2]) // '(1, 2)'

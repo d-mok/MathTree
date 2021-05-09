@@ -30,6 +30,10 @@ function RndShake(anchor: any): (typeof anchor)[] {
         // Point
         return RndShakePoint(anchor)
     }
+    if (owl.combo(anchor)) {
+        // Combo
+        return RndShakeCombo(anchor)
+    }
     if (typeof anchor === 'number' && owl.num(anchor)) {
         anchor = ant.blur(anchor)
         // Integer
@@ -216,4 +220,28 @@ function RndShakePoint(anchor: Point): Point[] {
     return dice.roll(func).distinct(3, (a, b) => a[0] === b[0] || a[1] === b[1])
 }
 globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point])
+
+
+
+
+/**
+ * @category RandomShake
+ * @return an array of 3 combo
+ * ```
+ * RndShakeCombo([true,true,true]) 
+ * // may return [[true,false,true],[false,true,false],[false,true,true]]
+ * ```
+ */
+function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, boolean][] {
+    let [a, b, c] = anchor
+    let func = (): [boolean, boolean, boolean] => {
+        return [
+            RndT() ? a : !a,
+            RndT() ? b : !b,
+            RndT() ? c : !c
+        ]
+    }
+    return dice.roll(func).unique(3, _ => JSON.stringify(_))
+}
+globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
 

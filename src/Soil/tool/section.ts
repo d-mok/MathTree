@@ -1,5 +1,5 @@
 
-import { Dict, Config } from '../cls'
+import { Dict } from '../cls'
 import { evalInline } from './eval'
 
 function DropVersion(html: string, section: string, version: number) {
