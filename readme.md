@@ -35,7 +35,7 @@
 
 ## Processing
 
--  This is for  **manipulating the content as html strings**.
+-  This is for  **manipulating the content as html strings**.  
    e.g. `question = question.replaceAll('3','three')`.
 -  Can access the  **question html string**  as  `question`.
 -  Can access the  **solution html string**  as  `solution`.
@@ -46,7 +46,8 @@
 
 1.  Run **populate**  to define to variables.
 2.  Run **validate**.  
-    If failed, populate again and again until validation passed. The execution will stop after 1000 failed trials.
+    If failed, populate again and again until validation passed.  
+    The execution will stop after 1000 failed trials.
 3.  Run **preprocess**.
 4.  **Substitute**  the variables, and do some smart adjustment:
     -   Round all decimal variables to 5 significant figures.
@@ -90,7 +91,7 @@
 |string| `a = "hello"`	| `*a` | hello |
 |boolean| `a = true`	| `*a` | ✓ |
 |boolean| `a = false`	| `*a` | ✕ |
-|coordinates| `a = [1,2]`	| `*a` | (1, 2) |
+|point| `a = [1,2]`	| `*a` | (1, 2) |
 |combo|`a = [true,true,false]`|`*a`|I and II only|
 |fraction| `a = 0.5`	| `*/a` | \dfrac{1}{2} |
 | sci notation |`a = 0.0000123`	| `**a` | 1.23 \times 10^{-5} |
@@ -98,7 +99,10 @@
 | bracket negative|`a = 2`|`*(a)`| 2|
 |sign|`a = 5`|`*+a`|+|
 |sign|`a = -5`|`*+a`|-|
-
+|percentage (planning)|`a = 0.123`|`*.a`| 12.3%|
+|ratio (planning)|`a = 0.5`|`*:a`| 1:2|
+|ratio (planning)|`a = 0.5`|`*:a`| 1:2|
+|inequality sign (planning)|`a = [true,true]`|`*=a`| \\\\ge|
 
 # 3. Advance Functions
 
@@ -175,8 +179,9 @@ then it's equivalent to
 
 ## Answer
 
-Normally, the firstion option must be the correct answer. This can be changed by:
-`answer = "B"`
+Normally, the first option must be the correct answer.  
+This can be changed by:
+`answer = "B"`  
 so that the second option is the correct answer.
 
 ## Answer Option Mapping
@@ -184,5 +189,3 @@ so that the second option is the correct answer.
 To get the answer option key after shuffling, use `{#A}`.
 For example, if option A is shuffled to C, then `{#A}` will print `C`.
 
-
-### This page is rendered by https://stackedit.io/

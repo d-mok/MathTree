@@ -212,6 +212,19 @@ test('RndShakeCombo', () => {
         expect(arr).toBeFlatIs(owl.combo);
         expect(arr).toAllHaveLength(3);
     }
-    
+
     run([true, true, true]);
+});
+
+
+
+test('RndShakeTrig', () => {
+
+    function run(anchor) {
+        let arr = sample(() => RndShakeTrig(anchor));
+        expect(arr).toBeFlatIs(owl.trig);
+        expect(arr).toAllHaveLength(3);
+    }
+
+    run('sin');
 });

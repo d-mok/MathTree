@@ -220,3 +220,72 @@ test('IntegerRatio', () => {
 //     expect(Blurs([1.1 ** 2, 'abc'])).toEqual([1.21, 'abc']);
 // });
 
+
+
+
+test('HCF', () => {
+    expect(HCF(1, 2, 3)).toBe(1);
+    expect(HCF(4, 6, 8)).toBe(2);
+    expect(HCF(24, 36, -60)).toBe(12);
+    expect(HCF(1, 1)).toBe(1);
+    expect(HCF(30)).toBe(30);
+    expect(() => HCF(5, 10, 5.1)).toThrow();
+    expect(() => HCF(0.1, 0.2)).toThrow();
+    expect(() => HCF(0, 3)).toThrow();
+});
+
+
+
+test('LCM', () => {
+    expect(LCM(1, 2, 3)).toBe(6);
+    expect(LCM(4, 6, 8)).toBe(24);
+    expect(LCM(24, 36, -60)).toBe(360);
+    expect(LCM(1, 1)).toBe(1);
+    expect(LCM(30)).toBe(30);
+    expect(() => LCM(10, 2.5)).toThrow();
+    expect(() => LCM(0, 3)).toThrow();
+});
+
+
+
+
+// test('FracSign', () => {
+//     expect(FracSign(2, 3)).toEqual([2, 3]);
+//     expect(FracSign(-2, 3)).toEqual([-2, 3]);
+//     expect(FracSign(2, -3)).toEqual([-2, 3]);
+//     expect(FracSign(-2, -3)).toEqual([2, 3]);
+//     expect(FracSign(0, -2)).toEqual([0, 2]);
+//     expect(() => FracSign(-2, 0)).toThrow();
+// });
+
+
+// test('Frac', () => {
+//     expect(Frac(6, 4)).toEqual([3, 2]);
+//     expect(Frac(-4, 2)).toEqual([-2, 1]);
+//     expect(Frac(18, -12)).toEqual([-3, 2]);
+//     expect(Frac(-10, -20)).toEqual([1, 2]);
+//     expect(Frac(0, 2)).toEqual([0, 1]);
+//     expect(Frac(1.5, -2)).toEqual([-1.5, 2]);
+//     expect(Frac(1, 1)).toEqual([1, 1]);
+//     expect(() => Frac(-2, 0)).toThrow();
+// });
+
+
+
+
+test('ToFrac', () => {
+    expect(ToFrac(0.5)).toEqual([1, 2]);
+    expect(ToFrac(-456 / 123)).toEqual([-152, 41]);
+
+    for (let i = 0; i <= 100; i++) {
+        for (let j = 1; j <= 100; j++) {
+            I = i * RndU();
+            let v = I / j;
+            let [p, q] = ToFrac(v);
+            expect(I * q - p * j === 0).toBe(true);
+        }
+    }
+});
+
+
+

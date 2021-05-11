@@ -248,3 +248,38 @@ function LongDivision(dividend: number[], divisor: number[]): string {
 globalThis.LongDivision = contract(LongDivision).sign([owl.ntuple, owl.ntuple])
 
 
+
+
+/**
+ * @category Text
+ * @param num - from 1 to 10
+ * @return roman number
+ * ```
+ * Romanize(1) // "I"
+ * Romanize(2) // "II"
+ * ```
+ */
+ function Romanize(num: number): string {
+    return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1]
+}
+globalThis.Romanize = contract(Romanize).sign([[owl.positiveInt, owl.between(1, 10)]])
+
+
+
+
+/**
+ * @category Text
+ * @param roman - from I to X
+ * @return arabic number
+ * ```
+ * DeRomanize("I") // 1
+ * DeRomanize("II") // 2
+ * ```
+ */
+function DeRomanize(roman: string): number {
+    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+    return romans.indexOf(roman) + 1
+}
+globalThis.DeRomanize = contract(DeRomanize).sign([owl.roman])
+
+

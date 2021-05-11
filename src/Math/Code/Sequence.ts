@@ -21,6 +21,7 @@ globalThis.ListIntegers = contract(ListIntegers).seal({
 
 
 
+
 /**
 * @category Sequence
 * @return Tn in an arithmetic sequence: a+(n-1)d

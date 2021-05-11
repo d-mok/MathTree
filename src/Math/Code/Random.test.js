@@ -23,6 +23,14 @@ test('RndR', () => {
 });
 
 
+test('RndQ', () => {
+    let arr = sample(() => RndQ(1, 2));
+    expect(arr).toBeFlatWithin(1, 2);
+    expect(arr).toBeFlatIs(owl.rational);
+});
+
+
+
 test('RndU', () => {
     let arr = sample(() => RndU());
     expect(arr).toBeFlatIncluded([1, -1]);

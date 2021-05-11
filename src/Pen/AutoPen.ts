@@ -1226,14 +1226,14 @@ class AutoPenCls {
         showTick = false
     }: {
         summary: number[],
-        labels: (string | null)[],
-        size: number,
-        tick: number,
+        labels?: (string | null)[],
+        size?: number,
+        tick?: number,
         start?: number,
         end?: number,
-        showDash: boolean,
-        showValue: boolean,
-        showTick: boolean,
+        showDash?: boolean,
+        showValue?: boolean,
+        showTick?: boolean,
     }) {
         const pen = new Pen();
         let [Q0, Q1, Q2, Q3, Q4] = summary

@@ -40,6 +40,22 @@ globalThis.RndR = contract(RndR).sign([owl.num])
 
 /**
  * @category Random
+ * @return a random fraction in [min, max] inclusive, with largest numerator / denominator.
+ * ```
+ * RndQ(1,2,9) // may return 5/3
+ * ```
+ */
+function RndQ(min: number, max: number, largest: number = 9): number {
+    let f = () => RndN(1, largest) / RndN(2, largest) * RndU()
+    return dice.roll(f).brute(_ => _ >= min && _ <= max)
+}
+globalThis.RndQ = contract(RndQ).sign([owl.num, owl.num, owl.positiveInt])
+
+
+
+
+/**
+ * @category Random
  * @return 1 or -1
  * ```
  * RndU() // may return 1 or -1

@@ -21,6 +21,10 @@ function RndShake(anchor: any): (typeof anchor)[] {
         if (owl.ineq(anchor)) {
             return RndShakeIneq(anchor)
         }
+        // trig
+        if (owl.trig(anchor)) {
+            return RndShakeTrig(anchor)
+        }
         // else convert to number
         if (Number(anchor)) {
             anchor = Number(anchor)
@@ -244,4 +248,24 @@ function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, 
     return dice.roll(func).unique(3, _ => JSON.stringify(_))
 }
 globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
+
+
+
+/**
+ * @category RandomShake
+ * @return an array of 3 trig
+ * ```
+ * RndShakeTrig('sin') 
+ * // may return ['cos','sin','cos']
+ * ```
+ */
+function RndShakeTrig(anchor: string): string[] {
+    return RndPickN(['sin', 'cos', 'tan'], 3)
+}
+globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
+
+
+
+
+
 

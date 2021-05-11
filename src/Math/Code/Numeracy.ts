@@ -222,3 +222,55 @@ globalThis.IntegerRatio = contract(IntegerRatio).sign([owl.rational])
 
 
 
+
+/**
+ * @category Numeracy
+ * @return The HCF of nums.
+ * ```
+ * HCF(6,8) // 2
+ * HCF(6,8,9) // 1
+ * HCF(1,3) // 1
+ * HCF(0.5,3) // throw
+ * HCF(0,3) // throw
+ * ```
+ */
+ function HCF(...nums: number[]): number {
+    nums = nums.map(ant.blur)
+    return ant.hcf(...nums)
+}
+globalThis.HCF = contract(HCF).sign([owl.nonZeroInt])
+
+
+/**
+ * @category Numeracy
+ * @return The LCM of nums.
+ * ```
+ * LCM(2,3) // 6
+ * LCM(2,3,5) // 30
+ * LCM(0.5,3) // throw
+ * LCM(0,3) // throw
+ * ```
+ */
+function LCM(...nums: number[]): number {
+    nums = nums.map(ant.blur)
+    return ant.lcm(...nums)
+}
+globalThis.LCM = contract(LCM).sign([owl.nonZeroInt])
+
+
+
+
+
+/**
+ * @category Numeracy
+ * @deprecated
+ * @return convert num to fraction
+ * ```
+ * ToFrac(0.5) // [1,2]
+ * ToFrac(-456/123) // [-152,41]
+ * ```
+ */
+ function ToFrac(num: number, maxDenominator = 1000): Fraction {
+    return ant.nearFrac(num, maxDenominator)
+}
+globalThis.ToFrac = contract(ToFrac).sign([owl.rational, owl.positiveInt])
