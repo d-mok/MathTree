@@ -23,6 +23,7 @@ import './Algebra/Algebra.ts'
 import './Algebra/Circle.ts'
 import './Algebra/Quadratic.ts'
 import './Algebra/Linear.ts'
+import './Algebra/Polynomial'
 
 
 import './should.ts'

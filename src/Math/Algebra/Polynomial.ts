@@ -108,6 +108,15 @@ class PolyClass {
         return newPoly.append(...polys)
     }
 
+
+    sortDesc(): polynomial {
+        let polys: polynomial[] = this.split()
+        polys = SortBy(polys, _ => (new PolyClass(_)).degree())
+        polys.reverse()
+        let newPoly: PolyClass = new PolyClass(this.cloneShell())
+        return newPoly.append(...polys)
+    }
+
     func() {
         return (values: { [_: string]: number }) => {
             let sum = 0
@@ -165,15 +174,29 @@ function RndPolynomial(degree: number, vars: string[] = ["x"], terms: number = d
         return pc.degree() === degree && !pc.hasLikeTerms()
     })
 }
+globalThis.RndPolynomial = RndPolynomial
 
 
-function PolySort(poly: polynomial) {
+function PolySort(poly: polynomial, desc: true) {
 
 }
 
 function PolyPrint(poly: polynomial) {
     return (new PolyClass(poly)).print()
 }
+globalThis.PolyPrint = PolyPrint
 
+
+function PolyPrettyPrint(poly: polynomial) {
+    // return (new PolyClass(poly)).print()
+}
+globalThis.PolyPrettyPrint = PolyPrettyPrint
+
+
+
+function PolyFunction(poly: polynomial) {
+    // return (new PolyClass(poly)).print()
+}
+globalThis.PolyFunction = PolyFunction
 
 
