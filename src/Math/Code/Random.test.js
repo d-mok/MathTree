@@ -141,15 +141,6 @@ test('RndPyth', () => {
 
 
 
-// test('RndLinearFromInt', () => {
-//     let arr = sample(() => RndLinearFromInt(2, 6));
-//     let ints = arr.map(L => [-L[2] / L[0], -L[2] / L[1]]);
-//     expect(ints).toBeFlatAbsWithin(2, 6);
-//     expect(ints).toBeFlatIsInteger();
-//     expect(arr).toAllHaveLength(3);
-// });
-
-
 
 test('RndPoint', () => {
     let arr = sample(() => RndPoint([1, 4], [10, 14]));

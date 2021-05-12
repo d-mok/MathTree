@@ -1,21 +1,10 @@
 
 
-test('LinearFeature', () => {
-    expect(LinearFeature(2, 4, 6)).toEqual([-3, -1.5, -0.5]);
-    expect(() => LinearFeature(0, 4, 6)).toThrow();
-    expect(() => LinearFeature(2, 0, 6)).toThrow();
+test('LineFeat', () => {
+    expect(LineFeat(2, 4, 6)).toEqual([-0.5, -1.5, -3]);
+    expect(() => LineFeat(0, 4, 6)).toThrow();
+    expect(() => LineFeat(2, 0, 6)).toThrow();
 });
-
-
-
-
-test('LineFromLinear', () => {
-    expect(LineFromLinear(2, 4, 6)).toEqual([-0.5, -1.5]);
-    expect(LineFromLinear(0, 4, 6)).toEqual([-0, -1.5]);
-    expect(() => LineFromLinear(1, 0, 6)).toThrow();
-});
-
-
 
 
 

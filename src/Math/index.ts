@@ -1,7 +1,6 @@
 import './Code/Assertion.ts'
 import './Code/Combinatorics.ts'
 import './Code/Flow.ts'
-// import './Code/Fraction.ts'
 import './Code/Function.ts'
 import './Code/Geometry.ts'
 import './Code/LinearProgram.ts'
@@ -16,7 +15,6 @@ import './Code/Stat.ts'
 import './Code/Text.ts'
 import './Code/Triangle.ts'
 import './Code/Trigonometry.ts'
-// import './Code/Utility.ts'
 import './Code/Vector.ts'
 
 import './Algebra/Algebra.ts'
@@ -27,6 +25,4 @@ import './Algebra/Polynomial'
 
 
 import './should.ts'
-import './chance.ts'
-
 

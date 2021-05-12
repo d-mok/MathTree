@@ -2717,9 +2717,6 @@ img {
 			<a href="math_code_random.html#rndeven" class="tsd-kind-icon">Rnd<wbr>Even</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_random.html#rndlinearfromint" class="tsd-kind-icon">Rnd<wbr>Linear<wbr>From<wbr>Int</a>
-		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_random.html#rndn" class="tsd-kind-icon">RndN</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2779,7 +2776,6 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndconvexpolygon" class="tsd-kind-icon">Rnd<wbr>Convex<wbr>Polygon</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rnddata" class="tsd-kind-icon">Rnd<wbr>Data</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndeven" class="tsd-kind-icon">Rnd<wbr>Even</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndlinearfromint" class="tsd-kind-icon">Rnd<wbr>Linear<wbr>From<wbr>Int</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndn" class="tsd-kind-icon">RndN</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndns" class="tsd-kind-icon">Rnd<wbr>Ns</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndodd" class="tsd-kind-icon">Rnd<wbr>Odd</a></li>
@@ -2911,32 +2907,6 @@ img {
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>a random even integer in [min, max] inclusive</p>
 						<pre><code><span style="color: #795E26">RndEven</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">8</span><span style="color: #000000">) </span><span style="color: #008000">// return 4, 6 or 8</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="rndlinearfromint" class="tsd-anchor"></a>
-				<h3>Rnd<wbr>Linear<wbr>From<wbr>Int</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Rnd<wbr>Linear<wbr>From<wbr>Int<span class="tsd-signature-symbol">(</span>minAbsIntercept<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, maxAbsIntercept<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>c<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>minAbsIntercept: <span class="tsd-signature-type">number</span></h5>
-							</li>
-							<li>
-								<h5>maxAbsIntercept: <span class="tsd-signature-type">number</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>c<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></h4>
-						<p>a linear [a,b,c] in ax+by+c=0</p>
-						<pre><code><span style="color: #795E26">RndLinearFromIntercept</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// may return [2,-3,6]</span>
 </code></pre>
 					</li>
 				</ul>
@@ -3139,7 +3109,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						<p>a random fraction with largest numerator / denominator, within range inclusive.</p>
+						<p>a random fraction (non-integer) with largest numerator / denominator, within range inclusive.</p>
 						<pre><code><span style="color: #795E26">RndQ</span><span style="color: #000000">(</span><span style="color: #098658">9</span><span style="color: #000000">,[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">9</span><span style="color: #000000">]) </span><span style="color: #008000">// may return 7/2</span>
 <span style="color: #795E26">RndQ</span><span style="color: #000000">(-</span><span style="color: #098658">9</span><span style="color: #000000">,[-</span><span style="color: #098658">9</span><span style="color: #000000">,</span><span style="color: #098658">9</span><span style="color: #000000">]) </span><span style="color: #008000">// may return 7/2 or -7/2, i.e. can be +ve or -ve</span>
 </code></pre>
@@ -3169,7 +3139,7 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
-						<p>an array of n unique random fractions.</p>
+						<p>an array of n unique random fractions (non-integer) .</p>
 						<pre><code><span style="color: #795E26">RndQs</span><span style="color: #000000">(</span><span style="color: #098658">9</span><span style="color: #000000">,[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">9</span><span style="color: #000000">],</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// may return [5/2,7/3,9/2]</span>
 </code></pre>
 					</li>

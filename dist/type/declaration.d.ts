@@ -270,7 +270,6 @@ declare module "Math/index" {
     import './Algebra/Linear.ts';
     import './Algebra/Polynomial';
     import './should.ts';
-    import './chance.ts';
 }
 declare var SHOULD_LOG: boolean;
 declare class CustomErrorCls extends Error {
@@ -392,20 +391,11 @@ declare function IntegralOnCircle(centre: Point, radius: number): Point[][];
  * @category Linear
  * @return [x-int,y-int,slope] of ax+by+c=0
  * ```
- * LinearFeature(2,4,6) // [-3,-1.5,-0.5]
- * LinearFeature(0,4,6) // throw
+ * LineFeat(2,4,6) // [-0.5,-1.5,-3]
+ * LineFeat(0,4,6) // throw
  * ```
  */
-declare function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number];
-/**
- * @category Linear
- * @return [slope,yInt] from ax+by+c=0
- * ```
- * LineFromLinear(2,4,6) // [-0.5,-1.5]
- * LineFromLinear(0,4,6) // [0,-1.5]
- * ```
- */
-declare function LineFromLinear(a: number, b: number, c: number): [slope: number, yInt: number];
+declare function LineFeat(a: number, b: number, c: number): [slope: number, yInt: number, xInt: number];
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
@@ -1263,6 +1253,7 @@ declare function Ceil(num: number): number;
 declare function Floor(num: number): number;
 /**
  * @category Numeracy
+ * @deprecated use Ratio() instead
  * @return reduce input array to simplest ratio.
  * ```
  * SimpRatio(2,4,6) // [1,2,3]
@@ -1282,7 +1273,7 @@ declare function SimpRatio(...nums: number[]): number[];
  * IntegerRatio(Math.sqrt(2),1/2,1/4) // throw
  * ```
  */
-declare function IntegerRatio(...nums: number[]): number[];
+declare function Ratio(...nums: number[]): number[];
 /**
  * @category Numeracy
  * @return The HCF of nums.
@@ -1367,7 +1358,7 @@ declare function RndR(min: number, max: number): number;
 declare function RndRs(min: number, max: number, n?: number): number[];
 /**
  * @category Random
- * @return a random fraction with largest numerator / denominator, within range inclusive.
+ * @return a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
  * ```
  * RndQ(9,[2,9]) // may return 7/2
  * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
@@ -1376,7 +1367,7 @@ declare function RndRs(min: number, max: number, n?: number): number[];
 declare function RndQ(largest?: number, range?: interval): number;
 /**
  * @category Random
- * @return an array of n unique random fractions.
+ * @return an array of n unique random fractions (non-integer) .
  * ```
  * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
  * ```
@@ -1455,14 +1446,6 @@ declare function RndPoly(...coeff: number[]): number[];
  * ```
  */
 declare function RndPyth(max?: number): [number, number, number];
-/**
- * @category Random
- * @return a linear [a,b,c] in ax+by+c=0
- * ```
- * RndLinearFromIntercept(1,5) // may return [2,-3,6]
- * ```
- */
-declare function RndLinearFromInt(minAbsIntercept: number, maxAbsIntercept: number): [a: number, b: number, c: number];
 /**
  * @category Random
  * @return a point within given range
@@ -2001,21 +1984,21 @@ declare function LongDivision(dividend: number[], divisor: number[]): string;
  * @param num - from 1 to 10
  * @return roman number
  * ```
- * Romanize(1) // "I"
- * Romanize(2) // "II"
+ * Roman(1) // "I"
+ * Roman(2) // "II"
  * ```
  */
-declare function Romanize(num: number): string;
+declare function Roman(num: number): string;
 /**
  * @category Text
  * @param roman - from I to X
  * @return arabic number
  * ```
- * DeRomanize("I") // 1
- * DeRomanize("II") // 2
+ * DeRoman("I") // 1
+ * DeRoman("II") // 2
  * ```
  */
-declare function DeRomanize(roman: string): number;
+declare function DeRoman(roman: string): number;
 /**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
@@ -3668,9 +3651,14 @@ declare class PenCls {
  * @ignore
  */
 declare var Pen: typeof PenCls;
+/**
+ * @ignore
+ */
 declare function cloneCanvas(oldCanvas: HTMLCanvasElement): HTMLCanvasElement;
+/**
+ * @ignore
+ */
 declare function trimCanvas(canvas: HTMLCanvasElement): void;
-declare function sleep(ms: number): void;
 declare module "Pen/index" {
     import './Frame.ts';
     import './Pen.ts';

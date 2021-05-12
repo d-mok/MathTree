@@ -4,34 +4,17 @@
  * @category Linear
  * @return [x-int,y-int,slope] of ax+by+c=0
  * ```
- * LinearFeature(2,4,6) // [-3,-1.5,-0.5]
- * LinearFeature(0,4,6) // throw
+ * LineFeat(2,4,6) // [-0.5,-1.5,-3]
+ * LineFeat(0,4,6) // throw
  * ```
  */
-function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number] {
+function LineFeat(a: number, b: number, c: number): [slope: number, yInt: number, xInt: number] {
     let x = -c / a
     let y = -c / b
     let m = -a / b
-    return [x, y, m]
+    return [m, y, x]
 }
-globalThis.LinearFeature = contract(LinearFeature).sign([owl.nonZero, owl.nonZero, owl.num])
-
-
-/**
- * @category Linear
- * @return [slope,yInt] from ax+by+c=0
- * ```
- * LineFromLinear(2,4,6) // [-0.5,-1.5]
- * LineFromLinear(0,4,6) // [0,-1.5]
- * ```
- */
-function LineFromLinear(a: number, b: number, c: number): [slope: number, yInt: number] {
-    let m = -a / b
-    let y = -c / b
-    return [m, y]
-}
-globalThis.LineFromLinear = contract(LineFromLinear).sign([owl.num, owl.nonZero, owl.num])
-
+globalThis.LineFeat = contract(LineFeat).sign([owl.nonZero, owl.nonZero, owl.num])
 
 
 /**
@@ -180,7 +163,7 @@ class LinearFunction {
         if (s === 0) s = 1;
         [a, b, c] = [a * s, b * s, c * s];
         try {
-            [a, b, c] = IntegerRatio(a, b, c)
+            [a, b, c] = Ratio(a, b, c)
         } catch {
         }
         this._linear = [a, b, c]
@@ -234,7 +217,8 @@ class LinearFunction {
     }
 
     line(): [slope: number, yInt: number] {
-        return LineFromLinear(...this.linear())
+        let [m, c] = LineFeat(...this.linear())
+        return [m, c]
     }
 
 }

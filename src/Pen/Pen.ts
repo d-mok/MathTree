@@ -1944,7 +1944,9 @@ var Pen = PenCls
 globalThis.Pen = Pen
 
 
-
+/**
+ * @ignore
+ */
 function cloneCanvas(oldCanvas: HTMLCanvasElement) {
     //create a new canvas
     let newCanvas = document.createElement('canvas');
@@ -1961,7 +1963,9 @@ function cloneCanvas(oldCanvas: HTMLCanvasElement) {
 
 
 
-
+/**
+ * @ignore
+ */
 function trimCanvas(canvas: HTMLCanvasElement) {
 
     function rowBlank(imageData: ImageData, width: number, y: number) {
@@ -1994,9 +1998,3 @@ function trimCanvas(canvas: HTMLCanvasElement) {
     ctx.putImageData(trimmed, 0, 0);
 }
 
-
-function sleep(ms: number) {
-    const start = new Date().getTime(), expire = start + ms;
-    while (new Date().getTime() < expire) { }
-    return;
-}

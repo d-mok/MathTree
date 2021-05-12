@@ -185,6 +185,7 @@ globalThis.Floor = contract(Floor).sign([owl.num])
 
 /**
  * @category Numeracy
+ * @deprecated use Ratio() instead
  * @return reduce input array to simplest ratio.
  * ```
  * SimpRatio(2,4,6) // [1,2,3]
@@ -214,10 +215,10 @@ globalThis.SimpRatio = contract(SimpRatio).sign([owl.num])
  * IntegerRatio(Math.sqrt(2),1/2,1/4) // throw
  * ```
  */
-function IntegerRatio(...nums: number[]): number[] {
+function Ratio(...nums: number[]): number[] {
     return ant.ratio(...nums)
 }
-globalThis.IntegerRatio = contract(IntegerRatio).sign([owl.rational])
+globalThis.Ratio = contract(Ratio).sign([owl.rational])
 
 
 
@@ -234,7 +235,7 @@ globalThis.IntegerRatio = contract(IntegerRatio).sign([owl.rational])
  * HCF(0,3) // throw
  * ```
  */
- function HCF(...nums: number[]): number {
+function HCF(...nums: number[]): number {
     nums = nums.map(ant.blur)
     return ant.hcf(...nums)
 }
@@ -270,7 +271,7 @@ globalThis.LCM = contract(LCM).sign([owl.nonZeroInt])
  * ToFrac(-456/123) // [-152,41]
  * ```
  */
- function ToFrac(num: number, maxDenominator = 1000): Fraction {
+function ToFrac(num: number, maxDenominator = 1000): Fraction {
     return ant.nearFrac(num, maxDenominator)
 }
 globalThis.ToFrac = contract(ToFrac).sign([owl.rational, owl.positiveInt])

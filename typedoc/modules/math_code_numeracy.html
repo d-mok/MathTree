@@ -2729,10 +2729,10 @@ img {
 			<a href="math_code_numeracy.html#hcf" class="tsd-kind-icon">HCF</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_numeracy.html#integerratio" class="tsd-kind-icon">Integer<wbr>Ratio</a>
+			<a href="math_code_numeracy.html#lcm" class="tsd-kind-icon">LCM</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_numeracy.html#lcm" class="tsd-kind-icon">LCM</a>
+			<a href="math_code_numeracy.html#ratio" class="tsd-kind-icon">Ratio</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_numeracy.html#round" class="tsd-kind-icon">Round</a>
@@ -2774,8 +2774,8 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#fixup" class="tsd-kind-icon">Fix<wbr>Up</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#floor" class="tsd-kind-icon">Floor</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#hcf" class="tsd-kind-icon">HCF</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#integerratio" class="tsd-kind-icon">Integer<wbr>Ratio</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#lcm" class="tsd-kind-icon">LCM</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#ratio" class="tsd-kind-icon">Ratio</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#round" class="tsd-kind-icon">Round</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#rounddown" class="tsd-kind-icon">Round<wbr>Down</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_numeracy.html#roundup" class="tsd-kind-icon">Round<wbr>Up</a></li>
@@ -3002,33 +3002,6 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="integerratio" class="tsd-anchor"></a>
-				<h3>Integer<wbr>Ratio</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Integer<wbr>Ratio<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>nums<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>nums: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
-						<p>reduce input array to integral ratio.</p>
-						<pre><code><span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// [1,2,3]</span>
-<span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// [0,2,3]</span>
-<span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// [0,1]</span>
-<span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// [4,6,3]</span>
-<span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #267F99">Math</span><span style="color: #000000">.</span><span style="color: #795E26">sqrt</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">),</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// throw</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 				<a name="lcm" class="tsd-anchor"></a>
 				<h3>LCM</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -3050,6 +3023,33 @@ img {
 <span style="color: #795E26">LCM</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// 30</span>
 <span style="color: #795E26">LCM</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// throw</span>
 <span style="color: #795E26">LCM</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// throw</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="ratio" class="tsd-anchor"></a>
+				<h3>Ratio</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Ratio<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>nums<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>nums: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
+						<p>reduce input array to integral ratio.</p>
+						<pre><code><span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// [1,2,3]</span>
+<span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">) </span><span style="color: #008000">// [0,2,3]</span>
+<span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// [0,1]</span>
+<span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// [4,6,3]</span>
+<span style="color: #795E26">IntegerRatio</span><span style="color: #000000">(</span><span style="color: #267F99">Math</span><span style="color: #000000">.</span><span style="color: #795E26">sqrt</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">),</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">/</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// throw</span>
 </code></pre>
 					</li>
 				</ul>
@@ -3199,6 +3199,13 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<dl class="tsd-comment-tags">
+								<dt>deprecated</dt>
+								<dd><p>use Ratio() instead</p>
+								</dd>
+							</dl>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>

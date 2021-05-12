@@ -105,26 +105,26 @@ test('LongDivision', () => {
 
 
 
-test('Romanize', () => {
-    expect(Romanize(1)).toBe('I');
-    expect(Romanize(2)).toBe('II');
-    expect(Romanize(3)).toBe('III');
-    expect(Romanize(4)).toBe('IV');
-    expect(Romanize(5)).toBe('V');
-    expect(Romanize(6)).toBe('VI');
-    expect(() => Romanize(0)).toThrow();
+test('Roman', () => {
+    expect(Roman(1)).toBe('I');
+    expect(Roman(2)).toBe('II');
+    expect(Roman(3)).toBe('III');
+    expect(Roman(4)).toBe('IV');
+    expect(Roman(5)).toBe('V');
+    expect(Roman(6)).toBe('VI');
+    expect(() => Roman(0)).toThrow();
 });
 
 
 
 
-test('DeRomanize', () => {
-    expect(DeRomanize('I')).toBe(1);
-    expect(DeRomanize('II')).toBe(2);
-    expect(DeRomanize('III')).toBe(3);
-    expect(DeRomanize('IV')).toBe(4);
-    expect(DeRomanize('V')).toBe(5);
-    expect(() => DeRomanize('XI')).toThrow();
+test('DeRoman', () => {
+    expect(DeRoman('I')).toBe(1);
+    expect(DeRoman('II')).toBe(2);
+    expect(DeRoman('III')).toBe(3);
+    expect(DeRoman('IV')).toBe(4);
+    expect(DeRoman('V')).toBe(5);
+    expect(() => DeRoman('XI')).toThrow();
 });
 
 
