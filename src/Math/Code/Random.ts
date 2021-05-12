@@ -239,19 +239,19 @@ function RndPyth(max = 100): [number, number, number] {
 globalThis.RndPyth = contract(RndPyth).sign([owl.positive])
 
 
-/**
- * @category Random
- * @return a linear [a,b,c] in ax+by+c=0
- * ```
- * RndLinearFromIntercept(1,5) // may return [2,-3,6]
- * ```
- */
-function RndLinearFromInt(minAbsIntercept: number, maxAbsIntercept: number) {
-    let xInt = RndZ(minAbsIntercept, maxAbsIntercept)
-    let yInt = RndZ(minAbsIntercept, maxAbsIntercept)
-    return LinearFromIntercepts(xInt, yInt)
-}
-globalThis.RndLinearFromInt = contract(RndLinearFromInt).sign([owl.nonNegative])
+// /**
+//  * @category Random
+//  * @return a linear [a,b,c] in ax+by+c=0
+//  * ```
+//  * RndLinearFromIntercept(1,5) // may return [2,-3,6]
+//  * ```
+//  */
+// function RndLinearFromInt(minAbsIntercept: number, maxAbsIntercept: number) {
+//     let xInt = RndZ(minAbsIntercept, maxAbsIntercept)
+//     let yInt = RndZ(minAbsIntercept, maxAbsIntercept)
+//     return LinearFromIntercepts(xInt, yInt)
+// }
+// globalThis.RndLinearFromInt = contract(RndLinearFromInt).sign([owl.nonNegative])
 
 
 /**
