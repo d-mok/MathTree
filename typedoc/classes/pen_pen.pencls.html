@@ -2738,13 +2738,7 @@ img {
 					<a href="pen_pen.pencls.html#tick" class="tsd-kind-icon">tick</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="pen_pen.pencls.html#angle-2" class="tsd-kind-icon">angle</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="pen_pen.pencls.html#anglepolar-2" class="tsd-kind-icon">angle<wbr>Polar</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="pen_pen.pencls.html#anglereflex-2" class="tsd-kind-icon">angle<wbr>Reflex</a>
+					<a href="pen_pen.pencls.html#angle-3" class="tsd-kind-icon">angle</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="pen_pen.pencls.html#arrow" class="tsd-kind-icon">arrow</a>
@@ -2847,9 +2841,7 @@ img {
 					<section class="tsd-index-section">
 						<h3>draw</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#angle-2" class="tsd-kind-icon">angle</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#anglepolar-2" class="tsd-kind-icon">angle<wbr>Polar</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#anglereflex-2" class="tsd-kind-icon">angle<wbr>Reflex</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#angle-3" class="tsd-kind-icon">angle</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#arrow" class="tsd-kind-icon">arrow</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#circle-2" class="tsd-kind-icon">circle</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#cutterh" class="tsd-kind-icon">cutterH</a></li>
@@ -3267,7 +3259,7 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="decorate" class="tsd-anchor"></a>
 				<h3>decorate</h3>
-				<div class="tsd-signature tsd-kind-icon">decorate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>angle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>anglePolar<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>angleReflex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>equalSide<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>parallel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>rightAngle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<div class="tsd-signature tsd-kind-icon">decorate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>angle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>anglePolar<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>equalSide<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>parallel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>rightAngle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -3349,6 +3341,11 @@ img {
 										<div class="lead">
 											<p>Decorate an angle AOB, always in anti-clockwise.</p>
 										</div>
+										<dl class="tsd-comment-tags">
+											<dt>deprecated</dt>
+											<dd><p>use pen.set.angle(&#39;polar&#39;)</p>
+											</dd>
+										</dl>
 									</div>
 									<h4 class="tsd-parameters-title">Parameters</h4>
 									<ul class="tsd-parameters">
@@ -3387,61 +3384,6 @@ img {
 									<p>void</p>
 									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">decorate</span><span style="color: #000000">.</span><span style="color: #795E26">anglePolar</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #098658">2</span><span style="color: #000000">) </span>
 <span style="color: #008000">// decorate an angle AOB with double-arc in anti-clockwise.</span>
-</code></pre>
-								</li>
-							</ul>
-						</li>
-						<li class="tsd-parameter">
-							<h5>angle<wbr>Reflex<span class="tsd-signature-symbol">: </span>function</h5>
-							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
-								<li class="tsd-signature tsd-kind-icon">angle<wbr>Reflex<span class="tsd-signature-symbol">(</span>A<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, O<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, B<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, arc<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, radius<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-							</ul>
-							<ul class="tsd-descriptions">
-								<li class="tsd-description">
-									<aside class="tsd-sources">
-									</aside>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Decorate an angle AOB, always reflex.</p>
-										</div>
-									</div>
-									<h4 class="tsd-parameters-title">Parameters</h4>
-									<ul class="tsd-parameters">
-										<li>
-											<h5>A: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>The starting point [x,y].</p>
-											</div>
-										</li>
-										<li>
-											<h5>O: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>The vertex point [x,y].</p>
-											</div>
-										</li>
-										<li>
-											<h5>B: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>The ending point [x,y].</p>
-											</div>
-										</li>
-										<li>
-											<h5>arc: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>The number of arcs.</p>
-											</div>
-										</li>
-										<li>
-											<h5>radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 15</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>The radius of the angle arc, in pixel.</p>
-											</div>
-										</li>
-									</ul>
-									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-									<p>void</p>
-									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">decorate</span><span style="color: #000000">.</span><span style="color: #795E26">angleReflex</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #098658">2</span><span style="color: #000000">) </span>
-<span style="color: #008000">// decorate a reflex angle AOB with double-arc.</span>
 </code></pre>
 								</li>
 							</ul>
@@ -3588,7 +3530,7 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>draw</h2>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="angle-2" class="tsd-anchor"></a>
+				<a name="angle-3" class="tsd-anchor"></a>
 				<h3>angle</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 					<li class="tsd-signature tsd-kind-icon">angle<span class="tsd-signature-symbol">(</span>A<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, O<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, B<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, label<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, arc<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, radius<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
@@ -3644,128 +3586,6 @@ img {
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						<p>void</p>
 						<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">angle</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">5</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],</span><span style="color: #A31515">&#039;x&#039;</span><span style="color: #000000">)</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="anglepolar-2" class="tsd-anchor"></a>
-				<h3>angle<wbr>Polar</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">angle<wbr>Polar<span class="tsd-signature-symbol">(</span>A<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, O<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, B<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, label<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, arc<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, radius<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Draw an angle with label, anticlockwise</p>
-							</div>
-						</div>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>A: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The starting point [x,y].</p>
-								</div>
-							</li>
-							<li>
-								<h5>O: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The vertex point [x,y].</p>
-								</div>
-							</li>
-							<li>
-								<h5>B: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The ending point [x,y].</p>
-								</div>
-							</li>
-							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> label: <span class="tsd-signature-type">string</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The label</p>
-								</div>
-							</li>
-							<li>
-								<h5>arc: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The number of arcs.</p>
-								</div>
-							</li>
-							<li>
-								<h5>radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 15</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The radius of the angle arc, in pixel.</p>
-								</div>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						<p>void</p>
-						<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">anglePolar</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">5</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],</span><span style="color: #A31515">&#039;x&#039;</span><span style="color: #000000">)</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="anglereflex-2" class="tsd-anchor"></a>
-				<h3>angle<wbr>Reflex</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">angle<wbr>Reflex<span class="tsd-signature-symbol">(</span>A<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, O<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, B<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, label<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, arc<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, radius<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Draw an angle with label, reflex</p>
-							</div>
-						</div>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>A: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The starting point [x,y].</p>
-								</div>
-							</li>
-							<li>
-								<h5>O: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The vertex point [x,y].</p>
-								</div>
-							</li>
-							<li>
-								<h5>B: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The ending point [x,y].</p>
-								</div>
-							</li>
-							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> label: <span class="tsd-signature-type">string</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The label</p>
-								</div>
-							</li>
-							<li>
-								<h5>arc: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The number of arcs.</p>
-								</div>
-							</li>
-							<li>
-								<h5>radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 15</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The radius of the angle arc, in pixel.</p>
-								</div>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						<p>void</p>
-						<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">angleReflex</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">5</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],</span><span style="color: #A31515">&#039;x&#039;</span><span style="color: #000000">)</span>
 </code></pre>
 					</li>
 				</ul>
@@ -5135,7 +4955,7 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="set-1" class="tsd-anchor"></a>
 				<h3>set</h3>
-				<div class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>LABEL_CENTER<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">; </span>TEXT_DIR<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>TEXT_LATEX<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>TEXT_SIZE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>alpha<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>color<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>dash<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>fillColor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>labelCenter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>reset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>strokeColor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textAlign<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textBaseline<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textItalic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textLatex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textSize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>weight<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<div class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>alpha<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>angle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>color<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>dash<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>fillColor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>labelCenter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>reset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>strokeColor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textAlign<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textBaseline<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textItalic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textLatex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>textSize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>weight<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -5146,18 +4966,6 @@ img {
 				<div class="tsd-type-declaration">
 					<h4>Type declaration</h4>
 					<ul class="tsd-parameters">
-						<li class="tsd-parameter">
-							<h5>LABEL_<wbr>CENTER<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-						</li>
-						<li class="tsd-parameter">
-							<h5>TEXT_<wbr>DIR<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-						</li>
-						<li class="tsd-parameter">
-							<h5>TEXT_<wbr>LATEX<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
-						</li>
-						<li class="tsd-parameter">
-							<h5>TEXT_<wbr>SIZE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-						</li>
 						<li class="tsd-parameter">
 							<h5>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a></h5>
 						</li>
@@ -5187,6 +4995,36 @@ img {
 									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 									<p>void</p>
 									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">set</span><span style="color: #000000">.</span><span style="color: #795E26">alpha</span><span style="color: #000000">(</span><span style="color: #098658">0.9</span><span style="color: #000000">) </span><span style="color: #008000">// set slightly transparent</span>
+</code></pre>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
+							<h5>angle<span class="tsd-signature-symbol">: </span>function</h5>
+							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+								<li class="tsd-signature tsd-kind-icon">angle<span class="tsd-signature-symbol">(</span>mode<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;normal&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;polar&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;reflex&quot;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+							</ul>
+							<ul class="tsd-descriptions">
+								<li class="tsd-description">
+									<aside class="tsd-sources">
+									</aside>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Set the mode for angle. All angles (e.g. AOB) will be understood as this mode.</p>
+										</div>
+									</div>
+									<h4 class="tsd-parameters-title">Parameters</h4>
+									<ul class="tsd-parameters">
+										<li>
+											<h5>mode: <span class="tsd-signature-type">&quot;normal&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;polar&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;reflex&quot;</span><span class="tsd-signature-symbol"> = &#x27;normal&#x27;</span></h5>
+											<div class="tsd-comment tsd-typography">
+												<p>the mode: &#39;normal&#39; | &#39;polar&#39; | &#39;reflex&#39;</p>
+											</div>
+										</li>
+									</ul>
+									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									<p>void</p>
+									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">set</span><span style="color: #000000">.</span><span style="color: #795E26">angle</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;polar&#039;</span><span style="color: #000000">) </span><span style="color: #008000">// set mode to &#039;polar&#039;</span>
 </code></pre>
 								</li>
 							</ul>
@@ -5706,7 +5544,7 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="label" class="tsd-anchor"></a>
 				<h3>label</h3>
-				<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>angle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>anglePolar<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>angleReflex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>coordinates<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>line<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>point<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>points<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>angle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>anglePolar<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>coordinates<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>line<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>point<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>points<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 				</aside>
 				<div class="tsd-type-declaration">
@@ -5718,7 +5556,7 @@ img {
 						<li class="tsd-parameter">
 							<h5>angle<span class="tsd-signature-symbol">: </span>function</h5>
 							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
-								<li class="tsd-signature tsd-kind-icon">angle<span class="tsd-signature-symbol">(</span>anglePoints<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">]</span>, text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dodgeDirection<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, offsetPixel<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								<li class="tsd-signature tsd-kind-icon">angle<span class="tsd-signature-symbol">(</span>anglePoints<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">]</span>, text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, dodgeDirection<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, offsetPixel<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 							</ul>
 							<ul class="tsd-descriptions">
 								<li class="tsd-description">
@@ -5738,7 +5576,7 @@ img {
 											</div>
 										</li>
 										<li>
-											<h5>text: <span class="tsd-signature-type">string</span></h5>
+											<h5>text: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 											<div class="tsd-comment tsd-typography">
 												<p>The string to write.</p>
 											</div>
@@ -5777,6 +5615,11 @@ img {
 										<div class="lead">
 											<p>Add a label to an angle AOB, in anticlockwise.</p>
 										</div>
+										<dl class="tsd-comment-tags">
+											<dt>deprecated</dt>
+											<dd><p>use pen.set.angle(&#39;polar&#39;)</p>
+											</dd>
+										</dl>
 									</div>
 									<h4 class="tsd-parameters-title">Parameters</h4>
 									<ul class="tsd-parameters">
@@ -5808,55 +5651,6 @@ img {
 									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 									<p>void</p>
 									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">label</span><span style="color: #000000">.</span><span style="color: #795E26">anglePolar</span><span style="color: #000000">([[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">]],</span><span style="color: #A31515">&#039;x&#039;</span><span style="color: #000000">) </span>
-<span style="color: #008000">// label the angle as &#039;x&#039;</span>
-</code></pre>
-								</li>
-							</ul>
-						</li>
-						<li class="tsd-parameter">
-							<h5>angle<wbr>Reflex<span class="tsd-signature-symbol">: </span>function</h5>
-							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
-								<li class="tsd-signature tsd-kind-icon">angle<wbr>Reflex<span class="tsd-signature-symbol">(</span>anglePoints<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">]</span>, text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dodgeDirection<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, offsetPixel<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-							</ul>
-							<ul class="tsd-descriptions">
-								<li class="tsd-description">
-									<aside class="tsd-sources">
-									</aside>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Add a label to an angle AOB, reflex.</p>
-										</div>
-									</div>
-									<h4 class="tsd-parameters-title">Parameters</h4>
-									<ul class="tsd-parameters">
-										<li>
-											<h5>anglePoints: <span class="tsd-signature-symbol">[</span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">]</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>An array [A,O,B] for the coordinates of A,O,B.</p>
-											</div>
-										</li>
-										<li>
-											<h5>text: <span class="tsd-signature-type">string</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>The string to write.</p>
-											</div>
-										</li>
-										<li>
-											<h5>dodgeDirection: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.</p>
-											</div>
-										</li>
-										<li>
-											<h5>offsetPixel: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = -1</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>The pixel distance to offset from the position. If negative, default to (text.length &lt;= 2 ? 25 : 30).</p>
-											</div>
-										</li>
-									</ul>
-									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-									<p>void</p>
-									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">label</span><span style="color: #000000">.</span><span style="color: #795E26">angleReflex</span><span style="color: #000000">([[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">]],</span><span style="color: #A31515">&#039;x&#039;</span><span style="color: #000000">) </span>
 <span style="color: #008000">// label the angle as &#039;x&#039;</span>
 </code></pre>
 								</li>

@@ -140,6 +140,7 @@ class PenCls {
         }
     }
 
+
     /**
      * Setup of canvas size.
      * @category setting
@@ -352,6 +353,24 @@ class PenCls {
     };
 
     /**
+     * @ignore
+     */
+    private setProperty: {
+        TEXT_SIZE: number
+        TEXT_DIR: number
+        TEXT_LATEX: boolean
+        LABEL_CENTER: Point | undefined,
+        ANGLE_MODE: 'normal' | 'polar' | 'reflex'
+    } = {
+            TEXT_SIZE: 1,
+            TEXT_DIR: 0,
+            TEXT_LATEX: false,
+            LABEL_CENTER: undefined,
+            ANGLE_MODE: 'normal'
+        }
+
+
+    /**
      * Settings.
      * @category setting
      */
@@ -360,22 +379,6 @@ class PenCls {
          * @ignore
          */
         _pen: this as PenCls,
-        /**
-         * @ignore
-         */
-        TEXT_SIZE: 1,
-        /**
-         * @ignore
-         */
-        TEXT_DIR: 0,
-        /**
-         * @ignore
-         */
-        TEXT_LATEX: false,
-        /**
-         * @ignore
-         */
-        LABEL_CENTER: undefined as Point | undefined,
         /**
          * Set the weight of the pen (line width).
          * @category set
@@ -488,7 +491,7 @@ class PenCls {
          * ```
          */
         textSize(size = 1) {
-            this.TEXT_SIZE = size
+            this._pen.setProperty.TEXT_SIZE = size
             const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
             size = Math.round(size * REM_PIXEL * PEN_QUALITY);
             this._pen.ctx.font = this._pen.ctx.font.replace(/\d+px/g, size + 'px');
@@ -521,7 +524,7 @@ class PenCls {
          * ```
          */
         textDir(angle = 0) {
-            this.TEXT_DIR = angle
+            this._pen.setProperty.TEXT_DIR = angle
         },
 
         /**
@@ -534,7 +537,7 @@ class PenCls {
          * ```
          */
         textLatex(on = false) {
-            this.TEXT_LATEX = on
+            this._pen.setProperty.TEXT_LATEX = on
         },
 
         /**
@@ -548,14 +551,26 @@ class PenCls {
          * ```
          */
         labelCenter(center: Point | boolean = false) {
-            if (center === false) this.LABEL_CENTER = undefined
+            if (center === false) this._pen.setProperty.LABEL_CENTER = undefined
             // @ts-ignore
-            if (owl.point(center)) this.LABEL_CENTER = center
+            if (owl.point(center)) this._pen.setProperty.LABEL_CENTER = center
             if (center === true) {
                 let x = (this._pen.frame.xmin + this._pen.frame.xmax) / 2
                 let y = (this._pen.frame.ymin + this._pen.frame.ymax) / 2
-                this.LABEL_CENTER = [x, y]
+                this._pen.setProperty.LABEL_CENTER = [x, y]
             }
+        },
+        /**
+         * Set the mode for angle. All angles (e.g. AOB) will be understood as this mode.
+         * @category set
+         * @param mode - the mode: 'normal' | 'polar' | 'reflex'
+         * @returns void
+         * ```
+         * pen.set.angle('polar') // set mode to 'polar'
+         * ```
+         */
+        angle(mode: 'normal' | 'polar' | 'reflex' = 'normal') {
+            this._pen.setProperty.ANGLE_MODE = mode
         },
         /**
          * Reset all pen settings.
@@ -569,6 +584,7 @@ class PenCls {
             this.weight();
             this.strokeColor();
             this.fillColor();
+            this.alpha()
             this.dash();
             this.textAlign();
             this.textBaseline();
@@ -1148,44 +1164,46 @@ class PenCls {
     }
 
 
-    /**
-     * Draw an angle with label, anticlockwise
-     * @category draw
-     * @param A - The starting point [x,y].
-     * @param O - The vertex point [x,y].
-     * @param B - The ending point [x,y].
-     * @param label - The label
-     * @param arc - The number of arcs.
-     * @param radius - The radius of the angle arc, in pixel.
-     * @returns void
-     * ```
-     * pen.anglePolar([0,0],[5,2],[3,4],'x')
-     * ```
-     */
-    anglePolar(A: Point, O: Point, B: Point, label?: string, arc = 1, radius = 15) {
-        this.decorate.anglePolar(A, O, B, arc, radius)
-        if (label !== undefined) this.label.anglePolar([A, O, B], label)
-    }
+    // /**
+    //  * Draw an angle with label, anticlockwise
+    //  * @category draw
+    //  * @deprecated
+    //  * @param A - The starting point [x,y].
+    //  * @param O - The vertex point [x,y].
+    //  * @param B - The ending point [x,y].
+    //  * @param label - The label
+    //  * @param arc - The number of arcs.
+    //  * @param radius - The radius of the angle arc, in pixel.
+    //  * @returns void
+    //  * ```
+    //  * pen.anglePolar([0,0],[5,2],[3,4],'x')
+    //  * ```
+    //  */
+    // anglePolar(A: Point, O: Point, B: Point, label?: string, arc = 1, radius = 15) {
+    //     this.decorate.anglePolar(A, O, B, arc, radius)
+    //     if (label !== undefined) this.label.anglePolar([A, O, B], label)
+    // }
 
 
-    /**
-     * Draw an angle with label, reflex
-     * @category draw
-     * @param A - The starting point [x,y].
-     * @param O - The vertex point [x,y].
-     * @param B - The ending point [x,y].
-     * @param label - The label
-     * @param arc - The number of arcs.
-     * @param radius - The radius of the angle arc, in pixel.
-     * @returns void
-     * ```
-     * pen.angleReflex([0,0],[5,2],[3,4],'x')
-     * ```
-     */
-    angleReflex(A: Point, O: Point, B: Point, label?: string, arc = 1, radius = 15) {
-        this.decorate.angleReflex(A, O, B, arc, radius)
-        if (label !== undefined) this.label.angleReflex([A, O, B], label)
-    }
+    // /**
+    //  * Draw an angle with label, reflex
+    //  * @category draw
+    //  * @deprecated
+    //  * @param A - The starting point [x,y].
+    //  * @param O - The vertex point [x,y].
+    //  * @param B - The ending point [x,y].
+    //  * @param label - The label
+    //  * @param arc - The number of arcs.
+    //  * @param radius - The radius of the angle arc, in pixel.
+    //  * @returns void
+    //  * ```
+    //  * pen.angleReflex([0,0],[5,2],[3,4],'x')
+    //  * ```
+    //  */
+    // angleReflex(A: Point, O: Point, B: Point, label?: string, arc = 1, radius = 15) {
+    //     this.decorate.angleReflex(A, O, B, arc, radius)
+    //     if (label !== undefined) this.label.angleReflex([A, O, B], label)
+    // }
 
 
     /**
@@ -1289,6 +1307,7 @@ class PenCls {
         /**
          * Decorate an angle AOB, always in anti-clockwise.
          * @category decorator
+         * @deprecated use pen.set.angle('polar')
          * @param A - The starting point [x,y].
          * @param O - The vertex point [x,y].
          * @param B - The ending point [x,y].
@@ -1328,28 +1347,41 @@ class PenCls {
          * ```
          */
         angle(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
-            if (IsReflex(A, O, B)) [A, B] = [B, A]
-            this.anglePolar(A, O, B, arc, radius)
+            let mode = this._pen.setProperty.ANGLE_MODE
+            if (mode === 'normal' && IsReflex(A, O, B)) [A, B] = [B, A]
+            if (mode === 'reflex' && !IsReflex(A, O, B)) [A, B] = [B, A]
+            // draw like polar
+            A = this._pen.frame.toPix(A);
+            let OPixel = this._pen.frame.toPix(O);
+            B = this._pen.frame.toPix(B);
+            let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
+            let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
+            let space = 3
+            let outset = arc > 1 ? space / 2 : 0
+            for (let i = 0; i < arc; i++) {
+                this._pen.circle(O, radius + outset - i * space, [a1, a2]);
+            }
         },
 
-        /**
-         * Decorate an angle AOB, always reflex.
-         * @category decorator
-         * @param A - The starting point [x,y].
-         * @param O - The vertex point [x,y].
-         * @param B - The ending point [x,y].
-         * @param arc - The number of arcs.
-         * @param radius - The radius of the angle arc, in pixel.
-         * @returns void
-         * ```
-         * pen.decorate.angleReflex([1,0],[0,0],[3,2],2) 
-         * // decorate a reflex angle AOB with double-arc.
-         * ```
-         */
-        angleReflex(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
-            if (!IsReflex(A, O, B)) [A, B] = [B, A]
-            this.anglePolar(A, O, B, arc, radius)
-        },
+        // /**
+        //  * Decorate an angle AOB, always reflex.
+        //  * @category decorator
+        //  * @deprecated use pen.set.angle('reflex')
+        //  * @param A - The starting point [x,y].
+        //  * @param O - The vertex point [x,y].
+        //  * @param B - The ending point [x,y].
+        //  * @param arc - The number of arcs.
+        //  * @param radius - The radius of the angle arc, in pixel.
+        //  * @returns void
+        //  * ```
+        //  * pen.decorate.angleReflex([1,0],[0,0],[3,2],2) 
+        //  * // decorate a reflex angle AOB with double-arc.
+        //  * ```
+        //  */
+        // angleReflex(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
+        //     if (!IsReflex(A, O, B)) [A, B] = [B, A]
+        //     this.anglePolar(A, O, B, arc, radius)
+        // },
 
         /**
          * Decorate a right-angle AOB.
@@ -1392,10 +1424,10 @@ class PenCls {
      */
     private _write(text: string, xPix: number, yPix: number) {
         this.ctx.save()
-        let ANGLE = -this.set.TEXT_DIR * Math.PI / 180
-        if (this.set.TEXT_LATEX) {
+        let ANGLE = -this.setProperty.TEXT_DIR * Math.PI / 180
+        if (this.setProperty.TEXT_LATEX) {
             const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
-            let size = Math.round(this.set.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
+            let size = Math.round(this.setProperty.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
             // @ts-ignore
             const widget = new CanvasLatex.default(
                 text,
@@ -1456,7 +1488,7 @@ class PenCls {
             let [x, y] = this._pen.frame.toPix(position);
             offsetPixel = offsetPixel * PEN_QUALITY;
             if (dodgeDirection === undefined) {
-                let center = this._pen.set.LABEL_CENTER
+                let center = this._pen.setProperty.LABEL_CENTER
                 if (center !== undefined && AreDistinctPoint(center, position)) {
                     dodgeDirection = Inclination(center, position)
                 } else {
@@ -1491,6 +1523,7 @@ class PenCls {
         /**
          * Add a label to an angle AOB, in anticlockwise.
          * @category text
+         * @deprecated use pen.set.angle('polar')
          * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
          * @param text - The string to write.
          * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
@@ -1526,34 +1559,46 @@ class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        angle(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
-            if (IsReflex(...anglePoints)) {
-                let [A, O, B] = anglePoints
-                anglePoints = [B, O, A]
-            }
-            this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel)
+        angle(anglePoints: [Point, Point, Point], text: string | number, dodgeDirection = 0, offsetPixel = -1) {
+            let mode = this._pen.setProperty.ANGLE_MODE
+            if (mode === 'normal' && IsReflex(...anglePoints))
+                anglePoints = [...anglePoints].reverse() as [Point, Point, Point]
+            if (mode === 'reflex' && !IsReflex(...anglePoints))
+                anglePoints = [...anglePoints].reverse() as [Point, Point, Point]
+            // draw like polar
+            let [A, O, B] = anglePoints;
+            let APixel = this._pen.frame.toPix(A);
+            let OPixel = this._pen.frame.toPix(O);
+            let BPixel = this._pen.frame.toPix(B);
+            let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
+            let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
+            if (a2 < a1) a2 = a2 + 360
+            if (typeof text === 'number') text = text + '°'
+            if (offsetPixel < 0) offsetPixel = text.length <= 2 ? 25 : 30
+            this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
         },
 
-        /**
-         * Add a label to an angle AOB, reflex.
-         * @category text
-         * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
-         * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
-         * @returns void
-         * ```
-         * pen.label.angleReflex([[1,2],[0,0],[-2,1]],'x') 
-         * // label the angle as 'x'
-         * ```
-         */
-        angleReflex(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
-            if (!IsReflex(...anglePoints)) {
-                let [A, O, B] = anglePoints
-                anglePoints = [B, O, A]
-            }
-            this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel)
-        },
+        // /**
+        //  * Add a label to an angle AOB, reflex.
+        //  * @category text
+        //  * @deprecated use pen.set.angle('reflex')
+        //  * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
+        //  * @param text - The string to write.
+        //  * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+        //  * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+        //  * @returns void
+        //  * ```
+        //  * pen.label.angleReflex([[1,2],[0,0],[-2,1]],'x') 
+        //  * // label the angle as 'x'
+        //  * ```
+        //  */
+        // angleReflex(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
+        //     if (!IsReflex(...anglePoints)) {
+        //         let [A, O, B] = anglePoints
+        //         anglePoints = [B, O, A]
+        //     }
+        //     this.anglePolar(anglePoints, text, dodgeDirection, offsetPixel)
+        // },
 
         /**
          * Add a label to a line AB.

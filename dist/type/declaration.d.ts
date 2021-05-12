@@ -2780,6 +2780,10 @@ declare class PenCls {
         inView(points: Point[], border?: number, origin?: boolean): void;
     };
     /**
+     * @ignore
+     */
+    private setProperty;
+    /**
      * Settings.
      * @category setting
      */
@@ -2788,22 +2792,6 @@ declare class PenCls {
          * @ignore
          */
         _pen: PenCls;
-        /**
-         * @ignore
-         */
-        TEXT_SIZE: number;
-        /**
-         * @ignore
-         */
-        TEXT_DIR: number;
-        /**
-         * @ignore
-         */
-        TEXT_LATEX: boolean;
-        /**
-         * @ignore
-         */
-        LABEL_CENTER: Point | undefined;
         /**
          * Set the weight of the pen (line width).
          * @category set
@@ -2935,6 +2923,16 @@ declare class PenCls {
          * ```
          */
         labelCenter(center?: Point | boolean): void;
+        /**
+         * Set the mode for angle. All angles (e.g. AOB) will be understood as this mode.
+         * @category set
+         * @param mode - the mode: 'normal' | 'polar' | 'reflex'
+         * @returns void
+         * ```
+         * pen.set.angle('polar') // set mode to 'polar'
+         * ```
+         */
+        angle(mode?: 'normal' | 'polar' | 'reflex'): void;
         /**
          * Reset all pen settings.
          * @category set
@@ -3284,36 +3282,6 @@ declare class PenCls {
      */
     angle(A: Point, O: Point, B: Point, label?: string, arc?: number, radius?: number): void;
     /**
-     * Draw an angle with label, anticlockwise
-     * @category draw
-     * @param A - The starting point [x,y].
-     * @param O - The vertex point [x,y].
-     * @param B - The ending point [x,y].
-     * @param label - The label
-     * @param arc - The number of arcs.
-     * @param radius - The radius of the angle arc, in pixel.
-     * @returns void
-     * ```
-     * pen.anglePolar([0,0],[5,2],[3,4],'x')
-     * ```
-     */
-    anglePolar(A: Point, O: Point, B: Point, label?: string, arc?: number, radius?: number): void;
-    /**
-     * Draw an angle with label, reflex
-     * @category draw
-     * @param A - The starting point [x,y].
-     * @param O - The vertex point [x,y].
-     * @param B - The ending point [x,y].
-     * @param label - The label
-     * @param arc - The number of arcs.
-     * @param radius - The radius of the angle arc, in pixel.
-     * @returns void
-     * ```
-     * pen.angleReflex([0,0],[5,2],[3,4],'x')
-     * ```
-     */
-    angleReflex(A: Point, O: Point, B: Point, label?: string, arc?: number, radius?: number): void;
-    /**
      * Geometry Decorator.
      * @category decorator
      */
@@ -3351,6 +3319,7 @@ declare class PenCls {
         /**
          * Decorate an angle AOB, always in anti-clockwise.
          * @category decorator
+         * @deprecated use pen.set.angle('polar')
          * @param A - The starting point [x,y].
          * @param O - The vertex point [x,y].
          * @param B - The ending point [x,y].
@@ -3378,21 +3347,6 @@ declare class PenCls {
          * ```
          */
         angle(A: Point, O: Point, B: Point, arc?: number, radius?: number): void;
-        /**
-         * Decorate an angle AOB, always reflex.
-         * @category decorator
-         * @param A - The starting point [x,y].
-         * @param O - The vertex point [x,y].
-         * @param B - The ending point [x,y].
-         * @param arc - The number of arcs.
-         * @param radius - The radius of the angle arc, in pixel.
-         * @returns void
-         * ```
-         * pen.decorate.angleReflex([1,0],[0,0],[3,2],2)
-         * // decorate a reflex angle AOB with double-arc.
-         * ```
-         */
-        angleReflex(A: Point, O: Point, B: Point, arc?: number, radius?: number): void;
         /**
          * Decorate a right-angle AOB.
          * @category decorator
@@ -3460,6 +3414,7 @@ declare class PenCls {
         /**
          * Add a label to an angle AOB, in anticlockwise.
          * @category text
+         * @deprecated use pen.set.angle('polar')
          * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
          * @param text - The string to write.
          * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
@@ -3484,21 +3439,7 @@ declare class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        angle(anglePoints: [Point, Point, Point], text: string, dodgeDirection?: number, offsetPixel?: number): void;
-        /**
-         * Add a label to an angle AOB, reflex.
-         * @category text
-         * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
-         * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
-         * @returns void
-         * ```
-         * pen.label.angleReflex([[1,2],[0,0],[-2,1]],'x')
-         * // label the angle as 'x'
-         * ```
-         */
-        angleReflex(anglePoints: [Point, Point, Point], text: string, dodgeDirection?: number, offsetPixel?: number): void;
+        angle(anglePoints: [Point, Point, Point], text: string | number, dodgeDirection?: number, offsetPixel?: number): void;
         /**
          * Add a label to a line AB.
          * @category text
