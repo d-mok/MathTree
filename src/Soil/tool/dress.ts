@@ -18,9 +18,11 @@ const pl = String.raw`[\(\[]`
 const pr = String.raw`[\)\]]`
 const c = String.raw`\,`
 const v = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`
+const f = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`
 const sl = String.raw`\\`
 const left = String.raw`\\left`
 const sq = String.raw`\\sqrt`
+
 const endtag = String.raw`(?=[^<>]*</span>)`
 
 
@@ -52,7 +54,7 @@ function handleSqrt(input: string): string {
 }
 
 function handleCoeff(input: string): string {
-    input = regReplace(input, or(p, m, e, l, sl, r, c) + s + 1 + s + or(v, pl, left, sq) + endtag, '$1$2')
+    input = regReplace(input, or(p, m, e, l, sl, r, c) + s + 1 + s + or(v, f, pl, left, sq) + endtag, '$1$2')
     return input
 }
 

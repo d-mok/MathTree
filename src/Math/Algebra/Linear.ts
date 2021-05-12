@@ -19,7 +19,6 @@ globalThis.LinearFeature = contract(LinearFeature).sign([owl.nonZero, owl.nonZer
 
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from ax+by+c=0
  * ```
  * LineFromLinear(2,4,6) // [-0.5,-1.5]
@@ -97,7 +96,6 @@ globalThis.LinearFromBisector = contract(LinearFromBisector).sign()
 
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from given intercepts
  * ```
  * LineFromIntercepts(1,2) // [-2,2]
@@ -115,7 +113,6 @@ globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign()
 
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from two given points
  * ```
  * LineFromTwoPoints([1,2],[3,4]) // [1,1]
@@ -131,7 +128,6 @@ globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign()
 
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from point and slope
  * ```
  * LineFromPointSlope([1,2],3) // [3,-1]
@@ -148,7 +144,6 @@ globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign()
 
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from perpendicular bisector of AB
  * ```
  * LineFromBisector([1,2],[3,4]) // [-1,5]

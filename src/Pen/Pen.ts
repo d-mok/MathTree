@@ -367,6 +367,14 @@ class PenCls {
         /**
          * @ignore
          */
+        TEXT_DIR: 0,
+        /**
+         * @ignore
+         */
+        TEXT_LATEX: false,
+        /**
+         * @ignore
+         */
         LABEL_CENTER: undefined as Point | undefined,
         /**
          * Set the weight of the pen (line width).
@@ -503,6 +511,31 @@ class PenCls {
                 this._pen.ctx.font = this._pen.ctx.font.replace('italic ', '');
             }
         },
+        /**
+         * Set text direction.
+         * @category set
+         * @param angle - angle to rotate text.
+         * @returns void
+         * ```
+         * pen.set.textDir(90) // set vertical text
+         * ```
+         */
+        textDir(angle = 0) {
+            this.TEXT_DIR = angle
+        },
+
+        /**
+         * Set text latex mode.
+         * @category set
+         * @param on - turn on or off.
+         * @returns void
+         * ```
+         * pen.set.textLatex(true) // turn on latex mode
+         * ```
+         */
+        textLatex(on = false) {
+            this.TEXT_LATEX = on
+        },
 
         /**
          * Set the center for label dodge. If undefined, dodge right by default.
@@ -511,13 +544,17 @@ class PenCls {
          * @returns void
          * ```
          * pen.set.labelCenter([0,0]) // set center to be [0,0]
+         * pen.set.labelCenter(true) // set center to be the center of the canvas
          * ```
          */
-        labelCenter(center?: Point) {
-            if (center) {
-                this.LABEL_CENTER = center
-            } else {
-                this.LABEL_CENTER = undefined
+        labelCenter(center: Point | boolean = false) {
+            if (center === false) this.LABEL_CENTER = undefined
+            // @ts-ignore
+            if (owl.point(center)) this.LABEL_CENTER = center
+            if (center === true) {
+                let x = (this._pen.frame.xmin + this._pen.frame.xmax) / 2
+                let y = (this._pen.frame.ymin + this._pen.frame.ymax) / 2
+                this.LABEL_CENTER = [x, y]
             }
         },
         /**
@@ -538,6 +575,8 @@ class PenCls {
             this._pen.ctx.font = 'normal 10px Times New Roman';
             this.textSize();
             this.textItalic();
+            this.textDir()
+            this.textLatex()
             this.labelCenter()
         }
     };

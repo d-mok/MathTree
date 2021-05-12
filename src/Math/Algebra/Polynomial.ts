@@ -1,12 +1,9 @@
 
 
-type polynomial = {
-    coeff: number[],
-    [_: string]: number[],
 
-}
-
-
+/**
+ * @ignore
+ */
 class PolyClass {
     constructor(public poly: polynomial) {
 
@@ -176,37 +173,42 @@ function RndPolynomial(degree: number, vars: string[] = ["x"], terms: number = d
         return pc.degree() === degree && !pc.hasLikeTerms()
     })
 }
-globalThis.RndPolynomial = RndPolynomial
+globalThis.RndPolynomial = contract(RndPolynomial).sign([owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num])
+
+
+function PolyPrint(poly: polynomial) {
+    return (new PolyClass(poly)).print()
+}
+globalThis.PolyPrint = contract(PolyPrint).sign([owl.polynomial])
 
 
 function PolySort(poly: polynomial, desc = true) {
     return (new PolyClass(poly)).sort(desc)
 }
-globalThis.PolySort = PolySort
-
-function PolyPrint(poly: polynomial) {
-    return (new PolyClass(poly)).print()
-}
-globalThis.PolyPrint = PolyPrint
+globalThis.PolySort = contract(PolySort).sign([owl.polynomial])
 
 
-function PolyPrettyPrint(poly: polynomial) {
-    // return (new PolyClass(poly)).print()
-}
-globalThis.PolyPrettyPrint = PolyPrettyPrint
+// function PolyPrettyPrint(poly: polynomial) {
+//     // return (new PolyClass(poly)).print()
+// }
+// globalThis.PolyPrettyPrint = contract(PolyPrettyPrint).sign([owl.polynomial])
 
 
 
 function PolyFunction(poly: polynomial): (values: { [_: string]: number }) => number {
     return (new PolyClass(poly)).func()
 }
-globalThis.PolyFunction = PolyFunction
+globalThis.PolyFunction = contract(PolyFunction).sign([owl.polynomial])
 
 
 
 function PolySplit(poly: polynomial): polynomial[] {
     return (new PolyClass(poly)).split()
 }
-globalThis.PolySplit = PolySplit
+globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
 
 
+function PolyDegree(poly: polynomial): number {
+    return (new PolyClass(poly)).degree()
+}
+globalThis.PolyDegree = contract(PolyDegree).sign([owl.polynomial])

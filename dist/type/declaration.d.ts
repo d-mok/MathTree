@@ -79,6 +79,7 @@ declare module "Core/Owl/index" {
     export const properFraction: (_: any) => any;
     export const vector: (_: any) => any;
     export const triangleSides: (_: any) => any;
+    export const polynomial: (_: any) => boolean;
     export const pass: (_: any) => boolean;
     export const fail: (_: any) => boolean;
     export const distinct: (_: any[]) => boolean;
@@ -210,10 +211,9 @@ declare module "Core/index" {
 }
 declare module "Core/Ant/ant.test" { }
 declare module "Core/Contract/contract.test" { }
-declare type polynomial = {
-    coeff: number[];
-    [_: string]: number[];
-};
+/**
+ * @ignore
+ */
 declare class PolyClass {
     poly: polynomial;
     constructor(poly: polynomial);
@@ -237,13 +237,13 @@ declare class PolyClass {
     print(): string;
 }
 declare function RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
-declare function PolySort(poly: polynomial, desc?: boolean): polynomial;
 declare function PolyPrint(poly: polynomial): string;
-declare function PolyPrettyPrint(poly: polynomial): void;
+declare function PolySort(poly: polynomial, desc?: boolean): polynomial;
 declare function PolyFunction(poly: polynomial): (values: {
     [_: string]: number;
 }) => number;
 declare function PolySplit(poly: polynomial): polynomial[];
+declare function PolyDegree(poly: polynomial): number;
 declare module "Math/index" {
     import './Code/Assertion.ts';
     import './Code/Combinatorics.ts';
@@ -332,6 +332,10 @@ declare type QuadrantCode = 1 | 2 | 3 | 4;
 declare type PolarPoint = [r: number, q: number];
 declare type TrigFunc = 'sin' | 'cos' | 'tan';
 declare type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
+declare type polynomial = {
+    coeff: number[];
+    [_: string]: number[];
+};
 /**
  * @category Algebra
  * @return solve [x,y] from ax+by=c and px+qy=r.

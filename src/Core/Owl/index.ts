@@ -111,6 +111,17 @@ export const triangleSides = (_: any) => {
         c + a > b
 }
 
+export const polynomial = (_: any) => {
+    if (!('coeff' in _)) return false
+    if (!ntuple(_.coeff)) return false
+    let n = _.coeff.length
+    for (let k in _) {
+        if (!ntuple(_[k])) return false
+        if (!arrayOfLength(n)(_[k])) return false
+    }
+    return true
+}
+
 // trivial
 
 export const pass = (_: any) => true
