@@ -100,28 +100,3 @@ export function evalInline(code: string, dict: Dict) {
     }
 }
 
-
-
-
-
-
-// export function intrapolate(html: string, dict: Dict): string {
-//     html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
-//         let code = x.substring(3, x.length - 2)
-//         let result = evalInline(code, this.dict)
-//         return ParseForPrint(result)
-//     })
-//     html = html.replace(/\*\{[^\{\}]*\}/g, x => {
-//         let code = x.substring(2, x.length - 1)
-//         let result = evalInline(code, this.dict)
-//         return ParseForPrint(result)
-//     })
-//     return html
-
-// }
-
-
-
-
-
-

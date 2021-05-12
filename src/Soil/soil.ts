@@ -89,15 +89,13 @@ export class Soil {
     }
 
     private intrapolateCode(html: string) {
-        html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
-            let code = x.substring(3, x.length - 2)
+        html = html.replace(/\*\\\{([^\{\}]*)\\\}/g, (match, code) => {
             let result = evalInline(code, this.dict)
-            return ParseForPrint(result,"")
+            return ParseForPrint(result, "")
         })
-        html = html.replace(/\*\{[^\{\}]*\}/g, x => {
-            let code = x.substring(2, x.length - 1)
+        html = html.replace(/\*\{([^\{\}]*)\}/g, (match, code) => {
             let result = evalInline(code, this.dict)
-            return ParseForPrint(result,"")
+            return ParseForPrint(result, "")
         })
         return html
     }
