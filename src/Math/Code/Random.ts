@@ -53,7 +53,7 @@ globalThis.RndRs = contract(RndRs).sign([owl.num, owl.num, owl.positiveInt])
 
 /**
  * @category Random
- * @return a random fraction with largest numerator / denominator, within range inclusive.
+ * @return a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
  * ```
  * RndQ(9,[2,9]) // may return 7/2
  * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
@@ -65,7 +65,7 @@ function RndQ(largest: number = 9, range?: interval): number {
     if (range) {
         return dice.roll(f).brute(_ => _ >= range[0] && _ <= range[1] && owl.dec(_))
     } else {
-        return f()
+        return dice.roll(f).brute(_ => owl.dec(_))
     }
 
 }
@@ -75,7 +75,7 @@ globalThis.RndQ = contract(RndQ).sign([owl.nonZeroInt, owl.interval])
 
 /**
  * @category Random
- * @return an array of n unique random fractions.
+ * @return an array of n unique random fractions (non-integer) .
  * ```
  * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
  * ```
