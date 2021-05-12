@@ -70,7 +70,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     print("/", "\\*\\/")
 
     // print *(x) as bracket if negative
-    print("()", "\\*\\(", "\\)")    
+    print("()", "\\*\\(", "\\)")
 
     // print *+x as sign of x
     print("+", "\\*\\+")
@@ -100,6 +100,8 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (owl.combo(value)) {
             return ink.printCombo(value)
         }
+        if (owl.polynomial(value))
+            return PolyPrint(value)
     }
 
     if (signal === '*') {
