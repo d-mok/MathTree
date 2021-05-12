@@ -398,7 +398,6 @@ declare function IntegralOnCircle(centre: Point, radius: number): Point[][];
 declare function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number];
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from ax+by+c=0
  * ```
  * LineFromLinear(2,4,6) // [-0.5,-1.5]
@@ -444,7 +443,6 @@ declare function LinearFromPointSlope(point: Point, slope: number): [a: number, 
 declare function LinearFromBisector(A: Point, B: Point): [a: number, b: number, c: number];
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from given intercepts
  * ```
  * LineFromIntercepts(1,2) // [-2,2]
@@ -454,7 +452,6 @@ declare function LinearFromBisector(A: Point, B: Point): [a: number, b: number, 
 declare function LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number];
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from two given points
  * ```
  * LineFromTwoPoints([1,2],[3,4]) // [1,1]
@@ -464,7 +461,6 @@ declare function LineFromIntercepts(xInt: number, yInt: number): [slope: number,
 declare function LineFromTwoPoints(point1: Point, point2: Point): [slope: number, yInt: number];
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from point and slope
  * ```
  * LineFromPointSlope([1,2],3) // [3,-1]
@@ -474,7 +470,6 @@ declare function LineFromTwoPoints(point1: Point, point2: Point): [slope: number
 declare function LineFromPointSlope(point: Point, slope: number): [slope: number, yInt: number];
 /**
  * @category Linear
- * @deprecated
  * @return [slope,yInt] from perpendicular bisector of AB
  * ```
  * LineFromBisector([1,2],[3,4]) // [-1,5]
@@ -2810,6 +2805,14 @@ declare class PenCls {
         /**
          * @ignore
          */
+        TEXT_DIR: number;
+        /**
+         * @ignore
+         */
+        TEXT_LATEX: boolean;
+        /**
+         * @ignore
+         */
         LABEL_CENTER: Point | undefined;
         /**
          * Set the weight of the pen (line width).
@@ -2912,15 +2915,36 @@ declare class PenCls {
          */
         textItalic(italic?: boolean): void;
         /**
+         * Set text direction.
+         * @category set
+         * @param angle - angle to rotate text.
+         * @returns void
+         * ```
+         * pen.set.textDir(90) // set vertical text
+         * ```
+         */
+        textDir(angle?: number): void;
+        /**
+         * Set text latex mode.
+         * @category set
+         * @param on - turn on or off.
+         * @returns void
+         * ```
+         * pen.set.textLatex(true) // turn on latex mode
+         * ```
+         */
+        textLatex(on?: boolean): void;
+        /**
          * Set the center for label dodge. If undefined, dodge right by default.
          * @category set
          * @param center - the center coordinate
          * @returns void
          * ```
          * pen.set.labelCenter([0,0]) // set center to be [0,0]
+         * pen.set.labelCenter(true) // set center to be the center of the canvas
          * ```
          */
-        labelCenter(center?: Point | undefined): void;
+        labelCenter(center?: Point | boolean): void;
         /**
          * Reset all pen settings.
          * @category set
