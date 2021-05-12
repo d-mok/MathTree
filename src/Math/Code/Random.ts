@@ -63,7 +63,7 @@ function RndQ(largest: number = 9, range?: interval): number {
     let L = Math.abs(largest)
     let f = () => RndN(1, L) / RndN(2, L) * (largest > 0 ? 1 : RndU())
     if (range) {
-        return dice.roll(f).brute(_ => _ >= range[0] && _ <= range[1])
+        return dice.roll(f).brute(_ => _ >= range[0] && _ <= range[1] && owl.dec(_))
     } else {
         return f()
     }

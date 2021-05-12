@@ -41,8 +41,9 @@ test('RndQ', () => {
 
 test('RndQs', () => {
     let arr = sample(() => RndQs(8, [0, 6], 3));
-    expect(arr).toBeFlatWithin(3, 6);
+    expect(arr).toBeFlatWithin(0, 6);
     expect(arr).toBeFlatIs(owl.rational);
+    expect(arr).toBeFlatDistinct(35);
     expect(arr).toAllHaveLength(3);
 });
 
