@@ -153,7 +153,6 @@ class PolyClass {
         if (terms.length === 0) terms.push('0')
         return terms.join("+")
     }
-
 }
 
 
@@ -208,6 +207,6 @@ globalThis.PolyFunction = PolyFunction
 function PolySplit(poly: polynomial): polynomial[] {
     return (new PolyClass(poly)).split()
 }
-globalThis.PolyFunction = PolyFunction
+globalThis.PolySplit = PolySplit
 
 
