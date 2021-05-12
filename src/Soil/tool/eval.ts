@@ -1,4 +1,5 @@
 import { Dict, Config } from '../cls'
+import { ParseForPrint } from './html'
 
 type Context = {
     dict: Dict
@@ -19,6 +20,8 @@ function detectVarErr(e: Error) {
         return e
     }
 }
+
+
 
 export function evaluate(code: string, context: Context) {
     // injectables
@@ -96,3 +99,29 @@ export function evalInline(code: string, dict: Dict) {
         throw detectVarErr(e)
     }
 }
+
+
+
+
+
+
+// export function intrapolate(html: string, dict: Dict): string {
+//     html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
+//         let code = x.substring(3, x.length - 2)
+//         let result = evalInline(code, this.dict)
+//         return ParseForPrint(result)
+//     })
+//     html = html.replace(/\*\{[^\{\}]*\}/g, x => {
+//         let code = x.substring(2, x.length - 1)
+//         let result = evalInline(code, this.dict)
+//         return ParseForPrint(result)
+//     })
+//     return html
+
+// }
+
+
+
+
+
+

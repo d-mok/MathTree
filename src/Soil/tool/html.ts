@@ -54,72 +54,107 @@ export class QuestionHTML {
 
 
 
-/**
-* print a variable (e.g. *x) into the html
-* ```typescript
-* let html = '1 + *x = *y'
-* PrintVariable(html,'x',2) // '1 + 2 = *y'
-* ```
-*/
 export function PrintVariable(html: string, symbol: string, value: any): string {
 
-    let print = (prefix: string, value: any, suffix: string = "") => {
-        html = html.replace(new RegExp(prefix + symbol + suffix, 'g'), value);
+    let print = (signal: string, prefix: string, suffix: string = "") => {
+        html = html.replace(
+            new RegExp(prefix + symbol + suffix, 'g'),
+            () => ParseForPrint(value, signal)
+        );
     }
 
-    let T = typeof value
-
+    print("*", "\\*\\*")
     // print **x as sci notation
-    if (T === 'number') {
-        let v = ant.blur(Round(value, 3))
-        if (v >= 10000 || v <= 0.01) {
-            print("\\*\\*", Sci(v))
-        } else {
-            print("\\*\\*", v)
-        }
-    }
+    // if (T === 'number') {
+    //     let v = ant.blur(Round(value, 3))
+    //     if (v >= 10000 || v <= 0.01) {
+    //         print("\\*\\*", Sci(v))
+    //     } else {
+    //         print("\\*\\*", v)
+    //     }
+    // }
 
+    print("/", "\\*\\/")
     // print */x as fraction
-    if (T === 'number') {
-        if (html.search("\\*\\/" + symbol) > -1) {
-            let [p, q] = ToFrac(value)
-            print("\\*\\/", Dfrac(p, q))
-        }
-    }
+    // if (T === 'number') {
+    //     if (html.search("\\*\\/" + symbol) > -1) {
+    //         let [p, q] = ToFrac(value)
+    //         print("\\*\\/", Dfrac(p, q))
+    //     }
+    // }
 
+
+    print("()", "\\*\\(", "\\)")
     // print *(x) as bracket if negative
-    if (T === 'number') {
-        let v = ant.blur(value)
-        if (IsDecimal(v)) v = Round(v, 5)
-        print("\\*\\(", v >= 0 ? v : '(' + v + ')', "\\)")
-    }
+    // if (T === 'number') {
+    //     let v = ant.blur(value)
+    //     if (IsDecimal(v)) v = Round(v, 5)
+    //     print("\\*\\(", v >= 0 ? v : '(' + v + ')', "\\)")
+    // }
 
+    print("+", "\\*\\+")
     // print *+x as sign of x
-    if (T === 'number') {
-        print("\\*\\+", value >= 0 ? '+' : '-')
-    }
+    // if (T === 'number') {
+    //     print("\\*\\+", value >= 0 ? '+' : '-')
+    // }
 
     // print *x as normal
-    print("\\*", ParseForPrint(value))
+    print("", "\\*")
     return html
 }
 
 
-export function ParseForPrint(value: any): any {
+export function ParseForPrint(value: any, signal: string = ""): string {
+
     let T = typeof value
-    if (T === 'number') {
-        value = ant.blur(value)
-        if (IsDecimal(value)) value = Round(value, 5)
+
+    if (signal === '') {
+        if (T === 'number') {
+            let v = ant.blur(value)
+            if (IsDecimal(v)) v = Round(v, 5)
+            return value
+        }
+        if (T === 'boolean') {
+            return Tick(value)
+        }
+        if (owl.point(value)) {
+            return Coord(value)
+        }
+        if (owl.combo(value)) {
+            return ink.printCombo(value)
+        }
     }
-    if (T === 'boolean') {
-        value = Tick(value)
+
+    if (signal === '*') {
+        if (T === 'number') {
+            let v = ant.blur(Round(value, 3))
+            return String((v >= 10000 || v <= 0.01) ? Sci(v) : v)
+        }
     }
-    if (owl.point(value)) {
-        value = Coord(value)
+
+
+    if (signal === '/') {
+        if (T === 'number') {
+            let [p, q] = ToFrac(value)
+            return Dfrac(p, q)
+        }
     }
-    if (owl.combo(value)) {
-        value = ink.printCombo(value)
+
+
+    if (signal === '()') {
+        if (T === 'number') {
+            let v = ant.blur(value)
+            if (IsDecimal(v)) v = Round(v, 5)
+            return String(v >= 0 ? v : '(' + v + ')')
+        }
     }
-    return value
+
+
+    if (signal === '+') {
+        if (T === 'number') return value >= 0 ? '+' : '-'
+    }
+
+    return String(value)
+
 }
 

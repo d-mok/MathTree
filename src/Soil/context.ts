@@ -51,6 +51,9 @@ declare var X: any
 declare var Y: any
 declare var Z: any
 
+/**
+ * @deprecated
+ */
 declare var sections: [number | string, number][]
 declare var answer: string
 declare var options: object

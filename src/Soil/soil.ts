@@ -92,12 +92,12 @@ export class Soil {
         html = html.replace(/\*\\\{[^\{\}]*\\\}/g, x => {
             let code = x.substring(3, x.length - 2)
             let result = evalInline(code, this.dict)
-            return ParseForPrint(result)
+            return ParseForPrint(result,"")
         })
         html = html.replace(/\*\{[^\{\}]*\}/g, x => {
             let code = x.substring(2, x.length - 1)
             let result = evalInline(code, this.dict)
-            return ParseForPrint(result)
+            return ParseForPrint(result,"")
         })
         return html
     }

@@ -43,7 +43,7 @@ export function parseDfrac(dfrac: string): Fraction {
     return [p, q]
 }
 
-export function printCombo(combo: [boolean, boolean, boolean]) {
+export function printCombo(combo: [boolean, boolean, boolean]): string {
     let [a, b, c] = combo
     if (a && b && c) return 'I, II and III'
     if (a && b && !c) return 'I and II only'
@@ -53,4 +53,5 @@ export function printCombo(combo: [boolean, boolean, boolean]) {
     if (!a && b && !c) return 'II only'
     if (!a && !b && c) return 'III only'
     if (!a && !b && !c) return 'None of the above'
+    throw 'never'
 }
