@@ -101,18 +101,19 @@ class PolyClass {
         return newPoly
     }
 
-    sortAsc(): polynomial {
+    sort(desc: boolean): polynomial {
         let polys: polynomial[] = this.split()
-        polys = SortBy(polys, _ => (new PolyClass(_)).degree())
-        let newPoly: PolyClass = new PolyClass(this.cloneShell())
-        return newPoly.append(...polys)
-    }
-
-
-    sortDesc(): polynomial {
-        let polys: polynomial[] = this.split()
-        polys = SortBy(polys, _ => (new PolyClass(_)).degree())
-        polys.reverse()
+        polys = SortBy(polys, _ => {
+            let pc = new PolyClass(_)
+            let k = pc.degree()
+            let order = 1
+            for (let v of this.vars()) {
+                order = order / 10
+                k += pc.power(1, v)
+            }
+            return k
+        })
+        if (desc) polys.reverse()
         let newPoly: PolyClass = new PolyClass(this.cloneShell())
         return newPoly.append(...polys)
     }
@@ -178,8 +179,9 @@ globalThis.RndPolynomial = RndPolynomial
 
 
 function PolySort(poly: polynomial, desc: true) {
-
+    return (new PolyClass(poly)).sort(desc)
 }
+globalThis.PolySort = PolySort
 
 function PolyPrint(poly: polynomial) {
     return (new PolyClass(poly)).print()
@@ -195,7 +197,7 @@ globalThis.PolyPrettyPrint = PolyPrettyPrint
 
 
 function PolyFunction(poly: polynomial) {
-    // return (new PolyClass(poly)).print()
+    return (new PolyClass(poly)).func()
 }
 globalThis.PolyFunction = PolyFunction
 

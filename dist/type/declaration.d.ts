@@ -214,7 +214,6 @@ declare module "Math/index" {
     import './Code/Assertion.ts';
     import './Code/Combinatorics.ts';
     import './Code/Flow.ts';
-    import './Code/Fraction.ts';
     import './Code/Function.ts';
     import './Code/Geometry.ts';
     import './Code/LinearProgram.ts';
@@ -229,7 +228,6 @@ declare module "Math/index" {
     import './Code/Text.ts';
     import './Code/Triangle.ts';
     import './Code/Trigonometry.ts';
-    import './Code/Utility.ts';
     import './Code/Vector.ts';
     import './Algebra/Algebra.ts';
     import './Algebra/Circle.ts';
@@ -361,6 +359,7 @@ declare function IntegralOnCircle(centre: Point, radius: number): Point[][];
 declare function LinearFeature(a: number, b: number, c: number): [xInt: number, yInt: number, slope: number];
 /**
  * @category Linear
+ * @deprecated
  * @return [slope,yInt] from ax+by+c=0
  * ```
  * LineFromLinear(2,4,6) // [-0.5,-1.5]
@@ -406,6 +405,7 @@ declare function LinearFromPointSlope(point: Point, slope: number): [a: number, 
 declare function LinearFromBisector(A: Point, B: Point): [a: number, b: number, c: number];
 /**
  * @category Linear
+ * @deprecated
  * @return [slope,yInt] from given intercepts
  * ```
  * LineFromIntercepts(1,2) // [-2,2]
@@ -415,6 +415,7 @@ declare function LinearFromBisector(A: Point, B: Point): [a: number, b: number, 
 declare function LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number];
 /**
  * @category Linear
+ * @deprecated
  * @return [slope,yInt] from two given points
  * ```
  * LineFromTwoPoints([1,2],[3,4]) // [1,1]
@@ -424,6 +425,7 @@ declare function LineFromIntercepts(xInt: number, yInt: number): [slope: number,
 declare function LineFromTwoPoints(point1: Point, point2: Point): [slope: number, yInt: number];
 /**
  * @category Linear
+ * @deprecated
  * @return [slope,yInt] from point and slope
  * ```
  * LineFromPointSlope([1,2],3) // [3,-1]
@@ -433,6 +435,7 @@ declare function LineFromTwoPoints(point1: Point, point2: Point): [slope: number
 declare function LineFromPointSlope(point: Point, slope: number): [slope: number, yInt: number];
 /**
  * @category Linear
+ * @deprecated
  * @return [slope,yInt] from perpendicular bisector of AB
  * ```
  * LineFromBisector([1,2],[3,4]) // [-1,5]
@@ -458,6 +461,39 @@ declare class LinearFunction {
  * @ignore
  */
 declare function LF(): LinearFunction;
+declare type polynomial = {
+    coeff: number[];
+    [_: string]: number[];
+};
+declare class PolyClass {
+    poly: polynomial;
+    constructor(poly: polynomial);
+    vars(): string[];
+    nTerm(): number;
+    nVar(): number;
+    coeff(position: number): number;
+    power(position: number, variable: string): number;
+    hasLikeTerms(): boolean;
+    powerSum(position: number): number;
+    degree(): number;
+    shuffle(): polynomial;
+    term(position: number): polynomial;
+    split(): polynomial[];
+    append(...polys: polynomial[]): polynomial;
+    cloneShell(): polynomial;
+    sort(desc: boolean): polynomial;
+    func(): (values: {
+        [_: string]: number;
+    }) => number;
+    print(): string;
+}
+declare function RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
+declare function PolySort(poly: polynomial, desc: true): polynomial;
+declare function PolyPrint(poly: polynomial): string;
+declare function PolyPrettyPrint(poly: polynomial): void;
+declare function PolyFunction(poly: polynomial): (values: {
+    [_: string]: number;
+}) => number;
 /**
  * @category Quadratic
  * @return the discriminant b^2-4ac.
@@ -752,15 +788,6 @@ declare function RndComboConfig(): {
     sections: [number, number][];
 };
 /**
- * @category Fraction
- * @return convert num to fraction
- * ```
- * ToFrac(0.5) // [1,2]
- * ToFrac(-456/123) // [-152,41]
- * ```
- */
-declare function ToFrac(num: number, maxDenominator?: number): Fraction;
-/**
  * @category Function
  * @return log(b,N)
  * ```
@@ -788,6 +815,7 @@ declare function Power(a: number, b: number): number;
 declare function Sqrt(x: number): number;
 /**
  * @category Function
+ * @deprecated
  * @return the radian of the degree
  * ```
  * Radian(180) // pi
@@ -798,6 +826,7 @@ declare function Sqrt(x: number): number;
 declare function Radian(degree: number): number;
 /**
  * @category Function
+ * @deprecated
  * @return the degree of the radian
  * ```
  * Degree(Math.PI) // 180
@@ -1263,6 +1292,39 @@ declare function SimpRatio(...nums: number[]): number[];
  * ```
  */
 declare function IntegerRatio(...nums: number[]): number[];
+/**
+ * @category Numeracy
+ * @return The HCF of nums.
+ * ```
+ * HCF(6,8) // 2
+ * HCF(6,8,9) // 1
+ * HCF(1,3) // 1
+ * HCF(0.5,3) // throw
+ * HCF(0,3) // throw
+ * ```
+ */
+declare function HCF(...nums: number[]): number;
+/**
+ * @category Numeracy
+ * @return The LCM of nums.
+ * ```
+ * LCM(2,3) // 6
+ * LCM(2,3,5) // 30
+ * LCM(0.5,3) // throw
+ * LCM(0,3) // throw
+ * ```
+ */
+declare function LCM(...nums: number[]): number;
+/**
+ * @category Numeracy
+ * @deprecated
+ * @return convert num to fraction
+ * ```
+ * ToFrac(0.5) // [1,2]
+ * ToFrac(-456/123) // [-152,41]
+ * ```
+ */
+declare function ToFrac(num: number, maxDenominator?: number): Fraction;
 declare var PhyConst: {
     R: number;
     N_A: number;
@@ -1304,6 +1366,14 @@ declare function RndNs(min: number, max: number, n?: number): number[];
  * ```
  */
 declare function RndR(min: number, max: number): number;
+/**
+ * @category Random
+ * @return a random fraction in [min, max] inclusive, with largest numerator / denominator.
+ * ```
+ * RndQ(1,2,9) // may return 5/3
+ * ```
+ */
+declare function RndQ(min: number, max: number, largest?: number): number;
 /**
  * @category Random
  * @return 1 or -1
@@ -1509,6 +1579,15 @@ declare function RndShakePoint(anchor: Point): Point[];
  * ```
  */
 declare function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, boolean][];
+/**
+ * @category RandomShake
+ * @return an array of 3 trig
+ * ```
+ * RndShakeTrig('sin')
+ * // may return ['cos','sin','cos']
+ * ```
+ */
+declare function RndShakeTrig(anchor: string): string[];
 /**
  * @category RandomUtil
  * @return a random item from the given items
@@ -1910,6 +1989,26 @@ declare function Sci(num: number): string;
  */
 declare function LongDivision(dividend: number[], divisor: number[]): string;
 /**
+ * @category Text
+ * @param num - from 1 to 10
+ * @return roman number
+ * ```
+ * Romanize(1) // "I"
+ * Romanize(2) // "II"
+ * ```
+ */
+declare function Romanize(num: number): string;
+/**
+ * @category Text
+ * @param roman - from I to X
+ * @return arabic number
+ * ```
+ * DeRomanize("I") // 1
+ * DeRomanize("II") // 2
+ * ```
+ */
+declare function DeRomanize(roman: string): number;
+/**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
  * ```
@@ -2013,49 +2112,6 @@ declare function ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): -1
  * ```
  */
 declare function TrigRoot(func: TrigFunc, k: number): [number | undefined, number | undefined, number | undefined];
-/**
- * @category Utility
- * @return The HCF of nums.
- * ```
- * HCF(6,8) // 2
- * HCF(6,8,9) // 1
- * HCF(1,3) // 1
- * HCF(0.5,3) // throw
- * HCF(0,3) // throw
- * ```
- */
-declare function HCF(...nums: number[]): number;
-/**
- * @category Utility
- * @return The LCM of nums.
- * ```
- * LCM(2,3) // 6
- * LCM(2,3,5) // 30
- * LCM(0.5,3) // throw
- * LCM(0,3) // throw
- * ```
- */
-declare function LCM(...nums: number[]): number;
-/**
- * @category Utility
- * @param num - from 1 to 10
- * @return roman number
- * ```
- * Romanize(1) // "I"
- * Romanize(2) // "II"
- * ```
- */
-declare function Romanize(num: number): string;
-/**
- * @category Utility
- * @param roman - from I to X
- * @return arabic number
- * ```
- * DeRomanize("I") // 1
- * DeRomanize("II") // 2
- * ```
- */
-declare function DeRomanize(roman: string): number;
 /**
  * @category Vector
  * @return the vector OP
@@ -2474,14 +2530,14 @@ declare class AutoPenCls {
      */
     Boxplot({ summary, labels, size, tick, start, end, showDash, showValue, showTick }: {
         summary: number[];
-        labels: (string | null)[];
-        size: number;
-        tick: number;
+        labels?: (string | null)[];
+        size?: number;
+        tick?: number;
         start?: number;
         end?: number;
-        showDash: boolean;
-        showValue: boolean;
-        showTick: boolean;
+        showDash?: boolean;
+        showValue?: boolean;
+        showTick?: boolean;
     }): void;
 }
 declare var AutoPen: typeof AutoPenCls;
