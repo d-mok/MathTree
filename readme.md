@@ -100,7 +100,8 @@
 | bracket negative|`a = 2`|`*(a)`| 2|
 |sign|`a = 5`|`*+a`|+|
 |sign|`a = -5`|`*+a`|-|
-|percentage (planning)|`a = 0.123`|`*.a`| 12.3%|
+|percentage|`a = 0.123`|`*%a`| 12.3%|
+|percentage|`a = 0.123`|`*\%a`| 12.3\%|
 |ratio (planning)|`a = 0.5`|`*:a`| 1:2|
 |ratio (planning)|`a = 0.5`|`*:a`| 1:2|
 |inequality sign (planning)|`a = [true,true]`|`*=a`| \\\\ge|
