@@ -113,9 +113,9 @@
 - **JavaScript code** can be written in **content** using `*{...}` .
 For example, `*{1+1}` will print `2`.
 - `*\{...\}` do the same as `*{...}`, but also display the brackets in equation object.
-- `*/{...}` works similarly.
+- `*/{...}` and `**{...}` work similarly.
 
-## Sections
+## Sections (Deprecated)
 **Sections** can be used in **content**:
 
 > \#\#1.1  
