@@ -4,7 +4,7 @@ import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { ParseForPrint } from './tool/html'
 import { Dict, Config } from './cls'
-import { evaluate, evalInline } from './tool/eval'
+import { evaluate, evalInline, intrapolate } from './tool/eval'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 
 // util functions
@@ -88,17 +88,17 @@ export class Soil {
         return result
     }
 
-    private intrapolateCode(html: string) {
-        html = html.replace(/\*\\\{([^\{\}]*)\\\}/g, (match, code) => {
-            let result = evalInline(code, this.dict)
-            return ParseForPrint(result, "")
-        })
-        html = html.replace(/\*\{([^\{\}]*)\}/g, (match, code) => {
-            let result = evalInline(code, this.dict)
-            return ParseForPrint(result, "")
-        })
-        return html
-    }
+    // private intrapolateCode(html: string) {
+    //     html = html.replace(/\*\\\{([^\{\}]*)\\\}/g, (match, code) => {
+    //         let result = evalInline(code, this.dict)
+    //         return ParseForPrint(result, "")
+    //     })
+    //     html = html.replace(/\*\{([^\{\}]*)\}/g, (match, code) => {
+    //         let result = evalInline(code, this.dict)
+    //         return ParseForPrint(result, "")
+    //     })
+    //     return html
+    // }
 
     private pushDict() {
         this.counter++
@@ -170,8 +170,8 @@ export class Soil {
     }
 
     private runIntrapolate(): boolean {
-        this.qn = this.intrapolateCode(this.qn)
-        this.sol = this.intrapolateCode(this.sol)
+        this.qn = intrapolate(this.qn, this.dict)
+        this.sol = intrapolate(this.sol, this.dict)
         return true
     }
 

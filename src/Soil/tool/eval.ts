@@ -100,3 +100,26 @@ export function evalInline(code: string, dict: Dict) {
     }
 }
 
+
+
+export function intrapolate(html: string, dict: Dict) {
+
+    function intra(signal: string, prefix: string) {
+        html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, 'g'),
+            (match, code) => {
+                let result = evalInline(code, dict)
+                return ParseForPrint(result, signal)
+            })
+        html = html.replace(new RegExp(String.raw`\*${prefix}\{([^\{\}]*)\}`, 'g'),
+            (match, code) => {
+                let result = evalInline(code, dict)
+                return ParseForPrint(result, signal)
+            })
+    }
+    intra('', '')
+    intra('/', '\\/')
+    intra('*', '\\*')
+    return html
+}
+
+

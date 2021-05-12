@@ -63,40 +63,17 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
         );
     }
 
-    print("*", "\\*\\*")
     // print **x as sci notation
-    // if (T === 'number') {
-    //     let v = ant.blur(Round(value, 3))
-    //     if (v >= 10000 || v <= 0.01) {
-    //         print("\\*\\*", Sci(v))
-    //     } else {
-    //         print("\\*\\*", v)
-    //     }
-    // }
+    print("*", "\\*\\*")
 
-    print("/", "\\*\\/")
     // print */x as fraction
-    // if (T === 'number') {
-    //     if (html.search("\\*\\/" + symbol) > -1) {
-    //         let [p, q] = ToFrac(value)
-    //         print("\\*\\/", Dfrac(p, q))
-    //     }
-    // }
+    print("/", "\\*\\/")
 
-
-    print("()", "\\*\\(", "\\)")
     // print *(x) as bracket if negative
-    // if (T === 'number') {
-    //     let v = ant.blur(value)
-    //     if (IsDecimal(v)) v = Round(v, 5)
-    //     print("\\*\\(", v >= 0 ? v : '(' + v + ')', "\\)")
-    // }
+    print("()", "\\*\\(", "\\)")    
 
-    print("+", "\\*\\+")
     // print *+x as sign of x
-    // if (T === 'number') {
-    //     print("\\*\\+", value >= 0 ? '+' : '-')
-    // }
+    print("+", "\\*\\+")
 
     // print *x as normal
     print("", "\\*")
