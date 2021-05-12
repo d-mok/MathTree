@@ -76,7 +76,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     print("+", "\\*\\+")
 
     // print *\%x as percent
-    print("%", "\\*\\\\%")
+    print("%", "\\*\\%")
     print("\\%", "\\*\\\\\\%")
 
 
@@ -94,7 +94,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (T === 'number') {
             let v = ant.blur(value)
             if (IsDecimal(v)) v = Round(v, 5)
-            return value
+            return String(v)
         }
         if (T === 'boolean') {
             return Tick(value)
