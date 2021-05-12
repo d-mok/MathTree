@@ -210,6 +210,40 @@ declare module "Core/index" {
 }
 declare module "Core/Ant/ant.test" { }
 declare module "Core/Contract/contract.test" { }
+declare type polynomial = {
+    coeff: number[];
+    [_: string]: number[];
+};
+declare class PolyClass {
+    poly: polynomial;
+    constructor(poly: polynomial);
+    vars(): string[];
+    nTerm(): number;
+    nVar(): number;
+    coeff(position: number): number;
+    power(position: number, variable: string): number;
+    hasLikeTerms(): boolean;
+    powerSum(position: number): number;
+    degree(): number;
+    shuffle(): polynomial;
+    term(position: number): polynomial;
+    split(): polynomial[];
+    append(...polys: polynomial[]): polynomial;
+    cloneShell(): polynomial;
+    sort(desc: boolean): polynomial;
+    func(): (values: {
+        [_: string]: number;
+    }) => number;
+    print(): string;
+}
+declare function RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
+declare function PolySort(poly: polynomial, desc?: boolean): polynomial;
+declare function PolyPrint(poly: polynomial): string;
+declare function PolyPrettyPrint(poly: polynomial): void;
+declare function PolyFunction(poly: polynomial): (values: {
+    [_: string]: number;
+}) => number;
+declare function PolySplit(poly: polynomial): polynomial[];
 declare module "Math/index" {
     import './Code/Assertion.ts';
     import './Code/Combinatorics.ts';
@@ -233,6 +267,7 @@ declare module "Math/index" {
     import './Algebra/Circle.ts';
     import './Algebra/Quadratic.ts';
     import './Algebra/Linear.ts';
+    import './Algebra/Polynomial';
     import './should.ts';
     import './chance.ts';
 }
@@ -461,39 +496,6 @@ declare class LinearFunction {
  * @ignore
  */
 declare function LF(): LinearFunction;
-declare type polynomial = {
-    coeff: number[];
-    [_: string]: number[];
-};
-declare class PolyClass {
-    poly: polynomial;
-    constructor(poly: polynomial);
-    vars(): string[];
-    nTerm(): number;
-    nVar(): number;
-    coeff(position: number): number;
-    power(position: number, variable: string): number;
-    hasLikeTerms(): boolean;
-    powerSum(position: number): number;
-    degree(): number;
-    shuffle(): polynomial;
-    term(position: number): polynomial;
-    split(): polynomial[];
-    append(...polys: polynomial[]): polynomial;
-    cloneShell(): polynomial;
-    sort(desc: boolean): polynomial;
-    func(): (values: {
-        [_: string]: number;
-    }) => number;
-    print(): string;
-}
-declare function RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
-declare function PolySort(poly: polynomial, desc: true): polynomial;
-declare function PolyPrint(poly: polynomial): string;
-declare function PolyPrettyPrint(poly: polynomial): void;
-declare function PolyFunction(poly: polynomial): (values: {
-    [_: string]: number;
-}) => number;
 /**
  * @category Quadratic
  * @return the discriminant b^2-4ac.

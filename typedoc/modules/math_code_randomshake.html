@@ -2731,6 +2731,9 @@ img {
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_randomshake.html#rndshaker" class="tsd-kind-icon">Rnd<wbr>ShakeR</a>
 		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_randomshake.html#rndshaketrig" class="tsd-kind-icon">Rnd<wbr>Shake<wbr>Trig</a>
+		</li>
 	</ul>
 </nav>
 <div class="container container-main">
@@ -2751,6 +2754,7 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_randomshake.html#rndshakepoint" class="tsd-kind-icon">Rnd<wbr>Shake<wbr>Point</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_randomshake.html#rndshakeq" class="tsd-kind-icon">Rnd<wbr>ShakeQ</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_randomshake.html#rndshaker" class="tsd-kind-icon">Rnd<wbr>ShakeR</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_randomshake.html#rndshaketrig" class="tsd-kind-icon">Rnd<wbr>Shake<wbr>Trig</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2994,6 +2998,30 @@ img {
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
 						<p>3 nearby same-signed real number with same precision, range = anchor * 50%</p>
 						<pre><code><span style="color: #795E26">RndShakeR</span><span style="color: #000000">(</span><span style="color: #098658">3.5</span><span style="color: #000000">) </span><span style="color: #008000">// return 3 unique values from [1.8,5.2]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="rndshaketrig" class="tsd-anchor"></a>
+				<h3>Rnd<wbr>Shake<wbr>Trig</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Rnd<wbr>Shake<wbr>Trig<span class="tsd-signature-symbol">(</span>anchor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>anchor: <span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+						<p>an array of 3 trig</p>
+						<pre><code><span style="color: #795E26">RndShakeTrig</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;sin&#039;</span><span style="color: #000000">) </span>
+<span style="color: #008000">// may return [&#039;cos&#039;,&#039;sin&#039;,&#039;cos&#039;]</span>
 </code></pre>
 					</li>
 				</ul>

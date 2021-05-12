@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Math/Code/Utility | mathtree</title>
+	<title>Math/Algebra/Polynomial | mathtree</title>
 	<meta name="description" content="Documentation for mathtree">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">:root {
@@ -2704,17 +2704,29 @@ img {
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
-		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_utility.html#deromanize" class="tsd-kind-icon">De<wbr>Romanize</a>
+		<li class=" tsd-kind-class tsd-parent-kind-module">
+			<a href="../classes/math_algebra_polynomial.polyclass.html" class="tsd-kind-icon">Poly<wbr>Class</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+			<a href="math_algebra_polynomial.html#polynomial" class="tsd-kind-icon">polynomial</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_utility.html#hcf" class="tsd-kind-icon">HCF</a>
+			<a href="math_algebra_polynomial.html#polyfunction" class="tsd-kind-icon">Poly<wbr>Function</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_utility.html#lcm" class="tsd-kind-icon">LCM</a>
+			<a href="math_algebra_polynomial.html#polyprettyprint" class="tsd-kind-icon">Poly<wbr>Pretty<wbr>Print</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_code_utility.html#romanize" class="tsd-kind-icon">Romanize</a>
+			<a href="math_algebra_polynomial.html#polyprint" class="tsd-kind-icon">Poly<wbr>Print</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_algebra_polynomial.html#polysort" class="tsd-kind-icon">Poly<wbr>Sort</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_algebra_polynomial.html#polysplit" class="tsd-kind-icon">Poly<wbr>Split</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_algebra_polynomial.html#rndpolynomial" class="tsd-kind-icon">Rnd<wbr>Polynomial</a>
 		</li>
 	</ul>
 </nav>
@@ -2724,25 +2736,60 @@ img {
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
-					<section class="tsd-index-section">
-						<h3>Utility</h3>
+					<section class="tsd-index-section ">
+						<h3>Classes</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_utility.html#deromanize" class="tsd-kind-icon">De<wbr>Romanize</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_utility.html#hcf" class="tsd-kind-icon">HCF</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_utility.html#lcm" class="tsd-kind-icon">LCM</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_utility.html#romanize" class="tsd-kind-icon">Romanize</a></li>
+							<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/math_algebra_polynomial.polyclass.html" class="tsd-kind-icon">Poly<wbr>Class</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Type aliases</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="math_algebra_polynomial.html#polynomial" class="tsd-kind-icon">polynomial</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Functions</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_polynomial.html#polyfunction" class="tsd-kind-icon">Poly<wbr>Function</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_polynomial.html#polyprettyprint" class="tsd-kind-icon">Poly<wbr>Pretty<wbr>Print</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_polynomial.html#polyprint" class="tsd-kind-icon">Poly<wbr>Print</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_polynomial.html#polysort" class="tsd-kind-icon">Poly<wbr>Sort</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_polynomial.html#polysplit" class="tsd-kind-icon">Poly<wbr>Split</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_polynomial.html#rndpolynomial" class="tsd-kind-icon">Rnd<wbr>Polynomial</a></li>
 						</ul>
 					</section>
 				</div>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
-			<h2>Utility</h2>
+			<h2>Type aliases</h2>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+				<a name="polynomial" class="tsd-anchor"></a>
+				<h3>polynomial</h3>
+				<div class="tsd-signature tsd-kind-icon">polynomial<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>coeff<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
+				<aside class="tsd-sources">
+				</aside>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+						<li class="tsd-parameter-index-signature">
+							<h5><span class="tsd-signature-symbol">[</span>_: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>coeff<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+						</li>
+					</ul>
+				</div>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Functions</h2>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="deromanize" class="tsd-anchor"></a>
-				<h3>De<wbr>Romanize</h3>
+				<a name="polyfunction" class="tsd-anchor"></a>
+				<h3>Poly<wbr>Function</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">De<wbr>Romanize<span class="tsd-signature-symbol">(</span>roman<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					<li class="tsd-signature tsd-kind-icon">Poly<wbr>Function<span class="tsd-signature-symbol">(</span>poly<span class="tsd-signature-symbol">: </span><a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2751,25 +2798,41 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>roman: <span class="tsd-signature-type">string</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>from I to X</p>
-								</div>
+								<h5>poly: <a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						<p>arabic number</p>
-						<pre><code><span style="color: #795E26">DeRomanize</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;I&quot;</span><span style="color: #000000">) </span><span style="color: #008000">// 1</span>
-<span style="color: #795E26">DeRomanize</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;II&quot;</span><span style="color: #000000">) </span><span style="color: #008000">// 2</span>
-</code></pre>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>values: <span class="tsd-signature-symbol">{}</span></h5>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter-index-signature">
+														<h5><span class="tsd-signature-symbol">[</span>_: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">number</span></h5>
+													</li>
+												</ul>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="hcf" class="tsd-anchor"></a>
-				<h3>HCF</h3>
+				<a name="polyprettyprint" class="tsd-anchor"></a>
+				<h3>Poly<wbr>Pretty<wbr>Print</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">HCF<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>nums<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					<li class="tsd-signature tsd-kind-icon">Poly<wbr>Pretty<wbr>Print<span class="tsd-signature-symbol">(</span>poly<span class="tsd-signature-symbol">: </span><a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2778,25 +2841,18 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>nums: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+								<h5>poly: <a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						<p>The HCF of nums.</p>
-						<pre><code><span style="color: #795E26">HCF</span><span style="color: #000000">(</span><span style="color: #098658">6</span><span style="color: #000000">,</span><span style="color: #098658">8</span><span style="color: #000000">) </span><span style="color: #008000">// 2</span>
-<span style="color: #795E26">HCF</span><span style="color: #000000">(</span><span style="color: #098658">6</span><span style="color: #000000">,</span><span style="color: #098658">8</span><span style="color: #000000">,</span><span style="color: #098658">9</span><span style="color: #000000">) </span><span style="color: #008000">// 1</span>
-<span style="color: #795E26">HCF</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// 1</span>
-<span style="color: #795E26">HCF</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// throw</span>
-<span style="color: #795E26">HCF</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// throw</span>
-</code></pre>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="lcm" class="tsd-anchor"></a>
-				<h3>LCM</h3>
+				<a name="polyprint" class="tsd-anchor"></a>
+				<h3>Poly<wbr>Print</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">LCM<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>nums<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					<li class="tsd-signature tsd-kind-icon">Poly<wbr>Print<span class="tsd-signature-symbol">(</span>poly<span class="tsd-signature-symbol">: </span><a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2805,43 +2861,82 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>nums: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						<p>The LCM of nums.</p>
-						<pre><code><span style="color: #795E26">LCM</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// 6</span>
-<span style="color: #795E26">LCM</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// 30</span>
-<span style="color: #795E26">LCM</span><span style="color: #000000">(</span><span style="color: #098658">0.5</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// throw</span>
-<span style="color: #795E26">LCM</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// throw</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="romanize" class="tsd-anchor"></a>
-				<h3>Romanize</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Romanize<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>num: <span class="tsd-signature-type">number</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>from 1 to 10</p>
-								</div>
+								<h5>poly: <a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						<p>roman number</p>
-						<pre><code><span style="color: #795E26">Romanize</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">) </span><span style="color: #008000">// &quot;I&quot;</span>
-<span style="color: #795E26">Romanize</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">) </span><span style="color: #008000">// &quot;II&quot;</span>
-</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="polysort" class="tsd-anchor"></a>
+				<h3>Poly<wbr>Sort</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Poly<wbr>Sort<span class="tsd-signature-symbol">(</span>poly<span class="tsd-signature-symbol">: </span><a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a>, desc<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>poly: <a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h5>
+							</li>
+							<li>
+								<h5>desc: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="polysplit" class="tsd-anchor"></a>
+				<h3>Poly<wbr>Split</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Poly<wbr>Split<span class="tsd-signature-symbol">(</span>poly<span class="tsd-signature-symbol">: </span><a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a><span class="tsd-signature-symbol">[]</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>poly: <a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="rndpolynomial" class="tsd-anchor"></a>
+				<h3>Rnd<wbr>Polynomial</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Rnd<wbr>Polynomial<span class="tsd-signature-symbol">(</span>degree<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, vars<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, terms<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, maxCoeff<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>degree: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>vars: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></h5>
+							</li>
+							<li>
+								<h5>terms: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = ...</span></h5>
+							</li>
+							<li>
+								<h5>maxCoeff: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 9</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_algebra_polynomial.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h4>
 					</li>
 				</ul>
 			</section>

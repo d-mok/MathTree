@@ -2708,6 +2708,364 @@ img {
 </nav>
 <div class="container container-main">
 	<div class="content-wrap">
+		<div class="tsd-panel tsd-typography">
+			<a href="#1-authoring" id="1-authoring" style="color: inherit; text-decoration: none;">
+				<h1>1. Authoring</h1>
+			</a>
+			<a href="#content" id="content" style="color: inherit; text-decoration: none;">
+				<h2>Content</h2>
+			</a>
+			<ul>
+				<li> The content editor can be used as  <strong>MS Word</strong>.</li>
+				<li>The symbol <code>*</code> signify a  <strong>variable</strong>.
+				e.g. <code>*x</code> will be substituted by the value of  <code>x</code>  from code.</li>
+				<li> <strong>LaTex</strong>  is used in equation objects. See  <a href="https://katex.org/docs/supported.html">KaTeX</a>  for a list of supported syntax.</li>
+				<li><strong>Answer options</strong>  must be listed as bullet points.
+					The  <strong>first option</strong>  must be the  <strong>correct answer</strong>. e.g.<ul>
+						<li>  I only</li>
+						<li>  I and II only</li>
+						<li>  I and III only</li>
+						<li>  I, II and III only</li>
+					</ul>
+				</li>
+			</ul>
+			<a href="#populate" id="populate" style="color: inherit; text-decoration: none;">
+				<h2>Populate</h2>
+			</a>
+			<ul>
+				<li> All  <strong>variables</strong>  must be defined here, e.g. <code>x = 1</code>.</li>
+				<li>All  <strong>alphabets</strong>  (<code>a-z</code>,<code>A-Z</code>) are pre-declared as variables.
+				Once defined, their values can be substituted in the <strong>content</strong>.</li>
+				<li> Each line should end with a  <strong>semicolon</strong>  <code>;</code>.</li>
+			</ul>
+			<a href="#validate" id="validate" style="color: inherit; text-decoration: none;">
+				<h2>Validate</h2>
+			</a>
+			<ul>
+				<li> All variables  <strong>validation</strong>  should be done here, e.g. <code>x &lt; 10</code>.</li>
+				<li> Must return a <strong>single Boolean expression</strong>, no matter how complex.</li>
+				<li> <strong>One line</strong>  should contain only  <strong>one condition</strong>  for clarity.</li>
+				<li> If no validation is needed, just left it blank.</li>
+				<li>Some common  <strong>logical operators</strong>:<ul>
+						<li>  and:  <code>x &amp;&amp; y</code></li>
+						<li>  or:  <code>x || y</code></li>
+						<li>  not:  <code>!x</code></li>
+						<li>  equal:  <code>x === y</code></li>
+						<li>  unequal:  <code>x !== y</code></li>
+					</ul>
+				</li>
+			</ul>
+			<a href="#processing" id="processing" style="color: inherit; text-decoration: none;">
+				<h2>Processing</h2>
+			</a>
+			<ul>
+				<li>This is for  <strong>manipulating the content as html strings</strong>.<br> e.g. <code>question = question.replaceAll(&#39;3&#39;,&#39;three&#39;)</code>.</li>
+				<li> Can access the  <strong>question html string</strong>  as  <code>question</code>.</li>
+				<li> Can access the  <strong>solution html string</strong>  as  <code>solution</code>.</li>
+				<li> <strong>Preprocess</strong>  code are executed  <strong>before</strong>  substituting the variables.</li>
+				<li> <strong>Postprocess</strong>  code are executed  <strong>after</strong>  substituting the variables.</li>
+			</ul>
+			<a href="#code-execution-flow" id="code-execution-flow" style="color: inherit; text-decoration: none;">
+				<h2>Code Execution Flow</h2>
+			</a>
+			<ol>
+				<li> Run <strong>populate</strong>  to define to variables.</li>
+				<li>Run <strong>validate</strong>.<br> If failed, populate again and again until validation passed.<br> The execution will stop after 1000 failed trials.</li>
+				<li> Run <strong>preprocess</strong>.</li>
+				<li><strong>Substitute</strong>  the variables, and do some smart adjustment:<ul>
+						<li>  Round all decimal variables to 5 significant figures.</li>
+						<li>  Correct minus signs, e.g. <code>x- -y</code> become <code>x+y</code>.</li>
+						<li>  Correct unit coefficient, e.g. <code>x+1y</code> become <code>x+y</code>.</li>
+					</ul>
+				</li>
+				<li> Run <strong>postprocess</strong>.</li>
+				<li><strong>Shuffle</strong>  the answer options.<br> If duplicated options are found, the whole execution will restart from step 1.</li>
+			</ol>
+			<a href="#2-reference" id="2-reference" style="color: inherit; text-decoration: none;">
+				<h1>2. Reference</h1>
+			</a>
+			<a href="#common-javascript-reference" id="common-javascript-reference" style="color: inherit; text-decoration: none;">
+				<h2>Common JavaScript Reference</h2>
+			</a>
+			<table>
+				<thead>
+					<tr>
+						<th>structure</th>
+						<th>code</th>
+					</tr>
+				</thead>
+				<tbody><tr>
+						<td>Declare variable</td>
+						<td><code>let myVariable = 1</code></td>
+					</tr>
+					<tr>
+						<td>If Then Else</td>
+						<td><code>if(condition){DoSomething}else{DoOtherThing}</code></td>
+					</tr>
+					<tr>
+						<td>Loop</td>
+						<td><code>for(let i=1; i&lt;10; i++){DoSomething}</code></td>
+					</tr>
+					<tr>
+						<td>Array</td>
+						<td><code>arr = [1,2,3];</code></td>
+					</tr>
+					<tr>
+						<td>Array Element</td>
+						<td><code>x = arr[0]; y = arr[1];</code></td>
+					</tr>
+					<tr>
+						<td>Array Deconstruction</td>
+						<td><code>[a,b,c]=[1,2,3]</code>  (same as  <code>a=1; b=2; c=3;</code>)</td>
+					</tr>
+					<tr>
+						<td>Array Spreading</td>
+						<td><code>sum(...[1,2,3])</code> (same as <code>sum(1,2,3)</code>)</td>
+					</tr>
+					<tr>
+						<td>Print Debug</td>
+						<td><code>console.log(x)</code></td>
+					</tr>
+			</tbody></table>
+			<a href="#common-latex-reference" id="common-latex-reference" style="color: inherit; text-decoration: none;">
+				<h2>Common LaTex Reference</h2>
+			</a>
+			<table>
+				<thead>
+					<tr>
+						<th>symbol</th>
+						<th>code</th>
+						<th>LaTex</th>
+					</tr>
+				</thead>
+				<tbody><tr>
+						<td>Superscript</td>
+						<td><code>a^{b}</code></td>
+						<td>$a^{b}$</td>
+					</tr>
+					<tr>
+						<td>Subscript</td>
+						<td><code>a_{b}</code></td>
+						<td>$a_{b}$</td>
+					</tr>
+					<tr>
+						<td>Fraction</td>
+						<td><code>\dfrac{a}{b}</code></td>
+						<td>$\dfrac{a}{b}$</td>
+					</tr>
+					<tr>
+						<td>Square Root</td>
+						<td><code>\sqrt{x}</code></td>
+						<td>$\sqrt{x}$</td>
+					</tr>
+					<tr>
+						<td>Equation Alignment</td>
+						<td><code>\begin{aligned} 2x-4&amp;=10 \\ x&amp;=7 \end{aligned}</code></td>
+						<td>$\begin{aligned} 2x-4&amp;=10 \ x&amp;=7 \end{aligned}$</td>
+					</tr>
+			</tbody></table>
+			<a href="#printing-variables" id="printing-variables" style="color: inherit; text-decoration: none;">
+				<h2>Printing Variables</h2>
+			</a>
+			<table>
+				<thead>
+					<tr>
+						<th>type</th>
+						<th>variable</th>
+						<th>print code</th>
+						<th>result</th>
+					</tr>
+				</thead>
+				<tbody><tr>
+						<td>number</td>
+						<td><code>a = 1.23</code></td>
+						<td><code>*a</code></td>
+						<td>1.23</td>
+					</tr>
+					<tr>
+						<td>string</td>
+						<td><code>a = &quot;hello&quot;</code></td>
+						<td><code>*a</code></td>
+						<td>hello</td>
+					</tr>
+					<tr>
+						<td>boolean</td>
+						<td><code>a = true</code></td>
+						<td><code>*a</code></td>
+						<td>✓</td>
+					</tr>
+					<tr>
+						<td>boolean</td>
+						<td><code>a = false</code></td>
+						<td><code>*a</code></td>
+						<td>✕</td>
+					</tr>
+					<tr>
+						<td>point</td>
+						<td><code>a = [1,2]</code></td>
+						<td><code>*a</code></td>
+						<td>(1, 2)</td>
+					</tr>
+					<tr>
+						<td>combo</td>
+						<td><code>a = [true,true,false]</code></td>
+						<td><code>*a</code></td>
+						<td>I and II only</td>
+					</tr>
+					<tr>
+						<td>fraction</td>
+						<td><code>a = 0.5</code></td>
+						<td><code>*/a</code></td>
+						<td>\dfrac{1}{2}</td>
+					</tr>
+					<tr>
+						<td>sci notation</td>
+						<td><code>a = 0.0000123</code></td>
+						<td><code>**a</code></td>
+						<td>1.23 \times 10^{-5}</td>
+					</tr>
+					<tr>
+						<td>bracket negative</td>
+						<td><code>a = -2</code></td>
+						<td><code>*(a)</code></td>
+						<td>(-2)</td>
+					</tr>
+					<tr>
+						<td>bracket negative</td>
+						<td><code>a = 2</code></td>
+						<td><code>*(a)</code></td>
+						<td>2</td>
+					</tr>
+					<tr>
+						<td>sign</td>
+						<td><code>a = 5</code></td>
+						<td><code>*+a</code></td>
+						<td>+</td>
+					</tr>
+					<tr>
+						<td>sign</td>
+						<td><code>a = -5</code></td>
+						<td><code>*+a</code></td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td>percentage (planning)</td>
+						<td><code>a = 0.123</code></td>
+						<td><code>*.a</code></td>
+						<td>12.3%</td>
+					</tr>
+					<tr>
+						<td>ratio (planning)</td>
+						<td><code>a = 0.5</code></td>
+						<td><code>*:a</code></td>
+						<td>1:2</td>
+					</tr>
+					<tr>
+						<td>ratio (planning)</td>
+						<td><code>a = 0.5</code></td>
+						<td><code>*:a</code></td>
+						<td>1:2</td>
+					</tr>
+					<tr>
+						<td>inequality sign (planning)</td>
+						<td><code>a = [true,true]</code></td>
+						<td><code>*=a</code></td>
+						<td>\\ge</td>
+					</tr>
+			</tbody></table>
+			<a href="#3-advance-functions" id="3-advance-functions" style="color: inherit; text-decoration: none;">
+				<h1>3. Advance Functions</h1>
+			</a>
+			<a href="#inline-code" id="inline-code" style="color: inherit; text-decoration: none;">
+				<h2>Inline Code</h2>
+			</a>
+			<ul>
+				<li><strong>JavaScript code</strong> can be written in <strong>content</strong> using <code>*{...}</code> .
+				For example, <code>*{1+1}</code> will print <code>2</code>.</li>
+				<li><code>*\{...\}</code> do the same as <code>*{...}</code>, but also display the brackets in equation object.</li>
+			</ul>
+			<a href="#sections" id="sections" style="color: inherit; text-decoration: none;">
+				<h2>Sections</h2>
+			</a>
+			<p><strong>Sections</strong> can be used in <strong>content</strong>:</p>
+			<blockquote>
+				<p>##1.1<br>section 1.1 here.<br>##<br>##1.2<br>section 1.2 here.<br>##</p>
+			</blockquote>
+			<p>If <code>sections = [[1,2]]</code> is defined in <strong>populate</strong>, only section 1.2 will be shown.</p>
+			<a href="#conditional-sections" id="conditional-sections" style="color: inherit; text-decoration: none;">
+				<h2>Conditional Sections</h2>
+			</a>
+			<p>We can decide whether to show a section or not by a condition: <code>##{condition}</code></p>
+			<blockquote>
+				<p>##{true}<br>This will be shown.<br>##</p>
+			</blockquote>
+			<blockquote>
+				<p>##{false}<br>This will NOT be shown.<br>##</p>
+			</blockquote>
+			<a href="#options" id="options" style="color: inherit; text-decoration: none;">
+				<h2>Options</h2>
+			</a>
+			<a href="#with-one-option" id="with-one-option" style="color: inherit; text-decoration: none;">
+				<h3>With One Option</h3>
+			</a>
+			<p>If the <strong>question</strong> contains only one answer option:</p>
+			<blockquote>
+				<p>What is 1+1?</p>
+				<ul>
+					<li>*a</li>
+				</ul>
+			</blockquote>
+			<p>and <strong>populate</strong> contains</p>
+			<pre><code><span style="color: #001080">a</span><span style="color: #000000"> = </span><span style="color: #098658">2</span>
+<span style="color: #001080">options</span><span style="color: #000000"> = {</span><span style="color: #001080">a:</span><span style="color: #000000"> [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]}</span>
+</code></pre>
+			<p>then it&#39;s equivalent to</p>
+			<blockquote>
+				<p>What is 1+1?</p>
+				<ul>
+					<li>2</li>
+					<li>3</li>
+					<li>4</li>
+					<li>5</li>
+				</ul>
+			</blockquote>
+			<p>If the options is left blank: <code>options = {a}</code>, then <code>RndShake()</code>  will be called on <code>a</code> to generate 3 random options.</p>
+			<a href="#with-two-options" id="with-two-options" style="color: inherit; text-decoration: none;">
+				<h3>With Two Options</h3>
+			</a>
+			<p>If the <strong>question</strong> contains only two answer options:</p>
+			<blockquote>
+				<p>What is 1+1?</p>
+				<ul>
+					<li>*a</li>
+					<li>-*a</li>
+				</ul>
+			</blockquote>
+			<p>and <strong>populate</strong> contains</p>
+			<pre><code><span style="color: #001080">a</span><span style="color: #000000"> = </span><span style="color: #098658">2</span>
+<span style="color: #001080">options</span><span style="color: #000000"> = {</span><span style="color: #001080">a:</span><span style="color: #000000"> [</span><span style="color: #098658">3</span><span style="color: #000000">]}</span>
+</code></pre>
+			<p>then it&#39;s equivalent to</p>
+			<blockquote>
+				<p>What is 1+1?</p>
+				<ul>
+					<li>2</li>
+					<li>-2</li>
+					<li>3</li>
+					<li>-3</li>
+				</ul>
+			</blockquote>
+			<a href="#answer" id="answer" style="color: inherit; text-decoration: none;">
+				<h2>Answer</h2>
+			</a>
+			<p>Normally, the first option must be the correct answer.<br>This can be changed by:
+			<code>answer = &quot;B&quot;</code><br>so that the second option is the correct answer.</p>
+			<a href="#answer-option-mapping" id="answer-option-mapping" style="color: inherit; text-decoration: none;">
+				<h2>Answer Option Mapping</h2>
+			</a>
+			<p>To get the answer option key after shuffling, use <code>{#A}</code>.
+			For example, if option A is shuffled to C, then <code>{#A}</code> will print <code>C</code>.</p>
+		</div>
 		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">
 			<h2>Index</h2>
@@ -2720,11 +3078,11 @@ img {
 							<li class="tsd-kind-module"><a href="modules/math_algebra_algebra.html" class="tsd-kind-icon">Math/<wbr>Algebra/<wbr>Algebra</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_algebra_circle.html" class="tsd-kind-icon">Math/<wbr>Algebra/<wbr>Circle</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_algebra_linear.html" class="tsd-kind-icon">Math/<wbr>Algebra/<wbr>Linear</a></li>
+							<li class="tsd-kind-module"><a href="modules/math_algebra_polynomial.html" class="tsd-kind-icon">Math/<wbr>Algebra/<wbr>Polynomial</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_algebra_quadratic.html" class="tsd-kind-icon">Math/<wbr>Algebra/<wbr>Quadratic</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_assertion.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Assertion</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_combinatorics.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Combinatorics</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_flow.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Flow</a></li>
-							<li class="tsd-kind-module"><a href="modules/math_code_fraction.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Fraction</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_function.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Function</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_geometry.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Geometry</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_linearprogram.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Linear<wbr>Program</a></li>
@@ -2739,7 +3097,6 @@ img {
 							<li class="tsd-kind-module"><a href="modules/math_code_text.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Text</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_triangle.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Triangle</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_trigonometry.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Trigonometry</a></li>
-							<li class="tsd-kind-module"><a href="modules/math_code_utility.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Utility</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_code_vector.html" class="tsd-kind-icon">Math/<wbr>Code/<wbr>Vector</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_jest_global.html" class="tsd-kind-icon">Math/<wbr>Jest/global</a></li>
 							<li class="tsd-kind-module"><a href="modules/math_chance.html" class="tsd-kind-icon">Math/chance</a></li>

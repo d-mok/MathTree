@@ -118,7 +118,7 @@ class PolyClass {
         return newPoly.append(...polys)
     }
 
-    func() {
+    func(): (values: { [_: string]: number }) => number {
         return (values: { [_: string]: number }) => {
             let sum = 0
             for (let i = 1; i <= this.nTerm(); i++) {
@@ -134,9 +134,10 @@ class PolyClass {
 
 
     print(): string {
-        let terms = []
+        let terms: string[] = []
         for (let i = 1; i <= this.nTerm(); i++) {
             let term: string = String(this.coeff(i))
+            if (term === '0') continue
             for (let v of this.vars()) {
                 let p = this.power(i, v)
                 if (p === 0) {
@@ -149,6 +150,7 @@ class PolyClass {
             }
             terms.push(term)
         }
+        if (terms.length === 0) terms.push('0')
         return terms.join("+")
     }
 
@@ -178,7 +180,7 @@ function RndPolynomial(degree: number, vars: string[] = ["x"], terms: number = d
 globalThis.RndPolynomial = RndPolynomial
 
 
-function PolySort(poly: polynomial, desc: true) {
+function PolySort(poly: polynomial, desc = true) {
     return (new PolyClass(poly)).sort(desc)
 }
 globalThis.PolySort = PolySort
@@ -196,8 +198,15 @@ globalThis.PolyPrettyPrint = PolyPrettyPrint
 
 
 
-function PolyFunction(poly: polynomial) {
+function PolyFunction(poly: polynomial): (values: { [_: string]: number }) => number {
     return (new PolyClass(poly)).func()
+}
+globalThis.PolyFunction = PolyFunction
+
+
+
+function PolySplit(poly: polynomial): polynomial[] {
+    return (new PolyClass(poly)).split()
 }
 globalThis.PolyFunction = PolyFunction
 
