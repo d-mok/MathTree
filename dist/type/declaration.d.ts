@@ -966,11 +966,11 @@ declare function RotatePoint(P: Point, O: Point, q: number): Point;
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
  * ```
- * Inclination([1,0],[3,2]) // 45
- * Inclination([3,2],[1,0]) // 225
+ * Direction([1,0],[3,2]) // 45
+ * Direction([3,2],[1,0]) // 225
  * ```
  */
-declare function Inclination(A: Point, B: Point): number;
+declare function Direction(A: Point, B: Point): number;
 /**
  * @category Geometry
  * @return the polar angle of a normal direction to AB, on the right of AB.

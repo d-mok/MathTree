@@ -606,9 +606,9 @@ class AutoPenCls {
         pen.polygon(A, B, C)
 
         pen.set.textItalic(true)
-        if (labelA) pen.label.point(A, labelA.toString(), Inclination(G, A))
-        if (labelB) pen.label.point(B, labelB.toString(), Inclination(G, B))
-        if (labelC) pen.label.point(C, labelC.toString(), Inclination(G, C))
+        if (labelA) pen.label.point(A, labelA.toString(), Direction(G, A))
+        if (labelB) pen.label.point(B, labelB.toString(), Direction(G, B))
+        if (labelC) pen.label.point(C, labelC.toString(), Direction(G, C))
         pen.set.textItalic()
 
         let AB = [B[0] - A[0], B[1] - A[1]]

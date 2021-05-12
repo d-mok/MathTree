@@ -1490,7 +1490,7 @@ class PenCls {
             if (dodgeDirection === undefined) {
                 let center = this._pen.setProperty.LABEL_CENTER
                 if (center !== undefined && AreDistinctPoint(center, position)) {
-                    dodgeDirection = Inclination(center, position)
+                    dodgeDirection = Direction(center, position)
                 } else {
                     dodgeDirection = 0
                 }

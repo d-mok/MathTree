@@ -90,14 +90,14 @@ globalThis.RotatePoint = contract(RotatePoint).sign([owl.point, owl.point, owl.n
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
  * ```
- * Inclination([1,0],[3,2]) // 45
- * Inclination([3,2],[1,0]) // 225
+ * Direction([1,0],[3,2]) // 45
+ * Direction([3,2],[1,0]) // 225
  * ```
  */
-function Inclination(A: Point, B: Point): number {
+function Direction(A: Point, B: Point): number {
     return VectorArg(Vector(A, B))
 }
-globalThis.Inclination = contract(Inclination).seal({
+globalThis.Direction = contract(Direction).seal({
     arg: [owl.point],
     args: function distinct_points(A, B) { return owl.distinct([A, B]) }
 })
@@ -116,7 +116,7 @@ globalThis.Inclination = contract(Inclination).seal({
  */
 function Normal(A: Point, B: Point): number {
     let R = RotatePoint(B, A, -90);
-    return Inclination(A, R);
+    return Direction(A, R);
 }
 globalThis.Normal = contract(Normal).seal({
     arg: [owl.point],
@@ -177,7 +177,7 @@ globalThis.Intersection = contract(Intersection).seal({
  * ```
  */
 function TranslatePoint(P: Point, q: number | Point, distance: number): Point {
-    if (Array.isArray(q)) q = Inclination(P, q)
+    if (Array.isArray(q)) q = Direction(P, q)
     let x = P[0] + distance * cos(q)
     let y = P[1] + distance * sin(q)
     return [x, y]

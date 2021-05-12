@@ -56,10 +56,10 @@ test('RotatePoint', () => {
 });
 
 
-test('Inclination', () => {
-    expect(Inclination([1, 0], [3, 2])).toBe(45);
-    expect(Inclination([3, 2], [1, 0])).toBe(225);
-    expect(() => Inclination([3, 2], [3, 2])).toThrow();
+test('Direction', () => {
+    expect(Direction([1, 0], [3, 2])).toBe(45);
+    expect(Direction([3, 2], [1, 0])).toBe(225);
+    expect(() => Direction([3, 2], [3, 2])).toThrow();
 });
 
 

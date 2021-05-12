@@ -120,7 +120,7 @@ function FeasiblePolygon(...cons: Constraint[]) {
     vertices = newList(vertices).distinct()
     Should(vertices.length > 2, 'No feasible region.')
     const center = VectorMean(...vertices);
-    vertices = SortBy(vertices, x => Inclination(center, x))
+    vertices = SortBy(vertices, x => Direction(center, x))
     return vertices;
 }
 globalThis.FeasiblePolygon = FeasiblePolygon
