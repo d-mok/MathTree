@@ -65,6 +65,8 @@ export const str = (_: any) => typeof _ === 'string'
 
 export const bool = (_: any) => typeof _ === 'boolean'
 
+export const object = (_: any) => typeof _ === 'object' && _ !== null
+
 export const emptyObject = (_: any) => !!_ && _.constructor === Object && Object.keys(_).length === 0
 
 export const array = (_: any) => Array.isArray(_)
@@ -112,6 +114,7 @@ export const triangleSides = (_: any) => {
 }
 
 export const polynomial = (_: any) => {
+    if (!object(_)) return false
     if (!('coeff' in _)) return false
     if (!ntuple(_.coeff)) return false
     let n = _.coeff.length
