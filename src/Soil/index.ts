@@ -24,7 +24,7 @@ class MathSoilCls {
         if ('content' in seed) seed.gene = seed.content // for backward compatible
         let soil = new Soil(seed.gene)
         seed.fruit = soil.nurture()
-        seed.question = seed.fruit
+        seed.question = seed.fruit // for backward compatible
     }
 
     public growAll(seeds: Seed[]): void {
