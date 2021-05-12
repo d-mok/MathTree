@@ -154,6 +154,15 @@ class PolyClass {
 
 
 
+
+/**
+ * @category Polynomial
+ * @return a random polynomial object
+ * ```
+ * RndPolynomial(5, ['x', 'y'], 3, 9))
+ * // may return 7xy+3x^2y^3-2xy^3
+ * ```
+ */
 function RndPolynomial(degree: number, vars: string[] = ["x"], terms: number = degree + 1, maxCoeff: number = 9): polynomial {
     let f = () => {
         let poly: polynomial = {
@@ -176,12 +185,31 @@ function RndPolynomial(degree: number, vars: string[] = ["x"], terms: number = d
 globalThis.RndPolynomial = contract(RndPolynomial).sign([owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num])
 
 
+
+
+/**
+ * @category Polynomial
+ * @return a string of the polynomial object
+ * ```
+ * PolyPrint({coeff:[1,2,3],x:[5,6,7]})
+ * // x^{5}+2x^{6}+3x^{7}
+ * ```
+ */
 function PolyPrint(poly: polynomial) {
     return (new PolyClass(poly)).print()
 }
 globalThis.PolyPrint = contract(PolyPrint).sign([owl.polynomial])
 
 
+
+/**
+ * @category Polynomial
+ * @return a polynomial object sorted by power
+ * ```
+ * PolySort({coeff:[1,2,3],x:[6,5,7]})
+ * // {coeff:[2,1,3],x:[5,6,7]}
+ * ```
+ */
 function PolySort(poly: polynomial, desc = true) {
     return (new PolyClass(poly)).sort(desc)
 }
@@ -194,7 +222,14 @@ globalThis.PolySort = contract(PolySort).sign([owl.polynomial, owl.bool])
 // globalThis.PolyPrettyPrint = contract(PolyPrettyPrint).sign([owl.polynomial])
 
 
-
+/**
+ * @category Polynomial
+ * @return a function of the polynomial, for substitution
+ * ```
+ * func = PolyFunction({coeff:[1,2,3],x:[4,5,6]})
+ * func({x:2}) // 272
+ * ```
+ */
 function PolyFunction(poly: polynomial): (values: { [_: string]: number }) => number {
     return (new PolyClass(poly)).func()
 }
@@ -202,12 +237,28 @@ globalThis.PolyFunction = contract(PolyFunction).sign([owl.polynomial])
 
 
 
+/**
+ * @category Polynomial
+ * @return an array of monomials
+ * ```
+ * PolySplit({coeff:[1,2,3],x:[4,5,6]})
+ * // [{coeff:[1],x:[4]} , {coeff:[2],x:[5]} , {coeff:[3],x:[6]}]
+ * ```
+ */
 function PolySplit(poly: polynomial): polynomial[] {
     return (new PolyClass(poly)).split()
 }
 globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
 
 
+
+/**
+ * @category Polynomial
+ * @return the degree of the polynomial
+ * ```
+ * PolyDegree({coeff:[1,2,3],x:[4,5,6]}) //6
+ * ```
+ */
 function PolyDegree(poly: polynomial): number {
     return (new PolyClass(poly)).degree()
 }

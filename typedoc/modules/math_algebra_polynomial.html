@@ -2730,8 +2730,8 @@ img {
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
-					<section class="tsd-index-section ">
-						<h3>Functions</h3>
+					<section class="tsd-index-section">
+						<h3>Polynomial</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_polynomial.html#polydegree" class="tsd-kind-icon">Poly<wbr>Degree</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_polynomial.html#polyfunction" class="tsd-kind-icon">Poly<wbr>Function</a></li>
@@ -2745,7 +2745,7 @@ img {
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
-			<h2>Functions</h2>
+			<h2>Polynomial</h2>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 				<a name="polydegree" class="tsd-anchor"></a>
 				<h3>Poly<wbr>Degree</h3>
@@ -2763,6 +2763,9 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						<p>the degree of the polynomial</p>
+						<pre><code><span style="color: #795E26">PolyDegree</span><span style="color: #000000">({</span><span style="color: #001080">coeff:</span><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],</span><span style="color: #001080">x:</span><span style="color: #000000">[</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">]}) </span><span style="color: #008000">//6</span>
+</code></pre>
 					</li>
 				</ul>
 			</section>
@@ -2783,6 +2786,10 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></h4>
+						<p>a function of the polynomial, for substitution</p>
+						<pre><code><span style="color: #001080">func</span><span style="color: #000000"> = </span><span style="color: #795E26">PolyFunction</span><span style="color: #000000">({</span><span style="color: #001080">coeff:</span><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],</span><span style="color: #001080">x:</span><span style="color: #000000">[</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">]})</span>
+<span style="color: #795E26">func</span><span style="color: #000000">({</span><span style="color: #001080">x:</span><span style="color: #098658">2</span><span style="color: #000000">}) </span><span style="color: #008000">// 272</span>
+</code></pre>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal">
@@ -2826,6 +2833,10 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>a string of the polynomial object</p>
+						<pre><code><span style="color: #795E26">PolyPrint</span><span style="color: #000000">({</span><span style="color: #001080">coeff:</span><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],</span><span style="color: #001080">x:</span><span style="color: #000000">[</span><span style="color: #098658">5</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">,</span><span style="color: #098658">7</span><span style="color: #000000">]})</span>
+<span style="color: #008000">// x^{5}+2x^{6}+3x^{7}</span>
+</code></pre>
 					</li>
 				</ul>
 			</section>
@@ -2849,6 +2860,10 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="math_type.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h4>
+						<p>a polynomial object sorted by power</p>
+						<pre><code><span style="color: #795E26">PolySort</span><span style="color: #000000">({</span><span style="color: #001080">coeff:</span><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],</span><span style="color: #001080">x:</span><span style="color: #000000">[</span><span style="color: #098658">6</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">,</span><span style="color: #098658">7</span><span style="color: #000000">]})</span>
+<span style="color: #008000">// {coeff:[2,1,3],x:[5,6,7]}</span>
+</code></pre>
 					</li>
 				</ul>
 			</section>
@@ -2869,6 +2884,10 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="math_type.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a><span class="tsd-signature-symbol">[]</span></h4>
+						<p>an array of monomials</p>
+						<pre><code><span style="color: #795E26">PolySplit</span><span style="color: #000000">({</span><span style="color: #001080">coeff:</span><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],</span><span style="color: #001080">x:</span><span style="color: #000000">[</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">]})</span>
+<span style="color: #008000">// [{coeff:[1],x:[4]} , {coeff:[2],x:[5]} , {coeff:[3],x:[6]}]</span>
+</code></pre>
 					</li>
 				</ul>
 			</section>
@@ -2898,6 +2917,10 @@ img {
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="math_type.html#polynomial" class="tsd-signature-type" data-tsd-kind="Type alias">polynomial</a></h4>
+						<p>a random polynomial object</p>
+						<pre><code><span style="color: #795E26">RndPolynomial</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">, [</span><span style="color: #A31515">&#039;x&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;y&#039;</span><span style="color: #000000">], </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #000000">))</span>
+<span style="color: #008000">// may return 7xy+3x^2y^3-2xy^3</span>
+</code></pre>
 					</li>
 				</ul>
 			</section>

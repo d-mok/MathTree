@@ -2,9 +2,8 @@ import { ExecSection } from './tool/section'
 import { dress } from './tool/dress'
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
-import { ParseForPrint } from './tool/html'
 import { Dict, Config } from './cls'
-import { evaluate, evalInline, intrapolate } from './tool/eval'
+import { evaluate,  intrapolate } from './tool/eval'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 
 // util functions
@@ -87,18 +86,6 @@ export class Soil {
 
         return result
     }
-
-    // private intrapolateCode(html: string) {
-    //     html = html.replace(/\*\\\{([^\{\}]*)\\\}/g, (match, code) => {
-    //         let result = evalInline(code, this.dict)
-    //         return ParseForPrint(result, "")
-    //     })
-    //     html = html.replace(/\*\{([^\{\}]*)\}/g, (match, code) => {
-    //         let result = evalInline(code, this.dict)
-    //         return ParseForPrint(result, "")
-    //     })
-    //     return html
-    // }
 
     private pushDict() {
         this.counter++

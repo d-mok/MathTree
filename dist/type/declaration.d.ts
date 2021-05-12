@@ -64,6 +64,7 @@ declare module "Core/Owl/index" {
     export const absBetween: (min: number, max: number) => (_: any) => boolean;
     export const str: (_: any) => boolean;
     export const bool: (_: any) => boolean;
+    export const object: (_: any) => boolean;
     export const emptyObject: (_: any) => boolean;
     export const array: (_: any) => boolean;
     export const arrayOfLength: (length: number) => (_: any) => boolean;
@@ -161,7 +162,7 @@ declare module "Core/Ink/index" {
     export function parseIneq(text: Ineq): [greater: boolean, equal: boolean];
     export function printDfrac(numerator: number, denominator: number, upSign?: boolean): string;
     export function parseDfrac(dfrac: string): Fraction;
-    export function printCombo(combo: [boolean, boolean, boolean]): "I, II and III" | "I and II only" | "I and III only" | "I only" | "II and III only" | "II only" | "III only" | "None of the above" | undefined;
+    export function printCombo(combo: [boolean, boolean, boolean]): string;
 }
 declare module "Core/Blood/index" {
     class Blood extends Error {
@@ -237,13 +238,60 @@ declare class PolyClass {
     }) => number;
     print(): string;
 }
+/**
+ * @category Polynomial
+ * @return a random polynomial object
+ * ```
+ * RndPolynomial(5, ['x', 'y'], 3, 9))
+ * // may return 7xy+3x^2y^3-2xy^3
+ * ```
+ */
 declare function RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
+/**
+ * @category Polynomial
+ * @return a string of the polynomial object
+ * ```
+ * PolyPrint({coeff:[1,2,3],x:[5,6,7]})
+ * // x^{5}+2x^{6}+3x^{7}
+ * ```
+ */
 declare function PolyPrint(poly: polynomial): string;
+/**
+ * @category Polynomial
+ * @return a polynomial object sorted by power
+ * ```
+ * PolySort({coeff:[1,2,3],x:[6,5,7]})
+ * // {coeff:[2,1,3],x:[5,6,7]}
+ * ```
+ */
 declare function PolySort(poly: polynomial, desc?: boolean): polynomial;
+/**
+ * @category Polynomial
+ * @return a function of the polynomial, for substitution
+ * ```
+ * func = PolyFunction({coeff:[1,2,3],x:[4,5,6]})
+ * func({x:2}) // 272
+ * ```
+ */
 declare function PolyFunction(poly: polynomial): (values: {
     [_: string]: number;
 }) => number;
+/**
+ * @category Polynomial
+ * @return an array of monomials
+ * ```
+ * PolySplit({coeff:[1,2,3],x:[4,5,6]})
+ * // [{coeff:[1],x:[4]} , {coeff:[2],x:[5]} , {coeff:[3],x:[6]}]
+ * ```
+ */
 declare function PolySplit(poly: polynomial): polynomial[];
+/**
+ * @category Polynomial
+ * @return the degree of the polynomial
+ * ```
+ * PolyDegree({coeff:[1,2,3],x:[4,5,6]}) //6
+ * ```
+ */
 declare function PolyDegree(poly: polynomial): number;
 declare module "Math/index" {
     import './Code/Assertion.ts';
@@ -3678,15 +3726,8 @@ declare module "Soil/tool/html" {
         isLiDuplicated(): boolean;
         shuffleLi(): number[];
     }
-    /**
-    * print a variable (e.g. *x) into the html
-    * ```typescript
-    * let html = '1 + *x = *y'
-    * PrintVariable(html,'x',2) // '1 + 2 = *y'
-    * ```
-    */
     export function PrintVariable(html: string, symbol: string, value: any): string;
-    export function ParseForPrint(value: any): any;
+    export function ParseForPrint(value: any, signal?: string): string;
 }
 declare module "Soil/cls" {
     export class Config {
@@ -3807,6 +3848,9 @@ declare var W: any;
 declare var X: any;
 declare var Y: any;
 declare var Z: any;
+/**
+ * @deprecated
+ */
 declare var sections: [number | string, number][];
 declare var answer: string;
 declare var options: object;
@@ -3827,6 +3871,7 @@ declare module "Soil/tool/eval" {
         context: Context;
     };
     export function evalInline(code: string, dict: Dict): any;
+    export function intrapolate(html: string, dict: Dict): string;
 }
 declare module "Soil/tool/section" {
     import { Dict } from "Soil/cls";
@@ -3879,7 +3924,6 @@ declare module "Soil/soil" {
         private recordError;
         private printError;
         private evalCode;
-        private intrapolateCode;
         private pushDict;
         private isValidated;
         private runPopulate;
