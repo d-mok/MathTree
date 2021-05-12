@@ -141,6 +141,8 @@ export const distinctBy = (keyFunc: (_: any) => any) =>
 
 // special text
 
+export const alphabet = (_: any): _ is Ineq => str(_) && _.length === 1 && (_.toLowerCase() !== _.toUpperCase())
+
 export const ineq = (_: any): _ is Ineq => ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'].includes(_)
 
 export const dfrac = (_: any) => {

@@ -37,11 +37,11 @@ test('IsRational', () => {
 
 
 
-test('IsCoeff', () => {
-    const T = [2, 3, -2, -5];
-    const F = [-1, 0, 1, 1.23, -0.5];
-    testAssertion(IsCoeff, T, F);
-});
+// test('IsCoeff', () => {
+//     const T = [2, 3, -2, -5];
+//     const F = [-1, 0, 1, 1.23, -0.5];
+//     testAssertion(IsCoeff, T, F);
+// });
 
 
 test('IsOdd', () => {

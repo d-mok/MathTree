@@ -74,22 +74,22 @@ function IsRational(...items: any[]): boolean {
 globalThis.IsRational = IsRational
 
 
-/**
- * @category Assertion
- * @ignore
- * @deprecated
- * @return check is an integer but not -1, 0 or 1.
- * ```
- * IsCoeff(2) // true
- * IsCoeff(-1) // false
- * ```
- */
-function IsCoeff(...items: any[]): boolean {
-    return items.every(
-        x => IsInteger(x) && ![-1, 0, 1].includes(ant.blur(x))
-    );
-}
-globalThis.IsCoeff = IsCoeff
+// /**
+//  * @category Assertion
+//  * @ignore
+//  * @deprecated
+//  * @return check is an integer but not -1, 0 or 1.
+//  * ```
+//  * IsCoeff(2) // true
+//  * IsCoeff(-1) // false
+//  * ```
+//  */
+// function IsCoeff(...items: any[]): boolean {
+//     return items.every(
+//         x => IsInteger(x) && ![-1, 0, 1].includes(ant.blur(x))
+//     );
+// }
+// globalThis.IsCoeff = IsCoeff
 
 
 

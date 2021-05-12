@@ -1188,7 +1188,6 @@ class PenCls {
     }
 
 
-
     /**
      * Geometry Decorator.
      * @category decorator
@@ -1388,7 +1387,32 @@ class PenCls {
         }
     };
 
-
+    /**
+     * @ignore
+     */
+    private _write(text: string, xPix: number, yPix: number) {
+        this.ctx.save()
+        let ANGLE = -this.set.TEXT_DIR * Math.PI / 180
+        if (this.set.TEXT_LATEX) {
+            const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            let size = Math.round(this.set.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
+            // @ts-ignore
+            const widget = new CanvasLatex.default(
+                text,
+                { displayMode: true, debugBounds: false, baseSize: size }
+            );
+            const bounds = widget.getBounds();
+            this.ctx.translate(xPix, yPix)
+            this.ctx.rotate(ANGLE);
+            this.ctx.translate(2 - bounds.width / 2 - bounds.x, -2 - bounds.y / 2)
+            widget.draw(this.ctx)
+        } else {
+            this.ctx.translate(xPix, yPix)
+            this.ctx.rotate(ANGLE);
+            this.ctx.fillText(text, 0, 0)
+        }
+        this.ctx.restore()
+    }
 
 
     /**
@@ -1403,54 +1427,8 @@ class PenCls {
      */
     write(position: Point, text: string) {
         const [x, y] = this.frame.toPix(position);
-        this.ctx.fillText(text, x, y);
+        this._write(text, x, y);
     }
-
-
-    /**
-     * Write text vertically
-     * @category text
-     * @param position - The coordinates [x,y] to position the text.
-     * @param text - The string to write.
-     * @returns void
-     * ```
-     * pen.writeVertical([1,2],'abc') // write 'abc' at [1,2] vertically
-     * ```
-     */
-    writeV(position: Point, text: string) {
-        const [x, y] = this.frame.toPix(position);
-        this.ctx.save()
-        this.ctx.translate(x, y)
-        this.ctx.rotate(-Math.PI / 2);
-        this.ctx.fillText(text, 0, 0)
-        this.ctx.restore()
-    }
-
-
-
-    /**
-     * Write latex
-     * @category text
-     * @param position - The coordinates [x,y] to position the text.
-     * @param latex - The latex to write.
-     * @returns void
-     * ```
-     * pen.writeLatex([1,2],'x+y=1') // write 'x+y=1' at [1,2]
-     * ```
-     */
-    writeLatex(position: Point, latex: string) {
-        const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        let size = Math.round(this.set.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
-        // @ts-ignore
-        const widget = new CanvasLatex.default(latex, { displayMode: true, debugBounds: false, baseSize: size });
-        let [px, py] = this.frame.toPix(position)
-        const bounds = widget.getBounds();
-        this.ctx.save()
-        this.ctx.translate(2 + px - bounds.width / 2 - bounds.x, -2 + py - bounds.y / 2)
-        widget.draw(this.ctx)
-        this.ctx.restore()
-    }
-
 
     /**
      * @category text
@@ -1489,11 +1467,8 @@ class PenCls {
             y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
 
             this._pen.ctx.save();
-            if (!isNaN(Number(text)))
-                this._pen.set.textItalic(false)
-            if (text.length === 1 && (text.toLowerCase() !== text.toUpperCase()))
-                this._pen.set.textItalic(true)
-            this._pen.ctx.fillText(text, x, y);
+            if (owl.alphabet(text)) this._pen.set.textItalic(true)
+            this._pen._write(text, x, y);
             this._pen.ctx.restore();
         },
 

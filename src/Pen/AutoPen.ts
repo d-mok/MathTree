@@ -1060,7 +1060,9 @@ class AutoPenCls {
         pen.line([0, 0], [width, 0])
         pen.arrow([0, 0], [0, height])
 
-        pen.writeV([-1.5, height / 2], yLabel)
+        pen.set.textDir(90)
+        pen.write([-1.5, height / 2], yLabel)
+        pen.set.textDir()
 
         pen.label.point([width / 2, 0], xLabel, 270, 40)
 

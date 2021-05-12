@@ -84,6 +84,7 @@ declare module "Core/Owl/index" {
     export const fail: (_: any) => boolean;
     export const distinct: (_: any[]) => boolean;
     export const distinctBy: (keyFunc: (_: any) => any) => (..._: any[]) => boolean;
+    export const alphabet: (_: any) => _ is Ineq;
     export const ineq: (_: any) => _ is Ineq;
     export const dfrac: (_: any) => any;
     export const constraint: (_: any) => boolean;
@@ -586,17 +587,6 @@ declare function IsTerminating(...items: any[]): boolean;
  * ```
  */
 declare function IsRational(...items: any[]): boolean;
-/**
- * @category Assertion
- * @ignore
- * @deprecated
- * @return check is an integer but not -1, 0 or 1.
- * ```
- * IsCoeff(2) // true
- * IsCoeff(-1) // false
- * ```
- */
-declare function IsCoeff(...items: any[]): boolean;
 /**
  * @category Assertion
  * @return check is an odd integer.
@@ -3419,6 +3409,10 @@ declare class PenCls {
         rightAngle(A: Point, O: Point, B?: Point, size?: number): void;
     };
     /**
+     * @ignore
+     */
+    private _write;
+    /**
      * Write text.
      * @category text
      * @param position - The coordinates [x,y] to position the text.
@@ -3429,28 +3423,6 @@ declare class PenCls {
      * ```
      */
     write(position: Point, text: string): void;
-    /**
-     * Write text vertically
-     * @category text
-     * @param position - The coordinates [x,y] to position the text.
-     * @param text - The string to write.
-     * @returns void
-     * ```
-     * pen.writeVertical([1,2],'abc') // write 'abc' at [1,2] vertically
-     * ```
-     */
-    writeV(position: Point, text: string): void;
-    /**
-     * Write latex
-     * @category text
-     * @param position - The coordinates [x,y] to position the text.
-     * @param latex - The latex to write.
-     * @returns void
-     * ```
-     * pen.writeLatex([1,2],'x+y=1') // write 'x+y=1' at [1,2]
-     * ```
-     */
-    writeLatex(position: Point, latex: string): void;
     /**
      * @category text
      */

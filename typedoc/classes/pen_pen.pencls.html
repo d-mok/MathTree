@@ -2803,12 +2803,6 @@ img {
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="pen_pen.pencls.html#write" class="tsd-kind-icon">write</a>
 				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="pen_pen.pencls.html#writelatex" class="tsd-kind-icon">write<wbr>Latex</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="pen_pen.pencls.html#writev" class="tsd-kind-icon">writeV</a>
-				</li>
 			</ul>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2906,8 +2900,6 @@ img {
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-property tsd-parent-kind-class"><a href="pen_pen.pencls.html#label" class="tsd-kind-icon">label</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#write" class="tsd-kind-icon">write</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#writelatex" class="tsd-kind-icon">write<wbr>Latex</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#writev" class="tsd-kind-icon">writeV</a></li>
 						</ul>
 					</section>
 				</div>
@@ -6078,80 +6070,6 @@ img {
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						<p>void</p>
 						<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">write</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #A31515">&#039;abc&#039;</span><span style="color: #000000">) </span><span style="color: #008000">// write &#039;abc&#039; at [1,2]</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="writelatex" class="tsd-anchor"></a>
-				<h3>write<wbr>Latex</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">write<wbr>Latex<span class="tsd-signature-symbol">(</span>position<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, latex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Write latex</p>
-							</div>
-						</div>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>position: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The coordinates [x,y] to position the text.</p>
-								</div>
-							</li>
-							<li>
-								<h5>latex: <span class="tsd-signature-type">string</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The latex to write.</p>
-								</div>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						<p>void</p>
-						<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">writeLatex</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #A31515">&#039;x+y=1&#039;</span><span style="color: #000000">) </span><span style="color: #008000">// write &#039;x+y=1&#039; at [1,2]</span>
-</code></pre>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="writev" class="tsd-anchor"></a>
-				<h3>writeV</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">writeV<span class="tsd-signature-symbol">(</span>position<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Write text vertically</p>
-							</div>
-						</div>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>position: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The coordinates [x,y] to position the text.</p>
-								</div>
-							</li>
-							<li>
-								<h5>text: <span class="tsd-signature-type">string</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>The string to write.</p>
-								</div>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						<p>void</p>
-						<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">writeVertical</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #A31515">&#039;abc&#039;</span><span style="color: #000000">) </span><span style="color: #008000">// write &#039;abc&#039; at [1,2] vertically</span>
 </code></pre>
 					</li>
 				</ul>
