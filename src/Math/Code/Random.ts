@@ -37,19 +37,54 @@ function RndR(min: number, max: number): number {
 globalThis.RndR = contract(RndR).sign([owl.num])
 
 
+/**
+ * @category Random
+ * @return an array of n unique random real number in [min, max] inclusive.
+ * ```
+ * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
+ * ```
+ */
+function RndRs(min: number, max: number, n: number = 10): number[] {
+    return dice.roll(() => RndR(min, max)).unique(n);
+}
+globalThis.RndRs = contract(RndRs).sign([owl.num, owl.num, owl.positiveInt])
+
+
 
 /**
  * @category Random
- * @return a random fraction in [min, max] inclusive, with largest numerator / denominator.
+ * @return a random fraction with largest numerator / denominator, within range inclusive.
  * ```
- * RndQ(1,2,9) // may return 5/3
+ * RndQ(9,[2,9]) // may return 7/2
+ * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
  * ```
  */
-function RndQ(min: number, max: number, largest: number = 9): number {
-    let f = () => RndN(1, largest) / RndN(2, largest) * RndU()
-    return dice.roll(f).brute(_ => _ >= min && _ <= max)
+function RndQ(largest: number = 9, range?: interval): number {
+    let L = Math.abs(largest)
+    let f = () => RndN(1, L) / RndN(2, L) * (largest > 0 ? 1 : RndU())
+    if (range) {
+        return dice.roll(f).brute(_ => _ >= range[0] && _ <= range[1])
+    } else {
+        return f()
+    }
+
 }
-globalThis.RndQ = contract(RndQ).sign([owl.num, owl.num, owl.positiveInt])
+globalThis.RndQ = contract(RndQ).sign([owl.nonZeroInt, owl.interval])
+
+
+
+/**
+ * @category Random
+ * @return an array of n unique random fractions.
+ * ```
+ * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
+ * ```
+ */
+function RndQs(largest: number = 9, range?: interval, n: number = 10): number[] {
+    n = Math.min(Math.abs(largest) + 1, n)
+    return dice.roll(() => RndQ(largest, range)).unique(n);
+}
+globalThis.RndQs = contract(RndQs).sign([owl.nonZeroInt, owl.interval, owl.positiveInt])
 
 
 

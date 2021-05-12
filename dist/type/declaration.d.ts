@@ -1359,12 +1359,29 @@ declare function RndNs(min: number, max: number, n?: number): number[];
 declare function RndR(min: number, max: number): number;
 /**
  * @category Random
- * @return a random fraction in [min, max] inclusive, with largest numerator / denominator.
+ * @return an array of n unique random real number in [min, max] inclusive.
  * ```
- * RndQ(1,2,9) // may return 5/3
+ * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
  * ```
  */
-declare function RndQ(min: number, max: number, largest?: number): number;
+declare function RndRs(min: number, max: number, n?: number): number[];
+/**
+ * @category Random
+ * @return a random fraction with largest numerator / denominator, within range inclusive.
+ * ```
+ * RndQ(9,[2,9]) // may return 7/2
+ * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
+ * ```
+ */
+declare function RndQ(largest?: number, range?: interval): number;
+/**
+ * @category Random
+ * @return an array of n unique random fractions.
+ * ```
+ * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
+ * ```
+ */
+declare function RndQs(largest?: number, range?: interval, n?: number): number[];
 /**
  * @category Random
  * @return 1 or -1

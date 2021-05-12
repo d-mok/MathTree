@@ -23,12 +23,28 @@ test('RndR', () => {
 });
 
 
+test('RndRs', () => {
+    let arr = sample(() => RndRs(5, 10, 3));
+    expect(arr).toBeFlatWithin(5, 10);
+    expect(arr).toAllHaveLength(3);
+});
+
 test('RndQ', () => {
-    let arr = sample(() => RndQ(1, 2));
-    expect(arr).toBeFlatWithin(1, 2);
+    let arr = sample(() => RndQ(8, [0, 6]));
+    expect(arr).toBeFlatWithin(0, 6);
+    expect(arr).toBeFlatIs(owl.rational);
+    arr = sample(() => RndQ(-8, [-6, 6]));
+    expect(arr).toBeFlatWithin(-6, 6);
     expect(arr).toBeFlatIs(owl.rational);
 });
 
+
+test('RndQs', () => {
+    let arr = sample(() => RndQs(8, [0, 6], 3));
+    expect(arr).toBeFlatWithin(3, 6);
+    expect(arr).toBeFlatIs(owl.rational);
+    expect(arr).toAllHaveLength(3);
+});
 
 
 test('RndU', () => {

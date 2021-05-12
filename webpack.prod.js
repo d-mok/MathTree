@@ -1,4 +1,5 @@
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: './src/index.ts',
@@ -20,6 +21,15 @@ module.exports = {
         path: path.resolve(__dirname, 'dist/edge'),
     },
     optimization: {
-        minimize: true
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    mangle: false
+                    // keep_classnames: true,
+                    // keep_fnames: true,
+                },
+            }),
+        ],
     },
 };
