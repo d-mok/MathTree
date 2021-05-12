@@ -115,7 +115,7 @@ export const triangleSides = (_: any) => {
 
 export const polynomial = (_: any) => {
     if (!object(_)) return false
-    if (!('coeff' in _)) return false
+    if (!_.hasOwnProperty('coeff')) return false
     if (!ntuple(_.coeff)) return false
     let n = _.coeff.length
     for (let k in _) {
