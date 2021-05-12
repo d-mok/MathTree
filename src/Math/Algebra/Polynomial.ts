@@ -185,7 +185,7 @@ globalThis.PolyPrint = contract(PolyPrint).sign([owl.polynomial])
 function PolySort(poly: polynomial, desc = true) {
     return (new PolyClass(poly)).sort(desc)
 }
-globalThis.PolySort = contract(PolySort).sign([owl.polynomial])
+globalThis.PolySort = contract(PolySort).sign([owl.polynomial, owl.bool])
 
 
 // function PolyPrettyPrint(poly: polynomial) {

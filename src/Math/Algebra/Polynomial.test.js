@@ -5,7 +5,7 @@ test('RndPolynomial', () => {
     let arr = sample(() => RndPolynomial(8, ['x', 'y'], 3, 9));
     expect(arr).toBeFlatIs(owl.polynomial);
     expect(arr).toBeFlatIs(_ => ('x' in _) && ('y' in _));
-    expect(arr).toBeFlatIs(_ =>  PolyDegree(_) === 8);
+    expect(arr).toBeFlatIs(_ => PolyDegree(_) === 8);
 });
 
 
@@ -26,7 +26,7 @@ test('PolySort', () => {
         x: [1, -1, 3, 6, 0, 3, 9, 0],
         y: [6, 5, 4, 3, 2, 1, 0, 0]
     };
-    P = PolySort(P);
+    P = PolySort(P, true);
     let T = '8x^{9}+-1x^{6}y^{3}+1x^{3}y^{4}+5xy^{6}+-7x^{-1}y^{5}+6y^{2}+2';
     expect(PolyPrint(P)).toBe(T);
 });
