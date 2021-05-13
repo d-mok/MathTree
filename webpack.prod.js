@@ -21,7 +21,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist/edge'),
     },
     optimization: {
-        minimize: true,
+        minimize: false,
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
