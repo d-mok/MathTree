@@ -69,6 +69,10 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     // print */x as fraction
     print("/", "\\*\\/")
 
+    // print *//x as fraction
+    print("//", "\\*\\/\\/")
+
+
     // print *(x) as bracket if negative
     print("()", "\\*\\(", "\\)")
 
@@ -121,6 +125,14 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (T === 'number') {
             let [p, q] = ToFrac(value)
             return Dfrac(p, q)
+        }
+    }
+
+
+    if (signal === '//') {
+        if (T === 'number') {
+            let [p, q] = ToFrac(value)
+            return p + "/" + q
         }
     }
 

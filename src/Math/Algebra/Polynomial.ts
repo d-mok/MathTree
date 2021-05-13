@@ -78,6 +78,15 @@ class PolyClass {
         return arr
     }
 
+    private augment(poly2: polynomial) {
+        let myKeys = Object.keys(this.poly)
+        let yourKeys = Object.keys(poly2)
+        let newVars = yourKeys.filter(_ => !myKeys.includes(_))
+        for (let v in newVars) {
+            this.poly[v] = Array(this.nTerm()).fill(0)
+        }
+    }
+
 
     append(...polys: polynomial[]): polynomial {
         let newPoly: polynomial = { coeff: [] }
@@ -249,6 +258,25 @@ function PolySplit(poly: polynomial): polynomial[] {
     return (new PolyClass(poly)).split()
 }
 globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
+
+
+
+// /**
+//  * @category Polynomial
+//  * @return an array of monomials
+//  * ```
+//  * PolySplit({coeff:[1,2,3],x:[4,5,6]})
+//  * // [{coeff:[1],x:[4]} , {coeff:[2],x:[5]} , {coeff:[3],x:[6]}]
+//  * ```
+//  */
+// function PolyJoin(...polys: polynomial[]): polynomial {
+
+//     return (new PolyClass(poly)).split()
+// }
+// globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
+
+
+
 
 
 

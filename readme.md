@@ -95,6 +95,7 @@
 |combo|`a = [true,true,false]`|`*a`|I and II only|
 |polynomial|`a = {coeff:[1,2],x:[3,4]}`|`*a`|1x^{3}+2x^{4}|
 |fraction| `a = 0.5`	| `*/a` | \dfrac{1}{2} |
+|small fraction| `a = 0.5`	| `*//a` | 1/2 |
 | sci notation |`a = 0.0000123`	| `**a` | 1.23 \times 10^{-5} |
 | bracket negative|`a = -2`|`*(a)`| (-2)|
 | bracket negative|`a = 2`|`*(a)`| 2|

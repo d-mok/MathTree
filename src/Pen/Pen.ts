@@ -1423,6 +1423,7 @@ class PenCls {
      * @ignore
      */
     private _write(text: string, xPix: number, yPix: number) {
+        text = String(text)
         this.ctx.save()
         let ANGLE = -this.setProperty.TEXT_DIR * Math.PI / 180
         if (this.setProperty.TEXT_LATEX) {
@@ -1436,7 +1437,17 @@ class PenCls {
             const bounds = widget.getBounds();
             this.ctx.translate(xPix, yPix)
             this.ctx.rotate(ANGLE);
-            this.ctx.translate(2 - bounds.width / 2 - bounds.x, -2 - bounds.y / 2)
+            let xTune: number = 2 - bounds.width / 2 - bounds.x
+            if (this.ctx.textAlign === 'left') xTune = 2 - bounds.x
+            if (this.ctx.textAlign === 'right') xTune = 2 - bounds.width - bounds.x
+            if (this.ctx.textAlign === 'center') xTune = 2 - bounds.width / 2 - bounds.x
+
+            let yTune: number = - bounds.y / 2
+            if (this.ctx.textBaseline === 'top') yTune = - bounds.y
+            if (this.ctx.textBaseline === 'bottom') yTune = - bounds.y - bounds.height
+            if (this.ctx.textBaseline === 'middle') yTune = - bounds.y - bounds.height / 2
+
+            this.ctx.translate(xTune, yTune)
             widget.draw(this.ctx)
         } else {
             this.ctx.translate(xPix, yPix)
