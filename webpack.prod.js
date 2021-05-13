@@ -25,9 +25,9 @@ module.exports = {
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
-                    mangle: false
-                    // keep_classnames: true,
-                    // keep_fnames: true,
+                    mangle: false,
+                    keep_classnames: true,
+                    keep_fnames: true,
                 },
             }),
         ],

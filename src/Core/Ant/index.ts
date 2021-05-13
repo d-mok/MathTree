@@ -107,13 +107,13 @@ export function sd(...nums: number[]): number {
     return std(nums, 'uncorrected')
 }
 
-export function nearFrac(num: number, maxDenominator = 1000): Fraction {
+export function nearFrac(num: number, maxDenominator = 10000): Fraction {
     let f = (new Decimal(num)).toFraction(maxDenominator)
     return [f[0].toNumber(), f[1].toNumber()]
 }
 
-export function fracable(num: number, maxDenominator = 1000): boolean {
-    let [p, q] = nearFrac(num, maxDenominator)
+export function fracable(num: number): boolean {
+    let [p, q] = nearFrac(num)
     return correct(num * q) === p
 }
 

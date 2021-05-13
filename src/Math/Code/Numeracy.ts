@@ -271,7 +271,7 @@ globalThis.LCM = contract(LCM).sign([owl.nonZeroInt])
  * ToFrac(-456/123) // [-152,41]
  * ```
  */
-function ToFrac(num: number, maxDenominator = 1000): Fraction {
-    return ant.nearFrac(num, maxDenominator)
+function ToFrac(num: number): Fraction {
+    return ant.nearFrac(num)
 }
-globalThis.ToFrac = contract(ToFrac).sign([owl.rational, owl.positiveInt])
+globalThis.ToFrac = contract(ToFrac).sign([owl.rational])
