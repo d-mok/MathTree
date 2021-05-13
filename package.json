@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "publish": "npm run build-dev && npm run build && npm run build-type && npm run typedoc && npm run jest",
-    "build": "webpack --config webpack.prod.js",
+    "build": "webpack --config webpack.edge.js",
     "build-dev": "webpack --config webpack.dev.js",
+    "build-stable": "webpack --config webpack.stable.js",
     "build-type": "npx tsc --project tsconfig.d.json",
     "build-type2": "webpack --config webpack.type.js && webpack --config webpack.type.js",
     "jest": "jest ./src/Math",

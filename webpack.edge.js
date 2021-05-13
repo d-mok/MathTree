@@ -17,7 +17,7 @@ module.exports = {
     },
     output: {
         filename: 'mathtree.js',
-        path: path.resolve(__dirname, 'dist/dev')
+        path: path.resolve(__dirname, 'dist/edge')
     },
     optimization: {
         minimize: false

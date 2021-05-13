@@ -1,5 +1,4 @@
 const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: './src/index.ts',
@@ -18,18 +17,9 @@ module.exports = {
     },
     output: {
         filename: 'mathtree.js',
-        path: path.resolve(__dirname, 'dist/edge'),
+        path: path.resolve(__dirname, 'dist/stable')
     },
     optimization: {
-        minimize: false,
-        minimizer: [
-            new TerserPlugin({
-                terserOptions: {
-                    mangle: false,
-                    keep_classnames: true,
-                    keep_fnames: true,
-                },
-            }),
-        ],
-    },
+        minimize: true
+    }
 };

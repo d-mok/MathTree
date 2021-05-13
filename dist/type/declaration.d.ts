@@ -149,7 +149,7 @@ declare module "Core/Ant/index" {
     export function median(...nums: number[]): number;
     export function sd(...nums: number[]): number;
     export function nearFrac(num: number, maxDenominator?: number): Fraction;
-    export function fracable(num: number, maxDenominator?: number): boolean;
+    export function fracable(num: number): boolean;
     export function ratio<T extends number[]>(...rationals: T): T;
     export function simpFrac(p: number, q: number): Fraction;
     export function e(num: number): number;
@@ -230,6 +230,7 @@ declare class PolyClass {
     shuffle(): polynomial;
     term(position: number): polynomial;
     split(): polynomial[];
+    private augment;
     append(...polys: polynomial[]): polynomial;
     cloneShell(): polynomial;
     sort(desc: boolean): polynomial;
@@ -1354,7 +1355,7 @@ declare function LCM(...nums: number[]): number;
  * ToFrac(-456/123) // [-152,41]
  * ```
  */
-declare function ToFrac(num: number, maxDenominator?: number): Fraction;
+declare function ToFrac(num: number): Fraction;
 declare var PhyConst: {
     R: number;
     N_A: number;
