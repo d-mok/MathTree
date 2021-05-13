@@ -128,3 +128,13 @@ test('DeRoman', () => {
 });
 
 
+
+
+
+test('ToBase', () => {
+    expect(ToBase(1000, 16)).toBe('3E8_{16}');
+    expect(ToBase(13, 2)).toBe('1101_{2}');
+    expect(ToBase(1234567890, 16)).toBe('499602D2_{16}');
+});
+
+

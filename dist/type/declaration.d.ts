@@ -2049,6 +2049,15 @@ declare function Roman(num: number): string;
  */
 declare function DeRoman(roman: string): number;
 /**
+ * @category Text
+ * @return the representation of num in base b
+ * ```
+ * ToBase(1000,16) // '3E8_{16}'
+ * ToBase(13,2) // '1101_{2}'
+ * ```
+ */
+declare function ToBase(num: number, base: number): string;
+/**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
  * ```

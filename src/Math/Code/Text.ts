@@ -259,7 +259,7 @@ globalThis.LongDivision = contract(LongDivision).sign([owl.ntuple, owl.ntuple])
  * Roman(2) // "II"
  * ```
  */
- function Roman(num: number): string {
+function Roman(num: number): string {
     return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1]
 }
 globalThis.Roman = contract(Roman).sign([[owl.positiveInt, owl.between(1, 10)]])
@@ -281,5 +281,22 @@ function DeRoman(roman: string): number {
     return romans.indexOf(roman) + 1
 }
 globalThis.DeRoman = contract(DeRoman).sign([owl.roman])
+
+
+
+
+/**
+ * @category Text
+ * @return the representation of num in base b
+ * ```
+ * ToBase(1000,16) // '3E8_{16}'
+ * ToBase(13,2) // '1101_{2}'
+ * ```
+ */
+function ToBase(num: number, base: number): string {
+    return num.toString(base).toUpperCase() + '_{' + base + '}'
+}
+globalThis.ToBase = contract(ToBase).sign([[owl.num, Number.isSafeInteger], owl.positiveInt])
+
 
 
