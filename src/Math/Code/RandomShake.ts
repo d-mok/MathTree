@@ -269,3 +269,25 @@ globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
 
 
 
+
+// /**
+//  * @category RandomShake
+//  * @return an array of 3 trig
+//  * ```
+//  * RndShakeTrig('sin') 
+//  * // may return ['cos','sin','cos']
+//  * ```
+//  */
+// function RndShakeBase(anchor: string): string[] {
+//     let [num, base] = anchor.split('_')
+//     base = base.replace('{', '').replace('}', '')
+//     let b = Number(base)
+
+
+// }
+// globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
+
+
+
+
+
