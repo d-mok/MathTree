@@ -60,31 +60,32 @@ declare module "Core/Owl/index" {
     export const nonPositiveInt: (_: any) => boolean;
     export const nonZero: (_: any) => boolean;
     export const nonZeroInt: (_: any) => boolean;
-    export const between: (min: number, max: number) => (_: any) => boolean;
-    export const absBetween: (min: number, max: number) => (_: any) => boolean;
+    export const between: (min: number, max: number) => predicate;
+    export const absBetween: (min: number, max: number) => predicate;
     export const str: (_: any) => boolean;
     export const bool: (_: any) => boolean;
     export const object: (_: any) => boolean;
     export const emptyObject: (_: any) => boolean;
     export const array: (_: any) => boolean;
-    export const arrayOfLength: (length: number) => (_: any) => boolean;
-    export const arrayWith: (predicate: (_: any) => boolean) => (_: any) => any;
-    export const couple: (_: any) => any;
-    export const triple: (_: any) => any;
-    export const combo: (_: any) => any;
-    export const ntuple: (_: any) => any;
-    export const interval: (_: any) => any;
-    export const point: (_: any) => any;
-    export const polar: (_: any) => any;
-    export const fraction: (_: any) => any;
-    export const properFraction: (_: any) => any;
-    export const vector: (_: any) => any;
+    export const arrayOfLength: (length: number) => predicate;
+    export const arrayWith: (predicate: (_: any) => boolean) => predicate;
+    export const couple: (_: any) => boolean;
+    export const triple: (_: any) => boolean;
+    export const combo: (_: any) => boolean;
+    export const ntuple: (_: any) => boolean;
+    export const interval: (_: any) => boolean;
+    export const point: (_: any) => boolean;
+    export const polar: (_: any) => boolean;
+    export const fraction: (_: any) => boolean;
+    export const properFraction: (_: any) => boolean;
+    export const vector: (_: any) => boolean;
     export const triangleSides: (_: any) => any;
+    export const monomial: (_: any) => boolean;
     export const polynomial: (_: any) => boolean;
     export const pass: (_: any) => boolean;
     export const fail: (_: any) => boolean;
     export const distinct: (_: any[]) => boolean;
-    export const distinctBy: (keyFunc: (_: any) => any) => (..._: any[]) => boolean;
+    export const distinctBy: (keyFunc: (_: any) => any) => predicate;
     export const alphabet: (_: any) => _ is Ineq;
     export const ineq: (_: any) => _ is Ineq;
     export const dfrac: (_: any) => any;
@@ -216,29 +217,41 @@ declare module "Core/Contract/contract.test" { }
 /**
  * @ignore
  */
-declare class PolyClass {
-    poly: polynomial;
-    constructor(poly: polynomial);
-    vars(): string[];
-    nTerm(): number;
-    nVar(): number;
-    coeff(position: number): number;
-    power(position: number, variable: string): number;
-    hasLikeTerms(): boolean;
-    powerSum(position: number): number;
+declare class MonomialCls<V extends string> {
+    coeff: number;
+    vars: {
+        variable: V;
+        power: number;
+    }[];
+    constructor(coeff?: number, vars?: {
+        variable: V;
+        power: number;
+    }[]);
+    random(degree: number, variables: V[], maxCoeff: number): void;
     degree(): number;
-    shuffle(): polynomial;
-    term(position: number): polynomial;
-    split(): polynomial[];
-    private augment;
-    append(...polys: polynomial[]): polynomial;
-    cloneShell(): polynomial;
-    sort(desc: boolean): polynomial;
-    func(): (values: {
+    sortedVars(): {
+        variable: V;
+        power: number;
+    }[];
+    size(): number;
+    signature(): string;
+    sort(): void;
+    print(): string;
+    func(): (input: {
         [_: string]: number;
     }) => number;
-    print(): string;
 }
+/**
+ * @category Polynomial
+ * @deprecated
+ * @return a monomial object
+ * ```
+ * ```
+ */
+declare function Monomial<V extends string>(coeff: number, vars: {
+    variable: V;
+    power: number;
+}[]): MonomialCls<V>;
 /**
  * @category Polynomial
  * @return a random polynomial object
@@ -247,53 +260,62 @@ declare class PolyClass {
  * // may return 7xy+3x^2y^3-2xy^3
  * ```
  */
-declare function RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
+declare function RndPolynomial<V extends string>(degree: number, vars?: V[], terms?: number, maxCoeff?: number): polynomial<V>;
 /**
  * @category Polynomial
  * @return a string of the polynomial object
  * ```
- * PolyPrint({coeff:[1,2,3],x:[5,6,7]})
+ * PolyPrint([x^5, 2x^6, 3x^7])
  * // x^{5}+2x^{6}+3x^{7}
  * ```
  */
-declare function PolyPrint(poly: polynomial): string;
+declare function PolyPrint<V extends string>(poly: polynomial<V>): string;
 /**
  * @category Polynomial
  * @return a polynomial object sorted by power
  * ```
- * PolySort({coeff:[1,2,3],x:[6,5,7]})
- * // {coeff:[2,1,3],x:[5,6,7]}
+ * PolySort([2x^6, x^5, 3x^7])
+ * //  [x^5, 2x^6, 3x^7]
  * ```
  */
-declare function PolySort(poly: polynomial, desc?: boolean): polynomial;
+declare function PolySort<V extends string>(poly: polynomial<V>, desc?: boolean): polynomial<V>;
 /**
  * @category Polynomial
  * @return a function of the polynomial, for substitution
  * ```
- * func = PolyFunction({coeff:[1,2,3],x:[4,5,6]})
+ * func = PolyFunction([2x^6, x^5, 3x^7])
  * func({x:2}) // 272
  * ```
  */
-declare function PolyFunction(poly: polynomial): (values: {
+declare function PolyFunction<V extends string>(poly: polynomial<V>): (values: {
     [_: string]: number;
 }) => number;
 /**
  * @category Polynomial
- * @return an array of monomials
+ * @return join arrays of monomials
  * ```
- * PolySplit({coeff:[1,2,3],x:[4,5,6]})
- * // [{coeff:[1],x:[4]} , {coeff:[2],x:[5]} , {coeff:[3],x:[6]}]
+ * PolyJoin([x^5, 2x^6], [3x^7])
+ * // [x^5, 2x^6, 3x^7]
  * ```
  */
-declare function PolySplit(poly: polynomial): polynomial[];
+declare function PolyJoin<V extends string>(...polys: polynomial<V>[]): polynomial<V>;
+/**
+ * @category Polynomial
+ * @return combine like terms in polynomial
+ * ```
+ * PolySimplify([x^5, 2x^6, 3x^5])
+ * // [4x^5, 2x^6]
+ * ```
+ */
+declare function PolySimplify<V extends string>(poly: polynomial<V>): polynomial<V>;
 /**
  * @category Polynomial
  * @return the degree of the polynomial
  * ```
- * PolyDegree({coeff:[1,2,3],x:[4,5,6]}) //6
+ * PolyDegree([x^5, 2x^6, 3x^7]) // 7
  * ```
  */
-declare function PolyDegree(poly: polynomial): number;
+declare function PolyDegree<V extends string>(poly: polynomial<V>): number;
 declare module "Math/index" {
     import './Code/Assertion.ts';
     import './Code/Combinatorics.ts';
@@ -381,10 +403,7 @@ declare type QuadrantCode = 1 | 2 | 3 | 4;
 declare type PolarPoint = [r: number, q: number];
 declare type TrigFunc = 'sin' | 'cos' | 'tan';
 declare type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
-declare type polynomial = {
-    coeff: number[];
-    [_: string]: number[];
-};
+declare type polynomial<V extends string> = MonomialCls<V>[];
 /**
  * @category Algebra
  * @return solve [x,y] from ax+by=c and px+qy=r.
@@ -1627,7 +1646,16 @@ declare function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, b
  * // may return ['cos','sin','cos']
  * ```
  */
-declare function RndShakeTrig(anchor: string): string[];
+declare function RndShakeTrig(anchor: TrigFunc): TrigFunc[];
+/**
+ * @category RandomShake
+ * @return an array of 3 ratios
+ * ```
+ * RndShakeRatio([4,5,6])
+ * // may return [[3,6,5],[7,5,3],[8,4,5]]
+ * ```
+ */
+declare function RndShakeRatio(anchor: number[]): number[][];
 /**
  * @category RandomUtil
  * @return a random item from the given items
