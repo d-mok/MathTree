@@ -278,7 +278,7 @@ globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
 function RndShakeRatio(anchor: number[]): number[][] {
     anchor = ant.ratio(...anchor)
     let func = (): number[] => {
-        return anchor.map(x => RndShakeN(x)[0])
+        return anchor.map(x => RndR(0, 1) < 1 / Math.abs(x) ? x : RndShakeN(x)[0])
     }
     func = dice.roll(func).shield(r => ant.hcf(...r) === 1)
     return dice.roll(func).unique(3, _ => JSON.stringify(_))
