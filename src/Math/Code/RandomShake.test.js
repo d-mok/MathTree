@@ -228,3 +228,15 @@ test('RndShakeTrig', () => {
 
     run('sin');
 });
+
+
+test('RndShakeRatio', () => {
+
+    function run(anchor) {
+        let arr = sample(() => RndShakeRatio(anchor));
+        expect(arr).toBeFlatIs(owl.ntuple);
+        expect(arr).toAllHaveLength(3);
+    }
+
+    run([4, 5, 6]);
+});

@@ -49,11 +49,9 @@ class MonomialCls<V extends string> {
         return s
     }
 
-    // signature() {
-    //     let arr = this.vars.map(_ => JSON.stringify(_))
-    //     arr.sort()
-    //     return JSON.stringify(arr)
-    // }
+    signature() {
+        return JSON.stringify(this.sortedVars())
+    }
 
     sort() {
         this.vars = this.sortedVars()
@@ -177,19 +175,6 @@ globalThis.PolyFunction = contract(PolyFunction).sign([owl.polynomial])
 
 
 
-// /**
-//  * @category Polynomial
-//  * @return an array of monomials
-//  * ```
-//  * PolySplit({coeff:[1,2,3],x:[4,5,6]})
-//  * // [{coeff:[1],x:[4]} , {coeff:[2],x:[5]} , {coeff:[3],x:[6]}]
-//  * ```
-//  */
-// function PolySplit(poly: polynomial): polynomial[] {
-//     return (new PolyClass(poly)).split()
-// }
-// globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
-
 
 
 /**
@@ -208,6 +193,32 @@ function PolyJoin<V extends string>(...polys: polynomial<V>[]): polynomial<V> {
 }
 globalThis.PolyJoin = contract(PolyJoin).sign([owl.polynomial])
 
+
+
+/**
+ * @category Polynomial
+ * @return combine like terms in polynomial
+ * ```
+ * PolySimplify([x^5, 2x^6, 3x^5])
+ * // [4x^5, 2x^6]
+ * ```
+ */
+function PolySimplify<V extends string>(poly: polynomial<V>): polynomial<V> {
+    let arr: polynomial<V> = []
+    function findLikeTerm(M: MonomialCls<V>) {
+        return arr.find(m => m.signature() === M.signature())
+    }
+    for (let M of poly) {
+        let like = findLikeTerm(M)
+        if (like) {
+            like.coeff += M.coeff
+        } else {
+            arr.push(M)
+        }
+    }
+    return arr
+}
+globalThis.PolySimplify = contract(PolySimplify).sign([owl.polynomial])
 
 
 

@@ -103,8 +103,8 @@
 |sign|`a = -5`|`*+a`|-|
 |percentage|`a = 0.123`|`*%a`| 12.3%|
 |percentage|`a = 0.123`|`*\%a`| 12.3\%|
-|ratio (planning)|`a = 0.5`|`*:a`| 1:2|
-|ratio (planning)|`a = 0.5`|`*:a`| 1:2|
+|ratio|`a = 0.5`|`*:a`| 1:2|
+|ratio|`a = [2,4,6]`|`*:a`| 1:2:3|
 |inequality sign (planning)|`a = [true,true]`|`*=a`| \\\\ge|
 
 # 3. Advance Functions

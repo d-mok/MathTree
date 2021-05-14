@@ -23,7 +23,7 @@ function RndShake(anchor: any): (typeof anchor)[] {
         }
         // trig
         if (owl.trig(anchor)) {
-            return RndShakeTrig(anchor)
+            return RndShakeTrig(anchor as TrigFunc)
         }
         // else convert to number
         if (Number(anchor)) {
@@ -259,10 +259,32 @@ globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
  * // may return ['cos','sin','cos']
  * ```
  */
-function RndShakeTrig(anchor: string): string[] {
+function RndShakeTrig(anchor: TrigFunc): TrigFunc[] {
     return RndPickN(['sin', 'cos', 'tan'], 3)
 }
 globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
+
+
+
+
+/**
+ * @category RandomShake
+ * @return an array of 3 ratios
+ * ```
+ * RndShakeRatio([4,5,6]) 
+ * // may return [[3,6,5],[7,5,3],[8,4,5]]
+ * ```
+ */
+function RndShakeRatio(anchor: number[]): number[][] {
+    anchor = ant.ratio(...anchor)
+    let func = (): number[] => {
+        return anchor.map(x => RndShakeN(x)[0])
+    }
+    func = dice.roll(func).shield(r => ant.hcf(...r) === 1)
+    return dice.roll(func).unique(3, _ => JSON.stringify(_))
+}
+globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple])
+
 
 
 

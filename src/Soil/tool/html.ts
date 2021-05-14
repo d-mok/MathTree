@@ -83,6 +83,8 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     print("%", "\\*\\%")
     print("\\%", "\\*\\\\\\%")
 
+    // print *:x as ratio
+    print(":", "\\*\\:")
 
     // print *x as normal
     print("", "\\*")
@@ -174,6 +176,16 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     }
 
 
+    if (signal === ':') {
+        if (owl.ntuple(value)) {
+            let v = ant.ratio(value)
+            return v.join(":")
+        }
+        if(T==='number'){
+            let [p, q] = ToFrac(value)
+            return p + ":" + q
+        }
+    }
 
     return String(value)
 
