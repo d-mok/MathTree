@@ -95,6 +95,7 @@ declare module "Core/Owl/index" {
     export const quadrant: (_: any) => boolean;
     export const trig: (_: any) => boolean;
     export const roman: (_: any) => boolean;
+    export const base: (_: any) => boolean;
     export function and(pds: predicate[], name?: string): predicate;
     export function or(pds: predicate[], name?: string): predicate;
     export function every(pd: predicate, name?: string): predicate;
@@ -1656,6 +1657,15 @@ declare function RndShakeTrig(anchor: TrigFunc): TrigFunc[];
  * ```
  */
 declare function RndShakeRatio(anchor: number[]): number[][];
+/**
+ * @category RandomShake
+ * @return an array of 3 ratios
+ * ```
+ * RndShakeBase('AB0CD_{16}')
+ * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
+ * ```
+ */
+declare function RndShakeBase(anchor: string): string[];
 /**
  * @category RandomUtil
  * @return a random item from the given items
