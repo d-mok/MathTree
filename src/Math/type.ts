@@ -72,8 +72,4 @@ type TrigFunc = 'sin' | 'cos' | 'tan'
 type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<'
 
 
-type polynomial = {
-    coeff: number[],
-    [_: string]: number[],
-
-}
+type polynomial<V extends string> = MonomialCls<V>[]

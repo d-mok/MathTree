@@ -1,167 +1,103 @@
 
 
 
+
 /**
  * @ignore
  */
-class PolyClass {
-    constructor(public poly: polynomial) {
+class MonomialCls<V extends string> {
+    constructor(
+        public coeff: number = 0,
+        public vars: { variable: V, power: number }[] = []
+    ) { }
 
-    }
+    random(degree: number, variables: V[], maxCoeff: number) {
+        let f = () => {
+            let M = new MonomialCls<V>()
+            M.coeff = RndZ(1, maxCoeff)
 
-    vars(): string[] {
-        return Object.keys(this.poly).filter(x => x !== 'coeff')
-    }
-
-    nTerm(): number {
-        return this.poly.coeff.length
-    }
-
-    nVar(): number {
-        return this.vars().length
-    }
-
-    coeff(position: number) {
-        return this.poly.coeff[position - 1]
-    }
-
-    power(position: number, variable: string): number {
-        return this.poly[variable][position - 1]
-    }
-
-    hasLikeTerms(): boolean {
-        let L = newList<any>([])
-        for (let i = 1; i <= this.nTerm(); i++) {
-            L.push(this.vars().map(v => this.power(i, v)))
+            for (let v of variables) {
+                if (variables.length === 1) {
+                    M.vars.push({ variable: v, power: degree })
+                } else {
+                    M.vars.push({ variable: v, power: RndN(0, degree) })
+                }
+            }
+            return M
         }
-        return !L.isDistinct()
-    }
-
-    powerSum(position: number): number {
-        return Sum(...this.vars().map(v => this.power(position, v)))
+        let mon = dice.roll(f).brute(M => M.degree() === degree)
+        this.coeff = mon.coeff
+        this.vars = mon.vars
     }
 
     degree() {
-        let powers = []
-        for (let i = 1; i <= this.nTerm(); i++) {
-            powers.push(this.powerSum(i))
-        }
-        return Math.max(...powers)
+        return Sum(...this.vars.map(_ => _.power))
     }
 
+    sortedVars() {
+        return SortBy([...this.vars], _ => _.variable.charCodeAt(0))
 
-    shuffle(): polynomial {
-        function reorder(arr: any[], perm: number[]): any[] {
-            return perm.map(i => arr[i])
-        }
-        let newPoly: polynomial = { coeff: [] }
-        let perm = RndShuffle(...ListIntegers(0, this.nTerm() - 1))
-        for (let k in this.poly) {
-            newPoly[k] = reorder(this.poly[k], perm)
-        }
-        return newPoly
     }
 
-    term(position: number): polynomial {
-        let p: polynomial = { coeff: [] }
-        for (let k in this.poly) {
-            p[k] = [this.poly[k][position - 1]]
+    size() {
+        let s = this.degree()
+        let order = 1
+        for (let { variable, power } of this.sortedVars()) {
+            order = order / 10
+            s += order * power
         }
-        return p
+        return s
     }
 
-    split(): polynomial[] {
-        let arr: polynomial[] = []
-        for (let i = 1; i <= this.nTerm(); i++) {
-            arr.push(this.term(i))
-        }
-        return arr
+    // signature() {
+    //     let arr = this.vars.map(_ => JSON.stringify(_))
+    //     arr.sort()
+    //     return JSON.stringify(arr)
+    // }
+
+    sort() {
+        this.vars = this.sortedVars()
     }
 
-    private augment(poly2: polynomial) {
-        let myKeys = Object.keys(this.poly)
-        let yourKeys = Object.keys(poly2)
-        let newVars = yourKeys.filter(_ => !myKeys.includes(_))
-        for (let v in newVars) {
-            this.poly[v] = Array(this.nTerm()).fill(0)
-        }
-    }
-
-
-    append(...polys: polynomial[]): polynomial {
-        let newPoly: polynomial = { coeff: [] }
-        for (let k in this.poly) {
-            newPoly[k] = [...this.poly[k]]
-            for (let p of polys) {
-                newPoly[k].push(...p[k])
+    print() {
+        let term = String(this.coeff)
+        if (this.coeff === 0) return term
+        for (let v of this.vars) {
+            let l = v.variable
+            let p = v.power
+            if (p === 0) {
+                continue
+            } else if (p === 1) {
+                term += l
+            } else {
+                term += l + '^{' + p + '}'
             }
         }
-        return newPoly
+        return term
     }
 
-    cloneShell(): polynomial {
-        let newPoly: polynomial = { coeff: [] }
-        for (let k in this.poly) {
-            newPoly[k] = []
-        }
-        return newPoly
-    }
-
-    sort(desc: boolean): polynomial {
-        let polys: polynomial[] = this.split()
-        polys = SortBy(polys, _ => {
-            let pc = new PolyClass(_)
-            let k = pc.degree()
-            let order = 1
-            for (let v of this.vars()) {
-                order = order / 10
-                k += pc.power(1, v)
+    func() {
+        return (input: { [_: string]: number }) => {
+            let x = this.coeff
+            for (let { variable, power } of this.vars) {
+                x = x * (input[variable] ** power)
             }
-            return k
-        })
-        if (desc) polys.reverse()
-        let newPoly: PolyClass = new PolyClass(this.cloneShell())
-        return newPoly.append(...polys)
-    }
-
-    func(): (values: { [_: string]: number }) => number {
-        return (values: { [_: string]: number }) => {
-            let sum = 0
-            for (let i = 1; i <= this.nTerm(); i++) {
-                let s = this.coeff(i)
-                for (let v of this.vars()) {
-                    s = s * (values[v] ** this.power(i, v))
-                }
-                sum += s
-            }
-            return sum
+            return x
         }
-    }
-
-
-    print(): string {
-        let terms: string[] = []
-        for (let i = 1; i <= this.nTerm(); i++) {
-            let term: string = String(this.coeff(i))
-            if (term === '0') continue
-            for (let v of this.vars()) {
-                let p = this.power(i, v)
-                if (p === 0) {
-                    continue
-                } else if (p === 1) {
-                    term += v
-                } else {
-                    term += v + '^{' + p + '}'
-                }
-            }
-            terms.push(term)
-        }
-        if (terms.length === 0) terms.push('0')
-        return terms.join("+")
     }
 }
 
-
+/**
+ * @category Polynomial
+ * @deprecated
+ * @return a monomial object
+ * ```
+ * ```
+ */
+function Monomial<V extends string>(coeff: number, vars: { variable: V, power: number }[]) {
+    return new MonomialCls<V>(coeff, vars)
+}
+globalThis.Monomial = contract(Monomial).sign([owl.num, owl.array])
 
 
 /**
@@ -172,24 +108,15 @@ class PolyClass {
  * // may return 7xy+3x^2y^3-2xy^3
  * ```
  */
-function RndPolynomial(degree: number, vars: string[] = ["x"], terms: number = degree + 1, maxCoeff: number = 9): polynomial {
-    let f = () => {
-        let poly: polynomial = {
-            coeff: RndZs(1, maxCoeff, terms),
-        }
-        for (let v of vars) {
-            if (vars.length === 1) {
-                poly[v] = RndNs(0, degree, terms)
-            } else {
-                poly[v] = dice.roll(() => RndN(0, degree)).sample(terms)
-            }
-        }
-        return poly
+function RndPolynomial<V extends string>(degree: number, vars: V[] = ["x" as V], terms: number = degree + 1, maxCoeff: number = 9): polynomial<V> {
+    let RndMono = () => {
+        let M = new MonomialCls<V>()
+        M.random(RndN(0, degree), vars, maxCoeff)
+        return M
     }
-    return dice.roll(f).brute(p => {
-        let pc = new PolyClass(p)
-        return pc.degree() === degree && !pc.hasLikeTerms()
-    })
+    let f = () => dice.roll(RndMono).unique(terms, M => M.size())
+    return dice.roll(f).brute(P => Max(...P.map(M => M.degree())) === degree)
+
 }
 globalThis.RndPolynomial = contract(RndPolynomial).sign([owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num])
 
@@ -200,12 +127,12 @@ globalThis.RndPolynomial = contract(RndPolynomial).sign([owl.positiveInt, owl.ar
  * @category Polynomial
  * @return a string of the polynomial object
  * ```
- * PolyPrint({coeff:[1,2,3],x:[5,6,7]})
+ * PolyPrint([x^5, 2x^6, 3x^7])
  * // x^{5}+2x^{6}+3x^{7}
  * ```
  */
-function PolyPrint(poly: polynomial) {
-    return (new PolyClass(poly)).print()
+function PolyPrint<V extends string>(poly: polynomial<V>): string {
+    return poly.map(M => M.print()).filter(x => x !== '0').join("+")
 }
 globalThis.PolyPrint = contract(PolyPrint).sign([owl.polynomial])
 
@@ -215,12 +142,14 @@ globalThis.PolyPrint = contract(PolyPrint).sign([owl.polynomial])
  * @category Polynomial
  * @return a polynomial object sorted by power
  * ```
- * PolySort({coeff:[1,2,3],x:[6,5,7]})
- * // {coeff:[2,1,3],x:[5,6,7]}
+ * PolySort([2x^6, x^5, 3x^7])
+ * //  [x^5, 2x^6, 3x^7]
  * ```
  */
-function PolySort(poly: polynomial, desc = true) {
-    return (new PolyClass(poly)).sort(desc)
+function PolySort<V extends string>(poly: polynomial<V>, desc = true): polynomial<V> {
+    let arr = SortBy(poly, M => M.size())
+    if (desc) arr.reverse()
+    return arr
 }
 globalThis.PolySort = contract(PolySort).sign([owl.polynomial, owl.bool])
 
@@ -235,29 +164,16 @@ globalThis.PolySort = contract(PolySort).sign([owl.polynomial, owl.bool])
  * @category Polynomial
  * @return a function of the polynomial, for substitution
  * ```
- * func = PolyFunction({coeff:[1,2,3],x:[4,5,6]})
+ * func = PolyFunction([2x^6, x^5, 3x^7])
  * func({x:2}) // 272
  * ```
  */
-function PolyFunction(poly: polynomial): (values: { [_: string]: number }) => number {
-    return (new PolyClass(poly)).func()
+function PolyFunction<V extends string>(poly: polynomial<V>): (values: { [_: string]: number }) => number {
+    return (values: { [_: string]: number }): number => {
+        return Sum(...poly.map(M => M.func()(values)))
+    }
 }
 globalThis.PolyFunction = contract(PolyFunction).sign([owl.polynomial])
-
-
-
-/**
- * @category Polynomial
- * @return an array of monomials
- * ```
- * PolySplit({coeff:[1,2,3],x:[4,5,6]})
- * // [{coeff:[1],x:[4]} , {coeff:[2],x:[5]} , {coeff:[3],x:[6]}]
- * ```
- */
-function PolySplit(poly: polynomial): polynomial[] {
-    return (new PolyClass(poly)).split()
-}
-globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
 
 
 
@@ -269,11 +185,28 @@ globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
 //  * // [{coeff:[1],x:[4]} , {coeff:[2],x:[5]} , {coeff:[3],x:[6]}]
 //  * ```
 //  */
-// function PolyJoin(...polys: polynomial[]): polynomial {
-
+// function PolySplit(poly: polynomial): polynomial[] {
 //     return (new PolyClass(poly)).split()
 // }
 // globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
+
+
+
+/**
+ * @category Polynomial
+ * @return join arrays of monomials
+ * ```
+ * PolyJoin([x^5, 2x^6], [3x^7])
+ * // [x^5, 2x^6, 3x^7]
+ * ```
+ */
+function PolyJoin<V extends string>(...polys: polynomial<V>[]): polynomial<V> {
+    let arr: polynomial<V> = []
+    for (let p of polys)
+        arr.push(...p)
+    return arr
+}
+globalThis.PolyJoin = contract(PolyJoin).sign([owl.polynomial])
 
 
 
@@ -284,10 +217,10 @@ globalThis.PolySplit = contract(PolySplit).sign([owl.polynomial])
  * @category Polynomial
  * @return the degree of the polynomial
  * ```
- * PolyDegree({coeff:[1,2,3],x:[4,5,6]}) //6
+ * PolyDegree([x^5, 2x^6, 3x^7]) // 7
  * ```
  */
-function PolyDegree(poly: polynomial): number {
-    return (new PolyClass(poly)).degree()
+function PolyDegree<V extends string>(poly: polynomial<V>): number {
+    return Max(...poly.map(M => M.degree()))
 }
 globalThis.PolyDegree = contract(PolyDegree).sign([owl.polynomial])

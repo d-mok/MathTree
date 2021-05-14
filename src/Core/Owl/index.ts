@@ -113,17 +113,9 @@ export const triangleSides = (_: any) => {
         c + a > b
 }
 
-export const polynomial = (_: any) => {
-    if (!object(_)) return false
-    if (!_.hasOwnProperty('coeff')) return false
-    if (!ntuple(_.coeff)) return false
-    let n = _.coeff.length
-    for (let k in _) {
-        if (!ntuple(_[k])) return false
-        if (!arrayOfLength(n)(_[k])) return false
-    }
-    return true
-}
+export const monomial = (_: any) => object(_) && ('coeff' in _) && ('vars' in _)
+
+export const polynomial = (_: any) => arrayWith(monomial)(_)
 
 // trivial
 
@@ -172,9 +164,9 @@ export const roman = (_: any) => ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VII
 
 // functor
 
-function build<F extends (...args: any[]) => any>(funcName: string, func: F): F {
-    const holder = { [funcName](...args: any[]) { return func(...args) } }
-    return holder[funcName] as F
+function build(funcName: string, func: predicate): predicate {
+    const holder = { [funcName](arg: any) { return func(arg) } }
+    return holder[funcName]
 }
 
 

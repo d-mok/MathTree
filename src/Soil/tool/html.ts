@@ -97,7 +97,11 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     if (signal === '') {
         if (T === 'number') {
             let v = ant.blur(value)
-            if (IsDecimal(v)) v = Round(v, 5)
+            if (IsInteger(v)) {
+                v = Fix(v, 0)
+            } else {
+                v = Round(v, 5)
+            }
             return String(v)
         }
         if (T === 'boolean') {
