@@ -178,7 +178,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === ':') {
         if (owl.ntuple(value)) {
-            let v = ant.ratio(value)
+            let v = ant.ratio(...value)
             return v.join(":")
         }
         if(T==='number'){
