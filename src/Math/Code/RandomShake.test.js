@@ -240,3 +240,15 @@ test('RndShakeRatio', () => {
 
     run([4, 5, 6]);
 });
+
+
+test('RndShakeBase', () => {
+
+    function run(anchor) {
+        let arr = sample(() => RndShakeBase(anchor));
+        expect(arr).toBeFlatIs(owl.base);
+        expect(arr).toAllHaveLength(3);
+    }
+
+    run('AB0CD_{16}');
+});

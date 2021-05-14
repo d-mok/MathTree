@@ -288,6 +288,44 @@ globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple])
 
 
 
+/**
+ * @category RandomShake
+ * @return an array of 3 ratios
+ * ```
+ * RndShakeBase('AB0CD_{16}') 
+ * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
+ * ```
+ */
+function RndShakeBase(anchor: string): string[] {
+    let [num, base] = anchor.split('_')
+    base = base.replace('{', '').replace('}', '')
+    let digits = '0123456789ABCDEF'.substring(0, Number(base)).split('')
+    function shake(d: string): string {
+        let x = digits.indexOf(d) + RndU()
+        if (x < 0) x = 0
+        if (x > digits.length - 1) x = digits.length - 1
+        return digits[x]
+    }
+    let f = (): string => {
+        let s = []
+        let nonzero = num.split('').filter(_ => _ !== '0').length
+        for (let d of num.split('')) {
+            if (d !== '0' && RndR(0, 1) < 2 / nonzero) {
+                s.push(shake(d))
+            } else {
+                s.push(d)
+            }
+        }
+        let T = s.join('') + '_{' + base + '}'
+        T = T.replace(/^0+/, '');
+        return T
+    }
+    return dice.roll(f).unique(3)
+}
+globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base])
+
+
+
 
 
 

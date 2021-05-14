@@ -157,6 +157,8 @@ export const trig = (_: any) => ['sin', 'cos', 'tan'].includes(_)
 
 export const roman = (_: any) => ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'].includes(_)
 
+export const base = (_: any) => str(_) && _.match(/[0-9A-Z]+\_\{[0-9]+\}/g) !== null
+
 
 
 
