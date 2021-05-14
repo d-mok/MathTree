@@ -310,42 +310,23 @@ function RndShakeBase(anchor: string): string[] {
         let s = []
         let nonzero = num.split('').filter(_ => _ !== '0').length
         for (let d of num.split('')) {
-            if (d !== '0' && RndR(0, 1) < 2 / nonzero) {
-                s.push(shake(d))
+            if (d === '0') {
+                let go = RndR(0, 1) < 0.05
+                s.push(go ? dice.array(digits).one() : '0')
             } else {
-                s.push(d)
+                let go = RndR(0, 1) < 2 / nonzero
+                s.push(go ? shake(d) : d)
             }
         }
-        let T = s.join('') + '_{' + base + '}'
+        let T = s.join('')
+        if (RndR(0, 1) < 0.2) T += '0'
+        T += '_{' + base + '}'
         T = T.replace(/^0+/, '');
         return T
     }
     return dice.roll(f).unique(3)
 }
 globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base])
-
-
-
-
-
-
-
-// /**
-//  * @category RandomShake
-//  * @return an array of 3 trig
-//  * ```
-//  * RndShakeTrig('sin') 
-//  * // may return ['cos','sin','cos']
-//  * ```
-//  */
-// function RndShakeBase(anchor: string): string[] {
-//     let [num, base] = anchor.split('_')
-//     base = base.replace('{', '').replace('}', '')
-//     let b = Number(base)
-
-
-// }
-// globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
 
 
 
