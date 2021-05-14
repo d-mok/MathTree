@@ -138,6 +138,8 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     if (signal === '//') {
         if (T === 'number') {
             let [p, q] = ToFrac(value)
+            if (q === 1) return String(p)
+            if (p === 0) return '0'
             return p + "/" + q
         }
     }
@@ -181,7 +183,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
             let v = ant.ratio(...value)
             return v.join(":")
         }
-        if(T==='number'){
+        if (T === 'number') {
             let [p, q] = ToFrac(value)
             return p + ":" + q
         }
