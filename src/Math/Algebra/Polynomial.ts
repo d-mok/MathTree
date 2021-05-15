@@ -11,6 +11,12 @@ class MonomialCls<V extends string> {
         public vars: { variable: V, power: number }[] = []
     ) { }
 
+    clone() {
+        let coeff = this.coeff
+        let vars = JSON.parse(JSON.stringify(this.vars))
+        return new MonomialCls<V>(coeff, vars)
+    }
+
     random(degree: number, variables: V[], maxCoeff: number) {
         let f = () => {
             let M = new MonomialCls<V>()
@@ -98,6 +104,21 @@ function Monomial<V extends string>(coeff: number, vars: { variable: V, power: n
 globalThis.Monomial = contract(Monomial).sign([owl.num, owl.array])
 
 
+
+/**
+ * @category Polynomial
+ * @return clone a polynomial
+ * ```
+ * PolyClone(7xy+3x^2y^3-2xy^3)
+ * //  7xy+3x^2y^3-2xy^3
+ * ```
+ */
+function PolyClone<V extends string>(poly: polynomial<V>): polynomial<V> {
+    return poly.map(M => M.clone())
+}
+globalThis.PolyClone = contract(PolyClone).sign([owl.polynomial])
+
+
 /**
  * @category Polynomial
  * @return a random polynomial object
@@ -145,8 +166,8 @@ globalThis.PolyPrint = contract(PolyPrint).sign([owl.polynomial])
  * ```
  */
 function PolySort<V extends string>(poly: polynomial<V>, desc = true): polynomial<V> {
-    let arr = SortBy(poly, M => M.size())
-    if (desc) arr.reverse()
+    poly = PolyClone(poly)
+    let arr = SortBy(poly, M => desc ? -M.size() : M.size())
     return arr
 }
 globalThis.PolySort = contract(PolySort).sign([owl.polynomial, owl.bool])
@@ -167,6 +188,7 @@ globalThis.PolySort = contract(PolySort).sign([owl.polynomial, owl.bool])
  * ```
  */
 function PolyFunction<V extends string>(poly: polynomial<V>): (values: { [_: string]: number }) => number {
+    poly = PolyClone(poly)
     return (values: { [_: string]: number }): number => {
         return Sum(...poly.map(M => M.func()(values)))
     }
@@ -186,6 +208,7 @@ globalThis.PolyFunction = contract(PolyFunction).sign([owl.polynomial])
  * ```
  */
 function PolyJoin<V extends string>(...polys: polynomial<V>[]): polynomial<V> {
+    polys = polys.map(p => PolyClone(p))
     let arr: polynomial<V> = []
     for (let p of polys)
         arr.push(...p)
@@ -204,6 +227,7 @@ globalThis.PolyJoin = contract(PolyJoin).sign([owl.polynomial])
  * ```
  */
 function PolySimplify<V extends string>(poly: polynomial<V>): polynomial<V> {
+    poly = PolyClone(poly)
     let arr: polynomial<V> = []
     function findLikeTerm(M: MonomialCls<V>) {
         return arr.find(m => m.signature() === M.signature())
@@ -235,3 +259,4 @@ function PolyDegree<V extends string>(poly: polynomial<V>): number {
     return Max(...poly.map(M => M.degree()))
 }
 globalThis.PolyDegree = contract(PolyDegree).sign([owl.polynomial])
+

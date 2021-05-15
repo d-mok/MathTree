@@ -300,31 +300,51 @@ function RndShakeBase(anchor: string): string[] {
     let [num, base] = anchor.split('_')
     base = base.replace('{', '').replace('}', '')
     let digits = '0123456789ABCDEF'.substring(0, Number(base)).split('')
+
     function shake(d: string): string {
         let x = digits.indexOf(d) + RndU()
         if (x < 0) x = 0
         if (x > digits.length - 1) x = digits.length - 1
         return digits[x]
     }
-    let f = (): string => {
+
+    function mutate(str: string): string {
         let s = []
-        let nonzero = num.split('').filter(_ => _ !== '0').length
-        for (let d of num.split('')) {
+        let nonzero = str.split('').filter(_ => _ !== '0').length
+        for (let d of str.split('')) {
             if (d === '0') {
-                let go = RndR(0, 1) < 0.05
+                let go = dice.bool(0.1)
                 s.push(go ? dice.array(digits).one() : '0')
             } else {
-                let go = RndR(0, 1) < 2 / nonzero
+                let go = dice.bool(1 / (nonzero + 2))
                 s.push(go ? shake(d) : d)
             }
         }
         let T = s.join('')
-        if (RndR(0, 1) < 0.2) T += '0'
-        T += '_{' + base + '}'
-        T = T.replace(/^0+/, '');
+        if (dice.bool(0.2)) T += '0'
         return T
     }
-    return dice.roll(f).unique(3)
+
+    function dress(str: string): string {
+        str = str.replace(/^0+/, '');
+        return str + '_{' + base + '}'
+    }
+
+    let f = (): string[] => {
+        let middle = Math.ceil(num.length / 2);
+        let s1 = num.slice(0, middle);
+        let s2 = num.slice(middle);
+
+        let t1 = mutate(s1)
+        let t2 = mutate(s2)
+
+        let B1 = dress(s1 + t2)
+        let B2 = dress(t1 + s2)
+        let B3 = dress(t1 + t2)
+
+        return [B1, B2, B3]
+    }
+    return dice.roll(f).brute(_ => newList<string>([num, ..._]).isDistinct())
 }
 globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base])
 

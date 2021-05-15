@@ -21,7 +21,7 @@ class AutoPenCls {
      * @param html - The html string to export to.
      * @param placeholder - The src field of the image tag to export to.
      * @returns The new html with src field pasted.
-     * ```typescript
+     * ```
      * question = autoPen.export(question,'imgQ') 
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
@@ -34,8 +34,8 @@ class AutoPenCls {
      * A short division diagram for prime factorization of numbers.
      * @category tool
      * @param numbers - The array of numbers to factorize.
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.PrimeFactorization({numbers:[12,24]})
      * ```
@@ -95,8 +95,8 @@ class AutoPenCls {
      * @param ticks - Represent the tick or cross for each region.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.Inequalities({
      *    items:[
@@ -195,8 +195,8 @@ class AutoPenCls {
      * @param k - value of trig, like sin = k.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.TrigSolution({trig:'sin', k:0.5})
      * ```
@@ -384,8 +384,8 @@ class AutoPenCls {
      * @param sign - The sign of the inequality. Can be like '>=' , '<' or '\\ge' , '\\lt'.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
      * ```
@@ -517,8 +517,8 @@ class AutoPenCls {
      * @param labels - The labels of the vertices. If falsy, show no label.
      * @param heights - Whether to draw the height.
      * @param scale - scale for pen.setup.size()
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.Triangle({
      *   vertices:[[0,0],[4,0],[0,3]],
@@ -680,8 +680,8 @@ class AutoPenCls {
      * @param highlights - Points to highlight, [{point,color,circle,contour,coordinates,label}].
      * @param ranges - Range of Canvas.
      * @param resolution - Resolution of Canvas
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
      * pen.LinearProgram({
@@ -919,8 +919,8 @@ class AutoPenCls {
      * @param q - P_n+1 = P_n + (pn+q)
      * @param n - the pattern required
      * @param offset - offset of initial position
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
      * ```
@@ -955,8 +955,8 @@ class AutoPenCls {
     /**
      * A pie chart
      * @category tool
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.PieChart({
      *   categories: ['a','b','c','d','e'],
@@ -1007,8 +1007,8 @@ class AutoPenCls {
     /**
      * A bar chart / line chart / histogram / frequency polygon / cf polygon
      * @category tool
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.HeightChart({
      *   categories: ['a','b','c','d','e'],
@@ -1132,8 +1132,8 @@ class AutoPenCls {
     /**
      * A pie chart
      * @category tool
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.StemAndLeaf({
      *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
@@ -1200,8 +1200,8 @@ class AutoPenCls {
     /**
      * A boxplot
      * @category tool
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.Boxplot({
      *   summary: [41,45,48,52,55],

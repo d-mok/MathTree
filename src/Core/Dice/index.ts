@@ -50,6 +50,10 @@ export function she(): string {
 }
 
 
+export function bool(chance: number): boolean {
+    return real(0, 1) < chance
+}
+
 
 
 
