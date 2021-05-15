@@ -3,13 +3,15 @@ import { Decimal } from 'decimal.js';
 import { gcd, lcm as math_lcm, combinations, factorial, permutations, sum as math_sum, mean as math_mean, mode as math_mode, median as math_median, std } from 'mathjs'
 
 
-const STANDARD_SIGFIG = 12
+const STANDARD_SIGFIG = 14
 
 /**
  * use for blurring value in-place to avoid things like 0.300000000004
  */
 export function blur(num: number): number {
-    return parseFloat(num.toPrecision(STANDARD_SIGFIG));
+    let n = parseFloat(num.toPrecision(STANDARD_SIGFIG));
+    let sf = sigfig(n)
+    return sf < STANDARD_SIGFIG - 4 ? n : num
 }
 
 /**

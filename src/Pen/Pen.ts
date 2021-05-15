@@ -553,7 +553,6 @@ class PenCls {
          */
         labelCenter(center: Point | boolean = false) {
             if (center === false) this._pen.setProperty.LABEL_CENTER = undefined
-            // @ts-ignore
             if (owl.point(center)) this._pen.setProperty.LABEL_CENTER = center
             if (center === true) {
                 let x = (this._pen.frame.xmin + this._pen.frame.xmax) / 2

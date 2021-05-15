@@ -1,3 +1,9 @@
+declare module "Quokka" {
+    import './Core/index.ts';
+    import './Math/index.ts';
+    import './Pen/index.ts';
+    import './Soil/index.ts';
+}
 declare module "index" {
     import './Core/index.ts';
     import './Math/index.ts';
@@ -23,6 +29,7 @@ declare module "Core/Dice/index" {
     export function prime(min: number, max: number): number;
     export function he(): string;
     export function she(): string;
+    export function bool(chance: number): boolean;
     export function roll<T>(func: roll<T>): {
         brute(predicate: predicate<T>): T;
         shield(predicate: predicate<T>): roll<T>;
@@ -39,63 +46,63 @@ declare module "Core/Dice/index" {
     };
 }
 declare module "Core/Owl/index" {
-    export const num: (_: any) => boolean;
-    export const whole: (_: any) => boolean;
-    export const int: (_: any) => boolean;
-    export const dec: (_: any) => boolean;
-    export const terminating: (_: any) => boolean;
-    export const rational: (_: any) => boolean;
-    export const irrational: (_: any) => boolean;
-    export const odd: (_: any) => boolean;
-    export const even: (_: any) => boolean;
-    export const prob: (_: any) => boolean;
-    export const sq: (_: any) => boolean;
-    export const positive: (_: any) => boolean;
-    export const positiveInt: (_: any) => boolean;
-    export const nonNegative: (_: any) => boolean;
-    export const nonNegativeInt: (_: any) => boolean;
-    export const negative: (_: any) => boolean;
-    export const negativeInt: (_: any) => boolean;
-    export const nonPositive: (_: any) => boolean;
-    export const nonPositiveInt: (_: any) => boolean;
-    export const nonZero: (_: any) => boolean;
-    export const nonZeroInt: (_: any) => boolean;
-    export const between: (min: number, max: number) => predicate;
-    export const absBetween: (min: number, max: number) => predicate;
-    export const str: (_: any) => boolean;
-    export const bool: (_: any) => boolean;
-    export const object: (_: any) => boolean;
-    export const emptyObject: (_: any) => boolean;
-    export const array: (_: any) => boolean;
-    export const arrayOfLength: (length: number) => predicate;
-    export const arrayWith: (predicate: (_: any) => boolean) => predicate;
-    export const couple: (_: any) => boolean;
-    export const triple: (_: any) => boolean;
-    export const combo: (_: any) => boolean;
-    export const ntuple: (_: any) => boolean;
-    export const interval: (_: any) => boolean;
-    export const point: (_: any) => boolean;
-    export const polar: (_: any) => boolean;
-    export const fraction: (_: any) => boolean;
-    export const properFraction: (_: any) => boolean;
-    export const vector: (_: any) => boolean;
-    export const triangleSides: (_: any) => any;
-    export const monomial: (_: any) => boolean;
-    export const polynomial: (_: any) => boolean;
-    export const pass: (_: any) => boolean;
-    export const fail: (_: any) => boolean;
-    export const distinct: (_: any[]) => boolean;
-    export const distinctBy: (keyFunc: (_: any) => any) => predicate;
-    export const alphabet: (_: any) => _ is Ineq;
-    export const ineq: (_: any) => _ is Ineq;
-    export const dfrac: (_: any) => any;
-    export const constraint: (_: any) => boolean;
-    export const quadrantCode: (_: any) => boolean;
-    export const quadrantName: (_: any) => boolean;
-    export const quadrant: (_: any) => boolean;
-    export const trig: (_: any) => boolean;
-    export const roman: (_: any) => boolean;
-    export const base: (_: any) => boolean;
+    export const num: (_: unknown) => _ is number;
+    export const whole: (_: unknown) => _ is number;
+    export const int: (_: unknown) => _ is number;
+    export const dec: (_: unknown) => _ is number;
+    export const terminating: (_: unknown) => _ is number;
+    export const rational: (_: unknown) => _ is number;
+    export const irrational: (_: unknown) => _ is number;
+    export const odd: (_: unknown) => _ is number;
+    export const even: (_: unknown) => _ is number;
+    export const prob: (_: unknown) => _ is number;
+    export const sq: (_: unknown) => _ is number;
+    export const positive: (_: unknown) => _ is number;
+    export const positiveInt: (_: unknown) => _ is number;
+    export const nonNegative: (_: unknown) => _ is number;
+    export const nonNegativeInt: (_: unknown) => _ is number;
+    export const negative: (_: unknown) => _ is number;
+    export const negativeInt: (_: unknown) => _ is number;
+    export const nonPositive: (_: unknown) => _ is number;
+    export const nonPositiveInt: (_: unknown) => _ is number;
+    export const nonZero: (_: unknown) => _ is number;
+    export const nonZeroInt: (_: unknown) => _ is number;
+    export const between: (min: number, max: number) => (_: unknown) => _ is number;
+    export const absBetween: (min: number, max: number) => (_: unknown) => _ is number;
+    export const str: (_: unknown) => _ is string;
+    export const bool: (_: unknown) => _ is boolean;
+    export const object: (_: unknown) => _ is Object;
+    export const emptyObject: (_: unknown) => _ is Object;
+    export const array: (_: unknown) => _ is any[];
+    export const arrayOfLength: (length: number) => (_: unknown) => _ is any[];
+    export const arrayWith: (predicate: (_: unknown) => boolean) => (_: unknown) => _ is any[];
+    export const couple: (_: unknown) => _ is [number, number];
+    export const triple: (_: unknown) => _ is [number, number, number];
+    export const combo: (_: unknown) => _ is [boolean, boolean, boolean];
+    export const ntuple: (_: unknown) => _ is number[];
+    export const interval: (_: unknown) => _ is interval;
+    export const point: (_: unknown) => _ is Point;
+    export const polar: (_: unknown) => _ is PolarPoint;
+    export const fraction: (_: unknown) => _ is Fraction;
+    export const properFraction: (_: unknown) => _ is Fraction;
+    export const vector: (_: unknown) => _ is Vector;
+    export const triangleSides: (_: unknown) => boolean;
+    export const monomial: (_: unknown) => _ is MonomialCls<any>;
+    export const polynomial: (_: unknown) => _ is polynomial<any>;
+    export const pass: (_: unknown) => boolean;
+    export const fail: (_: unknown) => boolean;
+    export const distinct: (_: unknown[]) => boolean;
+    export const distinctBy: (keyFunc: (_: unknown) => unknown) => (..._: unknown[]) => boolean;
+    export const alphabet: (_: unknown) => _ is string;
+    export const ineq: (_: unknown) => _ is Ineq;
+    export const dfrac: (_: unknown) => _ is string;
+    export const constraint: (_: unknown) => _ is Constraint;
+    export const quadrantCode: (_: unknown) => _ is QuadrantCode;
+    export const quadrantName: (_: unknown) => _ is QuadrantName;
+    export const quadrant: (_: unknown) => _ is QuadrantCode | QuadrantName;
+    export const trig: (_: unknown) => _ is TrigFunc;
+    export const roman: (_: unknown) => _ is string;
+    export const base: (_: unknown) => _ is string;
     export function and(pds: predicate[], name?: string): predicate;
     export function or(pds: predicate[], name?: string): predicate;
     export function every(pd: predicate, name?: string): predicate;
@@ -228,6 +235,7 @@ declare class MonomialCls<V extends string> {
         variable: V;
         power: number;
     }[]);
+    clone(): MonomialCls<V>;
     random(degree: number, variables: V[], maxCoeff: number): void;
     degree(): number;
     sortedVars(): {
@@ -253,6 +261,15 @@ declare function Monomial<V extends string>(coeff: number, vars: {
     variable: V;
     power: number;
 }[]): MonomialCls<V>;
+/**
+ * @category Polynomial
+ * @return clone a polynomial
+ * ```
+ * PolyClone(7xy+3x^2y^3-2xy^3)
+ * //  7xy+3x^2y^3-2xy^3
+ * ```
+ */
+declare function PolyClone<V extends string>(poly: polynomial<V>): polynomial<V>;
 /**
  * @category Polynomial
  * @return a random polynomial object
@@ -2321,7 +2338,7 @@ declare class AutoPenCls {
      * @param html - The html string to export to.
      * @param placeholder - The src field of the image tag to export to.
      * @returns The new html with src field pasted.
-     * ```typescript
+     * ```
      * question = autoPen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
@@ -2331,8 +2348,8 @@ declare class AutoPenCls {
      * A short division diagram for prime factorization of numbers.
      * @category tool
      * @param numbers - The array of numbers to factorize.
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.PrimeFactorization({numbers:[12,24]})
      * ```
@@ -2347,8 +2364,8 @@ declare class AutoPenCls {
      * @param ticks - Represent the tick or cross for each region.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.Inequalities({
      *    items:[
@@ -2378,8 +2395,8 @@ declare class AutoPenCls {
      * @param k - value of trig, like sin = k.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.TrigSolution({trig:'sin', k:0.5})
      * ```
@@ -2397,8 +2414,8 @@ declare class AutoPenCls {
      * @param sign - The sign of the inequality. Can be like '>=' , '<' or '\\ge' , '\\lt'.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
      * ```
@@ -2417,8 +2434,8 @@ declare class AutoPenCls {
      * @param labels - The labels of the vertices. If falsy, show no label.
      * @param heights - Whether to draw the height.
      * @param scale - scale for pen.setup.size()
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.Triangle({
      *   vertices:[[0,0],[4,0],[0,3]],
@@ -2445,8 +2462,8 @@ declare class AutoPenCls {
      * @param highlights - Points to highlight, [{point,color,circle,contour,coordinates,label}].
      * @param ranges - Range of Canvas.
      * @param resolution - Resolution of Canvas
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
      * pen.LinearProgram({
@@ -2509,8 +2526,8 @@ declare class AutoPenCls {
      * @param q - P_n+1 = P_n + (pn+q)
      * @param n - the pattern required
      * @param offset - offset of initial position
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
      * ```
@@ -2525,8 +2542,8 @@ declare class AutoPenCls {
     /**
      * A pie chart
      * @category tool
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.PieChart({
      *   categories: ['a','b','c','d','e'],
@@ -2547,8 +2564,8 @@ declare class AutoPenCls {
     /**
      * A bar chart / line chart / histogram / frequency polygon / cf polygon
      * @category tool
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.HeightChart({
      *   categories: ['a','b','c','d','e'],
@@ -2579,8 +2596,8 @@ declare class AutoPenCls {
     /**
      * A pie chart
      * @category tool
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.StemAndLeaf({
      *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
@@ -2599,8 +2616,8 @@ declare class AutoPenCls {
     /**
      * A boxplot
      * @category tool
-     * @returns
-     * ```typescript
+     * @returns void
+     * ```
      * let pen = new AutoPen()
      * pen.Boxplot({
      *   summary: [41,45,48,52,55],
@@ -3689,6 +3706,7 @@ declare class PenCls {
     };
     /**
      * @ignore
+     * @deprecated
      */
     autoCrop(): void;
     /**
