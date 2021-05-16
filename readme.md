@@ -85,38 +85,6 @@
 
 ## Printing Variables
 
-| type | variable | print code | result |
-|--|--|--|--|
-|number| `a = 1.23`	| `*a` | 1.23 |
-|string| `a = "hello"`	| `*a` | hello |
-|boolean| `a = true`	| `*a` | ✓ |
-|boolean| `a = false`	| `*a` | ✕ |
-|point| `a = [1,2]`	| `*a` | (1, 2) |
-|combo|`a = [true,true,false]`|`*a`|I and II only|
-|polynomial|`a = {coeff:[1,2],x:[3,4]}`|`*a`|1x^{3}+2x^{4}|
-|fraction| `a = 0.5`	| `*/a` | \dfrac{1}{2} |
-|small fraction| `a = 0.5`	| `*//a` | 1/2 |
-|sci notation|`a = 0.0000123`	| `**a` | 1.23 \times 10^{-5} |
-|bracket negative|`a = -2`|`*(a)`| (-2)|
-|bracket negative|`a = 2`|`*(a)`| 2|
-|absolute value|`a = -1.23`|`*|a|`| 1.23|
-|sign|`a = 5`|`*^+_a`|+|
-|sign|`a = -5`|`*^+_a`| - |
-|opposite sign|`a = 5`|`*^-_a`| - |
-|opposite sign|`a = -5`|`*^-_a`| + |
-|percentage|`a = 0.123`|`*%a`| 12.3%|
-|percentage|`a = 0.123`|`*\%a`| 12.3\%|
-|ratio|`a = 0.5`|`*:a`| 1:2|
-|ratio|`a = [2,4,6]`|`*:a`| 1:2:3|
-|ineq sign|`a = true`|`*^\gt_a`| \gt|
-|ineq sign|`a = false`|`*^\gt_a`| \lt|
-|ineq sign|`a = true`|`*^\lt_a`| \lt|
-|ineq sign|`a = false`|`*^\lt_a`| \gt|
-|ineq sign|`a = true`|`*^\ge_a`| \ge|
-|ineq sign|`a = false`|`*^\ge_a`| \le|
-|ineq sign|`a = true`|`*^\le_a`| \le|
-|ineq sign|`a = false`|`*^\le_a`| \ge|
-
 # 3. Advance Functions
 
 ## Inline Code
