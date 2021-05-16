@@ -105,7 +105,14 @@
 |percentage|`a = 0.123`|`*\%a`| 12.3\%|
 |ratio|`a = 0.5`|`*:a`| 1:2|
 |ratio|`a = [2,4,6]`|`*:a`| 1:2:3|
-|inequality sign (planning)|`a = [true,true]`|`*=a`| \\\\ge|
+|ineq sign|`a = true`|`*^\gt_a`| \gt|
+|ineq sign|`a = false`|`*^\gt_a`| \lt|
+|ineq sign|`a = true`|`*^\lt_a`| \lt|
+|ineq sign|`a = false`|`*^\lt_a`| \gt|
+|ineq sign|`a = true`|`*^\ge_a`| \ge|
+|ineq sign|`a = false`|`*^\ge_a`| \le|
+|ineq sign|`a = true`|`*^\le_a`| \le|
+|ineq sign|`a = false`|`*^\le_a`| \ge|
 
 # 3. Advance Functions
 
