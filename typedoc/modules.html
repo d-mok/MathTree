@@ -2949,16 +2949,34 @@ img {
 						<td>2</td>
 					</tr>
 					<tr>
+						<td>absolute value</td>
+						<td><code>a = -1.23</code></td>
+						<td>`*</td>
+						<td>a</td>
+					</tr>
+					<tr>
 						<td>sign</td>
 						<td><code>a = 5</code></td>
-						<td><code>*+a</code></td>
+						<td><code>*^+_a</code></td>
 						<td>+</td>
 					</tr>
 					<tr>
 						<td>sign</td>
 						<td><code>a = -5</code></td>
-						<td><code>*+a</code></td>
+						<td><code>*^+_a</code></td>
 						<td>-</td>
+					</tr>
+					<tr>
+						<td>opposite sign</td>
+						<td><code>a = 5</code></td>
+						<td><code>*^-_a</code></td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td>opposite sign</td>
+						<td><code>a = -5</code></td>
+						<td><code>*^-_a</code></td>
+						<td>+</td>
 					</tr>
 					<tr>
 						<td>percentage</td>
@@ -2985,10 +3003,52 @@ img {
 						<td>1:2:3</td>
 					</tr>
 					<tr>
-						<td>inequality sign (planning)</td>
-						<td><code>a = [true,true]</code></td>
-						<td><code>*=a</code></td>
-						<td>\\ge</td>
+						<td>ineq sign</td>
+						<td><code>a = true</code></td>
+						<td><code>*^\gt_a</code></td>
+						<td>\gt</td>
+					</tr>
+					<tr>
+						<td>ineq sign</td>
+						<td><code>a = false</code></td>
+						<td><code>*^\gt_a</code></td>
+						<td>\lt</td>
+					</tr>
+					<tr>
+						<td>ineq sign</td>
+						<td><code>a = true</code></td>
+						<td><code>*^\lt_a</code></td>
+						<td>\lt</td>
+					</tr>
+					<tr>
+						<td>ineq sign</td>
+						<td><code>a = false</code></td>
+						<td><code>*^\lt_a</code></td>
+						<td>\gt</td>
+					</tr>
+					<tr>
+						<td>ineq sign</td>
+						<td><code>a = true</code></td>
+						<td><code>*^\ge_a</code></td>
+						<td>\ge</td>
+					</tr>
+					<tr>
+						<td>ineq sign</td>
+						<td><code>a = false</code></td>
+						<td><code>*^\ge_a</code></td>
+						<td>\le</td>
+					</tr>
+					<tr>
+						<td>ineq sign</td>
+						<td><code>a = true</code></td>
+						<td><code>*^\le_a</code></td>
+						<td>\le</td>
+					</tr>
+					<tr>
+						<td>ineq sign</td>
+						<td><code>a = false</code></td>
+						<td><code>*^\le_a</code></td>
+						<td>\ge</td>
 					</tr>
 			</tbody></table>
 			<a href="#3-advance-functions" id="3-advance-functions" style="color: inherit; text-decoration: none;">

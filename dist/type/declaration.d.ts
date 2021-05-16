@@ -135,6 +135,7 @@ declare module "Core/Ant/index" {
      * 2-digit less accurate that blur
      */
     export function correct(num: number): number;
+    export function eq(a: number, b: number): boolean;
     export function round(num: number, sigfig?: number): {
         off: () => number;
         up: () => number;
@@ -2064,9 +2065,10 @@ declare function IndexToSurd(text: string): string;
  * Coord([1,2]) // '(1, 2)'
  * ```
  */
-declare function Coord(point: Point): string;
+declare function Coord(point: Point, dp?: number): string;
 /**
  * @category Text
+ * @deprecated
  * @return the scientific notation of number
  * ```
  * Sci(123.45) // '1.2345 x 10^{ 2}'
