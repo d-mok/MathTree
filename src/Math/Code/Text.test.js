@@ -78,7 +78,7 @@ test('IndexToSurd', () => {
 test('Coord', () => {
     expect(Coord([1, 2])).toBe('(1, 2)');
     expect(Coord([1, -2])).toBe('(1, -2)');
-    expect(Coord([-6.5, 0.123])).toBe('(-6.5, 0.123)');
+    expect(Coord([-6.5, 0.123])).toBe('(-6.5, 0.1)');
     expect(Coord([0.1 + 0.2, 0])).toBe('(0.3, 0)');
 });
 
