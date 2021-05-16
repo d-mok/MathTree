@@ -80,6 +80,9 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     print("+", "\\*\\^\\+\\_")
 
 
+    // print *^-_x as sign of x
+    print("-", "\\*\\^\\-\\_")
+
 
 
     // print *^\gt_x as '>' or '<'
@@ -174,8 +177,20 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     }
 
 
+    if (signal === '||') {
+        if (T === 'number') {
+            return ParseForPrint(Math.abs(value), '')
+        }
+    }
+
+
     if (signal === '+') {
         if (T === 'number') return value >= 0 ? '+' : '-'
+    }
+
+
+    if (signal === '-') {
+        if (T === 'number') return value <= 0 ? '-' : '+'
     }
 
 
