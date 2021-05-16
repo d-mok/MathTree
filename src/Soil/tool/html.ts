@@ -99,6 +99,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
 
     // print *^\le_x as '<=' or '>='
     print("<=", "\\*\\^\\\\\\l\\e\\_")
+    
     // print *\%x as percent
     print("%", "\\*\\%")
     print("\\%", "\\*\\\\\\%")
