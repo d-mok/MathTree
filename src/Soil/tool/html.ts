@@ -89,7 +89,6 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     print(">", "\\*\\^\\\\\\g\\t\\_")
 
 
-
     // print *^\lt_x as '<' or '>'
     print("<", "\\*\\^\\\\\\l\\t\\_")
 
@@ -100,7 +99,6 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
 
     // print *^\le_x as '<=' or '>='
     print("<=", "\\*\\^\\\\\\l\\e\\_")
-
     // print *\%x as percent
     print("%", "\\*\\%")
     print("\\%", "\\*\\\\\\%")
@@ -177,12 +175,6 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     }
 
 
-    if (signal === '||') {
-        if (T === 'number') {
-            return ParseForPrint(Math.abs(value), '')
-        }
-    }
-
 
     if (signal === '+') {
         if (T === 'number') return value >= 0 ? '+' : '-'
@@ -194,6 +186,12 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     }
 
 
+
+    if (signal === '||') {
+        if (T === 'number') {
+            return ParseForPrint(Math.abs(value), '')
+        }
+    }
 
 
     if (signal === '>') {
