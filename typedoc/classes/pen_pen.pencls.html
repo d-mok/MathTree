@@ -2768,6 +2768,9 @@ img {
 					<a href="pen_pen.pencls.html#line-2" class="tsd-kind-icon">line</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="pen_pen.pencls.html#pen3d" class="tsd-kind-icon">pen3D</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="pen_pen.pencls.html#plot" class="tsd-kind-icon">plot</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -2839,6 +2842,7 @@ img {
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#cutterv" class="tsd-kind-icon">cutterV</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#dash-1" class="tsd-kind-icon">dash</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#line-2" class="tsd-kind-icon">line</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#pen3d" class="tsd-kind-icon">pen3D</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#point-1" class="tsd-kind-icon">point</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#points-1" class="tsd-kind-icon">points</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="pen_pen.pencls.html#polyfill" class="tsd-kind-icon">polyfill</a></li>
@@ -3826,6 +3830,44 @@ img {
 						<p>void</p>
 						<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">line</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">]) </span><span style="color: #008000">// draw a line from [1,2] to [3,4]</span>
 <span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">line</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],</span><span style="color: #A31515">&#039;10&#039;</span><span style="color: #000000">) </span><span style="color: #008000">//  draw a line from [1,2] to [3,4] with label &#039;10&#039;</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="pen3d" class="tsd-anchor"></a>
+				<h3>pen3D</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">pen3D<span class="tsd-signature-symbol">(</span>angle<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, depth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="pen_3d.pen3dcls.html" class="tsd-signature-type" data-tsd-kind="Class">Pen3DCls</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Return a 3D pen. Should be named as p3d.</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>angle: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 60</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>The tilted angle of 3d projeciton, default 60.</p>
+								</div>
+							</li>
+							<li>
+								<h5>depth: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0.5</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>The depth for y-axis, default is 0.5.</p>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="pen_3d.pen3dcls.html" class="tsd-signature-type" data-tsd-kind="Class">Pen3DCls</a></h4>
+						<p>void</p>
+						<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">p3d</span><span style="color: #000000"> = </span><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #795E26">pen3D</span><span style="color: #000000">(</span><span style="color: #098658">60</span><span style="color: #000000">,</span><span style="color: #098658">0.5</span><span style="color: #000000">)</span>
+<span style="color: #001080">p3d</span><span style="color: #000000">.</span><span style="color: #795E26">axis3D</span><span style="color: #000000">()</span>
 </code></pre>
 					</li>
 				</ul>

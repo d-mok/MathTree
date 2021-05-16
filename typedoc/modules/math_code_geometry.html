@@ -2741,6 +2741,9 @@ img {
 			<a href="math_code_geometry.html#perpendicularfoot" class="tsd-kind-icon">Perpendicular<wbr>Foot</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_geometry.html#regularpolygon" class="tsd-kind-icon">Regular<wbr>Polygon</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_geometry.html#rotatepoint" class="tsd-kind-icon">Rotate<wbr>Point</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2748,6 +2751,9 @@ img {
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_geometry.html#translatepoint" class="tsd-kind-icon">Translate<wbr>Point</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_geometry.html#turtle" class="tsd-kind-icon">Turtle</a>
 		</li>
 	</ul>
 </nav>
@@ -2772,9 +2778,11 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#midpoint" class="tsd-kind-icon">Mid<wbr>Point</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#normal" class="tsd-kind-icon">Normal</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#perpendicularfoot" class="tsd-kind-icon">Perpendicular<wbr>Foot</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#regularpolygon" class="tsd-kind-icon">Regular<wbr>Polygon</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#rotatepoint" class="tsd-kind-icon">Rotate<wbr>Point</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#slope" class="tsd-kind-icon">Slope</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#translatepoint" class="tsd-kind-icon">Translate<wbr>Point</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#turtle" class="tsd-kind-icon">Turtle</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2837,7 +2845,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						<p>angle AOB, measured anticlockwise</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">AnglePolar</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// 90</span>
+						<pre><code><span style="color: #795E26">AnglePolar</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// 90</span>
 <span style="color: #795E26">AnglePolar</span><span style="color: #000000">([</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// 45</span>
 <span style="color: #795E26">AnglePolar</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// 315</span>
 </code></pre>
@@ -3036,7 +3044,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						<p>check if the polar angle AOB is reflex</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">IsReflex</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// false</span>
+						<pre><code><span style="color: #795E26">IsReflex</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// false</span>
 <span style="color: #795E26">IsReflex</span><span style="color: #000000">([</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// false</span>
 <span style="color: #795E26">IsReflex</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// true</span>
 </code></pre>
@@ -3126,6 +3134,38 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="regularpolygon" class="tsd-anchor"></a>
+				<h3>Regular<wbr>Polygon</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Regular<wbr>Polygon<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, center<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, startAngle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>n: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>center: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>radius: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>startAngle: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h4>
+						<p>points on a regular polygon</p>
+						<pre><code><span style="color: #795E26">RegularPolygon</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">,[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">) </span><span style="color: #008000">// [[1,0],[0,1],[-1,0],[0,-1]]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 				<a name="rotatepoint" class="tsd-anchor"></a>
 				<h3>Rotate<wbr>Point</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -3207,6 +3247,32 @@ img {
 						<p>Translate point P in the polar angle q (or the direction of point q) by a distance.</p>
 						<pre><code><span style="color: #795E26">TranslatePoint</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #098658">90</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [1,5]</span>
 <span style="color: #795E26">TranslatePoint</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">10</span><span style="color: #000000">, </span><span style="color: #098658">12</span><span style="color: #000000">],</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [3.006894195, 4.229882439]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="turtle" class="tsd-anchor"></a>
+				<h3>Turtle</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Turtle<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, <span class="tsd-signature-symbol">...</span>walk<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span>rotate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>distance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>start: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>walk: <span class="tsd-signature-symbol">[</span>rotate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>distance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h4>
+						<p>points from turtle walk</p>
+						<pre><code><span style="color: #795E26">Turtle</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">90</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">90</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">90</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">]) </span><span style="color: #008000">// [[0,0],[1,0],[1,1],[0,1]]</span>
 </code></pre>
 					</li>
 				</ul>

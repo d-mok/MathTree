@@ -1,6 +1,6 @@
 import { Decimal } from 'decimal.js';
 
-import { gcd, lcm as math_lcm, combinations, factorial, permutations, sum as math_sum, mean as math_mean, mode as math_mode, median as math_median, std } from 'mathjs'
+import { gcd, lcm as math_lcm, combinations, factorial, permutations, sum as math_sum, mean as math_mean, mode as math_mode, median as math_median, std, cross, dot } from 'mathjs'
 
 
 const STANDARD_SIGFIG = 14
@@ -158,3 +158,16 @@ export function logFloor(num: number): number {
     let exp = e(num)
     return Number('1e' + exp)
 }
+
+
+
+export function crossProduct(v1: Vector3D, v2: Vector3D): Vector3D {
+    return cross(v1, v2) as Vector3D
+}
+
+
+export function dotProduct<V extends (Vector | Vector3D)>(v1: V, v2: V): number {
+    return dot(v1, v2)
+}
+
+

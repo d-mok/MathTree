@@ -137,3 +137,17 @@ test('IsReflex', () => {
 });
 
 
+
+test('Turtle', () => {
+    expect(Turtle([0, 0], [0, 1], [90, 1], [90, 1])).toEqual([[0, 0], [1, 0], [1, 1], [0, 1]]);
+});
+
+
+
+
+test('RegularPolygon', () => {
+    expect(RegularPolygon(4, [0, 0], 1, 0)).toEqual([[1, 0], [0, 1], [-1, 0], [0, -1]]);
+});
+
+
+

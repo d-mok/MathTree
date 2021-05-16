@@ -76,10 +76,12 @@ declare module "Core/Owl/index" {
     export const ntuple: (_: unknown) => _ is number[];
     export const interval: (_: unknown) => _ is interval;
     export const point: (_: unknown) => _ is Point;
+    export const point3D: (_: unknown) => _ is Point3D;
     export const polar: (_: unknown) => _ is PolarPoint;
     export const fraction: (_: unknown) => _ is Fraction;
     export const properFraction: (_: unknown) => _ is Fraction;
     export const vector: (_: unknown) => _ is Vector;
+    export const vector3D: (_: unknown) => _ is Vector3D;
     export const triangleSides: (_: unknown) => boolean;
     export const monomial: (_: unknown) => _ is MonomialCls<any>;
     export const polynomial: (_: unknown) => _ is polynomial<any>;
@@ -160,6 +162,8 @@ declare module "Core/Ant/index" {
     export function mantissa(num: number): number;
     export function logCeil(num: number): number;
     export function logFloor(num: number): number;
+    export function crossProduct(v1: Vector3D, v2: Vector3D): Vector3D;
+    export function dotProduct<V extends (Vector | Vector3D)>(v1: V, v2: V): number;
 }
 declare module "Core/Ink/index" {
     export function printIneq(greater: boolean, equal: boolean): Ineq;
@@ -348,6 +352,7 @@ declare module "Math/index" {
     import './Code/Triangle.ts';
     import './Code/Trigonometry.ts';
     import './Code/Vector.ts';
+    import './Code/Vector3D.ts';
     import './Algebra/Algebra.ts';
     import './Algebra/Circle.ts';
     import './Algebra/Quadratic.ts';
@@ -370,7 +375,9 @@ declare function Should(condition: boolean, msg?: string): void;
  */
 declare type Quadratic = [a: number, b: number, c: number];
 declare type Point = [x: number, y: number];
+declare type Point3D = [x: number, y: number, z: number];
 declare type Vector = [x: number, y: number];
+declare type Vector3D = [x: number, y: number, z: number];
 declare type interval = [min: number, max: number];
 declare type Fraction = [numerator: number, denominator: number];
 /**
@@ -444,6 +451,15 @@ declare function xPolynomial(poly1: number[], poly2: number[]): number[];
  * ```
  */
 declare function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number, dots?: number): Point[];
+/**
+ * @category Algebra
+ * @return the points along the parametric curve
+ * ```
+ * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * ```
+ */
+declare function Trace3D(func: (t: number) => Point3D, tStart: number, tEnd: number, dots?: number): Point3D[];
 /**
  * @category Circle
  * @return D,E,F of circle general form
@@ -1060,7 +1076,7 @@ declare function Angle(A: Point, O: Point, B: Point): number;
 /**
  * @category Geometry
  * @return angle AOB, measured anticlockwise
- * ```typescript
+ * ```
  * AnglePolar([1,0],[0,0],[0,2]) // 90
  * AnglePolar([2,2],[1,1],[1,3]) // 45
  * AnglePolar([1,3],[1,1],[2,2]) // 315
@@ -1070,13 +1086,29 @@ declare function AnglePolar(A: Point, O: Point, B: Point): number;
 /**
  * @category Geometry
  * @return check if the polar angle AOB is reflex
- * ```typescript
+ * ```
  * IsReflex([1,0],[0,0],[0,2]) // false
  * IsReflex([2,2],[1,1],[1,3]) // false
  * IsReflex([1,3],[1,1],[2,2]) // true
  * ```
  */
 declare function IsReflex(A: Point, O: Point, B: Point): boolean;
+/**
+ * @category Geometry
+ * @return points from turtle walk
+ * ```
+ * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
+ * ```
+ */
+declare function Turtle(start: Point, ...walk: [rotate: number, distance: number][]): Point[];
+/**
+ * @category Geometry
+ * @return points on a regular polygon
+ * ```
+ * RegularPolygon(4,[0,0],1,0) // [[1,0],[0,1],[-1,0],[0,-1]]
+ * ```
+ */
+declare function RegularPolygon(n: number, center: Point, radius: number, startAngle: number): Point[];
 declare const LP_BOUND = 100;
 declare function onBoundary(p: Point): boolean;
 /**
@@ -2308,14 +2340,210 @@ declare function VectorScaleTo(v: Vector, length: number): Vector;
  */
 declare function VectorRotate(v: Vector, angle: number): Vector;
 /**
+ * @category Vector3D
+ * @return the vector OP
+ * ```
+ * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
+ * ```
+ */
+declare function Vec3D(O: Point3D, P: Point3D): Vector3D;
+/**
+ * @category Vector3D
+ * @return sum of all vectors
+ * ```
+ * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
+ * ```
+ */
+declare function Vec3DAdd(...vectors: Vector3D[]): Vector3D;
+/**
+ * @category Vector3D
+ * @return mean of all vectors
+ * ```
+ * Vec3DMean([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
+ * ```
+ */
+declare function Vec3DMean(...vectors: Vector3D[]): Vector3D;
+/**
+ * @category Vector3D
+ * @return length of vector
+ * ```
+ * Vec3DLength([-3,4,0]) // 5
+ * Vec3DLength([0,0,4]) // 4
+ * Vec3DLength([1,2,3]) // sqrt(14)
+ * ```
+ */
+declare function Vec3DLength(v: Vector3D): number;
+/**
+ * @category Vector3D
+ * @return find [kx,ky,kz] from [x,y,z]
+ * ```
+ * Vec3DScale([1,2,3],2) // [2,4,6]
+ * Vec3DScale([1,2,3],-2) // [-2,-4,-6]
+ * ```
+ */
+declare function Vec3DScale(v: Vector3D, k: number): Vector3D;
+/**
+ * @category Vector3D
+ * @return the unit vector of v
+ * ```
+ * Vec3DUnit([2,0,0]) // [1,0,0]
+ * Vec3DUnit([0,-2,0]) // [0,-1,0]
+ * Vec3DUnit([1,2,3]) // [1/sqrt(14),2/sqrt(14),3/sqrt(14)]
+ * ```
+ */
+declare function Vec3DUnit(v: Vector3D): Vector3D;
+/**
+ * @category Vector3D
+ * @return scale the vector to the given length
+ * ```
+ * Vec3DScaleTo([2,0,0],10) // [10,0,0]
+ * Vec3DScaleTo([0,-2,0],100) // [0,-100,0]
+ * Vec3DScaleTo([1,2,2],6) // [2,4,4]
+ * ```
+ */
+declare function Vec3DScaleTo(v: Vector3D, length: number): Vector3D;
+/**
+ * @category Vector3D
+ * @return the projection vector of v
+ * ```
+ * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
+ * ```
+ */
+declare function Vec3DProj(v: Vector3D, onto: Vector3D): Vector3D;
+/**
+ * @category Vector3D
+ * @return dot product of v1 and v2
+ * ```
+ * DotProduct([1, 1, 0], [0, 1, 1]) // 1
+ * DotProduct([1, 2, 3], [4, 5, -6]) // -4
+ * ```
+ */
+declare function DotProduct(v1: Vector3D, v2: Vector3D): number;
+/**
+ * @category Vector3D
+ * @return cross product of v1 and v2
+ * ```
+ * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
+ * ```
+ */
+declare function CrossProduct(v1: Vector3D, v2: Vector3D): Vector3D;
+/**
+ * @category Vector3D
+ * @return unit normal vector to the plane OAB
+ * ```
+ * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
+ * ```
+ */
+declare function NormalVector(O: Point3D, A: Point3D, B: Point3D): Vector3D;
+/**
+ * @category Vector3D
+ * @return projection of a point on a plane
+ * ```
+ * let P = [2,3,4]
+ * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
+ * ProjectionOnPlane(P,[A,B,C]) // [2,3,0]
+ * ```
+ */
+declare function ProjectionOnPlane(point: Point3D, plane: [Point3D, Point3D, Point3D]): Point3D;
+/**
+ * @category Vector3D
+ * @return embed points on xy-plane onto a plane in 3D
+ * ```
+ * let [A,B,C] = [[0,0],[1,0],[0,1]]
+ * EmbedPlane([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
+ * ```
+ */
+declare function EmbedPlane(plane2D: Point[], origin?: Point3D, xVec?: Vector3D, yVec?: Vector3D): Point3D[];
+/**
+ * @category Vector3D
+ * @return embed points on xy-plane onto a plane in 3D with constant z
+ * ```
+ * let [A,B,C] = [[0,0],[1,0],[0,1]]
+ * EmbedPlaneZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
+ * ```
+ */
+declare function EmbedPlaneZ(plane2D: Point[], z?: number): Point3D[];
+/**
+ * @category Vector3D
+ * @return extrude the lower base of a frustum towards the upper base by a ratio
+ * ```
+ * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
+ * ExtrudeBase([A,B,C],[[0,0,4]],0.25) // [[0,0,0],[3,0,0],[0,3,0]]
+ * ```
+ */
+declare function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: number): Point3D[];
+/**
 * @category 3DPen
+* @deprecated use Projector3D() instead
 * @return projector function from 3D point to 2D plane
-* ```typescript
+* ```
 * const pj = Projector(60,0.5) // create a 3D projector function
 * pj(1,1,0) // [1.25, 0.433012701892]
 * ```
 */
 declare function Projector(angle?: number, depth?: number): (x: number, y: number, z: number) => Point;
+/**
+* @category 3DPen
+* @return projector function from 3D point to 2D plane
+* ```
+* const pj = Projector3D(60,0.5) // create a 3D projector function
+* pj([1,1,0]) // [1.25, 0.433012701892]
+* ```
+*/
+declare function Projector3D(angle?: number, depth?: number): (_: Point3D) => Point;
+declare class Pen3DCls {
+    pen: PenCls;
+    py: (_: Point3D) => Point;
+    constructor(pen: PenCls, py: (_: Point3D) => Point);
+    line(startPoint: Point3D, endPoint: Point3D): void;
+    dash(startPoint: Point3D, endPoint: Point3D): void;
+    axis3D(length?: number): void;
+    shape(point3Ds: Point3D[], { line, dash, shade, fill }?: {
+        line?: boolean | undefined;
+        dash?: boolean | undefined;
+        shade?: boolean | undefined;
+        fill?: boolean | undefined;
+    }): void;
+    private _circleFunc;
+    xzCircle: (center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+        line?: boolean | undefined;
+        dash?: boolean | undefined;
+        shade?: boolean | undefined;
+        fill?: boolean | undefined;
+        arc?: number[] | undefined;
+    }) => void;
+    xyCircle: (center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+        line?: boolean | undefined;
+        dash?: boolean | undefined;
+        shade?: boolean | undefined;
+        fill?: boolean | undefined;
+        arc?: number[] | undefined;
+    }) => void;
+    yzCircle: (center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+        line?: boolean | undefined;
+        dash?: boolean | undefined;
+        shade?: boolean | undefined;
+        fill?: boolean | undefined;
+        arc?: number[] | undefined;
+    }) => void;
+    sphere(center: Point3D, radius: number, { showCenter, baseDash, baseShade, radiusLine, radiusDash, radiusLabel, lowerOnly, upperOnly }?: {
+        showCenter?: boolean | undefined;
+        baseDash?: boolean | undefined;
+        baseShade?: boolean | undefined;
+        radiusLine?: boolean | undefined;
+        radiusDash?: boolean | undefined;
+        radiusLabel?: string | undefined;
+        lowerOnly?: boolean | undefined;
+        upperOnly?: boolean | undefined;
+    }): void;
+    frustum(lowerBase: Point3D[], upperBase: Point3D[], { height }?: {
+        height?: boolean | undefined;
+    }): void;
+}
+/**
+ * @ignore
+ */
+declare var Pen3D: typeof Pen3DCls;
 /**
  * @category DrawingPen
  */
@@ -2686,7 +2914,7 @@ declare class PenCls {
     /**
      * @ignore
      */
-    private ctx;
+    ctx: CanvasRenderingContext2D;
     /**
      * @ignore
      */
@@ -3700,6 +3928,18 @@ declare class PenCls {
          */
         xy(interval?: number): void;
     };
+    /**
+     * Return a 3D pen. Should be named as p3d.
+     * @category draw
+     * @param angle - The tilted angle of 3d projeciton, default 60.
+     * @param depth - The depth for y-axis, default is 0.5.
+     * @returns void
+     * ```
+     * let p3d = pen.pen3D(60,0.5)
+     * p3d.axis3D()
+     * ```
+     */
+    pen3D(angle?: number, depth?: number): Pen3DCls;
     /**
      * @ignore
      * @deprecated

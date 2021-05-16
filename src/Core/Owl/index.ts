@@ -103,6 +103,8 @@ export const properFraction = (_: unknown): _ is Fraction => fraction(_) && _[1]
 
 export const vector = (_: unknown): _ is Vector => couple(_)
 
+export const vector3D = (_: unknown): _ is Vector3D => triple(_)
+
 export const triangleSides = (_: unknown) => {
     if (!triple(_)) return false
     let [a, b, c] = _

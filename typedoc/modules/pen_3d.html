@@ -2704,8 +2704,14 @@ img {
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
+		<li class=" tsd-kind-class tsd-parent-kind-module">
+			<a href="../classes/pen_3d.pen3dcls.html" class="tsd-kind-icon">Pen3DCls</a>
+		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="pen_3d.html#projector" class="tsd-kind-icon">Projector</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="pen_3d.html#projector3d" class="tsd-kind-icon">Projector3D</a>
 		</li>
 	</ul>
 </nav>
@@ -2719,6 +2725,13 @@ img {
 						<h3>3DPen</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="pen_3d.html#projector" class="tsd-kind-icon">Projector</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="pen_3d.html#projector3d" class="tsd-kind-icon">Projector3D</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section">
+						<h3>Other</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/pen_3d.pen3dcls.html" class="tsd-kind-icon">Pen3DCls</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2736,6 +2749,13 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<dl class="tsd-comment-tags">
+								<dt>deprecated</dt>
+								<dd><p>use Projector3D() instead</p>
+								</dd>
+							</dl>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -2747,7 +2767,7 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, z<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
 						<p>projector function from 3D point to 2D plane</p>
-						<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pj</span><span style="color: #000000"> = </span><span style="color: #795E26">Projector</span><span style="color: #000000">(</span><span style="color: #098658">60</span><span style="color: #000000">,</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// create a 3D projector function</span>
+						<pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pj</span><span style="color: #000000"> = </span><span style="color: #795E26">Projector</span><span style="color: #000000">(</span><span style="color: #098658">60</span><span style="color: #000000">,</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// create a 3D projector function</span>
 <span style="color: #795E26">pj</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">) </span><span style="color: #008000">// [1.25, 0.433012701892]</span>
 </code></pre>
 						<ul class="tsd-parameters">
@@ -2767,6 +2787,51 @@ img {
 											</li>
 											<li>
 												<h5>z: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="projector3d" class="tsd-anchor"></a>
+				<h3>Projector3D</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Projector3D<span class="tsd-signature-symbol">(</span>angle<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, depth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>angle: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 60</span></h5>
+							</li>
+							<li>
+								<h5>depth: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0.5</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>projector function from 3D point to 2D plane</p>
+						<pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pj</span><span style="color: #000000"> = </span><span style="color: #795E26">Projector3D</span><span style="color: #000000">(</span><span style="color: #098658">60</span><span style="color: #000000">,</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// create a 3D projector function</span>
+<span style="color: #795E26">pj</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">]) </span><span style="color: #008000">// [1.25, 0.433012701892]</span>
+</code></pre>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>_: <a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>

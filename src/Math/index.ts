@@ -16,6 +16,7 @@ import './Code/Text.ts'
 import './Code/Triangle.ts'
 import './Code/Trigonometry.ts'
 import './Code/Vector.ts'
+import './Code/Vector3D.ts'
 
 import './Algebra/Algebra.ts'
 import './Algebra/Circle.ts'
@@ -25,4 +26,5 @@ import './Algebra/Polynomial'
 
 
 import './should.ts'
+
 

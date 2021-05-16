@@ -234,7 +234,7 @@ globalThis.Angle = contract(Angle).seal({
 /**
  * @category Geometry
  * @return angle AOB, measured anticlockwise
- * ```typescript
+ * ```
  * AnglePolar([1,0],[0,0],[0,2]) // 90
  * AnglePolar([2,2],[1,1],[1,3]) // 45
  * AnglePolar([1,3],[1,1],[2,2]) // 315
@@ -257,7 +257,7 @@ globalThis.AnglePolar = contract(AnglePolar).seal({
 /**
  * @category Geometry
  * @return check if the polar angle AOB is reflex
- * ```typescript
+ * ```
  * IsReflex([1,0],[0,0],[0,2]) // false
  * IsReflex([2,2],[1,1],[1,3]) // false
  * IsReflex([1,3],[1,1],[2,2]) // true
@@ -273,3 +273,53 @@ globalThis.IsReflex = contract(IsReflex).seal({
         return owl.distinct([A, O]) && owl.distinct([B, O])
     }
 })
+
+
+
+
+
+/**
+ * @category Geometry
+ * @return points from turtle walk
+ * ```
+ * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
+ * ```
+ */
+function Turtle(start: Point, ...walk: [rotate: number, distance: number][]): Point[] {
+    let arr: Point[] = [start]
+    let lastPoint = start
+    let facing = 0
+    for (let w of walk) {
+        let [rot, dist] = w
+        facing += rot
+        let P = TranslatePoint(lastPoint, facing, dist)
+        arr.push(P)
+        lastPoint = P
+    }
+    return arr
+}
+globalThis.Turtle = contract(Turtle).sign([owl.point, owl.couple])
+
+
+
+/**
+ * @category Geometry
+ * @return points on a regular polygon
+ * ```
+ * RegularPolygon(4,[0,0],1,0) // [[1,0],[0,1],[-1,0],[0,-1]]
+ * ```
+ */
+function RegularPolygon(n: number, center: Point, radius: number, startAngle: number) {
+    let a = 360 / n
+    let arr: Point[] = []
+    for (let i = 0; i < n; i++) {
+        let p = PolToRect([radius, startAngle + i * a])
+        p[0] += center[0]
+        p[1] += center[1]
+        p[0] = ant.blur(p[0])
+        p[1] = ant.blur(p[1])
+        arr.push(p)
+    }
+    return arr
+}
+globalThis.RegularPolygon = contract(RegularPolygon).sign([owl.num, owl.point, owl.num, owl.num])

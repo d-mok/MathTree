@@ -46,12 +46,23 @@ class Pen3DCls {
     ) { }
 
 
-
-    axis3D(length: number = 999) {
-        this.pen.line(this.py([-length, 0, 0]), this.py([length, 0, 0]))
-        this.pen.line(this.py([0, -length, 0]), this.py([0, length, 0]))
-        this.pen.dash(this.py([0, 0, -length]), this.py([0, 0, length]))
+    line(startPoint: Point3D, endPoint: Point3D): void {
+        this.pen.line(this.py(startPoint), this.py(endPoint))
     }
+
+    dash(startPoint: Point3D, endPoint: Point3D): void {
+        this.pen.dash(this.py(startPoint), this.py(endPoint))
+    }
+
+
+
+    axis3D(length: number = 999): void {
+        this.line([-length, 0, 0], [length, 0, 0])
+        this.line([0, -length, 0], [0, length, 0])
+        this.dash([0, 0, -length], [0, 0, length])
+    }
+
+
 
 
     shape(point3Ds: Point3D[], {
@@ -59,7 +70,7 @@ class Pen3DCls {
         dash = !true,
         shade = !true,
         fill = !true
-    }={}) {
+    } = {}): void {
         if (dash) line = false
         let ps = point3Ds.map(p => this.py(p))
 
@@ -82,14 +93,14 @@ class Pen3DCls {
 
     }
 
-    _circleFunc(tracing: (t: number) => Point3D) {
+    private _circleFunc(tracing: (t: number) => Point3D) {
         return (center: Point3D, radius: number, {
             line = true,
             dash = !true,
             shade = !true,
             fill = !true,
             arc = [0, 360]
-        }={}) => {
+        } = {}): void => {
             let [x, y, z] = center
             let ps = Trace3D(tracing, arc[0], arc[1])
             ps = ps.map(p => [p[0] * radius, p[1] * radius, p[2] * radius])
@@ -116,7 +127,7 @@ class Pen3DCls {
         radiusLabel = '',
         lowerOnly = !true,
         upperOnly = !true
-    }={}) {
+    } = {}): void {
         if (upperOnly)
             this.xzCircle(center, radius, { arc: [0, 180] })
 
@@ -143,6 +154,21 @@ class Pen3DCls {
 
 
 
+    frustum(lowerBase: Point3D[], upperBase: Point3D[], {
+        height = !true
+    } = {}) {
+        this.shape(lowerBase)
+        this.shape(upperBase)
+        for (let i = 0; i < Math.max(lowerBase.length, upperBase.length); i++) {
+            let L = i < lowerBase.length ? lowerBase[i] : lowerBase[lowerBase.length - 1]
+            let U = i < upperBase.length ? upperBase[i] : upperBase[upperBase.length - 1]
+            this.line(L, U)
+        }
+        if (height) {
+            // TODO
+        }
+    }
+
 
 
 }
@@ -150,6 +176,5 @@ class Pen3DCls {
 /**
  * @ignore
  */
- var Pen3D = Pen3DCls
- globalThis.Pen3D = Pen3D
- 
+var Pen3D = Pen3DCls
+globalThis.Pen3D = Pen3D
