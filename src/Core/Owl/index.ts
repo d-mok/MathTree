@@ -93,6 +93,8 @@ export const interval = (_: unknown): _ is interval => couple(_) && _[0] <= _[1]
 
 export const point = (_: unknown): _ is Point => couple(_)
 
+export const point3D = (_: unknown): _ is Point3D => triple(_)
+
 export const polar = (_: unknown): _ is PolarPoint => couple(_) && _[0] >= 0
 
 export const fraction = (_: unknown): _ is Fraction => couple(_)

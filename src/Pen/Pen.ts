@@ -10,7 +10,7 @@ class PenCls {
     /**
      * @ignore
      */
-    private ctx: CanvasRenderingContext2D
+    public ctx: CanvasRenderingContext2D
     /**
      * @ignore
      */
@@ -1774,6 +1774,26 @@ class PenCls {
             this.y(interval)
         }
     };
+
+
+
+
+
+    /**
+     * Return a 3D pen. Should be named as p3d.
+     * @category draw
+     * @param angle - The tilted angle of 3d projeciton, default 60.
+     * @param depth - The depth for y-axis, default is 0.5.
+     * @returns void
+     * ```
+     * let p3d = pen.pen3D(60,0.5)
+     * p3d.axis3D()
+     * ```
+     */
+    pen3D(angle: number = 60, depth: number = 0.5) {
+        return new Pen3D(this, Projector3D(angle, depth))
+    }
+
 
 
     /**

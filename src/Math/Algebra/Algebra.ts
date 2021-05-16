@@ -73,3 +73,33 @@ function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number
     return points
 }
 globalThis.Trace = contract(Trace).sign([owl.pass, owl.num, owl.num, owl.positiveInt])
+
+
+
+
+/**
+ * @category Algebra
+ * @return the points along the parametric curve
+ * ```
+ * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * ```
+ */
+function Trace3D(func: (t: number) => Point3D, tStart: number, tEnd: number, dots = 1000) {
+    const tracer = (t: number): Point3D => {
+        try {
+            return func(t);
+        } catch {
+            return [NaN, NaN, NaN]
+        }
+    };
+    const step = (tEnd - tStart) / (dots - 1);
+    let points: Point3D[] = []
+    for (let t = tStart; t <= tEnd; t += step) {
+        points.push(tracer(t))
+    }
+    return points
+}
+globalThis.Trace3D = contract(Trace3D).sign([owl.pass, owl.num, owl.num, owl.positiveInt])
+
+
