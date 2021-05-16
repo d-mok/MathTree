@@ -76,7 +76,30 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     // print *(x) as bracket if negative
     print("()", "\\*\\(", "\\)")
 
+    // print *^+_x as sign of x
+    print("+", "\\*\\^\\+\\_")
 
+
+    // print *^-_x as sign of x
+    print("-", "\\*\\^\\-\\_")
+
+
+
+    // print *^\gt_x as '>' or '<'
+    print(">", "\\*\\^\\\\\\g\\t\\_")
+
+
+    // print *^\lt_x as '<' or '>'
+    print("<", "\\*\\^\\\\\\l\\t\\_")
+
+
+    // print *^\ge_x as '>=' or '<='
+    print(">=", "\\*\\^\\\\\\g\\e\\_")
+
+
+    // print *^\le_x as '<=' or '>='
+    print("<=", "\\*\\^\\\\\\l\\e\\_")
+    
     // print *\%x as percent
     print("%", "\\*\\%")
     print("\\%", "\\*\\\\\\%")
@@ -158,6 +181,38 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (T === 'number') return value >= 0 ? '+' : '-'
     }
 
+
+    if (signal === '-') {
+        if (T === 'number') return value <= 0 ? '-' : '+'
+    }
+
+
+
+    if (signal === '||') {
+        if (T === 'number') {
+            return ParseForPrint(Math.abs(value), '')
+        }
+    }
+
+
+    if (signal === '>') {
+        if (T === 'boolean') return value ? '\\gt' : '\\lt'
+    }
+
+
+    if (signal === '<') {
+        if (T === 'boolean') return value ? '\\lt' : '\\gt'
+    }
+
+
+    if (signal === '>=') {
+        if (T === 'boolean') return value ? '\\ge' : '\\le'
+    }
+
+
+    if (signal === '<=') {
+        if (T === 'boolean') return value ? '\\le' : '\\ge'
+    }
 
     if (signal === '%') {
         if (T === 'number') {
