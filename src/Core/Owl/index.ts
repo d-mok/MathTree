@@ -5,7 +5,7 @@ export const num = (_: unknown): _ is number => Number.isFinite(_)
 
 export const whole = (_: unknown): _ is number => Number.isInteger(_)
 
-export const int = (_: unknown): _ is number => num(_) && Number.isInteger(ant.correct(_))
+export const int = (_: unknown): _ is number => num(_) && Number.isInteger(ant.blur(_))
 
 export const dec = (_: unknown): _ is number => num(_) && !int(_)
 
@@ -15,9 +15,9 @@ export const rational = (_: unknown): _ is number => num(_) && ant.fracable(_)
 
 export const irrational = (_: unknown): _ is number => num(_) && !ant.fracable(_)
 
-export const odd = (_: unknown): _ is number => int(_) && Math.abs(ant.correct(_)) % 2 === 1
+export const odd = (_: unknown): _ is number => int(_) && Math.abs(ant.blur(_)) % 2 === 1
 
-export const even = (_: unknown): _ is number => int(_) && Math.abs(ant.correct(_)) % 2 === 0
+export const even = (_: unknown): _ is number => int(_) && Math.abs(ant.blur(_)) % 2 === 0
 
 export const prob = (_: unknown): _ is number => num(_) && _ >= 0 && _ <= 1
 

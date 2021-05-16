@@ -121,8 +121,11 @@ globalThis.IndexToSurd = contract(IndexToSurd).sign([owl.str])
  * Coord([1,2]) // '(1, 2)'
  * ```
  */
-function Coord(point: Point): string {
-    return '(' + ant.blur(point[0]) + ', ' + ant.blur(point[1]) + ')'
+function Coord(point: Point, dp: number = 1): string {
+    let [a, b] = point.map(_ => ant.blur(_))
+    a = Fix(a, dp)
+    b = Fix(b, dp)
+    return '(' + a + ', ' + b + ')'
 }
 globalThis.Coord = contract(Coord).sign([owl.point])
 
@@ -130,6 +133,7 @@ globalThis.Coord = contract(Coord).sign([owl.point])
 
 /**
  * @category Text
+ * @deprecated
  * @return the scientific notation of number
  * ```
  * Sci(123.45) // '1.2345 x 10^{ 2}'

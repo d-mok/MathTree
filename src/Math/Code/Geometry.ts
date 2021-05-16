@@ -12,7 +12,7 @@ function Slope(A: Point, B: Point): number {
 }
 globalThis.Slope = contract(Slope).seal({
     arg: [owl.point],
-    args: function not_vertical(A, B) { return ant.blur(A[0] - B[0]) !== 0 }
+    args: function not_vertical(A, B) { return !ant.eq(A[0], B[0]) }
 })
 
 

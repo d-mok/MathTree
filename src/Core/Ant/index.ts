@@ -22,6 +22,10 @@ export function correct(num: number): number {
     return parseFloat(num.toPrecision(STANDARD_SIGFIG - 2));
 }
 
+export function eq(a: number, b: number): boolean {
+    return correct(a) === correct(b)
+}
+
 export function round(num: number, sigfig = 3) {
     const exec = (mode: Decimal.Rounding) =>
         (new Decimal(num))
@@ -116,7 +120,7 @@ export function nearFrac(num: number, maxDenominator = 10000): Fraction {
 
 export function fracable(num: number): boolean {
     let [p, q] = nearFrac(num)
-    return correct(num * q) === p
+    return eq(num * q, p)
 }
 
 

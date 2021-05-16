@@ -12,6 +12,7 @@ function Divide(dividend: number, divisor: number): number {
 globalThis.Divide = contract(Divide).sign([owl.num, owl.nonZero])
 
 
+
 /**
  * @category Numeracy
  * @return the absolute value. Equivalent to Math.abs(x).
@@ -23,6 +24,7 @@ function Abs(num: number): number {
     return Math.abs(num);
 }
 globalThis.Abs = contract(Abs).sign([owl.num])
+
 
 
 /**

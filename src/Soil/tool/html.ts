@@ -76,8 +76,8 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     // print *(x) as bracket if negative
     print("()", "\\*\\(", "\\)")
 
-    // print *+x as sign of x
-    print("+", "\\*\\+")
+    // print *^+_x as sign of x
+    print("+", "\\*\\^\\+\\_")
 
     // print *\%x as percent
     print("%", "\\*\\%")
@@ -98,11 +98,12 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === '') {
         if (T === 'number') {
-            let v = ant.blur(value)
+            // let v = ant.blur(value)
+            let v = value
             if (IsInteger(v)) {
                 v = Fix(v, 0)
             } else {
-                v = Round(v, 5)
+                v = Math.abs(v) > 100 ? Fix(v, 2) : Round(v, 5)
             }
             return String(v)
         }
@@ -157,6 +158,9 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     if (signal === '+') {
         if (T === 'number') return value >= 0 ? '+' : '-'
     }
+
+    
+    
 
 
     if (signal === '%') {
