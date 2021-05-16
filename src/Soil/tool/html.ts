@@ -76,30 +76,35 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     // print *(x) as bracket if negative
     print("()", "\\*\\(", "\\)")
 
+
+    // print *|x| as abs(x)
+    print("||", "\\*\\|", "\\|")
+
+
     // print *^+_x as sign of x
     print("+", "\\*\\^\\+\\_")
 
 
-    // print *^-_x as sign of x
+    // print *^-_x as opposite sign of x
     print("-", "\\*\\^\\-\\_")
 
 
 
     // print *^\gt_x as '>' or '<'
-    print(">", "\\*\\^\\\\\\g\\t\\_")
+    print(">", "\\*\\^\\\\gt\\_")
 
 
     // print *^\lt_x as '<' or '>'
-    print("<", "\\*\\^\\\\\\l\\t\\_")
+    print("<", "\\*\\^\\\\lt\\_")
 
 
     // print *^\ge_x as '>=' or '<='
-    print(">=", "\\*\\^\\\\\\g\\e\\_")
+    print(">=", "\\*\\^\\\\ge\\_")
 
 
     // print *^\le_x as '<=' or '>='
-    print("<=", "\\*\\^\\\\\\l\\e\\_")
-    
+    print("<=", "\\*\\^\\\\le\\_")
+
     // print *\%x as percent
     print("%", "\\*\\%")
     print("\\%", "\\*\\\\\\%")
@@ -183,7 +188,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
 
     if (signal === '-') {
-        if (T === 'number') return value <= 0 ? '-' : '+'
+        if (T === 'number') return value >= 0 ? '-' : '+'
     }
 
 
