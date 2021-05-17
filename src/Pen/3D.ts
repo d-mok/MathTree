@@ -155,18 +155,58 @@ class Pen3DCls {
 
 
     frustum(lowerBase: Point3D[], upperBase: Point3D[], {
-        height = !true
+        height = !true,
+        shadeLower = !true,
+        shadeUpper = !true,
+        envelopeOnly = !true
+
     } = {}) {
+        lowerBase = [...lowerBase]
+        upperBase = [...upperBase]
         this.shape(lowerBase)
         this.shape(upperBase)
-        for (let i = 0; i < Math.max(lowerBase.length, upperBase.length); i++) {
-            let L = i < lowerBase.length ? lowerBase[i] : lowerBase[lowerBase.length - 1]
-            let U = i < upperBase.length ? upperBase[i] : upperBase[upperBase.length - 1]
-            this.line(L, U)
+
+        let max = Math.max(lowerBase.length, upperBase.length)
+        for (let i = 0; i < max; i++) {
+            if (i > lowerBase.length - 1)
+                lowerBase.push(lowerBase[lowerBase.length - 1])
+            if (i > upperBase.length - 1)
+                upperBase.push(upperBase[upperBase.length - 1])
         }
+        lowerBase.push(lowerBase[0])
+        upperBase.push(upperBase[0])
+
+        if (envelopeOnly) {
+            this.pen.ctx.save()
+            this.pen.set.alpha(0.1)
+            for (let i = 0; i < max; i++) {
+                let polygon = [lowerBase[i], lowerBase[i + 1], upperBase[i + 1], upperBase[i]]
+                this.shape(polygon, { line: false, fill: true })
+            }
+            this.pen.ctx.restore()
+        } else {
+            for (let i = 0; i < max; i++) {
+                this.line(lowerBase[i], upperBase[i])
+            }
+        }
+
+
         if (height) {
-            // TODO
+            let V = Vec3DMean(...upperBase)
+            let [A, B, C] = lowerBase
+            let O = ProjectionOnPlane(V, [A, B, C])
+            this.dash(O, V)
         }
+        if (shadeLower)
+            this.shape(lowerBase, { line: false, shade: true })
+        if (shadeUpper)
+            this.shape(upperBase, { line: false, shade: true })
+
+
+    }
+
+    circularFrustum() {
+
     }
 
 

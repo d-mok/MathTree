@@ -47,6 +47,7 @@ class PenCls {
         /**
          * Set the coordinate range of the canvas.
          * @category SetupRange
+         * @deprecated use .capture instead
          * @param xRange - The range [xmin,xmax].
          * @param yRange - The range [ymin,ymax].
          * @returns void
@@ -63,6 +64,7 @@ class PenCls {
          * Set the coordinate range of the canvas with given size and center.
          * Equivalent to pen.range.range([-size, size], [-size, size]) but shifted center.
          * @category SetupRange
+         * @deprecated use .capture instead
          * @param size - The max x and y coordinates in range.
          * @param center - [x,y] coordinates of the center.
          * @returns void
@@ -129,6 +131,7 @@ class PenCls {
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange
+         * @deprecated use .capture instead
          * @param points - An array of in-view points [x,y].
          * @returns void
          * ```
@@ -177,6 +180,7 @@ class PenCls {
         /**
          * Set the size of the canvas by resolution.
          * @category SetupSize
+         * @deprecated
          * @param xPPI - The scale per unit x.
          * @param yPPI - The scale per unit y, if not provided, follow x.
          * @returns void
@@ -1369,6 +1373,8 @@ class PenCls {
         if (this.setProperty.TEXT_LATEX) {
             const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
             let size = Math.round(this.setProperty.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
+            let color = this.ctx.fillStyle
+            text = `\\color{${color}} ` + text
             // @ts-ignore
             const widget = new CanvasLatex.default(
                 text,

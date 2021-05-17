@@ -1768,6 +1768,14 @@ declare function RndShe(): string;
  */
 declare function RndLetters(): string[];
 /**
+ * @category RandomUtil
+ * @return a random 3-letters array
+ * ```
+ * RndCapitals() // may return ['A','A','A'] or ['X','Y','Z'] or etc
+ * ```
+ */
+declare function RndCapitals(): string[];
+/**
  * @category Relation
  * @return Check if the numbers are all distinct.
  * ```
@@ -2050,6 +2058,7 @@ declare function Tick(bool: boolean): string;
 declare function Ticks(...bools: boolean[]): string[];
 /**
 * @category Text
+* @deprecated
 * @return a pair of latex inequalities sign array like ['\\ge', '\\le'].
 * ```typescript
 * IneqSign(true,true) // ['\\ge', '\\le']
@@ -2536,9 +2545,13 @@ declare class Pen3DCls {
         lowerOnly?: boolean | undefined;
         upperOnly?: boolean | undefined;
     }): void;
-    frustum(lowerBase: Point3D[], upperBase: Point3D[], { height }?: {
+    frustum(lowerBase: Point3D[], upperBase: Point3D[], { height, shadeLower, shadeUpper, envelopeOnly }?: {
         height?: boolean | undefined;
+        shadeLower?: boolean | undefined;
+        shadeUpper?: boolean | undefined;
+        envelopeOnly?: boolean | undefined;
     }): void;
+    circularFrustum(): void;
 }
 /**
  * @ignore
@@ -2939,6 +2952,7 @@ declare class PenCls {
         /**
          * Set the coordinate range of the canvas.
          * @category SetupRange
+         * @deprecated use .capture instead
          * @param xRange - The range [xmin,xmax].
          * @param yRange - The range [ymin,ymax].
          * @returns void
@@ -2951,6 +2965,7 @@ declare class PenCls {
          * Set the coordinate range of the canvas with given size and center.
          * Equivalent to pen.range.range([-size, size], [-size, size]) but shifted center.
          * @category SetupRange
+         * @deprecated use .capture instead
          * @param size - The max x and y coordinates in range.
          * @param center - [x,y] coordinates of the center.
          * @returns void
@@ -2973,6 +2988,7 @@ declare class PenCls {
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange
+         * @deprecated use .capture instead
          * @param points - An array of in-view points [x,y].
          * @returns void
          * ```
@@ -3006,6 +3022,7 @@ declare class PenCls {
         /**
          * Set the size of the canvas by resolution.
          * @category SetupSize
+         * @deprecated
          * @param xPPI - The scale per unit x.
          * @param yPPI - The scale per unit y, if not provided, follow x.
          * @returns void

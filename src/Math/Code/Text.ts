@@ -53,6 +53,7 @@ globalThis.Ticks = contract(Ticks).sign([owl.bool])
 
 /**
 * @category Text
+* @deprecated
 * @return a pair of latex inequalities sign array like ['\\ge', '\\le'].
 * ```typescript
 * IneqSign(true,true) // ['\\ge', '\\le']

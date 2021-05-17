@@ -107,3 +107,25 @@ globalThis.RndLetters = RndLetters
 
 
 
+
+/**
+ * @category RandomUtil
+ * @return a random 3-letters array
+ * ```
+ * RndCapitals() // may return ['A','A','A'] or ['X','Y','Z'] or etc
+ * ```
+ */
+function RndCapitals(): string[] {
+    return RndPick(
+        ['A', 'B', 'C'],
+        ['H', 'K', 'L'],
+        ['M', 'N', 'L'],
+        ['P', 'Q', 'R'],
+        ['R', 'S', 'T'],
+        ['U', 'V', 'W'],
+        ['X', 'Y', 'Z'],
+    )
+}
+globalThis.RndCapitals = RndCapitals
+
+

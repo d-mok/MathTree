@@ -84,3 +84,10 @@ test('RndLetters', () => {
     expect(arr).toAllHaveLength(3);
 });
 
+
+test('RndCapitals', () => {
+    let arr = sample(() => RndCapitals());
+    expect(arr).toBeFlatIs(x => typeof x === 'string');
+    expect(arr).toAllHaveLength(3);
+});
+
