@@ -1161,7 +1161,7 @@ class AutoPenCls {
         pen.setup.resolution(0.07)
 
         pen.line([0, -1], [0, 2])
-        pen.line([-5, 0], [1, 0])
+        pen.line([-3, 0], [1, 0])
 
         pen.set.textAlign('left')
         pen.write([0.5, 1], leafTitle)
