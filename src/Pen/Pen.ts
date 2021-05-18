@@ -1188,7 +1188,7 @@ class PenCls {
     angle(A: Point, O: Point, B: Point, label?: string, arc = 1, radius = -1) {
         if (radius < 0) {
             let angle = Angle(A, O, B)
-            let extra = Math.max(20 - angle, 0) * 2
+            let extra = Math.max(30 - angle, 0) * 2
             radius = 15 + extra
         }
         this.decorate.angle(A, O, B, arc, radius)
@@ -1340,7 +1340,7 @@ class PenCls {
         angle(A: Point, O: Point, B: Point, arc = 1, radius = -1) {
             if (radius < 0) {
                 let angle = Angle(A, O, B)
-                let extra = Math.max(20 - angle, 0) * 2
+                let extra = Math.max(30 - angle, 0) * 2
                 radius = 15 + extra
             }
             let mode = this._pen.setProperty.ANGLE_MODE
@@ -1566,7 +1566,7 @@ class PenCls {
             if (typeof text === 'number') text = text + '°'
             if (offsetPixel < 0) {
                 let angle = Angle(A, O, B)
-                let extra = Math.max(20 - angle, 0) * 2
+                let extra = Math.max(30 - angle, 0) * 2
                 offsetPixel = 30 + extra
             }
             this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
