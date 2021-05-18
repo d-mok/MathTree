@@ -2802,6 +2802,9 @@ img {
 				</li>
 			</ul>
 		</li>
+		<li class=" tsd-kind-variable tsd-parent-kind-module">
+			<a href="../modules/pen_pen.html#rem_pixel" class="tsd-kind-icon">REM_<wbr>PIXEL</a>
+		</li>
 	</ul>
 </nav>
 <div class="container container-main">
@@ -3309,7 +3312,7 @@ img {
 											</div>
 										</li>
 										<li>
-											<h5>radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 15</span></h5>
+											<h5>radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = -1</span></h5>
 											<div class="tsd-comment tsd-typography">
 												<p>The radius of the angle arc, in pixel.</p>
 											</div>
@@ -3572,7 +3575,7 @@ img {
 								</div>
 							</li>
 							<li>
-								<h5>radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 15</span></h5>
+								<h5>radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = -1</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<p>The radius of the angle arc, in pixel.</p>
 								</div>
@@ -4833,7 +4836,7 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="range" class="tsd-anchor"></a>
 				<h3>range</h3>
-				<div class="tsd-signature tsd-kind-icon">range<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>capture<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>extend<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>set<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>square<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<div class="tsd-signature tsd-kind-icon">range<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>AUTO_BORDER<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>RANGE_SET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>capture<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>extend<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>set<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>square<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -4844,6 +4847,12 @@ img {
 				<div class="tsd-type-declaration">
 					<h4>Type declaration</h4>
 					<ul class="tsd-parameters">
+						<li class="tsd-parameter">
+							<h5>AUTO_<wbr>BORDER<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>RANGE_<wbr>SET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
+						</li>
 						<li class="tsd-parameter">
 							<h5>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a></h5>
 						</li>
@@ -4890,11 +4899,6 @@ img {
 										<div class="lead">
 											<p>Set the coordinate range by specifying in-view points, include O(0,0).</p>
 										</div>
-										<dl class="tsd-comment-tags">
-											<dt>deprecated</dt>
-											<dd><p>use .capture instead</p>
-											</dd>
-										</dl>
 									</div>
 									<h4 class="tsd-parameters-title">Parameters</h4>
 									<ul class="tsd-parameters">
@@ -4926,11 +4930,6 @@ img {
 										<div class="lead">
 											<p>Set the coordinate range of the canvas.</p>
 										</div>
-										<dl class="tsd-comment-tags">
-											<dt>deprecated</dt>
-											<dd><p>use .capture instead</p>
-											</dd>
-										</dl>
 									</div>
 									<h4 class="tsd-parameters-title">Parameters</h4>
 									<ul class="tsd-parameters">
@@ -4968,11 +4967,6 @@ img {
 											<p>Set the coordinate range of the canvas with given size and center.
 											Equivalent to pen.range.range([-size, size], [-size, size]) but shifted center.</p>
 										</div>
-										<dl class="tsd-comment-tags">
-											<dt>deprecated</dt>
-											<dd><p>use .capture instead</p>
-											</dd>
-										</dl>
 									</div>
 									<h4 class="tsd-parameters-title">Parameters</h4>
 									<ul class="tsd-parameters">
@@ -5694,7 +5688,7 @@ img {
 											</div>
 										</li>
 										<li>
-											<h5>offsetPixel: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = -1</span></h5>
+											<h5>offsetPixel: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 30</span></h5>
 											<div class="tsd-comment tsd-typography">
 												<p>The pixel distance to offset from the position. If negative, default to (text.length &lt;= 2 ? 25 : 30).</p>
 											</div>
@@ -5783,7 +5777,7 @@ img {
 											</div>
 										</li>
 										<li>
-											<h5>offsetPixel: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = -1</span></h5>
+											<h5>offsetPixel: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 15</span></h5>
 											<div class="tsd-comment tsd-typography">
 												<p>The pixel distance to offset from the position. If negative, default to (text.length &lt;= 2 ? 15 : text.length &lt;= 4 ? 20 : 25).</p>
 											</div>

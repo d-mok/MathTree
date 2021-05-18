@@ -1,4 +1,8 @@
 
+
+const REM_PIXEL: number = parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+
 /**
  * @category DrawingPen
  */
@@ -29,10 +33,11 @@ class PenCls {
         this.ctx = this.canvas.getContext("2d")!;
         this.frame = new Frame();
         // set the default size and range
-        this.setup.size();
-        this.setup.range([-5, 5], [-5, 5]);
+        this.range.set([-5, 5], [-5, 5]);
+        this.size.set(1);
         this.set.reset();
         this.imgStore = null
+        this.range.RANGE_SET = false
     }
 
     /**
@@ -45,9 +50,16 @@ class PenCls {
          */
         _pen: this as PenCls,
         /**
+         * @ignore
+         */
+        AUTO_BORDER: false,
+        /**
+         * @ignore
+         */
+        RANGE_SET: false,
+        /**
          * Set the coordinate range of the canvas.
          * @category SetupRange
-         * @deprecated use .capture instead
          * @param xRange - The range [xmin,xmax].
          * @param yRange - The range [ymin,ymax].
          * @returns void
@@ -58,13 +70,13 @@ class PenCls {
         set(xRange: [number, number], yRange: [number, number] = xRange) {
             [this._pen.frame.xmin, this._pen.frame.xmax] = xRange;
             [this._pen.frame.ymin, this._pen.frame.ymax] = yRange;
+            this.RANGE_SET = true
         },
 
         /**
          * Set the coordinate range of the canvas with given size and center.
          * Equivalent to pen.range.range([-size, size], [-size, size]) but shifted center.
          * @category SetupRange
-         * @deprecated use .capture instead
          * @param size - The max x and y coordinates in range.
          * @param center - [x,y] coordinates of the center.
          * @returns void
@@ -88,7 +100,7 @@ class PenCls {
          * ```
          */
         capture(...points: Point[]) {
-            let border = 0.3
+            // let border = 0.3
             let pts = [...points]
             let xmin = pts[0][0];
             let xmax = pts[0][0];
@@ -118,20 +130,13 @@ class PenCls {
                 ymax += xSize / 2
                 ymin -= xSize / 2
             }
-            let xBorder = (xmax - xmin) * border
-            // let yBorder = (ymax - ymin) * border;
-            let yBorder = xBorder
-            xmin -= xBorder;
-            xmax += xBorder;
-            ymin -= yBorder
-            ymax += yBorder
             this.set([xmin, xmax], [ymin, ymax]);
+            this.AUTO_BORDER = true
         },
 
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange
-         * @deprecated use .capture instead
          * @param points - An array of in-view points [x,y].
          * @returns void
          * ```
@@ -166,15 +171,33 @@ class PenCls {
          * ```
          */
         set(width: number = 1, height = width) {
+            if (!this._pen.range.RANGE_SET)
+                throw CustomError('PenError', 'Range must be set before Size')
             // REM_PIXEL is the default font size of the browser, usually 16px
-            const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
-            const wPixel = width * 10 * REM_PIXEL;
-            const hPixel = height * 10 * REM_PIXEL;
             // create a canvas of higher resolution (PEN_QUALITY)
-            this._pen.canvas.width = wPixel * PEN_QUALITY;
-            this._pen.canvas.height = hPixel * PEN_QUALITY;
-            this._pen.frame.wPixel = wPixel * PEN_QUALITY;
-            this._pen.frame.hPixel = hPixel * PEN_QUALITY;
+            const wPixel = width * 10 * REM_PIXEL * PEN_QUALITY;
+            const hPixel = height * 10 * REM_PIXEL * PEN_QUALITY;
+            this._pen.canvas.width = wPixel;
+            this._pen.canvas.height = hPixel;
+            this._pen.frame.wPixel = wPixel;
+            this._pen.frame.hPixel = hPixel;
+
+            if (this._pen.range.AUTO_BORDER) {
+                let borderPix = 0.2 * 10 * REM_PIXEL * PEN_QUALITY;
+
+                let [xmin, xmax] = [this._pen.frame.xmin, this._pen.frame.xmax];
+                let [ymin, ymax] = [this._pen.frame.ymin, this._pen.frame.ymax]
+
+                let borderXUnit = (xmax - xmin) * borderPix / (wPixel - 2 * borderPix)
+                let borderYUnit = (ymax - ymin) * borderPix / (hPixel - 2 * borderPix)
+
+                xmin -= borderXUnit;
+                xmax += borderXUnit;
+                ymin -= borderYUnit
+                ymax += borderYUnit
+                this._pen.range.set([xmin, xmax], [ymin, ymax]);
+            }
+
             this._pen.set.reset();
         },
         /**
@@ -1162,9 +1185,14 @@ class PenCls {
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
-    angle(A: Point, O: Point, B: Point, label?: string, arc = 1, radius = 15) {
+    angle(A: Point, O: Point, B: Point, label?: string, arc = 1, radius = -1) {
+        if (radius < 0) {
+            let angle = Angle(A, O, B)
+            let extra = Math.max(20 - angle, 0) * 2
+            radius = 15 + extra
+        }
         this.decorate.angle(A, O, B, arc, radius)
-        if (label !== undefined) this.label.angle([A, O, B], label)
+        if (label !== undefined) this.label.angle([A, O, B], label, undefined, 30 + radius - 15)
     }
 
 
@@ -1309,7 +1337,12 @@ class PenCls {
          * // decorate an angle AOB with double-arc.
          * ```
          */
-        angle(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
+        angle(A: Point, O: Point, B: Point, arc = 1, radius = -1) {
+            if (radius < 0) {
+                let angle = Angle(A, O, B)
+                let extra = Math.max(20 - angle, 0) * 2
+                radius = 15 + extra
+            }
             let mode = this._pen.setProperty.ANGLE_MODE
             if (mode === 'normal' && IsReflex(A, O, B)) [A, B] = [B, A]
             if (mode === 'reflex' && !IsReflex(A, O, B)) [A, B] = [B, A]
@@ -1452,7 +1485,9 @@ class PenCls {
                     dodgeDirection = 0
                 }
             }
-            x += offsetPixel * Math.cos(dodgeDirection / 180 * Math.PI);
+
+            let textWidth = this._pen._textWidth(text)
+            x += (offsetPixel + textWidth - 5) * Math.cos(dodgeDirection / 180 * Math.PI);
             y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
 
             this._pen.ctx.save();
@@ -1491,7 +1526,7 @@ class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        anglePolar(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
+        anglePolar(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = 30) {
             let [A, O, B] = anglePoints;
             let APixel = this._pen.frame.toPix(A);
             let OPixel = this._pen.frame.toPix(O);
@@ -1499,8 +1534,6 @@ class PenCls {
             let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
             let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
             if (a2 < a1) a2 = a2 + 360
-            if (offsetPixel < 0)
-                offsetPixel = text.length <= 2 ? 25 : 30
             this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
         },
         /**
@@ -1531,7 +1564,11 @@ class PenCls {
             let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
             if (a2 < a1) a2 = a2 + 360
             if (typeof text === 'number') text = text + '°'
-            if (offsetPixel < 0) offsetPixel = text.length <= 2 ? 25 : 30
+            if (offsetPixel < 0) {
+                let angle = Angle(A, O, B)
+                let extra = Math.max(20 - angle, 0) * 2
+                offsetPixel = 30 + extra
+            }
             this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
         },
 
@@ -1547,14 +1584,12 @@ class PenCls {
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        line(linePoints: [Point, Point], text: string, dodgeDirection = 0, offsetPixel = -1) {
+        line(linePoints: [Point, Point], text: string, dodgeDirection = 0, offsetPixel = 15) {
             let [A, B] = linePoints;
             let M = MidPoint(A, B);
             let APixel = this._pen.frame.toPix(A);
             let BPixel = this._pen.frame.toPix(B);
             let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
-            if (offsetPixel < 0)
-                offsetPixel = text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25
             this.point(M, text, q + dodgeDirection, offsetPixel);
         },
 
@@ -1890,6 +1925,30 @@ class PenCls {
         if (this.imgStore !== null)
             this.ctx.putImageData(this.imgStore, 0, 0);
     }
+
+
+    /**
+     * @ignore
+     */
+    private _textWidth(text: string) {
+        if (this.setProperty.TEXT_LATEX) {
+            let size = Math.round(this.setProperty.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
+            let color = this.ctx.fillStyle
+            text = `\\color{${color}} ` + text
+            // @ts-ignore
+            const widget = new CanvasLatex.default(
+                text,
+                { displayMode: true, debugBounds: false, baseSize: size }
+            );
+            const bounds = widget.getBounds();
+            return bounds.width / 2
+        } else {
+            return this.ctx.measureText(text).width / 2
+        }
+
+    }
+
+
 
 };
 

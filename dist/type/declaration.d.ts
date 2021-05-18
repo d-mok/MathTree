@@ -2916,6 +2916,7 @@ declare class FrameCls {
  * @ignore
  */
 declare var Frame: typeof FrameCls;
+declare const REM_PIXEL: number;
 /**
  * @category DrawingPen
  */
@@ -2950,9 +2951,16 @@ declare class PenCls {
          */
         _pen: PenCls;
         /**
+         * @ignore
+         */
+        AUTO_BORDER: boolean;
+        /**
+         * @ignore
+         */
+        RANGE_SET: boolean;
+        /**
          * Set the coordinate range of the canvas.
          * @category SetupRange
-         * @deprecated use .capture instead
          * @param xRange - The range [xmin,xmax].
          * @param yRange - The range [ymin,ymax].
          * @returns void
@@ -2965,7 +2973,6 @@ declare class PenCls {
          * Set the coordinate range of the canvas with given size and center.
          * Equivalent to pen.range.range([-size, size], [-size, size]) but shifted center.
          * @category SetupRange
-         * @deprecated use .capture instead
          * @param size - The max x and y coordinates in range.
          * @param center - [x,y] coordinates of the center.
          * @returns void
@@ -2988,7 +2995,6 @@ declare class PenCls {
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange
-         * @deprecated use .capture instead
          * @param points - An array of in-view points [x,y].
          * @returns void
          * ```
@@ -4013,6 +4019,10 @@ declare class PenCls {
      * ```
      */
     restoreImg(): void;
+    /**
+     * @ignore
+     */
+    private _textWidth;
 }
 /**
  * @ignore
