@@ -2905,7 +2905,7 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="d3" class="tsd-anchor"></a>
 				<h3>d3</h3>
-				<div class="tsd-signature tsd-kind-icon">d3<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>axis3D<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>circle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>circleXY<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>circleXZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>circleYZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>frustum<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shape<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>sphere<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<div class="tsd-signature tsd-kind-icon">d3<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>_pen<span class="tsd-signature-symbol">: </span><a href="pen_pen.pencls.html" class="tsd-signature-type" data-tsd-kind="Class">PenCls</a><span class="tsd-signature-symbol">; </span>axis3D<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>circle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>circleXY<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>circleXZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>circleYZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>coneZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>cylinderZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>frustum<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>prismZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>pyramidZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>sphere<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -3097,6 +3097,88 @@ img {
 							</ul>
 						</li>
 						<li class="tsd-parameter">
+							<h5>coneZ<span class="tsd-signature-symbol">: </span>function</h5>
+							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+								<li class="tsd-signature tsd-kind-icon">coneZ<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, lowerZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, vertex<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeLower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+							</ul>
+							<ul class="tsd-descriptions">
+								<li class="tsd-description">
+									<aside class="tsd-sources">
+									</aside>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Draw a cone along the z-direction</p>
+										</div>
+									</div>
+									<h4 class="tsd-parameters-title">Parameters</h4>
+									<ul class="tsd-parameters">
+										<li>
+											<h5>center: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+										</li>
+										<li>
+											<h5>radius: <span class="tsd-signature-type">number</span></h5>
+										</li>
+										<li>
+											<h5>lowerZ: <span class="tsd-signature-type">number</span></h5>
+										</li>
+										<li>
+											<h5>vertex: <a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a></h5>
+										</li>
+										<li>
+											<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeLower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+											<ul class="tsd-parameters">
+											</ul>
+										</li>
+									</ul>
+									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									<p>void</p>
+									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">d3</span><span style="color: #000000">.</span><span style="color: #795E26">coneZ</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],</span><span style="color: #098658">2</span><span style="color: #000000">,[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">]) </span><span style="color: #008000">// draw a cone</span>
+</code></pre>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
+							<h5>cylinderZ<span class="tsd-signature-symbol">: </span>function</h5>
+							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+								<li class="tsd-signature tsd-kind-icon">cylinderZ<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, lowerZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, upperZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeLower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeUpper<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+							</ul>
+							<ul class="tsd-descriptions">
+								<li class="tsd-description">
+									<aside class="tsd-sources">
+									</aside>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Draw a cylinder along the z-direction</p>
+										</div>
+									</div>
+									<h4 class="tsd-parameters-title">Parameters</h4>
+									<ul class="tsd-parameters">
+										<li>
+											<h5>center: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+										</li>
+										<li>
+											<h5>radius: <span class="tsd-signature-type">number</span></h5>
+										</li>
+										<li>
+											<h5>lowerZ: <span class="tsd-signature-type">number</span></h5>
+										</li>
+										<li>
+											<h5>upperZ: <span class="tsd-signature-type">number</span></h5>
+										</li>
+										<li>
+											<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeLower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeUpper<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+											<ul class="tsd-parameters">
+											</ul>
+										</li>
+									</ul>
+									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									<p>void</p>
+									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">d3</span><span style="color: #000000">.</span><span style="color: #795E26">cylinderZ</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// draw a cylinder</span>
+</code></pre>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
 							<h5>envelope<span class="tsd-signature-symbol">: </span>function</h5>
 							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
 								<li class="tsd-signature tsd-kind-icon">envelope<span class="tsd-signature-symbol">(</span>lowerBase<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">[]</span>, upperBase<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">, </span><a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span></li>
@@ -3166,9 +3248,9 @@ img {
 							</ul>
 						</li>
 						<li class="tsd-parameter">
-							<h5>shape<span class="tsd-signature-symbol">: </span>function</h5>
+							<h5>prismZ<span class="tsd-signature-symbol">: </span>function</h5>
 							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
-								<li class="tsd-signature tsd-kind-icon">shape<span class="tsd-signature-symbol">(</span>point3Ds<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">[]</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>dash<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>fill<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>line<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shade<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								<li class="tsd-signature tsd-kind-icon">prismZ<span class="tsd-signature-symbol">(</span>lowerBase<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span>, lowerZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, upperZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeLower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeUpper<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 							</ul>
 							<ul class="tsd-descriptions">
 								<li class="tsd-description">
@@ -3176,23 +3258,69 @@ img {
 									</aside>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>Draw a shape in 3D, usually a plane.</p>
+											<p>Draw a prism along the z-direction</p>
 										</div>
 									</div>
 									<h4 class="tsd-parameters-title">Parameters</h4>
 									<ul class="tsd-parameters">
 										<li>
-											<h5>point3Ds: <a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">[]</span></h5>
+											<h5>lowerBase: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h5>
 										</li>
 										<li>
-											<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dash<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>fill<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>line<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shade<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+											<h5>lowerZ: <span class="tsd-signature-type">number</span></h5>
+										</li>
+										<li>
+											<h5>upperZ: <span class="tsd-signature-type">number</span></h5>
+										</li>
+										<li>
+											<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeLower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeUpper<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 											<ul class="tsd-parameters">
 											</ul>
 										</li>
 									</ul>
 									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 									<p>void</p>
-									<pre><code><span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">d3</span><span style="color: #000000">.</span><span style="color: #795E26">point3Ds</span><span style="color: #000000">([[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">]]) </span><span style="color: #008000">// draw a square</span>
+									<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> [</span><span style="color: #001080">A</span><span style="color: #000000">,</span><span style="color: #001080">B</span><span style="color: #000000">,</span><span style="color: #001080">C</span><span style="color: #000000">] = [[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]]</span>
+<span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">d3</span><span style="color: #000000">.</span><span style="color: #795E26">prismZ</span><span style="color: #000000">([</span><span style="color: #0070C1">A</span><span style="color: #000000">,</span><span style="color: #0070C1">B</span><span style="color: #000000">,</span><span style="color: #0070C1">C</span><span style="color: #000000">],</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// draw a triangular prism</span>
+</code></pre>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
+							<h5>pyramidZ<span class="tsd-signature-symbol">: </span>function</h5>
+							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+								<li class="tsd-signature tsd-kind-icon">pyramidZ<span class="tsd-signature-symbol">(</span>lowerBase<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span>, lowerZ<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, vertex<span class="tsd-signature-symbol">: </span><a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeLower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+							</ul>
+							<ul class="tsd-descriptions">
+								<li class="tsd-description">
+									<aside class="tsd-sources">
+									</aside>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Draw a pyramid along the z-direction</p>
+										</div>
+									</div>
+									<h4 class="tsd-parameters-title">Parameters</h4>
+									<ul class="tsd-parameters">
+										<li>
+											<h5>lowerBase: <a href="../modules/math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h5>
+										</li>
+										<li>
+											<h5>lowerZ: <span class="tsd-signature-type">number</span></h5>
+										</li>
+										<li>
+											<h5>vertex: <a href="../modules/math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a></h5>
+										</li>
+										<li>
+											<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>envelope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>shadeLower<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+											<ul class="tsd-parameters">
+											</ul>
+										</li>
+									</ul>
+									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									<p>void</p>
+									<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> [</span><span style="color: #001080">A</span><span style="color: #000000">,</span><span style="color: #001080">B</span><span style="color: #000000">,</span><span style="color: #001080">C</span><span style="color: #000000">] = [[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]]</span>
+<span style="color: #001080">pen</span><span style="color: #000000">.</span><span style="color: #001080">d3</span><span style="color: #000000">.</span><span style="color: #795E26">pyramidZ</span><span style="color: #000000">([</span><span style="color: #0070C1">A</span><span style="color: #000000">,</span><span style="color: #0070C1">B</span><span style="color: #000000">,</span><span style="color: #0070C1">C</span><span style="color: #000000">],</span><span style="color: #098658">0</span><span style="color: #000000">,[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">]) </span><span style="color: #008000">// draw a triangular prism</span>
 </code></pre>
 								</li>
 							</ul>

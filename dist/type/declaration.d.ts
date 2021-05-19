@@ -453,13 +453,12 @@ declare function xPolynomial(poly1: number[], poly2: number[]): number[];
 declare function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number, dots?: number): Point[];
 /**
  * @category Algebra
- * @return the points along the parametric curve
+ * @return the points along a circle
  * ```
- * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
- * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * TraceCircle([0,0],1)
  * ```
  */
-declare function Trace3D(func: (t: number) => Point3D, tStart: number, tEnd: number, dots?: number): Point3D[];
+declare function TraceCircle(center: Point, radius: number, angle?: number[]): Point[];
 /**
  * @category Circle
  * @return D,E,F of circle general form
@@ -3930,20 +3929,6 @@ declare class PenCls {
          */
         axis3D(length?: number): void;
         /**
-         * Draw a shape in 3D, usually a plane.
-         * @category 3D
-         * @returns void
-         * ```
-         * pen.d3.point3Ds([[1,0,0],[1,1,0],[0,1,0],[0,0,0]]) // draw a square
-         * ```
-         */
-        shape(point3Ds: Point3D[], { line, dash, shade, fill }?: {
-            line?: boolean | undefined;
-            dash?: boolean | undefined;
-            shade?: boolean | undefined;
-            fill?: boolean | undefined;
-        }): void;
-        /**
          * Draw a circle in 3D
          * @category 3D
          * @returns void
@@ -4051,6 +4036,66 @@ declare class PenCls {
             height?: boolean | undefined;
             shadeLower?: boolean | undefined;
             shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a prism along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0],[2,0],[0,2]]
+         * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
+         * ```
+         */
+        prismZ(lowerBase: Point[], lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a cylinder along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.cylinderZ([0,0,0],2,0,4) // draw a cylinder
+         * ```
+         */
+        cylinderZ(center: Point, radius: number, lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a pyramid along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0],[2,0],[0,2]]
+         * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
+         * ```
+         */
+        pyramidZ(lowerBase: Point[], lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a cone along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.coneZ([0,0,0],2,[0,0,4]) // draw a cone
+         * ```
+         */
+        coneZ(center: Point, radius: number, lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
             envelope?: boolean | undefined;
         }): void;
     };

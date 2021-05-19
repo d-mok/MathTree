@@ -635,7 +635,7 @@ class PenCls {
          * ```
          */
         projector3D(angle: number = 60, depth: number = 0.5): void {
-            this._pen.project = Projector3D(angle, depth)
+            this._pen.pj = Projector3D(angle, depth)
         },
         /**
          * Reset all pen settings.
@@ -1911,40 +1911,40 @@ class PenCls {
         },
 
 
-        /**
-         * Draw a shape in 3D, usually a plane.
-         * @category 3D
-         * @returns void
-         * ```
-         * pen.d3.point3Ds([[1,0,0],[1,1,0],[0,1,0],[0,0,0]]) // draw a square
-         * ```
-         */
-        shape(point3Ds: Point3D[], {
-            line = true,
-            dash = !true,
-            shade = !true,
-            fill = !true
-        } = {}): void {
-            if (dash) line = false
+        // /**
+        //  * Draw a shape in 3D, usually a plane.
+        //  * @category 3D
+        //  * @returns void
+        //  * ```
+        //  * pen.d3.point3Ds([[1,0,0],[1,1,0],[0,1,0],[0,0,0]]) // draw a square
+        //  * ```
+        //  */
+        // shape(point3Ds: Point3D[], {
+        //     line = true,
+        //     dash = !true,
+        //     shade = !true,
+        //     fill = !true
+        // } = {}): void {
+        //     if (dash) line = false
 
-            if (line) {
-                this._pen.polygon(...point3Ds)
-            }
+        //     if (line) {
+        //         this._pen.polygon(...point3Ds)
+        //     }
 
-            if (dash) {
-                this._pen.ctx.save()
-                this._pen.set.dash(true)
-                this._pen.polygon(...point3Ds)
-                this._pen.ctx.restore()
-            }
+        //     if (dash) {
+        //         this._pen.ctx.save()
+        //         this._pen.set.dash(true)
+        //         this._pen.polygon(...point3Ds)
+        //         this._pen.ctx.restore()
+        //     }
 
-            if (shade)
-                this._pen.polyshade(...point3Ds)
+        //     if (shade)
+        //         this._pen.polyshade(...point3Ds)
 
-            if (fill)
-                this._pen.polyfill(...point3Ds)
+        //     if (fill)
+        //         this._pen.polyfill(...point3Ds)
 
-        },
+        // },
 
         /**
          * Draw a circle in 3D
@@ -1963,12 +1963,23 @@ class PenCls {
         } = {}): void {
             let ps = Trace(t => [radius * cos(t), radius * sin(t)], arc[0], arc[1])
             let ps3D = EmbedPlane(ps, center, xVec, yVec)
-            this.shape(ps3D, {
-                line,
-                dash,
-                shade,
-                fill
-            })
+
+            if (line) {
+                this._pen.ctx.save()
+                if (dash) this._pen.set.dash(true)
+                if (arc[1] - arc[0] >= 360) {
+                    this._pen.polygon(...ps3D)
+                } else {
+                    this._pen.polyline(...ps3D)
+                }
+                this._pen.ctx.restore()
+            }
+
+            if (shade)
+                this._pen.polyshade(...ps3D)
+
+            if (fill)
+                this._pen.polyfill(...ps3D)
         },
 
 
@@ -2153,8 +2164,8 @@ class PenCls {
             let [lCyc, uCyc, len] = this._cyclicBases(lowerBase, upperBase)
 
             if (base) {
-                this.shape(lowerBase)
-                this.shape(upperBase)
+                this._pen.polygon(...lowerBase)
+                this._pen.polygon(...upperBase)
             }
 
             if (envelope) {
@@ -2175,10 +2186,117 @@ class PenCls {
                 this._pen.dash(O, V)
             }
             if (shadeLower)
-                this.shape(lowerBase, { line: false, shade: true })
+                this._pen.polyshade(...lowerBase)
             if (shadeUpper)
-                this.shape(upperBase, { line: false, shade: true })
+                this._pen.polyshade(...upperBase)
+        },
+
+
+        /**
+         * Draw a prism along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0],[2,0],[0,2]]
+         * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
+         * ```
+         */
+        prismZ(lowerBase: Point[], lowerZ: number, upperZ: number, {
+            base = true,
+            height = !true,
+            shadeLower = !true,
+            shadeUpper = !true,
+            envelope = !true,
+        } = {}) {
+            let lower = EmbedPlaneZ(lowerBase, lowerZ)
+            let upper = EmbedPlaneZ(lowerBase, upperZ)
+            this.frustum(lower, upper, {
+                base,
+                height,
+                shadeLower,
+                shadeUpper,
+                envelope
+            })
+        },
+
+
+
+        /**
+         * Draw a cylinder along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.cylinderZ([0,0,0],2,0,4) // draw a cylinder
+         * ```
+         */
+        cylinderZ(center: Point, radius: number, lowerZ: number, upperZ: number, {
+            base = true,
+            height = !true,
+            shadeLower = !true,
+            shadeUpper = !true,
+            envelope = !true,
+        } = {}) {
+            let ps = TraceCircle(center, radius)
+            let lower = EmbedPlaneZ(ps, lowerZ)
+            let upper = EmbedPlaneZ(ps, upperZ)
+            this.frustum(lower, upper, {
+                base,
+                height,
+                shadeLower,
+                shadeUpper,
+                envelope
+            })
+        },
+        /**
+         * Draw a pyramid along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0],[2,0],[0,2]]
+         * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
+         * ```
+         */
+        pyramidZ(lowerBase: Point[], lowerZ: number, vertex: Point3D, {
+            base = true,
+            height = !true,
+            shadeLower = !true,
+            envelope = !true,
+        } = {}) {
+            let lower = EmbedPlaneZ(lowerBase, lowerZ)
+            this.frustum(lower, [vertex], {
+                base,
+                height,
+                shadeLower,
+                envelope
+            })
+        },
+
+
+
+        /**
+         * Draw a cone along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.coneZ([0,0,0],2,[0,0,4]) // draw a cone
+         * ```
+         */
+        coneZ(center: Point, radius: number, lowerZ: number, vertex: Point3D, {
+            base = true,
+            height = !true,
+            shadeLower = !true,
+            envelope = !true,
+        } = {}) {
+            let ps = TraceCircle(center, radius)
+            let lower = EmbedPlaneZ(ps, lowerZ)
+            this.frustum(lower, [vertex], {
+                base,
+                height,
+                shadeLower,
+                envelope
+            })
         }
+
 
     };
 

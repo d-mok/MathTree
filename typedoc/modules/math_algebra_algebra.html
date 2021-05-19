@@ -2711,7 +2711,7 @@ img {
 			<a href="math_algebra_algebra.html#trace" class="tsd-kind-icon">Trace</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="math_algebra_algebra.html#trace3d" class="tsd-kind-icon">Trace3D</a>
+			<a href="math_algebra_algebra.html#tracecircle" class="tsd-kind-icon">Trace<wbr>Circle</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_algebra_algebra.html#xpolynomial" class="tsd-kind-icon">x<wbr>Polynomial</a>
@@ -2729,7 +2729,7 @@ img {
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_algebra.html#crammer" class="tsd-kind-icon">Crammer</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_algebra.html#trace" class="tsd-kind-icon">Trace</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_algebra.html#trace3d" class="tsd-kind-icon">Trace3D</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_algebra.html#tracecircle" class="tsd-kind-icon">Trace<wbr>Circle</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_algebra_algebra.html#xpolynomial" class="tsd-kind-icon">x<wbr>Polynomial</a></li>
 						</ul>
 					</section>
@@ -2829,10 +2829,10 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-				<a name="trace3d" class="tsd-anchor"></a>
-				<h3>Trace3D</h3>
+				<a name="tracecircle" class="tsd-anchor"></a>
+				<h3>Trace<wbr>Circle</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Trace3D<span class="tsd-signature-symbol">(</span>func<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>t<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a>, tStart<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, tEnd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, dots<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">Trace<wbr>Circle<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, angle<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2841,40 +2841,18 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>func: <span class="tsd-signature-symbol">(</span>t<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a></h5>
-								<ul class="tsd-parameters">
-									<li class="tsd-parameter-signature">
-										<ul class="tsd-signatures tsd-kind-type-literal">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>t<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a></li>
-										</ul>
-										<ul class="tsd-descriptions">
-											<li class="tsd-description">
-												<h4 class="tsd-parameters-title">Parameters</h4>
-												<ul class="tsd-parameters">
-													<li>
-														<h5>t: <span class="tsd-signature-type">number</span></h5>
-													</li>
-												</ul>
-												<h4 class="tsd-returns-title">Returns <a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a></h4>
-											</li>
-										</ul>
-									</li>
-								</ul>
+								<h5>center: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
 							</li>
 							<li>
-								<h5>tStart: <span class="tsd-signature-type">number</span></h5>
+								<h5>radius: <span class="tsd-signature-type">number</span></h5>
 							</li>
 							<li>
-								<h5>tEnd: <span class="tsd-signature-type">number</span></h5>
-							</li>
-							<li>
-								<h5>dots: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1000</span></h5>
+								<h5>angle: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point3d" class="tsd-signature-type" data-tsd-kind="Type alias">Point3D</a><span class="tsd-signature-symbol">[]</span></h4>
-						<p>the points along the parametric curve</p>
-						<pre><code><span style="color: #795E26">Trace</span><span style="color: #000000">(</span><span style="color: #001080">x</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> ** </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]</span>
-<span style="color: #795E26">Trace</span><span style="color: #000000">(</span><span style="color: #001080">t</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">t</span><span style="color: #000000">,</span><span style="color: #001080">t</span><span style="color: #000000">**</span><span style="color: #098658">2</span><span style="color: #000000">], </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]</span>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h4>
+						<p>the points along a circle</p>
+						<pre><code><span style="color: #795E26">TraceCircle</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],</span><span style="color: #098658">1</span><span style="color: #000000">)</span>
 </code></pre>
 					</li>
 				</ul>

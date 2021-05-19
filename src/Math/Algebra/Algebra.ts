@@ -79,27 +79,42 @@ globalThis.Trace = contract(Trace).sign([owl.pass, owl.num, owl.num, owl.positiv
 
 /**
  * @category Algebra
- * @return the points along the parametric curve
+ * @return the points along a circle
  * ```
- * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
- * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+ * TraceCircle([0,0],1)
  * ```
  */
-function Trace3D(func: (t: number) => Point3D, tStart: number, tEnd: number, dots = 1000) {
-    const tracer = (t: number): Point3D => {
-        try {
-            return func(t);
-        } catch {
-            return [NaN, NaN, NaN]
-        }
-    };
-    const step = (tEnd - tStart) / (dots - 1);
-    let points: Point3D[] = []
-    for (let t = tStart; t <= tEnd; t += step) {
-        points.push(tracer(t))
-    }
-    return points
+function TraceCircle(center: Point, radius: number, angle = [0, 360]) {
+    let [x, y] = center
+    let r = radius
+    return Trace(t => [x + r * cos(t), y + r * sin(t)], angle[0], angle[1], 100)
 }
-globalThis.Trace3D = contract(Trace3D).sign([owl.pass, owl.num, owl.num, owl.positiveInt])
+globalThis.TraceCircle = contract(TraceCircle).sign([owl.point, owl.num, owl.interval])
+
+
+// /**
+//  * @category Algebra
+//  * @return the points along the parametric curve
+//  * ```
+//  * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+//  * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
+//  * ```
+//  */
+// function Trace3D(func: (t: number) => Point3D, tStart: number, tEnd: number, dots = 1000) {
+//     const tracer = (t: number): Point3D => {
+//         try {
+//             return func(t);
+//         } catch {
+//             return [NaN, NaN, NaN]
+//         }
+//     };
+//     const step = (tEnd - tStart) / (dots - 1);
+//     let points: Point3D[] = []
+//     for (let t = tStart; t <= tEnd; t += step) {
+//         points.push(tracer(t))
+//     }
+//     return points
+// }
+// globalThis.Trace3D = contract(Trace3D).sign([owl.pass, owl.num, owl.num, owl.positiveInt])
 
 
