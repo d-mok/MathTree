@@ -276,8 +276,6 @@ globalThis.IsReflex = contract(IsReflex).seal({
 
 
 
-
-
 /**
  * @category Geometry
  * @return points from turtle walk

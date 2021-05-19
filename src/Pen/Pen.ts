@@ -27,6 +27,12 @@ class PenCls {
     /**
      * @ignore
      */
+    private pj: (_: Point3D) => Point = Projector3D(60, 0.5)
+
+
+    /**
+     * @ignore
+     */
     constructor() {
         // create the canvas DOM element
         this.canvas = document.createElement('canvas');
@@ -196,6 +202,7 @@ class PenCls {
                 ymin -= borderYUnit
                 ymax += borderYUnit
                 this._pen.range.set([xmin, xmax], [ymin, ymax]);
+                this._pen.range.AUTO_BORDER = false
             }
 
             this._pen.set.reset();
@@ -229,9 +236,27 @@ class PenCls {
          * ```
          */
         lock(width = 1) {
-            let xRange = this._pen.frame.xmax - this._pen.frame.xmin
-            let yRange = this._pen.frame.ymax - this._pen.frame.ymin
-            let ratio = yRange / xRange
+            // !!!!!!!!RATIO DEBUG!!!!!!!!
+
+            let [xmin, xmax] = [this._pen.frame.xmin, this._pen.frame.xmax];
+            let [ymin, ymax] = [this._pen.frame.ymin, this._pen.frame.ymax]
+
+
+            if (this._pen.range.AUTO_BORDER) {
+                let borderPix = 0.2
+
+                let borderXUnit = (xmax - xmin) * borderPix / (width - 2 * borderPix)
+                let borderYUnit = borderXUnit
+
+                xmin -= borderXUnit;
+                xmax += borderXUnit;
+                ymin -= borderYUnit
+                ymax += borderYUnit
+                this._pen.range.set([xmin, xmax], [ymin, ymax]);
+                this._pen.range.AUTO_BORDER = false
+            }
+
+            let ratio = (ymax - ymin) / (xmax - xmin)
             this.set(width, width * ratio)
         },
     }
@@ -416,7 +441,7 @@ class PenCls {
          * pen.set.weight(2) // set a bold line
          * ```
          */
-        weight(weight = 1) {
+        weight(weight = 1): void {
             this._pen.ctx.lineWidth = weight * PEN_QUALITY;
         },
         /**
@@ -428,7 +453,7 @@ class PenCls {
          * pen.set.strokeColor('grey') // set grey line
          * ```
          */
-        strokeColor(color = "black") {
+        strokeColor(color = "black"): void {
             this._pen.ctx.strokeStyle = color;
         },
         /**
@@ -440,7 +465,7 @@ class PenCls {
          * pen.set.fillColor('grey') // set grey filling
          * ```
          */
-        fillColor(color = "black") {
+        fillColor(color = "black"): void {
             this._pen.ctx.fillStyle = color;
         },
         /**
@@ -452,7 +477,7 @@ class PenCls {
          * pen.set.color('grey') // set grey filling and stroke
          * ```
          */
-        color(color = "black") {
+        color(color = "black"): void {
             this.strokeColor(color);
             this.fillColor(color);
         },
@@ -465,7 +490,7 @@ class PenCls {
          * pen.set.alpha(0.9) // set slightly transparent
          * ```
          */
-        alpha(alpha = 1) {
+        alpha(alpha = 1): void {
             this._pen.ctx.globalAlpha = alpha;
         },
         /**
@@ -477,7 +502,7 @@ class PenCls {
          * pen.set.dash([10,5]) // set dash line
          * ```
          */
-        dash(segments: (number[] | number | boolean) = []) {
+        dash(segments: (number[] | number | boolean) = []): void {
             if (Array.isArray(segments))
                 this._pen.ctx.setLineDash(segments.map(x => x * PEN_QUALITY));
             if (typeof segments === 'number')
@@ -494,7 +519,7 @@ class PenCls {
          * pen.set.textAlign('left') // set align to left
          * ```
          */
-        textAlign(align: CanvasTextAlign = "center") {
+        textAlign(align: CanvasTextAlign = "center"): void {
             this._pen.ctx.textAlign = align;
         },
         /**
@@ -506,7 +531,7 @@ class PenCls {
          * pen.set.textBaseline('bottom') // set align to bottom
          * ```
          */
-        textBaseline(baseline: CanvasTextBaseline = "middle") {
+        textBaseline(baseline: CanvasTextBaseline = "middle"): void {
             this._pen.ctx.textBaseline = baseline;
         },
         /**
@@ -518,9 +543,9 @@ class PenCls {
          * pen.set.textSize(2) // set larger text
          * ```
          */
-        textSize(size = 1) {
+        textSize(size = 1): void {
             this._pen.setProperty.TEXT_SIZE = size
-            const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            // const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
             size = Math.round(size * REM_PIXEL * PEN_QUALITY);
             this._pen.ctx.font = this._pen.ctx.font.replace(/\d+px/g, size + 'px');
         },
@@ -534,7 +559,7 @@ class PenCls {
          * pen.set.textItalic(true) // set italic to true
          * ```
          */
-        textItalic(italic = false) {
+        textItalic(italic = false): void {
             if (italic) {
                 if (!this._pen.ctx.font.includes('italic'))
                     this._pen.ctx.font = 'italic ' + this._pen.ctx.font;
@@ -551,7 +576,7 @@ class PenCls {
          * pen.set.textDir(90) // set vertical text
          * ```
          */
-        textDir(angle = 0) {
+        textDir(angle = 0): void {
             this._pen.setProperty.TEXT_DIR = angle
         },
 
@@ -564,7 +589,7 @@ class PenCls {
          * pen.set.textLatex(true) // turn on latex mode
          * ```
          */
-        textLatex(on = false) {
+        textLatex(on = false): void {
             this._pen.setProperty.TEXT_LATEX = on
         },
 
@@ -578,7 +603,7 @@ class PenCls {
          * pen.set.labelCenter(true) // set center to be the center of the canvas
          * ```
          */
-        labelCenter(center: Point | boolean = false) {
+        labelCenter(center: Point | boolean = false): void {
             if (center === false) this._pen.setProperty.LABEL_CENTER = undefined
             if (owl.point(center)) this._pen.setProperty.LABEL_CENTER = center
             if (center === true) {
@@ -596,8 +621,21 @@ class PenCls {
          * pen.set.angle('polar') // set mode to 'polar'
          * ```
          */
-        angle(mode: 'normal' | 'polar' | 'reflex' = 'normal') {
+        angle(mode: 'normal' | 'polar' | 'reflex' = 'normal'): void {
             this._pen.setProperty.ANGLE_MODE = mode
+        },
+        /**
+         * Set 3D projector function.
+         * @category set
+         * @param angle - The tilted angle of 3d projeciton, default 60.
+         * @param depth - The depth for y-axis, default is 0.5.
+         * @returns void
+         * ```
+         * pen.set.Projector3D(60, 0.5) 
+         * ```
+         */
+        projector3D(angle: number = 60, depth: number = 0.5): void {
+            this._pen.project = Projector3D(angle, depth)
         },
         /**
          * Reset all pen settings.
@@ -854,7 +892,8 @@ class PenCls {
      * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
      * ```
      */
-    point(position: Point, label?: string) {
+    point(position: Point | Point3D, label?: string) {
+        position = this.project(position)
         const [x, y] = this.frame.toPix(position);
         this.ctx.beginPath();
         this.ctx.arc(x, y, 2 * PEN_QUALITY, 0, 2 * Math.PI, false);
@@ -873,10 +912,13 @@ class PenCls {
      * pen.points({A,B},false) // mark point A and B, without label
      * ```
      */
-    points(positions: { [k: string]: Point }, label = true) {
+    points(positions: { [k: string]: Point | Point3D }, label = true) {
         for (let k in positions) {
-            this.point(positions[k])
-            if (label) this.label.point(positions[k], k)
+            if (label) {
+                this.point(positions[k], k)
+            } else {
+                this.point(positions[k])
+            }
         }
     }
 
@@ -943,7 +985,9 @@ class PenCls {
     /**
      * @ignore
      */
-    private _line(startPoint: Point, endPoint: Point, { arrow = false, dash = false }) {
+    private _line(startPoint: Point | Point3D, endPoint: Point | Point3D, { arrow = false, dash = false }) {
+        startPoint = this.project(startPoint)
+        endPoint = this.project(endPoint)
         this.ctx.save();
         const [x0, y0] = this.frame.toPix(startPoint);
         const [x1, y1] = this.frame.toPix(endPoint);
@@ -989,7 +1033,7 @@ class PenCls {
      * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
      * ```
      */
-    line(startPoint: Point, endPoint: Point, label?: string) {
+    line(startPoint: Point | Point3D, endPoint: Point | Point3D, label?: string) {
         this._line(startPoint, endPoint, {})
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
@@ -1006,7 +1050,7 @@ class PenCls {
      * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
      * ```
      */
-    dash(startPoint: Point, endPoint: Point, label?: string) {
+    dash(startPoint: Point | Point3D, endPoint: Point | Point3D, label?: string) {
         this._line(startPoint, endPoint, { dash: true })
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
@@ -1022,7 +1066,7 @@ class PenCls {
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint: Point, endPoint: Point) {
+    arrow(startPoint: Point | Point3D, endPoint: Point | Point3D) {
         this._line(startPoint, endPoint, { arrow: true })
     }
 
@@ -1030,12 +1074,13 @@ class PenCls {
     /**
      * @ignore
      */
-    private _polygon(points: Point[], { close = false, stroke = false, fill = false, shade = false }) {
+    private _polygon(points: (Point | Point3D)[], { close = false, stroke = false, fill = false, shade = false }) {
+        let ps = points.map(_ => this.project(_))
         this.ctx.beginPath();
-        let [xStart, yStart] = this.frame.toPix(points[0]);
+        let [xStart, yStart] = this.frame.toPix(ps[0]);
         this.ctx.moveTo(xStart, yStart);
-        for (let i = 1; i < points.length; i++) {
-            let [x, y] = this.frame.toPix(points[i]);
+        for (let i = 1; i < ps.length; i++) {
+            let [x, y] = this.frame.toPix(ps[i]);
             this.ctx.lineTo(x, y);
         }
         if (close) this.ctx.closePath();
@@ -1059,7 +1104,7 @@ class PenCls {
      * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyline(...points: Point[]) {
+    polyline(...points: (Point | Point3D)[]) {
         this._polygon(points, { stroke: true })
     }
 
@@ -1073,7 +1118,7 @@ class PenCls {
      * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polygon(...points: Point[]) {
+    polygon(...points: (Point | Point3D)[]) {
         this._polygon(points, { close: true, stroke: true })
     }
 
@@ -1086,7 +1131,7 @@ class PenCls {
      * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyfill(...points: Point[]) {
+    polyfill(...points: (Point | Point3D)[]) {
         this._polygon(points, { close: true, fill: true })
     }
 
@@ -1099,7 +1144,7 @@ class PenCls {
      * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyshade(...points: Point[]) {
+    polyshade(...points: (Point | Point3D)[]) {
         this._polygon(points, { close: true, shade: true })
     }
 
@@ -1185,7 +1230,10 @@ class PenCls {
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
-    angle(A: Point, O: Point, B: Point, label?: string, arc = 1, radius = -1) {
+    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string, arc = 1, radius = -1) {
+        A = this.project(A)
+        B = this.project(B)
+        O = this.project(O)
         if (radius < 0) {
             let angle = Angle(A, O, B)
             let extra = Math.max(30 - angle, 0) * 2
@@ -1218,7 +1266,9 @@ class PenCls {
          * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
          * ```
          */
-        equalSide(startPoint: Point, endPoint: Point, tick = 1) {
+        equalSide(startPoint: Point | Point3D, endPoint: Point | Point3D, tick = 1) {
+            startPoint = this._pen.project(startPoint)
+            endPoint = this._pen.project(endPoint)
             let length = 5
             let space = 3
             length = length * PEN_QUALITY;
@@ -1266,7 +1316,9 @@ class PenCls {
          * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
          * ```
          */
-        parallel(startPoint: Point, endPoint: Point, tick = 1) {
+        parallel(startPoint: Point | Point3D, endPoint: Point | Point3D, tick = 1) {
+            startPoint = this._pen.project(startPoint)
+            endPoint = this._pen.project(endPoint)
             let size = 4
             let space = 6
             size = size * PEN_QUALITY;
@@ -1337,7 +1389,10 @@ class PenCls {
          * // decorate an angle AOB with double-arc.
          * ```
          */
-        angle(A: Point, O: Point, B: Point, arc = 1, radius = -1) {
+        angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, arc = 1, radius = -1) {
+            A = this._pen.project(A)
+            B = this._pen.project(B)
+            O = this._pen.project(O)
             if (radius < 0) {
                 let angle = Angle(A, O, B)
                 let extra = Math.max(30 - angle, 0) * 2
@@ -1373,7 +1428,11 @@ class PenCls {
          * // decorate an right-angle AOB
          * ```
          */
-        rightAngle(A: Point, O: Point, B: Point = RotatePoint(A, O, 90), size = 12) {
+        rightAngle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, size = 12) {
+            A = this._pen.project(A)
+            B = this._pen.project(B)
+            O = this._pen.project(O)
+
             size = size * PEN_QUALITY;
             A = this._pen.frame.toPix(A);
             O = this._pen.frame.toPix(O);
@@ -1404,7 +1463,7 @@ class PenCls {
         this.ctx.save()
         let ANGLE = -this.setProperty.TEXT_DIR * Math.PI / 180
         if (this.setProperty.TEXT_LATEX) {
-            const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            // const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
             let size = Math.round(this.setProperty.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
             let color = this.ctx.fillStyle
             text = `\\color{${color}} ` + text
@@ -1447,7 +1506,8 @@ class PenCls {
      * pen.write([1,2],'abc') // write 'abc' at [1,2]
      * ```
      */
-    write(position: Point, text: string) {
+    write(position: Point | Point3D, text: string) {
+        position = this.project(position)
         const [x, y] = this.frame.toPix(position);
         this._write(text, x, y);
     }
@@ -1474,7 +1534,8 @@ class PenCls {
          * // label the point [1,2] as 'A', place the label on the left (180 degree)
          * ```
          */
-        point(position: Point, text = '', dodgeDirection?: number, offsetPixel = 15) {
+        point(position: Point | Point3D, text = '', dodgeDirection?: number, offsetPixel = 15) {
+            position = this._pen.project(position)
             let [x, y] = this._pen.frame.toPix(position);
             offsetPixel = offsetPixel * PEN_QUALITY;
             if (dodgeDirection === undefined) {
@@ -1505,7 +1566,7 @@ class PenCls {
          * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
          * ```
          */
-        points(positions: { [k: string]: Point }) {
+        points(positions: { [k: string]: Point | Point3D }) {
             for (let k in positions) {
                 this.point(positions[k], k)
             }
@@ -1549,14 +1610,15 @@ class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        angle(anglePoints: [Point, Point, Point], text: string | number, dodgeDirection = 0, offsetPixel = -1) {
+        angle(anglePoints: [Point | Point3D, Point | Point3D, Point | Point3D], text: string | number, dodgeDirection = 0, offsetPixel = -1) {
+            let ps = anglePoints.map(this._pen.project) as [Point, Point, Point]
             let mode = this._pen.setProperty.ANGLE_MODE
-            if (mode === 'normal' && IsReflex(...anglePoints))
-                anglePoints = [...anglePoints].reverse() as [Point, Point, Point]
-            if (mode === 'reflex' && !IsReflex(...anglePoints))
-                anglePoints = [...anglePoints].reverse() as [Point, Point, Point]
+            if (mode === 'normal' && IsReflex(...ps))
+                ps = [...ps].reverse() as [Point, Point, Point]
+            if (mode === 'reflex' && !IsReflex(...ps))
+                ps = [...ps].reverse() as [Point, Point, Point]
             // draw like polar
-            let [A, O, B] = anglePoints;
+            let [A, O, B] = ps;
             let APixel = this._pen.frame.toPix(A);
             let OPixel = this._pen.frame.toPix(O);
             let BPixel = this._pen.frame.toPix(B);
@@ -1584,8 +1646,10 @@ class PenCls {
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        line(linePoints: [Point, Point], text: string, dodgeDirection = 0, offsetPixel = 15) {
+        line(linePoints: [Point | Point3D, Point | Point3D], text: string, dodgeDirection = 0, offsetPixel = 15) {
             let [A, B] = linePoints;
+            A = this._pen.project(A)
+            B = this._pen.project(B)
             let M = MidPoint(A, B);
             let APixel = this._pen.frame.toPix(A);
             let BPixel = this._pen.frame.toPix(B);
@@ -1819,21 +1883,318 @@ class PenCls {
 
 
 
+    /**
+     * The 3D pen
+     * @category 3D
+     */
+    d3 = {
+        /**
+         * @ignore
+         */
+        _pen: this as PenCls,
+
+
+        /**
+         * Draw the 3D axis, for development only.
+         * @category 3D
+         * @deprecated
+         * @returns void
+         * ```
+         * pen.d3.axis3D(100) // draw 3D axis with length 100
+         * ```
+         */
+        axis3D(length: number = 999): void {
+            this._pen.line([-length, 0, 0], [length, 0, 0])
+            this._pen.line([0, -length, 0], [0, length, 0])
+            this._pen.dash([0, 0, -length], [0, 0, length])
+        },
+
+
+        /**
+         * Draw a shape in 3D, usually a plane.
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.point3Ds([[1,0,0],[1,1,0],[0,1,0],[0,0,0]]) // draw a square
+         * ```
+         */
+        shape(point3Ds: Point3D[], {
+            line = true,
+            dash = !true,
+            shade = !true,
+            fill = !true
+        } = {}): void {
+            if (dash) line = false
+
+            if (line) {
+                this._pen.polygon(...point3Ds)
+            }
+
+            if (dash) {
+                this._pen.ctx.save()
+                this._pen.set.dash(true)
+                this._pen.polygon(...point3Ds)
+                this._pen.ctx.restore()
+            }
+
+            if (shade)
+                this._pen.polyshade(...point3Ds)
+
+            if (fill)
+                this._pen.polyfill(...point3Ds)
+
+        },
+
+        /**
+         * Draw a circle in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.circle([0,0,1],2,[1,0,0],[0,1,0]) // draw a xy circle with radius 2
+         * ```
+         */
+        circle(center: Point3D, radius: number, xVec: Vector3D, yVec: Vector3D, {
+            line = true,
+            dash = !true,
+            shade = !true,
+            fill = !true,
+            arc = [0, 360]
+        } = {}): void {
+            let ps = Trace(t => [radius * cos(t), radius * sin(t)], arc[0], arc[1])
+            let ps3D = EmbedPlane(ps, center, xVec, yVec)
+            this.shape(ps3D, {
+                line,
+                dash,
+                shade,
+                fill
+            })
+        },
+
+
+        /**
+         * Draw a circle on XZ plane in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.circleXZ([0,3,0],2) // draw a xz circle with radius 2
+         * ```
+         */
+        circleXZ(center: Point3D, radius: number, {
+            line = true,
+            dash = !true,
+            shade = !true,
+            fill = !true,
+            arc = [0, 360]
+        } = {}) {
+            this.circle(center, radius, [1, 0, 0], [0, 0, 1], {
+                line,
+                dash,
+                shade,
+                fill,
+                arc
+            })
+        },
+
+
+        /**
+         * Draw a circle on YZ plane in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.circleYZ([3,0,0],2) // draw a yz circle with radius 2
+         * ```
+         */
+        circleYZ(center: Point3D, radius: number, {
+            line = true,
+            dash = !true,
+            shade = !true,
+            fill = !true,
+            arc = [0, 360]
+        } = {}) {
+            this.circle(center, radius, [0, 1, 0], [0, 0, 1], {
+                line,
+                dash,
+                shade,
+                fill,
+                arc
+            })
+        },
+
+
+
+        /**
+         * Draw a circle on XY plane in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.circleXY([0,0,3],2) // draw a xy circle with radius 2
+         * ```
+         */
+        circleXY(center: Point3D, radius: number, {
+            line = true,
+            dash = !true,
+            shade = !true,
+            fill = !true,
+            arc = [0, 360]
+        } = {}) {
+            this.circle(center, radius, [1, 0, 0], [0, 1, 0], {
+                line,
+                dash,
+                shade,
+                fill,
+                arc
+            })
+        },
+
+
+        /**
+         * Draw a sphere in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.sphere([1,0,0],3) // draw a sphere with radius 3
+         * ```
+         */
+        sphere(center: Point3D, radius: number, {
+            baseDash = !true,
+            baseShade = !true,
+            radiusLine = !true,
+            radiusDash = !true,
+            radiusLabel = '',
+            lowerOnly = !true,
+            upperOnly = !true
+        } = {}): void {
+            if (upperOnly)
+                this.circleXZ(center, radius, { arc: [0, 180] })
+
+            if (lowerOnly)
+                this.circleXZ(center, radius, { arc: [180, 360] })
+
+            if (!upperOnly && !lowerOnly)
+                this.circleXZ(center, radius, { arc: [0, 360] })
+
+
+            this.circleXY(center, radius, { line: true, dash: baseDash, shade: baseShade })
+
+            if (radiusLine)
+                this._pen.line(center, [radius, 0, 0])
+
+            if (radiusDash)
+                this._pen.dash(center, [radius, 0, 0])
+
+            if (radiusLabel.length > 0)
+                this._pen.label.line([[radius, 0, 0], center], radiusLabel)
+        },
+
+
+        /**
+         * 
+         * @ignore
+         */
+        _cyclicBases(lowerBase: Point3D[], upperBase: Point3D[]): [(index: number) => Point3D, (index: number) => Point3D, number] {
+            lowerBase = [...lowerBase]
+            upperBase = [...upperBase]
+            let length = Math.max(lowerBase.length, upperBase.length)
+            let cyclic = <T>(arr: T[], i: number): T => {
+                let n = arr.length
+                return arr[(i % n + n) % n]
+            }
+            let lowerCyclic = (index: number) => cyclic(lowerBase, index)
+            let upperCyclic = (index: number) => cyclic(upperBase, index)
+            return [lowerCyclic, upperCyclic, length]
+        },
+
+        /**
+         * Draw the envelop of a frustum
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
+         * let [D,E,F] = [[0,0,3],[1,0,3],[0,1,3]]
+         * pen.d3.envelope([A,B,C],[D,E,F]) 
+         * ```
+         */
+        envelope(lowerBase: Point3D[], upperBase: Point3D[]): [Point3D, Point3D][] {
+            let [lCyc, uCyc, len] = this._cyclicBases(lowerBase, upperBase)
+            let isPolar = (A: Point3D, O: Point3D, B: Point3D) =>
+                AnglePolar(this._pen.project(A), this._pen.project(O), this._pen.project(B)) < 180 ? 1 : -1
+            let lastPolarwise = isPolar(lCyc(-1), uCyc(-1), lCyc(0))
+            let arr: [Point3D, Point3D][] = []
+            for (let i = 0; i < len; i++) {
+                let polarwise = isPolar(lCyc(i), uCyc(i), lCyc(i + 1))
+                if (lastPolarwise * polarwise === -1)
+                    arr.push([lCyc(i), uCyc(i)])
+                lastPolarwise = polarwise
+            }
+            return arr
+        },
+
+
+        /**
+         * Draw a frustum
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
+         * let V = [0,0,5]
+         * pen.d3.frustum([A,B,C],[V]) // draw a cone
+         * ```
+         */
+        frustum(lowerBase: Point3D[], upperBase: Point3D[], {
+            base = true,
+            height = !true,
+            shadeLower = !true,
+            shadeUpper = !true,
+            envelope = !true,
+        } = {}) {
+            lowerBase = [...lowerBase]
+            upperBase = [...upperBase]
+            let [lCyc, uCyc, len] = this._cyclicBases(lowerBase, upperBase)
+
+            if (base) {
+                this.shape(lowerBase)
+                this.shape(upperBase)
+            }
+
+            if (envelope) {
+                let env = this.envelope(lowerBase, upperBase)
+                for (let e of env) {
+                    this._pen.line(e[0], e[1])
+                }
+            } else {
+                for (let i = 0; i < len; i++) {
+                    this._pen.line(lCyc(i), uCyc(i))
+                }
+            }
+
+            if (height) {
+                let V = Vec3DMean(...upperBase)
+                let [A, B, C] = lowerBase
+                let O = ProjectionOnPlane(V, [A, B, C])
+                this._pen.dash(O, V)
+            }
+            if (shadeLower)
+                this.shape(lowerBase, { line: false, shade: true })
+            if (shadeUpper)
+                this.shape(upperBase, { line: false, shade: true })
+        }
+
+    };
+
+
+
+
 
     /**
-     * Return a 3D pen. Should be named as p3d.
-     * @category draw
-     * @param angle - The tilted angle of 3d projeciton, default 60.
-     * @param depth - The depth for y-axis, default is 0.5.
-     * @returns void
-     * ```
-     * let p3d = pen.pen3D(60,0.5)
-     * p3d.axis3D()
-     * ```
+     * @ignore
      */
-    pen3D(angle: number = 60, depth: number = 0.5) {
-        return new Pen3D(this, Projector3D(angle, depth))
+    project(point: Point3D | Point): Point {
+        if (owl.point(point)) return point
+        return this.pj(point)
     }
+
+
+
 
 
 

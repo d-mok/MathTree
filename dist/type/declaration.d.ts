@@ -2500,63 +2500,6 @@ declare function Projector(angle?: number, depth?: number): (x: number, y: numbe
 * ```
 */
 declare function Projector3D(angle?: number, depth?: number): (_: Point3D) => Point;
-declare class Pen3DCls {
-    pen: PenCls;
-    py: (_: Point3D) => Point;
-    constructor(pen: PenCls, py: (_: Point3D) => Point);
-    line(startPoint: Point3D, endPoint: Point3D): void;
-    dash(startPoint: Point3D, endPoint: Point3D): void;
-    axis3D(length?: number): void;
-    shape(point3Ds: Point3D[], { line, dash, shade, fill }?: {
-        line?: boolean | undefined;
-        dash?: boolean | undefined;
-        shade?: boolean | undefined;
-        fill?: boolean | undefined;
-    }): void;
-    private _circleFunc;
-    xzCircle: (center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
-        line?: boolean | undefined;
-        dash?: boolean | undefined;
-        shade?: boolean | undefined;
-        fill?: boolean | undefined;
-        arc?: number[] | undefined;
-    }) => void;
-    xyCircle: (center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
-        line?: boolean | undefined;
-        dash?: boolean | undefined;
-        shade?: boolean | undefined;
-        fill?: boolean | undefined;
-        arc?: number[] | undefined;
-    }) => void;
-    yzCircle: (center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
-        line?: boolean | undefined;
-        dash?: boolean | undefined;
-        shade?: boolean | undefined;
-        fill?: boolean | undefined;
-        arc?: number[] | undefined;
-    }) => void;
-    sphere(center: Point3D, radius: number, { showCenter, baseDash, baseShade, radiusLine, radiusDash, radiusLabel, lowerOnly, upperOnly }?: {
-        showCenter?: boolean | undefined;
-        baseDash?: boolean | undefined;
-        baseShade?: boolean | undefined;
-        radiusLine?: boolean | undefined;
-        radiusDash?: boolean | undefined;
-        radiusLabel?: string | undefined;
-        lowerOnly?: boolean | undefined;
-        upperOnly?: boolean | undefined;
-    }): void;
-    frustum(lowerBase: Point3D[], upperBase: Point3D[], { height, shadeLower, shadeUpper, envelopeOnly }?: {
-        height?: boolean | undefined;
-        shadeLower?: boolean | undefined;
-        shadeUpper?: boolean | undefined;
-        envelopeOnly?: boolean | undefined;
-    }): void;
-    circularFrustum(): void;
-}
-/**
- * @ignore
- */
-declare var Pen3D: typeof Pen3DCls;
 /**
  * @category DrawingPen
  */
@@ -2940,6 +2883,10 @@ declare class PenCls {
     /**
      * @ignore
      */
+    private pj;
+    /**
+     * @ignore
+     */
     constructor();
     /**
      * Setup of canvas coordinate range.
@@ -3294,6 +3241,17 @@ declare class PenCls {
          */
         angle(mode?: 'normal' | 'polar' | 'reflex'): void;
         /**
+         * Set 3D projector function.
+         * @category set
+         * @param angle - The tilted angle of 3d projeciton, default 60.
+         * @param depth - The depth for y-axis, default is 0.5.
+         * @returns void
+         * ```
+         * pen.set.Projector3D(60, 0.5)
+         * ```
+         */
+        projector3D(angle?: number, depth?: number): void;
+        /**
          * Reset all pen settings.
          * @category set
          * @returns void
@@ -3443,7 +3401,7 @@ declare class PenCls {
      * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
      * ```
      */
-    point(position: Point, label?: string): void;
+    point(position: Point | Point3D, label?: string): void;
     /**
      * Draw a point.
      * @category draw
@@ -3456,7 +3414,7 @@ declare class PenCls {
      * ```
      */
     points(positions: {
-        [k: string]: Point;
+        [k: string]: Point | Point3D;
     }, label?: boolean): void;
     /**
      * Draw a horizontal cutter.
@@ -3510,7 +3468,7 @@ declare class PenCls {
      * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
      * ```
      */
-    line(startPoint: Point, endPoint: Point, label?: string): void;
+    line(startPoint: Point | Point3D, endPoint: Point | Point3D, label?: string): void;
     /**
      * Draw a dash line between two points.
      * @category draw
@@ -3523,7 +3481,7 @@ declare class PenCls {
      * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
      * ```
      */
-    dash(startPoint: Point, endPoint: Point, label?: string): void;
+    dash(startPoint: Point | Point3D, endPoint: Point | Point3D, label?: string): void;
     /**
      * Draw an arrow between two points.
      * @category draw
@@ -3534,7 +3492,7 @@ declare class PenCls {
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint: Point, endPoint: Point): void;
+    arrow(startPoint: Point | Point3D, endPoint: Point | Point3D): void;
     /**
      * @ignore
      */
@@ -3548,7 +3506,7 @@ declare class PenCls {
      * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyline(...points: Point[]): void;
+    polyline(...points: (Point | Point3D)[]): void;
     /**
      * Draw a polygon given points.
      * @category draw
@@ -3558,7 +3516,7 @@ declare class PenCls {
      * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polygon(...points: Point[]): void;
+    polygon(...points: (Point | Point3D)[]): void;
     /**
      * Fill a polygon given points.
      * @category draw
@@ -3568,7 +3526,7 @@ declare class PenCls {
      * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyfill(...points: Point[]): void;
+    polyfill(...points: (Point | Point3D)[]): void;
     /**
      * Shade a polygon given points.
      * @category draw
@@ -3578,7 +3536,7 @@ declare class PenCls {
      * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyshade(...points: Point[]): void;
+    polyshade(...points: (Point | Point3D)[]): void;
     /**
      * Fill a shape.
      * @category fill
@@ -3640,7 +3598,7 @@ declare class PenCls {
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
-    angle(A: Point, O: Point, B: Point, label?: string, arc?: number, radius?: number): void;
+    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string, arc?: number, radius?: number): void;
     /**
      * Geometry Decorator.
      * @category decorator
@@ -3662,7 +3620,7 @@ declare class PenCls {
          * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
          * ```
          */
-        equalSide(startPoint: Point, endPoint: Point, tick?: number): void;
+        equalSide(startPoint: Point | Point3D, endPoint: Point | Point3D, tick?: number): void;
         /**
          * Decorate parallel side.
          * @category decorator
@@ -3675,7 +3633,7 @@ declare class PenCls {
          * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
          * ```
          */
-        parallel(startPoint: Point, endPoint: Point, tick?: number): void;
+        parallel(startPoint: Point | Point3D, endPoint: Point | Point3D, tick?: number): void;
         /**
          * Decorate an angle AOB, always in anti-clockwise.
          * @category decorator
@@ -3706,7 +3664,7 @@ declare class PenCls {
          * // decorate an angle AOB with double-arc.
          * ```
          */
-        angle(A: Point, O: Point, B: Point, arc?: number, radius?: number): void;
+        angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, arc?: number, radius?: number): void;
         /**
          * Decorate a right-angle AOB.
          * @category decorator
@@ -3720,7 +3678,7 @@ declare class PenCls {
          * // decorate an right-angle AOB
          * ```
          */
-        rightAngle(A: Point, O: Point, B?: Point, size?: number): void;
+        rightAngle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, size?: number): void;
     };
     /**
      * @ignore
@@ -3736,7 +3694,7 @@ declare class PenCls {
      * pen.write([1,2],'abc') // write 'abc' at [1,2]
      * ```
      */
-    write(position: Point, text: string): void;
+    write(position: Point | Point3D, text: string): void;
     /**
      * @category text
      */
@@ -3758,7 +3716,7 @@ declare class PenCls {
          * // label the point [1,2] as 'A', place the label on the left (180 degree)
          * ```
          */
-        point(position: Point, text?: string, dodgeDirection?: number | undefined, offsetPixel?: number): void;
+        point(position: Point | Point3D, text?: string, dodgeDirection?: number | undefined, offsetPixel?: number): void;
         /**
          * Add a label to points, using index as text.
          * @category text
@@ -3769,7 +3727,7 @@ declare class PenCls {
          * ```
          */
         points(positions: {
-            [k: string]: Point;
+            [k: string]: Point | Point3D;
         }): void;
         /**
          * Add a label to an angle AOB, in anticlockwise.
@@ -3799,7 +3757,7 @@ declare class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        angle(anglePoints: [Point, Point, Point], text: string | number, dodgeDirection?: number, offsetPixel?: number): void;
+        angle(anglePoints: [Point | Point3D, Point | Point3D, Point | Point3D], text: string | number, dodgeDirection?: number, offsetPixel?: number): void;
         /**
          * Add a label to a line AB.
          * @category text
@@ -3812,7 +3770,7 @@ declare class PenCls {
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        line(linePoints: [Point, Point], text: string, dodgeDirection?: number, offsetPixel?: number): void;
+        line(linePoints: [Point | Point3D, Point | Point3D], text: string, dodgeDirection?: number, offsetPixel?: number): void;
         /**
          * Add a coordinates label to a point.
          * @category text
@@ -3952,17 +3910,153 @@ declare class PenCls {
         xy(interval?: number): void;
     };
     /**
-     * Return a 3D pen. Should be named as p3d.
-     * @category draw
-     * @param angle - The tilted angle of 3d projeciton, default 60.
-     * @param depth - The depth for y-axis, default is 0.5.
-     * @returns void
-     * ```
-     * let p3d = pen.pen3D(60,0.5)
-     * p3d.axis3D()
-     * ```
+     * The 3D pen
+     * @category 3D
      */
-    pen3D(angle?: number, depth?: number): Pen3DCls;
+    d3: {
+        /**
+         * @ignore
+         */
+        _pen: PenCls;
+        /**
+         * Draw the 3D axis, for development only.
+         * @category 3D
+         * @deprecated
+         * @returns void
+         * ```
+         * pen.d3.axis3D(100) // draw 3D axis with length 100
+         * ```
+         */
+        axis3D(length?: number): void;
+        /**
+         * Draw a shape in 3D, usually a plane.
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.point3Ds([[1,0,0],[1,1,0],[0,1,0],[0,0,0]]) // draw a square
+         * ```
+         */
+        shape(point3Ds: Point3D[], { line, dash, shade, fill }?: {
+            line?: boolean | undefined;
+            dash?: boolean | undefined;
+            shade?: boolean | undefined;
+            fill?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a circle in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.circle([0,0,1],2,[1,0,0],[0,1,0]) // draw a xy circle with radius 2
+         * ```
+         */
+        circle(center: Point3D, radius: number, xVec: Vector3D, yVec: Vector3D, { line, dash, shade, fill, arc }?: {
+            line?: boolean | undefined;
+            dash?: boolean | undefined;
+            shade?: boolean | undefined;
+            fill?: boolean | undefined;
+            arc?: number[] | undefined;
+        }): void;
+        /**
+         * Draw a circle on XZ plane in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.circleXZ([0,3,0],2) // draw a xz circle with radius 2
+         * ```
+         */
+        circleXZ(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+            line?: boolean | undefined;
+            dash?: boolean | undefined;
+            shade?: boolean | undefined;
+            fill?: boolean | undefined;
+            arc?: number[] | undefined;
+        }): void;
+        /**
+         * Draw a circle on YZ plane in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.circleYZ([3,0,0],2) // draw a yz circle with radius 2
+         * ```
+         */
+        circleYZ(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+            line?: boolean | undefined;
+            dash?: boolean | undefined;
+            shade?: boolean | undefined;
+            fill?: boolean | undefined;
+            arc?: number[] | undefined;
+        }): void;
+        /**
+         * Draw a circle on XY plane in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.circleXY([0,0,3],2) // draw a xy circle with radius 2
+         * ```
+         */
+        circleXY(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+            line?: boolean | undefined;
+            dash?: boolean | undefined;
+            shade?: boolean | undefined;
+            fill?: boolean | undefined;
+            arc?: number[] | undefined;
+        }): void;
+        /**
+         * Draw a sphere in 3D
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.sphere([1,0,0],3) // draw a sphere with radius 3
+         * ```
+         */
+        sphere(center: Point3D, radius: number, { baseDash, baseShade, radiusLine, radiusDash, radiusLabel, lowerOnly, upperOnly }?: {
+            baseDash?: boolean | undefined;
+            baseShade?: boolean | undefined;
+            radiusLine?: boolean | undefined;
+            radiusDash?: boolean | undefined;
+            radiusLabel?: string | undefined;
+            lowerOnly?: boolean | undefined;
+            upperOnly?: boolean | undefined;
+        }): void;
+        /**
+         *
+         * @ignore
+         */
+        _cyclicBases(lowerBase: Point3D[], upperBase: Point3D[]): [(index: number) => Point3D, (index: number) => Point3D, number];
+        /**
+         * Draw the envelop of a frustum
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
+         * let [D,E,F] = [[0,0,3],[1,0,3],[0,1,3]]
+         * pen.d3.envelope([A,B,C],[D,E,F])
+         * ```
+         */
+        envelope(lowerBase: Point3D[], upperBase: Point3D[]): [Point3D, Point3D][];
+        /**
+         * Draw a frustum
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
+         * let V = [0,0,5]
+         * pen.d3.frustum([A,B,C],[V]) // draw a cone
+         * ```
+         */
+        frustum(lowerBase: Point3D[], upperBase: Point3D[], { base, height, shadeLower, shadeUpper, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+    };
+    /**
+     * @ignore
+     */
+    project(point: Point3D | Point): Point;
     /**
      * @ignore
      * @deprecated
