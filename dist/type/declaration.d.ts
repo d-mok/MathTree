@@ -2493,6 +2493,7 @@ declare function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: 
 declare function Projector(angle?: number, depth?: number): (x: number, y: number, z: number) => Point;
 /**
 * @category 3DPen
+* @deprecated
 * @return projector function from 3D point to 2D plane
 * ```
 * const pj = Projector3D(60,0.5) // create a 3D projector function
@@ -3678,7 +3679,7 @@ declare class PenCls {
          * // decorate an right-angle AOB
          * ```
          */
-        rightAngle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, size?: number): void;
+        rightAngle(A: Point | Point3D, O: Point | Point3D, B?: Point | Point3D | undefined, size?: number): void;
     };
     /**
      * @ignore

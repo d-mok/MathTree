@@ -137,7 +137,7 @@ export function ratio<T extends number[]>(...rationals: T): T {
 }
 
 export function simpFrac(p: number, q: number): Fraction {
-    return nearFrac(p / q, q + 10)
+    return nearFrac(p / q, Math.abs(q) + 10)
 }
 
 
