@@ -1240,7 +1240,7 @@ class PenCls {
             radius = 15 + extra
         }
         this.decorate.angle(A, O, B, arc, radius)
-        if (label !== undefined) this.label.angle([A, O, B], label, undefined, 30 + radius - 15)
+        if (label !== undefined) this.label.angle([A, O, B], label, undefined, 25 + radius - 15)
     }
 
 
@@ -1588,7 +1588,7 @@ class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        anglePolar(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = 30) {
+        anglePolar(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = 25) {
             let [A, O, B] = anglePoints;
             let APixel = this._pen.frame.toPix(A);
             let OPixel = this._pen.frame.toPix(O);
@@ -1630,7 +1630,7 @@ class PenCls {
             if (offsetPixel < 0) {
                 let angle = Angle(A, O, B)
                 let extra = Math.max(30 - angle, 0) * 2
-                offsetPixel = 30 + extra
+                offsetPixel = 25 + extra
             }
             this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
         },
@@ -2088,14 +2088,16 @@ class PenCls {
 
             this.circleXY(center, radius, { line: true, dash: baseDash, shade: baseShade })
 
+            let leftEnd = Vec3DAdd(center, [radius, 0, 0])
+
             if (radiusLine)
-                this._pen.line(center, [radius, 0, 0])
+                this._pen.line(center, leftEnd)
 
             if (radiusDash)
-                this._pen.dash(center, [radius, 0, 0])
+                this._pen.dash(center, leftEnd)
 
             if (radiusLabel.length > 0)
-                this._pen.label.line([[radius, 0, 0], center], radiusLabel)
+                this._pen.label.line([leftEnd, center], radiusLabel)
         },
 
 
