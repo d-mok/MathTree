@@ -2726,6 +2726,9 @@ img {
 			<a href="math_code_text.html#longdivision" class="tsd-kind-icon">Long<wbr>Division</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_text.html#primefactorize" class="tsd-kind-icon">Prime<wbr>Factorize</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_text.html#roman" class="tsd-kind-icon">Roman</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2758,6 +2761,7 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#indextosurd" class="tsd-kind-icon">Index<wbr>ToSurd</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#ineqsign" class="tsd-kind-icon">Ineq<wbr>Sign</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#longdivision" class="tsd-kind-icon">Long<wbr>Division</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#primefactorize" class="tsd-kind-icon">Prime<wbr>Factorize</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#roman" class="tsd-kind-icon">Roman</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#sci" class="tsd-kind-icon">Sci</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#tick" class="tsd-kind-icon">Tick</a></li>
@@ -2978,6 +2982,44 @@ img {
 						<p>the katex of long division</p>
 						<pre><code><span style="color: #795E26">LongDivision</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">//</span>
 <span style="color: #795E26">LongDivision</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">//</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="primefactorize" class="tsd-anchor"></a>
+				<h3>Prime<wbr>Factorize</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Prime<wbr>Factorize<span class="tsd-signature-symbol">(</span>val<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>val: <span class="tsd-signature-symbol">{}</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-index-signature">
+										<h5><span class="tsd-signature-symbol">[</span>_: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h5>__namedParameters: <span class="tsd-signature-type">Object</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>a prime factorization layout for HCF or LCM</p>
+						<pre><code><span style="color: #795E26">PrimeFactorize</span><span style="color: #000000">({</span>
+<span style="color: #000000"> </span><span style="color: #A31515">&#039;number&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> [</span><span style="color: #098658">30</span><span style="color: #000000">, </span><span style="color: #098658">15</span><span style="color: #000000">, </span><span style="color: #098658">12</span><span style="color: #000000">],</span>
+<span style="color: #000000">  </span><span style="color: #001080">a:</span><span style="color: #000000"> [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">],</span>
+<span style="color: #000000">  </span><span style="color: #001080">b:</span><span style="color: #000000"> [</span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">],</span>
+<span style="color: #000000">  </span><span style="color: #A31515">&#039;(x+1)&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> [</span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
+<span style="color: #000000">}, </span>
+<span style="color: #000000">{</span><span style="color: #001080">hcf:</span><span style="color: #0000FF">true</span><span style="color: #000000">,</span><span style="color: #001080">lcm:</span><span style="color: #0000FF">true</span><span style="color: #000000">,</span><span style="color: #001080">multiply:</span><span style="color: #000000">!</span><span style="color: #0000FF">true</span><span style="color: #000000">}</span>
+<span style="color: #000000">)</span>
 </code></pre>
 					</li>
 				</ul>

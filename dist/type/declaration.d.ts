@@ -2149,6 +2149,27 @@ declare function DeRoman(roman: string): number;
  */
 declare function ToBase(num: number, base: number): string;
 /**
+ * @category Text
+ * @return a prime factorization layout for HCF or LCM
+ * ```
+ * PrimeFactorize({
+ *  'number': [30, 15, 12],
+ *   a: [3, 0, 5],
+ *   b: [5, 6, 1],
+ *   '(x+1)': [8, 7, 5]
+ * },
+ * {hcf:true,lcm:true,multiply:!true}
+ * )
+ * ```
+ */
+declare function PrimeFactorize(val: {
+    [_: string]: number[];
+}, { hcf, lcm, multiply }: {
+    hcf?: boolean | undefined;
+    lcm?: boolean | undefined;
+    multiply?: boolean | undefined;
+}): string;
+/**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
  * ```
