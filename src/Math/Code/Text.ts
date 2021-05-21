@@ -304,4 +304,68 @@ function ToBase(num: number, base: number): string {
 globalThis.ToBase = contract(ToBase).sign([[owl.num, Number.isSafeInteger], owl.positiveInt])
 
 
+/**
+ * @category Text
+ * @return a prime factorization layout for HCF or LCM
+ * ```
+ * PrimeFactorize({
+ *  'number': [30, 15, 12],
+ *   a: [3, 0, 5],
+ *   b: [5, 6, 1],
+ *   '(x+1)': [8, 7, 5]
+ * }, 
+ * {hcf:true,lcm:true,multiply:!true}
+ * )
+ * ```
+ */
+function PrimeFactorize(val: { [_: string]: number[] }, { hcf = false, lcm = false, multiply = false }) {
+    let T = '\\begin{matrix} '
+    function add(variable: string, power: number) {
+        let s = multiply ? '& \\times &' : '&'
+        if (power > 1) {
+            T += s + variable + '^{' + power + '}'
+        } else if (power === 1) {
+            T += s + variable
+        } else {
+            T += multiply ? '& &' : ' & '
+        }
+    }
 
+    let keys = Object.keys(val)
+    let n = val[keys[0]].length
+    for (let i = 0; i < n; i++) {
+        T += ' & '
+        if (keys.includes('number'))
+            T += ' & ' + val.number[i]
+        for (let k of keys) {
+            if (k === 'number') continue
+            add(k, val[k][i])
+
+        }
+        T += ' \\\\ '
+    }
+    T += '\\hline'
+    if (hcf) {
+        T += ' \\text{HCF} & = '
+        if (keys.includes('number'))
+            T += ' & ' + HCF(...val.number)
+        for (let k of keys) {
+            if (k === 'number') continue
+            add(k, Min(...val[k]))
+        }
+        T += ' \\\\ '
+    }
+    if (lcm) {
+        T += ' \\text{LCM} & = '
+        if (keys.includes('number'))
+            T += ' & ' + LCM(...val.number)
+        for (let k of keys) {
+            if (k === 'number') continue
+            add(k, Max(...val[k]))
+        }
+        T += ' \\\\ '
+    }
+    T += '\\end{matrix}'
+    return T
+}
+globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.object])
