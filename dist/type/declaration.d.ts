@@ -2227,6 +2227,38 @@ declare function TriangleFromVertex(A: Point, B: Point, C: Point, fix?: boolean)
  */
 declare function SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: PartialTriangle): Triangle;
 /**
+ * @category Triangle
+ * @return the orthocentre of a triangle
+ * ```
+ * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
+ * ```
+ */
+declare function Orthocentre(A: Point, B: Point, C: Point): Point;
+/**
+ * @category Triangle
+ * @return the circumcentre of a triangle
+ * ```
+ * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
+ * ```
+ */
+declare function Circumcentre(A: Point, B: Point, C: Point): Point;
+/**
+ * @category Triangle
+ * @return the centroid of a triangle
+ * ```
+ * Centroid([3,6],[9,12],[15,21])  // [9,13]
+ * ```
+ */
+declare function Centroid(A: Point, B: Point, C: Point): Point;
+/**
+ * @category Triangle
+ * @return the incentre of a triangle
+ * ```
+ * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
+ * ```
+ */
+declare function Incentre(A: Point, B: Point, C: Point): Point;
+/**
  * @category Trigonometry
  * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
  * @return  the quadrant of a point or angle: 'I','II','III' or 'IV'.

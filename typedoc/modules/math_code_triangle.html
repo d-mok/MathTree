@@ -2705,6 +2705,12 @@ img {
 <nav class="tsd-navigation secondary">
 	<ul>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_triangle.html#centroid" class="tsd-kind-icon">Centroid</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_triangle.html#circumcentre" class="tsd-kind-icon">Circumcentre</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_triangle.html#cosinelawangle" class="tsd-kind-icon">Cosine<wbr>Law<wbr>Angle</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2712,6 +2718,12 @@ img {
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_triangle.html#heron" class="tsd-kind-icon">Heron</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_triangle.html#incentre" class="tsd-kind-icon">Incentre</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_triangle.html#orthocentre" class="tsd-kind-icon">Orthocentre</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_triangle.html#solvetriangle" class="tsd-kind-icon">Solve<wbr>Triangle</a>
@@ -2730,9 +2742,13 @@ img {
 					<section class="tsd-index-section">
 						<h3>Triangle</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#centroid" class="tsd-kind-icon">Centroid</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#circumcentre" class="tsd-kind-icon">Circumcentre</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#cosinelawangle" class="tsd-kind-icon">Cosine<wbr>Law<wbr>Angle</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#cosinelawlength" class="tsd-kind-icon">Cosine<wbr>Law<wbr>Length</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#heron" class="tsd-kind-icon">Heron</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#incentre" class="tsd-kind-icon">Incentre</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#orthocentre" class="tsd-kind-icon">Orthocentre</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#solvetriangle" class="tsd-kind-icon">Solve<wbr>Triangle</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_triangle.html#trianglefromvertex" class="tsd-kind-icon">Triangle<wbr>From<wbr>Vertex</a></li>
 						</ul>
@@ -2742,6 +2758,64 @@ img {
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Triangle</h2>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="centroid" class="tsd-anchor"></a>
+				<h3>Centroid</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Centroid<span class="tsd-signature-symbol">(</span>A<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, B<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, C<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>A: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>B: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>C: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>the centroid of a triangle</p>
+						<pre><code><span style="color: #795E26">Centroid</span><span style="color: #000000">([</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">],[</span><span style="color: #098658">9</span><span style="color: #000000">,</span><span style="color: #098658">12</span><span style="color: #000000">],[</span><span style="color: #098658">15</span><span style="color: #000000">,</span><span style="color: #098658">21</span><span style="color: #000000">])  </span><span style="color: #008000">// [9,13]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="circumcentre" class="tsd-anchor"></a>
+				<h3>Circumcentre</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Circumcentre<span class="tsd-signature-symbol">(</span>A<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, B<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, C<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>A: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>B: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>C: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>the circumcentre of a triangle</p>
+						<pre><code><span style="color: #795E26">Circumcentre</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">7</span><span style="color: #000000">],[</span><span style="color: #098658">8</span><span style="color: #000000">,-</span><span style="color: #098658">4</span><span style="color: #000000">],[-</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">])  </span><span style="color: #008000">// [-1,-2]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 				<a name="cosinelawangle" class="tsd-anchor"></a>
 				<h3>Cosine<wbr>Law<wbr>Angle</h3>
@@ -2832,6 +2906,64 @@ img {
 						<pre><code><span style="color: #795E26">Heron</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">) </span><span style="color: #008000">// 6</span>
 <span style="color: #795E26">Heron</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">) </span><span style="color: #008000">// 0.433012701</span>
 <span style="color: #795E26">Heron</span><span style="color: #000000">(</span><span style="color: #098658">7</span><span style="color: #000000">,</span><span style="color: #098658">8</span><span style="color: #000000">,</span><span style="color: #098658">9</span><span style="color: #000000">) </span><span style="color: #008000">// 26.83281573</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="incentre" class="tsd-anchor"></a>
+				<h3>Incentre</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Incentre<span class="tsd-signature-symbol">(</span>A<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, B<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, C<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>A: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>B: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>C: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>the incentre of a triangle</p>
+						<pre><code><span style="color: #795E26">Incentre</span><span style="color: #000000">([</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[-</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">])  </span><span style="color: #008000">// [0,1.5]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="orthocentre" class="tsd-anchor"></a>
+				<h3>Orthocentre</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Orthocentre<span class="tsd-signature-symbol">(</span>A<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, B<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, C<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>A: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>B: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>C: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>the orthocentre of a triangle</p>
+						<pre><code><span style="color: #795E26">Orthocentre</span><span style="color: #000000">([</span><span style="color: #098658">9</span><span style="color: #000000">,-</span><span style="color: #098658">6</span><span style="color: #000000">],[</span><span style="color: #098658">6</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">],[-</span><span style="color: #098658">7</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">])  </span><span style="color: #008000">// [9,13]</span>
 </code></pre>
 					</li>
 				</ul>

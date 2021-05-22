@@ -114,3 +114,30 @@ test('SolveTriangle', () => {
     expect(T.angleC).toBeCloseTo(40);
 });
 
+
+
+
+test('Orthocentre', () => {
+    expect(Orthocentre([9, -6], [6, 10], [-7, 10])).toEqual([9, 13]);
+    expect(Orthocentre([1, 2], [3, 4], [5, 7])).toEqual([28, -16]);
+});
+
+
+test('Circumcentre', () => {
+    expect(Circumcentre([1, 7], [8, -4], [-10, 0])).toEqual([-1, -2]);
+    expect(Circumcentre([-7, -10], [9, 0], [9, -10])).toEqual([1, -5]);
+    expect(Circumcentre([1, 2], [3, 4], [5, 7])).toEqual([-9.5, 14.5]);
+});
+
+
+
+test('Centroid', () => {
+    expect(Centroid([3, 6], [9, 12], [15, 21])).toEqual([9, 13]);
+    expect(Centroid([1, 2], [3, 4], [5, 9])).toEqual([3, 5]);
+});
+
+
+test('Incentre', () => {
+    expect(Incentre([3, 0], [-3, 0], [0, 4])).toEqual([0, 1.5]);
+    expect(Incentre([288, -540], [225, 120], [-160, 300])).toEqual([113, 41]);
+});

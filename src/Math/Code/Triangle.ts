@@ -157,3 +157,75 @@ function SolveTriangle(
     throw 'never'
 }
 globalThis.SolveTriangle = contract(SolveTriangle).sign()
+
+
+
+/**
+ * @category Triangle
+ * @return the orthocentre of a triangle
+ * ```
+ * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
+ * ```
+ */
+function Orthocentre(A: Point, B: Point, C: Point): Point {
+    let H = PerpendicularFoot(A, B, C)
+    let G = PerpendicularFoot(B, C, A)
+    let [x, y] = Intersection(C, H, A, G)
+    return [ant.blur(x), ant.blur(y)]
+}
+globalThis.Orthocentre = contract(Orthocentre).sign([owl.point])
+
+
+
+/**
+ * @category Triangle
+ * @return the circumcentre of a triangle
+ * ```
+ * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
+ * ```
+ */
+function Circumcentre(A: Point, B: Point, C: Point): Point {
+    let [a1, b1, c1] = LinearFromBisector(A, B)
+    let [a2, b2, c2] = LinearFromBisector(B, C)
+    let [x, y] = Crammer(a1, b1, -c1, a2, b2, -c2)
+    return [ant.blur(x), ant.blur(y)]
+}
+globalThis.Circumcentre = contract(Circumcentre).sign([owl.point])
+
+
+
+
+/**
+ * @category Triangle
+ * @return the centroid of a triangle
+ * ```
+ * Centroid([3,6],[9,12],[15,21])  // [9,13]
+ * ```
+ */
+function Centroid(A: Point, B: Point, C: Point): Point {
+    let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3]
+    return [ant.blur(x), ant.blur(y)]
+}
+globalThis.Centroid = contract(Centroid).sign([owl.point])
+
+
+
+
+/**
+ * @category Triangle
+ * @return the incentre of a triangle
+ * ```
+ * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
+ * ```
+ */
+function Incentre(A: Point, B: Point, C: Point): Point {
+    let a = Distance(B, C)
+    let b = Distance(A, C)
+    let c = Distance(A, B)
+    let p = a + b + c
+    let x = (a * A[0] + b * B[0] + c * C[0]) / p
+    let y = (a * A[1] + b * B[1] + c * C[1]) / p
+    return [ant.blur(x), ant.blur(y)]
+}
+globalThis.Incentre = contract(Incentre).sign([owl.point])
+
