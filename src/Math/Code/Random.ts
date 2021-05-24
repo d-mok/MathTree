@@ -241,7 +241,7 @@ globalThis.RndPyth = contract(RndPyth).sign([owl.positive])
 
 /**
  * @category Random
- * @return a point within given range
+ * @return a point within given range, x and y are distinct and non-zero
  * ```
  * RndPoint([1,4],[10,14]) // may return [2,12]
  * // equivalent to [RndN(...xRange),Range(...yRange)]
@@ -249,11 +249,10 @@ globalThis.RndPyth = contract(RndPyth).sign([owl.positive])
  * ```
  */
 function RndPoint(xRange: number | interval, yRange: number | interval = xRange): Point {
-    if (typeof xRange === 'number') xRange = [-xRange, xRange]
-    if (typeof yRange === 'number') yRange = [-yRange, yRange]
-    let x = RndN(...xRange)
-    let y = RndN(...yRange)
-    return [x, y]
+    let xrange: interval = (typeof xRange === 'number') ? [-xRange, xRange] : xRange
+    let yrange: interval = (typeof yRange === 'number') ? [-yRange, yRange] : yRange
+    let f = (): Point => [RndN(...xrange), RndN(...yrange)]
+    return dice.roll(f).brute(p => !p.includes(0) && p[0] !== p[1])
 }
 globalThis.RndPoint = contract(RndPoint).sign([owl.or([owl.num, owl.interval])])
 

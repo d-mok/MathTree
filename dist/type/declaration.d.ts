@@ -1560,7 +1560,7 @@ declare function RndPoly(...coeff: number[]): number[];
 declare function RndPyth(max?: number): [number, number, number];
 /**
  * @category Random
- * @return a point within given range
+ * @return a point within given range, x and y are distinct and non-zero
  * ```
  * RndPoint([1,4],[10,14]) // may return [2,12]
  * // equivalent to [RndN(...xRange),Range(...yRange)]

@@ -150,6 +150,9 @@ test('RndPoint', () => {
     expect(ys).toBeFlatWithin(10, 14);
     expect(xs).toBeFlatIsInteger();
     expect(ys).toBeFlatIsInteger();
+    expect(xs).not.toContain(0);
+    expect(ys).not.toContain(0);
+    expect(arr.every(p => p[0] !== p[1])).toBe(true);
     expect(arr).toAllHaveLength(2);
 });
 
