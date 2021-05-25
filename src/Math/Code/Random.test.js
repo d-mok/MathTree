@@ -158,6 +158,18 @@ test('RndPoint', () => {
 
 
 
+test('RndPoints', () => {
+    let arr = sample(() => RndPoints([1, 4], [10, 14], 3));
+    expect(arr.every(ps => {
+        let a = Angle(ps[0], ps[1], ps[2]);
+        return ![0, 180].includes(ant.blur(a));
+    })).toBeTrue();
+    expect(arr).toAllHaveLength(3);
+});
+
+
+
+
 test('RndAngles', () => {
     let arr = sample(() => RndAngles(3, 50));
     let d1 = arr.map(x => x[1] - x[0]);
@@ -191,4 +203,15 @@ test('RndData', () => {
     expect(arr).toBeFlatIsInteger();
     expect(arr).toAllHaveLength(5);
     expect(arr.every(a => Mode(...a).length === 1)).toBe(true);
+});
+
+
+
+
+
+test('RndTriangle', () => {
+    let arr = sample(() => RndTriangle([0, 5], [0, 5], { minAngle: 30, minLength: 2 }));
+    expect(arr.every(t => Distance(t[0], t[1]) >= 2)).toBeTrue();
+    expect(arr.every(t => Angle(t[0], t[1], t[2]) >= 30)).toBeTrue();
+    expect(arr).toAllHaveLength(3);
 });

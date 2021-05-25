@@ -1563,11 +1563,19 @@ declare function RndPyth(max?: number): [number, number, number];
  * @return a point within given range, x and y are distinct and non-zero
  * ```
  * RndPoint([1,4],[10,14]) // may return [2,12]
- * // equivalent to [RndN(...xRange),Range(...yRange)]
  * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
+ * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
  * ```
  */
 declare function RndPoint(xRange: number | interval, yRange?: number | interval): Point;
+/**
+ * @category Random
+ * @return n points within given range, no horizontal / vertical / collinear
+ * ```
+ * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
+ * ```
+ */
+declare function RndPoints(xRange: number | interval, yRange?: number | interval, n?: number): Point[];
 /**
  * @category Random
  * @return n angles in [0,360] at least cyclic separated by separation
@@ -1592,6 +1600,17 @@ declare function RndConvexPolygon(n: number, center: Point, radius: number, sepa
  * ```
  */
 declare function RndData(min: number, max: number, n: number): number[];
+/**
+ * @category Random
+ * @return 3 points forming a triangle, with min angle and length
+ * ```
+ * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
+ * ```
+ */
+declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, minLength, }?: {
+    minAngle?: number | undefined;
+    minLength?: number | undefined;
+}): [Point, Point, Point];
 /**
  * @category RandomShake
  * @deprecated

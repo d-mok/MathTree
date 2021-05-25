@@ -2732,6 +2732,9 @@ img {
 			<a href="math_code_random.html#rndpoint" class="tsd-kind-icon">Rnd<wbr>Point</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_random.html#rndpoints" class="tsd-kind-icon">Rnd<wbr>Points</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_random.html#rndpoly" class="tsd-kind-icon">Rnd<wbr>Poly</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2751,6 +2754,9 @@ img {
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_random.html#rndt" class="tsd-kind-icon">RndT</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_random.html#rndtriangle" class="tsd-kind-icon">Rnd<wbr>Triangle</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_random.html#rndu" class="tsd-kind-icon">RndU</a>
@@ -2781,6 +2787,7 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndodd" class="tsd-kind-icon">Rnd<wbr>Odd</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndp" class="tsd-kind-icon">RndP</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndpoint" class="tsd-kind-icon">Rnd<wbr>Point</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndpoints" class="tsd-kind-icon">Rnd<wbr>Points</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndpoly" class="tsd-kind-icon">Rnd<wbr>Poly</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndpyth" class="tsd-kind-icon">Rnd<wbr>Pyth</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndq" class="tsd-kind-icon">RndQ</a></li>
@@ -2788,6 +2795,7 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndr" class="tsd-kind-icon">RndR</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndrs" class="tsd-kind-icon">Rnd<wbr>Rs</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndt" class="tsd-kind-icon">RndT</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndtriangle" class="tsd-kind-icon">Rnd<wbr>Triangle</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndu" class="tsd-kind-icon">RndU</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndz" class="tsd-kind-icon">RndZ</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_random.html#rndzs" class="tsd-kind-icon">Rnd<wbr>Zs</a></li>
@@ -3037,8 +3045,37 @@ img {
 						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
 						<p>a point within given range, x and y are distinct and non-zero</p>
 						<pre><code><span style="color: #795E26">RndPoint</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],[</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">14</span><span style="color: #000000">]) </span><span style="color: #008000">// may return [2,12]</span>
-<span style="color: #008000">// equivalent to [RndN(...xRange),Range(...yRange)]</span>
 <span style="color: #795E26">RndPoint</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">) </span><span style="color: #008000">// equivalent to RndPoint([-2,2],[-4,4])</span>
+<span style="color: #795E26">RndPoint</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">) </span><span style="color: #008000">// equivalent to RndPoint([-2,2],[-2,2])</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="rndpoints" class="tsd-anchor"></a>
+				<h3>Rnd<wbr>Points</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Rnd<wbr>Points<span class="tsd-signature-symbol">(</span>xRange<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="math_type.html#interval" class="tsd-signature-type" data-tsd-kind="Type alias">interval</a>, yRange<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="math_type.html#interval" class="tsd-signature-type" data-tsd-kind="Type alias">interval</a>, n<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>xRange: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="math_type.html#interval" class="tsd-signature-type" data-tsd-kind="Type alias">interval</a></h5>
+							</li>
+							<li>
+								<h5>yRange: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="math_type.html#interval" class="tsd-signature-type" data-tsd-kind="Type alias">interval</a><span class="tsd-signature-symbol"> = ...</span></h5>
+							</li>
+							<li>
+								<h5>n: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 10</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h4>
+						<p>n points within given range, no horizontal / vertical / collinear</p>
+						<pre><code><span style="color: #795E26">RndPoints</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">4</span><span style="color: #000000">],[</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">14</span><span style="color: #000000">],</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// may return [[2,12],[3,11],[1,13]]</span>
 </code></pre>
 					</li>
 				</ul>
@@ -3213,6 +3250,37 @@ img {
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						<p>true or false.</p>
 						<pre><code><span style="color: #795E26">RndT</span><span style="color: #000000">() </span><span style="color: #008000">// may return true or false</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="rndtriangle" class="tsd-anchor"></a>
+				<h3>Rnd<wbr>Triangle</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Rnd<wbr>Triangle<span class="tsd-signature-symbol">(</span>xRange<span class="tsd-signature-symbol">: </span><a href="math_type.html#interval" class="tsd-signature-type" data-tsd-kind="Type alias">interval</a>, yRange<span class="tsd-signature-symbol">: </span><a href="math_type.html#interval" class="tsd-signature-type" data-tsd-kind="Type alias">interval</a>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>minAngle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>minLength<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">]</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>xRange: <a href="math_type.html#interval" class="tsd-signature-type" data-tsd-kind="Type alias">interval</a></h5>
+							</li>
+							<li>
+								<h5>yRange: <a href="math_type.html#interval" class="tsd-signature-type" data-tsd-kind="Type alias">interval</a></h5>
+							</li>
+							<li>
+								<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>minAngle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>minLength<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+								<ul class="tsd-parameters">
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">, </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">]</span></h4>
+						<p>3 points forming a triangle, with min angle and length</p>
+						<pre><code><span style="color: #795E26">RndTriangle</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">5</span><span style="color: #000000">],{</span><span style="color: #001080">minAngle:</span><span style="color: #098658">30</span><span style="color: #000000">,</span><span style="color: #001080">minLength:</span><span style="color: #098658">2</span><span style="color: #000000">}) </span>
 </code></pre>
 					</li>
 				</ul>

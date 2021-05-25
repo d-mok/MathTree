@@ -244,8 +244,8 @@ globalThis.RndPyth = contract(RndPyth).sign([owl.positive])
  * @return a point within given range, x and y are distinct and non-zero
  * ```
  * RndPoint([1,4],[10,14]) // may return [2,12]
- * // equivalent to [RndN(...xRange),Range(...yRange)]
  * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
+ * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
  * ```
  */
 function RndPoint(xRange: number | interval, yRange: number | interval = xRange): Point {
@@ -255,6 +255,30 @@ function RndPoint(xRange: number | interval, yRange: number | interval = xRange)
     return dice.roll(f).brute(p => !p.includes(0) && p[0] !== p[1])
 }
 globalThis.RndPoint = contract(RndPoint).sign([owl.or([owl.num, owl.interval])])
+
+
+
+/**
+ * @category Random
+ * @return n points within given range, no horizontal / vertical / collinear
+ * ```
+ * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
+ * ```
+ */
+function RndPoints(xRange: number | interval, yRange: number | interval = xRange, n = 10): Point[] {
+    let f = () => dice.roll(() => RndPoint(xRange, yRange)).unique(n, _ => JSON.stringify(_))
+    return dice.roll(f).brute(ps => {
+        let arr: string[] = []
+        for (let [a, b] of newList(ps).pairs()) {
+            if (a[0] === b[0]) return false
+            if (a[1] === b[1]) return false
+            arr.push(JSON.stringify(LinearFromTwoPoints(a, b)))
+        }
+        if (!newList(arr).isDistinct()) return false
+        return true
+    })
+}
+globalThis.RndPoints = contract(RndPoints).sign([owl.or([owl.num, owl.interval]), owl.or([owl.num, owl.interval]), owl.num])
 
 
 /**
@@ -312,4 +336,46 @@ function RndData(min: number, max: number, n: number): number[] {
     return Sort(...dice.roll(f).brute(p))
 }
 globalThis.RndData = contract(RndData).sign([owl.num, owl.num, owl.positiveInt])
+
+
+/**
+ * @category Random
+ * @return 3 points forming a triangle, with min angle and length
+ * ```
+ * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2}) 
+ * ```
+ */
+function RndTriangle(xRange: interval, yRange: interval, {
+    minAngle = 0,
+    minLength = 0,
+} = {}): [Point, Point, Point] {
+    let [x1, x2] = xRange
+    let [y1, y2] = yRange
+    let arr: Point[] = []
+    for (let i = x1; i <= x2; i++) {
+        for (let j = y1; j <= y2; j++) {
+            arr.push([i, j])
+        }
+    }
+    arr = RndShuffle(...arr)
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = i + 1; j < arr.length; j++) {
+            for (let k = j + 1; k < arr.length; k++) {
+                let A = arr[i]
+                let B = arr[j]
+                let C = arr[k]
+                if (Angle(A, B, C) < minAngle) continue
+                if (Angle(B, C, A) < minAngle) continue
+                if (Angle(C, A, B) < minAngle) continue
+                if (Distance(A, B) < minLength) continue
+                if (Distance(B, C) < minLength) continue
+                if (Distance(C, A) < minLength) continue
+                return [A, B, C]
+            }
+        }
+    }
+    throw 'RndTriangle fail to find a suitable triangle.'
+
+}
+globalThis.RndTriangle = contract(RndTriangle).sign([owl.interval, owl.interval, owl.object])
 
