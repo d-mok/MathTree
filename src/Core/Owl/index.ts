@@ -39,9 +39,11 @@ export const nonPositive = (_: unknown): _ is number => num(_) && _ <= 0
 
 export const nonPositiveInt = (_: unknown): _ is number => int(_) && _ <= 0
 
-export const nonZero = (_: unknown): _ is number => num(_) && _ !== 0
+export const zero = (_: unknown): _ is number => num(_) && Math.abs(_) < 1e-14
 
-export const nonZeroInt = (_: unknown): _ is number => int(_) && _ !== 0
+export const nonZero = (_: unknown): _ is number => num(_) && !zero(_)
+
+export const nonZeroInt = (_: unknown): _ is number => int(_) && !zero(_)
 
 export const between = (min: number, max: number) => build(`between(${min},${max})`,
     (_: unknown): _ is number => num(_) && _ >= min && _ <= max

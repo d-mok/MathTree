@@ -126,6 +126,8 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (T === 'number') {
             // let v = ant.blur(value)
             let v = value
+            if (owl.zero(v))
+                return '0'
             if (IsInteger(v)) {
                 v = Fix(v, 0)
             } else {

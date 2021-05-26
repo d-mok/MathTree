@@ -59,6 +59,7 @@ declare module "Core/Owl/index" {
     export const negativeInt: (_: unknown) => _ is number;
     export const nonPositive: (_: unknown) => _ is number;
     export const nonPositiveInt: (_: unknown) => _ is number;
+    export const zero: (_: unknown) => _ is number;
     export const nonZero: (_: unknown) => _ is number;
     export const nonZeroInt: (_: unknown) => _ is number;
     export const between: (min: number, max: number) => (_: unknown) => _ is number;
@@ -1607,9 +1608,11 @@ declare function RndData(min: number, max: number, n: number): number[];
  * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
  * ```
  */
-declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, minLength, }?: {
+declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, maxAngle, minLength, obtuse }?: {
     minAngle?: number | undefined;
+    maxAngle?: number | undefined;
     minLength?: number | undefined;
+    obtuse?: boolean | undefined;
 }): [Point, Point, Point];
 /**
  * @category RandomShake

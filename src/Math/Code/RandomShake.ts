@@ -108,7 +108,7 @@ function RndShakeR(anchor: number): number[] {
         )
     return dice.roll(func).unique(3).map(x => Number(x + "e" + exp))
 }
-globalThis.RndShakeR = contract(RndShakeR).sign([owl.nonZero])
+globalThis.RndShakeR = contract(RndShakeR).sign([owl.num])
 
 
 /**

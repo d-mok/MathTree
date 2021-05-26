@@ -347,7 +347,9 @@ globalThis.RndData = contract(RndData).sign([owl.num, owl.num, owl.positiveInt])
  */
 function RndTriangle(xRange: interval, yRange: interval, {
     minAngle = 0,
+    maxAngle = 180,
     minLength = 0,
+    obtuse = false
 } = {}): [Point, Point, Point] {
     let [x1, x2] = xRange
     let [y1, y2] = yRange
@@ -364,12 +366,24 @@ function RndTriangle(xRange: interval, yRange: interval, {
                 let A = arr[i]
                 let B = arr[j]
                 let C = arr[k]
-                if (Angle(A, B, C) < minAngle) continue
-                if (Angle(B, C, A) < minAngle) continue
-                if (Angle(C, A, B) < minAngle) continue
+                if (A[0] === B[0]) continue
+                if (B[0] === C[0]) continue
+                if (C[0] === A[0]) continue
+                if (A[1] === B[1]) continue
+                if (B[1] === C[1]) continue
+                if (C[1] === A[1]) continue
+                if (Slope(A, B) === Slope(B, C)) continue
+                let A_ = Angle(C, A, B)
+                let B_ = Angle(A, B, C)
+                let C_ = Angle(B, C, A)
+                let smallestAngle = Min(A_, B_, C_)
+                let largestAngle = Max(A_, B_, C_)
+                if (smallestAngle < minAngle) continue
+                if (largestAngle > maxAngle) continue
                 if (Distance(A, B) < minLength) continue
                 if (Distance(B, C) < minLength) continue
                 if (Distance(C, A) < minLength) continue
+                if (obtuse && largestAngle <= 90) continue
                 return [A, B, C]
             }
         }

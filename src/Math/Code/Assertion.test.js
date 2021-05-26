@@ -118,7 +118,7 @@ test('IsNegative', () => {
 
 test('IsNonZero', () => {
     const T = [1, 1.4, -123, -0.001, 0.1, 4, 9];
-    const F = [0, -0];
+    const F = [0, -0, 1e-15];
     testAssertion(IsNonZero, T, F);
 });
 
