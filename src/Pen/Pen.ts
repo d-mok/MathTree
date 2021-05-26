@@ -1911,40 +1911,6 @@ class PenCls {
         },
 
 
-        // /**
-        //  * Draw a shape in 3D, usually a plane.
-        //  * @category 3D
-        //  * @returns void
-        //  * ```
-        //  * pen.d3.point3Ds([[1,0,0],[1,1,0],[0,1,0],[0,0,0]]) // draw a square
-        //  * ```
-        //  */
-        // shape(point3Ds: Point3D[], {
-        //     line = true,
-        //     dash = !true,
-        //     shade = !true,
-        //     fill = !true
-        // } = {}): void {
-        //     if (dash) line = false
-
-        //     if (line) {
-        //         this._pen.polygon(...point3Ds)
-        //     }
-
-        //     if (dash) {
-        //         this._pen.ctx.save()
-        //         this._pen.set.dash(true)
-        //         this._pen.polygon(...point3Ds)
-        //         this._pen.ctx.restore()
-        //     }
-
-        //     if (shade)
-        //         this._pen.polyshade(...point3Ds)
-
-        //     if (fill)
-        //         this._pen.polyfill(...point3Ds)
-
-        // },
 
         /**
          * Draw a circle in 3D
@@ -2228,7 +2194,7 @@ class PenCls {
          * @category 3D
          * @returns void
          * ```
-         * pen.d3.cylinderZ([0,0,0],2,0,4) // draw a cylinder
+         * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
          * ```
          */
         cylinderZ(center: Point, radius: number, lowerZ: number, upperZ: number, {
@@ -2280,7 +2246,7 @@ class PenCls {
          * @category 3D
          * @returns void
          * ```
-         * pen.d3.coneZ([0,0,0],2,[0,0,4]) // draw a cone
+         * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
          * ```
          */
         coneZ(center: Point, radius: number, lowerZ: number, vertex: Point3D, {

@@ -4131,7 +4131,7 @@ declare class PenCls {
          * @category 3D
          * @returns void
          * ```
-         * pen.d3.cylinderZ([0,0,0],2,0,4) // draw a cylinder
+         * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
          * ```
          */
         cylinderZ(center: Point, radius: number, lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
@@ -4161,7 +4161,7 @@ declare class PenCls {
          * @category 3D
          * @returns void
          * ```
-         * pen.d3.coneZ([0,0,0],2,[0,0,4]) // draw a cone
+         * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
          * ```
          */
         coneZ(center: Point, radius: number, lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
