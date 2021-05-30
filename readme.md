@@ -99,6 +99,7 @@
 |trig expression|`a = ['sin',90,-1,'x']`|`*a`|\sin(90 \degree - x)|
 |fraction| `a = 0.5`	| `*/a` | \dfrac{1}{2} |
 |small fraction| `a = 0.5`	| `*//a` | 1/2 |
+|bracket fraction| `a = 0.5`	| `*/(a)` |\left ( \dfrac{1}{2} \right ) |
 |sci notation|`a = 0.0000123`	| `**a` | 1.23 \times 10^{-5} |
 |bracket negative|`a = -2`|`*(a)`| (-2)|
 |bracket negative|`a = 2`|`*(a)`| 2|
