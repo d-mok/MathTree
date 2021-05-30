@@ -176,6 +176,7 @@ declare module "Core/Ink/index" {
     export function printCombo(combo: [boolean, boolean, boolean]): string;
     export function printTrigValue(T: TrigValue): string;
     export function printTrigExp(T: TrigExp): string;
+    export function printOrTrigRoots(roots: (number | undefined)[]): string;
 }
 declare module "Core/Blood/index" {
     class Blood extends Error {
@@ -2089,14 +2090,6 @@ declare function StdDev(...nums: number[]): number;
 * ```
 */
 declare function GrammarJoin(...items: unknown[]): string;
-/**
-* @category Text
-* @return a string joining the roots, e.g. '30 \degree ~~\text{or}~~ 60 \degree'
-* ```
-* TrigJoinRoot(30,60) //  '30 \degree ~~\text{or}~~ 60 \degree'
-* ```
-*/
-declare function TrigJoinRoot(...roots: (number | undefined)[]): string;
 /**
 * @category Text
 * @deprecated

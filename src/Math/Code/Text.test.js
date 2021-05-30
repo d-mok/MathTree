@@ -9,12 +9,6 @@ test('GrammarJoin', () => {
 
 
 
-test('TrigJoinRoot', () => {
-    expect(TrigJoinRoot(30, 60)).toBe('30 \\degree~~\\text{or}~~60 \\degree');
-    expect(TrigJoinRoot(30, 60, 90)).toBe('30 \\degree~~\\text{or}~~60 \\degree~~\\text{or}~~90 \\degree');
-});
-
-
 
 
 

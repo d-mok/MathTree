@@ -114,6 +114,11 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
 
     // print *x as normal
     print("", "\\*")
+
+
+    // print *|.x as OR trig roots
+    print("|.", "\\*\\|\\.")
+
     return html
 }
 
@@ -209,6 +214,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     }
 
 
+
     if (signal === '>') {
         if (T === 'boolean') return value ? '\\gt' : '\\lt'
     }
@@ -257,6 +263,14 @@ export function ParseForPrint(value: any, signal: string = ""): string {
             return p + ":" + q
         }
     }
+
+
+    if (signal === '|.') {
+        if (owl.array(value)) {
+            return ink.printOrTrigRoots(value)
+        }
+    }
+
 
     return String(value)
 

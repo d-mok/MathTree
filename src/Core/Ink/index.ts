@@ -64,3 +64,11 @@ export function printTrigValue(T: TrigValue): string {
 export function printTrigExp(T: TrigExp): string {
     return "\\" + T[0] + "(" + T[1] + " \\degree" + (T[2] > 0 ? '+' : '-') + T[3] + ")"
 }
+
+
+export function printOrTrigRoots(roots: (number | undefined)[]): string {
+    roots = roots.filter(owl.num)
+    roots = roots.map(x => Round(x!, 5))
+    let ss = roots.map(x => x + ' \\degree')
+    return ss.join('~~\\text{or}~~')
+}

@@ -118,6 +118,7 @@
 |ineq sign|`a = false`|`*^\ge_a`| \le|
 |ineq sign|`a = true`|`*^\le_a`| \le|
 |ineq sign|`a = false`|`*^\le_a`| \ge|
+|or trig root|`a = [30,60,90,undefined]`|`*|.a`| 30 \degree~~\text{or}~~60 \degree~~\text{or}~~90 \degree|
 
 # 3. Advance Functions
 
