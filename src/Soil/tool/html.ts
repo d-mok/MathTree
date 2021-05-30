@@ -183,7 +183,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     if (signal === '/()') {
         if (T === 'number') {
             let [p, q] = ToFrac(value)
-            if (q = 1) return Dfrac(p, q)
+            if (q === 1) return Dfrac(p, q)
             return '\\left ( ' + Dfrac(p, q) + ' \\right )'
         }
     }
