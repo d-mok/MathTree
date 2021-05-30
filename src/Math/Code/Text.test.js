@@ -9,9 +9,9 @@ test('GrammarJoin', () => {
 
 
 
-test('TrigMultiRoot', () => {
-    expect(TrigMultiRoot(30, 60)).toBe('30 \\degree~~\\text{or}~~60 \\degree');
-    expect(TrigMultiRoot(30, 60, 90)).toBe('30 \\degree~~\\text{or}~~60 \\degree~~\\text{or}~~90 \\degree');
+test('TrigJoinRoot', () => {
+    expect(TrigJoinRoot(30, 60)).toBe('30 \\degree~~\\text{or}~~60 \\degree');
+    expect(TrigJoinRoot(30, 60, 90)).toBe('30 \\degree~~\\text{or}~~60 \\degree~~\\text{or}~~90 \\degree');
 });
 
 

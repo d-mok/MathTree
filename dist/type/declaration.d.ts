@@ -2093,10 +2093,10 @@ declare function GrammarJoin(...items: unknown[]): string;
 * @category Text
 * @return a string joining the roots, e.g. '30 \degree ~~\text{or}~~ 60 \degree'
 * ```
-* TrigMultiRoot(30,60) //  '30 \degree ~~\text{or}~~ 60 \degree'
+* TrigJoinRoot(30,60) //  '30 \degree ~~\text{or}~~ 60 \degree'
 * ```
 */
-declare function TrigMultiRoot(...roots: number[]): string;
+declare function TrigJoinRoot(...roots: (number | undefined)[]): string;
 /**
 * @category Text
 * @deprecated

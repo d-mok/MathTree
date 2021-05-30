@@ -26,15 +26,15 @@ globalThis.GrammarJoin = GrammarJoin
 * @category Text
 * @return a string joining the roots, e.g. '30 \degree ~~\text{or}~~ 60 \degree'
 * ```
-* TrigMultiRoot(30,60) //  '30 \degree ~~\text{or}~~ 60 \degree'
+* TrigJoinRoot(30,60) //  '30 \degree ~~\text{or}~~ 60 \degree'
 * ```
 */
-function TrigMultiRoot(...roots: number[]): string {
+function TrigJoinRoot(...roots: (number | undefined)[]): string {
     roots = roots.filter(owl.num)
     let ss = roots.map(x => x + ' \\degree')
     return ss.join('~~\\text{or}~~')
 }
-globalThis.TrigMultiRoot = contract(TrigMultiRoot).sign([owl.num])
+globalThis.TrigJoinRoot = contract(TrigJoinRoot).sign([owl.pass])
 
 
 
