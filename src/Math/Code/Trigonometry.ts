@@ -128,4 +128,3 @@ function TrigRoot(func: TrigFunc, k: number): [number | undefined, number | unde
 globalThis.TrigRoot = contract(TrigRoot).sign([owl.trig, owl.num])
 
 
-

@@ -1615,6 +1615,14 @@ declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, max
     obtuse?: boolean | undefined;
 }): [Point, Point, Point];
 /**
+ * @category Random
+ * @return an array like ['sin',180,-1] representing sin(180-1), which is numerically equivalent to the input
+ * ```
+ * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
+ * ```
+ */
+declare function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number): (string | number)[];
+/**
  * @category RandomShake
  * @deprecated
  * @return an array of n nearby values around anchor, within range inclusive, auto detecting the input type.

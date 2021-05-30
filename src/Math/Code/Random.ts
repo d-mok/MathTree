@@ -393,3 +393,36 @@ function RndTriangle(xRange: interval, yRange: interval, {
 }
 globalThis.RndTriangle = contract(RndTriangle).sign([owl.interval, owl.interval, owl.object])
 
+
+
+
+
+
+/**
+ * @category Random
+ * @return an array like ['sin',180,-1] representing sin(180-1), which is numerically equivalent to the input
+ * ```
+ * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
+ * ```
+ */
+function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number) {
+    let trig = (funcName: TrigFunc, angle: number): number => {
+        if (funcName === 'sin') return sin(angle)
+        if (funcName === 'cos') return cos(angle)
+        if (funcName === 'tan') return tan(angle)
+        throw 'never'
+    }
+    let v = trig(func, startAngle + angle)
+    let arr = []
+    for (let f of ['sin', 'cos', 'tan']) {
+        for (let a of [90, 180, 270, 360]) {
+            for (let s of [angle, -angle]) {
+                if (func === f && startAngle === a && angle === s) continue
+                if (a === 360 && s > 0) continue
+                if (ant.eq(trig(f as TrigFunc, a + s), v)) arr.push([f, a, s])
+            }
+        }
+    }
+    return RndPick(...arr)
+}
+globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.trig, owl.int, owl.int])

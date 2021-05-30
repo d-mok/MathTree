@@ -215,3 +215,20 @@ test('RndTriangle', () => {
     expect(arr.every(t => Angle(t[0], t[1], t[2]) >= 30)).toBeTrue();
     expect(arr).toAllHaveLength(3);
 });
+
+
+
+
+test('RndTrigEqv', () => {
+    let trig = (funcName, angle) => {
+        if (funcName === 'sin') return sin(angle);
+        if (funcName === 'cos') return cos(angle);
+        if (funcName === 'tan') return tan(angle);
+        throw 'never';
+    };
+    let arr = sample(() => RndTrigEqv('sin', 180, -1));
+    let fs = arr.map(_ => _[0]);
+    expect(fs.every(f => ['sin', 'cos', 'tan'].includes(f))).toBeTrue();
+    expect(arr.every(t => ant.eq(trig(t[0], t[1] + t[2]), sin(179)))).toBeTrue();
+    expect(arr).toAllHaveLength(3);
+});
