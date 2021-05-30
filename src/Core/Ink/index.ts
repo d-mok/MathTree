@@ -70,6 +70,7 @@ export function printOrTrigRoots(roots: (number | undefined)[]): string {
     roots = roots.filter(owl.num)
     roots = roots.map(x => Round(x!, 5))
     let ss = roots.map(x => x + ' \\degree')
+    if (ss.length === 0) return "no solution"
     if (ss.length === 1) return ss[0]
     let last = ss.pop()
     return ss.join(',') + '~\\text{or}~' + last
