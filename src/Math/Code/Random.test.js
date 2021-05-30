@@ -218,6 +218,20 @@ test('RndTriangle', () => {
 
 
 
+test('RndTrigValue', () => {
+    let trig = (funcName, angle) => {
+        if (funcName === 'sin') return sin(angle);
+        if (funcName === 'cos') return cos(angle);
+        if (funcName === 'tan') return tan(angle);
+        throw 'never';
+    };
+    let arr = sample(() => RndTrigValue('sin', 60));
+    let fs = arr.map(_ => _[0]);
+    expect(fs.every(f => ['sin', 'cos', 'tan'].includes(f))).toBeTrue();
+    expect(arr.every(t => ant.eq(trig(t[0], t[1]), sin(60)))).toBeTrue();
+    expect(arr).toAllHaveLength(2);
+});
+
 
 test('RndTrigEqv', () => {
     let trig = (funcName, angle) => {

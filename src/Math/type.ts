@@ -78,4 +78,4 @@ type polynomial<V extends string> = MonomialCls<V>[]
 
 type TrigValue = [TrigFunc, number]
 
-type TrigExp = [TrigFunc, number, number, string]
+type TrigExp = [TrigFunc, number, 1 | -1, string]

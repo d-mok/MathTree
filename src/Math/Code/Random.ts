@@ -398,6 +398,41 @@ globalThis.RndTriangle = contract(RndTriangle).sign([owl.interval, owl.interval,
 
 
 
+
+/**
+ * @category Random
+ * @return an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
+ * ```
+ * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
+ * ```
+ */
+function RndTrigValue(func: TrigFunc, angle: number): TrigValue {
+    let trig = (funcName: TrigFunc, angle: number): number => {
+        if (funcName === 'sin') return sin(angle)
+        if (funcName === 'cos') return cos(angle)
+        if (funcName === 'tan') return tan(angle)
+        throw 'never'
+    }
+    let v = trig(func, angle)
+    let arr: TrigValue[] = []
+    for (let f of ['sin', 'cos', 'tan']) {
+        for (let a of [0, 90, 180, 270, 360]) {
+            for (let s of [angle, -angle]) {
+                if (a === 360 && s > 0) continue
+                if (a === 0 && s < 0) continue
+                if (ant.eq(trig(f as TrigFunc, a + s), v)) arr.push([f as TrigFunc, a + s])
+            }
+        }
+    }
+    return RndPick(...arr)
+}
+globalThis.RndTrigValue = contract(RndTrigValue).sign([owl.trig, owl.num])
+
+
+
+
+
+
 /**
  * @category Random
  * @return an array like ['sin',180,-1] representing sin(180-1), which is numerically equivalent to the input
@@ -405,21 +440,20 @@ globalThis.RndTriangle = contract(RndTriangle).sign([owl.interval, owl.interval,
  * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
  * ```
  */
-function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number, label: string): TrigExp {
+function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, sign: 1 | -1, label: string): TrigExp {
     let trig = (funcName: TrigFunc, angle: number): number => {
         if (funcName === 'sin') return sin(angle)
         if (funcName === 'cos') return cos(angle)
         if (funcName === 'tan') return tan(angle)
         throw 'never'
     }
-    let v = trig(func, startAngle + angle)
+    let v = trig(func, startAngle + sign)
     let arr: TrigExp[] = []
     for (let f of ['sin', 'cos', 'tan']) {
         for (let a of [90, 180, 270, 360]) {
-            for (let s of [angle, -angle]) {
-                if (func === f && startAngle === a && angle === s) continue
+            for (let s of [1, -1]) {
                 if (a === 360 && s > 0) continue
-                if (ant.eq(trig(f as TrigFunc, a + s), v)) arr.push([f as TrigFunc, a, s, label])
+                if (ant.eq(trig(f as TrigFunc, a + s), v)) arr.push([f as TrigFunc, a, s as 1 | -1, label])
             }
         }
     }

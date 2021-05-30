@@ -62,5 +62,5 @@ export function printTrigValue(T: TrigValue): string {
 
 
 export function printTrigExp(T: TrigExp): string {
-    return "\\" + T[0] + "(" + T[1] + " \\degree" + (T[2] >= 0 ? '+' : '-') + T[3] + ")"
+    return "\\" + T[0] + "(" + T[1] + " \\degree" + (T[2] > 0 ? '+' : '-') + T[3] + ")"
 }

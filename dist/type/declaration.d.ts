@@ -430,7 +430,7 @@ declare type TrigFunc = 'sin' | 'cos' | 'tan';
 declare type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
 declare type polynomial<V extends string> = MonomialCls<V>[];
 declare type TrigValue = [TrigFunc, number];
-declare type TrigExp = [TrigFunc, number, number, string];
+declare type TrigExp = [TrigFunc, number, 1 | -1, string];
 /**
  * @category Algebra
  * @return solve [x,y] from ax+by=c and px+qy=r.
@@ -1622,12 +1622,20 @@ declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, max
 }): [Point, Point, Point];
 /**
  * @category Random
+ * @return an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
+ * ```
+ * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
+ * ```
+ */
+declare function RndTrigValue(func: TrigFunc, angle: number): TrigValue;
+/**
+ * @category Random
  * @return an array like ['sin',180,-1] representing sin(180-1), which is numerically equivalent to the input
  * ```
  * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
  * ```
  */
-declare function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number, label: string): TrigExp;
+declare function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, sign: 1 | -1, label: string): TrigExp;
 /**
  * @category RandomShake
  * @deprecated
