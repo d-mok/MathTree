@@ -179,9 +179,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     if (signal === '//') {
         if (T === 'number') {
             let [p, q] = ToFrac(value)
-            if (q === 1) return String(p)
-            if (p === 0) return '0'
-            return p + "/" + q
+            return Dfrac(p, q).replace(/dfrac/g, 'frac')
         }
     }
 
