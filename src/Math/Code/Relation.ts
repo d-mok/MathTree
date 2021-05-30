@@ -119,3 +119,16 @@ function AreOblique(minAngle: number) {
 globalThis.AreOblique = contract(AreOblique).sign([owl.positive])
 
 
+
+/**
+ * @category Relation
+ * @return Check if the items are all distinct, by JSON.stringify.
+ * ```
+ * AreDifferent([1,2],[3,4]) // true
+ * AreDifferent([1,2],[1,2]) // false
+ * ```
+ */
+function AreDifferent(...items: any[]) {
+    return newList(items).isDistinct()
+}
+globalThis.AreDifferent = contract(AreDifferent).sign([owl.pass])

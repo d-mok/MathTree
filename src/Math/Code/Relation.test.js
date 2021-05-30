@@ -83,3 +83,12 @@ test('AreOblique', () => {
     expect(AreOblique(40)(0, 0.5)).toBe(false);
 });
 
+
+test('AreDifferent', () => {
+    expect(AreDifferent([1, 2], [3, 4])).toBe(true);
+    expect(AreDifferent([1, 2], [1, 4])).toBe(true);
+    expect(AreDifferent([1, 2], [1, 2])).toBe(false);
+    expect(AreDifferent([1, 2], [1, 2], [3, 4])).toBe(false);
+    expect(AreDifferent([1, 2, 'x'], [1, 2, 'x'])).toBe(false);
+    expect(AreDifferent([1, 2, 'x'], [1, 2, 'y'], [1, 2, 'z'])).toBe(true);
+});

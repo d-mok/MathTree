@@ -1888,6 +1888,15 @@ declare function AreDistantPoint(distance: number): (...points: Point[]) => bool
  */
 declare function AreOblique(minAngle: number): (...slopes: number[]) => boolean;
 /**
+ * @category Relation
+ * @return Check if the items are all distinct, by JSON.stringify.
+ * ```
+ * AreDifferent([1,2],[3,4]) // true
+ * AreDifferent([1,2],[1,2]) // false
+ * ```
+ */
+declare function AreDifferent(...items: any[]): boolean;
+/**
 * @category Sequence
 * @return an array of integers from start to end inclusive.
 * ```
