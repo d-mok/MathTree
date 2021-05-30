@@ -407,13 +407,21 @@ globalThis.RndTriangle = contract(RndTriangle).sign([owl.interval, owl.interval,
  * ```
  */
 function RndTrigValue(func: TrigFunc, angle: number): TrigValue {
-    let trig = (funcName: TrigFunc, angle: number): number => {
-        if (funcName === 'sin') return sin(angle)
-        if (funcName === 'cos') return cos(angle)
-        if (funcName === 'tan') return tan(angle)
+    let trig = (funcName: TrigFunc, q: number): number => {
+        if (funcName === 'sin') return sin(q)
+        if (funcName === 'cos') return cos(q)
+        if (funcName === 'tan') return tan(q)
+        throw 'never'
+    }
+    let atrig = (funcName: TrigFunc, val: number): number => {
+        if (funcName === 'sin') return arcsin(val)
+        if (funcName === 'cos') return arccos(val)
+        if (funcName === 'tan') return arctan(val)
         throw 'never'
     }
     let v = trig(func, angle)
+    angle = atrig(func, Abs(trig(func, angle)))
+    angle = ant.blur(angle)
     let arr: TrigValue[] = []
     for (let f of ['sin', 'cos', 'tan']) {
         for (let a of [0, 90, 180, 270, 360]) {
