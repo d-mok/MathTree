@@ -405,7 +405,7 @@ globalThis.RndTriangle = contract(RndTriangle).sign([owl.interval, owl.interval,
  * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
  * ```
  */
-function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number): [string, number, number] {
+function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number, label: string): TrigExp {
     let trig = (funcName: TrigFunc, angle: number): number => {
         if (funcName === 'sin') return sin(angle)
         if (funcName === 'cos') return cos(angle)
@@ -413,16 +413,16 @@ function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: num
         throw 'never'
     }
     let v = trig(func, startAngle + angle)
-    let arr: [string, number, number][] = []
+    let arr: TrigExp[] = []
     for (let f of ['sin', 'cos', 'tan']) {
         for (let a of [90, 180, 270, 360]) {
             for (let s of [angle, -angle]) {
                 if (func === f && startAngle === a && angle === s) continue
                 if (a === 360 && s > 0) continue
-                if (ant.eq(trig(f as TrigFunc, a + s), v)) arr.push([f, a, s])
+                if (ant.eq(trig(f as TrigFunc, a + s), v)) arr.push([f as TrigFunc, a, s, label])
             }
         }
     }
     return RndPick(...arr)
 }
-globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.trig, owl.int, owl.int])
+globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.trig, owl.int, owl.int, owl.str])

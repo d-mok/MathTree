@@ -1627,7 +1627,7 @@ declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, max
  * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
  * ```
  */
-declare function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number): [string, number, number];
+declare function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number, label: string): TrigExp;
 /**
  * @category RandomShake
  * @deprecated

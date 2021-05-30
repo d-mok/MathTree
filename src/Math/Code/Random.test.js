@@ -230,5 +230,5 @@ test('RndTrigEqv', () => {
     let fs = arr.map(_ => _[0]);
     expect(fs.every(f => ['sin', 'cos', 'tan'].includes(f))).toBeTrue();
     expect(arr.every(t => ant.eq(trig(t[0], t[1] + t[2]), sin(179)))).toBeTrue();
-    expect(arr).toAllHaveLength(3);
+    expect(arr).toAllHaveLength(4);
 });
