@@ -38,6 +38,10 @@ function RndShake(anchor: any): (typeof anchor)[] {
         // Combo
         return RndShakeCombo(anchor)
     }
+    if (owl.trigValue(anchor)) {
+        // TrigValue
+        return RndShakeTrigValue(anchor)
+    }
     if (typeof anchor === 'number' && owl.num(anchor)) {
         anchor = ant.blur(anchor)
         // Integer
