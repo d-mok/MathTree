@@ -2091,6 +2091,14 @@ declare function StdDev(...nums: number[]): number;
 declare function GrammarJoin(...items: unknown[]): string;
 /**
 * @category Text
+* @return a string joining the roots, e.g. '30 \degree ~~\text{or}~~ 60 \degree'
+* ```
+* TrigMultiRoot(30,60) //  '30 \degree ~~\text{or}~~ 60 \degree'
+* ```
+*/
+declare function TrigMultiRoot(...roots: number[]): string;
+/**
+* @category Text
 * @deprecated
 * @return '✔' or '✘'.
 * ```

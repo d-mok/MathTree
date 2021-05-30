@@ -2743,6 +2743,9 @@ img {
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_text.html#tobase" class="tsd-kind-icon">To<wbr>Base</a>
 		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_text.html#trigmultiroot" class="tsd-kind-icon">Trig<wbr>Multi<wbr>Root</a>
+		</li>
 	</ul>
 </nav>
 <div class="container container-main">
@@ -2767,6 +2770,7 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#tick" class="tsd-kind-icon">Tick</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#ticks" class="tsd-kind-icon">Ticks</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#tobase" class="tsd-kind-icon">To<wbr>Base</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_text.html#trigmultiroot" class="tsd-kind-icon">Trig<wbr>Multi<wbr>Root</a></li>
 						</ul>
 					</section>
 				</div>
@@ -3163,6 +3167,29 @@ img {
 						<p>the representation of num in base b</p>
 						<pre><code><span style="color: #795E26">ToBase</span><span style="color: #000000">(</span><span style="color: #098658">1000</span><span style="color: #000000">,</span><span style="color: #098658">16</span><span style="color: #000000">) </span><span style="color: #008000">// &#039;3E8_{16}&#039;</span>
 <span style="color: #795E26">ToBase</span><span style="color: #000000">(</span><span style="color: #098658">13</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">) </span><span style="color: #008000">// &#039;1101_{2}&#039;</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="trigmultiroot" class="tsd-anchor"></a>
+				<h3>Trig<wbr>Multi<wbr>Root</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Trig<wbr>Multi<wbr>Root<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>roots<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>roots: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>a string joining the roots, e.g. &#39;30 \degree <del>\text{or}</del> 60 \degree&#39;</p>
+						<pre><code><span style="color: #795E26">TrigMultiRoot</span><span style="color: #000000">(</span><span style="color: #098658">30</span><span style="color: #000000">,</span><span style="color: #098658">60</span><span style="color: #000000">) </span><span style="color: #008000">//  &#039;30 \degree ~~\text{or}~~ 60 \degree&#039;</span>
 </code></pre>
 					</li>
 				</ul>
