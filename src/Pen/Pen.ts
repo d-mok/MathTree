@@ -936,7 +936,7 @@ class PenCls {
         const [x, y] = position;
         const offset = this.frame.xOffset();
         this.line([x, y - offset], [x, y + offset]);
-        if (label !== undefined) this.label.point(position, label, 0)
+        if (label !== undefined) this.label.point(position, label, 90)
     }
 
     /**
@@ -953,7 +953,7 @@ class PenCls {
         const [x, y] = position;
         const offset = this.frame.yOffset();
         this.line([x - offset, y], [x + offset, y]);
-        if (label !== undefined) this.label.point(position, label, 90)
+        if (label !== undefined) this.label.point(position, label, 0)
     }
 
 
