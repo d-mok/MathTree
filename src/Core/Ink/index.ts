@@ -56,3 +56,11 @@ export function printCombo(combo: [boolean, boolean, boolean]): string {
     throw 'never'
 }
 
+export function printTrigValue(T: TrigValue): string {
+    return "\\" + T[0] + " " + T[1] + " \\degree"
+}
+
+
+export function printTrigExp(T: TrigExp): string {
+    return "\\" + T[0] + "(" + T[1] + " \\degree" + (T[2] >= 0 ? '+' : '-') + T[3] + ")"
+}

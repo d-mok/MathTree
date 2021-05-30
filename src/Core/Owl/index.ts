@@ -120,6 +120,14 @@ export const monomial = (_: unknown): _ is MonomialCls<any> => object(_) && ('co
 
 export const polynomial = (_: unknown): _ is polynomial<any> => arrayWith(monomial)(_)
 
+
+export const trigValue = (_: unknown): _ is TrigValue => arrayOfLength(2)(_) && trig(_[0]) && num(_[1])
+
+export const trigExp = (_: unknown): _ is TrigExp => arrayOfLength(4)(_) && trig(_[0]) && num(_[1]) && num(_[2]) && str(_[3])
+
+
+
+
 // trivial
 
 export const pass = (_: unknown) => true

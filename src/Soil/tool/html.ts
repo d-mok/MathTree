@@ -144,8 +144,15 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (owl.combo(value)) {
             return ink.printCombo(value)
         }
-        if (owl.polynomial(value))
+        if (owl.polynomial(value)) {
             return PolyPrint(value)
+        }
+        if (owl.trigValue(value)) {
+            return ink.printTrigValue(value)
+        }
+        if (owl.trigExp(value)) {
+            return ink.printTrigExp(value)
+        }
     }
 
     if (signal === '*') {

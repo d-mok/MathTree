@@ -86,6 +86,8 @@ declare module "Core/Owl/index" {
     export const triangleSides: (_: unknown) => boolean;
     export const monomial: (_: unknown) => _ is MonomialCls<any>;
     export const polynomial: (_: unknown) => _ is polynomial<any>;
+    export const trigValue: (_: unknown) => _ is TrigValue;
+    export const trigExp: (_: unknown) => _ is TrigExp;
     export const pass: (_: unknown) => boolean;
     export const fail: (_: unknown) => boolean;
     export const distinct: (_: unknown[]) => boolean;
@@ -172,6 +174,8 @@ declare module "Core/Ink/index" {
     export function printDfrac(numerator: number, denominator: number, upSign?: boolean): string;
     export function parseDfrac(dfrac: string): Fraction;
     export function printCombo(combo: [boolean, boolean, boolean]): string;
+    export function printTrigValue(T: TrigValue): string;
+    export function printTrigExp(T: TrigExp): string;
 }
 declare module "Core/Blood/index" {
     class Blood extends Error {
@@ -425,6 +429,8 @@ declare type PolarPoint = [r: number, q: number];
 declare type TrigFunc = 'sin' | 'cos' | 'tan';
 declare type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
 declare type polynomial<V extends string> = MonomialCls<V>[];
+declare type TrigValue = [TrigFunc, number];
+declare type TrigExp = [TrigFunc, number, number, string];
 /**
  * @category Algebra
  * @return solve [x,y] from ax+by=c and px+qy=r.
@@ -1621,7 +1627,7 @@ declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, max
  * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
  * ```
  */
-declare function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number): (string | number)[];
+declare function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, angle: number): [string, number, number];
 /**
  * @category RandomShake
  * @deprecated

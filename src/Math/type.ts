@@ -75,3 +75,7 @@ type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<'
 
 
 type polynomial<V extends string> = MonomialCls<V>[]
+
+type TrigValue = [TrigFunc, number]
+
+type TrigExp = [TrigFunc, number, number, string]
