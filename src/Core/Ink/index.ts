@@ -74,3 +74,4 @@ export function printOrTrigRoots(roots: (number | undefined)[]): string {
     let last = ss.pop()
     return ss.join(',') + '~\\text{or}~' + last
 }
+

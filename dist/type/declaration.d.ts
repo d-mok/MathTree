@@ -2351,6 +2351,7 @@ declare function RectToPol([x, y]: Point): PolarPoint;
 declare function ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): -1 | 0 | 1;
 /**
  * @category Trigonometry
+ * @deprecated use TrigSolve instead
  * @return the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k. The angles [r1,r2,r3].
  * ```
  * TrigRoot('sin',0) // [0, 180, 360]
@@ -2359,6 +2360,16 @@ declare function ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): -1
  * ```
  */
 declare function TrigRoot(func: TrigFunc, k: number): [number | undefined, number | undefined, number | undefined];
+/**
+ * @category Trigonometry
+ * @return the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k.
+ * ```
+ * TrigSolve('sin',0) // [0, 180, 360]
+ * TrigSolve('sin',0.5) // [30, 150]
+ * TrigSolve('sin',1) // [90]
+ * ```
+ */
+declare function TrigSolve(func: TrigFunc, k: number): number[];
 /**
  * @category Vector
  * @return the vector OP

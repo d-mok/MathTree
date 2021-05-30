@@ -12,10 +12,10 @@ test('Quadrant', () => {
 
 
 test('PolToRect', () => {
-    expect(PolToRect([1, 45])[0]).toBeCloseTo(2 ** -0.5,12);
-    expect(PolToRect([1, 45])[1]).toBeCloseTo(2 ** -0.5,12);
-    expect(PolToRect([1, 135])[0]).toBeCloseTo(-(2 ** -0.5),12);
-    expect(PolToRect([1, 135])[1]).toBeCloseTo(2 ** -0.5,12);
+    expect(PolToRect([1, 45])[0]).toBeCloseTo(2 ** -0.5, 12);
+    expect(PolToRect([1, 45])[1]).toBeCloseTo(2 ** -0.5, 12);
+    expect(PolToRect([1, 135])[0]).toBeCloseTo(-(2 ** -0.5), 12);
+    expect(PolToRect([1, 135])[1]).toBeCloseTo(2 ** -0.5, 12);
     expect(PolToRect([0, 0])).toEqual([0, 0]);
 });
 
@@ -64,6 +64,20 @@ test('TrigRoot', () => {
 
 
 
+
+
+test('TrigSolve', () => {
+    expect(TrigSolve('sin', 0)).toEqual([0, 180, 360]);
+    expect(TrigSolve('sin', 0.5)).toEqual([30, 150]);
+    expect(TrigSolve('sin', 1)).toEqual([90]);
+    expect(TrigSolve('sin', 2)).toEqual([]);
+    expect(TrigSolve('cos', 0)).toEqual([90, 270]);
+    expect(TrigSolve('cos', 0.5)).toEqual([60, 300]);
+    expect(TrigSolve('cos', 1)).toEqual([0, 360]);
+    expect(TrigSolve('cos', -2)).toEqual([]);
+    expect(TrigSolve('tan', 0)).toEqual([0, 180, 360]);
+    expect(TrigSolve('tan', 1)).toEqual([45, 225]);
+});
 
 
 

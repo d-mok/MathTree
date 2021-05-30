@@ -75,6 +75,7 @@ globalThis.ASTC = contract(ASTC).sign([owl.quadrant, owl.trig])
 
 /**
  * @category Trigonometry
+ * @deprecated use TrigSolve instead
  * @return the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k. The angles [r1,r2,r3].
  * ```
  * TrigRoot('sin',0) // [0, 180, 360]
@@ -126,5 +127,61 @@ function TrigRoot(func: TrigFunc, k: number): [number | undefined, number | unde
     return [undefined, undefined, undefined];
 }
 globalThis.TrigRoot = contract(TrigRoot).sign([owl.trig, owl.num])
+
+
+
+/**
+ * @category Trigonometry
+ * @return the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k.
+ * ```
+ * TrigSolve('sin',0) // [0, 180, 360]
+ * TrigSolve('sin',0.5) // [30, 150]
+ * TrigSolve('sin',1) // [90]
+ * ```
+ */
+function TrigSolve(func: TrigFunc, k: number): number[] {
+    if (func == 'sin') {
+        if (k > 1 || k < -1) return [];
+        if (k == 0) return [0, 180, 360];
+        if (k == 1) return [90];
+        if (k == -1) return [270];
+        if (k > 0) {
+            let a = arcsin(k);
+            let b = 180 - a;
+            return [a, b];
+        }
+        if (k < 0) {
+            let x = -arcsin(k);
+            let a = 180 + x;
+            let b = 360 - x;
+            return [a, b];
+        }
+    }
+    if (func == 'cos') {
+        if (k > 1 || k < -1) return [];
+        if (k == 0) return [90, 270];
+        if (k == 1) return [0, 360];
+        if (k == -1) return [180];
+        let a = arccos(k);
+        let b = 360 - a;
+        return [a, b];
+    }
+    if (func == 'tan') {
+        if (k == 0) return [0, 180, 360];
+        if (k > 0) {
+            let a = arctan(k);
+            let b = 180 + a;
+            return [a, b];
+        }
+        if (k < 0) {
+            let x = -arctan(k);
+            let a = 180 - x;
+            let b = 360 - x;
+            return [a, b];
+        }
+    }
+    return [];
+}
+globalThis.TrigSolve = contract(TrigSolve).sign([owl.trig, owl.num])
 
 
