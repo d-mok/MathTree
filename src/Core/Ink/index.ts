@@ -57,7 +57,11 @@ export function printCombo(combo: [boolean, boolean, boolean]): string {
 }
 
 export function printTrigValue(T: TrigValue): string {
-    return "\\" + T[0] + " " + T[1] + " \\degree"
+    if (typeof T[1] === 'number') {
+        return "\\" + T[0] + " " + T[1] + " \\degree"
+    } else {
+        return "\\" + T[0] + " " + T[1]
+    }
 }
 
 

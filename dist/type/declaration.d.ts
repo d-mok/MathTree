@@ -430,7 +430,7 @@ declare type PolarPoint = [r: number, q: number];
 declare type TrigFunc = 'sin' | 'cos' | 'tan';
 declare type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
 declare type polynomial<V extends string> = MonomialCls<V>[];
-declare type TrigValue = [TrigFunc, number];
+declare type TrigValue = [TrigFunc, number | string];
 declare type TrigExp = [TrigFunc, number, 1 | -1, string];
 /**
  * @category Algebra
