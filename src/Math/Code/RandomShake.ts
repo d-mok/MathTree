@@ -269,6 +269,26 @@ globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
 
 /**
  * @category RandomShake
+ * @return an array of 3 TrigValue
+ * ```
+ * RndShakeTrigValue(['sin','x']) 
+ * // may return [['cos','x'],['sin','x'],['cos','x']]
+ * ```
+ */
+function RndShakeTrigValue(anchor: TrigValue): TrigValue[] {
+    return RndPickN(['sin', 'cos', 'tan'], 3).map(x => [x as TrigFunc, anchor[1]])
+}
+globalThis.RndShakeTrigValue = contract(RndShakeTrigValue).sign([owl.trigValue])
+
+
+
+
+
+
+
+
+/**
+ * @category RandomShake
  * @return an array of 3 ratios
  * ```
  * RndShakeRatio([4,5,6]) 

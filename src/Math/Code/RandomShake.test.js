@@ -230,6 +230,20 @@ test('RndShakeTrig', () => {
 });
 
 
+
+test('RndShakeTrigValue', () => {
+
+    function run(anchor) {
+        let arr = sample(() => RndShakeTrigValue(anchor));
+        expect(arr).toBeFlatIs(owl.trigValue);
+        expect(arr).toAllHaveLength(3);
+    }
+
+    run(['sin', 'x']);
+});
+
+
+
 test('RndShakeRatio', () => {
 
     function run(anchor) {

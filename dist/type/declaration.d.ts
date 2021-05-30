@@ -1738,6 +1738,15 @@ declare function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, b
 declare function RndShakeTrig(anchor: TrigFunc): TrigFunc[];
 /**
  * @category RandomShake
+ * @return an array of 3 TrigValue
+ * ```
+ * RndShakeTrigValue(['sin','x'])
+ * // may return [['cos','x'],['sin','x'],['cos','x']]
+ * ```
+ */
+declare function RndShakeTrigValue(anchor: TrigValue): TrigValue[];
+/**
+ * @category RandomShake
  * @return an array of 3 ratios
  * ```
  * RndShakeRatio([4,5,6])

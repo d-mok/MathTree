@@ -95,7 +95,8 @@
 |combo|`a = [true,true,false]`|`*a`|I and II only|
 |polynomial|`a = poly`|`*a`|1x^{3}+2x^{4}|
 |trig value|`a = ['sin',60]`|`*a`|\sin 60 \degree|
-|trig expression|`a = ['sin',90,-1,'x']`|`*a`|\sin(90 \degree-x)|
+|trig value|`a = ['sin','x']`|`*a`|\sin x|
+|trig expression|`a = ['sin',90,-1,'x']`|`*a`|\sin(90 \degree - x)|
 |fraction| `a = 0.5`	| `*/a` | \dfrac{1}{2} |
 |small fraction| `a = 0.5`	| `*//a` | 1/2 |
 |sci notation|`a = 0.0000123`	| `**a` | 1.23 \times 10^{-5} |
