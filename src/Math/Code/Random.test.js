@@ -240,9 +240,9 @@ test('RndTrigEqv', () => {
         if (funcName === 'tan') return tan(angle);
         throw 'never';
     };
-    let arr = sample(() => RndTrigEqv('sin', 180, -1));
+    let arr = sample(() => RndTrigEqv('sin', 'x'));
     let fs = arr.map(_ => _[0]);
     expect(fs.every(f => ['sin', 'cos', 'tan'].includes(f))).toBeTrue();
-    expect(arr.every(t => ant.eq(trig(t[0], t[1] + t[2]), sin(179)))).toBeTrue();
+    expect(arr.every(t => ant.eq(trig(t[0], t[1] + t[2]), sin(1)))).toBeTrue();
     expect(arr).toAllHaveLength(4);
 });

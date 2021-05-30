@@ -1630,12 +1630,12 @@ declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, max
 declare function RndTrigValue(func: TrigFunc, angle: number): TrigValue;
 /**
  * @category Random
- * @return an array like ['sin',180,-1] representing sin(180-1), which is numerically equivalent to the input
+ * @return an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
  * ```
- * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
+ * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
  * ```
  */
-declare function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, sign: 1 | -1, label: string): TrigExp;
+declare function RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '1/tan' | '-1/tan', label: string): TrigExp;
 /**
  * @category RandomShake
  * @deprecated

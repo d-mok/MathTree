@@ -440,22 +440,29 @@ globalThis.RndTrigValue = contract(RndTrigValue).sign([owl.trig, owl.num])
 
 
 
-
 /**
  * @category Random
- * @return an array like ['sin',180,-1] representing sin(180-1), which is numerically equivalent to the input
+ * @return an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
  * ```
- * RndTrigEqv('sin',180,-1) // RndPick(['cos',90',-1],['cos',270',1])
+ * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
  * ```
  */
-function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, sign: 1 | -1, label: string): TrigExp {
+function RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '1/tan' | '-1/tan', label: string): TrigExp {
     let trig = (funcName: TrigFunc, angle: number): number => {
         if (funcName === 'sin') return sin(angle)
         if (funcName === 'cos') return cos(angle)
         if (funcName === 'tan') return tan(angle)
         throw 'never'
     }
-    let v = trig(func, startAngle + sign)
+    let v: number = 0
+    if (result === 'sin') v = sin(1)
+    if (result === '-sin') v = -sin(1)
+    if (result === 'cos') v = cos(1)
+    if (result === '-cos') v = -cos(1)
+    if (result === 'tan') v = tan(1)
+    if (result === '-tan') v = -tan(1)
+    if (result === '1/tan') v = 1 / tan(1)
+    if (result === '-1/tan') v = -1 / tan(1)
     let arr: TrigExp[] = []
     for (let f of ['sin', 'cos', 'tan']) {
         for (let a of [90, 180, 270, 360]) {
@@ -467,4 +474,6 @@ function RndTrigEqv(func: TrigFunc, startAngle: 90 | 180 | 270 | 360, sign: 1 | 
     }
     return RndPick(...arr)
 }
-globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.trig, owl.int, owl.int, owl.str])
+globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.str, owl.str])
+
+
