@@ -184,7 +184,7 @@ export function simpSurd(square: number): [number, number] {
     while (true) {
         for (let i = 2; i <= Math.ceil(square ** 0.5); i++) {
             if (owl.int(square / i ** 2)) {
-                square = square / i ** 2
+                square = blur(square / i ** 2)
                 factors.push(i)
                 continue
             }
