@@ -94,16 +94,19 @@
 |point| `a = [1,2]`	| `*a` | (1, 2) |
 |combo|`a = [true,true,false]`|`*a`|I and II only|
 |polynomial|`a = poly`|`*a`|1x^{3}+2x^{4}|
-|trig value|`a = ['sin',60]`|`*a`|\sin 60 \degree|
+|trig value|`a = ['sin',60]`|`*a`|\sin 60°|
 |trig value|`a = ['sin','x']`|`*a`|\sin x|
-|trig expression|`a = ['sin',90,-1,'x']`|`*a`|\sin(90 \degree - x)|
-|fraction| `a = 0.5`	| `*/a` | \dfrac{1}{2} |
+|trig expression|`a = ['sin',90,-1,'x']`|`*a`|\sin(90° - x)|
+|surd| `a = 18**0.5` | `*!a` | 3\sqrt{2} |
+|fraction| `a = 0.5` | `*/a` | \dfrac{1}{2} |
 |small fraction| `a = 0.5`	| `*//a` | 1/2 |
 |bracket fraction| `a = 0.5`	| `*/(a)` |\left ( \dfrac{1}{2} \right ) |
+|bracket fraction| `a = 5`	| `*/(a)` |5 |
+|bracket fraction| `a = -5`	| `*/(a)` |(-5) |
 |sci notation|`a = 0.0000123`	| `**a` | 1.23 \times 10^{-5} |
 |bracket negative|`a = -2`|`*(a)`| (-2)|
 |bracket negative|`a = 2`|`*(a)`| 2|
-|absolute value|`a = -1.23`|`*\|a\|`| 1.23|
+|absolute value|`a = -1.23`|`*|a|`| 1.23|
 |sign|`a = 5`|`*^+_a`|+|
 |sign|`a = -5`|`*^+_a`| - |
 |opposite sign|`a = 5`|`*^-_a`| - |
@@ -120,7 +123,7 @@
 |ineq sign|`a = false`|`*^\ge_a`| \le|
 |ineq sign|`a = true`|`*^\le_a`| \le|
 |ineq sign|`a = false`|`*^\le_a`| \ge|
-|or trig root|`a = [30,60,90,undefined]`|`*|.a`| 30 \degree~~\text{or}~~60 \degree~~\text{or}~~90 \degree|
+|or trig root|`a = [30,60,90,undefined]`|`*|.a`| 30°~~\text{or}~~60°~~\text{or}~~90°|
 
 # 3. Advance Functions
 

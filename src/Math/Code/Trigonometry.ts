@@ -185,3 +185,92 @@ function TrigSolve(func: TrigFunc, k: number): number[] {
 globalThis.TrigSolve = contract(TrigSolve).sign([owl.trig, owl.num])
 
 
+
+
+/**
+ * @category Trigonometry
+ * @return reduce the polar angle into the range [0,360)
+ * ```
+ * PolarReduce(370) // 10
+ * PolarReduce(-10) // 350
+ * ```
+ */
+function PolarReduce(q: number): number {
+    q = q % 360
+    if (q < 0) q += 360
+    return q
+}
+globalThis.PolarReduce = contract(PolarReduce).sign([owl.num])
+
+
+
+
+/**
+ * @category Trigonometry
+ * @return the angle (within [0,180]) between two polar angles
+ * ```
+ * PolarDiff(80,70) // 10
+ * PolarDiff(350,10) // 20
+ * ```
+ */
+function PolarDiff(angle1: number, angle2: number): number {
+    angle1 = PolarReduce(angle1)
+    angle2 = PolarReduce(angle2)
+    let d = Abs(angle1 - angle2)
+    return Math.min(d, 360 - d)
+}
+globalThis.PolarDiff = contract(PolarDiff).sign([owl.num])
+
+
+
+
+
+
+/**
+ * @category Trigonometry
+ * @return the whole bearing in the polar angle direction
+ * ```
+ * WholeBearing(0) // '090°'
+ * WholeBearing(180) // '270°'
+ * ```
+ */
+function WholeBearing(polarAngle: number): string {
+    let q = polarAngle
+    q = PolarReduce(q)
+    q = ant.blur(q)
+    q = q <= 90 ? 90 - q : 450 - q
+    q = ant.blur(q)
+    return q.toString().padStart(3, '0') + '°'
+}
+globalThis.WholeBearing = contract(WholeBearing).sign([owl.int])
+
+
+/**
+ * @category Trigonometry
+ * @return the compass bearing in the polar angle direction
+ * ```
+ * CompassBearing(30) // 'N60°E'
+ * ```
+ */
+function CompassBearing(polarAngle: number): string {
+    let q = polarAngle
+    q = PolarReduce(q)
+    q = ant.blur(q)
+
+    if (q === 0) return 'east'
+    if (q === 270) return 'south'
+    if (q === 180) return 'west'
+    if (q === 90) return 'north'
+
+    if (0 < q && q < 90)
+        return 'N' + (90 - q) + '°E'
+    if (90 < q && q < 180)
+        return 'N' + (q - 90) + '°W'
+    if (180 < q && q < 270)
+        return 'S' + (270 - q) + '°W'
+    if (270 < q && q < 360)
+        return 'S' + (q - 270) + '°E'
+    throw 'never'
+}
+globalThis.CompassBearing = contract(CompassBearing).sign([owl.int])
+

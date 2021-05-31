@@ -2708,7 +2708,16 @@ img {
 			<a href="math_code_trigonometry.html#astc" class="tsd-kind-icon">ASTC</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_trigonometry.html#compassbearing" class="tsd-kind-icon">Compass<wbr>Bearing</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_trigonometry.html#poltorect" class="tsd-kind-icon">Pol<wbr>ToRect</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_trigonometry.html#polardiff" class="tsd-kind-icon">Polar<wbr>Diff</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_trigonometry.html#polarreduce" class="tsd-kind-icon">Polar<wbr>Reduce</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_trigonometry.html#quadrant" class="tsd-kind-icon">Quadrant</a>
@@ -2722,6 +2731,9 @@ img {
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_trigonometry.html#trigsolve" class="tsd-kind-icon">Trig<wbr>Solve</a>
 		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_trigonometry.html#wholebearing" class="tsd-kind-icon">Whole<wbr>Bearing</a>
+		</li>
 	</ul>
 </nav>
 <div class="container container-main">
@@ -2734,11 +2746,15 @@ img {
 						<h3>Trigonometry</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#astc" class="tsd-kind-icon">ASTC</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#compassbearing" class="tsd-kind-icon">Compass<wbr>Bearing</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#poltorect" class="tsd-kind-icon">Pol<wbr>ToRect</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#polardiff" class="tsd-kind-icon">Polar<wbr>Diff</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#polarreduce" class="tsd-kind-icon">Polar<wbr>Reduce</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#quadrant" class="tsd-kind-icon">Quadrant</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#recttopol" class="tsd-kind-icon">Rect<wbr>ToPol</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#trigroot" class="tsd-kind-icon">Trig<wbr>Root</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#trigsolve" class="tsd-kind-icon">Trig<wbr>Solve</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_trigonometry.html#wholebearing" class="tsd-kind-icon">Whole<wbr>Bearing</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2774,6 +2790,29 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="compassbearing" class="tsd-anchor"></a>
+				<h3>Compass<wbr>Bearing</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Compass<wbr>Bearing<span class="tsd-signature-symbol">(</span>polarAngle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>polarAngle: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>the compass bearing in the polar angle direction</p>
+						<pre><code><span style="color: #795E26">CompassBearing</span><span style="color: #000000">(</span><span style="color: #098658">30</span><span style="color: #000000">) </span><span style="color: #008000">// &#039;N60°E&#039;</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 				<a name="poltorect" class="tsd-anchor"></a>
 				<h3>Pol<wbr>ToRect</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -2792,6 +2831,57 @@ img {
 						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
 						<p>the rectangular coordinates [x,y] from a polar coordinates [r,theta].</p>
 						<pre><code><span style="color: #795E26">PolToRect</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">45</span><span style="color: #000000">]) </span><span style="color: #008000">// [0.707,0.707]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="polardiff" class="tsd-anchor"></a>
+				<h3>Polar<wbr>Diff</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Polar<wbr>Diff<span class="tsd-signature-symbol">(</span>angle1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, angle2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>angle1: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>angle2: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						<p>the angle (within [0,180]) between two polar angles</p>
+						<pre><code><span style="color: #795E26">PolarDiff</span><span style="color: #000000">(</span><span style="color: #098658">80</span><span style="color: #000000">,</span><span style="color: #098658">70</span><span style="color: #000000">) </span><span style="color: #008000">// 10</span>
+<span style="color: #795E26">PolarDiff</span><span style="color: #000000">(</span><span style="color: #098658">350</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">) </span><span style="color: #008000">// 20</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="polarreduce" class="tsd-anchor"></a>
+				<h3>Polar<wbr>Reduce</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Polar<wbr>Reduce<span class="tsd-signature-symbol">(</span>q<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>q: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						<p>reduce the polar angle into the range [0,360)</p>
+						<pre><code><span style="color: #795E26">PolarReduce</span><span style="color: #000000">(</span><span style="color: #098658">370</span><span style="color: #000000">) </span><span style="color: #008000">// 10</span>
+<span style="color: #795E26">PolarReduce</span><span style="color: #000000">(-</span><span style="color: #098658">10</span><span style="color: #000000">) </span><span style="color: #008000">// 350</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2907,6 +2997,30 @@ img {
 						<pre><code><span style="color: #795E26">TrigSolve</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;sin&#039;</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">) </span><span style="color: #008000">// [0, 180, 360]</span>
 <span style="color: #795E26">TrigSolve</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;sin&#039;</span><span style="color: #000000">,</span><span style="color: #098658">0.5</span><span style="color: #000000">) </span><span style="color: #008000">// [30, 150]</span>
 <span style="color: #795E26">TrigSolve</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;sin&#039;</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">) </span><span style="color: #008000">// [90]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="wholebearing" class="tsd-anchor"></a>
+				<h3>Whole<wbr>Bearing</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Whole<wbr>Bearing<span class="tsd-signature-symbol">(</span>polarAngle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>polarAngle: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<p>the whole bearing in the polar angle direction</p>
+						<pre><code><span style="color: #795E26">WholeBearing</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">) </span><span style="color: #008000">// &#039;090°&#039;</span>
+<span style="color: #795E26">WholeBearing</span><span style="color: #000000">(</span><span style="color: #098658">180</span><span style="color: #000000">) </span><span style="color: #008000">// &#039;270°&#039;</span>
 </code></pre>
 					</li>
 				</ul>

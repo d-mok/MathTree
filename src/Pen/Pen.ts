@@ -1230,7 +1230,7 @@ class PenCls {
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
-    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string, arc = 1, radius = -1) {
+    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string|number, arc = 1, radius = -1) {
         A = this.project(A)
         B = this.project(B)
         O = this.project(O)

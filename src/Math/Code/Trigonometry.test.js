@@ -81,3 +81,44 @@ test('TrigSolve', () => {
 
 
 
+
+test('PolarReduce', () => {
+    expect(PolarReduce(0)).toBe(0);
+    expect(PolarReduce(360)).toBe(0);
+    expect(PolarReduce(370)).toBe(10);
+    expect(PolarReduce(-10)).toBe(350);
+    expect(PolarReduce(190)).toBe(190);
+    expect(PolarReduce(720)).toBe(0);
+    expect(PolarReduce(1000)).toBe(280);
+    expect(PolarReduce(-1000)).toBe(80);
+});
+
+
+test('PolarDiff', () => {
+    expect(PolarDiff(80, 70)).toBe(10);
+    expect(PolarDiff(350, 10)).toBe(20);
+    expect(PolarDiff(0, 360)).toBe(0);
+    expect(PolarDiff(1000, 20)).toBe(100);
+    expect(PolarDiff(-30, 20)).toBe(50);
+    expect(PolarDiff(20, 20)).toBe(0);
+});
+
+
+
+
+describe('WholeBearing and CompassBearing', () => {
+    const cases = [
+        [0, '090°', 'east'],
+        [90, '000°', 'north'],
+        [100, '350°', 'N10°W'],
+        [180, '270°', 'west'],
+        [350, '100°', 'S80°E'],
+        [30, '060°', 'N60°E'],
+        [1000, '170°', 'S10°E'],
+        [260, '190°', 'S10°W'],
+    ];
+    it.each(cases)('WholeBearing(%p) & CompassBearing(%p)', (input, whole, compass) => {
+        expect(WholeBearing(input)).toBe(whole);
+        expect(CompassBearing(input)).toBe(compass);
+    });
+});

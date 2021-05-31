@@ -81,6 +81,10 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     print("()", "\\*\\(", "\\)")
 
 
+    // print *!x as surd
+    print("!", "\\*\\!")
+
+
     // print *|x| as abs(x)
     print("||", "\\*\\|", "\\|")
 
@@ -183,7 +187,8 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     if (signal === '/()') {
         if (T === 'number') {
             let [p, q] = ToFrac(value)
-            if (q === 1) return Dfrac(p, q)
+            if (q === 1 && p >= 0) return Dfrac(p, q)
+            if (q === 1 && p < 0) return '(' + Dfrac(p, q) + ')'
             return '\\left ( ' + Dfrac(p, q) + ' \\right )'
         }
     }
@@ -203,6 +208,14 @@ export function ParseForPrint(value: any, signal: string = ""): string {
             let v = ant.blur(value)
             if (IsDecimal(v)) v = Round(v, 5)
             return String(v >= 0 ? v : '(' + v + ')')
+        }
+    }
+
+
+    if (signal === '!') {
+        if (T === 'number') {
+            let [p, q] = ant.simpSurd(value ** 2)
+            return ink.printSurd(p, q)
         }
     }
 

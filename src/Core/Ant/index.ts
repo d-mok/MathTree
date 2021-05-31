@@ -1,6 +1,6 @@
 import { Decimal } from 'decimal.js';
 
-import { gcd, lcm as math_lcm, combinations, factorial, permutations, sum as math_sum, mean as math_mean, mode as math_mode, median as math_median, std, cross, dot } from 'mathjs'
+import { gcd, lcm as math_lcm, combinations, factorial, permutations, sum as math_sum, mean as math_mean, mode as math_mode, median as math_median, std, cross, dot, isPrime } from 'mathjs'
 
 
 const STANDARD_SIGFIG = 14
@@ -96,6 +96,12 @@ export function sum(...nums: number[]): number {
 }
 
 
+export function prod(...nums: number[]): number {
+    if (nums.length === 0) return 1
+    return nums.reduce((a, x) => a * x, 1);
+}
+
+
 export function mean(...nums: number[]): number {
     return math_mean(...nums)
 }
@@ -171,3 +177,19 @@ export function dotProduct<V extends (Vector | Vector3D)>(v1: V, v2: V): number 
 }
 
 
+
+
+export function simpSurd(square: number): [number, number] {
+    let factors: number[] = [1]
+    while (true) {
+        for (let i = 2; i <= Math.ceil(square ** 0.5); i++) {
+            if (owl.int(square / i ** 2)) {
+                square = square / i ** 2
+                factors.push(i)
+                continue
+            }
+        }
+        break
+    }
+    return [prod(...factors), square]
+}

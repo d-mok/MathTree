@@ -39,6 +39,7 @@ globalThis.CircleFromGeneral = contract(CircleFromGeneral).sign([owl.num])
 
 /**
  * @category Circle
+ * @deprecated
  * @return all integral points on the circle
  * ```
  * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
@@ -73,3 +74,44 @@ function IntegralOnCircle(centre: Point, radius: number): Point[][] {
     return arr2
 }
 globalThis.IntegralOnCircle = contract(IntegralOnCircle).sign([owl.point, owl.positive])
+
+
+
+
+
+/**
+ * @category Circle
+ * @return intersections between a circle and a straight line
+ * ```
+ * CircleLineIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
+ * ```
+ */
+function CircleLineIntersect(center: Point, radius: number, linear: [number, number, number]): [Point, Point] {
+    let [a, b, c] = linear
+    let [h, k] = center
+    let r = radius  
+    if (b !== 0) {
+        let m = -a / b
+        let n = -c / b - k
+        let A = 1 + m * m
+        let B = -2 * h + 2 * m * n
+        let C = h * h + n * n - r * r
+        Should(Discriminant(A, B, C) >= 0, 'no intersection')
+        let [x1, x2] = QuadraticRoot(A, B, C)
+        let y1 = (-a * x1 - c) / b
+        let y2 = (-a * x2 - c) / b
+        let P: Point = [ant.blur(x1), ant.blur(y1)]
+        let Q: Point = [ant.blur(x2), ant.blur(y2)]
+        return [P, Q]
+    } else {
+        let x = -c / a
+        let D = r * r - (x - h) ** 2
+        Should(D >= 0, 'no intersection')
+        let y1 = k - Math.sqrt(D)
+        let y2 = k + Math.sqrt(D)
+        let P: Point = [ant.blur(x), ant.blur(y1)]
+        let Q: Point = [ant.blur(x), ant.blur(y2)]
+        return [P, Q]
+    }
+}
+globalThis.CircleLineIntersect = contract(CircleLineIntersect).sign([owl.point, owl.positive, owl.triple])

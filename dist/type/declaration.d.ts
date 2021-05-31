@@ -153,6 +153,7 @@ declare module "Core/Ant/index" {
     export function fac(n: number): number;
     export function nPr(n: number, r: number): number;
     export function sum(...nums: number[]): number;
+    export function prod(...nums: number[]): number;
     export function mean(...nums: number[]): number;
     export function mode(...nums: number[]): number[];
     export function median(...nums: number[]): number;
@@ -167,6 +168,7 @@ declare module "Core/Ant/index" {
     export function logFloor(num: number): number;
     export function crossProduct(v1: Vector3D, v2: Vector3D): Vector3D;
     export function dotProduct<V extends (Vector | Vector3D)>(v1: V, v2: V): number;
+    export function simpSurd(square: number): [number, number];
 }
 declare module "Core/Ink/index" {
     export function printIneq(greater: boolean, equal: boolean): Ineq;
@@ -177,6 +179,7 @@ declare module "Core/Ink/index" {
     export function printTrigValue(T: TrigValue): string;
     export function printTrigExp(T: TrigExp): string;
     export function printOrTrigRoots(roots: (number | undefined)[]): string;
+    export function printSurd(outside: number, inside: number): string;
 }
 declare module "Core/Blood/index" {
     class Blood extends Error {
@@ -485,12 +488,21 @@ declare function CircleGeneral(centre: Point, radius: number): [D: number, E: nu
 declare function CircleFromGeneral(D: number, E: number, F: number): [Point, number];
 /**
  * @category Circle
+ * @deprecated
  * @return all integral points on the circle
  * ```
  * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
  * ```
  */
 declare function IntegralOnCircle(centre: Point, radius: number): Point[][];
+/**
+ * @category Circle
+ * @return intersections between a circle and a straight line
+ * ```
+ * CircleLineIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
+ * ```
+ */
+declare function CircleLineIntersect(center: Point, radius: number, linear: [number, number, number]): [Point, Point];
 /**
  * @category Linear
  * @return [x-int,y-int,slope] of ax+by+c=0
@@ -2380,6 +2392,41 @@ declare function TrigRoot(func: TrigFunc, k: number): [number | undefined, numbe
  */
 declare function TrigSolve(func: TrigFunc, k: number): number[];
 /**
+ * @category Trigonometry
+ * @return reduce the polar angle into the range [0,360)
+ * ```
+ * PolarReduce(370) // 10
+ * PolarReduce(-10) // 350
+ * ```
+ */
+declare function PolarReduce(q: number): number;
+/**
+ * @category Trigonometry
+ * @return the angle (within [0,180]) between two polar angles
+ * ```
+ * PolarDiff(80,70) // 10
+ * PolarDiff(350,10) // 20
+ * ```
+ */
+declare function PolarDiff(angle1: number, angle2: number): number;
+/**
+ * @category Trigonometry
+ * @return the whole bearing in the polar angle direction
+ * ```
+ * WholeBearing(0) // '090°'
+ * WholeBearing(180) // '270°'
+ * ```
+ */
+declare function WholeBearing(polarAngle: number): string;
+/**
+ * @category Trigonometry
+ * @return the compass bearing in the polar angle direction
+ * ```
+ * CompassBearing(30) // 'N60°E'
+ * ```
+ */
+declare function CompassBearing(polarAngle: number): string;
+/**
  * @category Vector
  * @return the vector OP
  * ```
@@ -2416,7 +2463,7 @@ declare function VectorMean(...vectors: Vector[]): Vector;
 declare function VectorLength(v: Vector): number;
 /**
  * @category Vector
- * @return length of vector
+ * @return argument of vector
  * ```
  * VectorArg([2,0]) // 0
  * VectorArg([0,2]) // 90
@@ -3725,7 +3772,7 @@ declare class PenCls {
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
-    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string, arc?: number, radius?: number): void;
+    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string | number, arc?: number, radius?: number): void;
     /**
      * Geometry Decorator.
      * @category decorator

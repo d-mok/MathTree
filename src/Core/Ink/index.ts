@@ -58,7 +58,7 @@ export function printCombo(combo: [boolean, boolean, boolean]): string {
 
 export function printTrigValue(T: TrigValue): string {
     if (typeof T[1] === 'number') {
-        return "\\" + T[0] + " " + T[1] + " \\degree"
+        return "\\" + T[0] + " " + T[1] + "°"
     } else {
         return "\\" + T[0] + " " + T[1]
     }
@@ -66,17 +66,26 @@ export function printTrigValue(T: TrigValue): string {
 
 
 export function printTrigExp(T: TrigExp): string {
-    return "\\" + T[0] + "(" + T[1] + " \\degree" + (T[2] > 0 ? '+' : '-') + T[3] + ")"
+    return "\\" + T[0] + "(" + T[1] + "°" + (T[2] > 0 ? '+' : '-') + T[3] + ")"
 }
 
 
 export function printOrTrigRoots(roots: (number | undefined)[]): string {
     roots = roots.filter(owl.num)
     roots = roots.map(x => Round(x!, 5))
-    let ss = roots.map(x => x + ' \\degree')
+    let ss = roots.map(x => x + '°')
     if (ss.length === 0) return "no solution"
     if (ss.length === 1) return ss[0]
     let last = ss.pop()
     return ss.join(',') + '~\\text{or}~' + last
 }
 
+export function printSurd(outside: number, inside: number): string {
+    if (outside === 1) {
+        if (inside === 1) return '1'
+        return '\\sqrt{' + inside + '}'
+    } else {
+        if (inside === 1) return outside.toString()
+        return outside + '\\sqrt{' + inside + '}'
+    }
+}

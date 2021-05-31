@@ -277,3 +277,8 @@ function ToFrac(num: number): Fraction {
     return ant.nearFrac(num)
 }
 globalThis.ToFrac = contract(ToFrac).sign([owl.rational])
+
+
+
+
+

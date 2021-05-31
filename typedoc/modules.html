@@ -2922,7 +2922,7 @@ img {
 						<td>trig value</td>
 						<td><code>a = [&#39;sin&#39;,60]</code></td>
 						<td><code>*a</code></td>
-						<td>\sin 60 \degree</td>
+						<td>\sin 60°</td>
 					</tr>
 					<tr>
 						<td>trig value</td>
@@ -2934,7 +2934,13 @@ img {
 						<td>trig expression</td>
 						<td><code>a = [&#39;sin&#39;,90,-1,&#39;x&#39;]</code></td>
 						<td><code>*a</code></td>
-						<td>\sin(90 \degree - x)</td>
+						<td>\sin(90° - x)</td>
+					</tr>
+					<tr>
+						<td>surd</td>
+						<td><code>a = 18**0.5</code></td>
+						<td><code>*!a</code></td>
+						<td>3\sqrt{2}</td>
 					</tr>
 					<tr>
 						<td>fraction</td>
@@ -2953,6 +2959,18 @@ img {
 						<td><code>a = 0.5</code></td>
 						<td><code>*/(a)</code></td>
 						<td>\left ( \dfrac{1}{2} \right )</td>
+					</tr>
+					<tr>
+						<td>bracket fraction</td>
+						<td><code>a = 5</code></td>
+						<td><code>*/(a)</code></td>
+						<td>5</td>
+					</tr>
+					<tr>
+						<td>bracket fraction</td>
+						<td><code>a = -5</code></td>
+						<td><code>*/(a)</code></td>
+						<td>(-5)</td>
 					</tr>
 					<tr>
 						<td>sci notation</td>
@@ -2975,8 +2993,8 @@ img {
 					<tr>
 						<td>absolute value</td>
 						<td><code>a = -1.23</code></td>
-						<td><code>*|a|</code></td>
-						<td>1.23</td>
+						<td>`*</td>
+						<td>a</td>
 					</tr>
 					<tr>
 						<td>sign</td>

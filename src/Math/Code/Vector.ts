@@ -68,7 +68,7 @@ globalThis.VectorLength = contract(VectorLength).sign([owl.vector])
 
 /**
  * @category Vector
- * @return length of vector
+ * @return argument of vector
  * ```
  * VectorArg([2,0]) // 0
  * VectorArg([0,2]) // 90
