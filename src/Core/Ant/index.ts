@@ -180,6 +180,7 @@ export function dotProduct<V extends (Vector | Vector3D)>(v1: V, v2: V): number 
 
 
 export function simpSurd(square: number): [number, number] {
+    if (square === 0) return [0, 1]
     let factors: number[] = [1]
     while (true) {
         let found = false
