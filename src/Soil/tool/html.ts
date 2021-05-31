@@ -214,7 +214,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === '!') {
         if (T === 'number') {
-            let [p, q] = ant.simpSurd(value ** 2)
+            let [p, q] = ant.simpSurd(ant.blur(value ** 2))
             return ink.printSurd(p, q)
         }
     }
