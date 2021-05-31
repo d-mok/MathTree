@@ -182,14 +182,16 @@ export function dotProduct<V extends (Vector | Vector3D)>(v1: V, v2: V): number 
 export function simpSurd(square: number): [number, number] {
     let factors: number[] = [1]
     while (true) {
+        let found = false
         for (let i = 2; i <= Math.ceil(square ** 0.5); i++) {
             if (owl.int(square / i ** 2)) {
                 square = blur(square / i ** 2)
                 factors.push(i)
-                continue
+                found = true
+                break
             }
         }
-        break
+        if (!found) break
     }
     return [prod(...factors), square]
 }
