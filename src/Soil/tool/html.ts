@@ -131,22 +131,26 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
 }
 
 
+function numberDefault(num: number): number {
+    let v = num
+    if (owl.zero(v))
+        return 0
+    if (IsInteger(v)) {
+        v = Fix(v, 0)
+    } else {
+        v = Math.abs(v) > 100 ? Fix(v, 2) : Round(v, 5)
+    }
+    return v
+}
+
+
 export function ParseForPrint(value: any, signal: string = ""): string {
 
     let T = typeof value
 
     if (signal === '') {
         if (T === 'number') {
-            // let v = ant.blur(value)
-            let v = value
-            if (owl.zero(v))
-                return '0'
-            if (IsInteger(v)) {
-                v = Fix(v, 0)
-            } else {
-                v = Math.abs(v) > 100 ? Fix(v, 2) : Round(v, 5)
-            }
-            return String(v)
+            return String(numberDefault(value))
         }
         if (T === 'boolean') {
             return Tick(value)
@@ -205,8 +209,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === '()') {
         if (T === 'number') {
-            let v = ant.blur(value)
-            if (IsDecimal(v)) v = Round(v, 5)
+            let v = numberDefault(value)
             return String(v >= 0 ? v : '(' + v + ')')
         }
     }
@@ -236,7 +239,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === '||') {
         if (T === 'number') {
-            return ParseForPrint(Math.abs(value), '')
+            return String(numberDefault(Math.abs(value)))
         }
     }
 
@@ -263,19 +266,13 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === '%') {
         if (T === 'number') {
-            let v = ant.blur(value)
-            if (IsDecimal(v)) v = Round(v, 5)
-            v = v * 100
-            return v + '%'
+            return numberDefault(value * 100) + '%'
         }
     }
 
     if (signal === '\\%') {
         if (T === 'number') {
-            let v = ant.blur(value)
-            if (IsDecimal(v)) v = Round(v, 5)
-            v = v * 100
-            return v + '\\%'
+            return numberDefault(value * 100) + '\\%'
         }
     }
 
