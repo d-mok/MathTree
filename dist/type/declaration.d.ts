@@ -3405,6 +3405,16 @@ declare class PenCls {
          */
         labelCenter(center?: Point | boolean): void;
         /**
+         * Set length unit for line label.
+         * @category set
+         * @param text - the unit
+         * @returns void
+         * ```
+         * pen.set.lengthUnit('cm') // set unit to cm
+         * ```
+         */
+        lengthUnit(text?: string | undefined): void;
+        /**
          * Set the mode for angle. All angles (e.g. AOB) will be understood as this mode.
          * @category set
          * @param mode - the mode: 'normal' | 'polar' | 'reflex'
@@ -3853,6 +3863,17 @@ declare class PenCls {
          * ```
          */
         rightAngle(A: Point | Point3D, O: Point | Point3D, B?: Point | Point3D | undefined, size?: number): void;
+        /**
+         * Decorate a compass.
+         * @category decorator
+         * @param position - The position [x,y].
+         * @returns void
+         * ```
+         * pen.decorate.compass([1,2])
+         * // decorate a compass at [1,2]
+         * ```
+         */
+        compass(position: Point): void;
     };
     /**
      * @ignore
@@ -3944,7 +3965,7 @@ declare class PenCls {
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        line(linePoints: [Point | Point3D, Point | Point3D], text: string, dodgeDirection?: number, offsetPixel?: number): void;
+        line(linePoints: [Point | Point3D, Point | Point3D], text: string | number, dodgeDirection?: number, offsetPixel?: number): void;
         /**
          * Add a coordinates label to a point.
          * @category text

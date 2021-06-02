@@ -412,14 +412,16 @@ class PenCls {
         TEXT_SIZE: number
         TEXT_DIR: number
         TEXT_LATEX: boolean
-        LABEL_CENTER: Point | undefined,
+        LABEL_CENTER: Point | undefined
         ANGLE_MODE: 'normal' | 'polar' | 'reflex'
+        LENGTH_UNIT: string | undefined
     } = {
             TEXT_SIZE: 1,
             TEXT_DIR: 0,
             TEXT_LATEX: false,
             LABEL_CENTER: undefined,
-            ANGLE_MODE: 'normal'
+            ANGLE_MODE: 'normal',
+            LENGTH_UNIT: undefined
         }
 
 
@@ -612,6 +614,20 @@ class PenCls {
                 this._pen.setProperty.LABEL_CENTER = [x, y]
             }
         },
+        /**
+         * Set length unit for line label.
+         * @category set
+         * @param text - the unit
+         * @returns void
+         * ```
+         * pen.set.lengthUnit('cm') // set unit to cm
+         * ```
+         */
+        lengthUnit(text: string | undefined = undefined): void {
+            if (text === undefined) this._pen.setProperty.LENGTH_UNIT = undefined
+            this._pen.setProperty.LENGTH_UNIT = text
+        },
+
         /**
          * Set the mode for angle. All angles (e.g. AOB) will be understood as this mode.
          * @category set
@@ -1071,6 +1087,9 @@ class PenCls {
     }
 
 
+
+
+
     /**
      * @ignore
      */
@@ -1230,7 +1249,7 @@ class PenCls {
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
-    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string|number, arc = 1, radius = -1) {
+    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string | number, arc = 1, radius = -1) {
         A = this.project(A)
         B = this.project(B)
         O = this.project(O)
@@ -1453,6 +1472,36 @@ class PenCls {
             };
             draw(P, R);
             draw(Q, R);
+        },
+
+        /**
+         * Decorate a compass.
+         * @category decorator
+         * @param position - The position [x,y].
+         * @returns void
+         * ```
+         * pen.decorate.compass([1,2]) 
+         * // decorate a compass at [1,2]
+         * ```
+         */
+        compass(position: Point) {
+            this._pen.ctx.save();
+            let [x0, y0] = this._pen.frame.toPix(position);
+            let length = 50
+            let aLength = 20
+            let aWidth = 10
+            this._pen.ctx.translate(x0, y0);
+            this._pen.ctx.beginPath();
+            this._pen.ctx.moveTo(0, -1.2 * length);
+            this._pen.ctx.lineTo(0, 1.2 * length);
+            this._pen.ctx.moveTo(-aWidth, -1.2 * length + aLength);
+            this._pen.ctx.lineTo(0, -1.2 * length);
+            this._pen.ctx.lineTo(aWidth, -1.2 * length + aLength);
+            this._pen.ctx.stroke();
+            this._pen.ctx.moveTo(-length, 0);
+            this._pen.ctx.lineTo(length, 0);
+            this._pen.ctx.stroke();
+            this._pen.ctx.restore();
         }
     };
 
@@ -1647,7 +1696,7 @@ class PenCls {
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        line(linePoints: [Point | Point3D, Point | Point3D], text: string, dodgeDirection = 0, offsetPixel = 15) {
+        line(linePoints: [Point | Point3D, Point | Point3D], text: string | number, dodgeDirection = 0, offsetPixel = 15) {
             let [A, B] = linePoints;
             A = this._pen.project(A)
             B = this._pen.project(B)
@@ -1655,6 +1704,17 @@ class PenCls {
             let APixel = this._pen.frame.toPix(A);
             let BPixel = this._pen.frame.toPix(B);
             let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
+            if (typeof text === 'number') {
+                if (this._pen.setProperty.LENGTH_UNIT === undefined) {
+                    text = String(text)
+                } else {
+                    if (this._pen.setProperty.TEXT_LATEX) {
+                        text = text + '~\\text{' + this._pen.setProperty.LENGTH_UNIT + '}'
+                    } else {
+                        text = text + ' ' + this._pen.setProperty.LENGTH_UNIT
+                    }
+                }
+            }
             this.point(M, text, q + dodgeDirection, offsetPixel);
         },
 

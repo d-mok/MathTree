@@ -144,3 +144,13 @@ test('ToBase', () => {
 });
 
 
+
+test('PrimeFactorize', () => {
+    expect(PrimeFactorize({
+        x: [1, 2, 3],
+        y: [0, 5, 6],
+        z: [4, 5, 6]
+    }, { hcf: true, lcm: true })).toBe('\\begin{matrix}  & &x & &z^{4} \\\\  & &x^{2}&y^{5}&z^{5} \\\\  & &x^{3}&y^{6}&z^{6} \\\\ \\hline \\text{HCF} & = &x & &z^{4} \\\\  \\text{LCM} & = &x^{3}&y^{6}&z^{6} \\\\ \\end{matrix}');
+});
+
+
