@@ -304,7 +304,7 @@ function RndShakeRatio(anchor: number[]): number[][] {
     let func = (): number[] => {
         return anchor.map(x => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0])
     }
-    func = dice.roll(func).shield(r => ant.hcf(...r) === 1)
+    func = dice.roll(func).shield(r => ant.hcf(...r) === 1 && AreDifferent(anchor, r))
     return dice.roll(func).unique(3, _ => JSON.stringify(_))
 }
 globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple])
