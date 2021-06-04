@@ -17,6 +17,8 @@ globalThis.Crammer = contract(Crammer).seal({
     args: function has_unique_solution(a, b, c, p, q, r) { return a * q - b * p !== 0 }
 })
 
+Crammer(1,2,3,5,6,7) //?
+
 
 /**
  * @category Algebra

@@ -12,7 +12,6 @@ test('GrammarJoin', () => {
 
 
 
-
 test('Tick', () => {
     expect(Tick(true)).toBe('✔');
     expect(Tick(false)).toBe('✘');
