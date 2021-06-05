@@ -131,6 +131,8 @@ class AutoPenCls {
         pen.setup.size(scale, ratio);
         pen.setup.range([-width - 2, width + 2], [-(items.length) * (height + 2) + 2, height + 1]);
 
+        pen.set.textLatex(true)
+
         function inequality({ position, sign, num, base, vertical }: { position: number, sign: string, num: number | string, base: number, vertical: boolean }) {
             let greater = sign.includes('>') || sign.includes('g');
             let solid = sign.includes('=') || sign.includes('e');
@@ -393,7 +395,7 @@ class AutoPenCls {
     QuadraticInequality({
         quadratic,
         sign,
-        scale = 0.5,
+        scale = 1,
         ratio = 0.8
     }: {
         quadratic: [number, number, number],
@@ -422,8 +424,11 @@ class AutoPenCls {
         }
 
         const pen = new Pen();
-        pen.setup.size(scale, ratio);
-        pen.setup.range([-5, 5], [-5, 5]);
+        pen.range.set([-5, 5], [-5, 5]);
+        pen.size.set(scale, scale * ratio);
+
+        pen.set.textLatex(true)
+
         pen.axis.x('');
 
         if (p !== undefined && q !== undefined && p !== q) {

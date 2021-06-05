@@ -230,6 +230,7 @@ declare module "Core/index" {
 }
 declare module "Core/Ant/ant.test" { }
 declare module "Core/Contract/contract.test" { }
+declare module "Core/Dice/dice.test" { }
 /**
  * @ignore
  */
