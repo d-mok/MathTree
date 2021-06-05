@@ -1510,6 +1510,7 @@ class PenCls {
      */
     private _write(text: string, xPix: number, yPix: number) {
         text = String(text)
+        if (text === '') return
         this.ctx.save()
         let ANGLE = -this.setProperty.TEXT_DIR * Math.PI / 180
         if (this.setProperty.TEXT_LATEX) {
