@@ -54,7 +54,7 @@ function handleSqrt(input: string): string {
 }
 
 function handleCoeff(input: string): string {
-    input = regReplace(input, or(p, m, e, l, sl, r, c) + s + 1 + s + or(v, f, pl, left, sq) + endtag, '$1$2')
+    input = regReplace(input, or(p, m, e, l, sl, r, c) + s + 1 + s + or(v, f, pl, left, sq) + endtag, '$1 $2')
     return input
 }
 

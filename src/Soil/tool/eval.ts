@@ -45,6 +45,10 @@ export function evaluate(code: string, context: Context) {
         throw detectVarErr(e)
     }
 
+    // allow answer to be number
+    if (typeof answer === 'number') answer = ['A', 'B', 'C', 'D'][answer]
+
+
     //retrieve
 
     context.dict.update({

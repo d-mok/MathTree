@@ -105,9 +105,9 @@ class PenCls {
          * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
          * ```
          */
-        capture(...points: Point[]) {
+        capture(...points: (Point | Point3D)[]) {
             // let border = 0.3
-            let pts = [...points]
+            let pts = [...points].map(this._pen.project)
             let xmin = pts[0][0];
             let xmax = pts[0][0];
             let ymin = pts[0][1];

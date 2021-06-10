@@ -177,3 +177,51 @@ function StdDev(...nums: number[]): number {
     return ant.sd(...nums)
 }
 globalThis.StdDev = contract(StdDev).sign([owl.num])
+
+
+
+/**
+ * @category Stat
+ * @return the location of median
+ * ```
+ * MedianAt(12) \\ 6.5
+ * MedianAt(13) \\ 7
+ * ```
+ */
+function MedianAt(total: number): number {
+    return (total + 1) / 2
+}
+globalThis.MedianAt = contract(MedianAt).sign([owl.int])
+
+
+
+
+/**
+ * @category Stat
+ * @return the location of LQ
+ * ```
+ * LowerQAt(12) \\ 3.5
+ * LowerQAt(13) \\ 3.5
+ * ```
+ */
+function LowerQAt(total: number): number {
+    total = Math.floor(total / 2)
+    return MedianAt(total)
+}
+globalThis.LowerQAt = contract(LowerQAt).sign([owl.int])
+
+
+
+/**
+ * @category Stat
+ * @return the location of UQ
+ * ```
+ * UpperQAt(12) \\ 9.5
+ * UpperQAt(13) \\ 10.5
+ * ```
+ */
+function UpperQAt(total: number): number {
+    return total + 1 - LowerQAt(total)
+}
+globalThis.UpperQAt = contract(UpperQAt).sign([owl.int])
+

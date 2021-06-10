@@ -112,3 +112,43 @@ test('StdDev', () => {
     expect(StdDev(1, 1, 2, 2, 3)).toBeCloseTo(0.748331477);
 });
 
+
+
+test('MedianAt', () => {
+    expect(MedianAt(12)).toBe(6.5)
+    expect(MedianAt(13)).toBe(7)
+    expect(MedianAt(14)).toBe(7.5)
+    expect(MedianAt(15)).toBe(8)
+    expect(MedianAt(16)).toBe(8.5)
+    expect(MedianAt(17)).toBe(9)
+    expect(MedianAt(18)).toBe(9.5)
+    expect(MedianAt(19)).toBe(10)
+    expect(MedianAt(20)).toBe(10.5)
+});
+
+
+
+test('LowerQAt', () => {
+    expect(LowerQAt(12)).toBe(3.5)
+    expect(LowerQAt(13)).toBe(3.5)
+    expect(LowerQAt(14)).toBe(4)
+    expect(LowerQAt(15)).toBe(4)
+    expect(LowerQAt(16)).toBe(4.5)
+    expect(LowerQAt(17)).toBe(4.5)
+    expect(LowerQAt(18)).toBe(5)
+    expect(LowerQAt(19)).toBe(5)
+    expect(LowerQAt(20)).toBe(5.5)
+});
+
+
+test('UpperQAt', () => {
+    expect(UpperQAt(12)).toBe(9.5)
+    expect(UpperQAt(13)).toBe(10.5)
+    expect(UpperQAt(14)).toBe(11)
+    expect(UpperQAt(15)).toBe(12)
+    expect(UpperQAt(16)).toBe(12.5)
+    expect(UpperQAt(17)).toBe(13.5)
+    expect(UpperQAt(18)).toBe(14)
+    expect(UpperQAt(19)).toBe(15)
+    expect(UpperQAt(20)).toBe(15.5)
+});

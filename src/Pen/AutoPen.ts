@@ -967,7 +967,7 @@ class AutoPenCls {
      *   categories: ['a','b','c','d','e'],
      *   labels: ['10%','20%','30%','40%',''],
      *   angles: [45,135,60,50,70],
-     *   angleLabels: [null,'x',null,null,''],
+     *   angleLabels: [null,'x',null,undefined,''],
      *   size:1.5
      * })
      * ```
@@ -976,13 +976,14 @@ class AutoPenCls {
         categories: string[],
         labels: string[],
         angles: number[],
-        angleLabels: string[],
+        angleLabels: (string | null | undefined)[],
         size: number
     }) {
         const pen = new Pen();
         pen.setup.size(size);
         pen.setup.range([-1.2, 1.2], [-1.2, 1.2]);
         pen.graph.circle([0, 0], 1)
+        pen.set.angle('polar')
 
         let O: Point = [0, 0]
         pen.line(O, [1, 0])
@@ -992,9 +993,19 @@ class AutoPenCls {
             let next = current + a
             let mid = current + a / 2
             pen.line(O, PolToRect([1, next]))
-            pen.label.point(PolToRect([0.7, mid]), categories[i], 90, 10)
-            pen.label.point(PolToRect([0.7, mid]), labels[i], 270, 10)
-            pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), angleLabels[i] ?? angles[i] + "°")
+
+            if (categories[i] === '') {
+                pen.write(PolToRect([0.7, mid]), labels[i])
+            } else if (labels[i] === '') {
+                pen.write(PolToRect([0.7, mid]), categories[i])
+            } else {
+                pen.label.point(PolToRect([0.7, mid]), categories[i], 90, 10)
+                pen.label.point(PolToRect([0.7, mid]), labels[i], 270, 10)
+            }
+
+            if (angleLabels[i] !== undefined) {
+                pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), angleLabels[i] ?? angles[i] + "°")
+            }
             current += a
         }
         pen.autoCrop();

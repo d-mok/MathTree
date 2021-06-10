@@ -189,6 +189,79 @@ globalThis.TranslatePoint = contract(TranslatePoint).sign([
 ])
 
 
+
+
+
+
+/**
+ * @category Geometry
+ * @return Translate point P to the right by a distance.
+ * ```
+ * TranslateX([1,2],3) // [4,2]
+ * TranslateX([1,2],-3) // [-2,2]
+ * ```
+ */
+function TranslateX(P: Point, distance: number): Point {
+    return TranslatePoint(P, 0, distance)
+}
+globalThis.TranslateX = contract(TranslateX).sign([owl.point, owl.num])
+
+
+
+
+
+/**
+ * @category Geometry
+ * @return Translate point P upward by a distance.
+ * ```
+ * TranslateY([1,2],3) // [4,2]
+ * TranslateY([1,2],-3) // [-2,2]
+ * ```
+ */
+function TranslateY(P: Point, distance: number): Point {
+    return TranslatePoint(P, 90, distance)
+}
+globalThis.TranslateY = contract(TranslateY).sign([owl.point, owl.num])
+
+
+
+
+
+
+/**
+ * @category Geometry
+ * @return Reflect point P about x-axis
+ * ```
+ * ReflectX([1,2]) // [1,-2]
+ * ReflectX([1,-2]) // [1,2]
+ * ```
+ */
+function ReflectX(P: Point): Point {
+    return [P[0], -P[1]]
+}
+globalThis.ReflectX = contract(ReflectX).sign([owl.point])
+
+
+
+
+/**
+ * @category Geometry
+ * @return Reflect point P about y-axis
+ * ```
+ * ReflectY([1,2]) // [-1,2]
+ * ReflectY([-1,2]) // [1,2]
+ * ```
+ */
+function ReflectY(P: Point): Point {
+    return [-P[0], P[1]]
+}
+globalThis.ReflectY = contract(ReflectY).sign([owl.point])
+
+
+
+
+
+
 /**
  * @category Geometry
  * @return angle of intersection between two slopes

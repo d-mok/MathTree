@@ -4,7 +4,7 @@ import { evalInline } from './eval'
 
 function DropVersion(html: string, section: string, version: number) {
     let id = section + '.' + version;
-    return html.replace(new RegExp('<[^#<]*##' + id + '[^#]*##[^#>]*>', 'g'), '');
+    return html.replace(new RegExp('<p>##' + id + '<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>', 'g'), '');
 }
 
 

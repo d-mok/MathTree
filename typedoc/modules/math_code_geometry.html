@@ -2741,6 +2741,12 @@ img {
 			<a href="math_code_geometry.html#perpendicularfoot" class="tsd-kind-icon">Perpendicular<wbr>Foot</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_geometry.html#reflectx" class="tsd-kind-icon">ReflectX</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_geometry.html#reflecty" class="tsd-kind-icon">ReflectY</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_geometry.html#regularpolygon" class="tsd-kind-icon">Regular<wbr>Polygon</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2751,6 +2757,12 @@ img {
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_geometry.html#translatepoint" class="tsd-kind-icon">Translate<wbr>Point</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_geometry.html#translatex" class="tsd-kind-icon">TranslateX</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_geometry.html#translatey" class="tsd-kind-icon">TranslateY</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_geometry.html#turtle" class="tsd-kind-icon">Turtle</a>
@@ -2778,10 +2790,14 @@ img {
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#midpoint" class="tsd-kind-icon">Mid<wbr>Point</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#normal" class="tsd-kind-icon">Normal</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#perpendicularfoot" class="tsd-kind-icon">Perpendicular<wbr>Foot</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#reflectx" class="tsd-kind-icon">ReflectX</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#reflecty" class="tsd-kind-icon">ReflectY</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#regularpolygon" class="tsd-kind-icon">Regular<wbr>Polygon</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#rotatepoint" class="tsd-kind-icon">Rotate<wbr>Point</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#slope" class="tsd-kind-icon">Slope</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#translatepoint" class="tsd-kind-icon">Translate<wbr>Point</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#translatex" class="tsd-kind-icon">TranslateX</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#translatey" class="tsd-kind-icon">TranslateY</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#turtle" class="tsd-kind-icon">Turtle</a></li>
 						</ul>
 					</section>
@@ -3134,6 +3150,54 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="reflectx" class="tsd-anchor"></a>
+				<h3>ReflectX</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">ReflectX<span class="tsd-signature-symbol">(</span>P<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>P: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>Reflect point P about x-axis</p>
+						<pre><code><span style="color: #795E26">ReflectX</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// [1,-2]</span>
+<span style="color: #795E26">ReflectX</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// [1,2]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="reflecty" class="tsd-anchor"></a>
+				<h3>ReflectY</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">ReflectY<span class="tsd-signature-symbol">(</span>P<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>P: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>Reflect point P about y-axis</p>
+						<pre><code><span style="color: #795E26">ReflectY</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// [-1,2]</span>
+<span style="color: #795E26">ReflectY</span><span style="color: #000000">([-</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// [1,2]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 				<a name="regularpolygon" class="tsd-anchor"></a>
 				<h3>Regular<wbr>Polygon</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -3247,6 +3311,60 @@ img {
 						<p>Translate point P in the polar angle q (or the direction of point q) by a distance.</p>
 						<pre><code><span style="color: #795E26">TranslatePoint</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #098658">90</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [1,5]</span>
 <span style="color: #795E26">TranslatePoint</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">10</span><span style="color: #000000">, </span><span style="color: #098658">12</span><span style="color: #000000">],</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [3.006894195, 4.229882439]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="translatex" class="tsd-anchor"></a>
+				<h3>TranslateX</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">TranslateX<span class="tsd-signature-symbol">(</span>P<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, distance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>P: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>distance: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>Translate point P to the right by a distance.</p>
+						<pre><code><span style="color: #795E26">TranslateX</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [4,2]</span>
+<span style="color: #795E26">TranslateX</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],-</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [-2,2]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="translatey" class="tsd-anchor"></a>
+				<h3>TranslateY</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">TranslateY<span class="tsd-signature-symbol">(</span>P<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, distance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>P: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+							</li>
+							<li>
+								<h5>distance: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<p>Translate point P upward by a distance.</p>
+						<pre><code><span style="color: #795E26">TranslateY</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [4,2]</span>
+<span style="color: #795E26">TranslateY</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],-</span><span style="color: #098658">3</span><span style="color: #000000">) </span><span style="color: #008000">// [-2,2]</span>
 </code></pre>
 					</li>
 				</ul>

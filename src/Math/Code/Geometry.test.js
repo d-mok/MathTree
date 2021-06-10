@@ -96,6 +96,43 @@ test('TranslatePoint', () => {
 
 
 
+test('TranslateX', () => {
+    expect(TranslateX([1, 2], 3)).toEqual([4, 2]);
+    expect(TranslateX([1, 2], 4)).toEqual([5, 2]);
+    expect(TranslateX([1, 2], -3)).toEqual([-2, 2]);
+});
+
+
+
+test('TranslateY', () => {
+    expect(TranslateY([1, 2], 3)).toEqual([1, 5]);
+    expect(TranslateY([1, 2], 4)).toEqual([1, 6]);
+    expect(TranslateY([1, 2], -3)).toEqual([1, -1]);
+});
+
+
+
+
+test('ReflectX', () => {
+    expect(ReflectX([1, 2])).toEqual([1, -2]);
+    expect(ReflectX([-1, 2])).toEqual([-1, -2]);
+    expect(ReflectX([1, -2])).toEqual([1, 2]);
+});
+
+
+
+
+test('ReflectY', () => {
+    expect(ReflectY([1, 2])).toEqual([-1, 2]);
+    expect(ReflectY([-1, 2])).toEqual([1, 2]);
+    expect(ReflectY([1, -2])).toEqual([-1, -2]);
+});
+
+
+
+
+
+
 test('IntersectAngle', () => {
     expect(IntersectAngle(0, 1)).toBe(45);
     expect(IntersectAngle(1, -1)).toBe(90);

@@ -1076,6 +1076,42 @@ declare function Intersection(A: Point, B: Point, C: Point, D: Point): Point;
 declare function TranslatePoint(P: Point, q: number | Point, distance: number): Point;
 /**
  * @category Geometry
+ * @return Translate point P to the right by a distance.
+ * ```
+ * TranslateX([1,2],3) // [4,2]
+ * TranslateX([1,2],-3) // [-2,2]
+ * ```
+ */
+declare function TranslateX(P: Point, distance: number): Point;
+/**
+ * @category Geometry
+ * @return Translate point P upward by a distance.
+ * ```
+ * TranslateY([1,2],3) // [4,2]
+ * TranslateY([1,2],-3) // [-2,2]
+ * ```
+ */
+declare function TranslateY(P: Point, distance: number): Point;
+/**
+ * @category Geometry
+ * @return Reflect point P about x-axis
+ * ```
+ * ReflectX([1,2]) // [1,-2]
+ * ReflectX([1,-2]) // [1,2]
+ * ```
+ */
+declare function ReflectX(P: Point): Point;
+/**
+ * @category Geometry
+ * @return Reflect point P about y-axis
+ * ```
+ * ReflectY([1,2]) // [-1,2]
+ * ReflectY([-1,2]) // [1,2]
+ * ```
+ */
+declare function ReflectY(P: Point): Point;
+/**
+ * @category Geometry
  * @return angle of intersection between two slopes
  * ```
  * IntersectAngle(0,1) // 45
@@ -2104,6 +2140,33 @@ declare function Mode(...nums: number[]): number[];
  */
 declare function StdDev(...nums: number[]): number;
 /**
+ * @category Stat
+ * @return the location of median
+ * ```
+ * MedianAt(12) \\ 6.5
+ * MedianAt(13) \\ 7
+ * ```
+ */
+declare function MedianAt(total: number): number;
+/**
+ * @category Stat
+ * @return the location of LQ
+ * ```
+ * LowerQAt(12) \\ 3.5
+ * LowerQAt(13) \\ 3.5
+ * ```
+ */
+declare function LowerQAt(total: number): number;
+/**
+ * @category Stat
+ * @return the location of UQ
+ * ```
+ * UpperQAt(12) \\ 9.5
+ * UpperQAt(13) \\ 10.5
+ * ```
+ */
+declare function UpperQAt(total: number): number;
+/**
 * @category Text
 * @return a string of joined elements. [1,2,3] --> '1, 2 and 3'
 * ```
@@ -2904,7 +2967,7 @@ declare class AutoPenCls {
      *   categories: ['a','b','c','d','e'],
      *   labels: ['10%','20%','30%','40%',''],
      *   angles: [45,135,60,50,70],
-     *   angleLabels: [null,'x',null,null,''],
+     *   angleLabels: [null,'x',null,undefined,''],
      *   size:1.5
      * })
      * ```
@@ -3113,7 +3176,7 @@ declare class PenCls {
          * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
          * ```
          */
-        capture(...points: Point[]): void;
+        capture(...points: (Point | Point3D)[]): void;
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange
@@ -4517,7 +4580,7 @@ declare var Z: any;
  * @deprecated
  */
 declare var sections: [number | string, number][];
-declare var answer: string;
+declare var answer: string | number;
 declare var options: object;
 declare var question: string;
 declare var solution: string;
