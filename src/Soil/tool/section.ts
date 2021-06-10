@@ -36,7 +36,7 @@ export function ExecSection(html: string, sections: section[], dict: Dict) {
 
 function DropCondition(html: string, dict: Dict): string {
     return html.replace(
-        new RegExp('<[^#<]*##\{([^\{\}]*)\}[^#]*##[^#>]*>', 'g'),
+        new RegExp('<p>##\{([^\{\}]*)\}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>', 'g'),
         (match, p1) => evalInline(p1, dict) ? match : ""
     );
 }
