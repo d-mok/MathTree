@@ -1070,7 +1070,7 @@ class AutoPenCls {
         let maxSubUnit = maxUnit * (interval / subInterval)
         let height = (maxUnit) * interval * 1.1
 
-        pen.range.set([-width * 0.2, width], [-height, height]);
+        pen.range.set([-width * 0.5, width], [-height, height]);
         pen.size.resolution(0.2, 1.4 / height)
 
         pen.line([0, 0], [width, 0])
