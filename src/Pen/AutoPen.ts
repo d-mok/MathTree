@@ -972,7 +972,7 @@ class AutoPenCls {
      * })
      * ```
      */
-    PieChart({ categories, labels, angles, angleLabels, size = 1.5 }: {
+    PieChart({ categories, labels, angles, angleLabels, size = 2 }: {
         categories: string[],
         labels: string[],
         angles: number[],
@@ -1053,14 +1053,14 @@ class AutoPenCls {
         showLine = false }: {
             categories: string[],
             data: number[],
-            xLabel: string,
-            yLabel: string,
-            interval: number,
-            subInterval: number,
-            barWidth: number,
-            barGap: number,
-            showBar: boolean,
-            showLine: boolean
+            xLabel?: string,
+            yLabel?: string,
+            interval?: number,
+            subInterval?: number,
+            barWidth?: number,
+            barGap?: number,
+            showBar?: boolean,
+            showLine?: boolean
         }) {
         const pen = new Pen();
         let endGap = barWidth + barGap / 2
@@ -1162,8 +1162,8 @@ class AutoPenCls {
     StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }: {
         data: number[],
         labels?: string[],
-        stemTitle: string,
-        leafTitle: string
+        stemTitle?: string,
+        leafTitle?: string
     }) {
         const pen = new Pen();
 

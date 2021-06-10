@@ -2976,8 +2976,8 @@ declare class AutoPenCls {
         categories: string[];
         labels: string[];
         angles: number[];
-        angleLabels: string[];
-        size: number;
+        angleLabels: (string | null | undefined)[];
+        size?: number;
     }): void;
     /**
      * A bar chart / line chart / histogram / frequency polygon / cf polygon
@@ -3002,14 +3002,14 @@ declare class AutoPenCls {
     HeightChart({ categories, data, xLabel, yLabel, interval, subInterval, barWidth, barGap, showBar, showLine }: {
         categories: string[];
         data: number[];
-        xLabel: string;
-        yLabel: string;
-        interval: number;
-        subInterval: number;
-        barWidth: number;
-        barGap: number;
-        showBar: boolean;
-        showLine: boolean;
+        xLabel?: string;
+        yLabel?: string;
+        interval?: number;
+        subInterval?: number;
+        barWidth?: number;
+        barGap?: number;
+        showBar?: boolean;
+        showLine?: boolean;
     }): void;
     /**
      * A pie chart
@@ -3028,8 +3028,8 @@ declare class AutoPenCls {
     StemAndLeaf({ data, labels, stemTitle, leafTitle }: {
         data: number[];
         labels?: string[];
-        stemTitle: string;
-        leafTitle: string;
+        stemTitle?: string;
+        leafTitle?: string;
     }): void;
     /**
      * A boxplot
