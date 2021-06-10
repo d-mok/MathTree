@@ -1524,20 +1524,22 @@ class PenCls {
                 { displayMode: true, debugBounds: false, baseSize: size }
             );
             const bounds = widget.getBounds();
-            this.ctx.translate(xPix, yPix)
-            this.ctx.rotate(ANGLE);
-            let xTune: number = 2 - bounds.width / 2 - bounds.x
-            if (this.ctx.textAlign === 'left') xTune = 2 - bounds.x
-            if (this.ctx.textAlign === 'right') xTune = 2 - bounds.width - bounds.x
-            if (this.ctx.textAlign === 'center') xTune = 2 - bounds.width / 2 - bounds.x
+            if (bounds !== null) {
+                this.ctx.translate(xPix, yPix)
+                this.ctx.rotate(ANGLE);
+                let xTune: number = 2 - bounds.width / 2 - bounds.x
+                if (this.ctx.textAlign === 'left') xTune = 2 - bounds.x
+                if (this.ctx.textAlign === 'right') xTune = 2 - bounds.width - bounds.x
+                if (this.ctx.textAlign === 'center') xTune = 2 - bounds.width / 2 - bounds.x
 
-            let yTune: number = - bounds.y / 2
-            if (this.ctx.textBaseline === 'top') yTune = - bounds.y
-            if (this.ctx.textBaseline === 'bottom') yTune = - bounds.y - bounds.height
-            if (this.ctx.textBaseline === 'middle') yTune = - bounds.y - bounds.height / 2
+                let yTune: number = - bounds.y / 2
+                if (this.ctx.textBaseline === 'top') yTune = - bounds.y
+                if (this.ctx.textBaseline === 'bottom') yTune = - bounds.y - bounds.height
+                if (this.ctx.textBaseline === 'middle') yTune = - bounds.y - bounds.height / 2
 
-            this.ctx.translate(xTune, yTune)
-            widget.draw(this.ctx)
+                this.ctx.translate(xTune, yTune)
+                widget.draw(this.ctx)
+            }
         } else {
             this.ctx.translate(xPix, yPix)
             this.ctx.rotate(ANGLE);
@@ -2439,7 +2441,7 @@ class PenCls {
     /**
      * @ignore
      */
-    private _textWidth(text: string) {
+    private _textWidth(text: string): number {
         if (this.setProperty.TEXT_LATEX) {
             let size = Math.round(this.setProperty.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
             let color = this.ctx.fillStyle
@@ -2450,6 +2452,7 @@ class PenCls {
                 { displayMode: true, debugBounds: false, baseSize: size }
             );
             const bounds = widget.getBounds();
+            if (bounds === null) return 0
             return bounds.width / 2
         } else {
             return this.ctx.measureText(text).width / 2
