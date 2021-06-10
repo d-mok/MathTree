@@ -977,11 +977,11 @@ class AutoPenCls {
         labels: string[],
         angles: number[],
         angleLabels: (string | null | undefined)[],
-        size: number
+        size?: number
     }) {
         const pen = new Pen();
-        pen.setup.size(size);
-        pen.setup.range([-1.2, 1.2], [-1.2, 1.2]);
+        pen.range.set([-1.2, 1.2], [-1.2, 1.2]);
+        pen.size.set(size);
         pen.graph.circle([0, 0], 1)
         pen.set.angle('polar')
 
