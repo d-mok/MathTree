@@ -175,7 +175,8 @@ export function ParseForPrint(value: any, signal: string = ""): string {
     if (signal === '*') {
         if (T === 'number') {
             let v = ant.blur(Round(value, 3))
-            return String((v >= 10000 || v <= 0.01) ? Sci(v) : v)
+            let a = Math.abs(v)
+            return String((a >= 10000 || a <= 0.01) ? Sci(v) : v)
         }
     }
 
