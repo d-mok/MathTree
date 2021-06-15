@@ -17,7 +17,6 @@ function Projector(angle: number = 60, depth: number = 0.5) {
 globalThis.Projector = Projector
 
 
-
 /**
 * @category 3DPen
 * @deprecated

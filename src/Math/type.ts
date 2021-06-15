@@ -53,15 +53,6 @@ type Triangle = {
     angleC: number
 }
 
-type PartialTriangle = {
-    sideA: number | null,
-    sideB: number | null,
-    sideC: number | null,
-    angleA: number | null,
-    angleB: number | null,
-    angleC: number | null,
-}
-
 
 
 type QuadrantName = "I" | "II" | "III" | "IV"

@@ -98,14 +98,8 @@ globalThis.TriangleFromVertex = contract(TriangleFromVertex).sign([owl.point, ow
  * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
  * ```
  */
-function SolveTriangle(
-    { sideA = null,
-        sideB = null,
-        sideC = null,
-        angleA = null,
-        angleB = null,
-        angleC = null
-    }: PartialTriangle): Triangle {
+function SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: Partial<Triangle>): Triangle {
+
 
     let a = sideA
     let b = sideB
@@ -114,14 +108,23 @@ function SolveTriangle(
     let B = angleB
     let C = angleC
 
+    // temp
+    if (a === null) throw 'SolveTriangle not accept null now'
+    if (b === null) throw 'SolveTriangle not accept null now'
+    if (c === null) throw 'SolveTriangle not accept null now'
+    if (A === null) throw 'SolveTriangle not accept null now'
+    if (B === null) throw 'SolveTriangle not accept null now'
+    if (C === null) throw 'SolveTriangle not accept null now'
+
+
     function angleSum() {
-        if (A === null && B !== null && C !== null) A = 180 - B - C
-        if (B === null && A !== null && C !== null) B = 180 - A - C
-        if (C === null && B !== null && A !== null) C = 180 - A - B
+        if (A === undefined && B !== undefined && C !== undefined) A = 180 - B - C
+        if (B === undefined && A !== undefined && C !== undefined) B = 180 - A - C
+        if (C === undefined && B !== undefined && A !== undefined) C = 180 - A - B
     }
 
     function SSS() {
-        if (a !== null && b !== null && c !== null) {
+        if (a !== undefined && b !== undefined && c !== undefined) {
             A = CosineLawAngle(b, c, a)
             B = CosineLawAngle(c, a, b)
             C = CosineLawAngle(a, b, c)
@@ -129,23 +132,24 @@ function SolveTriangle(
     }
 
     function SAS() {
-        if (a !== null && b !== null && C !== null && c === null) c = CosineLawLength(a, b, C)
-        if (b !== null && c !== null && A !== null && a === null) a = CosineLawLength(b, c, A)
-        if (c !== null && a !== null && B !== null && b === null) b = CosineLawLength(c, a, B)
+        if (a !== undefined && b !== undefined && C !== undefined && c === undefined) c = CosineLawLength(a, b, C)
+        if (b !== undefined && c !== undefined && A !== undefined && a === undefined) a = CosineLawLength(b, c, A)
+        if (c !== undefined && a !== undefined && B !== undefined && b === undefined) b = CosineLawLength(c, a, B)
     }
 
     function AAS() {
-        let r: number | null = null
-        if (A !== null && a !== null && r === null) r = sin(A) / a
-        if (B !== null && b !== null && r === null) r = sin(B) / b
-        if (C !== null && c !== null && r === null) r = sin(C) / c
-        if (r !== null && A !== null && a === null) a = sin(A) / r
-        if (r !== null && B !== null && b === null) b = sin(B) / r
-        if (r !== null && C !== null && c === null) c = sin(C) / r
+        let r: number | undefined = undefined
+        if (A !== undefined && a !== undefined && r === undefined) r = sin(A) / a
+        if (B !== undefined && b !== undefined && r === undefined) r = sin(B) / b
+        if (C !== undefined && c !== undefined && r === undefined) r = sin(C) / c
+        if (r !== undefined && A !== undefined && a === undefined) a = sin(A) / r
+        if (r !== undefined && B !== undefined && b === undefined) b = sin(B) / r
+        if (r !== undefined && C !== undefined && c === undefined) c = sin(C) / r
     }
 
     for (let i = 0; i < 10; i++) {
-        if (a !== null && b !== null && c !== null && A !== null && B !== null && C !== null) {
+        if (a !== undefined && b !== undefined && c !== undefined
+            && A !== undefined && B !== undefined && C !== undefined) {
             return { sideA: a, sideB: b, sideC: c, angleA: A, angleB: B, angleC: C }
         }
         angleSum()
@@ -157,7 +161,6 @@ function SolveTriangle(
     throw 'never'
 }
 globalThis.SolveTriangle = contract(SolveTriangle).sign()
-
 
 
 /**

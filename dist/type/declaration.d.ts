@@ -420,14 +420,6 @@ declare type Triangle = {
     angleB: number;
     angleC: number;
 };
-declare type PartialTriangle = {
-    sideA: number | null;
-    sideB: number | null;
-    sideC: number | null;
-    angleA: number | null;
-    angleB: number | null;
-    angleC: number | null;
-};
 declare type QuadrantName = "I" | "II" | "III" | "IV";
 declare type QuadrantCode = 1 | 2 | 3 | 4;
 declare type PolarPoint = [r: number, q: number];
@@ -2364,7 +2356,7 @@ declare function TriangleFromVertex(A: Point, B: Point, C: Point, fix?: boolean)
  * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
  * ```
  */
-declare function SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: PartialTriangle): Triangle;
+declare function SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: Partial<Triangle>): Triangle;
 /**
  * @category Triangle
  * @return the orthocentre of a triangle

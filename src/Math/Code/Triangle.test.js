@@ -54,11 +54,8 @@ test('TriangleFromVertex', () => {
 test('SolveTriangle', () => {
     let T = SolveTriangle({
         sideA: 2,
-        angleB: null,
         sideC: 2,
-        angleA: null,
-        sideB: 2,
-        angleC: null
+        sideB: 2
     });
     //let T = SolveTriangle(2, null, 2, null, 2, null);
     expect(T.sideA).toBeCloseTo(2);
@@ -70,10 +67,7 @@ test('SolveTriangle', () => {
     T = SolveTriangle({
         sideA: 3,
         angleB: 90,
-        sideC: 4,
-        angleA: null,
-        sideB: null,
-        angleC: null
+        sideC: 4
     });
     //T = SolveTriangle(3, 90, 4, null, null, null);
     expect(T.sideA).toBeCloseTo(3);
@@ -85,10 +79,7 @@ test('SolveTriangle', () => {
     T = SolveTriangle({
         sideA: 5,
         angleB: 30,
-        sideC: null,
-        angleA: 80,
-        sideB: null,
-        angleC: null
+        angleA: 80
     });
     //T = SolveTriangle(5, 30, null, 80, null, null);
     expect(T.sideA).toBeCloseTo(5);
@@ -100,9 +91,6 @@ test('SolveTriangle', () => {
     T = SolveTriangle({
         sideA: 6,
         angleB: 30,
-        sideC: null,
-        angleA: null,
-        sideB: null,
         angleC: 40
     });
     //T = SolveTriangle(6, 30, null, null, null, 40);
