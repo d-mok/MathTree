@@ -3459,7 +3459,7 @@ declare class PenCls {
          * pen.set.labelCenter(true) // set center to be the center of the canvas
          * ```
          */
-        labelCenter(center?: Point | boolean): void;
+        labelCenter(center?: Point | Point3D | boolean): void;
         /**
          * Set length unit for line label.
          * @category set
