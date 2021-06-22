@@ -152,3 +152,8 @@ test('UpperQAt', () => {
     expect(UpperQAt(19)).toBe(15)
     expect(UpperQAt(20)).toBe(15.5)
 });
+
+test('Frequencies', () => {
+    expect(Frequencies(1,1,9,9,5,5,5)).toEqual([[1,5,9],[2,3,2]])
+    expect(Frequencies('a','c','c','b')).toEqual([['a','b','c'],[1,1,2]])
+});

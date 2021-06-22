@@ -225,3 +225,25 @@ function UpperQAt(total: number): number {
 }
 globalThis.UpperQAt = contract(UpperQAt).sign([owl.int])
 
+
+
+/**
+ * @category Stat
+ * @return array of the corresponding frequency of the value in a data set
+ * ```
+ * Frequencies(1,1,9,9,5,5,5) \\ [[1,5,9],[2,3,2]]
+ * Frequencies('a','c','c','b') \\ [['a','b','c'],[1,1,2]]
+ * ```
+ */
+ function Frequencies<T>(...data:T[]): [[value:T],[frequency:number]] {
+    let values = [...new Set(data)].sort((a,b)=>a>b?1:-1)
+    let arr: [[value:T],[frequency:number]] = []
+    for(let v of values){
+        arr[0].push(v)
+        arr[1].push(Frequency(v)(...data))
+    }
+    return arr   
+}
+globalThis.Frequencies = Frequencies
+
+

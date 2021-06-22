@@ -712,7 +712,7 @@ class AutoPenCls {
      *     showIntegralMax: false,
      *     showIntegralMin: false,
      *     contourColor : "grey",
-     *     constraintColors = ['black','black']
+     *     constraintColors : ['black','black']
      * })
      * ```
      */
