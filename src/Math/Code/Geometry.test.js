@@ -188,3 +188,13 @@ test('RegularPolygon', () => {
 
 
 
+
+
+test('ArcLength', () => {
+    expect(ArcLength(2,90)).toBe(Math.PI)
+    expect(ArcLength(2,180)).toBe(2*Math.PI)
+    expect(ArcLength(0,180)).toBe(0)
+});
+
+
+

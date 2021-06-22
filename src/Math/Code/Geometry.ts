@@ -394,3 +394,24 @@ function RegularPolygon(n: number, center: Point, radius: number, startAngle: nu
     return arr
 }
 globalThis.RegularPolygon = contract(RegularPolygon).sign([owl.num, owl.point, owl.num, owl.num])
+
+
+
+
+
+
+
+
+/**
+ * @category Geometry
+ * @return arc length with given radius and angle
+ * ```
+ * ArcLength(2,90) // pi
+ * ArcLength(2,180) // 2*pi
+ * ```
+ */
+function ArcLength(radius: number, theta: number): number {
+    return 2 * Math.PI * radius * theta / 360
+}
+globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative,owl.nonNegative])
+
