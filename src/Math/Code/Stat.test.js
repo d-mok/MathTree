@@ -157,3 +157,9 @@ test('Frequencies', () => {
     expect(Frequencies(1,1,9,9,5,5,5)).toEqual([[1,5,9],[2,3,2]])
     expect(Frequencies('a','c','c','b')).toEqual([['a','b','c'],[1,1,2]])
 });
+
+test('DataToSummary', () => {
+    expect(DataToSummary(1,1,2,3,3,3,3,4,5,5)).toStrictEqual([1,2,3,4,5])
+    expect(DataToSummary(1,2,3,4,5,6,7,8,9,10)).toStrictEqual([1,3,5.5,8,10])
+});
+

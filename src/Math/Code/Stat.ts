@@ -1,4 +1,5 @@
 
+
 /**
  * @category Stat
  * @return the minimum value. Equivalent to Math.min().
@@ -247,3 +248,15 @@ globalThis.UpperQAt = contract(UpperQAt).sign([owl.int])
 globalThis.Frequencies = Frequencies
 
 
+/**
+ * @category Stat
+ * @return array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
+ * ```
+ * DataToSummary(1,1,2,3,3,3,3,4,5,5) \\ [1,2,3,4,5]
+ * DataToSummary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
+ * ```
+ */
+ function DataToSummary(...data:number[]):number[] {
+    return [Min(...data),LowerQ(...data),Median(...data),UpperQ(...data),Max(...data)]
+}
+globalThis.DataToSummary= contract(DataToSummary).sign([owl.num])
