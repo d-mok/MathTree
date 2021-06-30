@@ -1,3 +1,4 @@
+
 const LP_BOUND = 100
 
 
@@ -296,3 +297,51 @@ function OptimizeField(points: Point[], field: Field, max: boolean): number {
 }
 globalThis.OptimizeField = OptimizeField
 
+
+
+/**
+ * 
+ * @category LinearProgram
+ * @return the constraints from the given points
+ * ```typescript
+ * ConstraintsFromPoints([[0,0],[10,10]],[1,2,3],true) // 33
+ * ConstraintsFromPoints([[0,0],[10,10]],[1,2,3],true) // 3
+ * ```
+ */
+ function ConstraintsFromPoints(...points: Point[],equal:boolean): Constraint[] {
+    if (IsConvexPolygon(...points)) { break };
+    const n=points.length;
+    let L:[a:number,b:number,c:number][]=[]
+    let C:number=0;
+    let l : [a:number,b:number,c:number]
+    let k:number=0
+    let constraints:Constraint[]=[]
+    let gotNegative:boolean=false
+    let sign:Ineq
+    for (let i=0;i<n;i++){
+        k=i+1
+        l = LinearFromTwoPoints(points[(i % n + n) % n],points[(k % n + n) % n])
+        gotNegative=false
+        for (let j=((i+2 % n + n) % n); j<((i-1 % n + n) % n); j++){
+            if (IsNegative(FieldAt(points[j],l))){
+                gotNegative=true
+            }
+        }
+        if (gotNegative) {
+            if (equal){
+                sign="\\le"
+            } else {
+                sign="\\lt"
+            }
+        } else {
+            if (equal){
+                sign="\\ge"
+            } else {
+                sign="\\gt"
+            }
+        }
+        constraints.push([l[0],l[1],sign,l[2]])
+    }
+    return constraints
+}
+globalThis.ConstraintsFromPoints = ConstraintsFromPoints
