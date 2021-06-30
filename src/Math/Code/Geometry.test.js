@@ -198,3 +198,8 @@ test('ArcLength', () => {
 
 
 
+test('IsConvexPolygon', () => {
+    expect(IsConvexPolygon([0,0],[1,0],[0,1])).toBe(true)
+    expect(IsConvexPolygon([0,0],[3,0],[1,1],[0,3])).toBe(false)
+});
+

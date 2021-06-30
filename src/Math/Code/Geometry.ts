@@ -1,4 +1,5 @@
 
+
 /**
  * @category Geometry
  * @return the slope of AB
@@ -415,3 +416,36 @@ function ArcLength(radius: number, theta: number): number {
 }
 globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative,owl.nonNegative])
 
+
+
+
+/**
+ * @category Geometry
+ * @return check is convex polygon
+ * ```
+ * IsConvexPolygon([0,0],[1,0],[0,1]) // true
+ * IsConvexPolygon([0,0],[3,0],[1,1],[0,3]) // false
+ * ```
+ */
+ function IsConvexPolygon (...points:Point[]) : boolean {
+    const n = points.length
+    let gotPositive:boolean = false
+    let gotNegative:boolean = false
+    let c:Vector3D
+    for (let i:number=0;i<n;i++){
+        let h:number = i-1
+        let k:number = i+1
+        c=CrossProduct([...points[(h % n + n) % n],0],[...points[(k % n + n) % n],0]) 
+        if (c[2] < 0)
+        {
+            gotNegative = true;
+        }
+        else if (c[2] > 0)
+        {
+            gotPositive = true;
+        }
+        if (gotNegative && gotPositive) return false;
+    }
+    return true
+}
+globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point])
