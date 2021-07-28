@@ -304,29 +304,23 @@ globalThis.OptimizeField = OptimizeField
  * @category LinearProgram
  * @return the constraints from the given points
  * ```typescript
- * ConstraintsFromPoints([[0,0],[10,10]],[1,2,3],true) // 33
- * ConstraintsFromPoints([[0,0],[10,10]],[1,2,3],true) // 3
+ * ConstraintsFromPoints([[0,0],[0,1],[1,0]],true) // [0,1,\\gt,0],[1,1,\\gt,0],[1,1,\\gt,0]
+ * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2],false) // [1, 3, "\\gt", -0],[3, 1, "\\lt", 8],[1, 1, "\\lt", 4],[1, -3, "\\gt", -8],[1, 1, "\\gt", -0]
  * ```
  */
- function ConstraintsFromPoints(...points: Point[],equal:boolean): Constraint[] {
-    if (IsConvexPolygon(...points)) { break };
+ function ConstraintsFromPoints(points: Point[],equal:boolean): Constraint[] {
+    Should(IsConvexPolygon(...points), 'Not a convex region');
     const n=points.length;
-    let L:[a:number,b:number,c:number][]=[]
-    let C:number=0;
-    let l : [a:number,b:number,c:number]
-    let k:number=0
     let constraints:Constraint[]=[]
-    let gotNegative:boolean=false
-    let sign:Ineq
     for (let i=0;i<n;i++){
-        k=i+1
-        l = LinearFromTwoPoints(points[(i % n + n) % n],points[(k % n + n) % n])
-        gotNegative=false
-        for (let j=((i+2 % n + n) % n); j<((i-1 % n + n) % n); j++){
-            if (IsNegative(FieldAt(points[j],l))){
+        let l : [a:number,b:number,c:number]= LinearFromTwoPoints(points[(i % n + n) % n],points[((i+1) % n + n) % n])
+        let gotNegative:boolean=false
+        for (let j=2;j<n;j++){
+            if (IsNegative(FieldAt(points[((i+j) % n + n) % n],l))){
                 gotNegative=true
             }
         }
+        let sign:Ineq
         if (gotNegative) {
             if (equal){
                 sign="\\le"
@@ -340,7 +334,7 @@ globalThis.OptimizeField = OptimizeField
                 sign="\\gt"
             }
         }
-        constraints.push([l[0],l[1],sign,l[2]])
+        constraints.push([l[0],l[1],sign,-l[2]])
     }
     return constraints
 }
