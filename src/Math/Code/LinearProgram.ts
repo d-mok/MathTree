@@ -304,12 +304,13 @@ globalThis.OptimizeField = OptimizeField
  * @category LinearProgram
  * @return the constraints from the given points
  * ```typescript
- * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [1,0,'\\ge',-0],[1,1,'\\le',1],[0,1,'\\ge',-0]
- * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2]) // [1, 3, "\\ge", -0],[3, 1, "\\le", 8],[1, 1, "\\le", 4],[1, -3, "\\ge", -8],[1, 1, "\\ge", -0]
+ * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
+ * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2]) // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
+ * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
  * ```
  */
  function ConstraintsFromPoints(...points: Point[]): Constraint[] {
-    
+    points=ArrangePoints(...points)
     Should(IsConvexPolygon(...points), 'Not a convex region');
     const n=points.length;
     let constraints:Constraint[]=[]
