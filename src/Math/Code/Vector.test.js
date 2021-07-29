@@ -84,3 +84,8 @@ test('VectorRotate', () => {
     expect(VectorRotate([1, 2], 360)).toEqual([1, 2]);
 });
 
+
+test('ArrangePoints', () => {
+    expect(ArrangePoints([0,0],[1,1],[0,1],[1,0])).toEqual([[1,0],[0,0],[0,1],[1,1]]);
+    expect(ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])).toEqual([[1,0],[0,0],[0,1],[1,2],[2,1]]);
+});

@@ -304,11 +304,12 @@ globalThis.OptimizeField = OptimizeField
  * @category LinearProgram
  * @return the constraints from the given points
  * ```typescript
- * ConstraintsFromPoints([[0,0],[0,1],[1,0]],true) // [0,1,\\gt,0],[1,1,\\gt,0],[1,1,\\gt,0]
- * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2],false) // [1, 3, "\\gt", -0],[3, 1, "\\lt", 8],[1, 1, "\\lt", 4],[1, -3, "\\gt", -8],[1, 1, "\\gt", -0]
+ * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [1,0,'\\ge',-0],[1,1,'\\le',1],[0,1,'\\ge',-0]
+ * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2]) // [1, 3, "\\ge", -0],[3, 1, "\\le", 8],[1, 1, "\\le", 4],[1, -3, "\\ge", -8],[1, 1, "\\ge", -0]
  * ```
  */
- function ConstraintsFromPoints(points: Point[],equal:boolean): Constraint[] {
+ function ConstraintsFromPoints(...points: Point[]): Constraint[] {
+    
     Should(IsConvexPolygon(...points), 'Not a convex region');
     const n=points.length;
     let constraints:Constraint[]=[]
@@ -321,19 +322,7 @@ globalThis.OptimizeField = OptimizeField
             }
         }
         let sign:Ineq
-        if (gotNegative) {
-            if (equal){
-                sign="\\le"
-            } else {
-                sign="\\lt"
-            }
-        } else {
-            if (equal){
-                sign="\\ge"
-            } else {
-                sign="\\gt"
-            }
-        }
+        sign=gotNegative?"\\le":"\\ge";
         constraints.push([l[0],l[1],sign,-l[2]])
     }
     return constraints

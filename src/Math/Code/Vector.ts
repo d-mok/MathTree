@@ -183,3 +183,18 @@ function VectorRotate(v: Vector, angle: number): Vector {
 globalThis.VectorRotate = contract(VectorRotate).sign([owl.vector, owl.num])
 
 
+
+
+/**
+ * @category ArrangePoints
+ * @return Arrange Points in anti-clockwise direction
+ * ```
+ * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
+ * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
+ * ```
+ */
+ function ArrangePoints(...points:Point[]): Point[] {
+    let mean:Point=[...VectorMean(...points.map(a=>Vector([0,0],a)))]
+    return points.sort((a,b)=>Direction(mean,b)-Direction(mean,a))
+}
+globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point])
