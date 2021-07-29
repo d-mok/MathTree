@@ -1157,6 +1157,24 @@ declare function Turtle(start: Point, ...walk: [rotate: number, distance: number
  * ```
  */
 declare function RegularPolygon(n: number, center: Point, radius: number, startAngle: number): Point[];
+/**
+ * @category Geometry
+ * @return arc length with given radius and angle
+ * ```
+ * ArcLength(2,90) // pi
+ * ArcLength(2,180) // 2*pi
+ * ```
+ */
+declare function ArcLength(radius: number, theta: number): number;
+/**
+ * @category Geometry
+ * @return check is convex polygon
+ * ```
+ * IsConvexPolygon([0,0],[1,0],[0,1]) // true
+ * IsConvexPolygon([0,0],[3,0],[1,1],[0,3]) // false
+ * ```
+ */
+declare function IsConvexPolygon(...points: Point[]): boolean;
 declare const LP_BOUND = 100;
 declare function onBoundary(p: Point): boolean;
 /**
@@ -1299,6 +1317,16 @@ declare function OptimizePoint(points: Point[], field: Field, max: boolean): Poi
  * ```
  */
 declare function OptimizeField(points: Point[], field: Field, max: boolean): number;
+/**
+ *
+ * @category LinearProgram
+ * @return the constraints from the given points
+ * ```typescript
+ * ConstraintsFromPoints([[0,0],[0,1],[1,0]],true) // [0,1,\\gt,0],[1,1,\\gt,0],[1,1,\\gt,0]
+ * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2],false) // [1, 3, "\\gt", -0],[3, 1, "\\lt", 8],[1, 1, "\\lt", 4],[1, -3, "\\gt", -8],[1, 1, "\\gt", -0]
+ * ```
+ */
+declare function ConstraintsFromPoints(points: Point[], equal: boolean): Constraint[];
 /**
  * @category Numeracy
  * @return division with x/0 handling
@@ -2159,6 +2187,24 @@ declare function LowerQAt(total: number): number;
  */
 declare function UpperQAt(total: number): number;
 /**
+ * @category Stat
+ * @return array of the corresponding frequency of the value in a data set
+ * ```
+ * Frequencies(1,1,9,9,5,5,5) \\ [[1,5,9],[2,3,2]]
+ * Frequencies('a','c','c','b') \\ [['a','b','c'],[1,1,2]]
+ * ```
+ */
+declare function Frequencies<T>(...data: T[]): [value: T[], frequency: number[]];
+/**
+ * @category Stat
+ * @return array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
+ * ```
+ * DataToSummary(1,1,2,3,3,3,3,4,5,5) \\ [1,2,3,4,5]
+ * DataToSummary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
+ * ```
+ */
+declare function DataToSummary(...data: number[]): number[];
+/**
 * @category Text
 * @return a string of joined elements. [1,2,3] --> '1, 2 and 3'
 * ```
@@ -2899,7 +2945,7 @@ declare class AutoPenCls {
      *     showIntegralMax: false,
      *     showIntegralMin: false,
      *     contourColor : "grey",
-     *     constraintColors = ['black','black']
+     *     constraintColors : ['black','black']
      * })
      * ```
      */

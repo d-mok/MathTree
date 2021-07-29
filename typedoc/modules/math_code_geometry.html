@@ -2711,6 +2711,9 @@ img {
 			<a href="math_code_geometry.html#anglepolar" class="tsd-kind-icon">Angle<wbr>Polar</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_geometry.html#arclength" class="tsd-kind-icon">Arc<wbr>Length</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_geometry.html#chessboarddistance" class="tsd-kind-icon">Chessboard<wbr>Distance</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
@@ -2727,6 +2730,9 @@ img {
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_geometry.html#intersection" class="tsd-kind-icon">Intersection</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="math_code_geometry.html#isconvexpolygon" class="tsd-kind-icon">Is<wbr>Convex<wbr>Polygon</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="math_code_geometry.html#isreflex" class="tsd-kind-icon">Is<wbr>Reflex</a>
@@ -2780,12 +2786,14 @@ img {
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#angle" class="tsd-kind-icon">Angle</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#anglepolar" class="tsd-kind-icon">Angle<wbr>Polar</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#arclength" class="tsd-kind-icon">Arc<wbr>Length</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#chessboarddistance" class="tsd-kind-icon">Chessboard<wbr>Distance</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#direction" class="tsd-kind-icon">Direction</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#distance" class="tsd-kind-icon">Distance</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#divisionpoint" class="tsd-kind-icon">Division<wbr>Point</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#intersectangle" class="tsd-kind-icon">Intersect<wbr>Angle</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#intersection" class="tsd-kind-icon">Intersection</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#isconvexpolygon" class="tsd-kind-icon">Is<wbr>Convex<wbr>Polygon</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#isreflex" class="tsd-kind-icon">Is<wbr>Reflex</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#midpoint" class="tsd-kind-icon">Mid<wbr>Point</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="math_code_geometry.html#normal" class="tsd-kind-icon">Normal</a></li>
@@ -2864,6 +2872,33 @@ img {
 						<pre><code><span style="color: #795E26">AnglePolar</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// 90</span>
 <span style="color: #795E26">AnglePolar</span><span style="color: #000000">([</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// 45</span>
 <span style="color: #795E26">AnglePolar</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// 315</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="arclength" class="tsd-anchor"></a>
+				<h3>Arc<wbr>Length</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Arc<wbr>Length<span class="tsd-signature-symbol">(</span>radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, theta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>radius: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>theta: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						<p>arc length with given radius and angle</p>
+						<pre><code><span style="color: #795E26">ArcLength</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">90</span><span style="color: #000000">) </span><span style="color: #008000">// pi</span>
+<span style="color: #795E26">ArcLength</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">180</span><span style="color: #000000">) </span><span style="color: #008000">// 2*pi</span>
 </code></pre>
 					</li>
 				</ul>
@@ -3032,6 +3067,30 @@ img {
 						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
 						<p>the intersection point of AB and CD.</p>
 						<pre><code><span style="color: #795E26">Intersection</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span><span style="color: #008000">// [1,1]</span>
+</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="isconvexpolygon" class="tsd-anchor"></a>
+				<h3>Is<wbr>Convex<wbr>Polygon</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">Is<wbr>Convex<wbr>Polygon<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>points: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p>check is convex polygon</p>
+						<pre><code><span style="color: #795E26">IsConvexPolygon</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">]) </span><span style="color: #008000">// true</span>
+<span style="color: #795E26">IsConvexPolygon</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// false</span>
 </code></pre>
 					</li>
 				</ul>
