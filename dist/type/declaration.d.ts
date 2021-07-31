@@ -1322,11 +1322,12 @@ declare function OptimizeField(points: Point[], field: Field, max: boolean): num
  * @category LinearProgram
  * @return the constraints from the given points
  * ```typescript
- * ConstraintsFromPoints([[0,0],[0,1],[1,0]],true) // [0,1,\\gt,0],[1,1,\\gt,0],[1,1,\\gt,0]
- * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2],false) // [1, 3, "\\gt", -0],[3, 1, "\\lt", 8],[1, 1, "\\lt", 4],[1, -3, "\\gt", -8],[1, 1, "\\gt", -0]
+ * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
+ * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2]) // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
+ * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
  * ```
  */
-declare function ConstraintsFromPoints(points: Point[], equal: boolean): Constraint[];
+declare function ConstraintsFromPoints(...points: Point[]): Constraint[];
 /**
  * @category Numeracy
  * @return division with x/0 handling
@@ -2623,6 +2624,15 @@ declare function VectorScaleTo(v: Vector, length: number): Vector;
  * ```
  */
 declare function VectorRotate(v: Vector, angle: number): Vector;
+/**
+ * @category ArrangePoints
+ * @return Arrange Points in anti-clockwise direction
+ * ```
+ * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
+ * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
+ * ```
+ */
+declare function ArrangePoints(...points: Point[]): Point[];
 /**
  * @category Vector3D
  * @return the vector OP
