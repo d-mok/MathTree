@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "publish": "npm run build-dev && npm run build && npm run build-type && npm run typedoc && npm run jest",
+    "publish": "npm run build-dev && npm run build && npm run build-type  && npm run jest",
     "build": "webpack --config webpack.edge.js",
     "build-dev": "webpack --config webpack.dev.js",
     "build-stable": "webpack --config webpack.stable.js",
