@@ -162,7 +162,7 @@ test('RndPoints', () => {
     let arr = sample(() => RndPoints([1, 4], [10, 14], 3));
     expect(arr.every(ps => {
         let a = Angle(ps[0], ps[1], ps[2]);
-        return ![0, 180].includes(ant.blur(a));
+        return ![0, 180].includes(cal.blur(a));
     })).toBeTrue();
     expect(arr).toAllHaveLength(3);
 });
@@ -228,7 +228,7 @@ test('RndTrigValue', () => {
     let arr = sample(() => RndTrigValue('sin', 60));
     let fs = arr.map(_ => _[0]);
     expect(fs.every(f => ['sin', 'cos', 'tan'].includes(f))).toBeTrue();
-    expect(arr.every(t => ant.eq(trig(t[0], t[1]), sin(60)))).toBeTrue();
+    expect(arr.every(t => cal.eq(trig(t[0], t[1]), sin(60)))).toBeTrue();
     expect(arr).toAllHaveLength(2);
 });
 
@@ -243,6 +243,6 @@ test('RndTrigEqv', () => {
     let arr = sample(() => RndTrigEqv('sin', 'x'));
     let fs = arr.map(_ => _[0]);
     expect(fs.every(f => ['sin', 'cos', 'tan'].includes(f))).toBeTrue();
-    expect(arr.every(t => ant.eq(trig(t[0], t[1] + t[2]), sin(1)))).toBeTrue();
+    expect(arr.every(t => cal.eq(trig(t[0], t[1] + t[2]), sin(1)))).toBeTrue();
     expect(arr).toAllHaveLength(4);
 });

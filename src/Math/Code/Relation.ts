@@ -9,7 +9,7 @@
  * ```
  */
 function AreDistinct(...nums: number[]): boolean {
-    nums = nums.map(ant.blur)
+    nums = nums.map(cal.blur)
     return (new Set(nums)).size === nums.length;
 }
 globalThis.AreDistinct = contract(AreDistinct).sign([owl.num])
@@ -62,24 +62,25 @@ globalThis.AreSameSign = contract(AreSameSign).sign([owl.num])
  * ```
  */
 function AreCoprime(...nums: number[]): boolean {
-    nums = nums.map(ant.blur)
+    nums = nums.map(cal.blur)
     if (!IsInteger(...nums)) return true
     if (!IsNonZero(...nums)) return true
-    return newList(nums).pairsEvery((a: number, b: number) => HCF(a, b) === 1)
+    return toList(nums).pairs().every(([a, b]) => HCF(a, b) === 1)
 }
 globalThis.AreCoprime = contract(AreCoprime).sign([owl.num])
 
 
 /**
  * @category Relation
+ * @deprecated use AreDifferent
  * @return Check if the points are all distinct.
  * ```
  * AreDistinctPoint([1,2],[3,4]) // true
  * AreDistinctPoint([1,2],[1,2]) // false
  * ```
  */
-function AreDistinctPoint(...points: Point[]) {
-    return newList(points).isDistinct()
+function AreDistinctPoint(...points: Point2D[]) {
+    return toList(points).duplessDeep()
 }
 globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point])
 
@@ -93,8 +94,8 @@ globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point])
  * ```
  */
 function AreDistantPoint(distance: number) {
-    let AreDistant = function (...points: Point[]): boolean {
-        return newList(points).pairsEvery((a, b) => Distance(a, b) >= distance)
+    let AreDistant = function (...points: Point2D[]): boolean {
+        return toShape2D(points).distances().min() >= distance
     }
     return contract(AreDistant).sign([owl.point])
 }
@@ -112,7 +113,7 @@ globalThis.AreDistantPoint = contract(AreDistantPoint).sign([owl.positive])
  */
 function AreOblique(minAngle: number) {
     let areOblique = function (...slopes: number[]): boolean {
-        return newList(slopes).pairsEvery((a, b) => IntersectAngle(a, b) >= minAngle)
+        return toList(slopes).pairs().every(([a, b]) => IntersectAngle(a, b) >= minAngle)
     }
     return contract(areOblique).sign([owl.num])
 }
@@ -129,6 +130,6 @@ globalThis.AreOblique = contract(AreOblique).sign([owl.positive])
  * ```
  */
 function AreDifferent(...items: any[]) {
-    return newList(items).isDistinct()
+    return toList(items).duplessDeep()
 }
 globalThis.AreDifferent = contract(AreDifferent).sign([owl.pass])

@@ -6,7 +6,7 @@
  * ```
  */
 function RndPick<T>(...items: T[]): T {
-    return dice.array(items).one()
+    return toList(items).draw()!
 }
 globalThis.RndPick = RndPick
 
@@ -19,7 +19,7 @@ globalThis.RndPick = RndPick
  * ```
  */
 function RndShuffle<T>(...items: T[]): T[] {
-    return dice.array(items).shuffle();
+    return [...toList(items).shuffled()]
 }
 globalThis.RndShuffle = RndShuffle
 
@@ -33,7 +33,7 @@ globalThis.RndShuffle = RndShuffle
  * ```
  */
 function RndPickN<T>(items: T[], n: number): T[] {
-    return dice.array(items).sample(n)
+    return [...toList(items).sample(n)!]
 }
 globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt])
 
@@ -41,14 +41,16 @@ globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt])
 
 /**
  * @category RandomUtil
- * @return n random unique items from given items
+ * @return n random unique items from given items, shallow compare.
  * ```
  * RndPickUnique([2,4,6],2) // may return [4,2]
  * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
  * ```
  */
 function RndPickUnique<T>(items: T[], n: number): T[] {
-    return dice.array(items).unique(n)
+    let ls = toList(items)
+    let f = () => ls.draw()!
+    return poker.dice(f).unique().rolls(n)
 }
 globalThis.RndPickUnique = contract(RndPickUnique).sign([owl.array, owl.positiveInt])
 
@@ -64,7 +66,7 @@ globalThis.RndPickUnique = contract(RndPickUnique).sign([owl.array, owl.positive
  * ```
  */
 function RndHe(): string {
-    return dice.he()
+    return poker.he()
 }
 globalThis.RndHe = RndHe
 
@@ -78,7 +80,7 @@ globalThis.RndHe = RndHe
  * ```
  */
 function RndShe(): string {
-    return dice.she()
+    return poker.she()
 }
 globalThis.RndShe = RndShe
 

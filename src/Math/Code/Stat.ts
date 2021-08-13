@@ -65,7 +65,7 @@ globalThis.SortBy = contract(SortBy).sign([owl.array, owl.pass])
  * ```
  */
 function Sum(...nums: number[]): number {
-    return ant.sum(...nums)
+    return toData(nums).sum()
 }
 globalThis.Sum = contract(Sum).sign([owl.num])
 
@@ -81,7 +81,7 @@ globalThis.Sum = contract(Sum).sign([owl.num])
  * ```
  */
 function Mean(...nums: number[]): number {
-    return ant.mean(...nums)
+    return toData(nums).mean()
 }
 globalThis.Mean = contract(Mean).sign([owl.num])
 
@@ -98,7 +98,7 @@ globalThis.Mean = contract(Mean).sign([owl.num])
  * ```
  */
 function Median(...nums: number[]): number {
-    return ant.median(...nums)
+    return toData(nums).median()
 }
 globalThis.Median = contract(Median).sign([owl.num])
 
@@ -112,11 +112,7 @@ globalThis.Median = contract(Median).sign([owl.num])
  * ```
  */
 function LowerQ(...nums: number[]): number {
-    nums = Sort(...nums)
-    let n = nums.length
-    let m = IsOdd(n) ? Floor(n / 2) : n / 2
-    nums.length = m
-    return Median(...nums)
+    return toData(nums).lowerQuartile()
 }
 globalThis.LowerQ = contract(LowerQ).sign([owl.num])
 
@@ -129,11 +125,7 @@ globalThis.LowerQ = contract(LowerQ).sign([owl.num])
  * ```
  */
 function UpperQ(...nums: number[]): number {
-    nums = Sort(...nums).reverse()
-    let n = nums.length
-    let m = IsOdd(n) ? Floor(n / 2) : n / 2
-    nums.length = m
-    return Median(...nums)
+    return toData(nums).upperQuartile()
 }
 globalThis.UpperQ = contract(UpperQ).sign([owl.num])
 
@@ -147,7 +139,7 @@ globalThis.UpperQ = contract(UpperQ).sign([owl.num])
  * ```
  */
 function Frequency<T>(item: T) {
-    return (...items: T[]) => items.filter(x => x === item).length
+    return (...items: T[]) => toList(items).freq(item)
 }
 globalThis.Frequency = Frequency
 
@@ -157,11 +149,11 @@ globalThis.Frequency = Frequency
  * @return mode of nums
  * ```
  * Mode(1,2,3,2,2,3,4) \\ [2]
- * Mode(1,1,2,2,3) \\ []
+ * Mode(1,1,2,2,3) \\ [1,2]
  * ```
  */
 function Mode(...nums: number[]): number[] {
-    return ant.mode(...nums)
+    return toData(nums).modes()
 }
 globalThis.Mode = contract(Mode).sign([owl.num])
 
@@ -175,7 +167,7 @@ globalThis.Mode = contract(Mode).sign([owl.num])
  * ```
  */
 function StdDev(...nums: number[]): number {
-    return ant.sd(...nums)
+    return toData(nums).stdDev()
 }
 globalThis.StdDev = contract(StdDev).sign([owl.num])
 
@@ -236,14 +228,14 @@ globalThis.UpperQAt = contract(UpperQAt).sign([owl.int])
  * Frequencies('a','c','c','b') \\ [['a','b','c'],[1,1,2]]
  * ```
  */
- function Frequencies<T>(...data:T[]): [value:T[],frequency:number[]] {
-    let values = [...new Set(data)].sort((a,b)=>a>b?1:-1)
-    let arr:[value:T[],frequency:number[]] = [[],[]]
-    for(let v of values){
+function Frequencies<T>(...data: T[]): [value: T[], frequency: number[]] {
+    let ls = toList(data)
+    let arr: [T[], number[]] = [[], []]
+    for (let v of ls.unique().ascending()) {
         arr[0].push(v)
-        arr[1].push(Frequency(v)(...data))
+        arr[1].push(ls.freq(v))
     }
-    return arr   
+    return arr
 }
 globalThis.Frequencies = Frequencies
 
@@ -256,7 +248,14 @@ globalThis.Frequencies = Frequencies
  * DataToSummary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
  * ```
  */
- function DataToSummary(...data:number[]):number[] {
-    return [Min(...data),LowerQ(...data),Median(...data),UpperQ(...data),Max(...data)]
+function DataToSummary(...data: number[]): number[] {
+    let d = toData(data)
+    return [
+        d.min(),
+        d.lowerQuartile(),
+        d.median(),
+        d.upperQuartile(),
+        d.max()
+    ]
 }
-globalThis.DataToSummary= contract(DataToSummary).sign([owl.num])
+globalThis.DataToSummary = contract(DataToSummary).sign([owl.num])

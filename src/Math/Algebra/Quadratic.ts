@@ -39,7 +39,7 @@ globalThis.QuadraticRoot = contract(QuadraticRoot).seal({
  * QuadraticVertex(1,2,3) // [-1,2]
  * ```
  */
-function QuadraticVertex(a: number, b: number, c: number): Point {
+function QuadraticVertex(a: number, b: number, c: number): Point2D {
     const h = Divide(-b, 2 * a)
     const k = a * h * h + b * h + c;
     return [h, k];

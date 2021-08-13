@@ -7,7 +7,7 @@
  */
 function log(b: number, N: number): number {
     const v = Math.log(N) / Math.log(b);
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.log = contract(log).sign([owl.positive])
 
@@ -22,7 +22,7 @@ globalThis.log = contract(log).sign([owl.positive])
  */
 function Power(a: number, b: number): number {
     const v = Math.pow(a, b);
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.Power = contract(Power).sign([owl.num])
 
@@ -35,7 +35,7 @@ globalThis.Power = contract(Power).sign([owl.num])
  */
 function Sqrt(x: number): number {
     const v = Math.sqrt(x)
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.Sqrt = contract(Sqrt).sign([owl.nonNegative])
 
@@ -51,7 +51,7 @@ globalThis.Sqrt = contract(Sqrt).sign([owl.nonNegative])
  */
 function Radian(degree: number): number {
     const v = degree / 180 * Math.PI
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.Radian = contract(Radian).sign([owl.num])
 
@@ -69,7 +69,7 @@ globalThis.Radian = contract(Radian).sign([owl.num])
  */
 function Degree(radian: number): number {
     const v = radian * 180 / Math.PI
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.Degree = contract(Degree).sign([owl.num])
 
@@ -85,7 +85,7 @@ globalThis.Degree = contract(Degree).sign([owl.num])
 function sin(x: number): number {
     if (x % 180 === 0) return 0
     let v = Math.sin(x / 180 * Math.PI);
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.sin = contract(sin).sign([owl.num])
 
@@ -99,7 +99,7 @@ globalThis.sin = contract(sin).sign([owl.num])
 function cos(x: number): number {
     if ((x - 90) % 180 === 0) return 0
     let v = Math.cos(x / 180 * Math.PI);
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.cos = contract(cos).sign([owl.num])
 
@@ -113,7 +113,7 @@ globalThis.cos = contract(cos).sign([owl.num])
 function tan(x: number): number {
     if (x % 180 === 0) return 0
     let v = Math.tan(x / 180 * Math.PI);
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.tan = contract(tan).sign([owl.num])
 
@@ -126,7 +126,7 @@ globalThis.tan = contract(tan).sign([owl.num])
  */
 function arcsin(x: number): number {
     let v = Math.asin(x) * 180 / Math.PI;
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.arcsin = contract(arcsin).sign([owl.between(-1, 1)])
 
@@ -139,7 +139,7 @@ globalThis.arcsin = contract(arcsin).sign([owl.between(-1, 1)])
  */
 function arccos(x: number): number {
     let v = Math.acos(x) * 180 / Math.PI;
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.arccos = contract(arccos).sign([owl.between(-1, 1)])
 
@@ -152,6 +152,6 @@ globalThis.arccos = contract(arccos).sign([owl.between(-1, 1)])
  */
 function arctan(x: number): number {
     let v = Math.atan(x) * 180 / Math.PI;
-    return ant.blur(v)
+    return cal.blur(v)
 }
 globalThis.arctan = contract(arctan).sign([owl.num])

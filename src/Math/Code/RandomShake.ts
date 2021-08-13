@@ -43,7 +43,7 @@ function RndShake(anchor: any): (typeof anchor)[] {
         return RndShakeTrigValue(anchor)
     }
     if (typeof anchor === 'number' && owl.num(anchor)) {
-        anchor = ant.blur(anchor)
+        anchor = cal.blur(anchor)
         // Integer
         if (owl.int(anchor)) {
             return RndShakeN(anchor)
@@ -75,15 +75,15 @@ globalThis.RndShake = RndShake
  */
 function RndShakeN(anchor: number): [number, number, number] {
     function N(): number {
-        anchor = ant.blur(anchor)
+        anchor = cal.blur(anchor)
         if (anchor === 0) return RndN(1, 3)
         let a = Abs(anchor)
         let range = Max(3, a * 0.1)
-        let max = Min(Floor(a + range), ant.logCeil(a) - 1)
-        let min = Max(Ceil(a - range), 1, ant.logFloor(a))
-        return dice.roll(() => RndN(min, max)).brute(x => x !== a) * Sign(anchor)
+        let max = Min(Floor(a + range), cal.logCeil(a) - 1)
+        let min = Max(Ceil(a - range), 1, cal.logFloor(a))
+        return poker.dice(() => RndN(min, max)).shield(x => x !== a).roll() * Sign(anchor)
     }
-    return dice.roll(N).unique(3) as [number, number, number]
+    return poker.dice(N).unique().rolls(3) as [number, number, number]
 }
 globalThis.RndShakeN = contract(RndShakeN).sign([owl.int])
 
@@ -99,18 +99,17 @@ globalThis.RndShakeN = contract(RndShakeN).sign([owl.int])
  * ```
  */
 function RndShakeR(anchor: number): number[] {
-    let exp = ant.e(anchor)
-    let m = ant.blur(ant.mantissa(anchor))
+    let exp = cal.e(anchor)
+    let m = cal.blur(cal.mantissa(anchor))
     if (IsInteger(m)) return RndShakeN(m).map(x => Number(x + "e" + exp))
-    let dp = ant.dp(m)
-    let func = dice
-        .roll(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
+    let dp = cal.dp(m)
+    return poker
+        .dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
         .shield(
             x => (x * m > 0) &&
-                (ant.e(x) === ant.e(m)) &&
+                (cal.e(x) === cal.e(m)) &&
                 (x !== m)
-        )
-    return dice.roll(func).unique(3).map(x => Number(x + "e" + exp))
+        ).unique().rolls(3).map(x => Number(x + "e" + exp))
 }
 globalThis.RndShakeR = contract(RndShakeR).sign([owl.num])
 
@@ -146,11 +145,11 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
  * ```
  */
 function RndShakeFrac(anchor: Fraction): Fraction[] {
-    let [p, q] = ant.simpFrac(...anchor);
-    [p, q] = [p, q].map(ant.blur)
+    let [p, q] = cal.toFraction(anchor[0] / anchor[1]);
+    [p, q] = [p, q].map(cal.blur)
     Should(IsInteger(p, q), 'input should be integral fraction')
-    let func = dice
-        .roll(
+    return poker
+        .dice(
             (): Fraction => {
                 const h = RndShakeN(p)[0]
                 const k = RndShakeN(q)[0]
@@ -168,8 +167,7 @@ function RndShakeFrac(anchor: Fraction): Fraction[] {
                 if (IsProbability(p / q) && !IsProbability(a / b)) return false
                 return true
             }
-        )
-    return dice.roll(func).unique(3, _ => _[0] / _[1])
+        ).unique(_ => _[0] / _[1]).rolls(3)
 }
 globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction])
 
@@ -204,7 +202,8 @@ globalThis.RndShakeDfrac = contract(RndShakeDfrac).sign([owl.dfrac])
  */
 function RndShakeIneq(anchor: Ineq): string[] {
     let f = ink.parseIneq(anchor)
-    return dice.array(IneqSign(...f).reverse()).balanced(3)
+    let [me, oppo] = IneqSign(...f)
+    return list(me, oppo, oppo).shuffled()
 }
 globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq])
 
@@ -218,14 +217,14 @@ globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq])
  * // may return [[2,5],[1,6],[4,2]]
  * ```
  */
-function RndShakePoint(anchor: Point): Point[] {
+function RndShakePoint(anchor: Point2D): Point2D[] {
     let [x, y] = anchor
-    let func = (): Point => {
+    let func = (): Point2D => {
         const h = IsInteger(x) ? RndShakeN(x)[0] : RndShakeR(x)[0]
         const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0]
         return [h, k]
     }
-    return dice.roll(func).distinct(3, (a, b) => a[0] === b[0] || a[1] === b[1])
+    return poker.dice(func).distinct((a, b) => a[0] === b[0] || a[1] === b[1]).rolls(3)
 }
 globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point])
 
@@ -249,7 +248,7 @@ function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, 
             RndT() ? c : !c
         ]
     }
-    return dice.roll(func).unique(3, _ => JSON.stringify(_))
+    return poker.dice(func).unique(_ => JSON.stringify(_)).rolls(3)
 }
 globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
 
@@ -300,12 +299,14 @@ globalThis.RndShakeTrigValue = contract(RndShakeTrigValue).sign([owl.trigValue])
  * ```
  */
 function RndShakeRatio(anchor: number[]): number[][] {
-    anchor = ant.ratio(...anchor)
+    anchor = [...toNumbers(anchor).ratio()]
     let func = (): number[] => {
         return anchor.map(x => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0])
     }
-    func = dice.roll(func).shield(r => ant.hcf(...r) === 1 && AreDifferent(anchor, r))
-    return dice.roll(func).unique(3, _ => JSON.stringify(_))
+    return poker.dice(func)
+        .shield(r => toNumbers(r).hcf() === 1 && AreDifferent(anchor, r))
+        .unique(_ => JSON.stringify(_))
+        .rolls(3)
 }
 globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple])
 
@@ -337,15 +338,15 @@ function RndShakeBase(anchor: string): string[] {
         let nonzero = str.split('').filter(_ => _ !== '0').length
         for (let d of str.split('')) {
             if (d === '0') {
-                let go = dice.bool(0.1)
-                s.push(go ? dice.array(digits).one() : '0')
+                let go = poker.bool(0.1)
+                s.push(go ? toList(digits).draw()! : '0')
             } else {
-                let go = dice.bool(1 / (nonzero + 2))
+                let go = poker.bool(1 / (nonzero + 2))
                 s.push(go ? shake(d) : d)
             }
         }
         let T = s.join('')
-        if (dice.bool(0.2)) T += '0'
+        if (poker.bool(0.2)) T += '0'
         return T
     }
 
@@ -368,7 +369,7 @@ function RndShakeBase(anchor: string): string[] {
 
         return [B1, B2, B3]
     }
-    return dice.roll(f).brute(_ => newList<string>([num, ..._]).isDistinct())
+    return poker.dice(f).shield(_ => toList<string>([num, ..._]).dupless()).roll()
 }
 globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base])
 

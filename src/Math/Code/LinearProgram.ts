@@ -2,7 +2,7 @@
 const LP_BOUND = 100
 
 
-function onBoundary(p: Point) {
+function onBoundary(p: Point2D) {
     return Abs(p[0]) >= LP_BOUND || Abs(p[1]) >= LP_BOUND
 }
 
@@ -16,7 +16,7 @@ function onBoundary(p: Point) {
  * FieldAt([1,2],[3,-4,5]) // 0
  * ```
  */
-function FieldAt(p: Point, field: Field): number {
+function FieldAt(p: Point2D, field: Field): number {
     const [a, b, c] = field
     const [x, y] = p
     return a * x + b * y + c
@@ -37,7 +37,7 @@ globalThis.FieldAt = FieldAt
  * // check whether [0,0] satisfies all the constraints
  * ```
  */
-function isConstrained(cons: Constraint[], point: Point): boolean {
+function isConstrained(cons: Constraint[], point: Point2D): boolean {
     const [x, y] = point
     return cons.every(con => {
         let [a, b, s, c] = con;
@@ -65,7 +65,7 @@ globalThis.isConstrained = isConstrained
  * // check whether [0,0] loosely satisfies all the constraints
  * ```
  */
-function isLooseConstrained(cons: Constraint[], point: Point): boolean {
+function isLooseConstrained(cons: Constraint[], point: Point2D): boolean {
     const [x, y] = point
     return cons.every(con => {
         let [a, b, s, c] = con;
@@ -102,7 +102,7 @@ function FeasiblePolygon(...cons: Constraint[]) {
         [0, 1, ">=", -LP_BOUND]
     ]
     let cs = [...cons, ...boundaryConstraints];
-    let vertices: Point[] = [];
+    let vertices: Point2D[] = [];
     for (let i = 0; i < cs.length; i++) {
         for (let j = i + 1; j < cs.length; j++) {
             let [a1, b1, s1, c1] = cs[i];
@@ -118,7 +118,7 @@ function FeasiblePolygon(...cons: Constraint[]) {
             }
         }
     }
-    vertices = newList(vertices).distinct()
+    vertices = toList(vertices).uniqueDeep()
     Should(vertices.length > 2, 'No feasible region.')
     const center = VectorMean(...vertices);
     vertices = SortBy(vertices, x => Direction(center, x))
@@ -195,7 +195,7 @@ globalThis.FeasibleIsBounded = FeasibleIsBounded
  * // [[1,1],[2,1]]
  * ```
  */
-function FeasibleIntegral(...cons: Constraint[]): Point[] {
+function FeasibleIntegral(...cons: Constraint[]): Point2D[] {
     let vertices = FeasiblePolygon(...cons)
     let xCoords = vertices.map(p => p[0])
     let yCoords = vertices.map(p => p[1])
@@ -204,10 +204,10 @@ function FeasibleIntegral(...cons: Constraint[]): Point[] {
     let ymax = Ceil(Max(...yCoords))
     let ymin = Floor(Min(...yCoords))
 
-    let points: Point[] = [];
+    let points: Point2D[] = [];
     for (let i = xmin; i <= xmax; i++) {
         for (let j = ymin; j <= ymax; j++) {
-            let p: Point = [i, j]
+            let p: Point2D = [i, j]
             if (isConstrained(cons, p)) points.push(p);
         }
     }
@@ -224,10 +224,10 @@ globalThis.FeasibleIntegral = FeasibleIntegral
  * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
  * ```
  */
-function MaximizePoint(points: Point[], field: Field): Point {
+function MaximizePoint(points: Point2D[], field: Field): Point2D {
     Should(points.length > 0, 'No feasible point')
     let orderedPoints = SortBy(points, x => -FieldAt(x, field))
-    orderedPoints = newList(orderedPoints).distinct()
+    orderedPoints = toList(orderedPoints).uniqueDeep()
     let point = orderedPoints[0]
     Should(!onBoundary(point), 'No max point')
     if (orderedPoints[1]) {
@@ -247,10 +247,10 @@ globalThis.MaximizePoint = MaximizePoint
  * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
  * ```
  */
-function MinimizePoint(points: Point[], field: Field): Point {
+function MinimizePoint(points: Point2D[], field: Field): Point2D {
     Should(points.length > 0, 'No feasible point')
     let orderedPoints = SortBy(points, x => FieldAt(x, field))
-    orderedPoints = newList(orderedPoints).distinct()
+    orderedPoints = toList(orderedPoints).uniqueDeep()
     let point = orderedPoints[0]
     Should(!onBoundary(point), 'No min point')
     if (orderedPoints[1]) {
@@ -271,7 +271,7 @@ globalThis.MinimizePoint = MinimizePoint
  * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
  * ```
  */
-function OptimizePoint(points: Point[], field: Field, max: boolean): Point {
+function OptimizePoint(points: Point2D[], field: Field, max: boolean): Point2D {
     if (max) {
         return MaximizePoint(points, field)
     } else {
@@ -291,7 +291,7 @@ globalThis.OptimizePoint = OptimizePoint
  * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
  * ```
  */
-function OptimizeField(points: Point[], field: Field, max: boolean): number {
+function OptimizeField(points: Point2D[], field: Field, max: boolean): number {
     let point = OptimizePoint(points, field, max)
     return FieldAt(point, field)
 }
@@ -309,7 +309,7 @@ globalThis.OptimizeField = OptimizeField
  * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
  * ```
  */
- function ConstraintsFromPoints(...points: Point[]): Constraint[] {
+ function ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
     points=ArrangePoints(...points)
     Should(IsConvexPolygon(...points), 'Not a convex region');
     const n=points.length;

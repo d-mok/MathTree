@@ -63,7 +63,7 @@ globalThis.Heron = contract(Heron).seal({
  * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
  * ```
  */
-function TriangleFromVertex(A: Point, B: Point, C: Point, fix = true): Triangle {
+function TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix = true): Triangle {
     let sideC = Distance(A, B)
     let sideA = Distance(B, C)
     let sideB = Distance(C, A)
@@ -170,11 +170,11 @@ globalThis.SolveTriangle = contract(SolveTriangle).sign()
  * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
  * ```
  */
-function Orthocentre(A: Point, B: Point, C: Point): Point {
+function Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let H = PerpendicularFoot(A, B, C)
     let G = PerpendicularFoot(B, C, A)
     let [x, y] = Intersection(C, H, A, G)
-    return [ant.blur(x), ant.blur(y)]
+    return [cal.blur(x), cal.blur(y)]
 }
 globalThis.Orthocentre = contract(Orthocentre).sign([owl.point])
 
@@ -187,11 +187,11 @@ globalThis.Orthocentre = contract(Orthocentre).sign([owl.point])
  * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
  * ```
  */
-function Circumcentre(A: Point, B: Point, C: Point): Point {
+function Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let [a1, b1, c1] = LinearFromBisector(A, B)
     let [a2, b2, c2] = LinearFromBisector(B, C)
     let [x, y] = Crammer(a1, b1, -c1, a2, b2, -c2)
-    return [ant.blur(x), ant.blur(y)]
+    return [cal.blur(x), cal.blur(y)]
 }
 globalThis.Circumcentre = contract(Circumcentre).sign([owl.point])
 
@@ -205,9 +205,9 @@ globalThis.Circumcentre = contract(Circumcentre).sign([owl.point])
  * Centroid([3,6],[9,12],[15,21])  // [9,13]
  * ```
  */
-function Centroid(A: Point, B: Point, C: Point): Point {
+function Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3]
-    return [ant.blur(x), ant.blur(y)]
+    return [cal.blur(x), cal.blur(y)]
 }
 globalThis.Centroid = contract(Centroid).sign([owl.point])
 
@@ -221,14 +221,14 @@ globalThis.Centroid = contract(Centroid).sign([owl.point])
  * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
  * ```
  */
-function Incentre(A: Point, B: Point, C: Point): Point {
+function Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let a = Distance(B, C)
     let b = Distance(A, C)
     let c = Distance(A, B)
     let p = a + b + c
     let x = (a * A[0] + b * B[0] + c * C[0]) / p
     let y = (a * A[1] + b * B[1] + c * C[1]) / p
-    return [ant.blur(x), ant.blur(y)]
+    return [cal.blur(x), cal.blur(y)]
 }
 globalThis.Incentre = contract(Incentre).sign([owl.point])
 

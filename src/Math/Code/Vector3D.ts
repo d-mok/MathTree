@@ -18,6 +18,7 @@ globalThis.Vec3D = contract(Vec3D).sign([owl.point3D])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return sum of all vectors
  * ```
  * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
@@ -36,6 +37,7 @@ globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return mean of all vectors
  * ```
  * Vec3DMean([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
@@ -53,6 +55,7 @@ globalThis.Vec3DMean = contract(Vec3DMean).sign([owl.vector3D])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return length of vector
  * ```
  * Vec3DLength([-3,4,0]) // 5
@@ -74,6 +77,7 @@ globalThis.Vec3DLength = contract(Vec3DLength).sign([owl.vector3D])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return find [kx,ky,kz] from [x,y,z]
  * ```
  * Vec3DScale([1,2,3],2) // [2,4,6]
@@ -91,6 +95,7 @@ globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return the unit vector of v
  * ```
  * Vec3DUnit([2,0,0]) // [1,0,0]
@@ -107,6 +112,7 @@ globalThis.Vec3DUnit = contract(Vec3DUnit).sign([owl.vector3D])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return scale the vector to the given length
  * ```
  * Vec3DScaleTo([2,0,0],10) // [10,0,0]
@@ -123,6 +129,7 @@ globalThis.Vec3DScaleTo = contract(Vec3DScaleTo).sign([owl.vector3D, owl.num])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return the projection vector of v
  * ```
  * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
@@ -140,6 +147,7 @@ globalThis.Vec3DProj = contract(Vec3DProj).sign([owl.vector3D, owl.vector3D])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return dot product of v1 and v2
  * ```
  * DotProduct([1, 1, 0], [0, 1, 1]) // 1
@@ -147,7 +155,7 @@ globalThis.Vec3DProj = contract(Vec3DProj).sign([owl.vector3D, owl.vector3D])
  * ```
  */
 function DotProduct(v1: Vector3D, v2: Vector3D): number {
-    return ant.dotProduct(v1, v2)
+    return vec3D(v1).dot(v2)
 }
 globalThis.DotProduct = contract(DotProduct).sign([owl.vector3D])
 
@@ -155,13 +163,14 @@ globalThis.DotProduct = contract(DotProduct).sign([owl.vector3D])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return cross product of v1 and v2
  * ```
  * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
  * ```
  */
 function CrossProduct(v1: Vector3D, v2: Vector3D): Vector3D {
-    return ant.crossProduct(v1, v2)
+    return vec3D(v1).cross(v2).toArray()
 }
 globalThis.CrossProduct = contract(CrossProduct).sign([owl.vector3D])
 
@@ -169,16 +178,14 @@ globalThis.CrossProduct = contract(CrossProduct).sign([owl.vector3D])
 
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return unit normal vector to the plane OAB
  * ```
  * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
  * ```
  */
 function NormalVector(O: Point3D, A: Point3D, B: Point3D): Vector3D {
-    let v1 = Vec3D(O, A)
-    let v2 = Vec3D(O, B)
-    let c = ant.crossProduct(v1, v2)
-    return Vec3DUnit(c)
+    return vec3D(O, A).cross(vec3D(O, B)).unit().toArray()
 }
 globalThis.NormalVector = contract(NormalVector).sign([owl.point3D])
 
@@ -201,7 +208,8 @@ function ProjectionOnPlane(point: Point3D, plane: [Point3D, Point3D, Point3D]): 
     let v_para = Vec3DAdd(v, Vec3DScale(v_perp, -1))
     return Vec3DAdd(O, v_para)
 }
-globalThis.ProjectionOnPlane = contract(ProjectionOnPlane).sign([owl.vector3D, owl.arrayWith(owl.vector3D)])
+globalThis.ProjectionOnPlane = contract(ProjectionOnPlane)
+    .sign([owl.vector3D, owl.arrayWith(owl.vector3D)])
 
 
 
@@ -213,10 +221,14 @@ globalThis.ProjectionOnPlane = contract(ProjectionOnPlane).sign([owl.vector3D, o
  * EmbedPlane([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-function EmbedPlane(plane2D: Point[], origin: Point3D = [0, 0, 0], xVec: Vector3D = [1, 0, 0], yVec: Vector3D = [0, 1, 0]): Point3D[] {
-    return plane2D.map(p => Vec3DAdd(origin, Vec3DScale(xVec, p[0]), Vec3DScale(yVec, p[1])))
+function EmbedPlane(plane2D: Point2D[], origin: Point3D = [0, 0, 0], xVec: Vector3D = [1, 0, 0], yVec: Vector3D = [0, 1, 0]): Point3D[] {
+    return toShape2D(plane2D)
+        .erect(xVec, yVec)
+        .translate(origin)
+        .toArray()
 }
-globalThis.EmbedPlane = contract(EmbedPlane).sign([owl.arrayWith(owl.point), owl.point3D, owl.vector3D, owl.vector3D])
+globalThis.EmbedPlane = contract(EmbedPlane)
+    .sign([owl.arrayWith(owl.point), owl.point3D, owl.vector3D, owl.vector3D])
 
 
 
@@ -228,7 +240,7 @@ globalThis.EmbedPlane = contract(EmbedPlane).sign([owl.arrayWith(owl.point), owl
  * EmbedPlaneZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-function EmbedPlaneZ(plane2D: Point[], z: number = 0): Point3D[] {
+function EmbedPlaneZ(plane2D: Point2D[], z: number = 0): Point3D[] {
     return EmbedPlane(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0])
 }
 globalThis.EmbedPlaneZ = contract(EmbedPlaneZ).sign([owl.arrayWith(owl.point), owl.num])
@@ -236,6 +248,7 @@ globalThis.EmbedPlaneZ = contract(EmbedPlaneZ).sign([owl.arrayWith(owl.point), o
 
 /**
  * @category Vector3D
+ * @deprecated use Extrude
  * @return extrude the lower base of a frustum towards the upper base by a ratio
  * ```
  * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
@@ -254,3 +267,23 @@ function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: number) 
     return arr
 }
 globalThis.ExtrudeBase = contract(ExtrudeBase).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num])
+
+
+
+
+/**
+ * @category Vector3D
+ * @return extrude the lower base of a frustum towards the upper base by a ratio
+ * ```
+ * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
+ * Extrude([A,B,C],[[0,0,4]],0.75) // [[0,0,0],[3,0,0],[0,3,0]]
+ * ```
+ */
+function Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: number): Point3D[] {
+    let max = Math.max(lowerBase.length, upperBase.length)
+    let LB = toShape3D(lowerBase).padTail(max)
+    let UB = toShape3D(upperBase).padTail(max)
+    return LB.extrudeToShape(UB, scale).toArray()
+}
+globalThis.Extrude = contract(Extrude).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num])
+

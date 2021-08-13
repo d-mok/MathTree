@@ -174,7 +174,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === '*') {
         if (T === 'number') {
-            let v = ant.blur(Round(value, 3))
+            let v = cal.blur(Round(value, 3))
             let abs = Math.abs(v)
             return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v)
         }
@@ -220,7 +220,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (T === 'number') {
             let s = Math.sign(value)
             let v = Math.abs(value)
-            let [p, q] = ant.simpSurd(ant.blur(v ** 2))
+            let [p, q] = cal.simpSurd(cal.blur(v ** 2))
             return s >= 0 ? ink.printSurd(p, q) : '-' + ink.printSurd(p, q)
         }
     }
@@ -280,7 +280,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === ':') {
         if (owl.ntuple(value)) {
-            let v = ant.ratio(...value)
+            let v = cal.ratio(...value)
             return v.join(":")
         }
         if (T === 'number') {

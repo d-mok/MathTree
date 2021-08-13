@@ -6,7 +6,7 @@
  * Vector([1,2],[10,5]) // [9,3]
  * ```
  */
-function Vector(O: Point, P: Point): Vector {
+function Vector(O: Point2D, P: Point2D): Vector {
     return [P[0] - O[0], P[1] - O[1]];
 }
 globalThis.Vector = contract(Vector).sign([owl.point])
@@ -49,6 +49,7 @@ globalThis.VectorMean = contract(VectorMean).sign([owl.vector])
 
 /**
  * @category Vector
+ * @deprecated useless
  * @return length of vector
  * ```
  * VectorLength([-3,4]) // 5
@@ -68,6 +69,7 @@ globalThis.VectorLength = contract(VectorLength).sign([owl.vector])
 
 /**
  * @category Vector
+ * @deprecated useless
  * @return argument of vector
  * ```
  * VectorArg([2,0]) // 0
@@ -110,6 +112,7 @@ globalThis.VectorScale = contract(VectorScale).sign([owl.vector, owl.num])
 
 /**
  * @category Vector
+ * @deprecated Useless
  * @return the negative of the vector
  * ```
  * VectorRev([-3,4]) // [3,-4]
@@ -129,6 +132,7 @@ globalThis.VectorRev = contract(VectorRev).sign([owl.vector])
 
 /**
  * @category Vector
+ * @deprecated Useless
  * @return the unit vector of v
  * ```
  * VectorUnit([2,0]) // [1,0]
@@ -147,6 +151,7 @@ globalThis.VectorUnit = contract(VectorUnit).sign([owl.vector])
 
 /**
  * @category Vector
+ * @deprecated useless
  * @return scale the vector to the given length
  * ```
  * VectorScaleTo([2,0],10) // [10,0]
@@ -167,6 +172,7 @@ globalThis.VectorScaleTo = contract(VectorScaleTo).sign([owl.vector, owl.num])
 
 /**
  * @category Vector
+ * @deprecated Useless
  * @return rotate a vector anticlockwise by angle.
  * ```
  * VectorRotate([1,2],90) // [-2,1]
@@ -187,14 +193,15 @@ globalThis.VectorRotate = contract(VectorRotate).sign([owl.vector, owl.num])
 
 /**
  * @category ArrangePoints
- * @return Arrange Points in anti-clockwise direction
+ * @return Arrange Points in anti-clockwise direction around their mean
  * ```
  * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
  * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
  * ```
  */
- function ArrangePoints(...points:Point[]): Point[] {
-    let mean:Point=[...VectorMean(...points.map(a=>Vector([0,0],a)))]
-    return points.sort((a,b)=>Direction(mean,b)-Direction(mean,a))
+function ArrangePoints(...points: Point2D[]): Point2D[] {
+    let ss = toShape2D(points)
+    ss.sortAroundMean()
+    return ss.toArray()
 }
 globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point])

@@ -42,7 +42,7 @@ class FrameCls {
         // how many pixel is 1 y-unit
         return this.hPixel / this.yHeight();
     }
-    toPix(xyArr: Point): Point {
+    toPix(xyArr: Point2D): Point2D {
         // [xCoord,yCoord] --> [xPixel,yPixel]
         const x = xyArr[0];
         const y = xyArr[1];
@@ -50,7 +50,7 @@ class FrameCls {
         const yPixel = (this.ymax - y) * this.yUnit();
         return [xPixel, yPixel];
     }
-    toCoord(xyArr: Point): Point {
+    toCoord(xyArr: Point2D): Point2D {
         // [xPixel,yPixel] --> [xCoord,yCoord]
         const xPixel = xyArr[0];
         const yPixel = xyArr[1];

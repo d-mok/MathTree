@@ -17,7 +17,8 @@ globalThis.Crammer = contract(Crammer).seal({
     args: function has_unique_solution(a, b, c, p, q, r) { return a * q - b * p !== 0 }
 })
 
-Crammer(1,2,3,5,6,7) //?
+
+
 
 
 /**
@@ -56,23 +57,8 @@ globalThis.xPolynomial = contract(xPolynomial).sign([[
  * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
  * ```
  */
-function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number, dots = 1000) {
-    const tracer = (t: number): Point => {
-        let result: number | Point
-        try {
-            result = func(t);
-        } catch {
-            return [NaN, NaN]
-        }
-        if (!Array.isArray(result)) result = [t, result];
-        return result
-    };
-    const step = (tEnd - tStart) / (dots - 1);
-    let points: Point[] = []
-    for (let t = tStart; t <= tEnd; t += step) {
-        points.push(tracer(t))
-    }
-    return points
+function Trace(func: ((t: number) => number) | ((t: number) => Point2D), tStart: number, tEnd: number, dots = 1000): (Point2D | null)[] {
+    return cal.trace(func, [tStart, tEnd], dots)
 }
 globalThis.Trace = contract(Trace).sign([owl.pass, owl.num, owl.num, owl.positiveInt])
 
@@ -86,7 +72,7 @@ globalThis.Trace = contract(Trace).sign([owl.pass, owl.num, owl.num, owl.positiv
  * TraceCircle([0,0],1)
  * ```
  */
-function TraceCircle(center: Point, radius: number, angle = [0, 360]) {
+function TraceCircle(center: Point2D, radius: number, angle = [0, 360]) {
     let [x, y] = center
     let r = radius
     return Trace(t => [x + r * cos(t), y + r * sin(t)], angle[0], angle[1], 100)

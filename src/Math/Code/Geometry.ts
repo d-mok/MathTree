@@ -8,12 +8,12 @@
  * Slope([1,2],[1,2]) // NaN
  * ```
  */
-function Slope(A: Point, B: Point): number {
+function Slope(A: Point2D, B: Point2D): number {
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
 globalThis.Slope = contract(Slope).seal({
     arg: [owl.point],
-    args: function not_vertical(A, B) { return !ant.eq(A[0], B[0]) }
+    args: function not_vertical(A, B) { return !cal.eq(A[0], B[0]) }
 })
 
 
@@ -24,7 +24,7 @@ globalThis.Slope = contract(Slope).seal({
  * Distance([0,0],[1,2]) // 2.23606797749979
  * ```
  */
-function Distance(A: Point, B: Point): number {
+function Distance(A: Point2D, B: Point2D): number {
     return ((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2) ** 0.5;
 }
 globalThis.Distance = contract(Distance).sign([owl.point])
@@ -38,7 +38,7 @@ globalThis.Distance = contract(Distance).sign([owl.point])
  * ChessboardDistance([0,0],[3,2]) // 3
  * ```
  */
-function ChessboardDistance(A: Point, B: Point): number {
+function ChessboardDistance(A: Point2D, B: Point2D): number {
     let x = Abs(A[0] - B[0])
     let y = Abs(A[1] - B[1])
     return Max(x, y)
@@ -52,7 +52,7 @@ globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point])
  * MidPoint([1,2],[3,4]) // [2,3]
  * ```
  */
-function MidPoint(A: Point, B: Point): Point {
+function MidPoint(A: Point2D, B: Point2D): Point2D {
     return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
 }
 globalThis.MidPoint = contract(MidPoint).sign([owl.point])
@@ -64,7 +64,7 @@ globalThis.MidPoint = contract(MidPoint).sign([owl.point])
  * DivisionPoint([1,0],[5,0],0.75) // [4,0]
  * ```
  */
-function DivisionPoint(A: Point, B: Point, ratio = 0.5): Point {
+function DivisionPoint(A: Point2D, B: Point2D, ratio = 0.5): Point2D {
     let r = ratio;
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
@@ -79,7 +79,7 @@ globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point, owl.point, o
  * RotatePoint([1,2],[0,0],90) // [-2,1]
  * ```
  */
-function RotatePoint(P: Point, O: Point, q: number): Point {
+function RotatePoint(P: Point2D, O: Point2D, q: number): Point2D {
     let v = Vector(O, P);
     v = VectorRotate(v, q)
     return VectorAdd(O, v);
@@ -95,7 +95,7 @@ globalThis.RotatePoint = contract(RotatePoint).sign([owl.point, owl.point, owl.n
  * Direction([3,2],[1,0]) // 225
  * ```
  */
-function Direction(A: Point, B: Point): number {
+function Direction(A: Point2D, B: Point2D): number {
     return VectorArg(Vector(A, B))
 }
 globalThis.Direction = contract(Direction).seal({
@@ -115,7 +115,7 @@ globalThis.Direction = contract(Direction).seal({
  * Normal([3,2],[1,0]) // 135
  * ```
  */
-function Normal(A: Point, B: Point): number {
+function Normal(A: Point2D, B: Point2D): number {
     let R = RotatePoint(B, A, -90);
     return Direction(A, R);
 }
@@ -131,7 +131,7 @@ globalThis.Normal = contract(Normal).seal({
  * PerpendicularFoot([-1,-1],[1,1],[-2,2]) // [0,0]
  * ```
  */
-function PerpendicularFoot(A: Point, B: Point, P: Point): Point {
+function PerpendicularFoot(A: Point2D, B: Point2D, P: Point2D): Point2D {
     let q = Normal(A, B);
     let V = PolToRect([1, q]);
     let Q = VectorAdd(P, V);
@@ -150,7 +150,7 @@ globalThis.PerpendicularFoot = contract(PerpendicularFoot).seal({
  * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
  * ```
  */
-function Intersection(A: Point, B: Point, C: Point, D: Point): Point {
+function Intersection(A: Point2D, B: Point2D, C: Point2D, D: Point2D): Point2D {
     return Crammer(
         B[1] - A[1],
         A[0] - B[0],
@@ -177,7 +177,7 @@ globalThis.Intersection = contract(Intersection).seal({
  * TranslatePoint([1,2],[10, 12],3) // [3.006894195, 4.229882439]
  * ```
  */
-function TranslatePoint(P: Point, q: number | Point, distance: number): Point {
+function TranslatePoint(P: Point2D, q: number | Point2D, distance: number): Point2D {
     if (Array.isArray(q)) q = Direction(P, q)
     let x = P[0] + distance * cos(q)
     let y = P[1] + distance * sin(q)
@@ -202,7 +202,7 @@ globalThis.TranslatePoint = contract(TranslatePoint).sign([
  * TranslateX([1,2],-3) // [-2,2]
  * ```
  */
-function TranslateX(P: Point, distance: number): Point {
+function TranslateX(P: Point2D, distance: number): Point2D {
     return TranslatePoint(P, 0, distance)
 }
 globalThis.TranslateX = contract(TranslateX).sign([owl.point, owl.num])
@@ -219,7 +219,7 @@ globalThis.TranslateX = contract(TranslateX).sign([owl.point, owl.num])
  * TranslateY([1,2],-3) // [-2,2]
  * ```
  */
-function TranslateY(P: Point, distance: number): Point {
+function TranslateY(P: Point2D, distance: number): Point2D {
     return TranslatePoint(P, 90, distance)
 }
 globalThis.TranslateY = contract(TranslateY).sign([owl.point, owl.num])
@@ -237,7 +237,7 @@ globalThis.TranslateY = contract(TranslateY).sign([owl.point, owl.num])
  * ReflectX([1,-2]) // [1,2]
  * ```
  */
-function ReflectX(P: Point): Point {
+function ReflectX(P: Point2D): Point2D {
     return [P[0], -P[1]]
 }
 globalThis.ReflectX = contract(ReflectX).sign([owl.point])
@@ -253,7 +253,7 @@ globalThis.ReflectX = contract(ReflectX).sign([owl.point])
  * ReflectY([-1,2]) // [1,2]
  * ```
  */
-function ReflectY(P: Point): Point {
+function ReflectY(P: Point2D): Point2D {
     return [-P[0], P[1]]
 }
 globalThis.ReflectY = contract(ReflectY).sign([owl.point])
@@ -291,7 +291,7 @@ globalThis.IntersectAngle = contract(IntersectAngle).sign([owl.num])
  * Angle([1,3],[1,1],[2,2]) // 45
  * ```
  */
-function Angle(A: Point, O: Point, B: Point): number {
+function Angle(A: Point2D, O: Point2D, B: Point2D): number {
     let anglePolar = AnglePolar(A, O, B)
     return IsReflex(A, O, B) ? 360 - anglePolar : anglePolar
 }
@@ -314,7 +314,7 @@ globalThis.Angle = contract(Angle).seal({
  * AnglePolar([1,3],[1,1],[2,2]) // 315
  * ```
  */
-function AnglePolar(A: Point, O: Point, B: Point): number {
+function AnglePolar(A: Point2D, O: Point2D, B: Point2D): number {
     let a = VectorArg(Vector(O, A))
     let b = VectorArg(Vector(O, B))
     return a <= b ? b - a : 360 + b - a
@@ -337,7 +337,7 @@ globalThis.AnglePolar = contract(AnglePolar).seal({
  * IsReflex([1,3],[1,1],[2,2]) // true
  * ```
  */
-function IsReflex(A: Point, O: Point, B: Point): boolean {
+function IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean {
     let angle = AnglePolar(A, O, B)
     return angle > 180
 }
@@ -357,8 +357,8 @@ globalThis.IsReflex = contract(IsReflex).seal({
  * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
  * ```
  */
-function Turtle(start: Point, ...walk: [rotate: number, distance: number][]): Point[] {
-    let arr: Point[] = [start]
+function Turtle(start: Point2D, ...walk: [rotate: number, distance: number][]): Point2D[] {
+    let arr: Point2D[] = [start]
     let lastPoint = start
     let facing = 0
     for (let w of walk) {
@@ -381,15 +381,15 @@ globalThis.Turtle = contract(Turtle).sign([owl.point, owl.couple])
  * RegularPolygon(4,[0,0],1,0) // [[1,0],[0,1],[-1,0],[0,-1]]
  * ```
  */
-function RegularPolygon(n: number, center: Point, radius: number, startAngle: number) {
+function RegularPolygon(n: number, center: Point2D, radius: number, startAngle: number) {
     let a = 360 / n
-    let arr: Point[] = []
+    let arr: Point2D[] = []
     for (let i = 0; i < n; i++) {
         let p = PolToRect([radius, startAngle + i * a])
         p[0] += center[0]
         p[1] += center[1]
-        p[0] = ant.blur(p[0])
-        p[1] = ant.blur(p[1])
+        p[0] = cal.blur(p[0])
+        p[1] = cal.blur(p[1])
         arr.push(p)
     }
     return arr
@@ -414,7 +414,7 @@ globalThis.RegularPolygon = contract(RegularPolygon).sign([owl.num, owl.point, o
 function ArcLength(radius: number, theta: number): number {
     return 2 * Math.PI * radius * theta / 360
 }
-globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative,owl.nonNegative])
+globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative, owl.nonNegative])
 
 
 
@@ -427,22 +427,20 @@ globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative,owl.nonNegative
  * IsConvexPolygon([0,0],[3,0],[1,1],[0,3]) // false
  * ```
  */
- function IsConvexPolygon (...points:Point[]) : boolean {
-    
+function IsConvexPolygon(...points: Point2D[]): boolean {
+
     const n = points.length
-    Should(n>=3,"Not a polygon");
-    let gotPositive:boolean = false
-    let gotNegative:boolean = false
-    for (let i:number=0;i<n;i++){
-        let v1 = Vec3D([...points[((i-1) % n + n) % n],0], [...points[(i % n + n) % n],0])
-        let v2 = Vec3D([...points[(i % n + n) % n],0], [...points[((i+1) % n + n) % n],0])
-        let c:Vector3D=CrossProduct(v1,v2) 
-        if (c[2] < 0)
-        {
+    Should(n >= 3, "Not a polygon");
+    let gotPositive: boolean = false
+    let gotNegative: boolean = false
+    for (let i: number = 0; i < n; i++) {
+        let v1 = Vec3D([...points[((i - 1) % n + n) % n], 0], [...points[(i % n + n) % n], 0])
+        let v2 = Vec3D([...points[(i % n + n) % n], 0], [...points[((i + 1) % n + n) % n], 0])
+        let c: Vector3D = CrossProduct(v1, v2)
+        if (c[2] < 0) {
             gotNegative = true;
         }
-        else if (c[2] > 0)
-        {
+        else if (c[2] > 0) {
             gotPositive = true;
         }
         if (gotNegative && gotPositive) return false;

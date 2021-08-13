@@ -8,7 +8,7 @@
  */
 type Quadratic = [a: number, b: number, c: number]
 
-type Point = [x: number, y: number]
+type Point2D = [x: number, y: number]
 type Point3D = [x: number, y: number, z: number]
 type Vector = [x: number, y: number]
 type Vector3D = [x: number, y: number, z: number]
@@ -35,7 +35,7 @@ type Field = [xCoeff: number, yCoeff: number, constant: number]
 
 
 type Highlight = {
-    point: Point,
+    point: Point2D,
     color?: string,
     circle?: boolean,
     contour?: boolean,

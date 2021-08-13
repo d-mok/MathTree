@@ -8,7 +8,7 @@
 * ```
 */
 function Projector(angle: number = 60, depth: number = 0.5) {
-    return function (x: number, y: number, z: number): Point {
+    return function (x: number, y: number, z: number): Point2D {
         let x_new = x + depth * y * cos(angle)
         let y_new = z + depth * y * sin(angle)
         return [x_new, y_new]
@@ -26,8 +26,8 @@ globalThis.Projector = Projector
 * pj([1,1,0]) // [1.25, 0.433012701892]
 * ```
 */
-function Projector3D(angle: number = 60, depth: number = 0.5): (_: Point3D) => Point {
-    let projector = function (point3D: Point3D): Point {
+function Projector3D(angle: number = 60, depth: number = 0.5): (_: Point3D) => Point2D {
+    let projector = function (point3D: Point3D): Point2D {
         let [x, y, z] = point3D
         let x_new = x + depth * y * cos(angle)
         let y_new = z + depth * y * sin(angle)

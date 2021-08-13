@@ -6,7 +6,7 @@
  * CircleGeneral([2,3],5) // [-4,-6,-12]
  * ```
  */
-function CircleGeneral(centre: Point, radius: number): [D: number, E: number, F: number] {
+function CircleGeneral(centre: Point2D, radius: number): [D: number, E: number, F: number] {
     let [h, k] = centre
     let r = radius
     let D = -2 * h
@@ -26,7 +26,7 @@ globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point, owl.positive
  * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
  * ```
  */
-function CircleFromGeneral(D: number, E: number, F: number): [Point, number] {
+function CircleFromGeneral(D: number, E: number, F: number): [Point2D, number] {
     let [h, k] = [-D / 2, -E / 2]
     let R = (D / 2) ** 2 + (E / 2) ** 2 - F
     Should(R >= 0, "radius should be real")
@@ -45,23 +45,23 @@ globalThis.CircleFromGeneral = contract(CircleFromGeneral).sign([owl.num])
  * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
  * ```
  */
-function IntegralOnCircle(centre: Point, radius: number): Point[][] {
+function IntegralOnCircle(centre: Point2D, radius: number): Point2D[][] {
     let [h, k] = centre
     let r = radius
 
     let [xmin, xmax] = [Floor(h - r), Ceil(h + r)]
     let [ymin, ymax] = [Floor(k - r), Ceil(k + r)]
 
-    let arr: Point[] = []
+    let arr: Point2D[] = []
     for (let x = xmin; x <= xmax; x++) {
         for (let y = ymin; y <= ymax; y++) {
-            let P: Point = [x, y]
+            let P: Point2D = [x, y]
             if (Abs(Distance(centre, P) ** 2 - r ** 2) <= 10 * Number.EPSILON)
                 arr.push(P)
         }
     }
 
-    arr = SortBy(arr, (p: Point) => VectorArg(Vector([h, k], p)))
+    arr = SortBy(arr, (p: Point2D) => VectorArg(Vector([h, k], p)))
     let order = arr.length / 4
     let arr2 = []
     for (let i = 0; i < order; i++) {
@@ -86,10 +86,10 @@ globalThis.IntegralOnCircle = contract(IntegralOnCircle).sign([owl.point, owl.po
  * CircleLineIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
  * ```
  */
-function CircleLineIntersect(center: Point, radius: number, linear: [number, number, number]): [Point, Point] {
+function CircleLineIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D] {
     let [a, b, c] = linear
     let [h, k] = center
-    let r = radius  
+    let r = radius
     if (b !== 0) {
         let m = -a / b
         let n = -c / b - k
@@ -100,8 +100,8 @@ function CircleLineIntersect(center: Point, radius: number, linear: [number, num
         let [x1, x2] = QuadraticRoot(A, B, C)
         let y1 = (-a * x1 - c) / b
         let y2 = (-a * x2 - c) / b
-        let P: Point = [ant.blur(x1), ant.blur(y1)]
-        let Q: Point = [ant.blur(x2), ant.blur(y2)]
+        let P: Point2D = [cal.blur(x1), cal.blur(y1)]
+        let Q: Point2D = [cal.blur(x2), cal.blur(y2)]
         return [P, Q]
     } else {
         let x = -c / a
@@ -109,8 +109,8 @@ function CircleLineIntersect(center: Point, radius: number, linear: [number, num
         Should(D >= 0, 'no intersection')
         let y1 = k - Math.sqrt(D)
         let y2 = k + Math.sqrt(D)
-        let P: Point = [ant.blur(x), ant.blur(y1)]
-        let Q: Point = [ant.blur(x), ant.blur(y2)]
+        let P: Point2D = [cal.blur(x), cal.blur(y1)]
+        let Q: Point2D = [cal.blur(x), cal.blur(y2)]
         return [P, Q]
     }
 }

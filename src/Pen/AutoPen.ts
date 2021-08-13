@@ -138,11 +138,11 @@ class AutoPenCls {
             let solid = sign.includes('=') || sign.includes('e');
             let align = -width + 2 * width * position;
 
-            let B: Point = [align, base];
-            let T: Point = [align, base + height];
-            let E: Point = [greater ? align + 0.4 * width : align - 0.4 * width, base + height];
-            let E1: Point = [greater ? width : -width, base + height];
-            let E2: Point = [greater ? width : -width, base];
+            let B: Point2D = [align, base];
+            let T: Point2D = [align, base + height];
+            let E: Point2D = [greater ? align + 0.4 * width : align - 0.4 * width, base + height];
+            let E1: Point2D = [greater ? width : -width, base + height];
+            let E2: Point2D = [greater ? width : -width, base];
 
             if (vertical) {
                 pen.set.strokeColor('grey');
@@ -302,9 +302,9 @@ class AutoPenCls {
             }
 
 
-            let P: Point = [x, y]
-            let Q: Point = [x, 0]
-            let R: Point = [anchor, 0]
+            let P: Point2D = [x, y]
+            let Q: Point2D = [x, 0]
+            let R: Point2D = [anchor, 0]
             pen.set.fillColor()
             pen.point(P)
             pen.set.fillColor('red')
@@ -433,8 +433,8 @@ class AutoPenCls {
 
         if (p !== undefined && q !== undefined && p !== q) {
             pen.plot(x => Sign(a) * (x ** 2 - 4))
-            let P: Point = [2, 0]
-            let Q: Point = [-2, 0]
+            let P: Point2D = [2, 0]
+            let Q: Point2D = [-2, 0]
             pen.cutterH(P)
             pen.cutterH(Q)
             pen.set.weight(3)
@@ -540,7 +540,7 @@ class AutoPenCls {
         heights = [false, false, false],
         scale = 0.8
     }: {
-        vertices: Point[],
+        vertices: Point2D[],
         triangle: any,
         labels: string[],
         heights: [boolean, boolean, boolean],
@@ -624,7 +624,7 @@ class AutoPenCls {
 
 
 
-        function writeSide(side: any, start: Point, end: Point): void {
+        function writeSide(side: any, start: Point2D, end: Point2D): void {
             if (side) {
                 if (typeof side === 'string' && !(/\d/.test(side)))
                     pen.set.textItalic(true)
@@ -641,7 +641,7 @@ class AutoPenCls {
         writeSide(sideA, B, C)
         writeSide(sideB, C, A)
 
-        function writeAngle(angle: any, P: Point, O: Point, Q: Point): void {
+        function writeAngle(angle: any, P: Point2D, O: Point2D, Q: Point2D): void {
             if (angle) {
                 if (typeof angle === 'string') pen.set.textItalic(true)
                 if (typeof angle === 'number') angle = angle + '°'
@@ -766,14 +766,14 @@ class AutoPenCls {
         constraintColors: string[]
 
     }) {
-        function fieldAt(p: Point): number {
+        function fieldAt(p: Point2D): number {
             const [a, b, c] = field
             const [x, y] = p
             return Fix(a * x + b * y + c, 1)
         }
 
         let vertices = FeasiblePolygon(...constraints)
-        let integrals: Point[] = []
+        let integrals: Point2D[] = []
         if (showIntegral || showIntegralMax || showIntegralMin) {
             integrals = FeasibleIntegral(...constraints)
         }
@@ -832,7 +832,7 @@ class AutoPenCls {
         labelConstraints.push((x, y) => y > ymin)
         labelConstraints.push((x, y) => y < ymax)
 
-        function labelField(p: Point) {
+        function labelField(p: Point2D) {
             pen.set.textAlign("left")
             pen.label.point(p, fieldAt(p).toString(), 60, 10);
             pen.set.textAlign()
@@ -985,7 +985,7 @@ class AutoPenCls {
         pen.graph.circle([0, 0], 1)
         pen.set.angle('polar')
 
-        let O: Point = [0, 0]
+        let O: Point2D = [0, 0]
         pen.line(O, [1, 0])
         let current = 0
         for (let i = 0; i < angles.length; i++) {
@@ -1123,10 +1123,10 @@ class AutoPenCls {
         }
 
         if (showLine) {
-            let points: Point[] = []
+            let points: Point2D[] = []
             for (let i = 0; i < categories.length; i++) {
                 let x = endGap + i * (barWidth + barGap) + barGap / 2
-                let p: Point = [x + barWidth / 2, data[i]]
+                let p: Point2D = [x + barWidth / 2, data[i]]
                 pen.point(p)
                 points.push(p)
                 writeCat(x, barWidth, categories[i])
@@ -1263,23 +1263,23 @@ class AutoPenCls {
         let t = b + thickness
         let m = (b + t) / 2
 
-        let L: Point = [Q0, m]
-        let R: Point = [Q4, m]
-        let A1: Point = [Q1, t]
-        let A2: Point = [Q1, b]
-        let Am: Point = [Q1, m]
+        let L: Point2D = [Q0, m]
+        let R: Point2D = [Q4, m]
+        let A1: Point2D = [Q1, t]
+        let A2: Point2D = [Q1, b]
+        let Am: Point2D = [Q1, m]
 
-        let B1: Point = [Q2, t]
-        let B2: Point = [Q2, b]
-        let C1: Point = [Q3, t]
-        let C2: Point = [Q3, b]
-        let Cm: Point = [Q3, m]
+        let B1: Point2D = [Q2, t]
+        let B2: Point2D = [Q2, b]
+        let C1: Point2D = [Q3, t]
+        let C2: Point2D = [Q3, b]
+        let Cm: Point2D = [Q3, m]
 
-        let L_: Point = [Q0, 0]
-        let R_: Point = [Q4, 0]
-        let A_: Point = [Q1, 0]
-        let B_: Point = [Q2, 0]
-        let C_: Point = [Q3, 0]
+        let L_: Point2D = [Q0, 0]
+        let R_: Point2D = [Q4, 0]
+        let A_: Point2D = [Q1, 0]
+        let B_: Point2D = [Q2, 0]
+        let C_: Point2D = [Q3, 0]
 
 
         if (start === undefined) start = Q0 - (Q4 - Q0) * 0.2

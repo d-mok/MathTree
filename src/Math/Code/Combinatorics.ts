@@ -8,7 +8,7 @@
  * ```
  */
 function Factorial(n: number): number {
-    return ant.fac(n)
+    return cal.factorial(n)
 }
 globalThis.Factorial = contract(Factorial).sign([owl.nonNegativeInt])
 
@@ -20,7 +20,7 @@ globalThis.Factorial = contract(Factorial).sign([owl.nonNegativeInt])
  * ```
  */
 function nCr(n: number, r: number): number {
-    return ant.nCr(n, r)
+    return cal.nCr(n, r)
 }
 globalThis.nCr = contract(nCr).sign([owl.nonNegativeInt])
 
@@ -32,6 +32,6 @@ globalThis.nCr = contract(nCr).sign([owl.nonNegativeInt])
  * ```
  */
 function nPr(n: number, r: number): number {
-    return ant.nPr(n, r)
+    return cal.nPr(n, r)
 }
 globalThis.nPr = contract(nPr).sign([owl.nonNegativeInt])

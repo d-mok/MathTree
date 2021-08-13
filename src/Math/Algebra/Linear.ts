@@ -40,7 +40,7 @@ globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign()
  * LinearFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-function LinearFromTwoPoints(point1: Point, point2: Point): [a: number, b: number, c: number] {
+function LinearFromTwoPoints(point1: Point2D, point2: Point2D): [a: number, b: number, c: number] {
     return LF().byTwoPoints(point1, point2).linear()
 }
 globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).sign()
@@ -55,7 +55,7 @@ globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).sign()
  * LinearFromPointSlope([1,2],0) // [0,1,-2]
  * ```
  */
-function LinearFromPointSlope(point: Point, slope: number): [a: number, b: number, c: number] {
+function LinearFromPointSlope(point: Point2D, slope: number): [a: number, b: number, c: number] {
     return LF().byPointSlope(point, slope).linear()
 }
 globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign()
@@ -70,7 +70,7 @@ globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign()
  * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
  * ```
  */
-function LinearFromBisector(A: Point, B: Point): [a: number, b: number, c: number] {
+function LinearFromBisector(A: Point2D, B: Point2D): [a: number, b: number, c: number] {
     return LF().byBisector(A, B).linear()
 }
 globalThis.LinearFromBisector = contract(LinearFromBisector).sign()
@@ -102,7 +102,7 @@ globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign()
  * LineFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-function LineFromTwoPoints(point1: Point, point2: Point): [slope: number, yInt: number] {
+function LineFromTwoPoints(point1: Point2D, point2: Point2D): [slope: number, yInt: number] {
     return LF().byTwoPoints(point1, point2).line()
 }
 globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign()
@@ -117,7 +117,7 @@ globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign()
  * LineFromPointSlope([1,2],0) // [0,2]
  * ```
  */
-function LineFromPointSlope(point: Point, slope: number): [slope: number, yInt: number] {
+function LineFromPointSlope(point: Point2D, slope: number): [slope: number, yInt: number] {
     return LF().byPointSlope(point, slope).line()
 }
 globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign()
@@ -133,7 +133,7 @@ globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign()
  * LineFromBisector([1,2],[1,4]) // [0,3]
  * ```
  */
-function LineFromBisector(A: Point, B: Point): [slope: number, yInt: number] {
+function LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number] {
     return LF().byBisector(A, B).line()
 }
 globalThis.LineFromBisector = contract(LineFromBisector).sign()
@@ -150,7 +150,7 @@ class LinearFunction {
     private _linear: [a: number, b: number, c: number] = [NaN, NaN, NaN]
 
     // define
-    byTwoPoints(p1: Point, p2: Point) {
+    byTwoPoints(p1: Point2D, p2: Point2D) {
         Should(owl.point(p1) && owl.point(p2), 'input must be point')
         Should(AreDistinctPoint(p1, p2), 'two points should be distinct')
         let [x1, y1] = p1
@@ -171,9 +171,9 @@ class LinearFunction {
         return this
     }
 
-    byPointSlope(p: Point, m: number) {
+    byPointSlope(p: Point2D, m: number) {
         Should(owl.point(p), 'input must be point')
-        let p2: Point = [p[0] + 1, p[1] + m]
+        let p2: Point2D = [p[0] + 1, p[1] + m]
         this.byTwoPoints(p, p2)
         return this
     }
@@ -185,7 +185,7 @@ class LinearFunction {
         return this
     }
 
-    byBisector(A: Point, B: Point) {
+    byBisector(A: Point2D, B: Point2D) {
         Should(owl.point(A) && owl.point(B), 'input must be point')
         Should(AreDistinctPoint(A, B), 'two points should be distinct')
         if (A[0] === B[0]) {

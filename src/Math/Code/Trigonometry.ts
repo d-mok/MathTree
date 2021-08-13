@@ -10,7 +10,7 @@
  * Quadrant(350) \\ 'IV'
  * ```
  */
-function Quadrant(rect: Point | number): QuadrantName {
+function Quadrant(rect: Point2D | number): QuadrantName {
     if (!Array.isArray(rect)) rect = PolToRect([1, rect]);
     const q = RectToPol(rect)[1];
     if (q >= 0 && q < 90) return "I";
@@ -30,7 +30,7 @@ globalThis.Quadrant = contract(Quadrant).sign([owl.or([owl.point, owl.num])])
  * PolToRect([1,45]) // [0.707,0.707]
  * ```
  */
-function PolToRect([r, q]: PolarPoint): Point {
+function PolToRect([r, q]: PolarPoint): Point2D {
     return [r * cos(q), r * sin(q)];
 }
 globalThis.PolToRect = contract(PolToRect).sign([owl.polar])
@@ -43,7 +43,7 @@ globalThis.PolToRect = contract(PolToRect).sign([owl.polar])
  * RectToPol([1,1]) // [1.414,45]
  * ```
  */
-function RectToPol([x, y]: Point): PolarPoint {
+function RectToPol([x, y]: Point2D): PolarPoint {
     const r = Math.sqrt(x * x + y * y);
     let q = Math.atan2(y, x) * 180 / Math.PI;
     if (q < 0) q = q + 360;
@@ -237,9 +237,9 @@ globalThis.PolarDiff = contract(PolarDiff).sign([owl.num])
 function WholeBearing(polarAngle: number): string {
     let q = polarAngle
     q = PolarReduce(q)
-    q = ant.blur(q)
+    q = cal.blur(q)
     q = q <= 90 ? 90 - q : 450 - q
-    q = ant.blur(q)
+    q = cal.blur(q)
     return q.toString().padStart(3, '0') + '°'
 }
 globalThis.WholeBearing = contract(WholeBearing).sign([owl.int])
@@ -255,7 +255,7 @@ globalThis.WholeBearing = contract(WholeBearing).sign([owl.int])
 function CompassBearing(polarAngle: number): string {
     let q = polarAngle
     q = PolarReduce(q)
-    q = ant.blur(q)
+    q = cal.blur(q)
 
     if (q === 0) return 'east'
     if (q === 270) return 'south'

@@ -5,19 +5,19 @@ export const num = (_: unknown): _ is number => Number.isFinite(_)
 
 export const whole = (_: unknown): _ is number => Number.isInteger(_)
 
-export const int = (_: unknown): _ is number => num(_) && Number.isInteger(ant.blur(_))
+export const int = (_: unknown): _ is number => num(_) && Number.isInteger(cal.blur(_))
 
 export const dec = (_: unknown): _ is number => num(_) && !int(_)
 
-export const terminating = (_: unknown): _ is number => num(_) && ant.sigfig(_) < 10
+export const terminating = (_: unknown): _ is number => num(_) && cal.sigfig(_) < 10
 
-export const rational = (_: unknown): _ is number => num(_) && ant.fracable(_)
+export const rational = (_: unknown): _ is number => num(_) && cal.fracable(_)
 
-export const irrational = (_: unknown): _ is number => num(_) && !ant.fracable(_)
+export const irrational = (_: unknown): _ is number => num(_) && !cal.fracable(_)
 
-export const odd = (_: unknown): _ is number => int(_) && Math.abs(ant.blur(_)) % 2 === 1
+export const odd = (_: unknown): _ is number => int(_) && Math.abs(cal.blur(_)) % 2 === 1
 
-export const even = (_: unknown): _ is number => int(_) && Math.abs(ant.blur(_)) % 2 === 0
+export const even = (_: unknown): _ is number => int(_) && Math.abs(cal.blur(_)) % 2 === 0
 
 export const prob = (_: unknown): _ is number => num(_) && _ >= 0 && _ <= 1
 
@@ -93,7 +93,7 @@ export const ntuple = (_: unknown): _ is number[] => arrayWith(num)(_)
 
 export const interval = (_: unknown): _ is interval => couple(_) && _[0] <= _[1]
 
-export const point = (_: unknown): _ is Point => couple(_)
+export const point = (_: unknown): _ is Point2D => couple(_)
 
 export const point3D = (_: unknown): _ is Point3D => triple(_)
 

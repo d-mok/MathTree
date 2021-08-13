@@ -301,8 +301,8 @@ globalThis.IsAbsBetween = contract(IsAbsBetween).seal({
  * IsAroundPoint([0,0],2)([3,0]) // false
  * ```
  */
-function IsAroundPoint(anchor: Point, range: number) {
-    return (...points: Point[]): boolean => points.every(
+function IsAroundPoint(anchor: Point2D, range: number) {
+    return (...points: Point2D[]): boolean => points.every(
         p => ChessboardDistance(anchor, p) <= range
     );
 }

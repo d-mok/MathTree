@@ -125,8 +125,8 @@ globalThis.IndexToSurd = contract(IndexToSurd).sign([owl.str])
  * Coord([1,2]) // '(1, 2)'
  * ```
  */
-function Coord(point: Point, dp: number = 1): string {
-    let [a, b] = point.map(_ => ant.blur(_))
+function Coord(point: Point2D, dp: number = 1): string {
+    let [a, b] = point.map(_ => cal.blur(_))
     a = Fix(a, dp)
     b = Fix(b, dp)
     return '(' + a + ', ' + b + ')'
@@ -146,10 +146,10 @@ globalThis.Coord = contract(Coord).sign([owl.point])
  */
 function Sci(num: number): string {
     if (num === 0) return '0'
-    let m = ant.e(ant.blur(num))
+    let m = cal.e(cal.blur(num))
     if (m === 0) return num.toString()
     num = num / (10 ** m)
-    num = ant.blur(num)
+    num = cal.blur(num)
     return num.toString() + ' \\times ' + '10^{ ' + m + '}'
 }
 globalThis.Sci = contract(Sci).sign([owl.num])

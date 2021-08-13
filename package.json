@@ -44,6 +44,7 @@
     "chance": "^1.1.7",
     "decimal.js": "^10.2.1",
     "katex": "^0.13.3",
-    "mathjs": "^9.3.2"
+    "mathjs": "^9.3.2",
+    "sapphire-js": "^1.0.15"
   }
 }

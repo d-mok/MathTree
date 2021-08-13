@@ -54,7 +54,7 @@ globalThis.Sign = contract(Sign).sign([owl.num])
  * ```
  */
 function SigFig(num: number): number {
-    return ant.sigfig(ant.blur(num))
+    return cal.sigfig(cal.blur(num))
 }
 globalThis.SigFig = contract(SigFig).sign([owl.num])
 
@@ -73,7 +73,7 @@ globalThis.SigFig = contract(SigFig).sign([owl.num])
  */
 function Round(num: number, sigfig = 3): number {
     num = num * (1 + Number.EPSILON)
-    return ant.round(num, sigfig).off()
+    return cal.round(num, sigfig).off()
 
 }
 globalThis.Round = contract(Round).sign([owl.num, owl.positiveInt])
@@ -88,7 +88,7 @@ globalThis.Round = contract(Round).sign([owl.num, owl.positiveInt])
  */
 function RoundUp(num: number, sigfig = 3): number {
     num = num * (1 - Number.EPSILON)
-    return ant.round(num, sigfig).up()
+    return cal.round(num, sigfig).up()
 }
 globalThis.RoundUp = contract(RoundUp).sign([owl.num, owl.positiveInt])
 
@@ -102,7 +102,7 @@ globalThis.RoundUp = contract(RoundUp).sign([owl.num, owl.positiveInt])
  */
 function RoundDown(num: number, sigfig = 3): number {
     num = num * (1 + Number.EPSILON)
-    return ant.round(num, sigfig).down()
+    return cal.round(num, sigfig).down()
 }
 globalThis.RoundDown = contract(RoundDown).sign([owl.num, owl.positiveInt])
 
@@ -118,7 +118,7 @@ globalThis.RoundDown = contract(RoundDown).sign([owl.num, owl.positiveInt])
  */
 function Fix(num: number, dp = 0): number {
     num = num * (1 + Number.EPSILON)
-    return ant.fix(num, dp).off()
+    return cal.fix(num, dp).off()
 }
 globalThis.Fix = contract(Fix).sign([owl.num, owl.int])
 
@@ -133,7 +133,7 @@ globalThis.Fix = contract(Fix).sign([owl.num, owl.int])
  */
 function FixUp(num: number, dp = 0): number {
     num = num * (1 - Number.EPSILON)
-    return ant.fix(num, dp).up()
+    return cal.fix(num, dp).up()
 }
 globalThis.FixUp = contract(FixUp).sign([owl.num, owl.int])
 
@@ -150,7 +150,7 @@ globalThis.FixUp = contract(FixUp).sign([owl.num, owl.int])
  */
 function FixDown(num: number, dp = 0): number {
     num = num * (1 + Number.EPSILON)
-    return ant.fix(num, dp).down()
+    return cal.fix(num, dp).down()
 }
 globalThis.FixDown = contract(FixDown).sign([owl.num, owl.int])
 
@@ -196,11 +196,12 @@ globalThis.Floor = contract(Floor).sign([owl.num])
  * ```
  */
 function SimpRatio(...nums: number[]): number[] {
-    nums = nums.map(ant.blur)
-    if (!IsInteger(...nums)) return nums
-    let nonzeros = nums.filter(x => IsNonZero(x))
+    let ns = toNumbers(nums).blur()
+    // nums = nums.map(cal.blur)
+    if (!IsInteger(...ns)) return nums
+    let nonzeros = ns.filter($ => IsNonZero($))
     Should(nonzeros.length > 0, 'at least one non-zero num')
-    return ant.ratio(...nums)
+    return ns.reduceRatio()
 }
 globalThis.SimpRatio = contract(SimpRatio).sign([owl.num])
 
@@ -218,7 +219,8 @@ globalThis.SimpRatio = contract(SimpRatio).sign([owl.num])
  * ```
  */
 function Ratio(...nums: number[]): number[] {
-    return ant.ratio(...nums)
+    Should(IsRational(...nums), 'input must be rational')
+    return toNumbers(nums).ratio()
 }
 globalThis.Ratio = contract(Ratio).sign([owl.rational])
 
@@ -238,8 +240,7 @@ globalThis.Ratio = contract(Ratio).sign([owl.rational])
  * ```
  */
 function HCF(...nums: number[]): number {
-    nums = nums.map(ant.blur)
-    return ant.hcf(...nums)
+    return toNumbers(nums).hcf()
 }
 globalThis.HCF = contract(HCF).sign([owl.nonZeroInt])
 
@@ -255,8 +256,7 @@ globalThis.HCF = contract(HCF).sign([owl.nonZeroInt])
  * ```
  */
 function LCM(...nums: number[]): number {
-    nums = nums.map(ant.blur)
-    return ant.lcm(...nums)
+    return toNumbers(nums).lcm()
 }
 globalThis.LCM = contract(LCM).sign([owl.nonZeroInt])
 
@@ -274,7 +274,7 @@ globalThis.LCM = contract(LCM).sign([owl.nonZeroInt])
  * ```
  */
 function ToFrac(num: number): Fraction {
-    return ant.nearFrac(num)
+    return cal.toFraction(num)
 }
 globalThis.ToFrac = contract(ToFrac).sign([owl.rational])
 

@@ -27,7 +27,7 @@ class PenCls {
     /**
      * @ignore
      */
-    private pj: (_: Point3D) => Point = Projector3D(60, 0.5)
+    private pj: (_: Point3D) => Point2D = Projector3D(60, 0.5)
 
 
     /**
@@ -91,7 +91,7 @@ class PenCls {
          * pen.range.square(5,[1,2]) // define range -4<x<6 and -3<y<7
          * ```
          */
-        square(size: number, center: Point = [0, 0]) {
+        square(size: number, center: Point2D = [0, 0]) {
             let [x, y] = center
             this.set([x - size, x + size], [y - size, y + size])
         },
@@ -105,7 +105,7 @@ class PenCls {
          * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
          * ```
          */
-        capture(...points: (Point | Point3D)[]) {
+        capture(...points: (Point2D | Point3D)[]) {
             // let border = 0.3
             let pts = [...points].map(p => this._pen.project(p))
             let xmin = pts[0][0];
@@ -150,7 +150,7 @@ class PenCls {
          * // equivalent to pen.range.capture([0,0],[1,2],[3,4])
          * ```
          */
-        extend(...points: Point[]) {
+        extend(...points: Point2D[]) {
             this.capture([0, 0], ...points)
         }
     }
@@ -363,7 +363,7 @@ class PenCls {
          * pen.setup.squareRange(5,[1,2]) // define range -4<x<6 and -3<y<7
          * ```
          */
-        squareRange(size: number, center: Point = [0, 0]) {
+        squareRange(size: number, center: Point2D = [0, 0]) {
             let [x, y] = center
             this.range([x - size, x + size], [y - size, y + size])
         },
@@ -380,7 +380,7 @@ class PenCls {
          * pen.setup.inView([[1,2],[3,4]]) // the points [0,0], [1,2] and [3,4] must be in-view
          * ```
          */
-        inView(points: Point[], border = 0.3, origin = true) {
+        inView(points: Point2D[], border = 0.3, origin = true) {
             let pts = [...points]
             if (origin) pts.push([0, 0]);
             let xmin = pts[0][0];
@@ -412,7 +412,7 @@ class PenCls {
         TEXT_SIZE: number
         TEXT_DIR: number
         TEXT_LATEX: boolean
-        LABEL_CENTER: Point | undefined
+        LABEL_CENTER: Point2D | undefined
         ANGLE_MODE: 'normal' | 'polar' | 'reflex'
         LENGTH_UNIT: string | undefined
     } = {
@@ -605,7 +605,7 @@ class PenCls {
          * pen.set.labelCenter(true) // set center to be the center of the canvas
          * ```
          */
-        labelCenter(center: Point | Point3D | boolean = false): void {
+        labelCenter(center: Point2D | Point3D | boolean = false): void {
 
             if (center === false) this._pen.setProperty.LABEL_CENTER = undefined
             if (owl.point(center)) this._pen.setProperty.LABEL_CENTER = center
@@ -693,8 +693,8 @@ class PenCls {
      * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
      * ```
      */
-    plot(func: (t: number) => number | Point, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
-        let points: Point[] = Trace(func, tStart, tEnd, dots).map(x => this.frame.toPix(x))
+    plot(func: (t: number) => number | Point2D, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
+        let points: Point2D[] = Trace(func, tStart, tEnd, dots).map(x => this.frame.toPix(x))
         // const tracer = (t: number) => {
         //     let result: number | Point
         //     try {
@@ -765,7 +765,7 @@ class PenCls {
          * pen.graph.circle([1,2],3) // draw (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        circle(center: Point, radius: number) {
+        circle(center: Point2D, radius: number) {
             const [h, k] = center
             this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
         },
@@ -781,7 +781,7 @@ class PenCls {
          * pen.graph.arc([1,2],3,0,180) // draw upper semi-circle (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        arc(center: Point, radius: number, qStart: number, qEnd: number) {
+        arc(center: Point2D, radius: number, qStart: number, qEnd: number) {
             const [h, k] = center
             this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
         },
@@ -797,7 +797,7 @@ class PenCls {
          * pen.graph.sector([1,2],3,0,90) // draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        sector(center: Point, radius: number, qStart: number, qEnd: number) {
+        sector(center: Point2D, radius: number, qStart: number, qEnd: number) {
             this.arc(center, radius, qStart, qEnd)
             let A = TranslatePoint(center, qStart, radius)
             let B = TranslatePoint(center, qEnd, radius)
@@ -816,7 +816,7 @@ class PenCls {
          * pen.graph.segment([1,2],3,0,90) // draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        segment(center: Point, radius: number, qStart: number, qEnd: number) {
+        segment(center: Point2D, radius: number, qStart: number, qEnd: number) {
             this.arc(center, radius, qStart, qEnd)
             let A = TranslatePoint(center, qStart, radius)
             let B = TranslatePoint(center, qEnd, radius)
@@ -910,7 +910,7 @@ class PenCls {
      * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
      * ```
      */
-    point(position: Point | Point3D, label?: string) {
+    point(position: Point2D | Point3D, label?: string) {
         position = this.project(position)
         const [x, y] = this.frame.toPix(position);
         this.ctx.beginPath();
@@ -930,7 +930,7 @@ class PenCls {
      * pen.points({A,B},false) // mark point A and B, without label
      * ```
      */
-    points(positions: { [k: string]: Point | Point3D }, label = true) {
+    points(positions: { [k: string]: Point2D | Point3D }, label = true) {
         for (let k in positions) {
             if (label) {
                 this.point(positions[k], k)
@@ -950,7 +950,7 @@ class PenCls {
      * pen.cutterH([1,2]) // draw a horizontal cutter at [1,2]
      * ```
      */
-    cutterH(position: Point, label?: string) {
+    cutterH(position: Point2D, label?: string) {
         const [x, y] = position;
         const offset = this.frame.xOffset();
         this.line([x, y - offset], [x, y + offset]);
@@ -967,7 +967,7 @@ class PenCls {
      * pen.cutterV([1,2]) // draw a vertical cutter at [1,2]
      * ```
      */
-    cutterV(position: Point, label?: string) {
+    cutterV(position: Point2D, label?: string) {
         const [x, y] = position;
         const offset = this.frame.yOffset();
         this.line([x - offset, y], [x + offset, y]);
@@ -988,7 +988,7 @@ class PenCls {
      * pen.circle([1,2], 10, [0,180]) // draw a upper semi-circle
      * ```
      */
-    circle(center: Point, radius: number, angles = [0, 360], fill = false) {
+    circle(center: Point2D, radius: number, angles = [0, 360], fill = false) {
         const [x, y] = this.frame.toPix(center);
         this.ctx.beginPath();
         let [q1, q2] = angles;
@@ -1003,7 +1003,7 @@ class PenCls {
     /**
      * @ignore
      */
-    private _line(startPoint: Point | Point3D, endPoint: Point | Point3D, { arrow = false, dash = false }) {
+    private _line(startPoint: Point2D | Point3D, endPoint: Point2D | Point3D, { arrow = false, dash = false }) {
         startPoint = this.project(startPoint)
         endPoint = this.project(endPoint)
         this.ctx.save();
@@ -1051,7 +1051,7 @@ class PenCls {
      * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
      * ```
      */
-    line(startPoint: Point | Point3D, endPoint: Point | Point3D, label?: string) {
+    line(startPoint: Point2D | Point3D, endPoint: Point2D | Point3D, label?: string) {
         this._line(startPoint, endPoint, {})
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
@@ -1068,7 +1068,7 @@ class PenCls {
      * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
      * ```
      */
-    dash(startPoint: Point | Point3D, endPoint: Point | Point3D, label?: string) {
+    dash(startPoint: Point2D | Point3D, endPoint: Point2D | Point3D, label?: string) {
         this._line(startPoint, endPoint, { dash: true })
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
@@ -1084,7 +1084,7 @@ class PenCls {
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint: Point | Point3D, endPoint: Point | Point3D) {
+    arrow(startPoint: Point2D | Point3D, endPoint: Point2D | Point3D) {
         this._line(startPoint, endPoint, { arrow: true })
     }
 
@@ -1095,7 +1095,7 @@ class PenCls {
     /**
      * @ignore
      */
-    private _polygon(points: (Point | Point3D)[], { close = false, stroke = false, fill = false, shade = false }) {
+    private _polygon(points: (Point2D | Point3D)[], { close = false, stroke = false, fill = false, shade = false }) {
         let ps = points.map(_ => this.project(_))
         this.ctx.beginPath();
         let [xStart, yStart] = this.frame.toPix(ps[0]);
@@ -1125,7 +1125,7 @@ class PenCls {
      * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyline(...points: (Point | Point3D)[]) {
+    polyline(...points: (Point2D | Point3D)[]) {
         this._polygon(points, { stroke: true })
     }
 
@@ -1139,7 +1139,7 @@ class PenCls {
      * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polygon(...points: (Point | Point3D)[]) {
+    polygon(...points: (Point2D | Point3D)[]) {
         this._polygon(points, { close: true, stroke: true })
     }
 
@@ -1152,7 +1152,7 @@ class PenCls {
      * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyfill(...points: (Point | Point3D)[]) {
+    polyfill(...points: (Point2D | Point3D)[]) {
         this._polygon(points, { close: true, fill: true })
     }
 
@@ -1165,7 +1165,7 @@ class PenCls {
      * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyshade(...points: (Point | Point3D)[]) {
+    polyshade(...points: (Point2D | Point3D)[]) {
         this._polygon(points, { close: true, shade: true })
     }
 
@@ -1192,7 +1192,7 @@ class PenCls {
          * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        circle(center: Point, radius: number) {
+        circle(center: Point2D, radius: number) {
             const [h, k] = center
             let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
             this._pen.polyfill(...points)
@@ -1209,7 +1209,7 @@ class PenCls {
          * pen.fill.sector([1,2],3,0,90) // fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        sector(center: Point, radius: number, qStart: number, qEnd: number) {
+        sector(center: Point2D, radius: number, qStart: number, qEnd: number) {
             const [h, k] = center
             let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
             this._pen.polyfill(center, ...points)
@@ -1226,7 +1226,7 @@ class PenCls {
          * pen.fill.segment([1,2],3,0,90) // fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        segment(center: Point, radius: number, qStart: number, qEnd: number) {
+        segment(center: Point2D, radius: number, qStart: number, qEnd: number) {
             const [h, k] = center
             let points = Trace(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
             this._pen.polyfill(...points)
@@ -1251,7 +1251,7 @@ class PenCls {
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
-    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string | number, arc = 1, radius = -1) {
+    angle(A: Point2D | Point3D, O: Point2D | Point3D, B: Point2D | Point3D, label?: string | number, arc = 1, radius = -1) {
         A = this.project(A)
         B = this.project(B)
         O = this.project(O)
@@ -1287,7 +1287,7 @@ class PenCls {
          * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
          * ```
          */
-        equalSide(startPoint: Point | Point3D, endPoint: Point | Point3D, tick = 1) {
+        equalSide(startPoint: Point2D | Point3D, endPoint: Point2D | Point3D, tick = 1) {
             startPoint = this._pen.project(startPoint)
             endPoint = this._pen.project(endPoint)
             let length = 5
@@ -1337,7 +1337,7 @@ class PenCls {
          * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
          * ```
          */
-        parallel(startPoint: Point | Point3D, endPoint: Point | Point3D, tick = 1) {
+        parallel(startPoint: Point2D | Point3D, endPoint: Point2D | Point3D, tick = 1) {
             startPoint = this._pen.project(startPoint)
             endPoint = this._pen.project(endPoint)
             let size = 4
@@ -1383,7 +1383,7 @@ class PenCls {
          * // decorate an angle AOB with double-arc in anti-clockwise.
          * ```
          */
-        anglePolar(A: Point, O: Point, B: Point, arc = 1, radius = 15) {
+        anglePolar(A: Point2D, O: Point2D, B: Point2D, arc = 1, radius = 15) {
             A = this._pen.frame.toPix(A);
             let OPixel = this._pen.frame.toPix(O);
             B = this._pen.frame.toPix(B);
@@ -1410,7 +1410,7 @@ class PenCls {
          * // decorate an angle AOB with double-arc.
          * ```
          */
-        angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, arc = 1, radius = -1) {
+        angle(A: Point2D | Point3D, O: Point2D | Point3D, B: Point2D | Point3D, arc = 1, radius = -1) {
             A = this._pen.project(A)
             B = this._pen.project(B)
             O = this._pen.project(O)
@@ -1449,7 +1449,7 @@ class PenCls {
          * // decorate an right-angle AOB
          * ```
          */
-        rightAngle(A: Point | Point3D, O: Point | Point3D, B?: Point | Point3D, size = 12) {
+        rightAngle(A: Point2D | Point3D, O: Point2D | Point3D, B?: Point2D | Point3D, size = 12) {
             A = this._pen.project(A)
             O = this._pen.project(O)
             B ??= RotatePoint(A, O, 90)
@@ -1462,11 +1462,11 @@ class PenCls {
             let angleA = Math.atan2(A[1] - O[1], A[0] - O[0]);
             let angleB = Math.atan2(B[1] - O[1], B[0] - O[0]);
 
-            let P: Point = [O[0] + size * Math.cos(angleA), O[1] + size * Math.sin(angleA)];
-            let Q: Point = [O[0] + size * Math.cos(angleB), O[1] + size * Math.sin(angleB)];
-            let R: Point = [O[0] + size * Math.cos(angleA) + size * Math.cos(angleB), O[1] + size * Math.sin(angleA) + size * Math.sin(angleB)];
+            let P: Point2D = [O[0] + size * Math.cos(angleA), O[1] + size * Math.sin(angleA)];
+            let Q: Point2D = [O[0] + size * Math.cos(angleB), O[1] + size * Math.sin(angleB)];
+            let R: Point2D = [O[0] + size * Math.cos(angleA) + size * Math.cos(angleB), O[1] + size * Math.sin(angleA) + size * Math.sin(angleB)];
 
-            let draw = (A: Point, B: Point) => {
+            let draw = (A: Point2D, B: Point2D) => {
                 this._pen.ctx.beginPath();
                 this._pen.ctx.moveTo(A[0], A[1]);
                 this._pen.ctx.lineTo(B[0], B[1]);
@@ -1486,7 +1486,7 @@ class PenCls {
          * // decorate a compass at [1,2]
          * ```
          */
-        compass(position: Point) {
+        compass(position: Point2D) {
             this._pen.ctx.save();
             let [x0, y0] = this._pen.frame.toPix(position);
             let length = 50
@@ -1561,7 +1561,7 @@ class PenCls {
      * pen.write([1,2],'abc') // write 'abc' at [1,2]
      * ```
      */
-    write(position: Point | Point3D, text: string) {
+    write(position: Point2D | Point3D, text: string) {
         position = this.project(position)
         const [x, y] = this.frame.toPix(position);
         this._write(text, x, y);
@@ -1589,7 +1589,7 @@ class PenCls {
          * // label the point [1,2] as 'A', place the label on the left (180 degree)
          * ```
          */
-        point(position: Point | Point3D, text = '', dodgeDirection?: number, offsetPixel = 15) {
+        point(position: Point2D | Point3D, text = '', dodgeDirection?: number, offsetPixel = 15) {
             position = this._pen.project(position)
             let [x, y] = this._pen.frame.toPix(position);
             offsetPixel = offsetPixel * PEN_QUALITY;
@@ -1621,7 +1621,7 @@ class PenCls {
          * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
          * ```
          */
-        points(positions: { [k: string]: Point | Point3D }) {
+        points(positions: { [k: string]: Point2D | Point3D }) {
             for (let k in positions) {
                 this.point(positions[k], k)
             }
@@ -1642,7 +1642,7 @@ class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        anglePolar(anglePoints: [Point, Point, Point], text: string, dodgeDirection = 0, offsetPixel = 25) {
+        anglePolar(anglePoints: [Point2D, Point2D, Point2D], text: string, dodgeDirection = 0, offsetPixel = 25) {
             let [A, O, B] = anglePoints;
             let APixel = this._pen.frame.toPix(A);
             let OPixel = this._pen.frame.toPix(O);
@@ -1665,13 +1665,13 @@ class PenCls {
          * // label the angle as 'x'
          * ```
          */
-        angle(anglePoints: [Point | Point3D, Point | Point3D, Point | Point3D], text: string | number, dodgeDirection = 0, offsetPixel = -1) {
-            let ps = anglePoints.map(p=>this._pen.project(p)) as [Point, Point, Point]
+        angle(anglePoints: [Point2D | Point3D, Point2D | Point3D, Point2D | Point3D], text: string | number, dodgeDirection = 0, offsetPixel = -1) {
+            let ps = anglePoints.map(p=>this._pen.project(p)) as [Point2D, Point2D, Point2D]
             let mode = this._pen.setProperty.ANGLE_MODE
             if (mode === 'normal' && IsReflex(...ps))
-                ps = [...ps].reverse() as [Point, Point, Point]
+                ps = [...ps].reverse() as [Point2D, Point2D, Point2D]
             if (mode === 'reflex' && !IsReflex(...ps))
-                ps = [...ps].reverse() as [Point, Point, Point]
+                ps = [...ps].reverse() as [Point2D, Point2D, Point2D]
             // draw like polar
             let [A, O, B] = ps;
             let APixel = this._pen.frame.toPix(A);
@@ -1701,7 +1701,7 @@ class PenCls {
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        line(linePoints: [Point | Point3D, Point | Point3D], text: string | number, dodgeDirection = 0, offsetPixel = 15) {
+        line(linePoints: [Point2D | Point3D, Point2D | Point3D], text: string | number, dodgeDirection = 0, offsetPixel = 15) {
             let [A, B] = linePoints;
             A = this._pen.project(A)
             B = this._pen.project(B)
@@ -1735,7 +1735,7 @@ class PenCls {
          * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
          * ```
          */
-        coordinates(point: Point, dodgeDirection = 90, offsetPixel = 15) {
+        coordinates(point: Point2D, dodgeDirection = 90, offsetPixel = 15) {
             let text = '(' + Fix(point[0], 1) + ', ' + Fix(point[1], 1) + ')'
             this.point(point, text, dodgeDirection, offsetPixel)
         }
@@ -2234,7 +2234,7 @@ class PenCls {
          * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
          * ```
          */
-        prismZ(lowerBase: Point[], lowerZ: number, upperZ: number, {
+        prismZ(lowerBase: Point2D[], lowerZ: number, upperZ: number, {
             base = true,
             height = !true,
             shadeLower = !true,
@@ -2262,7 +2262,7 @@ class PenCls {
          * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
          * ```
          */
-        cylinderZ(center: Point, radius: number, lowerZ: number, upperZ: number, {
+        cylinderZ(center: Point2D, radius: number, lowerZ: number, upperZ: number, {
             base = true,
             height = !true,
             shadeLower = !true,
@@ -2289,7 +2289,7 @@ class PenCls {
          * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
          * ```
          */
-        pyramidZ(lowerBase: Point[], lowerZ: number, vertex: Point3D, {
+        pyramidZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, {
             base = true,
             height = !true,
             shadeLower = !true,
@@ -2314,7 +2314,7 @@ class PenCls {
          * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
          * ```
          */
-        coneZ(center: Point, radius: number, lowerZ: number, vertex: Point3D, {
+        coneZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, {
             base = true,
             height = !true,
             shadeLower = !true,
@@ -2340,7 +2340,7 @@ class PenCls {
     /**
      * @ignore
      */
-    project(point: Point3D | Point): Point {
+    project(point: Point3D | Point2D): Point2D {
         if (owl.point(point)) return point
         return this.pj(point)
     }
