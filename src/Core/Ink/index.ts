@@ -18,7 +18,7 @@ export function printDfrac(numerator: number, denominator: number, upSign = fals
     let p = numerator
     let q = denominator
     if (p === 0) return '0';
-    [p, q] = cal.simpFrac(p, q)
+    [p, q] = cal.toFraction(p / q)
     if (q === 1) return p.toString()
     if (upSign) {
         return '\\dfrac{' + p + '}{' + q + '}'

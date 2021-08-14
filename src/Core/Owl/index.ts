@@ -11,9 +11,9 @@ export const dec = (_: unknown): _ is number => num(_) && !int(_)
 
 export const terminating = (_: unknown): _ is number => num(_) && cal.sigfig(_) < 10
 
-export const rational = (_: unknown): _ is number => num(_) && cal.fracable(_)
+export const rational = (_: unknown): _ is number => num(_) && cal.isRational(_)
 
-export const irrational = (_: unknown): _ is number => num(_) && !cal.fracable(_)
+export const irrational = (_: unknown): _ is number => num(_) && !cal.isRational(_)
 
 export const odd = (_: unknown): _ is number => int(_) && Math.abs(cal.blur(_)) % 2 === 1
 
@@ -138,12 +138,7 @@ export const fail = (_: unknown) => false
 
 // relation
 
-export const distinct = (_: unknown[]) => newList(_).isDistinct()
-
-export const distinctBy = (keyFunc: (_: unknown) => unknown) =>
-    build('distinctBy_' + (keyFunc.name || keyFunc.toString()),
-        (..._: unknown[]) => newList(_, keyFunc).isDistinct()
-    )
+export const distinct = (_: unknown[]) => toList(_).duplessDeep()
 
 // special text
 

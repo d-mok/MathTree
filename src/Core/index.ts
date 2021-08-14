@@ -56,7 +56,6 @@ import * as $Ink from './Ink/index'
 globalThis.ink = $Ink
 
 
-import './Blood/index'
 
 
 
