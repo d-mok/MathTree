@@ -80,9 +80,7 @@ globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point, owl.point, o
  * ```
  */
 function RotatePoint(P: Point2D, O: Point2D, q: number): Point2D {
-    let v = Vector(O, P);
-    v = VectorRotate(v, q)
-    return VectorAdd(O, v);
+    return vec2D(O, P).rotate(q).add(O).blur().toArray()
 }
 globalThis.RotatePoint = contract(RotatePoint).sign([owl.point, owl.point, owl.num])
 
@@ -96,7 +94,7 @@ globalThis.RotatePoint = contract(RotatePoint).sign([owl.point, owl.point, owl.n
  * ```
  */
 function Direction(A: Point2D, B: Point2D): number {
-    return VectorArg(Vector(A, B))
+    return vec2D(A, B).argument()
 }
 globalThis.Direction = contract(Direction).seal({
     arg: [owl.point],
@@ -315,8 +313,8 @@ globalThis.Angle = contract(Angle).seal({
  * ```
  */
 function AnglePolar(A: Point2D, O: Point2D, B: Point2D): number {
-    let a = VectorArg(Vector(O, A))
-    let b = VectorArg(Vector(O, B))
+    let a = vec2D(O, A).argument()
+    let b = vec2D(O, B).argument()
     return a <= b ? b - a : 360 + b - a
 }
 globalThis.AnglePolar = contract(AnglePolar).seal({

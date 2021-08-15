@@ -158,6 +158,8 @@ class PenCls extends Pencil {
 
             if (this._pen.range.AUTO_BORDER)
                 this._pen.initOuterBorder(DEFAULT_BORDER)
+
+            this._pen.set.reset();
         },
         /**
          * Set the size of the canvas by resolution.

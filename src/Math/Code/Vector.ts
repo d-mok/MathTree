@@ -47,84 +47,84 @@ globalThis.VectorMean = contract(VectorMean).sign([owl.vector])
 
 
 
-/**
- * @category Vector
- * @deprecated useless
- * @return length of vector
- * ```
- * VectorLength([-3,4]) // 5
- * VectorLength([0,0]) // 0
- * VectorLength([1,2]) // sqrt(5)
- * ```
- */
-function VectorLength(v: Vector): number {
-    const [x, y] = v
-    return (x * x + y * y) ** 0.5
-}
-globalThis.VectorLength = contract(VectorLength).sign([owl.vector])
+// /**
+//  * @category Vector
+//  * @deprecated useless
+//  * @return length of vector
+//  * ```
+//  * VectorLength([-3,4]) // 5
+//  * VectorLength([0,0]) // 0
+//  * VectorLength([1,2]) // sqrt(5)
+//  * ```
+//  */
+// function VectorLength(v: Vector): number {
+//     const [x, y] = v
+//     return (x * x + y * y) ** 0.5
+// }
+// globalThis.VectorLength = contract(VectorLength).sign([owl.vector])
 
 
 
 
 
-/**
- * @category Vector
- * @deprecated useless
- * @return argument of vector
- * ```
- * VectorArg([2,0]) // 0
- * VectorArg([0,2]) // 90
- * VectorArg([-2,0]) // 180
- * VectorArg([0,-2]) // 270
- * VectorArg([0,0]) // 0
- * VectorArg([1,1]) // 45
- * ```
- */
-function VectorArg(v: Vector): number {
-    const [x, y] = v
-    let arg = Math.atan2(y, x) / Math.PI * 180;
-    if (arg < 0) arg += 360
-    return arg
-}
-globalThis.VectorArg = contract(VectorArg).sign([owl.vector])
+// /**
+//  * @category Vector
+//  * @deprecated useless
+//  * @return argument of vector
+//  * ```
+//  * VectorArg([2,0]) // 0
+//  * VectorArg([0,2]) // 90
+//  * VectorArg([-2,0]) // 180
+//  * VectorArg([0,-2]) // 270
+//  * VectorArg([0,0]) // 0
+//  * VectorArg([1,1]) // 45
+//  * ```
+//  */
+// function VectorArg(v: Vector): number {
+//     const [x, y] = v
+//     let arg = Math.atan2(y, x) / Math.PI * 180;
+//     if (arg < 0) arg += 360
+//     return arg
+// }
+// globalThis.VectorArg = contract(VectorArg).sign([owl.vector])
 
 
 
 
 
-/**
- * @category Vector
- * @return find [kx,ky] from [x,y]
- * ```
- * VectorScale([1,2],2) // [2,4]
- * VectorScale([1,2],-2) // [-2,-4]
- * ```
- */
-function VectorScale(v: Vector, k: number): Vector {
-    return [k * v[0], k * v[1]];
-}
-globalThis.VectorScale = contract(VectorScale).sign([owl.vector, owl.num])
+// /**
+//  * @category Vector
+//  * @return find [kx,ky] from [x,y]
+//  * ```
+//  * VectorScale([1,2],2) // [2,4]
+//  * VectorScale([1,2],-2) // [-2,-4]
+//  * ```
+//  */
+// function VectorScale(v: Vector, k: number): Vector {
+//     return [k * v[0], k * v[1]];
+// }
+// globalThis.VectorScale = contract(VectorScale).sign([owl.vector, owl.num])
 
 
 
 
 
 
-/**
- * @category Vector
- * @deprecated Useless
- * @return the negative of the vector
- * ```
- * VectorRev([-3,4]) // [3,-4]
- * VectorRev([0,0]) // [0,0]
- * VectorRev([1,2]) // [-1,-2]
- * ```
- */
-function VectorRev(v: Vector): Vector {
-    const [x, y] = v
-    return [-x, -y]
-}
-globalThis.VectorRev = contract(VectorRev).sign([owl.vector])
+// /**
+//  * @category Vector
+//  * @deprecated Useless
+//  * @return the negative of the vector
+//  * ```
+//  * VectorRev([-3,4]) // [3,-4]
+//  * VectorRev([0,0]) // [0,0]
+//  * VectorRev([1,2]) // [-1,-2]
+//  * ```
+//  */
+// function VectorRev(v: Vector): Vector {
+//     const [x, y] = v
+//     return [-x, -y]
+// }
+// globalThis.VectorRev = contract(VectorRev).sign([owl.vector])
 
 
 
