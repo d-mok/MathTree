@@ -129,3 +129,40 @@ test('Incentre', () => {
     expect(Incentre([3, 0], [-3, 0], [0, 4])).toEqual([0, 1.5]);
     expect(Incentre([288, -540], [225, 120], [-160, 300])).toEqual([113, 41]);
 });
+
+
+
+test('ScaleOrthocentreToInt', () => {
+    expect(ScaleOrthocentreToInt([34, 23], [28, 44], [0, 37]))
+        .toEqual([[510, 345], [420, 660], [0, 555]]);
+    expect(ScaleOrthocentreToInt([8, 32], [40, 49], [15, 9]))
+        .toEqual([[1368, 5472], [6840, 8379], [2565, 1539]]);
+});
+
+
+test('ScaleCircumcentreToInt', () => {
+    expect(ScaleCircumcentreToInt([15, 44], [32, 3], [49, 32]))
+        .toEqual([[1785, 5236], [3808, 357], [5831, 3808]]);
+    expect(ScaleCircumcentreToInt([21, 2], [42, 41], [1, 35]))
+        .toEqual([[20622, 1964], [41244, 40262], [982, 34370]]);
+});
+
+
+
+test('ScaleCentroidToInt', () => {
+    expect(ScaleCentroidToInt([50, 7], [11, 39], [16, 3]))
+        .toEqual([[150, 21], [33, 117], [48, 9]]);
+    expect(ScaleCentroidToInt([12, 45], [17, 42], [8, 39]))
+        .toEqual([[36, 135], [51, 126], [24, 117]]);
+});
+
+
+
+
+test('ScaleIncentreToInt', () => {
+    expect(ScaleIncentreToInt([2, 30], [10, 18], [11, 36]))
+        .toEqual([[2, 30], [10, 18], [11, 36]]);
+    expect(ScaleIncentreToInt([36, 26], [13, 37], [19, 7]))
+        .toEqual([[72, 52], [26, 74], [38, 14]]);
+});
+

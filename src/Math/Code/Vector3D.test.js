@@ -133,7 +133,7 @@ test('ExtrudeBase', () => {
 
 test('Extrude', () => {
     let [A, B, C] = [[0, 0, 0], [4, 0, 0], [0, 4, 0]];
-    expect(Extrude([A, B, C], [[0, 0, 4]], 0.25)).toEqual([[0, 0, 1], [3, 0, 1], [0, 3, 1]]);
+    expect(Extrude([A, B, C], [[0, 0, 4]], 0.75)).toEqual([[0, 0, 1], [3, 0, 1], [0, 3, 1]]);
 });
 
 

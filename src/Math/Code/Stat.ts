@@ -83,7 +83,10 @@ globalThis.Sum = contract(Sum).sign([owl.num])
 function Mean(...nums: number[]): number {
     return toData(nums).mean()
 }
-globalThis.Mean = contract(Mean).sign([owl.num])
+globalThis.Mean = contract(Mean).seal({
+    arg: [owl.num],
+    args: function is_not_empty(...nums) { return nums.length > 0 }
+})
 
 
 

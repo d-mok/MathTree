@@ -20,6 +20,7 @@ import {
     toVector as $toVector,
     vec2D as $vec2D,
     vec3D as $vec3D,
+    Pencil as $Pencil
 } from 'sapphire-js'
 
 
@@ -44,6 +45,7 @@ globalThis.toShape3D = $toShape3D
 globalThis.toVector = $toVector
 globalThis.vec2D = $vec2D
 globalThis.vec3D = $vec3D
+globalThis.Pencil = $Pencil
 
 
 import * as $Owl from './Owl/index'
@@ -85,4 +87,5 @@ declare global {
     var vec3D: typeof $vec3D
     var owl: typeof $Owl
     var ink: typeof $Ink
+    var Pencil: typeof $Pencil
 }

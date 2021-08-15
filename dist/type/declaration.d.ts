@@ -4,41 +4,6 @@ declare module "index" {
     import './Pen/index.ts';
     import './Soil/index.ts';
 }
-declare module "Core/Dice/index" {
-    type roll<T> = () => T;
-    global {
-        namespace Chance {
-            interface Chance {
-                prime: (opt: {
-                    min: number;
-                    max: number;
-                }) => number;
-            }
-        }
-    }
-    type predicate<T> = (item: T) => boolean;
-    type keyFunc<T> = (item: T) => number | string;
-    export function integer(minInt: number, maxInt: number): number;
-    export function real(min: number, max: number): number;
-    export function prime(min: number, max: number): number;
-    export function he(): string;
-    export function she(): string;
-    export function bool(chance: number): boolean;
-    export function roll<T>(func: roll<T>): {
-        brute(predicate: predicate<T>): T;
-        shield(predicate: predicate<T>): roll<T>;
-        sample(length: number): T[];
-        unique(length: number, key?: keyFunc<T> | undefined): T[];
-        distinct(length: number, comparer: (a: T, b: T) => boolean): T[];
-    };
-    export function array<T>(items: T[]): {
-        one(): T;
-        sample(length: number): T[];
-        unique(length: number): T[];
-        shuffle(): T[];
-        balanced(length: number): T[];
-    };
-}
 declare module "Core/Owl/index" {
     export const num: (_: unknown) => _ is number;
     export const whole: (_: unknown) => _ is number;
@@ -76,7 +41,7 @@ declare module "Core/Owl/index" {
     export const combo: (_: unknown) => _ is [boolean, boolean, boolean];
     export const ntuple: (_: unknown) => _ is number[];
     export const interval: (_: unknown) => _ is interval;
-    export const point: (_: unknown) => _ is Point;
+    export const point: (_: unknown) => _ is Point2D;
     export const point3D: (_: unknown) => _ is Point3D;
     export const polar: (_: unknown) => _ is PolarPoint;
     export const fraction: (_: unknown) => _ is Fraction;
@@ -91,7 +56,6 @@ declare module "Core/Owl/index" {
     export const pass: (_: unknown) => boolean;
     export const fail: (_: unknown) => boolean;
     export const distinct: (_: unknown[]) => boolean;
-    export const distinctBy: (keyFunc: (_: unknown) => unknown) => (..._: unknown[]) => boolean;
     export const alphabet: (_: unknown) => _ is string;
     export const ineq: (_: unknown) => _ is Ineq;
     export const dfrac: (_: unknown) => _ is string;
@@ -106,70 +70,6 @@ declare module "Core/Owl/index" {
     export function or(pds: predicate[], name?: string): predicate;
     export function every(pd: predicate, name?: string): predicate;
 }
-declare module "Core/Contract/index" {
-    class Contract<F extends func> {
-        private host;
-        private Err;
-        constructor(host: F);
-        private validateArg;
-        private validateArgGrp;
-        private validateReturn;
-        private validateCatch;
-        sign(arg?: rule[], ret?: rule): F;
-        seal({ arg, args, ret }: {
-            arg?: rule[];
-            args?: argRule<F>;
-            ret?: rule;
-        }): F;
-    }
-    export function contract<F extends func>(f: F): Contract<F>;
-}
-declare module "Core/Ant/index" {
-    /**
-     * use for blurring value in-place to avoid things like 0.300000000004
-     */
-    export function blur(num: number): number;
-    /**
-     * use for bluring value for checking things like integer and equality
-     * 2-digit less accurate that blur
-     */
-    export function correct(num: number): number;
-    export function eq(a: number, b: number): boolean;
-    export function round(num: number, sigfig?: number): {
-        off: () => number;
-        up: () => number;
-        down: () => number;
-    };
-    export function fix(num: number, dp?: number): {
-        off: () => number;
-        up: () => number;
-        down: () => number;
-    };
-    export function sigfig(num: number): number;
-    export function dp(num: number): number;
-    export function hcf(...integers: number[]): number;
-    export function lcm(...integers: number[]): number;
-    export function nCr(n: number, r: number): number;
-    export function fac(n: number): number;
-    export function nPr(n: number, r: number): number;
-    export function sum(...nums: number[]): number;
-    export function prod(...nums: number[]): number;
-    export function mean(...nums: number[]): number;
-    export function mode(...nums: number[]): number[];
-    export function median(...nums: number[]): number;
-    export function sd(...nums: number[]): number;
-    export function nearFrac(num: number, maxDenominator?: number): Fraction;
-    export function fracable(num: number): boolean;
-    export function ratio<T extends number[]>(...rationals: T): T;
-    export function simpFrac(p: number, q: number): Fraction;
-    export function e(num: number): number;
-    export function mantissa(num: number): number;
-    export function logCeil(num: number): number;
-    export function logFloor(num: number): number;
-    export function crossProduct(v1: Vector3D, v2: Vector3D): Vector3D;
-    export function dotProduct<V extends (Vector | Vector3D)>(v1: V, v2: V): number;
-    export function simpSurd(square: number): [number, number];
-}
 declare module "Core/Ink/index" {
     export function printIneq(greater: boolean, equal: boolean): Ineq;
     export function parseIneq(text: Ineq): [greater: boolean, equal: boolean];
@@ -181,56 +81,37 @@ declare module "Core/Ink/index" {
     export function printOrTrigRoots(roots: (number | undefined)[]): string;
     export function printSurd(outside: number, inside: number): string;
 }
-declare module "Core/Blood/index" {
-    class Blood extends Error {
-        constructor(name: string, message: string);
-    }
-    type alias = Blood;
-    type TypeOfBlood = typeof Blood;
-    global {
-        type Blood = alias;
-        var Blood: TypeOfBlood;
-    }
-    export {};
-}
-declare module "Core/List/index" {
-    export function Clone<T>(object: T): T;
-    class ListCls<T> extends Array<T> {
-        private key;
-        constructor(arr: T[], keyFunc?: (_: T) => any);
-        isDistinct(): boolean;
-        distinctLength(): number;
-        distinct(): T[];
-        pairs(): [T, T][];
-        pairsEvery(relation: (a: T, b: T) => boolean): boolean;
-        pluck(index: keyof T): any[];
-    }
-    type alias<T> = ListCls<T>;
-    global {
-        type List<T> = alias<T>;
-        var newList: <T>(arr: T[], keyFunc?: (_: T) => any) => ListCls<T>;
-    }
-    export {};
-}
 declare module "Core/index" {
-    import * as DiceObj from "Core/Dice/index";
-    import * as OwlObj from "Core/Owl/index";
-    import * as ContractObj from "Core/Contract/index";
-    import * as AntObj from "Core/Ant/index";
-    import * as InkObj from "Core/Ink/index";
-    import "Core/Blood/index";
-    import "Core/List/index";
+    import { poker as $poker, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, Pencil as $Pencil } from 'sapphire-js';
+    import * as $Owl from "Core/Owl/index";
+    import * as $Ink from "Core/Ink/index";
     global {
-        var dice: typeof DiceObj;
-        var owl: typeof OwlObj;
-        var ant: typeof AntObj;
-        var ink: typeof InkObj;
-        var contract: typeof ContractObj.contract;
+        var poker: typeof $poker;
+        var contract: typeof $contract;
+        var cal: typeof $cal;
+        var data: typeof $data;
+        var list: typeof $list;
+        var numbers: typeof $numbers;
+        var shape: typeof $shape;
+        var shape2D: typeof $shape2D;
+        var shape3D: typeof $shape3D;
+        var vector: typeof $vector;
+        var vector2D: typeof $vector2D;
+        var vector3D: typeof $vector3D;
+        var toData: typeof $toData;
+        var toList: typeof $toList;
+        var toNumbers: typeof $toNumbers;
+        var toShape: typeof $toShape;
+        var toShape2D: typeof $toShape2D;
+        var toShape3D: typeof $toShape3D;
+        var toVector: typeof $toVector;
+        var vec2D: typeof $vec2D;
+        var vec3D: typeof $vec3D;
+        var owl: typeof $Owl;
+        var ink: typeof $Ink;
+        var Pencil: typeof $Pencil;
     }
 }
-declare module "Core/Ant/ant.test" { }
-declare module "Core/Contract/contract.test" { }
-declare module "Core/Dice/dice.test" { }
 /**
  * @ignore
  */
@@ -384,8 +265,9 @@ declare function Should(condition: boolean, msg?: string): void;
  * ```
  */
 declare type Quadratic = [a: number, b: number, c: number];
-declare type Point = [x: number, y: number];
+declare type Point2D = [x: number, y: number];
 declare type Point3D = [x: number, y: number, z: number];
+declare type Point = Point2D | Point3D;
 declare type Vector = [x: number, y: number];
 declare type Vector3D = [x: number, y: number, z: number];
 declare type interval = [min: number, max: number];
@@ -405,7 +287,7 @@ declare type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant:
  */
 declare type Field = [xCoeff: number, yCoeff: number, constant: number];
 declare type Highlight = {
-    point: Point;
+    point: Point2D;
     color?: string;
     circle?: boolean;
     contour?: boolean;
@@ -447,30 +329,13 @@ declare function Crammer(a: number, b: number, c: number, p: number, q: number, 
  */
 declare function xPolynomial(poly1: number[], poly2: number[]): number[];
 /**
- * @category Algebra
- * @return the points along the parametric curve
- * ```
- * Trace(x => x ** 2, 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
- * Trace(t => [t,t**2], 0, 4, 5) // [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]
- * ```
- */
-declare function Trace(func: (t: number) => number | Point, tStart: number, tEnd: number, dots?: number): Point[];
-/**
- * @category Algebra
- * @return the points along a circle
- * ```
- * TraceCircle([0,0],1)
- * ```
- */
-declare function TraceCircle(center: Point, radius: number, angle?: number[]): Point[];
-/**
  * @category Circle
  * @return D,E,F of circle general form
  * ```
  * CircleGeneral([2,3],5) // [-4,-6,-12]
  * ```
  */
-declare function CircleGeneral(centre: Point, radius: number): [D: number, E: number, F: number];
+declare function CircleGeneral(centre: Point2D, radius: number): [D: number, E: number, F: number];
 /**
  * @category Circle
  * @return centre and radius from general form
@@ -478,7 +343,7 @@ declare function CircleGeneral(centre: Point, radius: number): [D: number, E: nu
  * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
  * ```
  */
-declare function CircleFromGeneral(D: number, E: number, F: number): [Point, number];
+declare function CircleFromGeneral(D: number, E: number, F: number): [Point2D, number];
 /**
  * @category Circle
  * @deprecated
@@ -487,7 +352,7 @@ declare function CircleFromGeneral(D: number, E: number, F: number): [Point, num
  * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
  * ```
  */
-declare function IntegralOnCircle(centre: Point, radius: number): Point[][];
+declare function IntegralOnCircle(centre: Point2D, radius: number): Point2D[][];
 /**
  * @category Circle
  * @return intersections between a circle and a straight line
@@ -495,7 +360,7 @@ declare function IntegralOnCircle(centre: Point, radius: number): Point[][];
  * CircleLineIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
  * ```
  */
-declare function CircleLineIntersect(center: Point, radius: number, linear: [number, number, number]): [Point, Point];
+declare function CircleLineIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D];
 /**
  * @category Linear
  * @return [x-int,y-int,slope] of ax+by+c=0
@@ -522,7 +387,7 @@ declare function LinearFromIntercepts(xInt: number, yInt: number): [a: number, b
  * LinearFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-declare function LinearFromTwoPoints(point1: Point, point2: Point): [a: number, b: number, c: number];
+declare function LinearFromTwoPoints(point1: Point2D, point2: Point2D): [a: number, b: number, c: number];
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from point and slope
@@ -531,7 +396,7 @@ declare function LinearFromTwoPoints(point1: Point, point2: Point): [a: number, 
  * LinearFromPointSlope([1,2],0) // [0,1,-2]
  * ```
  */
-declare function LinearFromPointSlope(point: Point, slope: number): [a: number, b: number, c: number];
+declare function LinearFromPointSlope(point: Point2D, slope: number): [a: number, b: number, c: number];
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
@@ -540,7 +405,7 @@ declare function LinearFromPointSlope(point: Point, slope: number): [a: number, 
  * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
  * ```
  */
-declare function LinearFromBisector(A: Point, B: Point): [a: number, b: number, c: number];
+declare function LinearFromBisector(A: Point2D, B: Point2D): [a: number, b: number, c: number];
 /**
  * @category Linear
  * @return [slope,yInt] from given intercepts
@@ -558,7 +423,7 @@ declare function LineFromIntercepts(xInt: number, yInt: number): [slope: number,
  * LineFromTwoPoints([1,2],[1,2]) // throw
  * ```
  */
-declare function LineFromTwoPoints(point1: Point, point2: Point): [slope: number, yInt: number];
+declare function LineFromTwoPoints(point1: Point2D, point2: Point2D): [slope: number, yInt: number];
 /**
  * @category Linear
  * @return [slope,yInt] from point and slope
@@ -567,7 +432,7 @@ declare function LineFromTwoPoints(point1: Point, point2: Point): [slope: number
  * LineFromPointSlope([1,2],0) // [0,2]
  * ```
  */
-declare function LineFromPointSlope(point: Point, slope: number): [slope: number, yInt: number];
+declare function LineFromPointSlope(point: Point2D, slope: number): [slope: number, yInt: number];
 /**
  * @category Linear
  * @return [slope,yInt] from perpendicular bisector of AB
@@ -576,16 +441,16 @@ declare function LineFromPointSlope(point: Point, slope: number): [slope: number
  * LineFromBisector([1,2],[1,4]) // [0,3]
  * ```
  */
-declare function LineFromBisector(A: Point, B: Point): [slope: number, yInt: number];
+declare function LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number];
 /**
  * @ignore
  */
 declare class LinearFunction {
     private _linear;
-    byTwoPoints(p1: Point, p2: Point): this;
-    byPointSlope(p: Point, m: number): this;
+    byTwoPoints(p1: Point2D, p2: Point2D): this;
+    byPointSlope(p: Point2D, m: number): this;
     byIntercepts(x: number, y: number): this;
-    byBisector(A: Point, B: Point): this;
+    byBisector(A: Point2D, B: Point2D): this;
     byLinear(linear: [a: number, b: number, c: number]): this;
     private refresh;
     linear(): [a: number, b: number, c: number];
@@ -619,7 +484,7 @@ declare function QuadraticRoot(a: number, b: number, c: number): [number, number
  * QuadraticVertex(1,2,3) // [-1,2]
  * ```
  */
-declare function QuadraticVertex(a: number, b: number, c: number): Point;
+declare function QuadraticVertex(a: number, b: number, c: number): Point2D;
 /**
  * @category Quadratic
  * @return the quadratic coeff [a,b,c] from given a and roots p and q.
@@ -819,7 +684,7 @@ declare function IsAbsBetween(min: number, max: number): (...items: any[]) => bo
  * IsAroundPoint([0,0],2)([3,0]) // false
  * ```
  */
-declare function IsAroundPoint(anchor: Point, range: number): (...points: Point[]) => boolean;
+declare function IsAroundPoint(anchor: Point2D, range: number): (...points: Point2D[]) => boolean;
 /**
  * @category Assertion
  * @return Check if the array of legnths can form a triangle
@@ -981,7 +846,7 @@ declare function arctan(x: number): number;
  * Slope([1,2],[1,2]) // NaN
  * ```
  */
-declare function Slope(A: Point, B: Point): number;
+declare function Slope(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return the distance AB
@@ -989,7 +854,7 @@ declare function Slope(A: Point, B: Point): number;
  * Distance([0,0],[1,2]) // 2.23606797749979
  * ```
  */
-declare function Distance(A: Point, B: Point): number;
+declare function Distance(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return the chessboard distance AB, max(horizontal,vertical)
@@ -998,7 +863,7 @@ declare function Distance(A: Point, B: Point): number;
  * ChessboardDistance([0,0],[3,2]) // 3
  * ```
  */
-declare function ChessboardDistance(A: Point, B: Point): number;
+declare function ChessboardDistance(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return the mid-pt of AB
@@ -1006,7 +871,7 @@ declare function ChessboardDistance(A: Point, B: Point): number;
  * MidPoint([1,2],[3,4]) // [2,3]
  * ```
  */
-declare function MidPoint(A: Point, B: Point): Point;
+declare function MidPoint(A: Point2D, B: Point2D): Point2D;
 /**
  * @category Geometry
  * @return the point P on AB such that AP : PB = ratio : 1-ratio
@@ -1014,7 +879,7 @@ declare function MidPoint(A: Point, B: Point): Point;
  * DivisionPoint([1,0],[5,0],0.75) // [4,0]
  * ```
  */
-declare function DivisionPoint(A: Point, B: Point, ratio?: number): Point;
+declare function DivisionPoint(A: Point2D, B: Point2D, ratio?: number): Point2D;
 /**
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
@@ -1022,7 +887,7 @@ declare function DivisionPoint(A: Point, B: Point, ratio?: number): Point;
  * RotatePoint([1,2],[0,0],90) // [-2,1]
  * ```
  */
-declare function RotatePoint(P: Point, O: Point, q: number): Point;
+declare function RotatePoint(P: Point2D, O: Point2D, q: number): Point2D;
 /**
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
@@ -1031,7 +896,7 @@ declare function RotatePoint(P: Point, O: Point, q: number): Point;
  * Direction([3,2],[1,0]) // 225
  * ```
  */
-declare function Direction(A: Point, B: Point): number;
+declare function Direction(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return the polar angle of a normal direction to AB, on the right of AB.
@@ -1040,7 +905,7 @@ declare function Direction(A: Point, B: Point): number;
  * Normal([3,2],[1,0]) // 135
  * ```
  */
-declare function Normal(A: Point, B: Point): number;
+declare function Normal(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return the foot of perpendicular from P to AB.
@@ -1048,7 +913,7 @@ declare function Normal(A: Point, B: Point): number;
  * PerpendicularFoot([-1,-1],[1,1],[-2,2]) // [0,0]
  * ```
  */
-declare function PerpendicularFoot(A: Point, B: Point, P: Point): Point;
+declare function PerpendicularFoot(A: Point2D, B: Point2D, P: Point2D): Point2D;
 /**
  * @category Geometry
  * @return the intersection point of AB and CD.
@@ -1056,7 +921,7 @@ declare function PerpendicularFoot(A: Point, B: Point, P: Point): Point;
  * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
  * ```
  */
-declare function Intersection(A: Point, B: Point, C: Point, D: Point): Point;
+declare function Intersection(A: Point2D, B: Point2D, C: Point2D, D: Point2D): Point2D;
 /**
  * @category Geometry
  * @return Translate point P in the polar angle q (or the direction of point q) by a distance.
@@ -1065,7 +930,7 @@ declare function Intersection(A: Point, B: Point, C: Point, D: Point): Point;
  * TranslatePoint([1,2],[10, 12],3) // [3.006894195, 4.229882439]
  * ```
  */
-declare function TranslatePoint(P: Point, q: number | Point, distance: number): Point;
+declare function TranslatePoint(P: Point2D, q: number | Point2D, distance: number): Point2D;
 /**
  * @category Geometry
  * @return Translate point P to the right by a distance.
@@ -1074,7 +939,7 @@ declare function TranslatePoint(P: Point, q: number | Point, distance: number): 
  * TranslateX([1,2],-3) // [-2,2]
  * ```
  */
-declare function TranslateX(P: Point, distance: number): Point;
+declare function TranslateX(P: Point2D, distance: number): Point2D;
 /**
  * @category Geometry
  * @return Translate point P upward by a distance.
@@ -1083,7 +948,7 @@ declare function TranslateX(P: Point, distance: number): Point;
  * TranslateY([1,2],-3) // [-2,2]
  * ```
  */
-declare function TranslateY(P: Point, distance: number): Point;
+declare function TranslateY(P: Point2D, distance: number): Point2D;
 /**
  * @category Geometry
  * @return Reflect point P about x-axis
@@ -1092,7 +957,7 @@ declare function TranslateY(P: Point, distance: number): Point;
  * ReflectX([1,-2]) // [1,2]
  * ```
  */
-declare function ReflectX(P: Point): Point;
+declare function ReflectX(P: Point2D): Point2D;
 /**
  * @category Geometry
  * @return Reflect point P about y-axis
@@ -1101,7 +966,7 @@ declare function ReflectX(P: Point): Point;
  * ReflectY([-1,2]) // [1,2]
  * ```
  */
-declare function ReflectY(P: Point): Point;
+declare function ReflectY(P: Point2D): Point2D;
 /**
  * @category Geometry
  * @return angle of intersection between two slopes
@@ -1120,7 +985,7 @@ declare function IntersectAngle(slope1: number, slope2: number): number;
  * Angle([1,3],[1,1],[2,2]) // 45
  * ```
  */
-declare function Angle(A: Point, O: Point, B: Point): number;
+declare function Angle(A: Point2D, O: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return angle AOB, measured anticlockwise
@@ -1130,7 +995,7 @@ declare function Angle(A: Point, O: Point, B: Point): number;
  * AnglePolar([1,3],[1,1],[2,2]) // 315
  * ```
  */
-declare function AnglePolar(A: Point, O: Point, B: Point): number;
+declare function AnglePolar(A: Point2D, O: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return check if the polar angle AOB is reflex
@@ -1140,7 +1005,7 @@ declare function AnglePolar(A: Point, O: Point, B: Point): number;
  * IsReflex([1,3],[1,1],[2,2]) // true
  * ```
  */
-declare function IsReflex(A: Point, O: Point, B: Point): boolean;
+declare function IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean;
 /**
  * @category Geometry
  * @return points from turtle walk
@@ -1148,7 +1013,7 @@ declare function IsReflex(A: Point, O: Point, B: Point): boolean;
  * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
  * ```
  */
-declare function Turtle(start: Point, ...walk: [rotate: number, distance: number][]): Point[];
+declare function Turtle(start: Point2D, ...walk: [rotate: number, distance: number][]): Point2D[];
 /**
  * @category Geometry
  * @return points on a regular polygon
@@ -1156,7 +1021,7 @@ declare function Turtle(start: Point, ...walk: [rotate: number, distance: number
  * RegularPolygon(4,[0,0],1,0) // [[1,0],[0,1],[-1,0],[0,-1]]
  * ```
  */
-declare function RegularPolygon(n: number, center: Point, radius: number, startAngle: number): Point[];
+declare function RegularPolygon(n: number, center: Point2D, radius: number, startAngle: number): Point2D[];
 /**
  * @category Geometry
  * @return arc length with given radius and angle
@@ -1174,9 +1039,9 @@ declare function ArcLength(radius: number, theta: number): number;
  * IsConvexPolygon([0,0],[3,0],[1,1],[0,3]) // false
  * ```
  */
-declare function IsConvexPolygon(...points: Point[]): boolean;
+declare function IsConvexPolygon(...points: Point2D[]): boolean;
 declare const LP_BOUND = 100;
-declare function onBoundary(p: Point): boolean;
+declare function onBoundary(p: Point2D): boolean;
 /**
  *
  * @category LinearProgram
@@ -1186,7 +1051,7 @@ declare function onBoundary(p: Point): boolean;
  * FieldAt([1,2],[3,-4,5]) // 0
  * ```
  */
-declare function FieldAt(p: Point, field: Field): number;
+declare function FieldAt(p: Point2D, field: Field): number;
 /**
  *
  * @category LinearProgram
@@ -1200,7 +1065,7 @@ declare function FieldAt(p: Point, field: Field): number;
  * // check whether [0,0] satisfies all the constraints
  * ```
  */
-declare function isConstrained(cons: Constraint[], point: Point): boolean;
+declare function isConstrained(cons: Constraint[], point: Point2D): boolean;
 /**
  *
  * @category LinearProgram
@@ -1214,7 +1079,7 @@ declare function isConstrained(cons: Constraint[], point: Point): boolean;
  * // check whether [0,0] loosely satisfies all the constraints
  * ```
  */
-declare function isLooseConstrained(cons: Constraint[], point: Point): boolean;
+declare function isLooseConstrained(cons: Constraint[], point: Point2D): boolean;
 /**
  *
  * @category LinearProgram
@@ -1229,7 +1094,7 @@ declare function isLooseConstrained(cons: Constraint[], point: Point): boolean;
  * // [[-5,-5],[10,-5],[10,10],[-5,10]]
  * ```
  */
-declare function FeasiblePolygon(...cons: Constraint[]): Point[];
+declare function FeasiblePolygon(...cons: Constraint[]): Point2D[];
 /**
  *
  * @category LinearProgram
@@ -1244,7 +1109,7 @@ declare function FeasiblePolygon(...cons: Constraint[]): Point[];
  * // [[-5,-5],[10,-5],[10,10],[-5,10]]
  * ```
  */
-declare function FeasibleVertices(...cons: Constraint[]): Point[];
+declare function FeasibleVertices(...cons: Constraint[]): Point2D[];
 /**
  *
  * @category LinearProgram
@@ -1278,7 +1143,7 @@ declare function FeasibleIsBounded(...cons: Constraint[]): boolean;
  * // [[1,1],[2,1]]
  * ```
  */
-declare function FeasibleIntegral(...cons: Constraint[]): Point[];
+declare function FeasibleIntegral(...cons: Constraint[]): Point2D[];
 /**
  *
  * @category LinearProgram
@@ -1287,7 +1152,7 @@ declare function FeasibleIntegral(...cons: Constraint[]): Point[];
  * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
  * ```
  */
-declare function MaximizePoint(points: Point[], field: Field): Point;
+declare function MaximizePoint(points: Point2D[], field: Field): Point2D;
 /**
  *
  * @category LinearProgram
@@ -1296,7 +1161,7 @@ declare function MaximizePoint(points: Point[], field: Field): Point;
  * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
  * ```
  */
-declare function MinimizePoint(points: Point[], field: Field): Point;
+declare function MinimizePoint(points: Point2D[], field: Field): Point2D;
 /**
  *
  * @category LinearProgram
@@ -1306,7 +1171,7 @@ declare function MinimizePoint(points: Point[], field: Field): Point;
  * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
  * ```
  */
-declare function OptimizePoint(points: Point[], field: Field, max: boolean): Point;
+declare function OptimizePoint(points: Point2D[], field: Field, max: boolean): Point2D;
 /**
  *
  * @category LinearProgram
@@ -1316,18 +1181,19 @@ declare function OptimizePoint(points: Point[], field: Field, max: boolean): Poi
  * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
  * ```
  */
-declare function OptimizeField(points: Point[], field: Field, max: boolean): number;
+declare function OptimizeField(points: Point2D[], field: Field, max: boolean): number;
 /**
  *
  * @category LinearProgram
  * @return the constraints from the given points
  * ```typescript
  * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
- * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2]) // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
+ * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2])
+ * // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
  * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
  * ```
  */
-declare function ConstraintsFromPoints(...points: Point[]): Constraint[];
+declare function ConstraintsFromPoints(...points: Point2D[]): Constraint[];
 /**
  * @category Numeracy
  * @return division with x/0 handling
@@ -1645,7 +1511,7 @@ declare function RndPyth(max?: number): [number, number, number];
  * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
  * ```
  */
-declare function RndPoint(xRange: number | interval, yRange?: number | interval): Point;
+declare function RndPoint(xRange: number | interval, yRange?: number | interval): Point2D;
 /**
  * @category Random
  * @return n points within given range, no horizontal / vertical / collinear
@@ -1653,7 +1519,7 @@ declare function RndPoint(xRange: number | interval, yRange?: number | interval)
  * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
  * ```
  */
-declare function RndPoints(xRange: number | interval, yRange?: number | interval, n?: number): Point[];
+declare function RndPoints(xRange: number | interval, yRange?: number | interval, n?: number): Point2D[];
 /**
  * @category Random
  * @return n angles in [0,360] at least cyclic separated by separation
@@ -1669,7 +1535,7 @@ declare function RndAngles(n: number, separation: number): number[];
  * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
  * ```
  */
-declare function RndConvexPolygon(n: number, center: Point, radius: number, separation: number): Point[];
+declare function RndConvexPolygon(n: number, center: Point2D, radius: number, separation: number): Point2D[];
 /**
  * @category Random
  * @return n integers from [min, max]
@@ -1690,7 +1556,7 @@ declare function RndTriangle(xRange: interval, yRange: interval, { minAngle, max
     maxAngle?: number | undefined;
     minLength?: number | undefined;
     obtuse?: boolean | undefined;
-}): [Point, Point, Point];
+}): [Point2D, Point2D, Point2D];
 /**
  * @category Random
  * @return an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
@@ -1787,7 +1653,7 @@ declare function RndShakeIneq(anchor: Ineq): string[];
  * // may return [[2,5],[1,6],[4,2]]
  * ```
  */
-declare function RndShakePoint(anchor: Point): Point[];
+declare function RndShakePoint(anchor: Point2D): Point2D[];
 /**
  * @category RandomShake
  * @return an array of 3 combo
@@ -1859,7 +1725,7 @@ declare function RndShuffle<T>(...items: T[]): T[];
 declare function RndPickN<T>(items: T[], n: number): T[];
 /**
  * @category RandomUtil
- * @return n random unique items from given items
+ * @return n random unique items from given items, shallow compare.
  * ```
  * RndPickUnique([2,4,6],2) // may return [4,2]
  * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
@@ -1942,13 +1808,14 @@ declare function AreSameSign(...nums: number[]): boolean;
 declare function AreCoprime(...nums: number[]): boolean;
 /**
  * @category Relation
+ * @deprecated use AreDifferent
  * @return Check if the points are all distinct.
  * ```
  * AreDistinctPoint([1,2],[3,4]) // true
  * AreDistinctPoint([1,2],[1,2]) // false
  * ```
  */
-declare function AreDistinctPoint(...points: Point[]): boolean;
+declare function AreDistinctPoint(...points: Point2D[]): boolean;
 /**
  * @category Relation
  * @return Check if the points are pairwise distant apart.
@@ -1957,7 +1824,7 @@ declare function AreDistinctPoint(...points: Point[]): boolean;
  * AreDistantPoint(2)([0,0],[1,0]) // false
  * ```
  */
-declare function AreDistantPoint(distance: number): (...points: Point[]) => boolean;
+declare function AreDistantPoint(distance: number): (...points: Point2D[]) => boolean;
 /**
  * @category Relation
  * @return Check if slopes are at least oblique at minAngle
@@ -2147,7 +2014,7 @@ declare function Frequency<T>(item: T): (...items: T[]) => number;
  * @return mode of nums
  * ```
  * Mode(1,2,3,2,2,3,4) \\ [2]
- * Mode(1,1,2,2,3) \\ []
+ * Mode(1,1,2,2,3) \\ [1,2]
  * ```
  */
 declare function Mode(...nums: number[]): number[];
@@ -2277,7 +2144,7 @@ declare function IndexToSurd(text: string): string;
  * Coord([1,2]) // '(1, 2)'
  * ```
  */
-declare function Coord(point: Point, dp?: number): string;
+declare function Coord(point: Point2D, dp?: number): string;
 /**
  * @category Text
  * @deprecated
@@ -2387,7 +2254,7 @@ declare function Heron(a: number, b: number, c: number): number;
  * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
  * ```
  */
-declare function TriangleFromVertex(A: Point, B: Point, C: Point, fix?: boolean): Triangle;
+declare function TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): Triangle;
 /**
  * @category Triangle
  * @param triangle - unknown elements are null.
@@ -2411,7 +2278,7 @@ declare function SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: 
  * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
  * ```
  */
-declare function Orthocentre(A: Point, B: Point, C: Point): Point;
+declare function Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
 /**
  * @category Triangle
  * @return the circumcentre of a triangle
@@ -2419,7 +2286,7 @@ declare function Orthocentre(A: Point, B: Point, C: Point): Point;
  * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
  * ```
  */
-declare function Circumcentre(A: Point, B: Point, C: Point): Point;
+declare function Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
 /**
  * @category Triangle
  * @return the centroid of a triangle
@@ -2427,7 +2294,7 @@ declare function Circumcentre(A: Point, B: Point, C: Point): Point;
  * Centroid([3,6],[9,12],[15,21])  // [9,13]
  * ```
  */
-declare function Centroid(A: Point, B: Point, C: Point): Point;
+declare function Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D;
 /**
  * @category Triangle
  * @return the incentre of a triangle
@@ -2435,7 +2302,39 @@ declare function Centroid(A: Point, B: Point, C: Point): Point;
  * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
  * ```
  */
-declare function Incentre(A: Point, B: Point, C: Point): Point;
+declare function Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
+/**
+ * @category Triangle
+ * @param A - a point of the triangle
+ * @param B - a point of the triangle
+ * @param C - a point of the triangle
+ * @returns the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
+ */
+declare function ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+/**
+ * @category Triangle
+ * @param A - a point of the triangle
+ * @param B - a point of the triangle
+ * @param C - a point of the triangle
+ * @returns the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
+ */
+declare function ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+/**
+ * @category Triangle
+ * @param A - a point of the triangle
+ * @param B - a point of the triangle
+ * @param C - a point of the triangle
+ * @returns the scaled points [A,B,C] so that their centroid and themselves becomes integral
+ */
+declare function ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+/**
+ * @category Triangle
+ * @param A - a point of the triangle
+ * @param B - a point of the triangle
+ * @param C - a point of the triangle
+ * @returns the scaled points [A,B,C] so that their incentre and themselves becomes integral
+ */
+declare function ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
 /**
  * @category Trigonometry
  * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
@@ -2447,7 +2346,7 @@ declare function Incentre(A: Point, B: Point, C: Point): Point;
  * Quadrant(350) \\ 'IV'
  * ```
  */
-declare function Quadrant(rect: Point | number): QuadrantName;
+declare function Quadrant(rect: Point2D | number): QuadrantName;
 /**
  * @category Trigonometry
  * @return the rectangular coordinates [x,y] from a polar coordinates [r,theta].
@@ -2455,7 +2354,7 @@ declare function Quadrant(rect: Point | number): QuadrantName;
  * PolToRect([1,45]) // [0.707,0.707]
  * ```
  */
-declare function PolToRect([r, q]: PolarPoint): Point;
+declare function PolToRect([r, q]: PolarPoint): Point2D;
 /**
  * @category Trigonometry
  * @return the polar coordinates [r,theta] of a rectangular coordinates [x,y].
@@ -2463,7 +2362,7 @@ declare function PolToRect([r, q]: PolarPoint): Point;
  * RectToPol([1,1]) // [1.414,45]
  * ```
  */
-declare function RectToPol([x, y]: Point): PolarPoint;
+declare function RectToPol([x, y]: Point2D): PolarPoint;
 /**
  * @category Trigonometry
  * @return the sign from ASTC diagram, 1 or -1, representing positive or negative.
@@ -2536,7 +2435,7 @@ declare function CompassBearing(polarAngle: number): string;
  * Vector([1,2],[10,5]) // [9,3]
  * ```
  */
-declare function Vector(O: Point, P: Point): Vector;
+declare function Vector(O: Point2D, P: Point2D): Vector;
 /**
  * @category Vector
  * @return sum of all vectors
@@ -2556,6 +2455,7 @@ declare function VectorAdd(...vectors: Vector[]): Vector;
 declare function VectorMean(...vectors: Vector[]): Vector;
 /**
  * @category Vector
+ * @deprecated useless
  * @return length of vector
  * ```
  * VectorLength([-3,4]) // 5
@@ -2566,6 +2466,7 @@ declare function VectorMean(...vectors: Vector[]): Vector;
 declare function VectorLength(v: Vector): number;
 /**
  * @category Vector
+ * @deprecated useless
  * @return argument of vector
  * ```
  * VectorArg([2,0]) // 0
@@ -2588,6 +2489,7 @@ declare function VectorArg(v: Vector): number;
 declare function VectorScale(v: Vector, k: number): Vector;
 /**
  * @category Vector
+ * @deprecated Useless
  * @return the negative of the vector
  * ```
  * VectorRev([-3,4]) // [3,-4]
@@ -2598,6 +2500,7 @@ declare function VectorScale(v: Vector, k: number): Vector;
 declare function VectorRev(v: Vector): Vector;
 /**
  * @category Vector
+ * @deprecated Useless
  * @return the unit vector of v
  * ```
  * VectorUnit([2,0]) // [1,0]
@@ -2608,6 +2511,7 @@ declare function VectorRev(v: Vector): Vector;
 declare function VectorUnit(v: Vector): Vector;
 /**
  * @category Vector
+ * @deprecated useless
  * @return scale the vector to the given length
  * ```
  * VectorScaleTo([2,0],10) // [10,0]
@@ -2618,6 +2522,7 @@ declare function VectorUnit(v: Vector): Vector;
 declare function VectorScaleTo(v: Vector, length: number): Vector;
 /**
  * @category Vector
+ * @deprecated Useless
  * @return rotate a vector anticlockwise by angle.
  * ```
  * VectorRotate([1,2],90) // [-2,1]
@@ -2626,13 +2531,13 @@ declare function VectorScaleTo(v: Vector, length: number): Vector;
 declare function VectorRotate(v: Vector, angle: number): Vector;
 /**
  * @category ArrangePoints
- * @return Arrange Points in anti-clockwise direction
+ * @return Arrange Points in anti-clockwise direction around their mean
  * ```
  * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
  * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
  * ```
  */
-declare function ArrangePoints(...points: Point[]): Point[];
+declare function ArrangePoints(...points: Point2D[]): Point2D[];
 /**
  * @category Vector3D
  * @return the vector OP
@@ -2643,6 +2548,7 @@ declare function ArrangePoints(...points: Point[]): Point[];
 declare function Vec3D(O: Point3D, P: Point3D): Vector3D;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return sum of all vectors
  * ```
  * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
@@ -2651,6 +2557,7 @@ declare function Vec3D(O: Point3D, P: Point3D): Vector3D;
 declare function Vec3DAdd(...vectors: Vector3D[]): Vector3D;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return mean of all vectors
  * ```
  * Vec3DMean([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
@@ -2659,6 +2566,7 @@ declare function Vec3DAdd(...vectors: Vector3D[]): Vector3D;
 declare function Vec3DMean(...vectors: Vector3D[]): Vector3D;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return length of vector
  * ```
  * Vec3DLength([-3,4,0]) // 5
@@ -2669,6 +2577,7 @@ declare function Vec3DMean(...vectors: Vector3D[]): Vector3D;
 declare function Vec3DLength(v: Vector3D): number;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return find [kx,ky,kz] from [x,y,z]
  * ```
  * Vec3DScale([1,2,3],2) // [2,4,6]
@@ -2678,6 +2587,7 @@ declare function Vec3DLength(v: Vector3D): number;
 declare function Vec3DScale(v: Vector3D, k: number): Vector3D;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return the unit vector of v
  * ```
  * Vec3DUnit([2,0,0]) // [1,0,0]
@@ -2688,6 +2598,7 @@ declare function Vec3DScale(v: Vector3D, k: number): Vector3D;
 declare function Vec3DUnit(v: Vector3D): Vector3D;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return scale the vector to the given length
  * ```
  * Vec3DScaleTo([2,0,0],10) // [10,0,0]
@@ -2698,6 +2609,7 @@ declare function Vec3DUnit(v: Vector3D): Vector3D;
 declare function Vec3DScaleTo(v: Vector3D, length: number): Vector3D;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return the projection vector of v
  * ```
  * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
@@ -2706,6 +2618,7 @@ declare function Vec3DScaleTo(v: Vector3D, length: number): Vector3D;
 declare function Vec3DProj(v: Vector3D, onto: Vector3D): Vector3D;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return dot product of v1 and v2
  * ```
  * DotProduct([1, 1, 0], [0, 1, 1]) // 1
@@ -2715,6 +2628,7 @@ declare function Vec3DProj(v: Vector3D, onto: Vector3D): Vector3D;
 declare function DotProduct(v1: Vector3D, v2: Vector3D): number;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return cross product of v1 and v2
  * ```
  * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
@@ -2723,6 +2637,7 @@ declare function DotProduct(v1: Vector3D, v2: Vector3D): number;
 declare function CrossProduct(v1: Vector3D, v2: Vector3D): Vector3D;
 /**
  * @category Vector3D
+ * @deprecated useless
  * @return unit normal vector to the plane OAB
  * ```
  * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
@@ -2747,7 +2662,7 @@ declare function ProjectionOnPlane(point: Point3D, plane: [Point3D, Point3D, Poi
  * EmbedPlane([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-declare function EmbedPlane(plane2D: Point[], origin?: Point3D, xVec?: Vector3D, yVec?: Vector3D): Point3D[];
+declare function EmbedPlane(plane2D: Point2D[], origin?: Point3D, xVec?: Vector3D, yVec?: Vector3D): Point3D[];
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D with constant z
@@ -2756,9 +2671,10 @@ declare function EmbedPlane(plane2D: Point[], origin?: Point3D, xVec?: Vector3D,
  * EmbedPlaneZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-declare function EmbedPlaneZ(plane2D: Point[], z?: number): Point3D[];
+declare function EmbedPlaneZ(plane2D: Point2D[], z?: number): Point3D[];
 /**
  * @category Vector3D
+ * @deprecated use Extrude
  * @return extrude the lower base of a frustum towards the upper base by a ratio
  * ```
  * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
@@ -2767,25 +2683,14 @@ declare function EmbedPlaneZ(plane2D: Point[], z?: number): Point3D[];
  */
 declare function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: number): Point3D[];
 /**
-* @category 3DPen
-* @deprecated use Projector3D() instead
-* @return projector function from 3D point to 2D plane
-* ```
-* const pj = Projector(60,0.5) // create a 3D projector function
-* pj(1,1,0) // [1.25, 0.433012701892]
-* ```
-*/
-declare function Projector(angle?: number, depth?: number): (x: number, y: number, z: number) => Point;
-/**
-* @category 3DPen
-* @deprecated
-* @return projector function from 3D point to 2D plane
-* ```
-* const pj = Projector3D(60,0.5) // create a 3D projector function
-* pj([1,1,0]) // [1.25, 0.433012701892]
-* ```
-*/
-declare function Projector3D(angle?: number, depth?: number): (_: Point3D) => Point;
+ * @category Vector3D
+ * @return extrude the lower base of a frustum towards the upper base by a ratio
+ * ```
+ * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
+ * Extrude([A,B,C],[[0,0,4]],0.75) // [[0,0,0],[3,0,0],[0,3,0]]
+ * ```
+ */
+declare function Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: number): Point3D[];
 /**
  * @category DrawingPen
  */
@@ -2912,7 +2817,7 @@ declare class AutoPenCls {
      * ```
      */
     Triangle({ vertices, triangle, labels, heights, scale }: {
-        vertices: Point[];
+        vertices: Point2D[];
         triangle: any;
         labels: string[];
         heights: [boolean, boolean, boolean];
@@ -3114,62 +3019,19 @@ declare var AutoPen: typeof AutoPenCls;
 /**
  * @ignore
  */
-declare var PEN_QUALITY: number;
+declare const DEFAULT_BORDER = 0.2;
 /**
  * @ignore
  */
-declare class FrameCls {
-    wPixel: number;
-    hPixel: number;
-    xmin: number;
-    xmax: number;
-    ymin: number;
-    ymax: number;
-    axisOffset: number;
-    constructor();
-    xWidth(): number;
-    yHeight(): number;
-    xUnit(): number;
-    yUnit(): number;
-    toPix(xyArr: Point): Point;
-    toCoord(xyArr: Point): Point;
-    private _ticks;
-    xTicks(interval: number): number[];
-    yTicks(interval: number): number[];
-    xRange(): [number, number];
-    yRange(): [number, number];
-    xOffset(): number;
-    yOffset(): number;
-}
+declare const DEFAULT_POINT_RADIUS_PIXEL = 2;
 /**
  * @ignore
  */
-declare var Frame: typeof FrameCls;
-declare const REM_PIXEL: number;
+declare const DEFAULT_CUTTER_LENGTH_PIXEL = 5;
 /**
  * @category DrawingPen
  */
-declare class PenCls {
-    /**
-     * @ignore
-     */
-    private canvas;
-    /**
-     * @ignore
-     */
-    ctx: CanvasRenderingContext2D;
-    /**
-     * @ignore
-     */
-    private frame;
-    /**
-     * @ignore
-     */
-    private imgStore;
-    /**
-     * @ignore
-     */
-    private pj;
+declare class PenCls extends Pencil {
     /**
      * @ignore
      */
@@ -3187,10 +3049,6 @@ declare class PenCls {
          * @ignore
          */
         AUTO_BORDER: boolean;
-        /**
-         * @ignore
-         */
-        RANGE_SET: boolean;
         /**
          * Set the coordinate range of the canvas.
          * @category SetupRange
@@ -3214,7 +3072,7 @@ declare class PenCls {
          * pen.range.square(5,[1,2]) // define range -4<x<6 and -3<y<7
          * ```
          */
-        square(size: number, center?: Point): void;
+        square(size: number, center?: Point2D): void;
         /**
          * Set the coordinate range by specifying in-view points.
          * @category SetupRange
@@ -3224,7 +3082,7 @@ declare class PenCls {
          * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
          * ```
          */
-        capture(...points: (Point | Point3D)[]): void;
+        capture(...points: Point[]): void;
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange
@@ -3235,7 +3093,7 @@ declare class PenCls {
          * // equivalent to pen.range.capture([0,0],[1,2],[3,4])
          * ```
          */
-        extend(...points: Point[]): void;
+        extend(...points: Point2D[]): void;
     };
     /**
      * Setup of canvas size.
@@ -3298,7 +3156,7 @@ declare class PenCls {
          * @category setup
          * @deprecated
          * @param scale - The scale of the width.
-         * @param  ratio - The height-to-width ratio.
+         * @param ratio - The height-to-width ratio.
          * @returns void
          * ```
          * pen.setup.size(0.5,2)
@@ -3345,20 +3203,6 @@ declare class PenCls {
          */
         range(xRange: [number, number], yRange: [number, number]): void;
         /**
-         * Set the coordinate range of the canvas with given size and center.
-         * Equivalent to pen.range([-size, size], [-size, size]) but shifted center.
-         * @category setup
-         * @deprecated
-         * @param size - The max x and y coordinates in range.
-         * @param center - [x,y] coordinates of the center.
-         * @returns void
-         * ```
-         * pen.setup.squareRange(5) // define range -5<x<5 and -5<y<5
-         * pen.setup.squareRange(5,[1,2]) // define range -4<x<6 and -3<y<7
-         * ```
-         */
-        squareRange(size: number, center?: Point): void;
-        /**
          * Set the coordinate range by specifying in-view points.
          * @category setup
          * @deprecated
@@ -3370,12 +3214,8 @@ declare class PenCls {
          * pen.setup.inView([[1,2],[3,4]]) // the points [0,0], [1,2] and [3,4] must be in-view
          * ```
          */
-        inView(points: Point[], border?: number, origin?: boolean): void;
+        inView(points: Point2D[], border?: number, origin?: boolean): void;
     };
-    /**
-     * @ignore
-     */
-    private setProperty;
     /**
      * Settings.
      * @category setting
@@ -3428,13 +3268,13 @@ declare class PenCls {
         /**
          * Set the transparency.
          * @category set
-         * @param alpha - The alpha value, from 0 to 1. 0 is completely transparent.
+         * @param opaque - The opaque value, from 0 to 1. 0 is completely transparent.
          * @returns void
          * ```
          * pen.set.alpha(0.9) // set slightly transparent
          * ```
          */
-        alpha(alpha?: number): void;
+        alpha(opaque?: number): void;
         /**
          * Set the dash pattern of line.
          * @category set
@@ -3515,7 +3355,7 @@ declare class PenCls {
          * pen.set.labelCenter(true) // set center to be the center of the canvas
          * ```
          */
-        labelCenter(center?: Point | Point3D | boolean): void;
+        labelCenter(center?: Point | boolean): void;
         /**
          * Set length unit for line label.
          * @category set
@@ -3570,7 +3410,7 @@ declare class PenCls {
      * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
      * ```
      */
-    plot(func: (t: number) => number | Point, tStart?: number, tEnd?: number, dots?: number): void;
+    plot(func: ((t: number) => number) | ((t: number) => Point2D), tStart?: number, tEnd?: number, dots?: number): void;
     /**
      * Drawing graph of functions.
      * @category graph
@@ -3590,7 +3430,7 @@ declare class PenCls {
          * pen.graph.circle([1,2],3) // draw (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        circle(center: Point, radius: number): void;
+        circle(center: Point2D, radius: number): void;
         /**
          * Draw an arc of (x-h)^2+(y-k)^2 = r^2.
          * @category graph
@@ -3603,7 +3443,7 @@ declare class PenCls {
          * pen.graph.arc([1,2],3,0,180) // draw upper semi-circle (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        arc(center: Point, radius: number, qStart: number, qEnd: number): void;
+        arc(center: Point2D, radius: number, qStart: number, qEnd: number): void;
         /**
          * Draw a sector of (x-h)^2+(y-k)^2 = r^2.
          * @category graph
@@ -3616,7 +3456,7 @@ declare class PenCls {
          * pen.graph.sector([1,2],3,0,90) // draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        sector(center: Point, radius: number, qStart: number, qEnd: number): void;
+        sector(center: Point2D, radius: number, qStart: number, qEnd: number): void;
         /**
          * Draw an segment of (x-h)^2+(y-k)^2 = r^2.
          * @category graph
@@ -3629,7 +3469,7 @@ declare class PenCls {
          * pen.graph.segment([1,2],3,0,90) // draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        segment(center: Point, radius: number, qStart: number, qEnd: number): void;
+        segment(center: Point2D, radius: number, qStart: number, qEnd: number): void;
         /**
          * Draw a quadratic graph y=ax^2+bx+c.
          * @category graph
@@ -3697,7 +3537,7 @@ declare class PenCls {
      * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
      * ```
      */
-    point(position: Point | Point3D, label?: string): void;
+    point(position: Point, label?: string): void;
     /**
      * Draw a point.
      * @category draw
@@ -3710,7 +3550,7 @@ declare class PenCls {
      * ```
      */
     points(positions: {
-        [k: string]: Point | Point3D;
+        [k: string]: Point;
     }, label?: boolean): void;
     /**
      * Draw a horizontal cutter.
@@ -3722,7 +3562,7 @@ declare class PenCls {
      * pen.cutterH([1,2]) // draw a horizontal cutter at [1,2]
      * ```
      */
-    cutterH(position: Point, label?: string): void;
+    cutterH(position: Point2D, label?: string): void;
     /**
      * Draw a vertical cutter.
      * @category draw
@@ -3733,7 +3573,7 @@ declare class PenCls {
      * pen.cutterV([1,2]) // draw a vertical cutter at [1,2]
      * ```
      */
-    cutterV(position: Point, label?: string): void;
+    cutterV(position: Point2D, label?: string): void;
     /**
      * Draw a circle or arc.
      * @category draw
@@ -3747,11 +3587,7 @@ declare class PenCls {
      * pen.circle([1,2], 10, [0,180]) // draw a upper semi-circle
      * ```
      */
-    circle(center: Point, radius: number, angles?: number[], fill?: boolean): void;
-    /**
-     * @ignore
-     */
-    private _line;
+    circle(center: Point2D, radius: number, angles?: [number, number], fill?: boolean): void;
     /**
      * Draw a line between two points.
      * @category draw
@@ -3764,7 +3600,7 @@ declare class PenCls {
      * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
      * ```
      */
-    line(startPoint: Point | Point3D, endPoint: Point | Point3D, label?: string): void;
+    line(startPoint: Point, endPoint: Point, label?: string): void;
     /**
      * Draw a dash line between two points.
      * @category draw
@@ -3777,7 +3613,7 @@ declare class PenCls {
      * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
      * ```
      */
-    dash(startPoint: Point | Point3D, endPoint: Point | Point3D, label?: string): void;
+    dash(startPoint: Point, endPoint: Point, label?: string): void;
     /**
      * Draw an arrow between two points.
      * @category draw
@@ -3788,11 +3624,7 @@ declare class PenCls {
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint: Point | Point3D, endPoint: Point | Point3D): void;
-    /**
-     * @ignore
-     */
-    private _polygon;
+    arrow(startPoint: Point, endPoint: Point): void;
     /**
      * Draw a polyline given points.
      * @category draw
@@ -3802,7 +3634,7 @@ declare class PenCls {
      * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyline(...points: (Point | Point3D)[]): void;
+    polyline(...points: Point[]): void;
     /**
      * Draw a polygon given points.
      * @category draw
@@ -3812,7 +3644,7 @@ declare class PenCls {
      * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polygon(...points: (Point | Point3D)[]): void;
+    polygon(...points: Point[]): void;
     /**
      * Fill a polygon given points.
      * @category draw
@@ -3822,7 +3654,7 @@ declare class PenCls {
      * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyfill(...points: (Point | Point3D)[]): void;
+    polyfill(...points: Point[]): void;
     /**
      * Shade a polygon given points.
      * @category draw
@@ -3832,7 +3664,7 @@ declare class PenCls {
      * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle with vertices [0,0], [5,2] and [3,4]
      * ```
      */
-    polyshade(...points: (Point | Point3D)[]): void;
+    polyshade(...points: Point[]): void;
     /**
      * Fill a shape.
      * @category fill
@@ -3852,7 +3684,7 @@ declare class PenCls {
          * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        circle(center: Point, radius: number): void;
+        circle(center: Point2D, radius: number): void;
         /**
          * Fill a sector (x-h)^2+(y-k)^2 = r^2.
          * @category fill
@@ -3865,7 +3697,7 @@ declare class PenCls {
          * pen.fill.sector([1,2],3,0,90) // fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        sector(center: Point, radius: number, qStart: number, qEnd: number): void;
+        sector(center: Point2D, radius: number, qStart: number, qEnd: number): void;
         /**
          * Fill a segment (x-h)^2+(y-k)^2 = r^2.
          * @category fill
@@ -3878,7 +3710,7 @@ declare class PenCls {
          * pen.fill.segment([1,2],3,0,90) // fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        segment(center: Point, radius: number, qStart: number, qEnd: number): void;
+        segment(center: Point2D, radius: number, qStart: number, qEnd: number): void;
     };
     /**
      * Draw an angle with label, non-reflex
@@ -3894,7 +3726,7 @@ declare class PenCls {
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
-    angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, label?: string | number, arc?: number, radius?: number): void;
+    angle(A: Point, O: Point, B: Point, label?: string | number, arc?: number, radius?: number): void;
     /**
      * Geometry Decorator.
      * @category decorator
@@ -3916,7 +3748,7 @@ declare class PenCls {
          * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
          * ```
          */
-        equalSide(startPoint: Point | Point3D, endPoint: Point | Point3D, tick?: number): void;
+        equalSide(startPoint: Point, endPoint: Point, tick?: number): void;
         /**
          * Decorate parallel side.
          * @category decorator
@@ -3929,7 +3761,7 @@ declare class PenCls {
          * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
          * ```
          */
-        parallel(startPoint: Point | Point3D, endPoint: Point | Point3D, tick?: number): void;
+        parallel(startPoint: Point, endPoint: Point, tick?: number): void;
         /**
          * Decorate an angle AOB, always in anti-clockwise.
          * @category decorator
@@ -3945,7 +3777,7 @@ declare class PenCls {
          * // decorate an angle AOB with double-arc in anti-clockwise.
          * ```
          */
-        anglePolar(A: Point, O: Point, B: Point, arc?: number, radius?: number): void;
+        anglePolar(A: Point2D, O: Point2D, B: Point2D, arc?: number, radius?: number): void;
         /**
          * Decorate an angle AOB, always non-reflex.
          * @category decorator
@@ -3960,7 +3792,7 @@ declare class PenCls {
          * // decorate an angle AOB with double-arc.
          * ```
          */
-        angle(A: Point | Point3D, O: Point | Point3D, B: Point | Point3D, arc?: number, radius?: number): void;
+        angle(A: Point, O: Point, B: Point, arc?: number, radius?: number): void;
         /**
          * Decorate a right-angle AOB.
          * @category decorator
@@ -3974,7 +3806,7 @@ declare class PenCls {
          * // decorate an right-angle AOB
          * ```
          */
-        rightAngle(A: Point | Point3D, O: Point | Point3D, B?: Point | Point3D | undefined, size?: number): void;
+        rightAngle(A: Point, O: Point, B?: Point | undefined, size?: number): void;
         /**
          * Decorate a compass.
          * @category decorator
@@ -3985,12 +3817,8 @@ declare class PenCls {
          * // decorate a compass at [1,2]
          * ```
          */
-        compass(position: Point): void;
+        compass(position: Point2D): void;
     };
-    /**
-     * @ignore
-     */
-    private _write;
     /**
      * Write text.
      * @category text
@@ -4001,7 +3829,7 @@ declare class PenCls {
      * pen.write([1,2],'abc') // write 'abc' at [1,2]
      * ```
      */
-    write(position: Point | Point3D, text: string): void;
+    write(position: Point, text: string): void;
     /**
      * @category text
      */
@@ -4015,15 +3843,15 @@ declare class PenCls {
          * @category text
          * @param position - The coordinates [x,y] of the point to label.
          * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle.
-         * @param offsetPixel - The pixel distance to offset from the position.
+         * @param direction - The direction to offset, given as a polar angle.
+         * @param radius - The pixel distance to offset from the position.
          * @returns void
          * ```
          * pen.label.point([1,2],'A',180)
          * // label the point [1,2] as 'A', place the label on the left (180 degree)
          * ```
          */
-        point(position: Point | Point3D, text?: string, dodgeDirection?: number | undefined, offsetPixel?: number): void;
+        point(position: Point, text?: string, direction?: number | undefined, radius?: number): void;
         /**
          * Add a label to points, using index as text.
          * @category text
@@ -4034,7 +3862,7 @@ declare class PenCls {
          * ```
          */
         points(positions: {
-            [k: string]: Point | Point3D;
+            [k: string]: Point;
         }): void;
         /**
          * Add a label to an angle AOB, in anticlockwise.
@@ -4042,55 +3870,55 @@ declare class PenCls {
          * @deprecated use pen.set.angle('polar')
          * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
          * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+         * @param direction - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+         * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
          * @returns void
          * ```
          * pen.label.anglePolar([[1,2],[0,0],[-2,1]],'x')
          * // label the angle as 'x'
          * ```
          */
-        anglePolar(anglePoints: [Point, Point, Point], text: string, dodgeDirection?: number, offsetPixel?: number): void;
+        anglePolar(anglePoints: [Point2D, Point2D, Point2D], text: string, direction?: number, radius?: number): void;
         /**
          * Add a label to an angle AOB, non-reflex.
          * @category text
          * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
          * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+         * @param direction - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+         * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
          * @returns void
          * ```
          * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
          * // label the angle as 'x'
          * ```
          */
-        angle(anglePoints: [Point | Point3D, Point | Point3D, Point | Point3D], text: string | number, dodgeDirection?: number, offsetPixel?: number): void;
+        angle([A, O, B]: [Point, Point, Point], text: string | number, direction?: number, radius?: number): void;
         /**
          * Add a label to a line AB.
          * @category text
          * @param linePoints - An array [A,B] for the coordinates of AB.
          * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to the right normal of AB.
-         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
+         * @param direction - The direction to offset, given as a polar angle,relative to the right normal of AB.
+         * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
          * @returns void
          * ```
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        line(linePoints: [Point | Point3D, Point | Point3D], text: string | number, dodgeDirection?: number, offsetPixel?: number): void;
+        line([A, B]: [Point, Point], text: string | number, direction?: number, radius?: number): void;
         /**
          * Add a coordinates label to a point.
          * @category text
          * @param position - The coordinates [x,y] of the point to label.
-         * @param dodgeDirection - The direction to offset, given as a polar angle.
-         * @param offsetPixel - The pixel distance to offset from the position.
+         * @param direction - The direction to offset, given as a polar angle.
+         * @param radius - The pixel distance to offset from the position.
          * @returns void
          * ```
          * pen.label.coordinates([1,2],180)
          * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
          * ```
          */
-        coordinates(point: Point, dodgeDirection?: number, offsetPixel?: number): void;
+        coordinates(point: Point2D, direction?: number, radius?: number): void;
     };
     /**
      * The axis.
@@ -4248,7 +4076,7 @@ declare class PenCls {
             dash?: boolean | undefined;
             shade?: boolean | undefined;
             fill?: boolean | undefined;
-            arc?: number[] | undefined;
+            arc?: [number, number] | undefined;
         }): void;
         /**
          * Draw a circle on XZ plane in 3D
@@ -4263,7 +4091,7 @@ declare class PenCls {
             dash?: boolean | undefined;
             shade?: boolean | undefined;
             fill?: boolean | undefined;
-            arc?: number[] | undefined;
+            arc?: [number, number] | undefined;
         }): void;
         /**
          * Draw a circle on YZ plane in 3D
@@ -4278,7 +4106,7 @@ declare class PenCls {
             dash?: boolean | undefined;
             shade?: boolean | undefined;
             fill?: boolean | undefined;
-            arc?: number[] | undefined;
+            arc?: [number, number] | undefined;
         }): void;
         /**
          * Draw a circle on XY plane in 3D
@@ -4293,7 +4121,7 @@ declare class PenCls {
             dash?: boolean | undefined;
             shade?: boolean | undefined;
             fill?: boolean | undefined;
-            arc?: number[] | undefined;
+            arc?: [number, number] | undefined;
         }): void;
         /**
          * Draw a sphere in 3D
@@ -4313,13 +4141,10 @@ declare class PenCls {
             upperOnly?: boolean | undefined;
         }): void;
         /**
-         *
-         * @ignore
-         */
-        _cyclicBases(lowerBase: Point3D[], upperBase: Point3D[]): [(index: number) => Point3D, (index: number) => Point3D, number];
-        /**
          * Draw the envelop of a frustum
          * @category 3D
+         * @param lowerBase - the points in the lower base
+         * @param upperBase - the point in the upper base, must have the same length as lowerBase
          * @returns void
          * ```
          * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
@@ -4338,7 +4163,7 @@ declare class PenCls {
          * pen.d3.frustum([A,B,C],[V]) // draw a cone
          * ```
          */
-        frustum(lowerBase: Point3D[], upperBase: Point3D[], { base, height, shadeLower, shadeUpper, envelope, }?: {
+        frustum(lowerBase: Point3D[], upperBase: Point3D[] | Point3D, { base, height, shadeLower, shadeUpper, envelope, }?: {
             base?: boolean | undefined;
             height?: boolean | undefined;
             shadeLower?: boolean | undefined;
@@ -4354,7 +4179,7 @@ declare class PenCls {
          * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
          * ```
          */
-        prismZ(lowerBase: Point[], lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+        prismZ(lowerBase: Point2D[], lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
             base?: boolean | undefined;
             height?: boolean | undefined;
             shadeLower?: boolean | undefined;
@@ -4369,7 +4194,7 @@ declare class PenCls {
          * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
          * ```
          */
-        cylinderZ(center: Point, radius: number, lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+        cylinderZ(center: Point2D, radius: number, lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
             base?: boolean | undefined;
             height?: boolean | undefined;
             shadeLower?: boolean | undefined;
@@ -4385,7 +4210,7 @@ declare class PenCls {
          * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
          * ```
          */
-        pyramidZ(lowerBase: Point[], lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
+        pyramidZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
             base?: boolean | undefined;
             height?: boolean | undefined;
             shadeLower?: boolean | undefined;
@@ -4399,7 +4224,7 @@ declare class PenCls {
          * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
          * ```
          */
-        coneZ(center: Point, radius: number, lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
+        coneZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
             base?: boolean | undefined;
             height?: boolean | undefined;
             shadeLower?: boolean | undefined;
@@ -4408,13 +4233,10 @@ declare class PenCls {
     };
     /**
      * @ignore
-     */
-    project(point: Point3D | Point): Point;
-    /**
-     * @ignore
      * @deprecated
      */
     autoCrop(): void;
+    private exportCanvas;
     /**
      * Export the canvas to image tag.
      * @category export
@@ -4466,28 +4288,14 @@ declare class PenCls {
      * ```
      */
     restoreImg(): void;
-    /**
-     * @ignore
-     */
-    private _textWidth;
 }
 /**
  * @ignore
  */
 declare var Pen: typeof PenCls;
-/**
- * @ignore
- */
-declare function cloneCanvas(oldCanvas: HTMLCanvasElement): HTMLCanvasElement;
-/**
- * @ignore
- */
-declare function trimCanvas(canvas: HTMLCanvasElement): void;
 declare module "Pen/index" {
-    import './Frame.ts';
     import './Pen.ts';
     import './AutoPen.ts';
-    import './3D.ts';
 }
 declare module "Soil/tool/html" {
     export class QuestionHTML {

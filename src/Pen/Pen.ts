@@ -1,19 +1,17 @@
 
-
-// const REM_PIXEL: number = parseFloat(getComputedStyle(document.documentElement).fontSize);
-
-
-
-var PEN_QUALITY = 3
-
-
-import { Pencil } from 'sapphire-js'
-
-
+/**
+ * @ignore
+ */
 const DEFAULT_BORDER = 0.2
 
-
+/**
+ * @ignore
+ */
 const DEFAULT_POINT_RADIUS_PIXEL = 2
+
+/**
+ * @ignore
+ */
 const DEFAULT_CUTTER_LENGTH_PIXEL = 5
 
 
@@ -215,7 +213,7 @@ class PenCls extends Pencil {
          * @category setup
          * @deprecated
          * @param scale - The scale of the width.
-         * @param  ratio - The height-to-width ratio.
+         * @param ratio - The height-to-width ratio.
          * @returns void
          * ```
          * pen.setup.size(0.5,2) 
@@ -223,15 +221,20 @@ class PenCls extends Pencil {
          * ```
          */
         size(scale = 1, ratio = 1) {
-            // REM_PIXEL is the default font size of the browser, usually 16px
-            const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
-            const wPixel = scale * 25 * REM_PIXEL;
-            const hPixel = wPixel * ratio;
-            // create a canvas of higher resolution (PEN_QUALITY)
-            this._pen.canvas.width = wPixel * PEN_QUALITY;
-            this._pen.canvas.height = hPixel * PEN_QUALITY;
-            this._pen.frame.wPixel = wPixel * PEN_QUALITY;
-            this._pen.frame.hPixel = hPixel * PEN_QUALITY;
+            const width = scale * 2.5
+            const height = width * ratio
+            this._pen.initSize(width, height)
+
+            // // REM_PIXEL is the default font size of the browser, usually 16px
+            // const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            // const wPixel = scale * 25 * REM_PIXEL;
+            // const hPixel = wPixel * ratio;
+
+            // this._pen.canvas.width = wPixel * PEN_QUALITY;
+            // this._pen.canvas.height = hPixel * PEN_QUALITY;
+            // this._pen.frame.wPixel = wPixel * PEN_QUALITY;
+            // this._pen.frame.hPixel = hPixel * PEN_QUALITY;
+
             this._pen.set.reset();
         },
         /**
@@ -807,18 +810,6 @@ class PenCls extends Pencil {
     }
 
 
-    /**
-     * @ignore
-     */
-    private _line(startPoint: Point, endPoint: Point, { arrow = false, dash = false }) {
-        this.ctx.save()
-        if (dash) this.set.dash(true)
-        this.drawStroke([startPoint, endPoint])
-        this.ctx.restore();
-
-        if (arrow) this.drawArrowHead(startPoint, endPoint)
-    }
-
 
     /**
      * Draw a line between two points.
@@ -833,7 +824,7 @@ class PenCls extends Pencil {
      * ```
      */
     line(startPoint: Point, endPoint: Point, label?: string) {
-        this._line(startPoint, endPoint, {})
+        this.drawStroke([startPoint, endPoint])
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
@@ -850,7 +841,10 @@ class PenCls extends Pencil {
      * ```
      */
     dash(startPoint: Point, endPoint: Point, label?: string) {
-        this._line(startPoint, endPoint, { dash: true })
+        this.save()
+        this.set.dash(true)
+        this.drawStroke([startPoint, endPoint])
+        this.restore();
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
@@ -866,7 +860,8 @@ class PenCls extends Pencil {
      * ```
      */
     arrow(startPoint: Point, endPoint: Point) {
-        this._line(startPoint, endPoint, { arrow: true })
+        this.drawStroke([startPoint, endPoint])
+        this.drawArrowHead(startPoint, endPoint)
     }
 
 
@@ -950,8 +945,7 @@ class PenCls extends Pencil {
          * ```
          */
         circle(center: Point2D, radius: number) {
-            const [h, k] = center
-            let points = cal.trace(t => [h + radius * cos(t), k + radius * sin(t)], [0, 360])
+            let points = cal.traceCircle(center, radius, [0, 360])
             this._pen.polyfill(...points)
         },
         /**
@@ -967,8 +961,7 @@ class PenCls extends Pencil {
          * ```
          */
         sector(center: Point2D, radius: number, qStart: number, qEnd: number) {
-            const [h, k] = center
-            let points = cal.trace(t => [h + radius * cos(t), k + radius * sin(t)], [qStart, qEnd])
+            let points = cal.traceCircle(center, radius, [qStart, qEnd])
             this._pen.polyfill(center, ...points)
         },
         /**
@@ -984,8 +977,7 @@ class PenCls extends Pencil {
          * ```
          */
         segment(center: Point2D, radius: number, qStart: number, qEnd: number) {
-            const [h, k] = center
-            let points = cal.trace(t => [h + radius * cos(t), k + radius * sin(t)], [qStart, qEnd])
+            let points = cal.traceCircle(center, radius, [qStart, qEnd])
             this._pen.polyfill(...points)
         },
     };
@@ -1009,16 +1001,9 @@ class PenCls extends Pencil {
      * ```
      */
     angle(A: Point, O: Point, B: Point, label?: string | number, arc = 1, radius = -1) {
-        A = this.project(A)
-        B = this.project(B)
-        O = this.project(O)
-        if (radius < 0) {
-            let angle = Angle(A, O, B)
-            let extra = Math.max(30 - angle, 0) * 2
-            radius = 15 + extra
-        }
         this.decorate.angle(A, O, B, arc, radius)
-        if (label !== undefined) this.label.angle([A, O, B], label, undefined, 25 + radius - 15)
+        if (label !== undefined)
+            this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 10)
     }
 
 
@@ -1032,6 +1017,7 @@ class PenCls extends Pencil {
          * @ignore
          */
         _pen: this as PenCls,
+
         /**
          * Decorate equal side lengths.
          * @category decorator
@@ -1061,34 +1047,7 @@ class PenCls extends Pencil {
          * ```
          */
         parallel(startPoint: Point, endPoint: Point, tick = 1) {
-            startPoint = this._pen.project(startPoint)
-            endPoint = this._pen.project(endPoint)
-            let size = 4
-            let space = 6
-            size = size * PEN_QUALITY;
-            space = space * PEN_QUALITY;
-            startPoint = this._pen.frame.toPix(startPoint);
-            endPoint = this._pen.frame.toPix(endPoint);
-            let [x, y] = [(startPoint[0] + endPoint[0]) / 2, (startPoint[1] + endPoint[1]) / 2];
-            let dy = endPoint[1] - startPoint[1];
-            let dx = endPoint[0] - startPoint[0];
-            let angle = Math.atan2(dy, dx);
-
-            let mark = (position: number) => {
-                this._pen.ctx.save();
-                this._pen.ctx.translate(x, y);
-                this._pen.ctx.rotate(angle);
-                this._pen.ctx.beginPath();
-                this._pen.ctx.moveTo(position, 0);
-                this._pen.ctx.lineTo(position - size * 2, -size);
-                this._pen.ctx.moveTo(position, 0);
-                this._pen.ctx.lineTo(position - size * 2, size);
-                this._pen.ctx.stroke();
-                this._pen.ctx.restore();
-            };
-            for (let i = 0; i < tick; i++) {
-                mark(i * space);
-            }
+            this._pen.drawParallelMark(startPoint, endPoint, 4, tick, 6)
         },
 
         /**
@@ -1134,28 +1093,11 @@ class PenCls extends Pencil {
          * ```
          */
         angle(A: Point, O: Point, B: Point, arc = 1, radius = -1) {
-            A = this._pen.project(A)
-            B = this._pen.project(B)
-            O = this._pen.project(O)
-            if (radius < 0) {
-                let angle = Angle(A, O, B)
-                let extra = Math.max(30 - angle, 0) * 2
-                radius = 15 + extra
-            }
-            let mode = this._pen.setProperty.ANGLE_MODE
-            if (mode === 'normal' && IsReflex(A, O, B)) [A, B] = [B, A]
-            if (mode === 'reflex' && !IsReflex(A, O, B)) [A, B] = [B, A]
-            // draw like polar
-            A = this._pen.frame.toPix(A);
-            let OPixel = this._pen.frame.toPix(O);
-            B = this._pen.frame.toPix(B);
-            let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
-            let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
+            if (radius < 0)
+                radius = 15 + this._pen.getSmallAngleExtraPixel(A, O, B, 30, 2)
+
             let space = 3
-            let outset = arc > 1 ? space / 2 : 0
-            for (let i = 0; i < arc; i++) {
-                this._pen.circle(O, radius + outset - i * space, [a1, a2]);
-            }
+            this._pen.drawAngle(A, O, B, radius, arc, space)
         },
 
 
@@ -1173,30 +1115,14 @@ class PenCls extends Pencil {
          * ```
          */
         rightAngle(A: Point, O: Point, B?: Point, size = 12) {
-            A = this._pen.project(A)
-            O = this._pen.project(O)
+
+            A = this._pen.pj(A)
+            O = this._pen.pj(O)
             B ??= RotatePoint(A, O, 90)
-            B = this._pen.project(B)
+            B = this._pen.pj(B)
 
-            size = size * PEN_QUALITY;
-            A = this._pen.frame.toPix(A);
-            O = this._pen.frame.toPix(O);
-            B = this._pen.frame.toPix(B);
-            let angleA = Math.atan2(A[1] - O[1], A[0] - O[0]);
-            let angleB = Math.atan2(B[1] - O[1], B[0] - O[0]);
+            this._pen.drawRightAngle(A, O, B, size)
 
-            let P: Point2D = [O[0] + size * Math.cos(angleA), O[1] + size * Math.sin(angleA)];
-            let Q: Point2D = [O[0] + size * Math.cos(angleB), O[1] + size * Math.sin(angleB)];
-            let R: Point2D = [O[0] + size * Math.cos(angleA) + size * Math.cos(angleB), O[1] + size * Math.sin(angleA) + size * Math.sin(angleB)];
-
-            let draw = (A: Point2D, B: Point2D) => {
-                this._pen.ctx.beginPath();
-                this._pen.ctx.moveTo(A[0], A[1]);
-                this._pen.ctx.lineTo(B[0], B[1]);
-                this._pen.ctx.stroke();
-            };
-            draw(P, R);
-            draw(Q, R);
         },
 
         /**
@@ -1210,68 +1136,10 @@ class PenCls extends Pencil {
          * ```
          */
         compass(position: Point2D) {
-            this._pen.ctx.save();
-            let [x0, y0] = this._pen.frame.toPix(position);
-            let length = 50
-            let aLength = 20
-            let aWidth = 10
-            this._pen.ctx.translate(x0, y0);
-            this._pen.ctx.beginPath();
-            this._pen.ctx.moveTo(0, -1.2 * length);
-            this._pen.ctx.lineTo(0, 1.2 * length);
-            this._pen.ctx.moveTo(-aWidth, -1.2 * length + aLength);
-            this._pen.ctx.lineTo(0, -1.2 * length);
-            this._pen.ctx.lineTo(aWidth, -1.2 * length + aLength);
-            this._pen.ctx.stroke();
-            this._pen.ctx.moveTo(-length, 0);
-            this._pen.ctx.lineTo(length, 0);
-            this._pen.ctx.stroke();
-            this._pen.ctx.restore();
+            this._pen.drawCompass(position, 17, 20, 7, 3.5)
         }
     };
 
-    /**
-     * @ignore
-     */
-    private _write(text: string, xPix: number, yPix: number) {
-        text = String(text)
-        if (text === '') return
-        this.ctx.save()
-        let ANGLE = -this.setProperty.TEXT_DIR * Math.PI / 180
-        if (this.setProperty.TEXT_LATEX) {
-            // const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
-            let size = Math.round(this.setProperty.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
-            let color = this.ctx.fillStyle
-            text = `\\color{${color}} ` + text
-            // @ts-ignore
-            const widget = new CanvasLatex.default(
-                text,
-                { displayMode: true, debugBounds: false, baseSize: size }
-            );
-            const bounds = widget.getBounds();
-            if (bounds !== null) {
-                this.ctx.translate(xPix, yPix)
-                this.ctx.rotate(ANGLE);
-                let xTune: number = 2 - bounds.width / 2 - bounds.x
-                if (this.ctx.textAlign === 'left') xTune = 2 - bounds.x
-                if (this.ctx.textAlign === 'right') xTune = 2 - bounds.width - bounds.x
-                if (this.ctx.textAlign === 'center') xTune = 2 - bounds.width / 2 - bounds.x
-
-                let yTune: number = - bounds.y / 2
-                if (this.ctx.textBaseline === 'top') yTune = - bounds.y
-                if (this.ctx.textBaseline === 'bottom') yTune = - bounds.y - bounds.height
-                if (this.ctx.textBaseline === 'middle') yTune = - bounds.y - bounds.height / 2
-
-                this.ctx.translate(xTune, yTune)
-                widget.draw(this.ctx)
-            }
-        } else {
-            this.ctx.translate(xPix, yPix)
-            this.ctx.rotate(ANGLE);
-            this.ctx.fillText(text, 0, 0)
-        }
-        this.ctx.restore()
-    }
 
 
     /**
@@ -1285,9 +1153,7 @@ class PenCls extends Pencil {
      * ```
      */
     write(position: Point, text: string) {
-        position = this.project(position)
-        const [x, y] = this.frame.toPix(position);
-        this._write(text, x, y);
+        this.drawText(text, position, 0, 0)
     }
 
     /**
@@ -1304,35 +1170,19 @@ class PenCls extends Pencil {
          * @category text
          * @param position - The coordinates [x,y] of the point to label.
          * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle.
-         * @param offsetPixel - The pixel distance to offset from the position.
+         * @param direction - The direction to offset, given as a polar angle.
+         * @param radius - The pixel distance to offset from the position.
          * @returns void
          * ```
          * pen.label.point([1,2],'A',180) 
          * // label the point [1,2] as 'A', place the label on the left (180 degree)
          * ```
          */
-        point(position: Point, text = '', dodgeDirection?: number, offsetPixel = 15) {
-            position = this._pen.project(position)
-            let [x, y] = this._pen.frame.toPix(position);
-            offsetPixel = offsetPixel * PEN_QUALITY;
-            if (dodgeDirection === undefined) {
-                let center = this._pen.setProperty.LABEL_CENTER
-                if (center !== undefined && AreDistinctPoint(center, position)) {
-                    dodgeDirection = Direction(center, position)
-                } else {
-                    dodgeDirection = 0
-                }
-            }
-
-            let textWidth = this._pen._textWidth(text)
-            x += (offsetPixel + textWidth - 5) * Math.cos(dodgeDirection / 180 * Math.PI);
-            y -= offsetPixel * Math.sin(dodgeDirection / 180 * Math.PI);
-
-            this._pen.ctx.save();
+        point(position: Point, text = '', direction?: number, radius = 15) {
+            this._pen.save();
             if (owl.alphabet(text)) this._pen.set.textItalic(true)
-            this._pen._write(text, x, y);
-            this._pen.ctx.restore();
+            this._pen.drawLabel(text, position, direction, radius)
+            this._pen.restore();
         },
 
         /**
@@ -1357,15 +1207,15 @@ class PenCls extends Pencil {
          * @deprecated use pen.set.angle('polar')
          * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
          * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+         * @param direction - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+         * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
          * @returns void
          * ```
          * pen.label.anglePolar([[1,2],[0,0],[-2,1]],'x') 
          * // label the angle as 'x'
          * ```
          */
-        anglePolar(anglePoints: [Point2D, Point2D, Point2D], text: string, dodgeDirection = 0, offsetPixel = 25) {
+        anglePolar(anglePoints: [Point2D, Point2D, Point2D], text: string, direction = 0, radius = 25) {
             let [A, O, B] = anglePoints;
             let APixel = this._pen.frame.toPix(A);
             let OPixel = this._pen.frame.toPix(O);
@@ -1373,43 +1223,29 @@ class PenCls extends Pencil {
             let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
             let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
             if (a2 < a1) a2 = a2 + 360
-            this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
+            this.point(O, text, (a1 + a2) / 2 + direction, radius);
         },
         /**
          * Add a label to an angle AOB, non-reflex.
          * @category text
          * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
          * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
+         * @param direction - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
+         * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
          * @returns void
          * ```
          * pen.label.angle([[1,2],[0,0],[-2,1]],'x') 
          * // label the angle as 'x'
          * ```
          */
-        angle(anglePoints: [Point, Point, Point], text: string | number, dodgeDirection = 0, offsetPixel = -1) {
-            let ps = anglePoints.map(p => this._pen.project(p)) as [Point2D, Point2D, Point2D]
-            let mode = this._pen.setProperty.ANGLE_MODE
-            if (mode === 'normal' && IsReflex(...ps))
-                ps = [...ps].reverse() as [Point2D, Point2D, Point2D]
-            if (mode === 'reflex' && !IsReflex(...ps))
-                ps = [...ps].reverse() as [Point2D, Point2D, Point2D]
-            // draw like polar
-            let [A, O, B] = ps;
-            let APixel = this._pen.frame.toPix(A);
-            let OPixel = this._pen.frame.toPix(O);
-            let BPixel = this._pen.frame.toPix(B);
-            let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
-            let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
-            if (a2 < a1) a2 = a2 + 360
+        angle([A, O, B]: [Point, Point, Point], text: string | number, direction = 0, radius = -1) {
             if (typeof text === 'number') text = text + '°'
-            if (offsetPixel < 0) {
-                let angle = Angle(A, O, B)
-                let extra = Math.max(30 - angle, 0) * 2
-                offsetPixel = 25 + extra
+            if (radius < 0) {
+                radius = 25 + this._pen.getSmallAngleExtraPixel(A, O, B, 30, 2)
             }
-            this.point(O, text, (a1 + a2) / 2 + dodgeDirection, offsetPixel);
+            let dir = this._pen.getDirInPixelByAngle(A, O, B)
+
+            this.point(O, text, dir + direction, radius);
         },
 
         /**
@@ -1417,50 +1253,41 @@ class PenCls extends Pencil {
          * @category text
          * @param linePoints - An array [A,B] for the coordinates of AB.
          * @param text - The string to write.
-         * @param dodgeDirection - The direction to offset, given as a polar angle,relative to the right normal of AB.
-         * @param offsetPixel - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
+         * @param direction - The direction to offset, given as a polar angle,relative to the right normal of AB.
+         * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
          * @returns void
          * ```
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        line(linePoints: [Point, Point], text: string | number, dodgeDirection = 0, offsetPixel = 15) {
-            let [A, B] = linePoints;
-            A = this._pen.project(A)
-            B = this._pen.project(B)
+        line([A, B]: [Point, Point], text: string | number, direction = 0, radius = 15) {
+            A = this._pen.pj(A)
+            B = this._pen.pj(B)
             let M = MidPoint(A, B);
-            let APixel = this._pen.frame.toPix(A);
-            let BPixel = this._pen.frame.toPix(B);
-            let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
-            if (typeof text === 'number') {
-                if (this._pen.setProperty.LENGTH_UNIT === undefined) {
-                    text = String(text)
-                } else {
-                    if (this._pen.setProperty.TEXT_LATEX) {
-                        text = text + '~\\text{' + this._pen.setProperty.LENGTH_UNIT + '}'
-                    } else {
-                        text = text + ' ' + this._pen.setProperty.LENGTH_UNIT
-                    }
-                }
-            }
-            this.point(M, text, q + dodgeDirection, offsetPixel);
+
+            if (typeof text === 'number')
+                text = this._pen.getTextWithLengthUnit(text)
+
+            let dir = this._pen.getDirInPixel(A, B) - 90
+
+            this.point(M, text, dir + direction, radius);
         },
 
         /**
          * Add a coordinates label to a point.
          * @category text
          * @param position - The coordinates [x,y] of the point to label.
-         * @param dodgeDirection - The direction to offset, given as a polar angle.
-         * @param offsetPixel - The pixel distance to offset from the position.
+         * @param direction - The direction to offset, given as a polar angle.
+         * @param radius - The pixel distance to offset from the position.
          * @returns void
          * ```
          * pen.label.coordinates([1,2],180) 
          * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
          * ```
          */
-        coordinates(point: Point2D, dodgeDirection = 90, offsetPixel = 15) {
+        coordinates(point: Point2D, direction = 90, radius = 15) {
             let text = '(' + Fix(point[0], 1) + ', ' + Fix(point[1], 1) + ')'
-            this.point(point, text, dodgeDirection, offsetPixel)
+            this.point(point, text, direction, radius)
         }
 
     };
@@ -1480,6 +1307,7 @@ class PenCls extends Pencil {
          * @ignore
          */
         _pen: this as PenCls,
+
         /**
          * Draw x-axis.
          * @category axis
@@ -1490,15 +1318,11 @@ class PenCls extends Pencil {
          * ```
          */
         x(label = "x") {
-            const [xmin, xmax] = this._pen.frame.xRange();
-            const offset = 3 * this._pen.frame.xOffset();
-            this._pen.arrow([xmin, 0], [xmax, 0]);
-            this._pen.ctx.save();
+            this._pen.save();
             this._pen.set.textItalic(label.length === 1);
-            this._pen.set.textAlign("right");
-            this._pen.set.textBaseline("middle");
-            this._pen.write([xmax, offset], label);
-            this._pen.ctx.restore();
+            this._pen.drawXAxis()
+            this._pen.drawXAxisLabel(label)
+            this._pen.restore();
         },
         /**
          * Draw y-axis.
@@ -1510,15 +1334,11 @@ class PenCls extends Pencil {
          * ```
          */
         y(label = "y") {
-            const [ymin, ymax] = this._pen.frame.yRange();
-            const offset = 3 * this._pen.frame.yOffset();
-            this._pen.arrow([0, ymin], [0, ymax]);
-            this._pen.ctx.save();
+            this._pen.save();
             this._pen.set.textItalic(label.length === 1);
-            this._pen.set.textAlign("left");
-            this._pen.set.textBaseline("top");
-            this._pen.write([offset, ymax], label);
-            this._pen.ctx.restore();
+            this._pen.drawYAxis()
+            this._pen.drawYAxisLabel(label)
+            this._pen.restore();
         },
         /**
          * Draw both axis.
@@ -1556,18 +1376,13 @@ class PenCls extends Pencil {
          * ```
          */
         x(interval = 1, mark = true) {
-            const offset = this._pen.frame.xOffset();
-            for (let x of this._pen.frame.xTicks(interval)) {
-                this._pen.line([x, -offset], [x, offset]);
-                if (mark) {
-                    this._pen.ctx.save();
-                    this._pen.set.textItalic();
-                    this._pen.set.textAlign("center");
-                    this._pen.set.textBaseline("middle");
-                    this._pen.write([x, -3 * offset], x.toString());
-                    this._pen.ctx.restore();
-                };
-            }
+            this._pen.drawXAxisTick(interval)
+            if (mark) {
+                this._pen.save();
+                this._pen.set.textItalic();
+                this._pen.drawXAxisTickMark(interval)
+                this._pen.restore();
+            };
         },
         /**
          * Draw ticks on the y-axis.
@@ -1580,18 +1395,13 @@ class PenCls extends Pencil {
          * ```
          */
         y(interval = 1, mark = true) {
-            const offset = this._pen.frame.yOffset();
-            for (let y of this._pen.frame.yTicks(interval)) {
-                this._pen.line([-offset, y], [offset, y]);
-                if (mark) {
-                    this._pen.ctx.save();
-                    this._pen.set.textItalic();
-                    this._pen.set.textAlign("right");
-                    this._pen.set.textBaseline("middle");
-                    this._pen.write([-2 * offset, y], y.toString());
-                    this._pen.ctx.restore();
-                };
-            }
+            this._pen.drawYAxisTick(interval)
+            if (mark) {
+                this._pen.save();
+                this._pen.set.textItalic();
+                this._pen.drawYAxisTickMark(interval)
+                this._pen.restore();
+            };
         },
         /**
          * Draw ticks on both axis.
@@ -1628,13 +1438,7 @@ class PenCls extends Pencil {
          * ```
          */
         x(interval = 1) {
-            this._pen.ctx.save();
-            this._pen.ctx.strokeStyle = "#d3d5db";
-            this._pen.graph.vertical(0);
-            for (let x of this._pen.frame.xTicks(interval)) {
-                this._pen.graph.vertical(x);
-            }
-            this._pen.ctx.restore();
+            this._pen.drawXAxisGrid(interval)
         },
         /**
          * Draw gridlines on the y-axis.
@@ -1646,13 +1450,7 @@ class PenCls extends Pencil {
          * ```
          */
         y(interval = 1) {
-            this._pen.ctx.save();
-            this._pen.ctx.strokeStyle = "#d3d5db";
-            this._pen.graph.horizontal(0);
-            for (let y of this._pen.frame.yTicks(interval)) {
-                this._pen.graph.horizontal(y);
-            }
-            this._pen.ctx.restore();
+            this._pen.drawYAxisGrid(interval)
         },
         /**
          * Draw gridlines on both axis.
@@ -1714,19 +1512,25 @@ class PenCls extends Pencil {
             shade = !true,
             fill = !true,
             arc = [0, 360]
+        }: {
+            line?: boolean
+            dash?: boolean
+            shade?: boolean
+            fill?: boolean
+            arc?: [number, number]
         } = {}): void {
-            let ps = Trace(t => [radius * cos(t), radius * sin(t)], arc[0], arc[1])
+            let ps = cal.traceCircle([0, 0], radius, arc)
             let ps3D = EmbedPlane(ps, center, xVec, yVec)
 
             if (line) {
-                this._pen.ctx.save()
+                this._pen.save()
                 if (dash) this._pen.set.dash(true)
                 if (arc[1] - arc[0] >= 360) {
                     this._pen.polygon(...ps3D)
                 } else {
                     this._pen.polyline(...ps3D)
                 }
-                this._pen.ctx.restore()
+                this._pen.restore()
             }
 
             if (shade)
@@ -1751,6 +1555,12 @@ class PenCls extends Pencil {
             shade = !true,
             fill = !true,
             arc = [0, 360]
+        }: {
+            line?: boolean
+            dash?: boolean
+            shade?: boolean
+            fill?: boolean
+            arc?: [number, number]
         } = {}) {
             this.circle(center, radius, [1, 0, 0], [0, 0, 1], {
                 line,
@@ -1776,6 +1586,12 @@ class PenCls extends Pencil {
             shade = !true,
             fill = !true,
             arc = [0, 360]
+        }: {
+            line?: boolean
+            dash?: boolean
+            shade?: boolean
+            fill?: boolean
+            arc?: [number, number]
         } = {}) {
             this.circle(center, radius, [0, 1, 0], [0, 0, 1], {
                 line,
@@ -1802,6 +1618,12 @@ class PenCls extends Pencil {
             shade = !true,
             fill = !true,
             arc = [0, 360]
+        }: {
+            line?: boolean
+            dash?: boolean
+            shade?: boolean
+            fill?: boolean
+            arc?: [number, number]
         } = {}) {
             this.circle(center, radius, [1, 0, 0], [0, 1, 0], {
                 line,
@@ -1842,7 +1664,7 @@ class PenCls extends Pencil {
 
             this.circleXY(center, radius, { line: true, dash: baseDash, shade: baseShade })
 
-            let leftEnd = Vec3DAdd(center, [radius, 0, 0])
+            let leftEnd = vec3D(center).add([radius, 0, 0]).toArray()
 
             if (radiusLine)
                 this._pen.line(center, leftEnd)
@@ -1856,25 +1678,10 @@ class PenCls extends Pencil {
 
 
         /**
-         * 
-         * @ignore
-         */
-        _cyclicBases(lowerBase: Point3D[], upperBase: Point3D[]): [(index: number) => Point3D, (index: number) => Point3D, number] {
-            lowerBase = [...lowerBase]
-            upperBase = [...upperBase]
-            let length = Math.max(lowerBase.length, upperBase.length)
-            let cyclic = <T>(arr: T[], i: number): T => {
-                let n = arr.length
-                return arr[(i % n + n) % n]
-            }
-            let lowerCyclic = (index: number) => cyclic(lowerBase, index)
-            let upperCyclic = (index: number) => cyclic(upperBase, index)
-            return [lowerCyclic, upperCyclic, length]
-        },
-
-        /**
          * Draw the envelop of a frustum
          * @category 3D
+         * @param lowerBase - the points in the lower base
+         * @param upperBase - the point in the upper base, must have the same length as lowerBase
          * @returns void
          * ```
          * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
@@ -1883,17 +1690,30 @@ class PenCls extends Pencil {
          * ```
          */
         envelope(lowerBase: Point3D[], upperBase: Point3D[]): [Point3D, Point3D][] {
-            let [lCyc, uCyc, len] = this._cyclicBases(lowerBase, upperBase)
+            const LB = toList(lowerBase)
+            const UB = toList(upperBase)
+
+
+
+
             let isPolar = (A: Point3D, O: Point3D, B: Point3D) =>
-                AnglePolar(this._pen.project(A), this._pen.project(O), this._pen.project(B)) < 180 ? 1 : -1
-            let lastPolarwise = isPolar(lCyc(-1), uCyc(-1), lCyc(0))
+                AnglePolar(
+                    this._pen.pj(A),
+                    this._pen.pj(O),
+                    this._pen.pj(B))
+                    < 180 ? 1 : -1
+
+
+            let lastPolarwise = isPolar(LB.cyclicAt(-1)!, UB.cyclicAt(-1)!, LB.cyclicAt(0)!)
             let arr: [Point3D, Point3D][] = []
-            for (let i = 0; i < len; i++) {
-                let polarwise = isPolar(lCyc(i), uCyc(i), lCyc(i + 1))
+
+            for (let i = 0; i < LB.length; i++) {
+                let polarwise = isPolar(LB.cyclicAt(i)!, UB.cyclicAt(i)!, LB.cyclicAt(i + 1)!)
                 if (lastPolarwise * polarwise === -1)
-                    arr.push([lCyc(i), uCyc(i)])
+                    arr.push([LB.cyclicAt(i)!, UB.cyclicAt(i)!])
                 lastPolarwise = polarwise
             }
+
             return arr
         },
 
@@ -1908,16 +1728,23 @@ class PenCls extends Pencil {
          * pen.d3.frustum([A,B,C],[V]) // draw a cone
          * ```
          */
-        frustum(lowerBase: Point3D[], upperBase: Point3D[], {
+        frustum(lowerBase: Point3D[], upperBase: Point3D[] | Point3D, {
             base = true,
             height = !true,
             shadeLower = !true,
             shadeUpper = !true,
             envelope = !true,
         } = {}) {
-            lowerBase = [...lowerBase]
-            upperBase = [...upperBase]
-            let [lCyc, uCyc, len] = this._cyclicBases(lowerBase, upperBase)
+
+
+            if (owl.point3D(upperBase)) {
+                upperBase = Array(lowerBase.length).fill(upperBase)
+            }
+
+            // TEMP
+            if (upperBase.length === 1) {
+                upperBase = Array(lowerBase.length).fill(upperBase[0])
+            }
 
             if (base) {
                 this._pen.polygon(...lowerBase)
@@ -1930,13 +1757,13 @@ class PenCls extends Pencil {
                     this._pen.line(e[0], e[1])
                 }
             } else {
-                for (let i = 0; i < len; i++) {
-                    this._pen.line(lCyc(i), uCyc(i))
+                for (let i = 0; i < lowerBase.length; i++) {
+                    this._pen.line(lowerBase[i], upperBase[i])
                 }
             }
 
             if (height) {
-                let V = Vec3DMean(...upperBase)
+                let V = toShape3D(upperBase).mean().toArray()
                 let [A, B, C] = lowerBase
                 let O = ProjectionOnPlane(V, [A, B, C])
                 this._pen.dash(O, V)
@@ -1992,10 +1819,8 @@ class PenCls extends Pencil {
             shadeUpper = !true,
             envelope = !true,
         } = {}) {
-            let ps = TraceCircle(center, radius)
-            let lower = EmbedPlaneZ(ps, lowerZ)
-            let upper = EmbedPlaneZ(ps, upperZ)
-            this.frustum(lower, upper, {
+            let ps = cal.traceCircle(center, radius, [0, 360])
+            this.prismZ(ps, lowerZ, upperZ, {
                 base,
                 height,
                 shadeLower,
@@ -2003,6 +1828,7 @@ class PenCls extends Pencil {
                 envelope
             })
         },
+
         /**
          * Draw a pyramid along the z-direction
          * @category 3D
@@ -2019,7 +1845,7 @@ class PenCls extends Pencil {
             envelope = !true,
         } = {}) {
             let lower = EmbedPlaneZ(lowerBase, lowerZ)
-            this.frustum(lower, [vertex], {
+            this.frustum(lower, vertex, {
                 base,
                 height,
                 shadeLower,
@@ -2043,9 +1869,8 @@ class PenCls extends Pencil {
             shadeLower = !true,
             envelope = !true,
         } = {}) {
-            let ps = TraceCircle(center, radius)
-            let lower = EmbedPlaneZ(ps, lowerZ)
-            this.frustum(lower, [vertex], {
+            let ps = cal.traceCircle(center, radius, [0, 360])
+            this.pyramidZ(ps, lowerZ, vertex, {
                 base,
                 height,
                 shadeLower,
@@ -2060,27 +1885,22 @@ class PenCls extends Pencil {
 
 
 
-    /**
-     * @ignore
-     */
-    project(point: Point3D | Point2D): Point2D {
-        if (owl.point(point)) return point
-        return this.pj(point)
-    }
-
-
-
-
-
 
     /**
      * @ignore
      * @deprecated
      */
     autoCrop() {
-        trimCanvas(this.canvas)
+        this.trimCanvas()
     }
 
+
+    private exportCanvas(html: string, placeholder: string, canvas: HTMLCanvasElement) {
+        const src = 'src="' + this.toDataUrl(canvas) + '"';
+        const width = ' width="' + this.displayWidth(canvas) + '"';
+        const height = ' height="' + this.displayHeight(canvas) + '"';
+        return html.replace('src="' + placeholder + '"', src + width + height);
+    };
 
 
     /**
@@ -2095,10 +1915,7 @@ class PenCls extends Pencil {
      * ```
      */
     export(html: string, placeholder: string) {
-        const src = 'src="' + this.canvas.toDataURL() + '"';
-        const width = ' width="' + Math.floor(this.canvas.width / PEN_QUALITY) + '"';
-        const height = ' height="' + Math.floor(this.canvas.height / PEN_QUALITY) + '"';
-        return html.replace('src="' + placeholder + '"', src + width + height);
+        return this.exportCanvas(html, placeholder, this.canvas)
     };
 
 
@@ -2114,14 +1931,9 @@ class PenCls extends Pencil {
      * ```
      */
     exportTrim(html: string, placeholder: string) {
-        let clone = cloneCanvas(this.canvas);
-        trimCanvas(clone);
-        const src = 'src="' + clone.toDataURL() + '"';
-        const w = Math.floor(clone.width / PEN_QUALITY)
-        const h = Math.floor(clone.height / PEN_QUALITY)
-        const width = ' width="' + w + '"';
-        const height = ' height="' + h + '"';
-        return html.replace('src="' + placeholder + '"', src + width + height);
+        let clone = this.cloneCanvas();
+        this.trimCanvas(clone);
+        return this.exportCanvas(html, placeholder, clone)
     };
 
 
@@ -2134,7 +1946,7 @@ class PenCls extends Pencil {
      * ```
      */
     clear() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.clearCanvas();
     }
 
     /**
@@ -2146,7 +1958,7 @@ class PenCls extends Pencil {
      * ```
      */
     saveImg() {
-        this.imgStore = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
+        this.saveCanvasImg()
     }
 
     /**
@@ -2158,32 +1970,9 @@ class PenCls extends Pencil {
      * ```
      */
     restoreImg() {
-        if (this.imgStore !== null)
-            this.ctx.putImageData(this.imgStore, 0, 0);
+        this.restoreCanvasImg()
     }
 
-
-    /**
-     * @ignore
-     */
-    private _textWidth(text: string): number {
-        if (this.setProperty.TEXT_LATEX) {
-            let size = Math.round(this.setProperty.TEXT_SIZE * REM_PIXEL * PEN_QUALITY);
-            let color = this.ctx.fillStyle
-            text = `\\color{${color}} ` + text
-            // @ts-ignore
-            const widget = new CanvasLatex.default(
-                text,
-                { displayMode: true, debugBounds: false, baseSize: size }
-            );
-            const bounds = widget.getBounds();
-            if (bounds === null) return 0
-            return bounds.width / 2
-        } else {
-            return this.ctx.measureText(text).width / 2
-        }
-
-    }
 
 
 
@@ -2194,59 +1983,4 @@ class PenCls extends Pencil {
  */
 var Pen = PenCls
 globalThis.Pen = Pen
-
-
-/**
- * @ignore
- */
-function cloneCanvas(oldCanvas: HTMLCanvasElement) {
-    //create a new canvas
-    let newCanvas = document.createElement('canvas');
-    let context = newCanvas.getContext('2d')!;
-    //set dimensions
-    newCanvas.width = oldCanvas.width;
-    newCanvas.height = oldCanvas.height;
-    //apply the old canvas to the new one
-    context.drawImage(oldCanvas, 0, 0);
-    //return the new canvas
-    return newCanvas;
-}
-
-
-
-
-/**
- * @ignore
- */
-function trimCanvas(canvas: HTMLCanvasElement) {
-
-    function rowBlank(imageData: ImageData, width: number, y: number) {
-        for (var x = 0; x < width; ++x) {
-            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0) return false;
-        }
-        return true;
-    }
-
-    function columnBlank(imageData: ImageData, width: number, x: number, top: number, bottom: number) {
-        for (var y = top; y < bottom; ++y) {
-            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0) return false;
-        }
-        return true;
-    }
-
-    var ctx = canvas.getContext("2d")!;
-    var width = canvas.width;
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var top = 0, bottom = imageData.height, left = 0, right = imageData.width;
-
-    while (top < bottom && rowBlank(imageData, width, top)) ++top;
-    while (bottom - 1 > top && rowBlank(imageData, width, bottom - 1)) --bottom;
-    while (left < right && columnBlank(imageData, width, left, top, bottom)) ++left;
-    while (right - 1 > left && columnBlank(imageData, width, right - 1, top, bottom)) --right;
-
-    var trimmed = ctx.getImageData(left, top, right - left, bottom - top);
-    canvas.width = trimmed.width;
-    canvas.height = trimmed.height;
-    ctx.putImageData(trimmed, 0, 0);
-}
 

@@ -305,26 +305,24 @@ globalThis.OptimizeField = OptimizeField
  * @return the constraints from the given points
  * ```typescript
  * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
- * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2]) // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
+ * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2]) 
+ * // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
  * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
  * ```
  */
- function ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
-    points=ArrangePoints(...points)
-    Should(IsConvexPolygon(...points), 'Not a convex region');
-    const n=points.length;
-    let constraints:Constraint[]=[]
-    for (let i=0;i<n;i++){
-        let l : [a:number,b:number,c:number]= LinearFromTwoPoints(points[(i % n + n) % n],points[((i+1) % n + n) % n])
-        let gotNegative:boolean=false
-        for (let j=2;j<n;j++){
-            if (IsNegative(FieldAt(points[((i+j) % n + n) % n],l))){
-                gotNegative=true
-            }
-        }
-        let sign:Ineq
-        sign=gotNegative?"\\le":"\\ge";
-        constraints.push([l[0],l[1],sign,-l[2]])
+function ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
+    let mean = toShape2D(points).mean().toArray()
+
+    let pts = ArrangePoints(...points)
+    pts = [...pts, pts[0]]
+
+    Should(IsConvexPolygon(...pts), 'Not a convex region');
+    let constraints: Constraint[] = []
+
+    for (let i = 0; i < points.length; i++) {
+        let l = LinearFromTwoPoints(pts[i], pts[i + 1])
+        let sign: Ineq = FieldAt(mean, l) > 0 ? "\\ge" : "\\le"
+        constraints.push([l[0], l[1], sign, -l[2]])
     }
     return constraints
 }

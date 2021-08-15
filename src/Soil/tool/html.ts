@@ -220,7 +220,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (T === 'number') {
             let s = Math.sign(value)
             let v = Math.abs(value)
-            let [p, q] = cal.simpSurd(cal.blur(v ** 2))
+            let [p, q] = cal.simplifySurd(cal.blur(v ** 2))
             return s >= 0 ? ink.printSurd(p, q) : '-' + ink.printSurd(p, q)
         }
     }
@@ -280,11 +280,11 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === ':') {
         if (owl.ntuple(value)) {
-            let v = cal.ratio(...value)
+            let v = toNumbers(value).ratio()
             return v.join(":")
         }
         if (T === 'number') {
-            let [p, q] = ToFrac(value)
+            let [p, q] = cal.toFraction(value)
             return p + ":" + q
         }
     }

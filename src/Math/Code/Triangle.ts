@@ -232,3 +232,81 @@ function Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
 }
 globalThis.Incentre = contract(Incentre).sign([owl.point])
 
+
+
+
+
+/**
+ * @category Triangle
+ * @param A - a point of the triangle
+ * @param B - a point of the triangle
+ * @param C - a point of the triangle
+ * @returns the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
+ */
+function ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
+    let [x, y] = Orthocentre(A, B, C);
+    let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
+    Should(owl.num(q), 'original orthocentre must be rational')
+    return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
+}
+globalThis.ScaleOrthocentreToInt = contract(ScaleOrthocentreToInt).sign([owl.point])
+
+
+
+
+
+
+/**
+ * @category Triangle
+ * @param A - a point of the triangle
+ * @param B - a point of the triangle
+ * @param C - a point of the triangle
+ * @returns the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
+ */
+function ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
+    let [x, y] = Circumcentre(A, B, C);
+    let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
+    Should(owl.num(q), 'original circumcentre must be rational')
+    return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
+}
+globalThis.ScaleCircumcentreToInt = contract(ScaleCircumcentreToInt).sign([owl.point])
+
+
+
+
+
+/**
+ * @category Triangle
+ * @param A - a point of the triangle
+ * @param B - a point of the triangle
+ * @param C - a point of the triangle
+ * @returns the scaled points [A,B,C] so that their centroid and themselves becomes integral
+ */
+function ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
+    let [x, y] = Centroid(A, B, C);
+    let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
+    Should(owl.num(q), 'original centroid must be rational')
+    return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
+}
+globalThis.ScaleCentroidToInt = contract(ScaleCentroidToInt).sign([owl.point])
+
+
+
+
+
+/**
+ * @category Triangle
+ * @param A - a point of the triangle
+ * @param B - a point of the triangle
+ * @param C - a point of the triangle
+ * @returns the scaled points [A,B,C] so that their incentre and themselves becomes integral
+ */
+function ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
+    let [x, y] = Incentre(A, B, C);
+    let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
+    Should(owl.num(q), 'original incentre must be rational')
+    return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
+}
+globalThis.ScaleIncentreToInt = contract(ScaleIncentreToInt).sign([owl.point])
+
+
