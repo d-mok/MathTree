@@ -10,11 +10,6 @@ test('CircleFromGeneral', () => {
 });
 
 
-test('IntegralOnCircle', () => {
-    expect(IntegralOnCircle([0, 0], 5)).toEqual([[[5, 0], [0, 5], [-5, 0], [0, -5]], [[4, 3], [-3, 4], [-4, -3], [3, -4]], [[3, 4], [-4, 3], [-3, -4], [4, -3]]]);
-});
-
-
 
 test('CircleLineIntersect', () => {
     expect(CircleLineIntersect([0, 0], 2 ** 0.5, [1, -1, 0])).toEqual([[-1, -1], [1, 1]]);

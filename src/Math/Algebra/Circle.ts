@@ -37,45 +37,6 @@ globalThis.CircleFromGeneral = contract(CircleFromGeneral).sign([owl.num])
 
 
 
-/**
- * @category Circle
- * @deprecated
- * @return all integral points on the circle
- * ```
- * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
- * ```
- */
-function IntegralOnCircle(centre: Point2D, radius: number): Point2D[][] {
-    let [h, k] = centre
-    let r = radius
-
-    let [xmin, xmax] = [Floor(h - r), Ceil(h + r)]
-    let [ymin, ymax] = [Floor(k - r), Ceil(k + r)]
-
-    let arr: Point2D[] = []
-    for (let x = xmin; x <= xmax; x++) {
-        for (let y = ymin; y <= ymax; y++) {
-            let P: Point2D = [x, y]
-            if (Abs(Distance(centre, P) ** 2 - r ** 2) <= 10 * Number.EPSILON)
-                arr.push(P)
-        }
-    }
-
-    arr = SortBy(arr, (p: Point2D) => VectorArg(Vector([h, k], p)))
-    let order = arr.length / 4
-    let arr2 = []
-    for (let i = 0; i < order; i++) {
-        let temp = []
-        for (let j = 0; j < 4; j++) {
-            temp.push(arr[i + order * j])
-        }
-        arr2.push(temp)
-    }
-    return arr2
-}
-globalThis.IntegralOnCircle = contract(IntegralOnCircle).sign([owl.point, owl.positive])
-
-
 
 
 
