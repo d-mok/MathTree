@@ -428,23 +428,7 @@ globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative, owl.nonNegativ
  * ```
  */
 function IsConvexPolygon(...points: Point2D[]): boolean {
-
-    const n = points.length
-    Should(n >= 3, "Not a polygon");
-    let gotPositive: boolean = false
-    let gotNegative: boolean = false
-    for (let i: number = 0; i < n; i++) {
-        let v1 = Vec3D([...points[((i - 1) % n + n) % n], 0], [...points[(i % n + n) % n], 0])
-        let v2 = Vec3D([...points[(i % n + n) % n], 0], [...points[((i + 1) % n + n) % n], 0])
-        let c: Vector3D = CrossProduct(v1, v2)
-        if (c[2] < 0) {
-            gotNegative = true;
-        }
-        else if (c[2] > 0) {
-            gotPositive = true;
-        }
-        if (gotNegative && gotPositive) return false;
-    }
-    return true
+    Should(points.length >= 3, "must have at least 3 points to be a polygon");
+    return toShape2D(points).isConvex()
 }
 globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point])

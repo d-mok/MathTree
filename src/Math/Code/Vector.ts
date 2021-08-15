@@ -130,39 +130,39 @@ globalThis.VectorRev = contract(VectorRev).sign([owl.vector])
 
 
 
-/**
- * @category Vector
- * @deprecated Useless
- * @return the unit vector of v
- * ```
- * VectorUnit([2,0]) // [1,0]
- * VectorUnit([0,-2]) // [0,-1]
- * VectorUnit([1,2]) // [1/sqrt(5),2/sqrt(5)]
- * ```
- */
-function VectorUnit(v: Vector): Vector {
-    const [x, y] = v
-    const L = VectorLength(v)
-    return [x / L, y / L]
-}
-globalThis.VectorUnit = contract(VectorUnit).sign([owl.vector])
+// /**
+//  * @category Vector
+//  * @deprecated Useless
+//  * @return the unit vector of v
+//  * ```
+//  * VectorUnit([2,0]) // [1,0]
+//  * VectorUnit([0,-2]) // [0,-1]
+//  * VectorUnit([1,2]) // [1/sqrt(5),2/sqrt(5)]
+//  * ```
+//  */
+// function VectorUnit(v: Vector): Vector {
+//     const [x, y] = v
+//     const L = VectorLength(v)
+//     return [x / L, y / L]
+// }
+// globalThis.VectorUnit = contract(VectorUnit).sign([owl.vector])
 
 
 
-/**
- * @category Vector
- * @deprecated useless
- * @return scale the vector to the given length
- * ```
- * VectorScaleTo([2,0],10) // [10,0]
- * VectorScaleTo([0,-2],100) // [0,-100]
- * VectorScaleTo([-3,4],15) // [-9,12]
- * ```
- */
-function VectorScaleTo(v: Vector, length: number): Vector {
-    return VectorScale(VectorUnit(v), length)
-}
-globalThis.VectorScaleTo = contract(VectorScaleTo).sign([owl.vector, owl.num])
+// /**
+//  * @category Vector
+//  * @deprecated useless
+//  * @return scale the vector to the given length
+//  * ```
+//  * VectorScaleTo([2,0],10) // [10,0]
+//  * VectorScaleTo([0,-2],100) // [0,-100]
+//  * VectorScaleTo([-3,4],15) // [-9,12]
+//  * ```
+//  */
+// function VectorScaleTo(v: Vector, length: number): Vector {
+//     return VectorScale(VectorUnit(v), length)
+// }
+// globalThis.VectorScaleTo = contract(VectorScaleTo).sign([owl.vector, owl.num])
 
 
 
@@ -170,23 +170,23 @@ globalThis.VectorScaleTo = contract(VectorScaleTo).sign([owl.vector, owl.num])
 
 
 
-/**
- * @category Vector
- * @deprecated Useless
- * @return rotate a vector anticlockwise by angle.
- * ```
- * VectorRotate([1,2],90) // [-2,1]
- * ```
- */
-function VectorRotate(v: Vector, angle: number): Vector {
-    const [x, y] = v
-    const S = sin(angle)
-    const C = cos(angle)
-    const x1 = x * C - y * S
-    const y1 = x * S + y * C
-    return [x1, y1]
-}
-globalThis.VectorRotate = contract(VectorRotate).sign([owl.vector, owl.num])
+// /**
+//  * @category Vector
+//  * @deprecated Useless
+//  * @return rotate a vector anticlockwise by angle.
+//  * ```
+//  * VectorRotate([1,2],90) // [-2,1]
+//  * ```
+//  */
+// function VectorRotate(v: Vector, angle: number): Vector {
+//     const [x, y] = v
+//     const S = sin(angle)
+//     const C = cos(angle)
+//     const x1 = x * C - y * S
+//     const y1 = x * S + y * C
+//     return [x1, y1]
+// }
+// globalThis.VectorRotate = contract(VectorRotate).sign([owl.vector, owl.num])
 
 
 

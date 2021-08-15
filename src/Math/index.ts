@@ -1,6 +1,5 @@
 import './Code/Assertion.ts'
 import './Code/Combinatorics.ts'
-import './Code/Flow.ts'
 import './Code/Function.ts'
 import './Code/Geometry.ts'
 import './Code/LinearProgram.ts'

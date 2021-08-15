@@ -53,21 +53,21 @@ globalThis.Vec3DMean = contract(Vec3DMean).sign([owl.vector3D])
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return length of vector
- * ```
- * Vec3DLength([-3,4,0]) // 5
- * Vec3DLength([0,0,4]) // 4
- * Vec3DLength([1,2,3]) // sqrt(14)
- * ```
- */
-function Vec3DLength(v: Vector3D): number {
-    const [x, y, z] = v
-    return (x * x + y * y + z * z) ** 0.5
-}
-globalThis.Vec3DLength = contract(Vec3DLength).sign([owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return length of vector
+//  * ```
+//  * Vec3DLength([-3,4,0]) // 5
+//  * Vec3DLength([0,0,4]) // 4
+//  * Vec3DLength([1,2,3]) // sqrt(14)
+//  * ```
+//  */
+// function Vec3DLength(v: Vector3D): number {
+//     const [x, y, z] = v
+//     return (x * x + y * y + z * z) ** 0.5
+// }
+// globalThis.Vec3DLength = contract(Vec3DLength).sign([owl.vector3D])
 
 
 
@@ -93,101 +93,101 @@ globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num])
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return the unit vector of v
- * ```
- * Vec3DUnit([2,0,0]) // [1,0,0]
- * Vec3DUnit([0,-2,0]) // [0,-1,0]
- * Vec3DUnit([1,2,3]) // [1/sqrt(14),2/sqrt(14),3/sqrt(14)]
- * ```
- */
-function Vec3DUnit(v: Vector3D): Vector3D {
-    return Vec3DScale(v, 1 / Vec3DLength(v))
-}
-globalThis.Vec3DUnit = contract(Vec3DUnit).sign([owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return the unit vector of v
+//  * ```
+//  * Vec3DUnit([2,0,0]) // [1,0,0]
+//  * Vec3DUnit([0,-2,0]) // [0,-1,0]
+//  * Vec3DUnit([1,2,3]) // [1/sqrt(14),2/sqrt(14),3/sqrt(14)]
+//  * ```
+//  */
+// function Vec3DUnit(v: Vector3D): Vector3D {
+//     return Vec3DScale(v, 1 / Vec3DLength(v))
+// }
+// globalThis.Vec3DUnit = contract(Vec3DUnit).sign([owl.vector3D])
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return scale the vector to the given length
- * ```
- * Vec3DScaleTo([2,0,0],10) // [10,0,0]
- * Vec3DScaleTo([0,-2,0],100) // [0,-100,0]
- * Vec3DScaleTo([1,2,2],6) // [2,4,4]
- * ```
- */
-function Vec3DScaleTo(v: Vector3D, length: number): Vector3D {
-    return Vec3DScale(Vec3DUnit(v), length)
-}
-globalThis.Vec3DScaleTo = contract(Vec3DScaleTo).sign([owl.vector3D, owl.num])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return scale the vector to the given length
+//  * ```
+//  * Vec3DScaleTo([2,0,0],10) // [10,0,0]
+//  * Vec3DScaleTo([0,-2,0],100) // [0,-100,0]
+//  * Vec3DScaleTo([1,2,2],6) // [2,4,4]
+//  * ```
+//  */
+// function Vec3DScaleTo(v: Vector3D, length: number): Vector3D {
+//     return Vec3DScale(Vec3DUnit(v), length)
+// }
+// globalThis.Vec3DScaleTo = contract(Vec3DScaleTo).sign([owl.vector3D, owl.num])
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return the projection vector of v
- * ```
- * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
- * ```
- */
-function Vec3DProj(v: Vector3D, onto: Vector3D): Vector3D {
-    let scale = DotProduct(v, onto) / DotProduct(onto, onto)
-    return Vec3DScale(onto, scale)
-}
-globalThis.Vec3DProj = contract(Vec3DProj).sign([owl.vector3D, owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return the projection vector of v
+//  * ```
+//  * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
+//  * ```
+//  */
+// function Vec3DProj(v: Vector3D, onto: Vector3D): Vector3D {
+//     let scale = DotProduct(v, onto) / DotProduct(onto, onto)
+//     return Vec3DScale(onto, scale)
+// }
+// globalThis.Vec3DProj = contract(Vec3DProj).sign([owl.vector3D, owl.vector3D])
 
 
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return dot product of v1 and v2
- * ```
- * DotProduct([1, 1, 0], [0, 1, 1]) // 1
- * DotProduct([1, 2, 3], [4, 5, -6]) // -4
- * ```
- */
-function DotProduct(v1: Vector3D, v2: Vector3D): number {
-    return vec3D(v1).dot(v2)
-}
-globalThis.DotProduct = contract(DotProduct).sign([owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return dot product of v1 and v2
+//  * ```
+//  * DotProduct([1, 1, 0], [0, 1, 1]) // 1
+//  * DotProduct([1, 2, 3], [4, 5, -6]) // -4
+//  * ```
+//  */
+// function DotProduct(v1: Vector3D, v2: Vector3D): number {
+//     return vec3D(v1).dot(v2)
+// }
+// globalThis.DotProduct = contract(DotProduct).sign([owl.vector3D])
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return cross product of v1 and v2
- * ```
- * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
- * ```
- */
-function CrossProduct(v1: Vector3D, v2: Vector3D): Vector3D {
-    return vec3D(v1).cross(v2).toArray()
-}
-globalThis.CrossProduct = contract(CrossProduct).sign([owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return cross product of v1 and v2
+//  * ```
+//  * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
+//  * ```
+//  */
+// function CrossProduct(v1: Vector3D, v2: Vector3D): Vector3D {
+//     return vec3D(v1).cross(v2).toArray()
+// }
+// globalThis.CrossProduct = contract(CrossProduct).sign([owl.vector3D])
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return unit normal vector to the plane OAB
- * ```
- * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
- * ```
- */
-function NormalVector(O: Point3D, A: Point3D, B: Point3D): Vector3D {
-    return vec3D(O, A).cross(vec3D(O, B)).unit().toArray()
-}
-globalThis.NormalVector = contract(NormalVector).sign([owl.point3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return unit normal vector to the plane OAB
+//  * ```
+//  * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
+//  * ```
+//  */
+// function NormalVector(O: Point3D, A: Point3D, B: Point3D): Vector3D {
+//     return vec3D(O, A).cross(vec3D(O, B)).unit().toArray()
+// }
+// globalThis.NormalVector = contract(NormalVector).sign([owl.point3D])
 
 
 
@@ -201,12 +201,8 @@ globalThis.NormalVector = contract(NormalVector).sign([owl.point3D])
  * ```
  */
 function ProjectionOnPlane(point: Point3D, plane: [Point3D, Point3D, Point3D]): Point3D {
-    let n = NormalVector(...plane)
-    let O = plane[0]
-    let v = Vec3D(O, point)
-    let v_perp = Vec3DProj(v, n)
-    let v_para = Vec3DAdd(v, Vec3DScale(v_perp, -1))
-    return Vec3DAdd(O, v_para)
+    let [A, B, C] = plane
+    return vec3D(point).projectOnPlane(vec3D(A, B), vec3D(B, C)).toArray()
 }
 globalThis.ProjectionOnPlane = contract(ProjectionOnPlane)
     .sign([owl.vector3D, owl.arrayWith(owl.vector3D)])

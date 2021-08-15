@@ -227,7 +227,6 @@ declare function PolyDegree<V extends string>(poly: polynomial<V>): number;
 declare module "Math/index" {
     import './Code/Assertion.ts';
     import './Code/Combinatorics.ts';
-    import './Code/Flow.ts';
     import './Code/Function.ts';
     import './Code/Geometry.ts';
     import './Code/LinearProgram.ts';
@@ -344,15 +343,6 @@ declare function CircleGeneral(centre: Point2D, radius: number): [D: number, E: 
  * ```
  */
 declare function CircleFromGeneral(D: number, E: number, F: number): [Point2D, number];
-/**
- * @category Circle
- * @deprecated
- * @return all integral points on the circle
- * ```
- * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
- * ```
- */
-declare function IntegralOnCircle(centre: Point2D, radius: number): Point2D[][];
 /**
  * @category Circle
  * @return intersections between a circle and a straight line
@@ -722,27 +712,6 @@ declare function nCr(n: number, r: number): number;
  */
 declare function nPr(n: number, r: number): number;
 /**
-* @category Flow
-* @deprecated
-* @return a random config of a Combo Options question type.
-* ```typescript
-* RndComboConfig()
-* // may return {
-* //   truth: [true, true, false],
-* //   choices: ["I and II", "I only", "I and III", "I, II and III"],
-* //   sections: [[1,1], [2,1], [3,0]]
-* //  }
-* // truth: the true value of the 3 options.
-* // choices: for filling in the 4 answer choices, the 1st is correct.
-* // sections: the sections object for section versioning, version 0 is false, version 1 is true.
-* ```
-*/
-declare function RndComboConfig(): {
-    truth: boolean[];
-    choices: string[];
-    sections: [number, number][];
-};
-/**
  * @category Function
  * @return log(b,N)
  * ```
@@ -770,7 +739,6 @@ declare function Power(a: number, b: number): number;
 declare function Sqrt(x: number): number;
 /**
  * @category Function
- * @deprecated
  * @return the radian of the degree
  * ```
  * Radian(180) // pi
@@ -781,7 +749,6 @@ declare function Sqrt(x: number): number;
 declare function Radian(degree: number): number;
 /**
  * @category Function
- * @deprecated
  * @return the degree of the radian
  * ```
  * Degree(Math.PI) // 180
@@ -2567,17 +2534,6 @@ declare function Vec3DMean(...vectors: Vector3D[]): Vector3D;
 /**
  * @category Vector3D
  * @deprecated useless
- * @return length of vector
- * ```
- * Vec3DLength([-3,4,0]) // 5
- * Vec3DLength([0,0,4]) // 4
- * Vec3DLength([1,2,3]) // sqrt(14)
- * ```
- */
-declare function Vec3DLength(v: Vector3D): number;
-/**
- * @category Vector3D
- * @deprecated useless
  * @return find [kx,ky,kz] from [x,y,z]
  * ```
  * Vec3DScale([1,2,3],2) // [2,4,6]
@@ -2585,65 +2541,6 @@ declare function Vec3DLength(v: Vector3D): number;
  * ```
  */
 declare function Vec3DScale(v: Vector3D, k: number): Vector3D;
-/**
- * @category Vector3D
- * @deprecated useless
- * @return the unit vector of v
- * ```
- * Vec3DUnit([2,0,0]) // [1,0,0]
- * Vec3DUnit([0,-2,0]) // [0,-1,0]
- * Vec3DUnit([1,2,3]) // [1/sqrt(14),2/sqrt(14),3/sqrt(14)]
- * ```
- */
-declare function Vec3DUnit(v: Vector3D): Vector3D;
-/**
- * @category Vector3D
- * @deprecated useless
- * @return scale the vector to the given length
- * ```
- * Vec3DScaleTo([2,0,0],10) // [10,0,0]
- * Vec3DScaleTo([0,-2,0],100) // [0,-100,0]
- * Vec3DScaleTo([1,2,2],6) // [2,4,4]
- * ```
- */
-declare function Vec3DScaleTo(v: Vector3D, length: number): Vector3D;
-/**
- * @category Vector3D
- * @deprecated useless
- * @return the projection vector of v
- * ```
- * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
- * ```
- */
-declare function Vec3DProj(v: Vector3D, onto: Vector3D): Vector3D;
-/**
- * @category Vector3D
- * @deprecated useless
- * @return dot product of v1 and v2
- * ```
- * DotProduct([1, 1, 0], [0, 1, 1]) // 1
- * DotProduct([1, 2, 3], [4, 5, -6]) // -4
- * ```
- */
-declare function DotProduct(v1: Vector3D, v2: Vector3D): number;
-/**
- * @category Vector3D
- * @deprecated useless
- * @return cross product of v1 and v2
- * ```
- * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
- * ```
- */
-declare function CrossProduct(v1: Vector3D, v2: Vector3D): Vector3D;
-/**
- * @category Vector3D
- * @deprecated useless
- * @return unit normal vector to the plane OAB
- * ```
- * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
- * ```
- */
-declare function NormalVector(O: Point3D, A: Point3D, B: Point3D): Vector3D;
 /**
  * @category Vector3D
  * @return projection of a point on a plane

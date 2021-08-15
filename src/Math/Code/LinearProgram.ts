@@ -311,12 +311,12 @@ globalThis.OptimizeField = OptimizeField
  * ```
  */
 function ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
-    let mean = toShape2D(points).mean().toArray()
+    Should(IsConvexPolygon(...points), 'Not a convex region');
 
+    let mean = toShape2D(points).mean().toArray()
     let pts = ArrangePoints(...points)
     pts = [...pts, pts[0]]
 
-    Should(IsConvexPolygon(...pts), 'Not a convex region');
     let constraints: Constraint[] = []
 
     for (let i = 0; i < points.length; i++) {
@@ -326,4 +326,4 @@ function ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
     }
     return constraints
 }
-globalThis.ConstraintsFromPoints = ConstraintsFromPoints
+globalThis.ConstraintsFromPoints = contract(ConstraintsFromPoints).sign([owl.point])

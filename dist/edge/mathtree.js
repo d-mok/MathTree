@@ -29166,40 +29166,6 @@ function CircleFromGeneral(D, E, F) {
 globalThis.CircleFromGeneral = contract(CircleFromGeneral).sign([owl.num]);
 /**
  * @category Circle
- * @deprecated
- * @return all integral points on the circle
- * ```
- * IntegralOnCircle([0,0],5) // [[[5,0],[0,5],[-5,0],[0,-5]],[[4,3],[-3,4],[-4,-3],[3,-4]],[[3,4],[-4,3],[-3,-4],[4,-3]]]
- * ```
- */
-function IntegralOnCircle(centre, radius) {
-    let [h, k] = centre;
-    let r = radius;
-    let [xmin, xmax] = [Floor(h - r), Ceil(h + r)];
-    let [ymin, ymax] = [Floor(k - r), Ceil(k + r)];
-    let arr = [];
-    for (let x = xmin; x <= xmax; x++) {
-        for (let y = ymin; y <= ymax; y++) {
-            let P = [x, y];
-            if (Abs(Math.pow(Distance(centre, P), 2) - Math.pow(r, 2)) <= 10 * Number.EPSILON)
-                arr.push(P);
-        }
-    }
-    arr = SortBy(arr, (p) => VectorArg(Vector([h, k], p)));
-    let order = arr.length / 4;
-    let arr2 = [];
-    for (let i = 0; i < order; i++) {
-        let temp = [];
-        for (let j = 0; j < 4; j++) {
-            temp.push(arr[i + order * j]);
-        }
-        arr2.push(temp);
-    }
-    return arr2;
-}
-globalThis.IntegralOnCircle = contract(IntegralOnCircle).sign([owl.point, owl.positive]);
-/**
- * @category Circle
  * @return intersections between a circle and a straight line
  * ```
  * CircleLineIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
@@ -30063,76 +30029,6 @@ globalThis.nPr = contract(nPr).seal({
 
 /***/ }),
 
-/***/ 1648:
-/***/ (() => {
-
-"use strict";
-
-/**
-* @category Flow
-* @deprecated
-* @return a random config of a Combo Options question type.
-* ```typescript
-* RndComboConfig()
-* // may return {
-* //   truth: [true, true, false],
-* //   choices: ["I and II", "I only", "I and III", "I, II and III"],
-* //   sections: [[1,1], [2,1], [3,0]]
-* //  }
-* // truth: the true value of the 3 options.
-* // choices: for filling in the 4 answer choices, the 1st is correct.
-* // sections: the sections object for section versioning, version 0 is false, version 1 is true.
-* ```
-*/
-function RndComboConfig() {
-    function convertBool(n) {
-        if (n === 0)
-            return [false, false, false];
-        if (n === 1)
-            return [false, false, true];
-        if (n === 2)
-            return [false, true, false];
-        if (n === 3)
-            return [false, true, true];
-        if (n === 4)
-            return [true, false, false];
-        if (n === 5)
-            return [true, false, true];
-        if (n === 6)
-            return [true, true, false];
-        if (n === 7)
-            return [true, true, true];
-        return [false, false, false];
-    }
-    function convertText(n) {
-        let bools = convertBool(n);
-        let opts = [];
-        if (bools[0])
-            opts.push("I");
-        if (bools[1])
-            opts.push("II");
-        if (bools[2])
-            opts.push("III");
-        if (opts.length === 0)
-            return 'None';
-        if (opts.length === 1)
-            return opts[0] + ' only';
-        return GrammarJoin(...opts);
-    }
-    let codes = RndPickN([1, 2, 3, 4, 5, 6, 7], 4);
-    let truth = codes.map(x => convertBool(x))[0];
-    let choices = codes.map(x => convertText(x));
-    let sections = [];
-    sections.push([1, truth[0] ? 1 : 0]);
-    sections.push([2, truth[1] ? 1 : 0]);
-    sections.push([3, truth[2] ? 1 : 0]);
-    return { truth, choices, sections };
-}
-globalThis.RndComboConfig = RndComboConfig;
-
-
-/***/ }),
-
 /***/ 27:
 /***/ (() => {
 
@@ -30178,7 +30074,6 @@ function Sqrt(x) {
 globalThis.Sqrt = contract(Sqrt).sign([owl.nonNegative]);
 /**
  * @category Function
- * @deprecated
  * @return the radian of the degree
  * ```
  * Radian(180) // pi
@@ -30193,7 +30088,6 @@ function Radian(degree) {
 globalThis.Radian = contract(Radian).sign([owl.num]);
 /**
  * @category Function
- * @deprecated
  * @return the degree of the radian
  * ```
  * Degree(Math.PI) // 180
@@ -30640,24 +30534,8 @@ globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative, owl.nonNegativ
  * ```
  */
 function IsConvexPolygon(...points) {
-    const n = points.length;
-    Should(n >= 3, "Not a polygon");
-    let gotPositive = false;
-    let gotNegative = false;
-    for (let i = 0; i < n; i++) {
-        let v1 = Vec3D([...points[((i - 1) % n + n) % n], 0], [...points[(i % n + n) % n], 0]);
-        let v2 = Vec3D([...points[(i % n + n) % n], 0], [...points[((i + 1) % n + n) % n], 0]);
-        let c = CrossProduct(v1, v2);
-        if (c[2] < 0) {
-            gotNegative = true;
-        }
-        else if (c[2] > 0) {
-            gotPositive = true;
-        }
-        if (gotNegative && gotPositive)
-            return false;
-    }
-    return true;
+    Should(points.length >= 3, "must have at least 3 points to be a polygon");
+    return toShape2D(points).isConvex();
 }
 globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point]);
 
@@ -30948,10 +30826,10 @@ globalThis.OptimizeField = OptimizeField;
  * ```
  */
 function ConstraintsFromPoints(...points) {
+    Should(IsConvexPolygon(...points), 'Not a convex region');
     let mean = toShape2D(points).mean().toArray();
     let pts = ArrangePoints(...points);
     pts = [...pts, pts[0]];
-    Should(IsConvexPolygon(...pts), 'Not a convex region');
     let constraints = [];
     for (let i = 0; i < points.length; i++) {
         let l = LinearFromTwoPoints(pts[i], pts[i + 1]);
@@ -30960,7 +30838,7 @@ function ConstraintsFromPoints(...points) {
     }
     return constraints;
 }
-globalThis.ConstraintsFromPoints = ConstraintsFromPoints;
+globalThis.ConstraintsFromPoints = contract(ConstraintsFromPoints).sign([owl.point]);
 
 
 /***/ }),
@@ -33754,21 +33632,21 @@ function Vec3DMean(...vectors) {
     return [x, y, z];
 }
 globalThis.Vec3DMean = contract(Vec3DMean).sign([owl.vector3D]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return length of vector
- * ```
- * Vec3DLength([-3,4,0]) // 5
- * Vec3DLength([0,0,4]) // 4
- * Vec3DLength([1,2,3]) // sqrt(14)
- * ```
- */
-function Vec3DLength(v) {
-    const [x, y, z] = v;
-    return Math.pow((x * x + y * y + z * z), 0.5);
-}
-globalThis.Vec3DLength = contract(Vec3DLength).sign([owl.vector3D]);
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return length of vector
+//  * ```
+//  * Vec3DLength([-3,4,0]) // 5
+//  * Vec3DLength([0,0,4]) // 4
+//  * Vec3DLength([1,2,3]) // sqrt(14)
+//  * ```
+//  */
+// function Vec3DLength(v: Vector3D): number {
+//     const [x, y, z] = v
+//     return (x * x + y * y + z * z) ** 0.5
+// }
+// globalThis.Vec3DLength = contract(Vec3DLength).sign([owl.vector3D])
 /**
  * @category Vector3D
  * @deprecated useless
@@ -33782,84 +33660,84 @@ function Vec3DScale(v, k) {
     return [k * v[0], k * v[1], k * v[2]];
 }
 globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return the unit vector of v
- * ```
- * Vec3DUnit([2,0,0]) // [1,0,0]
- * Vec3DUnit([0,-2,0]) // [0,-1,0]
- * Vec3DUnit([1,2,3]) // [1/sqrt(14),2/sqrt(14),3/sqrt(14)]
- * ```
- */
-function Vec3DUnit(v) {
-    return Vec3DScale(v, 1 / Vec3DLength(v));
-}
-globalThis.Vec3DUnit = contract(Vec3DUnit).sign([owl.vector3D]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return scale the vector to the given length
- * ```
- * Vec3DScaleTo([2,0,0],10) // [10,0,0]
- * Vec3DScaleTo([0,-2,0],100) // [0,-100,0]
- * Vec3DScaleTo([1,2,2],6) // [2,4,4]
- * ```
- */
-function Vec3DScaleTo(v, length) {
-    return Vec3DScale(Vec3DUnit(v), length);
-}
-globalThis.Vec3DScaleTo = contract(Vec3DScaleTo).sign([owl.vector3D, owl.num]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return the projection vector of v
- * ```
- * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
- * ```
- */
-function Vec3DProj(v, onto) {
-    let scale = DotProduct(v, onto) / DotProduct(onto, onto);
-    return Vec3DScale(onto, scale);
-}
-globalThis.Vec3DProj = contract(Vec3DProj).sign([owl.vector3D, owl.vector3D]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return dot product of v1 and v2
- * ```
- * DotProduct([1, 1, 0], [0, 1, 1]) // 1
- * DotProduct([1, 2, 3], [4, 5, -6]) // -4
- * ```
- */
-function DotProduct(v1, v2) {
-    return vec3D(v1).dot(v2);
-}
-globalThis.DotProduct = contract(DotProduct).sign([owl.vector3D]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return cross product of v1 and v2
- * ```
- * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
- * ```
- */
-function CrossProduct(v1, v2) {
-    return vec3D(v1).cross(v2).toArray();
-}
-globalThis.CrossProduct = contract(CrossProduct).sign([owl.vector3D]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return unit normal vector to the plane OAB
- * ```
- * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
- * ```
- */
-function NormalVector(O, A, B) {
-    return vec3D(O, A).cross(vec3D(O, B)).unit().toArray();
-}
-globalThis.NormalVector = contract(NormalVector).sign([owl.point3D]);
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return the unit vector of v
+//  * ```
+//  * Vec3DUnit([2,0,0]) // [1,0,0]
+//  * Vec3DUnit([0,-2,0]) // [0,-1,0]
+//  * Vec3DUnit([1,2,3]) // [1/sqrt(14),2/sqrt(14),3/sqrt(14)]
+//  * ```
+//  */
+// function Vec3DUnit(v: Vector3D): Vector3D {
+//     return Vec3DScale(v, 1 / Vec3DLength(v))
+// }
+// globalThis.Vec3DUnit = contract(Vec3DUnit).sign([owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return scale the vector to the given length
+//  * ```
+//  * Vec3DScaleTo([2,0,0],10) // [10,0,0]
+//  * Vec3DScaleTo([0,-2,0],100) // [0,-100,0]
+//  * Vec3DScaleTo([1,2,2],6) // [2,4,4]
+//  * ```
+//  */
+// function Vec3DScaleTo(v: Vector3D, length: number): Vector3D {
+//     return Vec3DScale(Vec3DUnit(v), length)
+// }
+// globalThis.Vec3DScaleTo = contract(Vec3DScaleTo).sign([owl.vector3D, owl.num])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return the projection vector of v
+//  * ```
+//  * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
+//  * ```
+//  */
+// function Vec3DProj(v: Vector3D, onto: Vector3D): Vector3D {
+//     let scale = DotProduct(v, onto) / DotProduct(onto, onto)
+//     return Vec3DScale(onto, scale)
+// }
+// globalThis.Vec3DProj = contract(Vec3DProj).sign([owl.vector3D, owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return dot product of v1 and v2
+//  * ```
+//  * DotProduct([1, 1, 0], [0, 1, 1]) // 1
+//  * DotProduct([1, 2, 3], [4, 5, -6]) // -4
+//  * ```
+//  */
+// function DotProduct(v1: Vector3D, v2: Vector3D): number {
+//     return vec3D(v1).dot(v2)
+// }
+// globalThis.DotProduct = contract(DotProduct).sign([owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return cross product of v1 and v2
+//  * ```
+//  * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
+//  * ```
+//  */
+// function CrossProduct(v1: Vector3D, v2: Vector3D): Vector3D {
+//     return vec3D(v1).cross(v2).toArray()
+// }
+// globalThis.CrossProduct = contract(CrossProduct).sign([owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return unit normal vector to the plane OAB
+//  * ```
+//  * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
+//  * ```
+//  */
+// function NormalVector(O: Point3D, A: Point3D, B: Point3D): Vector3D {
+//     return vec3D(O, A).cross(vec3D(O, B)).unit().toArray()
+// }
+// globalThis.NormalVector = contract(NormalVector).sign([owl.point3D])
 /**
  * @category Vector3D
  * @return projection of a point on a plane
@@ -33870,12 +33748,8 @@ globalThis.NormalVector = contract(NormalVector).sign([owl.point3D]);
  * ```
  */
 function ProjectionOnPlane(point, plane) {
-    let n = NormalVector(...plane);
-    let O = plane[0];
-    let v = Vec3D(O, point);
-    let v_perp = Vec3DProj(v, n);
-    let v_para = Vec3DAdd(v, Vec3DScale(v_perp, -1));
-    return Vec3DAdd(O, v_para);
+    let [A, B, C] = plane;
+    return vec3D(point).projectOnPlane(vec3D(A, B), vec3D(B, C)).toArray();
 }
 globalThis.ProjectionOnPlane = contract(ProjectionOnPlane)
     .sign([owl.vector3D, owl.arrayWith(owl.vector3D)]);
@@ -33955,7 +33829,6 @@ globalThis.Extrude = contract(Extrude).sign([owl.arrayWith(owl.point3D), owl.arr
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 __webpack_require__(8004);
 __webpack_require__(5315);
-__webpack_require__(1648);
 __webpack_require__(27);
 __webpack_require__(7202);
 __webpack_require__(426);
@@ -35243,7 +35116,6 @@ class PenCls extends Pencil {
                 this._pen.initSize(width, height);
                 if (this._pen.range.AUTO_BORDER)
                     this._pen.initOuterBorder(DEFAULT_BORDER);
-                this._pen.set.reset();
             },
             /**
              * Set the size of the canvas by resolution.

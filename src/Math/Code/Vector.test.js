@@ -58,31 +58,31 @@ test('VectorRev', () => {
 
 
 
-test('VectorUnit', () => {
-    expect(VectorUnit([2, 0])).toEqual([1, 0]);
-    expect(VectorUnit([0, -2])).toEqual([0, -1]);
-    expect(VectorUnit([1, 2])).toBeArrayCloseTo([1 / (5 ** 0.5), 2 / (5 ** 0.5)]);
-});
+// test('VectorUnit', () => {
+//     expect(VectorUnit([2, 0])).toEqual([1, 0]);
+//     expect(VectorUnit([0, -2])).toEqual([0, -1]);
+//     expect(VectorUnit([1, 2])).toBeArrayCloseTo([1 / (5 ** 0.5), 2 / (5 ** 0.5)]);
+// });
 
 
 
-test('VectorScaleTo', () => {
-    expect(VectorScaleTo([2, 0], 10)).toEqual([10, 0]);
-    expect(VectorScaleTo([0, -2], 100)).toEqual([0, -100]);
-    expect(VectorScaleTo([-3, 4], 15)).toEqual([-9, 12]);
-});
+// test('VectorScaleTo', () => {
+//     expect(VectorScaleTo([2, 0], 10)).toEqual([10, 0]);
+//     expect(VectorScaleTo([0, -2], 100)).toEqual([0, -100]);
+//     expect(VectorScaleTo([-3, 4], 15)).toEqual([-9, 12]);
+// });
 
 
 
 
 
 
-test('VectorRotate', () => {
-    expect(VectorRotate([1, 2], 90)).toEqual([-2, 1]);
-    expect(VectorRotate([1, 2], 180)).toEqual([-1, -2]);
-    expect(VectorRotate([1, 2], 270)).toEqual([2, -1]);
-    expect(VectorRotate([1, 2], 360)).toEqual([1, 2]);
-});
+// test('VectorRotate', () => {
+//     expect(VectorRotate([1, 2], 90)).toEqual([-2, 1]);
+//     expect(VectorRotate([1, 2], 180)).toEqual([-1, -2]);
+//     expect(VectorRotate([1, 2], 270)).toEqual([2, -1]);
+//     expect(VectorRotate([1, 2], 360)).toEqual([1, 2]);
+// });
 
 
 test('ArrangePoints', () => {

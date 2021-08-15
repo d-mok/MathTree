@@ -41,7 +41,6 @@ globalThis.Sqrt = contract(Sqrt).sign([owl.nonNegative])
 
 /**
  * @category Function
- * @deprecated
  * @return the radian of the degree
  * ```
  * Radian(180) // pi
@@ -59,7 +58,6 @@ globalThis.Radian = contract(Radian).sign([owl.num])
 
 /**
  * @category Function
- * @deprecated
  * @return the degree of the radian
  * ```
  * Degree(Math.PI) // 180
