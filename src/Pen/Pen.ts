@@ -135,14 +135,14 @@ class PenCls extends Pencil {
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange
-         * @param points - An array of in-view points [x,y].
+         * @param points - An array of in-view points [x,y], or circle [[h,k,r]], or sphere [[a,b,c],r]
          * @returns void
          * ```
          * pen.range.extend([1,2],[3,4]) //  [0,0], [1,2], [3,4] must be in-view
          * // equivalent to pen.range.capture([0,0],[1,2],[3,4])
          * ```
          */
-        extend(...points: Point2D[]) {
+        extend(...points: (Point | [Point, number])[]) {
             this.capture([0, 0], ...points)
         }
     }
