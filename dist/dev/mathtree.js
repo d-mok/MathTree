@@ -26763,6 +26763,7 @@ const frame_1 = __webpack_require__(5117);
 const support_1 = __webpack_require__(4014);
 const cal = __importStar(__webpack_require__(2318));
 const list_1 = __webpack_require__(4140);
+const shape2D_1 = __webpack_require__(8951);
 /**
  * REM_PIXEL is the default font size of the browser, usually 16px
  */
@@ -26790,7 +26791,7 @@ class Pencil {
         this.$TEXT_SIZE = 1;
         this.$TEXT_DIR = 0;
         this.$TEXT_LATEX = false;
-        this.$LABEL_CENTER = undefined;
+        this.$LABEL_CENTER = 0;
         this.$ANGLE_MODE = 'normal';
         this.$LENGTH_UNIT = undefined;
         this.$3D_ANGLE = 60;
@@ -26816,9 +26817,13 @@ class Pencil {
             throw '[Pencil Error] Range must be set before Size';
         const wPixel = width * SIZE_SCALE * REM_PIXEL * frame_1.PEN_QUALITY;
         const hPixel = height * SIZE_SCALE * REM_PIXEL * frame_1.PEN_QUALITY;
+        let $3D_ANGLE = this.$3D_ANGLE;
+        let $3D_DEPTH = this.$3D_DEPTH;
         this.canvas.width = wPixel;
         this.canvas.height = hPixel;
         this.frame.setSize(wPixel, hPixel);
+        this.setAllDefault();
+        this.setProjector3D($3D_ANGLE, $3D_DEPTH);
         this.INIT_SIZE_ALREADY = true;
     }
     /**
@@ -26925,12 +26930,23 @@ class Pencil {
     setTextLatex(on = false) {
         this.$TEXT_LATEX = on;
     }
-    setLabelCenter(center = false) {
-        if (typeof center === 'boolean') {
-            this.$LABEL_CENTER = center ? this.frame.xyCenter() : undefined;
+    setLabelCenter(...centers) {
+        if (centers.length === 0) {
+            this.$LABEL_CENTER = this.frame.xyCenter();
+            return;
         }
-        else {
-            this.$LABEL_CENTER = this.pj(center);
+        // TEMP, to be deleted
+        if (centers[0] === true) {
+            this.$LABEL_CENTER = this.frame.xyCenter();
+            return;
+        }
+        if (typeof centers[0] === 'number') {
+            this.$LABEL_CENTER = centers[0];
+            return;
+        }
+        if (Array.isArray(centers[0])) {
+            let cens = centers;
+            this.$LABEL_CENTER = shape2D_1.toShape2D(this.pjs(cens)).mean().toArray();
         }
     }
     setLengthUnit(text = undefined) {
@@ -27446,8 +27462,8 @@ class Pencil {
     getLabelCenterDirInPixel(point) {
         let pt = this.pj(point);
         let center = this.$LABEL_CENTER;
-        if (center === undefined) {
-            return 0;
+        if (typeof center === 'number') {
+            return center;
         }
         else {
             if (center[0] === pt[0] && center[1] === pt[1])
@@ -29619,7 +29635,7 @@ function PolySimplify(poly) {
             arr.push(M);
         }
     }
-    return arr;
+    return arr.filter(m => m.coeff !== 0);
 }
 globalThis.PolySimplify = contract(PolySimplify).sign([owl.polynomial]);
 /**
@@ -35113,7 +35129,6 @@ class PenCls extends Pencil {
                 this._pen.initSize(width, height);
                 if (this._pen.range.AUTO_BORDER)
                     this._pen.initOuterBorder(DEFAULT_BORDER);
-                this._pen.set.reset();
             },
             /**
              * Set the size of the canvas by resolution.
@@ -35185,7 +35200,6 @@ class PenCls extends Pencil {
                 // this._pen.canvas.height = hPixel * PEN_QUALITY;
                 // this._pen.frame.wPixel = wPixel * PEN_QUALITY;
                 // this._pen.frame.hPixel = hPixel * PEN_QUALITY;
-                this._pen.set.reset();
             },
             /**
              * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
@@ -35436,17 +35450,19 @@ class PenCls extends Pencil {
                 this._pen.setTextLatex(on);
             },
             /**
-             * Set the center for label dodge. If undefined, dodge right by default.
+             * Set the center for label dodge.
              * @category set
-             * @param center - the center coordinate
+             * @param center - the center coordinates or a polar degree
              * @returns void
              * ```
              * pen.set.labelCenter([0,0]) // set center to be [0,0]
-             * pen.set.labelCenter(true) // set center to be the center of the canvas
+             * pen.set.labelCenter(A,B,C,D) // set center to be the centroid of A,B,C,D
+             * pen.set.labelCenter(90) // set label at 90 polar degree (top)
+             * pen.set.labelCenter() // set label to be the center of canvas
              * ```
              */
-            labelCenter(center = false) {
-                this._pen.setLabelCenter(center);
+            labelCenter(...centers) {
+                this._pen.setLabelCenter(...centers);
             },
             /**
              * Set length unit for line label.
@@ -36284,10 +36300,6 @@ class PenCls extends Pencil {
             frustum(lowerBase, upperBase, { base = true, height = !true, shadeLower = !true, shadeUpper = !true, envelope = !true, } = {}) {
                 if (owl.point3D(upperBase)) {
                     upperBase = Array(lowerBase.length).fill(upperBase);
-                }
-                // TEMP
-                if (upperBase.length === 1) {
-                    upperBase = Array(lowerBase.length).fill(upperBase[0]);
                 }
                 if (base) {
                     this._pen.polygon(...lowerBase);

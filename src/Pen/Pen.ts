@@ -83,7 +83,7 @@ class PenCls extends Pencil {
          * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
          * ```
          */
-        capture(...points: Point[]) {
+        capture(...points: (Point | [Point, number])[]) {
             let pts = this._pen.pjs(points)
             let xmin = pts[0][0];
             let xmax = pts[0][0];
@@ -158,8 +158,6 @@ class PenCls extends Pencil {
 
             if (this._pen.range.AUTO_BORDER)
                 this._pen.initOuterBorder(DEFAULT_BORDER)
-
-            this._pen.set.reset();
         },
         /**
          * Set the size of the canvas by resolution.
@@ -234,8 +232,6 @@ class PenCls extends Pencil {
             // this._pen.canvas.height = hPixel * PEN_QUALITY;
             // this._pen.frame.wPixel = wPixel * PEN_QUALITY;
             // this._pen.frame.hPixel = hPixel * PEN_QUALITY;
-
-            this._pen.set.reset();
         },
         /**
          * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
@@ -487,17 +483,19 @@ class PenCls extends Pencil {
         },
 
         /**
-         * Set the center for label dodge. If undefined, dodge right by default.
+         * Set the center for label dodge.
          * @category set
-         * @param center - the center coordinate
+         * @param center - the center coordinates or a polar degree
          * @returns void
          * ```
          * pen.set.labelCenter([0,0]) // set center to be [0,0]
-         * pen.set.labelCenter(true) // set center to be the center of the canvas
+         * pen.set.labelCenter(A,B,C,D) // set center to be the centroid of A,B,C,D
+         * pen.set.labelCenter(90) // set label at 90 polar degree (top)
+         * pen.set.labelCenter() // set label to be the center of canvas
          * ```
          */
-        labelCenter(center: Point | boolean = false): void {
-            this._pen.setLabelCenter(center)
+        labelCenter(...centers: Point[] | [number]): void {
+            this._pen.setLabelCenter(...centers)
         },
         /**
          * Set length unit for line label.
@@ -524,6 +522,7 @@ class PenCls extends Pencil {
         angle(mode: 'normal' | 'polar' | 'reflex' = 'normal'): void {
             this._pen.setAngleMode(mode)
         },
+
         /**
          * Set 3D projector function.
          * @category set
@@ -1739,11 +1738,6 @@ class PenCls extends Pencil {
 
             if (owl.point3D(upperBase)) {
                 upperBase = Array(lowerBase.length).fill(upperBase)
-            }
-
-            // TEMP
-            if (upperBase.length === 1) {
-                upperBase = Array(lowerBase.length).fill(upperBase[0])
             }
 
             if (base) {

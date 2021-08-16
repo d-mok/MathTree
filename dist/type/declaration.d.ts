@@ -3167,16 +3167,18 @@ declare class PenCls extends Pencil {
          */
         textLatex(on?: boolean): void;
         /**
-         * Set the center for label dodge. If undefined, dodge right by default.
+         * Set the center for label dodge.
          * @category set
-         * @param center - the center coordinate
+         * @param center - the center coordinates or a polar degree
          * @returns void
          * ```
          * pen.set.labelCenter([0,0]) // set center to be [0,0]
-         * pen.set.labelCenter(true) // set center to be the center of the canvas
+         * pen.set.labelCenter(A,B,C,D) // set center to be the centroid of A,B,C,D
+         * pen.set.labelCenter(90) // set label at 90 polar degree (top)
+         * pen.set.labelCenter() // set label to be the center of canvas
          * ```
          */
-        labelCenter(center?: Point | boolean): void;
+        labelCenter(...centers: Point[] | [number]): void;
         /**
          * Set length unit for line label.
          * @category set

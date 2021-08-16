@@ -17,7 +17,7 @@ let TSorted = '8x^{9}+-1x^{6}y^{3}+1x^{3}y^{4}+5xy^{6}+-7x^{-1}y^{5}+6y^{2}+2';
 
 
 test('PolyClone', () => {
-    let P = getPoly()
+    let P = getPoly();
     let Q = PolyClone(P);
     P[0].coeff = 1;
     expect(PolyPrint(Q)).toBe(T);
@@ -33,13 +33,13 @@ test('RndPolynomial', () => {
 
 
 test('PolyPrint', () => {
-    let P = getPoly()
+    let P = getPoly();
     expect(PolyPrint(P)).toBe(T);
 });
 
 
 test('PolySort', () => {
-    let P = getPoly()
+    let P = getPoly();
     P = PolySort(P, true);
     expect(PolyPrint(P)).toBe(TSorted);
 });
@@ -47,7 +47,7 @@ test('PolySort', () => {
 
 
 test('PolyFunction', () => {
-    let P = getPoly()
+    let P = getPoly();
     let func = PolyFunction(P);
     expect(func({ x: 2, y: 3 })).toBe(9511.5);
 });
@@ -73,21 +73,23 @@ test('PolyJoin', () => {
 
 
 
+
 test('PolySimplify', () => {
     let P = [
         Monomial(1, [{ variable: "x", power: 1 }, { variable: "y", power: 3 }]),
         Monomial(2, [{ variable: "x", power: 2 }, { variable: "y", power: 4 }]),
         Monomial(3, [{ variable: "x", power: 1 }, { variable: "y", power: 3 }]),
         Monomial(4, [{ variable: "x", power: 2 }, { variable: "y", power: 4 }]),
+        Monomial(0, [{ variable: "x", power: 3 }, { variable: "y", power: 5 }]),
     ];
     let T = '4xy^{3}+6x^{2}y^{4}';
     expect(PolyPrint(PolySimplify(P))).toBe(T);
+    expect(PolySimplify(P)).toHaveLength(2);
 });
 
 
 
-
 test('PolyDegree', () => {
-    let P = getPoly()
+    let P = getPoly();
     expect(PolyDegree(P)).toBe(9);
 });

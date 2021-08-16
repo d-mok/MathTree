@@ -240,7 +240,7 @@ function PolySimplify<V extends string>(poly: polynomial<V>): polynomial<V> {
             arr.push(M)
         }
     }
-    return arr
+    return arr.filter(m => m.coeff !== 0)
 }
 globalThis.PolySimplify = contract(PolySimplify).sign([owl.polynomial])
 
