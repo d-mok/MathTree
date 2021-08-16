@@ -30,7 +30,7 @@ function RndShake(anchor: any): (typeof anchor)[] {
             anchor = Number(anchor)
         }
     }
-    if (owl.point(anchor)) {
+    if (owl.point2D(anchor)) {
         // Point
         return RndShakePoint(anchor)
     }
@@ -226,7 +226,7 @@ function RndShakePoint(anchor: Point2D): Point2D[] {
     }
     return poker.dice(func).distinct((a, b) => a[0] === b[0] || a[1] === b[1]).rolls(3)
 }
-globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point])
+globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point2D])
 
 
 

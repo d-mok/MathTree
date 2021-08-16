@@ -326,7 +326,7 @@ function RndConvexPolygon(n: number, center: Point2D, radius: number, separation
     return vertices
 }
 globalThis.RndConvexPolygon = contract(RndConvexPolygon)
-    .sign([owl.positiveInt, owl.point, owl.positive, owl.positive])
+    .sign([owl.positiveInt, owl.point2D, owl.positive, owl.positive])
 
 
 

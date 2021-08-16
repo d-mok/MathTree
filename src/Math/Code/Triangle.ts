@@ -80,7 +80,7 @@ function TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix = true): Tri
     }
     return { sideC, angleB, sideA, angleC, sideB, angleA }
 }
-globalThis.TriangleFromVertex = contract(TriangleFromVertex).sign([owl.point, owl.point, owl.point, owl.bool])
+globalThis.TriangleFromVertex = contract(TriangleFromVertex).sign([owl.point2D, owl.point2D, owl.point2D, owl.bool])
 
 
 /**
@@ -176,7 +176,7 @@ function Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let [x, y] = Intersection(C, H, A, G)
     return [cal.blur(x), cal.blur(y)]
 }
-globalThis.Orthocentre = contract(Orthocentre).sign([owl.point])
+globalThis.Orthocentre = contract(Orthocentre).sign([owl.point2D])
 
 
 
@@ -193,7 +193,7 @@ function Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let [x, y] = Crammer(a1, b1, -c1, a2, b2, -c2)
     return [cal.blur(x), cal.blur(y)]
 }
-globalThis.Circumcentre = contract(Circumcentre).sign([owl.point])
+globalThis.Circumcentre = contract(Circumcentre).sign([owl.point2D])
 
 
 
@@ -209,7 +209,7 @@ function Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3]
     return [cal.blur(x), cal.blur(y)]
 }
-globalThis.Centroid = contract(Centroid).sign([owl.point])
+globalThis.Centroid = contract(Centroid).sign([owl.point2D])
 
 
 
@@ -230,7 +230,7 @@ function Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let y = (a * A[1] + b * B[1] + c * C[1]) / p
     return [cal.blur(x), cal.blur(y)]
 }
-globalThis.Incentre = contract(Incentre).sign([owl.point])
+globalThis.Incentre = contract(Incentre).sign([owl.point2D])
 
 
 
@@ -249,7 +249,7 @@ function ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Po
     Should(owl.num(q), 'original orthocentre must be rational')
     return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
 }
-globalThis.ScaleOrthocentreToInt = contract(ScaleOrthocentreToInt).sign([owl.point])
+globalThis.ScaleOrthocentreToInt = contract(ScaleOrthocentreToInt).sign([owl.point2D])
 
 
 
@@ -269,7 +269,7 @@ function ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, P
     Should(owl.num(q), 'original circumcentre must be rational')
     return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
 }
-globalThis.ScaleCircumcentreToInt = contract(ScaleCircumcentreToInt).sign([owl.point])
+globalThis.ScaleCircumcentreToInt = contract(ScaleCircumcentreToInt).sign([owl.point2D])
 
 
 
@@ -288,7 +288,7 @@ function ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point
     Should(owl.num(q), 'original centroid must be rational')
     return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
 }
-globalThis.ScaleCentroidToInt = contract(ScaleCentroidToInt).sign([owl.point])
+globalThis.ScaleCentroidToInt = contract(ScaleCentroidToInt).sign([owl.point2D])
 
 
 
@@ -307,6 +307,6 @@ function ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point
     Should(owl.num(q), 'original incentre must be rational')
     return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
 }
-globalThis.ScaleIncentreToInt = contract(ScaleIncentreToInt).sign([owl.point])
+globalThis.ScaleIncentreToInt = contract(ScaleIncentreToInt).sign([owl.point2D])
 
 

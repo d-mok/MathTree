@@ -20,7 +20,7 @@ function Quadrant(rect: Point2D | number): QuadrantName {
     Should(false, 'fail to parse quadrant!')
     throw 'never'
 }
-globalThis.Quadrant = contract(Quadrant).sign([owl.or([owl.point, owl.num])])
+globalThis.Quadrant = contract(Quadrant).sign([owl.or([owl.point2D, owl.num])])
 
 
 /**
@@ -49,7 +49,7 @@ function RectToPol([x, y]: Point2D): PolarPoint {
     if (q < 0) q = q + 360;
     return [r, q];
 }
-globalThis.RectToPol = contract(RectToPol).sign([owl.point])
+globalThis.RectToPol = contract(RectToPol).sign([owl.point2D])
 
 /**
  * @category Trigonometry

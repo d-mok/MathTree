@@ -9,7 +9,7 @@
 function Vector(O: Point2D, P: Point2D): Vector {
     return [P[0] - O[0], P[1] - O[1]];
 }
-globalThis.Vector = contract(Vector).sign([owl.point])
+globalThis.Vector = contract(Vector).sign([owl.point2D])
 
 
 
@@ -204,4 +204,4 @@ function ArrangePoints(...points: Point2D[]): Point2D[] {
     ss.sortAroundMean()
     return ss.toArray()
 }
-globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point])
+globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D])

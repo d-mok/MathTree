@@ -82,7 +82,7 @@ globalThis.AreCoprime = contract(AreCoprime).sign([owl.num])
 function AreDistinctPoint(...points: Point2D[]) {
     return toList(points).duplessDeep()
 }
-globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point])
+globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point2D])
 
 
 /**
@@ -97,7 +97,7 @@ function AreDistantPoint(distance: number) {
     let AreDistant = function (...points: Point2D[]): boolean {
         return toShape2D(points).distances().min() >= distance
     }
-    return contract(AreDistant).sign([owl.point])
+    return contract(AreDistant).sign([owl.point2D])
 }
 globalThis.AreDistantPoint = contract(AreDistantPoint).sign([owl.positive])
 

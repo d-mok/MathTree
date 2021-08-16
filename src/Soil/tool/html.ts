@@ -155,7 +155,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (T === 'boolean') {
             return Tick(value)
         }
-        if (owl.point(value)) {
+        if (owl.point2D(value)) {
             return Coord(value)
         }
         if (owl.combo(value)) {

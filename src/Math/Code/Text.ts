@@ -131,7 +131,7 @@ function Coord(point: Point2D, dp: number = 1): string {
     b = Fix(b, dp)
     return '(' + a + ', ' + b + ')'
 }
-globalThis.Coord = contract(Coord).sign([owl.point])
+globalThis.Coord = contract(Coord).sign([owl.point2D])
 
 
 

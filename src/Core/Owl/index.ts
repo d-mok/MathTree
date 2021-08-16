@@ -93,7 +93,7 @@ export const ntuple = (_: unknown): _ is number[] => arrayWith(num)(_)
 
 export const interval = (_: unknown): _ is interval => couple(_) && _[0] <= _[1]
 
-export const point = (_: unknown): _ is Point2D => couple(_)
+export const point2D = (_: unknown): _ is Point2D => couple(_)
 
 export const point3D = (_: unknown): _ is Point3D => triple(_)
 

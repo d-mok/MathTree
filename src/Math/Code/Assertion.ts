@@ -306,7 +306,7 @@ function IsAroundPoint(anchor: Point2D, range: number) {
         p => ChessboardDistance(anchor, p) <= range
     );
 }
-globalThis.IsAroundPoint = contract(IsAroundPoint).sign([owl.point, owl.positive])
+globalThis.IsAroundPoint = contract(IsAroundPoint).sign([owl.point2D, owl.positive])
 
 
 

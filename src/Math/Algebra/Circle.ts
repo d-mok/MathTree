@@ -14,7 +14,7 @@ function CircleGeneral(centre: Point2D, radius: number): [D: number, E: number, 
     let F = h ** 2 + k ** 2 - r ** 2
     return [D, E, F];
 }
-globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point, owl.positive])
+globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point2D, owl.positive])
 
 
 
@@ -75,4 +75,4 @@ function CircleLineIntersect(center: Point2D, radius: number, linear: [number, n
         return [P, Q]
     }
 }
-globalThis.CircleLineIntersect = contract(CircleLineIntersect).sign([owl.point, owl.positive, owl.triple])
+globalThis.CircleLineIntersect = contract(CircleLineIntersect).sign([owl.point2D, owl.positive, owl.triple])

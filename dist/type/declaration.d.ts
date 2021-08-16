@@ -41,7 +41,7 @@ declare module "Core/Owl/index" {
     export const combo: (_: unknown) => _ is [boolean, boolean, boolean];
     export const ntuple: (_: unknown) => _ is number[];
     export const interval: (_: unknown) => _ is interval;
-    export const point: (_: unknown) => _ is Point2D;
+    export const point2D: (_: unknown) => _ is Point2D;
     export const point3D: (_: unknown) => _ is Point3D;
     export const polar: (_: unknown) => _ is PolarPoint;
     export const fraction: (_: unknown) => _ is Fraction;
@@ -2897,13 +2897,14 @@ declare class PenCls extends Pencil {
         /**
          * Set the coordinate range by specifying in-view points.
          * @category SetupRange
-         * @param points - An array of in-view points [x,y].
+         * @param points - An array of in-view points [x,y], or circle [[h,k,r]], or sphere [[a,b,c],r]
          * @returns void
          * ```
          * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
+         * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
          * ```
          */
-        capture(...points: Point[]): void;
+        capture(...points: (Point | [Point, number])[]): void;
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange

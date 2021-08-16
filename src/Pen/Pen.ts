@@ -77,14 +77,29 @@ class PenCls extends Pencil {
         /**
          * Set the coordinate range by specifying in-view points.
          * @category SetupRange
-         * @param points - An array of in-view points [x,y].
+         * @param points - An array of in-view points [x,y], or circle [[h,k,r]], or sphere [[a,b,c],r]
          * @returns void
          * ```
          * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
+         * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
          * ```
          */
         capture(...points: (Point | [Point, number])[]) {
-            let pts = this._pen.pjs(points)
+
+            let arr: Point[] = []
+            for (let p of points) {
+                if (Array.isArray(p[0])) {
+                    let [center, r] = p as [Point, number]
+                    if (owl.point2D(center))
+                        arr.push(...this._pen.getCircleCorners(center, r))
+                    if (owl.point3D(center))
+                        arr.push(...this._pen.getSphereCorners(center, r))
+                } else {
+                    arr.push(p as Point)
+                }
+            }
+
+            let pts = this._pen.pjs(arr)
             let xmin = pts[0][0];
             let xmax = pts[0][0];
             let ymin = pts[0][1];

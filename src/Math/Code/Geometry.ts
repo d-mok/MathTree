@@ -12,7 +12,7 @@ function Slope(A: Point2D, B: Point2D): number {
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
 globalThis.Slope = contract(Slope).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function not_vertical(A, B) { return !cal.eq(A[0], B[0]) }
 })
 
@@ -27,7 +27,7 @@ globalThis.Slope = contract(Slope).seal({
 function Distance(A: Point2D, B: Point2D): number {
     return ((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2) ** 0.5;
 }
-globalThis.Distance = contract(Distance).sign([owl.point])
+globalThis.Distance = contract(Distance).sign([owl.point2D])
 
 
 /**
@@ -43,7 +43,7 @@ function ChessboardDistance(A: Point2D, B: Point2D): number {
     let y = Abs(A[1] - B[1])
     return Max(x, y)
 }
-globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point])
+globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point2D])
 
 /**
  * @category Geometry
@@ -55,7 +55,7 @@ globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point])
 function MidPoint(A: Point2D, B: Point2D): Point2D {
     return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
 }
-globalThis.MidPoint = contract(MidPoint).sign([owl.point])
+globalThis.MidPoint = contract(MidPoint).sign([owl.point2D])
 
 /**
  * @category Geometry
@@ -69,7 +69,7 @@ function DivisionPoint(A: Point2D, B: Point2D, ratio = 0.5): Point2D {
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
 }
-globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point, owl.point, owl.num])
+globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point2D, owl.point2D, owl.num])
 
 
 /**
@@ -82,7 +82,7 @@ globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point, owl.point, o
 function RotatePoint(P: Point2D, O: Point2D, q: number): Point2D {
     return vec2D(O, P).rotate(q).add(O).blur().toArray()
 }
-globalThis.RotatePoint = contract(RotatePoint).sign([owl.point, owl.point, owl.num])
+globalThis.RotatePoint = contract(RotatePoint).sign([owl.point2D, owl.point2D, owl.num])
 
 
 /**
@@ -97,7 +97,7 @@ function Direction(A: Point2D, B: Point2D): number {
     return vec2D(A, B).argument()
 }
 globalThis.Direction = contract(Direction).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, B) { return owl.distinct([A, B]) }
 })
 
@@ -118,7 +118,7 @@ function Normal(A: Point2D, B: Point2D): number {
     return Direction(A, R);
 }
 globalThis.Normal = contract(Normal).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, B) { return owl.distinct([A, B]) }
 })
 
@@ -136,7 +136,7 @@ function PerpendicularFoot(A: Point2D, B: Point2D, P: Point2D): Point2D {
     return Intersection(A, B, P, Q);
 }
 globalThis.PerpendicularFoot = contract(PerpendicularFoot).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, B, P) { return owl.distinct([A, B]) }
 })
 
@@ -159,7 +159,7 @@ function Intersection(A: Point2D, B: Point2D, C: Point2D, D: Point2D): Point2D {
     )
 }
 globalThis.Intersection = contract(Intersection).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, B, C, D) {
         return owl.distinct([A, B]) && owl.distinct([C, D])
     }
@@ -182,8 +182,8 @@ function TranslatePoint(P: Point2D, q: number | Point2D, distance: number): Poin
     return [x, y]
 }
 globalThis.TranslatePoint = contract(TranslatePoint).sign([
-    owl.point,
-    owl.or([owl.num, owl.point]),
+    owl.point2D,
+    owl.or([owl.num, owl.point2D]),
     owl.num
 ])
 
@@ -203,7 +203,7 @@ globalThis.TranslatePoint = contract(TranslatePoint).sign([
 function TranslateX(P: Point2D, distance: number): Point2D {
     return TranslatePoint(P, 0, distance)
 }
-globalThis.TranslateX = contract(TranslateX).sign([owl.point, owl.num])
+globalThis.TranslateX = contract(TranslateX).sign([owl.point2D, owl.num])
 
 
 
@@ -220,7 +220,7 @@ globalThis.TranslateX = contract(TranslateX).sign([owl.point, owl.num])
 function TranslateY(P: Point2D, distance: number): Point2D {
     return TranslatePoint(P, 90, distance)
 }
-globalThis.TranslateY = contract(TranslateY).sign([owl.point, owl.num])
+globalThis.TranslateY = contract(TranslateY).sign([owl.point2D, owl.num])
 
 
 
@@ -238,7 +238,7 @@ globalThis.TranslateY = contract(TranslateY).sign([owl.point, owl.num])
 function ReflectX(P: Point2D): Point2D {
     return [P[0], -P[1]]
 }
-globalThis.ReflectX = contract(ReflectX).sign([owl.point])
+globalThis.ReflectX = contract(ReflectX).sign([owl.point2D])
 
 
 
@@ -254,7 +254,7 @@ globalThis.ReflectX = contract(ReflectX).sign([owl.point])
 function ReflectY(P: Point2D): Point2D {
     return [-P[0], P[1]]
 }
-globalThis.ReflectY = contract(ReflectY).sign([owl.point])
+globalThis.ReflectY = contract(ReflectY).sign([owl.point2D])
 
 
 
@@ -294,7 +294,7 @@ function Angle(A: Point2D, O: Point2D, B: Point2D): number {
     return IsReflex(A, O, B) ? 360 - anglePolar : anglePolar
 }
 globalThis.Angle = contract(Angle).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O])
     }
@@ -318,7 +318,7 @@ function AnglePolar(A: Point2D, O: Point2D, B: Point2D): number {
     return a <= b ? b - a : 360 + b - a
 }
 globalThis.AnglePolar = contract(AnglePolar).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O])
     }
@@ -340,7 +340,7 @@ function IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean {
     return angle > 180
 }
 globalThis.IsReflex = contract(IsReflex).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O])
     }
@@ -368,7 +368,7 @@ function Turtle(start: Point2D, ...walk: [rotate: number, distance: number][]): 
     }
     return arr
 }
-globalThis.Turtle = contract(Turtle).sign([owl.point, owl.couple])
+globalThis.Turtle = contract(Turtle).sign([owl.point2D, owl.couple])
 
 
 
@@ -392,7 +392,7 @@ function RegularPolygon(n: number, center: Point2D, radius: number, startAngle: 
     }
     return arr
 }
-globalThis.RegularPolygon = contract(RegularPolygon).sign([owl.num, owl.point, owl.num, owl.num])
+globalThis.RegularPolygon = contract(RegularPolygon).sign([owl.num, owl.point2D, owl.num, owl.num])
 
 
 
@@ -429,4 +429,4 @@ function IsConvexPolygon(...points: Point2D[]): boolean {
     Should(points.length >= 3, "must have at least 3 points to be a polygon");
     return toShape2D(points).isConvex()
 }
-globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point])
+globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point2D])

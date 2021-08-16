@@ -608,7 +608,7 @@
 //         labelCenter(center: Point2D | Point3D | boolean = false): void {
 
 //             if (center === false) this._pen.setProperty.LABEL_CENTER = undefined
-//             if (owl.point(center)) this._pen.setProperty.LABEL_CENTER = center
+//             if (owl.point2D(center)) this._pen.setProperty.LABEL_CENTER = center
 //             if (owl.point3D(center)) this._pen.setProperty.LABEL_CENTER = this._pen.project(center)
 //             if (center === true) {
 //                 let x = (this._pen.frame.xmin + this._pen.frame.xmax) / 2
@@ -2341,7 +2341,7 @@
 //      * @ignore
 //      */
 //     project(point: Point3D | Point2D): Point2D {
-//         if (owl.point(point)) return point
+//         if (owl.point2D(point)) return point
 //         return this.pj(point)
 //     }
 

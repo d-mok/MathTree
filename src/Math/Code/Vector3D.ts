@@ -224,7 +224,7 @@ function EmbedPlane(plane2D: Point2D[], origin: Point3D = [0, 0, 0], xVec: Vecto
         .toArray()
 }
 globalThis.EmbedPlane = contract(EmbedPlane)
-    .sign([owl.arrayWith(owl.point), owl.point3D, owl.vector3D, owl.vector3D])
+    .sign([owl.arrayWith(owl.point2D), owl.point3D, owl.vector3D, owl.vector3D])
 
 
 
@@ -239,7 +239,7 @@ globalThis.EmbedPlane = contract(EmbedPlane)
 function EmbedPlaneZ(plane2D: Point2D[], z: number = 0): Point3D[] {
     return EmbedPlane(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0])
 }
-globalThis.EmbedPlaneZ = contract(EmbedPlaneZ).sign([owl.arrayWith(owl.point), owl.num])
+globalThis.EmbedPlaneZ = contract(EmbedPlaneZ).sign([owl.arrayWith(owl.point2D), owl.num])
 
 
 /**

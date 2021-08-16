@@ -26826,29 +26826,29 @@ class Pencil {
         this.setProjector3D($3D_ANGLE, $3D_DEPTH);
         this.INIT_SIZE_ALREADY = true;
     }
-    /**
-     * Set a border by fixing the size but extending the range. The original range will be shrinked as a result.
-     * The aspect-ratio of the original range will be changed.
-     * @param border - one-sided border width in scaled unit
-     */
-    initInnerBorder(border) {
-        if (!this.INIT_RANGE_ALREADY)
-            throw '[Pencil Error] Range must be set before setting range border';
-        if (!this.INIT_SIZE_ALREADY)
-            throw '[Pencil Error] Size must be set before setting range border';
-        const borderPix = border * SIZE_SCALE * REM_PIXEL * frame_1.PEN_QUALITY;
-        let [xmin, xmax] = this.frame.xRange();
-        let [ymin, ymax] = this.frame.yRange();
-        const wPixel = this.frame.wPixel;
-        const hPixel = this.frame.hPixel;
-        let borderXUnit = (xmax - xmin) * borderPix / (wPixel - 2 * borderPix);
-        let borderYUnit = (ymax - ymin) * borderPix / (hPixel - 2 * borderPix);
-        xmin -= borderXUnit;
-        xmax += borderXUnit;
-        ymin -= borderYUnit;
-        ymax += borderYUnit;
-        this.initRange([xmin, xmax], [ymin, ymax]);
-    }
+    // /**
+    //  * Set a border by fixing the size but extending the range. The original range will be shrinked as a result.
+    //  * The aspect-ratio of the original range will be changed.
+    //  * @param border - one-sided border width in scaled unit
+    //  */
+    // protected initInnerBorder(border: number): void {
+    //     if (!this.INIT_RANGE_ALREADY)
+    //         throw '[Pencil Error] Range must be set before setting range border'
+    //     if (!this.INIT_SIZE_ALREADY)
+    //         throw '[Pencil Error] Size must be set before setting range border'
+    //     const borderPix = border * SIZE_SCALE * REM_PIXEL * PEN_QUALITY;
+    //     let [xmin, xmax] = this.frame.xRange()
+    //     let [ymin, ymax] = this.frame.yRange()
+    //     const wPixel = this.frame.wPixel
+    //     const hPixel = this.frame.hPixel
+    //     let borderXUnit = (xmax - xmin) * borderPix / (wPixel - 2 * borderPix)
+    //     let borderYUnit = (ymax - ymin) * borderPix / (hPixel - 2 * borderPix)
+    //     xmin -= borderXUnit
+    //     xmax += borderXUnit
+    //     ymin -= borderYUnit
+    //     ymax += borderYUnit
+    //     this.initRange([xmin, xmax], [ymin, ymax]);
+    // }
     /**
      * Set a border by extending the range and size. The original image will be unchanged. The size will be bigger.
      * @param border - one-sided border width in scaled unit
@@ -27546,6 +27546,40 @@ class Pencil {
         let angle = this.getAngleInPixel(point1, vertex, point2);
         let angleUnderThreshold = Math.max(angleThreshold - angle, 0);
         return angleUnderThreshold * pixelPerDegree;
+    }
+    /**
+     * Get the 4 corners of a circle. For .capture() to parse circle input.
+     * @param center - center of circle
+     * @param radius - radius of circle
+     */
+    getCircleCorners(center, radius) {
+        let [h, k] = center;
+        let r = radius;
+        return [
+            [h + r, k + r],
+            [h + r, k - r],
+            [h - r, k + r],
+            [h - r, k - r]
+        ];
+    }
+    /**
+     * Get the 8 corners of a sphere. For .capture() to parse sphere input.
+     * @param center - center of sphere
+     * @param radius - radius of sphere
+     */
+    getSphereCorners(center, radius) {
+        let [a, b, c] = center;
+        let r = radius;
+        return [
+            [a + r, b + r, c + r],
+            [a + r, b + r, c - r],
+            [a + r, b - r, c + r],
+            [a + r, b - r, c - r],
+            [a - r, b + r, c + r],
+            [a - r, b + r, c - r],
+            [a - r, b - r, c + r],
+            [a - r, b - r, c - r],
+        ];
     }
     /**
      * Draw the x-axis.
@@ -28873,7 +28907,7 @@ exports.printSurd = printSurd;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.fail = exports.pass = exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3D = exports.point = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
+exports.fail = exports.pass = exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3D = exports.point2D = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
 exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = void 0;
 const num = (_) => Number.isFinite(_);
 exports.num = num;
@@ -28949,8 +28983,8 @@ const ntuple = (_) => exports.arrayWith(exports.num)(_);
 exports.ntuple = ntuple;
 const interval = (_) => exports.couple(_) && _[0] <= _[1];
 exports.interval = interval;
-const point = (_) => exports.couple(_);
-exports.point = point;
+const point2D = (_) => exports.couple(_);
+exports.point2D = point2D;
 const point3D = (_) => exports.triple(_);
 exports.point3D = point3D;
 const polar = (_) => exports.couple(_) && _[0] >= 0;
@@ -29164,7 +29198,7 @@ function CircleGeneral(centre, radius) {
     let F = Math.pow(h, 2) + Math.pow(k, 2) - Math.pow(r, 2);
     return [D, E, F];
 }
-globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point, owl.positive]);
+globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point2D, owl.positive]);
 /**
  * @category Circle
  * @return centre and radius from general form
@@ -29216,7 +29250,7 @@ function CircleLineIntersect(center, radius, linear) {
         return [P, Q];
     }
 }
-globalThis.CircleLineIntersect = contract(CircleLineIntersect).sign([owl.point, owl.positive, owl.triple]);
+globalThis.CircleLineIntersect = contract(CircleLineIntersect).sign([owl.point2D, owl.positive, owl.triple]);
 
 
 /***/ }),
@@ -29346,7 +29380,7 @@ class LinearFunction {
     }
     // define
     byTwoPoints(p1, p2) {
-        Should(owl.point(p1) && owl.point(p2), 'input must be point');
+        Should(owl.point2D(p1) && owl.point2D(p2), 'input must be point');
         Should(AreDistinctPoint(p1, p2), 'two points should be distinct');
         let [x1, y1] = p1;
         let [x2, y2] = p2;
@@ -29369,7 +29403,7 @@ class LinearFunction {
         return this;
     }
     byPointSlope(p, m) {
-        Should(owl.point(p), 'input must be point');
+        Should(owl.point2D(p), 'input must be point');
         let p2 = [p[0] + 1, p[1] + m];
         this.byTwoPoints(p, p2);
         return this;
@@ -29381,7 +29415,7 @@ class LinearFunction {
         return this;
     }
     byBisector(A, B) {
-        Should(owl.point(A) && owl.point(B), 'input must be point');
+        Should(owl.point2D(A) && owl.point2D(B), 'input must be point');
         Should(AreDistinctPoint(A, B), 'two points should be distinct');
         if (A[0] === B[0]) {
             this._linear = [0, 1, -(A[1] + B[1]) / 2];
@@ -29977,7 +30011,7 @@ globalThis.IsAbsBetween = contract(IsAbsBetween).seal({
 function IsAroundPoint(anchor, range) {
     return (...points) => points.every(p => ChessboardDistance(anchor, p) <= range);
 }
-globalThis.IsAroundPoint = contract(IsAroundPoint).sign([owl.point, owl.positive]);
+globalThis.IsAroundPoint = contract(IsAroundPoint).sign([owl.point2D, owl.positive]);
 /**
  * @category Assertion
  * @return Check if the array of legnths can form a triangle
@@ -30215,7 +30249,7 @@ function Slope(A, B) {
     return (A[1] - B[1]) / (A[0] - B[0]);
 }
 globalThis.Slope = contract(Slope).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function not_vertical(A, B) { return !cal.eq(A[0], B[0]); }
 });
 /**
@@ -30228,7 +30262,7 @@ globalThis.Slope = contract(Slope).seal({
 function Distance(A, B) {
     return Math.pow((Math.pow((A[0] - B[0]), 2) + Math.pow((A[1] - B[1]), 2)), 0.5);
 }
-globalThis.Distance = contract(Distance).sign([owl.point]);
+globalThis.Distance = contract(Distance).sign([owl.point2D]);
 /**
  * @category Geometry
  * @return the chessboard distance AB, max(horizontal,vertical)
@@ -30242,7 +30276,7 @@ function ChessboardDistance(A, B) {
     let y = Abs(A[1] - B[1]);
     return Max(x, y);
 }
-globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point]);
+globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point2D]);
 /**
  * @category Geometry
  * @return the mid-pt of AB
@@ -30253,7 +30287,7 @@ globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point]);
 function MidPoint(A, B) {
     return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
 }
-globalThis.MidPoint = contract(MidPoint).sign([owl.point]);
+globalThis.MidPoint = contract(MidPoint).sign([owl.point2D]);
 /**
  * @category Geometry
  * @return the point P on AB such that AP : PB = ratio : 1-ratio
@@ -30266,7 +30300,7 @@ function DivisionPoint(A, B, ratio = 0.5) {
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
 }
-globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point, owl.point, owl.num]);
+globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point2D, owl.point2D, owl.num]);
 /**
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
@@ -30277,7 +30311,7 @@ globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point, owl.point, o
 function RotatePoint(P, O, q) {
     return vec2D(O, P).rotate(q).add(O).blur().toArray();
 }
-globalThis.RotatePoint = contract(RotatePoint).sign([owl.point, owl.point, owl.num]);
+globalThis.RotatePoint = contract(RotatePoint).sign([owl.point2D, owl.point2D, owl.num]);
 /**
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
@@ -30290,7 +30324,7 @@ function Direction(A, B) {
     return vec2D(A, B).argument();
 }
 globalThis.Direction = contract(Direction).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, B) { return owl.distinct([A, B]); }
 });
 /**
@@ -30306,7 +30340,7 @@ function Normal(A, B) {
     return Direction(A, R);
 }
 globalThis.Normal = contract(Normal).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, B) { return owl.distinct([A, B]); }
 });
 /**
@@ -30323,7 +30357,7 @@ function PerpendicularFoot(A, B, P) {
     return Intersection(A, B, P, Q);
 }
 globalThis.PerpendicularFoot = contract(PerpendicularFoot).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, B, P) { return owl.distinct([A, B]); }
 });
 /**
@@ -30337,7 +30371,7 @@ function Intersection(A, B, C, D) {
     return Crammer(B[1] - A[1], A[0] - B[0], A[0] * B[1] - B[0] * A[1], D[1] - C[1], C[0] - D[0], C[0] * D[1] - D[0] * C[1]);
 }
 globalThis.Intersection = contract(Intersection).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, B, C, D) {
         return owl.distinct([A, B]) && owl.distinct([C, D]);
     }
@@ -30358,8 +30392,8 @@ function TranslatePoint(P, q, distance) {
     return [x, y];
 }
 globalThis.TranslatePoint = contract(TranslatePoint).sign([
-    owl.point,
-    owl.or([owl.num, owl.point]),
+    owl.point2D,
+    owl.or([owl.num, owl.point2D]),
     owl.num
 ]);
 /**
@@ -30373,7 +30407,7 @@ globalThis.TranslatePoint = contract(TranslatePoint).sign([
 function TranslateX(P, distance) {
     return TranslatePoint(P, 0, distance);
 }
-globalThis.TranslateX = contract(TranslateX).sign([owl.point, owl.num]);
+globalThis.TranslateX = contract(TranslateX).sign([owl.point2D, owl.num]);
 /**
  * @category Geometry
  * @return Translate point P upward by a distance.
@@ -30385,7 +30419,7 @@ globalThis.TranslateX = contract(TranslateX).sign([owl.point, owl.num]);
 function TranslateY(P, distance) {
     return TranslatePoint(P, 90, distance);
 }
-globalThis.TranslateY = contract(TranslateY).sign([owl.point, owl.num]);
+globalThis.TranslateY = contract(TranslateY).sign([owl.point2D, owl.num]);
 /**
  * @category Geometry
  * @return Reflect point P about x-axis
@@ -30397,7 +30431,7 @@ globalThis.TranslateY = contract(TranslateY).sign([owl.point, owl.num]);
 function ReflectX(P) {
     return [P[0], -P[1]];
 }
-globalThis.ReflectX = contract(ReflectX).sign([owl.point]);
+globalThis.ReflectX = contract(ReflectX).sign([owl.point2D]);
 /**
  * @category Geometry
  * @return Reflect point P about y-axis
@@ -30409,7 +30443,7 @@ globalThis.ReflectX = contract(ReflectX).sign([owl.point]);
 function ReflectY(P) {
     return [-P[0], P[1]];
 }
-globalThis.ReflectY = contract(ReflectY).sign([owl.point]);
+globalThis.ReflectY = contract(ReflectY).sign([owl.point2D]);
 /**
  * @category Geometry
  * @return angle of intersection between two slopes
@@ -30441,7 +30475,7 @@ function Angle(A, O, B) {
     return IsReflex(A, O, B) ? 360 - anglePolar : anglePolar;
 }
 globalThis.Angle = contract(Angle).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O]);
     }
@@ -30461,7 +30495,7 @@ function AnglePolar(A, O, B) {
     return a <= b ? b - a : 360 + b - a;
 }
 globalThis.AnglePolar = contract(AnglePolar).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O]);
     }
@@ -30480,7 +30514,7 @@ function IsReflex(A, O, B) {
     return angle > 180;
 }
 globalThis.IsReflex = contract(IsReflex).seal({
-    arg: [owl.point],
+    arg: [owl.point2D],
     args: function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O]);
     }
@@ -30505,7 +30539,7 @@ function Turtle(start, ...walk) {
     }
     return arr;
 }
-globalThis.Turtle = contract(Turtle).sign([owl.point, owl.couple]);
+globalThis.Turtle = contract(Turtle).sign([owl.point2D, owl.couple]);
 /**
  * @category Geometry
  * @return points on a regular polygon
@@ -30526,7 +30560,7 @@ function RegularPolygon(n, center, radius, startAngle) {
     }
     return arr;
 }
-globalThis.RegularPolygon = contract(RegularPolygon).sign([owl.num, owl.point, owl.num, owl.num]);
+globalThis.RegularPolygon = contract(RegularPolygon).sign([owl.num, owl.point2D, owl.num, owl.num]);
 /**
  * @category Geometry
  * @return arc length with given radius and angle
@@ -30551,7 +30585,7 @@ function IsConvexPolygon(...points) {
     Should(points.length >= 3, "must have at least 3 points to be a polygon");
     return toShape2D(points).isConvex();
 }
-globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point]);
+globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point2D]);
 
 
 /***/ }),
@@ -30852,7 +30886,7 @@ function ConstraintsFromPoints(...points) {
     }
     return constraints;
 }
-globalThis.ConstraintsFromPoints = contract(ConstraintsFromPoints).sign([owl.point]);
+globalThis.ConstraintsFromPoints = contract(ConstraintsFromPoints).sign([owl.point2D]);
 
 
 /***/ }),
@@ -31409,7 +31443,7 @@ function RndConvexPolygon(n, center, radius, separation) {
     return vertices;
 }
 globalThis.RndConvexPolygon = contract(RndConvexPolygon)
-    .sign([owl.positiveInt, owl.point, owl.positive, owl.positive]);
+    .sign([owl.positiveInt, owl.point2D, owl.positive, owl.positive]);
 /**
  * @category Random
  * @return n integers from [min, max]
@@ -31616,7 +31650,7 @@ function RndShake(anchor) {
             anchor = Number(anchor);
         }
     }
-    if (owl.point(anchor)) {
+    if (owl.point2D(anchor)) {
         // Point
         return RndShakePoint(anchor);
     }
@@ -31791,7 +31825,7 @@ function RndShakePoint(anchor) {
     };
     return poker.dice(func).distinct((a, b) => a[0] === b[0] || a[1] === b[1]).rolls(3);
 }
-globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point]);
+globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point2D]);
 /**
  * @category RandomShake
  * @return an array of 3 combo
@@ -32092,7 +32126,7 @@ globalThis.AreCoprime = contract(AreCoprime).sign([owl.num]);
 function AreDistinctPoint(...points) {
     return toList(points).duplessDeep();
 }
-globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point]);
+globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point2D]);
 /**
  * @category Relation
  * @return Check if the points are pairwise distant apart.
@@ -32105,7 +32139,7 @@ function AreDistantPoint(distance) {
     let AreDistant = function (...points) {
         return toShape2D(points).distances().min() >= distance;
     };
-    return contract(AreDistant).sign([owl.point]);
+    return contract(AreDistant).sign([owl.point2D]);
 }
 globalThis.AreDistantPoint = contract(AreDistantPoint).sign([owl.positive]);
 /**
@@ -32630,7 +32664,7 @@ function Coord(point, dp = 1) {
     b = Fix(b, dp);
     return '(' + a + ', ' + b + ')';
 }
-globalThis.Coord = contract(Coord).sign([owl.point]);
+globalThis.Coord = contract(Coord).sign([owl.point2D]);
 /**
  * @category Text
  * @deprecated
@@ -32932,7 +32966,7 @@ function TriangleFromVertex(A, B, C, fix = true) {
     }
     return { sideC, angleB, sideA, angleC, sideB, angleA };
 }
-globalThis.TriangleFromVertex = contract(TriangleFromVertex).sign([owl.point, owl.point, owl.point, owl.bool]);
+globalThis.TriangleFromVertex = contract(TriangleFromVertex).sign([owl.point2D, owl.point2D, owl.point2D, owl.bool]);
 /**
  * @category Triangle
  * @param triangle - unknown elements are null.
@@ -33033,7 +33067,7 @@ function Orthocentre(A, B, C) {
     let [x, y] = Intersection(C, H, A, G);
     return [cal.blur(x), cal.blur(y)];
 }
-globalThis.Orthocentre = contract(Orthocentre).sign([owl.point]);
+globalThis.Orthocentre = contract(Orthocentre).sign([owl.point2D]);
 /**
  * @category Triangle
  * @return the circumcentre of a triangle
@@ -33047,7 +33081,7 @@ function Circumcentre(A, B, C) {
     let [x, y] = Crammer(a1, b1, -c1, a2, b2, -c2);
     return [cal.blur(x), cal.blur(y)];
 }
-globalThis.Circumcentre = contract(Circumcentre).sign([owl.point]);
+globalThis.Circumcentre = contract(Circumcentre).sign([owl.point2D]);
 /**
  * @category Triangle
  * @return the centroid of a triangle
@@ -33059,7 +33093,7 @@ function Centroid(A, B, C) {
     let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3];
     return [cal.blur(x), cal.blur(y)];
 }
-globalThis.Centroid = contract(Centroid).sign([owl.point]);
+globalThis.Centroid = contract(Centroid).sign([owl.point2D]);
 /**
  * @category Triangle
  * @return the incentre of a triangle
@@ -33076,7 +33110,7 @@ function Incentre(A, B, C) {
     let y = (a * A[1] + b * B[1] + c * C[1]) / p;
     return [cal.blur(x), cal.blur(y)];
 }
-globalThis.Incentre = contract(Incentre).sign([owl.point]);
+globalThis.Incentre = contract(Incentre).sign([owl.point2D]);
 /**
  * @category Triangle
  * @param A - a point of the triangle
@@ -33090,7 +33124,7 @@ function ScaleOrthocentreToInt(A, B, C) {
     Should(owl.num(q), 'original orthocentre must be rational');
     return shape2D(A, B, C).scale(q).toArray();
 }
-globalThis.ScaleOrthocentreToInt = contract(ScaleOrthocentreToInt).sign([owl.point]);
+globalThis.ScaleOrthocentreToInt = contract(ScaleOrthocentreToInt).sign([owl.point2D]);
 /**
  * @category Triangle
  * @param A - a point of the triangle
@@ -33104,7 +33138,7 @@ function ScaleCircumcentreToInt(A, B, C) {
     Should(owl.num(q), 'original circumcentre must be rational');
     return shape2D(A, B, C).scale(q).toArray();
 }
-globalThis.ScaleCircumcentreToInt = contract(ScaleCircumcentreToInt).sign([owl.point]);
+globalThis.ScaleCircumcentreToInt = contract(ScaleCircumcentreToInt).sign([owl.point2D]);
 /**
  * @category Triangle
  * @param A - a point of the triangle
@@ -33118,7 +33152,7 @@ function ScaleCentroidToInt(A, B, C) {
     Should(owl.num(q), 'original centroid must be rational');
     return shape2D(A, B, C).scale(q).toArray();
 }
-globalThis.ScaleCentroidToInt = contract(ScaleCentroidToInt).sign([owl.point]);
+globalThis.ScaleCentroidToInt = contract(ScaleCentroidToInt).sign([owl.point2D]);
 /**
  * @category Triangle
  * @param A - a point of the triangle
@@ -33132,7 +33166,7 @@ function ScaleIncentreToInt(A, B, C) {
     Should(owl.num(q), 'original incentre must be rational');
     return shape2D(A, B, C).scale(q).toArray();
 }
-globalThis.ScaleIncentreToInt = contract(ScaleIncentreToInt).sign([owl.point]);
+globalThis.ScaleIncentreToInt = contract(ScaleIncentreToInt).sign([owl.point2D]);
 
 
 /***/ }),
@@ -33168,7 +33202,7 @@ function Quadrant(rect) {
     Should(false, 'fail to parse quadrant!');
     throw 'never';
 }
-globalThis.Quadrant = contract(Quadrant).sign([owl.or([owl.point, owl.num])]);
+globalThis.Quadrant = contract(Quadrant).sign([owl.or([owl.point2D, owl.num])]);
 /**
  * @category Trigonometry
  * @return the rectangular coordinates [x,y] from a polar coordinates [r,theta].
@@ -33194,7 +33228,7 @@ function RectToPol([x, y]) {
         q = q + 360;
     return [r, q];
 }
-globalThis.RectToPol = contract(RectToPol).sign([owl.point]);
+globalThis.RectToPol = contract(RectToPol).sign([owl.point2D]);
 /**
  * @category Trigonometry
  * @return the sign from ASTC diagram, 1 or -1, representing positive or negative.
@@ -33444,7 +33478,7 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 function Vector(O, P) {
     return [P[0] - O[0], P[1] - O[1]];
 }
-globalThis.Vector = contract(Vector).sign([owl.point]);
+globalThis.Vector = contract(Vector).sign([owl.point2D]);
 /**
  * @category Vector
  * @return sum of all vectors
@@ -33594,7 +33628,7 @@ function ArrangePoints(...points) {
     ss.sortAroundMean();
     return ss.toArray();
 }
-globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point]);
+globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
 
 
 /***/ }),
@@ -33781,7 +33815,7 @@ function EmbedPlane(plane2D, origin = [0, 0, 0], xVec = [1, 0, 0], yVec = [0, 1,
         .toArray();
 }
 globalThis.EmbedPlane = contract(EmbedPlane)
-    .sign([owl.arrayWith(owl.point), owl.point3D, owl.vector3D, owl.vector3D]);
+    .sign([owl.arrayWith(owl.point2D), owl.point3D, owl.vector3D, owl.vector3D]);
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D with constant z
@@ -33793,7 +33827,7 @@ globalThis.EmbedPlane = contract(EmbedPlane)
 function EmbedPlaneZ(plane2D, z = 0) {
     return EmbedPlane(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0]);
 }
-globalThis.EmbedPlaneZ = contract(EmbedPlaneZ).sign([owl.arrayWith(owl.point), owl.num]);
+globalThis.EmbedPlaneZ = contract(EmbedPlaneZ).sign([owl.arrayWith(owl.point2D), owl.num]);
 /**
  * @category Vector3D
  * @deprecated use Extrude
@@ -35048,14 +35082,28 @@ class PenCls extends Pencil {
             /**
              * Set the coordinate range by specifying in-view points.
              * @category SetupRange
-             * @param points - An array of in-view points [x,y].
+             * @param points - An array of in-view points [x,y], or circle [[h,k,r]], or sphere [[a,b,c],r]
              * @returns void
              * ```
              * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
+             * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
              * ```
              */
             capture(...points) {
-                let pts = this._pen.pjs(points);
+                let arr = [];
+                for (let p of points) {
+                    if (Array.isArray(p[0])) {
+                        let [center, r] = p;
+                        if (owl.point2D(center))
+                            arr.push(...this._pen.getCircleCorners(center, r));
+                        if (owl.point3D(center))
+                            arr.push(...this._pen.getSphereCorners(center, r));
+                    }
+                    else {
+                        arr.push(p);
+                    }
+                }
+                let pts = this._pen.pjs(arr);
                 let xmin = pts[0][0];
                 let xmax = pts[0][0];
                 let ymin = pts[0][1];
@@ -37403,7 +37451,7 @@ function ParseForPrint(value, signal = "") {
         if (T === 'boolean') {
             return Tick(value);
         }
-        if (owl.point(value)) {
+        if (owl.point2D(value)) {
             return Coord(value);
         }
         if (owl.combo(value)) {

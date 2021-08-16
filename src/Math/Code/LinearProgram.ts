@@ -326,4 +326,4 @@ function ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
     }
     return constraints
 }
-globalThis.ConstraintsFromPoints = contract(ConstraintsFromPoints).sign([owl.point])
+globalThis.ConstraintsFromPoints = contract(ConstraintsFromPoints).sign([owl.point2D])
