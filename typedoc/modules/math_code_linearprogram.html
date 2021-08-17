@@ -2787,7 +2787,7 @@ img {
 				<a name="constraintsfrompoints" class="tsd-anchor"></a>
 				<h3>Constraints<wbr>From<wbr>Points</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Constraints<wbr>From<wbr>Points<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span>, equal<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">Constraints<wbr>From<wbr>Points<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2796,16 +2796,15 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>points: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-							<li>
-								<h5>equal: <span class="tsd-signature-type">boolean</span></h5>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>points: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span></h4>
 						<p>the constraints from the given points</p>
-						<pre><code class="language-typescript"><span style="color: #795E26">ConstraintsFromPoints</span><span style="color: #000000">([[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">]],</span><span style="color: #0000FF">true</span><span style="color: #000000">) </span><span style="color: #008000">// [0,1,\\gt,0],[1,1,\\gt,0],[1,1,\\gt,0]</span>
-<span style="color: #795E26">ConstraintsFromPoints</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,-</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],</span><span style="color: #0000FF">false</span><span style="color: #000000">) </span><span style="color: #008000">// [1, 3, &quot;\\gt&quot;, -0],[3, 1, &quot;\\lt&quot;, 8],[1, 1, &quot;\\lt&quot;, 4],[1, -3, &quot;\\gt&quot;, -8],[1, 1, &quot;\\gt&quot;, -0]</span>
+						<pre><code class="language-typescript"><span style="color: #795E26">ConstraintsFromPoints</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">]) </span><span style="color: #008000">// [[0,1,&#039;\\ge&#039;,-0],[1,0,&#039;\\ge&#039;,-0],[1,1,&#039;\\le&#039;,1]]</span>
+<span style="color: #795E26">ConstraintsFromPoints</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">3</span><span style="color: #000000">,-</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],[-</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">]) </span>
+<span style="color: #008000">// [[[1, 3, &quot;\\ge&quot;, -0],[1, 1, &quot;\\ge&quot;, -0],[1, -3, &quot;\\ge&quot;, -8],[1, 1, &quot;\\le&quot;, 4],[3, 1, &quot;\\le&quot;, 8]]]</span>
+<span style="color: #795E26">ConstraintsFromPoints</span><span style="color: #000000">([</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">],[</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">1</span><span style="color: #000000">],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">]) </span><span style="color: #008000">// [[0, 1, &quot;\\ge&quot;, -0],[1, 0, &quot;\\ge&quot;, -0],[1, -1, &quot;\\ge&quot;, -1],[1, 1, &quot;\\le&quot;, 3],[1, -1, &quot;\\le&quot;, 1]]</span>
 </code></pre>
 					</li>
 				</ul>
@@ -2814,7 +2813,7 @@ img {
 				<a name="feasibleintegral" class="tsd-anchor"></a>
 				<h3>Feasible<wbr>Integral</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Feasible<wbr>Integral<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">Feasible<wbr>Integral<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2826,7 +2825,7 @@ img {
 								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>cons: <a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h4>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></h4>
 						<p>the integral points inside the feasible polygon</p>
 						<pre><code class="language-typescript"><span style="color: #795E26">FeasibleIntegral</span><span style="color: #000000">([</span>
 <span style="color: #000000">   [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&lt;&#039;</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">],</span>
@@ -2876,7 +2875,7 @@ img {
 				<a name="feasiblepolygon" class="tsd-anchor"></a>
 				<h3>Feasible<wbr>Polygon</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Feasible<wbr>Polygon<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">Feasible<wbr>Polygon<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2888,7 +2887,7 @@ img {
 								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>cons: <a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h4>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></h4>
 						<p>the vertices of the feasible polygon</p>
 						<pre><code class="language-typescript"><span style="color: #795E26">FeasiblePolygon</span><span style="color: #000000">([</span>
 <span style="color: #000000">   [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&lt;&#039;</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">],</span>
@@ -2905,7 +2904,7 @@ img {
 				<a name="feasiblevertices" class="tsd-anchor"></a>
 				<h3>Feasible<wbr>Vertices</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Feasible<wbr>Vertices<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">Feasible<wbr>Vertices<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2917,7 +2916,7 @@ img {
 								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>cons: <a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h4>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></h4>
 						<p>the vertices of the feasible polygon</p>
 						<pre><code class="language-typescript"><span style="color: #795E26">FeasiblePolygon</span><span style="color: #000000">([</span>
 <span style="color: #000000">   [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&lt;&#039;</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">],</span>
@@ -2934,7 +2933,7 @@ img {
 				<a name="fieldat" class="tsd-anchor"></a>
 				<h3>Field<wbr>At</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Field<wbr>At<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					<li class="tsd-signature tsd-kind-icon">Field<wbr>At<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2943,7 +2942,7 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>p: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+								<h5>p: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></h5>
 							</li>
 							<li>
 								<h5>field: <a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a></h5>
@@ -2961,7 +2960,7 @@ img {
 				<a name="maximizepoint" class="tsd-anchor"></a>
 				<h3>Maximize<wbr>Point</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Maximize<wbr>Point<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+					<li class="tsd-signature tsd-kind-icon">Maximize<wbr>Point<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2970,13 +2969,13 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>points: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h5>
+								<h5>points: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 							<li>
 								<h5>field: <a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></h4>
 						<p>the point with the max value of field</p>
 						<pre><code class="language-typescript"><span style="color: #795E26">MaximizePoint</span><span style="color: #000000">([[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">]],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [10,10]</span>
 </code></pre>
@@ -2987,7 +2986,7 @@ img {
 				<a name="minimizepoint" class="tsd-anchor"></a>
 				<h3>Minimize<wbr>Point</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Minimize<wbr>Point<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+					<li class="tsd-signature tsd-kind-icon">Minimize<wbr>Point<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -2996,13 +2995,13 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>points: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h5>
+								<h5>points: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 							<li>
 								<h5>field: <a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></h4>
 						<p>the point with the min value of field</p>
 						<pre><code class="language-typescript"><span style="color: #795E26">MinimizePoint</span><span style="color: #000000">([[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">]],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">]) </span><span style="color: #008000">// [0,0]</span>
 </code></pre>
@@ -3013,7 +3012,7 @@ img {
 				<a name="optimizefield" class="tsd-anchor"></a>
 				<h3>Optimize<wbr>Field</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Optimize<wbr>Field<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a>, max<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					<li class="tsd-signature tsd-kind-icon">Optimize<wbr>Field<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a>, max<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3022,7 +3021,7 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>points: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h5>
+								<h5>points: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 							<li>
 								<h5>field: <a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a></h5>
@@ -3043,7 +3042,7 @@ img {
 				<a name="optimizepoint" class="tsd-anchor"></a>
 				<h3>Optimize<wbr>Point</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">Optimize<wbr>Point<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a>, max<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></li>
+					<li class="tsd-signature tsd-kind-icon">Optimize<wbr>Point<span class="tsd-signature-symbol">(</span>points<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span>, field<span class="tsd-signature-symbol">: </span><a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a>, max<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3052,7 +3051,7 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>points: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">[]</span></h5>
+								<h5>points: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 							<li>
 								<h5>field: <a href="math_type.html#field" class="tsd-signature-type" data-tsd-kind="Type alias">Field</a></h5>
@@ -3061,7 +3060,7 @@ img {
 								<h5>max: <span class="tsd-signature-type">boolean</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h4>
+						<h4 class="tsd-returns-title">Returns <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></h4>
 						<p>the point with the min/max value of field</p>
 						<pre><code class="language-typescript"><span style="color: #795E26">OptimizePoint</span><span style="color: #000000">([[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">]],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],</span><span style="color: #0000FF">true</span><span style="color: #000000">) </span><span style="color: #008000">// [10,10]</span>
 <span style="color: #795E26">OptimizePoint</span><span style="color: #000000">([[</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">],[</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">]],[</span><span style="color: #098658">1</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,</span><span style="color: #098658">3</span><span style="color: #000000">],</span><span style="color: #0000FF">true</span><span style="color: #000000">) </span><span style="color: #008000">// [0,0]</span>
@@ -3073,7 +3072,7 @@ img {
 				<a name="isconstrained" class="tsd-anchor"></a>
 				<h3>is<wbr>Constrained</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">is<wbr>Constrained<span class="tsd-signature-symbol">(</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span>, point<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					<li class="tsd-signature tsd-kind-icon">is<wbr>Constrained<span class="tsd-signature-symbol">(</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span>, point<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3085,7 +3084,7 @@ img {
 								<h5>cons: <a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 							<li>
-								<h5>point: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+								<h5>point: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -3104,7 +3103,7 @@ img {
 				<a name="islooseconstrained" class="tsd-anchor"></a>
 				<h3>is<wbr>Loose<wbr>Constrained</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">is<wbr>Loose<wbr>Constrained<span class="tsd-signature-symbol">(</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span>, point<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					<li class="tsd-signature tsd-kind-icon">is<wbr>Loose<wbr>Constrained<span class="tsd-signature-symbol">(</span>cons<span class="tsd-signature-symbol">: </span><a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span>, point<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3116,7 +3115,7 @@ img {
 								<h5>cons: <a href="math_type.html#constraint" class="tsd-signature-type" data-tsd-kind="Type alias">Constraint</a><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 							<li>
-								<h5>point: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+								<h5>point: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -3145,7 +3144,7 @@ img {
 				<a name="onboundary" class="tsd-anchor"></a>
 				<h3>on<wbr>Boundary</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-					<li class="tsd-signature tsd-kind-icon">on<wbr>Boundary<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					<li class="tsd-signature tsd-kind-icon">on<wbr>Boundary<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3154,7 +3153,7 @@ img {
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>p: <a href="math_type.html#point-1" class="tsd-signature-type" data-tsd-kind="Type alias">Point</a></h5>
+								<h5>p: <a href="math_type.html#point2d" class="tsd-signature-type" data-tsd-kind="Type alias">Point2D</a></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>

@@ -49,8 +49,8 @@ class AutoPenCls {
             return 1;
         }
         const pen = new Pen();
-        pen.setup.size(2);
-        pen.setup.range([-10, 10], [-15, 5]);
+        pen.range.set([-10, 10], [-15, 5]);
+        pen.size.set(4);
         const w = 1;
         const h = 1;
         function drawRow(arr: number[], pivot: number[]) {
@@ -110,7 +110,7 @@ class AutoPenCls {
     Inequalities({
         items = [],
         ticks = [],
-        scale = 0.8,
+        scale = 1.6,
         ratio = 0.5
     }: {
         items: { position: number, sign: string, num: number | string, vertical: boolean, base: number }[],
@@ -128,8 +128,8 @@ class AutoPenCls {
         });
 
         const pen = new Pen();
-        pen.setup.size(scale, ratio);
-        pen.setup.range([-width - 2, width + 2], [-(items.length) * (height + 2) + 2, height + 1]);
+        pen.range.set([-width - 2, width + 2], [-(items.length) * (height + 2) + 2, height + 1]);
+        pen.size.set(scale, scale * ratio);
 
         pen.set.textLatex(true)
 
@@ -206,7 +206,7 @@ class AutoPenCls {
     TrigSolution({
         trig = 'sin',
         k = 0,
-        scale = 0.7,
+        scale = 1.4,
         ratio = 0.7
     }: {
         trig: TrigFunc,
@@ -235,13 +235,13 @@ class AutoPenCls {
 
 
         const pen = new Pen()
-        pen.setup.size(scale, ratio)
 
         let limit = Max(1, Abs(k)) + 0.2
 
-        if (trig === 'sin') pen.setup.range([-40, 390], [-limit, limit])
-        if (trig === 'cos') pen.setup.range([-40, 390], [-limit, limit])
-        if (trig === 'tan') pen.setup.range([-40, 390], [-5, 5])
+        if (trig === 'sin') pen.range.set([-40, 390], [-limit, limit])
+        if (trig === 'cos') pen.range.set([-40, 390], [-limit, limit])
+        if (trig === 'tan') pen.range.set([-40, 390], [-5, 5])
+        pen.size.set(scale, scale * ratio)
 
         pen.axis.x()
         pen.axis.y()
@@ -538,7 +538,7 @@ class AutoPenCls {
         triangle = {},
         labels = ['', '', ''],
         heights = [false, false, false],
-        scale = 0.8
+        scale = 1.6
     }: {
         vertices: Point2D[],
         triangle: any,
@@ -579,8 +579,8 @@ class AutoPenCls {
         let labelC = labels[2]
 
         const pen = new Pen();
-        pen.setup.size(scale);
-        pen.setup.range([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax])
+        pen.range.set([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax])
+        pen.size.set(scale);
 
 
         function drawHeight(vertex: [number, number], base: [number, number][]) {
@@ -690,7 +690,7 @@ class AutoPenCls {
      *     labelConstraints: [(x,y)=>y>0],
      *     highlights: [{point:[0,0]}],
      *     ranges: [[-10,10],[-10,10]],
-     *     resolution: 0.1,
+     *     resolution: 0.2,
      *     grid: 0,
      *     subGrid: 0,
      *     tick: 0,
@@ -717,7 +717,7 @@ class AutoPenCls {
         labelConstraints = [],
         highlights = [],
         ranges = [[-10, 10], [-10, 10]],
-        resolution = 0.1,
+        resolution = 0.2,
         grid = 0,
         subGrid = 0,
         tick = 0,
@@ -780,8 +780,8 @@ class AutoPenCls {
         xmax += bound
         ymin -= bound
         ymax += bound
-        pen.setup.range([xmin, xmax], [ymin, ymax])
-        pen.setup.resolution(resolution);
+        pen.range.set([xmin, xmax], [ymin, ymax])
+        pen.size.resolution(resolution);
 
         pen.axis.x('');
         pen.axis.y('');
@@ -928,8 +928,8 @@ class AutoPenCls {
         { a: number, p: number, q: number, n: number, offset: number }) {
 
         const pen = new Pen();
-        pen.setup.range([-2, 30], [-4, 10]);
-        pen.setup.resolution(0.03)
+        pen.range.set([-2, 30], [-4, 10]);
+        pen.size.resolution(0.8)
 
         function drawRow(n: number, j: number, offset = 0) {
             for (let i = 1 + offset; i <= n + offset; i++) {
@@ -1167,8 +1167,8 @@ class AutoPenCls {
         let width = data.length + 2
         let height = Ceil(Max(...data) / 10) + 2
 
-        pen.setup.range([-5, width], [-height, 2]);
-        pen.setup.resolution(0.07)
+        pen.range.set([-5, width], [-height, 2]);
+        pen.size.resolution(0.17)
 
         pen.line([0, -1], [0, 2])
         pen.line([-3, 0], [1, 0])

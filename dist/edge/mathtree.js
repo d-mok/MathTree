@@ -34090,8 +34090,8 @@ class AutoPenCls {
             return 1;
         }
         const pen = new Pen();
-        pen.setup.size(2);
-        pen.setup.range([-10, 10], [-15, 5]);
+        pen.range.set([-10, 10], [-15, 5]);
+        pen.size.set(4);
         const w = 1;
         const h = 1;
         function drawRow(arr, pivot) {
@@ -34147,7 +34147,7 @@ class AutoPenCls {
      * })
      * ```
      */
-    Inequalities({ items = [], ticks = [], scale = 0.8, ratio = 0.5 }) {
+    Inequalities({ items = [], ticks = [], scale = 1.6, ratio = 0.5 }) {
         const width = 5;
         const height = 2;
         items = items.map((x, i) => {
@@ -34155,8 +34155,8 @@ class AutoPenCls {
             return x;
         });
         const pen = new Pen();
-        pen.setup.size(scale, ratio);
-        pen.setup.range([-width - 2, width + 2], [-(items.length) * (height + 2) + 2, height + 1]);
+        pen.range.set([-width - 2, width + 2], [-(items.length) * (height + 2) + 2, height + 1]);
+        pen.size.set(scale, scale * ratio);
         pen.set.textLatex(true);
         function inequality({ position, sign, num, base, vertical }) {
             let greater = sign.includes('>') || sign.includes('g');
@@ -34213,7 +34213,7 @@ class AutoPenCls {
      * pen.TrigSolution({trig:'sin', k:0.5})
      * ```
      */
-    TrigSolution({ trig = 'sin', k = 0, scale = 0.7, ratio = 0.7 }) {
+    TrigSolution({ trig = 'sin', k = 0, scale = 1.4, ratio = 0.7 }) {
         if (trig === 'sin' || trig === 'cos') {
             if (k > 2)
                 k = 2;
@@ -34240,14 +34240,14 @@ class AutoPenCls {
         }
         let [a, b, c] = TrigRoot(trig, k);
         const pen = new Pen();
-        pen.setup.size(scale, ratio);
         let limit = Max(1, Abs(k)) + 0.2;
         if (trig === 'sin')
-            pen.setup.range([-40, 390], [-limit, limit]);
+            pen.range.set([-40, 390], [-limit, limit]);
         if (trig === 'cos')
-            pen.setup.range([-40, 390], [-limit, limit]);
+            pen.range.set([-40, 390], [-limit, limit]);
         if (trig === 'tan')
-            pen.setup.range([-40, 390], [-5, 5]);
+            pen.range.set([-40, 390], [-5, 5]);
+        pen.size.set(scale, scale * ratio);
         pen.axis.x();
         pen.axis.y();
         if (trig === 'sin' || trig === 'cos') {
@@ -34523,7 +34523,7 @@ class AutoPenCls {
      * })
      * ```
      */
-    Triangle({ vertices, triangle = {}, labels = ['', '', ''], heights = [false, false, false], scale = 0.8 }) {
+    Triangle({ vertices, triangle = {}, labels = ['', '', ''], heights = [false, false, false], scale = 1.6 }) {
         let A = vertices[0];
         let B = vertices[1];
         let C = vertices[2];
@@ -34548,8 +34548,8 @@ class AutoPenCls {
         let labelB = labels[1];
         let labelC = labels[2];
         const pen = new Pen();
-        pen.setup.size(scale);
-        pen.setup.range([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax]);
+        pen.range.set([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax]);
+        pen.size.set(scale);
         function drawHeight(vertex, base) {
             let F = PdFoot(base[0], base[1], vertex);
             pen.set.dash([5, 5]);
@@ -34641,7 +34641,7 @@ class AutoPenCls {
      *     labelConstraints: [(x,y)=>y>0],
      *     highlights: [{point:[0,0]}],
      *     ranges: [[-10,10],[-10,10]],
-     *     resolution: 0.1,
+     *     resolution: 0.2,
      *     grid: 0,
      *     subGrid: 0,
      *     tick: 0,
@@ -34661,7 +34661,7 @@ class AutoPenCls {
      * })
      * ```
      */
-    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.1, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey", constraintColors = [], }) {
+    LinearProgram({ constraints = [], field = [0, 0, 0], contours = [], labelConstraints = [], highlights = [], ranges = [[-10, 10], [-10, 10]], resolution = 0.2, grid = 0, subGrid = 0, tick = 0, showLine = true, showShade = true, showVertex = false, showVertexCoordinates = false, showVertexLabel = false, showVertexMax = false, showVertexMin = false, showIntegral = false, showIntegralLabel = false, showIntegralMax = false, showIntegralMin = false, contourColor = "grey", constraintColors = [], }) {
         function fieldAt(p) {
             const [a, b, c] = field;
             const [x, y] = p;
@@ -34679,8 +34679,8 @@ class AutoPenCls {
         xmax += bound;
         ymin -= bound;
         ymax += bound;
-        pen.setup.range([xmin, xmax], [ymin, ymax]);
-        pen.setup.resolution(resolution);
+        pen.range.set([xmin, xmax], [ymin, ymax]);
+        pen.size.resolution(resolution);
         pen.axis.x('');
         pen.axis.y('');
         if (grid > 0) {
@@ -34816,8 +34816,8 @@ class AutoPenCls {
      */
     DotPattern({ a, p, q, n, offset }) {
         const pen = new Pen();
-        pen.setup.range([-2, 30], [-4, 10]);
-        pen.setup.resolution(0.03);
+        pen.range.set([-2, 30], [-4, 10]);
+        pen.size.resolution(0.8);
         function drawRow(n, j, offset = 0) {
             for (let i = 1 + offset; i <= n + offset; i++) {
                 pen.point([i, j]);
@@ -34992,8 +34992,8 @@ class AutoPenCls {
         labels = labels.map(x => x.toString().split('').reverse()[0]);
         let width = data.length + 2;
         let height = Ceil(Max(...data) / 10) + 2;
-        pen.setup.range([-5, width], [-height, 2]);
-        pen.setup.resolution(0.07);
+        pen.range.set([-5, width], [-height, 2]);
+        pen.size.resolution(0.17);
         pen.line([0, -1], [0, 2]);
         pen.line([-3, 0], [1, 0]);
         pen.set.textAlign('left');
@@ -35314,137 +35314,6 @@ class PenCls extends Pencil {
                     this.set(height / ratio, height);
                 }
             },
-        };
-        /**
-         * Setup of canvas. Deprecated.
-         * @ignore
-         * @deprecated
-         * @category setting
-         */
-        this.setup = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Set the size of the canvas.
-             * @category setup
-             * @deprecated
-             * @param scale - The scale of the width.
-             * @param ratio - The height-to-width ratio.
-             * @returns void
-             * ```
-             * pen.setup.size(0.5,2)
-             * // half the standard width, with height-to-width = 2:1
-             * ```
-             */
-            size(scale = 1, ratio = 1) {
-                const width = scale * 2.5;
-                const height = width * ratio;
-                this._pen.initSize(width, height);
-                // // REM_PIXEL is the default font size of the browser, usually 16px
-                // const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
-                // const wPixel = scale * 25 * REM_PIXEL;
-                // const hPixel = wPixel * ratio;
-                // this._pen.canvas.width = wPixel * PEN_QUALITY;
-                // this._pen.canvas.height = hPixel * PEN_QUALITY;
-                // this._pen.frame.wPixel = wPixel * PEN_QUALITY;
-                // this._pen.frame.hPixel = hPixel * PEN_QUALITY;
-            },
-            /**
-             * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
-             * @category setup
-             * @deprecated
-             * @param scale - The scale of the width.
-             * @returns void
-             * ```
-             * pen.setup.squareSize(0.5)
-             * // half the standard width, with height-to-width defined by coordinates range set.
-             * ```
-             */
-            squareSize(scale = 1) {
-                let xRange = this._pen.frame.xmax - this._pen.frame.xmin;
-                let yRange = this._pen.frame.ymax - this._pen.frame.ymin;
-                let ratio = yRange / xRange;
-                this.size(scale, ratio);
-            },
-            /**
-             * Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
-             * @category setup
-             * @deprecated
-             * @param xPPI - The scale per unit x.
-             * @param yPPI - The scale per unit y, if not provided, follow x.
-             * @returns void
-             * ```
-             * pen.setup.resolution(0.1,0.2)
-             * // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
-             * ```
-             */
-            resolution(xPPI = 0.1, yPPI = -1) {
-                if (yPPI === -1)
-                    yPPI = xPPI;
-                let xRange = this._pen.frame.xmax - this._pen.frame.xmin;
-                let yRange = this._pen.frame.ymax - this._pen.frame.ymin;
-                let xScale = xRange * xPPI;
-                let yScale = yRange * yPPI;
-                this.size(xScale, yScale / xScale);
-            },
-            /**
-             * Set the coordinate range of the canvas.
-             * @category setup
-             * @deprecated
-             * @param xRange - The range [xmin,xmax].
-             * @param yRange - The range [ymin,ymax].
-             * @returns void
-             * ```
-             * pen.setup.range([-5,5],[-2,4])
-             * // define range -5<x<5 and -2<y<4
-             * ```
-             */
-            range(xRange, yRange) {
-                [this._pen.frame.xmin, this._pen.frame.xmax] = xRange;
-                [this._pen.frame.ymin, this._pen.frame.ymax] = yRange;
-            },
-            /**
-             * Set the coordinate range by specifying in-view points.
-             * @category setup
-             * @deprecated
-             * @param points - An array of in-view points [x,y].
-             * @param border - The percentage to extend the border.
-             * @param origin - Must contain the origin [0,0]
-             * @returns void
-             * ```
-             * pen.setup.inView([[1,2],[3,4]]) // the points [0,0], [1,2] and [3,4] must be in-view
-             * ```
-             */
-            inView(points, border = 0.3, origin = true) {
-                let pts = [...points];
-                if (origin)
-                    pts.push([0, 0]);
-                let xmin = pts[0][0];
-                let xmax = pts[0][0];
-                let ymin = pts[0][1];
-                let ymax = pts[0][1];
-                for (let i = 0; i < pts.length; i++) {
-                    let x = pts[i][0];
-                    let y = pts[i][1];
-                    if (x < xmin)
-                        xmin = x;
-                    if (x > xmax)
-                        xmax = x;
-                    if (y < ymin)
-                        ymin = y;
-                    if (y > ymax)
-                        ymax = y;
-                }
-                let xBorder = (xmax - xmin) * border;
-                let yBorder = (ymax - ymin) * border;
-                xmin -= xBorder;
-                xmax += xBorder;
-                ymin -= yBorder;
-                ymax += yBorder;
-                this.range([xmin, xmax], [ymin, ymax]);
-            }
         };
         /**
          * Settings.

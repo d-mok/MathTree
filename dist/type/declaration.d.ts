@@ -2638,7 +2638,7 @@ declare class AutoPenCls {
      *     labelConstraints: [(x,y)=>y>0],
      *     highlights: [{point:[0,0]}],
      *     ranges: [[-10,10],[-10,10]],
-     *     resolution: 0.1,
+     *     resolution: 0.2,
      *     grid: 0,
      *     subGrid: 0,
      *     tick: 0,
@@ -2933,82 +2933,6 @@ declare class PenCls extends Pencil {
          * ```
          */
         lock(width?: number, height?: number): void;
-    };
-    /**
-     * Setup of canvas. Deprecated.
-     * @ignore
-     * @deprecated
-     * @category setting
-     */
-    setup: {
-        /**
-         * @ignore
-         */
-        _pen: PenCls;
-        /**
-         * Set the size of the canvas.
-         * @category setup
-         * @deprecated
-         * @param scale - The scale of the width.
-         * @param ratio - The height-to-width ratio.
-         * @returns void
-         * ```
-         * pen.setup.size(0.5,2)
-         * // half the standard width, with height-to-width = 2:1
-         * ```
-         */
-        size(scale?: number, ratio?: number): void;
-        /**
-         * Set the size of the canvas, keep square zoom. pen.setup.range should be called before me to set the range first.
-         * @category setup
-         * @deprecated
-         * @param scale - The scale of the width.
-         * @returns void
-         * ```
-         * pen.setup.squareSize(0.5)
-         * // half the standard width, with height-to-width defined by coordinates range set.
-         * ```
-         */
-        squareSize(scale?: number): void;
-        /**
-         * Set the size of the canvas by resolution. pen.setup.range should be called before me to set the range first.
-         * @category setup
-         * @deprecated
-         * @param xPPI - The scale per unit x.
-         * @param yPPI - The scale per unit y, if not provided, follow x.
-         * @returns void
-         * ```
-         * pen.setup.resolution(0.1,0.2)
-         * // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
-         * ```
-         */
-        resolution(xPPI?: number, yPPI?: number): void;
-        /**
-         * Set the coordinate range of the canvas.
-         * @category setup
-         * @deprecated
-         * @param xRange - The range [xmin,xmax].
-         * @param yRange - The range [ymin,ymax].
-         * @returns void
-         * ```
-         * pen.setup.range([-5,5],[-2,4])
-         * // define range -5<x<5 and -2<y<4
-         * ```
-         */
-        range(xRange: [number, number], yRange: [number, number]): void;
-        /**
-         * Set the coordinate range by specifying in-view points.
-         * @category setup
-         * @deprecated
-         * @param points - An array of in-view points [x,y].
-         * @param border - The percentage to extend the border.
-         * @param origin - Must contain the origin [0,0]
-         * @returns void
-         * ```
-         * pen.setup.inView([[1,2],[3,4]]) // the points [0,0], [1,2] and [3,4] must be in-view
-         * ```
-         */
-        inView(points: Point2D[], border?: number, origin?: boolean): void;
     };
     /**
      * Settings.
