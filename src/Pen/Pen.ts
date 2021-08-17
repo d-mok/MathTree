@@ -629,15 +629,17 @@ class PenCls extends Pencil {
          * @category graph
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.graph.arc([1,2],3,0,180) // draw upper semi-circle (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        arc(center: Point2D, radius: number, qStart: number, qEnd: number) {
+        arc(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
             const [h, k] = center
+            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
+            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
             this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
         },
         /**
@@ -645,14 +647,16 @@ class PenCls extends Pencil {
          * @category graph
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.graph.sector([1,2],3,0,90) // draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        sector(center: Point2D, radius: number, qStart: number, qEnd: number) {
+        sector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
+            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
+            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
             this.arc(center, radius, qStart, qEnd)
             let A = Move(center, qStart, radius)
             let B = Move(center, qEnd, radius)
@@ -664,14 +668,16 @@ class PenCls extends Pencil {
          * @category graph
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.graph.segment([1,2],3,0,90) // draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        segment(center: Point2D, radius: number, qStart: number, qEnd: number) {
+        segment(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
+            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
+            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
             this.arc(center, radius, qStart, qEnd)
             let A = Move(center, qStart, radius)
             let B = Move(center, qEnd, radius)
@@ -792,31 +798,35 @@ class PenCls extends Pencil {
     }
 
     /**
-     * Draw a horizontal cutter.
+     * Draw a cutter to a horizontal line.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
      * @param label - The label of the point.
      * @returns void
      * ```
-     * pen.cutterH([1,2]) // draw a horizontal cutter at [1,2]
+     * pen.cutX([1,2]) // draw a vertical cutter at [1,2]
+     * pen.cutX(1) // same as cutX([1,0])
      * ```
      */
-    cutterH(position: Point2D, label?: string) {
+    cutX(position: Point2D | number, label?: string) {
+        if (typeof position === 'number') position = [position, 0]
         this.drawTickVertical(position, DEFAULT_CUTTER_LENGTH_PIXEL)
         if (label !== undefined) this.label.point(position, label, 90)
     }
 
     /**
-     * Draw a vertical cutter.
+     * Draw a cutter to a vertical line.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
      * @param label - The label of the point.
      * @returns void
      * ```
-     * pen.cutterV([1,2]) // draw a vertical cutter at [1,2]
+     * pen.cutY([1,2]) // draw a horizontal cutter at [1,2]
+     * pen.cutY(1) // same as cutY([0,1])
      * ```
      */
-    cutterV(position: Point2D, label?: string) {
+    cutY(position: Point2D | number, label?: string) {
+        if (typeof position === 'number') position = [0, position]
         this.drawTickHorizontal(position, DEFAULT_CUTTER_LENGTH_PIXEL)
         if (label !== undefined) this.label.point(position, label, 0)
     }
@@ -890,9 +900,10 @@ class PenCls extends Pencil {
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint: Point, endPoint: Point) {
+    arrow(startPoint: Point, endPoint: Point, label?: string) {
         this.drawStroke([startPoint, endPoint])
         this.drawArrowHead(startPoint, endPoint)
+        if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
 
@@ -979,19 +990,31 @@ class PenCls extends Pencil {
             let points = cal.traceCircle(center, radius, [0, 360])
             this._pen.polyfill(...points)
         },
+
+        // pseudoSector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D, vertices: Point2D | Point2D[]) {
+        //     if (typeof qStart !== 'number') qStart = Dir(center, qStart)
+        //     if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
+        //     let points = cal.traceCircle(center, radius, [qStart, qEnd])
+        //     if (owl.point2D(vertices))
+        //         vertices = [vertices]
+        //     this._pen.polyfill(...points, ...vertices)
+
+        // }
         /**
          * Fill a sector (x-h)^2+(y-k)^2 = r^2.
          * @category fill
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.fill.sector([1,2],3,0,90) // fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        sector(center: Point2D, radius: number, qStart: number, qEnd: number) {
+        sector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
+            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
+            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
             let points = cal.traceCircle(center, radius, [qStart, qEnd])
             this._pen.polyfill(center, ...points)
         },
@@ -1000,14 +1023,16 @@ class PenCls extends Pencil {
          * @category fill
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.fill.segment([1,2],3,0,90) // fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        segment(center: Point2D, radius: number, qStart: number, qEnd: number) {
+        segment(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
+            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
+            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
             let points = cal.traceCircle(center, radius, [qStart, qEnd])
             this._pen.polyfill(...points)
         },
@@ -1034,7 +1059,7 @@ class PenCls extends Pencil {
     angle(A: Point, O: Point, B: Point, label?: string | number, arc = 1, radius = -1) {
         this.decorate.angle(A, O, B, arc, radius)
         if (label !== undefined)
-            this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 10)
+            this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13)
     }
 
 
@@ -1098,7 +1123,7 @@ class PenCls extends Pencil {
          */
         angle(A: Point, O: Point, B: Point, arc = 1, radius = -1) {
             if (radius < 0)
-                radius = 15 + this._pen.getSmallAngleExtraPixel(A, O, B, 30, 2)
+                radius = 15 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5)
 
             let space = 3
             this._pen.drawAngle(A, O, B, radius, arc, space)
@@ -1156,7 +1181,7 @@ class PenCls extends Pencil {
      * pen.write([1,2],'abc') // write 'abc' at [1,2]
      * ```
      */
-    write(position: Point , text: string) {
+    write(position: Point, text: string) {
         this.drawText(text, position, 0, 0)
     }
 
@@ -1221,7 +1246,7 @@ class PenCls extends Pencil {
         angle([A, O, B]: [Point, Point, Point], text: string | number, direction = 0, radius = -1) {
             if (typeof text === 'number') text = text + '°'
             if (radius < 0) {
-                radius = 25 + this._pen.getSmallAngleExtraPixel(A, O, B, 30, 2)
+                radius = 28 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5)
             }
             let dir = this._pen.getDirInPixelByAngle(A, O, B)
 
@@ -1266,7 +1291,10 @@ class PenCls extends Pencil {
          * ```
          */
         coordinates(point: Point2D, direction = 90, radius = 15) {
-            let text = '(' + Fix(point[0], 1) + ', ' + Fix(point[1], 1) + ')'
+            let [x, y] = point
+            x = Fix(x, 1)
+            y = Fix(y, 1)
+            let text = `(${x}, ${y})`
             this.point(point, text, direction, radius)
         }
 

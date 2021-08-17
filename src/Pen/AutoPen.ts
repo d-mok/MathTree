@@ -253,8 +253,8 @@ class AutoPenCls {
         }
 
         if (trig === 'sin' || trig === 'cos') {
-            pen.cutterV([0, 1])
-            pen.cutterV([0, -1])
+            pen.cutY([0, 1])
+            pen.cutY([0, -1])
             pen.label.point([0, 1], '1', 180)
             pen.label.point([0, -1], '-1', 180)
         }
@@ -435,8 +435,8 @@ class AutoPenCls {
             pen.plot(x => Sign(a) * (x ** 2 - 4))
             let P: Point2D = [2, 0]
             let Q: Point2D = [-2, 0]
-            pen.cutterH(P)
-            pen.cutterH(Q)
+            pen.cutX(P)
+            pen.cutX(Q)
             pen.set.weight(3)
             pen.set.strokeColor('red')
 
@@ -645,13 +645,7 @@ class AutoPenCls {
             if (angle) {
                 if (typeof angle === 'string') pen.set.textItalic(true)
                 if (typeof angle === 'number') angle = angle + '°'
-                if (anticlockwise) {
-                    pen.decorate.anglePolar(P, O, Q)
-                    pen.label.anglePolar([P, O, Q], angle)
-                } else {
-                    pen.decorate.anglePolar(Q, O, P)
-                    pen.label.anglePolar([Q, O, P], angle)
-                }
+                pen.angle(P, O, Q, angle)
                 pen.set.textItalic()
             }
         }
@@ -1090,7 +1084,7 @@ class AutoPenCls {
             let h = y * interval
             pen.set.alpha(0.2)
             grid(h)
-            pen.cutterV([0, h])
+            pen.cutY([0, h])
             pen.set.alpha()
             pen.label.point([0, h], h.toString(), 180)
         }
@@ -1308,15 +1302,15 @@ class AutoPenCls {
         }
 
         if (showValue) {
-            pen.cutterH(L_)
+            pen.cutX(L_)
             pen.label.point(L_, labels[0] ?? String(Q0), 270)
-            pen.cutterH(A_)
+            pen.cutX(A_)
             pen.label.point(A_, labels[1] ?? String(Q1), 270)
-            pen.cutterH(B_)
+            pen.cutX(B_)
             pen.label.point(B_, labels[2] ?? String(Q2), 270)
-            pen.cutterH(C_)
+            pen.cutX(C_)
             pen.label.point(C_, labels[3] ?? String(Q3), 270)
-            pen.cutterH(R_)
+            pen.cutX(R_)
             pen.label.point(R_, labels[4] ?? String(Q4), 270)
         }
 

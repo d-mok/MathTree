@@ -30617,6 +30617,20 @@ function IsConvexPolygon(...points) {
     return toShape2D(points).isConvex();
 }
 globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point2D]);
+/**
+ * @category ArrangePoints
+ * @return Arrange Points in anti-clockwise direction around their mean
+ * ```
+ * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
+ * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
+ * ```
+ */
+function ArrangePoints(...points) {
+    let ss = toShape2D(points);
+    ss.sortAroundMean();
+    return ss.toArray();
+}
+globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
 
 
 /***/ }),
@@ -31086,26 +31100,25 @@ function Floor(num) {
     return Math.floor(num);
 }
 globalThis.Floor = contract(Floor).sign([owl.num]);
-/**
- * @category Numeracy
- * @deprecated use Ratio() instead
- * @return reduce input array to simplest ratio.
- * ```
- * SimpRatio(2,4,6) // [1,2,3]
- * SimpRatio(0,4,6) // [0,2,3]
- * SimpRatio(0,4) // [0,1]
- * ```
- */
-function SimpRatio(...nums) {
-    let ns = toNumbers(nums).blur();
-    // nums = nums.map(cal.blur)
-    if (!IsInteger(...ns))
-        return nums;
-    let nonzeros = ns.filter($ => IsNonZero($));
-    Should(nonzeros.length > 0, 'at least one non-zero num');
-    return ns.reduceRatio();
-}
-globalThis.SimpRatio = contract(SimpRatio).sign([owl.num]);
+// /**
+//  * @category Numeracy
+//  * @deprecated use Ratio() instead
+//  * @return reduce input array to simplest ratio.
+//  * ```
+//  * SimpRatio(2,4,6) // [1,2,3]
+//  * SimpRatio(0,4,6) // [0,2,3]
+//  * SimpRatio(0,4) // [0,1]
+//  * ```
+//  */
+// function SimpRatio(...nums: number[]): number[] {
+//     let ns = toNumbers(nums).blur()
+//     // nums = nums.map(cal.blur)
+//     if (!IsInteger(...ns)) return nums
+//     let nonzeros = ns.filter($ => IsNonZero($))
+//     Should(nonzeros.length > 0, 'at least one non-zero num')
+//     return ns.reduceRatio()
+// }
+// globalThis.SimpRatio = contract(SimpRatio).sign([owl.num])
 /**
  * @category Numeracy
  * @return reduce input array to integral ratio.
@@ -31153,7 +31166,6 @@ function LCM(...nums) {
 globalThis.LCM = contract(LCM).sign([owl.nonZeroInt]);
 /**
  * @category Numeracy
- * @deprecated
  * @return convert num to fraction
  * ```
  * ToFrac(0.5) // [1,2]
@@ -33499,17 +33511,17 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 
 "use strict";
 
-/**
- * @category Vector
- * @return the vector OP
- * ```
- * Vector([1,2],[10,5]) // [9,3]
- * ```
- */
-function Vector(O, P) {
-    return [P[0] - O[0], P[1] - O[1]];
-}
-globalThis.Vector = contract(Vector).sign([owl.point2D]);
+// /**
+//  * @category Vector
+//  * @return the vector OP
+//  * ```
+//  * Vector([1,2],[10,5]) // [9,3]
+//  * ```
+//  */
+// function Vector(O: Point2D, P: Point2D): Point2D {
+//     return [P[0] - O[0], P[1] - O[1]];
+// }
+// globalThis.Vector = contract(Vector).sign([owl.point2D])
 // /**
 //  * @category Vector
 //  * @return sum of all vectors
@@ -33646,20 +33658,6 @@ globalThis.Vector = contract(Vector).sign([owl.point2D]);
 //     return [x1, y1]
 // }
 // globalThis.VectorRotate = contract(VectorRotate).sign([owl.vector, owl.num])
-/**
- * @category ArrangePoints
- * @return Arrange Points in anti-clockwise direction around their mean
- * ```
- * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
- * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
- * ```
- */
-function ArrangePoints(...points) {
-    let ss = toShape2D(points);
-    ss.sortAroundMean();
-    return ss.toArray();
-}
-globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
 
 
 /***/ }),
@@ -33669,32 +33667,32 @@ globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
 
 "use strict";
 
-/**
- * @category Vector3D
- * @return the vector OP
- * ```
- * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
- * ```
- */
-function Vec3D(O, P) {
-    return [P[0] - O[0], P[1] - O[1], P[2] - O[2]];
-}
-globalThis.Vec3D = contract(Vec3D).sign([owl.point3D]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return sum of all vectors
- * ```
- * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
- * ```
- */
-function Vec3DAdd(...vectors) {
-    const x = Sum(...vectors.map(p => p[0]));
-    const y = Sum(...vectors.map(p => p[1]));
-    const z = Sum(...vectors.map(p => p[2]));
-    return [x, y, z];
-}
-globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D]);
+// /**
+//  * @category Vector3D
+//  * @return the vector OP
+//  * ```
+//  * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
+//  * ```
+//  */
+// function Vec3D(O: Point3D, P: Point3D): Point3D {
+//     return [P[0] - O[0], P[1] - O[1], P[2] - O[2]];
+// }
+// globalThis.Vec3D = contract(Vec3D).sign([owl.point3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return sum of all vectors
+//  * ```
+//  * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
+//  * ```
+//  */
+// function Vec3DAdd(...vectors: Point3D[]): Point3D {
+//     const x = Sum(...vectors.map(p => p[0]))
+//     const y = Sum(...vectors.map(p => p[1]))
+//     const z = Sum(...vectors.map(p => p[2]))
+//     return [x, y, z];
+// }
+// globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D])
 /**
  * @category Vector3D
  * @return mean of all vectors
@@ -34223,8 +34221,8 @@ class AutoPenCls {
             pen.tick.x(180);
         }
         if (trig === 'sin' || trig === 'cos') {
-            pen.cutterV([0, 1]);
-            pen.cutterV([0, -1]);
+            pen.cutY([0, 1]);
+            pen.cutY([0, -1]);
             pen.label.point([0, 1], '1', 180);
             pen.label.point([0, -1], '-1', 180);
         }
@@ -34392,8 +34390,8 @@ class AutoPenCls {
             pen.plot(x => Sign(a) * (Math.pow(x, 2) - 4));
             let P = [2, 0];
             let Q = [-2, 0];
-            pen.cutterH(P);
-            pen.cutterH(Q);
+            pen.cutX(P);
+            pen.cutX(Q);
             pen.set.weight(3);
             pen.set.strokeColor('red');
             if (a > 0) {
@@ -34576,14 +34574,7 @@ class AutoPenCls {
                     pen.set.textItalic(true);
                 if (typeof angle === 'number')
                     angle = angle + '°';
-                if (anticlockwise) {
-                    pen.decorate.anglePolar(P, O, Q);
-                    pen.label.anglePolar([P, O, Q], angle);
-                }
-                else {
-                    pen.decorate.anglePolar(Q, O, P);
-                    pen.label.anglePolar([Q, O, P], angle);
-                }
+                pen.angle(P, O, Q, angle);
                 pen.set.textItalic();
             }
         }
@@ -34904,7 +34895,7 @@ class AutoPenCls {
             let h = y * interval;
             pen.set.alpha(0.2);
             grid(h);
-            pen.cutterV([0, h]);
+            pen.cutY([0, h]);
             pen.set.alpha();
             pen.label.point([0, h], h.toString(), 180);
         }
@@ -35061,15 +35052,15 @@ class AutoPenCls {
             pen.dash(R, R_);
         }
         if (showValue) {
-            pen.cutterH(L_);
+            pen.cutX(L_);
             pen.label.point(L_, (_a = labels[0]) !== null && _a !== void 0 ? _a : String(Q0), 270);
-            pen.cutterH(A_);
+            pen.cutX(A_);
             pen.label.point(A_, (_b = labels[1]) !== null && _b !== void 0 ? _b : String(Q1), 270);
-            pen.cutterH(B_);
+            pen.cutX(B_);
             pen.label.point(B_, (_c = labels[2]) !== null && _c !== void 0 ? _c : String(Q2), 270);
-            pen.cutterH(C_);
+            pen.cutX(C_);
             pen.label.point(C_, (_d = labels[3]) !== null && _d !== void 0 ? _d : String(Q3), 270);
-            pen.cutterH(R_);
+            pen.cutX(R_);
             pen.label.point(R_, (_e = labels[4]) !== null && _e !== void 0 ? _e : String(Q4), 270);
         }
         pen.autoCrop();
@@ -35248,7 +35239,6 @@ class PenCls extends Pencil {
             /**
              * Set the size of the canvas by resolution.
              * @category SetupSize
-             * @deprecated
              * @param xPPI - The scale per unit x.
              * @param yPPI - The scale per unit y, if not provided, follow x.
              * @returns void
@@ -35677,8 +35667,8 @@ class PenCls extends Pencil {
              * @category graph
              * @param center - The center coordinates [h,k].
              * @param radius - The radius.
-             * @param qStart - The starting polar angle.
-             * @param qEnd - The ending polar angle.
+             * @param qStart - The starting polar angle, or starting point
+             * @param qEnd - The ending polar angle, or ending point
              * @returns void
              * ```
              * pen.graph.arc([1,2],3,0,180) // draw upper semi-circle (x-1)^2+(y-2)^2 = 9.
@@ -35686,6 +35676,10 @@ class PenCls extends Pencil {
              */
             arc(center, radius, qStart, qEnd) {
                 const [h, k] = center;
+                if (typeof qStart !== 'number')
+                    qStart = Dir(center, qStart);
+                if (typeof qEnd !== 'number')
+                    qEnd = Dir(center, qEnd);
                 this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd);
             },
             /**
@@ -35693,14 +35687,18 @@ class PenCls extends Pencil {
              * @category graph
              * @param center - The center coordinates [h,k].
              * @param radius - The radius.
-             * @param qStart - The starting polar angle.
-             * @param qEnd - The ending polar angle.
+             * @param qStart - The starting polar angle, or starting point
+             * @param qEnd - The ending polar angle, or ending point
              * @returns void
              * ```
              * pen.graph.sector([1,2],3,0,90) // draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.
              * ```
              */
             sector(center, radius, qStart, qEnd) {
+                if (typeof qStart !== 'number')
+                    qStart = Dir(center, qStart);
+                if (typeof qEnd !== 'number')
+                    qEnd = Dir(center, qEnd);
                 this.arc(center, radius, qStart, qEnd);
                 let A = Move(center, qStart, radius);
                 let B = Move(center, qEnd, radius);
@@ -35712,14 +35710,18 @@ class PenCls extends Pencil {
              * @category graph
              * @param center - The center coordinates [h,k].
              * @param radius - The radius.
-             * @param qStart - The starting polar angle.
-             * @param qEnd - The ending polar angle.
+             * @param qStart - The starting polar angle, or starting point
+             * @param qEnd - The ending polar angle, or ending point
              * @returns void
              * ```
              * pen.graph.segment([1,2],3,0,90) // draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
              * ```
              */
             segment(center, radius, qStart, qEnd) {
+                if (typeof qStart !== 'number')
+                    qStart = Dir(center, qStart);
+                if (typeof qEnd !== 'number')
+                    qEnd = Dir(center, qEnd);
                 this.arc(center, radius, qStart, qEnd);
                 let A = Move(center, qStart, radius);
                 let B = Move(center, qEnd, radius);
@@ -35823,19 +35825,31 @@ class PenCls extends Pencil {
                 let points = cal.traceCircle(center, radius, [0, 360]);
                 this._pen.polyfill(...points);
             },
+            // pseudoSector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D, vertices: Point2D | Point2D[]) {
+            //     if (typeof qStart !== 'number') qStart = Dir(center, qStart)
+            //     if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
+            //     let points = cal.traceCircle(center, radius, [qStart, qEnd])
+            //     if (owl.point2D(vertices))
+            //         vertices = [vertices]
+            //     this._pen.polyfill(...points, ...vertices)
+            // }
             /**
              * Fill a sector (x-h)^2+(y-k)^2 = r^2.
              * @category fill
              * @param center - The center coordinates [h,k].
              * @param radius - The radius.
-             * @param qStart - The starting polar angle.
-             * @param qEnd - The ending polar angle.
+             * @param qStart - The starting polar angle, or starting point
+             * @param qEnd - The ending polar angle, or ending point
              * @returns void
              * ```
              * pen.fill.sector([1,2],3,0,90) // fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.
              * ```
              */
             sector(center, radius, qStart, qEnd) {
+                if (typeof qStart !== 'number')
+                    qStart = Dir(center, qStart);
+                if (typeof qEnd !== 'number')
+                    qEnd = Dir(center, qEnd);
                 let points = cal.traceCircle(center, radius, [qStart, qEnd]);
                 this._pen.polyfill(center, ...points);
             },
@@ -35844,14 +35858,18 @@ class PenCls extends Pencil {
              * @category fill
              * @param center - The center coordinates [h,k].
              * @param radius - The radius.
-             * @param qStart - The starting polar angle.
-             * @param qEnd - The ending polar angle.
+             * @param qStart - The starting polar angle, or starting point
+             * @param qEnd - The ending polar angle, or ending point
              * @returns void
              * ```
              * pen.fill.segment([1,2],3,0,90) // fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
              * ```
              */
             segment(center, radius, qStart, qEnd) {
+                if (typeof qStart !== 'number')
+                    qStart = Dir(center, qStart);
+                if (typeof qEnd !== 'number')
+                    qEnd = Dir(center, qEnd);
                 let points = cal.traceCircle(center, radius, [qStart, qEnd]);
                 this._pen.polyfill(...points);
             },
@@ -35896,33 +35914,6 @@ class PenCls extends Pencil {
                 this._pen.drawParallelMark(startPoint, endPoint, 4, tick, 6);
             },
             /**
-             * Decorate an angle AOB, always in anti-clockwise.
-             * @category decorator
-             * @deprecated use pen.set.angle('polar')
-             * @param A - The starting point [x,y].
-             * @param O - The vertex point [x,y].
-             * @param B - The ending point [x,y].
-             * @param arc - The number of arcs.
-             * @param radius - The radius of the angle arc, in pixel.
-             * @returns void
-             * ```
-             * pen.decorate.anglePolar([1,0],[0,0],[3,2],2)
-             * // decorate an angle AOB with double-arc in anti-clockwise.
-             * ```
-             */
-            anglePolar(A, O, B, arc = 1, radius = 15) {
-                A = this._pen.frame.toPix(A);
-                let OPixel = this._pen.frame.toPix(O);
-                B = this._pen.frame.toPix(B);
-                let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
-                let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
-                let space = 3;
-                let outset = arc > 1 ? space / 2 : 0;
-                for (let i = 0; i < arc; i++) {
-                    this._pen.circle(O, radius + outset - i * space, [a1, a2]);
-                }
-            },
-            /**
              * Decorate an angle AOB, always non-reflex.
              * @category decorator
              * @param A - The starting point [x,y].
@@ -35938,7 +35929,7 @@ class PenCls extends Pencil {
              */
             angle(A, O, B, arc = 1, radius = -1) {
                 if (radius < 0)
-                    radius = 15 + this._pen.getSmallAngleExtraPixel(A, O, B, 30, 2);
+                    radius = 15 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5);
                 let space = 3;
                 this._pen.drawAngle(A, O, B, radius, arc, space);
             },
@@ -36019,31 +36010,6 @@ class PenCls extends Pencil {
                 }
             },
             /**
-             * Add a label to an angle AOB, in anticlockwise.
-             * @category text
-             * @deprecated use pen.set.angle('polar')
-             * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
-             * @param text - The string to write.
-             * @param direction - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-             * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
-             * @returns void
-             * ```
-             * pen.label.anglePolar([[1,2],[0,0],[-2,1]],'x')
-             * // label the angle as 'x'
-             * ```
-             */
-            anglePolar(anglePoints, text, direction = 0, radius = 25) {
-                let [A, O, B] = anglePoints;
-                let APixel = this._pen.frame.toPix(A);
-                let OPixel = this._pen.frame.toPix(O);
-                let BPixel = this._pen.frame.toPix(B);
-                let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
-                let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
-                if (a2 < a1)
-                    a2 = a2 + 360;
-                this.point(O, text, (a1 + a2) / 2 + direction, radius);
-            },
-            /**
              * Add a label to an angle AOB, non-reflex.
              * @category text
              * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
@@ -36060,7 +36026,7 @@ class PenCls extends Pencil {
                 if (typeof text === 'number')
                     text = text + '°';
                 if (radius < 0) {
-                    radius = 25 + this._pen.getSmallAngleExtraPixel(A, O, B, 30, 2);
+                    radius = 28 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5);
                 }
                 let dir = this._pen.getDirInPixelByAngle(A, O, B);
                 this.point(O, text, dir + direction, radius);
@@ -36087,23 +36053,6 @@ class PenCls extends Pencil {
                 this.point(M, text, dir + direction, radius);
             },
             /**
-             * Add a label to the center of a polygon.
-             * @param points - the polygon
-             * @param text - the string to write
-             * @returns void
-             * ```
-             * pen.label.polygon([[0,0],[1,0],[0,1]],'A') // label 'A' at the center
-             * ```
-             */
-            polygon(points, text) {
-                let pts = this._pen.pjs(points);
-                let center = toShape2D(pts).mean().toArray();
-                if (owl.alphabet(text))
-                    this._pen.set.textItalic(true);
-                this._pen.write(center, text);
-                this._pen.restore();
-            },
-            /**
              * Add a coordinates label to a point.
              * @category text
              * @param position - The coordinates [x,y] of the point to label.
@@ -36116,7 +36065,10 @@ class PenCls extends Pencil {
              * ```
              */
             coordinates(point, direction = 90, radius = 15) {
-                let text = '(' + Fix(point[0], 1) + ', ' + Fix(point[1], 1) + ')';
+                let [x, y] = point;
+                x = Fix(x, 1);
+                y = Fix(y, 1);
+                let text = `(${x}, ${y})`;
                 this.point(point, text, direction, radius);
             }
         };
@@ -36414,7 +36366,7 @@ class PenCls extends Pencil {
                     this._pen.label.line([leftEnd, center], radiusLabel);
             },
             /**
-             * Draw the envelop of a frustum
+             * Return the envelop of a frustum
              * @category 3D
              * @param lowerBase - the points in the lower base
              * @param upperBase - the point in the upper base, must have the same length as lowerBase
@@ -36612,31 +36564,37 @@ class PenCls extends Pencil {
         }
     }
     /**
-     * Draw a horizontal cutter.
+     * Draw a cutter to a horizontal line.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
      * @param label - The label of the point.
      * @returns void
      * ```
-     * pen.cutterH([1,2]) // draw a horizontal cutter at [1,2]
+     * pen.cutX([1,2]) // draw a vertical cutter at [1,2]
+     * pen.cutX(1) // same as cutX([1,0])
      * ```
      */
-    cutterH(position, label) {
+    cutX(position, label) {
+        if (typeof position === 'number')
+            position = [position, 0];
         this.drawTickVertical(position, DEFAULT_CUTTER_LENGTH_PIXEL);
         if (label !== undefined)
             this.label.point(position, label, 90);
     }
     /**
-     * Draw a vertical cutter.
+     * Draw a cutter to a vertical line.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
      * @param label - The label of the point.
      * @returns void
      * ```
-     * pen.cutterV([1,2]) // draw a vertical cutter at [1,2]
+     * pen.cutY([1,2]) // draw a horizontal cutter at [1,2]
+     * pen.cutY(1) // same as cutY([0,1])
      * ```
      */
-    cutterV(position, label) {
+    cutY(position, label) {
+        if (typeof position === 'number')
+            position = [0, position];
         this.drawTickHorizontal(position, DEFAULT_CUTTER_LENGTH_PIXEL);
         if (label !== undefined)
             this.label.point(position, label, 0);
@@ -36706,9 +36664,11 @@ class PenCls extends Pencil {
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint, endPoint) {
+    arrow(startPoint, endPoint, label) {
         this.drawStroke([startPoint, endPoint]);
         this.drawArrowHead(startPoint, endPoint);
+        if (label !== undefined)
+            this.label.line([startPoint, endPoint], label);
     }
     /**
      * Draw a polyline given points.
@@ -36775,7 +36735,7 @@ class PenCls extends Pencil {
     angle(A, O, B, label, arc = 1, radius = -1) {
         this.decorate.angle(A, O, B, arc, radius);
         if (label !== undefined)
-            this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 10);
+            this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13);
     }
     /**
      * Write text.

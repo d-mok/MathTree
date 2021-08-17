@@ -1009,6 +1009,15 @@ declare function ArcLength(radius: number, theta: number): number;
  * ```
  */
 declare function IsConvexPolygon(...points: Point2D[]): boolean;
+/**
+ * @category ArrangePoints
+ * @return Arrange Points in anti-clockwise direction around their mean
+ * ```
+ * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
+ * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
+ * ```
+ */
+declare function ArrangePoints(...points: Point2D[]): Point2D[];
 declare const LP_BOUND = 100;
 declare function onBoundary(p: Point2D): boolean;
 /**
@@ -1278,17 +1287,6 @@ declare function Ceil(num: number): number;
 declare function Floor(num: number): number;
 /**
  * @category Numeracy
- * @deprecated use Ratio() instead
- * @return reduce input array to simplest ratio.
- * ```
- * SimpRatio(2,4,6) // [1,2,3]
- * SimpRatio(0,4,6) // [0,2,3]
- * SimpRatio(0,4) // [0,1]
- * ```
- */
-declare function SimpRatio(...nums: number[]): number[];
-/**
- * @category Numeracy
  * @return reduce input array to integral ratio.
  * ```
  * IntegerRatio(2,4,6) // [1,2,3]
@@ -1324,7 +1322,6 @@ declare function HCF(...nums: number[]): number;
 declare function LCM(...nums: number[]): number;
 /**
  * @category Numeracy
- * @deprecated
  * @return convert num to fraction
  * ```
  * ToFrac(0.5) // [1,2]
@@ -2398,40 +2395,6 @@ declare function WholeBearing(polarAngle: number): string;
  */
 declare function CompassBearing(polarAngle: number): string;
 /**
- * @category Vector
- * @return the vector OP
- * ```
- * Vector([1,2],[10,5]) // [9,3]
- * ```
- */
-declare function Vector(O: Point2D, P: Point2D): Point2D;
-/**
- * @category ArrangePoints
- * @return Arrange Points in anti-clockwise direction around their mean
- * ```
- * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
- * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
- * ```
- */
-declare function ArrangePoints(...points: Point2D[]): Point2D[];
-/**
- * @category Vector3D
- * @return the vector OP
- * ```
- * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
- * ```
- */
-declare function Vec3D(O: Point3D, P: Point3D): Point3D;
-/**
- * @category Vector3D
- * @deprecated useless
- * @return sum of all vectors
- * ```
- * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
- * ```
- */
-declare function Vec3DAdd(...vectors: Point3D[]): Point3D;
-/**
  * @category Vector3D
  * @return mean of all vectors
  * ```
@@ -2927,7 +2890,6 @@ declare class PenCls extends Pencil {
         /**
          * Set the size of the canvas by resolution.
          * @category SetupSize
-         * @deprecated
          * @param xPPI - The scale per unit x.
          * @param yPPI - The scale per unit y, if not provided, follow x.
          * @returns void
@@ -3260,40 +3222,40 @@ declare class PenCls extends Pencil {
          * @category graph
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.graph.arc([1,2],3,0,180) // draw upper semi-circle (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        arc(center: Point2D, radius: number, qStart: number, qEnd: number): void;
+        arc(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
         /**
          * Draw a sector of (x-h)^2+(y-k)^2 = r^2.
          * @category graph
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.graph.sector([1,2],3,0,90) // draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        sector(center: Point2D, radius: number, qStart: number, qEnd: number): void;
+        sector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
         /**
          * Draw an segment of (x-h)^2+(y-k)^2 = r^2.
          * @category graph
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.graph.segment([1,2],3,0,90) // draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        segment(center: Point2D, radius: number, qStart: number, qEnd: number): void;
+        segment(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
         /**
          * Draw a quadratic graph y=ax^2+bx+c.
          * @category graph
@@ -3377,27 +3339,29 @@ declare class PenCls extends Pencil {
         [k: string]: Point;
     }, label?: boolean): void;
     /**
-     * Draw a horizontal cutter.
+     * Draw a cutter to a horizontal line.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
      * @param label - The label of the point.
      * @returns void
      * ```
-     * pen.cutterH([1,2]) // draw a horizontal cutter at [1,2]
+     * pen.cutX([1,2]) // draw a vertical cutter at [1,2]
+     * pen.cutX(1) // same as cutX([1,0])
      * ```
      */
-    cutterH(position: Point2D, label?: string): void;
+    cutX(position: Point2D | number, label?: string): void;
     /**
-     * Draw a vertical cutter.
+     * Draw a cutter to a vertical line.
      * @category draw
      * @param position - The coordinates [x,y] to draw.
      * @param label - The label of the point.
      * @returns void
      * ```
-     * pen.cutterV([1,2]) // draw a vertical cutter at [1,2]
+     * pen.cutY([1,2]) // draw a horizontal cutter at [1,2]
+     * pen.cutY(1) // same as cutY([0,1])
      * ```
      */
-    cutterV(position: Point2D, label?: string): void;
+    cutY(position: Point2D | number, label?: string): void;
     /**
      * Draw a circle or arc.
      * @category draw
@@ -3448,7 +3412,7 @@ declare class PenCls extends Pencil {
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint: Point, endPoint: Point): void;
+    arrow(startPoint: Point, endPoint: Point, label?: string): void;
     /**
      * Draw a polyline given points.
      * @category draw
@@ -3514,27 +3478,27 @@ declare class PenCls extends Pencil {
          * @category fill
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.fill.sector([1,2],3,0,90) // fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        sector(center: Point2D, radius: number, qStart: number, qEnd: number): void;
+        sector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
         /**
          * Fill a segment (x-h)^2+(y-k)^2 = r^2.
          * @category fill
          * @param center - The center coordinates [h,k].
          * @param radius - The radius.
-         * @param qStart - The starting polar angle.
-         * @param qEnd - The ending polar angle.
+         * @param qStart - The starting polar angle, or starting point
+         * @param qEnd - The ending polar angle, or ending point
          * @returns void
          * ```
          * pen.fill.segment([1,2],3,0,90) // fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
          * ```
          */
-        segment(center: Point2D, radius: number, qStart: number, qEnd: number): void;
+        segment(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
     };
     /**
      * Draw an angle with label, non-reflex
@@ -3586,22 +3550,6 @@ declare class PenCls extends Pencil {
          * ```
          */
         parallel(startPoint: Point, endPoint: Point, tick?: number): void;
-        /**
-         * Decorate an angle AOB, always in anti-clockwise.
-         * @category decorator
-         * @deprecated use pen.set.angle('polar')
-         * @param A - The starting point [x,y].
-         * @param O - The vertex point [x,y].
-         * @param B - The ending point [x,y].
-         * @param arc - The number of arcs.
-         * @param radius - The radius of the angle arc, in pixel.
-         * @returns void
-         * ```
-         * pen.decorate.anglePolar([1,0],[0,0],[3,2],2)
-         * // decorate an angle AOB with double-arc in anti-clockwise.
-         * ```
-         */
-        anglePolar(A: Point2D, O: Point2D, B: Point2D, arc?: number, radius?: number): void;
         /**
          * Decorate an angle AOB, always non-reflex.
          * @category decorator
@@ -3689,21 +3637,6 @@ declare class PenCls extends Pencil {
             [k: string]: Point;
         }): void;
         /**
-         * Add a label to an angle AOB, in anticlockwise.
-         * @category text
-         * @deprecated use pen.set.angle('polar')
-         * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
-         * @param text - The string to write.
-         * @param direction - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
-         * @returns void
-         * ```
-         * pen.label.anglePolar([[1,2],[0,0],[-2,1]],'x')
-         * // label the angle as 'x'
-         * ```
-         */
-        anglePolar(anglePoints: [Point2D, Point2D, Point2D], text: string, direction?: number, radius?: number): void;
-        /**
          * Add a label to an angle AOB, non-reflex.
          * @category text
          * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
@@ -3730,16 +3663,6 @@ declare class PenCls extends Pencil {
          * ```
          */
         line([A, B]: [Point, Point], text: string | number, direction?: number, radius?: number): void;
-        /**
-         * Add a label to the center of a polygon.
-         * @param points - the polygon
-         * @param text - the string to write
-         * @returns void
-         * ```
-         * pen.label.polygon([[0,0],[1,0],[0,1]],'A') // label 'A' at the center
-         * ```
-         */
-        polygon(points: Point[], text: string): void;
         /**
          * Add a coordinates label to a point.
          * @category text
@@ -3975,7 +3898,7 @@ declare class PenCls extends Pencil {
             upperOnly?: boolean | undefined;
         }): void;
         /**
-         * Draw the envelop of a frustum
+         * Return the envelop of a frustum
          * @category 3D
          * @param lowerBase - the points in the lower base
          * @param upperBase - the point in the upper base, must have the same length as lowerBase
