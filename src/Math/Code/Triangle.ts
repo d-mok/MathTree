@@ -171,8 +171,8 @@ globalThis.SolveTriangle = contract(SolveTriangle).sign()
  * ```
  */
 function Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
-    let H = PerpendicularFoot(A, B, C)
-    let G = PerpendicularFoot(B, C, A)
+    let H = PdFoot(A, B, C)
+    let G = PdFoot(B, C, A)
     let [x, y] = Intersection(C, H, A, G)
     return [cal.blur(x), cal.blur(y)]
 }

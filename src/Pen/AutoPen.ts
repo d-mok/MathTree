@@ -564,7 +564,7 @@ class AutoPenCls {
 
         let dmax = Math.max(dx, dy) * 0.8
 
-        let G = VectorMean(A, B, C)
+        let G = Mid(A, B, C)
 
         let T = triangle
         let sideA = T.sideA
@@ -584,7 +584,7 @@ class AutoPenCls {
 
 
         function drawHeight(vertex: [number, number], base: [number, number][]) {
-            let F = PerpendicularFoot(base[0], base[1], vertex)
+            let F = PdFoot(base[0], base[1], vertex)
             pen.set.dash([5, 5])
             pen.set.strokeColor('grey')
             pen.line(vertex, F)
@@ -611,9 +611,9 @@ class AutoPenCls {
         pen.polygon(A, B, C)
 
         pen.set.textItalic(true)
-        if (labelA) pen.label.point(A, labelA.toString(), Direction(G, A))
-        if (labelB) pen.label.point(B, labelB.toString(), Direction(G, B))
-        if (labelC) pen.label.point(C, labelC.toString(), Direction(G, C))
+        if (labelA) pen.label.point(A, labelA.toString(), Dir(G, A))
+        if (labelB) pen.label.point(B, labelB.toString(), Dir(G, B))
+        if (labelC) pen.label.point(C, labelC.toString(), Dir(G, C))
         pen.set.textItalic()
 
         let AB = [B[0] - A[0], B[1] - A[1]]

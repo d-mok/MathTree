@@ -799,8 +799,8 @@
 //          */
 //         sector(center: Point2D, radius: number, qStart: number, qEnd: number) {
 //             this.arc(center, radius, qStart, qEnd)
-//             let A = TranslatePoint(center, qStart, radius)
-//             let B = TranslatePoint(center, qEnd, radius)
+//             let A = Move(center, qStart, radius)
+//             let B = Move(center, qEnd, radius)
 //             this._pen.line(A, center)
 //             this._pen.line(B, center)
 //         },
@@ -818,8 +818,8 @@
 //          */
 //         segment(center: Point2D, radius: number, qStart: number, qEnd: number) {
 //             this.arc(center, radius, qStart, qEnd)
-//             let A = TranslatePoint(center, qStart, radius)
-//             let B = TranslatePoint(center, qEnd, radius)
+//             let A = Move(center, qStart, radius)
+//             let B = Move(center, qEnd, radius)
 //             this._pen.line(A, B)
 //         },
 //         /**
@@ -1452,7 +1452,7 @@
 //         rightAngle(A: Point2D | Point3D, O: Point2D | Point3D, B?: Point2D | Point3D, size = 12) {
 //             A = this._pen.project(A)
 //             O = this._pen.project(O)
-//             B ??= RotatePoint(A, O, 90)
+//             B ??= Rotate(A, O, 90)
 //             B = this._pen.project(B)
 
 //             size = size * PEN_QUALITY;
@@ -1596,7 +1596,7 @@
 //             if (dodgeDirection === undefined) {
 //                 let center = this._pen.setProperty.LABEL_CENTER
 //                 if (center !== undefined && AreDistinctPoint(center, position)) {
-//                     dodgeDirection = Direction(center, position)
+//                     dodgeDirection = Dir(center, position)
 //                 } else {
 //                     dodgeDirection = 0
 //                 }
@@ -1705,7 +1705,7 @@
 //             let [A, B] = linePoints;
 //             A = this._pen.project(A)
 //             B = this._pen.project(B)
-//             let M = MidPoint(A, B);
+//             let M = Mid(A, B);
 //             let APixel = this._pen.frame.toPix(A);
 //             let BPixel = this._pen.frame.toPix(B);
 //             let q = Math.atan2(-(BPixel[1] - APixel[1]), BPixel[0] - APixel[0]) / Math.PI * 180 - 90;
@@ -1993,7 +1993,7 @@
 //             arc = [0, 360]
 //         } = {}): void {
 //             let ps = Trace(t => [radius * cos(t), radius * sin(t)], arc[0], arc[1])
-//             let ps3D = EmbedPlane(ps, center, xVec, yVec)
+//             let ps3D = Embed(ps, center, xVec, yVec)
 
 //             if (line) {
 //                 this._pen.ctx.save()
@@ -2213,9 +2213,9 @@
 //             }
 
 //             if (height) {
-//                 let V = Vec3DMean(...upperBase)
+//                 let V = Mid3D(...upperBase)
 //                 let [A, B, C] = lowerBase
-//                 let O = ProjectionOnPlane(V, [A, B, C])
+//                 let O = PdFoot3D(V, [A, B, C])
 //                 this._pen.dash(O, V)
 //             }
 //             if (shadeLower)
@@ -2241,8 +2241,8 @@
 //             shadeUpper = !true,
 //             envelope = !true,
 //         } = {}) {
-//             let lower = EmbedPlaneZ(lowerBase, lowerZ)
-//             let upper = EmbedPlaneZ(lowerBase, upperZ)
+//             let lower = EmbedZ(lowerBase, lowerZ)
+//             let upper = EmbedZ(lowerBase, upperZ)
 //             this.frustum(lower, upper, {
 //                 base,
 //                 height,
@@ -2270,8 +2270,8 @@
 //             envelope = !true,
 //         } = {}) {
 //             let ps = TraceCircle(center, radius)
-//             let lower = EmbedPlaneZ(ps, lowerZ)
-//             let upper = EmbedPlaneZ(ps, upperZ)
+//             let lower = EmbedZ(ps, lowerZ)
+//             let upper = EmbedZ(ps, upperZ)
 //             this.frustum(lower, upper, {
 //                 base,
 //                 height,
@@ -2295,7 +2295,7 @@
 //             shadeLower = !true,
 //             envelope = !true,
 //         } = {}) {
-//             let lower = EmbedPlaneZ(lowerBase, lowerZ)
+//             let lower = EmbedZ(lowerBase, lowerZ)
 //             this.frustum(lower, [vertex], {
 //                 base,
 //                 height,
@@ -2321,7 +2321,7 @@
 //             envelope = !true,
 //         } = {}) {
 //             let ps = TraceCircle(center, radius)
-//             let lower = EmbedPlaneZ(ps, lowerZ)
+//             let lower = EmbedZ(ps, lowerZ)
 //             this.frustum(lower, [vertex], {
 //                 base,
 //                 height,

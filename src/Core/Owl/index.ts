@@ -103,9 +103,9 @@ export const fraction = (_: unknown): _ is Fraction => couple(_)
 
 export const properFraction = (_: unknown): _ is Fraction => fraction(_) && _[1] !== 0
 
-export const vector = (_: unknown): _ is Vector => couple(_)
+export const vector = (_: unknown): _ is Point2D => couple(_)
 
-export const vector3D = (_: unknown): _ is Vector3D => triple(_)
+export const vector3D = (_: unknown): _ is Point3D => triple(_)
 
 export const triangleSides = (_: unknown) => {
     if (!triple(_)) return false

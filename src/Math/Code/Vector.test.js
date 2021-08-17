@@ -15,10 +15,10 @@ test('VectorAdd', () => {
 
 
 
-test('VectorMean', () => {
-    expect(VectorMean([1, 2], [3, 4], [5, 6])).toEqual([3, 4]);
-    expect(VectorMean([0, 0], [2, 0], [2, 2], [0, 2])).toEqual([1, 1]);
-});
+// test('Mid', () => {
+//     expect(Mid([1, 2], [3, 4], [5, 6])).toEqual([3, 4]);
+//     expect(Mid([0, 0], [2, 0], [2, 2], [0, 2])).toEqual([1, 1]);
+// });
 
 
 

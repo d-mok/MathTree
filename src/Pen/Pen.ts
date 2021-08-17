@@ -1,8 +1,4 @@
 
-/**
- * @ignore
- */
-const DEFAULT_BORDER = 0.2
 
 /**
  * @ignore
@@ -161,7 +157,7 @@ class PenCls extends Pencil {
          * Set the size of the canvas.
          * @category SetupSize
          * @param width - The scale of the width.
-         * @param height - The scale of the height.
+         * @param height - The scale of the height, default to be same as width
          * @returns void
          * ```
          * pen.size.set(0.5,2) 
@@ -172,7 +168,7 @@ class PenCls extends Pencil {
             this._pen.initSize(width, height)
 
             if (this._pen.range.AUTO_BORDER)
-                this._pen.initOuterBorder(DEFAULT_BORDER)
+                this._pen.initOuterBorder()
         },
         /**
          * Set the size of the canvas by resolution.
@@ -196,17 +192,26 @@ class PenCls extends Pencil {
         /**
          * Set the size of the canvas, lock xy ratio.
          * @category SetupSize
-         * @param width - The scale of the width.
+         * @param width - The max scale of the width.
+         * @param height - The max scale of the height, default to be same as width
          * @returns void
          * ```
-         * pen.size.lock(0.5) // half the standard width, with yPPI = xPPI.
+         * pen.size.lock(0.5) 
+         * // max at half the standard width and height, with yPPI = xPPI.
+         * pen.size.lock(1, 2) 
+         * // max at standard width and double standard height, with yPPI = xPPI.
          * ```
          */
-        lock(width = 1) {
+        lock(width: number = 1, height = width) {
             let [xmin, xmax] = this._pen.frame.xRange()
             let [ymin, ymax] = this._pen.frame.yRange()
             let ratio = (ymax - ymin) / (xmax - xmin)
-            this.set(width, width * ratio)
+
+            if (width * ratio < height) {
+                this.set(width, width * ratio)
+            } else {
+                this.set(height / ratio, height)
+            }
         },
     }
 
@@ -551,6 +556,19 @@ class PenCls extends Pencil {
         projector3D(angle: number = 60, depth: number = 0.5): void {
             this._pen.setProjector3D(angle, depth)
         },
+
+        /**
+         * Ser the border scale when auto creating outer border.
+         * @category set
+         * @param border - The width of border, same scale as pen.size.set()
+         * @returns void
+         * ```
+         * pen.set.border(0.2)
+         * ```
+         */
+        border(border: number = 0.2): void {
+            this._pen.setBorder(border)
+        },
         /**
          * Reset all pen settings.
          * @category set
@@ -637,8 +655,8 @@ class PenCls extends Pencil {
          */
         sector(center: Point2D, radius: number, qStart: number, qEnd: number) {
             this.arc(center, radius, qStart, qEnd)
-            let A = TranslatePoint(center, qStart, radius)
-            let B = TranslatePoint(center, qEnd, radius)
+            let A = Move(center, qStart, radius)
+            let B = Move(center, qEnd, radius)
             this._pen.line(A, center)
             this._pen.line(B, center)
         },
@@ -656,8 +674,8 @@ class PenCls extends Pencil {
          */
         segment(center: Point2D, radius: number, qStart: number, qEnd: number) {
             this.arc(center, radius, qStart, qEnd)
-            let A = TranslatePoint(center, qStart, radius)
-            let B = TranslatePoint(center, qEnd, radius)
+            let A = Move(center, qStart, radius)
+            let B = Move(center, qEnd, radius)
             this._pen.line(A, B)
         },
         /**
@@ -1132,7 +1150,7 @@ class PenCls extends Pencil {
 
             A = this._pen.pj(A)
             O = this._pen.pj(O)
-            B ??= RotatePoint(A, O, 90)
+            B ??= Rotate(A, O, 90)
             B = this._pen.pj(B)
 
             this._pen.drawRightAngle(A, O, B, size)
@@ -1277,7 +1295,7 @@ class PenCls extends Pencil {
         line([A, B]: [Point, Point], text: string | number, direction = 0, radius = 15) {
             A = this._pen.pj(A)
             B = this._pen.pj(B)
-            let M = MidPoint(A, B);
+            let M = Mid(A, B);
 
             if (typeof text === 'number')
                 text = this._pen.getTextWithLengthUnit(text)
@@ -1285,6 +1303,23 @@ class PenCls extends Pencil {
             let dir = this._pen.getDirInPixel(A, B) - 90
 
             this.point(M, text, dir + direction, radius);
+        },
+
+        /**
+         * Add a label to the center of a polygon.
+         * @param points - the polygon
+         * @param text - the string to write
+         * @returns void
+         * ```
+         * pen.label.polygon([[0,0],[1,0],[0,1]],'A') // label 'A' at the center
+         * ```
+         */
+        polygon(points: Point[], text: string) {
+            let pts = this._pen.pjs(points)
+            let center = toShape2D(pts).mean().toArray()
+            if (owl.alphabet(text)) this._pen.set.textItalic(true)
+            this._pen.write(center, text)
+            this._pen.restore();
         },
 
         /**
@@ -1520,7 +1555,7 @@ class PenCls extends Pencil {
          * pen.d3.circle([0,0,1],2,[1,0,0],[0,1,0]) // draw a xy circle with radius 2
          * ```
          */
-        circle(center: Point3D, radius: number, xVec: Vector3D, yVec: Vector3D, {
+        circle(center: Point3D, radius: number, xVec: Point3D, yVec: Point3D, {
             line = true,
             dash = !true,
             shade = !true,
@@ -1534,7 +1569,7 @@ class PenCls extends Pencil {
             arc?: [number, number]
         } = {}): void {
             let ps = cal.traceCircle([0, 0], radius, arc)
-            let ps3D = EmbedPlane(ps, center, xVec, yVec)
+            let ps3D = Embed(ps, center, xVec, yVec)
 
             if (line) {
                 this._pen.save()
@@ -1774,7 +1809,7 @@ class PenCls extends Pencil {
             if (height) {
                 let V = toShape3D(upperBase).mean().toArray()
                 let [A, B, C] = lowerBase
-                let O = ProjectionOnPlane(V, [A, B, C])
+                let O = PdFoot3D(V, [A, B, C])
                 this._pen.dash(O, V)
             }
             if (shadeLower)
@@ -1800,8 +1835,8 @@ class PenCls extends Pencil {
             shadeUpper = !true,
             envelope = !true,
         } = {}) {
-            let lower = EmbedPlaneZ(lowerBase, lowerZ)
-            let upper = EmbedPlaneZ(lowerBase, upperZ)
+            let lower = EmbedZ(lowerBase, lowerZ)
+            let upper = EmbedZ(lowerBase, upperZ)
             this.frustum(lower, upper, {
                 base,
                 height,
@@ -1853,7 +1888,7 @@ class PenCls extends Pencil {
             shadeLower = !true,
             envelope = !true,
         } = {}) {
-            let lower = EmbedPlaneZ(lowerBase, lowerZ)
+            let lower = EmbedZ(lowerBase, lowerZ)
             this.frustum(lower, vertex, {
                 base,
                 height,

@@ -196,7 +196,7 @@ class LinearFunction {
             this.refresh()
         } else {
             let m = -1 / Slope(A, B)
-            let M = MidPoint(A, B)
+            let M = Mid(A, B)
             this.byPointSlope(M, m)
         }
         return this

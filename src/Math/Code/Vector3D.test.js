@@ -13,8 +13,8 @@ test('Vec3DAdd', () => {
 
 
 
-test('Vec3DMean', () => {
-    expect(Vec3DMean([1, 2, 3], [3, 4, 5], [5, 6, 7])).toEqual([3, 4, 5]);
+test('Mid3D', () => {
+    expect(Mid3D([1, 2, 3], [3, 4, 5], [5, 6, 7])).toEqual([3, 4, 5]);
 });
 
 
@@ -30,10 +30,10 @@ test('Vec3DMean', () => {
 
 
 
-test('Vec3DScale', () => {
-    expect(Vec3DScale([1, 2, 3], 2)).toEqual([2, 4, 6]);
-    expect(Vec3DScale([1, 2, 3], -2)).toEqual([-2, -4, -6]);
-});
+// test('Vec3DScale', () => {
+//     expect(Vec3DScale([1, 2, 3], 2)).toEqual([2, 4, 6]);
+//     expect(Vec3DScale([1, 2, 3], -2)).toEqual([-2, -4, -6]);
+// });
 
 
 
@@ -98,35 +98,35 @@ test('Vec3DScale', () => {
 
 
 
-test('ProjectionOnPlane', () => {
+test('PdFoot3D', () => {
     let P = [2, 3, 4];
     let [A, B, C] = [[0, 0, 0], [1, 0, 0], [0, 1, 0]];
-    expect(ProjectionOnPlane(P, [A, B, C])).toEqual([2, 3, 0]);
+    expect(PdFoot3D(P, [A, B, C])).toEqual([2, 3, 0]);
 });
 
 
 
 
-test('EmbedPlane', () => {
+test('Embed', () => {
     let [A, B, C] = [[0, 0], [1, 0], [0, 1]];
-    expect(EmbedPlane([A, B, C], [0, 0, 2], [1, 0, 0], [0, 1, 0])).toEqual([[0, 0, 2], [1, 0, 2], [0, 1, 2]]);
+    expect(Embed([A, B, C], [0, 0, 2], [1, 0, 0], [0, 1, 0])).toEqual([[0, 0, 2], [1, 0, 2], [0, 1, 2]]);
 });
 
 
 
 
-test('EmbedPlaneZ', () => {
+test('EmbedZ', () => {
     let [A, B, C] = [[0, 0], [1, 0], [0, 1]];
-    expect(EmbedPlaneZ([A, B, C], 2)).toEqual([[0, 0, 2], [1, 0, 2], [0, 1, 2]]);
+    expect(EmbedZ([A, B, C], 2)).toEqual([[0, 0, 2], [1, 0, 2], [0, 1, 2]]);
 });
 
 
 
 
-test('ExtrudeBase', () => {
-    let [A, B, C] = [[0, 0, 0], [4, 0, 0], [0, 4, 0]];
-    expect(ExtrudeBase([A, B, C], [[0, 0, 4]], 0.25)).toEqual([[0, 0, 1], [3, 0, 1], [0, 3, 1]]);
-});
+// test('ExtrudeBase', () => {
+//     let [A, B, C] = [[0, 0, 0], [4, 0, 0], [0, 4, 0]];
+//     expect(ExtrudeBase([A, B, C], [[0, 0, 4]], 0.25)).toEqual([[0, 0, 1], [3, 0, 1], [0, 3, 1]]);
+// });
 
 
 

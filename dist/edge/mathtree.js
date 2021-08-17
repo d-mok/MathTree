@@ -26796,6 +26796,7 @@ class Pencil {
         this.$LENGTH_UNIT = undefined;
         this.$3D_ANGLE = 60;
         this.$3D_DEPTH = 0.5;
+        this.$BORDER = 0.2;
     }
     /**
      * Set the coordinate range of the canvas.
@@ -26819,11 +26820,13 @@ class Pencil {
         const hPixel = height * SIZE_SCALE * REM_PIXEL * frame_1.PEN_QUALITY;
         let $3D_ANGLE = this.$3D_ANGLE;
         let $3D_DEPTH = this.$3D_DEPTH;
+        let $BORDER = this.$BORDER;
         this.canvas.width = wPixel;
         this.canvas.height = hPixel;
         this.frame.setSize(wPixel, hPixel);
         this.setAllDefault();
         this.setProjector3D($3D_ANGLE, $3D_DEPTH);
+        this.setBorder($BORDER);
         this.INIT_SIZE_ALREADY = true;
     }
     // /**
@@ -26851,14 +26854,13 @@ class Pencil {
     // }
     /**
      * Set a border by extending the range and size. The original image will be unchanged. The size will be bigger.
-     * @param border - one-sided border width in scaled unit
      */
-    initOuterBorder(border) {
+    initOuterBorder() {
         if (!this.INIT_RANGE_ALREADY)
             throw '[Pencil Error] Range must be set before setting range border';
         if (!this.INIT_SIZE_ALREADY)
             throw '[Pencil Error] Size must be set before setting range border';
-        const borderPix = border * SIZE_SCALE * REM_PIXEL * frame_1.PEN_QUALITY;
+        const borderPix = this.$BORDER * SIZE_SCALE * REM_PIXEL * frame_1.PEN_QUALITY;
         let [xmin, xmax] = this.frame.xRange();
         let [ymin, ymax] = this.frame.yRange();
         const wPixel = this.frame.wPixel;
@@ -26872,7 +26874,7 @@ class Pencil {
         this.initRange([xmin, xmax], [ymin, ymax]);
         const width = wPixel / SIZE_SCALE / REM_PIXEL / frame_1.PEN_QUALITY;
         const height = hPixel / SIZE_SCALE / REM_PIXEL / frame_1.PEN_QUALITY;
-        this.initSize(width + 2 * border, height + 2 * border);
+        this.initSize(width + 2 * this.$BORDER, height + 2 * this.$BORDER);
     }
     pj(point) {
         return support_1.force2D(point, this.$3D_ANGLE, this.$3D_DEPTH);
@@ -26958,6 +26960,9 @@ class Pencil {
     setProjector3D(angle = 60, depth = 0.5) {
         this.$3D_ANGLE = angle;
         this.$3D_DEPTH = depth;
+    }
+    setBorder(border = 0.2) {
+        this.$BORDER = border;
     }
     setAllDefault() {
         this.setWeight();
@@ -29427,7 +29432,7 @@ class LinearFunction {
         }
         else {
             let m = -1 / Slope(A, B);
-            let M = MidPoint(A, B);
+            let M = Mid(A, B);
             this.byPointSlope(M, m);
         }
         return this;
@@ -30254,6 +30259,21 @@ globalThis.Slope = contract(Slope).seal({
 });
 /**
  * @category Geometry
+ * @return the slope perpendicular to AB
+ * ```
+ * PdSlope([0,0],[1,2]) // -0.5
+ * PdSlope([1,2],[1,2]) // NaN
+ * ```
+ */
+function PdSlope(A, B) {
+    return -1 / Slope(A, B);
+}
+globalThis.PdSlope = contract(PdSlope).seal({
+    arg: [owl.point2D],
+    args: function not_horizontal(A, B) { return !cal.eq(A[1], B[1]); }
+});
+/**
+ * @category Geometry
  * @return the distance AB
  * ```
  * Distance([0,0],[1,2]) // 2.23606797749979
@@ -30279,84 +30299,85 @@ function ChessboardDistance(A, B) {
 globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point2D]);
 /**
  * @category Geometry
- * @return the mid-pt of AB
+ * @return the mid-pt / centroid of `points`
  * ```
- * MidPoint([1,2],[3,4]) // [2,3]
+ * Mid([1,2],[3,4]) // [2,3]
+ * Mid([1,2],[3,4],[5,6]) // [3,4]
  * ```
  */
-function MidPoint(A, B) {
-    return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
+function Mid(...points) {
+    return toShape2D(points).mean().toArray();
 }
-globalThis.MidPoint = contract(MidPoint).sign([owl.point2D]);
+globalThis.Mid = contract(Mid).sign([owl.point2D]);
 /**
  * @category Geometry
  * @return the point P on AB such that AP : PB = ratio : 1-ratio
  * ```
- * DivisionPoint([1,0],[5,0],0.75) // [4,0]
+ * Slide([1,0],[5,0],0.75) // [4,0]
  * ```
  */
-function DivisionPoint(A, B, ratio = 0.5) {
+function Slide(A, B, ratio = 0.5) {
     let r = ratio;
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
 }
-globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point2D, owl.point2D, owl.num]);
+globalThis.Slide = contract(Slide).sign([owl.point2D, owl.point2D, owl.num]);
 /**
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
  * ```
- * RotatePoint([1,2],[0,0],90) // [-2,1]
+ * Rotate([1,2],[0,0],90) // [-2,1]
  * ```
  */
-function RotatePoint(P, O, q) {
+function Rotate(P, O, q) {
     return vec2D(O, P).rotate(q).add(O).blur().toArray();
 }
-globalThis.RotatePoint = contract(RotatePoint).sign([owl.point2D, owl.point2D, owl.num]);
+globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.point2D, owl.num]);
 /**
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
  * ```
- * Direction([1,0],[3,2]) // 45
- * Direction([3,2],[1,0]) // 225
+ * Dir([1,0],[3,2]) // 45
+ * Dir([3,2],[1,0]) // 225
  * ```
  */
-function Direction(A, B) {
+function Dir(A, B) {
     return vec2D(A, B).argument();
 }
-globalThis.Direction = contract(Direction).seal({
+globalThis.Dir = contract(Dir).seal({
     arg: [owl.point2D],
     args: function distinct_points(A, B) { return owl.distinct([A, B]); }
 });
-/**
- * @category Geometry
- * @return the polar angle of a normal direction to AB, on the right of AB.
- * ```
- * Normal([1,0],[3,2]) // 315
- * Normal([3,2],[1,0]) // 135
- * ```
- */
-function Normal(A, B) {
-    let R = RotatePoint(B, A, -90);
-    return Direction(A, R);
-}
-globalThis.Normal = contract(Normal).seal({
-    arg: [owl.point2D],
-    args: function distinct_points(A, B) { return owl.distinct([A, B]); }
-});
+// /**
+//  * @category Geometry
+//  * @return the polar angle of a normal direction to AB, on the right of AB.
+//  * ```
+//  * Normal([1,0],[3,2]) // 315
+//  * Normal([3,2],[1,0]) // 135
+//  * ```
+//  */
+// function Normal(A: Point2D, B: Point2D): number {
+//     let R = Rotate(B, A, -90);
+//     return Dir(A, R);
+// }
+// globalThis.Normal = contract(Normal).seal({
+//     arg: [owl.point2D],
+//     args: function distinct_points(A, B) { return owl.distinct([A, B]) }
+// })
 /**
  * @category Geometry
  * @return the foot of perpendicular from P to AB.
  * ```
- * PerpendicularFoot([-1,-1],[1,1],[-2,2]) // [0,0]
+ * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
  * ```
  */
-function PerpendicularFoot(A, B, P) {
-    let q = Normal(A, B);
+function PdFoot(A, B, P) {
+    let q = Dir(A, B) + 90;
     let V = PolToRect([1, q]);
     let Q = VectorAdd(P, V);
     return Intersection(A, B, P, Q);
 }
-globalThis.PerpendicularFoot = contract(PerpendicularFoot).seal({
+globalThis.PdFoot = contract(PdFoot).seal({
     arg: [owl.point2D],
     args: function distinct_points(A, B, P) { return owl.distinct([A, B]); }
 });
@@ -30378,48 +30399,58 @@ globalThis.Intersection = contract(Intersection).seal({
 });
 /**
  * @category Geometry
- * @return Translate point P in the polar angle q (or the direction of point q) by a distance.
+ * @return Translate point P in the direction `dir` by a `distance`.
+ * @param dir - a polar angle, or two points [A,B] representing Dir(A,B), or one point A representing Dir(P,A)
  * ```
- * TranslatePoint([1,2],90,3) // [1,5]
- * TranslatePoint([1,2],[10, 12],3) // [3.006894195, 4.229882439]
+ * Move([1,2],90,3) // [1,5]
+ * Move([1,2],[2, 2],3) // [4,2]
+ * Move([1,2],[[0,0],[1,0]],3) // [4,2]
  * ```
  */
-function TranslatePoint(P, q, distance) {
-    if (Array.isArray(q))
-        q = Direction(P, q);
+function Move(P, dir, distance) {
+    let q = 0;
+    if (typeof dir === 'number') {
+        q = dir;
+    }
+    else if (owl.point2D(dir)) {
+        q = Dir(P, dir);
+    }
+    else {
+        q = Dir(dir[0], dir[1]);
+    }
     let x = P[0] + distance * cos(q);
     let y = P[1] + distance * sin(q);
     return [x, y];
 }
-globalThis.TranslatePoint = contract(TranslatePoint).sign([
+globalThis.Move = contract(Move).sign([
     owl.point2D,
-    owl.or([owl.num, owl.point2D]),
+    owl.or([owl.num, owl.point2D, owl.arrayWith(owl.point2D)]),
     owl.num
 ]);
 /**
  * @category Geometry
  * @return Translate point P to the right by a distance.
  * ```
- * TranslateX([1,2],3) // [4,2]
- * TranslateX([1,2],-3) // [-2,2]
+ * MoveX([1,2],3) // [4,2]
+ * MoveX([1,2],-3) // [-2,2]
  * ```
  */
-function TranslateX(P, distance) {
-    return TranslatePoint(P, 0, distance);
+function MoveX(P, distance) {
+    return Move(P, 0, distance);
 }
-globalThis.TranslateX = contract(TranslateX).sign([owl.point2D, owl.num]);
+globalThis.MoveX = contract(MoveX).sign([owl.point2D, owl.num]);
 /**
  * @category Geometry
  * @return Translate point P upward by a distance.
  * ```
- * TranslateY([1,2],3) // [4,2]
- * TranslateY([1,2],-3) // [-2,2]
+ * MoveY([1,2],3) // [4,2]
+ * MoveY([1,2],-3) // [-2,2]
  * ```
  */
-function TranslateY(P, distance) {
-    return TranslatePoint(P, 90, distance);
+function MoveY(P, distance) {
+    return Move(P, 90, distance);
 }
-globalThis.TranslateY = contract(TranslateY).sign([owl.point2D, owl.num]);
+globalThis.MoveY = contract(MoveY).sign([owl.point2D, owl.num]);
 /**
  * @category Geometry
  * @return Reflect point P about x-axis
@@ -30519,27 +30550,27 @@ globalThis.IsReflex = contract(IsReflex).seal({
         return owl.distinct([A, O]) && owl.distinct([B, O]);
     }
 });
-/**
- * @category Geometry
- * @return points from turtle walk
- * ```
- * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
- * ```
- */
-function Turtle(start, ...walk) {
-    let arr = [start];
-    let lastPoint = start;
-    let facing = 0;
-    for (let w of walk) {
-        let [rot, dist] = w;
-        facing += rot;
-        let P = TranslatePoint(lastPoint, facing, dist);
-        arr.push(P);
-        lastPoint = P;
-    }
-    return arr;
-}
-globalThis.Turtle = contract(Turtle).sign([owl.point2D, owl.couple]);
+// /**
+//  * @category Geometry
+//  * @return points from turtle walk
+//  * ```
+//  * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
+//  * ```
+//  */
+// function Turtle(start: Point2D, ...walk: [rotate: number, distance: number][]): Point2D[] {
+//     let arr: Point2D[] = [start]
+//     let lastPoint = start
+//     let facing = 0
+//     for (let w of walk) {
+//         let [rot, dist] = w
+//         facing += rot
+//         let P = Move(lastPoint, facing, dist)
+//         arr.push(P)
+//         lastPoint = P
+//     }
+//     return arr
+// }
+// globalThis.Turtle = contract(Turtle).sign([owl.point2D, owl.couple])
 /**
  * @category Geometry
  * @return points on a regular polygon
@@ -30710,8 +30741,8 @@ function FeasiblePolygon(...cons) {
     }
     vertices = toList(vertices).uniqueDeep();
     Should(vertices.length > 2, 'No feasible region.');
-    const center = VectorMean(...vertices);
-    vertices = SortBy(vertices, x => Direction(center, x));
+    const center = Mid(...vertices);
+    vertices = SortBy(vertices, x => Dir(center, x));
     return vertices;
 }
 globalThis.FeasiblePolygon = FeasiblePolygon;
@@ -33062,8 +33093,8 @@ globalThis.SolveTriangle = contract(SolveTriangle).sign();
  * ```
  */
 function Orthocentre(A, B, C) {
-    let H = PerpendicularFoot(A, B, C);
-    let G = PerpendicularFoot(B, C, A);
+    let H = PdFoot(A, B, C);
+    let G = PdFoot(B, C, A);
     let [x, y] = Intersection(C, H, A, G);
     return [cal.blur(x), cal.blur(y)];
 }
@@ -33492,20 +33523,20 @@ function VectorAdd(...vectors) {
     return [x, y];
 }
 globalThis.VectorAdd = contract(VectorAdd).sign([owl.vector]);
-/**
- * @category Vector
- * @return mean of all vectors
- * ```
- * VectorMean([1,2],[3,4],[5,6]) // [3,4]
- * VectorMean([0,0],[2,0],[2,2],[0,2]) // [1,1]
- * ```
- */
-function VectorMean(...vectors) {
-    const x = Sum(...vectors.map(p => p[0])) / vectors.length;
-    const y = Sum(...vectors.map(p => p[1])) / vectors.length;
-    return [x, y];
-}
-globalThis.VectorMean = contract(VectorMean).sign([owl.vector]);
+// /**
+//  * @category Vector
+//  * @return mean of all vectors
+//  * ```
+//  * Mid([1,2],[3,4],[5,6]) // [3,4]
+//  * Mid([0,0],[2,0],[2,2],[0,2]) // [1,1]
+//  * ```
+//  */
+// function Mid(...vectors: Point2D[]): Point2D {
+//     const x = Sum(...vectors.map(p => p[0])) / vectors.length
+//     const y = Sum(...vectors.map(p => p[1])) / vectors.length
+//     return [x, y];
+// }
+// globalThis.Mid = contract(Mid).sign([owl.vector])
 // /**
 //  * @category Vector
 //  * @deprecated useless
@@ -33666,19 +33697,18 @@ function Vec3DAdd(...vectors) {
 globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D]);
 /**
  * @category Vector3D
- * @deprecated useless
  * @return mean of all vectors
  * ```
- * Vec3DMean([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
+ * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
  * ```
  */
-function Vec3DMean(...vectors) {
+function Mid3D(...vectors) {
     const x = Sum(...vectors.map(p => p[0])) / vectors.length;
     const y = Sum(...vectors.map(p => p[1])) / vectors.length;
     const z = Sum(...vectors.map(p => p[2])) / vectors.length;
     return [x, y, z];
 }
-globalThis.Vec3DMean = contract(Vec3DMean).sign([owl.vector3D]);
+globalThis.Mid3D = contract(Mid3D).sign([owl.vector3D]);
 // /**
 //  * @category Vector3D
 //  * @deprecated useless
@@ -33694,19 +33724,19 @@ globalThis.Vec3DMean = contract(Vec3DMean).sign([owl.vector3D]);
 //     return (x * x + y * y + z * z) ** 0.5
 // }
 // globalThis.Vec3DLength = contract(Vec3DLength).sign([owl.vector3D])
-/**
- * @category Vector3D
- * @deprecated useless
- * @return find [kx,ky,kz] from [x,y,z]
- * ```
- * Vec3DScale([1,2,3],2) // [2,4,6]
- * Vec3DScale([1,2,3],-2) // [-2,-4,-6]
- * ```
- */
-function Vec3DScale(v, k) {
-    return [k * v[0], k * v[1], k * v[2]];
-}
-globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num]);
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return find [kx,ky,kz] from [x,y,z]
+//  * ```
+//  * Vec3DScale([1,2,3],2) // [2,4,6]
+//  * Vec3DScale([1,2,3],-2) // [-2,-4,-6]
+//  * ```
+//  */
+// function Vec3DScale(v: Point3D, k: number): Point3D {
+//     return [k * v[0], k * v[1], k * v[2]];
+// }
+// globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num])
 // /**
 //  * @category Vector3D
 //  * @deprecated useless
@@ -33791,64 +33821,64 @@ globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num]);
  * ```
  * let P = [2,3,4]
  * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
- * ProjectionOnPlane(P,[A,B,C]) // [2,3,0]
+ * PdFoot3D(P,[A,B,C]) // [2,3,0]
  * ```
  */
-function ProjectionOnPlane(point, plane) {
+function PdFoot3D(point, plane) {
     let [A, B, C] = plane;
     return vec3D(point).projectOnPlane(vec3D(A, B), vec3D(B, C)).toArray();
 }
-globalThis.ProjectionOnPlane = contract(ProjectionOnPlane)
+globalThis.PdFoot3D = contract(PdFoot3D)
     .sign([owl.vector3D, owl.arrayWith(owl.vector3D)]);
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D
  * ```
  * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedPlane([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
+ * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-function EmbedPlane(plane2D, origin = [0, 0, 0], xVec = [1, 0, 0], yVec = [0, 1, 0]) {
+function Embed(plane2D, origin = [0, 0, 0], xVec = [1, 0, 0], yVec = [0, 1, 0]) {
     return toShape2D(plane2D)
         .erect(xVec, yVec)
         .translate(origin)
         .toArray();
 }
-globalThis.EmbedPlane = contract(EmbedPlane)
+globalThis.Embed = contract(Embed)
     .sign([owl.arrayWith(owl.point2D), owl.point3D, owl.vector3D, owl.vector3D]);
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D with constant z
  * ```
  * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedPlaneZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
+ * EmbedZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-function EmbedPlaneZ(plane2D, z = 0) {
-    return EmbedPlane(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0]);
+function EmbedZ(plane2D, z = 0) {
+    return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0]);
 }
-globalThis.EmbedPlaneZ = contract(EmbedPlaneZ).sign([owl.arrayWith(owl.point2D), owl.num]);
-/**
- * @category Vector3D
- * @deprecated use Extrude
- * @return extrude the lower base of a frustum towards the upper base by a ratio
- * ```
- * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
- * ExtrudeBase([A,B,C],[[0,0,4]],0.25) // [[0,0,0],[3,0,0],[0,3,0]]
- * ```
- */
-function ExtrudeBase(lowerBase, upperBase, ratio) {
-    let arr = [];
-    for (let i = 0; i < Math.max(lowerBase.length, upperBase.length); i++) {
-        let L = i < lowerBase.length ? lowerBase[i] : lowerBase[lowerBase.length - 1];
-        let U = i < upperBase.length ? upperBase[i] : upperBase[upperBase.length - 1];
-        let r = ratio;
-        let s = 1 - r;
-        arr.push(Vec3DAdd(Vec3DScale(U, r), Vec3DScale(L, s)));
-    }
-    return arr;
-}
-globalThis.ExtrudeBase = contract(ExtrudeBase).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num]);
+globalThis.EmbedZ = contract(EmbedZ).sign([owl.arrayWith(owl.point2D), owl.num]);
+// /**
+//  * @category Vector3D
+//  * @deprecated use Extrude
+//  * @return extrude the lower base of a frustum towards the upper base by a ratio
+//  * ```
+//  * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
+//  * ExtrudeBase([A,B,C],[[0,0,4]],0.25) // [[0,0,0],[3,0,0],[0,3,0]]
+//  * ```
+//  */
+// function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: number) {
+//     let arr: Point3D[] = []
+//     for (let i = 0; i < Math.max(lowerBase.length, upperBase.length); i++) {
+//         let L = i < lowerBase.length ? lowerBase[i] : lowerBase[lowerBase.length - 1]
+//         let U = i < upperBase.length ? upperBase[i] : upperBase[upperBase.length - 1]
+//         let r = ratio
+//         let s = 1 - r
+//         arr.push(Vec3DAdd(Vec3DScale(U, r), Vec3DScale(L, s)))
+//     }
+//     return arr
+// }
+// globalThis.ExtrudeBase = contract(ExtrudeBase).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num])
 /**
  * @category Vector3D
  * @return extrude the lower base of a frustum towards the upper base by a ratio
@@ -34431,7 +34461,7 @@ class AutoPenCls {
         let dx = xmax - xmin;
         let dy = ymax - ymin;
         let dmax = Math.max(dx, dy) * 0.8;
-        let G = VectorMean(A, B, C);
+        let G = Mid(A, B, C);
         let T = triangle;
         let sideA = T.sideA;
         let sideB = T.sideB;
@@ -34446,7 +34476,7 @@ class AutoPenCls {
         pen.setup.size(scale);
         pen.setup.range([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax]);
         function drawHeight(vertex, base) {
-            let F = PerpendicularFoot(base[0], base[1], vertex);
+            let F = PdFoot(base[0], base[1], vertex);
             pen.set.dash([5, 5]);
             pen.set.strokeColor('grey');
             pen.line(vertex, F);
@@ -34474,11 +34504,11 @@ class AutoPenCls {
         pen.polygon(A, B, C);
         pen.set.textItalic(true);
         if (labelA)
-            pen.label.point(A, labelA.toString(), Direction(G, A));
+            pen.label.point(A, labelA.toString(), Dir(G, A));
         if (labelB)
-            pen.label.point(B, labelB.toString(), Direction(G, B));
+            pen.label.point(B, labelB.toString(), Dir(G, B));
         if (labelC)
-            pen.label.point(C, labelC.toString(), Direction(G, C));
+            pen.label.point(C, labelC.toString(), Dir(G, C));
         pen.set.textItalic();
         let AB = [B[0] - A[0], B[1] - A[1]];
         let BC = [C[0] - B[0], C[1] - B[1]];
@@ -35019,10 +35049,6 @@ globalThis.AutoPen = AutoPen;
 /**
  * @ignore
  */
-const DEFAULT_BORDER = 0.2;
-/**
- * @ignore
- */
 const DEFAULT_POINT_RADIUS_PIXEL = 2;
 /**
  * @ignore
@@ -35142,7 +35168,7 @@ class PenCls extends Pencil {
             /**
              * Set the coordinate range by specifying in-view points, include O(0,0).
              * @category SetupRange
-             * @param points - An array of in-view points [x,y].
+             * @param points - An array of in-view points [x,y], or circle [[h,k,r]], or sphere [[a,b,c],r]
              * @returns void
              * ```
              * pen.range.extend([1,2],[3,4]) //  [0,0], [1,2], [3,4] must be in-view
@@ -35166,7 +35192,7 @@ class PenCls extends Pencil {
              * Set the size of the canvas.
              * @category SetupSize
              * @param width - The scale of the width.
-             * @param height - The scale of the height.
+             * @param height - The scale of the height, default to be same as width
              * @returns void
              * ```
              * pen.size.set(0.5,2)
@@ -35176,7 +35202,7 @@ class PenCls extends Pencil {
             set(width = 1, height = width) {
                 this._pen.initSize(width, height);
                 if (this._pen.range.AUTO_BORDER)
-                    this._pen.initOuterBorder(DEFAULT_BORDER);
+                    this._pen.initOuterBorder();
             },
             /**
              * Set the size of the canvas by resolution.
@@ -35200,17 +35226,26 @@ class PenCls extends Pencil {
             /**
              * Set the size of the canvas, lock xy ratio.
              * @category SetupSize
-             * @param width - The scale of the width.
+             * @param width - The max scale of the width.
+             * @param height - The max scale of the height, default to be same as width
              * @returns void
              * ```
-             * pen.size.lock(0.5) // half the standard width, with yPPI = xPPI.
+             * pen.size.lock(0.5)
+             * // max at half the standard width and height, with yPPI = xPPI.
+             * pen.size.lock(1, 2)
+             * // max at standard width and double standard height, with yPPI = xPPI.
              * ```
              */
-            lock(width = 1) {
+            lock(width = 1, height = width) {
                 let [xmin, xmax] = this._pen.frame.xRange();
                 let [ymin, ymax] = this._pen.frame.yRange();
                 let ratio = (ymax - ymin) / (xmax - xmin);
-                this.set(width, width * ratio);
+                if (width * ratio < height) {
+                    this.set(width, width * ratio);
+                }
+                else {
+                    this.set(height / ratio, height);
+                }
             },
         };
         /**
@@ -35550,6 +35585,18 @@ class PenCls extends Pencil {
                 this._pen.setProjector3D(angle, depth);
             },
             /**
+             * Ser the border scale when auto creating outer border.
+             * @category set
+             * @param border - The width of border, same scale as pen.size.set()
+             * @returns void
+             * ```
+             * pen.set.border(0.2)
+             * ```
+             */
+            border(border = 0.2) {
+                this._pen.setBorder(border);
+            },
+            /**
              * Reset all pen settings.
              * @category set
              * @returns void
@@ -35614,8 +35661,8 @@ class PenCls extends Pencil {
              */
             sector(center, radius, qStart, qEnd) {
                 this.arc(center, radius, qStart, qEnd);
-                let A = TranslatePoint(center, qStart, radius);
-                let B = TranslatePoint(center, qEnd, radius);
+                let A = Move(center, qStart, radius);
+                let B = Move(center, qEnd, radius);
                 this._pen.line(A, center);
                 this._pen.line(B, center);
             },
@@ -35633,8 +35680,8 @@ class PenCls extends Pencil {
              */
             segment(center, radius, qStart, qEnd) {
                 this.arc(center, radius, qStart, qEnd);
-                let A = TranslatePoint(center, qStart, radius);
-                let B = TranslatePoint(center, qEnd, radius);
+                let A = Move(center, qStart, radius);
+                let B = Move(center, qEnd, radius);
                 this._pen.line(A, B);
             },
             /**
@@ -35870,7 +35917,7 @@ class PenCls extends Pencil {
             rightAngle(A, O, B, size = 12) {
                 A = this._pen.pj(A);
                 O = this._pen.pj(O);
-                B !== null && B !== void 0 ? B : (B = RotatePoint(A, O, 90));
+                B !== null && B !== void 0 ? B : (B = Rotate(A, O, 90));
                 B = this._pen.pj(B);
                 this._pen.drawRightAngle(A, O, B, size);
             },
@@ -35992,11 +36039,28 @@ class PenCls extends Pencil {
             line([A, B], text, direction = 0, radius = 15) {
                 A = this._pen.pj(A);
                 B = this._pen.pj(B);
-                let M = MidPoint(A, B);
+                let M = Mid(A, B);
                 if (typeof text === 'number')
                     text = this._pen.getTextWithLengthUnit(text);
                 let dir = this._pen.getDirInPixel(A, B) - 90;
                 this.point(M, text, dir + direction, radius);
+            },
+            /**
+             * Add a label to the center of a polygon.
+             * @param points - the polygon
+             * @param text - the string to write
+             * @returns void
+             * ```
+             * pen.label.polygon([[0,0],[1,0],[0,1]],'A') // label 'A' at the center
+             * ```
+             */
+            polygon(points, text) {
+                let pts = this._pen.pjs(points);
+                let center = toShape2D(pts).mean().toArray();
+                if (owl.alphabet(text))
+                    this._pen.set.textItalic(true);
+                this._pen.write(center, text);
+                this._pen.restore();
             },
             /**
              * Add a coordinates label to a point.
@@ -36215,7 +36279,7 @@ class PenCls extends Pencil {
              */
             circle(center, radius, xVec, yVec, { line = true, dash = !true, shade = !true, fill = !true, arc = [0, 360] } = {}) {
                 let ps = cal.traceCircle([0, 0], radius, arc);
-                let ps3D = EmbedPlane(ps, center, xVec, yVec);
+                let ps3D = Embed(ps, center, xVec, yVec);
                 if (line) {
                     this._pen.save();
                     if (dash)
@@ -36367,7 +36431,7 @@ class PenCls extends Pencil {
                 if (height) {
                     let V = toShape3D(upperBase).mean().toArray();
                     let [A, B, C] = lowerBase;
-                    let O = ProjectionOnPlane(V, [A, B, C]);
+                    let O = PdFoot3D(V, [A, B, C]);
                     this._pen.dash(O, V);
                 }
                 if (shadeLower)
@@ -36385,8 +36449,8 @@ class PenCls extends Pencil {
              * ```
              */
             prismZ(lowerBase, lowerZ, upperZ, { base = true, height = !true, shadeLower = !true, shadeUpper = !true, envelope = !true, } = {}) {
-                let lower = EmbedPlaneZ(lowerBase, lowerZ);
-                let upper = EmbedPlaneZ(lowerBase, upperZ);
+                let lower = EmbedZ(lowerBase, lowerZ);
+                let upper = EmbedZ(lowerBase, upperZ);
                 this.frustum(lower, upper, {
                     base,
                     height,
@@ -36423,7 +36487,7 @@ class PenCls extends Pencil {
              * ```
              */
             pyramidZ(lowerBase, lowerZ, vertex, { base = true, height = !true, shadeLower = !true, envelope = !true, } = {}) {
-                let lower = EmbedPlaneZ(lowerBase, lowerZ);
+                let lower = EmbedZ(lowerBase, lowerZ);
                 this.frustum(lower, vertex, {
                     base,
                     height,

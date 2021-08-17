@@ -13,9 +13,6 @@ type Point3D = [x: number, y: number, z: number]
 type Point = Point2D | Point3D
 
 
-// to be delete
-type Vector = [x: number, y: number]
-type Vector3D = [x: number, y: number, z: number]
 
 
 type interval = [min: number, max: number]

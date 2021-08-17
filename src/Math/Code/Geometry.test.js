@@ -10,6 +10,17 @@ test('Slope', () => {
 
 
 
+
+test('PdSlope', () => {
+    expect(PdSlope([0, 0], [1, 2])).toBe(-1 / 2);
+    expect(PdSlope([1, 2], [0, 0])).toBe(-1 / 2);
+    expect(PdSlope([3, 4], [6, -5])).toBe(1 / 3);
+    expect(() => PdSlope([3, 4], [2, 4])).toThrow();
+    expect(() => PdSlope([3, 3], [3, 3])).toThrow();
+});
+
+
+
 test('Distance', () => {
     expect(Distance([0, 0], [1, 2])).toBeCloseTo(5 ** 0.5, 12);
     expect(Distance([1, 2], [0, 0])).toBeCloseTo(5 ** 0.5, 12);
@@ -29,51 +40,53 @@ test('ChessboardDistance', () => {
 
 
 
-test('MidPoint', () => {
-    expect(MidPoint([0, 0], [1, 2])).toEqual([0.5, 1]);
-    expect(MidPoint([1, 2], [0, 0])).toEqual([0.5, 1]);
-    expect(MidPoint([1, 2], [1, 2])).toEqual([1, 2]);
-    expect(MidPoint([3, 4], [6, -5])).toEqual([4.5, -0.5]);
+test('Mid', () => {
+    expect(Mid([0, 0], [1, 2])).toEqual([0.5, 1]);
+    expect(Mid([1, 2], [0, 0])).toEqual([0.5, 1]);
+    expect(Mid([1, 2], [1, 2])).toEqual([1, 2]);
+    expect(Mid([3, 4], [6, -5])).toEqual([4.5, -0.5]);
+    expect(Mid([1, 2], [3, 4], [5, 6])).toEqual([3, 4]);
+    expect(Mid([0, 0], [2, 0], [2, 2], [0, 2])).toEqual([1, 1]);
 });
 
 
 
-test('DivisionPoint', () => {
-    expect(DivisionPoint([0, 0], [4, 8], 0.25)).toEqual([1, 2]);
-    expect(DivisionPoint([0, 0], [4, 8], 1.25)).toEqual([5, 10]);
-    expect(DivisionPoint([0, 0], [4, 8], -0.25)).toEqual([-1, -2]);
-});
-
-
-
-
-
-test('RotatePoint', () => {
-    expect(RotatePoint([1, 2], [0, 0], 90)).toEqual([-2, 1]);
-    expect(RotatePoint([1, 2], [0, 0], 180)).toEqual([-1, -2]);
-    expect(RotatePoint([1, 2], [0, 0], 270)).toEqual([2, -1]);
-    expect(RotatePoint([1, 2], [0, 0], 360)).toEqual([1, 2]);
-});
-
-
-test('Direction', () => {
-    expect(Direction([1, 0], [3, 2])).toBe(45);
-    expect(Direction([3, 2], [1, 0])).toBe(225);
-    expect(() => Direction([3, 2], [3, 2])).toThrow();
+test('Slide', () => {
+    expect(Slide([0, 0], [4, 8], 0.25)).toEqual([1, 2]);
+    expect(Slide([0, 0], [4, 8], 1.25)).toEqual([5, 10]);
+    expect(Slide([0, 0], [4, 8], -0.25)).toEqual([-1, -2]);
 });
 
 
 
 
-test('Normal', () => {
-    expect(Normal([1, 0], [3, 2])).toBe(315);
-    expect(Normal([3, 2], [1, 0])).toBe(135);
+
+test('Rotate', () => {
+    expect(Rotate([1, 2], [0, 0], 90)).toEqual([-2, 1]);
+    expect(Rotate([1, 2], [0, 0], 180)).toEqual([-1, -2]);
+    expect(Rotate([1, 2], [0, 0], 270)).toEqual([2, -1]);
+    expect(Rotate([1, 2], [0, 0], 360)).toEqual([1, 2]);
 });
 
 
-test('PerpendicularFoot', () => {
-    expect(PerpendicularFoot([-1, -1], [1, 1], [-2, 2])).toBeArrayCloseTo([0, 0]);
-    expect(PerpendicularFoot([-1, -1], [1, 1], [0, 0])).toBeArrayCloseTo([0, 0]);
+test('Dir', () => {
+    expect(Dir([1, 0], [3, 2])).toBe(45);
+    expect(Dir([3, 2], [1, 0])).toBe(225);
+    expect(() => Dir([3, 2], [3, 2])).toThrow();
+});
+
+
+
+
+// test('Normal', () => {
+//     expect(Normal([1, 0], [3, 2])).toBe(315);
+//     expect(Normal([3, 2], [1, 0])).toBe(135);
+// });
+
+
+test('PdFoot', () => {
+    expect(PdFoot([-1, -1], [1, 1], [-2, 2])).toBeArrayCloseTo([0, 0]);
+    expect(PdFoot([-1, -1], [1, 1], [0, 0])).toBeArrayCloseTo([0, 0]);
 });
 
 
@@ -85,29 +98,30 @@ test('Intersection', () => {
 
 
 
-test('TranslatePoint', () => {
-    expect(TranslatePoint([1, 2], 90, 3)).toEqual([1, 5]);
-    expect(TranslatePoint([1, 2], -90, 3)).toEqual([1, -1]);
-    expect(TranslatePoint([1, 2], 180, 3)).toEqual([-2, 2]);
-    expect(TranslatePoint([1, 2], 0, 3)).toEqual([4, 2]);
-    expect(TranslatePoint([1, 2], 30, 3)).toBeArrayCloseTo([3.598076211, 3.5]);
-    expect(TranslatePoint([1, 2], [10, 12], 3)).toBeArrayCloseTo([3.006894195, 4.229882439]);
+test('Move', () => {
+    expect(Move([1, 2], 90, 3)).toEqual([1, 5]);
+    expect(Move([1, 2], -90, 3)).toEqual([1, -1]);
+    expect(Move([1, 2], 180, 3)).toEqual([-2, 2]);
+    expect(Move([1, 2], 0, 3)).toEqual([4, 2]);
+    expect(Move([1, 2], 30, 3)).toBeArrayCloseTo([3.598076211, 3.5]);
+    expect(Move([1, 2], [10, 12], 3)).toBeArrayCloseTo([3.006894195, 4.229882439]);
+    expect(Move([1, 2], [[0, 0], [1, 0]], 3)).toBeArrayCloseTo([4, 2]);
 });
 
 
 
-test('TranslateX', () => {
-    expect(TranslateX([1, 2], 3)).toEqual([4, 2]);
-    expect(TranslateX([1, 2], 4)).toEqual([5, 2]);
-    expect(TranslateX([1, 2], -3)).toEqual([-2, 2]);
+test('MoveX', () => {
+    expect(MoveX([1, 2], 3)).toEqual([4, 2]);
+    expect(MoveX([1, 2], 4)).toEqual([5, 2]);
+    expect(MoveX([1, 2], -3)).toEqual([-2, 2]);
 });
 
 
 
-test('TranslateY', () => {
-    expect(TranslateY([1, 2], 3)).toEqual([1, 5]);
-    expect(TranslateY([1, 2], 4)).toEqual([1, 6]);
-    expect(TranslateY([1, 2], -3)).toEqual([1, -1]);
+test('MoveY', () => {
+    expect(MoveY([1, 2], 3)).toEqual([1, 5]);
+    expect(MoveY([1, 2], 4)).toEqual([1, 6]);
+    expect(MoveY([1, 2], -3)).toEqual([1, -1]);
 });
 
 
@@ -175,9 +189,9 @@ test('IsReflex', () => {
 
 
 
-test('Turtle', () => {
-    expect(Turtle([0, 0], [0, 1], [90, 1], [90, 1])).toEqual([[0, 0], [1, 0], [1, 1], [0, 1]]);
-});
+// test('Turtle', () => {
+//     expect(Turtle([0, 0], [0, 1], [90, 1], [90, 1])).toEqual([[0, 0], [1, 0], [1, 1], [0, 1]]);
+// });
 
 
 
@@ -191,15 +205,15 @@ test('RegularPolygon', () => {
 
 
 test('ArcLength', () => {
-    expect(ArcLength(2,90)).toBe(Math.PI)
-    expect(ArcLength(2,180)).toBe(2*Math.PI)
-    expect(ArcLength(0,180)).toBe(0)
+    expect(ArcLength(2, 90)).toBe(Math.PI);
+    expect(ArcLength(2, 180)).toBe(2 * Math.PI);
+    expect(ArcLength(0, 180)).toBe(0);
 });
 
 
 
 test('IsConvexPolygon', () => {
-    expect(IsConvexPolygon([0,0],[1,0],[0,1])).toBe(true)
-    expect(IsConvexPolygon([0,0],[3,0],[1,1],[0,3])).toBe(false)
+    expect(IsConvexPolygon([0, 0], [1, 0], [0, 1])).toBe(true);
+    expect(IsConvexPolygon([0, 0], [3, 0], [1, 1], [0, 3])).toBe(false);
 });
 

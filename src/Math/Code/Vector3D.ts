@@ -9,7 +9,7 @@
  * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
  * ```
  */
-function Vec3D(O: Point3D, P: Point3D): Vector3D {
+function Vec3D(O: Point3D, P: Point3D): Point3D {
     return [P[0] - O[0], P[1] - O[1], P[2] - O[2]];
 }
 globalThis.Vec3D = contract(Vec3D).sign([owl.point3D])
@@ -24,7 +24,7 @@ globalThis.Vec3D = contract(Vec3D).sign([owl.point3D])
  * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
  * ```
  */
-function Vec3DAdd(...vectors: Vector3D[]): Vector3D {
+function Vec3DAdd(...vectors: Point3D[]): Point3D {
     const x = Sum(...vectors.map(p => p[0]))
     const y = Sum(...vectors.map(p => p[1]))
     const z = Sum(...vectors.map(p => p[2]))
@@ -37,19 +37,18 @@ globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D])
 
 /**
  * @category Vector3D
- * @deprecated useless
  * @return mean of all vectors
  * ```
- * Vec3DMean([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
+ * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
  * ```
  */
-function Vec3DMean(...vectors: Vector3D[]): Vector3D {
+function Mid3D(...vectors: Point3D[]): Point3D {
     const x = Sum(...vectors.map(p => p[0])) / vectors.length
     const y = Sum(...vectors.map(p => p[1])) / vectors.length
     const z = Sum(...vectors.map(p => p[2])) / vectors.length
     return [x, y, z];
 }
-globalThis.Vec3DMean = contract(Vec3DMean).sign([owl.vector3D])
+globalThis.Mid3D = contract(Mid3D).sign([owl.vector3D])
 
 
 
@@ -75,19 +74,19 @@ globalThis.Vec3DMean = contract(Vec3DMean).sign([owl.vector3D])
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return find [kx,ky,kz] from [x,y,z]
- * ```
- * Vec3DScale([1,2,3],2) // [2,4,6]
- * Vec3DScale([1,2,3],-2) // [-2,-4,-6]
- * ```
- */
-function Vec3DScale(v: Vector3D, k: number): Vector3D {
-    return [k * v[0], k * v[1], k * v[2]];
-}
-globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return find [kx,ky,kz] from [x,y,z]
+//  * ```
+//  * Vec3DScale([1,2,3],2) // [2,4,6]
+//  * Vec3DScale([1,2,3],-2) // [-2,-4,-6]
+//  * ```
+//  */
+// function Vec3DScale(v: Point3D, k: number): Point3D {
+//     return [k * v[0], k * v[1], k * v[2]];
+// }
+// globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num])
 
 
 
@@ -197,14 +196,14 @@ globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num])
  * ```
  * let P = [2,3,4]
  * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
- * ProjectionOnPlane(P,[A,B,C]) // [2,3,0]
+ * PdFoot3D(P,[A,B,C]) // [2,3,0]
  * ```
  */
-function ProjectionOnPlane(point: Point3D, plane: [Point3D, Point3D, Point3D]): Point3D {
+function PdFoot3D(point: Point3D, plane: [Point3D, Point3D, Point3D]): Point3D {
     let [A, B, C] = plane
     return vec3D(point).projectOnPlane(vec3D(A, B), vec3D(B, C)).toArray()
 }
-globalThis.ProjectionOnPlane = contract(ProjectionOnPlane)
+globalThis.PdFoot3D = contract(PdFoot3D)
     .sign([owl.vector3D, owl.arrayWith(owl.vector3D)])
 
 
@@ -214,16 +213,16 @@ globalThis.ProjectionOnPlane = contract(ProjectionOnPlane)
  * @return embed points on xy-plane onto a plane in 3D
  * ```
  * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedPlane([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
+ * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-function EmbedPlane(plane2D: Point2D[], origin: Point3D = [0, 0, 0], xVec: Vector3D = [1, 0, 0], yVec: Vector3D = [0, 1, 0]): Point3D[] {
+function Embed(plane2D: Point2D[], origin: Point3D = [0, 0, 0], xVec: Point3D = [1, 0, 0], yVec: Point3D = [0, 1, 0]): Point3D[] {
     return toShape2D(plane2D)
         .erect(xVec, yVec)
         .translate(origin)
         .toArray()
 }
-globalThis.EmbedPlane = contract(EmbedPlane)
+globalThis.Embed = contract(Embed)
     .sign([owl.arrayWith(owl.point2D), owl.point3D, owl.vector3D, owl.vector3D])
 
 
@@ -233,36 +232,36 @@ globalThis.EmbedPlane = contract(EmbedPlane)
  * @return embed points on xy-plane onto a plane in 3D with constant z
  * ```
  * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedPlaneZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
+ * EmbedZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-function EmbedPlaneZ(plane2D: Point2D[], z: number = 0): Point3D[] {
-    return EmbedPlane(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0])
+function EmbedZ(plane2D: Point2D[], z: number = 0): Point3D[] {
+    return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0])
 }
-globalThis.EmbedPlaneZ = contract(EmbedPlaneZ).sign([owl.arrayWith(owl.point2D), owl.num])
+globalThis.EmbedZ = contract(EmbedZ).sign([owl.arrayWith(owl.point2D), owl.num])
 
 
-/**
- * @category Vector3D
- * @deprecated use Extrude
- * @return extrude the lower base of a frustum towards the upper base by a ratio
- * ```
- * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
- * ExtrudeBase([A,B,C],[[0,0,4]],0.25) // [[0,0,0],[3,0,0],[0,3,0]]
- * ```
- */
-function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: number) {
-    let arr: Point3D[] = []
-    for (let i = 0; i < Math.max(lowerBase.length, upperBase.length); i++) {
-        let L = i < lowerBase.length ? lowerBase[i] : lowerBase[lowerBase.length - 1]
-        let U = i < upperBase.length ? upperBase[i] : upperBase[upperBase.length - 1]
-        let r = ratio
-        let s = 1 - r
-        arr.push(Vec3DAdd(Vec3DScale(U, r), Vec3DScale(L, s)))
-    }
-    return arr
-}
-globalThis.ExtrudeBase = contract(ExtrudeBase).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num])
+// /**
+//  * @category Vector3D
+//  * @deprecated use Extrude
+//  * @return extrude the lower base of a frustum towards the upper base by a ratio
+//  * ```
+//  * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
+//  * ExtrudeBase([A,B,C],[[0,0,4]],0.25) // [[0,0,0],[3,0,0],[0,3,0]]
+//  * ```
+//  */
+// function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: number) {
+//     let arr: Point3D[] = []
+//     for (let i = 0; i < Math.max(lowerBase.length, upperBase.length); i++) {
+//         let L = i < lowerBase.length ? lowerBase[i] : lowerBase[lowerBase.length - 1]
+//         let U = i < upperBase.length ? upperBase[i] : upperBase[upperBase.length - 1]
+//         let r = ratio
+//         let s = 1 - r
+//         arr.push(Vec3DAdd(Vec3DScale(U, r), Vec3DScale(L, s)))
+//     }
+//     return arr
+// }
+// globalThis.ExtrudeBase = contract(ExtrudeBase).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num])
 
 
 

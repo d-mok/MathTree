@@ -16,6 +16,23 @@ globalThis.Slope = contract(Slope).seal({
     args: function not_vertical(A, B) { return !cal.eq(A[0], B[0]) }
 })
 
+/**
+ * @category Geometry
+ * @return the slope perpendicular to AB
+ * ```
+ * PdSlope([0,0],[1,2]) // -0.5
+ * PdSlope([1,2],[1,2]) // NaN
+ * ```
+ */
+function PdSlope(A: Point2D, B: Point2D): number {
+    return -1 / Slope(A, B)
+}
+globalThis.PdSlope = contract(PdSlope).seal({
+    arg: [owl.point2D],
+    args: function not_horizontal(A, B) { return !cal.eq(A[1], B[1]) }
+})
+
+
 
 /**
  * @category Geometry
@@ -47,56 +64,57 @@ globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point2D])
 
 /**
  * @category Geometry
- * @return the mid-pt of AB
+ * @return the mid-pt / centroid of `points`
  * ```
- * MidPoint([1,2],[3,4]) // [2,3]
+ * Mid([1,2],[3,4]) // [2,3]
+ * Mid([1,2],[3,4],[5,6]) // [3,4]
  * ```
  */
-function MidPoint(A: Point2D, B: Point2D): Point2D {
-    return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
+function Mid(...points: Point2D[]): Point2D {
+    return toShape2D(points).mean().toArray()
 }
-globalThis.MidPoint = contract(MidPoint).sign([owl.point2D])
+globalThis.Mid = contract(Mid).sign([owl.point2D])
 
 /**
  * @category Geometry
  * @return the point P on AB such that AP : PB = ratio : 1-ratio
  * ```
- * DivisionPoint([1,0],[5,0],0.75) // [4,0]
+ * Slide([1,0],[5,0],0.75) // [4,0]
  * ```
  */
-function DivisionPoint(A: Point2D, B: Point2D, ratio = 0.5): Point2D {
+function Slide(A: Point2D, B: Point2D, ratio = 0.5): Point2D {
     let r = ratio;
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
 }
-globalThis.DivisionPoint = contract(DivisionPoint).sign([owl.point2D, owl.point2D, owl.num])
+globalThis.Slide = contract(Slide).sign([owl.point2D, owl.point2D, owl.num])
 
 
 /**
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
  * ```
- * RotatePoint([1,2],[0,0],90) // [-2,1]
+ * Rotate([1,2],[0,0],90) // [-2,1]
  * ```
  */
-function RotatePoint(P: Point2D, O: Point2D, q: number): Point2D {
+function Rotate(P: Point2D, O: Point2D, q: number): Point2D {
     return vec2D(O, P).rotate(q).add(O).blur().toArray()
 }
-globalThis.RotatePoint = contract(RotatePoint).sign([owl.point2D, owl.point2D, owl.num])
+globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.point2D, owl.num])
 
 
 /**
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
  * ```
- * Direction([1,0],[3,2]) // 45
- * Direction([3,2],[1,0]) // 225
+ * Dir([1,0],[3,2]) // 45
+ * Dir([3,2],[1,0]) // 225
  * ```
  */
-function Direction(A: Point2D, B: Point2D): number {
+function Dir(A: Point2D, B: Point2D): number {
     return vec2D(A, B).argument()
 }
-globalThis.Direction = contract(Direction).seal({
+globalThis.Dir = contract(Dir).seal({
     arg: [owl.point2D],
     args: function distinct_points(A, B) { return owl.distinct([A, B]) }
 })
@@ -105,37 +123,37 @@ globalThis.Direction = contract(Direction).seal({
 
 
 
-/**
- * @category Geometry
- * @return the polar angle of a normal direction to AB, on the right of AB.
- * ```
- * Normal([1,0],[3,2]) // 315
- * Normal([3,2],[1,0]) // 135
- * ```
- */
-function Normal(A: Point2D, B: Point2D): number {
-    let R = RotatePoint(B, A, -90);
-    return Direction(A, R);
-}
-globalThis.Normal = contract(Normal).seal({
-    arg: [owl.point2D],
-    args: function distinct_points(A, B) { return owl.distinct([A, B]) }
-})
+// /**
+//  * @category Geometry
+//  * @return the polar angle of a normal direction to AB, on the right of AB.
+//  * ```
+//  * Normal([1,0],[3,2]) // 315
+//  * Normal([3,2],[1,0]) // 135
+//  * ```
+//  */
+// function Normal(A: Point2D, B: Point2D): number {
+//     let R = Rotate(B, A, -90);
+//     return Dir(A, R);
+// }
+// globalThis.Normal = contract(Normal).seal({
+//     arg: [owl.point2D],
+//     args: function distinct_points(A, B) { return owl.distinct([A, B]) }
+// })
 
 /**
  * @category Geometry
  * @return the foot of perpendicular from P to AB.
  * ```
- * PerpendicularFoot([-1,-1],[1,1],[-2,2]) // [0,0]
+ * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
  * ```
  */
-function PerpendicularFoot(A: Point2D, B: Point2D, P: Point2D): Point2D {
-    let q = Normal(A, B);
+function PdFoot(A: Point2D, B: Point2D, P: Point2D): Point2D {
+    let q = Dir(A, B) + 90;
     let V = PolToRect([1, q]);
     let Q = VectorAdd(P, V);
     return Intersection(A, B, P, Q);
 }
-globalThis.PerpendicularFoot = contract(PerpendicularFoot).seal({
+globalThis.PdFoot = contract(PdFoot).seal({
     arg: [owl.point2D],
     args: function distinct_points(A, B, P) { return owl.distinct([A, B]) }
 })
@@ -169,21 +187,30 @@ globalThis.Intersection = contract(Intersection).seal({
 
 /**
  * @category Geometry
- * @return Translate point P in the polar angle q (or the direction of point q) by a distance.
+ * @return Translate point P in the direction `dir` by a `distance`.
+ * @param dir - a polar angle, or two points [A,B] representing Dir(A,B), or one point A representing Dir(P,A)
  * ```
- * TranslatePoint([1,2],90,3) // [1,5]
- * TranslatePoint([1,2],[10, 12],3) // [3.006894195, 4.229882439]
+ * Move([1,2],90,3) // [1,5]
+ * Move([1,2],[2, 2],3) // [4,2]
+ * Move([1,2],[[0,0],[1,0]],3) // [4,2]
  * ```
  */
-function TranslatePoint(P: Point2D, q: number | Point2D, distance: number): Point2D {
-    if (Array.isArray(q)) q = Direction(P, q)
+function Move(P: Point2D, dir: number | Point2D | [Point2D, Point2D], distance: number): Point2D {
+    let q = 0
+    if (typeof dir === 'number') {
+        q = dir
+    } else if (owl.point2D(dir)) {
+        q = Dir(P, dir)
+    } else {
+        q = Dir(dir[0], dir[1])
+    }
     let x = P[0] + distance * cos(q)
     let y = P[1] + distance * sin(q)
     return [x, y]
 }
-globalThis.TranslatePoint = contract(TranslatePoint).sign([
+globalThis.Move = contract(Move).sign([
     owl.point2D,
-    owl.or([owl.num, owl.point2D]),
+    owl.or([owl.num, owl.point2D, owl.arrayWith(owl.point2D)]),
     owl.num
 ])
 
@@ -196,14 +223,14 @@ globalThis.TranslatePoint = contract(TranslatePoint).sign([
  * @category Geometry
  * @return Translate point P to the right by a distance.
  * ```
- * TranslateX([1,2],3) // [4,2]
- * TranslateX([1,2],-3) // [-2,2]
+ * MoveX([1,2],3) // [4,2]
+ * MoveX([1,2],-3) // [-2,2]
  * ```
  */
-function TranslateX(P: Point2D, distance: number): Point2D {
-    return TranslatePoint(P, 0, distance)
+function MoveX(P: Point2D, distance: number): Point2D {
+    return Move(P, 0, distance)
 }
-globalThis.TranslateX = contract(TranslateX).sign([owl.point2D, owl.num])
+globalThis.MoveX = contract(MoveX).sign([owl.point2D, owl.num])
 
 
 
@@ -213,14 +240,14 @@ globalThis.TranslateX = contract(TranslateX).sign([owl.point2D, owl.num])
  * @category Geometry
  * @return Translate point P upward by a distance.
  * ```
- * TranslateY([1,2],3) // [4,2]
- * TranslateY([1,2],-3) // [-2,2]
+ * MoveY([1,2],3) // [4,2]
+ * MoveY([1,2],-3) // [-2,2]
  * ```
  */
-function TranslateY(P: Point2D, distance: number): Point2D {
-    return TranslatePoint(P, 90, distance)
+function MoveY(P: Point2D, distance: number): Point2D {
+    return Move(P, 90, distance)
 }
-globalThis.TranslateY = contract(TranslateY).sign([owl.point2D, owl.num])
+globalThis.MoveY = contract(MoveY).sign([owl.point2D, owl.num])
 
 
 
@@ -348,27 +375,27 @@ globalThis.IsReflex = contract(IsReflex).seal({
 
 
 
-/**
- * @category Geometry
- * @return points from turtle walk
- * ```
- * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
- * ```
- */
-function Turtle(start: Point2D, ...walk: [rotate: number, distance: number][]): Point2D[] {
-    let arr: Point2D[] = [start]
-    let lastPoint = start
-    let facing = 0
-    for (let w of walk) {
-        let [rot, dist] = w
-        facing += rot
-        let P = TranslatePoint(lastPoint, facing, dist)
-        arr.push(P)
-        lastPoint = P
-    }
-    return arr
-}
-globalThis.Turtle = contract(Turtle).sign([owl.point2D, owl.couple])
+// /**
+//  * @category Geometry
+//  * @return points from turtle walk
+//  * ```
+//  * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
+//  * ```
+//  */
+// function Turtle(start: Point2D, ...walk: [rotate: number, distance: number][]): Point2D[] {
+//     let arr: Point2D[] = [start]
+//     let lastPoint = start
+//     let facing = 0
+//     for (let w of walk) {
+//         let [rot, dist] = w
+//         facing += rot
+//         let P = Move(lastPoint, facing, dist)
+//         arr.push(P)
+//         lastPoint = P
+//     }
+//     return arr
+// }
+// globalThis.Turtle = contract(Turtle).sign([owl.point2D, owl.couple])
 
 
 

@@ -46,8 +46,8 @@ declare module "Core/Owl/index" {
     export const polar: (_: unknown) => _ is PolarPoint;
     export const fraction: (_: unknown) => _ is Fraction;
     export const properFraction: (_: unknown) => _ is Fraction;
-    export const vector: (_: unknown) => _ is Vector;
-    export const vector3D: (_: unknown) => _ is Vector3D;
+    export const vector: (_: unknown) => _ is Point2D;
+    export const vector3D: (_: unknown) => _ is Point3D;
     export const triangleSides: (_: unknown) => boolean;
     export const monomial: (_: unknown) => _ is MonomialCls<any>;
     export const polynomial: (_: unknown) => _ is polynomial<any>;
@@ -267,8 +267,6 @@ declare type Quadratic = [a: number, b: number, c: number];
 declare type Point2D = [x: number, y: number];
 declare type Point3D = [x: number, y: number, z: number];
 declare type Point = Point2D | Point3D;
-declare type Vector = [x: number, y: number];
-declare type Vector3D = [x: number, y: number, z: number];
 declare type interval = [min: number, max: number];
 declare type Fraction = [numerator: number, denominator: number];
 /**
@@ -816,6 +814,15 @@ declare function arctan(x: number): number;
 declare function Slope(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
+ * @return the slope perpendicular to AB
+ * ```
+ * PdSlope([0,0],[1,2]) // -0.5
+ * PdSlope([1,2],[1,2]) // NaN
+ * ```
+ */
+declare function PdSlope(A: Point2D, B: Point2D): number;
+/**
+ * @category Geometry
  * @return the distance AB
  * ```
  * Distance([0,0],[1,2]) // 2.23606797749979
@@ -833,54 +840,46 @@ declare function Distance(A: Point2D, B: Point2D): number;
 declare function ChessboardDistance(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
- * @return the mid-pt of AB
+ * @return the mid-pt / centroid of `points`
  * ```
- * MidPoint([1,2],[3,4]) // [2,3]
+ * Mid([1,2],[3,4]) // [2,3]
+ * Mid([1,2],[3,4],[5,6]) // [3,4]
  * ```
  */
-declare function MidPoint(A: Point2D, B: Point2D): Point2D;
+declare function Mid(...points: Point2D[]): Point2D;
 /**
  * @category Geometry
  * @return the point P on AB such that AP : PB = ratio : 1-ratio
  * ```
- * DivisionPoint([1,0],[5,0],0.75) // [4,0]
+ * Slide([1,0],[5,0],0.75) // [4,0]
  * ```
  */
-declare function DivisionPoint(A: Point2D, B: Point2D, ratio?: number): Point2D;
+declare function Slide(A: Point2D, B: Point2D, ratio?: number): Point2D;
 /**
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
  * ```
- * RotatePoint([1,2],[0,0],90) // [-2,1]
+ * Rotate([1,2],[0,0],90) // [-2,1]
  * ```
  */
-declare function RotatePoint(P: Point2D, O: Point2D, q: number): Point2D;
+declare function Rotate(P: Point2D, O: Point2D, q: number): Point2D;
 /**
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
  * ```
- * Direction([1,0],[3,2]) // 45
- * Direction([3,2],[1,0]) // 225
+ * Dir([1,0],[3,2]) // 45
+ * Dir([3,2],[1,0]) // 225
  * ```
  */
-declare function Direction(A: Point2D, B: Point2D): number;
-/**
- * @category Geometry
- * @return the polar angle of a normal direction to AB, on the right of AB.
- * ```
- * Normal([1,0],[3,2]) // 315
- * Normal([3,2],[1,0]) // 135
- * ```
- */
-declare function Normal(A: Point2D, B: Point2D): number;
+declare function Dir(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return the foot of perpendicular from P to AB.
  * ```
- * PerpendicularFoot([-1,-1],[1,1],[-2,2]) // [0,0]
+ * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
  * ```
  */
-declare function PerpendicularFoot(A: Point2D, B: Point2D, P: Point2D): Point2D;
+declare function PdFoot(A: Point2D, B: Point2D, P: Point2D): Point2D;
 /**
  * @category Geometry
  * @return the intersection point of AB and CD.
@@ -891,31 +890,33 @@ declare function PerpendicularFoot(A: Point2D, B: Point2D, P: Point2D): Point2D;
 declare function Intersection(A: Point2D, B: Point2D, C: Point2D, D: Point2D): Point2D;
 /**
  * @category Geometry
- * @return Translate point P in the polar angle q (or the direction of point q) by a distance.
+ * @return Translate point P in the direction `dir` by a `distance`.
+ * @param dir - a polar angle, or two points [A,B] representing Dir(A,B), or one point A representing Dir(P,A)
  * ```
- * TranslatePoint([1,2],90,3) // [1,5]
- * TranslatePoint([1,2],[10, 12],3) // [3.006894195, 4.229882439]
+ * Move([1,2],90,3) // [1,5]
+ * Move([1,2],[2, 2],3) // [4,2]
+ * Move([1,2],[[0,0],[1,0]],3) // [4,2]
  * ```
  */
-declare function TranslatePoint(P: Point2D, q: number | Point2D, distance: number): Point2D;
+declare function Move(P: Point2D, dir: number | Point2D | [Point2D, Point2D], distance: number): Point2D;
 /**
  * @category Geometry
  * @return Translate point P to the right by a distance.
  * ```
- * TranslateX([1,2],3) // [4,2]
- * TranslateX([1,2],-3) // [-2,2]
+ * MoveX([1,2],3) // [4,2]
+ * MoveX([1,2],-3) // [-2,2]
  * ```
  */
-declare function TranslateX(P: Point2D, distance: number): Point2D;
+declare function MoveX(P: Point2D, distance: number): Point2D;
 /**
  * @category Geometry
  * @return Translate point P upward by a distance.
  * ```
- * TranslateY([1,2],3) // [4,2]
- * TranslateY([1,2],-3) // [-2,2]
+ * MoveY([1,2],3) // [4,2]
+ * MoveY([1,2],-3) // [-2,2]
  * ```
  */
-declare function TranslateY(P: Point2D, distance: number): Point2D;
+declare function MoveY(P: Point2D, distance: number): Point2D;
 /**
  * @category Geometry
  * @return Reflect point P about x-axis
@@ -973,14 +974,6 @@ declare function AnglePolar(A: Point2D, O: Point2D, B: Point2D): number;
  * ```
  */
 declare function IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean;
-/**
- * @category Geometry
- * @return points from turtle walk
- * ```
- * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
- * ```
- */
-declare function Turtle(start: Point2D, ...walk: [rotate: number, distance: number][]): Point2D[];
 /**
  * @category Geometry
  * @return points on a regular polygon
@@ -2402,7 +2395,7 @@ declare function CompassBearing(polarAngle: number): string;
  * Vector([1,2],[10,5]) // [9,3]
  * ```
  */
-declare function Vector(O: Point2D, P: Point2D): Vector;
+declare function Vector(O: Point2D, P: Point2D): Point2D;
 /**
  * @category Vector
  * @return sum of all vectors
@@ -2410,16 +2403,7 @@ declare function Vector(O: Point2D, P: Point2D): Vector;
  * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
  * ```
  */
-declare function VectorAdd(...vectors: Vector[]): Vector;
-/**
- * @category Vector
- * @return mean of all vectors
- * ```
- * VectorMean([1,2],[3,4],[5,6]) // [3,4]
- * VectorMean([0,0],[2,0],[2,2],[0,2]) // [1,1]
- * ```
- */
-declare function VectorMean(...vectors: Vector[]): Vector;
+declare function VectorAdd(...vectors: Point2D[]): Point2D;
 /**
  * @category ArrangePoints
  * @return Arrange Points in anti-clockwise direction around their mean
@@ -2436,7 +2420,7 @@ declare function ArrangePoints(...points: Point2D[]): Point2D[];
  * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
  * ```
  */
-declare function Vec3D(O: Point3D, P: Point3D): Vector3D;
+declare function Vec3D(O: Point3D, P: Point3D): Point3D;
 /**
  * @category Vector3D
  * @deprecated useless
@@ -2445,64 +2429,43 @@ declare function Vec3D(O: Point3D, P: Point3D): Vector3D;
  * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
  * ```
  */
-declare function Vec3DAdd(...vectors: Vector3D[]): Vector3D;
+declare function Vec3DAdd(...vectors: Point3D[]): Point3D;
 /**
  * @category Vector3D
- * @deprecated useless
  * @return mean of all vectors
  * ```
- * Vec3DMean([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
+ * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
  * ```
  */
-declare function Vec3DMean(...vectors: Vector3D[]): Vector3D;
-/**
- * @category Vector3D
- * @deprecated useless
- * @return find [kx,ky,kz] from [x,y,z]
- * ```
- * Vec3DScale([1,2,3],2) // [2,4,6]
- * Vec3DScale([1,2,3],-2) // [-2,-4,-6]
- * ```
- */
-declare function Vec3DScale(v: Vector3D, k: number): Vector3D;
+declare function Mid3D(...vectors: Point3D[]): Point3D;
 /**
  * @category Vector3D
  * @return projection of a point on a plane
  * ```
  * let P = [2,3,4]
  * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
- * ProjectionOnPlane(P,[A,B,C]) // [2,3,0]
+ * PdFoot3D(P,[A,B,C]) // [2,3,0]
  * ```
  */
-declare function ProjectionOnPlane(point: Point3D, plane: [Point3D, Point3D, Point3D]): Point3D;
+declare function PdFoot3D(point: Point3D, plane: [Point3D, Point3D, Point3D]): Point3D;
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D
  * ```
  * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedPlane([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
+ * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-declare function EmbedPlane(plane2D: Point2D[], origin?: Point3D, xVec?: Vector3D, yVec?: Vector3D): Point3D[];
+declare function Embed(plane2D: Point2D[], origin?: Point3D, xVec?: Point3D, yVec?: Point3D): Point3D[];
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D with constant z
  * ```
  * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedPlaneZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
+ * EmbedZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-declare function EmbedPlaneZ(plane2D: Point2D[], z?: number): Point3D[];
-/**
- * @category Vector3D
- * @deprecated use Extrude
- * @return extrude the lower base of a frustum towards the upper base by a ratio
- * ```
- * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
- * ExtrudeBase([A,B,C],[[0,0,4]],0.25) // [[0,0,0],[3,0,0],[0,3,0]]
- * ```
- */
-declare function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: number): Point3D[];
+declare function EmbedZ(plane2D: Point2D[], z?: number): Point3D[];
 /**
  * @category Vector3D
  * @return extrude the lower base of a frustum towards the upper base by a ratio
@@ -2840,10 +2803,6 @@ declare var AutoPen: typeof AutoPenCls;
 /**
  * @ignore
  */
-declare const DEFAULT_BORDER = 0.2;
-/**
- * @ignore
- */
 declare const DEFAULT_POINT_RADIUS_PIXEL = 2;
 /**
  * @ignore
@@ -2908,14 +2867,14 @@ declare class PenCls extends Pencil {
         /**
          * Set the coordinate range by specifying in-view points, include O(0,0).
          * @category SetupRange
-         * @param points - An array of in-view points [x,y].
+         * @param points - An array of in-view points [x,y], or circle [[h,k,r]], or sphere [[a,b,c],r]
          * @returns void
          * ```
          * pen.range.extend([1,2],[3,4]) //  [0,0], [1,2], [3,4] must be in-view
          * // equivalent to pen.range.capture([0,0],[1,2],[3,4])
          * ```
          */
-        extend(...points: Point2D[]): void;
+        extend(...points: (Point | [Point, number])[]): void;
     };
     /**
      * Setup of canvas size.
@@ -2930,7 +2889,7 @@ declare class PenCls extends Pencil {
          * Set the size of the canvas.
          * @category SetupSize
          * @param width - The scale of the width.
-         * @param height - The scale of the height.
+         * @param height - The scale of the height, default to be same as width
          * @returns void
          * ```
          * pen.size.set(0.5,2)
@@ -2954,13 +2913,17 @@ declare class PenCls extends Pencil {
         /**
          * Set the size of the canvas, lock xy ratio.
          * @category SetupSize
-         * @param width - The scale of the width.
+         * @param width - The max scale of the width.
+         * @param height - The max scale of the height, default to be same as width
          * @returns void
          * ```
-         * pen.size.lock(0.5) // half the standard width, with yPPI = xPPI.
+         * pen.size.lock(0.5)
+         * // max at half the standard width and height, with yPPI = xPPI.
+         * pen.size.lock(1, 2)
+         * // max at standard width and double standard height, with yPPI = xPPI.
          * ```
          */
-        lock(width?: number): void;
+        lock(width?: number, height?: number): void;
     };
     /**
      * Setup of canvas. Deprecated.
@@ -3211,6 +3174,16 @@ declare class PenCls extends Pencil {
          * ```
          */
         projector3D(angle?: number, depth?: number): void;
+        /**
+         * Ser the border scale when auto creating outer border.
+         * @category set
+         * @param border - The width of border, same scale as pen.size.set()
+         * @returns void
+         * ```
+         * pen.set.border(0.2)
+         * ```
+         */
+        border(border?: number): void;
         /**
          * Reset all pen settings.
          * @category set
@@ -3731,6 +3704,16 @@ declare class PenCls extends Pencil {
          */
         line([A, B]: [Point, Point], text: string | number, direction?: number, radius?: number): void;
         /**
+         * Add a label to the center of a polygon.
+         * @param points - the polygon
+         * @param text - the string to write
+         * @returns void
+         * ```
+         * pen.label.polygon([[0,0],[1,0],[0,1]],'A') // label 'A' at the center
+         * ```
+         */
+        polygon(points: Point[], text: string): void;
+        /**
          * Add a coordinates label to a point.
          * @category text
          * @param position - The coordinates [x,y] of the point to label.
@@ -3895,7 +3878,7 @@ declare class PenCls extends Pencil {
          * pen.d3.circle([0,0,1],2,[1,0,0],[0,1,0]) // draw a xy circle with radius 2
          * ```
          */
-        circle(center: Point3D, radius: number, xVec: Vector3D, yVec: Vector3D, { line, dash, shade, fill, arc }?: {
+        circle(center: Point3D, radius: number, xVec: Point3D, yVec: Point3D, { line, dash, shade, fill, arc }?: {
             line?: boolean | undefined;
             dash?: boolean | undefined;
             shade?: boolean | undefined;
