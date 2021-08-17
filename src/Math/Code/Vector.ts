@@ -13,19 +13,19 @@ globalThis.Vector = contract(Vector).sign([owl.point2D])
 
 
 
-/**
- * @category Vector
- * @return sum of all vectors
- * ```
- * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
- * ```
- */
-function VectorAdd(...vectors: Point2D[]): Point2D {
-    const x = Sum(...vectors.map(p => p[0]))
-    const y = Sum(...vectors.map(p => p[1]))
-    return [x, y];
-}
-globalThis.VectorAdd = contract(VectorAdd).sign([owl.vector])
+// /**
+//  * @category Vector
+//  * @return sum of all vectors
+//  * ```
+//  * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
+//  * ```
+//  */
+// function VectorAdd(...vectors: Point2D[]): Point2D {
+//     const x = Sum(...vectors.map(p => p[0]))
+//     const y = Sum(...vectors.map(p => p[1]))
+//     return [x, y];
+// }
+// globalThis.VectorAdd = contract(VectorAdd).sign([owl.vector])
 
 
 

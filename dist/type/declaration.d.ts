@@ -816,11 +816,11 @@ declare function Slope(A: Point2D, B: Point2D): number;
  * @category Geometry
  * @return the slope perpendicular to AB
  * ```
- * PdSlope([0,0],[1,2]) // -0.5
- * PdSlope([1,2],[1,2]) // NaN
+ * SlopePd([0,0],[1,2]) // -0.5
+ * SlopePd([1,2],[1,2]) // NaN
  * ```
  */
-declare function PdSlope(A: Point2D, B: Point2D): number;
+declare function SlopePd(A: Point2D, B: Point2D): number;
 /**
  * @category Geometry
  * @return the distance AB
@@ -854,7 +854,7 @@ declare function Mid(...points: Point2D[]): Point2D;
  * Slide([1,0],[5,0],0.75) // [4,0]
  * ```
  */
-declare function Slide(A: Point2D, B: Point2D, ratio?: number): Point2D;
+declare function Slide(A: Point2D, B: Point2D, ratio: number): Point2D;
 /**
  * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
@@ -917,6 +917,15 @@ declare function MoveX(P: Point2D, distance: number): Point2D;
  * ```
  */
 declare function MoveY(P: Point2D, distance: number): Point2D;
+/**
+ * @category Geometry
+ * @returns Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
+ * ```
+ * Shift([0,1],[[0,0],[1,0]],1) // [1,1]
+ * Shift([0,1],[[0,0],[1,0]],2) // [2,1]
+ * ```
+ */
+declare function Shift(P: Point2D, [A, B]: [Point2D, Point2D], scale?: number): Point2D;
 /**
  * @category Geometry
  * @return Reflect point P about x-axis
@@ -2397,14 +2406,6 @@ declare function CompassBearing(polarAngle: number): string;
  */
 declare function Vector(O: Point2D, P: Point2D): Point2D;
 /**
- * @category Vector
- * @return sum of all vectors
- * ```
- * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
- * ```
- */
-declare function VectorAdd(...vectors: Point2D[]): Point2D;
-/**
  * @category ArrangePoints
  * @return Arrange Points in anti-clockwise direction around their mean
  * ```
@@ -2439,6 +2440,14 @@ declare function Vec3DAdd(...vectors: Point3D[]): Point3D;
  */
 declare function Mid3D(...vectors: Point3D[]): Point3D;
 /**
+ * @category Geometry
+ * @return the point P on AB such that AP : PB = ratio : 1-ratio
+ * ```
+ * Slide3D([1,0,0],[5,0,0],0.75) // [4,0,0]
+ * ```
+ */
+declare function Slide3D(A: Point3D, B: Point3D, ratio: number): Point3D;
+/**
  * @category Vector3D
  * @return projection of a point on a plane
  * ```
@@ -2456,13 +2465,31 @@ declare function PdFoot3D(point: Point3D, plane: [Point3D, Point3D, Point3D]): P
  * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-declare function Embed(plane2D: Point2D[], origin?: Point3D, xVec?: Point3D, yVec?: Point3D): Point3D[];
+declare function Embed(plane2D: Point2D[], origin: Point3D, xVec: Point3D, yVec: Point3D): Point3D[];
+/**
+ * @category Vector3D
+ * @return embed 2D points onto a plane in 3D with constant x. The x-axis becomes the 3D y-axis. The y-axis becomes the 3D z-axis.
+ * ```
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedX([A,B,C],2) // [[2,0,0],[2,3,0],[2,0,1]]
+ * ```
+ */
+declare function EmbedX(plane2D: Point2D[], x?: number): Point3D[];
+/**
+ * @category Vector3D
+ * @return embed 2D points onto a plane in 3D with constant y. The x-axis becomes the 3D x-axis. The y-axis becomes the 3D z-axis.
+ * ```
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedY([A,B,C],2) // [[0,2,0],[3,2,0],[0,2,1]]
+ * ```
+ */
+declare function EmbedY(plane2D: Point2D[], y?: number): Point3D[];
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D with constant z
  * ```
- * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
  * ```
  */
 declare function EmbedZ(plane2D: Point2D[], z?: number): Point3D[];

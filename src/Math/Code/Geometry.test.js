@@ -11,12 +11,12 @@ test('Slope', () => {
 
 
 
-test('PdSlope', () => {
-    expect(PdSlope([0, 0], [1, 2])).toBe(-1 / 2);
-    expect(PdSlope([1, 2], [0, 0])).toBe(-1 / 2);
-    expect(PdSlope([3, 4], [6, -5])).toBe(1 / 3);
-    expect(() => PdSlope([3, 4], [2, 4])).toThrow();
-    expect(() => PdSlope([3, 3], [3, 3])).toThrow();
+test('SlopePd', () => {
+    expect(SlopePd([0, 0], [1, 2])).toBe(-1 / 2);
+    expect(SlopePd([1, 2], [0, 0])).toBe(-1 / 2);
+    expect(SlopePd([3, 4], [6, -5])).toBe(1 / 3);
+    expect(() => SlopePd([3, 4], [2, 4])).toThrow();
+    expect(() => SlopePd([3, 3], [3, 3])).toThrow();
 });
 
 
@@ -78,12 +78,6 @@ test('Dir', () => {
 
 
 
-// test('Normal', () => {
-//     expect(Normal([1, 0], [3, 2])).toBe(315);
-//     expect(Normal([3, 2], [1, 0])).toBe(135);
-// });
-
-
 test('PdFoot', () => {
     expect(PdFoot([-1, -1], [1, 1], [-2, 2])).toBeArrayCloseTo([0, 0]);
     expect(PdFoot([-1, -1], [1, 1], [0, 0])).toBeArrayCloseTo([0, 0]);
@@ -100,6 +94,7 @@ test('Intersection', () => {
 
 test('Move', () => {
     expect(Move([1, 2], 90, 3)).toEqual([1, 5]);
+    expect(Move([1, 2], 90, -3)).toEqual([1, -1]);
     expect(Move([1, 2], -90, 3)).toEqual([1, -1]);
     expect(Move([1, 2], 180, 3)).toEqual([-2, 2]);
     expect(Move([1, 2], 0, 3)).toEqual([4, 2]);
@@ -123,6 +118,17 @@ test('MoveY', () => {
     expect(MoveY([1, 2], 4)).toEqual([1, 6]);
     expect(MoveY([1, 2], -3)).toEqual([1, -1]);
 });
+
+
+
+
+test('Shift', () => {
+    expect(Shift([0, 1], [[0, 0], [1, 0]], 1)).toEqual([1, 1]);
+    expect(Shift([0, 1], [[0, 0], [1, 0]], 2)).toEqual([2, 1]);
+    expect(Shift([3, 4], [[1, 2], [5, 0]], 3)).toEqual([15, -2]);
+});
+
+
 
 
 

@@ -52,6 +52,27 @@ globalThis.Mid3D = contract(Mid3D).sign([owl.vector3D])
 
 
 
+/**
+ * @category Geometry
+ * @return the point P on AB such that AP : PB = ratio : 1-ratio
+ * ```
+ * Slide3D([1,0,0],[5,0,0],0.75) // [4,0,0]
+ * ```
+ */
+function Slide3D(A: Point3D, B: Point3D, ratio: number): Point3D {
+    let r = ratio;
+    let s = 1 - r;
+    return [
+        A[0] * s + B[0] * r,
+        A[1] * s + B[1] * r,
+        A[2] * s + B[2] * r
+    ];
+}
+globalThis.Slide3D = contract(Slide3D).sign([owl.point3D, owl.point3D, owl.num])
+
+
+
+
 // /**
 //  * @category Vector3D
 //  * @deprecated useless
@@ -216,7 +237,7 @@ globalThis.PdFoot3D = contract(PdFoot3D)
  * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-function Embed(plane2D: Point2D[], origin: Point3D = [0, 0, 0], xVec: Point3D = [1, 0, 0], yVec: Point3D = [0, 1, 0]): Point3D[] {
+function Embed(plane2D: Point2D[], origin: Point3D, xVec: Point3D, yVec: Point3D): Point3D[] {
     return toShape2D(plane2D)
         .erect(xVec, yVec)
         .translate(origin)
@@ -226,13 +247,41 @@ globalThis.Embed = contract(Embed)
     .sign([owl.arrayWith(owl.point2D), owl.point3D, owl.vector3D, owl.vector3D])
 
 
+/**
+ * @category Vector3D
+ * @return embed 2D points onto a plane in 3D with constant x. The x-axis becomes the 3D y-axis. The y-axis becomes the 3D z-axis.
+ * ```
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedX([A,B,C],2) // [[2,0,0],[2,3,0],[2,0,1]]
+ * ```
+ */
+function EmbedX(plane2D: Point2D[], x: number = 0): Point3D[] {
+    return Embed(plane2D, [x, 0, 0], [0, 1, 0], [0, 0, 1])
+}
+globalThis.EmbedX = contract(EmbedX).sign([owl.arrayWith(owl.point2D), owl.num])
+
+
+/**
+ * @category Vector3D
+ * @return embed 2D points onto a plane in 3D with constant y. The x-axis becomes the 3D x-axis. The y-axis becomes the 3D z-axis.
+ * ```
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedY([A,B,C],2) // [[0,2,0],[3,2,0],[0,2,1]]
+ * ```
+ */
+function EmbedY(plane2D: Point2D[], y: number = 0): Point3D[] {
+    return Embed(plane2D, [0, y, 0], [1, 0, 0], [0, 0, 1])
+}
+globalThis.EmbedY = contract(EmbedY).sign([owl.arrayWith(owl.point2D), owl.num])
+
+
 
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D with constant z
  * ```
- * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
  * ```
  */
 function EmbedZ(plane2D: Point2D[], z: number = 0): Point3D[] {

@@ -20,14 +20,14 @@ globalThis.Slope = contract(Slope).seal({
  * @category Geometry
  * @return the slope perpendicular to AB
  * ```
- * PdSlope([0,0],[1,2]) // -0.5
- * PdSlope([1,2],[1,2]) // NaN
+ * SlopePd([0,0],[1,2]) // -0.5
+ * SlopePd([1,2],[1,2]) // NaN
  * ```
  */
-function PdSlope(A: Point2D, B: Point2D): number {
+function SlopePd(A: Point2D, B: Point2D): number {
     return -1 / Slope(A, B)
 }
-globalThis.PdSlope = contract(PdSlope).seal({
+globalThis.SlopePd = contract(SlopePd).seal({
     arg: [owl.point2D],
     args: function not_horizontal(A, B) { return !cal.eq(A[1], B[1]) }
 })
@@ -82,7 +82,7 @@ globalThis.Mid = contract(Mid).sign([owl.point2D])
  * Slide([1,0],[5,0],0.75) // [4,0]
  * ```
  */
-function Slide(A: Point2D, B: Point2D, ratio = 0.5): Point2D {
+function Slide(A: Point2D, B: Point2D, ratio: number): Point2D {
     let r = ratio;
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
@@ -123,22 +123,6 @@ globalThis.Dir = contract(Dir).seal({
 
 
 
-// /**
-//  * @category Geometry
-//  * @return the polar angle of a normal direction to AB, on the right of AB.
-//  * ```
-//  * Normal([1,0],[3,2]) // 315
-//  * Normal([3,2],[1,0]) // 135
-//  * ```
-//  */
-// function Normal(A: Point2D, B: Point2D): number {
-//     let R = Rotate(B, A, -90);
-//     return Dir(A, R);
-// }
-// globalThis.Normal = contract(Normal).seal({
-//     arg: [owl.point2D],
-//     args: function distinct_points(A, B) { return owl.distinct([A, B]) }
-// })
 
 /**
  * @category Geometry
@@ -148,10 +132,7 @@ globalThis.Dir = contract(Dir).seal({
  * ```
  */
 function PdFoot(A: Point2D, B: Point2D, P: Point2D): Point2D {
-    let q = Dir(A, B) + 90;
-    let V = PolToRect([1, q]);
-    let Q = VectorAdd(P, V);
-    return Intersection(A, B, P, Q);
+   return vec2D(A,P).projectOn(vec2D(A,B)).add(A).toArray()
 }
 globalThis.PdFoot = contract(PdFoot).seal({
     arg: [owl.point2D],
@@ -251,8 +232,25 @@ globalThis.MoveY = contract(MoveY).sign([owl.point2D, owl.num])
 
 
 
-
-
+/**
+ * @category Geometry
+ * @returns Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
+ * ```
+ * Shift([0,1],[[0,0],[1,0]],1) // [1,1]
+ * Shift([0,1],[[0,0],[1,0]],2) // [2,1]
+ * ```
+ */
+function Shift(P: Point2D, [A, B]: [Point2D, Point2D], scale: number = 1): Point2D {
+    let [x, y] = P
+    let [xA, yA] = A
+    let [xB, yB] = B
+    return [x + (xB - xA) * scale, y + (yB - yA) * scale]
+}
+globalThis.Shift = contract(Shift).sign([
+    owl.point2D,
+    owl.arrayWith(owl.point2D),
+    owl.num
+])
 
 /**
  * @category Geometry

@@ -30261,14 +30261,14 @@ globalThis.Slope = contract(Slope).seal({
  * @category Geometry
  * @return the slope perpendicular to AB
  * ```
- * PdSlope([0,0],[1,2]) // -0.5
- * PdSlope([1,2],[1,2]) // NaN
+ * SlopePd([0,0],[1,2]) // -0.5
+ * SlopePd([1,2],[1,2]) // NaN
  * ```
  */
-function PdSlope(A, B) {
+function SlopePd(A, B) {
     return -1 / Slope(A, B);
 }
-globalThis.PdSlope = contract(PdSlope).seal({
+globalThis.SlopePd = contract(SlopePd).seal({
     arg: [owl.point2D],
     args: function not_horizontal(A, B) { return !cal.eq(A[1], B[1]); }
 });
@@ -30316,7 +30316,7 @@ globalThis.Mid = contract(Mid).sign([owl.point2D]);
  * Slide([1,0],[5,0],0.75) // [4,0]
  * ```
  */
-function Slide(A, B, ratio = 0.5) {
+function Slide(A, B, ratio) {
     let r = ratio;
     let s = 1 - r;
     return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
@@ -30348,22 +30348,6 @@ globalThis.Dir = contract(Dir).seal({
     arg: [owl.point2D],
     args: function distinct_points(A, B) { return owl.distinct([A, B]); }
 });
-// /**
-//  * @category Geometry
-//  * @return the polar angle of a normal direction to AB, on the right of AB.
-//  * ```
-//  * Normal([1,0],[3,2]) // 315
-//  * Normal([3,2],[1,0]) // 135
-//  * ```
-//  */
-// function Normal(A: Point2D, B: Point2D): number {
-//     let R = Rotate(B, A, -90);
-//     return Dir(A, R);
-// }
-// globalThis.Normal = contract(Normal).seal({
-//     arg: [owl.point2D],
-//     args: function distinct_points(A, B) { return owl.distinct([A, B]) }
-// })
 /**
  * @category Geometry
  * @return the foot of perpendicular from P to AB.
@@ -30372,10 +30356,7 @@ globalThis.Dir = contract(Dir).seal({
  * ```
  */
 function PdFoot(A, B, P) {
-    let q = Dir(A, B) + 90;
-    let V = PolToRect([1, q]);
-    let Q = VectorAdd(P, V);
-    return Intersection(A, B, P, Q);
+    return vec2D(A, P).projectOn(vec2D(A, B)).add(A).toArray();
 }
 globalThis.PdFoot = contract(PdFoot).seal({
     arg: [owl.point2D],
@@ -30451,6 +30432,25 @@ function MoveY(P, distance) {
     return Move(P, 90, distance);
 }
 globalThis.MoveY = contract(MoveY).sign([owl.point2D, owl.num]);
+/**
+ * @category Geometry
+ * @returns Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
+ * ```
+ * Shift([0,1],[[0,0],[1,0]],1) // [1,1]
+ * Shift([0,1],[[0,0],[1,0]],2) // [2,1]
+ * ```
+ */
+function Shift(P, [A, B], scale = 1) {
+    let [x, y] = P;
+    let [xA, yA] = A;
+    let [xB, yB] = B;
+    return [x + (xB - xA) * scale, y + (yB - yA) * scale];
+}
+globalThis.Shift = contract(Shift).sign([
+    owl.point2D,
+    owl.arrayWith(owl.point2D),
+    owl.num
+]);
 /**
  * @category Geometry
  * @return Reflect point P about x-axis
@@ -33510,19 +33510,19 @@ function Vector(O, P) {
     return [P[0] - O[0], P[1] - O[1]];
 }
 globalThis.Vector = contract(Vector).sign([owl.point2D]);
-/**
- * @category Vector
- * @return sum of all vectors
- * ```
- * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
- * ```
- */
-function VectorAdd(...vectors) {
-    const x = Sum(...vectors.map(p => p[0]));
-    const y = Sum(...vectors.map(p => p[1]));
-    return [x, y];
-}
-globalThis.VectorAdd = contract(VectorAdd).sign([owl.vector]);
+// /**
+//  * @category Vector
+//  * @return sum of all vectors
+//  * ```
+//  * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
+//  * ```
+//  */
+// function VectorAdd(...vectors: Point2D[]): Point2D {
+//     const x = Sum(...vectors.map(p => p[0]))
+//     const y = Sum(...vectors.map(p => p[1]))
+//     return [x, y];
+// }
+// globalThis.VectorAdd = contract(VectorAdd).sign([owl.vector])
 // /**
 //  * @category Vector
 //  * @return mean of all vectors
@@ -33709,6 +33709,23 @@ function Mid3D(...vectors) {
     return [x, y, z];
 }
 globalThis.Mid3D = contract(Mid3D).sign([owl.vector3D]);
+/**
+ * @category Geometry
+ * @return the point P on AB such that AP : PB = ratio : 1-ratio
+ * ```
+ * Slide3D([1,0,0],[5,0,0],0.75) // [4,0,0]
+ * ```
+ */
+function Slide3D(A, B, ratio) {
+    let r = ratio;
+    let s = 1 - r;
+    return [
+        A[0] * s + B[0] * r,
+        A[1] * s + B[1] * r,
+        A[2] * s + B[2] * r
+    ];
+}
+globalThis.Slide3D = contract(Slide3D).sign([owl.point3D, owl.point3D, owl.num]);
 // /**
 //  * @category Vector3D
 //  * @deprecated useless
@@ -33838,7 +33855,7 @@ globalThis.PdFoot3D = contract(PdFoot3D)
  * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
  * ```
  */
-function Embed(plane2D, origin = [0, 0, 0], xVec = [1, 0, 0], yVec = [0, 1, 0]) {
+function Embed(plane2D, origin, xVec, yVec) {
     return toShape2D(plane2D)
         .erect(xVec, yVec)
         .translate(origin)
@@ -33848,10 +33865,34 @@ globalThis.Embed = contract(Embed)
     .sign([owl.arrayWith(owl.point2D), owl.point3D, owl.vector3D, owl.vector3D]);
 /**
  * @category Vector3D
+ * @return embed 2D points onto a plane in 3D with constant x. The x-axis becomes the 3D y-axis. The y-axis becomes the 3D z-axis.
+ * ```
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedX([A,B,C],2) // [[2,0,0],[2,3,0],[2,0,1]]
+ * ```
+ */
+function EmbedX(plane2D, x = 0) {
+    return Embed(plane2D, [x, 0, 0], [0, 1, 0], [0, 0, 1]);
+}
+globalThis.EmbedX = contract(EmbedX).sign([owl.arrayWith(owl.point2D), owl.num]);
+/**
+ * @category Vector3D
+ * @return embed 2D points onto a plane in 3D with constant y. The x-axis becomes the 3D x-axis. The y-axis becomes the 3D z-axis.
+ * ```
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedY([A,B,C],2) // [[0,2,0],[3,2,0],[0,2,1]]
+ * ```
+ */
+function EmbedY(plane2D, y = 0) {
+    return Embed(plane2D, [0, y, 0], [1, 0, 0], [0, 0, 1]);
+}
+globalThis.EmbedY = contract(EmbedY).sign([owl.arrayWith(owl.point2D), owl.num]);
+/**
+ * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D with constant z
  * ```
- * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * EmbedZ([A,B,C],2) // [[0,0,2],[1,0,2],[0,1,2]]
+ * let [A,B,C] = [[0,0],[3,0],[0,1]]
+ * EmbedZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
  * ```
  */
 function EmbedZ(plane2D, z = 0) {
