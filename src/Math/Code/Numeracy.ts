@@ -185,25 +185,25 @@ function Floor(num: number): number {
 globalThis.Floor = contract(Floor).sign([owl.num])
 
 
-/**
- * @category Numeracy
- * @deprecated use Ratio() instead
- * @return reduce input array to simplest ratio.
- * ```
- * SimpRatio(2,4,6) // [1,2,3]
- * SimpRatio(0,4,6) // [0,2,3]
- * SimpRatio(0,4) // [0,1]
- * ```
- */
-function SimpRatio(...nums: number[]): number[] {
-    let ns = toNumbers(nums).blur()
-    // nums = nums.map(cal.blur)
-    if (!IsInteger(...ns)) return nums
-    let nonzeros = ns.filter($ => IsNonZero($))
-    Should(nonzeros.length > 0, 'at least one non-zero num')
-    return ns.reduceRatio()
-}
-globalThis.SimpRatio = contract(SimpRatio).sign([owl.num])
+// /**
+//  * @category Numeracy
+//  * @deprecated use Ratio() instead
+//  * @return reduce input array to simplest ratio.
+//  * ```
+//  * SimpRatio(2,4,6) // [1,2,3]
+//  * SimpRatio(0,4,6) // [0,2,3]
+//  * SimpRatio(0,4) // [0,1]
+//  * ```
+//  */
+// function SimpRatio(...nums: number[]): number[] {
+//     let ns = toNumbers(nums).blur()
+//     // nums = nums.map(cal.blur)
+//     if (!IsInteger(...ns)) return nums
+//     let nonzeros = ns.filter($ => IsNonZero($))
+//     Should(nonzeros.length > 0, 'at least one non-zero num')
+//     return ns.reduceRatio()
+// }
+// globalThis.SimpRatio = contract(SimpRatio).sign([owl.num])
 
 
 
@@ -266,7 +266,6 @@ globalThis.LCM = contract(LCM).sign([owl.nonZeroInt])
 
 /**
  * @category Numeracy
- * @deprecated
  * @return convert num to fraction
  * ```
  * ToFrac(0.5) // [1,2]

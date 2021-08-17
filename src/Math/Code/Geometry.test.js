@@ -223,3 +223,12 @@ test('IsConvexPolygon', () => {
     expect(IsConvexPolygon([0, 0], [3, 0], [1, 1], [0, 3])).toBe(false);
 });
 
+
+
+
+test('ArrangePoints', () => {
+    expect(ArrangePoints([0, 0], [1, 1], [0, 1], [1, 0]))
+        .toEqual([[1, 1], [0, 1], [0, 0], [1, 0]]);
+    expect(ArrangePoints([0, 0], [1, 2], [2, 1], [0, 1], [1, 0]))
+        .toEqual([[2, 1], [1, 2], [0, 1], [0, 0], [1, 0]]);
+});

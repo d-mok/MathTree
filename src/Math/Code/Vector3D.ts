@@ -2,35 +2,35 @@
 
 
 
-/**
- * @category Vector3D
- * @return the vector OP
- * ```
- * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
- * ```
- */
-function Vec3D(O: Point3D, P: Point3D): Point3D {
-    return [P[0] - O[0], P[1] - O[1], P[2] - O[2]];
-}
-globalThis.Vec3D = contract(Vec3D).sign([owl.point3D])
+// /**
+//  * @category Vector3D
+//  * @return the vector OP
+//  * ```
+//  * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
+//  * ```
+//  */
+// function Vec3D(O: Point3D, P: Point3D): Point3D {
+//     return [P[0] - O[0], P[1] - O[1], P[2] - O[2]];
+// }
+// globalThis.Vec3D = contract(Vec3D).sign([owl.point3D])
 
 
 
-/**
- * @category Vector3D
- * @deprecated useless
- * @return sum of all vectors
- * ```
- * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
- * ```
- */
-function Vec3DAdd(...vectors: Point3D[]): Point3D {
-    const x = Sum(...vectors.map(p => p[0]))
-    const y = Sum(...vectors.map(p => p[1]))
-    const z = Sum(...vectors.map(p => p[2]))
-    return [x, y, z];
-}
-globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return sum of all vectors
+//  * ```
+//  * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
+//  * ```
+//  */
+// function Vec3DAdd(...vectors: Point3D[]): Point3D {
+//     const x = Sum(...vectors.map(p => p[0]))
+//     const y = Sum(...vectors.map(p => p[1]))
+//     const z = Sum(...vectors.map(p => p[2]))
+//     return [x, y, z];
+// }
+// globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D])
 
 
 

@@ -455,3 +455,21 @@ function IsConvexPolygon(...points: Point2D[]): boolean {
     return toShape2D(points).isConvex()
 }
 globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point2D])
+
+
+
+/**
+ * @category ArrangePoints
+ * @return Arrange Points in anti-clockwise direction around their mean
+ * ```
+ * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
+ * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
+ * ```
+ */
+function ArrangePoints(...points: Point2D[]): Point2D[] {
+    let ss = toShape2D(points)
+    ss.sortAroundMean()
+    return ss.toArray()
+}
+globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D])
+

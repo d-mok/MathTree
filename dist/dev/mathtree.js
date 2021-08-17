@@ -30617,6 +30617,20 @@ function IsConvexPolygon(...points) {
     return toShape2D(points).isConvex();
 }
 globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point2D]);
+/**
+ * @category ArrangePoints
+ * @return Arrange Points in anti-clockwise direction around their mean
+ * ```
+ * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
+ * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
+ * ```
+ */
+function ArrangePoints(...points) {
+    let ss = toShape2D(points);
+    ss.sortAroundMean();
+    return ss.toArray();
+}
+globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
 
 
 /***/ }),
@@ -31086,26 +31100,25 @@ function Floor(num) {
     return Math.floor(num);
 }
 globalThis.Floor = contract(Floor).sign([owl.num]);
-/**
- * @category Numeracy
- * @deprecated use Ratio() instead
- * @return reduce input array to simplest ratio.
- * ```
- * SimpRatio(2,4,6) // [1,2,3]
- * SimpRatio(0,4,6) // [0,2,3]
- * SimpRatio(0,4) // [0,1]
- * ```
- */
-function SimpRatio(...nums) {
-    let ns = toNumbers(nums).blur();
-    // nums = nums.map(cal.blur)
-    if (!IsInteger(...ns))
-        return nums;
-    let nonzeros = ns.filter($ => IsNonZero($));
-    Should(nonzeros.length > 0, 'at least one non-zero num');
-    return ns.reduceRatio();
-}
-globalThis.SimpRatio = contract(SimpRatio).sign([owl.num]);
+// /**
+//  * @category Numeracy
+//  * @deprecated use Ratio() instead
+//  * @return reduce input array to simplest ratio.
+//  * ```
+//  * SimpRatio(2,4,6) // [1,2,3]
+//  * SimpRatio(0,4,6) // [0,2,3]
+//  * SimpRatio(0,4) // [0,1]
+//  * ```
+//  */
+// function SimpRatio(...nums: number[]): number[] {
+//     let ns = toNumbers(nums).blur()
+//     // nums = nums.map(cal.blur)
+//     if (!IsInteger(...ns)) return nums
+//     let nonzeros = ns.filter($ => IsNonZero($))
+//     Should(nonzeros.length > 0, 'at least one non-zero num')
+//     return ns.reduceRatio()
+// }
+// globalThis.SimpRatio = contract(SimpRatio).sign([owl.num])
 /**
  * @category Numeracy
  * @return reduce input array to integral ratio.
@@ -31153,7 +31166,6 @@ function LCM(...nums) {
 globalThis.LCM = contract(LCM).sign([owl.nonZeroInt]);
 /**
  * @category Numeracy
- * @deprecated
  * @return convert num to fraction
  * ```
  * ToFrac(0.5) // [1,2]
@@ -33499,17 +33511,17 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 
 "use strict";
 
-/**
- * @category Vector
- * @return the vector OP
- * ```
- * Vector([1,2],[10,5]) // [9,3]
- * ```
- */
-function Vector(O, P) {
-    return [P[0] - O[0], P[1] - O[1]];
-}
-globalThis.Vector = contract(Vector).sign([owl.point2D]);
+// /**
+//  * @category Vector
+//  * @return the vector OP
+//  * ```
+//  * Vector([1,2],[10,5]) // [9,3]
+//  * ```
+//  */
+// function Vector(O: Point2D, P: Point2D): Point2D {
+//     return [P[0] - O[0], P[1] - O[1]];
+// }
+// globalThis.Vector = contract(Vector).sign([owl.point2D])
 // /**
 //  * @category Vector
 //  * @return sum of all vectors
@@ -33646,20 +33658,6 @@ globalThis.Vector = contract(Vector).sign([owl.point2D]);
 //     return [x1, y1]
 // }
 // globalThis.VectorRotate = contract(VectorRotate).sign([owl.vector, owl.num])
-/**
- * @category ArrangePoints
- * @return Arrange Points in anti-clockwise direction around their mean
- * ```
- * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
- * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
- * ```
- */
-function ArrangePoints(...points) {
-    let ss = toShape2D(points);
-    ss.sortAroundMean();
-    return ss.toArray();
-}
-globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
 
 
 /***/ }),
@@ -33669,32 +33667,32 @@ globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
 
 "use strict";
 
-/**
- * @category Vector3D
- * @return the vector OP
- * ```
- * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
- * ```
- */
-function Vec3D(O, P) {
-    return [P[0] - O[0], P[1] - O[1], P[2] - O[2]];
-}
-globalThis.Vec3D = contract(Vec3D).sign([owl.point3D]);
-/**
- * @category Vector3D
- * @deprecated useless
- * @return sum of all vectors
- * ```
- * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
- * ```
- */
-function Vec3DAdd(...vectors) {
-    const x = Sum(...vectors.map(p => p[0]));
-    const y = Sum(...vectors.map(p => p[1]));
-    const z = Sum(...vectors.map(p => p[2]));
-    return [x, y, z];
-}
-globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D]);
+// /**
+//  * @category Vector3D
+//  * @return the vector OP
+//  * ```
+//  * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
+//  * ```
+//  */
+// function Vec3D(O: Point3D, P: Point3D): Point3D {
+//     return [P[0] - O[0], P[1] - O[1], P[2] - O[2]];
+// }
+// globalThis.Vec3D = contract(Vec3D).sign([owl.point3D])
+// /**
+//  * @category Vector3D
+//  * @deprecated useless
+//  * @return sum of all vectors
+//  * ```
+//  * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
+//  * ```
+//  */
+// function Vec3DAdd(...vectors: Point3D[]): Point3D {
+//     const x = Sum(...vectors.map(p => p[0]))
+//     const y = Sum(...vectors.map(p => p[1]))
+//     const z = Sum(...vectors.map(p => p[2]))
+//     return [x, y, z];
+// }
+// globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D])
 /**
  * @category Vector3D
  * @return mean of all vectors

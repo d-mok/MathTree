@@ -173,7 +173,6 @@ class PenCls extends Pencil {
         /**
          * Set the size of the canvas by resolution.
          * @category SetupSize
-         * @deprecated
          * @param xPPI - The scale per unit x.
          * @param yPPI - The scale per unit y, if not provided, follow x.
          * @returns void
@@ -1082,33 +1081,6 @@ class PenCls extends Pencil {
             this._pen.drawParallelMark(startPoint, endPoint, 4, tick, 6)
         },
 
-        /**
-         * Decorate an angle AOB, always in anti-clockwise.
-         * @category decorator
-         * @deprecated use pen.set.angle('polar')
-         * @param A - The starting point [x,y].
-         * @param O - The vertex point [x,y].
-         * @param B - The ending point [x,y].
-         * @param arc - The number of arcs.
-         * @param radius - The radius of the angle arc, in pixel.
-         * @returns void
-         * ```
-         * pen.decorate.anglePolar([1,0],[0,0],[3,2],2) 
-         * // decorate an angle AOB with double-arc in anti-clockwise.
-         * ```
-         */
-        anglePolar(A: Point2D, O: Point2D, B: Point2D, arc = 1, radius = 15) {
-            A = this._pen.frame.toPix(A);
-            let OPixel = this._pen.frame.toPix(O);
-            B = this._pen.frame.toPix(B);
-            let a1 = Math.atan2(-(A[1] - OPixel[1]), A[0] - OPixel[0]) / Math.PI * 180;
-            let a2 = Math.atan2(-(B[1] - OPixel[1]), B[0] - OPixel[0]) / Math.PI * 180;
-            let space = 3
-            let outset = arc > 1 ? space / 2 : 0
-            for (let i = 0; i < arc; i++) {
-                this._pen.circle(O, radius + outset - i * space, [a1, a2]);
-            }
-        },
 
         /**
          * Decorate an angle AOB, always non-reflex.
@@ -1184,7 +1156,7 @@ class PenCls extends Pencil {
      * pen.write([1,2],'abc') // write 'abc' at [1,2]
      * ```
      */
-    write(position: Point, text: string) {
+    write(position: Point , text: string) {
         this.drawText(text, position, 0, 0)
     }
 
@@ -1234,30 +1206,6 @@ class PenCls extends Pencil {
 
 
         /**
-         * Add a label to an angle AOB, in anticlockwise.
-         * @category text
-         * @deprecated use pen.set.angle('polar')
-         * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
-         * @param text - The string to write.
-         * @param direction - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-         * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
-         * @returns void
-         * ```
-         * pen.label.anglePolar([[1,2],[0,0],[-2,1]],'x') 
-         * // label the angle as 'x'
-         * ```
-         */
-        anglePolar(anglePoints: [Point2D, Point2D, Point2D], text: string, direction = 0, radius = 25) {
-            let [A, O, B] = anglePoints;
-            let APixel = this._pen.frame.toPix(A);
-            let OPixel = this._pen.frame.toPix(O);
-            let BPixel = this._pen.frame.toPix(B);
-            let a1 = Math.atan2(-(APixel[1] - OPixel[1]), APixel[0] - OPixel[0]) / Math.PI * 180;
-            let a2 = Math.atan2(-(BPixel[1] - OPixel[1]), BPixel[0] - OPixel[0]) / Math.PI * 180;
-            if (a2 < a1) a2 = a2 + 360
-            this.point(O, text, (a1 + a2) / 2 + direction, radius);
-        },
-        /**
          * Add a label to an angle AOB, non-reflex.
          * @category text
          * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
@@ -1303,23 +1251,6 @@ class PenCls extends Pencil {
             let dir = this._pen.getDirInPixel(A, B) - 90
 
             this.point(M, text, dir + direction, radius);
-        },
-
-        /**
-         * Add a label to the center of a polygon.
-         * @param points - the polygon
-         * @param text - the string to write
-         * @returns void
-         * ```
-         * pen.label.polygon([[0,0],[1,0],[0,1]],'A') // label 'A' at the center
-         * ```
-         */
-        polygon(points: Point[], text: string) {
-            let pts = this._pen.pjs(points)
-            let center = toShape2D(pts).mean().toArray()
-            if (owl.alphabet(text)) this._pen.set.textItalic(true)
-            this._pen.write(center, text)
-            this._pen.restore();
         },
 
         /**
@@ -1727,7 +1658,7 @@ class PenCls extends Pencil {
 
 
         /**
-         * Draw the envelop of a frustum
+         * Return the envelop of a frustum
          * @category 3D
          * @param lowerBase - the points in the lower base
          * @param upperBase - the point in the upper base, must have the same length as lowerBase
@@ -1742,16 +1673,12 @@ class PenCls extends Pencil {
             const LB = toList(lowerBase)
             const UB = toList(upperBase)
 
-
-
-
             let isPolar = (A: Point3D, O: Point3D, B: Point3D) =>
                 AnglePolar(
                     this._pen.pj(A),
                     this._pen.pj(O),
                     this._pen.pj(B))
                     < 180 ? 1 : -1
-
 
             let lastPolarwise = isPolar(LB.cyclicAt(-1)!, UB.cyclicAt(-1)!, LB.cyclicAt(0)!)
             let arr: [Point3D, Point3D][] = []

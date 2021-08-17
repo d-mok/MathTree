@@ -1,15 +1,15 @@
 
-/**
- * @category Vector
- * @return the vector OP
- * ```
- * Vector([1,2],[10,5]) // [9,3]
- * ```
- */
-function Vector(O: Point2D, P: Point2D): Point2D {
-    return [P[0] - O[0], P[1] - O[1]];
-}
-globalThis.Vector = contract(Vector).sign([owl.point2D])
+// /**
+//  * @category Vector
+//  * @return the vector OP
+//  * ```
+//  * Vector([1,2],[10,5]) // [9,3]
+//  * ```
+//  */
+// function Vector(O: Point2D, P: Point2D): Point2D {
+//     return [P[0] - O[0], P[1] - O[1]];
+// }
+// globalThis.Vector = contract(Vector).sign([owl.point2D])
 
 
 
@@ -190,18 +190,3 @@ globalThis.Vector = contract(Vector).sign([owl.point2D])
 
 
 
-
-/**
- * @category ArrangePoints
- * @return Arrange Points in anti-clockwise direction around their mean
- * ```
- * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
- * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
- * ```
- */
-function ArrangePoints(...points: Point2D[]): Point2D[] {
-    let ss = toShape2D(points)
-    ss.sortAroundMean()
-    return ss.toArray()
-}
-globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D])

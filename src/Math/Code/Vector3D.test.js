@@ -1,15 +1,15 @@
 
 
-test('Vec3D', () => {
-    expect(Vec3D([1, 2, 3], [10, 5, 2])).toEqual([9, 3, -1]);
-});
+// test('Vec3D', () => {
+//     expect(Vec3D([1, 2, 3], [10, 5, 2])).toEqual([9, 3, -1]);
+// });
 
 
 
 
-test('Vec3DAdd', () => {
-    expect(Vec3DAdd([1, 2, 3], [3, 4, 5], [5, 6, 7])).toEqual([9, 12, 15]);
-});
+// test('Vec3DAdd', () => {
+//     expect(Vec3DAdd([1, 2, 3], [3, 4, 5], [5, 6, 7])).toEqual([9, 12, 15]);
+// });
 
 
 
