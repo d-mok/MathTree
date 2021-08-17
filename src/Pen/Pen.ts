@@ -991,15 +991,6 @@ class PenCls extends Pencil {
             this._pen.polyfill(...points)
         },
 
-        // pseudoSector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D, vertices: Point2D | Point2D[]) {
-        //     if (typeof qStart !== 'number') qStart = Dir(center, qStart)
-        //     if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
-        //     let points = cal.traceCircle(center, radius, [qStart, qEnd])
-        //     if (owl.point2D(vertices))
-        //         vertices = [vertices]
-        //     this._pen.polyfill(...points, ...vertices)
-
-        // }
         /**
          * Fill a sector (x-h)^2+(y-k)^2 = r^2.
          * @category fill

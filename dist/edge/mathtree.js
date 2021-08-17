@@ -33933,6 +33933,42 @@ function Extrude(lowerBase, upperBase, scale) {
     return LB.extrudeToShape(UB, scale).toArray();
 }
 globalThis.Extrude = contract(Extrude).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num]);
+/**
+* @category 3DPen
+* @deprecated use Projector3D() instead
+* @return projector function from 3D point to 2D plane
+* ```
+* const pj = Projector(60,0.5) // create a 3D projector function
+* pj(1,1,0) // [1.25, 0.433012701892]
+* ```
+*/
+function Projector(angle = 60, depth = 0.5) {
+    return function (x, y, z) {
+        let x_new = x + depth * y * cos(angle);
+        let y_new = z + depth * y * sin(angle);
+        return [x_new, y_new];
+    };
+}
+globalThis.Projector = Projector;
+/**
+* @category 3DPen
+* @deprecated
+* @return projector function from 3D point to 2D plane
+* ```
+* const pj = Projector3D(60,0.5) // create a 3D projector function
+* pj([1,1,0]) // [1.25, 0.433012701892]
+* ```
+*/
+function Projector3D(angle = 60, depth = 0.5) {
+    let projector = function (point3D) {
+        let [x, y, z] = point3D;
+        let x_new = x + depth * y * cos(angle);
+        let y_new = z + depth * y * sin(angle);
+        return [x_new, y_new];
+    };
+    return contract(projector).sign([owl.point3D]);
+}
+globalThis.Projector3D = contract(Projector3D).sign([owl.num, owl.num]);
 
 
 /***/ }),
@@ -35825,14 +35861,6 @@ class PenCls extends Pencil {
                 let points = cal.traceCircle(center, radius, [0, 360]);
                 this._pen.polyfill(...points);
             },
-            // pseudoSector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D, vertices: Point2D | Point2D[]) {
-            //     if (typeof qStart !== 'number') qStart = Dir(center, qStart)
-            //     if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
-            //     let points = cal.traceCircle(center, radius, [qStart, qEnd])
-            //     if (owl.point2D(vertices))
-            //         vertices = [vertices]
-            //     this._pen.polyfill(...points, ...vertices)
-            // }
             /**
              * Fill a sector (x-h)^2+(y-k)^2 = r^2.
              * @category fill
