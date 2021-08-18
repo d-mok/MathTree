@@ -27095,7 +27095,7 @@ class Pencil {
         if (q2 < q1)
             q2 += 360;
         let points = cal.traceCircle(center, r, [q1, q2]);
-        this.path([...points, ...vertices]);
+        this.path([pStart, ...points, pEnd, ...vertices]);
     }
     /**
      * Draw a stroke of a pseudo-sector
@@ -36717,6 +36717,69 @@ class PenCls extends Pencil {
         this.decorate.angle(A, O, B, arc, radius);
         if (label !== undefined)
             this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13);
+    }
+    /**
+     * Decorate equal side lengths.
+     * @category decorator
+     * @param startPoint - The starting point [x,y].
+     * @param endPoint - The ending point [x,y].
+     * @param tick - The number of ticks.
+     * @returns void
+     * ```
+     * pen.decorate.equalSide([1,0],[3,2],2)
+     * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
+     * ```
+     */
+    equalSide(startPoint, endPoint, tick = 1) {
+        this.drawEqualMark(startPoint, endPoint, 5, tick, 3);
+    }
+    /**
+     * Decorate parallel side.
+     * @category decorator
+     * @param startPoint - The starting point [x,y].
+     * @param endPoint - The ending point [x,y].
+     * @param tick - The number of ticks.
+     * @returns void
+     * ```
+     * pen.decorate.parallel([1,0],[3,2],2)
+     * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
+     * ```
+     */
+    parallel(startPoint, endPoint, tick = 1) {
+        this.drawParallelMark(startPoint, endPoint, 4, tick, 6);
+    }
+    /**
+     * Decorate a right-angle AOB.
+     * @category decorator
+     * @param A - The starting point [x,y].
+     * @param O - The vertex point [x,y].
+     * @param B - The ending point [x,y]. Interchangeable with A.
+     * @param size - The size of the mark, in pixel.
+     * @returns void
+     * ```
+     * pen.decorate.rightAngle([1,0],[0,0],[3,2])
+     * // decorate an right-angle AOB
+     * ```
+     */
+    rightAngle(A, O, B, size = 12) {
+        A = this.pj(A);
+        O = this.pj(O);
+        B !== null && B !== void 0 ? B : (B = Rotate(A, O, 90));
+        B = this.pj(B);
+        this.drawRightAngle(A, O, B, size);
+    }
+    /**
+     * Decorate a compass.
+     * @category decorator
+     * @param position - The position [x,y].
+     * @returns void
+     * ```
+     * pen.decorate.compass([1,2])
+     * // decorate a compass at [1,2]
+     * ```
+     */
+    compass(position) {
+        this.drawCompass(position, 17, 20, 7, 3.5);
     }
     /**
      * Write text.
