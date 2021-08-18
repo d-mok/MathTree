@@ -1,3 +1,14 @@
+import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
+expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
+
+
+declare global {
+    namespace jest {
+        interface Matchers<R> {
+            toBeDeepCloseTo(...args: any[]): R;
+        }
+    }
+}
 
 
 test('Slope', () => {
@@ -79,10 +90,10 @@ test('Dir', () => {
 
 
 test('PdFoot', () => {
-    expect(PdFoot([-1, -1], [1, 1], [-2, 2])).toBeArrayCloseTo([0, 0]);
-    expect(PdFoot([-1, -1], [1, 1], [0, 0])).toBeArrayCloseTo([0, 0]);
-    expect(PdFoot([0, 5], [1, 5], [2, 3])).toBeArrayCloseTo([2, 5]);
-    expect(PdFoot([0, 5], [1, 5], [2, 5])).toBeArrayCloseTo([2, 5]);
+    expect(PdFoot([-1, -1], [1, 1], [-2, 2])).toBeDeepCloseTo([0, 0]);
+    expect(PdFoot([-1, -1], [1, 1], [0, 0])).toBeDeepCloseTo([0, 0]);
+    expect(PdFoot([0, 5], [1, 5], [2, 3])).toBeDeepCloseTo([2, 5]);
+    expect(PdFoot([0, 5], [1, 5], [2, 5])).toBeDeepCloseTo([2, 5]);
 });
 
 
@@ -100,9 +111,9 @@ test('Move', () => {
     expect(Move([1, 2], -90, 3)).toEqual([1, -1]);
     expect(Move([1, 2], 180, 3)).toEqual([-2, 2]);
     expect(Move([1, 2], 0, 3)).toEqual([4, 2]);
-    expect(Move([1, 2], 30, 3)).toBeArrayCloseTo([3.598076211, 3.5]);
-    expect(Move([1, 2], [10, 12], 3)).toBeArrayCloseTo([3.006894195, 4.229882439]);
-    expect(Move([1, 2], [[0, 0], [1, 0]], 3)).toBeArrayCloseTo([4, 2]);
+    expect(Move([1, 2], 30, 3)).toBeDeepCloseTo([3.59807621135, 3.5]);
+    expect(Move([1, 2], [10, 12], 3)).toBeDeepCloseTo([3.0068941948673, 4.229882438741]);
+    expect(Move([1, 2], [[0, 0], [1, 0]], 3)).toBeDeepCloseTo([4, 2]);
 });
 
 

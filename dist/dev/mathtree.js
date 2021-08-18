@@ -24472,7 +24472,28 @@ class List extends Array {
         return this[this.randomIndex()];
     }
     /**
-     * Return a random sample of n elements in this array.
+     * Return a random sample of n elements in this array WITH REPLACEMENT.
+     * The returned items are NOT neccessarily unique.
+     * If n > this.length, return `undefined`.
+     * @param n - the number of elements requested
+     * @returns array of sample elements
+     * @example
+     * ```
+     * [5,6,7].sample(2)
+     * // [5,5] or [6,5] or [5,7] or ...
+     * ```
+     */
+    draws(n) {
+        if (this.length === 0)
+            return undefined;
+        let arr = this.create([]);
+        for (let i = 0; i < n; i++) {
+            arr.push(this.draw());
+        }
+        return arr;
+    }
+    /**
+     * Return a random sample of n unique elements in this array.
      * If n > this.length, return `undefined`.
      * @param n - the number of elements requested
      * @returns array of sample elements
@@ -29107,17 +29128,17 @@ function build(funcName, func) {
     return holder[funcName];
 }
 function and(pds, name) {
-    name !== null && name !== void 0 ? name : (name = '(' + pds.map(f => f.name).join(' && ') + ')');
+    name ?? (name = '(' + pds.map(f => f.name).join(' && ') + ')');
     return build(name, (_) => pds.every(p => p(_)));
 }
 exports.and = and;
 function or(pds, name) {
-    name !== null && name !== void 0 ? name : (name = '(' + pds.map(f => f.name).join(' || ') + ')');
+    name ?? (name = '(' + pds.map(f => f.name).join(' || ') + ')');
     return build(name, (_) => pds.some(p => p(_)));
 }
 exports.or = or;
 function every(pd, name) {
-    name !== null && name !== void 0 ? name : (name = '(every.' + pd.name + ')');
+    name ?? (name = '(every.' + pd.name + ')');
     return build(name, (_) => exports.array(_) && _.every(pd));
 }
 exports.every = every;
@@ -29249,7 +29270,7 @@ function CircleGeneral(centre, radius) {
     let r = radius;
     let D = -2 * h;
     let E = -2 * k;
-    let F = Math.pow(h, 2) + Math.pow(k, 2) - Math.pow(r, 2);
+    let F = h ** 2 + k ** 2 - r ** 2;
     return [D, E, F];
 }
 globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point2D, owl.positive]);
@@ -29262,9 +29283,9 @@ globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point2D, owl.positi
  */
 function CircleFromGeneral(D, E, F) {
     let [h, k] = [-D / 2, -E / 2];
-    let R = Math.pow((D / 2), 2) + Math.pow((E / 2), 2) - F;
+    let R = (D / 2) ** 2 + (E / 2) ** 2 - F;
     Should(R >= 0, "radius should be real");
-    let r = Math.pow(R, 0.5);
+    let r = R ** 0.5;
     return [[h, k], r];
 }
 globalThis.CircleFromGeneral = contract(CircleFromGeneral).sign([owl.num]);
@@ -29295,7 +29316,7 @@ function CircleLineIntersect(center, radius, linear) {
     }
     else {
         let x = -c / a;
-        let D = r * r - Math.pow((x - h), 2);
+        let D = r * r - (x - h) ** 2;
         Should(D >= 0, 'no intersection');
         let y1 = k - Math.sqrt(D);
         let y2 = k + Math.sqrt(D);
@@ -29435,7 +29456,7 @@ class LinearFunction {
     // define
     byTwoPoints(p1, p2) {
         Should(owl.point2D(p1) && owl.point2D(p2), 'input must be point');
-        Should(AreDistinctPoint(p1, p2), 'two points should be distinct');
+        Should(AreDifferent(p1, p2), 'two points should be distinct');
         let [x1, y1] = p1;
         let [x2, y2] = p2;
         let dx = x1 - x2;
@@ -29450,7 +29471,7 @@ class LinearFunction {
         try {
             [a, b, c] = Ratio(a, b, c);
         }
-        catch (_a) {
+        catch {
         }
         this._linear = [a, b, c];
         this.refresh();
@@ -29470,7 +29491,7 @@ class LinearFunction {
     }
     byBisector(A, B) {
         Should(owl.point2D(A) && owl.point2D(B), 'input must be point');
-        Should(AreDistinctPoint(A, B), 'two points should be distinct');
+        Should(AreDifferent(A, B), 'two points should be distinct');
         if (A[0] === B[0]) {
             this._linear = [0, 1, -(A[1] + B[1]) / 2];
             this.refresh();
@@ -29592,7 +29613,7 @@ class MonomialCls {
         return (input) => {
             let x = this.coeff;
             for (let { variable, power } of this.vars) {
-                x = x * (Math.pow(input[variable], power));
+                x = x * (input[variable] ** power);
             }
             return x;
         };
@@ -29774,7 +29795,7 @@ function QuadraticRoot(a, b, c) {
 }
 globalThis.QuadraticRoot = contract(QuadraticRoot).seal({
     arg: [owl.nonZero, owl.num, owl.num],
-    args: function has_real_root(a, b, c) { return Math.pow(b, 2) - 4 * a * c >= 0; }
+    args: function has_real_root(a, b, c) { return b ** 2 - 4 * a * c >= 0; }
 });
 /**
  * @category Quadratic
@@ -30329,7 +30350,7 @@ globalThis.SlopePd = contract(SlopePd).seal({
  * ```
  */
 function Distance(A, B) {
-    return Math.pow((Math.pow((A[0] - B[0]), 2) + Math.pow((A[1] - B[1]), 2)), 0.5);
+    return ((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2) ** 0.5;
 }
 globalThis.Distance = contract(Distance).sign([owl.point2D]);
 /**
@@ -31732,9 +31753,10 @@ globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.str, owl.str]);
  */
 function RndShake(anchor) {
     if (typeof anchor === 'string') {
-        // Fraction
+        // Fraction, to be deleted
         if (owl.dfrac(anchor)) {
-            return RndShakeDfrac(anchor);
+            Should(false, 'RndShakeDfrac is not supported anymore');
+            // return RndShakeDfrac(anchor)
         }
         // Inequal Sign
         if (owl.ineq(anchor)) {
@@ -31843,23 +31865,7 @@ globalThis.RndShakeR = contract(RndShakeR).sign([owl.num]);
 function RndShakeQ(anchor) {
     if (owl.int(anchor))
         return RndShakeN(anchor);
-    let f = ToFrac(anchor);
-    return RndShakeFrac(f).map((x) => x[0] / x[1]);
-}
-globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational]);
-/**
- * @category RandomShake
- * @deprecated
- * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```
- * RndShakeFrac([5,6])
- * // return 3 unique fractions around [5,6]
- * RndShakeFrac([6,-5])
- * // return 3 unique fractions around [6,-5]
- * ```
- */
-function RndShakeFrac(anchor) {
-    let [p, q] = cal.toFraction(anchor[0] / anchor[1]);
+    let [p, q] = ToFrac(anchor);
     [p, q] = [p, q].map(cal.blur);
     Should(IsInteger(p, q), 'input should be integral fraction');
     return poker
@@ -31878,27 +31884,63 @@ function RndShakeFrac(anchor) {
         .shield(([a, b]) => b !== 1)
         .shield(([a, b]) => b !== 1)
         .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
-        .unique(_ => _[0] / _[1])
-        .rolls(3);
+        .unique(([p, q]) => p / q)
+        .rolls(3)
+        .map(([p, q]) => p / q);
 }
-globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction]);
-/**
- * @category RandomShake
- * @deprecated
- * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```
- * RndShakeDfrac('\\dfrac{5}{6}')
- * // return 3 unique Dfrac around [5,6]
- * RndShakeDfrac('-\\dfrac{6}{5}')
- * // return 3 unique Dfrac around [6,-5]
- * ```
- */
-function RndShakeDfrac(anchor) {
-    // Should(false, 'RndShakeDfrac is deprecated')
-    let f = ink.parseDfrac(anchor);
-    return RndShakeFrac(f).map(x => Dfrac(...x));
-}
-globalThis.RndShakeDfrac = contract(RndShakeDfrac).sign([owl.dfrac]);
+globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational]);
+// /**
+//  * @category RandomShake
+//  * @deprecated
+//  * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+//  * ```
+//  * RndShakeFrac([5,6]) 
+//  * // return 3 unique fractions around [5,6]
+//  * RndShakeFrac([6,-5])
+//  * // return 3 unique fractions around [6,-5]
+//  * ```
+//  */
+// function RndShakeFrac(anchor: Fraction): Fraction[] {
+//     let [p, q] = cal.toFraction(anchor[0] / anchor[1]);
+//     [p, q] = [p, q].map(cal.blur)
+//     Should(IsInteger(p, q), 'input should be integral fraction')
+//     return poker
+//         .dice(
+//             (): Fraction => {
+//                 const h = RndShakeN(p)[0]
+//                 const k = RndShakeN(q)[0]
+//                 let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h
+//                 let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k
+//                 if (a === p && b === q) return [h, k]
+//                 return [a, b]
+//             })
+//         .shield(([a, b]) => AreCoprime(a, b))
+//         .shield(([a, b]) => a !== 0)
+//         .shield(([a, b]) => b !== 0)
+//         .shield(([a, b]) => b !== 1)
+//         .shield(([a, b]) => b !== 1)
+//         .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
+//         .unique(_ => _[0] / _[1])
+//         .rolls(3)
+// }
+// globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction])
+// /**
+//  * @category RandomShake
+//  * @deprecated
+//  * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+//  * ```
+//  * RndShakeDfrac('\\dfrac{5}{6}') 
+//  * // return 3 unique Dfrac around [5,6]
+//  * RndShakeDfrac('-\\dfrac{6}{5}')
+//  * // return 3 unique Dfrac around [6,-5]
+//  * ```
+//  */
+// function RndShakeDfrac(anchor: string): string[] {
+//     Should(false, 'RndShakeDfrac is deprecated')
+//     let f = ink.parseDfrac(anchor)
+//     return RndShakeFrac(f).map(x => Dfrac(...x))
+// }
+// globalThis.RndShakeDfrac = contract(RndShakeDfrac).sign([owl.dfrac])
 /**
  * @category RandomShake
  * @return an array of 3 ineq signs, balanced in number.
@@ -31915,7 +31957,7 @@ function RndShakeIneq(anchor) {
 globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq]);
 /**
  * @category RandomShake
- * @return an array of 3 point
+ * @return an array of 3 point, both x and y are unique
  * ```
  * RndShakePoint([3,4])
  * // may return [[2,5],[1,6],[4,2]]
@@ -31928,7 +31970,10 @@ function RndShakePoint(anchor) {
         const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0];
         return [h, k];
     };
-    return poker.dice(func).distinct((a, b) => a[0] === b[0] || a[1] === b[1]).rolls(3);
+    return poker.dice(func)
+        .unique(([x, y]) => x)
+        .unique(([x, y]) => y)
+        .rolls(3);
 }
 globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point2D]);
 /**
@@ -31989,7 +32034,8 @@ function RndShakeRatio(anchor) {
         return anchor.map(x => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0]);
     };
     return poker.dice(func)
-        .shield(r => toNumbers(r).hcf() === 1 && AreDifferent(anchor, r))
+        .shield(r => toNumbers(r).hcf() === 1)
+        .shield(r => AreDifferent(anchor, r))
         .unique(_ => JSON.stringify(_))
         .rolls(3);
 }
@@ -32083,13 +32129,13 @@ function RndShuffle(...items) {
 globalThis.RndShuffle = RndShuffle;
 /**
  * @category RandomUtil
- * @return n random items from given items, not necessarily unique
+ * @return n random items from given items, NOT necessarily unique
  * ```
- * RndPickN([2,4,6],2) // may return [4,2]
+ * RndPickN([2,4,6],5) // may return [4,2,2,4,6]
  * ```
  */
 function RndPickN(items, n) {
-    return [...toList(items).sample(n)];
+    return [...toList(items).draws(n)];
 }
 globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt]);
 /**
@@ -32101,9 +32147,7 @@ globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt]);
  * ```
  */
 function RndPickUnique(items, n) {
-    let ls = toList(items);
-    let f = () => ls.draw();
-    return poker.dice(f).unique().rolls(n);
+    return [...toList(items).uniqueDeep().sample(n)];
 }
 globalThis.RndPickUnique = contract(RndPickUnique).sign([owl.array, owl.positiveInt]);
 /**
@@ -32219,19 +32263,19 @@ function AreCoprime(...nums) {
     return toList(nums).pairs().every(([a, b]) => HCF(a, b) === 1);
 }
 globalThis.AreCoprime = contract(AreCoprime).sign([owl.num]);
-/**
- * @category Relation
- * @deprecated use AreDifferent
- * @return Check if the points are all distinct.
- * ```
- * AreDistinctPoint([1,2],[3,4]) // true
- * AreDistinctPoint([1,2],[1,2]) // false
- * ```
- */
-function AreDistinctPoint(...points) {
-    return toList(points).duplessDeep();
-}
-globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point2D]);
+// /**
+//  * @category Relation
+//  * @deprecated use AreDifferent
+//  * @return Check if the points are all distinct.
+//  * ```
+//  * AreDistinctPoint([1,2],[3,4]) // true
+//  * AreDistinctPoint([1,2],[1,2]) // false
+//  * ```
+//  */
+// function AreDistinctPoint(...points: Point2D[]) {
+//     return toList(points).duplessDeep()
+// }
+// globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point2D])
 /**
  * @category Relation
  * @return Check if the points are pairwise distant apart.
@@ -32351,7 +32395,7 @@ globalThis.ASequence = contract(ASequence).sign([owl.num, owl.num, owl.positiveI
 * ```
 */
 function GSterm(a, r, n) {
-    return a * (Math.pow(r, (n - 1)));
+    return a * (r ** (n - 1));
 }
 globalThis.GSterm = contract(GSterm).sign([owl.num, owl.num, owl.positiveInt]);
 /**
@@ -32364,7 +32408,7 @@ globalThis.GSterm = contract(GSterm).sign([owl.num, owl.num, owl.positiveInt]);
 * ```
 */
 function GSsum(a, r, n = -1) {
-    return n > 0 ? a * (Math.pow(r, n) - 1) / (r - 1) : a / (1 - r);
+    return n > 0 ? a * (r ** n - 1) / (r - 1) : a / (1 - r);
 }
 globalThis.GSsum = contract(GSsum).sign([owl.num, owl.num, owl.int]);
 /**
@@ -32673,31 +32717,31 @@ function GrammarJoin(...items) {
     return arr.join(', ') + ' and ' + items[items.length - 1];
 }
 globalThis.GrammarJoin = GrammarJoin;
-/**
-* @category Text
-* @deprecated
-* @return '✔' or '✘'.
-* ```
-* Tick(true) // '✔'
-* Tick(false) // '✘'
-* ```
-*/
-function Tick(bool) {
-    return bool ? '✔' : '✘';
-}
-globalThis.Tick = contract(Tick).sign([owl.bool]);
-/**
-* @category Text
-* @deprecated
-* @return Array of '✔' or '✘'.
-* ```
-* Ticks(true,false) // ['✔','✘']
-* ```
-*/
-function Ticks(...bools) {
-    return bools.map(x => Tick(x));
-}
-globalThis.Ticks = contract(Ticks).sign([owl.bool]);
+// /**
+// * @category Text
+// * @deprecated
+// * @return '✔' or '✘'.
+// * ```
+// * Tick(true) // '✔'
+// * Tick(false) // '✘'
+// * ```
+// */
+// function Tick(bool: boolean): string {
+//     return bool ? '✔' : '✘'
+// }
+// globalThis.Tick = contract(Tick).sign([owl.bool])
+// /**
+// * @category Text
+// * @deprecated
+// * @return Array of '✔' or '✘'.
+// * ```
+// * Ticks(true,false) // ['✔','✘']
+// * ```
+// */
+// function Ticks(...bools: boolean[]): string[] {
+//     return bools.map(x => Tick(x))
+// }
+// globalThis.Ticks = contract(Ticks).sign([owl.bool])
 /**
 * @category Text
 * @deprecated
@@ -32785,7 +32829,7 @@ function Sci(num) {
     let m = cal.e(cal.blur(num));
     if (m === 0)
         return num.toString();
-    num = num / (Math.pow(10, m));
+    num = num / (10 ** m);
     num = cal.blur(num);
     return num.toString() + ' \\times ' + '10^{ ' + m + '}';
 }
@@ -32882,33 +32926,33 @@ function LongDivision(dividend, divisor) {
     return compose(dividend, divisor);
 }
 globalThis.LongDivision = contract(LongDivision).sign([owl.ntuple, owl.ntuple]);
-/**
- * @category Text
- * @param num - from 1 to 10
- * @return roman number
- * ```
- * Roman(1) // "I"
- * Roman(2) // "II"
- * ```
- */
-function Roman(num) {
-    return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1];
-}
-globalThis.Roman = contract(Roman).sign([[owl.positiveInt, owl.between(1, 10)]]);
-/**
- * @category Text
- * @param roman - from I to X
- * @return arabic number
- * ```
- * DeRoman("I") // 1
- * DeRoman("II") // 2
- * ```
- */
-function DeRoman(roman) {
-    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-    return romans.indexOf(roman) + 1;
-}
-globalThis.DeRoman = contract(DeRoman).sign([owl.roman]);
+// /**
+//  * @category Text
+//  * @param num - from 1 to 10
+//  * @return roman number
+//  * ```
+//  * Roman(1) // "I"
+//  * Roman(2) // "II"
+//  * ```
+//  */
+// function Roman(num: number): string {
+//     return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1]
+// }
+// globalThis.Roman = contract(Roman).sign([[owl.positiveInt, owl.between(1, 10)]])
+// /**
+//  * @category Text
+//  * @param roman - from I to X
+//  * @return arabic number
+//  * ```
+//  * DeRoman("I") // 1
+//  * DeRoman("II") // 2
+//  * ```
+//  */
+// function DeRoman(roman: string): number {
+//     const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+//     return romans.indexOf(roman) + 1
+// }
+// globalThis.DeRoman = contract(DeRoman).sign([owl.roman])
 /**
  * @category Text
  * @return the representation of num in base b
@@ -33009,7 +33053,7 @@ globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.objec
  * ```
  */
 function CosineLawLength(a, b, C) {
-    return Math.pow((Math.pow(a, 2) + Math.pow(b, 2) - 2 * a * b * cos(C)), 0.5);
+    return (a ** 2 + b ** 2 - 2 * a * b * cos(C)) ** 0.5;
 }
 globalThis.CosineLawLength = contract(CosineLawLength).sign([owl.positive, owl.positive, [owl.positive, owl.between(0, 180)]]);
 /**
@@ -33022,7 +33066,7 @@ globalThis.CosineLawLength = contract(CosineLawLength).sign([owl.positive, owl.p
  * ```
  */
 function CosineLawAngle(a, b, c) {
-    return arccos((Math.pow(c, 2) - Math.pow(a, 2) - Math.pow(b, 2)) / (-2 * a * b));
+    return arccos((c ** 2 - a ** 2 - b ** 2) / (-2 * a * b));
 }
 globalThis.CosineLawAngle = contract(CosineLawAngle).seal({
     arg: [owl.positive],
@@ -33039,7 +33083,7 @@ globalThis.CosineLawAngle = contract(CosineLawAngle).seal({
  */
 function Heron(a, b, c) {
     let s = (a + b + c) / 2;
-    return Math.pow((s * (s - a) * (s - b) * (s - c)), 0.5);
+    return (s * (s - a) * (s - b) * (s - c)) ** 0.5;
 }
 globalThis.Heron = contract(Heron).seal({
     arg: [owl.positive],
@@ -33489,6 +33533,7 @@ function TrigSolve(func, k) {
 globalThis.TrigSolve = contract(TrigSolve).sign([owl.trig, owl.num]);
 /**
  * @category Trigonometry
+ * @deprecated
  * @return reduce the polar angle into the range [0,360)
  * ```
  * PolarReduce(370) // 10
@@ -33504,6 +33549,7 @@ function PolarReduce(q) {
 globalThis.PolarReduce = contract(PolarReduce).sign([owl.num]);
 /**
  * @category Trigonometry
+ * @deprecated
  * @return the angle (within [0,180]) between two polar angles
  * ```
  * PolarDiff(80,70) // 10
@@ -34103,7 +34149,7 @@ function Should(condition, msg = "Should condition failed!") {
     if (!condition) {
         let caller = (new Error()).stack.split("\n")[2].trim().split(" ")[1];
         // let caller = 'function'
-        caller = caller !== null && caller !== void 0 ? caller : 'Anonymous ';
+        caller = caller ?? 'Anonymous ';
         throw MathError(caller + ': ' + msg);
     }
 }
@@ -34480,7 +34526,7 @@ class AutoPenCls {
         try {
             [p, q] = QuadraticRoot(a, b, c);
         }
-        catch (_a) {
+        catch {
             [p, q] = [undefined, undefined];
         }
         if (p !== undefined && q !== undefined) {
@@ -34494,7 +34540,7 @@ class AutoPenCls {
         pen.set.textLatex(true);
         pen.axis.x('');
         if (p !== undefined && q !== undefined && p !== q) {
-            pen.plot(x => Sign(a) * (Math.pow(x, 2) - 4));
+            pen.plot(x => Sign(a) * (x ** 2 - 4));
             let P = [2, 0];
             let Q = [-2, 0];
             pen.cutX(P);
@@ -34503,20 +34549,20 @@ class AutoPenCls {
             pen.set.strokeColor('red');
             if (a > 0) {
                 if (greater) {
-                    pen.plot(x => Sign(a) * (Math.pow(x, 2) - 4), -5, -2);
-                    pen.plot(x => Sign(a) * (Math.pow(x, 2) - 4), 2, 5);
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -5, -2);
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), 2, 5);
                 }
                 else {
-                    pen.plot(x => Sign(a) * (Math.pow(x, 2) - 4), -2, 2);
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -2, 2);
                 }
             }
             if (a < 0) {
                 if (greater) {
-                    pen.plot(x => Sign(a) * (Math.pow(x, 2) - 4), -2, 2);
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -2, 2);
                 }
                 else {
-                    pen.plot(x => Sign(a) * (Math.pow(x, 2) - 4), -5, -2);
-                    pen.plot(x => Sign(a) * (Math.pow(x, 2) - 4), 2, 5);
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), -5, -2);
+                    pen.plot(x => Sign(a) * (x ** 2 - 4), 2, 5);
                 }
             }
             pen.set.weight();
@@ -34530,12 +34576,12 @@ class AutoPenCls {
                 pen.set.strokeColor('red');
             }
             if (a > 0)
-                pen.plot(x => Math.pow(x, 2) + 2);
+                pen.plot(x => x ** 2 + 2);
             if (a < 0)
-                pen.plot(x => -(Math.pow(x, 2)) - 2);
+                pen.plot(x => -(x ** 2) - 2);
         }
         if (p !== undefined && q !== undefined && p === q) {
-            let func = a > 0 ? (x) => Math.pow(x, 2) : (x) => -(Math.pow(x, 2));
+            let func = a > 0 ? (x) => x ** 2 : (x) => -(x ** 2);
             pen.plot(func);
             pen.label.point([0, 0], p.toString(), a > 0 ? 270 : 90);
             if (a > 0) {
@@ -34775,13 +34821,12 @@ class AutoPenCls {
             pen.set.textSize();
         }
         function drawLines() {
-            var _a;
             for (let i = 0; i < constraints.length; i++) {
                 let [a, b, s, c] = constraints[i];
                 let [_, eq] = ink.parseIneq(s);
                 if (!eq)
                     pen.set.dash([5, 5]);
-                pen.set.color((_a = constraintColors[i]) !== null && _a !== void 0 ? _a : 'black');
+                pen.set.color(constraintColors[i] ?? 'black');
                 pen.graph.linear(a, b, -c);
                 pen.set.color();
                 pen.set.dash();
@@ -34927,7 +34972,6 @@ class AutoPenCls {
      * ```
      */
     PieChart({ categories, labels, angles, angleLabels, size = 2 }) {
-        var _a;
         const pen = new Pen();
         pen.range.set([-1.2, 1.2], [-1.2, 1.2]);
         pen.size.set(size);
@@ -34952,7 +34996,7 @@ class AutoPenCls {
                 pen.label.point(PolToRect([0.7, mid]), labels[i], 270, 10);
             }
             if (angleLabels[i] !== undefined) {
-                pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), (_a = angleLabels[i]) !== null && _a !== void 0 ? _a : angles[i] + "°");
+                pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), angleLabels[i] ?? angles[i] + "°");
             }
             current += a;
         }
@@ -35059,7 +35103,7 @@ class AutoPenCls {
      */
     StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }) {
         const pen = new Pen();
-        labels !== null && labels !== void 0 ? labels : (labels = [...data].map(x => x.toString()));
+        labels ?? (labels = [...data].map(x => x.toString()));
         labels = labels.map(x => x.toString().split('').reverse()[0]);
         let width = data.length + 2;
         let height = Ceil(Max(...data) / 10) + 2;
@@ -35114,7 +35158,6 @@ class AutoPenCls {
      * ```
      */
     Boxplot({ summary = [0, 0, 0, 0, 0], labels = [null, null, null, null, null], size = 2, tick = 1, start, end, showDash = false, showValue = false, showTick = false }) {
-        var _a, _b, _c, _d, _e;
         const pen = new Pen();
         let [Q0, Q1, Q2, Q3, Q4] = summary;
         let height = showDash ? 1 : 0.5;
@@ -35160,15 +35203,15 @@ class AutoPenCls {
         }
         if (showValue) {
             pen.cutX(L_);
-            pen.label.point(L_, (_a = labels[0]) !== null && _a !== void 0 ? _a : String(Q0), 270);
+            pen.label.point(L_, labels[0] ?? String(Q0), 270);
             pen.cutX(A_);
-            pen.label.point(A_, (_b = labels[1]) !== null && _b !== void 0 ? _b : String(Q1), 270);
+            pen.label.point(A_, labels[1] ?? String(Q1), 270);
             pen.cutX(B_);
-            pen.label.point(B_, (_c = labels[2]) !== null && _c !== void 0 ? _c : String(Q2), 270);
+            pen.label.point(B_, labels[2] ?? String(Q2), 270);
             pen.cutX(C_);
-            pen.label.point(C_, (_d = labels[3]) !== null && _d !== void 0 ? _d : String(Q3), 270);
+            pen.label.point(C_, labels[3] ?? String(Q3), 270);
             pen.cutX(R_);
-            pen.label.point(R_, (_e = labels[4]) !== null && _e !== void 0 ? _e : String(Q4), 270);
+            pen.label.point(R_, labels[4] ?? String(Q4), 270);
         }
         pen.autoCrop();
         this.pen = pen;
@@ -36731,7 +36774,7 @@ class PenCls extends Pencil {
     rightAngle(A, O, B, size = 12) {
         A = this.pj(A);
         O = this.pj(O);
-        B !== null && B !== void 0 ? B : (B = Rotate(A, 90, O));
+        B ?? (B = Rotate(A, 90, O));
         B = this.pj(B);
         this.drawRightAngle(A, O, B, size);
     }
@@ -37525,7 +37568,7 @@ function ParseForPrint(value, signal = "") {
             return String(numberDefault(value));
         }
         if (T === 'boolean') {
-            return Tick(value);
+            return value ? '✔' : '✘';
         }
         if (owl.point2D(value)) {
             return Coord(value);
@@ -37582,7 +37625,7 @@ function ParseForPrint(value, signal = "") {
         if (T === 'number') {
             let s = Math.sign(value);
             let v = Math.abs(value);
-            let [p, q] = cal.simplifySurd(cal.blur(Math.pow(v, 2)));
+            let [p, q] = cal.simplifySurd(cal.blur(v ** 2));
             return s >= 0 ? ink.printSurd(p, q) : '-' + ink.printSurd(p, q);
         }
     }

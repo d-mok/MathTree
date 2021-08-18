@@ -107,7 +107,7 @@ test('PolarDiff', () => {
 
 
 describe('WholeBearing and CompassBearing', () => {
-    const cases = [
+    const cases: [number, string, string][] = [
         [0, '090°', 'east'],
         [90, '000°', 'north'],
         [100, '350°', 'N10°W'],
@@ -117,7 +117,7 @@ describe('WholeBearing and CompassBearing', () => {
         [1000, '170°', 'S10°E'],
         [260, '190°', 'S10°W'],
     ];
-    it.each(cases)('WholeBearing(%p) & CompassBearing(%p)', (input, whole, compass) => {
+    it.each(cases)('WholeBearing(%p) & CompassBearing(%p)', (input: number, whole: string, compass: string) => {
         expect(WholeBearing(input)).toBe(whole);
         expect(CompassBearing(input)).toBe(compass);
     });

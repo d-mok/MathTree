@@ -472,7 +472,8 @@ function RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '
         for (let a of [90, 180, 270, 360]) {
             for (let s of [1, -1]) {
                 if (a === 360 && s > 0) continue
-                if (cal.eq(trig(f as TrigFunc, a + s), v)) arr.push([f as TrigFunc, a, s as 1 | -1, label])
+                if (cal.eq(trig(f as TrigFunc, a + s), v))
+                    arr.push([f as TrigFunc, a, s as 1 | -1, label])
             }
         }
     }

@@ -1,20 +1,7 @@
 
 
-// test('Sieve', () => {
-//     let func = Sieve(() => RndN(1, 10), x => IsOdd(x));
-//     let arr = sample(func);
-//     expect(arr).toBeFlatAbsWithin(1, 9);
-//     expect(arr).toBeFlatIsInteger();
-//     expect(arr).toBeFlatDistinct(5);
-//     expect(arr).toBeFlatIs(IsOdd);
-// });
-
-
-
 
 test('RndShake', () => {
-    let arr = sample(() => RndShake('\\dfrac{2}{3}'));
-    expect(arr).toBeFlatIs(owl.dfrac);
 
     arr = sample(() => RndShake('\\ge'));
     expect(arr).toBeFlatIs(owl.ineq);
@@ -110,48 +97,25 @@ test('RndShakeQ', () => {
 });
 
 
-test('RndShakeFrac', () => {
 
-    function run(anchor, isPositive, isProb) {
-        let arr = sample(() => RndShakeFrac(anchor));
-        let arr0 = arr.map(x => x.map(y => y[0]));
-        let arr1 = arr.map(x => x.map(y => y[1]));
-        expect(arr.flat()).toBeFlatIsInteger();
-        if (isPositive) {
-            expect(arr0).toBeFlatIs(x => x > 0);
-        } else {
-            expect(arr0).toBeFlatIs(x => x < 0);
-        }
-        expect(arr1).toBeFlatIs(x => x > 1);
-        expect(arr).toAllHaveLength(3);
-        if (isProb)
-            expect(arr.flat().map(x => x[0] / x[1])).toBeFlatIs(IsProbability);
-    }
-
-    run([5, 6], true, true);
-    run([6, -5], false, false);
-});
-
-
-
-test('RndShakeDfrac', () => {
-    function run(anchor, isPositive) {
-        let arr = sample(() => RndShakeDfrac(anchor));
-        let arr0 = arr.flat(2).map(x => ink.parseDfrac(x)[0]);
-        let arr1 = arr.flat(2).map(x => ink.parseDfrac(x)[1]);
-        expect(arr0).toBeFlatIsInteger();
-        expect(arr1).toBeFlatIsInteger();
-        if (isPositive) {
-            expect(arr0).toBeFlatIs(x => x > 0);
-        } else {
-            expect(arr0).toBeFlatIs(x => x < 0);
-        }
-        expect(arr1).toBeFlatIs(x => x > 1);
-        expect(arr).toAllHaveLength(3);
-    }
-    run('\\dfrac{5}{6}', true);
-    run('\\dfrac{6}{-5}', false);
-});
+// test('RndShakeDfrac', () => {
+//     function run(anchor, isPositive) {
+//         let arr = sample(() => RndShakeDfrac(anchor));
+//         let arr0 = arr.flat(2).map(x => ink.parseDfrac(x)[0]);
+//         let arr1 = arr.flat(2).map(x => ink.parseDfrac(x)[1]);
+//         expect(arr0).toBeFlatIsInteger();
+//         expect(arr1).toBeFlatIsInteger();
+//         if (isPositive) {
+//             expect(arr0).toBeFlatIs(x => x > 0);
+//         } else {
+//             expect(arr0).toBeFlatIs(x => x < 0);
+//         }
+//         expect(arr1).toBeFlatIs(x => x > 1);
+//         expect(arr).toAllHaveLength(3);
+//     }
+//     run('\\dfrac{5}{6}', true);
+//     run('\\dfrac{6}{-5}', false);
+// });
 
 
 

@@ -4,13 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "publish": "npm run build-dev && npm run build && npm run build-type  && npm run jest",
+    "publish": "npm run build-dev && npm run build && npm run build-type && npm run jest",
     "build": "webpack --config webpack.edge.js",
     "build-dev": "webpack --config webpack.dev.js",
     "build-stable": "webpack --config webpack.stable.js",
     "build-type": "npx tsc --project tsconfig.d.json",
     "jest": "jest ./src/Math",
-    "jest_extend": "jest JestExtend",
     "jest_soil": "jest ./src/Soil -debug",
     "typedoc": "typedoc --out typedoc ./src/Math ./src/Pen"
   },
@@ -29,6 +28,7 @@
     "@types/katex": "^0.11.0",
     "jest": "^26.6.3",
     "jest-extended": "^0.11.5",
+    "jest-matcher-deep-close-to": "^2.0.1",
     "ts-jest": "^26.5.5",
     "ts-loader": "^8.2.0",
     "typedoc": "^0.20.36",
@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "katex": "^0.13.3",
-    "sapphire-js": "^1.0.35"
+    "sapphire-js": "^1.0.36"
   }
 }

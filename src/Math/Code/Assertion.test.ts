@@ -1,3 +1,27 @@
+
+
+function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash = true) {
+    const trash = ['2', '-2', '0.5', NaN, Infinity, undefined, null, true, false];
+    if (withTrash)
+        falsy = [...falsy, ...trash];
+
+    for (let t of truthy) {
+        expect(func(t)).toBe(true);
+    }
+    expect(func(...truthy)).toBe(true);
+    for (let f of falsy) {
+        expect(func(f)).toBe(false);
+    }
+    expect(func(...falsy)).toBe(false);
+    expect(func(falsy[0], ...truthy)).toBe(false);
+    expect(func(truthy[1], ...falsy)).toBe(false);
+}
+globalThis.testAssertion = testAssertion;
+
+
+
+
+
 test('IsNum', () => {
     const T = [0, 4, -2, 1.23, -4.567, 9999999, 1 / 3];
     const F = [NaN, Infinity, '2'];

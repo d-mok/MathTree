@@ -279,7 +279,7 @@ test('ToFrac', () => {
 
     for (let i = 0; i <= 100; i++) {
         for (let j = 1; j <= 100; j++) {
-            I = i * RndU();
+            let I = i * RndU();
             let v = I / j;
             let [p, q] = ToFrac(v);
             expect(I * q - p * j === 0).toBe(true);

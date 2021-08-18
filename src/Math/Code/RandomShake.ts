@@ -13,9 +13,10 @@
  */
 function RndShake(anchor: any): (typeof anchor)[] {
     if (typeof anchor === 'string') {
-        // Fraction
+        // Fraction, to be deleted
         if (owl.dfrac(anchor)) {
-            return RndShakeDfrac(anchor)
+            Should(false, 'RndShakeDfrac is not supported anymore')
+            // return RndShakeDfrac(anchor)
         }
         // Inequal Sign
         if (owl.ineq(anchor)) {
@@ -136,26 +137,7 @@ globalThis.RndShakeR = contract(RndShakeR).sign([owl.num])
  */
 function RndShakeQ(anchor: number): number[] {
     if (owl.int(anchor)) return RndShakeN(anchor)
-    let f: Fraction = ToFrac(anchor)
-    return RndShakeFrac(f).map((x: Fraction): number => x[0] / x[1])
-}
-globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
-
-
-
-/**
- * @category RandomShake
- * @deprecated
- * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```
- * RndShakeFrac([5,6]) 
- * // return 3 unique fractions around [5,6]
- * RndShakeFrac([6,-5])
- * // return 3 unique fractions around [6,-5]
- * ```
- */
-function RndShakeFrac(anchor: Fraction): Fraction[] {
-    let [p, q] = cal.toFraction(anchor[0] / anchor[1]);
+    let [p, q]: Fraction = ToFrac(anchor);
     [p, q] = [p, q].map(cal.blur)
     Should(IsInteger(p, q), 'input should be integral fraction')
     return poker
@@ -174,29 +156,68 @@ function RndShakeFrac(anchor: Fraction): Fraction[] {
         .shield(([a, b]) => b !== 1)
         .shield(([a, b]) => b !== 1)
         .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
-        .unique(_ => _[0] / _[1])
+        .unique(([p, q]) => p / q)
         .rolls(3)
+        .map(([p, q]) => p / q)
 }
-globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction])
+globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
 
 
-/**
- * @category RandomShake
- * @deprecated
- * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```
- * RndShakeDfrac('\\dfrac{5}{6}') 
- * // return 3 unique Dfrac around [5,6]
- * RndShakeDfrac('-\\dfrac{6}{5}')
- * // return 3 unique Dfrac around [6,-5]
- * ```
- */
-function RndShakeDfrac(anchor: string): string[] {
-    Should(false, 'RndShakeDfrac is deprecated')
-    let f = ink.parseDfrac(anchor)
-    return RndShakeFrac(f).map(x => Dfrac(...x))
-}
-globalThis.RndShakeDfrac = contract(RndShakeDfrac).sign([owl.dfrac])
+
+// /**
+//  * @category RandomShake
+//  * @deprecated
+//  * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+//  * ```
+//  * RndShakeFrac([5,6]) 
+//  * // return 3 unique fractions around [5,6]
+//  * RndShakeFrac([6,-5])
+//  * // return 3 unique fractions around [6,-5]
+//  * ```
+//  */
+// function RndShakeFrac(anchor: Fraction): Fraction[] {
+//     let [p, q] = cal.toFraction(anchor[0] / anchor[1]);
+//     [p, q] = [p, q].map(cal.blur)
+//     Should(IsInteger(p, q), 'input should be integral fraction')
+//     return poker
+//         .dice(
+//             (): Fraction => {
+//                 const h = RndShakeN(p)[0]
+//                 const k = RndShakeN(q)[0]
+//                 let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h
+//                 let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k
+//                 if (a === p && b === q) return [h, k]
+//                 return [a, b]
+//             })
+//         .shield(([a, b]) => AreCoprime(a, b))
+//         .shield(([a, b]) => a !== 0)
+//         .shield(([a, b]) => b !== 0)
+//         .shield(([a, b]) => b !== 1)
+//         .shield(([a, b]) => b !== 1)
+//         .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
+//         .unique(_ => _[0] / _[1])
+//         .rolls(3)
+// }
+// globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction])
+
+
+// /**
+//  * @category RandomShake
+//  * @deprecated
+//  * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+//  * ```
+//  * RndShakeDfrac('\\dfrac{5}{6}') 
+//  * // return 3 unique Dfrac around [5,6]
+//  * RndShakeDfrac('-\\dfrac{6}{5}')
+//  * // return 3 unique Dfrac around [6,-5]
+//  * ```
+//  */
+// function RndShakeDfrac(anchor: string): string[] {
+//     Should(false, 'RndShakeDfrac is deprecated')
+//     let f = ink.parseDfrac(anchor)
+//     return RndShakeFrac(f).map(x => Dfrac(...x))
+// }
+// globalThis.RndShakeDfrac = contract(RndShakeDfrac).sign([owl.dfrac])
 
 
 
@@ -220,7 +241,7 @@ globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq])
 
 /**
  * @category RandomShake
- * @return an array of 3 point
+ * @return an array of 3 point, both x and y are unique
  * ```
  * RndShakePoint([3,4]) 
  * // may return [[2,5],[1,6],[4,2]]
@@ -233,7 +254,10 @@ function RndShakePoint(anchor: Point2D): Point2D[] {
         const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0]
         return [h, k]
     }
-    return poker.dice(func).distinct((a, b) => a[0] === b[0] || a[1] === b[1]).rolls(3)
+    return poker.dice(func)
+        .unique(([x, y]) => x)
+        .unique(([x, y]) => y)
+        .rolls(3)
 }
 globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point2D])
 
@@ -313,7 +337,8 @@ function RndShakeRatio(anchor: number[]): number[][] {
         return anchor.map(x => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0])
     }
     return poker.dice(func)
-        .shield(r => toNumbers(r).hcf() === 1 && AreDifferent(anchor, r))
+        .shield(r => toNumbers(r).hcf() === 1)
+        .shield(r => AreDifferent(anchor, r))
         .unique(_ => JSON.stringify(_))
         .rolls(3)
 }

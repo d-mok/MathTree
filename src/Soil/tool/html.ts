@@ -153,7 +153,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
             return String(numberDefault(value))
         }
         if (T === 'boolean') {
-            return Tick(value)
+            return value ? '✔' : '✘'
         }
         if (owl.point2D(value)) {
             return Coord(value)

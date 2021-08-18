@@ -189,6 +189,7 @@ globalThis.TrigSolve = contract(TrigSolve).sign([owl.trig, owl.num])
 
 /**
  * @category Trigonometry
+ * @deprecated
  * @return reduce the polar angle into the range [0,360)
  * ```
  * PolarReduce(370) // 10
@@ -207,6 +208,7 @@ globalThis.PolarReduce = contract(PolarReduce).sign([owl.num])
 
 /**
  * @category Trigonometry
+ * @deprecated
  * @return the angle (within [0,180]) between two polar angles
  * ```
  * PolarDiff(80,70) // 10

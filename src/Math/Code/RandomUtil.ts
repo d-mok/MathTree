@@ -27,13 +27,13 @@ globalThis.RndShuffle = RndShuffle
 
 /**
  * @category RandomUtil
- * @return n random items from given items, not necessarily unique
+ * @return n random items from given items, NOT necessarily unique
  * ```
- * RndPickN([2,4,6],2) // may return [4,2]
+ * RndPickN([2,4,6],5) // may return [4,2,2,4,6]
  * ```
  */
 function RndPickN<T>(items: T[], n: number): T[] {
-    return [...toList(items).sample(n)!]
+    return [...toList(items).draws(n)!]
 }
 globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt])
 
@@ -48,9 +48,7 @@ globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt])
  * ```
  */
 function RndPickUnique<T>(items: T[], n: number): T[] {
-    let ls = toList(items)
-    let f = () => ls.draw()!
-    return poker.dice(f).unique().rolls(n)
+    return [...toList(items).uniqueDeep().sample(n)!]
 }
 globalThis.RndPickUnique = contract(RndPickUnique).sign([owl.array, owl.positiveInt])
 

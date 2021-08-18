@@ -31734,6 +31734,7 @@ function RndShake(anchor) {
     if (typeof anchor === 'string') {
         // Fraction
         if (owl.dfrac(anchor)) {
+            Should(false, 'RndShakeDfrac is not supported anymore');
             return RndShakeDfrac(anchor);
         }
         // Inequal Sign

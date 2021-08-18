@@ -70,19 +70,19 @@ function AreCoprime(...nums: number[]): boolean {
 globalThis.AreCoprime = contract(AreCoprime).sign([owl.num])
 
 
-/**
- * @category Relation
- * @deprecated use AreDifferent
- * @return Check if the points are all distinct.
- * ```
- * AreDistinctPoint([1,2],[3,4]) // true
- * AreDistinctPoint([1,2],[1,2]) // false
- * ```
- */
-function AreDistinctPoint(...points: Point2D[]) {
-    return toList(points).duplessDeep()
-}
-globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point2D])
+// /**
+//  * @category Relation
+//  * @deprecated use AreDifferent
+//  * @return Check if the points are all distinct.
+//  * ```
+//  * AreDistinctPoint([1,2],[3,4]) // true
+//  * AreDistinctPoint([1,2],[1,2]) // false
+//  * ```
+//  */
+// function AreDistinctPoint(...points: Point2D[]) {
+//     return toList(points).duplessDeep()
+// }
+// globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point2D])
 
 
 /**

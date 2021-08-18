@@ -24,33 +24,33 @@ globalThis.GrammarJoin = GrammarJoin
 
 
 
-/**
-* @category Text
-* @deprecated
-* @return '✔' or '✘'.
-* ```
-* Tick(true) // '✔'
-* Tick(false) // '✘'
-* ```
-*/
-function Tick(bool: boolean): string {
-    return bool ? '✔' : '✘'
-}
-globalThis.Tick = contract(Tick).sign([owl.bool])
+// /**
+// * @category Text
+// * @deprecated
+// * @return '✔' or '✘'.
+// * ```
+// * Tick(true) // '✔'
+// * Tick(false) // '✘'
+// * ```
+// */
+// function Tick(bool: boolean): string {
+//     return bool ? '✔' : '✘'
+// }
+// globalThis.Tick = contract(Tick).sign([owl.bool])
 
 
-/**
-* @category Text
-* @deprecated
-* @return Array of '✔' or '✘'.
-* ```
-* Ticks(true,false) // ['✔','✘']
-* ```
-*/
-function Ticks(...bools: boolean[]): string[] {
-    return bools.map(x => Tick(x))
-}
-globalThis.Ticks = contract(Ticks).sign([owl.bool])
+// /**
+// * @category Text
+// * @deprecated
+// * @return Array of '✔' or '✘'.
+// * ```
+// * Ticks(true,false) // ['✔','✘']
+// * ```
+// */
+// function Ticks(...bools: boolean[]): string[] {
+//     return bools.map(x => Tick(x))
+// }
+// globalThis.Ticks = contract(Ticks).sign([owl.bool])
 
 
 
@@ -258,37 +258,37 @@ globalThis.LongDivision = contract(LongDivision).sign([owl.ntuple, owl.ntuple])
 
 
 
-/**
- * @category Text
- * @param num - from 1 to 10
- * @return roman number
- * ```
- * Roman(1) // "I"
- * Roman(2) // "II"
- * ```
- */
-function Roman(num: number): string {
-    return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1]
-}
-globalThis.Roman = contract(Roman).sign([[owl.positiveInt, owl.between(1, 10)]])
+// /**
+//  * @category Text
+//  * @param num - from 1 to 10
+//  * @return roman number
+//  * ```
+//  * Roman(1) // "I"
+//  * Roman(2) // "II"
+//  * ```
+//  */
+// function Roman(num: number): string {
+//     return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1]
+// }
+// globalThis.Roman = contract(Roman).sign([[owl.positiveInt, owl.between(1, 10)]])
 
 
 
 
-/**
- * @category Text
- * @param roman - from I to X
- * @return arabic number
- * ```
- * DeRoman("I") // 1
- * DeRoman("II") // 2
- * ```
- */
-function DeRoman(roman: string): number {
-    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
-    return romans.indexOf(roman) + 1
-}
-globalThis.DeRoman = contract(DeRoman).sign([owl.roman])
+// /**
+//  * @category Text
+//  * @param roman - from I to X
+//  * @return arabic number
+//  * ```
+//  * DeRoman("I") // 1
+//  * DeRoman("II") // 2
+//  * ```
+//  */
+// function DeRoman(roman: string): number {
+//     const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+//     return romans.indexOf(roman) + 1
+// }
+// globalThis.DeRoman = contract(DeRoman).sign([owl.roman])
 
 
 

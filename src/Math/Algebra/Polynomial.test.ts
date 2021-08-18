@@ -1,3 +1,4 @@
+import { repeat } from '../Jest/JestExtend'
 
 function getPoly() {
     return [
@@ -26,9 +27,12 @@ test('PolyClone', () => {
 
 
 test('RndPolynomial', () => {
-    let arr = sample(() => RndPolynomial(8, ['x', 'y'], 3, 9));
-    expect(arr).toSatisfyAll(owl.polynomial);
-    expect(arr).toSatisfyAll(_ => PolyDegree(_) === 8);
+    repeat(10, () => {
+        let poly = RndPolynomial(8, ['x', 'y'], 3, 9);
+        expect(poly).toSatisfy(owl.polynomial);
+        expect(poly).toSatisfy(_ => PolyDegree(_) === 8);
+    });
+
 });
 
 

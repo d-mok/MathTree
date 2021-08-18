@@ -152,7 +152,7 @@ class LinearFunction {
     // define
     byTwoPoints(p1: Point2D, p2: Point2D) {
         Should(owl.point2D(p1) && owl.point2D(p2), 'input must be point')
-        Should(AreDistinctPoint(p1, p2), 'two points should be distinct')
+        Should(AreDifferent(p1, p2), 'two points should be distinct')
         let [x1, y1] = p1
         let [x2, y2] = p2
         let dx = x1 - x2
@@ -187,7 +187,7 @@ class LinearFunction {
 
     byBisector(A: Point2D, B: Point2D) {
         Should(owl.point2D(A) && owl.point2D(B), 'input must be point')
-        Should(AreDistinctPoint(A, B), 'two points should be distinct')
+        Should(AreDifferent(A, B), 'two points should be distinct')
         if (A[0] === B[0]) {
             this._linear = [0, 1, -(A[1] + B[1]) / 2]
             this.refresh()

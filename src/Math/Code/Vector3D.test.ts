@@ -108,8 +108,8 @@ test('Slide3D', () => {
 
 
 test('PdFoot3D', () => {
-    let P = [2, 3, 4];
-    let [A, B, C] = [[0, 0, 5], [1, 0, 5], [0, 1, 5]];
+    let P: Point3D = [2, 3, 4];
+    let [A, B, C]: Point3D[] = [[0, 0, 5], [1, 0, 5], [0, 1, 5]];
     expect(PdFoot3D(P, [A, B, C])).toEqual([2, 3, 5]);
     expect(PdFoot3D(P, [A, B])).toEqual([2, 0, 5]);
 });
@@ -118,7 +118,7 @@ test('PdFoot3D', () => {
 
 
 test('Embed', () => {
-    let [A, B, C] = [[0, 0], [1, 0], [0, 1]];
+    let [A, B, C]: Point2D[] = [[0, 0], [1, 0], [0, 1]];
     expect(Embed([A, B, C], [0, 0, 2], [1, 0, 0], [0, 1, 0])).toEqual([[0, 0, 2], [1, 0, 2], [0, 1, 2]]);
 });
 
@@ -126,20 +126,20 @@ test('Embed', () => {
 
 
 test('EmbedX', () => {
-    let [A, B, C] = [[0, 0], [3, 0], [0, 1]];
+    let [A, B, C]: Point2D[] = [[0, 0], [3, 0], [0, 1]];
     expect(EmbedX([A, B, C], 2)).toEqual([[2, 0, 0], [2, 3, 0], [2, 0, 1]]);
 });
 
 
 
 test('EmbedY', () => {
-    let [A, B, C] = [[0, 0], [3, 0], [0, 1]];
+    let [A, B, C]: Point2D[] = [[0, 0], [3, 0], [0, 1]];
     expect(EmbedY([A, B, C], 2)).toEqual([[0, 2, 0], [3, 2, 0], [0, 2, 1]]);
 });
 
 
 test('EmbedZ', () => {
-    let [A, B, C] = [[0, 0], [3, 0], [0, 1]];
+    let [A, B, C]: Point2D[] = [[0, 0], [3, 0], [0, 1]];
     expect(EmbedZ([A, B, C], 2)).toEqual([[0, 0, 2], [3, 0, 2], [0, 1, 2]]);
 });
 
@@ -155,7 +155,7 @@ test('EmbedZ', () => {
 
 
 test('Extrude', () => {
-    let [A, B, C] = [[0, 0, 0], [4, 0, 0], [0, 4, 0]];
+    let [A, B, C]: Point3D[] = [[0, 0, 0], [4, 0, 0], [0, 4, 0]];
     expect(Extrude([A, B, C], [[0, 0, 4]], 0.75)).toEqual([[0, 0, 1], [3, 0, 1], [0, 3, 1]]);
 });
 

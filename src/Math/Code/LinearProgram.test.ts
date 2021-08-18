@@ -191,7 +191,7 @@ test('OptimizeField', () => {
 
 test('ConstraintsFromPoints', () => {
     
-    expect(() => ConstraintsFromPoints([[0, 3], [0, 1], [3, 0], [1, 1]], [2, 1, 1], false))
+    expect(() => ConstraintsFromPoints([0, 3], [0, 1], [3, 0], [1, 1]))
         .toThrow();
     
     expect(ConstraintsFromPoints([0, 0], [0, 1], [1, 0]))

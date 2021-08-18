@@ -64,12 +64,12 @@ test('AreCoprime', () => {
 
 
 
-test('AreDistinctPoint', () => {
-    expect(AreDistinctPoint([1, 2], [3, 4])).toBe(true);
-    expect(AreDistinctPoint([1, 2], [1, 4])).toBe(true);
-    expect(AreDistinctPoint([1, 2], [1, 2])).toBe(false);
-    expect(AreDistinctPoint([1, 2], [1, 2], [3, 4])).toBe(false);
-});
+// test('AreDistinctPoint', () => {
+//     expect(AreDistinctPoint([1, 2], [3, 4])).toBe(true);
+//     expect(AreDistinctPoint([1, 2], [1, 4])).toBe(true);
+//     expect(AreDistinctPoint([1, 2], [1, 2])).toBe(false);
+//     expect(AreDistinctPoint([1, 2], [1, 2], [3, 4])).toBe(false);
+// });
 
 
 test('AreDistantPoint', () => {
