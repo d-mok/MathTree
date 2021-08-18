@@ -30384,6 +30384,17 @@ function Rotate(P, O, q) {
 globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.point2D, owl.num]);
 /**
  * @category Geometry
+ * @return point P rotated anticlockwise by angle q about point O.
+ * ```
+ * Rotate([1,2],90,[0,0]) // [-2,1]
+ * ```
+ */
+function Rotate2(P, q, O = [0, 0]) {
+    return vec2D(O, P).rotate(q).add(O).blur().toArray();
+}
+globalThis.Rotate2 = contract(Rotate2).sign([owl.point2D, owl.num, owl.point2D]);
+/**
+ * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
  * ```
  * Dir([1,0],[3,2]) // 45
@@ -34612,10 +34623,10 @@ class AutoPenCls {
             }
             pen.set.dash();
             if (F[0] === base[0][0] && F[1] === base[0][1]) {
-                pen.decorate.rightAngle(vertex, F, base[1]);
+                pen.rightAngle(vertex, F, base[1]);
             }
             else {
-                pen.decorate.rightAngle(vertex, F, base[0]);
+                pen.rightAngle(vertex, F, base[0]);
             }
             pen.set.strokeColor();
         }
@@ -35868,99 +35879,6 @@ class PenCls extends Pencil {
             },
         };
         /**
-         * Geometry Decorator.
-         * @category decorator
-         */
-        this.decorate = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Decorate equal side lengths.
-             * @category decorator
-             * @param startPoint - The starting point [x,y].
-             * @param endPoint - The ending point [x,y].
-             * @param tick - The number of ticks.
-             * @returns void
-             * ```
-             * pen.decorate.equalSide([1,0],[3,2],2)
-             * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
-             * ```
-             */
-            equalSide(startPoint, endPoint, tick = 1) {
-                this._pen.drawEqualMark(startPoint, endPoint, 5, tick, 3);
-            },
-            /**
-             * Decorate parallel side.
-             * @category decorator
-             * @param startPoint - The starting point [x,y].
-             * @param endPoint - The ending point [x,y].
-             * @param tick - The number of ticks.
-             * @returns void
-             * ```
-             * pen.decorate.parallel([1,0],[3,2],2)
-             * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
-             * ```
-             */
-            parallel(startPoint, endPoint, tick = 1) {
-                this._pen.drawParallelMark(startPoint, endPoint, 4, tick, 6);
-            },
-            /**
-             * Decorate an angle AOB, always non-reflex.
-             * @category decorator
-             * @param A - The starting point [x,y].
-             * @param O - The vertex point [x,y].
-             * @param B - The ending point [x,y].
-             * @param arc - The number of arcs.
-             * @param radius - The radius of the angle arc, in pixel.
-             * @returns void
-             * ```
-             * pen.decorate.angle([1,0],[0,0],[3,2],2)
-             * // decorate an angle AOB with double-arc.
-             * ```
-             */
-            angle(A, O, B, arc = 1, radius = -1) {
-                if (radius < 0)
-                    radius = 15 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5);
-                let space = 3;
-                this._pen.drawAngle(A, O, B, radius, arc, space);
-            },
-            /**
-             * Decorate a right-angle AOB.
-             * @category decorator
-             * @param A - The starting point [x,y].
-             * @param O - The vertex point [x,y].
-             * @param B - The ending point [x,y]. Interchangeable with A.
-             * @param size - The size of the mark, in pixel.
-             * @returns void
-             * ```
-             * pen.decorate.rightAngle([1,0],[0,0],[3,2])
-             * // decorate an right-angle AOB
-             * ```
-             */
-            rightAngle(A, O, B, size = 12) {
-                A = this._pen.pj(A);
-                O = this._pen.pj(O);
-                B !== null && B !== void 0 ? B : (B = Rotate(A, O, 90));
-                B = this._pen.pj(B);
-                this._pen.drawRightAngle(A, O, B, size);
-            },
-            /**
-             * Decorate a compass.
-             * @category decorator
-             * @param position - The position [x,y].
-             * @returns void
-             * ```
-             * pen.decorate.compass([1,2])
-             * // decorate a compass at [1,2]
-             * ```
-             */
-            compass(position) {
-                this._pen.drawCompass(position, 17, 20, 7, 3.5);
-            }
-        };
-        /**
          * @category text
          */
         this.label = {
@@ -36663,6 +36581,8 @@ class PenCls extends Pencil {
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
     }
+    height(vertex, [A, B], label) {
+    }
     /**
      * Draw a polyline given points.
      * @category draw
@@ -36726,7 +36646,10 @@ class PenCls extends Pencil {
      * ```
      */
     angle(A, O, B, label, arc = 1, radius = -1) {
-        this.decorate.angle(A, O, B, arc, radius);
+        if (radius < 0)
+            radius = 15 + this.getSmallAngleExtraPixel(A, O, B, 40, 1.5);
+        let space = 3;
+        this.drawAngle(A, O, B, radius, arc, space);
         if (label !== undefined && label !== '')
             this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13);
     }

@@ -103,6 +103,20 @@ function Rotate(P: Point2D, O: Point2D, q: number): Point2D {
 globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.point2D, owl.num])
 
 
+
+/**
+ * @category Geometry
+ * @return point P rotated anticlockwise by angle q about point O.
+ * ```
+ * Rotate([1,2],90,[0,0]) // [-2,1]
+ * ```
+ */
+function Rotate2(P: Point2D, q: number, O: Point2D = [0, 0]): Point2D {
+    return vec2D(O, P).rotate(q).add(O).blur().toArray()
+}
+globalThis.Rotate2 = contract(Rotate2).sign([owl.point2D, owl.num, owl.point2D])
+
+
 /**
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
@@ -132,7 +146,7 @@ globalThis.Dir = contract(Dir).seal({
  * ```
  */
 function PdFoot(A: Point2D, B: Point2D, P: Point2D): Point2D {
-   return vec2D(A,P).projectOn(vec2D(A,B)).add(A).toArray()
+    return vec2D(A, P).projectOn(vec2D(A, B)).add(A).toArray()
 }
 globalThis.PdFoot = contract(PdFoot).seal({
     arg: [owl.point2D],

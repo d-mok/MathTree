@@ -762,8 +762,8 @@ class PenCls extends Pencil {
 
 
     height(vertex: Point, [A, B]: [Point, Point], label?: string) {
-        
-        
+
+
     }
 
 
@@ -981,7 +981,11 @@ class PenCls extends Pencil {
      * ```
      */
     angle(A: Point, O: Point, B: Point, label?: string | number, arc = 1, radius = -1) {
-        this.decorate.angle(A, O, B, arc, radius)
+        if (radius < 0)
+            radius = 15 + this.getSmallAngleExtraPixel(A, O, B, 40, 1.5)
+        let space = 3
+        this.drawAngle(A, O, B, radius, arc, space)
+
         if (label !== undefined && label !== '')
             this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13)
     }
@@ -1059,117 +1063,6 @@ class PenCls extends Pencil {
     compass(position: Point2D) {
         this.drawCompass(position, 17, 20, 7, 3.5)
     }
-
-
-
-
-
-
-
-    /**
-     * Geometry Decorator.
-     * @category decorator
-     */
-    decorate = {
-        /**
-         * @ignore
-         */
-        _pen: this as PenCls,
-
-        /**
-         * Decorate equal side lengths.
-         * @category decorator
-         * @param startPoint - The starting point [x,y].
-         * @param endPoint - The ending point [x,y].
-         * @param tick - The number of ticks.
-         * @returns void
-         * ```
-         * pen.decorate.equalSide([1,0],[3,2],2) 
-         * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
-         * ```
-         */
-        equalSide(startPoint: Point, endPoint: Point, tick = 1) {
-            this._pen.drawEqualMark(startPoint, endPoint, 5, tick, 3)
-        },
-
-        /**
-         * Decorate parallel side.
-         * @category decorator
-         * @param startPoint - The starting point [x,y].
-         * @param endPoint - The ending point [x,y].
-         * @param tick - The number of ticks.
-         * @returns void
-         * ```
-         * pen.decorate.parallel([1,0],[3,2],2) 
-         * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
-         * ```
-         */
-        parallel(startPoint: Point, endPoint: Point, tick = 1) {
-            this._pen.drawParallelMark(startPoint, endPoint, 4, tick, 6)
-        },
-
-
-        /**
-         * Decorate an angle AOB, always non-reflex.
-         * @category decorator
-         * @param A - The starting point [x,y].
-         * @param O - The vertex point [x,y].
-         * @param B - The ending point [x,y].
-         * @param arc - The number of arcs.
-         * @param radius - The radius of the angle arc, in pixel.
-         * @returns void
-         * ```
-         * pen.decorate.angle([1,0],[0,0],[3,2],2) 
-         * // decorate an angle AOB with double-arc.
-         * ```
-         */
-        angle(A: Point, O: Point, B: Point, arc = 1, radius = -1) {
-            if (radius < 0)
-                radius = 15 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5)
-
-            let space = 3
-            this._pen.drawAngle(A, O, B, radius, arc, space)
-        },
-
-
-        /**
-         * Decorate a right-angle AOB.
-         * @category decorator
-         * @param A - The starting point [x,y].
-         * @param O - The vertex point [x,y].
-         * @param B - The ending point [x,y]. Interchangeable with A.
-         * @param size - The size of the mark, in pixel.
-         * @returns void
-         * ```
-         * pen.decorate.rightAngle([1,0],[0,0],[3,2]) 
-         * // decorate an right-angle AOB
-         * ```
-         */
-        rightAngle(A: Point, O: Point, B?: Point, size = 12) {
-
-            A = this._pen.pj(A)
-            O = this._pen.pj(O)
-            B ??= Rotate(A, O, 90)
-            B = this._pen.pj(B)
-
-            this._pen.drawRightAngle(A, O, B, size)
-
-        },
-
-        /**
-         * Decorate a compass.
-         * @category decorator
-         * @param position - The position [x,y].
-         * @returns void
-         * ```
-         * pen.decorate.compass([1,2]) 
-         * // decorate a compass at [1,2]
-         * ```
-         */
-        compass(position: Point2D) {
-            this._pen.drawCompass(position, 17, 20, 7, 3.5)
-        }
-    };
 
 
 

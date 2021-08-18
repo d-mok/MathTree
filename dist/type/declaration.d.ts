@@ -865,6 +865,14 @@ declare function Slide(A: Point2D, B: Point2D, ratio: number): Point2D;
 declare function Rotate(P: Point2D, O: Point2D, q: number): Point2D;
 /**
  * @category Geometry
+ * @return point P rotated anticlockwise by angle q about point O.
+ * ```
+ * Rotate([1,2],90,[0,0]) // [-2,1]
+ * ```
+ */
+declare function Rotate2(P: Point2D, q: number, O?: Point2D): Point2D;
+/**
+ * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
  * ```
  * Dir([1,0],[3,2]) // 45
@@ -3354,7 +3362,7 @@ declare class PenCls extends Pencil {
      * ```
      */
     arrow(startPoint: Point, endPoint: Point, label?: string): void;
-    height(vertex: Point, [A, B]: Point, label?: string): void;
+    height(vertex: Point, [A, B]: [Point, Point], label?: string): void;
     /**
      * Draw a polyline given points.
      * @category draw
@@ -3577,82 +3585,6 @@ declare class PenCls extends Pencil {
      * ```
      */
     compass(position: Point2D): void;
-    /**
-     * Geometry Decorator.
-     * @category decorator
-     */
-    decorate: {
-        /**
-         * @ignore
-         */
-        _pen: PenCls;
-        /**
-         * Decorate equal side lengths.
-         * @category decorator
-         * @param startPoint - The starting point [x,y].
-         * @param endPoint - The ending point [x,y].
-         * @param tick - The number of ticks.
-         * @returns void
-         * ```
-         * pen.decorate.equalSide([1,0],[3,2],2)
-         * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
-         * ```
-         */
-        equalSide(startPoint: Point, endPoint: Point, tick?: number): void;
-        /**
-         * Decorate parallel side.
-         * @category decorator
-         * @param startPoint - The starting point [x,y].
-         * @param endPoint - The ending point [x,y].
-         * @param tick - The number of ticks.
-         * @returns void
-         * ```
-         * pen.decorate.parallel([1,0],[3,2],2)
-         * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
-         * ```
-         */
-        parallel(startPoint: Point, endPoint: Point, tick?: number): void;
-        /**
-         * Decorate an angle AOB, always non-reflex.
-         * @category decorator
-         * @param A - The starting point [x,y].
-         * @param O - The vertex point [x,y].
-         * @param B - The ending point [x,y].
-         * @param arc - The number of arcs.
-         * @param radius - The radius of the angle arc, in pixel.
-         * @returns void
-         * ```
-         * pen.decorate.angle([1,0],[0,0],[3,2],2)
-         * // decorate an angle AOB with double-arc.
-         * ```
-         */
-        angle(A: Point, O: Point, B: Point, arc?: number, radius?: number): void;
-        /**
-         * Decorate a right-angle AOB.
-         * @category decorator
-         * @param A - The starting point [x,y].
-         * @param O - The vertex point [x,y].
-         * @param B - The ending point [x,y]. Interchangeable with A.
-         * @param size - The size of the mark, in pixel.
-         * @returns void
-         * ```
-         * pen.decorate.rightAngle([1,0],[0,0],[3,2])
-         * // decorate an right-angle AOB
-         * ```
-         */
-        rightAngle(A: Point, O: Point, B?: Point | undefined, size?: number): void;
-        /**
-         * Decorate a compass.
-         * @category decorator
-         * @param position - The position [x,y].
-         * @returns void
-         * ```
-         * pen.decorate.compass([1,2])
-         * // decorate a compass at [1,2]
-         * ```
-         */
-        compass(position: Point2D): void;
-    };
     /**
      * Write text.
      * @category text

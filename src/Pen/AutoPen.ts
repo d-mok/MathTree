@@ -595,9 +595,9 @@ class AutoPenCls {
             }
             pen.set.dash()
             if (F[0] === base[0][0] && F[1] === base[0][1]) {
-                pen.decorate.rightAngle(vertex, F, base[1])
+                pen.rightAngle(vertex, F, base[1])
             } else {
-                pen.decorate.rightAngle(vertex, F, base[0])
+                pen.rightAngle(vertex, F, base[0])
             }
             pen.set.strokeColor()
 
