@@ -495,63 +495,46 @@ class PenCls extends Pencil {
             this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
         },
         /**
-         * Draw an arc of (x-h)^2+(y-k)^2 = r^2.
+         * Draw an arc.
          * @category graph
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.graph.arc([1,2],3,0,180) // draw upper semi-circle (x-1)^2+(y-2)^2 = 9.
+         * pen.graph.arc([0,0],[1,0],[-1,0]) // draw upper semi-unit circle
          * ```
          */
-        arc(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
-            const [h, k] = center
-            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
-            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
-            this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], qStart, qEnd)
+        arc(center: Point2D, pStart: Point2D, pEnd: Point2D) {
+            this._pen.drawStrokeSectoroid(center, pStart, pEnd, [])
         },
         /**
-         * Draw a sector of (x-h)^2+(y-k)^2 = r^2.
+         * Draw a sector.
          * @category graph
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.graph.sector([1,2],3,0,90) // draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.
+         * pen.graph.sector([0,0],[1,0],[0,1]) // draw a quarter circle sector
          * ```
          */
-        sector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
-            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
-            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
-            this.arc(center, radius, qStart, qEnd)
-            let A = Move(center, qStart, radius)
-            let B = Move(center, qEnd, radius)
-            this._pen.line(A, center)
-            this._pen.line(B, center)
+        sector(center: Point2D, pStart: Point2D, pEnd: Point2D) {
+            this._pen.drawStrokeSectoroid(center, pStart, pEnd, [center, pStart])
         },
         /**
-         * Draw an segment of (x-h)^2+(y-k)^2 = r^2.
+         * Draw a circle segment.
          * @category graph
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.graph.segment([1,2],3,0,90) // draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
+         * pen.graph.segment([0,0],[1,0],[0,1]) // draw a quarter circle segment
          * ```
          */
-        segment(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
-            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
-            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
-            this.arc(center, radius, qStart, qEnd)
-            let A = Move(center, qStart, radius)
-            let B = Move(center, qEnd, radius)
-            this._pen.line(A, B)
+        segment(center: Point2D, pStart: Point2D, pEnd: Point2D) {
+            this._pen.drawStrokeSectoroid(center, pStart, pEnd, [pStart])
         },
         /**
          * Draw a quadratic graph y=ax^2+bx+c.
@@ -860,42 +843,118 @@ class PenCls extends Pencil {
             let points = cal.traceCircle(center, radius, [0, 360])
             this._pen.polyfill(...points)
         },
-
         /**
-         * Fill a sector (x-h)^2+(y-k)^2 = r^2.
+         * Fill a sector.
          * @category fill
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.fill.sector([1,2],3,0,90) // fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.
+         * pen.fill.sector([0,0],[1,0],[0,1]) // fill a quarter circle sector
          * ```
          */
-        sector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
-            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
-            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
-            let points = cal.traceCircle(center, radius, [qStart, qEnd])
-            this._pen.polyfill(center, ...points)
+        sector(center: Point2D, pStart: Point2D, pEnd: Point2D) {
+            this._pen.drawFillSectoroid(center, pStart, pEnd, [center])
         },
         /**
-         * Fill a segment (x-h)^2+(y-k)^2 = r^2.
+         * Fill a circle segment.
          * @category fill
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.fill.segment([1,2],3,0,90) // fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
+         * pen.fill.segment([0,0],[1,0],[0,1]) // fill a quarter circle segment
          * ```
          */
-        segment(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D) {
-            if (typeof qStart !== 'number') qStart = Dir(center, qStart)
-            if (typeof qEnd !== 'number') qEnd = Dir(center, qEnd)
-            let points = cal.traceCircle(center, radius, [qStart, qEnd])
-            this._pen.polyfill(...points)
+        segment(center: Point2D, pStart: Point2D, pEnd: Point2D) {
+            this._pen.drawFillSectoroid(center, pStart, pEnd, [])
+        },
+        /**
+         * Fill a sector-like area.
+         * @category fill
+         * @param center - The center coordinates [h,k].
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
+         * @param vertices - connect to these points instead of the center
+         * @returns void
+         * ```
+         * pen.fill.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // fill a long sector-like region
+         * ```
+         */
+        sectoroid(center: Point2D, pStart: Point2D, pEnd: Point2D, vertices: Point2D[]) {
+            this._pen.drawFillSectoroid(center, pStart, pEnd, vertices)
+        },
+    };
+
+
+
+    /**
+     * Shade a shape.
+     * @category shade
+     */
+    shade = {
+        /**
+         * @ignore
+         */
+        _pen: this as PenCls,
+        /**
+         * Shade a circle (x-h)^2+(y-k)^2 = r^2.
+         * @category shade
+         * @param center - The center coordinates [h,k].
+         * @param radius - The radius.
+         * @returns void
+         * ```
+         * pen.shade.circle([1,2],3) // shade (x-1)^2+(y-2)^2 = 9.
+         * ```
+         */
+        circle(center: Point2D, radius: number) {
+            let points = cal.traceCircle(center, radius, [0, 360])
+            this._pen.polyshade(...points)
+        },
+        /**
+         * Shade a sector.
+         * @category shade
+         * @param center - The center coordinates [h,k].
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
+         * @returns void
+         * ```
+         * pen.shade.sector([0,0],[1,0],[0,1]) // shade a quarter circle sector
+         * ```
+         */
+        sector(center: Point2D, pStart: Point2D, pEnd: Point2D) {
+            this._pen.drawShadeSectoroid(center, pStart, pEnd, [center])
+        },
+        /**
+         * Shade a circle segment.
+         * @category shade
+         * @param center - The center coordinates [h,k].
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
+         * @returns void
+         * ```
+         * pen.shade.segment([0,0],[1,0],[0,1]) // shade a quarter circle segment
+         * ```
+         */
+        segment(center: Point2D, pStart: Point2D, pEnd: Point2D) {
+            this._pen.drawShadeSectoroid(center, pStart, pEnd, [])
+        },
+        /**
+         * Shade a sector-like area.
+         * @category shade
+         * @param center - The center coordinates [h,k].
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
+         * @param vertices - connect to these points instead of the center
+         * @returns void
+         * ```
+         * pen.shade.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // shade a long sector-like region
+         * ```
+         */
+        sectoroid(center: Point2D, pStart: Point2D, pEnd: Point2D, vertices: Point2D[]) {
+            this._pen.drawShadeSectoroid(center, pStart, pEnd, vertices)
         },
     };
 
@@ -922,6 +981,23 @@ class PenCls extends Pencil {
         if (label !== undefined)
             this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13)
     }
+
+
+    /**
+     * Decorate equal side lengths.
+     * @category decorator
+     * @param startPoint - The starting point [x,y].
+     * @param endPoint - The ending point [x,y].
+     * @param tick - The number of ticks.
+     * @returns void
+     * ```
+     * pen.decorate.equalSide([1,0],[3,2],2) 
+     * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
+     * ```
+     */
+    equalSide(startPoint: Point, endPoint: Point, tick = 1) {
+        this._pen.drawEqualMark(startPoint, endPoint, 5, tick, 3)
+    },
 
 
 

@@ -3162,44 +3162,41 @@ declare class PenCls extends Pencil {
          */
         circle(center: Point2D, radius: number): void;
         /**
-         * Draw an arc of (x-h)^2+(y-k)^2 = r^2.
+         * Draw an arc.
          * @category graph
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.graph.arc([1,2],3,0,180) // draw upper semi-circle (x-1)^2+(y-2)^2 = 9.
+         * pen.graph.arc([0,0],[1,0],[-1,0]) // draw upper semi-unit circle
          * ```
          */
-        arc(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
+        arc(center: Point2D, pStart: Point2D, pEnd: Point2D): void;
         /**
-         * Draw a sector of (x-h)^2+(y-k)^2 = r^2.
+         * Draw a sector.
          * @category graph
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.graph.sector([1,2],3,0,90) // draw upper-right quarter-sector (x-1)^2+(y-2)^2 = 9.
+         * pen.graph.sector([0,0],[1,0],[0,1]) // draw a quarter circle sector
          * ```
          */
-        sector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
+        sector(center: Point2D, pStart: Point2D, pEnd: Point2D): void;
         /**
-         * Draw an segment of (x-h)^2+(y-k)^2 = r^2.
+         * Draw a circle segment.
          * @category graph
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.graph.segment([1,2],3,0,90) // draw upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
+         * pen.graph.segment([0,0],[1,0],[0,1]) // draw a quarter circle segment
          * ```
          */
-        segment(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
+        segment(center: Point2D, pStart: Point2D, pEnd: Point2D): void;
         /**
          * Draw a quadratic graph y=ax^2+bx+c.
          * @category graph
@@ -3418,31 +3415,100 @@ declare class PenCls extends Pencil {
          */
         circle(center: Point2D, radius: number): void;
         /**
-         * Fill a sector (x-h)^2+(y-k)^2 = r^2.
+         * Fill a sector.
          * @category fill
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.fill.sector([1,2],3,0,90) // fill the upper-right quarter-circle (x-1)^2+(y-2)^2 = 9.
+         * pen.fill.sector([0,0],[1,0],[0,1]) // fill a quarter circle sector
          * ```
          */
-        sector(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
+        sector(center: Point2D, pStart: Point2D, pEnd: Point2D): void;
         /**
-         * Fill a segment (x-h)^2+(y-k)^2 = r^2.
+         * Fill a circle segment.
          * @category fill
          * @param center - The center coordinates [h,k].
-         * @param radius - The radius.
-         * @param qStart - The starting polar angle, or starting point
-         * @param qEnd - The ending polar angle, or ending point
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
          * @returns void
          * ```
-         * pen.fill.segment([1,2],3,0,90) // fill the upper-right quarter-segment (x-1)^2+(y-2)^2 = 9.
+         * pen.fill.segment([0,0],[1,0],[0,1]) // fill a quarter circle segment
          * ```
          */
-        segment(center: Point2D, radius: number, qStart: number | Point2D, qEnd: number | Point2D): void;
+        segment(center: Point2D, pStart: Point2D, pEnd: Point2D): void;
+        /**
+         * Fill a sector-like area.
+         * @category fill
+         * @param center - The center coordinates [h,k].
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
+         * @param vertices - connect to these points instead of the center
+         * @returns void
+         * ```
+         * pen.fill.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // fill a long sector-like region
+         * ```
+         */
+        sectoroid(center: Point2D, pStart: Point2D, pEnd: Point2D, vertices: Point2D[]): void;
+    };
+    /**
+     * Shade a shape.
+     * @category shade
+     */
+    shade: {
+        /**
+         * @ignore
+         */
+        _pen: PenCls;
+        /**
+         * Shade a circle (x-h)^2+(y-k)^2 = r^2.
+         * @category shade
+         * @param center - The center coordinates [h,k].
+         * @param radius - The radius.
+         * @returns void
+         * ```
+         * pen.shade.circle([1,2],3) // shade (x-1)^2+(y-2)^2 = 9.
+         * ```
+         */
+        circle(center: Point2D, radius: number): void;
+        /**
+         * Shade a sector.
+         * @category shade
+         * @param center - The center coordinates [h,k].
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
+         * @returns void
+         * ```
+         * pen.shade.sector([0,0],[1,0],[0,1]) // shade a quarter circle sector
+         * ```
+         */
+        sector(center: Point2D, pStart: Point2D, pEnd: Point2D): void;
+        /**
+         * Shade a circle segment.
+         * @category shade
+         * @param center - The center coordinates [h,k].
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
+         * @returns void
+         * ```
+         * pen.shade.segment([0,0],[1,0],[0,1]) // shade a quarter circle segment
+         * ```
+         */
+        segment(center: Point2D, pStart: Point2D, pEnd: Point2D): void;
+        /**
+         * Shade a sector-like area.
+         * @category shade
+         * @param center - The center coordinates [h,k].
+         * @param pStart - starting point of the arc
+         * @param pEnd - ending point of the arc, in polar direction
+         * @param vertices - connect to these points instead of the center
+         * @returns void
+         * ```
+         * pen.shade.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // shade a long sector-like region
+         * ```
+         */
+        sectoroid(center: Point2D, pStart: Point2D, pEnd: Point2D, vertices: Point2D[]): void;
     };
     /**
      * Draw an angle with label, non-reflex
