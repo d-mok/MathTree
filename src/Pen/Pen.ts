@@ -1044,7 +1044,7 @@ class PenCls extends Pencil {
     rightAngle(A: Point, O: Point, B?: Point, size = 12) {
         A = this.pj(A)
         O = this.pj(O)
-        B ??= Rotate(A, O, 90)
+        B ??= Rotate(A, 90, O)
         B = this.pj(B)
 
         this.drawRightAngle(A, O, B, size)

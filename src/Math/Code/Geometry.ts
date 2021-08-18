@@ -75,6 +75,7 @@ function Mid(...points: Point2D[]): Point2D {
 }
 globalThis.Mid = contract(Mid).sign([owl.point2D])
 
+
 /**
  * @category Geometry
  * @return the point P on AB such that AP : PB = ratio : 1-ratio
@@ -90,20 +91,6 @@ function Slide(A: Point2D, B: Point2D, ratio: number): Point2D {
 globalThis.Slide = contract(Slide).sign([owl.point2D, owl.point2D, owl.num])
 
 
-/**
- * @category Geometry
- * @deprecated
- * @return point P rotated anticlockwise by angle q about point O.
- * ```
- * Rotate([1,2],[0,0],90) // [-2,1]
- * ```
- */
-function Rotate(P: Point2D, O: Point2D, q: number): Point2D {
-    return vec2D(O, P).rotate(q).add(O).blur().toArray()
-}
-globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.point2D, owl.num])
-
-
 
 /**
  * @category Geometry
@@ -112,10 +99,10 @@ globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.point2D, owl.num])
  * Rotate([1,2],90,[0,0]) // [-2,1]
  * ```
  */
-function Rotate2(P: Point2D, q: number, O: Point2D = [0, 0]): Point2D {
+function Rotate(P: Point2D, q: number, O: Point2D = [0, 0]): Point2D {
     return vec2D(O, P).rotate(q).add(O).blur().toArray()
 }
-globalThis.Rotate2 = contract(Rotate2).sign([owl.point2D, owl.num, owl.point2D])
+globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.num, owl.point2D])
 
 
 /**

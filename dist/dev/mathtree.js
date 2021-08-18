@@ -30373,27 +30373,15 @@ function Slide(A, B, ratio) {
 globalThis.Slide = contract(Slide).sign([owl.point2D, owl.point2D, owl.num]);
 /**
  * @category Geometry
- * @deprecated
- * @return point P rotated anticlockwise by angle q about point O.
- * ```
- * Rotate([1,2],[0,0],90) // [-2,1]
- * ```
- */
-function Rotate(P, O, q) {
-    return vec2D(O, P).rotate(q).add(O).blur().toArray();
-}
-globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.point2D, owl.num]);
-/**
- * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
  * ```
  * Rotate([1,2],90,[0,0]) // [-2,1]
  * ```
  */
-function Rotate2(P, q, O = [0, 0]) {
+function Rotate(P, q, O = [0, 0]) {
     return vec2D(O, P).rotate(q).add(O).blur().toArray();
 }
-globalThis.Rotate2 = contract(Rotate2).sign([owl.point2D, owl.num, owl.point2D]);
+globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.num, owl.point2D]);
 /**
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].
@@ -36700,7 +36688,7 @@ class PenCls extends Pencil {
     rightAngle(A, O, B, size = 12) {
         A = this.pj(A);
         O = this.pj(O);
-        B !== null && B !== void 0 ? B : (B = Rotate(A, O, 90));
+        B !== null && B !== void 0 ? B : (B = Rotate(A, 90, O));
         B = this.pj(B);
         this.drawRightAngle(A, O, B, size);
     }

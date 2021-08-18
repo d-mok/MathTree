@@ -857,21 +857,12 @@ declare function Mid(...points: Point2D[]): Point2D;
 declare function Slide(A: Point2D, B: Point2D, ratio: number): Point2D;
 /**
  * @category Geometry
- * @deprecated
- * @return point P rotated anticlockwise by angle q about point O.
- * ```
- * Rotate([1,2],[0,0],90) // [-2,1]
- * ```
- */
-declare function Rotate(P: Point2D, O: Point2D, q: number): Point2D;
-/**
- * @category Geometry
  * @return point P rotated anticlockwise by angle q about point O.
  * ```
  * Rotate([1,2],90,[0,0]) // [-2,1]
  * ```
  */
-declare function Rotate2(P: Point2D, q: number, O?: Point2D): Point2D;
+declare function Rotate(P: Point2D, q: number, O?: Point2D): Point2D;
 /**
  * @category Geometry
  * @return the polar angle of B if A is the origin within [0,360].

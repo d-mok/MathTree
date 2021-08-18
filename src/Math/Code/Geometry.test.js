@@ -62,10 +62,10 @@ test('Slide', () => {
 
 
 test('Rotate', () => {
-    expect(Rotate([1, 2], [0, 0], 90)).toEqual([-2, 1]);
-    expect(Rotate([1, 2], [0, 0], 180)).toEqual([-1, -2]);
-    expect(Rotate([1, 2], [0, 0], 270)).toEqual([2, -1]);
-    expect(Rotate([1, 2], [0, 0], 360)).toEqual([1, 2]);
+    expect(Rotate([1, 2], 90, [0, 0])).toEqual([-2, 1]);
+    expect(Rotate([1, 2], 180, [0, 0])).toEqual([-1, -2]);
+    expect(Rotate([1, 2], 270, [0, 0])).toEqual([2, -1]);
+    expect(Rotate([1, 2], 360, [0, 0])).toEqual([1, 2]);
 });
 
 
