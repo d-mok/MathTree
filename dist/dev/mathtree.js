@@ -30466,7 +30466,8 @@ globalThis.Move = contract(Move).sign([
  * ```
  */
 function MoveX(P, distance) {
-    return Move(P, 0, distance);
+    let [x, y] = P;
+    return [x + distance, y];
 }
 globalThis.MoveX = contract(MoveX).sign([owl.point2D, owl.num]);
 /**
@@ -30478,7 +30479,8 @@ globalThis.MoveX = contract(MoveX).sign([owl.point2D, owl.num]);
  * ```
  */
 function MoveY(P, distance) {
-    return Move(P, 90, distance);
+    let [x, y] = P;
+    return [x, y + distance];
 }
 globalThis.MoveY = contract(MoveY).sign([owl.point2D, owl.num]);
 /**
@@ -30653,6 +30655,18 @@ function ArcLength(radius, theta) {
     return 2 * Math.PI * radius * theta / 360;
 }
 globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative, owl.nonNegative]);
+/**
+ * @category Geometry
+ * @return sector area with given radius and angle
+ * ```
+ * SectorArea(2,90) // pi
+ * SectorArea(2,180) // 2*pi
+ * ```
+ */
+function SectorArea(radius, theta) {
+    return Math.PI * radius * radius * theta / 360;
+}
+globalThis.SectorArea = contract(SectorArea).sign([owl.nonNegative, owl.nonNegative]);
 /**
  * @category Geometry
  * @return check is convex polygon
@@ -31180,7 +31194,6 @@ globalThis.Floor = contract(Floor).sign([owl.num]);
  * ```
  */
 function Ratio(...nums) {
-    Should(IsRational(...nums), 'input must be rational');
     return toNumbers(nums).ratio();
 }
 globalThis.Ratio = contract(Ratio).sign([owl.rational]);
@@ -31316,13 +31329,14 @@ globalThis.RndRs = contract(RndRs).sign([owl.num, owl.num, owl.positiveInt]);
  */
 function RndQ(largest = 9, range) {
     let L = Math.abs(largest);
-    let f = () => RndN(1, L) / RndN(2, L) * (largest > 0 ? 1 : RndU());
+    let sign = largest > 0 ? 1 : RndU();
+    let f = () => RndN(1, L) / RndN(2, L) * sign;
+    let dice = poker.dice(f).shield(_ => owl.dec(_));
     if (range) {
-        return poker.dice(f).shield(_ => _ >= range[0] && _ <= range[1] && owl.dec(_)).roll();
+        dice.shield(_ => _ >= range[0])
+            .shield(_ => _ <= range[1]);
     }
-    else {
-        return poker.dice(f).shield(_ => owl.dec(_)).roll();
-    }
+    return dice.roll();
 }
 globalThis.RndQ = contract(RndQ).sign([owl.nonZeroInt, owl.interval]);
 /**
@@ -31466,10 +31480,18 @@ globalThis.RndPyth = contract(RndPyth).sign([owl.positive]);
  * ```
  */
 function RndPoint(xRange, yRange = xRange) {
-    let xrange = (typeof xRange === 'number') ? [-xRange, xRange] : xRange;
-    let yrange = (typeof yRange === 'number') ? [-yRange, yRange] : yRange;
-    let f = () => [RndN(...xrange), RndN(...yrange)];
-    return poker.dice(f).shield(p => !p.includes(0) && p[0] !== p[1]).roll();
+    if (typeof xRange === 'number')
+        xRange = [-xRange, xRange];
+    if (typeof yRange === 'number')
+        yRange = [-yRange, yRange];
+    let [x1, x2] = xRange;
+    let [y1, y2] = yRange;
+    let f = () => [RndN(x1, x2), RndN(y1, y2)];
+    return poker.dice(f)
+        .shield(([x, y]) => x !== 0)
+        .shield(([x, y]) => y !== 0)
+        .shield(([x, y]) => x !== y)
+        .roll();
 }
 globalThis.RndPoint = contract(RndPoint).sign([owl.or([owl.num, owl.interval])]);
 /**
@@ -31481,23 +31503,13 @@ globalThis.RndPoint = contract(RndPoint).sign([owl.or([owl.num, owl.interval])])
  */
 function RndPoints(xRange, yRange = xRange, n = 10) {
     return poker.dice(() => RndPoint(xRange, yRange))
-        .unique($ => $[0])
-        .unique($ => $[1])
+        .unique(([x, y]) => x)
+        .unique(([x, y]) => y)
         .coherent($ => toList($).combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C)))
         .rolls(n);
-    // let f = () => poker.dice(() => RndPoint(xRange, yRange)).unique(_ => JSON.stringify(_)).rolls(n)
-    // return poker.dice(f).shield(ps => {
-    //     let arr: string[] = []
-    //     for (let [a, b] of newList(ps).pairs()) {
-    //         if (a[0] === b[0]) return false
-    //         if (a[1] === b[1]) return false
-    //         arr.push(JSON.stringify(LinearFromTwoPoints(a, b)))
-    //     }
-    //     if (!newList(arr).isDistinct()) return false
-    //     return true
-    // }).roll()
 }
-globalThis.RndPoints = contract(RndPoints).sign([owl.or([owl.num, owl.interval]), owl.or([owl.num, owl.interval]), owl.num]);
+globalThis.RndPoints = contract(RndPoints)
+    .sign([owl.or([owl.num, owl.interval]), owl.or([owl.num, owl.interval]), owl.num]);
 /**
  * @category Random
  * @return n angles in [0,360] at least cyclic separated by separation
@@ -31506,17 +31518,11 @@ globalThis.RndPoints = contract(RndPoints).sign([owl.or([owl.num, owl.interval])
  * ```
  */
 function RndAngles(n, separation) {
-    let f = () => Sort(...RndNs(0, 360, n));
-    let p = (arr) => {
-        for (let i = 0; i < arr.length - 1; i++) {
-            if (arr[i + 1] - arr[i] < separation)
-                return false;
-        }
-        if (arr[0] + 360 - arr[arr.length - 1] < separation)
-            return false;
-        return true;
-    };
-    return poker.dice(f).shield(p).roll();
+    let angles = poker.dice(() => RndN(0, 360))
+        .coherent(angles => toNumbers(angles).gapsMod(360).min() > separation)
+        .unique()
+        .rolls(n);
+    return toList(angles).ascending();
 }
 globalThis.RndAngles = contract(RndAngles).sign([owl.positiveInt, owl.positive]);
 /**
@@ -31531,22 +31537,23 @@ function RndConvexPolygon(n, center, radius, separation) {
     let r = radius;
     let angles = RndAngles(n, separation);
     let vertices = angles.map(a => [h + r * cos(a), k + r * sin(a)]);
-    vertices = vertices.map(v => [Fix(v[0]), Fix(v[1])]);
+    vertices = vertices.map(([x, y]) => [Fix(x), Fix(y)]);
     return vertices;
 }
 globalThis.RndConvexPolygon = contract(RndConvexPolygon)
     .sign([owl.positiveInt, owl.point2D, owl.positive, owl.positive]);
 /**
  * @category Random
- * @return n integers from [min, max]
+ * @return n integers from [min, max], must be uni-moded
  * ```
  * RndData(10,15,5) // may return [11,11,12,13,15]
  * ```
  */
 function RndData(min, max, n) {
-    let f = () => poker.dice(() => RndN(min, max)).rolls(n);
-    let p = (arr) => Mode(...arr).length === 1;
-    return Sort(...poker.dice(f).shield(p).roll());
+    let data = poker.dice(() => RndN(min, max))
+        .coherent(d => toData(d).isSingleMode())
+        .rolls(n);
+    return toList(data).ascending();
 }
 globalThis.RndData = contract(RndData).sign([owl.num, owl.num, owl.positiveInt]);
 /**
@@ -31781,17 +31788,23 @@ globalThis.RndShake = RndShake;
  * ```
  */
 function RndShakeN(anchor) {
-    function N() {
-        anchor = cal.blur(anchor);
-        if (anchor === 0)
-            return RndN(1, 3);
-        let a = Abs(anchor);
+    anchor = cal.blur(anchor);
+    let a = Abs(anchor);
+    let s = Sign(anchor);
+    let f;
+    if (anchor === 0) {
+        f = () => RndN(1, 3);
+    }
+    else {
         let range = Max(3, a * 0.1);
         let max = Min(Floor(a + range), cal.logCeil(a) - 1);
         let min = Max(Ceil(a - range), 1, cal.logFloor(a));
-        return poker.dice(() => RndN(min, max)).shield(x => x !== a).roll() * Sign(anchor);
+        f = () => RndN(min, max) * s;
     }
-    return poker.dice(N).unique().rolls(3);
+    return poker.dice(f)
+        .shield(x => x !== anchor)
+        .unique()
+        .rolls(3);
 }
 globalThis.RndShakeN = contract(RndShakeN).sign([owl.int]);
 /**
@@ -31809,9 +31822,12 @@ function RndShakeR(anchor) {
     let dp = cal.dp(m);
     return poker
         .dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
-        .shield(x => (x * m > 0) &&
-        (cal.e(x) === cal.e(m)) &&
-        (x !== m)).unique().rolls(3).map(x => Number(x + "e" + exp));
+        .shield(x => x * m > 0)
+        .shield(x => cal.e(x) === cal.e(m))
+        .shield(x => x !== m)
+        .unique()
+        .rolls(3)
+        .map(x => Number(x + "e" + exp));
 }
 globalThis.RndShakeR = contract(RndShakeR).sign([owl.num]);
 /**
@@ -31856,18 +31872,14 @@ function RndShakeFrac(anchor) {
             return [h, k];
         return [a, b];
     })
-        .shield(f => {
-        let [a, b] = f;
-        if (!AreCoprime(a, b))
-            return false;
-        if (a === 0 || b === 0)
-            return false;
-        if (b === 1)
-            return false;
-        if (IsProbability(p / q) && !IsProbability(a / b))
-            return false;
-        return true;
-    }).unique(_ => _[0] / _[1]).rolls(3);
+        .shield(([a, b]) => AreCoprime(a, b))
+        .shield(([a, b]) => a !== 0)
+        .shield(([a, b]) => b !== 0)
+        .shield(([a, b]) => b !== 1)
+        .shield(([a, b]) => b !== 1)
+        .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
+        .unique(_ => _[0] / _[1])
+        .rolls(3);
 }
 globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction]);
 /**
@@ -31882,6 +31894,7 @@ globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction]);
  * ```
  */
 function RndShakeDfrac(anchor) {
+    // Should(false, 'RndShakeDfrac is deprecated')
     let f = ink.parseDfrac(anchor);
     return RndShakeFrac(f).map(x => Dfrac(...x));
 }
@@ -33886,11 +33899,20 @@ globalThis.Slide3D = contract(Slide3D).sign([owl.point3D, owl.point3D, owl.num])
  * let P = [2,3,4]
  * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
  * PdFoot3D(P,[A,B,C]) // [2,3,0]
+ * PdFoot3D(P,[A,B]) // [2,0,0]
  * ```
  */
-function PdFoot3D(point, plane) {
-    let [A, B, C] = plane;
-    return vec3D(point).projectOnPlane(vec3D(A, B), vec3D(B, C)).toArray();
+function PdFoot3D(point, base) {
+    if (base.length === 3) {
+        let [A, B, C] = base;
+        return vec3D(A, point).projectOnPlane(vec3D(A, B), vec3D(B, C)).add(A).toArray();
+    }
+    else if (base.length === 2) {
+        let [A, B] = base;
+        return vec3D(A, point).projectOn(vec3D(A, B)).add(A).toArray();
+    }
+    Should(false, 'base must have 2 or 3 points');
+    throw 'never';
 }
 globalThis.PdFoot3D = contract(PdFoot3D)
     .sign([owl.vector3D, owl.arrayWith(owl.vector3D)]);
@@ -33984,7 +34006,7 @@ function Extrude(lowerBase, upperBase, scale) {
 globalThis.Extrude = contract(Extrude).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num]);
 /**
 * @category 3DPen
-* @deprecated use Projector3D() instead
+* @deprecated use built-in projector in Pen instead
 * @return projector function from 3D point to 2D plane
 * ```
 * const pj = Projector(60,0.5) // create a 3D projector function
@@ -34001,7 +34023,7 @@ function Projector(angle = 60, depth = 0.5) {
 globalThis.Projector = Projector;
 /**
 * @category 3DPen
-* @deprecated
+* @deprecated use built-in projector in Pen instead
 * @return projector function from 3D point to 2D plane
 * ```
 * const pj = Projector3D(60,0.5) // create a 3D projector function
@@ -36522,7 +36544,7 @@ class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
@@ -36539,7 +36561,7 @@ class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
@@ -36559,6 +36581,7 @@ class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
@@ -36570,7 +36593,27 @@ class PenCls extends Pencil {
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
     }
-    height(vertex, [A, B], label) {
+    /**
+     * Draw a dashed height with right-angled.
+     * @param vertex - top point of the height
+     * @param base - base of the height
+     * @param label - label of the height
+     */
+    height(vertex, base, label) {
+        let [A, B] = base;
+        let F = PdFoot(A, B, vertex);
+        let V = vertex;
+        this.dash(V, F);
+        this.rightAngle(A, F, V);
+        if (label !== undefined) {
+            const c = vec2D(V, A).cross2D(vec2D(V, B));
+            if (c > 0) {
+                this.label.line([V, F], label);
+            }
+            else {
+                this.label.line([F, V], label);
+            }
+        }
     }
     /**
      * Draw a polyline given points.

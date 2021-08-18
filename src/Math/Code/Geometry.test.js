@@ -81,6 +81,8 @@ test('Dir', () => {
 test('PdFoot', () => {
     expect(PdFoot([-1, -1], [1, 1], [-2, 2])).toBeArrayCloseTo([0, 0]);
     expect(PdFoot([-1, -1], [1, 1], [0, 0])).toBeArrayCloseTo([0, 0]);
+    expect(PdFoot([0, 5], [1, 5], [2, 3])).toBeArrayCloseTo([2, 5]);
+    expect(PdFoot([0, 5], [1, 5], [2, 5])).toBeArrayCloseTo([2, 5]);
 });
 
 
@@ -213,8 +215,19 @@ test('RegularPolygon', () => {
 test('ArcLength', () => {
     expect(ArcLength(2, 90)).toBe(Math.PI);
     expect(ArcLength(2, 180)).toBe(2 * Math.PI);
+    expect(ArcLength(10, 180)).toBe(10 * Math.PI);
     expect(ArcLength(0, 180)).toBe(0);
 });
+
+
+
+test('SectorArea', () => {
+    expect(SectorArea(2, 90)).toBe(Math.PI);
+    expect(SectorArea(2, 180)).toBe(2 * Math.PI);
+    expect(SectorArea(10, 180)).toBe(50 * Math.PI);
+    expect(SectorArea(0, 180)).toBe(0);
+});
+
 
 
 

@@ -218,11 +218,19 @@ globalThis.Slide3D = contract(Slide3D).sign([owl.point3D, owl.point3D, owl.num])
  * let P = [2,3,4]
  * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
  * PdFoot3D(P,[A,B,C]) // [2,3,0]
+ * PdFoot3D(P,[A,B]) // [2,0,0]
  * ```
  */
-function PdFoot3D(point: Point3D, plane: [Point3D, Point3D, Point3D]): Point3D {
-    let [A, B, C] = plane
-    return vec3D(point).projectOnPlane(vec3D(A, B), vec3D(B, C)).toArray()
+function PdFoot3D(point: Point3D, base: [Point3D, Point3D, Point3D] | [Point3D, Point3D]): Point3D {
+    if (base.length === 3) {
+        let [A, B, C] = base
+        return vec3D(A, point).projectOnPlane(vec3D(A, B), vec3D(B, C)).add(A).toArray()
+    } else if (base.length === 2) {
+        let [A, B] = base
+        return vec3D(A, point).projectOn(vec3D(A, B)).add(A).toArray()
+    }
+    Should(false, 'base must have 2 or 3 points')
+    throw 'never'
 }
 globalThis.PdFoot3D = contract(PdFoot3D)
     .sign([owl.vector3D, owl.arrayWith(owl.vector3D)])
@@ -347,7 +355,7 @@ globalThis.Extrude = contract(Extrude).sign([owl.arrayWith(owl.point3D), owl.arr
 
 /**
 * @category 3DPen
-* @deprecated use Projector3D() instead
+* @deprecated use built-in projector in Pen instead
 * @return projector function from 3D point to 2D plane
 * ```
 * const pj = Projector(60,0.5) // create a 3D projector function
@@ -366,7 +374,7 @@ globalThis.Projector = Projector
 
 /**
 * @category 3DPen
-* @deprecated
+* @deprecated use built-in projector in Pen instead
 * @return projector function from 3D point to 2D plane
 * ```
 * const pj = Projector3D(60,0.5) // create a 3D projector function

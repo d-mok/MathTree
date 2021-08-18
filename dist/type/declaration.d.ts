@@ -1002,6 +1002,15 @@ declare function RegularPolygon(n: number, center: Point2D, radius: number, star
 declare function ArcLength(radius: number, theta: number): number;
 /**
  * @category Geometry
+ * @return sector area with given radius and angle
+ * ```
+ * SectorArea(2,90) // pi
+ * SectorArea(2,180) // 2*pi
+ * ```
+ */
+declare function SectorArea(radius: number, theta: number): number;
+/**
+ * @category Geometry
  * @return check is convex polygon
  * ```
  * IsConvexPolygon([0,0],[1,0],[0,1]) // true
@@ -1504,7 +1513,7 @@ declare function RndAngles(n: number, separation: number): number[];
 declare function RndConvexPolygon(n: number, center: Point2D, radius: number, separation: number): Point2D[];
 /**
  * @category Random
- * @return n integers from [min, max]
+ * @return n integers from [min, max], must be uni-moded
  * ```
  * RndData(10,15,5) // may return [11,11,12,13,15]
  * ```
@@ -2417,9 +2426,10 @@ declare function Slide3D(A: Point3D, B: Point3D, ratio: number): Point3D;
  * let P = [2,3,4]
  * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
  * PdFoot3D(P,[A,B,C]) // [2,3,0]
+ * PdFoot3D(P,[A,B]) // [2,0,0]
  * ```
  */
-declare function PdFoot3D(point: Point3D, plane: [Point3D, Point3D, Point3D]): Point3D;
+declare function PdFoot3D(point: Point3D, base: [Point3D, Point3D, Point3D] | [Point3D, Point3D]): Point3D;
 /**
  * @category Vector3D
  * @return embed points on xy-plane onto a plane in 3D
@@ -2467,7 +2477,7 @@ declare function EmbedZ(plane2D: Point2D[], z?: number): Point3D[];
 declare function Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: number): Point3D[];
 /**
 * @category 3DPen
-* @deprecated use Projector3D() instead
+* @deprecated use built-in projector in Pen instead
 * @return projector function from 3D point to 2D plane
 * ```
 * const pj = Projector(60,0.5) // create a 3D projector function
@@ -2477,7 +2487,7 @@ declare function Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: numb
 declare function Projector(angle?: number, depth?: number): (x: number, y: number, z: number) => Point;
 /**
 * @category 3DPen
-* @deprecated
+* @deprecated use built-in projector in Pen instead
 * @return projector function from 3D point to 2D plane
 * ```
 * const pj = Projector3D(60,0.5) // create a 3D projector function
@@ -3322,7 +3332,7 @@ declare class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
@@ -3335,7 +3345,7 @@ declare class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
@@ -3348,13 +3358,20 @@ declare class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
     arrow(startPoint: Point, endPoint: Point, label?: string): void;
-    height(vertex: Point, [A, B]: [Point, Point], label?: string): void;
+    /**
+     * Draw a dashed height with right-angled.
+     * @param vertex - top point of the height
+     * @param base - base of the height
+     * @param label - label of the height
+     */
+    height(vertex: Point2D, base: [Point2D, Point2D], label?: string): void;
     /**
      * Draw a polyline given points.
      * @category draw

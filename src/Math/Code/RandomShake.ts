@@ -74,16 +74,24 @@ globalThis.RndShake = RndShake
  * ```
  */
 function RndShakeN(anchor: number): [number, number, number] {
-    function N(): number {
-        anchor = cal.blur(anchor)
-        if (anchor === 0) return RndN(1, 3)
-        let a = Abs(anchor)
+    anchor = cal.blur(anchor)
+    let a = Abs(anchor)
+    let s = Sign(anchor)
+    let f: () => number
+
+    if (anchor === 0) {
+        f = () => RndN(1, 3)
+    } else {
         let range = Max(3, a * 0.1)
         let max = Min(Floor(a + range), cal.logCeil(a) - 1)
         let min = Max(Ceil(a - range), 1, cal.logFloor(a))
-        return poker.dice(() => RndN(min, max)).shield(x => x !== a).roll() * Sign(anchor)
+        f = () => RndN(min, max) * s
     }
-    return poker.dice(N).unique().rolls(3) as [number, number, number]
+
+    return poker.dice(f)
+        .shield(x => x !== anchor)
+        .unique()
+        .rolls(3) as [number, number, number]
 }
 globalThis.RndShakeN = contract(RndShakeN).sign([owl.int])
 
@@ -101,15 +109,17 @@ globalThis.RndShakeN = contract(RndShakeN).sign([owl.int])
 function RndShakeR(anchor: number): number[] {
     let exp = cal.e(anchor)
     let m = cal.blur(cal.mantissa(anchor))
-    if (IsInteger(m)) return RndShakeN(m).map(x => Number(x + "e" + exp))
+    if (IsInteger(m))
+        return RndShakeN(m).map(x => Number(x + "e" + exp))
     let dp = cal.dp(m)
     return poker
         .dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
-        .shield(
-            x => (x * m > 0) &&
-                (cal.e(x) === cal.e(m)) &&
-                (x !== m)
-        ).unique().rolls(3).map(x => Number(x + "e" + exp))
+        .shield(x => x * m > 0)
+        .shield(x => cal.e(x) === cal.e(m))
+        .shield(x => x !== m)
+        .unique()
+        .rolls(3)
+        .map(x => Number(x + "e" + exp))
 }
 globalThis.RndShakeR = contract(RndShakeR).sign([owl.num])
 
@@ -158,16 +168,14 @@ function RndShakeFrac(anchor: Fraction): Fraction[] {
                 if (a === p && b === q) return [h, k]
                 return [a, b]
             })
-        .shield(
-            f => {
-                let [a, b] = f
-                if (!AreCoprime(a, b)) return false
-                if (a === 0 || b === 0) return false
-                if (b === 1) return false
-                if (IsProbability(p / q) && !IsProbability(a / b)) return false
-                return true
-            }
-        ).unique(_ => _[0] / _[1]).rolls(3)
+        .shield(([a, b]) => AreCoprime(a, b))
+        .shield(([a, b]) => a !== 0)
+        .shield(([a, b]) => b !== 0)
+        .shield(([a, b]) => b !== 1)
+        .shield(([a, b]) => b !== 1)
+        .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
+        .unique(_ => _[0] / _[1])
+        .rolls(3)
 }
 globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction])
 
@@ -184,6 +192,7 @@ globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction])
  * ```
  */
 function RndShakeDfrac(anchor: string): string[] {
+    Should(false, 'RndShakeDfrac is deprecated')
     let f = ink.parseDfrac(anchor)
     return RndShakeFrac(f).map(x => Dfrac(...x))
 }

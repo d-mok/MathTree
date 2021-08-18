@@ -211,7 +211,8 @@ globalThis.Move = contract(Move).sign([
  * ```
  */
 function MoveX(P: Point2D, distance: number): Point2D {
-    return Move(P, 0, distance)
+    let [x, y] = P
+    return [x + distance, y]
 }
 globalThis.MoveX = contract(MoveX).sign([owl.point2D, owl.num])
 
@@ -228,7 +229,8 @@ globalThis.MoveX = contract(MoveX).sign([owl.point2D, owl.num])
  * ```
  */
 function MoveY(P: Point2D, distance: number): Point2D {
-    return Move(P, 90, distance)
+    let [x, y] = P
+    return [x, y + distance]
 }
 globalThis.MoveY = contract(MoveY).sign([owl.point2D, owl.num])
 
@@ -440,6 +442,25 @@ function ArcLength(radius: number, theta: number): number {
     return 2 * Math.PI * radius * theta / 360
 }
 globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative, owl.nonNegative])
+
+
+
+
+
+/**
+ * @category Geometry
+ * @return sector area with given radius and angle
+ * ```
+ * SectorArea(2,90) // pi
+ * SectorArea(2,180) // 2*pi
+ * ```
+ */
+function SectorArea(radius: number, theta: number): number {
+    return Math.PI * radius * radius * theta / 360
+}
+globalThis.SectorArea = contract(SectorArea).sign([owl.nonNegative, owl.nonNegative])
+
+
 
 
 

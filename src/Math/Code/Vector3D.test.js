@@ -109,8 +109,9 @@ test('Slide3D', () => {
 
 test('PdFoot3D', () => {
     let P = [2, 3, 4];
-    let [A, B, C] = [[0, 0, 0], [1, 0, 0], [0, 1, 0]];
-    expect(PdFoot3D(P, [A, B, C])).toEqual([2, 3, 0]);
+    let [A, B, C] = [[0, 0, 5], [1, 0, 5], [0, 1, 5]];
+    expect(PdFoot3D(P, [A, B, C])).toEqual([2, 3, 5]);
+    expect(PdFoot3D(P, [A, B])).toEqual([2, 0, 5]);
 });
 
 

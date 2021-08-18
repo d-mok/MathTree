@@ -219,7 +219,6 @@ globalThis.Floor = contract(Floor).sign([owl.num])
  * ```
  */
 function Ratio(...nums: number[]): number[] {
-    Should(IsRational(...nums), 'input must be rational')
     return toNumbers(nums).ratio()
 }
 globalThis.Ratio = contract(Ratio).sign([owl.rational])

@@ -710,7 +710,7 @@ class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
@@ -727,7 +727,7 @@ class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
@@ -748,6 +748,7 @@ class PenCls extends Pencil {
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
      * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the line.
      * @returns void
      * ```
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
@@ -761,9 +762,26 @@ class PenCls extends Pencil {
 
 
 
-    height(vertex: Point, [A, B]: [Point, Point], label?: string) {
-
-
+    /**
+     * Draw a dashed height with right-angled.
+     * @param vertex - top point of the height
+     * @param base - base of the height
+     * @param label - label of the height
+     */
+    height(vertex: Point2D, base: [Point2D, Point2D], label?: string) {
+        let [A, B] = base
+        let F = PdFoot(A, B, vertex)
+        let V = vertex
+        this.dash(V, F)
+        this.rightAngle(A, F, V)
+        if (label !== undefined) {
+            const c = vec2D(V, A).cross2D(vec2D(V, B))
+            if (c > 0) {
+                this.label.line([V, F], label)
+            } else {
+                this.label.line([F, V], label)
+            }
+        }
     }
 
 
