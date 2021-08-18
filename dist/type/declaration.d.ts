@@ -857,6 +857,7 @@ declare function Mid(...points: Point2D[]): Point2D;
 declare function Slide(A: Point2D, B: Point2D, ratio: number): Point2D;
 /**
  * @category Geometry
+ * @deprecated
  * @return point P rotated anticlockwise by angle q about point O.
  * ```
  * Rotate([1,2],[0,0],90) // [-2,1]

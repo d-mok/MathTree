@@ -92,6 +92,7 @@ globalThis.Slide = contract(Slide).sign([owl.point2D, owl.point2D, owl.num])
 
 /**
  * @category Geometry
+ * @deprecated
  * @return point P rotated anticlockwise by angle q about point O.
  * ```
  * Rotate([1,2],[0,0],90) // [-2,1]
