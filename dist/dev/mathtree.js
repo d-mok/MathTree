@@ -25204,11 +25204,17 @@ class Numbers extends list_1.List {
             return arr[0];
         if (arr.length === 2) {
             let [a, b] = arr;
-            while (a !== b) {
-                if (a > b)
-                    a -= b;
-                if (b > a)
-                    b -= a;
+            while (true) {
+                if (a === 0)
+                    return b;
+                if (b === 0)
+                    return a;
+                if (a >= b) {
+                    a = a % b;
+                }
+                else {
+                    b = b % a;
+                }
             }
             return a;
         }
@@ -28602,6 +28608,8 @@ const list_1 = __webpack_require__(4140);
 function integer(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
+    if (min > max)
+        throw new blood_1.Blood('Poker', 'min must be less than max!');
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 exports.integer = integer;
@@ -28616,6 +28624,8 @@ exports.integer = integer;
  * ```
  */
 function real(min, max) {
+    if (min > max)
+        throw new blood_1.Blood('Poker', 'min must be less than max!');
     return Math.random() * (max - min) + min;
 }
 exports.real = real;
@@ -28631,6 +28641,8 @@ exports.real = real;
  * ```
  */
 function prime(min, max) {
+    if (min > max)
+        throw new blood_1.Blood('Poker', 'min must be less than max!');
     let primes = list_1.list(...cal.primes(max));
     primes.sieve($ => $ >= min);
     return primes.draw();
@@ -36715,7 +36727,7 @@ class PenCls extends Pencil {
      */
     angle(A, O, B, label, arc = 1, radius = -1) {
         this.decorate.angle(A, O, B, arc, radius);
-        if (label !== undefined)
+        if (label !== undefined && label !== '')
             this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13);
     }
     /**

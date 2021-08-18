@@ -761,6 +761,10 @@ class PenCls extends Pencil {
 
 
 
+    height(vertex: Point, [A, B]: [Point, Point], label?: string) {
+        
+        
+    }
 
 
     /**
@@ -978,9 +982,11 @@ class PenCls extends Pencil {
      */
     angle(A: Point, O: Point, B: Point, label?: string | number, arc = 1, radius = -1) {
         this.decorate.angle(A, O, B, arc, radius)
-        if (label !== undefined)
+        if (label !== undefined && label !== '')
             this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13)
     }
+
+
 
 
 

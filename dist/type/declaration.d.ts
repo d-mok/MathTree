@@ -3354,6 +3354,7 @@ declare class PenCls extends Pencil {
      * ```
      */
     arrow(startPoint: Point, endPoint: Point, label?: string): void;
+    height(vertex: Point, [A, B]: Point, label?: string): void;
     /**
      * Draw a polyline given points.
      * @category draw
