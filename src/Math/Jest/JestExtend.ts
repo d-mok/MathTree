@@ -113,8 +113,10 @@ expect.extend({
       sample = toNumbers(sample.flat(flatDepth) as number[])
     }
 
+    let tolerance = (max - min) * 0.1
 
-    const pass = sample.max() > max - 1 && sample.min() < min + 1
+
+    const pass = sample.max() > max - tolerance && sample.min() < min + tolerance
     if (pass) {
       return {
         message: () => `expected ${[...sample]} not to span the range ${min} to ${max}`,
@@ -274,8 +276,8 @@ expect.extend({
   // },
 
 
-  // toBeFlatIs(received, func) {
-  //   const pass = received.flat().every(x => func(x));
+  // toBeFlatIs(received: any[], func: ($: any) => boolean, flatDepth = 1) {
+  //   const pass = received.flat(flatDepth).every(x => func(x));
   //   if (pass) {
   //     return {
   //       message: () => `expected ${received} not to be ${func.name}`,
