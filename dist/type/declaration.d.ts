@@ -448,6 +448,25 @@ declare class LinearFunction {
  * @ignore
  */
 declare function LF(): LinearFunction;
+declare module "Math/Jest/JestExtend" {
+    export function repeat(times: number, func: Function): void;
+    global {
+        namespace jest {
+            interface Matchers<R> {
+                toBeBetween(min: number, max: number): R;
+                toAllBeBetween(min: number, max: number): R;
+                toSpanSame(members: any[], flatDepth?: number): R;
+                toSpanRange(min: number, max: number, flatDepth?: number): R;
+                toSpanLength(length: number, flatDepth?: number): R;
+                toAllBeOneOf(members: any[]): R;
+                toBeInteger(): R;
+                toAllBeInteger(): R;
+                toBeDupless(): R;
+            }
+        }
+    }
+}
+declare module "Math/Algebra/Polynomial.test" { }
 /**
  * @category Quadratic
  * @return the discriminant b^2-4ac.
@@ -491,6 +510,7 @@ declare function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
  * ```
  */
 declare function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
+declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
 /**
  * @category Assertion
  * @return check is a finite number.
@@ -803,6 +823,15 @@ declare function arccos(x: number): number;
  * ```
  */
 declare function arctan(x: number): number;
+declare module "Math/Code/Geometry.test" {
+    global {
+        namespace jest {
+            interface Matchers<R> {
+                toBeDeepCloseTo(...args: any[]): R;
+            }
+        }
+    }
+}
 /**
  * @category Geometry
  * @return the slope of AB
@@ -1355,6 +1384,7 @@ declare var PhyConst: {
     sigma: number;
     h: number;
 };
+declare module "Math/Code/Random.test" { }
 /**
  * @category Random
  * @return a random integer in [min, max] inclusive.
@@ -1548,6 +1578,7 @@ declare function RndTrigValue(func: TrigFunc, angle: number): TrigValue;
  * ```
  */
 declare function RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '1/tan' | '-1/tan', label: string): TrigExp;
+declare module "Math/Code/RandomShake.test" { }
 /**
  * @category RandomShake
  * @deprecated
@@ -1589,30 +1620,6 @@ declare function RndShakeR(anchor: number): number[];
 declare function RndShakeQ(anchor: number): number[];
 /**
  * @category RandomShake
- * @deprecated
- * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```
- * RndShakeFrac([5,6])
- * // return 3 unique fractions around [5,6]
- * RndShakeFrac([6,-5])
- * // return 3 unique fractions around [6,-5]
- * ```
- */
-declare function RndShakeFrac(anchor: Fraction): Fraction[];
-/**
- * @category RandomShake
- * @deprecated
- * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```
- * RndShakeDfrac('\\dfrac{5}{6}')
- * // return 3 unique Dfrac around [5,6]
- * RndShakeDfrac('-\\dfrac{6}{5}')
- * // return 3 unique Dfrac around [6,-5]
- * ```
- */
-declare function RndShakeDfrac(anchor: string): string[];
-/**
- * @category RandomShake
  * @return an array of 3 ineq signs, balanced in number.
  * ```
  * RndShakeIneq('\\ge')
@@ -1622,7 +1629,7 @@ declare function RndShakeDfrac(anchor: string): string[];
 declare function RndShakeIneq(anchor: Ineq): string[];
 /**
  * @category RandomShake
- * @return an array of 3 point
+ * @return an array of 3 point, both x and y are unique
  * ```
  * RndShakePoint([3,4])
  * // may return [[2,5],[1,6],[4,2]]
@@ -1674,6 +1681,7 @@ declare function RndShakeRatio(anchor: number[]): number[][];
  * ```
  */
 declare function RndShakeBase(anchor: string): string[];
+declare module "Math/Code/RandomUtil.test" { }
 /**
  * @category RandomUtil
  * @return a random item from the given items
@@ -1692,9 +1700,9 @@ declare function RndPick<T>(...items: T[]): T;
 declare function RndShuffle<T>(...items: T[]): T[];
 /**
  * @category RandomUtil
- * @return n random items from given items, not necessarily unique
+ * @return n random items from given items, NOT necessarily unique
  * ```
- * RndPickN([2,4,6],2) // may return [4,2]
+ * RndPickN([2,4,6],5) // may return [4,2,2,4,6]
  * ```
  */
 declare function RndPickN<T>(items: T[], n: number): T[];
@@ -1781,16 +1789,6 @@ declare function AreSameSign(...nums: number[]): boolean;
  * ```
  */
 declare function AreCoprime(...nums: number[]): boolean;
-/**
- * @category Relation
- * @deprecated use AreDifferent
- * @return Check if the points are all distinct.
- * ```
- * AreDistinctPoint([1,2],[3,4]) // true
- * AreDistinctPoint([1,2],[1,2]) // false
- * ```
- */
-declare function AreDistinctPoint(...points: Point2D[]): boolean;
 /**
  * @category Relation
  * @return Check if the points are pairwise distant apart.
@@ -2059,25 +2057,6 @@ declare function GrammarJoin(...items: unknown[]): string;
 /**
 * @category Text
 * @deprecated
-* @return '✔' or '✘'.
-* ```
-* Tick(true) // '✔'
-* Tick(false) // '✘'
-* ```
-*/
-declare function Tick(bool: boolean): string;
-/**
-* @category Text
-* @deprecated
-* @return Array of '✔' or '✘'.
-* ```
-* Ticks(true,false) // ['✔','✘']
-* ```
-*/
-declare function Ticks(...bools: boolean[]): string[];
-/**
-* @category Text
-* @deprecated
 * @return a pair of latex inequalities sign array like ['\\ge', '\\le'].
 * ```typescript
 * IneqSign(true,true) // ['\\ge', '\\le']
@@ -2139,26 +2118,6 @@ declare function Sci(num: number): string;
  * ```
  */
 declare function LongDivision(dividend: number[], divisor: number[]): string;
-/**
- * @category Text
- * @param num - from 1 to 10
- * @return roman number
- * ```
- * Roman(1) // "I"
- * Roman(2) // "II"
- * ```
- */
-declare function Roman(num: number): string;
-/**
- * @category Text
- * @param roman - from I to X
- * @return arabic number
- * ```
- * DeRoman("I") // 1
- * DeRoman("II") // 2
- * ```
- */
-declare function DeRoman(roman: string): number;
 /**
  * @category Text
  * @return the representation of num in base b
@@ -2370,6 +2329,7 @@ declare function TrigRoot(func: TrigFunc, k: number): [number | undefined, numbe
 declare function TrigSolve(func: TrigFunc, k: number): number[];
 /**
  * @category Trigonometry
+ * @deprecated
  * @return reduce the polar angle into the range [0,360)
  * ```
  * PolarReduce(370) // 10
@@ -2379,6 +2339,7 @@ declare function TrigSolve(func: TrigFunc, k: number): number[];
 declare function PolarReduce(q: number): number;
 /**
  * @category Trigonometry
+ * @deprecated
  * @return the angle (within [0,180]) between two polar angles
  * ```
  * PolarDiff(80,70) // 10

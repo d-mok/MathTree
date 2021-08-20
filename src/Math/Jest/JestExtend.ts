@@ -101,7 +101,7 @@ expect.extend({
 
 
 
-  toSpanRange: (funcOrArray: (() => number) | number[], min: number, max: number, flatDepth = 0) => {
+  toSpanRange: (funcOrArray: (() => number | number[]) | number[], min: number, max: number, flatDepth = 0) => {
 
     let sample = numbers()
     if (Array.isArray(funcOrArray)) {

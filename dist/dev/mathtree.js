@@ -34933,7 +34933,7 @@ class AutoPenCls {
     DotPattern({ a, p, q, n, offset }) {
         const pen = new Pen();
         pen.range.set([-2, 30], [-4, 10]);
-        pen.size.resolution(0.8);
+        pen.size.resolution(0.08);
         function drawRow(n, j, offset = 0) {
             for (let i = 1 + offset; i <= n + offset; i++) {
                 pen.point([i, j]);
