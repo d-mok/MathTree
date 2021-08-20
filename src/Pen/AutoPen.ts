@@ -929,7 +929,7 @@ class AutoPenCls {
 
         const pen = new Pen();
         pen.range.set([-2, 30], [-4, 10]);
-        pen.size.resolution(0.8)
+        pen.size.resolution(0.08)
 
         function drawRow(n: number, j: number, offset = 0) {
             for (let i = 1 + offset; i <= n + offset; i++) {
