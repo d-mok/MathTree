@@ -27,13 +27,13 @@ globalThis.RndShuffle = RndShuffle
 
 /**
  * @category RandomUtil
- * @return n random items from given items, NOT necessarily unique
+ * @return n random items from given items without replacement, but NOT necessarily unique if there are duplicated object in items.
  * ```
- * RndPickN([2,4,6],5) // may return [4,2,2,4,6]
+ * RndPickN([1,2,3,4,5],3) // may return [2,5,3]
  * ```
  */
 function RndPickN<T>(items: T[], n: number): T[] {
-    return [...toList(items).draws(n)!]
+    return [...toList(items).sample(n)!]
 }
 globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt])
 
@@ -41,7 +41,7 @@ globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt])
 
 /**
  * @category RandomUtil
- * @return n random unique items from given items, shallow compare.
+ * @return n random unique items from given items, deep compare.
  * ```
  * RndPickUnique([2,4,6],2) // may return [4,2]
  * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]

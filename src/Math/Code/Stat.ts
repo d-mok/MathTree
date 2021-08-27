@@ -136,6 +136,7 @@ globalThis.UpperQ = contract(UpperQ).sign([owl.num])
 
 /**
  * @category Stat
+ * @deprecated
  * @return count frequency of item in array
  * ```
  * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
@@ -145,6 +146,20 @@ function Frequency<T>(item: T) {
     return (...items: T[]) => toList(items).freq(item)
 }
 globalThis.Frequency = Frequency
+
+
+
+/**
+ * @category Stat
+ * @return count frequency of item in array
+ * ```
+ * Freq([2,3,4,1,5,1,1,4,5],1) // 3
+ * ```
+ */
+function Freq<T>(array: T[], item: T): number {
+    return toList(array).freq(item)
+}
+globalThis.Freq = contract(Freq).sign([owl.array, owl.pass])
 
 
 /**
@@ -227,31 +242,50 @@ globalThis.UpperQAt = contract(UpperQAt).sign([owl.int])
  * @category Stat
  * @return array of the corresponding frequency of the value in a data set
  * ```
- * Frequencies(1,1,9,9,5,5,5) \\ [[1,5,9],[2,3,2]]
- * Frequencies('a','c','c','b') \\ [['a','b','c'],[1,1,2]]
+ * Freqs(1,1,9,9,5,5,5) \\ [[1,5,9],[2,3,2]]
  * ```
  */
-function Frequencies<T>(...data: T[]): [value: T[], frequency: number[]] {
+function Freqs(...data: number[]): [values: number[], frequencies: number[]] {
     let ls = toList(data)
-    let arr: [T[], number[]] = [[], []]
+    let arr: [number[], number[]] = [[], []]
     for (let v of ls.unique().ascending()) {
         arr[0].push(v)
         arr[1].push(ls.freq(v))
     }
     return arr
 }
-globalThis.Frequencies = Frequencies
+globalThis.Freqs = contract(Freqs).sign([owl.num])
+
+
+
+/**
+ * @category Stat
+ * @return make a data set from frequencies
+ * ```
+ * DataFromFreqs([1,9,5],[2,2,3])
+ * // [1,1,9,9,5,5,5]
+ * ```
+ */
+function DataFromFreqs(values: number[], frequencies: number[]): number[] {
+    Should(values.length === frequencies.length, 'values and frequencies must be the same length')
+    let data: number[] = []
+    for (let i = 0; i < values.length; i++) {
+        data.push(...Array(frequencies[i]).fill(values[i]))
+    }
+    return data
+}
+globalThis.DataFromFreqs = contract(DataFromFreqs).sign([owl.ntuple])
 
 
 /**
  * @category Stat
  * @return array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
  * ```
- * DataToSummary(1,1,2,3,3,3,3,4,5,5) \\ [1,2,3,4,5]
- * DataToSummary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
+ * Summary(1,1,2,3,3,3,3,4,5,5) \\ [1,2,3,4,5]
+ * Summary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
  * ```
  */
-function DataToSummary(...data: number[]): number[] {
+function Summary(...data: number[]): number[] {
     let d = toData(data)
     return [
         d.min(),
@@ -261,4 +295,4 @@ function DataToSummary(...data: number[]): number[] {
         d.max()
     ]
 }
-globalThis.DataToSummary = contract(DataToSummary).sign([owl.num])
+globalThis.Summary = contract(Summary).sign([owl.num])

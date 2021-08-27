@@ -29128,17 +29128,17 @@ function build(funcName, func) {
     return holder[funcName];
 }
 function and(pds, name) {
-    name ?? (name = '(' + pds.map(f => f.name).join(' && ') + ')');
+    name ??= '(' + pds.map(f => f.name).join(' && ') + ')';
     return build(name, (_) => pds.every(p => p(_)));
 }
 exports.and = and;
 function or(pds, name) {
-    name ?? (name = '(' + pds.map(f => f.name).join(' || ') + ')');
+    name ??= '(' + pds.map(f => f.name).join(' || ') + ')';
     return build(name, (_) => pds.some(p => p(_)));
 }
 exports.or = or;
 function every(pd, name) {
-    name ?? (name = '(every.' + pd.name + ')');
+    name ??= '(every.' + pd.name + ')';
     return build(name, (_) => exports.array(_) && _.every(pd));
 }
 exports.every = every;
@@ -33033,6 +33033,41 @@ function PrimeFactorize(val, { hcf = false, lcm = false, multiply = false }) {
     return T;
 }
 globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.object]);
+/**
+ * @category Text
+ * @return print a latex table by array environment
+ * ```
+ * PrintTable(
+ *     [
+ *         ['a', 2, 3],
+ *         ['b', 5, 6],
+ *         ['c', 7, 8],
+ *         ['d', 12, 13]
+ *     ],
+ *     '|c::c:c|',
+ *     '|r||r|rr|',
+ * )
+ * ```
+ */
+function PrintTable(content, columns, rows) {
+    let nCol = Math.max(...content.map($ => $.length));
+    columns = columns ?? Array(nCol + 1).fill("|").join("c");
+    let nRow = content.length;
+    rows = rows ?? Array(nRow + 1).fill("|").join("r");
+    let rowsArr = rows.split('r').map($ => $.replaceAll("|", " \\hline ").replaceAll(":", " \\hdashline "));
+    let T = "";
+    T += `\\begin{array}{${columns}}`;
+    let i = 0;
+    for (let row of content) {
+        T += rowsArr[i] ?? '';
+        T += row.join(" & ") + " \\\\ ";
+        i++;
+    }
+    T += rowsArr[i] ?? '';
+    T += ` \\end{array}`;
+    return T;
+}
+globalThis.PrintTable = contract(PrintTable).sign([owl.pass, owl.str, owl.str]);
 
 
 /***/ }),
@@ -35103,7 +35138,7 @@ class AutoPenCls {
      */
     StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }) {
         const pen = new Pen();
-        labels ?? (labels = [...data].map(x => x.toString()));
+        labels ??= [...data].map(x => x.toString());
         labels = labels.map(x => x.toString().split('').reverse()[0]);
         let width = data.length + 2;
         let height = Ceil(Max(...data) / 10) + 2;
@@ -36774,7 +36809,7 @@ class PenCls extends Pencil {
     rightAngle(A, O, B, size = 12) {
         A = this.pj(A);
         O = this.pj(O);
-        B ?? (B = Rotate(A, 90, O));
+        B ??= Rotate(A, 90, O);
         B = this.pj(B);
         this.drawRightAngle(A, O, B, size);
     }

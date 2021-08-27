@@ -101,6 +101,11 @@ test('Frequency', () => {
 });
 
 
+test('Freq', () => {
+    expect(Freq([2, 3, 4, 1, 5, 1, 1, 4, 5], 1)).toBe(3);
+});
+
+
 test('Mode', () => {
     expect(Mode(1, 2, 3, 2, 2, 3, 4)).toEqual([2]);
     expect(Mode(1, 1, 2, 2, 3)).toEqual([1, 2]);
@@ -153,13 +158,20 @@ test('UpperQAt', () => {
     expect(UpperQAt(20)).toBe(15.5)
 });
 
-test('Frequencies', () => {
-    expect(Frequencies(1,1,9,9,5,5,5)).toEqual([[1,5,9],[2,3,2]])
-    expect(Frequencies('a','c','c','b')).toEqual([['a','b','c'],[1,1,2]])
+test('Freqs', () => {
+    expect(Freqs(1, 1, 9, 9, 5, 5, 5)).toEqual([[1, 5, 9], [2, 3, 2]])
 });
 
-test('DataToSummary', () => {
-    expect(DataToSummary(1,1,2,3,3,3,3,4,5,5)).toStrictEqual([1,2,3,4,5])
-    expect(DataToSummary(1,2,3,4,5,6,7,8,9,10)).toStrictEqual([1,3,5.5,8,10])
+
+
+test('DataFromFreqs', () => {
+    expect(DataFromFreqs([1, 9, 5], [2, 2, 3])).toEqual([1, 1, 9, 9, 5, 5, 5])
+});
+
+
+
+test('Summary', () => {
+    expect(Summary(1, 1, 2, 3, 3, 3, 3, 4, 5, 5)).toStrictEqual([1, 2, 3, 4, 5])
+    expect(Summary(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).toStrictEqual([1, 3, 5.5, 8, 10])
 });
 

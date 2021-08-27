@@ -372,3 +372,71 @@ function PrimeFactorize(val: { [_: string]: number[] }, { hcf = false, lcm = fal
     return T
 }
 globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.object])
+
+
+
+
+/**
+ * @category Text
+ * @return print a latex table by array environment
+ * ```
+ * PrintTable(
+ *     [
+ *         ['a', 2, 3],
+ *         ['b', 5, 6],
+ *         ['c', 7, 8],
+ *         ['d', 12, 13]
+ *     ],
+ *     '|c::c:c|',
+ *     '|r||r|rr|',
+ * )
+ * ```
+ */
+function PrintTable(content: (string | number)[][], columns?: string, rows?: string): string {
+    let nCol = Math.max(...content.map($ => $.length))
+    columns = columns ?? Array(nCol + 1).fill("|").join("c")
+
+    let nRow = content.length
+    rows = rows ?? Array(nRow + 1).fill("|").join("r")
+    let rowsArr = rows.split('r').map($ => $.replaceAll("|", " \\hline ").replaceAll(":", " \\hdashline "))
+
+    let T = ""
+    T += `\\begin{array}{${columns}}`
+
+    let i = 0
+    for (let row of content) {
+        T += rowsArr[i] ?? ''
+        T += row.join(" & ") + " \\\\ "
+        i++
+    }
+    T += rowsArr[i] ?? ''
+    T += ` \\end{array}`
+    return T
+}
+globalThis.PrintTable = contract(PrintTable).sign([owl.pass, owl.str, owl.str])
+
+
+
+
+
+
+
+/**
+ * @category Text
+ * @return print a latex frequency table 
+ * ```
+ * FreqTable([1,1,9,9,5,5,5],'num','count')
+ * ```
+ */
+function FreqTable(data: number[], valueLabel: string = "data", freqLabel: string = "frequency"): string {
+    let [values, freqs] = Freqs(...data)
+    valueLabel = ' \\text{' + valueLabel + '} '
+    freqLabel = ' \\text{' + freqLabel + '} '
+    return PrintTable(
+        [
+            [valueLabel, ...values],
+            [freqLabel, ...freqs]
+        ]
+    )
+}
+globalThis.FreqTable = contract(FreqTable).sign([owl.ntuple, owl.str, owl.str])

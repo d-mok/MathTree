@@ -296,7 +296,7 @@ globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
  * ```
  */
 function RndShakeTrig(anchor: TrigFunc): TrigFunc[] {
-    return RndPickN(['sin', 'cos', 'tan'], 3)
+    return [...list<TrigFunc>('sin', 'cos', 'tan').draws(3)!]
 }
 globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
 
@@ -312,7 +312,7 @@ globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
  * ```
  */
 function RndShakeTrigValue(anchor: TrigValue): TrigValue[] {
-    return RndPickN(['sin', 'cos', 'tan'], 3).map(x => [x as TrigFunc, anchor[1]])
+    return RndShakeTrig(anchor[0]).map(x => [x as TrigFunc, anchor[1]])
 }
 globalThis.RndShakeTrigValue = contract(RndShakeTrigValue).sign([owl.trigValue])
 

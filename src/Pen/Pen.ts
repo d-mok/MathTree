@@ -469,6 +469,28 @@ class PenCls extends Pencil {
     }
 
 
+    /**
+     * Plot a dashed explicit or parametric function.
+     * @category graph
+     * @param func - The function to plot, either x=>f(x) or t=>[x(t),y(t)].
+     * @param tStart - Start value of t, default to xmin.
+     * @param tEnd - End value of t, default to xmax.
+     * @param dots - Number of dots to plot. More dots give finer graph.
+     * @returns void
+     * ```
+     * pen.plot(x=>x**2) // plot y=x^2
+     * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
+     * ```
+     */
+    plotDash(func: ((t: number) => number) | ((t: number) => Point2D), tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
+        this.save()
+        this.set.dash(true)
+        this.drawPlot(func, tStart, tEnd, dots)
+        this.restore()
+    }
+
+
+
 
 
     /**
@@ -608,8 +630,6 @@ class PenCls extends Pencil {
             if (a !== 0 && b !== 0) this.line(-a / b, -c / b);
         }
     };
-
-
 
 
 

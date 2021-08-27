@@ -31,15 +31,12 @@ test('RndShuffle', () => {
 test('RndPickN', () => {
     repeat(10, () => {
         expect(() => RndPickN(["a", "b", "c"], 2)).toSpanSame([
-            ['a', 'a'],
             ['a', 'b'],
             ['a', 'c'],
             ['b', 'a'],
-            ['b', 'b'],
             ['b', 'c'],
             ['c', 'a'],
             ['c', 'b'],
-            ['c', 'c'],
         ])
     })
 });
