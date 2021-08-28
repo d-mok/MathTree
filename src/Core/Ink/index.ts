@@ -92,7 +92,7 @@ export function printSurd(outside: number, inside: number): string {
 
 export function printPointPolar(point: Point2D): string {
     let [r, q] = RectToPol(point)
-    let [a, b] = cal.simplifySurd(r ** 2)
+    let [a, b] = cal.simplifySurd(cal.blur(r ** 2))
     q = cal.blur(q)
     return `(${printSurd(a, b)},${q}°)`
 }

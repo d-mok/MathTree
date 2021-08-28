@@ -96,9 +96,9 @@ test('UpperQ', () => {
 
 
 
-test('Frequency', () => {
-    expect(Frequency(1)(2, 3, 4, 1, 5, 1, 1, 4, 5)).toBe(3);
-});
+// test('Frequency', () => {
+//     expect(Frequency(1)(2, 3, 4, 1, 5, 1, 1, 4, 5)).toBe(3);
+// });
 
 
 test('Freq', () => {

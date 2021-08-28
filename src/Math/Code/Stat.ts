@@ -134,18 +134,18 @@ globalThis.UpperQ = contract(UpperQ).sign([owl.num])
 
 
 
-/**
- * @category Stat
- * @deprecated
- * @return count frequency of item in array
- * ```
- * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
- * ```
- */
-function Frequency<T>(item: T) {
-    return (...items: T[]) => toList(items).freq(item)
-}
-globalThis.Frequency = Frequency
+// /**
+//  * @category Stat
+//  * @deprecated
+//  * @return count frequency of item in array
+//  * ```
+//  * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
+//  * ```
+//  */
+// function Frequency<T>(item: T) {
+//     return (...items: T[]) => toList(items).freq(item)
+// }
+// globalThis.Frequency = Frequency
 
 
 

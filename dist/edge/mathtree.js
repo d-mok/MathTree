@@ -29012,7 +29012,7 @@ function printSurd(outside, inside) {
 exports.printSurd = printSurd;
 function printPointPolar(point) {
     let [r, q] = RectToPol(point);
-    let [a, b] = cal.simplifySurd(r ** 2);
+    let [a, b] = cal.simplifySurd(cal.blur(r ** 2));
     q = cal.blur(q);
     return `(${printSurd(a, b)},${q}°)`;
 }
@@ -32655,18 +32655,18 @@ function UpperQ(...nums) {
     return toData(nums).upperQuartile();
 }
 globalThis.UpperQ = contract(UpperQ).sign([owl.num]);
-/**
- * @category Stat
- * @deprecated
- * @return count frequency of item in array
- * ```
- * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
- * ```
- */
-function Frequency(item) {
-    return (...items) => toList(items).freq(item);
-}
-globalThis.Frequency = Frequency;
+// /**
+//  * @category Stat
+//  * @deprecated
+//  * @return count frequency of item in array
+//  * ```
+//  * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
+//  * ```
+//  */
+// function Frequency<T>(item: T) {
+//     return (...items: T[]) => toList(items).freq(item)
+// }
+// globalThis.Frequency = Frequency
 /**
  * @category Stat
  * @return count frequency of item in array

@@ -1995,15 +1995,6 @@ declare function LowerQ(...nums: number[]): number;
 declare function UpperQ(...nums: number[]): number;
 /**
  * @category Stat
- * @deprecated
- * @return count frequency of item in array
- * ```
- * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
- * ```
- */
-declare function Frequency<T>(item: T): (...items: T[]) => number;
-/**
- * @category Stat
  * @return count frequency of item in array
  * ```
  * Freq([2,3,4,1,5,1,1,4,5],1) // 3
