@@ -80,19 +80,25 @@ export function printOrTrigRoots(roots: (number | undefined)[]): string {
     return ss.join(',') + '~\\text{or}~' + last
 }
 
-export function printSurd(outside: number, inside: number): string {
-    if (outside === 1) {
-        if (inside === 1) return '1'
-        return '\\sqrt{' + inside + '}'
+
+
+export function printSurd(num: number): string {
+    let s = Math.sign(num)
+    let v = Math.abs(num)
+    let [p, q] = cal.simplifySurd(cal.blur(v ** 2))
+    let sign = s >= 0 ? "" : "-"
+
+    if (p === 1) {
+        if (q === 1) return '1'
+        return sign + '\\sqrt{' + q + '}'
     } else {
-        if (inside === 1) return outside.toString()
-        return outside + '\\sqrt{' + inside + '}'
+        if (q === 1) return p.toString()
+        return sign + p + '\\sqrt{' + q + '}'
     }
 }
 
 export function printPointPolar(point: Point2D): string {
     let [r, q] = RectToPol(point)
-    let [a, b] = cal.simplifySurd(cal.blur(r ** 2))
     q = cal.blur(q)
-    return `(${printSurd(a, b)},${q}°)`
+    return `(${printSurd(r)},${q}°)`
 }

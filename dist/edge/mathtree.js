@@ -28997,24 +28997,27 @@ function printOrTrigRoots(roots) {
     return ss.join(',') + '~\\text{or}~' + last;
 }
 exports.printOrTrigRoots = printOrTrigRoots;
-function printSurd(outside, inside) {
-    if (outside === 1) {
-        if (inside === 1)
+function printSurd(num) {
+    let s = Math.sign(num);
+    let v = Math.abs(num);
+    let [p, q] = cal.simplifySurd(cal.blur(v ** 2));
+    let sign = s >= 0 ? "" : "-";
+    if (p === 1) {
+        if (q === 1)
             return '1';
-        return '\\sqrt{' + inside + '}';
+        return sign + '\\sqrt{' + q + '}';
     }
     else {
-        if (inside === 1)
-            return outside.toString();
-        return outside + '\\sqrt{' + inside + '}';
+        if (q === 1)
+            return p.toString();
+        return sign + p + '\\sqrt{' + q + '}';
     }
 }
 exports.printSurd = printSurd;
 function printPointPolar(point) {
     let [r, q] = RectToPol(point);
-    let [a, b] = cal.simplifySurd(cal.blur(r ** 2));
     q = cal.blur(q);
-    return `(${printSurd(a, b)},${q}°)`;
+    return `(${printSurd(r)},${q}°)`;
 }
 exports.printPointPolar = printPointPolar;
 
@@ -37843,10 +37846,11 @@ function ParseForPrint(value, signal = "") {
     }
     if (signal === '!') {
         if (T === 'number') {
-            let s = Math.sign(value);
-            let v = Math.abs(value);
-            let [p, q] = cal.simplifySurd(cal.blur(v ** 2));
-            return s >= 0 ? ink.printSurd(p, q) : '-' + ink.printSurd(p, q);
+            return ink.printSurd(value);
+        }
+        if (owl.point2D(value)) {
+            let [a, b] = value;
+            return '(' + ink.printSurd(a) + ',' + ink.printSurd(b) + ')';
         }
     }
     if (signal === '+') {

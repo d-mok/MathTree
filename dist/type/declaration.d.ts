@@ -79,7 +79,7 @@ declare module "Core/Ink/index" {
     export function printTrigValue(T: TrigValue): string;
     export function printTrigExp(T: TrigExp): string;
     export function printOrTrigRoots(roots: (number | undefined)[]): string;
-    export function printSurd(outside: number, inside: number): string;
+    export function printSurd(num: number): string;
     export function printPointPolar(point: Point2D): string;
 }
 declare module "Core/index" {
