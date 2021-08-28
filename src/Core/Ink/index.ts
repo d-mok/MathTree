@@ -89,3 +89,9 @@ export function printSurd(outside: number, inside: number): string {
         return outside + '\\sqrt{' + inside + '}'
     }
 }
+
+export function printPolarPoint(polarPoint: PolarPoint): string {
+    let [r, q] = polarPoint
+    let [a, b] = cal.simplifySurd(r)
+    return `(${printSurd(a, b)},${q}°)`
+}

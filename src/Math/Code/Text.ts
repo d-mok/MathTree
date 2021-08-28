@@ -398,7 +398,7 @@ function PrintTable(content: (string | number)[][], columns?: string, rows?: str
 
     let nRow = content.length
     rows = rows ?? Array(nRow + 1).fill("|").join("r")
-    let rowsArr = rows.split('r').map($ => $.replaceAll("|", " \\hline ").replaceAll(":", " \\hdashline "))
+    let rowsArr = rows.split('r').map($ => $.replace(/\|/g, " \\hline ").replace(/\:/g, " \\hdashline "))
 
     let T = ""
     T += `\\begin{array}{${columns}}`

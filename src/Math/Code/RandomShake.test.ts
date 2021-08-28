@@ -269,3 +269,20 @@ test('RndShakeBase', () => {
     })
 
 });
+
+
+test('RndShakePolarPoint', () => {
+
+    function run(anchor: PolarPoint) {
+        let shaked = RndShakePolarPoint(anchor)
+        expect(shaked).toSatisfyAll(owl.point2D);
+        expect(shaked).toSatisfyAll(([r, q]) => Number.isInteger(cal.blur(r ** 2)));
+        expect(shaked).toSatisfyAll(([r, q]) => [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330].includes(q));
+        expect(shaked).toHaveLength(3);
+    }
+
+    repeat(10, () => {
+        run([3, 60]);
+    })
+
+});

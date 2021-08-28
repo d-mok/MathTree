@@ -127,6 +127,7 @@
 |ineq sign|`a = true`|`*^\le_a`| \le|
 |ineq sign|`a = false`|`*^\le_a`| \ge|
 |or trig root|`a = [30,60,90,undefined]`|`*|.a`| 30°~~\text{or}~~60°~~\text{or}~~90°|
+|polar coordinates|`a = [3*sqrt(2),60]`|`*.a`| (3\sqrt{2}, 60\degree)|
 
 # 3. Advance Functions
 

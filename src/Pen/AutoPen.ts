@@ -1,8 +1,10 @@
+import {PenCls} from './Pen'
+
 
 /**
  * @category DrawingPen
  */
-class AutoPenCls {
+export class AutoPenCls {
     /**
      * @ignore
      */
@@ -1328,6 +1330,3 @@ class AutoPenCls {
 
 }
 
-
-var AutoPen = AutoPenCls
-globalThis.AutoPen = AutoPen

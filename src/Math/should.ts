@@ -15,10 +15,22 @@ function CustomError(name: string, message: string) {
 }
 globalThis.CustomError = CustomError
 
+function toError(e: unknown): Error {
+    if (e instanceof Error) {
+        return e
+    } else if (typeof e === 'string') {
+        return CustomError('UnknownError', e)
+    } else {
+        return CustomError('UnknownError', JSON.stringify(e))
+    }
+}
+globalThis.toError = toError
+
 function MathError(message: string) {
     return new CustomErrorCls('MathError', message)
 }
 globalThis.MathError = MathError
+
 
 
 function Should(condition: boolean, msg: string = "Should condition failed!") {

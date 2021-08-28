@@ -1,22 +1,14 @@
 module.exports = {
     preset: "ts-jest",
     // "setupFiles": ["./dist/dev/mathtree.js",],
-    "setupFiles": ["./src/index.ts",],
+    setupFiles: ["./src/index.ts",],
     setupFilesAfterEnv: ["jest-extended", "./src/Math/Jest/JestExtend.ts"],
-    "transform": {
+    transform: {
         "^.+\\.(ts|tsx)$": "ts-jest"
     },
-    "verbose": false,
-    "silent": false
+    verbose: false,
+    silent: false,
+    testEnvironment: "jsdom"
 };
 
 
-
-// module.exports = {
-//     preset: "ts-jest",
-//     "setupFilesAfterEnv": ["jest-extended"],
-//     testEnvironment: "node",
-//     modulePathIgnorePatterns: ["<rootDir>/lib/"]
-
-
-// };

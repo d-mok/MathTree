@@ -127,6 +127,10 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     // print *|.x as OR trig roots
     print("|.", "\\*\\|\\.")
 
+
+    // print *.x as polar coordinates, with r being a surd
+    print(".", "\\*\\.")
+
     return html
 }
 
@@ -295,6 +299,15 @@ export function ParseForPrint(value: any, signal: string = ""): string {
             return ink.printOrTrigRoots(value)
         }
     }
+
+
+
+    if (signal === '.') {
+        if (owl.point2D(value)) {
+            return ink.printPolarPoint(value)
+        }
+    }
+
 
 
     return String(value)

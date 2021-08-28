@@ -12,13 +12,19 @@ type Context = {
 
 
 
-function detectVarErr(e: Error) {
-    let isVarErr = e.message === 'Cannot convert a Symbol value to a number'
-    if (isVarErr) {
-        return CustomError('VariableError', "A variable is used before a value is defined.")
-    } else {
-        return e
+function detectVarErr(e: unknown) {
+    if (e instanceof Error) {
+        let isVarErr = e.message === 'Cannot convert a Symbol value to a number'
+        if (isVarErr) {
+            return CustomError('VariableError', "A variable is used before a value is defined.")
+        } else {
+            return e
+        }
     }
+
+    return e
+
+
 }
 
 

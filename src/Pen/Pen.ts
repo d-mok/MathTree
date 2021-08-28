@@ -1,4 +1,4 @@
-
+import { Pencil } from 'sapphire-js'
 
 /**
  * @ignore
@@ -14,7 +14,7 @@ const DEFAULT_CUTTER_LENGTH_PIXEL = 5
 /**
  * @category DrawingPen
  */
-class PenCls extends Pencil {
+export class PenCls extends Pencil {
 
     /**
      * @ignore
@@ -1909,10 +1909,3 @@ class PenCls extends Pencil {
 
 
 };
-
-/**
- * @ignore
- */
-var Pen = PenCls
-globalThis.Pen = Pen
-

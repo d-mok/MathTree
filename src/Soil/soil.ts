@@ -3,7 +3,7 @@ import { dress } from './tool/dress'
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Dict, Config } from './cls'
-import { evaluate,  intrapolate } from './tool/eval'
+import { evaluate, intrapolate } from './tool/eval'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 
 // util functions
@@ -51,8 +51,9 @@ export class Soil {
             throw CustomError('TimeoutError', 'taking too long to run: >' + allow + 's')
     }
 
-    private recordError(e: Error) {
-        this.errorPile.push(e)
+    private recordError(e: unknown) {
+        let err = toError(e)
+        this.errorPile.push(err)
     }
 
     private printError(delimiter: string, cut = true): string {
@@ -111,18 +112,22 @@ export class Soil {
                     throw CustomError('PopulationError', 'Cannot pass validate.')
                 return true;
             } catch (e) {
-                switch (e.name) {
-                    case 'ContractError':
-                        this.recordError(e)
-                        break;
-                    case 'MathError':
-                        this.recordError(e)
-                        break;
-                    case 'PopulationError':
-                        this.recordError(e)
-                        break;
-                    default:
-                        throw e
+                if (e instanceof Error) {
+                    switch (e.name) {
+                        case 'ContractError':
+                            this.recordError(e)
+                            break;
+                        case 'MathError':
+                            this.recordError(e)
+                            break;
+                        case 'PopulationError':
+                            this.recordError(e)
+                            break;
+                        default:
+                            throw e
+                    }
+                } else {
+                    throw e
                 }
             }
         };
@@ -212,9 +217,10 @@ export class Soil {
         }
     }
 
-    private errorFruit(e: Error): Fruit {
+    private errorFruit(e: unknown): Fruit {
+        let err = toError(e)
         return {
-            qn: "An Error Occurred!<br/>" + '[' + e.name + '] ' + e.message,
+            qn: "An Error Occurred!<br/>" + '[' + err.name + '] ' + err.message,
             sol: this.printError("<br/><br/>", true),
             ans: "X",
             counter: this.counter,

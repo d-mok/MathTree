@@ -482,3 +482,21 @@ function RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '
 globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.str, owl.str])
 
 
+
+
+/**
+ * @category Random
+ * @return a random polar point at special angle, whose rect coords must be in the form of a*sqrt(b).
+ * ```
+ * RndPolarPoint()
+ * // maybe [2*sqrt(3),60]
+ * ```
+ */
+function RndPolarPoint(): PolarPoint {
+    let angle = RndPick(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330)
+    let a = RndEven(2, 6)
+    let b = RndPick(1, 2, 3)
+    let r = a * Math.sqrt(b)
+    return [r, angle]
+}
+globalThis.RndPolarPoint = contract(RndPolarPoint).sign([])

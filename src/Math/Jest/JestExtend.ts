@@ -82,7 +82,7 @@ expect.extend({
       sample = toList(sample.flat(flatDepth))
     }
 
-    let sampleJSON = toList(sample.map($ => JSON.stringify($)))
+    let sampleJSON = sample.map($ => JSON.stringify($))
     let membersJSON = toList(members.map($ => JSON.stringify($)))
 
     const pass = sampleJSON.includesAll(membersJSON) && membersJSON.includesAll(sampleJSON)

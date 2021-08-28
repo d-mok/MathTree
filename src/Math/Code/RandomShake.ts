@@ -411,3 +411,20 @@ globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base])
 
 
 
+/**
+ * @category RandomShake
+ * @return an array of 3 polar points
+ * ```
+ * RndShakePolarPoint([3,60])
+ * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
+ * ```
+ */
+function RndShakePolarPoint(anchor: PolarPoint): PolarPoint[] {
+    let [r1, q1] = anchor
+    let [a, b] = cal.simplifySurd(r1 ** 2)
+    let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a
+    let angles = [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330]
+    let q2 = RndPick(...angles.filter($ => $ !== q1))
+    return RndShuffle([r1, q2], [r2, q1], [r2, q2])
+}
+globalThis.RndShakePolarPoint = contract(RndShakePolarPoint).sign([owl.point2D])
