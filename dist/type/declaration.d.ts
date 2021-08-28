@@ -1693,7 +1693,7 @@ declare function RndShakeRatio(anchor: number[]): number[][];
 declare function RndShakeBase(anchor: string): string[];
 /**
  * @category RandomShake
- * @return an array of 3 polar points
+ * @return an array of 3 points, all are special in polar coordinates
  * ```
  * RndShakePointPolar([3,60])
  * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
@@ -3175,6 +3175,17 @@ declare module "Pen/Pen" {
              * ```
              */
             sectoroid(center: Point2D, pStart: Point2D, pEnd: Point2D, vertices: Point2D[]): void;
+            /**
+             * Fill a rectangle.
+             * @category fill
+             * @param vertex1 - a vertex
+             * @param vertex2 - the diagonally opposite vertex
+             * @returns void
+             * ```
+             * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
+             * ```
+             */
+            rect(vertex1: Point2D, vertex2: Point2D): void;
         };
         /**
          * Shade a shape.
@@ -3233,6 +3244,17 @@ declare module "Pen/Pen" {
              * ```
              */
             sectoroid(center: Point2D, pStart: Point2D, pEnd: Point2D, vertices: Point2D[]): void;
+            /**
+             * Shade a rectangle.
+             * @category shade
+             * @param vertex1 - a vertex
+             * @param vertex2 - the diagonally opposite vertex
+             * @returns void
+             * ```
+             * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
+             * ```
+             */
+            rect(vertex1: Point2D, vertex2: Point2D): void;
         };
         /**
          * Draw an angle with label, non-reflex

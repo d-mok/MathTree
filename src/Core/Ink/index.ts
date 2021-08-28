@@ -88,13 +88,13 @@ export function printSurd(num: number): string {
     let [p, q] = cal.simplifySurd(cal.blur(v ** 2))
     let sign = s >= 0 ? "" : "-"
 
+    let T: string
     if (p === 1) {
-        if (q === 1) return '1'
-        return sign + '\\sqrt{' + q + '}'
+        T = q === 1 ? '1' : '\\sqrt{' + q + '}'
     } else {
-        if (q === 1) return p.toString()
-        return sign + p + '\\sqrt{' + q + '}'
+        T = q === 1 ? p.toString() : p + '\\sqrt{' + q + '}'
     }
+    return sign + T
 }
 
 export function printPointPolar(point: Point2D): string {

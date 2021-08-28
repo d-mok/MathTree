@@ -26792,7 +26792,7 @@ const vector2D_1 = __webpack_require__(1534);
  */
 const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
 const SIZE_SCALE = 10;
-const DEFAULT_SHADE_ALPHA = 0.2;
+const DEFAULT_SHADE_ALPHA = 0.1;
 const DEFAULT_AXIS_LABEL_OFFSET_PIXEL = 15;
 const DEFAULT_XAXIS_MARK_OFFSET_PIXEL = 15;
 const DEFAULT_YAXIS_MARK_OFFSET_PIXEL = 10;
@@ -29002,16 +29002,14 @@ function printSurd(num) {
     let v = Math.abs(num);
     let [p, q] = cal.simplifySurd(cal.blur(v ** 2));
     let sign = s >= 0 ? "" : "-";
+    let T;
     if (p === 1) {
-        if (q === 1)
-            return '1';
-        return sign + '\\sqrt{' + q + '}';
+        T = q === 1 ? '1' : '\\sqrt{' + q + '}';
     }
     else {
-        if (q === 1)
-            return p.toString();
-        return sign + p + '\\sqrt{' + q + '}';
+        T = q === 1 ? p.toString() : p + '\\sqrt{' + q + '}';
     }
+    return sign + T;
 }
 exports.printSurd = printSurd;
 function printPointPolar(point) {
@@ -32161,7 +32159,7 @@ function RndShakeBase(anchor) {
 globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base]);
 /**
  * @category RandomShake
- * @return an array of 3 polar points
+ * @return an array of 3 points, all are special in polar coordinates
  * ```
  * RndShakePointPolar([3,60])
  * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
@@ -32171,8 +32169,8 @@ function RndShakePointPolar(anchor) {
     let [r1, q1] = RectToPol(anchor);
     let [a, b] = cal.simplifySurd(r1 ** 2);
     let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a;
-    let angles = [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330];
-    let q2 = RndPick(...angles.filter($ => $ !== q1));
+    let angles = list(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330);
+    let q2 = RndPick(...angles.except([q1]));
     return RndShuffle([r1, q2], [r2, q1], [r2, q2]).map($ => PolToRect($));
 }
 globalThis.RndShakePointPolar = contract(RndShakePointPolar).sign([owl.point2D]);
@@ -36052,6 +36050,21 @@ class PenCls extends sapphire_js_1.Pencil {
             sectoroid(center, pStart, pEnd, vertices) {
                 this._pen.drawFillSectoroid(center, pStart, pEnd, vertices);
             },
+            /**
+             * Fill a rectangle.
+             * @category fill
+             * @param vertex1 - a vertex
+             * @param vertex2 - the diagonally opposite vertex
+             * @returns void
+             * ```
+             * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
+             * ```
+             */
+            rect(vertex1, vertex2) {
+                let [a, b] = vertex1;
+                let [c, d] = vertex2;
+                this._pen.polyfill([a, b], [c, b], [c, d], [a, d]);
+            }
         };
         /**
          * Shade a shape.
@@ -36119,6 +36132,21 @@ class PenCls extends sapphire_js_1.Pencil {
             sectoroid(center, pStart, pEnd, vertices) {
                 this._pen.drawShadeSectoroid(center, pStart, pEnd, vertices);
             },
+            /**
+             * Shade a rectangle.
+             * @category shade
+             * @param vertex1 - a vertex
+             * @param vertex2 - the diagonally opposite vertex
+             * @returns void
+             * ```
+             * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
+             * ```
+             */
+            rect(vertex1, vertex2) {
+                let [a, b] = vertex1;
+                let [c, d] = vertex2;
+                this._pen.polyshade([a, b], [c, b], [c, d], [a, d]);
+            }
         };
         /**
          * @category text

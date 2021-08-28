@@ -943,6 +943,22 @@ export class PenCls extends Pencil {
         sectoroid(center: Point2D, pStart: Point2D, pEnd: Point2D, vertices: Point2D[]) {
             this._pen.drawFillSectoroid(center, pStart, pEnd, vertices)
         },
+
+        /**
+         * Fill a rectangle.
+         * @category fill
+         * @param vertex1 - a vertex
+         * @param vertex2 - the diagonally opposite vertex
+         * @returns void
+         * ```
+         * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
+         * ```
+         */
+        rect(vertex1: Point2D, vertex2: Point2D) {
+            let [a, b] = vertex1
+            let [c, d] = vertex2
+            this._pen.polyfill([a, b], [c, b], [c, d], [a, d])
+        }
     };
 
 
@@ -1013,6 +1029,22 @@ export class PenCls extends Pencil {
         sectoroid(center: Point2D, pStart: Point2D, pEnd: Point2D, vertices: Point2D[]) {
             this._pen.drawShadeSectoroid(center, pStart, pEnd, vertices)
         },
+
+        /**
+         * Shade a rectangle.
+         * @category shade
+         * @param vertex1 - a vertex
+         * @param vertex2 - the diagonally opposite vertex
+         * @returns void
+         * ```
+         * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
+         * ```
+         */
+        rect(vertex1: Point2D, vertex2: Point2D) {
+            let [a, b] = vertex1
+            let [c, d] = vertex2
+            this._pen.polyshade([a, b], [c, b], [c, d], [a, d])
+        }
     };
 
 
