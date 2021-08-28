@@ -2048,12 +2048,12 @@ declare function LowerQAt(total: number): number;
 declare function UpperQAt(total: number): number;
 /**
  * @category Stat
- * @return array of the corresponding frequency of the value in a data set
+ * @return array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
  * ```
- * Freqs(1,1,9,9,5,5,5) \\ [[1,5,9],[2,3,2]]
+ * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
  * ```
  */
-declare function Freqs(...data: number[]): [values: number[], frequencies: number[]];
+declare function Freqs(data: number[], nums?: number[]): number[];
 /**
  * @category Stat
  * @return make a data set from frequencies

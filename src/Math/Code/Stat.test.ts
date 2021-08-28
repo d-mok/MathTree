@@ -159,7 +159,7 @@ test('UpperQAt', () => {
 });
 
 test('Freqs', () => {
-    expect(Freqs(1, 1, 9, 9, 5, 5, 5)).toEqual([[1, 5, 9], [2, 3, 2]])
+    expect(Freqs([1, 1, 4, 4, 3, 3, 3], [1, 2, 3, 4])).toEqual([2, 0, 3, 2])
 });
 
 

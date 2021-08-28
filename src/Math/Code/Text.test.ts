@@ -179,7 +179,7 @@ test('PrintTable', () => {
 
 
 test('FreqTable', () => {
-    expect(FreqTable([1, 1, 9, 9, 5, 5, 5], 'num', 'count')).toBe(String.raw`\begin{array}{|c|c|c|c|} \hline  \text{num}  & 1 & 5 & 9 \\  \hline  \text{count}  & 2 & 3 & 2 \\  \hline  \end{array}`);
+    expect(FreqTable([1, 1, 4, 4, 3, 3, 3], 'num', 'count')).toBe(String.raw`\begin{array}{|c|c|c|c|c|} \hline  \text{num}  & 1 & 2 & 3 & 4 \\  \hline  \text{count}  & 2 & 0 & 3 & 2 \\  \hline  \end{array}`);
 
 });
 

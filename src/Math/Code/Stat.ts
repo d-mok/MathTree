@@ -240,21 +240,21 @@ globalThis.UpperQAt = contract(UpperQAt).sign([owl.int])
 
 /**
  * @category Stat
- * @return array of the corresponding frequency of the value in a data set
+ * @return array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
  * ```
- * Freqs(1,1,9,9,5,5,5) \\ [[1,5,9],[2,3,2]]
+ * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
  * ```
  */
-function Freqs(...data: number[]): [values: number[], frequencies: number[]] {
+function Freqs(data: number[], nums?: number[]): number[] {
     let ls = toList(data)
-    let arr: [number[], number[]] = [[], []]
-    for (let v of ls.unique().ascending()) {
-        arr[0].push(v)
-        arr[1].push(ls.freq(v))
+    nums ??= ListIntegers(Math.min(...data), Math.max(...data))
+    let arr: number[] = []
+    for (let v of nums) {
+        arr.push(ls.freq(v))
     }
     return arr
 }
-globalThis.Freqs = contract(Freqs).sign([owl.num])
+globalThis.Freqs = contract(Freqs).sign([owl.ntuple, owl.ntuple])
 
 
 

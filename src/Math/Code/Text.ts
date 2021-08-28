@@ -429,7 +429,8 @@ globalThis.PrintTable = contract(PrintTable).sign([owl.pass, owl.str, owl.str])
  * ```
  */
 function FreqTable(data: number[], valueLabel: string = "data", freqLabel: string = "frequency"): string {
-    let [values, freqs] = Freqs(...data)
+    let values = ListIntegers(Math.min(...data), Math.max(...data))
+    let freqs = Freqs(data, values)
     valueLabel = ' \\text{' + valueLabel + '} '
     freqLabel = ' \\text{' + freqLabel + '} '
     return PrintTable(
