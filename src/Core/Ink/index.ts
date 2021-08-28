@@ -85,7 +85,7 @@ export function printOrTrigRoots(roots: (number | undefined)[]): string {
 export function printSurd(num: number): string {
     let s = Math.sign(num)
     let v = Math.abs(num)
-    let [p, q] = cal.simplifySurd(cal.blur(v ** 2))
+    let [p, q] = cal.simplifySurd(v ** 2)
     let sign = s >= 0 ? "" : "-"
 
     let T: string

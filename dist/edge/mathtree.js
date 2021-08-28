@@ -28293,6 +28293,7 @@ exports.isRational = isRational;
  * ```
  */
 function simplifySurd(square) {
+    square = blur(square);
     if (square === 0)
         return [0, 1];
     let factors = [1];
@@ -29000,7 +29001,7 @@ exports.printOrTrigRoots = printOrTrigRoots;
 function printSurd(num) {
     let s = Math.sign(num);
     let v = Math.abs(num);
-    let [p, q] = cal.simplifySurd(cal.blur(v ** 2));
+    let [p, q] = cal.simplifySurd(v ** 2);
     let sign = s >= 0 ? "" : "-";
     let T;
     if (p === 1) {
