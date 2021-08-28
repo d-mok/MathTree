@@ -438,6 +438,21 @@ export class PenCls extends Pencil {
         border(border: number = 0.2): void {
             this._pen.setBorder(border)
         },
+
+        /**
+         * Ser the mode for direction of line label.
+         * @category set
+         * @param setting - The mode, can be 'auto', 'left' or 'right'
+         * @returns void
+         * ```
+         * pen.set.lineLabel('auto')
+         * ```
+         */
+        lineLabel(setting: 'auto' | 'left' | 'right' = 'auto'): void {
+            this._pen.setLineLabel(setting)
+        },
+
+
         /**
          * Reset all pen settings.
          * @category set
@@ -1191,7 +1206,7 @@ export class PenCls extends Pencil {
          * @category text
          * @param linePoints - An array [A,B] for the coordinates of AB.
          * @param text - The string to write.
-         * @param direction - The direction to offset, given as a polar angle,relative to the right normal of AB.
+         * @param direction - The direction to offset, given as a polar angle,relative to the left or right normal of AB.
          * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
          * @returns void
          * ```
@@ -1206,7 +1221,7 @@ export class PenCls extends Pencil {
             if (typeof text === 'number')
                 text = this._pen.getTextWithLengthUnit(text)
 
-            let dir = this._pen.getDirInPixel(A, B) - 90
+            let dir = this._pen.getDirInPixelByLine(A, B)
 
             this.point(M, text, dir + direction, radius);
         },

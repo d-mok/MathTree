@@ -80,7 +80,7 @@ declare module "Core/Ink/index" {
     export function printTrigExp(T: TrigExp): string;
     export function printOrTrigRoots(roots: (number | undefined)[]): string;
     export function printSurd(outside: number, inside: number): string;
-    export function printPolarPoint(polarPoint: PolarPoint): string;
+    export function printPointPolar(point: Point2D): string;
 }
 declare module "Core/index" {
     import { poker as $poker, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D } from 'sapphire-js';
@@ -1581,13 +1581,13 @@ declare function RndTrigValue(func: TrigFunc, angle: number): TrigValue;
 declare function RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '1/tan' | '-1/tan', label: string): TrigExp;
 /**
  * @category Random
- * @return a random polar point at special angle, whose rect coords must be in the form of a*sqrt(b).
+ * @return a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
  * ```
- * RndPolarPoint()
- * // maybe [2*sqrt(3),60]
+ * RndPointPolar()
+ * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
  * ```
  */
-declare function RndPolarPoint(): PolarPoint;
+declare function RndPointPolar(): Point2D;
 declare module "Math/Code/RandomShake.test" { }
 /**
  * @category RandomShake
@@ -1695,11 +1695,11 @@ declare function RndShakeBase(anchor: string): string[];
  * @category RandomShake
  * @return an array of 3 polar points
  * ```
- * RndShakePolarPoint([3,60])
+ * RndShakePointPolar([3,60])
  * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
  * ```
  */
-declare function RndShakePolarPoint(anchor: PolarPoint): PolarPoint[];
+declare function RndShakePointPolar(anchor: Point2D): Point2D[];
 declare module "Math/Code/RandomUtil.test" { }
 /**
  * @category RandomUtil
@@ -2819,6 +2819,16 @@ declare module "Pen/Pen" {
              */
             border(border?: number): void;
             /**
+             * Ser the mode for direction of line label.
+             * @category set
+             * @param setting - The mode, can be 'auto', 'left' or 'right'
+             * @returns void
+             * ```
+             * pen.set.lineLabel('auto')
+             * ```
+             */
+            lineLabel(setting?: 'auto' | 'left' | 'right'): void;
+            /**
              * Reset all pen settings.
              * @category set
              * @returns void
@@ -3363,7 +3373,7 @@ declare module "Pen/Pen" {
              * @category text
              * @param linePoints - An array [A,B] for the coordinates of AB.
              * @param text - The string to write.
-             * @param direction - The direction to offset, given as a polar angle,relative to the right normal of AB.
+             * @param direction - The direction to offset, given as a polar angle,relative to the left or right normal of AB.
              * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
              * @returns void
              * ```

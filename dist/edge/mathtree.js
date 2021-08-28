@@ -24474,7 +24474,6 @@ class List extends Array {
     /**
      * Return a random sample of n elements in this array WITH REPLACEMENT.
      * The returned items are NOT neccessarily unique.
-     * If n > this.length, return `undefined`.
      * @param n - the number of elements requested
      * @returns array of sample elements
      * @example
@@ -26821,6 +26820,7 @@ class Pencil {
         this.$3D_ANGLE = 60;
         this.$3D_DEPTH = 0.5;
         this.$BORDER = 0.2;
+        this.$LINE_LABEL = 'auto';
     }
     /**
      * Set the coordinate range of the canvas.
@@ -26988,6 +26988,9 @@ class Pencil {
     setBorder(border = 0.2) {
         this.$BORDER = border;
     }
+    setLineLabel(setting = 'auto') {
+        this.$LINE_LABEL = setting;
+    }
     setAllDefault() {
         this.setWeight();
         this.setStrokeColor();
@@ -27006,6 +27009,7 @@ class Pencil {
         this.setAngleMode();
         this.setProjector3D();
         this.setBorder();
+        this.setLineLabel();
     }
     moveTo(point) {
         let pt = this.pj(point);
@@ -27523,6 +27527,37 @@ class Pencil {
         if (a2 < a1)
             a2 = a2 + 360;
         return (a1 + a2) / 2;
+    }
+    /**
+     * Find the left or right direction of a line, in the pixel world.
+     * Obey LINE_LABEL.
+     * If LINE_LABEL is 'auto', then away from LABEL_CENTER.
+     * If LINE_LABEL is 'left', then on the left.
+     * If LINE_LABEL is 'right', then on the right.
+     * @param pStart - start point in coordinates
+     * @param pEnd - end point in coordinates
+     */
+    getDirInPixelByLine(pStart, pEnd) {
+        let mode = this.$LINE_LABEL;
+        let left = this.getDirInPixel(pStart, pEnd) + 90;
+        let right = this.getDirInPixel(pStart, pEnd) - 90;
+        if (mode === 'left')
+            return left;
+        if (mode === 'right')
+            return right;
+        if (mode === 'auto') {
+            let cen = this.$LABEL_CENTER;
+            if (typeof cen === 'number')
+                return right;
+            let p1 = this.pj(pStart);
+            let p2 = this.pj(pEnd);
+            let v = vector2D_1.vec2D(p1, p2);
+            let leftDistance = v.rotate(90).add(p1).distanceWith(cen);
+            let rightDistance = v.rotate(-90).add(p1).distanceWith(cen);
+            return leftDistance > rightDistance ? left : right;
+        }
+        console.warn("$LINE_LABEL must be 'left' | 'right' | 'auto'");
+        return right;
     }
     getLabelCenterDirInPixel(point) {
         let pt = this.pj(point);
@@ -28864,7 +28899,7 @@ exports.dice = dice;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.printPolarPoint = exports.printSurd = exports.printOrTrigRoots = exports.printTrigExp = exports.printTrigValue = exports.printCombo = exports.parseDfrac = exports.printDfrac = exports.parseIneq = exports.printIneq = void 0;
+exports.printPointPolar = exports.printSurd = exports.printOrTrigRoots = exports.printTrigExp = exports.printTrigValue = exports.printCombo = exports.parseDfrac = exports.printDfrac = exports.parseIneq = exports.printIneq = void 0;
 function printIneq(greater, equal) {
     if (greater && equal)
         return '\\ge';
@@ -28975,12 +29010,13 @@ function printSurd(outside, inside) {
     }
 }
 exports.printSurd = printSurd;
-function printPolarPoint(polarPoint) {
-    let [r, q] = polarPoint;
-    let [a, b] = cal.simplifySurd(r);
+function printPointPolar(point) {
+    let [r, q] = RectToPol(point);
+    let [a, b] = cal.simplifySurd(r ** 2);
+    q = cal.blur(q);
     return `(${printSurd(a, b)},${q}°)`;
 }
-exports.printPolarPoint = printPolarPoint;
+exports.printPointPolar = printPointPolar;
 
 
 /***/ }),
@@ -31741,20 +31777,20 @@ function RndTrigEqv(result, label) {
 globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.str, owl.str]);
 /**
  * @category Random
- * @return a random polar point at special angle, whose rect coords must be in the form of a*sqrt(b).
+ * @return a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
  * ```
- * RndPolarPoint()
- * // maybe [2*sqrt(3),60]
+ * RndPointPolar()
+ * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
  * ```
  */
-function RndPolarPoint() {
+function RndPointPolar() {
     let angle = RndPick(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330);
     let a = RndEven(2, 6);
     let b = RndPick(1, 2, 3);
     let r = a * Math.sqrt(b);
-    return [r, angle];
+    return PolToRect([r, angle]);
 }
-globalThis.RndPolarPoint = contract(RndPolarPoint).sign([]);
+globalThis.RndPointPolar = contract(RndPointPolar).sign([]);
 
 
 /***/ }),
@@ -32124,19 +32160,19 @@ globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base]);
  * @category RandomShake
  * @return an array of 3 polar points
  * ```
- * RndShakePolarPoint([3,60])
+ * RndShakePointPolar([3,60])
  * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
  * ```
  */
-function RndShakePolarPoint(anchor) {
-    let [r1, q1] = anchor;
+function RndShakePointPolar(anchor) {
+    let [r1, q1] = RectToPol(anchor);
     let [a, b] = cal.simplifySurd(r1 ** 2);
     let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a;
     let angles = [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330];
     let q2 = RndPick(...angles.filter($ => $ !== q1));
-    return RndShuffle([r1, q2], [r2, q1], [r2, q2]);
+    return RndShuffle([r1, q2], [r2, q1], [r2, q2]).map($ => PolToRect($));
 }
-globalThis.RndShakePolarPoint = contract(RndShakePolarPoint).sign([owl.point2D]);
+globalThis.RndShakePointPolar = contract(RndShakePointPolar).sign([owl.point2D]);
 
 
 /***/ }),
@@ -35784,6 +35820,18 @@ class PenCls extends sapphire_js_1.Pencil {
                 this._pen.setBorder(border);
             },
             /**
+             * Ser the mode for direction of line label.
+             * @category set
+             * @param setting - The mode, can be 'auto', 'left' or 'right'
+             * @returns void
+             * ```
+             * pen.set.lineLabel('auto')
+             * ```
+             */
+            lineLabel(setting = 'auto') {
+                this._pen.setLineLabel(setting);
+            },
+            /**
              * Reset all pen settings.
              * @category set
              * @returns void
@@ -36138,7 +36186,7 @@ class PenCls extends sapphire_js_1.Pencil {
              * @category text
              * @param linePoints - An array [A,B] for the coordinates of AB.
              * @param text - The string to write.
-             * @param direction - The direction to offset, given as a polar angle,relative to the right normal of AB.
+             * @param direction - The direction to offset, given as a polar angle,relative to the left or right normal of AB.
              * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
              * @returns void
              * ```
@@ -36151,7 +36199,7 @@ class PenCls extends sapphire_js_1.Pencil {
                 let M = Mid(A, B);
                 if (typeof text === 'number')
                     text = this._pen.getTextWithLengthUnit(text);
-                let dir = this._pen.getDirInPixel(A, B) - 90;
+                let dir = this._pen.getDirInPixelByLine(A, B);
                 this.point(M, text, dir + direction, radius);
             },
             /**
@@ -37857,7 +37905,7 @@ function ParseForPrint(value, signal = "") {
     }
     if (signal === '.') {
         if (owl.point2D(value)) {
-            return ink.printPolarPoint(value);
+            return ink.printPointPolar(value);
         }
     }
     return String(value);

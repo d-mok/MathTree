@@ -375,15 +375,15 @@ test('RndTrigEqv', () => {
 
 
 
-test('RndPolarPoint', () => {
+test('RndPointPolar', () => {
 
     repeat(10, () => {
-        expect(() => RndPolarPoint()[0]).toSpanSame([
-            2, 4, 6,
-            2 * Math.sqrt(2), 4 * Math.sqrt(2), 6 * Math.sqrt(2),
-            2 * Math.sqrt(3), 4 * Math.sqrt(3), 6 * Math.sqrt(3),
+        expect(() => cal.blur(RectToPol(RndPointPolar())[0] ** 2)).toSpanSame([
+            4, 16, 36,
+            8, 32, 72,
+            12, 48, 108
         ])
-        expect(() => RndPolarPoint()[1]).toSpanSame([
+        expect(() => cal.blur(RectToPol(RndPointPolar())[1])).toSpanSame([
             30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330
         ])
     })

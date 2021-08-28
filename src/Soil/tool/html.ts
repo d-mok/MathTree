@@ -304,7 +304,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === '.') {
         if (owl.point2D(value)) {
-            return ink.printPolarPoint(value)
+            return ink.printPointPolar(value)
         }
     }
 

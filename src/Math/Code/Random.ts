@@ -486,17 +486,17 @@ globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.str, owl.str])
 
 /**
  * @category Random
- * @return a random polar point at special angle, whose rect coords must be in the form of a*sqrt(b).
+ * @return a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
  * ```
- * RndPolarPoint()
- * // maybe [2*sqrt(3),60]
+ * RndPointPolar()
+ * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
  * ```
  */
-function RndPolarPoint(): PolarPoint {
+function RndPointPolar(): Point2D {
     let angle = RndPick(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330)
     let a = RndEven(2, 6)
     let b = RndPick(1, 2, 3)
     let r = a * Math.sqrt(b)
-    return [r, angle]
+    return PolToRect([r, angle])
 }
-globalThis.RndPolarPoint = contract(RndPolarPoint).sign([])
+globalThis.RndPointPolar = contract(RndPointPolar).sign([])
