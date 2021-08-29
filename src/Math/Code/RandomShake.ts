@@ -424,7 +424,7 @@ function RndShakePointPolar(anchor: Point2D): Point2D[] {
     let [a, b] = cal.simplifySurd(r1 ** 2)
     let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a
     let angles = list(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330)
-    let q2 = RndPick(...angles.except([q1]))
+    let q2 = angles.except([q1]).draw()!
     return RndShuffle<PolarPoint>([r1, q2], [r2, q1], [r2, q2]).map($ => PolToRect($))
 }
 globalThis.RndShakePointPolar = contract(RndShakePointPolar).sign([owl.point2D])

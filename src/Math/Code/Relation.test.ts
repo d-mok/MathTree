@@ -9,7 +9,7 @@ test('AreDistinct', () => {
     expect(AreDistinct(1, 1, 2)).toBe(false);
     expect(AreDistinct(0, -0)).toBe(false);
     expect(AreDistinct(55, 98, 55, 34)).toBe(false);
-
+    
     expect(AreDistinct(0.1 + 0.2, 0.3)).toBe(false);
 });
 

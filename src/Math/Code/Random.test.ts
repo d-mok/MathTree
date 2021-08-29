@@ -1,8 +1,4 @@
-
-
-
 import { repeat } from '../Jest/JestExtend'
-
 
 
 test('RndN', () => {
@@ -97,15 +93,18 @@ test('RndT', () => {
 
 
 test('RndZ', () => {
+
     repeat(10, () => {
         expect(RndZ(5, 10)).toBeOneOf([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
         expect(RndZ(5, 10)).toBeInteger()
         expect(() => RndZ(5, 10)).toSpanSame([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
     })
+
 });
 
 
 test('RndZs', () => {
+
     repeat(10, () => {
         expect(RndZs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
         expect(RndZs(5, 10, 3)).toAllBeInteger()
@@ -113,6 +112,7 @@ test('RndZs', () => {
         expect(RndZs(5, 10, 3)).toBeDupless()
         expect(() => RndZs(5, 10, 3)).toSpanSame([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10], 1)
     })
+
 });
 
 
@@ -142,17 +142,20 @@ test('RndOdd', () => {
 
 
 test('RndEven', () => {
+
     repeat(10, () => {
         expect(RndEven(5, 10)).toBeOneOf([6, 8, 10])
         expect(RndEven(5, 10)).toBeInteger()
         expect(RndEven(5, 10)).toBeEven()
         expect(() => RndEven(5, 10)).toSpanSame([6, 8, 10])
     })
+
 });
 
 
 
 test('RndPoly', () => {
+
     repeat(10, () => {
         expect(RndPoly(3, 4, 5)[0]).toBeOneOf([1, 2, 3])
         expect(RndPoly(3, 4, 5)[1]).toBeOneOf([1, 2, 3, 4, -1, -2, -3, -4])
@@ -243,15 +246,11 @@ test('RndAngles', () => {
 
 test('RndConvexPolygon', () => {
 
-
     repeat(10, () => {
         let pts = RndConvexPolygon(3, [0, 0], 10, 50)
         let [A, B, C] = pts
         let angles = pts.map($ => Dir([0, 0], $))
         let [a, b, c] = angles.sort((a, b) => a - b)
-        a//?
-        b//?
-        c//?
         let d1 = b - a
         let d2 = c - b
         let d3 = a - c + 360
@@ -263,8 +262,6 @@ test('RndConvexPolygon', () => {
         expect([...A, ...B, ...C]).toAllBeInteger()
         expect(A).toHaveLength(2)
         expect([d1, d2, d3]).toAllBeBetween(40, 360)
-
-
     })
 
 });
@@ -273,7 +270,6 @@ test('RndConvexPolygon', () => {
 
 test('RndData', () => {
 
-
     repeat(10, () => {
         let data = RndData(10, 15, 5)
         expect(data).toAllBeBetween(10, 15)
@@ -281,6 +277,7 @@ test('RndData', () => {
         expect(data).toHaveLength(5)
         expect(data).toSatisfy($ => Mode(...$).length === 1)
     })
+
 });
 
 
@@ -378,12 +375,24 @@ test('RndTrigEqv', () => {
 test('RndPointPolar', () => {
 
     repeat(10, () => {
-        expect(() => cal.blur(RectToPol(RndPointPolar())[0] ** 2)).toSpanSame([
+        function getR2() {
+            let pt = RndPointPolar()
+            let [r, q] = RectToPol(pt)
+            return cal.blur(r ** 2)
+        }
+
+        function getq() {
+            let pt = RndPointPolar()
+            let [r, q] = RectToPol(pt)
+            return cal.blur(q)
+        }
+
+        expect(getR2).toSpanSame([
             4, 16, 36,
             8, 32, 72,
             12, 48, 108
         ])
-        expect(() => cal.blur(RectToPol(RndPointPolar())[1])).toSpanSame([
+        expect(getq).toSpanSame([
             30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330
         ])
     })
