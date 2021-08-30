@@ -38086,9 +38086,12 @@ exports.ParseForPrint = ParseForPrint;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoOptions = void 0;
 const html_1 = __webpack_require__(9870);
+function deepEqual(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+}
 function Produce(source, assigned) {
     return Array.isArray(assigned) && assigned !== source
-        ? RndShuffle(...assigned)
+        ? RndShuffle(...assigned.filter($ => !deepEqual($, source)))
         : RndShake(source);
 }
 function ExecInstructions(instructions, source) {
