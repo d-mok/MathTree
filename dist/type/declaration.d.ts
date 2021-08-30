@@ -1998,6 +1998,23 @@ declare function LowerQ(...nums: number[]): number;
 declare function UpperQ(...nums: number[]): number;
 /**
  * @category Stat
+ * @return range of nums
+ * ```
+ * StatRange(1,2,3,4,5) // 4
+ * StatRange(1,2,3,4,5,7) // 6
+ * ```
+ */
+declare function StatRange(...nums: number[]): number;
+/**
+ * @category Stat
+ * @return inter-quartile range of nums
+ * ```
+ * IQR(1,2,3,4,5,6) // 3
+ * ```
+ */
+declare function IQR(...nums: number[]): number;
+/**
+ * @category Stat
  * @return count frequency of item in array
  * ```
  * Freq([2,3,4,1,5,1,1,4,5],1) // 3

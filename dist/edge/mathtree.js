@@ -32759,6 +32759,29 @@ function UpperQ(...nums) {
     return toData(nums).upperQuartile();
 }
 globalThis.UpperQ = contract(UpperQ).sign([owl.num]);
+/**
+ * @category Stat
+ * @return range of nums
+ * ```
+ * StatRange(1,2,3,4,5) // 4
+ * StatRange(1,2,3,4,5,7) // 6
+ * ```
+ */
+function StatRange(...nums) {
+    return toData(nums).range();
+}
+globalThis.StatRange = contract(StatRange).sign([owl.num]);
+/**
+ * @category Stat
+ * @return inter-quartile range of nums
+ * ```
+ * IQR(1,2,3,4,5,6) // 3
+ * ```
+ */
+function IQR(...nums) {
+    return toData(nums).IQR();
+}
+globalThis.IQR = contract(IQR).sign([owl.num]);
 // /**
 //  * @category Stat
 //  * @deprecated
@@ -38135,12 +38158,9 @@ exports.ParseForPrint = ParseForPrint;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoOptions = void 0;
 const html_1 = __webpack_require__(9870);
-function deepEqual(a, b) {
-    return JSON.stringify(a) === JSON.stringify(b);
-}
 function Produce(source, assigned) {
     return Array.isArray(assigned) && assigned !== source
-        ? RndShuffle(...assigned.filter($ => !deepEqual($, source)))
+        ? RndShuffle(...assigned)
         : RndShake(source);
 }
 function ExecInstructions(instructions, source) {

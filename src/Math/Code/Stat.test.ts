@@ -96,6 +96,23 @@ test('UpperQ', () => {
 
 
 
+
+test('StatRange', () => {
+    expect(StatRange(1, 2, 3, 4, 50)).toBe(49);
+    expect(StatRange(1, 2, 3, 4, 5, 7)).toBe(6);
+    expect(StatRange(1, 2, 3, 4, 5, 7, 10)).toBe(9);
+    expect(StatRange(1, 2, 3, 4, 5, 7, 10, 20)).toBe(19);
+});
+
+
+test('IQR', () => {
+    expect(IQR(1, 2, 3, 4, 50)).toBe(25.5);
+    expect(IQR(1, 2, 3, 4, 5, 7)).toBe(3);
+    expect(IQR(1, 2, 3, 4, 5, 7, 10)).toBe(5);
+    expect(IQR(1, 2, 3, 4, 5, 7, 10, 20)).toBe(6);
+});
+
+
 // test('Frequency', () => {
 //     expect(Frequency(1)(2, 3, 4, 1, 5, 1, 1, 4, 5)).toBe(3);
 // });

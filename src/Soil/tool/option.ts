@@ -1,15 +1,9 @@
 import { Dict } from '../cls'
 import { QuestionHTML } from './html'
 
-
-function deepEqual(a: any, b: any): boolean {
-    return JSON.stringify(a) === JSON.stringify(b)
-}
-
-
 function Produce(source: any, assigned: any): (typeof source)[] {
     return Array.isArray(assigned) && assigned !== source
-        ? RndShuffle(...assigned.filter($ => !deepEqual($, source)))
+        ? RndShuffle(...assigned)
         : RndShake(source)
 }
 

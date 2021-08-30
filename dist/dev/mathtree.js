@@ -32759,6 +32759,29 @@ function UpperQ(...nums) {
     return toData(nums).upperQuartile();
 }
 globalThis.UpperQ = contract(UpperQ).sign([owl.num]);
+/**
+ * @category Stat
+ * @return range of nums
+ * ```
+ * StatRange(1,2,3,4,5) // 4
+ * StatRange(1,2,3,4,5,7) // 6
+ * ```
+ */
+function StatRange(...nums) {
+    return toData(nums).range();
+}
+globalThis.StatRange = contract(StatRange).sign([owl.num]);
+/**
+ * @category Stat
+ * @return inter-quartile range of nums
+ * ```
+ * IQR(1,2,3,4,5,6) // 3
+ * ```
+ */
+function IQR(...nums) {
+    return toData(nums).IQR();
+}
+globalThis.IQR = contract(IQR).sign([owl.num]);
 // /**
 //  * @category Stat
 //  * @deprecated
