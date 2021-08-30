@@ -188,7 +188,7 @@ test('FreqTable', () => {
 
 test('PairTable', () => {
     expect(PairTable('ab', '$cd', [1, 2, 3], [4, 5, 6, 7], (r, c) => r + c))
-        .toBe(String.raw`\begin{matrix} & cd \\ \text{ab} & {\begin{array}{c|ccc} & 4 & 5 & 6 & 7 \\ \hline 1 & 5 & 6 & 7 & 8 \\ 2 & 6 & 7 & 8 & 9 \\ 3 & 7 & 8 & 9 & 10 \\ \end{array} } \end{matrix}`);
+        .toBe(String.raw`\begin{matrix} & cd \\ \text{ab} & {\begin{array}{c|ccc} & 4 & 5 & 6 & 7 \\ \hline  1 & 5 & 6 & 7 & 8 \\ 2 & 6 & 7 & 8 & 9 \\ 3 & 7 & 8 & 9 & 10 \\ \end{array} } \end{matrix}`);
 
 });
 

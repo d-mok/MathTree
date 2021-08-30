@@ -33372,7 +33372,7 @@ function PairTable(rowTitle, colTitle, rowRange, colRange, cellMapper) {
     T += `\\end{matrix}`;
     return T;
 }
-globalThis.PairTable = contract(PairTable).sign([owl.str, owl.str]);
+globalThis.PairTable = contract(PairTable).sign([owl.str, owl.str, owl.array, owl.array, owl.pass]);
 
 
 /***/ }),
