@@ -1058,7 +1058,9 @@ export class AutoPenCls {
             showBar?: boolean,
             showLine?: boolean
         }) {
+        
         const pen = new Pen();
+
         let endGap = barWidth + barGap / 2
         let width = endGap + categories.length * (barWidth + barGap) + endGap
         let max = Max(...data)
@@ -1278,8 +1280,8 @@ export class AutoPenCls {
         let C_: Point2D = [Q3, 0]
 
 
-        if (start === undefined) start = Q0 - (Q4 - Q0) * 0.2
-        if (end === undefined) end = Q4 + (Q4 - Q0) * 0.2
+        start ??= Q0 - (Q4 - Q0) * 0.2
+        end ??= Q4 + (Q4 - Q0) * 0.2
 
         pen.range.set([start, end], [-(t + 1), t + 1]);
         pen.size.set(size, 1)

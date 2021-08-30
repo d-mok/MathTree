@@ -158,6 +158,12 @@ test('UpperQAt', () => {
     expect(UpperQAt(20)).toBe(15.5)
 });
 
+test('ListRange', () => {
+    expect(ListRange(1, 1, 4, 4, 3, 3, 3)).toEqual([1, 2, 3, 4])
+});
+
+
+
 test('Freqs', () => {
     expect(Freqs([1, 1, 4, 4, 3, 3, 3], [1, 2, 3, 4])).toEqual([2, 0, 3, 2])
 });

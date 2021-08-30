@@ -159,27 +159,27 @@ test('PrintTable', () => {
         [
             ['a', 2, 3],
             ['b', 5, 6],
-            ['c', 7, 8],
-            ['d', 12, 13]
+            ['$ c', 7, 8],
+            ['$ d', 12, 13]
         ],
         '|c::c:c|',
         '|r||r|rr|',
-    )).toBe(String.raw`\begin{array}{|c::c:c|} \hline a & 2 & 3 \\  \hline  \hline b & 5 & 6 \\  \hline c & 7 & 8 \\ d & 12 & 13 \\  \hline  \end{array}`);
+    )).toBe(String.raw`\begin{array}{|c::c:c|} \hline \text{a} & 2 & 3 \\  \hline  \hline \text{b} & 5 & 6 \\  \hline c & 7 & 8 \\ d & 12 & 13 \\  \hline  \end{array}`);
 
     expect(PrintTable(
         [
             ['a', 2, 3],
             ['b', 5, 6],
-            ['c', 7, 8],
-            ['d', 12, 13]
+            ['$ c', 7, 8],
+            ['$ d', 12, 13]
         ]
-    )).toBe(String.raw`\begin{array}{|c|c|c|} \hline a & 2 & 3 \\  \hline b & 5 & 6 \\  \hline c & 7 & 8 \\  \hline d & 12 & 13 \\  \hline  \end{array}`);
+    )).toBe(String.raw`\begin{array}{|c|c|c|} \hline \text{a} & 2 & 3 \\  \hline \text{b} & 5 & 6 \\  \hline c & 7 & 8 \\  \hline d & 12 & 13 \\  \hline  \end{array}`);
 });
 
 
 
 test('FreqTable', () => {
-    expect(FreqTable([1, 1, 4, 4, 3, 3, 3], 'num', 'count')).toBe(String.raw`\begin{array}{|c|c|c|c|c|} \hline  \text{num}  & 1 & 2 & 3 & 4 \\  \hline  \text{count}  & 2 & 0 & 3 & 2 \\  \hline  \end{array}`);
+    expect(FreqTable([1, 1, 4, 4, 3, 3, 3], '$ x', 'count')).toBe(String.raw`\begin{array}{|c|c|c|c|c|} \hline x & 1 & 2 & 3 & 4 \\  \hline \text{count} & 2 & 0 & 3 & 2 \\  \hline  \end{array}`);
 
 });
 

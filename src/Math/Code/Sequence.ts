@@ -7,11 +7,7 @@
 * ```
 */
 function ListIntegers(start: number, end: number): number[] {
-    let arr = [];
-    for (let i = start; i <= end; i++) {
-        arr.push(i);
-    }
-    return arr;
+    return cal.range(start, end)
 }
 globalThis.ListIntegers = contract(ListIntegers).seal({
     arg: [owl.num],

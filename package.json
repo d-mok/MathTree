@@ -37,7 +37,7 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "katex": "^0.13.3",
-    "sapphire-js": "^1.0.42"
+    "katex": "^0.13.16",
+    "sapphire-js": "^1.0.43"
   }
 }

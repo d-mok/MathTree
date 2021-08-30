@@ -398,15 +398,23 @@ function PrintTable(content: (string | number)[][], columns?: string, rows?: str
 
     let nRow = content.length
     rows = rows ?? Array(nRow + 1).fill("|").join("r")
-    let rowsArr = rows.split('r').map($ => $.replace(/\|/g, " \\hline ").replace(/\:/g, " \\hdashline "))
+    let rowsArr = rows.split('r').map($ => $
+        .replace(/\|/g, " \\hline ")
+        .replace(/\:/g, " \\hdashline ")
+    )
 
     let T = ""
     T += `\\begin{array}{${columns}}`
 
+    function parseCell(cell: string | number): string {
+        if (typeof cell === 'number') return String(cell)
+        return cell.startsWith('$ ') ? cell.substring(2) : `\\text{${cell}}`
+    }
+
     let i = 0
     for (let row of content) {
         T += rowsArr[i] ?? ''
-        T += row.join(" & ") + " \\\\ "
+        T += row.map(parseCell).join(" & ") + " \\\\ "
         i++
     }
     T += rowsArr[i] ?? ''
@@ -431,8 +439,6 @@ globalThis.PrintTable = contract(PrintTable).sign([owl.pass, owl.str, owl.str])
 function FreqTable(data: number[], valueLabel: string = "data", freqLabel: string = "frequency"): string {
     let values = ListIntegers(Math.min(...data), Math.max(...data))
     let freqs = Freqs(data, values)
-    valueLabel = ' \\text{' + valueLabel + '} '
-    freqLabel = ' \\text{' + freqLabel + '} '
     return PrintTable(
         [
             [valueLabel, ...values],

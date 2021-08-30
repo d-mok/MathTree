@@ -83,18 +83,16 @@ export function printOrTrigRoots(roots: (number | undefined)[]): string {
 
 
 export function printSurd(num: number): string {
-    let s = Math.sign(num)
-    let v = Math.abs(num)
-    let [p, q] = cal.simplifySurd(v ** 2)
-    let sign = s >= 0 ? "" : "-"
-
+    let [p, q] = cal.toSurd(num)
     let T: string
     if (p === 1) {
         T = q === 1 ? '1' : '\\sqrt{' + q + '}'
+    } else if (p === -1) {
+        T = q === 1 ? '-1' : '-\\sqrt{' + q + '}'
     } else {
         T = q === 1 ? p.toString() : p + '\\sqrt{' + q + '}'
     }
-    return sign + T
+    return T
 }
 
 export function printPointPolar(point: Point2D): string {
