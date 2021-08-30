@@ -118,6 +118,12 @@ test('StdDev', () => {
 });
 
 
+test('ZScore', () => {
+    expect(ZScore(80, 60, 10)).toBe(2)
+    expect(ZScore(40, 60, 10)).toBe(-2)
+});
+
+
 
 test('MedianAt', () => {
     expect(MedianAt(12)).toBe(6.5)

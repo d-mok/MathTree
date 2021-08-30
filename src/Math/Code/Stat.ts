@@ -193,6 +193,22 @@ globalThis.StdDev = contract(StdDev).sign([owl.num])
 
 /**
  * @category Stat
+ * @return z-score of `num` in a data set with `mean` and `SD`
+ * ```
+ * ZScore(80,60,10) \\ 2
+ * ```
+ */
+function ZScore(num: number, mean: number, SD: number): number {
+    return (num - mean) / SD
+}
+globalThis.ZScore = contract(ZScore).sign([owl.num])
+
+
+
+
+
+/**
+ * @category Stat
  * @return the location of median
  * ```
  * MedianAt(12) \\ 6.5

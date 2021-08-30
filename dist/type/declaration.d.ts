@@ -2021,6 +2021,14 @@ declare function Mode(...nums: number[]): number[];
 declare function StdDev(...nums: number[]): number;
 /**
  * @category Stat
+ * @return z-score of `num` in a data set with `mean` and `SD`
+ * ```
+ * ZScore(80,60,10) \\ 2
+ * ```
+ */
+declare function ZScore(num: number, mean: number, SD: number): number;
+/**
+ * @category Stat
  * @return the location of median
  * ```
  * MedianAt(12) \\ 6.5

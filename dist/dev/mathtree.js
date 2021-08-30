@@ -32805,6 +32805,17 @@ function StdDev(...nums) {
 globalThis.StdDev = contract(StdDev).sign([owl.num]);
 /**
  * @category Stat
+ * @return z-score of `num` in a data set with `mean` and `SD`
+ * ```
+ * ZScore(80,60,10) \\ 2
+ * ```
+ */
+function ZScore(num, mean, SD) {
+    return (num - mean) / SD;
+}
+globalThis.ZScore = contract(ZScore).sign([owl.num]);
+/**
+ * @category Stat
  * @return the location of median
  * ```
  * MedianAt(12) \\ 6.5
@@ -35471,10 +35482,8 @@ class AutoPenCls {
         let A_ = [Q1, 0];
         let B_ = [Q2, 0];
         let C_ = [Q3, 0];
-        if (start === undefined)
-            start = Q0 - (Q4 - Q0) * 0.2;
-        if (end === undefined)
-            end = Q4 + (Q4 - Q0) * 0.2;
+        start ?? (start = Q0 - (Q4 - Q0) * 0.2);
+        end ?? (end = Q4 + (Q4 - Q0) * 0.2);
         pen.range.set([start, end], [-(t + 1), t + 1]);
         pen.size.set(size, 1);
         if (showTick) {

@@ -111,6 +111,7 @@ globalThis.RoundDown = contract(RoundDown).sign([owl.num, owl.positiveInt])
  * @category Numeracy
  * @return the number rounded off to given decimal place.
  * ```
+ * Fix(12345.678) // round to integer by default, return 12346
  * Fix(12345.678,0) // round to integer, return 12346
  * Fix(12345.678,2) // round to 2 dp, return 12345.68
  * Fix(12345.678,-2) // round to hundred, return 12300
@@ -126,6 +127,7 @@ globalThis.Fix = contract(Fix).sign([owl.num, owl.int])
  * @category Numeracy
  * @return the number rounded up to given decimal place.
  * ```
+ * FixUp(12.34) // round to integer by default, return 13
  * FixUp(12.34,0) // round to integer, return 13
  * FixUp(12.34,1) // round to 1 dp, return 12.4
  * FixUp(12.34,-1) // round to ten, return 20
@@ -143,6 +145,7 @@ globalThis.FixUp = contract(FixUp).sign([owl.num, owl.int])
  * @category Numeracy
  * @return the number rounded down to given decimal place.
  * ```
+ * FixDown(17.89) // round to integer by default, return 17
  * FixDown(17.89,0) // round to integer, return 17
  * FixDown(17.89,1) // round to 1 dp, return 17.8
  * FixDown(17.89,-1) // round to ten, return 10
