@@ -378,14 +378,14 @@ globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.objec
 
 /**
  * @category Text
- * @return print a latex table by array environment
+ * @return Print a latex table by array environment. If a cell is a string starting with `$` then it will be printed as is, otherwise it will be put in `\text`.
  * ```
  * PrintTable(
  *     [
- *         ['a', 2, 3],
+ *         ['a', 2, 3],         // 'a' will be printed as '\text{a}'
  *         ['b', 5, 6],
- *         ['c', 7, 8],
- *         ['d', 12, 13]
+ *         ['$c', 7, 8],       // 'c' will be printed as is
+ *         ['$d', 12, 13]
  *     ],
  *     '|c::c:c|',
  *     '|r||r|rr|',
@@ -394,10 +394,10 @@ globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.objec
  */
 function PrintTable(content: (string | number)[][], columns?: string, rows?: string): string {
     let nCol = Math.max(...content.map($ => $.length))
-    columns = columns ?? Array(nCol + 1).fill("|").join("c")
+    columns ??= Array(nCol + 1).fill("|").join("c")
 
     let nRow = content.length
-    rows = rows ?? Array(nRow + 1).fill("|").join("r")
+    rows ??= Array(nRow + 1).fill("|").join("r")
     let rowsArr = rows.split('r').map($ => $
         .replace(/\|/g, " \\hline ")
         .replace(/\:/g, " \\hdashline ")
@@ -408,7 +408,7 @@ function PrintTable(content: (string | number)[][], columns?: string, rows?: str
 
     function parseCell(cell: string | number): string {
         if (typeof cell === 'number') return String(cell)
-        return cell.startsWith('$ ') ? cell.substring(2) : `\\text{${cell}}`
+        return cell.startsWith('$') ? cell.substring(1) : `\\text{${cell}}`
     }
 
     let i = 0

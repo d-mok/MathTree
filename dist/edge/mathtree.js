@@ -31269,6 +31269,7 @@ globalThis.RoundDown = contract(RoundDown).sign([owl.num, owl.positiveInt]);
  * @category Numeracy
  * @return the number rounded off to given decimal place.
  * ```
+ * Fix(12345.678) // round to integer by default, return 12346
  * Fix(12345.678,0) // round to integer, return 12346
  * Fix(12345.678,2) // round to 2 dp, return 12345.68
  * Fix(12345.678,-2) // round to hundred, return 12300
@@ -31283,6 +31284,7 @@ globalThis.Fix = contract(Fix).sign([owl.num, owl.int]);
  * @category Numeracy
  * @return the number rounded up to given decimal place.
  * ```
+ * FixUp(12.34) // round to integer by default, return 13
  * FixUp(12.34,0) // round to integer, return 13
  * FixUp(12.34,1) // round to 1 dp, return 12.4
  * FixUp(12.34,-1) // round to ten, return 20
@@ -31297,6 +31299,7 @@ globalThis.FixUp = contract(FixUp).sign([owl.num, owl.int]);
  * @category Numeracy
  * @return the number rounded down to given decimal place.
  * ```
+ * FixDown(17.89) // round to integer by default, return 17
  * FixDown(17.89,0) // round to integer, return 17
  * FixDown(17.89,1) // round to 1 dp, return 17.8
  * FixDown(17.89,-1) // round to ten, return 10
@@ -33265,14 +33268,14 @@ function PrimeFactorize(val, { hcf = false, lcm = false, multiply = false }) {
 globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.object]);
 /**
  * @category Text
- * @return print a latex table by array environment
+ * @return Print a latex table by array environment. If a cell is a string starting with `$` then it will be printed as is, otherwise it will be put in `\text`.
  * ```
  * PrintTable(
  *     [
- *         ['a', 2, 3],
+ *         ['a', 2, 3],         // 'a' will be printed as '\text{a}'
  *         ['b', 5, 6],
- *         ['c', 7, 8],
- *         ['d', 12, 13]
+ *         ['$c', 7, 8],       // 'c' will be printed as is
+ *         ['$d', 12, 13]
  *     ],
  *     '|c::c:c|',
  *     '|r||r|rr|',
@@ -33281,9 +33284,9 @@ globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.objec
  */
 function PrintTable(content, columns, rows) {
     let nCol = Math.max(...content.map($ => $.length));
-    columns = columns ?? Array(nCol + 1).fill("|").join("c");
+    columns ?? (columns = Array(nCol + 1).fill("|").join("c"));
     let nRow = content.length;
-    rows = rows ?? Array(nRow + 1).fill("|").join("r");
+    rows ?? (rows = Array(nRow + 1).fill("|").join("r"));
     let rowsArr = rows.split('r').map($ => $
         .replace(/\|/g, " \\hline ")
         .replace(/\:/g, " \\hdashline "));
@@ -33292,7 +33295,7 @@ function PrintTable(content, columns, rows) {
     function parseCell(cell) {
         if (typeof cell === 'number')
             return String(cell);
-        return cell.startsWith('$ ') ? cell.substring(2) : `\\text{${cell}}`;
+        return cell.startsWith('$') ? cell.substring(1) : `\\text{${cell}}`;
     }
     let i = 0;
     for (let row of content) {

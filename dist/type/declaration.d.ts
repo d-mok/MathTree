@@ -1278,6 +1278,7 @@ declare function RoundDown(num: number, sigfig?: number): number;
  * @category Numeracy
  * @return the number rounded off to given decimal place.
  * ```
+ * Fix(12345.678) // round to integer by default, return 12346
  * Fix(12345.678,0) // round to integer, return 12346
  * Fix(12345.678,2) // round to 2 dp, return 12345.68
  * Fix(12345.678,-2) // round to hundred, return 12300
@@ -1288,6 +1289,7 @@ declare function Fix(num: number, dp?: number): number;
  * @category Numeracy
  * @return the number rounded up to given decimal place.
  * ```
+ * FixUp(12.34) // round to integer by default, return 13
  * FixUp(12.34,0) // round to integer, return 13
  * FixUp(12.34,1) // round to 1 dp, return 12.4
  * FixUp(12.34,-1) // round to ten, return 20
@@ -1298,6 +1300,7 @@ declare function FixUp(num: number, dp?: number): number;
  * @category Numeracy
  * @return the number rounded down to given decimal place.
  * ```
+ * FixDown(17.89) // round to integer by default, return 17
  * FixDown(17.89,0) // round to integer, return 17
  * FixDown(17.89,1) // round to 1 dp, return 17.8
  * FixDown(17.89,-1) // round to ten, return 10
@@ -2193,14 +2196,14 @@ declare function PrimeFactorize(val: {
 }): string;
 /**
  * @category Text
- * @return print a latex table by array environment
+ * @return Print a latex table by array environment. If a cell is a string starting with `$` then it will be printed as is, otherwise it will be put in `\text`.
  * ```
  * PrintTable(
  *     [
- *         ['a', 2, 3],
+ *         ['a', 2, 3],         // 'a' will be printed as '\text{a}'
  *         ['b', 5, 6],
- *         ['c', 7, 8],
- *         ['d', 12, 13]
+ *         ['$c', 7, 8],       // 'c' will be printed as is
+ *         ['$d', 12, 13]
  *     ],
  *     '|c::c:c|',
  *     '|r||r|rr|',
