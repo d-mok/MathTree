@@ -33270,7 +33270,7 @@ globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.objec
  * @category Text
  * @return Print a latex table by array environment. If a cell is a string starting with `$` then it will be printed as is, otherwise it will be put in `\text`.
  * ```
- * PrintTable(
+ * Table(
  *     [
  *         ['a', 2, 3],         // 'a' will be printed as '\text{a}'
  *         ['b', 5, 6],
@@ -33282,7 +33282,7 @@ globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.objec
  * )
  * ```
  */
-function PrintTable(content, columns, rows) {
+function Table(content, columns, rows) {
     let nCol = Math.max(...content.map($ => $.length));
     columns ?? (columns = Array(nCol + 1).fill("|").join("c"));
     let nRow = content.length;
@@ -33307,7 +33307,7 @@ function PrintTable(content, columns, rows) {
     T += ` \\end{array}`;
     return T;
 }
-globalThis.PrintTable = contract(PrintTable).sign([owl.pass, owl.str, owl.str]);
+globalThis.Table = contract(Table).sign([owl.pass, owl.str, owl.str]);
 /**
  * @category Text
  * @return print a latex frequency table
@@ -33318,12 +33318,61 @@ globalThis.PrintTable = contract(PrintTable).sign([owl.pass, owl.str, owl.str]);
 function FreqTable(data, valueLabel = "data", freqLabel = "frequency") {
     let values = ListIntegers(Math.min(...data), Math.max(...data));
     let freqs = Freqs(data, values);
-    return PrintTable([
+    return Table([
         [valueLabel, ...values],
         [freqLabel, ...freqs]
     ]);
 }
 globalThis.FreqTable = contract(FreqTable).sign([owl.ntuple, owl.str, owl.str]);
+/**
+ * @category Text
+ * @return print a table showing cartisian product of two items.
+ * ```
+ * PairTable(
+ *      'first',
+ *      'second',
+ *       [1,2,3,4,5,6],
+ *       [1,2,3,4,5,6],
+ *       (r,c)=>r+c
+ * )
+ * // a table showing the sum of two dices
+ * ```
+ */
+function PairTable(rowTitle, colTitle, rowRange, colRange, cellMapper) {
+    function parseCell(cell) {
+        if (typeof cell === 'number')
+            return String(cell);
+        return cell.startsWith('$') ? cell.substring(1) : `\\text{${cell}}`;
+    }
+    colTitle = parseCell(colTitle);
+    rowTitle = parseCell(rowTitle);
+    function cellMap(r, c) {
+        let val = cellMapper(r, c);
+        if (typeof val === 'number')
+            return String(val);
+        if (typeof val === 'string')
+            return val;
+        if (typeof val === 'boolean')
+            return val ? '✔' : '✘';
+        return String(val);
+    }
+    let T = "";
+    T += '\\begin{matrix}';
+    T += ` & ${colTitle} \\\\`;
+    T += ` ${rowTitle} & {`;
+    T += `\\begin{array}{c|ccc}`;
+    T += ` & ` + colRange.join(' & ') + ' \\\\ \\hline ';
+    for (let r of rowRange) {
+        T += ' ' + String(r) + ' & ';
+        T += colRange.map(c => cellMap(r, c)).join(' & ');
+        T += ' \\\\';
+    }
+    T += ' \\end{array}';
+    T += ` } `;
+    T += `\\end{matrix}`;
+    return T;
+}
+globalThis.PairTable = contract(PairTable).sign([owl.str, owl.str]);
 
 
 /***/ }),

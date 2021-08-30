@@ -154,8 +154,8 @@ test('PrimeFactorize', () => {
 
 
 
-test('PrintTable', () => {
-    expect(PrintTable(
+test('Table', () => {
+    expect(Table(
         [
             ['a', 2, 3],
             ['b', 5, 6],
@@ -166,7 +166,7 @@ test('PrintTable', () => {
         '|r||r|rr|',
     )).toBe(String.raw`\begin{array}{|c::c:c|} \hline \text{a} & 2 & 3 \\  \hline  \hline \text{b} & 5 & 6 \\  \hline c & 7 & 8 \\ d & 12 & 13 \\  \hline  \end{array}`);
 
-    expect(PrintTable(
+    expect(Table(
         [
             ['a', 2, 3],
             ['b', 5, 6],
@@ -180,6 +180,15 @@ test('PrintTable', () => {
 
 test('FreqTable', () => {
     expect(FreqTable([1, 1, 4, 4, 3, 3, 3], '$x', 'count')).toBe(String.raw`\begin{array}{|c|c|c|c|c|} \hline x & 1 & 2 & 3 & 4 \\  \hline \text{count} & 2 & 0 & 3 & 2 \\  \hline  \end{array}`);
+
+});
+
+
+
+
+test('PairTable', () => {
+    expect(PairTable('ab', '$cd', [1, 2, 3], [4, 5, 6, 7], (r, c) => r + c))
+        .toBe(String.raw`\begin{matrix} & cd \\ \text{ab} & {\begin{array}{c|ccc} & 4 & 5 & 6 & 7 \\ \hline 1 & 5 & 6 & 7 & 8 \\ 2 & 6 & 7 & 8 & 9 \\ 3 & 7 & 8 & 9 & 10 \\ \end{array} } \end{matrix}`);
 
 });
 

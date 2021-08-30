@@ -2198,7 +2198,7 @@ declare function PrimeFactorize(val: {
  * @category Text
  * @return Print a latex table by array environment. If a cell is a string starting with `$` then it will be printed as is, otherwise it will be put in `\text`.
  * ```
- * PrintTable(
+ * Table(
  *     [
  *         ['a', 2, 3],         // 'a' will be printed as '\text{a}'
  *         ['b', 5, 6],
@@ -2210,7 +2210,7 @@ declare function PrimeFactorize(val: {
  * )
  * ```
  */
-declare function PrintTable(content: (string | number)[][], columns?: string, rows?: string): string;
+declare function Table(content: (string | number)[][], columns?: string, rows?: string): string;
 /**
  * @category Text
  * @return print a latex frequency table
@@ -2219,6 +2219,21 @@ declare function PrintTable(content: (string | number)[][], columns?: string, ro
  * ```
  */
 declare function FreqTable(data: number[], valueLabel?: string, freqLabel?: string): string;
+/**
+ * @category Text
+ * @return print a table showing cartisian product of two items.
+ * ```
+ * PairTable(
+ *      'first',
+ *      'second',
+ *       [1,2,3,4,5,6],
+ *       [1,2,3,4,5,6],
+ *       (r,c)=>r+c
+ * )
+ * // a table showing the sum of two dices
+ * ```
+ */
+declare function PairTable<R, C>(rowTitle: string, colTitle: string, rowRange: R[], colRange: C[], cellMapper: (r: R, c: C) => string | number | boolean): string;
 /**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
