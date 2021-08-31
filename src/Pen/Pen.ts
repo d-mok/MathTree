@@ -721,6 +721,39 @@ export class PenCls extends Pencil {
 
 
     /**
+     * Draw a guide line from `point` to the x-axis.
+     * @category draw
+     * @param point - from which point to draw the guide line
+     * @param label - the label on the x-axis
+     * @returns void
+     */
+    guideX(point: Point2D, label?: string) {
+        let [x, y] = point
+        this.dash([x, 0], point)
+        if (label !== undefined) {
+            this.cutX(x)
+            this.label.point([x, 0], label, y >= 0 ? 270 : 90)
+        }
+    }
+
+
+    /**
+     * Draw a guide line from `point` to the y-axis.
+     * @category draw
+     * @param point - from which point to draw the guide line
+     * @param label - the label on the y-axis
+     * @returns void
+     */
+    guideY(point: Point2D, label?: string) {
+        let [x, y] = point
+        this.dash([0, y], point)
+        if (label !== undefined) {
+            this.cutY(y)
+            this.label.point([0, y], label, x >= 0 ? 180 : 0)
+        }
+    }
+
+    /**
      * Draw a circle or arc.
      * @category draw
      * @param center - The coordinates [x,y] of center.

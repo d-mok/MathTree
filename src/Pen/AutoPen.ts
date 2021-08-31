@@ -1143,72 +1143,72 @@ export class AutoPenCls {
 
 
 
-    /**
-     * A pie chart
-     * @deprecated
-     * @category tool
-     * @returns void
-     * ```
-     * let pen = new AutoPen()
-     * pen.StemAndLeaf({
-     *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-     *   labels: [2,'x',6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-     *   stemTitle: "Stem (10 units)",
-     *   leafTitle: "Leaf (1 unit)"
-     * })
-     * ```
-     */
-    StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }: {
-        data: number[],
-        labels?: string[],
-        stemTitle?: string,
-        leafTitle?: string
-    }) {
-        const pen = new Pen();
+    // /**
+    //  * A pie chart
+    //  * @deprecated
+    //  * @category tool
+    //  * @returns void
+    //  * ```
+    //  * let pen = new AutoPen()
+    //  * pen.StemAndLeaf({
+    //  *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+    //  *   labels: [2,'x',6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+    //  *   stemTitle: "Stem (10 units)",
+    //  *   leafTitle: "Leaf (1 unit)"
+    //  * })
+    //  * ```
+    //  */
+    // StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }: {
+    //     data: number[],
+    //     labels?: string[],
+    //     stemTitle?: string,
+    //     leafTitle?: string
+    // }) {
+    //     const pen = new Pen();
 
-        labels ??= [...data].map(x => x.toString())
-        labels = labels.map(x => x.toString().split('').reverse()[0])
+    //     labels ??= [...data].map(x => x.toString())
+    //     labels = labels.map(x => x.toString().split('').reverse()[0])
 
-        let width = data.length + 2
-        let height = Ceil(Max(...data) / 10) + 2
+    //     let width = data.length + 2
+    //     let height = Ceil(Max(...data) / 10) + 2
 
-        pen.range.set([-5, width], [-height, 2]);
-        pen.size.resolution(0.17)
+    //     pen.range.set([-5, width], [-height, 2]);
+    //     pen.size.resolution(0.17)
 
-        pen.line([0, -1], [0, 2])
-        pen.line([-3, 0], [1, 0])
+    //     pen.line([0, -1], [0, 2])
+    //     pen.line([-3, 0], [1, 0])
 
-        pen.set.textAlign('left')
-        pen.write([0.5, 1], leafTitle)
+    //     pen.set.textAlign('left')
+    //     pen.write([0.5, 1], leafTitle)
 
-        pen.set.textAlign('right')
-        pen.write([-0.5, 1], stemTitle)
-        pen.set.textAlign()
+    //     pen.set.textAlign('right')
+    //     pen.write([-0.5, 1], stemTitle)
+    //     pen.set.textAlign()
 
-        let initTen = Floor(Min(...data) / 10)
-        let endTen = Floor(Max(...data) / 10)
+    //     let initTen = Floor(Min(...data) / 10)
+    //     let endTen = Floor(Max(...data) / 10)
 
-        let ten = initTen
-        for (let j = -1; ten <= endTen; j--) {
-            pen.write([-1, j], ten.toString())
-            pen.line([0, j], [0, j - 1])
+    //     let ten = initTen
+    //     for (let j = -1; ten <= endTen; j--) {
+    //         pen.write([-1, j], ten.toString())
+    //         pen.line([0, j], [0, j - 1])
 
-            let i = 1
-            for (let m = 0; m < data.length; m++) {
-                if (Floor(data[m] / 10) === ten) {
-                    if (!IsNum(Number(labels[m])))
-                        pen.set.textItalic(true)
-                    pen.write([i, j], labels[m])
-                    pen.set.textItalic()
-                    pen.line([i, 0], [i + 1, 0])
-                    i++
-                }
-            }
-            ten += 1
-        }
-        pen.autoCrop();
-        this.pen = pen;
-    }
+    //         let i = 1
+    //         for (let m = 0; m < data.length; m++) {
+    //             if (Floor(data[m] / 10) === ten) {
+    //                 if (!IsNum(Number(labels[m])))
+    //                     pen.set.textItalic(true)
+    //                 pen.write([i, j], labels[m])
+    //                 pen.set.textItalic()
+    //                 pen.line([i, 0], [i + 1, 0])
+    //                 i++
+    //             }
+    //         }
+    //         ten += 1
+    //     }
+    //     pen.autoCrop();
+    //     this.pen = pen;
+    // }
 
 
 
