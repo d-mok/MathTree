@@ -229,6 +229,7 @@ declare module "Math/index" {
     import './Code/Combinatorics.ts';
     import './Code/Function.ts';
     import './Code/Geometry.ts';
+    import './Code/Latex.ts';
     import './Code/LinearProgram.ts';
     import './Code/Numeracy.ts';
     import './Code/PhyConst.ts';
@@ -1057,6 +1058,95 @@ declare function IsConvexPolygon(...points: Point2D[]): boolean;
  * ```
  */
 declare function ArrangePoints(...points: Point2D[]): Point2D[];
+/**
+ * Print a stem-and-leaf diagram in latex.
+ * @param data - sorted data
+ * @param labels - a copy of data, but you can replace some number with string label.
+ * @example
+ * ```
+ * StemAndLeaf({
+ *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+ *   labels: [2,'x',6,12,14,16,23,23,24,25,26,'y',26,26,27,31],
+ *   stem: "10 units",
+ *   leaf: "{1} unit"
+ * })
+ * // a diagram with two numbers replaced by 'x' and 'y'
+ * ```
+ */
+declare function StemAndLeaf({ data, labels, stem, leaf }: {
+    data: number[];
+    labels?: (number | string)[];
+    stem?: string;
+    leaf?: string;
+}): string;
+/**
+ * Print a table in latex.
+ * @param content - the cell content
+ * @param columns - a latex syntax for column border
+ * @param rows - similar to `columns`
+ * @param stretch - scale the height of the cells
+ * @example
+ * ```
+ * Table({
+ *     content: [
+ *         ['a', 2, 3],   // 'a' will be printed as '\text{a}'
+ *         ['b', 5, 6],
+ *         ['$c', 7, 8],  // 'c' will be printed as is
+ *         ['$d', 12, 13]
+ *     ],
+ *     columns: '|c::c:c|',
+ *     rows: '|r||r|rr|',
+ * })
+ * ```
+ */
+declare function Table({ content, columns, rows, stretch }: {
+    content: (string | number)[][];
+    columns?: string;
+    rows?: string;
+    stretch?: number;
+}): string;
+/**
+ * Print a frequency table in latex.
+ * @dataLabel - the label for the 1st row
+ * @freqLabel - the label for the 2nd row
+ * @example
+ * ```
+ * FreqTable({
+ *   data: [1, 1, 4, 4, 3, 3, 3],
+ *   dataLabel: '$x',
+ *   freqLabel: 'count'
+ * })
+ * ```
+ */
+declare function FreqTable({ data, dataLabel, freqLabel }: {
+    data: number[];
+    dataLabel: string;
+    freqLabel: string;
+}): string;
+/**
+ * Print a table in latex showing cartisian product of two items.
+ * @rows - array of row values
+ * @cols - array of column values
+ * @cell - a function mapping row and column values to cell content
+ * @example
+ * ```
+ * PairTable({
+ *    rowTitle:'first',
+ *    colTitle:'second',
+ *    rows: [1,2,3,4,5,6],
+ *    cols: [1,2,3,4,5,6],
+ *    cell: (r,c) => r+c
+ * })
+ * // a table showing the sum of two dices
+ * ```
+ */
+declare function PairTable<R, C>({ rowTitle, colTitle, rows, cols, cell }: {
+    rowTitle: string;
+    colTitle: string;
+    rows: R[];
+    cols: C[];
+    cell: (rowValue: R, colValue: C) => string | number | boolean;
+}): string;
 declare const LP_BOUND = 100;
 declare function onBoundary(p: Point2D): boolean;
 /**
@@ -2220,46 +2310,6 @@ declare function PrimeFactorize(val: {
     lcm?: boolean | undefined;
     multiply?: boolean | undefined;
 }): string;
-/**
- * @category Text
- * @return Print a latex table by array environment. If a cell is a string starting with `$` then it will be printed as is, otherwise it will be put in `\text`.
- * ```
- * Table(
- *     [
- *         ['a', 2, 3],         // 'a' will be printed as '\text{a}'
- *         ['b', 5, 6],
- *         ['$c', 7, 8],       // 'c' will be printed as is
- *         ['$d', 12, 13]
- *     ],
- *     '|c::c:c|',
- *     '|r||r|rr|',
- * )
- * ```
- */
-declare function Table(content: (string | number)[][], columns?: string, rows?: string): string;
-/**
- * @category Text
- * @return print a latex frequency table
- * ```
- * FreqTable([1,1,9,9,5,5,5],'num','count')
- * ```
- */
-declare function FreqTable(data: number[], valueLabel?: string, freqLabel?: string): string;
-/**
- * @category Text
- * @return print a table showing cartisian product of two items.
- * ```
- * PairTable(
- *      'first',
- *      'second',
- *       [1,2,3,4,5,6],
- *       [1,2,3,4,5,6],
- *       (r,c)=>r+c
- * )
- * // a table showing the sum of two dices
- * ```
- */
-declare function PairTable<R, C>(rowTitle: string, colTitle: string, rowRange: R[], colRange: C[], cellMapper: (r: R, c: C) => string | number | boolean): string;
 /**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
@@ -4114,6 +4164,7 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * A pie chart
+         * @deprecated
          * @category tool
          * @returns void
          * ```

@@ -1,4 +1,4 @@
-import {PenCls} from './Pen'
+import { PenCls } from './Pen'
 
 
 /**
@@ -1058,7 +1058,7 @@ export class AutoPenCls {
             showBar?: boolean,
             showLine?: boolean
         }) {
-        
+
         const pen = new Pen();
 
         let endGap = barWidth + barGap / 2
@@ -1145,6 +1145,7 @@ export class AutoPenCls {
 
     /**
      * A pie chart
+     * @deprecated
      * @category tool
      * @returns void
      * ```
