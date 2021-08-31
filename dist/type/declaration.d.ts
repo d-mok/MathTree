@@ -2032,6 +2032,15 @@ declare function Freq<T>(array: T[], item: T): number;
 declare function Mode(...nums: number[]): number[];
 /**
  * @category Stat
+ * @return the only mode of nums, if there are multiple modes, then throw error
+ * ```
+ * UniMode(1,2,3,2,2,3,4) \\ 2
+ * UniMode(1,1,2,2,3) \\ throw error
+ * ```
+ */
+declare function UniMode(...nums: number[]): number;
+/**
+ * @category Stat
  * @return SD of nums
  * ```
  * StdDev(1,2,3,2,2,3,4) \\ 0.903507902

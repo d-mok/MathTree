@@ -129,6 +129,12 @@ test('Mode', () => {
 });
 
 
+
+test('UniMode', () => {
+    expect(UniMode(1, 2, 3, 2, 2, 3, 4)).toBe(2);
+    expect(() => UniMode(1, 1, 2, 2, 3)).toThrow();
+});
+
 test('StdDev', () => {
     expect(StdDev(1, 2, 3, 2, 2, 3, 4)).toBeCloseTo(0.903507902);
     expect(StdDev(1, 1, 2, 2, 3)).toBeCloseTo(0.748331477);
@@ -189,6 +195,7 @@ test('ListRange', () => {
 
 test('Freqs', () => {
     expect(Freqs([1, 1, 4, 4, 3, 3, 3], [1, 2, 3, 4])).toEqual([2, 0, 3, 2])
+    expect(Freqs([1, 1, 4, 4, 3, 3, 3])).toEqual([2, 0, 3, 2])
 });
 
 

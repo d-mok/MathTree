@@ -32814,9 +32814,24 @@ globalThis.Freq = contract(Freq).sign([owl.array, owl.pass]);
  * ```
  */
 function Mode(...nums) {
-    return toData(nums).modes();
+    return [...toData(nums).modes()];
 }
 globalThis.Mode = contract(Mode).sign([owl.num]);
+/**
+ * @category Stat
+ * @return the only mode of nums, if there are multiple modes, then throw error
+ * ```
+ * UniMode(1,2,3,2,2,3,4) \\ 2
+ * UniMode(1,1,2,2,3) \\ throw error
+ * ```
+ */
+function UniMode(...nums) {
+    return toData(nums).mode();
+}
+globalThis.UniMode = contract(UniMode).seal({
+    arg: [owl.num],
+    args: function has_single_mode(...nums) { return toData(nums).isSingleMode(1); }
+});
 /**
  * @category Stat
  * @return SD of nums
@@ -32899,7 +32914,7 @@ globalThis.ListRange = contract(ListRange).sign([owl.int]);
  */
 function Freqs(data, nums) {
     let ls = toList(data);
-    nums ?? (nums = ListIntegers(Math.min(...data), Math.max(...data)));
+    nums ?? (nums = ListRange(...data));
     let arr = [];
     for (let v of nums) {
         arr.push(ls.freq(v));
