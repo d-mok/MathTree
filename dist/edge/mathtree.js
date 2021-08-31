@@ -30888,7 +30888,7 @@ globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
  * // a diagram with two numbers replaced by 'x' and 'y'
  * ```
  */
-function StemAndLeaf({ data, labels, stem = "10 units", leaf = "{1} unit" }) {
+function StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }) {
     let T = "";
     T += '\\begin{array}{r|l}';
     T += `\\text{Stem} & \\text{Leaf} \\\\ `;

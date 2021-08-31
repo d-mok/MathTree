@@ -14,7 +14,7 @@
  * // a diagram with two numbers replaced by 'x' and 'y'
  * ```
  */
-function StemAndLeaf({ data, labels, stem = "10 units", leaf = "{1} unit" }: {
+function StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }: {
     data: number[],
     labels?: (number | string)[],
     stem?: string,
