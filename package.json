@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "katex": "^0.13.16",
-    "sapphire-js": "^1.0.43"
+    "sapphire-js": "^1.0.47"
   }
 }

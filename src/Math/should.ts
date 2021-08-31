@@ -33,7 +33,7 @@ globalThis.MathError = MathError
 
 
 
-function Should(condition: boolean, msg: string = "Should condition failed!") {
+function Should(condition: boolean, msg: string = "Should condition failed!"): asserts condition {
     if (!condition) {
         let caller = (new Error()).stack!.split("\n")[2].trim().split(" ")[1]
         // let caller = 'function'

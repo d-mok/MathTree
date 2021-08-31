@@ -230,7 +230,7 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
  * // may return ['\\ge','\\le','\\le']
  * ```
  */
-function RndShakeIneq(anchor: Ineq): string[] {
+function RndShakeIneq(anchor: Ineq): Ineq[] {
     let f = ink.parseIneq(anchor)
     let [me, oppo] = IneqSign(...f)
     return list(me, oppo, oppo).shuffled()
@@ -281,7 +281,7 @@ function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, 
             RndT() ? c : !c
         ]
     }
-    return poker.dice(func).unique(_ => JSON.stringify(_)).rolls(3)
+    return poker.dice(func).uniqueDeep().rolls(3)
 }
 globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
 
@@ -339,7 +339,7 @@ function RndShakeRatio(anchor: number[]): number[][] {
     return poker.dice(func)
         .shield(r => toNumbers(r).hcf() === 1)
         .shield(r => AreDifferent(anchor, r))
-        .unique(_ => JSON.stringify(_))
+        .uniqueDeep()
         .rolls(3)
 }
 globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple])
@@ -428,3 +428,45 @@ function RndShakePointPolar(anchor: Point2D): Point2D[] {
     return RndShuffle<PolarPoint>([r1, q2], [r2, q1], [r2, q2]).map($ => PolToRect($))
 }
 globalThis.RndShakePointPolar = contract(RndShakePointPolar).sign([owl.point2D])
+
+
+
+
+
+/**
+ * @category RandomShake
+ * @return an array of 3 constraint, with only the sign shaken
+ * ```
+ * RndShakeConstraint([1,2,'>',3])
+ * // may return [[1,2,'>',3], [1,2,'<',3], [1,2,'<',3]]
+ * ```
+ */
+function RndShakeConstraint(anchor: Constraint): Constraint[] {
+    let [a, b, i, c] = anchor
+    let signs = RndShakeIneq(i)
+    return signs.map($ => [a, b, $, c])
+}
+globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constraint])
+
+
+
+/**
+ * @category RandomShake
+ * @return an array of 3 constraint, with only the sign shaken
+ * ```
+ * RndShakeConstraints([
+ *   [1,2,'>',3],
+ *   [4,5,'>',6]
+ * ])
+ * // may return [
+ * // [[1,2,'>',3],[4,5,'>',6]],
+ * // [[1,2,'<',3],[4,5,'<',6]],
+ * // [[1,2,'<',3],[4,5,'>',6]]
+ * // ]
+ * ```
+ */
+function RndShakeConstraints(anchor: Constraint[]): Constraint[][] {
+    let func = (): Constraint[] => anchor.map($ => RndShakeConstraint($)[0])
+    return poker.dice(func).uniqueDeep().rolls(3)
+}
+globalThis.RndShakeConstraints = contract(RndShakeConstraints).sign([owl.constraints])

@@ -100,3 +100,25 @@ export function printPointPolar(point: Point2D): string {
     q = cal.blur(q)
     return `(${printSurd(r)},${q}°)`
 }
+
+
+export function printConstraint(con: Constraint, align = false): string {
+    let [a, b, i, c] = con
+    if (i === '>=') i = '\\ge'
+    if (i === '>') i = '\\gt'
+    if (i === '<=') i = '\\le'
+    if (i === '<') i = '\\lt'
+    return ` ${a}x + ${b}y ${align ? '&' : ''} ${i} ${c} `
+}
+
+
+export function printConstraints(cons: Constraint[]): string {
+    let T = ""
+    T += ' \\left\\{ \\begin{aligned} '
+    for (let c of cons) {
+        T += printConstraint(c, true) + ' \\\\ '
+    }
+    T += ' \\end{aligned} \\right. '
+    return T
+}
+

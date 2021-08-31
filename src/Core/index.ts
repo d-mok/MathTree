@@ -20,6 +20,8 @@ import {
     toVector as $toVector,
     vec2D as $vec2D,
     vec3D as $vec3D,
+    toConstraints as $toConstraints,
+    Optimizer as $Optimizer,
 } from 'sapphire-js'
 
 
@@ -44,6 +46,8 @@ globalThis.toShape3D = $toShape3D
 globalThis.toVector = $toVector
 globalThis.vec2D = $vec2D
 globalThis.vec3D = $vec3D
+globalThis.toConstraints = $toConstraints
+globalThis.Optimizer = $Optimizer
 
 
 import * as $Owl from './Owl/index'
@@ -83,6 +87,8 @@ declare global {
     var toVector: typeof $toVector
     var vec2D: typeof $vec2D
     var vec3D: typeof $vec3D
+    var toConstraints: typeof $toConstraints
+    var Optimizer: typeof $Optimizer
     var owl: typeof $Owl
     var ink: typeof $Ink
 }

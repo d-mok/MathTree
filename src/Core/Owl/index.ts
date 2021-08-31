@@ -95,6 +95,8 @@ export const interval = (_: unknown): _ is interval => couple(_) && _[0] <= _[1]
 
 export const point2D = (_: unknown): _ is Point2D => couple(_)
 
+export const point2Ds = (_: unknown): _ is Point2D[] => arrayWith(point2D)(_)
+
 export const point3D = (_: unknown): _ is Point3D => triple(_)
 
 export const polar = (_: unknown): _ is PolarPoint => couple(_) && _[0] >= 0
@@ -152,6 +154,10 @@ export const dfrac = (_: unknown): _ is string => {
 }
 
 export const constraint = (_: unknown): _ is Constraint => arrayOfLength(4)(_) && num(_[0]) && num(_[1]) && ineq(_[2]) && num(_[3])
+
+export const constraints = (_: unknown): _ is Constraint[] => arrayWith(constraint)(_)
+
+export const field = (_: unknown): _ is Field => triple(_)
 
 export const quadrantCode = (_: unknown): _ is QuadrantCode => int(_) && [1, 2, 3, 4].includes(_)
 

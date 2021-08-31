@@ -42,6 +42,7 @@ declare module "Core/Owl/index" {
     export const ntuple: (_: unknown) => _ is number[];
     export const interval: (_: unknown) => _ is interval;
     export const point2D: (_: unknown) => _ is Point2D;
+    export const point2Ds: (_: unknown) => _ is Point2D[];
     export const point3D: (_: unknown) => _ is Point3D;
     export const polar: (_: unknown) => _ is PolarPoint;
     export const fraction: (_: unknown) => _ is Fraction;
@@ -60,6 +61,8 @@ declare module "Core/Owl/index" {
     export const ineq: (_: unknown) => _ is Ineq;
     export const dfrac: (_: unknown) => _ is string;
     export const constraint: (_: unknown) => _ is Constraint;
+    export const constraints: (_: unknown) => _ is Constraint[];
+    export const field: (_: unknown) => _ is Field;
     export const quadrantCode: (_: unknown) => _ is QuadrantCode;
     export const quadrantName: (_: unknown) => _ is QuadrantName;
     export const quadrant: (_: unknown) => _ is QuadrantCode | QuadrantName;
@@ -81,9 +84,11 @@ declare module "Core/Ink/index" {
     export function printOrTrigRoots(roots: (number | undefined)[]): string;
     export function printSurd(num: number): string;
     export function printPointPolar(point: Point2D): string;
+    export function printConstraint(con: Constraint, align?: boolean): string;
+    export function printConstraints(cons: Constraint[]): string;
 }
 declare module "Core/index" {
-    import { poker as $poker, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D } from 'sapphire-js';
+    import { poker as $poker, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, toConstraints as $toConstraints, Optimizer as $Optimizer } from 'sapphire-js';
     import * as $Owl from "Core/Owl/index";
     import * as $Ink from "Core/Ink/index";
     global {
@@ -108,6 +113,8 @@ declare module "Core/index" {
         var toVector: typeof $toVector;
         var vec2D: typeof $vec2D;
         var vec3D: typeof $vec3D;
+        var toConstraints: typeof $toConstraints;
+        var Optimizer: typeof $Optimizer;
         var owl: typeof $Owl;
         var ink: typeof $Ink;
     }
@@ -1147,23 +1154,21 @@ declare function PairTable<R, C>({ rowTitle, colTitle, rows, cols, cell }: {
     cols: C[];
     cell: (rowValue: R, colValue: C) => string | number | boolean;
 }): string;
-declare const LP_BOUND = 100;
-declare function onBoundary(p: Point2D): boolean;
 /**
  *
  * @category LinearProgram
  * @return the value of field at given point
- * ```typescript
+ * ```
  * FieldAt([0,0],[1,2,3]) // 3
  * FieldAt([1,2],[3,-4,5]) // 0
  * ```
  */
-declare function FieldAt(p: Point2D, field: Field): number;
+declare function FieldAt(point: Point2D, field: Field): number;
 /**
  *
  * @category LinearProgram
  * @return check if point is constrained by cons
- * ```typescript
+ * ```
  * isConstrained([
  *    [1, 1, "<=", 5],
  *    [1, -1, "<", 4],
@@ -1177,7 +1182,7 @@ declare function isConstrained(cons: Constraint[], point: Point2D): boolean;
  *
  * @category LinearProgram
  * @return check if point is constrained by cons, treating all cons as 'or equal to'
- * ```typescript
+ * ```
  * isLooseConstrained([
  *    [1, 1, "<=", 5],
  *    [1, -1, "<", 4],
@@ -1191,7 +1196,7 @@ declare function isLooseConstrained(cons: Constraint[], point: Point2D): boolean
  *
  * @category LinearProgram
  * @return the vertices of the feasible polygon
- * ```typescript
+ * ```
  * FeasiblePolygon([
  *    [1, 0, '<', 10],
  *    [1, 0, '>', -5],
@@ -1201,12 +1206,12 @@ declare function isLooseConstrained(cons: Constraint[], point: Point2D): boolean
  * // [[-5,-5],[10,-5],[10,10],[-5,10]]
  * ```
  */
-declare function FeasiblePolygon(...cons: Constraint[]): Point2D[];
+declare function FeasiblePolygon(...cons: Constraint[]): [number, number][];
 /**
  *
  * @category LinearProgram
  * @return the vertices of the feasible polygon
- * ```typescript
+ * ```
  * FeasiblePolygon([
  *    [1, 0, '<', 10],
  *    [1, 0, '>', -5],
@@ -1216,12 +1221,12 @@ declare function FeasiblePolygon(...cons: Constraint[]): Point2D[];
  * // [[-5,-5],[10,-5],[10,10],[-5,10]]
  * ```
  */
-declare function FeasibleVertices(...cons: Constraint[]): Point2D[];
+declare function FeasibleVertices(...cons: Constraint[]): [number, number][];
 /**
  *
  * @category LinearProgram
  * @return check if the feasible region is bounded
- * ```typescript
+ * ```
  * FeasibleIsBounded([
  *    [1, 0, '<', 10],
  *    [1, 0, '>', -5],
@@ -1240,7 +1245,7 @@ declare function FeasibleIsBounded(...cons: Constraint[]): boolean;
  *
  * @category LinearProgram
  * @return the integral points inside the feasible polygon
- * ```typescript
+ * ```
  * FeasibleIntegral([
  *    [1, 0, '<', 3],
  *    [1, 0, '>', 0],
@@ -1255,7 +1260,7 @@ declare function FeasibleIntegral(...cons: Constraint[]): Point2D[];
  *
  * @category LinearProgram
  * @return the point with the max value of field
- * ```typescript
+ * ```
  * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
  * ```
  */
@@ -1264,7 +1269,7 @@ declare function MaximizePoint(points: Point2D[], field: Field): Point2D;
  *
  * @category LinearProgram
  * @return the point with the min value of field
- * ```typescript
+ * ```
  * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
  * ```
  */
@@ -1273,7 +1278,7 @@ declare function MinimizePoint(points: Point2D[], field: Field): Point2D;
  *
  * @category LinearProgram
  * @return the point with the min/max value of field
- * ```typescript
+ * ```
  * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [10,10]
  * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
  * ```
@@ -1283,7 +1288,7 @@ declare function OptimizePoint(points: Point2D[], field: Field, max: boolean): P
  *
  * @category LinearProgram
  * @return the min/max value of field
- * ```typescript
+ * ```
  * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
  * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
  * ```
@@ -1293,7 +1298,7 @@ declare function OptimizeField(points: Point2D[], field: Field, max: boolean): n
  *
  * @category LinearProgram
  * @return the constraints from the given points
- * ```typescript
+ * ```
  * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
  * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2])
  * // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
@@ -1729,7 +1734,7 @@ declare function RndShakeQ(anchor: number): number[];
  * // may return ['\\ge','\\le','\\le']
  * ```
  */
-declare function RndShakeIneq(anchor: Ineq): string[];
+declare function RndShakeIneq(anchor: Ineq): Ineq[];
 /**
  * @category RandomShake
  * @return an array of 3 point, both x and y are unique
@@ -1793,6 +1798,31 @@ declare function RndShakeBase(anchor: string): string[];
  * ```
  */
 declare function RndShakePointPolar(anchor: Point2D): Point2D[];
+/**
+ * @category RandomShake
+ * @return an array of 3 constraint, with only the sign shaken
+ * ```
+ * RndShakeConstraint([1,2,'>',3])
+ * // may return [[1,2,'>',3], [1,2,'<',3], [1,2,'<',3]]
+ * ```
+ */
+declare function RndShakeConstraint(anchor: Constraint): Constraint[];
+/**
+ * @category RandomShake
+ * @return an array of 3 constraint, with only the sign shaken
+ * ```
+ * RndShakeConstraints([
+ *   [1,2,'>',3],
+ *   [4,5,'>',6]
+ * ])
+ * // may return [
+ * // [[1,2,'>',3],[4,5,'>',6]],
+ * // [[1,2,'<',3],[4,5,'<',6]],
+ * // [[1,2,'<',3],[4,5,'>',6]]
+ * // ]
+ * ```
+ */
+declare function RndShakeConstraints(anchor: Constraint[]): Constraint[][];
 declare module "Math/Code/RandomUtil.test" { }
 /**
  * @category RandomUtil
@@ -2227,7 +2257,7 @@ declare function GrammarJoin(...items: unknown[]): string;
 * IneqSign(false,false) // ['\\lt', '\\gt']
 * ```
 */
-declare function IneqSign(greater: boolean, equal?: boolean): [string, string];
+declare function IneqSign(greater: boolean, equal?: boolean): [Ineq, Ineq];
 /**
 * @category Text
 * @deprecated

@@ -88,10 +88,10 @@ test('FeasibleIntegral', () => {
     expect(FeasibleIntegral(
         [1, 1, '<', 1],
     ).length).toBeGreaterThan(100);
-    expect(() => FeasibleIntegral(
+    expect(FeasibleIntegral(
         [1, 1, '<', 10],
         [1, 1, '>', 10],
-    )).toThrow();
+    )).toHaveLength(0);
 });
 
 
@@ -110,7 +110,7 @@ test('FeasibleVertices', () => {
     expect(FeasibleVertices(
         [1, 1, '<', 0],
         [1, -1, '<', 0],
-    )).toEqual([[0, -0]]);
+    )).toEqual([[0, 0]]);
 });
 
 
@@ -176,7 +176,6 @@ test('OptimizePoint', () => {
 });
 
 
-
 test('OptimizeField', () => {
     let points = FeasibleIntegral(
         [1, 1, "<=", 5],
@@ -184,9 +183,11 @@ test('OptimizeField', () => {
         [2, 1, ">=", -5],
         [3, 1, ">", -10]
     );
+    OptimizeField(points, [2, 1, 1], false)//?
+
     expect(OptimizeField(points, [2, 1, 1], true)).toBe(10);
     expect(OptimizeField(points, [1, 1, 1], false)).toBe(-3);
-    expect(() => OptimizeField(points, [2, 1, 1], false)).toThrow();
+    expect(OptimizeField(points, [2, 1, 1], false)).toBe(-4);
 });
 
 test('ConstraintsFromPoints', () => {

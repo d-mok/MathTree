@@ -286,3 +286,44 @@ test('RndShakePointPolar', () => {
     })
 
 });
+
+
+
+test('RndShakeConstraint', () => {
+
+    function run(anchor: Constraint) {
+        let shaked = RndShakeConstraint(anchor)
+        expect(shaked).toSatisfyAll(owl.constraint);
+        expect(shaked[0]).toBe(anchor[0]);
+        expect(shaked[1]).toBe(anchor[1]);
+        expect(shaked[2].length).toBe(anchor[2].length);
+        expect(shaked[3]).toBe(anchor[3]);
+    }
+
+    repeat(10, () => {
+        run([1, 2, '>', 3]);
+        run([1, 2, '>=', 3]);
+    })
+
+});
+
+
+
+
+test('RndShakeConstraints', () => {
+
+    function run(anchor: Constraint[]) {
+        let shaked = RndShakeConstraints(anchor)
+        expect(shaked).toSatisfyAll(owl.constraints);
+        expect(shaked[0][0]).toBe(anchor[0][0]);
+        expect(shaked[0][1]).toBe(anchor[0][1]);
+        expect(shaked[0][2].length).toBe(anchor[0][2].length);
+        expect(shaked[0][3]).toBe(anchor[0][3]);
+    }
+
+    repeat(10, () => {
+        run([[1, 2, '>', 3], [4, 5, '>', 6]]);
+        run([[1, 2, '>=', 3], [4, 5, '>=', 6]]);
+    })
+
+});

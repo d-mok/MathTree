@@ -174,6 +174,12 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (owl.trigExp(value)) {
             return ink.printTrigExp(value)
         }
+        if (owl.constraint(value)) {
+            return ink.printConstraint(value)
+        }
+        if (owl.constraints(value)) {
+            return ink.printConstraints(value)
+        }
     }
 
     if (signal === '*') {
@@ -285,8 +291,7 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === ':') {
         if (owl.ntuple(value)) {
-            let v = toNumbers(value).ratio()
-            return v.join(":")
+            return toNumbers(value).ratio().join(":")
         }
         if (T === 'number') {
             let [p, q] = cal.toFraction(value)

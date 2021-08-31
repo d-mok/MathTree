@@ -65,7 +65,7 @@ globalThis.GrammarJoin = GrammarJoin
 * IneqSign(false,false) // ['\\lt', '\\gt']
 * ```
 */
-function IneqSign(greater: boolean, equal: boolean = false): [string, string] {
+function IneqSign(greater: boolean, equal: boolean = false): [Ineq, Ineq] {
     if (greater && equal) { return ['\\ge', '\\le'] }
     if (greater && !equal) { return ['\\gt', '\\lt'] }
     if (!greater && equal) { return ['\\le', '\\ge'] }

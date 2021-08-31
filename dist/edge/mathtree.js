@@ -25213,7 +25213,7 @@ class Numbers extends list_1.List {
      * ```
      */
     blur() {
-        let blurred = this.map($ => cal_1.blur($));
+        let blurred = this.map($ => (0, cal_1.blur)($));
         return this.create(blurred);
     }
     /**
@@ -25225,8 +25225,8 @@ class Numbers extends list_1.List {
      * ```
      */
     toFraction() {
-        let fracs = this.map($ => cal_1.toFraction($));
-        return list_1.list(...fracs);
+        let fracs = this.map($ => (0, cal_1.toFraction)($));
+        return (0, list_1.list)(...fracs);
     }
     /**
      * Return an array of the gaps between every two consecutive numbers in the sorted version of this array.
@@ -25383,7 +25383,7 @@ class Numbers extends list_1.List {
     ratio() {
         if (this.except([0]).length === 0)
             return this.clone();
-        if (this.some($ => !cal_1.isRational($)))
+        if (this.some($ => !(0, cal_1.isRational)($)))
             return this.clone();
         let fracs = this.toFraction();
         let denos = this.create(fracs.map($ => $[1]));
@@ -25403,11 +25403,11 @@ class Numbers extends list_1.List {
     ratioFactor() {
         if (this.except([0]).length === 0)
             return NaN;
-        if (this.some($ => !cal_1.isRational($)))
+        if (this.some($ => !(0, cal_1.isRational)($)))
             return NaN;
         let clone = this.except([0]);
         let ratioed = clone.ratio();
-        return cal_1.blur(ratioed[0] / clone[0]);
+        return (0, cal_1.blur)(ratioed[0] / clone[0]);
     }
 }
 exports.Numbers = Numbers;
@@ -25470,7 +25470,7 @@ class Shape extends list_1.List {
      */
     distances() {
         let ds = this.pairs().map(([A, B]) => A.distanceWith(B));
-        return numbers_1.numbers(...ds);
+        return (0, numbers_1.numbers)(...ds);
     }
     /**
      * Return an array of distances from `point`.
@@ -25485,7 +25485,7 @@ class Shape extends list_1.List {
      */
     distancesFrom(point) {
         let ds = this.map($ => $.distanceWith(point));
-        return numbers_1.numbers(...ds);
+        return (0, numbers_1.numbers)(...ds);
     }
     /**
      * Return the mean of the points.
@@ -25596,7 +25596,7 @@ exports.Shape = Shape;
  */
 function shape(...elements) {
     let shp = new Shape();
-    shp.push(...elements.map($ => vector_1.vector(...$)));
+    shp.push(...elements.map($ => (0, vector_1.vector)(...$)));
     return shp;
 }
 exports.shape = shape;
@@ -25677,8 +25677,8 @@ class Shape2D extends shape_1.Shape {
             let p1 = clone.cyclicAt(i - 1);
             let p2 = clone.cyclicAt(i);
             let p3 = clone.cyclicAt(i + 1);
-            let u = vector2D_1.vec2D(p1, p2);
-            let v = vector2D_1.vec2D(p2, p3);
+            let u = (0, vector2D_1.vec2D)(p1, p2);
+            let v = (0, vector2D_1.vec2D)(p2, p3);
             cross.push(u.cross2D(v));
         }
         cross.filter($ => $ !== 0);
@@ -25696,15 +25696,15 @@ class Shape2D extends shape_1.Shape {
      * ```
      */
     erect(vecX, vecY) {
-        let vx = vector3D_1.vec3D(vecX);
-        let vy = vector3D_1.vec3D(vecY);
+        let vx = (0, vector3D_1.vec3D)(vecX);
+        let vy = (0, vector3D_1.vec3D)(vecY);
         let erected = this.map($ => {
             let [x, y] = $;
             let vx3D = vx.times(x);
             let vy3D = vy.times(y);
             return vx3D.add(vy3D);
         });
-        return shape3D_1.shape3D(...erected);
+        return (0, shape3D_1.shape3D)(...erected);
     }
 }
 exports.Shape2D = Shape2D;
@@ -25719,7 +25719,7 @@ exports.Shape2D = Shape2D;
  */
 function shape2D(...elements) {
     let shp = new Shape2D();
-    shp.push(...elements.map($ => vector2D_1.vec2D($)));
+    shp.push(...elements.map($ => (0, vector2D_1.vec2D)($)));
     return shp;
 }
 exports.shape2D = shape2D;
@@ -25781,7 +25781,7 @@ class Shape3D extends shape_1.Shape {
      */
     projectTo2D(angle = 60, depth = 0.5) {
         let projected = this.map($ => $.projectTo2D(angle, depth));
-        return shape2D_1.shape2D(...projected);
+        return (0, shape2D_1.shape2D)(...projected);
     }
 }
 exports.Shape3D = Shape3D;
@@ -25796,7 +25796,7 @@ exports.Shape3D = Shape3D;
  */
 function shape3D(...elements) {
     let shp = new Shape3D();
-    shp.push(...elements.map($ => vector3D_1.vec3D($)));
+    shp.push(...elements.map($ => (0, vector3D_1.vec3D)($)));
     return shp;
 }
 exports.shape3D = shape3D;
@@ -26566,7 +26566,7 @@ class Vector3D extends vector_1.Vector {
         let [x, y, z] = this;
         let x_new = x + depth * y * c;
         let y_new = z + depth * y * s;
-        return vector2D_1.vector2D(x_new, y_new);
+        return (0, vector2D_1.vector2D)(x_new, y_new);
     }
 }
 exports.Vector3D = Vector3D;
@@ -26982,7 +26982,7 @@ class Pencil {
         this.initSize(width + 2 * this.$BORDER, height + 2 * this.$BORDER);
     }
     pj(point) {
-        return support_1.force2D(point, this.$3D_ANGLE, this.$3D_DEPTH);
+        return (0, support_1.force2D)(point, this.$3D_ANGLE, this.$3D_DEPTH);
     }
     pjs(points) {
         return points.map($ => this.pj($));
@@ -27053,7 +27053,7 @@ class Pencil {
         }
         if (Array.isArray(centers[0])) {
             let cens = centers;
-            this.$LABEL_CENTER = shape2D_1.toShape2D(this.pjs(cens)).mean().toArray();
+            this.$LABEL_CENTER = (0, shape2D_1.toShape2D)(this.pjs(cens)).mean().toArray();
         }
     }
     setLengthUnit(text = undefined) {
@@ -27195,9 +27195,9 @@ class Pencil {
         this.ctx.fill();
     }
     pathSectoroid(center, pStart, pEnd, vertices) {
-        let v1 = vector2D_1.vec2D(center, pStart);
-        let v2 = vector2D_1.vec2D(center, pEnd);
-        let r = vector2D_1.vec2D(center, pStart).magnitude();
+        let v1 = (0, vector2D_1.vec2D)(center, pStart);
+        let v2 = (0, vector2D_1.vec2D)(center, pEnd);
+        let r = (0, vector2D_1.vec2D)(center, pStart).magnitude();
         let q1 = v1.argument();
         let q2 = v2.argument();
         if (q2 < q1)
@@ -27274,14 +27274,14 @@ class Pencil {
     drawAngle(point1, vertex, point2, radiusPixel, arcCount, spacePixel) {
         let [A, O, B] = this.pjs([point1, vertex, point2]);
         let mode = this.$ANGLE_MODE;
-        if (mode === 'normal' && support_1.IsReflex(A, O, B))
+        if (mode === 'normal' && (0, support_1.IsReflex)(A, O, B))
             [A, B] = [B, A];
-        if (mode === 'reflex' && !support_1.IsReflex(A, O, B))
+        if (mode === 'reflex' && !(0, support_1.IsReflex)(A, O, B))
             [A, B] = [B, A];
         // draw like polar
         let [pixelA, pixelO, pixelB] = this.frame.toPixs([A, O, B]);
-        let a1 = support_1.atan2(-(pixelA[1] - pixelO[1]), pixelA[0] - pixelO[0]);
-        let a2 = support_1.atan2(-(pixelB[1] - pixelO[1]), pixelB[0] - pixelO[0]);
+        let a1 = (0, support_1.atan2)(-(pixelA[1] - pixelO[1]), pixelA[0] - pixelO[0]);
+        let a2 = (0, support_1.atan2)(-(pixelB[1] - pixelO[1]), pixelB[0] - pixelO[0]);
         const mark = (position) => {
             this.drawArc(O, radiusPixel + position * spacePixel, [a1, a2]);
         };
@@ -27310,13 +27310,13 @@ class Pencil {
         let pts = this.pjs([point1, vertex, point2]);
         let [A, O, B] = this.frame.toPixs(pts);
         let size = sizePixel * frame_1.PEN_QUALITY;
-        let angleA = support_1.atan2(A[1] - O[1], A[0] - O[0]);
-        let angleB = support_1.atan2(B[1] - O[1], B[0] - O[0]);
-        let P = [O[0] + size * support_1.cos(angleA), O[1] + size * support_1.sin(angleA)];
-        let Q = [O[0] + size * support_1.cos(angleB), O[1] + size * support_1.sin(angleB)];
+        let angleA = (0, support_1.atan2)(A[1] - O[1], A[0] - O[0]);
+        let angleB = (0, support_1.atan2)(B[1] - O[1], B[0] - O[0]);
+        let P = [O[0] + size * (0, support_1.cos)(angleA), O[1] + size * (0, support_1.sin)(angleA)];
+        let Q = [O[0] + size * (0, support_1.cos)(angleB), O[1] + size * (0, support_1.sin)(angleB)];
         let R = [
-            O[0] + size * support_1.cos(angleA) + size * support_1.cos(angleB),
-            O[1] + size * support_1.sin(angleA) + size * support_1.sin(angleB)
+            O[0] + size * (0, support_1.cos)(angleA) + size * (0, support_1.cos)(angleB),
+            O[1] + size * (0, support_1.sin)(angleA) + size * (0, support_1.sin)(angleB)
         ];
         let draw = (A, B) => {
             this.ctx.beginPath();
@@ -27338,7 +27338,7 @@ class Pencil {
     drawParallelMark(startPoint, endPoint, sizePixel, tickCount, spacePixel) {
         let A = this.pj(startPoint);
         let B = this.pj(endPoint);
-        let M = support_1.midPoint(A, B);
+        let M = (0, support_1.midPoint)(A, B);
         // original default
         sizePixel ?? (sizePixel = 4);
         spacePixel ?? (spacePixel = 6);
@@ -27420,7 +27420,7 @@ class Pencil {
     drawEqualMark(startPoint, endPoint, lengthPixel, tickCount, spacePixel) {
         let A = this.pj(startPoint);
         let B = this.pj(endPoint);
-        let M = support_1.midPoint(A, B);
+        let M = (0, support_1.midPoint)(A, B);
         // original default
         lengthPixel ?? (lengthPixel = 5);
         spacePixel ?? (spacePixel = 3);
@@ -27496,7 +27496,7 @@ class Pencil {
                 return null;
             return pt;
         });
-        let segments = list_1.toList(filteredPoints).split(null);
+        let segments = (0, list_1.toList)(filteredPoints).split(null);
         for (let seg of segments) {
             if (seg.length === 0)
                 continue;
@@ -27585,7 +27585,7 @@ class Pencil {
     getDirInPixel(pStart, pEnd) {
         let [OPoint, APoint] = this.pjs([pStart, pEnd]);
         let [O, A] = this.frame.toPixs([OPoint, APoint]);
-        return support_1.atan2(-(A[1] - O[1]), A[0] - O[0]);
+        return (0, support_1.atan2)(-(A[1] - O[1]), A[0] - O[0]);
     }
     /**
      * Find the mid-ray direction given 3 points, in the pixel world.
@@ -27597,14 +27597,14 @@ class Pencil {
     getDirInPixelByAngle(point1, vertex, point2) {
         let [A, O, B] = this.pjs([point1, vertex, point2]);
         let mode = this.$ANGLE_MODE;
-        if (mode === 'normal' && support_1.IsReflex(A, O, B))
+        if (mode === 'normal' && (0, support_1.IsReflex)(A, O, B))
             [A, B] = [B, A];
-        if (mode === 'reflex' && !support_1.IsReflex(A, O, B))
+        if (mode === 'reflex' && !(0, support_1.IsReflex)(A, O, B))
             [A, B] = [B, A];
         // draw like polar
         let [pixelA, pixelO, pixelB] = this.frame.toPixs([A, O, B]);
-        let a1 = support_1.atan2(-(pixelA[1] - pixelO[1]), pixelA[0] - pixelO[0]);
-        let a2 = support_1.atan2(-(pixelB[1] - pixelO[1]), pixelB[0] - pixelO[0]);
+        let a1 = (0, support_1.atan2)(-(pixelA[1] - pixelO[1]), pixelA[0] - pixelO[0]);
+        let a2 = (0, support_1.atan2)(-(pixelB[1] - pixelO[1]), pixelB[0] - pixelO[0]);
         if (a2 < a1)
             a2 = a2 + 360;
         return (a1 + a2) / 2;
@@ -27632,7 +27632,7 @@ class Pencil {
                 return right;
             let p1 = this.pj(pStart);
             let p2 = this.pj(pEnd);
-            let v = vector2D_1.vec2D(p1, p2);
+            let v = (0, vector2D_1.vec2D)(p1, p2);
             let leftDistance = v.rotate(90).add(p1).distanceWith(cen);
             let rightDistance = v.rotate(-90).add(p1).distanceWith(cen);
             return leftDistance > rightDistance ? left : right;
@@ -27690,16 +27690,16 @@ class Pencil {
     drawLabel(text, position, direction, radiusPixel) {
         direction ?? (direction = this.getLabelCenterDirInPixel(position));
         let textWidth = this.getTextWidthInPixel(text);
-        let xOffset = (radiusPixel + textWidth - 5) * support_1.cos(direction);
-        let yOffset = radiusPixel * support_1.sin(direction);
+        let xOffset = (radiusPixel + textWidth - 5) * (0, support_1.cos)(direction);
+        let yOffset = radiusPixel * (0, support_1.sin)(direction);
         this.drawText(text, position, xOffset, yOffset);
     }
     makePolarAngle(point1, vertex, point2) {
         let [A, O, B] = this.pjs([point1, vertex, point2]);
         let mode = this.$ANGLE_MODE;
-        if (mode === 'normal' && support_1.IsReflex(A, O, B))
+        if (mode === 'normal' && (0, support_1.IsReflex)(A, O, B))
             return [point2, vertex, point1];
-        if (mode === 'reflex' && !support_1.IsReflex(A, O, B))
+        if (mode === 'reflex' && !(0, support_1.IsReflex)(A, O, B))
             return [point2, vertex, point1];
         return [point1, vertex, point2];
     }
@@ -28014,8 +28014,8 @@ const vector3D_1 = __webpack_require__(5830);
  * ```
  */
 function AnglePolar(A, O, B) {
-    let a = vector2D_1.vec2D(O, A).argument();
-    let b = vector2D_1.vec2D(O, B).argument();
+    let a = (0, vector2D_1.vec2D)(O, A).argument();
+    let b = (0, vector2D_1.vec2D)(O, B).argument();
     return a <= b ? b - a : 360 + b - a;
 }
 exports.AnglePolar = AnglePolar;
@@ -28033,7 +28033,7 @@ function IsReflex(A, O, B) {
 exports.IsReflex = IsReflex;
 function force2D(point, angle, depth) {
     if (point.length === 3) {
-        return vector3D_1.vec3D(point).projectTo2D(angle, depth).toArray();
+        return (0, vector3D_1.vec3D)(point).projectTo2D(angle, depth).toArray();
     }
     else {
         return point;
@@ -28085,7 +28085,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.poker = exports.contract = exports.cal = exports.Pencil = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
+exports.poker = exports.contract = exports.cal = exports.toConstraints = exports.Constraints = exports.Optimizer = exports.Pencil = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
 var data_1 = __webpack_require__(210);
 Object.defineProperty(exports, "Data", ({ enumerable: true, get: function () { return data_1.Data; } }));
 Object.defineProperty(exports, "data", ({ enumerable: true, get: function () { return data_1.data; } }));
@@ -28128,11 +28128,382 @@ Object.defineProperty(exports, "vector3D", ({ enumerable: true, get: function ()
 Object.defineProperty(exports, "vec3D", ({ enumerable: true, get: function () { return vector3D_1.vec3D; } }));
 var pencil_1 = __webpack_require__(3933);
 Object.defineProperty(exports, "Pencil", ({ enumerable: true, get: function () { return pencil_1.Pencil; } }));
+var optimizer_1 = __webpack_require__(4903);
+Object.defineProperty(exports, "Optimizer", ({ enumerable: true, get: function () { return optimizer_1.Optimizer; } }));
+var constraints_1 = __webpack_require__(2637);
+Object.defineProperty(exports, "Constraints", ({ enumerable: true, get: function () { return constraints_1.Constraints; } }));
+Object.defineProperty(exports, "toConstraints", ({ enumerable: true, get: function () { return constraints_1.toConstraints; } }));
 exports.cal = __importStar(__webpack_require__(2318));
 var contract_1 = __webpack_require__(1566);
 Object.defineProperty(exports, "contract", ({ enumerable: true, get: function () { return contract_1.contract; } }));
 exports.poker = __importStar(__webpack_require__(2383));
 //# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 894:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Constraint = void 0;
+const cal_1 = __webpack_require__(2318);
+const inequal_1 = __webpack_require__(3098);
+class Constraint {
+    constructor(constraint) {
+        this.constraint = constraint;
+    }
+    clone() {
+        return new Constraint(this.constraint);
+    }
+    /**
+     * Check if this constraint contains `point`.
+     */
+    contains(point) {
+        let [a, b, i, c] = this.constraint;
+        let [x, y] = point;
+        return (0, inequal_1.ineq)(i).compare(a * x + b * y, c);
+    }
+    /**
+     * Return a strict version of this constraint.
+     */
+    strict() {
+        let [a, b, i, c] = this.constraint;
+        let j = (0, inequal_1.ineq)(i).strict();
+        return new Constraint([a, b, j, c]);
+    }
+    /**
+     * Return a loose version of this constraint.
+     */
+    loose() {
+        let [a, b, i, c] = this.constraint;
+        let j = (0, inequal_1.ineq)(i).loose();
+        return new Constraint([a, b, j, c]);
+    }
+    /**
+     * Return a flipped version of this constraint.
+     */
+    flip() {
+        let [a, b, i, c] = this.constraint;
+        let j = (0, inequal_1.ineq)(i).flip();
+        return new Constraint([a, b, j, c]);
+    }
+    /**
+     * Return the intersection point of this and `another`.
+     * If parallel, return `undefined`.
+     */
+    intersectWith(another) {
+        let [a1, b1, i1, c1] = this.constraint;
+        let [a2, b2, i2, c2] = another.constraint;
+        if (a1 / b1 === a2 / b2)
+            return undefined;
+        return (0, cal_1.crammer)(a1, b1, c1, a2, b2, c2);
+    }
+    /**
+     * Return a clone or a flipped version.
+     */
+    shake() {
+        return Math.random() > 0.5 ? this.clone() : this.flip();
+    }
+}
+exports.Constraint = Constraint;
+//# sourceMappingURL=constraint.js.map
+
+/***/ }),
+
+/***/ 2637:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toConstraints = exports.Constraints = void 0;
+const constraint_1 = __webpack_require__(894);
+const list_1 = __webpack_require__(4140);
+const shape2D_1 = __webpack_require__(8951);
+const vector2D_1 = __webpack_require__(1534);
+/**
+ * A subclass of array. Designed as a set of constraints.
+ */
+class Constraints extends list_1.List {
+    constructor() {
+        super(...arguments);
+        this.EDGE = 100;
+        this.EDGE_CONSTRAINTS = [
+            new constraint_1.Constraint([1, 0, "<=", this.EDGE]),
+            new constraint_1.Constraint([1, 0, ">=", -this.EDGE]),
+            new constraint_1.Constraint([0, 1, "<=", this.EDGE]),
+            new constraint_1.Constraint([0, 1, ">=", -this.EDGE])
+        ];
+    }
+    fullConstraints() {
+        let cons = this.clone();
+        cons.push(...this.EDGE_CONSTRAINTS);
+        return cons;
+    }
+    onEdge(point) {
+        let [x, y] = point;
+        return Math.abs(x) + 1 >= this.EDGE || Math.abs(y) + 1 >= this.EDGE;
+    }
+    /**
+     * Check if `point` satisfy every constraint.
+     */
+    contains(point) {
+        return this.every($ => $.contains(point));
+    }
+    /**
+     * Check if `point` loosely satisfy every constraint.
+     */
+    looseContains(point) {
+        return this.map($ => $.loose()).every($ => $.contains(point));
+    }
+    /**
+     * Return the vertices of the feasible polygon, including EDGE points.
+     */
+    polygon() {
+        let cons = this.fullConstraints();
+        let vs = (0, shape2D_1.shape2D)();
+        for (let i = 0; i < cons.length; i++) {
+            for (let j = i + 1; j < cons.length; j++) {
+                let p = cons[i].intersectWith(cons[j]);
+                if (p === undefined)
+                    continue;
+                let others = cons.clone();
+                others.pull(j);
+                others.pull(i);
+                if (others.looseContains(p))
+                    vs.push((0, vector2D_1.vec2D)(p));
+            }
+        }
+        vs = vs.uniqueDeep();
+        // if (vs.length <= 2)
+        //     throw 'No feasible polygon.'    // OR STILL RETURN?
+        vs.sortAroundMean();
+        return vs.toArray();
+    }
+    /**
+     * Return the vertices of the feasible region, excluding EDGE points.
+     */
+    vertices() {
+        let vs = this.polygon().filter($ => !this.onEdge($));
+        // if (vs.length < 1)
+        //     throw 'no feasible vertex'
+        return vs;
+    }
+    /**
+     * Check if the feasible region is bounded.
+     */
+    isBounded() {
+        return this.polygon().every($ => !this.onEdge($));
+    }
+    /**
+     * Return all the integral points inside the feasible polygon.
+     */
+    integrals() {
+        let vs = (0, list_1.toList)(this.polygon());
+        let ymax = Math.ceil(vs.maxOf(([x, y]) => y));
+        let xmax = Math.ceil(vs.maxOf(([x, y]) => x));
+        let xmin = Math.floor(vs.minOf(([x, y]) => x));
+        let ymin = Math.floor(vs.minOf(([x, y]) => y));
+        let points = [];
+        for (let i = xmin; i <= xmax; i++) {
+            for (let j = ymin; j <= ymax; j++) {
+                let p = [i, j];
+                if (this.contains(p))
+                    points.push(p);
+            }
+        }
+        return points;
+    }
+    /**
+     * Return a shaked version of me.
+     */
+    shake() {
+        let cons = this.map($ => $.shake());
+        return this.create(cons);
+    }
+}
+exports.Constraints = Constraints;
+/**
+ * Return a `Constraints` prefilled with `elements`.
+ * @param elements - the elements to put in the `Constraints`
+ * @returns a `Constraints` array
+ * @example
+ * ```
+ * toConstraints([[1,2,'<',3],[4,5,'>',6]])
+ * ```
+ */
+function toConstraints(elements) {
+    let cs = new Constraints();
+    cs.push(...elements.map($ => new constraint_1.Constraint($)));
+    return cs;
+}
+exports.toConstraints = toConstraints;
+//# sourceMappingURL=constraints.js.map
+
+/***/ }),
+
+/***/ 3098:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ineq = void 0;
+function toCode(ineq) {
+    if (ineq === '\\ge')
+        return [true, true];
+    if (ineq === '\\gt')
+        return [true, false];
+    if (ineq === '\\le')
+        return [false, true];
+    if (ineq === '\\lt')
+        return [false, false];
+    if (ineq === '>=')
+        return [true, true];
+    if (ineq === '>')
+        return [true, false];
+    if (ineq === '<=')
+        return [false, true];
+    if (ineq === '<')
+        return [false, false];
+    throw 'cannot recognise ineq symbol!';
+}
+function toIneq(code) {
+    let [g, e] = code;
+    if (g && e)
+        return '\\ge';
+    if (g && !e)
+        return '\\gt';
+    if (!g && e)
+        return '\\le';
+    if (!g && !e)
+        return '\\lt';
+    throw 'cannot recognise code!';
+}
+class InequalSign {
+    constructor(sign) {
+        this.code = [true, true];
+        this.code = toCode(sign);
+    }
+    strict() {
+        let [g, e] = this.code;
+        return toIneq([g, false]);
+    }
+    loose() {
+        let [g, e] = this.code;
+        return toIneq([g, true]);
+    }
+    flip() {
+        let [g, e] = this.code;
+        return toIneq([!g, e]);
+    }
+    compare(a, b) {
+        let [g, e] = this.code;
+        if (g && e)
+            return a >= b;
+        if (g && !e)
+            return a > b;
+        if (!g && e)
+            return a <= b;
+        if (!g && !e)
+            return a < b;
+        throw 'never, cannot recognise code!';
+    }
+}
+function ineq(sign) {
+    return new InequalSign(sign);
+}
+exports.ineq = ineq;
+//# sourceMappingURL=inequal.js.map
+
+/***/ }),
+
+/***/ 4903:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Optimizer = void 0;
+const constraints_1 = __webpack_require__(2637);
+const list_1 = __webpack_require__(4140);
+class Optimizer {
+    constructor({ field, feasiblePoints = [] }) {
+        this.field = [0, 0, 0];
+        this.feasiblePoints = (0, list_1.list)();
+        this.field = field;
+        this.feasiblePoints = (0, list_1.toList)(feasiblePoints);
+    }
+    onEdge(point) {
+        return (new constraints_1.Constraints()).onEdge(point);
+    }
+    /**
+     * Evaluate `this.field` at `point`.
+     */
+    fieldAt(point) {
+        const [a, b, c] = this.field;
+        const [x, y] = point;
+        return a * x + b * y + c;
+    }
+    /**
+     * Return the points (among feasible points) where the field is max.
+     * Points onEdge are excluded.
+     */
+    maxPoints() {
+        return this.feasiblePoints
+            .maxsBy($ => this.fieldAt($))
+            .uniqueDeep()
+            .violate($ => this.onEdge($));
+    }
+    /**
+     * Return the points (among feasible points) where the field is min.
+     * Points onEdge are excluded.
+     */
+    minPoints() {
+        return this.feasiblePoints
+            .minsBy($ => this.fieldAt($))
+            .uniqueDeep()
+            .violate($ => this.onEdge($));
+    }
+    /**
+     * Return the points (among feasible points) where the field is min or max.
+     * Points onEdge are excluded.
+     */
+    optimalPoints(max) {
+        return max ? this.maxPoints() : this.minPoints();
+    }
+    /**
+     * Return the max field value among feasible points.
+     * Points onEdge are excluded.
+     */
+    max() {
+        let pts = this.maxPoints();
+        if (pts.length === 0)
+            return null;
+        return this.fieldAt(pts[0]);
+    }
+    /**
+     * Return the min field value among feasible points.
+     * Points onEdge are excluded.
+     */
+    min() {
+        let pts = this.minPoints();
+        if (pts.length === 0)
+            return null;
+        return this.fieldAt(pts[0]);
+    }
+    /**
+     * Return the min or max field value among feasible points.
+     * Points onEdge are excluded.
+     */
+    optimal(max) {
+        return max ? this.max() : this.min();
+    }
+}
+exports.Optimizer = Optimizer;
+//# sourceMappingURL=optimizer.js.map
 
 /***/ }),
 
@@ -28142,7 +28513,7 @@ exports.poker = __importStar(__webpack_require__(2383));
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.traceCircle = exports.trace = exports.range = exports.nPr = exports.nCr = exports.factorial = exports.primeFactors = exports.primes = exports.isPrime = exports.toSurd = exports.isRational = exports.toFraction = exports.logFloor = exports.logCeil = exports.mantissa = exports.e = exports.fix = exports.round = exports.dp = exports.sigfig = exports.eq = exports.correct = exports.blur = void 0;
+exports.crammer = exports.traceCircle = exports.trace = exports.range = exports.nPr = exports.nCr = exports.factorial = exports.primeFactors = exports.primes = exports.isPrime = exports.toSurd = exports.isRational = exports.toFraction = exports.logFloor = exports.logCeil = exports.mantissa = exports.e = exports.fix = exports.round = exports.dp = exports.sigfig = exports.eq = exports.correct = exports.blur = void 0;
 const decimal_js_1 = __webpack_require__(3776);
 /**
  * The number of significant digits used in {@link blur}.
@@ -28513,7 +28884,7 @@ function nPr(n, r) {
 }
 exports.nPr = nPr;
 /**
- * Return an array of integers from `min` to `max'
+ * Return an array of integers from `min` to `max`
  * @param min - the min value to start
  * @param max - the max value to end
  * @returns an array of integers
@@ -28566,6 +28937,19 @@ function trace(func, range, dots = 1000) {
     return points;
 }
 exports.trace = trace;
+/**
+ * Return an array of 2D points as [number,number] by tracing a circle.
+ * @param center - the center of the circle
+ * @param radius - the radius of the circle
+ * @param angleRange - the polar angle range
+ * @param dots - number of points requested, more dots more detailed
+ * @returns an array of 2D points
+ * @example
+ * ```
+ * traceCircle([0,0], 1, [0,360], 4)
+ * // [[1,0], [0,1], [-1,0], [0,-1]]
+ * ```
+ */
 function traceCircle(center, radius, angleRange, dots = 100) {
     const [h, k] = center;
     function sin(degree) {
@@ -28577,6 +28961,24 @@ function traceCircle(center, radius, angleRange, dots = 100) {
     return trace(t => [h + radius * cos(t), k + radius * sin(t)], angleRange, dots);
 }
 exports.traceCircle = traceCircle;
+/**
+ * Solve `[x,y]` from ax+by=c and px+qy=r.
+ * @returns array `[x,y]`
+ * @example
+ * ```
+ * crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
+ * crammer(1,1,3,2,2,6) // [NaN, NaN]
+ * ```
+ */
+function crammer(a, b, c, p, q, r) {
+    if (a / b === p / q)
+        return [NaN, NaN];
+    const D = a * q - b * p;
+    const x = (c * q - b * r) / D;
+    const y = (a * r - c * p) / D;
+    return [blur(x), blur(y)];
+}
+exports.crammer = crammer;
 //# sourceMappingURL=cal.js.map
 
 /***/ }),
@@ -28806,7 +29208,7 @@ exports.real = real;
 function prime(min, max) {
     if (min > max)
         throw new blood_1.Blood('Poker', 'min must be less than max!');
-    let primes = list_1.list(...cal.primes(max));
+    let primes = (0, list_1.list)(...cal.primes(max));
     primes.sieve($ => $ >= min);
     return primes.draw();
 }
@@ -28820,7 +29222,7 @@ exports.prime = prime;
  * ```
  */
 function he() {
-    const boys = list_1.list("Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William");
+    const boys = (0, list_1.list)("Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William");
     return boys.draw();
 }
 exports.he = he;
@@ -28833,7 +29235,7 @@ exports.he = he;
  * ```
  */
 function she() {
-    const girls = list_1.list("Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe");
+    const girls = (0, list_1.list)("Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe");
     return girls.draw();
 }
 exports.she = she;
@@ -28884,6 +29286,21 @@ class Dice {
      */
     unique(mapper = ($ => $)) {
         this.uniques.push(mapper);
+        return this;
+    }
+    /**
+     * Set a unique deep mapper requirement in this Dice. All outcomes from `rolls` must not have duplicated mapper value. Deep compare is done by `JSON.stringify`.
+     * @param mapper - a mapper function, default to self
+     * @returns this Dice for chaining
+     * @example
+     * ```
+     * this.uniqueDeep($ => [$%2,$%2]) // unique parity
+     * this.uniqueDeep() // default to be unique self value
+     * ```
+     */
+    uniqueDeep(mapper = ($ => $)) {
+        let map = ($) => JSON.stringify(mapper($));
+        this.unique(map);
         return this;
     }
     /**
@@ -29003,7 +29420,7 @@ exports.dice = dice;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.printPointPolar = exports.printSurd = exports.printOrTrigRoots = exports.printTrigExp = exports.printTrigValue = exports.printCombo = exports.parseDfrac = exports.printDfrac = exports.parseIneq = exports.printIneq = void 0;
+exports.printConstraints = exports.printConstraint = exports.printPointPolar = exports.printSurd = exports.printOrTrigRoots = exports.printTrigExp = exports.printTrigValue = exports.printCombo = exports.parseDfrac = exports.printDfrac = exports.parseIneq = exports.printIneq = void 0;
 function printIneq(greater, equal) {
     if (greater && equal)
         return '\\ge';
@@ -29122,6 +29539,29 @@ function printPointPolar(point) {
     return `(${printSurd(r)},${q}°)`;
 }
 exports.printPointPolar = printPointPolar;
+function printConstraint(con, align = false) {
+    let [a, b, i, c] = con;
+    if (i === '>=')
+        i = '\\ge';
+    if (i === '>')
+        i = '\\gt';
+    if (i === '<=')
+        i = '\\le';
+    if (i === '<')
+        i = '\\lt';
+    return ` ${a}x + ${b}y ${align ? '&' : ''} ${i} ${c} `;
+}
+exports.printConstraint = printConstraint;
+function printConstraints(cons) {
+    let T = "";
+    T += ' \\left\\{ \\begin{aligned} ';
+    for (let c of cons) {
+        T += printConstraint(c, true) + ' \\\\ ';
+    }
+    T += ' \\end{aligned} \\right. ';
+    return T;
+}
+exports.printConstraints = printConstraints;
 
 
 /***/ }),
@@ -29132,8 +29572,8 @@ exports.printPointPolar = printPointPolar;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.fail = exports.pass = exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3D = exports.point2D = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
-exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = void 0;
+exports.pass = exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3D = exports.point2Ds = exports.point2D = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
+exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.field = exports.constraints = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = exports.fail = void 0;
 const num = (_) => Number.isFinite(_);
 exports.num = num;
 const whole = (_) => Number.isInteger(_);
@@ -29210,6 +29650,8 @@ const interval = (_) => (0, exports.couple)(_) && _[0] <= _[1];
 exports.interval = interval;
 const point2D = (_) => (0, exports.couple)(_);
 exports.point2D = point2D;
+const point2Ds = (_) => (0, exports.arrayWith)(exports.point2D)(_);
+exports.point2Ds = point2Ds;
 const point3D = (_) => (0, exports.triple)(_);
 exports.point3D = point3D;
 const polar = (_) => (0, exports.couple)(_) && _[0] >= 0;
@@ -29260,6 +29702,10 @@ const dfrac = (_) => {
 exports.dfrac = dfrac;
 const constraint = (_) => (0, exports.arrayOfLength)(4)(_) && (0, exports.num)(_[0]) && (0, exports.num)(_[1]) && (0, exports.ineq)(_[2]) && (0, exports.num)(_[3]);
 exports.constraint = constraint;
+const constraints = (_) => (0, exports.arrayWith)(exports.constraint)(_);
+exports.constraints = constraints;
+const field = (_) => (0, exports.triple)(_);
+exports.field = field;
 const quadrantCode = (_) => (0, exports.int)(_) && [1, 2, 3, 4].includes(_);
 exports.quadrantCode = quadrantCode;
 const quadrantName = (_) => (0, exports.str)(_) && ['I', 'II', 'III', 'IV'].includes(_);
@@ -29343,6 +29789,8 @@ globalThis.toShape3D = sapphire_js_1.toShape3D;
 globalThis.toVector = sapphire_js_1.toVector;
 globalThis.vec2D = sapphire_js_1.vec2D;
 globalThis.vec3D = sapphire_js_1.vec3D;
+globalThis.toConstraints = sapphire_js_1.toConstraints;
+globalThis.Optimizer = sapphire_js_1.Optimizer;
 const $Owl = __importStar(__webpack_require__(1025));
 globalThis.owl = $Owl;
 const $Ink = __importStar(__webpack_require__(6715));
@@ -31061,30 +31509,25 @@ globalThis.PairTable = contract(PairTable)
 
 "use strict";
 
-const LP_BOUND = 100;
-function onBoundary(p) {
-    return Abs(p[0]) >= LP_BOUND || Abs(p[1]) >= LP_BOUND;
-}
 /**
  *
  * @category LinearProgram
  * @return the value of field at given point
- * ```typescript
+ * ```
  * FieldAt([0,0],[1,2,3]) // 3
  * FieldAt([1,2],[3,-4,5]) // 0
  * ```
  */
-function FieldAt(p, field) {
-    const [a, b, c] = field;
-    const [x, y] = p;
-    return a * x + b * y + c;
+function FieldAt(point, field) {
+    let op = new Optimizer({ field, feasiblePoints: [] });
+    return op.fieldAt(point);
 }
-globalThis.FieldAt = FieldAt;
+globalThis.FieldAt = contract(FieldAt).sign([owl.point2D, owl.field]);
 /**
  *
  * @category LinearProgram
  * @return check if point is constrained by cons
- * ```typescript
+ * ```
  * isConstrained([
  *    [1, 1, "<=", 5],
  *    [1, -1, "<", 4],
@@ -31094,27 +31537,14 @@ globalThis.FieldAt = FieldAt;
  * ```
  */
 function isConstrained(cons, point) {
-    const [x, y] = point;
-    return cons.every(con => {
-        let [a, b, s, c] = con;
-        let P = a * x + b * y - c;
-        let [greater, eq] = ink.parseIneq(s);
-        if (greater && eq)
-            return P >= 0;
-        if (greater && !eq)
-            return P > 0;
-        if (!greater && eq)
-            return P <= 0;
-        if (!greater && !eq)
-            return P < 0;
-    });
+    return toConstraints(cons).contains(point);
 }
-globalThis.isConstrained = isConstrained;
+globalThis.isConstrained = contract(isConstrained).sign([owl.constraints, owl.point2D]);
 /**
  *
  * @category LinearProgram
  * @return check if point is constrained by cons, treating all cons as 'or equal to'
- * ```typescript
+ * ```
  * isLooseConstrained([
  *    [1, 1, "<=", 5],
  *    [1, -1, "<", 4],
@@ -31124,23 +31554,14 @@ globalThis.isConstrained = isConstrained;
  * ```
  */
 function isLooseConstrained(cons, point) {
-    const [x, y] = point;
-    return cons.every(con => {
-        let [a, b, s, c] = con;
-        let P = a * x + b * y - c;
-        let [greater, _] = ink.parseIneq(s);
-        if (greater)
-            return P >= 0;
-        if (!greater)
-            return P <= 0;
-    });
+    return toConstraints(cons).looseContains(point);
 }
-globalThis.isLooseConstrained = isLooseConstrained;
+globalThis.isLooseConstrained = contract(isLooseConstrained).sign([owl.constraints, owl.point2D]);
 /**
  *
  * @category LinearProgram
  * @return the vertices of the feasible polygon
- * ```typescript
+ * ```
  * FeasiblePolygon([
  *    [1, 0, '<', 10],
  *    [1, 0, '>', -5],
@@ -31151,41 +31572,16 @@ globalThis.isLooseConstrained = isLooseConstrained;
  * ```
  */
 function FeasiblePolygon(...cons) {
-    const boundaryConstraints = [
-        [1, 0, "<=", LP_BOUND],
-        [1, 0, ">=", -LP_BOUND],
-        [0, 1, "<=", LP_BOUND],
-        [0, 1, ">=", -LP_BOUND]
-    ];
-    let cs = [...cons, ...boundaryConstraints];
-    let vertices = [];
-    for (let i = 0; i < cs.length; i++) {
-        for (let j = i + 1; j < cs.length; j++) {
-            let [a1, b1, s1, c1] = cs[i];
-            let [a2, b2, s2, c2] = cs[j];
-            if (a1 / b1 === a2 / b2)
-                continue;
-            let p = Crammer(a1, b1, c1, a2, b2, c2);
-            let otherCons = [...cs];
-            otherCons.splice(j, 1);
-            otherCons.splice(i, 1);
-            if (isLooseConstrained(otherCons, p)) {
-                vertices.push(p);
-            }
-        }
-    }
-    vertices = toList(vertices).uniqueDeep();
-    Should(vertices.length > 2, 'No feasible region.');
-    const center = Mid(...vertices);
-    vertices = SortBy(vertices, x => Dir(center, x));
-    return vertices;
+    let vs = toConstraints(cons).polygon();
+    Should(vs.length > 2, 'No feasible region.');
+    return vs;
 }
-globalThis.FeasiblePolygon = FeasiblePolygon;
+globalThis.FeasiblePolygon = contract(FeasiblePolygon).sign([owl.constraint]);
 /**
  *
  * @category LinearProgram
  * @return the vertices of the feasible polygon
- * ```typescript
+ * ```
  * FeasiblePolygon([
  *    [1, 0, '<', 10],
  *    [1, 0, '>', -5],
@@ -31196,16 +31592,16 @@ globalThis.FeasiblePolygon = FeasiblePolygon;
  * ```
  */
 function FeasibleVertices(...cons) {
-    let vertices = FeasiblePolygon(...cons).filter(v => !onBoundary(v));
-    Should(vertices.length > 0, 'no feasible vertex');
-    return vertices;
+    let vs = toConstraints(cons).vertices();
+    Should(vs.length > 0, 'no feasible vertex');
+    return vs;
 }
-globalThis.FeasibleVertices = FeasibleVertices;
+globalThis.FeasibleVertices = contract(FeasibleVertices).sign([owl.constraint]);
 /**
  *
  * @category LinearProgram
  * @return check if the feasible region is bounded
- * ```typescript
+ * ```
  * FeasibleIsBounded([
  *    [1, 0, '<', 10],
  *    [1, 0, '>', -5],
@@ -31220,14 +31616,14 @@ globalThis.FeasibleVertices = FeasibleVertices;
  * ```
  */
 function FeasibleIsBounded(...cons) {
-    return FeasiblePolygon(...cons).every(v => !onBoundary(v));
+    return toConstraints(cons).isBounded();
 }
-globalThis.FeasibleIsBounded = FeasibleIsBounded;
+globalThis.FeasibleIsBounded = contract(FeasibleIsBounded).sign([owl.constraint]);
 /**
  *
  * @category LinearProgram
  * @return the integral points inside the feasible polygon
- * ```typescript
+ * ```
  * FeasibleIntegral([
  *    [1, 0, '<', 3],
  *    [1, 0, '>', 0],
@@ -31238,101 +31634,86 @@ globalThis.FeasibleIsBounded = FeasibleIsBounded;
  * ```
  */
 function FeasibleIntegral(...cons) {
-    let vertices = FeasiblePolygon(...cons);
-    let xCoords = vertices.map(p => p[0]);
-    let yCoords = vertices.map(p => p[1]);
-    let xmax = Ceil(Max(...xCoords));
-    let xmin = Floor(Min(...xCoords));
-    let ymax = Ceil(Max(...yCoords));
-    let ymin = Floor(Min(...yCoords));
-    let points = [];
-    for (let i = xmin; i <= xmax; i++) {
-        for (let j = ymin; j <= ymax; j++) {
-            let p = [i, j];
-            if (isConstrained(cons, p))
-                points.push(p);
-        }
-    }
-    return points;
+    return toConstraints(cons).integrals();
 }
-globalThis.FeasibleIntegral = FeasibleIntegral;
+globalThis.FeasibleIntegral = contract(FeasibleIntegral).sign([owl.constraint]);
 /**
  *
  * @category LinearProgram
  * @return the point with the max value of field
- * ```typescript
+ * ```
  * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
  * ```
  */
 function MaximizePoint(points, field) {
     Should(points.length > 0, 'No feasible point');
-    let orderedPoints = SortBy(points, x => -FieldAt(x, field));
-    orderedPoints = toList(orderedPoints).uniqueDeep();
-    let point = orderedPoints[0];
-    Should(!onBoundary(point), 'No max point');
-    if (orderedPoints[1]) {
-        Should(FieldAt(point, field) !== FieldAt(orderedPoints[1], field), 'multiple max points');
-    }
-    return point;
+    let op = new Optimizer({
+        field: field,
+        feasiblePoints: points
+    });
+    let pts = op.maxPoints();
+    Should(pts.length > 0, 'No max point');
+    Should(pts.length < 2, 'Multiple max points');
+    return pts[0];
 }
-globalThis.MaximizePoint = MaximizePoint;
+globalThis.MaximizePoint = contract(MaximizePoint).sign([owl.point2Ds, owl.field]);
 /**
  *
  * @category LinearProgram
  * @return the point with the min value of field
- * ```typescript
+ * ```
  * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
  * ```
  */
 function MinimizePoint(points, field) {
     Should(points.length > 0, 'No feasible point');
-    let orderedPoints = SortBy(points, x => FieldAt(x, field));
-    orderedPoints = toList(orderedPoints).uniqueDeep();
-    let point = orderedPoints[0];
-    Should(!onBoundary(point), 'No min point');
-    if (orderedPoints[1]) {
-        Should(FieldAt(point, field) !== FieldAt(orderedPoints[1], field), 'multiple min points');
-    }
-    return point;
+    let op = new Optimizer({
+        field: field,
+        feasiblePoints: points
+    });
+    let pts = op.minPoints();
+    Should(pts.length > 0, 'No min point');
+    Should(pts.length < 2, 'Multiple min points');
+    return pts[0];
 }
-globalThis.MinimizePoint = MinimizePoint;
+globalThis.MinimizePoint = contract(MinimizePoint).sign([owl.point2Ds, owl.field]);
 /**
  *
  * @category LinearProgram
  * @return the point with the min/max value of field
- * ```typescript
+ * ```
  * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [10,10]
  * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
  * ```
  */
 function OptimizePoint(points, field, max) {
-    if (max) {
-        return MaximizePoint(points, field);
-    }
-    else {
-        return MinimizePoint(points, field);
-    }
+    return max ? MaximizePoint(points, field) : MinimizePoint(points, field);
 }
-globalThis.OptimizePoint = OptimizePoint;
+globalThis.OptimizePoint = contract(OptimizePoint).sign([owl.point2Ds, owl.field, owl.bool]);
 /**
  *
  * @category LinearProgram
  * @return the min/max value of field
- * ```typescript
+ * ```
  * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
  * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
  * ```
  */
 function OptimizeField(points, field, max) {
-    let point = OptimizePoint(points, field, max);
-    return FieldAt(point, field);
+    let op = new Optimizer({
+        field: field,
+        feasiblePoints: points
+    });
+    let val = max ? op.max() : op.min();
+    Should(val !== null, 'No optimal value for this field!');
+    return val;
 }
-globalThis.OptimizeField = OptimizeField;
+globalThis.OptimizeField = contract(OptimizeField).sign([owl.point2Ds, owl.field, owl.bool]);
 /**
  *
  * @category LinearProgram
  * @return the constraints from the given points
- * ```typescript
+ * ```
  * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
  * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2])
  * // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
@@ -32349,7 +32730,7 @@ function RndShakeCombo(anchor) {
             RndT() ? c : !c
         ];
     };
-    return poker.dice(func).unique(_ => JSON.stringify(_)).rolls(3);
+    return poker.dice(func).uniqueDeep().rolls(3);
 }
 globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo]);
 /**
@@ -32392,7 +32773,7 @@ function RndShakeRatio(anchor) {
     return poker.dice(func)
         .shield(r => toNumbers(r).hcf() === 1)
         .shield(r => AreDifferent(anchor, r))
-        .unique(_ => JSON.stringify(_))
+        .uniqueDeep()
         .rolls(3);
 }
 globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple]);
@@ -32469,6 +32850,40 @@ function RndShakePointPolar(anchor) {
     return RndShuffle([r1, q2], [r2, q1], [r2, q2]).map($ => PolToRect($));
 }
 globalThis.RndShakePointPolar = contract(RndShakePointPolar).sign([owl.point2D]);
+/**
+ * @category RandomShake
+ * @return an array of 3 constraint, with only the sign shaken
+ * ```
+ * RndShakeConstraint([1,2,'>',3])
+ * // may return [[1,2,'>',3], [1,2,'<',3], [1,2,'<',3]]
+ * ```
+ */
+function RndShakeConstraint(anchor) {
+    let [a, b, i, c] = anchor;
+    let signs = RndShakeIneq(i);
+    return signs.map($ => [a, b, $, c]);
+}
+globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constraint]);
+/**
+ * @category RandomShake
+ * @return an array of 3 constraint, with only the sign shaken
+ * ```
+ * RndShakeConstraints([
+ *   [1,2,'>',3],
+ *   [4,5,'>',6]
+ * ])
+ * // may return [
+ * // [[1,2,'>',3],[4,5,'>',6]],
+ * // [[1,2,'<',3],[4,5,'<',6]],
+ * // [[1,2,'<',3],[4,5,'>',6]]
+ * // ]
+ * ```
+ */
+function RndShakeConstraints(anchor) {
+    let func = () => anchor.map($ => RndShakeConstraint($)[0]);
+    return poker.dice(func).uniqueDeep().rolls(3);
+}
+globalThis.RndShakeConstraints = contract(RndShakeConstraints).sign([owl.constraints]);
 
 
 /***/ }),
@@ -38172,6 +38587,12 @@ function ParseForPrint(value, signal = "") {
         if (owl.trigExp(value)) {
             return ink.printTrigExp(value);
         }
+        if (owl.constraint(value)) {
+            return ink.printConstraint(value);
+        }
+        if (owl.constraints(value)) {
+            return ink.printConstraints(value);
+        }
     }
     if (signal === '*') {
         if (T === 'number') {
@@ -38258,8 +38679,7 @@ function ParseForPrint(value, signal = "") {
     }
     if (signal === ':') {
         if (owl.ntuple(value)) {
-            let v = toNumbers(value).ratio();
-            return v.join(":");
+            return toNumbers(value).ratio().join(":");
         }
         if (T === 'number') {
             let [p, q] = cal.toFraction(value);
