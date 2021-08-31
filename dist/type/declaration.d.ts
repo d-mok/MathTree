@@ -3130,6 +3130,22 @@ declare module "Pen/Pen" {
          */
         cutY(position: Point2D | number, label?: string): void;
         /**
+         * Draw a guide line from `point` to the x-axis.
+         * @category draw
+         * @param point - from which point to draw the guide line
+         * @param label - the label on the x-axis
+         * @returns void
+         */
+        guideX(point: Point2D, label?: string): void;
+        /**
+         * Draw a guide line from `point` to the y-axis.
+         * @category draw
+         * @param point - from which point to draw the guide line
+         * @param label - the label on the y-axis
+         * @returns void
+         */
+        guideY(point: Point2D, label?: string): void;
+        /**
          * Draw a circle or arc.
          * @category draw
          * @param center - The coordinates [x,y] of center.
@@ -4161,27 +4177,6 @@ declare module "Pen/AutoPen" {
             barGap?: number;
             showBar?: boolean;
             showLine?: boolean;
-        }): void;
-        /**
-         * A pie chart
-         * @deprecated
-         * @category tool
-         * @returns void
-         * ```
-         * let pen = new AutoPen()
-         * pen.StemAndLeaf({
-         *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-         *   labels: [2,'x',6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-         *   stemTitle: "Stem (10 units)",
-         *   leafTitle: "Leaf (1 unit)"
-         * })
-         * ```
-         */
-        StemAndLeaf({ data, labels, stemTitle, leafTitle }: {
-            data: number[];
-            labels?: string[];
-            stemTitle?: string;
-            leafTitle?: string;
         }): void;
         /**
          * A boxplot
