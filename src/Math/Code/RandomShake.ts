@@ -43,6 +43,14 @@ function RndShake(anchor: any): (typeof anchor)[] {
         // TrigValue
         return RndShakeTrigValue(anchor)
     }
+    if (owl.constraint(anchor)) {
+        // Constraint
+        return RndShakeConstraint(anchor)
+    }
+    if (owl.constraints(anchor)) {
+        // Constraints
+        return RndShakeConstraints(anchor)
+    }
     if (typeof anchor === 'number' && owl.num(anchor)) {
         anchor = cal.blur(anchor)
         // Integer
@@ -452,11 +460,10 @@ globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constrain
 
 /**
  * @category RandomShake
- * @return an array of 3 constraint, with only the sign shaken
+ * @return an array of 3 sets of constraints, with only the sign shaken
  * ```
  * RndShakeConstraints([
- *   [1,2,'>',3],
- *   [4,5,'>',6]
+ *   [1,2,'>',3], [4,5,'>',6]
  * ])
  * // may return [
  * // [[1,2,'>',3],[4,5,'>',6]],
@@ -467,6 +474,12 @@ globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constrain
  */
 function RndShakeConstraints(anchor: Constraint[]): Constraint[][] {
     let func = (): Constraint[] => anchor.map($ => RndShakeConstraint($)[0])
-    return poker.dice(func).uniqueDeep().rolls(3)
+    function diffFromAnchor(shaked: Constraint[]): boolean {
+        return JSON.stringify(shaked) !== JSON.stringify(anchor)
+    }
+    return poker.dice(func)
+        .shield(diffFromAnchor)
+        .uniqueDeep()
+        .rolls(3)
 }
 globalThis.RndShakeConstraints = contract(RndShakeConstraints).sign([owl.constraints])
