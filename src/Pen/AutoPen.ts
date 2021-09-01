@@ -814,8 +814,8 @@ export class AutoPenCls {
         function drawLines() {
             for (let i = 0; i < constraints.length; i++) {
                 let [a, b, s, c] = constraints[i];
-                let [_, eq] = ink.parseIneq(s)
-                if (!eq) pen.set.dash([5, 5]);
+                if (!ineq(s).canEqual())
+                    pen.set.dash([5, 5]);
                 pen.set.color(constraintColors[i] ?? 'black')
                 pen.graph.linear(a, b, -c);
                 pen.set.color()

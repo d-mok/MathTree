@@ -1,18 +1,18 @@
 
 
-export function printIneq(greater: boolean, equal: boolean): Ineq {
-    if (greater && equal) return '\\ge'
-    if (greater && !equal) return '\\gt'
-    if (!greater && equal) return '\\le'
-    if (!greater && !equal) return '\\lt'
-    throw 'never'
-}
+// export function printIneq(greater: boolean, equal: boolean): Ineq {
+//     if (greater && equal) return '\\ge'
+//     if (greater && !equal) return '\\gt'
+//     if (!greater && equal) return '\\le'
+//     if (!greater && !equal) return '\\lt'
+//     throw 'never'
+// }
 
-export function parseIneq(text: Ineq): [greater: boolean, equal: boolean] {
-    let greater = text.includes('g') || text.includes('>')
-    let equal = text.includes('e') || text.includes('=')
-    return [greater, equal]
-}
+// export function parseIneq(text: Ineq): [greater: boolean, equal: boolean] {
+//     let greater = text.includes('g') || text.includes('>')
+//     let equal = text.includes('e') || text.includes('=')
+//     return [greater, equal]
+// }
 
 export function printDfrac(numerator: number, denominator: number, upSign = false): string {
     let p = numerator
@@ -30,18 +30,18 @@ export function printDfrac(numerator: number, denominator: number, upSign = fals
 }
 
 
-export function parseDfrac(dfrac: string): Fraction {
-    if (!owl.dfrac(dfrac)) throw 'not dfrac'
-    const d = String.raw`-?\d+\.?\d*`
-    const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
-    dfrac = dfrac.match(new RegExp(f, 'g'))![0]
-    const matches = dfrac.match(new RegExp(d, 'g'))!
-    const u = dfrac.charAt(0) === '-' ? -1 : 1
-    const p = Number(matches[0]) * u
-    const q = Number(matches[1])
-    if (!(owl.num(p) && owl.num(q))) throw 'fail to parse dfrac'
-    return [p, q]
-}
+// export function parseDfrac(dfrac: string): Fraction {
+//     if (!owl.dfrac(dfrac)) throw 'not dfrac'
+//     const d = String.raw`-?\d+\.?\d*`
+//     const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
+//     dfrac = dfrac.match(new RegExp(f, 'g'))![0]
+//     const matches = dfrac.match(new RegExp(d, 'g'))!
+//     const u = dfrac.charAt(0) === '-' ? -1 : 1
+//     const p = Number(matches[0]) * u
+//     const q = Number(matches[1])
+//     if (!(owl.num(p) && owl.num(q))) throw 'fail to parse dfrac'
+//     return [p, q]
+// }
 
 export function printCombo(combo: [boolean, boolean, boolean]): string {
     let [a, b, c] = combo
@@ -108,7 +108,12 @@ export function printConstraint(con: Constraint, align = false): string {
     if (i === '>') i = '\\gt'
     if (i === '<=') i = '\\le'
     if (i === '<') i = '\\lt'
-    return ` ${a}x + ${b}y ${align ? '&' : ''} ${i} ${c} `
+    let j: string = i
+    if (align) j = ' & ' + j
+    if (a === 0 && b === 0) return ` 0 ${j} ${c} `
+    if (a !== 0 && b === 0) return ` ${a}x ${j} ${c} `
+    if (a === 0 && b !== 0) return ` ${b}y ${j} ${c} `
+    return ` ${a}x + ${b}y ${j} ${c} `
 }
 
 

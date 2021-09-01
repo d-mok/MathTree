@@ -97,7 +97,7 @@ function RndShakeN(anchor: number): [number, number, number] {
         f = () => RndN(min, max) * s
     }
 
-    return poker.dice(f)
+    return dice(f)
         .shield(x => x !== anchor)
         .unique()
         .rolls(3) as [number, number, number]
@@ -121,8 +121,7 @@ function RndShakeR(anchor: number): number[] {
     if (IsInteger(m))
         return RndShakeN(m).map(x => Number(x + "e" + exp))
     let dp = cal.dp(m)
-    return poker
-        .dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
+    return dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
         .shield(x => x * m > 0)
         .shield(x => cal.e(x) === cal.e(m))
         .shield(x => x !== m)
@@ -148,16 +147,15 @@ function RndShakeQ(anchor: number): number[] {
     let [p, q]: Fraction = ToFrac(anchor);
     [p, q] = [p, q].map(cal.blur)
     Should(IsInteger(p, q), 'input should be integral fraction')
-    return poker
-        .dice(
-            (): Fraction => {
-                const h = RndShakeN(p)[0]
-                const k = RndShakeN(q)[0]
-                let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h
-                let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k
-                if (a === p && b === q) return [h, k]
-                return [a, b]
-            })
+    return dice(
+        (): Fraction => {
+            const h = RndShakeN(p)[0]
+            const k = RndShakeN(q)[0]
+            let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h
+            let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k
+            if (a === p && b === q) return [h, k]
+            return [a, b]
+        })
         .shield(([a, b]) => AreCoprime(a, b))
         .shield(([a, b]) => a !== 0)
         .shield(([a, b]) => b !== 0)
@@ -239,9 +237,10 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
  * ```
  */
 function RndShakeIneq(anchor: Ineq): Ineq[] {
-    let f = ink.parseIneq(anchor)
-    let [me, oppo] = IneqSign(...f)
-    return list(me, oppo, oppo).shuffled()
+    let i = ineq(anchor)
+    let me = i.print()
+    let flip = i.flip()
+    return list(me, flip, flip).shuffled()
 }
 globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq])
 
@@ -262,7 +261,7 @@ function RndShakePoint(anchor: Point2D): Point2D[] {
         const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0]
         return [h, k]
     }
-    return poker.dice(func)
+    return dice(func)
         .unique(([x, y]) => x)
         .unique(([x, y]) => y)
         .rolls(3)
@@ -289,7 +288,7 @@ function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, 
             RndT() ? c : !c
         ]
     }
-    return poker.dice(func).uniqueDeep().rolls(3)
+    return dice(func).unique().rolls(3)
 }
 globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
 
@@ -344,10 +343,10 @@ function RndShakeRatio(anchor: number[]): number[][] {
     let func = (): number[] => {
         return anchor.map(x => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0])
     }
-    return poker.dice(func)
+    return dice(func)
         .shield(r => toNumbers(r).hcf() === 1)
         .shield(r => AreDifferent(anchor, r))
-        .uniqueDeep()
+        .unique()
         .rolls(3)
 }
 globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple])
@@ -411,7 +410,7 @@ function RndShakeBase(anchor: string): string[] {
 
         return [B1, B2, B3]
     }
-    return poker.dice(f).shield(_ => toList<string>([num, ..._]).dupless()).roll()
+    return dice(f).shield(_ => toList<string>([num, ..._]).dupless()).roll()
 }
 globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base])
 
@@ -450,9 +449,8 @@ globalThis.RndShakePointPolar = contract(RndShakePointPolar).sign([owl.point2D])
  * ```
  */
 function RndShakeConstraint(anchor: Constraint): Constraint[] {
-    let [a, b, i, c] = anchor
-    let signs = RndShakeIneq(i)
-    return signs.map($ => [a, b, $, c])
+    let flip = rein(anchor).flip().constraint
+    return list(anchor, flip, flip).shuffled()
 }
 globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constraint])
 
@@ -473,13 +471,10 @@ globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constrain
  * ```
  */
 function RndShakeConstraints(anchor: Constraint[]): Constraint[][] {
-    let func = (): Constraint[] => anchor.map($ => RndShakeConstraint($)[0])
-    function diffFromAnchor(shaked: Constraint[]): boolean {
-        return JSON.stringify(shaked) !== JSON.stringify(anchor)
-    }
-    return poker.dice(func)
-        .shield(diffFromAnchor)
-        .uniqueDeep()
+    let func = () => [...toReins(anchor).shake().map($ => $.constraint)]
+    return dice(func)
+        .forbid(anchor)
+        .unique()
         .rolls(3)
 }
 globalThis.RndShakeConstraints = contract(RndShakeConstraints).sign([owl.constraints])

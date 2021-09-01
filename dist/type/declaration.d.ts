@@ -74,10 +74,7 @@ declare module "Core/Owl/index" {
     export function every(pd: predicate, name?: string): predicate;
 }
 declare module "Core/Ink/index" {
-    export function printIneq(greater: boolean, equal: boolean): Ineq;
-    export function parseIneq(text: Ineq): [greater: boolean, equal: boolean];
     export function printDfrac(numerator: number, denominator: number, upSign?: boolean): string;
-    export function parseDfrac(dfrac: string): Fraction;
     export function printCombo(combo: [boolean, boolean, boolean]): string;
     export function printTrigValue(T: TrigValue): string;
     export function printTrigExp(T: TrigExp): string;
@@ -88,11 +85,12 @@ declare module "Core/Ink/index" {
     export function printConstraints(cons: Constraint[]): string;
 }
 declare module "Core/index" {
-    import { poker as $poker, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, toConstraints as $toConstraints, Optimizer as $Optimizer } from 'sapphire-js';
+    import { poker as $poker, dice as $dice, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins } from 'sapphire-js';
     import * as $Owl from "Core/Owl/index";
     import * as $Ink from "Core/Ink/index";
     global {
         var poker: typeof $poker;
+        var dice: typeof $dice;
         var contract: typeof $contract;
         var cal: typeof $cal;
         var data: typeof $data;
@@ -113,8 +111,10 @@ declare module "Core/index" {
         var toVector: typeof $toVector;
         var vec2D: typeof $vec2D;
         var vec3D: typeof $vec3D;
-        var toConstraints: typeof $toConstraints;
-        var Optimizer: typeof $Optimizer;
+        var ineq: typeof $ineq;
+        var optimizer: typeof $optimizer;
+        var rein: typeof $rein;
+        var toReins: typeof $toReins;
         var owl: typeof $Owl;
         var ink: typeof $Ink;
     }
@@ -265,7 +265,7 @@ declare class CustomErrorCls extends Error {
 declare function CustomError(name: string, message: string): CustomErrorCls;
 declare function toError(e: unknown): Error;
 declare function MathError(message: string): CustomErrorCls;
-declare function Should(condition: boolean, msg?: string): void;
+declare function Should(condition: boolean, msg?: string): asserts condition;
 /**
  * ```
  * // quadratic form
@@ -1809,11 +1809,10 @@ declare function RndShakePointPolar(anchor: Point2D): Point2D[];
 declare function RndShakeConstraint(anchor: Constraint): Constraint[];
 /**
  * @category RandomShake
- * @return an array of 3 constraint, with only the sign shaken
+ * @return an array of 3 sets of constraints, with only the sign shaken
  * ```
  * RndShakeConstraints([
- *   [1,2,'>',3],
- *   [4,5,'>',6]
+ *   [1,2,'>',3], [4,5,'>',6]
  * ])
  * // may return [
  * // [[1,2,'>',3],[4,5,'>',6]],
@@ -2248,7 +2247,7 @@ declare function Summary(...data: number[]): number[];
 declare function GrammarJoin(...items: unknown[]): string;
 /**
 * @category Text
-* @deprecated
+* @deprecated use symbol printing instead!!!
 * @return a pair of latex inequalities sign array like ['\\ge', '\\le'].
 * ```typescript
 * IneqSign(true,true) // ['\\ge', '\\le']

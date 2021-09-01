@@ -1,5 +1,6 @@
 import {
     poker as $poker,
+    dice as $dice,
     contract as $contract,
     cal as $cal,
     data as $data,
@@ -20,12 +21,15 @@ import {
     toVector as $toVector,
     vec2D as $vec2D,
     vec3D as $vec3D,
-    toConstraints as $toConstraints,
-    Optimizer as $Optimizer,
+    ineq as $ineq,
+    optimizer as $optimizer,
+    rein as $rein,
+    toReins as $toReins,
 } from 'sapphire-js'
 
 
 globalThis.poker = $poker
+globalThis.dice = $dice
 globalThis.contract = $contract
 globalThis.cal = $cal
 globalThis.data = $data
@@ -46,8 +50,10 @@ globalThis.toShape3D = $toShape3D
 globalThis.toVector = $toVector
 globalThis.vec2D = $vec2D
 globalThis.vec3D = $vec3D
-globalThis.toConstraints = $toConstraints
-globalThis.Optimizer = $Optimizer
+globalThis.ineq = $ineq
+globalThis.optimizer = $optimizer
+globalThis.rein = $rein
+globalThis.toReins = $toReins
 
 
 import * as $Owl from './Owl/index'
@@ -67,6 +73,7 @@ globalThis.ink = $Ink
 
 declare global {
     var poker: typeof $poker
+    var dice: typeof $dice
     var contract: typeof $contract
     var cal: typeof $cal
     var data: typeof $data
@@ -87,8 +94,10 @@ declare global {
     var toVector: typeof $toVector
     var vec2D: typeof $vec2D
     var vec3D: typeof $vec3D
-    var toConstraints: typeof $toConstraints
-    var Optimizer: typeof $Optimizer
+    var ineq: typeof $ineq
+    var optimizer: typeof $optimizer
+    var rein: typeof $rein
+    var toReins: typeof $toReins
     var owl: typeof $Owl
     var ink: typeof $Ink
 }

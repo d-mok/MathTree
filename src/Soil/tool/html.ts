@@ -259,21 +259,25 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
     if (signal === '>') {
         if (T === 'boolean') return value ? '\\gt' : '\\lt'
+        if (T === 'number') return value > 0 ? '\\gt' : value < 0 ? '\\lt' : '='
     }
 
 
     if (signal === '<') {
         if (T === 'boolean') return value ? '\\lt' : '\\gt'
+        if (T === 'number') return value > 0 ? '\\lt' : value < 0 ? '\\gt' : '='
     }
 
 
     if (signal === '>=') {
         if (T === 'boolean') return value ? '\\ge' : '\\le'
+        if (T === 'number') return value > 0 ? '\\ge' : value < 0 ? '\\le' : '='
     }
 
 
     if (signal === '<=') {
         if (T === 'boolean') return value ? '\\le' : '\\ge'
+        if (T === 'number') return value > 0 ? '\\le' : value < 0 ? '\\ge' : '='
     }
 
     if (signal === '%') {

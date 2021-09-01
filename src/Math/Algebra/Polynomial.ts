@@ -31,7 +31,7 @@ class MonomialCls<V extends string> {
             }
             return M
         }
-        let mon = poker.dice(f).shield(M => M.degree() === degree).roll()
+        let mon = dice(f).shield(M => M.degree() === degree).roll()
         this.coeff = mon.coeff
         this.vars = mon.vars
     }
@@ -133,8 +133,8 @@ function RndPolynomial<V extends string>(degree: number, vars: V[] = ["x" as V],
         M.random(RndN(0, degree), vars, maxCoeff)
         return M
     }
-    let f = () => poker.dice(RndMono).unique(M => M.size()).rolls(terms)
-    return poker.dice(f).shield(P => Max(...P.map(M => M.degree())) === degree).roll()
+    let f = () => dice(RndMono).unique(M => M.size()).rolls(terms)
+    return dice(f).shield(P => Max(...P.map(M => M.degree())) === degree).roll()
 
 }
 globalThis.RndPolynomial = contract(RndPolynomial).sign([owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num])

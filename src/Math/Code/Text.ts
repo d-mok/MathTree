@@ -56,7 +56,7 @@ globalThis.GrammarJoin = GrammarJoin
 
 /**
 * @category Text
-* @deprecated
+* @deprecated use symbol printing instead!!!
 * @return a pair of latex inequalities sign array like ['\\ge', '\\le'].
 * ```typescript
 * IneqSign(true,true) // ['\\ge', '\\le']

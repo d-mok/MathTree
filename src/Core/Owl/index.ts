@@ -174,8 +174,6 @@ export const base = (_: unknown): _ is string => str(_) && _.match(/[0-9A-Z]+\_\
 
 
 
-
-
 // functor
 
 function build<F extends predicate>(funcName: string, func: F): F {

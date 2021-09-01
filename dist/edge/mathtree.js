@@ -28085,7 +28085,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.poker = exports.contract = exports.cal = exports.toConstraints = exports.Constraints = exports.Optimizer = exports.Pencil = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
+exports.dice = exports.poker = exports.contract = exports.cal = exports.rein = exports.Rein = exports.reins = exports.toReins = exports.Reins = exports.optimizer = exports.Optimizer = exports.ineq = exports.Pencil = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
 var data_1 = __webpack_require__(210);
 Object.defineProperty(exports, "Data", ({ enumerable: true, get: function () { return data_1.Data; } }));
 Object.defineProperty(exports, "data", ({ enumerable: true, get: function () { return data_1.data; } }));
@@ -28128,219 +28128,25 @@ Object.defineProperty(exports, "vector3D", ({ enumerable: true, get: function ()
 Object.defineProperty(exports, "vec3D", ({ enumerable: true, get: function () { return vector3D_1.vec3D; } }));
 var pencil_1 = __webpack_require__(3933);
 Object.defineProperty(exports, "Pencil", ({ enumerable: true, get: function () { return pencil_1.Pencil; } }));
+var inequal_1 = __webpack_require__(3098);
+Object.defineProperty(exports, "ineq", ({ enumerable: true, get: function () { return inequal_1.ineq; } }));
 var optimizer_1 = __webpack_require__(4903);
 Object.defineProperty(exports, "Optimizer", ({ enumerable: true, get: function () { return optimizer_1.Optimizer; } }));
-var constraints_1 = __webpack_require__(2637);
-Object.defineProperty(exports, "Constraints", ({ enumerable: true, get: function () { return constraints_1.Constraints; } }));
-Object.defineProperty(exports, "toConstraints", ({ enumerable: true, get: function () { return constraints_1.toConstraints; } }));
+Object.defineProperty(exports, "optimizer", ({ enumerable: true, get: function () { return optimizer_1.optimizer; } }));
+var reins_1 = __webpack_require__(8902);
+Object.defineProperty(exports, "Reins", ({ enumerable: true, get: function () { return reins_1.Reins; } }));
+Object.defineProperty(exports, "toReins", ({ enumerable: true, get: function () { return reins_1.toReins; } }));
+Object.defineProperty(exports, "reins", ({ enumerable: true, get: function () { return reins_1.reins; } }));
+var rein_1 = __webpack_require__(8195);
+Object.defineProperty(exports, "Rein", ({ enumerable: true, get: function () { return rein_1.Rein; } }));
+Object.defineProperty(exports, "rein", ({ enumerable: true, get: function () { return rein_1.rein; } }));
 exports.cal = __importStar(__webpack_require__(2318));
 var contract_1 = __webpack_require__(1566);
 Object.defineProperty(exports, "contract", ({ enumerable: true, get: function () { return contract_1.contract; } }));
 exports.poker = __importStar(__webpack_require__(2383));
+var dice_1 = __webpack_require__(542);
+Object.defineProperty(exports, "dice", ({ enumerable: true, get: function () { return dice_1.dice; } }));
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 894:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Constraint = void 0;
-const cal_1 = __webpack_require__(2318);
-const inequal_1 = __webpack_require__(3098);
-class Constraint {
-    constructor(constraint) {
-        this.constraint = constraint;
-    }
-    clone() {
-        return new Constraint(this.constraint);
-    }
-    /**
-     * Check if this constraint contains `point`.
-     */
-    contains(point) {
-        let [a, b, i, c] = this.constraint;
-        let [x, y] = point;
-        return (0, inequal_1.ineq)(i).compare(a * x + b * y, c);
-    }
-    /**
-     * Return a strict version of this constraint.
-     */
-    strict() {
-        let [a, b, i, c] = this.constraint;
-        let j = (0, inequal_1.ineq)(i).strict();
-        return new Constraint([a, b, j, c]);
-    }
-    /**
-     * Return a loose version of this constraint.
-     */
-    loose() {
-        let [a, b, i, c] = this.constraint;
-        let j = (0, inequal_1.ineq)(i).loose();
-        return new Constraint([a, b, j, c]);
-    }
-    /**
-     * Return a flipped version of this constraint.
-     */
-    flip() {
-        let [a, b, i, c] = this.constraint;
-        let j = (0, inequal_1.ineq)(i).flip();
-        return new Constraint([a, b, j, c]);
-    }
-    /**
-     * Return the intersection point of this and `another`.
-     * If parallel, return `undefined`.
-     */
-    intersectWith(another) {
-        let [a1, b1, i1, c1] = this.constraint;
-        let [a2, b2, i2, c2] = another.constraint;
-        if (a1 / b1 === a2 / b2)
-            return undefined;
-        return (0, cal_1.crammer)(a1, b1, c1, a2, b2, c2);
-    }
-    /**
-     * Return a clone or a flipped version.
-     */
-    shake() {
-        return Math.random() > 0.5 ? this.clone() : this.flip();
-    }
-}
-exports.Constraint = Constraint;
-//# sourceMappingURL=constraint.js.map
-
-/***/ }),
-
-/***/ 2637:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toConstraints = exports.Constraints = void 0;
-const constraint_1 = __webpack_require__(894);
-const list_1 = __webpack_require__(4140);
-const shape2D_1 = __webpack_require__(8951);
-const vector2D_1 = __webpack_require__(1534);
-/**
- * A subclass of array. Designed as a set of constraints.
- */
-class Constraints extends list_1.List {
-    constructor() {
-        super(...arguments);
-        this.EDGE = 100;
-        this.EDGE_CONSTRAINTS = [
-            new constraint_1.Constraint([1, 0, "<=", this.EDGE]),
-            new constraint_1.Constraint([1, 0, ">=", -this.EDGE]),
-            new constraint_1.Constraint([0, 1, "<=", this.EDGE]),
-            new constraint_1.Constraint([0, 1, ">=", -this.EDGE])
-        ];
-    }
-    fullConstraints() {
-        let cons = this.clone();
-        cons.push(...this.EDGE_CONSTRAINTS);
-        return cons;
-    }
-    onEdge(point) {
-        let [x, y] = point;
-        return Math.abs(x) + 1 >= this.EDGE || Math.abs(y) + 1 >= this.EDGE;
-    }
-    /**
-     * Check if `point` satisfy every constraint.
-     */
-    contains(point) {
-        return this.every($ => $.contains(point));
-    }
-    /**
-     * Check if `point` loosely satisfy every constraint.
-     */
-    looseContains(point) {
-        return this.map($ => $.loose()).every($ => $.contains(point));
-    }
-    /**
-     * Return the vertices of the feasible polygon, including EDGE points.
-     */
-    polygon() {
-        let cons = this.fullConstraints();
-        let vs = (0, shape2D_1.shape2D)();
-        for (let i = 0; i < cons.length; i++) {
-            for (let j = i + 1; j < cons.length; j++) {
-                let p = cons[i].intersectWith(cons[j]);
-                if (p === undefined)
-                    continue;
-                let others = cons.clone();
-                others.pull(j);
-                others.pull(i);
-                if (others.looseContains(p))
-                    vs.push((0, vector2D_1.vec2D)(p));
-            }
-        }
-        vs = vs.uniqueDeep();
-        // if (vs.length <= 2)
-        //     throw 'No feasible polygon.'    // OR STILL RETURN?
-        vs.sortAroundMean();
-        return vs.toArray();
-    }
-    /**
-     * Return the vertices of the feasible region, excluding EDGE points.
-     */
-    vertices() {
-        let vs = this.polygon().filter($ => !this.onEdge($));
-        // if (vs.length < 1)
-        //     throw 'no feasible vertex'
-        return vs;
-    }
-    /**
-     * Check if the feasible region is bounded.
-     */
-    isBounded() {
-        return this.polygon().every($ => !this.onEdge($));
-    }
-    /**
-     * Return all the integral points inside the feasible polygon.
-     */
-    integrals() {
-        let vs = (0, list_1.toList)(this.polygon());
-        let ymax = Math.ceil(vs.maxOf(([x, y]) => y));
-        let xmax = Math.ceil(vs.maxOf(([x, y]) => x));
-        let xmin = Math.floor(vs.minOf(([x, y]) => x));
-        let ymin = Math.floor(vs.minOf(([x, y]) => y));
-        let points = [];
-        for (let i = xmin; i <= xmax; i++) {
-            for (let j = ymin; j <= ymax; j++) {
-                let p = [i, j];
-                if (this.contains(p))
-                    points.push(p);
-            }
-        }
-        return points;
-    }
-    /**
-     * Return a shaked version of me.
-     */
-    shake() {
-        let cons = this.map($ => $.shake());
-        return this.create(cons);
-    }
-}
-exports.Constraints = Constraints;
-/**
- * Return a `Constraints` prefilled with `elements`.
- * @param elements - the elements to put in the `Constraints`
- * @returns a `Constraints` array
- * @example
- * ```
- * toConstraints([[1,2,'<',3],[4,5,'>',6]])
- * ```
- */
-function toConstraints(elements) {
-    let cs = new Constraints();
-    cs.push(...elements.map($ => new constraint_1.Constraint($)));
-    return cs;
-}
-exports.toConstraints = toConstraints;
-//# sourceMappingURL=constraints.js.map
 
 /***/ }),
 
@@ -28387,18 +28193,54 @@ class InequalSign {
         this.code = [true, true];
         this.code = toCode(sign);
     }
+    /**
+     * Check if me is > or >=.
+     */
+    greaterThan() {
+        return this.code[0];
+    }
+    /**
+     * Check if me is < or <=.
+     */
+    lessThan() {
+        return !this.code[0];
+    }
+    /**
+     * Check if me allow equal.
+     */
+    canEqual() {
+        return this.code[1];
+    }
+    /**
+     * Return me, as `Ineq`.
+     */
+    print() {
+        return toIneq(this.code);
+    }
+    /**
+     * Return the strict version of me, as `Ineq`.
+     */
     strict() {
         let [g, e] = this.code;
         return toIneq([g, false]);
     }
+    /**
+     * Return the loose version of me, as `Ineq`.
+     */
     loose() {
         let [g, e] = this.code;
         return toIneq([g, true]);
     }
+    /**
+     * Return the flip version of me, as `Ineq`.
+     */
     flip() {
         let [g, e] = this.code;
         return toIneq([!g, e]);
     }
+    /**
+     * Check if `a` and `b` satisfy my comparison.
+     */
     compare(a, b) {
         let [g, e] = this.code;
         if (g && e)
@@ -28412,6 +28254,9 @@ class InequalSign {
         throw 'never, cannot recognise code!';
     }
 }
+/**
+ * Return an `InequalSign` instance.
+ */
 function ineq(sign) {
     return new InequalSign(sign);
 }
@@ -28426,8 +28271,8 @@ exports.ineq = ineq;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Optimizer = void 0;
-const constraints_1 = __webpack_require__(2637);
+exports.optimizer = exports.Optimizer = void 0;
+const reins_1 = __webpack_require__(8902);
 const list_1 = __webpack_require__(4140);
 class Optimizer {
     constructor({ field, feasiblePoints = [] }) {
@@ -28437,7 +28282,7 @@ class Optimizer {
         this.feasiblePoints = (0, list_1.toList)(feasiblePoints);
     }
     onEdge(point) {
-        return (new constraints_1.Constraints()).onEdge(point);
+        return (new reins_1.Reins()).onEdge(point);
     }
     /**
      * Evaluate `this.field` at `point`.
@@ -28503,7 +28348,251 @@ class Optimizer {
     }
 }
 exports.Optimizer = Optimizer;
+/**
+ * Return a `Optimizer` instance.
+ * @example
+ * ```
+ * optimizer({
+ *    field: [1,2,3],
+ *    feasiblePoints: [[0,0],[1,0],[0,1]]
+ * })
+ * ```
+ */
+function optimizer({ field, feasiblePoints = [] }) {
+    return new Optimizer({ field, feasiblePoints });
+}
+exports.optimizer = optimizer;
 //# sourceMappingURL=optimizer.js.map
+
+/***/ }),
+
+/***/ 8195:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.rein = exports.Rein = void 0;
+const cal_1 = __webpack_require__(2318);
+const inequal_1 = __webpack_require__(3098);
+class Rein {
+    constructor(constraint) {
+        this.constraint = constraint;
+    }
+    clone() {
+        return new Rein(this.constraint);
+    }
+    /**
+     * Check if this constraint contains `point`.
+     */
+    contains(point) {
+        let [a, b, i, c] = this.constraint;
+        let [x, y] = point;
+        return (0, inequal_1.ineq)(i).compare(a * x + b * y, c);
+    }
+    /**
+     * Return a strict version of this constraint.
+     */
+    strict() {
+        let [a, b, i, c] = this.constraint;
+        let j = (0, inequal_1.ineq)(i).strict();
+        return new Rein([a, b, j, c]);
+    }
+    /**
+     * Return a loose version of this constraint.
+     */
+    loose() {
+        let [a, b, i, c] = this.constraint;
+        let j = (0, inequal_1.ineq)(i).loose();
+        return new Rein([a, b, j, c]);
+    }
+    /**
+     * Return a flipped version of this constraint.
+     */
+    flip() {
+        let [a, b, i, c] = this.constraint;
+        let j = (0, inequal_1.ineq)(i).flip();
+        return new Rein([a, b, j, c]);
+    }
+    /**
+     * Return the intersection point of this and `another`.
+     * If parallel, return `undefined`.
+     */
+    intersectWith(another) {
+        let [a1, b1, i1, c1] = this.constraint;
+        let [a2, b2, i2, c2] = another.constraint;
+        if (a1 / b1 === a2 / b2)
+            return undefined;
+        return (0, cal_1.crammer)(a1, b1, c1, a2, b2, c2);
+    }
+    /**
+     * Return a clone or a flipped version.
+     */
+    shake() {
+        return Math.random() > 0.5 ? this.clone() : this.flip();
+    }
+}
+exports.Rein = Rein;
+/**
+ * Return a `Rein` instance.
+ * @param constraint - the constraint to represent
+ * @returns a `Rein` instance
+ * @example
+ * ```
+ * rein([1,2,'<',3])
+ * ```
+ */
+function rein(constraint) {
+    return new Rein(constraint);
+}
+exports.rein = rein;
+//# sourceMappingURL=rein.js.map
+
+/***/ }),
+
+/***/ 8902:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toReins = exports.reins = exports.Reins = void 0;
+const rein_1 = __webpack_require__(8195);
+const list_1 = __webpack_require__(4140);
+const shape2D_1 = __webpack_require__(8951);
+const vector2D_1 = __webpack_require__(1534);
+/**
+ * A subclass of array. Designed as a set of constraints.
+ */
+class Reins extends list_1.List {
+    constructor() {
+        super(...arguments);
+        this.EDGE = 100;
+        this.EDGE_CONSTRAINTS = [
+            new rein_1.Rein([1, 0, "<=", this.EDGE]),
+            new rein_1.Rein([1, 0, ">=", -this.EDGE]),
+            new rein_1.Rein([0, 1, "<=", this.EDGE]),
+            new rein_1.Rein([0, 1, ">=", -this.EDGE])
+        ];
+    }
+    fullConstraints() {
+        let cons = this.clone();
+        cons.push(...this.EDGE_CONSTRAINTS);
+        return cons;
+    }
+    /**
+     * Return me as array of `Constraint`.
+     */
+    constraints() {
+        return this.map($ => $.constraint);
+    }
+    onEdge(point) {
+        let [x, y] = point;
+        return Math.abs(x) + 1 >= this.EDGE || Math.abs(y) + 1 >= this.EDGE;
+    }
+    /**
+     * Check if `point` satisfy every constraint.
+     */
+    contains(point) {
+        return this.every($ => $.contains(point));
+    }
+    /**
+     * Check if `point` loosely satisfy every constraint.
+     */
+    looseContains(point) {
+        return this.map($ => $.loose()).every($ => $.contains(point));
+    }
+    /**
+     * Return the vertices of the feasible polygon, including EDGE points.
+     */
+    polygon() {
+        let cons = this.fullConstraints();
+        let vs = (0, shape2D_1.shape2D)();
+        for (let i = 0; i < cons.length; i++) {
+            for (let j = i + 1; j < cons.length; j++) {
+                let p = cons[i].intersectWith(cons[j]);
+                if (p === undefined)
+                    continue;
+                let others = cons.clone();
+                others.pull(j);
+                others.pull(i);
+                if (others.looseContains(p))
+                    vs.push((0, vector2D_1.vec2D)(p));
+            }
+        }
+        vs = vs.uniqueDeep();
+        vs.sortAroundMean();
+        return vs.toArray();
+    }
+    /**
+     * Return the vertices of the feasible region, excluding EDGE points.
+     */
+    vertices() {
+        return this.polygon().filter($ => !this.onEdge($));
+    }
+    /**
+     * Check if the feasible region is bounded.
+     */
+    isBounded() {
+        return this.polygon().every($ => !this.onEdge($));
+    }
+    /**
+     * Return all the integral points inside the feasible polygon.
+     */
+    integrals() {
+        let vs = (0, list_1.toList)(this.polygon());
+        let ymax = Math.ceil(vs.maxOf(([x, y]) => y));
+        let xmax = Math.ceil(vs.maxOf(([x, y]) => x));
+        let xmin = Math.floor(vs.minOf(([x, y]) => x));
+        let ymin = Math.floor(vs.minOf(([x, y]) => y));
+        let points = [];
+        for (let i = xmin; i <= xmax; i++) {
+            for (let j = ymin; j <= ymax; j++) {
+                let p = [i, j];
+                if (this.contains(p))
+                    points.push(p);
+            }
+        }
+        return points;
+    }
+    /**
+     * Return a shaked version of me.
+     */
+    shake() {
+        let cons = this.map($ => $.shake());
+        return this.create(cons);
+    }
+}
+exports.Reins = Reins;
+/**
+ * Return a `Reins` prefilled with `constraints`.
+ * @param constraints - the constraints to put in the `Numbers`
+ * @returns a `Reins` array
+ * @example
+ * ```
+ * reins([1,2,'<',3],[4,5,'>',6])
+ * ```
+ */
+function reins(...constraints) {
+    let cs = new Reins();
+    cs.push(...constraints.map($ => new rein_1.Rein($)));
+    return cs;
+}
+exports.reins = reins;
+/**
+ * Return a `Reins` prefilled with `constraints`.
+ * @param constraints - the constraints to put in the `Reins`
+ * @returns a `Reins` array
+ * @example
+ * ```
+ * toReins([[1,2,'<',3],[4,5,'>',6]])
+ * ```
+ */
+function toReins(constraints) {
+    return reins(...constraints);
+}
+exports.toReins = toReins;
+//# sourceMappingURL=reins.js.map
 
 /***/ }),
 
@@ -29053,7 +29142,7 @@ class Contract {
         this.Err = new ContractErrorFactory(host);
     }
     validateArg(f, rules) {
-        let policy = rules.map(shieldArray);
+        let policy = shieldArrays(rules);
         function rule(index) {
             // use the last rule for the rest
             const n = policy.length - 1;
@@ -29120,8 +29209,11 @@ class Contract {
         return f;
     }
 }
-function shieldArray(_) {
-    return Array.isArray(_) ? _ : [_];
+function shieldArray(item) {
+    return Array.isArray(item) ? item : [item];
+}
+function shieldArrays(items) {
+    return items.map(shieldArray);
 }
 function contract(f) {
     return new Contract(f);
@@ -29131,127 +29223,14 @@ exports.contract = contract;
 
 /***/ }),
 
-/***/ 2383:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 542:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.dice = exports.bool = exports.she = exports.he = exports.prime = exports.real = exports.integer = void 0;
+exports.dice = exports.Dice = void 0;
 const blood_1 = __webpack_require__(3704);
-const cal = __importStar(__webpack_require__(2318));
-const list_1 = __webpack_require__(4140);
-/**
- * Return a random integer from `min` to `max` inclusive.
- * @param min - the min value allowed
- * @param max - the max value allowed
- * @returns a random integer
- * @example
- * ```
- * integer(3,7) // maybe 3,4,5,6 or 7
- * ```
- */
-function integer(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    if (min > max)
-        throw new blood_1.Blood('Poker', 'min must be less than max!');
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-exports.integer = integer;
-/**
- * Return a random real number from `min` to `max` inclusive.
- * @param min - the min value allowed
- * @param max - the max value allowed
- * @returns a random real number
- * @example
- * ```
- * real(3,7) // anything between 3 and 7
- * ```
- */
-function real(min, max) {
-    if (min > max)
-        throw new blood_1.Blood('Poker', 'min must be less than max!');
-    return Math.random() * (max - min) + min;
-}
-exports.real = real;
-/**
- * Return a random prime number from `min` to `max` inclusive.
- * If there is no prime in the range, return `undefined`.
- * @param min - the min value allowed
- * @param max - the max value allowed
- * @returns a random prime number
- * @example
- * ```
- * prime(3,7) // 3 or 5 or 7
- * ```
- */
-function prime(min, max) {
-    if (min > max)
-        throw new blood_1.Blood('Poker', 'min must be less than max!');
-    let primes = (0, list_1.list)(...cal.primes(max));
-    primes.sieve($ => $ >= min);
-    return primes.draw();
-}
-exports.prime = prime;
-/**
- * Return a random male name.
- * @returns a random male name
- * @example
- * ```
- * he() // e.g. 'Peter'
- * ```
- */
-function he() {
-    const boys = (0, list_1.list)("Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William");
-    return boys.draw();
-}
-exports.he = he;
-/**
- * Return a random female name.
- * @returns a random female name
- * @example
- * ```
- * she() // e.g. 'Mary'
- * ```
- */
-function she() {
-    const girls = (0, list_1.list)("Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe");
-    return girls.draw();
-}
-exports.she = she;
-/**
- * Return a random boolean.
- * @param trueChance - the probability of true, from 0 to 1
- * @return a random Boolean
- * @example
- * ```
- * bool(0.6) // 60% chance true, 40% false
- * ```
- */
-function bool(trueChance = 0.5) {
-    return real(0, 1) < trueChance;
-}
-exports.bool = bool;
 class Dice {
     constructor(func) {
         this.TRIAL = 10000;
@@ -29275,7 +29254,21 @@ class Dice {
         return this;
     }
     /**
-     * Set a unique mapper requirement in this Dice. All outcomes from `rolls` must not have duplicated mapper value.
+     * Set a shield to forbid these items in the outcome. Deep compare by `JSON.stringify`.
+     * @param items - the items to ban
+     * @returns this Dice for chaining
+     * @example
+     * ```
+     * this.forbid(0,1) // outcome can't be 0 or 1
+     * ```
+     */
+    forbid(...items) {
+        for (let item of items)
+            this.shield($ => JSON.stringify($) !== JSON.stringify(item));
+        return this;
+    }
+    /**
+     * Set a unique mapper requirement in this Dice. All outcomes from `rolls` must not have duplicated mapper value. Deep compare by `JSON.stringify`.
      * @param mapper - a mapper function, default to self
      * @returns this Dice for chaining
      * @example
@@ -29285,22 +29278,8 @@ class Dice {
      * ```
      */
     unique(mapper = ($ => $)) {
-        this.uniques.push(mapper);
-        return this;
-    }
-    /**
-     * Set a unique deep mapper requirement in this Dice. All outcomes from `rolls` must not have duplicated mapper value. Deep compare is done by `JSON.stringify`.
-     * @param mapper - a mapper function, default to self
-     * @returns this Dice for chaining
-     * @example
-     * ```
-     * this.uniqueDeep($ => [$%2,$%2]) // unique parity
-     * this.uniqueDeep() // default to be unique self value
-     * ```
-     */
-    uniqueDeep(mapper = ($ => $)) {
         let map = ($) => JSON.stringify(mapper($));
-        this.unique(map);
+        this.uniques.push(map);
         return this;
     }
     /**
@@ -29397,6 +29376,7 @@ class Dice {
         }
     }
 }
+exports.Dice = Dice;
 /**
  * Return a `Dice` object, which is a random item generator.
  * @param func - a random generator function
@@ -29410,6 +29390,131 @@ function dice(func) {
     return new Dice(func);
 }
 exports.dice = dice;
+//# sourceMappingURL=dice.js.map
+
+/***/ }),
+
+/***/ 2383:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.bool = exports.she = exports.he = exports.prime = exports.real = exports.integer = void 0;
+const blood_1 = __webpack_require__(3704);
+const cal = __importStar(__webpack_require__(2318));
+const list_1 = __webpack_require__(4140);
+/**
+ * Return a random integer from `min` to `max` inclusive.
+ * @param min - the min value allowed
+ * @param max - the max value allowed
+ * @returns a random integer
+ * @example
+ * ```
+ * integer(3,7) // maybe 3,4,5,6 or 7
+ * ```
+ */
+function integer(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    if (min > max)
+        throw new blood_1.Blood('Poker', 'min must be less than max!');
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+exports.integer = integer;
+/**
+ * Return a random real number from `min` to `max` inclusive.
+ * @param min - the min value allowed
+ * @param max - the max value allowed
+ * @returns a random real number
+ * @example
+ * ```
+ * real(3,7) // anything between 3 and 7
+ * ```
+ */
+function real(min, max) {
+    if (min > max)
+        throw new blood_1.Blood('Poker', 'min must be less than max!');
+    return Math.random() * (max - min) + min;
+}
+exports.real = real;
+/**
+ * Return a random prime number from `min` to `max` inclusive.
+ * If there is no prime in the range, return `undefined`.
+ * @param min - the min value allowed
+ * @param max - the max value allowed
+ * @returns a random prime number
+ * @example
+ * ```
+ * prime(3,7) // 3 or 5 or 7
+ * ```
+ */
+function prime(min, max) {
+    if (min > max)
+        throw new blood_1.Blood('Poker', 'min must be less than max!');
+    let primes = (0, list_1.list)(...cal.primes(max));
+    primes.sieve($ => $ >= min);
+    return primes.draw();
+}
+exports.prime = prime;
+/**
+ * Return a random male name.
+ * @returns a random male name
+ * @example
+ * ```
+ * he() // e.g. 'Peter'
+ * ```
+ */
+function he() {
+    const boys = (0, list_1.list)("Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William");
+    return boys.draw();
+}
+exports.he = he;
+/**
+ * Return a random female name.
+ * @returns a random female name
+ * @example
+ * ```
+ * she() // e.g. 'Mary'
+ * ```
+ */
+function she() {
+    const girls = (0, list_1.list)("Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe");
+    return girls.draw();
+}
+exports.she = she;
+/**
+ * Return a random boolean.
+ * @param trueChance - the probability of true, from 0 to 1
+ * @return a random Boolean
+ * @example
+ * ```
+ * bool(0.6) // 60% chance true, 40% false
+ * ```
+ */
+function bool(trueChance = 0.5) {
+    return real(0, 1) < trueChance;
+}
+exports.bool = bool;
 //# sourceMappingURL=poker.js.map
 
 /***/ }),
@@ -29419,26 +29524,20 @@ exports.dice = dice;
 
 "use strict";
 
+// export function printIneq(greater: boolean, equal: boolean): Ineq {
+//     if (greater && equal) return '\\ge'
+//     if (greater && !equal) return '\\gt'
+//     if (!greater && equal) return '\\le'
+//     if (!greater && !equal) return '\\lt'
+//     throw 'never'
+// }
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.printConstraints = exports.printConstraint = exports.printPointPolar = exports.printSurd = exports.printOrTrigRoots = exports.printTrigExp = exports.printTrigValue = exports.printCombo = exports.parseDfrac = exports.printDfrac = exports.parseIneq = exports.printIneq = void 0;
-function printIneq(greater, equal) {
-    if (greater && equal)
-        return '\\ge';
-    if (greater && !equal)
-        return '\\gt';
-    if (!greater && equal)
-        return '\\le';
-    if (!greater && !equal)
-        return '\\lt';
-    throw 'never';
-}
-exports.printIneq = printIneq;
-function parseIneq(text) {
-    let greater = text.includes('g') || text.includes('>');
-    let equal = text.includes('e') || text.includes('=');
-    return [greater, equal];
-}
-exports.parseIneq = parseIneq;
+exports.printConstraints = exports.printConstraint = exports.printPointPolar = exports.printSurd = exports.printOrTrigRoots = exports.printTrigExp = exports.printTrigValue = exports.printCombo = exports.printDfrac = void 0;
+// export function parseIneq(text: Ineq): [greater: boolean, equal: boolean] {
+//     let greater = text.includes('g') || text.includes('>')
+//     let equal = text.includes('e') || text.includes('=')
+//     return [greater, equal]
+// }
 function printDfrac(numerator, denominator, upSign = false) {
     let p = numerator;
     let q = denominator;
@@ -29457,21 +29556,18 @@ function printDfrac(numerator, denominator, upSign = false) {
     }
 }
 exports.printDfrac = printDfrac;
-function parseDfrac(dfrac) {
-    if (!owl.dfrac(dfrac))
-        throw 'not dfrac';
-    const d = String.raw `-?\d+\.?\d*`;
-    const f = String.raw `-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
-    dfrac = dfrac.match(new RegExp(f, 'g'))[0];
-    const matches = dfrac.match(new RegExp(d, 'g'));
-    const u = dfrac.charAt(0) === '-' ? -1 : 1;
-    const p = Number(matches[0]) * u;
-    const q = Number(matches[1]);
-    if (!(owl.num(p) && owl.num(q)))
-        throw 'fail to parse dfrac';
-    return [p, q];
-}
-exports.parseDfrac = parseDfrac;
+// export function parseDfrac(dfrac: string): Fraction {
+//     if (!owl.dfrac(dfrac)) throw 'not dfrac'
+//     const d = String.raw`-?\d+\.?\d*`
+//     const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
+//     dfrac = dfrac.match(new RegExp(f, 'g'))![0]
+//     const matches = dfrac.match(new RegExp(d, 'g'))!
+//     const u = dfrac.charAt(0) === '-' ? -1 : 1
+//     const p = Number(matches[0]) * u
+//     const q = Number(matches[1])
+//     if (!(owl.num(p) && owl.num(q))) throw 'fail to parse dfrac'
+//     return [p, q]
+// }
 function printCombo(combo) {
     let [a, b, c] = combo;
     if (a && b && c)
@@ -29549,7 +29645,16 @@ function printConstraint(con, align = false) {
         i = '\\le';
     if (i === '<')
         i = '\\lt';
-    return ` ${a}x + ${b}y ${align ? '&' : ''} ${i} ${c} `;
+    let j = i;
+    if (align)
+        j = ' & ' + j;
+    if (a === 0 && b === 0)
+        return ` 0 ${j} ${c} `;
+    if (a !== 0 && b === 0)
+        return ` ${a}x ${j} ${c} `;
+    if (a === 0 && b !== 0)
+        return ` ${b}y ${j} ${c} `;
+    return ` ${a}x + ${b}y ${j} ${c} `;
 }
 exports.printConstraint = printConstraint;
 function printConstraints(cons) {
@@ -29769,6 +29874,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const sapphire_js_1 = __webpack_require__(3227);
 globalThis.poker = sapphire_js_1.poker;
+globalThis.dice = sapphire_js_1.dice;
 globalThis.contract = sapphire_js_1.contract;
 globalThis.cal = sapphire_js_1.cal;
 globalThis.data = sapphire_js_1.data;
@@ -29789,8 +29895,10 @@ globalThis.toShape3D = sapphire_js_1.toShape3D;
 globalThis.toVector = sapphire_js_1.toVector;
 globalThis.vec2D = sapphire_js_1.vec2D;
 globalThis.vec3D = sapphire_js_1.vec3D;
-globalThis.toConstraints = sapphire_js_1.toConstraints;
-globalThis.Optimizer = sapphire_js_1.Optimizer;
+globalThis.ineq = sapphire_js_1.ineq;
+globalThis.optimizer = sapphire_js_1.optimizer;
+globalThis.rein = sapphire_js_1.rein;
+globalThis.toReins = sapphire_js_1.toReins;
 const $Owl = __importStar(__webpack_require__(1025));
 globalThis.owl = $Owl;
 const $Ink = __importStar(__webpack_require__(6715));
@@ -30162,7 +30270,7 @@ class MonomialCls {
             }
             return M;
         };
-        let mon = poker.dice(f).shield(M => M.degree() === degree).roll();
+        let mon = dice(f).shield(M => M.degree() === degree).roll();
         this.coeff = mon.coeff;
         this.vars = mon.vars;
     }
@@ -30253,8 +30361,8 @@ function RndPolynomial(degree, vars = ["x"], terms = degree + 1, maxCoeff = 9) {
         M.random(RndN(0, degree), vars, maxCoeff);
         return M;
     };
-    let f = () => poker.dice(RndMono).unique(M => M.size()).rolls(terms);
-    return poker.dice(f).shield(P => Max(...P.map(M => M.degree())) === degree).roll();
+    let f = () => dice(RndMono).unique(M => M.size()).rolls(terms);
+    return dice(f).shield(P => Max(...P.map(M => M.degree())) === degree).roll();
 }
 globalThis.RndPolynomial = contract(RndPolynomial).sign([owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num]);
 /**
@@ -31519,8 +31627,7 @@ globalThis.PairTable = contract(PairTable)
  * ```
  */
 function FieldAt(point, field) {
-    let op = new Optimizer({ field, feasiblePoints: [] });
-    return op.fieldAt(point);
+    return optimizer({ field }).fieldAt(point);
 }
 globalThis.FieldAt = contract(FieldAt).sign([owl.point2D, owl.field]);
 /**
@@ -31537,7 +31644,7 @@ globalThis.FieldAt = contract(FieldAt).sign([owl.point2D, owl.field]);
  * ```
  */
 function isConstrained(cons, point) {
-    return toConstraints(cons).contains(point);
+    return toReins(cons).contains(point);
 }
 globalThis.isConstrained = contract(isConstrained).sign([owl.constraints, owl.point2D]);
 /**
@@ -31554,7 +31661,7 @@ globalThis.isConstrained = contract(isConstrained).sign([owl.constraints, owl.po
  * ```
  */
 function isLooseConstrained(cons, point) {
-    return toConstraints(cons).looseContains(point);
+    return toReins(cons).looseContains(point);
 }
 globalThis.isLooseConstrained = contract(isLooseConstrained).sign([owl.constraints, owl.point2D]);
 /**
@@ -31572,7 +31679,7 @@ globalThis.isLooseConstrained = contract(isLooseConstrained).sign([owl.constrain
  * ```
  */
 function FeasiblePolygon(...cons) {
-    let vs = toConstraints(cons).polygon();
+    let vs = toReins(cons).polygon();
     Should(vs.length > 2, 'No feasible region.');
     return vs;
 }
@@ -31592,7 +31699,7 @@ globalThis.FeasiblePolygon = contract(FeasiblePolygon).sign([owl.constraint]);
  * ```
  */
 function FeasibleVertices(...cons) {
-    let vs = toConstraints(cons).vertices();
+    let vs = toReins(cons).vertices();
     Should(vs.length > 0, 'no feasible vertex');
     return vs;
 }
@@ -31616,7 +31723,7 @@ globalThis.FeasibleVertices = contract(FeasibleVertices).sign([owl.constraint]);
  * ```
  */
 function FeasibleIsBounded(...cons) {
-    return toConstraints(cons).isBounded();
+    return toReins(cons).isBounded();
 }
 globalThis.FeasibleIsBounded = contract(FeasibleIsBounded).sign([owl.constraint]);
 /**
@@ -31634,7 +31741,7 @@ globalThis.FeasibleIsBounded = contract(FeasibleIsBounded).sign([owl.constraint]
  * ```
  */
 function FeasibleIntegral(...cons) {
-    return toConstraints(cons).integrals();
+    return toReins(cons).integrals();
 }
 globalThis.FeasibleIntegral = contract(FeasibleIntegral).sign([owl.constraint]);
 /**
@@ -31647,11 +31754,10 @@ globalThis.FeasibleIntegral = contract(FeasibleIntegral).sign([owl.constraint]);
  */
 function MaximizePoint(points, field) {
     Should(points.length > 0, 'No feasible point');
-    let op = new Optimizer({
+    let pts = optimizer({
         field: field,
         feasiblePoints: points
-    });
-    let pts = op.maxPoints();
+    }).maxPoints();
     Should(pts.length > 0, 'No max point');
     Should(pts.length < 2, 'Multiple max points');
     return pts[0];
@@ -31667,11 +31773,10 @@ globalThis.MaximizePoint = contract(MaximizePoint).sign([owl.point2Ds, owl.field
  */
 function MinimizePoint(points, field) {
     Should(points.length > 0, 'No feasible point');
-    let op = new Optimizer({
+    let pts = optimizer({
         field: field,
         feasiblePoints: points
-    });
-    let pts = op.minPoints();
+    }).minPoints();
     Should(pts.length > 0, 'No min point');
     Should(pts.length < 2, 'Multiple min points');
     return pts[0];
@@ -31700,7 +31805,7 @@ globalThis.OptimizePoint = contract(OptimizePoint).sign([owl.point2Ds, owl.field
  * ```
  */
 function OptimizeField(points, field, max) {
-    let op = new Optimizer({
+    let op = optimizer({
         field: field,
         feasiblePoints: points
     });
@@ -32036,7 +32141,7 @@ globalThis.RndN = contract(RndN).sign([owl.num]);
  */
 function RndNs(min, max, n = 10) {
     n = Math.min(Math.floor(max - min + 1), n);
-    return poker.dice(() => RndN(min, max)).unique().rolls(n);
+    return dice(() => RndN(min, max)).unique().rolls(n);
 }
 globalThis.RndNs = contract(RndNs).sign([owl.num, owl.num, owl.positiveInt]);
 /**
@@ -32058,7 +32163,7 @@ globalThis.RndR = contract(RndR).sign([owl.num]);
  * ```
  */
 function RndRs(min, max, n = 10) {
-    return poker.dice(() => RndR(min, max)).unique().rolls(n);
+    return dice(() => RndR(min, max)).unique().rolls(n);
 }
 globalThis.RndRs = contract(RndRs).sign([owl.num, owl.num, owl.positiveInt]);
 /**
@@ -32073,12 +32178,12 @@ function RndQ(largest = 9, range) {
     let L = Math.abs(largest);
     let sign = largest > 0 ? 1 : RndU();
     let f = () => RndN(1, L) / RndN(2, L) * sign;
-    let dice = poker.dice(f).shield(_ => owl.dec(_));
+    let d = dice(f).shield(_ => owl.dec(_));
     if (range) {
-        dice.shield(_ => _ >= range[0])
+        d.shield(_ => _ >= range[0])
             .shield(_ => _ <= range[1]);
     }
-    return dice.roll();
+    return d.roll();
 }
 globalThis.RndQ = contract(RndQ).sign([owl.nonZeroInt, owl.interval]);
 /**
@@ -32090,7 +32195,7 @@ globalThis.RndQ = contract(RndQ).sign([owl.nonZeroInt, owl.interval]);
  */
 function RndQs(largest = 9, range, n = 10) {
     n = Math.min(Math.abs(largest) + 1, n);
-    return poker.dice(() => RndQ(largest, range)).unique().rolls(n);
+    return dice(() => RndQ(largest, range)).unique().rolls(n);
 }
 globalThis.RndQs = contract(RndQs).sign([owl.nonZeroInt, owl.interval, owl.positiveInt]);
 /**
@@ -32136,7 +32241,7 @@ globalThis.RndZ = contract(RndZ).sign([owl.num]);
  */
 function RndZs(min, max, n = 10) {
     n = Math.min(Math.floor(max - min + 1), n);
-    return poker.dice(() => RndN(min, max)).unique().rolls(n).map(x => x * RndU());
+    return dice(() => RndN(min, max)).unique().rolls(n).map(x => x * RndU());
 }
 globalThis.RndZs = contract(RndZs).sign([owl.nonNegative, owl.nonNegative, owl.positiveInt]);
 /**
@@ -32229,7 +32334,7 @@ function RndPoint(xRange, yRange = xRange) {
     let [x1, x2] = xRange;
     let [y1, y2] = yRange;
     let f = () => [RndN(x1, x2), RndN(y1, y2)];
-    return poker.dice(f)
+    return dice(f)
         .shield(([x, y]) => x !== 0)
         .shield(([x, y]) => y !== 0)
         .shield(([x, y]) => x !== y)
@@ -32244,7 +32349,7 @@ globalThis.RndPoint = contract(RndPoint).sign([owl.or([owl.num, owl.interval])])
  * ```
  */
 function RndPoints(xRange, yRange = xRange, n = 10) {
-    return poker.dice(() => RndPoint(xRange, yRange))
+    return dice(() => RndPoint(xRange, yRange))
         .unique(([x, y]) => x)
         .unique(([x, y]) => y)
         .coherent($ => toList($).combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C)))
@@ -32260,7 +32365,7 @@ globalThis.RndPoints = contract(RndPoints)
  * ```
  */
 function RndAngles(n, separation) {
-    let angles = poker.dice(() => RndN(0, 360))
+    let angles = dice(() => RndN(0, 360))
         .coherent(angles => toNumbers(angles).gapsMod(360).min() > separation)
         .unique()
         .rolls(n);
@@ -32292,7 +32397,7 @@ globalThis.RndConvexPolygon = contract(RndConvexPolygon)
  * ```
  */
 function RndData(min, max, n) {
-    let data = poker.dice(() => RndN(min, max))
+    let data = dice(() => RndN(min, max))
         .coherent(d => toData(d).isSingleMode())
         .rolls(n);
     return toList(data).ascending();
@@ -32520,6 +32625,14 @@ function RndShake(anchor) {
         // TrigValue
         return RndShakeTrigValue(anchor);
     }
+    if (owl.constraint(anchor)) {
+        // Constraint
+        return RndShakeConstraint(anchor);
+    }
+    if (owl.constraints(anchor)) {
+        // Constraints
+        return RndShakeConstraints(anchor);
+    }
     if (typeof anchor === 'number' && owl.num(anchor)) {
         anchor = cal.blur(anchor);
         // Integer
@@ -32560,7 +32673,7 @@ function RndShakeN(anchor) {
         let min = Max(Ceil(a - range), 1, cal.logFloor(a));
         f = () => RndN(min, max) * s;
     }
-    return poker.dice(f)
+    return dice(f)
         .shield(x => x !== anchor)
         .unique()
         .rolls(3);
@@ -32579,8 +32692,7 @@ function RndShakeR(anchor) {
     if (IsInteger(m))
         return RndShakeN(m).map(x => Number(x + "e" + exp));
     let dp = cal.dp(m);
-    return poker
-        .dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
+    return dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
         .shield(x => x * m > 0)
         .shield(x => cal.e(x) === cal.e(m))
         .shield(x => x !== m)
@@ -32605,8 +32717,7 @@ function RndShakeQ(anchor) {
     let [p, q] = ToFrac(anchor);
     [p, q] = [p, q].map(cal.blur);
     Should(IsInteger(p, q), 'input should be integral fraction');
-    return poker
-        .dice(() => {
+    return dice(() => {
         const h = RndShakeN(p)[0];
         const k = RndShakeN(q)[0];
         let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h;
@@ -32687,9 +32798,10 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational]);
  * ```
  */
 function RndShakeIneq(anchor) {
-    let f = ink.parseIneq(anchor);
-    let [me, oppo] = IneqSign(...f);
-    return list(me, oppo, oppo).shuffled();
+    let i = ineq(anchor);
+    let me = i.print();
+    let flip = i.flip();
+    return list(me, flip, flip).shuffled();
 }
 globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq]);
 /**
@@ -32707,7 +32819,7 @@ function RndShakePoint(anchor) {
         const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0];
         return [h, k];
     };
-    return poker.dice(func)
+    return dice(func)
         .unique(([x, y]) => x)
         .unique(([x, y]) => y)
         .rolls(3);
@@ -32730,7 +32842,7 @@ function RndShakeCombo(anchor) {
             RndT() ? c : !c
         ];
     };
-    return poker.dice(func).uniqueDeep().rolls(3);
+    return dice(func).unique().rolls(3);
 }
 globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo]);
 /**
@@ -32770,10 +32882,10 @@ function RndShakeRatio(anchor) {
     let func = () => {
         return anchor.map(x => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0]);
     };
-    return poker.dice(func)
+    return dice(func)
         .shield(r => toNumbers(r).hcf() === 1)
         .shield(r => AreDifferent(anchor, r))
-        .uniqueDeep()
+        .unique()
         .rolls(3);
 }
 globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple]);
@@ -32830,7 +32942,7 @@ function RndShakeBase(anchor) {
         let B3 = dress(t1 + t2);
         return [B1, B2, B3];
     };
-    return poker.dice(f).shield(_ => toList([num, ..._]).dupless()).roll();
+    return dice(f).shield(_ => toList([num, ..._]).dupless()).roll();
 }
 globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base]);
 /**
@@ -32859,18 +32971,16 @@ globalThis.RndShakePointPolar = contract(RndShakePointPolar).sign([owl.point2D])
  * ```
  */
 function RndShakeConstraint(anchor) {
-    let [a, b, i, c] = anchor;
-    let signs = RndShakeIneq(i);
-    return signs.map($ => [a, b, $, c]);
+    let flip = rein(anchor).flip().constraint;
+    return list(anchor, flip, flip).shuffled();
 }
 globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constraint]);
 /**
  * @category RandomShake
- * @return an array of 3 constraint, with only the sign shaken
+ * @return an array of 3 sets of constraints, with only the sign shaken
  * ```
  * RndShakeConstraints([
- *   [1,2,'>',3],
- *   [4,5,'>',6]
+ *   [1,2,'>',3], [4,5,'>',6]
  * ])
  * // may return [
  * // [[1,2,'>',3],[4,5,'>',6]],
@@ -32880,8 +32990,11 @@ globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constrain
  * ```
  */
 function RndShakeConstraints(anchor) {
-    let func = () => anchor.map($ => RndShakeConstraint($)[0]);
-    return poker.dice(func).uniqueDeep().rolls(3);
+    let func = () => [...toReins(anchor).shake().map($ => $.constraint)];
+    return dice(func)
+        .forbid(anchor)
+        .unique()
+        .rolls(3);
 }
 globalThis.RndShakeConstraints = contract(RndShakeConstraints).sign([owl.constraints]);
 
@@ -33618,7 +33731,7 @@ globalThis.GrammarJoin = GrammarJoin;
 // globalThis.Ticks = contract(Ticks).sign([owl.bool])
 /**
 * @category Text
-* @deprecated
+* @deprecated use symbol printing instead!!!
 * @return a pair of latex inequalities sign array like ['\\ge', '\\le'].
 * ```typescript
 * IneqSign(true,true) // ['\\ge', '\\le']
@@ -35712,8 +35825,7 @@ class AutoPenCls {
         function drawLines() {
             for (let i = 0; i < constraints.length; i++) {
                 let [a, b, s, c] = constraints[i];
-                let [_, eq] = ink.parseIneq(s);
-                if (!eq)
+                if (!ineq(s).canEqual())
                     pen.set.dash([5, 5]);
                 pen.set.color(constraintColors[i] ?? 'black');
                 pen.graph.linear(a, b, -c);
@@ -38654,18 +38766,26 @@ function ParseForPrint(value, signal = "") {
     if (signal === '>') {
         if (T === 'boolean')
             return value ? '\\gt' : '\\lt';
+        if (T === 'number')
+            return value > 0 ? '\\gt' : value < 0 ? '\\lt' : '=';
     }
     if (signal === '<') {
         if (T === 'boolean')
             return value ? '\\lt' : '\\gt';
+        if (T === 'number')
+            return value > 0 ? '\\lt' : value < 0 ? '\\gt' : '=';
     }
     if (signal === '>=') {
         if (T === 'boolean')
             return value ? '\\ge' : '\\le';
+        if (T === 'number')
+            return value > 0 ? '\\ge' : value < 0 ? '\\le' : '=';
     }
     if (signal === '<=') {
         if (T === 'boolean')
             return value ? '\\le' : '\\ge';
+        if (T === 'number')
+            return value > 0 ? '\\le' : value < 0 ? '\\ge' : '=';
     }
     if (signal === '%') {
         if (T === 'number') {

@@ -9,8 +9,7 @@
  * ```
  */
 function FieldAt(point: Point2D, field: Field): number {
-    let op = new Optimizer({ field, feasiblePoints: [] })
-    return op.fieldAt(point)
+    return optimizer({ field }).fieldAt(point)
 }
 globalThis.FieldAt = contract(FieldAt).sign([owl.point2D, owl.field])
 
@@ -29,7 +28,7 @@ globalThis.FieldAt = contract(FieldAt).sign([owl.point2D, owl.field])
  * ```
  */
 function isConstrained(cons: Constraint[], point: Point2D): boolean {
-    return toConstraints(cons).contains(point)
+    return toReins(cons).contains(point)
 }
 globalThis.isConstrained = contract(isConstrained).sign([owl.constraints, owl.point2D])
 
@@ -48,7 +47,7 @@ globalThis.isConstrained = contract(isConstrained).sign([owl.constraints, owl.po
  * ```
  */
 function isLooseConstrained(cons: Constraint[], point: Point2D): boolean {
-    return toConstraints(cons).looseContains(point)
+    return toReins(cons).looseContains(point)
 }
 globalThis.isLooseConstrained = contract(isLooseConstrained).sign([owl.constraints, owl.point2D])
 
@@ -70,7 +69,7 @@ globalThis.isLooseConstrained = contract(isLooseConstrained).sign([owl.constrain
  * ```
  */
 function FeasiblePolygon(...cons: Constraint[]) {
-    let vs = toConstraints(cons).polygon()
+    let vs = toReins(cons).polygon()
     Should(vs.length > 2, 'No feasible region.')
     return vs
 }
@@ -94,7 +93,7 @@ globalThis.FeasiblePolygon = contract(FeasiblePolygon).sign([owl.constraint])
  * ```
  */
 function FeasibleVertices(...cons: Constraint[]) {
-    let vs = toConstraints(cons).vertices()
+    let vs = toReins(cons).vertices()
     Should(vs.length > 0, 'no feasible vertex')
     return vs
 }
@@ -123,7 +122,7 @@ globalThis.FeasibleVertices = contract(FeasibleVertices).sign([owl.constraint])
  * ```
  */
 function FeasibleIsBounded(...cons: Constraint[]) {
-    return toConstraints(cons).isBounded()
+    return toReins(cons).isBounded()
 }
 globalThis.FeasibleIsBounded = contract(FeasibleIsBounded).sign([owl.constraint])
 
@@ -146,7 +145,7 @@ globalThis.FeasibleIsBounded = contract(FeasibleIsBounded).sign([owl.constraint]
  * ```
  */
 function FeasibleIntegral(...cons: Constraint[]): Point2D[] {
-    return toConstraints(cons).integrals()
+    return toReins(cons).integrals()
 }
 globalThis.FeasibleIntegral = contract(FeasibleIntegral).sign([owl.constraint])
 
@@ -161,11 +160,10 @@ globalThis.FeasibleIntegral = contract(FeasibleIntegral).sign([owl.constraint])
  */
 function MaximizePoint(points: Point2D[], field: Field): Point2D {
     Should(points.length > 0, 'No feasible point')
-    let op = new Optimizer({
+    let pts = optimizer({
         field: field,
         feasiblePoints: points
-    })
-    let pts = op.maxPoints()
+    }).maxPoints()
     Should(pts.length > 0, 'No max point')
     Should(pts.length < 2, 'Multiple max points')
     return pts[0]
@@ -184,11 +182,10 @@ globalThis.MaximizePoint = contract(MaximizePoint).sign([owl.point2Ds, owl.field
  */
 function MinimizePoint(points: Point2D[], field: Field): Point2D {
     Should(points.length > 0, 'No feasible point')
-    let op = new Optimizer({
+    let pts = optimizer({
         field: field,
         feasiblePoints: points
-    })
-    let pts = op.minPoints()
+    }).minPoints()
     Should(pts.length > 0, 'No min point')
     Should(pts.length < 2, 'Multiple min points')
     return pts[0]
@@ -223,7 +220,7 @@ globalThis.OptimizePoint = contract(OptimizePoint).sign([owl.point2Ds, owl.field
  * ```
  */
 function OptimizeField(points: Point2D[], field: Field, max: boolean): number {
-    let op = new Optimizer({
+    let op = optimizer({
         field: field,
         feasiblePoints: points
     })

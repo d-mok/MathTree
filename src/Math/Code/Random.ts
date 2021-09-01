@@ -19,7 +19,7 @@ globalThis.RndN = contract(RndN).sign([owl.num])
  */
 function RndNs(min: number, max: number, n: number = 10): number[] {
     n = Math.min(Math.floor(max - min + 1), n)
-    return poker.dice(() => RndN(min, max)).unique().rolls(n);
+    return dice(() => RndN(min, max)).unique().rolls(n);
 }
 globalThis.RndNs = contract(RndNs).sign([owl.num, owl.num, owl.positiveInt])
 
@@ -45,7 +45,7 @@ globalThis.RndR = contract(RndR).sign([owl.num])
  * ```
  */
 function RndRs(min: number, max: number, n: number = 10): number[] {
-    return poker.dice(() => RndR(min, max)).unique().rolls(n);
+    return dice(() => RndR(min, max)).unique().rolls(n);
 }
 globalThis.RndRs = contract(RndRs).sign([owl.num, owl.num, owl.positiveInt])
 
@@ -64,12 +64,12 @@ function RndQ(largest: number = 9, range?: interval): number {
     let sign = largest > 0 ? 1 : RndU()
     let f = () => RndN(1, L) / RndN(2, L) * sign
 
-    let dice = poker.dice(f).shield(_ => owl.dec(_))
+    let d = dice(f).shield(_ => owl.dec(_))
     if (range) {
-        dice.shield(_ => _ >= range[0])
+        d.shield(_ => _ >= range[0])
             .shield(_ => _ <= range[1])
     }
-    return dice.roll()
+    return d.roll()
 
 }
 globalThis.RndQ = contract(RndQ).sign([owl.nonZeroInt, owl.interval])
@@ -85,7 +85,7 @@ globalThis.RndQ = contract(RndQ).sign([owl.nonZeroInt, owl.interval])
  */
 function RndQs(largest: number = 9, range?: interval, n: number = 10): number[] {
     n = Math.min(Math.abs(largest) + 1, n)
-    return poker.dice(() => RndQ(largest, range)).unique().rolls(n);
+    return dice(() => RndQ(largest, range)).unique().rolls(n);
 }
 globalThis.RndQs = contract(RndQs).sign([owl.nonZeroInt, owl.interval, owl.positiveInt])
 
@@ -145,7 +145,7 @@ globalThis.RndZ = contract(RndZ).sign([owl.num])
  */
 function RndZs(min: number, max: number, n: number = 10): number[] {
     n = Math.min(Math.floor(max - min + 1), n)
-    return poker.dice(() => RndN(min, max)).unique().rolls(n).map(x => x * RndU());
+    return dice(() => RndN(min, max)).unique().rolls(n).map(x => x * RndU());
 }
 globalThis.RndZs = contract(RndZs).sign([owl.nonNegative, owl.nonNegative, owl.positiveInt])
 
@@ -257,7 +257,7 @@ function RndPoint(xRange: number | interval, yRange: number | interval = xRange)
     let [x1, x2] = xRange
     let [y1, y2] = yRange
     let f = (): Point2D => [RndN(x1, x2), RndN(y1, y2)]
-    return poker.dice(f)
+    return dice(f)
         .shield(([x, y]) => x !== 0)
         .shield(([x, y]) => y !== 0)
         .shield(([x, y]) => x !== y)
@@ -275,7 +275,7 @@ globalThis.RndPoint = contract(RndPoint).sign([owl.or([owl.num, owl.interval])])
  * ```
  */
 function RndPoints(xRange: number | interval, yRange: number | interval = xRange, n = 10): Point2D[] {
-    return poker.dice(() => RndPoint(xRange, yRange))
+    return dice(() => RndPoint(xRange, yRange))
         .unique(([x, y]) => x)
         .unique(([x, y]) => y)
         .coherent($ => toList($).combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C)))
@@ -293,7 +293,7 @@ globalThis.RndPoints = contract(RndPoints)
  * ```
  */
 function RndAngles(n: number, separation: number): number[] {
-    let angles = poker.dice(() => RndN(0, 360))
+    let angles = dice(() => RndN(0, 360))
         .coherent(angles => toNumbers(angles).gapsMod(360).min() > separation)
         .unique()
         .rolls(n)
@@ -331,7 +331,7 @@ globalThis.RndConvexPolygon = contract(RndConvexPolygon)
  * ```
  */
 function RndData(min: number, max: number, n: number): number[] {
-    let data = poker.dice(() => RndN(min, max))
+    let data = dice(() => RndN(min, max))
         .coherent(d => toData(d).isSingleMode())
         .rolls(n)
     return toList(data).ascending()

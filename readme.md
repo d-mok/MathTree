@@ -64,7 +64,7 @@
 
 ## Common JavaScript Reference
 
-|structure| code 
+|structure| code |
 |--|--|
 | Declare variable	| `let myVariable = 1` |
 | If Then Else	| `if(condition){DoSomething}else{DoOtherThing}` |
@@ -121,12 +121,12 @@
 |ratio|`a = [2,4,6]`|`*:a`| 1:2:3|
 |ineq sign|`a = true`|`*^\gt_a`| \gt|
 |ineq sign|`a = false`|`*^\gt_a`| \lt|
-|ineq sign|`a = true`|`*^\lt_a`| \lt|
-|ineq sign|`a = false`|`*^\lt_a`| \gt|
-|ineq sign|`a = true`|`*^\ge_a`| \ge|
-|ineq sign|`a = false`|`*^\ge_a`| \le|
-|ineq sign|`a = true`|`*^\le_a`| \le|
-|ineq sign|`a = false`|`*^\le_a`| \ge|
+|ineq sign|`a > 0`|`*^\gt_a`| \gt|
+|ineq sign|`a < 0`|`*^\gt_a`| \lt|
+|ineq sign|`a = 0`|`*^\gt_a`| = |
+|ineq sign| similar |`*^\lt_a`| \lt|
+|ineq sign| similar |`*^\ge_a`| \le|
+|ineq sign| similar |`*^\le_a`| \ge|
 |or trig root|`a = [30,60,90,undefined]`|`*|.a`| 30°~~\text{or}~~60°~~\text{or}~~90°|
 |polar coordinates|`a = [sqrt(3),3]`|`*.a`| (2\sqrt{3}, 60\degree)|
 
