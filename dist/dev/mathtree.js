@@ -23333,7 +23333,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
   /**
    * Current KaTeX version
    */
-  version: "0.13.16",
+  version: "0.13.17",
 
   /**
    * Renders the given LaTeX into an HTML+MathML combination, and adds
@@ -28085,7 +28085,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.dice = exports.poker = exports.contract = exports.cal = exports.rein = exports.Rein = exports.reins = exports.toReins = exports.Reins = exports.optimizer = exports.Optimizer = exports.ineq = exports.Pencil = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
+exports.dice = exports.poker = exports.contract = exports.lin = exports.cal = exports.rein = exports.Rein = exports.reins = exports.toReins = exports.Reins = exports.optimizer = exports.Optimizer = exports.ineq = exports.Pencil = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
 var data_1 = __webpack_require__(210);
 Object.defineProperty(exports, "Data", ({ enumerable: true, get: function () { return data_1.Data; } }));
 Object.defineProperty(exports, "data", ({ enumerable: true, get: function () { return data_1.data; } }));
@@ -28141,6 +28141,8 @@ var rein_1 = __webpack_require__(8195);
 Object.defineProperty(exports, "Rein", ({ enumerable: true, get: function () { return rein_1.Rein; } }));
 Object.defineProperty(exports, "rein", ({ enumerable: true, get: function () { return rein_1.rein; } }));
 exports.cal = __importStar(__webpack_require__(2318));
+var linear_1 = __webpack_require__(7533);
+Object.defineProperty(exports, "lin", ({ enumerable: true, get: function () { return linear_1.lin; } }));
 var contract_1 = __webpack_require__(1566);
 Object.defineProperty(exports, "contract", ({ enumerable: true, get: function () { return contract_1.contract; } }));
 exports.poker = __importStar(__webpack_require__(2383));
@@ -29072,6 +29074,126 @@ exports.crammer = crammer;
 
 /***/ }),
 
+/***/ 7533:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.lin = exports.Linear = void 0;
+const numbers_1 = __webpack_require__(9109);
+function slope(A, B) {
+    let [x1, y1] = A;
+    let [x2, y2] = B;
+    return (y2 - y1) / (x2 - x1);
+}
+function midpoint(A, B) {
+    let [x1, y1] = A;
+    let [x2, y2] = B;
+    return [(x1 + x2) / 2, (y1 + y2) / 2];
+}
+class Linear {
+    constructor() {
+        this._linear = [NaN, NaN, NaN];
+        this.defined = false;
+    }
+    byLinear(linear) {
+        this._linear = linear;
+        this.defined = true;
+        return this;
+    }
+    byStandard(standard) {
+        let [a, b, _c] = standard;
+        this.byLinear([a, b, -_c]);
+        return this;
+    }
+    byTwoPoints(p1, p2) {
+        let [x1, y1] = p1;
+        let [x2, y2] = p2;
+        let dx = x1 - x2;
+        let dy = y1 - y2;
+        if (dx === 0 && dy === 0)
+            return this;
+        let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
+        let s = Math.sign(a) || Math.sign(b) || 1;
+        [a, b, c] = (0, numbers_1.numbers)(a, b, c).times(s).ratio();
+        this.byLinear([a, b, c]);
+        return this;
+    }
+    byPointSlope(p, m) {
+        let p2 = [p[0] + 1, p[1] + m];
+        this.byTwoPoints(p, p2);
+        return this;
+    }
+    byIntercepts(x, y) {
+        if (x === 0 || y === 0)
+            return this;
+        this.byTwoPoints([x, 0], [0, y]);
+        return this;
+    }
+    byBisector(A, B) {
+        let [x1, y1] = A;
+        let [x2, y2] = B;
+        if (x1 === x2 && y1 === y2)
+            return this;
+        if (x1 === x2) {
+            this.byLinear([0, 1, -(y1 + y2) / 2]);
+        }
+        else if (y1 === y2) {
+            this.byLinear([1, 0, -(x1 + x2) / 2]);
+        }
+        else {
+            let m = -1 / slope(A, B);
+            let M = midpoint(A, B);
+            this.byPointSlope(M, m);
+        }
+        return this;
+    }
+    slope() {
+        let [a, b, c] = this._linear;
+        return b === 0 ? NaN : -a / b;
+    }
+    xInt() {
+        let [a, b, c] = this._linear;
+        return a === 0 ? NaN : -c / a;
+    }
+    yInt() {
+        let [a, b, c] = this._linear;
+        return b === 0 ? NaN : -c / b;
+    }
+    toLinear() {
+        if (!this.defined)
+            return [NaN, NaN, NaN];
+        return this._linear;
+    }
+    toLine() {
+        if (!this.defined)
+            return [NaN, NaN];
+        return [this.slope(), this.yInt()];
+    }
+    toStandard() {
+        if (!this.defined)
+            return [NaN, NaN, NaN];
+        let [a, b, c] = this._linear;
+        return [a, b, -c];
+    }
+    toConstraint(ineq) {
+        let [a, b, c] = this.toStandard();
+        return [a, b, ineq, c];
+    }
+}
+exports.Linear = Linear;
+/**
+ * Return a `Linear` instance.
+ */
+function lin() {
+    return new Linear();
+}
+exports.lin = lin;
+//# sourceMappingURL=linear.js.map
+
+/***/ }),
+
 /***/ 3704:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -29899,6 +30021,7 @@ globalThis.ineq = sapphire_js_1.ineq;
 globalThis.optimizer = sapphire_js_1.optimizer;
 globalThis.rein = sapphire_js_1.rein;
 globalThis.toReins = sapphire_js_1.toReins;
+globalThis.lin = sapphire_js_1.lin;
 const $Owl = __importStar(__webpack_require__(1025));
 globalThis.owl = $Owl;
 const $Ink = __importStar(__webpack_require__(6715));
@@ -30064,9 +30187,9 @@ globalThis.LineFeat = contract(LineFeat).sign([owl.nonZero, owl.nonZero, owl.num
  * ```
  */
 function LinearFromIntercepts(xInt, yInt) {
-    return LF().byIntercepts(xInt, yInt).linear();
+    return lin().byIntercepts(xInt, yInt).toLinear();
 }
-globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign();
+globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign([owl.nonZero, owl.nonZero]);
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from two given points
@@ -30076,9 +30199,12 @@ globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign();
  * ```
  */
 function LinearFromTwoPoints(point1, point2) {
-    return LF().byTwoPoints(point1, point2).linear();
+    return lin().byTwoPoints(point1, point2).toLinear();
 }
-globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).sign();
+globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).seal({
+    arg: [owl.point2D, owl.point2D],
+    args: function different_points(p1, p2) { return owl.distinct([p1, p2]); }
+});
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from point and slope
@@ -30088,9 +30214,9 @@ globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).sign();
  * ```
  */
 function LinearFromPointSlope(point, slope) {
-    return LF().byPointSlope(point, slope).linear();
+    return lin().byPointSlope(point, slope).toLinear();
 }
-globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign();
+globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign([owl.point2D, owl.num]);
 /**
  * @category Linear
  * @return the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
@@ -30100,9 +30226,12 @@ globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign();
  * ```
  */
 function LinearFromBisector(A, B) {
-    return LF().byBisector(A, B).linear();
+    return lin().byBisector(A, B).toLinear();
 }
-globalThis.LinearFromBisector = contract(LinearFromBisector).sign();
+globalThis.LinearFromBisector = contract(LinearFromBisector).seal({
+    arg: [owl.point2D, owl.point2D],
+    args: function different_points(p1, p2) { return owl.distinct([p1, p2]); }
+});
 /**
  * @category Linear
  * @return [slope,yInt] from given intercepts
@@ -30112,9 +30241,9 @@ globalThis.LinearFromBisector = contract(LinearFromBisector).sign();
  * ```
  */
 function LineFromIntercepts(xInt, yInt) {
-    return LF().byIntercepts(xInt, yInt).line();
+    return lin().byIntercepts(xInt, yInt).toLine();
 }
-globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign();
+globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign([owl.nonZero, owl.nonZero]);
 /**
  * @category Linear
  * @return [slope,yInt] from two given points
@@ -30124,9 +30253,15 @@ globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign();
  * ```
  */
 function LineFromTwoPoints(point1, point2) {
-    return LF().byTwoPoints(point1, point2).line();
+    return lin().byTwoPoints(point1, point2).toLine();
 }
-globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign();
+globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).seal({
+    arg: [owl.point2D, owl.point2D],
+    args: [
+        function different_points(p1, p2) { return owl.distinct([p1, p2]); },
+        function non_vertical(p1, p2) { return p1[0] !== p2[0]; }
+    ]
+});
 /**
  * @category Linear
  * @return [slope,yInt] from point and slope
@@ -30136,9 +30271,9 @@ globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign();
  * ```
  */
 function LineFromPointSlope(point, slope) {
-    return LF().byPointSlope(point, slope).line();
+    return lin().byPointSlope(point, slope).toLine();
 }
-globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign();
+globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign([owl.point2D, owl.num]);
 /**
  * @category Linear
  * @return [slope,yInt] from perpendicular bisector of AB
@@ -30148,92 +30283,15 @@ globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign();
  * ```
  */
 function LineFromBisector(A, B) {
-    return LF().byBisector(A, B).line();
+    return lin().byBisector(A, B).toLine();
 }
-globalThis.LineFromBisector = contract(LineFromBisector).sign();
-/**
- * @ignore
- */
-class LinearFunction {
-    constructor() {
-        this._linear = [NaN, NaN, NaN];
-    }
-    // define
-    byTwoPoints(p1, p2) {
-        Should(owl.point2D(p1) && owl.point2D(p2), 'input must be point');
-        Should(AreDifferent(p1, p2), 'two points should be distinct');
-        let [x1, y1] = p1;
-        let [x2, y2] = p2;
-        let dx = x1 - x2;
-        let dy = y1 - y2;
-        let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
-        let s = Sign(a);
-        if (s === 0)
-            s = Sign(b);
-        if (s === 0)
-            s = 1;
-        [a, b, c] = [a * s, b * s, c * s];
-        try {
-            [a, b, c] = Ratio(a, b, c);
-        }
-        catch {
-        }
-        this._linear = [a, b, c];
-        this.refresh();
-        return this;
-    }
-    byPointSlope(p, m) {
-        Should(owl.point2D(p), 'input must be point');
-        let p2 = [p[0] + 1, p[1] + m];
-        this.byTwoPoints(p, p2);
-        return this;
-    }
-    byIntercepts(x, y) {
-        Should(IsNum(x, y), "input must be num");
-        Should(IsNonZero(x, y), 'intercepts cannot be zero');
-        this.byTwoPoints([x, 0], [0, y]);
-        return this;
-    }
-    byBisector(A, B) {
-        Should(owl.point2D(A) && owl.point2D(B), 'input must be point');
-        Should(AreDifferent(A, B), 'two points should be distinct');
-        if (A[0] === B[0]) {
-            this._linear = [0, 1, -(A[1] + B[1]) / 2];
-            this.refresh();
-        }
-        else if (A[1] === B[1]) {
-            this._linear = [1, 0, -(A[0] + B[0]) / 2];
-            this.refresh();
-        }
-        else {
-            let m = -1 / Slope(A, B);
-            let M = Mid(A, B);
-            this.byPointSlope(M, m);
-        }
-        return this;
-    }
-    byLinear(linear) {
-        this._linear = linear;
-        this.refresh();
-        return this;
-    }
-    refresh() {
-        let [a, b, c] = this._linear;
-    }
-    linear() {
-        return this._linear;
-    }
-    line() {
-        let [m, c] = LineFeat(...this.linear());
-        return [m, c];
-    }
-}
-/**
- * @ignore
- */
-function LF() {
-    return new LinearFunction();
-}
+globalThis.LineFromBisector = contract(LineFromBisector).seal({
+    arg: [owl.point2D, owl.point2D],
+    args: [
+        function different_points(p1, p2) { return owl.distinct([p1, p2]); },
+        function non_horizontal(p1, p2) { return p1[1] !== p2[1]; }
+    ]
+});
 
 
 /***/ }),
@@ -36815,6 +36873,30 @@ class PenCls extends sapphire_js_1.Pencil {
                     this.vertical(-c / a);
                 if (a !== 0 && b !== 0)
                     this.line(-a / b, -c / b);
+            },
+            /**
+             * Draw a line through two points.
+             * @category graph
+             * @param A - one point
+             * @param B - another point
+             * @returns void
+             */
+            through(A, B) {
+                let ptA = this._pen.pj(A);
+                let ptB = this._pen.pj(B);
+                let [a, b, c] = lin().byTwoPoints(ptA, ptB).toLinear();
+                this.linear(a, b, c);
+            },
+            /**
+             * Draw the perpendicular bisector of two points.
+             * @category graph
+             * @param A - one point
+             * @param B - another point
+             * @returns void
+             */
+            perpBisector(A, B) {
+                let [a, b, c] = lin().byBisector(A, B).toLinear();
+                this.linear(a, b, c);
             }
         };
         /**
@@ -37840,6 +37922,24 @@ class PenCls extends sapphire_js_1.Pencil {
      */
     equalSide(startPoint, endPoint, tick = 1) {
         this.drawEqualMark(startPoint, endPoint, 5, tick, 3);
+    }
+    /**
+     * Decorate bisecting equal lengths of a side.
+     * @category decorator
+     * @param startPoint - The starting point [x,y].
+     * @param endPoint - The ending point [x,y].
+     * @param tick - The number of ticks.
+     * @returns void
+     * ```
+     * pen.decorate.bisectSide([0,0], [2,2], 2)
+     * // decorate two double-ticks bisecting [0,0] and [2,2] at their mid-pt
+     * ```
+     */
+    bisectSide(startPoint, endPoint, tick = 1) {
+        let [A, B] = this.pjs([startPoint, endPoint]);
+        let M = Mid(A, B);
+        this.equalSide(A, M, tick);
+        this.equalSide(B, M, tick);
     }
     /**
      * Decorate parallel side.

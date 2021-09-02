@@ -531,6 +531,7 @@ export class PenCls extends Pencil {
             const [h, k] = center
             this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360)
         },
+
         /**
          * Draw an arc.
          * @category graph
@@ -545,6 +546,7 @@ export class PenCls extends Pencil {
         arc(center: Point2D, pStart: Point2D, pEnd: Point2D) {
             this._pen.drawStrokeSectoroid(center, pStart, pEnd, [])
         },
+
         /**
          * Draw a sector.
          * @category graph
@@ -559,6 +561,7 @@ export class PenCls extends Pencil {
         sector(center: Point2D, pStart: Point2D, pEnd: Point2D) {
             this._pen.drawStrokeSectoroid(center, pStart, pEnd, [center, pStart])
         },
+
         /**
          * Draw a circle segment.
          * @category graph
@@ -573,6 +576,7 @@ export class PenCls extends Pencil {
         segment(center: Point2D, pStart: Point2D, pEnd: Point2D) {
             this._pen.drawStrokeSectoroid(center, pStart, pEnd, [pStart])
         },
+
         /**
          * Draw a quadratic graph y=ax^2+bx+c.
          * @category graph
@@ -587,6 +591,7 @@ export class PenCls extends Pencil {
         quadratic(a: number, b: number, c: number) {
             this._pen.plot(x => a * x * x + b * x + c)
         },
+
         /**
          * Draw a line y=mx+c.
          * @category graph
@@ -602,6 +607,7 @@ export class PenCls extends Pencil {
             const y = (x: number) => m * x + c;
             this._pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
         },
+
         /**
          * Draw a horizontal line y=constant.
          * @category graph
@@ -615,6 +621,7 @@ export class PenCls extends Pencil {
             const [xmin, xmax] = this._pen.frame.xRange();
             this._pen.line([xmin, y], [xmax, y]);
         },
+
         /**
          * Draw a vertical line x=constant.
          * @category graph
@@ -628,6 +635,7 @@ export class PenCls extends Pencil {
             const [ymin, ymax] = this._pen.frame.yRange();
             this._pen.line([x, ymin], [x, ymax]);
         },
+
         /**
          * Draw a line ax+by+c=0.
          * @category graph
@@ -643,7 +651,34 @@ export class PenCls extends Pencil {
             if (a === 0 && b !== 0) this.horizontal(-c / b);
             if (b == 0 && a !== 0) this.vertical(-c / a);
             if (a !== 0 && b !== 0) this.line(-a / b, -c / b);
+        },
+
+        /**
+         * Draw a line through two points.
+         * @category graph
+         * @param A - one point
+         * @param B - another point
+         * @returns void
+         */
+        through(A: Point, B: Point) {
+            let ptA = this._pen.pj(A)
+            let ptB = this._pen.pj(B)
+            let [a, b, c] = lin().byTwoPoints(ptA, ptB).toLinear()
+            this.linear(a, b, c)
+        },
+
+        /**
+         * Draw the perpendicular bisector of two points.
+         * @category graph
+         * @param A - one point
+         * @param B - another point
+         * @returns void
+         */
+        perpBisector(A: Point2D, B: Point2D) {
+            let [a, b, c] = lin().byBisector(A, B).toLinear()
+            this.linear(a, b, c)
         }
+
     };
 
 
@@ -851,6 +886,7 @@ export class PenCls extends Pencil {
             }
         }
     }
+
 
 
     /**
@@ -1127,6 +1163,27 @@ export class PenCls extends Pencil {
     equalSide(startPoint: Point, endPoint: Point, tick = 1) {
         this.drawEqualMark(startPoint, endPoint, 5, tick, 3)
     }
+
+
+    /**
+     * Decorate bisecting equal lengths of a side.
+     * @category decorator
+     * @param startPoint - The starting point [x,y].
+     * @param endPoint - The ending point [x,y].
+     * @param tick - The number of ticks.
+     * @returns void
+     * ```
+     * pen.decorate.bisectSide([0,0], [2,2], 2)
+     * // decorate two double-ticks bisecting [0,0] and [2,2] at their mid-pt
+     * ```
+     */
+    bisectSide(startPoint: Point, endPoint: Point, tick = 1) {
+        let [A, B] = this.pjs([startPoint, endPoint])
+        let M = Mid(A, B)
+        this.equalSide(A, M, tick)
+        this.equalSide(B, M, tick)
+    }
+
 
     /**
      * Decorate parallel side.

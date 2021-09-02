@@ -25,6 +25,7 @@ import {
     optimizer as $optimizer,
     rein as $rein,
     toReins as $toReins,
+    lin as $lin,
 } from 'sapphire-js'
 
 
@@ -54,6 +55,7 @@ globalThis.ineq = $ineq
 globalThis.optimizer = $optimizer
 globalThis.rein = $rein
 globalThis.toReins = $toReins
+globalThis.lin = $lin
 
 
 import * as $Owl from './Owl/index'
@@ -98,6 +100,7 @@ declare global {
     var optimizer: typeof $optimizer
     var rein: typeof $rein
     var toReins: typeof $toReins
+    var lin: typeof $lin
     var owl: typeof $Owl
     var ink: typeof $Ink
 }

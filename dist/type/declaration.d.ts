@@ -85,7 +85,7 @@ declare module "Core/Ink/index" {
     export function printConstraints(cons: Constraint[]): string;
 }
 declare module "Core/index" {
-    import { poker as $poker, dice as $dice, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins } from 'sapphire-js';
+    import { poker as $poker, dice as $dice, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'sapphire-js';
     import * as $Owl from "Core/Owl/index";
     import * as $Ink from "Core/Ink/index";
     global {
@@ -115,6 +115,7 @@ declare module "Core/index" {
         var optimizer: typeof $optimizer;
         var rein: typeof $rein;
         var toReins: typeof $toReins;
+        var lin: typeof $lin;
         var owl: typeof $Owl;
         var ink: typeof $Ink;
     }
@@ -439,24 +440,6 @@ declare function LineFromPointSlope(point: Point2D, slope: number): [slope: numb
  * ```
  */
 declare function LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number];
-/**
- * @ignore
- */
-declare class LinearFunction {
-    private _linear;
-    byTwoPoints(p1: Point2D, p2: Point2D): this;
-    byPointSlope(p: Point2D, m: number): this;
-    byIntercepts(x: number, y: number): this;
-    byBisector(A: Point2D, B: Point2D): this;
-    byLinear(linear: [a: number, b: number, c: number]): this;
-    private refresh;
-    linear(): [a: number, b: number, c: number];
-    line(): [slope: number, yInt: number];
-}
-/**
- * @ignore
- */
-declare function LF(): LinearFunction;
 declare module "Math/Jest/JestExtend" {
     export function repeat(times: number, func: Function): void;
     global {
@@ -3107,6 +3090,22 @@ declare module "Pen/Pen" {
              * ```
              */
             linear(a: number, b: number, c: number): void;
+            /**
+             * Draw a line through two points.
+             * @category graph
+             * @param A - one point
+             * @param B - another point
+             * @returns void
+             */
+            through(A: Point, B: Point): void;
+            /**
+             * Draw the perpendicular bisector of two points.
+             * @category graph
+             * @param A - one point
+             * @param B - another point
+             * @returns void
+             */
+            perpBisector(A: Point2D, B: Point2D): void;
         };
         /**
          * Draw a point.
@@ -3439,6 +3438,19 @@ declare module "Pen/Pen" {
          * ```
          */
         equalSide(startPoint: Point, endPoint: Point, tick?: number): void;
+        /**
+         * Decorate bisecting equal lengths of a side.
+         * @category decorator
+         * @param startPoint - The starting point [x,y].
+         * @param endPoint - The ending point [x,y].
+         * @param tick - The number of ticks.
+         * @returns void
+         * ```
+         * pen.decorate.bisectSide([0,0], [2,2], 2)
+         * // decorate two double-ticks bisecting [0,0] and [2,2] at their mid-pt
+         * ```
+         */
+        bisectSide(startPoint: Point, endPoint: Point, tick?: number): void;
         /**
          * Decorate parallel side.
          * @category decorator

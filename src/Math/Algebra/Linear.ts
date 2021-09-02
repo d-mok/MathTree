@@ -26,9 +26,9 @@ globalThis.LineFeat = contract(LineFeat).sign([owl.nonZero, owl.nonZero, owl.num
  * ```
  */
 function LinearFromIntercepts(xInt: number, yInt: number): [a: number, b: number, c: number] {
-    return LF().byIntercepts(xInt, yInt).linear()
+    return lin().byIntercepts(xInt, yInt).toLinear()
 }
-globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign()
+globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign([owl.nonZero, owl.nonZero])
 
 
 
@@ -41,9 +41,12 @@ globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign()
  * ```
  */
 function LinearFromTwoPoints(point1: Point2D, point2: Point2D): [a: number, b: number, c: number] {
-    return LF().byTwoPoints(point1, point2).linear()
+    return lin().byTwoPoints(point1, point2).toLinear()
 }
-globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).sign()
+globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).seal({
+    arg: [owl.point2D, owl.point2D],
+    args: function different_points(p1, p2) { return owl.distinct([p1, p2]) }
+})
 
 
 
@@ -56,9 +59,9 @@ globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).sign()
  * ```
  */
 function LinearFromPointSlope(point: Point2D, slope: number): [a: number, b: number, c: number] {
-    return LF().byPointSlope(point, slope).linear()
+    return lin().byPointSlope(point, slope).toLinear()
 }
-globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign()
+globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign([owl.point2D, owl.num])
 
 
 
@@ -71,11 +74,12 @@ globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign()
  * ```
  */
 function LinearFromBisector(A: Point2D, B: Point2D): [a: number, b: number, c: number] {
-    return LF().byBisector(A, B).linear()
+    return lin().byBisector(A, B).toLinear()
 }
-globalThis.LinearFromBisector = contract(LinearFromBisector).sign()
-
-
+globalThis.LinearFromBisector = contract(LinearFromBisector).seal({
+    arg: [owl.point2D, owl.point2D],
+    args: function different_points(p1, p2) { return owl.distinct([p1, p2]) }
+})
 
 /**
  * @category Linear
@@ -86,9 +90,9 @@ globalThis.LinearFromBisector = contract(LinearFromBisector).sign()
  * ```
  */
 function LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number] {
-    return LF().byIntercepts(xInt, yInt).line()
+    return lin().byIntercepts(xInt, yInt).toLine()
 }
-globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign()
+globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign([owl.nonZero, owl.nonZero])
 
 
 
@@ -103,10 +107,15 @@ globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign()
  * ```
  */
 function LineFromTwoPoints(point1: Point2D, point2: Point2D): [slope: number, yInt: number] {
-    return LF().byTwoPoints(point1, point2).line()
+    return lin().byTwoPoints(point1, point2).toLine()
 }
-globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign()
-
+globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).seal({
+    arg: [owl.point2D, owl.point2D],
+    args: [
+        function different_points(p1, p2) { return owl.distinct([p1, p2]) },
+        function non_vertical(p1, p2) { return p1[0] !== p2[0] }
+    ]
+})
 
 
 /**
@@ -118,9 +127,9 @@ globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).sign()
  * ```
  */
 function LineFromPointSlope(point: Point2D, slope: number): [slope: number, yInt: number] {
-    return LF().byPointSlope(point, slope).line()
+    return lin().byPointSlope(point, slope).toLine()
 }
-globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign()
+globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign([owl.point2D, owl.num])
 
 
 
@@ -134,99 +143,13 @@ globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign()
  * ```
  */
 function LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number] {
-    return LF().byBisector(A, B).line()
+    return lin().byBisector(A, B).toLine()
 }
-globalThis.LineFromBisector = contract(LineFromBisector).sign()
+globalThis.LineFromBisector = contract(LineFromBisector).seal({
+    arg: [owl.point2D, owl.point2D],
+    args: [
+        function different_points(p1, p2) { return owl.distinct([p1, p2]) },
+        function non_horizontal(p1, p2) { return p1[1] !== p2[1] }
+    ]
+})
 
-
-
-
-
-
-/**
- * @ignore
- */
-class LinearFunction {
-    private _linear: [a: number, b: number, c: number] = [NaN, NaN, NaN]
-
-    // define
-    byTwoPoints(p1: Point2D, p2: Point2D) {
-        Should(owl.point2D(p1) && owl.point2D(p2), 'input must be point')
-        Should(AreDifferent(p1, p2), 'two points should be distinct')
-        let [x1, y1] = p1
-        let [x2, y2] = p2
-        let dx = x1 - x2
-        let dy = y1 - y2
-        let [a, b, c] = [dy, -dx, dx * y1 - dy * x1]
-        let s = Sign(a);
-        if (s === 0) s = Sign(b)
-        if (s === 0) s = 1;
-        [a, b, c] = [a * s, b * s, c * s];
-        try {
-            [a, b, c] = Ratio(a, b, c)
-        } catch {
-        }
-        this._linear = [a, b, c]
-        this.refresh()
-        return this
-    }
-
-    byPointSlope(p: Point2D, m: number) {
-        Should(owl.point2D(p), 'input must be point')
-        let p2: Point2D = [p[0] + 1, p[1] + m]
-        this.byTwoPoints(p, p2)
-        return this
-    }
-
-    byIntercepts(x: number, y: number) {
-        Should(IsNum(x, y), "input must be num")
-        Should(IsNonZero(x, y), 'intercepts cannot be zero')
-        this.byTwoPoints([x, 0], [0, y])
-        return this
-    }
-
-    byBisector(A: Point2D, B: Point2D) {
-        Should(owl.point2D(A) && owl.point2D(B), 'input must be point')
-        Should(AreDifferent(A, B), 'two points should be distinct')
-        if (A[0] === B[0]) {
-            this._linear = [0, 1, -(A[1] + B[1]) / 2]
-            this.refresh()
-        } else if (A[1] === B[1]) {
-            this._linear = [1, 0, -(A[0] + B[0]) / 2]
-            this.refresh()
-        } else {
-            let m = -1 / Slope(A, B)
-            let M = Mid(A, B)
-            this.byPointSlope(M, m)
-        }
-        return this
-    }
-
-    byLinear(linear: [a: number, b: number, c: number]) {
-        this._linear = linear
-        this.refresh()
-        return this
-    }
-
-    private refresh() {
-        let [a, b, c] = this._linear!
-    }
-
-    linear(): [a: number, b: number, c: number] {
-        return this._linear
-    }
-
-    line(): [slope: number, yInt: number] {
-        let [m, c] = LineFeat(...this.linear())
-        return [m, c]
-    }
-
-}
-
-
-/**
- * @ignore
- */
-function LF() {
-    return new LinearFunction()
-}
