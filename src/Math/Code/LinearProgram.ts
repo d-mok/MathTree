@@ -253,9 +253,11 @@ function ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
     let constraints: Constraint[] = []
 
     for (let i = 0; i < points.length; i++) {
-        let l = LinearFromTwoPoints(pts[i], pts[i + 1])
-        let sign: Ineq = FieldAt(mean, l) > 0 ? "\\ge" : "\\le"
-        constraints.push([l[0], l[1], sign, -l[2]])
+        let A = pts[i]
+        let B = pts[i + 1]
+        let [a, b, c] = LinearFromTwoPoints(A, B)
+        let sign: Ineq = FieldAt(mean, [a, b, c]) > 0 ? "\\ge" : "\\le"
+        constraints.push([a, b, sign, -c])
     }
     return constraints
 }
