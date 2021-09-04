@@ -9546,9 +9546,9 @@ defineSymbol(math, main, mathord, "\u03D6", "\\varpi", true);
 defineSymbol(math, main, mathord, "\u03F1", "\\varrho", true);
 defineSymbol(math, main, mathord, "\u03C2", "\\varsigma", true);
 defineSymbol(math, main, mathord, "\u03C6", "\\varphi", true);
-defineSymbol(math, main, bin, "\u2217", "*");
+defineSymbol(math, main, bin, "\u2217", "*", true);
 defineSymbol(math, main, bin, "+", "+");
-defineSymbol(math, main, bin, "\u2212", "-");
+defineSymbol(math, main, bin, "\u2212", "-", true);
 defineSymbol(math, main, bin, "\u22C5", "\\cdot", true);
 defineSymbol(math, main, bin, "\u2218", "\\circ");
 defineSymbol(math, main, bin, "\xF7", "\\div", true);
@@ -23333,7 +23333,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
   /**
    * Current KaTeX version
    */
-  version: "0.13.17",
+  version: "0.13.18",
 
   /**
    * Renders the given LaTeX into an HTML+MathML combination, and adds
@@ -28393,6 +28393,13 @@ class Rein {
         return (0, inequal_1.ineq)(i).compare(a * x + b * y, c);
     }
     /**
+     * Check if me can equal.
+     */
+    canEqual() {
+        let [a, b, i, c] = this.constraint;
+        return (0, inequal_1.ineq)(i).canEqual();
+    }
+    /**
      * Return a strict version of this constraint.
      */
     strict() {
@@ -28432,6 +28439,20 @@ class Rein {
      */
     shake() {
         return Math.random() > 0.5 ? this.clone() : this.flip();
+    }
+    /**
+     * Return Linear form object from constraint.
+     */
+    toLinear() {
+        let [a, b, i, c] = this.constraint;
+        return [a, b, -c];
+    }
+    /**
+     * Return Standard form object from constraint.
+     */
+    toStandard() {
+        let [a, b, i, c] = this.constraint;
+        return [a, b, c];
     }
 }
 exports.Rein = Rein;
@@ -28537,6 +28558,12 @@ class Reins extends list_1.List {
      */
     isBounded() {
         return this.polygon().every($ => !this.onEdge($));
+    }
+    /**
+     * Check if this set of constraints has any solution at all.
+     */
+    isConsistent() {
+        return this.polygon().length > 2;
     }
     /**
      * Return all the integral points inside the feasible polygon.
@@ -31890,9 +31917,11 @@ function ConstraintsFromPoints(...points) {
     pts = [...pts, pts[0]];
     let constraints = [];
     for (let i = 0; i < points.length; i++) {
-        let l = LinearFromTwoPoints(pts[i], pts[i + 1]);
-        let sign = FieldAt(mean, l) > 0 ? "\\ge" : "\\le";
-        constraints.push([l[0], l[1], sign, -l[2]]);
+        let A = pts[i];
+        let B = pts[i + 1];
+        let [a, b, c] = LinearFromTwoPoints(A, B);
+        let sign = FieldAt(mean, [a, b, c]) > 0 ? "\\ge" : "\\le";
+        constraints.push([a, b, sign, -c]);
     }
     return constraints;
 }
@@ -35799,6 +35828,7 @@ class AutoPenCls {
     }
     /**
      * Draw a graph for linear programming.
+     * @deprecated
      * @category tool
      * @param constraints - Constraint as system of inequalities, like [[1,1,'<',2]] represent x+y<2.
      * @param field - The target linear function to optimize, [a,b,c] represent ax+by+c.
@@ -37064,6 +37094,69 @@ class PenCls extends sapphire_js_1.Pencil {
             }
         };
         /**
+         * Linear Programming tools.
+         * @category linProg
+         */
+        this.linProg = {
+            /**
+             * @ignore
+             */
+            _pen: this,
+            /**
+             * Draw a constraint line.
+             * @category linProg
+             * @param constraints - The constraints to draw
+             * @returns void
+             * ```
+             * pen.linProg.constraint([1,2,'>',3])
+             * ```
+             */
+            drawConstraints(...constraints) {
+                for (let c of toReins(constraints)) {
+                    if (c.canEqual()) {
+                        this._pen.graph.linear(...c.toLinear());
+                    }
+                    else {
+                        this._pen.set.dash(true);
+                        this._pen.graph.linear(...c.toLinear());
+                        this._pen.set.dash();
+                    }
+                }
+            },
+            /**
+             * Shade the region of the constraint set.
+             * @category linProg
+             * @param constraints - The constraint to shade
+             * @returns void
+             * ```
+             * pen.linProg.shadeConstraints([[1,2,'>',3]])
+             * ```
+             */
+            shadeConstraints(constraints) {
+                let poly = toReins(constraints).polygon();
+                this._pen.polyshade(...poly);
+            },
+            /**
+             * Label coordinates of the vertices of the feasible region.
+             * @category linProg
+             * @param constraints - The constraint set
+             * @returns void
+             * ```
+             * pen.linProg.verticesCoord([
+             * [1,0,'>',0],
+             * [0,1,'>',0],
+             * [1,1,'<',2]
+             * ])
+             * ```
+             */
+            verticesCoord(constraints) {
+                let vs = toReins(constraints).vertices();
+                for (let v of vs) {
+                    this._pen.label.coordinates(v);
+                }
+            }
+        };
+        /**
          * @category text
          */
         this.label = {
@@ -37160,7 +37253,7 @@ class PenCls extends sapphire_js_1.Pencil {
              * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
              * ```
              */
-            coordinates(point, direction = 90, radius = 15) {
+            coordinates(point, direction, radius = 15) {
                 let [x, y] = point;
                 x = Fix(x, 1);
                 y = Fix(y, 1);

@@ -673,6 +673,7 @@ export class AutoPenCls {
 
     /**
      * Draw a graph for linear programming.
+     * @deprecated
      * @category tool
      * @param constraints - Constraint as system of inequalities, like [[1,1,'<',2]] represent x+y<2.
      * @param field - The target linear function to optimize, [a,b,c] represent ax+by+c.

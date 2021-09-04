@@ -3411,6 +3411,50 @@ declare module "Pen/Pen" {
             rect(vertex1: Point2D, vertex2: Point2D): void;
         };
         /**
+         * Linear Programming tools.
+         * @category linProg
+         */
+        linProg: {
+            /**
+             * @ignore
+             */
+            _pen: PenCls;
+            /**
+             * Draw a constraint line.
+             * @category linProg
+             * @param constraints - The constraints to draw
+             * @returns void
+             * ```
+             * pen.linProg.constraint([1,2,'>',3])
+             * ```
+             */
+            drawConstraints(...constraints: Constraint[]): void;
+            /**
+             * Shade the region of the constraint set.
+             * @category linProg
+             * @param constraints - The constraint to shade
+             * @returns void
+             * ```
+             * pen.linProg.shadeConstraints([[1,2,'>',3]])
+             * ```
+             */
+            shadeConstraints(constraints: Constraint[]): void;
+            /**
+             * Label coordinates of the vertices of the feasible region.
+             * @category linProg
+             * @param constraints - The constraint set
+             * @returns void
+             * ```
+             * pen.linProg.verticesCoord([
+             * [1,0,'>',0],
+             * [0,1,'>',0],
+             * [1,1,'<',2]
+             * ])
+             * ```
+             */
+            verticesCoord(constraints: Constraint[]): void;
+        };
+        /**
          * Draw an angle with label, non-reflex
          * @category draw
          * @param A - The starting point [x,y].
@@ -3573,7 +3617,7 @@ declare module "Pen/Pen" {
              * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
              * ```
              */
-            coordinates(point: Point2D, direction?: number, radius?: number): void;
+            coordinates(point: Point2D, direction?: number | undefined, radius?: number): void;
         };
         /**
          * The axis.
@@ -4080,6 +4124,7 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * Draw a graph for linear programming.
+         * @deprecated
          * @category tool
          * @param constraints - Constraint as system of inequalities, like [[1,1,'<',2]] represent x+y<2.
          * @param field - The target linear function to optimize, [a,b,c] represent ax+by+c.

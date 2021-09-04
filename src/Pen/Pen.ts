@@ -1119,6 +1119,77 @@ export class PenCls extends Pencil {
 
 
 
+    /**
+     * Linear Programming tools.
+     * @category linProg
+     */
+    linProg = {
+        /**
+         * @ignore
+         */
+        _pen: this as PenCls,
+        /**
+         * Draw a constraint line.
+         * @category linProg
+         * @param constraints - The constraints to draw
+         * @returns void
+         * ```
+         * pen.linProg.constraint([1,2,'>',3])
+         * ```
+         */
+        drawConstraints(...constraints: Constraint[]) {
+            for (let c of toReins(constraints)) {
+                if (c.canEqual()) {
+                    this._pen.graph.linear(...c.toLinear());
+                } else {
+                    this._pen.set.dash(true)
+                    this._pen.graph.linear(...c.toLinear());
+                    this._pen.set.dash()
+                }
+            }
+        },
+        /**
+         * Shade the region of the constraint set.
+         * @category linProg
+         * @param constraints - The constraint to shade
+         * @returns void
+         * ```
+         * pen.linProg.shadeConstraints([[1,2,'>',3]])
+         * ```
+         */
+        shadeConstraints(constraints: Constraint[]) {
+            let poly = toReins(constraints).polygon()
+            this._pen.polyshade(...poly);
+        },
+
+        /**
+         * Label coordinates of the vertices of the feasible region.
+         * @category linProg
+         * @param constraints - The constraint set
+         * @returns void
+         * ```
+         * pen.linProg.verticesCoord([
+         * [1,0,'>',0],
+         * [0,1,'>',0],
+         * [1,1,'<',2]
+         * ])
+         * ```
+         */
+        verticesCoord(constraints: Constraint[]) {
+            let vs = toReins(constraints).vertices()
+            for (let v of vs) {
+                this._pen.label.coordinates(v);
+            }
+        }
+
+
+
+
+    };
+
+
+
+
 
     /**
      * Draw an angle with label, non-reflex
@@ -1360,7 +1431,7 @@ export class PenCls extends Pencil {
          * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
          * ```
          */
-        coordinates(point: Point2D, direction = 90, radius = 15) {
+        coordinates(point: Point2D, direction?: number, radius = 15) {
             let [x, y] = point
             x = Fix(x, 1)
             y = Fix(y, 1)
