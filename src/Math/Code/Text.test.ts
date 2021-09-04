@@ -152,3 +152,10 @@ test('PrimeFactorize', () => {
     }, { hcf: true, lcm: true })).toBe('\\begin{matrix}  & &x & &z^{4} \\\\  & &x^{2}&y^{5}&z^{5} \\\\  & &x^{3}&y^{6}&z^{6} \\\\ \\hline \\text{HCF} & = &x & &z^{4} \\\\  \\text{LCM} & = &x^{3}&y^{6}&z^{6} \\\\ \\end{matrix}');
 });
 
+
+test('ConstraintText', () => {
+    expect(ConstraintText([1, 2, '<', 3], true, 'h', 'k')).toBe(' 1h + 2k \\lt 3 ');
+    expect(ConstraintText([1, 2, '<', 3], false)).toBe(' 1x + 2y \\gt 3 ');
+    expect(ConstraintText([1, 2, '<', 3], null)).toBe(' 1x + 2y = 3 ');
+});
+

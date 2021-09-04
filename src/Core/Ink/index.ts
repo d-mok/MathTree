@@ -102,13 +102,14 @@ export function printPointPolar(point: Point2D): string {
 }
 
 
-export function printConstraint(con: Constraint, align = false): string {
+export function printConstraint(con: Constraint, align = false, replaceEqual = false): string {
     let [a, b, i, c] = con
     if (i === '>=') i = '\\ge'
     if (i === '>') i = '\\gt'
     if (i === '<=') i = '\\le'
     if (i === '<') i = '\\lt'
     let j: string = i
+    if (replaceEqual) j = '='
     if (align) j = ' & ' + j
     if (a === 0 && b === 0) return ` 0 ${j} ${c} `
     if (a !== 0 && b === 0) return ` ${a}x ${j} ${c} `

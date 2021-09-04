@@ -374,3 +374,23 @@ function PrimeFactorize(val: { [_: string]: number[] }, { hcf = false, lcm = fal
 globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.object])
 
 
+
+
+
+/**
+ * @category Text
+ * @return the latex representing the `constraint`
+ * ```
+ * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
+ * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
+ * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
+ * ```
+ */
+function ConstraintText(constraint: Constraint, sign: boolean | null = true, xReplace = 'x', yReplace = 'y'): string {
+    let T = ink.printConstraint(constraint, false, sign === null)
+    T = T.replaceAll('x', xReplace)
+    T = T.replaceAll('y', yReplace)
+    return T
+}
+globalThis.ConstraintText = contract(ConstraintText)
+    .sign([owl.constraint, owl.pass, owl.str, owl.str])
