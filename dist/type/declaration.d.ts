@@ -81,7 +81,7 @@ declare module "Core/Ink/index" {
     export function printOrTrigRoots(roots: (number | undefined)[]): string;
     export function printSurd(num: number): string;
     export function printPointPolar(point: Point2D): string;
-    export function printConstraint(con: Constraint, align?: boolean): string;
+    export function printConstraint(con: Constraint, align?: boolean, replaceEqual?: boolean): string;
     export function printConstraints(cons: Constraint[]): string;
 }
 declare module "Core/index" {
@@ -2361,6 +2361,16 @@ declare function PrimeFactorize(val: {
     lcm?: boolean | undefined;
     multiply?: boolean | undefined;
 }): string;
+/**
+ * @category Text
+ * @return the latex representing the `constraint`
+ * ```
+ * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
+ * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
+ * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
+ * ```
+ */
+declare function ConstraintText(constraint: Constraint, sign?: boolean | null, xReplace?: string, yReplace?: string): string;
 /**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.

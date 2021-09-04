@@ -29784,7 +29784,7 @@ function printPointPolar(point) {
     return `(${printSurd(r)},${q}°)`;
 }
 exports.printPointPolar = printPointPolar;
-function printConstraint(con, align = false) {
+function printConstraint(con, align = false, replaceEqual = false) {
     let [a, b, i, c] = con;
     if (i === '>=')
         i = '\\ge';
@@ -29795,6 +29795,8 @@ function printConstraint(con, align = false) {
     if (i === '<')
         i = '\\lt';
     let j = i;
+    if (replaceEqual)
+        j = '=';
     if (align)
         j = ' & ' + j;
     if (a === 0 && b === 0)
@@ -31713,7 +31715,7 @@ function CheckVertices({ constraints, field, label }) {
     let T = "";
     let vs = toReins(constraints).vertices();
     for (let v of vs) {
-        T += '\\text{At } ' + Coord(v) + ', ';
+        T += '\\text{At } ' + Coord(v) + ':~~~';
         T += label + ' = ' + optimizer({ field }).fieldAt(v) + ' \\\\ ';
     }
     return T;
@@ -34166,6 +34168,25 @@ function PrimeFactorize(val, { hcf = false, lcm = false, multiply = false }) {
     return T;
 }
 globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.object]);
+/**
+ * @category Text
+ * @return the latex representing the `constraint`
+ * ```
+ * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
+ * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
+ * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
+ * ```
+ */
+function ConstraintText(constraint, sign = true, xReplace = 'x', yReplace = 'y') {
+    if (sign === false)
+        constraint = rein(constraint).flip().constraint;
+    let T = ink.printConstraint(constraint, false, sign === null);
+    T = T.replace(/x/g, xReplace);
+    T = T.replace(/y/g, yReplace);
+    return T;
+}
+globalThis.ConstraintText = contract(ConstraintText)
+    .sign([owl.constraint, owl.pass, owl.str, owl.str]);
 
 
 /***/ }),

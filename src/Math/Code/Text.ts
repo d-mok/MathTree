@@ -387,9 +387,11 @@ globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.objec
  * ```
  */
 function ConstraintText(constraint: Constraint, sign: boolean | null = true, xReplace = 'x', yReplace = 'y'): string {
+    if (sign === false)
+        constraint = rein(constraint).flip().constraint
     let T = ink.printConstraint(constraint, false, sign === null)
-    T = T.replaceAll('x', xReplace)
-    T = T.replaceAll('y', yReplace)
+    T = T.replace(/x/g, xReplace)
+    T = T.replace(/y/g, yReplace)
     return T
 }
 globalThis.ConstraintText = contract(ConstraintText)
