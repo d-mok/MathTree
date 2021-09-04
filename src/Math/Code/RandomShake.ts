@@ -474,6 +474,7 @@ function RndShakeConstraints(anchor: Constraint[]): Constraint[][] {
     let func = () => [...toReins(anchor).shake().map($ => $.constraint)]
     return dice(func)
         .forbid(anchor)
+        .shield($ => toReins($).isConsistent())
         .unique()
         .rolls(3)
 }
