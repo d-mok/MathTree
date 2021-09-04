@@ -31616,8 +31616,8 @@ globalThis.Table = contract(Table).sign([owl.pass]);
 // ************TO BE DONE!!! VALIDATE OBJECT
 /**
  * Print a frequency table in latex.
- * @dataLabel - the label for the 1st row
- * @freqLabel - the label for the 2nd row
+ * @param dataLabel - the label for the 1st row
+ * @param freqLabel - the label for the 2nd row
  * @example
  * ```
  * FreqTable({
@@ -31641,9 +31641,9 @@ globalThis.FreqTable = contract(FreqTable).sign([owl.pass]);
 // ************TO BE DONE!!! VALIDATE OBJECT
 /**
  * Print a table in latex showing cartisian product of two items.
- * @rows - array of row values
- * @cols - array of column values
- * @cell - a function mapping row and column values to cell content
+ * @param rows - array of row values
+ * @param cols - array of column values
+ * @param cell - a function mapping row and column values to cell content
  * @example
  * ```
  * PairTable({
@@ -31691,6 +31691,34 @@ function PairTable({ rowTitle, colTitle, rows, cols, cell }) {
     return T;
 }
 globalThis.PairTable = contract(PairTable)
+    .sign([owl.pass]);
+// ************TO BE DONE!!! VALIDATE OBJECT
+/**
+ * Print the check vertice steps.
+ * @param label - the field label
+ * @example
+ * ```
+ * CheckVertices({
+ *    constraints: [
+ *      [1,0,'>',0],
+ *      [0,1,'>',0],
+ *      [1,1,'<',2],
+ * ],
+ *    field: [1,2,3],
+ *    label: "P"
+ * })
+ * ```
+ */
+function CheckVertices({ constraints, field, label }) {
+    let T = "";
+    let vs = toReins(constraints).vertices();
+    for (let v of vs) {
+        T += '\\text{At } ' + Coord(v) + ', ';
+        T += label + ' = ' + optimizer({ field }).fieldAt(v) + ' \\\\ ';
+    }
+    return T;
+}
+globalThis.CheckVertices = contract(CheckVertices)
     .sign([owl.pass]);
 // ************TO BE DONE!!! VALIDATE OBJECT
 
@@ -31883,20 +31911,50 @@ globalThis.OptimizePoint = contract(OptimizePoint).sign([owl.point2Ds, owl.field
 /**
  *
  * @category LinearProgram
- * @return the min/max value of field
+ * @return the max value of field
  * ```
- * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
- * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
+ * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
  * ```
  */
-function OptimizeField(points, field, max) {
+function MaximizeField(points, field) {
     let op = optimizer({
         field: field,
         feasiblePoints: points
     });
-    let val = max ? op.max() : op.min();
+    let val = op.max();
     Should(val !== null, 'No optimal value for this field!');
     return val;
+}
+globalThis.MaximizeField = contract(MaximizeField).sign([owl.point2Ds, owl.field]);
+/**
+ *
+ * @category LinearProgram
+ * @return the min value of field
+ * ```
+ * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
+ * ```
+ */
+function MinimizeField(points, field) {
+    let op = optimizer({
+        field: field,
+        feasiblePoints: points
+    });
+    let val = op.min();
+    Should(val !== null, 'No optimal value for this field!');
+    return val;
+}
+globalThis.MinimizeField = contract(MinimizeField).sign([owl.point2Ds, owl.field]);
+/**
+ *
+ * @category LinearProgram
+ * @return the min/max value of field
+ * ```
+ * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
+ * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
+ * ```
+ */
+function OptimizeField(points, field, max) {
+    return max ? MaximizeField(points, field) : MinimizeField(points, field);
 }
 globalThis.OptimizeField = contract(OptimizeField).sign([owl.point2Ds, owl.field, owl.bool]);
 /**
@@ -33080,6 +33138,7 @@ function RndShakeConstraints(anchor) {
     let func = () => [...toReins(anchor).shake().map($ => $.constraint)];
     return dice(func)
         .forbid(anchor)
+        .shield($ => toReins($).isConsistent())
         .unique()
         .rolls(3);
 }

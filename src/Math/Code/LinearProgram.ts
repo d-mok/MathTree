@@ -210,23 +210,62 @@ globalThis.OptimizePoint = contract(OptimizePoint).sign([owl.point2Ds, owl.field
 
 
 
+
+
+
+/**
+ * 
+ * @category LinearProgram
+ * @return the max value of field
+ * ```
+ * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
+ * ```
+ */
+function MaximizeField(points: Point2D[], field: Field): number {
+    let op = optimizer({
+        field: field,
+        feasiblePoints: points
+    })
+    let val = op.max()
+    Should(val !== null, 'No optimal value for this field!')
+    return val
+}
+globalThis.MaximizeField = contract(MaximizeField).sign([owl.point2Ds, owl.field])
+
+
+
+/**
+ * 
+ * @category LinearProgram
+ * @return the min value of field
+ * ```
+ * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
+ * ```
+ */
+function MinimizeField(points: Point2D[], field: Field): number {
+    let op = optimizer({
+        field: field,
+        feasiblePoints: points
+    })
+    let val = op.min()
+    Should(val !== null, 'No optimal value for this field!')
+    return val
+}
+globalThis.MinimizeField = contract(MinimizeField).sign([owl.point2Ds, owl.field])
+
+
+
 /**
  * 
  * @category LinearProgram
  * @return the min/max value of field
  * ```
  * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
- * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
+ * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
  * ```
  */
 function OptimizeField(points: Point2D[], field: Field, max: boolean): number {
-    let op = optimizer({
-        field: field,
-        feasiblePoints: points
-    })
-    let val = max ? op.max() : op.min()
-    Should(val !== null, 'No optimal value for this field!')
-    return val
+    return max ? MaximizeField(points, field) : MinimizeField(points, field)
 }
 globalThis.OptimizeField = contract(OptimizeField).sign([owl.point2Ds, owl.field, owl.bool])
 

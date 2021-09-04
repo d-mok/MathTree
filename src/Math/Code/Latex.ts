@@ -268,7 +268,7 @@ function CheckVertices({ constraints, field, label }:
     let T = ""
     let vs = toReins(constraints).vertices()
     for (let v of vs) {
-        T += '\\text{At } ' + Coord(v) + ', '
+        T += '\\text{At } ' + Coord(v) + ':~~~'
         T += label + ' = ' + optimizer({ field }).fieldAt(v) + ' \\\\ '
     }
     return T

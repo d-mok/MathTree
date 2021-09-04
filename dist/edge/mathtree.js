@@ -31713,7 +31713,7 @@ function CheckVertices({ constraints, field, label }) {
     let T = "";
     let vs = toReins(constraints).vertices();
     for (let v of vs) {
-        T += '\\text{At } ' + Coord(v) + ', ';
+        T += '\\text{At } ' + Coord(v) + ':~~~';
         T += label + ' = ' + optimizer({ field }).fieldAt(v) + ' \\\\ ';
     }
     return T;
@@ -31911,20 +31911,50 @@ globalThis.OptimizePoint = contract(OptimizePoint).sign([owl.point2Ds, owl.field
 /**
  *
  * @category LinearProgram
- * @return the min/max value of field
+ * @return the max value of field
  * ```
- * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
- * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
+ * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
  * ```
  */
-function OptimizeField(points, field, max) {
+function MaximizeField(points, field) {
     let op = optimizer({
         field: field,
         feasiblePoints: points
     });
-    let val = max ? op.max() : op.min();
+    let val = op.max();
     Should(val !== null, 'No optimal value for this field!');
     return val;
+}
+globalThis.MaximizeField = contract(MaximizeField).sign([owl.point2Ds, owl.field]);
+/**
+ *
+ * @category LinearProgram
+ * @return the min value of field
+ * ```
+ * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
+ * ```
+ */
+function MinimizeField(points, field) {
+    let op = optimizer({
+        field: field,
+        feasiblePoints: points
+    });
+    let val = op.min();
+    Should(val !== null, 'No optimal value for this field!');
+    return val;
+}
+globalThis.MinimizeField = contract(MinimizeField).sign([owl.point2Ds, owl.field]);
+/**
+ *
+ * @category LinearProgram
+ * @return the min/max value of field
+ * ```
+ * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
+ * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
+ * ```
+ */
+function OptimizeField(points, field, max) {
+    return max ? MaximizeField(points, field) : MinimizeField(points, field);
 }
 globalThis.OptimizeField = contract(OptimizeField).sign([owl.point2Ds, owl.field, owl.bool]);
 /**

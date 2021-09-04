@@ -1097,8 +1097,8 @@ declare function Table({ content, columns, rows, stretch }: {
 }): string;
 /**
  * Print a frequency table in latex.
- * @dataLabel - the label for the 1st row
- * @freqLabel - the label for the 2nd row
+ * @param dataLabel - the label for the 1st row
+ * @param freqLabel - the label for the 2nd row
  * @example
  * ```
  * FreqTable({
@@ -1115,9 +1115,9 @@ declare function FreqTable({ data, dataLabel, freqLabel }: {
 }): string;
 /**
  * Print a table in latex showing cartisian product of two items.
- * @rows - array of row values
- * @cols - array of column values
- * @cell - a function mapping row and column values to cell content
+ * @param rows - array of row values
+ * @param cols - array of column values
+ * @param cell - a function mapping row and column values to cell content
  * @example
  * ```
  * PairTable({
@@ -1136,6 +1136,27 @@ declare function PairTable<R, C>({ rowTitle, colTitle, rows, cols, cell }: {
     rows: R[];
     cols: C[];
     cell: (rowValue: R, colValue: C) => string | number | boolean;
+}): string;
+/**
+ * Print the check vertice steps.
+ * @param label - the field label
+ * @example
+ * ```
+ * CheckVertices({
+ *    constraints: [
+ *      [1,0,'>',0],
+ *      [0,1,'>',0],
+ *      [1,1,'<',2],
+ * ],
+ *    field: [1,2,3],
+ *    label: "P"
+ * })
+ * ```
+ */
+declare function CheckVertices({ constraints, field, label }: {
+    constraints: Constraint[];
+    field: Field;
+    label: string;
 }): string;
 /**
  *
@@ -1270,10 +1291,28 @@ declare function OptimizePoint(points: Point2D[], field: Field, max: boolean): P
 /**
  *
  * @category LinearProgram
+ * @return the max value of field
+ * ```
+ * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
+ * ```
+ */
+declare function MaximizeField(points: Point2D[], field: Field): number;
+/**
+ *
+ * @category LinearProgram
+ * @return the min value of field
+ * ```
+ * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
+ * ```
+ */
+declare function MinimizeField(points: Point2D[], field: Field): number;
+/**
+ *
+ * @category LinearProgram
  * @return the min/max value of field
  * ```
  * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
- * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 3
+ * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
  * ```
  */
 declare function OptimizeField(points: Point2D[], field: Field, max: boolean): number;

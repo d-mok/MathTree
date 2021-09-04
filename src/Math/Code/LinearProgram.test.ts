@@ -176,6 +176,32 @@ test('OptimizePoint', () => {
 });
 
 
+
+test('MaximizeField', () => {
+    let points = FeasibleIntegral(
+        [1, 1, "<=", 5],
+        [1, -1, "<", 4],
+        [2, 1, ">=", -5],
+        [3, 1, ">", -10]
+    );
+    expect(MaximizeField(points, [2, 1, 1])).toBe(10);
+});
+
+
+
+
+test('MinimizeField', () => {
+    let points = FeasibleIntegral(
+        [1, 1, "<=", 5],
+        [1, -1, "<", 4],
+        [2, 1, ">=", -5],
+        [3, 1, ">", -10]
+    );
+    expect(MinimizeField(points, [1, 1, 1])).toBe(-3);
+    expect(MinimizeField(points, [2, 1, 1])).toBe(-4);
+});
+
+
 test('OptimizeField', () => {
     let points = FeasibleIntegral(
         [1, 1, "<=", 5],
@@ -183,25 +209,23 @@ test('OptimizeField', () => {
         [2, 1, ">=", -5],
         [3, 1, ">", -10]
     );
-    OptimizeField(points, [2, 1, 1], false)//?
-
     expect(OptimizeField(points, [2, 1, 1], true)).toBe(10);
     expect(OptimizeField(points, [1, 1, 1], false)).toBe(-3);
     expect(OptimizeField(points, [2, 1, 1], false)).toBe(-4);
 });
 
 test('ConstraintsFromPoints', () => {
-    
+
     expect(() => ConstraintsFromPoints([0, 3], [0, 1], [3, 0], [1, 1]))
         .toThrow();
-    
+
     expect(ConstraintsFromPoints([0, 0], [0, 1], [1, 0]))
         .toEqual([
             [1, 0, '\\ge', -0],
             [0, 1, '\\ge', -0],
             [1, 1, '\\le', 1],
         ]);
-    
+
     expect(ConstraintsFromPoints([0, 0], [3, -1], [2, 2], [1, 3], [-2, 2]))
         .toEqual([
             [1, 1, "\\le", 4],
