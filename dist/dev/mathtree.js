@@ -37729,7 +37729,7 @@ class PenCls extends sapphire_js_1.Pencil {
              * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
              * ```
              */
-            cylinderZ(center, radius, lowerZ, upperZ, { base = true, height = !true, shadeLower = !true, shadeUpper = !true, envelope = !true, } = {}) {
+            cylinderZ(center, radius, lowerZ, upperZ, { base = true, height = !true, shadeLower = !true, shadeUpper = !true, envelope = true, } = {}) {
                 let ps = cal.traceCircle(center, radius, [0, 360]);
                 this.prismZ(ps, lowerZ, upperZ, {
                     base,
@@ -37765,7 +37765,7 @@ class PenCls extends sapphire_js_1.Pencil {
              * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
              * ```
              */
-            coneZ(center, radius, lowerZ, vertex, { base = true, height = !true, shadeLower = !true, envelope = !true, } = {}) {
+            coneZ(center, radius, lowerZ, vertex, { base = true, height = !true, shadeLower = !true, envelope = true, } = {}) {
                 let ps = cal.traceCircle(center, radius, [0, 360]);
                 this.pyramidZ(ps, lowerZ, vertex, {
                     base,
@@ -37773,7 +37773,45 @@ class PenCls extends sapphire_js_1.Pencil {
                     shadeLower,
                     envelope
                 });
-            }
+            },
+            /**
+             * Draw a frustum along the z-direction
+             * @category 3D
+             * @returns void
+             * ```
+             * let [A,B,C] = [[0,0],[2,0],[0,2]]
+             * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
+             * ```
+             */
+            frustumZ(lowerBase, lowerZ, vertex, scale, { base = true, height = !true, shadeLower = !true, shadeUpper = !true, envelope = !true, } = {}) {
+                let lower = EmbedZ(lowerBase, lowerZ);
+                let upper = Extrude(lower, [vertex], scale);
+                this.frustum(lower, upper, {
+                    base,
+                    height,
+                    shadeLower,
+                    shadeUpper,
+                    envelope
+                });
+            },
+            /**
+             * Draw a conical frustum along the z-direction
+             * @category 3D
+             * @returns void
+             * ```
+             * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
+             * ```
+             */
+            conicalFrustumZ(center, radius, lowerZ, vertex, scale, { base = true, height = !true, shadeLower = !true, shadeUpper = !true, envelope = true, } = {}) {
+                let ps = cal.traceCircle(center, radius, [0, 360]);
+                this.frustumZ(ps, lowerZ, vertex, scale, {
+                    base,
+                    height,
+                    shadeLower,
+                    shadeUpper,
+                    envelope
+                });
+            },
         };
         this.range.set([-5, 5], [-5, 5]);
         this.size.set(1);

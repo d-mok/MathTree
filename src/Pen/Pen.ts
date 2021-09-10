@@ -820,7 +820,7 @@ export class PenCls extends Pencil {
      * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
      * ```
      */
-    line(startPoint: Point, endPoint: Point, label?: string) {
+    line(startPoint: Point, endPoint: Point, label?: string | number) {
         this.drawStroke([startPoint, endPoint])
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
@@ -837,7 +837,7 @@ export class PenCls extends Pencil {
      * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
      * ```
      */
-    dash(startPoint: Point, endPoint: Point, label?: string) {
+    dash(startPoint: Point, endPoint: Point, label?: string | number) {
         this.save()
         this.set.dash(true)
         this.drawStroke([startPoint, endPoint])
@@ -857,7 +857,7 @@ export class PenCls extends Pencil {
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint: Point, endPoint: Point, label?: string) {
+    arrow(startPoint: Point, endPoint: Point, label?: string | number) {
         this.drawStroke([startPoint, endPoint])
         this.drawArrowHead(startPoint, endPoint)
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
@@ -871,7 +871,7 @@ export class PenCls extends Pencil {
      * @param base - base of the height
      * @param label - label of the height
      */
-    height(vertex: Point2D, base: [Point2D, Point2D], label?: string) {
+    height(vertex: Point2D, base: [Point2D, Point2D], label?: string | number) {
         let [A, B] = base
         let F = PdFoot(A, B, vertex)
         let V = vertex
@@ -1957,7 +1957,7 @@ export class PenCls extends Pencil {
             height = !true,
             shadeLower = !true,
             shadeUpper = !true,
-            envelope = !true,
+            envelope = true,
         } = {}) {
             let ps = cal.traceCircle(center, radius, [0, 360])
             this.prismZ(ps, lowerZ, upperZ, {
@@ -2007,7 +2007,7 @@ export class PenCls extends Pencil {
             base = true,
             height = !true,
             shadeLower = !true,
-            envelope = !true,
+            envelope = true,
         } = {}) {
             let ps = cal.traceCircle(center, radius, [0, 360])
             this.pyramidZ(ps, lowerZ, vertex, {
@@ -2016,7 +2016,61 @@ export class PenCls extends Pencil {
                 shadeLower,
                 envelope
             })
-        }
+        },
+
+        /**
+         * Draw a frustum along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * let [A,B,C] = [[0,0],[2,0],[0,2]]
+         * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
+         * ```
+         */
+        frustumZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, scale: number, {
+            base = true,
+            height = !true,
+            shadeLower = !true,
+            shadeUpper = !true,
+            envelope = !true,
+        } = {}) {
+            let lower = EmbedZ(lowerBase, lowerZ)
+            let upper = Extrude(lower, [vertex], scale)
+            this.frustum(lower, upper, {
+                base,
+                height,
+                shadeLower,
+                shadeUpper,
+                envelope
+            })
+        },
+
+
+
+        /**
+         * Draw a conical frustum along the z-direction
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
+         * ```
+         */
+        conicalFrustumZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, scale: number, {
+            base = true,
+            height = !true,
+            shadeLower = !true,
+            shadeUpper = !true,
+            envelope = true,
+        } = {}) {
+            let ps = cal.traceCircle(center, radius, [0, 360])
+            this.frustumZ(ps, lowerZ, vertex, scale, {
+                base,
+                height,
+                shadeLower,
+                shadeUpper,
+                envelope
+            })
+        },
 
 
     };

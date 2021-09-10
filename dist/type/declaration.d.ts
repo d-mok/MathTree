@@ -3248,7 +3248,7 @@ declare module "Pen/Pen" {
          * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
          * ```
          */
-        line(startPoint: Point, endPoint: Point, label?: string): void;
+        line(startPoint: Point, endPoint: Point, label?: string | number): void;
         /**
          * Draw a dash line between two points.
          * @category draw
@@ -3261,7 +3261,7 @@ declare module "Pen/Pen" {
          * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
          * ```
          */
-        dash(startPoint: Point, endPoint: Point, label?: string): void;
+        dash(startPoint: Point, endPoint: Point, label?: string | number): void;
         /**
          * Draw an arrow between two points.
          * @category draw
@@ -3273,14 +3273,14 @@ declare module "Pen/Pen" {
          * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
          * ```
          */
-        arrow(startPoint: Point, endPoint: Point, label?: string): void;
+        arrow(startPoint: Point, endPoint: Point, label?: string | number): void;
         /**
          * Draw a dashed height with right-angled.
          * @param vertex - top point of the height
          * @param base - base of the height
          * @param label - label of the height
          */
-        height(vertex: Point2D, base: [Point2D, Point2D], label?: string): void;
+        height(vertex: Point2D, base: [Point2D, Point2D], label?: string | number): void;
         /**
          * Draw a polyline given points.
          * @category draw
@@ -3976,6 +3976,37 @@ declare module "Pen/Pen" {
                 base?: boolean | undefined;
                 height?: boolean | undefined;
                 shadeLower?: boolean | undefined;
+                envelope?: boolean | undefined;
+            }): void;
+            /**
+             * Draw a frustum along the z-direction
+             * @category 3D
+             * @returns void
+             * ```
+             * let [A,B,C] = [[0,0],[2,0],[0,2]]
+             * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
+             * ```
+             */
+            frustumZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, scale: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+                base?: boolean | undefined;
+                height?: boolean | undefined;
+                shadeLower?: boolean | undefined;
+                shadeUpper?: boolean | undefined;
+                envelope?: boolean | undefined;
+            }): void;
+            /**
+             * Draw a conical frustum along the z-direction
+             * @category 3D
+             * @returns void
+             * ```
+             * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
+             * ```
+             */
+            conicalFrustumZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, scale: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+                base?: boolean | undefined;
+                height?: boolean | undefined;
+                shadeLower?: boolean | undefined;
+                shadeUpper?: boolean | undefined;
                 envelope?: boolean | undefined;
             }): void;
         };
