@@ -36389,6 +36389,64 @@ class AutoPenCls {
         pen.autoCrop();
         this.pen = pen;
     }
+    /**
+     * A regular polygon
+     * @category tool
+     * @returns void
+     * ```
+     * let pen = new AutoPen()
+     * pen.RegularPolygon({
+     *   side: 8,
+     *   diagonal: true,
+     *   reflectional: false,
+     *   rotational: false,
+     * })
+     * ```
+     */
+    RegularPolygon({ side, diagonal = false, reflectional = false, rotational = false, }) {
+        const pen = new Pen();
+        pen.range.square(1.3);
+        pen.size.set(1);
+        let gon = RegularPolygon(side, [0, 0], 1, 0);
+        pen.polygon(...gon);
+        if (diagonal) {
+            pen.set.alpha(0.3);
+            for (let i = 0; i < side; i++) {
+                for (let j = i + 1; j < side; j++) {
+                    pen.line(gon[i], gon[j]);
+                }
+            }
+            pen.set.alpha();
+        }
+        if (reflectional) {
+            pen.set.alpha(0.5);
+            pen.set.dash(true);
+            if (side % 2 === 0) {
+                pen.set.color('red');
+                for (let n = 0; n < side; n += 2) {
+                    pen.graph.through([0, 0], PolToRect([1, n * 180 / side]));
+                }
+                pen.set.color('blue');
+                for (let n = 1; n < side; n += 2) {
+                    pen.graph.through([0, 0], PolToRect([1, n * 180 / side]));
+                }
+            }
+            else {
+                for (let n = 0; n < side; n++) {
+                    pen.graph.through([0, 0], PolToRect([1, n * 180 / side]));
+                }
+            }
+            pen.set.alpha();
+            pen.set.dash();
+        }
+        if (rotational) {
+            for (let i = 0; i < side - 1; i += 2) {
+                pen.line(gon[i], [0, 0]);
+            }
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
 }
 exports.AutoPenCls = AutoPenCls;
 

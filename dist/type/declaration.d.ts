@@ -4374,6 +4374,26 @@ declare module "Pen/AutoPen" {
             showValue?: boolean;
             showTick?: boolean;
         }): void;
+        /**
+         * A regular polygon
+         * @category tool
+         * @returns void
+         * ```
+         * let pen = new AutoPen()
+         * pen.RegularPolygon({
+         *   side: 8,
+         *   diagonal: true,
+         *   reflectional: false,
+         *   rotational: false,
+         * })
+         * ```
+         */
+        RegularPolygon({ side, diagonal, reflectional, rotational, }: {
+            side: number;
+            diagonal: boolean;
+            reflectional: boolean;
+            rotational: boolean;
+        }): void;
     }
 }
 declare module "Pen/index" {
