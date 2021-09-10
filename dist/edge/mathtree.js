@@ -36440,7 +36440,7 @@ class AutoPenCls {
             pen.set.dash();
         }
         if (rotational) {
-            for (let i = 0; i < side - 1; i += 2) {
+            for (let i = 0; i < side; i++) {
                 pen.line(gon[i], [0, 0]);
             }
         }

@@ -1349,9 +1349,9 @@ export class AutoPenCls {
 
     }: {
         side: number,
-        diagonal: boolean,
-        reflectional: boolean,
-        rotational: boolean,
+        diagonal?: boolean,
+        reflectional?: boolean,
+        rotational?: boolean,
     }) {
 
         const pen = new Pen()
@@ -1404,7 +1404,7 @@ export class AutoPenCls {
 
 
         if (rotational) {
-            for (let i = 0; i < side - 1; i += 2) {
+            for (let i = 0; i < side ; i ++) {
                 pen.line(gon[i], [0, 0])
             }
         }

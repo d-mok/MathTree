@@ -4390,9 +4390,9 @@ declare module "Pen/AutoPen" {
          */
         RegularPolygon({ side, diagonal, reflectional, rotational, }: {
             side: number;
-            diagonal: boolean;
-            reflectional: boolean;
-            rotational: boolean;
+            diagonal?: boolean;
+            reflectional?: boolean;
+            rotational?: boolean;
         }): void;
     }
 }
