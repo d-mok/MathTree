@@ -104,13 +104,13 @@
 |surd| `a = [2**0.5,3**0.5]` | `*!a` | (\sqrt{2},\sqrt{3}) |
 |fraction| `a = 0.5` | `*/a` | \dfrac{1}{2} |
 |small fraction| `a = 0.5`	| `*//a` | 1/2 |
-|bracket fraction| `a = 0.5`	| `*/(a)` |\left ( \dfrac{1}{2} \right ) |
-|bracket fraction| `a = 5`	| `*/(a)` |5 |
-|bracket fraction| `a = -5`	| `*/(a)` |(-5) |
+|bracket fraction| `a = 0.5`	| `*/(a)` | \left ( \dfrac{1}{2} \right ) |
+|bracket fraction| `a = 5`	| `*/(a)` | 5 |
+|bracket fraction| `a = -5`	| `*/(a)` | (-5) |
 |sci notation|`a = 0.0000123`	| `**a` | 1.23 \times 10^{-5} |
-|bracket negative|`a = -2`|`*(a)`| (-2)|
-|bracket negative|`a = 2`|`*(a)`| 2|
-|absolute value|`a = -1.23`|`*|a|`| 1.23|
+|bracket negative|`a = -2`|`*(a)`| (-2) |
+|bracket negative|`a = 2`|`*(a)`| 2 |
+|absolute value|`a = -1.23`|`*|a|`| 1.23 |
 |sign|`a = 5`|`*^+_a`|+|
 |sign|`a = -5`|`*^+_a`| - |
 |opposite sign|`a = 5`|`*^-_a`| - |
@@ -124,11 +124,18 @@
 |ineq sign|`a > 0`|`*^\gt_a`| \gt|
 |ineq sign|`a < 0`|`*^\gt_a`| \lt|
 |ineq sign|`a = 0`|`*^\gt_a`| = |
-|ineq sign| similar |`*^\lt_a`| \lt|
-|ineq sign| similar |`*^\ge_a`| \le|
-|ineq sign| similar |`*^\le_a`| \ge|
+|ineq sign| (similar) |`*^\lt_a`| \lt|
+|ineq sign| (similar) |`*^\ge_a`| \le|
+|ineq sign| (similar) |`*^\le_a`| \ge|
 |or trig root|`a = [30,60,90,undefined]`|`*|.a`| 30°~~\text{or}~~60°~~\text{or}~~90°|
-|polar coordinates|`a = [sqrt(3),3]`|`*.a`| (2\sqrt{3}, 60\degree)|
+|polar coordinates|`a = [sqrt(3),3]`|`*.a`| (2\sqrt{3}, 60°)|
+|labeled value|`a = [5,'x']`|`*=a`| x = 5 |
+|labeled value|`a = [5,'x','y']`|`*==a`| y = 5 |
+|labeled value angle|`a = [5,'x']`|`*=.a`| x = 5° |
+|labeled value angle|`a = [5,'x','y']`|`*==.a`| y = 5° |
+
+
+
 
 # 3. Advance Functions
 

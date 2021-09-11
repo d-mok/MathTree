@@ -128,3 +128,12 @@ export function printConstraints(cons: Constraint[]): string {
     return T
 }
 
+
+
+export function printLabeledValue(obj: LabeledValue, order = 1, isAngle: boolean = false): string {
+    let value = obj[0]
+    let label = obj[order]
+    let T = label + ' = ' + value
+    if (isAngle) T += '°'
+    return T
+}

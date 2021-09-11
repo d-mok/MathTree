@@ -127,7 +127,11 @@ export const trigValue = (_: unknown): _ is TrigValue => arrayOfLength(2)(_) && 
 
 export const trigExp = (_: unknown): _ is TrigExp => arrayOfLength(4)(_) && trig(_[0]) && num(_[1]) && num(_[2]) && str(_[3])
 
+export const labeledValue1 = (_: unknown): _ is LabeledValue1 => arrayOfLength(2)(_) && num(_[0]) && str(_[1])
 
+export const labeledValue2 = (_: unknown): _ is LabeledValue2 => arrayOfLength(3)(_) && num(_[0]) && str(_[1]) && str(_[2])
+
+export const labeledValue = (_: unknown): _ is LabeledValue => labeledValue1(_) || labeledValue2(_)
 
 
 // trivial

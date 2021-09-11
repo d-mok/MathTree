@@ -29681,7 +29681,7 @@ exports.bool = bool;
 //     throw 'never'
 // }
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.printConstraints = exports.printConstraint = exports.printPointPolar = exports.printSurd = exports.printOrTrigRoots = exports.printTrigExp = exports.printTrigValue = exports.printCombo = exports.printDfrac = void 0;
+exports.printLabeledValue = exports.printConstraints = exports.printConstraint = exports.printPointPolar = exports.printSurd = exports.printOrTrigRoots = exports.printTrigExp = exports.printTrigValue = exports.printCombo = exports.printDfrac = void 0;
 // export function parseIneq(text: Ineq): [greater: boolean, equal: boolean] {
 //     let greater = text.includes('g') || text.includes('>')
 //     let equal = text.includes('e') || text.includes('=')
@@ -29818,6 +29818,15 @@ function printConstraints(cons) {
     return T;
 }
 exports.printConstraints = printConstraints;
+function printLabeledValue(obj, order = 1, isAngle = false) {
+    let value = obj[0];
+    let label = obj[order];
+    let T = label + ' = ' + value;
+    if (isAngle)
+        T += '°';
+    return T;
+}
+exports.printLabeledValue = printLabeledValue;
 
 
 /***/ }),
@@ -29828,8 +29837,8 @@ exports.printConstraints = printConstraints;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pass = exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3D = exports.point2Ds = exports.point2D = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
-exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.field = exports.constraints = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = exports.fail = void 0;
+exports.labeledValue1 = exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3D = exports.point2Ds = exports.point2D = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
+exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.field = exports.constraints = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = exports.fail = exports.pass = exports.labeledValue = exports.labeledValue2 = void 0;
 const num = (_) => Number.isFinite(_);
 exports.num = num;
 const whole = (_) => Number.isInteger(_);
@@ -29938,6 +29947,12 @@ const trigValue = (_) => (0, exports.arrayOfLength)(2)(_) && (0, exports.trig)(_
 exports.trigValue = trigValue;
 const trigExp = (_) => (0, exports.arrayOfLength)(4)(_) && (0, exports.trig)(_[0]) && (0, exports.num)(_[1]) && (0, exports.num)(_[2]) && (0, exports.str)(_[3]);
 exports.trigExp = trigExp;
+const labeledValue1 = (_) => (0, exports.arrayOfLength)(2)(_) && (0, exports.num)(_[0]) && (0, exports.str)(_[1]);
+exports.labeledValue1 = labeledValue1;
+const labeledValue2 = (_) => (0, exports.arrayOfLength)(3)(_) && (0, exports.num)(_[0]) && (0, exports.str)(_[1]) && (0, exports.str)(_[2]);
+exports.labeledValue2 = labeledValue2;
+const labeledValue = (_) => (0, exports.labeledValue1)(_) || (0, exports.labeledValue2)(_);
+exports.labeledValue = labeledValue;
 // trivial
 const pass = (_) => true;
 exports.pass = pass;
@@ -31367,7 +31382,8 @@ globalThis.IntersectAngle = contract(IntersectAngle).sign([owl.num]);
  */
 function Angle(A, O, B) {
     let anglePolar = AnglePolar(A, O, B);
-    return IsReflex(A, O, B) ? 360 - anglePolar : anglePolar;
+    let a = IsReflex(A, O, B) ? 360 - anglePolar : anglePolar;
+    return cal.blur(a);
 }
 globalThis.Angle = contract(Angle).seal({
     arg: [owl.point2D],
@@ -31494,7 +31510,7 @@ function IsConvexPolygon(...points) {
 }
 globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point2D]);
 /**
- * @category ArrangePoints
+ * @category Geometry
  * @return Arrange Points in anti-clockwise direction around their mean
  * ```
  * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
@@ -31507,6 +31523,18 @@ function ArrangePoints(...points) {
     return ss.toArray();
 }
 globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
+/**
+ * @category Geometry
+ * @return a point with polar coordinates (1, `angle`).
+ * ```
+ * OnCircle(0) // [1,0]
+ * OnCircle(90) // [0,1]
+ * ```
+ */
+function OnCircle(angle) {
+    return PolToRect([1, angle]);
+}
+globalThis.OnCircle = contract(OnCircle).sign([owl.num]);
 
 
 /***/ }),
@@ -32516,9 +32544,20 @@ function RndAngles(n, separation) {
         .coherent(angles => toNumbers(angles).gapsMod(360).min() > separation)
         .unique()
         .rolls(n);
-    return toList(angles).ascending();
+    return [...toList(angles).ascending()];
 }
 globalThis.RndAngles = contract(RndAngles).sign([owl.positiveInt, owl.positive]);
+/**
+ * @category Random
+ * @return `n` points on a unit circle at least cyclic separated by separation
+ * ```
+ * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
+ * ```
+ */
+function RndOnCircle(n, separation) {
+    return RndAngles(n, separation).map($ => OnCircle($));
+}
+globalThis.RndOnCircle = contract(RndOnCircle).sign([owl.positiveInt, owl.positive]);
 /**
  * @category Random
  * @return n vertices of a convex polygon generated by rounding a cyclic polygon
@@ -36406,7 +36445,7 @@ class AutoPenCls {
     RegularPolygon({ side, diagonal = false, reflectional = false, rotational = false, }) {
         const pen = new Pen();
         pen.range.square(1.3);
-        pen.size.set(1);
+        pen.size.set(1.5);
         let gon = RegularPolygon(side, [0, 0], 1, 0);
         pen.polygon(...gon);
         if (diagonal) {
@@ -39183,6 +39222,34 @@ function ParseForPrint(value, signal = "") {
     if (signal === '.') {
         if (owl.point2D(value)) {
             return ink.printPointPolar(value);
+        }
+    }
+    if (signal === '=') {
+        if (owl.labeledValue(value)) {
+            let v = [...value];
+            v[0] = numberDefault(v[0]);
+            return ink.printLabeledValue(v, 1, false);
+        }
+    }
+    if (signal === '==') {
+        if (owl.labeledValue2(value)) {
+            let v = [...value];
+            v[0] = numberDefault(v[0]);
+            return ink.printLabeledValue(v, 2, false);
+        }
+    }
+    if (signal === '=.') {
+        if (owl.labeledValue(value)) {
+            let v = [...value];
+            v[0] = numberDefault(v[0]);
+            return ink.printLabeledValue(v, 1, true);
+        }
+    }
+    if (signal === '==.') {
+        if (owl.labeledValue2(value)) {
+            let v = [...value];
+            v[0] = numberDefault(v[0]);
+            return ink.printLabeledValue(v, 2, true);
         }
     }
     return String(value);

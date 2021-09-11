@@ -297,9 +297,23 @@ function RndAngles(n: number, separation: number): number[] {
         .coherent(angles => toNumbers(angles).gapsMod(360).min() > separation)
         .unique()
         .rolls(n)
-    return toList(angles).ascending()
+    return [...toList(angles).ascending()]
 }
 globalThis.RndAngles = contract(RndAngles).sign([owl.positiveInt, owl.positive])
+
+
+
+/**
+ * @category Random
+ * @return `n` points on a unit circle at least cyclic separated by separation
+ * ```
+ * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
+ * ```
+ */
+function RndOnCircle(n: number, separation: number): Point2D[] {
+    return RndAngles(n, separation).map($ => OnCircle($))
+}
+globalThis.RndOnCircle = contract(RndOnCircle).sign([owl.positiveInt, owl.positive])
 
 
 /**

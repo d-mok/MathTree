@@ -256,3 +256,11 @@ test('ArrangePoints', () => {
     expect(ArrangePoints([0, 0], [1, 2], [2, 1], [0, 1], [1, 0]))
         .toEqual([[2, 1], [1, 2], [0, 1], [0, 0], [1, 0]]);
 });
+
+
+
+test('OnCircle', () => {
+    expect(OnCircle(0)).toEqual([1, 0]);
+    expect(OnCircle(90)).toEqual([0, 1]);
+    expect(OnCircle(135)).toBeDeepCloseTo([-1 / Math.sqrt(2), 1 / Math.sqrt(2)]);
+});

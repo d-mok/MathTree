@@ -320,7 +320,8 @@ globalThis.IntersectAngle = contract(IntersectAngle).sign([owl.num])
  */
 function Angle(A: Point2D, O: Point2D, B: Point2D): number {
     let anglePolar = AnglePolar(A, O, B)
-    return IsReflex(A, O, B) ? 360 - anglePolar : anglePolar
+    let a = IsReflex(A, O, B) ? 360 - anglePolar : anglePolar
+    return cal.blur(a)
 }
 globalThis.Angle = contract(Angle).seal({
     arg: [owl.point2D],
@@ -482,7 +483,7 @@ globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point2D])
 
 
 /**
- * @category ArrangePoints
+ * @category Geometry
  * @return Arrange Points in anti-clockwise direction around their mean
  * ```
  * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
@@ -496,3 +497,18 @@ function ArrangePoints(...points: Point2D[]): Point2D[] {
 }
 globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D])
 
+
+
+
+/**
+ * @category Geometry
+ * @return a point with polar coordinates (1, `angle`).
+ * ```
+ * OnCircle(0) // [1,0]
+ * OnCircle(90) // [0,1]
+ * ```
+ */
+function OnCircle(angle: number): Point2D {
+    return PolToRect([1, angle])
+}
+globalThis.OnCircle = contract(OnCircle).sign([owl.num])

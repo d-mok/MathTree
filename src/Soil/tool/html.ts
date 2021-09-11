@@ -320,6 +320,44 @@ export function ParseForPrint(value: any, signal: string = ""): string {
 
 
 
+    if (signal === '=') {
+        if (owl.labeledValue(value)) {
+            let v: LabeledValue = [...value]
+            v[0] = numberDefault(v[0])
+            return ink.printLabeledValue(v, 1, false)
+        }
+    }
+
+
+    if (signal === '==') {
+        if (owl.labeledValue2(value)) {
+            let v: LabeledValue2 = [...value]
+            v[0] = numberDefault(v[0])
+            return ink.printLabeledValue(v, 2, false)
+        }
+    }
+
+
+
+
+    if (signal === '=.') {
+        if (owl.labeledValue(value)) {
+            let v: LabeledValue = [...value]
+            v[0] = numberDefault(v[0])
+            return ink.printLabeledValue(v, 1, true)
+        }
+    }
+
+
+    if (signal === '==.') {
+        if (owl.labeledValue2(value)) {
+            let v: LabeledValue2 = [...value]
+            v[0] = numberDefault(v[0])
+            return ink.printLabeledValue(v, 2, true)
+        }
+    }
+
+
     return String(value)
 
 }

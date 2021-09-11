@@ -1357,7 +1357,7 @@ export class AutoPenCls {
         const pen = new Pen()
 
         pen.range.square(1.3);
-        pen.size.set(1)
+        pen.size.set(1.5)
 
         let gon = RegularPolygon(side, [0, 0], 1, 0)
         pen.polygon(...gon)
@@ -1404,7 +1404,7 @@ export class AutoPenCls {
 
 
         if (rotational) {
-            for (let i = 0; i < side ; i ++) {
+            for (let i = 0; i < side; i++) {
                 pen.line(gon[i], [0, 0])
             }
         }
