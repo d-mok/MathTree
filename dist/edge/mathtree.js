@@ -39068,6 +39068,11 @@ function PrintVariable(html, symbol, value) {
     print("|.", "\\*\\|\\.");
     // print *.x as polar coordinates, with r being a surd
     print(".", "\\*\\.");
+    // print *= as equation for labeled value
+    print("=", "\\*\\=");
+    print("==", "\\*\\=\\=");
+    print("=.", "\\*\\=\\.");
+    print("==.", "\\*\\=\\=\\.");
     return html;
 }
 exports.PrintVariable = PrintVariable;

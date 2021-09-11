@@ -131,6 +131,12 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
     // print *.x as polar coordinates, with r being a surd
     print(".", "\\*\\.")
 
+    // print *= as equation for labeled value
+    print("=", "\\*\\=")
+    print("==", "\\*\\=\\=")
+    print("=.", "\\*\\=\\.")
+    print("==.", "\\*\\=\\=\\.")
+
     return html
 }
 
