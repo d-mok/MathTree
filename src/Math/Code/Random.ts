@@ -515,3 +515,17 @@ function RndPointPolar(): Point2D {
     return PolToRect([r, angle])
 }
 globalThis.RndPointPolar = contract(RndPointPolar).sign([])
+
+
+/**
+ * @category Random
+ * @return a random ratio group in [1, max] inclusive.
+ * ```
+ * RndRatio(9,3) // may return [3,7,5]
+ * ```
+ */
+function RndRatio(max: number = 5, n: number = 10): number[] {
+    let nums = RndNs(1, max, n)
+    return toNumbers(nums).ratio()
+}
+globalThis.RndRatio = contract(RndRatio).sign([owl.positive, owl.positiveInt])
