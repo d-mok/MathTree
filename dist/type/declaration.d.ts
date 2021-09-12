@@ -4166,8 +4166,8 @@ declare module "Pen/AutoPen" {
                 vertical: boolean;
             }[];
             ticks: boolean[];
-            scale: number;
-            ratio: number;
+            scale?: number;
+            ratio?: number;
         }): void;
         /**
          * Trig Graph for solving basic trig equation.

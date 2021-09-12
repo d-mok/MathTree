@@ -117,8 +117,8 @@ export class AutoPenCls {
     }: {
         items: { position: number, sign: string, num: number | string, vertical: boolean }[],
         ticks: boolean[],
-        scale: number,
-        ratio: number
+        scale?: number,
+        ratio?: number
     }) {
 
         const width = 5;
