@@ -30165,10 +30165,10 @@ globalThis.CircleFromGeneral = contract(CircleFromGeneral).sign([owl.num]);
  * @category Circle
  * @return intersections between a circle and a straight line
  * ```
- * CircleLineIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
+ * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
  * ```
  */
-function CircleLineIntersect(center, radius, linear) {
+function CircleLinearIntersect(center, radius, linear) {
     let [a, b, c] = linear;
     let [h, k] = center;
     let r = radius;
@@ -30197,7 +30197,19 @@ function CircleLineIntersect(center, radius, linear) {
         return [P, Q];
     }
 }
-globalThis.CircleLineIntersect = contract(CircleLineIntersect).sign([owl.point2D, owl.positive, owl.triple]);
+globalThis.CircleLinearIntersect = contract(CircleLinearIntersect).sign([owl.point2D, owl.positive, owl.triple]);
+/**
+ * @category Circle
+ * @return intersections between a circle and a straight line through `A` and `B`.
+ * ```
+ * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
+ * ```
+ */
+function CircleLineIntersect(center, radius, [A, B]) {
+    let lin = LinearFromTwoPoints(A, B);
+    return CircleLinearIntersect(center, radius, lin);
+}
+globalThis.CircleLineIntersect = contract(CircleLineIntersect).sign([owl.point2D, owl.positive, owl.point2Ds]);
 
 
 /***/ }),

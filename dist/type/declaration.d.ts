@@ -362,10 +362,18 @@ declare function CircleFromGeneral(D: number, E: number, F: number): [Point2D, n
  * @category Circle
  * @return intersections between a circle and a straight line
  * ```
- * CircleLineIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
+ * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
  * ```
  */
-declare function CircleLineIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D];
+declare function CircleLinearIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D];
+/**
+ * @category Circle
+ * @return intersections between a circle and a straight line through `A` and `B`.
+ * ```
+ * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
+ * ```
+ */
+declare function CircleLineIntersect(center: Point2D, radius: number, [A, B]: [Point2D, Point2D]): [Point2D, Point2D];
 /**
  * @category Linear
  * @return [x-int,y-int,slope] of ax+by+c=0
