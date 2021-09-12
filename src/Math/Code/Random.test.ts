@@ -426,12 +426,11 @@ test('RndPointPolar', () => {
 test('RndRatio', () => {
 
     repeat(10, () => {
-        let nums = RndRatio(9, 3)
+        let nums = RndRatio(2, 9, 3)
         expect(nums).toSatisfy($ => HCF(...$) === 1)
         expect(nums).toHaveLength(3)
         expect(nums).toBeDupless()
         expect(nums).toAllBeInteger()
-        expect(nums).toAllBeBetween(1, 9)
     })
 
 });

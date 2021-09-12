@@ -519,13 +519,13 @@ globalThis.RndPointPolar = contract(RndPointPolar).sign([])
 
 /**
  * @category Random
- * @return a random ratio group in [1, max] inclusive.
+ * @return a random ratio group in [min, max] inclusive.
  * ```
- * RndRatio(9,3) // may return [3,7,5]
+ * RndRatio(2,9,3) // may return [3,7,5]
  * ```
  */
-function RndRatio(max: number = 5, n: number = 10): number[] {
-    let nums = RndNs(1, max, n)
+function RndRatio(min: number, max: number, n: number = 10): number[] {
+    let nums = RndNs(min, max, n)
     return toNumbers(nums).ratio()
 }
-globalThis.RndRatio = contract(RndRatio).sign([owl.positive, owl.positiveInt])
+globalThis.RndRatio = contract(RndRatio).sign([owl.positive, owl.positive, owl.positiveInt])

@@ -1742,12 +1742,12 @@ declare function RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-
 declare function RndPointPolar(): Point2D;
 /**
  * @category Random
- * @return a random ratio group in [1, max] inclusive.
+ * @return a random ratio group in [min, max] inclusive.
  * ```
- * RndRatio(9,3) // may return [3,7,5]
+ * RndRatio(2,9,3) // may return [3,7,5]
  * ```
  */
-declare function RndRatio(max?: number, n?: number): number[];
+declare function RndRatio(min: number, max: number, n?: number): number[];
 declare module "Math/Code/RandomShake.test" { }
 /**
  * @category RandomShake
