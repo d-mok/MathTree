@@ -311,7 +311,8 @@ globalThis.RndAngles = contract(RndAngles).sign([owl.positiveInt, owl.positive])
  * ```
  */
 function RndOnCircle(n: number, separation: number): Point2D[] {
-    return RndAngles(n, separation).map($ => OnCircle($))
+    let t = RndN(0, 360)
+    return RndAngles(n, separation).map($ => OnCircle($ + t))
 }
 globalThis.RndOnCircle = contract(RndOnCircle).sign([owl.positiveInt, owl.positive])
 

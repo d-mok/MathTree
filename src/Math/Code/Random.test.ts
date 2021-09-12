@@ -248,8 +248,8 @@ test('RndOnCircle', () => {
 
     repeat(10, () => {
         let pts = RndOnCircle(3, 50)
-        let angles = pts.map($ => RectToPol($)[1]).map($ => cal.blur($))
-        let [A, B, C] = angles
+        let angles = pts.map($ => RectToPol($)[1]).map($ => cal.round($, 5).off())
+        let [A, B, C] = angles.sort((a, b) => a - b)
         let d1 = B - A
         let d2 = C - B
         let d3 = A - C + 360
