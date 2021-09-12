@@ -4164,7 +4164,6 @@ declare module "Pen/AutoPen" {
                 sign: string;
                 num: number | string;
                 vertical: boolean;
-                base: number;
             }[];
             ticks: boolean[];
             scale: number;

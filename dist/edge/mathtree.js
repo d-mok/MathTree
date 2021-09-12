@@ -35488,12 +35488,9 @@ class AutoPenCls {
     Inequalities({ items = [], ticks = [], scale = 1.6, ratio = 0.5 }) {
         const width = 5;
         const height = 2;
-        items = items.map((x, i) => {
-            x.base = -i * (height + 2);
-            return x;
-        });
+        let ineqs = items.map((x, i) => ({ base: -i * (height + 2), ...x }));
         const pen = new Pen();
-        pen.range.set([-width - 2, width + 2], [-(items.length) * (height + 2) + 2, height + 1]);
+        pen.range.set([-width - 2, width + 2], [-(ineqs.length) * (height + 2) + 2, height + 1]);
         pen.size.set(scale, scale * ratio);
         pen.set.textLatex(true);
         function inequality({ position, sign, num, base, vertical }) {
@@ -35525,11 +35522,11 @@ class AutoPenCls {
         }
         function tick(position, correct) {
             let align = -width + 2 * width * position;
-            let y = -(items.length - 1) * (height + 2) - height / 2;
+            let y = -(ineqs.length - 1) * (height + 2) - height / 2;
             pen.write([align, y], correct ? '✔' : '✘');
         }
-        items.forEach(x => inequality(x));
-        let cutting = items.map(x => x.position);
+        ineqs.forEach(x => inequality(x));
+        let cutting = ineqs.map(x => x.position);
         cutting = [0, ...cutting, 1];
         for (let i = 0; i < ticks.length; i++) {
             let p = (cutting[i] + cutting[i + 1]) / 2;
