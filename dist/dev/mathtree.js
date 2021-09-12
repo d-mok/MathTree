@@ -37429,6 +37429,24 @@ class PenCls extends sapphire_js_1.Pencil {
                 this.point(M, text, dir + direction, radius);
             },
             /**
+             * Add a label to a polygon.
+             * @category text
+             * @param points - the points of the polygon.
+             * @param text - The string to write.
+             * @returns void
+             * ```
+             * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'
+             * ```
+             */
+            polygon(points, text) {
+                let pts = this._pen.pjs(points);
+                this._pen.save();
+                if (owl.alphabet(text))
+                    this._pen.set.textItalic(true);
+                this._pen.write(Mid(...pts), String(text));
+                this._pen.restore();
+            },
+            /**
              * Add a coordinates label to a point.
              * @category text
              * @param position - The coordinates [x,y] of the point to label.
@@ -38131,6 +38149,24 @@ class PenCls extends sapphire_js_1.Pencil {
     arrow(startPoint, endPoint, label) {
         this.drawStroke([startPoint, endPoint]);
         this.drawArrowHead(startPoint, endPoint);
+        if (label !== undefined)
+            this.label.line([startPoint, endPoint], label);
+    }
+    /**
+     * Draw a length between two points.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param label - The label of the line.
+     * @returns void
+     * ```
+     * pen.length([1,2],[3,4]) // draw an length from [1,2] to [3,4]
+     * ```
+     */
+    length(startPoint, endPoint, label) {
+        this.drawStroke([startPoint, endPoint]);
+        this.drawTick(startPoint, endPoint, 5, 0);
+        this.drawTick(endPoint, startPoint, 5, 0);
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
     }

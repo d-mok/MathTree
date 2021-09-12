@@ -3307,6 +3307,18 @@ declare module "Pen/Pen" {
          */
         arrow(startPoint: Point, endPoint: Point, label?: string | number): void;
         /**
+         * Draw a length between two points.
+         * @category draw
+         * @param startPoint - The coordinates [x,y] of the start-point.
+         * @param endPoint - The coordinates [x,y] of the end-point.
+         * @param label - The label of the line.
+         * @returns void
+         * ```
+         * pen.length([1,2],[3,4]) // draw an length from [1,2] to [3,4]
+         * ```
+         */
+        length(startPoint: Point, endPoint: Point, label?: string | number): void;
+        /**
          * Draw a dashed height with right-angled.
          * @param vertex - top point of the height
          * @param base - base of the height
@@ -3686,6 +3698,17 @@ declare module "Pen/Pen" {
              * ```
              */
             line([A, B]: [Point, Point], text: string | number, direction?: number, radius?: number): void;
+            /**
+             * Add a label to a polygon.
+             * @category text
+             * @param points - the points of the polygon.
+             * @param text - The string to write.
+             * @returns void
+             * ```
+             * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'
+             * ```
+             */
+            polygon(points: Point[], text: string | number): void;
             /**
              * Add a coordinates label to a point.
              * @category text
