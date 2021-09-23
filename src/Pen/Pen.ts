@@ -2126,11 +2126,28 @@ export class PenCls extends Pencil {
     }
 
 
+    /**
+     * Set the background image url.
+     * @category export
+     * @param url - the url of background image
+     * @returns void
+     * ```
+     * pen.background('https://www2.pyc.edu.hk/img/pycnet_logo.png')
+     * ```
+     */
+    background(url: string): void {
+        this.setBackgroundImgUrl(url)
+    }
+
+
+
+
     private exportCanvas(html: string, placeholder: string, canvas: HTMLCanvasElement) {
         const src = 'src="' + this.toDataUrl(canvas) + '"';
         const width = ' width="' + this.displayWidth(canvas) + '"';
         const height = ' height="' + this.displayHeight(canvas) + '"';
-        return html.replace('src="' + placeholder + '"', src + width + height);
+        const backgroundAttr = this.backgroundImageAttr()
+        return html.replace('src="' + placeholder + '"', src + width + height + backgroundAttr);
     };
 
 

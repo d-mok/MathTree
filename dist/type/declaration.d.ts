@@ -4078,6 +4078,16 @@ declare module "Pen/Pen" {
          * @deprecated
          */
         autoCrop(): void;
+        /**
+         * Set the background image url.
+         * @category export
+         * @param url - the url of background image
+         * @returns void
+         * ```
+         * pen.background('https://www2.pyc.edu.hk/img/pycnet_logo.png')
+         * ```
+         */
+        background(url: string): void;
         private exportCanvas;
         /**
          * Export the canvas to image tag.

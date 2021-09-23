@@ -26892,6 +26892,7 @@ class Pencil {
         this.imgStore = null;
         this.INIT_RANGE_ALREADY = false;
         this.INIT_SIZE_ALREADY = false;
+        this.backgroundImgUrl = "";
         this.$TEXT_SIZE = 1;
         this.$TEXT_DIR = 0;
         this.$TEXT_LATEX = false;
@@ -27883,6 +27884,21 @@ class Pencil {
             drawLine(y);
         }
         this.ctx.restore();
+    }
+    /**
+     * Set the background image url
+     * @param url - the url of background image
+     */
+    setBackgroundImgUrl(url) {
+        this.backgroundImgUrl = url;
+    }
+    /**
+     * Return the style attr of img tag needed for adding a background image.
+     */
+    backgroundImageAttr() {
+        if (this.backgroundImgUrl.length === 0)
+            return "";
+        return ` style="background-image:url('${this.backgroundImgUrl}');background-size:100% 100%;" `;
     }
     /**
      * Return the data url of this image.
@@ -38375,11 +38391,24 @@ class PenCls extends sapphire_js_1.Pencil {
     autoCrop() {
         this.trimCanvas();
     }
+    /**
+     * Set the background image url.
+     * @category export
+     * @param url - the url of background image
+     * @returns void
+     * ```
+     * pen.background('https://www2.pyc.edu.hk/img/pycnet_logo.png')
+     * ```
+     */
+    background(url) {
+        this.setBackgroundImgUrl(url);
+    }
     exportCanvas(html, placeholder, canvas) {
         const src = 'src="' + this.toDataUrl(canvas) + '"';
         const width = ' width="' + this.displayWidth(canvas) + '"';
         const height = ' height="' + this.displayHeight(canvas) + '"';
-        return html.replace('src="' + placeholder + '"', src + width + height);
+        const backgroundAttr = this.backgroundImageAttr();
+        return html.replace('src="' + placeholder + '"', src + width + height + backgroundAttr);
     }
     ;
     /**
