@@ -10,7 +10,8 @@ export class Config {
     constructor(
         public sections: section[] = [],
         public answer: string = "A",
-        public options: Partial<Dict> = {}
+        public options: Partial<Dict> = {},
+        public shuffle: boolean = true
     ) { }
 }
 

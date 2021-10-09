@@ -4487,7 +4487,7 @@ declare module "Soil/tool/html" {
         printInWhole(symbol: string, value: any): void;
         printInLi(index: number, symbol: string, value: any): void;
         isLiDuplicated(): boolean;
-        shuffleLi(): number[];
+        shuffleLi(shuffle?: boolean): number[];
     }
     export function PrintVariable(html: string, symbol: string, value: any): string;
     export function ParseForPrint(value: any, signal?: string): string;
@@ -4497,7 +4497,8 @@ declare module "Soil/cls" {
         sections: section[];
         answer: string;
         options: Partial<Dict>;
-        constructor(sections?: section[], answer?: string, options?: Partial<Dict>);
+        shuffle: boolean;
+        constructor(sections?: section[], answer?: string, options?: Partial<Dict>, shuffle?: boolean);
     }
     export class Dict {
         a: any;
@@ -4617,6 +4618,7 @@ declare var Z: any;
 declare var sections: [number | string, number][];
 declare var answer: string | number;
 declare var options: object;
+declare var shuffle: boolean;
 declare var question: string;
 declare var solution: string;
 declare module "Soil/tool/eval" {
@@ -4626,6 +4628,7 @@ declare module "Soil/tool/eval" {
         sections: section[];
         answer: string;
         options: Partial<Dict>;
+        shuffle: boolean;
         qn: string;
         sol: string;
     };
@@ -4648,10 +4651,11 @@ declare module "Soil/tool/shuffle" {
         private qn;
         private sol;
         private ans;
+        private shuffle;
         private perm;
         private valid;
         private Qn;
-        constructor(qn: string, sol: string, ans: string);
+        constructor(qn: string, sol: string, ans: string, shuffle: boolean);
         AreOptionsDuplicated(): boolean;
         genQn(): string;
         private mapLetter;

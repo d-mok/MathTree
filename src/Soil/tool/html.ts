@@ -41,9 +41,14 @@ export class QuestionHTML {
         return (new Set(htmls)).size !== htmls.length
     }
 
-    shuffleLi(): number[] {
+    shuffleLi(shuffle: boolean = true): number[] {
         let oldHTMLs: string[] = this.li.map(x => x.innerHTML)
-        let newHTMLs: string[] = RndShuffle(...oldHTMLs)
+        let newHTMLs: string[]
+        if (shuffle) {
+            newHTMLs = RndShuffle(...oldHTMLs)
+        } else {
+            newHTMLs = [...oldHTMLs]
+        }
         for (let i = 0; i < newHTMLs.length; i++) {
             this.li[i].innerHTML = newHTMLs[i]
         }

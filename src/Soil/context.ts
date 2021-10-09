@@ -57,5 +57,6 @@ declare var Z: any
 declare var sections: [number | string, number][]
 declare var answer: string | number
 declare var options: object
+declare var shuffle: boolean
 declare var question: string
 declare var solution: string

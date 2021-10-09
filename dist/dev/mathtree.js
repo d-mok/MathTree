@@ -38512,10 +38512,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Dict = exports.Config = void 0;
 const html_1 = __webpack_require__(9870);
 class Config {
-    constructor(sections = [], answer = "A", options = {}) {
+    constructor(sections = [], answer = "A", options = {}, shuffle = true) {
         this.sections = sections;
         this.answer = answer;
         this.options = options;
+        this.shuffle = shuffle;
     }
 }
 exports.Config = Config;
@@ -38724,6 +38725,7 @@ class Soil {
             sections: this.config.sections,
             answer: this.config.answer,
             options: this.config.options,
+            shuffle: this.config.shuffle,
             qn: this.qn,
             sol: this.sol
         });
@@ -38731,7 +38733,8 @@ class Soil {
         this.config = {
             sections: context.sections,
             answer: context.answer,
-            options: context.options
+            options: context.options,
+            shuffle: context.shuffle
         };
         this.qn = context.qn;
         this.sol = context.sol;
@@ -38828,7 +38831,7 @@ class Soil {
         return true;
     }
     runShuffle() {
-        let shuffler = new shuffle_1.OptionShuffler(this.qn, this.sol, this.config.answer);
+        let shuffler = new shuffle_1.OptionShuffler(this.qn, this.sol, this.config.answer, this.config.shuffle);
         if (shuffler.AreOptionsDuplicated()) {
             this.recordError(CustomError('ShuffleError', 'Duplicated options found!'));
             return false;
@@ -38990,6 +38993,7 @@ function evaluate(code, context) {
     let sections = context.sections;
     let answer = context.answer;
     let options = context.options;
+    let shuffle = context.shuffle;
     let question = context.qn;
     let solution = context.sol;
     // execute
@@ -39015,6 +39019,7 @@ function evaluate(code, context) {
         sections,
         answer,
         options,
+        shuffle,
         qn: question,
         sol: solution
     };
@@ -39104,9 +39109,15 @@ class QuestionHTML {
         let htmls = this.li.map(x => x.innerHTML);
         return (new Set(htmls)).size !== htmls.length;
     }
-    shuffleLi() {
+    shuffleLi(shuffle = true) {
         let oldHTMLs = this.li.map(x => x.innerHTML);
-        let newHTMLs = RndShuffle(...oldHTMLs);
+        let newHTMLs;
+        if (shuffle) {
+            newHTMLs = RndShuffle(...oldHTMLs);
+        }
+        else {
+            newHTMLs = [...oldHTMLs];
+        }
         for (let i = 0; i < newHTMLs.length; i++) {
             this.li[i].innerHTML = newHTMLs[i];
         }
@@ -39460,10 +39471,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OptionShuffler = void 0;
 const html_1 = __webpack_require__(9870);
 class OptionShuffler {
-    constructor(qn, sol, ans) {
+    constructor(qn, sol, ans, shuffle) {
         this.qn = qn;
         this.sol = sol;
         this.ans = ans;
+        this.shuffle = shuffle;
         this.perm = [];
         this.valid = false;
         this.Qn = new html_1.QuestionHTML(qn);
@@ -39479,7 +39491,7 @@ class OptionShuffler {
     genQn() {
         if (!this.valid)
             return this.qn;
-        this.perm = this.Qn.shuffleLi();
+        this.perm = this.Qn.shuffleLi(this.shuffle);
         return this.Qn.export();
     }
     mapLetter(oldLetter) {

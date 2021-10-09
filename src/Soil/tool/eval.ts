@@ -6,6 +6,7 @@ type Context = {
     sections: section[]
     answer: string
     options: Partial<Dict>
+    shuffle: boolean
     qn: string
     sol: string
 }
@@ -40,6 +41,7 @@ export function evaluate(code: string, context: Context) {
     let sections: section[] = context.sections
     let answer: string = context.answer
     let options: Partial<Dict> = context.options
+    let shuffle: boolean = context.shuffle
     let question: string = context.qn
     let solution: string = context.sol
 
@@ -68,6 +70,7 @@ export function evaluate(code: string, context: Context) {
         sections,
         answer,
         options,
+        shuffle,
         qn: question,
         sol: solution
     }

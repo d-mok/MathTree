@@ -9,7 +9,8 @@ export class OptionShuffler {
     constructor(
         private qn: string,
         private sol: string,
-        private ans: string
+        private ans: string,
+        private shuffle: boolean
     ) {
         this.Qn = new QuestionHTML(qn)
         if (!this.Qn.ul) return // no <ul></ul>
@@ -23,7 +24,7 @@ export class OptionShuffler {
 
     genQn(): string {
         if (!this.valid) return this.qn
-        this.perm = this.Qn.shuffleLi()
+        this.perm = this.Qn.shuffleLi(this.shuffle)
         return this.Qn.export()
     }
 

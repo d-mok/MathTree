@@ -72,6 +72,7 @@ export class Soil {
             sections: this.config.sections,
             answer: this.config.answer,
             options: this.config.options,
+            shuffle: this.config.shuffle,
             qn: this.qn,
             sol: this.sol
         })
@@ -80,7 +81,8 @@ export class Soil {
         this.config = {
             sections: context.sections,
             answer: context.answer,
-            options: context.options
+            options: context.options,
+            shuffle: context.shuffle
         }
         this.qn = context.qn
         this.sol = context.sol
@@ -186,7 +188,8 @@ export class Soil {
         let shuffler = new OptionShuffler(
             this.qn,
             this.sol,
-            this.config.answer
+            this.config.answer,
+            this.config.shuffle
         )
         if (shuffler.AreOptionsDuplicated()) {
             this.recordError(CustomError(
