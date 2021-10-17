@@ -2,7 +2,8 @@
 import { Soil } from './soil'
 
 declare global {
-    var MathSoil: any
+    var MathSoil: MathSoilCls
+    var MathSoil2: MathSoil2Cls
 }
 
 
@@ -21,37 +22,12 @@ type Seed = {
 class MathSoilCls {
 
 
-    public reap(seed: Seed): Fruit {
+
+    private reap(seed: Seed): Fruit {
         let soil = new Soil(seed.gene)
         return soil.nurture()
     }
 
-    public reaps(seeds: Seed[]): Fruit[] {
-        return seeds.map(x => this.reap(x))
-    }
-
-    public inspect(seed: Seed, repeat: number): inspection {
-        let counters = [];
-        let times = []
-        for (let i = 1; i <= repeat; i++) {
-            let fruit: Fruit = this.reap(seed);
-            if (!fruit.success)
-                return {
-                    counter: 0,
-                    success: false,
-                    logs: fruit.logs,
-                    time: 0
-                }
-            counters.push(fruit.counter);
-            times.push(fruit.time)
-        }
-        return {
-            counter: Mean(...counters),
-            success: true,
-            logs: [],
-            time: Mean(...times)
-        }
-    }
 
 
     /**
@@ -87,3 +63,51 @@ class MathSoilCls {
 
 var MathSoil = new MathSoilCls()
 globalThis.MathSoil = MathSoil
+
+
+
+
+
+
+
+
+class MathSoil2Cls {
+
+
+    public reap(gene: Gene): Fruit {
+        let soil = new Soil(gene)
+        return soil.nurture()
+    }
+
+
+    public inspect(gene: Gene, repeat: number): inspection {
+        let counters = [];
+        let times = []
+        for (let i = 1; i <= repeat; i++) {
+            let fruit: Fruit = this.reap(gene);
+            if (!fruit.success)
+                return {
+                    counter: 0,
+                    success: false,
+                    logs: fruit.logs,
+                    time: 0
+                }
+            counters.push(fruit.counter);
+            times.push(fruit.time)
+        }
+        return {
+            counter: Mean(...counters),
+            success: true,
+            logs: [],
+            time: Mean(...times)
+        }
+    }
+
+
+}
+
+var MathSoil2 = new MathSoil2Cls()
+globalThis.MathSoil2 = MathSoil2
+
+
+

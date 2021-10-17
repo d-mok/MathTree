@@ -38626,31 +38626,6 @@ class MathSoilCls {
         let soil = new soil_1.Soil(seed.gene);
         return soil.nurture();
     }
-    reaps(seeds) {
-        return seeds.map(x => this.reap(x));
-    }
-    inspect(seed, repeat) {
-        let counters = [];
-        let times = [];
-        for (let i = 1; i <= repeat; i++) {
-            let fruit = this.reap(seed);
-            if (!fruit.success)
-                return {
-                    counter: 0,
-                    success: false,
-                    logs: fruit.logs,
-                    time: 0
-                };
-            counters.push(fruit.counter);
-            times.push(fruit.time);
-        }
-        return {
-            counter: Mean(...counters),
-            success: true,
-            logs: [],
-            time: Mean(...times)
-        };
-    }
     /**
      * @deprecated
      */
@@ -38681,6 +38656,36 @@ class MathSoilCls {
 }
 var MathSoil = new MathSoilCls();
 globalThis.MathSoil = MathSoil;
+class MathSoil2Cls {
+    reap(gene) {
+        let soil = new soil_1.Soil(gene);
+        return soil.nurture();
+    }
+    inspect(gene, repeat) {
+        let counters = [];
+        let times = [];
+        for (let i = 1; i <= repeat; i++) {
+            let fruit = this.reap(gene);
+            if (!fruit.success)
+                return {
+                    counter: 0,
+                    success: false,
+                    logs: fruit.logs,
+                    time: 0
+                };
+            counters.push(fruit.counter);
+            times.push(fruit.time);
+        }
+        return {
+            counter: Mean(...counters),
+            success: true,
+            logs: [],
+            time: Mean(...times)
+        };
+    }
+}
+var MathSoil2 = new MathSoil2Cls();
+globalThis.MathSoil2 = MathSoil2;
 
 
 /***/ }),
