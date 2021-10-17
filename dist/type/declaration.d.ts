@@ -263,7 +263,6 @@ declare module "Math/index" {
     import './Algebra/Polynomial';
     import './should.ts';
 }
-declare var SHOULD_LOG: boolean;
 declare class CustomErrorCls extends Error {
     constructor(name: string, message: string);
 }
@@ -4683,13 +4682,10 @@ declare module "Soil/soil" {
         private dict;
         private config;
         private counter;
-        private time;
-        private errorPile;
+        private timer;
+        private logger;
         constructor(gene: Gene);
         private reset;
-        private checkTime;
-        private recordError;
-        private printError;
         private evalCode;
         private pushDict;
         private isValidated;
@@ -4716,9 +4712,17 @@ declare type section = [number | string, number];
 declare type Fruit = {
     readonly qn: string;
     readonly sol: string;
-    readonly ans: string | undefined;
+    readonly ans: string;
     counter: number;
     readonly success: boolean;
+    readonly logs: string[];
+    readonly time: number;
+};
+declare type inspection = {
+    readonly counter: number;
+    readonly success: boolean;
+    readonly logs: string[];
+    readonly time: number;
 };
 declare type Gene = {
     readonly qn: string;

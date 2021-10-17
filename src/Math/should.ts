@@ -1,7 +1,4 @@
 
-var SHOULD_LOG = false
-globalThis.SHOULD_LOG = SHOULD_LOG
-
 
 class CustomErrorCls extends Error {
     constructor(name: string, message: string) {

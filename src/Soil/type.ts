@@ -3,9 +3,18 @@ type section = [number | string, number]
 type Fruit = {
     readonly qn: string,
     readonly sol: string,
-    readonly ans: string | undefined,
+    readonly ans: string,
     counter: number,
     readonly success: boolean
+    readonly logs: string[]
+    readonly time: number
+}
+
+type inspection = {
+    readonly counter: number
+    readonly success: boolean
+    readonly logs: string[]
+    readonly time: number
 }
 
 

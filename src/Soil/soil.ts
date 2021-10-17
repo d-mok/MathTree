@@ -20,8 +20,60 @@ function katex(html: string): string {
 
 
 
+class Timer {
+    private start: number = Date.now()
+
+    constructor(
+        private limit: number // in second
+    ) { }
+
+    elapsed(): number {
+        return (Date.now() - this.start) / 1000 // in second
+    }
+
+    over(): boolean {
+        return this.elapsed() > this.limit
+    }
+
+    check(): void {
+        if (this.over())
+            throw CustomError('TimeoutError', 'running too long: > ' + this.limit + 's')
+    }
+}
+
+
+class ErrorLogger {
+    private pile: string[] = []
+
+    add(e: unknown) {
+        let err = toError(e)
+        this.pile.push('[' + err.name + '] ' + err.message)
+    }
+
+    private read(delimiter: string): string {
+        return this.pile.join(delimiter)
+    }
+
+    logs(): string[] {
+        return [...this.pile]
+    }
+
+    html(): string {
+        let text = this.read("<br/><br/>")
+        let len = text.length
+        if (len > 1000)
+            text = text.substring(0, 1000) + ` ... (${len} chars)`;
+        return text
+    }
+
+    lastLog(): string {
+        return this.pile[this.pile.length - 1]
+    }
+
+}
+
+
 export class Soil {
-    // get from SeedBank API
     private qn: string = ""
     private sol: string = ""
     // working variables during growth
@@ -29,8 +81,8 @@ export class Soil {
     private config: Config = new Config()
     // state
     private counter: number = 0
-    private time: number = Date.now()
-    private errorPile: Error[] = []
+    private timer: Timer = new Timer(10)
+    private logger: ErrorLogger = new ErrorLogger()
 
     constructor(
         private readonly gene: Gene
@@ -43,26 +95,6 @@ export class Soil {
         this.sol = this.gene.sol
         this.dict = new Dict()
         this.config = new Config()
-    }
-
-    private checkTime() {
-        let allow = 10
-        if (Date.now() - this.time > allow * 1000)
-            throw CustomError('TimeoutError', 'taking too long to run: >' + allow + 's')
-    }
-
-    private recordError(e: unknown) {
-        let err = toError(e)
-        this.errorPile.push(err)
-    }
-
-    private printError(delimiter: string, cut = true): string {
-        let print = (x: Error) => '[' + x.name + '] ' + x.message
-        let stack = this.errorPile.map(print).join(delimiter)
-        if (cut) {
-            if (stack.length > 1000) stack = stack.substring(0, 1000) + ` ... (${stack.length} chars)`;
-        }
-        return stack
     }
 
     private evalCode(code: string): any {
@@ -105,7 +137,7 @@ export class Soil {
 
     private runPopulate(): boolean {
         while (this.counter <= 1000) {
-            this.checkTime()
+            this.timer.check()
             try {
                 this.pushDict()
                 if (!this.dict.checked())
@@ -117,13 +149,13 @@ export class Soil {
                 if (e instanceof Error) {
                     switch (e.name) {
                         case 'ContractError':
-                            this.recordError(e)
+                            this.logger.add(e)
                             break;
                         case 'MathError':
-                            this.recordError(e)
+                            this.logger.add(e)
                             break;
                         case 'PopulationError':
-                            this.recordError(e)
+                            this.logger.add(e)
                             break;
                         default:
                             throw e
@@ -156,7 +188,7 @@ export class Soil {
                 this.qn = AutoOptions(this.config.options, this.qn, this.dict)
                 return true
             } catch (e) {
-                this.recordError(e)
+                this.logger.add(e)
                 continue
             }
         };
@@ -192,7 +224,7 @@ export class Soil {
             this.config.shuffle
         )
         if (shuffler.AreOptionsDuplicated()) {
-            this.recordError(CustomError(
+            this.logger.add(CustomError(
                 'ShuffleError',
                 'Duplicated options found!'
             ))
@@ -216,18 +248,21 @@ export class Soil {
             sol: this.sol,
             ans: this.config.answer,
             counter: this.counter,
-            success: true
+            success: true,
+            logs: this.logger.logs(),
+            time: this.timer.elapsed()
         }
     }
 
-    private errorFruit(e: unknown): Fruit {
-        let err = toError(e)
+    private errorFruit(): Fruit {
         return {
-            qn: "An Error Occurred!<br/>" + '[' + err.name + '] ' + err.message,
-            sol: this.printError("<br/><br/>", true),
+            qn: "Error!<br/>" + this.logger.lastLog(),
+            sol: this.logger.html(),
             ans: "X",
             counter: this.counter,
-            success: false
+            success: false,
+            logs: this.logger.logs(),
+            time: this.timer.elapsed()
         }
     }
 
@@ -246,12 +281,11 @@ export class Soil {
                 this.runKatex()
                 break
             } while (true);
-            if (SHOULD_LOG) console.log(this.printError('\n', false))
             return this.successFruit()
         }
         catch (e) {
-            if (SHOULD_LOG) console.log(this.printError('\n', false))
-            return this.errorFruit(e)
+            this.logger.add(e)
+            return this.errorFruit()
         }
     }
 }

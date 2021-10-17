@@ -35364,8 +35364,6 @@ __webpack_require__(7414);
 
 "use strict";
 
-var SHOULD_LOG = false;
-globalThis.SHOULD_LOG = SHOULD_LOG;
 class CustomErrorCls extends Error {
     constructor(name, message) {
         super(message);
@@ -38624,19 +38622,53 @@ exports.Dict = Dict;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const soil_1 = __webpack_require__(6842);
 class MathSoilCls {
-    grow(seed) {
-        if ('content' in seed)
-            seed.gene = seed.content; // for backward compatible
+    reap(seed) {
         let soil = new soil_1.Soil(seed.gene);
-        seed.fruit = soil.nurture();
-        seed.question = seed.fruit; // for backward compatible
+        return soil.nurture();
     }
+    reaps(seeds) {
+        return seeds.map(x => this.reap(x));
+    }
+    inspect(seed, repeat) {
+        let counters = [];
+        let times = [];
+        for (let i = 1; i <= repeat; i++) {
+            let fruit = this.reap(seed);
+            if (!fruit.success)
+                return {
+                    counter: 0,
+                    success: false,
+                    logs: fruit.logs,
+                    time: 0
+                };
+            counters.push(fruit.counter);
+            times.push(fruit.time);
+        }
+        return {
+            counter: Mean(...counters),
+            success: true,
+            logs: [],
+            time: Mean(...times)
+        };
+    }
+    /**
+     * @deprecated
+     */
+    grow(seed) {
+        // if ('content' in seed) seed.gene = seed.content // for backward compatible
+        seed.fruit = this.reap(seed);
+        // seed.question = seed.fruit // for backward compatible
+    }
+    /**
+     * @deprecated
+     */
     growAll(seeds) {
         seeds.forEach(x => this.grow(x));
     }
+    /**
+     * @deprecated
+     */
     test(seed, repeat = 100) {
-        const log = SHOULD_LOG;
-        SHOULD_LOG = false;
         let counters = [];
         for (let i = 1; i <= repeat; i++) {
             this.grow(seed);
@@ -38645,7 +38677,6 @@ class MathSoilCls {
             counters.push(seed.fruit.counter);
         }
         seed.fruit.counter = Mean(...counters);
-        SHOULD_LOG = log;
     }
 }
 var MathSoil = new MathSoilCls();
@@ -38680,10 +38711,51 @@ function katex(html) {
     ele.remove();
     return T;
 }
+class Timer {
+    constructor(limit // in second
+    ) {
+        this.limit = limit;
+        this.start = Date.now();
+    }
+    elapsed() {
+        return (Date.now() - this.start) / 1000; // in second
+    }
+    over() {
+        return this.elapsed() > this.limit;
+    }
+    check() {
+        if (this.over())
+            throw CustomError('TimeoutError', 'running too long: > ' + this.limit + 's');
+    }
+}
+class ErrorLogger {
+    constructor() {
+        this.pile = [];
+    }
+    add(e) {
+        let err = toError(e);
+        this.pile.push('[' + err.name + '] ' + err.message);
+    }
+    read(delimiter) {
+        return this.pile.join(delimiter);
+    }
+    logs() {
+        return [...this.pile];
+    }
+    html() {
+        let text = this.read("<br/><br/>");
+        let len = text.length;
+        if (len > 1000)
+            text = text.substring(0, 1000) + ` ... (${len} chars)`;
+        return text;
+    }
+    lastLog() {
+        return this.pile[this.pile.length - 1];
+    }
+}
 class Soil {
     constructor(gene) {
         this.gene = gene;
-        // get from SeedBank API
         this.qn = "";
         this.sol = "";
         // working variables during growth
@@ -38691,8 +38763,8 @@ class Soil {
         this.config = new cls_1.Config();
         // state
         this.counter = 0;
-        this.time = Date.now();
-        this.errorPile = [];
+        this.timer = new Timer(10);
+        this.logger = new ErrorLogger();
         this.reset();
     }
     reset() {
@@ -38700,24 +38772,6 @@ class Soil {
         this.sol = this.gene.sol;
         this.dict = new cls_1.Dict();
         this.config = new cls_1.Config();
-    }
-    checkTime() {
-        let allow = 10;
-        if (Date.now() - this.time > allow * 1000)
-            throw CustomError('TimeoutError', 'taking too long to run: >' + allow + 's');
-    }
-    recordError(e) {
-        let err = toError(e);
-        this.errorPile.push(err);
-    }
-    printError(delimiter, cut = true) {
-        let print = (x) => '[' + x.name + '] ' + x.message;
-        let stack = this.errorPile.map(print).join(delimiter);
-        if (cut) {
-            if (stack.length > 1000)
-                stack = stack.substring(0, 1000) + ` ... (${stack.length} chars)`;
-        }
-        return stack;
     }
     evalCode(code) {
         let { result, context } = (0, eval_1.evaluate)(code, {
@@ -38753,7 +38807,7 @@ class Soil {
     }
     runPopulate() {
         while (this.counter <= 1000) {
-            this.checkTime();
+            this.timer.check();
             try {
                 this.pushDict();
                 if (!this.dict.checked())
@@ -38766,13 +38820,13 @@ class Soil {
                 if (e instanceof Error) {
                     switch (e.name) {
                         case 'ContractError':
-                            this.recordError(e);
+                            this.logger.add(e);
                             break;
                         case 'MathError':
-                            this.recordError(e);
+                            this.logger.add(e);
                             break;
                         case 'PopulationError':
-                            this.recordError(e);
+                            this.logger.add(e);
                             break;
                         default:
                             throw e;
@@ -38805,7 +38859,7 @@ class Soil {
                 return true;
             }
             catch (e) {
-                this.recordError(e);
+                this.logger.add(e);
                 continue;
             }
         }
@@ -38833,7 +38887,7 @@ class Soil {
     runShuffle() {
         let shuffler = new shuffle_1.OptionShuffler(this.qn, this.sol, this.config.answer, this.config.shuffle);
         if (shuffler.AreOptionsDuplicated()) {
-            this.recordError(CustomError('ShuffleError', 'Duplicated options found!'));
+            this.logger.add(CustomError('ShuffleError', 'Duplicated options found!'));
             return false;
         }
         this.qn = shuffler.genQn();
@@ -38852,17 +38906,20 @@ class Soil {
             sol: this.sol,
             ans: this.config.answer,
             counter: this.counter,
-            success: true
+            success: true,
+            logs: this.logger.logs(),
+            time: this.timer.elapsed()
         };
     }
-    errorFruit(e) {
-        let err = toError(e);
+    errorFruit() {
         return {
-            qn: "An Error Occurred!<br/>" + '[' + err.name + '] ' + err.message,
-            sol: this.printError("<br/><br/>", true),
+            qn: "Error!<br/>" + this.logger.lastLog(),
+            sol: this.logger.html(),
             ans: "X",
             counter: this.counter,
-            success: false
+            success: false,
+            logs: this.logger.logs(),
+            time: this.timer.elapsed()
         };
     }
     nurture() {
@@ -38881,14 +38938,11 @@ class Soil {
                 this.runKatex();
                 break;
             } while (true);
-            if (SHOULD_LOG)
-                console.log(this.printError('\n', false));
             return this.successFruit();
         }
         catch (e) {
-            if (SHOULD_LOG)
-                console.log(this.printError('\n', false));
-            return this.errorFruit(e);
+            this.logger.add(e);
+            return this.errorFruit();
         }
     }
 }
