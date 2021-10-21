@@ -37,7 +37,7 @@ export class QuestionHTML {
     }
 
     isLiDuplicated(): boolean {
-        let htmls: string[] = this.li.map(x => x.innerHTML)
+        let htmls: string[] = this.li.map(x => x.innerHTML.replace(/\s+/g, ''))
         return (new Set(htmls)).size !== htmls.length
     }
 

@@ -26,18 +26,18 @@
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@types/katex": "^0.11.0",
-    "jest": "^27.2.1",
+    "jest": "^27.3.1",
     "jest-extended": "^0.11.5",
     "jest-matcher-deep-close-to": "^2.0.1",
-    "ts-jest": "^27.0.5",
+    "ts-jest": "^27.0.7",
     "ts-loader": "^9.2.6",
     "typedoc": "^0.20.36",
-    "typescript": "^4.4.3",
-    "webpack": "^5.53.0",
-    "webpack-cli": "^4.8.0"
+    "typescript": "^4.4.4",
+    "webpack": "^5.59.1",
+    "webpack-cli": "^4.9.1"
   },
   "dependencies": {
     "katex": "^0.13.18",
-    "sapphire-js": "^1.0.57"
+    "sapphire-js": "^1.0.58"
   }
 }

@@ -28880,6 +28880,7 @@ exports.isRational = isRational;
  * ```
  */
 function toSurd(num) {
+    num = blur(num);
     let s = Math.sign(num);
     let a = Math.abs(num);
     let square = blur(a ** 2);
@@ -39165,7 +39166,7 @@ class QuestionHTML {
         li.innerHTML = PrintVariable(li.innerHTML, symbol, value);
     }
     isLiDuplicated() {
-        let htmls = this.li.map(x => x.innerHTML);
+        let htmls = this.li.map(x => x.innerHTML.replace(/\s+/g, ''));
         return (new Set(htmls)).size !== htmls.length;
     }
     shuffleLi(shuffle = true) {
