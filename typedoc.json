@@ -1,5 +1,6 @@
 {
     "categorizeByGroup":false,
-    "theme":"minimal",
-    "disableSources":true
+    "theme":"default",
+    "disableSources":true,
+    "entryPointStrategy":"expand"
   }
