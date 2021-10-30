@@ -19,7 +19,7 @@ export function BuildSolving(
     let givens = vars.filter($ => $ !== unknown)
     givens.forEach($ => $.round())
     unknown.clear()
-
+    unknown.widen()
     eq.fit()
 
     function sol(): string {
@@ -37,7 +37,12 @@ export function BuildSolving(
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
         vars: vars.map(v => v === unknown ? v.sym : v.long()),
-        unknown: [unknown.sym, unknown.name, unknown.getVal(), unknown.unit]
+        unknown: [
+            unknown.sym,
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ]
     }
 }
 

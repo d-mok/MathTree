@@ -47,6 +47,10 @@ export class Variable {
         return this.val
     }
 
+    solved(): boolean {
+        return Number.isFinite(this.val)
+    }
+
     widen(fraction: number = 0.1): void {
         let [min, max] = this.range
         this.range = [
@@ -127,6 +131,20 @@ export class EquSystem {
 
     solve() {
         this.equations.forEach($ => $.fit())
+    }
+
+    solveSingly(): void {
+        let found = this.variables.filter($ => $.solved())
+        for (let i = 0; i < 10; i++) {
+            for (let eq of this.equations) {
+                if (eq.isSolvable(found)) {
+                    eq.fit()
+                    found.push(...eq.dep)
+                }
+            }
+            if (this.variables.every(v => found.includes(v))) return
+        }
+        throw "[solveSingly] the system is not solvable yet."
     }
 
 

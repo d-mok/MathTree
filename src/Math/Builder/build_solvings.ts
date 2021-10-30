@@ -1,4 +1,4 @@
-import { EquSystem,toEquations, toVariables } from './support';
+import { EquSystem, toEquations, toVariables } from './support';
 
 
 export function BuildSolvings(
@@ -10,7 +10,6 @@ export function BuildSolvings(
     vars: string[],
     unknown: [sym: string, name: string, val: number, unit: string]
 } {
-
     let vars = toVariables(variables)
     let eqs = toEquations(equations, vars)
     let system = new EquSystem(vars, eqs)
@@ -19,8 +18,8 @@ export function BuildSolvings(
     let [givens, ungivens, unknown] = system.generateSolvables()
     givens.forEach($ => $.round())
     ungivens.forEach($ => $.clear())
-
-    system.solve()
+    ungivens.forEach($ => $.widen())
+    system.solveSingly()
 
     function sol(): string {
         let T = ""
@@ -38,7 +37,12 @@ export function BuildSolvings(
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
         vars: vars.map(v => givens.includes(v) ? v.long() : v.sym),
-        unknown: [unknown.sym, unknown.name, unknown.getVal(), unknown.unit]
+        unknown: [
+            unknown.sym,
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ]
     }
 }
 

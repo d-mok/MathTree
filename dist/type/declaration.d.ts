@@ -252,6 +252,7 @@ declare module "Math/Builder/support" {
         round(): void;
         clear(): void;
         getVal(): number;
+        solved(): boolean;
         widen(fraction?: number): void;
         short(): string;
         long(): string;
@@ -275,6 +276,7 @@ declare module "Math/Builder/support" {
         constructor(variables: Variable[], equations: Equation[]);
         private clearVals;
         solve(): void;
+        solveSingly(): void;
         compare(): void;
         private canBeGivens;
         private canBeUnknown;

@@ -30712,7 +30712,7 @@ function bisection(f, ranges) {
             if (f(...a) > 0)
                 return a;
         }
-        throw "[bisection] can't find positive point";
+        throw "[bisection] can't find positive point with ranges:" + JSON.stringify(ranges);
     }
     function randomNegPoint() {
         for (let i = 0; i < 1000; i++) {
@@ -30720,7 +30720,7 @@ function bisection(f, ranges) {
             if (f(...b) < 0)
                 return b;
         }
-        throw "[bisection] can't find negative point";
+        throw "[bisection] can't find negative point with ranges:" + JSON.stringify(ranges);
     }
     let a = randomPosPoint();
     let b = randomNegPoint();
@@ -30774,6 +30774,7 @@ function BuildSolving(variables, func, latex) {
     let givens = vars.filter($ => $ !== unknown);
     givens.forEach($ => $.round());
     unknown.clear();
+    unknown.widen();
     eq.fit();
     function sol() {
         let T = "";
@@ -30789,7 +30790,12 @@ function BuildSolving(variables, func, latex) {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
         vars: vars.map(v => v === unknown ? v.sym : v.long()),
-        unknown: [unknown.sym, unknown.name, unknown.getVal(), unknown.unit]
+        unknown: [
+            unknown.sym,
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ]
     };
 }
 exports.BuildSolving = BuildSolving;
@@ -30813,7 +30819,8 @@ function BuildSolvings(variables, equations) {
     let [givens, ungivens, unknown] = system.generateSolvables();
     givens.forEach($ => $.round());
     ungivens.forEach($ => $.clear());
-    system.solve();
+    ungivens.forEach($ => $.widen());
+    system.solveSingly();
     function sol() {
         let T = "";
         T += system.print() + " \\\\~\\\\ ";
@@ -30829,7 +30836,12 @@ function BuildSolvings(variables, equations) {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
         vars: vars.map(v => givens.includes(v) ? v.long() : v.sym),
-        unknown: [unknown.sym, unknown.name, unknown.getVal(), unknown.unit]
+        unknown: [
+            unknown.sym,
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ]
     };
 }
 exports.BuildSolvings = BuildSolvings;
@@ -30943,6 +30955,16 @@ class Variable {
     getVal() {
         return this.val;
     }
+    solved() {
+        return Number.isFinite(this.val);
+    }
+    widen(fraction = 0.1) {
+        let [min, max] = this.range;
+        this.range = [
+            min - Math.abs(min * fraction),
+            max + Math.abs(max * fraction)
+        ];
+    }
     short() {
         return Number.parseFloat(this.val.toPrecision(3)).toString();
     }
@@ -31001,6 +31023,20 @@ class EquSystem {
     }
     solve() {
         this.equations.forEach($ => $.fit());
+    }
+    solveSingly() {
+        let found = this.variables.filter($ => $.solved());
+        for (let i = 0; i < 10; i++) {
+            for (let eq of this.equations) {
+                if (eq.isSolvable(found)) {
+                    eq.fit();
+                    found.push(...eq.dep);
+                }
+            }
+            if (this.variables.every(v => found.includes(v)))
+                return;
+        }
+        throw "[solveSingly] the system is not solvable yet.";
     }
     compare() {
         this.clearVals();
