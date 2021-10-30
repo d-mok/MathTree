@@ -30820,6 +30820,8 @@ function BuildSolvings(variables, equations) {
     givens.forEach($ => $.round());
     ungivens.forEach($ => $.clear());
     ungivens.forEach($ => $.widen());
+    console.log('givens:', givens);
+    console.log('unknown:', unknown);
     system.solveSingly();
     function sol() {
         let T = "";
