@@ -236,6 +236,86 @@ declare function PolySimplify<V extends string>(poly: polynomial<V>): polynomial
  * ```
  */
 declare function PolyDegree<V extends string>(poly: polynomial<V>): number;
+declare module "Math/Builder/bisect" {
+    export function bisection(f: Fun, ranges: [number, number][]): number[];
+}
+declare module "Math/Builder/support" {
+    export class Variable {
+        sym: string;
+        name: string;
+        range: [number, number];
+        unit: string;
+        private val;
+        constructor(sym: string, name: string, range: [number, number], unit?: string);
+        bounds(): [number, number];
+        set(val: number): void;
+        round(): void;
+        clear(): void;
+        getVal(): number;
+        short(): string;
+        long(): string;
+        full(): string;
+        whole(): string;
+    }
+    export class Equation {
+        zeroFunc: Fun;
+        latex: string;
+        dep: Variable[];
+        constructor(zeroFunc: Fun, latex: string, dep: Variable[]);
+        fit(): void;
+        private missingDepCount;
+        isSolvable(givens: Variable[]): boolean;
+        isSolved(givens: Variable[]): boolean;
+        print(show?: Variable[]): string;
+    }
+    export class EquSystem {
+        variables: Variable[];
+        equations: Equation[];
+        constructor(variables: Variable[], equations: Equation[]);
+        private clearVals;
+        solve(): void;
+        compare(): void;
+        private canBeGivens;
+        private canBeUnknown;
+        generateSolvables(): [givens: Variable[], ungivens: Variable[], unknown: Variable];
+        print(givens?: Variable[]): string;
+    }
+    export function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variable[];
+    export function toEquations(eqs: [func: Fun, latex: string, dep: string[]][], vars: Variable[]): Equation[];
+}
+declare module "Math/Builder/build_solving" {
+    export function BuildSolving(variables: [sym: string, name: string, range: [number, number], unit: string][], func: Fun, latex: string): {
+        list: string;
+        sol: string;
+        vars: string[];
+        unknown: (string | number)[];
+    };
+}
+declare module "Math/Builder/build_solvings" {
+    export function BuildSolvings(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][]): {
+        list: string;
+        sol: string;
+        vars: string[];
+        unknown: (string | number)[];
+    };
+}
+declare module "Math/Builder/build_trend" {
+    export function BuildTrend(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][], constancies?: string[][]): {
+        constancy: string[][];
+        control: (string | number)[];
+        responses: (string | number)[][];
+    };
+}
+declare module "Math/Builder/index" {
+    import { BuildSolving as $BuildSolving } from "Math/Builder/build_solving";
+    import { BuildSolvings as $BuildSolvings } from "Math/Builder/build_solvings";
+    import { BuildTrend as $BuildTrend } from "Math/Builder/build_trend";
+    global {
+        var BuildSolving: typeof $BuildSolving;
+        var BuildSolvings: typeof $BuildSolvings;
+        var BuildTrend: typeof $BuildTrend;
+    }
+}
 declare module "Math/index" {
     import './Code/Assertion.ts';
     import './Code/Combinatorics.ts';
@@ -262,6 +342,7 @@ declare module "Math/index" {
     import './Algebra/Linear.ts';
     import './Algebra/Polynomial';
     import './should.ts';
+    import "Math/Builder/index";
 }
 declare class CustomErrorCls extends Error {
     constructor(name: string, message: string);
@@ -516,62 +597,6 @@ declare function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
  * ```
  */
 declare function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
-declare type Fun = (...args: number[]) => number;
-declare function bisection(f: Fun, ranges: [number, number][]): number[];
-declare const UNITS: {
-    [_: string]: string;
-};
-declare class Variable {
-    sym: string;
-    name: string;
-    range: [number, number];
-    unit: string;
-    val: number;
-    constructor(sym: string, name: string, range: [number, number], unit?: string);
-    bounds(): [number, number];
-    short(): string;
-    long(): string;
-    full(): string;
-    whole(): string;
-}
-declare class Equation {
-    zeroFunc: Fun;
-    latex: string;
-    dep: Variable[];
-    constructor(zeroFunc: Fun, latex: string, dep: Variable[]);
-    fit(): void;
-    print(givens?: Variable[]): string;
-}
-declare class EquSystem {
-    variables: Variable[];
-    equations: Equation[];
-    constructor(variables: Variable[], equations: Equation[]);
-    solve(): void;
-    compare(): void;
-    private canBeGivens;
-    private canBeUnknown;
-    genGivens(): [givens: Variable[], ungivens: Variable[], unknown: Variable];
-    print(givens?: Variable[]): string;
-}
-declare function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variable[];
-declare function toEquations(eqs: [func: Fun, latex: string, dep: string[]][], vars: Variable[]): Equation[];
-declare function SubstitutionQuestionBuilder(variables: [sym: string, name: string, range: [number, number], unit: string][], func: Fun, latex: string): {
-    list: string;
-    sol: string;
-    vars: string[];
-    unknown: (string | number)[];
-};
-declare function MultiSubstitutionQuestionBuilder(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][]): {
-    list: string;
-    sol: string;
-    vars: string[];
-    unknown: (string | number)[];
-};
-declare function TrendQuestionBuilder(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][], constancies?: string[][]): {
-    constancy: string[][];
-    control: (string | number)[];
-    responses: (string | number)[][];
-};
 declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
 /**
  * @category Assertion
