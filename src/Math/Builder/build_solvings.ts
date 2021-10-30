@@ -19,8 +19,8 @@ export function BuildSolvings(
     givens.forEach($ => $.round())
     ungivens.forEach($ => $.clear())
     ungivens.forEach($ => $.widen())
-    console.log('givens:',givens)
-    console.log('unknown:',unknown)
+    console.log('givens:',JSON.stringify(givens))
+    console.log('unknown:',JSON.stringify(unknown))
     system.solveSingly()
 
     function sol(): string {
