@@ -1,3 +1,4 @@
+import { analyze } from './analyzer'
 import { bisection } from './bisect'
 
 
@@ -15,6 +16,7 @@ const UNITS: { [_: string]: string } = {
 export class Variable {
 
     private val: number = NaN
+    public order: number = -1
 
     constructor(
         public sym: string,
@@ -86,24 +88,34 @@ export class Equation {
         public dep: Variable[]
     ) { }
 
+    solvable(): boolean {
+        let unsolved = this.dep.filter($ => !$.solved())
+        return unsolved.length === 1
+    }
+
+    solve() {
+        if (this.solvable()) this.fit()
+    }
+
     fit() {
         const bounds = this.dep.map($ => $.bounds())
         let roots = bisection(this.zeroFunc, bounds)
         this.dep.forEach((v, i) => v.set(roots[i]))
     }
 
-    private missingDepCount(vars: Variable[]): number {
-        let nIncluded = this.dep.filter(v => vars.includes(v)).length
-        return this.dep.length - nIncluded
-    }
 
-    isSolvable(givens: Variable[]): boolean {
-        return this.missingDepCount(givens) <= 1
-    }
+    // private missingDepCount(vars: Variable[]): number {
+    //     let nIncluded = this.dep.filter(v => vars.includes(v)).length
+    //     return this.dep.length - nIncluded
+    // }
 
-    isSolved(givens: Variable[]): boolean {
-        return this.missingDepCount(givens) === 0
-    }
+    // isSolvable(givens: Variable[]): boolean {
+    //     return this.missingDepCount(givens) <= 1
+    // }
+
+    // isSolved(givens: Variable[]): boolean {
+    //     return this.missingDepCount(givens) === 0
+    // }
 
     print(show: Variable[] = []): string {
         let T = this.latex
@@ -129,32 +141,30 @@ export class EquSystem {
         this.variables.forEach($ => $.clear())
     }
 
-    solve() {
+    private solved(): boolean {
+        return this.variables.every($ => $.solved())
+    }
+
+    fit() {
         this.equations.forEach($ => $.fit())
     }
 
-    solveSingly(): void {
-        let found = this.variables.filter($ => $.solved())
-        console.log(found)
+    solve(): void {
         for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations) {
-                if (eq.isSolvable(found)) {
-                    eq.fit()
-                    found.push(...eq.dep)
-                }
-            }
-            if (this.variables.every(v => found.includes(v))) return
+            for (let eq of this.equations) eq.solve()
+            if (this.solved()) return
         }
-        throw "[solveSingly] the system is not solvable yet."
+        throw 'The system is not solvable yet.'
     }
+
 
 
     compare() {
         this.clearVals()
-        this.solve()
+        this.fit()
         let T1 = this.variables.map(v => v.getVal())
         this.clearVals()
-        this.solve()
+        this.fit()
         let T2 = this.variables.map(v => v.getVal())
         for (let i = 0; i < this.variables.length; i++) {
             let a = T1[i]
@@ -169,33 +179,34 @@ export class EquSystem {
     }
 
 
-    private canBeGivens(givens: Variable[]): boolean {
-        let found = [...givens]
-        for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations) {
-                if (eq.isSolvable(found)) found.push(...eq.dep)
-            }
-            if (this.variables.every(v => found.includes(v))) return true
-        }
-        return false
+
+    private analyze(): void {
+        analyze(this)
     }
 
-    private canBeUnknown(unknown: Variable, givens: Variable[]): boolean {
-        return !this.equations.some(eq => eq.isSolved([unknown, ...givens]))
+    private maxOrder(): number {
+        let orders = this.variables.map($ => $.order)
+        return Math.max(...orders)
     }
 
-    generateSolvables(): [givens: Variable[], ungivens: Variable[], unknown: Variable] {
-        let n = this.equations.length
-        for (let i = 0; i < 100; i++) {
-            let ungivens = RndPickN(this.variables, n)
-            let givens = this.variables.filter(v => !ungivens.includes(v))
-            if (!this.canBeGivens(givens)) continue
-            for (let u of ungivens) {
-                if (this.canBeUnknown(u, givens))
-                    return [givens, ungivens, u]
-            }
-        }
-        throw 'fail to generate sensible givens and unknown after 100 trials'
+    private givens(): Variable[] {
+        return this.variables.filter($ => $.order === 0)
+    }
+
+    private hiddens(): Variable[] {
+        let max = this.maxOrder()
+        return this.variables.filter($ => $.order > 0 && $.order < max)
+    }
+
+    private unknownables(): Variable[] {
+        let max = this.maxOrder()
+        return this.variables.filter($ => $.order === max)
+    }
+
+    generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable] {
+        this.analyze()
+        let unknown = RndPick(...this.unknownables())
+        return [this.givens(), this.hiddens(), unknown]
     }
 
 

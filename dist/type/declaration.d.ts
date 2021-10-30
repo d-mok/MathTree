@@ -236,16 +236,21 @@ declare function PolySimplify<V extends string>(poly: polynomial<V>): polynomial
  * ```
  */
 declare function PolyDegree<V extends string>(poly: polynomial<V>): number;
-declare module "Math/Builder/bisect" {
+declare module "Math/Builder/support/analyzer" {
+    import { EquSystem } from "Math/Builder/support/support";
+    export function analyze(sys: EquSystem): void;
+}
+declare module "Math/Builder/support/bisect" {
     export function bisection(f: Fun, ranges: [number, number][]): number[];
 }
-declare module "Math/Builder/support" {
+declare module "Math/Builder/support/support" {
     export class Variable {
         sym: string;
         name: string;
         range: [number, number];
         unit: string;
         private val;
+        order: number;
         constructor(sym: string, name: string, range: [number, number], unit?: string);
         bounds(): [number, number];
         set(val: number): void;
@@ -264,10 +269,9 @@ declare module "Math/Builder/support" {
         latex: string;
         dep: Variable[];
         constructor(zeroFunc: Fun, latex: string, dep: Variable[]);
+        solvable(): boolean;
+        solve(): void;
         fit(): void;
-        private missingDepCount;
-        isSolvable(givens: Variable[]): boolean;
-        isSolved(givens: Variable[]): boolean;
         print(show?: Variable[]): string;
     }
     export class EquSystem {
@@ -275,12 +279,16 @@ declare module "Math/Builder/support" {
         equations: Equation[];
         constructor(variables: Variable[], equations: Equation[]);
         private clearVals;
+        private solved;
+        fit(): void;
         solve(): void;
-        solveSingly(): void;
         compare(): void;
-        private canBeGivens;
-        private canBeUnknown;
-        generateSolvables(): [givens: Variable[], ungivens: Variable[], unknown: Variable];
+        private analyze;
+        private maxOrder;
+        private givens;
+        private hiddens;
+        private unknownables;
+        generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable];
         print(givens?: Variable[]): string;
     }
     export function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variable[];

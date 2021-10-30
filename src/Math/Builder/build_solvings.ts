@@ -1,4 +1,4 @@
-import { EquSystem, toEquations, toVariables } from './support';
+import { EquSystem, toEquations, toVariables } from './support/support';
 
 
 export function BuildSolvings(
@@ -13,22 +13,20 @@ export function BuildSolvings(
     let vars = toVariables(variables)
     let eqs = toEquations(equations, vars)
     let system = new EquSystem(vars, eqs)
-    system.solve()
+    system.fit()
 
-    let [givens, ungivens, unknown] = system.generateSolvables()
+    let [givens, hiddens, unknown] = system.generateSolvables()
     givens.forEach($ => $.round())
-    ungivens.forEach($ => $.clear())
-    ungivens.forEach($ => $.widen())
-    console.log('givens:',JSON.stringify(givens))
-    console.log('unknown:',JSON.stringify(unknown))
-    system.solveSingly()
+    hiddens.forEach($ => $.clear())
+    hiddens.forEach($ => $.widen())
+    system.solve()
 
     function sol(): string {
         let T = ""
         T += system.print() + " \\\\~\\\\ "
         T += system.print(givens) + " \\\\~\\\\ "
         T += "\\left\\{\\begin{aligned}"
-        for (let v of ungivens)
+        for (let v of hiddens)
             T += v.full() + ' \\\\ '
         T += " \\end{aligned}\\right."
         T = T.replaceAll("=", "&=")

@@ -1,4 +1,4 @@
-import { Equation, toVariables } from './support';
+import { Equation, toVariables } from './support/support';
 
 export function BuildSolving(
     variables: [sym: string, name: string, range: [number, number], unit: string][],
@@ -20,7 +20,7 @@ export function BuildSolving(
     givens.forEach($ => $.round())
     unknown.clear()
     unknown.widen()
-    eq.fit()
+    eq.solve()
 
     function sol(): string {
         let T = ""

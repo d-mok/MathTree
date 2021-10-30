@@ -1,4 +1,4 @@
-import { Variable,EquSystem, toEquations, toVariables } from './support';
+import { Variable,EquSystem, toEquations, toVariables } from './support/support';
 
 export function BuildTrend(
     variables: [sym: string, name: string, range: [number, number], unit: string][],

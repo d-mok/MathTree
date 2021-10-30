@@ -30695,7 +30695,278 @@ globalThis.QuadraticFromVertex = contract(QuadraticFromVertex).sign([owl.nonZero
 
 /***/ }),
 
-/***/ 1919:
+/***/ 411:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BuildSolving = void 0;
+const support_1 = __webpack_require__(3760);
+function BuildSolving(variables, func, latex) {
+    let vars = (0, support_1.toVariables)(variables);
+    let eq = new support_1.Equation(func, latex, vars);
+    eq.fit();
+    let unknown = RndPick(...vars);
+    let givens = vars.filter($ => $ !== unknown);
+    givens.forEach($ => $.round());
+    unknown.clear();
+    unknown.widen();
+    eq.solve();
+    function sol() {
+        let T = "";
+        T += "\\begin{aligned}";
+        T += eq.print() + ' \\\\ ';
+        T += eq.print(givens) + ' \\\\ ';
+        T += unknown.full();
+        T += " \\end{aligned}";
+        T = T.replaceAll("=", "&=");
+        return T;
+    }
+    return {
+        list: givens.map($ => $.whole()).join("\\\\"),
+        sol: sol(),
+        vars: vars.map(v => v === unknown ? v.sym : v.long()),
+        unknown: [
+            unknown.sym,
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ]
+    };
+}
+exports.BuildSolving = BuildSolving;
+
+
+/***/ }),
+
+/***/ 8236:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BuildSolvings = void 0;
+const support_1 = __webpack_require__(3760);
+function BuildSolvings(variables, equations) {
+    let vars = (0, support_1.toVariables)(variables);
+    let eqs = (0, support_1.toEquations)(equations, vars);
+    let system = new support_1.EquSystem(vars, eqs);
+    system.fit();
+    let [givens, hiddens, unknown] = system.generateSolvables();
+    givens.forEach($ => $.round());
+    hiddens.forEach($ => $.clear());
+    hiddens.forEach($ => $.widen());
+    system.solve();
+    function sol() {
+        let T = "";
+        T += system.print() + " \\\\~\\\\ ";
+        T += system.print(givens) + " \\\\~\\\\ ";
+        T += "\\left\\{\\begin{aligned}";
+        for (let v of hiddens)
+            T += v.full() + ' \\\\ ';
+        T += " \\end{aligned}\\right.";
+        T = T.replaceAll("=", "&=");
+        return T;
+    }
+    return {
+        list: givens.map($ => $.whole()).join("\\\\"),
+        sol: sol(),
+        vars: vars.map(v => givens.includes(v) ? v.long() : v.sym),
+        unknown: [
+            unknown.sym,
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ]
+    };
+}
+exports.BuildSolvings = BuildSolvings;
+
+
+/***/ }),
+
+/***/ 6871:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BuildTrend = void 0;
+const support_1 = __webpack_require__(3760);
+function BuildTrend(variables, equations, constancies = []) {
+    for (let i = 0; i < 100; i++) {
+        try {
+            let vars = (0, support_1.toVariables)(variables);
+            let eqs = (0, support_1.toEquations)(equations, vars);
+            let system = new support_1.EquSystem(vars, eqs);
+            let constancy = [];
+            if (constancies.length === 0) {
+                constancy = RndPickN(vars, variables.length - equations.length - 1);
+            }
+            else {
+                constancy = RndPick(...constancies).map($ => vars.find(v => v.sym === $));
+            }
+            for (let v of constancy) {
+                let [min, max] = v.range;
+                let val = RndR(min, max);
+                v.range = [val, val];
+            }
+            system.compare();
+            let changed = vars.filter(v => !constancy.includes(v) && v.getVal() !== 0);
+            if (changed.length === 0)
+                throw "";
+            let control = RndPick(...changed);
+            let responses = vars.filter(v => !constancy.includes(v) && v !== control);
+            return {
+                constancy: constancy.map(v => [v.sym, v.name]),
+                control: [control.sym, control.name, control.getVal()],
+                responses: responses.map(v => [v.sym, v.name, v.getVal()])
+            };
+        }
+        catch { }
+        finally { }
+    }
+    throw 'fail to build trend after 100 trial';
+}
+exports.BuildTrend = BuildTrend;
+
+
+/***/ }),
+
+/***/ 6661:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const build_solving_1 = __webpack_require__(411);
+const build_solvings_1 = __webpack_require__(8236);
+const build_trend_1 = __webpack_require__(6871);
+globalThis.BuildSolving = build_solving_1.BuildSolving;
+globalThis.BuildSolvings = build_solvings_1.BuildSolvings;
+globalThis.BuildTrend = build_trend_1.BuildTrend;
+
+
+/***/ }),
+
+/***/ 5334:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.analyze = void 0;
+class varlet {
+    constructor(sym) {
+        this.sym = sym;
+        this.solved = false;
+        this.order = -1;
+    }
+    solve(order) {
+        this.solved = true;
+        this.order = order;
+    }
+    reset() {
+        this.solved = false;
+        this.order = -1;
+    }
+}
+class equlet {
+    constructor(dep) {
+        this.dep = dep;
+    }
+    solved() {
+        return this.dep.filter($ => $.solved);
+    }
+    unsolved() {
+        return this.dep.filter($ => !$.solved);
+    }
+    nextOrder() {
+        let orders = this.solved().map($ => $.order);
+        if (orders.length === 0)
+            return 0;
+        return Math.max(...orders) + 1;
+    }
+    doable() {
+        return this.unsolved().length === 1;
+    }
+    done() {
+        return this.unsolved().length === 0;
+    }
+    do() {
+        let order = this.nextOrder();
+        this.unsolved().forEach($ => $.solve(order));
+    }
+    tryDo() {
+        if (this.doable())
+            this.do();
+    }
+}
+class EquSystemAnalyzer {
+    constructor(vars, equations) {
+        this.vars = vars;
+        this.equations = equations;
+    }
+    reset() {
+        this.vars.forEach($ => $.reset());
+    }
+    setZeroth(vars) {
+        this.reset();
+        vars.forEach($ => $.solve(0));
+    }
+    pickZeroth() {
+        let nGivens = this.vars.length - this.equations.length;
+        let zeroths = RndPickN(this.vars, nGivens);
+        this.setZeroth(zeroths);
+    }
+    orders() {
+        return this.vars.map($ => $.order);
+    }
+    maxOrder() {
+        return Math.max(...this.orders());
+    }
+    done() {
+        return this.equations.every($ => $.done());
+    }
+    do() {
+        for (let i = 0; i < 10; i++) {
+            for (let eq of this.equations)
+                eq.tryDo();
+        }
+    }
+    searchOnce() {
+        this.pickZeroth();
+        this.do();
+    }
+    search() {
+        for (let i = 0; i < 100; i++) {
+            this.searchOnce();
+            if (this.done())
+                return;
+        }
+        throw '[Analyzer] Fail to search a solving path.';
+    }
+}
+function analyze(sys) {
+    let varlets = sys.variables.map($ => new varlet($.sym));
+    function findVarlet(sym) {
+        return varlets.find($ => $.sym === sym);
+    }
+    let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))));
+    let analyzer = new EquSystemAnalyzer(varlets, equlets);
+    analyzer.search();
+    let orders = analyzer.orders();
+    for (let i = 0; i < orders.length; i++) {
+        sys.variables[i].order = orders[i];
+    }
+}
+exports.analyze = analyze;
+
+
+/***/ }),
+
+/***/ 6190:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -30758,171 +31029,15 @@ exports.bisection = bisection;
 
 /***/ }),
 
-/***/ 411:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BuildSolving = void 0;
-const support_1 = __webpack_require__(2996);
-function BuildSolving(variables, func, latex) {
-    let vars = (0, support_1.toVariables)(variables);
-    let eq = new support_1.Equation(func, latex, vars);
-    eq.fit();
-    let unknown = RndPick(...vars);
-    let givens = vars.filter($ => $ !== unknown);
-    givens.forEach($ => $.round());
-    unknown.clear();
-    unknown.widen();
-    eq.fit();
-    function sol() {
-        let T = "";
-        T += "\\begin{aligned}";
-        T += eq.print() + ' \\\\ ';
-        T += eq.print(givens) + ' \\\\ ';
-        T += unknown.full();
-        T += " \\end{aligned}";
-        T = T.replaceAll("=", "&=");
-        return T;
-    }
-    return {
-        list: givens.map($ => $.whole()).join("\\\\"),
-        sol: sol(),
-        vars: vars.map(v => v === unknown ? v.sym : v.long()),
-        unknown: [
-            unknown.sym,
-            unknown.name,
-            unknown.getVal(),
-            unknown.unit
-        ]
-    };
-}
-exports.BuildSolving = BuildSolving;
-
-
-/***/ }),
-
-/***/ 8236:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BuildSolvings = void 0;
-const support_1 = __webpack_require__(2996);
-function BuildSolvings(variables, equations) {
-    let vars = (0, support_1.toVariables)(variables);
-    let eqs = (0, support_1.toEquations)(equations, vars);
-    let system = new support_1.EquSystem(vars, eqs);
-    system.solve();
-    let [givens, ungivens, unknown] = system.generateSolvables();
-    givens.forEach($ => $.round());
-    ungivens.forEach($ => $.clear());
-    ungivens.forEach($ => $.widen());
-    console.log('givens:', JSON.stringify(givens));
-    console.log('unknown:', JSON.stringify(unknown));
-    system.solveSingly();
-    function sol() {
-        let T = "";
-        T += system.print() + " \\\\~\\\\ ";
-        T += system.print(givens) + " \\\\~\\\\ ";
-        T += "\\left\\{\\begin{aligned}";
-        for (let v of ungivens)
-            T += v.full() + ' \\\\ ';
-        T += " \\end{aligned}\\right.";
-        T = T.replaceAll("=", "&=");
-        return T;
-    }
-    return {
-        list: givens.map($ => $.whole()).join("\\\\"),
-        sol: sol(),
-        vars: vars.map(v => givens.includes(v) ? v.long() : v.sym),
-        unknown: [
-            unknown.sym,
-            unknown.name,
-            unknown.getVal(),
-            unknown.unit
-        ]
-    };
-}
-exports.BuildSolvings = BuildSolvings;
-
-
-/***/ }),
-
-/***/ 6871:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BuildTrend = void 0;
-const support_1 = __webpack_require__(2996);
-function BuildTrend(variables, equations, constancies = []) {
-    for (let i = 0; i < 100; i++) {
-        try {
-            let vars = (0, support_1.toVariables)(variables);
-            let eqs = (0, support_1.toEquations)(equations, vars);
-            let system = new support_1.EquSystem(vars, eqs);
-            let constancy = [];
-            if (constancies.length === 0) {
-                constancy = RndPickN(vars, variables.length - equations.length - 1);
-            }
-            else {
-                constancy = RndPick(...constancies).map($ => vars.find(v => v.sym === $));
-            }
-            for (let v of constancy) {
-                let [min, max] = v.range;
-                let val = RndR(min, max);
-                v.range = [val, val];
-            }
-            system.compare();
-            let changed = vars.filter(v => !constancy.includes(v) && v.getVal() !== 0);
-            if (changed.length === 0)
-                throw "";
-            let control = RndPick(...changed);
-            let responses = vars.filter(v => !constancy.includes(v) && v !== control);
-            return {
-                constancy: constancy.map(v => [v.sym, v.name]),
-                control: [control.sym, control.name, control.getVal()],
-                responses: responses.map(v => [v.sym, v.name, v.getVal()])
-            };
-        }
-        catch { }
-        finally { }
-    }
-    throw 'fail to build trend after 100 trial';
-}
-exports.BuildTrend = BuildTrend;
-
-
-/***/ }),
-
-/***/ 6661:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const build_solving_1 = __webpack_require__(411);
-const build_solvings_1 = __webpack_require__(8236);
-const build_trend_1 = __webpack_require__(6871);
-globalThis.BuildSolving = build_solving_1.BuildSolving;
-globalThis.BuildSolvings = build_solvings_1.BuildSolvings;
-globalThis.BuildTrend = build_trend_1.BuildTrend;
-
-
-/***/ }),
-
-/***/ 2996:
+/***/ 3760:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.Variable = void 0;
-const bisect_1 = __webpack_require__(1919);
+const analyzer_1 = __webpack_require__(5334);
+const bisect_1 = __webpack_require__(6190);
 const UNITS = {
     'Pa': '~\\text{Pa}',
     'm3': '~\\text{m}^3',
@@ -30938,6 +31053,7 @@ class Variable {
         this.range = range;
         this.unit = unit;
         this.val = NaN;
+        this.order = -1;
         this.unit = UNITS[this.unit] ?? this.unit;
     }
     bounds() {
@@ -30987,21 +31103,29 @@ class Equation {
         this.latex = latex;
         this.dep = dep;
     }
+    solvable() {
+        let unsolved = this.dep.filter($ => !$.solved());
+        return unsolved.length === 1;
+    }
+    solve() {
+        if (this.solvable())
+            this.fit();
+    }
     fit() {
         const bounds = this.dep.map($ => $.bounds());
         let roots = (0, bisect_1.bisection)(this.zeroFunc, bounds);
         this.dep.forEach((v, i) => v.set(roots[i]));
     }
-    missingDepCount(vars) {
-        let nIncluded = this.dep.filter(v => vars.includes(v)).length;
-        return this.dep.length - nIncluded;
-    }
-    isSolvable(givens) {
-        return this.missingDepCount(givens) <= 1;
-    }
-    isSolved(givens) {
-        return this.missingDepCount(givens) === 0;
-    }
+    // private missingDepCount(vars: Variable[]): number {
+    //     let nIncluded = this.dep.filter(v => vars.includes(v)).length
+    //     return this.dep.length - nIncluded
+    // }
+    // isSolvable(givens: Variable[]): boolean {
+    //     return this.missingDepCount(givens) <= 1
+    // }
+    // isSolved(givens: Variable[]): boolean {
+    //     return this.missingDepCount(givens) === 0
+    // }
     print(show = []) {
         let T = this.latex;
         for (let v of this.dep) {
@@ -31023,29 +31147,27 @@ class EquSystem {
     clearVals() {
         this.variables.forEach($ => $.clear());
     }
-    solve() {
+    solved() {
+        return this.variables.every($ => $.solved());
+    }
+    fit() {
         this.equations.forEach($ => $.fit());
     }
-    solveSingly() {
-        let found = this.variables.filter($ => $.solved());
+    solve() {
         for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations) {
-                if (eq.isSolvable(found)) {
-                    eq.fit();
-                    found.push(...eq.dep);
-                }
-            }
-            if (this.variables.every(v => found.includes(v)))
+            for (let eq of this.equations)
+                eq.solve();
+            if (this.solved())
                 return;
         }
-        throw "[solveSingly] the system is not solvable yet.";
+        throw 'The system is not solvable yet.';
     }
     compare() {
         this.clearVals();
-        this.solve();
+        this.fit();
         let T1 = this.variables.map(v => v.getVal());
         this.clearVals();
-        this.solve();
+        this.fit();
         let T2 = this.variables.map(v => v.getVal());
         for (let i = 0; i < this.variables.length; i++) {
             let a = T1[i];
@@ -31060,34 +31182,28 @@ class EquSystem {
                 this.variables[i].set(-1);
         }
     }
-    canBeGivens(givens) {
-        let found = [...givens];
-        for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations) {
-                if (eq.isSolvable(found))
-                    found.push(...eq.dep);
-            }
-            if (this.variables.every(v => found.includes(v)))
-                return true;
-        }
-        return false;
+    analyze() {
+        (0, analyzer_1.analyze)(this);
     }
-    canBeUnknown(unknown, givens) {
-        return !this.equations.some(eq => eq.isSolved([unknown, ...givens]));
+    maxOrder() {
+        let orders = this.variables.map($ => $.order);
+        return Math.max(...orders);
+    }
+    givens() {
+        return this.variables.filter($ => $.order === 0);
+    }
+    hiddens() {
+        let max = this.maxOrder();
+        return this.variables.filter($ => $.order > 0 && $.order < max);
+    }
+    unknownables() {
+        let max = this.maxOrder();
+        return this.variables.filter($ => $.order === max);
     }
     generateSolvables() {
-        let n = this.equations.length;
-        for (let i = 0; i < 100; i++) {
-            let ungivens = RndPickN(this.variables, n);
-            let givens = this.variables.filter(v => !ungivens.includes(v));
-            if (!this.canBeGivens(givens))
-                continue;
-            for (let u of ungivens) {
-                if (this.canBeUnknown(u, givens))
-                    return [givens, ungivens, u];
-            }
-        }
-        throw 'fail to generate sensible givens and unknown after 100 trials';
+        this.analyze();
+        let unknown = RndPick(...this.unknownables());
+        return [this.givens(), this.hiddens(), unknown];
     }
     print(givens = []) {
         let T = "";
