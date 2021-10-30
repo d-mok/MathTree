@@ -88,8 +88,12 @@ class EquSystemAnalyzer {
         return Math.max(...this.orders())
     }
 
+    rich(): boolean {
+        return this.maxOrder() === this.equations.length
+    }
+
     done(): boolean {
-        return this.equations.every($ => $.done())
+        return this.equations.every($ => $.done()) && this.rich()
     }
 
     do(): void {

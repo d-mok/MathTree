@@ -194,8 +194,7 @@ export class EquSystem {
     }
 
     private hiddens(): Variable[] {
-        let max = this.maxOrder()
-        return this.variables.filter($ => $.order > 0 && $.order < max)
+        return this.variables.filter($ => $.order > 0 )
     }
 
     private unknownables(): Variable[] {

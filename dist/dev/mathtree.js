@@ -31193,8 +31193,7 @@ class EquSystem {
         return this.variables.filter($ => $.order === 0);
     }
     hiddens() {
-        let max = this.maxOrder();
-        return this.variables.filter($ => $.order > 0 && $.order < max);
+        return this.variables.filter($ => $.order > 0);
     }
     unknownables() {
         let max = this.maxOrder();
