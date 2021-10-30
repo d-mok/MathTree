@@ -4,7 +4,12 @@ import { EquSystem,toEquations, toVariables } from './support';
 export function BuildSolvings(
     variables: [sym: string, name: string, range: [number, number], unit: string][],
     equations: [func: Fun, latex: string, dep: string[]][],
-) {
+): {
+    list: string,
+    sol: string,
+    vars: string[],
+    unknown: [sym: string, name: string, val: number, unit: string]
+} {
 
     let vars = toVariables(variables)
     let eqs = toEquations(equations, vars)

@@ -31,20 +31,28 @@ export class Variable {
         return this.range
     }
 
-    set(val: number): void{
-        this.val=val
+    set(val: number): void {
+        this.val = val
     }
 
-    round(): void{
-        this.val = Round(this.val,3)
+    round(): void {
+        this.val = Round(this.val, 3)
     }
 
-    clear(): void{
-        this.val=NaN
+    clear(): void {
+        this.val = NaN
     }
 
-    getVal(): number{
+    getVal(): number {
         return this.val
+    }
+
+    widen(fraction: number = 0.1): void {
+        let [min, max] = this.range
+        this.range = [
+            min - Math.abs(min * fraction),
+            max + Math.abs(max * fraction)
+        ]
     }
 
     short(): string { // val

@@ -1,10 +1,15 @@
-import { Equation,toVariables } from './support';
+import { Equation, toVariables } from './support';
 
 export function BuildSolving(
     variables: [sym: string, name: string, range: [number, number], unit: string][],
     func: Fun,
     latex: string,
-) {
+): {
+    list: string,
+    sol: string,
+    vars: string[],
+    unknown: [sym: string, name: string, val: number, unit: string]
+} {
 
     let vars = toVariables(variables)
     let eq = new Equation(func, latex, vars)

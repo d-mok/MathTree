@@ -252,6 +252,7 @@ declare module "Math/Builder/support" {
         round(): void;
         clear(): void;
         getVal(): number;
+        widen(fraction?: number): void;
         short(): string;
         long(): string;
         full(): string;
@@ -288,7 +289,7 @@ declare module "Math/Builder/build_solving" {
         list: string;
         sol: string;
         vars: string[];
-        unknown: (string | number)[];
+        unknown: [sym: string, name: string, val: number, unit: string];
     };
 }
 declare module "Math/Builder/build_solvings" {
@@ -296,7 +297,7 @@ declare module "Math/Builder/build_solvings" {
         list: string;
         sol: string;
         vars: string[];
-        unknown: (string | number)[];
+        unknown: [sym: string, name: string, val: number, unit: string];
     };
 }
 declare module "Math/Builder/build_trend" {
