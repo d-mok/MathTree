@@ -30712,7 +30712,7 @@ function bisection(f, ranges) {
             if (f(...a) > 0)
                 return a;
         }
-        throw "[bisection] can't find positive point";
+        throw "[bisection] can't find positive point with ranges:" + JSON.stringify(ranges);
     }
     function randomNegPoint() {
         for (let i = 0; i < 1000; i++) {
@@ -30720,7 +30720,7 @@ function bisection(f, ranges) {
             if (f(...b) < 0)
                 return b;
         }
-        throw "[bisection] can't find negative point";
+        throw "[bisection] can't find negative point with ranges:" + JSON.stringify(ranges);
     }
     let a = randomPosPoint();
     let b = randomNegPoint();

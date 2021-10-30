@@ -10,7 +10,7 @@ export function bisection(f: Fun, ranges: [number, number][]): number[] {
             let a = randomPoint()
             if (f(...a) > 0) return a
         }
-        throw "[bisection] can't find positive point"
+        throw "[bisection] can't find positive point with ranges:" + JSON.stringify(ranges)
     }
 
 
@@ -19,7 +19,7 @@ export function bisection(f: Fun, ranges: [number, number][]): number[] {
             let b = randomPoint()
             if (f(...b) < 0) return b
         }
-        throw "[bisection] can't find negative point"
+        throw "[bisection] can't find negative point with ranges:" + JSON.stringify(ranges)
     }
 
     let a = randomPosPoint()
