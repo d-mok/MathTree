@@ -91,7 +91,9 @@ export function BuildRatio(
                 ["", "Before", "After"],
                 ["$" + given.sym, G1, G2],
                 ["$" + unknown.sym, U1, U2],
-            ]
+            ],
+            columns: '|c||c|c|',
+            rows: '|r||r|r|',
         })
     }
 

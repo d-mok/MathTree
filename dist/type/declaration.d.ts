@@ -253,6 +253,7 @@ declare module "Math/Builder/support/support" {
         order: number;
         private store;
         private freezed;
+        subscript: string;
         constructor(sym: string, name: string, range: [number, number], unit?: string);
         bounds(): [number, number];
         set(val: number): void;
@@ -269,6 +270,7 @@ declare module "Math/Builder/support/support" {
         long(): string;
         full(): string;
         whole(): string;
+        symbol(): string;
     }
     export class Equation {
         zeroFunc: Fun;
@@ -328,12 +330,23 @@ declare module "Math/Builder/build_trend" {
         sol: string;
     };
 }
+declare module "Math/Builder/build_ratio" {
+    export function BuildRatio(variables: [sym: string, name: string, range: [number, number], unit: string][], equation: [func: Fun, latex: string]): {
+        table: string;
+        sol: string;
+        constants: string[][];
+        given: (string | number)[];
+        unknown: (string | number)[];
+    };
+}
 declare module "Math/Builder/index" {
     import { BuildSolve as $BuildSolve } from "Math/Builder/build_solve";
     import { BuildTrend as $BuildTrend } from "Math/Builder/build_trend";
+    import { BuildRatio as $BuildRatio } from "Math/Builder/build_ratio";
     global {
         var BuildSolve: typeof $BuildSolve;
         var BuildTrend: typeof $BuildTrend;
+        var BuildRatio: typeof $BuildRatio;
     }
 }
 declare module "Math/index" {
@@ -617,15 +630,6 @@ declare function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
  * ```
  */
 declare function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
-declare module "Math/Builder/build_ratio" {
-    export function BuildRatio(variables: [sym: string, name: string, range: [number, number], unit: string][], equation: [func: Fun, latex: string]): {
-        table: string;
-        sol: string;
-        constants: string[][];
-        given: (string | number)[];
-        unknown: (string | number)[];
-    };
-}
 declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
 /**
  * @category Assertion
