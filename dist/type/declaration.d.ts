@@ -617,6 +617,15 @@ declare function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
  * ```
  */
 declare function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
+declare module "Math/Builder/build_ratio" {
+    export function BuildRatio(variables: [sym: string, name: string, range: [number, number], unit: string][], equation: [func: Fun, latex: string]): {
+        table: string;
+        sol: string;
+        constants: string[][];
+        given: (string | number)[];
+        unknown: (string | number)[];
+    };
+}
 declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
 /**
  * @category Assertion

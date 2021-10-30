@@ -227,10 +227,11 @@ export class EquSystem {
             let a = T1[i]
             let b = T2[i]
             let p = (b - a) / ((Math.abs(a) + Math.abs(b)) / 2)
-            let threshold = 0.0000001
-            if (Math.abs(p) <= threshold) this.variables[i].set(0)
-            if (p > threshold) this.variables[i].set(1)
-            if (p < -threshold) this.variables[i].set(-1)
+            let THRESHOLD = 0.0000001
+            let v = 0
+            if (p > THRESHOLD) v = 1
+            if (p < -THRESHOLD) v = -1
+            this.variables[i].set(v)
         }
         let responses = this.variables.filter($ => ![control, ...constants].includes($))
         return [constants, control, responses]
@@ -271,7 +272,7 @@ export function toEquations(
 export function toEquSystem(
     variables: [sym: string, name: string, range: [number, number], unit: string][],
     equations: [func: Fun, latex: string][],
-) :EquSystem{
+): EquSystem {
     let vars = toVariables(variables)
     let eqs = toEquations(equations, vars)
     return new EquSystem(vars, eqs)
