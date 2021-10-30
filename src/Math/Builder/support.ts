@@ -135,6 +135,7 @@ export class EquSystem {
 
     solveSingly(): void {
         let found = this.variables.filter($ => $.solved())
+        console.log(found)
         for (let i = 0; i < 10; i++) {
             for (let eq of this.equations) {
                 if (eq.isSolvable(found)) {
