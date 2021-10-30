@@ -17,6 +17,8 @@ export class Variable {
 
     private val: number = NaN
     public order: number = -1
+    private store: number[] = []
+    private freezed: boolean = false
 
     constructor(
         public sym: string,
@@ -34,15 +36,21 @@ export class Variable {
     }
 
     set(val: number): void {
+        if (this.freezed) return
         this.val = val
     }
 
+    random(): void{
+        let [min,max] = this.range
+        this.set(RndR(min, max))
+    }
+
     round(): void {
-        this.val = Round(this.val, 3)
+        this.set(Round(this.val, 3))
     }
 
     clear(): void {
-        this.val = NaN
+        this.set(NaN)
     }
 
     getVal(): number {
@@ -59,6 +67,24 @@ export class Variable {
             min - Math.abs(min * fraction),
             max + Math.abs(max * fraction)
         ]
+    }
+
+    save(): void {
+        this.store.push(this.val)
+        this.clear()
+    }
+
+    restore(): void {
+        let val = this.store.pop()
+        this.set(val ?? this.val)
+    }
+
+    freeze(): void {
+        this.freezed = true
+    }
+
+    unfreeze(): void {
+        this.freezed = false
     }
 
     short(): string { // val
@@ -97,6 +123,7 @@ export class Equation {
         if (this.solvable()) this.fit()
     }
 
+
     fit() {
         const bounds = this.dep.map($ => $.bounds())
         let roots = bisection(this.zeroFunc, bounds)
@@ -104,18 +131,6 @@ export class Equation {
     }
 
 
-    // private missingDepCount(vars: Variable[]): number {
-    //     let nIncluded = this.dep.filter(v => vars.includes(v)).length
-    //     return this.dep.length - nIncluded
-    // }
-
-    // isSolvable(givens: Variable[]): boolean {
-    //     return this.missingDepCount(givens) <= 1
-    // }
-
-    // isSolved(givens: Variable[]): boolean {
-    //     return this.missingDepCount(givens) === 0
-    // }
 
     print(show: Variable[] = []): string {
         let T = this.latex
@@ -141,6 +156,14 @@ export class EquSystem {
         this.variables.forEach($ => $.clear())
     }
 
+    private saveVals(): void {
+        this.variables.forEach($ => $.save())
+    }
+
+    private restoreVals(): void {
+        this.variables.forEach($ => $.restore())
+    }
+
     private solved(): boolean {
         return this.variables.every($ => $.solved())
     }
@@ -158,14 +181,18 @@ export class EquSystem {
     }
 
 
+    private findRoots(): number[] {
+        this.saveVals()
+        this.fit()
+        let roots = this.variables.map($ => $.getVal())
+        this.restoreVals()
+        return roots
+    }
 
-    compare() {
-        this.clearVals()
-        this.fit()
-        let T1 = this.variables.map(v => v.getVal())
-        this.clearVals()
-        this.fit()
-        let T2 = this.variables.map(v => v.getVal())
+    compare(constants: Variable[]) {
+        constants.
+        let T1 = this.findRoots()
+        let T2 = this.findRoots()
         for (let i = 0; i < this.variables.length; i++) {
             let a = T1[i]
             let b = T2[i]
@@ -194,7 +221,7 @@ export class EquSystem {
     }
 
     private hiddens(): Variable[] {
-        return this.variables.filter($ => $.order > 0 )
+        return this.variables.filter($ => $.order > 0)
     }
 
     private unknownables(): Variable[] {
