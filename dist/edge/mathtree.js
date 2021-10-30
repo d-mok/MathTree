@@ -4929,15 +4929,15 @@ var __WEBPACK_AMD_DEFINE_RESULT__;;(function (globalScope) {
 	if(true)
 		module.exports = factory(__webpack_require__(527));
 	else {}
-})((typeof self !== 'undefined' ? self : this), function(__WEBPACK_EXTERNAL_MODULE__974__) {
+})((typeof self !== 'undefined' ? self : this), function(__WEBPACK_EXTERNAL_MODULE__771__) {
 return /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 974:
+/***/ 771:
 /***/ (function(module) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__974__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__771__;
 
 /***/ })
 
@@ -5008,7 +5008,7 @@ __nested_webpack_require_940__.d(__webpack_exports__, {
 });
 
 // EXTERNAL MODULE: external "katex"
-var external_katex_ = __nested_webpack_require_940__(974);
+var external_katex_ = __nested_webpack_require_940__(771);
 var external_katex_default = /*#__PURE__*/__nested_webpack_require_940__.n(external_katex_);
 ;// CONCATENATED MODULE: ./contrib/auto-render/splitAtDelimiters.js
 /* eslint no-constant-condition:0 */
@@ -5242,7 +5242,7 @@ var renderMathInElement = function renderMathInElement(elem, options) {
 
 /* harmony default export */ var auto_render = (renderMathInElement);
 }();
-__webpack_exports__ = __webpack_exports__.default;
+__webpack_exports__ = __webpack_exports__["default"];
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
@@ -11590,7 +11590,11 @@ function buildHTMLUnbreakable(children, options) {
 
   var strut = buildHTML_makeSpan(["strut"]);
   strut.style.height = body.height + body.depth + "em";
-  strut.style.verticalAlign = -body.depth + "em";
+
+  if (body.depth) {
+    strut.style.verticalAlign = -body.depth + "em";
+  }
+
   body.children.unshift(strut);
   return body;
 }
@@ -11685,7 +11689,10 @@ function buildHTML(tree, options) {
   if (tagChild) {
     var strut = tagChild.children[0];
     strut.style.height = htmlNode.height + htmlNode.depth + "em";
-    strut.style.verticalAlign = -htmlNode.depth + "em";
+
+    if (htmlNode.depth) {
+      strut.style.verticalAlign = -htmlNode.depth + "em";
+    }
   }
 
   return htmlNode;
@@ -15407,7 +15414,8 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
   var nc = 0;
   var body = new Array(nr);
   var hlines = [];
-  var ruleThickness = Math.max(options.fontMetrics().arrayRuleWidth, options.minRuleThickness // User override.
+  var ruleThickness = Math.max( // From LaTeX \showthe\arrayrulewidth. Equals 0.04 em.
+  options.fontMetrics().arrayRuleWidth, options.minRuleThickness // User override.
   ); // Horizontal spacing
 
   var pt = 1 / options.fontMetrics().ptPerEm;
@@ -15562,7 +15570,13 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
         separator.style.borderRightWidth = ruleThickness + "em";
         separator.style.borderRightStyle = lineType;
         separator.style.margin = "0 -" + ruleThickness / 2 + "em";
-        separator.style.verticalAlign = -(totalHeight - offset) + "em";
+
+        var _shift = totalHeight - offset;
+
+        if (_shift) {
+          separator.style.verticalAlign = -_shift + "em";
+        }
+
         cols.push(separator);
       } else {
         throw new src_ParseError("Invalid separator type: " + colDescr.separator);
@@ -15599,14 +15613,14 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
         continue;
       }
 
-      var _shift = row.pos - offset;
+      var _shift2 = row.pos - offset;
 
       elem.depth = row.depth;
       elem.height = row.height;
       col.push({
         type: "elem",
         elem: elem,
-        shift: _shift
+        shift: _shift2
       });
     }
 
@@ -17813,7 +17827,11 @@ defineFunction({
 
     var strut = buildCommon.makeSpan(["strut"]);
     strut.style.height = node.height + node.depth + "em";
-    strut.style.verticalAlign = -node.depth + "em";
+
+    if (node.depth) {
+      strut.style.verticalAlign = -node.depth + "em";
+    }
+
     node.children.unshift(strut); // Next, prevent vertical misplacement when next to something tall.
     // This code resolves issue #1234
 
@@ -22610,7 +22628,8 @@ var Parser = /*#__PURE__*/function () {
       var argType = funcData.argTypes && funcData.argTypes[i];
       var isOptional = i < funcData.numOptionalArgs;
 
-      if (funcData.primitive && argType == null || funcData.type === "sqrt" && i === 1 && optArgs[0] == null) {
+      if (funcData.primitive && argType == null || // \sqrt expands into primitive if optional argument doesn't exist
+      funcData.type === "sqrt" && i === 1 && optArgs[0] == null) {
         argType = "primitive";
       }
 
@@ -23333,7 +23352,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
   /**
    * Current KaTeX version
    */
-  version: "0.13.18",
+  version: "0.13.22",
 
   /**
    * Renders the given LaTeX into an HTML+MathML combination, and adds
@@ -23426,7 +23445,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
 
 
 /* harmony default export */ var katex_webpack = (katex);
-__webpack_exports__ = __webpack_exports__.default;
+__webpack_exports__ = __webpack_exports__["default"];
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
@@ -30012,17 +30031,17 @@ function build(funcName, func) {
     return holder[funcName];
 }
 function and(pds, name) {
-    name ?? (name = '(' + pds.map(f => f.name).join(' && ') + ')');
+    name ??= '(' + pds.map(f => f.name).join(' && ') + ')';
     return build(name, (_) => pds.every(p => p(_)));
 }
 exports.and = and;
 function or(pds, name) {
-    name ?? (name = '(' + pds.map(f => f.name).join(' || ') + ')');
+    name ??= '(' + pds.map(f => f.name).join(' || ') + ')';
     return build(name, (_) => pds.some(p => p(_)));
 }
 exports.or = or;
 function every(pd, name) {
-    name ?? (name = '(every.' + pd.name + ')');
+    name ??= '(every.' + pd.name + ')';
     return build(name, (_) => (0, exports.array)(_) && _.every(pd));
 }
 exports.every = every;
@@ -31604,7 +31623,7 @@ function StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }) {
             return unit(label).toString();
         return label;
     }
-    labels ?? (labels = [...data]);
+    labels ??= [...data];
     let parsedLabels = labels.map(parse);
     let initTen = ten(Math.min(...data));
     let endTen = ten(Math.max(...data));
@@ -31646,9 +31665,9 @@ globalThis.StemAndLeaf = contract(StemAndLeaf)
  */
 function Table({ content, columns, rows, stretch }) {
     let nCol = Math.max(...content.map($ => $.length));
-    columns ?? (columns = Array(nCol + 1).fill("|").join("c"));
+    columns ??= Array(nCol + 1).fill("|").join("c");
     let nRow = content.length;
-    rows ?? (rows = Array(nRow + 1).fill("|").join("r"));
+    rows ??= Array(nRow + 1).fill("|").join("r");
     let rowsArr = rows.split('r').map($ => $
         .replace(/\|/g, " \\hline ")
         .replace(/\:/g, " \\hdashline "));
@@ -33859,7 +33878,7 @@ globalThis.ListRange = contract(ListRange).sign([owl.int]);
  */
 function Freqs(data, nums) {
     let ls = toList(data);
-    nums ?? (nums = ListRange(...data));
+    nums ??= ListRange(...data);
     let arr = [];
     for (let v of nums) {
         arr.push(ls.freq(v));
@@ -36431,8 +36450,8 @@ class AutoPenCls {
         let A_ = [Q1, 0];
         let B_ = [Q2, 0];
         let C_ = [Q3, 0];
-        start ?? (start = Q0 - (Q4 - Q0) * 0.2);
-        end ?? (end = Q4 + (Q4 - Q0) * 0.2);
+        start ??= Q0 - (Q4 - Q0) * 0.2;
+        end ??= Q4 + (Q4 - Q0) * 0.2;
         pen.range.set([start, end], [-(t + 1), t + 1]);
         pen.size.set(size, 1);
         if (showTick) {
@@ -38353,7 +38372,7 @@ class PenCls extends sapphire_js_1.Pencil {
     rightAngle(A, O, B, size = 12) {
         A = this.pj(A);
         O = this.pj(O);
-        B ?? (B = Rotate(A, 90, O));
+        B ??= Rotate(A, 90, O);
         B = this.pj(B);
         this.drawRightAngle(A, O, B, size);
     }

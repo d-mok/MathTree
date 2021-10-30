@@ -2,13 +2,13 @@ import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 
-declare global {
-    namespace jest {
-        interface Matchers<R> {
-            toBeDeepCloseTo(...args: any[]): R;
-        }
-    }
-}
+// declare global {
+//     namespace jest {
+//         interface Matchers<R> {
+//             toBeDeepCloseTo(...args: any[]): R;
+//         }
+//     }
+// }
 
 
 test('Slope', () => {

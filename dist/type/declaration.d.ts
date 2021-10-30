@@ -516,6 +516,62 @@ declare function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
  * ```
  */
 declare function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
+declare type Fun = (...args: number[]) => number;
+declare function bisection(f: Fun, ranges: [number, number][]): number[];
+declare const UNITS: {
+    [_: string]: string;
+};
+declare class Variable {
+    sym: string;
+    name: string;
+    range: [number, number];
+    unit: string;
+    val: number;
+    constructor(sym: string, name: string, range: [number, number], unit?: string);
+    bounds(): [number, number];
+    short(): string;
+    long(): string;
+    full(): string;
+    whole(): string;
+}
+declare class Equation {
+    zeroFunc: Fun;
+    latex: string;
+    dep: Variable[];
+    constructor(zeroFunc: Fun, latex: string, dep: Variable[]);
+    fit(): void;
+    print(givens?: Variable[]): string;
+}
+declare class EquSystem {
+    variables: Variable[];
+    equations: Equation[];
+    constructor(variables: Variable[], equations: Equation[]);
+    solve(): void;
+    compare(): void;
+    private canBeGivens;
+    private canBeUnknown;
+    genGivens(): [givens: Variable[], ungivens: Variable[], unknown: Variable];
+    print(givens?: Variable[]): string;
+}
+declare function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variable[];
+declare function toEquations(eqs: [func: Fun, latex: string, dep: string[]][], vars: Variable[]): Equation[];
+declare function SubstitutionQuestionBuilder(variables: [sym: string, name: string, range: [number, number], unit: string][], func: Fun, latex: string): {
+    list: string;
+    sol: string;
+    vars: string[];
+    unknown: (string | number)[];
+};
+declare function MultiSubstitutionQuestionBuilder(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][]): {
+    list: string;
+    sol: string;
+    vars: string[];
+    unknown: (string | number)[];
+};
+declare function TrendQuestionBuilder(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][], constancies?: string[][]): {
+    constancy: string[][];
+    control: (string | number)[];
+    responses: (string | number)[][];
+};
 declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
 /**
  * @category Assertion
@@ -829,15 +885,7 @@ declare function arccos(x: number): number;
  * ```
  */
 declare function arctan(x: number): number;
-declare module "Math/Code/Geometry.test" {
-    global {
-        namespace jest {
-            interface Matchers<R> {
-                toBeDeepCloseTo(...args: any[]): R;
-            }
-        }
-    }
-}
+declare module "Math/Code/Geometry.test" { }
 /**
  * @category Geometry
  * @return the slope of AB
