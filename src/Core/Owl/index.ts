@@ -187,18 +187,18 @@ function build<F extends predicate>(funcName: string, func: F): F {
 
 
 export function and(pds: predicate[], name?: string): predicate {
-    name = name ?? '(' + pds.map(f => f.name).join(' && ') + ')'
+    name ??= '(' + pds.map(f => f.name).join(' && ') + ')'
     return build(name, (_: unknown) => pds.every(p => p(_)))
 }
 
 
 export function or(pds: predicate[], name?: string): predicate {
-    name = name ?? '(' + pds.map(f => f.name).join(' || ') + ')'
+    name ??= '(' + pds.map(f => f.name).join(' || ') + ')'
     return build(name, (_: unknown) => pds.some(p => p(_)))
 }
 
 export function every(pd: predicate, name?: string): predicate {
-    name = name ?? '(every.' + pd.name + ')'
+    name ??= '(every.' + pd.name + ')'
     return build(name, (_: unknown) => array(_) && _.every(pd))
 }
 

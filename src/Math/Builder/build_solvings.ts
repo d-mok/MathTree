@@ -33,6 +33,8 @@ export function BuildSolvings(
         return T
     }
 
+    console.log(vars)
+
     return {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),

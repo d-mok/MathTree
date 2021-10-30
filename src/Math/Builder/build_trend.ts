@@ -7,7 +7,8 @@ export function BuildTrend(
 ): {
     constants: [sym: string, name: string][],
     control: [sym: string, name: string, trend: string, change: number],
-    responses: [sym: string, name: string, trend: string, change: number][]
+    responses: [sym: string, name: string, trend: string, change: number][],
+    sol: string
 } {
 
     let vars = toVariables(variables)
@@ -24,11 +25,11 @@ export function BuildTrend(
         return "[error]"
     }
 
+
     return {
         constants: constants.map(v => [v.sym, v.name]),
         control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
-        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()])
+        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
+        sol: system.print().replaceAll("=", "&=")
     }
 }
-
-

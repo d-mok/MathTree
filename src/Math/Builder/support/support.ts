@@ -11,11 +11,6 @@ const UNITS: { [_: string]: string } = {
     '°C': '~\\text{°C}',
 }
 
-declare global {
-    interface String {
-        replaceAll(...args:any[]): string;
-    }
-}
 
 
 

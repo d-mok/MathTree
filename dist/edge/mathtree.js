@@ -7267,6 +7267,7 @@ function assertSpan(group) {
     "8764": [-0.10889, 0.39111, 0, 0, 0.89444],
     "8768": [0.19444, 0.69444, 0, 0, 0.31944],
     "8771": [0.00222, 0.50222, 0, 0, 0.89444],
+    "8773": [0.027, 0.638, 0, 0, 0.894],
     "8776": [0.02444, 0.52444, 0, 0, 0.89444],
     "8781": [0.00222, 0.50222, 0, 0, 0.89444],
     "8801": [0.00222, 0.50222, 0, 0, 0.89444],
@@ -7784,7 +7785,7 @@ function assertSpan(group) {
     "8764": [-0.13313, 0.36687, 0, 0, 0.77778],
     "8768": [0.19444, 0.69444, 0, 0, 0.27778],
     "8771": [-0.03625, 0.46375, 0, 0, 0.77778],
-    "8773": [-0.022, 0.589, 0, 0, 1.0],
+    "8773": [-0.022, 0.589, 0, 0, 0.778],
     "8776": [-0.01688, 0.48312, 0, 0, 0.77778],
     "8781": [-0.03625, 0.46375, 0, 0, 0.77778],
     "8784": [-0.133, 0.673, 0, 0, 0.778],
@@ -23352,7 +23353,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
   /**
    * Current KaTeX version
    */
-  version: "0.13.22",
+  version: "0.13.23",
 
   /**
    * Renders the given LaTeX into an HTML+MathML combination, and adds
@@ -30031,17 +30032,17 @@ function build(funcName, func) {
     return holder[funcName];
 }
 function and(pds, name) {
-    name ??= '(' + pds.map(f => f.name).join(' && ') + ')';
+    name ?? (name = '(' + pds.map(f => f.name).join(' && ') + ')');
     return build(name, (_) => pds.every(p => p(_)));
 }
 exports.and = and;
 function or(pds, name) {
-    name ??= '(' + pds.map(f => f.name).join(' || ') + ')';
+    name ?? (name = '(' + pds.map(f => f.name).join(' || ') + ')');
     return build(name, (_) => pds.some(p => p(_)));
 }
 exports.or = or;
 function every(pd, name) {
-    name ??= '(every.' + pd.name + ')';
+    name ?? (name = '(every.' + pd.name + ')');
     return build(name, (_) => (0, exports.array)(_) && _.every(pd));
 }
 exports.every = every;
@@ -30769,6 +30770,7 @@ function BuildSolvings(variables, equations) {
         T = T.replaceAll("=", "&=");
         return T;
     }
+    console.log(vars);
     return {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
@@ -30811,7 +30813,8 @@ function BuildTrend(variables, equations, trendWords = ['increases', 'is unchang
     return {
         constants: constants.map(v => [v.sym, v.name]),
         control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
-        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()])
+        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
+        sol: system.print().replaceAll("=", "&=")
     };
 }
 exports.BuildTrend = BuildTrend;
@@ -32171,7 +32174,7 @@ function StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }) {
             return unit(label).toString();
         return label;
     }
-    labels ??= [...data];
+    labels ?? (labels = [...data]);
     let parsedLabels = labels.map(parse);
     let initTen = ten(Math.min(...data));
     let endTen = ten(Math.max(...data));
@@ -32213,9 +32216,9 @@ globalThis.StemAndLeaf = contract(StemAndLeaf)
  */
 function Table({ content, columns, rows, stretch }) {
     let nCol = Math.max(...content.map($ => $.length));
-    columns ??= Array(nCol + 1).fill("|").join("c");
+    columns ?? (columns = Array(nCol + 1).fill("|").join("c"));
     let nRow = content.length;
-    rows ??= Array(nRow + 1).fill("|").join("r");
+    rows ?? (rows = Array(nRow + 1).fill("|").join("r"));
     let rowsArr = rows.split('r').map($ => $
         .replace(/\|/g, " \\hline ")
         .replace(/\:/g, " \\hdashline "));
@@ -34426,7 +34429,7 @@ globalThis.ListRange = contract(ListRange).sign([owl.int]);
  */
 function Freqs(data, nums) {
     let ls = toList(data);
-    nums ??= ListRange(...data);
+    nums ?? (nums = ListRange(...data));
     let arr = [];
     for (let v of nums) {
         arr.push(ls.freq(v));
@@ -36999,8 +37002,8 @@ class AutoPenCls {
         let A_ = [Q1, 0];
         let B_ = [Q2, 0];
         let C_ = [Q3, 0];
-        start ??= Q0 - (Q4 - Q0) * 0.2;
-        end ??= Q4 + (Q4 - Q0) * 0.2;
+        start ?? (start = Q0 - (Q4 - Q0) * 0.2);
+        end ?? (end = Q4 + (Q4 - Q0) * 0.2);
         pen.range.set([start, end], [-(t + 1), t + 1]);
         pen.size.set(size, 1);
         if (showTick) {
@@ -38921,7 +38924,7 @@ class PenCls extends sapphire_js_1.Pencil {
     rightAngle(A, O, B, size = 12) {
         A = this.pj(A);
         O = this.pj(O);
-        B ??= Rotate(A, 90, O);
+        B ?? (B = Rotate(A, 90, O));
         B = this.pj(B);
         this.drawRightAngle(A, O, B, size);
     }
