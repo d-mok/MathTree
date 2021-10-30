@@ -7267,6 +7267,7 @@ function assertSpan(group) {
     "8764": [-0.10889, 0.39111, 0, 0, 0.89444],
     "8768": [0.19444, 0.69444, 0, 0, 0.31944],
     "8771": [0.00222, 0.50222, 0, 0, 0.89444],
+    "8773": [0.027, 0.638, 0, 0, 0.894],
     "8776": [0.02444, 0.52444, 0, 0, 0.89444],
     "8781": [0.00222, 0.50222, 0, 0, 0.89444],
     "8801": [0.00222, 0.50222, 0, 0, 0.89444],
@@ -7784,7 +7785,7 @@ function assertSpan(group) {
     "8764": [-0.13313, 0.36687, 0, 0, 0.77778],
     "8768": [0.19444, 0.69444, 0, 0, 0.27778],
     "8771": [-0.03625, 0.46375, 0, 0, 0.77778],
-    "8773": [-0.022, 0.589, 0, 0, 1.0],
+    "8773": [-0.022, 0.589, 0, 0, 0.778],
     "8776": [-0.01688, 0.48312, 0, 0, 0.77778],
     "8781": [-0.03625, 0.46375, 0, 0, 0.77778],
     "8784": [-0.133, 0.673, 0, 0, 0.778],
@@ -23352,7 +23353,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
   /**
    * Current KaTeX version
    */
-  version: "0.13.22",
+  version: "0.13.23",
 
   /**
    * Renders the given LaTeX into an HTML+MathML combination, and adds
@@ -30031,17 +30032,17 @@ function build(funcName, func) {
     return holder[funcName];
 }
 function and(pds, name) {
-    name ??= '(' + pds.map(f => f.name).join(' && ') + ')';
+    name ?? (name = '(' + pds.map(f => f.name).join(' && ') + ')');
     return build(name, (_) => pds.every(p => p(_)));
 }
 exports.and = and;
 function or(pds, name) {
-    name ??= '(' + pds.map(f => f.name).join(' || ') + ')';
+    name ?? (name = '(' + pds.map(f => f.name).join(' || ') + ')');
     return build(name, (_) => pds.some(p => p(_)));
 }
 exports.or = or;
 function every(pd, name) {
-    name ??= '(every.' + pd.name + ')';
+    name ?? (name = '(every.' + pd.name + ')');
     return build(name, (_) => (0, exports.array)(_) && _.every(pd));
 }
 exports.every = every;
@@ -30695,16 +30696,66 @@ globalThis.QuadraticFromVertex = contract(QuadraticFromVertex).sign([owl.nonZero
 
 /***/ }),
 
-/***/ 411:
+/***/ 5033:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BuildSolving = void 0;
+exports.BuildSolve = void 0;
 const support_1 = __webpack_require__(3760);
-function BuildSolving(variables, func, latex) {
+const build_solve_single_1 = __webpack_require__(9974);
+function BuildSolve(variables, equations) {
+    if (equations.length === 1) {
+        return (0, build_solve_single_1.BuildSolveSingle)(variables, equations[0]);
+    }
+    let system = (0, support_1.toEquSystem)(variables, equations);
+    system.fit();
+    let [givens, hiddens, unknown] = system.generateSolvables();
+    givens.forEach($ => $.round());
+    hiddens.forEach($ => $.clear());
+    hiddens.forEach($ => $.widen());
+    system.solve();
+    function sol() {
+        let T = "";
+        T += system.print() + " \\\\~\\\\ ";
+        T += system.print(givens) + " \\\\~\\\\ ";
+        T += "\\left\\{\\begin{aligned}";
+        for (let v of hiddens)
+            T += v.full() + ' \\\\ ';
+        T += " \\end{aligned}\\right.";
+        T = T.replaceAll("=", "&=");
+        return T;
+    }
+    console.log(system);
+    return {
+        list: givens.map($ => $.whole()).join("\\\\"),
+        sol: sol(),
+        vars: system.variables.map(v => givens.includes(v) ? v.long() : v.sym),
+        unknown: [
+            unknown.sym,
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ]
+    };
+}
+exports.BuildSolve = BuildSolve;
+
+
+/***/ }),
+
+/***/ 9974:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BuildSolveSingle = void 0;
+const support_1 = __webpack_require__(3760);
+function BuildSolveSingle(variables, equation) {
     let vars = (0, support_1.toVariables)(variables);
+    let [func, latex] = equation;
     let eq = new support_1.Equation(func, latex, vars);
     eq.fit();
     let unknown = RndPick(...vars);
@@ -30735,53 +30786,7 @@ function BuildSolving(variables, func, latex) {
         ]
     };
 }
-exports.BuildSolving = BuildSolving;
-
-
-/***/ }),
-
-/***/ 8236:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BuildSolvings = void 0;
-const support_1 = __webpack_require__(3760);
-function BuildSolvings(variables, equations) {
-    let vars = (0, support_1.toVariables)(variables);
-    let eqs = (0, support_1.toEquations)(equations, vars);
-    let system = new support_1.EquSystem(vars, eqs);
-    system.fit();
-    let [givens, hiddens, unknown] = system.generateSolvables();
-    givens.forEach($ => $.round());
-    hiddens.forEach($ => $.clear());
-    hiddens.forEach($ => $.widen());
-    system.solve();
-    function sol() {
-        let T = "";
-        T += system.print() + " \\\\~\\\\ ";
-        T += system.print(givens) + " \\\\~\\\\ ";
-        T += "\\left\\{\\begin{aligned}";
-        for (let v of hiddens)
-            T += v.full() + ' \\\\ ';
-        T += " \\end{aligned}\\right.";
-        T = T.replaceAll("=", "&=");
-        return T;
-    }
-    return {
-        list: givens.map($ => $.whole()).join("\\\\"),
-        sol: sol(),
-        vars: vars.map(v => givens.includes(v) ? v.long() : v.sym),
-        unknown: [
-            unknown.sym,
-            unknown.name,
-            unknown.getVal(),
-            unknown.unit
-        ]
-    };
-}
-exports.BuildSolvings = BuildSolvings;
+exports.BuildSolveSingle = BuildSolveSingle;
 
 
 /***/ }),
@@ -30795,9 +30800,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildTrend = void 0;
 const support_1 = __webpack_require__(3760);
 function BuildTrend(variables, equations, trendWords = ['increases', 'is unchanged', 'decreases']) {
-    let vars = (0, support_1.toVariables)(variables);
-    let eqs = (0, support_1.toEquations)(equations, vars);
-    let system = new support_1.EquSystem(vars, eqs);
+    let system = (0, support_1.toEquSystem)(variables, equations);
     let [constants, control, responses] = system.generateTrend();
     function toWord(change) {
         if (change > 0)
@@ -30811,7 +30814,8 @@ function BuildTrend(variables, equations, trendWords = ['increases', 'is unchang
     return {
         constants: constants.map(v => [v.sym, v.name]),
         control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
-        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()])
+        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
+        sol: system.print().replaceAll("=", "&=")
     };
 }
 exports.BuildTrend = BuildTrend;
@@ -30825,11 +30829,9 @@ exports.BuildTrend = BuildTrend;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const build_solving_1 = __webpack_require__(411);
-const build_solvings_1 = __webpack_require__(8236);
+const build_solve_1 = __webpack_require__(5033);
 const build_trend_1 = __webpack_require__(6871);
-globalThis.BuildSolving = build_solving_1.BuildSolving;
-globalThis.BuildSolvings = build_solvings_1.BuildSolvings;
+globalThis.BuildSolve = build_solve_1.BuildSolve;
 globalThis.BuildTrend = build_trend_1.BuildTrend;
 
 
@@ -30916,7 +30918,7 @@ class EquSystemAnalyzer {
         return this.maxOrder() === this.equations.length;
     }
     done() {
-        return this.equations.every($ => $.done()) && this.rich();
+        return this.equations.every($ => $.done()) && this.requiredRich ? this.rich() : true;
     }
     do() {
         for (let i = 0; i < 10; i++) {
@@ -31024,7 +31026,7 @@ exports.bisection = bisection;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.Variable = void 0;
+exports.toEquSystem = exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.Variable = void 0;
 const analyzer_1 = __webpack_require__(5334);
 const bisect_1 = __webpack_require__(6190);
 const UNITS = {
@@ -31233,12 +31235,31 @@ function toVariables(vars) {
 }
 exports.toVariables = toVariables;
 function toEquations(eqs, vars) {
-    function getVars(dep) {
-        return dep.map($ => vars.find(v => v.sym === $));
-    }
-    return eqs.map(([func, latex, dep]) => new Equation(func, latex, getVars(dep)));
+    return eqs.map(([func, latex]) => new Equation(func, latex, getDeps(func, vars)));
 }
 exports.toEquations = toEquations;
+function toEquSystem(variables, equations) {
+    let vars = toVariables(variables);
+    let eqs = toEquations(equations, vars);
+    return new EquSystem(vars, eqs);
+}
+exports.toEquSystem = toEquSystem;
+function getSignature(func) {
+    const fnStr = func.toString();
+    return fnStr
+        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+        .replaceAll(" ", "")
+        .split(",");
+}
+function getDeps(func, vars) {
+    let dep = getSignature(func);
+    return dep.map($ => {
+        let v = vars.find(v => v.sym === $);
+        if (v === undefined)
+            throw "Fail to get dependency for func: " + func;
+        return v;
+    });
+}
 
 
 /***/ }),
@@ -32171,7 +32192,7 @@ function StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }) {
             return unit(label).toString();
         return label;
     }
-    labels ??= [...data];
+    labels ?? (labels = [...data]);
     let parsedLabels = labels.map(parse);
     let initTen = ten(Math.min(...data));
     let endTen = ten(Math.max(...data));
@@ -32213,9 +32234,9 @@ globalThis.StemAndLeaf = contract(StemAndLeaf)
  */
 function Table({ content, columns, rows, stretch }) {
     let nCol = Math.max(...content.map($ => $.length));
-    columns ??= Array(nCol + 1).fill("|").join("c");
+    columns ?? (columns = Array(nCol + 1).fill("|").join("c"));
     let nRow = content.length;
-    rows ??= Array(nRow + 1).fill("|").join("r");
+    rows ?? (rows = Array(nRow + 1).fill("|").join("r"));
     let rowsArr = rows.split('r').map($ => $
         .replace(/\|/g, " \\hline ")
         .replace(/\:/g, " \\hdashline "));
@@ -34426,7 +34447,7 @@ globalThis.ListRange = contract(ListRange).sign([owl.int]);
  */
 function Freqs(data, nums) {
     let ls = toList(data);
-    nums ??= ListRange(...data);
+    nums ?? (nums = ListRange(...data));
     let arr = [];
     for (let v of nums) {
         arr.push(ls.freq(v));
@@ -36999,8 +37020,8 @@ class AutoPenCls {
         let A_ = [Q1, 0];
         let B_ = [Q2, 0];
         let C_ = [Q3, 0];
-        start ??= Q0 - (Q4 - Q0) * 0.2;
-        end ??= Q4 + (Q4 - Q0) * 0.2;
+        start ?? (start = Q0 - (Q4 - Q0) * 0.2);
+        end ?? (end = Q4 + (Q4 - Q0) * 0.2);
         pen.range.set([start, end], [-(t + 1), t + 1]);
         pen.size.set(size, 1);
         if (showTick) {
@@ -38921,7 +38942,7 @@ class PenCls extends sapphire_js_1.Pencil {
     rightAngle(A, O, B, size = 12) {
         A = this.pj(A);
         O = this.pj(O);
-        B ??= Rotate(A, 90, O);
+        B ?? (B = Rotate(A, 90, O));
         B = this.pj(B);
         this.drawRightAngle(A, O, B, size);
     }

@@ -63,7 +63,7 @@ class EquSystemAnalyzer {
     constructor(
         public vars: varlet[],
         public equations: equlet[],
-        private requiredRich:boolean
+        private requiredRich: boolean
     ) { }
 
     reset(): void {
@@ -94,7 +94,7 @@ class EquSystemAnalyzer {
     }
 
     done(): boolean {
-        return this.equations.every($ => $.done()) && this.rich()
+        return this.equations.every($ => $.done()) && this.requiredRich ? this.rich() : true
     }
 
     do(): void {
@@ -111,14 +111,14 @@ class EquSystemAnalyzer {
     search() {
         for (let i = 0; i < 100; i++) {
             this.searchOnce()
-            if (this.done()) return 
+            if (this.done()) return
         }
         throw '[Analyzer] Fail to search a solving path.'
     }
 
 }
 
-export function analyze(sys: EquSystem, rich:boolean): void{
+export function analyze(sys: EquSystem, rich: boolean): void {
     let varlets = sys.variables.map($ => new varlet($.sym))
     function findVarlet(sym: string): varlet {
         return varlets.find($ => $.sym === sym)!
@@ -127,7 +127,7 @@ export function analyze(sys: EquSystem, rich:boolean): void{
     let analyzer = new EquSystemAnalyzer(varlets, equlets, rich)
     analyzer.search()
     let orders = analyzer.orders()
-    for (let i = 0; i < orders.length; i++){
+    for (let i = 0; i < orders.length; i++) {
         sys.variables[i].order = orders[i]
     }
 }

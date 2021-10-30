@@ -30696,16 +30696,66 @@ globalThis.QuadraticFromVertex = contract(QuadraticFromVertex).sign([owl.nonZero
 
 /***/ }),
 
-/***/ 411:
+/***/ 5033:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BuildSolving = void 0;
+exports.BuildSolve = void 0;
 const support_1 = __webpack_require__(3760);
-function BuildSolving(variables, func, latex) {
+const build_solve_single_1 = __webpack_require__(9974);
+function BuildSolve(variables, equations) {
+    if (equations.length === 1) {
+        return (0, build_solve_single_1.BuildSolveSingle)(variables, equations[0]);
+    }
+    let system = (0, support_1.toEquSystem)(variables, equations);
+    system.fit();
+    let [givens, hiddens, unknown] = system.generateSolvables();
+    givens.forEach($ => $.round());
+    hiddens.forEach($ => $.clear());
+    hiddens.forEach($ => $.widen());
+    system.solve();
+    function sol() {
+        let T = "";
+        T += system.print() + " \\\\~\\\\ ";
+        T += system.print(givens) + " \\\\~\\\\ ";
+        T += "\\left\\{\\begin{aligned}";
+        for (let v of hiddens)
+            T += v.full() + ' \\\\ ';
+        T += " \\end{aligned}\\right.";
+        T = T.replaceAll("=", "&=");
+        return T;
+    }
+    console.log(system);
+    return {
+        list: givens.map($ => $.whole()).join("\\\\"),
+        sol: sol(),
+        vars: system.variables.map(v => givens.includes(v) ? v.long() : v.sym),
+        unknown: [
+            unknown.sym,
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ]
+    };
+}
+exports.BuildSolve = BuildSolve;
+
+
+/***/ }),
+
+/***/ 9974:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BuildSolveSingle = void 0;
+const support_1 = __webpack_require__(3760);
+function BuildSolveSingle(variables, equation) {
     let vars = (0, support_1.toVariables)(variables);
+    let [func, latex] = equation;
     let eq = new support_1.Equation(func, latex, vars);
     eq.fit();
     let unknown = RndPick(...vars);
@@ -30736,54 +30786,7 @@ function BuildSolving(variables, func, latex) {
         ]
     };
 }
-exports.BuildSolving = BuildSolving;
-
-
-/***/ }),
-
-/***/ 8236:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BuildSolvings = void 0;
-const support_1 = __webpack_require__(3760);
-function BuildSolvings(variables, equations) {
-    let vars = (0, support_1.toVariables)(variables);
-    let eqs = (0, support_1.toEquations)(equations, vars);
-    let system = new support_1.EquSystem(vars, eqs);
-    system.fit();
-    let [givens, hiddens, unknown] = system.generateSolvables();
-    givens.forEach($ => $.round());
-    hiddens.forEach($ => $.clear());
-    hiddens.forEach($ => $.widen());
-    system.solve();
-    function sol() {
-        let T = "";
-        T += system.print() + " \\\\~\\\\ ";
-        T += system.print(givens) + " \\\\~\\\\ ";
-        T += "\\left\\{\\begin{aligned}";
-        for (let v of hiddens)
-            T += v.full() + ' \\\\ ';
-        T += " \\end{aligned}\\right.";
-        T = T.replaceAll("=", "&=");
-        return T;
-    }
-    console.log(vars);
-    return {
-        list: givens.map($ => $.whole()).join("\\\\"),
-        sol: sol(),
-        vars: vars.map(v => givens.includes(v) ? v.long() : v.sym),
-        unknown: [
-            unknown.sym,
-            unknown.name,
-            unknown.getVal(),
-            unknown.unit
-        ]
-    };
-}
-exports.BuildSolvings = BuildSolvings;
+exports.BuildSolveSingle = BuildSolveSingle;
 
 
 /***/ }),
@@ -30797,9 +30800,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildTrend = void 0;
 const support_1 = __webpack_require__(3760);
 function BuildTrend(variables, equations, trendWords = ['increases', 'is unchanged', 'decreases']) {
-    let vars = (0, support_1.toVariables)(variables);
-    let eqs = (0, support_1.toEquations)(equations, vars);
-    let system = new support_1.EquSystem(vars, eqs);
+    let system = (0, support_1.toEquSystem)(variables, equations);
     let [constants, control, responses] = system.generateTrend();
     function toWord(change) {
         if (change > 0)
@@ -30828,11 +30829,9 @@ exports.BuildTrend = BuildTrend;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const build_solving_1 = __webpack_require__(411);
-const build_solvings_1 = __webpack_require__(8236);
+const build_solve_1 = __webpack_require__(5033);
 const build_trend_1 = __webpack_require__(6871);
-globalThis.BuildSolving = build_solving_1.BuildSolving;
-globalThis.BuildSolvings = build_solvings_1.BuildSolvings;
+globalThis.BuildSolve = build_solve_1.BuildSolve;
 globalThis.BuildTrend = build_trend_1.BuildTrend;
 
 
@@ -30919,7 +30918,7 @@ class EquSystemAnalyzer {
         return this.maxOrder() === this.equations.length;
     }
     done() {
-        return this.equations.every($ => $.done()) && this.rich();
+        return this.equations.every($ => $.done()) && this.requiredRich ? this.rich() : true;
     }
     do() {
         for (let i = 0; i < 10; i++) {
@@ -31027,7 +31026,7 @@ exports.bisection = bisection;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.Variable = void 0;
+exports.toEquSystem = exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.Variable = void 0;
 const analyzer_1 = __webpack_require__(5334);
 const bisect_1 = __webpack_require__(6190);
 const UNITS = {
@@ -31236,12 +31235,31 @@ function toVariables(vars) {
 }
 exports.toVariables = toVariables;
 function toEquations(eqs, vars) {
-    function getVars(dep) {
-        return dep.map($ => vars.find(v => v.sym === $));
-    }
-    return eqs.map(([func, latex, dep]) => new Equation(func, latex, getVars(dep)));
+    return eqs.map(([func, latex]) => new Equation(func, latex, getDeps(func, vars)));
 }
 exports.toEquations = toEquations;
+function toEquSystem(variables, equations) {
+    let vars = toVariables(variables);
+    let eqs = toEquations(equations, vars);
+    return new EquSystem(vars, eqs);
+}
+exports.toEquSystem = toEquSystem;
+function getSignature(func) {
+    const fnStr = func.toString();
+    return fnStr
+        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+        .replaceAll(" ", "")
+        .split(",");
+}
+function getDeps(func, vars) {
+    let dep = getSignature(func);
+    return dep.map($ => {
+        let v = vars.find(v => v.sym === $);
+        if (v === undefined)
+            throw "Fail to get dependency for func: " + func;
+        return v;
+    });
+}
 
 
 /***/ }),

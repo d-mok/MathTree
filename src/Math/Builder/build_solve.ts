@@ -1,18 +1,21 @@
-import { EquSystem, toEquations, toVariables } from './support/support';
+import { toEquSystem } from './support/support';
+import { BuildSolveSingle } from './build_solve_single'
 
-
-export function BuildSolvings(
+export function BuildSolve(
     variables: [sym: string, name: string, range: [number, number], unit: string][],
-    equations: [func: Fun, latex: string, dep: string[]][],
+    equations: [func: Fun, latex: string][],
 ): {
     list: string,
     sol: string,
     vars: string[],
     unknown: [sym: string, name: string, val: number, unit: string]
 } {
-    let vars = toVariables(variables)
-    let eqs = toEquations(equations, vars)
-    let system = new EquSystem(vars, eqs)
+
+    if (equations.length === 1) {
+        return BuildSolveSingle(variables, equations[0])
+    }
+
+    let system = toEquSystem(variables, equations)
     system.fit()
 
     let [givens, hiddens, unknown] = system.generateSolvables()
@@ -33,12 +36,12 @@ export function BuildSolvings(
         return T
     }
 
-    console.log(vars)
+    console.log(system)
 
     return {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
-        vars: vars.map(v => givens.includes(v) ? v.long() : v.sym),
+        vars: system.variables.map(v => givens.includes(v) ? v.long() : v.sym),
         unknown: [
             unknown.sym,
             unknown.name,

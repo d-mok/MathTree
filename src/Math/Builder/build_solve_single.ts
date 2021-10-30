@@ -1,9 +1,8 @@
 import { Equation, toVariables } from './support/support';
 
-export function BuildSolving(
+export function BuildSolveSingle(
     variables: [sym: string, name: string, range: [number, number], unit: string][],
-    func: Fun,
-    latex: string,
+    equation: [func: Fun, latex: string],
 ): {
     list: string,
     sol: string,
@@ -12,6 +11,7 @@ export function BuildSolving(
 } {
 
     let vars = toVariables(variables)
+    let [func, latex] = equation
     let eq = new Equation(func, latex, vars)
     eq.fit()
 

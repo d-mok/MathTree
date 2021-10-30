@@ -251,13 +251,47 @@ export class EquSystem {
 
 
 
-export function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variable[] {
-    return vars.map(([sym, name, range, unit]) => new Variable(sym, name, range, unit))
+export function toVariables(
+    vars: [sym: string, name: string, range: [number, number], unit: string][]
+): Variable[] {
+    return vars.map(([sym, name, range, unit]) =>
+        new Variable(sym, name, range, unit))
 }
 
-export function toEquations(eqs: [func: Fun, latex: string, dep: string[]][], vars: Variable[]): Equation[] {
-    function getVars(dep: string[]): Variable[] {
-        return dep.map($ => vars.find(v => v.sym === $)!)
-    }
-    return eqs.map(([func, latex, dep]) => new Equation(func, latex, getVars(dep)))
+export function toEquations(
+    eqs: [func: Fun, latex: string][],
+    vars: Variable[]
+): Equation[] {
+
+    return eqs.map(([func, latex]) =>
+        new Equation(func, latex, getDeps(func, vars))
+    )
 }
+
+export function toEquSystem(
+    variables: [sym: string, name: string, range: [number, number], unit: string][],
+    equations: [func: Fun, latex: string][],
+) :EquSystem{
+    let vars = toVariables(variables)
+    let eqs = toEquations(equations, vars)
+    return new EquSystem(vars, eqs)
+}
+
+
+function getSignature(func: Fun): string[] {
+    const fnStr = func.toString()
+    return fnStr
+        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+        .replaceAll(" ", "")
+        .split(",")
+}
+
+function getDeps(func: Fun, vars: Variable[]): Variable[] {
+    let dep = getSignature(func)
+    return dep.map($ => {
+        let v = vars.find(v => v.sym === $)
+        if (v === undefined) throw "Fail to get dependency for func: " + func
+        return v
+    })
+}
+

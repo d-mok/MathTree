@@ -301,18 +301,19 @@ declare module "Math/Builder/support/support" {
         print(givens?: Variable[]): string;
     }
     export function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variable[];
-    export function toEquations(eqs: [func: Fun, latex: string, dep: string[]][], vars: Variable[]): Equation[];
+    export function toEquations(eqs: [func: Fun, latex: string][], vars: Variable[]): Equation[];
+    export function toEquSystem(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string][]): EquSystem;
 }
-declare module "Math/Builder/build_solving" {
-    export function BuildSolving(variables: [sym: string, name: string, range: [number, number], unit: string][], func: Fun, latex: string): {
+declare module "Math/Builder/build_solve_single" {
+    export function BuildSolveSingle(variables: [sym: string, name: string, range: [number, number], unit: string][], equation: [func: Fun, latex: string]): {
         list: string;
         sol: string;
         vars: string[];
         unknown: [sym: string, name: string, val: number, unit: string];
     };
 }
-declare module "Math/Builder/build_solvings" {
-    export function BuildSolvings(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][]): {
+declare module "Math/Builder/build_solve" {
+    export function BuildSolve(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string][]): {
         list: string;
         sol: string;
         vars: string[];
@@ -320,19 +321,18 @@ declare module "Math/Builder/build_solvings" {
     };
 }
 declare module "Math/Builder/build_trend" {
-    export function BuildTrend(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][], trendWords?: [string, string, string]): {
+    export function BuildTrend(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string][], trendWords?: [string, string, string]): {
         constants: [sym: string, name: string][];
         control: [sym: string, name: string, trend: string, change: number];
         responses: [sym: string, name: string, trend: string, change: number][];
+        sol: string;
     };
 }
 declare module "Math/Builder/index" {
-    import { BuildSolving as $BuildSolving } from "Math/Builder/build_solving";
-    import { BuildSolvings as $BuildSolvings } from "Math/Builder/build_solvings";
+    import { BuildSolve as $BuildSolve } from "Math/Builder/build_solve";
     import { BuildTrend as $BuildTrend } from "Math/Builder/build_trend";
     global {
-        var BuildSolving: typeof $BuildSolving;
-        var BuildSolvings: typeof $BuildSolvings;
+        var BuildSolve: typeof $BuildSolve;
         var BuildTrend: typeof $BuildTrend;
     }
 }

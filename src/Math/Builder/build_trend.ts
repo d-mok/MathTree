@@ -1,8 +1,8 @@
-import { Variable, EquSystem, toEquations, toVariables } from './support/support';
+import { toEquSystem } from './support/support';
 
 export function BuildTrend(
     variables: [sym: string, name: string, range: [number, number], unit: string][],
-    equations: [func: Fun, latex: string, dep: string[]][],
+    equations: [func: Fun, latex: string][],
     trendWords: [string, string, string] = ['increases', 'is unchanged', 'decreases']
 ): {
     constants: [sym: string, name: string][],
@@ -11,10 +11,7 @@ export function BuildTrend(
     sol: string
 } {
 
-    let vars = toVariables(variables)
-    let eqs = toEquations(equations, vars)
-    let system = new EquSystem(vars, eqs)
-
+    let system = toEquSystem(variables, equations)
 
     let [constants, control, responses] = system.generateTrend()
 
