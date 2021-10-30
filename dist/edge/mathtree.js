@@ -30696,6 +30696,101 @@ globalThis.QuadraticFromVertex = contract(QuadraticFromVertex).sign([owl.nonZero
 
 /***/ }),
 
+/***/ 8620:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BuildRatio = void 0;
+const support_1 = __webpack_require__(3760);
+function BuildRatio(variables, equation) {
+    let vars = (0, support_1.toVariables)(variables);
+    let [func, latex] = equation;
+    let eq = new support_1.Equation(func, latex, vars);
+    eq.fit();
+    let [given, unknown, ...constants] = RndShuffle(...vars);
+    given.round();
+    unknown.round();
+    let g1 = given.getVal();
+    let u1 = unknown.getVal();
+    constants.forEach($ => $.clear());
+    constants.forEach($ => $.widen());
+    eq.fit();
+    given.clear();
+    given.widen();
+    unknown.clear();
+    unknown.widen();
+    eq.fit();
+    let g2 = given.getVal();
+    let u2 = unknown.getVal();
+    function printEq() {
+        given.sym += "_2";
+        unknown.sym += "_2";
+        let [lhs2, rhs2] = eq.print().split("=");
+        given.sym = given.sym.replace("_2", "_1");
+        unknown.sym = unknown.sym.replace("_2", "_1");
+        let [lhs1, rhs1] = eq.print().split("=");
+        given.sym = given.sym.replace("_1", "");
+        unknown.sym = unknown.sym.replace("_1", "");
+        return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`;
+    }
+    function printSubs() {
+        given.set(g2);
+        unknown.sym += "_2";
+        let [lhs2, rhs2] = eq.print([given]).split("=");
+        unknown.sym = unknown.sym.replace("_2", "");
+        given.set(g1);
+        unknown.set(u1);
+        let [lhs1, rhs1] = eq.print([given, unknown]).split("=");
+        return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`;
+    }
+    function printAns() {
+        unknown.sym += "_2";
+        unknown.set(u2);
+        let T = unknown.full();
+        unknown.sym = unknown.sym.replace("_2", "");
+        return T;
+    }
+    function sol() {
+        let T = "";
+        T += "\\begin{aligned}";
+        T += printEq() + ' \\\\ ';
+        T += printSubs() + ' \\\\ ';
+        T += printAns();
+        T += " \\end{aligned}";
+        T = T.replaceAll("=", "&=");
+        return T;
+    }
+    function table() {
+        given.set(g1);
+        let G1 = "$" + given.long();
+        given.set(g2);
+        let G2 = "$" + given.long();
+        unknown.set(u1);
+        let U1 = "$" + unknown.long();
+        let U2 = "$" + unknown.sym + "_2";
+        return Table({
+            content: [
+                ["", "Before", "After"],
+                ["$" + given.sym, G1, G2],
+                ["$" + unknown.sym, U1, U2],
+            ]
+        });
+    }
+    return {
+        table: table(),
+        sol: sol(),
+        constants: constants.map(v => [v.sym, v.name]),
+        given: [given.sym, given.name, g1, g2, given.unit],
+        unknown: [unknown.sym, unknown.name, u1, u2, unknown.unit],
+    };
+}
+exports.BuildRatio = BuildRatio;
+
+
+/***/ }),
+
 /***/ 5033:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -30831,8 +30926,10 @@ exports.BuildTrend = BuildTrend;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const build_solve_1 = __webpack_require__(5033);
 const build_trend_1 = __webpack_require__(6871);
+const build_ratio_1 = __webpack_require__(8620);
 globalThis.BuildSolve = build_solve_1.BuildSolve;
 globalThis.BuildTrend = build_trend_1.BuildTrend;
+globalThis.BuildRatio = build_ratio_1.BuildRatio;
 
 
 /***/ }),
