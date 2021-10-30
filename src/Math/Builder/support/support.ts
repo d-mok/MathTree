@@ -20,6 +20,7 @@ export class Variable {
     public order: number = -1
     private store: number[] = []
     private freezed: boolean = false
+    public subscript: string = ""
 
     constructor(
         public sym: string,
@@ -93,12 +94,18 @@ export class Variable {
     }
 
     full(): string { // sym = val + unit
-        return this.sym + " = " + this.long()
+        return this.symbol() + " = " + this.long()
     }
 
     whole(): string { // name = val + unit
         return "\\text{" + this.name + "}" + " = " + this.long()
     }
+
+    symbol(): string {
+        if (this.subscript.length > 0) return this.sym + "_" + this.subscript
+        return this.sym
+    }
+
 
 }
 
@@ -130,10 +137,10 @@ export class Equation {
         let T = this.latex
         for (let v of this.dep) {
             let shown = show.includes(v)
-            T = T.replaceAll("*(" + v.sym + ")", shown ? "(" + v.short() + ")" : v.sym)
-            T = T.replaceAll("*" + v.sym, shown ? v.short() : v.sym)
-            T = T.replaceAll("$(" + v.sym + ")", shown ? "(" + v.long() + ")" : v.sym)
-            T = T.replaceAll("$" + v.sym, shown ? v.long() : v.sym)
+            T = T.replaceAll("*(" + v.sym + ")", shown ? "(" + v.short() + ")" : v.symbol())
+            T = T.replaceAll("*" + v.sym, shown ? v.short() : v.symbol())
+            T = T.replaceAll("$(" + v.sym + ")", shown ? "(" + v.long() + ")" : v.symbol())
+            T = T.replaceAll("$" + v.sym, shown ? v.long() : v.symbol())
         }
         return T
     }

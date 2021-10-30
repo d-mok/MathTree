@@ -30725,34 +30725,31 @@ function BuildRatio(variables, equation) {
     let g2 = given.getVal();
     let u2 = unknown.getVal();
     function printEq() {
-        given.sym += "_2";
-        unknown.sym += "_2";
-        console.log("given", given);
-        console.log("unknown", unknown);
-        console.log(eq.print());
+        given.subscript = "2";
+        unknown.subscript += "2";
         let [lhs2, rhs2] = eq.print().split("=");
-        given.sym = given.sym.replace("_2", "_1");
-        unknown.sym = unknown.sym.replace("_2", "_1");
+        given.subscript = "1";
+        unknown.subscript = "1";
         let [lhs1, rhs1] = eq.print().split("=");
-        given.sym = given.sym.replace("_1", "");
-        unknown.sym = unknown.sym.replace("_1", "");
+        given.subscript = "";
+        unknown.subscript = "";
         return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`;
     }
     function printSubs() {
         given.set(g2);
-        unknown.sym += "_2";
+        unknown.subscript = "2";
         let [lhs2, rhs2] = eq.print([given]).split("=");
-        unknown.sym = unknown.sym.replace("_2", "");
+        unknown.subscript = "";
         given.set(g1);
         unknown.set(u1);
         let [lhs1, rhs1] = eq.print([given, unknown]).split("=");
         return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`;
     }
     function printAns() {
-        unknown.sym += "_2";
+        unknown.subscript = "2";
         unknown.set(u2);
         let T = unknown.full();
-        unknown.sym = unknown.sym.replace("_2", "");
+        unknown.subscript = "";
         return T;
     }
     function sol() {
@@ -30772,7 +30769,9 @@ function BuildRatio(variables, equation) {
         let G2 = "$" + given.long();
         unknown.set(u1);
         let U1 = "$" + unknown.long();
-        let U2 = "$" + unknown.sym + "_2";
+        unknown.subscript = "2";
+        let U2 = "$" + unknown.symbol();
+        unknown.subscript = "";
         return Table({
             content: [
                 ["", "Before", "After"],
@@ -31147,6 +31146,7 @@ class Variable {
         this.order = -1;
         this.store = [];
         this.freezed = false;
+        this.subscript = "";
         this.unit = UNITS[this.unit] ?? this.unit;
     }
     bounds() {
@@ -31199,10 +31199,15 @@ class Variable {
         return this.short() + this.unit;
     }
     full() {
-        return this.sym + " = " + this.long();
+        return this.symbol() + " = " + this.long();
     }
     whole() {
         return "\\text{" + this.name + "}" + " = " + this.long();
+    }
+    symbol() {
+        if (this.subscript.length > 0)
+            return this.sym + "_" + this.subscript;
+        return this.sym;
     }
 }
 exports.Variable = Variable;
@@ -31229,10 +31234,10 @@ class Equation {
         let T = this.latex;
         for (let v of this.dep) {
             let shown = show.includes(v);
-            T = T.replaceAll("*(" + v.sym + ")", shown ? "(" + v.short() + ")" : v.sym);
-            T = T.replaceAll("*" + v.sym, shown ? v.short() : v.sym);
-            T = T.replaceAll("$(" + v.sym + ")", shown ? "(" + v.long() + ")" : v.sym);
-            T = T.replaceAll("$" + v.sym, shown ? v.long() : v.sym);
+            T = T.replaceAll("*(" + v.sym + ")", shown ? "(" + v.short() + ")" : v.symbol());
+            T = T.replaceAll("*" + v.sym, shown ? v.short() : v.symbol());
+            T = T.replaceAll("$(" + v.sym + ")", shown ? "(" + v.long() + ")" : v.symbol());
+            T = T.replaceAll("$" + v.sym, shown ? v.long() : v.symbol());
         }
         return T;
     }

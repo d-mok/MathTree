@@ -34,25 +34,22 @@ export function BuildRatio(
     let u2 = unknown.getVal()
 
     function printEq(): string {
-        given.sym += "_2"
-        unknown.sym += "_2"
-        console.log("given", given)
-        console.log("unknown", unknown)
-        console.log(eq.print())
+        given.subscript = "2"
+        unknown.subscript += "2"
         let [lhs2, rhs2] = eq.print().split("=")
-        given.sym = given.sym.replace("_2", "_1")
-        unknown.sym = unknown.sym.replace("_2", "_1")
+        given.subscript = "1"
+        unknown.subscript = "1"
         let [lhs1, rhs1] = eq.print().split("=")
-        given.sym = given.sym.replace("_1", "")
-        unknown.sym = unknown.sym.replace("_1", "")
+        given.subscript = ""
+        unknown.subscript = ""
         return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`
     }
 
     function printSubs(): string {
         given.set(g2)
-        unknown.sym += "_2"
+        unknown.subscript = "2"
         let [lhs2, rhs2] = eq.print([given]).split("=")
-        unknown.sym = unknown.sym.replace("_2", "")
+        unknown.subscript = ""
         given.set(g1)
         unknown.set(u1)
         let [lhs1, rhs1] = eq.print([given, unknown]).split("=")
@@ -60,10 +57,10 @@ export function BuildRatio(
     }
 
     function printAns(): string {
-        unknown.sym += "_2"
+        unknown.subscript = "2"
         unknown.set(u2)
         let T = unknown.full()
-        unknown.sym = unknown.sym.replace("_2", "")
+        unknown.subscript = ""
         return T
     }
 
@@ -86,7 +83,9 @@ export function BuildRatio(
         let G2 = "$" + given.long()
         unknown.set(u1)
         let U1 = "$" + unknown.long()
-        let U2 = "$" + unknown.sym + "_2"
+        unknown.subscript = "2"
+        let U2 = "$" + unknown.symbol()
+        unknown.subscript = ""
         return Table({
             content: [
                 ["", "Before", "After"],
