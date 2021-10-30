@@ -30794,40 +30794,25 @@ exports.BuildSolvings = BuildSolvings;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildTrend = void 0;
 const support_1 = __webpack_require__(3760);
-function BuildTrend(variables, equations, constancies = []) {
-    for (let i = 0; i < 100; i++) {
-        try {
-            let vars = (0, support_1.toVariables)(variables);
-            let eqs = (0, support_1.toEquations)(equations, vars);
-            let system = new support_1.EquSystem(vars, eqs);
-            let constancy = [];
-            if (constancies.length === 0) {
-                constancy = RndPickN(vars, variables.length - equations.length - 1);
-            }
-            else {
-                constancy = RndPick(...constancies).map($ => vars.find(v => v.sym === $));
-            }
-            for (let v of constancy) {
-                let [min, max] = v.range;
-                let val = RndR(min, max);
-                v.range = [val, val];
-            }
-            system.compare();
-            let changed = vars.filter(v => !constancy.includes(v) && v.getVal() !== 0);
-            if (changed.length === 0)
-                throw "";
-            let control = RndPick(...changed);
-            let responses = vars.filter(v => !constancy.includes(v) && v !== control);
-            return {
-                constancy: constancy.map(v => [v.sym, v.name]),
-                control: [control.sym, control.name, control.getVal()],
-                responses: responses.map(v => [v.sym, v.name, v.getVal()])
-            };
-        }
-        catch { }
-        finally { }
+function BuildTrend(variables, equations, trendWords = ['increases', 'is unchanged', 'decreases']) {
+    let vars = (0, support_1.toVariables)(variables);
+    let eqs = (0, support_1.toEquations)(equations, vars);
+    let system = new support_1.EquSystem(vars, eqs);
+    let [constants, control, responses] = system.generateTrend();
+    function toWord(change) {
+        if (change > 0)
+            return trendWords[0];
+        if (change === 0)
+            return trendWords[1];
+        if (change < 0)
+            return trendWords[2];
+        return "[error]";
     }
-    throw 'fail to build trend after 100 trial';
+    return {
+        constants: constants.map(v => [v.sym, v.name]),
+        control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
+        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()])
+    };
 }
 exports.BuildTrend = BuildTrend;
 
@@ -30904,9 +30889,10 @@ class equlet {
     }
 }
 class EquSystemAnalyzer {
-    constructor(vars, equations) {
+    constructor(vars, equations, requiredRich) {
         this.vars = vars;
         this.equations = equations;
+        this.requiredRich = requiredRich;
     }
     reset() {
         this.vars.forEach($ => $.reset());
@@ -30926,8 +30912,11 @@ class EquSystemAnalyzer {
     maxOrder() {
         return Math.max(...this.orders());
     }
+    rich() {
+        return this.maxOrder() === this.equations.length;
+    }
     done() {
-        return this.equations.every($ => $.done());
+        return this.equations.every($ => $.done()) && this.rich();
     }
     do() {
         for (let i = 0; i < 10; i++) {
@@ -30948,13 +30937,13 @@ class EquSystemAnalyzer {
         throw '[Analyzer] Fail to search a solving path.';
     }
 }
-function analyze(sys) {
+function analyze(sys, rich) {
     let varlets = sys.variables.map($ => new varlet($.sym));
     function findVarlet(sym) {
         return varlets.find($ => $.sym === sym);
     }
     let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))));
-    let analyzer = new EquSystemAnalyzer(varlets, equlets);
+    let analyzer = new EquSystemAnalyzer(varlets, equlets, rich);
     analyzer.search();
     let orders = analyzer.orders();
     for (let i = 0; i < orders.length; i++) {
@@ -31054,6 +31043,8 @@ class Variable {
         this.unit = unit;
         this.val = NaN;
         this.order = -1;
+        this.store = [];
+        this.freezed = false;
         this.unit = UNITS[this.unit] ?? this.unit;
     }
     bounds() {
@@ -31062,13 +31053,15 @@ class Variable {
         return this.range;
     }
     set(val) {
+        if (this.freezed)
+            return;
         this.val = val;
     }
     round() {
-        this.val = Round(this.val, 3);
+        this.set(Round(this.val, 3));
     }
     clear() {
-        this.val = NaN;
+        this.set(NaN);
     }
     getVal() {
         return this.val;
@@ -31082,6 +31075,20 @@ class Variable {
             min - Math.abs(min * fraction),
             max + Math.abs(max * fraction)
         ];
+    }
+    save() {
+        this.store.push(this.val);
+        this.clear();
+    }
+    restore() {
+        let val = this.store.pop();
+        this.set(val ?? this.val);
+    }
+    freeze() {
+        this.freezed = true;
+    }
+    unfreeze() {
+        this.freezed = false;
     }
     short() {
         return Number.parseFloat(this.val.toPrecision(3)).toString();
@@ -31116,16 +31123,6 @@ class Equation {
         let roots = (0, bisect_1.bisection)(this.zeroFunc, bounds);
         this.dep.forEach((v, i) => v.set(roots[i]));
     }
-    // private missingDepCount(vars: Variable[]): number {
-    //     let nIncluded = this.dep.filter(v => vars.includes(v)).length
-    //     return this.dep.length - nIncluded
-    // }
-    // isSolvable(givens: Variable[]): boolean {
-    //     return this.missingDepCount(givens) <= 1
-    // }
-    // isSolved(givens: Variable[]): boolean {
-    //     return this.missingDepCount(givens) === 0
-    // }
     print(show = []) {
         let T = this.latex;
         for (let v of this.dep) {
@@ -31147,6 +31144,15 @@ class EquSystem {
     clearVals() {
         this.variables.forEach($ => $.clear());
     }
+    saveVals() {
+        this.variables.forEach($ => $.save());
+    }
+    restoreVals() {
+        this.variables.forEach($ => $.restore());
+    }
+    getVals() {
+        return this.variables.map($ => $.getVal());
+    }
     solved() {
         return this.variables.every($ => $.solved());
     }
@@ -31162,28 +31168,8 @@ class EquSystem {
         }
         throw 'The system is not solvable yet.';
     }
-    compare() {
-        this.clearVals();
-        this.fit();
-        let T1 = this.variables.map(v => v.getVal());
-        this.clearVals();
-        this.fit();
-        let T2 = this.variables.map(v => v.getVal());
-        for (let i = 0; i < this.variables.length; i++) {
-            let a = T1[i];
-            let b = T2[i];
-            let p = (b - a) / ((Math.abs(a) + Math.abs(b)) / 2);
-            let threshold = 0.0000001;
-            if (Math.abs(p) <= threshold)
-                this.variables[i].set(0);
-            if (p > threshold)
-                this.variables[i].set(1);
-            if (p < -threshold)
-                this.variables[i].set(-1);
-        }
-    }
-    analyze() {
-        (0, analyzer_1.analyze)(this);
+    analyze(rich) {
+        (0, analyzer_1.analyze)(this, rich);
     }
     maxOrder() {
         let orders = this.variables.map($ => $.order);
@@ -31200,9 +31186,37 @@ class EquSystem {
         return this.variables.filter($ => $.order === max);
     }
     generateSolvables() {
-        this.analyze();
+        this.analyze(true);
         let unknown = RndPick(...this.unknownables());
         return [this.givens(), this.hiddens(), unknown];
+    }
+    generateTrend() {
+        this.analyze(false);
+        let constants = RndShuffle(...this.givens());
+        let control = constants.pop();
+        this.clearVals();
+        this.fit();
+        let T1 = this.getVals();
+        control.set(control.getVal() * (RndT() ? 1.05 : 0.95));
+        control.freeze();
+        constants.forEach($ => $.freeze());
+        this.clearVals();
+        this.solve();
+        let T2 = this.getVals();
+        for (let i = 0; i < this.variables.length; i++) {
+            let a = T1[i];
+            let b = T2[i];
+            let p = (b - a) / ((Math.abs(a) + Math.abs(b)) / 2);
+            let threshold = 0.0000001;
+            if (Math.abs(p) <= threshold)
+                this.variables[i].set(0);
+            if (p > threshold)
+                this.variables[i].set(1);
+            if (p < -threshold)
+                this.variables[i].set(-1);
+        }
+        let responses = this.variables.filter($ => ![control, ...constants].includes($));
+        return [constants, control, responses];
     }
     print(givens = []) {
         let T = "";

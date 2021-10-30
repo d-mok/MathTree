@@ -62,7 +62,8 @@ class EquSystemAnalyzer {
 
     constructor(
         public vars: varlet[],
-        public equations: equlet[]
+        public equations: equlet[],
+        private requiredRich:boolean
     ) { }
 
     reset(): void {
@@ -117,13 +118,13 @@ class EquSystemAnalyzer {
 
 }
 
-export function analyze(sys: EquSystem): void{
+export function analyze(sys: EquSystem, rich:boolean): void{
     let varlets = sys.variables.map($ => new varlet($.sym))
     function findVarlet(sym: string): varlet {
         return varlets.find($ => $.sym === sym)!
     }
     let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))))
-    let analyzer = new EquSystemAnalyzer(varlets, equlets)
+    let analyzer = new EquSystemAnalyzer(varlets, equlets, rich)
     analyzer.search()
     let orders = analyzer.orders()
     for (let i = 0; i < orders.length; i++){

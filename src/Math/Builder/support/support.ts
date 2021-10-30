@@ -11,6 +11,12 @@ const UNITS: { [_: string]: string } = {
     '°C': '~\\text{°C}',
 }
 
+declare global {
+    interface String {
+        replaceAll(...args:any[]): string;
+    }
+}
+
 
 
 export class Variable {
@@ -40,10 +46,6 @@ export class Variable {
         this.val = val
     }
 
-    random(): void{
-        let [min,max] = this.range
-        this.set(RndR(min, max))
-    }
 
     round(): void {
         this.set(Round(this.val, 3))
@@ -123,14 +125,11 @@ export class Equation {
         if (this.solvable()) this.fit()
     }
 
-
     fit() {
         const bounds = this.dep.map($ => $.bounds())
         let roots = bisection(this.zeroFunc, bounds)
         this.dep.forEach((v, i) => v.set(roots[i]))
     }
-
-
 
     print(show: Variable[] = []): string {
         let T = this.latex
@@ -164,6 +163,10 @@ export class EquSystem {
         this.variables.forEach($ => $.restore())
     }
 
+    private getVals(): number[] {
+        return this.variables.map($ => $.getVal())
+    }
+
     private solved(): boolean {
         return this.variables.every($ => $.solved())
     }
@@ -174,41 +177,17 @@ export class EquSystem {
 
     solve(): void {
         for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations) eq.solve()
+            for (let eq of this.equations)
+                eq.solve()
             if (this.solved()) return
         }
         throw 'The system is not solvable yet.'
     }
 
 
-    private findRoots(): number[] {
-        this.saveVals()
-        this.fit()
-        let roots = this.variables.map($ => $.getVal())
-        this.restoreVals()
-        return roots
-    }
 
-    compare(constants: Variable[]) {
-        constants.
-        let T1 = this.findRoots()
-        let T2 = this.findRoots()
-        for (let i = 0; i < this.variables.length; i++) {
-            let a = T1[i]
-            let b = T2[i]
-            let p = (b - a) / ((Math.abs(a) + Math.abs(b)) / 2)
-            let threshold = 0.0000001
-            if (Math.abs(p) <= threshold) this.variables[i].set(0)
-            if (p > threshold) this.variables[i].set(1)
-            if (p < -threshold) this.variables[i].set(-1)
-        }
-
-    }
-
-
-
-    private analyze(): void {
-        analyze(this)
+    private analyze(rich: boolean): void {
+        analyze(this, rich)
     }
 
     private maxOrder(): number {
@@ -230,9 +209,36 @@ export class EquSystem {
     }
 
     generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable] {
-        this.analyze()
+        this.analyze(true)
         let unknown = RndPick(...this.unknownables())
         return [this.givens(), this.hiddens(), unknown]
+    }
+
+
+    generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]] {
+        this.analyze(false)
+        let constants = RndShuffle(...this.givens())
+        let control = constants.pop()!
+        this.clearVals()
+        this.fit()
+        let T1 = this.getVals()
+        control.set(control.getVal() * (RndT() ? 1.05 : 0.95))
+        control.freeze()
+        constants.forEach($ => $.freeze())
+        this.clearVals()
+        this.solve()
+        let T2 = this.getVals()
+        for (let i = 0; i < this.variables.length; i++) {
+            let a = T1[i]
+            let b = T2[i]
+            let p = (b - a) / ((Math.abs(a) + Math.abs(b)) / 2)
+            let threshold = 0.0000001
+            if (Math.abs(p) <= threshold) this.variables[i].set(0)
+            if (p > threshold) this.variables[i].set(1)
+            if (p < -threshold) this.variables[i].set(-1)
+        }
+        let responses = this.variables.filter($ => ![control, ...constants].includes($))
+        return [constants, control, responses]
     }
 
 

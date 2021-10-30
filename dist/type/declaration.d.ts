@@ -238,7 +238,7 @@ declare function PolySimplify<V extends string>(poly: polynomial<V>): polynomial
 declare function PolyDegree<V extends string>(poly: polynomial<V>): number;
 declare module "Math/Builder/support/analyzer" {
     import { EquSystem } from "Math/Builder/support/support";
-    export function analyze(sys: EquSystem): void;
+    export function analyze(sys: EquSystem, rich: boolean): void;
 }
 declare module "Math/Builder/support/bisect" {
     export function bisection(f: Fun, ranges: [number, number][]): number[];
@@ -251,6 +251,8 @@ declare module "Math/Builder/support/support" {
         unit: string;
         private val;
         order: number;
+        private store;
+        private freezed;
         constructor(sym: string, name: string, range: [number, number], unit?: string);
         bounds(): [number, number];
         set(val: number): void;
@@ -259,6 +261,10 @@ declare module "Math/Builder/support/support" {
         getVal(): number;
         solved(): boolean;
         widen(fraction?: number): void;
+        save(): void;
+        restore(): void;
+        freeze(): void;
+        unfreeze(): void;
         short(): string;
         long(): string;
         full(): string;
@@ -279,16 +285,19 @@ declare module "Math/Builder/support/support" {
         equations: Equation[];
         constructor(variables: Variable[], equations: Equation[]);
         private clearVals;
+        private saveVals;
+        private restoreVals;
+        private getVals;
         private solved;
         fit(): void;
         solve(): void;
-        compare(): void;
         private analyze;
         private maxOrder;
         private givens;
         private hiddens;
         private unknownables;
         generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable];
+        generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]];
         print(givens?: Variable[]): string;
     }
     export function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variable[];
@@ -311,10 +320,10 @@ declare module "Math/Builder/build_solvings" {
     };
 }
 declare module "Math/Builder/build_trend" {
-    export function BuildTrend(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][], constancies?: string[][]): {
-        constancy: string[][];
-        control: (string | number)[];
-        responses: (string | number)[][];
+    export function BuildTrend(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string, dep: string[]][], trendWords?: [string, string, string]): {
+        constants: [sym: string, name: string][];
+        control: [sym: string, name: string, trend: string, change: number];
+        responses: [sym: string, name: string, trend: string, change: number][];
     };
 }
 declare module "Math/Builder/index" {
