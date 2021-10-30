@@ -36,6 +36,9 @@ export function BuildRatio(
     function printEq(): string {
         given.sym += "_2"
         unknown.sym += "_2"
+        console.log("given", given)
+        console.log("unknown", unknown)
+        console.log(eq.print())
         let [lhs2, rhs2] = eq.print().split("=")
         given.sym = given.sym.replace("_2", "_1")
         unknown.sym = unknown.sym.replace("_2", "_1")
