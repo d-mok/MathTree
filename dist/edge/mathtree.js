@@ -30709,10 +30709,10 @@ const support_1 = __webpack_require__(3760);
 function BuildRatio(variables, func, latex, settings = {}) {
     let vars = (0, support_1.toVariables)(variables);
     let eq = new equation_1.Equation(func, latex, vars);
-    eq.fit();
     let [given, unknown, ...constants] = RndShuffle(...vars);
     let g = [];
     let u = [];
+    eq.fit();
     given.round();
     unknown.round();
     g.push(given.getVal());
@@ -31303,12 +31303,12 @@ exports.DEFAULT_UNIT = {
     'width': 'm',
     'wavelength': 'm',
     'capacitiy': 'm3',
-    'angle': 'o',
+    'angle': '°',
     'energy': 'J',
     'mass': 'kg',
-    'heat capacity': 'J oC-1',
-    'specific heat capacity': 'J kg-1 oC-1',
-    'temperature': 'oC',
+    'heat capacity': 'J °C-1',
+    'specific heat capacity': 'J kg-1 °C-1',
+    'temperature': '°C',
     'latent heat': 'J kg-1',
     'pressure': 'Pa',
     'mole': 'mol',
@@ -31322,7 +31322,7 @@ exports.DEFAULT_UNIT = {
     'angular speed': 'rad s-1',
     'angular displacement': 'rad',
     'gravitational field strength': 'm s-2',
-    'angular position': 'o',
+    'angular position': '°',
     'period': 's',
     'frequency': 'Hz',
     'amplitude': 'm',
@@ -31354,8 +31354,6 @@ const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4'];
 function parseUnit(raw) {
     let T = raw.replaceAll(" ", "");
     T = T.replaceAll("ohm", "\\Omega");
-    T = T.replaceAll("oC", "°C");
-    T = T.replaceAll("o", "°");
     for (let u of BASE_UNITS) {
         if (!T.includes(u))
             continue;
@@ -31560,7 +31558,7 @@ class Variables extends Array {
             }
             return;
         }
-        throw failMsg;
+        throw "[Timeloop 100] " + failMsg;
     }
 }
 exports.Variables = Variables;

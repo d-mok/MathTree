@@ -226,6 +226,6 @@ export class Variables extends Array<Variable>{
             }
             return
         }
-        throw failMsg
+        throw "[Timeloop 100] " + failMsg
     }
 }
