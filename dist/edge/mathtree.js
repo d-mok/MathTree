@@ -30772,23 +30772,17 @@ function BuildRatio(variables, func, latex, settings = {}) {
             rows: 'r|r:r',
         });
     }
+    function getUnknown() {
+        setCase(2);
+        return [unknown.symbol(), unknown.name, unknown.getVal(), unknown.unit];
+    }
     return {
         table: table(),
         sol: sol(),
-        vars: vars.map($ => {
-            let val = $.getVal();
-            let vals = [val, val];
-            if ($ === given)
-                vals = [g[0], g[1]];
-            if ($ === unknown)
-                vals = [u[0], u[1]];
-            return [$.sym, $.name, vals, $.unit];
-        }),
-        constants: constants.map(v => [v.sym, v.name]),
-        constNames: constants.map(v => v.name),
+        consts: constants.map(v => v.name),
         constSyms: constants.map(v => v.sym),
-        given: [given.sym, given.name, [g[0], g[1]], given.unit],
-        unknown: [unknown.sym, unknown.name, [u[0], u[1]], unknown.unit],
+        given: [given.sym, given.name],
+        unknown: getUnknown(),
     };
 }
 exports.BuildRatio = BuildRatio;

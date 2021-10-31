@@ -14,12 +14,10 @@ export function BuildRatio(
 ): {
     table: string
     sol: string
-    vars: [sym: string, name: string, val: [number, number], unit: string][]
-    constants: [sym: string, name: string][]
-    constNames: string[]
+    consts: string[]
     constSyms: string[]
-    given: [sym: string, name: string, val: [number, number], unit: string]
-    unknown: [sym: string, name: string, val: [number, number], unit: string]
+    given: [sym: string, name: string]
+    unknown: [sym: string, name: string, val: number, unit: string]
 } {
 
     let vars = toVariables(variables)
@@ -103,23 +101,18 @@ export function BuildRatio(
         })
     }
 
-
+    function getUnknown(): [sym: string, name: string, val: number, unit: string] {
+        setCase(2)
+        return [unknown.symbol(), unknown.name, unknown.getVal(), unknown.unit]
+    }
 
     return {
         table: table(),
         sol: sol(),
-        vars: vars.map($ => {
-            let val = $.getVal()
-            let vals: [number, number] = [val, val]
-            if ($ === given) vals = [g[0], g[1]]
-            if ($ === unknown) vals = [u[0], u[1]]
-            return [$.sym, $.name, vals, $.unit]
-        }),
-        constants: constants.map(v => [v.sym, v.name]),
-        constNames: constants.map(v => v.name),
+        consts: constants.map(v => v.name),
         constSyms: constants.map(v => v.sym),
-        given: [given.sym, given.name, [g[0], g[1]], given.unit],
-        unknown: [unknown.sym, unknown.name, [u[0], u[1]], unknown.unit],
+        given: [given.sym, given.name],
+        unknown: getUnknown(),
     }
 }
 
