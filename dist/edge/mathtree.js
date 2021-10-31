@@ -31394,6 +31394,7 @@ class Variable {
         this.order = -1;
         this.subs = "";
         unit ?? (unit = units_1.DEFAULT_UNIT[name]);
+        unit ?? (unit = "");
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
     }

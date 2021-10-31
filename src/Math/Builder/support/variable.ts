@@ -27,6 +27,7 @@ export class Variable {
         unit?: string
     ) {
         unit ??= DEFAULT_UNIT[name]
+        unit ??= ""
         this.unit = parseUnit(unit)
         this.range = parseRange(range)
     }
