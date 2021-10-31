@@ -69,13 +69,12 @@ const BASE_PREFIX = ['n', 'u', 'm', 'c', 'k', 'M', 'G', 'T', '']
 const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4']
 
 export function parseUnit(raw: string): string {
-    let T = raw.replaceAll(" ", "")
-    T = " " + T + " "
+    let T = " " + raw + " "
     T = T.replaceAll("ohm", "\\Omega")
     for (let u of BASE_UNITS) {
         if (!T.includes(u)) continue
         for (let p of BASE_PREFIX) {
-            T.replaceAll(
+            T = T.replaceAll(
                 new RegExp('([^a-zA-z])' + p + u + '([^a-zA-z])', 'g'),
                 '$1' + "~\\text{" + p + u + "}" + '$2'
             )
