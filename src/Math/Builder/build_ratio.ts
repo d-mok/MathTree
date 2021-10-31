@@ -1,91 +1,83 @@
-import { Equation, toVariables } from './support/support';
+import { Equation, toVariables, latexAligned } from './support/support';
+import { Variable } from './support/variable';
 
 
 
 
 export function BuildRatio(
     variables: [sym: string, name: string, range: [number, number], unit: string][],
-    equation: [func: Fun, latex: string],
+    func: Fun,
+    latex: string
 ) {
 
     let vars = toVariables(variables)
-    let [func, latex] = equation
     let eq = new Equation(func, latex, vars)
     eq.fit()
 
     let [given, unknown, ...constants] = RndShuffle(...vars)
+    let g: number[] = []
+    let u: number[] = []
 
     given.round()
     unknown.round()
-    let g1 = given.getVal()
-    let u1 = unknown.getVal()
+    g.push(given.getVal())
+    u.push(unknown.getVal())
 
-    constants.forEach($ => $.clear())
-    constants.forEach($ => $.widen())
-    eq.fit()
+    eq.fitAgain(constants)
+    eq.fitAgain([given, unknown])
+    given.round()
+    eq.fitAgain([unknown])
 
-    given.clear()
-    given.widen()
-    unknown.clear()
-    unknown.widen()
-    eq.fit()
+    g.push(given.getVal())
+    u.push(unknown.getVal())
 
-    let g2 = given.getVal()
-    let u2 = unknown.getVal()
+    function setSubscript(subs: number | string = "") {
+        given.subsrcipt(subs)
+        unknown.subsrcipt(subs)
+    }
 
-    function printEq(): string {
-        given.subscript = "2"
-        unknown.subscript += "2"
-        let [lhs2, rhs2] = eq.print().split("=")
-        given.subscript = "1"
-        unknown.subscript = "1"
-        let [lhs1, rhs1] = eq.print().split("=")
-        given.subscript = ""
-        unknown.subscript = ""
+    function setVal(order: 1 | 2) {
+        given.set(g[order - 1])
+        unknown.set(u[order - 1])
+    }
+
+    function setCase(order: 1 | 2) {
+        setSubscript(order)
+        setVal(order)
+    }
+
+    function printRatioFraction(
+        case1Show: Variable[] = [],
+        case2Show: Variable[] = []): string {
+        setCase(2)
+        let [lhs2, rhs2] = eq.print(case2Show).split("=")
+        setCase(1)
+        let [lhs1, rhs1] = eq.print(case1Show).split("=")
         return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`
     }
 
-    function printSubs(): string {
-        given.set(g2)
-        unknown.subscript = "2"
-        let [lhs2, rhs2] = eq.print([given]).split("=")
-        unknown.subscript = ""
-        given.set(g1)
-        unknown.set(u1)
-        let [lhs1, rhs1] = eq.print([given, unknown]).split("=")
-        return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`
-    }
 
     function printAns(): string {
-        unknown.subscript = "2"
-        unknown.set(u2)
-        let T = unknown.full()
-        unknown.subscript = ""
-        return T
+        setCase(2)
+        return unknown.full()
     }
 
     function sol(): string {
-        let T = ""
-        T += "\\begin{aligned}"
-        T += printEq() + ' \\\\ '
-        T += printSubs() + ' \\\\ '
-        T += printAns()
-        T += " \\end{aligned}"
-        T = T.replaceAll("=", "&=")
-        return T
+        return latexAligned([
+            printRatioFraction(),
+            printRatioFraction([given, unknown], [given]),
+            printAns()
+        ])
     }
 
 
     function table(): string {
-        given.set(g1)
+        setCase(1)
         let G1 = "$" + given.long()
-        given.set(g2)
-        let G2 = "$" + given.long()
-        unknown.set(u1)
         let U1 = "$" + unknown.long()
-        unknown.subscript = "2"
+        setCase(2)
+        let G2 = "$" + given.long()
         let U2 = "$" + unknown.symbol()
-        unknown.subscript = ""
         return Table({
             content: [
                 ["", "Before", "After"],
@@ -102,8 +94,8 @@ export function BuildRatio(
         table: table(),
         sol: sol(),
         constants: constants.map(v => [v.sym, v.name]),
-        given: [given.sym, given.name, g1, g2, given.unit],
-        unknown: [unknown.sym, unknown.name, u1, u2, unknown.unit],
+        given: [given.sym, given.name, [g[0], g[1]], given.unit],
+        unknown: [unknown.sym, unknown.name, [u[0], u[1]], unknown.unit],
     }
 }
 

@@ -1,145 +1,145 @@
-import { EquSystem } from "./support";
+// import { EquSystem } from "./support";
 
-class varlet {
-    public solved: boolean = false
-    public order: number = -1
+// class varlet {
+//     public solved: boolean = false
+//     public order: number = -1
 
-    constructor(public sym: string) { }
+//     constructor(public sym: string) { }
 
-    solve(order: number): void {
-        this.solved = true;
-        this.order = order
-    }
+//     solve(order: number): void {
+//         this.solved = true;
+//         this.order = order
+//     }
 
-    reset(): void {
-        this.solved = false
-        this.order = -1
-    }
-}
+//     reset(): void {
+//         this.solved = false
+//         this.order = -1
+//     }
+// }
 
-class equlet {
+// class equlet {
 
-    constructor(
-        private dep: varlet[]
-    ) { }
+//     constructor(
+//         private dep: varlet[]
+//     ) { }
 
-    private solved(): varlet[] {
-        return this.dep.filter($ => $.solved)
-    }
+//     private solved(): varlet[] {
+//         return this.dep.filter($ => $.solved)
+//     }
 
-    private unsolved(): varlet[] {
-        return this.dep.filter($ => !$.solved)
-    }
+//     private unsolved(): varlet[] {
+//         return this.dep.filter($ => !$.solved)
+//     }
 
-    private nextOrder(): number {
-        let orders = this.solved().map($ => $.order)
-        if (orders.length === 0) return 0
-        return Math.max(...orders) + 1
-    }
+//     private nextOrder(): number {
+//         let orders = this.solved().map($ => $.order)
+//         if (orders.length === 0) return 0
+//         return Math.max(...orders) + 1
+//     }
 
-    private doable(): boolean {
-        return this.unsolved().length === 1
-    }
+//     private doable(): boolean {
+//         return this.unsolved().length === 1
+//     }
 
-    done(): boolean {
-        return this.unsolved().length === 0
-    }
+//     done(): boolean {
+//         return this.unsolved().length === 0
+//     }
 
-    private do(): void {
-        let order = this.nextOrder()
-        this.unsolved().forEach($ => $.solve(order))
-    }
+//     private do(): void {
+//         let order = this.nextOrder()
+//         this.unsolved().forEach($ => $.solve(order))
+//     }
 
-    tryDo(): void {
-        if (this.doable()) this.do()
-    }
+//     tryDo(): void {
+//         if (this.doable()) this.do()
+//     }
 
-}
+// }
 
-class EquSystemAnalyzer {
+// class EquSystemAnalyzer {
 
 
 
-    constructor(
-        public vars: varlet[],
-        public equations: equlet[],
-        private requiredRich: boolean
-    ) { }
+//     constructor(
+//         public vars: varlet[],
+//         public equations: equlet[],
+//         private requiredRich: boolean
+//     ) { }
 
-    private reset(): void {
-        this.vars.forEach($ => $.reset())
-    }
+//     private reset(): void {
+//         this.vars.forEach($ => $.reset())
+//     }
 
-    private setZeroth(vars: varlet[]): void {
-        this.reset()
-        vars.forEach($ => $.solve(0))
-    }
+//     private setZeroth(vars: varlet[]): void {
+//         this.reset()
+//         vars.forEach($ => $.solve(0))
+//     }
 
-    private pickZeroth(): void {
-        let nGivens = this.vars.length - this.equations.length
-        let zeroths = RndPickN(this.vars, nGivens)
-        this.setZeroth(zeroths)
-    }
+//     private pickZeroth(): void {
+//         let nGivens = this.vars.length - this.equations.length
+//         let zeroths = RndPickN(this.vars, nGivens)
+//         this.setZeroth(zeroths)
+//     }
 
-    orders(): number[] {
-        return this.vars.map($ => $.order)
-    }
+//     orders(): number[] {
+//         return this.vars.map($ => $.order)
+//     }
 
-    private maxOrder(): number {
-        return Math.max(...this.orders())
-    }
+//     private maxOrder(): number {
+//         return Math.max(...this.orders())
+//     }
 
-    private rich(): boolean {
-        return this.maxOrder() === this.equations.length
-    }
+//     private rich(): boolean {
+//         return this.maxOrder() === this.equations.length
+//     }
 
-    private done(): boolean {
-        return this.equations.every($ => $.done()) && this.requiredRich ? this.rich() : true
-    }
+//     private done(): boolean {
+//         return this.equations.every($ => $.done()) && this.requiredRich ? this.rich() : true
+//     }
 
-    private do(): void {
-        for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations) eq.tryDo()
-        }
-    }
+//     private do(): void {
+//         for (let i = 0; i < 10; i++) {
+//             for (let eq of this.equations) eq.tryDo()
+//         }
+//     }
 
-    private searchOnce(): void {
-        this.pickZeroth()
-        this.do()
-    }
+//     private searchOnce(): void {
+//         this.pickZeroth()
+//         this.do()
+//     }
 
-    search() {
-        for (let i = 0; i < 100; i++) {
-            this.searchOnce()
-            if (this.done()) return
-        }
-        throw '[Analyzer] Fail to search a solving path.'
-    }
+//     search() {
+//         for (let i = 0; i < 100; i++) {
+//             this.searchOnce()
+//             if (this.done()) return
+//         }
+//         throw '[Analyzer] Fail to search a solving path.'
+//     }
 
-}
+// }
 
-function toVarlets
+// function toVarlets
 
-function toAnalyzer(sys: EquSystem): EquSystemAnalyzer {
-    let varlets = sys.variables.map($ => new varlet($.sym))
-    function findVarlet(sym: string): varlet {
-        return varlets.find($ => $.sym === sym)!
-    }
-    let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))))
-    return new EquSystemAnalyzer(varlets, equlets, rich)
-}
+// function toAnalyzer(sys: EquSystem): EquSystemAnalyzer {
+//     let varlets = sys.variables.map($ => new varlet($.sym))
+//     function findVarlet(sym: string): varlet {
+//         return varlets.find($ => $.sym === sym)!
+//     }
+//     let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))))
+//     return new EquSystemAnalyzer(varlets, equlets, rich)
+// }
 
-export function analyze(sys: EquSystem, rich: boolean): void {
-    let varlets = sys.variables.map($ => new varlet($.sym))
-    function findVarlet(sym: string): varlet {
-        return varlets.find($ => $.sym === sym)!
-    }
-    let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))))
-    let analyzer = new EquSystemAnalyzer(varlets, equlets, rich)
-    analyzer.search()
-    let orders = analyzer.orders()
-    for (let i = 0; i < orders.length; i++) {
-        sys.variables[i].order = orders[i]
-    }
-}
+// export function analyze(sys: EquSystem, rich: boolean): void {
+//     let varlets = sys.variables.map($ => new varlet($.sym))
+//     function findVarlet(sym: string): varlet {
+//         return varlets.find($ => $.sym === sym)!
+//     }
+//     let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))))
+//     let analyzer = new EquSystemAnalyzer(varlets, equlets, rich)
+//     analyzer.search()
+//     let orders = analyzer.orders()
+//     for (let i = 0; i < orders.length; i++) {
+//         sys.variables[i].order = orders[i]
+//     }
+// }
 

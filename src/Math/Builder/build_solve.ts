@@ -1,4 +1,4 @@
-import { toEquSystem } from './support/support';
+import { toEquSystem, latexAligned, latexBraced } from './support/support';
 import { BuildSolveSingle } from './build_solve_single'
 
 export function BuildSolve(
@@ -11,29 +11,32 @@ export function BuildSolve(
     unknown: [sym: string, name: string, val: number, unit: string]
 } {
 
-    if (equations.length === 1) {
-        return BuildSolveSingle(variables, equations[0])
-    }
+    // if (equations.length === 1) {
+    //     return BuildSolveSingle(variables, equations[0])
+    // }
 
     let system = toEquSystem(variables, equations)
     system.fit()
 
     let [givens, hiddens, unknown] = system.generateSolvables()
     givens.forEach($ => $.round())
-    hiddens.forEach($ => $.clear())
-    hiddens.forEach($ => $.widen())
-    system.solve()
+    system.solveAgain(hiddens)
 
     function sol(): string {
-        let T = ""
-        T += system.print() + " \\\\~\\\\ "
-        T += system.print(givens) + " \\\\~\\\\ "
-        T += "\\left\\{\\begin{aligned}"
-        for (let v of hiddens)
-            T += v.full() + ' \\\\ '
-        T += " \\end{aligned}\\right."
-        T = T.replaceAll("=", "&=")
-        return T
+        if (equations.length === 1) {
+            let eq = system.equations[0]
+            return latexAligned([
+                eq.print(),
+                eq.print(givens),
+                unknown.full()
+            ])
+        } else {
+            let T = ""
+            T += system.print() + " \\\\~\\\\ "
+            T += system.print(givens) + " \\\\~\\\\ "
+            T += latexBraced(hiddens.map($ => $.full()))
+            return T
+        }
     }
 
     console.log(system)

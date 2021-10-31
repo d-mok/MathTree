@@ -1,177 +1,60 @@
 // import { analyze } from './analyzer'
 import { bisection } from './bisect'
 import { createOrderTree } from './ana'
+import { Variable, Variables } from './variable'
 
-const UNITS: { [_: string]: string } = {
-    'Pa': '~\\text{Pa}',
-    'm3': '~\\text{m}^3',
-    'cm3': '~\\text{cm}^3',
-    'mol': '~\\text{mol}',
-    'K': '~\\text{K}',
-    '°C': '~\\text{°C}',
+
+export function latexAligned(texts: string[]): string {
+    let T = ""
+    T += "\\begin{aligned}"
+    for (let t of texts)
+        T += t + " \\\\ "
+    T += " \\end{aligned}"
+    T = T.replaceAll("=", "&=")
+    T = T.replaceAll("&&=", "&=")
+    return T
 }
 
-
-
-
-export class Variable {
-
-    private val: number = NaN
-    public order: number = -1
-    private store: number[] = []
-    private freezed: boolean = false
-    public subscript: string = ""
-
-    constructor(
-        public sym: string,
-        public name: string,
-        public range: [number, number],
-        public unit: string = ""
-    ) {
-        this.unit = UNITS[this.unit] ?? this.unit
-    }
-
-    bounds(): [number, number] {
-        if (Number.isFinite(this.val))
-            return [this.val, this.val]
-        return this.range
-    }
-
-    set(val: number): void {
-        if (this.freezed) return
-        this.val = val
-    }
-
-
-    round(): void {
-        this.set(Round(this.val, 3))
-    }
-
-    clear(): void {
-        this.set(NaN)
-    }
-
-    getVal(): number {
-        return this.val
-    }
-
-    solved(): boolean {
-        return Number.isFinite(this.val)
-    }
-
-    widen(fraction: number = 0.1): void {
-        let [min, max] = this.range
-        this.range = [
-            min - Math.abs(min * fraction),
-            max + Math.abs(max * fraction)
-        ]
-    }
-
-    save(): void {
-        this.store.push(this.val)
-        this.clear()
-    }
-
-    restore(): void {
-        let val = this.store.pop()
-        this.set(val ?? this.val)
-    }
-
-    freeze(): void {
-        this.freezed = true
-    }
-
-    unfreeze(): void {
-        this.freezed = false
-    }
-
-    short(): string { // val
-        return Number.parseFloat(this.val.toPrecision(3)).toString()
-    }
-
-    long(): string { // val + unit
-        return this.short() + this.unit
-    }
-
-    full(): string { // sym = val + unit
-        return this.symbol() + " = " + this.long()
-    }
-
-    whole(): string { // name = val + unit
-        return "\\text{" + this.name + "}" + " = " + this.long()
-    }
-
-    symbol(): string {
-        if (this.subscript.length > 0) return this.sym + "_" + this.subscript
-        return this.sym
-    }
-
-
+export function latexBraced(texts: string[]): string {
+    return "\\left\\{" + latexAligned(texts) + "\\right."
 }
-
 
 export class Equation {
 
     constructor(
         public zeroFunc: Fun,
         public latex: string,
-        public dep: Variable[]
+        public dep: Variables
     ) { }
 
-    solvable(): boolean {
-        let unsolved = this.dep.filter($ => !$.solved())
-        return unsolved.length === 1
-    }
 
     solve() {
-        if (this.solvable()) this.fit()
+        if (this.dep.solvable())
+            this.fit()
     }
 
     fit() {
-        const bounds = this.dep.map($ => $.bounds())
-        let roots = bisection(this.zeroFunc, bounds)
-        this.dep.forEach((v, i) => v.set(roots[i]))
+        let roots = bisection(this.zeroFunc, this.dep.bounds())
+        this.dep.setVals(roots)
     }
 
-    print(show: Variable[] = []): string {
-        let T = this.latex
-        for (let v of this.dep) {
-            let shown = show.includes(v)
-            T = T.replaceAll("*(" + v.sym + ")", shown ? "(" + v.short() + ")" : v.symbol())
-            T = T.replaceAll("*" + v.sym, shown ? v.short() : v.symbol())
-            T = T.replaceAll("$(" + v.sym + ")", shown ? "(" + v.long() + ")" : v.symbol())
-            T = T.replaceAll("$" + v.sym, shown ? v.long() : v.symbol())
-        }
-        return T
+    fitAgain(vars: Variable[]) {
+        vars.forEach($ => $.clear())
+        vars.forEach($ => $.widen())
+        this.fit()
+    }
+
+    print(showVars: Variable[] = []): string {
+        return this.dep.write(this.latex, showVars)
     }
 
 }
 
 export class EquSystem {
     constructor(
-        public variables: Variable[],
+        public variables: Variables,
         public equations: Equation[]
     ) { }
-
-    private clearVals(): void {
-        this.variables.forEach($ => $.clear())
-    }
-
-    private saveVals(): void {
-        this.variables.forEach($ => $.save())
-    }
-
-    private restoreVals(): void {
-        this.variables.forEach($ => $.restore())
-    }
-
-    private getVals(): number[] {
-        return this.variables.map($ => $.getVal())
-    }
-
-    private solved(): boolean {
-        return this.variables.every($ => $.solved())
-    }
 
     fit() {
         this.equations.forEach($ => $.fit())
@@ -179,79 +62,46 @@ export class EquSystem {
 
     solve(): void {
         for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations)
-                eq.solve()
-            if (this.solved()) return
+            for (let eq of this.equations) eq.solve()
+            if (this.variables.solved()) return
         }
         throw 'The system is not solvable yet.'
     }
 
-
-
-    private createOrder(rich: boolean): void {
-        createOrderTree(this, rich)
+    solveAgain(vars: Variable[]): void {
+        vars.forEach($ => $.clear())
+        vars.forEach($ => $.widen())
+        this.solve()
     }
 
-    private maxOrder(): number {
-        let orders = this.variables.map($ => $.order)
-        return Math.max(...orders)
-    }
-
-    private givens(): Variable[] {
-        return this.variables.filter($ => $.order === 0)
-    }
-
-    private hiddens(): Variable[] {
-        return this.variables.filter($ => $.order > 0)
-    }
-
-    private unknownables(): Variable[] {
-        let max = this.maxOrder()
-        return this.variables.filter($ => $.order === max)
-    }
 
     generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable] {
-        this.createOrder(true)
-        let unknown = RndPick(...this.unknownables())
-        return [this.givens(), this.hiddens(), unknown]
+        createOrderTree(this, true)
+        return [
+            this.variables.zeros(),
+            this.variables.positives(),
+            this.variables.pickTop()
+        ]
     }
 
 
     generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]] {
-        this.createOrder(false)
-        let constants = RndShuffle(...this.givens())
-        let control = constants.pop()!
-        this.clearVals()
+        createOrderTree(this, false)
+        let [control, ...constants] = this.variables.shuffledZeros()
+        let responses = this.variables.positives()
+        this.variables.clear()
         this.fit()
-        let T1 = this.getVals()
-        control.set(control.getVal() * (RndT() ? 1.05 : 0.95))
-        control.freeze()
-        constants.forEach($ => $.freeze())
-        this.clearVals()
-        this.solve()
-        let T2 = this.getVals()
-        for (let i = 0; i < this.variables.length; i++) {
-            let a = T1[i]
-            let b = T2[i]
-            let p = (b - a) / ((Math.abs(a) + Math.abs(b)) / 2)
-            let THRESHOLD = 0.0000001
-            let v = 0
-            if (p > THRESHOLD) v = 1
-            if (p < -THRESHOLD) v = -1
-            this.variables[i].set(v)
-        }
-        let responses = this.variables.filter($ => ![control, ...constants].includes($))
+        let oldVal = this.variables.getVals()
+        control.shake()
+        this.solveAgain(responses)
+        this.variables.compareWith(oldVal)
         return [constants, control, responses]
     }
 
 
     print(givens: Variable[] = []): string {
-        let T = ""
-        T += "\\left\\{\\begin{aligned}"
-        for (let eq of this.equations)
-            T += eq.print(givens) + " \\\\ "
-        T += " \\end{aligned}\\right. \\\\"
-        return T
+        let eqs = this.equations.map($ => $.print(givens))
+        return latexBraced(eqs)
     }
 
 }
@@ -261,16 +111,16 @@ export class EquSystem {
 
 export function toVariables(
     vars: [sym: string, name: string, range: [number, number], unit: string][]
-): Variable[] {
-    return vars.map(([sym, name, range, unit]) =>
+): Variables {
+    let vs = vars.map(([sym, name, range, unit]) =>
         new Variable(sym, name, range, unit))
+    return new Variables(...vs)
 }
 
 export function toEquations(
     eqs: [func: Fun, latex: string][],
-    vars: Variable[]
+    vars: Variables
 ): Equation[] {
-
     return eqs.map(([func, latex]) =>
         new Equation(func, latex, getDeps(func, vars))
     )
@@ -294,12 +144,13 @@ function getSignature(func: Fun): string[] {
         .split(",")
 }
 
-function getDeps(func: Fun, vars: Variable[]): Variable[] {
+function getDeps(func: Fun, vars: Variables): Variables {
     let dep = getSignature(func)
-    return dep.map($ => {
+    let vs = dep.map($ => {
         let v = vars.find(v => v.sym === $)
         if (v === undefined) throw "Fail to get dependency for func: " + func
         return v
     })
+    return new Variables(...vs)
 }
 

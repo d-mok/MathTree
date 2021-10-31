@@ -30704,74 +30704,60 @@ globalThis.QuadraticFromVertex = contract(QuadraticFromVertex).sign([owl.nonZero
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildRatio = void 0;
 const support_1 = __webpack_require__(3760);
-function BuildRatio(variables, equation) {
+function BuildRatio(variables, func, latex) {
     let vars = (0, support_1.toVariables)(variables);
-    let [func, latex] = equation;
     let eq = new support_1.Equation(func, latex, vars);
     eq.fit();
     let [given, unknown, ...constants] = RndShuffle(...vars);
+    let g = [];
+    let u = [];
     given.round();
     unknown.round();
-    let g1 = given.getVal();
-    let u1 = unknown.getVal();
-    constants.forEach($ => $.clear());
-    constants.forEach($ => $.widen());
-    eq.fit();
-    given.clear();
-    given.widen();
-    unknown.clear();
-    unknown.widen();
-    eq.fit();
-    let g2 = given.getVal();
-    let u2 = unknown.getVal();
-    function printEq() {
-        given.subscript = "2";
-        unknown.subscript += "2";
-        let [lhs2, rhs2] = eq.print().split("=");
-        given.subscript = "1";
-        unknown.subscript = "1";
-        let [lhs1, rhs1] = eq.print().split("=");
-        given.subscript = "";
-        unknown.subscript = "";
-        return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`;
+    g.push(given.getVal());
+    u.push(unknown.getVal());
+    eq.fitAgain(constants);
+    eq.fitAgain([given, unknown]);
+    given.round();
+    eq.fitAgain([unknown]);
+    g.push(given.getVal());
+    u.push(unknown.getVal());
+    function setSubscript(subs = "") {
+        given.subsrcipt(subs);
+        unknown.subsrcipt(subs);
     }
-    function printSubs() {
-        given.set(g2);
-        unknown.subscript = "2";
-        let [lhs2, rhs2] = eq.print([given]).split("=");
-        unknown.subscript = "";
-        given.set(g1);
-        unknown.set(u1);
-        let [lhs1, rhs1] = eq.print([given, unknown]).split("=");
+    function setVal(order) {
+        given.set(g[order - 1]);
+        unknown.set(u[order - 1]);
+    }
+    function setCase(order) {
+        setSubscript(order);
+        setVal(order);
+    }
+    function printRatioFraction(case1Show = [], case2Show = []) {
+        setCase(2);
+        let [lhs2, rhs2] = eq.print(case2Show).split("=");
+        setCase(1);
+        let [lhs1, rhs1] = eq.print(case1Show).split("=");
         return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`;
     }
     function printAns() {
-        unknown.subscript = "2";
-        unknown.set(u2);
-        let T = unknown.full();
-        unknown.subscript = "";
-        return T;
+        setCase(2);
+        return unknown.full();
     }
     function sol() {
-        let T = "";
-        T += "\\begin{aligned}";
-        T += printEq() + ' \\\\ ';
-        T += printSubs() + ' \\\\ ';
-        T += printAns();
-        T += " \\end{aligned}";
-        T = T.replaceAll("=", "&=");
-        return T;
+        return (0, support_1.latexAligned)([
+            printRatioFraction(),
+            printRatioFraction([given, unknown], [given]),
+            printAns()
+        ]);
     }
     function table() {
-        given.set(g1);
+        setCase(1);
         let G1 = "$" + given.long();
-        given.set(g2);
-        let G2 = "$" + given.long();
-        unknown.set(u1);
         let U1 = "$" + unknown.long();
-        unknown.subscript = "2";
+        setCase(2);
+        let G2 = "$" + given.long();
         let U2 = "$" + unknown.symbol();
-        unknown.subscript = "";
         return Table({
             content: [
                 ["", "Before", "After"],
@@ -30786,8 +30772,8 @@ function BuildRatio(variables, equation) {
         table: table(),
         sol: sol(),
         constants: constants.map(v => [v.sym, v.name]),
-        given: [given.sym, given.name, g1, g2, given.unit],
-        unknown: [unknown.sym, unknown.name, u1, u2, unknown.unit],
+        given: [given.sym, given.name, [g[0], g[1]], given.unit],
+        unknown: [unknown.sym, unknown.name, [u[0], u[1]], unknown.unit],
     };
 }
 exports.BuildRatio = BuildRatio;
@@ -30803,28 +30789,31 @@ exports.BuildRatio = BuildRatio;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildSolve = void 0;
 const support_1 = __webpack_require__(3760);
-const build_solve_single_1 = __webpack_require__(9974);
 function BuildSolve(variables, equations) {
-    if (equations.length === 1) {
-        return (0, build_solve_single_1.BuildSolveSingle)(variables, equations[0]);
-    }
+    // if (equations.length === 1) {
+    //     return BuildSolveSingle(variables, equations[0])
+    // }
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables();
     givens.forEach($ => $.round());
-    hiddens.forEach($ => $.clear());
-    hiddens.forEach($ => $.widen());
-    system.solve();
+    system.solveAgain(hiddens);
     function sol() {
-        let T = "";
-        T += system.print() + " \\\\~\\\\ ";
-        T += system.print(givens) + " \\\\~\\\\ ";
-        T += "\\left\\{\\begin{aligned}";
-        for (let v of hiddens)
-            T += v.full() + ' \\\\ ';
-        T += " \\end{aligned}\\right.";
-        T = T.replaceAll("=", "&=");
-        return T;
+        if (equations.length === 1) {
+            let eq = system.equations[0];
+            return (0, support_1.latexAligned)([
+                eq.print(),
+                eq.print(givens),
+                unknown.full()
+            ]);
+        }
+        else {
+            let T = "";
+            T += system.print() + " \\\\~\\\\ ";
+            T += system.print(givens) + " \\\\~\\\\ ";
+            T += (0, support_1.latexBraced)(hiddens.map($ => $.full()));
+            return T;
+        }
     }
     console.log(system);
     return {
@@ -30840,52 +30829,6 @@ function BuildSolve(variables, equations) {
     };
 }
 exports.BuildSolve = BuildSolve;
-
-
-/***/ }),
-
-/***/ 9974:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BuildSolveSingle = void 0;
-const support_1 = __webpack_require__(3760);
-function BuildSolveSingle(variables, equation) {
-    let vars = (0, support_1.toVariables)(variables);
-    let [func, latex] = equation;
-    let eq = new support_1.Equation(func, latex, vars);
-    eq.fit();
-    let unknown = RndPick(...vars);
-    let givens = vars.filter($ => $ !== unknown);
-    givens.forEach($ => $.round());
-    unknown.clear();
-    unknown.widen();
-    eq.solve();
-    function sol() {
-        let T = "";
-        T += "\\begin{aligned}";
-        T += eq.print() + ' \\\\ ';
-        T += eq.print(givens) + ' \\\\ ';
-        T += unknown.full();
-        T += " \\end{aligned}";
-        T = T.replaceAll("=", "&=");
-        return T;
-    }
-    return {
-        list: givens.map($ => $.whole()).join("\\\\"),
-        sol: sol(),
-        vars: vars.map(v => v === unknown ? v.sym : v.long()),
-        unknown: [
-            unknown.sym,
-            unknown.name,
-            unknown.getVal(),
-            unknown.unit
-        ]
-    };
-}
-exports.BuildSolveSingle = BuildSolveSingle;
 
 
 /***/ }),
@@ -30938,122 +30881,155 @@ globalThis.BuildRatio = build_ratio_1.BuildRatio;
 
 /***/ }),
 
-/***/ 5334:
+/***/ 1642:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.analyze = void 0;
-class varlet {
-    constructor(sym) {
-        this.sym = sym;
-        this.solved = false;
-        this.order = -1;
-    }
-    solve(order) {
-        this.solved = true;
-        this.order = order;
-    }
-    reset() {
-        this.solved = false;
-        this.order = -1;
-    }
+exports.createOrderTree = void 0;
+function trim(arr) {
+    return arr.filter($ => Number.isFinite($));
 }
-class equlet {
-    constructor(dep) {
-        this.dep = dep;
-    }
-    solved() {
-        return this.dep.filter($ => $.solved);
-    }
-    unsolved() {
-        return this.dep.filter($ => !$.solved);
-    }
-    nextOrder() {
-        let orders = this.solved().map($ => $.order);
-        if (orders.length === 0)
-            return 0;
-        return Math.max(...orders) + 1;
-    }
-    doable() {
-        return this.unsolved().length === 1;
-    }
-    done() {
-        return this.unsolved().length === 0;
-    }
-    do() {
-        let order = this.nextOrder();
-        this.unsolved().forEach($ => $.solve(order));
-    }
-    tryDo() {
-        if (this.doable())
-            this.do();
-    }
+function max(arr) {
+    return Math.max(...trim(arr));
 }
-class EquSystemAnalyzer {
-    constructor(vars, equations, requiredRich) {
-        this.vars = vars;
-        this.equations = equations;
-        this.requiredRich = requiredRich;
-    }
-    reset() {
-        this.vars.forEach($ => $.reset());
-    }
-    setZeroth(vars) {
-        this.reset();
-        vars.forEach($ => $.solve(0));
-    }
-    pickZeroth() {
-        let nGivens = this.vars.length - this.equations.length;
-        let zeroths = RndPickN(this.vars, nGivens);
-        this.setZeroth(zeroths);
-    }
-    orders() {
-        return this.vars.map($ => $.order);
-    }
-    maxOrder() {
-        return Math.max(...this.orders());
-    }
-    rich() {
-        return this.maxOrder() === this.equations.length;
-    }
-    done() {
-        return this.equations.every($ => $.done()) && this.requiredRich ? this.rich() : true;
-    }
-    do() {
-        for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations)
-                eq.tryDo();
+/**
+ * The system of equations is represented by a matrix.
+ * Each row is a variable.
+ * Each col is an equation.
+ * Initially, all element is set to -1 if the equation contains the variable.
+ * Else, it's set to NaN.
+ * Whenever a variable is solved, that row is set to the corresponding order.
+ */
+class Analyzer {
+    constructor(nRow, nCol) {
+        this.nRow = nRow;
+        this.nCol = nCol;
+        this.matrix = [];
+        this.requireRich = false;
+        for (let i = 0; i < nRow; i++) {
+            let row = Array(nCol).fill(NaN);
+            this.matrix.push(row);
         }
     }
+    initialize(pairs) {
+        for (let [i, j] of pairs)
+            this.matrix[i][j] = -1;
+    }
+    col(j) {
+        return this.matrix.map(r => r[j]);
+    }
+    set(i, j, order) {
+        let v = this.matrix[i][j];
+        if (Number.isFinite(v))
+            this.matrix[i][j] = order;
+    }
+    reset() {
+        for (let i = 0; i < this.nRow; i++) {
+            for (let j = 0; j < this.nCol; j++) {
+                this.set(i, j, -1);
+            }
+        }
+    }
+    reveal(i, order) {
+        for (let j = 0; j < this.nCol; j++)
+            this.set(i, j, order);
+    }
+    nextOrder(j) {
+        return max(this.col(j)) + 1;
+    }
+    nUnsolved(j) {
+        return this.col(j).filter($ => $ === -1).length;
+    }
+    iUnsolved(j) {
+        return this.col(j).findIndex($ => $ === -1);
+    }
+    isSolvable(j) {
+        return this.nUnsolved(j) === 1;
+    }
+    isSolved(j) {
+        return this.nUnsolved(j) === 0;
+    }
+    solve(j) {
+        if (!this.isSolvable(j))
+            return;
+        let nextOrder = this.nextOrder(j);
+        let i = this.iUnsolved(j);
+        this.reveal(i, nextOrder);
+    }
+    solveAll() {
+        for (let j = 0; j < this.nCol; j++)
+            this.solve(j);
+    }
+    solveLoop() {
+        for (let n = 0; n < this.nCol + 2; n++)
+            this.solveAll();
+    }
+    done() {
+        return this.matrix.flat().filter($ => $ === -1).length === 0;
+    }
+    rich() {
+        let maxOrder = max(this.matrix.flat());
+        return maxOrder === this.nCol;
+    }
+    finished() {
+        let rich = this.requireRich ? this.rich() : true;
+        return this.done() && rich;
+    }
+    pickZeroth() {
+        let n = this.nRow - this.nCol;
+        let indices = [...Array(this.nRow).keys()];
+        let zeroIndices = [...toList(indices).sample(n)];
+        for (let i of zeroIndices)
+            this.reveal(i, 0);
+    }
     searchOnce() {
+        this.reset();
         this.pickZeroth();
-        this.do();
+        this.solveLoop();
     }
     search() {
         for (let i = 0; i < 100; i++) {
             this.searchOnce();
-            if (this.done())
+            if (this.finished())
                 return;
         }
         throw '[Analyzer] Fail to search a solving path.';
     }
-}
-function analyze(sys, rich) {
-    let varlets = sys.variables.map($ => new varlet($.sym));
-    function findVarlet(sym) {
-        return varlets.find($ => $.sym === sym);
+    orders() {
+        return this.matrix.map(r => max(r));
     }
-    let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))));
-    let analyzer = new EquSystemAnalyzer(varlets, equlets, rich);
-    analyzer.search();
+}
+function createAnalyzer(sys) {
+    let nVars = sys.variables.length;
+    let nEqs = sys.equations.length;
+    let analyzer = new Analyzer(nVars, nEqs);
+    let pairs = [];
+    for (let i = 0; i < nVars; i++) {
+        for (let j = 0; j < nEqs; j++) {
+            let va = sys.variables[i];
+            let eq = sys.equations[j];
+            if (eq.dep.includes(va))
+                pairs.push([i, j]);
+        }
+    }
+    analyzer.initialize(pairs);
+    return analyzer;
+}
+function writeOrder(sys, analyzer) {
     let orders = analyzer.orders();
     for (let i = 0; i < orders.length; i++) {
         sys.variables[i].order = orders[i];
     }
 }
-exports.analyze = analyze;
+function createOrderTree(sys, rich) {
+    let analyzer = createAnalyzer(sys);
+    analyzer.requireRich = rich;
+    analyzer.search();
+    writeOrder(sys, analyzer);
+}
+exports.createOrderTree = createOrderTree;
 
 
 /***/ }),
@@ -31127,121 +31103,47 @@ exports.bisection = bisection;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toEquSystem = exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.Variable = void 0;
-const analyzer_1 = __webpack_require__(5334);
+exports.toEquSystem = exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.latexBraced = exports.latexAligned = void 0;
+// import { analyze } from './analyzer'
 const bisect_1 = __webpack_require__(6190);
-const UNITS = {
-    'Pa': '~\\text{Pa}',
-    'm3': '~\\text{m}^3',
-    'cm3': '~\\text{cm}^3',
-    'mol': '~\\text{mol}',
-    'K': '~\\text{K}',
-    '°C': '~\\text{°C}',
-};
-class Variable {
-    constructor(sym, name, range, unit = "") {
-        this.sym = sym;
-        this.name = name;
-        this.range = range;
-        this.unit = unit;
-        this.val = NaN;
-        this.order = -1;
-        this.store = [];
-        this.freezed = false;
-        this.subscript = "";
-        this.unit = UNITS[this.unit] ?? this.unit;
-    }
-    bounds() {
-        if (Number.isFinite(this.val))
-            return [this.val, this.val];
-        return this.range;
-    }
-    set(val) {
-        if (this.freezed)
-            return;
-        this.val = val;
-    }
-    round() {
-        this.set(Round(this.val, 3));
-    }
-    clear() {
-        this.set(NaN);
-    }
-    getVal() {
-        return this.val;
-    }
-    solved() {
-        return Number.isFinite(this.val);
-    }
-    widen(fraction = 0.1) {
-        let [min, max] = this.range;
-        this.range = [
-            min - Math.abs(min * fraction),
-            max + Math.abs(max * fraction)
-        ];
-    }
-    save() {
-        this.store.push(this.val);
-        this.clear();
-    }
-    restore() {
-        let val = this.store.pop();
-        this.set(val ?? this.val);
-    }
-    freeze() {
-        this.freezed = true;
-    }
-    unfreeze() {
-        this.freezed = false;
-    }
-    short() {
-        return Number.parseFloat(this.val.toPrecision(3)).toString();
-    }
-    long() {
-        return this.short() + this.unit;
-    }
-    full() {
-        return this.symbol() + " = " + this.long();
-    }
-    whole() {
-        return "\\text{" + this.name + "}" + " = " + this.long();
-    }
-    symbol() {
-        if (this.subscript.length > 0)
-            return this.sym + "_" + this.subscript;
-        return this.sym;
-    }
+const ana_1 = __webpack_require__(1642);
+const variable_1 = __webpack_require__(7515);
+function latexAligned(texts) {
+    let T = "";
+    T += "\\begin{aligned}";
+    for (let t of texts)
+        T += t + " \\\\ ";
+    T += " \\end{aligned}";
+    T = T.replaceAll("=", "&=");
+    T = T.replaceAll("&&=", "&=");
+    return T;
 }
-exports.Variable = Variable;
+exports.latexAligned = latexAligned;
+function latexBraced(texts) {
+    return "\\left\\{" + latexAligned(texts) + "\\right.";
+}
+exports.latexBraced = latexBraced;
 class Equation {
     constructor(zeroFunc, latex, dep) {
         this.zeroFunc = zeroFunc;
         this.latex = latex;
         this.dep = dep;
     }
-    solvable() {
-        let unsolved = this.dep.filter($ => !$.solved());
-        return unsolved.length === 1;
-    }
     solve() {
-        if (this.solvable())
+        if (this.dep.solvable())
             this.fit();
     }
     fit() {
-        const bounds = this.dep.map($ => $.bounds());
-        let roots = (0, bisect_1.bisection)(this.zeroFunc, bounds);
-        this.dep.forEach((v, i) => v.set(roots[i]));
+        let roots = (0, bisect_1.bisection)(this.zeroFunc, this.dep.bounds());
+        this.dep.setVals(roots);
     }
-    print(show = []) {
-        let T = this.latex;
-        for (let v of this.dep) {
-            let shown = show.includes(v);
-            T = T.replaceAll("*(" + v.sym + ")", shown ? "(" + v.short() + ")" : v.symbol());
-            T = T.replaceAll("*" + v.sym, shown ? v.short() : v.symbol());
-            T = T.replaceAll("$(" + v.sym + ")", shown ? "(" + v.long() + ")" : v.symbol());
-            T = T.replaceAll("$" + v.sym, shown ? v.long() : v.symbol());
-        }
-        return T;
+    fitAgain(vars) {
+        vars.forEach($ => $.clear());
+        vars.forEach($ => $.widen());
+        this.fit();
+    }
+    print(showVars = []) {
+        return this.dep.write(this.latex, showVars);
     }
 }
 exports.Equation = Equation;
@@ -31250,21 +31152,6 @@ class EquSystem {
         this.variables = variables;
         this.equations = equations;
     }
-    clearVals() {
-        this.variables.forEach($ => $.clear());
-    }
-    saveVals() {
-        this.variables.forEach($ => $.save());
-    }
-    restoreVals() {
-        this.variables.forEach($ => $.restore());
-    }
-    getVals() {
-        return this.variables.map($ => $.getVal());
-    }
-    solved() {
-        return this.variables.every($ => $.solved());
-    }
     fit() {
         this.equations.forEach($ => $.fit());
     }
@@ -31272,73 +31159,45 @@ class EquSystem {
         for (let i = 0; i < 10; i++) {
             for (let eq of this.equations)
                 eq.solve();
-            if (this.solved())
+            if (this.variables.solved())
                 return;
         }
         throw 'The system is not solvable yet.';
     }
-    analyze(rich) {
-        (0, analyzer_1.analyze)(this, rich);
-    }
-    maxOrder() {
-        let orders = this.variables.map($ => $.order);
-        return Math.max(...orders);
-    }
-    givens() {
-        return this.variables.filter($ => $.order === 0);
-    }
-    hiddens() {
-        return this.variables.filter($ => $.order > 0);
-    }
-    unknownables() {
-        let max = this.maxOrder();
-        return this.variables.filter($ => $.order === max);
+    solveAgain(vars) {
+        vars.forEach($ => $.clear());
+        vars.forEach($ => $.widen());
+        this.solve();
     }
     generateSolvables() {
-        this.analyze(true);
-        let unknown = RndPick(...this.unknownables());
-        return [this.givens(), this.hiddens(), unknown];
+        (0, ana_1.createOrderTree)(this, true);
+        return [
+            this.variables.zeros(),
+            this.variables.positives(),
+            this.variables.pickTop()
+        ];
     }
     generateTrend() {
-        this.analyze(false);
-        let constants = RndShuffle(...this.givens());
-        let control = constants.pop();
-        this.clearVals();
+        (0, ana_1.createOrderTree)(this, false);
+        let [control, ...constants] = this.variables.shuffledZeros();
+        let responses = this.variables.positives();
+        this.variables.clear();
         this.fit();
-        let T1 = this.getVals();
-        control.set(control.getVal() * (RndT() ? 1.05 : 0.95));
-        control.freeze();
-        constants.forEach($ => $.freeze());
-        this.clearVals();
-        this.solve();
-        let T2 = this.getVals();
-        for (let i = 0; i < this.variables.length; i++) {
-            let a = T1[i];
-            let b = T2[i];
-            let p = (b - a) / ((Math.abs(a) + Math.abs(b)) / 2);
-            let THRESHOLD = 0.0000001;
-            let v = 0;
-            if (p > THRESHOLD)
-                v = 1;
-            if (p < -THRESHOLD)
-                v = -1;
-            this.variables[i].set(v);
-        }
-        let responses = this.variables.filter($ => ![control, ...constants].includes($));
+        let oldVal = this.variables.getVals();
+        control.shake();
+        this.solveAgain(responses);
+        this.variables.compareWith(oldVal);
         return [constants, control, responses];
     }
     print(givens = []) {
-        let T = "";
-        T += "\\left\\{\\begin{aligned}";
-        for (let eq of this.equations)
-            T += eq.print(givens) + " \\\\ ";
-        T += " \\end{aligned}\\right. \\\\";
-        return T;
+        let eqs = this.equations.map($ => $.print(givens));
+        return latexBraced(eqs);
     }
 }
 exports.EquSystem = EquSystem;
 function toVariables(vars) {
-    return vars.map(([sym, name, range, unit]) => new Variable(sym, name, range, unit));
+    let vs = vars.map(([sym, name, range, unit]) => new variable_1.Variable(sym, name, range, unit));
+    return new variable_1.Variables(...vs);
 }
 exports.toVariables = toVariables;
 function toEquations(eqs, vars) {
@@ -31360,13 +31219,197 @@ function getSignature(func) {
 }
 function getDeps(func, vars) {
     let dep = getSignature(func);
-    return dep.map($ => {
+    let vs = dep.map($ => {
         let v = vars.find(v => v.sym === $);
         if (v === undefined)
             throw "Fail to get dependency for func: " + func;
         return v;
     });
+    return new variable_1.Variables(...vs);
 }
+
+
+/***/ }),
+
+/***/ 3103:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UNITS = void 0;
+exports.UNITS = {
+    'Pa': '~\\text{Pa}',
+    'm3': '~\\text{m}^3',
+    'cm3': '~\\text{cm}^3',
+    'mol': '~\\text{mol}',
+    'K': '~\\text{K}',
+    '°C': '~\\text{°C}',
+};
+
+
+/***/ }),
+
+/***/ 7515:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Variables = exports.Variable = void 0;
+const units_1 = __webpack_require__(3103);
+class Variable {
+    constructor(sym, name, range, unit = "") {
+        this.sym = sym;
+        this.name = name;
+        this.range = range;
+        this.unit = unit;
+        this.val = NaN;
+        this.order = -1;
+        this.subs = "";
+        this.unit = units_1.UNITS[this.unit] ?? this.unit;
+    }
+    bounds() {
+        if (Number.isFinite(this.val))
+            return [this.val, this.val];
+        return this.range;
+    }
+    set(val) {
+        this.val = val;
+    }
+    round() {
+        this.set(Round(this.val, 3));
+    }
+    shake() {
+        let ratio = RndT() ? 1.05 : 0.95;
+        this.set(this.val * ratio);
+    }
+    clear() {
+        this.set(NaN);
+    }
+    getVal() {
+        return this.val;
+    }
+    solved() {
+        return Number.isFinite(this.val);
+    }
+    widen(fraction = 0.1) {
+        let [min, max] = this.range;
+        this.range = [
+            min - Math.abs(min * fraction),
+            max + Math.abs(max * fraction)
+        ];
+    }
+    subsrcipt(subs = "") {
+        this.subs = String(subs);
+    }
+    symbol() {
+        if (this.subs.length > 0)
+            return this.sym + "_{" + this.subs + "}";
+        return this.sym;
+    }
+    short() {
+        return Number.parseFloat(this.val.toPrecision(3)).toString();
+    }
+    long() {
+        return this.short() + this.unit;
+    }
+    full() {
+        return this.symbol() + " = " + this.long();
+    }
+    whole() {
+        return "\\text{" + this.name + "}" + " = " + this.long();
+    }
+    writeSymbol(latex) {
+        let T = latex;
+        let sym = this.sym;
+        let s = this.symbol();
+        T = T.replaceAll("*(" + sym + ")", s);
+        T = T.replaceAll("*" + sym, s);
+        T = T.replaceAll("$(" + sym + ")", s);
+        T = T.replaceAll("$" + sym, s);
+        return T;
+    }
+    writeValue(latex) {
+        let T = latex;
+        let sym = this.sym;
+        let S = this.short();
+        let L = this.long();
+        T = T.replaceAll("*(" + sym + ")", "(" + S + ")");
+        T = T.replaceAll("*" + sym, S);
+        T = T.replaceAll("$(" + sym + ")", "(" + L + ")");
+        T = T.replaceAll("$" + sym, L);
+        return T;
+    }
+}
+exports.Variable = Variable;
+class Variables extends Array {
+    bounds() {
+        return this.map($ => $.bounds());
+    }
+    clear() {
+        this.forEach($ => $.clear());
+    }
+    widen() {
+        this.forEach($ => $.widen());
+    }
+    getVals() {
+        return this.map($ => $.getVal());
+    }
+    setVals(vals) {
+        this.forEach((v, i) => v.set(vals[i]));
+    }
+    solved() {
+        return this.every($ => $.solved());
+    }
+    solvable() {
+        let unsolved = this.filter($ => !$.solved());
+        return unsolved.length === 1;
+    }
+    maxOrder() {
+        let orders = this.map($ => $.order);
+        return Math.max(...orders);
+    }
+    zeros() {
+        return new Variables(...this.filter($ => $.order === 0));
+    }
+    shuffledZeros() {
+        return new Variables(...RndShuffle(...this.zeros()));
+    }
+    positives() {
+        return new Variables(...this.filter($ => $.order > 0));
+    }
+    tops() {
+        let max = this.maxOrder();
+        return new Variables(...this.filter($ => $.order === max));
+    }
+    pickTop() {
+        return RndPick(...this.tops());
+    }
+    write(latex, showVars) {
+        let T = latex;
+        for (let v of this) {
+            T = showVars.includes(v) ? v.writeValue(T) : v.writeSymbol(T);
+        }
+        return T;
+    }
+    compareWith(oldVals) {
+        this.forEach((v, i) => {
+            let b = v.getVal();
+            let a = oldVals[i];
+            let mid = (Math.abs(a) + Math.abs(b)) / 2;
+            let percent = (b - a) / mid;
+            let THRESHOLD = 0.0000001;
+            let sign = 0;
+            if (percent > THRESHOLD)
+                sign = 1;
+            if (percent < -THRESHOLD)
+                sign = -1;
+            v.set(sign);
+        });
+    }
+}
+exports.Variables = Variables;
 
 
 /***/ }),

@@ -236,14 +236,19 @@ declare function PolySimplify<V extends string>(poly: polynomial<V>): polynomial
  * ```
  */
 declare function PolyDegree<V extends string>(poly: polynomial<V>): number;
-declare module "Math/Builder/support/analyzer" {
-    import { EquSystem } from "Math/Builder/support/support";
-    export function analyze(sys: EquSystem, rich: boolean): void;
-}
 declare module "Math/Builder/support/bisect" {
     export function bisection(f: Fun, ranges: [number, number][]): number[];
 }
-declare module "Math/Builder/support/support" {
+declare module "Math/Builder/support/ana" {
+    import { EquSystem } from "Math/Builder/support/support";
+    export function createOrderTree(sys: EquSystem, rich: boolean): void;
+}
+declare module "Math/Builder/support/units" {
+    export const UNITS: {
+        [_: string]: string;
+    };
+}
+declare module "Math/Builder/support/variable" {
     export class Variable {
         sym: string;
         name: string;
@@ -251,59 +256,70 @@ declare module "Math/Builder/support/support" {
         unit: string;
         private val;
         order: number;
-        private store;
-        private freezed;
-        subscript: string;
+        private subs;
         constructor(sym: string, name: string, range: [number, number], unit?: string);
         bounds(): [number, number];
         set(val: number): void;
         round(): void;
+        shake(): void;
         clear(): void;
         getVal(): number;
         solved(): boolean;
         widen(fraction?: number): void;
-        save(): void;
-        restore(): void;
-        freeze(): void;
-        unfreeze(): void;
+        subsrcipt(subs?: string | number): void;
+        symbol(): string;
         short(): string;
         long(): string;
         full(): string;
         whole(): string;
-        symbol(): string;
+        writeSymbol(latex: string): string;
+        writeValue(latex: string): string;
     }
+    export class Variables extends Array<Variable> {
+        bounds(): [number, number][];
+        clear(): void;
+        widen(): void;
+        getVals(): number[];
+        setVals(vals: number[]): void;
+        solved(): boolean;
+        solvable(): boolean;
+        private maxOrder;
+        zeros(): Variables;
+        shuffledZeros(): Variables;
+        positives(): Variables;
+        tops(): Variables;
+        pickTop(): Variable;
+        write(latex: string, showVars: Variable[]): string;
+        compareWith(oldVals: number[]): void;
+    }
+}
+declare module "Math/Builder/support/support" {
+    import { Variable, Variables } from "Math/Builder/support/variable";
+    export function latexAligned(texts: string[]): string;
+    export function latexBraced(texts: string[]): string;
     export class Equation {
         zeroFunc: Fun;
         latex: string;
-        dep: Variable[];
-        constructor(zeroFunc: Fun, latex: string, dep: Variable[]);
-        solvable(): boolean;
+        dep: Variables;
+        constructor(zeroFunc: Fun, latex: string, dep: Variables);
         solve(): void;
         fit(): void;
-        print(show?: Variable[]): string;
+        fitAgain(vars: Variable[]): void;
+        print(showVars?: Variable[]): string;
     }
     export class EquSystem {
-        variables: Variable[];
+        variables: Variables;
         equations: Equation[];
-        constructor(variables: Variable[], equations: Equation[]);
-        private clearVals;
-        private saveVals;
-        private restoreVals;
-        private getVals;
-        private solved;
+        constructor(variables: Variables, equations: Equation[]);
         fit(): void;
         solve(): void;
-        private analyze;
-        private maxOrder;
-        private givens;
-        private hiddens;
-        private unknownables;
+        solveAgain(vars: Variable[]): void;
         generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable];
         generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]];
         print(givens?: Variable[]): string;
     }
-    export function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variable[];
-    export function toEquations(eqs: [func: Fun, latex: string][], vars: Variable[]): Equation[];
+    export function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variables;
+    export function toEquations(eqs: [func: Fun, latex: string][], vars: Variables): Equation[];
     export function toEquSystem(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string][]): EquSystem;
 }
 declare module "Math/Builder/build_solve_single" {
@@ -331,12 +347,12 @@ declare module "Math/Builder/build_trend" {
     };
 }
 declare module "Math/Builder/build_ratio" {
-    export function BuildRatio(variables: [sym: string, name: string, range: [number, number], unit: string][], equation: [func: Fun, latex: string]): {
+    export function BuildRatio(variables: [sym: string, name: string, range: [number, number], unit: string][], func: Fun, latex: string): {
         table: string;
         sol: string;
         constants: string[][];
-        given: (string | number)[];
-        unknown: (string | number)[];
+        given: (string | number[])[];
+        unknown: (string | number[])[];
     };
 }
 declare module "Math/Builder/index" {
