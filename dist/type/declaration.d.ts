@@ -244,9 +244,7 @@ declare module "Math/Builder/support/bisect" {
     export function bisection(f: Fun, ranges: [number, number][]): number[];
 }
 declare module "Math/Builder/support/units" {
-    export const DEFAULT_UNIT: {
-        [_: string]: string;
-    };
+    export function findUnit(name: string): string | undefined;
     export function parseUnit(raw: string): string;
 }
 declare module "Math/Builder/support/variable" {
@@ -363,9 +361,10 @@ declare module "Math/Builder/build_ratio" {
     }): {
         table: string;
         sol: string;
-        constants: [sym: string, name: string][];
-        given: [sym: string, name: string, val: [number, number], unit: string];
-        unknown: [sym: string, name: string, val: [number, number], unit: string];
+        consts: string[];
+        constSyms: string[];
+        given: [sym: string, name: string];
+        unknown: [sym: string, name: string, val: number, unit: string];
     };
 }
 declare module "Math/Builder/index" {

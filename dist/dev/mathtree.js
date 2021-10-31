@@ -30709,10 +30709,10 @@ const support_1 = __webpack_require__(3760);
 function BuildRatio(variables, func, latex, settings = {}) {
     let vars = (0, support_1.toVariables)(variables);
     let eq = new equation_1.Equation(func, latex, vars);
-    eq.fit();
     let [given, unknown, ...constants] = RndShuffle(...vars);
     let g = [];
     let u = [];
+    eq.fit();
     given.round();
     unknown.round();
     g.push(given.getVal());
@@ -30764,20 +30764,25 @@ function BuildRatio(variables, func, latex, settings = {}) {
         let [case1, case2] = settings.cases ?? ["Before", "After"];
         return Table({
             content: [
-                ["", case1, case2],
-                ["$" + given.sym, G1, G2],
-                ["$" + unknown.sym, U1, U2],
+                ["", "$" + given.sym, "$" + unknown.sym],
+                [case1, G1, U1],
+                [case2, G2, U2]
             ],
             columns: 'c|c:c',
             rows: 'r|r:r',
         });
     }
+    function getUnknown() {
+        setCase(2);
+        return [unknown.symbol(), unknown.name, unknown.getVal(), unknown.unit];
+    }
     return {
         table: table(),
         sol: sol(),
-        constants: constants.map(v => [v.sym, v.name]),
-        given: [given.sym, given.name, [g[0], g[1]], given.unit],
-        unknown: [unknown.sym, unknown.name, [u[0], u[1]], unknown.unit],
+        consts: constants.map(v => v.name),
+        constSyms: constants.map(v => v.sym),
+        given: [given.sym, given.name],
+        unknown: getUnknown(),
     };
 }
 exports.BuildRatio = BuildRatio;
@@ -31285,8 +31290,8 @@ exports.EquSystem = EquSystem;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseUnit = exports.DEFAULT_UNIT = void 0;
-exports.DEFAULT_UNIT = {
+exports.parseUnit = exports.findUnit = void 0;
+const DEFAULT_UNIT = {
     'time': 's',
     'distance': 'm',
     'displacement': 'm',
@@ -31303,15 +31308,16 @@ exports.DEFAULT_UNIT = {
     'width': 'm',
     'wavelength': 'm',
     'capacitiy': 'm3',
-    'angle': 'o',
+    'angle': '°',
     'energy': 'J',
     'mass': 'kg',
-    'heat capacity': 'J oC-1',
-    'specific heat capacity': 'J kg-1 oC-1',
-    'temperature': 'oC',
+    'electromotive force': 'V',
+    'specific heat capacity': 'J kg-1 °C-1',
+    'heat capacity': 'J °C-1',
+    'temperature': '°C',
     'latent heat': 'J kg-1',
     'pressure': 'Pa',
-    'mole': 'mol',
+    'number of mole': 'mol',
     'force': 'N',
     'weight': 'N',
     'tension': 'N',
@@ -31322,20 +31328,19 @@ exports.DEFAULT_UNIT = {
     'angular speed': 'rad s-1',
     'angular displacement': 'rad',
     'gravitational field strength': 'm s-2',
-    'angular position': 'o',
+    'angular position': '°',
     'period': 's',
     'frequency': 'Hz',
     'amplitude': 'm',
     'charge': 'C',
     'current': 'A',
     'voltage': 'V',
-    'resistance': 'ohm',
+    'resistance': 'Ω',
     'electric field strength': 'N C-1',
     'potential difference': 'V',
-    'resistivity': 'ohm m',
+    'resistivity': 'Ω m',
     'emf': 'V',
     'e.m.f.': 'V',
-    'electromotive force': 'V',
     'magnetic field': 'B',
     'magnetic flux': 'Wb',
     'activity': 'Bq',
@@ -31344,27 +31349,31 @@ exports.DEFAULT_UNIT = {
     'density': 'kg m-3'
 };
 const BASE_UNITS = [
-    '\\Omega',
     'rad', 'mol',
     'Wb', 'Bq', 'eV', '°C', 'Pa',
-    's', 'm', 'g', 'A', 'K', 'J', 'N', 'W', 'C', 'V', 'T', 'u',
+    's', 'm', 'g', 'A', 'K', 'J', 'N', 'W', 'C', 'V', 'T', 'u', 'Ω'
 ];
 const BASE_PREFIX = ['n', 'u', 'm', 'c', 'k', 'M', 'G', 'T', ''];
 const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4'];
+function findUnit(name) {
+    for (let k in DEFAULT_UNIT) {
+        if (name.includes(k))
+            return DEFAULT_UNIT[k];
+    }
+    return undefined;
+}
+exports.findUnit = findUnit;
 function parseUnit(raw) {
-    let T = raw.replaceAll(" ", "");
-    T = T.replaceAll("ohm", "\\Omega");
-    T = T.replaceAll("oC", "°C");
-    T = T.replaceAll("o", "°");
+    let T = " " + raw + " ";
     for (let u of BASE_UNITS) {
         if (!T.includes(u))
             continue;
         for (let p of BASE_PREFIX) {
-            T = T.replaceAll(p + u, "~\\text{" + p + u + "}");
+            T = T.replaceAll(new RegExp('([^a-zA-z])' + p + u + '([^a-zA-z])', 'g'), '$1' + "~\\text{" + p + u + "}" + '$2');
         }
     }
     for (let i of BASE_INDEX)
-        T = T.replaceAll(i, "^{" + i + "}");
+        T = T.replaceAll(new RegExp('([^0123456789-])' + i + '([^0123456789-])', 'g'), '$1' + "^{" + i + "}" + '$2');
     return T;
 }
 exports.parseUnit = parseUnit;
@@ -31395,7 +31404,8 @@ class Variable {
         this.val = NaN;
         this.order = -1;
         this.subs = "";
-        unit ?? (unit = units_1.DEFAULT_UNIT[name]);
+        unit ?? (unit = (0, units_1.findUnit)(name));
+        unit ?? (unit = "");
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
     }
@@ -31439,7 +31449,9 @@ class Variable {
         return this.sym;
     }
     short() {
-        return Number.parseFloat(this.val.toPrecision(3)).toString();
+        let v = cal.blur(Round(this.val, 3));
+        let abs = Math.abs(v);
+        return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v);
     }
     long() {
         return this.short() + this.unit;
@@ -31560,7 +31572,7 @@ class Variables extends Array {
             }
             return;
         }
-        throw failMsg;
+        throw "[Timeloop 100] " + failMsg;
     }
 }
 exports.Variables = Variables;
