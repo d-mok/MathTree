@@ -21,11 +21,11 @@ export function BuildRatio(
 
     let vars = toVariables(variables)
     let eq = new Equation(func, latex, vars)
-    
+
     let [given, unknown, ...constants] = RndShuffle(...vars)
     let g: number[] = []
     let u: number[] = []
-    
+
     eq.fit()
     given.round()
     unknown.round()
@@ -91,9 +91,9 @@ export function BuildRatio(
         let [case1, case2] = settings.cases ?? ["Before", "After"]
         return Table({
             content: [
-                ["", case1, case2],
-                ["$" + given.sym, G1, G2],
-                ["$" + unknown.sym, U1, U2],
+                ["", "$" + given.sym, "$" + unknown.sym],
+                [case1, G1, U1],
+                [case2, G2, U2]
             ],
             columns: 'c|c:c',
             rows: 'r|r:r',
