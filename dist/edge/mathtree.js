@@ -31290,8 +31290,8 @@ exports.EquSystem = EquSystem;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseUnit = exports.DEFAULT_UNIT = void 0;
-exports.DEFAULT_UNIT = {
+exports.parseUnit = exports.findUnit = void 0;
+const DEFAULT_UNIT = {
     'time': 's',
     'distance': 'm',
     'displacement': 'm',
@@ -31311,8 +31311,9 @@ exports.DEFAULT_UNIT = {
     'angle': '°',
     'energy': 'J',
     'mass': 'kg',
-    'heat capacity': 'J °C-1',
+    'electromotive force': 'V',
     'specific heat capacity': 'J kg-1 °C-1',
+    'heat capacity': 'J °C-1',
     'temperature': '°C',
     'latent heat': 'J kg-1',
     'pressure': 'Pa',
@@ -31340,7 +31341,6 @@ exports.DEFAULT_UNIT = {
     'resistivity': 'ohm m',
     'emf': 'V',
     'e.m.f.': 'V',
-    'electromotive force': 'V',
     'magnetic field': 'B',
     'magnetic flux': 'Wb',
     'activity': 'Bq',
@@ -31356,6 +31356,14 @@ const BASE_UNITS = [
 ];
 const BASE_PREFIX = ['n', 'u', 'm', 'c', 'k', 'M', 'G', 'T', ''];
 const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4'];
+function findUnit(name) {
+    for (let k in DEFAULT_UNIT) {
+        if (name.includes(k))
+            return DEFAULT_UNIT[k];
+    }
+    return undefined;
+}
+exports.findUnit = findUnit;
 function parseUnit(raw) {
     let T = " " + raw + " ";
     T = T.replaceAll("ohm", "\\Omega");
@@ -31398,7 +31406,7 @@ class Variable {
         this.val = NaN;
         this.order = -1;
         this.subs = "";
-        unit ?? (unit = units_1.DEFAULT_UNIT[name]);
+        unit ?? (unit = (0, units_1.findUnit)(name));
         unit ?? (unit = "");
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);

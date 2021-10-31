@@ -1,5 +1,5 @@
 
-export const DEFAULT_UNIT: { [_: string]: string } = {
+const DEFAULT_UNIT: { [_: string]: string } = {
     'time': 's',
     'distance': 'm',
     'displacement': 'm',
@@ -19,8 +19,9 @@ export const DEFAULT_UNIT: { [_: string]: string } = {
     'angle': '°',
     'energy': 'J',
     'mass': 'kg',
-    'heat capacity': 'J °C-1',
+    'electromotive force': 'V',
     'specific heat capacity': 'J kg-1 °C-1',
+    'heat capacity': 'J °C-1',
     'temperature': '°C',
     'latent heat': 'J kg-1',
     'pressure': 'Pa',
@@ -48,7 +49,6 @@ export const DEFAULT_UNIT: { [_: string]: string } = {
     'resistivity': 'ohm m',
     'emf': 'V',
     'e.m.f.': 'V',
-    'electromotive force': 'V',
     'magnetic field': 'B',
     'magnetic flux': 'Wb',
     'activity': 'Bq',
@@ -67,6 +67,16 @@ const BASE_UNITS = [
 const BASE_PREFIX = ['n', 'u', 'm', 'c', 'k', 'M', 'G', 'T', '']
 
 const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4']
+
+
+
+export function findUnit(name: string): string | undefined {
+    for (let k in DEFAULT_UNIT) {
+        if (name.includes(k)) return DEFAULT_UNIT[k];
+    }
+    return undefined;
+}
+
 
 export function parseUnit(raw: string): string {
     let T = " " + raw + " "

@@ -1,4 +1,4 @@
-import { parseUnit, DEFAULT_UNIT } from './units'
+import { parseUnit, findUnit } from './units'
 
 
 
@@ -26,7 +26,7 @@ export class Variable {
         range: rangeInput,
         unit?: string
     ) {
-        unit ??= DEFAULT_UNIT[name]
+        unit ??= findUnit(name)
         unit ??= ""
         this.unit = parseUnit(unit)
         this.range = parseRange(range)
