@@ -31311,7 +31311,7 @@ exports.DEFAULT_UNIT = {
     'temperature': '°C',
     'latent heat': 'J kg-1',
     'pressure': 'Pa',
-    'mole': 'mol',
+    'number of mole': 'mol',
     'force': 'N',
     'weight': 'N',
     'tension': 'N',
