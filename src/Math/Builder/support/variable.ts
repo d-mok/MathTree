@@ -82,7 +82,9 @@ export class Variable {
     }
 
     short(): string { // val
-        return Number.parseFloat(this.val.toPrecision(3)).toString()
+        let v = cal.blur(Round(this.val, 3))
+        let abs = Math.abs(v)
+        return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v)
     }
 
     long(): string { // val + unit
