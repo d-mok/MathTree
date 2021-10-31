@@ -1,20 +1,14 @@
-import { toEquSystem, latexAligned, latexBraced } from './support/support';
-import { BuildSolveSingle } from './build_solve_single'
+import { toEquSystem, latexAligned, latexBraced, RangeInput} from './support/support';
 
 export function BuildSolve(
-    variables: [sym: string, name: string, range: [number, number], unit: string][],
+    variables: [sym: string, name: string, range: RangeInput, unit: string][],
     equations: [func: Fun, latex: string][],
 ): {
-    list: string,
-    sol: string,
-    vars: string[],
+    list: string
+    sol: string
+    vars: string[]
     unknown: [sym: string, name: string, val: number, unit: string]
 } {
-
-    // if (equations.length === 1) {
-    //     return BuildSolveSingle(variables, equations[0])
-    // }
-
     let system = toEquSystem(variables, equations)
     system.fit()
 

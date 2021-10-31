@@ -1,14 +1,17 @@
-import { Equation, toVariables, latexAligned } from './support/support';
+import { Equation, toVariables, latexAligned, RangeInput } from './support/support';
 import { Variable } from './support/variable';
 
-
-
-
 export function BuildRatio(
-    variables: [sym: string, name: string, range: [number, number], unit: string][],
+    variables: [sym: string, name: string, range: RangeInput, unit: string][],
     func: Fun,
     latex: string
-) {
+): {
+    table: string
+    sol: string
+    constants: [sym: string, name: string][]
+    given: [sym: string, name: string, val: [number, number], unit: string]
+    unknown: [sym: string, name: string, val: [number, number], unit: string]
+} {
 
     let vars = toVariables(variables)
     let eq = new Equation(func, latex, vars)

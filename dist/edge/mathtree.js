@@ -30790,9 +30790,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildSolve = void 0;
 const support_1 = __webpack_require__(3760);
 function BuildSolve(variables, equations) {
-    // if (equations.length === 1) {
-    //     return BuildSolveSingle(variables, equations[0])
-    // }
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables();
@@ -30881,7 +30878,7 @@ globalThis.BuildRatio = build_ratio_1.BuildRatio;
 
 /***/ }),
 
-/***/ 1642:
+/***/ 5334:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -30947,9 +30944,6 @@ class Analyzer {
     }
     isSolvable(j) {
         return this.nUnsolved(j) === 1;
-    }
-    isSolved(j) {
-        return this.nUnsolved(j) === 0;
     }
     solve(j) {
         if (!this.isSolvable(j))
@@ -31027,6 +31021,7 @@ function createOrderTree(sys, rich) {
     let analyzer = createAnalyzer(sys);
     analyzer.requireRich = rich;
     analyzer.search();
+    console.log(analyzer);
     writeOrder(sys, analyzer);
 }
 exports.createOrderTree = createOrderTree;
@@ -31106,7 +31101,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toEquSystem = exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.latexBraced = exports.latexAligned = void 0;
 // import { analyze } from './analyzer'
 const bisect_1 = __webpack_require__(6190);
-const ana_1 = __webpack_require__(1642);
+const analyzer_1 = __webpack_require__(5334);
 const variable_1 = __webpack_require__(7515);
 function latexAligned(texts) {
     let T = "";
@@ -31170,7 +31165,7 @@ class EquSystem {
         this.solve();
     }
     generateSolvables() {
-        (0, ana_1.createOrderTree)(this, true);
+        (0, analyzer_1.createOrderTree)(this, true);
         return [
             this.variables.zeros(),
             this.variables.positives(),
@@ -31178,7 +31173,7 @@ class EquSystem {
         ];
     }
     generateTrend() {
-        (0, ana_1.createOrderTree)(this, false);
+        (0, analyzer_1.createOrderTree)(this, false);
         let [control, ...constants] = this.variables.shuffledZeros();
         let responses = this.variables.positives();
         this.variables.clear();
@@ -31195,8 +31190,18 @@ class EquSystem {
     }
 }
 exports.EquSystem = EquSystem;
+function parseRange(rng) {
+    if (Array.isArray(rng)) {
+        if (rng.length === 2)
+            return rng;
+        return [rng[0], rng[0]];
+    }
+    else {
+        return [rng / 10, rng * 10];
+    }
+}
 function toVariables(vars) {
-    let vs = vars.map(([sym, name, range, unit]) => new variable_1.Variable(sym, name, range, unit));
+    let vs = vars.map(([sym, name, range, unit]) => new variable_1.Variable(sym, name, parseRange(range), unit));
     return new variable_1.Variables(...vs);
 }
 exports.toVariables = toVariables;

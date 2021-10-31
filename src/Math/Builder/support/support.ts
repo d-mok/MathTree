@@ -1,6 +1,6 @@
 // import { analyze } from './analyzer'
 import { bisection } from './bisect'
-import { createOrderTree } from './ana'
+import { createOrderTree } from './analyzer'
 import { Variable, Variables } from './variable'
 
 
@@ -106,14 +106,22 @@ export class EquSystem {
 
 }
 
+export type RangeInput = [number, number] | [number] | number
 
-
+function parseRange(rng: RangeInput): [number, number] {
+    if (Array.isArray(rng)) {
+        if (rng.length === 2) return rng
+        return [rng[0], rng[0]]
+    } else {
+        return [rng / 10, rng * 10]
+    }
+}
 
 export function toVariables(
-    vars: [sym: string, name: string, range: [number, number], unit: string][]
+    vars: [sym: string, name: string, range: RangeInput, unit: string][]
 ): Variables {
     let vs = vars.map(([sym, name, range, unit]) =>
-        new Variable(sym, name, range, unit))
+        new Variable(sym, name, parseRange(range), unit))
     return new Variables(...vs)
 }
 
@@ -127,7 +135,7 @@ export function toEquations(
 }
 
 export function toEquSystem(
-    variables: [sym: string, name: string, range: [number, number], unit: string][],
+    variables: [sym: string, name: string, range: RangeInput, unit: string][],
     equations: [func: Fun, latex: string][],
 ): EquSystem {
     let vars = toVariables(variables)

@@ -239,7 +239,7 @@ declare function PolyDegree<V extends string>(poly: polynomial<V>): number;
 declare module "Math/Builder/support/bisect" {
     export function bisection(f: Fun, ranges: [number, number][]): number[];
 }
-declare module "Math/Builder/support/ana" {
+declare module "Math/Builder/support/analyzer" {
     import { EquSystem } from "Math/Builder/support/support";
     export function createOrderTree(sys: EquSystem, rich: boolean): void;
 }
@@ -318,20 +318,14 @@ declare module "Math/Builder/support/support" {
         generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]];
         print(givens?: Variable[]): string;
     }
-    export function toVariables(vars: [sym: string, name: string, range: [number, number], unit: string][]): Variables;
+    export type RangeInput = [number, number] | [number] | number;
+    export function toVariables(vars: [sym: string, name: string, range: RangeInput, unit: string][]): Variables;
     export function toEquations(eqs: [func: Fun, latex: string][], vars: Variables): Equation[];
-    export function toEquSystem(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string][]): EquSystem;
-}
-declare module "Math/Builder/build_solve_single" {
-    export function BuildSolveSingle(variables: [sym: string, name: string, range: [number, number], unit: string][], equation: [func: Fun, latex: string]): {
-        list: string;
-        sol: string;
-        vars: string[];
-        unknown: [sym: string, name: string, val: number, unit: string];
-    };
+    export function toEquSystem(variables: [sym: string, name: string, range: RangeInput, unit: string][], equations: [func: Fun, latex: string][]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string][]): {
+    import { RangeInput } from "Math/Builder/support/support";
+    export function BuildSolve(variables: [sym: string, name: string, range: RangeInput, unit: string][], equations: [func: Fun, latex: string][]): {
         list: string;
         sol: string;
         vars: string[];
@@ -339,7 +333,8 @@ declare module "Math/Builder/build_solve" {
     };
 }
 declare module "Math/Builder/build_trend" {
-    export function BuildTrend(variables: [sym: string, name: string, range: [number, number], unit: string][], equations: [func: Fun, latex: string][], trendWords?: [string, string, string]): {
+    import { RangeInput } from "Math/Builder/support/support";
+    export function BuildTrend(variables: [sym: string, name: string, range: RangeInput, unit: string][], equations: [func: Fun, latex: string][], trendWords?: [string, string, string]): {
         constants: [sym: string, name: string][];
         control: [sym: string, name: string, trend: string, change: number];
         responses: [sym: string, name: string, trend: string, change: number][];
@@ -347,12 +342,13 @@ declare module "Math/Builder/build_trend" {
     };
 }
 declare module "Math/Builder/build_ratio" {
-    export function BuildRatio(variables: [sym: string, name: string, range: [number, number], unit: string][], func: Fun, latex: string): {
+    import { RangeInput } from "Math/Builder/support/support";
+    export function BuildRatio(variables: [sym: string, name: string, range: RangeInput, unit: string][], func: Fun, latex: string): {
         table: string;
         sol: string;
-        constants: string[][];
-        given: (string | number[])[];
-        unknown: (string | number[])[];
+        constants: [sym: string, name: string][];
+        given: [sym: string, name: string, val: [number, number], unit: string];
+        unknown: [sym: string, name: string, val: [number, number], unit: string];
     };
 }
 declare module "Math/Builder/index" {
