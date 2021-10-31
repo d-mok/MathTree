@@ -1,4 +1,4 @@
-import { EquSystem } from "./support"
+import { EquSystem } from "./system"
 
 function trim(arr: number[]): number[] {
     return arr.filter($ => Number.isFinite($))

@@ -30703,10 +30703,12 @@ globalThis.QuadraticFromVertex = contract(QuadraticFromVertex).sign([owl.nonZero
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildRatio = void 0;
+const equation_1 = __webpack_require__(404);
+const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
-function BuildRatio(variables, func, latex) {
+function BuildRatio(variables, func, latex, settings = {}) {
     let vars = (0, support_1.toVariables)(variables);
-    let eq = new support_1.Equation(func, latex, vars);
+    let eq = new equation_1.Equation(func, latex, vars);
     eq.fit();
     let [given, unknown, ...constants] = RndShuffle(...vars);
     let g = [];
@@ -30721,9 +30723,10 @@ function BuildRatio(variables, func, latex) {
     eq.fitAgain([unknown]);
     g.push(given.getVal());
     u.push(unknown.getVal());
-    function setSubscript(subs = "") {
-        given.subsrcipt(subs);
-        unknown.subsrcipt(subs);
+    function setSubscript(order) {
+        let subs = settings.subsrcipt ?? [1, 2];
+        given.subsrcipt(subs[order - 1]);
+        unknown.subsrcipt(subs[order - 1]);
     }
     function setVal(order) {
         given.set(g[order - 1]);
@@ -30745,7 +30748,7 @@ function BuildRatio(variables, func, latex) {
         return unknown.full();
     }
     function sol() {
-        return (0, support_1.latexAligned)([
+        return (0, latex_1.latexAligned)([
             printRatioFraction(),
             printRatioFraction([given, unknown], [given]),
             printAns()
@@ -30758,9 +30761,10 @@ function BuildRatio(variables, func, latex) {
         setCase(2);
         let G2 = "$" + given.long();
         let U2 = "$" + unknown.symbol();
+        let [case1, case2] = settings.cases ?? ["Before", "After"];
         return Table({
             content: [
-                ["", "Before", "After"],
+                ["", case1, case2],
                 ["$" + given.sym, G1, G2],
                 ["$" + unknown.sym, U1, U2],
             ],
@@ -30788,6 +30792,7 @@ exports.BuildRatio = BuildRatio;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildSolve = void 0;
+const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
 function BuildSolve(variables, equations) {
     let system = (0, support_1.toEquSystem)(variables, equations);
@@ -30798,7 +30803,7 @@ function BuildSolve(variables, equations) {
     function sol() {
         if (equations.length === 1) {
             let eq = system.equations[0];
-            return (0, support_1.latexAligned)([
+            return (0, latex_1.latexAligned)([
                 eq.print(),
                 eq.print(givens),
                 unknown.full()
@@ -30808,7 +30813,7 @@ function BuildSolve(variables, equations) {
             let T = "";
             T += system.print() + " \\\\~\\\\ ";
             T += system.print(givens) + " \\\\~\\\\ ";
-            T += (0, support_1.latexBraced)(hiddens.map($ => $.full()));
+            T += (0, latex_1.latexBraced)(hiddens.map($ => $.full()));
             return T;
         }
     }
@@ -30837,16 +30842,17 @@ exports.BuildSolve = BuildSolve;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildTrend = void 0;
 const support_1 = __webpack_require__(3760);
-function BuildTrend(variables, equations, trendWords = ['increases', 'is unchanged', 'decreases']) {
+function BuildTrend(variables, equations, settings = {}) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     let [constants, control, responses] = system.generateTrend();
     function toWord(change) {
+        let trendWords = settings.trends ?? ['increases', 'decreases', 'is unchanged'];
         if (change > 0)
             return trendWords[0];
         if (change === 0)
-            return trendWords[1];
-        if (change < 0)
             return trendWords[2];
+        if (change < 0)
+            return trendWords[1];
         return "[error]";
     }
     return {
@@ -31090,32 +31096,15 @@ exports.bisection = bisection;
 
 /***/ }),
 
-/***/ 3760:
+/***/ 404:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toEquSystem = exports.toEquations = exports.toVariables = exports.EquSystem = exports.Equation = exports.latexBraced = exports.latexAligned = void 0;
+exports.Equation = void 0;
 // import { analyze } from './analyzer'
 const bisect_1 = __webpack_require__(6190);
-const analyzer_1 = __webpack_require__(5334);
-const variable_1 = __webpack_require__(7515);
-function latexAligned(texts) {
-    let T = "";
-    T += "\\begin{aligned}";
-    for (let t of texts)
-        T += t + " \\\\ ";
-    T += " \\end{aligned}";
-    T = T.replaceAll("=", "&=");
-    T = T.replaceAll("&&=", "&=");
-    return T;
-}
-exports.latexAligned = latexAligned;
-function latexBraced(texts) {
-    return "\\left\\{" + latexAligned(texts) + "\\right.";
-}
-exports.latexBraced = latexBraced;
 class Equation {
     constructor(zeroFunc, latex, dep) {
         this.zeroFunc = zeroFunc;
@@ -31140,22 +31129,120 @@ class Equation {
     }
 }
 exports.Equation = Equation;
+
+
+/***/ }),
+
+/***/ 1838:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.latexBraced = exports.latexAligned = void 0;
+function latexAligned(texts) {
+    let T = "";
+    T += "\\begin{aligned}";
+    for (let t of texts)
+        T += t + " \\\\ ";
+    T += " \\end{aligned}";
+    T = T.replaceAll("=", "&=");
+    T = T.replaceAll("&&=", "&=");
+    return T;
+}
+exports.latexAligned = latexAligned;
+function latexBraced(texts) {
+    return "\\left\\{" + latexAligned(texts) + "\\right.";
+}
+exports.latexBraced = latexBraced;
+
+
+/***/ }),
+
+/***/ 3760:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toEquSystem = exports.toEquations = exports.toVariables = void 0;
+const equation_1 = __webpack_require__(404);
+const system_1 = __webpack_require__(793);
+const variable_1 = __webpack_require__(7515);
+function getSignature(func) {
+    const fnStr = func.toString();
+    return fnStr
+        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+        .replaceAll(" ", "")
+        .split(",");
+}
+function findVarBySym(sym, vars) {
+    let v = vars.find(v => v.sym === sym);
+    if (v === undefined)
+        throw "Fail to find variable: " + sym;
+    return v;
+}
+function getDeps(func, vars) {
+    let dep = getSignature(func);
+    let vs = dep.map($ => findVarBySym($, vars));
+    return new variable_1.Variables(...vs);
+}
+function toVariable(variable) {
+    let [sym, name, range, unit] = variable;
+    return new variable_1.Variable(sym, name, range, unit);
+}
+function toVariables(vars) {
+    let vs = vars.map($ => toVariable($));
+    return new variable_1.Variables(...vs);
+}
+exports.toVariables = toVariables;
+function toEquation(eq, vars) {
+    let [func, latex] = eq;
+    return new equation_1.Equation(func, latex, getDeps(func, vars));
+}
+function toEquations(eqs, vars) {
+    return eqs.map($ => toEquation($, vars));
+}
+exports.toEquations = toEquations;
+function toEquSystem(variables, equations) {
+    let vars = toVariables(variables);
+    let eqs = toEquations(equations, vars);
+    return new system_1.EquSystem(vars, eqs);
+}
+exports.toEquSystem = toEquSystem;
+
+
+/***/ }),
+
+/***/ 793:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EquSystem = void 0;
+const analyzer_1 = __webpack_require__(5334);
+const latex_1 = __webpack_require__(1838);
 class EquSystem {
     constructor(variables, equations) {
         this.variables = variables;
         this.equations = equations;
     }
     fit() {
-        this.equations.forEach($ => $.fit());
+        this.variables.timeLoop(() => {
+            this.equations.forEach($ => $.fit());
+        }, 'The system is not solvable is given range.');
     }
     solve() {
-        for (let i = 0; i < 10; i++) {
-            for (let eq of this.equations)
-                eq.solve();
-            if (this.variables.solved())
-                return;
-        }
-        throw 'The system is not solvable yet.';
+        this.variables.timeLoop(() => {
+            for (let i = 0; i < 10; i++) {
+                for (let eq of this.equations)
+                    eq.solve();
+                if (this.variables.solved())
+                    return;
+            }
+            throw 'The system is not solvable yet.';
+        }, 'The system is not solvable is given range.');
     }
     solveAgain(vars) {
         vars.forEach($ => $.clear());
@@ -31184,52 +31271,10 @@ class EquSystem {
     }
     print(givens = []) {
         let eqs = this.equations.map($ => $.print(givens));
-        return latexBraced(eqs);
+        return (0, latex_1.latexBraced)(eqs);
     }
 }
 exports.EquSystem = EquSystem;
-function parseRange(rng) {
-    if (Array.isArray(rng)) {
-        if (rng.length === 2)
-            return rng;
-        return [rng[0], rng[0]];
-    }
-    else {
-        return [rng / 10, rng * 10];
-    }
-}
-function toVariables(vars) {
-    let vs = vars.map(([sym, name, range, unit]) => new variable_1.Variable(sym, name, parseRange(range), unit));
-    return new variable_1.Variables(...vs);
-}
-exports.toVariables = toVariables;
-function toEquations(eqs, vars) {
-    return eqs.map(([func, latex]) => new Equation(func, latex, getDeps(func, vars)));
-}
-exports.toEquations = toEquations;
-function toEquSystem(variables, equations) {
-    let vars = toVariables(variables);
-    let eqs = toEquations(equations, vars);
-    return new EquSystem(vars, eqs);
-}
-exports.toEquSystem = toEquSystem;
-function getSignature(func) {
-    const fnStr = func.toString();
-    return fnStr
-        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
-        .replaceAll(" ", "")
-        .split(",");
-}
-function getDeps(func, vars) {
-    let dep = getSignature(func);
-    let vs = dep.map($ => {
-        let v = vars.find(v => v.sym === $);
-        if (v === undefined)
-            throw "Fail to get dependency for func: " + func;
-        return v;
-    });
-    return new variable_1.Variables(...vs);
-}
 
 
 /***/ }),
@@ -31240,15 +31285,89 @@ function getDeps(func, vars) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UNITS = void 0;
-exports.UNITS = {
-    'Pa': '~\\text{Pa}',
-    'm3': '~\\text{m}^3',
-    'cm3': '~\\text{cm}^3',
-    'mol': '~\\text{mol}',
-    'K': '~\\text{K}',
-    '°C': '~\\text{°C}',
+exports.parseUnit = exports.DEFAULT_UNIT = void 0;
+exports.DEFAULT_UNIT = {
+    'time': 's',
+    'distance': 'm',
+    'displacement': 'm',
+    'separation': 'm',
+    'speed': 'm s-1',
+    'velocity': 'm s-1',
+    'acceleration': 'm s-2',
+    'deceleration': 'm s-2',
+    'area': 'm2',
+    'volume': 'm3',
+    'height': 'm',
+    'radius': 'm',
+    'length': 'm',
+    'width': 'm',
+    'wavelength': 'm',
+    'capacitiy': 'm3',
+    'angle': 'o',
+    'energy': 'J',
+    'mass': 'kg',
+    'heat capacity': 'J oC-1',
+    'specific heat capacity': 'J kg-1 oC-1',
+    'temperature': 'oC',
+    'latent heat': 'J kg-1',
+    'pressure': 'Pa',
+    'mole': 'mol',
+    'force': 'N',
+    'weight': 'N',
+    'tension': 'N',
+    'normal reaction': 'N',
+    'friction': 'N',
+    'moment': 'N m',
+    'power': 'W',
+    'angular speed': 'rad s-1',
+    'angular displacement': 'rad',
+    'gravitational field strength': 'm s-2',
+    'angular position': 'o',
+    'period': 's',
+    'frequency': 'Hz',
+    'amplitude': 'm',
+    'charge': 'C',
+    'current': 'A',
+    'voltage': 'V',
+    'resistance': 'ohm',
+    'electric field strength': 'N C-1',
+    'potential difference': 'V',
+    'resistivity': 'ohm m',
+    'emf': 'V',
+    'e.m.f.': 'V',
+    'electromotive force': 'V',
+    'magnetic field': 'B',
+    'magnetic flux': 'Wb',
+    'activity': 'Bq',
+    'half-life': 's',
+    'decay constant': 's-1',
+    'density': 'kg m-3'
 };
+const BASE_UNITS = [
+    '\\Omega',
+    'rad', 'mol',
+    'Wb', 'Bq', 'eV', '°C', 'Pa',
+    's', 'm', 'g', 'A', 'K', 'J', 'N', 'W', 'C', 'V', 'T', 'u',
+];
+const BASE_PREFIX = ['n', 'u', 'm', 'c', 'k', 'M', 'G', 'T', ''];
+const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4'];
+function parseUnit(raw) {
+    let T = raw.replaceAll(" ", "");
+    T = T.replaceAll("ohm", "\\Omega");
+    T = T.replaceAll("oC", "°C");
+    T = T.replaceAll("o", "°");
+    for (let u of BASE_UNITS) {
+        if (!T.includes(u))
+            continue;
+        for (let p of BASE_PREFIX) {
+            T = T.replaceAll(p + u, "~\\text{" + p + u + "}");
+        }
+    }
+    for (let i of BASE_INDEX)
+        T = T.replaceAll(i, "^{" + i + "}");
+    return T;
+}
+exports.parseUnit = parseUnit;
 
 
 /***/ }),
@@ -31261,16 +31380,24 @@ exports.UNITS = {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Variables = exports.Variable = void 0;
 const units_1 = __webpack_require__(3103);
+function parseRange(rng) {
+    if (Array.isArray(rng)) {
+        return rng.length === 2 ? rng : [rng[0], rng[0]];
+    }
+    else {
+        return [rng / 10, rng * 10];
+    }
+}
 class Variable {
-    constructor(sym, name, range, unit = "") {
+    constructor(sym, name, range, unit) {
         this.sym = sym;
         this.name = name;
-        this.range = range;
-        this.unit = unit;
         this.val = NaN;
         this.order = -1;
         this.subs = "";
-        this.unit = units_1.UNITS[this.unit] ?? this.unit;
+        unit ?? (unit = units_1.DEFAULT_UNIT[name]);
+        this.unit = (0, units_1.parseUnit)(unit);
+        this.range = parseRange(range);
     }
     bounds() {
         if (Number.isFinite(this.val))
@@ -31347,6 +31474,10 @@ class Variable {
 }
 exports.Variable = Variable;
 class Variables extends Array {
+    constructor() {
+        super(...arguments);
+        this.store = [];
+    }
     bounds() {
         return this.map($ => $.bounds());
     }
@@ -31410,6 +31541,26 @@ class Variables extends Array {
                 sign = -1;
             v.set(sign);
         });
+    }
+    save() {
+        this.store = this.getVals();
+    }
+    restore() {
+        this.setVals(this.store);
+    }
+    timeLoop(func, failMsg) {
+        this.save();
+        for (let i = 0; i < 100; i++) {
+            this.restore();
+            try {
+                func();
+            }
+            catch {
+                continue;
+            }
+            return;
+        }
+        throw failMsg;
     }
 }
 exports.Variables = Variables;

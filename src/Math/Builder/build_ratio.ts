@@ -1,10 +1,16 @@
-import { Equation, toVariables, latexAligned } from './support/support';
+import { Equation } from './support/equation';
+import { latexAligned } from './support/latex';
+import { toVariables } from './support/support';
 import { Variable } from './support/variable';
 
 export function BuildRatio(
-    variables: [sym: string, name: string, range: RangeInput, unit: string][],
+    variables: [sym: string, name: string, range: rangeInput, unit?: string][],
     func: Fun,
-    latex: string
+    latex: string,
+    settings: {
+        cases?: [string, string]
+        subsrcipt?: [string | number, string | number]
+    } = {}
 ): {
     table: string
     sol: string
@@ -15,12 +21,12 @@ export function BuildRatio(
 
     let vars = toVariables(variables)
     let eq = new Equation(func, latex, vars)
-    eq.fit()
-
+    
     let [given, unknown, ...constants] = RndShuffle(...vars)
     let g: number[] = []
     let u: number[] = []
-
+    
+    eq.fit()
     given.round()
     unknown.round()
     g.push(given.getVal())
@@ -34,9 +40,10 @@ export function BuildRatio(
     g.push(given.getVal())
     u.push(unknown.getVal())
 
-    function setSubscript(subs: number | string = "") {
-        given.subsrcipt(subs)
-        unknown.subsrcipt(subs)
+    function setSubscript(order: 1 | 2) {
+        let subs = settings.subsrcipt ?? [1, 2]
+        given.subsrcipt(subs[order - 1])
+        unknown.subsrcipt(subs[order - 1])
     }
 
     function setVal(order: 1 | 2) {
@@ -81,9 +88,10 @@ export function BuildRatio(
         setCase(2)
         let G2 = "$" + given.long()
         let U2 = "$" + unknown.symbol()
+        let [case1, case2] = settings.cases ?? ["Before", "After"]
         return Table({
             content: [
-                ["", "Before", "After"],
+                ["", case1, case2],
                 ["$" + given.sym, G1, G2],
                 ["$" + unknown.sym, U1, U2],
             ],

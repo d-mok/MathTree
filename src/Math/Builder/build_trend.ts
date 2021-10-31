@@ -1,9 +1,11 @@
 import { toEquSystem } from './support/support';
 
 export function BuildTrend(
-    variables: [sym: string, name: string, range: RangeInput, unit: string][],
+    variables: [sym: string, name: string, range: rangeInput, unit?: string][],
     equations: [func: Fun, latex: string][],
-    trendWords: [string, string, string] = ['increases', 'is unchanged', 'decreases']
+    settings: {
+        trends?: [inc: string, dec: string, unchange: string]
+    } = {}
 ): {
     constants: [sym: string, name: string][]
     control: [sym: string, name: string, trend: string, change: number]
@@ -16,9 +18,10 @@ export function BuildTrend(
     let [constants, control, responses] = system.generateTrend()
 
     function toWord(change: number): string {
+        let trendWords = settings.trends ?? ['increases', 'decreases', 'is unchanged']
         if (change > 0) return trendWords[0]
-        if (change === 0) return trendWords[1]
-        if (change < 0) return trendWords[2]
+        if (change === 0) return trendWords[2]
+        if (change < 0) return trendWords[1]
         return "[error]"
     }
 

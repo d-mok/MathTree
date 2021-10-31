@@ -1,4 +1,14 @@
-import { UNITS } from './units'
+import { parseUnit, DEFAULT_UNIT } from './units'
+
+
+
+function parseRange(rng: rangeInput): [number, number] {
+    if (Array.isArray(rng)) {
+        return rng.length === 2 ? rng : [rng[0], rng[0]]
+    } else {
+        return [rng / 10, rng * 10]
+    }
+}
 
 
 export class Variable {
@@ -7,13 +17,18 @@ export class Variable {
     public order: number = -1
     private subs: string = ""
 
+    public unit: string
+    private range: [number, number]
+
     constructor(
         public sym: string,
         public name: string,
-        public range: [number, number],
-        public unit: string = ""
+        range: rangeInput,
+        unit?: string
     ) {
-        this.unit = UNITS[this.unit] ?? this.unit
+        unit ??= DEFAULT_UNIT[name]
+        this.unit = parseUnit(unit)
+        this.range = parseRange(range)
     }
 
     bounds(): [number, number] {
@@ -112,6 +127,7 @@ export class Variable {
 
 export class Variables extends Array<Variable>{
 
+    private store: number[] = []
 
     bounds(): [number, number][] {
         return this.map($ => $.bounds())
@@ -189,5 +205,27 @@ export class Variables extends Array<Variable>{
             if (percent < -THRESHOLD) sign = -1
             v.set(sign)
         })
+    }
+
+    private save() {
+        this.store = this.getVals()
+    }
+
+    private restore() {
+        this.setVals(this.store)
+    }
+
+    timeLoop(func: Function, failMsg: string) {
+        this.save()
+        for (let i = 0; i < 100; i++) {
+            this.restore()
+            try {
+                func()
+            } catch {
+                continue
+            }
+            return
+        }
+        throw failMsg
     }
 }

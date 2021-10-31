@@ -1,7 +1,8 @@
-import { toEquSystem, latexAligned, latexBraced } from './support/support';
+import { latexAligned, latexBraced } from './support/latex';
+import { toEquSystem } from './support/support';
 
 export function BuildSolve(
-    variables: [sym: string, name: string, range: RangeInput, unit: string][],
+    variables: [sym: string, name: string, range: rangeInput, unit?: string][],
     equations: [func: Fun, latex: string][],
 ): {
     list: string
