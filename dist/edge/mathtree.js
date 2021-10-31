@@ -30764,8 +30764,8 @@ function BuildRatio(variables, func, latex) {
                 ["$" + given.sym, G1, G2],
                 ["$" + unknown.sym, U1, U2],
             ],
-            columns: '|c||c|c|',
-            rows: '|r||r|r|',
+            columns: 'c|c:c',
+            rows: 'r|r:r',
         });
     }
     return {
@@ -30812,7 +30812,6 @@ function BuildSolve(variables, equations) {
             return T;
         }
     }
-    console.log(system);
     return {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
@@ -31021,7 +31020,6 @@ function createOrderTree(sys, rich) {
     let analyzer = createAnalyzer(sys);
     analyzer.requireRich = rich;
     analyzer.search();
-    console.log(analyzer);
     writeOrder(sys, analyzer);
 }
 exports.createOrderTree = createOrderTree;

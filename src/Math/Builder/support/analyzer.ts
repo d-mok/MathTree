@@ -170,7 +170,6 @@ export function createOrderTree(sys: EquSystem, rich: boolean) {
     let analyzer = createAnalyzer(sys)
     analyzer.requireRich = rich
     analyzer.search()
-    console.log(analyzer)
     writeOrder(sys, analyzer)
 }
 

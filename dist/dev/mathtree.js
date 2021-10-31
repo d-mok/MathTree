@@ -30812,7 +30812,6 @@ function BuildSolve(variables, equations) {
             return T;
         }
     }
-    console.log(system);
     return {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),

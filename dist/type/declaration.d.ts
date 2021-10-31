@@ -318,13 +318,11 @@ declare module "Math/Builder/support/support" {
         generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]];
         print(givens?: Variable[]): string;
     }
-    export type RangeInput = [number, number] | [number] | number;
     export function toVariables(vars: [sym: string, name: string, range: RangeInput, unit: string][]): Variables;
     export function toEquations(eqs: [func: Fun, latex: string][], vars: Variables): Equation[];
     export function toEquSystem(variables: [sym: string, name: string, range: RangeInput, unit: string][], equations: [func: Fun, latex: string][]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    import { RangeInput } from "Math/Builder/support/support";
     export function BuildSolve(variables: [sym: string, name: string, range: RangeInput, unit: string][], equations: [func: Fun, latex: string][]): {
         list: string;
         sol: string;
@@ -333,7 +331,6 @@ declare module "Math/Builder/build_solve" {
     };
 }
 declare module "Math/Builder/build_trend" {
-    import { RangeInput } from "Math/Builder/support/support";
     export function BuildTrend(variables: [sym: string, name: string, range: RangeInput, unit: string][], equations: [func: Fun, latex: string][], trendWords?: [string, string, string]): {
         constants: [sym: string, name: string][];
         control: [sym: string, name: string, trend: string, change: number];
@@ -342,7 +339,6 @@ declare module "Math/Builder/build_trend" {
     };
 }
 declare module "Math/Builder/build_ratio" {
-    import { RangeInput } from "Math/Builder/support/support";
     export function BuildRatio(variables: [sym: string, name: string, range: RangeInput, unit: string][], func: Fun, latex: string): {
         table: string;
         sol: string;

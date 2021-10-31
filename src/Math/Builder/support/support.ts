@@ -106,8 +106,6 @@ export class EquSystem {
 
 }
 
-export type RangeInput = [number, number] | [number] | number
-
 function parseRange(rng: RangeInput): [number, number] {
     if (Array.isArray(rng)) {
         if (rng.length === 2) return rng

@@ -1,4 +1,4 @@
-import { toEquSystem, RangeInput } from './support/support';
+import { toEquSystem } from './support/support';
 
 export function BuildTrend(
     variables: [sym: string, name: string, range: RangeInput, unit: string][],

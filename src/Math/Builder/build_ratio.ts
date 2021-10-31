@@ -1,4 +1,4 @@
-import { Equation, toVariables, latexAligned, RangeInput } from './support/support';
+import { Equation, toVariables, latexAligned } from './support/support';
 import { Variable } from './support/variable';
 
 export function BuildRatio(
@@ -87,8 +87,8 @@ export function BuildRatio(
                 ["$" + given.sym, G1, G2],
                 ["$" + unknown.sym, U1, U2],
             ],
-            columns: '|c||c|c|',
-            rows: '|r||r|r|',
+            columns: 'c|c:c',
+            rows: 'r|r:r',
         })
     }
 

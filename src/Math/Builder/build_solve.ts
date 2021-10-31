@@ -1,4 +1,4 @@
-import { toEquSystem, latexAligned, latexBraced, RangeInput} from './support/support';
+import { toEquSystem, latexAligned, latexBraced } from './support/support';
 
 export function BuildSolve(
     variables: [sym: string, name: string, range: RangeInput, unit: string][],
@@ -32,8 +32,6 @@ export function BuildSolve(
             return T
         }
     }
-
-    console.log(system)
 
     return {
         list: givens.map($ => $.whole()).join("\\\\"),
