@@ -31335,10 +31335,10 @@ const DEFAULT_UNIT = {
     'charge': 'C',
     'current': 'A',
     'voltage': 'V',
-    'resistance': 'ohm',
+    'resistance': 'Ω',
     'electric field strength': 'N C-1',
     'potential difference': 'V',
-    'resistivity': 'ohm m',
+    'resistivity': 'Ω m',
     'emf': 'V',
     'e.m.f.': 'V',
     'magnetic field': 'B',
@@ -31349,10 +31349,9 @@ const DEFAULT_UNIT = {
     'density': 'kg m-3'
 };
 const BASE_UNITS = [
-    '\\Omega',
     'rad', 'mol',
     'Wb', 'Bq', 'eV', '°C', 'Pa',
-    's', 'm', 'g', 'A', 'K', 'J', 'N', 'W', 'C', 'V', 'T', 'u',
+    's', 'm', 'g', 'A', 'K', 'J', 'N', 'W', 'C', 'V', 'T', 'u', 'Ω'
 ];
 const BASE_PREFIX = ['n', 'u', 'm', 'c', 'k', 'M', 'G', 'T', ''];
 const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4'];
@@ -31366,7 +31365,6 @@ function findUnit(name) {
 exports.findUnit = findUnit;
 function parseUnit(raw) {
     let T = " " + raw + " ";
-    T = T.replaceAll("ohm", "\\Omega");
     for (let u of BASE_UNITS) {
         if (!T.includes(u))
             continue;
@@ -31375,7 +31373,7 @@ function parseUnit(raw) {
         }
     }
     for (let i of BASE_INDEX)
-        T = T.replaceAll(i, "^{" + i + "}");
+        T = T.replaceAll(new RegExp('([^0123456789-])' + i + '([^0123456789-])', 'g'), '$1' + "^{" + i + "}" + '$2');
     return T;
 }
 exports.parseUnit = parseUnit;

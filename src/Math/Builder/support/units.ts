@@ -43,10 +43,10 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     'charge': 'C',
     'current': 'A',
     'voltage': 'V',
-    'resistance': 'ohm',
+    'resistance': 'Ω',
     'electric field strength': 'N C-1',
     'potential difference': 'V',
-    'resistivity': 'ohm m',
+    'resistivity': 'Ω m',
     'emf': 'V',
     'e.m.f.': 'V',
     'magnetic field': 'B',
@@ -58,10 +58,9 @@ const DEFAULT_UNIT: { [_: string]: string } = {
 }
 
 const BASE_UNITS = [
-    '\\Omega',
     'rad', 'mol',
     'Wb', 'Bq', 'eV', '°C', 'Pa',
-    's', 'm', 'g', 'A', 'K', 'J', 'N', 'W', 'C', 'V', 'T', 'u',
+    's', 'm', 'g', 'A', 'K', 'J', 'N', 'W', 'C', 'V', 'T', 'u', 'Ω'
 ]
 
 const BASE_PREFIX = ['n', 'u', 'm', 'c', 'k', 'M', 'G', 'T', '']
@@ -80,7 +79,6 @@ export function findUnit(name: string): string | undefined {
 
 export function parseUnit(raw: string): string {
     let T = " " + raw + " "
-    T = T.replaceAll("ohm", "\\Omega")
     for (let u of BASE_UNITS) {
         if (!T.includes(u)) continue
         for (let p of BASE_PREFIX) {
@@ -91,6 +89,9 @@ export function parseUnit(raw: string): string {
         }
     }
     for (let i of BASE_INDEX)
-        T = T.replaceAll(i, "^{" + i + "}")
+        T = T.replaceAll(
+            new RegExp('([^0123456789-])' + i + '([^0123456789-])', 'g'),
+            '$1' + "^{" + i + "}" + '$2'
+        )
     return T
 }
