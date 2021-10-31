@@ -1,6 +1,6 @@
-import { analyze } from './analyzer'
+// import { analyze } from './analyzer'
 import { bisection } from './bisect'
-
+import { createOrderTree } from './ana'
 
 const UNITS: { [_: string]: string } = {
     'Pa': '~\\text{Pa}',
@@ -188,8 +188,8 @@ export class EquSystem {
 
 
 
-    private analyze(rich: boolean): void {
-        analyze(this, rich)
+    private createOrder(rich: boolean): void {
+        createOrderTree(this, rich)
     }
 
     private maxOrder(): number {
@@ -211,14 +211,14 @@ export class EquSystem {
     }
 
     generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable] {
-        this.analyze(true)
+        this.createOrder(true)
         let unknown = RndPick(...this.unknownables())
         return [this.givens(), this.hiddens(), unknown]
     }
 
 
     generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]] {
-        this.analyze(false)
+        this.createOrder(false)
         let constants = RndShuffle(...this.givens())
         let control = constants.pop()!
         this.clearVals()

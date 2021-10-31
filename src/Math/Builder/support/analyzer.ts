@@ -20,9 +20,8 @@ class varlet {
 class equlet {
 
     constructor(
-        public dep: varlet[]
-    ) {
-    }
+        private dep: varlet[]
+    ) { }
 
     private solved(): varlet[] {
         return this.dep.filter($ => $.solved)
@@ -38,7 +37,7 @@ class equlet {
         return Math.max(...orders) + 1
     }
 
-    doable(): boolean {
+    private doable(): boolean {
         return this.unsolved().length === 1
     }
 
@@ -46,12 +45,12 @@ class equlet {
         return this.unsolved().length === 0
     }
 
-    do(): void {
+    private do(): void {
         let order = this.nextOrder()
         this.unsolved().forEach($ => $.solve(order))
     }
 
-    tryDo() {
+    tryDo(): void {
         if (this.doable()) this.do()
     }
 
@@ -60,22 +59,23 @@ class equlet {
 class EquSystemAnalyzer {
 
 
+
     constructor(
         public vars: varlet[],
         public equations: equlet[],
         private requiredRich: boolean
     ) { }
 
-    reset(): void {
+    private reset(): void {
         this.vars.forEach($ => $.reset())
     }
 
-    setZeroth(vars: varlet[]): void {
+    private setZeroth(vars: varlet[]): void {
         this.reset()
         vars.forEach($ => $.solve(0))
     }
 
-    pickZeroth(): void {
+    private pickZeroth(): void {
         let nGivens = this.vars.length - this.equations.length
         let zeroths = RndPickN(this.vars, nGivens)
         this.setZeroth(zeroths)
@@ -85,25 +85,25 @@ class EquSystemAnalyzer {
         return this.vars.map($ => $.order)
     }
 
-    maxOrder(): number {
+    private maxOrder(): number {
         return Math.max(...this.orders())
     }
 
-    rich(): boolean {
+    private rich(): boolean {
         return this.maxOrder() === this.equations.length
     }
 
-    done(): boolean {
+    private done(): boolean {
         return this.equations.every($ => $.done()) && this.requiredRich ? this.rich() : true
     }
 
-    do(): void {
+    private do(): void {
         for (let i = 0; i < 10; i++) {
             for (let eq of this.equations) eq.tryDo()
         }
     }
 
-    searchOnce(): void {
+    private searchOnce(): void {
         this.pickZeroth()
         this.do()
     }
@@ -116,6 +116,17 @@ class EquSystemAnalyzer {
         throw '[Analyzer] Fail to search a solving path.'
     }
 
+}
+
+function toVarlets
+
+function toAnalyzer(sys: EquSystem): EquSystemAnalyzer {
+    let varlets = sys.variables.map($ => new varlet($.sym))
+    function findVarlet(sym: string): varlet {
+        return varlets.find($ => $.sym === sym)!
+    }
+    let equlets = sys.equations.map($ => new equlet($.dep.map(v => findVarlet(v.sym))))
+    return new EquSystemAnalyzer(varlets, equlets, rich)
 }
 
 export function analyze(sys: EquSystem, rich: boolean): void {
