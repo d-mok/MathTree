@@ -34,8 +34,13 @@ export function BuildRatio(
     u.push(unknown.getVal())
 
     eq.fitAgain(constants)
-    eq.fitAgain([given, unknown])
-    given.round()
+
+    for (let i = 0; i < 10; i++) { // avoid accidentally getting same set of [given,unknown]
+        eq.fitAgain([given, unknown])
+        given.round()
+        if (given.getVal() !== g[0]) break
+    }
+
     eq.fitAgain([unknown])
 
     g.push(given.getVal())
@@ -64,7 +69,7 @@ export function BuildRatio(
         let [lhs2, rhs2] = eq.print(case2Show).split("=")
         setCase(1)
         let [lhs1, rhs1] = eq.print(case1Show).split("=")
-        return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`
+        return `\\dfrac{${lhs1}}{${lhs2}}=\\dfrac{${rhs1}}{${rhs2}}`
     }
 
 

@@ -30718,8 +30718,12 @@ function BuildRatio(variables, func, latex, settings = {}) {
     g.push(given.getVal());
     u.push(unknown.getVal());
     eq.fitAgain(constants);
-    eq.fitAgain([given, unknown]);
-    given.round();
+    for (let i = 0; i < 10; i++) { // avoid accidentally getting same set of [given,unknown]
+        eq.fitAgain([given, unknown]);
+        given.round();
+        if (given.getVal() !== g[0])
+            break;
+    }
     eq.fitAgain([unknown]);
     g.push(given.getVal());
     u.push(unknown.getVal());
@@ -30741,7 +30745,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
         let [lhs2, rhs2] = eq.print(case2Show).split("=");
         setCase(1);
         let [lhs1, rhs1] = eq.print(case1Show).split("=");
-        return `\\dfrac{${lhs2}}{${lhs1}}=\\dfrac{${rhs2}}{${rhs1}}`;
+        return `\\dfrac{${lhs1}}{${lhs2}}=\\dfrac{${rhs1}}{${rhs2}}`;
     }
     function printAns() {
         setCase(2);
@@ -31310,6 +31314,7 @@ const DEFAULT_UNIT = {
     'capacitiy': 'm3',
     'angle': '°',
     'energy': 'J',
+    'molar mass': 'kg mol-1',
     'mass': 'kg',
     'electromotive force': 'V',
     'specific heat capacity': 'J kg-1 °C-1',
@@ -31317,6 +31322,7 @@ const DEFAULT_UNIT = {
     'temperature': '°C',
     'latent heat': 'J kg-1',
     'pressure': 'Pa',
+    'number of molecule': '',
     'number of mole': 'mol',
     'force': 'N',
     'weight': 'N',
@@ -31369,7 +31375,7 @@ function parseUnit(raw) {
         if (!T.includes(u))
             continue;
         for (let p of BASE_PREFIX) {
-            T = T.replaceAll(new RegExp('([^a-zA-z])' + p + u + '([^a-zA-z])', 'g'), '$1' + "~\\text{" + p + u + "}" + '$2');
+            T = T.replaceAll(new RegExp('([^a-zA-z°])' + p + u + '([^a-zA-z°])', 'g'), '$1' + "~\\text{" + p + u + "}" + '$2');
         }
     }
     for (let i of BASE_INDEX)

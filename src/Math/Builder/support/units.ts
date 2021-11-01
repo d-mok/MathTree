@@ -18,6 +18,7 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     'capacitiy': 'm3',
     'angle': '°',
     'energy': 'J',
+    'molar mass': 'kg mol-1',
     'mass': 'kg',
     'electromotive force': 'V',
     'specific heat capacity': 'J kg-1 °C-1',
@@ -25,6 +26,7 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     'temperature': '°C',
     'latent heat': 'J kg-1',
     'pressure': 'Pa',
+    'number of molecule': '',
     'number of mole': 'mol',
     'force': 'N',
     'weight': 'N',
@@ -83,7 +85,7 @@ export function parseUnit(raw: string): string {
         if (!T.includes(u)) continue
         for (let p of BASE_PREFIX) {
             T = T.replaceAll(
-                new RegExp('([^a-zA-z])' + p + u + '([^a-zA-z])', 'g'),
+                new RegExp('([^a-zA-z°])' + p + u + '([^a-zA-z°])', 'g'),
                 '$1' + "~\\text{" + p + u + "}" + '$2'
             )
         }
