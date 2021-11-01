@@ -348,10 +348,10 @@ declare module "Math/Builder/build_trend" {
     export function BuildTrend(variables: [sym: string, name: string, range: rangeInput, unit?: string][], equations: [func: Fun, latex: string][], settings?: {
         trends?: [inc: string, dec: string, unchange: string];
     }): {
-        constants: [sym: string, name: string][];
+        sol: string;
+        consts: [sym: string[], name: string[]];
         control: [sym: string, name: string, trend: string, change: number];
         responses: [sym: string, name: string, trend: string, change: number][];
-        sol: string;
     };
 }
 declare module "Math/Builder/build_ratio" {
@@ -361,8 +361,7 @@ declare module "Math/Builder/build_ratio" {
     }): {
         table: string;
         sol: string;
-        consts: string[];
-        constSyms: string[];
+        consts: [sym: string[], name: string[]];
         given: [sym: string, name: string];
         unknown: [sym: string, name: string, val: number, unit: string];
     };

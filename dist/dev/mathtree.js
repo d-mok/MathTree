@@ -30783,8 +30783,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
     return {
         table: table(),
         sol: sol(),
-        consts: constants.map(v => v.name),
-        constSyms: constants.map(v => v.sym),
+        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
         given: [given.sym, given.name],
         unknown: getUnknown(),
     };
@@ -30804,6 +30803,23 @@ exports.BuildSolve = void 0;
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
 function BuildSolve(variables, equations) {
+    for (let i = 0; i <= 10; i++) {
+        try {
+            return BuildSolveOnce(variables, equations);
+        }
+        catch (e) {
+            if (i === 10) {
+                throw e;
+            }
+            else {
+                continue;
+            }
+        }
+    }
+    throw "never";
+}
+exports.BuildSolve = BuildSolve;
+function BuildSolveOnce(variables, equations) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables();
@@ -30838,7 +30854,6 @@ function BuildSolve(variables, equations) {
         ]
     };
 }
-exports.BuildSolve = BuildSolve;
 
 
 /***/ }),
@@ -30865,7 +30880,7 @@ function BuildTrend(variables, equations, settings = {}) {
         return "[error]";
     }
     return {
-        constants: constants.map(v => [v.sym, v.name]),
+        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
         control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
         responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
         sol: system.print().replaceAll("=", "&=")
@@ -31054,7 +31069,7 @@ function bisection(f, ranges) {
         return ranges.map(([min, max]) => RndR(min, max));
     }
     function randomPosPoint() {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             let a = randomPoint();
             if (f(...a) > 0)
                 return a;
@@ -31062,7 +31077,7 @@ function bisection(f, ranges) {
         throw "[bisection] can't find positive point with ranges:" + JSON.stringify(ranges);
     }
     function randomNegPoint() {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             let b = randomPoint();
             if (f(...b) < 0)
                 return b;
@@ -31414,6 +31429,9 @@ class Variable {
         unit ?? (unit = "");
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
+        let [min, max] = this.range;
+        if (min <= 0 || max <= 0)
+            throw "[Variable] Range must be positive!";
     }
     bounds() {
         if (Number.isFinite(this.val))
@@ -31439,7 +31457,7 @@ class Variable {
     solved() {
         return Number.isFinite(this.val);
     }
-    widen(fraction = 0.1) {
+    widen(fraction = 0.2) {
         let [min, max] = this.range;
         this.range = [
             min - Math.abs(min * fraction),
@@ -31573,7 +31591,8 @@ class Variables extends Array {
             try {
                 func();
             }
-            catch {
+            catch (e) {
+                // console.warn(e)
                 continue;
             }
             return;

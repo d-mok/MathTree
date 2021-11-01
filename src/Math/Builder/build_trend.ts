@@ -7,10 +7,10 @@ export function BuildTrend(
         trends?: [inc: string, dec: string, unchange: string]
     } = {}
 ): {
-    constants: [sym: string, name: string][]
+    sol: string
+    consts: [sym: string[], name: string[]]
     control: [sym: string, name: string, trend: string, change: number]
     responses: [sym: string, name: string, trend: string, change: number][]
-    sol: string
 } {
 
     let system = toEquSystem(variables, equations)
@@ -26,7 +26,7 @@ export function BuildTrend(
     }
 
     return {
-        constants: constants.map(v => [v.sym, v.name]),
+        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
         control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
         responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
         sol: system.print().replaceAll("=", "&=")

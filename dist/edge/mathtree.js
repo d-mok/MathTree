@@ -30783,8 +30783,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
     return {
         table: table(),
         sol: sol(),
-        consts: constants.map(v => v.name),
-        constSyms: constants.map(v => v.sym),
+        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
         given: [given.sym, given.name],
         unknown: getUnknown(),
     };
@@ -30881,7 +30880,7 @@ function BuildTrend(variables, equations, settings = {}) {
         return "[error]";
     }
     return {
-        constants: constants.map(v => [v.sym, v.name]),
+        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
         control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
         responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
         sol: system.print().replaceAll("=", "&=")

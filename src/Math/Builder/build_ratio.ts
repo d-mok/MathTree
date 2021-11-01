@@ -14,8 +14,7 @@ export function BuildRatio(
 ): {
     table: string
     sol: string
-    consts: string[]
-    constSyms: string[]
+    consts: [sym: string[], name: string[]]
     given: [sym: string, name: string]
     unknown: [sym: string, name: string, val: number, unit: string]
 } {
@@ -114,8 +113,7 @@ export function BuildRatio(
     return {
         table: table(),
         sol: sol(),
-        consts: constants.map(v => v.name),
-        constSyms: constants.map(v => v.sym),
+        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
         given: [given.sym, given.name],
         unknown: getUnknown(),
     }
