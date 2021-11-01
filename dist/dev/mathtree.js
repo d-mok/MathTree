@@ -30868,7 +30868,7 @@ exports.BuildTrend = void 0;
 const support_1 = __webpack_require__(3760);
 function BuildTrend(variables, equations, settings = {}) {
     let system = (0, support_1.toEquSystem)(variables, equations);
-    let [constants, control, responses] = system.generateTrend();
+    let [constants, agent, responses] = system.generateTrend();
     function toWord(change) {
         let trendWords = settings.trends ?? ['increases', 'decreases', 'is unchanged'];
         if (change > 0)
@@ -30881,7 +30881,7 @@ function BuildTrend(variables, equations, settings = {}) {
     }
     return {
         consts: [constants.map(v => v.sym), constants.map(v => v.name)],
-        control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
+        agent: [agent.sym, agent.name, toWord(agent.getVal()), agent.getVal()],
         responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
         sol: system.print().replaceAll("=", "&=")
     };
@@ -31283,15 +31283,15 @@ class EquSystem {
     }
     generateTrend() {
         (0, analyzer_1.createOrderTree)(this, false);
-        let [control, ...constants] = this.variables.shuffledZeros();
+        let [agent, ...constants] = this.variables.shuffledZeros();
         let responses = this.variables.positives();
         this.variables.clear();
         this.fit();
         let oldVal = this.variables.getVals();
-        control.shake();
+        agent.shake();
         this.solveAgain(responses);
         this.variables.compareWith(oldVal);
-        return [constants, control, responses];
+        return [constants, agent, responses];
     }
     print(givens = []) {
         let eqs = this.equations.map($ => $.print(givens));

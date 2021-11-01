@@ -9,13 +9,13 @@ export function BuildTrend(
 ): {
     sol: string
     consts: [sym: string[], name: string[]]
-    control: [sym: string, name: string, trend: string, change: number]
+    agent: [sym: string, name: string, trend: string, change: number]
     responses: [sym: string, name: string, trend: string, change: number][]
 } {
 
     let system = toEquSystem(variables, equations)
 
-    let [constants, control, responses] = system.generateTrend()
+    let [constants, agent, responses] = system.generateTrend()
 
     function toWord(change: number): string {
         let trendWords = settings.trends ?? ['increases', 'decreases', 'is unchanged']
@@ -27,7 +27,7 @@ export function BuildTrend(
 
     return {
         consts: [constants.map(v => v.sym), constants.map(v => v.name)],
-        control: [control.sym, control.name, toWord(control.getVal()), control.getVal()],
+        agent: [agent.sym, agent.name, toWord(agent.getVal()), agent.getVal()],
         responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
         sol: system.print().replaceAll("=", "&=")
     }

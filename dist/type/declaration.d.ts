@@ -324,7 +324,7 @@ declare module "Math/Builder/support/system" {
         solve(): void;
         solveAgain(vars: Variable[]): void;
         generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable];
-        generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]];
+        generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[]];
         print(givens?: Variable[]): string;
     }
 }
@@ -350,7 +350,7 @@ declare module "Math/Builder/build_trend" {
     }): {
         sol: string;
         consts: [sym: string[], name: string[]];
-        control: [sym: string, name: string, trend: string, change: number];
+        agent: [sym: string, name: string, trend: string, change: number];
         responses: [sym: string, name: string, trend: string, change: number][];
     };
 }

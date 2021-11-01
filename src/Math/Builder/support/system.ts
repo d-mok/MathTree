@@ -50,17 +50,17 @@ export class EquSystem {
     }
 
 
-    generateTrend(): [constants: Variable[], control: Variable, responses: Variable[]] {
+    generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[]] {
         createOrderTree(this, false)
-        let [control, ...constants] = this.variables.shuffledZeros()
+        let [agent, ...constants] = this.variables.shuffledZeros()
         let responses = this.variables.positives()
         this.variables.clear()
         this.fit()
         let oldVal = this.variables.getVals()
-        control.shake()
+        agent.shake()
         this.solveAgain(responses)
         this.variables.compareWith(oldVal)
-        return [constants, control, responses]
+        return [constants, agent, responses]
     }
 
 
