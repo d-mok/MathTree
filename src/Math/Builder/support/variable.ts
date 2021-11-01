@@ -30,6 +30,8 @@ export class Variable {
         unit ??= ""
         this.unit = parseUnit(unit)
         this.range = parseRange(range)
+        let [min, max] = this.range
+        if (min <= 0 || max <= 0) throw "[Variable] Range must be positive!"
     }
 
     bounds(): [number, number] {
@@ -63,7 +65,7 @@ export class Variable {
         return Number.isFinite(this.val)
     }
 
-    widen(fraction: number = 0.1): void {
+    widen(fraction: number = 0.2): void {
         let [min, max] = this.range
         this.range = [
             min - Math.abs(min * fraction),
@@ -224,7 +226,8 @@ export class Variables extends Array<Variable>{
             this.restore()
             try {
                 func()
-            } catch {
+            } catch (e) {
+                console.warn(e)
                 continue
             }
             return

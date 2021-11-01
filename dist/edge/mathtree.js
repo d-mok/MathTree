@@ -31414,6 +31414,9 @@ class Variable {
         unit ?? (unit = "");
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
+        let [min, max] = this.range;
+        if (min <= 0 || max <= 0)
+            throw "[Variable] Range must be positive!";
     }
     bounds() {
         if (Number.isFinite(this.val))
@@ -31439,7 +31442,7 @@ class Variable {
     solved() {
         return Number.isFinite(this.val);
     }
-    widen(fraction = 0.1) {
+    widen(fraction = 0.2) {
         let [min, max] = this.range;
         this.range = [
             min - Math.abs(min * fraction),
@@ -31573,7 +31576,8 @@ class Variables extends Array {
             try {
                 func();
             }
-            catch {
+            catch (e) {
+                console.warn(e);
                 continue;
             }
             return;
