@@ -227,7 +227,7 @@ export class Variables extends Array<Variable>{
             try {
                 func()
             } catch (e) {
-                console.warn(e)
+                // console.warn(e)
                 continue
             }
             return

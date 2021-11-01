@@ -31070,7 +31070,7 @@ function bisection(f, ranges) {
         return ranges.map(([min, max]) => RndR(min, max));
     }
     function randomPosPoint() {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             let a = randomPoint();
             if (f(...a) > 0)
                 return a;
@@ -31078,7 +31078,7 @@ function bisection(f, ranges) {
         throw "[bisection] can't find positive point with ranges:" + JSON.stringify(ranges);
     }
     function randomNegPoint() {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             let b = randomPoint();
             if (f(...b) < 0)
                 return b;
@@ -31593,7 +31593,7 @@ class Variables extends Array {
                 func();
             }
             catch (e) {
-                console.warn(e);
+                // console.warn(e)
                 continue;
             }
             return;

@@ -6,7 +6,7 @@ export function bisection(f: Fun, ranges: [number, number][]): number[] {
     }
 
     function randomPosPoint(): number[] {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             let a = randomPoint()
             if (f(...a) > 0) return a
         }
@@ -15,7 +15,7 @@ export function bisection(f: Fun, ranges: [number, number][]): number[] {
 
 
     function randomNegPoint(): number[] {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             let b = randomPoint()
             if (f(...b) < 0) return b
         }
