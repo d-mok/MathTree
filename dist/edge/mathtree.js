@@ -30879,11 +30879,20 @@ function BuildTrend(variables, equations, settings = {}) {
             return trendWords[1];
         return "[error]";
     }
+    function toCode(change) {
+        if (change > 0)
+            return 0;
+        if (change === 0)
+            return 2;
+        if (change < 0)
+            return 1;
+        return 3;
+    }
     return {
         consts: [constants.map(v => v.sym), constants.map(v => v.name)],
-        agent: [agent.sym, agent.name, toWord(agent.getVal()), agent.getVal()],
-        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), v.getVal()]),
-        sol: system.print().replaceAll("=", "&=")
+        agent: [agent.sym, agent.name, toWord(agent.getVal()), toCode(agent.getVal())],
+        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), toCode(v.getVal())]),
+        sol: system.print()
     };
 }
 exports.BuildTrend = BuildTrend;

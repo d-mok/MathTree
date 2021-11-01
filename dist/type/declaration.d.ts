@@ -350,8 +350,8 @@ declare module "Math/Builder/build_trend" {
     }): {
         sol: string;
         consts: [sym: string[], name: string[]];
-        agent: [sym: string, name: string, trend: string, change: number];
-        responses: [sym: string, name: string, trend: string, change: number][];
+        agent: [sym: string, name: string, trend: string, code: number];
+        responses: [sym: string, name: string, trend: string, code: number][];
     };
 }
 declare module "Math/Builder/build_ratio" {
