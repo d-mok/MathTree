@@ -30804,6 +30804,23 @@ exports.BuildSolve = void 0;
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
 function BuildSolve(variables, equations) {
+    for (let i = 0; i <= 10; i++) {
+        try {
+            return BuildSolveOnce(variables, equations);
+        }
+        catch (e) {
+            if (i === 10) {
+                throw e;
+            }
+            else {
+                continue;
+            }
+        }
+    }
+    throw "never";
+}
+exports.BuildSolve = BuildSolve;
+function BuildSolveOnce(variables, equations) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables();
@@ -30838,7 +30855,6 @@ function BuildSolve(variables, equations) {
         ]
     };
 }
-exports.BuildSolve = BuildSolve;
 
 
 /***/ }),

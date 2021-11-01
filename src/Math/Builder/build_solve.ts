@@ -10,6 +10,32 @@ export function BuildSolve(
     vars: string[]
     unknown: [sym: string, name: string, val: number, unit: string]
 } {
+
+    for (let i = 0; i <= 10; i++) {
+        try {
+            return BuildSolveOnce(variables, equations)
+        } catch (e) {
+            if (i === 10) {
+                throw e
+            } else {
+                continue
+            }
+        }
+    }
+    throw "never"
+}
+
+
+
+function BuildSolveOnce(
+    variables: [sym: string, name: string, range: rangeInput, unit?: string][],
+    equations: [func: Fun, latex: string][],
+): {
+    list: string
+    sol: string
+    vars: string[]
+    unknown: [sym: string, name: string, val: number, unit: string]
+} {
     let system = toEquSystem(variables, equations)
     system.fit()
 
@@ -46,4 +72,3 @@ export function BuildSolve(
         ]
     }
 }
-
