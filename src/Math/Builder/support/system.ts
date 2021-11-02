@@ -51,7 +51,7 @@ export class EquSystem {
 
 
     generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[],target: Variable] {
-        createOrderTree(this, true)
+        createOrderTree(this, false)
         let [agent, ...constants] = this.variables.shuffledZeros()
         let responses = this.variables.positives()
         let target = this.variables.pickTop()

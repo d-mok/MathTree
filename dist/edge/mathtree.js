@@ -31318,7 +31318,7 @@ class EquSystem {
         ];
     }
     generateTrend() {
-        (0, analyzer_1.createOrderTree)(this, true);
+        (0, analyzer_1.createOrderTree)(this, false);
         let [agent, ...constants] = this.variables.shuffledZeros();
         let responses = this.variables.positives();
         let target = this.variables.pickTop();
