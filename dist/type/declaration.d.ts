@@ -325,7 +325,7 @@ declare module "Math/Builder/support/system" {
         solve(): void;
         solveAgain(vars: Variable[]): void;
         generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable];
-        generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[]];
+        generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable];
         print(givens?: Variable[]): string;
     }
 }
@@ -353,6 +353,7 @@ declare module "Math/Builder/build_trend" {
         consts: [symbol: string[], name: string[]];
         agent: [symbol: string, name: string, trend: string, code: number];
         responses: [symbol: string, name: string, trend: string, code: number][];
+        target: [symbol: string, name: string, trend: string, code: number];
     };
 }
 declare module "Math/Builder/build_ratio" {

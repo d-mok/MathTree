@@ -30876,7 +30876,7 @@ exports.BuildTrend = void 0;
 const support_1 = __webpack_require__(3760);
 function BuildTrend(variables, equations, settings = {}) {
     let system = (0, support_1.toEquSystem)(variables, equations);
-    let [constants, agent, responses] = system.generateTrend();
+    let [constants, agent, responses, target] = system.generateTrend();
     function toWord(change) {
         let trendWords = settings.trends ?? ['increases', 'decreases', 'is unchanged'];
         if (change > 0)
@@ -30913,6 +30913,12 @@ function BuildTrend(variables, equations, settings = {}) {
             toWord(v.getVal()),
             toCode(v.getVal())
         ]),
+        target: [
+            target.symbol(),
+            target.name,
+            toWord(target.getVal()),
+            toCode(target.getVal())
+        ],
         sol: system.print()
     };
 }
@@ -31312,16 +31318,17 @@ class EquSystem {
         ];
     }
     generateTrend() {
-        (0, analyzer_1.createOrderTree)(this, false);
+        (0, analyzer_1.createOrderTree)(this, true);
         let [agent, ...constants] = this.variables.shuffledZeros();
         let responses = this.variables.positives();
+        let target = this.variables.pickTop();
         this.variables.clear();
         this.fit();
         let oldVal = this.variables.getVals();
         agent.shake();
         this.solveAgain(responses);
         this.variables.compareWith(oldVal);
-        return [constants, agent, responses];
+        return [constants, agent, responses, target];
     }
     print(givens = []) {
         let eqs = this.equations.map($ => $.print(givens));
