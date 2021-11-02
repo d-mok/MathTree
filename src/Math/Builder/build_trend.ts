@@ -1,16 +1,16 @@
 import { toEquSystem } from './support/support';
 
 export function BuildTrend(
-    variables: [sym: string, name: string, range: rangeInput, unit?: string][],
+    variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: Fun, latex: string][],
     settings: {
         trends?: [inc: string, dec: string, unchange: string]
     } = {}
 ): {
     sol: string
-    consts: [sym: string[], name: string[]]
-    agent: [sym: string, name: string, trend: string, code: number]
-    responses: [sym: string, name: string, trend: string, code: number][]
+    consts: [symbol: string[], name: string[]]
+    agent: [symbol: string, name: string, trend: string, code: number]
+    responses: [symbol: string, name: string, trend: string, code: number][]
 } {
 
     let system = toEquSystem(variables, equations)
@@ -33,9 +33,22 @@ export function BuildTrend(
     }
 
     return {
-        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
-        agent: [agent.sym, agent.name, toWord(agent.getVal()), toCode(agent.getVal())],
-        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), toCode(v.getVal())]),
+        consts: [
+            constants.map(v => v.symbol()),
+            constants.map(v => v.name)
+        ],
+        agent: [
+            agent.symbol(),
+            agent.name,
+            toWord(agent.getVal()),
+            toCode(agent.getVal())
+        ],
+        responses: responses.map(v => [
+            v.symbol(),
+            v.name,
+            toWord(v.getVal()),
+            toCode(v.getVal())
+        ]),
         sol: system.print()
     }
 

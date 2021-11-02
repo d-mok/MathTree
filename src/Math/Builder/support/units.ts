@@ -56,7 +56,9 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     'activity': 'Bq',
     'half-life': 's',
     'decay constant': 's-1',
-    'density': 'kg m-3'
+    'density': 'kg m-3',
+    'KE': 'J',
+    'PE': 'J'
 }
 
 const BASE_UNITS = [

@@ -4,7 +4,7 @@ import { toVariables } from './support/support';
 import { Variable } from './support/variable';
 
 export function BuildRatio(
-    variables: [sym: string, name: string, range: rangeInput, unit?: string][],
+    variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     func: Fun,
     latex: string,
     settings: {
@@ -14,9 +14,9 @@ export function BuildRatio(
 ): {
     table: string
     sol: string
-    consts: [sym: string[], name: string[]]
-    given: [sym: string, name: string]
-    unknown: [sym: string, name: string, val: number, unit: string]
+    consts: [symbol: string[], name: string[]]
+    given: [symbol: string, name: string]
+    unknown: [symbol: string, name: string, val: number, unit: string]
 } {
 
     let vars = toVariables(variables)
@@ -47,8 +47,8 @@ export function BuildRatio(
 
     function setSubscript(order: 1 | 2) {
         let subs = settings.subsrcipt ?? [1, 2]
-        given.subsrcipt(subs[order - 1])
-        unknown.subsrcipt(subs[order - 1])
+        given.label(subs[order - 1])
+        unknown.label(subs[order - 1])
     }
 
     function setVal(order: 1 | 2) {
@@ -105,7 +105,7 @@ export function BuildRatio(
         })
     }
 
-    function getUnknown(): [sym: string, name: string, val: number, unit: string] {
+    function getUnknown(): [symbol: string, name: string, val: number, unit: string] {
         setCase(2)
         return [unknown.symbol(), unknown.name, unknown.getVal(), unknown.unit]
     }
@@ -113,8 +113,14 @@ export function BuildRatio(
     return {
         table: table(),
         sol: sol(),
-        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
-        given: [given.sym, given.name],
+        consts: [
+            constants.map(v => v.symbol()),
+            constants.map(v => v.name)
+        ],
+        given: [
+            given.symbol(),
+            given.name
+        ],
         unknown: getUnknown(),
     }
 }

@@ -25,8 +25,8 @@ function getDeps(func: Fun, vars: Variables): Variables {
 }
 
 function toVariable(variable: varInput): Variable {
-    let [sym, name, range, unit] = variable
-    return new Variable(sym, name, range, unit)
+    let [sym, name, range, unit, display] = variable
+    return new Variable(sym, name, range, unit, display)
 }
 
 export function toVariables(vars: varInput[]): Variables {

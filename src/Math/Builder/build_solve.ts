@@ -2,13 +2,13 @@ import { latexAligned, latexBraced } from './support/latex';
 import { toEquSystem } from './support/support';
 
 export function BuildSolve(
-    variables: [sym: string, name: string, range: rangeInput, unit?: string][],
+    variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: Fun, latex: string][],
 ): {
     list: string
     sol: string
     vars: string[]
-    unknown: [sym: string, name: string, val: number, unit: string]
+    unknown: [symbol: string, name: string, val: number, unit: string]
 } {
 
     for (let i = 0; i <= 10; i++) {
@@ -28,14 +28,15 @@ export function BuildSolve(
 
 
 function BuildSolveOnce(
-    variables: [sym: string, name: string, range: rangeInput, unit?: string][],
+    variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: Fun, latex: string][],
 ): {
     list: string
     sol: string
     vars: string[]
-    unknown: [sym: string, name: string, val: number, unit: string]
+    unknown: [symbol: string, name: string, val: number, unit: string]
 } {
+
     let system = toEquSystem(variables, equations)
     system.fit()
 
@@ -63,9 +64,9 @@ function BuildSolveOnce(
     return {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
-        vars: system.variables.map(v => givens.includes(v) ? v.long() : v.sym),
+        vars: system.variables.map(v => givens.includes(v) ? v.long() : v.symbol()),
         unknown: [
-            unknown.sym,
+            unknown.symbol(),
             unknown.name,
             unknown.getVal(),
             unknown.unit

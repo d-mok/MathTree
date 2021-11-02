@@ -15,16 +15,18 @@ export class Variable {
 
     private val: number = NaN
     public order: number = -1
-    private subs: string = ""
+    private subscript: string = ""
 
     public unit: string
     private range: [number, number]
+    private display: string
 
     constructor(
         public sym: string,
         public name: string,
         range: rangeInput,
-        unit?: string
+        unit: string | undefined,
+        display: string | undefined,
     ) {
         unit ??= findUnit(name)
         unit ??= ""
@@ -32,6 +34,7 @@ export class Variable {
         this.range = parseRange(range)
         let [min, max] = this.range
         if (min <= 0 || max <= 0) throw "[Variable] Range must be positive!"
+        this.display = display ?? this.sym
     }
 
     bounds(): [number, number] {
@@ -73,14 +76,14 @@ export class Variable {
         ]
     }
 
-    subsrcipt(subs: string | number = ""): void {
-        this.subs = String(subs)
+    label(subscript: string | number = ""): void {
+        this.subscript = String(subscript)
     }
 
     symbol(): string {
-        if (this.subs.length > 0)
-            return this.sym + "_{" + this.subs + "}"
-        return this.sym
+        if (this.subscript.length > 0)
+            return this.display + "_{" + this.subscript + "}"
+        return this.display
     }
 
     short(): string { // val
@@ -100,8 +103,6 @@ export class Variable {
     whole(): string { // name = val + unit
         return "\\text{" + this.name + "}" + " = " + this.long()
     }
-
-
 
     writeSymbol(latex: string): string {
         let T = latex
