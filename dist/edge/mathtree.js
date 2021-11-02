@@ -30729,8 +30729,8 @@ function BuildRatio(variables, func, latex, settings = {}) {
     u.push(unknown.getVal());
     function setSubscript(order) {
         let subs = settings.subsrcipt ?? [1, 2];
-        given.subsrcipt(subs[order - 1]);
-        unknown.subsrcipt(subs[order - 1]);
+        given.label(subs[order - 1]);
+        unknown.label(subs[order - 1]);
     }
     function setVal(order) {
         given.set(g[order - 1]);
@@ -30783,8 +30783,14 @@ function BuildRatio(variables, func, latex, settings = {}) {
     return {
         table: table(),
         sol: sol(),
-        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
-        given: [given.sym, given.name],
+        consts: [
+            constants.map(v => v.symbol()),
+            constants.map(v => v.name)
+        ],
+        given: [
+            given.symbol(),
+            given.name
+        ],
         unknown: getUnknown(),
     };
 }
@@ -30838,16 +30844,18 @@ function BuildSolveOnce(variables, equations) {
             let T = "";
             T += system.print() + " \\\\~\\\\ ";
             T += system.print(givens) + " \\\\~\\\\ ";
-            T += (0, latex_1.latexBraced)(hiddens.map($ => $.full()));
+            let hds = [...hiddens];
+            hds.sort((a, b) => a.order - b.order);
+            T += (0, latex_1.latexBraced)(hds.map($ => $.full()));
             return T;
         }
     }
     return {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
-        vars: system.variables.map(v => givens.includes(v) ? v.long() : v.sym),
+        vars: system.variables.map(v => givens.includes(v) ? v.long() : v.symbol()),
         unknown: [
-            unknown.sym,
+            unknown.symbol(),
             unknown.name,
             unknown.getVal(),
             unknown.unit
@@ -30889,9 +30897,22 @@ function BuildTrend(variables, equations, settings = {}) {
         return 3;
     }
     return {
-        consts: [constants.map(v => v.sym), constants.map(v => v.name)],
-        agent: [agent.sym, agent.name, toWord(agent.getVal()), toCode(agent.getVal())],
-        responses: responses.map(v => [v.sym, v.name, toWord(v.getVal()), toCode(v.getVal())]),
+        consts: [
+            constants.map(v => v.symbol()),
+            constants.map(v => v.name)
+        ],
+        agent: [
+            agent.symbol(),
+            agent.name,
+            toWord(agent.getVal()),
+            toCode(agent.getVal())
+        ],
+        responses: responses.map(v => [
+            v.symbol(),
+            v.name,
+            toWord(v.getVal()),
+            toCode(v.getVal())
+        ]),
         sol: system.print()
     };
 }
@@ -31221,8 +31242,8 @@ function getDeps(func, vars) {
     return new variable_1.Variables(...vs);
 }
 function toVariable(variable) {
-    let [sym, name, range, unit] = variable;
-    return new variable_1.Variable(sym, name, range, unit);
+    let [sym, name, range, unit, display] = variable;
+    return new variable_1.Variable(sym, name, range, unit, display);
 }
 function toVariables(vars) {
     let vs = vars.map($ => toVariable($));
@@ -31376,7 +31397,9 @@ const DEFAULT_UNIT = {
     'activity': 'Bq',
     'half-life': 's',
     'decay constant': 's-1',
-    'density': 'kg m-3'
+    'density': 'kg m-3',
+    'KE': 'J',
+    'PE': 'J'
 };
 const BASE_UNITS = [
     'rad', 'mol',
@@ -31428,12 +31451,12 @@ function parseRange(rng) {
     }
 }
 class Variable {
-    constructor(sym, name, range, unit) {
+    constructor(sym, name, range, unit, display) {
         this.sym = sym;
         this.name = name;
         this.val = NaN;
         this.order = -1;
-        this.subs = "";
+        this.subscript = "";
         unit ?? (unit = (0, units_1.findUnit)(name));
         unit ?? (unit = "");
         this.unit = (0, units_1.parseUnit)(unit);
@@ -31441,6 +31464,7 @@ class Variable {
         let [min, max] = this.range;
         if (min <= 0 || max <= 0)
             throw "[Variable] Range must be positive!";
+        this.display = display ?? this.sym;
     }
     bounds() {
         if (Number.isFinite(this.val))
@@ -31473,13 +31497,13 @@ class Variable {
             max + Math.abs(max * fraction)
         ];
     }
-    subsrcipt(subs = "") {
-        this.subs = String(subs);
+    label(subscript = "") {
+        this.subscript = String(subscript);
     }
     symbol() {
-        if (this.subs.length > 0)
-            return this.sym + "_{" + this.subs + "}";
-        return this.sym;
+        if (this.subscript.length > 0)
+            return this.display + "_{" + this.subscript + "}";
+        return this.display;
     }
     short() {
         let v = cal.blur(Round(this.val, 3));

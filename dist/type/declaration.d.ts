@@ -253,10 +253,11 @@ declare module "Math/Builder/support/variable" {
         name: string;
         private val;
         order: number;
-        private subs;
+        private subscript;
         unit: string;
         private range;
-        constructor(sym: string, name: string, range: rangeInput, unit?: string);
+        private display;
+        constructor(sym: string, name: string, range: rangeInput, unit: string | undefined, display: string | undefined);
         bounds(): [number, number];
         set(val: number): void;
         round(): void;
@@ -265,7 +266,7 @@ declare module "Math/Builder/support/variable" {
         getVal(): number;
         solved(): boolean;
         widen(fraction?: number): void;
-        subsrcipt(subs?: string | number): void;
+        label(subscript?: string | number): void;
         symbol(): string;
         short(): string;
         long(): string;
@@ -337,33 +338,33 @@ declare module "Math/Builder/support/support" {
     export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string][], equations: [func: Fun, latex: string][]): {
+    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: Fun, latex: string][]): {
         list: string;
         sol: string;
         vars: string[];
-        unknown: [sym: string, name: string, val: number, unit: string];
+        unknown: [symbol: string, name: string, val: number, unit: string];
     };
 }
 declare module "Math/Builder/build_trend" {
-    export function BuildTrend(variables: [sym: string, name: string, range: rangeInput, unit?: string][], equations: [func: Fun, latex: string][], settings?: {
+    export function BuildTrend(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: Fun, latex: string][], settings?: {
         trends?: [inc: string, dec: string, unchange: string];
     }): {
         sol: string;
-        consts: [sym: string[], name: string[]];
-        agent: [sym: string, name: string, trend: string, code: number];
-        responses: [sym: string, name: string, trend: string, code: number][];
+        consts: [symbol: string[], name: string[]];
+        agent: [symbol: string, name: string, trend: string, code: number];
+        responses: [symbol: string, name: string, trend: string, code: number][];
     };
 }
 declare module "Math/Builder/build_ratio" {
-    export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string][], func: Fun, latex: string, settings?: {
+    export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], func: Fun, latex: string, settings?: {
         cases?: [string, string];
         subsrcipt?: [string | number, string | number];
     }): {
         table: string;
         sol: string;
-        consts: [sym: string[], name: string[]];
-        given: [sym: string, name: string];
-        unknown: [sym: string, name: string, val: number, unit: string];
+        consts: [symbol: string[], name: string[]];
+        given: [symbol: string, name: string];
+        unknown: [symbol: string, name: string, val: number, unit: string];
     };
 }
 declare module "Math/Builder/index" {
