@@ -9,7 +9,7 @@ export function BuildRatio(
     latex: string,
     settings: {
         cases?: [string, string]
-        subsrcipt?: [string | number, string | number]
+        subscript?: [string | number, string | number]
     } = {}
 ): {
     table: string
@@ -46,7 +46,7 @@ export function BuildRatio(
     u.push(unknown.getVal())
 
     function setSubscript(order: 1 | 2) {
-        let subs = settings.subsrcipt ?? [1, 2]
+        let subs = settings.subscript ?? [1, 2]
         given.label(subs[order - 1])
         unknown.label(subs[order - 1])
     }
@@ -96,7 +96,7 @@ export function BuildRatio(
         let [case1, case2] = settings.cases ?? ["Before", "After"]
         return Table({
             content: [
-                ["", "$" + given.sym, "$" + unknown.sym],
+                ["", "$" + given.symbol(), "$" + unknown.symbol()],
                 [case1, G1, U1],
                 [case2, G2, U2]
             ],

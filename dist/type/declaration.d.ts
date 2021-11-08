@@ -342,6 +342,7 @@ declare module "Math/Builder/build_solve" {
         list: string;
         sol: string;
         vars: string[];
+        vals: number[];
         unknown: [symbol: string, name: string, val: number, unit: string];
     };
 }
@@ -359,7 +360,7 @@ declare module "Math/Builder/build_trend" {
 declare module "Math/Builder/build_ratio" {
     export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], func: Fun, latex: string, settings?: {
         cases?: [string, string];
-        subsrcipt?: [string | number, string | number];
+        subscript?: [string | number, string | number];
     }): {
         table: string;
         sol: string;

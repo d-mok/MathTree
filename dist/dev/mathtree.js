@@ -30728,7 +30728,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
     g.push(given.getVal());
     u.push(unknown.getVal());
     function setSubscript(order) {
-        let subs = settings.subsrcipt ?? [1, 2];
+        let subs = settings.subscript ?? [1, 2];
         given.label(subs[order - 1]);
         unknown.label(subs[order - 1]);
     }
@@ -30768,7 +30768,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
         let [case1, case2] = settings.cases ?? ["Before", "After"];
         return Table({
             content: [
-                ["", "$" + given.sym, "$" + unknown.sym],
+                ["", "$" + given.symbol(), "$" + unknown.symbol()],
                 [case1, G1, U1],
                 [case2, G2, U2]
             ],
@@ -30854,6 +30854,7 @@ function BuildSolveOnce(variables, equations) {
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
         vars: system.variables.map(v => givens.includes(v) ? v.long() : v.symbol()),
+        vals: system.variables.map($ => $.getVal()),
         unknown: [
             unknown.symbol(),
             unknown.name,
@@ -31318,7 +31319,7 @@ class EquSystem {
         ];
     }
     generateTrend() {
-        (0, analyzer_1.createOrderTree)(this, true);
+        (0, analyzer_1.createOrderTree)(this, false);
         let [agent, ...constants] = this.variables.shuffledZeros();
         let responses = this.variables.positives();
         let target = this.variables.pickTop();

@@ -8,6 +8,7 @@ export function BuildSolve(
     list: string
     sol: string
     vars: string[]
+    vals: number[]
     unknown: [symbol: string, name: string, val: number, unit: string]
 } {
 
@@ -34,6 +35,7 @@ function BuildSolveOnce(
     list: string
     sol: string
     vars: string[]
+    vals: number[]
     unknown: [symbol: string, name: string, val: number, unit: string]
 } {
 
@@ -67,6 +69,7 @@ function BuildSolveOnce(
         list: givens.map($ => $.whole()).join("\\\\"),
         sol: sol(),
         vars: system.variables.map(v => givens.includes(v) ? v.long() : v.symbol()),
+        vals: system.variables.map($ => $.getVal()),
         unknown: [
             unknown.symbol(),
             unknown.name,
