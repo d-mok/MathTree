@@ -193,6 +193,8 @@ export class Variables extends Array<Variable>{
 
     write(latex: string, showVars: Variable[]): string {
         let T = latex
+        let shows = [...showVars]
+        shows.sort((a, b) =>b.sym.length - a.sym.length)
         for (let v of this) {
             T = showVars.includes(v) ? v.writeValue(T) : v.writeSymbol(T)
         }

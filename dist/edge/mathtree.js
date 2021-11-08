@@ -31599,6 +31599,8 @@ class Variables extends Array {
     }
     write(latex, showVars) {
         let T = latex;
+        let shows = [...showVars];
+        shows.sort((a, b) => b.sym.length - a.sym.length);
         for (let v of this) {
             T = showVars.includes(v) ? v.writeValue(T) : v.writeSymbol(T);
         }
