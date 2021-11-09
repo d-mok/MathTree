@@ -33,7 +33,8 @@ export class EquSystem {
     }
 
     getVariables(symbols: string[]): Variables {
-        return new Variables(...this.variables.filter($ => symbols.includes($.sym)))
+        const vars = symbols.map($ => this.variables.find(_ => _.sym === $)!)
+        return new Variables(...vars)
     }
 
 

@@ -31817,7 +31817,8 @@ class EquSystem {
         this.fit();
     }
     getVariables(symbols) {
-        return new variable_1.Variables(...this.variables.filter($ => symbols.includes($.sym)));
+        const vars = symbols.map($ => this.variables.find(_ => _.sym === $));
+        return new variable_1.Variables(...vars);
     }
     getFullTree() {
         let trees = RndShuffle(...(0, taylor_js_1.analyze)(this.fs));
