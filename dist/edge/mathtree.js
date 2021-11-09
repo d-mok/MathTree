@@ -31846,7 +31846,8 @@ class EquSystem {
     generateTrend() {
         let { tree, top, info } = this.getFullTree();
         let [agent, ...constants] = RndShuffle(...this.getVariables(info.givens));
-        let responses = this.getVariables(info.solved);
+        let responses = [...this.getVariables(info.solved)];
+        responses = RndShuffle(...responses);
         let target = top;
         this.variables.clear();
         this.fit();
