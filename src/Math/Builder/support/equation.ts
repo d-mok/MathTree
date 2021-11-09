@@ -6,7 +6,7 @@ import { Variable, Variables } from './variable'
 export class Equation {
 
     constructor(
-        public zeroFunc: Fun,
+        public zeroFunc: zeroFunction,
         public latex: string,
         public dep: Variables
     ) { }

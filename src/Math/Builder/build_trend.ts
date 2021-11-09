@@ -2,7 +2,7 @@ import { toEquSystem } from './support/support';
 
 export function BuildTrend(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
-    equations: [func: Fun, latex: string][],
+    equations: [func: zeroFunction, latex: string][],
     settings: {
         trends?: [inc: string, dec: string, unchange: string]
     } = {}

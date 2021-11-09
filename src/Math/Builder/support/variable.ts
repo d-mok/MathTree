@@ -18,7 +18,7 @@ export class Variable {
     private subscript: string = ""
 
     public unit: string
-    private range: [number, number]
+    public range: [number, number]
     private display: string
 
     constructor(

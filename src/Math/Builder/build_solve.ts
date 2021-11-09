@@ -3,7 +3,7 @@ import { toEquSystem } from './support/support';
 
 export function BuildSolve(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
-    equations: [func: Fun, latex: string][],
+    equations: [func: zeroFunction, latex: string][],
 ): {
     list: string
     sol: string
@@ -30,7 +30,7 @@ export function BuildSolve(
 
 function BuildSolveOnce(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
-    equations: [func: Fun, latex: string][],
+    equations: [func: zeroFunction, latex: string][],
 ): {
     list: string
     sol: string

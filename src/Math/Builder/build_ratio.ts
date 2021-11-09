@@ -5,7 +5,7 @@ import { Variable } from './support/variable';
 
 export function BuildRatio(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
-    func: Fun,
+    func: zeroFunction,
     latex: string,
     settings: {
         cases?: [string, string]

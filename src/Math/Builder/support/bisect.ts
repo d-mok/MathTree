@@ -1,5 +1,5 @@
 
-export function bisection(f: Fun, ranges: [number, number][]): number[] {
+export function bisection(f: zeroFunction, ranges: [number, number][]): number[] {
 
     function randomPoint(): number[] {
         return ranges.map(([min, max]) => RndR(min, max))

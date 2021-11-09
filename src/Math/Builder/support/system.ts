@@ -3,7 +3,7 @@ import { Variable, Variables } from './variable'
 import { Equation } from './equation'
 import { latexBraced } from './latex'
 
-
+import {fit} from 'taylor-js'
 
 export class EquSystem {
     constructor(
@@ -19,6 +19,13 @@ export class EquSystem {
             'The system is not solvable is given range.'
         )
     }
+
+    // fit2() {
+    //     let fs = this.equations.map($ => $.zeroFunc)
+    //     let ranges = this.variables.map($ => $.range)
+        
+    //     let vals = fit(fs,)
+    // }
 
     solve(): void {
         this.variables.timeLoop(

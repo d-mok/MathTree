@@ -4,7 +4,7 @@ import { Variable, Variables } from './variable'
 
 
 
-function getSignature(func: Fun): string[] {
+function getSignature(func: zeroFunction): string[] {
     const fnStr = func.toString()
     return fnStr
         .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
@@ -18,7 +18,7 @@ function findVarBySym(sym: string, vars: Variables): Variable {
     return v
 }
 
-function getDeps(func: Fun, vars: Variables): Variables {
+function getDeps(func: zeroFunction, vars: Variables): Variables {
     let dep = getSignature(func)
     let vs = dep.map($ => findVarBySym($, vars))
     return new Variables(...vs)
