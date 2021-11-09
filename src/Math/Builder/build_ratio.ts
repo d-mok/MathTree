@@ -1,6 +1,5 @@
-import { Equation } from './support/equation';
 import { latexAligned } from './support/latex';
-import { toVariables } from './support/support';
+import { toEquSystem, toVariables } from './support/support';
 import { Variable } from './support/variable';
 
 export function BuildRatio(
@@ -19,28 +18,29 @@ export function BuildRatio(
     unknown: [symbol: string, name: string, val: number, unit: string]
 } {
 
-    let vars = toVariables(variables)
-    let eq = new Equation(func, latex, vars)
+    let system = toEquSystem(variables, [[func,latex]])
+
+    let vars = system.variables
 
     let [given, unknown, ...constants] = RndShuffle(...vars)
     let g: number[] = []
     let u: number[] = []
 
-    eq.fit()
+    system.fit()
     given.round()
     unknown.round()
     g.push(given.getVal())
     u.push(unknown.getVal())
 
-    eq.fitAgain(constants)
+    system.fitAgain(constants)
 
     for (let i = 0; i < 10; i++) { // avoid accidentally getting same set of [given,unknown]
-        eq.fitAgain([given, unknown])
+        system.fitAgain([given, unknown])
         given.round()
         if (given.getVal() !== g[0]) break
     }
 
-    eq.fitAgain([unknown])
+    system.fitAgain([unknown])
 
     g.push(given.getVal())
     u.push(unknown.getVal())
@@ -65,9 +65,9 @@ export function BuildRatio(
         case1Show: Variable[] = [],
         case2Show: Variable[] = []): string {
         setCase(2)
-        let [lhs2, rhs2] = eq.print(case2Show).split("=")
+        let [lhs2, rhs2] = system.print(case2Show).split("=")
         setCase(1)
-        let [lhs1, rhs1] = eq.print(case1Show).split("=")
+        let [lhs1, rhs1] = system.print(case1Show).split("=")
         return `\\dfrac{${lhs1}}{${lhs2}}=\\dfrac{${rhs1}}{${rhs2}}`
     }
 

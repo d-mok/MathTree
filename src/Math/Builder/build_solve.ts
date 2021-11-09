@@ -44,7 +44,7 @@ function BuildSolveOnce(
 
     let [givens, hiddens, unknown] = system.generateSolvables()
     givens.forEach($ => $.round())
-    system.solveAgain(hiddens)
+    system.fitAgain(hiddens)
 
     function sol(): string {
         if (equations.length === 1) {

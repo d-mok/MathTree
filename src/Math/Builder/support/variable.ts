@@ -152,7 +152,15 @@ export class Variables extends Array<Variable>{
         return this.map($ => $.getVal())
     }
 
-    setVals(vals: number[]): void {
+    setVal(obj: valObj): void {
+        for (let k in obj) {
+            let val = obj[k]
+            let variable = this.find($ => $.sym === k)!
+            variable.set(val)
+        }
+    }
+
+    setVals2(vals: number[]): void {
         this.forEach((v, i) => v.set(vals[i]))
     }
 
@@ -194,7 +202,7 @@ export class Variables extends Array<Variable>{
     write(latex: string, showVars: Variable[]): string {
         let T = latex
         let shows = [...showVars]
-        shows.sort((a, b) =>b.sym.length - a.sym.length)
+        shows.sort((a, b) => b.sym.length - a.sym.length)
         for (let v of this) {
             T = showVars.includes(v) ? v.writeValue(T) : v.writeSymbol(T)
         }
@@ -215,26 +223,50 @@ export class Variables extends Array<Variable>{
         })
     }
 
-    private save() {
-        this.store = this.getVals()
-    }
+    // private save() {
+    //     this.store = this.getVals()
+    // }
 
-    private restore() {
-        this.setVals(this.store)
-    }
+    // private restore() {
+    //     this.setVals(this.store)
+    // }
 
-    timeLoop(func: Function, failMsg: string) {
-        this.save()
-        for (let i = 0; i < 100; i++) {
-            this.restore()
-            try {
-                func()
-            } catch (e) {
-                // console.warn(e)
-                continue
-            }
-            return
+    // timeLoop(func: Function, failMsg: string) {
+    //     this.save()
+    //     for (let i = 0; i < 100; i++) {
+    //         this.restore()
+    //         try {
+    //             func()
+    //         } catch (e) {
+    //             // console.warn(e)
+    //             continue
+    //         }
+    //         return
+    //     }
+    //     throw "[Timeloop 100] " + failMsg
+    // }
+
+    rangeObj(): rangeObj {
+        let obj: rangeObj = {}
+        for (let v of this) {
+            obj[v.sym] = v.range
         }
-        throw "[Timeloop 100] " + failMsg
+        return obj
+    }
+
+    valObj(): valObj {
+        let obj: valObj = {}
+        for (let v of this) {
+            obj[v.sym] = v.getVal()
+        }
+        return obj
+    }
+
+    setOrder(tree: tree): void {
+        for (let k in tree) {
+            let order = tree[k]
+            let variable = this.find($ => $.sym === k)!
+            variable.order = order
+        }
     }
 }

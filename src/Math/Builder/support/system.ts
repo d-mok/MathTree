@@ -1,54 +1,38 @@
-import { createOrderTree } from './analyzer'
 import { Variable, Variables } from './variable'
 import { Equation } from './equation'
 import { latexBraced } from './latex'
 
-import {fit} from 'taylor-js'
+import { fit,analyze } from 'taylor-js'
 
 export class EquSystem {
+
+    private fs: zeroFunction[]
+
     constructor(
         public variables: Variables,
         public equations: Equation[]
-    ) { }
+    ) {
+        this.fs = equations.map($ => $.zeroFunc)
+    }
+
 
     fit() {
-        this.variables.timeLoop(
-            () => {
-                this.equations.forEach($ => $.fit())
-            },
-            'The system is not solvable is given range.'
-        )
+        let vals = fit(this.fs, this.variables.rangeObj(), this.variables.valObj())
+        this.variables.setVal(vals)
     }
 
-    // fit2() {
-    //     let fs = this.equations.map($ => $.zeroFunc)
-    //     let ranges = this.variables.map($ => $.range)
-        
-    //     let vals = fit(fs,)
-    // }
 
-    solve(): void {
-        this.variables.timeLoop(
-            () => {
-                for (let i = 0; i < 10; i++) {
-                    for (let eq of this.equations) eq.solve()
-                    if (this.variables.solved()) return
-                }
-                throw 'The system is not solvable yet.'
-            },
-            'The system is not solvable is given range.'
-        )
-    }
-
-    solveAgain(vars: Variable[]): void {
+    fitAgain(vars: Variable[]): void {
         vars.forEach($ => $.clear())
         vars.forEach($ => $.widen())
-        this.solve()
+        this.fit()
     }
 
 
     generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable] {
-        createOrderTree(this, true)
+        let trees = analyze(this.fs)
+        // testing
+        this.variables.setOrder(trees[0])
         return [
             this.variables.zeros(),
             this.variables.positives(),
@@ -57,8 +41,10 @@ export class EquSystem {
     }
 
 
-    generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[],target: Variable] {
-        createOrderTree(this, false)
+    generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable] {
+        let trees = analyze(this.fs)
+        // testing
+        this.variables.setOrder(trees[0])
         let [agent, ...constants] = this.variables.shuffledZeros()
         let responses = this.variables.positives()
         let target = this.variables.pickTop()
@@ -66,14 +52,16 @@ export class EquSystem {
         this.fit()
         let oldVal = this.variables.getVals()
         agent.shake()
-        this.solveAgain(responses)
+        this.fitAgain(responses)
         this.variables.compareWith(oldVal)
-        return [constants, agent, responses,target]
+        return [constants, agent, responses, target]
     }
 
 
     print(givens: Variable[] = []): string {
-        let eqs = this.equations.map($ => $.print(givens))
+        let eqs = this.equations.map($ =>
+            $.dep.write($.latex, givens)
+        )
         return latexBraced(eqs)
     }
 
