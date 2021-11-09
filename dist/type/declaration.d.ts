@@ -240,9 +240,6 @@ declare module "Math/Builder/support/latex" {
     export function latexAligned(texts: string[]): string;
     export function latexBraced(texts: string[]): string;
 }
-declare module "Math/Builder/support/bisect" {
-    export function bisection(f: Fun, ranges: [number, number][]): number[];
-}
 declare module "Math/Builder/support/units" {
     export function findUnit(name: string): string | undefined;
     export function parseUnit(raw: string): string;
@@ -255,7 +252,7 @@ declare module "Math/Builder/support/variable" {
         order: number;
         private subscript;
         unit: string;
-        private range;
+        range: [number, number];
         private display;
         constructor(sym: string, name: string, range: rangeInput, unit: string | undefined, display: string | undefined);
         bounds(): [number, number];
@@ -281,7 +278,8 @@ declare module "Math/Builder/support/variable" {
         clear(): void;
         widen(): void;
         getVals(): number[];
-        setVals(vals: number[]): void;
+        setVal(obj: valObj): void;
+        setVals2(vals: number[]): void;
         solved(): boolean;
         solvable(): boolean;
         private maxOrder;
@@ -292,27 +290,20 @@ declare module "Math/Builder/support/variable" {
         pickTop(): Variable;
         write(latex: string, showVars: Variable[]): string;
         compareWith(oldVals: number[]): void;
-        private save;
-        private restore;
-        timeLoop(func: Function, failMsg: string): void;
+        rangeObj(): rangeObj;
+        valObj(): valObj;
+        setOrder(tree: tree): void;
     }
 }
 declare module "Math/Builder/support/equation" {
     import { Variable, Variables } from "Math/Builder/support/variable";
     export class Equation {
-        zeroFunc: Fun;
+        zeroFunc: zeroFunction;
         latex: string;
         dep: Variables;
-        constructor(zeroFunc: Fun, latex: string, dep: Variables);
-        solve(): void;
-        fit(): void;
-        fitAgain(vars: Variable[]): void;
+        constructor(zeroFunc: zeroFunction, latex: string, dep: Variables);
         print(showVars?: Variable[]): string;
     }
-}
-declare module "Math/Builder/support/analyzer" {
-    import { EquSystem } from "Math/Builder/support/system";
-    export function createOrderTree(sys: EquSystem, rich: boolean): void;
 }
 declare module "Math/Builder/support/system" {
     import { Variable, Variables } from "Math/Builder/support/variable";
@@ -320,11 +311,13 @@ declare module "Math/Builder/support/system" {
     export class EquSystem {
         variables: Variables;
         equations: Equation[];
+        private fs;
         constructor(variables: Variables, equations: Equation[]);
         fit(): void;
-        solve(): void;
-        solveAgain(vars: Variable[]): void;
-        generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable];
+        fitAgain(vars: Variable[]): void;
+        getVariables(symbols: string[]): Variables;
+        private getFullTree;
+        generateSolvables(): [givens: Variables, hiddens: Variables, unknown: Variable];
         generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable];
         print(givens?: Variable[]): string;
     }
@@ -338,7 +331,7 @@ declare module "Math/Builder/support/support" {
     export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: Fun, latex: string][]): {
+    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][]): {
         list: string;
         sol: string;
         vars: string[];
@@ -347,7 +340,7 @@ declare module "Math/Builder/build_solve" {
     };
 }
 declare module "Math/Builder/build_trend" {
-    export function BuildTrend(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: Fun, latex: string][], settings?: {
+    export function BuildTrend(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], settings?: {
         trends?: [inc: string, dec: string, unchange: string];
     }): {
         sol: string;
@@ -358,7 +351,7 @@ declare module "Math/Builder/build_trend" {
     };
 }
 declare module "Math/Builder/build_ratio" {
-    export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], func: Fun, latex: string, settings?: {
+    export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], func: zeroFunction, latex: string, settings?: {
         cases?: [string, string];
         subscript?: [string | number, string | number];
     }): {
