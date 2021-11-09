@@ -30032,17 +30032,17 @@ function build(funcName, func) {
     return holder[funcName];
 }
 function and(pds, name) {
-    name ?? (name = '(' + pds.map(f => f.name).join(' && ') + ')');
+    name ??= '(' + pds.map(f => f.name).join(' && ') + ')';
     return build(name, (_) => pds.every(p => p(_)));
 }
 exports.and = and;
 function or(pds, name) {
-    name ?? (name = '(' + pds.map(f => f.name).join(' || ') + ')');
+    name ??= '(' + pds.map(f => f.name).join(' || ') + ')';
     return build(name, (_) => pds.some(p => p(_)));
 }
 exports.or = or;
 function every(pd, name) {
-    name ?? (name = '(every.' + pd.name + ')');
+    name ??= '(every.' + pd.name + ')';
     return build(name, (_) => (0, exports.array)(_) && _.every(pd));
 }
 exports.every = every;
@@ -31465,8 +31465,8 @@ class Variable {
         this.val = NaN;
         this.order = -1;
         this.subscript = "";
-        unit ?? (unit = (0, units_1.findUnit)(name));
-        unit ?? (unit = "");
+        unit ??= (0, units_1.findUnit)(name);
+        unit ??= "";
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
         let [min, max] = this.range;
@@ -32576,7 +32576,7 @@ function StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }) {
             return unit(label).toString();
         return label;
     }
-    labels ?? (labels = [...data]);
+    labels ??= [...data];
     let parsedLabels = labels.map(parse);
     let initTen = ten(Math.min(...data));
     let endTen = ten(Math.max(...data));
@@ -32618,9 +32618,9 @@ globalThis.StemAndLeaf = contract(StemAndLeaf)
  */
 function Table({ content, columns, rows, stretch }) {
     let nCol = Math.max(...content.map($ => $.length));
-    columns ?? (columns = Array(nCol + 1).fill("|").join("c"));
+    columns ??= Array(nCol + 1).fill("|").join("c");
     let nRow = content.length;
-    rows ?? (rows = Array(nRow + 1).fill("|").join("r"));
+    rows ??= Array(nRow + 1).fill("|").join("r");
     let rowsArr = rows.split('r').map($ => $
         .replace(/\|/g, " \\hline ")
         .replace(/\:/g, " \\hdashline "));
@@ -34831,7 +34831,7 @@ globalThis.ListRange = contract(ListRange).sign([owl.int]);
  */
 function Freqs(data, nums) {
     let ls = toList(data);
-    nums ?? (nums = ListRange(...data));
+    nums ??= ListRange(...data);
     let arr = [];
     for (let v of nums) {
         arr.push(ls.freq(v));
@@ -37404,8 +37404,8 @@ class AutoPenCls {
         let A_ = [Q1, 0];
         let B_ = [Q2, 0];
         let C_ = [Q3, 0];
-        start ?? (start = Q0 - (Q4 - Q0) * 0.2);
-        end ?? (end = Q4 + (Q4 - Q0) * 0.2);
+        start ??= Q0 - (Q4 - Q0) * 0.2;
+        end ??= Q4 + (Q4 - Q0) * 0.2;
         pen.range.set([start, end], [-(t + 1), t + 1]);
         pen.size.set(size, 1);
         if (showTick) {
@@ -39326,7 +39326,7 @@ class PenCls extends sapphire_js_1.Pencil {
     rightAngle(A, O, B, size = 12) {
         A = this.pj(A);
         O = this.pj(O);
-        B ?? (B = Rotate(A, 90, O));
+        B ??= Rotate(A, 90, O);
         B = this.pj(B);
         this.drawRightAngle(A, O, B, size);
     }
