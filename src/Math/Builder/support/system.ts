@@ -84,7 +84,7 @@ export class EquSystem {
         let eqs = this.equations.map($ =>
             $.dep.write($.latex, givens)
         )
-        return latexBraced(eqs)
+        return eqs.length === 1 ? eqs[0] : latexBraced(eqs)
     }
 
 }

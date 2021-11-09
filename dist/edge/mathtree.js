@@ -31858,7 +31858,7 @@ class EquSystem {
     }
     print(givens = []) {
         let eqs = this.equations.map($ => $.dep.write($.latex, givens));
-        return (0, latex_1.latexBraced)(eqs);
+        return eqs.length === 1 ? eqs[0] : (0, latex_1.latexBraced)(eqs);
     }
 }
 exports.EquSystem = EquSystem;
