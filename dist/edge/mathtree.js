@@ -30102,7 +30102,7 @@ function randomValue(range) {
     let [min, max] = range;
     if (min > 0 && max > 0)
         return randomLog(range);
-    if (min < 0 && min < 0)
+    if (min < 0 && max < 0)
         return randomLogNeg(range);
     return randomUniform(range);
 }
