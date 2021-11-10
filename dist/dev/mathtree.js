@@ -31982,7 +31982,7 @@ class Variable {
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
         let [min, max] = this.range;
-        if (min * max > 0)
+        if (min * max < 0)
             throw "[Variable] Range must have single sign!";
         this.display = display ?? this.sym;
     }
