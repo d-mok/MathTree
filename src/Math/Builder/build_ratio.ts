@@ -45,18 +45,23 @@ export function BuildRatio(
     g.push(given.getVal())
     u.push(unknown.getVal())
 
-    function setSubscript(order: 1 | 2) {
+    function setSubscript(order: 0 | 1 | 2) {
+        if (order === 0) {
+            given.label()
+            unknown.label()
+        }
         let subs = settings.subscript ?? [1, 2]
         given.label(subs[order - 1])
         unknown.label(subs[order - 1])
     }
 
-    function setVal(order: 1 | 2) {
+    function setVal(order: 0 | 1 | 2) {
+        if(order===0)return
         given.set(g[order - 1])
         unknown.set(u[order - 1])
     }
 
-    function setCase(order: 1 | 2) {
+    function setCase(order: 0|1 | 2) {
         setSubscript(order)
         setVal(order)
     }
@@ -94,6 +99,7 @@ export function BuildRatio(
         let G2 = "$" + given.long()
         let U2 = "$" + unknown.symbol()
         let [case1, case2] = settings.cases ?? ["Before", "After"]
+        setCase(0)
         return Table({
             content: [
                 ["", "$" + given.symbol(), "$" + unknown.symbol()],

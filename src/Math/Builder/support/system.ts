@@ -2,7 +2,11 @@ import { Variable, Variables } from './variable'
 import { Equation } from './equation'
 import { latexBraced } from './latex'
 
-import { fit,analyze } from 'taylor-js'
+import { fit, analyze, readTree, solutionFlow } from 'taylor-js'
+
+
+
+
 
 export class EquSystem {
 
@@ -28,26 +32,46 @@ export class EquSystem {
         this.fit()
     }
 
+    getVariables(symbols: string[]): Variables {
+        const vars = symbols.map($ => this.variables.find(_ => _.sym === $)!)
+        return new Variables(...vars)
+    }
 
-    generateSolvables(): [givens: Variable[], hiddens: Variable[], unknown: Variable] {
-        let trees = analyze(this.fs)
-        // testing
-        this.variables.setOrder(trees[0])
+
+    private getFullTree() {
+        let trees = RndShuffle(...analyze(this.fs))
+        for (let tree of trees) {
+            let info = readTree(tree)
+            for (let top of RndShuffle(...info.tops)) {
+                let flow = solutionFlow(this.fs, tree, [top])
+                if (flow.length === this.fs.length)
+                    return {
+                        tree,
+                        top: this.getVariables([top])[0],
+                        info
+                    }
+            }
+        }
+        throw 'no sensible set of solvables found!'
+    }
+
+
+    generateSolvables(): [givens: Variables, hiddens: Variables, unknown: Variable] {
+        let { tree, top, info } = this.getFullTree()
         return [
-            this.variables.zeros(),
-            this.variables.positives(),
-            this.variables.pickTop()
+            this.getVariables(info.givens),
+            this.getVariables(info.solved),
+            top
         ]
     }
 
 
     generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable] {
-        let trees = analyze(this.fs)
-        // testing
-        this.variables.setOrder(trees[0])
-        let [agent, ...constants] = this.variables.shuffledZeros()
-        let responses = this.variables.positives()
-        let target = this.variables.pickTop()
+        let { tree, top, info } = this.getFullTree()
+        let [agent, ...constants] = RndShuffle(...this.getVariables(info.givens))
+        let responses = [...this.getVariables(info.solved)]
+        responses = RndShuffle(...responses)
+        let target = top
         this.variables.clear()
         this.fit()
         let oldVal = this.variables.getVals()
@@ -62,7 +86,7 @@ export class EquSystem {
         let eqs = this.equations.map($ =>
             $.dep.write($.latex, givens)
         )
-        return latexBraced(eqs)
+        return eqs.length === 1 ? eqs[0] : latexBraced(eqs)
     }
 
 }
