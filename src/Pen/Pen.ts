@@ -734,7 +734,7 @@ export class PenCls extends Pencil {
     cutX(position: Point2D | number, label?: string) {
         if (typeof position === 'number') position = [position, 0]
         this.drawTickVertical(position, DEFAULT_CUTTER_LENGTH_PIXEL)
-        if (label !== undefined) this.label.point(position, label, 270)
+        if (label !== undefined) this.label.point(position, label, 90)
     }
 
     /**
@@ -751,7 +751,7 @@ export class PenCls extends Pencil {
     cutY(position: Point2D | number, label?: string) {
         if (typeof position === 'number') position = [0, position]
         this.drawTickHorizontal(position, DEFAULT_CUTTER_LENGTH_PIXEL)
-        if (label !== undefined) this.label.point(position, label, 180)
+        if (label !== undefined) this.label.point(position, label, 0)
     }
 
 
