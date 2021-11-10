@@ -29705,6 +29705,608 @@ exports.bool = bool;
 
 /***/ }),
 
+/***/ 3897:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.analyze = void 0;
+const utils_1 = __webpack_require__(4337);
+class Vabe {
+    constructor(symbol) {
+        this.symbol = symbol;
+        this.order = NaN;
+    }
+    reset() {
+        this.order = NaN;
+    }
+    setZero() {
+        this.order = 0;
+    }
+    solve(order) {
+        this.order = order;
+    }
+    solved() {
+        return Number.isFinite(this.order);
+    }
+}
+class Eqube {
+    constructor(vabes) {
+        this.vabes = vabes;
+    }
+    unsolvedVabes() {
+        return this.vabes.filter($ => !$.solved());
+    }
+    solved() {
+        return this.unsolvedVabes().length === 0;
+    }
+    solvable() {
+        return this.unsolvedVabes().length === 1;
+    }
+    orders() {
+        return this.vabes.map($ => $.order);
+    }
+    realOrders() {
+        return this.orders().filter($ => Number.isFinite($));
+    }
+    maxOrder() {
+        const orders = this.realOrders();
+        if (orders.length === 0)
+            return -1;
+        return Math.max(...orders);
+    }
+    nextOrder() {
+        return this.maxOrder() + 1;
+    }
+    forceSolve() {
+        let nextOrder = this.nextOrder();
+        for (let v of this.unsolvedVabes()) {
+            v.solve(nextOrder);
+        }
+    }
+    trySolve() {
+        if (this.solvable()) {
+            this.forceSolve();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+}
+class PresetAnalyzer {
+    constructor(vabes, equbes, preset) {
+        this.vabes = vabes;
+        this.equbes = equbes;
+        this.preset = preset;
+    }
+    reset() {
+        for (let v of this.vabes) {
+            const isPreset = this.preset.includes(v);
+            isPreset ? v.setZero() : v.reset();
+        }
+    }
+    trySolveNext() {
+        for (let eq of this.equbes) {
+            const t = eq.trySolve();
+            if (t === true)
+                return true;
+        }
+        return false;
+    }
+    exportOrder() {
+        const orders = {};
+        for (let v of this.vabes) {
+            orders[v.symbol] = v.order;
+        }
+        return orders;
+    }
+    getTree() {
+        this.reset();
+        for (let i = 0; i <= this.equbes.length; i++) {
+            const t = this.trySolveNext();
+            if (!t)
+                break;
+        }
+        return this.exportOrder();
+    }
+}
+class Analyzer {
+    constructor(vabes, equbes) {
+        this.vabes = vabes;
+        this.equbes = equbes;
+    }
+    allVabeCombinations() {
+        const n = this.vabes.length - this.equbes.length;
+        return (0, utils_1.combinations)(this.vabes, n);
+    }
+    getTrees() {
+        const combs = this.allVabeCombinations();
+        const ts = [];
+        for (let c of combs) {
+            const ana = new PresetAnalyzer(this.vabes, this.equbes, c);
+            ts.push(ana.getTree());
+        }
+        return ts;
+    }
+    isHealthy(tree) {
+        // return true
+        const orders = Object.values(tree);
+        return orders.every($ => Number.isFinite($));
+    }
+    getHealthyTrees() {
+        return this.getTrees().filter($ => this.isHealthy($));
+    }
+}
+function analyze(fs) {
+    const symbols = (0, utils_1.getAllVars)(fs);
+    const vabes = symbols.map($ => new Vabe($));
+    const equbes = [];
+    for (let f of fs) {
+        let syms = (0, utils_1.getVars)(f);
+        const vs = syms.map($ => vabes.find(_ => _.symbol === $));
+        let eq = new Eqube(vs);
+        equbes.push(eq);
+    }
+    let analyzer = new Analyzer(vabes, equbes);
+    return analyzer.getHealthyTrees();
+}
+exports.analyze = analyze;
+//# sourceMappingURL=analyze.js.map
+
+/***/ }),
+
+/***/ 8723:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.solvingSymbol = exports.solutionFlow = exports.analyze = void 0;
+var analyze_1 = __webpack_require__(3897);
+Object.defineProperty(exports, "analyze", ({ enumerable: true, get: function () { return analyze_1.analyze; } }));
+var reader_1 = __webpack_require__(9267);
+Object.defineProperty(exports, "solutionFlow", ({ enumerable: true, get: function () { return reader_1.solutionFlow; } }));
+Object.defineProperty(exports, "solvingSymbol", ({ enumerable: true, get: function () { return reader_1.solvingSymbol; } }));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 9267:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.solvingSymbol = exports.solutionFlow = void 0;
+const utils_1 = __webpack_require__(4337);
+class EquationReader {
+    constructor(f, tree) {
+        this.f = f;
+        this.tree = tree;
+        this.symbols = (0, utils_1.getVars)(f);
+    }
+    isActiveSolve() {
+        const m = this.maxOrder();
+        return m !== 0 && this.symbolsWithOrder(m).length === 1;
+    }
+    maxOrder() {
+        const orders = this.symbols.map($ => this.tree[$]);
+        const realOrders = orders.filter($ => Number.isFinite($));
+        return Math.max(...realOrders);
+    }
+    symbolsWithOrder(order) {
+        return this.symbols.filter($ => this.tree[$] === order);
+    }
+    solvingSymbol() {
+        if (!this.isActiveSolve())
+            return undefined;
+        return this.symbolsWithOrder(this.maxOrder())[0];
+    }
+    givenSymbols() {
+        return this.symbolsWithOrder(0);
+    }
+    stepSymbols() {
+        const arr = [];
+        for (let i = 1; i < this.maxOrder(); i++) {
+            arr.push(...this.symbolsWithOrder(i));
+        }
+        return arr;
+    }
+}
+class TreeReader {
+    constructor(tree, eqReaders) {
+        this.tree = tree;
+        this.eqReaders = eqReaders;
+        this.symbols = Object.keys(this.tree);
+    }
+    revealer(symbol) {
+        for (let eq of this.eqReaders) {
+            if (eq.solvingSymbol() === symbol)
+                return eq;
+        }
+        return undefined;
+    }
+    prerequisites(symbol) {
+        return this.revealer(symbol)?.stepSymbols() ?? [];
+    }
+    flowForOne(symbol) {
+        const order = this.tree[symbol];
+        if (order === 0)
+            return [];
+        if (order === 1)
+            return [this.revealer(symbol)];
+        let eqs = [];
+        for (let s of this.prerequisites(symbol)) {
+            eqs.push(...this.flowForOne(s));
+        }
+        eqs.push(this.revealer(symbol));
+        return [...new Set(eqs)];
+    }
+    flow(unknowns) {
+        let eqs = [];
+        for (let u of unknowns) {
+            eqs.push(...this.flowForOne(u));
+        }
+        return [...new Set(eqs)];
+    }
+}
+function solutionFlow(fs, tree, unknownSymbols) {
+    const eqReaders = fs.map($ => new EquationReader($, tree));
+    const reader = new TreeReader(tree, eqReaders);
+    let flow = reader.flow(unknownSymbols);
+    return flow.map($ => $.f);
+}
+exports.solutionFlow = solutionFlow;
+function solvingSymbol(f, tree) {
+    const eqReader = new EquationReader(f, tree);
+    return eqReader.solvingSymbol();
+}
+exports.solvingSymbol = solvingSymbol;
+//# sourceMappingURL=reader.js.map
+
+/***/ }),
+
+/***/ 9733:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Bisection = void 0;
+function randomUniform(range) {
+    const [min, max] = range;
+    return Math.random() * (max - min) + min;
+}
+function randomLog(range) {
+    const [min, max] = range;
+    const logmin = Math.log10(min);
+    const logmax = Math.log10(max);
+    const e = randomUniform([logmin, logmax]);
+    return 10 ** e;
+}
+function mid(a, b) {
+    return a.map(($, i) => ($ + b[i]) / 2);
+}
+function equal(a, b) {
+    return a.every(($, i) => $ === b[i])
+        && a.length === b.length;
+}
+class Bisection {
+    constructor(equation, ranges) {
+        this.equation = equation;
+        this.ranges = ranges;
+        this.a = []; // positive point
+        this.b = []; // negative point
+        this.precision = 10;
+    }
+    randomPoint() {
+        return this.ranges.map(randomLog);
+    }
+    randomSignedPoint(sign) {
+        for (let i = 0; i < 100; i++) {
+            const point = this.randomPoint();
+            const value = this.equation(...point);
+            const sameSign = value * sign > 0;
+            if (sameSign)
+                return point;
+        }
+        console.error("[bisection] No signed point in ranges: " + JSON.stringify(this.ranges));
+        throw '';
+    }
+    intialize() {
+        this.a = this.randomSignedPoint(1);
+        this.b = this.randomSignedPoint(-1);
+    }
+    iterate() {
+        const m = mid(this.a, this.b);
+        const M = this.equation(...m);
+        if (!Number.isFinite(M)) {
+            console.error('[bisection] The function value is not a finite number!');
+            throw '';
+        }
+        if (M >= 0)
+            this.a = m;
+        if (M <= 0)
+            this.b = m;
+    }
+    done() {
+        const precision_a = this.a.map($ => $.toPrecision(this.precision));
+        const precision_b = this.b.map($ => $.toPrecision(this.precision));
+        return equal(precision_a, precision_b);
+    }
+    assertRange() {
+        const pass = this.ranges.some(([min, max]) => max > min);
+        if (!pass) {
+            console.error('[bisection] all variables are locked already');
+            throw '';
+        }
+    }
+    run() {
+        this.assertRange();
+        this.intialize();
+        for (let i = 0; i < 100; i++) {
+            this.iterate();
+            if (this.done())
+                return [...this.a];
+        }
+        console.error('[bisection] fail to find tolarable solution after 100 iteration');
+        throw '';
+    }
+    exec() {
+        try {
+            return this.run();
+        }
+        catch {
+            throw '[bisection] An error occur during bisection.';
+        }
+    }
+}
+exports.Bisection = Bisection;
+//# sourceMappingURL=bisection.js.map
+
+/***/ }),
+
+/***/ 712:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.bisect = void 0;
+const utils_1 = __webpack_require__(4337);
+const bisection_1 = __webpack_require__(9733);
+function toObject(keys, vals) {
+    const obj = {};
+    for (let i = 0; i < keys.length; i++) {
+        obj[keys[i]] = vals[i];
+    }
+    return obj;
+}
+function narrowRange(ranges, preset) {
+    const rngs = { ...ranges };
+    for (let k in preset) {
+        const val = preset[k];
+        if (k in rngs && Number.isFinite(val))
+            rngs[k] = [val, val];
+    }
+    return rngs;
+}
+function bisect(f, ranges, preset) {
+    const vars = (0, utils_1.getVars)(f);
+    const narrowedRngs = narrowRange(ranges, preset);
+    const bounds = vars.map($ => narrowedRngs[$]);
+    const bi = new bisection_1.Bisection(f, bounds);
+    const sol = bi.exec();
+    return toObject(vars, sol);
+}
+exports.bisect = bisect;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 7873:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Fitter = void 0;
+const Bisection_1 = __webpack_require__(712);
+const utils_1 = __webpack_require__(4337);
+const searcher_1 = __webpack_require__(5746);
+class Fitter {
+    constructor(fs, ranges, preset) {
+        this.fs = fs;
+        this.ranges = ranges;
+        this.preset = preset;
+        this.vals = {};
+        this.allVariables = (0, utils_1.getAllVars)(fs);
+        this.reset();
+    }
+    reset() {
+        this.vals = {};
+        this.allVariables.forEach($ => this.vals[$] = NaN);
+        this.setVals(this.preset);
+    }
+    setVals(vals) {
+        this.vals = { ...this.vals, ...vals };
+    }
+    fitOne(f) {
+        const sol = (0, Bisection_1.bisect)(f, this.ranges, this.vals);
+        this.setVals(sol);
+    }
+    fit() {
+        const orderedFS = (0, searcher_1.getFittableOrder)(this.fs, this.preset);
+        if (orderedFS === undefined)
+            throw 'There is no fittable order for this system.';
+        for (let i = 0; i < 10; i++) {
+            try {
+                this.reset();
+                orderedFS.forEach($ => this.fitOne($));
+                return this.vals;
+            }
+            catch {
+            }
+        }
+        throw 'The system is not fittable in given range.';
+    }
+}
+exports.Fitter = Fitter;
+//# sourceMappingURL=fitter.js.map
+
+/***/ }),
+
+/***/ 4335:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.fit = void 0;
+const fitter_1 = __webpack_require__(7873);
+function fit(fs, ranges, preset) {
+    let fitter = new fitter_1.Fitter(fs, ranges, preset);
+    return fitter.fit();
+}
+exports.fit = fit;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 5746:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getFittableOrder = void 0;
+const utils_1 = __webpack_require__(4337);
+class Searcher {
+    constructor(fs, givens = []) {
+        this.fs = fs;
+        this.givens = givens;
+        this.founds = new Set();
+    }
+    reset() {
+        this.founds = new Set(this.givens);
+    }
+    isFull(f) {
+        return (0, utils_1.getVars)(f).every($ => this.founds.has($));
+    }
+    fit(f) {
+        (0, utils_1.getVars)(f).forEach($ => this.founds.add($));
+    }
+    isFittableOrder(fs) {
+        this.reset();
+        for (let f of fs) {
+            if (this.isFull(f))
+                return false;
+            this.fit(f);
+        }
+        return true;
+    }
+    getFittableOrder() {
+        for (let fs of (0, utils_1.permute)(this.fs)) {
+            if (this.isFittableOrder(fs))
+                return fs;
+        }
+        return undefined;
+    }
+}
+function getFittableOrder(fs, preset) {
+    const givens = [];
+    for (let k in preset) {
+        let v = preset[k];
+        if (Number.isFinite(v))
+            givens.push(k);
+    }
+    const sr = new Searcher(fs, givens);
+    return sr.getFittableOrder();
+}
+exports.getFittableOrder = getFittableOrder;
+//# sourceMappingURL=searcher.js.map
+
+/***/ }),
+
+/***/ 7561:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.solvingSymbol = exports.solutionFlow = exports.analyze = exports.fit = void 0;
+var EquationFitter_1 = __webpack_require__(4335);
+Object.defineProperty(exports, "fit", ({ enumerable: true, get: function () { return EquationFitter_1.fit; } }));
+var EquationAnalyzer_1 = __webpack_require__(8723);
+Object.defineProperty(exports, "analyze", ({ enumerable: true, get: function () { return EquationAnalyzer_1.analyze; } }));
+Object.defineProperty(exports, "solutionFlow", ({ enumerable: true, get: function () { return EquationAnalyzer_1.solutionFlow; } }));
+Object.defineProperty(exports, "solvingSymbol", ({ enumerable: true, get: function () { return EquationAnalyzer_1.solvingSymbol; } }));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 4337:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.combinations = exports.permute = exports.getAllVars = exports.getVars = void 0;
+function getVars(func) {
+    const fnStr = func.toString();
+    return fnStr
+        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+        .replaceAll(" ", "")
+        .split(",");
+}
+exports.getVars = getVars;
+function getAllVars(fs) {
+    const vars = fs.map($ => getVars($)).flat();
+    return [...new Set(vars)];
+}
+exports.getAllVars = getAllVars;
+function permute(arr) {
+    let result = [];
+    if (arr.length === 0)
+        return [];
+    if (arr.length === 1)
+        return [arr];
+    for (let i = 0; i < arr.length; i++) {
+        const current = arr[i];
+        const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];
+        const remainingPermuted = permute(remaining);
+        for (let permuted of remainingPermuted) {
+            result.push([current, ...permuted]);
+        }
+    }
+    return result;
+}
+exports.permute = permute;
+function combinations(arr, k) {
+    if (k > arr.length || k <= 0)
+        return [];
+    if (k === arr.length)
+        return [[...arr]];
+    if (k === 1)
+        return arr.map($ => [$]);
+    const combs = [];
+    let tail_combs = [];
+    for (let i = 0; i <= arr.length - k + 1; i++) {
+        let tail = arr.slice(i + 1);
+        tail_combs = combinations(tail, k - 1);
+        for (let j = 0; j < tail_combs.length; j++) {
+            combs.push([arr[i], ...tail_combs[j]]);
+        }
+    }
+    return combs;
+}
+exports.combinations = combinations;
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
 /***/ 6715:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -30703,36 +31305,41 @@ globalThis.QuadraticFromVertex = contract(QuadraticFromVertex).sign([owl.nonZero
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildRatio = void 0;
-const equation_1 = __webpack_require__(404);
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
 function BuildRatio(variables, func, latex, settings = {}) {
-    let vars = (0, support_1.toVariables)(variables);
-    let eq = new equation_1.Equation(func, latex, vars);
+    let system = (0, support_1.toEquSystem)(variables, [[func, latex]]);
+    let vars = system.variables;
     let [given, unknown, ...constants] = RndShuffle(...vars);
     let g = [];
     let u = [];
-    eq.fit();
+    system.fit();
     given.round();
     unknown.round();
     g.push(given.getVal());
     u.push(unknown.getVal());
-    eq.fitAgain(constants);
+    system.fitAgain(constants);
     for (let i = 0; i < 10; i++) { // avoid accidentally getting same set of [given,unknown]
-        eq.fitAgain([given, unknown]);
+        system.fitAgain([given, unknown]);
         given.round();
         if (given.getVal() !== g[0])
             break;
     }
-    eq.fitAgain([unknown]);
+    system.fitAgain([unknown]);
     g.push(given.getVal());
     u.push(unknown.getVal());
     function setSubscript(order) {
+        if (order === 0) {
+            given.label();
+            unknown.label();
+        }
         let subs = settings.subscript ?? [1, 2];
         given.label(subs[order - 1]);
         unknown.label(subs[order - 1]);
     }
     function setVal(order) {
+        if (order === 0)
+            return;
         given.set(g[order - 1]);
         unknown.set(u[order - 1]);
     }
@@ -30742,9 +31349,9 @@ function BuildRatio(variables, func, latex, settings = {}) {
     }
     function printRatioFraction(case1Show = [], case2Show = []) {
         setCase(2);
-        let [lhs2, rhs2] = eq.print(case2Show).split("=");
+        let [lhs2, rhs2] = system.print(case2Show).split("=");
         setCase(1);
-        let [lhs1, rhs1] = eq.print(case1Show).split("=");
+        let [lhs1, rhs1] = system.print(case1Show).split("=");
         return `\\dfrac{${lhs1}}{${lhs2}}=\\dfrac{${rhs1}}{${rhs2}}`;
     }
     function printAns() {
@@ -30766,6 +31373,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
         let G2 = "$" + given.long();
         let U2 = "$" + unknown.symbol();
         let [case1, case2] = settings.cases ?? ["Before", "After"];
+        setCase(0);
         return Table({
             content: [
                 ["", "$" + given.symbol(), "$" + unknown.symbol()],
@@ -30830,7 +31438,7 @@ function BuildSolveOnce(variables, equations) {
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables();
     givens.forEach($ => $.round());
-    system.solveAgain(hiddens);
+    system.fitAgain(hiddens);
     function sol() {
         if (equations.length === 1) {
             let eq = system.equations[0];
@@ -30944,246 +31552,18 @@ globalThis.BuildRatio = build_ratio_1.BuildRatio;
 
 /***/ }),
 
-/***/ 5334:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createOrderTree = void 0;
-function trim(arr) {
-    return arr.filter($ => Number.isFinite($));
-}
-function max(arr) {
-    return Math.max(...trim(arr));
-}
-/**
- * The system of equations is represented by a matrix.
- * Each row is a variable.
- * Each col is an equation.
- * Initially, all element is set to -1 if the equation contains the variable.
- * Else, it's set to NaN.
- * Whenever a variable is solved, that row is set to the corresponding order.
- */
-class Analyzer {
-    constructor(nRow, nCol) {
-        this.nRow = nRow;
-        this.nCol = nCol;
-        this.matrix = [];
-        this.requireRich = false;
-        for (let i = 0; i < nRow; i++) {
-            let row = Array(nCol).fill(NaN);
-            this.matrix.push(row);
-        }
-    }
-    initialize(pairs) {
-        for (let [i, j] of pairs)
-            this.matrix[i][j] = -1;
-    }
-    col(j) {
-        return this.matrix.map(r => r[j]);
-    }
-    set(i, j, order) {
-        let v = this.matrix[i][j];
-        if (Number.isFinite(v))
-            this.matrix[i][j] = order;
-    }
-    reset() {
-        for (let i = 0; i < this.nRow; i++) {
-            for (let j = 0; j < this.nCol; j++) {
-                this.set(i, j, -1);
-            }
-        }
-    }
-    reveal(i, order) {
-        for (let j = 0; j < this.nCol; j++)
-            this.set(i, j, order);
-    }
-    nextOrder(j) {
-        return max(this.col(j)) + 1;
-    }
-    nUnsolved(j) {
-        return this.col(j).filter($ => $ === -1).length;
-    }
-    iUnsolved(j) {
-        return this.col(j).findIndex($ => $ === -1);
-    }
-    isSolvable(j) {
-        return this.nUnsolved(j) === 1;
-    }
-    solve(j) {
-        if (!this.isSolvable(j))
-            return;
-        let nextOrder = this.nextOrder(j);
-        let i = this.iUnsolved(j);
-        this.reveal(i, nextOrder);
-    }
-    solveAll() {
-        for (let j = 0; j < this.nCol; j++)
-            this.solve(j);
-    }
-    solveLoop() {
-        for (let n = 0; n < this.nCol + 2; n++)
-            this.solveAll();
-    }
-    done() {
-        return this.matrix.flat().filter($ => $ === -1).length === 0;
-    }
-    rich() {
-        let maxOrder = max(this.matrix.flat());
-        return maxOrder === this.nCol;
-    }
-    finished() {
-        let rich = this.requireRich ? this.rich() : true;
-        return this.done() && rich;
-    }
-    pickZeroth() {
-        let n = this.nRow - this.nCol;
-        let indices = [...Array(this.nRow).keys()];
-        let zeroIndices = [...toList(indices).sample(n)];
-        for (let i of zeroIndices)
-            this.reveal(i, 0);
-    }
-    searchOnce() {
-        this.reset();
-        this.pickZeroth();
-        this.solveLoop();
-    }
-    search() {
-        for (let i = 0; i < 100; i++) {
-            this.searchOnce();
-            if (this.finished())
-                return;
-        }
-        throw '[Analyzer] Fail to search a solving path.';
-    }
-    orders() {
-        return this.matrix.map(r => max(r));
-    }
-}
-function createAnalyzer(sys) {
-    let nVars = sys.variables.length;
-    let nEqs = sys.equations.length;
-    let analyzer = new Analyzer(nVars, nEqs);
-    let pairs = [];
-    for (let i = 0; i < nVars; i++) {
-        for (let j = 0; j < nEqs; j++) {
-            let va = sys.variables[i];
-            let eq = sys.equations[j];
-            if (eq.dep.includes(va))
-                pairs.push([i, j]);
-        }
-    }
-    analyzer.initialize(pairs);
-    return analyzer;
-}
-function writeOrder(sys, analyzer) {
-    let orders = analyzer.orders();
-    for (let i = 0; i < orders.length; i++) {
-        sys.variables[i].order = orders[i];
-    }
-}
-function createOrderTree(sys, rich) {
-    let analyzer = createAnalyzer(sys);
-    analyzer.requireRich = rich;
-    analyzer.search();
-    writeOrder(sys, analyzer);
-}
-exports.createOrderTree = createOrderTree;
-
-
-/***/ }),
-
-/***/ 6190:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.bisection = void 0;
-function bisection(f, ranges) {
-    function randomPoint() {
-        return ranges.map(([min, max]) => RndR(min, max));
-    }
-    function randomPosPoint() {
-        for (let i = 0; i < 1000; i++) {
-            let a = randomPoint();
-            if (f(...a) > 0)
-                return a;
-        }
-        throw "[bisection] can't find positive point with ranges:" + JSON.stringify(ranges);
-    }
-    function randomNegPoint() {
-        for (let i = 0; i < 1000; i++) {
-            let b = randomPoint();
-            if (f(...b) < 0)
-                return b;
-        }
-        throw "[bisection] can't find negative point with ranges:" + JSON.stringify(ranges);
-    }
-    let a = randomPosPoint();
-    let b = randomNegPoint();
-    function mid() {
-        let m = [];
-        for (let i = 0; i < ranges.length; i++) {
-            m.push((a[i] + b[i]) / 2);
-        }
-        return m;
-    }
-    function tolerable() {
-        const TOLERANCE = 0.000000000001;
-        return ranges.every(([min, max], i) => Math.abs(a[i] - b[i]) <= (max - min) * TOLERANCE);
-    }
-    for (let i = 0; i < 10000; i++) {
-        let m = mid();
-        let M = f(...m);
-        if (!Number.isFinite(M))
-            throw '[bisection] The function value is not a finite number!';
-        if (M === 0)
-            return m;
-        if (M > 0) {
-            a = m;
-        }
-        else {
-            b = m;
-        }
-        if (tolerable())
-            return mid();
-    }
-    throw '[bisection] fail to find tolarable solution after 10000 iteration';
-}
-exports.bisection = bisection;
-
-
-/***/ }),
-
 /***/ 404:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Equation = void 0;
-// import { analyze } from './analyzer'
-const bisect_1 = __webpack_require__(6190);
 class Equation {
     constructor(zeroFunc, latex, dep) {
         this.zeroFunc = zeroFunc;
         this.latex = latex;
         this.dep = dep;
-    }
-    solve() {
-        if (this.dep.solvable())
-            this.fit();
-    }
-    fit() {
-        let roots = (0, bisect_1.bisection)(this.zeroFunc, this.dep.bounds());
-        this.dep.setVals(roots);
-    }
-    fitAgain(vars) {
-        vars.forEach($ => $.clear());
-        vars.forEach($ => $.widen());
-        this.fit();
     }
     print(showVars = []) {
         return this.dep.write(this.latex, showVars);
@@ -31282,36 +31662,27 @@ exports.toEquSystem = toEquSystem;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EquSystem = void 0;
-const analyzer_1 = __webpack_require__(5334);
 const latex_1 = __webpack_require__(1838);
+const taylor_js_1 = __webpack_require__(7561);
 class EquSystem {
     constructor(variables, equations) {
         this.variables = variables;
         this.equations = equations;
+        this.fs = equations.map($ => $.zeroFunc);
     }
     fit() {
-        this.variables.timeLoop(() => {
-            this.equations.forEach($ => $.fit());
-        }, 'The system is not solvable is given range.');
+        let vals = (0, taylor_js_1.fit)(this.fs, this.variables.rangeObj(), this.variables.valObj());
+        this.variables.setVal(vals);
     }
-    solve() {
-        this.variables.timeLoop(() => {
-            for (let i = 0; i < 10; i++) {
-                for (let eq of this.equations)
-                    eq.solve();
-                if (this.variables.solved())
-                    return;
-            }
-            throw 'The system is not solvable yet.';
-        }, 'The system is not solvable is given range.');
-    }
-    solveAgain(vars) {
+    fitAgain(vars) {
         vars.forEach($ => $.clear());
         vars.forEach($ => $.widen());
-        this.solve();
+        this.fit();
     }
     generateSolvables() {
-        (0, analyzer_1.createOrderTree)(this, true);
+        let trees = (0, taylor_js_1.analyze)(this.fs);
+        // testing
+        this.variables.setOrder(trees[0]);
         return [
             this.variables.zeros(),
             this.variables.positives(),
@@ -31319,7 +31690,9 @@ class EquSystem {
         ];
     }
     generateTrend() {
-        (0, analyzer_1.createOrderTree)(this, false);
+        let trees = (0, taylor_js_1.analyze)(this.fs);
+        // testing
+        this.variables.setOrder(trees[0]);
         let [agent, ...constants] = this.variables.shuffledZeros();
         let responses = this.variables.positives();
         let target = this.variables.pickTop();
@@ -31327,7 +31700,7 @@ class EquSystem {
         this.fit();
         let oldVal = this.variables.getVals();
         agent.shake();
-        this.solveAgain(responses);
+        this.fitAgain(responses);
         this.variables.compareWith(oldVal);
         return [constants, agent, responses, target];
     }
@@ -31567,7 +31940,14 @@ class Variables extends Array {
     getVals() {
         return this.map($ => $.getVal());
     }
-    setVals(vals) {
+    setVal(obj) {
+        for (let k in obj) {
+            let val = obj[k];
+            let variable = this.find($ => $.sym === k);
+            variable.set(val);
+        }
+    }
+    setVals2(vals) {
         this.forEach((v, i) => v.set(vals[i]));
     }
     solved() {
@@ -31621,26 +32001,46 @@ class Variables extends Array {
             v.set(sign);
         });
     }
-    save() {
-        this.store = this.getVals();
-    }
-    restore() {
-        this.setVals(this.store);
-    }
-    timeLoop(func, failMsg) {
-        this.save();
-        for (let i = 0; i < 100; i++) {
-            this.restore();
-            try {
-                func();
-            }
-            catch (e) {
-                // console.warn(e)
-                continue;
-            }
-            return;
+    // private save() {
+    //     this.store = this.getVals()
+    // }
+    // private restore() {
+    //     this.setVals(this.store)
+    // }
+    // timeLoop(func: Function, failMsg: string) {
+    //     this.save()
+    //     for (let i = 0; i < 100; i++) {
+    //         this.restore()
+    //         try {
+    //             func()
+    //         } catch (e) {
+    //             // console.warn(e)
+    //             continue
+    //         }
+    //         return
+    //     }
+    //     throw "[Timeloop 100] " + failMsg
+    // }
+    rangeObj() {
+        let obj = {};
+        for (let v of this) {
+            obj[v.sym] = v.range;
         }
-        throw "[Timeloop 100] " + failMsg;
+        return obj;
+    }
+    valObj() {
+        let obj = {};
+        for (let v of this) {
+            obj[v.sym] = v.getVal();
+        }
+        return obj;
+    }
+    setOrder(tree) {
+        for (let k in tree) {
+            let order = tree[k];
+            let variable = this.find($ => $.sym === k);
+            variable.order = order;
+        }
     }
 }
 exports.Variables = Variables;
@@ -39030,7 +39430,7 @@ class PenCls extends sapphire_js_1.Pencil {
             position = [position, 0];
         this.drawTickVertical(position, DEFAULT_CUTTER_LENGTH_PIXEL);
         if (label !== undefined)
-            this.label.point(position, label, 90);
+            this.label.point(position, label, 270);
     }
     /**
      * Draw a cutter to a vertical line.
@@ -39048,7 +39448,7 @@ class PenCls extends sapphire_js_1.Pencil {
             position = [0, position];
         this.drawTickHorizontal(position, DEFAULT_CUTTER_LENGTH_PIXEL);
         if (label !== undefined)
-            this.label.point(position, label, 0);
+            this.label.point(position, label, 180);
     }
     /**
      * Draw a guide line from `point` to the x-axis.

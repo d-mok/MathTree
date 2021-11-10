@@ -59,9 +59,7 @@ export class EquSystem {
 
 
     print(givens: Variable[] = []): string {
-        let eqs = this.equations.map($ =>
-            $.dep.write($.latex, givens)
-        )
+        let eqs = this.equations.map($ =>$.print(givens))
         return latexBraced(eqs)
     }
 
