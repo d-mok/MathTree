@@ -31982,8 +31982,7 @@ class Variable {
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
         let [min, max] = this.range;
-        if (min * max < 0)
-            throw "[Variable] Range must have single sign!";
+        // if (min * max < 0) throw "[Variable] Range must have single sign!"
         this.display = display ?? this.sym;
     }
     bounds() {
@@ -32010,7 +32009,7 @@ class Variable {
     solved() {
         return Number.isFinite(this.val);
     }
-    widen(fraction = 0.2) {
+    widen(fraction = 0.1) {
         let [min, max] = this.range;
         this.range = [
             min - Math.abs(min * fraction),

@@ -33,7 +33,7 @@ export class Variable {
         this.unit = parseUnit(unit)
         this.range = parseRange(range)
         let [min, max] = this.range
-        if (min * max < 0) throw "[Variable] Range must have single sign!"
+        // if (min * max < 0) throw "[Variable] Range must have single sign!"
         this.display = display ?? this.sym
     }
 
@@ -68,7 +68,7 @@ export class Variable {
         return Number.isFinite(this.val)
     }
 
-    widen(fraction: number = 0.2): void {
+    widen(fraction: number = 0.1): void {
         let [min, max] = this.range
         this.range = [
             min - Math.abs(min * fraction),
