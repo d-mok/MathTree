@@ -33,7 +33,7 @@ export class Variable {
         this.unit = parseUnit(unit)
         this.range = parseRange(range)
         let [min, max] = this.range
-        if (min <= 0 || max <= 0) throw "[Variable] Range must be positive!"
+        if (min * max > 0) throw "[Variable] Range must have single sign!"
         this.display = display ?? this.sym
     }
 
