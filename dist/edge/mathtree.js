@@ -32003,7 +32003,7 @@ function parseRange(rng) {
         return rng.length === 2 ? rng : [rng[0], rng[0]];
     }
     else {
-        return [rng / 10, rng * 10];
+        return rng > 0 ? [rng / 10, rng * 10] : [rng * 10, rng / 10];
     }
 }
 class Variable {
@@ -32018,7 +32018,8 @@ class Variable {
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
         let [min, max] = this.range;
-        // if (min * max < 0) throw "[Variable] Range must have single sign!"
+        if (min > max)
+            throw "[Variable] Range must have max > min";
         this.display = display ?? this.sym;
     }
     bounds() {
