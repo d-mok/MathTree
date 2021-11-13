@@ -28,7 +28,7 @@ function seal(...args: any[]) {
         //     return original(...args) * 3
         // }
 
-        descriptor.value = contract(descriptor.value).sign(args)
+        descriptor.value = contract(descriptor.value).sign(...args)
 
         //@ts-ignore
         globalThis[key] = descriptor.value
