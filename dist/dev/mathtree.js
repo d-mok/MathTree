@@ -36353,10 +36353,16 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 /***/ }),
 
 /***/ 6779:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
 
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 class SampleMaster {
     /**
@@ -36366,11 +36372,28 @@ class SampleMaster {
      * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
      * ```
      */
-    static vecMid(A, B, ratio) {
+    static vecMid(A, ratio) {
         return [10, 10];
     }
 }
-globalThis.vecMid = SampleMaster.vecMid;
+__decorate([
+    seal([owl.positive, owl.negative])
+], SampleMaster, "vecMid", null);
+function seal(...args) {
+    return function (target, key, descriptor) {
+        console.log(target);
+        console.log(key);
+        console.log(descriptor);
+        // let original = descriptor.value
+        // descriptor.value = function (...args: any[]) {
+        //     return original(...args) * 3
+        // }
+        descriptor.value = contract(descriptor.value).sign(args);
+        //@ts-ignore
+        globalThis[key] = descriptor.value;
+        return descriptor;
+    };
+}
 // /**
 //  * @category Vector
 //  * @return the vector OP

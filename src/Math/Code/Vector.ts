@@ -9,10 +9,33 @@ class SampleMaster {
      * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
      * ```
      */
-    static vecMid(A: Point3D, B: Point3D, ratio: number): Point2D {
+    @seal([owl.positive, owl.negative])
+    static vecMid(A: number, ratio: number): Point2D {
         return [10, 10]
     }
 
+}
+
+
+function seal(...args: any[]) {
+    return function (target: Object, key: string | symbol, descriptor: PropertyDescriptor) {
+        console.log(target)
+        console.log(key)
+        console.log(descriptor)
+        // let original = descriptor.value
+
+        // descriptor.value = function (...args: any[]) {
+        //     return original(...args) * 3
+        // }
+
+        descriptor.value = contract(descriptor.value).sign(args)
+
+        //@ts-ignore
+        globalThis[key] = descriptor.value
+
+
+        return descriptor
+    }
 }
 
 
@@ -21,7 +44,7 @@ declare global {
 }
 
 
-globalThis.vecMid = SampleMaster.vecMid
+// globalThis.vecMid = SampleMaster.vecMid
 
 
 export { }
