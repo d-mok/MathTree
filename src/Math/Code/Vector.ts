@@ -1,4 +1,29 @@
 
+
+class SampleMaster {
+
+    /**
+     * The is a sample testing function.
+     */
+    static vecMid(...vec: Point2D[]): Point2D {
+        return [10, 10]
+    }
+
+}
+
+
+declare global {
+    var vecMid: typeof SampleMaster.vecMid
+}
+
+
+globalThis.vecMid = SampleMaster.vecMid
+
+
+export { }
+
+
+
 // /**
 //  * @category Vector
 //  * @return the vector OP

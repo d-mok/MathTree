@@ -30092,20 +30092,6 @@ function randomLog(range) {
     const e = randomUniform([logmin, logmax]);
     return 10 ** e;
 }
-function randomLogNeg(range) {
-    const [minNeg, maxNeg] = range;
-    const min = -maxNeg;
-    const max = -minNeg;
-    return -randomLog([min, max]);
-}
-function randomValue(range) {
-    let [min, max] = range;
-    if (min > 0 && max > 0)
-        return randomLog(range);
-    if (min < 0 && min < 0)
-        return randomLogNeg(range);
-    return randomUniform(range);
-}
 function mid(a, b) {
     return a.map(($, i) => ($ + b[i]) / 2);
 }
@@ -30122,7 +30108,7 @@ class Bisection {
         this.precision = 10;
     }
     randomPoint() {
-        return this.ranges.map(randomValue);
+        return this.ranges.map(randomLog);
     }
     randomSignedPoint(sign) {
         for (let i = 0; i < 100; i++) {
@@ -31596,9 +31582,9 @@ function BuildSolveOnce(variables, equations) {
             let T = "";
             T += system.print() + " \\\\~\\\\ ";
             T += system.print(givens) + " \\\\~\\\\ ";
-            let hds = [...hiddens];
-            hds.sort((a, b) => a.order - b.order);
-            T += (0, latex_1.latexBraced)(hds.map($ => $.full()));
+            // let hds = [...hiddens]
+            // hds.sort((a, b) => a.order - b.order)
+            T += (0, latex_1.latexBraced)(hiddens.map($ => $.full()));
             return T;
         }
     }
@@ -32003,7 +31989,7 @@ function parseRange(rng) {
         return rng.length === 2 ? rng : [rng[0], rng[0]];
     }
     else {
-        return [rng / 10, rng * 10];
+        return rng > 0 ? [rng / 10, rng * 10] : [rng * 10, rng / 10];
     }
 }
 class Variable {
@@ -32011,21 +31997,22 @@ class Variable {
         this.sym = sym;
         this.name = name;
         this.val = NaN;
-        this.order = -1;
+        // public order: number = -1
         this.subscript = "";
         unit ??= (0, units_1.findUnit)(name);
         unit ??= "";
         this.unit = (0, units_1.parseUnit)(unit);
         this.range = parseRange(range);
         let [min, max] = this.range;
-        // if (min * max < 0) throw "[Variable] Range must have single sign!"
+        if (min > max)
+            throw "[Variable] Range must have max > min";
         this.display = display ?? this.sym;
     }
-    bounds() {
-        if (Number.isFinite(this.val))
-            return [this.val, this.val];
-        return this.range;
-    }
+    // bounds(): [number, number] {
+    //     if (Number.isFinite(this.val))
+    //         return [this.val, this.val]
+    //     return this.range
+    // }
     set(val) {
         this.val = val;
     }
@@ -32042,9 +32029,9 @@ class Variable {
     getVal() {
         return this.val;
     }
-    solved() {
-        return Number.isFinite(this.val);
-    }
+    // solved(): boolean {
+    //     return Number.isFinite(this.val)
+    // }
     widen(fraction = 0.1) {
         let [min, max] = this.range;
         this.range = [
@@ -32098,13 +32085,10 @@ class Variable {
 }
 exports.Variable = Variable;
 class Variables extends Array {
-    constructor() {
-        super(...arguments);
-        this.store = [];
-    }
-    bounds() {
-        return this.map($ => $.bounds());
-    }
+    // private store: number[] = []
+    // bounds(): [number, number][] {
+    //     return this.map($ => $.bounds())
+    // }
     clear() {
         this.forEach($ => $.clear());
     }
@@ -32121,36 +32105,36 @@ class Variables extends Array {
             variable.set(val);
         }
     }
-    setVals2(vals) {
-        this.forEach((v, i) => v.set(vals[i]));
-    }
-    solved() {
-        return this.every($ => $.solved());
-    }
-    solvable() {
-        let unsolved = this.filter($ => !$.solved());
-        return unsolved.length === 1;
-    }
-    maxOrder() {
-        let orders = this.map($ => $.order);
-        return Math.max(...orders);
-    }
-    zeros() {
-        return new Variables(...this.filter($ => $.order === 0));
-    }
-    shuffledZeros() {
-        return new Variables(...RndShuffle(...this.zeros()));
-    }
-    positives() {
-        return new Variables(...this.filter($ => $.order > 0));
-    }
-    tops() {
-        let max = this.maxOrder();
-        return new Variables(...this.filter($ => $.order === max));
-    }
-    pickTop() {
-        return RndPick(...this.tops());
-    }
+    // setVals2(vals: number[]): void {
+    //     this.forEach((v, i) => v.set(vals[i]))
+    // }
+    // solved(): boolean {
+    //     return this.every($ => $.solved())
+    // }
+    // solvable(): boolean {
+    //     let unsolved = this.filter($ => !$.solved())
+    //     return unsolved.length === 1
+    // }
+    // private maxOrder(): number {
+    //     let orders = this.map($ => $.order)
+    //     return Math.max(...orders)
+    // }
+    // zeros(): Variables {
+    //     return new Variables(...this.filter($ => $.order === 0))
+    // }
+    // shuffledZeros(): Variables {
+    //     return new Variables(...RndShuffle(...this.zeros()))
+    // }
+    // positives(): Variables {
+    //     return new Variables(...this.filter($ => $.order > 0))
+    // }
+    // tops(): Variables {
+    //     let max = this.maxOrder()
+    //     return new Variables(...this.filter($ => $.order === max))
+    // }
+    // pickTop(): Variable {
+    //     return RndPick(...this.tops())
+    // }
     write(latex, showVars) {
         let T = latex;
         let shows = [...showVars];
@@ -32175,26 +32159,6 @@ class Variables extends Array {
             v.set(sign);
         });
     }
-    // private save() {
-    //     this.store = this.getVals()
-    // }
-    // private restore() {
-    //     this.setVals(this.store)
-    // }
-    // timeLoop(func: Function, failMsg: string) {
-    //     this.save()
-    //     for (let i = 0; i < 100; i++) {
-    //         this.restore()
-    //         try {
-    //             func()
-    //         } catch (e) {
-    //             // console.warn(e)
-    //             continue
-    //         }
-    //         return
-    //     }
-    //     throw "[Timeloop 100] " + failMsg
-    // }
     rangeObj() {
         let obj = {};
         for (let v of this) {
@@ -32208,13 +32172,6 @@ class Variables extends Array {
             obj[v.sym] = v.getVal();
         }
         return obj;
-    }
-    setOrder(tree) {
-        for (let k in tree) {
-            let order = tree[k];
-            let variable = this.find($ => $.sym === k);
-            variable.order = order;
-        }
     }
 }
 exports.Variables = Variables;
@@ -36396,10 +36353,20 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 /***/ }),
 
 /***/ 6779:
-/***/ (() => {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+class SampleMaster {
+    /**
+     * The is a sample testing function.
+     */
+    static vecMid(...vec) {
+        return [10, 10];
+    }
+}
+globalThis.vecMid = SampleMaster.vecMid;
 // /**
 //  * @category Vector
 //  * @return the vector OP

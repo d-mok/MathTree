@@ -36353,10 +36353,20 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 /***/ }),
 
 /***/ 6779:
-/***/ (() => {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+class SampleMaster {
+    /**
+     * The is a sample testing function.
+     */
+    static vecMid(...vec) {
+        return [10, 10];
+    }
+}
+globalThis.vecMid = SampleMaster.vecMid;
 // /**
 //  * @category Vector
 //  * @return the vector OP

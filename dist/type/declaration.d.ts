@@ -249,19 +249,16 @@ declare module "Math/Builder/support/variable" {
         sym: string;
         name: string;
         private val;
-        order: number;
         private subscript;
         unit: string;
         range: [number, number];
         private display;
         constructor(sym: string, name: string, range: rangeInput, unit: string | undefined, display: string | undefined);
-        bounds(): [number, number];
         set(val: number): void;
         round(): void;
         shake(): void;
         clear(): void;
         getVal(): number;
-        solved(): boolean;
         widen(fraction?: number): void;
         label(subscript?: string | number): void;
         symbol(): string;
@@ -273,26 +270,14 @@ declare module "Math/Builder/support/variable" {
         writeValue(latex: string): string;
     }
     export class Variables extends Array<Variable> {
-        private store;
-        bounds(): [number, number][];
         clear(): void;
         widen(): void;
         getVals(): number[];
         setVal(obj: valObj): void;
-        setVals2(vals: number[]): void;
-        solved(): boolean;
-        solvable(): boolean;
-        private maxOrder;
-        zeros(): Variables;
-        shuffledZeros(): Variables;
-        positives(): Variables;
-        tops(): Variables;
-        pickTop(): Variable;
         write(latex: string, showVars: Variable[]): string;
         compareWith(oldVals: number[]): void;
         rangeObj(): rangeObj;
         valObj(): valObj;
-        setOrder(tree: tree): void;
     }
 }
 declare module "Math/Builder/support/equation" {
@@ -2755,6 +2740,18 @@ declare function WholeBearing(polarAngle: number): string;
  * ```
  */
 declare function CompassBearing(polarAngle: number): string;
+declare module "Math/Code/Vector" {
+    class SampleMaster {
+        /**
+         * The is a sample testing function.
+         */
+        static vecMid(...vec: Point2D[]): Point2D;
+    }
+    global {
+        var vecMid: typeof SampleMaster.vecMid;
+    }
+    export {};
+}
 /**
  * @category Vector3D
  * @return mean of all vectors
