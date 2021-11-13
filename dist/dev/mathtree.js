@@ -30092,6 +30092,20 @@ function randomLog(range) {
     const e = randomUniform([logmin, logmax]);
     return 10 ** e;
 }
+function randomLogNeg(range) {
+    const [minNeg, maxNeg] = range;
+    const min = -maxNeg;
+    const max = -minNeg;
+    return -randomLog([min, max]);
+}
+function randomValue(range) {
+    let [min, max] = range;
+    if (min > 0 && max > 0)
+        return randomLog(range);
+    if (min < 0 && max < 0)
+        return randomLogNeg(range);
+    return randomUniform(range);
+}
 function mid(a, b) {
     return a.map(($, i) => ($ + b[i]) / 2);
 }
@@ -30108,7 +30122,7 @@ class Bisection {
         this.precision = 10;
     }
     randomPoint() {
-        return this.ranges.map(randomLog);
+        return this.ranges.map(randomValue);
     }
     randomSignedPoint(sign) {
         for (let i = 0; i < 100; i++) {
@@ -36388,7 +36402,7 @@ function seal(...args) {
         // descriptor.value = function (...args: any[]) {
         //     return original(...args) * 3
         // }
-        descriptor.value = contract(descriptor.value).sign(args);
+        descriptor.value = contract(descriptor.value).sign(...args);
         //@ts-ignore
         globalThis[key] = descriptor.value;
         return descriptor;
