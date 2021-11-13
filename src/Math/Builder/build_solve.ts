@@ -58,9 +58,9 @@ function BuildSolveOnce(
             let T = ""
             T += system.print() + " \\\\~\\\\ "
             T += system.print(givens) + " \\\\~\\\\ "
-            let hds = [...hiddens]
-            hds.sort((a, b) => a.order - b.order)
-            T += latexBraced(hds.map($ => $.full()))
+            // let hds = [...hiddens]
+            // hds.sort((a, b) => a.order - b.order)
+            T += latexBraced(hiddens.map($ => $.full()))
             return T
         }
     }

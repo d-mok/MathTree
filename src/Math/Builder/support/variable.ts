@@ -14,7 +14,7 @@ function parseRange(rng: rangeInput): [number, number] {
 export class Variable {
 
     private val: number = NaN
-    public order: number = -1
+    // public order: number = -1
     private subscript: string = ""
 
     public unit: string
@@ -37,11 +37,11 @@ export class Variable {
         this.display = display ?? this.sym
     }
 
-    bounds(): [number, number] {
-        if (Number.isFinite(this.val))
-            return [this.val, this.val]
-        return this.range
-    }
+    // bounds(): [number, number] {
+    //     if (Number.isFinite(this.val))
+    //         return [this.val, this.val]
+    //     return this.range
+    // }
 
     set(val: number): void {
         this.val = val
@@ -64,9 +64,9 @@ export class Variable {
         return this.val
     }
 
-    solved(): boolean {
-        return Number.isFinite(this.val)
-    }
+    // solved(): boolean {
+    //     return Number.isFinite(this.val)
+    // }
 
     widen(fraction: number = 0.1): void {
         let [min, max] = this.range
@@ -133,11 +133,11 @@ export class Variable {
 
 export class Variables extends Array<Variable>{
 
-    private store: number[] = []
+    // private store: number[] = []
 
-    bounds(): [number, number][] {
-        return this.map($ => $.bounds())
-    }
+    // bounds(): [number, number][] {
+    //     return this.map($ => $.bounds())
+    // }
 
 
     clear(): void {
@@ -160,44 +160,44 @@ export class Variables extends Array<Variable>{
         }
     }
 
-    setVals2(vals: number[]): void {
-        this.forEach((v, i) => v.set(vals[i]))
-    }
+    // setVals2(vals: number[]): void {
+    //     this.forEach((v, i) => v.set(vals[i]))
+    // }
 
-    solved(): boolean {
-        return this.every($ => $.solved())
-    }
+    // solved(): boolean {
+    //     return this.every($ => $.solved())
+    // }
 
-    solvable(): boolean {
-        let unsolved = this.filter($ => !$.solved())
-        return unsolved.length === 1
-    }
+    // solvable(): boolean {
+    //     let unsolved = this.filter($ => !$.solved())
+    //     return unsolved.length === 1
+    // }
 
-    private maxOrder(): number {
-        let orders = this.map($ => $.order)
-        return Math.max(...orders)
-    }
+    // private maxOrder(): number {
+    //     let orders = this.map($ => $.order)
+    //     return Math.max(...orders)
+    // }
 
-    zeros(): Variables {
-        return new Variables(...this.filter($ => $.order === 0))
-    }
+    // zeros(): Variables {
+    //     return new Variables(...this.filter($ => $.order === 0))
+    // }
 
-    shuffledZeros(): Variables {
-        return new Variables(...RndShuffle(...this.zeros()))
-    }
+    // shuffledZeros(): Variables {
+    //     return new Variables(...RndShuffle(...this.zeros()))
+    // }
 
-    positives(): Variables {
-        return new Variables(...this.filter($ => $.order > 0))
-    }
+    // positives(): Variables {
+    //     return new Variables(...this.filter($ => $.order > 0))
+    // }
 
-    tops(): Variables {
-        let max = this.maxOrder()
-        return new Variables(...this.filter($ => $.order === max))
-    }
+    // tops(): Variables {
+    //     let max = this.maxOrder()
+    //     return new Variables(...this.filter($ => $.order === max))
+    // }
 
-    pickTop(): Variable {
-        return RndPick(...this.tops())
-    }
+    // pickTop(): Variable {
+    //     return RndPick(...this.tops())
+    // }
 
     write(latex: string, showVars: Variable[]): string {
         let T = latex
@@ -223,29 +223,7 @@ export class Variables extends Array<Variable>{
         })
     }
 
-    // private save() {
-    //     this.store = this.getVals()
-    // }
-
-    // private restore() {
-    //     this.setVals(this.store)
-    // }
-
-    // timeLoop(func: Function, failMsg: string) {
-    //     this.save()
-    //     for (let i = 0; i < 100; i++) {
-    //         this.restore()
-    //         try {
-    //             func()
-    //         } catch (e) {
-    //             // console.warn(e)
-    //             continue
-    //         }
-    //         return
-    //     }
-    //     throw "[Timeloop 100] " + failMsg
-    // }
-
+    
     rangeObj(): rangeObj {
         let obj: rangeObj = {}
         for (let v of this) {
@@ -262,11 +240,11 @@ export class Variables extends Array<Variable>{
         return obj
     }
 
-    setOrder(tree: tree): void {
-        for (let k in tree) {
-            let order = tree[k]
-            let variable = this.find($ => $.sym === k)!
-            variable.order = order
-        }
-    }
+    // setOrder(tree: tree): void {
+    //     for (let k in tree) {
+    //         let order = tree[k]
+    //         let variable = this.find($ => $.sym === k)!
+    //         variable.order = order
+    //     }
+    // }
 }
