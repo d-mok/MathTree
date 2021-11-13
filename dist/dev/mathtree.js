@@ -36360,9 +36360,13 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 class SampleMaster {
     /**
-     * The is a sample testing function.
+     * @category Vector
+     * @return sum of all vectors
+     * ```
+     * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
+     * ```
      */
-    static vecMid(...vec) {
+    static vecMid(A, B, ratio) {
         return [10, 10];
     }
 }

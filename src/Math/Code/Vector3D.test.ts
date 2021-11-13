@@ -18,9 +18,6 @@ test('Mid3D', () => {
 });
 
 
-
-
-
 test('Slide3D', () => {
     expect(Slide3D([0, 0, 0], [4, 8, 0], 0.25)).toEqual([1, 2, 0]);
     expect(Slide3D([0, 0, 0], [4, 8, 0], 1.25)).toEqual([5, 10, 0]);
