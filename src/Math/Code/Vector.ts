@@ -43,10 +43,6 @@ declare global {
     var vecMid: typeof SampleMaster.vecMid
 }
 
-
-// globalThis.vecMid = SampleMaster.vecMid
-
-
 export { }
 
 
