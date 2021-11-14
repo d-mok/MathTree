@@ -36394,11 +36394,11 @@ class SampleMaster {
     }
 }
 __decorate([
+    expose(),
     (0, waxy_js_1.check)(owl.positive, owl.negative),
     (0, waxy_js_1.inspect)(function small(a, b) { return a + b < 100; }),
     (0, waxy_js_1.accept)(owl.positive),
-    (0, waxy_js_1.protect)(),
-    expose()
+    (0, waxy_js_1.protect)()
 ], SampleMaster, "vecMid", null);
 function expose() {
     return function (target, key, descriptor) {
@@ -40299,21 +40299,21 @@ class ErrorLogger {
         let err = toError(e);
         this.pile.push('[' + err.name + '] ' + err.message);
     }
-    read(delimiter) {
-        return this.pile.join(delimiter);
+    readHtml(delimiter) {
+        return this.pile.map($ => $.replaceAll('\n', '<br/>')).join(delimiter);
     }
     logs() {
         return [...this.pile];
     }
     html() {
-        let text = this.read("<br/><br/>");
+        let text = this.readHtml("<br/><br/>");
         let len = text.length;
         if (len > 1000)
             text = text.substring(0, 1000) + ` ... (${len} chars)`;
         return text;
     }
-    lastLog() {
-        return this.pile[this.pile.length - 1];
+    lastLogHtml() {
+        return this.pile[this.pile.length - 1].replaceAll('\n', '<br/>');
     }
 }
 class Soil {
@@ -40476,7 +40476,7 @@ class Soil {
     }
     errorFruit() {
         return {
-            qn: "Error!<br/>" + this.logger.lastLog(),
+            qn: "Error!<br/>" + this.logger.lastLogHtml(),
             sol: this.logger.html(),
             ans: "X",
             counter: this.counter,

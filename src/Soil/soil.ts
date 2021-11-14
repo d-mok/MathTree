@@ -50,8 +50,8 @@ class ErrorLogger {
         this.pile.push('[' + err.name + '] ' + err.message)
     }
 
-    private read(delimiter: string): string {
-        return this.pile.join(delimiter)
+    private readHtml(delimiter: string): string {
+        return this.pile.map($ => $.replaceAll('\n', '<br/>')).join(delimiter)
     }
 
     logs(): string[] {
@@ -59,15 +59,15 @@ class ErrorLogger {
     }
 
     html(): string {
-        let text = this.read("<br/><br/>")
+        let text = this.readHtml("<br/><br/>")
         let len = text.length
         if (len > 1000)
             text = text.substring(0, 1000) + ` ... (${len} chars)`;
         return text
     }
 
-    lastLog(): string {
-        return this.pile[this.pile.length - 1]
+    lastLogHtml(): string {
+        return this.pile[this.pile.length - 1].replaceAll('\n', '<br/>')
     }
 
 }
@@ -256,7 +256,7 @@ export class Soil {
 
     private errorFruit(): Fruit {
         return {
-            qn: "Error!<br/>" + this.logger.lastLog(),
+            qn: "Error!<br/>" + this.logger.lastLogHtml(),
             sol: this.logger.html(),
             ans: "X",
             counter: this.counter,
