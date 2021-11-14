@@ -36367,7 +36367,7 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 /***/ }),
 
 /***/ 6779:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -36378,6 +36378,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const waxy_js_1 = __webpack_require__(4832);
 class SampleMaster {
     /**
      * @category Vector
@@ -36387,22 +36388,23 @@ class SampleMaster {
      * ```
      */
     static vecMid(A, ratio) {
+        if (A === 99)
+            throw 'A should not be 99!';
         return [10, 10];
     }
 }
 __decorate([
-    seal([owl.positive, owl.negative])
+    (0, waxy_js_1.check)(owl.positive, owl.negative),
+    (0, waxy_js_1.inspect)(function small(a, b) { return a + b < 100; }),
+    (0, waxy_js_1.accept)(owl.positive),
+    (0, waxy_js_1.protect)(),
+    expose()
 ], SampleMaster, "vecMid", null);
-function seal(...args) {
+function expose() {
     return function (target, key, descriptor) {
         console.log(target);
         console.log(key);
         console.log(descriptor);
-        // let original = descriptor.value
-        // descriptor.value = function (...args: any[]) {
-        //     return original(...args) * 3
-        // }
-        descriptor.value = contract(descriptor.value).sign(...args);
         //@ts-ignore
         globalThis[key] = descriptor.value;
         return descriptor;
@@ -41137,6 +41139,339 @@ class OptionShuffler {
 exports.OptionShuffler = OptionShuffler;
 
 
+/***/ }),
+
+/***/ 4832:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "accept": () => (/* reexport */ accept),
+  "check": () => (/* reexport */ check),
+  "inspect": () => (/* reexport */ inspect),
+  "protect": () => (/* reexport */ protect),
+  "wax": () => (/* reexport */ wax)
+});
+
+;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/assertor/report.js
+function passIt() {
+    return { pass: true };
+}
+function failIt(require) {
+    return {
+        pass: false,
+        require
+    };
+}
+function nameOfFunc(f) {
+    return f.name ?? f.toString();
+}
+//# sourceMappingURL=report.js.map
+;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/assertor/predicate.js
+
+function satisfyPred(val, rule) {
+    const pass = rule(val);
+    if (!pass)
+        return failIt(nameOfFunc(rule));
+    return passIt();
+}
+function satisfyPredAnd(val, rule) {
+    for (let p of rule) {
+        const pass = p(val);
+        if (!pass)
+            return failIt(nameOfFunc(p));
+    }
+    return passIt();
+}
+function satisfyPredObj(val, rule) {
+    for (let k in rule) {
+        const has = k in val;
+        if (!has)
+            return failIt('should have property: ' + k);
+        const p = rule[k];
+        const pass = p(val[k]);
+        if (!pass)
+            return failIt(k + ' -> ' + nameOfFunc(p));
+    }
+    return passIt();
+}
+function isPred(rule) {
+    return typeof rule === 'function';
+}
+function isPredAnd(rule) {
+    return Array.isArray(rule);
+}
+function isPredObj(rule) {
+    return typeof rule === 'object' &&
+        !Array.isArray(rule) &&
+        rule !== null;
+}
+function satisfy(val, rule) {
+    if (isPred(rule))
+        return satisfyPred(val, rule);
+    if (isPredAnd(rule))
+        return satisfyPredAnd(val, rule);
+    if (isPredObj(rule))
+        return satisfyPredObj(val, rule);
+    return failIt('fail to recognize the rule');
+}
+//# sourceMappingURL=predicate.js.map
+;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/assertor/argPredicate.js
+
+function satisfyArgPred(vals, argRule) {
+    const pass = argRule(...vals);
+    if (!pass)
+        return failIt(nameOfFunc(argRule));
+    return passIt();
+}
+function satisfyArgPredAnd(vals, argRule) {
+    for (let p of argRule) {
+        const pass = p(...vals);
+        if (!pass)
+            return failIt(nameOfFunc(p));
+    }
+    return passIt();
+}
+function isArgPred(argRule) {
+    return typeof argRule === 'function';
+}
+function isArgPredAnd(argRule) {
+    return Array.isArray(argRule);
+}
+function satisfyArgs(vals, argRule) {
+    if (isArgPred(argRule))
+        return satisfyArgPred(vals, argRule);
+    if (isArgPredAnd(argRule))
+        return satisfyArgPredAnd(vals, argRule);
+    return failIt('fail to recognize the rule');
+}
+//# sourceMappingURL=argPredicate.js.map
+;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/assertor/error.js
+
+
+function isError(e) {
+    return typeof e === 'object' && e !== null && 'name' in e && 'message' in e;
+}
+function error(msg) {
+    const e = new Error(msg);
+    e.name = 'ContractError';
+    return e;
+}
+function signature(f) {
+    const s = f.toString();
+    return s.slice(s.indexOf('(') + 1, s.indexOf(')'));
+}
+function str(obj) {
+    return JSON.stringify(obj);
+}
+function join(arr) {
+    return arr.map(str).join(',');
+}
+class ErrFactory {
+    constructor(host) {
+        this.name = host.name;
+        this.signature = signature(host);
+    }
+    err(...msgs) {
+        const h = `${this.name}(${this.signature})`;
+        const ms = [h, ...msgs];
+        return error(ms.join('\n'));
+    }
+    argErr(argIndex, argValue, vioMsg) {
+        return this.err('arg[' + argIndex + '] = ' + str(argValue), 'violate: ' + vioMsg);
+    }
+    argsErr(argValues, vioMsg) {
+        return this.err('args = (' + join(argValues) + ')', 'violate: ' + vioMsg);
+    }
+    retErr(argValues, returnValue, vioMsg) {
+        return this.err('args = (' + join(argValues) + ')', 'return = ' + returnValue, 'violate: ' + vioMsg);
+    }
+    catchString(argValues, e) {
+        return this.err('args = (' + join(argValues) + ')', 'throw: ' + e);
+    }
+    catchErrObj(argValues, e) {
+        return this.err('args = (' + join(argValues) + ')', 'throw: ' + e.name, 'message: ' + e.message);
+    }
+    catchAny(argValues, e) {
+        return this.err('args = (' + join(argValues) + ')', 'throw: ' + str(e));
+    }
+    catchErr(argValues, e) {
+        if (typeof e === 'string')
+            return this.catchString(argValues, e);
+        if (isError(e))
+            return this.catchErrObj(argValues, e);
+        return this.catchAny(argValues, e);
+    }
+}
+class Assertor extends ErrFactory {
+    arg(argIndex, argValue, rule) {
+        const rep = satisfy(argValue, rule);
+        if (!rep.pass)
+            throw this.argErr(argIndex, argValue, rep.require);
+    }
+    args(argValues, argRule) {
+        const rep = satisfyArgs(argValues, argRule);
+        if (!rep.pass)
+            throw this.argsErr(argValues, rep.require);
+    }
+    ret(argValues, returnValue, rule) {
+        const rep = satisfy(returnValue, rule);
+        if (!rep.pass)
+            throw this.retErr(argValues, returnValue, rep.require);
+    }
+}
+//# sourceMappingURL=error.js.map
+;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/validator.js
+
+function getOriginal(f) {
+    return f.wax_original ?? f;
+}
+function getToTail(arr, index) {
+    const n = arr.length - 1;
+    const i = Math.min(index, n);
+    return arr[i];
+}
+function setName(f, name) {
+    Object.defineProperty(f, "name", { value: name });
+}
+class Validator {
+    constructor(host) {
+        this.host = host;
+        this.assert = new Assertor(getOriginal(host));
+    }
+    setHost(f) {
+        f.wax_original = getOriginal(this.host);
+        setName(f, f.wax_original.name);
+        this.host = f;
+    }
+    arg(rules) {
+        const f = this.host;
+        const newFunc = (...args) => {
+            args.forEach((v, i) => this.assert.arg(i, v, getToTail(rules, i)));
+            return f(...args);
+        };
+        this.setHost(newFunc);
+    }
+    args(argRule) {
+        const f = this.host;
+        const newFunc = (...args) => {
+            this.assert.args(args, argRule);
+            return f(...args);
+        };
+        this.setHost(newFunc);
+    }
+    ret(rule) {
+        const f = this.host;
+        const newFunc = (...args) => {
+            const result = f(...args);
+            this.assert.ret(args, result, rule);
+            return result;
+        };
+        this.setHost(newFunc);
+    }
+    catch() {
+        const f = this.host;
+        const newFunc = (...args) => {
+            try {
+                return f(...args);
+            }
+            catch (e) {
+                throw this.assert.catchErr(args, e);
+            }
+        };
+        this.setHost(newFunc);
+    }
+    export() {
+        return this.host;
+    }
+}
+function install(f, { arg, args, ret, cat }) {
+    let v = new Validator(f);
+    if (cat === true)
+        v.catch();
+    if (ret !== undefined)
+        v.ret(ret);
+    if (args !== undefined)
+        v.args(args);
+    if (arg !== undefined && arg.length > 0)
+        v.arg(arg);
+    return v.export();
+}
+//# sourceMappingURL=validator.js.map
+;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/wax.js
+
+class Wax {
+    constructor(f) {
+        this.f = f;
+    }
+    /**
+     * Validate each argument.
+     */
+    sign(...arg) {
+        return this.seal({ arg });
+    }
+    /**
+     * Validate each argument and return value.
+     */
+    stamp(arg, ret) {
+        return this.seal({ arg, ret });
+    }
+    /**
+     * Validate everything.
+     */
+    seal({ arg, args, ret }) {
+        return install(this.f, { arg, args, ret, cat: true });
+    }
+}
+function makeDecorator(param) {
+    return function (target, key, descriptor) {
+        descriptor.value = install(descriptor.value, param);
+        return descriptor;
+    };
+}
+/**
+ * For use as a static method decorator.
+ * Validate each argument.
+ */
+function check(...rules) {
+    return makeDecorator({ arg: rules });
+}
+/**
+ * For use as a static method decorator.
+ * Validate the arguments as a whole.
+ */
+function inspect(argRule) {
+    return makeDecorator({ args: argRule });
+}
+/**
+ * For use as a static method decorator.
+ * Validate the return value.
+ */
+function accept(rule) {
+    return makeDecorator({ ret: rule });
+}
+/**
+ * For use as a static method decorator.
+ * Validate no throw.
+ */
+function protect() {
+    return makeDecorator({ cat: true });
+}
+/**
+ * Function validator.
+ */
+function wax(f) {
+    return new Wax(f);
+}
+//# sourceMappingURL=wax.js.map
+;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/index.js
+
+//# sourceMappingURL=index.js.map
+
 /***/ })
 
 /******/ 	});
@@ -41164,6 +41499,35 @@ exports.OptionShuffler = OptionShuffler;
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
