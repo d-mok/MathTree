@@ -36394,11 +36394,11 @@ class SampleMaster {
     }
 }
 __decorate([
+    expose(),
     (0, waxy_js_1.check)(owl.positive, owl.negative),
     (0, waxy_js_1.inspect)(function small(a, b) { return a + b < 100; }),
     (0, waxy_js_1.accept)(owl.positive),
-    (0, waxy_js_1.protect)(),
-    expose()
+    (0, waxy_js_1.protect)()
 ], SampleMaster, "vecMid", null);
 function expose() {
     return function (target, key, descriptor) {

@@ -9,11 +9,11 @@ class SampleMaster {
      * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
      * ```
      */
+    @expose()
     @check(owl.positive, owl.negative)
     @inspect(function small(a, b) { return a + b < 100 })
     @accept(owl.positive)
     @protect()
-    @expose()
     static vecMid(A: number, ratio: number): Point2D {
         if (A === 99) throw 'A should not be 99!'
         return [10, 10]
