@@ -445,24 +445,32 @@ declare type TrigExp = [TrigFunc, number, 1 | -1, string];
 declare type LabeledValue1 = [value: number, label: string];
 declare type LabeledValue2 = [value: number, label1: string, label2: string];
 declare type LabeledValue = LabeledValue1 | LabeledValue2;
-/**
- * @category Algebra
- * @return solve [x,y] from ax+by=c and px+qy=r.
- * ```
- * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
- * Crammer(1,1,3,2,2,6) // throw
- * ```
- */
-declare function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
-/**
- * @category Algebra
- * @return the product of two input polynomials.
- * ```
- * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
- * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
- * ```
- */
-declare function xPolynomial(poly1: number[], poly2: number[]): number[];
+declare module "Math/Algebra/Algebra" {
+    class Dummy {
+        /**
+         * @category Algebra
+         * @return solve [x,y] from ax+by=c and px+qy=r.
+         * ```
+         * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
+         * Crammer(1,1,3,2,2,6) // throw
+         * ```
+         */
+        static Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
+        /**
+         * @category Algebra
+         * @return the product of two input polynomials.
+         * ```
+         * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
+         * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+         * ```
+         */
+        static xPolynomial(poly1: number[], poly2: number[]): number[];
+    }
+    global {
+        var Crammer: typeof Dummy.Crammer;
+        var xPolynomial: typeof Dummy.xPolynomial;
+    }
+}
 /**
  * @category Circle
  * @return D,E,F of circle general form
