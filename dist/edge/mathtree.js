@@ -30858,52 +30858,114 @@ globalThis.ink = $Ink;
 /***/ }),
 
 /***/ 3053:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Algebra
- * @return solve [x,y] from ax+by=c and px+qy=r.
- * ```
- * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
- * Crammer(1,1,3,2,2,6) // throw
- * ```
- */
-function Crammer(a, b, c, p, q, r) {
-    const D = a * q - b * p;
-    const x = (c * q - b * r) / D;
-    const y = (a * r - c * p) / D;
-    return [x, y];
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const waxy_js_1 = __webpack_require__(1789);
+function expose() {
+    return function (target, key, descriptor) {
+        //@ts-ignore
+        globalThis[key] = descriptor.value;
+        return descriptor;
+    };
 }
-globalThis.Crammer = contract(Crammer).seal({
-    arg: [owl.num],
-    args: function has_unique_solution(a, b, c, p, q, r) { return a * q - b * p !== 0; }
-});
-/**
- * @category Algebra
- * @return the product of two input polynomials.
- * ```
- * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
- * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
- * ```
- */
-function xPolynomial(poly1, poly2) {
-    const deg1 = poly1.length - 1;
-    const deg2 = poly2.length - 1;
-    const deg = deg1 + deg2;
-    const result = Array(deg + 1).fill(0);
-    for (let i = 0; i <= deg1; i++) {
-        for (let j = 0; j <= deg2; j++) {
-            result[i + j] += poly1[i] * poly2[j];
-        }
+class Dummy {
+    /**
+     * @category Algebra
+     * @return solve [x,y] from ax+by=c and px+qy=r.
+     * ```
+     * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
+     * Crammer(1,1,3,2,2,6) // throw
+     * ```
+     */
+    static Crammer(a, b, c, p, q, r) {
+        const D = a * q - b * p;
+        const x = (c * q - b * r) / D;
+        const y = (a * r - c * p) / D;
+        return [x, y];
     }
-    return result;
+    /**
+     * @category Algebra
+     * @return the product of two input polynomials.
+     * ```
+     * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
+     * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+     * ```
+     */
+    static xPolynomial(poly1, poly2) {
+        const deg1 = poly1.length - 1;
+        const deg2 = poly2.length - 1;
+        const deg = deg1 + deg2;
+        const result = Array(deg + 1).fill(0);
+        for (let i = 0; i <= deg1; i++) {
+            for (let j = 0; j <= deg2; j++) {
+                result[i + j] += poly1[i] * poly2[j];
+            }
+        }
+        return result;
+    }
 }
-globalThis.xPolynomial = contract(xPolynomial).sign([[
-        owl.ntuple,
-        function non_zero_leading_coeff(_) { return _[0] !== 0; }
-    ]]);
+__decorate([
+    expose(),
+    (0, waxy_js_1.check)(owl.num),
+    (0, waxy_js_1.inspect)(function has_unique_solution(a, b, c, p, q, r) { return a * q - b * p !== 0; }),
+    (0, waxy_js_1.protect)()
+], Dummy, "Crammer", null);
+__decorate([
+    expose(),
+    (0, waxy_js_1.check)([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0; }]),
+    (0, waxy_js_1.protect)()
+], Dummy, "xPolynomial", null);
+// /**
+//  * @category Algebra
+//  * @return solve [x,y] from ax+by=c and px+qy=r. 
+//  * ```
+//  * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
+//  * Crammer(1,1,3,2,2,6) // throw
+//  * ```
+//  */
+// function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number] {
+//     const D = a * q - b * p
+//     const x = (c * q - b * r) / D;
+//     const y = (a * r - c * p) / D;
+//     return [x, y];
+// }
+// globalThis.Crammer = contract(Crammer).seal({
+//     arg: [owl.num],
+//     args: function has_unique_solution(a, b, c, p, q, r) { return a * q - b * p !== 0 }
+// })
+// /**
+//  * @category Algebra
+//  * @return the product of two input polynomials.
+//  * ```
+//  * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
+//  * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+//  * ```
+//  */
+// function xPolynomial(poly1: number[], poly2: number[]): number[] {
+//     const deg1 = poly1.length - 1
+//     const deg2 = poly2.length - 1
+//     const deg = deg1 + deg2
+//     const result = Array(deg + 1).fill(0)
+//     for (let i = 0; i <= deg1; i++) {
+//         for (let j = 0; j <= deg2; j++) {
+//             result[i + j] += poly1[i] * poly2[j]
+//         }
+//     }
+//     return result
+// }
+// globalThis.xPolynomial = contract(xPolynomial).sign([[
+//     owl.ntuple,
+//     function non_zero_leading_coeff(_) { return _[0] !== 0 }
+// ]])
 
 
 /***/ }),
@@ -36402,9 +36464,6 @@ __decorate([
 ], SampleMaster, "vecMid", null);
 function expose() {
     return function (target, key, descriptor) {
-        console.log(target);
-        console.log(key);
-        console.log(descriptor);
         //@ts-ignore
         globalThis[key] = descriptor.value;
         return descriptor;
