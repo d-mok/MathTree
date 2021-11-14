@@ -36387,10 +36387,10 @@ class SampleMaster {
      * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
      * ```
      */
-    static vecMid(A, ratio) {
+    static vecMid(A, B) {
         if (A === 99)
             throw 'A should not be 99!';
-        return [10, 10];
+        return A + B;
     }
 }
 __decorate([

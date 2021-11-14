@@ -2749,7 +2749,7 @@ declare module "Math/Code/Vector" {
          * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
          * ```
          */
-        static vecMid(A: number, ratio: number): Point2D;
+        static vecMid(A: number, B: number): number;
     }
     global {
         var vecMid: typeof SampleMaster.vecMid;

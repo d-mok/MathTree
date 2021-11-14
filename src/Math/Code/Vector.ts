@@ -14,9 +14,9 @@ class SampleMaster {
     @inspect(function small(a, b) { return a + b < 100 })
     @accept(owl.positive)
     @protect()
-    static vecMid(A: number, ratio: number): Point2D {
+    static vecMid(A: number, B: number): number {
         if (A === 99) throw 'A should not be 99!'
-        return [10, 10]
+        return A + B
     }
 
 }
