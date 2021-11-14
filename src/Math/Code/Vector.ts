@@ -24,9 +24,6 @@ class SampleMaster {
 
 function expose() {
     return function (target: Object, key: string | symbol, descriptor: PropertyDescriptor) {
-        console.log(target)
-        console.log(key)
-        console.log(descriptor)
         //@ts-ignore
         globalThis[key] = descriptor.value
         return descriptor

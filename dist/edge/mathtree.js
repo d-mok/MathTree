@@ -36378,7 +36378,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const waxy_js_1 = __webpack_require__(4832);
+const waxy_js_1 = __webpack_require__(1789);
 class SampleMaster {
     /**
      * @category Vector
@@ -41141,100 +41141,27 @@ exports.OptionShuffler = OptionShuffler;
 
 /***/ }),
 
-/***/ 4832:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ 9982:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
 
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  "accept": () => (/* reexport */ accept),
-  "check": () => (/* reexport */ check),
-  "inspect": () => (/* reexport */ inspect),
-  "protect": () => (/* reexport */ protect),
-  "wax": () => (/* reexport */ wax)
-});
-
-;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/assertor/report.js
-function passIt() {
-    return { pass: true };
-}
-function failIt(require) {
-    return {
-        pass: false,
-        require
-    };
-}
-function nameOfFunc(f) {
-    return f.name ?? f.toString();
-}
-//# sourceMappingURL=report.js.map
-;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/assertor/predicate.js
-
-function satisfyPred(val, rule) {
-    const pass = rule(val);
-    if (!pass)
-        return failIt(nameOfFunc(rule));
-    return passIt();
-}
-function satisfyPredAnd(val, rule) {
-    for (let p of rule) {
-        const pass = p(val);
-        if (!pass)
-            return failIt(nameOfFunc(p));
-    }
-    return passIt();
-}
-function satisfyPredObj(val, rule) {
-    for (let k in rule) {
-        const has = k in val;
-        if (!has)
-            return failIt('should have property: ' + k);
-        const p = rule[k];
-        const pass = p(val[k]);
-        if (!pass)
-            return failIt(k + ' -> ' + nameOfFunc(p));
-    }
-    return passIt();
-}
-function isPred(rule) {
-    return typeof rule === 'function';
-}
-function isPredAnd(rule) {
-    return Array.isArray(rule);
-}
-function isPredObj(rule) {
-    return typeof rule === 'object' &&
-        !Array.isArray(rule) &&
-        rule !== null;
-}
-function satisfy(val, rule) {
-    if (isPred(rule))
-        return satisfyPred(val, rule);
-    if (isPredAnd(rule))
-        return satisfyPredAnd(val, rule);
-    if (isPredObj(rule))
-        return satisfyPredObj(val, rule);
-    return failIt('fail to recognize the rule');
-}
-//# sourceMappingURL=predicate.js.map
-;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/assertor/argPredicate.js
-
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.satisfyArgs = void 0;
+const report_1 = __webpack_require__(731);
 function satisfyArgPred(vals, argRule) {
     const pass = argRule(...vals);
     if (!pass)
-        return failIt(nameOfFunc(argRule));
-    return passIt();
+        return (0, report_1.failIt)((0, report_1.nameOfFunc)(argRule));
+    return (0, report_1.passIt)();
 }
 function satisfyArgPredAnd(vals, argRule) {
     for (let p of argRule) {
         const pass = p(...vals);
         if (!pass)
-            return failIt(nameOfFunc(p));
+            return (0, report_1.failIt)((0, report_1.nameOfFunc)(p));
     }
-    return passIt();
+    return (0, report_1.passIt)();
 }
 function isArgPred(argRule) {
     return typeof argRule === 'function';
@@ -41247,12 +41174,22 @@ function satisfyArgs(vals, argRule) {
         return satisfyArgPred(vals, argRule);
     if (isArgPredAnd(argRule))
         return satisfyArgPredAnd(vals, argRule);
-    return failIt('fail to recognize the rule');
+    return (0, report_1.failIt)('fail to recognize the rule');
 }
+exports.satisfyArgs = satisfyArgs;
 //# sourceMappingURL=argPredicate.js.map
-;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/assertor/error.js
 
+/***/ }),
 
+/***/ 8253:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Assertor = void 0;
+const predicate_1 = __webpack_require__(922);
+const argPredicate_1 = __webpack_require__(9982);
 function isError(e) {
     return typeof e === 'object' && e !== null && 'name' in e && 'message' in e;
 }
@@ -41309,24 +41246,149 @@ class ErrFactory {
 }
 class Assertor extends ErrFactory {
     arg(argIndex, argValue, rule) {
-        const rep = satisfy(argValue, rule);
+        const rep = (0, predicate_1.satisfy)(argValue, rule);
         if (!rep.pass)
             throw this.argErr(argIndex, argValue, rep.require);
     }
     args(argValues, argRule) {
-        const rep = satisfyArgs(argValues, argRule);
+        const rep = (0, argPredicate_1.satisfyArgs)(argValues, argRule);
         if (!rep.pass)
             throw this.argsErr(argValues, rep.require);
     }
     ret(argValues, returnValue, rule) {
-        const rep = satisfy(returnValue, rule);
+        const rep = (0, predicate_1.satisfy)(returnValue, rule);
         if (!rep.pass)
             throw this.retErr(argValues, returnValue, rep.require);
     }
 }
+exports.Assertor = Assertor;
 //# sourceMappingURL=error.js.map
-;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/validator.js
 
+/***/ }),
+
+/***/ 8972:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Assertor = void 0;
+var error_1 = __webpack_require__(8253);
+Object.defineProperty(exports, "Assertor", ({ enumerable: true, get: function () { return error_1.Assertor; } }));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 922:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.satisfy = void 0;
+const report_1 = __webpack_require__(731);
+function satisfyPred(val, rule) {
+    const pass = rule(val);
+    if (!pass)
+        return (0, report_1.failIt)((0, report_1.nameOfFunc)(rule));
+    return (0, report_1.passIt)();
+}
+function satisfyPredAnd(val, rule) {
+    for (let p of rule) {
+        const pass = p(val);
+        if (!pass)
+            return (0, report_1.failIt)((0, report_1.nameOfFunc)(p));
+    }
+    return (0, report_1.passIt)();
+}
+function satisfyPredObj(val, rule) {
+    for (let k in rule) {
+        const has = k in val;
+        if (!has)
+            return (0, report_1.failIt)('should have property: ' + k);
+        const p = rule[k];
+        const pass = p(val[k]);
+        if (!pass)
+            return (0, report_1.failIt)(k + ' -> ' + (0, report_1.nameOfFunc)(p));
+    }
+    return (0, report_1.passIt)();
+}
+function isPred(rule) {
+    return typeof rule === 'function';
+}
+function isPredAnd(rule) {
+    return Array.isArray(rule);
+}
+function isPredObj(rule) {
+    return typeof rule === 'object' &&
+        !Array.isArray(rule) &&
+        rule !== null;
+}
+function satisfy(val, rule) {
+    if (isPred(rule))
+        return satisfyPred(val, rule);
+    if (isPredAnd(rule))
+        return satisfyPredAnd(val, rule);
+    if (isPredObj(rule))
+        return satisfyPredObj(val, rule);
+    return (0, report_1.failIt)('fail to recognize the rule');
+}
+exports.satisfy = satisfy;
+//# sourceMappingURL=predicate.js.map
+
+/***/ }),
+
+/***/ 731:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.nameOfFunc = exports.failIt = exports.passIt = void 0;
+function passIt() {
+    return { pass: true };
+}
+exports.passIt = passIt;
+function failIt(require) {
+    return {
+        pass: false,
+        require
+    };
+}
+exports.failIt = failIt;
+function nameOfFunc(f) {
+    return f.name ?? f.toString();
+}
+exports.nameOfFunc = nameOfFunc;
+//# sourceMappingURL=report.js.map
+
+/***/ }),
+
+/***/ 1789:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.wax = exports.protect = exports.accept = exports.inspect = exports.check = void 0;
+var wax_1 = __webpack_require__(7501);
+Object.defineProperty(exports, "check", ({ enumerable: true, get: function () { return wax_1.check; } }));
+Object.defineProperty(exports, "inspect", ({ enumerable: true, get: function () { return wax_1.inspect; } }));
+Object.defineProperty(exports, "accept", ({ enumerable: true, get: function () { return wax_1.accept; } }));
+Object.defineProperty(exports, "protect", ({ enumerable: true, get: function () { return wax_1.protect; } }));
+Object.defineProperty(exports, "wax", ({ enumerable: true, get: function () { return wax_1.wax; } }));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 3575:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.install = void 0;
+const assertor_1 = __webpack_require__(8972);
 function getOriginal(f) {
     return f.wax_original ?? f;
 }
@@ -41341,7 +41403,7 @@ function setName(f, name) {
 class Validator {
     constructor(host) {
         this.host = host;
-        this.assert = new Assertor(getOriginal(host));
+        this.assert = new assertor_1.Assertor(getOriginal(host));
     }
     setHost(f) {
         f.wax_original = getOriginal(this.host);
@@ -41401,9 +41463,19 @@ function install(f, { arg, args, ret, cat }) {
         v.arg(arg);
     return v.export();
 }
+exports.install = install;
 //# sourceMappingURL=validator.js.map
-;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/wax.js
 
+/***/ }),
+
+/***/ 7501:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.wax = exports.protect = exports.accept = exports.inspect = exports.check = void 0;
+const validator_1 = __webpack_require__(3575);
 class Wax {
     constructor(f) {
         this.f = f;
@@ -41424,12 +41496,12 @@ class Wax {
      * Validate everything.
      */
     seal({ arg, args, ret }) {
-        return install(this.f, { arg, args, ret, cat: true });
+        return (0, validator_1.install)(this.f, { arg, args, ret, cat: true });
     }
 }
 function makeDecorator(param) {
     return function (target, key, descriptor) {
-        descriptor.value = install(descriptor.value, param);
+        descriptor.value = (0, validator_1.install)(descriptor.value, param);
         return descriptor;
     };
 }
@@ -41440,6 +41512,7 @@ function makeDecorator(param) {
 function check(...rules) {
     return makeDecorator({ arg: rules });
 }
+exports.check = check;
 /**
  * For use as a static method decorator.
  * Validate the arguments as a whole.
@@ -41447,6 +41520,7 @@ function check(...rules) {
 function inspect(argRule) {
     return makeDecorator({ args: argRule });
 }
+exports.inspect = inspect;
 /**
  * For use as a static method decorator.
  * Validate the return value.
@@ -41454,6 +41528,7 @@ function inspect(argRule) {
 function accept(rule) {
     return makeDecorator({ ret: rule });
 }
+exports.accept = accept;
 /**
  * For use as a static method decorator.
  * Validate no throw.
@@ -41461,16 +41536,15 @@ function accept(rule) {
 function protect() {
     return makeDecorator({ cat: true });
 }
+exports.protect = protect;
 /**
  * Function validator.
  */
 function wax(f) {
     return new Wax(f);
 }
+exports.wax = wax;
 //# sourceMappingURL=wax.js.map
-;// CONCATENATED MODULE: ./node_modules/waxy-js/lib/index.js
-
-//# sourceMappingURL=index.js.map
 
 /***/ })
 
@@ -41499,35 +41573,6 @@ function wax(f) {
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
