@@ -12,6 +12,7 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     'volume': 'm3',
     'height': 'm',
     'radius': 'm',
+    'diameter': 'm',
     'length': 'm',
     'width': 'm',
     'wavelength': 'm',
