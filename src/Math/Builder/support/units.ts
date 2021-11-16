@@ -1,5 +1,7 @@
 
 const DEFAULT_UNIT: { [_: string]: string } = {
+    'angular speed': 'rad s-1',
+    'angular displacement': 'rad',
     'time': 's',
     'distance': 'm',
     'displacement': 'm',
@@ -36,8 +38,6 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     'friction': 'N',
     'moment': 'N m',
     'power': 'W',
-    'angular speed': 'rad s-1',
-    'angular displacement': 'rad',
     'gravitational field strength': 'm s-2',
     'angular position': '°',
     'period': 's',
