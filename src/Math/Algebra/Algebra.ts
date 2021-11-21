@@ -64,7 +64,7 @@ class Dummy {
 
 
 declare global {
-    var Crammer: typeof Dummy.Crammer
+    function Crammer(...args: Parameters<typeof Dummy.Crammer>): ReturnType<typeof Dummy.Crammer>
     var xPolynomial: typeof Dummy.xPolynomial
 }
 

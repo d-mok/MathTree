@@ -31959,6 +31959,8 @@ exports.EquSystem = EquSystem;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseUnit = exports.findUnit = void 0;
 const DEFAULT_UNIT = {
+    'angular speed': 'rad s-1',
+    'angular displacement': 'rad',
     'time': 's',
     'distance': 'm',
     'displacement': 'm',
@@ -31971,6 +31973,7 @@ const DEFAULT_UNIT = {
     'volume': 'm3',
     'height': 'm',
     'radius': 'm',
+    'diameter': 'm',
     'length': 'm',
     'width': 'm',
     'wavelength': 'm',
@@ -31994,8 +31997,6 @@ const DEFAULT_UNIT = {
     'friction': 'N',
     'moment': 'N m',
     'power': 'W',
-    'angular speed': 'rad s-1',
-    'angular displacement': 'rad',
     'gravitational field strength': 'm s-2',
     'angular position': '°',
     'period': 's',
