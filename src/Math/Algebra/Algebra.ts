@@ -1,11 +1,11 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'waxy-js'
 
 
-
-
 @exposeAll()
 @captureAll()
-class _ {
+export class Algebra {
+
+    private constructor() { }
 
     /**
      * solve [x,y] from ax+by=c and px+qy=r. 
@@ -49,7 +49,8 @@ class _ {
 
 
 declare global {
-    var Crammer: typeof _.Crammer
-    var xPolynomial: typeof _.xPolynomial
+    var Crammer: typeof Algebra.Crammer
+    var xPolynomial: typeof Algebra.xPolynomial
 }
+
 

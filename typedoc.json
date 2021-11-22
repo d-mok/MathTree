@@ -1,6 +1,9 @@
 {
-    "categorizeByGroup":false,
-    "theme":"default",
-    "disableSources":true,
-    "entryPointStrategy":"expand"
-  }
+  "categorizeByGroup": false,
+  "theme": "default",
+  "disableSources": true,
+  "entryPointStrategy": "expand",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "hideGenerator": true
+}
