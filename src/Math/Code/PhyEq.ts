@@ -32,14 +32,10 @@ type eq = [func: zeroFunction, latex: string]
 
 class PhyEqCls {
 
-    Circular_angular_speed(v = '*v', r = '*r', ω = '*ω'): eq {
-        let [_v, _r, _ω] = pads(v, r, ω)
-        _r = surround(_r)
-        _ω = surround(_ω);
-        [v, r, ω] = pures(v, r, ω)
+    Circular_vrω(v = 'v', r = 'r', ω = 'ω', $ = '***'): eq {
         return [
             makeFn([v, r, ω], `${v}-${r}*${ω}`),
-            `${_v}=${r}${ω}`
+            `${$[0]}${v}=${$[1]}(${r})${$[2]}(${ω})`
         ]
     }
 
