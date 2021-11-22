@@ -4,7 +4,7 @@ import { toEquSystem } from './support/support'
 export function BuildSolve(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: zeroFunction, latex: string][],
-    { listSym = false }
+    { listSym = false } = {}
 ): {
     list: string
     sol: string
@@ -33,7 +33,7 @@ export function BuildSolve(
 function BuildSolveOnce(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: zeroFunction, latex: string][],
-    { listSym = false }
+    { listSym = false } = {}
 ): {
     list: string
     sol: string

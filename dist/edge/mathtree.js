@@ -31581,7 +31581,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildSolve = void 0;
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
-function BuildSolve(variables, equations, { listSym = false }) {
+function BuildSolve(variables, equations, { listSym = false } = {}) {
     for (let i = 0; i <= 10; i++) {
         try {
             return BuildSolveOnce(variables, equations, { listSym });
@@ -31598,7 +31598,7 @@ function BuildSolve(variables, equations, { listSym = false }) {
     throw "never";
 }
 exports.BuildSolve = BuildSolve;
-function BuildSolveOnce(variables, equations, { listSym = false }) {
+function BuildSolveOnce(variables, equations, { listSym = false } = {}) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables();
