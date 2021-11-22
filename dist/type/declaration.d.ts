@@ -366,6 +366,7 @@ declare module "Math/index" {
     import './Code/LinearProgram.ts';
     import './Code/Numeracy.ts';
     import './Code/PhyConst.ts';
+    import './Code/PhyEq.ts';
     import './Code/Random.ts';
     import './Code/RandomShake.ts';
     import './Code/RandomUtil.ts';
@@ -1649,6 +1650,16 @@ declare var PhyConst: {
     sigma: number;
     h: number;
 };
+declare module "Math/Code/PhyEq" {
+    type eq = [func: zeroFunction, latex: string];
+    class PhyEqCls {
+        Circular_angular_speed(v?: string, r?: string, ω?: string): eq;
+    }
+    global {
+        var PhyEq: PhyEqCls;
+    }
+    export {};
+}
 declare module "Math/Code/Random.test" { }
 /**
  * @category Random

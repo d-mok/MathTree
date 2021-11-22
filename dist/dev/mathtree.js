@@ -33852,6 +33852,52 @@ globalThis.PhyConst = PhyConst;
 
 /***/ }),
 
+/***/ 8219:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+function makeFn(args, body) {
+    const paras = '(' + args.join(',') + ')';
+    return new Function("return " + paras + "=>" + body)();
+}
+function surround(variable) {
+    const [h, ...t] = variable;
+    return h + '(' + t.join('') + ')';
+}
+function pad(variable) {
+    const h = variable[0];
+    if (h === '*' || h === '$')
+        return variable;
+    return '*' + variable;
+}
+function pure(variable) {
+    return variable.replaceAll('*', '').replaceAll('$', '');
+}
+function pads(...vars) {
+    return vars.map(pad);
+}
+function pures(...vars) {
+    return vars.map(pure);
+}
+class PhyEqCls {
+    Circular_angular_speed(v = '*v', r = '*r', ω = '*ω') {
+        let [_v, _r, _ω] = pads(v, r, ω);
+        _r = surround(_r);
+        _ω = surround(_ω);
+        [v, r, ω] = pures(v, r, ω);
+        return [
+            makeFn([v, r, ω], `${v}-${r}*${ω}`),
+            `${_v}=${r}${ω}`
+        ];
+    }
+}
+globalThis.PhyEq = new PhyEqCls();
+
+
+/***/ }),
+
 /***/ 2113:
 /***/ (() => {
 
@@ -36871,6 +36917,7 @@ __webpack_require__(4453);
 __webpack_require__(426);
 __webpack_require__(5931);
 __webpack_require__(1307);
+__webpack_require__(8219);
 __webpack_require__(2113);
 __webpack_require__(9348);
 __webpack_require__(1759);
