@@ -446,10 +446,9 @@ declare type LabeledValue1 = [value: number, label: string];
 declare type LabeledValue2 = [value: number, label1: string, label2: string];
 declare type LabeledValue = LabeledValue1 | LabeledValue2;
 declare module "Math/Algebra/Algebra" {
-    class Dummy {
+    class _ {
         /**
-         * @category Algebra
-         * @return solve [x,y] from ax+by=c and px+qy=r.
+         * solve [x,y] from ax+by=c and px+qy=r.
          * ```
          * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
          * Crammer(1,1,3,2,2,6) // throw
@@ -457,8 +456,7 @@ declare module "Math/Algebra/Algebra" {
          */
         static Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
         /**
-         * @category Algebra
-         * @return the product of two input polynomials.
+         * the product of two input polynomials.
          * ```
          * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
          * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
@@ -467,8 +465,8 @@ declare module "Math/Algebra/Algebra" {
         static xPolynomial(poly1: number[], poly2: number[]): number[];
     }
     global {
-        function Crammer(...args: Parameters<typeof Dummy.Crammer>): ReturnType<typeof Dummy.Crammer>;
-        var xPolynomial: typeof Dummy.xPolynomial;
+        var Crammer: typeof _.Crammer;
+        var xPolynomial: typeof _.xPolynomial;
     }
 }
 /**
@@ -2748,22 +2746,6 @@ declare function WholeBearing(polarAngle: number): string;
  * ```
  */
 declare function CompassBearing(polarAngle: number): string;
-declare module "Math/Code/Vector" {
-    class SampleMaster {
-        /**
-         * @category Vector
-         * @return sum of all vectors
-         * ```
-         * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
-         * ```
-         */
-        static vecMid(A: number, B: number): number;
-    }
-    global {
-        var vecMid: typeof SampleMaster.vecMid;
-    }
-    export {};
-}
 /**
  * @category Vector3D
  * @return mean of all vectors

@@ -30870,17 +30870,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const waxy_js_1 = __webpack_require__(1789);
-function expose() {
-    return function (target, key, descriptor) {
-        //@ts-ignore
-        globalThis[key] = descriptor.value;
-        return descriptor;
-    };
-}
-class Dummy {
+let _ = class _ {
     /**
-     * @category Algebra
-     * @return solve [x,y] from ax+by=c and px+qy=r.
+     * solve [x,y] from ax+by=c and px+qy=r.
      * ```
      * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
      * Crammer(1,1,3,2,2,6) // throw
@@ -30893,8 +30885,7 @@ class Dummy {
         return [x, y];
     }
     /**
-     * @category Algebra
-     * @return the product of two input polynomials.
+     * the product of two input polynomials.
      * ```
      * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
      * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
@@ -30912,60 +30903,18 @@ class Dummy {
         }
         return result;
     }
-}
+};
 __decorate([
-    expose(),
-    (0, waxy_js_1.check)(owl.num),
-    (0, waxy_js_1.inspect)(function has_unique_solution(a, b, c, p, q, r) { return a * q - b * p !== 0; }),
-    (0, waxy_js_1.protect)()
-], Dummy, "Crammer", null);
+    (0, waxy_js_1.checkIt)(owl.num),
+    (0, waxy_js_1.inspectIt)(function has_unique_sol(a, b, c, p, q, r) { return a * q - b * p !== 0; })
+], _, "Crammer", null);
 __decorate([
-    expose(),
-    (0, waxy_js_1.check)([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0; }]),
-    (0, waxy_js_1.protect)()
-], Dummy, "xPolynomial", null);
-// /**
-//  * @category Algebra
-//  * @return solve [x,y] from ax+by=c and px+qy=r. 
-//  * ```
-//  * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
-//  * Crammer(1,1,3,2,2,6) // throw
-//  * ```
-//  */
-// function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number] {
-//     const D = a * q - b * p
-//     const x = (c * q - b * r) / D;
-//     const y = (a * r - c * p) / D;
-//     return [x, y];
-// }
-// globalThis.Crammer = contract(Crammer).seal({
-//     arg: [owl.num],
-//     args: function has_unique_solution(a, b, c, p, q, r) { return a * q - b * p !== 0 }
-// })
-// /**
-//  * @category Algebra
-//  * @return the product of two input polynomials.
-//  * ```
-//  * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
-//  * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
-//  * ```
-//  */
-// function xPolynomial(poly1: number[], poly2: number[]): number[] {
-//     const deg1 = poly1.length - 1
-//     const deg2 = poly2.length - 1
-//     const deg = deg1 + deg2
-//     const result = Array(deg + 1).fill(0)
-//     for (let i = 0; i <= deg1; i++) {
-//         for (let j = 0; j <= deg2; j++) {
-//             result[i + j] += poly1[i] * poly2[j]
-//         }
-//     }
-//     return result
-// }
-// globalThis.xPolynomial = contract(xPolynomial).sign([[
-//     owl.ntuple,
-//     function non_zero_leading_coeff(_) { return _[0] !== 0 }
-// ]])
+    (0, waxy_js_1.checkIt)([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0; }])
+], _, "xPolynomial", null);
+_ = __decorate([
+    (0, waxy_js_1.exposeAll)(),
+    (0, waxy_js_1.captureAll)()
+], _);
 
 
 /***/ }),
@@ -36430,46 +36379,10 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 /***/ }),
 
 /***/ 6779:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (() => {
 
 "use strict";
 
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const waxy_js_1 = __webpack_require__(1789);
-class SampleMaster {
-    /**
-     * @category Vector
-     * @return sum of all vectors
-     * ```
-     * VectorAdd([1,2],[3,4],[5,6]) // [9,12]
-     * ```
-     */
-    static vecMid(A, B) {
-        if (A === 99)
-            throw 'A should not be 99!';
-        return A + B;
-    }
-}
-__decorate([
-    expose(),
-    (0, waxy_js_1.check)(owl.positive, owl.negative),
-    (0, waxy_js_1.inspect)(function small(a, b) { return a + b < 100; }),
-    (0, waxy_js_1.accept)(owl.positive),
-    (0, waxy_js_1.protect)()
-], SampleMaster, "vecMid", null);
-function expose() {
-    return function (target, key, descriptor) {
-        //@ts-ignore
-        globalThis[key] = descriptor.value;
-        return descriptor;
-    };
-}
 // /**
 //  * @category Vector
 //  * @return the vector OP
@@ -41201,128 +41114,39 @@ exports.OptionShuffler = OptionShuffler;
 
 /***/ }),
 
-/***/ 9982:
+/***/ 9389:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.satisfyArgs = void 0;
-const report_1 = __webpack_require__(731);
-function satisfyArgPred(vals, argRule) {
-    const pass = argRule(...vals);
-    if (!pass)
-        return (0, report_1.failIt)((0, report_1.nameOfFunc)(argRule));
-    return (0, report_1.passIt)();
+exports.acceptIt = exports.accept = void 0;
+const util_1 = __webpack_require__(3113);
+const assertor_1 = __webpack_require__(8972);
+function e(f, argValues, returnValue, msg) {
+    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(argValues) + ')', 'return = ' + returnValue, 'violate: ' + msg);
 }
-function satisfyArgPredAnd(vals, argRule) {
-    for (let p of argRule) {
-        const pass = p(...vals);
-        if (!pass)
-            return (0, report_1.failIt)((0, report_1.nameOfFunc)(p));
-    }
-    return (0, report_1.passIt)();
+function match(f, argValues, returnValue, rule) {
+    const pass = (0, assertor_1.matchRule)(returnValue, rule);
+    if (pass !== true)
+        throw e(f, argValues, returnValue, pass);
 }
-function isArgPred(argRule) {
-    return typeof argRule === 'function';
+function accept(f, rule) {
+    (0, util_1.brand)(f);
+    const nf = (...args) => {
+        const result = f(...args);
+        match(f, args, result, rule);
+        return result;
+    };
+    (0, util_1.transferBrand)(f, nf);
+    return nf;
 }
-function isArgPredAnd(argRule) {
-    return Array.isArray(argRule);
+exports.accept = accept;
+function acceptIt(rule) {
+    return (0, util_1.makeStaticDecorator)($ => accept($, rule));
 }
-function satisfyArgs(vals, argRule) {
-    if (isArgPred(argRule))
-        return satisfyArgPred(vals, argRule);
-    if (isArgPredAnd(argRule))
-        return satisfyArgPredAnd(vals, argRule);
-    return (0, report_1.failIt)('fail to recognize the rule');
-}
-exports.satisfyArgs = satisfyArgs;
-//# sourceMappingURL=argPredicate.js.map
-
-/***/ }),
-
-/***/ 8253:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Assertor = void 0;
-const predicate_1 = __webpack_require__(922);
-const argPredicate_1 = __webpack_require__(9982);
-function isError(e) {
-    return typeof e === 'object' && e !== null && 'name' in e && 'message' in e;
-}
-function error(msg) {
-    const e = new Error(msg);
-    e.name = 'ContractError';
-    return e;
-}
-function signature(f) {
-    const s = f.toString();
-    return s.slice(s.indexOf('(') + 1, s.indexOf(')'));
-}
-function str(obj) {
-    return JSON.stringify(obj);
-}
-function join(arr) {
-    return arr.map(str).join(',');
-}
-class ErrFactory {
-    constructor(host) {
-        this.name = host.name;
-        this.signature = signature(host);
-    }
-    err(...msgs) {
-        const h = `${this.name}(${this.signature})`;
-        const ms = [h, ...msgs];
-        return error(ms.join('\n'));
-    }
-    argErr(argIndex, argValue, vioMsg) {
-        return this.err('arg[' + argIndex + '] = ' + str(argValue), 'violate: ' + vioMsg);
-    }
-    argsErr(argValues, vioMsg) {
-        return this.err('args = (' + join(argValues) + ')', 'violate: ' + vioMsg);
-    }
-    retErr(argValues, returnValue, vioMsg) {
-        return this.err('args = (' + join(argValues) + ')', 'return = ' + returnValue, 'violate: ' + vioMsg);
-    }
-    catchString(argValues, e) {
-        return this.err('args = (' + join(argValues) + ')', 'throw: ' + e);
-    }
-    catchErrObj(argValues, e) {
-        return this.err('args = (' + join(argValues) + ')', 'throw: ' + e.name, 'message: ' + e.message);
-    }
-    catchAny(argValues, e) {
-        return this.err('args = (' + join(argValues) + ')', 'throw: ' + str(e));
-    }
-    catchErr(argValues, e) {
-        if (typeof e === 'string')
-            return this.catchString(argValues, e);
-        if (isError(e))
-            return this.catchErrObj(argValues, e);
-        return this.catchAny(argValues, e);
-    }
-}
-class Assertor extends ErrFactory {
-    arg(argIndex, argValue, rule) {
-        const rep = (0, predicate_1.satisfy)(argValue, rule);
-        if (!rep.pass)
-            throw this.argErr(argIndex, argValue, rep.require);
-    }
-    args(argValues, argRule) {
-        const rep = (0, argPredicate_1.satisfyArgs)(argValues, argRule);
-        if (!rep.pass)
-            throw this.argsErr(argValues, rep.require);
-    }
-    ret(argValues, returnValue, rule) {
-        const rep = (0, predicate_1.satisfy)(returnValue, rule);
-        if (!rep.pass)
-            throw this.retErr(argValues, returnValue, rep.require);
-    }
-}
-exports.Assertor = Assertor;
-//# sourceMappingURL=error.js.map
+exports.acceptIt = acceptIt;
+//# sourceMappingURL=accept.js.map
 
 /***/ }),
 
@@ -41332,95 +41156,246 @@ exports.Assertor = Assertor;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Assertor = void 0;
-var error_1 = __webpack_require__(8253);
-Object.defineProperty(exports, "Assertor", ({ enumerable: true, get: function () { return error_1.Assertor; } }));
+exports.matchTreaty = exports.matchRule = void 0;
+var rule_1 = __webpack_require__(2768);
+Object.defineProperty(exports, "matchRule", ({ enumerable: true, get: function () { return rule_1.matchRule; } }));
+var treaty_1 = __webpack_require__(2235);
+Object.defineProperty(exports, "matchTreaty", ({ enumerable: true, get: function () { return treaty_1.matchTreaty; } }));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 922:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.satisfy = void 0;
-const report_1 = __webpack_require__(731);
-function satisfyPred(val, rule) {
-    const pass = rule(val);
-    if (!pass)
-        return (0, report_1.failIt)((0, report_1.nameOfFunc)(rule));
-    return (0, report_1.passIt)();
-}
-function satisfyPredAnd(val, rule) {
-    for (let p of rule) {
-        const pass = p(val);
-        if (!pass)
-            return (0, report_1.failIt)((0, report_1.nameOfFunc)(p));
-    }
-    return (0, report_1.passIt)();
-}
-function satisfyPredObj(val, rule) {
-    for (let k in rule) {
-        const has = k in val;
-        if (!has)
-            return (0, report_1.failIt)('should have property: ' + k);
-        const p = rule[k];
-        const pass = p(val[k]);
-        if (!pass)
-            return (0, report_1.failIt)(k + ' -> ' + (0, report_1.nameOfFunc)(p));
-    }
-    return (0, report_1.passIt)();
-}
-function isPred(rule) {
-    return typeof rule === 'function';
-}
-function isPredAnd(rule) {
-    return Array.isArray(rule);
-}
-function isPredObj(rule) {
-    return typeof rule === 'object' &&
-        !Array.isArray(rule) &&
-        rule !== null;
-}
-function satisfy(val, rule) {
-    if (isPred(rule))
-        return satisfyPred(val, rule);
-    if (isPredAnd(rule))
-        return satisfyPredAnd(val, rule);
-    if (isPredObj(rule))
-        return satisfyPredObj(val, rule);
-    return (0, report_1.failIt)('fail to recognize the rule');
-}
-exports.satisfy = satisfy;
-//# sourceMappingURL=predicate.js.map
-
-/***/ }),
-
-/***/ 731:
+/***/ 2768:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.nameOfFunc = exports.failIt = exports.passIt = void 0;
-function passIt() {
-    return { pass: true };
-}
-exports.passIt = passIt;
-function failIt(require) {
-    return {
-        pass: false,
-        require
-    };
-}
-exports.failIt = failIt;
-function nameOfFunc(f) {
+exports.matchRule = void 0;
+function nameOf(f) {
     return f.name ?? f.toString();
 }
-exports.nameOfFunc = nameOfFunc;
-//# sourceMappingURL=report.js.map
+function matchOne(val, rule) {
+    return rule(val) ? true : nameOf(rule);
+}
+function matchAnd(val, rule) {
+    for (let p of rule)
+        if (!p(val))
+            return nameOf(p);
+    return true;
+}
+function matchObj(val, rule) {
+    for (let k in rule) {
+        const has = k in val;
+        if (!has)
+            return 'should have property: ' + k;
+        const p = rule[k];
+        const pass = p(val[k]);
+        if (!pass)
+            return k + ' -> ' + nameOf(p);
+    }
+    return true;
+}
+function isOne(rule) {
+    return typeof rule === 'function';
+}
+function isAnd(rule) {
+    return Array.isArray(rule);
+}
+function isObj(rule) {
+    return typeof rule === 'object' &&
+        !Array.isArray(rule) &&
+        rule !== null;
+}
+function matchRule(val, rule) {
+    if (isOne(rule))
+        return matchOne(val, rule);
+    if (isAnd(rule))
+        return matchAnd(val, rule);
+    if (isObj(rule))
+        return matchObj(val, rule);
+    return 'fail to recognize the rule';
+}
+exports.matchRule = matchRule;
+//# sourceMappingURL=rule.js.map
+
+/***/ }),
+
+/***/ 2235:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.matchTreaty = void 0;
+function nameOf(f) {
+    return f.name ?? f.toString();
+}
+function matchOne(vals, treaty) {
+    return treaty(...vals) ? true : nameOf(treaty);
+}
+function matchAnd(vals, treaty) {
+    for (let p of treaty)
+        if (!p(...vals))
+            return nameOf(p);
+    return true;
+}
+function isOne(treaty) {
+    return typeof treaty === 'function';
+}
+function isAnd(treaty) {
+    return Array.isArray(treaty);
+}
+function matchTreaty(vals, treaty) {
+    if (isOne(treaty))
+        return matchOne(vals, treaty);
+    if (isAnd(treaty))
+        return matchAnd(vals, treaty);
+    return 'fail to recognize the rule';
+}
+exports.matchTreaty = matchTreaty;
+//# sourceMappingURL=treaty.js.map
+
+/***/ }),
+
+/***/ 2688:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.captureAll = exports.captureIt = exports.capture = void 0;
+const util_1 = __webpack_require__(3113);
+function catchString(f, vals, e) {
+    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + e);
+}
+function catchErrObj(f, vals, e) {
+    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + e.name, 'message: ' + e.message);
+}
+function catchAny(f, vals, e) {
+    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + (0, util_1.str)(e));
+}
+function isError(e) {
+    return typeof e === 'object' && e !== null && 'name' in e && 'message' in e;
+}
+function isContractError(e) {
+    return isError(e) && e.name === 'ContractError';
+}
+function catchErr(f, vals, e) {
+    if (isContractError(e))
+        return e;
+    if (typeof e === 'string')
+        return catchString(f, vals, e);
+    if (isError(e))
+        return catchErrObj(f, vals, e);
+    return catchAny(f, vals, e);
+}
+function capture(f) {
+    (0, util_1.brand)(f);
+    const nf = (...args) => {
+        try {
+            return f(...args);
+        }
+        catch (e) {
+            throw catchErr(f, args, e);
+        }
+    };
+    (0, util_1.transferBrand)(f, nf);
+    return nf;
+}
+exports.capture = capture;
+function captureIt() {
+    return (0, util_1.makeStaticDecorator)($ => capture($));
+}
+exports.captureIt = captureIt;
+function captureAll() {
+    return function (constructor) {
+        for (let key of (0, util_1.getClassStaticNames)(constructor)) {
+            let descriptor = Object.getOwnPropertyDescriptor(constructor, key);
+            if (descriptor !== undefined) {
+                descriptor.value = capture(descriptor.value);
+                Object.defineProperty(constructor, key, descriptor);
+            }
+        }
+    };
+}
+exports.captureAll = captureAll;
+//# sourceMappingURL=capture.js.map
+
+/***/ }),
+
+/***/ 4269:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.checkIt = exports.check = void 0;
+const util_1 = __webpack_require__(3113);
+const assertor_1 = __webpack_require__(8972);
+function getToTail(arr, index) {
+    const n = arr.length - 1;
+    const i = Math.min(index, n);
+    return arr[i];
+}
+function e(f, argIndex, argValue, msg) {
+    return (0, util_1.err)(f, 'arg[' + argIndex + '] = ' + (0, util_1.str)(argValue), 'violate: ' + msg);
+}
+function match(f, argIndex, argValue, rule) {
+    const pass = (0, assertor_1.matchRule)(argValue, rule);
+    if (pass !== true)
+        throw e(f, argIndex, argValue, pass);
+}
+function check(f, rules) {
+    (0, util_1.brand)(f);
+    const nf = (...args) => {
+        args.forEach((v, i) => match(f, i, v, getToTail(rules, i)));
+        return f(...args);
+    };
+    (0, util_1.transferBrand)(f, nf);
+    return nf;
+}
+exports.check = check;
+function checkIt(...rules) {
+    return (0, util_1.makeStaticDecorator)($ => check($, rules));
+}
+exports.checkIt = checkIt;
+//# sourceMappingURL=check.js.map
+
+/***/ }),
+
+/***/ 9511:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.exposeAll = exports.exposeIt = exports.expose = void 0;
+const util_1 = __webpack_require__(3113);
+function expose(name, f) {
+    // @ts-ignore
+    globalThis[String(name)] = f;
+}
+exports.expose = expose;
+function exposeIt() {
+    return function (target, key, descriptor) {
+        expose(key, descriptor.value);
+        return descriptor;
+    };
+}
+exports.exposeIt = exposeIt;
+function exposeAll() {
+    return function (constructor) {
+        for (let key of (0, util_1.getClassStaticNames)(constructor)) {
+            let descriptor = Object.getOwnPropertyDescriptor(constructor, key);
+            if (descriptor !== undefined) {
+                expose(key, descriptor.value);
+            }
+        }
+    };
+}
+exports.exposeAll = exposeAll;
+//# sourceMappingURL=expose.js.map
 
 /***/ }),
 
@@ -41430,181 +41405,126 @@ exports.nameOfFunc = nameOfFunc;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wax = exports.protect = exports.accept = exports.inspect = exports.check = void 0;
-var wax_1 = __webpack_require__(7501);
-Object.defineProperty(exports, "check", ({ enumerable: true, get: function () { return wax_1.check; } }));
-Object.defineProperty(exports, "inspect", ({ enumerable: true, get: function () { return wax_1.inspect; } }));
-Object.defineProperty(exports, "accept", ({ enumerable: true, get: function () { return wax_1.accept; } }));
-Object.defineProperty(exports, "protect", ({ enumerable: true, get: function () { return wax_1.protect; } }));
-Object.defineProperty(exports, "wax", ({ enumerable: true, get: function () { return wax_1.wax; } }));
+exports.exposeAll = exports.exposeIt = exports.expose = exports.inspectIt = exports.inspect = exports.checkIt = exports.check = exports.acceptIt = exports.accept = exports.captureAll = exports.captureIt = exports.capture = void 0;
+var capture_1 = __webpack_require__(2688);
+Object.defineProperty(exports, "capture", ({ enumerable: true, get: function () { return capture_1.capture; } }));
+Object.defineProperty(exports, "captureIt", ({ enumerable: true, get: function () { return capture_1.captureIt; } }));
+Object.defineProperty(exports, "captureAll", ({ enumerable: true, get: function () { return capture_1.captureAll; } }));
+var accept_1 = __webpack_require__(9389);
+Object.defineProperty(exports, "accept", ({ enumerable: true, get: function () { return accept_1.accept; } }));
+Object.defineProperty(exports, "acceptIt", ({ enumerable: true, get: function () { return accept_1.acceptIt; } }));
+var check_1 = __webpack_require__(4269);
+Object.defineProperty(exports, "check", ({ enumerable: true, get: function () { return check_1.check; } }));
+Object.defineProperty(exports, "checkIt", ({ enumerable: true, get: function () { return check_1.checkIt; } }));
+var inspect_1 = __webpack_require__(1323);
+Object.defineProperty(exports, "inspect", ({ enumerable: true, get: function () { return inspect_1.inspect; } }));
+Object.defineProperty(exports, "inspectIt", ({ enumerable: true, get: function () { return inspect_1.inspectIt; } }));
+var expose_1 = __webpack_require__(9511);
+Object.defineProperty(exports, "expose", ({ enumerable: true, get: function () { return expose_1.expose; } }));
+Object.defineProperty(exports, "exposeIt", ({ enumerable: true, get: function () { return expose_1.exposeIt; } }));
+Object.defineProperty(exports, "exposeAll", ({ enumerable: true, get: function () { return expose_1.exposeAll; } }));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 3575:
+/***/ 1323:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.install = void 0;
+exports.inspectIt = exports.inspect = void 0;
+const util_1 = __webpack_require__(3113);
 const assertor_1 = __webpack_require__(8972);
-function getOriginal(f) {
-    return f.wax_original ?? f;
+function e(f, vals, msg) {
+    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'violate: ' + msg);
 }
-function getToTail(arr, index) {
-    const n = arr.length - 1;
-    const i = Math.min(index, n);
-    return arr[i];
+function match(f, vals, treaty) {
+    const pass = (0, assertor_1.matchTreaty)(vals, treaty);
+    if (pass !== true)
+        throw e(f, vals, pass);
 }
-function setName(f, name) {
-    Object.defineProperty(f, "name", { value: name });
+function inspect(f, treaty) {
+    (0, util_1.brand)(f);
+    const nf = (...args) => {
+        match(f, args, treaty);
+        return f(...args);
+    };
+    (0, util_1.transferBrand)(f, nf);
+    return nf;
 }
-class Validator {
-    constructor(host) {
-        this.host = host;
-        this.assert = new assertor_1.Assertor(getOriginal(host));
-    }
-    setHost(f) {
-        f.wax_original = getOriginal(this.host);
-        setName(f, f.wax_original.name);
-        this.host = f;
-    }
-    arg(rules) {
-        const f = this.host;
-        const newFunc = (...args) => {
-            args.forEach((v, i) => this.assert.arg(i, v, getToTail(rules, i)));
-            return f(...args);
-        };
-        this.setHost(newFunc);
-    }
-    args(argRule) {
-        const f = this.host;
-        const newFunc = (...args) => {
-            this.assert.args(args, argRule);
-            return f(...args);
-        };
-        this.setHost(newFunc);
-    }
-    ret(rule) {
-        const f = this.host;
-        const newFunc = (...args) => {
-            const result = f(...args);
-            this.assert.ret(args, result, rule);
-            return result;
-        };
-        this.setHost(newFunc);
-    }
-    catch() {
-        const f = this.host;
-        const newFunc = (...args) => {
-            try {
-                return f(...args);
-            }
-            catch (e) {
-                throw this.assert.catchErr(args, e);
-            }
-        };
-        this.setHost(newFunc);
-    }
-    export() {
-        return this.host;
-    }
+exports.inspect = inspect;
+function inspectIt(treaty) {
+    return (0, util_1.makeStaticDecorator)($ => inspect($, treaty));
 }
-function install(f, { arg, args, ret, cat }) {
-    let v = new Validator(f);
-    if (cat === true)
-        v.catch();
-    if (ret !== undefined)
-        v.ret(ret);
-    if (args !== undefined)
-        v.args(args);
-    if (arg !== undefined && arg.length > 0)
-        v.arg(arg);
-    return v.export();
-}
-exports.install = install;
-//# sourceMappingURL=validator.js.map
+exports.inspectIt = inspectIt;
+//# sourceMappingURL=inspect.js.map
 
 /***/ }),
 
-/***/ 7501:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 3113:
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wax = exports.protect = exports.accept = exports.inspect = exports.check = void 0;
-const validator_1 = __webpack_require__(3575);
-class Wax {
-    constructor(f) {
-        this.f = f;
-    }
-    /**
-     * Validate each argument.
-     */
-    sign(...arg) {
-        return this.seal({ arg });
-    }
-    /**
-     * Validate each argument and return value.
-     */
-    stamp(arg, ret) {
-        return this.seal({ arg, ret });
-    }
-    /**
-     * Validate everything.
-     */
-    seal({ arg, args, ret }) {
-        return (0, validator_1.install)(this.f, { arg, args, ret, cat: true });
-    }
+exports.getClassStaticNames = exports.makeClassDecorator = exports.makeStaticDecorator = exports.transferBrand = exports.brand = exports.err = exports.join = exports.str = exports.signature = void 0;
+function error(msg) {
+    const e = new Error(msg);
+    e.name = 'ContractError';
+    return e;
 }
-function makeDecorator(param) {
+function signature(f) {
+    const s = f.toString();
+    return s.slice(s.indexOf('(') + 1, s.indexOf(')'));
+}
+exports.signature = signature;
+function str(obj) {
+    return JSON.stringify(obj);
+}
+exports.str = str;
+function join(arr) {
+    return arr.map(str).join(',');
+}
+exports.join = join;
+function err(f, ...msgs) {
+    const h = `${f.wax_name}(${f.wax_signature})`;
+    const ms = [h, ...msgs];
+    return error(ms.join('\n'));
+}
+exports.err = err;
+function brand(f) {
+    if (!('wax_name' in f))
+        f.wax_name = f.name ?? f.toString();
+    if (!('wax_signature' in f))
+        f.wax_signature = signature(f);
+}
+exports.brand = brand;
+function transferBrand(source, target) {
+    target.wax_name = source.wax_name;
+    target.wax_signature = source.wax_signature;
+}
+exports.transferBrand = transferBrand;
+function makeStaticDecorator(transform) {
     return function (target, key, descriptor) {
-        descriptor.value = (0, validator_1.install)(descriptor.value, param);
+        descriptor.value = transform(descriptor.value);
         return descriptor;
     };
 }
-/**
- * For use as a static method decorator.
- * Validate each argument.
- */
-function check(...rules) {
-    return makeDecorator({ arg: rules });
+exports.makeStaticDecorator = makeStaticDecorator;
+function makeClassDecorator(transform) {
+    return function (target, key, descriptor) {
+        descriptor.value = transform(descriptor.value);
+        return descriptor;
+    };
 }
-exports.check = check;
-/**
- * For use as a static method decorator.
- * Validate the arguments as a whole.
- */
-function inspect(argRule) {
-    return makeDecorator({ args: argRule });
+exports.makeClassDecorator = makeClassDecorator;
+function getClassStaticNames(constructor) {
+    return Object.getOwnPropertyNames(constructor)
+        .filter($ => $ !== 'length' && $ !== 'prototype' && $ !== 'name');
 }
-exports.inspect = inspect;
-/**
- * For use as a static method decorator.
- * Validate the return value.
- */
-function accept(rule) {
-    return makeDecorator({ ret: rule });
-}
-exports.accept = accept;
-/**
- * For use as a static method decorator.
- * Validate no throw.
- */
-function protect() {
-    return makeDecorator({ cat: true });
-}
-exports.protect = protect;
-/**
- * Function validator.
- */
-function wax(f) {
-    return new Wax(f);
-}
-exports.wax = wax;
-//# sourceMappingURL=wax.js.map
+exports.getClassStaticNames = getClassStaticNames;
+//# sourceMappingURL=util.js.map
 
 /***/ })
 
