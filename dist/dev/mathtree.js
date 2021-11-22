@@ -31581,7 +31581,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildSolve = void 0;
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
-function BuildSolve(variables, equations, { listSym = false }) {
+function BuildSolve(variables, equations, { listSym = false } = {}) {
     for (let i = 0; i <= 10; i++) {
         try {
             return BuildSolveOnce(variables, equations, { listSym });
@@ -31598,7 +31598,7 @@ function BuildSolve(variables, equations, { listSym = false }) {
     throw "never";
 }
 exports.BuildSolve = BuildSolve;
-function BuildSolveOnce(variables, equations, { listSym = false }) {
+function BuildSolveOnce(variables, equations, { listSym = false } = {}) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables();
@@ -39871,6 +39871,26 @@ class PenCls extends sapphire_js_1.Pencil {
         this.drawArrowHead(startPoint, endPoint);
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
+    }
+    /**
+     * Draw the component of the arrow.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param dir - The direction to resolve.
+     * @param angleLabel - The label of the angle.
+     * @returns void
+     * ```
+     * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+     * ```
+     */
+    arrowResolve(startPoint, endPoint, dir, angleLabel) {
+        let O = startPoint;
+        let P = endPoint;
+        let X = Move(O, dir, 1);
+        let Q = PdFoot(O, X, P);
+        this.arrow(O, Q);
+        this.angle(Q, O, P, angleLabel);
     }
     /**
      * Draw a length between two points.

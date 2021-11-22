@@ -21,9 +21,9 @@ export class PenCls extends Pencil {
      */
     constructor() {
         super()
-        this.range.set([-5, 5], [-5, 5]);
-        this.size.set(1);
-        this.set.reset();
+        this.range.set([-5, 5], [-5, 5])
+        this.size.set(1)
+        this.set.reset()
     }
 
     /**
@@ -96,17 +96,17 @@ export class PenCls extends Pencil {
             }
 
             let pts = this._pen.pjs(arr)
-            let xmin = pts[0][0];
-            let xmax = pts[0][0];
-            let ymin = pts[0][1];
-            let ymax = pts[0][1];
+            let xmin = pts[0][0]
+            let xmax = pts[0][0]
+            let ymin = pts[0][1]
+            let ymax = pts[0][1]
             for (let i = 0; i < pts.length; i++) {
-                let x = pts[i][0];
-                let y = pts[i][1];
-                if (x < xmin) xmin = x;
-                if (x > xmax) xmax = x;
-                if (y < ymin) ymin = y;
-                if (y > ymax) ymax = y;
+                let x = pts[i][0]
+                let y = pts[i][1]
+                if (x < xmin) xmin = x
+                if (x > xmax) xmax = x
+                if (y < ymin) ymin = y
+                if (y > ymax) ymax = y
             }
             let xSize = xmax - xmin
             let ySize = ymax - ymin
@@ -124,7 +124,7 @@ export class PenCls extends Pencil {
                 ymax += xSize / 2
                 ymin -= xSize / 2
             }
-            this.set([xmin, xmax], [ymin, ymax]);
+            this.set([xmin, xmax], [ymin, ymax])
             this.AUTO_BORDER = true
         },
 
@@ -246,7 +246,7 @@ export class PenCls extends Pencil {
          * ```
          */
         strokeColor(color = "black"): void {
-            this._pen.setStrokeColor(color);
+            this._pen.setStrokeColor(color)
         },
         /**
          * Set the color of filling.
@@ -603,9 +603,9 @@ export class PenCls extends Pencil {
          * ```
          */
         line(m: number, c: number) {
-            const [xmin, xmax] = this._pen.frame.xRange();
-            const y = (x: number) => m * x + c;
-            this._pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
+            const [xmin, xmax] = this._pen.frame.xRange()
+            const y = (x: number) => m * x + c
+            this._pen.line([xmin, y(xmin)], [xmax, y(xmax)])
         },
 
         /**
@@ -618,8 +618,8 @@ export class PenCls extends Pencil {
          * ```
          */
         horizontal(y: number) {
-            const [xmin, xmax] = this._pen.frame.xRange();
-            this._pen.line([xmin, y], [xmax, y]);
+            const [xmin, xmax] = this._pen.frame.xRange()
+            this._pen.line([xmin, y], [xmax, y])
         },
 
         /**
@@ -632,8 +632,8 @@ export class PenCls extends Pencil {
          * ```
          */
         vertical(x: number) {
-            const [ymin, ymax] = this._pen.frame.yRange();
-            this._pen.line([x, ymin], [x, ymax]);
+            const [ymin, ymax] = this._pen.frame.yRange()
+            this._pen.line([x, ymin], [x, ymax])
         },
 
         /**
@@ -648,9 +648,9 @@ export class PenCls extends Pencil {
          * ```
          */
         linear(a: number, b: number, c: number) {
-            if (a === 0 && b !== 0) this.horizontal(-c / b);
-            if (b == 0 && a !== 0) this.vertical(-c / a);
-            if (a !== 0 && b !== 0) this.line(-a / b, -c / b);
+            if (a === 0 && b !== 0) this.horizontal(-c / b)
+            if (b == 0 && a !== 0) this.vertical(-c / a)
+            if (a !== 0 && b !== 0) this.line(-a / b, -c / b)
         },
 
         /**
@@ -841,7 +841,7 @@ export class PenCls extends Pencil {
         this.save()
         this.set.dash(true)
         this.drawStroke([startPoint, endPoint])
-        this.restore();
+        this.restore()
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
@@ -861,6 +861,27 @@ export class PenCls extends Pencil {
         this.drawStroke([startPoint, endPoint])
         this.drawArrowHead(startPoint, endPoint)
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
+    }
+
+    /**
+     * Draw the component of the arrow.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param dir - The direction to resolve.
+     * @param angleLabel - The label of the angle.
+     * @returns void
+     * ```
+     * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+     * ```
+     */
+    arrowResolve(startPoint: Point2D, endPoint: Point2D, dir: number, angleLabel?: string | number) {
+        let O = startPoint
+        let P = endPoint
+        let X = Move(O, dir, 1)
+        let Q = PdFoot(O, X, P)
+        this.arrow(O, Q)
+        this.angle(Q, O, P, angleLabel)
     }
 
 
@@ -1158,10 +1179,10 @@ export class PenCls extends Pencil {
         drawConstraints(...constraints: Constraint[]) {
             for (let c of toReins(constraints)) {
                 if (c.canEqual()) {
-                    this._pen.graph.linear(...c.toLinear());
+                    this._pen.graph.linear(...c.toLinear())
                 } else {
                     this._pen.set.dash(true)
-                    this._pen.graph.linear(...c.toLinear());
+                    this._pen.graph.linear(...c.toLinear())
                     this._pen.set.dash()
                 }
             }
@@ -1177,7 +1198,7 @@ export class PenCls extends Pencil {
          */
         shadeConstraints(constraints: Constraint[]) {
             let poly = toReins(constraints).polygon()
-            this._pen.polyshade(...poly);
+            this._pen.polyshade(...poly)
         },
 
         /**
@@ -1196,7 +1217,7 @@ export class PenCls extends Pencil {
         verticesCoord(constraints: Constraint[]) {
             let vs = toReins(constraints).vertices()
             for (let v of vs) {
-                this._pen.label.coordinates(v);
+                this._pen.label.coordinates(v)
             }
         }
 
@@ -1367,10 +1388,10 @@ export class PenCls extends Pencil {
          * ```
          */
         point(position: Point, text = '', direction?: number, radius = 15) {
-            this._pen.save();
+            this._pen.save()
             if (owl.alphabet(text)) this._pen.set.textItalic(true)
             this._pen.drawLabel(text, position, direction, radius)
-            this._pen.restore();
+            this._pen.restore()
         },
 
         /**
@@ -1409,7 +1430,7 @@ export class PenCls extends Pencil {
             }
             let dir = this._pen.getDirInPixelByAngle(A, O, B)
 
-            this.point(O, text, dir + direction, radius);
+            this.point(O, text, dir + direction, radius)
         },
 
         /**
@@ -1427,14 +1448,14 @@ export class PenCls extends Pencil {
         line([A, B]: [Point, Point], text: string | number, direction = 0, radius = 15) {
             A = this._pen.pj(A)
             B = this._pen.pj(B)
-            let M = Mid(A, B);
+            let M = Mid(A, B)
 
             if (typeof text === 'number')
                 text = this._pen.getTextWithLengthUnit(text)
 
             let dir = this._pen.getDirInPixelByLine(A, B)
 
-            this.point(M, text, dir + direction, radius);
+            this.point(M, text, dir + direction, radius)
         },
 
 
@@ -1450,10 +1471,10 @@ export class PenCls extends Pencil {
          */
         polygon(points: Point[], text: string | number) {
             let pts = this._pen.pjs(points)
-            this._pen.save();
+            this._pen.save()
             if (owl.alphabet(text)) this._pen.set.textItalic(true)
             this._pen.write(Mid(...pts), String(text))
-            this._pen.restore();
+            this._pen.restore()
         },
 
         /**
@@ -1504,11 +1525,11 @@ export class PenCls extends Pencil {
          * ```
          */
         x(label = "x") {
-            this._pen.save();
-            this._pen.set.textItalic(label.length === 1);
+            this._pen.save()
+            this._pen.set.textItalic(label.length === 1)
             this._pen.drawXAxis()
             this._pen.drawXAxisLabel(label)
-            this._pen.restore();
+            this._pen.restore()
         },
         /**
          * Draw y-axis.
@@ -1520,11 +1541,11 @@ export class PenCls extends Pencil {
          * ```
          */
         y(label = "y") {
-            this._pen.save();
-            this._pen.set.textItalic(label.length === 1);
+            this._pen.save()
+            this._pen.set.textItalic(label.length === 1)
             this._pen.drawYAxis()
             this._pen.drawYAxisLabel(label)
-            this._pen.restore();
+            this._pen.restore()
         },
         /**
          * Draw both axis.
@@ -1564,10 +1585,10 @@ export class PenCls extends Pencil {
         x(interval = 1, mark = true) {
             this._pen.drawXAxisTick(interval)
             if (mark) {
-                this._pen.save();
-                this._pen.set.textItalic();
+                this._pen.save()
+                this._pen.set.textItalic()
                 this._pen.drawXAxisTickMark(interval)
-                this._pen.restore();
+                this._pen.restore()
             };
         },
         /**
@@ -1583,10 +1604,10 @@ export class PenCls extends Pencil {
         y(interval = 1, mark = true) {
             this._pen.drawYAxisTick(interval)
             if (mark) {
-                this._pen.save();
-                this._pen.set.textItalic();
+                this._pen.save()
+                this._pen.set.textItalic()
                 this._pen.drawYAxisTickMark(interval)
-                this._pen.restore();
+                this._pen.restore()
             };
         },
         /**
@@ -2143,11 +2164,11 @@ export class PenCls extends Pencil {
 
 
     private exportCanvas(html: string, placeholder: string, canvas: HTMLCanvasElement) {
-        const src = 'src="' + this.toDataUrl(canvas) + '"';
-        const width = ' width="' + this.displayWidth(canvas) + '"';
-        const height = ' height="' + this.displayHeight(canvas) + '"';
+        const src = 'src="' + this.toDataUrl(canvas) + '"'
+        const width = ' width="' + this.displayWidth(canvas) + '"'
+        const height = ' height="' + this.displayHeight(canvas) + '"'
         const backgroundAttr = this.backgroundImageAttr()
-        return html.replace('src="' + placeholder + '"', src + width + height + backgroundAttr);
+        return html.replace('src="' + placeholder + '"', src + width + height + backgroundAttr)
     };
 
 
@@ -2179,8 +2200,8 @@ export class PenCls extends Pencil {
      * ```
      */
     exportTrim(html: string, placeholder: string) {
-        let clone = this.cloneCanvas();
-        this.trimCanvas(clone);
+        let clone = this.cloneCanvas()
+        this.trimCanvas(clone)
         return this.exportCanvas(html, placeholder, clone)
     };
 
@@ -2194,7 +2215,7 @@ export class PenCls extends Pencil {
      * ```
      */
     clear() {
-        this.clearCanvas();
+        this.clearCanvas()
     }
 
     /**

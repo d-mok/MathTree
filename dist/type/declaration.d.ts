@@ -318,7 +318,7 @@ declare module "Math/Builder/support/support" {
     export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym }: {
+    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym }?: {
         listSym?: boolean | undefined;
     }): {
         list: string;
@@ -3498,6 +3498,19 @@ declare module "Pen/Pen" {
          * ```
          */
         arrow(startPoint: Point, endPoint: Point, label?: string | number): void;
+        /**
+         * Draw the component of the arrow.
+         * @category draw
+         * @param startPoint - The coordinates [x,y] of the start-point.
+         * @param endPoint - The coordinates [x,y] of the end-point.
+         * @param dir - The direction to resolve.
+         * @param angleLabel - The label of the angle.
+         * @returns void
+         * ```
+         * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+         * ```
+         */
+        arrowResolve(startPoint: Point2D, endPoint: Point2D, dir: number, angleLabel?: string | number): void;
         /**
          * Draw a length between two points.
          * @category draw

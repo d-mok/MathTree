@@ -39873,6 +39873,26 @@ class PenCls extends sapphire_js_1.Pencil {
             this.label.line([startPoint, endPoint], label);
     }
     /**
+     * Draw the component of the arrow.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param dir - The direction to resolve.
+     * @param angleLabel - The label of the angle.
+     * @returns void
+     * ```
+     * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+     * ```
+     */
+    arrowResolve(startPoint, endPoint, dir, angleLabel) {
+        let O = startPoint;
+        let P = endPoint;
+        let X = Move(O, dir, 1);
+        let Q = PdFoot(O, X, P);
+        this.arrow(O, Q);
+        this.angle(Q, O, P, angleLabel);
+    }
+    /**
      * Draw a length between two points.
      * @category draw
      * @param startPoint - The coordinates [x,y] of the start-point.
