@@ -39881,16 +39881,33 @@ class PenCls extends sapphire_js_1.Pencil {
      * @param angleLabel - The label of the angle.
      * @returns void
      * ```
-     * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+     * pen.arrowCompo([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
      * ```
      */
-    arrowResolve(startPoint, endPoint, dir, angleLabel) {
+    arrowCompo(startPoint, endPoint, dir, angleLabel) {
         let O = startPoint;
         let P = endPoint;
         let X = Move(O, dir, 1);
         let Q = PdFoot(O, X, P);
         this.arrow(O, Q);
-        this.angle(Q, O, P, angleLabel);
+        if (angleLabel !== undefined)
+            this.angle(Q, O, P, angleLabel);
+    }
+    /**
+     * Draw both components of the arrow.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param dir - The direction to resolve.
+     * @param angleLabel - The label of the angle.
+     * @returns void
+     * ```
+     * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal and vertical components of arrow from [1,2] to [3,4]
+     * ```
+     */
+    arrowResolve(startPoint, endPoint, dir, angleLabel) {
+        this.arrowCompo(startPoint, endPoint, dir, angleLabel);
+        this.arrowCompo(startPoint, endPoint, dir + 90);
     }
     /**
      * Draw a length between two points.
@@ -40195,6 +40212,125 @@ exports.PenCls = PenCls;
 
 /***/ }),
 
+/***/ 9905:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PhyPenCls = void 0;
+/**
+ * @category DrawingPen
+ */
+class PhyPenCls {
+    /**
+     * @ignore
+     */
+    constructor() {
+        this.pen = new Pen();
+    }
+    /**
+     * Export the canvas to image tag.
+     * @category export
+     * @param html - The html string to export to.
+     * @param placeholder - The src field of the image tag to export to.
+     * @returns The new html with src field pasted.
+     * ```
+     * question = autoPen.export(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
+     */
+    export(html, placeholder) {
+        return this.pen.export(html, placeholder);
+    }
+    /**
+     * A car on a banked road.
+     * Circular Motion.
+     * @category tool
+     * @returns void
+     * ```
+     * let pen = new PhyPen()
+     * pen.CarOnBankedRoad({
+     *  carMid : 7,
+     *  carWidth : 3,
+     *  wheelHeight : 1,
+     *  carHeight : 2,
+     *  angle : 30,
+     *  angleLabel : 'θ',
+     *  weight : 2,
+     *  weightLabel : 'mg',
+     *  normal : 3,
+     *  normalLabel : 'R',
+     *  friction : 0,
+     *  frictionLabel : 'f',
+     *  showAllForces : false
+     * })
+     * ```
+     */
+    CarOnBankedRoad({ carMid = 7, carWidth = 3, wheelHeight = 1, carHeight = 2, angle = 30, angleLabel = 'θ', weight = 2, weightLabel = 'mg', normal = 3, normalLabel = 'R', friction = 0, frictionLabel = 'f', showAllForces = false }) {
+        let O = [0, 0];
+        let l = carMid - carWidth / 2;
+        let r = carMid + carWidth / 2;
+        // wheels
+        let A = [l, 0];
+        let B = [r, 0];
+        // car body
+        let P = MoveY(A, wheelHeight);
+        let Q = MoveY(P, carHeight);
+        let R = MoveY(B, wheelHeight);
+        let S = MoveY(R, carHeight);
+        [A, B, P, Q, R, S] = [A, B, P, Q, R, S].map($ => Rotate($, angle, O));
+        // road
+        let Z = [2 * r, 0];
+        let Y = Rotate(Z, angle, O);
+        // mg
+        let G = Mid(P, Q, R, S);
+        let W = MoveY(G, -weight);
+        // normal reaction
+        let N = Move(G, 90 + angle, normal);
+        // friction
+        let g = friction > 0 ? A : B;
+        let f = Move(g, friction > 0 ? 180 + angle : angle, Math.abs(friction));
+        let pen = new Pen();
+        pen.range.capture(O, A, B, P, Q, R, S, N, f);
+        pen.size.lock(1.3);
+        pen.set.labelCenter(Q);
+        pen.set.textLatex(true);
+        pen.polygon(P, Q, S, R);
+        pen.line(O, Z);
+        pen.line(O, Y);
+        pen.angle(Y, O, Z, angleLabel);
+        pen.set.weight(4);
+        pen.line(A, P);
+        pen.line(B, R);
+        if (showAllForces) {
+            pen.set.weight(3);
+            pen.set.color('red');
+            pen.arrow(G, W, weightLabel);
+            pen.set.weight(3);
+            pen.set.color('purple');
+            pen.arrow(G, N);
+            pen.label.point(N, normalLabel);
+            pen.set.weight(2);
+            pen.arrowResolve(G, N, 90, angleLabel);
+            if (friction !== 0) {
+                pen.set.weight(3);
+                pen.set.color('blue');
+                pen.arrow(g, f);
+                pen.label.point(f, frictionLabel);
+                pen.set.weight(2);
+                pen.arrowResolve(g, f, 0, angleLabel);
+            }
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
+}
+exports.PhyPenCls = PhyPenCls;
+
+
+/***/ }),
+
 /***/ 1370:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -40203,6 +40339,7 @@ exports.PenCls = PenCls;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const Pen_1 = __webpack_require__(1377);
 const AutoPen_1 = __webpack_require__(5336);
+const PhyPen_1 = __webpack_require__(9905);
 /**
  * @ignore
  */
@@ -40211,6 +40348,10 @@ globalThis.Pen = Pen_1.PenCls;
  * @ignore
  */
 globalThis.AutoPen = AutoPen_1.AutoPenCls;
+/**
+ * @ignore
+ */
+globalThis.PhyPen = PhyPen_1.PhyPenCls;
 
 
 /***/ }),

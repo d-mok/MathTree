@@ -3507,7 +3507,20 @@ declare module "Pen/Pen" {
          * @param angleLabel - The label of the angle.
          * @returns void
          * ```
-         * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+         * pen.arrowCompo([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+         * ```
+         */
+        arrowCompo(startPoint: Point2D, endPoint: Point2D, dir: number, angleLabel?: string | number): void;
+        /**
+         * Draw both components of the arrow.
+         * @category draw
+         * @param startPoint - The coordinates [x,y] of the start-point.
+         * @param endPoint - The coordinates [x,y] of the end-point.
+         * @param dir - The direction to resolve.
+         * @param angleLabel - The label of the angle.
+         * @returns void
+         * ```
+         * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal and vertical components of arrow from [1,2] to [3,4]
          * ```
          */
         arrowResolve(startPoint: Point2D, endPoint: Point2D, dir: number, angleLabel?: string | number): void;
@@ -4665,12 +4678,80 @@ declare module "Pen/AutoPen" {
         }): void;
     }
 }
+declare module "Pen/PhyPen" {
+    /**
+     * @category DrawingPen
+     */
+    export class PhyPenCls {
+        /**
+         * @ignore
+         */
+        private pen;
+        /**
+         * @ignore
+         */
+        constructor();
+        /**
+         * Export the canvas to image tag.
+         * @category export
+         * @param html - The html string to export to.
+         * @param placeholder - The src field of the image tag to export to.
+         * @returns The new html with src field pasted.
+         * ```
+         * question = autoPen.export(question,'imgQ')
+         * // paste the canvas to the image tag with src field 'imgQ'
+         * ```
+         */
+        export(html: string, placeholder: string): string;
+        /**
+         * A car on a banked road.
+         * Circular Motion.
+         * @category tool
+         * @returns void
+         * ```
+         * let pen = new PhyPen()
+         * pen.CarOnBankedRoad({
+         *  carMid : 7,
+         *  carWidth : 3,
+         *  wheelHeight : 1,
+         *  carHeight : 2,
+         *  angle : 30,
+         *  angleLabel : 'θ',
+         *  weight : 2,
+         *  weightLabel : 'mg',
+         *  normal : 3,
+         *  normalLabel : 'R',
+         *  friction : 0,
+         *  frictionLabel : 'f',
+         *  showAllForces : false
+         * })
+         * ```
+         */
+        CarOnBankedRoad({ carMid, carWidth, wheelHeight, carHeight, angle, angleLabel, weight, weightLabel, normal, normalLabel, friction, frictionLabel, showAllForces }: {
+            carMid?: number;
+            carWidth?: number;
+            wheelHeight?: number;
+            carHeight?: number;
+            angle?: number;
+            angleLabel?: string;
+            weight?: number;
+            weightLabel?: string;
+            normal?: number;
+            normalLabel?: string;
+            friction?: number;
+            frictionLabel?: string;
+            showAllForces?: boolean;
+        }): void;
+    }
+}
 declare module "Pen/index" {
     import { PenCls } from "Pen/Pen";
     import { AutoPenCls } from "Pen/AutoPen";
+    import { PhyPenCls } from "Pen/PhyPen";
     global {
         var Pen: typeof PenCls;
         var AutoPen: typeof AutoPenCls;
+        var PhyPen: typeof PhyPenCls;
     }
 }
 declare module "Soil/tool/html" {
