@@ -33864,8 +33864,8 @@ function makeFn(args, body) {
     return new Function("return " + paras + "=>" + body)();
 }
 function makeFn2(args, body) {
-    const paras = '(' + args.join(',') + ')';
-    return new Function("return " + paras + "=> body" + paras)();
+    const paras = args.join(',');
+    return new Function("return (" + paras + ") => (" + body.toString() + ').apply(null,[' + args + '])')();
 }
 class PhyEqCls {
     /**

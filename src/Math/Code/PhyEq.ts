@@ -6,8 +6,8 @@ function makeFn(args: string[], body: string): zeroFunction {
 
 
 function makeFn2(args: string[], body: (...args: any[]) => any): zeroFunction {
-    const paras = '(' + args.join(',') + ')'
-    return new Function("return " + paras + "=> body" + paras)()
+    const paras = args.join(',')
+    return new Function("return (" + paras + ") => (" + body.toString() + ').apply(null,[' + args + '])')()
 }
 
 
