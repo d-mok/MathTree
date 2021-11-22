@@ -33862,27 +33862,47 @@ function makeFn(args, body) {
     const paras = '(' + args.join(',') + ')';
     return new Function("return " + paras + "=>" + body)();
 }
-function surround(variable) {
-    const [h, ...t] = variable;
-    return h + '(' + t.join('') + ')';
-}
-function pad(variable) {
-    const h = variable[0];
-    if (h === '*' || h === '$')
-        return variable;
-    return '*' + variable;
-}
-function pure(variable) {
-    return variable.replaceAll('*', '').replaceAll('$', '');
-}
-function pads(...vars) {
-    return vars.map(pad);
-}
-function pures(...vars) {
-    return vars.map(pure);
-}
 class PhyEqCls {
-    Circular_vrω(v = 'v', r = 'r', ω = 'ω', $ = '***') {
+    /**
+     * s = vt
+     */
+    svt(s = 's', v = 'v', t = 't', $ = '***') {
+        return [
+            makeFn([s, v, t], `${s}-${v}*${t}`),
+            `${$[0]}${s}=${$[1]}(${v})${$[2]}(${t})`
+        ];
+    }
+    /**
+     * θ = ωt
+     */
+    θωt(θ = 'θ', ω = 'ω', t = 't', $ = '$$$') {
+        return [
+            makeFn([θ, ω, t], `${θ}-${ω}*${t}`),
+            `${$[0]}${θ}=${$[1]}(${ω})${$[2]}(${t})`
+        ];
+    }
+    /**
+     * ω = 2π/T
+     */
+    ωT(ω = 'ω', T = 'T', $ = '$$') {
+        return [
+            makeFn([ω, T], `${ω}-2*Math.PI*${T}`),
+            `${$[0]}${ω}=\\dfrac{2π}{${$[2]}${T}}`
+        ];
+    }
+    /**
+     * s = rθ
+     */
+    srθ(s = 's', r = 'r', θ = 'θ', $ = '**$') {
+        return [
+            makeFn([s, r, θ], `${s}-${r}*${θ}`),
+            `${$[0]}${s}=${$[1]}(${r})${$[2]}(${θ})`
+        ];
+    }
+    /**
+     * v = rω
+     */
+    vrω(v = 'v', r = 'r', ω = 'ω', $ = '***') {
         return [
             makeFn([v, r, ω], `${v}-${r}*${ω}`),
             `${$[0]}${v}=${$[1]}(${r})${$[2]}(${ω})`

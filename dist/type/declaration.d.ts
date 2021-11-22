@@ -1653,7 +1653,26 @@ declare var PhyConst: {
 declare module "Math/Code/PhyEq" {
     type eq = [func: zeroFunction, latex: string];
     class PhyEqCls {
-        Circular_vrω(v?: string, r?: string, ω?: string, $?: string): eq;
+        /**
+         * s = vt
+         */
+        svt(s?: string, v?: string, t?: string, $?: string): eq;
+        /**
+         * θ = ωt
+         */
+        θωt(θ?: string, ω?: string, t?: string, $?: string): eq;
+        /**
+         * ω = 2π/T
+         */
+        ωT(ω?: string, T?: string, $?: string): eq;
+        /**
+         * s = rθ
+         */
+        srθ(s?: string, r?: string, θ?: string, $?: string): eq;
+        /**
+         * v = rω
+         */
+        vrω(v?: string, r?: string, ω?: string, $?: string): eq;
     }
     global {
         var PhyEq: PhyEqCls;
