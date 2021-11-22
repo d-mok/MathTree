@@ -65,7 +65,7 @@ export function PrintVariable(html: string, symbol: string, value: any): string 
         html = html.replace(
             new RegExp(prefix + symbol + suffix, 'g'),
             () => ParseForPrint(value, signal)
-        );
+        )
     }
 
     // print **x as sci notation
@@ -170,6 +170,10 @@ export function ParseForPrint(value: any, signal: string = ""): string {
         if (T === 'boolean') {
             return value ? '✔' : '✘'
         }
+        if (owl.quantity(value)) {
+            let { val, unit } = value
+            return String(numberDefault(val)) + unit
+        }
         if (owl.point2D(value)) {
             return Coord(value)
         }
@@ -198,6 +202,12 @@ export function ParseForPrint(value: any, signal: string = ""): string {
             let v = cal.blur(Round(value, 3))
             let abs = Math.abs(v)
             return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v)
+        }
+        if (owl.quantity(value)) {
+            let { val, unit } = value
+            let v = cal.blur(Round(val, 3))
+            let abs = Math.abs(v)
+            return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v) + unit
         }
     }
 

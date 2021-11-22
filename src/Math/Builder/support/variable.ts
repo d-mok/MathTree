@@ -104,6 +104,10 @@ export class Variable {
         return "\\text{" + this.name + "}" + " = " + this.long()
     }
 
+    rich(): string {
+        return "\\text{" + this.name + "}~" + this.symbol() + " = " + this.long()
+    }
+
     writeSymbol(latex: string): string {
         let T = latex
         let sym = this.sym
@@ -223,7 +227,7 @@ export class Variables extends Array<Variable>{
         })
     }
 
-    
+
     rangeObj(): rangeObj {
         let obj: rangeObj = {}
         for (let v of this) {

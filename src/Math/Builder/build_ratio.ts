@@ -1,6 +1,6 @@
-import { latexAligned } from './support/latex';
-import { toEquSystem, toVariables } from './support/support';
-import { Variable } from './support/variable';
+import { latexAligned } from './support/latex'
+import { toEquSystem, toVariables } from './support/support'
+import { Variable } from './support/variable'
 
 export function BuildRatio(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
@@ -16,9 +16,10 @@ export function BuildRatio(
     consts: [symbol: string[], name: string[]]
     given: [symbol: string, name: string]
     unknown: [symbol: string, name: string, val: number, unit: string]
+    ans: quantity
 } {
 
-    let system = toEquSystem(variables, [[func,latex]])
+    let system = toEquSystem(variables, [[func, latex]])
 
     let vars = system.variables
 
@@ -56,12 +57,12 @@ export function BuildRatio(
     }
 
     function setVal(order: 0 | 1 | 2) {
-        if(order===0)return
+        if (order === 0) return
         given.set(g[order - 1])
         unknown.set(u[order - 1])
     }
 
-    function setCase(order: 0|1 | 2) {
+    function setCase(order: 0 | 1 | 2) {
         setSubscript(order)
         setVal(order)
     }
@@ -116,6 +117,11 @@ export function BuildRatio(
         return [unknown.symbol(), unknown.name, unknown.getVal(), unknown.unit]
     }
 
+    function getAns(): quantity {
+        setCase(2)
+        return { val: unknown.getVal(), unit: unknown.unit }
+    }
+
     return {
         table: table(),
         sol: sol(),
@@ -128,6 +134,7 @@ export function BuildRatio(
             given.name
         ],
         unknown: getUnknown(),
+        ans: getAns()
     }
 }
 

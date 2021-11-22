@@ -30621,7 +30621,7 @@ exports.printLabeledValue = printLabeledValue;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.labeledValue1 = exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3D = exports.point2Ds = exports.point2D = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
-exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.field = exports.constraints = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = exports.fail = exports.pass = exports.labeledValue = exports.labeledValue2 = void 0;
+exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.field = exports.constraints = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = exports.fail = exports.pass = exports.quantity = exports.labeledValue = exports.labeledValue2 = void 0;
 const num = (_) => Number.isFinite(_);
 exports.num = num;
 const whole = (_) => Number.isInteger(_);
@@ -30736,6 +30736,8 @@ const labeledValue2 = (_) => (0, exports.arrayOfLength)(3)(_) && (0, exports.num
 exports.labeledValue2 = labeledValue2;
 const labeledValue = (_) => (0, exports.labeledValue1)(_) || (0, exports.labeledValue2)(_);
 exports.labeledValue = labeledValue;
+const quantity = (_) => (0, exports.object)(_) && ('val' in _) && ('unit' in _);
+exports.quantity = quantity;
 // trivial
 const pass = (_) => true;
 exports.pass = pass;
@@ -31546,6 +31548,10 @@ function BuildRatio(variables, func, latex, settings = {}) {
         setCase(2);
         return [unknown.symbol(), unknown.name, unknown.getVal(), unknown.unit];
     }
+    function getAns() {
+        setCase(2);
+        return { val: unknown.getVal(), unit: unknown.unit };
+    }
     return {
         table: table(),
         sol: sol(),
@@ -31558,6 +31564,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
             given.name
         ],
         unknown: getUnknown(),
+        ans: getAns()
     };
 }
 exports.BuildRatio = BuildRatio;
@@ -31574,10 +31581,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildSolve = void 0;
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
-function BuildSolve(variables, equations) {
+function BuildSolve(variables, equations, { listSym = false }) {
     for (let i = 0; i <= 10; i++) {
         try {
-            return BuildSolveOnce(variables, equations);
+            return BuildSolveOnce(variables, equations, { listSym });
         }
         catch (e) {
             if (i === 10) {
@@ -31591,7 +31598,7 @@ function BuildSolve(variables, equations) {
     throw "never";
 }
 exports.BuildSolve = BuildSolve;
-function BuildSolveOnce(variables, equations) {
+function BuildSolveOnce(variables, equations, { listSym = false }) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables();
@@ -31617,7 +31624,7 @@ function BuildSolveOnce(variables, equations) {
         }
     }
     return {
-        list: givens.map($ => $.whole()).join("\\\\"),
+        list: givens.map($ => listSym ? $.rich() : $.whole()).join("\\\\"),
         sol: sol(),
         vars: system.variables.map(v => givens.includes(v) ? v.long() : v.symbol()),
         vals: system.variables.map($ => $.getVal()),
@@ -31626,7 +31633,8 @@ function BuildSolveOnce(variables, equations) {
             unknown.name,
             unknown.getVal(),
             unknown.unit
-        ]
+        ],
+        ans: { val: unknown.getVal(), unit: unknown.unit }
     };
 }
 
@@ -32089,6 +32097,9 @@ class Variable {
     }
     whole() {
         return "\\text{" + this.name + "}" + " = " + this.long();
+    }
+    rich() {
+        return "\\text{" + this.name + "}~" + this.symbol() + " = " + this.long();
     }
     writeSymbol(latex) {
         let T = latex;
@@ -34511,6 +34522,10 @@ function RndShake(anchor) {
             anchor = Number(anchor);
         }
     }
+    if (owl.quantity(anchor)) {
+        // quantity
+        return RndShakeQuantity(anchor);
+    }
     if (owl.point2D(anchor)) {
         // Point
         return RndShakePoint(anchor);
@@ -34896,6 +34911,12 @@ function RndShakeConstraints(anchor) {
         .rolls(3);
 }
 globalThis.RndShakeConstraints = contract(RndShakeConstraints).sign([owl.constraints]);
+function RndShakeQuantity(anchor) {
+    let { val, unit } = anchor;
+    let vals = RndShake(val);
+    return vals.map($ => ({ val: $, unit }));
+}
+globalThis.RndShakeQuantity = contract(RndShakeQuantity).sign([owl.quantity]);
 
 
 /***/ }),
@@ -40927,6 +40948,10 @@ function ParseForPrint(value, signal = "") {
         if (T === 'boolean') {
             return value ? '✔' : '✘';
         }
+        if (owl.quantity(value)) {
+            let { val, unit } = value;
+            return String(numberDefault(val)) + unit;
+        }
         if (owl.point2D(value)) {
             return Coord(value);
         }
@@ -40954,6 +40979,12 @@ function ParseForPrint(value, signal = "") {
             let v = cal.blur(Round(value, 3));
             let abs = Math.abs(v);
             return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v);
+        }
+        if (owl.quantity(value)) {
+            let { val, unit } = value;
+            let v = cal.blur(Round(val, 3));
+            let abs = Math.abs(v);
+            return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v) + unit;
         }
     }
     if (signal === '/') {

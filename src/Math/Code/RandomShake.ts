@@ -31,6 +31,10 @@ function RndShake(anchor: any): (typeof anchor)[] {
             anchor = Number(anchor)
         }
     }
+    if (owl.quantity(anchor)) {
+        // quantity
+        return RndShakeQuantity(anchor)
+    }
     if (owl.point2D(anchor)) {
         // Point
         return RndShakePoint(anchor)
@@ -392,14 +396,14 @@ function RndShakeBase(anchor: string): string[] {
     }
 
     function dress(str: string): string {
-        str = str.replace(/^0+/, '');
+        str = str.replace(/^0+/, '')
         return str + '_{' + base + '}'
     }
 
     let f = (): string[] => {
-        let middle = Math.ceil(num.length / 2);
-        let s1 = num.slice(0, middle);
-        let s2 = num.slice(middle);
+        let middle = Math.ceil(num.length / 2)
+        let s1 = num.slice(0, middle)
+        let s2 = num.slice(middle)
 
         let t1 = mutate(s1)
         let t2 = mutate(s2)
@@ -479,3 +483,12 @@ function RndShakeConstraints(anchor: Constraint[]): Constraint[][] {
         .rolls(3)
 }
 globalThis.RndShakeConstraints = contract(RndShakeConstraints).sign([owl.constraints])
+
+
+
+function RndShakeQuantity(anchor: quantity): quantity[] {
+    let { val, unit } = anchor
+    let vals = RndShake(val)
+    return vals.map($ => ({ val: $, unit }))
+}
+globalThis.RndShakeQuantity = contract(RndShakeQuantity).sign([owl.quantity])

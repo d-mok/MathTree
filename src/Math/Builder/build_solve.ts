@@ -1,20 +1,22 @@
-import { latexAligned, latexBraced } from './support/latex';
-import { toEquSystem } from './support/support';
+import { latexAligned, latexBraced } from './support/latex'
+import { toEquSystem } from './support/support'
 
 export function BuildSolve(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: zeroFunction, latex: string][],
+    { listSym = false }
 ): {
     list: string
     sol: string
     vars: string[]
     vals: number[]
     unknown: [symbol: string, name: string, val: number, unit: string]
+    ans: quantity
 } {
 
     for (let i = 0; i <= 10; i++) {
         try {
-            return BuildSolveOnce(variables, equations)
+            return BuildSolveOnce(variables, equations, { listSym })
         } catch (e) {
             if (i === 10) {
                 throw e
@@ -31,12 +33,14 @@ export function BuildSolve(
 function BuildSolveOnce(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: zeroFunction, latex: string][],
+    { listSym = false }
 ): {
     list: string
     sol: string
     vars: string[]
     vals: number[]
     unknown: [symbol: string, name: string, val: number, unit: string]
+    ans: quantity
 } {
 
     let system = toEquSystem(variables, equations)
@@ -66,7 +70,7 @@ function BuildSolveOnce(
     }
 
     return {
-        list: givens.map($ => $.whole()).join("\\\\"),
+        list: givens.map($ => listSym ? $.rich() : $.whole()).join("\\\\"),
         sol: sol(),
         vars: system.variables.map(v => givens.includes(v) ? v.long() : v.symbol()),
         vals: system.variables.map($ => $.getVal()),
@@ -75,6 +79,7 @@ function BuildSolveOnce(
             unknown.name,
             unknown.getVal(),
             unknown.unit
-        ]
+        ],
+        ans: { val: unknown.getVal(), unit: unknown.unit }
     }
 }

@@ -12,7 +12,6 @@ export function BuildTrend(
     agent: [symbol: string, name: string, trend: string, code: number]
     responses: [symbol: string, name: string, trend: string, code: number][]
     target: [symbol: string, name: string, trend: string, code: number]
-
 } {
 
     let system = toEquSystem(variables, equations)

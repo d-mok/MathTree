@@ -133,6 +133,9 @@ export const labeledValue2 = (_: unknown): _ is LabeledValue2 => arrayOfLength(3
 
 export const labeledValue = (_: unknown): _ is LabeledValue => labeledValue1(_) || labeledValue2(_)
 
+export const quantity = (_: unknown): _ is quantity => object(_) && ('val' in _) && ('unit' in _)
+
+
 
 // trivial
 

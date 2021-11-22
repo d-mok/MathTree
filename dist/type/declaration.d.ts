@@ -57,6 +57,7 @@ declare module "Core/Owl/index" {
     export const labeledValue1: (_: unknown) => _ is LabeledValue1;
     export const labeledValue2: (_: unknown) => _ is LabeledValue2;
     export const labeledValue: (_: unknown) => _ is LabeledValue;
+    export const quantity: (_: unknown) => _ is quantity;
     export const pass: (_: unknown) => boolean;
     export const fail: (_: unknown) => boolean;
     export const distinct: (_: unknown[]) => boolean;
@@ -266,6 +267,7 @@ declare module "Math/Builder/support/variable" {
         long(): string;
         full(): string;
         whole(): string;
+        rich(): string;
         writeSymbol(latex: string): string;
         writeValue(latex: string): string;
     }
@@ -316,12 +318,15 @@ declare module "Math/Builder/support/support" {
     export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][]): {
+    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym }: {
+        listSym?: boolean | undefined;
+    }): {
         list: string;
         sol: string;
         vars: string[];
         vals: number[];
         unknown: [symbol: string, name: string, val: number, unit: string];
+        ans: quantity;
     };
 }
 declare module "Math/Builder/build_trend" {
@@ -345,6 +350,7 @@ declare module "Math/Builder/build_ratio" {
         consts: [symbol: string[], name: string[]];
         given: [symbol: string, name: string];
         unknown: [symbol: string, name: string, val: number, unit: string];
+        ans: quantity;
     };
 }
 declare module "Math/Builder/index" {
@@ -446,6 +452,10 @@ declare type TrigExp = [TrigFunc, number, 1 | -1, string];
 declare type LabeledValue1 = [value: number, label: string];
 declare type LabeledValue2 = [value: number, label1: string, label2: string];
 declare type LabeledValue = LabeledValue1 | LabeledValue2;
+declare type quantity = {
+    val: number;
+    unit: string;
+};
 declare module "Math/Algebra/Algebra" {
     export class Algebra {
         private constructor();
@@ -2057,6 +2067,7 @@ declare function RndShakeConstraint(anchor: Constraint): Constraint[];
  * ```
  */
 declare function RndShakeConstraints(anchor: Constraint[]): Constraint[][];
+declare function RndShakeQuantity(anchor: quantity): quantity[];
 declare module "Math/Code/RandomUtil.test" { }
 /**
  * @category RandomUtil
