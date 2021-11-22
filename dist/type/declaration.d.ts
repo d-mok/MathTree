@@ -1674,10 +1674,6 @@ declare module "Math/Code/PhyEq" {
          */
         vrω(v?: string, r?: string, ω?: string, $?: string): eq;
         /**
-         * v = rω
-         */
-        vrω2(v?: string, r?: string, ω?: string, $?: string): eq;
-        /**
          * a = vω
          */
         avω(a?: string, v?: string, ω?: string, $?: string): eq;

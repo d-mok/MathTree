@@ -1,13 +1,19 @@
 
-function makeFn(args: string[], body: string): zeroFunction {
-    const paras = '(' + args.join(',') + ')'
-    return new Function("return " + paras + "=>" + body)()
+
+function makeFn(args: string[], body: (...args: any[]) => any): zeroFunction {
+    const paras = args.join(',')
+    return new Function("return (" + paras + ") => (" + body.toString() + ').apply(null,[' + args + '])')()
 }
 
 
-function makeFn2(args: string[], body: (...args: any[]) => any): zeroFunction {
-    const paras = args.join(',')
-    return new Function("return (" + paras + ") => (" + body.toString() + ').apply(null,[' + args + '])')()
+function makeLatex(args: string[], template: string, units: string, brackets: string): string {
+    let T = template
+    for (let i = 0; i < args.length; i++) {
+        const [l, r] = brackets[i] === '|' ? ['(', ')'] : ['', '']
+        const u = units[i]
+        T = T.replace('@', u + l + args[i] + r)
+    }
+    return T
 }
 
 
@@ -21,7 +27,7 @@ export class PhyEqCls {
      */
     svt(s = 's', v = 'v', t = 't', $ = '***'): eq {
         return [
-            makeFn([s, v, t], `${s}-${v}*${t}`),
+            makeFn([s, v, t], (s, v, t) => s - v * t),
             `${$[0]}${s}=${$[1]}(${v})${$[2]}(${t})`
         ]
     }
@@ -33,7 +39,7 @@ export class PhyEqCls {
      */
     θωt(θ = 'θ', ω = 'ω', t = 't', $ = '$$$'): eq {
         return [
-            makeFn([θ, ω, t], `${θ}-${ω}*${t}`),
+            makeFn([θ, ω, t], (θ, ω, t) => θ - ω * t),
             `${$[0]}${θ}=${$[1]}(${ω})${$[2]}(${t})`
         ]
     }
@@ -43,7 +49,7 @@ export class PhyEqCls {
      */
     ωT(ω = 'ω', T = 'T', $ = '$$'): eq {
         return [
-            makeFn([ω, T], `${ω}-2*Math.PI/${T}`),
+            makeFn([ω, T], (ω, T) => ω - 2 * Math.PI / T),
             `${$[0]}${ω}=\\dfrac{2π}{${$[1]}${T}}`
         ]
     }
@@ -53,7 +59,7 @@ export class PhyEqCls {
      */
     srθ(s = 's', r = 'r', θ = 'θ', $ = '**$'): eq {
         return [
-            makeFn([s, r, θ], `${s}-${r}*${θ}`),
+            makeFn([s, r, θ], (s, r, θ) => s - r * θ),
             `${$[0]}${s}=${$[1]}(${r})${$[2]}(${θ})`
         ]
     }
@@ -62,29 +68,22 @@ export class PhyEqCls {
      * v = rω
      */
     vrω(v = 'v', r = 'r', ω = 'ω', $ = '***'): eq {
+        let args = [v, r, ω]
         return [
-            makeFn([v, r, ω], `${v}-${r}*${ω}`),
-            `${$[0]}${v}=${$[1]}(${r})${$[2]}(${ω})`
+            makeFn(args, (v, r, ω) => v - r * ω),
+            makeLatex(args, '@=@@', $, ':||')
+            // `${$[0]}${v}=${$[1]}(${r})${$[2]}(${ω})`
         ]
     }
 
 
-    /**
-     * v = rω
-     */
-    vrω2(v = 'v', r = 'r', ω = 'ω', $ = '***'): eq {
-        return [
-            makeFn2([v, r, ω], (v, r, ω) => v - r * ω),
-            `${$[0]}${v}=${$[1]}(${r})${$[2]}(${ω})`
-        ]
-    }
 
     /**
      * a = vω
      */
     avω(a = 'a', v = 'v', ω = 'ω', $ = '***'): eq {
         return [
-            makeFn([a, v, ω], `${a}-${v}*${ω}`),
+            makeFn([a, v, ω], (a, v, ω) => a - v * ω),
             `${$[0]}${a}=${$[1]}(${v})${$[2]}(${ω})`
         ]
     }
@@ -94,7 +93,7 @@ export class PhyEqCls {
      */
     avr(a = 'a', v = 'v', r = 'r', $ = '***'): eq {
         return [
-            makeFn([a, v, r], `${a}-${v}*${v}/${r}`),
+            makeFn([a, v, r], (a, v, r) => a - v * v / r),
             `${$[0]}${a}=\\dfrac{${$[1]}(${v})^2}{${$[2]}${r}}`
         ]
     }
@@ -104,7 +103,7 @@ export class PhyEqCls {
      */
     arω(a = 'a', r = 'r', ω = 'ω', $ = '***'): eq {
         return [
-            makeFn([a, r, ω], `${a}-${r}*${ω}*${ω}`),
+            makeFn([a, r, ω], (a, r, ω) => a - r * ω * ω),
             `${$[0]}${a}=${$[1]}(${r})${$[2]}(${ω})^2`
         ]
     }
@@ -114,7 +113,7 @@ export class PhyEqCls {
      */
     Fmvω(F = 'F', m = 'm', v = 'v', ω = 'ω', $ = '****'): eq {
         return [
-            makeFn([F, m, v, ω], `${F}-${m}*${v}*${ω}`),
+            makeFn([F, m, v, ω], (F, m, v, ω) => F - m * v * ω),
             `${$[0]}${F}=${$[1]}(${m})${$[2]}(${v})${$[3]}(${ω})`
         ]
     }
@@ -124,7 +123,7 @@ export class PhyEqCls {
      */
     Fmvr(F = 'F', m = 'm', v = 'v', r = 'r', $ = '****'): eq {
         return [
-            makeFn([F, m, v, r], `${F}-${m}*${v}*${v}/${r}`),
+            makeFn([F, m, v, r], (F, m, v, r) => F - m * v * v / r),
             `${$[0]}${F}=\\dfrac{${$[1]}(${m})${$[2]}(${v})^2}{${$[3]}${r}}`
         ]
     }
@@ -134,7 +133,7 @@ export class PhyEqCls {
      */
     Fmrω(F = 'F', m = 'm', r = 'r', ω = 'ω', $ = '****'): eq {
         return [
-            makeFn([F, m, r, ω], `${F}-${m}*${r}*${ω}*${ω}`),
+            makeFn([F, m, r, ω], (F, m, r, ω) => F - m * r * ω * ω),
             `${$[0]}${F}=${$[1]}(${m})${$[2]}(${r})${$[3]}(${ω})^2`
         ]
     }
