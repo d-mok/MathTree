@@ -446,7 +446,8 @@ declare type LabeledValue1 = [value: number, label: string];
 declare type LabeledValue2 = [value: number, label1: string, label2: string];
 declare type LabeledValue = LabeledValue1 | LabeledValue2;
 declare module "Math/Algebra/Algebra" {
-    class _ {
+    export class Algebra {
+        private constructor();
         /**
          * solve [x,y] from ax+by=c and px+qy=r.
          * ```
@@ -465,8 +466,8 @@ declare module "Math/Algebra/Algebra" {
         static xPolynomial(poly1: number[], poly2: number[]): number[];
     }
     global {
-        var Crammer: typeof _.Crammer;
-        var xPolynomial: typeof _.xPolynomial;
+        var Crammer: typeof Algebra.Crammer;
+        var xPolynomial: typeof Algebra.xPolynomial;
     }
 }
 /**

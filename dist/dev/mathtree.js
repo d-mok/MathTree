@@ -30869,8 +30869,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Algebra = void 0;
 const waxy_js_1 = __webpack_require__(1789);
-let _ = class _ {
+let Algebra = class Algebra {
+    constructor() { }
     /**
      * solve [x,y] from ax+by=c and px+qy=r.
      * ```
@@ -30907,14 +30909,15 @@ let _ = class _ {
 __decorate([
     (0, waxy_js_1.checkIt)(owl.num),
     (0, waxy_js_1.inspectIt)(function has_unique_sol(a, b, c, p, q, r) { return a * q - b * p !== 0; })
-], _, "Crammer", null);
+], Algebra, "Crammer", null);
 __decorate([
     (0, waxy_js_1.checkIt)([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0; }])
-], _, "xPolynomial", null);
-_ = __decorate([
+], Algebra, "xPolynomial", null);
+Algebra = __decorate([
     (0, waxy_js_1.exposeAll)(),
     (0, waxy_js_1.captureAll)()
-], _);
+], Algebra);
+exports.Algebra = Algebra;
 
 
 /***/ }),
