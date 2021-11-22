@@ -40219,9 +40219,6 @@ exports.PenCls = PenCls;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PhyPenCls = void 0;
-/**
- * @category DrawingPen
- */
 class PhyPenCls {
     /**
      * @ignore
@@ -40231,10 +40228,6 @@ class PhyPenCls {
     }
     /**
      * Export the canvas to image tag.
-     * @category export
-     * @param html - The html string to export to.
-     * @param placeholder - The src field of the image tag to export to.
-     * @returns The new html with src field pasted.
      * ```
      * question = autoPen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
@@ -40246,8 +40239,6 @@ class PhyPenCls {
     /**
      * A car on a banked road.
      * Circular Motion.
-     * @category tool
-     * @returns void
      * ```
      * let pen = new PhyPen()
      * pen.CarOnBankedRoad({

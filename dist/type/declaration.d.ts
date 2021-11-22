@@ -4679,9 +4679,6 @@ declare module "Pen/AutoPen" {
     }
 }
 declare module "Pen/PhyPen" {
-    /**
-     * @category DrawingPen
-     */
     export class PhyPenCls {
         /**
          * @ignore
@@ -4693,10 +4690,6 @@ declare module "Pen/PhyPen" {
         constructor();
         /**
          * Export the canvas to image tag.
-         * @category export
-         * @param html - The html string to export to.
-         * @param placeholder - The src field of the image tag to export to.
-         * @returns The new html with src field pasted.
          * ```
          * question = autoPen.export(question,'imgQ')
          * // paste the canvas to the image tag with src field 'imgQ'
@@ -4706,20 +4699,18 @@ declare module "Pen/PhyPen" {
         /**
          * A car on a banked road.
          * Circular Motion.
-         * @category tool
-         * @returns void
          * ```
          * let pen = new PhyPen()
          * pen.CarOnBankedRoad({
-         *  carMid : 7,
+         *  carMid : 10,
          *  carWidth : 3,
          *  wheelHeight : 1,
          *  carHeight : 2,
-         *  angle : 30,
+         *  angle : 25,
          *  angleLabel : 'θ',
-         *  weight : 2,
+         *  weight : 4,
          *  weightLabel : 'mg',
-         *  normal : 3,
+         *  normal : 5,
          *  normalLabel : 'R',
          *  friction : 0,
          *  frictionLabel : 'f',
