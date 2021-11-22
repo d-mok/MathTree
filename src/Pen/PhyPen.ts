@@ -44,15 +44,15 @@ export class PhyPenCls {
      * ```
      * let pen = new PhyPen()
      * pen.CarOnBankedRoad({
-     *  carMid : 7,
+     *  carMid : 10,
      *  carWidth : 3,
      *  wheelHeight : 1,
      *  carHeight : 2,
-     *  angle : 30,
+     *  angle : 25,
      *  angleLabel : 'θ',
-     *  weight : 2,
+     *  weight : 4,
      *  weightLabel : 'mg',
-     *  normal : 3,
+     *  normal : 5,
      *  normalLabel : 'R',
      *  friction : 0,
      *  frictionLabel : 'f',
@@ -61,15 +61,15 @@ export class PhyPenCls {
      * ```
      */
     CarOnBankedRoad({
-        carMid = 7,
+        carMid = 10,
         carWidth = 3,
         wheelHeight = 1,
         carHeight = 2,
-        angle = 30,
+        angle = 25,
         angleLabel = 'θ',
-        weight = 2,
+        weight = 4,
         weightLabel = 'mg',
-        normal = 3,
+        normal = 5,
         normalLabel = 'R',
         friction = 0,
         frictionLabel = 'f',
@@ -126,7 +126,7 @@ export class PhyPenCls {
 
         pen.range.capture(O, A, B, P, Q, R, S, N, f)
         pen.size.lock(1.3)
-        pen.set.labelCenter(Q)
+        pen.set.labelCenter(G)
         pen.set.textLatex(true)
 
         pen.polygon(P, Q, S, R)
@@ -140,7 +140,10 @@ export class PhyPenCls {
         if (showAllForces) {
             pen.set.weight(3)
             pen.set.color('red')
+            pen.set.lineLabel('left')
             pen.arrow(G, W, weightLabel)
+            pen.set.lineLabel()
+
 
             pen.set.weight(3)
             pen.set.color('purple')
