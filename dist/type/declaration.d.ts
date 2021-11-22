@@ -1652,7 +1652,7 @@ declare var PhyConst: {
 };
 declare module "Math/Code/PhyEq" {
     type eq = [func: zeroFunction, latex: string];
-    class PhyEqCls {
+    export class PhyEqCls {
         /**
          * s = vt
          */
@@ -1673,11 +1673,38 @@ declare module "Math/Code/PhyEq" {
          * v = rω
          */
         vrω(v?: string, r?: string, ω?: string, $?: string): eq;
+        /**
+         * v = rω
+         */
+        vrω2(v?: string, r?: string, ω?: string, $?: string): eq;
+        /**
+         * a = vω
+         */
+        avω(a?: string, v?: string, ω?: string, $?: string): eq;
+        /**
+         * a = v^2/r
+         */
+        avr(a?: string, v?: string, r?: string, $?: string): eq;
+        /**
+         * a = rω^2
+         */
+        arω(a?: string, r?: string, ω?: string, $?: string): eq;
+        /**
+         * F = mvω
+         */
+        Fmvω(F?: string, m?: string, v?: string, ω?: string, $?: string): eq;
+        /**
+         * F = mv^2/r
+         */
+        Fmvr(F?: string, m?: string, v?: string, r?: string, $?: string): eq;
+        /**
+         * F = mrω^2
+         */
+        Fmrω(F?: string, m?: string, r?: string, ω?: string, $?: string): eq;
     }
     global {
         var PhyEq: PhyEqCls;
     }
-    export {};
 }
 declare module "Math/Code/Random.test" { }
 /**

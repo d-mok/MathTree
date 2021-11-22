@@ -33858,9 +33858,14 @@ globalThis.PhyConst = PhyConst;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PhyEqCls = void 0;
 function makeFn(args, body) {
     const paras = '(' + args.join(',') + ')';
     return new Function("return " + paras + "=>" + body)();
+}
+function makeFn2(args, body) {
+    const paras = '(' + args.join(',') + ')';
+    return new Function("return " + paras + "=> body" + paras)();
 }
 class PhyEqCls {
     /**
@@ -33886,8 +33891,8 @@ class PhyEqCls {
      */
     ωT(ω = 'ω', T = 'T', $ = '$$') {
         return [
-            makeFn([ω, T], `${ω}-2*Math.PI*${T}`),
-            `${$[0]}${ω}=\\dfrac{2π}{${$[2]}${T}}`
+            makeFn([ω, T], `${ω}-2*Math.PI/${T}`),
+            `${$[0]}${ω}=\\dfrac{2π}{${$[1]}${T}}`
         ];
     }
     /**
@@ -33908,7 +33913,71 @@ class PhyEqCls {
             `${$[0]}${v}=${$[1]}(${r})${$[2]}(${ω})`
         ];
     }
+    /**
+     * v = rω
+     */
+    vrω2(v = 'v', r = 'r', ω = 'ω', $ = '***') {
+        return [
+            makeFn2([v, r, ω], (v, r, ω) => v - r * ω),
+            `${$[0]}${v}=${$[1]}(${r})${$[2]}(${ω})`
+        ];
+    }
+    /**
+     * a = vω
+     */
+    avω(a = 'a', v = 'v', ω = 'ω', $ = '***') {
+        return [
+            makeFn([a, v, ω], `${a}-${v}*${ω}`),
+            `${$[0]}${a}=${$[1]}(${v})${$[2]}(${ω})`
+        ];
+    }
+    /**
+     * a = v^2/r
+     */
+    avr(a = 'a', v = 'v', r = 'r', $ = '***') {
+        return [
+            makeFn([a, v, r], `${a}-${v}*${v}/${r}`),
+            `${$[0]}${a}=\\dfrac{${$[1]}(${v})^2}{${$[2]}${r}}`
+        ];
+    }
+    /**
+     * a = rω^2
+     */
+    arω(a = 'a', r = 'r', ω = 'ω', $ = '***') {
+        return [
+            makeFn([a, r, ω], `${a}-${r}*${ω}*${ω}`),
+            `${$[0]}${a}=${$[1]}(${r})${$[2]}(${ω})^2`
+        ];
+    }
+    /**
+     * F = mvω
+     */
+    Fmvω(F = 'F', m = 'm', v = 'v', ω = 'ω', $ = '****') {
+        return [
+            makeFn([F, m, v, ω], `${F}-${m}*${v}*${ω}`),
+            `${$[0]}${F}=${$[1]}(${m})${$[2]}(${v})${$[3]}(${ω})`
+        ];
+    }
+    /**
+     * F = mv^2/r
+     */
+    Fmvr(F = 'F', m = 'm', v = 'v', r = 'r', $ = '****') {
+        return [
+            makeFn([F, m, v, r], `${F}-${m}*${v}*${v}/${r}`),
+            `${$[0]}${F}=\\dfrac{${$[1]}(${m})${$[2]}(${v})^2}{${$[3]}${r}}`
+        ];
+    }
+    /**
+     * F = mrω^2
+     */
+    Fmrω(F = 'F', m = 'm', r = 'r', ω = 'ω', $ = '****') {
+        return [
+            makeFn([F, m, r, ω], `${F}-${m}*${r}*${ω}*${ω}`),
+            `${$[0]}${F}=${$[1]}(${m})${$[2]}(${r})${$[3]}(${ω})^2`
+        ];
+    }
 }
+exports.PhyEqCls = PhyEqCls;
 globalThis.PhyEq = new PhyEqCls();
 
 
