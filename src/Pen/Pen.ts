@@ -872,10 +872,10 @@ export class PenCls extends Pencil {
      * @param angleLabel - The label of the angle.
      * @returns void
      * ```
-     * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+     * pen.arrowCompo([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
      * ```
      */
-    arrowResolve(startPoint: Point2D, endPoint: Point2D, dir: number, angleLabel?: string | number) {
+    arrowCompo(startPoint: Point2D, endPoint: Point2D, dir: number, angleLabel?: string | number) {
         let O = startPoint
         let P = endPoint
         let X = Move(O, dir, 1)
@@ -884,6 +884,25 @@ export class PenCls extends Pencil {
         if (angleLabel !== undefined)
             this.angle(Q, O, P, angleLabel)
     }
+
+
+    /**
+     * Draw both components of the arrow.
+     * @category draw
+     * @param startPoint - The coordinates [x,y] of the start-point.
+     * @param endPoint - The coordinates [x,y] of the end-point.
+     * @param dir - The direction to resolve.
+     * @param angleLabel - The label of the angle.
+     * @returns void
+     * ```
+     * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal and vertical components of arrow from [1,2] to [3,4]
+     * ```
+     */
+    arrowResolve(startPoint: Point2D, endPoint: Point2D, dir: number, angleLabel?: string | number) {
+        this.arrowCompo(startPoint, endPoint, dir, angleLabel)
+        this.arrowCompo(startPoint, endPoint, dir + 90)
+    }
+
 
 
     /**
