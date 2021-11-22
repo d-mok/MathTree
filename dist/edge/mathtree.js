@@ -39890,7 +39890,8 @@ class PenCls extends sapphire_js_1.Pencil {
         let X = Move(O, dir, 1);
         let Q = PdFoot(O, X, P);
         this.arrow(O, Q);
-        this.angle(Q, O, P, angleLabel);
+        if (angleLabel !== undefined)
+            this.angle(Q, O, P, angleLabel);
     }
     /**
      * Draw a length between two points.
