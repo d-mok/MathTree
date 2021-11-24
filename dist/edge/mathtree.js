@@ -40405,7 +40405,7 @@ class PhyPenCls {
         let pen = new Pen();
         pen.set.border(0.3);
         pen.range.capture(O, P, V, ReflectY(P), W);
-        pen.size.lock(1);
+        pen.size.lock(1.3);
         pen.set.textLatex(true);
         pen.set.color('grey');
         pen.plotDash(t => [P[0] * cos(t) + V[0], 1 * sin(t) + V[1]], 0, 360);
