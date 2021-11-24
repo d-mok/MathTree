@@ -4739,9 +4739,9 @@ declare module "Pen/PhyPen" {
          * ```
          * let pen = new PhyPen()
          * pen.AirplaneTurning({
-         *   wingWidth = 3,
+         *   wingWidth = 4,
          *   planeRadius = 1,
-         *   angle = 30,
+         *   angle = 35,
          *   angleLabel = 'θ',
          *   weight = 4,
          *   weightLabel = 'mg',
