@@ -40352,7 +40352,9 @@ class PhyPenCls {
         pen.set.labelCenter(O);
         pen.set.textLatex(true);
         pen.graph.circle(O, planeRadius);
+        pen.set.weight(3);
         pen.line(P, Q);
+        pen.set.weight();
         pen.set.dash(true);
         pen.graph.horizontal(0);
         pen.set.dash();
