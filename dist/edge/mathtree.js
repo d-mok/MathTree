@@ -40356,7 +40356,7 @@ class PhyPenCls {
         pen.set.dash(true);
         pen.graph.horizontal(0);
         pen.set.dash();
-        pen.angle(Q, O, [0, 1], angleLabel);
+        pen.angle(Q, O, [1, 0], angleLabel);
         if (showAllForces) {
             pen.set.weight(3);
             pen.set.color('red');

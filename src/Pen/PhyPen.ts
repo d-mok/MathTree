@@ -205,9 +205,8 @@ export class PhyPenCls {
         let O: Point2D = [0, 0]
 
         // plane centre
-        let P: Point2D = [- wingWidth, 0]
+        let P: Point2D = [- wingWidth, 0];
         let Q: Point2D = [+ wingWidth, 0];
-
         [P, Q] = [P, Q].map($ => Rotate($, angle, O))
 
         // mg
@@ -228,7 +227,7 @@ export class PhyPenCls {
         pen.set.dash(true)
         pen.graph.horizontal(0)
         pen.set.dash()
-        pen.angle(Q, O, [0, 1], angleLabel)
+        pen.angle(Q, O, [1, 0], angleLabel)
 
         if (showAllForces) {
             pen.set.weight(3)
