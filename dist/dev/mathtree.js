@@ -40324,7 +40324,7 @@ class PhyPenCls {
      * ```
      * let pen = new PhyPen()
      * pen.AirplaneTurning({
-     *   wingWidth = 4,
+     *   wingWidth = 7,
      *   planeRadius = 1,
      *   angle = 35,
      *   angleLabel = 'θ',
@@ -40336,7 +40336,7 @@ class PhyPenCls {
      * })
      * ```
      */
-    AirplaneTurning({ wingWidth = 4, planeRadius = 1, angle = 35, angleLabel = 'θ', weight = 4, weightLabel = 'mg', lift = 5, liftLabel = 'R', showAllForces = false }) {
+    AirplaneTurning({ wingWidth = 7, planeRadius = 1, angle = 35, angleLabel = 'θ', weight = 4, weightLabel = 'mg', lift = 5, liftLabel = 'R', showAllForces = false }) {
         let O = [0, 0];
         // plane centre
         let P = [-wingWidth, 0];
@@ -40352,6 +40352,7 @@ class PhyPenCls {
         pen.set.labelCenter(O);
         pen.set.textLatex(true);
         pen.graph.circle(O, planeRadius);
+        pen.shade.circle(O, planeRadius);
         pen.set.weight(3);
         pen.line(P, Q);
         pen.set.weight();

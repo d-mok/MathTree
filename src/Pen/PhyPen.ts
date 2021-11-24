@@ -168,7 +168,7 @@ export class PhyPenCls {
      * ```
      * let pen = new PhyPen()
      * pen.AirplaneTurning({
-     *   wingWidth = 4,
+     *   wingWidth = 7,
      *   planeRadius = 1,
      *   angle = 35,
      *   angleLabel = 'θ',
@@ -181,7 +181,7 @@ export class PhyPenCls {
      * ```
      */
     AirplaneTurning({
-        wingWidth = 4,
+        wingWidth = 7,
         planeRadius = 1,
         angle = 35,
         angleLabel = 'θ',
@@ -223,6 +223,7 @@ export class PhyPenCls {
         pen.set.textLatex(true)
 
         pen.graph.circle(O, planeRadius)
+        pen.shade.circle(O, planeRadius)
         pen.set.weight(3)
         pen.line(P, Q)
         pen.set.weight()
