@@ -175,7 +175,7 @@ export class PhyPenCls {
      *   weight = 4,
      *   weightLabel = 'mg',
      *   lift = 5,
-     *   liftLabel = 'R',
+     *   liftLabel = 'L',
      *   showAllForces = false
      * })
      * ```
@@ -188,7 +188,7 @@ export class PhyPenCls {
         weight = 4,
         weightLabel = 'mg',
         lift = 5,
-        liftLabel = 'R',
+        liftLabel = 'L',
         showAllForces = false
     }: {
         planeMid?: number

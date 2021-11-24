@@ -40331,12 +40331,12 @@ class PhyPenCls {
      *   weight = 4,
      *   weightLabel = 'mg',
      *   lift = 5,
-     *   liftLabel = 'R',
+     *   liftLabel = 'L',
      *   showAllForces = false
      * })
      * ```
      */
-    AirplaneTurning({ wingWidth = 7, planeRadius = 1, angle = 35, angleLabel = 'θ', weight = 4, weightLabel = 'mg', lift = 5, liftLabel = 'R', showAllForces = false }) {
+    AirplaneTurning({ wingWidth = 7, planeRadius = 1, angle = 35, angleLabel = 'θ', weight = 4, weightLabel = 'mg', lift = 5, liftLabel = 'L', showAllForces = false }) {
         let O = [0, 0];
         // plane centre
         let P = [-wingWidth, 0];
