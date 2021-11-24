@@ -4746,7 +4746,7 @@ declare module "Pen/PhyPen" {
          *   weight = 4,
          *   weightLabel = 'mg',
          *   lift = 5,
-         *   liftLabel = 'R',
+         *   liftLabel = 'L',
          *   showAllForces = false
          * })
          * ```
@@ -4761,6 +4761,35 @@ declare module "Pen/PhyPen" {
             weightLabel?: string;
             lift?: number;
             liftLabel?: string;
+            showAllForces?: boolean;
+        }): void;
+        /**
+         * A conical pendulum.
+         * Circular Motion.
+         * ```
+         * let pen = new PhyPen()
+         * pen.ConicalPendulum({
+         *    bobRadius = 1,
+         *    length = 15,
+         *    angle = 50,
+         *    angleLabel = 'θ',
+         *    weight = 7,
+         *    weightLabel = 'mg',
+         *    tension = 10,
+         *    tensionLabel = 'T',
+         *    showAllForces = false
+         * })
+         * ```
+         */
+        ConicalPendulum({ bobRadius, length, angle, angleLabel, weight, weightLabel, tension, tensionLabel, showAllForces }: {
+            bobRadius?: number;
+            length?: number;
+            angle?: number;
+            angleLabel?: string;
+            weight?: number;
+            weightLabel?: string;
+            tension?: number;
+            tensionLabel?: string;
             showAllForces?: boolean;
         }): void;
     }

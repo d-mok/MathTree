@@ -40376,6 +40376,60 @@ class PhyPenCls {
         pen.autoCrop();
         this.pen = pen;
     }
+    /**
+     * A conical pendulum.
+     * Circular Motion.
+     * ```
+     * let pen = new PhyPen()
+     * pen.ConicalPendulum({
+     *    bobRadius = 1,
+     *    length = 15,
+     *    angle = 50,
+     *    angleLabel = 'θ',
+     *    weight = 7,
+     *    weightLabel = 'mg',
+     *    tension = 10,
+     *    tensionLabel = 'T',
+     *    showAllForces = false
+     * })
+     * ```
+     */
+    ConicalPendulum({ bobRadius = 1, length = 15, angle = 50, angleLabel = 'θ', weight = 7, weightLabel = 'mg', tension = 10, tensionLabel = 'T', showAllForces = false }) {
+        let O = [0, 0];
+        let P = Rotate([0, -length], angle, O);
+        let V = [0, P[1]];
+        // weight
+        let W = MoveY(P, -weight);
+        // tension
+        let T = Move(P, 90 + angle, tension);
+        let pen = new Pen();
+        pen.set.border(0.3);
+        pen.range.capture(O, P, V, ReflectY(P), W);
+        pen.size.lock(1);
+        pen.set.textLatex(true);
+        pen.set.color('grey');
+        pen.plotDash(t => [P[0] * cos(t) + V[0], 1 * sin(t) + V[1]], 0, 360);
+        pen.set.color();
+        pen.dash(O, V);
+        pen.line(O, P);
+        pen.fill.circle(P, bobRadius);
+        pen.angle(P, O, V, angleLabel);
+        if (showAllForces) {
+            // weight
+            pen.set.color('red');
+            pen.set.weight(3);
+            pen.arrow(P, W, weightLabel);
+            // tension
+            pen.set.color('blue');
+            pen.arrow(P, T);
+            pen.set.weight(2);
+            pen.arrowResolve(P, T, 90, angleLabel);
+            pen.set.weight();
+            pen.label.point(T, tensionLabel);
+        }
+        pen.autoCrop();
+        this.pen = pen;
+    }
 }
 exports.PhyPenCls = PhyPenCls;
 
