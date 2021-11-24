@@ -4733,6 +4733,36 @@ declare module "Pen/PhyPen" {
             frictionLabel?: string;
             showAllForces?: boolean;
         }): void;
+        /**
+         * A plane making a turn.
+         * Circular Motion.
+         * ```
+         * let pen = new PhyPen()
+         * pen.AirplaneTurning({
+         *   wingWidth = 3,
+         *   planeRadius = 1,
+         *   angle = 30,
+         *   angleLabel = 'θ',
+         *   weight = 4,
+         *   weightLabel = 'mg',
+         *   lift = 5,
+         *   liftLabel = 'R',
+         *   showAllForces = false
+         * })
+         * ```
+         */
+        AirplaneTurning({ wingWidth, planeRadius, angle, angleLabel, weight, weightLabel, lift, liftLabel, showAllForces }: {
+            planeMid?: number;
+            wingWidth?: number;
+            planeRadius?: number;
+            angle?: number;
+            angleLabel?: string;
+            weight?: number;
+            weightLabel?: string;
+            lift?: number;
+            liftLabel?: string;
+            showAllForces?: boolean;
+        }): void;
     }
 }
 declare module "Pen/index" {

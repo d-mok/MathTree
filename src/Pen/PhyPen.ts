@@ -159,5 +159,97 @@ export class PhyPenCls {
     }
 
 
+
+
+
+    /**
+     * A plane making a turn.
+     * Circular Motion.
+     * ```
+     * let pen = new PhyPen()
+     * pen.AirplaneTurning({
+     *   wingWidth = 3,
+     *   planeRadius = 1,
+     *   angle = 30,
+     *   angleLabel = 'θ',
+     *   weight = 4,
+     *   weightLabel = 'mg',
+     *   lift = 5,
+     *   liftLabel = 'R',
+     *   showAllForces = false
+     * })
+     * ```
+     */
+    AirplaneTurning({
+        wingWidth = 3,
+        planeRadius = 1,
+        angle = 30,
+        angleLabel = 'θ',
+        weight = 4,
+        weightLabel = 'mg',
+        lift = 5,
+        liftLabel = 'R',
+        showAllForces = false
+    }: {
+        planeMid?: number
+        wingWidth?: number
+        planeRadius?: number
+        angle?: number
+        angleLabel?: string
+        weight?: number
+        weightLabel?: string
+        lift?: number
+        liftLabel?: string
+        showAllForces?: boolean
+    }) {
+        let O: Point2D = [0, 0]
+
+        // plane centre
+        let P: Point2D = [- wingWidth, 0]
+        let Q: Point2D = [+ wingWidth, 0];
+
+        [P, Q] = [P, Q].map($ => Rotate($, angle, O))
+
+        // mg
+        let W = MoveY(O, -weight)
+
+        // lift
+        let N = Move(O, 90 + angle, lift)
+
+        let pen = new Pen()
+
+        pen.range.capture(P, Q, W, N)
+        pen.size.lock(1.3)
+        pen.set.labelCenter(O)
+        pen.set.textLatex(true)
+
+        pen.graph.circle(O, planeRadius)
+        pen.line(P, Q)
+        pen.set.dash(true)
+        pen.graph.horizontal(P[1])
+        pen.set.dash()
+        pen.angle(Q, P, [0, P[1]], angleLabel)
+
+        if (showAllForces) {
+            pen.set.weight(3)
+            pen.set.color('red')
+            pen.set.lineLabel('left')
+            pen.arrow(O, W, weightLabel)
+            pen.set.lineLabel()
+
+            pen.set.weight(3)
+            pen.set.color('purple')
+            pen.arrow(O, N)
+            pen.label.point(N, liftLabel)
+            pen.set.weight(2)
+            pen.arrowResolve(O, N, 90, angleLabel)
+        }
+
+        pen.autoCrop()
+        this.pen = pen
+
+    }
+
+
 }
 
