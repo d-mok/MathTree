@@ -24,8 +24,10 @@ globalThis.Pyth = contract(Pyth).sign([owl.positive])
 function PythLeg(c: number, a: number): number {
     return (c ** 2 - a ** 2) ** 0.5
 }
-globalThis.PythLeg = contract(PythLeg).sign([owl.positive])
-
+globalThis.PythLeg = contract(PythLeg).seal({
+    arg: [owl.positive],
+    args: function is_triangle(c, a) { return c >= a }
+})
 
 /**
  * @category Triangle
