@@ -35,6 +35,21 @@ test('CosineLawAngle', () => {
 })
 
 
+test('SineLawLength', () => {
+    expect(SineLawLength(60, 1, 60)).toBeCloseTo(1)
+    expect(SineLawLength(90,2,30)).toBeCloseTo(1)
+})
+
+
+test('SineLawAngle', () => {
+    expect(SineLawAngle(1, 60,1)).toBeCloseTo(60)
+    expect(SineLawAngle(2, 90, 1)).toBeCloseTo(30)
+    expect(() => SineLawAngle(2, 90, 3)).toThrow()
+})
+
+
+
+
 test('Heron', () => {
     expect(Heron(3, 4, 5)).toBeCloseTo(6)
     expect(Heron(1, 1, 1)).toBeCloseTo(0.433012701)

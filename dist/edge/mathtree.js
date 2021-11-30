@@ -36022,6 +36022,31 @@ globalThis.CosineLawAngle = contract(CosineLawAngle).seal({
 });
 /**
  * @category Triangle
+ * @return Find side b by sine law.
+ * ```
+ * SineLawLength(60,1,60) // 1
+ * ```
+ */
+function SineLawLength(A, a, B) {
+    return a / sin(A) * sin(B);
+}
+globalThis.SineLawLength = contract(SineLawLength).sign([owl.positive]);
+/**
+ * @category Triangle
+ * @return Find angle B by sine law.
+ * ```
+ * SineLawAngle(1,60,1) // 60
+ * ```
+ */
+function SineLawAngle(a, A, b) {
+    return arcsin(sin(A) / a * b);
+}
+globalThis.SineLawAngle = contract(SineLawAngle).seal({
+    arg: [owl.positive],
+    args: function is_triangle(a, A, b) { return sin(A) / a * b >= 0 && sin(A) / a * b <= 1; }
+});
+/**
+ * @category Triangle
  * @return Find area by Heron's formula.
  * ```
  * Heron(3,4,5) // 6

@@ -2634,6 +2634,22 @@ declare function CosineLawLength(a: number, b: number, C: number): number;
 declare function CosineLawAngle(a: number, b: number, c: number): number;
 /**
  * @category Triangle
+ * @return Find side b by sine law.
+ * ```
+ * SineLawLength(60,1,60) // 1
+ * ```
+ */
+declare function SineLawLength(A: number, a: number, B: number): number;
+/**
+ * @category Triangle
+ * @return Find angle B by sine law.
+ * ```
+ * SineLawAngle(1,60,1) // 60
+ * ```
+ */
+declare function SineLawAngle(a: number, A: number, b: number): number;
+/**
+ * @category Triangle
  * @return Find area by Heron's formula.
  * ```
  * Heron(3,4,5) // 6
