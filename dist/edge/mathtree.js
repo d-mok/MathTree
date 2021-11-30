@@ -35970,6 +35970,28 @@ globalThis.ConstraintText = contract(ConstraintText)
 
 /**
  * @category Triangle
+ * @return Find c from a and b of a right triangle.
+ * ```
+ * Pyth(3,4) // 5
+ * ```
+ */
+function Pyth(a, b) {
+    return (a ** 2 + b ** 2) ** 0.5;
+}
+globalThis.Pyth = contract(Pyth).sign([owl.positive]);
+/**
+ * @category Triangle
+ * @return Find b from c and a of a right triangle.
+ * ```
+ * PythLeg(5,4) // 3
+ * ```
+ */
+function PythLeg(c, a) {
+    return (c ** 2 - a ** 2) ** 0.5;
+}
+globalThis.PythLeg = contract(PythLeg).sign([owl.positive]);
+/**
+ * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
  * ```
  * CosineLawLength(5,5,60) // 5

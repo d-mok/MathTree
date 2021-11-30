@@ -1,4 +1,32 @@
 
+
+
+/**
+ * @category Triangle
+ * @return Find c from a and b of a right triangle.
+ * ```
+ * Pyth(3,4) // 5
+ * ```
+ */
+function Pyth(a: number, b: number): number {
+    return (a ** 2 + b ** 2) ** 0.5
+}
+globalThis.Pyth = contract(Pyth).sign([owl.positive])
+
+
+/**
+ * @category Triangle
+ * @return Find b from c and a of a right triangle.
+ * ```
+ * PythLeg(5,4) // 3
+ * ```
+ */
+function PythLeg(c: number, a: number): number {
+    return (c ** 2 - a ** 2) ** 0.5
+}
+globalThis.PythLeg = contract(PythLeg).sign([owl.positive])
+
+
 /**
  * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
@@ -59,7 +87,7 @@ globalThis.Heron = contract(Heron).seal({
  * @param fix - Round all return values to integer.
  * @return Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
  * ```
- * TriangleFromVertex([0,0],[4,0],[0,3],false) 
+ * TriangleFromVertex([0,0],[4,0],[0,3],false)
  * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
  * ```
  */
@@ -88,7 +116,7 @@ globalThis.TriangleFromVertex = contract(TriangleFromVertex).sign([owl.point2D, 
  * @param triangle - unknown elements are null.
  * @return Solve a triangle. return the triangle object solved.
  * ```
- * SolveTriangle({sideC:2, sideA:2, sideB:2}) 
+ * SolveTriangle({sideC:2, sideA:2, sideB:2})
  * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
  * SolveTriangle({sideC:3, angleB:90, sideA:4})
  * // {sideC:3, angleB:90, sideA:4, angleC:36.86989765, sideB:5, angleA:53.13010235}
@@ -244,7 +272,7 @@ globalThis.Incentre = contract(Incentre).sign([owl.point2D])
  * @returns the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
  */
 function ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
-    let [x, y] = Orthocentre(A, B, C);
+    let [x, y] = Orthocentre(A, B, C)
     let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
     Should(owl.num(q), 'original orthocentre must be rational')
     return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
@@ -264,7 +292,7 @@ globalThis.ScaleOrthocentreToInt = contract(ScaleOrthocentreToInt).sign([owl.poi
  * @returns the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
  */
 function ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
-    let [x, y] = Circumcentre(A, B, C);
+    let [x, y] = Circumcentre(A, B, C)
     let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
     Should(owl.num(q), 'original circumcentre must be rational')
     return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
@@ -283,7 +311,7 @@ globalThis.ScaleCircumcentreToInt = contract(ScaleCircumcentreToInt).sign([owl.p
  * @returns the scaled points [A,B,C] so that their centroid and themselves becomes integral
  */
 function ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
-    let [x, y] = Centroid(A, B, C);
+    let [x, y] = Centroid(A, B, C)
     let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
     Should(owl.num(q), 'original centroid must be rational')
     return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
@@ -302,7 +330,7 @@ globalThis.ScaleCentroidToInt = contract(ScaleCentroidToInt).sign([owl.point2D])
  * @returns the scaled points [A,B,C] so that their incentre and themselves becomes integral
  */
 function ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
-    let [x, y] = Incentre(A, B, C);
+    let [x, y] = Incentre(A, B, C)
     let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
     Should(owl.num(q), 'original incentre must be rational')
     return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
