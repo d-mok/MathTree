@@ -40152,7 +40152,7 @@ class PenCls extends sapphire_js_1.Pencil {
      * ```
      */
     export(html, placeholder) {
-        return this.exportCanvas(html, placeholder, this.canvas);
+        return this.exportCanvas(html, placeholder, this.cloneCanvas());
     }
     ;
     /**
