@@ -35970,6 +35970,31 @@ globalThis.ConstraintText = contract(ConstraintText)
 
 /**
  * @category Triangle
+ * @return Find c from a and b of a right triangle.
+ * ```
+ * Pyth(3,4) // 5
+ * ```
+ */
+function Pyth(a, b) {
+    return (a ** 2 + b ** 2) ** 0.5;
+}
+globalThis.Pyth = contract(Pyth).sign([owl.positive]);
+/**
+ * @category Triangle
+ * @return Find b from c and a of a right triangle.
+ * ```
+ * PythLeg(5,4) // 3
+ * ```
+ */
+function PythLeg(c, a) {
+    return (c ** 2 - a ** 2) ** 0.5;
+}
+globalThis.PythLeg = contract(PythLeg).seal({
+    arg: [owl.positive],
+    args: function is_triangle(c, a) { return c >= a; }
+});
+/**
+ * @category Triangle
  * @return Find side length c by cosine law. Input sides a,b and angle C.
  * ```
  * CosineLawLength(5,5,60) // 5
@@ -35997,6 +36022,31 @@ function CosineLawAngle(a, b, c) {
 globalThis.CosineLawAngle = contract(CosineLawAngle).seal({
     arg: [owl.positive],
     args: function triangle_ineq(a, b, c) { return owl.triangleSides([a, b, c]); }
+});
+/**
+ * @category Triangle
+ * @return Find side b by sine law.
+ * ```
+ * SineLawLength(60,1,60) // 1
+ * ```
+ */
+function SineLawLength(A, a, B) {
+    return a / sin(A) * sin(B);
+}
+globalThis.SineLawLength = contract(SineLawLength).sign([owl.positive]);
+/**
+ * @category Triangle
+ * @return Find angle B by sine law.
+ * ```
+ * SineLawAngle(1,60,1) // 60
+ * ```
+ */
+function SineLawAngle(a, A, b) {
+    return arcsin(sin(A) / a * b);
+}
+globalThis.SineLawAngle = contract(SineLawAngle).seal({
+    arg: [owl.positive],
+    args: function is_triangle(a, A, b) { return sin(A) / a * b >= 0 && sin(A) / a * b <= 1; }
 });
 /**
  * @category Triangle
@@ -40405,7 +40455,7 @@ class PhyPenCls {
         let pen = new Pen();
         pen.set.border(0.3);
         pen.range.capture(O, P, V, ReflectY(P), W);
-        pen.size.lock(1);
+        pen.size.lock(1.3);
         pen.set.textLatex(true);
         pen.set.color('grey');
         pen.plotDash(t => [P[0] * cos(t) + V[0], 1 * sin(t) + V[1]], 0, 360);
