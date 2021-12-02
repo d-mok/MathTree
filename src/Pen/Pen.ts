@@ -160,7 +160,7 @@ export class PenCls extends Pencil {
          * @param height - The scale of the height, default to be same as width
          * @returns void
          * ```
-         * pen.size.set(0.5,2) 
+         * pen.size.set(0.5,2)
          * // half the standard width, double the standard height
          * ```
          */
@@ -177,7 +177,7 @@ export class PenCls extends Pencil {
          * @param yPPI - The scale per unit y, if not provided, follow x.
          * @returns void
          * ```
-         * pen.size.resolution(0.1,0.2) 
+         * pen.size.resolution(0.1,0.2)
          * // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
          * ```
          */
@@ -195,9 +195,9 @@ export class PenCls extends Pencil {
          * @param height - The max scale of the height, default to be same as width
          * @returns void
          * ```
-         * pen.size.lock(0.5) 
+         * pen.size.lock(0.5)
          * // max at half the standard width and height, with yPPI = xPPI.
-         * pen.size.lock(1, 2) 
+         * pen.size.lock(1, 2)
          * // max at standard width and double standard height, with yPPI = xPPI.
          * ```
          */
@@ -419,7 +419,7 @@ export class PenCls extends Pencil {
          * @param depth - The depth for y-axis, default is 0.5.
          * @returns void
          * ```
-         * pen.set.Projector3D(60, 0.5) 
+         * pen.set.Projector3D(60, 0.5)
          * ```
          */
         projector3D(angle: number = 60, depth: number = 0.5): void {
@@ -1286,7 +1286,7 @@ export class PenCls extends Pencil {
      * @param tick - The number of ticks.
      * @returns void
      * ```
-     * pen.decorate.equalSide([1,0],[3,2],2) 
+     * pen.decorate.equalSide([1,0],[3,2],2)
      * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
      * ```
      */
@@ -1323,7 +1323,7 @@ export class PenCls extends Pencil {
      * @param tick - The number of ticks.
      * @returns void
      * ```
-     * pen.decorate.parallel([1,0],[3,2],2) 
+     * pen.decorate.parallel([1,0],[3,2],2)
      * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
      * ```
      */
@@ -1342,7 +1342,7 @@ export class PenCls extends Pencil {
      * @param size - The size of the mark, in pixel.
      * @returns void
      * ```
-     * pen.decorate.rightAngle([1,0],[0,0],[3,2]) 
+     * pen.decorate.rightAngle([1,0],[0,0],[3,2])
      * // decorate an right-angle AOB
      * ```
      */
@@ -1361,7 +1361,7 @@ export class PenCls extends Pencil {
      * @param position - The position [x,y].
      * @returns void
      * ```
-     * pen.decorate.compass([1,2]) 
+     * pen.decorate.compass([1,2])
      * // decorate a compass at [1,2]
      * ```
      */
@@ -1403,7 +1403,7 @@ export class PenCls extends Pencil {
          * @param radius - The pixel distance to offset from the position.
          * @returns void
          * ```
-         * pen.label.point([1,2],'A',180) 
+         * pen.label.point([1,2],'A',180)
          * // label the point [1,2] as 'A', place the label on the left (180 degree)
          * ```
          */
@@ -1439,7 +1439,7 @@ export class PenCls extends Pencil {
          * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
          * @returns void
          * ```
-         * pen.label.angle([[1,2],[0,0],[-2,1]],'x') 
+         * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
          * // label the angle as 'x'
          * ```
          */
@@ -1505,7 +1505,7 @@ export class PenCls extends Pencil {
          * @param radius - The pixel distance to offset from the position.
          * @returns void
          * ```
-         * pen.label.coordinates([1,2],180) 
+         * pen.label.coordinates([1,2],180)
          * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
          * ```
          */
@@ -1913,7 +1913,7 @@ export class PenCls extends Pencil {
          * ```
          * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
          * let [D,E,F] = [[0,0,3],[1,0,3],[0,1,3]]
-         * pen.d3.envelope([A,B,C],[D,E,F]) 
+         * pen.d3.envelope([A,B,C],[D,E,F])
          * ```
          */
         envelope(lowerBase: Point3D[], upperBase: Point3D[]): [Point3D, Point3D][] {
@@ -2199,12 +2199,12 @@ export class PenCls extends Pencil {
      * @param placeholder - The src field of the image tag to export to.
      * @returns The new html with src field pasted.
      * ```
-     * question = pen.export(question,'imgQ') 
+     * question = pen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
      */
     export(html: string, placeholder: string) {
-        return this.exportCanvas(html, placeholder, this.canvas)
+        return this.exportCanvas(html, placeholder, this.cloneCanvas())
     };
 
 
@@ -2215,7 +2215,7 @@ export class PenCls extends Pencil {
      * @param placeholder - The src field of the image tag to export to.
      * @returns The new html with src field pasted.
      * ```
-     * question = pen.exportTrim(question,'imgQ') 
+     * question = pen.exportTrim(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
      */
