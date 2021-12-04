@@ -29727,730 +29727,6 @@ exports.bool = bool;
 
 /***/ }),
 
-/***/ 3897:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.analyze = void 0;
-const utils_1 = __webpack_require__(4337);
-class Vabe {
-    constructor(symbol) {
-        this.symbol = symbol;
-        this.order = NaN;
-    }
-    reset() {
-        this.order = NaN;
-    }
-    setZero() {
-        this.order = 0;
-    }
-    solve(order) {
-        this.order = order;
-    }
-    solved() {
-        return Number.isFinite(this.order);
-    }
-}
-class Eqube {
-    constructor(vabes) {
-        this.vabes = vabes;
-    }
-    unsolvedVabes() {
-        return this.vabes.filter($ => !$.solved());
-    }
-    solved() {
-        return this.unsolvedVabes().length === 0;
-    }
-    solvable() {
-        return this.unsolvedVabes().length === 1;
-    }
-    orders() {
-        return this.vabes.map($ => $.order);
-    }
-    realOrders() {
-        return this.orders().filter($ => Number.isFinite($));
-    }
-    maxOrder() {
-        const orders = this.realOrders();
-        if (orders.length === 0)
-            return -1;
-        return Math.max(...orders);
-    }
-    nextOrder() {
-        return this.maxOrder() + 1;
-    }
-    forceSolve() {
-        let nextOrder = this.nextOrder();
-        for (let v of this.unsolvedVabes()) {
-            v.solve(nextOrder);
-        }
-    }
-    trySolve() {
-        if (this.solvable()) {
-            this.forceSolve();
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-}
-class PresetAnalyzer {
-    constructor(vabes, equbes, preset) {
-        this.vabes = vabes;
-        this.equbes = equbes;
-        this.preset = preset;
-    }
-    reset() {
-        for (let v of this.vabes) {
-            const isPreset = this.preset.includes(v);
-            isPreset ? v.setZero() : v.reset();
-        }
-    }
-    trySolveNext() {
-        for (let eq of this.equbes) {
-            const t = eq.trySolve();
-            if (t === true)
-                return true;
-        }
-        return false;
-    }
-    exportOrder() {
-        const orders = {};
-        for (let v of this.vabes) {
-            orders[v.symbol] = v.order;
-        }
-        return orders;
-    }
-    /**
-     * Get the tree of the system under current preset.
-     * The process is deterministic, so a unique tree should be obtained.
-     * The tree may or may not be healthy, i.e. fully solved.
-     */
-    getTree() {
-        this.reset();
-        for (let i = 0; i <= this.equbes.length; i++) {
-            const t = this.trySolveNext();
-            if (!t)
-                break;
-        }
-        return this.exportOrder();
-    }
-}
-class Analyzer {
-    constructor(vabes, equbes) {
-        this.vabes = vabes;
-        this.equbes = equbes;
-    }
-    allVabeCombinations() {
-        const n = this.vabes.length - this.equbes.length;
-        return (0, utils_1.combinations)(this.vabes, n);
-    }
-    getTrees() {
-        const combs = this.allVabeCombinations();
-        const ts = [];
-        for (let c of combs) {
-            const ana = new PresetAnalyzer(this.vabes, this.equbes, c);
-            ts.push(ana.getTree());
-        }
-        return ts;
-    }
-    isHealthy(tree) {
-        // return true
-        const orders = Object.values(tree);
-        return orders.every($ => Number.isFinite($));
-    }
-    /**
-     * Get all the healthy trees generated from all possible 'given variables' combinations.
-     */
-    getHealthyTrees() {
-        return this.getTrees().filter($ => this.isHealthy($));
-    }
-}
-/**
- * Get all the healthy trees of this system generated from all possible 'given variables' combinations.
- */
-function analyze(fs) {
-    const symbols = (0, utils_1.getAllVars)(fs);
-    const vabes = symbols.map($ => new Vabe($));
-    const equbes = [];
-    for (let f of fs) {
-        let syms = (0, utils_1.getVars)(f);
-        const vs = syms.map($ => vabes.find(_ => _.symbol === $));
-        let eq = new Eqube(vs);
-        equbes.push(eq);
-    }
-    let analyzer = new Analyzer(vabes, equbes);
-    return analyzer.getHealthyTrees();
-}
-exports.analyze = analyze;
-//# sourceMappingURL=analyze.js.map
-
-/***/ }),
-
-/***/ 8723:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.readTree = exports.solvingSymbol = exports.solutionFlow = exports.analyze = void 0;
-var analyze_1 = __webpack_require__(3897);
-Object.defineProperty(exports, "analyze", ({ enumerable: true, get: function () { return analyze_1.analyze; } }));
-var reader_1 = __webpack_require__(9267);
-Object.defineProperty(exports, "solutionFlow", ({ enumerable: true, get: function () { return reader_1.solutionFlow; } }));
-Object.defineProperty(exports, "solvingSymbol", ({ enumerable: true, get: function () { return reader_1.solvingSymbol; } }));
-Object.defineProperty(exports, "readTree", ({ enumerable: true, get: function () { return reader_1.readTree; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 9267:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.readTree = exports.solvingSymbol = exports.solutionFlow = void 0;
-const utils_1 = __webpack_require__(4337);
-class TreeReader {
-    constructor(tree) {
-        this.tree = tree;
-        this.symbols = Object.keys(tree);
-        this.orders = Object.values(this.tree);
-        this.realOrders = this.orders.filter($ => Number.isFinite($));
-        this.maxOrder = Math.max(...this.realOrders);
-    }
-    symbolsWithOrder(order) {
-        return this.symbols.filter($ => this.tree[$] === order);
-    }
-    givenSymbols() {
-        return this.symbolsWithOrder(0);
-    }
-    topSymbols() {
-        return this.symbolsWithOrder(this.maxOrder);
-    }
-    stepSymbols() {
-        const arr = [];
-        for (let i = 1; i < this.maxOrder; i++) {
-            arr.push(...this.symbolsWithOrder(i));
-        }
-        return arr;
-    }
-    solvedSymbols() {
-        return [...this.stepSymbols(), ...this.topSymbols()];
-    }
-}
-class EquationReader {
-    constructor(f, tree) {
-        this.f = f;
-        this.tree = tree;
-        this.myTree = {};
-        this.symbols = (0, utils_1.getVars)(f);
-        for (let k in tree) {
-            if (this.symbols.includes(k))
-                this.myTree[k] = tree[k];
-        }
-        this.reader = new TreeReader(this.myTree);
-    }
-    /**
-     * Is this equation actively solved, or passively satisfied?
-     */
-    isActiveSolve() {
-        const m = this.maxOrder();
-        return m !== 0 && this.symbolsWithOrder(m).length === 1;
-    }
-    maxOrder() {
-        return this.reader.maxOrder;
-    }
-    symbolsWithOrder(order) {
-        return this.symbols.filter($ => this.tree[$] === order);
-    }
-    /**
-     * Which symbol is solved using this equation?
-     */
-    solvingSymbol() {
-        if (!this.isActiveSolve())
-            return undefined;
-        return this.reader.topSymbols()[0];
-    }
-    /**
-     * Which symbols are given in this equation?
-     */
-    givenSymbols() {
-        return this.reader.givenSymbols();
-    }
-    /**
-     * Which symbols are the steps when solving this equation?
-     */
-    stepSymbols() {
-        return this.reader.stepSymbols();
-    }
-}
-class Tracer {
-    constructor(tree, eqReaders) {
-        this.tree = tree;
-        this.eqReaders = eqReaders;
-        this.symbols = Object.keys(this.tree);
-    }
-    /**
-     * Which equation is used solve this symbol in the final step?
-     */
-    revealer(symbol) {
-        for (let eq of this.eqReaders) {
-            if (eq.solvingSymbol() === symbol)
-                return eq;
-        }
-        return undefined;
-    }
-    /**
-     * In the revealer of this symbol, what symbols are the step symbols?
-     */
-    prerequisites(symbol) {
-        return this.revealer(symbol)?.stepSymbols() ?? [];
-    }
-    /**
-     * Get the ordered list of equation in the sequential step when solving for this symbol.
-     */
-    flowForOne(symbol) {
-        const order = this.tree[symbol];
-        if (order === 0)
-            return [];
-        if (order === 1)
-            return [this.revealer(symbol)];
-        let eqs = [];
-        for (let s of this.prerequisites(symbol)) {
-            eqs.push(...this.flowForOne(s));
-        }
-        eqs.push(this.revealer(symbol));
-        return [...new Set(eqs)];
-    }
-    /**
-     * Get the ordered list of equation in the sequential step when solving for these symbols.
-     */
-    flow(unknowns) {
-        let eqs = [];
-        for (let u of unknowns) {
-            eqs.push(...this.flowForOne(u));
-        }
-        return [...new Set(eqs)];
-    }
-}
-/**
- * Get the ordered list of function in the sequential step when solving for these symbols under the given tree.
- */
-function solutionFlow(fs, tree, unknownSymbols) {
-    const eqReaders = fs.map($ => new EquationReader($, tree));
-    const tracer = new Tracer(tree, eqReaders);
-    let flow = tracer.flow(unknownSymbols);
-    return flow.map($ => $.f);
-}
-exports.solutionFlow = solutionFlow;
-/**
- * Which symbol is solved using this function under the given tree?
- */
-function solvingSymbol(f, tree) {
-    const eqReader = new EquationReader(f, tree);
-    return eqReader.solvingSymbol();
-}
-exports.solvingSymbol = solvingSymbol;
-/**
- * Read basic info of a tree.
- */
-function readTree(tree) {
-    const reader = new TreeReader(tree);
-    return {
-        maxOrder: reader.maxOrder,
-        givens: reader.givenSymbols(),
-        tops: reader.topSymbols(),
-        steps: reader.stepSymbols(),
-        solved: reader.solvedSymbols()
-    };
-}
-exports.readTree = readTree;
-//# sourceMappingURL=reader.js.map
-
-/***/ }),
-
-/***/ 9733:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Bisection = void 0;
-function randomUniform(range) {
-    const [min, max] = range;
-    return Math.random() * (max - min) + min;
-}
-function randomLog(range) {
-    const [min, max] = range;
-    const logmin = Math.log10(min);
-    const logmax = Math.log10(max);
-    const e = randomUniform([logmin, logmax]);
-    return 10 ** e;
-}
-function randomLogNeg(range) {
-    const [minNeg, maxNeg] = range;
-    const min = -maxNeg;
-    const max = -minNeg;
-    return -randomLog([min, max]);
-}
-function randomValue(range) {
-    let [min, max] = range;
-    if (min > 0 && max > 0)
-        return randomLog(range);
-    if (min < 0 && max < 0)
-        return randomLogNeg(range);
-    return randomUniform(range);
-}
-function mid(a, b) {
-    return a.map(($, i) => ($ + b[i]) / 2);
-}
-function equal(a, b) {
-    return a.every(($, i) => $ === b[i])
-        && a.length === b.length;
-}
-class Bisection {
-    constructor(equation, ranges) {
-        this.equation = equation;
-        this.ranges = ranges;
-        this.a = []; // positive point
-        this.b = []; // negative point
-        this.precision = 10;
-    }
-    randomPoint() {
-        return this.ranges.map(randomValue);
-    }
-    randomSignedPoint(sign) {
-        for (let i = 0; i < 100; i++) {
-            const point = this.randomPoint();
-            const value = this.equation(...point);
-            const sameSign = value * sign > 0;
-            if (sameSign)
-                return point;
-        }
-        console.error("[bisection] No signed point in ranges: " + JSON.stringify(this.ranges));
-        throw '';
-    }
-    intialize() {
-        this.a = this.randomSignedPoint(1);
-        this.b = this.randomSignedPoint(-1);
-    }
-    iterate() {
-        const m = mid(this.a, this.b);
-        const M = this.equation(...m);
-        if (!Number.isFinite(M)) {
-            console.error('[bisection] The function value is not a finite number!');
-            throw '';
-        }
-        if (M >= 0)
-            this.a = m;
-        if (M <= 0)
-            this.b = m;
-    }
-    done() {
-        const precision_a = this.a.map($ => $.toPrecision(this.precision));
-        const precision_b = this.b.map($ => $.toPrecision(this.precision));
-        return equal(precision_a, precision_b);
-    }
-    assertRange() {
-        const pass = this.ranges.some(([min, max]) => max > min);
-        if (!pass) {
-            console.error('[bisection] all variables are locked already');
-            throw '';
-        }
-    }
-    run() {
-        this.assertRange();
-        this.intialize();
-        for (let i = 0; i < 100; i++) {
-            this.iterate();
-            if (this.done())
-                return [...this.a];
-        }
-        console.error('[bisection] fail to find tolarable solution after 100 iteration');
-        throw '';
-    }
-    exec() {
-        try {
-            return this.run();
-        }
-        catch {
-            throw '[bisection] An error occur during bisection.';
-        }
-    }
-}
-exports.Bisection = Bisection;
-//# sourceMappingURL=bisection.js.map
-
-/***/ }),
-
-/***/ 712:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.bisect = void 0;
-const utils_1 = __webpack_require__(4337);
-const bisection_1 = __webpack_require__(9733);
-function toObject(keys, vals) {
-    const obj = {};
-    for (let i = 0; i < keys.length; i++) {
-        obj[keys[i]] = vals[i];
-    }
-    return obj;
-}
-function narrowRange(ranges, preset) {
-    const rngs = { ...ranges };
-    for (let k in preset) {
-        const val = preset[k];
-        if (k in rngs && Number.isFinite(val))
-            rngs[k] = [val, val];
-    }
-    return rngs;
-}
-/**
- * Find a solution of the function under these ranges and presets.
- */
-function bisect(f, ranges, preset) {
-    const vars = (0, utils_1.getVars)(f);
-    const narrowedRngs = narrowRange(ranges, preset);
-    const bounds = vars.map($ => narrowedRngs[$]);
-    const bi = new bisection_1.Bisection(f, bounds);
-    const sol = bi.exec();
-    return toObject(vars, sol);
-}
-exports.bisect = bisect;
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 7873:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Fitter = void 0;
-const Bisection_1 = __webpack_require__(712);
-const utils_1 = __webpack_require__(4337);
-const searcher_1 = __webpack_require__(5746);
-class Fitter {
-    constructor(fs, ranges, preset) {
-        this.fs = fs;
-        this.ranges = ranges;
-        this.preset = preset;
-        this.vals = {};
-        this.allVariables = (0, utils_1.getAllVars)(fs);
-        this.reset();
-    }
-    reset() {
-        this.vals = {};
-        this.allVariables.forEach($ => this.vals[$] = NaN);
-        this.setVals(this.preset);
-    }
-    setVals(vals) {
-        this.vals = { ...this.vals, ...vals };
-    }
-    fitOne(f) {
-        const sol = (0, Bisection_1.bisect)(f, this.ranges, this.vals);
-        this.setVals(sol);
-    }
-    /**
-     * Try to fit the system by fitting the equations one by one in a fittable order.
-     * To avoid accidental range conflict, 10 retries are allowed.
-     */
-    fit() {
-        const orderedFS = (0, searcher_1.getFittableOrder)(this.fs, this.preset);
-        if (orderedFS === undefined)
-            throw 'There is no fittable order for this system.';
-        for (let i = 0; i < 10; i++) {
-            try {
-                this.reset();
-                orderedFS.forEach($ => this.fitOne($));
-                return this.vals;
-            }
-            catch {
-            }
-        }
-        throw 'The system is not fittable in given range.';
-    }
-}
-exports.Fitter = Fitter;
-//# sourceMappingURL=fitter.js.map
-
-/***/ }),
-
-/***/ 4335:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.fit = void 0;
-const fitter_1 = __webpack_require__(7873);
-/**
- * Fit the system of equations under given ranges and presets.
- */
-function fit(fs, ranges, preset) {
-    let fitter = new fitter_1.Fitter(fs, ranges, preset);
-    return fitter.fit();
-}
-exports.fit = fit;
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 5746:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getFittableOrder = void 0;
-const utils_1 = __webpack_require__(4337);
-class Searcher {
-    constructor(fs, givens = []) {
-        this.fs = fs;
-        this.givens = givens;
-        this.founds = new Set();
-    }
-    reset() {
-        this.founds = new Set(this.givens);
-    }
-    /**
-     * A function is full if all variables in it are found.
-     */
-    isFull(f) {
-        return (0, utils_1.getVars)(f).every($ => this.founds.has($));
-    }
-    fit(f) {
-        (0, utils_1.getVars)(f).forEach($ => this.founds.add($));
-    }
-    /**
-     * Check if the functions can be fitted one by one without being full.
-     */
-    isFittableOrder(fs) {
-        this.reset();
-        for (let f of fs) {
-            if (this.isFull(f))
-                return false;
-            this.fit(f);
-        }
-        return true;
-    }
-    /**
-     * Randomly get a fittable order under current presets.
-     */
-    getFittableOrder() {
-        for (let fs of (0, utils_1.permute)(this.fs)) {
-            if (this.isFittableOrder(fs))
-                return fs;
-        }
-        return undefined;
-    }
-}
-/**
- * Randomly get a fittable order for this set of functions under these presets.
- * If no fittable order exists, return undefined.
- */
-function getFittableOrder(fs, preset) {
-    const givens = [];
-    for (let k in preset) {
-        let v = preset[k];
-        if (Number.isFinite(v))
-            givens.push(k);
-    }
-    const sr = new Searcher(fs, givens);
-    return sr.getFittableOrder();
-}
-exports.getFittableOrder = getFittableOrder;
-//# sourceMappingURL=searcher.js.map
-
-/***/ }),
-
-/***/ 7561:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.readTree = exports.solvingSymbol = exports.solutionFlow = exports.analyze = exports.fit = void 0;
-var EquationFitter_1 = __webpack_require__(4335);
-Object.defineProperty(exports, "fit", ({ enumerable: true, get: function () { return EquationFitter_1.fit; } }));
-var EquationAnalyzer_1 = __webpack_require__(8723);
-Object.defineProperty(exports, "analyze", ({ enumerable: true, get: function () { return EquationAnalyzer_1.analyze; } }));
-Object.defineProperty(exports, "solutionFlow", ({ enumerable: true, get: function () { return EquationAnalyzer_1.solutionFlow; } }));
-Object.defineProperty(exports, "solvingSymbol", ({ enumerable: true, get: function () { return EquationAnalyzer_1.solvingSymbol; } }));
-Object.defineProperty(exports, "readTree", ({ enumerable: true, get: function () { return EquationAnalyzer_1.readTree; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 4337:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.combinations = exports.permute = exports.getAllVars = exports.getVars = void 0;
-function getVars(func) {
-    const fnStr = func.toString();
-    return fnStr
-        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
-        .replaceAll(" ", "")
-        .split(",");
-}
-exports.getVars = getVars;
-function getAllVars(fs) {
-    const vars = fs.map($ => getVars($)).flat();
-    return [...new Set(vars)];
-}
-exports.getAllVars = getAllVars;
-function permute(arr) {
-    let result = [];
-    if (arr.length === 0)
-        return [];
-    if (arr.length === 1)
-        return [arr];
-    for (let i = 0; i < arr.length; i++) {
-        const current = arr[i];
-        const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];
-        const remainingPermuted = permute(remaining);
-        for (let permuted of remainingPermuted) {
-            result.push([current, ...permuted]);
-        }
-    }
-    return result;
-}
-exports.permute = permute;
-function combinations(arr, k) {
-    if (k > arr.length || k <= 0)
-        return [];
-    if (k === arr.length)
-        return [[...arr]];
-    if (k === 1)
-        return arr.map($ => [$]);
-    const combs = [];
-    let tail_combs = [];
-    for (let i = 0; i <= arr.length - k + 1; i++) {
-        let tail = arr.slice(i + 1);
-        tail_combs = combinations(tail, k - 1);
-        for (let j = 0; j < tail_combs.length; j++) {
-            combs.push([arr[i], ...tail_combs[j]]);
-        }
-    }
-    return combs;
-}
-exports.combinations = combinations;
-//# sourceMappingURL=utils.js.map
-
-/***/ }),
-
 /***/ 6715:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -31843,7 +31119,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EquSystem = void 0;
 const variable_1 = __webpack_require__(7515);
 const latex_1 = __webpack_require__(1838);
-const taylor_js_1 = __webpack_require__(7561);
+const gauss_1 = __webpack_require__(6912);
 class EquSystem {
     constructor(variables, equations) {
         this.variables = variables;
@@ -31851,7 +31127,7 @@ class EquSystem {
         this.fs = equations.map($ => $.zeroFunc);
     }
     fit() {
-        let vals = (0, taylor_js_1.fit)(this.fs, this.variables.rangeObj(), this.variables.valObj());
+        let vals = (0, gauss_1.fit)(this.fs, this.variables.rangeObj(), this.variables.valObj());
         this.variables.setVal(vals);
     }
     fitAgain(vars) {
@@ -31864,11 +31140,11 @@ class EquSystem {
         return new variable_1.Variables(...vars);
     }
     getFullTree() {
-        let trees = RndShuffle(...(0, taylor_js_1.analyze)(this.fs));
+        let trees = RndShuffle(...(0, gauss_1.analyze)(this.fs));
         for (let tree of trees) {
-            let info = (0, taylor_js_1.readTree)(tree);
+            let info = (0, gauss_1.readTree)(tree);
             for (let top of RndShuffle(...info.tops)) {
-                let flow = (0, taylor_js_1.solutionFlow)(this.fs, tree, [top]);
+                let flow = (0, gauss_1.solutionFlow)(this.fs, tree, [top]);
                 if (flow.length === this.fs.length)
                     return {
                         tree,
@@ -42014,6 +41290,730 @@ function getClassStaticNames(constructor) {
 }
 exports.getClassStaticNames = getClassStaticNames;
 //# sourceMappingURL=util.js.map
+
+/***/ }),
+
+/***/ 3631:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.analyze = void 0;
+const utils_1 = __webpack_require__(9407);
+class Vabe {
+    constructor(symbol) {
+        this.symbol = symbol;
+        this.order = NaN;
+    }
+    reset() {
+        this.order = NaN;
+    }
+    setZero() {
+        this.order = 0;
+    }
+    solve(order) {
+        this.order = order;
+    }
+    solved() {
+        return Number.isFinite(this.order);
+    }
+}
+class Eqube {
+    constructor(vabes) {
+        this.vabes = vabes;
+    }
+    unsolvedVabes() {
+        return this.vabes.filter($ => !$.solved());
+    }
+    solved() {
+        return this.unsolvedVabes().length === 0;
+    }
+    solvable() {
+        return this.unsolvedVabes().length === 1;
+    }
+    orders() {
+        return this.vabes.map($ => $.order);
+    }
+    realOrders() {
+        return this.orders().filter($ => Number.isFinite($));
+    }
+    maxOrder() {
+        const orders = this.realOrders();
+        if (orders.length === 0)
+            return -1;
+        return Math.max(...orders);
+    }
+    nextOrder() {
+        return this.maxOrder() + 1;
+    }
+    forceSolve() {
+        let nextOrder = this.nextOrder();
+        for (let v of this.unsolvedVabes()) {
+            v.solve(nextOrder);
+        }
+    }
+    trySolve() {
+        if (this.solvable()) {
+            this.forceSolve();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+}
+class PresetAnalyzer {
+    constructor(vabes, equbes, preset) {
+        this.vabes = vabes;
+        this.equbes = equbes;
+        this.preset = preset;
+    }
+    reset() {
+        for (let v of this.vabes) {
+            const isPreset = this.preset.includes(v);
+            isPreset ? v.setZero() : v.reset();
+        }
+    }
+    trySolveNext() {
+        for (let eq of this.equbes) {
+            const t = eq.trySolve();
+            if (t === true)
+                return true;
+        }
+        return false;
+    }
+    exportOrder() {
+        const orders = {};
+        for (let v of this.vabes) {
+            orders[v.symbol] = v.order;
+        }
+        return orders;
+    }
+    /**
+     * Get the tree of the system under current preset.
+     * The process is deterministic, so a unique tree should be obtained.
+     * The tree may or may not be healthy, i.e. fully solved.
+     */
+    getTree() {
+        this.reset();
+        for (let i = 0; i <= this.equbes.length; i++) {
+            const t = this.trySolveNext();
+            if (!t)
+                break;
+        }
+        return this.exportOrder();
+    }
+}
+class Analyzer {
+    constructor(vabes, equbes) {
+        this.vabes = vabes;
+        this.equbes = equbes;
+    }
+    allVabeCombinations() {
+        const n = this.vabes.length - this.equbes.length;
+        return (0, utils_1.combinations)(this.vabes, n);
+    }
+    getTrees() {
+        const combs = this.allVabeCombinations();
+        const ts = [];
+        for (let c of combs) {
+            const ana = new PresetAnalyzer(this.vabes, this.equbes, c);
+            ts.push(ana.getTree());
+        }
+        return ts;
+    }
+    isHealthy(tree) {
+        // return true
+        const orders = Object.values(tree);
+        return orders.every($ => Number.isFinite($));
+    }
+    /**
+     * Get all the healthy trees generated from all possible 'given variables' combinations.
+     */
+    getHealthyTrees() {
+        return this.getTrees().filter($ => this.isHealthy($));
+    }
+}
+/**
+ * Get all the healthy trees of this system generated from all possible 'given variables' combinations.
+ */
+function analyze(fs) {
+    const symbols = (0, utils_1.getAllVars)(fs);
+    const vabes = symbols.map($ => new Vabe($));
+    const equbes = [];
+    for (let f of fs) {
+        let syms = (0, utils_1.getVars)(f);
+        const vs = syms.map($ => vabes.find(_ => _.symbol === $));
+        let eq = new Eqube(vs);
+        equbes.push(eq);
+    }
+    let analyzer = new Analyzer(vabes, equbes);
+    return analyzer.getHealthyTrees();
+}
+exports.analyze = analyze;
+//# sourceMappingURL=analyze.js.map
+
+/***/ }),
+
+/***/ 8476:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.readTree = exports.solvingSymbol = exports.solutionFlow = exports.analyze = void 0;
+var analyze_1 = __webpack_require__(3631);
+Object.defineProperty(exports, "analyze", ({ enumerable: true, get: function () { return analyze_1.analyze; } }));
+var reader_1 = __webpack_require__(3323);
+Object.defineProperty(exports, "solutionFlow", ({ enumerable: true, get: function () { return reader_1.solutionFlow; } }));
+Object.defineProperty(exports, "solvingSymbol", ({ enumerable: true, get: function () { return reader_1.solvingSymbol; } }));
+Object.defineProperty(exports, "readTree", ({ enumerable: true, get: function () { return reader_1.readTree; } }));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 3323:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.readTree = exports.solvingSymbol = exports.solutionFlow = void 0;
+const utils_1 = __webpack_require__(9407);
+class TreeReader {
+    constructor(tree) {
+        this.tree = tree;
+        this.symbols = Object.keys(tree);
+        this.orders = Object.values(this.tree);
+        this.realOrders = this.orders.filter($ => Number.isFinite($));
+        this.maxOrder = Math.max(...this.realOrders);
+    }
+    symbolsWithOrder(order) {
+        return this.symbols.filter($ => this.tree[$] === order);
+    }
+    givenSymbols() {
+        return this.symbolsWithOrder(0);
+    }
+    topSymbols() {
+        return this.symbolsWithOrder(this.maxOrder);
+    }
+    stepSymbols() {
+        const arr = [];
+        for (let i = 1; i < this.maxOrder; i++) {
+            arr.push(...this.symbolsWithOrder(i));
+        }
+        return arr;
+    }
+    solvedSymbols() {
+        return [...this.stepSymbols(), ...this.topSymbols()];
+    }
+}
+class EquationReader {
+    constructor(f, tree) {
+        this.f = f;
+        this.tree = tree;
+        this.myTree = {};
+        this.symbols = (0, utils_1.getVars)(f);
+        for (let k in tree) {
+            if (this.symbols.includes(k))
+                this.myTree[k] = tree[k];
+        }
+        this.reader = new TreeReader(this.myTree);
+    }
+    /**
+     * Is this equation actively solved, or passively satisfied?
+     */
+    isActiveSolve() {
+        const m = this.maxOrder();
+        return m !== 0 && this.symbolsWithOrder(m).length === 1;
+    }
+    maxOrder() {
+        return this.reader.maxOrder;
+    }
+    symbolsWithOrder(order) {
+        return this.symbols.filter($ => this.tree[$] === order);
+    }
+    /**
+     * Which symbol is solved using this equation?
+     */
+    solvingSymbol() {
+        if (!this.isActiveSolve())
+            return undefined;
+        return this.reader.topSymbols()[0];
+    }
+    /**
+     * Which symbols are given in this equation?
+     */
+    givenSymbols() {
+        return this.reader.givenSymbols();
+    }
+    /**
+     * Which symbols are the steps when solving this equation?
+     */
+    stepSymbols() {
+        return this.reader.stepSymbols();
+    }
+}
+class Tracer {
+    constructor(tree, eqReaders) {
+        this.tree = tree;
+        this.eqReaders = eqReaders;
+        this.symbols = Object.keys(this.tree);
+    }
+    /**
+     * Which equation is used solve this symbol in the final step?
+     */
+    revealer(symbol) {
+        for (let eq of this.eqReaders) {
+            if (eq.solvingSymbol() === symbol)
+                return eq;
+        }
+        return undefined;
+    }
+    /**
+     * In the revealer of this symbol, what symbols are the step symbols?
+     */
+    prerequisites(symbol) {
+        return this.revealer(symbol)?.stepSymbols() ?? [];
+    }
+    /**
+     * Get the ordered list of equation in the sequential step when solving for this symbol.
+     */
+    flowForOne(symbol) {
+        const order = this.tree[symbol];
+        if (order === 0)
+            return [];
+        if (order === 1)
+            return [this.revealer(symbol)];
+        let eqs = [];
+        for (let s of this.prerequisites(symbol)) {
+            eqs.push(...this.flowForOne(s));
+        }
+        eqs.push(this.revealer(symbol));
+        return [...new Set(eqs)];
+    }
+    /**
+     * Get the ordered list of equation in the sequential step when solving for these symbols.
+     */
+    flow(unknowns) {
+        let eqs = [];
+        for (let u of unknowns) {
+            eqs.push(...this.flowForOne(u));
+        }
+        return [...new Set(eqs)];
+    }
+}
+/**
+ * Get the ordered list of function in the sequential step when solving for these symbols under the given tree.
+ */
+function solutionFlow(fs, tree, unknownSymbols) {
+    const eqReaders = fs.map($ => new EquationReader($, tree));
+    const tracer = new Tracer(tree, eqReaders);
+    let flow = tracer.flow(unknownSymbols);
+    return flow.map($ => $.f);
+}
+exports.solutionFlow = solutionFlow;
+/**
+ * Which symbol is solved using this function under the given tree?
+ */
+function solvingSymbol(f, tree) {
+    const eqReader = new EquationReader(f, tree);
+    return eqReader.solvingSymbol();
+}
+exports.solvingSymbol = solvingSymbol;
+/**
+ * Read basic info of a tree.
+ */
+function readTree(tree) {
+    const reader = new TreeReader(tree);
+    return {
+        maxOrder: reader.maxOrder,
+        givens: reader.givenSymbols(),
+        tops: reader.topSymbols(),
+        steps: reader.stepSymbols(),
+        solved: reader.solvedSymbols()
+    };
+}
+exports.readTree = readTree;
+//# sourceMappingURL=reader.js.map
+
+/***/ }),
+
+/***/ 7017:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Bisection = void 0;
+function randomUniform(range) {
+    const [min, max] = range;
+    return Math.random() * (max - min) + min;
+}
+function randomLog(range) {
+    const [min, max] = range;
+    const logmin = Math.log10(min);
+    const logmax = Math.log10(max);
+    const e = randomUniform([logmin, logmax]);
+    return 10 ** e;
+}
+function randomLogNeg(range) {
+    const [minNeg, maxNeg] = range;
+    const min = -maxNeg;
+    const max = -minNeg;
+    return -randomLog([min, max]);
+}
+function randomValue(range) {
+    let [min, max] = range;
+    if (min > 0 && max > 0)
+        return randomLog(range);
+    if (min < 0 && max < 0)
+        return randomLogNeg(range);
+    return randomUniform(range);
+}
+function mid(a, b) {
+    return a.map(($, i) => ($ + b[i]) / 2);
+}
+function equal(a, b) {
+    return a.every(($, i) => $ === b[i])
+        && a.length === b.length;
+}
+class Bisection {
+    constructor(equation, ranges) {
+        this.equation = equation;
+        this.ranges = ranges;
+        this.a = []; // positive point
+        this.b = []; // negative point
+        this.precision = 10;
+    }
+    randomPoint() {
+        return this.ranges.map(randomValue);
+    }
+    randomSignedPoint(sign) {
+        for (let i = 0; i < 100; i++) {
+            const point = this.randomPoint();
+            const value = this.equation(...point);
+            const sameSign = value * sign > 0;
+            if (sameSign)
+                return point;
+        }
+        console.error("[bisection] No signed point in ranges: " + JSON.stringify(this.ranges));
+        throw '';
+    }
+    intialize() {
+        this.a = this.randomSignedPoint(1);
+        this.b = this.randomSignedPoint(-1);
+    }
+    iterate() {
+        const m = mid(this.a, this.b);
+        const M = this.equation(...m);
+        if (!Number.isFinite(M)) {
+            console.error('[bisection] The function value is not a finite number!');
+            throw '';
+        }
+        if (M >= 0)
+            this.a = m;
+        if (M <= 0)
+            this.b = m;
+    }
+    done() {
+        const precision_a = this.a.map($ => $.toPrecision(this.precision));
+        const precision_b = this.b.map($ => $.toPrecision(this.precision));
+        return equal(precision_a, precision_b);
+    }
+    assertRange() {
+        const pass = this.ranges.some(([min, max]) => max > min);
+        if (!pass) {
+            console.error('[bisection] all variables are locked already');
+            throw '';
+        }
+    }
+    run() {
+        this.assertRange();
+        this.intialize();
+        for (let i = 0; i < 100; i++) {
+            this.iterate();
+            if (this.done())
+                return [...this.a];
+        }
+        console.error('[bisection] fail to find tolarable solution after 100 iteration');
+        throw '';
+    }
+    exec() {
+        try {
+            return this.run();
+        }
+        catch {
+            throw '[bisection] An error occur during bisection.';
+        }
+    }
+}
+exports.Bisection = Bisection;
+//# sourceMappingURL=bisection.js.map
+
+/***/ }),
+
+/***/ 4665:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.bisect = void 0;
+const utils_1 = __webpack_require__(9407);
+const bisection_1 = __webpack_require__(7017);
+function toObject(keys, vals) {
+    const obj = {};
+    for (let i = 0; i < keys.length; i++) {
+        obj[keys[i]] = vals[i];
+    }
+    return obj;
+}
+function narrowRange(ranges, preset) {
+    const rngs = { ...ranges };
+    for (let k in preset) {
+        const val = preset[k];
+        if (k in rngs && Number.isFinite(val))
+            rngs[k] = [val, val];
+    }
+    return rngs;
+}
+/**
+ * Find a solution of the function under these ranges and presets.
+ */
+function bisect(f, ranges, preset) {
+    const vars = (0, utils_1.getVars)(f);
+    const narrowedRngs = narrowRange(ranges, preset);
+    const bounds = vars.map($ => narrowedRngs[$]);
+    const bi = new bisection_1.Bisection(f, bounds);
+    const sol = bi.exec();
+    return toObject(vars, sol);
+}
+exports.bisect = bisect;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 4626:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Fitter = void 0;
+const Bisection_1 = __webpack_require__(4665);
+const utils_1 = __webpack_require__(9407);
+const searcher_1 = __webpack_require__(8125);
+class Fitter {
+    constructor(fs, ranges, preset) {
+        this.fs = fs;
+        this.ranges = ranges;
+        this.preset = preset;
+        this.vals = {};
+        this.allVariables = (0, utils_1.getAllVars)(fs);
+        this.reset();
+    }
+    reset() {
+        this.vals = {};
+        this.allVariables.forEach($ => this.vals[$] = NaN);
+        this.setVals(this.preset);
+    }
+    setVals(vals) {
+        this.vals = { ...this.vals, ...vals };
+    }
+    fitOne(f) {
+        const sol = (0, Bisection_1.bisect)(f, this.ranges, this.vals);
+        this.setVals(sol);
+    }
+    /**
+     * Try to fit the system by fitting the equations one by one in a fittable order.
+     * To avoid accidental range conflict, 10 retries are allowed.
+     */
+    fit() {
+        const orderedFS = (0, searcher_1.getFittableOrder)(this.fs, this.preset);
+        if (orderedFS === undefined)
+            throw 'There is no fittable order for this system.';
+        for (let i = 0; i < 10; i++) {
+            try {
+                this.reset();
+                orderedFS.forEach($ => this.fitOne($));
+                return this.vals;
+            }
+            catch {
+            }
+        }
+        throw 'The system is not fittable in given range.';
+    }
+}
+exports.Fitter = Fitter;
+//# sourceMappingURL=fitter.js.map
+
+/***/ }),
+
+/***/ 2380:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.fit = void 0;
+const fitter_1 = __webpack_require__(4626);
+/**
+ * Fit the system of equations under given ranges and presets.
+ */
+function fit(fs, ranges, preset) {
+    let fitter = new fitter_1.Fitter(fs, ranges, preset);
+    return fitter.fit();
+}
+exports.fit = fit;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 8125:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getFittableOrder = void 0;
+const utils_1 = __webpack_require__(9407);
+class Searcher {
+    constructor(fs, givens = []) {
+        this.fs = fs;
+        this.givens = givens;
+        this.founds = new Set();
+    }
+    reset() {
+        this.founds = new Set(this.givens);
+    }
+    /**
+     * A function is full if all variables in it are found.
+     */
+    isFull(f) {
+        return (0, utils_1.getVars)(f).every($ => this.founds.has($));
+    }
+    fit(f) {
+        (0, utils_1.getVars)(f).forEach($ => this.founds.add($));
+    }
+    /**
+     * Check if the functions can be fitted one by one without being full.
+     */
+    isFittableOrder(fs) {
+        this.reset();
+        for (let f of fs) {
+            if (this.isFull(f))
+                return false;
+            this.fit(f);
+        }
+        return true;
+    }
+    /**
+     * Randomly get a fittable order under current presets.
+     */
+    getFittableOrder() {
+        for (let fs of (0, utils_1.permute)(this.fs)) {
+            if (this.isFittableOrder(fs))
+                return fs;
+        }
+        return undefined;
+    }
+}
+/**
+ * Randomly get a fittable order for this set of functions under these presets.
+ * If no fittable order exists, return undefined.
+ */
+function getFittableOrder(fs, preset) {
+    const givens = [];
+    for (let k in preset) {
+        let v = preset[k];
+        if (Number.isFinite(v))
+            givens.push(k);
+    }
+    const sr = new Searcher(fs, givens);
+    return sr.getFittableOrder();
+}
+exports.getFittableOrder = getFittableOrder;
+//# sourceMappingURL=searcher.js.map
+
+/***/ }),
+
+/***/ 6912:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.readTree = exports.solvingSymbol = exports.solutionFlow = exports.analyze = exports.fit = void 0;
+var EquationFitter_1 = __webpack_require__(2380);
+Object.defineProperty(exports, "fit", ({ enumerable: true, get: function () { return EquationFitter_1.fit; } }));
+var EquationAnalyzer_1 = __webpack_require__(8476);
+Object.defineProperty(exports, "analyze", ({ enumerable: true, get: function () { return EquationAnalyzer_1.analyze; } }));
+Object.defineProperty(exports, "solutionFlow", ({ enumerable: true, get: function () { return EquationAnalyzer_1.solutionFlow; } }));
+Object.defineProperty(exports, "solvingSymbol", ({ enumerable: true, get: function () { return EquationAnalyzer_1.solvingSymbol; } }));
+Object.defineProperty(exports, "readTree", ({ enumerable: true, get: function () { return EquationAnalyzer_1.readTree; } }));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 9407:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.combinations = exports.permute = exports.getAllVars = exports.getVars = void 0;
+function getVars(func) {
+    const fnStr = func.toString();
+    return fnStr
+        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+        .replaceAll(" ", "")
+        .split(",");
+}
+exports.getVars = getVars;
+function getAllVars(fs) {
+    const vars = fs.map($ => getVars($)).flat();
+    return [...new Set(vars)];
+}
+exports.getAllVars = getAllVars;
+function permute(arr) {
+    let result = [];
+    if (arr.length === 0)
+        return [];
+    if (arr.length === 1)
+        return [arr];
+    for (let i = 0; i < arr.length; i++) {
+        const current = arr[i];
+        const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];
+        const remainingPermuted = permute(remaining);
+        for (let permuted of remainingPermuted) {
+            result.push([current, ...permuted]);
+        }
+    }
+    return result;
+}
+exports.permute = permute;
+function combinations(arr, k) {
+    if (k > arr.length || k <= 0)
+        return [];
+    if (k === arr.length)
+        return [[...arr]];
+    if (k === 1)
+        return arr.map($ => [$]);
+    const combs = [];
+    let tail_combs = [];
+    for (let i = 0; i <= arr.length - k + 1; i++) {
+        let tail = arr.slice(i + 1);
+        tail_combs = combinations(tail, k - 1);
+        for (let j = 0; j < tail_combs.length; j++) {
+            combs.push([arr[i], ...tail_combs[j]]);
+        }
+    }
+    return combs;
+}
+exports.combinations = combinations;
+//# sourceMappingURL=utils.js.map
 
 /***/ })
 

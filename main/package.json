@@ -14,16 +14,6 @@
     "jest_soil": "jest ./src/Soil -debug",
     "typedoc": "typedoc --out ../typedoc ./src/Math ./src/Pen"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/d-mok/MathTree.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/d-mok/MathTree/issues"
-  },
-  "homepage": "https://github.com/d-mok/MathTree#readme",
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "@types/katex": "^0.11.0",
@@ -39,8 +29,8 @@
   },
   "dependencies": {
     "contract": "file:../packages/contract",
+    "gauss": "file:../packages/gauss",
     "katex": "^0.13.23",
-    "sapphire-js": "^1.0.58",
-    "taylor-js": "^0.0.5"
+    "sapphire-js": "^1.0.58"
   }
 }

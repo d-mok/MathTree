@@ -2,7 +2,7 @@ import { Variable, Variables } from './variable'
 import { Equation } from './equation'
 import { latexBraced } from './latex'
 
-import { fit, analyze, readTree, solutionFlow } from 'taylor-js'
+import { fit, analyze, readTree, solutionFlow } from 'gauss'
 
 
 
