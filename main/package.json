@@ -41,6 +41,6 @@
     "katex": "^0.13.23",
     "sapphire-js": "^1.0.58",
     "taylor-js": "^0.0.5",
-    "waxy-js": "^1.0.8"
+    "waxy-js": "file:../packages/waxy"
   }
 }
