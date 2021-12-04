@@ -12,7 +12,7 @@
     "build-type": "npx tsc --project tsconfig.d.json",
     "jest": "jest ./src/Math",
     "jest_soil": "jest ./src/Soil -debug",
-    "typedoc": "typedoc --out typedoc ./src/Math ./src/Pen"
+    "typedoc": "typedoc --out ../typedoc ./src/Math ./src/Pen"
   },
   "repository": {
     "type": "git",
