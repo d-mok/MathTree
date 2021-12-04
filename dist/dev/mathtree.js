@@ -30872,7 +30872,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Algebra = void 0;
-const waxy_js_1 = __webpack_require__(2138);
+const contract_1 = __webpack_require__(1154);
 let Algebra = class Algebra {
     constructor() { }
     /**
@@ -30909,15 +30909,15 @@ let Algebra = class Algebra {
     }
 };
 __decorate([
-    (0, waxy_js_1.checkIt)(owl.num),
-    (0, waxy_js_1.inspectIt)(function has_unique_sol(a, b, c, p, q, r) { return a * q - b * p !== 0; })
+    (0, contract_1.checkIt)(owl.num),
+    (0, contract_1.inspectIt)(function has_unique_sol(a, b, c, p, q, r) { return a * q - b * p !== 0; })
 ], Algebra, "Crammer", null);
 __decorate([
-    (0, waxy_js_1.checkIt)([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0; }])
+    (0, contract_1.checkIt)([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0; }])
 ], Algebra, "xPolynomial", null);
 Algebra = __decorate([
-    (0, waxy_js_1.exposeAll)(),
-    (0, waxy_js_1.captureAll)()
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
 ], Algebra);
 exports.Algebra = Algebra;
 
@@ -41603,22 +41603,22 @@ exports.OptionShuffler = OptionShuffler;
 
 /***/ }),
 
-/***/ 3830:
+/***/ 7798:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.matchTreaty = exports.matchRule = void 0;
-var rule_1 = __webpack_require__(6902);
+var rule_1 = __webpack_require__(5810);
 Object.defineProperty(exports, "matchRule", ({ enumerable: true, get: function () { return rule_1.matchRule; } }));
-var treaty_1 = __webpack_require__(4490);
+var treaty_1 = __webpack_require__(7510);
 Object.defineProperty(exports, "matchTreaty", ({ enumerable: true, get: function () { return treaty_1.matchTreaty; } }));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 6902:
+/***/ 5810:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -41674,7 +41674,7 @@ exports.matchRule = matchRule;
 
 /***/ }),
 
-/***/ 4490:
+/***/ 7510:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -41711,15 +41711,15 @@ exports.matchTreaty = matchTreaty;
 
 /***/ }),
 
-/***/ 9462:
+/***/ 3279:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.acceptIt = exports.accept = void 0;
-const util_1 = __webpack_require__(9063);
-const assertion_1 = __webpack_require__(3830);
+const util_1 = __webpack_require__(6991);
+const assertion_1 = __webpack_require__(7798);
 function e(f, argValues, returnValue, msg) {
     return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(argValues) + ')', 'return = ' + returnValue, 'violate: ' + msg);
 }
@@ -41747,14 +41747,14 @@ exports.acceptIt = acceptIt;
 
 /***/ }),
 
-/***/ 881:
+/***/ 7025:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.captureAll = exports.captureIt = exports.capture = void 0;
-const util_1 = __webpack_require__(9063);
+const util_1 = __webpack_require__(6991);
 function catchString(f, vals, e) {
     return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + e);
 }
@@ -41813,15 +41813,15 @@ exports.captureAll = captureAll;
 
 /***/ }),
 
-/***/ 6755:
+/***/ 349:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checkIt = exports.check = void 0;
-const util_1 = __webpack_require__(9063);
-const assertion_1 = __webpack_require__(3830);
+const util_1 = __webpack_require__(6991);
+const assertion_1 = __webpack_require__(7798);
 function getToTail(arr, index) {
     const n = arr.length - 1;
     const i = Math.min(index, n);
@@ -41853,14 +41853,14 @@ exports.checkIt = checkIt;
 
 /***/ }),
 
-/***/ 4846:
+/***/ 9602:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.exposeAll = exports.exposeIt = exports.expose = void 0;
-const util_1 = __webpack_require__(9063);
+const util_1 = __webpack_require__(6991);
 function expose(name, f) {
     // @ts-ignore
     globalThis[String(name)] = f;
@@ -41888,15 +41888,15 @@ exports.exposeAll = exposeAll;
 
 /***/ }),
 
-/***/ 3059:
+/***/ 4114:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.inspectIt = exports.inspect = void 0;
-const util_1 = __webpack_require__(9063);
-const assertion_1 = __webpack_require__(3830);
+const util_1 = __webpack_require__(6991);
+const assertion_1 = __webpack_require__(7798);
 function e(f, vals, msg) {
     return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'violate: ' + msg);
 }
@@ -41923,27 +41923,27 @@ exports.inspectIt = inspectIt;
 
 /***/ }),
 
-/***/ 2138:
+/***/ 1154:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.exposeAll = exports.exposeIt = exports.expose = exports.inspectIt = exports.inspect = exports.checkIt = exports.check = exports.acceptIt = exports.accept = exports.captureAll = exports.captureIt = exports.capture = void 0;
-var capture_1 = __webpack_require__(881);
+var capture_1 = __webpack_require__(7025);
 Object.defineProperty(exports, "capture", ({ enumerable: true, get: function () { return capture_1.capture; } }));
 Object.defineProperty(exports, "captureIt", ({ enumerable: true, get: function () { return capture_1.captureIt; } }));
 Object.defineProperty(exports, "captureAll", ({ enumerable: true, get: function () { return capture_1.captureAll; } }));
-var accept_1 = __webpack_require__(9462);
+var accept_1 = __webpack_require__(3279);
 Object.defineProperty(exports, "accept", ({ enumerable: true, get: function () { return accept_1.accept; } }));
 Object.defineProperty(exports, "acceptIt", ({ enumerable: true, get: function () { return accept_1.acceptIt; } }));
-var check_1 = __webpack_require__(6755);
+var check_1 = __webpack_require__(349);
 Object.defineProperty(exports, "check", ({ enumerable: true, get: function () { return check_1.check; } }));
 Object.defineProperty(exports, "checkIt", ({ enumerable: true, get: function () { return check_1.checkIt; } }));
-var inspect_1 = __webpack_require__(3059);
+var inspect_1 = __webpack_require__(4114);
 Object.defineProperty(exports, "inspect", ({ enumerable: true, get: function () { return inspect_1.inspect; } }));
 Object.defineProperty(exports, "inspectIt", ({ enumerable: true, get: function () { return inspect_1.inspectIt; } }));
-var expose_1 = __webpack_require__(4846);
+var expose_1 = __webpack_require__(9602);
 Object.defineProperty(exports, "expose", ({ enumerable: true, get: function () { return expose_1.expose; } }));
 Object.defineProperty(exports, "exposeIt", ({ enumerable: true, get: function () { return expose_1.exposeIt; } }));
 Object.defineProperty(exports, "exposeAll", ({ enumerable: true, get: function () { return expose_1.exposeAll; } }));
@@ -41951,7 +41951,7 @@ Object.defineProperty(exports, "exposeAll", ({ enumerable: true, get: function (
 
 /***/ }),
 
-/***/ 9063:
+/***/ 6991:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";

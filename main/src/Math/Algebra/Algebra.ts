@@ -1,4 +1,4 @@
-import { checkIt, inspectIt, captureAll, exposeAll } from 'waxy-js'
+import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
 
 @exposeAll()
@@ -8,7 +8,7 @@ export class Algebra {
     private constructor() { }
 
     /**
-     * solve [x,y] from ax+by=c and px+qy=r. 
+     * solve [x,y] from ax+by=c and px+qy=r.
      * ```
      * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
      * Crammer(1,1,3,2,2,6) // throw
