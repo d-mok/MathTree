@@ -14,7 +14,7 @@ add = inspect(add, function distinct(a, b, c) { return isDistinct([a, b, c]) })
 let h = 'add(a, b, c = 0)\n'
 
 @suite
-class wax {
+class contract {
 
     @test
     normal() {

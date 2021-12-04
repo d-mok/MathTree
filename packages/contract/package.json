@@ -1,6 +1,6 @@
 {
-  "name": "waxy-js",
-  "version": "1.0.9",
+  "name": "contract",
+  "version": "1.0.0",
   "description": "a library for function validation",
   "main": "lib/index.js",
   "types": "lib",
@@ -11,16 +11,6 @@
     "jest": "jest",
     "build": "tsc -p tsconfig.prod.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/d-mok/waxy-js.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/d-mok/waxy-js/issues"
-  },
-  "homepage": "https://github.com/d-mok/waxy-js#readme",
   "devDependencies": {
     "@testdeck/jest": "^0.2.0",
     "@types/jest": "^27.0.3",
