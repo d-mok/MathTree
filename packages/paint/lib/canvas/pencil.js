@@ -32,7 +32,6 @@ class Pencil {
         this.imgStore = null;
         this.INIT_RANGE_ALREADY = false;
         this.INIT_SIZE_ALREADY = false;
-        this.backgroundImgUrl = "";
         // private $TEXT_SIZE: number = 1
         this.$TEXT_DIR = 0;
         this.$TEXT_LATEX = false;
@@ -527,7 +526,7 @@ class Pencil {
             let p1 = this.pj(pStart);
             let p2 = this.pj(pEnd);
             let cross = (0, support_1.cross2D)((0, support_1.vec)(p2, p1), (0, support_1.vec)(p2, cen));
-            return cross >= 0 ? right : left;
+            return cross > 0 ? left : right;
         }
         console.warn("$LINE_LABEL must be 'left' | 'right' | 'auto'");
         return right;
@@ -763,108 +762,6 @@ class Pencil {
         }
         this.ctx.restore();
     }
-    /**
-     * Set the background image url
-     * @param url - the url of background image
-     */
-    setBackgroundImgUrl(url) {
-        this.backgroundImgUrl = url;
-    }
-    /**
-     * Return the style attr of img tag needed for adding a background image.
-     */
-    backgroundImageAttr() {
-        if (this.backgroundImgUrl.length === 0)
-            return "";
-        return ` style="background-image:url('${this.backgroundImgUrl}');background-size:100% 100%;" `;
-    }
-    // /**
-    //  * Return the data url of this image.
-    //  * @param canvas - the main canvas, default to this.canvas.
-    //  */
-    // protected toDataUrl(canvas: HTMLCanvasElement = this.canvas): string {
-    //     return canvas.toDataURL()
-    // }
-    // /**
-    //  * Return the width in pixel for display, i.e. canvas.width / PEN_QUALITY
-    //  * @param canvas - the main canvas, default to this.canvas.
-    //  */
-    // protected displayWidth(canvas: HTMLCanvasElement = this.canvas): number {
-    //     return Math.floor(canvas.width / PEN_QUALITY)
-    // }
-    // /**
-    //  * Return the height in pixel for display, i.e. canvas.height / PEN_QUALITY
-    //  * @param canvas - the main canvas, default to this.canvas.
-    //  */
-    // protected displayHeight(canvas: HTMLCanvasElement = this.canvas): number {
-    //     return Math.floor(canvas.height / PEN_QUALITY)
-    // }
-    // /**
-    //  * Return a clone of the canvas.
-    //  * @param canvas - the main canvas, default to this.canvas.
-    //  */
-    // protected cloneCanvas(canvas: HTMLCanvasElement = this.canvas): HTMLCanvasElement {
-    //     let oldCanvas = canvas
-    //     //create a new canvas
-    //     let newCanvas = document.createElement('canvas')
-    //     let context = newCanvas.getContext('2d')!
-    //     //set dimensions
-    //     newCanvas.width = oldCanvas.width
-    //     newCanvas.height = oldCanvas.height
-    //     //apply the old canvas to the new one
-    //     context.drawImage(oldCanvas, 0, 0)
-    //     //return the new canvas
-    //     return newCanvas
-    // }
-    // /**
-    //  * Trim the canvas in-place.
-    //  * @param canvas - the main canvas, default to this.canvas.
-    //  */
-    // protected trimCanvas(canvas: HTMLCanvasElement = this.canvas): void {
-    //     function rowBlank(imageData: ImageData, width: number, y: number) {
-    //         for (var x = 0; x < width; ++x) {
-    //             if (imageData.data[y * width * 4 + x * 4 + 3] !== 0) return false
-    //         }
-    //         return true
-    //     }
-    //     function columnBlank(imageData: ImageData, width: number, x: number, top: number, bottom: number) {
-    //         for (var y = top; y < bottom; ++y) {
-    //             if (imageData.data[y * width * 4 + x * 4 + 3] !== 0) return false
-    //         }
-    //         return true
-    //     }
-    //     var ctx = canvas.getContext("2d")!
-    //     var width = canvas.width
-    //     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    //     var top = 0, bottom = imageData.height, left = 0, right = imageData.width
-    //     while (top < bottom && rowBlank(imageData, width, top)) ++top
-    //     while (bottom - 1 > top && rowBlank(imageData, width, bottom - 1)) --bottom
-    //     while (left < right && columnBlank(imageData, width, left, top, bottom)) ++left
-    //     while (right - 1 > left && columnBlank(imageData, width, right - 1, top, bottom)) --right
-    //     var trimmed = ctx.getImageData(left, top, right - left, bottom - top)
-    //     canvas.width = trimmed.width
-    //     canvas.height = trimmed.height
-    //     ctx.putImageData(trimmed, 0, 0)
-    // }
-    // /**
-    //  * Clear this canvas in-place.
-    //  */
-    // protected clearCanvas() {
-    //     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    // }
-    // /**
-    //  * Save the current image for restoring later.
-    //  */
-    // protected saveCanvasImg() {
-    //     this.imgStore = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
-    // }
-    // /**
-    //  * Restore previously saved image.
-    //  */
-    // protected restoreCanvasImg() {
-    //     if (this.imgStore !== null)
-    //         this.ctx.putImageData(this.imgStore, 0, 0)
-    // }
     /**
      * Equivalent to ctx.save()
      */

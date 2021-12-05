@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Board = void 0;
+const QUALITY = 3;
 /**
  * Provide functions to operate on the canvas.
  */
@@ -8,14 +9,13 @@ class Board {
     constructor(canvas) {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
-        this.PEN_QUALITY = 3;
         this.imgStore = null;
+        this.bgImgUrl = "";
     }
     init(width, height) {
-        const Q = this.PEN_QUALITY;
-        this.canvas.width = width * Q;
-        this.canvas.height = height * Q;
-        this.ctx.scale(Q, Q);
+        this.canvas.width = width * QUALITY;
+        this.canvas.height = height * QUALITY;
+        this.ctx.scale(QUALITY, QUALITY);
     }
     toDataUrl() {
         return this.canvas.toDataURL();
@@ -79,17 +79,28 @@ class Board {
         //return the new canvas
         return new Board(newCanvas);
     }
-    /**
-     * Return the width in pixel for display, i.e. canvas.width / PEN_QUALITY
-     */
     displayWidth() {
-        return Math.floor(this.canvas.width / this.PEN_QUALITY);
+        return Math.floor(this.canvas.width / QUALITY);
     }
-    /**
-     * Return the height in pixel for display, i.e. canvas.height / PEN_QUALITY
-     */
     displayHeight() {
-        return Math.floor(this.canvas.height / this.PEN_QUALITY);
+        return Math.floor(this.canvas.height / QUALITY);
+    }
+    setBgImgUrl(url) {
+        this.bgImgUrl = url;
+    }
+    bgAttr() {
+        if (this.bgImgUrl.length === 0)
+            return "";
+        return ` style="background-image:url('${this.bgImgUrl}');background-size:100% 100%;" `;
+    }
+    export(html, placeholder, trim) {
+        let clone = this.clone();
+        if (trim)
+            clone.trim();
+        const src = 'src="' + clone.toDataUrl() + '"';
+        const width = ' width="' + clone.displayWidth() + '"';
+        const height = ' height="' + clone.displayHeight() + '"';
+        return html.replace('src="' + placeholder + '"', src + width + height + clone.bgAttr());
     }
 }
 exports.Board = Board;

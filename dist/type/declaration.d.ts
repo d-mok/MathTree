@@ -2936,7 +2936,7 @@ declare function Projector(angle?: number, depth?: number): (x: number, y: numbe
 */
 declare function Projector3D(angle?: number, depth?: number): (_: Point3D) => Point;
 declare module "Pen/Pen" {
-    import { Pencil } from 'sapphire-js';
+    import { Pencil } from 'paint';
     /**
      * @category DrawingPen
      */
@@ -4330,7 +4330,6 @@ declare module "Pen/Pen" {
          * ```
          */
         background(url: string): void;
-        private exportCanvas;
         /**
          * Export the canvas to image tag.
          * @category export

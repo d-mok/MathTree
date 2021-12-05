@@ -1,6 +1,4 @@
 "use strict";
-// import { vec2D, vector2D } from "../array/vector2D"
-// import { vec3D, vector3D } from "../array/vector3D"
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.split = exports.traceCircle = exports.trace = exports.cross2D = exports.argument = exports.magnitude = exports.vec = exports.meanPoint = exports.midPoint = exports.atan2 = exports.cos = exports.sin = exports.force2D = exports.IsReflex = exports.AnglePolar = void 0;
 /**

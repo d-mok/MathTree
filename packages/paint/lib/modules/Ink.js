@@ -24,6 +24,25 @@ function floorHalf(n) {
         n = n - 1;
     return n / 2;
 }
+function steps(n) {
+    let N = floorHalf(n);
+    let arr = [];
+    if (isOdd(n)) {
+        arr.push(0);
+        for (let i = 1; i <= N; i++) {
+            arr.push(i);
+            arr.push(-i);
+        }
+    }
+    else {
+        for (let i = 1; i <= N; i++) {
+            let s = i - 0.5;
+            arr.push(s);
+            arr.push(-s);
+        }
+    }
+    return arr;
+}
 function dotVec([x1, y1], [x2, y2]) {
     return [x2 - x1, y2 - y1];
 }
@@ -138,23 +157,9 @@ class Ink {
     anglePolar(A, O, B, radius, count, space) {
         let q1 = dir(O, A);
         let q2 = dir(O, B);
-        const draw = (step) => {
-            let r = radius + step * space;
+        for (let s of steps(count)) {
+            let r = radius + s * space;
             this.arc(O, r, [q1, q2]);
-        };
-        const draw2 = (step) => {
-            draw(step);
-            draw(-step);
-        };
-        let N = floorHalf(count);
-        if (isOdd(count)) {
-            draw(0);
-            for (let i = 1; i <= N; i++)
-                draw2(i);
-        }
-        else {
-            for (let i = 1; i <= N; i++)
-                draw2(i - 0.5);
         }
     }
     rightAngle(A, O, B, size) {
@@ -190,22 +195,8 @@ class Ink {
     }
     equalSide(start, end, length, count, space) {
         let M = mid(start, end);
-        const draw = (step) => {
-            this.tick(start, M, length, step * space);
-        };
-        const draw2 = (step) => {
-            draw(step);
-            draw(-step);
-        };
-        let N = floorHalf(count);
-        if (isOdd(count)) {
-            draw(0);
-            for (let i = 1; i <= N; i++)
-                draw2(i);
-        }
-        else {
-            for (let i = 1; i <= N; i++)
-                draw2(i - 0.5);
+        for (let s of steps(count)) {
+            this.tick(start, M, length, s * space);
         }
     }
     compass(center, xSize, ySize, arrowSize) {

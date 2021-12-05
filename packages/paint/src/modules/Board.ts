@@ -1,5 +1,5 @@
 type pixel = number
-
+const QUALITY = 3
 
 /**
  * Provide functions to operate on the canvas.
@@ -10,29 +10,25 @@ export class Board {
         private readonly canvas: HTMLCanvasElement
     ) { }
 
-
-
     private readonly ctx: CanvasRenderingContext2D = this.canvas.getContext("2d")!
-
-    private readonly PEN_QUALITY = 3
     private imgStore: ImageData | null = null
+    private bgImgUrl: string = ""
 
 
-    public init(width: pixel, height: pixel) {
-        const Q = this.PEN_QUALITY
-        this.canvas.width = width * Q
-        this.canvas.height = height * Q
-        this.ctx.scale(Q, Q)
+    init(width: pixel, height: pixel) {
+        this.canvas.width = width * QUALITY
+        this.canvas.height = height * QUALITY
+        this.ctx.scale(QUALITY, QUALITY)
     }
 
 
 
-    public toDataUrl(): string {
+    toDataUrl(): string {
         return this.canvas.toDataURL()
     }
 
 
-    public save(): void {
+    save(): void {
         const w = this.canvas.width
         const h = this.canvas.height
         this.imgStore = this.ctx.getImageData(0, 0, w, h)
@@ -40,13 +36,13 @@ export class Board {
 
 
 
-    public restore(): void {
+    restore(): void {
         if (this.imgStore !== null)
             this.ctx.putImageData(this.imgStore, 0, 0)
     }
 
 
-    public clear(): void {
+    clear(): void {
         const w = this.canvas.width
         const h = this.canvas.height
         this.ctx.clearRect(0, 0, w, h)
@@ -54,7 +50,7 @@ export class Board {
 
 
 
-    public trim(): void {
+    trim(): void {
 
         function rowBlank(imageData: ImageData, width: number, y: number): boolean {
             for (var x = 0; x < width; ++x) {
@@ -87,7 +83,7 @@ export class Board {
     }
 
 
-    public clone(): Board {
+    private clone(): Board {
         let oldCanvas = this.canvas
         //create a new canvas
         let newCanvas = document.createElement('canvas')
@@ -102,19 +98,38 @@ export class Board {
     }
 
 
-    /**
-     * Return the width in pixel for display, i.e. canvas.width / PEN_QUALITY
-     */
-    public displayWidth(): number {
-        return Math.floor(this.canvas.width / this.PEN_QUALITY)
+
+    private displayWidth(): number {
+        return Math.floor(this.canvas.width / QUALITY)
     }
 
-    /**
-     * Return the height in pixel for display, i.e. canvas.height / PEN_QUALITY
-     */
-    public displayHeight(): number {
-        return Math.floor(this.canvas.height / this.PEN_QUALITY)
+
+    private displayHeight(): number {
+        return Math.floor(this.canvas.height / QUALITY)
     }
+
+
+
+    setBgImgUrl(url: string): void {
+        this.bgImgUrl = url
+    }
+
+
+    private bgAttr(): string {
+        if (this.bgImgUrl.length === 0) return ""
+        return ` style="background-image:url('${this.bgImgUrl}');background-size:100% 100%;" `
+    }
+
+
+    export(html: string, placeholder: string, trim: boolean): string {
+        let clone = this.clone()
+        if (trim) clone.trim()
+        const src = 'src="' + clone.toDataUrl() + '"'
+        const width = ' width="' + clone.displayWidth() + '"'
+        const height = ' height="' + clone.displayHeight() + '"'
+        return html.replace('src="' + placeholder + '"', src + width + height + clone.bgAttr())
+    }
+
 
 
 }

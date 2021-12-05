@@ -15,8 +15,8 @@ export declare class Dial {
     setTextAlign(align?: CanvasTextAlign): void;
     setTextBaseline(baseline?: CanvasTextBaseline): void;
     setTextPixel(pixel: pixel): void;
-    getTextPixel(): pixel;
     setTextItalic(italic?: boolean): void;
+    getTextPixel(): pixel;
     getTextItalic(): boolean;
     save(): void;
     restore(): void;

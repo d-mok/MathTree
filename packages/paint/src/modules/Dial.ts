@@ -1,8 +1,6 @@
 type pixel = number
 type dot = [pixel, pixel]
 
-
-
 /**
  * Provide functions to control the state of the ctx.
  */
@@ -12,10 +10,7 @@ export class Dial {
         protected readonly ctx: CanvasRenderingContext2D
     ) { }
 
-
-
-
-
+    // settings
 
     public setWeight(weight = 1): void {
         this.ctx.lineWidth = weight
@@ -60,17 +55,6 @@ export class Dial {
         this.ctx.font = this.ctx.font.replace(/\d+px/g, pixel + 'px')
     }
 
-    // public setTextSize(size = 1): void {
-    //     let px = Math.round(size * REM_PIXEL)
-    //     this.setTextPixel(px)
-    // }
-
-    public getTextPixel(): pixel {
-        let match = this.ctx.font.match(/(\d+)px/)
-        if (match === null) return NaN
-        return Number.parseInt(match[1])
-    }
-
     public setTextItalic(italic = false): void {
         if (italic) {
             if (!this.getTextItalic())
@@ -80,9 +64,19 @@ export class Dial {
         }
     }
 
+    // getters
+
+    public getTextPixel(): pixel {
+        let match = this.ctx.font.match(/(\d+)px/)
+        if (match === null) return NaN
+        return Number.parseInt(match[1])
+    }
+
     public getTextItalic(): boolean {
         return this.ctx.font.includes('italic')
     }
+
+    // meta
 
     public save(): void {
         this.ctx.save()
@@ -92,9 +86,7 @@ export class Dial {
         this.ctx.restore()
     }
 
-    // public scale(widthRatio: number, heightRatio: number): void {
-    //     this.ctx.scale(widthRatio, heightRatio)
-    // }
+    // transform
 
     public translate(x: pixel, y: pixel): void {
         this.ctx.translate(x, y)
@@ -117,10 +109,5 @@ export class Dial {
         let q = Math.atan2(dy, dx)
         this.ctx.rotate(q)
     }
-
-
-
-
-
 
 }

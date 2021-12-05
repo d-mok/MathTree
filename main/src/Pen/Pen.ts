@@ -1,4 +1,5 @@
-import { Pencil } from 'sapphire-js'
+// import { Pencil } from 'sapphire-js'
+import { Pencil } from 'paint'
 
 /**
  * @ignore
@@ -1366,7 +1367,7 @@ export class PenCls extends Pencil {
      * ```
      */
     compass(position: Point2D) {
-        this.drawCompass(position, 17, 20, 7, 3.5)
+        this.drawCompass(position, 17, 20, 3.5)
     }
 
 
@@ -2163,7 +2164,7 @@ export class PenCls extends Pencil {
      * @deprecated
      */
     autoCrop() {
-        this.trimCanvas()
+        this.board.trim()
     }
 
 
@@ -2177,19 +2178,9 @@ export class PenCls extends Pencil {
      * ```
      */
     background(url: string): void {
-        this.setBackgroundImgUrl(url)
+        this.board.setBgImgUrl(url)
     }
 
-
-
-
-    private exportCanvas(html: string, placeholder: string, canvas: HTMLCanvasElement) {
-        const src = 'src="' + this.toDataUrl(canvas) + '"'
-        const width = ' width="' + this.displayWidth(canvas) + '"'
-        const height = ' height="' + this.displayHeight(canvas) + '"'
-        const backgroundAttr = this.backgroundImageAttr()
-        return html.replace('src="' + placeholder + '"', src + width + height + backgroundAttr)
-    };
 
 
     /**
@@ -2204,7 +2195,7 @@ export class PenCls extends Pencil {
      * ```
      */
     export(html: string, placeholder: string) {
-        return this.exportCanvas(html, placeholder, this.cloneCanvas())
+        return this.board.export(html, placeholder, false)
     };
 
 
@@ -2220,9 +2211,7 @@ export class PenCls extends Pencil {
      * ```
      */
     exportTrim(html: string, placeholder: string) {
-        let clone = this.cloneCanvas()
-        this.trimCanvas(clone)
-        return this.exportCanvas(html, placeholder, clone)
+        return this.board.export(html, placeholder, true)
     };
 
 
@@ -2235,7 +2224,7 @@ export class PenCls extends Pencil {
      * ```
      */
     clear() {
-        this.clearCanvas()
+        this.board.clear()
     }
 
     /**
@@ -2247,7 +2236,7 @@ export class PenCls extends Pencil {
      * ```
      */
     saveImg() {
-        this.saveCanvasImg()
+        this.board.save()
     }
 
     /**
@@ -2259,7 +2248,7 @@ export class PenCls extends Pencil {
      * ```
      */
     restoreImg() {
-        this.restoreCanvasImg()
+        this.board.restore()
     }
 
 

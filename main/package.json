@@ -31,6 +31,7 @@
     "contract": "file:../packages/contract",
     "gauss": "file:../packages/gauss",
     "katex": "^0.13.23",
+    "paint": "file:../packages/paint",
     "sapphire-js": "^1.0.58"
   }
 }

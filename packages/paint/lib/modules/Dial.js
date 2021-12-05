@@ -8,6 +8,7 @@ class Dial {
     constructor(ctx) {
         this.ctx = ctx;
     }
+    // settings
     setWeight(weight = 1) {
         this.ctx.lineWidth = weight;
     }
@@ -42,16 +43,6 @@ class Dial {
         pixel = Math.round(pixel);
         this.ctx.font = this.ctx.font.replace(/\d+px/g, pixel + 'px');
     }
-    // public setTextSize(size = 1): void {
-    //     let px = Math.round(size * REM_PIXEL)
-    //     this.setTextPixel(px)
-    // }
-    getTextPixel() {
-        let match = this.ctx.font.match(/(\d+)px/);
-        if (match === null)
-            return NaN;
-        return Number.parseInt(match[1]);
-    }
     setTextItalic(italic = false) {
         if (italic) {
             if (!this.getTextItalic())
@@ -61,18 +52,24 @@ class Dial {
             this.ctx.font = this.ctx.font.replace('italic ', '');
         }
     }
+    // getters
+    getTextPixel() {
+        let match = this.ctx.font.match(/(\d+)px/);
+        if (match === null)
+            return NaN;
+        return Number.parseInt(match[1]);
+    }
     getTextItalic() {
         return this.ctx.font.includes('italic');
     }
+    // meta
     save() {
         this.ctx.save();
     }
     restore() {
         this.ctx.restore();
     }
-    // public scale(widthRatio: number, heightRatio: number): void {
-    //     this.ctx.scale(widthRatio, heightRatio)
-    // }
+    // transform
     translate(x, y) {
         this.ctx.translate(x, y);
     }

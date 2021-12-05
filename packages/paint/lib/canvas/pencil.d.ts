@@ -21,7 +21,6 @@ export declare class Pencil {
     private imgStore;
     private INIT_RANGE_ALREADY;
     private INIT_SIZE_ALREADY;
-    private backgroundImgUrl;
     /**
      * Set the coordinate range of the canvas.
      * @param xRange - [xmin,xmax] in coordinates
@@ -332,15 +331,6 @@ export declare class Pencil {
      * @param interval - distance between grids, in coordinates.
      */
     protected drawYAxisGrid(interval: number): void;
-    /**
-     * Set the background image url
-     * @param url - the url of background image
-     */
-    protected setBackgroundImgUrl(url: string): void;
-    /**
-     * Return the style attr of img tag needed for adding a background image.
-     */
-    protected backgroundImageAttr(): string;
     /**
      * Equivalent to ctx.save()
      */

@@ -22,26 +22,17 @@ function LatexWidget(text: string, color: string, size: number) {
     return widget
 }
 
-// !!!! the 2 hardcoded here may not respect PEN_QUALITY
 function latexTuneX(x: number, width: number, textAlign: CanvasTextAlign): number {
-    let b = 2 - x
-    let w = width / 2
-    if (textAlign === 'left')
-        return b
-    if (textAlign === 'right')
-        return b - 2 * w
-    if (textAlign === 'center')
-        return b - w
-    return b - w
+    if (textAlign === 'left') return - x
+    if (textAlign === 'right') return - x - width
+    if (textAlign === 'center') return - x - width / 2
+    return - x - width / 2
 }
 
 function latexTuneY(y: number, height: number, textBaseline: CanvasTextBaseline): number {
-    if (textBaseline === 'top')
-        return - y
-    if (textBaseline === 'bottom')
-        return - y - height
-    if (textBaseline === 'middle')
-        return - y - height / 2
+    if (textBaseline === 'top') return - y
+    if (textBaseline === 'bottom') return - y - height
+    if (textBaseline === 'middle') return - y - height / 2
     return - y / 2
 }
 
@@ -106,9 +97,9 @@ export class Feather {
 
     write(text: string, dot: dot, dir: number, latex: boolean) {
         if (latex) {
-            this.writePlain(text, dot, dir)
-        } else {
             this.writeLatex(text, dot, dir)
+        } else {
+            this.writePlain(text, dot, dir)
         }
     }
 

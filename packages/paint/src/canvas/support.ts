@@ -1,7 +1,3 @@
-// import { vec2D, vector2D } from "../array/vector2D"
-// import { vec3D, vector3D } from "../array/vector3D"
-
-
 
 
 type Point2D = [number, number]

@@ -15,17 +15,14 @@ function LatexWidget(text, color, size) {
     });
     return widget;
 }
-// !!!! the 2 hardcoded here may not respect PEN_QUALITY
 function latexTuneX(x, width, textAlign) {
-    let b = 2 - x;
-    let w = width / 2;
     if (textAlign === 'left')
-        return b;
+        return -x;
     if (textAlign === 'right')
-        return b - 2 * w;
+        return -x - width;
     if (textAlign === 'center')
-        return b - w;
-    return b - w;
+        return -x - width / 2;
+    return -x - width / 2;
 }
 function latexTuneY(y, height, textBaseline) {
     if (textBaseline === 'top')
@@ -83,10 +80,10 @@ class Feather {
     }
     write(text, dot, dir, latex) {
         if (latex) {
-            this.writePlain(text, dot, dir);
+            this.writeLatex(text, dot, dir);
         }
         else {
-            this.writeLatex(text, dot, dir);
+            this.writePlain(text, dot, dir);
         }
     }
     // text width
