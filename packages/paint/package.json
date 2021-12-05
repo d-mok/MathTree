@@ -1,0 +1,17 @@
+{
+  "name": "paint",
+  "version": "1.0.0",
+  "description": "a canvas library",
+  "main": "lib/index.js",
+  "types": "lib",
+  "files": [
+    "/lib"
+  ],
+  "scripts": {
+    "jest": "jest",
+    "build": "tsc -p tsconfig.prod.json"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.2"
+  }
+}
