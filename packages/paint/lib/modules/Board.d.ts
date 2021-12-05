@@ -1,6 +1,6 @@
 declare type pixel = number;
 /**
- * Provide functions to operate on the canvas.
+ * Provide functions to operate meta data on the canvas.
  */
 export declare class Board {
     private readonly canvas;

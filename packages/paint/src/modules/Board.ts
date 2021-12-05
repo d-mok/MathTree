@@ -2,7 +2,7 @@ type pixel = number
 const QUALITY = 3
 
 /**
- * Provide functions to operate on the canvas.
+ * Provide functions to operate meta data on the canvas.
  */
 export class Board {
 

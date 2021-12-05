@@ -9,6 +9,18 @@ type Point = Point2D | Point3D
 type pixel = number
 type dot = [pixel, pixel]
 
+type state = {
+    $TEXT_DIR: number
+    $TEXT_LATEX: boolean
+    $LABEL_CENTER: Point2D | number
+    $ANGLE_MODE: 'normal' | 'polar' | 'reflex'
+    $LENGTH_UNIT: string | undefined
+    $3D_ANGLE: number
+    $3D_DEPTH: number
+    $BORDER: number
+    $LINE_LABEL: 'auto' | 'left' | 'right'
+}
+
 
 
 /**
@@ -42,17 +54,12 @@ export class Pencil {
     private ink = new Ink(this.ctx)
     private feather = new Feather(this.ctx)
 
-
-
-
-
     protected frame: Frame = new Frame();
-
-    private imgStore: ImageData | null = null
 
     private INIT_RANGE_ALREADY = false
     private INIT_SIZE_ALREADY = false
 
+    private state: state[] = []
 
 
     /**
@@ -123,7 +130,6 @@ export class Pencil {
 
 
 
-    // private $TEXT_SIZE: number = 1
     private $TEXT_DIR: number = 0
     private $TEXT_LATEX: boolean = false
     private $LABEL_CENTER: Point2D | number = 0
@@ -260,7 +266,35 @@ export class Pencil {
         this.setBorder()
     }
 
+    protected save() {
+        this.ctx.save()
+        this.state.push({
+            $TEXT_DIR: this.$TEXT_DIR,
+            $TEXT_LATEX: this.$TEXT_LATEX,
+            $LABEL_CENTER: this.$LABEL_CENTER,
+            $ANGLE_MODE: this.$ANGLE_MODE,
+            $LENGTH_UNIT: this.$LENGTH_UNIT,
+            $3D_ANGLE: this.$3D_ANGLE,
+            $3D_DEPTH: this.$3D_DEPTH,
+            $BORDER: this.$BORDER,
+            $LINE_LABEL: this.$LINE_LABEL
+        })
+    }
 
+    protected restore() {
+        this.ctx.restore()
+        let state = this.state.pop()
+        if (state === undefined) return
+        this.$TEXT_DIR = state.$TEXT_DIR
+        this.$TEXT_LATEX = state.$TEXT_LATEX
+        this.$LABEL_CENTER = state.$LABEL_CENTER
+        this.$ANGLE_MODE = state.$ANGLE_MODE
+        this.$LENGTH_UNIT = state.$LENGTH_UNIT
+        this.$3D_ANGLE = state.$3D_ANGLE
+        this.$3D_DEPTH = state.$3D_DEPTH
+        this.$BORDER = state.$BORDER
+        this.$LINE_LABEL = state.$LINE_LABEL
+    }
 
 
     private toPix(point: Point): dot {
@@ -411,23 +445,14 @@ export class Pencil {
      * Draw an arrow head at `endPoint`.
      * @param startPoint - start point of arrow, used to determine arrow direction only
      * @param endPoint - end point of arrow, where the arrow head will be drawn
-     * @param arrowLength - length pixel along the arrow head
-     * @param arrowWidth - width pixel across the arrow on one side
-     * @param arrowOffset - offset pixel along the arrow
+     * @param length - length pixel along the arrow head
+     * @param width - width pixel across the arrow on one side
+     * @param offset - offset pixel along the arrow
      */
-    protected drawArrowHead(startPoint: Point, endPoint: Point,
-        { arrowLength, arrowWidth, arrowOffset }:
-            { arrowLength?: pixel, arrowWidth?: pixel, arrowOffset?: pixel } = {}) {
-
+    protected drawArrowHead(startPoint: Point, endPoint: Point, size: pixel, offset: pixel) {
         let p1 = this.toPix(startPoint)
         let p2 = this.toPix(endPoint)
-
-        // original default
-        arrowLength ??= 10
-        arrowWidth ??= arrowLength / 2
-        arrowOffset ??= 0
-
-        this.ink.arrow(p1, p2, arrowLength, arrowWidth, arrowOffset)
+        this.ink.arrow(p1, p2, size * 2, size, offset)
     }
 
 
@@ -476,10 +501,6 @@ export class Pencil {
      * @param spacePixel - space between marks in pixel
      */
     protected drawParallelMark(startPoint: Point, endPoint: Point, sizePixel: pixel, tickCount: number, spacePixel: pixel): void {
-        // original default
-        sizePixel ??= 4
-        spacePixel ??= 6
-
         let [A, B] = this.toPixs([startPoint, endPoint])
         this.ink.parallel(A, B, sizePixel, tickCount, spacePixel)
     }
@@ -495,11 +516,6 @@ export class Pencil {
     protected drawTick(startPoint: Point, tickPoint: Point, lengthPixel: pixel, offsetPixel: pixel): void {
         let p1 = this.toPix(startPoint)
         let p2 = this.toPix(tickPoint)
-
-        // original default
-        lengthPixel ??= 5
-        offsetPixel ??= 0
-
         this.ink.tick(p1, p2, lengthPixel, offsetPixel)
     }
 
@@ -537,11 +553,6 @@ export class Pencil {
     protected drawEqualMark(startPoint: Point, endPoint: Point, lengthPixel: pixel, tickCount: number, spacePixel: pixel): void {
         let A = this.toPix(startPoint)
         let B = this.toPix(endPoint)
-
-        // original default
-        lengthPixel ??= 5
-        spacePixel ??= 3
-
         this.ink.equalSide(A, B, lengthPixel, tickCount, spacePixel)
     }
 
@@ -552,17 +563,10 @@ export class Pencil {
      * @param center - position of compass center
      * @param xSizePixel - horizontal one-sided length of compass, in pixel
      * @param ySizePixel - vertical one-sided length of compass, in pixel
-     * @param arrowLength - length of arrow head
-     * @param arrowWidth - one-sided width of arrow head
+     * @param arrowSize - one-sided width of arrow head
      */
     protected drawCompass(center: Point, xSizePixel: pixel, ySizePixel: pixel, arrowSize: pixel): void {
         let cen = this.toPix(center)
-
-        xSizePixel ??= 17
-        ySizePixel ??= 20
-        // arrowLength ??= 7
-        // arrowWidth ??= arrowLength / 2
-
         this.ink.compass(cen, xSizePixel, ySizePixel, arrowSize)
     }
 
@@ -579,11 +583,14 @@ export class Pencil {
         func: ((t: number) => number) | ((t: number) => Point2D),
         tStart: number, tEnd: number, dots = 1000
     ): void {
-
         let points = trace(func, [tStart, tEnd], dots)
+        let [xmin, xmax] = this.frame.xRange()
+        let [ymin, ymax] = this.frame.yRange()
+        let X = xmax - xmin
+        let Y = ymax - ymin
 
-        function outOfRange(num: number[]) {
-            return num.some($ => Math.abs($) > 10000)
+        function outOfRange([x, y]: Point2D) {
+            return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y
         }
 
         let filteredPoints = points.map(pt => {
@@ -594,8 +601,8 @@ export class Pencil {
             return pt
         })
 
-
         let segments = split(filteredPoints, null) as Point2D[][]
+        console.log(segments)
         for (let seg of segments) {
             if (seg.length === 0) continue
             this.drawStroke(seg)
@@ -833,7 +840,7 @@ export class Pencil {
     protected drawXAxis(): void {
         const [xmin, xmax] = this.frame.xRange()
         this.drawStroke([[xmin, 0], [xmax, 0]])
-        this.drawArrowHead([xmin, 0], [xmax, 0])
+        this.drawArrowHead([xmin, 0], [xmax, 0], 5, 0)
     }
 
     /**
@@ -859,7 +866,7 @@ export class Pencil {
     protected drawYAxis(): void {
         const [ymin, ymax] = this.frame.yRange()
         this.drawStroke([[0, ymin], [0, ymax]])
-        this.drawArrowHead([0, ymin], [0, ymax])
+        this.drawArrowHead([0, ymin], [0, ymax], 5, 0)
     }
 
 
@@ -973,21 +980,7 @@ export class Pencil {
 
 
 
-    
 
-    /**
-     * Equivalent to ctx.save()
-     */
-    protected save() {
-        this.ctx.save()
-    }
-
-    /**
-     * Equivalent to ctx.restore()
-     */
-    protected restore() {
-        this.ctx.restore()
-    }
 
 
 

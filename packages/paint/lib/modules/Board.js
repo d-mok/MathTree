@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Board = void 0;
 const QUALITY = 3;
 /**
- * Provide functions to operate on the canvas.
+ * Provide functions to operate meta data on the canvas.
  */
 class Board {
     constructor(canvas) {

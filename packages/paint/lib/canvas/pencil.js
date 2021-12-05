@@ -29,10 +29,9 @@ class Pencil {
         this.ink = new modules_1.Ink(this.ctx);
         this.feather = new modules_1.Feather(this.ctx);
         this.frame = new frame_1.Frame();
-        this.imgStore = null;
         this.INIT_RANGE_ALREADY = false;
         this.INIT_SIZE_ALREADY = false;
-        // private $TEXT_SIZE: number = 1
+        this.state = [];
         this.$TEXT_DIR = 0;
         this.$TEXT_LATEX = false;
         this.$LABEL_CENTER = 0;
@@ -194,6 +193,35 @@ class Pencil {
         this.setProjector3D();
         this.setBorder();
     }
+    save() {
+        this.ctx.save();
+        this.state.push({
+            $TEXT_DIR: this.$TEXT_DIR,
+            $TEXT_LATEX: this.$TEXT_LATEX,
+            $LABEL_CENTER: this.$LABEL_CENTER,
+            $ANGLE_MODE: this.$ANGLE_MODE,
+            $LENGTH_UNIT: this.$LENGTH_UNIT,
+            $3D_ANGLE: this.$3D_ANGLE,
+            $3D_DEPTH: this.$3D_DEPTH,
+            $BORDER: this.$BORDER,
+            $LINE_LABEL: this.$LINE_LABEL
+        });
+    }
+    restore() {
+        this.ctx.restore();
+        let state = this.state.pop();
+        if (state === undefined)
+            return;
+        this.$TEXT_DIR = state.$TEXT_DIR;
+        this.$TEXT_LATEX = state.$TEXT_LATEX;
+        this.$LABEL_CENTER = state.$LABEL_CENTER;
+        this.$ANGLE_MODE = state.$ANGLE_MODE;
+        this.$LENGTH_UNIT = state.$LENGTH_UNIT;
+        this.$3D_ANGLE = state.$3D_ANGLE;
+        this.$3D_DEPTH = state.$3D_DEPTH;
+        this.$BORDER = state.$BORDER;
+        this.$LINE_LABEL = state.$LINE_LABEL;
+    }
     toPix(point) {
         let pt = this.pj(point);
         return this.frame.toPix(pt);
@@ -305,18 +333,14 @@ class Pencil {
      * Draw an arrow head at `endPoint`.
      * @param startPoint - start point of arrow, used to determine arrow direction only
      * @param endPoint - end point of arrow, where the arrow head will be drawn
-     * @param arrowLength - length pixel along the arrow head
-     * @param arrowWidth - width pixel across the arrow on one side
-     * @param arrowOffset - offset pixel along the arrow
+     * @param length - length pixel along the arrow head
+     * @param width - width pixel across the arrow on one side
+     * @param offset - offset pixel along the arrow
      */
-    drawArrowHead(startPoint, endPoint, { arrowLength, arrowWidth, arrowOffset } = {}) {
+    drawArrowHead(startPoint, endPoint, size, offset) {
         let p1 = this.toPix(startPoint);
         let p2 = this.toPix(endPoint);
-        // original default
-        arrowLength ?? (arrowLength = 10);
-        arrowWidth ?? (arrowWidth = arrowLength / 2);
-        arrowOffset ?? (arrowOffset = 0);
-        this.ink.arrow(p1, p2, arrowLength, arrowWidth, arrowOffset);
+        this.ink.arrow(p1, p2, size * 2, size, offset);
     }
     /**
      * Draw an angle.
@@ -356,9 +380,6 @@ class Pencil {
      * @param spacePixel - space between marks in pixel
      */
     drawParallelMark(startPoint, endPoint, sizePixel, tickCount, spacePixel) {
-        // original default
-        sizePixel ?? (sizePixel = 4);
-        spacePixel ?? (spacePixel = 6);
         let [A, B] = this.toPixs([startPoint, endPoint]);
         this.ink.parallel(A, B, sizePixel, tickCount, spacePixel);
     }
@@ -372,9 +393,6 @@ class Pencil {
     drawTick(startPoint, tickPoint, lengthPixel, offsetPixel) {
         let p1 = this.toPix(startPoint);
         let p2 = this.toPix(tickPoint);
-        // original default
-        lengthPixel ?? (lengthPixel = 5);
-        offsetPixel ?? (offsetPixel = 0);
         this.ink.tick(p1, p2, lengthPixel, offsetPixel);
     }
     /**
@@ -406,9 +424,6 @@ class Pencil {
     drawEqualMark(startPoint, endPoint, lengthPixel, tickCount, spacePixel) {
         let A = this.toPix(startPoint);
         let B = this.toPix(endPoint);
-        // original default
-        lengthPixel ?? (lengthPixel = 5);
-        spacePixel ?? (spacePixel = 3);
         this.ink.equalSide(A, B, lengthPixel, tickCount, spacePixel);
     }
     /**
@@ -416,15 +431,10 @@ class Pencil {
      * @param center - position of compass center
      * @param xSizePixel - horizontal one-sided length of compass, in pixel
      * @param ySizePixel - vertical one-sided length of compass, in pixel
-     * @param arrowLength - length of arrow head
-     * @param arrowWidth - one-sided width of arrow head
+     * @param arrowSize - one-sided width of arrow head
      */
     drawCompass(center, xSizePixel, ySizePixel, arrowSize) {
         let cen = this.toPix(center);
-        xSizePixel ?? (xSizePixel = 17);
-        ySizePixel ?? (ySizePixel = 20);
-        // arrowLength ??= 7
-        // arrowWidth ??= arrowLength / 2
         this.ink.compass(cen, xSizePixel, ySizePixel, arrowSize);
     }
     /**
@@ -436,8 +446,12 @@ class Pencil {
      */
     drawPlot(func, tStart, tEnd, dots = 1000) {
         let points = (0, support_1.trace)(func, [tStart, tEnd], dots);
-        function outOfRange(num) {
-            return num.some($ => Math.abs($) > 10000);
+        let [xmin, xmax] = this.frame.xRange();
+        let [ymin, ymax] = this.frame.yRange();
+        let X = xmax - xmin;
+        let Y = ymax - ymin;
+        function outOfRange([x, y]) {
+            return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y;
         }
         let filteredPoints = points.map(pt => {
             let [x, y] = pt;
@@ -450,6 +464,7 @@ class Pencil {
             return pt;
         });
         let segments = (0, support_1.split)(filteredPoints, null);
+        console.log(segments);
         for (let seg of segments) {
             if (seg.length === 0)
                 continue;
@@ -646,7 +661,7 @@ class Pencil {
     drawXAxis() {
         const [xmin, xmax] = this.frame.xRange();
         this.drawStroke([[xmin, 0], [xmax, 0]]);
-        this.drawArrowHead([xmin, 0], [xmax, 0]);
+        this.drawArrowHead([xmin, 0], [xmax, 0], 5, 0);
     }
     /**
      * Draw the label of x-axis.
@@ -667,7 +682,7 @@ class Pencil {
     drawYAxis() {
         const [ymin, ymax] = this.frame.yRange();
         this.drawStroke([[0, ymin], [0, ymax]]);
-        this.drawArrowHead([0, ymin], [0, ymax]);
+        this.drawArrowHead([0, ymin], [0, ymax], 5, 0);
     }
     /**
      * Draw the label of y-axis.
@@ -760,18 +775,6 @@ class Pencil {
         for (let y of this.frame.yTicks(interval)) {
             drawLine(y);
         }
-        this.ctx.restore();
-    }
-    /**
-     * Equivalent to ctx.save()
-     */
-    save() {
-        this.ctx.save();
-    }
-    /**
-     * Equivalent to ctx.restore()
-     */
-    restore() {
         this.ctx.restore();
     }
 }

@@ -175,7 +175,7 @@ function split(arr, delimitElement) {
             ls.push(head);
             clone.shift();
             if (clone.length === 0) {
-                ls.push([]);
+                // ls.push([])
                 break;
             }
         }

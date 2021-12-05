@@ -18,9 +18,9 @@ export declare class Pencil {
     private ink;
     private feather;
     protected frame: Frame;
-    private imgStore;
     private INIT_RANGE_ALREADY;
     private INIT_SIZE_ALREADY;
+    private state;
     /**
      * Set the coordinate range of the canvas.
      * @param xRange - [xmin,xmax] in coordinates
@@ -69,6 +69,8 @@ export declare class Pencil {
     protected setLineLabel(setting?: 'auto' | 'left' | 'right'): void;
     protected setDefault(): void;
     protected setAllDefault(): void;
+    protected save(): void;
+    protected restore(): void;
     private toPix;
     private toPixs;
     /**
@@ -130,15 +132,11 @@ export declare class Pencil {
      * Draw an arrow head at `endPoint`.
      * @param startPoint - start point of arrow, used to determine arrow direction only
      * @param endPoint - end point of arrow, where the arrow head will be drawn
-     * @param arrowLength - length pixel along the arrow head
-     * @param arrowWidth - width pixel across the arrow on one side
-     * @param arrowOffset - offset pixel along the arrow
+     * @param length - length pixel along the arrow head
+     * @param width - width pixel across the arrow on one side
+     * @param offset - offset pixel along the arrow
      */
-    protected drawArrowHead(startPoint: Point, endPoint: Point, { arrowLength, arrowWidth, arrowOffset }?: {
-        arrowLength?: pixel;
-        arrowWidth?: pixel;
-        arrowOffset?: pixel;
-    }): void;
+    protected drawArrowHead(startPoint: Point, endPoint: Point, size: pixel, offset: pixel): void;
     /**
      * Draw an angle.
      * @param point1 - first point
@@ -198,8 +196,7 @@ export declare class Pencil {
      * @param center - position of compass center
      * @param xSizePixel - horizontal one-sided length of compass, in pixel
      * @param ySizePixel - vertical one-sided length of compass, in pixel
-     * @param arrowLength - length of arrow head
-     * @param arrowWidth - one-sided width of arrow head
+     * @param arrowSize - one-sided width of arrow head
      */
     protected drawCompass(center: Point, xSizePixel: pixel, ySizePixel: pixel, arrowSize: pixel): void;
     /**
@@ -331,14 +328,6 @@ export declare class Pencil {
      * @param interval - distance between grids, in coordinates.
      */
     protected drawYAxisGrid(interval: number): void;
-    /**
-     * Equivalent to ctx.save()
-     */
-    protected save(): void;
-    /**
-     * Equivalent to ctx.restore()
-     */
-    protected restore(): void;
 }
 export {};
 //# sourceMappingURL=pencil.d.ts.map

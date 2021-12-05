@@ -3922,6 +3922,18 @@ declare module "Pen/Pen" {
                 [k: string]: Point;
             }): void;
             /**
+             * Add a label to points, using index as text, with label center set as center of points.
+             * @category text
+             * @param positions - {label:position}.
+             * @returns void
+             * ```
+             * pen.label.vertices({A,B}) // label point A as 'A', point B as 'B'
+             * ```
+             */
+            vertices(positions: {
+                [k: string]: Point;
+            }): void;
+            /**
              * Add a label to an angle AOB, non-reflex.
              * @category text
              * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.

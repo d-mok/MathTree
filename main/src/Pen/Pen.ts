@@ -860,7 +860,7 @@ export class PenCls extends Pencil {
      */
     arrow(startPoint: Point, endPoint: Point, label?: string | number) {
         this.drawStroke([startPoint, endPoint])
-        this.drawArrowHead(startPoint, endPoint)
+        this.drawArrowHead(startPoint, endPoint, 5, 0)
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
@@ -1428,6 +1428,23 @@ export class PenCls extends Pencil {
             for (let k in positions) {
                 this.point(positions[k], k)
             }
+        },
+
+
+        /**
+         * Add a label to points, using index as text, with label center set as center of points.
+         * @category text
+         * @param positions - {label:position}.
+         * @returns void
+         * ```
+         * pen.label.vertices({A,B}) // label point A as 'A', point B as 'B'
+         * ```
+         */
+        vertices(positions: { [k: string]: Point }) {
+            this._pen.save()
+            this._pen.setLabelCenter(...Object.values(positions))
+            this.points(positions)
+            this._pen.restore()
         },
 
 
