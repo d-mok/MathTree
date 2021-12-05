@@ -17,12 +17,12 @@ export class PhyPenCls {
     /**
      * Export the canvas to image tag.
      * ```
-     * question = autoPen.export(question,'imgQ') 
+     * question = autoPen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
      */
     export(html: string, placeholder: string) {
-        return this.pen.export(html, placeholder)
+        return this.pen.exportTrim(html, placeholder)
     }
 
 
@@ -153,7 +153,6 @@ export class PhyPenCls {
             }
         }
 
-        pen.autoCrop()
         this.pen = pen
 
     }
@@ -247,7 +246,6 @@ export class PhyPenCls {
             pen.arrowResolve(O, N, 90, angleLabel)
         }
 
-        pen.autoCrop()
         this.pen = pen
 
     }
@@ -336,7 +334,6 @@ export class PhyPenCls {
 
         }
 
-        pen.autoCrop()
         this.pen = pen
 
 

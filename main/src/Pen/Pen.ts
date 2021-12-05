@@ -2160,15 +2160,6 @@ export class PenCls extends Pencil {
 
 
     /**
-     * @ignore
-     * @deprecated
-     */
-    autoCrop() {
-        this.board.trim()
-    }
-
-
-    /**
      * Set the background image url.
      * @category export
      * @param url - the url of background image

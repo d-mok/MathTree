@@ -36452,7 +36452,7 @@ class AutoPenCls {
      * ```
      */
     export(html, placeholder) {
-        return this.pen.export(html, placeholder);
+        return this.pen.exportTrim(html, placeholder);
     }
     /**
      * A short division diagram for prime factorization of numbers.
@@ -36509,7 +36509,6 @@ class AutoPenCls {
         while (HCF(...numbers) > 1) {
             [numbers, pivot] = drawDiv(numbers, pivot);
         }
-        pen.autoCrop();
         this.pen = pen;
     }
     /**
@@ -36578,7 +36577,6 @@ class AutoPenCls {
             let p = (cutting[i] + cutting[i + 1]) / 2;
             tick(p, ticks[i]);
         }
-        pen.autoCrop();
         this.pen = pen;
     }
     /**
@@ -36998,7 +36996,6 @@ class AutoPenCls {
         writeAngle(angleA, B, A, C);
         writeAngle(angleB, C, B, A);
         writeAngle(angleC, A, C, B);
-        pen.autoCrop();
         this.pen = pen;
     }
     /**
@@ -37217,7 +37214,6 @@ class AutoPenCls {
         if (n >= 3)
             m = n + 'th';
         pen.write([(1 + a + (n - 1) * p) / 2, -1], m + ' pattern');
-        pen.autoCrop();
         this.pen = pen;
     }
     /**
@@ -37264,7 +37260,6 @@ class AutoPenCls {
             }
             current += a;
         }
-        pen.autoCrop();
         this.pen = pen;
     }
     /**
@@ -37348,66 +37343,8 @@ class AutoPenCls {
             pen.polyline(...points);
             pen.set.weight();
         }
-        pen.autoCrop();
         this.pen = pen;
     }
-    // /**
-    //  * A pie chart
-    //  * @deprecated
-    //  * @category tool
-    //  * @returns void
-    //  * ```
-    //  * let pen = new AutoPen()
-    //  * pen.StemAndLeaf({
-    //  *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-    //  *   labels: [2,'x',6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-    //  *   stemTitle: "Stem (10 units)",
-    //  *   leafTitle: "Leaf (1 unit)"
-    //  * })
-    //  * ```
-    //  */
-    // StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }: {
-    //     data: number[],
-    //     labels?: string[],
-    //     stemTitle?: string,
-    //     leafTitle?: string
-    // }) {
-    //     const pen = new Pen();
-    //     labels ??= [...data].map(x => x.toString())
-    //     labels = labels.map(x => x.toString().split('').reverse()[0])
-    //     let width = data.length + 2
-    //     let height = Ceil(Max(...data) / 10) + 2
-    //     pen.range.set([-5, width], [-height, 2]);
-    //     pen.size.resolution(0.17)
-    //     pen.line([0, -1], [0, 2])
-    //     pen.line([-3, 0], [1, 0])
-    //     pen.set.textAlign('left')
-    //     pen.write([0.5, 1], leafTitle)
-    //     pen.set.textAlign('right')
-    //     pen.write([-0.5, 1], stemTitle)
-    //     pen.set.textAlign()
-    //     let initTen = Floor(Min(...data) / 10)
-    //     let endTen = Floor(Max(...data) / 10)
-    //     let ten = initTen
-    //     for (let j = -1; ten <= endTen; j--) {
-    //         pen.write([-1, j], ten.toString())
-    //         pen.line([0, j], [0, j - 1])
-    //         let i = 1
-    //         for (let m = 0; m < data.length; m++) {
-    //             if (Floor(data[m] / 10) === ten) {
-    //                 if (!IsNum(Number(labels[m])))
-    //                     pen.set.textItalic(true)
-    //                 pen.write([i, j], labels[m])
-    //                 pen.set.textItalic()
-    //                 pen.line([i, 0], [i + 1, 0])
-    //                 i++
-    //             }
-    //         }
-    //         ten += 1
-    //     }
-    //     pen.autoCrop();
-    //     this.pen = pen;
-    // }
     /**
      * A boxplot
      * @category tool
@@ -37481,7 +37418,6 @@ class AutoPenCls {
             pen.cutX(R_);
             pen.label.point(R_, labels[4] ?? String(Q4), 270);
         }
-        pen.autoCrop();
         this.pen = pen;
     }
     /**
@@ -37539,7 +37475,6 @@ class AutoPenCls {
                 pen.line(gon[i], [0, 0]);
             }
         }
-        pen.autoCrop();
         this.pen = pen;
     }
 }
@@ -39441,13 +39376,6 @@ class PenCls extends paint_1.Pencil {
         this.drawText(text, position, 0, 0);
     }
     /**
-     * @ignore
-     * @deprecated
-     */
-    autoCrop() {
-        this.board.trim();
-    }
-    /**
      * Set the background image url.
      * @category export
      * @param url - the url of background image
@@ -39551,7 +39479,7 @@ class PhyPenCls {
      * ```
      */
     export(html, placeholder) {
-        return this.pen.export(html, placeholder);
+        return this.pen.exportTrim(html, placeholder);
     }
     /**
      * A car on a banked road.
@@ -39632,7 +39560,6 @@ class PhyPenCls {
                 pen.arrowResolve(g, f, 0, angleLabel);
             }
         }
-        pen.autoCrop();
         this.pen = pen;
     }
     /**
@@ -39690,7 +39617,6 @@ class PhyPenCls {
             pen.set.weight(2);
             pen.arrowResolve(O, N, 90, angleLabel);
         }
-        pen.autoCrop();
         this.pen = pen;
     }
     /**
@@ -39744,7 +39670,6 @@ class PhyPenCls {
             pen.set.weight();
             pen.label.point(T, tensionLabel);
         }
-        pen.autoCrop();
         this.pen = pen;
     }
 }

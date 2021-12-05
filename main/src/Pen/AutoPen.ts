@@ -14,7 +14,7 @@ export class AutoPenCls {
      * @ignore
      */
     constructor() {
-        this.pen = new Pen();
+        this.pen = new Pen()
     }
 
     /**
@@ -24,12 +24,12 @@ export class AutoPenCls {
      * @param placeholder - The src field of the image tag to export to.
      * @returns The new html with src field pasted.
      * ```
-     * question = autoPen.export(question,'imgQ') 
+     * question = autoPen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
      */
     export(html: string, placeholder: string) {
-        return this.pen.export(html, placeholder);
+        return this.pen.exportTrim(html, placeholder)
     }
 
     /**
@@ -44,50 +44,49 @@ export class AutoPenCls {
      */
     PrimeFactorization({ numbers }: { numbers: number[] }) {
         function lowestFactor(arr: number[]) {
-            const primes = [2, 3, 5, 7, 11, 13, 17, 19];
+            const primes = [2, 3, 5, 7, 11, 13, 17, 19]
             for (let p of primes) {
-                if (HCF(...arr) % p === 0) return p;
+                if (HCF(...arr) % p === 0) return p
             }
-            return 1;
+            return 1
         }
-        const pen = new Pen();
-        pen.range.set([-10, 10], [-15, 5]);
-        pen.size.set(4);
-        const w = 1;
-        const h = 1;
+        const pen = new Pen()
+        pen.range.set([-10, 10], [-15, 5])
+        pen.size.set(4)
+        const w = 1
+        const h = 1
         function drawRow(arr: number[], pivot: number[]) {
             for (let i = 0; i < arr.length; i++) {
-                pen.write([pivot[0] + i * w, pivot[1]], arr[i].toString());
+                pen.write([pivot[0] + i * w, pivot[1]], arr[i].toString())
             }
         }
         function drawVert(pivot: number[]) {
-            pen.line([pivot[0] - 0.5 * w, pivot[1] - h / 2], [pivot[0] - 0.5 * w, pivot[1] + h / 2]);
+            pen.line([pivot[0] - 0.5 * w, pivot[1] - h / 2], [pivot[0] - 0.5 * w, pivot[1] + h / 2])
         }
         function drawUnderline(arr: number[], pivot: number[]) {
             for (let i = 0; i < arr.length; i++) {
-                pen.line([pivot[0] + i * w - 0.5 * w, pivot[1] - h / 2], [pivot[0] + i * w + 0.5 * w, pivot[1] - h / 2]);
+                pen.line([pivot[0] + i * w - 0.5 * w, pivot[1] - h / 2], [pivot[0] + i * w + 0.5 * w, pivot[1] - h / 2])
             }
         }
         function drawDivisor(pivot: number[], divisor: number) {
-            pen.write([pivot[0] - w, pivot[1]], divisor.toString());
+            pen.write([pivot[0] - w, pivot[1]], divisor.toString())
         }
         function drawDiv(arr: number[], pivot: number[]) {
-            const d = lowestFactor(arr);
-            drawVert(pivot);
-            drawUnderline(arr, pivot);
-            drawDivisor(pivot, d);
-            arr = arr.map(x => x / d);
-            pivot = [pivot[0], pivot[1] - h];
-            drawRow(arr, pivot);
-            return [arr, pivot];
+            const d = lowestFactor(arr)
+            drawVert(pivot)
+            drawUnderline(arr, pivot)
+            drawDivisor(pivot, d)
+            arr = arr.map(x => x / d)
+            pivot = [pivot[0], pivot[1] - h]
+            drawRow(arr, pivot)
+            return [arr, pivot]
         }
-        let pivot = [1, 0];
-        drawRow(numbers, pivot);
+        let pivot = [1, 0]
+        drawRow(numbers, pivot)
         while (HCF(...numbers) > 1) {
-            [numbers, pivot] = drawDiv(numbers, pivot);
+            [numbers, pivot] = drawDiv(numbers, pivot)
         }
-        pen.autoCrop();
-        this.pen = pen;
+        this.pen = pen
     }
 
     /**
@@ -121,70 +120,69 @@ export class AutoPenCls {
         ratio?: number
     }) {
 
-        const width = 5;
-        const height = 2;
+        const width = 5
+        const height = 2
 
         let ineqs: { position: number, sign: string, num: number | string, vertical: boolean, base: number }[]
-            = items.map((x, i) => ({ base: -i * (height + 2), ...x }));
+            = items.map((x, i) => ({ base: -i * (height + 2), ...x }))
 
-        const pen = new Pen();
-        pen.range.set([-width - 2, width + 2], [-(ineqs.length) * (height + 2) + 2, height + 1]);
-        pen.size.set(scale, scale * ratio);
+        const pen = new Pen()
+        pen.range.set([-width - 2, width + 2], [-(ineqs.length) * (height + 2) + 2, height + 1])
+        pen.size.set(scale, scale * ratio)
 
         pen.set.textLatex(true)
 
         function inequality({ position, sign, num, base, vertical }: { position: number, sign: string, num: number | string, base: number, vertical: boolean }) {
-            let greater = sign.includes('>') || sign.includes('g');
-            let solid = sign.includes('=') || sign.includes('e');
-            let align = -width + 2 * width * position;
+            let greater = sign.includes('>') || sign.includes('g')
+            let solid = sign.includes('=') || sign.includes('e')
+            let align = -width + 2 * width * position
 
-            let B: Point2D = [align, base];
-            let T: Point2D = [align, base + height];
-            let E: Point2D = [greater ? align + 0.4 * width : align - 0.4 * width, base + height];
-            let E1: Point2D = [greater ? width : -width, base + height];
-            let E2: Point2D = [greater ? width : -width, base];
+            let B: Point2D = [align, base]
+            let T: Point2D = [align, base + height]
+            let E: Point2D = [greater ? align + 0.4 * width : align - 0.4 * width, base + height]
+            let E1: Point2D = [greater ? width : -width, base + height]
+            let E2: Point2D = [greater ? width : -width, base]
 
             if (vertical) {
-                pen.set.strokeColor('grey');
-                pen.set.dash([10, 10]);
-                pen.graph.vertical(align);
-                pen.set.strokeColor();
-                pen.set.dash();
+                pen.set.strokeColor('grey')
+                pen.set.dash([10, 10])
+                pen.graph.vertical(align)
+                pen.set.strokeColor()
+                pen.set.dash()
             }
 
-            pen.polyshade(B, T, E1, E2);
+            pen.polyshade(B, T, E1, E2)
 
-            pen.arrow([-width, base], [width, base]);
-            pen.line(B, T);
-            pen.arrow(T, E);
-            pen.set.fillColor(solid ? 'black' : 'white');
-            pen.set.weight(3);
-            pen.circle(T, 3, [0, 360], true);
-            pen.set.weight();
-            pen.set.fillColor('black');
+            pen.arrow([-width, base], [width, base])
+            pen.line(B, T)
+            pen.arrow(T, E)
+            pen.set.fillColor(solid ? 'black' : 'white')
+            pen.set.weight(3)
+            pen.circle(T, 3, [0, 360], true)
+            pen.set.weight()
+            pen.set.fillColor('black')
 
-            pen.label.point(B, num.toString(), 270);
+            pen.label.point(B, num.toString(), 270)
         }
 
         function tick(position: number, correct: boolean) {
-            let align = -width + 2 * width * position;
-            let y = -(ineqs.length - 1) * (height + 2) - height / 2;
-            pen.write([align, y], correct ? '✔' : '✘');
+            let align = -width + 2 * width * position
+            let y = -(ineqs.length - 1) * (height + 2) - height / 2
+            pen.write([align, y], correct ? '✔' : '✘')
         }
 
-        ineqs.forEach(x => inequality(x));
+        ineqs.forEach(x => inequality(x))
 
 
-        let cutting = ineqs.map(x => x.position);
-        cutting = [0, ...cutting, 1];
+        let cutting = ineqs.map(x => x.position)
+        cutting = [0, ...cutting, 1]
 
         for (let i = 0; i < ticks.length; i++) {
-            let p = (cutting[i] + cutting[i + 1]) / 2;
-            tick(p, ticks[i]);
+            let p = (cutting[i] + cutting[i + 1]) / 2
+            tick(p, ticks[i])
         }
 
-        pen.autoCrop();
-        this.pen = pen;
+        this.pen = pen
     }
 
 
@@ -374,7 +372,7 @@ export class AutoPenCls {
             }
         }
 
-        this.pen = pen;
+        this.pen = pen
     }
 
 
@@ -407,13 +405,13 @@ export class AutoPenCls {
         let b = quadratic[1]
         let c = quadratic[2]
 
-        let greater = sign.includes('>') || sign.includes('g');
-        let equal = sign.includes('=') || sign.includes('e');
+        let greater = sign.includes('>') || sign.includes('g')
+        let equal = sign.includes('=') || sign.includes('e')
 
         let p: number | undefined
         let q: number | undefined
         try {
-            [p, q] = QuadraticRoot(a, b, c);
+            [p, q] = QuadraticRoot(a, b, c)
         } catch {
             [p, q] = [undefined, undefined]
         }
@@ -423,13 +421,13 @@ export class AutoPenCls {
             q = Fix(q, 2)
         }
 
-        const pen = new Pen();
-        pen.range.set([-5, 5], [-5, 5]);
-        pen.size.set(scale, scale * ratio);
+        const pen = new Pen()
+        pen.range.set([-5, 5], [-5, 5])
+        pen.size.set(scale, scale * ratio)
 
         pen.set.textLatex(true)
 
-        pen.axis.x('');
+        pen.axis.x('')
 
         if (p !== undefined && q !== undefined && p !== q) {
             pen.plot(x => Sign(a) * (x ** 2 - 4))
@@ -510,7 +508,7 @@ export class AutoPenCls {
                 if (greater && !equal) { }
             }
         }
-        this.pen = pen;
+        this.pen = pen
     }
 
 
@@ -578,9 +576,9 @@ export class AutoPenCls {
         let labelB = labels[1]
         let labelC = labels[2]
 
-        const pen = new Pen();
+        const pen = new Pen()
         pen.range.set([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax])
-        pen.size.set(scale);
+        pen.size.set(scale)
 
 
         function drawHeight(vertex: [number, number], base: [number, number][]) {
@@ -654,8 +652,7 @@ export class AutoPenCls {
         writeAngle(angleB, C, B, A)
         writeAngle(angleC, A, C, B)
 
-        pen.autoCrop()
-        this.pen = pen;
+        this.pen = pen
     }
 
 
@@ -773,7 +770,7 @@ export class AutoPenCls {
             integrals = FeasibleIntegral(...constraints)
         }
 
-        const pen = new Pen();
+        const pen = new Pen()
 
         let [[xmin, xmax], [ymin, ymax]] = ranges
         let bound = 0.7
@@ -782,43 +779,43 @@ export class AutoPenCls {
         ymin -= bound
         ymax += bound
         pen.range.set([xmin, xmax], [ymin, ymax])
-        pen.size.resolution(resolution);
+        pen.size.resolution(resolution)
 
-        pen.axis.x('');
-        pen.axis.y('');
+        pen.axis.x('')
+        pen.axis.y('')
 
         if (grid > 0) {
-            pen.set.alpha(0.6);
-            pen.grid.x(grid);
-            pen.grid.y(grid);
-            pen.set.alpha();
+            pen.set.alpha(0.6)
+            pen.grid.x(grid)
+            pen.grid.y(grid)
+            pen.set.alpha()
         }
 
         if (subGrid > 0) {
-            pen.set.alpha(0.4);
-            pen.grid.x(grid);
-            pen.grid.y(grid);
-            pen.set.alpha();
+            pen.set.alpha(0.4)
+            pen.grid.x(grid)
+            pen.grid.y(grid)
+            pen.set.alpha()
         }
 
         if (tick > 0) {
-            pen.set.fillColor("grey");
-            pen.set.textSize(0.8);
-            pen.tick.x(tick);
-            pen.tick.y(tick);
-            pen.set.fillColor();
-            pen.set.textSize();
+            pen.set.fillColor("grey")
+            pen.set.textSize(0.8)
+            pen.tick.x(tick)
+            pen.tick.y(tick)
+            pen.set.fillColor()
+            pen.set.textSize()
         }
 
         function drawLines() {
             for (let i = 0; i < constraints.length; i++) {
-                let [a, b, s, c] = constraints[i];
+                let [a, b, s, c] = constraints[i]
                 if (!ineq(s).canEqual())
-                    pen.set.dash([5, 5]);
+                    pen.set.dash([5, 5])
                 pen.set.color(constraintColors[i] ?? 'black')
-                pen.graph.linear(a, b, -c);
+                pen.graph.linear(a, b, -c)
                 pen.set.color()
-                pen.set.dash();
+                pen.set.dash()
             }
         }
 
@@ -829,37 +826,37 @@ export class AutoPenCls {
 
         function labelField(p: Point2D) {
             pen.set.textAlign("left")
-            pen.label.point(p, fieldAt(p).toString(), 60, 10);
+            pen.label.point(p, fieldAt(p).toString(), 60, 10)
             pen.set.textAlign()
         }
 
         function drawIntegral(label = false) {
             integrals.forEach((p) => {
-                pen.point(p);
+                pen.point(p)
                 if (label && labelConstraints.every((f) => f(...p))) labelField(p)
-            });
+            })
         }
 
         function drawVertex(coordinates = false, label = false) {
             vertices.forEach((p) => {
-                pen.point(p);
-                if (coordinates) pen.label.coordinates(p, 270);
+                pen.point(p)
+                if (coordinates) pen.label.coordinates(p, 270)
                 if (label && labelConstraints.every((f) => f(...p))) labelField(p)
-            });
+            })
         }
 
         function drawShade() {
-            pen.polyshade(...vertices);
+            pen.polyshade(...vertices)
         }
 
         function drawContour(value: number) {
-            pen.graph.linear(field[0], field[1], field[2] - value);
+            pen.graph.linear(field[0], field[1], field[2] - value)
         }
 
         function drawContours(color = contourColor) {
-            pen.set.color(color);
-            contours.forEach(drawContour);
-            pen.set.color();
+            pen.set.color(color)
+            contours.forEach(drawContour)
+            pen.set.color()
         }
 
         function drawHighlight({
@@ -870,44 +867,44 @@ export class AutoPenCls {
             coordinates = true,
             label = true,
         }: Highlight) {
-            pen.set.color(color);
-            pen.point(point);
-            if (circle) pen.circle(point, 5);
-            if (contour) drawContour(fieldAt(point));
-            if (coordinates) pen.label.coordinates(point, 270);
+            pen.set.color(color)
+            pen.point(point)
+            if (circle) pen.circle(point, 5)
+            if (contour) drawContour(fieldAt(point))
+            if (coordinates) pen.label.coordinates(point, 270)
             if (label) labelField(point)
-            pen.set.color();
+            pen.set.color()
         }
 
         function drawHighlights() {
-            highlights.forEach((h) => drawHighlight(h));
+            highlights.forEach((h) => drawHighlight(h))
         }
 
-        if (showLine) drawLines();
-        if (showIntegral) drawIntegral(showIntegralLabel);
-        if (showShade) drawShade();
-        if (showVertex) drawVertex(showVertexCoordinates, showVertexLabel);
-        drawHighlights();
-        drawContours();
+        if (showLine) drawLines()
+        if (showIntegral) drawIntegral(showIntegralLabel)
+        if (showShade) drawShade()
+        if (showVertex) drawVertex(showVertexCoordinates, showVertexLabel)
+        drawHighlights()
+        drawContours()
 
         if (showVertexMax) drawHighlight({
             point: MaximizePoint(vertices, field),
             color: "red"
-        });
+        })
         if (showVertexMin) drawHighlight({
             point: MinimizePoint(vertices, field),
             color: "blue"
-        });
+        })
         if (showIntegralMax) drawHighlight({
             point: MaximizePoint(integrals, field),
             color: "red"
-        });
+        })
         if (showIntegralMin) drawHighlight({
             point: MinimizePoint(integrals, field),
             color: "blue"
-        });
+        })
 
-        this.pen = pen;
+        this.pen = pen
     }
 
 
@@ -928,8 +925,8 @@ export class AutoPenCls {
     DotPattern({ a, p, q, n, offset }:
         { a: number, p: number, q: number, n: number, offset: number }) {
 
-        const pen = new Pen();
-        pen.range.set([-2, 30], [-4, 10]);
+        const pen = new Pen()
+        pen.range.set([-2, 30], [-4, 10])
         pen.size.resolution(0.08)
 
         function drawRow(n: number, j: number, offset = 0) {
@@ -947,8 +944,7 @@ export class AutoPenCls {
         if (n === 3) m = '3rd'
         if (n >= 3) m = n + 'th'
         pen.write([(1 + a + (n - 1) * p) / 2, -1], m + ' pattern')
-        pen.autoCrop();
-        this.pen = pen;
+        this.pen = pen
     }
 
 
@@ -974,9 +970,9 @@ export class AutoPenCls {
         angleLabels: (string | null | undefined)[],
         size?: number
     }) {
-        const pen = new Pen();
-        pen.range.set([-1.2, 1.2], [-1.2, 1.2]);
-        pen.size.set(size);
+        const pen = new Pen()
+        pen.range.set([-1.2, 1.2], [-1.2, 1.2])
+        pen.size.set(size)
         pen.graph.circle([0, 0], 1)
         pen.set.angle('polar')
 
@@ -1003,8 +999,7 @@ export class AutoPenCls {
             }
             current += a
         }
-        pen.autoCrop();
-        this.pen = pen;
+        this.pen = pen
     }
 
 
@@ -1058,7 +1053,7 @@ export class AutoPenCls {
             showLine?: boolean
         }) {
 
-        const pen = new Pen();
+        const pen = new Pen()
 
         let endGap = barWidth + barGap / 2
         let width = endGap + categories.length * (barWidth + barGap) + endGap
@@ -1067,7 +1062,7 @@ export class AutoPenCls {
         let maxSubUnit = maxUnit * (interval / subInterval)
         let height = (maxUnit) * interval * 1.1
 
-        pen.range.set([-width * 0.5, width], [-height, height]);
+        pen.range.set([-width * 0.5, width], [-height, height])
         pen.size.resolution(0.2, 1.4 / height)
 
         pen.line([0, 0], [width, 0])
@@ -1133,81 +1128,12 @@ export class AutoPenCls {
             pen.set.weight()
         }
 
-        pen.autoCrop();
-        this.pen = pen;
+        this.pen = pen
     }
 
 
 
 
-
-
-    // /**
-    //  * A pie chart
-    //  * @deprecated
-    //  * @category tool
-    //  * @returns void
-    //  * ```
-    //  * let pen = new AutoPen()
-    //  * pen.StemAndLeaf({
-    //  *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-    //  *   labels: [2,'x',6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-    //  *   stemTitle: "Stem (10 units)",
-    //  *   leafTitle: "Leaf (1 unit)"
-    //  * })
-    //  * ```
-    //  */
-    // StemAndLeaf({ data, labels, stemTitle = "Stem (10 units)", leafTitle = "Leaf (1 unit)" }: {
-    //     data: number[],
-    //     labels?: string[],
-    //     stemTitle?: string,
-    //     leafTitle?: string
-    // }) {
-    //     const pen = new Pen();
-
-    //     labels ??= [...data].map(x => x.toString())
-    //     labels = labels.map(x => x.toString().split('').reverse()[0])
-
-    //     let width = data.length + 2
-    //     let height = Ceil(Max(...data) / 10) + 2
-
-    //     pen.range.set([-5, width], [-height, 2]);
-    //     pen.size.resolution(0.17)
-
-    //     pen.line([0, -1], [0, 2])
-    //     pen.line([-3, 0], [1, 0])
-
-    //     pen.set.textAlign('left')
-    //     pen.write([0.5, 1], leafTitle)
-
-    //     pen.set.textAlign('right')
-    //     pen.write([-0.5, 1], stemTitle)
-    //     pen.set.textAlign()
-
-    //     let initTen = Floor(Min(...data) / 10)
-    //     let endTen = Floor(Max(...data) / 10)
-
-    //     let ten = initTen
-    //     for (let j = -1; ten <= endTen; j--) {
-    //         pen.write([-1, j], ten.toString())
-    //         pen.line([0, j], [0, j - 1])
-
-    //         let i = 1
-    //         for (let m = 0; m < data.length; m++) {
-    //             if (Floor(data[m] / 10) === ten) {
-    //                 if (!IsNum(Number(labels[m])))
-    //                     pen.set.textItalic(true)
-    //                 pen.write([i, j], labels[m])
-    //                 pen.set.textItalic()
-    //                 pen.line([i, 0], [i + 1, 0])
-    //                 i++
-    //             }
-    //         }
-    //         ten += 1
-    //     }
-    //     pen.autoCrop();
-    //     this.pen = pen;
-    // }
 
 
 
@@ -1251,7 +1177,7 @@ export class AutoPenCls {
         showValue?: boolean,
         showTick?: boolean,
     }) {
-        const pen = new Pen();
+        const pen = new Pen()
         let [Q0, Q1, Q2, Q3, Q4] = summary
 
         let height = showDash ? 1 : 0.5
@@ -1283,14 +1209,14 @@ export class AutoPenCls {
         start ??= Q0 - (Q4 - Q0) * 0.2
         end ??= Q4 + (Q4 - Q0) * 0.2
 
-        pen.range.set([start, end], [-(t + 1), t + 1]);
+        pen.range.set([start, end], [-(t + 1), t + 1])
         pen.size.set(size, 1)
 
         if (showTick) {
-            pen.tick.x(tick);
+            pen.tick.x(tick)
         }
 
-        pen.axis.x('');
+        pen.axis.x('')
 
         pen.polygon(A1, A2, C2, C1)
         pen.line(B1, B2)
@@ -1318,8 +1244,7 @@ export class AutoPenCls {
             pen.label.point(R_, labels[4] ?? String(Q4), 270)
         }
 
-        pen.autoCrop();
-        this.pen = pen;
+        this.pen = pen
     }
 
 
@@ -1354,7 +1279,7 @@ export class AutoPenCls {
 
         const pen = new Pen()
 
-        pen.range.square(1.3);
+        pen.range.square(1.3)
         pen.size.set(1.5)
 
         let gon = RegularPolygon(side, [0, 0], 1, 0)
@@ -1407,8 +1332,7 @@ export class AutoPenCls {
             }
         }
 
-        pen.autoCrop();
-        this.pen = pen;
+        this.pen = pen
     }
 
 

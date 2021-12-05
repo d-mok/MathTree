@@ -4316,11 +4316,6 @@ declare module "Pen/Pen" {
             }): void;
         };
         /**
-         * @ignore
-         * @deprecated
-         */
-        autoCrop(): void;
-        /**
          * Set the background image url.
          * @category export
          * @param url - the url of background image
