@@ -194,6 +194,18 @@ export class PhyEqCls {
             ]
         },
 
+
+        /**
+         * F = mg
+         */
+        Fmg(F = 'F', m = 'm', g = 'g', $ = '***'): eq {
+            let args = [F, m, g]
+            return [
+                makeFn(args, (F, m, g) => F - m * g),
+                makeLatex(args, '@=@@}', $, ':||')
+            ]
+        },
+
     }
 
 

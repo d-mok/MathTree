@@ -33202,6 +33202,16 @@ class PhyEqCls {
                     makeLatex(args, '@=\\dfrac{G@}{(@+@)^2}', $, ':|::')
                 ];
             },
+            /**
+             * F = mg
+             */
+            Fmg(F = 'F', m = 'm', g = 'g', $ = '***') {
+                let args = [F, m, g];
+                return [
+                    makeFn(args, (F, m, g) => F - m * g),
+                    makeLatex(args, '@=@@}', $, ':||')
+                ];
+            },
         };
     }
     /**
