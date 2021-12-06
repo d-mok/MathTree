@@ -1713,9 +1713,17 @@ declare module "Math/Code/PhyEq" {
              */
             FGMmr2(F?: string, M?: string, m?: string, r?: string, $?: string): eq;
             /**
+             * F = GMm/r^2
+             */
+            FGMmRh2(F?: string, M?: string, m?: string, R?: string, h?: string, $?: string): eq;
+            /**
              * g = GM/r^2
              */
             gGMr2(g?: string, M?: string, r?: string, $?: string): eq;
+            /**
+             * g = GM/r^2
+             */
+            gGMRh2(g?: string, M?: string, R?: string, h?: string, $?: string): eq;
         };
     }
     global {

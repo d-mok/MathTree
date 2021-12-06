@@ -157,7 +157,18 @@ export class PhyEqCls {
             let args = [F, M, m, r]
             return [
                 makeFn(args, (F, M, m, r) => F - PhyConst.G * M * m / (r ** 2)),
-                makeLatex(args, '@=\\dfrac{G@@}{@^2}', $, ':||:')
+                makeLatex(args, '@=\\dfrac{G@@}{@^2}', $, ':|||')
+            ]
+        },
+
+        /**
+         * F = GMm/r^2
+         */
+        FGMmRh2(F = 'F', M = 'M', m = 'm', R = 'R', h = 'h', $ = '****'): eq {
+            let args = [F, M, m, R, h]
+            return [
+                makeFn(args, (F, M, m, R, h) => F - PhyConst.G * M * m / ((R + h) ** 2)),
+                makeLatex(args, '@=\\dfrac{G@@}{(@+@)^2}', $, ':||::')
             ]
         },
 
@@ -168,10 +179,20 @@ export class PhyEqCls {
             let args = [g, M, r]
             return [
                 makeFn(args, (g, M, r) => g - PhyConst.G * M / (r ** 2)),
-                makeLatex(args, '@=\\dfrac{G@}{@^2}', $, ':|:')
+                makeLatex(args, '@=\\dfrac{G@}{@^2}', $, ':||')
             ]
         },
 
+        /**
+         * g = GM/r^2
+         */
+        gGMRh2(g = 'g', M = 'M', R = 'R', h = 'h', $ = '***'): eq {
+            let args = [g, M, R, h]
+            return [
+                makeFn(args, (g, M, R, h) => g - PhyConst.G * M / ((R + h) ** 2)),
+                makeLatex(args, '@=\\dfrac{G@}{(@+@)^2}', $, ':|::')
+            ]
+        },
 
     }
 
@@ -182,4 +203,3 @@ declare global {
     var PhyEq: PhyEqCls
 }
 globalThis.PhyEq = new PhyEqCls()
-
