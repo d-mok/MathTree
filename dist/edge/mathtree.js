@@ -33160,6 +33160,30 @@ function makeLatex(args, template, units, brackets) {
     return T;
 }
 class PhyEqCls {
+    constructor() {
+        this.Gravitation = {
+            /**
+             * F = GMm/r^2
+             */
+            FGMmr2(F = 'F', M = 'M', m = 'm', r = 'r', $ = '****') {
+                let args = [F, M, m, r];
+                return [
+                    makeFn(args, (F, M, m, r) => F - PhyConst.G * M * m / (r ** 2)),
+                    makeLatex(args, '@=\\dfrac{G@@}{@^2}', $, ':||:')
+                ];
+            },
+            /**
+             * g = GM/r^2
+             */
+            gGMr2(g = 'g', M = 'M', r = 'r', $ = '***') {
+                let args = [g, M, r];
+                return [
+                    makeFn(args, (g, M, r) => g - PhyConst.G * M / (r ** 2)),
+                    makeLatex(args, '@=\\dfrac{G@}{@^2}', $, ':|:')
+                ];
+            },
+        };
+    }
     /**
      * s = vt
      */

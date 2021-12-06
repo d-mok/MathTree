@@ -1707,6 +1707,16 @@ declare module "Math/Code/PhyEq" {
          * F = mrω^2
          */
         Fmrω(F?: string, m?: string, r?: string, ω?: string, $?: string): eq;
+        Gravitation: {
+            /**
+             * F = GMm/r^2
+             */
+            FGMmr2(F?: string, M?: string, m?: string, r?: string, $?: string): eq;
+            /**
+             * g = GM/r^2
+             */
+            gGMr2(g?: string, M?: string, r?: string, $?: string): eq;
+        };
     }
     global {
         var PhyEq: PhyEqCls;
