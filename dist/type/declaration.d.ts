@@ -1663,50 +1663,52 @@ declare var PhyConst: {
 declare module "Math/Code/PhyEq" {
     type eq = [func: zeroFunction, latex: string];
     export class PhyEqCls {
-        /**
-         * s = vt
-         */
-        svt(s?: string, v?: string, t?: string, $?: string): eq;
-        /**
-         * θ = ωt
-         */
-        θωt(θ?: string, ω?: string, t?: string, $?: string): eq;
-        /**
-         * ω = 2π/T
-         */
-        ωT(ω?: string, T?: string, $?: string): eq;
-        /**
-         * s = rθ
-         */
-        srθ(s?: string, r?: string, θ?: string, $?: string): eq;
-        /**
-         * v = rω
-         */
-        vrω(v?: string, r?: string, ω?: string, $?: string): eq;
-        /**
-         * a = vω
-         */
-        avω(a?: string, v?: string, ω?: string, $?: string): eq;
-        /**
-         * a = v^2/r
-         */
-        avr(a?: string, v?: string, r?: string, $?: string): eq;
-        /**
-         * a = rω^2
-         */
-        arω(a?: string, r?: string, ω?: string, $?: string): eq;
-        /**
-         * F = mvω
-         */
-        Fmvω(F?: string, m?: string, v?: string, ω?: string, $?: string): eq;
-        /**
-         * F = mv^2/r
-         */
-        Fmvr(F?: string, m?: string, v?: string, r?: string, $?: string): eq;
-        /**
-         * F = mrω^2
-         */
-        Fmrω(F?: string, m?: string, r?: string, ω?: string, $?: string): eq;
+        CircularMotion: {
+            /**
+             * s = vt
+             */
+            svt(s?: string, v?: string, t?: string, $?: string): eq;
+            /**
+             * θ = ωt
+             */
+            θωt(θ?: string, ω?: string, t?: string, $?: string): eq;
+            /**
+             * ω = 2π/T
+             */
+            ωT(ω?: string, T?: string, $?: string): eq;
+            /**
+             * s = rθ
+             */
+            srθ(s?: string, r?: string, θ?: string, $?: string): eq;
+            /**
+             * v = rω
+             */
+            vrω(v?: string, r?: string, ω?: string, $?: string): eq;
+            /**
+             * a = vω
+             */
+            avω(a?: string, v?: string, ω?: string, $?: string): eq;
+            /**
+             * a = v^2/r
+             */
+            avr(a?: string, v?: string, r?: string, $?: string): eq;
+            /**
+             * a = rω^2
+             */
+            arω(a?: string, r?: string, ω?: string, $?: string): eq;
+            /**
+             * F = mvω
+             */
+            Fmvω(F?: string, m?: string, v?: string, ω?: string, $?: string): eq;
+            /**
+             * F = mv^2/r
+             */
+            Fmvr(F?: string, m?: string, v?: string, r?: string, $?: string): eq;
+            /**
+             * F = mrω^2
+             */
+            Fmrω(F?: string, m?: string, r?: string, ω?: string, $?: string): eq;
+        };
         Gravitation: {
             /**
              * F = GMm/r^2
