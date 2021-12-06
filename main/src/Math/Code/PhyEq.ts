@@ -202,7 +202,7 @@ export class PhyEqCls {
             let args = [F, m, g]
             return [
                 makeFn(args, (F, m, g) => F - m * g),
-                makeLatex(args, '@=@@}', $, ':||')
+                makeLatex(args, '@=@@', $, ':||')
             ]
         },
 
