@@ -38,7 +38,7 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     'friction': 'N',
     'moment': 'N m',
     'power': 'W',
-    'gravitational field strength': 'm s-2',
+    'gravitational field strength': 'N kg-1',
     'angular position': '°',
     'period': 's',
     'frequency': 'Hz',
@@ -76,9 +76,9 @@ const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4']
 
 export function findUnit(name: string): string | undefined {
     for (let k in DEFAULT_UNIT) {
-        if (name.includes(k)) return DEFAULT_UNIT[k];
+        if (name.includes(k)) return DEFAULT_UNIT[k]
     }
-    return undefined;
+    return undefined
 }
 
 

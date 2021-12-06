@@ -31233,7 +31233,7 @@ const DEFAULT_UNIT = {
     'friction': 'N',
     'moment': 'N m',
     'power': 'W',
-    'gravitational field strength': 'm s-2',
+    'gravitational field strength': 'N kg-1',
     'angular position': '°',
     'period': 's',
     'frequency': 'Hz',
@@ -33173,7 +33173,7 @@ class PhyEqCls {
                 ];
             },
             /**
-             * F = GMm/r^2
+             * F = GMm/(R+h)^2
              */
             FGMmRh2(F = 'F', M = 'M', m = 'm', R = 'R', h = 'h', $ = '*****') {
                 let args = [F, M, m, R, h];
@@ -33193,7 +33193,7 @@ class PhyEqCls {
                 ];
             },
             /**
-             * g = GM/r^2
+             * g = GM/(R+h)^2
              */
             gGMRh2(g = 'g', M = 'M', R = 'R', h = 'h', $ = '****') {
                 let args = [g, M, R, h];
