@@ -162,9 +162,9 @@ export class PhyEqCls {
         },
 
         /**
-         * F = GMm/r^2
+         * F = GMm/(R+h)^2
          */
-        FGMmRh2(F = 'F', M = 'M', m = 'm', R = 'R', h = 'h', $ = '****'): eq {
+        FGMmRh2(F = 'F', M = 'M', m = 'm', R = 'R', h = 'h', $ = '*****'): eq {
             let args = [F, M, m, R, h]
             return [
                 makeFn(args, (F, M, m, R, h) => F - PhyConst.G * M * m / ((R + h) ** 2)),
@@ -184,9 +184,9 @@ export class PhyEqCls {
         },
 
         /**
-         * g = GM/r^2
+         * g = GM/(R+h)^2
          */
-        gGMRh2(g = 'g', M = 'M', R = 'R', h = 'h', $ = '***'): eq {
+        gGMRh2(g = 'g', M = 'M', R = 'R', h = 'h', $ = '****'): eq {
             let args = [g, M, R, h]
             return [
                 makeFn(args, (g, M, R, h) => g - PhyConst.G * M / ((R + h) ** 2)),
