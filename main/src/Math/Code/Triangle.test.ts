@@ -1,3 +1,6 @@
+import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to'
+expect.extend({ toBeDeepCloseTo, toMatchCloseTo })
+
 
 test('Pyth', () => {
     expect(Pyth(3, 4)).toBe(5)
@@ -12,17 +15,10 @@ test('PythLeg', () => {
 
 test('CosineLawLength', () => {
     expect(CosineLawLength(5, 5, 60)).toBeCloseTo(5)
+    expect(CosineLawLength(3, 4, 90)).toBeCloseTo(5)
     expect(CosineLawLength(2, 4, 30)).toBeCloseTo(2.47862735)
     expect(CosineLawLength(1, 2, 180)).toBeCloseTo(3)
-    expect(() => CosineLawLength(4, 6, 0)).toThrow()
-})
-
-
-test('CosineLawLength', () => {
-    expect(CosineLawLength(5, 5, 60)).toBeCloseTo(5)
-    expect(CosineLawLength(2, 4, 30)).toBeCloseTo(2.47862735)
-    expect(CosineLawLength(1, 2, 180)).toBeCloseTo(3)
-    expect(() => CosineLawLength(4, 6, 0)).toThrow()
+    expect(CosineLawLength(4, 6, 0)).toBeCloseTo(2)
 })
 
 
@@ -37,12 +33,12 @@ test('CosineLawAngle', () => {
 
 test('SineLawLength', () => {
     expect(SineLawLength(60, 1, 60)).toBeCloseTo(1)
-    expect(SineLawLength(90,2,30)).toBeCloseTo(1)
+    expect(SineLawLength(90, 2, 30)).toBeCloseTo(1)
 })
 
 
 test('SineLawAngle', () => {
-    expect(SineLawAngle(1, 60,1)).toBeCloseTo(60)
+    expect(SineLawAngle(1, 60, 1)).toBeCloseTo(60)
     expect(SineLawAngle(2, 90, 1)).toBeCloseTo(30)
     expect(() => SineLawAngle(2, 90, 3)).toThrow()
 })
@@ -57,6 +53,48 @@ test('Heron', () => {
     expect(() => Heron(1, 1, 3)).toThrow()
 })
 
+
+
+test('SolveSSS', () => {
+    expect(SolveSSS(1, 3 ** 0.5, 2)).toEqual([90, 30, 60])
+    expect(() => SolveSSS(1, 1, 3)).toThrow()
+})
+
+
+
+test('SolveSAS', () => {
+    expect(SolveSAS(1, 90, 3 ** 0.5)).toBeDeepCloseTo([30, 2, 60])
+})
+
+
+test('SolveAAS', () => {
+    expect(SolveAAS(60, 90, 3 ** 0.5)).toEqual([1, 30, 2])
+})
+
+
+test('SolveASA', () => {
+    expect(SolveASA(90, 3 ** 0.5, 30)).toEqual([2, 60, 1])
+})
+
+
+
+test('SolveSSA', () => {
+    expect(SolveSSA(1, 3 ** 0.5, 30)).toEqual([90, 2, 60])
+})
+
+
+test('HeightsBySSS', () => {
+    expect(HeightsBySSS(1, 3 ** 0.5, 2)).toBeDeepCloseTo([3 ** 0.5, 1, 0.5 * 3 ** 0.5])
+    expect(() => HeightsBySSS(1, 1, 3)).toThrow()
+})
+
+
+test('HeightBySSS', () => {
+    expect(HeightBySSS(1, 3 ** 0.5, 2)).toBeCloseTo(3 ** 0.5)
+    expect(HeightBySSS(3 ** 0.5, 2, 1)).toBeCloseTo(1)
+    expect(HeightBySSS(2, 1, 3 ** 0.5)).toBeCloseTo(0.5 * 3 ** 0.5)
+    expect(() => HeightBySSS(1, 1, 3)).toThrow()
+})
 
 
 test('TriangleFromVertex', () => {

@@ -2617,159 +2617,208 @@ declare function PrimeFactorize(val: {
  * ```
  */
 declare function ConstraintText(constraint: Constraint, sign?: boolean | null, xReplace?: string, yReplace?: string): string;
-/**
- * @category Triangle
- * @return Find c from a and b of a right triangle.
- * ```
- * Pyth(3,4) // 5
- * ```
- */
-declare function Pyth(a: number, b: number): number;
-/**
- * @category Triangle
- * @return Find b from c and a of a right triangle.
- * ```
- * PythLeg(5,4) // 3
- * ```
- */
-declare function PythLeg(c: number, a: number): number;
-/**
- * @category Triangle
- * @return Find side length c by cosine law. Input sides a,b and angle C.
- * ```
- * CosineLawLength(5,5,60) // 5
- * CosineLawLength(2,4,30) // 2.47862735
- * CosineLawLength(1,2,180) // 3
- * CosineLawLength(4,6,0) // 2
- * ```
- */
-declare function CosineLawLength(a: number, b: number, C: number): number;
-/**
- * @category Triangle
- * @return Find angle C by cosine law. Input sides a,b,c.
- * ```
- * CosineLawAngle(5,5,5) // 60
- * CosineLawAngle(3,4,5) // 90
- * CosineLawAngle(7,8,9) // 73.3984504
- * ```
- */
-declare function CosineLawAngle(a: number, b: number, c: number): number;
-/**
- * @category Triangle
- * @return Find side b by sine law.
- * ```
- * SineLawLength(60,1,60) // 1
- * ```
- */
-declare function SineLawLength(A: number, a: number, B: number): number;
-/**
- * @category Triangle
- * @return Find angle B by sine law.
- * ```
- * SineLawAngle(1,60,1) // 60
- * ```
- */
-declare function SineLawAngle(a: number, A: number, b: number): number;
-/**
- * @category Triangle
- * @return Find area by Heron's formula.
- * ```
- * Heron(3,4,5) // 6
- * Heron(1,1,1) // 0.433012701
- * Heron(7,8,9) // 26.83281573
- * ```
- */
-declare function Heron(a: number, b: number, c: number): number;
-/**
- * @category Triangle
- * @param fix - Round all return values to integer.
- * @return Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
- * ```
- * TriangleFromVertex([0,0],[4,0],[0,3],false)
- * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
- * ```
- */
-declare function TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): Triangle;
-/**
- * @category Triangle
- * @param triangle - unknown elements are null.
- * @return Solve a triangle. return the triangle object solved.
- * ```
- * SolveTriangle({sideC:2, sideA:2, sideB:2})
- * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
- * SolveTriangle({sideC:3, angleB:90, sideA:4})
- * // {sideC:3, angleB:90, sideA:4, angleC:36.86989765, sideB:5, angleA:53.13010235}
- * SolveTriangle({sideC:5, angleB:30, angleC:80})
- * // {sideC:5, angleB:30, sideA:4.770944471, angleC:80, sideB:2.53856653, angleA:70}
- * SolveTriangle({sideC:6, angleB:30, angleA:40})
- * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
- * ```
- */
-declare function SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: Partial<Triangle>): Triangle;
-/**
- * @category Triangle
- * @return the orthocentre of a triangle
- * ```
- * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
- * ```
- */
-declare function Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
-/**
- * @category Triangle
- * @return the circumcentre of a triangle
- * ```
- * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
- * ```
- */
-declare function Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
-/**
- * @category Triangle
- * @return the centroid of a triangle
- * ```
- * Centroid([3,6],[9,12],[15,21])  // [9,13]
- * ```
- */
-declare function Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D;
-/**
- * @category Triangle
- * @return the incentre of a triangle
- * ```
- * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
- * ```
- */
-declare function Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
-/**
- * @category Triangle
- * @param A - a point of the triangle
- * @param B - a point of the triangle
- * @param C - a point of the triangle
- * @returns the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
- */
-declare function ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
-/**
- * @category Triangle
- * @param A - a point of the triangle
- * @param B - a point of the triangle
- * @param C - a point of the triangle
- * @returns the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
- */
-declare function ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
-/**
- * @category Triangle
- * @param A - a point of the triangle
- * @param B - a point of the triangle
- * @param C - a point of the triangle
- * @returns the scaled points [A,B,C] so that their centroid and themselves becomes integral
- */
-declare function ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
-/**
- * @category Triangle
- * @param A - a point of the triangle
- * @param B - a point of the triangle
- * @param C - a point of the triangle
- * @returns the scaled points [A,B,C] so that their incentre and themselves becomes integral
- */
-declare function ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+declare module "Math/Code/Triangle.test" { }
+declare module "Math/Code/Triangle" {
+    export class Host {
+        /**
+         * Find c from a and b of a right triangle.
+         * ```
+         * Pyth(3,4) // 5
+         * ```
+         */
+        static Pyth(a: number, b: number): number;
+        /**
+         * Find b from c and a of a right triangle.
+         * ```
+         * PythLeg(5,4) // 3
+         * ```
+         */
+        static PythLeg(c: number, a: number): number;
+        /**
+         * Find side length c by cosine law. Input sides a,b and angle C.
+         * ```
+         * CosineLawLength(3, 4, 90) // 5
+         * ```
+         */
+        static CosineLawLength(a: number, b: number, C: number): number;
+        /**
+         * Find angle C by cosine law. Input sides a,b,c.
+         * ```
+         * CosineLawAngle(5,5,5) // 60
+         * CosineLawAngle(3,4,5) // 90
+         * CosineLawAngle(7,8,9) // 73.3984504
+         * ```
+         */
+        static CosineLawAngle(a: number, b: number, c: number): number;
+        /**
+         * Find side b by sine law.
+         * ```
+         * SineLawLength(60,1,60) // 1
+         * ```
+         */
+        static SineLawLength(A: number, a: number, B: number): number;
+        /**
+         * Find angle B by sine law. Assume acute.
+         * ```
+         * SineLawAngle(1,60,1) // 60
+         * ```
+         */
+        static SineLawAngle(a: number, A: number, b: number): number;
+        /**
+         * Find area by Heron's formula.
+         * ```
+         * Heron(3,4,5) // 6
+         * Heron(1,1,1) // 0.433012701
+         * Heron(7,8,9) // 26.83281573
+         * ```
+         */
+        static Heron(a: number, b: number, c: number): number;
+        /**
+         * Solve SSS triangle.
+         * ```
+         * SolveSSS(1,sqrt(3),2) // [90,30,60]
+         * ```
+         */
+        static SolveSSS(a: number, b: number, c: number): [C: number, A: number, B: number];
+        /**
+         * Solve SAS triangle.
+         * ```
+         * SolveSAS(1,90,sqrt(3)) // [30,2,60]
+         * ```
+         */
+        static SolveSAS(a: number, C: number, b: number): [A: number, c: number, B: number];
+        /**
+         * Solve AAS triangle.
+         * ```
+         * SolveAAS(60,90,sqrt(3)) // [1,30,2]
+         * ```
+         */
+        static SolveAAS(A: number, B: number, a: number): [c: number, C: number, b: number];
+        /**
+         * Solve ASA triangle.
+         * ```
+         * SolveASA(90,sqrt(3),30) // [2,60,1]
+         * ```
+         */
+        static SolveASA(A: number, c: number, B: number): [a: number, C: number, b: number];
+        /**
+         * Solve SSA triangle.
+         * ```
+         * SolveSSA(1,sqrt(3),30) // [90,2,60]
+         * ```
+         */
+        static SolveSSA(a: number, b: number, A: number): [C: number, c: number, B: number];
+        /**
+         * Find heights of SSS triangle.
+         * ```
+         * HeightSSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
+         * ```
+         */
+        static HeightsBySSS(a: number, b: number, c: number): [Ha: number, Hb: number, Hc: number];
+        /**
+         * Find height of SSS triangle, against the first base.
+         * ```
+         * HeightSSS(1,sqrt(3),2) // sqrt(3)
+         * ```
+         */
+        static HeightBySSS(a: number, b: number, c: number): number;
+        /**
+         * @deprecated
+         * @param fix - Round all return values to integer.
+         * Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
+         * ```
+         * TriangleFromVertex([0,0],[4,0],[0,3],false)
+         * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
+         * ```
+         */
+        static TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): Triangle;
+        /**
+         * @deprecated
+         * Solve a triangle. return the triangle object solved.
+         * ```
+         * SolveTriangle({sideC:2, sideA:2, sideB:2})
+         * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
+         * SolveTriangle({sideC:3, angleB:90, sideA:4})
+         * // {sideC:3, angleB:90, sideA:4, angleC:36.86989765, sideB:5, angleA:53.13010235}
+         * SolveTriangle({sideC:5, angleB:30, angleC:80})
+         * // {sideC:5, angleB:30, sideA:4.770944471, angleC:80, sideB:2.53856653, angleA:70}
+         * SolveTriangle({sideC:6, angleB:30, angleA:40})
+         * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
+         * ```
+         */
+        static SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: Partial<Triangle>): Triangle;
+        /**
+         * the orthocentre of a triangle
+         * ```
+         * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
+         * ```
+         */
+        static Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
+        /**
+         * the circumcentre of a triangle
+         * ```
+         * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
+         * ```
+         */
+        static Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
+        /**
+         * the centroid of a triangle
+         * ```
+         * Centroid([3,6],[9,12],[15,21])  // [9,13]
+         * ```
+         */
+        static Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D;
+        /**
+         * the incentre of a triangle
+         * ```
+         * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
+         * ```
+         */
+        static Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
+        /**
+         * the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
+         */
+        static ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+        /**
+         * the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
+         */
+        static ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+        /**
+         * the scaled points [A,B,C] so that their centroid and themselves becomes integral
+         */
+        static ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+        /**
+         * the scaled points [A,B,C] so that their incentre and themselves becomes integral
+         */
+        static ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+    }
+    global {
+        var Pyth: typeof Host.Pyth;
+        var PythLeg: typeof Host.PythLeg;
+        var CosineLawLength: typeof Host.CosineLawLength;
+        var CosineLawAngle: typeof Host.CosineLawAngle;
+        var SineLawLength: typeof Host.SineLawLength;
+        var SineLawAngle: typeof Host.SineLawAngle;
+        var Heron: typeof Host.Heron;
+        var SolveSSS: typeof Host.SolveSSS;
+        var SolveSAS: typeof Host.SolveSAS;
+        var SolveAAS: typeof Host.SolveAAS;
+        var SolveASA: typeof Host.SolveASA;
+        var SolveSSA: typeof Host.SolveSSA;
+        var HeightsBySSS: typeof Host.HeightsBySSS;
+        var HeightBySSS: typeof Host.HeightBySSS;
+        var TriangleFromVertex: typeof Host.TriangleFromVertex;
+        var SolveTriangle: typeof Host.SolveTriangle;
+        var Orthocentre: typeof Host.Orthocentre;
+        var Circumcentre: typeof Host.Circumcentre;
+        var Centroid: typeof Host.Centroid;
+        var Incentre: typeof Host.Incentre;
+        var ScaleOrthocentreToInt: typeof Host.ScaleOrthocentreToInt;
+        var ScaleCircumcentreToInt: typeof Host.ScaleCircumcentreToInt;
+        var ScaleCentroidToInt: typeof Host.ScaleCentroidToInt;
+        var ScaleIncentreToInt: typeof Host.ScaleIncentreToInt;
+    }
+}
 /**
  * @category Trigonometry
  * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
