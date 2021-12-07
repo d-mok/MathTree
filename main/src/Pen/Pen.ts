@@ -2181,6 +2181,21 @@ export class PenCls extends Pencil {
             })
         },
 
+        angleBetween(
+            angle: [Point3D, Point3D, Point3D],
+            line: [Point3D | undefined, Point3D | undefined],
+            label?: string
+        ) {
+            let [P, O, Q] = angle
+            let [A, B] = line
+            this._pen.angle(P, O, Q)
+            if (label !== undefined) {
+                this._pen.label.angle([P, O, Q], label)
+            }
+            this._pen.rightAngle(P, O, A)
+            this._pen.rightAngle(Q, O, B)
+        }
+
 
     };
 

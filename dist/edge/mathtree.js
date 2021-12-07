@@ -33161,6 +33161,43 @@ function makeLatex(args, template, units, brackets) {
 }
 class PhyEqCls {
     constructor() {
+        this.Motion = {
+            /**
+             * v = u + at
+             */
+            vuat(v = 'v', u = 'u', a = 'a', t = 't', $ = '****') {
+                let args = [v, u, a, t];
+                return [
+                    makeFn(args, (v, u, a, t) => v - u - a * t),
+                    makeLatex(args, '@=@+@@', $, '::||')
+                ];
+            },
+            /**
+             * v^2 = u^2 + 2as
+             */
+            vu2as(v = 'v', u = 'u', a = 'a', s = 's', $ = '****') {
+                let args = [v, u, a, s];
+                return [
+                    makeFn(args, (v, u, a, s) => v ** 2 - u ** 2 - 2 * a * s),
+                    makeLatex(args, '@^2=@^2+2@@', $, '||||')
+                ];
+            },
+            sutat2(s = 's', u = 'u', t = 't', a = 'a', $ = '****') {
+                let args = [s, u, t, a];
+                let [_s, _u, _t, _a] = $;
+                return [
+                    makeFn(args, (s, u, t, a) => s - u * t - 0.5 * a * t * t),
+                    makeLatex([s, u, t, a, t], '@=@@+\\dfrac{1}{2}@@^2', [_s, _u, _t, _a, _t].join(), ':||||')
+                ];
+            },
+            suvt(s = 's', u = 'u', v = 'v', t = 't', $ = '****') {
+                let args = [s, u, v, t];
+                return [
+                    makeFn(args, (s, u, v, t) => s - 0.5 * (u + v) * t),
+                    makeLatex(args, '@=\\dfrac{1}{2}(@+@)@', $, ':::|')
+                ];
+            }
+        };
         this.CircularMotion = {
             /**
              * s = vt
@@ -36476,6 +36513,7 @@ globalThis.EmbedZ = contract(EmbedZ).sign([owl.arrayWith(owl.point2D), owl.num])
  * ```
  */
 function FlatZ(points, z = 0) {
+    return points.map(([x, y, _]) => [x, y, z]);
     let arr = [];
     for (let [x, y, _] of points) {
         arr.push([x, y, z]);
@@ -39151,6 +39189,16 @@ class PenCls extends paint_1.Pencil {
                     envelope
                 });
             },
+            angleBetween(angle, line, label) {
+                let [P, O, Q] = angle;
+                let [A, B] = line;
+                this._pen.angle(P, O, Q);
+                if (label !== undefined) {
+                    this._pen.label.angle([P, O, Q], label);
+                }
+                this._pen.rightAngle(P, O, A);
+                this._pen.rightAngle(Q, O, B);
+            }
         };
         this.range.set([-5, 5], [-5, 5]);
         this.size.set(1);

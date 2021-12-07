@@ -1663,6 +1663,18 @@ declare var PhyConst: {
 declare module "Math/Code/PhyEq" {
     type eq = [func: zeroFunction, latex: string];
     export class PhyEqCls {
+        Motion: {
+            /**
+             * v = u + at
+             */
+            vuat(v?: string, u?: string, a?: string, t?: string, $?: string): eq;
+            /**
+             * v^2 = u^2 + 2as
+             */
+            vu2as(v?: string, u?: string, a?: string, s?: string, $?: string): eq;
+            sutat2(s?: string, u?: string, t?: string, a?: string, $?: string): (string | zeroFunction)[];
+            suvt(s?: string, u?: string, v?: string, t?: string, $?: string): (string | zeroFunction)[];
+        };
         CircularMotion: {
             /**
              * s = vt
@@ -4435,6 +4447,7 @@ declare module "Pen/Pen" {
                 shadeUpper?: boolean | undefined;
                 envelope?: boolean | undefined;
             }): void;
+            angleBetween(angle: [Point3D, Point3D, Point3D], line: [Point3D | undefined, Point3D | undefined], label?: string | undefined): void;
         };
         /**
          * Set the background image url.

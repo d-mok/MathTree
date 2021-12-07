@@ -23,6 +23,51 @@ type eq = [func: zeroFunction, latex: string]
 export class PhyEqCls {
 
 
+    Motion = {
+
+
+        /**
+         * v = u + at
+         */
+        vuat(v = 'v', u = 'u', a = 'a', t = 't', $ = '****'): eq {
+            let args = [v, u, a, t]
+            return [
+                makeFn(args, (v, u, a, t) => v - u - a * t),
+                makeLatex(args, '@=@+@@', $, '::||')
+            ]
+        },
+
+        /**
+         * v^2 = u^2 + 2as
+         */
+        vu2as(v = 'v', u = 'u', a = 'a', s = 's', $ = '****'): eq {
+            let args = [v, u, a, s]
+            return [
+                makeFn(args, (v, u, a, s) => v ** 2 - u ** 2 - 2 * a * s),
+                makeLatex(args, '@^2=@^2+2@@', $, '||||')
+            ]
+        },
+
+        sutat2(s = 's', u = 'u', t = 't', a = 'a', $ = '****') {
+            let args = [s, u, t, a]
+            let [_s, _u, _t, _a] = $
+            return [
+                makeFn(args, (s, u, t, a) => s - u * t - 0.5 * a * t * t),
+                makeLatex([s, u, t, a, t], '@=@@+\\dfrac{1}{2}@@^2', [_s, _u, _t, _a, _t].join(), ':||||')
+            ]
+        },
+
+        suvt(s = 's', u = 'u', v = 'v', t = 't', $ = '****') {
+            let args = [s, u, v, t]
+            return [
+                makeFn(args, (s, u, v, t) => s - 0.5 * (u + v) * t),
+                makeLatex(args, '@=\\dfrac{1}{2}(@+@)@', $, ':::|')
+            ]
+        }
+
+
+    }
+
     CircularMotion = {
 
         /**

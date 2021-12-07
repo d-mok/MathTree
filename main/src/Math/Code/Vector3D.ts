@@ -308,6 +308,7 @@ globalThis.EmbedZ = contract(EmbedZ).sign([owl.arrayWith(owl.point2D), owl.num])
  * ```
  */
 function FlatZ(points: Point3D[], z: number = 0): Point3D[] {
+    return points.map(([x,y,_])=>[x,y,z])
     let arr: Point3D[] = []
     for (let [x, y, _] of points) {
         arr.push([x, y, z])
