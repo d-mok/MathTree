@@ -33190,6 +33190,9 @@ class PhyEqCls {
                     makeLatex(args, '@^2=@^2+2@@', $, '||||')
                 ];
             },
+            /**
+             * s = ut + 0.5at^2
+             */
             sutat2(s = 's', u = 'u', t = 't', a = 'a', $ = '****') {
                 let args = [s, u, t, a];
                 let [_s, _u, _t, _a] = $;
@@ -33198,13 +33201,46 @@ class PhyEqCls {
                     makeLatex([s, u, t, a, t], '@=@@+\\dfrac{1}{2}@@^2', [_s, _u, _t, _a, _t].join(''), ':||||')
                 ];
             },
+            /**
+             * s = 0.5(u+v)t
+             */
             suvt(s = 's', u = 'u', v = 'v', t = 't', $ = '****') {
                 let args = [s, u, v, t];
                 return [
                     makeFn(args, (s, u, v, t) => s - 0.5 * (u + v) * t),
                     makeLatex(args, '@=\\dfrac{1}{2}(@+@)@', $, ':::|')
                 ];
-            }
+            },
+            /**
+             * s  = 0.5at^2
+             */
+            sat2(s = 's', a = 'a', t = 't', $ = '***') {
+                let args = [s, a, t];
+                return [
+                    makeFn(args, (s, a, t) => s - 0.5 * a * t * t),
+                    makeLatex(args, '@=\\dfrac{1}{2}@@^2', $, ':||')
+                ];
+            },
+            /**
+             * v = at
+             */
+            vat(v = 'v', a = 'a', t = 't', $ = '***') {
+                let args = [v, a, t];
+                return [
+                    makeFn(args, (v, a, t) => v - a * t),
+                    makeLatex(args, '@=@@', $, ':||')
+                ];
+            },
+            /**
+             * v^2 = 2as
+             */
+            v2as(v = 'v', a = 'a', s = 's', $ = '***') {
+                let args = [v, a, s];
+                return [
+                    makeFn(args, (v, a, s) => v ** 2 - 2 * a * s),
+                    makeLatex(args, '@^2=2@@', $, '|||')
+                ];
+            },
         };
         this.CircularMotion = {
             /**

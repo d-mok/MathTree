@@ -1672,8 +1672,26 @@ declare module "Math/Code/PhyEq" {
              * v^2 = u^2 + 2as
              */
             vu2as(v?: string, u?: string, a?: string, s?: string, $?: string): eq;
+            /**
+             * s = ut + 0.5at^2
+             */
             sutat2(s?: string, u?: string, t?: string, a?: string, $?: string): (string | zeroFunction)[];
+            /**
+             * s = 0.5(u+v)t
+             */
             suvt(s?: string, u?: string, v?: string, t?: string, $?: string): (string | zeroFunction)[];
+            /**
+             * s  = 0.5at^2
+             */
+            sat2(s?: string, a?: string, t?: string, $?: string): (string | zeroFunction)[];
+            /**
+             * v = at
+             */
+            vat(v?: string, a?: string, t?: string, $?: string): eq;
+            /**
+             * v^2 = 2as
+             */
+            v2as(v?: string, a?: string, s?: string, $?: string): eq;
         };
         CircularMotion: {
             /**
