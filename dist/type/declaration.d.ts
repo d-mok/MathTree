@@ -4465,7 +4465,7 @@ declare module "Pen/Pen" {
                 shadeUpper?: boolean | undefined;
                 envelope?: boolean | undefined;
             }): void;
-            angleBetween(angle: [Point3D, Point3D, Point3D], line: [Point3D | undefined, Point3D | undefined], label?: string | undefined): void;
+            angleBet(angle: [Point3D, Point3D, Point3D], line: [Point3D | undefined, Point3D | undefined], label?: string | undefined): void;
         };
         /**
          * Set the background image url.

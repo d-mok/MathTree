@@ -39233,15 +39233,18 @@ class PenCls extends paint_1.Pencil {
                     envelope
                 });
             },
-            angleBetween(angle, line, label) {
+            angleBet(angle, line, label) {
                 let [P, O, Q] = angle;
                 let [A, B] = line;
+                this._pen.line(P, O);
+                this._pen.line(Q, O);
                 this._pen.angle(P, O, Q);
-                if (label !== undefined) {
+                if (label !== undefined)
                     this._pen.label.angle([P, O, Q], label);
-                }
-                this._pen.rightAngle(P, O, A);
-                this._pen.rightAngle(Q, O, B);
+                if (A !== undefined)
+                    this._pen.rightAngle(P, O, A);
+                if (B !== undefined)
+                    this._pen.rightAngle(Q, O, B);
             }
         };
         this.range.set([-5, 5], [-5, 5]);
