@@ -53,7 +53,7 @@ export class PhyEqCls {
             let [_s, _u, _t, _a] = $
             return [
                 makeFn(args, (s, u, t, a) => s - u * t - 0.5 * a * t * t),
-                makeLatex([s, u, t, a, t], '@=@@+\\dfrac{1}{2}@@^2', [_s, _u, _t, _a, _t].join(), ':||||')
+                makeLatex([s, u, t, a, t], '@=@@+\\dfrac{1}{2}@@^2', [_s, _u, _t, _a, _t].join(''), ':||||')
             ]
         },
 
