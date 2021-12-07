@@ -2713,17 +2713,31 @@ declare module "Math/Code/Triangle" {
         /**
          * Find heights of SSS triangle.
          * ```
-         * HeightSSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
+         * HeightsBySSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
          * ```
          */
         static HeightsBySSS(a: number, b: number, c: number): [Ha: number, Hb: number, Hc: number];
         /**
          * Find height of SSS triangle, against the first base.
          * ```
-         * HeightSSS(1,sqrt(3),2) // sqrt(3)
+         * HeightBySSS(1,sqrt(3),2) // sqrt(3)
          * ```
          */
         static HeightBySSS(a: number, b: number, c: number): number;
+        /**
+         * Find heights of SAS triangle.
+         * ```
+         * HeightsBySAS(1,90,sqrt(3)) // [sqrt(3),1,sqrt(3)/2]
+         * ```
+         */
+        static HeightsBySAS(a: number, C: number, b: number): [Ha: number, Hb: number, Hc: number];
+        /**
+         * Find height of SAS triangle, opposite to the given angle.
+         * ```
+         * HeightBySAS(1,90,sqrt(3)) // sqrt(3)/2
+         * ```
+         */
+        static HeightBySAS(a: number, C: number, b: number): number;
         /**
          * @deprecated
          * @param fix - Round all return values to integer.
@@ -2809,6 +2823,8 @@ declare module "Math/Code/Triangle" {
         var SolveSSA: typeof Host.SolveSSA;
         var HeightsBySSS: typeof Host.HeightsBySSS;
         var HeightBySSS: typeof Host.HeightBySSS;
+        var HeightsBySAS: typeof Host.HeightsBySAS;
+        var HeightBySAS: typeof Host.HeightBySAS;
         var TriangleFromVertex: typeof Host.TriangleFromVertex;
         var SolveTriangle: typeof Host.SolveTriangle;
         var Orthocentre: typeof Host.Orthocentre;
@@ -2916,6 +2932,7 @@ declare function WholeBearing(polarAngle: number): string;
  * ```
  */
 declare function CompassBearing(polarAngle: number): string;
+declare module "Math/Code/Vector3D.test" { }
 /**
  * @category Vector3D
  * @return mean of all vectors
@@ -2979,6 +2996,15 @@ declare function EmbedY(plane2D: Point2D[], y?: number): Point3D[];
  * ```
  */
 declare function EmbedZ(plane2D: Point2D[], z?: number): Point3D[];
+/**
+ * @category Vector3D
+ * @return flatten points to the same z-plane
+ * ```
+ * let [A,B,C] = [[0,0,0],[3,0,1],[0,1,2]]
+ * FlatZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
+ * ```
+ */
+declare function FlatZ(points: Point3D[], z?: number): Point3D[];
 /**
  * @category Vector3D
  * @return extrude the lower base of a frustum towards the upper base by a ratio
@@ -3688,6 +3714,16 @@ declare module "Pen/Pen" {
          * ```
          */
         polyshade(...points: Point[]): void;
+        /**
+         * Draw and shade a polygon given points.
+         * @category draw
+         * @param points - The coordinates [x,y] of all points.
+         * @returns void
+         * ```
+         * pen.polyshape([0,0],[5,2],[3,4]) // draw and shape a triangle with vertices [0,0], [5,2] and [3,4]
+         * ```
+         */
+        polyshape(...points: Point[]): void;
         /**
          * Fill a shape.
          * @category fill

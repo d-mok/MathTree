@@ -184,7 +184,7 @@ export class Host {
     /**
      * Find heights of SSS triangle.
      * ```
-     * HeightSSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
+     * HeightsBySSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
      * ```
      */
     @checkIt(side)
@@ -201,7 +201,7 @@ export class Host {
     /**
      * Find height of SSS triangle, against the first base.
      * ```
-     * HeightSSS(1,sqrt(3),2) // sqrt(3)
+     * HeightBySSS(1,sqrt(3),2) // sqrt(3)
      * ```
      */
     @checkIt(side)
@@ -210,6 +210,36 @@ export class Host {
         let area = Heron(a, b, c)
         return 2 * area / a
     }
+
+
+
+    /**
+     * Find heights of SAS triangle.
+     * ```
+     * HeightsBySAS(1,90,sqrt(3)) // [sqrt(3),1,sqrt(3)/2]
+     * ```
+     */
+    @checkIt(side, angle, side)
+    static HeightsBySAS(a: number, C: number, b: number): [Ha: number, Hb: number, Hc: number] {
+        let [A, c, B] = SolveSAS(a, C, b)
+        return HeightsBySSS(a, b, c)
+    }
+
+
+
+
+    /**
+     * Find height of SAS triangle, opposite to the given angle.
+     * ```
+     * HeightBySAS(1,90,sqrt(3)) // sqrt(3)/2
+     * ```
+     */
+    @checkIt(side, angle, side)
+    static HeightBySAS(a: number, C: number, b: number): number{
+        let [ha, hb, hc] = HeightsBySAS(a, C, b)
+        return hc
+    }
+
 
 
 
@@ -476,6 +506,8 @@ declare global {
 
     var HeightsBySSS: typeof Host.HeightsBySSS
     var HeightBySSS: typeof Host.HeightBySSS
+    var HeightsBySAS: typeof Host.HeightsBySAS
+    var HeightBySAS: typeof Host.HeightBySAS
 
     var TriangleFromVertex: typeof Host.TriangleFromVertex
     var SolveTriangle: typeof Host.SolveTriangle

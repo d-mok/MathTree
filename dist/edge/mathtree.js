@@ -35445,7 +35445,7 @@ let Host = class Host {
     /**
      * Find heights of SSS triangle.
      * ```
-     * HeightSSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
+     * HeightsBySSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
      * ```
      */
     static HeightsBySSS(a, b, c) {
@@ -35458,12 +35458,32 @@ let Host = class Host {
     /**
      * Find height of SSS triangle, against the first base.
      * ```
-     * HeightSSS(1,sqrt(3),2) // sqrt(3)
+     * HeightBySSS(1,sqrt(3),2) // sqrt(3)
      * ```
      */
     static HeightBySSS(a, b, c) {
         let area = Heron(a, b, c);
         return 2 * area / a;
+    }
+    /**
+     * Find heights of SAS triangle.
+     * ```
+     * HeightsBySAS(1,90,sqrt(3)) // [sqrt(3),1,sqrt(3)/2]
+     * ```
+     */
+    static HeightsBySAS(a, C, b) {
+        let [A, c, B] = SolveSAS(a, C, b);
+        return HeightsBySSS(a, b, c);
+    }
+    /**
+     * Find height of SAS triangle, opposite to the given angle.
+     * ```
+     * HeightBySAS(1,90,sqrt(3)) // sqrt(3)/2
+     * ```
+     */
+    static HeightBySAS(a, C, b) {
+        let [ha, hb, hc] = HeightsBySAS(a, C, b);
+        return hc;
     }
     /**
      * @deprecated
@@ -35711,6 +35731,12 @@ __decorate([
     (0, contract_1.checkIt)(side),
     (0, contract_1.inspectIt)(triangle_ineq)
 ], Host, "HeightBySSS", null);
+__decorate([
+    (0, contract_1.checkIt)(side, angle, side)
+], Host, "HeightsBySAS", null);
+__decorate([
+    (0, contract_1.checkIt)(side, angle, side)
+], Host, "HeightBySAS", null);
 __decorate([
     (0, contract_1.checkIt)(owl.point2D, owl.point2D, owl.point2D, owl.bool)
 ], Host, "TriangleFromVertex", null);
@@ -36441,6 +36467,22 @@ function EmbedZ(plane2D, z = 0) {
     return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0]);
 }
 globalThis.EmbedZ = contract(EmbedZ).sign([owl.arrayWith(owl.point2D), owl.num]);
+/**
+ * @category Vector3D
+ * @return flatten points to the same z-plane
+ * ```
+ * let [A,B,C] = [[0,0,0],[3,0,1],[0,1,2]]
+ * FlatZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
+ * ```
+ */
+function FlatZ(points, z = 0) {
+    let arr = [];
+    for (let [x, y, _] of points) {
+        arr.push([x, y, z]);
+    }
+    return arr;
+}
+globalThis.FlatZ = contract(FlatZ).sign([owl.arrayWith(owl.point3D), owl.num]);
 // /**
 //  * @category Vector3D
 //  * @deprecated use Extrude
@@ -39448,6 +39490,19 @@ class PenCls extends paint_1.Pencil {
      */
     polyshade(...points) {
         this.drawShade(points);
+    }
+    /**
+     * Draw and shade a polygon given points.
+     * @category draw
+     * @param points - The coordinates [x,y] of all points.
+     * @returns void
+     * ```
+     * pen.polyshape([0,0],[5,2],[3,4]) // draw and shape a triangle with vertices [0,0], [5,2] and [3,4]
+     * ```
+     */
+    polyshape(...points) {
+        this.polygon(...points);
+        this.polyshade(...points);
     }
     /**
      * Draw an angle with label, non-reflex

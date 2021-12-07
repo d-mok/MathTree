@@ -97,6 +97,18 @@ test('HeightBySSS', () => {
 })
 
 
+
+test('HeightsBySAS', () => {
+    expect(HeightsBySAS(1, 90,3 ** 0.5)).toBeDeepCloseTo([3 ** 0.5, 1, 0.5 * 3 ** 0.5])
+})
+
+
+
+test('HeightBySAS', () => {
+    expect(HeightBySAS(1, 90, 3 ** 0.5)).toBeCloseTo( 0.5 * 3 ** 0.5)
+})
+
+
 test('TriangleFromVertex', () => {
     let T = TriangleFromVertex([0, 0], [4, 0], [0, 3], false)
     expect(T.sideC).toBeCloseTo(4)

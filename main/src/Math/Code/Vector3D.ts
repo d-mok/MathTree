@@ -46,7 +46,7 @@ function Mid3D(...vectors: Point3D[]): Point3D {
     const x = Sum(...vectors.map(p => p[0])) / vectors.length
     const y = Sum(...vectors.map(p => p[1])) / vectors.length
     const z = Sum(...vectors.map(p => p[2])) / vectors.length
-    return [x, y, z];
+    return [x, y, z]
 }
 globalThis.Mid3D = contract(Mid3D).sign([owl.vector3D])
 
@@ -60,13 +60,13 @@ globalThis.Mid3D = contract(Mid3D).sign([owl.vector3D])
  * ```
  */
 function Slide3D(A: Point3D, B: Point3D, ratio: number): Point3D {
-    let r = ratio;
-    let s = 1 - r;
+    let r = ratio
+    let s = 1 - r
     return [
         A[0] * s + B[0] * r,
         A[1] * s + B[1] * r,
         A[2] * s + B[2] * r
-    ];
+    ]
 }
 globalThis.Slide3D = contract(Slide3D).sign([owl.point3D, owl.point3D, owl.num])
 
@@ -296,6 +296,25 @@ function EmbedZ(plane2D: Point2D[], z: number = 0): Point3D[] {
     return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0])
 }
 globalThis.EmbedZ = contract(EmbedZ).sign([owl.arrayWith(owl.point2D), owl.num])
+
+
+
+/**
+ * @category Vector3D
+ * @return flatten points to the same z-plane
+ * ```
+ * let [A,B,C] = [[0,0,0],[3,0,1],[0,1,2]]
+ * FlatZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
+ * ```
+ */
+function FlatZ(points: Point3D[], z: number = 0): Point3D[] {
+    let arr: Point3D[] = []
+    for (let [x, y, _] of points) {
+        arr.push([x, y, z])
+    }
+    return arr
+}
+globalThis.FlatZ = contract(FlatZ).sign([owl.arrayWith(owl.point3D), owl.num])
 
 
 // /**

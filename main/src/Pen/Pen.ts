@@ -1003,6 +1003,19 @@ export class PenCls extends Pencil {
     }
 
 
+    /**
+     * Draw and shade a polygon given points.
+     * @category draw
+     * @param points - The coordinates [x,y] of all points.
+     * @returns void
+     * ```
+     * pen.polyshape([0,0],[5,2],[3,4]) // draw and shape a triangle with vertices [0,0], [5,2] and [3,4]
+     * ```
+     */
+    polyshape(...points: Point[]) {
+        this.polygon(...points)
+        this.polyshade(...points)
+    }
 
 
 
