@@ -4465,7 +4465,38 @@ declare module "Pen/Pen" {
                 shadeUpper?: boolean | undefined;
                 envelope?: boolean | undefined;
             }): void;
+            /**
+             * Draw the angle between two plane.
+             * @category 3D
+             * @returns void
+             * ```
+             * let P = [0,0,1]
+             * let O = [0,0,0]
+             * let Q = [1,0,0]
+             * let A = [0,1,0]
+             * let B = [0,-1,0]
+             * pen.d3.angleBet([P,O,Q], [A,B], 'x')
+             * ```
+             */
             angleBet(angle: [Point3D, Point3D, Point3D], line: [Point3D | undefined, Point3D | undefined], label?: string | undefined): void;
+            /**
+             * Draw the dash height and right-angle.
+             * @category 3D
+             * @returns void
+             * ```
+             * pen.d3.height([0,0,1],[0,0,0],[0,1,0])
+             * ```
+             */
+            height(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string | undefined): void;
+            /**
+             * Draw the solid height and right-angle.
+             * @category 3D
+             * @returns void
+             * ```
+             * pen.d3.altitude([0,0,1],[0,0,0],[0,1,0])
+             * ```
+             */
+            altitude(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string | undefined): void;
         };
         /**
          * Set the background image url.

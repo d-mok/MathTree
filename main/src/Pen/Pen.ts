@@ -949,6 +949,9 @@ export class PenCls extends Pencil {
 
 
 
+
+
+
     /**
      * Draw a polyline given points.
      * @category draw
@@ -2181,6 +2184,19 @@ export class PenCls extends Pencil {
             })
         },
 
+        /**
+         * Draw the angle between two plane.
+         * @category 3D
+         * @returns void
+         * ```
+         * let P = [0,0,1]
+         * let O = [0,0,0]
+         * let Q = [1,0,0]
+         * let A = [0,1,0]
+         * let B = [0,-1,0]
+         * pen.d3.angleBet([P,O,Q], [A,B], 'x')
+         * ```
+         */
         angleBet(
             angle: [Point3D, Point3D, Point3D],
             line: [Point3D | undefined, Point3D | undefined],
@@ -2197,8 +2213,41 @@ export class PenCls extends Pencil {
                 this._pen.rightAngle(P, O, A)
             if (B !== undefined)
                 this._pen.rightAngle(Q, O, B)
-        }
+        },
 
+
+        /**
+         * Draw the dash height and right-angle.
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.height([0,0,1],[0,0,0],[0,1,0])
+         * ```
+         */
+        height(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string) {
+            this._pen.dash(vertex, foot)
+            this._pen.rightAngle(vertex, foot, leg)
+            this._pen.line(foot, leg)
+            if (label !== undefined)
+                this._pen.label.line([vertex, foot], label)
+        },
+
+
+        /**
+         * Draw the solid height and right-angle.
+         * @category 3D
+         * @returns void
+         * ```
+         * pen.d3.altitude([0,0,1],[0,0,0],[0,1,0])
+         * ```
+         */
+        altitude(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string) {
+            this._pen.line(vertex, foot)
+            this._pen.rightAngle(vertex, foot, leg)
+            this._pen.line(foot, leg)
+            if (label !== undefined)
+                this._pen.label.line([vertex, foot], label)
+        }
 
     };
 

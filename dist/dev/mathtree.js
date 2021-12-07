@@ -39233,6 +39233,19 @@ class PenCls extends paint_1.Pencil {
                     envelope
                 });
             },
+            /**
+             * Draw the angle between two plane.
+             * @category 3D
+             * @returns void
+             * ```
+             * let P = [0,0,1]
+             * let O = [0,0,0]
+             * let Q = [1,0,0]
+             * let A = [0,1,0]
+             * let B = [0,-1,0]
+             * pen.d3.angleBet([P,O,Q], [A,B], 'x')
+             * ```
+             */
             angleBet(angle, line, label) {
                 let [P, O, Q] = angle;
                 let [A, B] = line;
@@ -39245,6 +39258,36 @@ class PenCls extends paint_1.Pencil {
                     this._pen.rightAngle(P, O, A);
                 if (B !== undefined)
                     this._pen.rightAngle(Q, O, B);
+            },
+            /**
+             * Draw the dash height and right-angle.
+             * @category 3D
+             * @returns void
+             * ```
+             * pen.d3.height([0,0,1],[0,0,0],[0,1,0])
+             * ```
+             */
+            height(vertex, foot, leg, label) {
+                this._pen.dash(vertex, foot);
+                this._pen.rightAngle(vertex, foot, leg);
+                this._pen.line(foot, leg);
+                if (label !== undefined)
+                    this._pen.label.line([vertex, foot], label);
+            },
+            /**
+             * Draw the solid height and right-angle.
+             * @category 3D
+             * @returns void
+             * ```
+             * pen.d3.altitude([0,0,1],[0,0,0],[0,1,0])
+             * ```
+             */
+            altitude(vertex, foot, leg, label) {
+                this._pen.line(vertex, foot);
+                this._pen.rightAngle(vertex, foot, leg);
+                this._pen.line(foot, leg);
+                if (label !== undefined)
+                    this._pen.label.line([vertex, foot], label);
             }
         };
         this.range.set([-5, 5], [-5, 5]);
