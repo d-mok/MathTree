@@ -31195,6 +31195,14 @@ exports.EquSystem = EquSystem;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseUnit = exports.findUnit = void 0;
 const DEFAULT_UNIT = {
+    'illuminance': 'lx',
+    'luminous flux': 'lm',
+    'overall thermal transfer value': 'W m-2',
+    'thermal conductivity': 'W m-1  K-1',
+    'thermal Transmittance': 'W m-2 K-1',
+    'cooling capacity': 'W',
+    'rate of conduction': 'W',
+    'effciency': '\\%',
     'angular speed': 'rad s-1',
     'angular displacement': 'rad',
     'time': 's',

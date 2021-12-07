@@ -1,5 +1,13 @@
 
 const DEFAULT_UNIT: { [_: string]: string } = {
+    'illuminance': 'lx',
+    'luminous flux': 'lm',
+    'overall thermal transfer value': 'W m-2',
+    'thermal conductivity': 'W m-1  K-1',
+    'thermal Transmittance': 'W m-2 K-1',
+    'cooling capacity': 'W',
+    'rate of conduction': 'W',
+    'effciency': '\\%',
     'angular speed': 'rad s-1',
     'angular displacement': 'rad',
     'time': 's',
