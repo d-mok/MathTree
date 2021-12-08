@@ -602,7 +602,6 @@ export class Pencil {
         })
 
         let segments = split(filteredPoints, null) as Point2D[][]
-        console.log(segments)
         for (let seg of segments) {
             if (seg.length === 0) continue
             this.drawStroke(seg)

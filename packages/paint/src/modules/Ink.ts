@@ -191,6 +191,7 @@ export class Ink {
 
     arrow(start: dot, end: dot, length: pixel, width: pixel, offset: pixel) {
         this.dial.save()
+        this.dial.setDash()
         this.dial.translateTo(end)
         this.dial.rotateAlong(start, end)
         let A: dot = [offset - length, -width]
