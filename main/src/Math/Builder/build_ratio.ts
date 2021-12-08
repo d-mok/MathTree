@@ -6,9 +6,14 @@ export function BuildRatio(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     func: zeroFunction,
     latex: string,
-    settings: {
+    {
+        cases = ["Before", "After"],
+        subscript = [1, 2],
+        sigfig = {}
+    }: {
         cases?: [string, string]
         subscript?: [string | number, string | number]
+        sigfig?: { [_: string]: number }
     } = {}
 ): {
     table: string
@@ -28,8 +33,8 @@ export function BuildRatio(
     let u: number[] = []
 
     system.fit()
-    given.round()
-    unknown.round()
+    given.round(sigfig[given.sym])
+    unknown.round(sigfig[unknown.sym])
     g.push(given.getVal())
     u.push(unknown.getVal())
 
@@ -37,7 +42,7 @@ export function BuildRatio(
 
     for (let i = 0; i < 10; i++) { // avoid accidentally getting same set of [given,unknown]
         system.fitAgain([given, unknown])
-        given.round()
+        given.round(sigfig[given.sym])
         if (given.getVal() !== g[0]) break
     }
 
@@ -51,7 +56,7 @@ export function BuildRatio(
             given.label()
             unknown.label()
         }
-        let subs = settings.subscript ?? [1, 2]
+        let subs = subscript
         given.label(subs[order - 1])
         unknown.label(subs[order - 1])
     }
@@ -99,7 +104,7 @@ export function BuildRatio(
         setCase(2)
         let G2 = "$" + given.long()
         let U2 = "$" + unknown.symbol()
-        let [case1, case2] = settings.cases ?? ["Before", "After"]
+        let [case1, case2] = cases
         setCase(0)
         return Table({
             content: [

@@ -256,7 +256,7 @@ declare module "Math/Builder/support/variable" {
         private display;
         constructor(sym: string, name: string, range: rangeInput, unit: string | undefined, display: string | undefined);
         set(val: number): void;
-        round(): void;
+        round(sigfig?: number): void;
         shake(): void;
         clear(): void;
         getVal(): number;
@@ -320,9 +320,12 @@ declare module "Math/Builder/support/support" {
     export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids }?: {
+    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig }?: {
         listSym?: boolean;
         avoids?: string[][];
+        sigfig?: {
+            [_: string]: number;
+        };
     }): {
         list: string;
         sol: string;
@@ -344,9 +347,12 @@ declare module "Math/Builder/build_trend" {
     };
 }
 declare module "Math/Builder/build_ratio" {
-    export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], func: zeroFunction, latex: string, settings?: {
+    export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], func: zeroFunction, latex: string, { cases, subscript, sigfig }?: {
         cases?: [string, string];
         subscript?: [string | number, string | number];
+        sigfig?: {
+            [_: string]: number;
+        };
     }): {
         table: string;
         sol: string;

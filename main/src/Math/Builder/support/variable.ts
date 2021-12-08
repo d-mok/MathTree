@@ -47,8 +47,8 @@ export class Variable {
         this.val = val
     }
 
-    round(): void {
-        this.set(Round(this.val, 3))
+    round(sigfig: number = 2): void {
+        this.set(Round(this.val, sigfig))
     }
 
     shake(): void {

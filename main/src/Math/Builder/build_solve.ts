@@ -6,10 +6,12 @@ export function BuildSolve(
     equations: [func: zeroFunction, latex: string][],
     {
         listSym = false,
-        avoids = []
+        avoids = [],
+        sigfig = {}
     }: {
         listSym?: boolean
         avoids?: string[][]
+        sigfig?: { [_: string]: number }
     } = {}
 ): {
     list: string
@@ -22,7 +24,7 @@ export function BuildSolve(
 
     for (let i = 0; i <= 10; i++) {
         try {
-            return BuildSolveOnce(variables, equations, { listSym, avoids })
+            return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig })
         } catch (e) {
             if (i === 10) {
                 throw e
@@ -41,10 +43,12 @@ function BuildSolveOnce(
     equations: [func: zeroFunction, latex: string][],
     {
         listSym = false,
-        avoids = []
+        avoids = [],
+        sigfig = {}
     }: {
         listSym?: boolean
         avoids?: string[][]
+        sigfig?: { [_: string]: number }
     } = {}
 ): {
     list: string
@@ -59,7 +63,7 @@ function BuildSolveOnce(
     system.fit()
 
     let [givens, hiddens, unknown] = system.generateSolvables(avoids)
-    givens.forEach($ => $.round())
+    givens.forEach($ => $.round(sigfig[$.sym]))
     system.fitAgain(hiddens)
 
     function sol(): string {

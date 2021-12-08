@@ -30743,21 +30743,21 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildRatio = void 0;
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
-function BuildRatio(variables, func, latex, settings = {}) {
+function BuildRatio(variables, func, latex, { cases = ["Before", "After"], subscript = [1, 2], sigfig = {} } = {}) {
     let system = (0, support_1.toEquSystem)(variables, [[func, latex]]);
     let vars = system.variables;
     let [given, unknown, ...constants] = RndShuffle(...vars);
     let g = [];
     let u = [];
     system.fit();
-    given.round();
-    unknown.round();
+    given.round(sigfig[given.sym]);
+    unknown.round(sigfig[unknown.sym]);
     g.push(given.getVal());
     u.push(unknown.getVal());
     system.fitAgain(constants);
     for (let i = 0; i < 10; i++) { // avoid accidentally getting same set of [given,unknown]
         system.fitAgain([given, unknown]);
-        given.round();
+        given.round(sigfig[given.sym]);
         if (given.getVal() !== g[0])
             break;
     }
@@ -30769,7 +30769,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
             given.label();
             unknown.label();
         }
-        let subs = settings.subscript ?? [1, 2];
+        let subs = subscript;
         given.label(subs[order - 1]);
         unknown.label(subs[order - 1]);
     }
@@ -30808,7 +30808,7 @@ function BuildRatio(variables, func, latex, settings = {}) {
         setCase(2);
         let G2 = "$" + given.long();
         let U2 = "$" + unknown.symbol();
-        let [case1, case2] = settings.cases ?? ["Before", "After"];
+        let [case1, case2] = cases;
         setCase(0);
         return Table({
             content: [
@@ -30857,10 +30857,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildSolve = void 0;
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
-function BuildSolve(variables, equations, { listSym = false, avoids = [] } = {}) {
+function BuildSolve(variables, equations, { listSym = false, avoids = [], sigfig = {} } = {}) {
     for (let i = 0; i <= 10; i++) {
         try {
-            return BuildSolveOnce(variables, equations, { listSym, avoids });
+            return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig });
         }
         catch (e) {
             if (i === 10) {
@@ -30874,11 +30874,11 @@ function BuildSolve(variables, equations, { listSym = false, avoids = [] } = {})
     throw "never";
 }
 exports.BuildSolve = BuildSolve;
-function BuildSolveOnce(variables, equations, { listSym = false, avoids = [] } = {}) {
+function BuildSolveOnce(variables, equations, { listSym = false, avoids = [], sigfig = {} } = {}) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables(avoids);
-    givens.forEach($ => $.round());
+    givens.forEach($ => $.round(sigfig[$.sym]));
     system.fitAgain(hiddens);
     function sol() {
         if (equations.length === 1) {
@@ -31346,8 +31346,8 @@ class Variable {
     set(val) {
         this.val = val;
     }
-    round() {
-        this.set(Round(this.val, 3));
+    round(sigfig = 2) {
+        this.set(Round(this.val, sigfig));
     }
     shake() {
         let ratio = RndT() ? 1.05 : 0.95;
