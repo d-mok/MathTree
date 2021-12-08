@@ -4,7 +4,13 @@ import { toEquSystem } from './support/support'
 export function BuildSolve(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: zeroFunction, latex: string][],
-    { listSym = false } = {}
+    {
+        listSym = false,
+        avoids = []
+    }: {
+        listSym?: boolean
+        avoids?: string[][]
+    } = {}
 ): {
     list: string
     sol: string
@@ -16,7 +22,7 @@ export function BuildSolve(
 
     for (let i = 0; i <= 10; i++) {
         try {
-            return BuildSolveOnce(variables, equations, { listSym })
+            return BuildSolveOnce(variables, equations, { listSym, avoids })
         } catch (e) {
             if (i === 10) {
                 throw e
@@ -33,7 +39,13 @@ export function BuildSolve(
 function BuildSolveOnce(
     variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][],
     equations: [func: zeroFunction, latex: string][],
-    { listSym = false } = {}
+    {
+        listSym = false,
+        avoids = []
+    }: {
+        listSym?: boolean
+        avoids?: string[][]
+    } = {}
 ): {
     list: string
     sol: string
@@ -46,7 +58,7 @@ function BuildSolveOnce(
     let system = toEquSystem(variables, equations)
     system.fit()
 
-    let [givens, hiddens, unknown] = system.generateSolvables()
+    let [givens, hiddens, unknown] = system.generateSolvables(avoids)
     givens.forEach($ => $.round())
     system.fitAgain(hiddens)
 

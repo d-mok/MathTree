@@ -30857,10 +30857,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildSolve = void 0;
 const latex_1 = __webpack_require__(1838);
 const support_1 = __webpack_require__(3760);
-function BuildSolve(variables, equations, { listSym = false } = {}) {
+function BuildSolve(variables, equations, { listSym = false, avoids = [] } = {}) {
     for (let i = 0; i <= 10; i++) {
         try {
-            return BuildSolveOnce(variables, equations, { listSym });
+            return BuildSolveOnce(variables, equations, { listSym, avoids });
         }
         catch (e) {
             if (i === 10) {
@@ -30874,10 +30874,10 @@ function BuildSolve(variables, equations, { listSym = false } = {}) {
     throw "never";
 }
 exports.BuildSolve = BuildSolve;
-function BuildSolveOnce(variables, equations, { listSym = false } = {}) {
+function BuildSolveOnce(variables, equations, { listSym = false, avoids = [] } = {}) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
-    let [givens, hiddens, unknown] = system.generateSolvables();
+    let [givens, hiddens, unknown] = system.generateSolvables(avoids);
     givens.forEach($ => $.round());
     system.fitAgain(hiddens);
     function sol() {
@@ -31139,13 +31139,13 @@ class EquSystem {
         const vars = symbols.map($ => this.variables.find(_ => _.sym === $));
         return new variable_1.Variables(...vars);
     }
-    getFullTree() {
+    getFullTree(avoids = []) {
         let trees = RndShuffle(...(0, gauss_1.analyze)(this.fs));
         for (let tree of trees) {
             let info = (0, gauss_1.readTree)(tree);
             for (let top of RndShuffle(...info.tops)) {
                 let flow = (0, gauss_1.solutionFlow)(this.fs, tree, [top]);
-                if (flow.length === this.fs.length)
+                if (flow.length === this.fs.length && this.checkAvoids(info.givens, top, avoids))
                     return {
                         tree,
                         top: this.getVariables([top])[0],
@@ -31155,8 +31155,17 @@ class EquSystem {
         }
         throw 'no sensible set of solvables found!';
     }
-    generateSolvables() {
-        let { tree, top, info } = this.getFullTree();
+    checkAvoid(givens, unknown, avoid) {
+        let allAreGivensOrUnknown = avoid.every($ => givens.includes($) || unknown === $);
+        let containUnknown = avoid.includes(unknown);
+        let immediatelySolved = allAreGivensOrUnknown && containUnknown;
+        return !immediatelySolved;
+    }
+    checkAvoids(givens, unknown, avoids) {
+        return avoids.every($ => this.checkAvoid(givens, unknown, $));
+    }
+    generateSolvables(avoids = []) {
+        let { tree, top, info } = this.getFullTree(avoids);
         return [
             this.getVariables(info.givens),
             this.getVariables(info.solved),

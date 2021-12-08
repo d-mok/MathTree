@@ -304,7 +304,9 @@ declare module "Math/Builder/support/system" {
         fitAgain(vars: Variable[]): void;
         getVariables(symbols: string[]): Variables;
         private getFullTree;
-        generateSolvables(): [givens: Variables, hiddens: Variables, unknown: Variable];
+        private checkAvoid;
+        private checkAvoids;
+        generateSolvables(avoids?: string[][]): [givens: Variables, hiddens: Variables, unknown: Variable];
         generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable];
         print(givens?: Variable[]): string;
     }
@@ -318,8 +320,9 @@ declare module "Math/Builder/support/support" {
     export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym }?: {
-        listSym?: boolean | undefined;
+    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids }?: {
+        listSym?: boolean;
+        avoids?: string[][];
     }): {
         list: string;
         sol: string;

@@ -38,13 +38,13 @@ export class EquSystem {
     }
 
 
-    private getFullTree() {
+    private getFullTree(avoids: string[][] = []) {
         let trees = RndShuffle(...analyze(this.fs))
         for (let tree of trees) {
             let info = readTree(tree)
             for (let top of RndShuffle(...info.tops)) {
                 let flow = solutionFlow(this.fs, tree, [top])
-                if (flow.length === this.fs.length)
+                if (flow.length === this.fs.length && this.checkAvoids(info.givens, top, avoids))
                     return {
                         tree,
                         top: this.getVariables([top])[0],
@@ -56,8 +56,20 @@ export class EquSystem {
     }
 
 
-    generateSolvables(): [givens: Variables, hiddens: Variables, unknown: Variable] {
-        let { tree, top, info } = this.getFullTree()
+    private checkAvoid(givens: string[], unknown: string, avoid: string[]): boolean {
+        let allAreGivensOrUnknown = avoid.every($ => givens.includes($) || unknown === $)
+        let containUnknown = avoid.includes(unknown)
+        let immediatelySolved = allAreGivensOrUnknown && containUnknown
+        return !immediatelySolved
+    }
+
+    private checkAvoids(givens: string[], unknown: string, avoids: string[][]): boolean {
+        return avoids.every($ => this.checkAvoid(givens, unknown, $))
+    }
+
+
+    generateSolvables(avoids: string[][]=[]): [givens: Variables, hiddens: Variables, unknown: Variable] {
+        let { tree, top, info } = this.getFullTree(avoids)
         return [
             this.getVariables(info.givens),
             this.getVariables(info.solved),
