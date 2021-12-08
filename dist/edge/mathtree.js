@@ -33414,6 +33414,30 @@ class PhyEqCls {
                     makeLatex(args, '@=@@', $, ':||')
                 ];
             },
+            /**
+             * GMm/r2 = mv2/r
+             */
+            GMmr2v2r(M = 'M', r = 'r', v = 'v', $ = '***') {
+                let args = [M, r, v];
+                let [_M, _r, _v] = $;
+                $ = [_M, _r, _v, _r].join('');
+                return [
+                    makeFn(args, (M, r, v) => PhyConst.G * M / r / r - v * v / r),
+                    makeLatex([M, r, v, r], '\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}', $, '|||:')
+                ];
+            },
+            /**
+             * GMm/r2 = mrω2
+             */
+            GMmr2rω2(M = 'M', r = 'r', ω = 'ω', $ = '***') {
+                let args = [M, r, ω];
+                let [_M, _r, _ω] = $;
+                $ = [_M, _r, _r, _ω].join('');
+                return [
+                    makeFn(args, (M, r, ω) => PhyConst.G * M / r / r - r * ω * ω),
+                    makeLatex([M, r, r, ω], '\\dfrac{G@m}{@^2}=m@@^2', $, '||||')
+                ];
+            },
         };
     }
 }

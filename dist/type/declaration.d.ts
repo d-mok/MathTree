@@ -1763,6 +1763,14 @@ declare module "Math/Code/PhyEq" {
              * F = mg
              */
             Fmg(F?: string, m?: string, g?: string, $?: string): eq;
+            /**
+             * GMm/r2 = mv2/r
+             */
+            GMmr2v2r(M?: string, r?: string, v?: string, $?: string): eq;
+            /**
+             * GMm/r2 = mrω2
+             */
+            GMmr2rω2(M?: string, r?: string, ω?: string, $?: string): eq;
         };
     }
     global {
