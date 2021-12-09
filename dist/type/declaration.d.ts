@@ -5018,6 +5018,24 @@ declare module "Pen/PhyPen" {
             tensionLabel?: string;
             showAllForces?: boolean;
         }): void;
+        /**
+         * A satellite orbits around a planet.
+         * Gravitation.
+         * ```
+         * let pen = new PhyPen()
+         * pen.SatelliteOrbit({
+         *    planetRadius = 1.3,
+         *    orbitRadius = 2,
+         *    angle = 30,
+         * })
+         * ```
+         */
+        SatelliteOrbit({ planetRadius, orbitRadius, angle, showHeight }: {
+            planetRadius?: number;
+            orbitRadius?: number;
+            angle?: number;
+            showHeight?: boolean;
+        }): void;
     }
 }
 declare module "Pen/index" {

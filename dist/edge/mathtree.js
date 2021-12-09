@@ -40088,6 +40088,51 @@ class PhyPenCls {
         }
         this.pen = pen;
     }
+    /**
+     * A satellite orbits around a planet.
+     * Gravitation.
+     * ```
+     * let pen = new PhyPen()
+     * pen.SatelliteOrbit({
+     *    planetRadius = 1.3,
+     *    orbitRadius = 2,
+     *    angle = 30,
+     * })
+     * ```
+     */
+    SatelliteOrbit({ planetRadius = 1.3, orbitRadius = 2, angle = 30, showHeight = false }) {
+        let pen = new Pen();
+        let O = [0, 0];
+        //satellite
+        let P = PolToRect([orbitRadius, angle]);
+        // r line
+        let Q = PolToRect([orbitRadius, -angle]);
+        // R line
+        let A = [-planetRadius, 0];
+        // h line
+        let B = PolToRect([planetRadius, angle]);
+        // M label
+        let C = [0, -planetRadius];
+        pen.range.capture([O, orbitRadius]);
+        pen.size.set(1.2);
+        pen.shade.circle(O, planetRadius);
+        pen.graph.circle(O, planetRadius);
+        pen.label.point(C, 'M', 270);
+        pen.point(P, 'm');
+        pen.point(O);
+        if (showHeight) {
+            pen.set.color('red');
+            pen.line(B, P, 'h');
+        }
+        pen.set.color('blue');
+        pen.line(O, Q, 'r');
+        pen.set.color('grey');
+        pen.line(O, A, 'R');
+        pen.set.color();
+        pen.set.dash(true);
+        pen.graph.circle(O, orbitRadius);
+        this.pen = pen;
+    }
 }
 exports.PhyPenCls = PhyPenCls;
 
