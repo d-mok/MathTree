@@ -33998,7 +33998,7 @@ function RndShake(anchor) {
         if (owl.int(anchor)) {
             return RndShakeN(anchor);
         }
-        // Decimal      
+        // Decimal
         if (owl.num(anchor)) {
             return RndShakeR(anchor);
         }
@@ -34101,7 +34101,7 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational]);
 //  * @deprecated
 //  * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
 //  * ```
-//  * RndShakeFrac([5,6]) 
+//  * RndShakeFrac([5,6])
 //  * // return 3 unique fractions around [5,6]
 //  * RndShakeFrac([6,-5])
 //  * // return 3 unique fractions around [6,-5]
@@ -34136,7 +34136,7 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational]);
 //  * @deprecated
 //  * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
 //  * ```
-//  * RndShakeDfrac('\\dfrac{5}{6}') 
+//  * RndShakeDfrac('\\dfrac{5}{6}')
 //  * // return 3 unique Dfrac around [5,6]
 //  * RndShakeDfrac('-\\dfrac{6}{5}')
 //  * // return 3 unique Dfrac around [6,-5]
@@ -34201,7 +34201,12 @@ function RndShakeCombo(anchor) {
             RndT() ? c : !c
         ];
     };
-    return dice(func).unique().rolls(3);
+    let diff = (bools) => { return bools.some($ => $) && bools.some($ => !$); };
+    return dice(func).unique()
+        .coherent(all => diff([a, ...all.map($ => $[0])]))
+        .coherent(all => diff([b, ...all.map($ => $[1])]))
+        .coherent(all => diff([c, ...all.map($ => $[2])]))
+        .rolls(3);
 }
 globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo]);
 /**
