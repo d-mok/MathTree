@@ -11,6 +11,7 @@ import { fit, analyze, readTree, solutionFlow, solvingSymbol } from 'gauss'
 export class EquSystem {
 
     private fs: zeroFunction[]
+    private tree: valObj = {}
 
     constructor(
         public variables: Variables,
@@ -45,11 +46,12 @@ export class EquSystem {
             for (let top of RndShuffle(...info.tops)) {
                 let flow = solutionFlow(this.fs, tree, [top])
                 if (flow.length === this.fs.length && this.checkAvoids(info.givens, top, avoids))
-                    return {
-                        tree,
-                        top: this.getVariables([top])[0],
-                        info
-                    }
+                    this.tree = tree // save the tree!
+                return {
+                    tree,
+                    top: this.getVariables([top])[0],
+                    info
+                }
             }
         }
         throw 'no sensible set of solvables found!'
@@ -68,24 +70,24 @@ export class EquSystem {
     }
 
 
-    generateSolvables(avoids: string[][] = []): [givens: Variables, hiddens: Variables, unknown: Variable, solInStep: string] {
+    generateSolvables(avoids: string[][] = []): [givens: Variables, hiddens: Variables, unknown: Variable] {
         let { tree, top, info } = this.getFullTree(avoids)
         return [
             this.getVariables(info.givens),
             this.getVariables(info.solved),
             top,
-            this.solInSteps(tree, top)
         ]
     }
 
-    solInSteps(tree: valObj, unknown: Variable): string {
-        let fs = solutionFlow(this.fs, tree, [unknown.sym])
+    solInSteps(unknown: Variable): string {
+        // use the tree stored in this
+        let fs = solutionFlow(this.fs, this.tree, [unknown.sym])
         let eqs = fs.map($ => this.equations.find(_ => _.zeroFunc === $)!)
-        let info = readTree(tree)
+        let info = readTree(this.tree)
         let givens = info.givens.map($ => this.variables.find(_ => _.sym === $)!)
         let T = ''
         for (let eq of eqs) {
-            let solved = solvingSymbol(eq.zeroFunc, tree)!
+            let solved = solvingSymbol(eq.zeroFunc, this.tree)!
             let solvedVar = this.variables.find($ => $.sym === solved)!
             T += latexAligned([eq.print(), eq.print(givens), solvedVar.full()])
             T += " \\\\~\\\\ "

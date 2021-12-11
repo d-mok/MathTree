@@ -30946,7 +30946,7 @@ exports.BuildSolve2 = BuildSolve2;
 function BuildSolveOnce(variables, equations, { listSym = false, avoids = [], sigfig = {} } = {}) {
     let system = (0, support_1.toEquSystem)(variables, equations);
     system.fit();
-    let [givens, hiddens, unknown, solInStep] = system.generateSolvables(avoids);
+    let [givens, hiddens, unknown] = system.generateSolvables(avoids);
     givens.forEach($ => $.round(sigfig[$.sym]));
     system.fitAgain(hiddens);
     function sol() {
@@ -30965,7 +30965,7 @@ function BuildSolveOnce(variables, equations, { listSym = false, avoids = [], si
             // // let hds = [...hiddens]
             // // hds.sort((a, b) => a.order - b.order)
             // T += latexBraced(hiddens.map($ => $.full()))
-            return solInStep;
+            return system.solInSteps(unknown);
         }
     }
     return {
@@ -31195,6 +31195,7 @@ class EquSystem {
     constructor(variables, equations) {
         this.variables = variables;
         this.equations = equations;
+        this.tree = {};
         this.fs = equations.map($ => $.zeroFunc);
     }
     fit() {
@@ -31217,11 +31218,12 @@ class EquSystem {
             for (let top of RndShuffle(...info.tops)) {
                 let flow = (0, gauss_1.solutionFlow)(this.fs, tree, [top]);
                 if (flow.length === this.fs.length && this.checkAvoids(info.givens, top, avoids))
-                    return {
-                        tree,
-                        top: this.getVariables([top])[0],
-                        info
-                    };
+                    this.tree = tree; // save the tree!
+                return {
+                    tree,
+                    top: this.getVariables([top])[0],
+                    info
+                };
             }
         }
         throw 'no sensible set of solvables found!';
@@ -31241,17 +31243,17 @@ class EquSystem {
             this.getVariables(info.givens),
             this.getVariables(info.solved),
             top,
-            this.solInSteps(tree, top)
         ];
     }
-    solInSteps(tree, unknown) {
-        let fs = (0, gauss_1.solutionFlow)(this.fs, tree, [unknown.sym]);
+    solInSteps(unknown) {
+        // use the tree stored in this
+        let fs = (0, gauss_1.solutionFlow)(this.fs, this.tree, [unknown.sym]);
         let eqs = fs.map($ => this.equations.find(_ => _.zeroFunc === $));
-        let info = (0, gauss_1.readTree)(tree);
+        let info = (0, gauss_1.readTree)(this.tree);
         let givens = info.givens.map($ => this.variables.find(_ => _.sym === $));
         let T = '';
         for (let eq of eqs) {
-            let solved = (0, gauss_1.solvingSymbol)(eq.zeroFunc, tree);
+            let solved = (0, gauss_1.solvingSymbol)(eq.zeroFunc, this.tree);
             let solvedVar = this.variables.find($ => $.sym === solved);
             T += (0, latex_1.latexAligned)([eq.print(), eq.print(givens), solvedVar.full()]);
             T += " \\\\~\\\\ ";

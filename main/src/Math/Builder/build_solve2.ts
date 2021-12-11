@@ -62,7 +62,7 @@ function BuildSolveOnce(
     let system = toEquSystem(variables, equations)
     system.fit()
 
-    let [givens, hiddens, unknown,solInStep] = system.generateSolvables(avoids)
+    let [givens, hiddens, unknown] = system.generateSolvables(avoids)
     givens.forEach($ => $.round(sigfig[$.sym]))
     system.fitAgain(hiddens)
 
@@ -81,7 +81,7 @@ function BuildSolveOnce(
             // // let hds = [...hiddens]
             // // hds.sort((a, b) => a.order - b.order)
             // T += latexBraced(hiddens.map($ => $.full()))
-            return solInStep
+            return system.solInSteps(unknown)
         }
     }
 

@@ -299,6 +299,7 @@ declare module "Math/Builder/support/system" {
         variables: Variables;
         equations: Equation[];
         private fs;
+        private tree;
         constructor(variables: Variables, equations: Equation[]);
         fit(): void;
         fitAgain(vars: Variable[]): void;
@@ -306,8 +307,8 @@ declare module "Math/Builder/support/system" {
         private getFullTree;
         private checkAvoid;
         private checkAvoids;
-        generateSolvables(avoids?: string[][]): [givens: Variables, hiddens: Variables, unknown: Variable, solInStep: string];
-        solInSteps(tree: valObj, unknown: Variable): string;
+        generateSolvables(avoids?: string[][]): [givens: Variables, hiddens: Variables, unknown: Variable];
+        solInSteps(unknown: Variable): string;
         generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable];
         print(givens?: Variable[]): string;
     }
