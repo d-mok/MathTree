@@ -31257,7 +31257,7 @@ class EquSystem {
             let solvedVar = this.variables.find($ => $.sym === solved);
             T += solvedVar.full();
             givens.push(solvedVar);
-            T += +" \\\\~\\\\ ";
+            T += " \\\\~\\\\ ";
         }
         return T;
     }
