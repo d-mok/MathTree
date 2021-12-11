@@ -31251,12 +31251,10 @@ class EquSystem {
         let givens = info.givens.map($ => this.variables.find(_ => _.sym === $));
         let T = '';
         for (let eq of eqs) {
-            T += eq.print() + " \\\\ ";
-            T += eq.print(givens) + " \\\\ ";
             let solved = (0, gauss_1.solvingSymbol)(eq.zeroFunc, tree);
             let solvedVar = this.variables.find($ => $.sym === solved);
-            T += solvedVar.full();
             givens.push(solvedVar);
+            T += (0, latex_1.latexAligned)([eq.print(), eq.print(givens), solvedVar.full()]);
             T += " \\\\~\\\\ ";
         }
         return T;

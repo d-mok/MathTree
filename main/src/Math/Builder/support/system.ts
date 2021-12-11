@@ -1,6 +1,6 @@
 import { Variable, Variables } from './variable'
 import { Equation } from './equation'
-import { latexBraced } from './latex'
+import { latexAligned, latexBraced } from './latex'
 
 import { fit, analyze, readTree, solutionFlow, solvingSymbol } from 'gauss'
 
@@ -85,12 +85,10 @@ export class EquSystem {
         let givens = info.givens.map($ => this.variables.find(_ => _.sym === $)!)
         let T = ''
         for (let eq of eqs) {
-            T += eq.print() + " \\\\ "
-            T += eq.print(givens) + " \\\\ "
             let solved = solvingSymbol(eq.zeroFunc, tree)!
             let solvedVar = this.variables.find($ => $.sym === solved)!
-            T += solvedVar.full()
             givens.push(solvedVar)
+            T += latexAligned([eq.print(), eq.print(givens), solvedVar.full()])
             T += " \\\\~\\\\ "
         }
         return T
