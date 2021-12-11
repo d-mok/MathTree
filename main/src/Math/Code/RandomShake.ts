@@ -5,10 +5,10 @@
  * @deprecated
  * @return an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
  * ```
- * RndShake(10) 
- * // equivalent to RndShakeN(10) 
- * RndShake(10.5) 
- * // equivalent to RndShakeR(10.5) 
+ * RndShake(10)
+ * // equivalent to RndShakeN(10)
+ * RndShake(10.5)
+ * // equivalent to RndShakeR(10.5)
  * ```
  */
 function RndShake(anchor: any): (typeof anchor)[] {
@@ -61,7 +61,7 @@ function RndShake(anchor: any): (typeof anchor)[] {
         if (owl.int(anchor)) {
             return RndShakeN(anchor)
         }
-        // Decimal      
+        // Decimal
         if (owl.num(anchor)) {
             return RndShakeR(anchor)
         }
@@ -140,7 +140,7 @@ globalThis.RndShakeR = contract(RndShakeR).sign([owl.num])
  * @category RandomShake
  * @return 3 nearby same-sign rational by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
  * ```
- * RndShakeQ(5/6) 
+ * RndShakeQ(5/6)
  * // return 3 unique fractions around [5,6]
  * RndShakeQ(6/-5)
  * // return 3 unique fractions around [6,-5]
@@ -179,7 +179,7 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
 //  * @deprecated
 //  * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
 //  * ```
-//  * RndShakeFrac([5,6]) 
+//  * RndShakeFrac([5,6])
 //  * // return 3 unique fractions around [5,6]
 //  * RndShakeFrac([6,-5])
 //  * // return 3 unique fractions around [6,-5]
@@ -216,7 +216,7 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
 //  * @deprecated
 //  * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
 //  * ```
-//  * RndShakeDfrac('\\dfrac{5}{6}') 
+//  * RndShakeDfrac('\\dfrac{5}{6}')
 //  * // return 3 unique Dfrac around [5,6]
 //  * RndShakeDfrac('-\\dfrac{6}{5}')
 //  * // return 3 unique Dfrac around [6,-5]
@@ -236,7 +236,7 @@ globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational])
  * @category RandomShake
  * @return an array of 3 ineq signs, balanced in number.
  * ```
- * RndShakeIneq('\\ge') 
+ * RndShakeIneq('\\ge')
  * // may return ['\\ge','\\le','\\le']
  * ```
  */
@@ -254,7 +254,7 @@ globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq])
  * @category RandomShake
  * @return an array of 3 point, both x and y are unique
  * ```
- * RndShakePoint([3,4]) 
+ * RndShakePoint([3,4])
  * // may return [[2,5],[1,6],[4,2]]
  * ```
  */
@@ -279,7 +279,7 @@ globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point2D])
  * @category RandomShake
  * @return an array of 3 combo
  * ```
- * RndShakeCombo([true,true,true]) 
+ * RndShakeCombo([true,true,true])
  * // may return [[true,false,true],[false,true,false],[false,true,true]]
  * ```
  */
@@ -292,7 +292,13 @@ function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, 
             RndT() ? c : !c
         ]
     }
-    return dice(func).unique().rolls(3)
+
+    let diff = (bools: boolean[]) => { return bools.some($ => $) && bools.some($ => !$) }
+    return dice(func).unique()
+        .coherent(all => diff([a, ...all.map($ => $[0])]))
+        .coherent(all => diff([b, ...all.map($ => $[1])]))
+        .coherent(all => diff([c, ...all.map($ => $[2])]))
+        .rolls(3)
 }
 globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
 
@@ -302,7 +308,7 @@ globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo])
  * @category RandomShake
  * @return an array of 3 trig
  * ```
- * RndShakeTrig('sin') 
+ * RndShakeTrig('sin')
  * // may return ['cos','sin','cos']
  * ```
  */
@@ -318,7 +324,7 @@ globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig])
  * @category RandomShake
  * @return an array of 3 TrigValue
  * ```
- * RndShakeTrigValue(['sin','x']) 
+ * RndShakeTrigValue(['sin','x'])
  * // may return [['cos','x'],['sin','x'],['cos','x']]
  * ```
  */
@@ -338,7 +344,7 @@ globalThis.RndShakeTrigValue = contract(RndShakeTrigValue).sign([owl.trigValue])
  * @category RandomShake
  * @return an array of 3 ratios
  * ```
- * RndShakeRatio([4,5,6]) 
+ * RndShakeRatio([4,5,6])
  * // may return [[3,6,5],[7,5,3],[8,4,5]]
  * ```
  */
@@ -362,7 +368,7 @@ globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple])
  * @category RandomShake
  * @return an array of 3 ratios
  * ```
- * RndShakeBase('AB0CD_{16}') 
+ * RndShakeBase('AB0CD_{16}')
  * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
  * ```
  */

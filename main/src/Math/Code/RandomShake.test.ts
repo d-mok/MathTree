@@ -193,9 +193,14 @@ test('RndShakePoint', () => {
 test('RndShakeCombo', () => {
 
     function run(anchor: [boolean, boolean, boolean]) {
+        let [a, b, c] = anchor
         let shaked = RndShakeCombo(anchor)
         expect(shaked).toSatisfyAll(owl.combo)
         expect(shaked).toHaveLength(3)
+        expect(shaked).toHaveLength(3)
+        expect([a, ...shaked.map($ => $[0])]).toIncludeAllMembers([true, false])
+        expect([b, ...shaked.map($ => $[1])]).toIncludeAllMembers([true, false])
+        expect([c, ...shaked.map($ => $[2])]).toIncludeAllMembers([true, false])
     }
 
 
