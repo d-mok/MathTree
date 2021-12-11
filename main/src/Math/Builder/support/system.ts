@@ -2,7 +2,7 @@ import { Variable, Variables } from './variable'
 import { Equation } from './equation'
 import { latexBraced } from './latex'
 
-import { fit, analyze, readTree, solutionFlow } from 'gauss'
+import { fit, analyze, readTree, solutionFlow, solvingSymbol } from 'gauss'
 
 
 
@@ -68,13 +68,32 @@ export class EquSystem {
     }
 
 
-    generateSolvables(avoids: string[][]=[]): [givens: Variables, hiddens: Variables, unknown: Variable] {
+    generateSolvables(avoids: string[][] = []): [givens: Variables, hiddens: Variables, unknown: Variable, solInStep: string] {
         let { tree, top, info } = this.getFullTree(avoids)
         return [
             this.getVariables(info.givens),
             this.getVariables(info.solved),
-            top
+            top,
+            this.solInSteps(tree, top)
         ]
+    }
+
+    solInSteps(tree: valObj, unknown: Variable): string {
+        let fs = solutionFlow(this.fs, tree, [unknown.sym])
+        let eqs = fs.map($ => this.equations.find(_ => _.zeroFunc === $)!)
+        let info = readTree(tree)
+        let givens = info.givens.map($ => this.variables.find(_ => _.sym === $)!)
+        let T = ''
+        for (let eq of eqs) {
+            T += eq.print() + " \\\\ "
+            T += eq.print(givens) + " \\\\ "
+            let solved = solvingSymbol(eq.zeroFunc, tree)!
+            let solvedVar = this.variables.find($ => $.sym === solved)!
+            T += solvedVar.full()
+            givens.push(solvedVar)
+            T += + " \\\\~\\\\ "
+        }
+        return T
     }
 
 

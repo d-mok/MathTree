@@ -306,7 +306,8 @@ declare module "Math/Builder/support/system" {
         private getFullTree;
         private checkAvoid;
         private checkAvoids;
-        generateSolvables(avoids?: string[][]): [givens: Variables, hiddens: Variables, unknown: Variable];
+        generateSolvables(avoids?: string[][]): [givens: Variables, hiddens: Variables, unknown: Variable, solInStep: string];
+        solInSteps(tree: valObj, unknown: Variable): string;
         generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable];
         print(givens?: Variable[]): string;
     }
@@ -362,14 +363,32 @@ declare module "Math/Builder/build_ratio" {
         ans: quantity;
     };
 }
+declare module "Math/Builder/build_solve2" {
+    export function BuildSolve2(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig }?: {
+        listSym?: boolean;
+        avoids?: string[][];
+        sigfig?: {
+            [_: string]: number;
+        };
+    }): {
+        list: string;
+        sol: string;
+        vars: string[];
+        vals: number[];
+        unknown: [symbol: string, name: string, val: number, unit: string];
+        ans: quantity;
+    };
+}
 declare module "Math/Builder/index" {
     import { BuildSolve as $BuildSolve } from "Math/Builder/build_solve";
     import { BuildTrend as $BuildTrend } from "Math/Builder/build_trend";
     import { BuildRatio as $BuildRatio } from "Math/Builder/build_ratio";
+    import { BuildSolve2 as $BuildSolve2 } from "Math/Builder/build_solve2";
     global {
         var BuildSolve: typeof $BuildSolve;
         var BuildTrend: typeof $BuildTrend;
         var BuildRatio: typeof $BuildRatio;
+        var BuildSolve2: typeof $BuildSolve2;
     }
 }
 declare module "Math/index" {

@@ -30917,6 +30917,75 @@ function BuildSolveOnce(variables, equations, { listSym = false, avoids = [], si
 
 /***/ }),
 
+/***/ 1871:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BuildSolve2 = void 0;
+const latex_1 = __webpack_require__(1838);
+const support_1 = __webpack_require__(3760);
+function BuildSolve2(variables, equations, { listSym = false, avoids = [], sigfig = {} } = {}) {
+    for (let i = 0; i <= 10; i++) {
+        try {
+            return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig });
+        }
+        catch (e) {
+            if (i === 10) {
+                throw e;
+            }
+            else {
+                continue;
+            }
+        }
+    }
+    throw "never";
+}
+exports.BuildSolve2 = BuildSolve2;
+function BuildSolveOnce(variables, equations, { listSym = false, avoids = [], sigfig = {} } = {}) {
+    let system = (0, support_1.toEquSystem)(variables, equations);
+    system.fit();
+    let [givens, hiddens, unknown, solInStep] = system.generateSolvables(avoids);
+    givens.forEach($ => $.round(sigfig[$.sym]));
+    system.fitAgain(hiddens);
+    function sol() {
+        if (equations.length === 1) {
+            let eq = system.equations[0];
+            return (0, latex_1.latexAligned)([
+                eq.print(),
+                eq.print(givens),
+                unknown.full()
+            ]);
+        }
+        else {
+            // let T = ""
+            // T += system.print() + " \\\\~\\\\ "
+            // T += system.print(givens) + " \\\\~\\\\ "
+            // // let hds = [...hiddens]
+            // // hds.sort((a, b) => a.order - b.order)
+            // T += latexBraced(hiddens.map($ => $.full()))
+            return solInStep;
+        }
+    }
+    return {
+        list: givens.map($ => listSym ? $.rich() : $.whole()).join("\\\\"),
+        sol: sol(),
+        vars: system.variables.map(v => givens.includes(v) ? v.long() : v.symbol()),
+        vals: system.variables.map($ => $.getVal()),
+        unknown: [
+            unknown.symbol(),
+            unknown.name,
+            unknown.getVal(),
+            unknown.unit
+        ],
+        ans: { val: unknown.getVal(), unit: unknown.unit }
+    };
+}
+
+
+/***/ }),
+
 /***/ 6871:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -30987,9 +31056,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const build_solve_1 = __webpack_require__(5033);
 const build_trend_1 = __webpack_require__(6871);
 const build_ratio_1 = __webpack_require__(8620);
+const build_solve2_1 = __webpack_require__(1871);
 globalThis.BuildSolve = build_solve_1.BuildSolve;
 globalThis.BuildTrend = build_trend_1.BuildTrend;
 globalThis.BuildRatio = build_ratio_1.BuildRatio;
+globalThis.BuildSolve2 = build_solve2_1.BuildSolve2;
 
 
 /***/ }),
@@ -31169,8 +31240,26 @@ class EquSystem {
         return [
             this.getVariables(info.givens),
             this.getVariables(info.solved),
-            top
+            top,
+            this.solInSteps(tree, top)
         ];
+    }
+    solInSteps(tree, unknown) {
+        let fs = (0, gauss_1.solutionFlow)(this.fs, tree, [unknown.sym]);
+        let eqs = fs.map($ => this.equations.find(_ => _.zeroFunc === $));
+        let info = (0, gauss_1.readTree)(tree);
+        let givens = info.givens.map($ => this.variables.find(_ => _.sym === $));
+        let T = '';
+        for (let eq of eqs) {
+            T += eq.print() + " \\\\ ";
+            T += eq.print(givens) + " \\\\ ";
+            let solved = (0, gauss_1.solvingSymbol)(eq.zeroFunc, tree);
+            let solvedVar = this.variables.find($ => $.sym === solved);
+            T += solvedVar.full();
+            givens.push(solvedVar);
+            T += +" \\\\~\\\\ ";
+        }
+        return T;
     }
     generateTrend() {
         let { tree, top, info } = this.getFullTree();
