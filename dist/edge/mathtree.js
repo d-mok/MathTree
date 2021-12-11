@@ -31253,9 +31253,9 @@ class EquSystem {
         for (let eq of eqs) {
             let solved = (0, gauss_1.solvingSymbol)(eq.zeroFunc, tree);
             let solvedVar = this.variables.find($ => $.sym === solved);
-            givens.push(solvedVar);
             T += (0, latex_1.latexAligned)([eq.print(), eq.print(givens), solvedVar.full()]);
             T += " \\\\~\\\\ ";
+            givens.push(solvedVar);
         }
         return T;
     }

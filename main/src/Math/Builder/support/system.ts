@@ -87,9 +87,9 @@ export class EquSystem {
         for (let eq of eqs) {
             let solved = solvingSymbol(eq.zeroFunc, tree)!
             let solvedVar = this.variables.find($ => $.sym === solved)!
-            givens.push(solvedVar)
             T += latexAligned([eq.print(), eq.print(givens), solvedVar.full()])
             T += " \\\\~\\\\ "
+            givens.push(solvedVar)
         }
         return T
     }
