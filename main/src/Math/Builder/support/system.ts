@@ -112,7 +112,6 @@ export class EquSystem {
         return [constants, agent, responses, target]
     }
 
-
     print(givens: Variable[] = []): string {
         let eqs = this.equations.map($ =>
             $.dep.write($.latex, givens)

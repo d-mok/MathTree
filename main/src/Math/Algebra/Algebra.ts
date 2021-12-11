@@ -54,3 +54,60 @@ declare global {
 }
 
 
+
+
+
+
+function intrapolateBetween([A, B]: [Point2D, Point2D], x: number): number {
+    let [x1, y1] = A
+    let [x2, y2] = B
+    let r = (x - x1) / (x2 - x1)
+    return y1 + (y2 - y1) * r
+}
+
+function justOnLeft(pts: Point2D[], x: number): Point2D | undefined {
+    let smaller = pts.filter(([x0, _]) => x0 <= x)
+    if (smaller.length === 0) return undefined
+    let P = smaller[0]
+    for (let p of smaller) {
+        if (p[0] <= x && p[0] > P[0])
+            P = p
+    }
+    return P
+}
+
+
+function justOnRight(pts: Point2D[], x: number): Point2D | undefined {
+    let larger = pts.filter(([x0, _]) => x0 >= x)
+    if (larger.length === 0) return undefined
+    let P = larger[0]
+    for (let p of larger) {
+        if (p[0] >= x && p[0] < P[0])
+            P = p
+    }
+    return P
+}
+
+function intrapolate(sorted: Point2D[], x: number): number {
+    let first = sorted[0]
+    let last = sorted[sorted.length - 1]
+    if (x < first[0]) {
+        return intrapolateBetween([sorted[0],sorted[1]],x)
+    }
+    if (x > last[0])  {
+        return intrapolateBetween([sorted[0], sorted[1]], x)
+    }
+    let i = sorted.findIndex($ => $[0] > x) - 1
+    return intrapolateBetween([sorted[i], sorted[i + 1]], x)
+}
+
+
+function functionize() {
+
+}
+
+function differentiate(points: Point2D[],): Point2D[] {
+
+}
+
+
