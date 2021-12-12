@@ -263,12 +263,12 @@ class BasicCanvas {
     }
     // export
     export(html, placeholder, trim) {
-        let canvas = cloneCanvas(this.canvas);
+        let cv = cloneCanvas(this.canvas);
         if (trim)
-            trimCanvas(canvas);
-        const displayWidth = Math.floor(canvas.width / QUALITY);
-        const displayHeight = Math.floor(this.canvas.height / QUALITY);
-        const src = 'src="' + canvas.toDataURL() + '"';
+            trimCanvas(cv);
+        const displayWidth = Math.floor(cv.width / QUALITY);
+        const displayHeight = Math.floor(cv.height / QUALITY);
+        const src = 'src="' + cv.toDataURL() + '"';
         const width = ' width="' + displayWidth + '"';
         const height = ' height="' + displayHeight + '"';
         const bg = this.backgroundURL.length === 0 ?

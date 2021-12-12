@@ -385,13 +385,13 @@ export class BasicCanvas {
 
 
     public export(html: string, placeholder: string, trim: boolean): string {
-        let canvas = cloneCanvas(this.canvas)
-        if (trim) trimCanvas(canvas)
+        let cv = cloneCanvas(this.canvas)
+        if (trim) trimCanvas(cv)
 
-        const displayWidth = Math.floor(canvas.width / QUALITY)
-        const displayHeight = Math.floor(this.canvas.height / QUALITY)
+        const displayWidth = Math.floor(cv.width / QUALITY)
+        const displayHeight = Math.floor(cv.height / QUALITY)
 
-        const src = 'src="' + canvas.toDataURL() + '"'
+        const src = 'src="' + cv.toDataURL() + '"'
         const width = ' width="' + displayWidth + '"'
         const height = ' height="' + displayHeight + '"'
 
