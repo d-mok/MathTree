@@ -1,93 +1,6 @@
 
 
 type Point2D = [number, number]
-type Point3D = [number, number, number]
-type Point = Point2D | Point3D
-
-type Pixel = number
-type Pixel2D = [number, number]
-
-
-/**
- * @return angle AOB, measured anticlockwise
- * ```
- * AnglePolar([1,0],[0,0],[0,2]) // 90
- * AnglePolar([2,2],[1,1],[1,3]) // 45
- * AnglePolar([1,3],[1,1],[2,2]) // 315
- * ```
- */
-export function AnglePolar(A: Point2D, O: Point2D, B: Point2D): number {
-    let a = argument(vec(O, A))
-    let b = argument(vec(O, B))
-    return a <= b ? b - a : 360 + b - a
-}
-
-
-
-/**
- * @return check if the polar angle AOB is reflex
- * ```
- * IsReflex([1,0],[0,0],[0,2]) // false
- * IsReflex([2,2],[1,1],[1,3]) // false
- * IsReflex([1,3],[1,1],[2,2]) // true
- * ```
- */
-export function IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean {
-    return AnglePolar(A, O, B) > 180
-}
-
-
-
-function projectTo2D(point3D: Point3D, angle: number, depth: number): Point2D {
-    let a = angle * Math.PI / 180
-    let s = Math.sin(a)
-    let c = Math.cos(a)
-
-    let [x, y, z] = point3D
-    let x_new = x + depth * y * c
-    let y_new = z + depth * y * s
-    return [x_new, y_new]
-}
-
-
-
-export function force2D(point: Point, angle: number, depth: number): Point2D {
-    if (point.length === 3) {
-        return projectTo2D(point, angle, depth)
-    } else {
-        return point
-    }
-}
-
-export function sin(degree: number): number {
-    return Math.sin(degree / 180 * Math.PI)
-}
-
-
-export function cos(degree: number): number {
-    return Math.cos(degree / 180 * Math.PI)
-}
-
-export function atan2(dy: number, dx: number): number {
-    return Math.atan2(dy, dx) * 180 / Math.PI
-}
-
-export function midPoint(A: Point2D, B: Point2D): Point2D {
-    return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2]
-}
-
-
-export function meanPoint(...Points: Point2D[]): Point2D {
-    if (Points.length === 0) return [0, 0]
-    let X = 0
-    let Y = 0
-    for (let p of Points) {
-        X += p[0]
-        Y += p[1]
-    }
-    let n = Points.length
-    return [X / n, Y / n]
-}
 
 export function vec(p1: Point2D, p2: Point2D): Point2D {
     let [x1, y1] = p1
@@ -110,11 +23,6 @@ export function argument([x, y]: Point2D): number {
     return angle
 }
 
-export function cross2D(vec1: Point2D, vec2: Point2D): number {
-    let [x1, y1] = vec1
-    let [x2, y2] = vec2
-    return x1 * y2 - y1 * x2
-}
 
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.

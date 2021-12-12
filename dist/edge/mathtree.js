@@ -30196,6 +30196,48 @@ Algebra = __decorate([
     (0, contract_1.captureAll)()
 ], Algebra);
 exports.Algebra = Algebra;
+// function intrapolateBetween([A, B]: [Point2D, Point2D], x: number): number {
+//     let [x1, y1] = A
+//     let [x2, y2] = B
+//     let r = (x - x1) / (x2 - x1)
+//     return y1 + (y2 - y1) * r
+// }
+// function justOnLeft(pts: Point2D[], x: number): Point2D | undefined {
+//     let smaller = pts.filter(([x0, _]) => x0 <= x)
+//     if (smaller.length === 0) return undefined
+//     let P = smaller[0]
+//     for (let p of smaller) {
+//         if (p[0] <= x && p[0] > P[0])
+//             P = p
+//     }
+//     return P
+// }
+// function justOnRight(pts: Point2D[], x: number): Point2D | undefined {
+//     let larger = pts.filter(([x0, _]) => x0 >= x)
+//     if (larger.length === 0) return undefined
+//     let P = larger[0]
+//     for (let p of larger) {
+//         if (p[0] >= x && p[0] < P[0])
+//             P = p
+//     }
+//     return P
+// }
+// function intrapolate(sorted: Point2D[], x: number): number {
+//     let first = sorted[0]
+//     let last = sorted[sorted.length - 1]
+//     if (x < first[0]) {
+//         return intrapolateBetween([sorted[0],sorted[1]],x)
+//     }
+//     if (x > last[0])  {
+//         return intrapolateBetween([sorted[0], sorted[1]], x)
+//     }
+//     let i = sorted.findIndex($ => $[0] > x) - 1
+//     return intrapolateBetween([sorted[i], sorted[i + 1]], x)
+// }
+// function functionize() {
+// }
+// function differentiate(points: Point2D[],): Point2D[] {
+// }
 
 
 /***/ }),
@@ -36974,21 +37016,21 @@ class AutoPenCls {
             let E1 = [greater ? width : -width, base + height];
             let E2 = [greater ? width : -width, base];
             if (vertical) {
-                pen.set.strokeColor('grey');
+                pen.set.color('grey');
                 pen.set.dash([10, 10]);
                 pen.graph.vertical(align);
-                pen.set.strokeColor();
+                pen.set.color();
                 pen.set.dash();
             }
             pen.polyshade(B, T, E1, E2);
             pen.arrow([-width, base], [width, base]);
             pen.line(B, T);
             pen.arrow(T, E);
-            pen.set.fillColor(solid ? 'black' : 'white');
+            pen.set.color(solid ? 'black' : 'white');
             pen.set.weight(3);
             pen.circle(T, 3, [0, 360], true);
             pen.set.weight();
-            pen.set.fillColor('black');
+            pen.set.color('black');
             pen.label.point(B, num.toString(), 270);
         }
         function tick(position, correct) {
@@ -37074,12 +37116,12 @@ class AutoPenCls {
             pen.plot(x => cos(x), 0, 360);
         if (trig === 'tan') {
             pen.plot(x => tan(x), 0, 360);
-            pen.set.strokeColor('grey');
+            pen.set.color('grey');
             pen.set.dash([5, 10]);
             pen.set.weight(0.7);
             pen.graph.vertical(90);
             pen.graph.vertical(270);
-            pen.set.strokeColor();
+            pen.set.color();
             pen.set.dash();
             pen.set.weight(1);
         }
@@ -37118,9 +37160,9 @@ class AutoPenCls {
             let P = [x, y];
             let Q = [x, 0];
             let R = [anchor, 0];
-            pen.set.fillColor();
+            pen.set.color();
             pen.point(P);
-            pen.set.fillColor('red');
+            pen.set.color('red');
             if (y !== 0) {
                 pen.arrow(P, Q);
             }
@@ -37133,13 +37175,12 @@ class AutoPenCls {
             if (skipAnchor)
                 return;
             pen.set.weight(3);
-            pen.set.strokeColor('blue');
+            pen.set.color('blue');
             pen.line(R, Q);
             pen.set.weight(1);
-            pen.set.strokeColor('red');
+            pen.set.color('red');
         }
-        pen.set.strokeColor('red');
-        pen.set.fillColor('red');
+        pen.set.color('red');
         pen.set.dash([5, 5]);
         pen.graph.horizontal(k);
         pen.set.dash();
@@ -37234,7 +37275,7 @@ class AutoPenCls {
             pen.cutX(P);
             pen.cutX(Q);
             pen.set.weight(3);
-            pen.set.strokeColor('red');
+            pen.set.color('red');
             if (a > 0) {
                 if (greater) {
                     pen.plot(x => Sign(a) * (x ** 2 - 4), -5, -2);
@@ -37254,14 +37295,14 @@ class AutoPenCls {
                 }
             }
             pen.set.weight();
-            pen.set.strokeColor();
+            pen.set.color();
             pen.label.point(P, p.toString(), a > 0 ? 315 : 45);
             pen.label.point(Q, q.toString(), a > 0 ? 225 : 135);
         }
         if (p === undefined && q === undefined) {
             if ((a > 0 && greater) || (a < 0 && !greater)) {
                 pen.set.weight(3);
-                pen.set.strokeColor('red');
+                pen.set.color('red');
             }
             if (a > 0)
                 pen.plot(x => x ** 2 + 2);
@@ -37274,34 +37315,36 @@ class AutoPenCls {
             pen.label.point([0, 0], p.toString(), a > 0 ? 270 : 90);
             if (a > 0) {
                 pen.set.weight(3);
-                pen.set.strokeColor('red');
+                pen.set.color('red');
                 if (greater && equal)
                     pen.plot(func);
                 if (greater && !equal) {
                     pen.plot(func);
-                    pen.set.strokeColor();
-                    pen.set.fillColor('white');
+                    pen.set.color('white');
                     pen.circle([0, 0], 4, [0, 360], true);
+                    pen.set.color();
+                    pen.circle([0, 0], 4, [0, 360]);
                 }
                 if (!greater && equal) {
-                    pen.set.fillColor('red');
+                    pen.set.color('red');
                     pen.circle([0, 0], 4, [0, 360], true);
                 }
                 if (!greater && !equal) { }
             }
             if (a < 0) {
                 pen.set.weight(3);
-                pen.set.strokeColor('red');
+                pen.set.color('red');
                 if (!greater && equal)
                     pen.plot(func);
                 if (!greater && !equal) {
                     pen.plot(func);
-                    pen.set.strokeColor();
-                    pen.set.fillColor('white');
+                    pen.set.color('white');
                     pen.circle([0, 0], 4, [0, 360], true);
+                    pen.set.color();
+                    pen.circle([0, 0], 4, [0, 360]);
                 }
                 if (greater && equal) {
-                    pen.set.fillColor('red');
+                    pen.set.color('red');
                     pen.circle([0, 0], 4, [0, 360], true);
                 }
                 if (greater && !equal) { }
@@ -37358,7 +37401,7 @@ class AutoPenCls {
         function drawHeight(vertex, base) {
             let F = PdFoot(base[0], base[1], vertex);
             pen.set.dash([5, 5]);
-            pen.set.strokeColor('grey');
+            pen.set.color('grey');
             pen.line(vertex, F);
             if (F[0] === base[0][0] && F[1] === base[0][1]) {
                 pen.line(F, base[1]);
@@ -37373,7 +37416,7 @@ class AutoPenCls {
             else {
                 pen.rightAngle(vertex, F, base[0]);
             }
-            pen.set.strokeColor();
+            pen.set.color();
         }
         if (heights[0])
             drawHeight(A, [B, C]);
@@ -37501,11 +37544,11 @@ class AutoPenCls {
             pen.set.alpha();
         }
         if (tick > 0) {
-            pen.set.fillColor("grey");
+            pen.set.color("grey");
             pen.set.textSize(0.8);
             pen.tick.x(tick);
             pen.tick.y(tick);
-            pen.set.fillColor();
+            pen.set.color();
             pen.set.textSize();
         }
         function drawLines() {
@@ -38075,6 +38118,7 @@ class PenCls extends paint_1.Pencil {
                 this._pen.initSize(width, height);
                 if (this._pen.range.AUTO_BORDER)
                     this._pen.initOuterBorder();
+                this._pen.set.reset();
             },
             /**
              * Set the size of the canvas by resolution.
@@ -38088,10 +38132,8 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             resolution(xPPI = 0.1, yPPI = xPPI) {
-                let xRange = this._pen.frame.xmax - this._pen.frame.xmin;
-                let yRange = this._pen.frame.ymax - this._pen.frame.ymin;
-                let xScale = xRange * xPPI;
-                let yScale = yRange * yPPI;
+                let xScale = this._pen.cv.dx() * xPPI;
+                let yScale = this._pen.cv.dy() * yPPI;
                 this.set(xScale, yScale);
             },
             /**
@@ -38108,9 +38150,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             lock(width = 1, height = width) {
-                let [xmin, xmax] = this._pen.frame.xRange();
-                let [ymin, ymax] = this._pen.frame.yRange();
-                let ratio = (ymax - ymin) / (xmax - xmin);
+                let ratio = this._pen.cv.yxRatio();
                 if (width * ratio < height) {
                     this.set(width, width * ratio);
                 }
@@ -38129,6 +38169,10 @@ class PenCls extends paint_1.Pencil {
              */
             _pen: this,
             /**
+             * @ignore
+             */
+            _cv: this.cv,
+            /**
              * Set the weight of the pen (line width).
              * @category set
              * @param weight - The line width.
@@ -38138,31 +38182,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             weight(weight = 1) {
-                this._pen.setWeight(weight);
-            },
-            /**
-             * Set the color of the pen stroke.
-             * @category set
-             * @param color - The line color.
-             * @returns void
-             * ```
-             * pen.set.strokeColor('grey') // set grey line
-             * ```
-             */
-            strokeColor(color = "black") {
-                this._pen.setStrokeColor(color);
-            },
-            /**
-             * Set the color of filling.
-             * @category set
-             * @param color - The filling color.
-             * @returns void
-             * ```
-             * pen.set.fillColor('grey') // set grey filling
-             * ```
-             */
-            fillColor(color = "black") {
-                this._pen.setFillColor(color);
+                this._cv.$WEIGHT = weight;
             },
             /**
              * Set the color of both filling and stroke.
@@ -38174,7 +38194,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             color(color = "black") {
-                this._pen.setColor(color);
+                this._cv.$COLOR = color;
             },
             /**
              * Set the transparency.
@@ -38186,7 +38206,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             alpha(opaque = 1) {
-                this._pen.setAlpha(opaque);
+                this._cv.$ALPHA = opaque;
             },
             /**
              * Set the dash pattern of line.
@@ -38198,7 +38218,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             dash(segments = []) {
-                this._pen.setDash(segments);
+                this._cv.$DASH = segments;
             },
             /**
              * Set the horizontal alignment of text.
@@ -38210,7 +38230,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             textAlign(align = "center") {
-                this._pen.setTextAlign(align);
+                this._cv.$TEXT_ALIGN = align;
             },
             /**
              * Set the vertical alignment of text.
@@ -38222,7 +38242,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             textBaseline(baseline = "middle") {
-                this._pen.setTextBaseline(baseline);
+                this._cv.$TEXT_BASELINE = baseline;
             },
             /**
              * Set the size of text.
@@ -38234,7 +38254,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             textSize(size = 1) {
-                this._pen.setTextSize(size);
+                this._cv.$TEXT_SIZE = size;
             },
             /**
              * Set italic style of text.
@@ -38246,7 +38266,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             textItalic(italic = false) {
-                this._pen.setTextItalic(italic);
+                this._cv.$TEXT_ITALIC = italic;
             },
             /**
              * Set text direction.
@@ -38258,7 +38278,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             textDir(angle = 0) {
-                this._pen.setTextDir(angle);
+                this._cv.$TEXT_DIR = angle;
             },
             /**
              * Set text latex mode.
@@ -38270,7 +38290,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             textLatex(on = false) {
-                this._pen.setTextLatex(on);
+                this._cv.$TEXT_LATEX = on;
             },
             /**
              * Set the center for label dodge.
@@ -38280,12 +38300,11 @@ class PenCls extends paint_1.Pencil {
              * ```
              * pen.set.labelCenter([0,0]) // set center to be [0,0]
              * pen.set.labelCenter(A,B,C,D) // set center to be the centroid of A,B,C,D
-             * pen.set.labelCenter(90) // set label at 90 polar degree (top)
              * pen.set.labelCenter() // set label to be the center of canvas
              * ```
              */
             labelCenter(...centers) {
-                this._pen.setLabelCenter(...centers);
+                this._cv.$LABEL_CENTER = centers;
             },
             /**
              * Set length unit for line label.
@@ -38296,8 +38315,8 @@ class PenCls extends paint_1.Pencil {
              * pen.set.lengthUnit('cm') // set unit to cm
              * ```
              */
-            lengthUnit(text = undefined) {
-                this._pen.setLengthUnit(text);
+            lengthUnit(text = '') {
+                this._cv.$LENGTH_UNIT = text;
             },
             /**
              * Set the mode for angle. All angles (e.g. AOB) will be understood as this mode.
@@ -38309,7 +38328,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             angle(mode = 'normal') {
-                this._pen.setAngleMode(mode);
+                this._cv.$ANGLE_MODE = mode;
             },
             /**
              * Set 3D projector function.
@@ -38322,7 +38341,8 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             projector3D(angle = 60, depth = 0.5) {
-                this._pen.setProjector3D(angle, depth);
+                this._cv.$3D_ANGLE = angle;
+                this._cv.$3D_DEPTH = depth;
             },
             /**
              * Ser the border scale when auto creating outer border.
@@ -38334,7 +38354,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             border(border = 0.2) {
-                this._pen.setBorder(border);
+                this._cv.$BORDER = border;
             },
             /**
              * Ser the mode for direction of line label.
@@ -38346,7 +38366,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             lineLabel(setting = 'auto') {
-                this._pen.setLineLabel(setting);
+                this._cv.$LINE_LABEL = setting;
             },
             /**
              * Reset all pen settings.
@@ -38357,7 +38377,33 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             reset() {
-                this._pen.setAllDefault();
+                this.weight();
+                this.color();
+                this.alpha();
+                this.dash();
+                this.textAlign();
+                this.textBaseline();
+                this.textSize();
+                this.textItalic();
+                this.textDir();
+                this.textLatex();
+                this.labelCenter();
+                this.lengthUnit();
+                this.angle();
+                this.lineLabel();
+            },
+            /**
+             * Reset all pen settings, including border and 3D.
+             * @category set
+             * @returns void
+             * ```
+             * pen.resetAll() // reset
+             * ```
+             */
+            resetAll() {
+                this.reset();
+                this.border();
+                this.projector3D();
             }
         };
         /**
@@ -38450,7 +38496,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             line(m, c) {
-                const [xmin, xmax] = this._pen.frame.xRange();
+                const { xmin, xmax } = this._pen.cv;
                 const y = (x) => m * x + c;
                 this._pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
             },
@@ -38464,7 +38510,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             horizontal(y) {
-                const [xmin, xmax] = this._pen.frame.xRange();
+                const { xmin, xmax } = this._pen.cv;
                 this._pen.line([xmin, y], [xmax, y]);
             },
             /**
@@ -38477,7 +38523,7 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             vertical(x) {
-                const [ymin, ymax] = this._pen.frame.yRange();
+                const { ymin, ymax } = this._pen.cv;
                 this._pen.line([x, ymin], [x, ymax]);
             },
             /**
@@ -38773,11 +38819,11 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             point(position, text = '', direction, radius = 15) {
-                this._pen.save();
+                this._pen.cv.save();
                 if (owl.alphabet(text))
                     this._pen.set.textItalic(true);
                 this._pen.drawLabel(text, position, direction, radius);
-                this._pen.restore();
+                this._pen.cv.restore();
             },
             /**
              * Add a label to points, using index as text.
@@ -38803,10 +38849,10 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             vertices(positions) {
-                this._pen.save();
-                this._pen.setLabelCenter(...Object.values(positions));
+                this._pen.cv.save();
+                this._pen.set.labelCenter(...Object.values(positions));
                 this.points(positions);
-                this._pen.restore();
+                this._pen.cv.restore();
             },
             /**
              * Add a label to an angle AOB, non-reflex.
@@ -38827,7 +38873,7 @@ class PenCls extends paint_1.Pencil {
                 if (radius < 0) {
                     radius = 28 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5);
                 }
-                let dir = this._pen.getDirInPixelByAngle(A, O, B);
+                let dir = this._pen.cv.getMidDir(A, O, B);
                 this.point(O, text, dir + direction, radius);
             },
             /**
@@ -38847,8 +38893,8 @@ class PenCls extends paint_1.Pencil {
                 B = this._pen.pj(B);
                 let M = Mid(A, B);
                 if (typeof text === 'number')
-                    text = this._pen.getTextWithLengthUnit(text);
-                let dir = this._pen.getDirInPixelByLine(A, B);
+                    text = this._pen.cv.unitize(text);
+                let dir = this._pen.cv.getLineDir(A, B);
                 this.point(M, text, dir + direction, radius);
             },
             /**
@@ -38863,11 +38909,11 @@ class PenCls extends paint_1.Pencil {
              */
             polygon(points, text) {
                 let pts = this._pen.pjs(points);
-                this._pen.save();
+                this._pen.cv.save();
                 if (owl.alphabet(text))
                     this._pen.set.textItalic(true);
                 this._pen.write(Mid(...pts), String(text));
-                this._pen.restore();
+                this._pen.cv.restore();
             },
             /**
              * Add a coordinates label to a point.
@@ -38908,11 +38954,11 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             x(label = "x") {
-                this._pen.save();
+                this._pen.cv.save();
                 this._pen.set.textItalic(label.length === 1);
                 this._pen.drawXAxis();
                 this._pen.drawXAxisLabel(label);
-                this._pen.restore();
+                this._pen.cv.restore();
             },
             /**
              * Draw y-axis.
@@ -38924,11 +38970,11 @@ class PenCls extends paint_1.Pencil {
              * ```
              */
             y(label = "y") {
-                this._pen.save();
+                this._pen.cv.save();
                 this._pen.set.textItalic(label.length === 1);
                 this._pen.drawYAxis();
                 this._pen.drawYAxisLabel(label);
-                this._pen.restore();
+                this._pen.cv.restore();
             },
             /**
              * Draw both axis.
@@ -38967,10 +39013,10 @@ class PenCls extends paint_1.Pencil {
             x(interval = 1, mark = true) {
                 this._pen.drawXAxisTick(interval);
                 if (mark) {
-                    this._pen.save();
+                    this._pen.cv.save();
                     this._pen.set.textItalic();
                     this._pen.drawXAxisTickMark(interval);
-                    this._pen.restore();
+                    this._pen.cv.restore();
                 }
                 ;
             },
@@ -38987,10 +39033,10 @@ class PenCls extends paint_1.Pencil {
             y(interval = 1, mark = true) {
                 this._pen.drawYAxisTick(interval);
                 if (mark) {
-                    this._pen.save();
+                    this._pen.cv.save();
                     this._pen.set.textItalic();
                     this._pen.drawYAxisTickMark(interval);
-                    this._pen.restore();
+                    this._pen.cv.restore();
                 }
                 ;
             },
@@ -39091,7 +39137,7 @@ class PenCls extends paint_1.Pencil {
                 let ps = cal.traceCircle([0, 0], radius, arc);
                 let ps3D = Embed(ps, center, xVec, yVec);
                 if (line) {
-                    this._pen.save();
+                    this._pen.cv.save();
                     if (dash)
                         this._pen.set.dash(true);
                     if (arc[1] - arc[0] >= 360) {
@@ -39100,7 +39146,7 @@ class PenCls extends paint_1.Pencil {
                     else {
                         this._pen.polyline(...ps3D);
                     }
-                    this._pen.restore();
+                    this._pen.cv.restore();
                 }
                 if (shade)
                     this._pen.polyshade(...ps3D);
@@ -39421,6 +39467,12 @@ class PenCls extends paint_1.Pencil {
         this.size.set(1);
         this.set.reset();
     }
+    pj(pt) {
+        return this.cv.pj(pt);
+    }
+    pjs(pts) {
+        return this.cv.pjs(pts);
+    }
     /**
      * Plot an explicit or parametric function.
      * @category graph
@@ -39434,7 +39486,7 @@ class PenCls extends paint_1.Pencil {
      * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
      * ```
      */
-    plot(func, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
+    plot(func, tStart, tEnd, dots = 1000) {
         this.drawPlot(func, tStart, tEnd, dots);
     }
     /**
@@ -39450,11 +39502,11 @@ class PenCls extends paint_1.Pencil {
      * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
      * ```
      */
-    plotDash(func, tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
-        this.save();
+    plotDash(func, tStart, tEnd, dots = 1000) {
+        this.cv.save();
         this.set.dash(true);
         this.drawPlot(func, tStart, tEnd, dots);
-        this.restore();
+        this.cv.restore();
     }
     /**
      * Draw a point.
@@ -39468,7 +39520,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     point(position, label) {
-        this.drawDot(position, DEFAULT_POINT_RADIUS_PIXEL);
+        this.cv.disc(position, DEFAULT_POINT_RADIUS_PIXEL);
         if (label !== undefined)
             this.label.point(position, label);
     }
@@ -39507,7 +39559,7 @@ class PenCls extends paint_1.Pencil {
     cutX(position, label) {
         if (typeof position === 'number')
             position = [position, 0];
-        this.drawTickVertical(position, DEFAULT_CUTTER_LENGTH_PIXEL);
+        this.cv.tickVert(position, DEFAULT_CUTTER_LENGTH_PIXEL);
         if (label !== undefined)
             this.label.point(position, label, 270);
     }
@@ -39525,7 +39577,7 @@ class PenCls extends paint_1.Pencil {
     cutY(position, label) {
         if (typeof position === 'number')
             position = [0, position];
-        this.drawTickHorizontal(position, DEFAULT_CUTTER_LENGTH_PIXEL);
+        this.cv.tickHori(position, DEFAULT_CUTTER_LENGTH_PIXEL);
         if (label !== undefined)
             this.label.point(position, label, 180);
     }
@@ -39564,7 +39616,7 @@ class PenCls extends paint_1.Pencil {
      * @category draw
      * @param center - The coordinates [x,y] of center.
      * @param radius - The radius in pixel.
-     * @param angles - The polar angle range [q1,q2].
+     * @param angles - deprecated
      * @param fill - Whether to fill the inside.
      * @returns void
      * ```
@@ -39573,9 +39625,9 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     circle(center, radius, angles = [0, 360], fill = false) {
-        this.drawArc(center, radius, angles);
+        this.cv.circle(center, radius);
         if (fill)
-            this.drawSegment(center, radius, angles);
+            this.cv.disc(center, radius);
     }
     /**
      * Draw a line between two points.
@@ -39590,7 +39642,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     line(startPoint, endPoint, label) {
-        this.drawStroke([startPoint, endPoint]);
+        this.cv.line([startPoint, endPoint]);
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
     }
@@ -39607,10 +39659,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     dash(startPoint, endPoint, label) {
-        this.save();
-        this.set.dash(true);
-        this.drawStroke([startPoint, endPoint]);
-        this.restore();
+        this.cv.dash([startPoint, endPoint]);
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
     }
@@ -39626,8 +39675,8 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     arrow(startPoint, endPoint, label) {
-        this.drawStroke([startPoint, endPoint]);
-        this.drawArrowHead(startPoint, endPoint, 5, 0);
+        this.cv.line([startPoint, endPoint]);
+        this.cv.arrow(startPoint, endPoint, 5, 0);
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
     }
@@ -39680,9 +39729,9 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     length(startPoint, endPoint, label) {
-        this.drawStroke([startPoint, endPoint]);
-        this.drawTick(startPoint, endPoint, 5, 0);
-        this.drawTick(endPoint, startPoint, 5, 0);
+        this.cv.line([startPoint, endPoint]);
+        this.cv.tick(startPoint, endPoint, 5, 0);
+        this.cv.tick(endPoint, startPoint, 5, 0);
         if (label !== undefined)
             this.label.line([startPoint, endPoint], label);
     }
@@ -39718,7 +39767,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     polyline(...points) {
-        this.drawStroke(points);
+        this.cv.line(points);
     }
     /**
      * Draw a polygon given points.
@@ -39730,7 +39779,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     polygon(...points) {
-        this.drawShape(points);
+        this.cv.shape(points);
     }
     /**
      * Fill a polygon given points.
@@ -39742,7 +39791,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     polyfill(...points) {
-        this.drawFill(points);
+        this.cv.fill(points);
     }
     /**
      * Shade a polygon given points.
@@ -39754,7 +39803,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     polyshade(...points) {
-        this.drawShade(points);
+        this.cv.shade(points);
     }
     /**
      * Draw and shade a polygon given points.
@@ -39804,7 +39853,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     equalSide(startPoint, endPoint, tick = 1) {
-        this.drawEqualMark(startPoint, endPoint, 5, tick, 3);
+        this.cv.equalSide(startPoint, endPoint, 5, tick, 3);
     }
     /**
      * Decorate bisecting equal lengths of a side.
@@ -39837,7 +39886,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     parallel(startPoint, endPoint, tick = 1) {
-        this.drawParallelMark(startPoint, endPoint, 4, tick, 6);
+        this.cv.parallel(startPoint, endPoint, 4, tick, 6);
     }
     /**
      * Decorate a right-angle AOB.
@@ -39857,7 +39906,7 @@ class PenCls extends paint_1.Pencil {
         O = this.pj(O);
         B ??= Rotate(A, 90, O);
         B = this.pj(B);
-        this.drawRightAngle(A, O, B, size);
+        this.cv.rightAngle(A, O, B, size);
     }
     /**
      * Decorate a compass.
@@ -39870,7 +39919,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     compass(position) {
-        this.drawCompass(position, 17, 20, 3.5);
+        this.cv.compass(position, 17, 20, 3.5);
     }
     /**
      * Write text.
@@ -39895,7 +39944,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     background(url) {
-        this.board.setBgImgUrl(url);
+        this.cv.backgroundURL = url;
     }
     /**
      * Export the canvas to image tag.
@@ -39909,7 +39958,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     export(html, placeholder) {
-        return this.board.export(html, placeholder, false);
+        return this.cv.export(html, placeholder, false);
     }
     ;
     /**
@@ -39924,7 +39973,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     exportTrim(html, placeholder) {
-        return this.board.export(html, placeholder, true);
+        return this.cv.export(html, placeholder, true);
     }
     ;
     /**
@@ -39936,7 +39985,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     clear() {
-        this.board.clear();
+        this.cv.clearImg();
     }
     /**
      * Temporarily save the img internally. Can be later restored by restoreImg.
@@ -39947,7 +39996,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     saveImg() {
-        this.board.save();
+        this.cv.saveImg();
     }
     /**
      * Restored the previously saved img by saveImg.
@@ -39958,7 +40007,7 @@ class PenCls extends paint_1.Pencil {
      * ```
      */
     restoreImg() {
-        this.board.restore();
+        this.cv.restoreImg();
     }
 }
 exports.PenCls = PenCls;
@@ -42488,214 +42537,902 @@ exports.combinations = combinations;
 
 /***/ }),
 
-/***/ 3273:
+/***/ 9492:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ArmedConvas = void 0;
+const convas_1 = __webpack_require__(3957);
+// step
+function isEven(n) {
+    return n % 2 === 0;
+}
+function isOdd(n) {
+    return n % 2 !== 0;
+}
+function floorHalf(n) {
+    if (isOdd(n))
+        n = n - 1;
+    return n / 2;
+}
+function steps(n) {
+    let N = floorHalf(n);
+    let arr = [];
+    if (isOdd(n)) {
+        arr.push(0);
+        for (let i = 1; i <= N; i++) {
+            arr.push(i);
+            arr.push(-i);
+        }
+    }
+    else {
+        for (let i = 1; i <= N; i++) {
+            let s = i - 0.5;
+            arr.push(s);
+            arr.push(-s);
+        }
+    }
+    return arr;
+}
+// vector
+function mid(A, B) {
+    if (A.length === 3 && B.length === 3) {
+        let [x, y, z] = A;
+        let [X, Y, Z] = B;
+        return [(x + X) / 2, (y + Y) / 2, (z + Z) / 2];
+    }
+    else {
+        let [x, y] = A;
+        let [X, Y] = B;
+        return [(x + X) / 2, (y + Y) / 2];
+    }
+}
+class ArmedConvas extends convas_1.Convas {
+    linePx(dots) {
+        this.createPathPx(dots);
+        this.doStroke();
+    }
+    solidPx(dots) {
+        this.createPathPx(dots);
+        this.doSolid();
+    }
+    line(pts) {
+        this.createPath(pts);
+        this.doStroke();
+    }
+    solid(pts) {
+        this.createPath(pts);
+        this.doSolid();
+    }
+    dash(pts) {
+        this.createPath(pts);
+        this.doDash();
+    }
+    shape(pts) {
+        this.createShape(pts);
+        this.doStroke();
+    }
+    fill(pts) {
+        this.createShape(pts);
+        this.doFill();
+    }
+    shade(pts) {
+        this.createShape(pts);
+        this.doShade();
+    }
+    arc(P, O, Q, radius) {
+        this.createArcByPoints(P, O, Q, radius);
+        this.doStroke();
+    }
+    circle(center, radius) {
+        this.createArc(center, radius, [0, 360]);
+        this.doStroke();
+    }
+    disc(center, radius) {
+        this.createArc(center, radius, [0, 360]);
+        this.doFill();
+    }
+    // advanced
+    arrow(start, end, size, offset) {
+        this.save();
+        this.translateTo(end);
+        this.rotateTo(start, end);
+        let A = [offset - 2 * size, -size];
+        let O = [offset, 0];
+        let B = [offset - 2 * size, +size];
+        this.solidPx([A, O, B]);
+        this.restore();
+    }
+    anglePolar(A, O, B, radius, count, space) {
+        for (let s of steps(count)) {
+            let r = radius + s * space;
+            this.arc(A, O, B, r);
+        }
+    }
+    rightAngle(A, O, B, size) {
+        this.createRightAnglePath(A, O, B, size);
+        this.doSolid();
+    }
+    parallel(start, end, size, count, space) {
+        let M = mid(start, end);
+        for (let i = 0; i < count; i++) {
+            this.arrow(start, M, size, i * space);
+        }
+    }
+    tick(start, end, length, offset) {
+        this.save();
+        this.translateTo(end);
+        this.rotateTo(start, end);
+        let A = [offset, -length];
+        let B = [offset, +length];
+        this.solidPx([A, B]);
+        this.restore();
+    }
+    tickVert(pt, length) {
+        let [x, y] = pt;
+        this.tick([x - 1, y], pt, length, 0);
+    }
+    tickHori(pt, length) {
+        let [x, y] = pt;
+        this.tick([x, y - 1], pt, length, 0);
+    }
+    equalSide(start, end, length, count, space) {
+        let M = mid(start, end);
+        for (let s of steps(count)) {
+            this.tick(start, M, length, s * space);
+        }
+    }
+    compass(center, xSize, ySize, arrowSize) {
+        this.save();
+        this.translateTo(center);
+        let E = [xSize, 0];
+        let W = [-xSize, 0];
+        let S = [0, ySize];
+        let N = [0, -ySize];
+        let A = [-arrowSize, -ySize + arrowSize * 2];
+        let B = [+arrowSize, -ySize + arrowSize * 2];
+        this.solidPx([E, W]);
+        this.solidPx([N, S]);
+        this.solidPx([A, N, B]);
+        this.restore();
+    }
+}
+exports.ArmedConvas = ArmedConvas;
+//# sourceMappingURL=armedconvas.js.map
+
+/***/ }),
+
+/***/ 5813:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Frame = void 0;
-class Frame {
+exports.BasicCanvas = void 0;
+// pixel conversion
+function toPixelX(xmin, xmax, width, xCoord) {
+    return (xCoord - xmin) / (xmax - xmin) * width;
+}
+function toPixelY(ymin, ymax, height, yCoord) {
+    return height - (yCoord - ymin) / (ymax - ymin) * height;
+}
+function proj(point3D, angle, depth) {
+    let a = angle * Math.PI / 180;
+    let s = Math.sin(a);
+    let c = Math.cos(a);
+    let [x, y, z] = point3D;
+    let x_new = x + depth * y * c;
+    let y_new = z + depth * y * s;
+    return [x_new, y_new];
+}
+function forceProj(point, angle, depth) {
+    return point.length === 3 ? proj(point, angle, depth) : point;
+}
+function segmentArray(seg) {
+    if (Array.isArray(seg))
+        return seg;
+    if (typeof seg === 'number')
+        return [seg, seg];
+    if (typeof seg === 'boolean')
+        return seg ? [5, 5] : [];
+    return [];
+}
+// Const
+const QUALITY = 3;
+const SIZE_SCALE = 10;
+/**
+ * REM_PIXEL is the default font size of the browser, usually 16px
+ */
+const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+/**
+ * handle all config
+ */
+class BasicCanvas {
     constructor() {
-        /**
-         * Total width in pixel
-         */
-        this.wPixel = 0;
-        /**
-         * Total height in pixel
-         */
-        this.hPixel = 0;
-        /**
-         * Min x-coord
-         */
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext("2d");
+        this.imgStore = null;
+        this.states = [];
+        this.backgroundURL = "";
+        // coord
         this.xmin = 0;
-        /**
-         * Max x-coord
-         */
         this.xmax = 0;
-        /**
-         * Min y-coord
-         */
         this.ymin = 0;
-        /**
-         * Max y-coord
-         */
         this.ymax = 0;
-        /**
-         * Distance from axis to number label in pixel.
-         */
-        this.axisOffset = 5;
+        // user setting
+        this.$3D_ANGLE = 60;
+        this.$3D_DEPTH = 0.5;
+        this.$TEXT_DIR = 0;
+        this.$TEXT_LATEX = false;
+        this.$ANGLE_MODE = 'normal';
+        this.$LENGTH_UNIT = '';
+        this.$BORDER = 0.2;
+        this.$LINE_LABEL = 'auto';
+        this._$LABEL_CENTER = this.center();
     }
-    /**
-     * Set the size of `wPixel` and `hPixel`.
-     * @param wPixel - total width in pixel
-     * @param hPixel - total height in pixel
-     */
-    setSize(wPixel, hPixel) {
-        this.wPixel = wPixel;
-        this.hPixel = hPixel;
-    }
-    /**
-     * Set the `xmin` and `xmax`.
-     * @param xRange - `[xmin,xmax]`
-     */
-    setXRange(xRange) {
-        [this.xmin, this.xmax] = xRange;
-    }
-    /**
-     * Set the `ymin` and `ymax`.
-     * @param yRange - `[ymin,ymax]`
-     */
-    setYRange(yRange) {
-        [this.ymin, this.ymax] = yRange;
-    }
-    /**
-     * Return the width in x-coord
-     * @returns width in x-coord
-     */
-    xWidth() {
+    dx() {
         return this.xmax - this.xmin;
     }
-    /**
-     * Return the height in y-coord
-     * @returns height in y-coord
-     */
-    yHeight() {
+    dy() {
         return this.ymax - this.ymin;
     }
-    /**
-     * How many pixel is one x-unit
-     * @returns number of pixel
-     */
-    xUnit() {
-        return this.wPixel / this.xWidth();
+    yxRatio() {
+        return this.dy() / this.dx();
     }
-    /**
-     * How many pixel is one y-unit
-     * @returns number of pixel
-     */
-    yUnit() {
-        return this.hPixel / this.yHeight();
-    }
-    /**
-     * Convert point from coord to pixel.
-     * [xCoord, yCoord] -> [xPixel, yPixel]
-     * @param point2D - the point in coord
-     * @returns the point in pixel
-     */
-    toPix(point2D) {
-        const x = point2D[0];
-        const y = point2D[1];
-        const xPixel = (x - this.xmin) * this.xUnit();
-        const yPixel = (this.ymax - y) * this.yUnit();
-        return [xPixel, yPixel];
-    }
-    /**
-     * Convert points from coord to pixel.
-     * [xCoord, yCoord][] -> [xPixel, yPixel][]
-     * @param point2Ds - the points in coord
-     * @returns the points in pixel
-     */
-    toPixs(point2Ds) {
-        return point2Ds.map($ => this.toPix($));
-    }
-    /**
-     * Convert point from pixel to coord.
-     * [xPixel, yPixel] -> [xCoord, yCoord]
-     * @param pixel2D - the point in pixel
-     * @returns the point in coord
-     */
-    toCoord(pixel2D) {
-        const xPixel = pixel2D[0];
-        const yPixel = pixel2D[1];
-        const x = this.xmin + xPixel / this.xUnit();
-        const y = this.ymax - yPixel / this.yUnit();
+    center() {
+        let x = (this.xmin + this.xmax) / 2;
+        let y = (this.ymin + this.ymax) / 2;
         return [x, y];
     }
-    /**
-     * Convert points from pixel to coord.
-     * [xPixel, yPixel][] -> [xCoord, yCoord][]
-     * @param pixel2Ds - the points in pixel
-     * @returns the points in coord
-     */
-    toCoords(pixel2Ds) {
-        return pixel2Ds.map($ => this.toCoord($));
+    edgeTop(x = 0) {
+        return [x, this.ymax];
     }
-    /**
-     * Return the tick positions for x-axis, unit: coord.
-     * @param interval - distance between ticks
-     * @returns array of tick positions
-     */
-    xTicks(interval) {
-        return getTicks(this.xmin, this.xmax, interval);
+    edgeBottom(x = 0) {
+        return [x, this.ymin];
     }
-    /**
-     * Return the tick positions for y-axis, unit: coord.
-     * @param interval - distance between ticks
-     * @returns array of tick positions
-     */
-    yTicks(interval) {
-        return getTicks(this.ymin, this.ymax, interval);
+    edgeLeft(y = 0) {
+        return [this.xmin, y];
     }
-    /**
-     * Return the range object `[xmin, xmax]` in coord.
-     * @returns the range of x-coord
-     */
-    xRange() {
-        return [this.xmin, this.xmax];
+    edgeRight(y = 0) {
+        return [this.xmax, y];
     }
-    /**
-     * Return the range object `[ymin, ymax]` in coord.
-     * @returns the range of y-coord
-     */
-    yRange() {
-        return [this.ymin, this.ymax];
+    // size
+    reset() {
+        this.ctx.scale(QUALITY, QUALITY);
+        this.ctx.font = 'normal 10px Times New Roman';
     }
-    /**
-     * Return the mid of `xmin` and `xmax`.
-     * @returns the mid x-coord
-     */
-    xCenter() {
-        return (this.xmin + this.xmax) / 2;
+    get width() {
+        return this.canvas.width / QUALITY;
     }
-    /**
-     * Return the mid of `ymin` and `ymax`.
-     * @returns the mid y-coord
-     */
-    yCenter() {
-        return (this.ymin + this.ymax) / 2;
+    set width(value) {
+        this.canvas.width = value * QUALITY;
+        this.reset();
     }
-    /**
-     * Return the central point of xy-coord.
-     * @returns the central point, unit: coord
-     */
-    xyCenter() {
-        return [this.xCenter(), this.yCenter()];
+    get height() {
+        return this.canvas.height / QUALITY;
     }
-    /**
-     * Return the offset from x-axis to number label, unit: coord.
-     * @returns offset in coord
-     */
-    xOffset() {
-        return this.axisOffset / this.yUnit();
+    set height(value) {
+        this.canvas.height = value * QUALITY;
+        this.reset();
     }
-    /**
-     * Return the offset from y-axis to number label, unit: coord.
-     * @returns offset in coord
-     */
-    yOffset() {
-        return this.axisOffset / this.xUnit();
+    // init
+    initRange(xRange, yRange) {
+        this.xmin = xRange[0];
+        this.xmax = xRange[1];
+        this.ymin = yRange[0];
+        this.ymax = yRange[1];
+    }
+    initSize(width, height) {
+        this.width = width * SIZE_SCALE * REM_PIXEL;
+        this.height = height * SIZE_SCALE * REM_PIXEL;
+    }
+    // border
+    setBorder() {
+        const borderPix = this.$BORDER * SIZE_SCALE * REM_PIXEL;
+        let borderXUnit = (this.xmax - this.xmin) * borderPix / this.width;
+        let borderYUnit = (this.ymax - this.ymin) * borderPix / this.height;
+        this.xmin -= borderXUnit;
+        this.xmax += borderXUnit;
+        this.ymin -= borderYUnit;
+        this.ymax += borderYUnit;
+        this.width += 2 * borderPix;
+        this.height += 2 * borderPix;
+    }
+    // // conversion
+    pj(point) {
+        return forceProj(point, this.$3D_ANGLE, this.$3D_DEPTH);
+    }
+    pjs(points) {
+        return points.map($ => this.pj($));
+    }
+    toPx(point) {
+        let pt = this.pj(point);
+        let [xCoord, yCoord] = pt;
+        let x = toPixelX(this.xmin, this.xmax, this.width, xCoord);
+        let y = toPixelY(this.ymin, this.ymax, this.height, yCoord);
+        return [x, y];
+    }
+    // native settings
+    get $WEIGHT() {
+        return this.ctx.lineWidth;
+    }
+    set $WEIGHT(value) {
+        this.ctx.lineWidth = value;
+    }
+    get $COLOR() {
+        let c = this.ctx.fillStyle;
+        return typeof c === 'string' ? c : '';
+    }
+    set $COLOR(value) {
+        this.ctx.strokeStyle = value;
+        this.ctx.fillStyle = value;
+    }
+    get $ALPHA() {
+        return this.ctx.globalAlpha;
+    }
+    set $ALPHA(value) {
+        this.ctx.globalAlpha = value;
+    }
+    get $DASH() {
+        return this.ctx.getLineDash();
+    }
+    set $DASH(value) {
+        let seg = segmentArray(value);
+        this.ctx.setLineDash(seg);
+    }
+    get $TEXT_ALIGN() {
+        return this.ctx.textAlign;
+    }
+    set $TEXT_ALIGN(value) {
+        this.ctx.textAlign = value;
+    }
+    get $TEXT_BASELINE() {
+        return this.ctx.textBaseline;
+    }
+    set $TEXT_BASELINE(value) {
+        this.ctx.textBaseline = value;
+    }
+    get $TEXT_PIXEL() {
+        let match = this.ctx.font.match(/(\d+)px/);
+        if (match === null)
+            return NaN;
+        return Number.parseInt(match[1]);
+    }
+    set $TEXT_PIXEL(value) {
+        value = Math.round(value);
+        this.ctx.font = this.ctx.font.replace(/\d+px/g, value + 'px');
+    }
+    get $TEXT_SIZE() {
+        return this.$TEXT_PIXEL / REM_PIXEL;
+    }
+    set $TEXT_SIZE(value) {
+        this.$TEXT_PIXEL = value * REM_PIXEL;
+    }
+    get $TEXT_ITALIC() {
+        return this.ctx.font.includes('italic');
+    }
+    set $TEXT_ITALIC(value) {
+        this.ctx.font = this.ctx.font.replace('italic ', '');
+        if (value)
+            this.ctx.font = 'italic ' + this.ctx.font;
+    }
+    set $LABEL_CENTER(centers) {
+        // TEMP, true to be deleted
+        let empty = centers.length === 0;
+        this._$LABEL_CENTER = empty ? this.center() : meanPoint(this.pjs(centers));
+    }
+    get $LABEL_CENTER() {
+        return [this._$LABEL_CENTER];
+    }
+    // setting meta
+    save() {
+        this.ctx.save();
+        this.states.push({
+            $3D_ANGLE: this.$3D_ANGLE,
+            $3D_DEPTH: this.$3D_DEPTH,
+            $TEXT_DIR: this.$TEXT_DIR,
+            $TEXT_LATEX: this.$TEXT_LATEX,
+            $LABEL_CENTER: this.$LABEL_CENTER,
+            $ANGLE_MODE: this.$ANGLE_MODE,
+            $LENGTH_UNIT: this.$LENGTH_UNIT,
+            $BORDER: this.$BORDER,
+            $LINE_LABEL: this.$LINE_LABEL
+        });
+    }
+    restore() {
+        this.ctx.restore();
+        let state = this.states.pop();
+        if (state === undefined)
+            return;
+        this.$3D_ANGLE = state.$3D_ANGLE;
+        this.$3D_DEPTH = state.$3D_DEPTH;
+        this.$TEXT_DIR = state.$TEXT_DIR;
+        this.$TEXT_LATEX = state.$TEXT_LATEX;
+        this.$LABEL_CENTER = state.$LABEL_CENTER;
+        this.$ANGLE_MODE = state.$ANGLE_MODE;
+        this.$LENGTH_UNIT = state.$LENGTH_UNIT;
+        this.$BORDER = state.$BORDER;
+        this.$LINE_LABEL = state.$LINE_LABEL;
+    }
+    // image store
+    saveImg() {
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        this.imgStore = this.ctx.getImageData(0, 0, w, h);
+    }
+    restoreImg() {
+        if (this.imgStore !== null)
+            this.ctx.putImageData(this.imgStore, 0, 0);
+    }
+    clearImg() {
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        this.ctx.clearRect(0, 0, w, h);
+    }
+    // export
+    export(html, placeholder, trim) {
+        let canvas = cloneCanvas(this.canvas);
+        if (trim)
+            trimCanvas(canvas);
+        const displayWidth = Math.floor(canvas.width / QUALITY);
+        const displayHeight = Math.floor(this.canvas.height / QUALITY);
+        const src = 'src="' + canvas.toDataURL() + '"';
+        const width = ' width="' + displayWidth + '"';
+        const height = ' height="' + displayHeight + '"';
+        const bg = this.backgroundURL.length === 0 ?
+            '' :
+            ` style="background-image:url('${this.backgroundURL}');background-size:100% 100%;" `;
+        return html.replace('src="' + placeholder + '"', src + width + height + bg);
     }
 }
-exports.Frame = Frame;
+exports.BasicCanvas = BasicCanvas;
+function meanPoint(Points) {
+    if (Points.length === 0)
+        return [0, 0];
+    let X = 0;
+    let Y = 0;
+    for (let p of Points) {
+        X += p[0];
+        Y += p[1];
+    }
+    let n = Points.length;
+    return [X / n, Y / n];
+}
+/**
+ * Trim the canvas in-place.
+ */
+function trimCanvas(canvas) {
+    function rowBlank(imageData, width, y) {
+        for (var x = 0; x < width; ++x) {
+            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
+                return false;
+        }
+        return true;
+    }
+    function columnBlank(imageData, width, x, top, bottom) {
+        for (var y = top; y < bottom; ++y) {
+            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
+                return false;
+        }
+        return true;
+    }
+    var ctx = canvas.getContext("2d");
+    var width = canvas.width;
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var top = 0, bottom = imageData.height, left = 0, right = imageData.width;
+    while (top < bottom && rowBlank(imageData, width, top))
+        ++top;
+    while (bottom - 1 > top && rowBlank(imageData, width, bottom - 1))
+        --bottom;
+    while (left < right && columnBlank(imageData, width, left, top, bottom))
+        ++left;
+    while (right - 1 > left && columnBlank(imageData, width, right - 1, top, bottom))
+        --right;
+    var trimmed = ctx.getImageData(left, top, right - left, bottom - top);
+    canvas.width = trimmed.width;
+    canvas.height = trimmed.height;
+    ctx.putImageData(trimmed, 0, 0);
+}
+/**
+ * Return a clone of the canvas.
+ */
+function cloneCanvas(canvas) {
+    let oldCanvas = canvas;
+    //create a new canvas
+    let newCanvas = document.createElement('canvas');
+    let context = newCanvas.getContext('2d');
+    //set dimensions
+    newCanvas.width = oldCanvas.width;
+    newCanvas.height = oldCanvas.height;
+    //apply the old canvas to the new one
+    context.drawImage(oldCanvas, 0, 0);
+    //return the new canvas
+    return newCanvas;
+}
+//# sourceMappingURL=basic_canvas.js.map
+
+/***/ }),
+
+/***/ 3957:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Convas = exports.cross2D = exports.vec = exports.cos = exports.sin = void 0;
+const basic_canvas_1 = __webpack_require__(5813);
+// math
+function rad(degree) {
+    return degree * Math.PI / 180;
+}
+function deg(radian) {
+    return radian / Math.PI * 180;
+}
+function dotVec([x1, y1], [x2, y2]) {
+    return [x2 - x1, y2 - y1];
+}
+function dir(A, B) {
+    let [dx, dy] = dotVec(A, B);
+    let rad = -Math.atan2(dy, dx);
+    return deg(rad);
+}
+function scaleDot([x, y], ratio) {
+    return [x * ratio, y * ratio];
+}
+function dist(A, B) {
+    let [dx, dy] = dotVec(A, B);
+    return (dx * dx + dy * dy) ** 0.5;
+}
+function addDot([x1, y1], [x2, y2]) {
+    return [x1 + x2, y1 + y2];
+}
+function scaleDotTo(A, length) {
+    let oldLength = dist([0, 0], A);
+    let ratio = length / oldLength;
+    return scaleDot(A, ratio);
+}
+function moveDot(A, B, dist) {
+    let AB = dotVec(A, B);
+    let d = scaleDotTo(AB, dist);
+    return addDot(A, d);
+}
+function sin(degree) {
+    return Math.sin(degree / 180 * Math.PI);
+}
+exports.sin = sin;
+function cos(degree) {
+    return Math.cos(degree / 180 * Math.PI);
+}
+exports.cos = cos;
+// polar
+function vec(p1, p2) {
+    let [x1, y1] = p1;
+    let [x2, y2] = p2;
+    return [x2 - x1, y2 - y1];
+}
+exports.vec = vec;
+function cross2D(vec1, vec2) {
+    let [x1, y1] = vec1;
+    let [x2, y2] = vec2;
+    return x1 * y2 - y1 * x2;
+}
+exports.cross2D = cross2D;
+/**
+ * @return check if the polar angle AOB is reflex
+ * ```
+ * IsReflex([1,0],[0,0],[0,2]) // false
+ * IsReflex([2,2],[1,1],[1,3]) // false
+ * IsReflex([1,3],[1,1],[2,2]) // true
+ * ```
+ */
+function IsReflex(A, O, B) {
+    let OA = vec(O, A);
+    let OB = vec(O, B);
+    return cross2D(OA, OB) < 0;
+}
+function polarFlip(A, O, B, mode) {
+    let isReflex = IsReflex(A, O, B);
+    if (mode === 'normal' && isReflex)
+        return true;
+    if (mode === 'reflex' && !isReflex)
+        return true;
+    return false;
+}
+// latex
+/**
+ * CanvasLatex is a library that must be imported from script tag
+ */
+function LatexWidget(text, color, size) {
+    text = `\\color{${color}} ` + text;
+    // @ts-ignore
+    const widget = new CanvasLatex.default(text, {
+        displayMode: true,
+        debugBounds: false,
+        baseSize: size
+    });
+    return widget;
+}
+function latexTuneX(x, width, textAlign) {
+    if (textAlign === 'left')
+        return -x;
+    if (textAlign === 'right')
+        return -x - width;
+    if (textAlign === 'center')
+        return -x - width / 2;
+    return -x - width / 2;
+}
+function latexTuneY(y, height, textBaseline) {
+    if (textBaseline === 'top')
+        return -y;
+    if (textBaseline === 'bottom')
+        return -y - height;
+    if (textBaseline === 'middle')
+        return -y - height / 2;
+    return -y / 2;
+}
+// Const
+const DEFAULT_SHADE_ALPHA = 0.1;
+class Convas extends basic_canvas_1.BasicCanvas {
+    // transform
+    translateTo(pt) {
+        let [x, y] = this.toPx(pt);
+        this.ctx.translate(x, y);
+    }
+    rotate(degreePolar) {
+        this.ctx.rotate(-rad(degreePolar));
+    }
+    rotateTo(start, end) {
+        let [x1, y1] = this.toPx(start);
+        let [x2, y2] = this.toPx(end);
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+        let q = Math.atan2(dy, dx);
+        this.ctx.rotate(q);
+    }
+    alignTo(start, end) {
+        this.translateTo(end);
+        this.rotateTo(start, end);
+    }
+    // straight drawer in px
+    moveToPx([x, y]) {
+        this.ctx.moveTo(x, y);
+    }
+    lineToPx([x, y]) {
+        this.ctx.lineTo(x, y);
+    }
+    createPathPx(dots) {
+        this.ctx.beginPath();
+        if (dots.length === 0)
+            return;
+        let [first, ...rest] = dots;
+        this.moveToPx(first);
+        for (let d of rest) {
+            this.lineToPx(d);
+        }
+    }
+    createShapePx(dots) {
+        this.createPathPx(dots);
+        this.ctx.closePath();
+    }
+    // drawer in coord
+    moveTo(pt) {
+        let [x, y] = this.toPx(pt);
+        this.ctx.moveTo(x, y);
+    }
+    lineTo(pt) {
+        let [x, y] = this.toPx(pt);
+        this.ctx.lineTo(x, y);
+    }
+    createPath(pts) {
+        this.ctx.beginPath();
+        if (pts.length === 0)
+            return;
+        let [first, ...rest] = pts;
+        this.moveTo(first);
+        for (let p of rest) {
+            this.lineTo(p);
+        }
+    }
+    createShape(pts) {
+        this.createPath(pts);
+        this.ctx.closePath();
+    }
+    createArc(center, radius, angle) {
+        let [x, y] = this.toPx(center);
+        let [q1, q2] = angle;
+        q1 = -rad(q1);
+        q2 = -rad(q2);
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, radius, q1, q2, true);
+    }
+    createArcByPoints(P, O, Q, radius) {
+        let p = this.toPx(P);
+        let o = this.toPx(O);
+        let q = this.toPx(Q);
+        let q1 = dir(o, p);
+        let q2 = dir(o, q);
+        this.createArc(O, radius, [q1, q2]);
+    }
+    createRightAnglePath(P, O, Q, size) {
+        let p = this.toPx(P);
+        let o = this.toPx(O);
+        let q = this.toPx(Q);
+        let a = moveDot(o, p, size);
+        let b = moveDot(o, q, size);
+        let c = addDot(b, dotVec(o, a));
+        this.createPathPx([a, c, b]);
+    }
+    // finishing
+    doStroke() {
+        this.ctx.stroke();
+    }
+    doSolid() {
+        let dash = this.$DASH;
+        this.$DASH = false;
+        this.ctx.stroke();
+        this.$DASH = dash;
+    }
+    doDash() {
+        let dash = this.$DASH;
+        this.$DASH = true;
+        this.ctx.stroke();
+        this.$DASH = dash;
+    }
+    doFill() {
+        this.ctx.fill();
+    }
+    doShade() {
+        let alpha = this.$ALPHA;
+        this.$ALPHA = DEFAULT_SHADE_ALPHA;
+        this.ctx.fill();
+        this.$ALPHA = alpha;
+    }
+    // text in pixel
+    plainPx(text, dot) {
+        text = String(text);
+        if (text === '')
+            return;
+        this.save();
+        this.ctx.translate(...dot);
+        this.rotate(this.$TEXT_DIR);
+        this.ctx.fillText(text, 0, 0);
+        this.restore();
+    }
+    latexPx(text, dot) {
+        text = String(text);
+        if (text === '')
+            return;
+        const widget = LatexWidget(text, this.$COLOR, this.$TEXT_PIXEL);
+        const bounds = widget.getBounds();
+        if (bounds === null) {
+            console.error('[CanvasLatex] bounds === null! This is an unexpected error.');
+            return;
+        }
+        this.save();
+        this.ctx.translate(...dot);
+        this.rotate(this.$TEXT_DIR);
+        let xTune = latexTuneX(bounds.x, bounds.width, this.ctx.textAlign);
+        let yTune = latexTuneY(bounds.y, bounds.height, this.ctx.textBaseline);
+        this.ctx.translate(xTune, yTune);
+        widget.draw(this.ctx);
+        this.restore();
+    }
+    textPx(text, dot) {
+        if (this.$TEXT_LATEX) {
+            this.latexPx(text, dot);
+        }
+        else {
+            this.plainPx(text, dot);
+        }
+    }
+    // text in coord
+    text(text, point, offset) {
+        let [x, y] = this.toPx(point);
+        x += offset[0];
+        y -= offset[1];
+        this.textPx(text, [x, y]);
+    }
+    // label in coord
+    textDodge(text, point, radius, dodge) {
+        let textWidth = this.textSemi(text);
+        let xOffset = (radius + textWidth - 5) * cos(dodge);
+        let yOffset = radius * sin(dodge);
+        this.text(text, point, [xOffset, yOffset]);
+    }
+    // text width
+    plainSemi(text) {
+        return this.ctx.measureText(text).width / 2;
+    }
+    latexSemi(text) {
+        const widget = LatexWidget(text, this.$COLOR, this.$TEXT_PIXEL);
+        const bounds = widget.getBounds();
+        return bounds === null ? 0 : bounds.width / 2;
+    }
+    textSemi(text) {
+        return this.$TEXT_LATEX ?
+            this.latexSemi(text) :
+            this.plainSemi(text);
+    }
+    // dir
+    getDir(start, end) {
+        let A = this.toPx(start);
+        let B = this.toPx(end);
+        return dir(A, B);
+    }
+    getCenterDir(point) {
+        let C = this.$LABEL_CENTER[0];
+        return this.getDir(C, point);
+    }
+    getDirAngle(A, O, B) {
+        let flip = this.polarFlip(A, O, B);
+        let [P, Q] = flip ? [B, A] : [A, B];
+        // draw like polar
+        let a = this.getDir(O, P);
+        let b = this.getDir(O, Q);
+        return a <= b ? b - a : 360 + b - a;
+    }
+    getMidDir(A, O, B) {
+        let flip = this.polarFlip(A, O, B);
+        let [P, Q] = flip ? [B, A] : [A, B];
+        // draw like polar
+        let a1 = this.getDir(O, P);
+        let a2 = this.getDir(O, Q);
+        if (a2 < a1)
+            a2 += 360;
+        return (a1 + a2) / 2;
+    }
+    getLineDir(A, B) {
+        let q = this.getDir(A, B);
+        let mode = this.$LINE_LABEL;
+        if (mode === 'left')
+            return q + 90;
+        if (mode === 'right')
+            return q - 90;
+        let [a, b, c] = this.pjs([A, B, this.$LABEL_CENTER[0]]);
+        let right = IsReflex(a, b, c);
+        return right ? q - 90 : q + 90;
+    }
+    polarFlip(A, O, B) {
+        let [a, o, b] = this.pjs([A, O, B]);
+        return polarFlip(a, o, b, this.$ANGLE_MODE);
+    }
+    // other
+    unitize(text) {
+        text = String(text);
+        let unit = this.$LENGTH_UNIT;
+        if (unit === '')
+            return text;
+        if (this.$TEXT_LATEX) {
+            return text + `~\\text{${unit}}`;
+        }
+        else {
+            return text + ' ' + unit;
+        }
+    }
+}
+exports.Convas = Convas;
+//# sourceMappingURL=convas.js.map
+
+/***/ }),
+
+/***/ 4984:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Pencil = void 0;
+const armedconvas_1 = __webpack_require__(9492);
+const support_1 = __webpack_require__(703);
+const DEFAULT_AXIS_LABEL_OFFSET_PIXEL = 15;
+const DEFAULT_XAXIS_MARK_OFFSET_PIXEL = 15;
+const DEFAULT_YAXIS_MARK_OFFSET_PIXEL = 10;
+const DEFAULT_AXIS_TICK_LENGTH_PIXEL = 5;
 /**
  * Return an array of ticks position at `interval` within `[min,max]`.
  * Zero is always a potential tick position.
- * @param min - min value
- * @param max - max value
- * @param interval - distance between ticks
- * @returns array of tick positions
- * @example
  * ```
  * getTicks(2,10,3) // [3,6,9]
  * ```
@@ -42713,57 +43450,11 @@ function getTicks(min, max, interval, includeZero = false) {
     }
     return arr;
 }
-//# sourceMappingURL=frame.js.map
-
-/***/ }),
-
-/***/ 6752:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Pencil = void 0;
-const frame_1 = __webpack_require__(3273);
-const support_1 = __webpack_require__(7303);
-const modules_1 = __webpack_require__(843);
-/**
- * REM_PIXEL is the default font size of the browser, usually 16px
- */
-const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
-const SIZE_SCALE = 10;
-const DEFAULT_SHADE_ALPHA = 0.1;
-const DEFAULT_AXIS_LABEL_OFFSET_PIXEL = 15;
-const DEFAULT_XAXIS_MARK_OFFSET_PIXEL = 15;
-const DEFAULT_YAXIS_MARK_OFFSET_PIXEL = 10;
-const DEFAULT_AXIS_TICK_LENGTH_PIXEL = 5;
 class Pencil {
     constructor() {
-        /**
-         * @deprecated
-         */
-        this.canvas = document.createElement('canvas');
-        /**
-         * @deprecated
-         */
-        this.ctx = this.canvas.getContext("2d");
-        this.board = new modules_1.Board(this.canvas);
-        this.dial = new modules_1.Dial(this.ctx);
-        this.ink = new modules_1.Ink(this.ctx);
-        this.feather = new modules_1.Feather(this.ctx);
-        this.frame = new frame_1.Frame();
-        this.INIT_RANGE_ALREADY = false;
-        this.INIT_SIZE_ALREADY = false;
-        this.state = [];
-        this.$TEXT_DIR = 0;
-        this.$TEXT_LATEX = false;
-        this.$LABEL_CENTER = 0;
-        this.$ANGLE_MODE = 'normal';
-        this.$LENGTH_UNIT = undefined;
-        this.$3D_ANGLE = 60;
-        this.$3D_DEPTH = 0.5;
-        this.$BORDER = 0.2;
-        this.$LINE_LABEL = 'auto';
+        this.cv = new armedconvas_1.ArmedConvas();
+        this.RANGE_DONE = false;
+        this.SIZE_DONE = false;
     }
     /**
      * Set the coordinate range of the canvas.
@@ -42771,9 +43462,8 @@ class Pencil {
      * @param yRange - [ymin,ymax] in coordinates
      */
     initRange(xRange, yRange) {
-        this.frame.setXRange(xRange);
-        this.frame.setYRange(yRange);
-        this.INIT_RANGE_ALREADY = true;
+        this.cv.initRange(xRange, yRange);
+        this.RANGE_DONE = true;
     }
     /**
      * Set the physical size of the canvas.
@@ -42781,242 +43471,21 @@ class Pencil {
      * @param height - height of canvas in scaled unit.
      */
     initSize(width, height) {
-        if (!this.INIT_RANGE_ALREADY)
-            throw '[Pencil Error] Range must be set before Size';
-        const wPixel = width * SIZE_SCALE * REM_PIXEL;
-        const hPixel = height * SIZE_SCALE * REM_PIXEL;
-        this.board.init(wPixel, hPixel);
-        this.frame.setSize(wPixel, hPixel);
-        this.setDefault();
-        this.INIT_SIZE_ALREADY = true;
+        if (!this.RANGE_DONE)
+            throw '[Pencil] Range must be set before Size';
+        this.cv.initSize(width, height);
+        this.SIZE_DONE = true;
     }
     /**
      * Set a border by extending the range and size.
      * The original image will be unchanged. The size will be bigger.
      */
     initOuterBorder() {
-        if (!this.INIT_RANGE_ALREADY)
-            throw '[Pencil Error] Range must be set before setting range border';
-        if (!this.INIT_SIZE_ALREADY)
-            throw '[Pencil Error] Size must be set before setting range border';
-        const borderPix = this.$BORDER * SIZE_SCALE * REM_PIXEL;
-        let [xmin, xmax] = this.frame.xRange();
-        let [ymin, ymax] = this.frame.yRange();
-        const wPixel = this.frame.wPixel;
-        const hPixel = this.frame.hPixel;
-        let borderXUnit = (xmax - xmin) * borderPix / wPixel;
-        let borderYUnit = (ymax - ymin) * borderPix / hPixel;
-        xmin -= borderXUnit;
-        xmax += borderXUnit;
-        ymin -= borderYUnit;
-        ymax += borderYUnit;
-        this.initRange([xmin, xmax], [ymin, ymax]);
-        const width = wPixel / SIZE_SCALE / REM_PIXEL;
-        const height = hPixel / SIZE_SCALE / REM_PIXEL;
-        this.initSize(width + 2 * this.$BORDER, height + 2 * this.$BORDER);
-    }
-    pj(point) {
-        return (0, support_1.force2D)(point, this.$3D_ANGLE, this.$3D_DEPTH);
-    }
-    pjs(points) {
-        return points.map($ => this.pj($));
-    }
-    setWeight(weight = 1) {
-        this.dial.setWeight(weight);
-    }
-    setStrokeColor(color = "black") {
-        this.dial.setStrokeColor(color);
-    }
-    setFillColor(color = "black") {
-        this.dial.setFillColor(color);
-    }
-    setColor(color = "black") {
-        this.dial.setColor(color);
-    }
-    setAlpha(opaque = 1) {
-        this.dial.setAlpha(opaque);
-    }
-    setDash(segments = []) {
-        this.dial.setDash(segments);
-    }
-    setTextAlign(align = "center") {
-        this.dial.setTextAlign(align);
-    }
-    setTextBaseline(baseline = "middle") {
-        this.dial.setTextBaseline(baseline);
-    }
-    setTextSize(size = 1) {
-        this.dial.setTextPixel(size * REM_PIXEL);
-    }
-    setTextItalic(italic = false) {
-        this.dial.setTextItalic(italic);
-    }
-    setTextDir(angle = 0) {
-        this.$TEXT_DIR = angle;
-    }
-    setTextLatex(on = false) {
-        this.$TEXT_LATEX = on;
-    }
-    setLabelCenter(...centers) {
-        if (centers.length === 0) {
-            this.$LABEL_CENTER = this.frame.xyCenter();
-            return;
-        }
-        // TEMP, to be deleted
-        if (centers[0] === true) {
-            this.$LABEL_CENTER = this.frame.xyCenter();
-            return;
-        }
-        if (typeof centers[0] === 'number') {
-            this.$LABEL_CENTER = centers[0];
-            return;
-        }
-        if (Array.isArray(centers[0])) {
-            let cens = centers;
-            let pts = cens.map($ => (0, support_1.force2D)($, this.$3D_ANGLE, this.$3D_DEPTH));
-            this.$LABEL_CENTER = (0, support_1.meanPoint)(...pts);
-        }
-    }
-    setLengthUnit(text = undefined) {
-        this.$LENGTH_UNIT = text;
-    }
-    setAngleMode(mode = 'normal') {
-        this.$ANGLE_MODE = mode;
-    }
-    setProjector3D(angle = 60, depth = 0.5) {
-        this.$3D_ANGLE = angle;
-        this.$3D_DEPTH = depth;
-    }
-    setBorder(border = 0.2) {
-        this.$BORDER = border;
-    }
-    setLineLabel(setting = 'auto') {
-        this.$LINE_LABEL = setting;
-    }
-    setDefault() {
-        this.setWeight();
-        this.setStrokeColor();
-        this.setFillColor();
-        this.setAlpha();
-        this.setDash();
-        this.setTextAlign();
-        this.setTextBaseline();
-        this.ctx.font = 'normal 10px Times New Roman';
-        this.setTextSize();
-        this.setTextItalic();
-        this.setTextDir();
-        this.setTextLatex();
-        this.setLabelCenter();
-        this.setLengthUnit();
-        this.setAngleMode();
-        this.setLineLabel();
-    }
-    setAllDefault() {
-        this.setDefault();
-        this.setProjector3D();
-        this.setBorder();
-    }
-    save() {
-        this.ctx.save();
-        this.state.push({
-            $TEXT_DIR: this.$TEXT_DIR,
-            $TEXT_LATEX: this.$TEXT_LATEX,
-            $LABEL_CENTER: this.$LABEL_CENTER,
-            $ANGLE_MODE: this.$ANGLE_MODE,
-            $LENGTH_UNIT: this.$LENGTH_UNIT,
-            $3D_ANGLE: this.$3D_ANGLE,
-            $3D_DEPTH: this.$3D_DEPTH,
-            $BORDER: this.$BORDER,
-            $LINE_LABEL: this.$LINE_LABEL
-        });
-    }
-    restore() {
-        this.ctx.restore();
-        let state = this.state.pop();
-        if (state === undefined)
-            return;
-        this.$TEXT_DIR = state.$TEXT_DIR;
-        this.$TEXT_LATEX = state.$TEXT_LATEX;
-        this.$LABEL_CENTER = state.$LABEL_CENTER;
-        this.$ANGLE_MODE = state.$ANGLE_MODE;
-        this.$LENGTH_UNIT = state.$LENGTH_UNIT;
-        this.$3D_ANGLE = state.$3D_ANGLE;
-        this.$3D_DEPTH = state.$3D_DEPTH;
-        this.$BORDER = state.$BORDER;
-        this.$LINE_LABEL = state.$LINE_LABEL;
-    }
-    toPix(point) {
-        let pt = this.pj(point);
-        return this.frame.toPix(pt);
-    }
-    toPixs(points) {
-        return points.map($ => this.toPix($));
-    }
-    /**
-     * Draw a stroke through the `points`.
-     */
-    drawStroke(points) {
-        let dots = this.toPixs(points);
-        this.ink.track(dots);
-    }
-    /**
-     * Draw a stroke through the `points` to form a closed shape.
-     */
-    drawShape(points) {
-        let dots = this.toPixs(points);
-        this.ink.shape(dots);
-    }
-    /**
-     * Fill the closed shape formed by `points`.
-     */
-    drawFill(points) {
-        let dots = this.toPixs(points);
-        this.ink.fill(dots);
-    }
-    /**
-     * Shade the closed shape formed by `points`.
-     */
-    drawShade(points) {
-        let alpha = this.ctx.globalAlpha;
-        this.setAlpha(DEFAULT_SHADE_ALPHA);
-        this.drawFill(points);
-        this.setAlpha(alpha);
-    }
-    /**
-     * Draw an arc.
-     * @param center - the center of the arc's circle
-     * @param radiusPixel - the radius in pixel
-     * @param angleRange - polar angle range
-     */
-    drawArc(center, radiusPixel, angleRange) {
-        let cen = this.toPix(center);
-        this.ink.arc(cen, radiusPixel, angleRange);
-    }
-    /**
-     * Draw a filled segment.
-     * @param center - the center of the segment's circle
-     * @param radiusPixel - the radius in pixel
-     * @param angleRange - polar angle range
-     */
-    drawSegment(center, radiusPixel, angleRange) {
-        let cen = this.toPix(center);
-        this.ink.segment(cen, radiusPixel, angleRange);
-    }
-    /**
-     * Draw a circle.
-     * @param center - the center of the circle
-     * @param radiusPixel - the radius in pixel
-     */
-    drawCircle(center, radiusPixel) {
-        this.drawArc(center, radiusPixel, [0, 360]);
-    }
-    /**
-     * Draw a dot, i.e. a filled circle.
-     * @param center - the center of the circle
-     * @param radiusPixel - the radius in pixel
-     */
-    drawDot(center, radiusPixel) {
-        this.drawSegment(center, radiusPixel, [0, 360]);
+        if (!this.RANGE_DONE)
+            throw '[Pencil] Range must be set before setting border';
+        if (!this.SIZE_DONE)
+            throw '[Pencil] Size must be set before setting border';
+        this.cv.setBorder();
     }
     pathSectoroid(center, pStart, pEnd, vertices) {
         let v1 = (0, support_1.vec)(center, pStart);
@@ -43034,131 +43503,30 @@ class Pencil {
      */
     drawStrokeSectoroid(center, pStart, pEnd, vertices) {
         let pts = this.pathSectoroid(center, pStart, pEnd, vertices);
-        this.drawStroke(pts);
+        this.cv.line(pts);
     }
     /**
      * Fill a pseudo-sector
      */
     drawFillSectoroid(center, pStart, pEnd, vertices) {
         let pts = this.pathSectoroid(center, pStart, pEnd, vertices);
-        this.drawFill(pts);
+        this.cv.fill(pts);
     }
     /**
      * Shade a pseudo-sector
      */
     drawShadeSectoroid(center, pStart, pEnd, vertices) {
-        let alpha = this.ctx.globalAlpha;
-        this.setAlpha(DEFAULT_SHADE_ALPHA);
-        this.drawFillSectoroid(center, pStart, pEnd, vertices);
-        this.setAlpha(alpha);
-    }
-    /**
-     * Draw an arrow head at `endPoint`.
-     * @param startPoint - start point of arrow, used to determine arrow direction only
-     * @param endPoint - end point of arrow, where the arrow head will be drawn
-     * @param length - length pixel along the arrow head
-     * @param width - width pixel across the arrow on one side
-     * @param offset - offset pixel along the arrow
-     */
-    drawArrowHead(startPoint, endPoint, size, offset) {
-        let p1 = this.toPix(startPoint);
-        let p2 = this.toPix(endPoint);
-        this.ink.arrow(p1, p2, size * 2, size, offset);
+        let pts = this.pathSectoroid(center, pStart, pEnd, vertices);
+        this.cv.shade(pts);
     }
     /**
      * Draw an angle.
-     * @param point1 - first point
-     * @param vertex - where the angle is
-     * @param point2 - second point
-     * @param radiusPixels - radius of angle mark in pixel
      */
-    drawAngle(point1, vertex, point2, radiusPixel, arcCount, spacePixel) {
-        let [A, O, B] = this.pjs([point1, vertex, point2]);
-        let mode = this.$ANGLE_MODE;
-        if (mode === 'normal' && (0, support_1.IsReflex)(A, O, B))
-            [A, B] = [B, A];
-        if (mode === 'reflex' && !(0, support_1.IsReflex)(A, O, B))
-            [A, B] = [B, A];
+    drawAngle(A, O, B, radiusPixel, arcCount, spacePixel) {
+        let flip = this.cv.polarFlip(A, O, B);
+        let [P, Q] = flip ? [B, A] : [A, B];
         // draw like polar
-        let [a, o, b] = this.toPixs([A, O, B]);
-        this.ink.anglePolar(a, o, b, radiusPixel, arcCount, spacePixel);
-    }
-    /**
-     * Draw a right angle.
-     * @param point1 - first point
-     * @param vertex - where the angle is
-     * @param point2 - second point
-     * @param sizePixel - size in pixel
-     */
-    drawRightAngle(point1, vertex, point2, sizePixel) {
-        let [A, O, B] = this.toPixs([point1, vertex, point2]);
-        this.ink.rightAngle(A, O, B, sizePixel);
-    }
-    /**
-     * Draw parallel mark
-     * @param startPoint - start point of the line to decorate
-     * @param endPoint -end point of the line to decorate
-     * @param sizePixel - size of mark in pixel
-     * @param tickCount - how many marks
-     * @param spacePixel - space between marks in pixel
-     */
-    drawParallelMark(startPoint, endPoint, sizePixel, tickCount, spacePixel) {
-        let [A, B] = this.toPixs([startPoint, endPoint]);
-        this.ink.parallel(A, B, sizePixel, tickCount, spacePixel);
-    }
-    /**
-     * Draw a tick.
-     * @param startPoint - start point of the line to tick, for direction only
-     * @param tickPoint - where the tick is
-     * @param lengthPixel - one-sided length of the tick in pixel
-     * @param offsetPixel - offset of the tick position along the line, in pixel
-     */
-    drawTick(startPoint, tickPoint, lengthPixel, offsetPixel) {
-        let p1 = this.toPix(startPoint);
-        let p2 = this.toPix(tickPoint);
-        this.ink.tick(p1, p2, lengthPixel, offsetPixel);
-    }
-    /**
-     * Draw a vertical tick.
-     * @param position - where the tick is, in coordinates.
-     * @param lengthPixel - one-sided length of the tick
-     */
-    drawTickVertical(position, lengthPixel) {
-        let p = this.toPix(position);
-        this.ink.tickVert(p, lengthPixel);
-    }
-    /**
-     * Draw a horizontal tick.
-     * @param position - where the tick is, in coordinates.
-     * @param lengthPixel - one-sided length of the tick
-     */
-    drawTickHorizontal(position, lengthPixel) {
-        let p = this.toPix(position);
-        this.ink.tickHori(p, lengthPixel);
-    }
-    /**
-     * Draw equal mark at the mid-pt of a line.
-     * @param startPoint - start point of the line to decorate
-     * @param endPoint - end point of the line to decorate
-     * @param lengthPixel - one-sided length of the mark in pixel
-     * @param tickCount - how many marks
-     * @param spacePixel -space between the marks, in pixel
-     */
-    drawEqualMark(startPoint, endPoint, lengthPixel, tickCount, spacePixel) {
-        let A = this.toPix(startPoint);
-        let B = this.toPix(endPoint);
-        this.ink.equalSide(A, B, lengthPixel, tickCount, spacePixel);
-    }
-    /**
-     * Draw a compass.
-     * @param center - position of compass center
-     * @param xSizePixel - horizontal one-sided length of compass, in pixel
-     * @param ySizePixel - vertical one-sided length of compass, in pixel
-     * @param arrowSize - one-sided width of arrow head
-     */
-    drawCompass(center, xSizePixel, ySizePixel, arrowSize) {
-        let cen = this.toPix(center);
-        this.ink.compass(cen, xSizePixel, ySizePixel, arrowSize);
+        this.cv.anglePolar(P, O, Q, radiusPixel, arcCount, spacePixel);
     }
     /**
      * Draw a plot of function.
@@ -43167,10 +43535,12 @@ class Pencil {
      * @param tEnd - end of parameter
      * @param dots - total number of dots along the curve
      */
-    drawPlot(func, tStart, tEnd, dots = 1000) {
+    drawPlot(func, tStart = this.cv.xmin, tEnd = this.cv.xmax, dots = 1000) {
         let points = (0, support_1.trace)(func, [tStart, tEnd], dots);
-        let [xmin, xmax] = this.frame.xRange();
-        let [ymin, ymax] = this.frame.yRange();
+        let xmin = this.cv.xmin;
+        let xmax = this.cv.xmax;
+        let ymin = this.cv.ymin;
+        let ymax = this.cv.ymax;
         let X = xmax - xmin;
         let Y = ymax - ymin;
         function outOfRange([x, y]) {
@@ -43187,11 +43557,10 @@ class Pencil {
             return pt;
         });
         let segments = (0, support_1.split)(filteredPoints, null);
-        console.log(segments);
         for (let seg of segments) {
             if (seg.length === 0)
                 continue;
-            this.drawStroke(seg);
+            this.cv.line(seg);
         }
     }
     /**
@@ -43203,98 +43572,7 @@ class Pencil {
      * @returns
      */
     drawText(text, position, xOffset, yOffset) {
-        let [x, y] = this.toPix(position);
-        x += xOffset;
-        y -= yOffset;
-        this.feather.write(text, [x, y], this.$TEXT_DIR, this.$TEXT_LATEX);
-    }
-    /**
-     * Find the polar direction between two points, in the pixel world.
-     * @param pStart - start point in coordinates
-     * @param pEnd - end point in coordinates
-     */
-    getDirInPixel(pStart, pEnd) {
-        let [OPoint, APoint] = this.pjs([pStart, pEnd]);
-        let [O, A] = this.frame.toPixs([OPoint, APoint]);
-        return (0, support_1.atan2)(-(A[1] - O[1]), A[0] - O[0]);
-    }
-    /**
-     * Find the mid-ray direction given 3 points, in the pixel world.
-     * Obey ANGLE_MODE.
-     * @param point1 - first point, in coordinates.
-     * @param vertex - where the angle is, in coordinates.
-     * @param point2 - second point, in coordinates.
-     */
-    getDirInPixelByAngle(point1, vertex, point2) {
-        let [A, O, B] = this.pjs([point1, vertex, point2]);
-        let mode = this.$ANGLE_MODE;
-        if (mode === 'normal' && (0, support_1.IsReflex)(A, O, B))
-            [A, B] = [B, A];
-        if (mode === 'reflex' && !(0, support_1.IsReflex)(A, O, B))
-            [A, B] = [B, A];
-        // draw like polar
-        let [pixelA, pixelO, pixelB] = this.frame.toPixs([A, O, B]);
-        let a1 = (0, support_1.atan2)(-(pixelA[1] - pixelO[1]), pixelA[0] - pixelO[0]);
-        let a2 = (0, support_1.atan2)(-(pixelB[1] - pixelO[1]), pixelB[0] - pixelO[0]);
-        if (a2 < a1)
-            a2 = a2 + 360;
-        return (a1 + a2) / 2;
-    }
-    /**
-     * Find the left or right direction of a line, in the pixel world.
-     * Obey LINE_LABEL.
-     * If LINE_LABEL is 'auto', then away from LABEL_CENTER.
-     * If LINE_LABEL is 'left', then on the left.
-     * If LINE_LABEL is 'right', then on the right.
-     * @param pStart - start point in coordinates
-     * @param pEnd - end point in coordinates
-     */
-    getDirInPixelByLine(pStart, pEnd) {
-        let mode = this.$LINE_LABEL;
-        let left = this.getDirInPixel(pStart, pEnd) + 90;
-        let right = this.getDirInPixel(pStart, pEnd) - 90;
-        if (mode === 'left')
-            return left;
-        if (mode === 'right')
-            return right;
-        if (mode === 'auto') {
-            let cen = this.$LABEL_CENTER;
-            if (typeof cen === 'number')
-                return right;
-            let p1 = this.pj(pStart);
-            let p2 = this.pj(pEnd);
-            let cross = (0, support_1.cross2D)((0, support_1.vec)(p2, p1), (0, support_1.vec)(p2, cen));
-            return cross > 0 ? left : right;
-        }
-        console.warn("$LINE_LABEL must be 'left' | 'right' | 'auto'");
-        return right;
-    }
-    getLabelCenterDirInPixel(point) {
-        let pt = this.pj(point);
-        let center = this.$LABEL_CENTER;
-        if (typeof center === 'number') {
-            return center;
-        }
-        else {
-            if (center[0] === pt[0] && center[1] === pt[1])
-                return 0;
-            return this.getDirInPixel(center, pt);
-        }
-    }
-    getTextWidthInPixel(text) {
-        return this.feather.getHalfWidth(text, this.$TEXT_LATEX);
-    }
-    getTextWithLengthUnit(text) {
-        text = String(text);
-        let unit = this.$LENGTH_UNIT;
-        if (unit === undefined)
-            return text;
-        if (this.$TEXT_LATEX) {
-            return text + `~\\text{${unit}}`;
-        }
-        else {
-            return text + ' ' + unit;
-        }
+        this.cv.text(text, position, [xOffset, yOffset]);
     }
     /**
      * Draw a text label around a point. The label dodges the point elliptically.
@@ -43304,43 +43582,19 @@ class Pencil {
      * @param radiusPixel - offset distance in pixel
      */
     drawLabel(text, position, direction, radiusPixel) {
-        direction ?? (direction = this.getLabelCenterDirInPixel(position));
-        let textWidth = this.getTextWidthInPixel(text);
-        let xOffset = (radiusPixel + textWidth - 5) * (0, support_1.cos)(direction);
-        let yOffset = radiusPixel * (0, support_1.sin)(direction);
-        this.drawText(text, position, xOffset, yOffset);
-    }
-    makePolarAngle(point1, vertex, point2) {
-        let [A, O, B] = this.pjs([point1, vertex, point2]);
-        let mode = this.$ANGLE_MODE;
-        if (mode === 'normal' && (0, support_1.IsReflex)(A, O, B))
-            return [point2, vertex, point1];
-        if (mode === 'reflex' && !(0, support_1.IsReflex)(A, O, B))
-            return [point2, vertex, point1];
-        return [point1, vertex, point2];
-    }
-    /**
-     * Find the angle in pixel world. Obey ANGLE_MODE.
-     * @param point1 - first point, in coordinates.
-     * @param vertex - where the angle is, in coordinates.
-     * @param point2 - second point, in coordinates.
-     */
-    getAngleInPixel(point1, vertex, point2) {
-        let [A, O, B] = this.makePolarAngle(point1, vertex, point2);
-        let a = this.getDirInPixel(O, A);
-        let b = this.getDirInPixel(O, B);
-        return a <= b ? b - a : 360 + b - a;
+        direction ?? (direction = this.cv.getCenterDir(position));
+        this.cv.textDodge(text, position, radiusPixel, direction);
     }
     /**
      * Find the extra pixel allowance when drawing angle arc and angle label for small angles.
-     * @param point1 - first point, in coordinates.
-     * @param vertex - where the angle is, in coordinates.
-     * @param point2 - second point, in coordinates.
+     * @param A - first point, in coordinates.
+     * @param O - where the angle is, in coordinates.
+     * @param B - second point, in coordinates.
      * @param angleThreshold - the max angle under which extra pixel is needed
      * @param pixelPerDegree - extra pixel per degree under the threshold
      */
-    getSmallAngleExtraPixel(point1, vertex, point2, angleThreshold, pixelPerDegree) {
-        let angle = this.getAngleInPixel(point1, vertex, point2);
+    getSmallAngleExtraPixel(A, O, B, angleThreshold, pixelPerDegree) {
+        let angle = this.cv.getDirAngle(A, O, B);
         let angleUnderThreshold = Math.max(angleThreshold - angle, 0);
         return angleUnderThreshold * pixelPerDegree;
     }
@@ -43382,51 +43636,55 @@ class Pencil {
      * Draw the x-axis.
      */
     drawXAxis() {
-        const [xmin, xmax] = this.frame.xRange();
-        this.drawStroke([[xmin, 0], [xmax, 0]]);
-        this.drawArrowHead([xmin, 0], [xmax, 0], 5, 0);
+        let A = [this.cv.xmin, 0];
+        let B = [this.cv.xmax, 0];
+        this.cv.line([A, B]);
+        this.cv.arrow(A, B, 5, 0);
     }
     /**
      * Draw the label of x-axis.
      * @param text - string to write
      */
     drawXAxisLabel(text) {
-        text = String(text);
-        const [xmin, xmax] = this.frame.xRange();
-        this.ctx.save();
-        this.setTextAlign("right");
-        this.setTextBaseline("middle");
-        this.drawText(text, [xmax, 0], 0, DEFAULT_AXIS_LABEL_OFFSET_PIXEL);
-        this.ctx.restore();
+        this.cv.save();
+        this.cv.$TEXT_ALIGN = "right";
+        this.cv.$TEXT_BASELINE = "middle";
+        this.drawText(text, [this.cv.xmax, 0], 0, DEFAULT_AXIS_LABEL_OFFSET_PIXEL);
+        this.cv.restore();
     }
     /**
      * Draw the y-axis.
      */
     drawYAxis() {
-        const [ymin, ymax] = this.frame.yRange();
-        this.drawStroke([[0, ymin], [0, ymax]]);
-        this.drawArrowHead([0, ymin], [0, ymax], 5, 0);
+        let A = [0, this.cv.ymin];
+        let B = [0, this.cv.ymax];
+        this.cv.line([A, B]);
+        this.cv.arrow(A, B, 5, 0);
     }
     /**
      * Draw the label of y-axis.
      * @param text - string to write
      */
     drawYAxisLabel(text) {
-        text = String(text);
-        const [ymin, ymax] = this.frame.yRange();
-        this.ctx.save();
-        this.setTextAlign("left");
-        this.setTextBaseline("top");
-        this.drawText(text, [0, ymax], DEFAULT_AXIS_LABEL_OFFSET_PIXEL, 0);
-        this.ctx.restore();
+        this.cv.save();
+        this.cv.$TEXT_ALIGN = "left";
+        this.cv.$TEXT_BASELINE = "top";
+        this.drawText(text, [0, this.cv.ymax], DEFAULT_AXIS_LABEL_OFFSET_PIXEL, 0);
+        this.cv.restore();
+    }
+    xTicks(interval) {
+        return getTicks(this.cv.xmin, this.cv.xmax, interval);
+    }
+    yTicks(interval) {
+        return getTicks(this.cv.ymin, this.cv.ymax, interval);
     }
     /**
      * Draw the ticks on x-axis.
      * @param interval - distance between tick, in coordinates.
      */
     drawXAxisTick(interval) {
-        for (let x of this.frame.xTicks(interval)) {
-            this.drawTickVertical([x, 0], DEFAULT_AXIS_TICK_LENGTH_PIXEL);
+        for (let x of this.xTicks(interval)) {
+            this.cv.tickVert([x, 0], DEFAULT_AXIS_TICK_LENGTH_PIXEL);
         }
     }
     /**
@@ -43434,8 +43692,8 @@ class Pencil {
      * @param interval - distance between tick, in coordinates.
      */
     drawYAxisTick(interval) {
-        for (let y of this.frame.yTicks(interval)) {
-            this.drawTickHorizontal([0, y], DEFAULT_AXIS_TICK_LENGTH_PIXEL);
+        for (let y of this.yTicks(interval)) {
+            this.cv.tickHori([0, y], DEFAULT_AXIS_TICK_LENGTH_PIXEL);
         }
     }
     /**
@@ -43443,62 +43701,66 @@ class Pencil {
      * @param interval - distance between tick, in coordinates.
      */
     drawXAxisTickMark(interval) {
-        this.ctx.save();
-        this.setTextItalic();
-        this.setTextAlign("center");
-        this.setTextBaseline("middle");
-        for (let x of this.frame.xTicks(interval)) {
+        this.cv.save();
+        this.cv.$TEXT_ITALIC = false;
+        this.cv.$TEXT_ALIGN = "center";
+        this.cv.$TEXT_BASELINE = "middle";
+        for (let x of this.xTicks(interval)) {
             this.drawText(String(x), [x, 0], 0, -DEFAULT_XAXIS_MARK_OFFSET_PIXEL);
         }
-        this.ctx.restore();
+        this.cv.restore();
     }
     /**
      * Draw the number mark on the ticks on y-axis.
      * @param interval - distance between tick, in coordinates.
      */
     drawYAxisTickMark(interval) {
-        this.ctx.save();
-        this.setTextItalic();
-        this.setTextAlign("right");
-        this.setTextBaseline("middle");
-        for (let y of this.frame.yTicks(interval)) {
+        this.cv.save();
+        this.cv.$TEXT_ITALIC = false;
+        this.cv.$TEXT_ALIGN = "right";
+        this.cv.$TEXT_BASELINE = "middle";
+        for (let y of this.yTicks(interval)) {
             this.drawText(String(y), [0, y], -DEFAULT_YAXIS_MARK_OFFSET_PIXEL, 0);
         }
-        this.ctx.restore();
+        this.cv.restore();
     }
     /**
      * Draw the vertical grid lines on the x-axis.
      * @param interval - distance between grids, in coordinates.
      */
     drawXAxisGrid(interval) {
-        this.ctx.save();
-        this.ctx.strokeStyle = "#d3d5db";
-        let [ymin, ymax] = this.frame.yRange();
+        this.cv.save();
+        this.cv.$COLOR = "#d3d5db";
         const drawLine = (x) => {
-            this.drawStroke([[x, ymin], [x, ymax]]);
+            this.cv.line([
+                [x, this.cv.ymin],
+                [x, this.cv.ymax]
+            ]);
         };
         drawLine(0);
-        for (let x of this.frame.xTicks(interval)) {
+        for (let x of this.xTicks(interval)) {
             drawLine(x);
         }
-        this.ctx.restore();
+        this.cv.restore();
     }
     /**
      * Draw the horizontal grid lines on the y-axis.
      * @param interval - distance between grids, in coordinates.
      */
     drawYAxisGrid(interval) {
-        this.ctx.save();
-        this.ctx.strokeStyle = "#d3d5db";
-        let [xmin, xmax] = this.frame.xRange();
+        this.cv.save();
+        this.cv.$COLOR = "#d3d5db";
         const drawLine = (y) => {
-            this.drawStroke([[xmin, y], [xmax, y]]);
+            this.cv.line([
+                [this.cv.xmin, y],
+                [this.cv.xmax, y]
+            ]);
         };
         drawLine(0);
-        for (let y of this.frame.yTicks(interval)) {
+        for (let y of this.yTicks(interval)) {
             drawLine(y);
         }
-        this.ctx.restore();
+        this.cv.restore();
     }
 }
 exports.Pencil = Pencil;
@@ -43507,86 +43769,13 @@ exports.Pencil = Pencil;
 
 /***/ }),
 
-/***/ 7303:
+/***/ 703:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.split = exports.traceCircle = exports.trace = exports.cross2D = exports.argument = exports.magnitude = exports.vec = exports.meanPoint = exports.midPoint = exports.atan2 = exports.cos = exports.sin = exports.force2D = exports.IsReflex = exports.AnglePolar = void 0;
-/**
- * @return angle AOB, measured anticlockwise
- * ```
- * AnglePolar([1,0],[0,0],[0,2]) // 90
- * AnglePolar([2,2],[1,1],[1,3]) // 45
- * AnglePolar([1,3],[1,1],[2,2]) // 315
- * ```
- */
-function AnglePolar(A, O, B) {
-    let a = argument(vec(O, A));
-    let b = argument(vec(O, B));
-    return a <= b ? b - a : 360 + b - a;
-}
-exports.AnglePolar = AnglePolar;
-/**
- * @return check if the polar angle AOB is reflex
- * ```
- * IsReflex([1,0],[0,0],[0,2]) // false
- * IsReflex([2,2],[1,1],[1,3]) // false
- * IsReflex([1,3],[1,1],[2,2]) // true
- * ```
- */
-function IsReflex(A, O, B) {
-    return AnglePolar(A, O, B) > 180;
-}
-exports.IsReflex = IsReflex;
-function projectTo2D(point3D, angle, depth) {
-    let a = angle * Math.PI / 180;
-    let s = Math.sin(a);
-    let c = Math.cos(a);
-    let [x, y, z] = point3D;
-    let x_new = x + depth * y * c;
-    let y_new = z + depth * y * s;
-    return [x_new, y_new];
-}
-function force2D(point, angle, depth) {
-    if (point.length === 3) {
-        return projectTo2D(point, angle, depth);
-    }
-    else {
-        return point;
-    }
-}
-exports.force2D = force2D;
-function sin(degree) {
-    return Math.sin(degree / 180 * Math.PI);
-}
-exports.sin = sin;
-function cos(degree) {
-    return Math.cos(degree / 180 * Math.PI);
-}
-exports.cos = cos;
-function atan2(dy, dx) {
-    return Math.atan2(dy, dx) * 180 / Math.PI;
-}
-exports.atan2 = atan2;
-function midPoint(A, B) {
-    return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
-}
-exports.midPoint = midPoint;
-function meanPoint(...Points) {
-    if (Points.length === 0)
-        return [0, 0];
-    let X = 0;
-    let Y = 0;
-    for (let p of Points) {
-        X += p[0];
-        Y += p[1];
-    }
-    let n = Points.length;
-    return [X / n, Y / n];
-}
-exports.meanPoint = meanPoint;
+exports.split = exports.traceCircle = exports.trace = exports.argument = exports.magnitude = exports.vec = void 0;
 function vec(p1, p2) {
     let [x1, y1] = p1;
     let [x2, y2] = p2;
@@ -43608,12 +43797,6 @@ function argument([x, y]) {
     return angle;
 }
 exports.argument = argument;
-function cross2D(vec1, vec2) {
-    let [x1, y1] = vec1;
-    let [x2, y2] = vec2;
-    return x1 * y2 - y1 * x2;
-}
-exports.cross2D = cross2D;
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.
  * @param func - the func to trace, can be normal or parametric.
@@ -43707,580 +43890,8 @@ exports.split = split;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Pencil = void 0;
-var pencil_1 = __webpack_require__(6752);
+var pencil_1 = __webpack_require__(4984);
 Object.defineProperty(exports, "Pencil", ({ enumerable: true, get: function () { return pencil_1.Pencil; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 4844:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Board = void 0;
-const QUALITY = 3;
-/**
- * Provide functions to operate meta data on the canvas.
- */
-class Board {
-    constructor(canvas) {
-        this.canvas = canvas;
-        this.ctx = this.canvas.getContext("2d");
-        this.imgStore = null;
-        this.bgImgUrl = "";
-    }
-    init(width, height) {
-        this.canvas.width = width * QUALITY;
-        this.canvas.height = height * QUALITY;
-        this.ctx.scale(QUALITY, QUALITY);
-    }
-    toDataUrl() {
-        return this.canvas.toDataURL();
-    }
-    save() {
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-        this.imgStore = this.ctx.getImageData(0, 0, w, h);
-    }
-    restore() {
-        if (this.imgStore !== null)
-            this.ctx.putImageData(this.imgStore, 0, 0);
-    }
-    clear() {
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-        this.ctx.clearRect(0, 0, w, h);
-    }
-    trim() {
-        function rowBlank(imageData, width, y) {
-            for (var x = 0; x < width; ++x) {
-                if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
-                    return false;
-            }
-            return true;
-        }
-        function columnBlank(imageData, width, x, top, bottom) {
-            for (var y = top; y < bottom; ++y) {
-                if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
-                    return false;
-            }
-            return true;
-        }
-        var ctx = this.canvas.getContext("2d");
-        var width = this.canvas.width;
-        var imageData = ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-        var top = 0, bottom = imageData.height, left = 0, right = imageData.width;
-        while (top < bottom && rowBlank(imageData, width, top))
-            ++top;
-        while (bottom - 1 > top && rowBlank(imageData, width, bottom - 1))
-            --bottom;
-        while (left < right && columnBlank(imageData, width, left, top, bottom))
-            ++left;
-        while (right - 1 > left && columnBlank(imageData, width, right - 1, top, bottom))
-            --right;
-        var trimmed = ctx.getImageData(left, top, right - left, bottom - top);
-        this.canvas.width = trimmed.width;
-        this.canvas.height = trimmed.height;
-        ctx.putImageData(trimmed, 0, 0);
-    }
-    clone() {
-        let oldCanvas = this.canvas;
-        //create a new canvas
-        let newCanvas = document.createElement('canvas');
-        let context = newCanvas.getContext('2d');
-        //set dimensions
-        newCanvas.width = oldCanvas.width;
-        newCanvas.height = oldCanvas.height;
-        //apply the old canvas to the new one
-        context.drawImage(oldCanvas, 0, 0);
-        //return the new canvas
-        return new Board(newCanvas);
-    }
-    displayWidth() {
-        return Math.floor(this.canvas.width / QUALITY);
-    }
-    displayHeight() {
-        return Math.floor(this.canvas.height / QUALITY);
-    }
-    setBgImgUrl(url) {
-        this.bgImgUrl = url;
-    }
-    bgAttr() {
-        if (this.bgImgUrl.length === 0)
-            return "";
-        return ` style="background-image:url('${this.bgImgUrl}');background-size:100% 100%;" `;
-    }
-    export(html, placeholder, trim) {
-        let clone = this.clone();
-        if (trim)
-            clone.trim();
-        const src = 'src="' + clone.toDataUrl() + '"';
-        const width = ' width="' + clone.displayWidth() + '"';
-        const height = ' height="' + clone.displayHeight() + '"';
-        return html.replace('src="' + placeholder + '"', src + width + height + clone.bgAttr());
-    }
-}
-exports.Board = Board;
-//# sourceMappingURL=Board.js.map
-
-/***/ }),
-
-/***/ 2807:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Dial = void 0;
-/**
- * Provide functions to control the state of the ctx.
- */
-class Dial {
-    constructor(ctx) {
-        this.ctx = ctx;
-    }
-    // settings
-    setWeight(weight = 1) {
-        this.ctx.lineWidth = weight;
-    }
-    setStrokeColor(color = "black") {
-        this.ctx.strokeStyle = color;
-    }
-    setFillColor(color = "black") {
-        this.ctx.fillStyle = color;
-    }
-    setColor(color = "black") {
-        this.setStrokeColor(color);
-        this.setFillColor(color);
-    }
-    setAlpha(opaque = 1) {
-        this.ctx.globalAlpha = opaque;
-    }
-    setDash(segments = []) {
-        if (Array.isArray(segments))
-            this.ctx.setLineDash(segments);
-        if (typeof segments === 'number')
-            this.setDash([segments, segments]);
-        if (typeof segments === 'boolean')
-            this.setDash(segments ? [5, 5] : []);
-    }
-    setTextAlign(align = "center") {
-        this.ctx.textAlign = align;
-    }
-    setTextBaseline(baseline = "middle") {
-        this.ctx.textBaseline = baseline;
-    }
-    setTextPixel(pixel) {
-        pixel = Math.round(pixel);
-        this.ctx.font = this.ctx.font.replace(/\d+px/g, pixel + 'px');
-    }
-    setTextItalic(italic = false) {
-        if (italic) {
-            if (!this.getTextItalic())
-                this.ctx.font = 'italic ' + this.ctx.font;
-        }
-        else {
-            this.ctx.font = this.ctx.font.replace('italic ', '');
-        }
-    }
-    // getters
-    getTextPixel() {
-        let match = this.ctx.font.match(/(\d+)px/);
-        if (match === null)
-            return NaN;
-        return Number.parseInt(match[1]);
-    }
-    getTextItalic() {
-        return this.ctx.font.includes('italic');
-    }
-    // meta
-    save() {
-        this.ctx.save();
-    }
-    restore() {
-        this.ctx.restore();
-    }
-    // transform
-    translate(x, y) {
-        this.ctx.translate(x, y);
-    }
-    translateTo(dot) {
-        let [x, y] = dot;
-        this.ctx.translate(x, y);
-    }
-    rotate(degreePolar) {
-        this.ctx.rotate(-degreePolar * Math.PI / 180);
-    }
-    rotateAlong(start, end) {
-        let [x1, y1] = start;
-        let [x2, y2] = end;
-        let dx = x2 - x1;
-        let dy = y2 - y1;
-        let q = Math.atan2(dy, dx);
-        this.ctx.rotate(q);
-    }
-}
-exports.Dial = Dial;
-//# sourceMappingURL=Dial.js.map
-
-/***/ }),
-
-/***/ 3749:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Feather = void 0;
-const Dial_1 = __webpack_require__(2807);
-/**
- * CanvasLatex is a library that must be imported from script tag
- */
-function LatexWidget(text, color, size) {
-    text = `\\color{${color}} ` + text;
-    // @ts-ignore
-    const widget = new CanvasLatex.default(text, {
-        displayMode: true,
-        debugBounds: false,
-        baseSize: size
-    });
-    return widget;
-}
-function latexTuneX(x, width, textAlign) {
-    if (textAlign === 'left')
-        return -x;
-    if (textAlign === 'right')
-        return -x - width;
-    if (textAlign === 'center')
-        return -x - width / 2;
-    return -x - width / 2;
-}
-function latexTuneY(y, height, textBaseline) {
-    if (textBaseline === 'top')
-        return -y;
-    if (textBaseline === 'bottom')
-        return -y - height;
-    if (textBaseline === 'middle')
-        return -y - height / 2;
-    return -y / 2;
-}
-/**
- * Provide writing function in terms of pixel.
- */
-class Feather {
-    constructor(ctx) {
-        this.ctx = ctx;
-        this.dial = new Dial_1.Dial(this.ctx);
-    }
-    // text
-    writePlain(text, dot, dir) {
-        text = String(text);
-        if (text === '')
-            return;
-        this.dial.save();
-        this.dial.translateTo(dot);
-        this.dial.rotate(dir);
-        this.ctx.fillText(text, 0, 0);
-        this.dial.restore();
-    }
-    getLatexWidget(text) {
-        let color = this.ctx.fillStyle;
-        if (typeof color !== 'string')
-            color = 'black';
-        let size = this.dial.getTextPixel();
-        return LatexWidget(text, color, size);
-    }
-    writeLatex(text, dot, dir) {
-        text = String(text);
-        if (text === '')
-            return;
-        const widget = this.getLatexWidget(text);
-        const bounds = widget.getBounds();
-        if (bounds === null) {
-            console.error('[CanvasLatex] bounds === null! This is an unexpected error.');
-            return;
-        }
-        this.dial.save();
-        this.dial.translateTo(dot);
-        this.dial.rotate(dir);
-        let xTune = latexTuneX(bounds.x, bounds.width, this.ctx.textAlign);
-        let yTune = latexTuneY(bounds.y, bounds.height, this.ctx.textBaseline);
-        this.dial.translate(xTune, yTune);
-        widget.draw(this.ctx);
-        this.dial.restore();
-    }
-    write(text, dot, dir, latex) {
-        if (latex) {
-            this.writeLatex(text, dot, dir);
-        }
-        else {
-            this.writePlain(text, dot, dir);
-        }
-    }
-    // text width
-    getPlainTextHalfWidth(text) {
-        return this.ctx.measureText(text).width / 2;
-    }
-    getLatexHalfWidth(text) {
-        const widget = this.getLatexWidget(text);
-        const bounds = widget.getBounds();
-        if (bounds === null)
-            return 0;
-        return bounds.width / 2;
-    }
-    getHalfWidth(text, latex) {
-        return latex ?
-            this.getLatexHalfWidth(text) :
-            this.getPlainTextHalfWidth(text);
-    }
-}
-exports.Feather = Feather;
-//# sourceMappingURL=Feather.js.map
-
-/***/ }),
-
-/***/ 5169:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Ink = void 0;
-const Dial_1 = __webpack_require__(2807);
-function deg(radian) {
-    return radian / Math.PI * 180;
-}
-function rad(degree) {
-    return degree * Math.PI / 180;
-}
-function dir(A, B) {
-    let [dx, dy] = dotVec(A, B);
-    let rad = -Math.atan2(dy, dx);
-    return deg(rad);
-}
-function isEven(n) {
-    return n % 2 === 0;
-}
-function isOdd(n) {
-    return n % 2 !== 0;
-}
-function floorHalf(n) {
-    if (isOdd(n))
-        n = n - 1;
-    return n / 2;
-}
-function steps(n) {
-    let N = floorHalf(n);
-    let arr = [];
-    if (isOdd(n)) {
-        arr.push(0);
-        for (let i = 1; i <= N; i++) {
-            arr.push(i);
-            arr.push(-i);
-        }
-    }
-    else {
-        for (let i = 1; i <= N; i++) {
-            let s = i - 0.5;
-            arr.push(s);
-            arr.push(-s);
-        }
-    }
-    return arr;
-}
-function dotVec([x1, y1], [x2, y2]) {
-    return [x2 - x1, y2 - y1];
-}
-function scaleDot([x, y], ratio) {
-    return [x * ratio, y * ratio];
-}
-function dist(A, B) {
-    let [dx, dy] = dotVec(A, B);
-    return (dx * dx + dy * dy) ** 0.5;
-}
-function addDot([x1, y1], [x2, y2]) {
-    return [x1 + x2, y1 + y2];
-}
-function scaleDotTo(A, length) {
-    let oldLength = dist([0, 0], A);
-    let ratio = length / oldLength;
-    return scaleDot(A, ratio);
-}
-function moveDot(A, B, dist) {
-    let AB = dotVec(A, B);
-    let d = scaleDotTo(AB, dist);
-    return addDot(A, d);
-}
-function moveDotX([x, y], dist) {
-    return [x + dist, y];
-}
-function moveDotY([x, y], dist) {
-    return [x, y + dist];
-}
-function mid(A, B) {
-    return scaleDot(addDot(A, B), 0.5);
-}
-/**
- * Provide drawing function in terms of pixel.
- */
-class Ink {
-    constructor(ctx) {
-        this.ctx = ctx;
-        this.dial = new Dial_1.Dial(this.ctx);
-    }
-    // rect
-    moveTo(dot) {
-        let [x, y] = dot;
-        this.ctx.moveTo(x, y);
-    }
-    lineTo(dot) {
-        let [x, y] = dot;
-        this.ctx.lineTo(x, y);
-    }
-    createPath(dots) {
-        this.ctx.beginPath();
-        if (dots.length === 0)
-            return;
-        this.moveTo(dots[0]);
-        for (let i = 1; i < dots.length; i++) {
-            this.lineTo(dots[i]);
-        }
-    }
-    createShape(dots) {
-        this.createPath(dots);
-        this.ctx.closePath();
-    }
-    track(dots) {
-        this.createPath(dots);
-        this.ctx.stroke();
-    }
-    line(...dots) {
-        this.track(dots);
-    }
-    shape(dots) {
-        this.createShape(dots);
-        this.ctx.stroke();
-    }
-    fill(dots) {
-        this.createShape(dots);
-        this.ctx.fill();
-    }
-    // circle
-    createArcPath(center, radius, angle) {
-        let [x, y] = center;
-        let [q1, q2] = angle;
-        q1 = -rad(q1);
-        q2 = -rad(q2);
-        this.ctx.beginPath();
-        this.ctx.arc(x, y, radius, q1, q2, true);
-    }
-    arc(center, radius, angle) {
-        this.createArcPath(center, radius, angle);
-        this.ctx.stroke();
-    }
-    segment(center, radius, angle) {
-        this.createArcPath(center, radius, angle);
-        this.ctx.fill();
-    }
-    circle(center, radius) {
-        this.arc(center, radius, [0, 360]);
-    }
-    disc(center, radius) {
-        this.segment(center, radius, [0, 360]);
-    }
-    // advanced
-    arrow(start, end, length, width, offset) {
-        this.dial.save();
-        this.dial.translateTo(end);
-        this.dial.rotateAlong(start, end);
-        let A = [offset - length, -width];
-        let O = [offset, 0];
-        let B = [offset - length, +width];
-        this.track([A, O, B]);
-        this.dial.restore();
-    }
-    anglePolar(A, O, B, radius, count, space) {
-        let q1 = dir(O, A);
-        let q2 = dir(O, B);
-        for (let s of steps(count)) {
-            let r = radius + s * space;
-            this.arc(O, r, [q1, q2]);
-        }
-    }
-    rightAngle(A, O, B, size) {
-        let P = moveDot(O, A, size);
-        let Q = moveDot(O, B, size);
-        let R = addDot(Q, dotVec(O, P));
-        this.track([P, R, Q]);
-    }
-    parallel(start, end, size, count, space) {
-        let M = mid(start, end);
-        for (let i = 0; i < count; i++) {
-            this.arrow(start, M, size * 2, size, i * space);
-        }
-    }
-    tick(start, end, length, offset) {
-        this.dial.save();
-        this.dial.translateTo(end);
-        this.dial.rotateAlong(start, end);
-        let A = [offset, -length];
-        let B = [offset, +length];
-        this.line(A, B);
-        this.dial.restore();
-    }
-    tickVert(dot, length) {
-        let A = moveDotY(dot, -length);
-        let B = moveDotY(dot, +length);
-        this.line(A, B);
-    }
-    tickHori(dot, length) {
-        let A = moveDotX(dot, -length);
-        let B = moveDotX(dot, +length);
-        this.line(A, B);
-    }
-    equalSide(start, end, length, count, space) {
-        let M = mid(start, end);
-        for (let s of steps(count)) {
-            this.tick(start, M, length, s * space);
-        }
-    }
-    compass(center, xSize, ySize, arrowSize) {
-        this.dial.save();
-        this.dial.translateTo(center);
-        let E = [xSize, 0];
-        let W = [-xSize, 0];
-        let S = [0, ySize];
-        let N = [0, -ySize];
-        let A = [-arrowSize, -ySize + arrowSize * 2];
-        let B = [+arrowSize, -ySize + arrowSize * 2];
-        this.line(E, W);
-        this.line(N, S);
-        this.line(A, N, B);
-        this.dial.restore();
-    }
-}
-exports.Ink = Ink;
-//# sourceMappingURL=Ink.js.map
-
-/***/ }),
-
-/***/ 843:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Feather = exports.Ink = exports.Dial = exports.Board = void 0;
-var Board_1 = __webpack_require__(4844);
-Object.defineProperty(exports, "Board", ({ enumerable: true, get: function () { return Board_1.Board; } }));
-var Dial_1 = __webpack_require__(2807);
-Object.defineProperty(exports, "Dial", ({ enumerable: true, get: function () { return Dial_1.Dial; } }));
-var Ink_1 = __webpack_require__(5169);
-Object.defineProperty(exports, "Ink", ({ enumerable: true, get: function () { return Ink_1.Ink; } }));
-var Feather_1 = __webpack_require__(3749);
-Object.defineProperty(exports, "Feather", ({ enumerable: true, get: function () { return Feather_1.Feather; } }));
 //# sourceMappingURL=index.js.map
 
 /***/ })
@@ -44324,6 +43935,29 @@ __webpack_require__(4163);
 __webpack_require__(3221);
 __webpack_require__(1370);
 __webpack_require__(6183);
+// polyfill for .at
+function at(n) {
+    // ToInteger() abstract op
+    n = Math.trunc(n) || 0;
+    // Allow negative indexing from the end
+    if (n < 0)
+        n += this.length;
+    // OOB access is guaranteed to return undefined
+    if (n < 0 || n >= this.length)
+        return undefined;
+    // Otherwise, this is just normal property access
+    return this[n];
+}
+const TypedArray = Reflect.getPrototypeOf(Int8Array);
+for (const C of [Array, String, TypedArray]) {
+    // @ts-ignore
+    Object.defineProperty(C.prototype, "at", {
+        value: at,
+        writable: true,
+        enumerable: false,
+        configurable: true
+    });
+}
 
 })();
 

@@ -146,6 +146,7 @@ class Ink {
     // advanced
     arrow(start, end, length, width, offset) {
         this.dial.save();
+        this.dial.setDash();
         this.dial.translateTo(end);
         this.dial.rotateAlong(start, end);
         let A = [offset - length, -width];

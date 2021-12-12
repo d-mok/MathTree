@@ -27,6 +27,16 @@ export class PenCls extends Pencil {
         this.set.reset()
     }
 
+
+
+    private pj(pt: Point): Point2D {
+        return this.cv.pj(pt)
+    }
+
+    private pjs(pts: Point[]): Point2D[] {
+        return this.cv.pjs(pts)
+    }
+
     /**
      * Setup of canvas coordinate range.
      * @category setting
@@ -170,6 +180,8 @@ export class PenCls extends Pencil {
 
             if (this._pen.range.AUTO_BORDER)
                 this._pen.initOuterBorder()
+
+            this._pen.set.reset()
         },
         /**
          * Set the size of the canvas by resolution.
@@ -183,10 +195,8 @@ export class PenCls extends Pencil {
          * ```
          */
         resolution(xPPI = 0.1, yPPI = xPPI) {
-            let xRange = this._pen.frame.xmax - this._pen.frame.xmin
-            let yRange = this._pen.frame.ymax - this._pen.frame.ymin
-            let xScale = xRange * xPPI
-            let yScale = yRange * yPPI
+            let xScale = this._pen.cv.dx() * xPPI
+            let yScale = this._pen.cv.dy() * yPPI
             this.set(xScale, yScale)
         },
         /**
@@ -203,10 +213,7 @@ export class PenCls extends Pencil {
          * ```
          */
         lock(width: number = 1, height = width) {
-            let [xmin, xmax] = this._pen.frame.xRange()
-            let [ymin, ymax] = this._pen.frame.yRange()
-            let ratio = (ymax - ymin) / (xmax - xmin)
-
+            let ratio = this._pen.cv.yxRatio()
             if (width * ratio < height) {
                 this.set(width, width * ratio)
             } else {
@@ -226,6 +233,10 @@ export class PenCls extends Pencil {
          */
         _pen: this as PenCls,
         /**
+         * @ignore
+         */
+        _cv: this.cv,
+        /**
          * Set the weight of the pen (line width).
          * @category set
          * @param weight - The line width.
@@ -235,31 +246,7 @@ export class PenCls extends Pencil {
          * ```
          */
         weight(weight = 1): void {
-            this._pen.setWeight(weight)
-        },
-        /**
-         * Set the color of the pen stroke.
-         * @category set
-         * @param color - The line color.
-         * @returns void
-         * ```
-         * pen.set.strokeColor('grey') // set grey line
-         * ```
-         */
-        strokeColor(color = "black"): void {
-            this._pen.setStrokeColor(color)
-        },
-        /**
-         * Set the color of filling.
-         * @category set
-         * @param color - The filling color.
-         * @returns void
-         * ```
-         * pen.set.fillColor('grey') // set grey filling
-         * ```
-         */
-        fillColor(color = "black"): void {
-            this._pen.setFillColor(color)
+            this._cv.$WEIGHT = weight
         },
         /**
          * Set the color of both filling and stroke.
@@ -271,7 +258,7 @@ export class PenCls extends Pencil {
          * ```
          */
         color(color = "black"): void {
-            this._pen.setColor(color)
+            this._cv.$COLOR = color
         },
         /**
          * Set the transparency.
@@ -283,7 +270,7 @@ export class PenCls extends Pencil {
          * ```
          */
         alpha(opaque = 1): void {
-            this._pen.setAlpha(opaque)
+            this._cv.$ALPHA = opaque
         },
         /**
          * Set the dash pattern of line.
@@ -295,7 +282,7 @@ export class PenCls extends Pencil {
          * ```
          */
         dash(segments: (number[] | number | boolean) = []): void {
-            this._pen.setDash(segments)
+            this._cv.$DASH = segments
         },
         /**
          * Set the horizontal alignment of text.
@@ -307,7 +294,7 @@ export class PenCls extends Pencil {
          * ```
          */
         textAlign(align: CanvasTextAlign = "center"): void {
-            this._pen.setTextAlign(align)
+            this._cv.$TEXT_ALIGN = align
         },
         /**
          * Set the vertical alignment of text.
@@ -319,7 +306,7 @@ export class PenCls extends Pencil {
          * ```
          */
         textBaseline(baseline: CanvasTextBaseline = "middle"): void {
-            this._pen.setTextBaseline(baseline)
+            this._cv.$TEXT_BASELINE = baseline
         },
         /**
          * Set the size of text.
@@ -331,7 +318,7 @@ export class PenCls extends Pencil {
          * ```
          */
         textSize(size = 1): void {
-            this._pen.setTextSize(size)
+            this._cv.$TEXT_SIZE = size
         },
 
         /**
@@ -344,7 +331,7 @@ export class PenCls extends Pencil {
          * ```
          */
         textItalic(italic = false): void {
-            this._pen.setTextItalic(italic)
+            this._cv.$TEXT_ITALIC = italic
         },
         /**
          * Set text direction.
@@ -356,7 +343,7 @@ export class PenCls extends Pencil {
          * ```
          */
         textDir(angle = 0): void {
-            this._pen.setTextDir(angle)
+            this._cv.$TEXT_DIR = angle
         },
 
         /**
@@ -369,7 +356,7 @@ export class PenCls extends Pencil {
          * ```
          */
         textLatex(on = false): void {
-            this._pen.setTextLatex(on)
+            this._cv.$TEXT_LATEX = on
         },
 
         /**
@@ -380,12 +367,11 @@ export class PenCls extends Pencil {
          * ```
          * pen.set.labelCenter([0,0]) // set center to be [0,0]
          * pen.set.labelCenter(A,B,C,D) // set center to be the centroid of A,B,C,D
-         * pen.set.labelCenter(90) // set label at 90 polar degree (top)
          * pen.set.labelCenter() // set label to be the center of canvas
          * ```
          */
-        labelCenter(...centers: Point[] | [number]): void {
-            this._pen.setLabelCenter(...centers)
+        labelCenter(...centers: Point[]): void {
+            this._cv.$LABEL_CENTER = centers
         },
         /**
          * Set length unit for line label.
@@ -396,8 +382,8 @@ export class PenCls extends Pencil {
          * pen.set.lengthUnit('cm') // set unit to cm
          * ```
          */
-        lengthUnit(text: string | undefined = undefined): void {
-            this._pen.setLengthUnit(text)
+        lengthUnit(text: string = ''): void {
+            this._cv.$LENGTH_UNIT = text
         },
 
         /**
@@ -410,7 +396,7 @@ export class PenCls extends Pencil {
          * ```
          */
         angle(mode: 'normal' | 'polar' | 'reflex' = 'normal'): void {
-            this._pen.setAngleMode(mode)
+            this._cv.$ANGLE_MODE = mode
         },
 
         /**
@@ -424,7 +410,8 @@ export class PenCls extends Pencil {
          * ```
          */
         projector3D(angle: number = 60, depth: number = 0.5): void {
-            this._pen.setProjector3D(angle, depth)
+            this._cv.$3D_ANGLE = angle
+            this._cv.$3D_DEPTH = depth
         },
 
         /**
@@ -437,7 +424,7 @@ export class PenCls extends Pencil {
          * ```
          */
         border(border: number = 0.2): void {
-            this._pen.setBorder(border)
+            this._cv.$BORDER = border
         },
 
         /**
@@ -450,7 +437,7 @@ export class PenCls extends Pencil {
          * ```
          */
         lineLabel(setting: 'auto' | 'left' | 'right' = 'auto'): void {
-            this._pen.setLineLabel(setting)
+            this._cv.$LINE_LABEL = setting
         },
 
 
@@ -463,8 +450,38 @@ export class PenCls extends Pencil {
          * ```
          */
         reset() {
-            this._pen.setAllDefault()
+            this.weight()
+            this.color()
+            this.alpha()
+            this.dash()
+            this.textAlign()
+            this.textBaseline()
+            this.textSize()
+            this.textItalic()
+            this.textDir()
+            this.textLatex()
+            this.labelCenter()
+            this.lengthUnit()
+            this.angle()
+            this.lineLabel()
+
+        },
+
+        /**
+         * Reset all pen settings, including border and 3D.
+         * @category set
+         * @returns void
+         * ```
+         * pen.resetAll() // reset
+         * ```
+         */
+        resetAll() {
+            this.reset()
+            this.border()
+            this.projector3D()
         }
+
+
     };
 
     /**
@@ -480,7 +497,10 @@ export class PenCls extends Pencil {
      * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
      * ```
      */
-    plot(func: ((t: number) => number) | ((t: number) => Point2D), tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
+    plot(
+        func: ((t: number) => number) | ((t: number) => Point2D),
+        tStart?: number, tEnd?: number, dots = 1000
+    ) {
         this.drawPlot(func, tStart, tEnd, dots)
     }
 
@@ -498,11 +518,16 @@ export class PenCls extends Pencil {
      * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
      * ```
      */
-    plotDash(func: ((t: number) => number) | ((t: number) => Point2D), tStart = this.frame.xmin, tEnd = this.frame.xmax, dots = 1000) {
-        this.save()
+    plotDash(
+        func: ((t: number) => number) | ((t: number) => Point2D),
+        tStart?: number,
+        tEnd?: number,
+        dots = 1000
+    ) {
+        this.cv.save()
         this.set.dash(true)
         this.drawPlot(func, tStart, tEnd, dots)
-        this.restore()
+        this.cv.restore()
     }
 
 
@@ -604,7 +629,7 @@ export class PenCls extends Pencil {
          * ```
          */
         line(m: number, c: number) {
-            const [xmin, xmax] = this._pen.frame.xRange()
+            const { xmin, xmax } = this._pen.cv
             const y = (x: number) => m * x + c
             this._pen.line([xmin, y(xmin)], [xmax, y(xmax)])
         },
@@ -619,7 +644,7 @@ export class PenCls extends Pencil {
          * ```
          */
         horizontal(y: number) {
-            const [xmin, xmax] = this._pen.frame.xRange()
+            const { xmin, xmax } = this._pen.cv
             this._pen.line([xmin, y], [xmax, y])
         },
 
@@ -633,7 +658,7 @@ export class PenCls extends Pencil {
          * ```
          */
         vertical(x: number) {
-            const [ymin, ymax] = this._pen.frame.yRange()
+            const { ymin, ymax } = this._pen.cv
             this._pen.line([x, ymin], [x, ymax])
         },
 
@@ -696,7 +721,7 @@ export class PenCls extends Pencil {
      * ```
      */
     point(position: Point, label?: string) {
-        this.drawDot(position, DEFAULT_POINT_RADIUS_PIXEL)
+        this.cv.disc(position, DEFAULT_POINT_RADIUS_PIXEL)
         if (label !== undefined) this.label.point(position, label)
     }
 
@@ -734,7 +759,7 @@ export class PenCls extends Pencil {
      */
     cutX(position: Point2D | number, label?: string) {
         if (typeof position === 'number') position = [position, 0]
-        this.drawTickVertical(position, DEFAULT_CUTTER_LENGTH_PIXEL)
+        this.cv.tickVert(position, DEFAULT_CUTTER_LENGTH_PIXEL)
         if (label !== undefined) this.label.point(position, label, 270)
     }
 
@@ -751,7 +776,7 @@ export class PenCls extends Pencil {
      */
     cutY(position: Point2D | number, label?: string) {
         if (typeof position === 'number') position = [0, position]
-        this.drawTickHorizontal(position, DEFAULT_CUTTER_LENGTH_PIXEL)
+        this.cv.tickHori(position, DEFAULT_CUTTER_LENGTH_PIXEL)
         if (label !== undefined) this.label.point(position, label, 180)
     }
 
@@ -794,7 +819,7 @@ export class PenCls extends Pencil {
      * @category draw
      * @param center - The coordinates [x,y] of center.
      * @param radius - The radius in pixel.
-     * @param angles - The polar angle range [q1,q2].
+     * @param angles - deprecated
      * @param fill - Whether to fill the inside.
      * @returns void
      * ```
@@ -803,8 +828,8 @@ export class PenCls extends Pencil {
      * ```
      */
     circle(center: Point2D, radius: number, angles: [number, number] = [0, 360], fill = false) {
-        this.drawArc(center, radius, angles)
-        if (fill) this.drawSegment(center, radius, angles)
+        this.cv.circle(center, radius)
+        if (fill) this.cv.disc(center, radius)
     }
 
 
@@ -822,7 +847,7 @@ export class PenCls extends Pencil {
      * ```
      */
     line(startPoint: Point, endPoint: Point, label?: string | number) {
-        this.drawStroke([startPoint, endPoint])
+        this.cv.line([startPoint, endPoint])
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
@@ -839,10 +864,7 @@ export class PenCls extends Pencil {
      * ```
      */
     dash(startPoint: Point, endPoint: Point, label?: string | number) {
-        this.save()
-        this.set.dash(true)
-        this.drawStroke([startPoint, endPoint])
-        this.restore()
+        this.cv.dash([startPoint, endPoint])
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
@@ -859,8 +881,8 @@ export class PenCls extends Pencil {
      * ```
      */
     arrow(startPoint: Point, endPoint: Point, label?: string | number) {
-        this.drawStroke([startPoint, endPoint])
-        this.drawArrowHead(startPoint, endPoint, 5, 0)
+        this.cv.line([startPoint, endPoint])
+        this.cv.arrow(startPoint, endPoint, 5, 0)
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
@@ -918,9 +940,9 @@ export class PenCls extends Pencil {
      * ```
      */
     length(startPoint: Point, endPoint: Point, label?: string | number) {
-        this.drawStroke([startPoint, endPoint])
-        this.drawTick(startPoint, endPoint, 5, 0)
-        this.drawTick(endPoint, startPoint, 5, 0)
+        this.cv.line([startPoint, endPoint])
+        this.cv.tick(startPoint, endPoint, 5, 0)
+        this.cv.tick(endPoint, startPoint, 5, 0)
         if (label !== undefined) this.label.line([startPoint, endPoint], label)
     }
 
@@ -962,7 +984,7 @@ export class PenCls extends Pencil {
      * ```
      */
     polyline(...points: Point[]) {
-        this.drawStroke(points)
+        this.cv.line(points)
     }
 
 
@@ -976,7 +998,7 @@ export class PenCls extends Pencil {
      * ```
      */
     polygon(...points: Point[]) {
-        this.drawShape(points)
+        this.cv.shape(points)
     }
 
     /**
@@ -989,7 +1011,7 @@ export class PenCls extends Pencil {
      * ```
      */
     polyfill(...points: Point[]) {
-        this.drawFill(points)
+        this.cv.fill(points)
     }
 
     /**
@@ -1002,7 +1024,7 @@ export class PenCls extends Pencil {
      * ```
      */
     polyshade(...points: Point[]) {
-        this.drawShade(points)
+        this.cv.shade(points)
     }
 
 
@@ -1308,7 +1330,7 @@ export class PenCls extends Pencil {
      * ```
      */
     equalSide(startPoint: Point, endPoint: Point, tick = 1) {
-        this.drawEqualMark(startPoint, endPoint, 5, tick, 3)
+        this.cv.equalSide(startPoint, endPoint, 5, tick, 3)
     }
 
 
@@ -1345,7 +1367,7 @@ export class PenCls extends Pencil {
      * ```
      */
     parallel(startPoint: Point, endPoint: Point, tick = 1) {
-        this.drawParallelMark(startPoint, endPoint, 4, tick, 6)
+        this.cv.parallel(startPoint, endPoint, 4, tick, 6)
     }
 
 
@@ -1369,7 +1391,7 @@ export class PenCls extends Pencil {
         B ??= Rotate(A, 90, O)
         B = this.pj(B)
 
-        this.drawRightAngle(A, O, B, size)
+        this.cv.rightAngle(A, O, B, size)
     }
 
     /**
@@ -1383,7 +1405,7 @@ export class PenCls extends Pencil {
      * ```
      */
     compass(position: Point2D) {
-        this.drawCompass(position, 17, 20, 3.5)
+        this.cv.compass(position, 17, 20, 3.5)
     }
 
 
@@ -1425,10 +1447,10 @@ export class PenCls extends Pencil {
          * ```
          */
         point(position: Point, text = '', direction?: number, radius = 15) {
-            this._pen.save()
+            this._pen.cv.save()
             if (owl.alphabet(text)) this._pen.set.textItalic(true)
             this._pen.drawLabel(text, position, direction, radius)
-            this._pen.restore()
+            this._pen.cv.restore()
         },
 
         /**
@@ -1457,10 +1479,10 @@ export class PenCls extends Pencil {
          * ```
          */
         vertices(positions: { [k: string]: Point }) {
-            this._pen.save()
-            this._pen.setLabelCenter(...Object.values(positions))
+            this._pen.cv.save()
+            this._pen.set.labelCenter(...Object.values(positions))
             this.points(positions)
-            this._pen.restore()
+            this._pen.cv.restore()
         },
 
 
@@ -1482,7 +1504,7 @@ export class PenCls extends Pencil {
             if (radius < 0) {
                 radius = 28 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5)
             }
-            let dir = this._pen.getDirInPixelByAngle(A, O, B)
+            let dir = this._pen.cv.getMidDir(A, O, B)
 
             this.point(O, text, dir + direction, radius)
         },
@@ -1505,9 +1527,9 @@ export class PenCls extends Pencil {
             let M = Mid(A, B)
 
             if (typeof text === 'number')
-                text = this._pen.getTextWithLengthUnit(text)
+                text = this._pen.cv.unitize(text)
 
-            let dir = this._pen.getDirInPixelByLine(A, B)
+            let dir = this._pen.cv.getLineDir(A, B)
 
             this.point(M, text, dir + direction, radius)
         },
@@ -1525,10 +1547,10 @@ export class PenCls extends Pencil {
          */
         polygon(points: Point[], text: string | number) {
             let pts = this._pen.pjs(points)
-            this._pen.save()
+            this._pen.cv.save()
             if (owl.alphabet(text)) this._pen.set.textItalic(true)
             this._pen.write(Mid(...pts), String(text))
-            this._pen.restore()
+            this._pen.cv.restore()
         },
 
         /**
@@ -1579,11 +1601,11 @@ export class PenCls extends Pencil {
          * ```
          */
         x(label = "x") {
-            this._pen.save()
+            this._pen.cv.save()
             this._pen.set.textItalic(label.length === 1)
             this._pen.drawXAxis()
             this._pen.drawXAxisLabel(label)
-            this._pen.restore()
+            this._pen.cv.restore()
         },
         /**
          * Draw y-axis.
@@ -1595,11 +1617,11 @@ export class PenCls extends Pencil {
          * ```
          */
         y(label = "y") {
-            this._pen.save()
+            this._pen.cv.save()
             this._pen.set.textItalic(label.length === 1)
             this._pen.drawYAxis()
             this._pen.drawYAxisLabel(label)
-            this._pen.restore()
+            this._pen.cv.restore()
         },
         /**
          * Draw both axis.
@@ -1639,10 +1661,10 @@ export class PenCls extends Pencil {
         x(interval = 1, mark = true) {
             this._pen.drawXAxisTick(interval)
             if (mark) {
-                this._pen.save()
+                this._pen.cv.save()
                 this._pen.set.textItalic()
                 this._pen.drawXAxisTickMark(interval)
-                this._pen.restore()
+                this._pen.cv.restore()
             };
         },
         /**
@@ -1658,10 +1680,10 @@ export class PenCls extends Pencil {
         y(interval = 1, mark = true) {
             this._pen.drawYAxisTick(interval)
             if (mark) {
-                this._pen.save()
+                this._pen.cv.save()
                 this._pen.set.textItalic()
                 this._pen.drawYAxisTickMark(interval)
-                this._pen.restore()
+                this._pen.cv.restore()
             };
         },
         /**
@@ -1784,14 +1806,14 @@ export class PenCls extends Pencil {
             let ps3D = Embed(ps, center, xVec, yVec)
 
             if (line) {
-                this._pen.save()
+                this._pen.cv.save()
                 if (dash) this._pen.set.dash(true)
                 if (arc[1] - arc[0] >= 360) {
                     this._pen.polygon(...ps3D)
                 } else {
                     this._pen.polyline(...ps3D)
                 }
-                this._pen.restore()
+                this._pen.cv.restore()
             }
 
             if (shade)
@@ -2266,7 +2288,7 @@ export class PenCls extends Pencil {
      * ```
      */
     background(url: string): void {
-        this.board.setBgImgUrl(url)
+        this.cv.backgroundURL = url
     }
 
 
@@ -2283,7 +2305,7 @@ export class PenCls extends Pencil {
      * ```
      */
     export(html: string, placeholder: string) {
-        return this.board.export(html, placeholder, false)
+        return this.cv.export(html, placeholder, false)
     };
 
 
@@ -2299,7 +2321,7 @@ export class PenCls extends Pencil {
      * ```
      */
     exportTrim(html: string, placeholder: string) {
-        return this.board.export(html, placeholder, true)
+        return this.cv.export(html, placeholder, true)
     };
 
 
@@ -2312,7 +2334,7 @@ export class PenCls extends Pencil {
      * ```
      */
     clear() {
-        this.board.clear()
+        this.cv.clearImg()
     }
 
     /**
@@ -2324,7 +2346,7 @@ export class PenCls extends Pencil {
      * ```
      */
     saveImg() {
-        this.board.save()
+        this.cv.saveImg()
     }
 
     /**
@@ -2336,7 +2358,7 @@ export class PenCls extends Pencil {
      * ```
      */
     restoreImg() {
-        this.board.restore()
+        this.cv.restoreImg()
     }
 
 

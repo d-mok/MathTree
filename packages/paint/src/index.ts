@@ -1,6 +1,6 @@
 
 
 
-export { Pencil } from './canvas/pencil'
+export { Pencil } from './canvas2/pencil'
 
 

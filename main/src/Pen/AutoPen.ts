@@ -144,10 +144,10 @@ export class AutoPenCls {
             let E2: Point2D = [greater ? width : -width, base]
 
             if (vertical) {
-                pen.set.strokeColor('grey')
+                pen.set.color('grey')
                 pen.set.dash([10, 10])
                 pen.graph.vertical(align)
-                pen.set.strokeColor()
+                pen.set.color()
                 pen.set.dash()
             }
 
@@ -156,11 +156,11 @@ export class AutoPenCls {
             pen.arrow([-width, base], [width, base])
             pen.line(B, T)
             pen.arrow(T, E)
-            pen.set.fillColor(solid ? 'black' : 'white')
+            pen.set.color(solid ? 'black' : 'white')
             pen.set.weight(3)
             pen.circle(T, 3, [0, 360], true)
             pen.set.weight()
-            pen.set.fillColor('black')
+            pen.set.color('black')
 
             pen.label.point(B, num.toString(), 270)
         }
@@ -263,12 +263,12 @@ export class AutoPenCls {
         if (trig === 'cos') pen.plot(x => cos(x), 0, 360)
         if (trig === 'tan') {
             pen.plot(x => tan(x), 0, 360)
-            pen.set.strokeColor('grey')
+            pen.set.color('grey')
             pen.set.dash([5, 10])
             pen.set.weight(0.7)
             pen.graph.vertical(90)
             pen.graph.vertical(270)
-            pen.set.strokeColor()
+            pen.set.color()
             pen.set.dash()
             pen.set.weight(1)
         }
@@ -303,23 +303,22 @@ export class AutoPenCls {
             let P: Point2D = [x, y]
             let Q: Point2D = [x, 0]
             let R: Point2D = [anchor, 0]
-            pen.set.fillColor()
+            pen.set.color()
             pen.point(P)
-            pen.set.fillColor('red')
+            pen.set.color('red')
             if (y !== 0) { pen.arrow(P, Q) }
             if (y >= 0) { pen.label.point(Q, label, 270) }
             if (y < 0) { pen.label.point(Q, label, 90) }
 
             if (skipAnchor) return
             pen.set.weight(3)
-            pen.set.strokeColor('blue')
+            pen.set.color('blue')
             pen.line(R, Q)
             pen.set.weight(1)
-            pen.set.strokeColor('red')
+            pen.set.color('red')
         }
 
-        pen.set.strokeColor('red')
-        pen.set.fillColor('red')
+        pen.set.color('red')
         pen.set.dash([5, 5])
         pen.graph.horizontal(k)
         pen.set.dash()
@@ -436,7 +435,7 @@ export class AutoPenCls {
             pen.cutX(P)
             pen.cutX(Q)
             pen.set.weight(3)
-            pen.set.strokeColor('red')
+            pen.set.color('red')
 
             if (a > 0) {
                 if (greater) {
@@ -456,7 +455,7 @@ export class AutoPenCls {
                 }
             }
             pen.set.weight()
-            pen.set.strokeColor()
+            pen.set.color()
             pen.label.point(P, p.toString(), a > 0 ? 315 : 45)
             pen.label.point(Q, q.toString(), a > 0 ? 225 : 135)
         }
@@ -464,7 +463,7 @@ export class AutoPenCls {
         if (p === undefined && q === undefined) {
             if ((a > 0 && greater) || (a < 0 && !greater)) {
                 pen.set.weight(3)
-                pen.set.strokeColor('red')
+                pen.set.color('red')
             }
             if (a > 0) pen.plot(x => x ** 2 + 2)
             if (a < 0) pen.plot(x => -(x ** 2) - 2)
@@ -476,16 +475,17 @@ export class AutoPenCls {
             pen.label.point([0, 0], p.toString(), a > 0 ? 270 : 90)
             if (a > 0) {
                 pen.set.weight(3)
-                pen.set.strokeColor('red')
+                pen.set.color('red')
                 if (greater && equal) pen.plot(func)
                 if (greater && !equal) {
                     pen.plot(func)
-                    pen.set.strokeColor()
-                    pen.set.fillColor('white')
+                    pen.set.color('white')
                     pen.circle([0, 0], 4, [0, 360], true)
+                    pen.set.color()
+                    pen.circle([0, 0], 4, [0, 360])
                 }
                 if (!greater && equal) {
-                    pen.set.fillColor('red')
+                    pen.set.color('red')
                     pen.circle([0, 0], 4, [0, 360], true)
                 }
                 if (!greater && !equal) { }
@@ -493,16 +493,17 @@ export class AutoPenCls {
 
             if (a < 0) {
                 pen.set.weight(3)
-                pen.set.strokeColor('red')
+                pen.set.color('red')
                 if (!greater && equal) pen.plot(func)
                 if (!greater && !equal) {
                     pen.plot(func)
-                    pen.set.strokeColor()
-                    pen.set.fillColor('white')
+                    pen.set.color('white')
                     pen.circle([0, 0], 4, [0, 360], true)
+                    pen.set.color()
+                    pen.circle([0, 0], 4, [0, 360])
                 }
                 if (greater && equal) {
-                    pen.set.fillColor('red')
+                    pen.set.color('red')
                     pen.circle([0, 0], 4, [0, 360], true)
                 }
                 if (greater && !equal) { }
@@ -584,7 +585,7 @@ export class AutoPenCls {
         function drawHeight(vertex: [number, number], base: [number, number][]) {
             let F = PdFoot(base[0], base[1], vertex)
             pen.set.dash([5, 5])
-            pen.set.strokeColor('grey')
+            pen.set.color('grey')
             pen.line(vertex, F)
             if (F[0] === base[0][0] && F[1] === base[0][1]) {
                 pen.line(F, base[1])
@@ -597,7 +598,7 @@ export class AutoPenCls {
             } else {
                 pen.rightAngle(vertex, F, base[0])
             }
-            pen.set.strokeColor()
+            pen.set.color()
 
         }
 
@@ -799,11 +800,11 @@ export class AutoPenCls {
         }
 
         if (tick > 0) {
-            pen.set.fillColor("grey")
+            pen.set.color("grey")
             pen.set.textSize(0.8)
             pen.tick.x(tick)
             pen.tick.y(tick)
-            pen.set.fillColor()
+            pen.set.color()
             pen.set.textSize()
         }
 

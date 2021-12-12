@@ -464,7 +464,6 @@ class Pencil {
             return pt;
         });
         let segments = (0, support_1.split)(filteredPoints, null);
-        console.log(segments);
         for (let seg of segments) {
             if (seg.length === 0)
                 continue;

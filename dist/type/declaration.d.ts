@@ -3111,6 +3111,8 @@ declare module "Pen/Pen" {
          * @ignore
          */
         constructor();
+        private pj;
+        private pjs;
         /**
          * Setup of canvas coordinate range.
          * @category setting
@@ -3229,6 +3231,10 @@ declare module "Pen/Pen" {
              */
             _pen: PenCls;
             /**
+             * @ignore
+             */
+            _cv: import("paint/lib/canvas2/armedconvas").ArmedConvas;
+            /**
              * Set the weight of the pen (line width).
              * @category set
              * @param weight - The line width.
@@ -3238,26 +3244,6 @@ declare module "Pen/Pen" {
              * ```
              */
             weight(weight?: number): void;
-            /**
-             * Set the color of the pen stroke.
-             * @category set
-             * @param color - The line color.
-             * @returns void
-             * ```
-             * pen.set.strokeColor('grey') // set grey line
-             * ```
-             */
-            strokeColor(color?: string): void;
-            /**
-             * Set the color of filling.
-             * @category set
-             * @param color - The filling color.
-             * @returns void
-             * ```
-             * pen.set.fillColor('grey') // set grey filling
-             * ```
-             */
-            fillColor(color?: string): void;
             /**
              * Set the color of both filling and stroke.
              * @category set
@@ -3356,11 +3342,10 @@ declare module "Pen/Pen" {
              * ```
              * pen.set.labelCenter([0,0]) // set center to be [0,0]
              * pen.set.labelCenter(A,B,C,D) // set center to be the centroid of A,B,C,D
-             * pen.set.labelCenter(90) // set label at 90 polar degree (top)
              * pen.set.labelCenter() // set label to be the center of canvas
              * ```
              */
-            labelCenter(...centers: Point[] | [number]): void;
+            labelCenter(...centers: Point[]): void;
             /**
              * Set length unit for line label.
              * @category set
@@ -3370,7 +3355,7 @@ declare module "Pen/Pen" {
              * pen.set.lengthUnit('cm') // set unit to cm
              * ```
              */
-            lengthUnit(text?: string | undefined): void;
+            lengthUnit(text?: string): void;
             /**
              * Set the mode for angle. All angles (e.g. AOB) will be understood as this mode.
              * @category set
@@ -3421,6 +3406,15 @@ declare module "Pen/Pen" {
              * ```
              */
             reset(): void;
+            /**
+             * Reset all pen settings, including border and 3D.
+             * @category set
+             * @returns void
+             * ```
+             * pen.resetAll() // reset
+             * ```
+             */
+            resetAll(): void;
         };
         /**
          * Plot an explicit or parametric function.
@@ -3649,7 +3643,7 @@ declare module "Pen/Pen" {
          * @category draw
          * @param center - The coordinates [x,y] of center.
          * @param radius - The radius in pixel.
-         * @param angles - The polar angle range [q1,q2].
+         * @param angles - deprecated
          * @param fill - Whether to fill the inside.
          * @returns void
          * ```

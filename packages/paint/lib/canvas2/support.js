@@ -1,94 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.split = exports.traceCircle = exports.trace = exports.cross2D = exports.argument = exports.magnitude = exports.vec = exports.meanPoint3D = exports.meanPoint = exports.midPoint = exports.atan2 = exports.cos = exports.sin = exports.force2D = exports.IsReflex = exports.AnglePolar = void 0;
-/**
- * @return angle AOB, measured anticlockwise
- * ```
- * AnglePolar([1,0],[0,0],[0,2]) // 90
- * AnglePolar([2,2],[1,1],[1,3]) // 45
- * AnglePolar([1,3],[1,1],[2,2]) // 315
- * ```
- */
-function AnglePolar(A, O, B) {
-    let a = argument(vec(O, A));
-    let b = argument(vec(O, B));
-    return a <= b ? b - a : 360 + b - a;
-}
-exports.AnglePolar = AnglePolar;
-/**
- * @return check if the polar angle AOB is reflex
- * ```
- * IsReflex([1,0],[0,0],[0,2]) // false
- * IsReflex([2,2],[1,1],[1,3]) // false
- * IsReflex([1,3],[1,1],[2,2]) // true
- * ```
- */
-function IsReflex(A, O, B) {
-    return AnglePolar(A, O, B) > 180;
-}
-exports.IsReflex = IsReflex;
-function projectTo2D(point3D, angle, depth) {
-    let a = angle * Math.PI / 180;
-    let s = Math.sin(a);
-    let c = Math.cos(a);
-    let [x, y, z] = point3D;
-    let x_new = x + depth * y * c;
-    let y_new = z + depth * y * s;
-    return [x_new, y_new];
-}
-function force2D(point, angle, depth) {
-    if (point.length === 3) {
-        return projectTo2D(point, angle, depth);
-    }
-    else {
-        return point;
-    }
-}
-exports.force2D = force2D;
-function sin(degree) {
-    return Math.sin(degree / 180 * Math.PI);
-}
-exports.sin = sin;
-function cos(degree) {
-    return Math.cos(degree / 180 * Math.PI);
-}
-exports.cos = cos;
-function atan2(dy, dx) {
-    return Math.atan2(dy, dx) * 180 / Math.PI;
-}
-exports.atan2 = atan2;
-function midPoint(A, B) {
-    return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
-}
-exports.midPoint = midPoint;
-function meanPoint(...Points) {
-    if (Points.length === 0)
-        return [0, 0];
-    let X = 0;
-    let Y = 0;
-    for (let p of Points) {
-        X += p[0];
-        Y += p[1];
-    }
-    let n = Points.length;
-    return [X / n, Y / n];
-}
-exports.meanPoint = meanPoint;
-function meanPoint3D(...Points) {
-    if (Points.length === 0)
-        return [0, 0, 0];
-    let X = 0;
-    let Y = 0;
-    let Z = 0;
-    for (let p of Points) {
-        X += p[0];
-        Y += p[1];
-        Z += p[2];
-    }
-    let n = Points.length;
-    return [X / n, Y / n, Z / n];
-}
-exports.meanPoint3D = meanPoint3D;
+exports.split = exports.traceCircle = exports.trace = exports.argument = exports.magnitude = exports.vec = void 0;
 function vec(p1, p2) {
     let [x1, y1] = p1;
     let [x2, y2] = p2;
@@ -110,12 +22,6 @@ function argument([x, y]) {
     return angle;
 }
 exports.argument = argument;
-function cross2D(vec1, vec2) {
-    let [x1, y1] = vec1;
-    let [x2, y2] = vec2;
-    return x1 * y2 - y1 * x2;
-}
-exports.cross2D = cross2D;
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.
  * @param func - the func to trace, can be normal or parametric.
