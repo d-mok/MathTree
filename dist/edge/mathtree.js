@@ -37026,9 +37026,18 @@ class AutoPenCls {
             pen.arrow([-width, base], [width, base]);
             pen.line(B, T);
             pen.arrow(T, E);
-            pen.set.color(solid ? 'black' : 'white');
-            pen.set.weight(3);
-            pen.circle(T, 3, [0, 360], true);
+            if (solid) {
+                pen.set.color('black');
+                pen.set.weight(3);
+                pen.circle(T, 3, [0, 360], true);
+            }
+            else {
+                pen.set.color('white');
+                pen.set.weight(3);
+                pen.circle(T, 3, [0, 360], true);
+                pen.set.color('black');
+                pen.circle(T, 3, [0, 360]);
+            }
             pen.set.weight();
             pen.set.color('black');
             pen.label.point(B, num.toString(), 270);
