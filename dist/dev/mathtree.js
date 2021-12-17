@@ -37028,12 +37028,10 @@ class AutoPenCls {
             pen.arrow(T, E);
             if (solid) {
                 pen.set.color('black');
-                pen.set.weight(3);
                 pen.circle(T, 3, [0, 360], true);
             }
             else {
                 pen.set.color('white');
-                pen.set.weight(3);
                 pen.circle(T, 3, [0, 360], true);
                 pen.set.color('black');
                 pen.circle(T, 3, [0, 360]);
