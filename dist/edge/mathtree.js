@@ -37966,7 +37966,6 @@ exports.AutoPenCls = AutoPenCls;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PenCls = void 0;
-// import { Pencil } from 'sapphire-js'
 const paint_1 = __webpack_require__(5619);
 /**
  * @ignore
@@ -37976,9 +37975,6 @@ const DEFAULT_POINT_RADIUS_PIXEL = 2;
  * @ignore
  */
 const DEFAULT_CUTTER_LENGTH_PIXEL = 5;
-/**
- * @category DrawingPen
- */
 class PenCls extends paint_1.Pencil {
     /**
      * @ignore
@@ -37999,11 +37995,7 @@ class PenCls extends paint_1.Pencil {
              */
             AUTO_BORDER: false,
             /**
-             * Set the coordinate range of the canvas.
-             * @category SetupRange
-             * @param xRange - The range [xmin,xmax].
-             * @param yRange - The range [ymin,ymax].
-             * @returns void
+             * Set the coordinate range.
              * ```
              * pen.range.set([-5,5],[-2,4]) // -5<x<5 and -2<y<4
              * ```
@@ -38012,15 +38004,10 @@ class PenCls extends paint_1.Pencil {
                 this._pen.initRange(xRange, yRange);
             },
             /**
-             * Set the coordinate range of the canvas with given size and center.
-             * Equivalent to pen.range.range([-size, size], [-size, size]) but shifted center.
-             * @category SetupRange
-             * @param size - The max x and y coordinates in range.
-             * @param center - [x,y] coordinates of the center.
-             * @returns void
+             * Set the coordinate range as a square.
              * ```
-             * pen.range.square(5) // define range -5<x<5 and -5<y<5
-             * pen.range.square(5,[1,2]) // define range -4<x<6 and -3<y<7
+             * pen.range.square(5) // -5<x<5 and -5<y<5
+             * pen.range.square(5,[1,2]) // -4<x<6 and -3<y<7
              * ```
              */
             square(size, center = [0, 0]) {
@@ -38028,77 +38015,26 @@ class PenCls extends paint_1.Pencil {
                 this.set([x - size, x + size], [y - size, y + size]);
             },
             /**
-             * Set the coordinate range by specifying in-view points.
-             * @category SetupRange
-             * @param points - An array of in-view points [x,y], or circle [[h,k,r]], or sphere [[a,b,c],r]
-             * @returns void
+             * Set the coordinate range by capture points or objects.
+             * @param things - point / circle [[h,k],r] / sphere [[a,b,c],r]
              * ```
              * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
              * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
              * ```
              */
-            capture(...points) {
-                let arr = [];
-                for (let p of points) {
-                    if (Array.isArray(p[0])) {
-                        let [center, r] = p;
-                        if (owl.point2D(center))
-                            arr.push(...this._pen.getCircleCorners(center, r));
-                        if (owl.point3D(center))
-                            arr.push(...this._pen.getSphereCorners(center, r));
-                    }
-                    else {
-                        arr.push(p);
-                    }
-                }
-                let pts = this._pen.pjs(arr);
-                let xmin = pts[0][0];
-                let xmax = pts[0][0];
-                let ymin = pts[0][1];
-                let ymax = pts[0][1];
-                for (let i = 0; i < pts.length; i++) {
-                    let x = pts[i][0];
-                    let y = pts[i][1];
-                    if (x < xmin)
-                        xmin = x;
-                    if (x > xmax)
-                        xmax = x;
-                    if (y < ymin)
-                        ymin = y;
-                    if (y > ymax)
-                        ymax = y;
-                }
-                let xSize = xmax - xmin;
-                let ySize = ymax - ymin;
-                if (xSize === 0 && ySize === 0) {
-                    xmax++;
-                    xmin--;
-                    ymax++;
-                    ymin--;
-                }
-                if (xSize === 0 && ySize !== 0) {
-                    xmax += ySize / 2;
-                    xmin -= ySize / 2;
-                }
-                if (xSize !== 0 && ySize === 0) {
-                    ymax += xSize / 2;
-                    ymin -= xSize / 2;
-                }
-                this.set([xmin, xmax], [ymin, ymax]);
+            capture(...things) {
+                this._pen.cv.capture(things);
                 this.AUTO_BORDER = true;
             },
             /**
-             * Set the coordinate range by specifying in-view points, include O(0,0).
-             * @category SetupRange
-             * @param points - An array of in-view points [x,y], or circle [[h,k,r]], or sphere [[a,b,c],r]
-             * @returns void
+             * Set the coordinate range by capture points or objects, include O(0,0).
+             * @param things - point / circle [[h,k],r] / sphere [[a,b,c],r]
              * ```
-             * pen.range.extend([1,2],[3,4]) //  [0,0], [1,2], [3,4] must be in-view
-             * // equivalent to pen.range.capture([0,0],[1,2],[3,4])
+             * pen.range.extend([1,2],[3,4]) // [0,0], [1,2], [3,4] must be in-view
              * ```
              */
-            extend(...points) {
-                this.capture([0, 0], ...points);
+            extend(...things) {
+                this.capture([0, 0], ...things);
             }
         };
         /**
@@ -38111,58 +38047,43 @@ class PenCls extends paint_1.Pencil {
              */
             _pen: this,
             /**
-             * Set the size of the canvas.
-             * @category SetupSize
-             * @param width - The scale of the width.
-             * @param height - The scale of the height, default to be same as width
-             * @returns void
+             * Set the canvas size.
              * ```
-             * pen.size.set(0.5,2)
-             * // half the standard width, double the standard height
+             * pen.size.set(0.5,2) // width = 0.5 inch, height = 2 inch
              * ```
              */
-            set(width = 1, height = width) {
-                this._pen.initSize(width, height);
+            set(widthInch = 1, heightInch = widthInch) {
+                this._pen.initSize(widthInch, heightInch);
                 if (this._pen.range.AUTO_BORDER)
                     this._pen.initOuterBorder();
                 this._pen.set.reset();
             },
             /**
-             * Set the size of the canvas by resolution.
-             * @category SetupSize
-             * @param xPPI - The scale per unit x.
-             * @param yPPI - The scale per unit y, if not provided, follow x.
-             * @returns void
+             * Set the canvas size by resolution.
              * ```
              * pen.size.resolution(0.1,0.2)
-             * // 0.1 scale for each x-unit, and 0.2 scale for each y-unit.
+             * // 0.1 inch for each x-unit, and 0.2 inch for each y-unit
              * ```
              */
-            resolution(xPPI = 0.1, yPPI = xPPI) {
-                let xScale = this._pen.cv.dx() * xPPI;
-                let yScale = this._pen.cv.dy() * yPPI;
+            resolution(xIPU = 0.1, yIPU = xIPU) {
+                let xScale = this._pen.cv.dx() * xIPU;
+                let yScale = this._pen.cv.dy() * yIPU;
                 this.set(xScale, yScale);
             },
             /**
-             * Set the size of the canvas, lock xy ratio.
-             * @category SetupSize
-             * @param width - The max scale of the width.
-             * @param height - The max scale of the height, default to be same as width
-             * @returns void
+             * Set the canvas size, locking x-y ratio.
              * ```
-             * pen.size.lock(0.5)
-             * // max at half the standard width and height, with yPPI = xPPI.
-             * pen.size.lock(1, 2)
-             * // max at standard width and double standard height, with yPPI = xPPI.
+             * pen.size.lock(1, 2) // max at width = 1 inch and height = 2 inch
+             * pen.size.lock(0.5) // max at both = 0.5 inch
              * ```
              */
-            lock(width = 1, height = width) {
+            lock(maxWidthInch = 1, maxHeightInch = maxWidthInch) {
                 let ratio = this._pen.cv.yxRatio();
-                if (width * ratio < height) {
-                    this.set(width, width * ratio);
+                if (maxWidthInch * ratio < maxHeightInch) {
+                    this.set(maxWidthInch, maxWidthInch * ratio);
                 }
                 else {
-                    this.set(height / ratio, height);
+                    this.set(maxHeightInch / ratio, maxHeightInch);
                 }
             },
         };
@@ -38181,9 +38102,6 @@ class PenCls extends paint_1.Pencil {
             _cv: this.cv,
             /**
              * Set the weight of the pen (line width).
-             * @category set
-             * @param weight - The line width.
-             * @returns void
              * ```
              * pen.set.weight(2) // set a bold line
              * ```
@@ -38193,11 +38111,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set the color of both filling and stroke.
-             * @category set
-             * @param color - The color.
-             * @returns void
              * ```
-             * pen.set.color('grey') // set grey filling and stroke
+             * pen.set.color('grey')
              * ```
              */
             color(color = "black") {
@@ -38205,23 +38120,21 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set the transparency.
-             * @category set
-             * @param opaque - The opaque value, from 0 to 1. 0 is completely transparent.
-             * @returns void
+             * @param value - 0 is transparent, 1 is opaque
              * ```
-             * pen.set.alpha(0.9) // set slightly transparent
+             * pen.set.alpha(0.9) // slightly transparent
              * ```
              */
-            alpha(opaque = 1) {
-                this._cv.$ALPHA = opaque;
+            alpha(value = 1) {
+                this._cv.$ALPHA = value;
             },
             /**
              * Set the dash pattern of line.
-             * @category set
-             * @param segments - The dash pattern, as [5,5] or 5 or true.
-             * @returns void
              * ```
-             * pen.set.dash([10,5]) // set dash line
+             * pen.set.dash([5,5]) // set dash line
+             * pen.set.dash(5) // same
+             * pen.set.dash(true) // same
+             * pen.set.dash(false) // set solid line
              * ```
              */
             dash(segments = []) {
@@ -38229,11 +38142,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set the horizontal alignment of text.
-             * @category set
-             * @param align - The alignment {'left','right','center'}.
-             * @returns void
              * ```
-             * pen.set.textAlign('left') // set align to left
+             * pen.set.textAlign('left') // {'left','right','center'}
              * ```
              */
             textAlign(align = "center") {
@@ -38241,11 +38151,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set the vertical alignment of text.
-             * @category set
-             * @param baseline - The alignment {'top','bottom','middle'}.
-             * @returns void
              * ```
-             * pen.set.textBaseline('bottom') // set align to bottom
+             * pen.set.textBaseline('bottom') // {'top','bottom','middle'}
              * ```
              */
             textBaseline(baseline = "middle") {
@@ -38253,11 +38160,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set the size of text.
-             * @category set
-             * @param size - The text size.
-             * @returns void
              * ```
-             * pen.set.textSize(2) // set larger text
+             * pen.set.textSize(2) // double-sized text
              * ```
              */
             textSize(size = 1) {
@@ -38265,11 +38169,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set italic style of text.
-             * @category set
-             * @param italic - Italic or not.
-             * @returns void
              * ```
-             * pen.set.textItalic(true) // set italic to true
+             * pen.set.textItalic(true)
              * ```
              */
             textItalic(italic = false) {
@@ -38277,11 +38178,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set text direction.
-             * @category set
-             * @param angle - angle to rotate text.
-             * @returns void
              * ```
-             * pen.set.textDir(90) // set vertical text
+             * pen.set.textDir(90) // vertical text
              * ```
              */
             textDir(angle = 0) {
@@ -38289,11 +38187,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set text latex mode.
-             * @category set
-             * @param on - turn on or off.
-             * @returns void
              * ```
-             * pen.set.textLatex(true) // turn on latex mode
+             * pen.set.textLatex(true)
              * ```
              */
             textLatex(on = false) {
@@ -38301,13 +38196,9 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set the center for label dodge.
-             * @category set
-             * @param center - the center coordinates or a polar degree
-             * @returns void
              * ```
-             * pen.set.labelCenter([0,0]) // set center to be [0,0]
-             * pen.set.labelCenter(A,B,C,D) // set center to be the centroid of A,B,C,D
-             * pen.set.labelCenter() // set label to be the center of canvas
+             * pen.set.labelCenter(A,B,C,D) // centroid of A,B,C,D
+             * pen.set.labelCenter() // center of canvas
              * ```
              */
             labelCenter(...centers) {
@@ -38315,23 +38206,18 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set length unit for line label.
-             * @category set
-             * @param text - the unit
-             * @returns void
              * ```
-             * pen.set.lengthUnit('cm') // set unit to cm
+             * pen.set.lengthUnit('cm')
              * ```
              */
             lengthUnit(text = '') {
                 this._cv.$LENGTH_UNIT = text;
             },
             /**
-             * Set the mode for angle. All angles (e.g. AOB) will be understood as this mode.
-             * @category set
-             * @param mode - the mode: 'normal' | 'polar' | 'reflex'
-             * @returns void
+             * Set the mode for angle.
+             * All angles (e.g. AOB) will be understood as this mode.
              * ```
-             * pen.set.angle('polar') // set mode to 'polar'
+             * pen.set.angle('polar') // {normal' | 'polar' | 'reflex'}
              * ```
              */
             angle(mode = 'normal') {
@@ -38339,12 +38225,9 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Set 3D projector function.
-             * @category set
-             * @param angle - The tilted angle of 3d projeciton, default 60.
-             * @param depth - The depth for y-axis, default is 0.5.
-             * @returns void
              * ```
              * pen.set.Projector3D(60, 0.5)
+             * // tilted 60 degree, 0.5 depth for y-axis
              * ```
              */
             projector3D(angle = 60, depth = 0.5) {
@@ -38352,12 +38235,9 @@ class PenCls extends paint_1.Pencil {
                 this._cv.$3D_DEPTH = depth;
             },
             /**
-             * Ser the border scale when auto creating outer border.
-             * @category set
-             * @param border - The width of border, same scale as pen.size.set()
-             * @returns void
+             * Ser the border inch when auto creating outer border.
              * ```
-             * pen.set.border(0.2)
+             * pen.set.border(0.2) // 0.2 inch
              * ```
              */
             border(border = 0.2) {
@@ -38365,11 +38245,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Ser the mode for direction of line label.
-             * @category set
-             * @param setting - The mode, can be 'auto', 'left' or 'right'
-             * @returns void
              * ```
-             * pen.set.lineLabel('auto')
+             * pen.set.lineLabel('auto') // {'auto', 'left', 'right'}
              * ```
              */
             lineLabel(setting = 'auto') {
@@ -38377,11 +38254,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Reset all pen settings.
-             * @category set
-             * @returns void
-             * ```
-             * pen.reset() // reset
-             * ```
              */
             reset() {
                 this.weight();
@@ -38401,11 +38273,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Reset all pen settings, including border and 3D.
-             * @category set
-             * @returns void
-             * ```
-             * pen.resetAll() // reset
-             * ```
              */
             resetAll() {
                 this.reset();
@@ -38424,69 +38291,46 @@ class PenCls extends paint_1.Pencil {
             _pen: this,
             /**
              * Draw a circle (x-h)^2+(y-k)^2 = r^2.
-             * @category graph
-             * @param center - The center coordinates [h,k].
-             * @param radius - The radius.
-             * @returns void
              * ```
-             * pen.graph.circle([1,2],3) // draw (x-1)^2+(y-2)^2 = 9.
+             * pen.graph.circle([1,2],3) // (x-1)^2+(y-2)^2 = 9
              * ```
              */
             circle(center, radius) {
                 const [h, k] = center;
-                this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 360);
+                this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 365);
             },
             /**
-             * Draw an arc.
-             * @category graph
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @returns void
+             * Draw an arc. AOB must be in polar direction.
              * ```
-             * pen.graph.arc([0,0],[1,0],[-1,0]) // draw upper semi-unit circle
+             * pen.graph.arc([0,0],[1,0],[-1,0]) // upper semi-unit circle
+             *
              * ```
              */
-            arc(center, pStart, pEnd) {
-                this._pen.drawStrokeSectoroid(center, pStart, pEnd, []);
+            arc(O, A, B) {
+                this._pen.cv.sectoroidLine(O, A, B, []);
             },
             /**
-             * Draw a sector.
-             * @category graph
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @returns void
+             * Draw a sector. AOB must be in polar direction.
              * ```
-             * pen.graph.sector([0,0],[1,0],[0,1]) // draw a quarter circle sector
+             * pen.graph.sector([0,0],[1,0],[0,1]) // quarter circle sector
              * ```
              */
-            sector(center, pStart, pEnd) {
-                this._pen.drawStrokeSectoroid(center, pStart, pEnd, [center, pStart]);
+            sector(O, A, B) {
+                this._pen.cv.sectoroidLine(O, A, B, [O, A]);
             },
             /**
-             * Draw a circle segment.
-             * @category graph
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @returns void
+             * Draw a circle segment. AOB must be in polar direction.
              * ```
-             * pen.graph.segment([0,0],[1,0],[0,1]) // draw a quarter circle segment
+             * pen.graph.segment([0,0],[1,0],[0,1]) // quarter circle segment
              * ```
              */
-            segment(center, pStart, pEnd) {
-                this._pen.drawStrokeSectoroid(center, pStart, pEnd, [pStart]);
+            segment(O, A, B) {
+                this._pen.cv.sectoroidLine(O, A, B, [A]);
             },
             /**
-             * Draw a quadratic graph y=ax^2+bx+c.
-             * @category graph
-             * @param a - The coeff of x^2.
-             * @param b - The coeff of x.
-             * @param c - The constant.
-             * @returns void
+             * Draw a quadratic graph.
              * ```
-             * pen.graph.quadratic(1,2,3) // draw y=x^2+2x+3.
+             * pen.graph.quadratic(1,2,3) // y=x^2+2x+3.
              * ```
              */
             quadratic(a, b, c) {
@@ -38494,12 +38338,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a line y=mx+c.
-             * @category graph
-             * @param m - The slope.
-             * @param c - The y-intercept.
-             * @returns void
              * ```
-             * pen.graph.line(2,1) // draw the line y=2x+1
+             * pen.graph.line(2,1) // y=2x+1
              * ```
              */
             line(m, c) {
@@ -38508,40 +38348,27 @@ class PenCls extends paint_1.Pencil {
                 this._pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
             },
             /**
-             * Draw a horizontal line y=constant.
-             * @category graph
-             * @param y - The constant value of y.
-             * @returns void
+             * Draw a horizontal line.
              * ```
-             * pen.graph.horizontal(2) // draw the line y=2
+             * pen.graph.horizontal(2) // y=2
              * ```
              */
             horizontal(y) {
-                const { xmin, xmax } = this._pen.cv;
-                this._pen.line([xmin, y], [xmax, y]);
+                this._pen.cv.lineHori(y);
             },
             /**
-             * Draw a vertical line x=constant.
-             * @category graph
-             * @param x - The constant value of x.
-             * @returns void
+             * Draw a vertical line.
              * ```
-             * pen.graph.vertical(2) // draw the line x=2
+             * pen.graph.vertical(2) // x=2
              * ```
              */
             vertical(x) {
-                const { ymin, ymax } = this._pen.cv;
-                this._pen.line([x, ymin], [x, ymax]);
+                this._pen.cv.lineVert(x);
             },
             /**
              * Draw a line ax+by+c=0.
-             * @category graph
-             * @param a - The coeff of x.
-             * @param b - The coeff of y.
-             * @param c - The constant.
-             * @returns void
              * ```
-             * pen.graph.linear(1,2,3) // draw the line x+2y+3=0
+             * pen.graph.linear(1,2,3) // x+2y+3=0
              * ```
              */
             linear(a, b, c) {
@@ -38554,10 +38381,9 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a line through two points.
-             * @category graph
-             * @param A - one point
-             * @param B - another point
-             * @returns void
+             * ```
+             * pen.graph.through([0,0],[1,1]) // y = x
+             * ```
              */
             through(A, B) {
                 let ptA = this._pen.pj(A);
@@ -38567,10 +38393,9 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw the perpendicular bisector of two points.
-             * @category graph
-             * @param A - one point
-             * @param B - another point
-             * @returns void
+             * ```
+             * pen.graph.perpBisector([0,0],[2,2]) // y = -x+2
+             * ```
              */
             perpBisector(A, B) {
                 let [a, b, c] = lin().byBisector(A, B).toLinear();
@@ -38587,11 +38412,7 @@ class PenCls extends paint_1.Pencil {
              */
             _pen: this,
             /**
-             * Fill a circle (x-h)^2+(y-k)^2 = r^2.
-             * @category fill
-             * @param center - The center coordinates [h,k].
-             * @param radius - The radius.
-             * @returns void
+             * Fill a circle.
              * ```
              * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
              * ```
@@ -38601,61 +38422,41 @@ class PenCls extends paint_1.Pencil {
                 this._pen.polyfill(...points);
             },
             /**
-             * Fill a sector.
-             * @category fill
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @returns void
+             * Fill a sector. AOB must be in polar direction.
              * ```
              * pen.fill.sector([0,0],[1,0],[0,1]) // fill a quarter circle sector
              * ```
              */
-            sector(center, pStart, pEnd) {
-                this._pen.drawFillSectoroid(center, pStart, pEnd, [center]);
+            sector(O, A, B) {
+                this._pen.cv.sectoroidFill(O, A, B, [O]);
             },
             /**
-             * Fill a circle segment.
-             * @category fill
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @returns void
+             * Fill a circle segment. AOB must be in polar direction.
              * ```
              * pen.fill.segment([0,0],[1,0],[0,1]) // fill a quarter circle segment
              * ```
              */
-            segment(center, pStart, pEnd) {
-                this._pen.drawFillSectoroid(center, pStart, pEnd, []);
+            segment(O, A, B) {
+                this._pen.cv.sectoroidFill(O, A, B, []);
             },
             /**
-             * Fill a sector-like area.
-             * @category fill
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @param vertices - connect to these points instead of the center
-             * @returns void
+             * Fill a sector-like area. AOB must be in polar direction.
              * ```
              * pen.fill.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // fill a long sector-like region
              * ```
              */
-            sectoroid(center, pStart, pEnd, vertices) {
-                this._pen.drawFillSectoroid(center, pStart, pEnd, vertices);
+            sectoroid(O, A, B, vertices) {
+                this._pen.cv.sectoroidFill(O, A, B, vertices);
             },
             /**
              * Fill a rectangle.
-             * @category fill
-             * @param vertex1 - a vertex
-             * @param vertex2 - the diagonally opposite vertex
-             * @returns void
              * ```
              * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
              * ```
              */
-            rect(vertex1, vertex2) {
-                let [a, b] = vertex1;
-                let [c, d] = vertex2;
+            rect(A, C) {
+                let [a, b] = A;
+                let [c, d] = C;
                 this._pen.polyfill([a, b], [c, b], [c, d], [a, d]);
             }
         };
@@ -38670,10 +38471,6 @@ class PenCls extends paint_1.Pencil {
             _pen: this,
             /**
              * Shade a circle (x-h)^2+(y-k)^2 = r^2.
-             * @category shade
-             * @param center - The center coordinates [h,k].
-             * @param radius - The radius.
-             * @returns void
              * ```
              * pen.shade.circle([1,2],3) // shade (x-1)^2+(y-2)^2 = 9.
              * ```
@@ -38683,61 +38480,41 @@ class PenCls extends paint_1.Pencil {
                 this._pen.polyshade(...points);
             },
             /**
-             * Shade a sector.
-             * @category shade
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @returns void
+             * Shade a sector. AOB must be in polar direction.
              * ```
              * pen.shade.sector([0,0],[1,0],[0,1]) // shade a quarter circle sector
              * ```
              */
-            sector(center, pStart, pEnd) {
-                this._pen.drawShadeSectoroid(center, pStart, pEnd, [center]);
+            sector(O, A, B) {
+                this._pen.cv.sectoroidShade(O, A, B, [O]);
             },
             /**
-             * Shade a circle segment.
-             * @category shade
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @returns void
+             * Shade a circle segment. AOB must be in polar direction.
              * ```
              * pen.shade.segment([0,0],[1,0],[0,1]) // shade a quarter circle segment
              * ```
              */
-            segment(center, pStart, pEnd) {
-                this._pen.drawShadeSectoroid(center, pStart, pEnd, []);
+            segment(O, A, B) {
+                this._pen.cv.sectoroidShade(O, A, B, []);
             },
             /**
-             * Shade a sector-like area.
-             * @category shade
-             * @param center - The center coordinates [h,k].
-             * @param pStart - starting point of the arc
-             * @param pEnd - ending point of the arc, in polar direction
-             * @param vertices - connect to these points instead of the center
-             * @returns void
+             * Shade a sector-like area. AOB must be in polar direction.
              * ```
              * pen.shade.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // shade a long sector-like region
              * ```
              */
-            sectoroid(center, pStart, pEnd, vertices) {
-                this._pen.drawShadeSectoroid(center, pStart, pEnd, vertices);
+            sectoroid(O, A, B, vertices) {
+                this._pen.cv.sectoroidShade(O, A, B, vertices);
             },
             /**
              * Shade a rectangle.
-             * @category shade
-             * @param vertex1 - a vertex
-             * @param vertex2 - the diagonally opposite vertex
-             * @returns void
              * ```
              * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
              * ```
              */
-            rect(vertex1, vertex2) {
-                let [a, b] = vertex1;
-                let [c, d] = vertex2;
+            rect(A, C) {
+                let [a, b] = A;
+                let [c, d] = C;
                 this._pen.polyshade([a, b], [c, b], [c, d], [a, d]);
             }
         };
@@ -38752,9 +38529,6 @@ class PenCls extends paint_1.Pencil {
             _pen: this,
             /**
              * Draw a constraint line.
-             * @category linProg
-             * @param constraints - The constraints to draw
-             * @returns void
              * ```
              * pen.linProg.constraint([1,2,'>',3])
              * ```
@@ -38773,9 +38547,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Shade the region of the constraint set.
-             * @category linProg
-             * @param constraints - The constraint to shade
-             * @returns void
              * ```
              * pen.linProg.shadeConstraints([[1,2,'>',3]])
              * ```
@@ -38786,9 +38557,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Label coordinates of the vertices of the feasible region.
-             * @category linProg
-             * @param constraints - The constraint set
-             * @returns void
              * ```
              * pen.linProg.verticesCoord([
              * [1,0,'>',0],
@@ -38814,132 +38582,87 @@ class PenCls extends paint_1.Pencil {
             _pen: this,
             /**
              * Add a label to a point.
-             * @category text
-             * @param position - The coordinates [x,y] of the point to label.
-             * @param text - The string to write.
-             * @param direction - The direction to offset, given as a polar angle.
-             * @param radius - The pixel distance to offset from the position.
-             * @returns void
              * ```
              * pen.label.point([1,2],'A',180)
              * // label the point [1,2] as 'A', place the label on the left (180 degree)
              * ```
              */
-            point(position, text = '', direction, radius = 15) {
-                this._pen.cv.save();
-                if (owl.alphabet(text))
-                    this._pen.set.textItalic(true);
-                this._pen.drawLabel(text, position, direction, radius);
-                this._pen.cv.restore();
+            point(point, text = '', dir, radius = 15) {
+                if (dir !== undefined) {
+                    this._pen.cv.labelPoint(text, point, dir, radius);
+                }
+                else {
+                    this._pen.cv.labelPointAuto(text, point, radius);
+                }
             },
             /**
              * Add a label to points, using index as text.
-             * @category text
-             * @param positions - {label:position}.
-             * @returns void
              * ```
              * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
              * ```
              */
-            points(positions) {
-                for (let k in positions) {
-                    this.point(positions[k], k);
+            points(points) {
+                for (let k in points) {
+                    this.point(points[k], k);
                 }
             },
             /**
              * Add a label to points, using index as text, with label center set as center of points.
-             * @category text
-             * @param positions - {label:position}.
-             * @returns void
              * ```
              * pen.label.vertices({A,B}) // label point A as 'A', point B as 'B'
              * ```
              */
-            vertices(positions) {
+            vertices(points) {
                 this._pen.cv.save();
-                this._pen.set.labelCenter(...Object.values(positions));
-                this.points(positions);
+                this._pen.set.labelCenter(...Object.values(points));
+                this.points(points);
                 this._pen.cv.restore();
             },
             /**
-             * Add a label to an angle AOB, non-reflex.
-             * @category text
-             * @param anglePoints - An array [A,O,B] for the coordinates of A,O,B.
-             * @param text - The string to write.
-             * @param direction - The direction to offset, given as a polar angle,relative to mid-ray of angle AOB.
-             * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 25 : 30).
-             * @returns void
+             * Add a label to an angle AOB.
              * ```
              * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
              * // label the angle as 'x'
              * ```
              */
-            angle([A, O, B], text, direction = 0, radius = -1) {
-                if (typeof text === 'number')
-                    text = text + '°';
+            angle([A, O, B], text, dir = 0, radius = -1) {
                 if (radius < 0) {
-                    radius = 28 + this._pen.getSmallAngleExtraPixel(A, O, B, 40, 1.5);
+                    radius = 28 + this._pen.cv.getAngleAllowance(A, O, B, 40, 1.5);
                 }
-                let dir = this._pen.cv.getMidDir(A, O, B);
-                this.point(O, text, dir + direction, radius);
+                this._pen.cv.labelAngle(text, [A, O, B], dir, radius);
             },
             /**
              * Add a label to a line AB.
-             * @category text
-             * @param linePoints - An array [A,B] for the coordinates of AB.
-             * @param text - The string to write.
-             * @param direction - The direction to offset, given as a polar angle,relative to the left or right normal of AB.
-             * @param radius - The pixel distance to offset from the position. If negative, default to (text.length <= 2 ? 15 : text.length <= 4 ? 20 : 25).
-             * @returns void
              * ```
              * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
              * ```
              */
-            line([A, B], text, direction = 0, radius = 15) {
-                A = this._pen.pj(A);
-                B = this._pen.pj(B);
-                let M = Mid(A, B);
-                if (typeof text === 'number')
-                    text = this._pen.cv.unitize(text);
-                let dir = this._pen.cv.getLineDir(A, B);
-                this.point(M, text, dir + direction, radius);
+            line([A, B], text, dir = 0, radius = 15) {
+                this._pen.cv.labelLine(text, [A, B], dir, radius);
             },
             /**
              * Add a label to a polygon.
-             * @category text
-             * @param points - the points of the polygon.
-             * @param text - The string to write.
-             * @returns void
              * ```
              * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'
              * ```
              */
             polygon(points, text) {
                 let pts = this._pen.pjs(points);
-                this._pen.cv.save();
-                if (owl.alphabet(text))
-                    this._pen.set.textItalic(true);
-                this._pen.write(Mid(...pts), String(text));
-                this._pen.cv.restore();
+                this._pen.cv.labelPoint(String(text), Mid(...pts), 0, 0);
             },
             /**
              * Add a coordinates label to a point.
-             * @category text
-             * @param position - The coordinates [x,y] of the point to label.
-             * @param direction - The direction to offset, given as a polar angle.
-             * @param radius - The pixel distance to offset from the position.
-             * @returns void
              * ```
              * pen.label.coordinates([1,2],180)
              * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
              * ```
              */
-            coordinates(point, direction, radius = 15) {
+            coordinates(point, dir, radius = 15) {
                 let [x, y] = point;
                 x = Fix(x, 1);
                 y = Fix(y, 1);
                 let text = `(${x}, ${y})`;
-                this.point(point, text, direction, radius);
+                this.point(point, text, dir, radius);
             }
         };
         /**
@@ -38953,42 +38676,26 @@ class PenCls extends paint_1.Pencil {
             _pen: this,
             /**
              * Draw x-axis.
-             * @category axis
-             * @param label - The axis label.
-             * @returns void
              * ```
              * pen.axis.x('time') // draw the x-axis, label as 'time'
              * ```
              */
             x(label = "x") {
-                this._pen.cv.save();
-                this._pen.set.textItalic(label.length === 1);
-                this._pen.drawXAxis();
-                this._pen.drawXAxisLabel(label);
-                this._pen.cv.restore();
+                this._pen.cv.xAxis();
+                this._pen.cv.xAxisLabel(label);
             },
             /**
              * Draw y-axis.
-             * @category axis
-             * @param label - The axis label.
-             * @returns void
              * ```
              * pen.axis.y('height') // draw the y-axis, label as 'height'
              * ```
              */
             y(label = "y") {
-                this._pen.cv.save();
-                this._pen.set.textItalic(label.length === 1);
-                this._pen.drawYAxis();
-                this._pen.drawYAxisLabel(label);
-                this._pen.cv.restore();
+                this._pen.cv.yAxis();
+                this._pen.cv.yAxisLabel(label);
             },
             /**
              * Draw both axis.
-             * @category axis
-             * @param xlabel - The x-axis label.
-             * @param ylabel - The y-axis label.
-             * @returns void
              * ```
              * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
              * ```
@@ -39009,50 +38716,28 @@ class PenCls extends paint_1.Pencil {
             _pen: this,
             /**
              * Draw ticks on the x-axis.
-             * @category axisTick
-             * @param interval - The tick interval.
-             * @param mark - Whether to label number at ticks.
-             * @returns void
              * ```
              * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
              * ```
              */
             x(interval = 1, mark = true) {
-                this._pen.drawXAxisTick(interval);
-                if (mark) {
-                    this._pen.cv.save();
-                    this._pen.set.textItalic();
-                    this._pen.drawXAxisTickMark(interval);
-                    this._pen.cv.restore();
-                }
-                ;
+                this._pen.cv.xAxisTick(interval);
+                if (mark)
+                    this._pen.cv.xAxisTickMark(interval);
             },
             /**
              * Draw ticks on the y-axis.
-             * @category axisTick
-             * @param interval - The tick interval.
-             * @param mark - Whether to label number at ticks.
-             * @returns void
              * ```
              * pen.tick.y(2) // draw ticks on the y-axis, at interval 2 units
              * ```
              */
             y(interval = 1, mark = true) {
-                this._pen.drawYAxisTick(interval);
-                if (mark) {
-                    this._pen.cv.save();
-                    this._pen.set.textItalic();
-                    this._pen.drawYAxisTickMark(interval);
-                    this._pen.cv.restore();
-                }
-                ;
+                this._pen.cv.yAxisTick(interval);
+                if (mark)
+                    this._pen.cv.yAxisTickMark(interval);
             },
             /**
              * Draw ticks on both axis.
-             * @category axisTick
-             * @param interval - The tick interval.
-             * @param mark - Whether to label number at ticks.
-             * @returns void
              * ```
              * pen.tick.xy(2) // draw ticks on both axis, at interval 2 units
              * ```
@@ -39073,33 +38758,24 @@ class PenCls extends paint_1.Pencil {
             _pen: this,
             /**
              * Draw gridlines on the x-axis.
-             * @category axisGrid
-             * @param interval - The grid interval.
-             * @returns void
              * ```
              * pen.grid.x(2) // draw gridlines on the x-axis, at interval 2 units
              * ```
              */
             x(interval = 1) {
-                this._pen.drawXAxisGrid(interval);
+                this._pen.cv.xAxisGrid(interval);
             },
             /**
              * Draw gridlines on the y-axis.
-             * @category axisGrid
-             * @param interval - The grid interval.
-             * @returns void
              * ```
              * pen.grid.y(2) // draw gridlines on the y-axis, at interval 2 units
              * ```
              */
             y(interval = 1) {
-                this._pen.drawYAxisGrid(interval);
+                this._pen.cv.yAxisGrid(interval);
             },
             /**
              * Draw gridlines on both axis.
-             * @category axisGrid
-             * @param interval - The grid interval.
-             * @returns void
              * ```
              * pen.grid.xy(2) // draw gridlines on both axis, at interval 2 units
              * ```
@@ -39120,9 +38796,7 @@ class PenCls extends paint_1.Pencil {
             _pen: this,
             /**
              * Draw the 3D axis, for development only.
-             * @category 3D
              * @deprecated
-             * @returns void
              * ```
              * pen.d3.axis3D(100) // draw 3D axis with length 100
              * ```
@@ -39134,8 +38808,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a circle in 3D
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.circle([0,0,1],2,[1,0,0],[0,1,0]) // draw a xy circle with radius 2
              * ```
@@ -39162,8 +38834,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a circle on XZ plane in 3D
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.circleXZ([0,3,0],2) // draw a xz circle with radius 2
              * ```
@@ -39179,8 +38849,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a circle on YZ plane in 3D
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.circleYZ([3,0,0],2) // draw a yz circle with radius 2
              * ```
@@ -39196,8 +38864,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a circle on XY plane in 3D
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.circleXY([0,0,3],2) // draw a xy circle with radius 2
              * ```
@@ -39213,8 +38879,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a sphere in 3D
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.sphere([1,0,0],3) // draw a sphere with radius 3
              * ```
@@ -39237,10 +38901,8 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Return the envelop of a frustum
-             * @category 3D
              * @param lowerBase - the points in the lower base
              * @param upperBase - the point in the upper base, must have the same length as lowerBase
-             * @returns void
              * ```
              * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
              * let [D,E,F] = [[0,0,3],[1,0,3],[0,1,3]]
@@ -39264,8 +38926,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a frustum
-             * @category 3D
-             * @returns void
              * ```
              * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
              * let V = [0,0,5]
@@ -39304,8 +38964,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a prism along the z-direction
-             * @category 3D
-             * @returns void
              * ```
              * let [A,B,C] = [[0,0],[2,0],[0,2]]
              * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
@@ -39324,8 +38982,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a cylinder along the z-direction
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
              * ```
@@ -39342,8 +38998,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a pyramid along the z-direction
-             * @category 3D
-             * @returns void
              * ```
              * let [A,B,C] = [[0,0],[2,0],[0,2]]
              * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
@@ -39360,8 +39014,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a cone along the z-direction
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
              * ```
@@ -39377,8 +39029,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a frustum along the z-direction
-             * @category 3D
-             * @returns void
              * ```
              * let [A,B,C] = [[0,0],[2,0],[0,2]]
              * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
@@ -39397,8 +39047,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw a conical frustum along the z-direction
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
              * ```
@@ -39415,8 +39063,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw the angle between two plane.
-             * @category 3D
-             * @returns void
              * ```
              * let P = [0,0,1]
              * let O = [0,0,0]
@@ -39441,8 +39087,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw the dash height and right-angle.
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.height([0,0,1],[0,0,0],[0,1,0])
              * ```
@@ -39456,8 +39100,6 @@ class PenCls extends paint_1.Pencil {
             },
             /**
              * Draw the solid height and right-angle.
-             * @category 3D
-             * @returns void
              * ```
              * pen.d3.altitude([0,0,1],[0,0,0],[0,1,0])
              * ```
@@ -39474,53 +39116,31 @@ class PenCls extends paint_1.Pencil {
         this.size.set(1);
         this.set.reset();
     }
-    pj(pt) {
-        return this.cv.pj(pt);
-    }
-    pjs(pts) {
-        return this.cv.pjs(pts);
-    }
     /**
      * Plot an explicit or parametric function.
      * @category graph
-     * @param func - The function to plot, either x=>f(x) or t=>[x(t),y(t)].
-     * @param tStart - Start value of t, default to xmin.
-     * @param tEnd - End value of t, default to xmax.
-     * @param dots - Number of dots to plot. More dots give finer graph.
-     * @returns void
      * ```
-     * pen.plot(x=>x**2) // plot y=x^2
-     * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
+     * pen.plot(x=>x**2,1,2) // y=x^2 from x = 1 to 2
+     * pen.plot(x=>x**2) // y=x^2 in from x = xmin to xmax
+     * pen.plot(t=>[cos(t),sin(t)],0,360) // a unit circle
      * ```
      */
-    plot(func, tStart, tEnd, dots = 1000) {
-        this.drawPlot(func, tStart, tEnd, dots);
+    plot(func, tStart, tEnd) {
+        this.cv.plot(func, tStart, tEnd, 1000);
     }
     /**
-     * Plot a dashed explicit or parametric function.
+     * Same as .plot but dashed.
      * @category graph
-     * @param func - The function to plot, either x=>f(x) or t=>[x(t),y(t)].
-     * @param tStart - Start value of t, default to xmin.
-     * @param tEnd - End value of t, default to xmax.
-     * @param dots - Number of dots to plot. More dots give finer graph.
-     * @returns void
-     * ```
-     * pen.plot(x=>x**2) // plot y=x^2
-     * pen.plot(t=>[cos(t),sin(t)],0,360) // plot a circle centered (0,0) with r=1
-     * ```
      */
-    plotDash(func, tStart, tEnd, dots = 1000) {
+    plotDash(func, tStart, tEnd) {
         this.cv.save();
         this.set.dash(true);
-        this.drawPlot(func, tStart, tEnd, dots);
+        this.cv.plot(func, tStart, tEnd, 1000);
         this.cv.restore();
     }
     /**
      * Draw a point.
      * @category draw
-     * @param position - The coordinates [x,y] to draw.
-     * @param label - The label of the point.
-     * @returns void
      * ```
      * pen.point([1,2]) // draw a point at [1,2]
      * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
@@ -39534,9 +39154,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a point.
      * @category draw
-     * @param positions - {label:position}
-     * @param label - whether to label the points
-     * @returns void
      * ```
      * pen.points({A,B}) // mark and label point A as 'A', point B as 'B'
      * pen.points({A,B},false) // mark point A and B, without label
@@ -39555,9 +39172,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a cutter to a horizontal line.
      * @category draw
-     * @param position - The coordinates [x,y] to draw.
-     * @param label - The label of the point.
-     * @returns void
      * ```
      * pen.cutX([1,2]) // draw a vertical cutter at [1,2]
      * pen.cutX(1) // same as cutX([1,0])
@@ -39573,9 +39187,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a cutter to a vertical line.
      * @category draw
-     * @param position - The coordinates [x,y] to draw.
-     * @param label - The label of the point.
-     * @returns void
      * ```
      * pen.cutY([1,2]) // draw a horizontal cutter at [1,2]
      * pen.cutY(1) // same as cutY([0,1])
@@ -39591,9 +39202,9 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a guide line from `point` to the x-axis.
      * @category draw
-     * @param point - from which point to draw the guide line
-     * @param label - the label on the x-axis
-     * @returns void
+     * ```
+     * pen.guideX([1,2],'1') // draw guide from [1,2] and label '1' on x-axis
+     * ```
      */
     guideX(point, label) {
         let [x, y] = point;
@@ -39606,9 +39217,9 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a guide line from `point` to the y-axis.
      * @category draw
-     * @param point - from which point to draw the guide line
-     * @param label - the label on the y-axis
-     * @returns void
+     * ```
+     * pen.guideY([1,2],'2') // draw guide from [1,2] and label '2' on y-axis
+     * ```
      */
     guideY(point, label) {
         let [x, y] = point;
@@ -39639,69 +39250,51 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a line between two points.
      * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the line.
-     * @returns void
      * ```
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
-     * pen.line([1,2],[3,4],'10') //  draw a line from [1,2] to [3,4] with label '10'
+     * pen.line([1,2],[3,4],'10') //  also label '10'
      * ```
      */
-    line(startPoint, endPoint, label) {
-        this.cv.line([startPoint, endPoint]);
+    line(A, B, label) {
+        this.cv.line([A, B]);
         if (label !== undefined)
-            this.label.line([startPoint, endPoint], label);
+            this.label.line([A, B], label);
     }
     /**
      * Draw a dash line between two points.
      * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the line.
-     * @returns void
      * ```
      * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
-     * pen.dash([1,2],[3,4],'10') //  draw a dash line from [1,2] to [3,4] with label '10'
+     * pen.dash([1,2],[3,4],'10') //  also label '10'
      * ```
      */
-    dash(startPoint, endPoint, label) {
-        this.cv.dash([startPoint, endPoint]);
+    dash(A, B, label) {
+        this.cv.dash([A, B]);
         if (label !== undefined)
-            this.label.line([startPoint, endPoint], label);
+            this.label.line([A, B], label);
     }
     /**
      * Draw an arrow between two points.
      * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the line.
-     * @returns void
      * ```
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
      */
-    arrow(startPoint, endPoint, label) {
-        this.cv.line([startPoint, endPoint]);
-        this.cv.arrow(startPoint, endPoint, 5, 0);
+    arrow(A, B, label) {
+        this.cv.arrow(A, B, 5);
         if (label !== undefined)
-            this.label.line([startPoint, endPoint], label);
+            this.label.line([A, B], label);
     }
     /**
      * Draw the component of the arrow.
      * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param dir - The direction to resolve.
-     * @param angleLabel - The label of the angle.
-     * @returns void
      * ```
-     * pen.arrowCompo([1,2],[3,4],0) // draw the horizontal component of arrow from [1,2] to [3,4]
+     * pen.arrowCompo([1,2],[3,4],0,'x')
+     * // draw the horizontal component of arrow from [1,2] to [3,4]
+     * // label the angle as 'x'
      * ```
      */
-    arrowCompo(startPoint, endPoint, dir, angleLabel) {
-        let O = startPoint;
-        let P = endPoint;
+    arrowCompo(O, P, dir, angleLabel) {
         let X = Move(O, dir, 1);
         let Q = PdFoot(O, X, P);
         this.arrow(O, Q);
@@ -39711,47 +39304,41 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw both components of the arrow.
      * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param dir - The direction to resolve.
-     * @param angleLabel - The label of the angle.
-     * @returns void
      * ```
-     * pen.arrowResolve([1,2],[3,4],0) // draw the horizontal and vertical components of arrow from [1,2] to [3,4]
+     * pen.arrowResolve([1,2],[3,4],0,'x')
+     * // draw the horizontal and vertical components of arrow from [1,2] to [3,4]
+     * // label the angle with the horizontal as 'x'
      * ```
      */
-    arrowResolve(startPoint, endPoint, dir, angleLabel) {
-        this.arrowCompo(startPoint, endPoint, dir, angleLabel);
-        this.arrowCompo(startPoint, endPoint, dir + 90);
+    arrowResolve(O, P, dir, angleLabel) {
+        this.arrowCompo(O, P, dir, angleLabel);
+        this.arrowCompo(O, P, dir + 90);
     }
     /**
      * Draw a length between two points.
      * @category draw
-     * @param startPoint - The coordinates [x,y] of the start-point.
-     * @param endPoint - The coordinates [x,y] of the end-point.
-     * @param label - The label of the line.
-     * @returns void
      * ```
-     * pen.length([1,2],[3,4]) // draw an length from [1,2] to [3,4]
+     * pen.length([1,2],[3,4],'d')
+     * // draw an length 'd' from [1,2] to [3,4]
      * ```
      */
-    length(startPoint, endPoint, label) {
-        this.cv.line([startPoint, endPoint]);
-        this.cv.tick(startPoint, endPoint, 5, 0);
-        this.cv.tick(endPoint, startPoint, 5, 0);
+    length(A, B, label) {
+        this.cv.line([A, B]);
+        this.cv.tick(A, B, 5, 0);
+        this.cv.tick(B, A, 5, 0);
         if (label !== undefined)
-            this.label.line([startPoint, endPoint], label);
+            this.label.line([A, B], label);
     }
     /**
-     * Draw a dashed height with right-angled.
-     * @param vertex - top point of the height
-     * @param base - base of the height
-     * @param label - label of the height
+     * Draw a dashed height with right angle, from V to AB.
+     * @category draw
+     * ```
+     * pen.height([0,4],[[-1,0],[1,0]],'h')
+     * // draw the height 'h' from [0,4] to x-axis
+     * ```
      */
-    height(vertex, base, label) {
-        let [A, B] = base;
-        let F = PdFoot(A, B, vertex);
-        let V = vertex;
+    height(V, [A, B], label) {
+        let F = PdFoot(A, B, V);
         this.dash(V, F);
         this.rightAngle(A, F, V);
         if (label !== undefined) {
@@ -39767,10 +39354,8 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a polyline given points.
      * @category draw
-     * @param points - The coordinates [x,y] of all points.
-     * @returns void
      * ```
-     * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline with vertices [0,0], [5,2] and [3,4]
+     * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline through 3 points
      * ```
      */
     polyline(...points) {
@@ -39779,10 +39364,8 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a polygon given points.
      * @category draw
-     * @param points - The coordinates [x,y] of all points.
-     * @returns void
      * ```
-     * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle with vertices [0,0], [5,2] and [3,4]
+     * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle
      * ```
      */
     polygon(...points) {
@@ -39791,10 +39374,8 @@ class PenCls extends paint_1.Pencil {
     /**
      * Fill a polygon given points.
      * @category draw
-     * @param points - The coordinates [x,y] of all points.
-     * @returns void
      * ```
-     * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle with vertices [0,0], [5,2] and [3,4]
+     * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle
      * ```
      */
     polyfill(...points) {
@@ -39803,10 +39384,8 @@ class PenCls extends paint_1.Pencil {
     /**
      * Shade a polygon given points.
      * @category draw
-     * @param points - The coordinates [x,y] of all points.
-     * @returns void
      * ```
-     * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle with vertices [0,0], [5,2] and [3,4]
+     * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle
      * ```
      */
     polyshade(...points) {
@@ -39815,10 +39394,8 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw and shade a polygon given points.
      * @category draw
-     * @param points - The coordinates [x,y] of all points.
-     * @returns void
      * ```
-     * pen.polyshape([0,0],[5,2],[3,4]) // draw and shape a triangle with vertices [0,0], [5,2] and [3,4]
+     * pen.polyshape([0,0],[5,2],[3,4]) // draw and shade a triangle
      * ```
      */
     polyshape(...points) {
@@ -39826,56 +39403,41 @@ class PenCls extends paint_1.Pencil {
         this.polyshade(...points);
     }
     /**
-     * Draw an angle with label, non-reflex
+     * Draw an angle with label.
      * @category draw
-     * @param A - The starting point [x,y].
-     * @param O - The vertex point [x,y].
-     * @param B - The ending point [x,y].
-     * @param label - The label
-     * @param arc - The number of arcs.
-     * @param radius - The radius of the angle arc, in pixel.
-     * @returns void
      * ```
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
      */
     angle(A, O, B, label, arc = 1, radius = -1) {
         if (radius < 0)
-            radius = 15 + this.getSmallAngleExtraPixel(A, O, B, 40, 1.5);
+            radius = 15 + this.cv.getAngleAllowance(A, O, B, 40, 1.5);
         let space = 3;
-        this.drawAngle(A, O, B, radius, arc, space);
+        this.cv.angle(A, O, B, radius, arc, space);
         if (label !== undefined && label !== '')
             this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13);
     }
     /**
      * Decorate equal side lengths.
      * @category decorator
-     * @param startPoint - The starting point [x,y].
-     * @param endPoint - The ending point [x,y].
-     * @param tick - The number of ticks.
-     * @returns void
      * ```
      * pen.decorate.equalSide([1,0],[3,2],2)
-     * // decorate a double-tick at the mid-pt of [1,0] and [3,2]
+     * // a double-tick at the mid-pt of [1,0] and [3,2]
      * ```
      */
-    equalSide(startPoint, endPoint, tick = 1) {
-        this.cv.equalSide(startPoint, endPoint, 5, tick, 3);
+    equalSide(A, B, tick = 1) {
+        this.cv.equalSide(A, B, 5, tick, 3);
     }
     /**
      * Decorate bisecting equal lengths of a side.
      * @category decorator
-     * @param startPoint - The starting point [x,y].
-     * @param endPoint - The ending point [x,y].
-     * @param tick - The number of ticks.
-     * @returns void
      * ```
      * pen.decorate.bisectSide([0,0], [2,2], 2)
-     * // decorate two double-ticks bisecting [0,0] and [2,2] at their mid-pt
+     * // two double-ticks bisecting [0,0] and [2,2] at their mid-pt
      * ```
      */
-    bisectSide(startPoint, endPoint, tick = 1) {
-        let [A, B] = this.pjs([startPoint, endPoint]);
+    bisectSide(A, B, tick = 1) {
+        [A, B] = this.pjs([A, B]);
         let M = Mid(A, B);
         this.equalSide(A, M, tick);
         this.equalSide(B, M, tick);
@@ -39883,29 +39445,20 @@ class PenCls extends paint_1.Pencil {
     /**
      * Decorate parallel side.
      * @category decorator
-     * @param startPoint - The starting point [x,y].
-     * @param endPoint - The ending point [x,y].
-     * @param tick - The number of ticks.
-     * @returns void
      * ```
      * pen.decorate.parallel([1,0],[3,2],2)
-     * // decorate a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
+     * // a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
      * ```
      */
-    parallel(startPoint, endPoint, tick = 1) {
-        this.cv.parallel(startPoint, endPoint, 4, tick, 6);
+    parallel(A, B, tick = 1) {
+        this.cv.parallel(A, B, 4, tick, 6);
     }
     /**
      * Decorate a right-angle AOB.
      * @category decorator
-     * @param A - The starting point [x,y].
-     * @param O - The vertex point [x,y].
-     * @param B - The ending point [x,y]. Interchangeable with A.
-     * @param size - The size of the mark, in pixel.
-     * @returns void
      * ```
      * pen.decorate.rightAngle([1,0],[0,0],[3,2])
-     * // decorate an right-angle AOB
+     * // an right-angle AOB
      * ```
      */
     rightAngle(A, O, B, size = 12) {
@@ -39918,34 +39471,27 @@ class PenCls extends paint_1.Pencil {
     /**
      * Decorate a compass.
      * @category decorator
-     * @param position - The position [x,y].
-     * @returns void
      * ```
      * pen.decorate.compass([1,2])
-     * // decorate a compass at [1,2]
+     * // a compass at [1,2]
      * ```
      */
-    compass(position) {
-        this.cv.compass(position, 17, 20, 3.5);
+    compass(point) {
+        this.cv.compass(point, 17, 20, 3.5);
     }
     /**
      * Write text.
      * @category text
-     * @param position - The coordinates [x,y] to position the text.
-     * @param text - The string to write.
-     * @returns void
      * ```
-     * pen.write([1,2],'abc') // write 'abc' at [1,2]
+     * pen.write([1,2],'abc') // 'abc' at [1,2]
      * ```
      */
-    write(position, text) {
-        this.drawText(text, position, 0, 0);
+    write(point, text) {
+        this.cv.write(text, point);
     }
     /**
      * Set the background image url.
      * @category export
-     * @param url - the url of background image
-     * @returns void
      * ```
      * pen.background('https://www2.pyc.edu.hk/img/pycnet_logo.png')
      * ```
@@ -39956,9 +39502,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Export the canvas to image tag.
      * @category export
-     * @param html - The html string to export to.
-     * @param placeholder - The src field of the image tag to export to.
-     * @returns The new html with src field pasted.
      * ```
      * question = pen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
@@ -39971,9 +39514,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Export the canvas to image tag, with white space trimmed.
      * @category export
-     * @param html - The html string to export to.
-     * @param placeholder - The src field of the image tag to export to.
-     * @returns The new html with src field pasted.
      * ```
      * question = pen.exportTrim(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
@@ -39986,10 +39526,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Clear the canvas.
      * @category export
-     * @returns void
-     * ```
-     * pen.clear() // clear the canvas.
-     * ```
      */
     clear() {
         this.cv.clearImg();
@@ -39997,10 +39533,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Temporarily save the img internally. Can be later restored by restoreImg.
      * @category export
-     * @returns
-     * ```
-     * pen.saveImg() // save the current canvas image
-     * ```
      */
     saveImg() {
         this.cv.saveImg();
@@ -40008,10 +39540,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Restored the previously saved img by saveImg.
      * @category export
-     * @returns void
-     * ```
-     * pen.restoreImg() // restore the previously saved img
-     * ```
      */
     restoreImg() {
         this.cv.restoreImg();
@@ -42544,180 +42072,131 @@ exports.combinations = combinations;
 
 /***/ }),
 
-/***/ 9492:
+/***/ 1335:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ArmedConvas = void 0;
-const convas_1 = __webpack_require__(3957);
-// step
-function isEven(n) {
-    return n % 2 === 0;
+exports.Canvas00 = void 0;
+const trim_1 = __webpack_require__(8838);
+// The scale factor of canvas size for clearer image.
+const QUALITY = 3;
+// The scale factor for width and height settings.
+const INCH_SCALE = 10;
+// REM_PIXEL is the default font size of the browser, usually 16px
+const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+function inchToPx(inch) {
+    return inch * INCH_SCALE * REM_PIXEL;
 }
-function isOdd(n) {
-    return n % 2 !== 0;
+function pxToInch(px) {
+    return px / INCH_SCALE / REM_PIXEL;
 }
-function floorHalf(n) {
-    if (isOdd(n))
-        n = n - 1;
-    return n / 2;
-}
-function steps(n) {
-    let N = floorHalf(n);
-    let arr = [];
-    if (isOdd(n)) {
-        arr.push(0);
-        for (let i = 1; i <= N; i++) {
-            arr.push(i);
-            arr.push(-i);
-        }
+/**
+ * Handle:
+ * - all canvas width and height issue
+ * - save and restore canvas image
+ * - exporting
+ */
+class Canvas00 {
+    constructor() {
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext("2d");
+        // image store
+        this.imgStore = null;
+        // export
+        this.backgroundURL = "";
     }
-    else {
-        for (let i = 1; i <= N; i++) {
-            let s = i - 0.5;
-            arr.push(s);
-            arr.push(-s);
-        }
+    // size in pixel
+    reset() {
+        this.ctx.scale(QUALITY, QUALITY);
+        this.ctx.font = 'normal 10px Times New Roman';
     }
-    return arr;
-}
-// vector
-function mid(A, B) {
-    if (A.length === 3 && B.length === 3) {
-        let [x, y, z] = A;
-        let [X, Y, Z] = B;
-        return [(x + X) / 2, (y + Y) / 2, (z + Z) / 2];
+    get width() {
+        return this.canvas.width / QUALITY;
     }
-    else {
-        let [x, y] = A;
-        let [X, Y] = B;
-        return [(x + X) / 2, (y + Y) / 2];
+    set width(value) {
+        this.canvas.width = value * QUALITY;
+        this.reset();
     }
-}
-class ArmedConvas extends convas_1.Convas {
-    linePx(dots) {
-        this.createPathPx(dots);
-        this.doStroke();
+    get height() {
+        return this.canvas.height / QUALITY;
     }
-    solidPx(dots) {
-        this.createPathPx(dots);
-        this.doSolid();
+    set height(value) {
+        this.canvas.height = value * QUALITY;
+        this.reset();
     }
-    line(pts) {
-        this.createPath(pts);
-        this.doStroke();
+    // size in inch
+    get widthInch() {
+        return pxToInch(this.width);
     }
-    solid(pts) {
-        this.createPath(pts);
-        this.doSolid();
+    set widthInch(value) {
+        this.width = inchToPx(value);
     }
-    dash(pts) {
-        this.createPath(pts);
-        this.doDash();
+    get heightInch() {
+        return pxToInch(this.height);
     }
-    shape(pts) {
-        this.createShape(pts);
-        this.doStroke();
+    set heightInch(value) {
+        this.height = inchToPx(value);
     }
-    fill(pts) {
-        this.createShape(pts);
-        this.doFill();
+    saveImg() {
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        this.imgStore = this.ctx.getImageData(0, 0, w, h);
     }
-    shade(pts) {
-        this.createShape(pts);
-        this.doShade();
+    restoreImg() {
+        if (this.imgStore !== null)
+            this.ctx.putImageData(this.imgStore, 0, 0);
     }
-    arc(P, O, Q, radius) {
-        this.createArcByPoints(P, O, Q, radius);
-        this.doStroke();
+    clearImg() {
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        this.ctx.clearRect(0, 0, w, h);
     }
-    circle(center, radius) {
-        this.createArc(center, radius, [0, 360]);
-        this.doStroke();
-    }
-    disc(center, radius) {
-        this.createArc(center, radius, [0, 360]);
-        this.doFill();
-    }
-    // advanced
-    arrow(start, end, size, offset) {
-        this.save();
-        this.translateTo(end);
-        this.rotateTo(start, end);
-        let A = [offset - 2 * size, -size];
-        let O = [offset, 0];
-        let B = [offset - 2 * size, +size];
-        this.solidPx([A, O, B]);
-        this.restore();
-    }
-    anglePolar(A, O, B, radius, count, space) {
-        for (let s of steps(count)) {
-            let r = radius + s * space;
-            this.arc(A, O, B, r);
-        }
-    }
-    rightAngle(A, O, B, size) {
-        this.createRightAnglePath(A, O, B, size);
-        this.doSolid();
-    }
-    parallel(start, end, size, count, space) {
-        let M = mid(start, end);
-        for (let i = 0; i < count; i++) {
-            this.arrow(start, M, size, i * space);
-        }
-    }
-    tick(start, end, length, offset) {
-        this.save();
-        this.translateTo(end);
-        this.rotateTo(start, end);
-        let A = [offset, -length];
-        let B = [offset, +length];
-        this.solidPx([A, B]);
-        this.restore();
-    }
-    tickVert(pt, length) {
-        let [x, y] = pt;
-        this.tick([x - 1, y], pt, length, 0);
-    }
-    tickHori(pt, length) {
-        let [x, y] = pt;
-        this.tick([x, y - 1], pt, length, 0);
-    }
-    equalSide(start, end, length, count, space) {
-        let M = mid(start, end);
-        for (let s of steps(count)) {
-            this.tick(start, M, length, s * space);
-        }
-    }
-    compass(center, xSize, ySize, arrowSize) {
-        this.save();
-        this.translateTo(center);
-        let E = [xSize, 0];
-        let W = [-xSize, 0];
-        let S = [0, ySize];
-        let N = [0, -ySize];
-        let A = [-arrowSize, -ySize + arrowSize * 2];
-        let B = [+arrowSize, -ySize + arrowSize * 2];
-        this.solidPx([E, W]);
-        this.solidPx([N, S]);
-        this.solidPx([A, N, B]);
-        this.restore();
+    export(html, placeholder, trim) {
+        let cv = cloneCanvas(this.canvas);
+        if (trim)
+            (0, trim_1.trimCanvas)(cv);
+        const displayWidth = Math.floor(cv.width / QUALITY);
+        const displayHeight = Math.floor(cv.height / QUALITY);
+        const src = `src="${cv.toDataURL()}"`;
+        const width = ` width="${displayWidth}"`;
+        const height = ` height="${displayHeight}"`;
+        const bg = this.backgroundURL.length === 0 ?
+            '' :
+            ` style="background-image:url('${this.backgroundURL}');background-size:100% 100%;" `;
+        return html.replace('src="' + placeholder + '"', src + width + height + bg);
     }
 }
-exports.ArmedConvas = ArmedConvas;
-//# sourceMappingURL=armedconvas.js.map
+exports.Canvas00 = Canvas00;
+/**
+ * Return a clone of the canvas.
+ */
+function cloneCanvas(canvas) {
+    let oldCanvas = canvas;
+    //create a new canvas
+    let newCanvas = document.createElement('canvas');
+    let context = newCanvas.getContext('2d');
+    //set dimensions
+    newCanvas.width = oldCanvas.width;
+    newCanvas.height = oldCanvas.height;
+    //apply the old canvas to the new one
+    context.drawImage(oldCanvas, 0, 0);
+    //return the new canvas
+    return newCanvas;
+}
+//# sourceMappingURL=canvas00.js.map
 
 /***/ }),
 
-/***/ 5813:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 1880:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BasicCanvas = void 0;
+exports.Canvas01 = void 0;
+const canvas00_1 = __webpack_require__(1335);
 // pixel conversion
 function toPixelX(xmin, xmax, width, xCoord) {
     return (xCoord - xmin) / (xmax - xmin) * width;
@@ -42725,59 +42204,19 @@ function toPixelX(xmin, xmax, width, xCoord) {
 function toPixelY(ymin, ymax, height, yCoord) {
     return height - (yCoord - ymin) / (ymax - ymin) * height;
 }
-function proj(point3D, angle, depth) {
-    let a = angle * Math.PI / 180;
-    let s = Math.sin(a);
-    let c = Math.cos(a);
-    let [x, y, z] = point3D;
-    let x_new = x + depth * y * c;
-    let y_new = z + depth * y * s;
-    return [x_new, y_new];
-}
-function forceProj(point, angle, depth) {
-    return point.length === 3 ? proj(point, angle, depth) : point;
-}
-function segmentArray(seg) {
-    if (Array.isArray(seg))
-        return seg;
-    if (typeof seg === 'number')
-        return [seg, seg];
-    if (typeof seg === 'boolean')
-        return seg ? [5, 5] : [];
-    return [];
-}
-// Const
-const QUALITY = 3;
-const SIZE_SCALE = 10;
 /**
- * REM_PIXEL is the default font size of the browser, usually 16px
+ * Handle:
+ * - 2D coordinate definition
+ * - 2D coordinate to px conversion
  */
-const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
-/**
- * handle all config
- */
-class BasicCanvas {
+class Canvas01 extends canvas00_1.Canvas00 {
     constructor() {
-        this.canvas = document.createElement('canvas');
-        this.ctx = this.canvas.getContext("2d");
-        this.imgStore = null;
-        this.states = [];
-        this.backgroundURL = "";
         // coord
+        super(...arguments);
         this.xmin = 0;
         this.xmax = 0;
         this.ymin = 0;
         this.ymax = 0;
-        // user setting
-        this.$3D_ANGLE = 60;
-        this.$3D_DEPTH = 0.5;
-        this.$TEXT_DIR = 0;
-        this.$TEXT_LATEX = false;
-        this.$ANGLE_MODE = 'normal';
-        this.$LENGTH_UNIT = '';
-        this.$BORDER = 0.2;
-        this.$LINE_LABEL = 'auto';
-        this._$LABEL_CENTER = this.center();
     }
     dx() {
         return this.xmax - this.xmin;
@@ -42805,63 +42244,173 @@ class BasicCanvas {
     edgeRight(y = 0) {
         return [this.xmax, y];
     }
-    // size
-    reset() {
-        this.ctx.scale(QUALITY, QUALITY);
-        this.ctx.font = 'normal 10px Times New Roman';
+    // capture
+    capturePoints2D(pts) {
+        if (pts.length === 0)
+            return;
+        let [first, ...rest] = pts;
+        let xmin = first[0];
+        let xmax = first[0];
+        let ymin = first[1];
+        let ymax = first[1];
+        for (let [x, y] of rest) {
+            if (x < xmin)
+                xmin = x;
+            if (x > xmax)
+                xmax = x;
+            if (y < ymin)
+                ymin = y;
+            if (y > ymax)
+                ymax = y;
+        }
+        this.xmin = xmin;
+        this.xmax = xmax;
+        this.ymin = ymin;
+        this.ymax = ymax;
     }
-    get width() {
-        return this.canvas.width / QUALITY;
-    }
-    set width(value) {
-        this.canvas.width = value * QUALITY;
-        this.reset();
-    }
-    get height() {
-        return this.canvas.height / QUALITY;
-    }
-    set height(value) {
-        this.canvas.height = value * QUALITY;
-        this.reset();
-    }
-    // init
-    initRange(xRange, yRange) {
-        this.xmin = xRange[0];
-        this.xmax = xRange[1];
-        this.ymin = yRange[0];
-        this.ymax = yRange[1];
-    }
-    initSize(width, height) {
-        this.width = width * SIZE_SCALE * REM_PIXEL;
-        this.height = height * SIZE_SCALE * REM_PIXEL;
+    fixCollapsedRange() {
+        let { xmin, xmax, ymin, ymax } = this;
+        let xSize = xmax - xmin;
+        let ySize = ymax - ymin;
+        if (xSize === 0 && ySize === 0) {
+            xmax++;
+            xmin--;
+            ymax++;
+            ymin--;
+        }
+        if (xSize === 0 && ySize !== 0) {
+            xmax += ySize / 2;
+            xmin -= ySize / 2;
+        }
+        if (xSize !== 0 && ySize === 0) {
+            ymax += xSize / 2;
+            ymin -= xSize / 2;
+        }
+        this.xmin = xmin;
+        this.xmax = xmax;
+        this.ymin = ymin;
+        this.ymax = ymax;
     }
     // border
-    setBorder() {
-        const borderPix = this.$BORDER * SIZE_SCALE * REM_PIXEL;
-        let borderXUnit = (this.xmax - this.xmin) * borderPix / this.width;
-        let borderYUnit = (this.ymax - this.ymin) * borderPix / this.height;
+    addBorder(borderInch) {
+        let borderXUnit = this.dx() / this.widthInch * borderInch;
+        let borderYUnit = this.dy() / this.heightInch * borderInch;
         this.xmin -= borderXUnit;
         this.xmax += borderXUnit;
         this.ymin -= borderYUnit;
         this.ymax += borderYUnit;
-        this.width += 2 * borderPix;
-        this.height += 2 * borderPix;
+        this.widthInch += 2 * borderInch;
+        this.heightInch += 2 * borderInch;
     }
-    // // conversion
+    // conversion
+    point2DtoPx(point) {
+        let [xCoord, yCoord] = point;
+        let x = toPixelX(this.xmin, this.xmax, this.width, xCoord);
+        let y = toPixelY(this.ymin, this.ymax, this.height, yCoord);
+        return [x, y];
+    }
+}
+exports.Canvas01 = Canvas01;
+//# sourceMappingURL=canvas01.js.map
+
+/***/ }),
+
+/***/ 5595:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Canvas02 = void 0;
+const canvas01_1 = __webpack_require__(1880);
+const capture_1 = __webpack_require__(3570);
+function proj(point3D, angle, depth) {
+    let a = angle * Math.PI / 180;
+    let s = Math.sin(a);
+    let c = Math.cos(a);
+    let [x, y, z] = point3D;
+    let x_new = x + depth * y * c;
+    let y_new = z + depth * y * s;
+    return [x_new, y_new];
+}
+function forceProj(point, angle, depth) {
+    return point.length === 3
+        ? proj(point, angle, depth)
+        : point;
+}
+/**
+ * Handle:
+ * - 3D coordinate to px conversion
+ * - capturing things
+ */
+class Canvas02 extends canvas01_1.Canvas01 {
+    constructor() {
+        // setting
+        super(...arguments);
+        this.Proj_3D_Angle = 60;
+        this.Proj_3D_Depth = 0.5;
+    }
+    // conversion
     pj(point) {
-        return forceProj(point, this.$3D_ANGLE, this.$3D_DEPTH);
+        return forceProj(point, this.Proj_3D_Angle, this.Proj_3D_Depth);
     }
     pjs(points) {
         return points.map($ => this.pj($));
     }
     toPx(point) {
         let pt = this.pj(point);
-        let [xCoord, yCoord] = pt;
-        let x = toPixelX(this.xmin, this.xmax, this.width, xCoord);
-        let y = toPixelY(this.ymin, this.ymax, this.height, yCoord);
-        return [x, y];
+        return this.point2DtoPx(pt);
     }
-    // native settings
+    // capture
+    capture(things) {
+        let pts = (0, capture_1.thingsToPoints)(things);
+        let pt2Ds = this.pjs(pts);
+        this.capturePoints2D(pt2Ds);
+    }
+}
+exports.Canvas02 = Canvas02;
+//# sourceMappingURL=canvas02.js.map
+
+/***/ }),
+
+/***/ 2023:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Canvas03 = void 0;
+const canvas02_1 = __webpack_require__(5595);
+function segmentArray(seg) {
+    if (Array.isArray(seg))
+        return seg;
+    if (typeof seg === 'number')
+        return [seg, seg];
+    if (typeof seg === 'boolean')
+        return seg ? [5, 5] : [];
+    return [];
+}
+// REM_PIXEL is the default font size of the browser, usually 16px
+const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+/**
+ * Handle:
+ * - Settings
+ */
+class Canvas03 extends canvas02_1.Canvas02 {
+    constructor() {
+        // native settings
+        super(...arguments);
+        // user setting
+        this.$TEXT_DIR = 0;
+        this.$TEXT_LATEX = false;
+        this.$ANGLE_MODE = 'normal';
+        this.$LENGTH_UNIT = '';
+        this.$BORDER = 0.2;
+        this.$LINE_LABEL = 'auto';
+        this._$LABEL_CENTER = this.center();
+        // setting meta
+        this.states = [];
+    }
     get $WEIGHT() {
         return this.ctx.lineWidth;
     }
@@ -42925,15 +42474,26 @@ class BasicCanvas {
         if (value)
             this.ctx.font = 'italic ' + this.ctx.font;
     }
+    // parent setting
+    get $3D_ANGLE() {
+        return this.Proj_3D_Angle;
+    }
+    set $3D_ANGLE(value) {
+        this.Proj_3D_Angle = value;
+    }
+    get $3D_DEPTH() {
+        return this.Proj_3D_Depth;
+    }
+    set $3D_DEPTH(value) {
+        this.Proj_3D_Depth = value;
+    }
     set $LABEL_CENTER(centers) {
-        // TEMP, true to be deleted
         let empty = centers.length === 0;
-        this._$LABEL_CENTER = empty ? this.center() : meanPoint(this.pjs(centers));
+        this._$LABEL_CENTER = empty ? this.center() : mid(this.pjs(centers));
     }
     get $LABEL_CENTER() {
         return [this._$LABEL_CENTER];
     }
-    // setting meta
     save() {
         this.ctx.save();
         this.states.push({
@@ -42963,39 +42523,9 @@ class BasicCanvas {
         this.$BORDER = state.$BORDER;
         this.$LINE_LABEL = state.$LINE_LABEL;
     }
-    // image store
-    saveImg() {
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-        this.imgStore = this.ctx.getImageData(0, 0, w, h);
-    }
-    restoreImg() {
-        if (this.imgStore !== null)
-            this.ctx.putImageData(this.imgStore, 0, 0);
-    }
-    clearImg() {
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-        this.ctx.clearRect(0, 0, w, h);
-    }
-    // export
-    export(html, placeholder, trim) {
-        let cv = cloneCanvas(this.canvas);
-        if (trim)
-            trimCanvas(cv);
-        const displayWidth = Math.floor(cv.width / QUALITY);
-        const displayHeight = Math.floor(cv.height / QUALITY);
-        const src = 'src="' + cv.toDataURL() + '"';
-        const width = ' width="' + displayWidth + '"';
-        const height = ' height="' + displayHeight + '"';
-        const bg = this.backgroundURL.length === 0 ?
-            '' :
-            ` style="background-image:url('${this.backgroundURL}');background-size:100% 100%;" `;
-        return html.replace('src="' + placeholder + '"', src + width + height + bg);
-    }
 }
-exports.BasicCanvas = BasicCanvas;
-function meanPoint(Points) {
+exports.Canvas03 = Canvas03;
+function mid(Points) {
     if (Points.length === 0)
         return [0, 0];
     let X = 0;
@@ -43007,70 +42537,18 @@ function meanPoint(Points) {
     let n = Points.length;
     return [X / n, Y / n];
 }
-/**
- * Trim the canvas in-place.
- */
-function trimCanvas(canvas) {
-    function rowBlank(imageData, width, y) {
-        for (var x = 0; x < width; ++x) {
-            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
-                return false;
-        }
-        return true;
-    }
-    function columnBlank(imageData, width, x, top, bottom) {
-        for (var y = top; y < bottom; ++y) {
-            if (imageData.data[y * width * 4 + x * 4 + 3] !== 0)
-                return false;
-        }
-        return true;
-    }
-    var ctx = canvas.getContext("2d");
-    var width = canvas.width;
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var top = 0, bottom = imageData.height, left = 0, right = imageData.width;
-    while (top < bottom && rowBlank(imageData, width, top))
-        ++top;
-    while (bottom - 1 > top && rowBlank(imageData, width, bottom - 1))
-        --bottom;
-    while (left < right && columnBlank(imageData, width, left, top, bottom))
-        ++left;
-    while (right - 1 > left && columnBlank(imageData, width, right - 1, top, bottom))
-        --right;
-    var trimmed = ctx.getImageData(left, top, right - left, bottom - top);
-    canvas.width = trimmed.width;
-    canvas.height = trimmed.height;
-    ctx.putImageData(trimmed, 0, 0);
-}
-/**
- * Return a clone of the canvas.
- */
-function cloneCanvas(canvas) {
-    let oldCanvas = canvas;
-    //create a new canvas
-    let newCanvas = document.createElement('canvas');
-    let context = newCanvas.getContext('2d');
-    //set dimensions
-    newCanvas.width = oldCanvas.width;
-    newCanvas.height = oldCanvas.height;
-    //apply the old canvas to the new one
-    context.drawImage(oldCanvas, 0, 0);
-    //return the new canvas
-    return newCanvas;
-}
-//# sourceMappingURL=basic_canvas.js.map
+//# sourceMappingURL=canvas03.js.map
 
 /***/ }),
 
-/***/ 3957:
+/***/ 5138:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Convas = exports.cross2D = exports.vec = exports.cos = exports.sin = void 0;
-const basic_canvas_1 = __webpack_require__(5813);
-// math
+exports.Canvas04 = void 0;
+const canvas03_1 = __webpack_require__(2023);
 function rad(degree) {
     return degree * Math.PI / 180;
 }
@@ -43105,83 +42583,12 @@ function moveDot(A, B, dist) {
     let d = scaleDotTo(AB, dist);
     return addDot(A, d);
 }
-function sin(degree) {
-    return Math.sin(degree / 180 * Math.PI);
-}
-exports.sin = sin;
-function cos(degree) {
-    return Math.cos(degree / 180 * Math.PI);
-}
-exports.cos = cos;
-// polar
-function vec(p1, p2) {
-    let [x1, y1] = p1;
-    let [x2, y2] = p2;
-    return [x2 - x1, y2 - y1];
-}
-exports.vec = vec;
-function cross2D(vec1, vec2) {
-    let [x1, y1] = vec1;
-    let [x2, y2] = vec2;
-    return x1 * y2 - y1 * x2;
-}
-exports.cross2D = cross2D;
 /**
- * @return check if the polar angle AOB is reflex
- * ```
- * IsReflex([1,0],[0,0],[0,2]) // false
- * IsReflex([2,2],[1,1],[1,3]) // false
- * IsReflex([1,3],[1,1],[2,2]) // true
- * ```
+ * Handle:
+ * - transform
+ * - drawing in pixel and coordinates
  */
-function IsReflex(A, O, B) {
-    let OA = vec(O, A);
-    let OB = vec(O, B);
-    return cross2D(OA, OB) < 0;
-}
-function polarFlip(A, O, B, mode) {
-    let isReflex = IsReflex(A, O, B);
-    if (mode === 'normal' && isReflex)
-        return true;
-    if (mode === 'reflex' && !isReflex)
-        return true;
-    return false;
-}
-// latex
-/**
- * CanvasLatex is a library that must be imported from script tag
- */
-function LatexWidget(text, color, size) {
-    text = `\\color{${color}} ` + text;
-    // @ts-ignore
-    const widget = new CanvasLatex.default(text, {
-        displayMode: true,
-        debugBounds: false,
-        baseSize: size
-    });
-    return widget;
-}
-function latexTuneX(x, width, textAlign) {
-    if (textAlign === 'left')
-        return -x;
-    if (textAlign === 'right')
-        return -x - width;
-    if (textAlign === 'center')
-        return -x - width / 2;
-    return -x - width / 2;
-}
-function latexTuneY(y, height, textBaseline) {
-    if (textBaseline === 'top')
-        return -y;
-    if (textBaseline === 'bottom')
-        return -y - height;
-    if (textBaseline === 'middle')
-        return -y - height / 2;
-    return -y / 2;
-}
-// Const
-const DEFAULT_SHADE_ALPHA = 0.1;
-class Convas extends basic_canvas_1.BasicCanvas {
+class Canvas04 extends canvas03_1.Canvas03 {
     // transform
     translateTo(pt) {
         let [x, y] = this.toPx(pt);
@@ -43223,7 +42630,7 @@ class Convas extends basic_canvas_1.BasicCanvas {
         this.createPathPx(dots);
         this.ctx.closePath();
     }
-    // drawer in coord
+    // straight drawer in coord
     moveTo(pt) {
         let [x, y] = this.toPx(pt);
         this.ctx.moveTo(x, y);
@@ -43246,6 +42653,7 @@ class Convas extends basic_canvas_1.BasicCanvas {
         this.createPath(pts);
         this.ctx.closePath();
     }
+    // arc drawer
     createArc(center, radius, angle) {
         let [x, y] = this.toPx(center);
         let [q1, q2] = angle;
@@ -43291,11 +42699,69 @@ class Convas extends basic_canvas_1.BasicCanvas {
         this.ctx.fill();
     }
     doShade() {
+        const DEFAULT_SHADE_ALPHA = 0.1;
         let alpha = this.$ALPHA;
         this.$ALPHA = DEFAULT_SHADE_ALPHA;
         this.ctx.fill();
         this.$ALPHA = alpha;
     }
+}
+exports.Canvas04 = Canvas04;
+//# sourceMappingURL=canvas04.js.map
+
+/***/ }),
+
+/***/ 9795:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Canvas05 = void 0;
+const canvas04_1 = __webpack_require__(5138);
+function sin(degree) {
+    return Math.sin(degree / 180 * Math.PI);
+}
+function cos(degree) {
+    return Math.cos(degree / 180 * Math.PI);
+}
+// CanvasLatex is a library that must be imported from script tag
+function LatexWidget(text, color, size) {
+    text = `\\color{${color}} ` + text;
+    // @ts-ignore
+    const widget = new CanvasLatex.default(text, {
+        displayMode: true,
+        debugBounds: false,
+        baseSize: size
+    });
+    return widget;
+}
+function latexTuneX(x, width, textAlign) {
+    if (textAlign === 'left')
+        return -x;
+    if (textAlign === 'right')
+        return -x - width;
+    if (textAlign === 'center')
+        return -x - width / 2;
+    return -x - width / 2;
+}
+function latexTuneY(y, height, textBaseline) {
+    if (textBaseline === 'top')
+        return -y;
+    if (textBaseline === 'bottom')
+        return -y - height;
+    if (textBaseline === 'middle')
+        return -y - height / 2;
+    return -y / 2;
+}
+function isAlphabet(_) {
+    return _.length === 1 && (_.toLowerCase() !== _.toUpperCase());
+}
+/**
+ * Handle:
+ * - text basic
+ */
+class Canvas05 extends canvas04_1.Canvas04 {
     // text in pixel
     plainPx(text, dot) {
         text = String(text);
@@ -43341,12 +42807,24 @@ class Convas extends basic_canvas_1.BasicCanvas {
         y -= offset[1];
         this.textPx(text, [x, y]);
     }
+    // write in coord
+    write(text, point) {
+        this.text(text, point, [0, 0]);
+    }
     // label in coord
-    textDodge(text, point, radius, dodge) {
+    labelOffset(text, radius, dir) {
         let textWidth = this.textSemi(text);
-        let xOffset = (radius + textWidth - 5) * cos(dodge);
-        let yOffset = radius * sin(dodge);
-        this.text(text, point, [xOffset, yOffset]);
+        let x = (radius + textWidth - 5) * cos(dir);
+        let y = radius * sin(dir);
+        return [x, y];
+    }
+    label(text, point, radius, dir) {
+        let italic = this.$TEXT_ITALIC;
+        if (isAlphabet(text))
+            this.$TEXT_ITALIC = true;
+        let offset = this.labelOffset(text, radius, dir);
+        this.text(text, point, offset);
+        this.$TEXT_ITALIC = italic;
     }
     // text width
     plainSemi(text) {
@@ -43362,6 +42840,61 @@ class Convas extends basic_canvas_1.BasicCanvas {
             this.latexSemi(text) :
             this.plainSemi(text);
     }
+}
+exports.Canvas05 = Canvas05;
+//# sourceMappingURL=canvas05.js.map
+
+/***/ }),
+
+/***/ 1253:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Canvas06 = void 0;
+const canvas05_1 = __webpack_require__(9795);
+// math
+function deg(radian) {
+    return radian / Math.PI * 180;
+}
+function dotVec([x1, y1], [x2, y2]) {
+    return [x2 - x1, y2 - y1];
+}
+function dir(A, B) {
+    let [dx, dy] = dotVec(A, B);
+    let rad = -Math.atan2(dy, dx);
+    return deg(rad);
+}
+// polar
+function vec(p1, p2) {
+    let [x1, y1] = p1;
+    let [x2, y2] = p2;
+    return [x2 - x1, y2 - y1];
+}
+function cross2D(vec1, vec2) {
+    let [x1, y1] = vec1;
+    let [x2, y2] = vec2;
+    return x1 * y2 - y1 * x2;
+}
+function IsReflex(A, O, B) {
+    let OA = vec(O, A);
+    let OB = vec(O, B);
+    return cross2D(OA, OB) < 0;
+}
+function polarFlip(A, O, B, mode) {
+    let isReflex = IsReflex(A, O, B);
+    if (mode === 'normal' && isReflex)
+        return true;
+    if (mode === 'reflex' && !isReflex)
+        return true;
+    return false;
+}
+/**
+ * Handle:
+ * - direction helper
+ */
+class Canvas06 extends canvas05_1.Canvas05 {
     // dir
     getDir(start, end) {
         let A = this.toPx(start);
@@ -43405,38 +42938,233 @@ class Convas extends basic_canvas_1.BasicCanvas {
         let [a, o, b] = this.pjs([A, O, B]);
         return polarFlip(a, o, b, this.$ANGLE_MODE);
     }
-    // other
+    // string
     unitize(text) {
-        text = String(text);
-        let unit = this.$LENGTH_UNIT;
-        if (unit === '')
-            return text;
-        if (this.$TEXT_LATEX) {
-            return text + `~\\text{${unit}}`;
+        if (typeof text === 'number') {
+            text = String(text);
+            let unit = this.$LENGTH_UNIT;
+            if (unit === '')
+                return text;
+            return this.$TEXT_LATEX
+                ? text + `~\\text{${unit}}`
+                : text + ' ' + unit;
         }
         else {
-            return text + ' ' + unit;
+            return text;
         }
     }
+    // Find the extra pixel allowance when drawing angle arc and angle label for small angles.
+    getAngleAllowance(A, O, B, threshold, pixelPerDeg) {
+        let angle = this.getDirAngle(A, O, B);
+        let angleUnderThreshold = Math.max(threshold - angle, 0);
+        return angleUnderThreshold * pixelPerDeg;
+    }
 }
-exports.Convas = Convas;
-//# sourceMappingURL=convas.js.map
+exports.Canvas06 = Canvas06;
+//# sourceMappingURL=canvas06.js.map
 
 /***/ }),
 
-/***/ 4984:
+/***/ 7610:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Pencil = void 0;
-const armedconvas_1 = __webpack_require__(9492);
-const support_1 = __webpack_require__(703);
-const DEFAULT_AXIS_LABEL_OFFSET_PIXEL = 15;
-const DEFAULT_XAXIS_MARK_OFFSET_PIXEL = 15;
-const DEFAULT_YAXIS_MARK_OFFSET_PIXEL = 10;
-const DEFAULT_AXIS_TICK_LENGTH_PIXEL = 5;
+exports.Canvas07 = void 0;
+const canvas06_1 = __webpack_require__(1253);
+// step
+function isOdd(n) {
+    return n % 2 !== 0;
+}
+function floorHalf(n) {
+    if (isOdd(n))
+        n = n - 1;
+    return n / 2;
+}
+function steps(n) {
+    let N = floorHalf(n);
+    let arr = [];
+    if (isOdd(n)) {
+        arr.push(0);
+        for (let i = 1; i <= N; i++) {
+            arr.push(i);
+            arr.push(-i);
+        }
+    }
+    else {
+        for (let i = 1; i <= N; i++) {
+            let s = i - 0.5;
+            arr.push(s);
+            arr.push(-s);
+        }
+    }
+    return arr;
+}
+// vector
+function mid(A, B) {
+    if (A.length === 3 && B.length === 3) {
+        let [x, y, z] = A;
+        let [X, Y, Z] = B;
+        return [(x + X) / 2, (y + Y) / 2, (z + Z) / 2];
+    }
+    else {
+        let [x, y] = A;
+        let [X, Y] = B;
+        return [(x + X) / 2, (y + Y) / 2];
+    }
+}
+/**
+ * Handle:
+ * - basic elements
+ */
+class Canvas07 extends canvas06_1.Canvas06 {
+    linePx(dots) {
+        this.createPathPx(dots);
+        this.doStroke();
+    }
+    solidPx(dots) {
+        this.createPathPx(dots);
+        this.doSolid();
+    }
+    line(pts) {
+        this.createPath(pts);
+        this.doStroke();
+    }
+    lineVert(x) {
+        let A = this.edgeBottom(x);
+        let B = this.edgeTop(x);
+        this.line([A, B]);
+    }
+    lineHori(y) {
+        let A = this.edgeLeft(y);
+        let B = this.edgeRight(y);
+        this.line([A, B]);
+    }
+    solid(pts) {
+        this.createPath(pts);
+        this.doSolid();
+    }
+    dash(pts) {
+        this.createPath(pts);
+        this.doDash();
+    }
+    shape(pts) {
+        this.createShape(pts);
+        this.doStroke();
+    }
+    fill(pts) {
+        this.createShape(pts);
+        this.doFill();
+    }
+    shade(pts) {
+        this.createShape(pts);
+        this.doShade();
+    }
+    arc(P, O, Q, radius) {
+        this.createArcByPoints(P, O, Q, radius);
+        this.doStroke();
+    }
+    circle(center, radius) {
+        this.createArc(center, radius, [0, 360]);
+        this.doStroke();
+    }
+    disc(center, radius) {
+        this.createArc(center, radius, [0, 360]);
+        this.doFill();
+    }
+    // advanced
+    arrowHead(start, end, size, offset) {
+        this.save();
+        this.translateTo(end);
+        this.rotateTo(start, end);
+        let A = [offset - 2 * size, -size];
+        let O = [offset, 0];
+        let B = [offset - 2 * size, +size];
+        this.solidPx([A, O, B]);
+        this.restore();
+    }
+    arrow(start, end, size) {
+        this.line([start, end]);
+        this.arrowHead(start, end, size, 0);
+    }
+    anglePolar(A, O, B, radius, count, space) {
+        for (let s of steps(count)) {
+            let r = radius + s * space;
+            this.arc(A, O, B, r);
+        }
+    }
+    angle(A, O, B, radius, count, space) {
+        let flip = this.polarFlip(A, O, B);
+        let [P, Q] = flip ? [B, A] : [A, B];
+        // draw like polar
+        this.anglePolar(P, O, Q, radius, count, space);
+    }
+    rightAngle(A, O, B, size) {
+        this.createRightAnglePath(A, O, B, size);
+        this.doSolid();
+    }
+    parallel(start, end, size, count, space) {
+        let M = mid(start, end);
+        for (let i = 0; i < count; i++) {
+            this.arrowHead(start, M, size, i * space);
+        }
+    }
+    tick(start, end, length, offset) {
+        this.save();
+        this.translateTo(end);
+        this.rotateTo(start, end);
+        let A = [offset, -length];
+        let B = [offset, +length];
+        this.solidPx([A, B]);
+        this.restore();
+    }
+    tickVert(pt, length) {
+        let [x, y] = pt;
+        this.tick([x - 1, y], pt, length, 0);
+    }
+    tickHori(pt, length) {
+        let [x, y] = pt;
+        this.tick([x, y - 1], pt, length, 0);
+    }
+    equalSide(start, end, length, count, space) {
+        let M = mid(start, end);
+        for (let s of steps(count)) {
+            this.tick(start, M, length, s * space);
+        }
+    }
+    compass(center, xSize, ySize, arrowSize) {
+        this.save();
+        this.translateTo(center);
+        let E = [xSize, 0];
+        let W = [-xSize, 0];
+        let S = [0, ySize];
+        let N = [0, -ySize];
+        let A = [-arrowSize, -ySize + arrowSize * 2];
+        let B = [+arrowSize, -ySize + arrowSize * 2];
+        this.solidPx([E, W]);
+        this.solidPx([N, S]);
+        this.solidPx([A, N, B]);
+        this.restore();
+    }
+}
+exports.Canvas07 = Canvas07;
+//# sourceMappingURL=canvas07.js.map
+
+/***/ }),
+
+/***/ 8227:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Canvas08 = void 0;
+const canvas07_1 = __webpack_require__(7610);
+const LABEL_OFFSET_PX = 15;
+const X_MARK_OFFSET_PX = 15;
+const Y_MARK_OFFSET_PX = 10;
+const TICK_LENGTH_PX = 5;
 /**
  * Return an array of ticks position at `interval` within `[min,max]`.
  * Zero is always a potential tick position.
@@ -43444,43 +43172,254 @@ const DEFAULT_AXIS_TICK_LENGTH_PIXEL = 5;
  * getTicks(2,10,3) // [3,6,9]
  * ```
  */
-function getTicks(min, max, interval, includeZero = false) {
+function getTicks(min, max, interval) {
     const start = Math.floor(min / interval) * interval;
     const arr = [];
     for (let i = start; i <= max; i += interval) {
         i = parseFloat(i.toPrecision(3));
         if (i === min || i === max)
             continue;
-        if (!includeZero && i === 0)
+        if (i === 0)
             continue;
         arr.push(i);
     }
     return arr;
 }
+/**
+ * Handle:
+ * - Axis
+ */
+class Canvas08 extends canvas07_1.Canvas07 {
+    xAxis() {
+        let A = this.edgeLeft(0);
+        let B = this.edgeRight(0);
+        this.arrow(A, B, 5);
+    }
+    yAxis() {
+        let A = this.edgeBottom(0);
+        let B = this.edgeTop(0);
+        this.arrow(A, B, 5);
+    }
+    xAxisLabel(text) {
+        this.save();
+        this.$TEXT_ALIGN = "right";
+        this.$TEXT_BASELINE = "middle";
+        this.label(text, this.edgeRight(0), LABEL_OFFSET_PX, 90);
+        this.restore();
+    }
+    yAxisLabel(text) {
+        this.save();
+        this.$TEXT_ALIGN = "left";
+        this.$TEXT_BASELINE = "top";
+        this.label(text, this.edgeTop(0), LABEL_OFFSET_PX, 0);
+        this.restore();
+    }
+    xTicks(interval) {
+        return getTicks(this.xmin, this.xmax, interval);
+    }
+    yTicks(interval) {
+        return getTicks(this.ymin, this.ymax, interval);
+    }
+    xAxisTick(interval) {
+        for (let x of this.xTicks(interval)) {
+            this.tickVert([x, 0], TICK_LENGTH_PX);
+        }
+    }
+    yAxisTick(interval) {
+        for (let y of this.yTicks(interval)) {
+            this.tickHori([0, y], TICK_LENGTH_PX);
+        }
+    }
+    xAxisTickMark(interval) {
+        this.save();
+        this.$TEXT_ITALIC = false;
+        this.$TEXT_ALIGN = "center";
+        this.$TEXT_BASELINE = "middle";
+        for (let x of this.xTicks(interval)) {
+            this.label(String(x), [x, 0], X_MARK_OFFSET_PX, 270);
+        }
+        this.restore();
+    }
+    yAxisTickMark(interval) {
+        this.save();
+        this.$TEXT_ITALIC = false;
+        this.$TEXT_ALIGN = "right";
+        this.$TEXT_BASELINE = "middle";
+        for (let y of this.yTicks(interval)) {
+            this.label(String(y), [0, y], Y_MARK_OFFSET_PX, 180);
+        }
+        this.restore();
+    }
+    xAxisGrid(interval) {
+        this.save();
+        this.$COLOR = "#d3d5db";
+        this.lineVert(0);
+        for (let x of this.xTicks(interval)) {
+            this.lineVert(x);
+        }
+        this.restore();
+    }
+    yAxisGrid(interval) {
+        this.save();
+        this.$COLOR = "#d3d5db";
+        this.lineHori(0);
+        for (let y of this.yTicks(interval)) {
+            this.lineHori(y);
+        }
+        this.restore();
+    }
+}
+exports.Canvas08 = Canvas08;
+//# sourceMappingURL=canvas08.js.map
+
+/***/ }),
+
+/***/ 7267:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Canvas09 = void 0;
+const canvas08_1 = __webpack_require__(8227);
+const trace_1 = __webpack_require__(2921);
+const sectoroid_1 = __webpack_require__(3065);
+/**
+ * Handle:
+ * - plot
+ */
+class Canvas09 extends canvas08_1.Canvas08 {
+    plot(func, tStart = this.xmin, tEnd = this.xmax, dots = 1000) {
+        let points = (0, trace_1.trace)(func, [tStart, tEnd], dots);
+        let { xmin, xmax, ymin, ymax } = this;
+        let X = xmax - xmin;
+        let Y = ymax - ymin;
+        function outOfRange([x, y]) {
+            return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y;
+        }
+        function isIll(p) {
+            let [x, y] = p;
+            return !Number.isFinite(x) || !Number.isFinite(y) || outOfRange(p);
+        }
+        let filteredPoints = points.map(p => isIll(p) ? null : p);
+        let segments = (0, trace_1.splitNull)(filteredPoints);
+        for (let seg of segments)
+            this.line(seg);
+    }
+    sectoroidLine(O, A, B, vertices) {
+        let pts = (0, sectoroid_1.sectoroid)(O, A, B, vertices);
+        this.line(pts);
+    }
+    sectoroidFill(O, A, B, vertices) {
+        let pts = (0, sectoroid_1.sectoroid)(O, A, B, vertices);
+        this.fill(pts);
+    }
+    sectoroidShade(O, A, B, vertices) {
+        let pts = (0, sectoroid_1.sectoroid)(O, A, B, vertices);
+        this.shade(pts);
+    }
+}
+exports.Canvas09 = Canvas09;
+//# sourceMappingURL=canvas09.js.map
+
+/***/ }),
+
+/***/ 7964:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Canvas10 = void 0;
+const canvas09_1 = __webpack_require__(7267);
+function degrize(text) {
+    return typeof text === 'number'
+        ? text + '°'
+        : text;
+}
+function mid(A, B) {
+    if (A.length === 3 && B.length === 3) {
+        let [x, y, z] = A;
+        let [X, Y, Z] = B;
+        return [(x + X) / 2, (y + Y) / 2, (z + Z) / 2];
+    }
+    else {
+        let [x, y] = A;
+        let [X, Y] = B;
+        return [(x + X) / 2, (y + Y) / 2];
+    }
+}
+/**
+ * Handle:
+ * - label
+ */
+class Canvas10 extends canvas09_1.Canvas09 {
+    labelPoint(text, point, dir, radius) {
+        this.label(text, point, radius, dir);
+    }
+    labelPointAuto(text, point, radius) {
+        let dir = this.getCenterDir(point);
+        this.label(text, point, radius, dir);
+    }
+    labelAngle(text, [A, O, B], dir, radius) {
+        let T = degrize(text);
+        let mid = this.getMidDir(A, O, B);
+        this.label(T, O, radius, mid + dir);
+    }
+    labelLine(text, [A, B], dir, radius) {
+        text = this.unitize(text);
+        let M = mid(A, B);
+        let normal = this.getLineDir(A, B);
+        this.label(text, M, radius, normal + dir);
+    }
+}
+exports.Canvas10 = Canvas10;
+//# sourceMappingURL=canvas10.js.map
+
+/***/ }),
+
+/***/ 6752:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Pencil = void 0;
+const canvas10_1 = __webpack_require__(7964);
 class Pencil {
     constructor() {
-        this.cv = new armedconvas_1.ArmedConvas();
+        this.cv = new canvas10_1.Canvas10();
         this.RANGE_DONE = false;
         this.SIZE_DONE = false;
+    }
+    pj(pt) {
+        return this.cv.pj(pt);
+    }
+    pjs(pts) {
+        return this.cv.pjs(pts);
     }
     /**
      * Set the coordinate range of the canvas.
      * @param xRange - [xmin,xmax] in coordinates
      * @param yRange - [ymin,ymax] in coordinates
      */
-    initRange(xRange, yRange) {
-        this.cv.initRange(xRange, yRange);
+    initRange([xmin, xmax], [ymin, ymax]) {
+        this.cv.xmin = xmin;
+        this.cv.xmax = xmax;
+        this.cv.ymin = ymin;
+        this.cv.ymax = ymax;
         this.RANGE_DONE = true;
     }
     /**
      * Set the physical size of the canvas.
-     * @param width - width of canvas in scaled unit, 1 unit = SIZE_SCALE (=10) * REM_PIXEL pixel
-     * @param height - height of canvas in scaled unit.
+     * @param widthInch - width of canvas in scaled unit, 1 unit = SIZE_SCALE (=10) * REM_PIXEL pixel
+     * @param heightInch - height of canvas in scaled unit.
      */
-    initSize(width, height) {
+    initSize(widthInch, heightInch) {
         if (!this.RANGE_DONE)
             throw '[Pencil] Range must be set before Size';
-        this.cv.initSize(width, height);
+        this.cv.widthInch = widthInch;
+        this.cv.heightInch = heightInch;
         this.SIZE_DONE = true;
     }
     /**
@@ -43492,282 +43431,7 @@ class Pencil {
             throw '[Pencil] Range must be set before setting border';
         if (!this.SIZE_DONE)
             throw '[Pencil] Size must be set before setting border';
-        this.cv.setBorder();
-    }
-    pathSectoroid(center, pStart, pEnd, vertices) {
-        let v1 = (0, support_1.vec)(center, pStart);
-        let v2 = (0, support_1.vec)(center, pEnd);
-        let r = (0, support_1.magnitude)(v1);
-        let q1 = (0, support_1.argument)(v1);
-        let q2 = (0, support_1.argument)(v2);
-        if (q2 < q1)
-            q2 += 360;
-        let points = (0, support_1.traceCircle)(center, r, [q1, q2]);
-        return [pStart, ...points, pEnd, ...vertices];
-    }
-    /**
-     * Draw a stroke of a pseudo-sector
-     */
-    drawStrokeSectoroid(center, pStart, pEnd, vertices) {
-        let pts = this.pathSectoroid(center, pStart, pEnd, vertices);
-        this.cv.line(pts);
-    }
-    /**
-     * Fill a pseudo-sector
-     */
-    drawFillSectoroid(center, pStart, pEnd, vertices) {
-        let pts = this.pathSectoroid(center, pStart, pEnd, vertices);
-        this.cv.fill(pts);
-    }
-    /**
-     * Shade a pseudo-sector
-     */
-    drawShadeSectoroid(center, pStart, pEnd, vertices) {
-        let pts = this.pathSectoroid(center, pStart, pEnd, vertices);
-        this.cv.shade(pts);
-    }
-    /**
-     * Draw an angle.
-     */
-    drawAngle(A, O, B, radiusPixel, arcCount, spacePixel) {
-        let flip = this.cv.polarFlip(A, O, B);
-        let [P, Q] = flip ? [B, A] : [A, B];
-        // draw like polar
-        this.cv.anglePolar(P, O, Q, radiusPixel, arcCount, spacePixel);
-    }
-    /**
-     * Draw a plot of function.
-     * @param func - the function to plot
-     * @param tStart - start of parameter
-     * @param tEnd - end of parameter
-     * @param dots - total number of dots along the curve
-     */
-    drawPlot(func, tStart = this.cv.xmin, tEnd = this.cv.xmax, dots = 1000) {
-        let points = (0, support_1.trace)(func, [tStart, tEnd], dots);
-        let xmin = this.cv.xmin;
-        let xmax = this.cv.xmax;
-        let ymin = this.cv.ymin;
-        let ymax = this.cv.ymax;
-        let X = xmax - xmin;
-        let Y = ymax - ymin;
-        function outOfRange([x, y]) {
-            return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y;
-        }
-        let filteredPoints = points.map(pt => {
-            let [x, y] = pt;
-            if (!Number.isFinite(x))
-                return null;
-            if (!Number.isFinite(y))
-                return null;
-            if (outOfRange(pt))
-                return null;
-            return pt;
-        });
-        let segments = (0, support_1.split)(filteredPoints, null);
-        for (let seg of segments) {
-            if (seg.length === 0)
-                continue;
-            this.cv.line(seg);
-        }
-    }
-    /**
-     * Draw text.
-     * @param text - string to draw
-     * @param position - where to draw, in coordinates
-     * @param xOffset - horizontal offset in pixel, right is positive
-     * @param yOffset - vertical offset in pixel, up is positive
-     * @returns
-     */
-    drawText(text, position, xOffset, yOffset) {
-        this.cv.text(text, position, [xOffset, yOffset]);
-    }
-    /**
-     * Draw a text label around a point. The label dodges the point elliptically.
-     * @param text - string to write
-     * @param position - where to write, in coordinates
-     * @param direction - polar angle to dodge, in the visible (pixel world) sense
-     * @param radiusPixel - offset distance in pixel
-     */
-    drawLabel(text, position, direction, radiusPixel) {
-        direction ?? (direction = this.cv.getCenterDir(position));
-        this.cv.textDodge(text, position, radiusPixel, direction);
-    }
-    /**
-     * Find the extra pixel allowance when drawing angle arc and angle label for small angles.
-     * @param A - first point, in coordinates.
-     * @param O - where the angle is, in coordinates.
-     * @param B - second point, in coordinates.
-     * @param angleThreshold - the max angle under which extra pixel is needed
-     * @param pixelPerDegree - extra pixel per degree under the threshold
-     */
-    getSmallAngleExtraPixel(A, O, B, angleThreshold, pixelPerDegree) {
-        let angle = this.cv.getDirAngle(A, O, B);
-        let angleUnderThreshold = Math.max(angleThreshold - angle, 0);
-        return angleUnderThreshold * pixelPerDegree;
-    }
-    /**
-     * Get the 4 corners of a circle. For .capture() to parse circle input.
-     * @param center - center of circle
-     * @param radius - radius of circle
-     */
-    getCircleCorners(center, radius) {
-        let [h, k] = center;
-        let r = radius;
-        return [
-            [h + r, k + r],
-            [h + r, k - r],
-            [h - r, k + r],
-            [h - r, k - r]
-        ];
-    }
-    /**
-     * Get the 8 corners of a sphere. For .capture() to parse sphere input.
-     * @param center - center of sphere
-     * @param radius - radius of sphere
-     */
-    getSphereCorners(center, radius) {
-        let [a, b, c] = center;
-        let r = radius;
-        return [
-            [a + r, b + r, c + r],
-            [a + r, b + r, c - r],
-            [a + r, b - r, c + r],
-            [a + r, b - r, c - r],
-            [a - r, b + r, c + r],
-            [a - r, b + r, c - r],
-            [a - r, b - r, c + r],
-            [a - r, b - r, c - r],
-        ];
-    }
-    /**
-     * Draw the x-axis.
-     */
-    drawXAxis() {
-        let A = [this.cv.xmin, 0];
-        let B = [this.cv.xmax, 0];
-        this.cv.line([A, B]);
-        this.cv.arrow(A, B, 5, 0);
-    }
-    /**
-     * Draw the label of x-axis.
-     * @param text - string to write
-     */
-    drawXAxisLabel(text) {
-        this.cv.save();
-        this.cv.$TEXT_ALIGN = "right";
-        this.cv.$TEXT_BASELINE = "middle";
-        this.drawText(text, [this.cv.xmax, 0], 0, DEFAULT_AXIS_LABEL_OFFSET_PIXEL);
-        this.cv.restore();
-    }
-    /**
-     * Draw the y-axis.
-     */
-    drawYAxis() {
-        let A = [0, this.cv.ymin];
-        let B = [0, this.cv.ymax];
-        this.cv.line([A, B]);
-        this.cv.arrow(A, B, 5, 0);
-    }
-    /**
-     * Draw the label of y-axis.
-     * @param text - string to write
-     */
-    drawYAxisLabel(text) {
-        this.cv.save();
-        this.cv.$TEXT_ALIGN = "left";
-        this.cv.$TEXT_BASELINE = "top";
-        this.drawText(text, [0, this.cv.ymax], DEFAULT_AXIS_LABEL_OFFSET_PIXEL, 0);
-        this.cv.restore();
-    }
-    xTicks(interval) {
-        return getTicks(this.cv.xmin, this.cv.xmax, interval);
-    }
-    yTicks(interval) {
-        return getTicks(this.cv.ymin, this.cv.ymax, interval);
-    }
-    /**
-     * Draw the ticks on x-axis.
-     * @param interval - distance between tick, in coordinates.
-     */
-    drawXAxisTick(interval) {
-        for (let x of this.xTicks(interval)) {
-            this.cv.tickVert([x, 0], DEFAULT_AXIS_TICK_LENGTH_PIXEL);
-        }
-    }
-    /**
-     * Draw the ticks on y-axis.
-     * @param interval - distance between tick, in coordinates.
-     */
-    drawYAxisTick(interval) {
-        for (let y of this.yTicks(interval)) {
-            this.cv.tickHori([0, y], DEFAULT_AXIS_TICK_LENGTH_PIXEL);
-        }
-    }
-    /**
-     * Draw the number mark on the ticks on x-axis.
-     * @param interval - distance between tick, in coordinates.
-     */
-    drawXAxisTickMark(interval) {
-        this.cv.save();
-        this.cv.$TEXT_ITALIC = false;
-        this.cv.$TEXT_ALIGN = "center";
-        this.cv.$TEXT_BASELINE = "middle";
-        for (let x of this.xTicks(interval)) {
-            this.drawText(String(x), [x, 0], 0, -DEFAULT_XAXIS_MARK_OFFSET_PIXEL);
-        }
-        this.cv.restore();
-    }
-    /**
-     * Draw the number mark on the ticks on y-axis.
-     * @param interval - distance between tick, in coordinates.
-     */
-    drawYAxisTickMark(interval) {
-        this.cv.save();
-        this.cv.$TEXT_ITALIC = false;
-        this.cv.$TEXT_ALIGN = "right";
-        this.cv.$TEXT_BASELINE = "middle";
-        for (let y of this.yTicks(interval)) {
-            this.drawText(String(y), [0, y], -DEFAULT_YAXIS_MARK_OFFSET_PIXEL, 0);
-        }
-        this.cv.restore();
-    }
-    /**
-     * Draw the vertical grid lines on the x-axis.
-     * @param interval - distance between grids, in coordinates.
-     */
-    drawXAxisGrid(interval) {
-        this.cv.save();
-        this.cv.$COLOR = "#d3d5db";
-        const drawLine = (x) => {
-            this.cv.line([
-                [x, this.cv.ymin],
-                [x, this.cv.ymax]
-            ]);
-        };
-        drawLine(0);
-        for (let x of this.xTicks(interval)) {
-            drawLine(x);
-        }
-        this.cv.restore();
-    }
-    /**
-     * Draw the horizontal grid lines on the y-axis.
-     * @param interval - distance between grids, in coordinates.
-     */
-    drawYAxisGrid(interval) {
-        this.cv.save();
-        this.cv.$COLOR = "#d3d5db";
-        const drawLine = (y) => {
-            this.cv.line([
-                [this.cv.xmin, y],
-                [this.cv.xmax, y]
-            ]);
-        };
-        drawLine(0);
-        for (let y of this.yTicks(interval)) {
-            drawLine(y);
-        }
-        this.cv.restore();
+        this.cv.addBorder(this.cv.$BORDER);
     }
 }
 exports.Pencil = Pencil;
@@ -43776,26 +43440,119 @@ exports.Pencil = Pencil;
 
 /***/ }),
 
-/***/ 703:
+/***/ 5619:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Pencil = void 0;
+var pencil_1 = __webpack_require__(6752);
+Object.defineProperty(exports, "Pencil", ({ enumerable: true, get: function () { return pencil_1.Pencil; } }));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 3570:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.split = exports.traceCircle = exports.trace = exports.argument = exports.magnitude = exports.vec = void 0;
+exports.thingsToPoints = void 0;
+function getCircleCorners(center, radius) {
+    let [h, k] = center;
+    let r = radius;
+    return [
+        [h + r, k + r],
+        [h + r, k - r],
+        [h - r, k + r],
+        [h - r, k - r]
+    ];
+}
+function getSphereCorners(center, radius) {
+    let [a, b, c] = center;
+    let r = radius;
+    return [
+        [a + r, b + r, c + r],
+        [a + r, b + r, c - r],
+        [a + r, b - r, c + r],
+        [a + r, b - r, c - r],
+        [a - r, b + r, c + r],
+        [a - r, b + r, c - r],
+        [a - r, b - r, c + r],
+        [a - r, b - r, c - r],
+    ];
+}
+function isPoint2D(thing) {
+    return Array.isArray(thing)
+        && thing.length === 2
+        && typeof thing[0] === 'number'
+        && typeof thing[1] === 'number';
+}
+function isPoint3D(thing) {
+    return Array.isArray(thing)
+        && thing.length === 3
+        && typeof thing[0] === 'number'
+        && typeof thing[1] === 'number'
+        && typeof thing[2] === 'number';
+}
+function isCircle(thing) {
+    return thing.length === 2
+        && isPoint2D(thing[0])
+        && typeof thing[1] === 'number';
+}
+function isSphere(thing) {
+    return thing.length === 2
+        && isPoint3D(thing[0])
+        && typeof thing[1] === 'number';
+}
+function thingsToPoints(things) {
+    let pts = [];
+    for (let th of things) {
+        if (isPoint2D(th)) {
+            pts.push(th);
+            continue;
+        }
+        if (isPoint3D(th)) {
+            pts.push(th);
+            continue;
+        }
+        if (isCircle(th)) {
+            pts.push(...getCircleCorners(...th));
+            continue;
+        }
+        if (isSphere(th)) {
+            pts.push(...getSphereCorners(...th));
+            continue;
+        }
+    }
+    return pts;
+}
+exports.thingsToPoints = thingsToPoints;
+//# sourceMappingURL=capture.js.map
+
+/***/ }),
+
+/***/ 3065:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.sectoroid = void 0;
+const trace_1 = __webpack_require__(2921);
 function vec(p1, p2) {
     let [x1, y1] = p1;
     let [x2, y2] = p2;
     return [x2 - x1, y2 - y1];
 }
-exports.vec = vec;
 function deg(radian) {
     return radian / Math.PI * 180;
 }
 function magnitude([x, y]) {
     return (x * x + y * y) ** 0.5;
 }
-exports.magnitude = magnitude;
 function argument([x, y]) {
     let rad = Math.atan2(y, x);
     let angle = deg(rad);
@@ -43803,14 +43560,31 @@ function argument([x, y]) {
         angle += 360;
     return angle;
 }
-exports.argument = argument;
+function sectoroid(O, A, B, vertices) {
+    let v1 = vec(O, A);
+    let v2 = vec(O, B);
+    let r = magnitude(v1);
+    let q1 = argument(v1);
+    let q2 = argument(v2);
+    if (q2 < q1)
+        q2 += 360;
+    let points = (0, trace_1.traceCircle)(O, r, [q1, q2]);
+    return [A, ...points, B, ...vertices];
+}
+exports.sectoroid = sectoroid;
+//# sourceMappingURL=sectoroid.js.map
+
+/***/ }),
+
+/***/ 2921:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.splitNull = exports.traceCircle = exports.trace = void 0;
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.
- * @param func - the func to trace, can be normal or parametric.
- * @param range - the range of `func` input to trace
- * @param dots - number of points requested, more dots more detailed
- * @returns an array of 2D points
- * @example
  * ```
  * trace(x=>x**2, [0,3], 4)
  * // [[0,0], [1,1], [2,4], [3,9]]
@@ -43841,12 +43615,7 @@ function trace(func, range, dots = 1000) {
 exports.trace = trace;
 /**
  * Return an array of 2D points as [number,number] by tracing a circle.
- * @param center - the center of the circle
- * @param radius - the radius of the circle
  * @param angleRange - the polar angle range
- * @param dots - number of points requested, more dots more detailed
- * @returns an array of 2D points
- * @example
  * ```
  * traceCircle([0,0], 1, [0,360], 4)
  * // [[1,0], [0,1], [-1,0], [0,-1]]
@@ -43863,43 +43632,96 @@ function traceCircle(center, radius, angleRange, dots = 100) {
     return trace(t => [h + radius * cos(t), k + radius * sin(t)], angleRange, dots);
 }
 exports.traceCircle = traceCircle;
-function split(arr, delimitElement) {
+function splitNull(arr) {
     let ls = [];
     let clone = [...arr];
     while (true) {
-        let firstDelimIndex = clone.findIndex($ => $ === delimitElement);
-        if (firstDelimIndex === -1) {
+        let index = clone.findIndex($ => $ === null);
+        if (index === -1) {
             let head = clone.splice(0);
             ls.push(head);
             break;
         }
         else {
-            let head = clone.splice(0, firstDelimIndex);
+            let head = clone.splice(0, index);
             ls.push(head);
             clone.shift();
-            if (clone.length === 0) {
-                // ls.push([])
+            if (clone.length === 0)
                 break;
-            }
         }
     }
+    ls = ls.filter($ => $.length > 0);
     return ls;
 }
-exports.split = split;
-//# sourceMappingURL=support.js.map
+exports.splitNull = splitNull;
+//# sourceMappingURL=trace.js.map
 
 /***/ }),
 
-/***/ 5619:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8838:
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Pencil = void 0;
-var pencil_1 = __webpack_require__(4984);
-Object.defineProperty(exports, "Pencil", ({ enumerable: true, get: function () { return pencil_1.Pencil; } }));
-//# sourceMappingURL=index.js.map
+exports.trimCanvas = void 0;
+function getAlpha(img, x, y) {
+    let i = 0;
+    i += y * img.width;
+    i += x;
+    return img.data[4 * i + 3];
+}
+function isPainted(img, x, y) {
+    return getAlpha(img, x, y) !== 0;
+}
+function rowBlank(img, y) {
+    for (let x = 0; x < img.width; x++) {
+        if (isPainted(img, x, y))
+            return false;
+    }
+    return true;
+}
+function colBlank(img, x) {
+    for (let y = 0; y < img.height; y++) {
+        if (isPainted(img, x, y))
+            return false;
+    }
+    return true;
+}
+function trimCanvasX(canvas) {
+    let ctx = canvas.getContext("2d");
+    let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let top = 0;
+    let bottom = img.height - 1;
+    while (top < bottom && rowBlank(img, top))
+        top++;
+    while (bottom > top && rowBlank(img, bottom))
+        bottom--;
+    let trimmed = ctx.getImageData(0, top, img.width, bottom - top + 1);
+    canvas.width = trimmed.width;
+    canvas.height = trimmed.height;
+    ctx.putImageData(trimmed, 0, 0);
+}
+function trimCanvasY(canvas) {
+    let ctx = canvas.getContext("2d");
+    let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let left = 0;
+    let right = img.width - 1;
+    while (left < right && colBlank(img, left))
+        left++;
+    while (right > left && colBlank(img, right))
+        right--;
+    let trimmed = ctx.getImageData(left, 0, right - left + 1, img.height);
+    canvas.width = trimmed.width;
+    canvas.height = trimmed.height;
+    ctx.putImageData(trimmed, 0, 0);
+}
+function trimCanvas(canvas) {
+    trimCanvasX(canvas);
+    trimCanvasY(canvas);
+}
+exports.trimCanvas = trimCanvas;
+//# sourceMappingURL=trim.js.map
 
 /***/ })
 
@@ -43965,6 +43787,7 @@ for (const C of [Array, String, TypedArray]) {
         configurable: true
     });
 }
+console.log('MathTree 1');
 
 })();
 

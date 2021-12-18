@@ -1,0 +1,10 @@
+export declare type px = number;
+export declare type dot = [px, px];
+export declare type inch = number;
+export declare type Point2D = [number, number];
+export declare type Point3D = [number, number, number];
+export declare type Point = Point2D | Point3D;
+export declare type circle = [center: Point2D, radius: number];
+export declare type sphere = [center: Point3D, radius: number];
+export declare type capturable = Point | circle | sphere;
+//# sourceMappingURL=global.d.ts.map

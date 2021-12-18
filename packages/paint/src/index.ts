@@ -1,6 +1,7 @@
 
 
 
-export { Pencil } from './canvas2/pencil'
+export { Pencil } from './canvas/pencil'
 
 
+export { capturable } from './global'
