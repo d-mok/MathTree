@@ -39232,11 +39232,6 @@ class PenCls extends paint_1.Pencil {
     /**
      * Draw a circle or arc.
      * @category draw
-     * @param center - The coordinates [x,y] of center.
-     * @param radius - The radius in pixel.
-     * @param angles - deprecated
-     * @param fill - Whether to fill the inside.
-     * @returns void
      * ```
      * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
      * pen.circle([1,2], 10, [0,180]) // draw a upper semi-circle
@@ -39246,6 +39241,16 @@ class PenCls extends paint_1.Pencil {
         this.cv.circle(center, radius);
         if (fill)
             this.cv.disc(center, radius);
+    }
+    /**
+     * Draw a disc.
+     * @category draw
+     * ```
+     * pen.disc([1,2], 10) // draw a disc centered at [1,2] with 10 px radius
+     * ```
+     */
+    disc(center, radius) {
+        this.cv.disc(center, radius);
     }
     /**
      * Draw a line between two points.
