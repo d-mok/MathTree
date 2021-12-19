@@ -1332,7 +1332,7 @@ export class AutoPenCls {
      *    titles: ['step 1', 'step 2'],
      *    probabilities: [[0.1], [0.2, 0.3]],
      *    events: [[['✔', '✘']], [['✔✔', '✔✘'], ['✘✔', '✘✘']]],
-     *    select: 1
+     *    select: [1]
      * })
      * ```
      */
@@ -1351,8 +1351,8 @@ export class AutoPenCls {
     }) {
 
         const pen = new Pen()
-        pen.range.set([-1, 10], [-8, 10])
-        pen.size.set(1.8)
+        pen.range.set([-1, 15], [-8, 10])
+        pen.size.set(2)
 
         function path(
             P: Point2D, Q: Point2D,

@@ -37943,8 +37943,8 @@ class AutoPenCls {
      */
     TreeDiagram({ titles, probabilities, events, select, circleSize }) {
         const pen = new Pen();
-        pen.range.set([-1, 10], [-8, 10]);
-        pen.size.set(1.8);
+        pen.range.set([-1, 15], [-8, 10]);
+        pen.size.set(2);
         function path(P, Q, prob, event, selected, circle) {
             let T = MoveX(Q, 2);
             pen.write(T, event);
