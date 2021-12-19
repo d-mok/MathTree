@@ -3526,12 +3526,384 @@ declare module "Pen/Pen/d3" {
         altitude(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string): void;
     }
 }
+declare module "Pen/Pen/graph" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenGraph {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Draw a circle (x-h)^2+(y-k)^2 = r^2.
+         * ```
+         * pen.graph.circle([1,2],3) // (x-1)^2+(y-2)^2 = 9
+         * ```
+         */
+        circle(center: Point2D, radius: number): void;
+        /**
+         * Draw an arc. AOB must be in polar direction.
+         * ```
+         * pen.graph.arc([0,0],[1,0],[-1,0]) // upper semi-unit circle
+         *
+         * ```
+         */
+        arc(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Draw a sector. AOB must be in polar direction.
+         * ```
+         * pen.graph.sector([0,0],[1,0],[0,1]) // quarter circle sector
+         * ```
+         */
+        sector(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Draw a circle segment. AOB must be in polar direction.
+         * ```
+         * pen.graph.segment([0,0],[1,0],[0,1]) // quarter circle segment
+         * ```
+         */
+        segment(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Draw a quadratic graph.
+         * ```
+         * pen.graph.quadratic(1,2,3) // y=x^2+2x+3.
+         * ```
+         */
+        quadratic(a: number, b: number, c: number): void;
+        /**
+         * Draw a line y=mx+c.
+         * ```
+         * pen.graph.line(2,1) // y=2x+1
+         * ```
+         */
+        line(m: number, c: number): void;
+        /**
+         * Draw a horizontal line.
+         * ```
+         * pen.graph.horizontal(2) // y=2
+         * ```
+         */
+        horizontal(y: number): void;
+        /**
+         * Draw a vertical line.
+         * ```
+         * pen.graph.vertical(2) // x=2
+         * ```
+         */
+        vertical(x: number): void;
+        /**
+         * Draw a line ax+by+c=0.
+         * ```
+         * pen.graph.linear(1,2,3) // x+2y+3=0
+         * ```
+         */
+        linear(a: number, b: number, c: number): void;
+        /**
+         * Draw a line through two points.
+         * ```
+         * pen.graph.through([0,0],[1,1]) // y = x
+         * ```
+         */
+        through(A: Point, B: Point): void;
+        /**
+         * Draw the perpendicular bisector of two points.
+         * ```
+         * pen.graph.perpBisector([0,0],[2,2]) // y = -x+2
+         * ```
+         */
+        perpBisector(A: Point2D, B: Point2D): void;
+    }
+}
+declare module "Pen/Pen/fill" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenFill {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Fill a circle.
+         * ```
+         * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
+         * ```
+         */
+        circle(center: Point2D, radius: number): void;
+        /**
+         * Fill a sector. AOB must be in polar direction.
+         * ```
+         * pen.fill.sector([0,0],[1,0],[0,1]) // fill a quarter circle sector
+         * ```
+         */
+        sector(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Fill a circle segment. AOB must be in polar direction.
+         * ```
+         * pen.fill.segment([0,0],[1,0],[0,1]) // fill a quarter circle segment
+         * ```
+         */
+        segment(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Fill a sector-like area. AOB must be in polar direction.
+         * ```
+         * pen.fill.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // fill a long sector-like region
+         * ```
+         */
+        sectoroid(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]): void;
+        /**
+         * Fill a rectangle.
+         * ```
+         * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
+         * ```
+         */
+        rect(A: Point2D, C: Point2D): void;
+    }
+}
+declare module "Pen/Pen/shade" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenShade {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Shade a circle (x-h)^2+(y-k)^2 = r^2.
+         * ```
+         * pen.shade.circle([1,2],3) // shade (x-1)^2+(y-2)^2 = 9.
+         * ```
+         */
+        circle(center: Point2D, radius: number): void;
+        /**
+         * Shade a sector. AOB must be in polar direction.
+         * ```
+         * pen.shade.sector([0,0],[1,0],[0,1]) // shade a quarter circle sector
+         * ```
+         */
+        sector(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Shade a circle segment. AOB must be in polar direction.
+         * ```
+         * pen.shade.segment([0,0],[1,0],[0,1]) // shade a quarter circle segment
+         * ```
+         */
+        segment(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Shade a sector-like area. AOB must be in polar direction.
+         * ```
+         * pen.shade.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // shade a long sector-like region
+         * ```
+         */
+        sectoroid(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]): void;
+        /**
+         * Shade a rectangle.
+         * ```
+         * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
+         * ```
+         */
+        rect(A: Point2D, C: Point2D): void;
+    }
+}
+declare module "Pen/Pen/label" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenLabel {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+        * Add a label to a point.
+        * ```
+        * pen.label.point([1,2],'A',180)
+        * // label the point [1,2] as 'A', place the label on the left (180 degree)
+        * ```
+        */
+        point(point: Point, text?: string, dir?: number, radius?: number): void;
+        /**
+         * Add a label to points, using index as text.
+         * ```
+         * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
+         * ```
+         */
+        points(points: {
+            [k: string]: Point;
+        }): void;
+        /**
+         * Add a label to points, using index as text, with label center set as center of points.
+         * ```
+         * pen.label.vertices({A,B}) // label point A as 'A', point B as 'B'
+         * ```
+         */
+        vertices(points: {
+            [k: string]: Point;
+        }): void;
+        /**
+         * Add a label to an angle AOB.
+         * ```
+         * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
+         * // label the angle as 'x'
+         * ```
+         */
+        angle([A, O, B]: [Point, Point, Point], text: string | number, dir?: number, radius?: number): void;
+        /**
+         * Add a label to a line AB.
+         * ```
+         * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
+         * ```
+         */
+        line([A, B]: [Point, Point], text: string | number, dir?: number, radius?: number): void;
+        /**
+         * Add a label to a polygon.
+         * ```
+         * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'
+         * ```
+         */
+        polygon(points: Point[], text: string | number): void;
+        /**
+         * Add a coordinates label to a point.
+         * ```
+         * pen.label.coordinates([1,2],180)
+         * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
+         * ```
+         */
+        coordinates(point: Point2D, dir?: number, radius?: number): void;
+    }
+}
+declare module "Pen/Pen/axis" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenAxis {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Draw x-axis.
+         * ```
+         * pen.axis.x('time') // draw the x-axis, label as 'time'
+         * ```
+         */
+        x(label?: string): void;
+        /**
+         * Draw y-axis.
+         * ```
+         * pen.axis.y('height') // draw the y-axis, label as 'height'
+         * ```
+         */
+        y(label?: string): void;
+        /**
+         * Draw both axis.
+         * ```
+         * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
+         * ```
+         */
+        xy(xlabel?: string, ylabel?: string): void;
+    }
+}
+declare module "Pen/Pen/tick" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenTick {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+        * Draw ticks on the x-axis.
+        * ```
+        * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
+        * ```
+        */
+        x(interval?: number, mark?: boolean): void;
+        /**
+         * Draw ticks on the y-axis.
+         * ```
+         * pen.tick.y(2) // draw ticks on the y-axis, at interval 2 units
+         * ```
+         */
+        y(interval?: number, mark?: boolean): void;
+        /**
+         * Draw ticks on both axis.
+         * ```
+         * pen.tick.xy(2) // draw ticks on both axis, at interval 2 units
+         * ```
+         */
+        xy(interval?: number, mark?: boolean): void;
+    }
+}
+declare module "Pen/Pen/grid" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenGrid {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Draw gridlines on the x-axis.
+         * ```
+         * pen.grid.x(2) // draw gridlines on the x-axis, at interval 2 units
+         * ```
+         */
+        x(interval?: number): void;
+        /**
+         * Draw gridlines on the y-axis.
+         * ```
+         * pen.grid.y(2) // draw gridlines on the y-axis, at interval 2 units
+         * ```
+         */
+        y(interval?: number): void;
+        /**
+         * Draw gridlines on both axis.
+         * ```
+         * pen.grid.xy(2) // draw gridlines on both axis, at interval 2 units
+         * ```
+         */
+        xy(interval?: number): void;
+    }
+}
+declare module "Pen/Pen/linProg" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenLinProg {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Draw a constraint line.
+         * ```
+         * pen.linProg.constraint([1,2,'>',3])
+         * ```
+         */
+        drawConstraints(...constraints: Constraint[]): void;
+        /**
+         * Shade the region of the constraint set.
+         * ```
+         * pen.linProg.shadeConstraints([[1,2,'>',3]])
+         * ```
+         */
+        shadeConstraints(constraints: Constraint[]): void;
+        /**
+         * Label coordinates of the vertices of the feasible region.
+         * ```
+         * pen.linProg.verticesCoord([
+         *    [1,0,'>',0],
+         *    [0,1,'>',0],
+         *    [1,1,'<',2]
+         * ])
+         * ```
+         */
+        verticesCoord(constraints: Constraint[]): void;
+    }
+}
 declare module "Pen/Pen/core" {
     import { Convas } from 'paint';
     import { PenRange } from "Pen/Pen/range";
     import { PenSize } from "Pen/Pen/size";
     import { PenSettings } from "Pen/Pen/settings";
     import { PenD3 } from "Pen/Pen/d3";
+    import { PenGraph } from "Pen/Pen/graph";
+    import { PenFill } from "Pen/Pen/fill";
+    import { PenShade } from "Pen/Pen/shade";
+    import { PenLabel } from "Pen/Pen/label";
+    import { PenAxis } from "Pen/Pen/axis";
+    import { PenTick } from "Pen/Pen/tick";
+    import { PenGrid } from "Pen/Pen/grid";
+    import { PenLinProg } from "Pen/Pen/linProg";
     export class PenCls {
         protected cv: Convas;
         constructor();
@@ -3571,90 +3943,7 @@ declare module "Pen/Pen/core" {
          * Drawing graph of functions.
          * @category graph
          */
-        graph: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Draw a circle (x-h)^2+(y-k)^2 = r^2.
-             * ```
-             * pen.graph.circle([1,2],3) // (x-1)^2+(y-2)^2 = 9
-             * ```
-             */
-            circle(center: Point2D, radius: number): void;
-            /**
-             * Draw an arc. AOB must be in polar direction.
-             * ```
-             * pen.graph.arc([0,0],[1,0],[-1,0]) // upper semi-unit circle
-             *
-             * ```
-             */
-            arc(O: Point2D, A: Point2D, B: Point2D): void;
-            /**
-             * Draw a sector. AOB must be in polar direction.
-             * ```
-             * pen.graph.sector([0,0],[1,0],[0,1]) // quarter circle sector
-             * ```
-             */
-            sector(O: Point2D, A: Point2D, B: Point2D): void;
-            /**
-             * Draw a circle segment. AOB must be in polar direction.
-             * ```
-             * pen.graph.segment([0,0],[1,0],[0,1]) // quarter circle segment
-             * ```
-             */
-            segment(O: Point2D, A: Point2D, B: Point2D): void;
-            /**
-             * Draw a quadratic graph.
-             * ```
-             * pen.graph.quadratic(1,2,3) // y=x^2+2x+3.
-             * ```
-             */
-            quadratic(a: number, b: number, c: number): void;
-            /**
-             * Draw a line y=mx+c.
-             * ```
-             * pen.graph.line(2,1) // y=2x+1
-             * ```
-             */
-            line(m: number, c: number): void;
-            /**
-             * Draw a horizontal line.
-             * ```
-             * pen.graph.horizontal(2) // y=2
-             * ```
-             */
-            horizontal(y: number): void;
-            /**
-             * Draw a vertical line.
-             * ```
-             * pen.graph.vertical(2) // x=2
-             * ```
-             */
-            vertical(x: number): void;
-            /**
-             * Draw a line ax+by+c=0.
-             * ```
-             * pen.graph.linear(1,2,3) // x+2y+3=0
-             * ```
-             */
-            linear(a: number, b: number, c: number): void;
-            /**
-             * Draw a line through two points.
-             * ```
-             * pen.graph.through([0,0],[1,1]) // y = x
-             * ```
-             */
-            through(A: Point, B: Point): void;
-            /**
-             * Draw the perpendicular bisector of two points.
-             * ```
-             * pen.graph.perpBisector([0,0],[2,2]) // y = -x+2
-             * ```
-             */
-            perpBisector(A: Point2D, B: Point2D): void;
-        };
+        graph: PenGraph;
         /**
          * Draw a point.
          * @category draw
@@ -3857,127 +4146,17 @@ declare module "Pen/Pen/core" {
          * Fill a shape.
          * @category fill
          */
-        fill: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Fill a circle.
-             * ```
-             * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
-             * ```
-             */
-            circle(center: Point2D, radius: number): void;
-            /**
-             * Fill a sector. AOB must be in polar direction.
-             * ```
-             * pen.fill.sector([0,0],[1,0],[0,1]) // fill a quarter circle sector
-             * ```
-             */
-            sector(O: Point2D, A: Point2D, B: Point2D): void;
-            /**
-             * Fill a circle segment. AOB must be in polar direction.
-             * ```
-             * pen.fill.segment([0,0],[1,0],[0,1]) // fill a quarter circle segment
-             * ```
-             */
-            segment(O: Point2D, A: Point2D, B: Point2D): void;
-            /**
-             * Fill a sector-like area. AOB must be in polar direction.
-             * ```
-             * pen.fill.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // fill a long sector-like region
-             * ```
-             */
-            sectoroid(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]): void;
-            /**
-             * Fill a rectangle.
-             * ```
-             * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
-             * ```
-             */
-            rect(A: Point2D, C: Point2D): void;
-        };
+        fill: PenFill;
         /**
          * Shade a shape.
          * @category shade
          */
-        shade: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Shade a circle (x-h)^2+(y-k)^2 = r^2.
-             * ```
-             * pen.shade.circle([1,2],3) // shade (x-1)^2+(y-2)^2 = 9.
-             * ```
-             */
-            circle(center: Point2D, radius: number): void;
-            /**
-             * Shade a sector. AOB must be in polar direction.
-             * ```
-             * pen.shade.sector([0,0],[1,0],[0,1]) // shade a quarter circle sector
-             * ```
-             */
-            sector(O: Point2D, A: Point2D, B: Point2D): void;
-            /**
-             * Shade a circle segment. AOB must be in polar direction.
-             * ```
-             * pen.shade.segment([0,0],[1,0],[0,1]) // shade a quarter circle segment
-             * ```
-             */
-            segment(O: Point2D, A: Point2D, B: Point2D): void;
-            /**
-             * Shade a sector-like area. AOB must be in polar direction.
-             * ```
-             * pen.shade.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // shade a long sector-like region
-             * ```
-             */
-            sectoroid(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]): void;
-            /**
-             * Shade a rectangle.
-             * ```
-             * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
-             * ```
-             */
-            rect(A: Point2D, C: Point2D): void;
-        };
+        shade: PenShade;
         /**
          * Linear Programming tools.
          * @category linProg
          */
-        linProg: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Draw a constraint line.
-             * ```
-             * pen.linProg.constraint([1,2,'>',3])
-             * ```
-             */
-            drawConstraints(...constraints: Constraint[]): void;
-            /**
-             * Shade the region of the constraint set.
-             * ```
-             * pen.linProg.shadeConstraints([[1,2,'>',3]])
-             * ```
-             */
-            shadeConstraints(constraints: Constraint[]): void;
-            /**
-             * Label coordinates of the vertices of the feasible region.
-             * ```
-             * pen.linProg.verticesCoord([
-             * [1,0,'>',0],
-             * [0,1,'>',0],
-             * [1,1,'<',2]
-             * ])
-             * ```
-             */
-            verticesCoord(constraints: Constraint[]): void;
-        };
+        linProg: PenLinProg;
         /**
          * Draw an angle with label.
          * @category draw
@@ -4042,161 +4221,22 @@ declare module "Pen/Pen/core" {
         /**
          * @category text
          */
-        label: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Add a label to a point.
-             * ```
-             * pen.label.point([1,2],'A',180)
-             * // label the point [1,2] as 'A', place the label on the left (180 degree)
-             * ```
-             */
-            point(point: Point, text?: string, dir?: number | undefined, radius?: number): void;
-            /**
-             * Add a label to points, using index as text.
-             * ```
-             * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
-             * ```
-             */
-            points(points: {
-                [k: string]: Point;
-            }): void;
-            /**
-             * Add a label to points, using index as text, with label center set as center of points.
-             * ```
-             * pen.label.vertices({A,B}) // label point A as 'A', point B as 'B'
-             * ```
-             */
-            vertices(points: {
-                [k: string]: Point;
-            }): void;
-            /**
-             * Add a label to an angle AOB.
-             * ```
-             * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
-             * // label the angle as 'x'
-             * ```
-             */
-            angle([A, O, B]: [Point, Point, Point], text: string | number, dir?: number, radius?: number): void;
-            /**
-             * Add a label to a line AB.
-             * ```
-             * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
-             * ```
-             */
-            line([A, B]: [Point, Point], text: string | number, dir?: number, radius?: number): void;
-            /**
-             * Add a label to a polygon.
-             * ```
-             * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'
-             * ```
-             */
-            polygon(points: Point[], text: string | number): void;
-            /**
-             * Add a coordinates label to a point.
-             * ```
-             * pen.label.coordinates([1,2],180)
-             * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
-             * ```
-             */
-            coordinates(point: Point2D, dir?: number | undefined, radius?: number): void;
-        };
+        label: PenLabel;
         /**
          * The axis.
          * @category axis
          */
-        axis: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Draw x-axis.
-             * ```
-             * pen.axis.x('time') // draw the x-axis, label as 'time'
-             * ```
-             */
-            x(label?: string): void;
-            /**
-             * Draw y-axis.
-             * ```
-             * pen.axis.y('height') // draw the y-axis, label as 'height'
-             * ```
-             */
-            y(label?: string): void;
-            /**
-             * Draw both axis.
-             * ```
-             * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
-             * ```
-             */
-            xy(xlabel?: string, ylabel?: string): void;
-        };
+        axis: PenAxis;
         /**
          * The axis ticks.
          * @category axis
          */
-        tick: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Draw ticks on the x-axis.
-             * ```
-             * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
-             * ```
-             */
-            x(interval?: number, mark?: boolean): void;
-            /**
-             * Draw ticks on the y-axis.
-             * ```
-             * pen.tick.y(2) // draw ticks on the y-axis, at interval 2 units
-             * ```
-             */
-            y(interval?: number, mark?: boolean): void;
-            /**
-             * Draw ticks on both axis.
-             * ```
-             * pen.tick.xy(2) // draw ticks on both axis, at interval 2 units
-             * ```
-             */
-            xy(interval?: number, mark?: boolean): void;
-        };
+        tick: PenTick;
         /**
          * The axis gridlines.
          * @category axis
          */
-        grid: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Draw gridlines on the x-axis.
-             * ```
-             * pen.grid.x(2) // draw gridlines on the x-axis, at interval 2 units
-             * ```
-             */
-            x(interval?: number): void;
-            /**
-             * Draw gridlines on the y-axis.
-             * ```
-             * pen.grid.y(2) // draw gridlines on the y-axis, at interval 2 units
-             * ```
-             */
-            y(interval?: number): void;
-            /**
-             * Draw gridlines on both axis.
-             * ```
-             * pen.grid.xy(2) // draw gridlines on both axis, at interval 2 units
-             * ```
-             */
-            xy(interval?: number): void;
-        };
+        grid: PenGrid;
         /**
          * The 3D pen
          * @category 3D
@@ -4728,120 +4768,6 @@ declare module "Pen/index" {
         var Pen: typeof PenCls;
         var AutoPen: typeof AutoPenCls;
         var PhyPen: typeof PhyPenCls;
-    }
-}
-declare module "Pen/Pen/fill" {
-    import { PenCls } from "Pen/Pen/core";
-    import { Convas } from 'paint';
-    export class PenFill {
-        private pen;
-        private cv;
-        constructor(pen: PenCls, cv: Convas);
-    }
-}
-declare module "Pen/Pen/graph" {
-    import { PenCls } from "Pen/Pen/core";
-    import { Convas } from 'paint';
-    export class PenGraph {
-        private pen;
-        private cv;
-        constructor(pen: PenCls, cv: Convas);
-        /**
-         * Draw a circle (x-h)^2+(y-k)^2 = r^2.
-         * ```
-         * pen.graph.circle([1,2],3) // (x-1)^2+(y-2)^2 = 9
-         * ```
-         */
-        circle(center: Point2D, radius: number): void;
-        /**
-         * Draw an arc. AOB must be in polar direction.
-         * ```
-         * pen.graph.arc([0,0],[1,0],[-1,0]) // upper semi-unit circle
-         *
-         * ```
-         */
-        arc(O: Point2D, A: Point2D, B: Point2D): void;
-        /**
-         * Draw a sector. AOB must be in polar direction.
-         * ```
-         * pen.graph.sector([0,0],[1,0],[0,1]) // quarter circle sector
-         * ```
-         */
-        sector(O: Point2D, A: Point2D, B: Point2D): void;
-        /**
-         * Draw a circle segment. AOB must be in polar direction.
-         * ```
-         * pen.graph.segment([0,0],[1,0],[0,1]) // quarter circle segment
-         * ```
-         */
-        segment(O: Point2D, A: Point2D, B: Point2D): void;
-        /**
-         * Draw a quadratic graph.
-         * ```
-         * pen.graph.quadratic(1,2,3) // y=x^2+2x+3.
-         * ```
-         */
-        quadratic(a: number, b: number, c: number): void;
-        /**
-         * Draw a line y=mx+c.
-         * ```
-         * pen.graph.line(2,1) // y=2x+1
-         * ```
-         */
-        line(m: number, c: number): void;
-        /**
-         * Draw a horizontal line.
-         * ```
-         * pen.graph.horizontal(2) // y=2
-         * ```
-         */
-        horizontal(y: number): void;
-        /**
-         * Draw a vertical line.
-         * ```
-         * pen.graph.vertical(2) // x=2
-         * ```
-         */
-        vertical(x: number): void;
-        /**
-         * Draw a line ax+by+c=0.
-         * ```
-         * pen.graph.linear(1,2,3) // x+2y+3=0
-         * ```
-         */
-        linear(a: number, b: number, c: number): void;
-        /**
-         * Draw a line through two points.
-         * ```
-         * pen.graph.through([0,0],[1,1]) // y = x
-         * ```
-         */
-        through(A: Point, B: Point): void;
-        /**
-         * Draw the perpendicular bisector of two points.
-         * ```
-         * pen.graph.perpBisector([0,0],[2,2]) // y = -x+2
-         * ```
-         */
-        perpBisector(A: Point2D, B: Point2D): void;
-    }
-}
-declare module "Pen/Pen/label" {
-    import { PenCls } from "Pen/Pen/core";
-    import { Convas } from 'paint';
-    export class PenLabel {
-        private pen;
-        private cv;
-        constructor(pen: PenCls, cv: Convas);
-    }
-}
-declare module "Pen/Pen/shade" {
-    import { PenCls } from "Pen/Pen/core";
-    import { Convas } from 'paint';
-    export class PenShade {
-        private pen;
-        private cv;
-        constructor(pen: PenCls, cv: Convas);
     }
 }
 declare module "Soil/tool/html" {

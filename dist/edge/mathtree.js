@@ -37987,6 +37987,54 @@ exports.AutoPenCls = AutoPenCls;
 
 /***/ }),
 
+/***/ 3495:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenAxis = void 0;
+class PenAxis {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+     * Draw x-axis.
+     * ```
+     * pen.axis.x('time') // draw the x-axis, label as 'time'
+     * ```
+     */
+    x(label = "x") {
+        this.cv.xAxis();
+        this.cv.xAxisLabel(label);
+    }
+    /**
+     * Draw y-axis.
+     * ```
+     * pen.axis.y('height') // draw the y-axis, label as 'height'
+     * ```
+     */
+    y(label = "y") {
+        this.cv.yAxis();
+        this.cv.yAxisLabel(label);
+    }
+    /**
+     * Draw both axis.
+     * ```
+     * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
+     * ```
+     */
+    xy(xlabel = "x", ylabel = "y") {
+        this.x(xlabel);
+        this.y(ylabel);
+    }
+}
+exports.PenAxis = PenAxis;
+
+
+/***/ }),
+
 /***/ 6183:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -37999,6 +38047,14 @@ const range_1 = __webpack_require__(1991);
 const size_1 = __webpack_require__(9945);
 const settings_1 = __webpack_require__(7650);
 const d3_1 = __webpack_require__(2137);
+const graph_1 = __webpack_require__(1932);
+const fill_1 = __webpack_require__(2431);
+const shade_1 = __webpack_require__(9645);
+const label_1 = __webpack_require__(1945);
+const axis_1 = __webpack_require__(3495);
+const tick_1 = __webpack_require__(7766);
+const grid_1 = __webpack_require__(2198);
+const linProg_1 = __webpack_require__(6285);
 /**
  * @ignore
  */
@@ -38029,507 +38085,359 @@ class PenCls {
          * Drawing graph of functions.
          * @category graph
          */
-        this.graph = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Draw a circle (x-h)^2+(y-k)^2 = r^2.
-             * ```
-             * pen.graph.circle([1,2],3) // (x-1)^2+(y-2)^2 = 9
-             * ```
-             */
-            circle(center, radius) {
-                const [h, k] = center;
-                this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 365);
-            },
-            /**
-             * Draw an arc. AOB must be in polar direction.
-             * ```
-             * pen.graph.arc([0,0],[1,0],[-1,0]) // upper semi-unit circle
-             *
-             * ```
-             */
-            arc(O, A, B) {
-                this._pen.cv.sectoroidLine(O, A, B, []);
-            },
-            /**
-             * Draw a sector. AOB must be in polar direction.
-             * ```
-             * pen.graph.sector([0,0],[1,0],[0,1]) // quarter circle sector
-             * ```
-             */
-            sector(O, A, B) {
-                this._pen.cv.sectoroidLine(O, A, B, [O, A]);
-            },
-            /**
-             * Draw a circle segment. AOB must be in polar direction.
-             * ```
-             * pen.graph.segment([0,0],[1,0],[0,1]) // quarter circle segment
-             * ```
-             */
-            segment(O, A, B) {
-                this._pen.cv.sectoroidLine(O, A, B, [A]);
-            },
-            /**
-             * Draw a quadratic graph.
-             * ```
-             * pen.graph.quadratic(1,2,3) // y=x^2+2x+3.
-             * ```
-             */
-            quadratic(a, b, c) {
-                this._pen.plot(x => a * x * x + b * x + c);
-            },
-            /**
-             * Draw a line y=mx+c.
-             * ```
-             * pen.graph.line(2,1) // y=2x+1
-             * ```
-             */
-            line(m, c) {
-                const { xmin, xmax } = this._pen.cv;
-                const y = (x) => m * x + c;
-                this._pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
-            },
-            /**
-             * Draw a horizontal line.
-             * ```
-             * pen.graph.horizontal(2) // y=2
-             * ```
-             */
-            horizontal(y) {
-                this._pen.cv.lineHori(y);
-            },
-            /**
-             * Draw a vertical line.
-             * ```
-             * pen.graph.vertical(2) // x=2
-             * ```
-             */
-            vertical(x) {
-                this._pen.cv.lineVert(x);
-            },
-            /**
-             * Draw a line ax+by+c=0.
-             * ```
-             * pen.graph.linear(1,2,3) // x+2y+3=0
-             * ```
-             */
-            linear(a, b, c) {
-                if (a === 0 && b !== 0)
-                    this.horizontal(-c / b);
-                if (b == 0 && a !== 0)
-                    this.vertical(-c / a);
-                if (a !== 0 && b !== 0)
-                    this.line(-a / b, -c / b);
-            },
-            /**
-             * Draw a line through two points.
-             * ```
-             * pen.graph.through([0,0],[1,1]) // y = x
-             * ```
-             */
-            through(A, B) {
-                let ptA = this._pen.pj(A);
-                let ptB = this._pen.pj(B);
-                let [a, b, c] = lin().byTwoPoints(ptA, ptB).toLinear();
-                this.linear(a, b, c);
-            },
-            /**
-             * Draw the perpendicular bisector of two points.
-             * ```
-             * pen.graph.perpBisector([0,0],[2,2]) // y = -x+2
-             * ```
-             */
-            perpBisector(A, B) {
-                let [a, b, c] = lin().byBisector(A, B).toLinear();
-                this.linear(a, b, c);
-            }
-        };
+        this.graph = new graph_1.PenGraph(this, this.cv);
         /**
          * Fill a shape.
          * @category fill
          */
-        this.fill = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Fill a circle.
-             * ```
-             * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
-             * ```
-             */
-            circle(center, radius) {
-                let points = cal.traceCircle(center, radius, [0, 360]);
-                this._pen.polyfill(...points);
-            },
-            /**
-             * Fill a sector. AOB must be in polar direction.
-             * ```
-             * pen.fill.sector([0,0],[1,0],[0,1]) // fill a quarter circle sector
-             * ```
-             */
-            sector(O, A, B) {
-                this._pen.cv.sectoroidFill(O, A, B, [O]);
-            },
-            /**
-             * Fill a circle segment. AOB must be in polar direction.
-             * ```
-             * pen.fill.segment([0,0],[1,0],[0,1]) // fill a quarter circle segment
-             * ```
-             */
-            segment(O, A, B) {
-                this._pen.cv.sectoroidFill(O, A, B, []);
-            },
-            /**
-             * Fill a sector-like area. AOB must be in polar direction.
-             * ```
-             * pen.fill.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // fill a long sector-like region
-             * ```
-             */
-            sectoroid(O, A, B, vertices) {
-                this._pen.cv.sectoroidFill(O, A, B, vertices);
-            },
-            /**
-             * Fill a rectangle.
-             * ```
-             * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
-             * ```
-             */
-            rect(A, C) {
-                let [a, b] = A;
-                let [c, d] = C;
-                this._pen.polyfill([a, b], [c, b], [c, d], [a, d]);
-            }
-        };
+        this.fill = new fill_1.PenFill(this, this.cv);
+        // /**
+        //  * Fill a shape.
+        //  * @category fill
+        //  */
+        // fill = {
+        //     /**
+        //      * @ignore
+        //      */
+        //     _pen: this as PenCls,
+        //     /**
+        //      * Fill a circle.
+        //      * ```
+        //      * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
+        //      * ```
+        //      */
+        //     circle(center: Point2D, radius: number) {
+        //         let points = cal.traceCircle(center, radius, [0, 360])
+        //         this._pen.polyfill(...points)
+        //     },
+        //     /**
+        //      * Fill a sector. AOB must be in polar direction.
+        //      * ```
+        //      * pen.fill.sector([0,0],[1,0],[0,1]) // fill a quarter circle sector
+        //      * ```
+        //      */
+        //     sector(O: Point2D, A: Point2D, B: Point2D) {
+        //         this._pen.cv.sectoroidFill(O, A, B, [O])
+        //     },
+        //     /**
+        //      * Fill a circle segment. AOB must be in polar direction.
+        //      * ```
+        //      * pen.fill.segment([0,0],[1,0],[0,1]) // fill a quarter circle segment
+        //      * ```
+        //      */
+        //     segment(O: Point2D, A: Point2D, B: Point2D) {
+        //         this._pen.cv.sectoroidFill(O, A, B, [])
+        //     },
+        //     /**
+        //      * Fill a sector-like area. AOB must be in polar direction.
+        //      * ```
+        //      * pen.fill.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // fill a long sector-like region
+        //      * ```
+        //      */
+        //     sectoroid(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]) {
+        //         this._pen.cv.sectoroidFill(O, A, B, vertices)
+        //     },
+        //     /**
+        //      * Fill a rectangle.
+        //      * ```
+        //      * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
+        //      * ```
+        //      */
+        //     rect(A: Point2D, C: Point2D) {
+        //         let [a, b] = A
+        //         let [c, d] = C
+        //         this._pen.polyfill([a, b], [c, b], [c, d], [a, d])
+        //     }
+        // };
         /**
          * Shade a shape.
          * @category shade
          */
-        this.shade = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Shade a circle (x-h)^2+(y-k)^2 = r^2.
-             * ```
-             * pen.shade.circle([1,2],3) // shade (x-1)^2+(y-2)^2 = 9.
-             * ```
-             */
-            circle(center, radius) {
-                let points = cal.traceCircle(center, radius, [0, 360]);
-                this._pen.polyshade(...points);
-            },
-            /**
-             * Shade a sector. AOB must be in polar direction.
-             * ```
-             * pen.shade.sector([0,0],[1,0],[0,1]) // shade a quarter circle sector
-             * ```
-             */
-            sector(O, A, B) {
-                this._pen.cv.sectoroidShade(O, A, B, [O]);
-            },
-            /**
-             * Shade a circle segment. AOB must be in polar direction.
-             * ```
-             * pen.shade.segment([0,0],[1,0],[0,1]) // shade a quarter circle segment
-             * ```
-             */
-            segment(O, A, B) {
-                this._pen.cv.sectoroidShade(O, A, B, []);
-            },
-            /**
-             * Shade a sector-like area. AOB must be in polar direction.
-             * ```
-             * pen.shade.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // shade a long sector-like region
-             * ```
-             */
-            sectoroid(O, A, B, vertices) {
-                this._pen.cv.sectoroidShade(O, A, B, vertices);
-            },
-            /**
-             * Shade a rectangle.
-             * ```
-             * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
-             * ```
-             */
-            rect(A, C) {
-                let [a, b] = A;
-                let [c, d] = C;
-                this._pen.polyshade([a, b], [c, b], [c, d], [a, d]);
-            }
-        };
+        this.shade = new shade_1.PenShade(this, this.cv);
+        // /**
+        //  * Shade a shape.
+        //  * @category shade
+        //  */
+        // shade = {
+        //     /**
+        //      * @ignore
+        //      */
+        //     _pen: this as PenCls,
+        //     /**
+        //      * Shade a circle (x-h)^2+(y-k)^2 = r^2.
+        //      * ```
+        //      * pen.shade.circle([1,2],3) // shade (x-1)^2+(y-2)^2 = 9.
+        //      * ```
+        //      */
+        //     circle(center: Point2D, radius: number) {
+        //         let points = cal.traceCircle(center, radius, [0, 360])
+        //         this._pen.polyshade(...points)
+        //     },
+        //     /**
+        //      * Shade a sector. AOB must be in polar direction.
+        //      * ```
+        //      * pen.shade.sector([0,0],[1,0],[0,1]) // shade a quarter circle sector
+        //      * ```
+        //      */
+        //     sector(O: Point2D, A: Point2D, B: Point2D) {
+        //         this._pen.cv.sectoroidShade(O, A, B, [O])
+        //     },
+        //     /**
+        //      * Shade a circle segment. AOB must be in polar direction.
+        //      * ```
+        //      * pen.shade.segment([0,0],[1,0],[0,1]) // shade a quarter circle segment
+        //      * ```
+        //      */
+        //     segment(O: Point2D, A: Point2D, B: Point2D) {
+        //         this._pen.cv.sectoroidShade(O, A, B, [])
+        //     },
+        //     /**
+        //      * Shade a sector-like area. AOB must be in polar direction.
+        //      * ```
+        //      * pen.shade.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // shade a long sector-like region
+        //      * ```
+        //      */
+        //     sectoroid(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]) {
+        //         this._pen.cv.sectoroidShade(O, A, B, vertices)
+        //     },
+        //     /**
+        //      * Shade a rectangle.
+        //      * ```
+        //      * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
+        //      * ```
+        //      */
+        //     rect(A: Point2D, C: Point2D) {
+        //         let [a, b] = A
+        //         let [c, d] = C
+        //         this._pen.polyshade([a, b], [c, b], [c, d], [a, d])
+        //     }
+        // };
         /**
          * Linear Programming tools.
          * @category linProg
          */
-        this.linProg = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Draw a constraint line.
-             * ```
-             * pen.linProg.constraint([1,2,'>',3])
-             * ```
-             */
-            drawConstraints(...constraints) {
-                for (let c of toReins(constraints)) {
-                    if (c.canEqual()) {
-                        this._pen.graph.linear(...c.toLinear());
-                    }
-                    else {
-                        this._pen.set.dash(true);
-                        this._pen.graph.linear(...c.toLinear());
-                        this._pen.set.dash();
-                    }
-                }
-            },
-            /**
-             * Shade the region of the constraint set.
-             * ```
-             * pen.linProg.shadeConstraints([[1,2,'>',3]])
-             * ```
-             */
-            shadeConstraints(constraints) {
-                let poly = toReins(constraints).polygon();
-                this._pen.polyshade(...poly);
-            },
-            /**
-             * Label coordinates of the vertices of the feasible region.
-             * ```
-             * pen.linProg.verticesCoord([
-             * [1,0,'>',0],
-             * [0,1,'>',0],
-             * [1,1,'<',2]
-             * ])
-             * ```
-             */
-            verticesCoord(constraints) {
-                let vs = toReins(constraints).vertices();
-                for (let v of vs) {
-                    this._pen.label.coordinates(v);
-                }
-            }
-        };
+        this.linProg = new linProg_1.PenLinProg(this, this.cv);
         /**
          * @category text
          */
-        this.label = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Add a label to a point.
-             * ```
-             * pen.label.point([1,2],'A',180)
-             * // label the point [1,2] as 'A', place the label on the left (180 degree)
-             * ```
-             */
-            point(point, text = '', dir, radius = 15) {
-                if (dir !== undefined) {
-                    this._pen.cv.labelPoint(text, point, dir, radius);
-                }
-                else {
-                    this._pen.cv.labelPointAuto(text, point, radius);
-                }
-            },
-            /**
-             * Add a label to points, using index as text.
-             * ```
-             * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
-             * ```
-             */
-            points(points) {
-                for (let k in points) {
-                    this.point(points[k], k);
-                }
-            },
-            /**
-             * Add a label to points, using index as text, with label center set as center of points.
-             * ```
-             * pen.label.vertices({A,B}) // label point A as 'A', point B as 'B'
-             * ```
-             */
-            vertices(points) {
-                this._pen.cv.save();
-                this._pen.set.labelCenter(...Object.values(points));
-                this.points(points);
-                this._pen.cv.restore();
-            },
-            /**
-             * Add a label to an angle AOB.
-             * ```
-             * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
-             * // label the angle as 'x'
-             * ```
-             */
-            angle([A, O, B], text, dir = 0, radius = -1) {
-                if (radius < 0) {
-                    radius = 28 + this._pen.cv.getAngleAllowance(A, O, B, 40, 1.5);
-                }
-                this._pen.cv.labelAngle(text, [A, O, B], dir, radius);
-            },
-            /**
-             * Add a label to a line AB.
-             * ```
-             * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
-             * ```
-             */
-            line([A, B], text, dir = 0, radius = 15) {
-                this._pen.cv.labelLine(text, [A, B], dir, radius);
-            },
-            /**
-             * Add a label to a polygon.
-             * ```
-             * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'
-             * ```
-             */
-            polygon(points, text) {
-                let pts = this._pen.pjs(points);
-                this._pen.cv.labelPoint(String(text), Mid(...pts), 0, 0);
-            },
-            /**
-             * Add a coordinates label to a point.
-             * ```
-             * pen.label.coordinates([1,2],180)
-             * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
-             * ```
-             */
-            coordinates(point, dir, radius = 15) {
-                let [x, y] = point;
-                x = Fix(x, 1);
-                y = Fix(y, 1);
-                let text = `(${x}, ${y})`;
-                this.point(point, text, dir, radius);
-            }
-        };
+        this.label = new label_1.PenLabel(this, this.cv);
+        // /**
+        //  * @category text
+        //  */
+        // label = {
+        //     /**
+        //      * @ignore
+        //      */
+        //     _pen: this as PenCls,
+        //     /**
+        //      * Add a label to a point.
+        //      * ```
+        //      * pen.label.point([1,2],'A',180)
+        //      * // label the point [1,2] as 'A', place the label on the left (180 degree)
+        //      * ```
+        //      */
+        //     point(point: Point, text = '', dir?: number, radius = 15) {
+        //         if (dir !== undefined) {
+        //             this._pen.cv.labelPoint(text, point, dir, radius)
+        //         } else {
+        //             this._pen.cv.labelPointAuto(text, point, radius)
+        //         }
+        //     },
+        //     /**
+        //      * Add a label to points, using index as text.
+        //      * ```
+        //      * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
+        //      * ```
+        //      */
+        //     points(points: { [k: string]: Point }) {
+        //         for (let k in points) {
+        //             this.point(points[k], k)
+        //         }
+        //     },
+        //     /**
+        //      * Add a label to points, using index as text, with label center set as center of points.
+        //      * ```
+        //      * pen.label.vertices({A,B}) // label point A as 'A', point B as 'B'
+        //      * ```
+        //      */
+        //     vertices(points: { [k: string]: Point }) {
+        //         this._pen.cv.save()
+        //         this._pen.set.labelCenter(...Object.values(points))
+        //         this.points(points)
+        //         this._pen.cv.restore()
+        //     },
+        //     /**
+        //      * Add a label to an angle AOB.
+        //      * ```
+        //      * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
+        //      * // label the angle as 'x'
+        //      * ```
+        //      */
+        //     angle([A, O, B]: [Point, Point, Point], text: string | number, dir = 0, radius = -1) {
+        //         if (radius < 0) {
+        //             radius = 28 + this._pen.cv.getAngleAllowance(A, O, B, 40, 1.5)
+        //         }
+        //         this._pen.cv.labelAngle(text, [A, O, B], dir, radius)
+        //     },
+        //     /**
+        //      * Add a label to a line AB.
+        //      * ```
+        //      * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
+        //      * ```
+        //      */
+        //     line([A, B]: [Point, Point], text: string | number, dir = 0, radius = 15) {
+        //         this._pen.cv.labelLine(text, [A, B], dir, radius)
+        //     },
+        //     /**
+        //      * Add a label to a polygon.
+        //      * ```
+        //      * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'
+        //      * ```
+        //      */
+        //     polygon(points: Point[], text: string | number) {
+        //         let pts = this._pen.pjs(points)
+        //         this._pen.cv.labelPoint(String(text), Mid(...pts), 0, 0)
+        //     },
+        //     /**
+        //      * Add a coordinates label to a point.
+        //      * ```
+        //      * pen.label.coordinates([1,2],180)
+        //      * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
+        //      * ```
+        //      */
+        //     coordinates(point: Point2D, dir?: number, radius = 15) {
+        //         let [x, y] = point
+        //         x = Fix(x, 1)
+        //         y = Fix(y, 1)
+        //         let text = `(${x}, ${y})`
+        //         this.point(point, text, dir, radius)
+        //     }
+        // };
         /**
          * The axis.
          * @category axis
          */
-        this.axis = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Draw x-axis.
-             * ```
-             * pen.axis.x('time') // draw the x-axis, label as 'time'
-             * ```
-             */
-            x(label = "x") {
-                this._pen.cv.xAxis();
-                this._pen.cv.xAxisLabel(label);
-            },
-            /**
-             * Draw y-axis.
-             * ```
-             * pen.axis.y('height') // draw the y-axis, label as 'height'
-             * ```
-             */
-            y(label = "y") {
-                this._pen.cv.yAxis();
-                this._pen.cv.yAxisLabel(label);
-            },
-            /**
-             * Draw both axis.
-             * ```
-             * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
-             * ```
-             */
-            xy(xlabel = "x", ylabel = "y") {
-                this.x(xlabel);
-                this.y(ylabel);
-            },
-        };
+        this.axis = new axis_1.PenAxis(this, this.cv);
+        // /**
+        //  * The axis.
+        //  * @category axis
+        //  */
+        // axis = {
+        //     /**
+        //      * @ignore
+        //      */
+        //     _pen: this as PenCls,
+        //     /**
+        //      * Draw x-axis.
+        //      * ```
+        //      * pen.axis.x('time') // draw the x-axis, label as 'time'
+        //      * ```
+        //      */
+        //     x(label = "x") {
+        //         this._pen.cv.xAxis()
+        //         this._pen.cv.xAxisLabel(label)
+        //     },
+        //     /**
+        //      * Draw y-axis.
+        //      * ```
+        //      * pen.axis.y('height') // draw the y-axis, label as 'height'
+        //      * ```
+        //      */
+        //     y(label = "y") {
+        //         this._pen.cv.yAxis()
+        //         this._pen.cv.yAxisLabel(label)
+        //     },
+        //     /**
+        //      * Draw both axis.
+        //      * ```
+        //      * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
+        //      * ```
+        //      */
+        //     xy(xlabel = "x", ylabel = "y") {
+        //         this.x(xlabel)
+        //         this.y(ylabel)
+        //     },
+        // };
         /**
          * The axis ticks.
          * @category axis
          */
-        this.tick = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Draw ticks on the x-axis.
-             * ```
-             * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
-             * ```
-             */
-            x(interval = 1, mark = true) {
-                this._pen.cv.xAxisTick(interval);
-                if (mark)
-                    this._pen.cv.xAxisTickMark(interval);
-            },
-            /**
-             * Draw ticks on the y-axis.
-             * ```
-             * pen.tick.y(2) // draw ticks on the y-axis, at interval 2 units
-             * ```
-             */
-            y(interval = 1, mark = true) {
-                this._pen.cv.yAxisTick(interval);
-                if (mark)
-                    this._pen.cv.yAxisTickMark(interval);
-            },
-            /**
-             * Draw ticks on both axis.
-             * ```
-             * pen.tick.xy(2) // draw ticks on both axis, at interval 2 units
-             * ```
-             */
-            xy(interval = 1, mark = true) {
-                this.x(interval, mark);
-                this.y(interval, mark);
-            }
-        };
+        this.tick = new tick_1.PenTick(this, this.cv);
+        // tick = {
+        //     /**
+        //      * @ignore
+        //      */
+        //     _pen: this as PenCls,
+        //     /**
+        //      * Draw ticks on the x-axis.
+        //      * ```
+        //      * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
+        //      * ```
+        //      */
+        //     x(interval = 1, mark = true) {
+        //         this._pen.cv.xAxisTick(interval)
+        //         if (mark) this._pen.cv.xAxisTickMark(interval)
+        //     },
+        //     /**
+        //      * Draw ticks on the y-axis.
+        //      * ```
+        //      * pen.tick.y(2) // draw ticks on the y-axis, at interval 2 units
+        //      * ```
+        //      */
+        //     y(interval = 1, mark = true) {
+        //         this._pen.cv.yAxisTick(interval)
+        //         if (mark) this._pen.cv.yAxisTickMark(interval)
+        //     },
+        //     /**
+        //      * Draw ticks on both axis.
+        //      * ```
+        //      * pen.tick.xy(2) // draw ticks on both axis, at interval 2 units
+        //      * ```
+        //      */
+        //     xy(interval = 1, mark = true) {
+        //         this.x(interval, mark)
+        //         this.y(interval, mark)
+        //     }
+        // };
         /**
          * The axis gridlines.
          * @category axis
          */
-        this.grid = {
-            /**
-             * @ignore
-             */
-            _pen: this,
-            /**
-             * Draw gridlines on the x-axis.
-             * ```
-             * pen.grid.x(2) // draw gridlines on the x-axis, at interval 2 units
-             * ```
-             */
-            x(interval = 1) {
-                this._pen.cv.xAxisGrid(interval);
-            },
-            /**
-             * Draw gridlines on the y-axis.
-             * ```
-             * pen.grid.y(2) // draw gridlines on the y-axis, at interval 2 units
-             * ```
-             */
-            y(interval = 1) {
-                this._pen.cv.yAxisGrid(interval);
-            },
-            /**
-             * Draw gridlines on both axis.
-             * ```
-             * pen.grid.xy(2) // draw gridlines on both axis, at interval 2 units
-             * ```
-             */
-            xy(interval = 1) {
-                this.x(interval);
-                this.y(interval);
-            }
-        };
+        this.grid = new grid_1.PenGrid(this, this.cv);
+        // grid = {
+        //     /**
+        //      * @ignore
+        //      */
+        //     _pen: this as PenCls,
+        //     /**
+        //      * Draw gridlines on the x-axis.
+        //      * ```
+        //      * pen.grid.x(2) // draw gridlines on the x-axis, at interval 2 units
+        //      * ```
+        //      */
+        //     x(interval = 1) {
+        //         this._pen.cv.xAxisGrid(interval)
+        //     },
+        //     /**
+        //      * Draw gridlines on the y-axis.
+        //      * ```
+        //      * pen.grid.y(2) // draw gridlines on the y-axis, at interval 2 units
+        //      * ```
+        //      */
+        //     y(interval = 1) {
+        //         this._pen.cv.yAxisGrid(interval)
+        //     },
+        //     /**
+        //      * Draw gridlines on both axis.
+        //      * ```
+        //      * pen.grid.xy(2) // draw gridlines on both axis, at interval 2 units
+        //      * ```
+        //      */
+        //     xy(interval = 1) {
+        //         this.x(interval)
+        //         this.y(interval)
+        //     }
+        // };
         /**
          * The 3D pen
          * @category 3D
@@ -38567,6 +38475,125 @@ class PenCls {
         this.cv.plot(func, tStart, tEnd, 1000);
         this.cv.restore();
     }
+    // /**
+    //  * Drawing graph of functions.
+    //  * @category graph
+    //  */
+    // graph = {
+    //     /**
+    //      * @ignore
+    //      */
+    //     _pen: this as PenCls,
+    //     /**
+    //      * Draw a circle (x-h)^2+(y-k)^2 = r^2.
+    //      * ```
+    //      * pen.graph.circle([1,2],3) // (x-1)^2+(y-2)^2 = 9
+    //      * ```
+    //      */
+    //     circle(center: Point2D, radius: number) {
+    //         const [h, k] = center
+    //         this._pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 365)
+    //     },
+    //     /**
+    //      * Draw an arc. AOB must be in polar direction.
+    //      * ```
+    //      * pen.graph.arc([0,0],[1,0],[-1,0]) // upper semi-unit circle
+    //      *
+    //      * ```
+    //      */
+    //     arc(O: Point2D, A: Point2D, B: Point2D) {
+    //         this._pen.cv.sectoroidLine(O, A, B, [])
+    //     },
+    //     /**
+    //      * Draw a sector. AOB must be in polar direction.
+    //      * ```
+    //      * pen.graph.sector([0,0],[1,0],[0,1]) // quarter circle sector
+    //      * ```
+    //      */
+    //     sector(O: Point2D, A: Point2D, B: Point2D) {
+    //         this._pen.cv.sectoroidLine(O, A, B, [O, A])
+    //     },
+    //     /**
+    //      * Draw a circle segment. AOB must be in polar direction.
+    //      * ```
+    //      * pen.graph.segment([0,0],[1,0],[0,1]) // quarter circle segment
+    //      * ```
+    //      */
+    //     segment(O: Point2D, A: Point2D, B: Point2D) {
+    //         this._pen.cv.sectoroidLine(O, A, B, [A])
+    //     },
+    //     /**
+    //      * Draw a quadratic graph.
+    //      * ```
+    //      * pen.graph.quadratic(1,2,3) // y=x^2+2x+3.
+    //      * ```
+    //      */
+    //     quadratic(a: number, b: number, c: number) {
+    //         this._pen.plot(x => a * x * x + b * x + c)
+    //     },
+    //     /**
+    //      * Draw a line y=mx+c.
+    //      * ```
+    //      * pen.graph.line(2,1) // y=2x+1
+    //      * ```
+    //      */
+    //     line(m: number, c: number) {
+    //         const { xmin, xmax } = this._pen.cv
+    //         const y = (x: number) => m * x + c
+    //         this._pen.line([xmin, y(xmin)], [xmax, y(xmax)])
+    //     },
+    //     /**
+    //      * Draw a horizontal line.
+    //      * ```
+    //      * pen.graph.horizontal(2) // y=2
+    //      * ```
+    //      */
+    //     horizontal(y: number) {
+    //         this._pen.cv.lineHori(y)
+    //     },
+    //     /**
+    //      * Draw a vertical line.
+    //      * ```
+    //      * pen.graph.vertical(2) // x=2
+    //      * ```
+    //      */
+    //     vertical(x: number) {
+    //         this._pen.cv.lineVert(x)
+    //     },
+    //     /**
+    //      * Draw a line ax+by+c=0.
+    //      * ```
+    //      * pen.graph.linear(1,2,3) // x+2y+3=0
+    //      * ```
+    //      */
+    //     linear(a: number, b: number, c: number) {
+    //         if (a === 0 && b !== 0) this.horizontal(-c / b)
+    //         if (b == 0 && a !== 0) this.vertical(-c / a)
+    //         if (a !== 0 && b !== 0) this.line(-a / b, -c / b)
+    //     },
+    //     /**
+    //      * Draw a line through two points.
+    //      * ```
+    //      * pen.graph.through([0,0],[1,1]) // y = x
+    //      * ```
+    //      */
+    //     through(A: Point, B: Point) {
+    //         let ptA = this._pen.pj(A)
+    //         let ptB = this._pen.pj(B)
+    //         let [a, b, c] = lin().byTwoPoints(ptA, ptB).toLinear()
+    //         this.linear(a, b, c)
+    //     },
+    //     /**
+    //      * Draw the perpendicular bisector of two points.
+    //      * ```
+    //      * pen.graph.perpBisector([0,0],[2,2]) // y = -x+2
+    //      * ```
+    //      */
+    //     perpBisector(A: Point2D, B: Point2D) {
+    //         let [a, b, c] = lin().byBisector(A, B).toLinear()
+    //         this.linear(a, b, c)
+    //     }
+    // };
     /**
      * Draw a point.
      * @category draw
@@ -38862,6 +38889,55 @@ class PenCls {
         this.polygon(...points);
         this.polyshade(...points);
     }
+    // linProg = {
+    //     /**
+    //      * @ignore
+    //      */
+    //     _pen: this as PenCls,
+    //     /**
+    //      * Draw a constraint line.
+    //      * ```
+    //      * pen.linProg.constraint([1,2,'>',3])
+    //      * ```
+    //      */
+    //     drawConstraints(...constraints: Constraint[]) {
+    //         for (let c of toReins(constraints)) {
+    //             if (c.canEqual()) {
+    //                 this._pen.graph.linear(...c.toLinear())
+    //             } else {
+    //                 this._pen.set.dash(true)
+    //                 this._pen.graph.linear(...c.toLinear())
+    //                 this._pen.set.dash()
+    //             }
+    //         }
+    //     },
+    //     /**
+    //      * Shade the region of the constraint set.
+    //      * ```
+    //      * pen.linProg.shadeConstraints([[1,2,'>',3]])
+    //      * ```
+    //      */
+    //     shadeConstraints(constraints: Constraint[]) {
+    //         let poly = toReins(constraints).polygon()
+    //         this._pen.polyshade(...poly)
+    //     },
+    //     /**
+    //      * Label coordinates of the vertices of the feasible region.
+    //      * ```
+    //      * pen.linProg.verticesCoord([
+    //      * [1,0,'>',0],
+    //      * [0,1,'>',0],
+    //      * [1,1,'<',2]
+    //      * ])
+    //      * ```
+    //      */
+    //     verticesCoord(constraints: Constraint[]) {
+    //         let vs = toReins(constraints).vertices()
+    //         for (let v of vs) {
+    //             this._pen.label.coordinates(v)
+    //         }
+    //     }
+    // };
     /**
      * Draw an angle with label.
      * @category draw
@@ -39774,6 +39850,412 @@ exports.PenD3 = PenD3;
 
 /***/ }),
 
+/***/ 2431:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenFill = void 0;
+class PenFill {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+     * Fill a circle.
+     * ```
+     * pen.fill.circle([1,2],3) // fill (x-1)^2+(y-2)^2 = 9.
+     * ```
+     */
+    circle(center, radius) {
+        let points = cal.traceCircle(center, radius, [0, 360]);
+        this.pen.polyfill(...points);
+    }
+    /**
+     * Fill a sector. AOB must be in polar direction.
+     * ```
+     * pen.fill.sector([0,0],[1,0],[0,1]) // fill a quarter circle sector
+     * ```
+     */
+    sector(O, A, B) {
+        this.cv.sectoroidFill(O, A, B, [O]);
+    }
+    /**
+     * Fill a circle segment. AOB must be in polar direction.
+     * ```
+     * pen.fill.segment([0,0],[1,0],[0,1]) // fill a quarter circle segment
+     * ```
+     */
+    segment(O, A, B) {
+        this.cv.sectoroidFill(O, A, B, []);
+    }
+    /**
+     * Fill a sector-like area. AOB must be in polar direction.
+     * ```
+     * pen.fill.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // fill a long sector-like region
+     * ```
+     */
+    sectoroid(O, A, B, vertices) {
+        this.cv.sectoroidFill(O, A, B, vertices);
+    }
+    /**
+     * Fill a rectangle.
+     * ```
+     * pen.fill.rect([0,0],[2,3]) // fill a rectangle [[0,0],[2,0],[2,3],[0,3]]
+     * ```
+     */
+    rect(A, C) {
+        let [a, b] = A;
+        let [c, d] = C;
+        this.pen.polyfill([a, b], [c, b], [c, d], [a, d]);
+    }
+}
+exports.PenFill = PenFill;
+
+
+/***/ }),
+
+/***/ 1932:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenGraph = void 0;
+class PenGraph {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+     * Draw a circle (x-h)^2+(y-k)^2 = r^2.
+     * ```
+     * pen.graph.circle([1,2],3) // (x-1)^2+(y-2)^2 = 9
+     * ```
+     */
+    circle(center, radius) {
+        const [h, k] = center;
+        this.pen.plot(t => [h + radius * cos(t), k + radius * sin(t)], 0, 365);
+    }
+    /**
+     * Draw an arc. AOB must be in polar direction.
+     * ```
+     * pen.graph.arc([0,0],[1,0],[-1,0]) // upper semi-unit circle
+     *
+     * ```
+     */
+    arc(O, A, B) {
+        this.cv.sectoroidLine(O, A, B, []);
+    }
+    /**
+     * Draw a sector. AOB must be in polar direction.
+     * ```
+     * pen.graph.sector([0,0],[1,0],[0,1]) // quarter circle sector
+     * ```
+     */
+    sector(O, A, B) {
+        this.cv.sectoroidLine(O, A, B, [O, A]);
+    }
+    /**
+     * Draw a circle segment. AOB must be in polar direction.
+     * ```
+     * pen.graph.segment([0,0],[1,0],[0,1]) // quarter circle segment
+     * ```
+     */
+    segment(O, A, B) {
+        this.cv.sectoroidLine(O, A, B, [A]);
+    }
+    /**
+     * Draw a quadratic graph.
+     * ```
+     * pen.graph.quadratic(1,2,3) // y=x^2+2x+3.
+     * ```
+     */
+    quadratic(a, b, c) {
+        this.pen.plot(x => a * x * x + b * x + c);
+    }
+    /**
+     * Draw a line y=mx+c.
+     * ```
+     * pen.graph.line(2,1) // y=2x+1
+     * ```
+     */
+    line(m, c) {
+        const { xmin, xmax } = this.cv;
+        const y = (x) => m * x + c;
+        this.pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
+    }
+    /**
+     * Draw a horizontal line.
+     * ```
+     * pen.graph.horizontal(2) // y=2
+     * ```
+     */
+    horizontal(y) {
+        this.cv.lineHori(y);
+    }
+    /**
+     * Draw a vertical line.
+     * ```
+     * pen.graph.vertical(2) // x=2
+     * ```
+     */
+    vertical(x) {
+        this.cv.lineVert(x);
+    }
+    /**
+     * Draw a line ax+by+c=0.
+     * ```
+     * pen.graph.linear(1,2,3) // x+2y+3=0
+     * ```
+     */
+    linear(a, b, c) {
+        if (a === 0 && b !== 0)
+            this.horizontal(-c / b);
+        if (b == 0 && a !== 0)
+            this.vertical(-c / a);
+        if (a !== 0 && b !== 0)
+            this.line(-a / b, -c / b);
+    }
+    /**
+     * Draw a line through two points.
+     * ```
+     * pen.graph.through([0,0],[1,1]) // y = x
+     * ```
+     */
+    through(A, B) {
+        let ptA = this.cv.pj(A);
+        let ptB = this.cv.pj(B);
+        let [a, b, c] = lin().byTwoPoints(ptA, ptB).toLinear();
+        this.linear(a, b, c);
+    }
+    /**
+     * Draw the perpendicular bisector of two points.
+     * ```
+     * pen.graph.perpBisector([0,0],[2,2]) // y = -x+2
+     * ```
+     */
+    perpBisector(A, B) {
+        let [a, b, c] = lin().byBisector(A, B).toLinear();
+        this.linear(a, b, c);
+    }
+}
+exports.PenGraph = PenGraph;
+
+
+/***/ }),
+
+/***/ 2198:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenGrid = void 0;
+class PenGrid {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+     * Draw gridlines on the x-axis.
+     * ```
+     * pen.grid.x(2) // draw gridlines on the x-axis, at interval 2 units
+     * ```
+     */
+    x(interval = 1) {
+        this.cv.xAxisGrid(interval);
+    }
+    /**
+     * Draw gridlines on the y-axis.
+     * ```
+     * pen.grid.y(2) // draw gridlines on the y-axis, at interval 2 units
+     * ```
+     */
+    y(interval = 1) {
+        this.cv.yAxisGrid(interval);
+    }
+    /**
+     * Draw gridlines on both axis.
+     * ```
+     * pen.grid.xy(2) // draw gridlines on both axis, at interval 2 units
+     * ```
+     */
+    xy(interval = 1) {
+        this.x(interval);
+        this.y(interval);
+    }
+}
+exports.PenGrid = PenGrid;
+
+
+/***/ }),
+
+/***/ 1945:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenLabel = void 0;
+class PenLabel {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+    * Add a label to a point.
+    * ```
+    * pen.label.point([1,2],'A',180)
+    * // label the point [1,2] as 'A', place the label on the left (180 degree)
+    * ```
+    */
+    point(point, text = '', dir, radius = 15) {
+        if (dir !== undefined) {
+            this.cv.labelPoint(text, point, dir, radius);
+        }
+        else {
+            this.cv.labelPointAuto(text, point, radius);
+        }
+    }
+    /**
+     * Add a label to points, using index as text.
+     * ```
+     * pen.label.points({A,B}) // label point A as 'A', point B as 'B'
+     * ```
+     */
+    points(points) {
+        for (let k in points) {
+            this.point(points[k], k);
+        }
+    }
+    /**
+     * Add a label to points, using index as text, with label center set as center of points.
+     * ```
+     * pen.label.vertices({A,B}) // label point A as 'A', point B as 'B'
+     * ```
+     */
+    vertices(points) {
+        this.cv.save();
+        this.pen.set.labelCenter(...Object.values(points));
+        this.points(points);
+        this.cv.restore();
+    }
+    /**
+     * Add a label to an angle AOB.
+     * ```
+     * pen.label.angle([[1,2],[0,0],[-2,1]],'x')
+     * // label the angle as 'x'
+     * ```
+     */
+    angle([A, O, B], text, dir = 0, radius = -1) {
+        if (radius < 0) {
+            radius = 28 + this.cv.getAngleAllowance(A, O, B, 40, 1.5);
+        }
+        this.cv.labelAngle(text, [A, O, B], dir, radius);
+    }
+    /**
+     * Add a label to a line AB.
+     * ```
+     * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
+     * ```
+     */
+    line([A, B], text, dir = 0, radius = 15) {
+        this.cv.labelLine(text, [A, B], dir, radius);
+    }
+    /**
+     * Add a label to a polygon.
+     * ```
+     * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'
+     * ```
+     */
+    polygon(points, text) {
+        let pts = this.cv.pjs(points);
+        this.cv.labelPoint(String(text), Mid(...pts), 0, 0);
+    }
+    /**
+     * Add a coordinates label to a point.
+     * ```
+     * pen.label.coordinates([1,2],180)
+     * // label the point [1,2] as '(1, 2)', place the label on the left (180 degree)
+     * ```
+     */
+    coordinates(point, dir, radius = 15) {
+        let [x, y] = point;
+        x = Fix(x, 1);
+        y = Fix(y, 1);
+        let text = `(${x}, ${y})`;
+        this.point(point, text, dir, radius);
+    }
+}
+exports.PenLabel = PenLabel;
+
+
+/***/ }),
+
+/***/ 6285:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenLinProg = void 0;
+class PenLinProg {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+     * Draw a constraint line.
+     * ```
+     * pen.linProg.constraint([1,2,'>',3])
+     * ```
+     */
+    drawConstraints(...constraints) {
+        for (let c of toReins(constraints)) {
+            if (c.canEqual()) {
+                this.pen.graph.linear(...c.toLinear());
+            }
+            else {
+                this.pen.set.dash(true);
+                this.pen.graph.linear(...c.toLinear());
+                this.pen.set.dash();
+            }
+        }
+    }
+    /**
+     * Shade the region of the constraint set.
+     * ```
+     * pen.linProg.shadeConstraints([[1,2,'>',3]])
+     * ```
+     */
+    shadeConstraints(constraints) {
+        let poly = toReins(constraints).polygon();
+        this.pen.polyshade(...poly);
+    }
+    /**
+     * Label coordinates of the vertices of the feasible region.
+     * ```
+     * pen.linProg.verticesCoord([
+     *    [1,0,'>',0],
+     *    [0,1,'>',0],
+     *    [1,1,'<',2]
+     * ])
+     * ```
+     */
+    verticesCoord(constraints) {
+        let vs = toReins(constraints).vertices();
+        for (let v of vs) {
+            this.pen.label.coordinates(v);
+        }
+    }
+}
+exports.PenLinProg = PenLinProg;
+
+
+/***/ }),
+
 /***/ 1991:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -40033,6 +40515,72 @@ exports.PenSettings = PenSettings;
 
 /***/ }),
 
+/***/ 9645:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenShade = void 0;
+class PenShade {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+     * Shade a circle (x-h)^2+(y-k)^2 = r^2.
+     * ```
+     * pen.shade.circle([1,2],3) // shade (x-1)^2+(y-2)^2 = 9.
+     * ```
+     */
+    circle(center, radius) {
+        let points = cal.traceCircle(center, radius, [0, 360]);
+        this.pen.polyshade(...points);
+    }
+    /**
+     * Shade a sector. AOB must be in polar direction.
+     * ```
+     * pen.shade.sector([0,0],[1,0],[0,1]) // shade a quarter circle sector
+     * ```
+     */
+    sector(O, A, B) {
+        this.cv.sectoroidShade(O, A, B, [O]);
+    }
+    /**
+     * Shade a circle segment. AOB must be in polar direction.
+     * ```
+     * pen.shade.segment([0,0],[1,0],[0,1]) // shade a quarter circle segment
+     * ```
+     */
+    segment(O, A, B) {
+        this.cv.sectoroidShade(O, A, B, []);
+    }
+    /**
+     * Shade a sector-like area. AOB must be in polar direction.
+     * ```
+     * pen.shade.sectoroid([0,0],[1,0],[0,1],[[-1,0]]) // shade a long sector-like region
+     * ```
+     */
+    sectoroid(O, A, B, vertices) {
+        this.cv.sectoroidShade(O, A, B, vertices);
+    }
+    /**
+     * Shade a rectangle.
+     * ```
+     * pen.shade.rect([0,0],[2,3]) // shade a rectangle [[0,0],[2,0],[2,3],[0,3]]
+     * ```
+     */
+    rect(A, C) {
+        let [a, b] = A;
+        let [c, d] = C;
+        this.pen.polyshade([a, b], [c, b], [c, d], [a, d]);
+    }
+}
+exports.PenShade = PenShade;
+
+
+/***/ }),
+
 /***/ 9945:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -40101,6 +40649,56 @@ class PenSize {
     }
 }
 exports.PenSize = PenSize;
+
+
+/***/ }),
+
+/***/ 7766:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenTick = void 0;
+class PenTick {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+    * Draw ticks on the x-axis.
+    * ```
+    * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
+    * ```
+    */
+    x(interval = 1, mark = true) {
+        this.cv.xAxisTick(interval);
+        if (mark)
+            this.cv.xAxisTickMark(interval);
+    }
+    /**
+     * Draw ticks on the y-axis.
+     * ```
+     * pen.tick.y(2) // draw ticks on the y-axis, at interval 2 units
+     * ```
+     */
+    y(interval = 1, mark = true) {
+        this.cv.yAxisTick(interval);
+        if (mark)
+            this.cv.yAxisTickMark(interval);
+    }
+    /**
+     * Draw ticks on both axis.
+     * ```
+     * pen.tick.xy(2) // draw ticks on both axis, at interval 2 units
+     * ```
+     */
+    xy(interval = 1, mark = true) {
+        this.x(interval, mark);
+        this.y(interval, mark);
+    }
+}
+exports.PenTick = PenTick;
 
 
 /***/ }),
