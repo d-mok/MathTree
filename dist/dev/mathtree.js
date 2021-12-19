@@ -37943,14 +37943,8 @@ class AutoPenCls {
      */
     TreeDiagram({ titles, probabilities, events, select, circleSize }) {
         const pen = new Pen();
-        pen.range.set([-1, 15], [-8, 10]);
-        pen.size.resolution(0.1);
-        pen.grid.x();
-        pen.grid.y();
-        pen.axis.x();
-        pen.axis.y();
-        pen.tick.x();
-        pen.tick.y();
+        pen.range.set([-5, 15], [-12, 12]);
+        pen.size.resolution(0.12);
         function path(P, Q, prob, event, selected, circle) {
             let T = MoveX(Q, 2);
             pen.write(T, event);
@@ -39310,6 +39304,20 @@ class PenCls extends paint_1.Pencil {
      */
     halo(center, radius) {
         this.cv.halo(center, radius);
+    }
+    /**
+     * Draw a hole.
+     * @category draw
+     * ```
+     * pen.hole([1,2], 10) // draw a hole at [1,2] with 10 px radius
+     * ```
+     */
+    hole(center, radius) {
+        this.cv.save();
+        this.set.color('white');
+        this.disc(center, radius);
+        this.cv.restore();
+        this.circle(center, radius);
     }
     /**
      * Draw a line between two points.

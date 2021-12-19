@@ -39306,6 +39306,20 @@ class PenCls extends paint_1.Pencil {
         this.cv.halo(center, radius);
     }
     /**
+     * Draw a hole.
+     * @category draw
+     * ```
+     * pen.hole([1,2], 10) // draw a hole at [1,2] with 10 px radius
+     * ```
+     */
+    hole(center, radius) {
+        this.cv.save();
+        this.set.color('white');
+        this.disc(center, radius);
+        this.cv.restore();
+        this.circle(center, radius);
+    }
+    /**
      * Draw a line between two points.
      * @category draw
      * ```
