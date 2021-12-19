@@ -4578,17 +4578,19 @@ declare module "Pen/PhyPen" {
          * let pen = new PhyPen()
          * pen.Projectile({
          *    speed: 20,
-         *    angle: 50
+         *    angle: 50,
          *    time: 4,
          *    arrowScale: 0.5,
+         *    ground: false
          * })
          * ```
          */
-        Projectile({ speed, angle, time, arrowScale }: {
+        Projectile({ speed, angle, time, arrowScale, ground, }: {
             speed: number;
-            angle: number;
-            time: number;
-            arrowScale: number;
+            angle?: number;
+            time?: number;
+            arrowScale?: number;
+            ground?: boolean;
         }): void;
         /**
          * A car on a banked road.

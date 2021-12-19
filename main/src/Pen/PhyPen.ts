@@ -36,27 +36,32 @@ export class PhyPenCls {
      * let pen = new PhyPen()
      * pen.Projectile({
      *    speed: 20,
-     *    angle: 50
+     *    angle: 50,
      *    time: 4,
      *    arrowScale: 0.5,
+     *    ground: false
      * })
      * ```
      */
     Projectile({
         speed,
-        angle,
+        angle = 0,
         time,
-        arrowScale
+        arrowScale = 0.5,
+        ground = false,
     }: {
         speed: number
-        angle: number
-        time: number
-        arrowScale: number
+        angle?: number
+        time?: number
+        arrowScale?: number
+        ground?: boolean
     }) {
         let pen = new Pen()
 
         let ux = speed * cos(angle)
         let uy = speed * sin(angle)
+
+        time ??= 2 * uy / 9.81
 
         let x = (t: number) => ux * t
         let y = (t: number) => uy * t - 0.5 * 9.81 * t * t
@@ -73,6 +78,9 @@ export class PhyPenCls {
         pen.set.color('grey')
         pen.plotDash(t => [x(t), y(t)], 0, time)
         pen.circle(P, 5)
+        if (ground) {
+            pen.graph.horizontal(0)
+        }
 
         this.pen = pen
     }

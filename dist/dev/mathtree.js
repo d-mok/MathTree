@@ -39658,16 +39658,17 @@ class PhyPenCls {
      * let pen = new PhyPen()
      * pen.Projectile({
      *    speed: 20,
-     *    angle: 50
+     *    angle: 50,
      *    time: 4,
      *    arrowScale: 0.5,
      * })
      * ```
      */
-    Projectile({ speed, angle, time, arrowScale }) {
+    Projectile({ speed, angle = 0, time, arrowScale = 0.5, ground = false, }) {
         let pen = new Pen();
         let ux = speed * cos(angle);
         let uy = speed * sin(angle);
+        time ??= 2 * uy / 9.81;
         let x = (t) => ux * t;
         let y = (t) => uy * t - 0.5 * 9.81 * t * t;
         let O = [0, 0];
@@ -39680,6 +39681,9 @@ class PhyPenCls {
         pen.set.color('grey');
         pen.plotDash(t => [x(t), y(t)], 0, time);
         pen.circle(P, 5);
+        if (ground) {
+            pen.graph.horizontal(0);
+        }
         this.pen = pen;
     }
     /**
