@@ -1340,12 +1340,14 @@ export class AutoPenCls {
         titles,
         probabilities,
         events,
-        select
+        select,
+        circleSize
     }: {
         titles: [string, string]
-        probabilities: number[][]
+        probabilities: (number | [string, string])[][]
         events: [string, string][][]
-        select: 1 | 2 | 3 | 4
+        select: (1 | 2 | 3 | 4)[]
+        circleSize?: number
     }) {
 
         const pen = new Pen()
@@ -1354,23 +1356,23 @@ export class AutoPenCls {
 
         function path(
             P: Point2D, Q: Point2D,
-            prob: number, event: string,
+            prob: string, event: string,
             selected: boolean, circle: boolean
         ) {
-            let T = MoveX(Q, 1)
+            let T = MoveX(Q, 2)
             pen.write(T, event)
             pen.line(P, Q, prob)
             if (selected) {
                 pen.set.weight(3)
                 pen.line(P, Q, prob)
-                if (circle) pen.circle(T, 20)
+                if (circle) pen.halo(T, circleSize ?? 30)
                 pen.set.weight()
             }
         }
 
         function branch(
             C: Point2D, w: number, h1: number, h2: number,
-            prob: number,
+            prob: number | [string, string],
             [eventA, eventB]: [string, string],
             [selectedA, selectedB]: [boolean, boolean],
             circle: boolean,
@@ -1378,16 +1380,25 @@ export class AutoPenCls {
         ) {
             let D = MoveX(C, w)
 
+            let probA: string
+            let probB: string
+            if (typeof prob === 'number') {
+                probA = String(Round(prob, 5))
+                probB = String(Round(1 - prob, 5))
+            } else {
+                probA = prob[0]
+                probB = prob[1]
+            }
+
             // upper branch
             let A1 = MoveY(C, h1)
             let A2 = MoveY(D, h2)
-            path(A1, A2, prob, eventA, selectedA, circle)
+            path(A1, A2, probA, eventA, selectedA, circle)
 
             // lower branch
             let B1 = MoveY(C, -h1)
             let B2 = MoveY(D, -h2)
-            let unprob = Round(1 - prob, 5)
-            path(B1, B2, unprob, eventB, selectedB, circle)
+            path(B1, B2, probB, eventB, selectedB, circle)
 
             // title
             if (title && titleHeight) {
@@ -1397,18 +1408,18 @@ export class AutoPenCls {
             }
         }
 
-        let s1 = select === 1
-        let s2 = select === 2
-        let s3 = select === 3
-        let s4 = select === 4
+        let s1 = select.includes(1)
+        let s2 = select.includes(2)
+        let s3 = select.includes(3)
+        let s4 = select.includes(4)
 
         let [t1, t2] = titles
         let [[p00], [p10, p11]] = probabilities
         let [[e00], [e10, e11]] = events
 
         branch([0, 0], 2, 2, 4, p00, e00, [s1 || s2, s3 || s4], false, [t1, 8])
-        branch([4, 4], 3, 1, 2, p10, e10, [s1, s2], true, [t2, 5])
-        branch([4, -4], 3, 1, 2, p11, e11, [s3, s4], true)
+        branch([6, 4], 3, 1, 2, p10, e10, [s1, s2], true, [t2, 5])
+        branch([6, -4], 3, 1, 2, p11, e11, [s3, s4], true)
 
         this.pen = pen
     }

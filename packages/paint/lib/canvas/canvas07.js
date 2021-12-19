@@ -102,6 +102,10 @@ class Canvas07 extends canvas06_1.Canvas06 {
         this.createArc(center, radius, [0, 360]);
         this.doFill();
     }
+    halo(center, radius) {
+        this.createArc(center, radius, [0, 360]);
+        this.doShade();
+    }
     // advanced
     arrowHead(start, end, size, offset) {
         this.save();

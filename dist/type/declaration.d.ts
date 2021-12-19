@@ -3495,13 +3495,21 @@ declare module "Pen/Pen" {
          */
         circle(center: Point2D, radius: number, angles?: [number, number], fill?: boolean): void;
         /**
-         * Draw a disc.
+         * Fill a disc.
          * @category draw
          * ```
          * pen.disc([1,2], 10) // draw a disc centered at [1,2] with 10 px radius
          * ```
          */
         disc(center: Point2D, radius: number): void;
+        /**
+         * Shade a disc.
+         * @category draw
+         * ```
+         * pen.halo([1,2], 10) // shade a disc centered at [1,2] with 10 px radius
+         * ```
+         */
+        halo(center: Point2D, radius: number): void;
         /**
          * Draw a line between two points.
          * @category draw
@@ -4224,10 +4232,8 @@ declare module "Pen/AutoPen" {
         constructor();
         /**
          * Export the canvas to image tag.
-         * @category export
          * @param html - The html string to export to.
          * @param placeholder - The src field of the image tag to export to.
-         * @returns The new html with src field pasted.
          * ```
          * question = autoPen.export(question,'imgQ')
          * // paste the canvas to the image tag with src field 'imgQ'
@@ -4236,9 +4242,7 @@ declare module "Pen/AutoPen" {
         export(html: string, placeholder: string): string;
         /**
          * A short division diagram for prime factorization of numbers.
-         * @category tool
          * @param numbers - The array of numbers to factorize.
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.PrimeFactorization({numbers:[12,24]})
@@ -4249,12 +4253,10 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * Arrow diagram for inequalities.
-         * @category tool
          * @param items - Represent the inequalities.
          * @param ticks - Represent the tick or cross for each region.
          * @param scale - scale for pen.setup.size()
          * @param ratio - ratio for pen.setup.size()
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.Inequalities({
@@ -4279,12 +4281,10 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * Trig Graph for solving basic trig equation.
-         * @category tool
          * @param trig - 'sin' | 'cos' | 'tan'
          * @param k - value of trig, like sin = k.
          * @param scale - scale for pen.setup.size()
          * @param ratio - ratio for pen.setup.size()
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.TrigSolution({trig:'sin', k:0.5})
@@ -4298,12 +4298,10 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * Sketch for solving quadratic inequality.
-         * @category tool
          * @param quadratic - [a,b,c] representing coeff of quadratic inequality.
          * @param sign - The sign of the inequality. Can be like '>=' , '<' or '\\ge' , '\\lt'.
          * @param scale - scale for pen.setup.size()
          * @param ratio - ratio for pen.setup.size()
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
@@ -4317,13 +4315,11 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * Draw a triangle.
-         * @category tool
          * @param vertices - [A,B,C] an array of coordinates [x,y] of 3 vertices, must be anticlockwise.
          * @param triangle - The elements of triangle to print, {sideC,angleB,sideA,angleC,sideB,angleA}. If falsy, show no label.
          * @param labels - The labels of the vertices. If falsy, show no label.
          * @param heights - Whether to draw the height.
          * @param scale - scale for pen.setup.size()
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.Triangle({
@@ -4533,11 +4529,12 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        TreeDiagram({ titles, probabilities, events, select }: {
+        TreeDiagram({ titles, probabilities, events, select, circleSize }: {
             titles: [string, string];
-            probabilities: number[][];
+            probabilities: (number | [string, string])[][];
             events: [string, string][][];
-            select: 1 | 2 | 3 | 4;
+            select: (1 | 2 | 3 | 4)[];
+            circleSize?: number;
         }): void;
     }
 }

@@ -128,6 +128,12 @@ export class Canvas07 extends Canvas06 {
         this.doFill()
     }
 
+
+    halo(center: Point, radius: px) {
+        this.createArc(center, radius, [0, 360])
+        this.doShade()
+    }
+
     // advanced
 
     arrowHead(start: Point, end: Point, size: px, offset: px) {

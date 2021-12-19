@@ -632,7 +632,7 @@ export class PenCls extends Pencil {
 
 
     /**
-     * Draw a disc.
+     * Fill a disc.
      * @category draw
      * ```
      * pen.disc([1,2], 10) // draw a disc centered at [1,2] with 10 px radius
@@ -640,6 +640,18 @@ export class PenCls extends Pencil {
      */
     disc(center: Point2D, radius: number) {
         this.cv.disc(center, radius)
+    }
+
+
+    /**
+     * Shade a disc.
+     * @category draw
+     * ```
+     * pen.halo([1,2], 10) // shade a disc centered at [1,2] with 10 px radius
+     * ```
+     */
+    halo(center: Point2D, radius: number) {
+        this.cv.halo(center, radius)
     }
 
 

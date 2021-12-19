@@ -36910,10 +36910,8 @@ class AutoPenCls {
     }
     /**
      * Export the canvas to image tag.
-     * @category export
      * @param html - The html string to export to.
      * @param placeholder - The src field of the image tag to export to.
-     * @returns The new html with src field pasted.
      * ```
      * question = autoPen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
@@ -36924,9 +36922,7 @@ class AutoPenCls {
     }
     /**
      * A short division diagram for prime factorization of numbers.
-     * @category tool
      * @param numbers - The array of numbers to factorize.
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.PrimeFactorization({numbers:[12,24]})
@@ -36981,12 +36977,10 @@ class AutoPenCls {
     }
     /**
      * Arrow diagram for inequalities.
-     * @category tool
      * @param items - Represent the inequalities.
      * @param ticks - Represent the tick or cross for each region.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.Inequalities({
@@ -37056,12 +37050,10 @@ class AutoPenCls {
     }
     /**
      * Trig Graph for solving basic trig equation.
-     * @category tool
      * @param trig - 'sin' | 'cos' | 'tan'
      * @param k - value of trig, like sin = k.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.TrigSolution({trig:'sin', k:0.5})
@@ -37240,12 +37232,10 @@ class AutoPenCls {
     }
     /**
      * Sketch for solving quadratic inequality.
-     * @category tool
      * @param quadratic - [a,b,c] representing coeff of quadratic inequality.
      * @param sign - The sign of the inequality. Can be like '>=' , '<' or '\\ge' , '\\lt'.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
@@ -37361,13 +37351,11 @@ class AutoPenCls {
     }
     /**
      * Draw a triangle.
-     * @category tool
      * @param vertices - [A,B,C] an array of coordinates [x,y] of 3 vertices, must be anticlockwise.
      * @param triangle - The elements of triangle to print, {sideC,angleB,sideA,angleC,sideB,angleA}. If falsy, show no label.
      * @param labels - The labels of the vertices. If falsy, show no label.
      * @param heights - Whether to draw the height.
      * @param scale - scale for pen.setup.size()
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.Triangle({
@@ -37477,7 +37465,6 @@ class AutoPenCls {
     /**
      * Draw a graph for linear programming.
      * @deprecated
-     * @category tool
      * @param constraints - Constraint as system of inequalities, like [[1,1,'<',2]] represent x+y<2.
      * @param field - The target linear function to optimize, [a,b,c] represent ax+by+c.
      * @param contours - The contours to draw, [4,5] represent P=4 and P=5.
@@ -37485,7 +37472,6 @@ class AutoPenCls {
      * @param highlights - Points to highlight, [{point,color,circle,contour,coordinates,label}].
      * @param ranges - Range of Canvas.
      * @param resolution - Resolution of Canvas
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
@@ -37655,13 +37641,11 @@ class AutoPenCls {
     }
     /**
      * A dot pattern
-     * @category tool
      * @param a - no. of dot of 1st pattern
      * @param p - P_n+1 = P_n + (pn+q)
      * @param q - P_n+1 = P_n + (pn+q)
      * @param n - the pattern required
      * @param offset - offset of initial position
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
@@ -37694,8 +37678,6 @@ class AutoPenCls {
     }
     /**
      * A pie chart
-     * @category tool
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.PieChart({
@@ -37740,8 +37722,6 @@ class AutoPenCls {
     }
     /**
      * A bar chart / line chart / histogram / frequency polygon / cf polygon
-     * @category tool
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.HeightChart({
@@ -37961,33 +37941,42 @@ class AutoPenCls {
      * })
      * ```
      */
-    TreeDiagram({ titles, probabilities, events, select }) {
+    TreeDiagram({ titles, probabilities, events, select, circleSize }) {
         const pen = new Pen();
         pen.range.set([-1, 10], [-8, 10]);
         pen.size.set(1.8);
         function path(P, Q, prob, event, selected, circle) {
-            let T = MoveX(Q, 1);
+            let T = MoveX(Q, 2);
             pen.write(T, event);
             pen.line(P, Q, prob);
             if (selected) {
                 pen.set.weight(3);
                 pen.line(P, Q, prob);
                 if (circle)
-                    pen.circle(T, 20);
+                    pen.halo(T, circleSize ?? 30);
                 pen.set.weight();
             }
         }
         function branch(C, w, h1, h2, prob, [eventA, eventB], [selectedA, selectedB], circle, [title, titleHeight] = ['', 0]) {
             let D = MoveX(C, w);
+            let probA;
+            let probB;
+            if (typeof prob === 'number') {
+                probA = String(Round(prob, 5));
+                probB = String(Round(1 - prob, 5));
+            }
+            else {
+                probA = prob[0];
+                probB = prob[1];
+            }
             // upper branch
             let A1 = MoveY(C, h1);
             let A2 = MoveY(D, h2);
-            path(A1, A2, prob, eventA, selectedA, circle);
+            path(A1, A2, probA, eventA, selectedA, circle);
             // lower branch
             let B1 = MoveY(C, -h1);
             let B2 = MoveY(D, -h2);
-            let unprob = Round(1 - prob, 5);
-            path(B1, B2, unprob, eventB, selectedB, circle);
+            path(B1, B2, probB, eventB, selectedB, circle);
             // title
             if (title && titleHeight) {
                 let M = Mid(C, D);
@@ -37995,16 +37984,16 @@ class AutoPenCls {
                 pen.write(T, title);
             }
         }
-        let s1 = select === 1;
-        let s2 = select === 2;
-        let s3 = select === 3;
-        let s4 = select === 4;
+        let s1 = select.includes(1);
+        let s2 = select.includes(2);
+        let s3 = select.includes(3);
+        let s4 = select.includes(4);
         let [t1, t2] = titles;
         let [[p00], [p10, p11]] = probabilities;
         let [[e00], [e10, e11]] = events;
         branch([0, 0], 2, 2, 4, p00, e00, [s1 || s2, s3 || s4], false, [t1, 8]);
-        branch([4, 4], 3, 1, 2, p10, e10, [s1, s2], true, [t2, 5]);
-        branch([4, -4], 3, 1, 2, p11, e11, [s3, s4], true);
+        branch([6, 4], 3, 1, 2, p10, e10, [s1, s2], true, [t2, 5]);
+        branch([6, -4], 3, 1, 2, p11, e11, [s3, s4], true);
         this.pen = pen;
     }
 }
@@ -39297,7 +39286,7 @@ class PenCls extends paint_1.Pencil {
             this.cv.disc(center, radius);
     }
     /**
-     * Draw a disc.
+     * Fill a disc.
      * @category draw
      * ```
      * pen.disc([1,2], 10) // draw a disc centered at [1,2] with 10 px radius
@@ -39305,6 +39294,16 @@ class PenCls extends paint_1.Pencil {
      */
     disc(center, radius) {
         this.cv.disc(center, radius);
+    }
+    /**
+     * Shade a disc.
+     * @category draw
+     * ```
+     * pen.halo([1,2], 10) // shade a disc centered at [1,2] with 10 px radius
+     * ```
+     */
+    halo(center, radius) {
+        this.cv.halo(center, radius);
     }
     /**
      * Draw a line between two points.
@@ -43131,6 +43130,10 @@ class Canvas07 extends canvas06_1.Canvas06 {
     disc(center, radius) {
         this.createArc(center, radius, [0, 360]);
         this.doFill();
+    }
+    halo(center, radius) {
+        this.createArc(center, radius, [0, 360]);
+        this.doShade();
     }
     // advanced
     arrowHead(start, end, size, offset) {
