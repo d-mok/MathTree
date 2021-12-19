@@ -37823,8 +37823,6 @@ class AutoPenCls {
     }
     /**
      * A boxplot
-     * @category tool
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.Boxplot({
@@ -37898,8 +37896,6 @@ class AutoPenCls {
     }
     /**
      * A regular polygon
-     * @category tool
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.RegularPolygon({
@@ -37951,6 +37947,64 @@ class AutoPenCls {
                 pen.line(gon[i], [0, 0]);
             }
         }
+        this.pen = pen;
+    }
+    /**
+     * A 2x2 binary tree diagram for probability.
+     * ```
+     * let pen = new AutoPen()
+     * pen.TreeDiagram({
+     *    titles: ['step 1', 'step 2'],
+     *    probabilities: [[0.1], [0.2, 0.3]],
+     *    events: [[['✔', '✘']], [['✔✔', '✔✘'], ['✘✔', '✘✘']]],
+     *    select: 1
+     * })
+     * ```
+     */
+    TreeDiagram({ titles, probabilities, events, select }) {
+        const pen = new Pen();
+        pen.range.set([-1, 10], [-8, 10]);
+        pen.size.set(1.8);
+        function path(P, Q, prob, event, selected, circle) {
+            let T = MoveX(Q, 1);
+            pen.write(T, event);
+            pen.line(P, Q, prob);
+            if (selected) {
+                pen.set.weight(3);
+                pen.line(P, Q, prob);
+                if (circle)
+                    pen.circle(T, 20);
+                pen.set.weight();
+            }
+        }
+        function branch(C, w, h1, h2, prob, [eventA, eventB], [selectedA, selectedB], circle, [title, titleHeight] = ['', 0]) {
+            let D = MoveX(C, w);
+            // upper branch
+            let A1 = MoveY(C, h1);
+            let A2 = MoveY(D, h2);
+            path(A1, A2, prob, eventA, selectedA, circle);
+            // lower branch
+            let B1 = MoveY(C, -h1);
+            let B2 = MoveY(D, -h2);
+            let unprob = Round(1 - prob, 5);
+            path(B1, B2, unprob, eventB, selectedB, circle);
+            // title
+            if (title && titleHeight) {
+                let M = Mid(C, D);
+                let T = MoveY(M, titleHeight);
+                pen.write(T, title);
+            }
+        }
+        let s1 = select === 1;
+        let s2 = select === 2;
+        let s3 = select === 3;
+        let s4 = select === 4;
+        let [t1, t2] = titles;
+        let [[p00], [p10, p11]] = probabilities;
+        let [[e00], [e10, e11]] = events;
+        branch([0, 0], 2, 2, 4, p00, e00, [s1 || s2, s3 || s4], false, [t1, 8]);
+        branch([4, 4], 3, 1, 2, p10, e10, [s1, s2], true, [t2, 5]);
+        branch([4, -4], 3, 1, 2, p11, e11, [s3, s4], true);
         this.pen = pen;
     }
 }

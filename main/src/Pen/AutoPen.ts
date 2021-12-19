@@ -1,3 +1,4 @@
+import { prob } from '../Core/Owl'
 import { PenCls } from './Pen'
 
 
@@ -19,10 +20,8 @@ export class AutoPenCls {
 
     /**
      * Export the canvas to image tag.
-     * @category export
      * @param html - The html string to export to.
      * @param placeholder - The src field of the image tag to export to.
-     * @returns The new html with src field pasted.
      * ```
      * question = autoPen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
@@ -34,9 +33,7 @@ export class AutoPenCls {
 
     /**
      * A short division diagram for prime factorization of numbers.
-     * @category tool
      * @param numbers - The array of numbers to factorize.
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.PrimeFactorization({numbers:[12,24]})
@@ -91,12 +88,10 @@ export class AutoPenCls {
 
     /**
      * Arrow diagram for inequalities.
-     * @category tool
      * @param items - Represent the inequalities.
      * @param ticks - Represent the tick or cross for each region.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.Inequalities({
@@ -196,12 +191,10 @@ export class AutoPenCls {
 
     /**
      * Trig Graph for solving basic trig equation.
-     * @category tool
      * @param trig - 'sin' | 'cos' | 'tan'
      * @param k - value of trig, like sin = k.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.TrigSolution({trig:'sin', k:0.5})
@@ -384,12 +377,10 @@ export class AutoPenCls {
 
     /**
      * Sketch for solving quadratic inequality.
-     * @category tool
      * @param quadratic - [a,b,c] representing coeff of quadratic inequality.
      * @param sign - The sign of the inequality. Can be like '>=' , '<' or '\\ge' , '\\lt'.
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
@@ -521,13 +512,11 @@ export class AutoPenCls {
 
     /**
      * Draw a triangle.
-     * @category tool
      * @param vertices - [A,B,C] an array of coordinates [x,y] of 3 vertices, must be anticlockwise.
      * @param triangle - The elements of triangle to print, {sideC,angleB,sideA,angleC,sideB,angleA}. If falsy, show no label.
      * @param labels - The labels of the vertices. If falsy, show no label.
      * @param heights - Whether to draw the height.
      * @param scale - scale for pen.setup.size()
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.Triangle({
@@ -676,7 +665,6 @@ export class AutoPenCls {
     /**
      * Draw a graph for linear programming.
      * @deprecated
-     * @category tool
      * @param constraints - Constraint as system of inequalities, like [[1,1,'<',2]] represent x+y<2.
      * @param field - The target linear function to optimize, [a,b,c] represent ax+by+c.
      * @param contours - The contours to draw, [4,5] represent P=4 and P=5.
@@ -684,7 +672,6 @@ export class AutoPenCls {
      * @param highlights - Points to highlight, [{point,color,circle,contour,coordinates,label}].
      * @param ranges - Range of Canvas.
      * @param resolution - Resolution of Canvas
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
@@ -917,13 +904,11 @@ export class AutoPenCls {
 
     /**
      * A dot pattern
-     * @category tool
      * @param a - no. of dot of 1st pattern
      * @param p - P_n+1 = P_n + (pn+q)
      * @param q - P_n+1 = P_n + (pn+q)
      * @param n - the pattern required
      * @param offset - offset of initial position
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
@@ -957,8 +942,6 @@ export class AutoPenCls {
 
     /**
      * A pie chart
-     * @category tool
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.PieChart({
@@ -1019,8 +1002,6 @@ export class AutoPenCls {
 
     /**
      * A bar chart / line chart / histogram / frequency polygon / cf polygon
-     * @category tool
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.HeightChart({
@@ -1146,8 +1127,6 @@ export class AutoPenCls {
 
     /**
      * A boxplot
-     * @category tool
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.Boxplot({
@@ -1259,8 +1238,6 @@ export class AutoPenCls {
 
     /**
      * A regular polygon
-     * @category tool
-     * @returns void
      * ```
      * let pen = new AutoPen()
      * pen.RegularPolygon({
@@ -1342,6 +1319,99 @@ export class AutoPenCls {
         this.pen = pen
     }
 
+
+
+
+
+
+    /**
+     * A 2x2 binary tree diagram for probability.
+     * ```
+     * let pen = new AutoPen()
+     * pen.TreeDiagram({
+     *    titles: ['step 1', 'step 2'],
+     *    probabilities: [[0.1], [0.2, 0.3]],
+     *    events: [[['✔', '✘']], [['✔✔', '✔✘'], ['✘✔', '✘✘']]],
+     *    select: 1
+     * })
+     * ```
+     */
+    TreeDiagram({
+        titles,
+        probabilities,
+        events,
+        select
+    }: {
+        titles: [string, string]
+        probabilities: number[][]
+        events: [string, string][][]
+        select: 1 | 2 | 3 | 4
+    }) {
+
+        const pen = new Pen()
+        pen.range.set([-1, 10], [-8, 10])
+        pen.size.set(1.8)
+
+        function path(
+            P: Point2D, Q: Point2D,
+            prob: number, event: string,
+            selected: boolean, circle: boolean
+        ) {
+            let T = MoveX(Q, 1)
+            pen.write(T, event)
+            pen.line(P, Q, prob)
+            if (selected) {
+                pen.set.weight(3)
+                pen.line(P, Q, prob)
+                if (circle) pen.circle(T, 20)
+                pen.set.weight()
+            }
+        }
+
+        function branch(
+            C: Point2D, w: number, h1: number, h2: number,
+            prob: number,
+            [eventA, eventB]: [string, string],
+            [selectedA, selectedB]: [boolean, boolean],
+            circle: boolean,
+            [title, titleHeight]: [string, number] = ['', 0]
+        ) {
+            let D = MoveX(C, w)
+
+            // upper branch
+            let A1 = MoveY(C, h1)
+            let A2 = MoveY(D, h2)
+            path(A1, A2, prob, eventA, selectedA, circle)
+
+            // lower branch
+            let B1 = MoveY(C, -h1)
+            let B2 = MoveY(D, -h2)
+            let unprob = Round(1 - prob, 5)
+            path(B1, B2, unprob, eventB, selectedB, circle)
+
+            // title
+            if (title && titleHeight) {
+                let M = Mid(C, D)
+                let T = MoveY(M, titleHeight)
+                pen.write(T, title)
+            }
+        }
+
+        let s1 = select === 1
+        let s2 = select === 2
+        let s3 = select === 3
+        let s4 = select === 4
+
+        let [t1, t2] = titles
+        let [[p00], [p10, p11]] = probabilities
+        let [[e00], [e10, e11]] = events
+
+        branch([0, 0], 2, 2, 4, p00, e00, [s1 || s2, s3 || s4], false, [t1, 8])
+        branch([4, 4], 3, 1, 2, p10, e10, [s1, s2], true, [t2, 5])
+        branch([4, -4], 3, 1, 2, p11, e11, [s3, s4], true)
+
+        this.pen = pen
+    }
 
 
 

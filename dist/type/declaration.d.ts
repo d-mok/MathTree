@@ -4344,7 +4344,6 @@ declare module "Pen/AutoPen" {
         /**
          * Draw a graph for linear programming.
          * @deprecated
-         * @category tool
          * @param constraints - Constraint as system of inequalities, like [[1,1,'<',2]] represent x+y<2.
          * @param field - The target linear function to optimize, [a,b,c] represent ax+by+c.
          * @param contours - The contours to draw, [4,5] represent P=4 and P=5.
@@ -4352,7 +4351,6 @@ declare module "Pen/AutoPen" {
          * @param highlights - Points to highlight, [{point,color,circle,contour,coordinates,label}].
          * @param ranges - Range of Canvas.
          * @param resolution - Resolution of Canvas
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
@@ -4410,13 +4408,11 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * A dot pattern
-         * @category tool
          * @param a - no. of dot of 1st pattern
          * @param p - P_n+1 = P_n + (pn+q)
          * @param q - P_n+1 = P_n + (pn+q)
          * @param n - the pattern required
          * @param offset - offset of initial position
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
@@ -4431,8 +4427,6 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * A pie chart
-         * @category tool
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.PieChart({
@@ -4453,8 +4447,6 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * A bar chart / line chart / histogram / frequency polygon / cf polygon
-         * @category tool
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.HeightChart({
@@ -4485,8 +4477,6 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * A boxplot
-         * @category tool
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.Boxplot({
@@ -4515,8 +4505,6 @@ declare module "Pen/AutoPen" {
         }): void;
         /**
          * A regular polygon
-         * @category tool
-         * @returns void
          * ```
          * let pen = new AutoPen()
          * pen.RegularPolygon({
@@ -4532,6 +4520,24 @@ declare module "Pen/AutoPen" {
             diagonal?: boolean;
             reflectional?: boolean;
             rotational?: boolean;
+        }): void;
+        /**
+         * A 2x2 binary tree diagram for probability.
+         * ```
+         * let pen = new AutoPen()
+         * pen.TreeDiagram({
+         *    titles: ['step 1', 'step 2'],
+         *    probabilities: [[0.1], [0.2, 0.3]],
+         *    events: [[['✔', '✘']], [['✔✔', '✔✘'], ['✘✔', '✘✘']]],
+         *    select: 1
+         * })
+         * ```
+         */
+        TreeDiagram({ titles, probabilities, events, select }: {
+            titles: [string, string];
+            probabilities: number[][];
+            events: [string, string][][];
+            select: 1 | 2 | 3 | 4;
         }): void;
     }
 }
