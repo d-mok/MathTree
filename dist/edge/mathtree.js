@@ -37937,14 +37937,20 @@ class AutoPenCls {
      *    titles: ['step 1', 'step 2'],
      *    probabilities: [[0.1], [0.2, 0.3]],
      *    events: [[['✔', '✘']], [['✔✔', '✔✘'], ['✘✔', '✘✘']]],
-     *    select: 1
+     *    select: [1]
      * })
      * ```
      */
     TreeDiagram({ titles, probabilities, events, select, circleSize }) {
         const pen = new Pen();
         pen.range.set([-1, 15], [-8, 10]);
-        pen.size.set(2);
+        pen.size.resolution(0.1);
+        pen.grid.x();
+        pen.grid.y();
+        pen.axis.x();
+        pen.axis.y();
+        pen.tick.x();
+        pen.tick.y();
         function path(P, Q, prob, event, selected, circle) {
             let T = MoveX(Q, 2);
             pen.write(T, event);

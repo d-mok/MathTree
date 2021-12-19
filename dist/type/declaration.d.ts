@@ -4525,7 +4525,7 @@ declare module "Pen/AutoPen" {
          *    titles: ['step 1', 'step 2'],
          *    probabilities: [[0.1], [0.2, 0.3]],
          *    events: [[['✔', '✘']], [['✔✔', '✔✘'], ['✘✔', '✘✘']]],
-         *    select: 1
+         *    select: [1]
          * })
          * ```
          */

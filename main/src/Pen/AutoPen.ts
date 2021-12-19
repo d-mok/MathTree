@@ -1352,7 +1352,16 @@ export class AutoPenCls {
 
         const pen = new Pen()
         pen.range.set([-1, 15], [-8, 10])
-        pen.size.set(2)
+        pen.size.resolution(0.1)
+
+
+        pen.grid.x()
+        pen.grid.y()
+        pen.axis.x()
+        pen.axis.y()
+        pen.tick.x()
+        pen.tick.y()
+
 
         function path(
             P: Point2D, Q: Point2D,
