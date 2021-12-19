@@ -140,7 +140,7 @@ export class AutoPenCls {
 
             if (vertical) {
                 pen.set.color('grey')
-                pen.set.dash([10, 10])
+                pen.set.dash(10)
                 pen.graph.vertical(align)
                 pen.set.color()
                 pen.set.dash()
@@ -151,17 +151,7 @@ export class AutoPenCls {
             pen.arrow([-width, base], [width, base])
             pen.line(B, T)
             pen.arrow(T, E)
-            if (solid) {
-                pen.set.color('black')
-                pen.circle(T, 3, [0, 360], true)
-            } else {
-                pen.set.color('white')
-                pen.circle(T, 3, [0, 360], true)
-                pen.set.color('black')
-                pen.circle(T, 3, [0, 360])
-            }
-            pen.set.weight()
-            pen.set.color('black')
+            solid ? pen.dot(T) : pen.hole(T)
 
             pen.label.point(B, num.toString(), 270)
         }
@@ -476,14 +466,12 @@ export class AutoPenCls {
                 if (greater && equal) pen.plot(func)
                 if (greater && !equal) {
                     pen.plot(func)
-                    pen.set.color('white')
-                    pen.circle([0, 0], 4, [0, 360], true)
                     pen.set.color()
-                    pen.circle([0, 0], 4, [0, 360])
+                    pen.hole([0, 0])
                 }
                 if (!greater && equal) {
                     pen.set.color('red')
-                    pen.circle([0, 0], 4, [0, 360], true)
+                    pen.dot([0, 0])
                 }
                 if (!greater && !equal) { }
             }
@@ -494,14 +482,12 @@ export class AutoPenCls {
                 if (!greater && equal) pen.plot(func)
                 if (!greater && !equal) {
                     pen.plot(func)
-                    pen.set.color('white')
-                    pen.circle([0, 0], 4, [0, 360], true)
                     pen.set.color()
-                    pen.circle([0, 0], 4, [0, 360])
+                    pen.hole([0, 0])
                 }
                 if (greater && equal) {
                     pen.set.color('red')
-                    pen.circle([0, 0], 4, [0, 360], true)
+                    pen.dot([0, 0])
                 }
                 if (greater && !equal) { }
             }

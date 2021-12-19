@@ -37011,7 +37011,7 @@ class AutoPenCls {
             let E2 = [greater ? width : -width, base];
             if (vertical) {
                 pen.set.color('grey');
-                pen.set.dash([10, 10]);
+                pen.set.dash(10);
                 pen.graph.vertical(align);
                 pen.set.color();
                 pen.set.dash();
@@ -37020,18 +37020,7 @@ class AutoPenCls {
             pen.arrow([-width, base], [width, base]);
             pen.line(B, T);
             pen.arrow(T, E);
-            if (solid) {
-                pen.set.color('black');
-                pen.circle(T, 3, [0, 360], true);
-            }
-            else {
-                pen.set.color('white');
-                pen.circle(T, 3, [0, 360], true);
-                pen.set.color('black');
-                pen.circle(T, 3, [0, 360]);
-            }
-            pen.set.weight();
-            pen.set.color('black');
+            solid ? pen.dot(T) : pen.hole(T);
             pen.label.point(B, num.toString(), 270);
         }
         function tick(position, correct) {
@@ -37317,14 +37306,12 @@ class AutoPenCls {
                     pen.plot(func);
                 if (greater && !equal) {
                     pen.plot(func);
-                    pen.set.color('white');
-                    pen.circle([0, 0], 4, [0, 360], true);
                     pen.set.color();
-                    pen.circle([0, 0], 4, [0, 360]);
+                    pen.hole([0, 0]);
                 }
                 if (!greater && equal) {
                     pen.set.color('red');
-                    pen.circle([0, 0], 4, [0, 360], true);
+                    pen.dot([0, 0]);
                 }
                 if (!greater && !equal) { }
             }
@@ -37335,14 +37322,12 @@ class AutoPenCls {
                     pen.plot(func);
                 if (!greater && !equal) {
                     pen.plot(func);
-                    pen.set.color('white');
-                    pen.circle([0, 0], 4, [0, 360], true);
                     pen.set.color();
-                    pen.circle([0, 0], 4, [0, 360]);
+                    pen.hole([0, 0]);
                 }
                 if (greater && equal) {
                     pen.set.color('red');
-                    pen.circle([0, 0], 4, [0, 360], true);
+                    pen.dot([0, 0]);
                 }
                 if (greater && !equal) { }
             }
@@ -39272,13 +39257,10 @@ class PenCls extends paint_1.Pencil {
      * @category draw
      * ```
      * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
-     * pen.circle([1,2], 10, [0,180]) // draw a upper semi-circle
      * ```
      */
-    circle(center, radius, angles = [0, 360], fill = false) {
+    circle(center, radius) {
         this.cv.circle(center, radius);
-        if (fill)
-            this.cv.disc(center, radius);
     }
     /**
      * Fill a disc.
@@ -39661,6 +39643,7 @@ class PhyPenCls {
      *    angle: 50,
      *    time: 4,
      *    arrowScale: 0.5,
+     *    ground: false
      * })
      * ```
      */

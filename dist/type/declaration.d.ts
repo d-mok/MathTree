@@ -3490,10 +3490,9 @@ declare module "Pen/Pen" {
          * @category draw
          * ```
          * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
-         * pen.circle([1,2], 10, [0,180]) // draw a upper semi-circle
          * ```
          */
-        circle(center: Point2D, radius: number, angles?: [number, number], fill?: boolean): void;
+        circle(center: Point2D, radius: number): void;
         /**
          * Fill a disc.
          * @category draw
