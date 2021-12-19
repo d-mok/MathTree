@@ -1355,14 +1355,6 @@ export class AutoPenCls {
         pen.size.resolution(0.12)
 
 
-        pen.grid.x()
-        pen.grid.y()
-        pen.axis.x()
-        pen.axis.y()
-        pen.tick.x()
-        pen.tick.y()
-
-
         function path(
             P: Point2D, Q: Point2D,
             prob: string, event: string,

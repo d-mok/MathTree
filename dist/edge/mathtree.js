@@ -37945,12 +37945,6 @@ class AutoPenCls {
         const pen = new Pen();
         pen.range.set([-5, 15], [-12, 12]);
         pen.size.resolution(0.12);
-        pen.grid.x();
-        pen.grid.y();
-        pen.axis.x();
-        pen.axis.y();
-        pen.tick.x();
-        pen.tick.y();
         function path(P, Q, prob, event, selected, circle) {
             let T = MoveX(Q, 2);
             pen.write(T, event);
