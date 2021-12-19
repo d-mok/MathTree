@@ -4573,6 +4573,24 @@ declare module "Pen/PhyPen" {
          */
         export(html: string, placeholder: string): string;
         /**
+         * A projectile trajectory.
+         * ```
+         * let pen = new PhyPen()
+         * pen.Projectile({
+         *    speed: 20,
+         *    angle: 50
+         *    time: 4,
+         *    arrowScale: 0.5,
+         * })
+         * ```
+         */
+        Projectile({ speed, angle, time, arrowScale }: {
+            speed: number;
+            angle: number;
+            time: number;
+            arrowScale: number;
+        }): void;
+        /**
          * A car on a banked road.
          * Circular Motion.
          * ```

@@ -29,6 +29,55 @@ export class PhyPenCls {
 
 
 
+
+    /**
+     * A projectile trajectory.
+     * ```
+     * let pen = new PhyPen()
+     * pen.Projectile({
+     *    speed: 20,
+     *    angle: 50
+     *    time: 4,
+     *    arrowScale: 0.5,
+     * })
+     * ```
+     */
+    Projectile({
+        speed,
+        angle,
+        time,
+        arrowScale
+    }: {
+        speed: number
+        angle: number
+        time: number
+        arrowScale: number
+    }) {
+        let pen = new Pen()
+
+        let ux = speed * cos(angle)
+        let uy = speed * sin(angle)
+
+        let x = (t: number) => ux * t
+        let y = (t: number) => uy * t - 0.5 * 9.81 * t * t
+
+        let O: Point2D = [0, 0]
+        let U: Point2D = [ux * arrowScale, uy * arrowScale]
+        let P: Point2D = [x(time), y(time)]
+
+        pen.range.capture(O, U, P)
+        pen.size.lock(1.5)
+
+        pen.disc(O, 5)
+        pen.arrow(O, U)
+        pen.set.color('grey')
+        pen.plotDash(t => [x(t), y(t)], 0, time)
+        pen.circle(P, 5)
+
+        this.pen = pen
+    }
+
+
     /**
      * A car on a banked road.
      * Circular Motion.

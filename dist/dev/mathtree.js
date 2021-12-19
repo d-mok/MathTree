@@ -39653,6 +39653,36 @@ class PhyPenCls {
         return this.pen.exportTrim(html, placeholder);
     }
     /**
+     * A projectile trajectory.
+     * ```
+     * let pen = new PhyPen()
+     * pen.Projectile({
+     *    speed: 20,
+     *    angle: 50
+     *    time: 4,
+     *    arrowScale: 0.5,
+     * })
+     * ```
+     */
+    Projectile({ speed, angle, time, arrowScale }) {
+        let pen = new Pen();
+        let ux = speed * cos(angle);
+        let uy = speed * sin(angle);
+        let x = (t) => ux * t;
+        let y = (t) => uy * t - 0.5 * 9.81 * t * t;
+        let O = [0, 0];
+        let U = [ux * arrowScale, uy * arrowScale];
+        let P = [x(time), y(time)];
+        pen.range.capture(O, U, P);
+        pen.size.lock(1.5);
+        pen.disc(O, 5);
+        pen.arrow(O, U);
+        pen.set.color('grey');
+        pen.plotDash(t => [x(t), y(t)], 0, time);
+        pen.circle(P, 5);
+        this.pen = pen;
+    }
+    /**
      * A car on a banked road.
      * Circular Motion.
      * ```
