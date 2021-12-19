@@ -3450,7 +3450,7 @@ declare module "Pen/Pen" {
          */
         points(positions: {
             [k: string]: Point;
-        }, label?: boolean): void;
+        }): void;
         /**
          * Draw a cutter to a horizontal line.
          * @category draw

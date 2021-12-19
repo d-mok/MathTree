@@ -545,13 +545,9 @@ export class PenCls extends Pencil {
      * pen.points({A,B},false) // mark point A and B, without label
      * ```
      */
-    points(positions: { [k: string]: Point }, label = true) {
+    points(positions: { [k: string]: Point }) {
         for (let k in positions) {
-            if (label) {
-                this.point(positions[k], k)
-            } else {
-                this.point(positions[k])
-            }
+            this.point(positions[k], k)
         }
     }
 

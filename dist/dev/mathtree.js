@@ -39202,14 +39202,9 @@ class PenCls extends paint_1.Pencil {
      * pen.points({A,B},false) // mark point A and B, without label
      * ```
      */
-    points(positions, label = true) {
+    points(positions) {
         for (let k in positions) {
-            if (label) {
-                this.point(positions[k], k);
-            }
-            else {
-                this.point(positions[k]);
-            }
+            this.point(positions[k], k);
         }
     }
     /**
