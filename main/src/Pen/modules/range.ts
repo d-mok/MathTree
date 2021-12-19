@@ -1,5 +1,5 @@
-import { PenCls } from './core'
-import { Pencil, capturable, Convas } from 'paint'
+import { PenCls } from '../Pen'
+import {  capturable, Convas } from 'paint'
 
 
 export class PenRange {

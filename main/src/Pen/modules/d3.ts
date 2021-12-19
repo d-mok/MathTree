@@ -1,4 +1,4 @@
-import { PenCls } from './core'
+import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
 
