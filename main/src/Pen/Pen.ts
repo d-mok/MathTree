@@ -655,19 +655,32 @@ export class PenCls extends Pencil {
     }
 
 
+
+    /**
+     * Draw a dot.
+     * @category draw
+     * ```
+     * pen.dot([1,2]) // draw a dot at [1,2]
+     * ```
+     */
+    dot(point: Point2D) {
+        this.disc(point, 4)
+    }
+
+
     /**
      * Draw a hole.
      * @category draw
      * ```
-     * pen.hole([1,2], 10) // draw a hole at [1,2] with 10 px radius
+     * pen.hole([1,2]) // draw a hole at [1,2]
      * ```
      */
-    hole(center: Point2D, radius: number) {
+    hole(point: Point2D) {
         this.cv.save()
         this.set.color('white')
-        this.disc(center, radius)
+        this.disc(point, 4)
         this.cv.restore()
-        this.circle(center, radius)
+        this.circle(point, 4)
     }
 
 

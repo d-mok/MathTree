@@ -3511,13 +3511,21 @@ declare module "Pen/Pen" {
          */
         halo(center: Point2D, radius: number): void;
         /**
+         * Draw a dot.
+         * @category draw
+         * ```
+         * pen.dot([1,2]) // draw a dot at [1,2]
+         * ```
+         */
+        dot(point: Point2D): void;
+        /**
          * Draw a hole.
          * @category draw
          * ```
-         * pen.hole([1,2], 10) // draw a hole at [1,2] with 10 px radius
+         * pen.hole([1,2]) // draw a hole at [1,2]
          * ```
          */
-        hole(center: Point2D, radius: number): void;
+        hole(point: Point2D): void;
         /**
          * Draw a line between two points.
          * @category draw
