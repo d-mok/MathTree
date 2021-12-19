@@ -118,6 +118,11 @@ export class Canvas07 extends Canvas06 {
         this.doStroke()
     }
 
+    solidArc(P: Point, O: Point, Q: Point, radius: px) {
+        this.createArcByPoints(P, O, Q, radius)
+        this.doSolid()
+    }
+
     circle(center: Point, radius: px) {
         this.createArc(center, radius, [0, 360])
         this.doStroke()
@@ -157,7 +162,7 @@ export class Canvas07 extends Canvas06 {
     anglePolar(A: Point, O: Point, B: Point, radius: px, count: number, space: px) {
         for (let s of steps(count)) {
             let r = radius + s * space
-            this.arc(A, O, B, r)
+            this.solidArc(A, O, B, r)
         }
     }
 

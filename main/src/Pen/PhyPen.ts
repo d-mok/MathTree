@@ -1,4 +1,4 @@
-import { PenCls } from './Pen'
+import { PenCls } from './Pen/core'
 
 
 export class PhyPenCls {

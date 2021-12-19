@@ -1,5 +1,4 @@
-import { prob } from '../Core/Owl'
-import { PenCls } from './Pen'
+import { PenCls } from './Pen/core'
 
 
 /**

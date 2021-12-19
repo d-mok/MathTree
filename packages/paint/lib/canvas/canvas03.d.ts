@@ -7,6 +7,9 @@ declare type LineLabel = 'auto' | 'left' | 'right';
  * - Settings
  */
 export declare class Canvas03 extends Canvas02 {
+    AUTO_BORDER: boolean;
+    RANGE_DONE: boolean;
+    SIZE_DONE: boolean;
     get $WEIGHT(): number;
     set $WEIGHT(value: number);
     get $COLOR(): string;

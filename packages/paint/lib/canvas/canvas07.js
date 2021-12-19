@@ -94,6 +94,10 @@ class Canvas07 extends canvas06_1.Canvas06 {
         this.createArcByPoints(P, O, Q, radius);
         this.doStroke();
     }
+    solidArc(P, O, Q, radius) {
+        this.createArcByPoints(P, O, Q, radius);
+        this.doSolid();
+    }
     circle(center, radius) {
         this.createArc(center, radius, [0, 360]);
         this.doStroke();
@@ -124,7 +128,7 @@ class Canvas07 extends canvas06_1.Canvas06 {
     anglePolar(A, O, B, radius, count, space) {
         for (let s of steps(count)) {
             let r = radius + s * space;
-            this.arc(A, O, B, r);
+            this.solidArc(A, O, B, r);
         }
     }
     angle(A, O, B, radius, count, space) {

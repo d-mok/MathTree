@@ -3101,233 +3101,457 @@ declare function Projector(angle?: number, depth?: number): (x: number, y: numbe
 * ```
 */
 declare function Projector3D(angle?: number, depth?: number): (_: Point3D) => Point;
-declare module "Pen/Pen" {
-    import { Pencil, capturable } from 'paint';
-    export class PenCls extends Pencil {
+declare module "Pen/Pen/range" {
+    import { PenCls } from "Pen/Pen/core";
+    import { capturable, Convas } from 'paint';
+    export class PenRange {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
         /**
-         * @ignore
+         * Set the coordinate range.
+         * ```
+         * pen.range.set([-5,5],[-2,4]) // -5<x<5 and -2<y<4
+         * ```
          */
+        set([xmin, xmax]: [number, number], [ymin, ymax]?: [number, number]): void;
+        /**
+         * Set the coordinate range as a square.
+         * ```
+         * pen.range.square(5) // -5<x<5 and -5<y<5
+         * pen.range.square(5,[1,2]) // -4<x<6 and -3<y<7
+         * ```
+         */
+        square(size: number, [x, y]?: Point2D): void;
+        /**
+         * Set the coordinate range by capture points or objects.
+         * ```
+         * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
+         * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
+         * // point | circle [[h,k],r] | sphere [[a,b,c],r]
+         * ```
+         */
+        capture(...things: capturable[]): void;
+        /**
+         * Set the coordinate range by capture points or objects, include O(0,0).
+         * ```
+         * pen.range.extend([1,2],[3,4]) // [0,0], [1,2], [3,4] must be in-view
+         * // point | circle [[h,k],r] | sphere [[a,b,c],r]
+         * ```
+         */
+        extend(...things: capturable[]): void;
+    }
+}
+declare module "Pen/Pen/size" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenSize {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        private initSize;
+        private initOuterBorder;
+        /**
+         * Set the canvas size.
+         * ```
+         * pen.size.set(0.5,2) // width = 0.5 inch, height = 2 inch
+         * ```
+         */
+        set(widthInch?: number, heightInch?: number): void;
+        /**
+         * Set the canvas size by resolution.
+         * ```
+         * pen.size.resolution(0.1,0.2)
+         * // 0.1 inch for each x-unit, and 0.2 inch for each y-unit
+         * ```
+         */
+        resolution(xIPU?: number, yIPU?: number): void;
+        /**
+         * Set the canvas size, locking x-y ratio.
+         * ```
+         * pen.size.lock(1, 2) // max at width = 1 inch and height = 2 inch
+         * pen.size.lock(0.5) // max at both = 0.5 inch
+         * ```
+         */
+        lock(maxWidthInch?: number, maxHeightInch?: number): void;
+    }
+}
+declare module "Pen/Pen/settings" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenSettings {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Set the weight of the pen (line width).
+         * ```
+         * pen.set.weight(2) // set a bold line
+         * ```
+         */
+        weight(weight?: number): void;
+        /**
+         * Set the color of both filling and stroke.
+         * ```
+         * pen.set.color('grey')
+         * ```
+         */
+        color(color?: string): void;
+        /**
+         * Set the transparency. From 0 to 1.
+         * ```
+         * pen.set.alpha(0.9) // slightly transparent
+         * ```
+         */
+        alpha(value?: number): void;
+        /**
+         * Set the dash pattern of line.
+         * ```
+         * pen.set.dash([5,5]) // set dash line
+         * pen.set.dash(5) // same
+         * pen.set.dash(true) // same
+         * pen.set.dash(false) // set solid line
+         * ```
+         */
+        dash(segments?: (number[] | number | boolean)): void;
+        /**
+         * Set the horizontal alignment of text.
+         * ```
+         * pen.set.textAlign('left') // {'left','right','center'}
+         * ```
+         */
+        textAlign(align?: CanvasTextAlign): void;
+        /**
+         * Set the vertical alignment of text.
+         * ```
+         * pen.set.textBaseline('bottom') // {'top','bottom','middle'}
+         * ```
+         */
+        textBaseline(baseline?: CanvasTextBaseline): void;
+        /**
+         * Set the size of text.
+         * ```
+         * pen.set.textSize(2) // double-sized text
+         * ```
+         */
+        textSize(size?: number): void;
+        /**
+         * Set italic style of text.
+         * ```
+         * pen.set.textItalic(true)
+         * ```
+         */
+        textItalic(italic?: boolean): void;
+        /**
+         * Set text direction.
+         * ```
+         * pen.set.textDir(90) // vertical text
+         * ```
+         */
+        textDir(angle?: number): void;
+        /**
+         * Set text latex mode.
+         * ```
+         * pen.set.textLatex(true)
+         * ```
+         */
+        textLatex(on?: boolean): void;
+        /**
+         * Set the center for label dodge.
+         * ```
+         * pen.set.labelCenter(A,B,C,D) // centroid of A,B,C,D
+         * pen.set.labelCenter() // center of canvas
+         * ```
+         */
+        labelCenter(...centers: Point[]): void;
+        /**
+         * Set length unit for line label.
+         * ```
+         * pen.set.lengthUnit('cm')
+         * ```
+         */
+        lengthUnit(text?: string): void;
+        /**
+         * Set the mode for angle.
+         * All angles (e.g. AOB) will be understood as this mode.
+         * ```
+         * pen.set.angle('polar') // {normal' | 'polar' | 'reflex'}
+         * ```
+         */
+        angle(mode?: 'normal' | 'polar' | 'reflex'): void;
+        /**
+         * Set 3D projector function.
+         * ```
+         * pen.set.Projector3D(60, 0.5)
+         * // tilted 60 degree, 0.5 depth for y-axis
+         * ```
+         */
+        projector3D(angle?: number, depth?: number): void;
+        /**
+         * Ser the border inch when auto creating outer border.
+         * ```
+         * pen.set.border(0.2) // 0.2 inch
+         * ```
+         */
+        border(border?: number): void;
+        /**
+         * Ser the mode for direction of line label.
+         * ```
+         * pen.set.lineLabel('auto') // {'auto', 'left', 'right'}
+         * ```
+         */
+        lineLabel(setting?: 'auto' | 'left' | 'right'): void;
+        /**
+         * Reset all pen settings.
+         */
+        reset(): void;
+        /**
+         * Reset all pen settings, including border and 3D.
+         */
+        resetAll(): void;
+    }
+}
+declare module "Pen/Pen/d3" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenD3 {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Draw the 3D axis, for development only.
+         * @deprecated
+         * ```
+         * pen.d3.axis3D(100) // draw 3D axis with length 100
+         * ```
+         */
+        axis3D(length?: number): void;
+        /**
+         * Draw a circle in 3D
+         * ```
+         * pen.d3.circle([0,0,1],2,[1,0,0],[0,1,0]) // draw a xy circle with radius 2
+         * ```
+         */
+        circle(center: Point3D, radius: number, xVec: Point3D, yVec: Point3D, { line, dash, shade, fill, arc }?: {
+            line?: boolean;
+            dash?: boolean;
+            shade?: boolean;
+            fill?: boolean;
+            arc?: [number, number];
+        }): void;
+        /**
+         * Draw a circle on XZ plane in 3D
+         * ```
+         * pen.d3.circleXZ([0,3,0],2) // draw a xz circle with radius 2
+         * ```
+         */
+        circleXZ(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+            line?: boolean;
+            dash?: boolean;
+            shade?: boolean;
+            fill?: boolean;
+            arc?: [number, number];
+        }): void;
+        /**
+         * Draw a circle on YZ plane in 3D
+         * ```
+         * pen.d3.circleYZ([3,0,0],2) // draw a yz circle with radius 2
+         * ```
+         */
+        circleYZ(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+            line?: boolean;
+            dash?: boolean;
+            shade?: boolean;
+            fill?: boolean;
+            arc?: [number, number];
+        }): void;
+        /**
+         * Draw a circle on XY plane in 3D
+         * ```
+         * pen.d3.circleXY([0,0,3],2) // draw a xy circle with radius 2
+         * ```
+         */
+        circleXY(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+            line?: boolean;
+            dash?: boolean;
+            shade?: boolean;
+            fill?: boolean;
+            arc?: [number, number];
+        }): void;
+        /**
+         * Draw a sphere in 3D
+         * ```
+         * pen.d3.sphere([1,0,0],3) // draw a sphere with radius 3
+         * ```
+         */
+        sphere(center: Point3D, radius: number, { baseDash, baseShade, radiusLine, radiusDash, radiusLabel, lowerOnly, upperOnly }?: {
+            baseDash?: boolean | undefined;
+            baseShade?: boolean | undefined;
+            radiusLine?: boolean | undefined;
+            radiusDash?: boolean | undefined;
+            radiusLabel?: string | undefined;
+            lowerOnly?: boolean | undefined;
+            upperOnly?: boolean | undefined;
+        }): void;
+        /**
+         * Return the envelop of a frustum
+         * @param lowerBase - the points in the lower base
+         * @param upperBase - the point in the upper base, must have the same length as lowerBase
+         * ```
+         * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
+         * let [D,E,F] = [[0,0,3],[1,0,3],[0,1,3]]
+         * pen.d3.envelope([A,B,C],[D,E,F])
+         * ```
+         */
+        envelope(lowerBase: Point3D[], upperBase: Point3D[]): [Point3D, Point3D][];
+        /**
+         * Draw a frustum
+         * ```
+         * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
+         * let V = [0,0,5]
+         * pen.d3.frustum([A,B,C],[V]) // draw a cone
+         * ```
+         */
+        frustum(lowerBase: Point3D[], upperBase: Point3D[] | Point3D, { base, height, shadeLower, shadeUpper, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a prism along the z-direction
+         * ```
+         * let [A,B,C] = [[0,0],[2,0],[0,2]]
+         * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
+         * ```
+         */
+        prismZ(lowerBase: Point2D[], lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a cylinder along the z-direction
+         * ```
+         * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
+         * ```
+         */
+        cylinderZ(center: Point2D, radius: number, lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a pyramid along the z-direction
+         * ```
+         * let [A,B,C] = [[0,0],[2,0],[0,2]]
+         * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
+         * ```
+         */
+        pyramidZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a cone along the z-direction
+         * ```
+         * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
+         * ```
+         */
+        coneZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a frustum along the z-direction
+         * ```
+         * let [A,B,C] = [[0,0],[2,0],[0,2]]
+         * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
+         * ```
+         */
+        frustumZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, scale: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw a conical frustum along the z-direction
+         * ```
+         * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
+         * ```
+         */
+        conicalFrustumZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, scale: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
+            base?: boolean | undefined;
+            height?: boolean | undefined;
+            shadeLower?: boolean | undefined;
+            shadeUpper?: boolean | undefined;
+            envelope?: boolean | undefined;
+        }): void;
+        /**
+         * Draw the angle between two plane.
+         * ```
+         * let P = [0,0,1]
+         * let O = [0,0,0]
+         * let Q = [1,0,0]
+         * let A = [0,1,0]
+         * let B = [0,-1,0]
+         * pen.d3.angleBet([P,O,Q], [A,B], 'x')
+         * ```
+         */
+        angleBet(angle: [Point3D, Point3D, Point3D], line: [Point3D | undefined, Point3D | undefined], label?: string): void;
+        /**
+         * Draw the dash height and right-angle.
+         * ```
+         * pen.d3.height([0,0,1],[0,0,0],[0,1,0])
+         * ```
+         */
+        height(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string): void;
+        /**
+         * Draw the solid height and right-angle.
+         * ```
+         * pen.d3.altitude([0,0,1],[0,0,0],[0,1,0])
+         * ```
+         */
+        altitude(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string): void;
+    }
+}
+declare module "Pen/Pen/core" {
+    import { Convas } from 'paint';
+    import { PenRange } from "Pen/Pen/range";
+    import { PenSize } from "Pen/Pen/size";
+    import { PenSettings } from "Pen/Pen/settings";
+    import { PenD3 } from "Pen/Pen/d3";
+    export class PenCls {
+        protected cv: Convas;
         constructor();
+        protected pj(pt: Point): Point2D;
+        protected pjs(pts: Point[]): Point2D[];
         /**
          * Setup of canvas coordinate range.
          * @category setting
          */
-        range: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * @ignore
-             */
-            AUTO_BORDER: boolean;
-            /**
-             * Set the coordinate range.
-             * ```
-             * pen.range.set([-5,5],[-2,4]) // -5<x<5 and -2<y<4
-             * ```
-             */
-            set(xRange: [number, number], yRange?: [number, number]): void;
-            /**
-             * Set the coordinate range as a square.
-             * ```
-             * pen.range.square(5) // -5<x<5 and -5<y<5
-             * pen.range.square(5,[1,2]) // -4<x<6 and -3<y<7
-             * ```
-             */
-            square(size: number, center?: Point2D): void;
-            /**
-             * Set the coordinate range by capture points or objects.
-             * @param things - point / circle [[h,k],r] / sphere [[a,b,c],r]
-             * ```
-             * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
-             * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
-             * ```
-             */
-            capture(...things: capturable[]): void;
-            /**
-             * Set the coordinate range by capture points or objects, include O(0,0).
-             * @param things - point / circle [[h,k],r] / sphere [[a,b,c],r]
-             * ```
-             * pen.range.extend([1,2],[3,4]) // [0,0], [1,2], [3,4] must be in-view
-             * ```
-             */
-            extend(...things: capturable[]): void;
-        };
+        range: PenRange;
         /**
          * Setup of canvas size.
          * @category setting
          */
-        size: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Set the canvas size.
-             * ```
-             * pen.size.set(0.5,2) // width = 0.5 inch, height = 2 inch
-             * ```
-             */
-            set(widthInch?: number, heightInch?: number): void;
-            /**
-             * Set the canvas size by resolution.
-             * ```
-             * pen.size.resolution(0.1,0.2)
-             * // 0.1 inch for each x-unit, and 0.2 inch for each y-unit
-             * ```
-             */
-            resolution(xIPU?: number, yIPU?: number): void;
-            /**
-             * Set the canvas size, locking x-y ratio.
-             * ```
-             * pen.size.lock(1, 2) // max at width = 1 inch and height = 2 inch
-             * pen.size.lock(0.5) // max at both = 0.5 inch
-             * ```
-             */
-            lock(maxWidthInch?: number, maxHeightInch?: number): void;
-        };
+        size: PenSize;
         /**
          * Settings.
          * @category setting
          */
-        set: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * @ignore
-             */
-            _cv: import("paint/lib/canvas/canvas10").Canvas10;
-            /**
-             * Set the weight of the pen (line width).
-             * ```
-             * pen.set.weight(2) // set a bold line
-             * ```
-             */
-            weight(weight?: number): void;
-            /**
-             * Set the color of both filling and stroke.
-             * ```
-             * pen.set.color('grey')
-             * ```
-             */
-            color(color?: string): void;
-            /**
-             * Set the transparency.
-             * @param value - 0 is transparent, 1 is opaque
-             * ```
-             * pen.set.alpha(0.9) // slightly transparent
-             * ```
-             */
-            alpha(value?: number): void;
-            /**
-             * Set the dash pattern of line.
-             * ```
-             * pen.set.dash([5,5]) // set dash line
-             * pen.set.dash(5) // same
-             * pen.set.dash(true) // same
-             * pen.set.dash(false) // set solid line
-             * ```
-             */
-            dash(segments?: (number[] | number | boolean)): void;
-            /**
-             * Set the horizontal alignment of text.
-             * ```
-             * pen.set.textAlign('left') // {'left','right','center'}
-             * ```
-             */
-            textAlign(align?: CanvasTextAlign): void;
-            /**
-             * Set the vertical alignment of text.
-             * ```
-             * pen.set.textBaseline('bottom') // {'top','bottom','middle'}
-             * ```
-             */
-            textBaseline(baseline?: CanvasTextBaseline): void;
-            /**
-             * Set the size of text.
-             * ```
-             * pen.set.textSize(2) // double-sized text
-             * ```
-             */
-            textSize(size?: number): void;
-            /**
-             * Set italic style of text.
-             * ```
-             * pen.set.textItalic(true)
-             * ```
-             */
-            textItalic(italic?: boolean): void;
-            /**
-             * Set text direction.
-             * ```
-             * pen.set.textDir(90) // vertical text
-             * ```
-             */
-            textDir(angle?: number): void;
-            /**
-             * Set text latex mode.
-             * ```
-             * pen.set.textLatex(true)
-             * ```
-             */
-            textLatex(on?: boolean): void;
-            /**
-             * Set the center for label dodge.
-             * ```
-             * pen.set.labelCenter(A,B,C,D) // centroid of A,B,C,D
-             * pen.set.labelCenter() // center of canvas
-             * ```
-             */
-            labelCenter(...centers: Point[]): void;
-            /**
-             * Set length unit for line label.
-             * ```
-             * pen.set.lengthUnit('cm')
-             * ```
-             */
-            lengthUnit(text?: string): void;
-            /**
-             * Set the mode for angle.
-             * All angles (e.g. AOB) will be understood as this mode.
-             * ```
-             * pen.set.angle('polar') // {normal' | 'polar' | 'reflex'}
-             * ```
-             */
-            angle(mode?: 'normal' | 'polar' | 'reflex'): void;
-            /**
-             * Set 3D projector function.
-             * ```
-             * pen.set.Projector3D(60, 0.5)
-             * // tilted 60 degree, 0.5 depth for y-axis
-             * ```
-             */
-            projector3D(angle?: number, depth?: number): void;
-            /**
-             * Ser the border inch when auto creating outer border.
-             * ```
-             * pen.set.border(0.2) // 0.2 inch
-             * ```
-             */
-            border(border?: number): void;
-            /**
-             * Ser the mode for direction of line label.
-             * ```
-             * pen.set.lineLabel('auto') // {'auto', 'left', 'right'}
-             * ```
-             */
-            lineLabel(setting?: 'auto' | 'left' | 'right'): void;
-            /**
-             * Reset all pen settings.
-             */
-            reset(): void;
-            /**
-             * Reset all pen settings, including border and 3D.
-             */
-            resetAll(): void;
-        };
+        set: PenSettings;
         /**
          * Plot an explicit or parametric function.
          * @category graph
@@ -3582,11 +3806,11 @@ declare module "Pen/Pen" {
         length(A: Point, B: Point, label?: string | number): void;
         /**
          * Draw a dashed height with right angle, from V to AB.
-         * @category draw
          * ```
          * pen.height([0,4],[[-1,0],[1,0]],'h')
          * // draw the height 'h' from [0,4] to x-axis
          * ```
+         * @category draw
          */
         height(V: Point2D, [A, B]: [Point2D, Point2D], label?: string | number): void;
         /**
@@ -3977,218 +4201,7 @@ declare module "Pen/Pen" {
          * The 3D pen
          * @category 3D
          */
-        d3: {
-            /**
-             * @ignore
-             */
-            _pen: PenCls;
-            /**
-             * Draw the 3D axis, for development only.
-             * @deprecated
-             * ```
-             * pen.d3.axis3D(100) // draw 3D axis with length 100
-             * ```
-             */
-            axis3D(length?: number): void;
-            /**
-             * Draw a circle in 3D
-             * ```
-             * pen.d3.circle([0,0,1],2,[1,0,0],[0,1,0]) // draw a xy circle with radius 2
-             * ```
-             */
-            circle(center: Point3D, radius: number, xVec: Point3D, yVec: Point3D, { line, dash, shade, fill, arc }?: {
-                line?: boolean | undefined;
-                dash?: boolean | undefined;
-                shade?: boolean | undefined;
-                fill?: boolean | undefined;
-                arc?: [number, number] | undefined;
-            }): void;
-            /**
-             * Draw a circle on XZ plane in 3D
-             * ```
-             * pen.d3.circleXZ([0,3,0],2) // draw a xz circle with radius 2
-             * ```
-             */
-            circleXZ(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
-                line?: boolean | undefined;
-                dash?: boolean | undefined;
-                shade?: boolean | undefined;
-                fill?: boolean | undefined;
-                arc?: [number, number] | undefined;
-            }): void;
-            /**
-             * Draw a circle on YZ plane in 3D
-             * ```
-             * pen.d3.circleYZ([3,0,0],2) // draw a yz circle with radius 2
-             * ```
-             */
-            circleYZ(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
-                line?: boolean | undefined;
-                dash?: boolean | undefined;
-                shade?: boolean | undefined;
-                fill?: boolean | undefined;
-                arc?: [number, number] | undefined;
-            }): void;
-            /**
-             * Draw a circle on XY plane in 3D
-             * ```
-             * pen.d3.circleXY([0,0,3],2) // draw a xy circle with radius 2
-             * ```
-             */
-            circleXY(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
-                line?: boolean | undefined;
-                dash?: boolean | undefined;
-                shade?: boolean | undefined;
-                fill?: boolean | undefined;
-                arc?: [number, number] | undefined;
-            }): void;
-            /**
-             * Draw a sphere in 3D
-             * ```
-             * pen.d3.sphere([1,0,0],3) // draw a sphere with radius 3
-             * ```
-             */
-            sphere(center: Point3D, radius: number, { baseDash, baseShade, radiusLine, radiusDash, radiusLabel, lowerOnly, upperOnly }?: {
-                baseDash?: boolean | undefined;
-                baseShade?: boolean | undefined;
-                radiusLine?: boolean | undefined;
-                radiusDash?: boolean | undefined;
-                radiusLabel?: string | undefined;
-                lowerOnly?: boolean | undefined;
-                upperOnly?: boolean | undefined;
-            }): void;
-            /**
-             * Return the envelop of a frustum
-             * @param lowerBase - the points in the lower base
-             * @param upperBase - the point in the upper base, must have the same length as lowerBase
-             * ```
-             * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
-             * let [D,E,F] = [[0,0,3],[1,0,3],[0,1,3]]
-             * pen.d3.envelope([A,B,C],[D,E,F])
-             * ```
-             */
-            envelope(lowerBase: Point3D[], upperBase: Point3D[]): [Point3D, Point3D][];
-            /**
-             * Draw a frustum
-             * ```
-             * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
-             * let V = [0,0,5]
-             * pen.d3.frustum([A,B,C],[V]) // draw a cone
-             * ```
-             */
-            frustum(lowerBase: Point3D[], upperBase: Point3D[] | Point3D, { base, height, shadeLower, shadeUpper, envelope, }?: {
-                base?: boolean | undefined;
-                height?: boolean | undefined;
-                shadeLower?: boolean | undefined;
-                shadeUpper?: boolean | undefined;
-                envelope?: boolean | undefined;
-            }): void;
-            /**
-             * Draw a prism along the z-direction
-             * ```
-             * let [A,B,C] = [[0,0],[2,0],[0,2]]
-             * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
-             * ```
-             */
-            prismZ(lowerBase: Point2D[], lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
-                base?: boolean | undefined;
-                height?: boolean | undefined;
-                shadeLower?: boolean | undefined;
-                shadeUpper?: boolean | undefined;
-                envelope?: boolean | undefined;
-            }): void;
-            /**
-             * Draw a cylinder along the z-direction
-             * ```
-             * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
-             * ```
-             */
-            cylinderZ(center: Point2D, radius: number, lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
-                base?: boolean | undefined;
-                height?: boolean | undefined;
-                shadeLower?: boolean | undefined;
-                shadeUpper?: boolean | undefined;
-                envelope?: boolean | undefined;
-            }): void;
-            /**
-             * Draw a pyramid along the z-direction
-             * ```
-             * let [A,B,C] = [[0,0],[2,0],[0,2]]
-             * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
-             * ```
-             */
-            pyramidZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
-                base?: boolean | undefined;
-                height?: boolean | undefined;
-                shadeLower?: boolean | undefined;
-                envelope?: boolean | undefined;
-            }): void;
-            /**
-             * Draw a cone along the z-direction
-             * ```
-             * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
-             * ```
-             */
-            coneZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
-                base?: boolean | undefined;
-                height?: boolean | undefined;
-                shadeLower?: boolean | undefined;
-                envelope?: boolean | undefined;
-            }): void;
-            /**
-             * Draw a frustum along the z-direction
-             * ```
-             * let [A,B,C] = [[0,0],[2,0],[0,2]]
-             * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
-             * ```
-             */
-            frustumZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, scale: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
-                base?: boolean | undefined;
-                height?: boolean | undefined;
-                shadeLower?: boolean | undefined;
-                shadeUpper?: boolean | undefined;
-                envelope?: boolean | undefined;
-            }): void;
-            /**
-             * Draw a conical frustum along the z-direction
-             * ```
-             * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
-             * ```
-             */
-            conicalFrustumZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, scale: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
-                base?: boolean | undefined;
-                height?: boolean | undefined;
-                shadeLower?: boolean | undefined;
-                shadeUpper?: boolean | undefined;
-                envelope?: boolean | undefined;
-            }): void;
-            /**
-             * Draw the angle between two plane.
-             * ```
-             * let P = [0,0,1]
-             * let O = [0,0,0]
-             * let Q = [1,0,0]
-             * let A = [0,1,0]
-             * let B = [0,-1,0]
-             * pen.d3.angleBet([P,O,Q], [A,B], 'x')
-             * ```
-             */
-            angleBet(angle: [Point3D, Point3D, Point3D], line: [Point3D | undefined, Point3D | undefined], label?: string | undefined): void;
-            /**
-             * Draw the dash height and right-angle.
-             * ```
-             * pen.d3.height([0,0,1],[0,0,0],[0,1,0])
-             * ```
-             */
-            height(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string | undefined): void;
-            /**
-             * Draw the solid height and right-angle.
-             * ```
-             * pen.d3.altitude([0,0,1],[0,0,0],[0,1,0])
-             * ```
-             */
-            altitude(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string | undefined): void;
-        };
+        d3: PenD3;
         /**
          * Set the background image url.
          * @category export
@@ -4708,13 +4721,127 @@ declare module "Pen/PhyPen" {
     }
 }
 declare module "Pen/index" {
-    import { PenCls } from "Pen/Pen";
+    import { PenCls } from "Pen/Pen/core";
     import { AutoPenCls } from "Pen/AutoPen";
     import { PhyPenCls } from "Pen/PhyPen";
     global {
         var Pen: typeof PenCls;
         var AutoPen: typeof AutoPenCls;
         var PhyPen: typeof PhyPenCls;
+    }
+}
+declare module "Pen/Pen/fill" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenFill {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+    }
+}
+declare module "Pen/Pen/graph" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenGraph {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Draw a circle (x-h)^2+(y-k)^2 = r^2.
+         * ```
+         * pen.graph.circle([1,2],3) // (x-1)^2+(y-2)^2 = 9
+         * ```
+         */
+        circle(center: Point2D, radius: number): void;
+        /**
+         * Draw an arc. AOB must be in polar direction.
+         * ```
+         * pen.graph.arc([0,0],[1,0],[-1,0]) // upper semi-unit circle
+         *
+         * ```
+         */
+        arc(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Draw a sector. AOB must be in polar direction.
+         * ```
+         * pen.graph.sector([0,0],[1,0],[0,1]) // quarter circle sector
+         * ```
+         */
+        sector(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Draw a circle segment. AOB must be in polar direction.
+         * ```
+         * pen.graph.segment([0,0],[1,0],[0,1]) // quarter circle segment
+         * ```
+         */
+        segment(O: Point2D, A: Point2D, B: Point2D): void;
+        /**
+         * Draw a quadratic graph.
+         * ```
+         * pen.graph.quadratic(1,2,3) // y=x^2+2x+3.
+         * ```
+         */
+        quadratic(a: number, b: number, c: number): void;
+        /**
+         * Draw a line y=mx+c.
+         * ```
+         * pen.graph.line(2,1) // y=2x+1
+         * ```
+         */
+        line(m: number, c: number): void;
+        /**
+         * Draw a horizontal line.
+         * ```
+         * pen.graph.horizontal(2) // y=2
+         * ```
+         */
+        horizontal(y: number): void;
+        /**
+         * Draw a vertical line.
+         * ```
+         * pen.graph.vertical(2) // x=2
+         * ```
+         */
+        vertical(x: number): void;
+        /**
+         * Draw a line ax+by+c=0.
+         * ```
+         * pen.graph.linear(1,2,3) // x+2y+3=0
+         * ```
+         */
+        linear(a: number, b: number, c: number): void;
+        /**
+         * Draw a line through two points.
+         * ```
+         * pen.graph.through([0,0],[1,1]) // y = x
+         * ```
+         */
+        through(A: Point, B: Point): void;
+        /**
+         * Draw the perpendicular bisector of two points.
+         * ```
+         * pen.graph.perpBisector([0,0],[2,2]) // y = -x+2
+         * ```
+         */
+        perpBisector(A: Point2D, B: Point2D): void;
+    }
+}
+declare module "Pen/Pen/label" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenLabel {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+    }
+}
+declare module "Pen/Pen/shade" {
+    import { PenCls } from "Pen/Pen/core";
+    import { Convas } from 'paint';
+    export class PenShade {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
     }
 }
 declare module "Soil/tool/html" {

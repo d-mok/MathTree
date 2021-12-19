@@ -43,6 +43,12 @@ const REM_PIXEL: number = parseFloat(getComputedStyle(document.documentElement).
  */
 export class Canvas03 extends Canvas02 {
 
+    // initialize state
+
+    public AUTO_BORDER = false
+    public RANGE_DONE = false
+    public SIZE_DONE = false
+
     // native settings
 
     public get $WEIGHT(): number {

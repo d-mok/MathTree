@@ -16,6 +16,7 @@ export declare class Canvas07 extends Canvas06 {
     fill(pts: Point[]): void;
     shade(pts: Point[]): void;
     arc(P: Point, O: Point, Q: Point, radius: px): void;
+    solidArc(P: Point, O: Point, Q: Point, radius: px): void;
     circle(center: Point, radius: px): void;
     disc(center: Point, radius: px): void;
     halo(center: Point, radius: px): void;

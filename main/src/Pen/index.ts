@@ -1,4 +1,4 @@
-import { PenCls } from './Pen'
+import { PenCls } from './Pen/core'
 import { AutoPenCls } from './AutoPen'
 import { PhyPenCls } from './PhyPen'
 

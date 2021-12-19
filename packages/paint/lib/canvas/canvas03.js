@@ -19,8 +19,11 @@ const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize
  */
 class Canvas03 extends canvas02_1.Canvas02 {
     constructor() {
-        // native settings
+        // initialize state
         super(...arguments);
+        this.AUTO_BORDER = false;
+        this.RANGE_DONE = false;
+        this.SIZE_DONE = false;
         // user setting
         this.$TEXT_DIR = 0;
         this.$TEXT_LATEX = false;
@@ -32,6 +35,7 @@ class Canvas03 extends canvas02_1.Canvas02 {
         // setting meta
         this.states = [];
     }
+    // native settings
     get $WEIGHT() {
         return this.ctx.lineWidth;
     }
