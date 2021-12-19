@@ -37943,8 +37943,8 @@ class AutoPenCls {
      */
     TreeDiagram({ titles, probabilities, events, select, circleSize }) {
         const pen = new Pen();
-        pen.range.set([-1, 15], [-8, 10]);
-        pen.size.resolution(0.1);
+        pen.range.set([-5, 15], [-12, 12]);
+        pen.size.resolution(0.12);
         pen.grid.x();
         pen.grid.y();
         pen.axis.x();
