@@ -1,4 +1,5 @@
 
+import { MonomialCls } from '../../Math/Algebra/PolynomialClass'
 
 
 export const num = (_: unknown): _ is number => Number.isFinite(_)

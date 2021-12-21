@@ -3,15 +3,13 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
 @exposeAll()
 @captureAll()
-export class Algebra {
-
-    private constructor() { }
+class Host {
 
     /**
-     * solve [x,y] from ax+by=c and px+qy=r.
+     * Solve [x,y] from ax+by=c and px+qy=r.
      * ```
      * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
-     * Crammer(1,1,3,2,2,6) // throw
+     * Crammer(1,1,3,2,2,6) // throw, parallel
      * ```
      */
     @checkIt(owl.num)
@@ -24,10 +22,10 @@ export class Algebra {
     }
 
     /**
-     * the product of two input polynomials.
+     * The product of two polynomials.
      * ```
-     * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
      * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+     * // (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
      * ```
      */
     @checkIt([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0 }])
@@ -49,8 +47,8 @@ export class Algebra {
 
 
 declare global {
-    var Crammer: typeof Algebra.Crammer
-    var xPolynomial: typeof Algebra.xPolynomial
+    var Crammer: typeof Host.Crammer
+    var xPolynomial: typeof Host.xPolynomial
 }
 
 

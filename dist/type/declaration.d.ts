@@ -125,118 +125,94 @@ declare module "Core/index" {
         var ink: typeof $Ink;
     }
 }
-/**
- * @ignore
- */
-declare class MonomialCls<V extends string> {
-    coeff: number;
-    vars: {
-        variable: V;
-        power: number;
-    }[];
-    constructor(coeff?: number, vars?: {
-        variable: V;
-        power: number;
-    }[]);
-    clone(): MonomialCls<V>;
-    random(degree: number, variables: V[], maxCoeff: number): void;
-    degree(): number;
-    sortedVars(): {
-        variable: V;
-        power: number;
-    }[];
-    size(): number;
-    signature(): string;
-    sort(): void;
-    print(): string;
-    func(): (input: {
-        [_: string]: number;
-    }) => number;
+declare module "Math/Algebra/Polynomial" {
+    class Host {
+        /**
+         * @deprecated
+         * a monomial object
+         */
+        static Monomial<V extends string>(coeff: number, vars: {
+            variable: V;
+            power: number;
+        }[]): MonomialCls<V>;
+        /**
+         * clone a polynomial
+         * ```
+         * PolyClone(7xy+3x^2y^3-2xy^3)
+         * //  7xy+3x^2y^3-2xy^3
+         * ```
+         */
+        static PolyClone<V extends string>(poly: polynomial<V>): polynomial<V>;
+        /**
+         * a random polynomial object
+         * ```
+         * RndPolynomial(5, ['x', 'y'], 3, 9))
+         * // may return 7xy+3x^2y^3-2xy^3
+         * ```
+         */
+        static RndPolynomial<V extends string>(degree: number, vars?: V[], terms?: number, maxCoeff?: number): polynomial<V>;
+        /**
+         * a string of the polynomial object
+         * ```
+         * PolyPrint([x^5, 2x^6, 3x^7])
+         * // x^{5}+2x^{6}+3x^{7}
+         * ```
+         */
+        static PolyPrint<V extends string>(poly: polynomial<V>): string;
+        /**
+         * a polynomial object sorted by power
+         * ```
+         * PolySort([2x^6, x^5, 3x^7])
+         * //  [x^5, 2x^6, 3x^7]
+         * ```
+         */
+        static PolySort<V extends string>(poly: polynomial<V>, desc?: boolean): polynomial<V>;
+        /**
+         * a function of the polynomial, for substitution
+         * ```
+         * func = PolyFunction([2x^6, x^5, 3x^7])
+         * func({x:2}) // 272
+         * ```
+         */
+        static PolyFunction<V extends string>(poly: polynomial<V>): (values: {
+            [_: string]: number;
+        }) => number;
+        /**
+         * join arrays of monomials
+         * ```
+         * PolyJoin([x^5, 2x^6], [3x^7])
+         * // [x^5, 2x^6, 3x^7]
+         * ```
+         */
+        static PolyJoin<V extends string>(...polys: polynomial<V>[]): polynomial<V>;
+        /**
+         * combine like terms in polynomial
+         * ```
+         * PolySimplify([x^5, 2x^6, 3x^5])
+         * // [4x^5, 2x^6]
+         * ```
+         */
+        static PolySimplify<V extends string>(poly: polynomial<V>): polynomial<V>;
+        /**
+         * the degree of the polynomial
+         * ```
+         * PolyDegree([x^5, 2x^6, 3x^7]) // 7
+         * ```
+         */
+        static PolyDegree<V extends string>(poly: polynomial<V>): number;
+    }
+    global {
+        var Monomial: typeof Host.Monomial;
+        var PolyClone: typeof Host.PolyClone;
+        var RndPolynomial: typeof Host.RndPolynomial;
+        var PolyPrint: typeof Host.PolyPrint;
+        var PolySort: typeof Host.PolySort;
+        var PolyFunction: typeof Host.PolyFunction;
+        var PolyJoin: typeof Host.PolyJoin;
+        var PolySimplify: typeof Host.PolySimplify;
+        var PolyDegree: typeof Host.PolyDegree;
+    }
 }
-/**
- * @category Polynomial
- * @deprecated
- * @return a monomial object
- * ```
- * ```
- */
-declare function Monomial<V extends string>(coeff: number, vars: {
-    variable: V;
-    power: number;
-}[]): MonomialCls<V>;
-/**
- * @category Polynomial
- * @return clone a polynomial
- * ```
- * PolyClone(7xy+3x^2y^3-2xy^3)
- * //  7xy+3x^2y^3-2xy^3
- * ```
- */
-declare function PolyClone<V extends string>(poly: polynomial<V>): polynomial<V>;
-/**
- * @category Polynomial
- * @return a random polynomial object
- * ```
- * RndPolynomial(5, ['x', 'y'], 3, 9))
- * // may return 7xy+3x^2y^3-2xy^3
- * ```
- */
-declare function RndPolynomial<V extends string>(degree: number, vars?: V[], terms?: number, maxCoeff?: number): polynomial<V>;
-/**
- * @category Polynomial
- * @return a string of the polynomial object
- * ```
- * PolyPrint([x^5, 2x^6, 3x^7])
- * // x^{5}+2x^{6}+3x^{7}
- * ```
- */
-declare function PolyPrint<V extends string>(poly: polynomial<V>): string;
-/**
- * @category Polynomial
- * @return a polynomial object sorted by power
- * ```
- * PolySort([2x^6, x^5, 3x^7])
- * //  [x^5, 2x^6, 3x^7]
- * ```
- */
-declare function PolySort<V extends string>(poly: polynomial<V>, desc?: boolean): polynomial<V>;
-/**
- * @category Polynomial
- * @return a function of the polynomial, for substitution
- * ```
- * func = PolyFunction([2x^6, x^5, 3x^7])
- * func({x:2}) // 272
- * ```
- */
-declare function PolyFunction<V extends string>(poly: polynomial<V>): (values: {
-    [_: string]: number;
-}) => number;
-/**
- * @category Polynomial
- * @return join arrays of monomials
- * ```
- * PolyJoin([x^5, 2x^6], [3x^7])
- * // [x^5, 2x^6, 3x^7]
- * ```
- */
-declare function PolyJoin<V extends string>(...polys: polynomial<V>[]): polynomial<V>;
-/**
- * @category Polynomial
- * @return combine like terms in polynomial
- * ```
- * PolySimplify([x^5, 2x^6, 3x^5])
- * // [4x^5, 2x^6]
- * ```
- */
-declare function PolySimplify<V extends string>(poly: polynomial<V>): polynomial<V>;
-/**
- * @category Polynomial
- * @return the degree of the polynomial
- * ```
- * PolyDegree([x^5, 2x^6, 3x^7]) // 7
- * ```
- */
-declare function PolyDegree<V extends string>(poly: polynomial<V>): number;
 declare module "Math/Builder/support/latex" {
     export function latexAligned(texts: string[]): string;
     export function latexBraced(texts: string[]): string;
@@ -417,7 +393,7 @@ declare module "Math/index" {
     import './Algebra/Circle.ts';
     import './Algebra/Quadratic.ts';
     import './Algebra/Linear.ts';
-    import './Algebra/Polynomial';
+    import "Math/Algebra/Polynomial";
     import './should.ts';
     import "Math/Builder/index";
 }
@@ -486,143 +462,154 @@ declare type quantity = {
     unit: string;
 };
 declare module "Math/Algebra/Algebra" {
-    export class Algebra {
-        private constructor();
+    class Host {
         /**
-         * solve [x,y] from ax+by=c and px+qy=r.
+         * Solve [x,y] from ax+by=c and px+qy=r.
          * ```
          * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
-         * Crammer(1,1,3,2,2,6) // throw
+         * Crammer(1,1,3,2,2,6) // throw, parallel
          * ```
          */
         static Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
         /**
-         * the product of two input polynomials.
+         * The product of two polynomials.
          * ```
-         * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
          * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+         * // (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
          * ```
          */
         static xPolynomial(poly1: number[], poly2: number[]): number[];
     }
     global {
-        var Crammer: typeof Algebra.Crammer;
-        var xPolynomial: typeof Algebra.xPolynomial;
+        var Crammer: typeof Host.Crammer;
+        var xPolynomial: typeof Host.xPolynomial;
     }
 }
-/**
- * @category Circle
- * @return D,E,F of circle general form
- * ```
- * CircleGeneral([2,3],5) // [-4,-6,-12]
- * ```
- */
-declare function CircleGeneral(centre: Point2D, radius: number): [D: number, E: number, F: number];
-/**
- * @category Circle
- * @return centre and radius from general form
- * ```
- * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
- * ```
- */
-declare function CircleFromGeneral(D: number, E: number, F: number): [Point2D, number];
-/**
- * @category Circle
- * @return intersections between a circle and a straight line
- * ```
- * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
- * ```
- */
-declare function CircleLinearIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D];
-/**
- * @category Circle
- * @return intersections between a circle and a straight line through `A` and `B`.
- * ```
- * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
- * ```
- */
-declare function CircleLineIntersect(center: Point2D, radius: number, [A, B]: [Point2D, Point2D]): [Point2D, Point2D];
-/**
- * @category Linear
- * @return [x-int,y-int,slope] of ax+by+c=0
- * ```
- * LineFeat(2,4,6) // [-0.5,-1.5,-3]
- * LineFeat(0,4,6) // throw
- * ```
- */
-declare function LineFeat(a: number, b: number, c: number): [slope: number, yInt: number, xInt: number];
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
- * ```
- * LinearFromIntercepts(1,2) // [2,1,-2]
- * LinearFromIntercepts(0,2) // throw
- * ```
- */
-declare function LinearFromIntercepts(xInt: number, yInt: number): [a: number, b: number, c: number];
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from two given points
- * ```
- * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
- * LinearFromTwoPoints([1,2],[1,2]) // throw
- * ```
- */
-declare function LinearFromTwoPoints(point1: Point2D, point2: Point2D): [a: number, b: number, c: number];
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from point and slope
- * ```
- * LinearFromPointSlope([1,2],3) // [3,-1,-1]
- * LinearFromPointSlope([1,2],0) // [0,1,-2]
- * ```
- */
-declare function LinearFromPointSlope(point: Point2D, slope: number): [a: number, b: number, c: number];
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
- * ```
- * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
- * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
- * ```
- */
-declare function LinearFromBisector(A: Point2D, B: Point2D): [a: number, b: number, c: number];
-/**
- * @category Linear
- * @return [slope,yInt] from given intercepts
- * ```
- * LineFromIntercepts(1,2) // [-2,2]
- * LineFromIntercepts(0,2) // throw
- * ```
- */
-declare function LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number];
-/**
- * @category Linear
- * @return [slope,yInt] from two given points
- * ```
- * LineFromTwoPoints([1,2],[3,4]) // [1,1]
- * LineFromTwoPoints([1,2],[1,2]) // throw
- * ```
- */
-declare function LineFromTwoPoints(point1: Point2D, point2: Point2D): [slope: number, yInt: number];
-/**
- * @category Linear
- * @return [slope,yInt] from point and slope
- * ```
- * LineFromPointSlope([1,2],3) // [3,-1]
- * LineFromPointSlope([1,2],0) // [0,2]
- * ```
- */
-declare function LineFromPointSlope(point: Point2D, slope: number): [slope: number, yInt: number];
-/**
- * @category Linear
- * @return [slope,yInt] from perpendicular bisector of AB
- * ```
- * LineFromBisector([1,2],[3,4]) // [-1,5]
- * LineFromBisector([1,2],[1,4]) // [0,3]
- * ```
- */
-declare function LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number];
+declare module "Math/Algebra/Circle" {
+    class Host {
+        /**
+         * D,E,F of circle general form
+         * ```
+         * CircleGeneral([2,3],5) // [-4,-6,-12]
+         * ```
+         */
+        static CircleGeneral(centre: Point2D, radius: number): [D: number, E: number, F: number];
+        /**
+         * Centre and radius from general form.
+         * ```
+         * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
+         * ```
+         */
+        static CircleFromGeneral(D: number, E: number, F: number): [Point2D, number];
+        /**
+         * Intersections between a circle and a straight line.
+         * ```
+         * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
+         * ```
+         */
+        static CircleLinearIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D];
+        /**
+         * Intersections between a circle and a straight line through `A` and `B`.
+         * ```
+         * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
+         * ```
+         */
+        static CircleLineIntersect(center: Point2D, radius: number, [A, B]: [Point2D, Point2D]): [Point2D, Point2D];
+    }
+    global {
+        var CircleGeneral: typeof Host.CircleGeneral;
+        var CircleFromGeneral: typeof Host.CircleFromGeneral;
+        var CircleLinearIntersect: typeof Host.CircleLinearIntersect;
+        var CircleLineIntersect: typeof Host.CircleLineIntersect;
+    }
+}
+declare module "Math/Algebra/Linear" {
+    class Host {
+        /**
+         * [x-int,y-int,slope] of ax+by+c=0
+         * ```
+         * LineFeat(2,4,6) // [-0.5,-1.5,-3]
+         * LineFeat(0,4,6) // throw
+         * ```
+         */
+        static LineFeat(a: number, b: number, c: number): [slope: number, yInt: number, xInt: number];
+        /**
+         * the coeff [a,b,c] in ax+by+c=0 from given intercepts
+         * ```
+         * LinearFromIntercepts(1,2) // [2,1,-2]
+         * LinearFromIntercepts(0,2) // throw
+         * ```
+         */
+        static LinearFromIntercepts(xInt: number, yInt: number): [a: number, b: number, c: number];
+        /**
+         * the coeff [a,b,c] in ax+by+c=0 from two given points
+         * ```
+         * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+         * LinearFromTwoPoints([1,2],[1,2]) // throw
+         * ```
+         */
+        static LinearFromTwoPoints(point1: Point2D, point2: Point2D): [a: number, b: number, c: number];
+        /**
+         * the coeff [a,b,c] in ax+by+c=0 from point and slope
+         * ```
+         * LinearFromPointSlope([1,2],3) // [3,-1,-1]
+         * LinearFromPointSlope([1,2],0) // [0,1,-2]
+         * ```
+         */
+        static LinearFromPointSlope(point: Point2D, slope: number): [a: number, b: number, c: number];
+        /**
+         * the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
+         * ```
+         * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
+         * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
+         * ```
+         */
+        static LinearFromBisector(A: Point2D, B: Point2D): [a: number, b: number, c: number];
+        /**
+         * [slope,yInt] from given intercepts
+         * ```
+         * LineFromIntercepts(1,2) // [-2,2]
+         * LineFromIntercepts(0,2) // throw
+         * ```
+         */
+        static LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number];
+        /**
+         * [slope,yInt] from two given points
+         * ```
+         * LineFromTwoPoints([1,2],[3,4]) // [1,1]
+         * LineFromTwoPoints([1,2],[1,2]) // throw
+         * ```
+         */
+        static LineFromTwoPoints(point1: Point2D, point2: Point2D): [slope: number, yInt: number];
+        /**
+         * [slope,yInt] from point and slope
+         * ```
+         * LineFromPointSlope([1,2],3) // [3,-1]
+         * LineFromPointSlope([1,2],0) // [0,2]
+         * ```
+         */
+        static LineFromPointSlope(point: Point2D, slope: number): [slope: number, yInt: number];
+        /**
+         * [slope,yInt] from perpendicular bisector of AB
+         * ```
+         * LineFromBisector([1,2],[3,4]) // [-1,5]
+         * LineFromBisector([1,2],[1,4]) // [0,3]
+         * ```
+         */
+        static LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number];
+    }
+    global {
+        var LineFeat: typeof Host.LineFeat;
+        var LinearFromIntercepts: typeof Host.LinearFromIntercepts;
+        var LinearFromTwoPoints: typeof Host.LinearFromTwoPoints;
+        var LinearFromPointSlope: typeof Host.LinearFromPointSlope;
+        var LinearFromBisector: typeof Host.LinearFromBisector;
+        var LineFromIntercepts: typeof Host.LineFromIntercepts;
+        var LineFromTwoPoints: typeof Host.LineFromTwoPoints;
+        var LineFromPointSlope: typeof Host.LineFromPointSlope;
+        var LineFromBisector: typeof Host.LineFromBisector;
+    }
+}
 declare module "Math/Jest/JestExtend" {
     export function repeat(times: number, func: Function): void;
     global {
@@ -643,48 +630,80 @@ declare module "Math/Jest/JestExtend" {
 }
 declare module "Math/Algebra/Polynomial.test" { }
 /**
- * @category Quadratic
- * @return the discriminant b^2-4ac.
- * ```
- * Discriminant(2,3,4) // -23
- * ```
+ * @ignore
  */
-declare function Discriminant(a: number, b: number, c: number): number;
-/**
- * @category Quadratic
- * @return the roots [p,q] of ax^2+bx+c=0 where p<=q
- * ```
- * QuadraticRoot(1,2,-3) // [-3,1]
- * QuadraticRoot(1,2,3) // throw when no real root
- * ```
- */
-declare function QuadraticRoot(a: number, b: number, c: number): [number, number];
-/**
- * @category Quadratic
- * @return the vertex [h,k] of y=ax^2+bx+c.
- * ```
- * QuadraticVertex(1,2,3) // [-1,2]
- * ```
- */
-declare function QuadraticVertex(a: number, b: number, c: number): Point2D;
-/**
- * @category Quadratic
- * @return the quadratic coeff [a,b,c] from given a and roots p and q.
- * ```
- * QuadraticFromRoot(1,2,3) // [1,-5,6]
- * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
- * ```
- */
-declare function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
-/**
- * @category Quadratic
- * @return the quadratic coeff [a,b,c] from given a and vertex (h,k).
- * ```
- * QuadraticFromVertex(1,2,3) // [1,-4,7]
- * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
- * ```
- */
-declare function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
+declare class MonomialCls<V extends string> {
+    coeff: number;
+    vars: {
+        variable: V;
+        power: number;
+    }[];
+    constructor(coeff?: number, vars?: {
+        variable: V;
+        power: number;
+    }[]);
+    clone(): MonomialCls<V>;
+    random(degree: number, variables: V[], maxCoeff: number): void;
+    degree(): number;
+    sortedVars(): {
+        variable: V;
+        power: number;
+    }[];
+    size(): number;
+    signature(): string;
+    sort(): void;
+    print(): string;
+    func(): (input: {
+        [_: string]: number;
+    }) => number;
+}
+declare module "Math/Algebra/Quadratic" {
+    class Host {
+        /**
+         * the discriminant b^2-4ac.
+         * ```
+         * Discriminant(2,3,4) // -23
+         * ```
+         */
+        static Discriminant(a: number, b: number, c: number): number;
+        /**
+         * the roots [p,q] of ax^2+bx+c=0 where p<=q
+         * ```
+         * QuadraticRoot(1,2,-3) // [-3,1]
+         * QuadraticRoot(1,2,3) // throw when no real root
+         * ```
+         */
+        static QuadraticRoot(a: number, b: number, c: number): [number, number];
+        /**
+         * the vertex [h,k] of y=ax^2+bx+c.
+         * ```
+         * QuadraticVertex(1,2,3) // [-1,2]
+         * ```
+         */
+        static QuadraticVertex(a: number, b: number, c: number): Point2D;
+        /**
+         * the quadratic coeff [a,b,c] from given a and roots p and q.
+         * ```
+         * QuadraticFromRoot(1,2,3) // [1,-5,6]
+         * ```
+         */
+        static QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
+        /**
+         * the quadratic coeff [a,b,c] from given a and vertex (h,k).
+         * ```
+         * QuadraticFromVertex(1,2,3) // [1,-4,7]
+         * ```
+         */
+        static QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
+    }
+    global {
+        var Discriminant: typeof Host.Discriminant;
+        var QuadraticRoot: typeof Host.QuadraticRoot;
+        var QuadraticVertex: typeof Host.QuadraticVertex;
+        var QuadraticFromRoot: typeof Host.QuadraticFromRoot;
+        var QuadraticFromVertex: typeof Host.QuadraticFromVertex;
+    }
+}
 declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
 /**
  * @category Assertion
@@ -3101,8 +3120,8 @@ declare function Projector(angle?: number, depth?: number): (x: number, y: numbe
 * ```
 */
 declare function Projector3D(angle?: number, depth?: number): (_: Point3D) => Point;
-declare module "Pen/Pen/range" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/range" {
+    import { PenCls } from "Pen/Pen";
     import { capturable, Convas } from 'paint';
     export class PenRange {
         private pen;
@@ -3142,8 +3161,8 @@ declare module "Pen/Pen/range" {
         extend(...things: capturable[]): void;
     }
 }
-declare module "Pen/Pen/size" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/size" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenSize {
         private pen;
@@ -3176,8 +3195,8 @@ declare module "Pen/Pen/size" {
         lock(maxWidthInch?: number, maxHeightInch?: number): void;
     }
 }
-declare module "Pen/Pen/settings" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/settings" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenSettings {
         private pen;
@@ -3311,8 +3330,8 @@ declare module "Pen/Pen/settings" {
         resetAll(): void;
     }
 }
-declare module "Pen/Pen/d3" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/d3" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenD3 {
         private pen;
@@ -3526,8 +3545,8 @@ declare module "Pen/Pen/d3" {
         altitude(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string): void;
     }
 }
-declare module "Pen/Pen/graph" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/graph" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenGraph {
         private pen;
@@ -3613,8 +3632,8 @@ declare module "Pen/Pen/graph" {
         perpBisector(A: Point2D, B: Point2D): void;
     }
 }
-declare module "Pen/Pen/fill" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/fill" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenFill {
         private pen;
@@ -3657,8 +3676,8 @@ declare module "Pen/Pen/fill" {
         rect(A: Point2D, C: Point2D): void;
     }
 }
-declare module "Pen/Pen/shade" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/shade" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenShade {
         private pen;
@@ -3701,8 +3720,8 @@ declare module "Pen/Pen/shade" {
         rect(A: Point2D, C: Point2D): void;
     }
 }
-declare module "Pen/Pen/label" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/label" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenLabel {
         private pen;
@@ -3766,8 +3785,8 @@ declare module "Pen/Pen/label" {
         coordinates(point: Point2D, dir?: number, radius?: number): void;
     }
 }
-declare module "Pen/Pen/axis" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/axis" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenAxis {
         private pen;
@@ -3796,8 +3815,8 @@ declare module "Pen/Pen/axis" {
         xy(xlabel?: string, ylabel?: string): void;
     }
 }
-declare module "Pen/Pen/tick" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/tick" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenTick {
         private pen;
@@ -3826,8 +3845,8 @@ declare module "Pen/Pen/tick" {
         xy(interval?: number, mark?: boolean): void;
     }
 }
-declare module "Pen/Pen/grid" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/grid" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenGrid {
         private pen;
@@ -3856,8 +3875,8 @@ declare module "Pen/Pen/grid" {
         xy(interval?: number): void;
     }
 }
-declare module "Pen/Pen/linProg" {
-    import { PenCls } from "Pen/Pen/core";
+declare module "Pen/modules/linProg" {
+    import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
     export class PenLinProg {
         private pen;
@@ -3890,25 +3909,23 @@ declare module "Pen/Pen/linProg" {
         verticesCoord(constraints: Constraint[]): void;
     }
 }
-declare module "Pen/Pen/core" {
+declare module "Pen/Pen" {
     import { Convas } from 'paint';
-    import { PenRange } from "Pen/Pen/range";
-    import { PenSize } from "Pen/Pen/size";
-    import { PenSettings } from "Pen/Pen/settings";
-    import { PenD3 } from "Pen/Pen/d3";
-    import { PenGraph } from "Pen/Pen/graph";
-    import { PenFill } from "Pen/Pen/fill";
-    import { PenShade } from "Pen/Pen/shade";
-    import { PenLabel } from "Pen/Pen/label";
-    import { PenAxis } from "Pen/Pen/axis";
-    import { PenTick } from "Pen/Pen/tick";
-    import { PenGrid } from "Pen/Pen/grid";
-    import { PenLinProg } from "Pen/Pen/linProg";
+    import { PenRange } from "Pen/modules/range";
+    import { PenSize } from "Pen/modules/size";
+    import { PenSettings } from "Pen/modules/settings";
+    import { PenD3 } from "Pen/modules/d3";
+    import { PenGraph } from "Pen/modules/graph";
+    import { PenFill } from "Pen/modules/fill";
+    import { PenShade } from "Pen/modules/shade";
+    import { PenLabel } from "Pen/modules/label";
+    import { PenAxis } from "Pen/modules/axis";
+    import { PenTick } from "Pen/modules/tick";
+    import { PenGrid } from "Pen/modules/grid";
+    import { PenLinProg } from "Pen/modules/linProg";
     export class PenCls {
         protected cv: Convas;
         constructor();
-        protected pj(pt: Point): Point2D;
-        protected pjs(pts: Point[]): Point2D[];
         /**
          * Setup of canvas coordinate range.
          * @category setting
@@ -3926,12 +3943,12 @@ declare module "Pen/Pen/core" {
         set: PenSettings;
         /**
          * Plot an explicit or parametric function.
-         * @category graph
          * ```
          * pen.plot(x=>x**2,1,2) // y=x^2 from x = 1 to 2
          * pen.plot(x=>x**2) // y=x^2 in from x = xmin to xmax
          * pen.plot(t=>[cos(t),sin(t)],0,360) // a unit circle
          * ```
+         * @category graph
          */
         plot(func: ((t: number) => number) | ((t: number) => Point2D), tStart?: number, tEnd?: number): void;
         /**
@@ -3946,151 +3963,151 @@ declare module "Pen/Pen/core" {
         graph: PenGraph;
         /**
          * Draw a point.
-         * @category draw
          * ```
          * pen.point([1,2]) // draw a point at [1,2]
          * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
          * ```
+         * @category draw
          */
         point(position: Point, label?: string): void;
         /**
          * Draw a point.
-         * @category draw
          * ```
          * pen.points({A,B}) // mark and label point A as 'A', point B as 'B'
          * pen.points({A,B},false) // mark point A and B, without label
          * ```
+         * @category draw
          */
         points(positions: {
             [k: string]: Point;
         }): void;
         /**
          * Draw a cutter to a horizontal line.
-         * @category draw
          * ```
          * pen.cutX([1,2]) // draw a vertical cutter at [1,2]
          * pen.cutX(1) // same as cutX([1,0])
          * ```
+         * @category draw
          */
         cutX(position: Point2D | number, label?: string): void;
         /**
          * Draw a cutter to a vertical line.
-         * @category draw
          * ```
          * pen.cutY([1,2]) // draw a horizontal cutter at [1,2]
          * pen.cutY(1) // same as cutY([0,1])
          * ```
+         * @category draw
          */
         cutY(position: Point2D | number, label?: string): void;
         /**
          * Draw a guide line from `point` to the x-axis.
-         * @category draw
          * ```
          * pen.guideX([1,2],'1') // draw guide from [1,2] and label '1' on x-axis
          * ```
+         * @category draw
          */
         guideX(point: Point2D, label?: string): void;
         /**
          * Draw a guide line from `point` to the y-axis.
-         * @category draw
          * ```
          * pen.guideY([1,2],'2') // draw guide from [1,2] and label '2' on y-axis
          * ```
+         * @category draw
          */
         guideY(point: Point2D, label?: string): void;
         /**
          * Draw a circle or arc.
-         * @category draw
          * ```
          * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
          * ```
+         * @category draw
          */
         circle(center: Point2D, radius: number): void;
         /**
          * Fill a disc.
-         * @category draw
          * ```
          * pen.disc([1,2], 10) // draw a disc centered at [1,2] with 10 px radius
          * ```
+         * @category draw
          */
         disc(center: Point2D, radius: number): void;
         /**
          * Shade a disc.
-         * @category draw
          * ```
          * pen.halo([1,2], 10) // shade a disc centered at [1,2] with 10 px radius
          * ```
+         * @category draw
          */
         halo(center: Point2D, radius: number): void;
         /**
          * Draw a dot.
-         * @category draw
          * ```
          * pen.dot([1,2]) // draw a dot at [1,2]
          * ```
+         * @category draw
          */
         dot(point: Point2D): void;
         /**
          * Draw a hole.
-         * @category draw
          * ```
          * pen.hole([1,2]) // draw a hole at [1,2]
          * ```
+         * @category draw
          */
         hole(point: Point2D): void;
         /**
          * Draw a line between two points.
-         * @category draw
          * ```
          * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
          * pen.line([1,2],[3,4],'10') //  also label '10'
          * ```
+         * @category draw
          */
         line(A: Point, B: Point, label?: string | number): void;
         /**
          * Draw a dash line between two points.
-         * @category draw
          * ```
          * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
          * pen.dash([1,2],[3,4],'10') //  also label '10'
          * ```
+         * @category draw
          */
         dash(A: Point, B: Point, label?: string | number): void;
         /**
          * Draw an arrow between two points.
-         * @category draw
          * ```
          * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
          * ```
+         * @category draw
          */
         arrow(A: Point, B: Point, label?: string | number): void;
         /**
          * Draw the component of the arrow.
-         * @category draw
          * ```
          * pen.arrowCompo([1,2],[3,4],0,'x')
          * // draw the horizontal component of arrow from [1,2] to [3,4]
          * // label the angle as 'x'
          * ```
+         * @category draw
          */
         arrowCompo(O: Point2D, P: Point2D, dir: number, angleLabel?: string | number): void;
         /**
          * Draw both components of the arrow.
-         * @category draw
          * ```
          * pen.arrowResolve([1,2],[3,4],0,'x')
          * // draw the horizontal and vertical components of arrow from [1,2] to [3,4]
          * // label the angle with the horizontal as 'x'
          * ```
+         * @category draw
          */
         arrowResolve(O: Point2D, P: Point2D, dir: number, angleLabel?: string | number): void;
         /**
          * Draw a length between two points.
-         * @category draw
          * ```
          * pen.length([1,2],[3,4],'d')
          * // draw an length 'd' from [1,2] to [3,4]
          * ```
+         * @category draw
          */
         length(A: Point, B: Point, label?: string | number): void;
         /**
@@ -4104,42 +4121,42 @@ declare module "Pen/Pen/core" {
         height(V: Point2D, [A, B]: [Point2D, Point2D], label?: string | number): void;
         /**
          * Draw a polyline given points.
-         * @category draw
          * ```
          * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline through 3 points
          * ```
+         * @category draw
          */
         polyline(...points: Point[]): void;
         /**
          * Draw a polygon given points.
-         * @category draw
          * ```
          * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle
          * ```
+         * @category draw
          */
         polygon(...points: Point[]): void;
         /**
          * Fill a polygon given points.
-         * @category draw
          * ```
          * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle
          * ```
+         * @category draw
          */
         polyfill(...points: Point[]): void;
         /**
          * Shade a polygon given points.
-         * @category draw
          * ```
          * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle
          * ```
+         * @category draw
          */
         polyshade(...points: Point[]): void;
         /**
          * Draw and shade a polygon given points.
-         * @category draw
          * ```
          * pen.polyshape([0,0],[5,2],[3,4]) // draw and shade a triangle
          * ```
+         * @category draw
          */
         polyshape(...points: Point[]): void;
         /**
@@ -4159,63 +4176,63 @@ declare module "Pen/Pen/core" {
         linProg: PenLinProg;
         /**
          * Draw an angle with label.
-         * @category draw
          * ```
          * pen.angle([0,0],[5,2],[3,4],'x')
          * ```
+         * @category draw
          */
         angle(A: Point, O: Point, B: Point, label?: string | number, arc?: number, radius?: number): void;
         /**
          * Decorate equal side lengths.
-         * @category decorator
          * ```
          * pen.decorate.equalSide([1,0],[3,2],2)
          * // a double-tick at the mid-pt of [1,0] and [3,2]
          * ```
+         * @category decorator
          */
         equalSide(A: Point, B: Point, tick?: number): void;
         /**
          * Decorate bisecting equal lengths of a side.
-         * @category decorator
          * ```
          * pen.decorate.bisectSide([0,0], [2,2], 2)
          * // two double-ticks bisecting [0,0] and [2,2] at their mid-pt
          * ```
+         * @category decorator
          */
         bisectSide(A: Point, B: Point, tick?: number): void;
         /**
          * Decorate parallel side.
-         * @category decorator
          * ```
          * pen.decorate.parallel([1,0],[3,2],2)
          * // a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
          * ```
+         * @category decorator
          */
         parallel(A: Point, B: Point, tick?: number): void;
         /**
          * Decorate a right-angle AOB.
-         * @category decorator
          * ```
          * pen.decorate.rightAngle([1,0],[0,0],[3,2])
          * // an right-angle AOB
          * ```
+         * @category decorator
          */
         rightAngle(A: Point, O: Point, B?: Point, size?: number): void;
         /**
          * Decorate a compass.
-         * @category decorator
          * ```
          * pen.decorate.compass([1,2])
          * // a compass at [1,2]
          * ```
+         * @category decorator
          */
         compass(point: Point2D): void;
         /**
          * Write text.
-         * @category text
          * ```
          * pen.write([1,2],'abc') // 'abc' at [1,2]
          * ```
+         * @category text
          */
         write(point: Point, text: string): void;
         /**
@@ -4244,28 +4261,28 @@ declare module "Pen/Pen/core" {
         d3: PenD3;
         /**
          * Set the background image url.
-         * @category export
          * ```
          * pen.background('https://www2.pyc.edu.hk/img/pycnet_logo.png')
          * ```
+         * @category export
          */
         background(url: string): void;
         /**
          * Export the canvas to image tag.
-         * @category export
          * ```
          * question = pen.export(question,'imgQ')
          * // paste the canvas to the image tag with src field 'imgQ'
          * ```
+         * @category export
          */
         export(html: string, placeholder: string): string;
         /**
          * Export the canvas to image tag, with white space trimmed.
-         * @category export
          * ```
          * question = pen.exportTrim(question,'imgQ')
          * // paste the canvas to the image tag with src field 'imgQ'
          * ```
+         * @category export
          */
         exportTrim(html: string, placeholder: string): string;
         /**
@@ -4761,7 +4778,7 @@ declare module "Pen/PhyPen" {
     }
 }
 declare module "Pen/index" {
-    import { PenCls } from "Pen/Pen/core";
+    import { PenCls } from "Pen/Pen";
     import { AutoPenCls } from "Pen/AutoPen";
     import { PhyPenCls } from "Pen/PhyPen";
     global {

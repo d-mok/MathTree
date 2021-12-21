@@ -30147,15 +30147,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Algebra = void 0;
 const contract_1 = __webpack_require__(1154);
-let Algebra = class Algebra {
-    constructor() { }
+let Host = class Host {
     /**
-     * solve [x,y] from ax+by=c and px+qy=r.
+     * Solve [x,y] from ax+by=c and px+qy=r.
      * ```
      * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
-     * Crammer(1,1,3,2,2,6) // throw
+     * Crammer(1,1,3,2,2,6) // throw, parallel
      * ```
      */
     static Crammer(a, b, c, p, q, r) {
@@ -30165,10 +30163,10 @@ let Algebra = class Algebra {
         return [x, y];
     }
     /**
-     * the product of two input polynomials.
+     * The product of two polynomials.
      * ```
-     * // do (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
      * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+     * // (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
      * ```
      */
     static xPolynomial(poly1, poly2) {
@@ -30187,15 +30185,14 @@ let Algebra = class Algebra {
 __decorate([
     (0, contract_1.checkIt)(owl.num),
     (0, contract_1.inspectIt)(function has_unique_sol(a, b, c, p, q, r) { return a * q - b * p !== 0; })
-], Algebra, "Crammer", null);
+], Host, "Crammer", null);
 __decorate([
     (0, contract_1.checkIt)([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0; }])
-], Algebra, "xPolynomial", null);
-Algebra = __decorate([
+], Host, "xPolynomial", null);
+Host = __decorate([
     (0, contract_1.exposeAll)(),
     (0, contract_1.captureAll)()
-], Algebra);
-exports.Algebra = Algebra;
+], Host);
 // function intrapolateBetween([A, B]: [Point2D, Point2D], x: number): number {
 //     let [x1, y1] = A
 //     let [x2, y2] = B
@@ -30243,535 +30240,519 @@ exports.Algebra = Algebra;
 /***/ }),
 
 /***/ 8126:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Circle
- * @return D,E,F of circle general form
- * ```
- * CircleGeneral([2,3],5) // [-4,-6,-12]
- * ```
- */
-function CircleGeneral(centre, radius) {
-    let [h, k] = centre;
-    let r = radius;
-    let D = -2 * h;
-    let E = -2 * k;
-    let F = h ** 2 + k ** 2 - r ** 2;
-    return [D, E, F];
-}
-globalThis.CircleGeneral = contract(CircleGeneral).sign([owl.point2D, owl.positive]);
-/**
- * @category Circle
- * @return centre and radius from general form
- * ```
- * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
- * ```
- */
-function CircleFromGeneral(D, E, F) {
-    let [h, k] = [-D / 2, -E / 2];
-    let R = (D / 2) ** 2 + (E / 2) ** 2 - F;
-    Should(R >= 0, "radius should be real");
-    let r = R ** 0.5;
-    return [[h, k], r];
-}
-globalThis.CircleFromGeneral = contract(CircleFromGeneral).sign([owl.num]);
-/**
- * @category Circle
- * @return intersections between a circle and a straight line
- * ```
- * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
- * ```
- */
-function CircleLinearIntersect(center, radius, linear) {
-    let [a, b, c] = linear;
-    let [h, k] = center;
-    let r = radius;
-    if (b !== 0) {
-        let m = -a / b;
-        let n = -c / b - k;
-        let A = 1 + m * m;
-        let B = -2 * h + 2 * m * n;
-        let C = h * h + n * n - r * r;
-        Should(Discriminant(A, B, C) >= 0, 'no intersection');
-        let [x1, x2] = QuadraticRoot(A, B, C);
-        let y1 = (-a * x1 - c) / b;
-        let y2 = (-a * x2 - c) / b;
-        let P = [cal.blur(x1), cal.blur(y1)];
-        let Q = [cal.blur(x2), cal.blur(y2)];
-        return [P, Q];
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(1154);
+let Host = class Host {
+    /**
+     * D,E,F of circle general form
+     * ```
+     * CircleGeneral([2,3],5) // [-4,-6,-12]
+     * ```
+     */
+    static CircleGeneral(centre, radius) {
+        let [h, k] = centre;
+        let r = radius;
+        let D = -2 * h;
+        let E = -2 * k;
+        let F = h ** 2 + k ** 2 - r ** 2;
+        return [D, E, F];
     }
-    else {
-        let x = -c / a;
-        let D = r * r - (x - h) ** 2;
-        Should(D >= 0, 'no intersection');
-        let y1 = k - Math.sqrt(D);
-        let y2 = k + Math.sqrt(D);
-        let P = [cal.blur(x), cal.blur(y1)];
-        let Q = [cal.blur(x), cal.blur(y2)];
-        return [P, Q];
+    /**
+     * Centre and radius from general form.
+     * ```
+     * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
+     * ```
+     */
+    static CircleFromGeneral(D, E, F) {
+        let [h, k] = [-D / 2, -E / 2];
+        let R = (D / 2) ** 2 + (E / 2) ** 2 - F;
+        Should(R >= 0, "radius should be real");
+        let r = R ** 0.5;
+        return [[h, k], r];
     }
-}
-globalThis.CircleLinearIntersect = contract(CircleLinearIntersect).sign([owl.point2D, owl.positive, owl.triple]);
-/**
- * @category Circle
- * @return intersections between a circle and a straight line through `A` and `B`.
- * ```
- * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
- * ```
- */
-function CircleLineIntersect(center, radius, [A, B]) {
-    let lin = LinearFromTwoPoints(A, B);
-    return CircleLinearIntersect(center, radius, lin);
-}
-globalThis.CircleLineIntersect = contract(CircleLineIntersect).sign([owl.point2D, owl.positive, owl.point2Ds]);
+    /**
+     * Intersections between a circle and a straight line.
+     * ```
+     * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
+     * ```
+     */
+    static CircleLinearIntersect(center, radius, linear) {
+        let [a, b, c] = linear;
+        let [h, k] = center;
+        let r = radius;
+        if (b !== 0) {
+            let m = -a / b;
+            let n = -c / b - k;
+            let A = 1 + m * m;
+            let B = -2 * h + 2 * m * n;
+            let C = h * h + n * n - r * r;
+            Should(Discriminant(A, B, C) >= 0, 'no intersection');
+            let [x1, x2] = QuadraticRoot(A, B, C);
+            let y1 = (-a * x1 - c) / b;
+            let y2 = (-a * x2 - c) / b;
+            let P = [cal.blur(x1), cal.blur(y1)];
+            let Q = [cal.blur(x2), cal.blur(y2)];
+            return [P, Q];
+        }
+        else {
+            let x = -c / a;
+            let D = r * r - (x - h) ** 2;
+            Should(D >= 0, 'no intersection');
+            let y1 = k - Math.sqrt(D);
+            let y2 = k + Math.sqrt(D);
+            let P = [cal.blur(x), cal.blur(y1)];
+            let Q = [cal.blur(x), cal.blur(y2)];
+            return [P, Q];
+        }
+    }
+    /**
+     * Intersections between a circle and a straight line through `A` and `B`.
+     * ```
+     * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
+     * ```
+     */
+    static CircleLineIntersect(center, radius, [A, B]) {
+        let lin = LinearFromTwoPoints(A, B);
+        return CircleLinearIntersect(center, radius, lin);
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.positive)
+], Host, "CircleGeneral", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "CircleFromGeneral", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.positive, owl.triple)
+], Host, "CircleLinearIntersect", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.positive, owl.point2Ds)
+], Host, "CircleLineIntersect", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 8401:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Linear
- * @return [x-int,y-int,slope] of ax+by+c=0
- * ```
- * LineFeat(2,4,6) // [-0.5,-1.5,-3]
- * LineFeat(0,4,6) // throw
- * ```
- */
-function LineFeat(a, b, c) {
-    let x = -c / a;
-    let y = -c / b;
-    let m = -a / b;
-    return [m, y, x];
-}
-globalThis.LineFeat = contract(LineFeat).sign([owl.nonZero, owl.nonZero, owl.num]);
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from given intercepts
- * ```
- * LinearFromIntercepts(1,2) // [2,1,-2]
- * LinearFromIntercepts(0,2) // throw
- * ```
- */
-function LinearFromIntercepts(xInt, yInt) {
-    return lin().byIntercepts(xInt, yInt).toLinear();
-}
-globalThis.LinearFromIntercepts = contract(LinearFromIntercepts).sign([owl.nonZero, owl.nonZero]);
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from two given points
- * ```
- * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
- * LinearFromTwoPoints([1,2],[1,2]) // throw
- * ```
- */
-function LinearFromTwoPoints(point1, point2) {
-    return lin().byTwoPoints(point1, point2).toLinear();
-}
-globalThis.LinearFromTwoPoints = contract(LinearFromTwoPoints).seal({
-    arg: [owl.point2D, owl.point2D],
-    args: function different_points(p1, p2) { return owl.distinct([p1, p2]); }
-});
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from point and slope
- * ```
- * LinearFromPointSlope([1,2],3) // [3,-1,-1]
- * LinearFromPointSlope([1,2],0) // [0,1,-2]
- * ```
- */
-function LinearFromPointSlope(point, slope) {
-    return lin().byPointSlope(point, slope).toLinear();
-}
-globalThis.LinearFromPointSlope = contract(LinearFromPointSlope).sign([owl.point2D, owl.num]);
-/**
- * @category Linear
- * @return the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
- * ```
- * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
- * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
- * ```
- */
-function LinearFromBisector(A, B) {
-    return lin().byBisector(A, B).toLinear();
-}
-globalThis.LinearFromBisector = contract(LinearFromBisector).seal({
-    arg: [owl.point2D, owl.point2D],
-    args: function different_points(p1, p2) { return owl.distinct([p1, p2]); }
-});
-/**
- * @category Linear
- * @return [slope,yInt] from given intercepts
- * ```
- * LineFromIntercepts(1,2) // [-2,2]
- * LineFromIntercepts(0,2) // throw
- * ```
- */
-function LineFromIntercepts(xInt, yInt) {
-    return lin().byIntercepts(xInt, yInt).toLine();
-}
-globalThis.LineFromIntercepts = contract(LineFromIntercepts).sign([owl.nonZero, owl.nonZero]);
-/**
- * @category Linear
- * @return [slope,yInt] from two given points
- * ```
- * LineFromTwoPoints([1,2],[3,4]) // [1,1]
- * LineFromTwoPoints([1,2],[1,2]) // throw
- * ```
- */
-function LineFromTwoPoints(point1, point2) {
-    return lin().byTwoPoints(point1, point2).toLine();
-}
-globalThis.LineFromTwoPoints = contract(LineFromTwoPoints).seal({
-    arg: [owl.point2D, owl.point2D],
-    args: [
-        function different_points(p1, p2) { return owl.distinct([p1, p2]); },
-        function non_vertical(p1, p2) { return p1[0] !== p2[0]; }
-    ]
-});
-/**
- * @category Linear
- * @return [slope,yInt] from point and slope
- * ```
- * LineFromPointSlope([1,2],3) // [3,-1]
- * LineFromPointSlope([1,2],0) // [0,2]
- * ```
- */
-function LineFromPointSlope(point, slope) {
-    return lin().byPointSlope(point, slope).toLine();
-}
-globalThis.LineFromPointSlope = contract(LineFromPointSlope).sign([owl.point2D, owl.num]);
-/**
- * @category Linear
- * @return [slope,yInt] from perpendicular bisector of AB
- * ```
- * LineFromBisector([1,2],[3,4]) // [-1,5]
- * LineFromBisector([1,2],[1,4]) // [0,3]
- * ```
- */
-function LineFromBisector(A, B) {
-    return lin().byBisector(A, B).toLine();
-}
-globalThis.LineFromBisector = contract(LineFromBisector).seal({
-    arg: [owl.point2D, owl.point2D],
-    args: [
-        function different_points(p1, p2) { return owl.distinct([p1, p2]); },
-        function non_horizontal(p1, p2) { return p1[1] !== p2[1]; }
-    ]
-});
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(1154);
+let Host = class Host {
+    /**
+     * [x-int,y-int,slope] of ax+by+c=0
+     * ```
+     * LineFeat(2,4,6) // [-0.5,-1.5,-3]
+     * LineFeat(0,4,6) // throw
+     * ```
+     */
+    static LineFeat(a, b, c) {
+        let x = -c / a;
+        let y = -c / b;
+        let m = -a / b;
+        return [m, y, x];
+    }
+    /**
+     * the coeff [a,b,c] in ax+by+c=0 from given intercepts
+     * ```
+     * LinearFromIntercepts(1,2) // [2,1,-2]
+     * LinearFromIntercepts(0,2) // throw
+     * ```
+     */
+    static LinearFromIntercepts(xInt, yInt) {
+        return lin().byIntercepts(xInt, yInt).toLinear();
+    }
+    /**
+     * the coeff [a,b,c] in ax+by+c=0 from two given points
+     * ```
+     * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+     * LinearFromTwoPoints([1,2],[1,2]) // throw
+     * ```
+     */
+    static LinearFromTwoPoints(point1, point2) {
+        return lin().byTwoPoints(point1, point2).toLinear();
+    }
+    /**
+     * the coeff [a,b,c] in ax+by+c=0 from point and slope
+     * ```
+     * LinearFromPointSlope([1,2],3) // [3,-1,-1]
+     * LinearFromPointSlope([1,2],0) // [0,1,-2]
+     * ```
+     */
+    static LinearFromPointSlope(point, slope) {
+        return lin().byPointSlope(point, slope).toLinear();
+    }
+    /**
+     * the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
+     * ```
+     * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
+     * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
+     * ```
+     */
+    static LinearFromBisector(A, B) {
+        return lin().byBisector(A, B).toLinear();
+    }
+    /**
+     * [slope,yInt] from given intercepts
+     * ```
+     * LineFromIntercepts(1,2) // [-2,2]
+     * LineFromIntercepts(0,2) // throw
+     * ```
+     */
+    static LineFromIntercepts(xInt, yInt) {
+        return lin().byIntercepts(xInt, yInt).toLine();
+    }
+    /**
+     * [slope,yInt] from two given points
+     * ```
+     * LineFromTwoPoints([1,2],[3,4]) // [1,1]
+     * LineFromTwoPoints([1,2],[1,2]) // throw
+     * ```
+     */
+    static LineFromTwoPoints(point1, point2) {
+        return lin().byTwoPoints(point1, point2).toLine();
+    }
+    /**
+     * [slope,yInt] from point and slope
+     * ```
+     * LineFromPointSlope([1,2],3) // [3,-1]
+     * LineFromPointSlope([1,2],0) // [0,2]
+     * ```
+     */
+    static LineFromPointSlope(point, slope) {
+        return lin().byPointSlope(point, slope).toLine();
+    }
+    /**
+     * [slope,yInt] from perpendicular bisector of AB
+     * ```
+     * LineFromBisector([1,2],[3,4]) // [-1,5]
+     * LineFromBisector([1,2],[1,4]) // [0,3]
+     * ```
+     */
+    static LineFromBisector(A, B) {
+        return lin().byBisector(A, B).toLine();
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZero, owl.nonZero, owl.num)
+], Host, "LineFeat", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZero, owl.nonZero)
+], Host, "LinearFromIntercepts", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.point2D),
+    (0, contract_1.inspectIt)(function different_points(p1, p2) { return owl.distinct([p1, p2]); })
+], Host, "LinearFromTwoPoints", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.num)
+], Host, "LinearFromPointSlope", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.point2D),
+    (0, contract_1.inspectIt)(function different_points(p1, p2) { return owl.distinct([p1, p2]); })
+], Host, "LinearFromBisector", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZero, owl.nonZero)
+], Host, "LineFromIntercepts", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.point2D),
+    (0, contract_1.inspectIt)(function different_points(p1, p2) { return owl.distinct([p1, p2]); }),
+    (0, contract_1.inspectIt)(function non_vertical(p1, p2) { return p1[0] !== p2[0]; })
+], Host, "LineFromTwoPoints", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.num)
+], Host, "LineFromPointSlope", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.point2D),
+    (0, contract_1.inspectIt)(function different_points(p1, p2) { return owl.distinct([p1, p2]); }),
+    (0, contract_1.inspectIt)(function non_horizontal(p1, p2) { return p1[1] !== p2[1]; })
+], Host, "LineFromBisector", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 1040:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @ignore
- */
-class MonomialCls {
-    constructor(coeff = 0, vars = []) {
-        this.coeff = coeff;
-        this.vars = vars;
-    }
-    clone() {
-        let coeff = this.coeff;
-        let vars = JSON.parse(JSON.stringify(this.vars));
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(1154);
+let Host = class Host {
+    /**
+     * @deprecated
+     * a monomial object
+     */
+    static Monomial(coeff, vars) {
         return new MonomialCls(coeff, vars);
     }
-    random(degree, variables, maxCoeff) {
-        let f = () => {
+    /**
+     * clone a polynomial
+     * ```
+     * PolyClone(7xy+3x^2y^3-2xy^3)
+     * //  7xy+3x^2y^3-2xy^3
+     * ```
+     */
+    static PolyClone(poly) {
+        return poly.map(M => M.clone());
+    }
+    /**
+     * a random polynomial object
+     * ```
+     * RndPolynomial(5, ['x', 'y'], 3, 9))
+     * // may return 7xy+3x^2y^3-2xy^3
+     * ```
+     */
+    static RndPolynomial(degree, vars = ["x"], terms = degree + 1, maxCoeff = 9) {
+        let RndMono = () => {
             let M = new MonomialCls();
-            M.coeff = RndZ(1, maxCoeff);
-            for (let v of variables) {
-                if (variables.length === 1) {
-                    M.vars.push({ variable: v, power: degree });
-                }
-                else {
-                    M.vars.push({ variable: v, power: RndN(0, degree) });
-                }
-            }
+            M.random(RndN(0, degree), vars, maxCoeff);
             return M;
         };
-        let mon = dice(f).shield(M => M.degree() === degree).roll();
-        this.coeff = mon.coeff;
-        this.vars = mon.vars;
+        let f = () => dice(RndMono).unique(M => M.size()).rolls(terms);
+        return dice(f).shield(P => Max(...P.map(M => M.degree())) === degree).roll();
     }
-    degree() {
-        return Sum(...this.vars.map(_ => _.power));
+    /**
+     * a string of the polynomial object
+     * ```
+     * PolyPrint([x^5, 2x^6, 3x^7])
+     * // x^{5}+2x^{6}+3x^{7}
+     * ```
+     */
+    static PolyPrint(poly) {
+        return poly.map(M => M.print()).filter(x => x !== '0').join("+");
     }
-    sortedVars() {
-        return SortBy([...this.vars], _ => _.variable.charCodeAt(0));
+    /**
+     * a polynomial object sorted by power
+     * ```
+     * PolySort([2x^6, x^5, 3x^7])
+     * //  [x^5, 2x^6, 3x^7]
+     * ```
+     */
+    static PolySort(poly, desc = true) {
+        poly = PolyClone(poly);
+        let arr = SortBy(poly, M => desc ? -M.size() : M.size());
+        return arr;
     }
-    size() {
-        let s = this.degree();
-        let order = 1;
-        for (let { variable, power } of this.sortedVars()) {
-            order = order / 10;
-            s += order * power;
-        }
-        return s;
-    }
-    signature() {
-        return JSON.stringify(this.sortedVars());
-    }
-    sort() {
-        this.vars = this.sortedVars();
-    }
-    print() {
-        let term = String(this.coeff);
-        if (this.coeff === 0)
-            return term;
-        for (let v of this.vars) {
-            let l = v.variable;
-            let p = v.power;
-            if (p === 0) {
-                continue;
-            }
-            else if (p === 1) {
-                term += l;
-            }
-            else {
-                term += l + '^{' + p + '}';
-            }
-        }
-        return term;
-    }
-    func() {
-        return (input) => {
-            let x = this.coeff;
-            for (let { variable, power } of this.vars) {
-                x = x * (input[variable] ** power);
-            }
-            return x;
+    // function PolyPrettyPrint(poly: polynomial) {
+    //     // return (new PolyClass(poly)).print()
+    // }
+    // globalThis.PolyPrettyPrint = contract(PolyPrettyPrint).sign([owl.polynomial])
+    /**
+     * a function of the polynomial, for substitution
+     * ```
+     * func = PolyFunction([2x^6, x^5, 3x^7])
+     * func({x:2}) // 272
+     * ```
+     */
+    static PolyFunction(poly) {
+        poly = PolyClone(poly);
+        return (values) => {
+            return Sum(...poly.map(M => M.func()(values)));
         };
     }
-}
-/**
- * @category Polynomial
- * @deprecated
- * @return a monomial object
- * ```
- * ```
- */
-function Monomial(coeff, vars) {
-    return new MonomialCls(coeff, vars);
-}
-globalThis.Monomial = contract(Monomial).sign([owl.num, owl.array]);
-/**
- * @category Polynomial
- * @return clone a polynomial
- * ```
- * PolyClone(7xy+3x^2y^3-2xy^3)
- * //  7xy+3x^2y^3-2xy^3
- * ```
- */
-function PolyClone(poly) {
-    return poly.map(M => M.clone());
-}
-globalThis.PolyClone = contract(PolyClone).sign([owl.polynomial]);
-/**
- * @category Polynomial
- * @return a random polynomial object
- * ```
- * RndPolynomial(5, ['x', 'y'], 3, 9))
- * // may return 7xy+3x^2y^3-2xy^3
- * ```
- */
-function RndPolynomial(degree, vars = ["x"], terms = degree + 1, maxCoeff = 9) {
-    let RndMono = () => {
-        let M = new MonomialCls();
-        M.random(RndN(0, degree), vars, maxCoeff);
-        return M;
-    };
-    let f = () => dice(RndMono).unique(M => M.size()).rolls(terms);
-    return dice(f).shield(P => Max(...P.map(M => M.degree())) === degree).roll();
-}
-globalThis.RndPolynomial = contract(RndPolynomial).sign([owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num]);
-/**
- * @category Polynomial
- * @return a string of the polynomial object
- * ```
- * PolyPrint([x^5, 2x^6, 3x^7])
- * // x^{5}+2x^{6}+3x^{7}
- * ```
- */
-function PolyPrint(poly) {
-    return poly.map(M => M.print()).filter(x => x !== '0').join("+");
-}
-globalThis.PolyPrint = contract(PolyPrint).sign([owl.polynomial]);
-/**
- * @category Polynomial
- * @return a polynomial object sorted by power
- * ```
- * PolySort([2x^6, x^5, 3x^7])
- * //  [x^5, 2x^6, 3x^7]
- * ```
- */
-function PolySort(poly, desc = true) {
-    poly = PolyClone(poly);
-    let arr = SortBy(poly, M => desc ? -M.size() : M.size());
-    return arr;
-}
-globalThis.PolySort = contract(PolySort).sign([owl.polynomial, owl.bool]);
-// function PolyPrettyPrint(poly: polynomial) {
-//     // return (new PolyClass(poly)).print()
-// }
-// globalThis.PolyPrettyPrint = contract(PolyPrettyPrint).sign([owl.polynomial])
-/**
- * @category Polynomial
- * @return a function of the polynomial, for substitution
- * ```
- * func = PolyFunction([2x^6, x^5, 3x^7])
- * func({x:2}) // 272
- * ```
- */
-function PolyFunction(poly) {
-    poly = PolyClone(poly);
-    return (values) => {
-        return Sum(...poly.map(M => M.func()(values)));
-    };
-}
-globalThis.PolyFunction = contract(PolyFunction).sign([owl.polynomial]);
-/**
- * @category Polynomial
- * @return join arrays of monomials
- * ```
- * PolyJoin([x^5, 2x^6], [3x^7])
- * // [x^5, 2x^6, 3x^7]
- * ```
- */
-function PolyJoin(...polys) {
-    polys = polys.map(p => PolyClone(p));
-    let arr = [];
-    for (let p of polys)
-        arr.push(...p);
-    return arr;
-}
-globalThis.PolyJoin = contract(PolyJoin).sign([owl.polynomial]);
-/**
- * @category Polynomial
- * @return combine like terms in polynomial
- * ```
- * PolySimplify([x^5, 2x^6, 3x^5])
- * // [4x^5, 2x^6]
- * ```
- */
-function PolySimplify(poly) {
-    poly = PolyClone(poly);
-    let arr = [];
-    function findLikeTerm(M) {
-        return arr.find(m => m.signature() === M.signature());
+    /**
+     * join arrays of monomials
+     * ```
+     * PolyJoin([x^5, 2x^6], [3x^7])
+     * // [x^5, 2x^6, 3x^7]
+     * ```
+     */
+    static PolyJoin(...polys) {
+        polys = polys.map(p => PolyClone(p));
+        let arr = [];
+        for (let p of polys)
+            arr.push(...p);
+        return arr;
     }
-    for (let M of poly) {
-        let like = findLikeTerm(M);
-        if (like) {
-            like.coeff += M.coeff;
+    /**
+     * combine like terms in polynomial
+     * ```
+     * PolySimplify([x^5, 2x^6, 3x^5])
+     * // [4x^5, 2x^6]
+     * ```
+     */
+    static PolySimplify(poly) {
+        poly = PolyClone(poly);
+        let arr = [];
+        function findLikeTerm(M) {
+            return arr.find(m => m.signature() === M.signature());
         }
-        else {
-            arr.push(M);
+        for (let M of poly) {
+            let like = findLikeTerm(M);
+            if (like) {
+                like.coeff += M.coeff;
+            }
+            else {
+                arr.push(M);
+            }
         }
+        return arr.filter(m => m.coeff !== 0);
     }
-    return arr.filter(m => m.coeff !== 0);
-}
-globalThis.PolySimplify = contract(PolySimplify).sign([owl.polynomial]);
-/**
- * @category Polynomial
- * @return the degree of the polynomial
- * ```
- * PolyDegree([x^5, 2x^6, 3x^7]) // 7
- * ```
- */
-function PolyDegree(poly) {
-    return Max(...poly.map(M => M.degree()));
-}
-globalThis.PolyDegree = contract(PolyDegree).sign([owl.polynomial]);
+    /**
+     * the degree of the polynomial
+     * ```
+     * PolyDegree([x^5, 2x^6, 3x^7]) // 7
+     * ```
+     */
+    static PolyDegree(poly) {
+        return Max(...poly.map(M => M.degree()));
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.array)
+], Host, "Monomial", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.polynomial)
+], Host, "PolyClone", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num)
+], Host, "RndPolynomial", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.polynomial)
+], Host, "PolyPrint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.polynomial, owl.bool)
+], Host, "PolySort", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.polynomial)
+], Host, "PolyFunction", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.polynomial)
+], Host, "PolyJoin", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.polynomial)
+], Host, "PolySimplify", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.polynomial)
+], Host, "PolyDegree", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 3286:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Quadratic
- * @return the discriminant b^2-4ac.
- * ```
- * Discriminant(2,3,4) // -23
- * ```
- */
-function Discriminant(a, b, c) {
-    return b * b - 4 * a * c;
-}
-globalThis.Discriminant = contract(Discriminant).sign([owl.nonZero, owl.num, owl.num]);
-/**
- * @category Quadratic
- * @return the roots [p,q] of ax^2+bx+c=0 where p<=q
- * ```
- * QuadraticRoot(1,2,-3) // [-3,1]
- * QuadraticRoot(1,2,3) // throw when no real root
- * ```
- */
-function QuadraticRoot(a, b, c) {
-    const d = Discriminant(a, b, c);
-    const s = Math.sqrt(d);
-    const r1 = Divide(-b - s, 2 * a);
-    const r2 = Divide(-b + s, 2 * a);
-    return [Min(r1, r2), Max(r1, r2)];
-}
-globalThis.QuadraticRoot = contract(QuadraticRoot).seal({
-    arg: [owl.nonZero, owl.num, owl.num],
-    args: function has_real_root(a, b, c) { return b ** 2 - 4 * a * c >= 0; }
-});
-/**
- * @category Quadratic
- * @return the vertex [h,k] of y=ax^2+bx+c.
- * ```
- * QuadraticVertex(1,2,3) // [-1,2]
- * ```
- */
-function QuadraticVertex(a, b, c) {
-    const h = Divide(-b, 2 * a);
-    const k = a * h * h + b * h + c;
-    return [h, k];
-}
-globalThis.QuadraticVertex = contract(QuadraticVertex).sign([owl.nonZero, owl.num, owl.num]);
-/**
- * @category Quadratic
- * @return the quadratic coeff [a,b,c] from given a and roots p and q.
- * ```
- * QuadraticFromRoot(1,2,3) // [1,-5,6]
- * QuadraticFromRoot(-2,4,-3) // [-2,2,24]
- * ```
- */
-function QuadraticFromRoot(a, p, q) {
-    return [a, -a * (p + q), a * p * q];
-}
-globalThis.QuadraticFromRoot = contract(QuadraticFromRoot).sign([owl.nonZero, owl.num, owl.num]);
-/**
- * @category Quadratic
- * @return the quadratic coeff [a,b,c] from given a and vertex (h,k).
- * ```
- * QuadraticFromVertex(1,2,3) // [1,-4,7]
- * QuadraticFromVertex(-2,4,-3) // [-2,16,-35]
- * ```
- */
-function QuadraticFromVertex(a, h, k) {
-    const b = -2 * a * h;
-    const c = k - a * h * h - b * h;
-    return [a, b, c];
-}
-globalThis.QuadraticFromVertex = contract(QuadraticFromVertex).sign([owl.nonZero, owl.num, owl.num]);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(1154);
+let Host = class Host {
+    /**
+     * the discriminant b^2-4ac.
+     * ```
+     * Discriminant(2,3,4) // -23
+     * ```
+     */
+    static Discriminant(a, b, c) {
+        return b * b - 4 * a * c;
+    }
+    /**
+     * the roots [p,q] of ax^2+bx+c=0 where p<=q
+     * ```
+     * QuadraticRoot(1,2,-3) // [-3,1]
+     * QuadraticRoot(1,2,3) // throw when no real root
+     * ```
+     */
+    static QuadraticRoot(a, b, c) {
+        const d = Discriminant(a, b, c);
+        const s = Math.sqrt(d);
+        const r1 = Divide(-b - s, 2 * a);
+        const r2 = Divide(-b + s, 2 * a);
+        return [Min(r1, r2), Max(r1, r2)];
+    }
+    /**
+     * the vertex [h,k] of y=ax^2+bx+c.
+     * ```
+     * QuadraticVertex(1,2,3) // [-1,2]
+     * ```
+     */
+    static QuadraticVertex(a, b, c) {
+        const h = Divide(-b, 2 * a);
+        const k = a * h * h + b * h + c;
+        return [h, k];
+    }
+    /**
+     * the quadratic coeff [a,b,c] from given a and roots p and q.
+     * ```
+     * QuadraticFromRoot(1,2,3) // [1,-5,6]
+     * ```
+     */
+    static QuadraticFromRoot(a, p, q) {
+        return [a, -a * (p + q), a * p * q];
+    }
+    /**
+     * the quadratic coeff [a,b,c] from given a and vertex (h,k).
+     * ```
+     * QuadraticFromVertex(1,2,3) // [1,-4,7]
+     * ```
+     */
+    static QuadraticFromVertex(a, h, k) {
+        const b = -2 * a * h;
+        const c = k - a * h * h - b * h;
+        return [a, b, c];
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZero, owl.num, owl.num)
+], Host, "Discriminant", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZero, owl.num, owl.num),
+    (0, contract_1.inspectIt)(function has_real_root(a, b, c) { return b ** 2 - 4 * a * c >= 0; })
+], Host, "QuadraticRoot", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZero, owl.num, owl.num)
+], Host, "QuadraticVertex", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZero, owl.num, owl.num)
+], Host, "QuadraticFromRoot", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZero, owl.num, owl.num)
+], Host, "QuadraticFromVertex", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
@@ -37987,55 +37968,7 @@ exports.AutoPenCls = AutoPenCls;
 
 /***/ }),
 
-/***/ 3495:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PenAxis = void 0;
-class PenAxis {
-    constructor(pen, cv) {
-        this.pen = pen;
-        this.cv = cv;
-    }
-    /**
-     * Draw x-axis.
-     * ```
-     * pen.axis.x('time') // draw the x-axis, label as 'time'
-     * ```
-     */
-    x(label = "x") {
-        this.cv.xAxis();
-        this.cv.xAxisLabel(label);
-    }
-    /**
-     * Draw y-axis.
-     * ```
-     * pen.axis.y('height') // draw the y-axis, label as 'height'
-     * ```
-     */
-    y(label = "y") {
-        this.cv.yAxis();
-        this.cv.yAxisLabel(label);
-    }
-    /**
-     * Draw both axis.
-     * ```
-     * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
-     * ```
-     */
-    xy(xlabel = "x", ylabel = "y") {
-        this.x(xlabel);
-        this.y(ylabel);
-    }
-}
-exports.PenAxis = PenAxis;
-
-
-/***/ }),
-
-/***/ 6183:
+/***/ 1377:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -38043,18 +37976,18 @@ exports.PenAxis = PenAxis;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PenCls = void 0;
 const paint_1 = __webpack_require__(5619);
-const range_1 = __webpack_require__(1991);
-const size_1 = __webpack_require__(9945);
-const settings_1 = __webpack_require__(7650);
-const d3_1 = __webpack_require__(2137);
-const graph_1 = __webpack_require__(1932);
-const fill_1 = __webpack_require__(2431);
-const shade_1 = __webpack_require__(9645);
-const label_1 = __webpack_require__(1945);
-const axis_1 = __webpack_require__(3495);
-const tick_1 = __webpack_require__(7766);
-const grid_1 = __webpack_require__(2198);
-const linProg_1 = __webpack_require__(6285);
+const range_1 = __webpack_require__(9062);
+const size_1 = __webpack_require__(2037);
+const settings_1 = __webpack_require__(6887);
+const d3_1 = __webpack_require__(7799);
+const graph_1 = __webpack_require__(2681);
+const fill_1 = __webpack_require__(3462);
+const shade_1 = __webpack_require__(4101);
+const label_1 = __webpack_require__(1121);
+const axis_1 = __webpack_require__(4786);
+const tick_1 = __webpack_require__(9503);
+const grid_1 = __webpack_require__(5163);
+const linProg_1 = __webpack_require__(4661);
 /**
  * @ignore
  */
@@ -38129,20 +38062,14 @@ class PenCls {
         this.size.set(1);
         this.set.reset();
     }
-    pj(pt) {
-        return this.cv.pj(pt);
-    }
-    pjs(pts) {
-        return this.cv.pjs(pts);
-    }
     /**
      * Plot an explicit or parametric function.
-     * @category graph
      * ```
      * pen.plot(x=>x**2,1,2) // y=x^2 from x = 1 to 2
      * pen.plot(x=>x**2) // y=x^2 in from x = xmin to xmax
      * pen.plot(t=>[cos(t),sin(t)],0,360) // a unit circle
      * ```
+     * @category graph
      */
     plot(func, tStart, tEnd) {
         this.cv.plot(func, tStart, tEnd, 1000);
@@ -38159,11 +38086,11 @@ class PenCls {
     }
     /**
      * Draw a point.
-     * @category draw
      * ```
      * pen.point([1,2]) // draw a point at [1,2]
      * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
      * ```
+     * @category draw
      */
     point(position, label) {
         this.cv.disc(position, DEFAULT_POINT_RADIUS_PIXEL);
@@ -38172,11 +38099,11 @@ class PenCls {
     }
     /**
      * Draw a point.
-     * @category draw
      * ```
      * pen.points({A,B}) // mark and label point A as 'A', point B as 'B'
      * pen.points({A,B},false) // mark point A and B, without label
      * ```
+     * @category draw
      */
     points(positions) {
         for (let k in positions) {
@@ -38185,11 +38112,11 @@ class PenCls {
     }
     /**
      * Draw a cutter to a horizontal line.
-     * @category draw
      * ```
      * pen.cutX([1,2]) // draw a vertical cutter at [1,2]
      * pen.cutX(1) // same as cutX([1,0])
      * ```
+     * @category draw
      */
     cutX(position, label) {
         if (typeof position === 'number')
@@ -38200,11 +38127,11 @@ class PenCls {
     }
     /**
      * Draw a cutter to a vertical line.
-     * @category draw
      * ```
      * pen.cutY([1,2]) // draw a horizontal cutter at [1,2]
      * pen.cutY(1) // same as cutY([0,1])
      * ```
+     * @category draw
      */
     cutY(position, label) {
         if (typeof position === 'number')
@@ -38215,10 +38142,10 @@ class PenCls {
     }
     /**
      * Draw a guide line from `point` to the x-axis.
-     * @category draw
      * ```
      * pen.guideX([1,2],'1') // draw guide from [1,2] and label '1' on x-axis
      * ```
+     * @category draw
      */
     guideX(point, label) {
         let [x, y] = point;
@@ -38230,10 +38157,10 @@ class PenCls {
     }
     /**
      * Draw a guide line from `point` to the y-axis.
-     * @category draw
      * ```
      * pen.guideY([1,2],'2') // draw guide from [1,2] and label '2' on y-axis
      * ```
+     * @category draw
      */
     guideY(point, label) {
         let [x, y] = point;
@@ -38245,50 +38172,50 @@ class PenCls {
     }
     /**
      * Draw a circle or arc.
-     * @category draw
      * ```
      * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
      * ```
+     * @category draw
      */
     circle(center, radius) {
         this.cv.circle(center, radius);
     }
     /**
      * Fill a disc.
-     * @category draw
      * ```
      * pen.disc([1,2], 10) // draw a disc centered at [1,2] with 10 px radius
      * ```
+     * @category draw
      */
     disc(center, radius) {
         this.cv.disc(center, radius);
     }
     /**
      * Shade a disc.
-     * @category draw
      * ```
      * pen.halo([1,2], 10) // shade a disc centered at [1,2] with 10 px radius
      * ```
+     * @category draw
      */
     halo(center, radius) {
         this.cv.halo(center, radius);
     }
     /**
      * Draw a dot.
-     * @category draw
      * ```
      * pen.dot([1,2]) // draw a dot at [1,2]
      * ```
+     * @category draw
      */
     dot(point) {
         this.disc(point, 4);
     }
     /**
      * Draw a hole.
-     * @category draw
      * ```
      * pen.hole([1,2]) // draw a hole at [1,2]
      * ```
+     * @category draw
      */
     hole(point) {
         this.cv.save();
@@ -38299,11 +38226,11 @@ class PenCls {
     }
     /**
      * Draw a line between two points.
-     * @category draw
      * ```
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
      * pen.line([1,2],[3,4],'10') //  also label '10'
      * ```
+     * @category draw
      */
     line(A, B, label) {
         this.cv.line([A, B]);
@@ -38312,11 +38239,11 @@ class PenCls {
     }
     /**
      * Draw a dash line between two points.
-     * @category draw
      * ```
      * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
      * pen.dash([1,2],[3,4],'10') //  also label '10'
      * ```
+     * @category draw
      */
     dash(A, B, label) {
         this.cv.dash([A, B]);
@@ -38325,10 +38252,10 @@ class PenCls {
     }
     /**
      * Draw an arrow between two points.
-     * @category draw
      * ```
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
+     * @category draw
      */
     arrow(A, B, label) {
         this.cv.arrow(A, B, 5);
@@ -38337,12 +38264,12 @@ class PenCls {
     }
     /**
      * Draw the component of the arrow.
-     * @category draw
      * ```
      * pen.arrowCompo([1,2],[3,4],0,'x')
      * // draw the horizontal component of arrow from [1,2] to [3,4]
      * // label the angle as 'x'
      * ```
+     * @category draw
      */
     arrowCompo(O, P, dir, angleLabel) {
         let X = Move(O, dir, 1);
@@ -38353,12 +38280,12 @@ class PenCls {
     }
     /**
      * Draw both components of the arrow.
-     * @category draw
      * ```
      * pen.arrowResolve([1,2],[3,4],0,'x')
      * // draw the horizontal and vertical components of arrow from [1,2] to [3,4]
      * // label the angle with the horizontal as 'x'
      * ```
+     * @category draw
      */
     arrowResolve(O, P, dir, angleLabel) {
         this.arrowCompo(O, P, dir, angleLabel);
@@ -38366,11 +38293,11 @@ class PenCls {
     }
     /**
      * Draw a length between two points.
-     * @category draw
      * ```
      * pen.length([1,2],[3,4],'d')
      * // draw an length 'd' from [1,2] to [3,4]
      * ```
+     * @category draw
      */
     length(A, B, label) {
         this.cv.line([A, B]);
@@ -38403,50 +38330,50 @@ class PenCls {
     }
     /**
      * Draw a polyline given points.
-     * @category draw
      * ```
      * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline through 3 points
      * ```
+     * @category draw
      */
     polyline(...points) {
         this.cv.line(points);
     }
     /**
      * Draw a polygon given points.
-     * @category draw
      * ```
      * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle
      * ```
+     * @category draw
      */
     polygon(...points) {
         this.cv.shape(points);
     }
     /**
      * Fill a polygon given points.
-     * @category draw
      * ```
      * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle
      * ```
+     * @category draw
      */
     polyfill(...points) {
         this.cv.fill(points);
     }
     /**
      * Shade a polygon given points.
-     * @category draw
      * ```
      * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle
      * ```
+     * @category draw
      */
     polyshade(...points) {
         this.cv.shade(points);
     }
     /**
      * Draw and shade a polygon given points.
-     * @category draw
      * ```
      * pen.polyshape([0,0],[5,2],[3,4]) // draw and shade a triangle
      * ```
+     * @category draw
      */
     polyshape(...points) {
         this.polygon(...points);
@@ -38454,10 +38381,10 @@ class PenCls {
     }
     /**
      * Draw an angle with label.
-     * @category draw
      * ```
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
+     * @category draw
      */
     angle(A, O, B, label, arc = 1, radius = -1) {
         if (radius < 0)
@@ -38469,93 +38396,93 @@ class PenCls {
     }
     /**
      * Decorate equal side lengths.
-     * @category decorator
      * ```
      * pen.decorate.equalSide([1,0],[3,2],2)
      * // a double-tick at the mid-pt of [1,0] and [3,2]
      * ```
+     * @category decorator
      */
     equalSide(A, B, tick = 1) {
         this.cv.equalSide(A, B, 5, tick, 3);
     }
     /**
      * Decorate bisecting equal lengths of a side.
-     * @category decorator
      * ```
      * pen.decorate.bisectSide([0,0], [2,2], 2)
      * // two double-ticks bisecting [0,0] and [2,2] at their mid-pt
      * ```
+     * @category decorator
      */
     bisectSide(A, B, tick = 1) {
-        [A, B] = this.pjs([A, B]);
+        [A, B] = this.cv.pjs([A, B]);
         let M = Mid(A, B);
         this.equalSide(A, M, tick);
         this.equalSide(B, M, tick);
     }
     /**
      * Decorate parallel side.
-     * @category decorator
      * ```
      * pen.decorate.parallel([1,0],[3,2],2)
      * // a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
      * ```
+     * @category decorator
      */
     parallel(A, B, tick = 1) {
         this.cv.parallel(A, B, 4, tick, 6);
     }
     /**
      * Decorate a right-angle AOB.
-     * @category decorator
      * ```
      * pen.decorate.rightAngle([1,0],[0,0],[3,2])
      * // an right-angle AOB
      * ```
+     * @category decorator
      */
     rightAngle(A, O, B, size = 12) {
-        A = this.pj(A);
-        O = this.pj(O);
+        A = this.cv.pj(A);
+        O = this.cv.pj(O);
         B ??= Rotate(A, 90, O);
-        B = this.pj(B);
+        B = this.cv.pj(B);
         this.cv.rightAngle(A, O, B, size);
     }
     /**
      * Decorate a compass.
-     * @category decorator
      * ```
      * pen.decorate.compass([1,2])
      * // a compass at [1,2]
      * ```
+     * @category decorator
      */
     compass(point) {
         this.cv.compass(point, 17, 20, 3.5);
     }
     /**
      * Write text.
-     * @category text
      * ```
      * pen.write([1,2],'abc') // 'abc' at [1,2]
      * ```
+     * @category text
      */
     write(point, text) {
         this.cv.write(text, point);
     }
     /**
      * Set the background image url.
-     * @category export
      * ```
      * pen.background('https://www2.pyc.edu.hk/img/pycnet_logo.png')
      * ```
+     * @category export
      */
     background(url) {
         this.cv.backgroundURL = url;
     }
     /**
      * Export the canvas to image tag.
-     * @category export
      * ```
      * question = pen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
+     * @category export
      */
     export(html, placeholder) {
         return this.cv.export(html, placeholder, false);
@@ -38563,11 +38490,11 @@ class PenCls {
     ;
     /**
      * Export the canvas to image tag, with white space trimmed.
-     * @category export
      * ```
      * question = pen.exportTrim(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
+     * @category export
      */
     exportTrim(html, placeholder) {
         return this.cv.export(html, placeholder, true);
@@ -38601,7 +38528,381 @@ exports.PenCls = PenCls;
 
 /***/ }),
 
-/***/ 2137:
+/***/ 9905:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PhyPenCls = void 0;
+class PhyPenCls {
+    /**
+     * @ignore
+     */
+    constructor() {
+        this.pen = new Pen();
+    }
+    /**
+     * Export the canvas to image tag.
+     * ```
+     * question = autoPen.export(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
+     */
+    export(html, placeholder) {
+        return this.pen.exportTrim(html, placeholder);
+    }
+    /**
+     * A projectile trajectory.
+     * ```
+     * let pen = new PhyPen()
+     * pen.Projectile({
+     *    speed: 20,
+     *    angle: 50,
+     *    time: 4,
+     *    arrowScale: 0.5,
+     *    ground: false
+     * })
+     * ```
+     */
+    Projectile({ speed, angle = 0, time, arrowScale = 0.5, ground = false, }) {
+        let pen = new Pen();
+        let ux = speed * cos(angle);
+        let uy = speed * sin(angle);
+        time ??= 2 * uy / 9.81;
+        let x = (t) => ux * t;
+        let y = (t) => uy * t - 0.5 * 9.81 * t * t;
+        let O = [0, 0];
+        let U = [ux * arrowScale, uy * arrowScale];
+        let P = [x(time), y(time)];
+        pen.range.capture(O, U, P);
+        pen.size.lock(1.5);
+        pen.disc(O, 5);
+        pen.arrow(O, U);
+        pen.set.color('grey');
+        pen.plotDash(t => [x(t), y(t)], 0, time);
+        pen.circle(P, 5);
+        if (ground) {
+            pen.graph.horizontal(0);
+        }
+        this.pen = pen;
+    }
+    /**
+     * A car on a banked road.
+     * Circular Motion.
+     * ```
+     * let pen = new PhyPen()
+     * pen.CarOnBankedRoad({
+     *  carMid : 10,
+     *  carWidth : 3,
+     *  wheelHeight : 1,
+     *  carHeight : 2,
+     *  angle : 25,
+     *  angleLabel : 'θ',
+     *  weight : 4,
+     *  weightLabel : 'mg',
+     *  normal : 5,
+     *  normalLabel : 'R',
+     *  friction : 0,
+     *  frictionLabel : 'f',
+     *  showAllForces : false
+     * })
+     * ```
+     */
+    CarOnBankedRoad({ carMid = 10, carWidth = 3, wheelHeight = 1, carHeight = 2, angle = 25, angleLabel = 'θ', weight = 4, weightLabel = 'mg', normal = 5, normalLabel = 'R', friction = 0, frictionLabel = 'f', showAllForces = false }) {
+        let O = [0, 0];
+        let l = carMid - carWidth / 2;
+        let r = carMid + carWidth / 2;
+        // wheels
+        let A = [l, 0];
+        let B = [r, 0];
+        // car body
+        let P = MoveY(A, wheelHeight);
+        let Q = MoveY(P, carHeight);
+        let R = MoveY(B, wheelHeight);
+        let S = MoveY(R, carHeight);
+        [A, B, P, Q, R, S] = [A, B, P, Q, R, S].map($ => Rotate($, angle, O));
+        // road
+        let Z = [2 * r, 0];
+        let Y = Rotate(Z, angle, O);
+        // mg
+        let G = Mid(P, Q, R, S);
+        let W = MoveY(G, -weight);
+        // normal reaction
+        let N = Move(G, 90 + angle, normal);
+        // friction
+        let g = friction > 0 ? A : B;
+        let f = Move(g, friction > 0 ? 180 + angle : angle, Math.abs(friction));
+        let pen = new Pen();
+        pen.range.capture(O, A, B, P, Q, R, S, N, f);
+        pen.size.lock(1.3);
+        pen.set.labelCenter(G);
+        pen.set.textLatex(true);
+        pen.polygon(P, Q, S, R);
+        pen.line(O, Z);
+        pen.line(O, Y);
+        pen.angle(Y, O, Z, angleLabel);
+        pen.set.weight(4);
+        pen.line(A, P);
+        pen.line(B, R);
+        if (showAllForces) {
+            pen.set.weight(3);
+            pen.set.color('red');
+            pen.set.lineLabel('left');
+            pen.arrow(G, W, weightLabel);
+            pen.set.lineLabel();
+            pen.set.weight(3);
+            pen.set.color('purple');
+            pen.arrow(G, N);
+            pen.label.point(N, normalLabel);
+            pen.set.weight(2);
+            pen.arrowResolve(G, N, 90, angleLabel);
+            if (friction !== 0) {
+                pen.set.weight(3);
+                pen.set.color('blue');
+                pen.arrow(g, f);
+                pen.label.point(f, frictionLabel);
+                pen.set.weight(2);
+                pen.arrowResolve(g, f, 0, angleLabel);
+            }
+        }
+        this.pen = pen;
+    }
+    /**
+     * A plane making a turn.
+     * Circular Motion.
+     * ```
+     * let pen = new PhyPen()
+     * pen.AirplaneTurning({
+     *   wingWidth = 7,
+     *   planeRadius = 1,
+     *   angle = 35,
+     *   angleLabel = 'θ',
+     *   weight = 4,
+     *   weightLabel = 'mg',
+     *   lift = 5,
+     *   liftLabel = 'L',
+     *   showAllForces = false
+     * })
+     * ```
+     */
+    AirplaneTurning({ wingWidth = 7, planeRadius = 1, angle = 35, angleLabel = 'θ', weight = 4, weightLabel = 'mg', lift = 5, liftLabel = 'L', showAllForces = false }) {
+        let O = [0, 0];
+        // plane centre
+        let P = [-wingWidth, 0];
+        let Q = [+wingWidth, 0];
+        [P, Q] = [P, Q].map($ => Rotate($, angle, O));
+        // mg
+        let W = MoveY(O, -weight);
+        // lift
+        let N = Move(O, 90 + angle, lift);
+        let pen = new Pen();
+        pen.range.capture(P, Q, W, N);
+        pen.size.lock(1.3);
+        pen.set.labelCenter(O);
+        pen.set.textLatex(true);
+        pen.graph.circle(O, planeRadius);
+        pen.shade.circle(O, planeRadius);
+        pen.set.weight(3);
+        pen.line(P, Q);
+        pen.set.weight();
+        pen.set.dash(true);
+        pen.graph.horizontal(0);
+        pen.set.dash();
+        pen.angle(Q, O, [1, 0], angleLabel);
+        if (showAllForces) {
+            pen.set.weight(3);
+            pen.set.color('red');
+            pen.set.lineLabel('left');
+            pen.arrow(O, W, weightLabel);
+            pen.set.lineLabel();
+            pen.set.weight(3);
+            pen.set.color('purple');
+            pen.arrow(O, N);
+            pen.label.point(N, liftLabel);
+            pen.set.weight(2);
+            pen.arrowResolve(O, N, 90, angleLabel);
+        }
+        this.pen = pen;
+    }
+    /**
+     * A conical pendulum.
+     * Circular Motion.
+     * ```
+     * let pen = new PhyPen()
+     * pen.ConicalPendulum({
+     *    bobRadius = 1,
+     *    length = 15,
+     *    angle = 50,
+     *    angleLabel = 'θ',
+     *    weight = 7,
+     *    weightLabel = 'mg',
+     *    tension = 10,
+     *    tensionLabel = 'T',
+     *    showAllForces = false
+     * })
+     * ```
+     */
+    ConicalPendulum({ bobRadius = 1, length = 15, angle = 50, angleLabel = 'θ', weight = 7, weightLabel = 'mg', tension = 10, tensionLabel = 'T', showAllForces = false }) {
+        let O = [0, 0];
+        let P = Rotate([0, -length], angle, O);
+        let V = [0, P[1]];
+        // weight
+        let W = MoveY(P, -weight);
+        // tension
+        let T = Move(P, 90 + angle, tension);
+        let pen = new Pen();
+        pen.set.border(0.3);
+        pen.range.capture(O, P, V, ReflectY(P), W);
+        pen.size.lock(1.3);
+        pen.set.textLatex(true);
+        pen.set.color('grey');
+        pen.plotDash(t => [P[0] * cos(t) + V[0], 1 * sin(t) + V[1]], 0, 360);
+        pen.set.color();
+        pen.dash(O, V);
+        pen.line(O, P);
+        pen.fill.circle(P, bobRadius);
+        pen.angle(P, O, V, angleLabel);
+        if (showAllForces) {
+            // weight
+            pen.set.color('red');
+            pen.set.weight(3);
+            pen.arrow(P, W, weightLabel);
+            // tension
+            pen.set.color('blue');
+            pen.arrow(P, T);
+            pen.set.weight(2);
+            pen.arrowResolve(P, T, 90, angleLabel);
+            pen.set.weight();
+            pen.label.point(T, tensionLabel);
+        }
+        this.pen = pen;
+    }
+    /**
+     * A satellite orbits around a planet.
+     * Gravitation.
+     * ```
+     * let pen = new PhyPen()
+     * pen.SatelliteOrbit({
+     *    planetRadius = 1.3,
+     *    orbitRadius = 2,
+     *    angle = 30,
+     * })
+     * ```
+     */
+    SatelliteOrbit({ planetRadius = 1.3, orbitRadius = 2, angle = 30, showHeight = false }) {
+        let pen = new Pen();
+        let O = [0, 0];
+        //satellite
+        let P = PolToRect([orbitRadius, angle]);
+        // r line
+        let Q = PolToRect([orbitRadius, -angle]);
+        // R line
+        let A = [-planetRadius, 0];
+        // h line
+        let B = PolToRect([planetRadius, angle]);
+        // M label
+        let C = [0, -planetRadius];
+        pen.range.capture([O, orbitRadius]);
+        pen.size.set(1.2);
+        pen.shade.circle(O, planetRadius);
+        pen.graph.circle(O, planetRadius);
+        pen.label.point(C, 'M', 270);
+        pen.point(P, 'm');
+        pen.point(O);
+        if (showHeight) {
+            pen.set.color('red');
+            pen.line(B, P, 'h');
+        }
+        pen.set.color('blue');
+        pen.line(O, Q, 'r');
+        pen.set.color('grey');
+        pen.line(O, A, 'R');
+        pen.set.color();
+        pen.set.dash(true);
+        pen.graph.circle(O, orbitRadius);
+        this.pen = pen;
+    }
+}
+exports.PhyPenCls = PhyPenCls;
+
+
+/***/ }),
+
+/***/ 1370:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Pen_1 = __webpack_require__(1377);
+const AutoPen_1 = __webpack_require__(5336);
+const PhyPen_1 = __webpack_require__(9905);
+/**
+ * @ignore
+ */
+globalThis.Pen = Pen_1.PenCls;
+/**
+ * @ignore
+ */
+globalThis.AutoPen = AutoPen_1.AutoPenCls;
+/**
+ * @ignore
+ */
+globalThis.PhyPen = PhyPen_1.PhyPenCls;
+
+
+/***/ }),
+
+/***/ 4786:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PenAxis = void 0;
+class PenAxis {
+    constructor(pen, cv) {
+        this.pen = pen;
+        this.cv = cv;
+    }
+    /**
+     * Draw x-axis.
+     * ```
+     * pen.axis.x('time') // draw the x-axis, label as 'time'
+     * ```
+     */
+    x(label = "x") {
+        this.cv.xAxis();
+        this.cv.xAxisLabel(label);
+    }
+    /**
+     * Draw y-axis.
+     * ```
+     * pen.axis.y('height') // draw the y-axis, label as 'height'
+     * ```
+     */
+    y(label = "y") {
+        this.cv.yAxis();
+        this.cv.yAxisLabel(label);
+    }
+    /**
+     * Draw both axis.
+     * ```
+     * pen.axis.xy('x','y') // draw both axis, label as 'x' and 'y'
+     * ```
+     */
+    xy(xlabel = "x", ylabel = "y") {
+        this.x(xlabel);
+        this.y(ylabel);
+    }
+}
+exports.PenAxis = PenAxis;
+
+
+/***/ }),
+
+/***/ 7799:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -38936,7 +39237,7 @@ exports.PenD3 = PenD3;
 
 /***/ }),
 
-/***/ 2431:
+/***/ 3462:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39002,7 +39303,7 @@ exports.PenFill = PenFill;
 
 /***/ }),
 
-/***/ 1932:
+/***/ 2681:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39132,7 +39433,7 @@ exports.PenGraph = PenGraph;
 
 /***/ }),
 
-/***/ 2198:
+/***/ 5163:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39178,7 +39479,7 @@ exports.PenGrid = PenGrid;
 
 /***/ }),
 
-/***/ 1945:
+/***/ 1121:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39280,7 +39581,7 @@ exports.PenLabel = PenLabel;
 
 /***/ }),
 
-/***/ 6285:
+/***/ 4661:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39342,7 +39643,7 @@ exports.PenLinProg = PenLinProg;
 
 /***/ }),
 
-/***/ 1991:
+/***/ 9062:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39405,7 +39706,7 @@ exports.PenRange = PenRange;
 
 /***/ }),
 
-/***/ 7650:
+/***/ 6887:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39601,7 +39902,7 @@ exports.PenSettings = PenSettings;
 
 /***/ }),
 
-/***/ 9645:
+/***/ 4101:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39667,7 +39968,7 @@ exports.PenShade = PenShade;
 
 /***/ }),
 
-/***/ 9945:
+/***/ 2037:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39739,7 +40040,7 @@ exports.PenSize = PenSize;
 
 /***/ }),
 
-/***/ 7766:
+/***/ 9503:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -39785,332 +40086,6 @@ class PenTick {
     }
 }
 exports.PenTick = PenTick;
-
-
-/***/ }),
-
-/***/ 9905:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PhyPenCls = void 0;
-class PhyPenCls {
-    /**
-     * @ignore
-     */
-    constructor() {
-        this.pen = new Pen();
-    }
-    /**
-     * Export the canvas to image tag.
-     * ```
-     * question = autoPen.export(question,'imgQ')
-     * // paste the canvas to the image tag with src field 'imgQ'
-     * ```
-     */
-    export(html, placeholder) {
-        return this.pen.exportTrim(html, placeholder);
-    }
-    /**
-     * A projectile trajectory.
-     * ```
-     * let pen = new PhyPen()
-     * pen.Projectile({
-     *    speed: 20,
-     *    angle: 50,
-     *    time: 4,
-     *    arrowScale: 0.5,
-     *    ground: false
-     * })
-     * ```
-     */
-    Projectile({ speed, angle = 0, time, arrowScale = 0.5, ground = false, }) {
-        let pen = new Pen();
-        let ux = speed * cos(angle);
-        let uy = speed * sin(angle);
-        time ??= 2 * uy / 9.81;
-        let x = (t) => ux * t;
-        let y = (t) => uy * t - 0.5 * 9.81 * t * t;
-        let O = [0, 0];
-        let U = [ux * arrowScale, uy * arrowScale];
-        let P = [x(time), y(time)];
-        pen.range.capture(O, U, P);
-        pen.size.lock(1.5);
-        pen.disc(O, 5);
-        pen.arrow(O, U);
-        pen.set.color('grey');
-        pen.plotDash(t => [x(t), y(t)], 0, time);
-        pen.circle(P, 5);
-        if (ground) {
-            pen.graph.horizontal(0);
-        }
-        this.pen = pen;
-    }
-    /**
-     * A car on a banked road.
-     * Circular Motion.
-     * ```
-     * let pen = new PhyPen()
-     * pen.CarOnBankedRoad({
-     *  carMid : 10,
-     *  carWidth : 3,
-     *  wheelHeight : 1,
-     *  carHeight : 2,
-     *  angle : 25,
-     *  angleLabel : 'θ',
-     *  weight : 4,
-     *  weightLabel : 'mg',
-     *  normal : 5,
-     *  normalLabel : 'R',
-     *  friction : 0,
-     *  frictionLabel : 'f',
-     *  showAllForces : false
-     * })
-     * ```
-     */
-    CarOnBankedRoad({ carMid = 10, carWidth = 3, wheelHeight = 1, carHeight = 2, angle = 25, angleLabel = 'θ', weight = 4, weightLabel = 'mg', normal = 5, normalLabel = 'R', friction = 0, frictionLabel = 'f', showAllForces = false }) {
-        let O = [0, 0];
-        let l = carMid - carWidth / 2;
-        let r = carMid + carWidth / 2;
-        // wheels
-        let A = [l, 0];
-        let B = [r, 0];
-        // car body
-        let P = MoveY(A, wheelHeight);
-        let Q = MoveY(P, carHeight);
-        let R = MoveY(B, wheelHeight);
-        let S = MoveY(R, carHeight);
-        [A, B, P, Q, R, S] = [A, B, P, Q, R, S].map($ => Rotate($, angle, O));
-        // road
-        let Z = [2 * r, 0];
-        let Y = Rotate(Z, angle, O);
-        // mg
-        let G = Mid(P, Q, R, S);
-        let W = MoveY(G, -weight);
-        // normal reaction
-        let N = Move(G, 90 + angle, normal);
-        // friction
-        let g = friction > 0 ? A : B;
-        let f = Move(g, friction > 0 ? 180 + angle : angle, Math.abs(friction));
-        let pen = new Pen();
-        pen.range.capture(O, A, B, P, Q, R, S, N, f);
-        pen.size.lock(1.3);
-        pen.set.labelCenter(G);
-        pen.set.textLatex(true);
-        pen.polygon(P, Q, S, R);
-        pen.line(O, Z);
-        pen.line(O, Y);
-        pen.angle(Y, O, Z, angleLabel);
-        pen.set.weight(4);
-        pen.line(A, P);
-        pen.line(B, R);
-        if (showAllForces) {
-            pen.set.weight(3);
-            pen.set.color('red');
-            pen.set.lineLabel('left');
-            pen.arrow(G, W, weightLabel);
-            pen.set.lineLabel();
-            pen.set.weight(3);
-            pen.set.color('purple');
-            pen.arrow(G, N);
-            pen.label.point(N, normalLabel);
-            pen.set.weight(2);
-            pen.arrowResolve(G, N, 90, angleLabel);
-            if (friction !== 0) {
-                pen.set.weight(3);
-                pen.set.color('blue');
-                pen.arrow(g, f);
-                pen.label.point(f, frictionLabel);
-                pen.set.weight(2);
-                pen.arrowResolve(g, f, 0, angleLabel);
-            }
-        }
-        this.pen = pen;
-    }
-    /**
-     * A plane making a turn.
-     * Circular Motion.
-     * ```
-     * let pen = new PhyPen()
-     * pen.AirplaneTurning({
-     *   wingWidth = 7,
-     *   planeRadius = 1,
-     *   angle = 35,
-     *   angleLabel = 'θ',
-     *   weight = 4,
-     *   weightLabel = 'mg',
-     *   lift = 5,
-     *   liftLabel = 'L',
-     *   showAllForces = false
-     * })
-     * ```
-     */
-    AirplaneTurning({ wingWidth = 7, planeRadius = 1, angle = 35, angleLabel = 'θ', weight = 4, weightLabel = 'mg', lift = 5, liftLabel = 'L', showAllForces = false }) {
-        let O = [0, 0];
-        // plane centre
-        let P = [-wingWidth, 0];
-        let Q = [+wingWidth, 0];
-        [P, Q] = [P, Q].map($ => Rotate($, angle, O));
-        // mg
-        let W = MoveY(O, -weight);
-        // lift
-        let N = Move(O, 90 + angle, lift);
-        let pen = new Pen();
-        pen.range.capture(P, Q, W, N);
-        pen.size.lock(1.3);
-        pen.set.labelCenter(O);
-        pen.set.textLatex(true);
-        pen.graph.circle(O, planeRadius);
-        pen.shade.circle(O, planeRadius);
-        pen.set.weight(3);
-        pen.line(P, Q);
-        pen.set.weight();
-        pen.set.dash(true);
-        pen.graph.horizontal(0);
-        pen.set.dash();
-        pen.angle(Q, O, [1, 0], angleLabel);
-        if (showAllForces) {
-            pen.set.weight(3);
-            pen.set.color('red');
-            pen.set.lineLabel('left');
-            pen.arrow(O, W, weightLabel);
-            pen.set.lineLabel();
-            pen.set.weight(3);
-            pen.set.color('purple');
-            pen.arrow(O, N);
-            pen.label.point(N, liftLabel);
-            pen.set.weight(2);
-            pen.arrowResolve(O, N, 90, angleLabel);
-        }
-        this.pen = pen;
-    }
-    /**
-     * A conical pendulum.
-     * Circular Motion.
-     * ```
-     * let pen = new PhyPen()
-     * pen.ConicalPendulum({
-     *    bobRadius = 1,
-     *    length = 15,
-     *    angle = 50,
-     *    angleLabel = 'θ',
-     *    weight = 7,
-     *    weightLabel = 'mg',
-     *    tension = 10,
-     *    tensionLabel = 'T',
-     *    showAllForces = false
-     * })
-     * ```
-     */
-    ConicalPendulum({ bobRadius = 1, length = 15, angle = 50, angleLabel = 'θ', weight = 7, weightLabel = 'mg', tension = 10, tensionLabel = 'T', showAllForces = false }) {
-        let O = [0, 0];
-        let P = Rotate([0, -length], angle, O);
-        let V = [0, P[1]];
-        // weight
-        let W = MoveY(P, -weight);
-        // tension
-        let T = Move(P, 90 + angle, tension);
-        let pen = new Pen();
-        pen.set.border(0.3);
-        pen.range.capture(O, P, V, ReflectY(P), W);
-        pen.size.lock(1.3);
-        pen.set.textLatex(true);
-        pen.set.color('grey');
-        pen.plotDash(t => [P[0] * cos(t) + V[0], 1 * sin(t) + V[1]], 0, 360);
-        pen.set.color();
-        pen.dash(O, V);
-        pen.line(O, P);
-        pen.fill.circle(P, bobRadius);
-        pen.angle(P, O, V, angleLabel);
-        if (showAllForces) {
-            // weight
-            pen.set.color('red');
-            pen.set.weight(3);
-            pen.arrow(P, W, weightLabel);
-            // tension
-            pen.set.color('blue');
-            pen.arrow(P, T);
-            pen.set.weight(2);
-            pen.arrowResolve(P, T, 90, angleLabel);
-            pen.set.weight();
-            pen.label.point(T, tensionLabel);
-        }
-        this.pen = pen;
-    }
-    /**
-     * A satellite orbits around a planet.
-     * Gravitation.
-     * ```
-     * let pen = new PhyPen()
-     * pen.SatelliteOrbit({
-     *    planetRadius = 1.3,
-     *    orbitRadius = 2,
-     *    angle = 30,
-     * })
-     * ```
-     */
-    SatelliteOrbit({ planetRadius = 1.3, orbitRadius = 2, angle = 30, showHeight = false }) {
-        let pen = new Pen();
-        let O = [0, 0];
-        //satellite
-        let P = PolToRect([orbitRadius, angle]);
-        // r line
-        let Q = PolToRect([orbitRadius, -angle]);
-        // R line
-        let A = [-planetRadius, 0];
-        // h line
-        let B = PolToRect([planetRadius, angle]);
-        // M label
-        let C = [0, -planetRadius];
-        pen.range.capture([O, orbitRadius]);
-        pen.size.set(1.2);
-        pen.shade.circle(O, planetRadius);
-        pen.graph.circle(O, planetRadius);
-        pen.label.point(C, 'M', 270);
-        pen.point(P, 'm');
-        pen.point(O);
-        if (showHeight) {
-            pen.set.color('red');
-            pen.line(B, P, 'h');
-        }
-        pen.set.color('blue');
-        pen.line(O, Q, 'r');
-        pen.set.color('grey');
-        pen.line(O, A, 'R');
-        pen.set.color();
-        pen.set.dash(true);
-        pen.graph.circle(O, orbitRadius);
-        this.pen = pen;
-    }
-}
-exports.PhyPenCls = PhyPenCls;
-
-
-/***/ }),
-
-/***/ 1370:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __webpack_require__(6183);
-const AutoPen_1 = __webpack_require__(5336);
-const PhyPen_1 = __webpack_require__(9905);
-/**
- * @ignore
- */
-globalThis.Pen = core_1.PenCls;
-/**
- * @ignore
- */
-globalThis.AutoPen = AutoPen_1.AutoPenCls;
-/**
- * @ignore
- */
-globalThis.PhyPen = PhyPen_1.PhyPenCls;
 
 
 /***/ }),
@@ -40228,7 +40203,7 @@ exports.Dict = Dict;
 
 /***/ }),
 
-/***/ 4612:
+/***/ 6183:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -43986,7 +43961,7 @@ __webpack_unused_export__ = ({ value: true });
 __webpack_require__(4163);
 __webpack_require__(3221);
 __webpack_require__(1370);
-__webpack_require__(4612);
+__webpack_require__(6183);
 // polyfill for .at
 function at(n) {
     // ToInteger() abstract op
