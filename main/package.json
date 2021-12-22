@@ -31,6 +31,6 @@
     "fate": "file:../packages/fate",
     "katex": "^0.13.23",
     "paint": "file:../packages/paint",
-    "sapphire-js": "^1.0.58"
+    "sapphire-js": "^1.0.59"
   }
 }

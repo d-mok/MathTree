@@ -6,7 +6,7 @@ import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
 
 @exposeAll()
 @captureAll()
-class Host {
+export class Host {
 
 
 

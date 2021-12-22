@@ -5,7 +5,7 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
 @exposeAll()
 @captureAll()
-class Host {
+export class Host {
 
     /**
      * D,E,F of circle general form

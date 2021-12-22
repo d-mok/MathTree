@@ -3,7 +3,7 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
 @exposeAll()
 @captureAll()
-class Host {
+export class Host {
 
     /**
      * Solve [x,y] from ax+by=c and px+qy=r.

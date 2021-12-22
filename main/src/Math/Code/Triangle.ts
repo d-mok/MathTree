@@ -235,7 +235,7 @@ export class Host {
      * ```
      */
     @checkIt(side, angle, side)
-    static HeightBySAS(a: number, C: number, b: number): number{
+    static HeightBySAS(a: number, C: number, b: number): number {
         let [ha, hb, hc] = HeightsBySAS(a, C, b)
         return hc
     }

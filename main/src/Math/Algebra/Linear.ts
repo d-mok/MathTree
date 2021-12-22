@@ -4,7 +4,7 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
 @exposeAll()
 @captureAll()
-class Host {
+export class Host {
 
     /**
      * [x-int,y-int,slope] of ax+by+c=0

@@ -156,7 +156,7 @@ declare module "Core/index" {
 }
 declare module "Math/Algebra/Polynomial" {
     import { MonomialCls } from "Math/Algebra/PolynomialClass";
-    class Host {
+    export class Host {
         /**
          * @deprecated
          * a monomial object
@@ -499,7 +499,7 @@ declare module "Math/type" {
     }
 }
 declare module "Math/Algebra/Algebra" {
-    class Host {
+    export class Host {
         /**
          * Solve [x,y] from ax+by=c and px+qy=r.
          * ```
@@ -523,7 +523,7 @@ declare module "Math/Algebra/Algebra" {
     }
 }
 declare module "Math/Algebra/Circle" {
-    class Host {
+    export class Host {
         /**
          * D,E,F of circle general form
          * ```
@@ -561,7 +561,7 @@ declare module "Math/Algebra/Circle" {
     }
 }
 declare module "Math/Algebra/Linear" {
-    class Host {
+    export class Host {
         /**
          * [x-int,y-int,slope] of ax+by+c=0
          * ```
@@ -667,7 +667,7 @@ declare module "Math/Jest/JestExtend" {
 }
 declare module "Math/Algebra/Polynomial.test" { }
 declare module "Math/Algebra/Quadratic" {
-    class Host {
+    export class Host {
         /**
          * the discriminant b^2-4ac.
          * ```
@@ -715,7 +715,7 @@ declare module "Math/Algebra/Quadratic" {
 }
 declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
 declare module "Math/Code/Assertion" {
-    class Host {
+    export class Host {
         /**
          * check is a finite number.
          * ```
@@ -914,7 +914,7 @@ declare module "Math/Code/Assertion" {
     }
 }
 declare module "Math/Code/Combinatorics" {
-    class Host {
+    export class Host {
         /**
          * the factorial n!
          * ```
@@ -945,7 +945,7 @@ declare module "Math/Code/Combinatorics" {
     }
 }
 declare module "Math/Code/Function" {
-    class Host {
+    export class Host {
         /**
          * log(b,N)
          * ```
@@ -1046,7 +1046,7 @@ declare module "Math/Code/Function" {
 }
 declare module "Math/Code/Geometry.test" { }
 declare module "Math/Code/Geometry" {
-    class Host {
+    export class Host {
         /**
          * the slope of AB
          * ```
@@ -1285,7 +1285,7 @@ declare module "Math/Code/Geometry" {
     }
 }
 declare module "Math/Code/Latex" {
-    class Host {
+    export class Host {
         /**
          * Print a stem-and-leaf diagram in latex.
          * @param data - sorted data
@@ -1406,7 +1406,7 @@ declare module "Math/Code/Latex" {
     }
 }
 declare module "Math/Code/LinearProgram" {
-    class Host {
+    export class Host {
         /**
          * the value of field at given point
          * ```
@@ -1568,7 +1568,7 @@ declare module "Math/Code/LinearProgram" {
     }
 }
 declare module "Math/Code/Numeracy" {
-    class Host {
+    export class Host {
         /**
          * division with x/0 handling
          * ```
@@ -1866,7 +1866,7 @@ declare module "Math/Code/PhyEq" {
 }
 declare module "Math/Code/Random.test" { }
 declare module "Math/Code/Random" {
-    class Host {
+    export class Host {
         /**
          * a random integer in [min, max] inclusive.
          * ```
@@ -2091,7 +2091,7 @@ declare module "Math/Code/Random" {
 }
 declare module "Math/Code/RandomShake.test" { }
 declare module "Math/Code/RandomShake" {
-    class Host {
+    export class Host {
         /**
          * @deprecated
          * an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
@@ -2235,7 +2235,7 @@ declare module "Math/Code/RandomShake" {
 }
 declare module "Math/Code/RandomUtil.test" { }
 declare module "Math/Code/RandomUtil" {
-    class Host {
+    export class Host {
         /**
          * a random item from the given items
          * ```
@@ -2306,7 +2306,7 @@ declare module "Math/Code/RandomUtil" {
     }
 }
 declare module "Math/Code/Relation" {
-    class Host {
+    export class Host {
         /**
          * Check if the numbers are all distinct.
          * ```
@@ -2381,7 +2381,7 @@ declare module "Math/Code/Relation" {
     }
 }
 declare module "Math/Code/Sequence" {
-    class Host {
+    export class Host {
         /**
         * an array of integers from start to end inclusive.
         * ```
@@ -2467,7 +2467,7 @@ declare module "Math/Code/Sequence" {
     }
 }
 declare module "Math/Code/Stat" {
-    class Host {
+    export class Host {
         /**
          * the minimum value. Equivalent to Math.min().
          * ```
@@ -2672,7 +2672,7 @@ declare module "Math/Code/Stat" {
     }
 }
 declare module "Math/Code/Text" {
-    class Host {
+    export class Host {
         /**
         * a string of joined elements. [1,2,3] --> '1, 2 and 3'
         * ```
@@ -3016,7 +3016,7 @@ declare module "Math/Code/Triangle" {
     }
 }
 declare module "Math/Code/Trigonometry" {
-    class Host {
+    export class Host {
         /**
          * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
          * the quadrant of a point or angle: 'I','II','III' or 'IV'.
@@ -3118,7 +3118,7 @@ declare module "Math/Code/Trigonometry" {
 }
 declare module "Math/Code/Vector3D.test" { }
 declare module "Math/Code/Vector3D" {
-    class Host {
+    export class Host {
         /**
          * mean of all vectors
          * ```

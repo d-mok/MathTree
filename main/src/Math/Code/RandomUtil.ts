@@ -4,7 +4,7 @@ import { poker, dice } from 'fate'
 
 @exposeAll()
 @captureAll()
-class Host {
+export class Host {
 
 
     /**
