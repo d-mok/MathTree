@@ -4,8 +4,8 @@ import './Pen/index.ts'
 import './Soil/index.ts'
 
 
-import katexObj from 'katex'
-globalThis.katex = katexObj
+// import katexObj from 'katex'
+// globalThis.katex = katexObj
 
 
 
