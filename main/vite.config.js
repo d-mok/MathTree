@@ -7,7 +7,7 @@ module.exports = defineConfig({
             entry: path.resolve(__dirname, 'src/index.ts'),
             name: 'MyLib',
             fileName: (format) => `my-lib.${format}.js`,
-            formats: ['es','iife']
+            formats: ['es', 'iife']
         },
     },
 

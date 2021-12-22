@@ -4,6 +4,11 @@ import './Pen/index.ts'
 import './Soil/index.ts'
 
 
+import katexObj from 'katex'
+globalThis.katex = katexObj
+
+
+
 
 // polyfill for .at
 function at(this: any, n: number) {
