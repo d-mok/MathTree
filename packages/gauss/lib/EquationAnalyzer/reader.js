@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.readTree = exports.solvingSymbol = exports.solutionFlow = void 0;
-const utils_1 = require("../utils");
+import { getVars } from "../utils";
 class TreeReader {
     constructor(tree) {
         this.tree = tree;
@@ -35,7 +32,7 @@ class EquationReader {
         this.f = f;
         this.tree = tree;
         this.myTree = {};
-        this.symbols = (0, utils_1.getVars)(f);
+        this.symbols = getVars(f);
         for (let k in tree) {
             if (this.symbols.includes(k))
                 this.myTree[k] = tree[k];
@@ -128,25 +125,23 @@ class Tracer {
 /**
  * Get the ordered list of function in the sequential step when solving for these symbols under the given tree.
  */
-function solutionFlow(fs, tree, unknownSymbols) {
+export function solutionFlow(fs, tree, unknownSymbols) {
     const eqReaders = fs.map($ => new EquationReader($, tree));
     const tracer = new Tracer(tree, eqReaders);
     let flow = tracer.flow(unknownSymbols);
     return flow.map($ => $.f);
 }
-exports.solutionFlow = solutionFlow;
 /**
  * Which symbol is solved using this function under the given tree?
  */
-function solvingSymbol(f, tree) {
+export function solvingSymbol(f, tree) {
     const eqReader = new EquationReader(f, tree);
     return eqReader.solvingSymbol();
 }
-exports.solvingSymbol = solvingSymbol;
 /**
  * Read basic info of a tree.
  */
-function readTree(tree) {
+export function readTree(tree) {
     const reader = new TreeReader(tree);
     return {
         maxOrder: reader.maxOrder,
@@ -156,5 +151,4 @@ function readTree(tree) {
         solved: reader.solvedSymbols()
     };
 }
-exports.readTree = readTree;
 //# sourceMappingURL=reader.js.map

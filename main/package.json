@@ -10,9 +10,10 @@
     "build-dev": "webpack --config webpack.dev.js",
     "build-stable": "webpack --config webpack.stable.js",
     "build-type": "npx tsc --project tsconfig.d.json",
-    "jest": "jest ./src/Math",
+    "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./src/Math",
     "jest_soil": "jest ./src/Soil -debug",
-    "typedoc": "typedoc --out ../typedoc ./src/Math ./src/Pen"
+    "typedoc": "typedoc --out ../typedoc ./src/Math ./src/Pen",
+    "buildonly": "vite build"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",
@@ -25,7 +26,9 @@
     "typedoc": "^0.22.9",
     "typescript": "^4.4.4",
     "webpack": "^5.64.2",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^4.9.1",
+    "vite": "^2.7.2",
+    "cross-env": "^7.0.3"
   },
   "dependencies": {
     "contract": "file:../packages/contract",

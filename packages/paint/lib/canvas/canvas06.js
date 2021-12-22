@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas06 = void 0;
-const canvas05_1 = require("./canvas05");
+import { Canvas05 } from './canvas05';
 // math
 function deg(radian) {
     return radian / Math.PI * 180;
@@ -42,7 +39,7 @@ function polarFlip(A, O, B, mode) {
  * Handle:
  * - direction helper
  */
-class Canvas06 extends canvas05_1.Canvas05 {
+export class Canvas06 extends Canvas05 {
     // dir
     getDir(start, end) {
         let A = this.toPx(start);
@@ -108,5 +105,4 @@ class Canvas06 extends canvas05_1.Canvas05 {
         return angleUnderThreshold * pixelPerDeg;
     }
 }
-exports.Canvas06 = Canvas06;
 //# sourceMappingURL=canvas06.js.map

@@ -1,20 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.combinations = exports.permute = exports.getAllVars = exports.getVars = void 0;
-function getVars(func) {
+export function getVars(func) {
     const fnStr = func.toString();
     return fnStr
         .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
         .replaceAll(" ", "")
         .split(",");
 }
-exports.getVars = getVars;
-function getAllVars(fs) {
+export function getAllVars(fs) {
     const vars = fs.map($ => getVars($)).flat();
     return [...new Set(vars)];
 }
-exports.getAllVars = getAllVars;
-function permute(arr) {
+export function permute(arr) {
     let result = [];
     if (arr.length === 0)
         return [];
@@ -30,8 +25,7 @@ function permute(arr) {
     }
     return result;
 }
-exports.permute = permute;
-function combinations(arr, k) {
+export function combinations(arr, k) {
     if (k > arr.length || k <= 0)
         return [];
     if (k === arr.length)
@@ -49,5 +43,4 @@ function combinations(arr, k) {
     }
     return combs;
 }
-exports.combinations = combinations;
 //# sourceMappingURL=utils.js.map

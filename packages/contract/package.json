@@ -4,6 +4,7 @@
   "description": "a library for function validation",
   "main": "lib/index.js",
   "types": "lib",
+  "type": "module",
   "files": [
     "/lib"
   ],

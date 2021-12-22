@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas08 = void 0;
-const canvas07_1 = require("./canvas07");
+import { Canvas07 } from "./canvas07";
 const LABEL_OFFSET_PX = 15;
 const X_MARK_OFFSET_PX = 15;
 const Y_MARK_OFFSET_PX = 10;
@@ -30,7 +27,7 @@ function getTicks(min, max, interval) {
  * Handle:
  * - Axis
  */
-class Canvas08 extends canvas07_1.Canvas07 {
+export class Canvas08 extends Canvas07 {
     xAxis() {
         let A = this.edgeLeft(0);
         let B = this.edgeRight(0);
@@ -110,5 +107,4 @@ class Canvas08 extends canvas07_1.Canvas07 {
         this.restore();
     }
 }
-exports.Canvas08 = Canvas08;
 //# sourceMappingURL=canvas08.js.map

@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.trimCanvas = void 0;
 function getAlpha(img, x, y) {
     let i = 0;
     i += y * img.width;
@@ -52,9 +49,8 @@ function trimCanvasY(canvas) {
     canvas.height = trimmed.height;
     ctx.putImageData(trimmed, 0, 0);
 }
-function trimCanvas(canvas) {
+export function trimCanvas(canvas) {
     trimCanvasX(canvas);
     trimCanvasY(canvas);
 }
-exports.trimCanvas = trimCanvas;
 //# sourceMappingURL=trim.js.map

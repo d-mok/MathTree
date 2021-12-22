@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas04 = void 0;
-const canvas03_1 = require("./canvas03");
+import { Canvas03 } from './canvas03';
 function rad(degree) {
     return degree * Math.PI / 180;
 }
@@ -41,7 +38,7 @@ function moveDot(A, B, dist) {
  * - transform
  * - drawing in pixel and coordinates
  */
-class Canvas04 extends canvas03_1.Canvas03 {
+export class Canvas04 extends Canvas03 {
     // transform
     translateTo(pt) {
         let [x, y] = this.toPx(pt);
@@ -159,5 +156,4 @@ class Canvas04 extends canvas03_1.Canvas03 {
         this.$ALPHA = alpha;
     }
 }
-exports.Canvas04 = Canvas04;
 //# sourceMappingURL=canvas04.js.map

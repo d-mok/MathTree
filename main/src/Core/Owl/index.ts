@@ -100,6 +100,9 @@ export const point2Ds = (_: unknown): _ is Point2D[] => arrayWith(point2D)(_)
 
 export const point3D = (_: unknown): _ is Point3D => triple(_)
 
+export const point3Ds = (_: unknown): _ is Point3D[] => arrayWith(point3D)(_)
+
+
 export const polar = (_: unknown): _ is PolarPoint => couple(_) && _[0] >= 0
 
 export const fraction = (_: unknown): _ is Fraction => couple(_)

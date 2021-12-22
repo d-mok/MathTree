@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchRule = void 0;
 function nameOf(f) {
     return f.name ?? f.toString();
 }
@@ -36,7 +33,7 @@ function isObj(rule) {
         !Array.isArray(rule) &&
         rule !== null;
 }
-function matchRule(val, rule) {
+export function matchRule(val, rule) {
     if (isOne(rule))
         return matchOne(val, rule);
     if (isAnd(rule))
@@ -45,5 +42,4 @@ function matchRule(val, rule) {
         return matchObj(val, rule);
     return 'fail to recognize the rule';
 }
-exports.matchRule = matchRule;
 //# sourceMappingURL=rule.js.map

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas07 = void 0;
-const canvas06_1 = require("./canvas06");
+import { Canvas06 } from "./canvas06";
 // step
 function isOdd(n) {
     return n % 2 !== 0;
@@ -47,7 +44,7 @@ function mid(A, B) {
  * Handle:
  * - basic elements
  */
-class Canvas07 extends canvas06_1.Canvas06 {
+export class Canvas07 extends Canvas06 {
     linePx(dots) {
         this.createPathPx(dots);
         this.doStroke();
@@ -185,5 +182,4 @@ class Canvas07 extends canvas06_1.Canvas06 {
         this.restore();
     }
 }
-exports.Canvas07 = Canvas07;
 //# sourceMappingURL=canvas07.js.map

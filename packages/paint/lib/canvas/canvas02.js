@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas02 = void 0;
-const canvas01_1 = require("./canvas01");
-const capture_1 = require("../support/capture");
+import { Canvas01 } from './canvas01';
+import { thingsToPoints } from '../support/capture';
 function proj(point3D, angle, depth) {
     let a = angle * Math.PI / 180;
     let s = Math.sin(a);
@@ -22,7 +19,7 @@ function forceProj(point, angle, depth) {
  * - 3D coordinate to px conversion
  * - capturing things
  */
-class Canvas02 extends canvas01_1.Canvas01 {
+export class Canvas02 extends Canvas01 {
     constructor() {
         // setting
         super(...arguments);
@@ -42,10 +39,9 @@ class Canvas02 extends canvas01_1.Canvas01 {
     }
     // capture
     capture(things) {
-        let pts = (0, capture_1.thingsToPoints)(things);
+        let pts = thingsToPoints(things);
         let pt2Ds = this.pjs(pts);
         this.capturePoints2D(pt2Ds);
     }
 }
-exports.Canvas02 = Canvas02;
 //# sourceMappingURL=canvas02.js.map

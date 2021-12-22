@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas01 = void 0;
-const canvas00_1 = require("./canvas00");
+import { Canvas00 } from './canvas00';
 // pixel conversion
 function toPixelX(xmin, xmax, width, xCoord) {
     return (xCoord - xmin) / (xmax - xmin) * width;
@@ -14,7 +11,7 @@ function toPixelY(ymin, ymax, height, yCoord) {
  * - 2D coordinate definition
  * - 2D coordinate to px conversion
  */
-class Canvas01 extends canvas00_1.Canvas00 {
+export class Canvas01 extends Canvas00 {
     constructor() {
         // coord
         super(...arguments);
@@ -115,5 +112,4 @@ class Canvas01 extends canvas00_1.Canvas00 {
         return [x, y];
     }
 }
-exports.Canvas01 = Canvas01;
 //# sourceMappingURL=canvas01.js.map

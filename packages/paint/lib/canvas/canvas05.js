@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas05 = void 0;
-const canvas04_1 = require("./canvas04");
+import { Canvas04 } from './canvas04';
 function sin(degree) {
     return Math.sin(degree / 180 * Math.PI);
 }
@@ -44,7 +41,7 @@ function isAlphabet(_) {
  * Handle:
  * - text basic
  */
-class Canvas05 extends canvas04_1.Canvas04 {
+export class Canvas05 extends Canvas04 {
     // text in pixel
     plainPx(text, dot) {
         text = String(text);
@@ -124,5 +121,4 @@ class Canvas05 extends canvas04_1.Canvas04 {
             this.plainSemi(text);
     }
 }
-exports.Canvas05 = Canvas05;
 //# sourceMappingURL=canvas05.js.map

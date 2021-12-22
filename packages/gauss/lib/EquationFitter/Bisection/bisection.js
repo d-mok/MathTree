@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Bisection = void 0;
 function randomUniform(range) {
     const [min, max] = range;
     return Math.random() * (max - min) + min;
@@ -33,7 +30,7 @@ function equal(a, b) {
     return a.every(($, i) => $ === b[i])
         && a.length === b.length;
 }
-class Bisection {
+export class Bisection {
     constructor(equation, ranges) {
         this.equation = equation;
         this.ranges = ranges;
@@ -103,5 +100,4 @@ class Bisection {
         }
     }
 }
-exports.Bisection = Bisection;
 //# sourceMappingURL=bisection.js.map

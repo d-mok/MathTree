@@ -36,7 +36,7 @@ class Host {
     }
 
 
-    
+
     /**
      * the vertex [h,k] of y=ax^2+bx+c.
      * ```

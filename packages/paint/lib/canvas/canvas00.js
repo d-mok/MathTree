@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas00 = void 0;
-const trim_1 = require("../support/trim");
+import { trimCanvas } from '../support/trim';
 // The scale factor of canvas size for clearer image.
 const QUALITY = 3;
 // The scale factor for width and height settings.
@@ -20,7 +17,7 @@ function pxToInch(px) {
  * - save and restore canvas image
  * - exporting
  */
-class Canvas00 {
+export class Canvas00 {
     constructor() {
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext("2d");
@@ -78,7 +75,7 @@ class Canvas00 {
     export(html, placeholder, trim) {
         let cv = cloneCanvas(this.canvas);
         if (trim)
-            (0, trim_1.trimCanvas)(cv);
+            trimCanvas(cv);
         const displayWidth = Math.floor(cv.width / QUALITY);
         const displayHeight = Math.floor(cv.height / QUALITY);
         const src = `src="${cv.toDataURL()}"`;
@@ -90,7 +87,6 @@ class Canvas00 {
         return html.replace('src="' + placeholder + '"', src + width + height + bg);
     }
 }
-exports.Canvas00 = Canvas00;
 /**
  * Return a clone of the canvas.
  */

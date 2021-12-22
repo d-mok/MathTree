@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.thingsToPoints = void 0;
 function getCircleCorners(center, radius) {
     let [h, k] = center;
     let r = radius;
@@ -48,7 +45,7 @@ function isSphere(thing) {
         && isPoint3D(thing[0])
         && typeof thing[1] === 'number';
 }
-function thingsToPoints(things) {
+export function thingsToPoints(things) {
     let pts = [];
     for (let th of things) {
         if (isPoint2D(th)) {
@@ -70,5 +67,4 @@ function thingsToPoints(things) {
     }
     return pts;
 }
-exports.thingsToPoints = thingsToPoints;
 //# sourceMappingURL=capture.js.map

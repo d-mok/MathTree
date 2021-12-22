@@ -1,15 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.captureAll = exports.captureIt = exports.capture = void 0;
-const util_1 = require("../util");
+import { err, join, str, brand, transferBrand, makeStaticDecorator, getClassStaticNames } from '../util';
 function catchString(f, vals, e) {
-    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + e);
+    return err(f, 'args = (' + join(vals) + ')', 'throw: ' + e);
 }
 function catchErrObj(f, vals, e) {
-    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + e.name, 'message: ' + e.message);
+    return err(f, 'args = (' + join(vals) + ')', 'throw: ' + e.name, 'message: ' + e.message);
 }
 function catchAny(f, vals, e) {
-    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + (0, util_1.str)(e));
+    return err(f, 'args = (' + join(vals) + ')', 'throw: ' + str(e));
 }
 function isError(e) {
     return typeof e === 'object' && e !== null && 'name' in e && 'message' in e;
@@ -26,8 +23,8 @@ function catchErr(f, vals, e) {
         return catchErrObj(f, vals, e);
     return catchAny(f, vals, e);
 }
-function capture(f) {
-    (0, util_1.brand)(f);
+export function capture(f) {
+    brand(f);
     const nf = (...args) => {
         try {
             return f(...args);
@@ -36,17 +33,15 @@ function capture(f) {
             throw catchErr(f, args, e);
         }
     };
-    (0, util_1.transferBrand)(f, nf);
+    transferBrand(f, nf);
     return nf;
 }
-exports.capture = capture;
-function captureIt() {
-    return (0, util_1.makeStaticDecorator)($ => capture($));
+export function captureIt() {
+    return makeStaticDecorator($ => capture($));
 }
-exports.captureIt = captureIt;
-function captureAll() {
+export function captureAll() {
     return function (constructor) {
-        for (let key of (0, util_1.getClassStaticNames)(constructor)) {
+        for (let key of getClassStaticNames(constructor)) {
             let descriptor = Object.getOwnPropertyDescriptor(constructor, key);
             if (descriptor !== undefined) {
                 descriptor.value = capture(descriptor.value);
@@ -55,5 +50,4 @@ function captureAll() {
         }
     };
 }
-exports.captureAll = captureAll;
 //# sourceMappingURL=capture.js.map

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas10 = void 0;
-const canvas09_1 = require("./canvas09");
+import { Canvas09 } from "./canvas09";
 function degrize(text) {
     return typeof text === 'number'
         ? text + '°'
@@ -23,7 +20,7 @@ function mid(A, B) {
  * Handle:
  * - label
  */
-class Canvas10 extends canvas09_1.Canvas09 {
+export class Canvas10 extends Canvas09 {
     labelPoint(text, point, dir, radius) {
         this.label(text, point, radius, dir);
     }
@@ -43,5 +40,4 @@ class Canvas10 extends canvas09_1.Canvas09 {
         this.label(text, M, radius, normal + dir);
     }
 }
-exports.Canvas10 = Canvas10;
 //# sourceMappingURL=canvas10.js.map

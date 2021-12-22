@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sectoroid = void 0;
-const trace_1 = require("./trace");
+import { traceCircle } from './trace';
 function vec(p1, p2) {
     let [x1, y1] = p1;
     let [x2, y2] = p2;
@@ -20,7 +17,7 @@ function argument([x, y]) {
         angle += 360;
     return angle;
 }
-function sectoroid(O, A, B, vertices) {
+export function sectoroid(O, A, B, vertices) {
     let v1 = vec(O, A);
     let v2 = vec(O, B);
     let r = magnitude(v1);
@@ -28,8 +25,7 @@ function sectoroid(O, A, B, vertices) {
     let q2 = argument(v2);
     if (q2 < q1)
         q2 += 360;
-    let points = (0, trace_1.traceCircle)(O, r, [q1, q2]);
+    let points = traceCircle(O, r, [q1, q2]);
     return [A, ...points, B, ...vertices];
 }
-exports.sectoroid = sectoroid;
 //# sourceMappingURL=sectoroid.js.map

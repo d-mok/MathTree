@@ -29,6 +29,3 @@ for (const C of [Array, String, TypedArray]) {
             configurable: true
         })
 }
-
-
-console.log('MathTree 1')

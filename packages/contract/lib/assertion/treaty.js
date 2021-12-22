@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchTreaty = void 0;
 function nameOf(f) {
     return f.name ?? f.toString();
 }
@@ -19,12 +16,11 @@ function isOne(treaty) {
 function isAnd(treaty) {
     return Array.isArray(treaty);
 }
-function matchTreaty(vals, treaty) {
+export function matchTreaty(vals, treaty) {
     if (isOne(treaty))
         return matchOne(vals, treaty);
     if (isAnd(treaty))
         return matchAnd(vals, treaty);
     return 'fail to recognize the rule';
 }
-exports.matchTreaty = matchTreaty;
 //# sourceMappingURL=treaty.js.map

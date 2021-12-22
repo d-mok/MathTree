@@ -29896,8 +29896,8 @@ exports.printLabeledValue = printLabeledValue;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.labeledValue1 = exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3D = exports.point2Ds = exports.point2D = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
-exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.field = exports.constraints = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = exports.fail = exports.pass = exports.quantity = exports.labeledValue = exports.labeledValue2 = void 0;
+exports.trigExp = exports.trigValue = exports.polynomial = exports.monomial = exports.triangleSides = exports.vector3D = exports.vector = exports.properFraction = exports.fraction = exports.polar = exports.point3Ds = exports.point3D = exports.point2Ds = exports.point2D = exports.interval = exports.ntuple = exports.combo = exports.triple = exports.couple = exports.arrayWith = exports.arrayOfLength = exports.array = exports.emptyObject = exports.object = exports.bool = exports.str = exports.absBetween = exports.between = exports.nonZeroInt = exports.nonZero = exports.zero = exports.nonPositiveInt = exports.nonPositive = exports.negativeInt = exports.negative = exports.nonNegativeInt = exports.nonNegative = exports.positiveInt = exports.positive = exports.sq = exports.prob = exports.even = exports.odd = exports.irrational = exports.rational = exports.terminating = exports.dec = exports.int = exports.whole = exports.num = void 0;
+exports.every = exports.or = exports.and = exports.base = exports.roman = exports.trig = exports.quadrant = exports.quadrantName = exports.quadrantCode = exports.field = exports.constraints = exports.constraint = exports.dfrac = exports.ineq = exports.alphabet = exports.distinct = exports.fail = exports.pass = exports.quantity = exports.labeledValue = exports.labeledValue2 = exports.labeledValue1 = void 0;
 const num = (_) => Number.isFinite(_);
 exports.num = num;
 const whole = (_) => Number.isInteger(_);
@@ -29978,6 +29978,8 @@ const point2Ds = (_) => (0, exports.arrayWith)(exports.point2D)(_);
 exports.point2Ds = point2Ds;
 const point3D = (_) => (0, exports.triple)(_);
 exports.point3D = point3D;
+const point3Ds = (_) => (0, exports.arrayWith)(exports.point3D)(_);
+exports.point3Ds = point3Ds;
 const polar = (_) => (0, exports.couple)(_) && _[0] >= 0;
 exports.polar = polar;
 const fraction = (_) => (0, exports.couple)(_);
@@ -30147,7 +30149,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const contract_1 = __webpack_require__(1154);
+const contract_1 = __webpack_require__(9110);
 let Host = class Host {
     /**
      * Solve [x,y] from ax+by=c and px+qy=r.
@@ -30251,7 +30253,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const contract_1 = __webpack_require__(1154);
+const contract_1 = __webpack_require__(9110);
 let Host = class Host {
     /**
      * D,E,F of circle general form
@@ -30358,7 +30360,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const contract_1 = __webpack_require__(1154);
+const contract_1 = __webpack_require__(9110);
 let Host = class Host {
     /**
      * [x-int,y-int,slope] of ax+by+c=0
@@ -30507,14 +30509,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const contract_1 = __webpack_require__(1154);
+const contract_1 = __webpack_require__(9110);
+const PolynomialClass_1 = __webpack_require__(6517);
 let Host = class Host {
     /**
      * @deprecated
      * a monomial object
      */
     static Monomial(coeff, vars) {
-        return new MonomialCls(coeff, vars);
+        return new PolynomialClass_1.MonomialCls(coeff, vars);
     }
     /**
      * clone a polynomial
@@ -30535,7 +30538,7 @@ let Host = class Host {
      */
     static RndPolynomial(degree, vars = ["x"], terms = degree + 1, maxCoeff = 9) {
         let RndMono = () => {
-            let M = new MonomialCls();
+            let M = new PolynomialClass_1.MonomialCls();
             M.random(RndN(0, degree), vars, maxCoeff);
             return M;
         };
@@ -30664,6 +30667,99 @@ Host = __decorate([
 
 /***/ }),
 
+/***/ 6517:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MonomialCls = void 0;
+/**
+ * @ignore
+ */
+class MonomialCls {
+    constructor(coeff = 0, vars = []) {
+        this.coeff = coeff;
+        this.vars = vars;
+    }
+    clone() {
+        let coeff = this.coeff;
+        let vars = JSON.parse(JSON.stringify(this.vars));
+        return new MonomialCls(coeff, vars);
+    }
+    random(degree, variables, maxCoeff) {
+        let f = () => {
+            let M = new MonomialCls();
+            M.coeff = RndZ(1, maxCoeff);
+            for (let v of variables) {
+                if (variables.length === 1) {
+                    M.vars.push({ variable: v, power: degree });
+                }
+                else {
+                    M.vars.push({ variable: v, power: RndN(0, degree) });
+                }
+            }
+            return M;
+        };
+        let mon = dice(f).shield(M => M.degree() === degree).roll();
+        this.coeff = mon.coeff;
+        this.vars = mon.vars;
+    }
+    degree() {
+        return Sum(...this.vars.map(_ => _.power));
+    }
+    sortedVars() {
+        return SortBy([...this.vars], _ => _.variable.charCodeAt(0));
+    }
+    size() {
+        let s = this.degree();
+        let order = 1;
+        for (let { variable, power } of this.sortedVars()) {
+            order = order / 10;
+            s += order * power;
+        }
+        return s;
+    }
+    signature() {
+        return JSON.stringify(this.sortedVars());
+    }
+    sort() {
+        this.vars = this.sortedVars();
+    }
+    print() {
+        let term = String(this.coeff);
+        if (this.coeff === 0)
+            return term;
+        for (let v of this.vars) {
+            let l = v.variable;
+            let p = v.power;
+            if (p === 0) {
+                continue;
+            }
+            else if (p === 1) {
+                term += l;
+            }
+            else {
+                term += l + '^{' + p + '}';
+            }
+        }
+        return term;
+    }
+    func() {
+        return (input) => {
+            let x = this.coeff;
+            for (let { variable, power } of this.vars) {
+                x = x * (input[variable] ** power);
+            }
+            return x;
+        };
+    }
+}
+exports.MonomialCls = MonomialCls;
+
+
+/***/ }),
+
 /***/ 3286:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -30676,7 +30772,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const contract_1 = __webpack_require__(1154);
+const contract_1 = __webpack_require__(9110);
 let Host = class Host {
     /**
      * the discriminant b^2-4ac.
@@ -31213,7 +31309,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EquSystem = void 0;
 const variable_1 = __webpack_require__(7515);
 const latex_1 = __webpack_require__(1838);
-const gauss_1 = __webpack_require__(6912);
+const gauss_1 = __webpack_require__(214);
 class EquSystem {
     constructor(variables, equations) {
         this.variables = variables;
@@ -31625,1618 +31721,1665 @@ exports.Variables = Variables;
 /***/ }),
 
 /***/ 8004:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Assertion
- * @return check is a finite number.
- * ```
- * IsNum(1.23) // true
- * IsNum(NaN) // false
- * IsNum(Infinity) // false
- * IsNum('2') // false
- * ```
- */
-function IsNum(...items) {
-    return items.every(owl.num);
-}
-globalThis.IsNum = IsNum;
-/**
- * @category Assertion
- * @return check is an integer.
- * ```
- * IsInteger(5) // true
- * IsInteger(0.5) // false
- * ```
- */
-function IsInteger(...items) {
-    return items.every(owl.int);
-}
-globalThis.IsInteger = IsInteger;
-/**
- * @category Assertion
- * @return check is a decimal (non-integer).
- * ```
- * IsDecimal(0.5) // true
- * IsDecimal(5) // false
- * ```
- */
-function IsDecimal(...items) {
-    return items.every(owl.dec);
-}
-globalThis.IsDecimal = IsDecimal;
-/**
- * @category Assertion
- * @return check is a terminating decimal (or integer)
- * ```
- * IsTerminating(1/4) // true
- * IsTerminating(5) // false
- * ```
- */
-function IsTerminating(...items) {
-    return items.every(owl.terminating);
-}
-globalThis.IsTerminating = IsTerminating;
-/**
- * @category Assertion
- * @return check is a rational number with denominator <= 1000.
- * ```
- * IsRational(0.5) // true
- * IsRational(-5) // true
- * IsRational(Math.sqrt(2)) // false
- * ```
- */
-function IsRational(...items) {
-    return items.every(owl.rational);
-}
-globalThis.IsRational = IsRational;
-/**
- * @category Assertion
- * @return check is an odd integer.
- * ```
- * IsOdd(5) // true
- * IsOdd(-5) // true
- * IsOdd(4) // false
- * ```
- */
-function IsOdd(...items) {
-    return items.every(owl.odd);
-}
-globalThis.IsOdd = IsOdd;
-/**
- * @category Assertion
- * @return check is an even integer.
- * ```
- * IsEven(4) // true
- * IsEven(-4) // true
- * IsEven(0) // true
- * IsEven(5) // false
- * ```
- */
-function IsEven(...items) {
-    return items.every(owl.even);
-}
-globalThis.IsEven = IsEven;
-/**
- * @category Assertion
- * @return check is in range [0,1].
- * ```
- * IsProbability(0) // true
- * IsProbability(0.5467) // true
- * IsProbability(1.1) // false
- * IsProbability(-0.1) // false
- * ```
- */
-function IsProbability(...items) {
-    return items.every(owl.prob);
-}
-globalThis.IsProbability = IsProbability;
-/**
- * @category Assertion
- * @return check is a square number.
- * ```
- * IsSquareNum(9) // true
- * IsSquareNum(10) // false
- * IsSquareNum(-9) // false
- * ```
- */
-function IsSquareNum(...items) {
-    return items.every(owl.sq);
-}
-globalThis.IsSquareNum = IsSquareNum;
-/**
- * @category Assertion
- * @return check is positive.
- * ```
- * IsPositive(2) // true
- * IsPositive(0) // false
- * IsPositive(-2) // false
- * ```
- */
-function IsPositive(...items) {
-    return items.every(owl.positive);
-}
-globalThis.IsPositive = IsPositive;
-/**
- * @category Assertion
- * @return check is non-negative.
- * ```
- * IsNonNegative(2) // true
- * IsNonNegative(0) // true
- * IsNonNegative(-2) // false
- * IsNonNegative(1.5) // true
- * ```
- */
-function IsNonNegative(...items) {
-    return items.every(owl.nonNegative);
-}
-globalThis.IsNonNegative = IsNonNegative;
-/**
- * @category Assertion
- * @return check is a positive integer.
- * ```
- * IsPositiveInteger(2) // true
- * IsPositiveInteger(0) // false
- * IsPositiveInteger(-2) // false
- * IsPositiveInteger(1.5) // false
- * ```
- */
-function IsPositiveInteger(...items) {
-    return items.every(owl.positiveInt);
-}
-globalThis.IsPositiveInteger = IsPositiveInteger;
-/**
- * @category Assertion
- * @return check is a non-negative integer.
- * ```
- * IsNonNegativeInteger(2) // true
- * IsNonNegativeInteger(0) // true
- * IsNonNegativeInteger(-2) // false
- * IsNonNegativeInteger(1.5) // false
- * ```
- */
-function IsNonNegativeInteger(...items) {
-    return items.every(owl.nonNegativeInt);
-}
-globalThis.IsNonNegativeInteger = IsNonNegativeInteger;
-/**
- * @category Assertion
- * @return check is negative.
- * ```
- * IsNegative(-2) // true
- * IsNegative(0) // false
- * IsNegative(2) // false
- * ```
- */
-function IsNegative(...items) {
-    return items.every(owl.negative);
-}
-globalThis.IsNegative = IsNegative;
-/**
- * @category Assertion
- * @return check is non-zero finite number.
- * ```
- * IsNonZero(2) // true
- * IsNonZero(0) // false
- * IsNonZero(-2) // true
- * ```
- */
-function IsNonZero(...items) {
-    return items.every(owl.nonZero);
-}
-globalThis.IsNonZero = IsNonZero;
-/**
- * @category Assertion
- * @return check is between min and max inclusive.
- * ```
- * IsBetween(2,5)(3) // true
- * IsBetween(2,5)(2) // true
- * IsBetween(2,5)(1) // false
- * ```
- */
-function IsBetween(min, max) {
-    return (...items) => items.every(owl.between(min, max));
-}
-globalThis.IsBetween = contract(IsBetween).seal({
-    arg: [owl.num],
-    args: function is_range(min, max) { return min < max; }
-});
-/**
- * @category Assertion
- * @return check if its abs is between min and max inclusive.
- * ```
- * IsAbsBetween(2,5)(-3) // true
- * IsAbsBetween(2,5)(-2) // true
- * IsAbsBetween(2,5)(1) // false
- * ```
- */
-function IsAbsBetween(min, max) {
-    return (...items) => items.every(owl.absBetween(min, max));
-}
-globalThis.IsAbsBetween = contract(IsAbsBetween).seal({
-    arg: [owl.nonNegative],
-    args: function is_range(min, max) { return min < max; }
-});
-/**
- * @category Assertion
- * @return Check if the points are chessboard around anchor.
- * ```
- * IsAroundPoint([0,0],2)([2,2]) // true
- * IsAroundPoint([0,0],2)([3,0]) // false
- * ```
- */
-function IsAroundPoint(anchor, range) {
-    return (...points) => points.every(p => ChessboardDistance(anchor, p) <= range);
-}
-globalThis.IsAroundPoint = contract(IsAroundPoint).sign([owl.point2D, owl.positive]);
-/**
- * @category Assertion
- * @return Check if the array of legnths can form a triangle
- * ```
- * IsTriangle([1,1,1]) // true
- * IsTriangle([6,7,8]) // true
- * IsTriangle([1,2,3]) // false
- * IsTriangle([6,14,8]) // false
- * ```
- */
-function IsTriangle(...triangles) {
-    return triangles.every(owl.triangleSides);
-}
-globalThis.IsTriangle = contract(IsTriangle).sign([owl.triple]);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * check is a finite number.
+     * ```
+     * IsNum(1.23) // true
+     * IsNum(NaN) // false
+     * IsNum(Infinity) // false
+     * IsNum('2') // false
+     * ```
+     */
+    static IsNum(...items) {
+        return items.every(owl.num);
+    }
+    /**
+     * check is an integer.
+     * ```
+     * IsInteger(5) // true
+     * IsInteger(0.5) // false
+     * ```
+     */
+    static IsInteger(...items) {
+        return items.every(owl.int);
+    }
+    /**
+     * check is a decimal (non-integer).
+     * ```
+     * IsDecimal(0.5) // true
+     * IsDecimal(5) // false
+     * ```
+     */
+    static IsDecimal(...items) {
+        return items.every(owl.dec);
+    }
+    /**
+     * check is a terminating decimal (or integer)
+     * ```
+     * IsTerminating(1/4) // true
+     * IsTerminating(5) // false
+     * ```
+     */
+    static IsTerminating(...items) {
+        return items.every(owl.terminating);
+    }
+    /**
+     * check is a rational number with denominator <= 1000.
+     * ```
+     * IsRational(0.5) // true
+     * IsRational(-5) // true
+     * IsRational(Math.sqrt(2)) // false
+     * ```
+     */
+    static IsRational(...items) {
+        return items.every(owl.rational);
+    }
+    /**
+     * check is an odd integer.
+     * ```
+     * IsOdd(5) // true
+     * IsOdd(-5) // true
+     * IsOdd(4) // false
+     * ```
+     */
+    static IsOdd(...items) {
+        return items.every(owl.odd);
+    }
+    /**
+     * check is an even integer.
+     * ```
+     * IsEven(4) // true
+     * IsEven(-4) // true
+     * IsEven(0) // true
+     * IsEven(5) // false
+     * ```
+     */
+    static IsEven(...items) {
+        return items.every(owl.even);
+    }
+    /**
+     * check is in range [0,1].
+     * ```
+     * IsProbability(0) // true
+     * IsProbability(0.5467) // true
+     * IsProbability(1.1) // false
+     * IsProbability(-0.1) // false
+     * ```
+     */
+    static IsProbability(...items) {
+        return items.every(owl.prob);
+    }
+    /**
+     * check is a square number.
+     * ```
+     * IsSquareNum(9) // true
+     * IsSquareNum(10) // false
+     * IsSquareNum(-9) // false
+     * ```
+     */
+    static IsSquareNum(...items) {
+        return items.every(owl.sq);
+    }
+    /**
+     * check is positive.
+     * ```
+     * IsPositive(2) // true
+     * IsPositive(0) // false
+     * IsPositive(-2) // false
+     * ```
+     */
+    static IsPositive(...items) {
+        return items.every(owl.positive);
+    }
+    /**
+     * check is non-negative.
+     * ```
+     * IsNonNegative(2) // true
+     * IsNonNegative(0) // true
+     * IsNonNegative(-2) // false
+     * IsNonNegative(1.5) // true
+     * ```
+     */
+    static IsNonNegative(...items) {
+        return items.every(owl.nonNegative);
+    }
+    /**
+     * check is a positive integer.
+     * ```
+     * IsPositiveInteger(2) // true
+     * IsPositiveInteger(0) // false
+     * IsPositiveInteger(-2) // false
+     * IsPositiveInteger(1.5) // false
+     * ```
+     */
+    static IsPositiveInteger(...items) {
+        return items.every(owl.positiveInt);
+    }
+    /**
+     * check is a non-negative integer.
+     * ```
+     * IsNonNegativeInteger(2) // true
+     * IsNonNegativeInteger(0) // true
+     * IsNonNegativeInteger(-2) // false
+     * IsNonNegativeInteger(1.5) // false
+     * ```
+     */
+    static IsNonNegativeInteger(...items) {
+        return items.every(owl.nonNegativeInt);
+    }
+    /**
+     * check is negative.
+     * ```
+     * IsNegative(-2) // true
+     * IsNegative(0) // false
+     * IsNegative(2) // false
+     * ```
+     */
+    static IsNegative(...items) {
+        return items.every(owl.negative);
+    }
+    /**
+     * check is non-zero finite number.
+     * ```
+     * IsNonZero(2) // true
+     * IsNonZero(0) // false
+     * IsNonZero(-2) // true
+     * ```
+     */
+    static IsNonZero(...items) {
+        return items.every(owl.nonZero);
+    }
+    /**
+     * check is between min and max inclusive.
+     * ```
+     * IsBetween(2,5)(3) // true
+     * IsBetween(2,5)(2) // true
+     * IsBetween(2,5)(1) // false
+     * ```
+     */
+    static IsBetween(min, max) {
+        return (...items) => items.every(owl.between(min, max));
+    }
+    /**
+     * check if its abs is between min and max inclusive.
+     * ```
+     * IsAbsBetween(2,5)(-3) // true
+     * IsAbsBetween(2,5)(-2) // true
+     * IsAbsBetween(2,5)(1) // false
+     * ```
+     */
+    static IsAbsBetween(min, max) {
+        return (...items) => items.every(owl.absBetween(min, max));
+    }
+    /**
+     * Check if the points are chessboard around anchor.
+     * ```
+     * IsAroundPoint([0,0],2)([2,2]) // true
+     * IsAroundPoint([0,0],2)([3,0]) // false
+     * ```
+     */
+    static IsAroundPoint(anchor, range) {
+        return (...points) => points.every(p => ChessboardDistance(anchor, p) <= range);
+    }
+    /**
+     * Check if the array of legnths can form a triangle
+     * ```
+     * IsTriangle([1,1,1]) // true
+     * IsTriangle([6,7,8]) // true
+     * IsTriangle([1,2,3]) // false
+     * IsTriangle([6,14,8]) // false
+     * ```
+     */
+    static IsTriangle(...triangles) {
+        return triangles.every(owl.triangleSides);
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.num),
+    (0, contract_1.inspectIt)(function is_range(min, max) { return min < max; })
+], Host, "IsBetween", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonNegative),
+    (0, contract_1.inspectIt)(function is_range(min, max) { return min < max; })
+], Host, "IsAbsBetween", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.positive)
+], Host, "IsAroundPoint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.triple)
+], Host, "IsTriangle", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 5315:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Combinatorics
- * @return the factorial n!
- * ```
- * Factorial(5) // 120
- * Factorial(1.5) // throw
- * ```
- */
-function Factorial(n) {
-    return cal.factorial(n);
-}
-globalThis.Factorial = contract(Factorial).sign([owl.nonNegativeInt]);
-/**
- * @category Combinatorics
- * @return nCr
- * ```
- * nCr(5,3) // 10
- * ```
- */
-function nCr(n, r) {
-    return cal.nCr(n, r);
-}
-globalThis.nCr = contract(nCr).seal({
-    arg: [owl.nonNegativeInt],
-    args: function r_less_than_n(n, r) { return n >= r; }
-});
-/**
- * @category Combinatorics
- * @return nPr
- * ```
- * nPr(5,3) // 60
- * ```
- */
-function nPr(n, r) {
-    return cal.nPr(n, r);
-}
-globalThis.nPr = contract(nPr).seal({
-    arg: [owl.nonNegativeInt],
-    args: function r_less_than_n(n, r) { return n >= r; }
-});
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * the factorial n!
+     * ```
+     * Factorial(5) // 120
+     * Factorial(1.5) // throw
+     * ```
+     */
+    static Factorial(n) {
+        return cal.factorial(n);
+    }
+    /**
+     * nCr
+     * ```
+     * nCr(5,3) // 10
+     * ```
+     */
+    static nCr(n, r) {
+        return cal.nCr(n, r);
+    }
+    /**
+     * nPr
+     * ```
+     * nPr(5,3) // 60
+     * ```
+     */
+    static nPr(n, r) {
+        return cal.nPr(n, r);
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.nonNegativeInt)
+], Host, "Factorial", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonNegativeInt),
+    (0, contract_1.inspectIt)(function r_less_than_n(n, r) { return n >= r; })
+], Host, "nCr", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonNegativeInt),
+    (0, contract_1.inspectIt)(function r_less_than_n(n, r) { return n >= r; })
+], Host, "nPr", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 27:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Function
- * @return log(b,N)
- * ```
- * log(2,8) // 3
- * ```
- */
-function log(b, N) {
-    const v = Math.log(N) / Math.log(b);
-    return cal.blur(v);
-}
-globalThis.log = contract(log).sign([owl.positive]);
-/**
- * @deprecated
- * @ignore
- * @category Function
- * @return a**b, a to the power of b.
- * ```
- * Power(2,3) // 8
- * ```
- */
-function Power(a, b) {
-    const v = Math.pow(a, b);
-    return cal.blur(v);
-}
-globalThis.Power = contract(Power).sign([owl.num]);
-/**
- * @category Function
- * @return square root of x
- * ```
- * Sqrt(4) // 2
- * ```
- */
-function Sqrt(x) {
-    const v = Math.sqrt(x);
-    return cal.blur(v);
-}
-globalThis.Sqrt = contract(Sqrt).sign([owl.nonNegative]);
-/**
- * @category Function
- * @return the radian of the degree
- * ```
- * Radian(180) // pi
- * Radian(90) // pi/2
- * Radian(30) // PI/6
- * ```
- */
-function Radian(degree) {
-    const v = degree / 180 * Math.PI;
-    return cal.blur(v);
-}
-globalThis.Radian = contract(Radian).sign([owl.num]);
-/**
- * @category Function
- * @return the degree of the radian
- * ```
- * Degree(Math.PI) // 180
- * Degree(Math.PI/2) // 90
- * Degree(Math.PI/6) // 30
- * ```
- */
-function Degree(radian) {
-    const v = radian * 180 / Math.PI;
-    return cal.blur(v);
-}
-globalThis.Degree = contract(Degree).sign([owl.num]);
-/**
- * @category Function
- * @return sin(x).
- * ```
- * sin(30) // 0.5
- * ```
- */
-function sin(x) {
-    if (x % 180 === 0)
-        return 0;
-    let v = Math.sin(x / 180 * Math.PI);
-    return cal.blur(v);
-}
-globalThis.sin = contract(sin).sign([owl.num]);
-/**
- * @category Function
- * @return cos(x).
- * ```
- * cos(60) // 0.5
- * ```
- */
-function cos(x) {
-    if ((x - 90) % 180 === 0)
-        return 0;
-    let v = Math.cos(x / 180 * Math.PI);
-    return cal.blur(v);
-}
-globalThis.cos = contract(cos).sign([owl.num]);
-/**
- * @category Function
- * @return tan(x).
- * ```
- * tan(45) // 1
- * ```
- */
-function tan(x) {
-    if (x % 180 === 0)
-        return 0;
-    let v = Math.tan(x / 180 * Math.PI);
-    return cal.blur(v);
-}
-globalThis.tan = contract(tan).sign([owl.num]);
-/**
- * @category Function
- * @return arcsin(x) between -90 and 90.
- * ```
- * arcsin(0.5) // 30
- * ```
- */
-function arcsin(x) {
-    let v = Math.asin(x) * 180 / Math.PI;
-    return cal.blur(v);
-}
-globalThis.arcsin = contract(arcsin).sign([owl.between(-1, 1)]);
-/**
- * @category Function
- * @return arccos(x) between 0 and 180.
- * ```
- * arccos(0.5) // 60
- * ```
- */
-function arccos(x) {
-    let v = Math.acos(x) * 180 / Math.PI;
-    return cal.blur(v);
-}
-globalThis.arccos = contract(arccos).sign([owl.between(-1, 1)]);
-/**
- * @category Function
- * @return arctan(x) between -90 and 90.
- * ```
- * arctan(1) // 45
- * ```
- */
-function arctan(x) {
-    let v = Math.atan(x) * 180 / Math.PI;
-    return cal.blur(v);
-}
-globalThis.arctan = contract(arctan).sign([owl.num]);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * log(b,N)
+     * ```
+     * log(2,8) // 3
+     * ```
+     */
+    static log(b, N) {
+        const v = Math.log(N) / Math.log(b);
+        return cal.blur(v);
+    }
+    /**
+     * @deprecated
+     * @ignore
+     * a**b, a to the power of b.
+     * ```
+     * Power(2,3) // 8
+     * ```
+     */
+    static Power(a, b) {
+        const v = Math.pow(a, b);
+        return cal.blur(v);
+    }
+    /**
+     * square root of x
+     * ```
+     * Sqrt(4) // 2
+     * ```
+     */
+    static Sqrt(x) {
+        const v = Math.sqrt(x);
+        return cal.blur(v);
+    }
+    /**
+     * the radian of the degree
+     * ```
+     * Radian(180) // pi
+     * Radian(90) // pi/2
+     * Radian(30) // PI/6
+     * ```
+     */
+    static Radian(degree) {
+        const v = degree / 180 * Math.PI;
+        return cal.blur(v);
+    }
+    /**
+     * the degree of the radian
+     * ```
+     * Degree(Math.PI) // 180
+     * Degree(Math.PI/2) // 90
+     * Degree(Math.PI/6) // 30
+     * ```
+     */
+    static Degree(radian) {
+        const v = radian * 180 / Math.PI;
+        return cal.blur(v);
+    }
+    /**
+     * sin(x).
+     * ```
+     * sin(30) // 0.5
+     * ```
+     */
+    static sin(x) {
+        if (x % 180 === 0)
+            return 0;
+        let v = Math.sin(x / 180 * Math.PI);
+        return cal.blur(v);
+    }
+    /**
+     * cos(x).
+     * ```
+     * cos(60) // 0.5
+     * ```
+     */
+    static cos(x) {
+        if ((x - 90) % 180 === 0)
+            return 0;
+        let v = Math.cos(x / 180 * Math.PI);
+        return cal.blur(v);
+    }
+    /**
+     * tan(x).
+     * ```
+     * tan(45) // 1
+     * ```
+     */
+    static tan(x) {
+        if (x % 180 === 0)
+            return 0;
+        let v = Math.tan(x / 180 * Math.PI);
+        return cal.blur(v);
+    }
+    /**
+     * arcsin(x) between -90 and 90.
+     * ```
+     * arcsin(0.5) // 30
+     * ```
+     */
+    static arcsin(x) {
+        let v = Math.asin(x) * 180 / Math.PI;
+        return cal.blur(v);
+    }
+    /**
+     * arccos(x) between 0 and 180.
+     * ```
+     * arccos(0.5) // 60
+     * ```
+     */
+    static arccos(x) {
+        let v = Math.acos(x) * 180 / Math.PI;
+        return cal.blur(v);
+    }
+    /**
+     * arctan(x) between -90 and 90.
+     * ```
+     * arctan(1) // 45
+     * ```
+     */
+    static arctan(x) {
+        let v = Math.atan(x) * 180 / Math.PI;
+        return cal.blur(v);
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.positive)
+], Host, "log", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Power", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonNegative)
+], Host, "Sqrt", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Radian", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Degree", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "sin", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "cos", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "tan", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.between(-1, 1))
+], Host, "arcsin", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.between(-1, 1))
+], Host, "arccos", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "arctan", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 7202:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Geometry
- * @return the slope of AB
- * ```
- * Slope([0,0],[1,2]) // 2
- * Slope([1,2],[1,2]) // NaN
- * ```
- */
-function Slope(A, B) {
-    return (A[1] - B[1]) / (A[0] - B[0]);
-}
-globalThis.Slope = contract(Slope).seal({
-    arg: [owl.point2D],
-    args: function not_vertical(A, B) { return !cal.eq(A[0], B[0]); }
-});
-/**
- * @category Geometry
- * @return the slope perpendicular to AB
- * ```
- * SlopePd([0,0],[1,2]) // -0.5
- * SlopePd([1,2],[1,2]) // NaN
- * ```
- */
-function SlopePd(A, B) {
-    return -1 / Slope(A, B);
-}
-globalThis.SlopePd = contract(SlopePd).seal({
-    arg: [owl.point2D],
-    args: function not_horizontal(A, B) { return !cal.eq(A[1], B[1]); }
-});
-/**
- * @category Geometry
- * @return the distance AB
- * ```
- * Distance([0,0],[1,2]) // 2.23606797749979
- * ```
- */
-function Distance(A, B) {
-    return ((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2) ** 0.5;
-}
-globalThis.Distance = contract(Distance).sign([owl.point2D]);
-/**
- * @category Geometry
- * @return the chessboard distance AB, max(horizontal,vertical)
- * ```
- * ChessboardDistance([0,0],[1,2]) // 2
- * ChessboardDistance([0,0],[3,2]) // 3
- * ```
- */
-function ChessboardDistance(A, B) {
-    let x = Abs(A[0] - B[0]);
-    let y = Abs(A[1] - B[1]);
-    return Max(x, y);
-}
-globalThis.ChessboardDistance = contract(ChessboardDistance).sign([owl.point2D]);
-/**
- * @category Geometry
- * @return the mid-pt / centroid of `points`
- * ```
- * Mid([1,2],[3,4]) // [2,3]
- * Mid([1,2],[3,4],[5,6]) // [3,4]
- * ```
- */
-function Mid(...points) {
-    return toShape2D(points).mean().toArray();
-}
-globalThis.Mid = contract(Mid).sign([owl.point2D]);
-/**
- * @category Geometry
- * @return the point P on AB such that AP : PB = ratio : 1-ratio
- * ```
- * Slide([1,0],[5,0],0.75) // [4,0]
- * ```
- */
-function Slide(A, B, ratio) {
-    let r = ratio;
-    let s = 1 - r;
-    return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
-}
-globalThis.Slide = contract(Slide).sign([owl.point2D, owl.point2D, owl.num]);
-/**
- * @category Geometry
- * @return point P rotated anticlockwise by angle q about point O.
- * ```
- * Rotate([1,2],90,[0,0]) // [-2,1]
- * ```
- */
-function Rotate(P, q, O = [0, 0]) {
-    return vec2D(O, P).rotate(q).add(O).blur().toArray();
-}
-globalThis.Rotate = contract(Rotate).sign([owl.point2D, owl.num, owl.point2D]);
-/**
- * @category Geometry
- * @return the polar angle of B if A is the origin within [0,360].
- * ```
- * Dir([1,0],[3,2]) // 45
- * Dir([3,2],[1,0]) // 225
- * ```
- */
-function Dir(A, B) {
-    return vec2D(A, B).argument();
-}
-globalThis.Dir = contract(Dir).seal({
-    arg: [owl.point2D],
-    args: function distinct_points(A, B) { return owl.distinct([A, B]); }
-});
-/**
- * @category Geometry
- * @return the foot of perpendicular from P to AB.
- * ```
- * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
- * ```
- */
-function PdFoot(A, B, P) {
-    return vec2D(A, P).projectOn(vec2D(A, B)).add(A).toArray();
-}
-globalThis.PdFoot = contract(PdFoot).seal({
-    arg: [owl.point2D],
-    args: function distinct_points(A, B, P) { return owl.distinct([A, B]); }
-});
-/**
- * @category Geometry
- * @return the intersection point of AB and CD.
- * ```
- * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
- * ```
- */
-function Intersection(A, B, C, D) {
-    return Crammer(B[1] - A[1], A[0] - B[0], A[0] * B[1] - B[0] * A[1], D[1] - C[1], C[0] - D[0], C[0] * D[1] - D[0] * C[1]);
-}
-globalThis.Intersection = contract(Intersection).seal({
-    arg: [owl.point2D],
-    args: function distinct_points(A, B, C, D) {
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * the slope of AB
+     * ```
+     * Slope([0,0],[1,2]) // 2
+     * Slope([1,2],[1,2]) // NaN
+     * ```
+     */
+    static Slope(A, B) {
+        return (A[1] - B[1]) / (A[0] - B[0]);
+    }
+    /**
+     * the slope perpendicular to AB
+     * ```
+     * SlopePd([0,0],[1,2]) // -0.5
+     * SlopePd([1,2],[1,2]) // NaN
+     * ```
+     */
+    static SlopePd(A, B) {
+        return -1 / Slope(A, B);
+    }
+    /**
+     * the distance AB
+     * ```
+     * Distance([0,0],[1,2]) // 2.23606797749979
+     * ```
+     */
+    static Distance(A, B) {
+        return ((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2) ** 0.5;
+    }
+    /**
+     * the chessboard distance AB, max(horizontal,vertical)
+     * ```
+     * ChessboardDistance([0,0],[1,2]) // 2
+     * ChessboardDistance([0,0],[3,2]) // 3
+     * ```
+     */
+    static ChessboardDistance(A, B) {
+        let x = Abs(A[0] - B[0]);
+        let y = Abs(A[1] - B[1]);
+        return Max(x, y);
+    }
+    /**
+     * the mid-pt / centroid of `points`
+     * ```
+     * Mid([1,2],[3,4]) // [2,3]
+     * Mid([1,2],[3,4],[5,6]) // [3,4]
+     * ```
+     */
+    static Mid(...points) {
+        return toShape2D(points).mean().toArray();
+    }
+    /**
+     * the point P on AB such that AP : PB = ratio : 1-ratio
+     * ```
+     * Slide([1,0],[5,0],0.75) // [4,0]
+     * ```
+     */
+    static Slide(A, B, ratio) {
+        let r = ratio;
+        let s = 1 - r;
+        return [A[0] * s + B[0] * r, A[1] * s + B[1] * r];
+    }
+    /**
+     * point P rotated anticlockwise by angle q about point O.
+     * ```
+     * Rotate([1,2],90,[0,0]) // [-2,1]
+     * ```
+     */
+    static Rotate(P, q, O = [0, 0]) {
+        return vec2D(O, P).rotate(q).add(O).blur().toArray();
+    }
+    /**
+     * the polar angle of B if A is the origin within [0,360].
+     * ```
+     * Dir([1,0],[3,2]) // 45
+     * Dir([3,2],[1,0]) // 225
+     * ```
+     */
+    static Dir(A, B) {
+        return vec2D(A, B).argument();
+    }
+    /**
+     * the foot of perpendicular from P to AB.
+     * ```
+     * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
+     * ```
+     */
+    static PdFoot(A, B, P) {
+        return vec2D(A, P).projectOn(vec2D(A, B)).add(A).toArray();
+    }
+    /**
+     * the intersection point of AB and CD.
+     * ```
+     * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
+     * ```
+     */
+    static Intersection(A, B, C, D) {
+        return Crammer(B[1] - A[1], A[0] - B[0], A[0] * B[1] - B[0] * A[1], D[1] - C[1], C[0] - D[0], C[0] * D[1] - D[0] * C[1]);
+    }
+    /**
+     * Translate point P in the direction `dir` by a `distance`.
+     * @param dir - a polar angle, or two points [A,B] representing Dir(A,B), or one point A representing Dir(P,A)
+     * ```
+     * Move([1,2],90,3) // [1,5]
+     * Move([1,2],[2, 2],3) // [4,2]
+     * Move([1,2],[[0,0],[1,0]],3) // [4,2]
+     * ```
+     */
+    static Move(P, dir, distance) {
+        let q = 0;
+        if (typeof dir === 'number') {
+            q = dir;
+        }
+        else if (owl.point2D(dir)) {
+            q = Dir(P, dir);
+        }
+        else {
+            q = Dir(dir[0], dir[1]);
+        }
+        let x = P[0] + distance * cos(q);
+        let y = P[1] + distance * sin(q);
+        return [x, y];
+    }
+    /**
+     * Translate point P to the right by a distance.
+     * ```
+     * MoveX([1,2],3) // [4,2]
+     * MoveX([1,2],-3) // [-2,2]
+     * ```
+     */
+    static MoveX(P, distance) {
+        let [x, y] = P;
+        return [x + distance, y];
+    }
+    /**
+     * Translate point P upward by a distance.
+     * ```
+     * MoveY([1,2],3) // [4,2]
+     * MoveY([1,2],-3) // [-2,2]
+     * ```
+     */
+    static MoveY(P, distance) {
+        let [x, y] = P;
+        return [x, y + distance];
+    }
+    /**
+     * @returns Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
+     * ```
+     * Shift([0,1],[[0,0],[1,0]],1) // [1,1]
+     * Shift([0,1],[[0,0],[1,0]],2) // [2,1]
+     * ```
+     */
+    static Shift(P, [A, B], scale = 1) {
+        let [x, y] = P;
+        let [xA, yA] = A;
+        let [xB, yB] = B;
+        return [x + (xB - xA) * scale, y + (yB - yA) * scale];
+    }
+    /**
+     * Reflect point P about x-axis
+     * ```
+     * ReflectX([1,2]) // [1,-2]
+     * ReflectX([1,-2]) // [1,2]
+     * ```
+     */
+    static ReflectX(P) {
+        return [P[0], -P[1]];
+    }
+    /**
+     * Reflect point P about y-axis
+     * ```
+     * ReflectY([1,2]) // [-1,2]
+     * ReflectY([-1,2]) // [1,2]
+     * ```
+     */
+    static ReflectY(P) {
+        return [-P[0], P[1]];
+    }
+    /**
+     * angle of intersection between two slopes
+     * ```
+     * IntersectAngle(0,1) // 45
+     * IntersectAngle(1,-1) // 90
+     * ```
+     */
+    static IntersectAngle(slope1, slope2) {
+        let A1 = arctan(slope1);
+        let A2 = arctan(slope2);
+        let d = Abs(A1 - A2);
+        if (d > 90)
+            d = 180 - d;
+        return d;
+    }
+    /**
+     * angle AOB, non-reflex
+     * ```
+     * Angle([1,0],[0,0],[0,2]) // 90
+     * Angle([2,2],[1,1],[1,3]) // 45
+     * Angle([1,3],[1,1],[2,2]) // 45
+     * ```
+     */
+    static Angle(A, O, B) {
+        let anglePolar = AnglePolar(A, O, B);
+        let a = IsReflex(A, O, B) ? 360 - anglePolar : anglePolar;
+        return cal.blur(a);
+    }
+    /**
+     * angle AOB, measured anticlockwise
+     * ```
+     * AnglePolar([1,0],[0,0],[0,2]) // 90
+     * AnglePolar([2,2],[1,1],[1,3]) // 45
+     * AnglePolar([1,3],[1,1],[2,2]) // 315
+     * ```
+     */
+    static AnglePolar(A, O, B) {
+        let a = vec2D(O, A).argument();
+        let b = vec2D(O, B).argument();
+        return a <= b ? b - a : 360 + b - a;
+    }
+    /**
+     * check if the polar angle AOB is reflex
+     * ```
+     * IsReflex([1,0],[0,0],[0,2]) // false
+     * IsReflex([2,2],[1,1],[1,3]) // false
+     * IsReflex([1,3],[1,1],[2,2]) // true
+     * ```
+     */
+    static IsReflex(A, O, B) {
+        let angle = AnglePolar(A, O, B);
+        return angle > 180;
+    }
+    /**
+     * points on a regular polygon
+     * ```
+     * RegularPolygon(4,[0,0],1,0) // [[1,0],[0,1],[-1,0],[0,-1]]
+     * ```
+     */
+    static RegularPolygon(n, center, radius, startAngle) {
+        let a = 360 / n;
+        let arr = [];
+        for (let i = 0; i < n; i++) {
+            let p = PolToRect([radius, startAngle + i * a]);
+            p[0] += center[0];
+            p[1] += center[1];
+            p[0] = cal.blur(p[0]);
+            p[1] = cal.blur(p[1]);
+            arr.push(p);
+        }
+        return arr;
+    }
+    /**
+     * arc length with given radius and angle
+     * ```
+     * ArcLength(2,90) // pi
+     * ArcLength(2,180) // 2*pi
+     * ```
+     */
+    static ArcLength(radius, theta) {
+        return 2 * Math.PI * radius * theta / 360;
+    }
+    /**
+     * sector area with given radius and angle
+     * ```
+     * SectorArea(2,90) // pi
+     * SectorArea(2,180) // 2*pi
+     * ```
+     */
+    static SectorArea(radius, theta) {
+        return Math.PI * radius * radius * theta / 360;
+    }
+    /**
+     * check is convex polygon
+     * ```
+     * IsConvexPolygon([0,0],[1,0],[0,1]) // true
+     * IsConvexPolygon([0,0],[3,0],[1,1],[0,3]) // false
+     * ```
+     */
+    static IsConvexPolygon(...points) {
+        Should(points.length >= 3, "must have at least 3 points to be a polygon");
+        return toShape2D(points).isConvex();
+    }
+    /**
+     * Arrange Points in anti-clockwise direction around their mean
+     * ```
+     * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
+     * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
+     * ```
+     */
+    static ArrangePoints(...points) {
+        let ss = toShape2D(points);
+        ss.sortAroundMean();
+        return ss.toArray();
+    }
+    /**
+     * a point with polar coordinates (1, `angle`).
+     * ```
+     * OnCircle(0) // [1,0]
+     * OnCircle(90) // [0,1]
+     * ```
+     */
+    static OnCircle(angle) {
+        return PolToRect([1, angle]);
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D),
+    (0, contract_1.inspectIt)(function not_vertical(A, B) { return !cal.eq(A[0], B[0]); })
+], Host, "Slope", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D),
+    (0, contract_1.inspectIt)(function not_horizontal(A, B) { return !cal.eq(A[1], B[1]); })
+], Host, "SlopePd", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "Distance", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "ChessboardDistance", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "Mid", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.point2D, owl.num)
+], Host, "Slide", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.num, owl.point2D)
+], Host, "Rotate", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D),
+    (0, contract_1.inspectIt)(function distinct_points(A, B) { return owl.distinct([A, B]); })
+], Host, "Dir", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D),
+    (0, contract_1.inspectIt)(function distinct_points(A, B, P) { return owl.distinct([A, B]); })
+], Host, "PdFoot", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D),
+    (0, contract_1.inspectIt)(function distinct_points(A, B, C, D) {
         return owl.distinct([A, B]) && owl.distinct([C, D]);
-    }
-});
-/**
- * @category Geometry
- * @return Translate point P in the direction `dir` by a `distance`.
- * @param dir - a polar angle, or two points [A,B] representing Dir(A,B), or one point A representing Dir(P,A)
- * ```
- * Move([1,2],90,3) // [1,5]
- * Move([1,2],[2, 2],3) // [4,2]
- * Move([1,2],[[0,0],[1,0]],3) // [4,2]
- * ```
- */
-function Move(P, dir, distance) {
-    let q = 0;
-    if (typeof dir === 'number') {
-        q = dir;
-    }
-    else if (owl.point2D(dir)) {
-        q = Dir(P, dir);
-    }
-    else {
-        q = Dir(dir[0], dir[1]);
-    }
-    let x = P[0] + distance * cos(q);
-    let y = P[1] + distance * sin(q);
-    return [x, y];
-}
-globalThis.Move = contract(Move).sign([
-    owl.point2D,
-    owl.or([owl.num, owl.point2D, owl.arrayWith(owl.point2D)]),
-    owl.num
-]);
-/**
- * @category Geometry
- * @return Translate point P to the right by a distance.
- * ```
- * MoveX([1,2],3) // [4,2]
- * MoveX([1,2],-3) // [-2,2]
- * ```
- */
-function MoveX(P, distance) {
-    let [x, y] = P;
-    return [x + distance, y];
-}
-globalThis.MoveX = contract(MoveX).sign([owl.point2D, owl.num]);
-/**
- * @category Geometry
- * @return Translate point P upward by a distance.
- * ```
- * MoveY([1,2],3) // [4,2]
- * MoveY([1,2],-3) // [-2,2]
- * ```
- */
-function MoveY(P, distance) {
-    let [x, y] = P;
-    return [x, y + distance];
-}
-globalThis.MoveY = contract(MoveY).sign([owl.point2D, owl.num]);
-/**
- * @category Geometry
- * @returns Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
- * ```
- * Shift([0,1],[[0,0],[1,0]],1) // [1,1]
- * Shift([0,1],[[0,0],[1,0]],2) // [2,1]
- * ```
- */
-function Shift(P, [A, B], scale = 1) {
-    let [x, y] = P;
-    let [xA, yA] = A;
-    let [xB, yB] = B;
-    return [x + (xB - xA) * scale, y + (yB - yA) * scale];
-}
-globalThis.Shift = contract(Shift).sign([
-    owl.point2D,
-    owl.arrayWith(owl.point2D),
-    owl.num
-]);
-/**
- * @category Geometry
- * @return Reflect point P about x-axis
- * ```
- * ReflectX([1,2]) // [1,-2]
- * ReflectX([1,-2]) // [1,2]
- * ```
- */
-function ReflectX(P) {
-    return [P[0], -P[1]];
-}
-globalThis.ReflectX = contract(ReflectX).sign([owl.point2D]);
-/**
- * @category Geometry
- * @return Reflect point P about y-axis
- * ```
- * ReflectY([1,2]) // [-1,2]
- * ReflectY([-1,2]) // [1,2]
- * ```
- */
-function ReflectY(P) {
-    return [-P[0], P[1]];
-}
-globalThis.ReflectY = contract(ReflectY).sign([owl.point2D]);
-/**
- * @category Geometry
- * @return angle of intersection between two slopes
- * ```
- * IntersectAngle(0,1) // 45
- * IntersectAngle(1,-1) // 90
- * ```
- */
-function IntersectAngle(slope1, slope2) {
-    let A1 = arctan(slope1);
-    let A2 = arctan(slope2);
-    let d = Abs(A1 - A2);
-    if (d > 90)
-        d = 180 - d;
-    return d;
-}
-globalThis.IntersectAngle = contract(IntersectAngle).sign([owl.num]);
-/**
- * @category Geometry
- * @return angle AOB, non-reflex
- * ```
- * Angle([1,0],[0,0],[0,2]) // 90
- * Angle([2,2],[1,1],[1,3]) // 45
- * Angle([1,3],[1,1],[2,2]) // 45
- * ```
- */
-function Angle(A, O, B) {
-    let anglePolar = AnglePolar(A, O, B);
-    let a = IsReflex(A, O, B) ? 360 - anglePolar : anglePolar;
-    return cal.blur(a);
-}
-globalThis.Angle = contract(Angle).seal({
-    arg: [owl.point2D],
-    args: function distinct_points(A, O, B) {
+    })
+], Host, "Intersection", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.or([owl.num, owl.point2D, owl.arrayWith(owl.point2D)]), owl.num)
+], Host, "Move", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.num)
+], Host, "MoveX", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.num)
+], Host, "MoveY", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.point2Ds, owl.num)
+], Host, "Shift", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "ReflectX", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "ReflectY", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "IntersectAngle", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D),
+    (0, contract_1.inspectIt)(function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O]);
-    }
-});
-/**
- * @category Geometry
- * @return angle AOB, measured anticlockwise
- * ```
- * AnglePolar([1,0],[0,0],[0,2]) // 90
- * AnglePolar([2,2],[1,1],[1,3]) // 45
- * AnglePolar([1,3],[1,1],[2,2]) // 315
- * ```
- */
-function AnglePolar(A, O, B) {
-    let a = vec2D(O, A).argument();
-    let b = vec2D(O, B).argument();
-    return a <= b ? b - a : 360 + b - a;
-}
-globalThis.AnglePolar = contract(AnglePolar).seal({
-    arg: [owl.point2D],
-    args: function distinct_points(A, O, B) {
+    })
+], Host, "Angle", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D),
+    (0, contract_1.inspectIt)(function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O]);
-    }
-});
-/**
- * @category Geometry
- * @return check if the polar angle AOB is reflex
- * ```
- * IsReflex([1,0],[0,0],[0,2]) // false
- * IsReflex([2,2],[1,1],[1,3]) // false
- * IsReflex([1,3],[1,1],[2,2]) // true
- * ```
- */
-function IsReflex(A, O, B) {
-    let angle = AnglePolar(A, O, B);
-    return angle > 180;
-}
-globalThis.IsReflex = contract(IsReflex).seal({
-    arg: [owl.point2D],
-    args: function distinct_points(A, O, B) {
+    })
+], Host, "AnglePolar", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D),
+    (0, contract_1.inspectIt)(function distinct_points(A, O, B) {
         return owl.distinct([A, O]) && owl.distinct([B, O]);
-    }
-});
-// /**
-//  * @category Geometry
-//  * @return points from turtle walk
-//  * ```
-//  * Turtle([0,0],[90,1],[90,1],[90,1]) // [[0,0],[1,0],[1,1],[0,1]]
-//  * ```
-//  */
-// function Turtle(start: Point2D, ...walk: [rotate: number, distance: number][]): Point2D[] {
-//     let arr: Point2D[] = [start]
-//     let lastPoint = start
-//     let facing = 0
-//     for (let w of walk) {
-//         let [rot, dist] = w
-//         facing += rot
-//         let P = Move(lastPoint, facing, dist)
-//         arr.push(P)
-//         lastPoint = P
-//     }
-//     return arr
-// }
-// globalThis.Turtle = contract(Turtle).sign([owl.point2D, owl.couple])
-/**
- * @category Geometry
- * @return points on a regular polygon
- * ```
- * RegularPolygon(4,[0,0],1,0) // [[1,0],[0,1],[-1,0],[0,-1]]
- * ```
- */
-function RegularPolygon(n, center, radius, startAngle) {
-    let a = 360 / n;
-    let arr = [];
-    for (let i = 0; i < n; i++) {
-        let p = PolToRect([radius, startAngle + i * a]);
-        p[0] += center[0];
-        p[1] += center[1];
-        p[0] = cal.blur(p[0]);
-        p[1] = cal.blur(p[1]);
-        arr.push(p);
-    }
-    return arr;
-}
-globalThis.RegularPolygon = contract(RegularPolygon).sign([owl.num, owl.point2D, owl.num, owl.num]);
-/**
- * @category Geometry
- * @return arc length with given radius and angle
- * ```
- * ArcLength(2,90) // pi
- * ArcLength(2,180) // 2*pi
- * ```
- */
-function ArcLength(radius, theta) {
-    return 2 * Math.PI * radius * theta / 360;
-}
-globalThis.ArcLength = contract(ArcLength).sign([owl.nonNegative, owl.nonNegative]);
-/**
- * @category Geometry
- * @return sector area with given radius and angle
- * ```
- * SectorArea(2,90) // pi
- * SectorArea(2,180) // 2*pi
- * ```
- */
-function SectorArea(radius, theta) {
-    return Math.PI * radius * radius * theta / 360;
-}
-globalThis.SectorArea = contract(SectorArea).sign([owl.nonNegative, owl.nonNegative]);
-/**
- * @category Geometry
- * @return check is convex polygon
- * ```
- * IsConvexPolygon([0,0],[1,0],[0,1]) // true
- * IsConvexPolygon([0,0],[3,0],[1,1],[0,3]) // false
- * ```
- */
-function IsConvexPolygon(...points) {
-    Should(points.length >= 3, "must have at least 3 points to be a polygon");
-    return toShape2D(points).isConvex();
-}
-globalThis.IsConvexPolygon = contract(IsConvexPolygon).sign([owl.point2D]);
-/**
- * @category Geometry
- * @return Arrange Points in anti-clockwise direction around their mean
- * ```
- * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
- * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
- * ```
- */
-function ArrangePoints(...points) {
-    let ss = toShape2D(points);
-    ss.sortAroundMean();
-    return ss.toArray();
-}
-globalThis.ArrangePoints = contract(ArrangePoints).sign([owl.point2D]);
-/**
- * @category Geometry
- * @return a point with polar coordinates (1, `angle`).
- * ```
- * OnCircle(0) // [1,0]
- * OnCircle(90) // [0,1]
- * ```
- */
-function OnCircle(angle) {
-    return PolToRect([1, angle]);
-}
-globalThis.OnCircle = contract(OnCircle).sign([owl.num]);
+    })
+], Host, "IsReflex", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.point2D, owl.num, owl.num)
+], Host, "RegularPolygon", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonNegative, owl.nonNegative)
+], Host, "ArcLength", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonNegative, owl.nonNegative)
+], Host, "SectorArea", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "IsConvexPolygon", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "ArrangePoints", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "OnCircle", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 4453:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * Print a stem-and-leaf diagram in latex.
- * @param data - sorted data
- * @param labels - a copy of data, but you can replace some number with string label.
- * @example
- * ```
- * StemAndLeaf({
- *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
- *   labels: [2,'x',6,12,14,16,23,23,24,25,26,'y',26,26,27,31],
- *   stem: "10 units",
- *   leaf: "{1} unit"
- * })
- * // a diagram with two numbers replaced by 'x' and 'y'
- * ```
- */
-function StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }) {
-    let T = "";
-    T += '\\begin{array}{r|l}';
-    T += `\\text{Stem} & \\text{Leaf} \\\\ `;
-    T += `\\text{${stem}} & \\text{${leaf}} \\\\ \\hline `;
-    function ten(num) {
-        return Math.floor(num / 10 + Number.EPSILON);
-    }
-    function unit(num) {
-        return num - ten(num) * 10;
-    }
-    function parse(label) {
-        if (typeof label === 'number')
-            return unit(label).toString();
-        return label;
-    }
-    labels ??= [...data];
-    let parsedLabels = labels.map(parse);
-    let initTen = ten(Math.min(...data));
-    let endTen = ten(Math.max(...data));
-    for (let t = initTen; t <= endTen; t++) {
-        T += t + ' & { \\begin{array}{} ';
-        let units = [];
-        for (let i = 0; i < data.length; i++) {
-            if (ten(data[i]) === t)
-                units.push(parsedLabels[i]);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * Print a stem-and-leaf diagram in latex.
+     * @param data - sorted data
+     * @param labels - a copy of data, but you can replace some number with string label.
+     * @example
+     * ```
+     * StemAndLeaf({
+     *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+     *   labels: [2,'x',6,12,14,16,23,23,24,25,26,'y',26,26,27,31],
+     *   stem: "10 units",
+     *   leaf: "{1} unit"
+     * })
+     * // a diagram with two numbers replaced by 'x' and 'y'
+     * ```
+     */
+    static StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }) {
+        let T = "";
+        T += '\\begin{array}{r|l}';
+        T += `\\text{Stem} & \\text{Leaf} \\\\ `;
+        T += `\\text{${stem}} & \\text{${leaf}} \\\\ \\hline `;
+        function ten(num) {
+            return Math.floor(num / 10 + Number.EPSILON);
         }
-        T += units.join(' & ');
-        T += ' \\end{array} } \\\\ ';
+        function unit(num) {
+            return num - ten(num) * 10;
+        }
+        function parse(label) {
+            if (typeof label === 'number')
+                return unit(label).toString();
+            return label;
+        }
+        labels ??= [...data];
+        let parsedLabels = labels.map(parse);
+        let initTen = ten(Math.min(...data));
+        let endTen = ten(Math.max(...data));
+        for (let t = initTen; t <= endTen; t++) {
+            T += t + ' & { \\begin{array}{} ';
+            let units = [];
+            for (let i = 0; i < data.length; i++) {
+                if (ten(data[i]) === t)
+                    units.push(parsedLabels[i]);
+            }
+            T += units.join(' & ');
+            T += ' \\end{array} } \\\\ ';
+        }
+        T += ' \\end{array}';
+        return T;
     }
-    T += ' \\end{array}';
-    return T;
-}
-globalThis.StemAndLeaf = contract(StemAndLeaf)
-    .sign([owl.pass]);
-// ************TO BE DONE!!! VALIDATE OBJECT
-/**
- * Print a table in latex.
- * @param content - the cell content
- * @param columns - a latex syntax for column border
- * @param rows - similar to `columns`
- * @param stretch - scale the height of the cells
- * @example
- * ```
- * Table({
- *     content: [
- *         ['a', 2, 3],   // 'a' will be printed as '\text{a}'
- *         ['b', 5, 6],
- *         ['$c', 7, 8],  // 'c' will be printed as is
- *         ['$d', 12, 13]
- *     ],
- *     columns: '|c::c:c|',
- *     rows: '|r||r|rr|',
- * })
- * ```
- */
-function Table({ content, columns, rows, stretch }) {
-    let nCol = Math.max(...content.map($ => $.length));
-    columns ??= Array(nCol + 1).fill("|").join("c");
-    let nRow = content.length;
-    rows ??= Array(nRow + 1).fill("|").join("r");
-    let rowsArr = rows.split('r').map($ => $
-        .replace(/\|/g, " \\hline ")
-        .replace(/\:/g, " \\hdashline "));
-    let T = "";
-    if (stretch)
-        T += '\\def \\arraystretch{1.5} ';
-    T += `\\begin{array}{${columns}}`;
-    function parseCell(cell) {
-        if (typeof cell === 'number')
-            return String(cell);
-        return cell.startsWith('$') ? cell.substring(1) : `\\text{${cell}}`;
-    }
-    let i = 0;
-    for (let row of content) {
+    // ************TO BE DONE!!! VALIDATE OBJECT
+    /**
+     * Print a table in latex.
+     * @param content - the cell content
+     * @param columns - a latex syntax for column border
+     * @param rows - similar to `columns`
+     * @param stretch - scale the height of the cells
+     * @example
+     * ```
+     * Table({
+     *     content: [
+     *         ['a', 2, 3],   // 'a' will be printed as '\text{a}'
+     *         ['b', 5, 6],
+     *         ['$c', 7, 8],  // 'c' will be printed as is
+     *         ['$d', 12, 13]
+     *     ],
+     *     columns: '|c::c:c|',
+     *     rows: '|r||r|rr|',
+     * })
+     * ```
+     */
+    static Table({ content, columns, rows, stretch }) {
+        let nCol = Math.max(...content.map($ => $.length));
+        columns ??= Array(nCol + 1).fill("|").join("c");
+        let nRow = content.length;
+        rows ??= Array(nRow + 1).fill("|").join("r");
+        let rowsArr = rows.split('r').map($ => $
+            .replace(/\|/g, " \\hline ")
+            .replace(/\:/g, " \\hdashline "));
+        let T = "";
+        if (stretch)
+            T += '\\def \\arraystretch{1.5} ';
+        T += `\\begin{array}{${columns}}`;
+        function parseCell(cell) {
+            if (typeof cell === 'number')
+                return String(cell);
+            return cell.startsWith('$') ? cell.substring(1) : `\\text{${cell}}`;
+        }
+        let i = 0;
+        for (let row of content) {
+            T += rowsArr[i] ?? '';
+            T += row.map(parseCell).join(" & ") + " \\\\ ";
+            i++;
+        }
         T += rowsArr[i] ?? '';
-        T += row.map(parseCell).join(" & ") + " \\\\ ";
-        i++;
+        T += ` \\end{array}`;
+        return T;
     }
-    T += rowsArr[i] ?? '';
-    T += ` \\end{array}`;
-    return T;
-}
-globalThis.Table = contract(Table).sign([owl.pass]);
-// ************TO BE DONE!!! VALIDATE OBJECT
-/**
- * Print a frequency table in latex.
- * @param dataLabel - the label for the 1st row
- * @param freqLabel - the label for the 2nd row
- * @example
- * ```
- * FreqTable({
- *   data: [1, 1, 4, 4, 3, 3, 3],
- *   dataLabel: '$x',
- *   freqLabel: 'count'
- * })
- * ```
- */
-function FreqTable({ data, dataLabel, freqLabel }) {
-    let values = ListIntegers(Math.min(...data), Math.max(...data));
-    let freqs = Freqs(data, values);
-    return Table({
-        content: [
-            [dataLabel, ...values],
-            [freqLabel, ...freqs]
-        ]
-    });
-}
-globalThis.FreqTable = contract(FreqTable).sign([owl.pass]);
-// ************TO BE DONE!!! VALIDATE OBJECT
-/**
- * Print a table in latex showing cartisian product of two items.
- * @param rows - array of row values
- * @param cols - array of column values
- * @param cell - a function mapping row and column values to cell content
- * @example
- * ```
- * PairTable({
- *    rowTitle:'first',
- *    colTitle:'second',
- *    rows: [1,2,3,4,5,6],
- *    cols: [1,2,3,4,5,6],
- *    cell: (r,c) => r+c
- * })
- * // a table showing the sum of two dices
- * ```
- */
-function PairTable({ rowTitle, colTitle, rows, cols, cell }) {
-    function parseCell(cell) {
-        if (typeof cell === 'number')
-            return String(cell);
-        return cell.startsWith('$') ? cell.substring(1) : `\\text{${cell}}`;
+    // ************TO BE DONE!!! VALIDATE OBJECT
+    /**
+     * Print a frequency table in latex.
+     * @param dataLabel - the label for the 1st row
+     * @param freqLabel - the label for the 2nd row
+     * @example
+     * ```
+     * FreqTable({
+     *   data: [1, 1, 4, 4, 3, 3, 3],
+     *   dataLabel: '$x',
+     *   freqLabel: 'count'
+     * })
+     * ```
+     */
+    static FreqTable({ data, dataLabel, freqLabel }) {
+        let values = ListIntegers(Math.min(...data), Math.max(...data));
+        let freqs = Freqs(data, values);
+        return Table({
+            content: [
+                [dataLabel, ...values],
+                [freqLabel, ...freqs]
+            ]
+        });
     }
-    colTitle = parseCell(colTitle);
-    rowTitle = parseCell(rowTitle);
-    function cellMap(r, c) {
-        let val = cell(r, c);
-        if (typeof val === 'number')
+    // ************TO BE DONE!!! VALIDATE OBJECT
+    /**
+     * Print a table in latex showing cartisian product of two items.
+     * @param rows - array of row values
+     * @param cols - array of column values
+     * @param cell - a function mapping row and column values to cell content
+     * @example
+     * ```
+     * PairTable({
+     *    rowTitle:'first',
+     *    colTitle:'second',
+     *    rows: [1,2,3,4,5,6],
+     *    cols: [1,2,3,4,5,6],
+     *    cell: (r,c) => r+c
+     * })
+     * // a table showing the sum of two dices
+     * ```
+     */
+    static PairTable({ rowTitle, colTitle, rows, cols, cell }) {
+        function parseCell(cell) {
+            if (typeof cell === 'number')
+                return String(cell);
+            return cell.startsWith('$') ? cell.substring(1) : `\\text{${cell}}`;
+        }
+        colTitle = parseCell(colTitle);
+        rowTitle = parseCell(rowTitle);
+        function cellMap(r, c) {
+            let val = cell(r, c);
+            if (typeof val === 'number')
+                return String(val);
+            if (typeof val === 'string')
+                return val;
+            if (typeof val === 'boolean')
+                return val ? '✔' : '✘';
             return String(val);
-        if (typeof val === 'string')
-            return val;
-        if (typeof val === 'boolean')
-            return val ? '✔' : '✘';
-        return String(val);
+        }
+        let T = "";
+        T += '\\begin{matrix}';
+        T += ` & ${colTitle} \\\\`;
+        T += ` ${rowTitle} & {`;
+        T += `\\begin{array}{c|ccc}`;
+        T += ` & ` + cols.join(' & ') + ' \\\\ \\hline ';
+        for (let r of rows) {
+            T += ' ' + String(r) + ' & ';
+            T += cols.map(c => cellMap(r, c)).join(' & ');
+            T += ' \\\\';
+        }
+        T += ' \\end{array}';
+        T += ` } `;
+        T += `\\end{matrix}`;
+        return T;
     }
-    let T = "";
-    T += '\\begin{matrix}';
-    T += ` & ${colTitle} \\\\`;
-    T += ` ${rowTitle} & {`;
-    T += `\\begin{array}{c|ccc}`;
-    T += ` & ` + cols.join(' & ') + ' \\\\ \\hline ';
-    for (let r of rows) {
-        T += ' ' + String(r) + ' & ';
-        T += cols.map(c => cellMap(r, c)).join(' & ');
-        T += ' \\\\';
+    // ************TO BE DONE!!! VALIDATE OBJECT
+    /**
+     * Print the check vertice steps.
+     * @param label - the field label
+     * @example
+     * ```
+     * CheckVertices({
+     *    constraints: [
+     *      [1,0,'>',0],
+     *      [0,1,'>',0],
+     *      [1,1,'<',2],
+     * ],
+     *    field: [1,2,3],
+     *    label: "P"
+     * })
+     * ```
+     */
+    static CheckVertices({ constraints, field, label }) {
+        let T = "";
+        let vs = toReins(constraints).vertices();
+        for (let v of vs) {
+            T += '\\text{At } ' + Coord(v) + ':~~~';
+            T += label + ' = ' + optimizer({ field }).fieldAt(v) + ' \\\\ ';
+        }
+        return T;
     }
-    T += ' \\end{array}';
-    T += ` } `;
-    T += `\\end{matrix}`;
-    return T;
-}
-globalThis.PairTable = contract(PairTable)
-    .sign([owl.pass]);
-// ************TO BE DONE!!! VALIDATE OBJECT
-/**
- * Print the check vertice steps.
- * @param label - the field label
- * @example
- * ```
- * CheckVertices({
- *    constraints: [
- *      [1,0,'>',0],
- *      [0,1,'>',0],
- *      [1,1,'<',2],
- * ],
- *    field: [1,2,3],
- *    label: "P"
- * })
- * ```
- */
-function CheckVertices({ constraints, field, label }) {
-    let T = "";
-    let vs = toReins(constraints).vertices();
-    for (let v of vs) {
-        T += '\\text{At } ' + Coord(v) + ':~~~';
-        T += label + ' = ' + optimizer({ field }).fieldAt(v) + ' \\\\ ';
-    }
-    return T;
-}
-globalThis.CheckVertices = contract(CheckVertices)
-    .sign([owl.pass]);
-// ************TO BE DONE!!! VALIDATE OBJECT
+};
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 426:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- *
- * @category LinearProgram
- * @return the value of field at given point
- * ```
- * FieldAt([0,0],[1,2,3]) // 3
- * FieldAt([1,2],[3,-4,5]) // 0
- * ```
- */
-function FieldAt(point, field) {
-    return optimizer({ field }).fieldAt(point);
-}
-globalThis.FieldAt = contract(FieldAt).sign([owl.point2D, owl.field]);
-/**
- *
- * @category LinearProgram
- * @return check if point is constrained by cons
- * ```
- * isConstrained([
- *    [1, 1, "<=", 5],
- *    [1, -1, "<", 4],
- *    [2, 1, ">=", -5]
- * ], [0, 0])
- * // check whether [0,0] satisfies all the constraints
- * ```
- */
-function isConstrained(cons, point) {
-    return toReins(cons).contains(point);
-}
-globalThis.isConstrained = contract(isConstrained).sign([owl.constraints, owl.point2D]);
-/**
- *
- * @category LinearProgram
- * @return check if point is constrained by cons, treating all cons as 'or equal to'
- * ```
- * isLooseConstrained([
- *    [1, 1, "<=", 5],
- *    [1, -1, "<", 4],
- *    [2, 1, ">=", -5]
- * ], [0, 0])
- * // check whether [0,0] loosely satisfies all the constraints
- * ```
- */
-function isLooseConstrained(cons, point) {
-    return toReins(cons).looseContains(point);
-}
-globalThis.isLooseConstrained = contract(isLooseConstrained).sign([owl.constraints, owl.point2D]);
-/**
- *
- * @category LinearProgram
- * @return the vertices of the feasible polygon
- * ```
- * FeasiblePolygon([
- *    [1, 0, '<', 10],
- *    [1, 0, '>', -5],
- *    [0, 1, '<', 10],
- *    [0, 1, '>', -5]
- * ])
- * // [[-5,-5],[10,-5],[10,10],[-5,10]]
- * ```
- */
-function FeasiblePolygon(...cons) {
-    let vs = toReins(cons).polygon();
-    Should(vs.length > 2, 'No feasible region.');
-    return vs;
-}
-globalThis.FeasiblePolygon = contract(FeasiblePolygon).sign([owl.constraint]);
-/**
- *
- * @category LinearProgram
- * @return the vertices of the feasible polygon
- * ```
- * FeasiblePolygon([
- *    [1, 0, '<', 10],
- *    [1, 0, '>', -5],
- *    [0, 1, '<', 10],
- *    [0, 1, '>', -5]
- * ])
- * // [[-5,-5],[10,-5],[10,10],[-5,10]]
- * ```
- */
-function FeasibleVertices(...cons) {
-    let vs = toReins(cons).vertices();
-    Should(vs.length > 0, 'no feasible vertex');
-    return vs;
-}
-globalThis.FeasibleVertices = contract(FeasibleVertices).sign([owl.constraint]);
-/**
- *
- * @category LinearProgram
- * @return check if the feasible region is bounded
- * ```
- * FeasibleIsBounded([
- *    [1, 0, '<', 10],
- *    [1, 0, '>', -5],
- *    [0, 1, '<', 10],
- *    [0, 1, '>', -5]
- * ])
- * // true
- * FeasibleIsBounded([
- *    [1, 0, '<', 10],
- * ])
- * // false
- * ```
- */
-function FeasibleIsBounded(...cons) {
-    return toReins(cons).isBounded();
-}
-globalThis.FeasibleIsBounded = contract(FeasibleIsBounded).sign([owl.constraint]);
-/**
- *
- * @category LinearProgram
- * @return the integral points inside the feasible polygon
- * ```
- * FeasibleIntegral([
- *    [1, 0, '<', 3],
- *    [1, 0, '>', 0],
- *    [0, 1, '<', 2],
- *    [0, 1, '>', 0]
- * ])
- * // [[1,1],[2,1]]
- * ```
- */
-function FeasibleIntegral(...cons) {
-    return toReins(cons).integrals();
-}
-globalThis.FeasibleIntegral = contract(FeasibleIntegral).sign([owl.constraint]);
-/**
- *
- * @category LinearProgram
- * @return the point with the max value of field
- * ```
- * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
- * ```
- */
-function MaximizePoint(points, field) {
-    Should(points.length > 0, 'No feasible point');
-    let pts = optimizer({
-        field: field,
-        feasiblePoints: points
-    }).maxPoints();
-    Should(pts.length > 0, 'No max point');
-    Should(pts.length < 2, 'Multiple max points');
-    return pts[0];
-}
-globalThis.MaximizePoint = contract(MaximizePoint).sign([owl.point2Ds, owl.field]);
-/**
- *
- * @category LinearProgram
- * @return the point with the min value of field
- * ```
- * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
- * ```
- */
-function MinimizePoint(points, field) {
-    Should(points.length > 0, 'No feasible point');
-    let pts = optimizer({
-        field: field,
-        feasiblePoints: points
-    }).minPoints();
-    Should(pts.length > 0, 'No min point');
-    Should(pts.length < 2, 'Multiple min points');
-    return pts[0];
-}
-globalThis.MinimizePoint = contract(MinimizePoint).sign([owl.point2Ds, owl.field]);
-/**
- *
- * @category LinearProgram
- * @return the point with the min/max value of field
- * ```
- * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [10,10]
- * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
- * ```
- */
-function OptimizePoint(points, field, max) {
-    return max ? MaximizePoint(points, field) : MinimizePoint(points, field);
-}
-globalThis.OptimizePoint = contract(OptimizePoint).sign([owl.point2Ds, owl.field, owl.bool]);
-/**
- *
- * @category LinearProgram
- * @return the max value of field
- * ```
- * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
- * ```
- */
-function MaximizeField(points, field) {
-    let op = optimizer({
-        field: field,
-        feasiblePoints: points
-    });
-    let val = op.max();
-    Should(val !== null, 'No optimal value for this field!');
-    return val;
-}
-globalThis.MaximizeField = contract(MaximizeField).sign([owl.point2Ds, owl.field]);
-/**
- *
- * @category LinearProgram
- * @return the min value of field
- * ```
- * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
- * ```
- */
-function MinimizeField(points, field) {
-    let op = optimizer({
-        field: field,
-        feasiblePoints: points
-    });
-    let val = op.min();
-    Should(val !== null, 'No optimal value for this field!');
-    return val;
-}
-globalThis.MinimizeField = contract(MinimizeField).sign([owl.point2Ds, owl.field]);
-/**
- *
- * @category LinearProgram
- * @return the min/max value of field
- * ```
- * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
- * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
- * ```
- */
-function OptimizeField(points, field, max) {
-    return max ? MaximizeField(points, field) : MinimizeField(points, field);
-}
-globalThis.OptimizeField = contract(OptimizeField).sign([owl.point2Ds, owl.field, owl.bool]);
-/**
- *
- * @category LinearProgram
- * @return the constraints from the given points
- * ```
- * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
- * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2])
- * // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
- * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
- * ```
- */
-function ConstraintsFromPoints(...points) {
-    Should(IsConvexPolygon(...points), 'Not a convex region');
-    let mean = toShape2D(points).mean().toArray();
-    let pts = ArrangePoints(...points);
-    pts = [...pts, pts[0]];
-    let constraints = [];
-    for (let i = 0; i < points.length; i++) {
-        let A = pts[i];
-        let B = pts[i + 1];
-        let [a, b, c] = LinearFromTwoPoints(A, B);
-        let sign = FieldAt(mean, [a, b, c]) > 0 ? "\\ge" : "\\le";
-        constraints.push([a, b, sign, -c]);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * the value of field at given point
+     * ```
+     * FieldAt([0,0],[1,2,3]) // 3
+     * FieldAt([1,2],[3,-4,5]) // 0
+     * ```
+     */
+    static FieldAt(point, field) {
+        return optimizer({ field }).fieldAt(point);
     }
-    return constraints;
-}
-globalThis.ConstraintsFromPoints = contract(ConstraintsFromPoints).sign([owl.point2D]);
+    /**
+     * check if point is constrained by cons
+     * ```
+     * isConstrained([
+     *    [1, 1, "<=", 5],
+     *    [1, -1, "<", 4],
+     *    [2, 1, ">=", -5]
+     * ], [0, 0])
+     * // check whether [0,0] satisfies all the constraints
+     * ```
+     */
+    static isConstrained(cons, point) {
+        return toReins(cons).contains(point);
+    }
+    /**
+     * check if point is constrained by cons, treating all cons as 'or equal to'
+     * ```
+     * isLooseConstrained([
+     *    [1, 1, "<=", 5],
+     *    [1, -1, "<", 4],
+     *    [2, 1, ">=", -5]
+     * ], [0, 0])
+     * // check whether [0,0] loosely satisfies all the constraints
+     * ```
+     */
+    static isLooseConstrained(cons, point) {
+        return toReins(cons).looseContains(point);
+    }
+    /**
+     * the vertices of the feasible polygon
+     * ```
+     * FeasiblePolygon([
+     *    [1, 0, '<', 10],
+     *    [1, 0, '>', -5],
+     *    [0, 1, '<', 10],
+     *    [0, 1, '>', -5]
+     * ])
+     * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+     * ```
+     */
+    static FeasiblePolygon(...cons) {
+        let vs = toReins(cons).polygon();
+        Should(vs.length > 2, 'No feasible region.');
+        return vs;
+    }
+    /**
+     * the vertices of the feasible polygon
+     * ```
+     * FeasiblePolygon([
+     *    [1, 0, '<', 10],
+     *    [1, 0, '>', -5],
+     *    [0, 1, '<', 10],
+     *    [0, 1, '>', -5]
+     * ])
+     * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+     * ```
+     */
+    static FeasibleVertices(...cons) {
+        let vs = toReins(cons).vertices();
+        Should(vs.length > 0, 'no feasible vertex');
+        return vs;
+    }
+    /**
+     * check if the feasible region is bounded
+     * ```
+     * FeasibleIsBounded([
+     *    [1, 0, '<', 10],
+     *    [1, 0, '>', -5],
+     *    [0, 1, '<', 10],
+     *    [0, 1, '>', -5]
+     * ])
+     * // true
+     * FeasibleIsBounded([
+     *    [1, 0, '<', 10],
+     * ])
+     * // false
+     * ```
+     */
+    static FeasibleIsBounded(...cons) {
+        return toReins(cons).isBounded();
+    }
+    /**
+     * the integral points inside the feasible polygon
+     * ```
+     * FeasibleIntegral([
+     *    [1, 0, '<', 3],
+     *    [1, 0, '>', 0],
+     *    [0, 1, '<', 2],
+     *    [0, 1, '>', 0]
+     * ])
+     * // [[1,1],[2,1]]
+     * ```
+     */
+    static FeasibleIntegral(...cons) {
+        return toReins(cons).integrals();
+    }
+    /**
+     * the point with the max value of field
+     * ```
+     * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
+     * ```
+     */
+    static MaximizePoint(points, field) {
+        Should(points.length > 0, 'No feasible point');
+        let pts = optimizer({
+            field: field,
+            feasiblePoints: points
+        }).maxPoints();
+        Should(pts.length > 0, 'No max point');
+        Should(pts.length < 2, 'Multiple max points');
+        return pts[0];
+    }
+    /**
+     * the point with the min value of field
+     * ```
+     * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
+     * ```
+     */
+    static MinimizePoint(points, field) {
+        Should(points.length > 0, 'No feasible point');
+        let pts = optimizer({
+            field: field,
+            feasiblePoints: points
+        }).minPoints();
+        Should(pts.length > 0, 'No min point');
+        Should(pts.length < 2, 'Multiple min points');
+        return pts[0];
+    }
+    /**
+     * the point with the min/max value of field
+     * ```
+     * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [10,10]
+     * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
+     * ```
+     */
+    static OptimizePoint(points, field, max) {
+        return max ? MaximizePoint(points, field) : MinimizePoint(points, field);
+    }
+    /**
+     * the max value of field
+     * ```
+     * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
+     * ```
+     */
+    static MaximizeField(points, field) {
+        let op = optimizer({
+            field: field,
+            feasiblePoints: points
+        });
+        let val = op.max();
+        Should(val !== null, 'No optimal value for this field!');
+        return val;
+    }
+    /**
+     * the min value of field
+     * ```
+     * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
+     * ```
+     */
+    static MinimizeField(points, field) {
+        let op = optimizer({
+            field: field,
+            feasiblePoints: points
+        });
+        let val = op.min();
+        Should(val !== null, 'No optimal value for this field!');
+        return val;
+    }
+    /**
+     * the min/max value of field
+     * ```
+     * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
+     * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
+     * ```
+     */
+    static OptimizeField(points, field, max) {
+        return max ? MaximizeField(points, field) : MinimizeField(points, field);
+    }
+    /**
+     * the constraints from the given points
+     * ```
+     * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
+     * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2])
+     * // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
+     * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
+     * ```
+     */
+    static ConstraintsFromPoints(...points) {
+        Should(IsConvexPolygon(...points), 'Not a convex region');
+        let mean = toShape2D(points).mean().toArray();
+        let pts = ArrangePoints(...points);
+        pts = [...pts, pts[0]];
+        let constraints = [];
+        for (let i = 0; i < points.length; i++) {
+            let A = pts[i];
+            let B = pts[i + 1];
+            let [a, b, c] = LinearFromTwoPoints(A, B);
+            let sign = FieldAt(mean, [a, b, c]) > 0 ? "\\ge" : "\\le";
+            constraints.push([a, b, sign, -c]);
+        }
+        return constraints;
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D, owl.field)
+], Host, "FieldAt", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraints, owl.point2D)
+], Host, "isConstrained", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraints, owl.point2D)
+], Host, "isLooseConstrained", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraint)
+], Host, "FeasiblePolygon", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraint)
+], Host, "FeasibleVertices", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraint)
+], Host, "FeasibleIsBounded", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraint)
+], Host, "FeasibleIntegral", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.field)
+], Host, "MaximizePoint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.field)
+], Host, "MinimizePoint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.field, owl.bool)
+], Host, "OptimizePoint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.field)
+], Host, "MaximizeField", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.field)
+], Host, "MinimizeField", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.field, owl.bool)
+], Host, "OptimizeField", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "ConstraintsFromPoints", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 5931:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Numeracy
- * @return division with x/0 handling
- * ```
- * Divide(6,2) // 3
- * Divide(6,0) // throw
- * ```
- */
-function Divide(dividend, divisor) {
-    return dividend / divisor;
-}
-globalThis.Divide = contract(Divide).sign([owl.num, owl.nonZero]);
-/**
- * @category Numeracy
- * @return the absolute value. Equivalent to Math.abs(x).
- * ```
- * Abs(-2) // 2
- * ```
- */
-function Abs(num) {
-    return Math.abs(num);
-}
-globalThis.Abs = contract(Abs).sign([owl.num]);
-/**
- * @category Numeracy
- * @return the sign of the number as 1,0 or -1.
- * ```
- * Sign(3) // 1
- * Sign(-4.5) // -1
- * Sign(0) // 0
- * ```
- */
-function Sign(num) {
-    if (num > 0)
-        return 1;
-    if (num < 0)
-        return -1;
-    return 0;
-}
-globalThis.Sign = contract(Sign).sign([owl.num]);
-/**
- * @deprecated
- * @category Numeracy
- * @return the sign of the number as 1,0 or -1.
- * ```
- * SigFig(123.45) // 5
- * ```
- */
-function SigFig(num) {
-    return cal.sigfig(cal.blur(num));
-}
-globalThis.SigFig = contract(SigFig).sign([owl.num]);
-/**
- * @category Numeracy
- * @return the number rounded off to given sigfig.
- * ```
- * Round(1.23456,3) // 1.23
- * Round(1.23567,3) // 1.24
- * ```
- */
-function Round(num, sigfig = 3) {
-    num = num * (1 + Number.EPSILON);
-    return cal.round(num, sigfig).off();
-}
-globalThis.Round = contract(Round).sign([owl.num, owl.positiveInt]);
-/**
- * @category Numeracy
- * @return the number rounded up to given sigfig.
- * ```
- * RoundUp(1.23456,3) // 1.23
- * RoundUp(1.23567,1) // 2
- * ```
- */
-function RoundUp(num, sigfig = 3) {
-    num = num * (1 - Number.EPSILON);
-    return cal.round(num, sigfig).up();
-}
-globalThis.RoundUp = contract(RoundUp).sign([owl.num, owl.positiveInt]);
-/**
- * @category Numeracy
- * @return the number rounded down to given sigfig.
- * ```
- * RoundDown(1.23456,5) // 1.2345
- * RoundDown(1.6789,1) // 1
- * ```
- */
-function RoundDown(num, sigfig = 3) {
-    num = num * (1 + Number.EPSILON);
-    return cal.round(num, sigfig).down();
-}
-globalThis.RoundDown = contract(RoundDown).sign([owl.num, owl.positiveInt]);
-/**
- * @category Numeracy
- * @return the number rounded off to given decimal place.
- * ```
- * Fix(12345.678) // round to integer by default, return 12346
- * Fix(12345.678,0) // round to integer, return 12346
- * Fix(12345.678,2) // round to 2 dp, return 12345.68
- * Fix(12345.678,-2) // round to hundred, return 12300
- * ```
- */
-function Fix(num, dp = 0) {
-    num = num * (1 + Number.EPSILON);
-    return cal.fix(num, dp).off();
-}
-globalThis.Fix = contract(Fix).sign([owl.num, owl.int]);
-/**
- * @category Numeracy
- * @return the number rounded up to given decimal place.
- * ```
- * FixUp(12.34) // round to integer by default, return 13
- * FixUp(12.34,0) // round to integer, return 13
- * FixUp(12.34,1) // round to 1 dp, return 12.4
- * FixUp(12.34,-1) // round to ten, return 20
- * ```
- */
-function FixUp(num, dp = 0) {
-    num = num * (1 - Number.EPSILON);
-    return cal.fix(num, dp).up();
-}
-globalThis.FixUp = contract(FixUp).sign([owl.num, owl.int]);
-/**
- * @category Numeracy
- * @return the number rounded down to given decimal place.
- * ```
- * FixDown(17.89) // round to integer by default, return 17
- * FixDown(17.89,0) // round to integer, return 17
- * FixDown(17.89,1) // round to 1 dp, return 17.8
- * FixDown(17.89,-1) // round to ten, return 10
- * ```
- */
-function FixDown(num, dp = 0) {
-    num = num * (1 + Number.EPSILON);
-    return cal.fix(num, dp).down();
-}
-globalThis.FixDown = contract(FixDown).sign([owl.num, owl.int]);
-/**
- * @category Numeracy
- * @return the ceiling integer of the number.
- * ```
- * Ceil(1.1) // 2
- * Ceil(-1.1) // -1
- * Ceil(2)) // 2
- * ```
- */
-function Ceil(num) {
-    return Math.ceil(num);
-}
-globalThis.Ceil = contract(Ceil).sign([owl.num]);
-/**
- * @category Numeracy
- * @return the floor integer of the number.
- * ```
- * Floor(1.9) // 1
- * Floor(-1.9) // -2
- * Floor(2)) // 2
- * ```
- */
-function Floor(num) {
-    return Math.floor(num);
-}
-globalThis.Floor = contract(Floor).sign([owl.num]);
-// /**
-//  * @category Numeracy
-//  * @deprecated use Ratio() instead
-//  * @return reduce input array to simplest ratio.
-//  * ```
-//  * SimpRatio(2,4,6) // [1,2,3]
-//  * SimpRatio(0,4,6) // [0,2,3]
-//  * SimpRatio(0,4) // [0,1]
-//  * ```
-//  */
-// function SimpRatio(...nums: number[]): number[] {
-//     let ns = toNumbers(nums).blur()
-//     // nums = nums.map(cal.blur)
-//     if (!IsInteger(...ns)) return nums
-//     let nonzeros = ns.filter($ => IsNonZero($))
-//     Should(nonzeros.length > 0, 'at least one non-zero num')
-//     return ns.reduceRatio()
-// }
-// globalThis.SimpRatio = contract(SimpRatio).sign([owl.num])
-/**
- * @category Numeracy
- * @return reduce input array to integral ratio.
- * ```
- * IntegerRatio(2,4,6) // [1,2,3]
- * IntegerRatio(0,4,6) // [0,2,3]
- * IntegerRatio(0,4) // [0,1]
- * IntegerRatio(1/3,1/2,1/4) // [4,6,3]
- * IntegerRatio(Math.sqrt(2),1/2,1/4) // throw
- * ```
- */
-function Ratio(...nums) {
-    return toNumbers(nums).ratio();
-}
-globalThis.Ratio = contract(Ratio).sign([owl.rational]);
-/**
- * @category Numeracy
- * @return The HCF of nums.
- * ```
- * HCF(6,8) // 2
- * HCF(6,8,9) // 1
- * HCF(1,3) // 1
- * HCF(0.5,3) // throw
- * HCF(0,3) // throw
- * ```
- */
-function HCF(...nums) {
-    return toNumbers(nums).hcf();
-}
-globalThis.HCF = contract(HCF).sign([owl.nonZeroInt]);
-/**
- * @category Numeracy
- * @return The LCM of nums.
- * ```
- * LCM(2,3) // 6
- * LCM(2,3,5) // 30
- * LCM(0.5,3) // throw
- * LCM(0,3) // throw
- * ```
- */
-function LCM(...nums) {
-    return toNumbers(nums).lcm();
-}
-globalThis.LCM = contract(LCM).sign([owl.nonZeroInt]);
-/**
- * @category Numeracy
- * @return convert num to fraction
- * ```
- * ToFrac(0.5) // [1,2]
- * ToFrac(-456/123) // [-152,41]
- * ```
- */
-function ToFrac(num) {
-    return cal.toFraction(num);
-}
-globalThis.ToFrac = contract(ToFrac).sign([owl.rational]);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * division with x/0 handling
+     * ```
+     * Divide(6,2) // 3
+     * Divide(6,0) // throw
+     * ```
+     */
+    static Divide(dividend, divisor) {
+        return dividend / divisor;
+    }
+    /**
+     * the absolute value. Equivalent to Math.abs(x).
+     * ```
+     * Abs(-2) // 2
+     * ```
+     */
+    static Abs(num) {
+        return Math.abs(num);
+    }
+    /**
+     * the sign of the number as 1,0 or -1.
+     * ```
+     * Sign(3) // 1
+     * Sign(-4.5) // -1
+     * Sign(0) // 0
+     * ```
+     */
+    static Sign(num) {
+        if (num > 0)
+            return 1;
+        if (num < 0)
+            return -1;
+        return 0;
+    }
+    /**
+     * @deprecated
+     * the sign of the number as 1,0 or -1.
+     * ```
+     * SigFig(123.45) // 5
+     * ```
+     */
+    static SigFig(num) {
+        return cal.sigfig(cal.blur(num));
+    }
+    /**
+     * the number rounded off to given sigfig.
+     * ```
+     * Round(1.23456,3) // 1.23
+     * Round(1.23567,3) // 1.24
+     * ```
+     */
+    static Round(num, sigfig = 3) {
+        num = num * (1 + Number.EPSILON);
+        return cal.round(num, sigfig).off();
+    }
+    /**
+     * the number rounded up to given sigfig.
+     * ```
+     * RoundUp(1.23456,3) // 1.23
+     * RoundUp(1.23567,1) // 2
+     * ```
+     */
+    static RoundUp(num, sigfig = 3) {
+        num = num * (1 - Number.EPSILON);
+        return cal.round(num, sigfig).up();
+    }
+    /**
+     * the number rounded down to given sigfig.
+     * ```
+     * RoundDown(1.23456,5) // 1.2345
+     * RoundDown(1.6789,1) // 1
+     * ```
+     */
+    static RoundDown(num, sigfig = 3) {
+        num = num * (1 + Number.EPSILON);
+        return cal.round(num, sigfig).down();
+    }
+    /**
+     * the number rounded off to given decimal place.
+     * ```
+     * Fix(12345.678) // round to integer by default, return 12346
+     * Fix(12345.678,0) // round to integer, return 12346
+     * Fix(12345.678,2) // round to 2 dp, return 12345.68
+     * Fix(12345.678,-2) // round to hundred, return 12300
+     * ```
+     */
+    static Fix(num, dp = 0) {
+        num = num * (1 + Number.EPSILON);
+        return cal.fix(num, dp).off();
+    }
+    /**
+     * the number rounded up to given decimal place.
+     * ```
+     * FixUp(12.34) // round to integer by default, return 13
+     * FixUp(12.34,0) // round to integer, return 13
+     * FixUp(12.34,1) // round to 1 dp, return 12.4
+     * FixUp(12.34,-1) // round to ten, return 20
+     * ```
+     */
+    static FixUp(num, dp = 0) {
+        num = num * (1 - Number.EPSILON);
+        return cal.fix(num, dp).up();
+    }
+    /**
+     * the number rounded down to given decimal place.
+     * ```
+     * FixDown(17.89) // round to integer by default, return 17
+     * FixDown(17.89,0) // round to integer, return 17
+     * FixDown(17.89,1) // round to 1 dp, return 17.8
+     * FixDown(17.89,-1) // round to ten, return 10
+     * ```
+     */
+    static FixDown(num, dp = 0) {
+        num = num * (1 + Number.EPSILON);
+        return cal.fix(num, dp).down();
+    }
+    /**
+     * the ceiling integer of the number.
+     * ```
+     * Ceil(1.1) // 2
+     * Ceil(-1.1) // -1
+     * Ceil(2)) // 2
+     * ```
+     */
+    static Ceil(num) {
+        return Math.ceil(num);
+    }
+    /**
+     * the floor integer of the number.
+     * ```
+     * Floor(1.9) // 1
+     * Floor(-1.9) // -2
+     * Floor(2)) // 2
+     * ```
+     */
+    static Floor(num) {
+        return Math.floor(num);
+    }
+    /**
+     * reduce input array to integral ratio.
+     * ```
+     * IntegerRatio(2,4,6) // [1,2,3]
+     * IntegerRatio(0,4,6) // [0,2,3]
+     * IntegerRatio(0,4) // [0,1]
+     * IntegerRatio(1/3,1/2,1/4) // [4,6,3]
+     * IntegerRatio(Math.sqrt(2),1/2,1/4) // throw
+     * ```
+     */
+    static Ratio(...nums) {
+        return toNumbers(nums).ratio();
+    }
+    /**
+     * The HCF of nums.
+     * ```
+     * HCF(6,8) // 2
+     * HCF(6,8,9) // 1
+     * HCF(1,3) // 1
+     * HCF(0.5,3) // throw
+     * HCF(0,3) // throw
+     * ```
+     */
+    static HCF(...nums) {
+        return toNumbers(nums).hcf();
+    }
+    /**
+     * The LCM of nums.
+     * ```
+     * LCM(2,3) // 6
+     * LCM(2,3,5) // 30
+     * LCM(0.5,3) // throw
+     * LCM(0,3) // throw
+     * ```
+     */
+    static LCM(...nums) {
+        return toNumbers(nums).lcm();
+    }
+    /**
+     * convert num to fraction
+     * ```
+     * ToFrac(0.5) // [1,2]
+     * ToFrac(-456/123) // [-152,41]
+     * ```
+     */
+    static ToFrac(num) {
+        return cal.toFraction(num);
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.nonZero)
+], Host, "Divide", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Abs", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Sign", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "SigFig", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.positiveInt)
+], Host, "Round", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.positiveInt)
+], Host, "RoundUp", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.positiveInt)
+], Host, "RoundDown", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.int)
+], Host, "Fix", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.int)
+], Host, "FixUp", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.int)
+], Host, "FixDown", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Ceil", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Floor", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.rational)
+], Host, "Ratio", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZeroInt)
+], Host, "HCF", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZeroInt)
+], Host, "LCM", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.rational)
+], Host, "ToFrac", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
@@ -33560,1968 +33703,2024 @@ globalThis.PhyEq = new PhyEqCls();
 /***/ }),
 
 /***/ 2113:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Random
- * @return a random integer in [min, max] inclusive.
- * ```
- * RndN(2,5) // may return 2, 3, 4 or 5
- * ```
- */
-function RndN(min, max) {
-    return poker.integer(min, max);
-}
-globalThis.RndN = contract(RndN).sign([owl.num]);
-/**
- * @category Random
- * @return an array of n unique random integer in [min, max] inclusive.
- * ```
- * RndNs(2,8,3) // may return [5,3,7]
- * ```
- */
-function RndNs(min, max, n = 10) {
-    n = Math.min(Math.floor(max - min + 1), n);
-    return dice(() => RndN(min, max)).unique().rolls(n);
-}
-globalThis.RndNs = contract(RndNs).sign([owl.num, owl.num, owl.positiveInt]);
-/**
- * @category Random
- * @return a random real number in [min, max] inclusive
- * ```
- * RndR(1,2) // may return 1.242574363
- * ```
- */
-function RndR(min, max) {
-    return poker.real(min, max);
-}
-globalThis.RndR = contract(RndR).sign([owl.num]);
-/**
- * @category Random
- * @return an array of n unique random real number in [min, max] inclusive.
- * ```
- * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
- * ```
- */
-function RndRs(min, max, n = 10) {
-    return dice(() => RndR(min, max)).unique().rolls(n);
-}
-globalThis.RndRs = contract(RndRs).sign([owl.num, owl.num, owl.positiveInt]);
-/**
- * @category Random
- * @return a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
- * ```
- * RndQ(9,[2,9]) // may return 7/2
- * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
- * ```
- */
-function RndQ(largest = 9, range) {
-    let L = Math.abs(largest);
-    let sign = largest > 0 ? 1 : RndU();
-    let f = () => RndN(1, L) / RndN(2, L) * sign;
-    let d = dice(f).shield(_ => owl.dec(_));
-    if (range) {
-        d.shield(_ => _ >= range[0])
-            .shield(_ => _ <= range[1]);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * @category Random
+     * @return a random integer in [min, max] inclusive.
+     * ```
+     * RndN(2,5) // may return 2, 3, 4 or 5
+     * ```
+     */
+    static RndN(min, max) {
+        return poker.integer(min, max);
     }
-    return d.roll();
-}
-globalThis.RndQ = contract(RndQ).sign([owl.nonZeroInt, owl.interval]);
-/**
- * @category Random
- * @return an array of n unique random fractions (non-integer) .
- * ```
- * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
- * ```
- */
-function RndQs(largest = 9, range, n = 10) {
-    n = Math.min(Math.abs(largest) + 1, n);
-    return dice(() => RndQ(largest, range)).unique().rolls(n);
-}
-globalThis.RndQs = contract(RndQs).sign([owl.nonZeroInt, owl.interval, owl.positiveInt]);
-/**
- * @category Random
- * @return 1 or -1
- * ```
- * RndU() // may return 1 or -1
- * ```
- */
-function RndU() {
-    return list(1, -1).draw();
-}
-globalThis.RndU = RndU;
-/**
- * @category Random
- * @return true or false.
- * ```
- * RndT() // may return true or false
- * ```
- */
-function RndT() {
-    return poker.bool();
-}
-globalThis.RndT = RndT;
-/**
- * @category Random
- * @return a random integer in [min, max] or [-max, -min] inclusive.
- * ```
- * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
- * ```
- */
-function RndZ(min, max) {
-    return RndN(min, max) * RndU();
-}
-globalThis.RndZ = contract(RndZ).sign([owl.num]);
-/**
- * @category Random
- * @param n - default to 10
- * @return an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
- * ```
- * RndZs(2,8,3) // may return [5,-3,7]
- * ```
- */
-function RndZs(min, max, n = 10) {
-    n = Math.min(Math.floor(max - min + 1), n);
-    return dice(() => RndN(min, max)).unique().rolls(n).map(x => x * RndU());
-}
-globalThis.RndZs = contract(RndZs).sign([owl.nonNegative, owl.nonNegative, owl.positiveInt]);
-/**
- * @category Random
- * @return a random prime number less than or equal to max.
- * ```
- * RndP(10) // may return 2, 3, 5 or 7
- * ```
- */
-function RndP(max) {
-    return poker.prime(2, max);
-}
-globalThis.RndP = contract(RndP).sign([owl.positive]);
-/**
- * @category Random
- * @return a random odd integer in [min, max] inclusive
- * ```
- * RndOdd(3,8) // return 3, 5 or 7
- * ```
- */
-function RndOdd(min, max) {
-    min = Math.ceil((min + 1) / 2);
-    max = Math.floor((max + 1) / 2);
-    return 2 * RndN(min, max) - 1;
-}
-globalThis.RndOdd = contract(RndOdd).sign([owl.num]);
-/**
- * @category Random
- * @return a random even integer in [min, max] inclusive
- * ```
- * RndEven(3,8) // return 4, 6 or 8
- * ```
- */
-function RndEven(min, max) {
-    min = Math.ceil(min / 2);
-    max = Math.floor(max / 2);
-    return 2 * RndN(min, max);
-}
-globalThis.RndEven = contract(RndEven).sign([owl.num]);
-/**
- * @category Random
- * @return an array of random polynomial coefficients
- * ```
- * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
- * ```
- */
-function RndPoly(...coeff) {
-    let arr = coeff.map(x => RndZ(1, x));
-    arr[0] = Math.abs(arr[0]);
-    return arr;
-}
-globalThis.RndPoly = contract(RndPoly).sign([owl.positive]);
-/**
- * @category Random
- * @return an array of a Pyth Triple
- * ```
- * RndPyth(10) // may return [3,4,5]
- * ```
- */
-function RndPyth(max = 100) {
-    let arr = [];
-    for (let m = 1; m < 10; m++) {
-        for (let n = 1; n < m; n++) {
-            for (let k = 1; k < 10; k++) {
-                let a = m * m - n * n;
-                let b = 2 * m * n;
-                let c = m * m + n * n;
-                if (c <= max)
-                    arr.push([a, b, c]);
+    /**
+     * @category Random
+     * @return an array of n unique random integer in [min, max] inclusive.
+     * ```
+     * RndNs(2,8,3) // may return [5,3,7]
+     * ```
+     */
+    static RndNs(min, max, n = 10) {
+        n = Math.min(Math.floor(max - min + 1), n);
+        return dice(() => RndN(min, max)).unique().rolls(n);
+    }
+    /**
+     * @category Random
+     * @return a random real number in [min, max] inclusive
+     * ```
+     * RndR(1,2) // may return 1.242574363
+     * ```
+     */
+    static RndR(min, max) {
+        return poker.real(min, max);
+    }
+    /**
+     * @category Random
+     * @return an array of n unique random real number in [min, max] inclusive.
+     * ```
+     * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
+     * ```
+     */
+    static RndRs(min, max, n = 10) {
+        return dice(() => RndR(min, max)).unique().rolls(n);
+    }
+    /**
+     * @category Random
+     * @return a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
+     * ```
+     * RndQ(9,[2,9]) // may return 7/2
+     * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
+     * ```
+     */
+    static RndQ(largest = 9, range) {
+        let L = Math.abs(largest);
+        let sign = largest > 0 ? 1 : RndU();
+        let f = () => RndN(1, L) / RndN(2, L) * sign;
+        let d = dice(f).shield(_ => owl.dec(_));
+        if (range) {
+            d.shield(_ => _ >= range[0])
+                .shield(_ => _ <= range[1]);
+        }
+        return d.roll();
+    }
+    /**
+     * @category Random
+     * @return an array of n unique random fractions (non-integer) .
+     * ```
+     * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
+     * ```
+     */
+    static RndQs(largest = 9, range, n = 10) {
+        n = Math.min(Math.abs(largest) + 1, n);
+        return dice(() => RndQ(largest, range)).unique().rolls(n);
+    }
+    /**
+     * @category Random
+     * @return 1 or -1
+     * ```
+     * RndU() // may return 1 or -1
+     * ```
+     */
+    static RndU() {
+        return list(1, -1).draw();
+    }
+    /**
+     * @category Random
+     * @return true or false.
+     * ```
+     * RndT() // may return true or false
+     * ```
+     */
+    static RndT() {
+        return poker.bool();
+    }
+    /**
+     * @category Random
+     * @return a random integer in [min, max] or [-max, -min] inclusive.
+     * ```
+     * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
+     * ```
+     */
+    static RndZ(min, max) {
+        return RndN(min, max) * RndU();
+    }
+    /**
+     * @category Random
+     * @param n - default to 10
+     * @return an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
+     * ```
+     * RndZs(2,8,3) // may return [5,-3,7]
+     * ```
+     */
+    static RndZs(min, max, n = 10) {
+        n = Math.min(Math.floor(max - min + 1), n);
+        return dice(() => RndN(min, max)).unique().rolls(n).map(x => x * RndU());
+    }
+    /**
+     * @category Random
+     * @return a random prime number less than or equal to max.
+     * ```
+     * RndP(10) // may return 2, 3, 5 or 7
+     * ```
+     */
+    static RndP(max) {
+        return poker.prime(2, max);
+    }
+    /**
+     * @category Random
+     * @return a random odd integer in [min, max] inclusive
+     * ```
+     * RndOdd(3,8) // return 3, 5 or 7
+     * ```
+     */
+    static RndOdd(min, max) {
+        min = Math.ceil((min + 1) / 2);
+        max = Math.floor((max + 1) / 2);
+        return 2 * RndN(min, max) - 1;
+    }
+    /**
+     * @category Random
+     * @return a random even integer in [min, max] inclusive
+     * ```
+     * RndEven(3,8) // return 4, 6 or 8
+     * ```
+     */
+    static RndEven(min, max) {
+        min = Math.ceil(min / 2);
+        max = Math.floor(max / 2);
+        return 2 * RndN(min, max);
+    }
+    /**
+     * @category Random
+     * @return an array of random polynomial coefficients
+     * ```
+     * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
+     * ```
+     */
+    static RndPoly(...coeff) {
+        let arr = coeff.map(x => RndZ(1, x));
+        arr[0] = Math.abs(arr[0]);
+        return arr;
+    }
+    /**
+     * @category Random
+     * @return an array of a Pyth Triple
+     * ```
+     * RndPyth(10) // may return [3,4,5]
+     * ```
+     */
+    static RndPyth(max = 100) {
+        let arr = [];
+        for (let m = 1; m < 10; m++) {
+            for (let n = 1; n < m; n++) {
+                for (let k = 1; k < 10; k++) {
+                    let a = m * m - n * n;
+                    let b = 2 * m * n;
+                    let c = m * m + n * n;
+                    if (c <= max)
+                        arr.push([a, b, c]);
+                }
             }
         }
+        return toList(arr).draw();
     }
-    return toList(arr).draw();
-}
-globalThis.RndPyth = contract(RndPyth).sign([owl.positive]);
-/**
- * @category Random
- * @return a point within given range, x and y are distinct and non-zero
- * ```
- * RndPoint([1,4],[10,14]) // may return [2,12]
- * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
- * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
- * ```
- */
-function RndPoint(xRange, yRange = xRange) {
-    if (typeof xRange === 'number')
-        xRange = [-xRange, xRange];
-    if (typeof yRange === 'number')
-        yRange = [-yRange, yRange];
-    let [x1, x2] = xRange;
-    let [y1, y2] = yRange;
-    let f = () => [RndN(x1, x2), RndN(y1, y2)];
-    return dice(f)
-        .shield(([x, y]) => x !== 0)
-        .shield(([x, y]) => y !== 0)
-        .shield(([x, y]) => x !== y)
-        .roll();
-}
-globalThis.RndPoint = contract(RndPoint).sign([owl.or([owl.num, owl.interval])]);
-/**
- * @category Random
- * @return n points within given range, no horizontal / vertical / collinear
- * ```
- * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
- * ```
- */
-function RndPoints(xRange, yRange = xRange, n = 10) {
-    return dice(() => RndPoint(xRange, yRange))
-        .unique(([x, y]) => x)
-        .unique(([x, y]) => y)
-        .coherent($ => toList($).combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C)))
-        .rolls(n);
-}
-globalThis.RndPoints = contract(RndPoints)
-    .sign([owl.or([owl.num, owl.interval]), owl.or([owl.num, owl.interval]), owl.num]);
-/**
- * @category Random
- * @return n angles in [0,360] at least cyclic separated by separation
- * ```
- * RndAngles(3,50) // may return [30,90,200]
- * ```
- */
-function RndAngles(n, separation) {
-    let angles = dice(() => RndN(0, 360))
-        .coherent(angles => toNumbers(angles).gapsMod(360).min() > separation)
-        .unique()
-        .rolls(n);
-    return [...toList(angles).ascending()];
-}
-globalThis.RndAngles = contract(RndAngles).sign([owl.positiveInt, owl.positive]);
-/**
- * @category Random
- * @return `n` points on a unit circle at least cyclic separated by separation
- * ```
- * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
- * ```
- */
-function RndOnCircle(n, separation) {
-    let t = RndN(0, 360);
-    return RndAngles(n, separation).map($ => OnCircle($ + t));
-}
-globalThis.RndOnCircle = contract(RndOnCircle).sign([owl.positiveInt, owl.positive]);
-/**
- * @category Random
- * @return n vertices of a convex polygon generated by rounding a cyclic polygon
- * ```
- * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
- * ```
- */
-function RndConvexPolygon(n, center, radius, separation) {
-    let [h, k] = center;
-    let r = radius;
-    let angles = RndAngles(n, separation);
-    let vertices = angles.map(a => [h + r * cos(a), k + r * sin(a)]);
-    vertices = vertices.map(([x, y]) => [Fix(x), Fix(y)]);
-    return vertices;
-}
-globalThis.RndConvexPolygon = contract(RndConvexPolygon)
-    .sign([owl.positiveInt, owl.point2D, owl.positive, owl.positive]);
-/**
- * @category Random
- * @return n integers from [min, max], must be uni-moded
- * ```
- * RndData(10,15,5) // may return [11,11,12,13,15]
- * ```
- */
-function RndData(min, max, n) {
-    let data = dice(() => RndN(min, max))
-        .coherent(d => toData(d).isSingleMode())
-        .rolls(n);
-    return toList(data).ascending();
-}
-globalThis.RndData = contract(RndData).sign([owl.num, owl.num, owl.positiveInt]);
-/**
- * @category Random
- * @return 3 points forming a triangle, with min angle and length
- * ```
- * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
- * ```
- */
-function RndTriangle(xRange, yRange, { minAngle = 0, maxAngle = 180, minLength = 0, obtuse = false } = {}) {
-    let [x1, x2] = xRange;
-    let [y1, y2] = yRange;
-    let arr = [];
-    for (let i = x1; i <= x2; i++) {
-        for (let j = y1; j <= y2; j++) {
-            arr.push([i, j]);
-        }
+    /**
+     * @category Random
+     * @return a point within given range, x and y are distinct and non-zero
+     * ```
+     * RndPoint([1,4],[10,14]) // may return [2,12]
+     * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
+     * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
+     * ```
+     */
+    static RndPoint(xRange, yRange = xRange) {
+        if (typeof xRange === 'number')
+            xRange = [-xRange, xRange];
+        if (typeof yRange === 'number')
+            yRange = [-yRange, yRange];
+        let [x1, x2] = xRange;
+        let [y1, y2] = yRange;
+        let f = () => [RndN(x1, x2), RndN(y1, y2)];
+        return dice(f)
+            .shield(([x, y]) => x !== 0)
+            .shield(([x, y]) => y !== 0)
+            .shield(([x, y]) => x !== y)
+            .roll();
     }
-    arr = RndShuffle(...arr);
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = i + 1; j < arr.length; j++) {
-            for (let k = j + 1; k < arr.length; k++) {
-                let A = arr[i];
-                let B = arr[j];
-                let C = arr[k];
-                if (A[0] === B[0])
-                    continue;
-                if (B[0] === C[0])
-                    continue;
-                if (C[0] === A[0])
-                    continue;
-                if (A[1] === B[1])
-                    continue;
-                if (B[1] === C[1])
-                    continue;
-                if (C[1] === A[1])
-                    continue;
-                if (Slope(A, B) === Slope(B, C))
-                    continue;
-                let A_ = Angle(C, A, B);
-                let B_ = Angle(A, B, C);
-                let C_ = Angle(B, C, A);
-                let smallestAngle = Min(A_, B_, C_);
-                let largestAngle = Max(A_, B_, C_);
-                if (smallestAngle < minAngle)
-                    continue;
-                if (largestAngle > maxAngle)
-                    continue;
-                if (Distance(A, B) < minLength)
-                    continue;
-                if (Distance(B, C) < minLength)
-                    continue;
-                if (Distance(C, A) < minLength)
-                    continue;
-                if (obtuse && largestAngle <= 90)
-                    continue;
-                return [A, B, C];
+    /**
+     * @category Random
+     * @return n points within given range, no horizontal / vertical / collinear
+     * ```
+     * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
+     * ```
+     */
+    static RndPoints(xRange, yRange = xRange, n = 10) {
+        return dice(() => RndPoint(xRange, yRange))
+            .unique(([x, y]) => x)
+            .unique(([x, y]) => y)
+            .coherent($ => toList($).combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C)))
+            .rolls(n);
+    }
+    /**
+     * @category Random
+     * @return n angles in [0,360] at least cyclic separated by separation
+     * ```
+     * RndAngles(3,50) // may return [30,90,200]
+     * ```
+     */
+    static RndAngles(n, separation) {
+        let angles = dice(() => RndN(0, 360))
+            .coherent(angles => toNumbers(angles).gapsMod(360).min() > separation)
+            .unique()
+            .rolls(n);
+        return [...toList(angles).ascending()];
+    }
+    /**
+     * @category Random
+     * @return `n` points on a unit circle at least cyclic separated by separation
+     * ```
+     * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
+     * ```
+     */
+    static RndOnCircle(n, separation) {
+        let t = RndN(0, 360);
+        return RndAngles(n, separation).map($ => OnCircle($ + t));
+    }
+    /**
+     * @category Random
+     * @return n vertices of a convex polygon generated by rounding a cyclic polygon
+     * ```
+     * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
+     * ```
+     */
+    static RndConvexPolygon(n, center, radius, separation) {
+        let [h, k] = center;
+        let r = radius;
+        let angles = RndAngles(n, separation);
+        let vertices = angles.map(a => [h + r * cos(a), k + r * sin(a)]);
+        vertices = vertices.map(([x, y]) => [Fix(x), Fix(y)]);
+        return vertices;
+    }
+    /**
+     * @category Random
+     * @return n integers from [min, max], must be uni-moded
+     * ```
+     * RndData(10,15,5) // may return [11,11,12,13,15]
+     * ```
+     */
+    static RndData(min, max, n) {
+        let data = dice(() => RndN(min, max))
+            .coherent(d => toData(d).isSingleMode())
+            .rolls(n);
+        return toList(data).ascending();
+    }
+    /**
+     * @category Random
+     * @return 3 points forming a triangle, with min angle and length
+     * ```
+     * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
+     * ```
+     */
+    static RndTriangle(xRange, yRange, { minAngle = 0, maxAngle = 180, minLength = 0, obtuse = false } = {}) {
+        let [x1, x2] = xRange;
+        let [y1, y2] = yRange;
+        let arr = [];
+        for (let i = x1; i <= x2; i++) {
+            for (let j = y1; j <= y2; j++) {
+                arr.push([i, j]);
             }
         }
-    }
-    throw 'RndTriangle fail to find a suitable triangle.';
-}
-globalThis.RndTriangle = contract(RndTriangle).sign([owl.interval, owl.interval, owl.object]);
-/**
- * @category Random
- * @return an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
- * ```
- * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
- * ```
- */
-function RndTrigValue(func, angle) {
-    let trig = (funcName, q) => {
-        if (funcName === 'sin')
-            return sin(q);
-        if (funcName === 'cos')
-            return cos(q);
-        if (funcName === 'tan')
-            return tan(q);
-        throw 'never';
-    };
-    let atrig = (funcName, val) => {
-        if (funcName === 'sin')
-            return arcsin(val);
-        if (funcName === 'cos')
-            return arccos(val);
-        if (funcName === 'tan')
-            return arctan(val);
-        throw 'never';
-    };
-    let v = trig(func, angle);
-    angle = atrig(func, Abs(trig(func, angle)));
-    angle = cal.blur(angle);
-    let arr = [];
-    for (let f of ['sin', 'cos', 'tan']) {
-        for (let a of [0, 90, 180, 270, 360]) {
-            for (let s of [angle, -angle]) {
-                if (a === 360 && s > 0)
-                    continue;
-                if (a === 0 && s < 0)
-                    continue;
-                if (cal.eq(trig(f, a + s), v))
-                    arr.push([f, a + s]);
+        arr = RndShuffle(...arr);
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = i + 1; j < arr.length; j++) {
+                for (let k = j + 1; k < arr.length; k++) {
+                    let A = arr[i];
+                    let B = arr[j];
+                    let C = arr[k];
+                    if (A[0] === B[0])
+                        continue;
+                    if (B[0] === C[0])
+                        continue;
+                    if (C[0] === A[0])
+                        continue;
+                    if (A[1] === B[1])
+                        continue;
+                    if (B[1] === C[1])
+                        continue;
+                    if (C[1] === A[1])
+                        continue;
+                    if (Slope(A, B) === Slope(B, C))
+                        continue;
+                    let A_ = Angle(C, A, B);
+                    let B_ = Angle(A, B, C);
+                    let C_ = Angle(B, C, A);
+                    let smallestAngle = Min(A_, B_, C_);
+                    let largestAngle = Max(A_, B_, C_);
+                    if (smallestAngle < minAngle)
+                        continue;
+                    if (largestAngle > maxAngle)
+                        continue;
+                    if (Distance(A, B) < minLength)
+                        continue;
+                    if (Distance(B, C) < minLength)
+                        continue;
+                    if (Distance(C, A) < minLength)
+                        continue;
+                    if (obtuse && largestAngle <= 90)
+                        continue;
+                    return [A, B, C];
+                }
             }
         }
+        throw 'RndTriangle fail to find a suitable triangle.';
     }
-    return RndPick(...arr);
-}
-globalThis.RndTrigValue = contract(RndTrigValue).sign([owl.trig, owl.num]);
-/**
- * @category Random
- * @return an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
- * ```
- * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
- * ```
- */
-function RndTrigEqv(result, label) {
-    let trig = (funcName, angle) => {
-        if (funcName === 'sin')
-            return sin(angle);
-        if (funcName === 'cos')
-            return cos(angle);
-        if (funcName === 'tan')
-            return tan(angle);
-        throw 'never';
-    };
-    let v = 0;
-    if (result === 'sin')
-        v = sin(1);
-    if (result === '-sin')
-        v = -sin(1);
-    if (result === 'cos')
-        v = cos(1);
-    if (result === '-cos')
-        v = -cos(1);
-    if (result === 'tan')
-        v = tan(1);
-    if (result === '-tan')
-        v = -tan(1);
-    if (result === '1/tan')
-        v = 1 / tan(1);
-    if (result === '-1/tan')
-        v = -1 / tan(1);
-    let arr = [];
-    for (let f of ['sin', 'cos', 'tan']) {
-        for (let a of [90, 180, 270, 360]) {
-            for (let s of [1, -1]) {
-                if (a === 360 && s > 0)
-                    continue;
-                if (cal.eq(trig(f, a + s), v))
-                    arr.push([f, a, s, label]);
+    /**
+     * @category Random
+     * @return an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
+     * ```
+     * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
+     * ```
+     */
+    static RndTrigValue(func, angle) {
+        let trig = (funcName, q) => {
+            if (funcName === 'sin')
+                return sin(q);
+            if (funcName === 'cos')
+                return cos(q);
+            if (funcName === 'tan')
+                return tan(q);
+            throw 'never';
+        };
+        let atrig = (funcName, val) => {
+            if (funcName === 'sin')
+                return arcsin(val);
+            if (funcName === 'cos')
+                return arccos(val);
+            if (funcName === 'tan')
+                return arctan(val);
+            throw 'never';
+        };
+        let v = trig(func, angle);
+        angle = atrig(func, Abs(trig(func, angle)));
+        angle = cal.blur(angle);
+        let arr = [];
+        for (let f of ['sin', 'cos', 'tan']) {
+            for (let a of [0, 90, 180, 270, 360]) {
+                for (let s of [angle, -angle]) {
+                    if (a === 360 && s > 0)
+                        continue;
+                    if (a === 0 && s < 0)
+                        continue;
+                    if (cal.eq(trig(f, a + s), v))
+                        arr.push([f, a + s]);
+                }
             }
         }
+        return RndPick(...arr);
     }
-    return RndPick(...arr);
-}
-globalThis.RndTrigEqv = contract(RndTrigEqv).sign([owl.str, owl.str]);
-/**
- * @category Random
- * @return a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
- * ```
- * RndPointPolar()
- * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
- * ```
- */
-function RndPointPolar() {
-    let angle = RndPick(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330);
-    let a = RndEven(2, 6);
-    let b = RndPick(1, 2, 3);
-    let r = a * Math.sqrt(b);
-    return PolToRect([r, angle]);
-}
-globalThis.RndPointPolar = contract(RndPointPolar).sign([]);
-/**
- * @category Random
- * @return a random ratio group in [min, max] inclusive.
- * ```
- * RndRatio(2,9,3) // may return [3,7,5]
- * ```
- */
-function RndRatio(min, max, n = 10) {
-    let nums = RndNs(min, max, n);
-    return toNumbers(nums).ratio();
-}
-globalThis.RndRatio = contract(RndRatio).sign([owl.positive, owl.positive, owl.positiveInt]);
+    /**
+     * @category Random
+     * @return an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
+     * ```
+     * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
+     * ```
+     */
+    static RndTrigEqv(result, label) {
+        let trig = (funcName, angle) => {
+            if (funcName === 'sin')
+                return sin(angle);
+            if (funcName === 'cos')
+                return cos(angle);
+            if (funcName === 'tan')
+                return tan(angle);
+            throw 'never';
+        };
+        let v = 0;
+        if (result === 'sin')
+            v = sin(1);
+        if (result === '-sin')
+            v = -sin(1);
+        if (result === 'cos')
+            v = cos(1);
+        if (result === '-cos')
+            v = -cos(1);
+        if (result === 'tan')
+            v = tan(1);
+        if (result === '-tan')
+            v = -tan(1);
+        if (result === '1/tan')
+            v = 1 / tan(1);
+        if (result === '-1/tan')
+            v = -1 / tan(1);
+        let arr = [];
+        for (let f of ['sin', 'cos', 'tan']) {
+            for (let a of [90, 180, 270, 360]) {
+                for (let s of [1, -1]) {
+                    if (a === 360 && s > 0)
+                        continue;
+                    if (cal.eq(trig(f, a + s), v))
+                        arr.push([f, a, s, label]);
+                }
+            }
+        }
+        return RndPick(...arr);
+    }
+    /**
+     * @category Random
+     * @return a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
+     * ```
+     * RndPointPolar()
+     * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
+     * ```
+     */
+    static RndPointPolar() {
+        let angle = RndPick(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330);
+        let a = RndEven(2, 6);
+        let b = RndPick(1, 2, 3);
+        let r = a * Math.sqrt(b);
+        return PolToRect([r, angle]);
+    }
+    /**
+     * @category Random
+     * @return a random ratio group in [min, max] inclusive.
+     * ```
+     * RndRatio(2,9,3) // may return [3,7,5]
+     * ```
+     */
+    static RndRatio(min, max, n = 10) {
+        let nums = RndNs(min, max, n);
+        return toNumbers(nums).ratio();
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "RndN", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.positiveInt)
+], Host, "RndNs", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "RndR", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.positiveInt)
+], Host, "RndRs", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZeroInt, owl.interval)
+], Host, "RndQ", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonZeroInt, owl.interval, owl.positiveInt)
+], Host, "RndQs", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "RndZ", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.nonNegative, owl.nonNegative, owl.positiveInt)
+], Host, "RndZs", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positive)
+], Host, "RndP", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "RndOdd", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "RndEven", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positive)
+], Host, "RndPoly", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positive)
+], Host, "RndPyth", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.or([owl.num, owl.interval]))
+], Host, "RndPoint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.or([owl.num, owl.interval]), owl.or([owl.num, owl.interval]), owl.num)
+], Host, "RndPoints", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positiveInt, owl.positive)
+], Host, "RndAngles", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positiveInt, owl.positive)
+], Host, "RndOnCircle", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positiveInt, owl.point2D, owl.positive, owl.positive)
+], Host, "RndConvexPolygon", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.positiveInt)
+], Host, "RndData", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.interval, owl.interval, owl.object)
+], Host, "RndTriangle", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.trig, owl.num)
+], Host, "RndTrigValue", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.str, owl.str)
+], Host, "RndTrigEqv", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positive, owl.positive, owl.positiveInt)
+], Host, "RndRatio", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 9348:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category RandomShake
- * @deprecated
- * @return an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
- * ```
- * RndShake(10)
- * // equivalent to RndShakeN(10)
- * RndShake(10.5)
- * // equivalent to RndShakeR(10.5)
- * ```
- */
-function RndShake(anchor) {
-    if (typeof anchor === 'string') {
-        // Fraction, to be deleted
-        if (owl.dfrac(anchor)) {
-            Should(false, 'RndShakeDfrac is not supported anymore');
-            // return RndShakeDfrac(anchor)
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * @deprecated
+     * an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
+     * ```
+     * RndShake(10)
+     * // equivalent to RndShakeN(10)
+     * RndShake(10.5)
+     * // equivalent to RndShakeR(10.5)
+     * ```
+     */
+    static RndShake(anchor) {
+        if (typeof anchor === 'string') {
+            // Fraction, to be deleted
+            if (owl.dfrac(anchor)) {
+                Should(false, 'RndShakeDfrac is not supported anymore');
+                // return RndShakeDfrac(anchor)
+            }
+            // Inequal Sign
+            if (owl.ineq(anchor)) {
+                return RndShakeIneq(anchor);
+            }
+            // trig
+            if (owl.trig(anchor)) {
+                return RndShakeTrig(anchor);
+            }
+            // else convert to number
+            if (Number(anchor)) {
+                anchor = Number(anchor);
+            }
         }
-        // Inequal Sign
-        if (owl.ineq(anchor)) {
-            return RndShakeIneq(anchor);
+        if (owl.quantity(anchor)) {
+            // quantity
+            return RndShakeQuantity(anchor);
         }
-        // trig
-        if (owl.trig(anchor)) {
-            return RndShakeTrig(anchor);
+        if (owl.point2D(anchor)) {
+            // Point
+            return RndShakePoint(anchor);
         }
-        // else convert to number
-        if (Number(anchor)) {
-            anchor = Number(anchor);
+        if (owl.combo(anchor)) {
+            // Combo
+            return RndShakeCombo(anchor);
         }
-    }
-    if (owl.quantity(anchor)) {
-        // quantity
-        return RndShakeQuantity(anchor);
-    }
-    if (owl.point2D(anchor)) {
-        // Point
-        return RndShakePoint(anchor);
-    }
-    if (owl.combo(anchor)) {
-        // Combo
-        return RndShakeCombo(anchor);
-    }
-    if (owl.trigValue(anchor)) {
-        // TrigValue
-        return RndShakeTrigValue(anchor);
-    }
-    if (owl.constraint(anchor)) {
-        // Constraint
-        return RndShakeConstraint(anchor);
-    }
-    if (owl.constraints(anchor)) {
-        // Constraints
-        return RndShakeConstraints(anchor);
-    }
-    if (typeof anchor === 'number' && owl.num(anchor)) {
-        anchor = cal.blur(anchor);
-        // Integer
-        if (owl.int(anchor)) {
-            return RndShakeN(anchor);
+        if (owl.trigValue(anchor)) {
+            // TrigValue
+            return RndShakeTrigValue(anchor);
         }
-        // Decimal
-        if (owl.num(anchor)) {
-            return RndShakeR(anchor);
+        if (owl.constraint(anchor)) {
+            // Constraint
+            return RndShakeConstraint(anchor);
         }
-        if (isNaN(anchor)) {
+        if (owl.constraints(anchor)) {
+            // Constraints
+            return RndShakeConstraints(anchor);
+        }
+        if (typeof anchor === 'number' && owl.num(anchor)) {
+            anchor = cal.blur(anchor);
+            // Integer
+            if (owl.int(anchor)) {
+                return RndShakeN(anchor);
+            }
+            // Decimal
+            if (owl.num(anchor)) {
+                return RndShakeR(anchor);
+            }
+            if (isNaN(anchor)) {
+                return [];
+            }
+        }
+        if (anchor === undefined)
             return [];
+        throw MathError('Fail to RndShake: ' + anchor);
+    }
+    /**
+     * 3 nearby same-signed integers, range = Max(5, anchor * 10%)
+     * ```
+     * RndShakeN(5) // return 3 unique integers from 1-10
+     * ```
+     */
+    static RndShakeN(anchor) {
+        anchor = cal.blur(anchor);
+        let a = Abs(anchor);
+        let s = Sign(anchor);
+        let f;
+        if (anchor === 0) {
+            f = () => RndN(1, 3);
         }
+        else {
+            let range = Max(3, a * 0.1);
+            let max = Min(Floor(a + range), cal.logCeil(a) - 1);
+            let min = Max(Ceil(a - range), 1, cal.logFloor(a));
+            f = () => RndN(min, max) * s;
+        }
+        return dice(f)
+            .shield(x => x !== anchor)
+            .unique()
+            .rolls(3);
     }
-    if (anchor === undefined)
-        return [];
-    throw MathError('Fail to RndShake: ' + anchor);
-}
-globalThis.RndShake = RndShake;
-/**
- * @category RandomShake
- * @return 3 nearby same-signed integers, range = Max(5, anchor * 10%)
- * ```
- * RndShakeN(5) // return 3 unique integers from 1-10
- * ```
- */
-function RndShakeN(anchor) {
-    anchor = cal.blur(anchor);
-    let a = Abs(anchor);
-    let s = Sign(anchor);
-    let f;
-    if (anchor === 0) {
-        f = () => RndN(1, 3);
+    /**
+     * 3 nearby same-signed real number with same precision, range = anchor * 50%
+     * ```
+     * RndShakeR(3.5) // return 3 unique values from [1.8,5.2]
+     * ```
+     */
+    static RndShakeR(anchor) {
+        let exp = cal.e(anchor);
+        let m = cal.blur(cal.mantissa(anchor));
+        if (IsInteger(m))
+            return RndShakeN(m).map(x => Number(x + "e" + exp));
+        let dp = cal.dp(m);
+        return dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
+            .shield(x => x * m > 0)
+            .shield(x => cal.e(x) === cal.e(m))
+            .shield(x => x !== m)
+            .unique()
+            .rolls(3)
+            .map(x => Number(x + "e" + exp));
     }
-    else {
-        let range = Max(3, a * 0.1);
-        let max = Min(Floor(a + range), cal.logCeil(a) - 1);
-        let min = Max(Ceil(a - range), 1, cal.logFloor(a));
-        f = () => RndN(min, max) * s;
+    /**
+     * 3 nearby same-sign rational by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+     * ```
+     * RndShakeQ(5/6)
+     * // return 3 unique fractions around [5,6]
+     * RndShakeQ(6/-5)
+     * // return 3 unique fractions around [6,-5]
+     * ```
+     */
+    static RndShakeQ(anchor) {
+        if (owl.int(anchor))
+            return RndShakeN(anchor);
+        let [p, q] = ToFrac(anchor);
+        [p, q] = [p, q].map(cal.blur);
+        Should(IsInteger(p, q), 'input should be integral fraction');
+        return dice(() => {
+            const h = RndShakeN(p)[0];
+            const k = RndShakeN(q)[0];
+            let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h;
+            let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k;
+            if (a === p && b === q)
+                return [h, k];
+            return [a, b];
+        })
+            .shield(([a, b]) => AreCoprime(a, b))
+            .shield(([a, b]) => a !== 0)
+            .shield(([a, b]) => b !== 0)
+            .shield(([a, b]) => b !== 1)
+            .shield(([a, b]) => b !== 1)
+            .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
+            .unique(([p, q]) => p / q)
+            .rolls(3)
+            .map(([p, q]) => p / q);
     }
-    return dice(f)
-        .shield(x => x !== anchor)
-        .unique()
-        .rolls(3);
-}
-globalThis.RndShakeN = contract(RndShakeN).sign([owl.int]);
-/**
- * @category RandomShake
- * @return 3 nearby same-signed real number with same precision, range = anchor * 50%
- * ```
- * RndShakeR(3.5) // return 3 unique values from [1.8,5.2]
- * ```
- */
-function RndShakeR(anchor) {
-    let exp = cal.e(anchor);
-    let m = cal.blur(cal.mantissa(anchor));
-    if (IsInteger(m))
-        return RndShakeN(m).map(x => Number(x + "e" + exp));
-    let dp = cal.dp(m);
-    return dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
-        .shield(x => x * m > 0)
-        .shield(x => cal.e(x) === cal.e(m))
-        .shield(x => x !== m)
-        .unique()
-        .rolls(3)
-        .map(x => Number(x + "e" + exp));
-}
-globalThis.RndShakeR = contract(RndShakeR).sign([owl.num]);
-/**
- * @category RandomShake
- * @return 3 nearby same-sign rational by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
- * ```
- * RndShakeQ(5/6)
- * // return 3 unique fractions around [5,6]
- * RndShakeQ(6/-5)
- * // return 3 unique fractions around [6,-5]
- * ```
- */
-function RndShakeQ(anchor) {
-    if (owl.int(anchor))
-        return RndShakeN(anchor);
-    let [p, q] = ToFrac(anchor);
-    [p, q] = [p, q].map(cal.blur);
-    Should(IsInteger(p, q), 'input should be integral fraction');
-    return dice(() => {
-        const h = RndShakeN(p)[0];
-        const k = RndShakeN(q)[0];
-        let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h;
-        let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k;
-        if (a === p && b === q)
+    /**
+     * an array of 3 ineq signs, balanced in number.
+     * ```
+     * RndShakeIneq('\\ge')
+     * // may return ['\\ge','\\le','\\le']
+     * ```
+     */
+    static RndShakeIneq(anchor) {
+        let i = ineq(anchor);
+        let me = i.print();
+        let flip = i.flip();
+        return list(me, flip, flip).shuffled();
+    }
+    /**
+     * an array of 3 point, both x and y are unique
+     * ```
+     * RndShakePoint([3,4])
+     * // may return [[2,5],[1,6],[4,2]]
+     * ```
+     */
+    static RndShakePoint(anchor) {
+        let [x, y] = anchor;
+        let func = () => {
+            const h = IsInteger(x) ? RndShakeN(x)[0] : RndShakeR(x)[0];
+            const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0];
             return [h, k];
-        return [a, b];
-    })
-        .shield(([a, b]) => AreCoprime(a, b))
-        .shield(([a, b]) => a !== 0)
-        .shield(([a, b]) => b !== 0)
-        .shield(([a, b]) => b !== 1)
-        .shield(([a, b]) => b !== 1)
-        .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
-        .unique(([p, q]) => p / q)
-        .rolls(3)
-        .map(([p, q]) => p / q);
-}
-globalThis.RndShakeQ = contract(RndShakeQ).sign([owl.rational]);
-// /**
-//  * @category RandomShake
-//  * @deprecated
-//  * @return 3 nearby same-sign fraction by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
-//  * ```
-//  * RndShakeFrac([5,6])
-//  * // return 3 unique fractions around [5,6]
-//  * RndShakeFrac([6,-5])
-//  * // return 3 unique fractions around [6,-5]
-//  * ```
-//  */
-// function RndShakeFrac(anchor: Fraction): Fraction[] {
-//     let [p, q] = cal.toFraction(anchor[0] / anchor[1]);
-//     [p, q] = [p, q].map(cal.blur)
-//     Should(IsInteger(p, q), 'input should be integral fraction')
-//     return poker
-//         .dice(
-//             (): Fraction => {
-//                 const h = RndShakeN(p)[0]
-//                 const k = RndShakeN(q)[0]
-//                 let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h
-//                 let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k
-//                 if (a === p && b === q) return [h, k]
-//                 return [a, b]
-//             })
-//         .shield(([a, b]) => AreCoprime(a, b))
-//         .shield(([a, b]) => a !== 0)
-//         .shield(([a, b]) => b !== 0)
-//         .shield(([a, b]) => b !== 1)
-//         .shield(([a, b]) => b !== 1)
-//         .shield(([a, b]) => IsProbability(p / q) ? IsProbability(a / b) : true)
-//         .unique(_ => _[0] / _[1])
-//         .rolls(3)
-// }
-// globalThis.RndShakeFrac = contract(RndShakeFrac).sign([owl.fraction])
-// /**
-//  * @category RandomShake
-//  * @deprecated
-//  * @return 3 nearby same-signed Dfrac by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
-//  * ```
-//  * RndShakeDfrac('\\dfrac{5}{6}')
-//  * // return 3 unique Dfrac around [5,6]
-//  * RndShakeDfrac('-\\dfrac{6}{5}')
-//  * // return 3 unique Dfrac around [6,-5]
-//  * ```
-//  */
-// function RndShakeDfrac(anchor: string): string[] {
-//     Should(false, 'RndShakeDfrac is deprecated')
-//     let f = ink.parseDfrac(anchor)
-//     return RndShakeFrac(f).map(x => Dfrac(...x))
-// }
-// globalThis.RndShakeDfrac = contract(RndShakeDfrac).sign([owl.dfrac])
-/**
- * @category RandomShake
- * @return an array of 3 ineq signs, balanced in number.
- * ```
- * RndShakeIneq('\\ge')
- * // may return ['\\ge','\\le','\\le']
- * ```
- */
-function RndShakeIneq(anchor) {
-    let i = ineq(anchor);
-    let me = i.print();
-    let flip = i.flip();
-    return list(me, flip, flip).shuffled();
-}
-globalThis.RndShakeIneq = contract(RndShakeIneq).sign([owl.ineq]);
-/**
- * @category RandomShake
- * @return an array of 3 point, both x and y are unique
- * ```
- * RndShakePoint([3,4])
- * // may return [[2,5],[1,6],[4,2]]
- * ```
- */
-function RndShakePoint(anchor) {
-    let [x, y] = anchor;
-    let func = () => {
-        const h = IsInteger(x) ? RndShakeN(x)[0] : RndShakeR(x)[0];
-        const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0];
-        return [h, k];
-    };
-    return dice(func)
-        .unique(([x, y]) => x)
-        .unique(([x, y]) => y)
-        .rolls(3);
-}
-globalThis.RndShakePoint = contract(RndShakePoint).sign([owl.point2D]);
-/**
- * @category RandomShake
- * @return an array of 3 combo
- * ```
- * RndShakeCombo([true,true,true])
- * // may return [[true,false,true],[false,true,false],[false,true,true]]
- * ```
- */
-function RndShakeCombo(anchor) {
-    let [a, b, c] = anchor;
-    let func = () => {
-        return [
-            RndT() ? a : !a,
-            RndT() ? b : !b,
-            RndT() ? c : !c
-        ];
-    };
-    let diff = (bools) => { return bools.some($ => $) && bools.some($ => !$); };
-    return dice(func).unique()
-        .coherent(all => diff([a, ...all.map($ => $[0])]))
-        .coherent(all => diff([b, ...all.map($ => $[1])]))
-        .coherent(all => diff([c, ...all.map($ => $[2])]))
-        .rolls(3);
-}
-globalThis.RndShakeCombo = contract(RndShakeCombo).sign([owl.combo]);
-/**
- * @category RandomShake
- * @return an array of 3 trig
- * ```
- * RndShakeTrig('sin')
- * // may return ['cos','sin','cos']
- * ```
- */
-function RndShakeTrig(anchor) {
-    return [...list('sin', 'cos', 'tan').draws(3)];
-}
-globalThis.RndShakeTrig = contract(RndShakeTrig).sign([owl.trig]);
-/**
- * @category RandomShake
- * @return an array of 3 TrigValue
- * ```
- * RndShakeTrigValue(['sin','x'])
- * // may return [['cos','x'],['sin','x'],['cos','x']]
- * ```
- */
-function RndShakeTrigValue(anchor) {
-    return RndShakeTrig(anchor[0]).map(x => [x, anchor[1]]);
-}
-globalThis.RndShakeTrigValue = contract(RndShakeTrigValue).sign([owl.trigValue]);
-/**
- * @category RandomShake
- * @return an array of 3 ratios
- * ```
- * RndShakeRatio([4,5,6])
- * // may return [[3,6,5],[7,5,3],[8,4,5]]
- * ```
- */
-function RndShakeRatio(anchor) {
-    anchor = [...toNumbers(anchor).ratio()];
-    let func = () => {
-        return anchor.map(x => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0]);
-    };
-    return dice(func)
-        .shield(r => toNumbers(r).hcf() === 1)
-        .shield(r => AreDifferent(anchor, r))
-        .unique()
-        .rolls(3);
-}
-globalThis.RndShakeRatio = contract(RndShakeRatio).sign([owl.ntuple]);
-/**
- * @category RandomShake
- * @return an array of 3 ratios
- * ```
- * RndShakeBase('AB0CD_{16}')
- * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
- * ```
- */
-function RndShakeBase(anchor) {
-    let [num, base] = anchor.split('_');
-    base = base.replace('{', '').replace('}', '');
-    let digits = '0123456789ABCDEF'.substring(0, Number(base)).split('');
-    function shake(d) {
-        let x = digits.indexOf(d) + RndU();
-        if (x < 0)
-            x = 0;
-        if (x > digits.length - 1)
-            x = digits.length - 1;
-        return digits[x];
+        };
+        return dice(func)
+            .unique(([x, y]) => x)
+            .unique(([x, y]) => y)
+            .rolls(3);
     }
-    function mutate(str) {
-        let s = [];
-        let nonzero = str.split('').filter(_ => _ !== '0').length;
-        for (let d of str.split('')) {
-            if (d === '0') {
-                let go = poker.bool(0.1);
-                s.push(go ? toList(digits).draw() : '0');
-            }
-            else {
-                let go = poker.bool(1 / (nonzero + 2));
-                s.push(go ? shake(d) : d);
-            }
+    /**
+     * an array of 3 combo
+     * ```
+     * RndShakeCombo([true,true,true])
+     * // may return [[true,false,true],[false,true,false],[false,true,true]]
+     * ```
+     */
+    static RndShakeCombo(anchor) {
+        let [a, b, c] = anchor;
+        let func = () => {
+            return [
+                RndT() ? a : !a,
+                RndT() ? b : !b,
+                RndT() ? c : !c
+            ];
+        };
+        let diff = (bools) => { return bools.some($ => $) && bools.some($ => !$); };
+        return dice(func).unique()
+            .coherent(all => diff([a, ...all.map($ => $[0])]))
+            .coherent(all => diff([b, ...all.map($ => $[1])]))
+            .coherent(all => diff([c, ...all.map($ => $[2])]))
+            .rolls(3);
+    }
+    /**
+     * an array of 3 trig
+     * ```
+     * RndShakeTrig('sin')
+     * // may return ['cos','sin','cos']
+     * ```
+     */
+    static RndShakeTrig(anchor) {
+        return [...list('sin', 'cos', 'tan').draws(3)];
+    }
+    /**
+     * an array of 3 TrigValue
+     * ```
+     * RndShakeTrigValue(['sin','x'])
+     * // may return [['cos','x'],['sin','x'],['cos','x']]
+     * ```
+     */
+    static RndShakeTrigValue(anchor) {
+        return RndShakeTrig(anchor[0]).map(x => [x, anchor[1]]);
+    }
+    /**
+     * an array of 3 ratios
+     * ```
+     * RndShakeRatio([4,5,6])
+     * // may return [[3,6,5],[7,5,3],[8,4,5]]
+     * ```
+     */
+    static RndShakeRatio(anchor) {
+        anchor = [...toNumbers(anchor).ratio()];
+        let func = () => {
+            return anchor.map(x => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0]);
+        };
+        return dice(func)
+            .shield(r => toNumbers(r).hcf() === 1)
+            .shield(r => AreDifferent(anchor, r))
+            .unique()
+            .rolls(3);
+    }
+    /**
+     * an array of 3 ratios
+     * ```
+     * RndShakeBase('AB0CD_{16}')
+     * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
+     * ```
+     */
+    static RndShakeBase(anchor) {
+        let [num, base] = anchor.split('_');
+        base = base.replace('{', '').replace('}', '');
+        let digits = '0123456789ABCDEF'.substring(0, Number(base)).split('');
+        function shake(d) {
+            let x = digits.indexOf(d) + RndU();
+            if (x < 0)
+                x = 0;
+            if (x > digits.length - 1)
+                x = digits.length - 1;
+            return digits[x];
         }
-        let T = s.join('');
-        if (poker.bool(0.2))
-            T += '0';
-        return T;
+        function mutate(str) {
+            let s = [];
+            let nonzero = str.split('').filter(_ => _ !== '0').length;
+            for (let d of str.split('')) {
+                if (d === '0') {
+                    let go = poker.bool(0.1);
+                    s.push(go ? toList(digits).draw() : '0');
+                }
+                else {
+                    let go = poker.bool(1 / (nonzero + 2));
+                    s.push(go ? shake(d) : d);
+                }
+            }
+            let T = s.join('');
+            if (poker.bool(0.2))
+                T += '0';
+            return T;
+        }
+        function dress(str) {
+            str = str.replace(/^0+/, '');
+            return str + '_{' + base + '}';
+        }
+        let f = () => {
+            let middle = Math.ceil(num.length / 2);
+            let s1 = num.slice(0, middle);
+            let s2 = num.slice(middle);
+            let t1 = mutate(s1);
+            let t2 = mutate(s2);
+            let B1 = dress(s1 + t2);
+            let B2 = dress(t1 + s2);
+            let B3 = dress(t1 + t2);
+            return [B1, B2, B3];
+        };
+        return dice(f).shield(_ => toList([num, ..._]).dupless()).roll();
     }
-    function dress(str) {
-        str = str.replace(/^0+/, '');
-        return str + '_{' + base + '}';
+    /**
+     * an array of 3 points, all are special in polar coordinates
+     * ```
+     * RndShakePointPolar([3,60])
+     * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
+     * ```
+     */
+    static RndShakePointPolar(anchor) {
+        let [r1, q1] = RectToPol(anchor);
+        let [a, b] = cal.toSurd(r1);
+        let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a;
+        let angles = list(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330);
+        let q2 = angles.except([q1]).draw();
+        return RndShuffle([r1, q2], [r2, q1], [r2, q2]).map($ => PolToRect($));
     }
-    let f = () => {
-        let middle = Math.ceil(num.length / 2);
-        let s1 = num.slice(0, middle);
-        let s2 = num.slice(middle);
-        let t1 = mutate(s1);
-        let t2 = mutate(s2);
-        let B1 = dress(s1 + t2);
-        let B2 = dress(t1 + s2);
-        let B3 = dress(t1 + t2);
-        return [B1, B2, B3];
-    };
-    return dice(f).shield(_ => toList([num, ..._]).dupless()).roll();
-}
-globalThis.RndShakeBase = contract(RndShakeBase).sign([owl.base]);
-/**
- * @category RandomShake
- * @return an array of 3 points, all are special in polar coordinates
- * ```
- * RndShakePointPolar([3,60])
- * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
- * ```
- */
-function RndShakePointPolar(anchor) {
-    let [r1, q1] = RectToPol(anchor);
-    let [a, b] = cal.toSurd(r1);
-    let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a;
-    let angles = list(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330);
-    let q2 = angles.except([q1]).draw();
-    return RndShuffle([r1, q2], [r2, q1], [r2, q2]).map($ => PolToRect($));
-}
-globalThis.RndShakePointPolar = contract(RndShakePointPolar).sign([owl.point2D]);
-/**
- * @category RandomShake
- * @return an array of 3 constraint, with only the sign shaken
- * ```
- * RndShakeConstraint([1,2,'>',3])
- * // may return [[1,2,'>',3], [1,2,'<',3], [1,2,'<',3]]
- * ```
- */
-function RndShakeConstraint(anchor) {
-    let flip = rein(anchor).flip().constraint;
-    return list(anchor, flip, flip).shuffled();
-}
-globalThis.RndShakeConstraint = contract(RndShakeConstraint).sign([owl.constraint]);
-/**
- * @category RandomShake
- * @return an array of 3 sets of constraints, with only the sign shaken
- * ```
- * RndShakeConstraints([
- *   [1,2,'>',3], [4,5,'>',6]
- * ])
- * // may return [
- * // [[1,2,'>',3],[4,5,'>',6]],
- * // [[1,2,'<',3],[4,5,'<',6]],
- * // [[1,2,'<',3],[4,5,'>',6]]
- * // ]
- * ```
- */
-function RndShakeConstraints(anchor) {
-    let func = () => [...toReins(anchor).shake().map($ => $.constraint)];
-    return dice(func)
-        .forbid(anchor)
-        .shield($ => toReins($).isConsistent())
-        .unique()
-        .rolls(3);
-}
-globalThis.RndShakeConstraints = contract(RndShakeConstraints).sign([owl.constraints]);
-function RndShakeQuantity(anchor) {
-    let { val, unit } = anchor;
-    let vals = RndShake(val);
-    return vals.map($ => ({ val: $, unit }));
-}
-globalThis.RndShakeQuantity = contract(RndShakeQuantity).sign([owl.quantity]);
+    /**
+     * an array of 3 constraint, with only the sign shaken
+     * ```
+     * RndShakeConstraint([1,2,'>',3])
+     * // may return [[1,2,'>',3], [1,2,'<',3], [1,2,'<',3]]
+     * ```
+     */
+    static RndShakeConstraint(anchor) {
+        let flip = rein(anchor).flip().constraint;
+        return list(anchor, flip, flip).shuffled();
+    }
+    /**
+     * an array of 3 sets of constraints, with only the sign shaken
+     * ```
+     * RndShakeConstraints([
+     *   [1,2,'>',3], [4,5,'>',6]
+     * ])
+     * // may return [
+     * // [[1,2,'>',3],[4,5,'>',6]],
+     * // [[1,2,'<',3],[4,5,'<',6]],
+     * // [[1,2,'<',3],[4,5,'>',6]]
+     * // ]
+     * ```
+     */
+    static RndShakeConstraints(anchor) {
+        let func = () => [...toReins(anchor).shake().map($ => $.constraint)];
+        return dice(func)
+            .forbid(anchor)
+            .shield($ => toReins($).isConsistent())
+            .unique()
+            .rolls(3);
+    }
+    static RndShakeQuantity(anchor) {
+        let { val, unit } = anchor;
+        let vals = RndShake(val);
+        return vals.map($ => ({ val: $, unit }));
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.int)
+], Host, "RndShakeN", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "RndShakeR", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.rational)
+], Host, "RndShakeQ", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.ineq)
+], Host, "RndShakeIneq", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "RndShakePoint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.combo)
+], Host, "RndShakeCombo", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.trig)
+], Host, "RndShakeTrig", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.trigValue)
+], Host, "RndShakeTrigValue", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.ntuple)
+], Host, "RndShakeRatio", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.base)
+], Host, "RndShakeBase", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "RndShakePointPolar", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraint)
+], Host, "RndShakeConstraint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraints)
+], Host, "RndShakeConstraints", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.quantity)
+], Host, "RndShakeQuantity", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 1759:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category RandomUtil
- * @return a random item from the given items
- * ```
- * RndPick(2,4,6) // may return 2, 4 or 6
- * ```
- */
-function RndPick(...items) {
-    return toList(items).draw();
-}
-globalThis.RndPick = RndPick;
-/**
- * @category RandomUtil
- * @return a shuffled array of the given items
- * ```
- * RndShuffle(2,4,6) // may return [4,2,6]
- * ```
- */
-function RndShuffle(...items) {
-    return [...toList(items).shuffled()];
-}
-globalThis.RndShuffle = RndShuffle;
-/**
- * @category RandomUtil
- * @return n random items from given items without replacement, but NOT necessarily unique if there are duplicated object in items.
- * ```
- * RndPickN([1,2,3,4,5],3) // may return [2,5,3]
- * ```
- */
-function RndPickN(items, n) {
-    return [...toList(items).sample(n)];
-}
-globalThis.RndPickN = contract(RndPickN).sign([owl.array, owl.positiveInt]);
-/**
- * @category RandomUtil
- * @return n random unique items from given items, deep compare.
- * ```
- * RndPickUnique([2,4,6],2) // may return [4,2]
- * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
- * ```
- */
-function RndPickUnique(items, n) {
-    return [...toList(items).uniqueDeep().sample(n)];
-}
-globalThis.RndPickUnique = contract(RndPickUnique).sign([owl.array, owl.positiveInt]);
-/**
- * @category RandomUtil
- * @return a random male name
- * ```
- * RndHe() // may return 'Peter', 'David', etc
- * ```
- */
-function RndHe() {
-    return poker.he();
-}
-globalThis.RndHe = RndHe;
-/**
- * @category RandomUtil
- * @return a random female name
- * ```
- * RndShe() // may return 'Mary', 'Alice', etc
- * ```
- */
-function RndShe() {
-    return poker.she();
-}
-globalThis.RndShe = RndShe;
-/**
- * @category RandomUtil
- * @return a random 3-letters array
- * ```
- * RndLetters() // may return ['a','b','c'] or ['x','y','z'] or etc
- * ```
- */
-function RndLetters() {
-    return RndPick(['a', 'b', 'c'], ['h', 'k', 'l'], ['m', 'n', 'l'], ['p', 'q', 'r'], ['r', 's', 't'], ['u', 'v', 'w'], ['x', 'y', 'z']);
-}
-globalThis.RndLetters = RndLetters;
-/**
- * @category RandomUtil
- * @return a random 3-letters array
- * ```
- * RndCapitals() // may return ['A','A','A'] or ['X','Y','Z'] or etc
- * ```
- */
-function RndCapitals() {
-    return RndPick(['A', 'B', 'C'], ['H', 'K', 'L'], ['M', 'N', 'L'], ['P', 'Q', 'R'], ['R', 'S', 'T'], ['U', 'V', 'W'], ['X', 'Y', 'Z']);
-}
-globalThis.RndCapitals = RndCapitals;
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * a random item from the given items
+     * ```
+     * RndPick(2,4,6) // may return 2, 4 or 6
+     * ```
+     */
+    static RndPick(...items) {
+        return toList(items).draw();
+    }
+    /**
+     * a shuffled array of the given items
+     * ```
+     * RndShuffle(2,4,6) // may return [4,2,6]
+     * ```
+     */
+    static RndShuffle(...items) {
+        return [...toList(items).shuffled()];
+    }
+    /**
+     * n random items from given items without replacement, but NOT necessarily unique if there are duplicated object in items.
+     * ```
+     * RndPickN([1,2,3,4,5],3) // may return [2,5,3]
+     * ```
+     */
+    static RndPickN(items, n) {
+        return [...toList(items).sample(n)];
+    }
+    /**
+     * n random unique items from given items, deep compare.
+     * ```
+     * RndPickUnique([2,4,6],2) // may return [4,2]
+     * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
+     * ```
+     */
+    static RndPickUnique(items, n) {
+        return [...toList(items).uniqueDeep().sample(n)];
+    }
+    /**
+     * a random male name
+     * ```
+     * RndHe() // may return 'Peter', 'David', etc
+     * ```
+     */
+    static RndHe() {
+        return poker.he();
+    }
+    /**
+     * a random female name
+     * ```
+     * RndShe() // may return 'Mary', 'Alice', etc
+     * ```
+     */
+    static RndShe() {
+        return poker.she();
+    }
+    /**
+     * a random 3-letters array
+     * ```
+     * RndLetters() // may return ['a','b','c'] or ['x','y','z'] or etc
+     * ```
+     */
+    static RndLetters() {
+        return RndPick(['a', 'b', 'c'], ['h', 'k', 'l'], ['m', 'n', 'l'], ['p', 'q', 'r'], ['r', 's', 't'], ['u', 'v', 'w'], ['x', 'y', 'z']);
+    }
+    /**
+     * a random 3-letters array
+     * ```
+     * RndCapitals() // may return ['A','A','A'] or ['X','Y','Z'] or etc
+     * ```
+     */
+    static RndCapitals() {
+        return RndPick(['A', 'B', 'C'], ['H', 'K', 'L'], ['M', 'N', 'L'], ['P', 'Q', 'R'], ['R', 'S', 'T'], ['U', 'V', 'W'], ['X', 'Y', 'Z']);
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.array, owl.positiveInt)
+], Host, "RndPickN", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.array, owl.positiveInt)
+], Host, "RndPickUnique", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 6007:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Relation
- * @return Check if the numbers are all distinct.
- * ```
- * AreDistinct(1,2,3) // true
- * AreDistinct(1,2,2) // false
- * ```
- */
-function AreDistinct(...nums) {
-    nums = nums.map(cal.blur);
-    return (new Set(nums)).size === nums.length;
-}
-globalThis.AreDistinct = contract(AreDistinct).sign([owl.num]);
-/**
- * @category Relation
- * @return Check if the absolute values of the numbers are all distinct.
- * ```
- * AreAbsDistinct(1,2,3) // true
- * AreAbsDistinct(1,2,2) // false
- * AreAbsDistinct(1,2,-2) // false
- * ```
- */
-function AreAbsDistinct(...nums) {
-    return AreDistinct(...nums.map(Math.abs));
-}
-globalThis.AreAbsDistinct = contract(AreAbsDistinct).sign([owl.num]);
-/**
- * @category Relation
- * @return Check if the numbers all have the same sign.
- * ```
- * AreSameSign(1,2,3) // true
- * AreSameSign(1,2,-3) // false
- * AreSameSign(1,2,0) // false
- * ```
- */
-function AreSameSign(...nums) {
-    return [...new Set(nums.map(Math.sign))].length === 1;
-}
-globalThis.AreSameSign = contract(AreSameSign).sign([owl.num]);
-/**
- * @category Relation
- * @return Check if the numbers all pairwise coprime.
- * ```
- * AreCoprime(2,3) // true
- * AreCoprime(2,6) // false
- * AreCoprime(1,2) // true
- * AreCoprime(2,3,6) // true
- * AreCoprime(1.5,3) // true
- * AreCoprime(0,3) // true
- * ```
- */
-function AreCoprime(...nums) {
-    nums = nums.map(cal.blur);
-    if (!IsInteger(...nums))
-        return true;
-    if (!IsNonZero(...nums))
-        return true;
-    return toList(nums).pairs().every(([a, b]) => HCF(a, b) === 1);
-}
-globalThis.AreCoprime = contract(AreCoprime).sign([owl.num]);
-// /**
-//  * @category Relation
-//  * @deprecated use AreDifferent
-//  * @return Check if the points are all distinct.
-//  * ```
-//  * AreDistinctPoint([1,2],[3,4]) // true
-//  * AreDistinctPoint([1,2],[1,2]) // false
-//  * ```
-//  */
-// function AreDistinctPoint(...points: Point2D[]) {
-//     return toList(points).duplessDeep()
-// }
-// globalThis.AreDistinctPoint = contract(AreDistinctPoint).sign([owl.point2D])
-/**
- * @category Relation
- * @return Check if the points are pairwise distant apart.
- * ```
- * AreDistantPoint(2)([0,0],[3,0]) // true
- * AreDistantPoint(2)([0,0],[1,0]) // false
- * ```
- */
-function AreDistantPoint(distance) {
-    let AreDistant = function (...points) {
-        return toShape2D(points).distances().min() >= distance;
-    };
-    return contract(AreDistant).sign([owl.point2D]);
-}
-globalThis.AreDistantPoint = contract(AreDistantPoint).sign([owl.positive]);
-/**
- * @category Relation
- * @return Check if slopes are at least oblique at minAngle
- * ```
- * AreOblique(40)(0,1) // true
- * AreOblique(40)(0,0.5) // false
- * ```
- */
-function AreOblique(minAngle) {
-    let areOblique = function (...slopes) {
-        return toList(slopes).pairs().every(([a, b]) => IntersectAngle(a, b) >= minAngle);
-    };
-    return contract(areOblique).sign([owl.num]);
-}
-globalThis.AreOblique = contract(AreOblique).sign([owl.positive]);
-/**
- * @category Relation
- * @return Check if the items are all distinct, by JSON.stringify.
- * ```
- * AreDifferent([1,2],[3,4]) // true
- * AreDifferent([1,2],[1,2]) // false
- * ```
- */
-function AreDifferent(...items) {
-    return toList(items).duplessDeep();
-}
-globalThis.AreDifferent = contract(AreDifferent).sign([owl.pass]);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * Check if the numbers are all distinct.
+     * ```
+     * AreDistinct(1,2,3) // true
+     * AreDistinct(1,2,2) // false
+     * ```
+     */
+    static AreDistinct(...nums) {
+        nums = nums.map(cal.blur);
+        return (new Set(nums)).size === nums.length;
+    }
+    /**
+     * Check if the absolute values of the numbers are all distinct.
+     * ```
+     * AreAbsDistinct(1,2,3) // true
+     * AreAbsDistinct(1,2,2) // false
+     * AreAbsDistinct(1,2,-2) // false
+     * ```
+     */
+    static AreAbsDistinct(...nums) {
+        return AreDistinct(...nums.map(Math.abs));
+    }
+    /**
+     * Check if the numbers all have the same sign.
+     * ```
+     * AreSameSign(1,2,3) // true
+     * AreSameSign(1,2,-3) // false
+     * AreSameSign(1,2,0) // false
+     * ```
+     */
+    static AreSameSign(...nums) {
+        return [...new Set(nums.map(Math.sign))].length === 1;
+    }
+    /**
+     * Check if the numbers all pairwise coprime.
+     * ```
+     * AreCoprime(2,3) // true
+     * AreCoprime(2,6) // false
+     * AreCoprime(1,2) // true
+     * AreCoprime(2,3,6) // true
+     * AreCoprime(1.5,3) // true
+     * AreCoprime(0,3) // true
+     * ```
+     */
+    static AreCoprime(...nums) {
+        nums = nums.map(cal.blur);
+        if (!IsInteger(...nums))
+            return true;
+        if (!IsNonZero(...nums))
+            return true;
+        return toList(nums).pairs().every(([a, b]) => HCF(a, b) === 1);
+    }
+    /**
+     * Check if the points are pairwise distant apart.
+     * ```
+     * AreDistantPoint(2)([0,0],[3,0]) // true
+     * AreDistantPoint(2)([0,0],[1,0]) // false
+     * ```
+     */
+    static AreDistantPoint(distance) {
+        let AreDistant = function (...points) {
+            return toShape2D(points).distances().min() >= distance;
+        };
+        return contract(AreDistant).sign([owl.point2D]);
+    }
+    /**
+     * Check if slopes are at least oblique at minAngle
+     * ```
+     * AreOblique(40)(0,1) // true
+     * AreOblique(40)(0,0.5) // false
+     * ```
+     */
+    static AreOblique(minAngle) {
+        let areOblique = function (...slopes) {
+            return toList(slopes).pairs().every(([a, b]) => IntersectAngle(a, b) >= minAngle);
+        };
+        return contract(areOblique).sign([owl.num]);
+    }
+    /**
+     * Check if the items are all distinct, by JSON.stringify.
+     * ```
+     * AreDifferent([1,2],[3,4]) // true
+     * AreDifferent([1,2],[1,2]) // false
+     * ```
+     */
+    static AreDifferent(...items) {
+        return toList(items).duplessDeep();
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "AreDistinct", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "AreAbsDistinct", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "AreSameSign", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "AreCoprime", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positive)
+], Host, "AreDistantPoint", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.positive)
+], Host, "AreOblique", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 188:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
-* @category Sequence
-* @return an array of integers from start to end inclusive.
-* ```
-* ListIntegers(2,6) // [2,3,4,5,6]
-* ListIntegers(-2,1) // [-2,-1,0,1]
-* ```
-*/
-function ListIntegers(start, end) {
-    return cal.range(start, end);
-}
-globalThis.ListIntegers = contract(ListIntegers).seal({
-    arg: [owl.num],
-    args: function is_range(start, end) { return start < end; }
-});
-/**
-* @category Sequence
-* @return Tn in an arithmetic sequence: a+(n-1)d
-* ```
-* ASterm(2,3,10) // 29
-* ASterm(5,-2,6) // -5
-* ```
-*/
-function ASterm(a, d, n) {
-    return a + (n - 1) * d;
-}
-globalThis.ASterm = contract(ASterm).sign([owl.num, owl.num, owl.positiveInt]);
-/**
-* @category Sequence
-* @return Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).
-* ```
-* ASsum(2,3,10) // 155
-* ASsum(5,-2,6) // 0
-* ```
-*/
-function ASsum(a, d, n) {
-    return 0.5 * n * (2 * a + (n - 1) * d);
-}
-globalThis.ASsum = contract(ASsum).sign([owl.num, owl.num, owl.positiveInt]);
-/**
-* @category Sequence
-* @return an array of the first n terms in an arithmetic sequence.
-* ```
-* ASequence(2,3,5) // [2,5,8,11,14]
-* ASequence(5,-2,3) // [5,3,1]
-* ```
-*/
-function ASequence(a, d, n = 10) {
-    let arr = [];
-    for (let i = 1; i <= n; i++) {
-        arr.push(ASterm(a, d, i));
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+    * an array of integers from start to end inclusive.
+    * ```
+    * ListIntegers(2,6) // [2,3,4,5,6]
+    * ListIntegers(-2,1) // [-2,-1,0,1]
+    * ```
+    */
+    static ListIntegers(start, end) {
+        return cal.range(start, end);
     }
-    return arr;
-}
-globalThis.ASequence = contract(ASequence).sign([owl.num, owl.num, owl.positiveInt]);
-/**
-* @category Sequence
-* @return Tn in a geometric sequence: ar**(n-1)
-* ```
-* GSterm(2,3,4) // 54
-* GSterm(5,-2,6) // -160
-* ```
-*/
-function GSterm(a, r, n) {
-    return a * (r ** (n - 1));
-}
-globalThis.GSterm = contract(GSterm).sign([owl.num, owl.num, owl.positiveInt]);
-/**
-* @category Sequence
-* @return Sn in a geometric sequence: a*(r*n-1)/(r-1)
-* ```
-* GSsum(2,3,4) // 80
-* GSsum(5,-2,3) // 15
-* GSsum(3,0.5) // 6 , sum to inf if omit n
-* ```
-*/
-function GSsum(a, r, n = -1) {
-    return n > 0 ? a * (r ** n - 1) / (r - 1) : a / (1 - r);
-}
-globalThis.GSsum = contract(GSsum).sign([owl.num, owl.num, owl.int]);
-/**
-* @category Sequence
-* @return an array of the first n terms in a geometric sequence.
-* ```
-* GSequence(2,3,5) // return [2,6,18,54,162]
-* GSequence(5,-2,3) // return [5,-10,20]
-* ```
-*/
-function GSequence(a, r, n = 10) {
-    let arr = [];
-    for (let i = 1; i <= n; i++) {
-        arr.push(GSterm(a, r, i));
+    /**
+    * Tn in an arithmetic sequence: a+(n-1)d
+    * ```
+    * ASterm(2,3,10) // 29
+    * ASterm(5,-2,6) // -5
+    * ```
+    */
+    static ASterm(a, d, n) {
+        return a + (n - 1) * d;
     }
-    return arr;
-}
-globalThis.GSequence = contract(GSequence).sign([owl.num, owl.num, owl.positiveInt]);
-/**
-* @category Sequence
-* @return the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q
-* ```
-* QuadraticSequence(1,2,3,4) //
-* ```
-*/
-function QuadraticSequence(a, p, q, n) {
-    let c = a;
-    for (let i = 2; i <= n; i++) {
-        c += p * (i - 1) + q;
+    /**
+    * Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).
+    * ```
+    * ASsum(2,3,10) // 155
+    * ASsum(5,-2,6) // 0
+    * ```
+    */
+    static ASsum(a, d, n) {
+        return 0.5 * n * (2 * a + (n - 1) * d);
     }
-    return c;
-}
-globalThis.QuadraticSequence = contract(QuadraticSequence).sign([owl.num, owl.num, owl.num, owl.positiveInt]);
-/**
-* @category Sequence
-* @return the nth term in a lucas sequence, a_i = p*a_{i-1} + q*a_{i-2}
-* ```
-* LucasSequence(1,2,3,4,5) //
-* ```
-*/
-function LucasSequence(first, second, p, q, n) {
-    if (n === 1)
-        return first;
-    if (n === 2)
-        return second;
-    let S = [first, second];
-    for (let i = 3; i <= n; i++) {
-        S.push(p * S[i - 2] + q * S[i - 3]);
+    /**
+    * an array of the first n terms in an arithmetic sequence.
+    * ```
+    * ASequence(2,3,5) // [2,5,8,11,14]
+    * ASequence(5,-2,3) // [5,3,1]
+    * ```
+    */
+    static ASequence(a, d, n = 10) {
+        let arr = [];
+        for (let i = 1; i <= n; i++) {
+            arr.push(ASterm(a, d, i));
+        }
+        return arr;
     }
-    return S[n - 1];
-}
-globalThis.LucasSequence = contract(LucasSequence).sign([owl.num, owl.num, owl.num, owl.num, owl.positiveInt]);
+    /**
+    * Tn in a geometric sequence: ar**(n-1)
+    * ```
+    * GSterm(2,3,4) // 54
+    * GSterm(5,-2,6) // -160
+    * ```
+    */
+    static GSterm(a, r, n) {
+        return a * (r ** (n - 1));
+    }
+    /**
+    * Sn in a geometric sequence: a*(r*n-1)/(r-1)
+    * ```
+    * GSsum(2,3,4) // 80
+    * GSsum(5,-2,3) // 15
+    * GSsum(3,0.5) // 6 , sum to inf if omit n
+    * ```
+    */
+    static GSsum(a, r, n = -1) {
+        return n > 0 ? a * (r ** n - 1) / (r - 1) : a / (1 - r);
+    }
+    /**
+    * an array of the first n terms in a geometric sequence.
+    * ```
+    * GSequence(2,3,5) // return [2,6,18,54,162]
+    * GSequence(5,-2,3) // return [5,-10,20]
+    * ```
+    */
+    static GSequence(a, r, n = 10) {
+        let arr = [];
+        for (let i = 1; i <= n; i++) {
+            arr.push(GSterm(a, r, i));
+        }
+        return arr;
+    }
+    /**
+    * the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q
+    * ```
+    * QuadraticSequence(1,2,3,4) //
+    * ```
+    */
+    static QuadraticSequence(a, p, q, n) {
+        let c = a;
+        for (let i = 2; i <= n; i++) {
+            c += p * (i - 1) + q;
+        }
+        return c;
+    }
+    /**
+    * the nth term in a lucas sequence, a_i = p*a_{i-1} + q*a_{i-2}
+    * ```
+    * LucasSequence(1,2,3,4,5) //
+    * ```
+    */
+    static LucasSequence(first, second, p, q, n) {
+        if (n === 1)
+            return first;
+        if (n === 2)
+            return second;
+        let S = [first, second];
+        for (let i = 3; i <= n; i++) {
+            S.push(p * S[i - 2] + q * S[i - 3]);
+        }
+        return S[n - 1];
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.num),
+    (0, contract_1.inspectIt)(function is_range(start, end) { return start < end; })
+], Host, "ListIntegers", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.positiveInt)
+], Host, "ASterm", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.positiveInt)
+], Host, "ASsum", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.positiveInt)
+], Host, "ASequence", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.positiveInt)
+], Host, "GSterm", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.int)
+], Host, "GSsum", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.positiveInt)
+], Host, "GSequence", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.num, owl.positiveInt)
+], Host, "QuadraticSequence", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num, owl.num, owl.num, owl.positiveInt)
+], Host, "LucasSequence", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 701:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Stat
- * @return the minimum value. Equivalent to Math.min().
- * ```
- * Min(2,3,4) // 2
- * ```
- */
-function Min(...nums) {
-    return Math.min(...nums);
-}
-globalThis.Min = contract(Min).sign([owl.num]);
-/**
- * @category Stat
- * @return the maximum value. Equivalent to Math.max().
- * ```
- * Max(2,3,4) // 4
- * ```
- */
-function Max(...nums) {
-    return Math.max(...nums);
-}
-globalThis.Max = contract(Max).sign([owl.num]);
-/**
- * @category Stat
- * @return the sorted array of numbers.
- * ```
- * Sort(2,3,1) // [1,2,3]
- * ```
- */
-function Sort(...nums) {
-    return [...nums].sort((a, b) => a - b);
-}
-globalThis.Sort = contract(Sort).sign([owl.num]);
-/**
- * @category Stat
- * @return the sorted array of items by giving each item a value.
- * ```
- * SortBy([2,3,1],x=>x) // [1,2,3]
- * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
- * ```
- */
-function SortBy(items, valueFunc) {
-    return [...items].sort((a, b) => valueFunc(a) - valueFunc(b));
-}
-globalThis.SortBy = contract(SortBy).sign([owl.array, owl.pass]);
-/**
- * @category Stat
- * @return sum of nums
- * ```
- * Sum(1,2,3) // 6
- * Sum(-1,2,3,4,5) // 13
- * ```
- */
-function Sum(...nums) {
-    return toData(nums).sum();
-}
-globalThis.Sum = contract(Sum).sign([owl.num]);
-/**
- * @category Stat
- * @return mean of nums
- * ```
- * Mean(1,2,3) // 2
- * Mean(-1,2,3,4,5) // 2.6
- * ```
- */
-function Mean(...nums) {
-    return toData(nums).mean();
-}
-globalThis.Mean = contract(Mean).seal({
-    arg: [owl.num],
-    args: function is_not_empty(...nums) { return nums.length > 0; }
-});
-/**
- * @category Stat
- * @return median of nums
- * ```
- * Median(1,2,3,4,50) // 3
- * Median(1,2,3,4,5,7) // 3.5
- * ```
- */
-function Median(...nums) {
-    return toData(nums).median();
-}
-globalThis.Median = contract(Median).sign([owl.num]);
-/**
- * @category Stat
- * @return lower quartile of nums
- * ```
- * LowerQ(1,2,3,4,5) // 1.5
- * LowerQ(1,2,3,4,5,7) // 2
- * ```
- */
-function LowerQ(...nums) {
-    return toData(nums).lowerQuartile();
-}
-globalThis.LowerQ = contract(LowerQ).sign([owl.num]);
-/**
- * @category Stat
- * @return lower quartile of nums
- * ```
- * UpperQ(1,2,3,4,5) // 4.5
- * UpperQ(1,2,3,4,5,7) // 5
- * ```
- */
-function UpperQ(...nums) {
-    return toData(nums).upperQuartile();
-}
-globalThis.UpperQ = contract(UpperQ).sign([owl.num]);
-/**
- * @category Stat
- * @return range of nums
- * ```
- * StatRange(1,2,3,4,5) // 4
- * StatRange(1,2,3,4,5,7) // 6
- * ```
- */
-function StatRange(...nums) {
-    return toData(nums).range();
-}
-globalThis.StatRange = contract(StatRange).sign([owl.num]);
-/**
- * @category Stat
- * @return inter-quartile range of nums
- * ```
- * IQR(1,2,3,4,5,6) // 3
- * ```
- */
-function IQR(...nums) {
-    return toData(nums).IQR();
-}
-globalThis.IQR = contract(IQR).sign([owl.num]);
-// /**
-//  * @category Stat
-//  * @deprecated
-//  * @return count frequency of item in array
-//  * ```
-//  * Frequency(1)(2,3,4,1,5,1,1,4,5) // 3
-//  * ```
-//  */
-// function Frequency<T>(item: T) {
-//     return (...items: T[]) => toList(items).freq(item)
-// }
-// globalThis.Frequency = Frequency
-/**
- * @category Stat
- * @return count frequency of item in array
- * ```
- * Freq([2,3,4,1,5,1,1,4,5],1) // 3
- * ```
- */
-function Freq(array, item) {
-    return toList(array).freq(item);
-}
-globalThis.Freq = contract(Freq).sign([owl.array, owl.pass]);
-/**
- * @category Stat
- * @return mode of nums
- * ```
- * Mode(1,2,3,2,2,3,4) \\ [2]
- * Mode(1,1,2,2,3) \\ [1,2]
- * ```
- */
-function Mode(...nums) {
-    return [...toData(nums).modes()];
-}
-globalThis.Mode = contract(Mode).sign([owl.num]);
-/**
- * @category Stat
- * @return the only mode of nums, if there are multiple modes, then throw error
- * ```
- * UniMode(1,2,3,2,2,3,4) \\ 2
- * UniMode(1,1,2,2,3) \\ throw error
- * ```
- */
-function UniMode(...nums) {
-    return toData(nums).mode();
-}
-globalThis.UniMode = contract(UniMode).seal({
-    arg: [owl.num],
-    args: function has_single_mode(...nums) { return toData(nums).isSingleMode(1); }
-});
-/**
- * @category Stat
- * @return SD of nums
- * ```
- * StdDev(1,2,3,2,2,3,4) \\ 0.903507902
- * StdDev(1,1,2,2,3) \\ 0.748331477
- * ```
- */
-function StdDev(...nums) {
-    return toData(nums).stdDev();
-}
-globalThis.StdDev = contract(StdDev).sign([owl.num]);
-/**
- * @category Stat
- * @return z-score of `num` in a data set with `mean` and `SD`
- * ```
- * ZScore(80,60,10) \\ 2
- * ```
- */
-function ZScore(num, mean, SD) {
-    return (num - mean) / SD;
-}
-globalThis.ZScore = contract(ZScore).sign([owl.num]);
-/**
- * @category Stat
- * @return the location of median
- * ```
- * MedianAt(12) \\ 6.5
- * MedianAt(13) \\ 7
- * ```
- */
-function MedianAt(total) {
-    return (total + 1) / 2;
-}
-globalThis.MedianAt = contract(MedianAt).sign([owl.int]);
-/**
- * @category Stat
- * @return the location of LQ
- * ```
- * LowerQAt(12) \\ 3.5
- * LowerQAt(13) \\ 3.5
- * ```
- */
-function LowerQAt(total) {
-    total = Math.floor(total / 2);
-    return MedianAt(total);
-}
-globalThis.LowerQAt = contract(LowerQAt).sign([owl.int]);
-/**
- * @category Stat
- * @return the location of UQ
- * ```
- * UpperQAt(12) \\ 9.5
- * UpperQAt(13) \\ 10.5
- * ```
- */
-function UpperQAt(total) {
-    return total + 1 - LowerQAt(total);
-}
-globalThis.UpperQAt = contract(UpperQAt).sign([owl.int]);
-/**
- * @category Stat
- * @return array of all integers between the min and max of `data`.
- * ```
- * ListRange(1,1,4,4,3,3,3) \\ [1,2,3,4]
- * ```
- */
-function ListRange(...data) {
-    let min = Math.min(...data);
-    let max = Math.max(...data);
-    return cal.range(min, max);
-}
-globalThis.ListRange = contract(ListRange).sign([owl.int]);
-/**
- * @category Stat
- * @return array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
- * ```
- * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
- * ```
- */
-function Freqs(data, nums) {
-    let ls = toList(data);
-    nums ??= ListRange(...data);
-    let arr = [];
-    for (let v of nums) {
-        arr.push(ls.freq(v));
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * the minimum value. Equivalent to Math.min().
+     * ```
+     * Min(2,3,4) // 2
+     * ```
+     */
+    static Min(...nums) {
+        return Math.min(...nums);
     }
-    return arr;
-}
-globalThis.Freqs = contract(Freqs).sign([owl.ntuple, owl.ntuple]);
-/**
- * @category Stat
- * @return make a data set from frequencies
- * ```
- * DataFromFreqs([1,9,5],[2,2,3])
- * // [1,1,9,9,5,5,5]
- * ```
- */
-function DataFromFreqs(values, frequencies) {
-    Should(values.length === frequencies.length, 'values and frequencies must be the same length');
-    let data = [];
-    for (let i = 0; i < values.length; i++) {
-        data.push(...Array(frequencies[i]).fill(values[i]));
+    /**
+     * the maximum value. Equivalent to Math.max().
+     * ```
+     * Max(2,3,4) // 4
+     * ```
+     */
+    static Max(...nums) {
+        return Math.max(...nums);
     }
-    return data;
-}
-globalThis.DataFromFreqs = contract(DataFromFreqs).sign([owl.ntuple]);
-/**
- * @category Stat
- * @return array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
- * ```
- * Summary(1,1,2,3,3,3,3,4,5,5) \\ [1,2,3,4,5]
- * Summary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
- * ```
- */
-function Summary(...data) {
-    let d = toData(data);
-    return [
-        d.min(),
-        d.lowerQuartile(),
-        d.median(),
-        d.upperQuartile(),
-        d.max()
-    ];
-}
-globalThis.Summary = contract(Summary).sign([owl.num]);
+    /**
+     * the sorted array of numbers.
+     * ```
+     * Sort(2,3,1) // [1,2,3]
+     * ```
+     */
+    static Sort(...nums) {
+        return [...nums].sort((a, b) => a - b);
+    }
+    /**
+     * the sorted array of items by giving each item a value.
+     * ```
+     * SortBy([2,3,1],x=>x) // [1,2,3]
+     * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
+     * ```
+     */
+    static SortBy(items, valueFunc) {
+        return [...items].sort((a, b) => valueFunc(a) - valueFunc(b));
+    }
+    /**
+     * sum of nums
+     * ```
+     * Sum(1,2,3) // 6
+     * Sum(-1,2,3,4,5) // 13
+     * ```
+     */
+    static Sum(...nums) {
+        return toData(nums).sum();
+    }
+    /**
+     * mean of nums
+     * ```
+     * Mean(1,2,3) // 2
+     * Mean(-1,2,3,4,5) // 2.6
+     * ```
+     */
+    static Mean(...nums) {
+        return toData(nums).mean();
+    }
+    /**
+     * median of nums
+     * ```
+     * Median(1,2,3,4,50) // 3
+     * Median(1,2,3,4,5,7) // 3.5
+     * ```
+     */
+    static Median(...nums) {
+        return toData(nums).median();
+    }
+    /**
+     * lower quartile of nums
+     * ```
+     * LowerQ(1,2,3,4,5) // 1.5
+     * LowerQ(1,2,3,4,5,7) // 2
+     * ```
+     */
+    static LowerQ(...nums) {
+        return toData(nums).lowerQuartile();
+    }
+    /**
+     * lower quartile of nums
+     * ```
+     * UpperQ(1,2,3,4,5) // 4.5
+     * UpperQ(1,2,3,4,5,7) // 5
+     * ```
+     */
+    static UpperQ(...nums) {
+        return toData(nums).upperQuartile();
+    }
+    /**
+     * range of nums
+     * ```
+     * StatRange(1,2,3,4,5) // 4
+     * StatRange(1,2,3,4,5,7) // 6
+     * ```
+     */
+    static StatRange(...nums) {
+        return toData(nums).range();
+    }
+    /**
+     * inter-quartile range of nums
+     * ```
+     * IQR(1,2,3,4,5,6) // 3
+     * ```
+     */
+    static IQR(...nums) {
+        return toData(nums).IQR();
+    }
+    /**
+     * count frequency of item in array
+     * ```
+     * Freq([2,3,4,1,5,1,1,4,5],1) // 3
+     * ```
+     */
+    static Freq(array, item) {
+        return toList(array).freq(item);
+    }
+    /**
+     * mode of nums
+     * ```
+     * Mode(1,2,3,2,2,3,4) \\ [2]
+     * Mode(1,1,2,2,3) \\ [1,2]
+     * ```
+     */
+    static Mode(...nums) {
+        return [...toData(nums).modes()];
+    }
+    /**
+     * the only mode of nums, if there are multiple modes, then throw error
+     * ```
+     * UniMode(1,2,3,2,2,3,4) \\ 2
+     * UniMode(1,1,2,2,3) \\ throw error
+     * ```
+     */
+    static UniMode(...nums) {
+        return toData(nums).mode();
+    }
+    /**
+     * SD of nums
+     * ```
+     * StdDev(1,2,3,2,2,3,4) \\ 0.903507902
+     * StdDev(1,1,2,2,3) \\ 0.748331477
+     * ```
+     */
+    static StdDev(...nums) {
+        return toData(nums).stdDev();
+    }
+    /**
+     * z-score of `num` in a data set with `mean` and `SD`
+     * ```
+     * ZScore(80,60,10) \\ 2
+     * ```
+     */
+    static ZScore(num, mean, SD) {
+        return (num - mean) / SD;
+    }
+    /**
+     * the location of median
+     * ```
+     * MedianAt(12) \\ 6.5
+     * MedianAt(13) \\ 7
+     * ```
+     */
+    static MedianAt(total) {
+        return (total + 1) / 2;
+    }
+    /**
+     * the location of LQ
+     * ```
+     * LowerQAt(12) \\ 3.5
+     * LowerQAt(13) \\ 3.5
+     * ```
+     */
+    static LowerQAt(total) {
+        total = Math.floor(total / 2);
+        return MedianAt(total);
+    }
+    /**
+     * the location of UQ
+     * ```
+     * UpperQAt(12) \\ 9.5
+     * UpperQAt(13) \\ 10.5
+     * ```
+     */
+    static UpperQAt(total) {
+        return total + 1 - LowerQAt(total);
+    }
+    /**
+     * array of all integers between the min and max of `data`.
+     * ```
+     * ListRange(1,1,4,4,3,3,3) \\ [1,2,3,4]
+     * ```
+     */
+    static ListRange(...data) {
+        let min = Math.min(...data);
+        let max = Math.max(...data);
+        return cal.range(min, max);
+    }
+    /**
+     * array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
+     * ```
+     * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
+     * ```
+     */
+    static Freqs(data, nums) {
+        let ls = toList(data);
+        nums ??= ListRange(...data);
+        let arr = [];
+        for (let v of nums) {
+            arr.push(ls.freq(v));
+        }
+        return arr;
+    }
+    /**
+     * make a data set from frequencies
+     * ```
+     * DataFromFreqs([1,9,5],[2,2,3])
+     * // [1,1,9,9,5,5,5]
+     * ```
+     */
+    static DataFromFreqs(values, frequencies) {
+        Should(values.length === frequencies.length, 'values and frequencies must be the same length');
+        let data = [];
+        for (let i = 0; i < values.length; i++) {
+            data.push(...Array(frequencies[i]).fill(values[i]));
+        }
+        return data;
+    }
+    /**
+     * array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
+     * ```
+     * Summary(1,1,2,3,3,3,3,4,5,5) \\ [1,2,3,4,5]
+     * Summary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
+     * ```
+     */
+    static Summary(...data) {
+        let d = toData(data);
+        return [
+            d.min(),
+            d.lowerQuartile(),
+            d.median(),
+            d.upperQuartile(),
+            d.max()
+        ];
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Min", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Max", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Sort", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.array, owl.pass)
+], Host, "SortBy", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Sum", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num),
+    (0, contract_1.inspectIt)(function is_not_empty(...nums) { return nums.length > 0; })
+], Host, "Mean", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Median", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "LowerQ", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "UpperQ", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "StatRange", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "IQR", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.array, owl.pass)
+], Host, "Freq", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Mode", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num),
+    (0, contract_1.inspectIt)(function has_single_mode(...nums) { return toData(nums).isSingleMode(1); })
+], Host, "UniMode", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "StdDev", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "ZScore", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.int)
+], Host, "MedianAt", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.int)
+], Host, "LowerQAt", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.int)
+], Host, "UpperQAt", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.int)
+], Host, "ListRange", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.ntuple, owl.ntuple)
+], Host, "Freqs", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.ntuple)
+], Host, "DataFromFreqs", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Summary", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
 
 /***/ 8730:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
-* @category Text
-* @return a string of joined elements. [1,2,3] --> '1, 2 and 3'
-* ```
-* GrammarJoin(1,2,3,4) // '1, 2, 3 and 4'
-* GrammarJoin('a','b','c') // 'a, b and c'
-* ```
-*/
-function GrammarJoin(...items) {
-    let L = items.length;
-    if (L === 0)
-        return '';
-    if (L === 1)
-        return String(items[0]);
-    let arr = [];
-    for (let i = 0; i < L - 1; i++) {
-        arr.push(items[i]);
-    }
-    return arr.join(', ') + ' and ' + items[items.length - 1];
-}
-globalThis.GrammarJoin = GrammarJoin;
-// /**
-// * @category Text
-// * @deprecated
-// * @return '✔' or '✘'.
-// * ```
-// * Tick(true) // '✔'
-// * Tick(false) // '✘'
-// * ```
-// */
-// function Tick(bool: boolean): string {
-//     return bool ? '✔' : '✘'
-// }
-// globalThis.Tick = contract(Tick).sign([owl.bool])
-// /**
-// * @category Text
-// * @deprecated
-// * @return Array of '✔' or '✘'.
-// * ```
-// * Ticks(true,false) // ['✔','✘']
-// * ```
-// */
-// function Ticks(...bools: boolean[]): string[] {
-//     return bools.map(x => Tick(x))
-// }
-// globalThis.Ticks = contract(Ticks).sign([owl.bool])
-/**
-* @category Text
-* @deprecated use symbol printing instead!!!
-* @return a pair of latex inequalities sign array like ['\\ge', '\\le'].
-* ```typescript
-* IneqSign(true,true) // ['\\ge', '\\le']
-* IneqSign(true,false) // ['\\gt', '\\lt']
-* IneqSign(false,true) // ['\\le', '\\ge']
-* IneqSign(false,false) // ['\\lt', '\\gt']
-* ```
-*/
-function IneqSign(greater, equal = false) {
-    if (greater && equal) {
-        return ['\\ge', '\\le'];
-    }
-    if (greater && !equal) {
-        return ['\\gt', '\\lt'];
-    }
-    if (!greater && equal) {
-        return ['\\le', '\\ge'];
-    }
-    if (!greater && !equal) {
-        return ['\\lt', '\\gt'];
-    }
-    throw 'never';
-}
-globalThis.IneqSign = contract(IneqSign).sign([owl.bool, owl.bool]);
-/**
-* @category Text
-* @deprecated
-* @param upSign - put -ve sign on numerator instead of the front.
-* @return latex of dfrac p/q like \dfrac{1}{2}.
-* ```
-* Dfrac(1,2) // '\\dfrac{1}{2}'
-* Dfrac(1,-2) // '\\dfrac{-1}{2}'
-* Dfrac(6,4) // '\\dfrac{3}{2}'
-* Dfrac(6,-2) // '-3'
-* Dfrac(0,2) // '0'
-* Dfrac(5,0) // undefined
-* ```
-*/
-function Dfrac(numerator, denominator, upSign = false) {
-    return ink.printDfrac(numerator, denominator, upSign);
-}
-globalThis.Dfrac = contract(Dfrac).sign([owl.num, owl.nonZero, owl.bool]);
-/**
- * @category Text
- * @return convert index katex to surd
- * ```
- * IndexToSurd('{x}^{0.5}') // '\\sqrt{x}'
- * IndexToSurd('{(y)}^{0.5}') // '\\sqrt{y}'
- * ```
- */
-function IndexToSurd(text) {
-    return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}");
-}
-globalThis.IndexToSurd = contract(IndexToSurd).sign([owl.str]);
-/**
- * @category Text
- * @deprecated
- * @return the coordinates '(a, b)' of point [a,b]
- * ```
- * Coord([1,2]) // '(1, 2)'
- * ```
- */
-function Coord(point, dp = 1) {
-    let [a, b] = point.map(_ => cal.blur(_));
-    a = Fix(a, dp);
-    b = Fix(b, dp);
-    return '(' + a + ', ' + b + ')';
-}
-globalThis.Coord = contract(Coord).sign([owl.point2D]);
-/**
- * @category Text
- * @deprecated
- * @return the scientific notation of number
- * ```
- * Sci(123.45) // '1.2345 x 10^{ 2}'
- * Sci(1.2345) // '1.2345'
- * ```
- */
-function Sci(num) {
-    if (num === 0)
-        return '0';
-    let m = cal.e(cal.blur(num));
-    if (m === 0)
-        return num.toString();
-    num = num / (10 ** m);
-    num = cal.blur(num);
-    return num.toString() + ' \\times ' + '10^{ ' + m + '}';
-}
-globalThis.Sci = contract(Sci).sign([owl.num]);
-/**
- * @category Text
- * @return the katex of long division
- * ```
- * LongDivision([1,2,3,4],[1,2]) //
- * LongDivision([1,2,3,4],[1,2]) //
- * ```
- */
-function LongDivision(dividend, divisor) {
-    dividend = dividend.reverse();
-    divisor = divisor.reverse();
-    function xTerm(power) {
-        if (power === 0)
-            return "";
-        if (power === 1)
-            return "x";
-        return "x^" + power;
-    }
-    function printSolid(poly) {
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+    * a string of joined elements. [1,2,3] --> '1, 2 and 3'
+    * ```
+    * GrammarJoin(1,2,3,4) // '1, 2, 3 and 4'
+    * GrammarJoin('a','b','c') // 'a, b and c'
+    * ```
+    */
+    static GrammarJoin(...items) {
+        let L = items.length;
+        if (L === 0)
+            return '';
+        if (L === 1)
+            return String(items[0]);
         let arr = [];
-        poly.forEach((v, i) => {
-            if (v !== null)
-                arr.push(v + xTerm(i));
-        });
-        return arr.reverse().join("+");
-    }
-    function printUnderline(poly) {
-        return "\\underline{" + printSolid(poly) + "}";
-    }
-    function printPhantom(poly) {
-        let arr = [];
-        poly.forEach((v, i) => {
-            if (v === null)
-                arr.push(dividend[i] + xTerm(i));
-        });
-        let T = arr.reverse().join("+");
-        if (T.length === 0)
-            return "";
-        return "\\phantom{" + "+" + T + "}";
-    }
-    function writeSolid(poly) {
-        return printSolid(poly) + printPhantom(poly);
-    }
-    function writeUnderline(poly) {
-        return printUnderline(poly) + printPhantom(poly);
-    }
-    function pushDivide(dividend, divisor) {
-        let t1 = dividend[dividend.length - 1];
-        let t2 = divisor[divisor.length - 1];
-        return t1 / t2;
-    }
-    function step(current, divisor) {
-        let q = pushDivide(current, divisor);
-        let under = divisor.map(x => x * q);
-        for (let i = 1; i <= current.length - divisor.length; i++)
-            under.unshift(null);
-        let next = [];
-        for (let i = 0; i < current.length - 1; i++)
-            next.push(current[i] - Number(under[i]));
-        let nextPrint = [...next].reverse();
-        for (let i = 0; i < nextPrint.length; i++)
-            if (i > divisor.length - 1)
-                nextPrint[i] = null;
-        nextPrint.reverse();
-        return { next, nextPrint, under, q };
-    }
-    function compose(dividend, divisor) {
-        let T = "\\begin{array}{r}";
-        T += "QUOTIENT \\\\";
-        T += writeSolid(divisor);
-        T += "{\\overline{\\smash{\\big)}";
-        T += writeSolid(dividend);
-        T += "}}\\\\";
-        let current = dividend;
-        let quotient = [];
-        while (true) {
-            let { next, nextPrint, under, q } = step(current, divisor);
-            T += writeUnderline(under) + "\\\\";
-            T += writeSolid(nextPrint) + "\\\\";
-            current = next;
-            quotient.push(q);
-            if (current.length < divisor.length)
-                break;
+        for (let i = 0; i < L - 1; i++) {
+            arr.push(items[i]);
         }
-        T += "\\end{array}";
-        quotient.reverse();
-        T = T.replace('QUOTIENT', writeSolid(quotient));
+        return arr.join(', ') + ' and ' + items[items.length - 1];
+    }
+    /**
+    * @deprecated use symbol printing instead!!!
+    * a pair of latex inequalities sign array like ['\\ge', '\\le'].
+    * ```typescript
+    * IneqSign(true,true) // ['\\ge', '\\le']
+    * IneqSign(true,false) // ['\\gt', '\\lt']
+    * IneqSign(false,true) // ['\\le', '\\ge']
+    * IneqSign(false,false) // ['\\lt', '\\gt']
+    * ```
+    */
+    static IneqSign(greater, equal = false) {
+        if (greater && equal) {
+            return ['\\ge', '\\le'];
+        }
+        if (greater && !equal) {
+            return ['\\gt', '\\lt'];
+        }
+        if (!greater && equal) {
+            return ['\\le', '\\ge'];
+        }
+        if (!greater && !equal) {
+            return ['\\lt', '\\gt'];
+        }
+        throw 'never';
+    }
+    /**
+    * @deprecated
+    * @param upSign - put -ve sign on numerator instead of the front.
+    * latex of dfrac p/q like \dfrac{1}{2}.
+    * ```
+    * Dfrac(1,2) // '\\dfrac{1}{2}'
+    * Dfrac(1,-2) // '\\dfrac{-1}{2}'
+    * Dfrac(6,4) // '\\dfrac{3}{2}'
+    * Dfrac(6,-2) // '-3'
+    * Dfrac(0,2) // '0'
+    * Dfrac(5,0) // undefined
+    * ```
+    */
+    static Dfrac(numerator, denominator, upSign = false) {
+        return ink.printDfrac(numerator, denominator, upSign);
+    }
+    /**
+
+     * convert index katex to surd
+     * ```
+     * IndexToSurd('{x}^{0.5}') // '\\sqrt{x}'
+     * IndexToSurd('{(y)}^{0.5}') // '\\sqrt{y}'
+     * ```
+     */
+    static IndexToSurd(text) {
+        return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}");
+    }
+    /**
+
+     * @deprecated
+     * the coordinates '(a, b)' of point [a,b]
+     * ```
+     * Coord([1,2]) // '(1, 2)'
+     * ```
+     */
+    static Coord(point, dp = 1) {
+        let [a, b] = point.map(_ => cal.blur(_));
+        a = Fix(a, dp);
+        b = Fix(b, dp);
+        return '(' + a + ', ' + b + ')';
+    }
+    /**
+
+     * @deprecated
+     * the scientific notation of number
+     * ```
+     * Sci(123.45) // '1.2345 x 10^{ 2}'
+     * Sci(1.2345) // '1.2345'
+     * ```
+     */
+    static Sci(num) {
+        if (num === 0)
+            return '0';
+        let m = cal.e(cal.blur(num));
+        if (m === 0)
+            return num.toString();
+        num = num / (10 ** m);
+        num = cal.blur(num);
+        return num.toString() + ' \\times ' + '10^{ ' + m + '}';
+    }
+    /**
+
+     * the katex of long division
+     * ```
+     * LongDivision([1,2,3,4],[1,2]) //
+     * LongDivision([1,2,3,4],[1,2]) //
+     * ```
+     */
+    static LongDivision(dividend, divisor) {
+        dividend = dividend.reverse();
+        divisor = divisor.reverse();
+        function xTerm(power) {
+            if (power === 0)
+                return "";
+            if (power === 1)
+                return "x";
+            return "x^" + power;
+        }
+        function printSolid(poly) {
+            let arr = [];
+            poly.forEach((v, i) => {
+                if (v !== null)
+                    arr.push(v + xTerm(i));
+            });
+            return arr.reverse().join("+");
+        }
+        function printUnderline(poly) {
+            return "\\underline{" + printSolid(poly) + "}";
+        }
+        function printPhantom(poly) {
+            let arr = [];
+            poly.forEach((v, i) => {
+                if (v === null)
+                    arr.push(dividend[i] + xTerm(i));
+            });
+            let T = arr.reverse().join("+");
+            if (T.length === 0)
+                return "";
+            return "\\phantom{" + "+" + T + "}";
+        }
+        function writeSolid(poly) {
+            return printSolid(poly) + printPhantom(poly);
+        }
+        function writeUnderline(poly) {
+            return printUnderline(poly) + printPhantom(poly);
+        }
+        function pushDivide(dividend, divisor) {
+            let t1 = dividend[dividend.length - 1];
+            let t2 = divisor[divisor.length - 1];
+            return t1 / t2;
+        }
+        function step(current, divisor) {
+            let q = pushDivide(current, divisor);
+            let under = divisor.map(x => x * q);
+            for (let i = 1; i <= current.length - divisor.length; i++)
+                under.unshift(null);
+            let next = [];
+            for (let i = 0; i < current.length - 1; i++)
+                next.push(current[i] - Number(under[i]));
+            let nextPrint = [...next].reverse();
+            for (let i = 0; i < nextPrint.length; i++)
+                if (i > divisor.length - 1)
+                    nextPrint[i] = null;
+            nextPrint.reverse();
+            return { next, nextPrint, under, q };
+        }
+        function compose(dividend, divisor) {
+            let T = "\\begin{array}{r}";
+            T += "QUOTIENT \\\\";
+            T += writeSolid(divisor);
+            T += "{\\overline{\\smash{\\big)}";
+            T += writeSolid(dividend);
+            T += "}}\\\\";
+            let current = dividend;
+            let quotient = [];
+            while (true) {
+                let { next, nextPrint, under, q } = step(current, divisor);
+                T += writeUnderline(under) + "\\\\";
+                T += writeSolid(nextPrint) + "\\\\";
+                current = next;
+                quotient.push(q);
+                if (current.length < divisor.length)
+                    break;
+            }
+            T += "\\end{array}";
+            quotient.reverse();
+            T = T.replace('QUOTIENT', writeSolid(quotient));
+            return T;
+        }
+        return compose(dividend, divisor);
+    }
+    /**
+
+     * the representation of num in base b
+     * ```
+     * ToBase(1000,16) // '3E8_{16}'
+     * ToBase(13,2) // '1101_{2}'
+     * ```
+     */
+    static ToBase(num, base) {
+        return num.toString(base).toUpperCase() + '_{' + base + '}';
+    }
+    /**
+
+     * a prime factorization layout for HCF or LCM
+     * ```
+     * PrimeFactorize({
+     *  'number': [30, 15, 12],
+     *   a: [3, 0, 5],
+     *   b: [5, 6, 1],
+     *   '(x+1)': [8, 7, 5]
+     * },
+     * {hcf:true,lcm:true,multiply:!true}
+     * )
+     * ```
+     */
+    static PrimeFactorize(val, { hcf = false, lcm = false, multiply = false }) {
+        let T = '\\begin{matrix} ';
+        function add(variable, power) {
+            let s = multiply ? '& \\times &' : '&';
+            if (power > 1) {
+                T += s + variable + '^{' + power + '}';
+            }
+            else if (power === 1) {
+                T += s + variable;
+            }
+            else {
+                T += multiply ? '& &' : ' & ';
+            }
+        }
+        let keys = Object.keys(val);
+        let n = val[keys[0]].length;
+        for (let i = 0; i < n; i++) {
+            T += ' & ';
+            if (keys.includes('number'))
+                T += ' & ' + val.number[i];
+            for (let k of keys) {
+                if (k === 'number')
+                    continue;
+                add(k, val[k][i]);
+            }
+            T += ' \\\\ ';
+        }
+        T += '\\hline';
+        if (hcf) {
+            T += ' \\text{HCF} & = ';
+            if (keys.includes('number'))
+                T += ' & ' + HCF(...val.number);
+            for (let k of keys) {
+                if (k === 'number')
+                    continue;
+                add(k, Min(...val[k]));
+            }
+            T += ' \\\\ ';
+        }
+        if (lcm) {
+            T += ' \\text{LCM} & = ';
+            if (keys.includes('number'))
+                T += ' & ' + LCM(...val.number);
+            for (let k of keys) {
+                if (k === 'number')
+                    continue;
+                add(k, Max(...val[k]));
+            }
+            T += ' \\\\ ';
+        }
+        T += '\\end{matrix}';
         return T;
     }
-    return compose(dividend, divisor);
-}
-globalThis.LongDivision = contract(LongDivision).sign([owl.ntuple, owl.ntuple]);
-// /**
-//  * @category Text
-//  * @param num - from 1 to 10
-//  * @return roman number
-//  * ```
-//  * Roman(1) // "I"
-//  * Roman(2) // "II"
-//  * ```
-//  */
-// function Roman(num: number): string {
-//     return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][num - 1]
-// }
-// globalThis.Roman = contract(Roman).sign([[owl.positiveInt, owl.between(1, 10)]])
-// /**
-//  * @category Text
-//  * @param roman - from I to X
-//  * @return arabic number
-//  * ```
-//  * DeRoman("I") // 1
-//  * DeRoman("II") // 2
-//  * ```
-//  */
-// function DeRoman(roman: string): number {
-//     const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
-//     return romans.indexOf(roman) + 1
-// }
-// globalThis.DeRoman = contract(DeRoman).sign([owl.roman])
-/**
- * @category Text
- * @return the representation of num in base b
- * ```
- * ToBase(1000,16) // '3E8_{16}'
- * ToBase(13,2) // '1101_{2}'
- * ```
- */
-function ToBase(num, base) {
-    return num.toString(base).toUpperCase() + '_{' + base + '}';
-}
-globalThis.ToBase = contract(ToBase).sign([[owl.num, Number.isSafeInteger], owl.positiveInt]);
-/**
- * @category Text
- * @return a prime factorization layout for HCF or LCM
- * ```
- * PrimeFactorize({
- *  'number': [30, 15, 12],
- *   a: [3, 0, 5],
- *   b: [5, 6, 1],
- *   '(x+1)': [8, 7, 5]
- * },
- * {hcf:true,lcm:true,multiply:!true}
- * )
- * ```
- */
-function PrimeFactorize(val, { hcf = false, lcm = false, multiply = false }) {
-    let T = '\\begin{matrix} ';
-    function add(variable, power) {
-        let s = multiply ? '& \\times &' : '&';
-        if (power > 1) {
-            T += s + variable + '^{' + power + '}';
-        }
-        else if (power === 1) {
-            T += s + variable;
-        }
-        else {
-            T += multiply ? '& &' : ' & ';
-        }
+    /**
+
+     * the latex representing the `constraint`
+     * ```
+     * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
+     * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
+     * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
+     * ```
+     */
+    static ConstraintText(constraint, sign = true, xReplace = 'x', yReplace = 'y') {
+        if (sign === false)
+            constraint = rein(constraint).flip().constraint;
+        let T = ink.printConstraint(constraint, false, sign === null);
+        T = T.replace(/x/g, xReplace);
+        T = T.replace(/y/g, yReplace);
+        return T;
     }
-    let keys = Object.keys(val);
-    let n = val[keys[0]].length;
-    for (let i = 0; i < n; i++) {
-        T += ' & ';
-        if (keys.includes('number'))
-            T += ' & ' + val.number[i];
-        for (let k of keys) {
-            if (k === 'number')
-                continue;
-            add(k, val[k][i]);
-        }
-        T += ' \\\\ ';
-    }
-    T += '\\hline';
-    if (hcf) {
-        T += ' \\text{HCF} & = ';
-        if (keys.includes('number'))
-            T += ' & ' + HCF(...val.number);
-        for (let k of keys) {
-            if (k === 'number')
-                continue;
-            add(k, Min(...val[k]));
-        }
-        T += ' \\\\ ';
-    }
-    if (lcm) {
-        T += ' \\text{LCM} & = ';
-        if (keys.includes('number'))
-            T += ' & ' + LCM(...val.number);
-        for (let k of keys) {
-            if (k === 'number')
-                continue;
-            add(k, Max(...val[k]));
-        }
-        T += ' \\\\ ';
-    }
-    T += '\\end{matrix}';
-    return T;
-}
-globalThis.PrimeFactorize = contract(PrimeFactorize).sign([owl.object, owl.object]);
-/**
- * @category Text
- * @return the latex representing the `constraint`
- * ```
- * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
- * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
- * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
- * ```
- */
-function ConstraintText(constraint, sign = true, xReplace = 'x', yReplace = 'y') {
-    if (sign === false)
-        constraint = rein(constraint).flip().constraint;
-    let T = ink.printConstraint(constraint, false, sign === null);
-    T = T.replace(/x/g, xReplace);
-    T = T.replace(/y/g, yReplace);
-    return T;
-}
-globalThis.ConstraintText = contract(ConstraintText)
-    .sign([owl.constraint, owl.pass, owl.str, owl.str]);
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.bool, owl.bool)
+], Host, "IneqSign", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.nonZero, owl.bool)
+], Host, "Dfrac", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.str)
+], Host, "IndexToSurd", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "Coord", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "Sci", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.ntuple, owl.ntuple)
+], Host, "LongDivision", null);
+__decorate([
+    (0, contract_1.checkIt)([owl.num, Number.isSafeInteger], owl.positiveInt)
+], Host, "ToBase", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.object, owl.object)
+], Host, "PrimeFactorize", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.constraint, owl.pass, owl.str, owl.str)
+], Host, "ConstraintText", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
@@ -35539,7 +35738,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Host = void 0;
-const contract_1 = __webpack_require__(1154);
+const contract_1 = __webpack_require__(9110);
 let angle = owl.between(0, 180);
 let side = owl.positive;
 function triangle_ineq(a, b, c) {
@@ -36005,295 +36204,319 @@ exports.Host = Host;
 /***/ }),
 
 /***/ 9812:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-/**
- * @category Trigonometry
- * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
- * @return  the quadrant of a point or angle: 'I','II','III' or 'IV'.
- * ```
- * Quadrant([1,1]) \\ 'I'
- * Quadrant([-1,1]) \\ 'II'
- * Quadrant(200) \\ 'III'
- * Quadrant(350) \\ 'IV'
- * ```
- */
-function Quadrant(rect) {
-    if (!Array.isArray(rect))
-        rect = PolToRect([1, rect]);
-    const q = RectToPol(rect)[1];
-    if (q >= 0 && q < 90)
-        return "I";
-    if (q >= 90 && q < 180)
-        return "II";
-    if (q >= 180 && q < 270)
-        return "III";
-    if (q >= 270 && q < 360)
-        return "IV";
-    Should(false, 'fail to parse quadrant!');
-    throw 'never';
-}
-globalThis.Quadrant = contract(Quadrant).sign([owl.or([owl.point2D, owl.num])]);
-/**
- * @category Trigonometry
- * @return the rectangular coordinates [x,y] from a polar coordinates [r,theta].
- * ```
- * PolToRect([1,45]) // [0.707,0.707]
- * ```
- */
-function PolToRect([r, q]) {
-    return [r * cos(q), r * sin(q)];
-}
-globalThis.PolToRect = contract(PolToRect).sign([owl.polar]);
-/**
- * @category Trigonometry
- * @return the polar coordinates [r,theta] of a rectangular coordinates [x,y].
- * ```
- * RectToPol([1,1]) // [1.414,45]
- * ```
- */
-function RectToPol([x, y]) {
-    const r = Math.sqrt(x * x + y * y);
-    let q = Math.atan2(y, x) * 180 / Math.PI;
-    if (q < 0)
-        q = q + 360;
-    return [r, q];
-}
-globalThis.RectToPol = contract(RectToPol).sign([owl.point2D]);
-/**
- * @category Trigonometry
- * @return the sign from ASTC diagram, 1 or -1, representing positive or negative.
- * ```
- * ASTC(2,'cos') // -1
- * ASTC('III','tan') // 1
- * ```
- */
-function ASTC(quadrant, func) {
-    if (quadrant == "I")
-        quadrant = 1;
-    if (quadrant == "II")
-        quadrant = 2;
-    if (quadrant == "III")
-        quadrant = 3;
-    if (quadrant == "IV")
-        quadrant = 4;
-    if (quadrant == 1)
-        return 1;
-    if (quadrant == 2)
-        return func === 'sin' ? 1 : -1;
-    if (quadrant == 3)
-        return func === 'tan' ? 1 : -1;
-    if (quadrant == 4)
-        return func === 'cos' ? 1 : -1;
-    return 0;
-}
-globalThis.ASTC = contract(ASTC).sign([owl.quadrant, owl.trig]);
-/**
- * @category Trigonometry
- * @deprecated use TrigSolve instead
- * @return the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k. The angles [r1,r2,r3].
- * ```
- * TrigRoot('sin',0) // [0, 180, 360]
- * TrigRoot('sin',0.5) // [30, 150, undefined]
- * TrigRoot('sin',1) // [90, undefined, undefined]
- * ```
- */
-function TrigRoot(func, k) {
-    if (func == 'sin') {
-        if (k > 1 || k < -1)
-            return [undefined, undefined, undefined];
-        if (k == 0)
-            return [0, 180, 360];
-        if (k == 1)
-            return [90, undefined, undefined];
-        if (k == -1)
-            return [270, undefined, undefined];
-        if (k > 0) {
-            let a = arcsin(k);
-            let b = 180 - a;
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
+     * the quadrant of a point or angle: 'I','II','III' or 'IV'.
+     * ```
+     * Quadrant([1,1]) \\ 'I'
+     * Quadrant([-1,1]) \\ 'II'
+     * Quadrant(200) \\ 'III'
+     * Quadrant(350) \\ 'IV'
+     * ```
+     */
+    static Quadrant(rect) {
+        if (!Array.isArray(rect))
+            rect = PolToRect([1, rect]);
+        const q = RectToPol(rect)[1];
+        if (q >= 0 && q < 90)
+            return "I";
+        if (q >= 90 && q < 180)
+            return "II";
+        if (q >= 180 && q < 270)
+            return "III";
+        if (q >= 270 && q < 360)
+            return "IV";
+        Should(false, 'fail to parse quadrant!');
+        throw 'never';
+    }
+    /**
+     * the rectangular coordinates [x,y] from a polar coordinates [r,theta].
+     * ```
+     * PolToRect([1,45]) // [0.707,0.707]
+     * ```
+     */
+    static PolToRect([r, q]) {
+        return [r * cos(q), r * sin(q)];
+    }
+    /**
+     * the polar coordinates [r,theta] of a rectangular coordinates [x,y].
+     * ```
+     * RectToPol([1,1]) // [1.414,45]
+     * ```
+     */
+    static RectToPol([x, y]) {
+        const r = Math.sqrt(x * x + y * y);
+        let q = Math.atan2(y, x) * 180 / Math.PI;
+        if (q < 0)
+            q = q + 360;
+        return [r, q];
+    }
+    /**
+     * the sign from ASTC diagram, 1 or -1, representing positive or negative.
+     * ```
+     * ASTC(2,'cos') // -1
+     * ASTC('III','tan') // 1
+     * ```
+     */
+    static ASTC(quadrant, func) {
+        if (quadrant == "I")
+            quadrant = 1;
+        if (quadrant == "II")
+            quadrant = 2;
+        if (quadrant == "III")
+            quadrant = 3;
+        if (quadrant == "IV")
+            quadrant = 4;
+        if (quadrant == 1)
+            return 1;
+        if (quadrant == 2)
+            return func === 'sin' ? 1 : -1;
+        if (quadrant == 3)
+            return func === 'tan' ? 1 : -1;
+        if (quadrant == 4)
+            return func === 'cos' ? 1 : -1;
+        return 0;
+    }
+    /**
+     * @deprecated use TrigSolve instead
+     * the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k. The angles [r1,r2,r3].
+     * ```
+     * TrigRoot('sin',0) // [0, 180, 360]
+     * TrigRoot('sin',0.5) // [30, 150, undefined]
+     * TrigRoot('sin',1) // [90, undefined, undefined]
+     * ```
+     */
+    static TrigRoot(func, k) {
+        if (func == 'sin') {
+            if (k > 1 || k < -1)
+                return [undefined, undefined, undefined];
+            if (k == 0)
+                return [0, 180, 360];
+            if (k == 1)
+                return [90, undefined, undefined];
+            if (k == -1)
+                return [270, undefined, undefined];
+            if (k > 0) {
+                let a = arcsin(k);
+                let b = 180 - a;
+                return [a, b, undefined];
+            }
+            if (k < 0) {
+                let x = -arcsin(k);
+                let a = 180 + x;
+                let b = 360 - x;
+                return [a, b, undefined];
+            }
+        }
+        if (func == 'cos') {
+            if (k > 1 || k < -1)
+                return [undefined, undefined, undefined];
+            if (k == 0)
+                return [90, 270, undefined];
+            if (k == 1)
+                return [0, 360, undefined];
+            if (k == -1)
+                return [180, undefined, undefined];
+            let a = arccos(k);
+            let b = 360 - a;
             return [a, b, undefined];
         }
-        if (k < 0) {
-            let x = -arcsin(k);
-            let a = 180 + x;
-            let b = 360 - x;
-            return [a, b, undefined];
+        if (func == 'tan') {
+            if (k == 0)
+                return [0, 180, 360];
+            if (k > 0) {
+                let a = arctan(k);
+                let b = 180 + a;
+                return [a, b, undefined];
+            }
+            if (k < 0) {
+                let x = -arctan(k);
+                let a = 180 - x;
+                let b = 360 - x;
+                return [a, b, undefined];
+            }
         }
+        return [undefined, undefined, undefined];
     }
-    if (func == 'cos') {
-        if (k > 1 || k < -1)
-            return [undefined, undefined, undefined];
-        if (k == 0)
-            return [90, 270, undefined];
-        if (k == 1)
-            return [0, 360, undefined];
-        if (k == -1)
-            return [180, undefined, undefined];
-        let a = arccos(k);
-        let b = 360 - a;
-        return [a, b, undefined];
-    }
-    if (func == 'tan') {
-        if (k == 0)
-            return [0, 180, 360];
-        if (k > 0) {
-            let a = arctan(k);
-            let b = 180 + a;
-            return [a, b, undefined];
+    /**
+     * the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k.
+     * ```
+     * TrigSolve('sin',0) // [0, 180, 360]
+     * TrigSolve('sin',0.5) // [30, 150]
+     * TrigSolve('sin',1) // [90]
+     * ```
+     */
+    static TrigSolve(func, k) {
+        if (func == 'sin') {
+            if (k > 1 || k < -1)
+                return [];
+            if (k == 0)
+                return [0, 180, 360];
+            if (k == 1)
+                return [90];
+            if (k == -1)
+                return [270];
+            if (k > 0) {
+                let a = arcsin(k);
+                let b = 180 - a;
+                return [a, b];
+            }
+            if (k < 0) {
+                let x = -arcsin(k);
+                let a = 180 + x;
+                let b = 360 - x;
+                return [a, b];
+            }
         }
-        if (k < 0) {
-            let x = -arctan(k);
-            let a = 180 - x;
-            let b = 360 - x;
-            return [a, b, undefined];
-        }
-    }
-    return [undefined, undefined, undefined];
-}
-globalThis.TrigRoot = contract(TrigRoot).sign([owl.trig, owl.num]);
-/**
- * @category Trigonometry
- * @return the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k.
- * ```
- * TrigSolve('sin',0) // [0, 180, 360]
- * TrigSolve('sin',0.5) // [30, 150]
- * TrigSolve('sin',1) // [90]
- * ```
- */
-function TrigSolve(func, k) {
-    if (func == 'sin') {
-        if (k > 1 || k < -1)
-            return [];
-        if (k == 0)
-            return [0, 180, 360];
-        if (k == 1)
-            return [90];
-        if (k == -1)
-            return [270];
-        if (k > 0) {
-            let a = arcsin(k);
-            let b = 180 - a;
+        if (func == 'cos') {
+            if (k > 1 || k < -1)
+                return [];
+            if (k == 0)
+                return [90, 270];
+            if (k == 1)
+                return [0, 360];
+            if (k == -1)
+                return [180];
+            let a = arccos(k);
+            let b = 360 - a;
             return [a, b];
         }
-        if (k < 0) {
-            let x = -arcsin(k);
-            let a = 180 + x;
-            let b = 360 - x;
-            return [a, b];
+        if (func == 'tan') {
+            if (k == 0)
+                return [0, 180, 360];
+            if (k > 0) {
+                let a = arctan(k);
+                let b = 180 + a;
+                return [a, b];
+            }
+            if (k < 0) {
+                let x = -arctan(k);
+                let a = 180 - x;
+                let b = 360 - x;
+                return [a, b];
+            }
         }
+        return [];
     }
-    if (func == 'cos') {
-        if (k > 1 || k < -1)
-            return [];
-        if (k == 0)
-            return [90, 270];
-        if (k == 1)
-            return [0, 360];
-        if (k == -1)
-            return [180];
-        let a = arccos(k);
-        let b = 360 - a;
-        return [a, b];
+    /**
+     * @deprecated
+     * reduce the polar angle into the range [0,360)
+     * ```
+     * PolarReduce(370) // 10
+     * PolarReduce(-10) // 350
+     * ```
+     */
+    static PolarReduce(q) {
+        q = q % 360;
+        if (q < 0)
+            q += 360;
+        return q;
     }
-    if (func == 'tan') {
-        if (k == 0)
-            return [0, 180, 360];
-        if (k > 0) {
-            let a = arctan(k);
-            let b = 180 + a;
-            return [a, b];
-        }
-        if (k < 0) {
-            let x = -arctan(k);
-            let a = 180 - x;
-            let b = 360 - x;
-            return [a, b];
-        }
+    /**
+     * @deprecated
+     * the angle (within [0,180]) between two polar angles
+     * ```
+     * PolarDiff(80,70) // 10
+     * PolarDiff(350,10) // 20
+     * ```
+     */
+    static PolarDiff(angle1, angle2) {
+        angle1 = PolarReduce(angle1);
+        angle2 = PolarReduce(angle2);
+        let d = Abs(angle1 - angle2);
+        return Math.min(d, 360 - d);
     }
-    return [];
-}
-globalThis.TrigSolve = contract(TrigSolve).sign([owl.trig, owl.num]);
-/**
- * @category Trigonometry
- * @deprecated
- * @return reduce the polar angle into the range [0,360)
- * ```
- * PolarReduce(370) // 10
- * PolarReduce(-10) // 350
- * ```
- */
-function PolarReduce(q) {
-    q = q % 360;
-    if (q < 0)
-        q += 360;
-    return q;
-}
-globalThis.PolarReduce = contract(PolarReduce).sign([owl.num]);
-/**
- * @category Trigonometry
- * @deprecated
- * @return the angle (within [0,180]) between two polar angles
- * ```
- * PolarDiff(80,70) // 10
- * PolarDiff(350,10) // 20
- * ```
- */
-function PolarDiff(angle1, angle2) {
-    angle1 = PolarReduce(angle1);
-    angle2 = PolarReduce(angle2);
-    let d = Abs(angle1 - angle2);
-    return Math.min(d, 360 - d);
-}
-globalThis.PolarDiff = contract(PolarDiff).sign([owl.num]);
-/**
- * @category Trigonometry
- * @return the whole bearing in the polar angle direction
- * ```
- * WholeBearing(0) // '090°'
- * WholeBearing(180) // '270°'
- * ```
- */
-function WholeBearing(polarAngle) {
-    let q = polarAngle;
-    q = PolarReduce(q);
-    q = cal.blur(q);
-    q = q <= 90 ? 90 - q : 450 - q;
-    q = cal.blur(q);
-    return q.toString().padStart(3, '0') + '°';
-}
-globalThis.WholeBearing = contract(WholeBearing).sign([owl.int]);
-/**
- * @category Trigonometry
- * @return the compass bearing in the polar angle direction
- * ```
- * CompassBearing(30) // 'N60°E'
- * ```
- */
-function CompassBearing(polarAngle) {
-    let q = polarAngle;
-    q = PolarReduce(q);
-    q = cal.blur(q);
-    if (q === 0)
-        return 'east';
-    if (q === 270)
-        return 'south';
-    if (q === 180)
-        return 'west';
-    if (q === 90)
-        return 'north';
-    if (0 < q && q < 90)
-        return 'N' + (90 - q) + '°E';
-    if (90 < q && q < 180)
-        return 'N' + (q - 90) + '°W';
-    if (180 < q && q < 270)
-        return 'S' + (270 - q) + '°W';
-    if (270 < q && q < 360)
-        return 'S' + (q - 270) + '°E';
-    throw 'never';
-}
-globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
+    /**
+     * the whole bearing in the polar angle direction
+     * ```
+     * WholeBearing(0) // '090°'
+     * WholeBearing(180) // '270°'
+     * ```
+     */
+    static WholeBearing(polarAngle) {
+        let q = polarAngle;
+        q = PolarReduce(q);
+        q = cal.blur(q);
+        q = q <= 90 ? 90 - q : 450 - q;
+        q = cal.blur(q);
+        return q.toString().padStart(3, '0') + '°';
+    }
+    /**
+     * the compass bearing in the polar angle direction
+     * ```
+     * CompassBearing(30) // 'N60°E'
+     * ```
+     */
+    static CompassBearing(polarAngle) {
+        let q = polarAngle;
+        q = PolarReduce(q);
+        q = cal.blur(q);
+        if (q === 0)
+            return 'east';
+        if (q === 270)
+            return 'south';
+        if (q === 180)
+            return 'west';
+        if (q === 90)
+            return 'north';
+        if (0 < q && q < 90)
+            return 'N' + (90 - q) + '°E';
+        if (90 < q && q < 180)
+            return 'N' + (q - 90) + '°W';
+        if (180 < q && q < 270)
+            return 'S' + (270 - q) + '°W';
+        if (270 < q && q < 360)
+            return 'S' + (q - 270) + '°E';
+        throw 'never';
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.or([owl.point2D, owl.num]))
+], Host, "Quadrant", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.polar)
+], Host, "PolToRect", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2D)
+], Host, "RectToPol", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.quadrant, owl.trig)
+], Host, "ASTC", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.trig, owl.num)
+], Host, "TrigRoot", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.trig, owl.num)
+], Host, "TrigSolve", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "PolarReduce", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num)
+], Host, "PolarDiff", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.int)
+], Host, "WholeBearing", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.int)
+], Host, "CompassBearing", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
@@ -36455,338 +36678,202 @@ globalThis.CompassBearing = contract(CompassBearing).sign([owl.int]);
 /***/ }),
 
 /***/ 4154:
-/***/ (() => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-// /**
-//  * @category Vector3D
-//  * @return the vector OP
-//  * ```
-//  * Vec3D([1,2,3],[10,5,2]) // [9,3,-1]
-//  * ```
-//  */
-// function Vec3D(O: Point3D, P: Point3D): Point3D {
-//     return [P[0] - O[0], P[1] - O[1], P[2] - O[2]];
-// }
-// globalThis.Vec3D = contract(Vec3D).sign([owl.point3D])
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return sum of all vectors
-//  * ```
-//  * Vec3DAdd([1,2,3],[3,4,5],[5,6,7]) // [9,12,15]
-//  * ```
-//  */
-// function Vec3DAdd(...vectors: Point3D[]): Point3D {
-//     const x = Sum(...vectors.map(p => p[0]))
-//     const y = Sum(...vectors.map(p => p[1]))
-//     const z = Sum(...vectors.map(p => p[2]))
-//     return [x, y, z];
-// }
-// globalThis.Vec3DAdd = contract(Vec3DAdd).sign([owl.vector3D])
-/**
- * @category Vector3D
- * @return mean of all vectors
- * ```
- * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
- * ```
- */
-function Mid3D(...vectors) {
-    const x = Sum(...vectors.map(p => p[0])) / vectors.length;
-    const y = Sum(...vectors.map(p => p[1])) / vectors.length;
-    const z = Sum(...vectors.map(p => p[2])) / vectors.length;
-    return [x, y, z];
-}
-globalThis.Mid3D = contract(Mid3D).sign([owl.vector3D]);
-/**
- * @category Geometry
- * @return the point P on AB such that AP : PB = ratio : 1-ratio
- * ```
- * Slide3D([1,0,0],[5,0,0],0.75) // [4,0,0]
- * ```
- */
-function Slide3D(A, B, ratio) {
-    let r = ratio;
-    let s = 1 - r;
-    return [
-        A[0] * s + B[0] * r,
-        A[1] * s + B[1] * r,
-        A[2] * s + B[2] * r
-    ];
-}
-globalThis.Slide3D = contract(Slide3D).sign([owl.point3D, owl.point3D, owl.num]);
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return length of vector
-//  * ```
-//  * Vec3DLength([-3,4,0]) // 5
-//  * Vec3DLength([0,0,4]) // 4
-//  * Vec3DLength([1,2,3]) // sqrt(14)
-//  * ```
-//  */
-// function Vec3DLength(v: Vector3D): number {
-//     const [x, y, z] = v
-//     return (x * x + y * y + z * z) ** 0.5
-// }
-// globalThis.Vec3DLength = contract(Vec3DLength).sign([owl.vector3D])
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return find [kx,ky,kz] from [x,y,z]
-//  * ```
-//  * Vec3DScale([1,2,3],2) // [2,4,6]
-//  * Vec3DScale([1,2,3],-2) // [-2,-4,-6]
-//  * ```
-//  */
-// function Vec3DScale(v: Point3D, k: number): Point3D {
-//     return [k * v[0], k * v[1], k * v[2]];
-// }
-// globalThis.Vec3DScale = contract(Vec3DScale).sign([owl.vector3D, owl.num])
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return the unit vector of v
-//  * ```
-//  * Vec3DUnit([2,0,0]) // [1,0,0]
-//  * Vec3DUnit([0,-2,0]) // [0,-1,0]
-//  * Vec3DUnit([1,2,3]) // [1/sqrt(14),2/sqrt(14),3/sqrt(14)]
-//  * ```
-//  */
-// function Vec3DUnit(v: Vector3D): Vector3D {
-//     return Vec3DScale(v, 1 / Vec3DLength(v))
-// }
-// globalThis.Vec3DUnit = contract(Vec3DUnit).sign([owl.vector3D])
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return scale the vector to the given length
-//  * ```
-//  * Vec3DScaleTo([2,0,0],10) // [10,0,0]
-//  * Vec3DScaleTo([0,-2,0],100) // [0,-100,0]
-//  * Vec3DScaleTo([1,2,2],6) // [2,4,4]
-//  * ```
-//  */
-// function Vec3DScaleTo(v: Vector3D, length: number): Vector3D {
-//     return Vec3DScale(Vec3DUnit(v), length)
-// }
-// globalThis.Vec3DScaleTo = contract(Vec3DScaleTo).sign([owl.vector3D, owl.num])
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return the projection vector of v
-//  * ```
-//  * Vec3DProj([2,1,3],[1,0,0]) // [2,0,0]
-//  * ```
-//  */
-// function Vec3DProj(v: Vector3D, onto: Vector3D): Vector3D {
-//     let scale = DotProduct(v, onto) / DotProduct(onto, onto)
-//     return Vec3DScale(onto, scale)
-// }
-// globalThis.Vec3DProj = contract(Vec3DProj).sign([owl.vector3D, owl.vector3D])
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return dot product of v1 and v2
-//  * ```
-//  * DotProduct([1, 1, 0], [0, 1, 1]) // 1
-//  * DotProduct([1, 2, 3], [4, 5, -6]) // -4
-//  * ```
-//  */
-// function DotProduct(v1: Vector3D, v2: Vector3D): number {
-//     return vec3D(v1).dot(v2)
-// }
-// globalThis.DotProduct = contract(DotProduct).sign([owl.vector3D])
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return cross product of v1 and v2
-//  * ```
-//  * CrossProduct([1, 1, 0], [0, 1, 1]) // [1, -1, 1]
-//  * ```
-//  */
-// function CrossProduct(v1: Vector3D, v2: Vector3D): Vector3D {
-//     return vec3D(v1).cross(v2).toArray()
-// }
-// globalThis.CrossProduct = contract(CrossProduct).sign([owl.vector3D])
-// /**
-//  * @category Vector3D
-//  * @deprecated useless
-//  * @return unit normal vector to the plane OAB
-//  * ```
-//  * NormalVector([0,0,0], [1,1,0], [0,1,1]) // [1/sqrt(3), -1/sqrt(3), 1/sqrt(3)]
-//  * ```
-//  */
-// function NormalVector(O: Point3D, A: Point3D, B: Point3D): Vector3D {
-//     return vec3D(O, A).cross(vec3D(O, B)).unit().toArray()
-// }
-// globalThis.NormalVector = contract(NormalVector).sign([owl.point3D])
-/**
- * @category Vector3D
- * @return projection of a point on a plane
- * ```
- * let P = [2,3,4]
- * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
- * PdFoot3D(P,[A,B,C]) // [2,3,0]
- * PdFoot3D(P,[A,B]) // [2,0,0]
- * ```
- */
-function PdFoot3D(point, base) {
-    if (base.length === 3) {
-        let [A, B, C] = base;
-        return vec3D(A, point).projectOnPlane(vec3D(A, B), vec3D(B, C)).add(A).toArray();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const contract_1 = __webpack_require__(9110);
+let Host = class Host {
+    /**
+     * mean of all vectors
+     * ```
+     * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
+     * ```
+     */
+    static Mid3D(...vectors) {
+        const x = Sum(...vectors.map(p => p[0])) / vectors.length;
+        const y = Sum(...vectors.map(p => p[1])) / vectors.length;
+        const z = Sum(...vectors.map(p => p[2])) / vectors.length;
+        return [x, y, z];
     }
-    else if (base.length === 2) {
-        let [A, B] = base;
-        return vec3D(A, point).projectOn(vec3D(A, B)).add(A).toArray();
+    /**
+     * the point P on AB such that AP : PB = ratio : 1-ratio
+     * ```
+     * Slide3D([1,0,0],[5,0,0],0.75) // [4,0,0]
+     * ```
+     */
+    static Slide3D(A, B, ratio) {
+        let r = ratio;
+        let s = 1 - r;
+        return [
+            A[0] * s + B[0] * r,
+            A[1] * s + B[1] * r,
+            A[2] * s + B[2] * r
+        ];
     }
-    Should(false, 'base must have 2 or 3 points');
-    throw 'never';
-}
-globalThis.PdFoot3D = contract(PdFoot3D)
-    .sign([owl.vector3D, owl.arrayWith(owl.vector3D)]);
-/**
- * @category Vector3D
- * @return embed points on xy-plane onto a plane in 3D
- * ```
- * let [A,B,C] = [[0,0],[1,0],[0,1]]
- * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
- * ```
- */
-function Embed(plane2D, origin, xVec, yVec) {
-    return toShape2D(plane2D)
-        .erect(xVec, yVec)
-        .translate(origin)
-        .toArray();
-}
-globalThis.Embed = contract(Embed)
-    .sign([owl.arrayWith(owl.point2D), owl.point3D, owl.vector3D, owl.vector3D]);
-/**
- * @category Vector3D
- * @return embed 2D points onto a plane in 3D with constant x. The x-axis becomes the 3D y-axis. The y-axis becomes the 3D z-axis.
- * ```
- * let [A,B,C] = [[0,0],[3,0],[0,1]]
- * EmbedX([A,B,C],2) // [[2,0,0],[2,3,0],[2,0,1]]
- * ```
- */
-function EmbedX(plane2D, x = 0) {
-    return Embed(plane2D, [x, 0, 0], [0, 1, 0], [0, 0, 1]);
-}
-globalThis.EmbedX = contract(EmbedX).sign([owl.arrayWith(owl.point2D), owl.num]);
-/**
- * @category Vector3D
- * @return embed 2D points onto a plane in 3D with constant y. The x-axis becomes the 3D x-axis. The y-axis becomes the 3D z-axis.
- * ```
- * let [A,B,C] = [[0,0],[3,0],[0,1]]
- * EmbedY([A,B,C],2) // [[0,2,0],[3,2,0],[0,2,1]]
- * ```
- */
-function EmbedY(plane2D, y = 0) {
-    return Embed(plane2D, [0, y, 0], [1, 0, 0], [0, 0, 1]);
-}
-globalThis.EmbedY = contract(EmbedY).sign([owl.arrayWith(owl.point2D), owl.num]);
-/**
- * @category Vector3D
- * @return embed points on xy-plane onto a plane in 3D with constant z
- * ```
- * let [A,B,C] = [[0,0],[3,0],[0,1]]
- * EmbedZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
- * ```
- */
-function EmbedZ(plane2D, z = 0) {
-    return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0]);
-}
-globalThis.EmbedZ = contract(EmbedZ).sign([owl.arrayWith(owl.point2D), owl.num]);
-/**
- * @category Vector3D
- * @return flatten points to the same z-plane
- * ```
- * let [A,B,C] = [[0,0,0],[3,0,1],[0,1,2]]
- * FlatZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
- * ```
- */
-function FlatZ(points, z = 0) {
-    return points.map(([x, y, _]) => [x, y, z]);
-    let arr = [];
-    for (let [x, y, _] of points) {
-        arr.push([x, y, z]);
+    /**
+     * projection of a point on a plane
+     * ```
+     * let P = [2,3,4]
+     * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
+     * PdFoot3D(P,[A,B,C]) // [2,3,0]
+     * PdFoot3D(P,[A,B]) // [2,0,0]
+     * ```
+     */
+    static PdFoot3D(point, base) {
+        if (base.length === 3) {
+            let [A, B, C] = base;
+            return vec3D(A, point).projectOnPlane(vec3D(A, B), vec3D(B, C)).add(A).toArray();
+        }
+        else if (base.length === 2) {
+            let [A, B] = base;
+            return vec3D(A, point).projectOn(vec3D(A, B)).add(A).toArray();
+        }
+        Should(false, 'base must have 2 or 3 points');
+        throw 'never';
     }
-    return arr;
-}
-globalThis.FlatZ = contract(FlatZ).sign([owl.arrayWith(owl.point3D), owl.num]);
-// /**
-//  * @category Vector3D
-//  * @deprecated use Extrude
-//  * @return extrude the lower base of a frustum towards the upper base by a ratio
-//  * ```
-//  * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
-//  * ExtrudeBase([A,B,C],[[0,0,4]],0.25) // [[0,0,0],[3,0,0],[0,3,0]]
-//  * ```
-//  */
-// function ExtrudeBase(lowerBase: Point3D[], upperBase: Point3D[], ratio: number) {
-//     let arr: Point3D[] = []
-//     for (let i = 0; i < Math.max(lowerBase.length, upperBase.length); i++) {
-//         let L = i < lowerBase.length ? lowerBase[i] : lowerBase[lowerBase.length - 1]
-//         let U = i < upperBase.length ? upperBase[i] : upperBase[upperBase.length - 1]
-//         let r = ratio
-//         let s = 1 - r
-//         arr.push(Vec3DAdd(Vec3DScale(U, r), Vec3DScale(L, s)))
-//     }
-//     return arr
-// }
-// globalThis.ExtrudeBase = contract(ExtrudeBase).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num])
-/**
- * @category Vector3D
- * @return extrude the lower base of a frustum towards the upper base by a ratio
- * ```
- * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
- * Extrude([A,B,C],[[0,0,4]],0.75) // [[0,0,0],[3,0,0],[0,3,0]]
- * ```
- */
-function Extrude(lowerBase, upperBase, scale) {
-    let max = Math.max(lowerBase.length, upperBase.length);
-    let LB = toShape3D(lowerBase).padTail(max);
-    let UB = toShape3D(upperBase).padTail(max);
-    return LB.extrudeToShape(UB, scale).toArray();
-}
-globalThis.Extrude = contract(Extrude).sign([owl.arrayWith(owl.point3D), owl.arrayWith(owl.point3D), owl.num]);
-/**
-* @category 3DPen
-* @deprecated use built-in projector in Pen instead
-* @return projector function from 3D point to 2D plane
-* ```
-* const pj = Projector(60,0.5) // create a 3D projector function
-* pj(1,1,0) // [1.25, 0.433012701892]
-* ```
-*/
-function Projector(angle = 60, depth = 0.5) {
-    return function (x, y, z) {
-        let x_new = x + depth * y * cos(angle);
-        let y_new = z + depth * y * sin(angle);
-        return [x_new, y_new];
-    };
-}
-globalThis.Projector = Projector;
-/**
-* @category 3DPen
-* @deprecated use built-in projector in Pen instead
-* @return projector function from 3D point to 2D plane
-* ```
-* const pj = Projector3D(60,0.5) // create a 3D projector function
-* pj([1,1,0]) // [1.25, 0.433012701892]
-* ```
-*/
-function Projector3D(angle = 60, depth = 0.5) {
-    let projector = function (point3D) {
-        let [x, y, z] = point3D;
-        let x_new = x + depth * y * cos(angle);
-        let y_new = z + depth * y * sin(angle);
-        return [x_new, y_new];
-    };
-    return contract(projector).sign([owl.point3D]);
-}
-globalThis.Projector3D = contract(Projector3D).sign([owl.num, owl.num]);
+    /**
+     * embed points on xy-plane onto a plane in 3D
+     * ```
+     * let [A,B,C] = [[0,0],[1,0],[0,1]]
+     * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
+     * ```
+     */
+    static Embed(plane2D, origin, xVec, yVec) {
+        return toShape2D(plane2D)
+            .erect(xVec, yVec)
+            .translate(origin)
+            .toArray();
+    }
+    /**
+     * embed 2D points onto a plane in 3D with constant x. The x-axis becomes the 3D y-axis. The y-axis becomes the 3D z-axis.
+     * ```
+     * let [A,B,C] = [[0,0],[3,0],[0,1]]
+     * EmbedX([A,B,C],2) // [[2,0,0],[2,3,0],[2,0,1]]
+     * ```
+     */
+    static EmbedX(plane2D, x = 0) {
+        return Embed(plane2D, [x, 0, 0], [0, 1, 0], [0, 0, 1]);
+    }
+    /**
+     * embed 2D points onto a plane in 3D with constant y. The x-axis becomes the 3D x-axis. The y-axis becomes the 3D z-axis.
+     * ```
+     * let [A,B,C] = [[0,0],[3,0],[0,1]]
+     * EmbedY([A,B,C],2) // [[0,2,0],[3,2,0],[0,2,1]]
+     * ```
+     */
+    static EmbedY(plane2D, y = 0) {
+        return Embed(plane2D, [0, y, 0], [1, 0, 0], [0, 0, 1]);
+    }
+    /**
+     * embed points on xy-plane onto a plane in 3D with constant z
+     * ```
+     * let [A,B,C] = [[0,0],[3,0],[0,1]]
+     * EmbedZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
+     * ```
+     */
+    static EmbedZ(plane2D, z = 0) {
+        return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0]);
+    }
+    /**
+     * flatten points to the same z-plane
+     * ```
+     * let [A,B,C] = [[0,0,0],[3,0,1],[0,1,2]]
+     * FlatZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
+     * ```
+     */
+    static FlatZ(points, z = 0) {
+        return points.map(([x, y, _]) => [x, y, z]);
+    }
+    /**
+     * extrude the lower base of a frustum towards the upper base by a ratio
+     * ```
+     * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
+     * Extrude([A,B,C],[[0,0,4]],0.75) // [[0,0,0],[3,0,0],[0,3,0]]
+     * ```
+     */
+    static Extrude(lowerBase, upperBase, scale) {
+        let max = Math.max(lowerBase.length, upperBase.length);
+        let LB = toShape3D(lowerBase).padTail(max);
+        let UB = toShape3D(upperBase).padTail(max);
+        return LB.extrudeToShape(UB, scale).toArray();
+    }
+    /**
+    * @category 3DPen
+    * @deprecated use built-in projector in Pen instead
+    * projector function from 3D point to 2D plane
+    * ```
+    * const pj = Projector(60,0.5) // create a 3D projector function
+    * pj(1,1,0) // [1.25, 0.433012701892]
+    * ```
+    */
+    static Projector(angle = 60, depth = 0.5) {
+        return function (x, y, z) {
+            let x_new = x + depth * y * cos(angle);
+            let y_new = z + depth * y * sin(angle);
+            return [x_new, y_new];
+        };
+    }
+    /**
+    * @category 3DPen
+    * @deprecated use built-in projector in Pen instead
+    * projector function from 3D point to 2D plane
+    * ```
+    * const pj = Projector3D(60,0.5) // create a 3D projector function
+    * pj([1,1,0]) // [1.25, 0.433012701892]
+    * ```
+    */
+    static Projector3D(angle = 60, depth = 0.5) {
+        let projector = function (point3D) {
+            let [x, y, z] = point3D;
+            let x_new = x + depth * y * cos(angle);
+            let y_new = z + depth * y * sin(angle);
+            return [x_new, y_new];
+        };
+        return contract(projector).sign([owl.point3D]);
+    }
+};
+__decorate([
+    (0, contract_1.checkIt)(owl.vector3D)
+], Host, "Mid3D", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point3D, owl.point3D, owl.num)
+], Host, "Slide3D", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point3D, owl.point3Ds)
+], Host, "PdFoot3D", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.point3D, owl.vector3D, owl.vector3D)
+], Host, "Embed", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.num)
+], Host, "EmbedX", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.num)
+], Host, "EmbedY", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point2Ds, owl.num)
+], Host, "EmbedZ", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point3Ds, owl.num)
+], Host, "FlatZ", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.point3Ds, owl.point3Ds, owl.num)
+], Host, "Extrude", null);
+__decorate([
+    (0, contract_1.checkIt)(owl.num, owl.num)
+], Host, "Projector3D", null);
+Host = __decorate([
+    (0, contract_1.exposeAll)(),
+    (0, contract_1.captureAll)()
+], Host);
 
 
 /***/ }),
@@ -37975,7 +38062,7 @@ exports.AutoPenCls = AutoPenCls;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PenCls = void 0;
-const paint_1 = __webpack_require__(5619);
+const paint_1 = __webpack_require__(3254);
 const range_1 = __webpack_require__(9062);
 const size_1 = __webpack_require__(2037);
 const settings_1 = __webpack_require__(6887);
@@ -41182,28 +41269,132 @@ exports.OptionShuffler = OptionShuffler;
 
 /***/ }),
 
-/***/ 7798:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 9110:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.matchTreaty = exports.matchRule = void 0;
-var rule_1 = __webpack_require__(5810);
-Object.defineProperty(exports, "matchRule", ({ enumerable: true, get: function () { return rule_1.matchRule; } }));
-var treaty_1 = __webpack_require__(7510);
-Object.defineProperty(exports, "matchTreaty", ({ enumerable: true, get: function () { return treaty_1.matchTreaty; } }));
-//# sourceMappingURL=index.js.map
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "accept": () => (/* reexport */ accept),
+  "acceptIt": () => (/* reexport */ acceptIt),
+  "capture": () => (/* reexport */ capture),
+  "captureAll": () => (/* reexport */ captureAll),
+  "captureIt": () => (/* reexport */ captureIt),
+  "check": () => (/* reexport */ check),
+  "checkIt": () => (/* reexport */ checkIt),
+  "expose": () => (/* reexport */ expose),
+  "exposeAll": () => (/* reexport */ exposeAll),
+  "exposeIt": () => (/* reexport */ exposeIt),
+  "inspect": () => (/* reexport */ inspect),
+  "inspectIt": () => (/* reexport */ inspectIt)
+});
 
-/***/ }),
+;// CONCATENATED MODULE: ../packages/contract/lib/util.js
+function error(msg) {
+    const e = new Error(msg);
+    e.name = 'ContractError';
+    return e;
+}
+function signature(f) {
+    const s = f.toString();
+    return s.slice(s.indexOf('(') + 1, s.indexOf(')'));
+}
+function str(obj) {
+    return JSON.stringify(obj);
+}
+function join(arr) {
+    return arr.map(str).join(',');
+}
+function err(f, ...msgs) {
+    const h = `${f.wax_name}(${f.wax_signature})`;
+    const ms = [h, ...msgs];
+    return error(ms.join('\n'));
+}
+function brand(f) {
+    if (!('wax_name' in f))
+        f.wax_name = f.name ?? f.toString();
+    if (!('wax_signature' in f))
+        f.wax_signature = signature(f);
+}
+function transferBrand(source, target) {
+    target.wax_name = source.wax_name;
+    target.wax_signature = source.wax_signature;
+}
+function makeStaticDecorator(transform) {
+    return function (target, key, descriptor) {
+        descriptor.value = transform(descriptor.value);
+        return descriptor;
+    };
+}
+function makeClassDecorator(transform) {
+    return function (target, key, descriptor) {
+        descriptor.value = transform(descriptor.value);
+        return descriptor;
+    };
+}
+function getClassStaticNames(constructor) {
+    return Object.getOwnPropertyNames(constructor)
+        .filter($ => $ !== 'length' && $ !== 'prototype' && $ !== 'name');
+}
+//# sourceMappingURL=util.js.map
+;// CONCATENATED MODULE: ../packages/contract/lib/functions/capture.js
 
-/***/ 5810:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.matchRule = void 0;
+function catchString(f, vals, e) {
+    return err(f, 'args = (' + join(vals) + ')', 'throw: ' + e);
+}
+function catchErrObj(f, vals, e) {
+    return err(f, 'args = (' + join(vals) + ')', 'throw: ' + e.name, 'message: ' + e.message);
+}
+function catchAny(f, vals, e) {
+    return err(f, 'args = (' + join(vals) + ')', 'throw: ' + str(e));
+}
+function isError(e) {
+    return typeof e === 'object' && e !== null && 'name' in e && 'message' in e;
+}
+function isContractError(e) {
+    return isError(e) && e.name === 'ContractError';
+}
+function catchErr(f, vals, e) {
+    if (isContractError(e))
+        return e;
+    if (typeof e === 'string')
+        return catchString(f, vals, e);
+    if (isError(e))
+        return catchErrObj(f, vals, e);
+    return catchAny(f, vals, e);
+}
+function capture(f) {
+    brand(f);
+    const nf = (...args) => {
+        try {
+            return f(...args);
+        }
+        catch (e) {
+            throw catchErr(f, args, e);
+        }
+    };
+    transferBrand(f, nf);
+    return nf;
+}
+function captureIt() {
+    return makeStaticDecorator($ => capture($));
+}
+function captureAll() {
+    return function (constructor) {
+        for (let key of getClassStaticNames(constructor)) {
+            let descriptor = Object.getOwnPropertyDescriptor(constructor, key);
+            if (descriptor !== undefined) {
+                descriptor.value = capture(descriptor.value);
+                Object.defineProperty(constructor, key, descriptor);
+            }
+        }
+    };
+}
+//# sourceMappingURL=capture.js.map
+;// CONCATENATED MODULE: ../packages/contract/lib/assertion/rule.js
 function nameOf(f) {
     return f.name ?? f.toString();
 }
@@ -41248,213 +41439,127 @@ function matchRule(val, rule) {
         return matchObj(val, rule);
     return 'fail to recognize the rule';
 }
-exports.matchRule = matchRule;
 //# sourceMappingURL=rule.js.map
+;// CONCATENATED MODULE: ../packages/contract/lib/functions/accept.js
 
-/***/ }),
 
-/***/ 7510:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.matchTreaty = void 0;
-function nameOf(f) {
-    return f.name ?? f.toString();
-}
-function matchOne(vals, treaty) {
-    return treaty(...vals) ? true : nameOf(treaty);
-}
-function matchAnd(vals, treaty) {
-    for (let p of treaty)
-        if (!p(...vals))
-            return nameOf(p);
-    return true;
-}
-function isOne(treaty) {
-    return typeof treaty === 'function';
-}
-function isAnd(treaty) {
-    return Array.isArray(treaty);
-}
-function matchTreaty(vals, treaty) {
-    if (isOne(treaty))
-        return matchOne(vals, treaty);
-    if (isAnd(treaty))
-        return matchAnd(vals, treaty);
-    return 'fail to recognize the rule';
-}
-exports.matchTreaty = matchTreaty;
-//# sourceMappingURL=treaty.js.map
-
-/***/ }),
-
-/***/ 3279:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.acceptIt = exports.accept = void 0;
-const util_1 = __webpack_require__(6991);
-const assertion_1 = __webpack_require__(7798);
 function e(f, argValues, returnValue, msg) {
-    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(argValues) + ')', 'return = ' + returnValue, 'violate: ' + msg);
+    return err(f, 'args = (' + join(argValues) + ')', 'return = ' + returnValue, 'violate: ' + msg);
 }
 function match(f, argValues, returnValue, rule) {
-    const pass = (0, assertion_1.matchRule)(returnValue, rule);
+    const pass = matchRule(returnValue, rule);
     if (pass !== true)
         throw e(f, argValues, returnValue, pass);
 }
 function accept(f, rule) {
-    (0, util_1.brand)(f);
+    brand(f);
     const nf = (...args) => {
         const result = f(...args);
         match(f, args, result, rule);
         return result;
     };
-    (0, util_1.transferBrand)(f, nf);
+    transferBrand(f, nf);
     return nf;
 }
-exports.accept = accept;
 function acceptIt(rule) {
-    return (0, util_1.makeStaticDecorator)($ => accept($, rule));
+    return makeStaticDecorator($ => accept($, rule));
 }
-exports.acceptIt = acceptIt;
 //# sourceMappingURL=accept.js.map
+;// CONCATENATED MODULE: ../packages/contract/lib/functions/check.js
 
-/***/ }),
 
-/***/ 7025:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.captureAll = exports.captureIt = exports.capture = void 0;
-const util_1 = __webpack_require__(6991);
-function catchString(f, vals, e) {
-    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + e);
-}
-function catchErrObj(f, vals, e) {
-    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + e.name, 'message: ' + e.message);
-}
-function catchAny(f, vals, e) {
-    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'throw: ' + (0, util_1.str)(e));
-}
-function isError(e) {
-    return typeof e === 'object' && e !== null && 'name' in e && 'message' in e;
-}
-function isContractError(e) {
-    return isError(e) && e.name === 'ContractError';
-}
-function catchErr(f, vals, e) {
-    if (isContractError(e))
-        return e;
-    if (typeof e === 'string')
-        return catchString(f, vals, e);
-    if (isError(e))
-        return catchErrObj(f, vals, e);
-    return catchAny(f, vals, e);
-}
-function capture(f) {
-    (0, util_1.brand)(f);
-    const nf = (...args) => {
-        try {
-            return f(...args);
-        }
-        catch (e) {
-            throw catchErr(f, args, e);
-        }
-    };
-    (0, util_1.transferBrand)(f, nf);
-    return nf;
-}
-exports.capture = capture;
-function captureIt() {
-    return (0, util_1.makeStaticDecorator)($ => capture($));
-}
-exports.captureIt = captureIt;
-function captureAll() {
-    return function (constructor) {
-        for (let key of (0, util_1.getClassStaticNames)(constructor)) {
-            let descriptor = Object.getOwnPropertyDescriptor(constructor, key);
-            if (descriptor !== undefined) {
-                descriptor.value = capture(descriptor.value);
-                Object.defineProperty(constructor, key, descriptor);
-            }
-        }
-    };
-}
-exports.captureAll = captureAll;
-//# sourceMappingURL=capture.js.map
-
-/***/ }),
-
-/***/ 349:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkIt = exports.check = void 0;
-const util_1 = __webpack_require__(6991);
-const assertion_1 = __webpack_require__(7798);
 function getToTail(arr, index) {
     const n = arr.length - 1;
     const i = Math.min(index, n);
     return arr[i];
 }
-function e(f, argIndex, argValue, msg) {
-    return (0, util_1.err)(f, 'arg[' + argIndex + '] = ' + (0, util_1.str)(argValue), 'violate: ' + msg);
+function check_e(f, argIndex, argValue, msg) {
+    return err(f, 'arg[' + argIndex + '] = ' + str(argValue), 'violate: ' + msg);
 }
-function match(f, argIndex, argValue, rule) {
-    const pass = (0, assertion_1.matchRule)(argValue, rule);
+function check_match(f, argIndex, argValue, rule) {
+    const pass = matchRule(argValue, rule);
     if (pass !== true)
-        throw e(f, argIndex, argValue, pass);
+        throw check_e(f, argIndex, argValue, pass);
 }
 function check(f, rules) {
-    (0, util_1.brand)(f);
+    brand(f);
     const nf = (...args) => {
-        args.forEach((v, i) => match(f, i, v, getToTail(rules, i)));
+        args.forEach((v, i) => check_match(f, i, v, getToTail(rules, i)));
         return f(...args);
     };
-    (0, util_1.transferBrand)(f, nf);
+    transferBrand(f, nf);
     return nf;
 }
-exports.check = check;
 function checkIt(...rules) {
-    return (0, util_1.makeStaticDecorator)($ => check($, rules));
+    return makeStaticDecorator($ => check($, rules));
 }
-exports.checkIt = checkIt;
 //# sourceMappingURL=check.js.map
+;// CONCATENATED MODULE: ../packages/contract/lib/assertion/treaty.js
+function treaty_nameOf(f) {
+    return f.name ?? f.toString();
+}
+function treaty_matchOne(vals, treaty) {
+    return treaty(...vals) ? true : treaty_nameOf(treaty);
+}
+function treaty_matchAnd(vals, treaty) {
+    for (let p of treaty)
+        if (!p(...vals))
+            return treaty_nameOf(p);
+    return true;
+}
+function treaty_isOne(treaty) {
+    return typeof treaty === 'function';
+}
+function treaty_isAnd(treaty) {
+    return Array.isArray(treaty);
+}
+function matchTreaty(vals, treaty) {
+    if (treaty_isOne(treaty))
+        return treaty_matchOne(vals, treaty);
+    if (treaty_isAnd(treaty))
+        return treaty_matchAnd(vals, treaty);
+    return 'fail to recognize the rule';
+}
+//# sourceMappingURL=treaty.js.map
+;// CONCATENATED MODULE: ../packages/contract/lib/functions/inspect.js
 
-/***/ }),
 
-/***/ 9602:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+function inspect_e(f, vals, msg) {
+    return err(f, 'args = (' + join(vals) + ')', 'violate: ' + msg);
+}
+function inspect_match(f, vals, treaty) {
+    const pass = matchTreaty(vals, treaty);
+    if (pass !== true)
+        throw inspect_e(f, vals, pass);
+}
+function inspect(f, treaty) {
+    brand(f);
+    const nf = (...args) => {
+        inspect_match(f, args, treaty);
+        return f(...args);
+    };
+    transferBrand(f, nf);
+    return nf;
+}
+function inspectIt(treaty) {
+    return makeStaticDecorator($ => inspect($, treaty));
+}
+//# sourceMappingURL=inspect.js.map
+;// CONCATENATED MODULE: ../packages/contract/lib/functions/expose.js
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.exposeAll = exports.exposeIt = exports.expose = void 0;
-const util_1 = __webpack_require__(6991);
 function expose(name, f) {
     // @ts-ignore
     globalThis[String(name)] = f;
 }
-exports.expose = expose;
 function exposeIt() {
     return function (target, key, descriptor) {
         expose(key, descriptor.value);
         return descriptor;
     };
 }
-exports.exposeIt = exposeIt;
 function exposeAll() {
     return function (constructor) {
-        for (let key of (0, util_1.getClassStaticNames)(constructor)) {
+        for (let key of getClassStaticNames(constructor)) {
             let descriptor = Object.getOwnPropertyDescriptor(constructor, key);
             if (descriptor !== undefined) {
                 expose(key, descriptor.value);
@@ -41462,148 +41567,331 @@ function exposeAll() {
         }
     };
 }
-exports.exposeAll = exposeAll;
 //# sourceMappingURL=expose.js.map
+;// CONCATENATED MODULE: ../packages/contract/lib/index.js
 
-/***/ }),
 
-/***/ 4114:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.inspectIt = exports.inspect = void 0;
-const util_1 = __webpack_require__(6991);
-const assertion_1 = __webpack_require__(7798);
-function e(f, vals, msg) {
-    return (0, util_1.err)(f, 'args = (' + (0, util_1.join)(vals) + ')', 'violate: ' + msg);
-}
-function match(f, vals, treaty) {
-    const pass = (0, assertion_1.matchTreaty)(vals, treaty);
-    if (pass !== true)
-        throw e(f, vals, pass);
-}
-function inspect(f, treaty) {
-    (0, util_1.brand)(f);
-    const nf = (...args) => {
-        match(f, args, treaty);
-        return f(...args);
-    };
-    (0, util_1.transferBrand)(f, nf);
-    return nf;
-}
-exports.inspect = inspect;
-function inspectIt(treaty) {
-    return (0, util_1.makeStaticDecorator)($ => inspect($, treaty));
-}
-exports.inspectIt = inspectIt;
-//# sourceMappingURL=inspect.js.map
 
-/***/ }),
-
-/***/ 1154:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.exposeAll = exports.exposeIt = exports.expose = exports.inspectIt = exports.inspect = exports.checkIt = exports.check = exports.acceptIt = exports.accept = exports.captureAll = exports.captureIt = exports.capture = void 0;
-var capture_1 = __webpack_require__(7025);
-Object.defineProperty(exports, "capture", ({ enumerable: true, get: function () { return capture_1.capture; } }));
-Object.defineProperty(exports, "captureIt", ({ enumerable: true, get: function () { return capture_1.captureIt; } }));
-Object.defineProperty(exports, "captureAll", ({ enumerable: true, get: function () { return capture_1.captureAll; } }));
-var accept_1 = __webpack_require__(3279);
-Object.defineProperty(exports, "accept", ({ enumerable: true, get: function () { return accept_1.accept; } }));
-Object.defineProperty(exports, "acceptIt", ({ enumerable: true, get: function () { return accept_1.acceptIt; } }));
-var check_1 = __webpack_require__(349);
-Object.defineProperty(exports, "check", ({ enumerable: true, get: function () { return check_1.check; } }));
-Object.defineProperty(exports, "checkIt", ({ enumerable: true, get: function () { return check_1.checkIt; } }));
-var inspect_1 = __webpack_require__(4114);
-Object.defineProperty(exports, "inspect", ({ enumerable: true, get: function () { return inspect_1.inspect; } }));
-Object.defineProperty(exports, "inspectIt", ({ enumerable: true, get: function () { return inspect_1.inspectIt; } }));
-var expose_1 = __webpack_require__(9602);
-Object.defineProperty(exports, "expose", ({ enumerable: true, get: function () { return expose_1.expose; } }));
-Object.defineProperty(exports, "exposeIt", ({ enumerable: true, get: function () { return expose_1.exposeIt; } }));
-Object.defineProperty(exports, "exposeAll", ({ enumerable: true, get: function () { return expose_1.exposeAll; } }));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 6991:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 214:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getClassStaticNames = exports.makeClassDecorator = exports.makeStaticDecorator = exports.transferBrand = exports.brand = exports.err = exports.join = exports.str = exports.signature = void 0;
-function error(msg) {
-    const e = new Error(msg);
-    e.name = 'ContractError';
-    return e;
-}
-function signature(f) {
-    const s = f.toString();
-    return s.slice(s.indexOf('(') + 1, s.indexOf(')'));
-}
-exports.signature = signature;
-function str(obj) {
-    return JSON.stringify(obj);
-}
-exports.str = str;
-function join(arr) {
-    return arr.map(str).join(',');
-}
-exports.join = join;
-function err(f, ...msgs) {
-    const h = `${f.wax_name}(${f.wax_signature})`;
-    const ms = [h, ...msgs];
-    return error(ms.join('\n'));
-}
-exports.err = err;
-function brand(f) {
-    if (!('wax_name' in f))
-        f.wax_name = f.name ?? f.toString();
-    if (!('wax_signature' in f))
-        f.wax_signature = signature(f);
-}
-exports.brand = brand;
-function transferBrand(source, target) {
-    target.wax_name = source.wax_name;
-    target.wax_signature = source.wax_signature;
-}
-exports.transferBrand = transferBrand;
-function makeStaticDecorator(transform) {
-    return function (target, key, descriptor) {
-        descriptor.value = transform(descriptor.value);
-        return descriptor;
-    };
-}
-exports.makeStaticDecorator = makeStaticDecorator;
-function makeClassDecorator(transform) {
-    return function (target, key, descriptor) {
-        descriptor.value = transform(descriptor.value);
-        return descriptor;
-    };
-}
-exports.makeClassDecorator = makeClassDecorator;
-function getClassStaticNames(constructor) {
-    return Object.getOwnPropertyNames(constructor)
-        .filter($ => $ !== 'length' && $ !== 'prototype' && $ !== 'name');
-}
-exports.getClassStaticNames = getClassStaticNames;
-//# sourceMappingURL=util.js.map
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "analyze": () => (/* reexport */ analyze),
+  "fit": () => (/* reexport */ fit),
+  "readTree": () => (/* reexport */ readTree),
+  "solutionFlow": () => (/* reexport */ solutionFlow),
+  "solvingSymbol": () => (/* reexport */ solvingSymbol)
+});
 
-/***/ }),
+;// CONCATENATED MODULE: ../packages/gauss/lib/utils.js
+function getVars(func) {
+    const fnStr = func.toString();
+    return fnStr
+        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+        .replaceAll(" ", "")
+        .split(",");
+}
+function getAllVars(fs) {
+    const vars = fs.map($ => getVars($)).flat();
+    return [...new Set(vars)];
+}
+function permute(arr) {
+    let result = [];
+    if (arr.length === 0)
+        return [];
+    if (arr.length === 1)
+        return [arr];
+    for (let i = 0; i < arr.length; i++) {
+        const current = arr[i];
+        const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];
+        const remainingPermuted = permute(remaining);
+        for (let permuted of remainingPermuted) {
+            result.push([current, ...permuted]);
+        }
+    }
+    return result;
+}
+function combinations(arr, k) {
+    if (k > arr.length || k <= 0)
+        return [];
+    if (k === arr.length)
+        return [[...arr]];
+    if (k === 1)
+        return arr.map($ => [$]);
+    const combs = [];
+    let tail_combs = [];
+    for (let i = 0; i <= arr.length - k + 1; i++) {
+        let tail = arr.slice(i + 1);
+        tail_combs = combinations(tail, k - 1);
+        for (let j = 0; j < tail_combs.length; j++) {
+            combs.push([arr[i], ...tail_combs[j]]);
+        }
+    }
+    return combs;
+}
+//# sourceMappingURL=utils.js.map
+;// CONCATENATED MODULE: ../packages/gauss/lib/EquationFitter/Bisection/bisection.js
+function randomUniform(range) {
+    const [min, max] = range;
+    return Math.random() * (max - min) + min;
+}
+function randomLog(range) {
+    const [min, max] = range;
+    const logmin = Math.log10(min);
+    const logmax = Math.log10(max);
+    const e = randomUniform([logmin, logmax]);
+    return 10 ** e;
+}
+function randomLogNeg(range) {
+    const [minNeg, maxNeg] = range;
+    const min = -maxNeg;
+    const max = -minNeg;
+    return -randomLog([min, max]);
+}
+function randomValue(range) {
+    let [min, max] = range;
+    if (min > 0 && max > 0)
+        return randomLog(range);
+    if (min < 0 && max < 0)
+        return randomLogNeg(range);
+    return randomUniform(range);
+}
+function mid(a, b) {
+    return a.map(($, i) => ($ + b[i]) / 2);
+}
+function equal(a, b) {
+    return a.every(($, i) => $ === b[i])
+        && a.length === b.length;
+}
+class Bisection {
+    constructor(equation, ranges) {
+        this.equation = equation;
+        this.ranges = ranges;
+        this.a = []; // positive point
+        this.b = []; // negative point
+        this.precision = 10;
+    }
+    randomPoint() {
+        return this.ranges.map(randomValue);
+    }
+    randomSignedPoint(sign) {
+        for (let i = 0; i < 100; i++) {
+            const point = this.randomPoint();
+            const value = this.equation(...point);
+            const sameSign = value * sign > 0;
+            if (sameSign)
+                return point;
+        }
+        console.error("[bisection] No signed point in ranges: " + JSON.stringify(this.ranges));
+        throw '';
+    }
+    intialize() {
+        this.a = this.randomSignedPoint(1);
+        this.b = this.randomSignedPoint(-1);
+    }
+    iterate() {
+        const m = mid(this.a, this.b);
+        const M = this.equation(...m);
+        if (!Number.isFinite(M)) {
+            console.error('[bisection] The function value is not a finite number!');
+            throw '';
+        }
+        if (M >= 0)
+            this.a = m;
+        if (M <= 0)
+            this.b = m;
+    }
+    done() {
+        const precision_a = this.a.map($ => $.toPrecision(this.precision));
+        const precision_b = this.b.map($ => $.toPrecision(this.precision));
+        return equal(precision_a, precision_b);
+    }
+    assertRange() {
+        const pass = this.ranges.some(([min, max]) => max > min);
+        if (!pass) {
+            console.error('[bisection] all variables are locked already');
+            throw '';
+        }
+    }
+    run() {
+        this.assertRange();
+        this.intialize();
+        for (let i = 0; i < 100; i++) {
+            this.iterate();
+            if (this.done())
+                return [...this.a];
+        }
+        console.error('[bisection] fail to find tolarable solution after 100 iteration');
+        throw '';
+    }
+    exec() {
+        try {
+            return this.run();
+        }
+        catch {
+            throw '[bisection] An error occur during bisection.';
+        }
+    }
+}
+//# sourceMappingURL=bisection.js.map
+;// CONCATENATED MODULE: ../packages/gauss/lib/EquationFitter/Bisection/index.js
 
-/***/ 3631:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
+function toObject(keys, vals) {
+    const obj = {};
+    for (let i = 0; i < keys.length; i++) {
+        obj[keys[i]] = vals[i];
+    }
+    return obj;
+}
+function narrowRange(ranges, preset) {
+    const rngs = { ...ranges };
+    for (let k in preset) {
+        const val = preset[k];
+        if (k in rngs && Number.isFinite(val))
+            rngs[k] = [val, val];
+    }
+    return rngs;
+}
+/**
+ * Find a solution of the function under these ranges and presets.
+ */
+function bisect(f, ranges, preset) {
+    const vars = getVars(f);
+    const narrowedRngs = narrowRange(ranges, preset);
+    const bounds = vars.map($ => narrowedRngs[$]);
+    const bi = new Bisection(f, bounds);
+    const sol = bi.exec();
+    return toObject(vars, sol);
+}
+//# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ../packages/gauss/lib/EquationFitter/searcher.js
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.analyze = void 0;
-const utils_1 = __webpack_require__(9407);
+class Searcher {
+    constructor(fs, givens = []) {
+        this.fs = fs;
+        this.givens = givens;
+        this.founds = new Set();
+    }
+    reset() {
+        this.founds = new Set(this.givens);
+    }
+    /**
+     * A function is full if all variables in it are found.
+     */
+    isFull(f) {
+        return getVars(f).every($ => this.founds.has($));
+    }
+    fit(f) {
+        getVars(f).forEach($ => this.founds.add($));
+    }
+    /**
+     * Check if the functions can be fitted one by one without being full.
+     */
+    isFittableOrder(fs) {
+        this.reset();
+        for (let f of fs) {
+            if (this.isFull(f))
+                return false;
+            this.fit(f);
+        }
+        return true;
+    }
+    /**
+     * Randomly get a fittable order under current presets.
+     */
+    getFittableOrder() {
+        for (let fs of permute(this.fs)) {
+            if (this.isFittableOrder(fs))
+                return fs;
+        }
+        return undefined;
+    }
+}
+/**
+ * Randomly get a fittable order for this set of functions under these presets.
+ * If no fittable order exists, return undefined.
+ */
+function getFittableOrder(fs, preset) {
+    const givens = [];
+    for (let k in preset) {
+        let v = preset[k];
+        if (Number.isFinite(v))
+            givens.push(k);
+    }
+    const sr = new Searcher(fs, givens);
+    return sr.getFittableOrder();
+}
+//# sourceMappingURL=searcher.js.map
+;// CONCATENATED MODULE: ../packages/gauss/lib/EquationFitter/fitter.js
+
+
+
+class Fitter {
+    constructor(fs, ranges, preset) {
+        this.fs = fs;
+        this.ranges = ranges;
+        this.preset = preset;
+        this.vals = {};
+        this.allVariables = getAllVars(fs);
+        this.reset();
+    }
+    reset() {
+        this.vals = {};
+        this.allVariables.forEach($ => this.vals[$] = NaN);
+        this.setVals(this.preset);
+    }
+    setVals(vals) {
+        this.vals = { ...this.vals, ...vals };
+    }
+    fitOne(f) {
+        const sol = bisect(f, this.ranges, this.vals);
+        this.setVals(sol);
+    }
+    /**
+     * Try to fit the system by fitting the equations one by one in a fittable order.
+     * To avoid accidental range conflict, 10 retries are allowed.
+     */
+    fit() {
+        const orderedFS = getFittableOrder(this.fs, this.preset);
+        if (orderedFS === undefined)
+            throw 'There is no fittable order for this system.';
+        for (let i = 0; i < 10; i++) {
+            try {
+                this.reset();
+                orderedFS.forEach($ => this.fitOne($));
+                return this.vals;
+            }
+            catch {
+            }
+        }
+        throw 'The system is not fittable in given range.';
+    }
+}
+//# sourceMappingURL=fitter.js.map
+;// CONCATENATED MODULE: ../packages/gauss/lib/EquationFitter/index.js
+
+/**
+ * Fit the system of equations under given ranges and presets.
+ */
+function fit(fs, ranges, preset) {
+    let fitter = new Fitter(fs, ranges, preset);
+    return fitter.fit();
+}
+//# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ../packages/gauss/lib/EquationAnalyzer/analyze.js
+
 class Vabe {
     constructor(symbol) {
         this.symbol = symbol;
@@ -41715,7 +42003,7 @@ class Analyzer {
     }
     allVabeCombinations() {
         const n = this.vabes.length - this.equbes.length;
-        return (0, utils_1.combinations)(this.vabes, n);
+        return combinations(this.vabes, n);
     }
     getTrees() {
         const combs = this.allVabeCombinations();
@@ -41742,11 +42030,11 @@ class Analyzer {
  * Get all the healthy trees of this system generated from all possible 'given variables' combinations.
  */
 function analyze(fs) {
-    const symbols = (0, utils_1.getAllVars)(fs);
+    const symbols = getAllVars(fs);
     const vabes = symbols.map($ => new Vabe($));
     const equbes = [];
     for (let f of fs) {
-        let syms = (0, utils_1.getVars)(f);
+        let syms = getVars(f);
         const vs = syms.map($ => vabes.find(_ => _.symbol === $));
         let eq = new Eqube(vs);
         equbes.push(eq);
@@ -41754,36 +42042,9 @@ function analyze(fs) {
     let analyzer = new Analyzer(vabes, equbes);
     return analyzer.getHealthyTrees();
 }
-exports.analyze = analyze;
 //# sourceMappingURL=analyze.js.map
+;// CONCATENATED MODULE: ../packages/gauss/lib/EquationAnalyzer/reader.js
 
-/***/ }),
-
-/***/ 8476:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.readTree = exports.solvingSymbol = exports.solutionFlow = exports.analyze = void 0;
-var analyze_1 = __webpack_require__(3631);
-Object.defineProperty(exports, "analyze", ({ enumerable: true, get: function () { return analyze_1.analyze; } }));
-var reader_1 = __webpack_require__(3323);
-Object.defineProperty(exports, "solutionFlow", ({ enumerable: true, get: function () { return reader_1.solutionFlow; } }));
-Object.defineProperty(exports, "solvingSymbol", ({ enumerable: true, get: function () { return reader_1.solvingSymbol; } }));
-Object.defineProperty(exports, "readTree", ({ enumerable: true, get: function () { return reader_1.readTree; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 3323:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.readTree = exports.solvingSymbol = exports.solutionFlow = void 0;
-const utils_1 = __webpack_require__(9407);
 class TreeReader {
     constructor(tree) {
         this.tree = tree;
@@ -41817,7 +42078,7 @@ class EquationReader {
         this.f = f;
         this.tree = tree;
         this.myTree = {};
-        this.symbols = (0, utils_1.getVars)(f);
+        this.symbols = getVars(f);
         for (let k in tree) {
             if (this.symbols.includes(k))
                 this.myTree[k] = tree[k];
@@ -41916,7 +42177,6 @@ function solutionFlow(fs, tree, unknownSymbols) {
     let flow = tracer.flow(unknownSymbols);
     return flow.map($ => $.f);
 }
-exports.solutionFlow = solutionFlow;
 /**
  * Which symbol is solved using this function under the given tree?
  */
@@ -41924,7 +42184,6 @@ function solvingSymbol(f, tree) {
     const eqReader = new EquationReader(f, tree);
     return eqReader.solvingSymbol();
 }
-exports.solvingSymbol = solvingSymbol;
 /**
  * Read basic info of a tree.
  */
@@ -41938,396 +42197,85 @@ function readTree(tree) {
         solved: reader.solvedSymbols()
     };
 }
-exports.readTree = readTree;
 //# sourceMappingURL=reader.js.map
+;// CONCATENATED MODULE: ../packages/gauss/lib/index.js
 
-/***/ }),
 
-/***/ 7017:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Bisection = void 0;
-function randomUniform(range) {
-    const [min, max] = range;
-    return Math.random() * (max - min) + min;
-}
-function randomLog(range) {
-    const [min, max] = range;
-    const logmin = Math.log10(min);
-    const logmax = Math.log10(max);
-    const e = randomUniform([logmin, logmax]);
-    return 10 ** e;
-}
-function randomLogNeg(range) {
-    const [minNeg, maxNeg] = range;
-    const min = -maxNeg;
-    const max = -minNeg;
-    return -randomLog([min, max]);
-}
-function randomValue(range) {
-    let [min, max] = range;
-    if (min > 0 && max > 0)
-        return randomLog(range);
-    if (min < 0 && max < 0)
-        return randomLogNeg(range);
-    return randomUniform(range);
-}
-function mid(a, b) {
-    return a.map(($, i) => ($ + b[i]) / 2);
-}
-function equal(a, b) {
-    return a.every(($, i) => $ === b[i])
-        && a.length === b.length;
-}
-class Bisection {
-    constructor(equation, ranges) {
-        this.equation = equation;
-        this.ranges = ranges;
-        this.a = []; // positive point
-        this.b = []; // negative point
-        this.precision = 10;
-    }
-    randomPoint() {
-        return this.ranges.map(randomValue);
-    }
-    randomSignedPoint(sign) {
-        for (let i = 0; i < 100; i++) {
-            const point = this.randomPoint();
-            const value = this.equation(...point);
-            const sameSign = value * sign > 0;
-            if (sameSign)
-                return point;
-        }
-        console.error("[bisection] No signed point in ranges: " + JSON.stringify(this.ranges));
-        throw '';
-    }
-    intialize() {
-        this.a = this.randomSignedPoint(1);
-        this.b = this.randomSignedPoint(-1);
-    }
-    iterate() {
-        const m = mid(this.a, this.b);
-        const M = this.equation(...m);
-        if (!Number.isFinite(M)) {
-            console.error('[bisection] The function value is not a finite number!');
-            throw '';
-        }
-        if (M >= 0)
-            this.a = m;
-        if (M <= 0)
-            this.b = m;
-    }
-    done() {
-        const precision_a = this.a.map($ => $.toPrecision(this.precision));
-        const precision_b = this.b.map($ => $.toPrecision(this.precision));
-        return equal(precision_a, precision_b);
-    }
-    assertRange() {
-        const pass = this.ranges.some(([min, max]) => max > min);
-        if (!pass) {
-            console.error('[bisection] all variables are locked already');
-            throw '';
-        }
-    }
-    run() {
-        this.assertRange();
-        this.intialize();
-        for (let i = 0; i < 100; i++) {
-            this.iterate();
-            if (this.done())
-                return [...this.a];
-        }
-        console.error('[bisection] fail to find tolarable solution after 100 iteration');
-        throw '';
-    }
-    exec() {
-        try {
-            return this.run();
-        }
-        catch {
-            throw '[bisection] An error occur during bisection.';
-        }
-    }
-}
-exports.Bisection = Bisection;
-//# sourceMappingURL=bisection.js.map
-
-/***/ }),
-
-/***/ 4665:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.bisect = void 0;
-const utils_1 = __webpack_require__(9407);
-const bisection_1 = __webpack_require__(7017);
-function toObject(keys, vals) {
-    const obj = {};
-    for (let i = 0; i < keys.length; i++) {
-        obj[keys[i]] = vals[i];
-    }
-    return obj;
-}
-function narrowRange(ranges, preset) {
-    const rngs = { ...ranges };
-    for (let k in preset) {
-        const val = preset[k];
-        if (k in rngs && Number.isFinite(val))
-            rngs[k] = [val, val];
-    }
-    return rngs;
-}
-/**
- * Find a solution of the function under these ranges and presets.
- */
-function bisect(f, ranges, preset) {
-    const vars = (0, utils_1.getVars)(f);
-    const narrowedRngs = narrowRange(ranges, preset);
-    const bounds = vars.map($ => narrowedRngs[$]);
-    const bi = new bisection_1.Bisection(f, bounds);
-    const sol = bi.exec();
-    return toObject(vars, sol);
-}
-exports.bisect = bisect;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 4626:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 3254:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Fitter = void 0;
-const Bisection_1 = __webpack_require__(4665);
-const utils_1 = __webpack_require__(9407);
-const searcher_1 = __webpack_require__(8125);
-class Fitter {
-    constructor(fs, ranges, preset) {
-        this.fs = fs;
-        this.ranges = ranges;
-        this.preset = preset;
-        this.vals = {};
-        this.allVariables = (0, utils_1.getAllVars)(fs);
-        this.reset();
-    }
-    reset() {
-        this.vals = {};
-        this.allVariables.forEach($ => this.vals[$] = NaN);
-        this.setVals(this.preset);
-    }
-    setVals(vals) {
-        this.vals = { ...this.vals, ...vals };
-    }
-    fitOne(f) {
-        const sol = (0, Bisection_1.bisect)(f, this.ranges, this.vals);
-        this.setVals(sol);
-    }
-    /**
-     * Try to fit the system by fitting the equations one by one in a fittable order.
-     * To avoid accidental range conflict, 10 retries are allowed.
-     */
-    fit() {
-        const orderedFS = (0, searcher_1.getFittableOrder)(this.fs, this.preset);
-        if (orderedFS === undefined)
-            throw 'There is no fittable order for this system.';
-        for (let i = 0; i < 10; i++) {
-            try {
-                this.reset();
-                orderedFS.forEach($ => this.fitOne($));
-                return this.vals;
-            }
-            catch {
-            }
-        }
-        throw 'The system is not fittable in given range.';
-    }
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "Convas": () => (/* reexport */ Canvas10)
+});
+
+;// CONCATENATED MODULE: ../packages/paint/lib/support/trim.js
+function getAlpha(img, x, y) {
+    let i = 0;
+    i += y * img.width;
+    i += x;
+    return img.data[4 * i + 3];
 }
-exports.Fitter = Fitter;
-//# sourceMappingURL=fitter.js.map
-
-/***/ }),
-
-/***/ 2380:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.fit = void 0;
-const fitter_1 = __webpack_require__(4626);
-/**
- * Fit the system of equations under given ranges and presets.
- */
-function fit(fs, ranges, preset) {
-    let fitter = new fitter_1.Fitter(fs, ranges, preset);
-    return fitter.fit();
+function isPainted(img, x, y) {
+    return getAlpha(img, x, y) !== 0;
 }
-exports.fit = fit;
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 8125:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getFittableOrder = void 0;
-const utils_1 = __webpack_require__(9407);
-class Searcher {
-    constructor(fs, givens = []) {
-        this.fs = fs;
-        this.givens = givens;
-        this.founds = new Set();
+function rowBlank(img, y) {
+    for (let x = 0; x < img.width; x++) {
+        if (isPainted(img, x, y))
+            return false;
     }
-    reset() {
-        this.founds = new Set(this.givens);
-    }
-    /**
-     * A function is full if all variables in it are found.
-     */
-    isFull(f) {
-        return (0, utils_1.getVars)(f).every($ => this.founds.has($));
-    }
-    fit(f) {
-        (0, utils_1.getVars)(f).forEach($ => this.founds.add($));
-    }
-    /**
-     * Check if the functions can be fitted one by one without being full.
-     */
-    isFittableOrder(fs) {
-        this.reset();
-        for (let f of fs) {
-            if (this.isFull(f))
-                return false;
-            this.fit(f);
-        }
-        return true;
-    }
-    /**
-     * Randomly get a fittable order under current presets.
-     */
-    getFittableOrder() {
-        for (let fs of (0, utils_1.permute)(this.fs)) {
-            if (this.isFittableOrder(fs))
-                return fs;
-        }
-        return undefined;
-    }
+    return true;
 }
-/**
- * Randomly get a fittable order for this set of functions under these presets.
- * If no fittable order exists, return undefined.
- */
-function getFittableOrder(fs, preset) {
-    const givens = [];
-    for (let k in preset) {
-        let v = preset[k];
-        if (Number.isFinite(v))
-            givens.push(k);
+function colBlank(img, x) {
+    for (let y = 0; y < img.height; y++) {
+        if (isPainted(img, x, y))
+            return false;
     }
-    const sr = new Searcher(fs, givens);
-    return sr.getFittableOrder();
+    return true;
 }
-exports.getFittableOrder = getFittableOrder;
-//# sourceMappingURL=searcher.js.map
-
-/***/ }),
-
-/***/ 6912:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.readTree = exports.solvingSymbol = exports.solutionFlow = exports.analyze = exports.fit = void 0;
-var EquationFitter_1 = __webpack_require__(2380);
-Object.defineProperty(exports, "fit", ({ enumerable: true, get: function () { return EquationFitter_1.fit; } }));
-var EquationAnalyzer_1 = __webpack_require__(8476);
-Object.defineProperty(exports, "analyze", ({ enumerable: true, get: function () { return EquationAnalyzer_1.analyze; } }));
-Object.defineProperty(exports, "solutionFlow", ({ enumerable: true, get: function () { return EquationAnalyzer_1.solutionFlow; } }));
-Object.defineProperty(exports, "solvingSymbol", ({ enumerable: true, get: function () { return EquationAnalyzer_1.solvingSymbol; } }));
-Object.defineProperty(exports, "readTree", ({ enumerable: true, get: function () { return EquationAnalyzer_1.readTree; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 9407:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.combinations = exports.permute = exports.getAllVars = exports.getVars = void 0;
-function getVars(func) {
-    const fnStr = func.toString();
-    return fnStr
-        .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
-        .replaceAll(" ", "")
-        .split(",");
+function trimCanvasX(canvas) {
+    let ctx = canvas.getContext("2d");
+    let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let top = 0;
+    let bottom = img.height - 1;
+    while (top < bottom && rowBlank(img, top))
+        top++;
+    while (bottom > top && rowBlank(img, bottom))
+        bottom--;
+    let trimmed = ctx.getImageData(0, top, img.width, bottom - top + 1);
+    canvas.width = trimmed.width;
+    canvas.height = trimmed.height;
+    ctx.putImageData(trimmed, 0, 0);
 }
-exports.getVars = getVars;
-function getAllVars(fs) {
-    const vars = fs.map($ => getVars($)).flat();
-    return [...new Set(vars)];
+function trimCanvasY(canvas) {
+    let ctx = canvas.getContext("2d");
+    let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let left = 0;
+    let right = img.width - 1;
+    while (left < right && colBlank(img, left))
+        left++;
+    while (right > left && colBlank(img, right))
+        right--;
+    let trimmed = ctx.getImageData(left, 0, right - left + 1, img.height);
+    canvas.width = trimmed.width;
+    canvas.height = trimmed.height;
+    ctx.putImageData(trimmed, 0, 0);
 }
-exports.getAllVars = getAllVars;
-function permute(arr) {
-    let result = [];
-    if (arr.length === 0)
-        return [];
-    if (arr.length === 1)
-        return [arr];
-    for (let i = 0; i < arr.length; i++) {
-        const current = arr[i];
-        const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];
-        const remainingPermuted = permute(remaining);
-        for (let permuted of remainingPermuted) {
-            result.push([current, ...permuted]);
-        }
-    }
-    return result;
+function trimCanvas(canvas) {
+    trimCanvasX(canvas);
+    trimCanvasY(canvas);
 }
-exports.permute = permute;
-function combinations(arr, k) {
-    if (k > arr.length || k <= 0)
-        return [];
-    if (k === arr.length)
-        return [[...arr]];
-    if (k === 1)
-        return arr.map($ => [$]);
-    const combs = [];
-    let tail_combs = [];
-    for (let i = 0; i <= arr.length - k + 1; i++) {
-        let tail = arr.slice(i + 1);
-        tail_combs = combinations(tail, k - 1);
-        for (let j = 0; j < tail_combs.length; j++) {
-            combs.push([arr[i], ...tail_combs[j]]);
-        }
-    }
-    return combs;
-}
-exports.combinations = combinations;
-//# sourceMappingURL=utils.js.map
+//# sourceMappingURL=trim.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas00.js
 
-/***/ }),
-
-/***/ 1335:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas00 = void 0;
-const trim_1 = __webpack_require__(8838);
 // The scale factor of canvas size for clearer image.
 const QUALITY = 3;
 // The scale factor for width and height settings.
@@ -42404,7 +42352,7 @@ class Canvas00 {
     export(html, placeholder, trim) {
         let cv = cloneCanvas(this.canvas);
         if (trim)
-            (0, trim_1.trimCanvas)(cv);
+            trimCanvas(cv);
         const displayWidth = Math.floor(cv.width / QUALITY);
         const displayHeight = Math.floor(cv.height / QUALITY);
         const src = `src="${cv.toDataURL()}"`;
@@ -42416,7 +42364,6 @@ class Canvas00 {
         return html.replace('src="' + placeholder + '"', src + width + height + bg);
     }
 }
-exports.Canvas00 = Canvas00;
 /**
  * Return a clone of the canvas.
  */
@@ -42434,17 +42381,8 @@ function cloneCanvas(canvas) {
     return newCanvas;
 }
 //# sourceMappingURL=canvas00.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas01.js
 
-/***/ }),
-
-/***/ 1880:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas01 = void 0;
-const canvas00_1 = __webpack_require__(1335);
 // pixel conversion
 function toPixelX(xmin, xmax, width, xCoord) {
     return (xCoord - xmin) / (xmax - xmin) * width;
@@ -42457,7 +42395,7 @@ function toPixelY(ymin, ymax, height, yCoord) {
  * - 2D coordinate definition
  * - 2D coordinate to px conversion
  */
-class Canvas01 extends canvas00_1.Canvas00 {
+class Canvas01 extends Canvas00 {
     constructor() {
         // coord
         super(...arguments);
@@ -42558,20 +42496,81 @@ class Canvas01 extends canvas00_1.Canvas00 {
         return [x, y];
     }
 }
-exports.Canvas01 = Canvas01;
 //# sourceMappingURL=canvas01.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/support/capture.js
+function getCircleCorners(center, radius) {
+    let [h, k] = center;
+    let r = radius;
+    return [
+        [h + r, k + r],
+        [h + r, k - r],
+        [h - r, k + r],
+        [h - r, k - r]
+    ];
+}
+function getSphereCorners(center, radius) {
+    let [a, b, c] = center;
+    let r = radius;
+    return [
+        [a + r, b + r, c + r],
+        [a + r, b + r, c - r],
+        [a + r, b - r, c + r],
+        [a + r, b - r, c - r],
+        [a - r, b + r, c + r],
+        [a - r, b + r, c - r],
+        [a - r, b - r, c + r],
+        [a - r, b - r, c - r],
+    ];
+}
+function isPoint2D(thing) {
+    return Array.isArray(thing)
+        && thing.length === 2
+        && typeof thing[0] === 'number'
+        && typeof thing[1] === 'number';
+}
+function isPoint3D(thing) {
+    return Array.isArray(thing)
+        && thing.length === 3
+        && typeof thing[0] === 'number'
+        && typeof thing[1] === 'number'
+        && typeof thing[2] === 'number';
+}
+function isCircle(thing) {
+    return thing.length === 2
+        && isPoint2D(thing[0])
+        && typeof thing[1] === 'number';
+}
+function isSphere(thing) {
+    return thing.length === 2
+        && isPoint3D(thing[0])
+        && typeof thing[1] === 'number';
+}
+function thingsToPoints(things) {
+    let pts = [];
+    for (let th of things) {
+        if (isPoint2D(th)) {
+            pts.push(th);
+            continue;
+        }
+        if (isPoint3D(th)) {
+            pts.push(th);
+            continue;
+        }
+        if (isCircle(th)) {
+            pts.push(...getCircleCorners(...th));
+            continue;
+        }
+        if (isSphere(th)) {
+            pts.push(...getSphereCorners(...th));
+            continue;
+        }
+    }
+    return pts;
+}
+//# sourceMappingURL=capture.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas02.js
 
-/***/ }),
 
-/***/ 5595:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas02 = void 0;
-const canvas01_1 = __webpack_require__(1880);
-const capture_1 = __webpack_require__(3570);
 function proj(point3D, angle, depth) {
     let a = angle * Math.PI / 180;
     let s = Math.sin(a);
@@ -42591,7 +42590,7 @@ function forceProj(point, angle, depth) {
  * - 3D coordinate to px conversion
  * - capturing things
  */
-class Canvas02 extends canvas01_1.Canvas01 {
+class Canvas02 extends Canvas01 {
     constructor() {
         // setting
         super(...arguments);
@@ -42611,24 +42610,14 @@ class Canvas02 extends canvas01_1.Canvas01 {
     }
     // capture
     capture(things) {
-        let pts = (0, capture_1.thingsToPoints)(things);
+        let pts = thingsToPoints(things);
         let pt2Ds = this.pjs(pts);
         this.capturePoints2D(pt2Ds);
     }
 }
-exports.Canvas02 = Canvas02;
 //# sourceMappingURL=canvas02.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas03.js
 
-/***/ }),
-
-/***/ 2023:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas03 = void 0;
-const canvas02_1 = __webpack_require__(5595);
 function segmentArray(seg) {
     if (Array.isArray(seg))
         return seg;
@@ -42639,12 +42628,12 @@ function segmentArray(seg) {
     return [];
 }
 // REM_PIXEL is the default font size of the browser, usually 16px
-const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
+const canvas03_REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize);
 /**
  * Handle:
  * - Settings
  */
-class Canvas03 extends canvas02_1.Canvas02 {
+class Canvas03 extends Canvas02 {
     constructor() {
         // initialize state
         super(...arguments);
@@ -42713,10 +42702,10 @@ class Canvas03 extends canvas02_1.Canvas02 {
         this.ctx.font = this.ctx.font.replace(/\d+px/g, value + 'px');
     }
     get $TEXT_SIZE() {
-        return this.$TEXT_PIXEL / REM_PIXEL;
+        return this.$TEXT_PIXEL / canvas03_REM_PIXEL;
     }
     set $TEXT_SIZE(value) {
-        this.$TEXT_PIXEL = value * REM_PIXEL;
+        this.$TEXT_PIXEL = value * canvas03_REM_PIXEL;
     }
     get $TEXT_ITALIC() {
         return this.ctx.font.includes('italic');
@@ -42776,7 +42765,6 @@ class Canvas03 extends canvas02_1.Canvas02 {
         this.$LINE_LABEL = state.$LINE_LABEL;
     }
 }
-exports.Canvas03 = Canvas03;
 function mid(Points) {
     if (Points.length === 0)
         return [0, 0];
@@ -42790,17 +42778,8 @@ function mid(Points) {
     return [X / n, Y / n];
 }
 //# sourceMappingURL=canvas03.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas04.js
 
-/***/ }),
-
-/***/ 5138:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas04 = void 0;
-const canvas03_1 = __webpack_require__(2023);
 function rad(degree) {
     return degree * Math.PI / 180;
 }
@@ -42840,7 +42819,7 @@ function moveDot(A, B, dist) {
  * - transform
  * - drawing in pixel and coordinates
  */
-class Canvas04 extends canvas03_1.Canvas03 {
+class Canvas04 extends Canvas03 {
     // transform
     translateTo(pt) {
         let [x, y] = this.toPx(pt);
@@ -42958,19 +42937,9 @@ class Canvas04 extends canvas03_1.Canvas03 {
         this.$ALPHA = alpha;
     }
 }
-exports.Canvas04 = Canvas04;
 //# sourceMappingURL=canvas04.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas05.js
 
-/***/ }),
-
-/***/ 9795:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas05 = void 0;
-const canvas04_1 = __webpack_require__(5138);
 function sin(degree) {
     return Math.sin(degree / 180 * Math.PI);
 }
@@ -43013,7 +42982,7 @@ function isAlphabet(_) {
  * Handle:
  * - text basic
  */
-class Canvas05 extends canvas04_1.Canvas04 {
+class Canvas05 extends Canvas04 {
     // text in pixel
     plainPx(text, dot) {
         text = String(text);
@@ -43093,30 +43062,20 @@ class Canvas05 extends canvas04_1.Canvas04 {
             this.plainSemi(text);
     }
 }
-exports.Canvas05 = Canvas05;
 //# sourceMappingURL=canvas05.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas06.js
 
-/***/ }),
-
-/***/ 1253:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas06 = void 0;
-const canvas05_1 = __webpack_require__(9795);
 // math
-function deg(radian) {
+function canvas06_deg(radian) {
     return radian / Math.PI * 180;
 }
-function dotVec([x1, y1], [x2, y2]) {
+function canvas06_dotVec([x1, y1], [x2, y2]) {
     return [x2 - x1, y2 - y1];
 }
-function dir(A, B) {
-    let [dx, dy] = dotVec(A, B);
+function canvas06_dir(A, B) {
+    let [dx, dy] = canvas06_dotVec(A, B);
     let rad = -Math.atan2(dy, dx);
-    return deg(rad);
+    return canvas06_deg(rad);
 }
 // polar
 function vec(p1, p2) {
@@ -43146,12 +43105,12 @@ function polarFlip(A, O, B, mode) {
  * Handle:
  * - direction helper
  */
-class Canvas06 extends canvas05_1.Canvas05 {
+class Canvas06 extends Canvas05 {
     // dir
     getDir(start, end) {
         let A = this.toPx(start);
         let B = this.toPx(end);
-        return dir(A, B);
+        return canvas06_dir(A, B);
     }
     getCenterDir(point) {
         let C = this.$LABEL_CENTER[0];
@@ -43212,19 +43171,9 @@ class Canvas06 extends canvas05_1.Canvas05 {
         return angleUnderThreshold * pixelPerDeg;
     }
 }
-exports.Canvas06 = Canvas06;
 //# sourceMappingURL=canvas06.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas07.js
 
-/***/ }),
-
-/***/ 7610:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas07 = void 0;
-const canvas06_1 = __webpack_require__(1253);
 // step
 function isOdd(n) {
     return n % 2 !== 0;
@@ -43254,7 +43203,7 @@ function steps(n) {
     return arr;
 }
 // vector
-function mid(A, B) {
+function canvas07_mid(A, B) {
     if (A.length === 3 && B.length === 3) {
         let [x, y, z] = A;
         let [X, Y, Z] = B;
@@ -43270,7 +43219,7 @@ function mid(A, B) {
  * Handle:
  * - basic elements
  */
-class Canvas07 extends canvas06_1.Canvas06 {
+class Canvas07 extends Canvas06 {
     linePx(dots) {
         this.createPathPx(dots);
         this.doStroke();
@@ -43365,7 +43314,7 @@ class Canvas07 extends canvas06_1.Canvas06 {
         this.doSolid();
     }
     parallel(start, end, size, count, space) {
-        let M = mid(start, end);
+        let M = canvas07_mid(start, end);
         for (let i = 0; i < count; i++) {
             this.arrowHead(start, M, size, i * space);
         }
@@ -43388,7 +43337,7 @@ class Canvas07 extends canvas06_1.Canvas06 {
         this.tick([x, y - 1], pt, length, 0);
     }
     equalSide(start, end, length, count, space) {
-        let M = mid(start, end);
+        let M = canvas07_mid(start, end);
         for (let s of steps(count)) {
             this.tick(start, M, length, s * space);
         }
@@ -43408,19 +43357,9 @@ class Canvas07 extends canvas06_1.Canvas06 {
         this.restore();
     }
 }
-exports.Canvas07 = Canvas07;
 //# sourceMappingURL=canvas07.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas08.js
 
-/***/ }),
-
-/***/ 8227:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas08 = void 0;
-const canvas07_1 = __webpack_require__(7610);
 const LABEL_OFFSET_PX = 15;
 const X_MARK_OFFSET_PX = 15;
 const Y_MARK_OFFSET_PX = 10;
@@ -43449,7 +43388,7 @@ function getTicks(min, max, interval) {
  * Handle:
  * - Axis
  */
-class Canvas08 extends canvas07_1.Canvas07 {
+class Canvas08 extends Canvas07 {
     xAxis() {
         let A = this.edgeLeft(0);
         let B = this.edgeRight(0);
@@ -43529,258 +43468,8 @@ class Canvas08 extends canvas07_1.Canvas07 {
         this.restore();
     }
 }
-exports.Canvas08 = Canvas08;
 //# sourceMappingURL=canvas08.js.map
-
-/***/ }),
-
-/***/ 7267:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas09 = void 0;
-const canvas08_1 = __webpack_require__(8227);
-const trace_1 = __webpack_require__(2921);
-const sectoroid_1 = __webpack_require__(3065);
-/**
- * Handle:
- * - plot
- */
-class Canvas09 extends canvas08_1.Canvas08 {
-    plot(func, tStart = this.xmin, tEnd = this.xmax, dots = 1000) {
-        let points = (0, trace_1.trace)(func, [tStart, tEnd], dots);
-        let { xmin, xmax, ymin, ymax } = this;
-        let X = xmax - xmin;
-        let Y = ymax - ymin;
-        function outOfRange([x, y]) {
-            return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y;
-        }
-        function isIll(p) {
-            let [x, y] = p;
-            return !Number.isFinite(x) || !Number.isFinite(y) || outOfRange(p);
-        }
-        let filteredPoints = points.map(p => isIll(p) ? null : p);
-        let segments = (0, trace_1.splitNull)(filteredPoints);
-        for (let seg of segments)
-            this.line(seg);
-    }
-    sectoroidLine(O, A, B, vertices) {
-        let pts = (0, sectoroid_1.sectoroid)(O, A, B, vertices);
-        this.line(pts);
-    }
-    sectoroidFill(O, A, B, vertices) {
-        let pts = (0, sectoroid_1.sectoroid)(O, A, B, vertices);
-        this.fill(pts);
-    }
-    sectoroidShade(O, A, B, vertices) {
-        let pts = (0, sectoroid_1.sectoroid)(O, A, B, vertices);
-        this.shade(pts);
-    }
-}
-exports.Canvas09 = Canvas09;
-//# sourceMappingURL=canvas09.js.map
-
-/***/ }),
-
-/***/ 7964:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Canvas10 = void 0;
-const canvas09_1 = __webpack_require__(7267);
-function degrize(text) {
-    return typeof text === 'number'
-        ? text + '°'
-        : text;
-}
-function mid(A, B) {
-    if (A.length === 3 && B.length === 3) {
-        let [x, y, z] = A;
-        let [X, Y, Z] = B;
-        return [(x + X) / 2, (y + Y) / 2, (z + Z) / 2];
-    }
-    else {
-        let [x, y] = A;
-        let [X, Y] = B;
-        return [(x + X) / 2, (y + Y) / 2];
-    }
-}
-/**
- * Handle:
- * - label
- */
-class Canvas10 extends canvas09_1.Canvas09 {
-    labelPoint(text, point, dir, radius) {
-        this.label(text, point, radius, dir);
-    }
-    labelPointAuto(text, point, radius) {
-        let dir = this.getCenterDir(point);
-        this.label(text, point, radius, dir);
-    }
-    labelAngle(text, [A, O, B], dir, radius) {
-        let T = degrize(text);
-        let mid = this.getMidDir(A, O, B);
-        this.label(T, O, radius, mid + dir);
-    }
-    labelLine(text, [A, B], dir, radius) {
-        text = this.unitize(text);
-        let M = mid(A, B);
-        let normal = this.getLineDir(A, B);
-        this.label(text, M, radius, normal + dir);
-    }
-}
-exports.Canvas10 = Canvas10;
-//# sourceMappingURL=canvas10.js.map
-
-/***/ }),
-
-/***/ 5619:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Convas = void 0;
-var canvas10_1 = __webpack_require__(7964);
-Object.defineProperty(exports, "Convas", ({ enumerable: true, get: function () { return canvas10_1.Canvas10; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 3570:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.thingsToPoints = void 0;
-function getCircleCorners(center, radius) {
-    let [h, k] = center;
-    let r = radius;
-    return [
-        [h + r, k + r],
-        [h + r, k - r],
-        [h - r, k + r],
-        [h - r, k - r]
-    ];
-}
-function getSphereCorners(center, radius) {
-    let [a, b, c] = center;
-    let r = radius;
-    return [
-        [a + r, b + r, c + r],
-        [a + r, b + r, c - r],
-        [a + r, b - r, c + r],
-        [a + r, b - r, c - r],
-        [a - r, b + r, c + r],
-        [a - r, b + r, c - r],
-        [a - r, b - r, c + r],
-        [a - r, b - r, c - r],
-    ];
-}
-function isPoint2D(thing) {
-    return Array.isArray(thing)
-        && thing.length === 2
-        && typeof thing[0] === 'number'
-        && typeof thing[1] === 'number';
-}
-function isPoint3D(thing) {
-    return Array.isArray(thing)
-        && thing.length === 3
-        && typeof thing[0] === 'number'
-        && typeof thing[1] === 'number'
-        && typeof thing[2] === 'number';
-}
-function isCircle(thing) {
-    return thing.length === 2
-        && isPoint2D(thing[0])
-        && typeof thing[1] === 'number';
-}
-function isSphere(thing) {
-    return thing.length === 2
-        && isPoint3D(thing[0])
-        && typeof thing[1] === 'number';
-}
-function thingsToPoints(things) {
-    let pts = [];
-    for (let th of things) {
-        if (isPoint2D(th)) {
-            pts.push(th);
-            continue;
-        }
-        if (isPoint3D(th)) {
-            pts.push(th);
-            continue;
-        }
-        if (isCircle(th)) {
-            pts.push(...getCircleCorners(...th));
-            continue;
-        }
-        if (isSphere(th)) {
-            pts.push(...getSphereCorners(...th));
-            continue;
-        }
-    }
-    return pts;
-}
-exports.thingsToPoints = thingsToPoints;
-//# sourceMappingURL=capture.js.map
-
-/***/ }),
-
-/***/ 3065:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sectoroid = void 0;
-const trace_1 = __webpack_require__(2921);
-function vec(p1, p2) {
-    let [x1, y1] = p1;
-    let [x2, y2] = p2;
-    return [x2 - x1, y2 - y1];
-}
-function deg(radian) {
-    return radian / Math.PI * 180;
-}
-function magnitude([x, y]) {
-    return (x * x + y * y) ** 0.5;
-}
-function argument([x, y]) {
-    let rad = Math.atan2(y, x);
-    let angle = deg(rad);
-    if (angle < 0)
-        angle += 360;
-    return angle;
-}
-function sectoroid(O, A, B, vertices) {
-    let v1 = vec(O, A);
-    let v2 = vec(O, B);
-    let r = magnitude(v1);
-    let q1 = argument(v1);
-    let q2 = argument(v2);
-    if (q2 < q1)
-        q2 += 360;
-    let points = (0, trace_1.traceCircle)(O, r, [q1, q2]);
-    return [A, ...points, B, ...vertices];
-}
-exports.sectoroid = sectoroid;
-//# sourceMappingURL=sectoroid.js.map
-
-/***/ }),
-
-/***/ 2921:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.splitNull = exports.traceCircle = exports.trace = void 0;
+;// CONCATENATED MODULE: ../packages/paint/lib/support/trace.js
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.
  * ```
@@ -43810,7 +43499,6 @@ function trace(func, range, dots = 1000) {
     }
     return points;
 }
-exports.trace = trace;
 /**
  * Return an array of 2D points as [number,number] by tracing a circle.
  * @param angleRange - the polar angle range
@@ -43829,7 +43517,6 @@ function traceCircle(center, radius, angleRange, dots = 100) {
     }
     return trace(t => [h + radius * cos(t), k + radius * sin(t)], angleRange, dots);
 }
-exports.traceCircle = traceCircle;
 function splitNull(arr) {
     let ls = [];
     let clone = [...arr];
@@ -43851,75 +43538,126 @@ function splitNull(arr) {
     ls = ls.filter($ => $.length > 0);
     return ls;
 }
-exports.splitNull = splitNull;
 //# sourceMappingURL=trace.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/support/sectoroid.js
 
-/***/ }),
-
-/***/ 8838:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.trimCanvas = void 0;
-function getAlpha(img, x, y) {
-    let i = 0;
-    i += y * img.width;
-    i += x;
-    return img.data[4 * i + 3];
+function sectoroid_vec(p1, p2) {
+    let [x1, y1] = p1;
+    let [x2, y2] = p2;
+    return [x2 - x1, y2 - y1];
 }
-function isPainted(img, x, y) {
-    return getAlpha(img, x, y) !== 0;
+function sectoroid_deg(radian) {
+    return radian / Math.PI * 180;
 }
-function rowBlank(img, y) {
-    for (let x = 0; x < img.width; x++) {
-        if (isPainted(img, x, y))
-            return false;
+function magnitude([x, y]) {
+    return (x * x + y * y) ** 0.5;
+}
+function argument([x, y]) {
+    let rad = Math.atan2(y, x);
+    let angle = sectoroid_deg(rad);
+    if (angle < 0)
+        angle += 360;
+    return angle;
+}
+function sectoroid(O, A, B, vertices) {
+    let v1 = sectoroid_vec(O, A);
+    let v2 = sectoroid_vec(O, B);
+    let r = magnitude(v1);
+    let q1 = argument(v1);
+    let q2 = argument(v2);
+    if (q2 < q1)
+        q2 += 360;
+    let points = traceCircle(O, r, [q1, q2]);
+    return [A, ...points, B, ...vertices];
+}
+//# sourceMappingURL=sectoroid.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas09.js
+
+
+
+/**
+ * Handle:
+ * - plot
+ */
+class Canvas09 extends Canvas08 {
+    plot(func, tStart = this.xmin, tEnd = this.xmax, dots = 1000) {
+        let points = trace(func, [tStart, tEnd], dots);
+        let { xmin, xmax, ymin, ymax } = this;
+        let X = xmax - xmin;
+        let Y = ymax - ymin;
+        function outOfRange([x, y]) {
+            return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y;
+        }
+        function isIll(p) {
+            let [x, y] = p;
+            return !Number.isFinite(x) || !Number.isFinite(y) || outOfRange(p);
+        }
+        let filteredPoints = points.map(p => isIll(p) ? null : p);
+        let segments = splitNull(filteredPoints);
+        for (let seg of segments)
+            this.line(seg);
     }
-    return true;
-}
-function colBlank(img, x) {
-    for (let y = 0; y < img.height; y++) {
-        if (isPainted(img, x, y))
-            return false;
+    sectoroidLine(O, A, B, vertices) {
+        let pts = sectoroid(O, A, B, vertices);
+        this.line(pts);
     }
-    return true;
+    sectoroidFill(O, A, B, vertices) {
+        let pts = sectoroid(O, A, B, vertices);
+        this.fill(pts);
+    }
+    sectoroidShade(O, A, B, vertices) {
+        let pts = sectoroid(O, A, B, vertices);
+        this.shade(pts);
+    }
 }
-function trimCanvasX(canvas) {
-    let ctx = canvas.getContext("2d");
-    let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let top = 0;
-    let bottom = img.height - 1;
-    while (top < bottom && rowBlank(img, top))
-        top++;
-    while (bottom > top && rowBlank(img, bottom))
-        bottom--;
-    let trimmed = ctx.getImageData(0, top, img.width, bottom - top + 1);
-    canvas.width = trimmed.width;
-    canvas.height = trimmed.height;
-    ctx.putImageData(trimmed, 0, 0);
+//# sourceMappingURL=canvas09.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/canvas/canvas10.js
+
+function degrize(text) {
+    return typeof text === 'number'
+        ? text + '°'
+        : text;
 }
-function trimCanvasY(canvas) {
-    let ctx = canvas.getContext("2d");
-    let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let left = 0;
-    let right = img.width - 1;
-    while (left < right && colBlank(img, left))
-        left++;
-    while (right > left && colBlank(img, right))
-        right--;
-    let trimmed = ctx.getImageData(left, 0, right - left + 1, img.height);
-    canvas.width = trimmed.width;
-    canvas.height = trimmed.height;
-    ctx.putImageData(trimmed, 0, 0);
+function canvas10_mid(A, B) {
+    if (A.length === 3 && B.length === 3) {
+        let [x, y, z] = A;
+        let [X, Y, Z] = B;
+        return [(x + X) / 2, (y + Y) / 2, (z + Z) / 2];
+    }
+    else {
+        let [x, y] = A;
+        let [X, Y] = B;
+        return [(x + X) / 2, (y + Y) / 2];
+    }
 }
-function trimCanvas(canvas) {
-    trimCanvasX(canvas);
-    trimCanvasY(canvas);
+/**
+ * Handle:
+ * - label
+ */
+class Canvas10 extends Canvas09 {
+    labelPoint(text, point, dir, radius) {
+        this.label(text, point, radius, dir);
+    }
+    labelPointAuto(text, point, radius) {
+        let dir = this.getCenterDir(point);
+        this.label(text, point, radius, dir);
+    }
+    labelAngle(text, [A, O, B], dir, radius) {
+        let T = degrize(text);
+        let mid = this.getMidDir(A, O, B);
+        this.label(T, O, radius, mid + dir);
+    }
+    labelLine(text, [A, B], dir, radius) {
+        text = this.unitize(text);
+        let M = canvas10_mid(A, B);
+        let normal = this.getLineDir(A, B);
+        this.label(text, M, radius, normal + dir);
+    }
 }
-exports.trimCanvas = trimCanvas;
-//# sourceMappingURL=trim.js.map
+//# sourceMappingURL=canvas10.js.map
+;// CONCATENATED MODULE: ../packages/paint/lib/index.js
+
+//# sourceMappingURL=index.js.map
 
 /***/ })
 
@@ -43948,6 +43686,35 @@ exports.trimCanvas = trimCanvas;
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};

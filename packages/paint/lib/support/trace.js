@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.splitNull = exports.traceCircle = exports.trace = void 0;
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.
  * ```
@@ -8,7 +5,7 @@ exports.splitNull = exports.traceCircle = exports.trace = void 0;
  * // [[0,0], [1,1], [2,4], [3,9]]
  * ```
  */
-function trace(func, range, dots = 1000) {
+export function trace(func, range, dots = 1000) {
     function tracer(t) {
         let result;
         try {
@@ -30,7 +27,6 @@ function trace(func, range, dots = 1000) {
     }
     return points;
 }
-exports.trace = trace;
 /**
  * Return an array of 2D points as [number,number] by tracing a circle.
  * @param angleRange - the polar angle range
@@ -39,7 +35,7 @@ exports.trace = trace;
  * // [[1,0], [0,1], [-1,0], [0,-1]]
  * ```
  */
-function traceCircle(center, radius, angleRange, dots = 100) {
+export function traceCircle(center, radius, angleRange, dots = 100) {
     const [h, k] = center;
     function sin(degree) {
         return Math.sin(degree / 180 * Math.PI);
@@ -49,8 +45,7 @@ function traceCircle(center, radius, angleRange, dots = 100) {
     }
     return trace(t => [h + radius * cos(t), k + radius * sin(t)], angleRange, dots);
 }
-exports.traceCircle = traceCircle;
-function splitNull(arr) {
+export function splitNull(arr) {
     let ls = [];
     let clone = [...arr];
     while (true) {
@@ -71,5 +66,4 @@ function splitNull(arr) {
     ls = ls.filter($ => $.length > 0);
     return ls;
 }
-exports.splitNull = splitNull;
 //# sourceMappingURL=trace.js.map

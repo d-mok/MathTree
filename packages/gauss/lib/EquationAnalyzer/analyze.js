@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.analyze = void 0;
-const utils_1 = require("../utils");
+import { combinations, getAllVars, getVars } from "../utils";
 class Vabe {
     constructor(symbol) {
         this.symbol = symbol;
@@ -113,7 +110,7 @@ class Analyzer {
     }
     allVabeCombinations() {
         const n = this.vabes.length - this.equbes.length;
-        return (0, utils_1.combinations)(this.vabes, n);
+        return combinations(this.vabes, n);
     }
     getTrees() {
         const combs = this.allVabeCombinations();
@@ -139,12 +136,12 @@ class Analyzer {
 /**
  * Get all the healthy trees of this system generated from all possible 'given variables' combinations.
  */
-function analyze(fs) {
-    const symbols = (0, utils_1.getAllVars)(fs);
+export function analyze(fs) {
+    const symbols = getAllVars(fs);
     const vabes = symbols.map($ => new Vabe($));
     const equbes = [];
     for (let f of fs) {
-        let syms = (0, utils_1.getVars)(f);
+        let syms = getVars(f);
         const vs = syms.map($ => vabes.find(_ => _.symbol === $));
         let eq = new Eqube(vs);
         equbes.push(eq);
@@ -152,5 +149,4 @@ function analyze(fs) {
     let analyzer = new Analyzer(vabes, equbes);
     return analyzer.getHealthyTrees();
 }
-exports.analyze = analyze;
 //# sourceMappingURL=analyze.js.map

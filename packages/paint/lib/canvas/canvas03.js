@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Canvas03 = void 0;
-const canvas02_1 = require("./canvas02");
+import { Canvas02 } from './canvas02';
 function segmentArray(seg) {
     if (Array.isArray(seg))
         return seg;
@@ -17,7 +14,7 @@ const REM_PIXEL = parseFloat(getComputedStyle(document.documentElement).fontSize
  * Handle:
  * - Settings
  */
-class Canvas03 extends canvas02_1.Canvas02 {
+export class Canvas03 extends Canvas02 {
     constructor() {
         // initialize state
         super(...arguments);
@@ -149,7 +146,6 @@ class Canvas03 extends canvas02_1.Canvas02 {
         this.$LINE_LABEL = state.$LINE_LABEL;
     }
 }
-exports.Canvas03 = Canvas03;
 function mid(Points) {
     if (Points.length === 0)
         return [0, 0];
