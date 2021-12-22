@@ -4,16 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "publish": "npm run build-dev && npm run build && npm run build-type && npm run jest",
-    "publish_no_jest": "npm run build-dev && npm run build && npm run build-type",
-    "build": "webpack --config webpack.edge.js",
-    "build-dev": "webpack --config webpack.dev.js",
-    "build-stable": "webpack --config webpack.stable.js",
+    "publish": "npm run build-edge && npm run build-type",
+    "build-edge": "esbuild src/index.ts --bundle --outfile=../dist/edge/mathtree.js",
     "build-type": "npx tsc --project tsconfig.d.json",
+    "build-stable": "esbuild src/index.ts --bundle --minify --target=es2020 --outfile=../dist/stable/mathtree.js",
     "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./src/Math",
     "jest_soil": "jest ./src/Soil -debug",
-    "typedoc": "typedoc --out ../typedoc ./src/Math ./src/Pen",
-    "esbuild": "esbuild src/index.ts --bundle --outfile=out.js"
+    "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js",
+    "typedoc": "typedoc --out ../typedoc ./src/Math ./src/Pen"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",

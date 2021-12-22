@@ -122,13 +122,12 @@ declare module "Core/Ink/index" {
     export function printLabeledValue(obj: LabeledValue, order?: number, isAngle?: boolean): string;
 }
 declare module "Core/index" {
-    import { poker as $poker, dice as $dice, contract as $contract, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'sapphire-js';
+    import { poker as $poker, dice as $dice, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'sapphire-js';
     import * as $Owl from "Core/Owl/index";
     import * as $Ink from "Core/Ink/index";
     global {
         var poker: typeof $poker;
         var dice: typeof $dice;
-        var contract: typeof $contract;
         var cal: typeof $cal;
         var data: typeof $data;
         var list: typeof $list;
@@ -1869,40 +1868,35 @@ declare module "Math/Code/Random.test" { }
 declare module "Math/Code/Random" {
     class Host {
         /**
-         * @category Random
-         * @return a random integer in [min, max] inclusive.
+         * a random integer in [min, max] inclusive.
          * ```
          * RndN(2,5) // may return 2, 3, 4 or 5
          * ```
          */
         static RndN(min: number, max: number): number;
         /**
-         * @category Random
-         * @return an array of n unique random integer in [min, max] inclusive.
+         * an array of n unique random integer in [min, max] inclusive.
          * ```
          * RndNs(2,8,3) // may return [5,3,7]
          * ```
          */
         static RndNs(min: number, max: number, n?: number): number[];
         /**
-         * @category Random
-         * @return a random real number in [min, max] inclusive
+         * a random real number in [min, max] inclusive
          * ```
          * RndR(1,2) // may return 1.242574363
          * ```
          */
         static RndR(min: number, max: number): number;
         /**
-         * @category Random
-         * @return an array of n unique random real number in [min, max] inclusive.
+         * an array of n unique random real number in [min, max] inclusive.
          * ```
          * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
          * ```
          */
         static RndRs(min: number, max: number, n?: number): number[];
         /**
-         * @category Random
-         * @return a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
+         * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
          * ```
          * RndQ(9,[2,9]) // may return 7/2
          * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
@@ -1910,89 +1904,78 @@ declare module "Math/Code/Random" {
          */
         static RndQ(largest?: number, range?: interval): number;
         /**
-         * @category Random
-         * @return an array of n unique random fractions (non-integer) .
+         * an array of n unique random fractions (non-integer) .
          * ```
          * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
          * ```
          */
         static RndQs(largest?: number, range?: interval, n?: number): number[];
         /**
-         * @category Random
-         * @return 1 or -1
+         * 1 or -1
          * ```
          * RndU() // may return 1 or -1
          * ```
          */
         static RndU(): 1 | -1;
         /**
-         * @category Random
-         * @return true or false.
+         * true or false.
          * ```
          * RndT() // may return true or false
          * ```
          */
         static RndT(): boolean;
         /**
-         * @category Random
-         * @return a random integer in [min, max] or [-max, -min] inclusive.
+         * a random integer in [min, max] or [-max, -min] inclusive.
          * ```
          * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
          * ```
          */
         static RndZ(min: number, max: number): number;
         /**
-         * @category Random
          * @param n - default to 10
-         * @return an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
+         * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
          * ```
          * RndZs(2,8,3) // may return [5,-3,7]
          * ```
          */
         static RndZs(min: number, max: number, n?: number): number[];
         /**
-         * @category Random
-         * @return a random prime number less than or equal to max.
+         * a random prime number less than or equal to max.
          * ```
          * RndP(10) // may return 2, 3, 5 or 7
          * ```
          */
         static RndP(max: number): number;
         /**
-         * @category Random
-         * @return a random odd integer in [min, max] inclusive
+         * a random odd integer in [min, max] inclusive
          * ```
          * RndOdd(3,8) // return 3, 5 or 7
          * ```
          */
         static RndOdd(min: number, max: number): number;
         /**
-         * @category Random
-         * @return a random even integer in [min, max] inclusive
+         * a random even integer in [min, max] inclusive
          * ```
          * RndEven(3,8) // return 4, 6 or 8
          * ```
          */
         static RndEven(min: number, max: number): number;
         /**
-         * @category Random
-         * @return an array of random polynomial coefficients
+         * an array of random polynomial coefficients
          * ```
          * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
          * ```
          */
         static RndPoly(...coeff: number[]): number[];
         /**
-         * @category Random
-         * @return an array of a Pyth Triple
+         * an array of a Pyth Triple
          * ```
          * RndPyth(10) // may return [3,4,5]
          * ```
          */
         static RndPyth(max?: number): [number, number, number];
         /**
-         * @category Random
-         * @return a point within given range, x and y are distinct and non-zero
+         * a point within given range, x and y are distinct and non-zero
          * ```
          * RndPoint([1,4],[10,14]) // may return [2,12]
          * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
@@ -2001,48 +1984,42 @@ declare module "Math/Code/Random" {
          */
         static RndPoint(xRange: number | interval, yRange?: number | interval): Point2D;
         /**
-         * @category Random
-         * @return n points within given range, no horizontal / vertical / collinear
+         * n points within given range, no horizontal / vertical / collinear
          * ```
          * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
          * ```
          */
         static RndPoints(xRange: number | interval, yRange?: number | interval, n?: number): Point2D[];
         /**
-         * @category Random
-         * @return n angles in [0,360] at least cyclic separated by separation
+         * n angles in [0,360] at least cyclic separated by separation
          * ```
          * RndAngles(3,50) // may return [30,90,200]
          * ```
          */
         static RndAngles(n: number, separation: number): number[];
         /**
-         * @category Random
-         * @return `n` points on a unit circle at least cyclic separated by separation
+         * `n` points on a unit circle at least cyclic separated by separation
          * ```
          * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
          * ```
          */
         static RndOnCircle(n: number, separation: number): Point2D[];
         /**
-         * @category Random
-         * @return n vertices of a convex polygon generated by rounding a cyclic polygon
+         * n vertices of a convex polygon generated by rounding a cyclic polygon
          * ```
          * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
          * ```
          */
         static RndConvexPolygon(n: number, center: Point2D, radius: number, separation: number): Point2D[];
         /**
-         * @category Random
-         * @return n integers from [min, max], must be uni-moded
+         * n integers from [min, max], must be uni-moded
          * ```
          * RndData(10,15,5) // may return [11,11,12,13,15]
          * ```
          */
         static RndData(min: number, max: number, n: number): number[];
         /**
-         * @category Random
-         * @return 3 points forming a triangle, with min angle and length
+         * 3 points forming a triangle, with min angle and length
          * ```
          * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
          * ```
@@ -2054,24 +2031,21 @@ declare module "Math/Code/Random" {
             obtuse?: boolean | undefined;
         }): [Point2D, Point2D, Point2D];
         /**
-         * @category Random
-         * @return an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
+         * an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
          * ```
          * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
          * ```
          */
         static RndTrigValue(func: TrigFunc, angle: number): TrigValue;
         /**
-         * @category Random
-         * @return an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
+         * an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
          * ```
          * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
          * ```
          */
         static RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '1/tan' | '-1/tan', label: string): TrigExp;
         /**
-         * @category Random
-         * @return a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
+         * a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
          * ```
          * RndPointPolar()
          * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
@@ -2079,8 +2053,7 @@ declare module "Math/Code/Random" {
          */
         static RndPointPolar(): Point2D;
         /**
-         * @category Random
-         * @return a random ratio group in [min, max] inclusive.
+         * a random ratio group in [min, max] inclusive.
          * ```
          * RndRatio(2,9,3) // may return [3,7,5]
          * ```
