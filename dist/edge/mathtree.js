@@ -339,10 +339,10 @@
         randomIndex() {
           if (this.length === 0)
             return void 0;
-          function rndInt(min, max) {
+          function rndInt2(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
           }
-          return rndInt(0, this.length - 1);
+          return rndInt2(0, this.length - 1);
         }
         draw() {
           if (this.length === 0)
@@ -2932,7 +2932,7 @@
         return [s3 * product, square];
       }
       exports.toSurd = toSurd;
-      function isPrime(num2) {
+      function isPrime2(num2) {
         if (!Number.isInteger(num2))
           return false;
         if (num2 <= 1)
@@ -2947,21 +2947,21 @@
         }
         return true;
       }
-      exports.isPrime = isPrime;
-      function primes(max) {
+      exports.isPrime = isPrime2;
+      function primes2(max) {
         let arr = [];
         for (let i2 = 2; i2 <= max; i2++) {
-          if (isPrime(i2))
+          if (isPrime2(i2))
             arr.push(i2);
         }
         return arr;
       }
-      exports.primes = primes;
+      exports.primes = primes2;
       function primeFactors(num2) {
         let arr = [];
         let i2 = 2;
         while (num2 > 1) {
-          if (!isPrime(i2)) {
+          if (!isPrime2(i2)) {
             i2++;
             continue;
           }
@@ -4351,14 +4351,14 @@
             O2[0] + size * (0, support_1.cos)(angleA) + size * (0, support_1.cos)(angleB),
             O2[1] + size * (0, support_1.sin)(angleA) + size * (0, support_1.sin)(angleB)
           ];
-          let draw = (A3, B3) => {
+          let draw2 = (A3, B3) => {
             this.ctx.beginPath();
             this.ctx.moveTo(A3[0], A3[1]);
             this.ctx.lineTo(B3[0], B3[1]);
             this.ctx.stroke();
           };
-          draw(P2, R2);
-          draw(Q2, R2);
+          draw2(P2, R2);
+          draw2(Q2, R2);
         }
         drawParallelMark(startPoint, endPoint, sizePixel, tickCount, spacePixel) {
           let A2 = this.pj(startPoint);
@@ -5442,42 +5442,42 @@
       var blood_1 = require_blood();
       var cal2 = __importStar(require_cal());
       var list_1 = require_list();
-      function integer(min, max) {
+      function integer2(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         if (min > max)
           throw new blood_1.Blood("Poker", "min must be less than max!");
         return Math.floor(Math.random() * (max - min + 1) + min);
       }
-      exports.integer = integer;
-      function real(min, max) {
+      exports.integer = integer2;
+      function real2(min, max) {
         if (min > max)
           throw new blood_1.Blood("Poker", "min must be less than max!");
         return Math.random() * (max - min) + min;
       }
-      exports.real = real;
-      function prime(min, max) {
+      exports.real = real2;
+      function prime2(min, max) {
         if (min > max)
           throw new blood_1.Blood("Poker", "min must be less than max!");
-        let primes = (0, list_1.list)(...cal2.primes(max));
-        primes.sieve(($) => $ >= min);
-        return primes.draw();
+        let primes2 = (0, list_1.list)(...cal2.primes(max));
+        primes2.sieve(($) => $ >= min);
+        return primes2.draw();
       }
-      exports.prime = prime;
-      function he() {
+      exports.prime = prime2;
+      function he2() {
         const boys = (0, list_1.list)("Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William");
         return boys.draw();
       }
-      exports.he = he;
-      function she() {
+      exports.he = he2;
+      function she2() {
         const girls = (0, list_1.list)("Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe");
         return girls.draw();
       }
-      exports.she = she;
-      function bool2(trueChance = 0.5) {
-        return real(0, 1) < trueChance;
+      exports.she = she2;
+      function bool3(trueChance = 0.5) {
+        return real2(0, 1) < trueChance;
       }
-      exports.bool = bool2;
+      exports.bool = bool3;
     }
   });
 
@@ -5488,7 +5488,7 @@
       Object.defineProperty(exports, "__esModule", { value: true });
       exports.dice = exports.Dice = void 0;
       var blood_1 = require_blood();
-      var Dice = class {
+      var Dice2 = class {
         constructor(func) {
           this.TRIAL = 1e4;
           this.shields = [];
@@ -5574,11 +5574,11 @@
           }
         }
       };
-      exports.Dice = Dice;
-      function dice2(func) {
-        return new Dice(func);
+      exports.Dice = Dice2;
+      function dice3(func) {
+        return new Dice2(func);
       }
-      exports.dice = dice2;
+      exports.dice = dice3;
     }
   });
 
@@ -5804,7 +5804,7 @@
           ;
           var ParseError = function ParseError2(message, token) {
             this.position = void 0;
-            var error2 = "KaTeX parse error: " + message;
+            var error4 = "KaTeX parse error: " + message;
             var start;
             var loc = token && token.loc;
             if (loc && loc.start <= loc.end) {
@@ -5812,9 +5812,9 @@
               start = loc.start;
               var end = loc.end;
               if (start === input.length) {
-                error2 += " at end of input: ";
+                error4 += " at end of input: ";
               } else {
-                error2 += " at position " + (start + 1) + ": ";
+                error4 += " at position " + (start + 1) + ": ";
               }
               var underlined = input.slice(start, end).replace(/[^]/g, "$&\u0332");
               var left2;
@@ -5829,9 +5829,9 @@
               } else {
                 right = input.slice(end);
               }
-              error2 += left2 + underlined + right;
+              error4 += left2 + underlined + right;
             }
-            var self2 = new Error(error2);
+            var self2 = new Error(error4);
             self2.name = "ParseError";
             self2.__proto__ = ParseError2.prototype;
             self2.position = start;
@@ -5959,7 +5959,7 @@
               if (typeof strict === "function") {
                 try {
                   strict = strict(errorCode, errorMsg, token);
-                } catch (error2) {
+                } catch (error4) {
                   strict = "error";
                 }
               }
@@ -18380,24 +18380,24 @@
                   if (superscript) {
                     throw new src_ParseError("Double superscript", lex);
                   }
-                  var prime = {
+                  var prime2 = {
                     type: "textord",
                     mode: this.mode,
                     text: "\\prime"
                   };
-                  var primes = [prime];
+                  var primes2 = [prime2];
                   this.consume();
                   while (this.fetch().text === "'") {
-                    primes.push(prime);
+                    primes2.push(prime2);
                     this.consume();
                   }
                   if (this.fetch().text === "^") {
-                    primes.push(this.handleSupSubscript("superscript"));
+                    primes2.push(this.handleSupSubscript("superscript"));
                   }
                   superscript = {
                     type: "ordgroup",
                     mode: this.mode,
-                    body: primes
+                    body: primes2
                   };
                 } else {
                   break;
@@ -18870,12 +18870,12 @@
             var settings = new Settings(options2);
             return src_parseTree(expression, settings);
           };
-          var renderError = function renderError2(error2, expression, options2) {
-            if (options2.throwOnError || !(error2 instanceof src_ParseError)) {
-              throw error2;
+          var renderError = function renderError2(error4, expression, options2) {
+            if (options2.throwOnError || !(error4 instanceof src_ParseError)) {
+              throw error4;
             }
             var node = buildCommon.makeSpan(["katex-error"], [new SymbolNode(expression)]);
-            node.setAttribute("title", error2.toString());
+            node.setAttribute("title", error4.toString());
             node.setAttribute("style", "color:" + options2.errorColor);
             return node;
           };
@@ -18884,8 +18884,8 @@
             try {
               var tree = src_parseTree(expression, settings);
               return buildTree(tree, expression, settings);
-            } catch (error2) {
-              return renderError(error2, expression, settings);
+            } catch (error4) {
+              return renderError(error4, expression, settings);
             }
           };
           var renderToHTMLTree = function renderToHTMLTree2(expression, options2) {
@@ -18893,8 +18893,8 @@
             try {
               var tree = src_parseTree(expression, settings);
               return buildHTMLTree(tree, expression, settings);
-            } catch (error2) {
-              return renderError(error2, expression, settings);
+            } catch (error4) {
+              return renderError(error4, expression, settings);
             }
           };
           var katex2 = {
@@ -19484,8 +19484,6 @@
   }
 
   // src/Core/index.ts
-  globalThis.poker = import_sapphire_js.poker;
-  globalThis.dice = import_sapphire_js.dice;
   globalThis.cal = import_sapphire_js.cal;
   globalThis.data = import_sapphire_js.data;
   globalThis.list = import_sapphire_js.list;
@@ -20582,208 +20580,382 @@
     return T2;
   }
   var PhyEqCls = class {
-    constructor() {
-      this.Motion = {
-        vuat(v3 = "v", u2 = "u", a2 = "a", t2 = "t", $ = "****") {
-          let args = [v3, u2, a2, t2];
-          return [
-            makeFn(args, (v4, u3, a3, t3) => v4 - u3 - a3 * t3),
-            makeLatex(args, "@=@+@@", $, "::||")
-          ];
-        },
-        vu2as(v3 = "v", u2 = "u", a2 = "a", s3 = "s", $ = "****") {
-          let args = [v3, u2, a2, s3];
-          return [
-            makeFn(args, (v4, u3, a3, s4) => v4 ** 2 - u3 ** 2 - 2 * a3 * s4),
-            makeLatex(args, "@^2=@^2+2@@", $, "||||")
-          ];
-        },
-        sutat2(s3 = "s", u2 = "u", t2 = "t", a2 = "a", $ = "****") {
-          let args = [s3, u2, t2, a2];
-          let [_s, _u, _t, _a] = $;
-          return [
-            makeFn(args, (s4, u3, t3, a3) => s4 - u3 * t3 - 0.5 * a3 * t3 * t3),
-            makeLatex([s3, u2, t2, a2, t2], "@=@@+\\dfrac{1}{2}@@^2", [_s, _u, _t, _a, _t].join(""), ":||||")
-          ];
-        },
-        suvt(s3 = "s", u2 = "u", v3 = "v", t2 = "t", $ = "****") {
-          let args = [s3, u2, v3, t2];
-          return [
-            makeFn(args, (s4, u3, v4, t3) => s4 - 0.5 * (u3 + v4) * t3),
-            makeLatex(args, "@=\\dfrac{1}{2}(@+@)@", $, ":::|")
-          ];
-        },
-        sat2(s3 = "s", a2 = "a", t2 = "t", $ = "***") {
-          let args = [s3, a2, t2];
-          return [
-            makeFn(args, (s4, a3, t3) => s4 - 0.5 * a3 * t3 * t3),
-            makeLatex(args, "@=\\dfrac{1}{2}@@^2", $, ":||")
-          ];
-        },
-        vat(v3 = "v", a2 = "a", t2 = "t", $ = "***") {
-          let args = [v3, a2, t2];
-          return [
-            makeFn(args, (v4, a3, t3) => v4 - a3 * t3),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        v2as(v3 = "v", a2 = "a", s3 = "s", $ = "***") {
-          let args = [v3, a2, s3];
-          return [
-            makeFn(args, (v4, a3, s4) => v4 ** 2 - 2 * a3 * s4),
-            makeLatex(args, "@^2=2@@", $, "|||")
-          ];
-        }
-      };
-      this.CircularMotion = {
-        svt(s3 = "s", v3 = "v", t2 = "t", $ = "***") {
-          let args = [s3, v3, t2];
-          return [
-            makeFn(args, (s4, v4, t3) => s4 - v4 * t3),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        \u03B8\u03C9t(\u03B8 = "\u03B8", \u03C9 = "\u03C9", t2 = "t", $ = "$$$") {
-          let args = [\u03B8, \u03C9, t2];
-          return [
-            makeFn(args, (\u03B82, \u03C92, t3) => \u03B82 - \u03C92 * t3),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        \u03C9T(\u03C9 = "\u03C9", T2 = "T", $ = "$$") {
-          let args = [\u03C9, T2];
-          return [
-            makeFn(args, (\u03C92, T3) => \u03C92 - 2 * Math.PI / T3),
-            makeLatex(args, "@=\\dfrac{2\u03C0}{@}", $, "::")
-          ];
-        },
-        sr\u03B8(s3 = "s", r3 = "r", \u03B8 = "\u03B8", $ = "**$") {
-          let args = [s3, r3, \u03B8];
-          return [
-            makeFn(args, (s4, r4, \u03B82) => s4 - r4 * \u03B82),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        vr\u03C9(v3 = "v", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-          let args = [v3, r3, \u03C9];
-          return [
-            makeFn(args, (v4, r4, \u03C92) => v4 - r4 * \u03C92),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        av\u03C9(a2 = "a", v3 = "v", \u03C9 = "\u03C9", $ = "***") {
-          let args = [a2, v3, \u03C9];
-          return [
-            makeFn(args, (a3, v4, \u03C92) => a3 - v4 * \u03C92),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        avr(a2 = "a", v3 = "v", r3 = "r", $ = "***") {
-          let args = [a2, v3, r3];
-          return [
-            makeFn(args, (a3, v4, r4) => a3 - v4 * v4 / r4),
-            makeLatex(args, "@=\\dfrac{@^2}{@}", $, ":|:")
-          ];
-        },
-        ar\u03C9(a2 = "a", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-          let args = [a2, r3, \u03C9];
-          return [
-            makeFn(args, (a3, r4, \u03C92) => a3 - r4 * \u03C92 * \u03C92),
-            makeLatex(args, "@=@@^2", $, ":||")
-          ];
-        },
-        Fmv\u03C9(F2 = "F", m3 = "m", v3 = "v", \u03C9 = "\u03C9", $ = "****") {
-          let args = [F2, m3, v3, \u03C9];
-          return [
-            makeFn(args, (F3, m4, v4, \u03C92) => F3 - m4 * v4 * \u03C92),
-            makeLatex(args, "@=@@@", $, ":|||")
-          ];
-        },
-        Fmvr(F2 = "F", m3 = "m", v3 = "v", r3 = "r", $ = "****") {
-          let args = [F2, m3, v3, r3];
-          return [
-            makeFn(args, (F3, m4, v4, r4) => F3 - m4 * v4 * v4 / r4),
-            makeLatex(args, "@=\\dfrac{@@^2}{@}", $, ":||:")
-          ];
-        },
-        Fmr\u03C9(F2 = "F", m3 = "m", r3 = "r", \u03C9 = "\u03C9", $ = "****") {
-          let args = [F2, m3, r3, \u03C9];
-          return [
-            makeFn(args, (F3, m4, r4, \u03C92) => F3 - m4 * r4 * \u03C92 * \u03C92),
-            makeLatex(args, "@=@@@^2", $, ":|||")
-          ];
-        }
-      };
-      this.Gravitation = {
-        FGMmr2(F2 = "F", M2 = "M", m3 = "m", r3 = "r", $ = "****") {
-          let args = [F2, M2, m3, r3];
-          return [
-            makeFn(args, (F3, M3, m4, r4) => F3 - PhyConst.G * M3 * m4 / r4 ** 2),
-            makeLatex(args, "@=\\dfrac{G@@}{@^2}", $, ":|||")
-          ];
-        },
-        FGMmRh2(F2 = "F", M2 = "M", m3 = "m", R2 = "R", h2 = "h", $ = "*****") {
-          let args = [F2, M2, m3, R2, h2];
-          return [
-            makeFn(args, (F3, M3, m4, R3, h3) => F3 - PhyConst.G * M3 * m4 / (R3 + h3) ** 2),
-            makeLatex(args, "@=\\dfrac{G@@}{(@+@)^2}", $, ":||::")
-          ];
-        },
-        gGMr2(g2 = "g", M2 = "M", r3 = "r", $ = "***") {
-          let args = [g2, M2, r3];
-          return [
-            makeFn(args, (g3, M3, r4) => g3 - PhyConst.G * M3 / r4 ** 2),
-            makeLatex(args, "@=\\dfrac{G@}{@^2}", $, ":||")
-          ];
-        },
-        gGMRh2(g2 = "g", M2 = "M", R2 = "R", h2 = "h", $ = "****") {
-          let args = [g2, M2, R2, h2];
-          return [
-            makeFn(args, (g3, M3, R3, h3) => g3 - PhyConst.G * M3 / (R3 + h3) ** 2),
-            makeLatex(args, "@=\\dfrac{G@}{(@+@)^2}", $, ":|::")
-          ];
-        },
-        Fmg(F2 = "F", m3 = "m", g2 = "g", $ = "***") {
-          let args = [F2, m3, g2];
-          return [
-            makeFn(args, (F3, m4, g3) => F3 - m4 * g3),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        GMmr2v2r(M2 = "M", r3 = "r", v3 = "v", $ = "***") {
-          let args = [M2, r3, v3];
-          let [_M, _r, _v] = $;
-          $ = [_M, _r, _v, _r].join("");
-          return [
-            makeFn(args, (M3, r4, v4) => PhyConst.G * M3 / r4 / r4 - v4 * v4 / r4),
-            makeLatex([M2, r3, v3, r3], "\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}", $, "|||:")
-          ];
-        },
-        GMmr2r\u03C92(M2 = "M", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-          let args = [M2, r3, \u03C9];
-          let [_M, _r, _\u03C9] = $;
-          $ = [_M, _r, _r, _\u03C9].join("");
-          return [
-            makeFn(args, (M3, r4, \u03C92) => PhyConst.G * M3 / r4 / r4 - r4 * \u03C92 * \u03C92),
-            makeLatex([M2, r3, r3, \u03C9], "\\dfrac{G@m}{@^2}=m@@^2", $, "||||")
-          ];
-        }
-      };
-    }
+    Motion = {
+      vuat(v3 = "v", u2 = "u", a2 = "a", t2 = "t", $ = "****") {
+        let args = [v3, u2, a2, t2];
+        return [
+          makeFn(args, (v4, u3, a3, t3) => v4 - u3 - a3 * t3),
+          makeLatex(args, "@=@+@@", $, "::||")
+        ];
+      },
+      vu2as(v3 = "v", u2 = "u", a2 = "a", s3 = "s", $ = "****") {
+        let args = [v3, u2, a2, s3];
+        return [
+          makeFn(args, (v4, u3, a3, s4) => v4 ** 2 - u3 ** 2 - 2 * a3 * s4),
+          makeLatex(args, "@^2=@^2+2@@", $, "||||")
+        ];
+      },
+      sutat2(s3 = "s", u2 = "u", t2 = "t", a2 = "a", $ = "****") {
+        let args = [s3, u2, t2, a2];
+        let [_s, _u, _t, _a] = $;
+        return [
+          makeFn(args, (s4, u3, t3, a3) => s4 - u3 * t3 - 0.5 * a3 * t3 * t3),
+          makeLatex([s3, u2, t2, a2, t2], "@=@@+\\dfrac{1}{2}@@^2", [_s, _u, _t, _a, _t].join(""), ":||||")
+        ];
+      },
+      suvt(s3 = "s", u2 = "u", v3 = "v", t2 = "t", $ = "****") {
+        let args = [s3, u2, v3, t2];
+        return [
+          makeFn(args, (s4, u3, v4, t3) => s4 - 0.5 * (u3 + v4) * t3),
+          makeLatex(args, "@=\\dfrac{1}{2}(@+@)@", $, ":::|")
+        ];
+      },
+      sat2(s3 = "s", a2 = "a", t2 = "t", $ = "***") {
+        let args = [s3, a2, t2];
+        return [
+          makeFn(args, (s4, a3, t3) => s4 - 0.5 * a3 * t3 * t3),
+          makeLatex(args, "@=\\dfrac{1}{2}@@^2", $, ":||")
+        ];
+      },
+      vat(v3 = "v", a2 = "a", t2 = "t", $ = "***") {
+        let args = [v3, a2, t2];
+        return [
+          makeFn(args, (v4, a3, t3) => v4 - a3 * t3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      v2as(v3 = "v", a2 = "a", s3 = "s", $ = "***") {
+        let args = [v3, a2, s3];
+        return [
+          makeFn(args, (v4, a3, s4) => v4 ** 2 - 2 * a3 * s4),
+          makeLatex(args, "@^2=2@@", $, "|||")
+        ];
+      }
+    };
+    CircularMotion = {
+      svt(s3 = "s", v3 = "v", t2 = "t", $ = "***") {
+        let args = [s3, v3, t2];
+        return [
+          makeFn(args, (s4, v4, t3) => s4 - v4 * t3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      \u03B8\u03C9t(\u03B8 = "\u03B8", \u03C9 = "\u03C9", t2 = "t", $ = "$$$") {
+        let args = [\u03B8, \u03C9, t2];
+        return [
+          makeFn(args, (\u03B82, \u03C92, t3) => \u03B82 - \u03C92 * t3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      \u03C9T(\u03C9 = "\u03C9", T2 = "T", $ = "$$") {
+        let args = [\u03C9, T2];
+        return [
+          makeFn(args, (\u03C92, T3) => \u03C92 - 2 * Math.PI / T3),
+          makeLatex(args, "@=\\dfrac{2\u03C0}{@}", $, "::")
+        ];
+      },
+      sr\u03B8(s3 = "s", r3 = "r", \u03B8 = "\u03B8", $ = "**$") {
+        let args = [s3, r3, \u03B8];
+        return [
+          makeFn(args, (s4, r4, \u03B82) => s4 - r4 * \u03B82),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      vr\u03C9(v3 = "v", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [v3, r3, \u03C9];
+        return [
+          makeFn(args, (v4, r4, \u03C92) => v4 - r4 * \u03C92),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      av\u03C9(a2 = "a", v3 = "v", \u03C9 = "\u03C9", $ = "***") {
+        let args = [a2, v3, \u03C9];
+        return [
+          makeFn(args, (a3, v4, \u03C92) => a3 - v4 * \u03C92),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      avr(a2 = "a", v3 = "v", r3 = "r", $ = "***") {
+        let args = [a2, v3, r3];
+        return [
+          makeFn(args, (a3, v4, r4) => a3 - v4 * v4 / r4),
+          makeLatex(args, "@=\\dfrac{@^2}{@}", $, ":|:")
+        ];
+      },
+      ar\u03C9(a2 = "a", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [a2, r3, \u03C9];
+        return [
+          makeFn(args, (a3, r4, \u03C92) => a3 - r4 * \u03C92 * \u03C92),
+          makeLatex(args, "@=@@^2", $, ":||")
+        ];
+      },
+      Fmv\u03C9(F2 = "F", m3 = "m", v3 = "v", \u03C9 = "\u03C9", $ = "****") {
+        let args = [F2, m3, v3, \u03C9];
+        return [
+          makeFn(args, (F3, m4, v4, \u03C92) => F3 - m4 * v4 * \u03C92),
+          makeLatex(args, "@=@@@", $, ":|||")
+        ];
+      },
+      Fmvr(F2 = "F", m3 = "m", v3 = "v", r3 = "r", $ = "****") {
+        let args = [F2, m3, v3, r3];
+        return [
+          makeFn(args, (F3, m4, v4, r4) => F3 - m4 * v4 * v4 / r4),
+          makeLatex(args, "@=\\dfrac{@@^2}{@}", $, ":||:")
+        ];
+      },
+      Fmr\u03C9(F2 = "F", m3 = "m", r3 = "r", \u03C9 = "\u03C9", $ = "****") {
+        let args = [F2, m3, r3, \u03C9];
+        return [
+          makeFn(args, (F3, m4, r4, \u03C92) => F3 - m4 * r4 * \u03C92 * \u03C92),
+          makeLatex(args, "@=@@@^2", $, ":|||")
+        ];
+      }
+    };
+    Gravitation = {
+      FGMmr2(F2 = "F", M2 = "M", m3 = "m", r3 = "r", $ = "****") {
+        let args = [F2, M2, m3, r3];
+        return [
+          makeFn(args, (F3, M3, m4, r4) => F3 - PhyConst.G * M3 * m4 / r4 ** 2),
+          makeLatex(args, "@=\\dfrac{G@@}{@^2}", $, ":|||")
+        ];
+      },
+      FGMmRh2(F2 = "F", M2 = "M", m3 = "m", R2 = "R", h2 = "h", $ = "*****") {
+        let args = [F2, M2, m3, R2, h2];
+        return [
+          makeFn(args, (F3, M3, m4, R3, h3) => F3 - PhyConst.G * M3 * m4 / (R3 + h3) ** 2),
+          makeLatex(args, "@=\\dfrac{G@@}{(@+@)^2}", $, ":||::")
+        ];
+      },
+      gGMr2(g2 = "g", M2 = "M", r3 = "r", $ = "***") {
+        let args = [g2, M2, r3];
+        return [
+          makeFn(args, (g3, M3, r4) => g3 - PhyConst.G * M3 / r4 ** 2),
+          makeLatex(args, "@=\\dfrac{G@}{@^2}", $, ":||")
+        ];
+      },
+      gGMRh2(g2 = "g", M2 = "M", R2 = "R", h2 = "h", $ = "****") {
+        let args = [g2, M2, R2, h2];
+        return [
+          makeFn(args, (g3, M3, R3, h3) => g3 - PhyConst.G * M3 / (R3 + h3) ** 2),
+          makeLatex(args, "@=\\dfrac{G@}{(@+@)^2}", $, ":|::")
+        ];
+      },
+      Fmg(F2 = "F", m3 = "m", g2 = "g", $ = "***") {
+        let args = [F2, m3, g2];
+        return [
+          makeFn(args, (F3, m4, g3) => F3 - m4 * g3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      GMmr2v2r(M2 = "M", r3 = "r", v3 = "v", $ = "***") {
+        let args = [M2, r3, v3];
+        let [_M, _r, _v] = $;
+        $ = [_M, _r, _v, _r].join("");
+        return [
+          makeFn(args, (M3, r4, v4) => PhyConst.G * M3 / r4 / r4 - v4 * v4 / r4),
+          makeLatex([M2, r3, v3, r3], "\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}", $, "|||:")
+        ];
+      },
+      GMmr2r\u03C92(M2 = "M", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [M2, r3, \u03C9];
+        let [_M, _r, _\u03C9] = $;
+        $ = [_M, _r, _r, _\u03C9].join("");
+        return [
+          makeFn(args, (M3, r4, \u03C92) => PhyConst.G * M3 / r4 / r4 - r4 * \u03C92 * \u03C92),
+          makeLatex([M2, r3, r3, \u03C9], "\\dfrac{G@m}{@^2}=m@@^2", $, "||||")
+        ];
+      }
+    };
   };
   globalThis.PhyEq = new PhyEqCls();
+
+  // ../packages/fate/lib/poker.js
+  var poker_exports = {};
+  __export(poker_exports, {
+    bool: () => bool2,
+    he: () => he,
+    integer: () => integer,
+    prime: () => prime,
+    real: () => real,
+    she: () => she
+  });
+
+  // ../packages/fate/lib/support.js
+  function isPrime(num2) {
+    if (!Number.isInteger(num2))
+      return false;
+    if (num2 <= 1)
+      return false;
+    if (num2 === 2)
+      return true;
+    if (num2 % 2 === 0)
+      return false;
+    for (let i2 = 3; i2 <= Math.sqrt(num2) + 1; i2 = i2 + 2) {
+      if (num2 % i2 === 0)
+        return false;
+    }
+    return true;
+  }
+  function primes(max) {
+    let arr = [];
+    for (let i2 = 2; i2 <= max; i2++) {
+      if (isPrime(i2))
+        arr.push(i2);
+    }
+    return arr;
+  }
+  function rndInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  function randomIndex(array2) {
+    return rndInt(0, array2.length - 1);
+  }
+  function draw(array2) {
+    let i2 = randomIndex(array2);
+    return array2[i2];
+  }
+
+  // ../packages/fate/lib/poker.js
+  function error2(msg) {
+    const e5 = new Error(msg);
+    e5.name = "PokerError";
+    return e5;
+  }
+  function integer(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    if (min > max)
+      throw error2("min must be less than max!");
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  function real(min, max) {
+    if (min > max)
+      throw error2("min must be less than max!");
+    return Math.random() * (max - min) + min;
+  }
+  function prime(min, max) {
+    if (min > max)
+      throw error2("min must be less than max!");
+    let ps = primes(max).filter(($) => $ >= min);
+    return draw(ps);
+  }
+  function he() {
+    return draw(["Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William"]);
+  }
+  function she() {
+    return draw(["Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe"]);
+  }
+  function bool2(trueChance = 0.5) {
+    return real(0, 1) < trueChance;
+  }
+
+  // ../packages/fate/lib/dice.js
+  function error3(msg) {
+    const e5 = new Error(msg);
+    e5.name = "DiceError";
+    return e5;
+  }
+  var Dice = class {
+    constructor(func) {
+      this.TRIAL = 1e4;
+      this.shields = [];
+      this.uniques = [];
+      this.distincts = [];
+      this.coherents = [];
+      this.func = func;
+    }
+    shield(predicate) {
+      this.shields.push(predicate);
+      return this;
+    }
+    forbid(...items) {
+      for (let item of items)
+        this.shield(($) => JSON.stringify($) !== JSON.stringify(item));
+      return this;
+    }
+    unique(mapper = ($) => $) {
+      let map = ($) => JSON.stringify(mapper($));
+      this.uniques.push(map);
+      return this;
+    }
+    distinct(equality) {
+      this.distincts.push(equality);
+      return this;
+    }
+    coherent(predicate) {
+      this.coherents.push(predicate);
+      return this;
+    }
+    roll() {
+      let counter = 0;
+      while (true) {
+        counter++;
+        if (counter > this.TRIAL) {
+          throw error3("No items can satisfy predicate after " + this.TRIAL + " trials!");
+        }
+        let item = this.func();
+        if (this.shields.every(($) => $(item)))
+          return item;
+      }
+    }
+    rolls(count) {
+      let counter = 0;
+      const genRandomCohort = () => {
+        let arr = [];
+        let mappeds = [];
+        for (let i2 = 0; i2 < this.uniques.length; i2++) {
+          mappeds.push([]);
+        }
+        const pushMap = (itemMap) => {
+          mappeds.forEach((mapped, i2) => mapped.push(itemMap[i2]));
+        };
+        const mapInclude = (itemMap) => {
+          return mappeds.some((mapped, i2) => mapped.includes(itemMap[i2]));
+        };
+        const someEqual = (item) => {
+          return this.distincts.some((equal2) => arr.some(($) => equal2($, item)));
+        };
+        while (arr.length < count) {
+          counter++;
+          if (counter > this.TRIAL) {
+            throw error3("rolls count is likely too large for sample set");
+          }
+          let item = this.roll();
+          let map = this.uniques.map(($) => $(item));
+          if (mapInclude(map))
+            continue;
+          if (someEqual(item))
+            continue;
+          arr.push(item);
+          pushMap(map);
+        }
+        return arr;
+      };
+      const isCoherent = (cohort) => {
+        return this.coherents.every(($) => $(cohort));
+      };
+      while (true) {
+        let cohort = genRandomCohort();
+        if (isCoherent(cohort))
+          return cohort;
+      }
+    }
+  };
+  function dice(func) {
+    return new Dice(func);
+  }
 
   // src/Math/Code/Random.ts
   var Host8 = class {
     static RndN(min, max) {
-      return poker.integer(min, max);
+      return poker_exports.integer(min, max);
     }
     static RndNs(min, max, n2 = 10) {
       n2 = Math.min(Math.floor(max - min + 1), n2);
       return dice(() => RndN(min, max)).unique().rolls(n2);
     }
     static RndR(min, max) {
-      return poker.real(min, max);
+      return poker_exports.real(min, max);
     }
     static RndRs(min, max, n2 = 10) {
       return dice(() => RndR(min, max)).unique().rolls(n2);
@@ -20806,7 +20978,7 @@
       return list(1, -1).draw();
     }
     static RndT() {
-      return poker.bool();
+      return poker_exports.bool();
     }
     static RndZ(min, max) {
       return RndN(min, max) * RndU();
@@ -20816,7 +20988,7 @@
       return dice(() => RndN(min, max)).unique().rolls(n2).map((x2) => x2 * RndU());
     }
     static RndP(max) {
-      return poker.prime(2, max);
+      return poker_exports.prime(2, max);
     }
     static RndOdd(min, max) {
       min = Math.ceil((min + 1) / 2);
@@ -21251,15 +21423,15 @@
         let nonzero = str3.split("").filter((_) => _ !== "0").length;
         for (let d2 of str3.split("")) {
           if (d2 === "0") {
-            let go = poker.bool(0.1);
+            let go = poker_exports.bool(0.1);
             s3.push(go ? toList(digits).draw() : "0");
           } else {
-            let go = poker.bool(1 / (nonzero + 2));
+            let go = poker_exports.bool(1 / (nonzero + 2));
             s3.push(go ? shake(d2) : d2);
           }
         }
         let T2 = s3.join("");
-        if (poker.bool(0.2))
+        if (poker_exports.bool(0.2))
           T2 += "0";
         return T2;
       }
@@ -21364,10 +21536,10 @@
       return [...toList(items).uniqueDeep().sample(n2)];
     }
     static RndHe() {
-      return poker.he();
+      return poker_exports.he();
     }
     static RndShe() {
-      return poker.she();
+      return poker_exports.she();
     }
     static RndLetters() {
       return RndPick(["a", "b", "c"], ["h", "k", "l"], ["m", "n", "l"], ["p", "q", "r"], ["r", "s", "t"], ["u", "v", "w"], ["x", "y", "z"]);
@@ -23158,8 +23330,6 @@
     constructor(sym, name, range, unit, display) {
       this.sym = sym;
       this.name = name;
-      this.val = NaN;
-      this.subscript = "";
       unit ??= findUnit(name);
       unit ??= "";
       this.unit = parseUnit(unit);
@@ -23169,6 +23339,11 @@
         throw "[Variable] Range must have max > min";
       this.display = display ?? this.sym;
     }
+    val = NaN;
+    subscript = "";
+    unit;
+    range;
+    display;
     set(val) {
       this.val = val;
     }
@@ -23821,9 +23996,10 @@
     constructor(variables, equations) {
       this.variables = variables;
       this.equations = equations;
-      this.tree = {};
       this.fs = equations.map(($) => $.zeroFunc);
     }
+    fs;
+    tree = {};
     fit() {
       let vals = fit(this.fs, this.variables.rangeObj(), this.variables.valObj());
       this.variables.setVal(vals);
@@ -26159,24 +26335,15 @@
   var DEFAULT_POINT_RADIUS_PIXEL = 2;
   var DEFAULT_CUTTER_LENGTH_PIXEL = 5;
   var PenCls = class {
+    cv = new Canvas10();
     constructor() {
-      this.cv = new Canvas10();
-      this.range = new PenRange(this, this.cv);
-      this.size = new PenSize(this, this.cv);
-      this.set = new PenSettings(this, this.cv);
-      this.graph = new PenGraph(this, this.cv);
-      this.fill = new PenFill(this, this.cv);
-      this.shade = new PenShade(this, this.cv);
-      this.linProg = new PenLinProg(this, this.cv);
-      this.label = new PenLabel(this, this.cv);
-      this.axis = new PenAxis(this, this.cv);
-      this.tick = new PenTick(this, this.cv);
-      this.grid = new PenGrid(this, this.cv);
-      this.d3 = new PenD3(this, this.cv);
       this.range.set([-5, 5], [-5, 5]);
       this.size.set(1);
       this.set.reset();
     }
+    range = new PenRange(this, this.cv);
+    size = new PenSize(this, this.cv);
+    set = new PenSettings(this, this.cv);
     plot(func, tStart, tEnd) {
       this.cv.plot(func, tStart, tEnd, 1e3);
     }
@@ -26186,6 +26353,7 @@
       this.cv.plot(func, tStart, tEnd, 1e3);
       this.cv.restore();
     }
+    graph = new PenGraph(this, this.cv);
     point(position, label) {
       this.cv.disc(position, DEFAULT_POINT_RADIUS_PIXEL);
       if (label !== void 0)
@@ -26307,6 +26475,9 @@
       this.polygon(...points);
       this.polyshade(...points);
     }
+    fill = new PenFill(this, this.cv);
+    shade = new PenShade(this, this.cv);
+    linProg = new PenLinProg(this, this.cv);
     angle(A2, O2, B2, label, arc = 1, radius = -1) {
       if (radius < 0)
         radius = 15 + this.cv.getAngleAllowance(A2, O2, B2, 40, 1.5);
@@ -26340,6 +26511,11 @@
     write(point, text) {
       this.cv.write(text, point);
     }
+    label = new PenLabel(this, this.cv);
+    axis = new PenAxis(this, this.cv);
+    tick = new PenTick(this, this.cv);
+    grid = new PenGrid(this, this.cv);
+    d3 = new PenD3(this, this.cv);
     background(url) {
       this.cv.backgroundURL = url;
     }
@@ -26362,6 +26538,7 @@
 
   // src/Pen/AutoPen.ts
   var AutoPenCls = class {
+    pen;
     constructor() {
       this.pen = new Pen();
     }
@@ -26370,8 +26547,8 @@
     }
     PrimeFactorization({ numbers: numbers2 }) {
       function lowestFactor(arr) {
-        const primes = [2, 3, 5, 7, 11, 13, 17, 19];
-        for (let p3 of primes) {
+        const primes2 = [2, 3, 5, 7, 11, 13, 17, 19];
+        for (let p3 of primes2) {
           if (HCF(...arr) % p3 === 0)
             return p3;
         }
@@ -27318,6 +27495,7 @@
 
   // src/Pen/PhyPen.ts
   var PhyPenCls = class {
+    pen;
     constructor() {
       this.pen = new Pen();
     }
@@ -27548,6 +27726,7 @@
 
   // src/Soil/tool/html.ts
   var QuestionHTML = class {
+    body;
     constructor(html = "") {
       this.body = new DOMParser().parseFromString(html, "text/html").getElementsByTagName("body")[0];
     }
@@ -28139,8 +28318,6 @@
       this.sol = sol;
       this.ans = ans;
       this.shuffle = shuffle2;
-      this.perm = [];
-      this.valid = false;
       this.Qn = new QuestionHTML(qn);
       if (!this.Qn.ul)
         return;
@@ -28148,6 +28325,9 @@
         return;
       this.valid = true;
     }
+    perm = [];
+    valid = false;
+    Qn;
     AreOptionsDuplicated() {
       return this.Qn.isLiDuplicated();
     }
@@ -28281,61 +28461,61 @@
       this.X = X2;
       this.Y = Y2;
       this.Z = Z2;
-      this.variables = [
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "o",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "u",
-        "v",
-        "w",
-        "x",
-        "y",
-        "z",
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z"
-      ];
     }
+    variables = [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z"
+    ];
     update(other) {
       for (let key of this.variables) {
         if (key in other)
@@ -28374,8 +28554,8 @@
   var Timer = class {
     constructor(limit) {
       this.limit = limit;
-      this.start = Date.now();
     }
+    start = Date.now();
     elapsed() {
       return (Date.now() - this.start) / 1e3;
     }
@@ -28388,9 +28568,7 @@
     }
   };
   var ErrorLogger = class {
-    constructor() {
-      this.pile = [];
-    }
+    pile = [];
     add(e5) {
       let err2 = toError(e5);
       this.pile.push("[" + err2.name + "] " + err2.message);
@@ -28415,15 +28593,15 @@
   var Soil = class {
     constructor(gene) {
       this.gene = gene;
-      this.qn = "";
-      this.sol = "";
-      this.dict = new Dict();
-      this.config = new Config();
-      this.counter = 0;
-      this.timer = new Timer(10);
-      this.logger = new ErrorLogger();
       this.reset();
     }
+    qn = "";
+    sol = "";
+    dict = new Dict();
+    config = new Config();
+    counter = 0;
+    timer = new Timer(10);
+    logger = new ErrorLogger();
     reset() {
       this.qn = this.gene.qn;
       this.sol = this.gene.sol;

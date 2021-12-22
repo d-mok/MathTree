@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import { poker, dice } from 'fate'
 
 
 @exposeAll()

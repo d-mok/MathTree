@@ -122,12 +122,10 @@ declare module "Core/Ink/index" {
     export function printLabeledValue(obj: LabeledValue, order?: number, isAngle?: boolean): string;
 }
 declare module "Core/index" {
-    import { poker as $poker, dice as $dice, cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'sapphire-js';
+    import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'sapphire-js';
     import * as $Owl from "Core/Owl/index";
     import * as $Ink from "Core/Ink/index";
     global {
-        var poker: typeof $poker;
-        var dice: typeof $dice;
         var cal: typeof $cal;
         var data: typeof $data;
         var list: typeof $list;
@@ -429,13 +427,15 @@ declare module "Math/index" {
     import './should.ts';
     import "Math/Builder/index";
 }
-declare class CustomErrorCls extends Error {
-    constructor(name: string, message: string);
+declare module "Math/should" {
+    global {
+        var CustomError: any;
+        var toError: any;
+        var MathError: any;
+        var Should: (condition: boolean, msg: string) => asserts condition;
+    }
+    export {};
 }
-declare function CustomError(name: string, message: string): CustomErrorCls;
-declare function toError(e: unknown): Error;
-declare function MathError(message: string): CustomErrorCls;
-declare function Should(condition: boolean, msg?: string): asserts condition;
 declare module "Math/type" {
     import { MonomialCls } from "Math/Algebra/PolynomialClass";
     global {
@@ -3224,19 +3224,6 @@ declare module "Math/Code/Vector3D" {
         var Extrude: typeof Host.Extrude;
         var Projector: typeof Host.Projector;
         var Projector3D: typeof Host.Projector3D;
-    }
-}
-declare module "Math/Code/aaa" {
-    class Host {
-        static aaaaaaaaaa(): void;
-    }
-    global {
-        var aaaaaaaaaa: typeof Host.aaaaaaaaaa;
-        var aaaaaaaaaa: typeof Host.aaaaaaaaaa;
-        var aaaaaaaaaa: typeof Host.aaaaaaaaaa;
-        var aaaaaaaaaa: typeof Host.aaaaaaaaaa;
-        var aaaaaaaaaa: typeof Host.aaaaaaaaaa;
-        var aaaaaaaaaa: typeof Host.aaaaaaaaaa;
     }
 }
 declare module "Pen/modules/range" {

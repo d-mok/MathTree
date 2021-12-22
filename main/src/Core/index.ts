@@ -1,6 +1,4 @@
 import {
-    poker as $poker,
-    dice as $dice,
     cal as $cal,
     data as $data,
     list as $list,
@@ -28,8 +26,6 @@ import {
 } from 'sapphire-js'
 
 
-globalThis.poker = $poker
-globalThis.dice = $dice
 globalThis.cal = $cal
 globalThis.data = $data
 globalThis.list = $list
@@ -72,8 +68,6 @@ globalThis.ink = $Ink
 
 
 declare global {
-    var poker: typeof $poker
-    var dice: typeof $dice
     var cal: typeof $cal
     var data: typeof $data
     var list: typeof $list
