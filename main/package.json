@@ -13,11 +13,13 @@
     "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./src/Math",
     "jest_soil": "jest ./src/Soil -debug",
     "typedoc": "typedoc --out ../typedoc ./src/Math ./src/Pen",
-    "buildonly": "vite build"
+    "esbuild": "esbuild src/index.ts --bundle --outfile=out.js"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "@types/katex": "^0.11.0",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.14.7",
     "jest": "^27.3.1",
     "jest-extended": "^1.1.0",
     "jest-matcher-deep-close-to": "^3.0.2",
@@ -26,9 +28,7 @@
     "typedoc": "^0.22.9",
     "typescript": "^4.4.4",
     "webpack": "^5.64.2",
-    "webpack-cli": "^4.9.1",
-    "vite": "^2.7.2",
-    "cross-env": "^7.0.3"
+    "webpack-cli": "^4.9.1"
   },
   "dependencies": {
     "contract": "file:../packages/contract",

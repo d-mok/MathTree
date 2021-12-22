@@ -1,7 +1,6 @@
 import {
     poker as $poker,
     dice as $dice,
-    contract as $contract,
     cal as $cal,
     data as $data,
     list as $list,
@@ -31,7 +30,6 @@ import {
 
 globalThis.poker = $poker
 globalThis.dice = $dice
-globalThis.contract = $contract
 globalThis.cal = $cal
 globalThis.data = $data
 globalThis.list = $list
@@ -76,7 +74,6 @@ globalThis.ink = $Ink
 declare global {
     var poker: typeof $poker
     var dice: typeof $dice
-    var contract: typeof $contract
     var cal: typeof $cal
     var data: typeof $data
     var list: typeof $list

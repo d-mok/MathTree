@@ -1,4 +1,4 @@
-import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
 
 
 @exposeAll()
@@ -85,7 +85,7 @@ class Host {
         let AreDistant = function (...points: Point2D[]): boolean {
             return toShape2D(points).distances().min() >= distance
         }
-        return contract(AreDistant).sign([owl.point2D])
+        return check(AreDistant, [owl.point2D])
     }
 
 
@@ -102,7 +102,7 @@ class Host {
         let areOblique = function (...slopes: number[]): boolean {
             return toList(slopes).pairs().every(([a, b]) => IntersectAngle(a, b) >= minAngle)
         }
-        return contract(areOblique).sign([owl.num])
+        return check(areOblique, [owl.num])
     }
 
 

@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
     entry: './src/index.ts',
@@ -9,6 +9,16 @@ module.exports = {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/,
+            },
+            {
+                test: /\.m?js/,
+                type: "javascript/auto",
+            },
+            {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false,
+                },
             },
         ],
     },
@@ -22,5 +32,5 @@ module.exports = {
     optimization: {
         minimize: false
     }
-};
+}
 

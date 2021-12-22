@@ -8,8 +8,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random integer in [min, max] inclusive.
+     * a random integer in [min, max] inclusive.
      * ```
      * RndN(2,5) // may return 2, 3, 4 or 5
      * ```
@@ -20,8 +19,7 @@ class Host {
     }
 
     /**
-     * @category Random
-     * @return an array of n unique random integer in [min, max] inclusive.
+     * an array of n unique random integer in [min, max] inclusive.
      * ```
      * RndNs(2,8,3) // may return [5,3,7]
      * ```
@@ -34,8 +32,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random real number in [min, max] inclusive
+     * a random real number in [min, max] inclusive
      * ```
      * RndR(1,2) // may return 1.242574363
      * ```
@@ -47,8 +44,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return an array of n unique random real number in [min, max] inclusive.
+     * an array of n unique random real number in [min, max] inclusive.
      * ```
      * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
      * ```
@@ -61,8 +57,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
+     * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
      * ```
      * RndQ(9,[2,9]) // may return 7/2
      * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
@@ -85,8 +80,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return an array of n unique random fractions (non-integer) .
+     * an array of n unique random fractions (non-integer) .
      * ```
      * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
      * ```
@@ -101,8 +95,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return 1 or -1
+     * 1 or -1
      * ```
      * RndU() // may return 1 or -1
      * ```
@@ -113,8 +106,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return true or false.
+     * true or false.
      * ```
      * RndT() // may return true or false
      * ```
@@ -127,8 +119,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random integer in [min, max] or [-max, -min] inclusive.
+     * a random integer in [min, max] or [-max, -min] inclusive.
      * ```
      * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
      * ```
@@ -142,9 +133,8 @@ class Host {
 
 
     /**
-     * @category Random
      * @param n - default to 10
-     * @return an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
+     * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
      * ```
      * RndZs(2,8,3) // may return [5,-3,7]
      * ```
@@ -160,8 +150,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random prime number less than or equal to max.
+     * a random prime number less than or equal to max.
      * ```
      * RndP(10) // may return 2, 3, 5 or 7
      * ```
@@ -176,8 +165,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random odd integer in [min, max] inclusive
+     * a random odd integer in [min, max] inclusive
      * ```
      * RndOdd(3,8) // return 3, 5 or 7
      * ```
@@ -192,8 +180,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random even integer in [min, max] inclusive
+     * a random even integer in [min, max] inclusive
      * ```
      * RndEven(3,8) // return 4, 6 or 8
      * ```
@@ -208,8 +195,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return an array of random polynomial coefficients
+     * an array of random polynomial coefficients
      * ```
      * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
      * ```
@@ -225,8 +211,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return an array of a Pyth Triple
+     * an array of a Pyth Triple
      * ```
      * RndPyth(10) // may return [3,4,5]
      * ```
@@ -249,8 +234,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a point within given range, x and y are distinct and non-zero
+     * a point within given range, x and y are distinct and non-zero
      * ```
      * RndPoint([1,4],[10,14]) // may return [2,12]
      * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
@@ -274,8 +258,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return n points within given range, no horizontal / vertical / collinear
+     * n points within given range, no horizontal / vertical / collinear
      * ```
      * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
      * ```
@@ -291,8 +274,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return n angles in [0,360] at least cyclic separated by separation
+     * n angles in [0,360] at least cyclic separated by separation
      * ```
      * RndAngles(3,50) // may return [30,90,200]
      * ```
@@ -309,8 +291,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return `n` points on a unit circle at least cyclic separated by separation
+     * `n` points on a unit circle at least cyclic separated by separation
      * ```
      * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
      * ```
@@ -323,8 +304,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return n vertices of a convex polygon generated by rounding a cyclic polygon
+     * n vertices of a convex polygon generated by rounding a cyclic polygon
      * ```
      * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
      * ```
@@ -343,8 +323,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return n integers from [min, max], must be uni-moded
+     * n integers from [min, max], must be uni-moded
      * ```
      * RndData(10,15,5) // may return [11,11,12,13,15]
      * ```
@@ -359,8 +338,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return 3 points forming a triangle, with min angle and length
+     * 3 points forming a triangle, with min angle and length
      * ```
      * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
      * ```
@@ -422,8 +400,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
+     * an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
      * ```
      * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
      * ```
@@ -463,8 +440,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
+     * an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
      * ```
      * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
      * ```
@@ -503,8 +479,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
+     * a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
      * ```
      * RndPointPolar()
      * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
@@ -520,8 +495,7 @@ class Host {
 
 
     /**
-     * @category Random
-     * @return a random ratio group in [min, max] inclusive.
+     * a random ratio group in [min, max] inclusive.
      * ```
      * RndRatio(2,9,3) // may return [3,7,5]
      * ```

@@ -37,7 +37,7 @@ export function evaluate(code: string, context: Context) {
         o, p, q, r, s, t, u, v, w, x, y, z,
         A, B, C, D, E, F, G, H, I, J, K, L, M, N,
         O, P, Q, R, S, T, U, V, W, X, Y, Z
-    } = context.dict;
+    } = context.dict
     let sections: section[] = context.sections
     let answer: string = context.answer
     let options: Partial<Dict> = context.options
@@ -88,7 +88,7 @@ function htmlDecode(str: string) {
             '&#39;': "'",
             '&quot;': '"'
         }[tag] || tag)
-    );
+    )
 }
 
 
@@ -103,7 +103,7 @@ export function evalInline(code: string, dict: Dict) {
         o, p, q, r, s, t, u, v, w, x, y, z,
         A, B, C, D, E, F, G, H, I, J, K, L, M, N,
         O, P, Q, R, S, T, U, V, W, X, Y, Z
-    } = dict;
+    } = dict
 
     // execute
     try {

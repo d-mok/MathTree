@@ -1,5 +1,5 @@
 
-import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import { checkIt, inspectIt, captureAll, exposeAll,check } from 'contract'
 
 
 @exposeAll()
@@ -191,7 +191,7 @@ class Host {
             let y_new = z + depth * y * sin(angle)
             return [x_new, y_new]
         }
-        return contract(projector).sign([owl.point3D])
+        return check(projector, [owl.point3D])
     }
 
 }
