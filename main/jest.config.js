@@ -6,8 +6,7 @@ module.exports = {
         },
     },
     // "setupFiles": ["./dist/dev/mathtree.js",],
-    setupFiles: ["./out.js"],
-    // setupFiles: ["./src/index.ts",],
+    setupFiles: ["./src/index.ts",],
     setupFilesAfterEnv: ["jest-extended/all", "./src/Math/Jest/JestExtend.ts"],
     transform: {
         "^.+\\.(ts|tsx)$": "ts-jest"

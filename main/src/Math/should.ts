@@ -2,7 +2,7 @@
 
 class CustomErrorCls extends Error {
     constructor(name: string, message: string) {
-        super(message);
+        super(message)
         this.name = name
     }
 }
@@ -41,3 +41,12 @@ function Should(condition: boolean, msg: string = "Should condition failed!"): a
 globalThis.Should = Should
 
 
+declare global {
+    var CustomError: any
+    var toError: any
+    var MathError: any
+    var Should: (condition: boolean, msg: string) => asserts condition
+}
+
+
+export { }
