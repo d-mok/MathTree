@@ -339,10 +339,10 @@
         randomIndex() {
           if (this.length === 0)
             return void 0;
-          function rndInt(min, max) {
+          function rndInt2(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
           }
-          return rndInt(0, this.length - 1);
+          return rndInt2(0, this.length - 1);
         }
         draw() {
           if (this.length === 0)
@@ -2932,7 +2932,7 @@
         return [s3 * product, square];
       }
       exports.toSurd = toSurd;
-      function isPrime(num2) {
+      function isPrime2(num2) {
         if (!Number.isInteger(num2))
           return false;
         if (num2 <= 1)
@@ -2947,21 +2947,21 @@
         }
         return true;
       }
-      exports.isPrime = isPrime;
-      function primes(max) {
+      exports.isPrime = isPrime2;
+      function primes2(max) {
         let arr = [];
         for (let i2 = 2; i2 <= max; i2++) {
-          if (isPrime(i2))
+          if (isPrime2(i2))
             arr.push(i2);
         }
         return arr;
       }
-      exports.primes = primes;
+      exports.primes = primes2;
       function primeFactors(num2) {
         let arr = [];
         let i2 = 2;
         while (num2 > 1) {
-          if (!isPrime(i2)) {
+          if (!isPrime2(i2)) {
             i2++;
             continue;
           }
@@ -3826,1017 +3826,6 @@
     }
   });
 
-  // node_modules/sapphire-js/lib/canvas/frame.js
-  var require_frame = __commonJS({
-    "node_modules/sapphire-js/lib/canvas/frame.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.Frame = exports.PEN_QUALITY = void 0;
-      exports.PEN_QUALITY = 3;
-      var Frame = class {
-        constructor() {
-          this.wPixel = 0;
-          this.hPixel = 0;
-          this.xmin = 0;
-          this.xmax = 0;
-          this.ymin = 0;
-          this.ymax = 0;
-          this.axisOffset = 5 * exports.PEN_QUALITY;
-        }
-        setSize(wPixel, hPixel) {
-          this.wPixel = wPixel;
-          this.hPixel = hPixel;
-        }
-        setXRange(xRange) {
-          [this.xmin, this.xmax] = xRange;
-        }
-        setYRange(yRange) {
-          [this.ymin, this.ymax] = yRange;
-        }
-        xWidth() {
-          return this.xmax - this.xmin;
-        }
-        yHeight() {
-          return this.ymax - this.ymin;
-        }
-        xUnit() {
-          return this.wPixel / this.xWidth();
-        }
-        yUnit() {
-          return this.hPixel / this.yHeight();
-        }
-        toPix(point2D2) {
-          const x2 = point2D2[0];
-          const y2 = point2D2[1];
-          const xPixel = (x2 - this.xmin) * this.xUnit();
-          const yPixel = (this.ymax - y2) * this.yUnit();
-          return [xPixel, yPixel];
-        }
-        toPixs(point2Ds2) {
-          return point2Ds2.map(($) => this.toPix($));
-        }
-        toCoord(pixel2D) {
-          const xPixel = pixel2D[0];
-          const yPixel = pixel2D[1];
-          const x2 = this.xmin + xPixel / this.xUnit();
-          const y2 = this.ymax - yPixel / this.yUnit();
-          return [x2, y2];
-        }
-        toCoords(pixel2Ds) {
-          return pixel2Ds.map(($) => this.toCoord($));
-        }
-        xTicks(interval2) {
-          return getTicks2(this.xmin, this.xmax, interval2);
-        }
-        yTicks(interval2) {
-          return getTicks2(this.ymin, this.ymax, interval2);
-        }
-        xRange() {
-          return [this.xmin, this.xmax];
-        }
-        yRange() {
-          return [this.ymin, this.ymax];
-        }
-        xCenter() {
-          return (this.xmin + this.xmax) / 2;
-        }
-        yCenter() {
-          return (this.ymin + this.ymax) / 2;
-        }
-        xyCenter() {
-          return [this.xCenter(), this.yCenter()];
-        }
-        xOffset() {
-          return this.axisOffset / this.yUnit();
-        }
-        yOffset() {
-          return this.axisOffset / this.xUnit();
-        }
-      };
-      exports.Frame = Frame;
-      function getTicks2(min, max, interval2, includeZero = false) {
-        const start = Math.floor(min / interval2) * interval2;
-        const arr = [];
-        for (let i2 = start; i2 <= max; i2 += interval2) {
-          i2 = parseFloat(i2.toPrecision(3));
-          if (i2 === min || i2 === max)
-            continue;
-          if (!includeZero && i2 === 0)
-            continue;
-          arr.push(i2);
-        }
-        return arr;
-      }
-    }
-  });
-
-  // node_modules/sapphire-js/lib/canvas/support.js
-  var require_support = __commonJS({
-    "node_modules/sapphire-js/lib/canvas/support.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.midPoint = exports.atan2 = exports.cos = exports.sin = exports.force2D = exports.IsReflex = exports.AnglePolar = void 0;
-      var vector2D_1 = require_vector2D();
-      var vector3D_1 = require_vector3D();
-      function AnglePolar2(A2, O2, B2) {
-        let a2 = (0, vector2D_1.vec2D)(O2, A2).argument();
-        let b2 = (0, vector2D_1.vec2D)(O2, B2).argument();
-        return a2 <= b2 ? b2 - a2 : 360 + b2 - a2;
-      }
-      exports.AnglePolar = AnglePolar2;
-      function IsReflex3(A2, O2, B2) {
-        return AnglePolar2(A2, O2, B2) > 180;
-      }
-      exports.IsReflex = IsReflex3;
-      function force2D(point, angle2, depth) {
-        if (point.length === 3) {
-          return (0, vector3D_1.vec3D)(point).projectTo2D(angle2, depth).toArray();
-        } else {
-          return point;
-        }
-      }
-      exports.force2D = force2D;
-      function sin3(degree) {
-        return Math.sin(degree / 180 * Math.PI);
-      }
-      exports.sin = sin3;
-      function cos3(degree) {
-        return Math.cos(degree / 180 * Math.PI);
-      }
-      exports.cos = cos3;
-      function atan2(dy, dx) {
-        return Math.atan2(dy, dx) * 180 / Math.PI;
-      }
-      exports.atan2 = atan2;
-      function midPoint(A2, B2) {
-        return [(A2[0] + B2[0]) / 2, (A2[1] + B2[1]) / 2];
-      }
-      exports.midPoint = midPoint;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/canvas/pencil.js
-  var require_pencil = __commonJS({
-    "node_modules/sapphire-js/lib/canvas/pencil.js"(exports) {
-      "use strict";
-      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o2, m3, k2, k22) {
-        if (k22 === void 0)
-          k22 = k2;
-        Object.defineProperty(o2, k22, { enumerable: true, get: function() {
-          return m3[k2];
-        } });
-      } : function(o2, m3, k2, k22) {
-        if (k22 === void 0)
-          k22 = k2;
-        o2[k22] = m3[k2];
-      });
-      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o2, v3) {
-        Object.defineProperty(o2, "default", { enumerable: true, value: v3 });
-      } : function(o2, v3) {
-        o2["default"] = v3;
-      });
-      var __importStar = exports && exports.__importStar || function(mod) {
-        if (mod && mod.__esModule)
-          return mod;
-        var result2 = {};
-        if (mod != null) {
-          for (var k2 in mod)
-            if (k2 !== "default" && Object.prototype.hasOwnProperty.call(mod, k2))
-              __createBinding(result2, mod, k2);
-        }
-        __setModuleDefault(result2, mod);
-        return result2;
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.Pencil = void 0;
-      var frame_1 = require_frame();
-      var support_1 = require_support();
-      var cal2 = __importStar(require_cal());
-      var list_1 = require_list();
-      var shape2D_1 = require_shape2D();
-      var vector2D_1 = require_vector2D();
-      var REM_PIXEL3 = parseFloat(getComputedStyle(document.documentElement).fontSize);
-      var SIZE_SCALE = 10;
-      var DEFAULT_SHADE_ALPHA = 0.1;
-      var DEFAULT_AXIS_LABEL_OFFSET_PIXEL = 15;
-      var DEFAULT_XAXIS_MARK_OFFSET_PIXEL = 15;
-      var DEFAULT_YAXIS_MARK_OFFSET_PIXEL = 10;
-      var DEFAULT_AXIS_TICK_LENGTH_PIXEL = 5;
-      var Pencil = class {
-        constructor() {
-          this.canvas = document.createElement("canvas");
-          this.ctx = this.canvas.getContext("2d");
-          this.frame = new frame_1.Frame();
-          this.imgStore = null;
-          this.INIT_RANGE_ALREADY = false;
-          this.INIT_SIZE_ALREADY = false;
-          this.backgroundImgUrl = "";
-          this.$TEXT_SIZE = 1;
-          this.$TEXT_DIR = 0;
-          this.$TEXT_LATEX = false;
-          this.$LABEL_CENTER = 0;
-          this.$ANGLE_MODE = "normal";
-          this.$LENGTH_UNIT = void 0;
-          this.$3D_ANGLE = 60;
-          this.$3D_DEPTH = 0.5;
-          this.$BORDER = 0.2;
-          this.$LINE_LABEL = "auto";
-        }
-        initRange(xRange, yRange) {
-          this.frame.setXRange(xRange);
-          this.frame.setYRange(yRange);
-          this.INIT_RANGE_ALREADY = true;
-        }
-        initSize(width, height) {
-          if (!this.INIT_RANGE_ALREADY)
-            throw "[Pencil Error] Range must be set before Size";
-          const wPixel = width * SIZE_SCALE * REM_PIXEL3 * frame_1.PEN_QUALITY;
-          const hPixel = height * SIZE_SCALE * REM_PIXEL3 * frame_1.PEN_QUALITY;
-          let $3D_ANGLE = this.$3D_ANGLE;
-          let $3D_DEPTH = this.$3D_DEPTH;
-          let $BORDER = this.$BORDER;
-          this.canvas.width = wPixel;
-          this.canvas.height = hPixel;
-          this.frame.setSize(wPixel, hPixel);
-          this.setAllDefault();
-          this.setProjector3D($3D_ANGLE, $3D_DEPTH);
-          this.setBorder($BORDER);
-          this.INIT_SIZE_ALREADY = true;
-        }
-        initOuterBorder() {
-          if (!this.INIT_RANGE_ALREADY)
-            throw "[Pencil Error] Range must be set before setting range border";
-          if (!this.INIT_SIZE_ALREADY)
-            throw "[Pencil Error] Size must be set before setting range border";
-          const borderPix = this.$BORDER * SIZE_SCALE * REM_PIXEL3 * frame_1.PEN_QUALITY;
-          let [xmin, xmax] = this.frame.xRange();
-          let [ymin, ymax] = this.frame.yRange();
-          const wPixel = this.frame.wPixel;
-          const hPixel = this.frame.hPixel;
-          let borderXUnit = (xmax - xmin) * borderPix / wPixel;
-          let borderYUnit = (ymax - ymin) * borderPix / hPixel;
-          xmin -= borderXUnit;
-          xmax += borderXUnit;
-          ymin -= borderYUnit;
-          ymax += borderYUnit;
-          this.initRange([xmin, xmax], [ymin, ymax]);
-          const width = wPixel / SIZE_SCALE / REM_PIXEL3 / frame_1.PEN_QUALITY;
-          const height = hPixel / SIZE_SCALE / REM_PIXEL3 / frame_1.PEN_QUALITY;
-          this.initSize(width + 2 * this.$BORDER, height + 2 * this.$BORDER);
-        }
-        pj(point) {
-          return (0, support_1.force2D)(point, this.$3D_ANGLE, this.$3D_DEPTH);
-        }
-        pjs(points) {
-          return points.map(($) => this.pj($));
-        }
-        setWeight(weight = 1) {
-          this.ctx.lineWidth = weight * frame_1.PEN_QUALITY;
-        }
-        setStrokeColor(color = "black") {
-          this.ctx.strokeStyle = color;
-        }
-        setFillColor(color = "black") {
-          this.ctx.fillStyle = color;
-        }
-        setColor(color = "black") {
-          this.setStrokeColor(color);
-          this.setFillColor(color);
-        }
-        setAlpha(opaque = 1) {
-          this.ctx.globalAlpha = opaque;
-        }
-        setDash(segments = []) {
-          if (Array.isArray(segments))
-            this.ctx.setLineDash(segments.map((x2) => x2 * frame_1.PEN_QUALITY));
-          if (typeof segments === "number")
-            this.setDash([segments, segments]);
-          if (typeof segments === "boolean")
-            this.setDash(segments ? [5, 5] : []);
-        }
-        setTextAlign(align = "center") {
-          this.ctx.textAlign = align;
-        }
-        setTextBaseline(baseline = "middle") {
-          this.ctx.textBaseline = baseline;
-        }
-        setTextSize(size = 1) {
-          this.$TEXT_SIZE = size;
-          size = Math.round(size * REM_PIXEL3 * frame_1.PEN_QUALITY);
-          this.ctx.font = this.ctx.font.replace(/\d+px/g, size + "px");
-        }
-        setTextItalic(italic = false) {
-          if (italic) {
-            if (!this.ctx.font.includes("italic"))
-              this.ctx.font = "italic " + this.ctx.font;
-          } else {
-            this.ctx.font = this.ctx.font.replace("italic ", "");
-          }
-        }
-        setTextDir(angle2 = 0) {
-          this.$TEXT_DIR = angle2;
-        }
-        setTextLatex(on = false) {
-          this.$TEXT_LATEX = on;
-        }
-        setLabelCenter(...centers) {
-          if (centers.length === 0) {
-            this.$LABEL_CENTER = this.frame.xyCenter();
-            return;
-          }
-          if (centers[0] === true) {
-            this.$LABEL_CENTER = this.frame.xyCenter();
-            return;
-          }
-          if (typeof centers[0] === "number") {
-            this.$LABEL_CENTER = centers[0];
-            return;
-          }
-          if (Array.isArray(centers[0])) {
-            let cens = centers;
-            this.$LABEL_CENTER = (0, shape2D_1.toShape2D)(this.pjs(cens)).mean().toArray();
-          }
-        }
-        setLengthUnit(text = void 0) {
-          this.$LENGTH_UNIT = text;
-        }
-        setAngleMode(mode = "normal") {
-          this.$ANGLE_MODE = mode;
-        }
-        setProjector3D(angle2 = 60, depth = 0.5) {
-          this.$3D_ANGLE = angle2;
-          this.$3D_DEPTH = depth;
-        }
-        setBorder(border = 0.2) {
-          this.$BORDER = border;
-        }
-        setLineLabel(setting = "auto") {
-          this.$LINE_LABEL = setting;
-        }
-        setAllDefault() {
-          this.setWeight();
-          this.setStrokeColor();
-          this.setFillColor();
-          this.setAlpha();
-          this.setDash();
-          this.setTextAlign();
-          this.setTextBaseline();
-          this.ctx.font = "normal 10px Times New Roman";
-          this.setTextSize();
-          this.setTextItalic();
-          this.setTextDir();
-          this.setTextLatex();
-          this.setLabelCenter();
-          this.setLengthUnit();
-          this.setAngleMode();
-          this.setProjector3D();
-          this.setBorder();
-          this.setLineLabel();
-        }
-        moveTo(point) {
-          let pt = this.pj(point);
-          let pixels = this.frame.toPix(pt);
-          let [x2, y2] = pixels;
-          this.ctx.beginPath();
-          this.ctx.moveTo(x2, y2);
-        }
-        lineTo(point) {
-          let pt = this.pj(point);
-          let pixels = this.frame.toPix(pt);
-          let [x2, y2] = pixels;
-          this.ctx.lineTo(x2, y2);
-        }
-        path(points) {
-          if (points.length === 0) {
-            this.ctx.beginPath();
-            return;
-          }
-          let pts = this.pjs(points);
-          this.moveTo(pts[0]);
-          for (let i2 = 1; i2 < pts.length; i2++) {
-            this.lineTo(pts[i2]);
-          }
-        }
-        drawStroke(points) {
-          this.path(points);
-          this.ctx.stroke();
-        }
-        drawShape(points) {
-          this.path(points);
-          this.ctx.closePath();
-          this.ctx.stroke();
-        }
-        drawFill(points) {
-          this.path(points);
-          this.ctx.closePath();
-          this.ctx.fill();
-        }
-        drawShade(points) {
-          let alpha = this.ctx.globalAlpha;
-          this.setAlpha(DEFAULT_SHADE_ALPHA);
-          this.drawFill(points);
-          this.setAlpha(alpha);
-        }
-        pathArc(center, radiusPixel, angleRange) {
-          let cen = this.pj(center);
-          let [x2, y2] = this.frame.toPix(cen);
-          let [q1, q2] = angleRange;
-          q1 = -q1 / 180 * Math.PI;
-          q2 = -q2 / 180 * Math.PI;
-          this.ctx.beginPath();
-          this.ctx.arc(x2, y2, radiusPixel * frame_1.PEN_QUALITY, q1, q2, true);
-        }
-        drawArc(center, radiusPixel, angleRange) {
-          this.pathArc(center, radiusPixel, angleRange);
-          this.ctx.stroke();
-        }
-        drawSegment(center, radiusPixel, angleRange) {
-          this.pathArc(center, radiusPixel, angleRange);
-          this.ctx.fill();
-        }
-        drawCircle(center, radiusPixel) {
-          this.drawArc(center, radiusPixel, [0, 360]);
-        }
-        drawDot(center, radiusPixel) {
-          this.pathArc(center, radiusPixel, [0, 360]);
-          this.ctx.fill();
-        }
-        pathSectoroid(center, pStart, pEnd, vertices) {
-          let v1 = (0, vector2D_1.vec2D)(center, pStart);
-          let v22 = (0, vector2D_1.vec2D)(center, pEnd);
-          let r3 = (0, vector2D_1.vec2D)(center, pStart).magnitude();
-          let q1 = v1.argument();
-          let q2 = v22.argument();
-          if (q2 < q1)
-            q2 += 360;
-          let points = cal2.traceCircle(center, r3, [q1, q2]);
-          this.path([pStart, ...points, pEnd, ...vertices]);
-        }
-        drawStrokeSectoroid(center, pStart, pEnd, vertices) {
-          this.pathSectoroid(center, pStart, pEnd, vertices);
-          this.ctx.stroke();
-        }
-        drawFillSectoroid(center, pStart, pEnd, vertices) {
-          this.pathSectoroid(center, pStart, pEnd, vertices);
-          this.ctx.closePath();
-          this.ctx.fill();
-        }
-        drawShadeSectoroid(center, pStart, pEnd, vertices) {
-          let alpha = this.ctx.globalAlpha;
-          this.setAlpha(DEFAULT_SHADE_ALPHA);
-          this.drawFillSectoroid(center, pStart, pEnd, vertices);
-          this.setAlpha(alpha);
-        }
-        drawArrowHead(startPoint, endPoint, { arrowLength, arrowWidth, arrowOffset } = {}) {
-          let p1 = this.pj(startPoint);
-          let p22 = this.pj(endPoint);
-          const [x0, y0] = this.frame.toPix(p1);
-          const [x1, y1] = this.frame.toPix(p22);
-          const dx = x1 - x0;
-          const dy = y1 - y0;
-          const angle2 = Math.atan2(dy, dx);
-          const length = Math.sqrt(dx * dx + dy * dy);
-          arrowLength ?? (arrowLength = 10);
-          arrowWidth ?? (arrowWidth = arrowLength / 2);
-          arrowOffset ?? (arrowOffset = 0);
-          arrowLength *= frame_1.PEN_QUALITY;
-          arrowWidth *= frame_1.PEN_QUALITY;
-          arrowOffset *= frame_1.PEN_QUALITY;
-          this.ctx.save();
-          this.ctx.translate(x0, y0);
-          this.ctx.rotate(angle2);
-          this.ctx.beginPath();
-          this.ctx.moveTo(length + arrowOffset - arrowLength, -arrowWidth);
-          this.ctx.lineTo(length + arrowOffset, 0);
-          this.ctx.lineTo(length + arrowOffset - arrowLength, arrowWidth);
-          this.ctx.stroke();
-          this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-          this.ctx.restore();
-        }
-        drawAngle(point1, vertex, point2, radiusPixel, arcCount, spacePixel) {
-          let [A2, O2, B2] = this.pjs([point1, vertex, point2]);
-          let mode = this.$ANGLE_MODE;
-          if (mode === "normal" && (0, support_1.IsReflex)(A2, O2, B2))
-            [A2, B2] = [B2, A2];
-          if (mode === "reflex" && !(0, support_1.IsReflex)(A2, O2, B2))
-            [A2, B2] = [B2, A2];
-          let [pixelA, pixelO, pixelB] = this.frame.toPixs([A2, O2, B2]);
-          let a1 = (0, support_1.atan2)(-(pixelA[1] - pixelO[1]), pixelA[0] - pixelO[0]);
-          let a2 = (0, support_1.atan2)(-(pixelB[1] - pixelO[1]), pixelB[0] - pixelO[0]);
-          const mark = (position) => {
-            this.drawArc(O2, radiusPixel + position * spacePixel, [a1, a2]);
-          };
-          if (arcCount % 2 === 1) {
-            mark(0);
-            for (let i2 = 1; i2 <= (arcCount - 1) / 2; i2++) {
-              mark(i2);
-              mark(-i2);
-            }
-          } else {
-            for (let i2 = 1; i2 <= arcCount / 2; i2++) {
-              mark(i2 - 0.5);
-              mark(-(i2 - 0.5));
-            }
-          }
-        }
-        drawRightAngle(point1, vertex, point2, sizePixel) {
-          let pts = this.pjs([point1, vertex, point2]);
-          let [A2, O2, B2] = this.frame.toPixs(pts);
-          let size = sizePixel * frame_1.PEN_QUALITY;
-          let angleA = (0, support_1.atan2)(A2[1] - O2[1], A2[0] - O2[0]);
-          let angleB = (0, support_1.atan2)(B2[1] - O2[1], B2[0] - O2[0]);
-          let P2 = [O2[0] + size * (0, support_1.cos)(angleA), O2[1] + size * (0, support_1.sin)(angleA)];
-          let Q2 = [O2[0] + size * (0, support_1.cos)(angleB), O2[1] + size * (0, support_1.sin)(angleB)];
-          let R2 = [
-            O2[0] + size * (0, support_1.cos)(angleA) + size * (0, support_1.cos)(angleB),
-            O2[1] + size * (0, support_1.sin)(angleA) + size * (0, support_1.sin)(angleB)
-          ];
-          let draw = (A3, B3) => {
-            this.ctx.beginPath();
-            this.ctx.moveTo(A3[0], A3[1]);
-            this.ctx.lineTo(B3[0], B3[1]);
-            this.ctx.stroke();
-          };
-          draw(P2, R2);
-          draw(Q2, R2);
-        }
-        drawParallelMark(startPoint, endPoint, sizePixel, tickCount, spacePixel) {
-          let A2 = this.pj(startPoint);
-          let B2 = this.pj(endPoint);
-          let M2 = (0, support_1.midPoint)(A2, B2);
-          sizePixel ?? (sizePixel = 4);
-          spacePixel ?? (spacePixel = 6);
-          for (let i2 = 0; i2 < tickCount; i2++) {
-            this.drawArrowHead(A2, M2, {
-              arrowLength: sizePixel * 2,
-              arrowWidth: sizePixel,
-              arrowOffset: i2 * spacePixel
-            });
-          }
-        }
-        drawTick(startPoint, tickPoint, lengthPixel, offsetPixel) {
-          let p1 = this.pj(startPoint);
-          let p22 = this.pj(tickPoint);
-          const [x0, y0] = this.frame.toPix(p1);
-          const [x1, y1] = this.frame.toPix(p22);
-          const dx = x1 - x0;
-          const dy = y1 - y0;
-          const angle2 = Math.atan2(dy, dx);
-          const length = Math.sqrt(dx * dx + dy * dy);
-          lengthPixel ?? (lengthPixel = 5);
-          offsetPixel ?? (offsetPixel = 0);
-          lengthPixel *= frame_1.PEN_QUALITY;
-          offsetPixel *= frame_1.PEN_QUALITY;
-          this.ctx.save();
-          this.ctx.translate(x0, y0);
-          this.ctx.rotate(angle2);
-          this.ctx.beginPath();
-          this.ctx.moveTo(length + offsetPixel, -lengthPixel);
-          this.ctx.lineTo(length + offsetPixel, lengthPixel);
-          this.ctx.stroke();
-          this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-          this.ctx.restore();
-        }
-        drawTickVertical(position, lengthPixel) {
-          let p3 = this.pj(position);
-          const [x2, y2] = this.frame.toPix(p3);
-          lengthPixel *= frame_1.PEN_QUALITY;
-          this.ctx.beginPath();
-          this.ctx.moveTo(x2, y2 - lengthPixel);
-          this.ctx.lineTo(x2, y2 + lengthPixel);
-          this.ctx.stroke();
-        }
-        drawTickHorizontal(position, lengthPixel) {
-          let p3 = this.pj(position);
-          const [x2, y2] = this.frame.toPix(p3);
-          lengthPixel *= frame_1.PEN_QUALITY;
-          this.ctx.beginPath();
-          this.ctx.moveTo(x2 - lengthPixel, y2);
-          this.ctx.lineTo(x2 + lengthPixel, y2);
-          this.ctx.stroke();
-        }
-        drawEqualMark(startPoint, endPoint, lengthPixel, tickCount, spacePixel) {
-          let A2 = this.pj(startPoint);
-          let B2 = this.pj(endPoint);
-          let M2 = (0, support_1.midPoint)(A2, B2);
-          lengthPixel ?? (lengthPixel = 5);
-          spacePixel ?? (spacePixel = 3);
-          const mark = (position) => {
-            this.drawTick(A2, M2, lengthPixel, position * spacePixel);
-          };
-          if (tickCount % 2 === 1) {
-            mark(0);
-            for (let i2 = 1; i2 <= (tickCount - 1) / 2; i2++) {
-              mark(i2);
-              mark(-i2);
-            }
-          } else {
-            for (let i2 = 1; i2 <= tickCount / 2; i2++) {
-              mark(i2 - 0.5);
-              mark(-(i2 - 0.5));
-            }
-          }
-        }
-        drawCompass(center, xSizePixel, ySizePixel, arrowLength, arrowWidth) {
-          let cen = this.pj(center);
-          let [x2, y2] = this.frame.toPix(cen);
-          xSizePixel ?? (xSizePixel = 17);
-          ySizePixel ?? (ySizePixel = 20);
-          arrowLength ?? (arrowLength = 7);
-          arrowWidth ?? (arrowWidth = arrowLength / 2);
-          xSizePixel *= frame_1.PEN_QUALITY;
-          ySizePixel *= frame_1.PEN_QUALITY;
-          arrowLength *= frame_1.PEN_QUALITY;
-          arrowWidth *= frame_1.PEN_QUALITY;
-          this.ctx.save();
-          this.ctx.translate(x2, y2);
-          this.ctx.beginPath();
-          this.ctx.moveTo(0, -ySizePixel);
-          this.ctx.lineTo(0, ySizePixel);
-          this.ctx.moveTo(-arrowWidth, -ySizePixel + arrowLength);
-          this.ctx.lineTo(0, -ySizePixel);
-          this.ctx.lineTo(arrowWidth, -ySizePixel + arrowLength);
-          this.ctx.stroke();
-          this.ctx.moveTo(-xSizePixel, 0);
-          this.ctx.lineTo(xSizePixel, 0);
-          this.ctx.stroke();
-          this.ctx.restore();
-        }
-        drawPlot(func, tStart, tEnd, dots = 1e3) {
-          let points = cal2.trace(func, [tStart, tEnd], dots);
-          function outOfRange(num2) {
-            return num2.some(($) => Math.abs($) > 1e4);
-          }
-          let filteredPoints = points.map((pt) => {
-            let [x2, y2] = pt;
-            if (!Number.isFinite(x2))
-              return null;
-            if (!Number.isFinite(y2))
-              return null;
-            if (outOfRange(pt))
-              return null;
-            return pt;
-          });
-          let segments = (0, list_1.toList)(filteredPoints).split(null);
-          for (let seg of segments) {
-            if (seg.length === 0)
-              continue;
-            this.drawStroke(seg);
-          }
-        }
-        plainTextAtPixel(text, position) {
-          text = String(text);
-          if (text === "")
-            return;
-          let [x2, y2] = position;
-          let ANGLE = -this.$TEXT_DIR * Math.PI / 180;
-          this.ctx.save();
-          this.ctx.translate(x2, y2);
-          this.ctx.rotate(ANGLE);
-          this.ctx.fillText(text, 0, 0);
-          this.ctx.restore();
-        }
-        latexAtPixel(text, position) {
-          text = String(text);
-          if (text === "")
-            return;
-          let [x2, y2] = position;
-          let ANGLE = -this.$TEXT_DIR * Math.PI / 180;
-          let size = Math.round(this.$TEXT_SIZE * REM_PIXEL3 * frame_1.PEN_QUALITY);
-          let color = this.ctx.fillStyle;
-          text = `\\color{${color}} ` + text;
-          this.ctx.save();
-          const widget = new CanvasLatex.default(text, { displayMode: true, debugBounds: false, baseSize: size });
-          const bounds = widget.getBounds();
-          if (bounds !== null) {
-            this.ctx.translate(x2, y2);
-            this.ctx.rotate(ANGLE);
-            let xTune = 2 - bounds.width / 2 - bounds.x;
-            if (this.ctx.textAlign === "left")
-              xTune = 2 - bounds.x;
-            if (this.ctx.textAlign === "right")
-              xTune = 2 - bounds.width - bounds.x;
-            if (this.ctx.textAlign === "center")
-              xTune = 2 - bounds.width / 2 - bounds.x;
-            let yTune = -bounds.y / 2;
-            if (this.ctx.textBaseline === "top")
-              yTune = -bounds.y;
-            if (this.ctx.textBaseline === "bottom")
-              yTune = -bounds.y - bounds.height;
-            if (this.ctx.textBaseline === "middle")
-              yTune = -bounds.y - bounds.height / 2;
-            this.ctx.translate(xTune, yTune);
-            widget.draw(this.ctx);
-          } else {
-            console.error("[CanvasLatex] bounds === null! This is an unexpected error.");
-          }
-          this.ctx.restore();
-        }
-        drawText(text, position, xOffset, yOffset) {
-          text = String(text);
-          if (text === "")
-            return;
-          let pos = this.pj(position);
-          let [x2, y2] = this.frame.toPix(pos);
-          x2 += xOffset * frame_1.PEN_QUALITY;
-          y2 -= yOffset * frame_1.PEN_QUALITY;
-          if (this.$TEXT_LATEX) {
-            this.latexAtPixel(text, [x2, y2]);
-          } else {
-            this.plainTextAtPixel(text, [x2, y2]);
-          }
-        }
-        getDirInPixel(pStart, pEnd) {
-          let [OPoint, APoint] = this.pjs([pStart, pEnd]);
-          let [O2, A2] = this.frame.toPixs([OPoint, APoint]);
-          return (0, support_1.atan2)(-(A2[1] - O2[1]), A2[0] - O2[0]);
-        }
-        getDirInPixelByAngle(point1, vertex, point2) {
-          let [A2, O2, B2] = this.pjs([point1, vertex, point2]);
-          let mode = this.$ANGLE_MODE;
-          if (mode === "normal" && (0, support_1.IsReflex)(A2, O2, B2))
-            [A2, B2] = [B2, A2];
-          if (mode === "reflex" && !(0, support_1.IsReflex)(A2, O2, B2))
-            [A2, B2] = [B2, A2];
-          let [pixelA, pixelO, pixelB] = this.frame.toPixs([A2, O2, B2]);
-          let a1 = (0, support_1.atan2)(-(pixelA[1] - pixelO[1]), pixelA[0] - pixelO[0]);
-          let a2 = (0, support_1.atan2)(-(pixelB[1] - pixelO[1]), pixelB[0] - pixelO[0]);
-          if (a2 < a1)
-            a2 = a2 + 360;
-          return (a1 + a2) / 2;
-        }
-        getDirInPixelByLine(pStart, pEnd) {
-          let mode = this.$LINE_LABEL;
-          let left2 = this.getDirInPixel(pStart, pEnd) + 90;
-          let right = this.getDirInPixel(pStart, pEnd) - 90;
-          if (mode === "left")
-            return left2;
-          if (mode === "right")
-            return right;
-          if (mode === "auto") {
-            let cen = this.$LABEL_CENTER;
-            if (typeof cen === "number")
-              return right;
-            let p1 = this.pj(pStart);
-            let p22 = this.pj(pEnd);
-            let v3 = (0, vector2D_1.vec2D)(p1, p22);
-            let leftDistance = v3.rotate(90).add(p1).distanceWith(cen);
-            let rightDistance = v3.rotate(-90).add(p1).distanceWith(cen);
-            return leftDistance > rightDistance ? left2 : right;
-          }
-          console.warn("$LINE_LABEL must be 'left' | 'right' | 'auto'");
-          return right;
-        }
-        getLabelCenterDirInPixel(point) {
-          let pt = this.pj(point);
-          let center = this.$LABEL_CENTER;
-          if (typeof center === "number") {
-            return center;
-          } else {
-            if (center[0] === pt[0] && center[1] === pt[1])
-              return 0;
-            return this.getDirInPixel(center, pt);
-          }
-        }
-        getTextWidthInPixel(text) {
-          if (this.$TEXT_LATEX) {
-            let size = Math.round(this.$TEXT_SIZE * REM_PIXEL3 * frame_1.PEN_QUALITY);
-            let color = this.ctx.fillStyle;
-            text = `\\color{${color}} ` + text;
-            const widget = new CanvasLatex.default(text, { displayMode: true, debugBounds: false, baseSize: size });
-            const bounds = widget.getBounds();
-            if (bounds === null)
-              return 0;
-            return bounds.width / 2 / frame_1.PEN_QUALITY;
-          } else {
-            return this.ctx.measureText(text).width / 2 / frame_1.PEN_QUALITY;
-          }
-        }
-        getTextWithLengthUnit(text) {
-          text = String(text);
-          let unit = this.$LENGTH_UNIT;
-          if (unit === void 0)
-            return text;
-          if (this.$TEXT_LATEX) {
-            return text + `~\\text{${unit}}`;
-          } else {
-            return text + " " + unit;
-          }
-        }
-        drawLabel(text, position, direction, radiusPixel) {
-          direction ?? (direction = this.getLabelCenterDirInPixel(position));
-          let textWidth = this.getTextWidthInPixel(text);
-          let xOffset = (radiusPixel + textWidth - 5) * (0, support_1.cos)(direction);
-          let yOffset = radiusPixel * (0, support_1.sin)(direction);
-          this.drawText(text, position, xOffset, yOffset);
-        }
-        makePolarAngle(point1, vertex, point2) {
-          let [A2, O2, B2] = this.pjs([point1, vertex, point2]);
-          let mode = this.$ANGLE_MODE;
-          if (mode === "normal" && (0, support_1.IsReflex)(A2, O2, B2))
-            return [point2, vertex, point1];
-          if (mode === "reflex" && !(0, support_1.IsReflex)(A2, O2, B2))
-            return [point2, vertex, point1];
-          return [point1, vertex, point2];
-        }
-        getAngleInPixel(point1, vertex, point2) {
-          let [A2, O2, B2] = this.makePolarAngle(point1, vertex, point2);
-          let a2 = this.getDirInPixel(O2, A2);
-          let b2 = this.getDirInPixel(O2, B2);
-          return a2 <= b2 ? b2 - a2 : 360 + b2 - a2;
-        }
-        getSmallAngleExtraPixel(point1, vertex, point2, angleThreshold, pixelPerDegree) {
-          let angle2 = this.getAngleInPixel(point1, vertex, point2);
-          let angleUnderThreshold = Math.max(angleThreshold - angle2, 0);
-          return angleUnderThreshold * pixelPerDegree;
-        }
-        getCircleCorners(center, radius) {
-          let [h2, k2] = center;
-          let r3 = radius;
-          return [
-            [h2 + r3, k2 + r3],
-            [h2 + r3, k2 - r3],
-            [h2 - r3, k2 + r3],
-            [h2 - r3, k2 - r3]
-          ];
-        }
-        getSphereCorners(center, radius) {
-          let [a2, b2, c3] = center;
-          let r3 = radius;
-          return [
-            [a2 + r3, b2 + r3, c3 + r3],
-            [a2 + r3, b2 + r3, c3 - r3],
-            [a2 + r3, b2 - r3, c3 + r3],
-            [a2 + r3, b2 - r3, c3 - r3],
-            [a2 - r3, b2 + r3, c3 + r3],
-            [a2 - r3, b2 + r3, c3 - r3],
-            [a2 - r3, b2 - r3, c3 + r3],
-            [a2 - r3, b2 - r3, c3 - r3]
-          ];
-        }
-        drawXAxis() {
-          const [xmin, xmax] = this.frame.xRange();
-          this.drawStroke([[xmin, 0], [xmax, 0]]);
-          this.drawArrowHead([xmin, 0], [xmax, 0]);
-        }
-        drawXAxisLabel(text) {
-          text = String(text);
-          const [xmin, xmax] = this.frame.xRange();
-          this.ctx.save();
-          this.setTextAlign("right");
-          this.setTextBaseline("middle");
-          this.drawText(text, [xmax, 0], 0, DEFAULT_AXIS_LABEL_OFFSET_PIXEL);
-          this.ctx.restore();
-        }
-        drawYAxis() {
-          const [ymin, ymax] = this.frame.yRange();
-          this.drawStroke([[0, ymin], [0, ymax]]);
-          this.drawArrowHead([0, ymin], [0, ymax]);
-        }
-        drawYAxisLabel(text) {
-          text = String(text);
-          const [ymin, ymax] = this.frame.yRange();
-          this.ctx.save();
-          this.setTextAlign("left");
-          this.setTextBaseline("top");
-          this.drawText(text, [0, ymax], DEFAULT_AXIS_LABEL_OFFSET_PIXEL, 0);
-          this.ctx.restore();
-        }
-        drawXAxisTick(interval2) {
-          for (let x2 of this.frame.xTicks(interval2)) {
-            this.drawTickVertical([x2, 0], DEFAULT_AXIS_TICK_LENGTH_PIXEL);
-          }
-        }
-        drawYAxisTick(interval2) {
-          for (let y2 of this.frame.yTicks(interval2)) {
-            this.drawTickHorizontal([0, y2], DEFAULT_AXIS_TICK_LENGTH_PIXEL);
-          }
-        }
-        drawXAxisTickMark(interval2) {
-          this.ctx.save();
-          this.setTextItalic();
-          this.setTextAlign("center");
-          this.setTextBaseline("middle");
-          for (let x2 of this.frame.xTicks(interval2)) {
-            this.drawText(String(x2), [x2, 0], 0, -DEFAULT_XAXIS_MARK_OFFSET_PIXEL);
-          }
-          this.ctx.restore();
-        }
-        drawYAxisTickMark(interval2) {
-          this.ctx.save();
-          this.setTextItalic();
-          this.setTextAlign("right");
-          this.setTextBaseline("middle");
-          for (let y2 of this.frame.yTicks(interval2)) {
-            this.drawText(String(y2), [0, y2], -DEFAULT_YAXIS_MARK_OFFSET_PIXEL, 0);
-          }
-          this.ctx.restore();
-        }
-        drawXAxisGrid(interval2) {
-          this.ctx.save();
-          this.ctx.strokeStyle = "#d3d5db";
-          let [ymin, ymax] = this.frame.yRange();
-          const drawLine = (x2) => {
-            this.drawStroke([[x2, ymin], [x2, ymax]]);
-          };
-          drawLine(0);
-          for (let x2 of this.frame.xTicks(interval2)) {
-            drawLine(x2);
-          }
-          this.ctx.restore();
-        }
-        drawYAxisGrid(interval2) {
-          this.ctx.save();
-          this.ctx.strokeStyle = "#d3d5db";
-          let [xmin, xmax] = this.frame.xRange();
-          const drawLine = (y2) => {
-            this.drawStroke([[xmin, y2], [xmax, y2]]);
-          };
-          drawLine(0);
-          for (let y2 of this.frame.yTicks(interval2)) {
-            drawLine(y2);
-          }
-          this.ctx.restore();
-        }
-        setBackgroundImgUrl(url) {
-          this.backgroundImgUrl = url;
-        }
-        backgroundImageAttr() {
-          if (this.backgroundImgUrl.length === 0)
-            return "";
-          return ` style="background-image:url('${this.backgroundImgUrl}');background-size:100% 100%;" `;
-        }
-        toDataUrl(canvas = this.canvas) {
-          return canvas.toDataURL();
-        }
-        displayWidth(canvas = this.canvas) {
-          return Math.floor(canvas.width / frame_1.PEN_QUALITY);
-        }
-        displayHeight(canvas = this.canvas) {
-          return Math.floor(canvas.height / frame_1.PEN_QUALITY);
-        }
-        cloneCanvas(canvas = this.canvas) {
-          let oldCanvas = canvas;
-          let newCanvas = document.createElement("canvas");
-          let context2 = newCanvas.getContext("2d");
-          newCanvas.width = oldCanvas.width;
-          newCanvas.height = oldCanvas.height;
-          context2.drawImage(oldCanvas, 0, 0);
-          return newCanvas;
-        }
-        trimCanvas(canvas = this.canvas) {
-          function rowBlank2(imageData2, width2, y2) {
-            for (var x2 = 0; x2 < width2; ++x2) {
-              if (imageData2.data[y2 * width2 * 4 + x2 * 4 + 3] !== 0)
-                return false;
-            }
-            return true;
-          }
-          function columnBlank(imageData2, width2, x2, top2, bottom2) {
-            for (var y2 = top2; y2 < bottom2; ++y2) {
-              if (imageData2.data[y2 * width2 * 4 + x2 * 4 + 3] !== 0)
-                return false;
-            }
-            return true;
-          }
-          var ctx = canvas.getContext("2d");
-          var width = canvas.width;
-          var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          var top = 0, bottom = imageData.height, left2 = 0, right = imageData.width;
-          while (top < bottom && rowBlank2(imageData, width, top))
-            ++top;
-          while (bottom - 1 > top && rowBlank2(imageData, width, bottom - 1))
-            --bottom;
-          while (left2 < right && columnBlank(imageData, width, left2, top, bottom))
-            ++left2;
-          while (right - 1 > left2 && columnBlank(imageData, width, right - 1, top, bottom))
-            --right;
-          var trimmed = ctx.getImageData(left2, top, right - left2, bottom - top);
-          canvas.width = trimmed.width;
-          canvas.height = trimmed.height;
-          ctx.putImageData(trimmed, 0, 0);
-        }
-        clearCanvas() {
-          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        }
-        saveCanvasImg() {
-          this.imgStore = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-        }
-        restoreCanvasImg() {
-          if (this.imgStore !== null)
-            this.ctx.putImageData(this.imgStore, 0, 0);
-        }
-        save() {
-          this.ctx.save();
-        }
-        restore() {
-          this.ctx.restore();
-        }
-      };
-      exports.Pencil = Pencil;
-    }
-  });
-
   // node_modules/sapphire-js/lib/linear_program/inequal.js
   var require_inequal = __commonJS({
     "node_modules/sapphire-js/lib/linear_program/inequal.js"(exports) {
@@ -5260,328 +4249,6 @@
     }
   });
 
-  // node_modules/sapphire-js/lib/utils/blood.js
-  var require_blood = __commonJS({
-    "node_modules/sapphire-js/lib/utils/blood.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.Blood = void 0;
-      var Blood = class extends Error {
-        constructor(name, message) {
-          super(message);
-          this.name = name + "Error";
-        }
-      };
-      exports.Blood = Blood;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/utils/contract.js
-  var require_contract = __commonJS({
-    "node_modules/sapphire-js/lib/utils/contract.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.contract = void 0;
-      var blood_1 = require_blood();
-      var ContractErrorFactory = class {
-        constructor(host) {
-          this.name = host.name;
-          this.signature = this.getSignature(host);
-        }
-        getSignature(func) {
-          const fnStr = func.toString();
-          return fnStr.slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")"));
-        }
-        ArgBlood(argIndex, argValue, predicate) {
-          let i2 = String(argIndex);
-          let v3 = JSON.stringify(argValue);
-          let p3 = predicate.name || predicate.toString();
-          return new blood_1.Blood("Contract", "(" + this.name + ")\narg(" + this.signature + ")[" + i2 + "] = " + v3 + "\nviolate: " + p3);
-        }
-        ArgGrpBlood(argValues, predicate) {
-          let a2 = argValues.map((_) => JSON.stringify(_)).join(",");
-          let p3 = predicate.name || predicate.toString();
-          return new blood_1.Blood("Contract", "(" + this.name + ")\narg(" + this.signature + ") = (" + a2 + ")\nviolate: " + p3);
-        }
-        ReturnBlood(argValues, returnValue, predicate) {
-          let v3 = returnValue;
-          let a2 = argValues.map((_) => JSON.stringify(_)).join(",");
-          let p3 = predicate.name || predicate.toString();
-          return new blood_1.Blood("Contract", "(" + this.name + ")\nfrom arg(" + this.signature + ") = (" + a2 + ")\n=> return = " + v3 + "\nviolate: " + p3);
-        }
-        CatchBlood(argValues, e5) {
-          let a2 = argValues.map((_) => JSON.stringify(_)).join(",");
-          if (typeof e5 === "string") {
-            return new blood_1.Blood("Contract", "(" + this.name + ")\nfrom arg(" + this.signature + ") = (" + a2 + ")\nthrow:\n" + e5);
-          }
-          if (typeof e5 === "object" && e5 !== null && "name" in e5 && "message" in e5) {
-            let { name, message } = e5;
-            return new blood_1.Blood("Contract", "(" + this.name + ")\nfrom arg(" + this.signature + ") = (" + a2 + ")\nthrow:\n" + name + "\nwith message:\n" + message);
-          }
-          return new blood_1.Blood("Contract", "(" + this.name + ")\nfrom arg(" + this.signature + ") = (" + a2 + ")\nthrow:\n" + JSON.stringify(e5));
-        }
-      };
-      var Contract = class {
-        constructor(host) {
-          this.host = host;
-          this.Err = new ContractErrorFactory(host);
-        }
-        validateArg(f3, rules) {
-          let policy = shieldArrays(rules);
-          function rule(index) {
-            const n2 = policy.length - 1;
-            return policy[Math.min(index, n2)];
-          }
-          const newFunc = (...args) => {
-            for (let i2 = 0; i2 < args.length; i2++) {
-              const arg = args[i2];
-              for (let pd of rule(i2)) {
-                if (!pd(arg))
-                  throw this.Err.ArgBlood(i2, arg, pd);
-              }
-            }
-            return f3(...args);
-          };
-          return newFunc;
-        }
-        validateArgGrp(f3, argRule) {
-          let r3 = shieldArray(argRule);
-          const newFunc = (...args) => {
-            for (let pd of r3) {
-              if (!pd(...args))
-                throw this.Err.ArgGrpBlood(args, pd);
-            }
-            return f3(...args);
-          };
-          return newFunc;
-        }
-        validateReturn(f3, rule) {
-          let r3 = shieldArray(rule);
-          const newFunc = (...args) => {
-            const result2 = f3(...args);
-            for (let pd of r3) {
-              if (!pd(result2))
-                throw this.Err.ReturnBlood(args, result2, pd);
-            }
-            return result2;
-          };
-          return newFunc;
-        }
-        validateCatch(f3) {
-          const newFunc = (...args) => {
-            try {
-              return f3(...args);
-            } catch (e5) {
-              throw this.Err.CatchBlood(args, e5);
-            }
-          };
-          return newFunc;
-        }
-        sign(arg, ret) {
-          return this.seal({ arg, ret });
-        }
-        seal({ arg, args, ret }) {
-          let f3 = this.host;
-          f3 = this.validateCatch(f3);
-          if (ret !== void 0)
-            f3 = this.validateReturn(f3, ret);
-          if (args !== void 0)
-            f3 = this.validateArgGrp(f3, args);
-          if (arg !== void 0 && arg.length > 0)
-            f3 = this.validateArg(f3, arg);
-          return f3;
-        }
-      };
-      function shieldArray(item) {
-        return Array.isArray(item) ? item : [item];
-      }
-      function shieldArrays(items) {
-        return items.map(shieldArray);
-      }
-      function contract(f3) {
-        return new Contract(f3);
-      }
-      exports.contract = contract;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/utils/poker.js
-  var require_poker = __commonJS({
-    "node_modules/sapphire-js/lib/utils/poker.js"(exports) {
-      "use strict";
-      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o2, m3, k2, k22) {
-        if (k22 === void 0)
-          k22 = k2;
-        Object.defineProperty(o2, k22, { enumerable: true, get: function() {
-          return m3[k2];
-        } });
-      } : function(o2, m3, k2, k22) {
-        if (k22 === void 0)
-          k22 = k2;
-        o2[k22] = m3[k2];
-      });
-      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o2, v3) {
-        Object.defineProperty(o2, "default", { enumerable: true, value: v3 });
-      } : function(o2, v3) {
-        o2["default"] = v3;
-      });
-      var __importStar = exports && exports.__importStar || function(mod) {
-        if (mod && mod.__esModule)
-          return mod;
-        var result2 = {};
-        if (mod != null) {
-          for (var k2 in mod)
-            if (k2 !== "default" && Object.prototype.hasOwnProperty.call(mod, k2))
-              __createBinding(result2, mod, k2);
-        }
-        __setModuleDefault(result2, mod);
-        return result2;
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.bool = exports.she = exports.he = exports.prime = exports.real = exports.integer = void 0;
-      var blood_1 = require_blood();
-      var cal2 = __importStar(require_cal());
-      var list_1 = require_list();
-      function integer(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        if (min > max)
-          throw new blood_1.Blood("Poker", "min must be less than max!");
-        return Math.floor(Math.random() * (max - min + 1) + min);
-      }
-      exports.integer = integer;
-      function real(min, max) {
-        if (min > max)
-          throw new blood_1.Blood("Poker", "min must be less than max!");
-        return Math.random() * (max - min) + min;
-      }
-      exports.real = real;
-      function prime(min, max) {
-        if (min > max)
-          throw new blood_1.Blood("Poker", "min must be less than max!");
-        let primes = (0, list_1.list)(...cal2.primes(max));
-        primes.sieve(($) => $ >= min);
-        return primes.draw();
-      }
-      exports.prime = prime;
-      function he() {
-        const boys = (0, list_1.list)("Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William");
-        return boys.draw();
-      }
-      exports.he = he;
-      function she() {
-        const girls = (0, list_1.list)("Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe");
-        return girls.draw();
-      }
-      exports.she = she;
-      function bool2(trueChance = 0.5) {
-        return real(0, 1) < trueChance;
-      }
-      exports.bool = bool2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/utils/dice.js
-  var require_dice = __commonJS({
-    "node_modules/sapphire-js/lib/utils/dice.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.dice = exports.Dice = void 0;
-      var blood_1 = require_blood();
-      var Dice = class {
-        constructor(func) {
-          this.TRIAL = 1e4;
-          this.shields = [];
-          this.uniques = [];
-          this.distincts = [];
-          this.coherents = [];
-          this.func = func;
-        }
-        shield(predicate) {
-          this.shields.push(predicate);
-          return this;
-        }
-        forbid(...items) {
-          for (let item of items)
-            this.shield(($) => JSON.stringify($) !== JSON.stringify(item));
-          return this;
-        }
-        unique(mapper = ($) => $) {
-          let map = ($) => JSON.stringify(mapper($));
-          this.uniques.push(map);
-          return this;
-        }
-        distinct(equality) {
-          this.distincts.push(equality);
-          return this;
-        }
-        coherent(predicate) {
-          this.coherents.push(predicate);
-          return this;
-        }
-        roll() {
-          let counter = 0;
-          while (true) {
-            counter++;
-            if (counter > this.TRIAL) {
-              throw new blood_1.Blood("Dice", "No items can satisfy predicate after " + this.TRIAL + " trials!");
-            }
-            let item = this.func();
-            if (this.shields.every(($) => $(item)))
-              return item;
-          }
-        }
-        rolls(count) {
-          let counter = 0;
-          const genRandomCohort = () => {
-            let arr = [];
-            let mappeds = [];
-            for (let i2 = 0; i2 < this.uniques.length; i2++) {
-              mappeds.push([]);
-            }
-            const pushMap = (itemMap) => {
-              mappeds.forEach((mapped, i2) => mapped.push(itemMap[i2]));
-            };
-            const mapInclude = (itemMap) => {
-              return mappeds.some((mapped, i2) => mapped.includes(itemMap[i2]));
-            };
-            const someEqual = (item) => {
-              return this.distincts.some((equal2) => arr.some(($) => equal2($, item)));
-            };
-            while (arr.length < count) {
-              counter++;
-              if (counter > this.TRIAL) {
-                throw new blood_1.Blood("Dice", "rolls count is likely too large for sample set");
-              }
-              let item = this.roll();
-              let map = this.uniques.map(($) => $(item));
-              if (mapInclude(map))
-                continue;
-              if (someEqual(item))
-                continue;
-              arr.push(item);
-              pushMap(map);
-            }
-            return arr;
-          };
-          const isCoherent = (cohort) => {
-            return this.coherents.every(($) => $(cohort));
-          };
-          while (true) {
-            let cohort = genRandomCohort();
-            if (isCoherent(cohort))
-              return cohort;
-          }
-        }
-      };
-      exports.Dice = Dice;
-      function dice2(func) {
-        return new Dice(func);
-      }
-      exports.dice = dice2;
-    }
-  });
-
   // node_modules/sapphire-js/lib/index.js
   var require_lib = __commonJS({
     "node_modules/sapphire-js/lib/index.js"(exports) {
@@ -5615,7 +4282,7 @@
         return result2;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
-      exports.dice = exports.poker = exports.contract = exports.lin = exports.cal = exports.rein = exports.Rein = exports.reins = exports.toReins = exports.Reins = exports.optimizer = exports.Optimizer = exports.ineq = exports.Pencil = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
+      exports.lin = exports.cal = exports.rein = exports.Rein = exports.reins = exports.toReins = exports.Reins = exports.optimizer = exports.Optimizer = exports.ineq = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
       var data_1 = require_data();
       Object.defineProperty(exports, "Data", { enumerable: true, get: function() {
         return data_1.Data;
@@ -5716,10 +4383,6 @@
       Object.defineProperty(exports, "vec3D", { enumerable: true, get: function() {
         return vector3D_1.vec3D;
       } });
-      var pencil_1 = require_pencil();
-      Object.defineProperty(exports, "Pencil", { enumerable: true, get: function() {
-        return pencil_1.Pencil;
-      } });
       var inequal_1 = require_inequal();
       Object.defineProperty(exports, "ineq", { enumerable: true, get: function() {
         return inequal_1.ineq;
@@ -5752,15 +4415,6 @@
       var linear_1 = require_linear();
       Object.defineProperty(exports, "lin", { enumerable: true, get: function() {
         return linear_1.lin;
-      } });
-      var contract_1 = require_contract();
-      Object.defineProperty(exports, "contract", { enumerable: true, get: function() {
-        return contract_1.contract;
-      } });
-      exports.poker = __importStar(require_poker());
-      var dice_1 = require_dice();
-      Object.defineProperty(exports, "dice", { enumerable: true, get: function() {
-        return dice_1.dice;
       } });
     }
   });
@@ -5804,7 +4458,7 @@
           ;
           var ParseError = function ParseError2(message, token) {
             this.position = void 0;
-            var error2 = "KaTeX parse error: " + message;
+            var error4 = "KaTeX parse error: " + message;
             var start;
             var loc = token && token.loc;
             if (loc && loc.start <= loc.end) {
@@ -5812,9 +4466,9 @@
               start = loc.start;
               var end = loc.end;
               if (start === input.length) {
-                error2 += " at end of input: ";
+                error4 += " at end of input: ";
               } else {
-                error2 += " at position " + (start + 1) + ": ";
+                error4 += " at position " + (start + 1) + ": ";
               }
               var underlined = input.slice(start, end).replace(/[^]/g, "$&\u0332");
               var left2;
@@ -5829,9 +4483,9 @@
               } else {
                 right = input.slice(end);
               }
-              error2 += left2 + underlined + right;
+              error4 += left2 + underlined + right;
             }
-            var self2 = new Error(error2);
+            var self2 = new Error(error4);
             self2.name = "ParseError";
             self2.__proto__ = ParseError2.prototype;
             self2.position = start;
@@ -5959,7 +4613,7 @@
               if (typeof strict === "function") {
                 try {
                   strict = strict(errorCode, errorMsg, token);
-                } catch (error2) {
+                } catch (error4) {
                   strict = "error";
                 }
               }
@@ -18380,24 +17034,24 @@
                   if (superscript) {
                     throw new src_ParseError("Double superscript", lex);
                   }
-                  var prime = {
+                  var prime2 = {
                     type: "textord",
                     mode: this.mode,
                     text: "\\prime"
                   };
-                  var primes = [prime];
+                  var primes2 = [prime2];
                   this.consume();
                   while (this.fetch().text === "'") {
-                    primes.push(prime);
+                    primes2.push(prime2);
                     this.consume();
                   }
                   if (this.fetch().text === "^") {
-                    primes.push(this.handleSupSubscript("superscript"));
+                    primes2.push(this.handleSupSubscript("superscript"));
                   }
                   superscript = {
                     type: "ordgroup",
                     mode: this.mode,
-                    body: primes
+                    body: primes2
                   };
                 } else {
                   break;
@@ -18870,12 +17524,12 @@
             var settings = new Settings(options2);
             return src_parseTree(expression, settings);
           };
-          var renderError = function renderError2(error2, expression, options2) {
-            if (options2.throwOnError || !(error2 instanceof src_ParseError)) {
-              throw error2;
+          var renderError = function renderError2(error4, expression, options2) {
+            if (options2.throwOnError || !(error4 instanceof src_ParseError)) {
+              throw error4;
             }
             var node = buildCommon.makeSpan(["katex-error"], [new SymbolNode(expression)]);
-            node.setAttribute("title", error2.toString());
+            node.setAttribute("title", error4.toString());
             node.setAttribute("style", "color:" + options2.errorColor);
             return node;
           };
@@ -18884,8 +17538,8 @@
             try {
               var tree = src_parseTree(expression, settings);
               return buildTree(tree, expression, settings);
-            } catch (error2) {
-              return renderError(error2, expression, settings);
+            } catch (error4) {
+              return renderError(error4, expression, settings);
             }
           };
           var renderToHTMLTree = function renderToHTMLTree2(expression, options2) {
@@ -18893,8 +17547,8 @@
             try {
               var tree = src_parseTree(expression, settings);
               return buildHTMLTree(tree, expression, settings);
-            } catch (error2) {
-              return renderError(error2, expression, settings);
+            } catch (error4) {
+              return renderError(error4, expression, settings);
             }
           };
           var katex2 = {
@@ -19484,8 +18138,6 @@
   }
 
   // src/Core/index.ts
-  globalThis.poker = import_sapphire_js.poker;
-  globalThis.dice = import_sapphire_js.dice;
   globalThis.cal = import_sapphire_js.cal;
   globalThis.data = import_sapphire_js.data;
   globalThis.list = import_sapphire_js.list;
@@ -20582,208 +19234,382 @@
     return T2;
   }
   var PhyEqCls = class {
-    constructor() {
-      this.Motion = {
-        vuat(v3 = "v", u2 = "u", a2 = "a", t2 = "t", $ = "****") {
-          let args = [v3, u2, a2, t2];
-          return [
-            makeFn(args, (v4, u3, a3, t3) => v4 - u3 - a3 * t3),
-            makeLatex(args, "@=@+@@", $, "::||")
-          ];
-        },
-        vu2as(v3 = "v", u2 = "u", a2 = "a", s3 = "s", $ = "****") {
-          let args = [v3, u2, a2, s3];
-          return [
-            makeFn(args, (v4, u3, a3, s4) => v4 ** 2 - u3 ** 2 - 2 * a3 * s4),
-            makeLatex(args, "@^2=@^2+2@@", $, "||||")
-          ];
-        },
-        sutat2(s3 = "s", u2 = "u", t2 = "t", a2 = "a", $ = "****") {
-          let args = [s3, u2, t2, a2];
-          let [_s, _u, _t, _a] = $;
-          return [
-            makeFn(args, (s4, u3, t3, a3) => s4 - u3 * t3 - 0.5 * a3 * t3 * t3),
-            makeLatex([s3, u2, t2, a2, t2], "@=@@+\\dfrac{1}{2}@@^2", [_s, _u, _t, _a, _t].join(""), ":||||")
-          ];
-        },
-        suvt(s3 = "s", u2 = "u", v3 = "v", t2 = "t", $ = "****") {
-          let args = [s3, u2, v3, t2];
-          return [
-            makeFn(args, (s4, u3, v4, t3) => s4 - 0.5 * (u3 + v4) * t3),
-            makeLatex(args, "@=\\dfrac{1}{2}(@+@)@", $, ":::|")
-          ];
-        },
-        sat2(s3 = "s", a2 = "a", t2 = "t", $ = "***") {
-          let args = [s3, a2, t2];
-          return [
-            makeFn(args, (s4, a3, t3) => s4 - 0.5 * a3 * t3 * t3),
-            makeLatex(args, "@=\\dfrac{1}{2}@@^2", $, ":||")
-          ];
-        },
-        vat(v3 = "v", a2 = "a", t2 = "t", $ = "***") {
-          let args = [v3, a2, t2];
-          return [
-            makeFn(args, (v4, a3, t3) => v4 - a3 * t3),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        v2as(v3 = "v", a2 = "a", s3 = "s", $ = "***") {
-          let args = [v3, a2, s3];
-          return [
-            makeFn(args, (v4, a3, s4) => v4 ** 2 - 2 * a3 * s4),
-            makeLatex(args, "@^2=2@@", $, "|||")
-          ];
-        }
-      };
-      this.CircularMotion = {
-        svt(s3 = "s", v3 = "v", t2 = "t", $ = "***") {
-          let args = [s3, v3, t2];
-          return [
-            makeFn(args, (s4, v4, t3) => s4 - v4 * t3),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        \u03B8\u03C9t(\u03B8 = "\u03B8", \u03C9 = "\u03C9", t2 = "t", $ = "$$$") {
-          let args = [\u03B8, \u03C9, t2];
-          return [
-            makeFn(args, (\u03B82, \u03C92, t3) => \u03B82 - \u03C92 * t3),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        \u03C9T(\u03C9 = "\u03C9", T2 = "T", $ = "$$") {
-          let args = [\u03C9, T2];
-          return [
-            makeFn(args, (\u03C92, T3) => \u03C92 - 2 * Math.PI / T3),
-            makeLatex(args, "@=\\dfrac{2\u03C0}{@}", $, "::")
-          ];
-        },
-        sr\u03B8(s3 = "s", r3 = "r", \u03B8 = "\u03B8", $ = "**$") {
-          let args = [s3, r3, \u03B8];
-          return [
-            makeFn(args, (s4, r4, \u03B82) => s4 - r4 * \u03B82),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        vr\u03C9(v3 = "v", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-          let args = [v3, r3, \u03C9];
-          return [
-            makeFn(args, (v4, r4, \u03C92) => v4 - r4 * \u03C92),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        av\u03C9(a2 = "a", v3 = "v", \u03C9 = "\u03C9", $ = "***") {
-          let args = [a2, v3, \u03C9];
-          return [
-            makeFn(args, (a3, v4, \u03C92) => a3 - v4 * \u03C92),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        avr(a2 = "a", v3 = "v", r3 = "r", $ = "***") {
-          let args = [a2, v3, r3];
-          return [
-            makeFn(args, (a3, v4, r4) => a3 - v4 * v4 / r4),
-            makeLatex(args, "@=\\dfrac{@^2}{@}", $, ":|:")
-          ];
-        },
-        ar\u03C9(a2 = "a", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-          let args = [a2, r3, \u03C9];
-          return [
-            makeFn(args, (a3, r4, \u03C92) => a3 - r4 * \u03C92 * \u03C92),
-            makeLatex(args, "@=@@^2", $, ":||")
-          ];
-        },
-        Fmv\u03C9(F2 = "F", m3 = "m", v3 = "v", \u03C9 = "\u03C9", $ = "****") {
-          let args = [F2, m3, v3, \u03C9];
-          return [
-            makeFn(args, (F3, m4, v4, \u03C92) => F3 - m4 * v4 * \u03C92),
-            makeLatex(args, "@=@@@", $, ":|||")
-          ];
-        },
-        Fmvr(F2 = "F", m3 = "m", v3 = "v", r3 = "r", $ = "****") {
-          let args = [F2, m3, v3, r3];
-          return [
-            makeFn(args, (F3, m4, v4, r4) => F3 - m4 * v4 * v4 / r4),
-            makeLatex(args, "@=\\dfrac{@@^2}{@}", $, ":||:")
-          ];
-        },
-        Fmr\u03C9(F2 = "F", m3 = "m", r3 = "r", \u03C9 = "\u03C9", $ = "****") {
-          let args = [F2, m3, r3, \u03C9];
-          return [
-            makeFn(args, (F3, m4, r4, \u03C92) => F3 - m4 * r4 * \u03C92 * \u03C92),
-            makeLatex(args, "@=@@@^2", $, ":|||")
-          ];
-        }
-      };
-      this.Gravitation = {
-        FGMmr2(F2 = "F", M2 = "M", m3 = "m", r3 = "r", $ = "****") {
-          let args = [F2, M2, m3, r3];
-          return [
-            makeFn(args, (F3, M3, m4, r4) => F3 - PhyConst.G * M3 * m4 / r4 ** 2),
-            makeLatex(args, "@=\\dfrac{G@@}{@^2}", $, ":|||")
-          ];
-        },
-        FGMmRh2(F2 = "F", M2 = "M", m3 = "m", R2 = "R", h2 = "h", $ = "*****") {
-          let args = [F2, M2, m3, R2, h2];
-          return [
-            makeFn(args, (F3, M3, m4, R3, h3) => F3 - PhyConst.G * M3 * m4 / (R3 + h3) ** 2),
-            makeLatex(args, "@=\\dfrac{G@@}{(@+@)^2}", $, ":||::")
-          ];
-        },
-        gGMr2(g2 = "g", M2 = "M", r3 = "r", $ = "***") {
-          let args = [g2, M2, r3];
-          return [
-            makeFn(args, (g3, M3, r4) => g3 - PhyConst.G * M3 / r4 ** 2),
-            makeLatex(args, "@=\\dfrac{G@}{@^2}", $, ":||")
-          ];
-        },
-        gGMRh2(g2 = "g", M2 = "M", R2 = "R", h2 = "h", $ = "****") {
-          let args = [g2, M2, R2, h2];
-          return [
-            makeFn(args, (g3, M3, R3, h3) => g3 - PhyConst.G * M3 / (R3 + h3) ** 2),
-            makeLatex(args, "@=\\dfrac{G@}{(@+@)^2}", $, ":|::")
-          ];
-        },
-        Fmg(F2 = "F", m3 = "m", g2 = "g", $ = "***") {
-          let args = [F2, m3, g2];
-          return [
-            makeFn(args, (F3, m4, g3) => F3 - m4 * g3),
-            makeLatex(args, "@=@@", $, ":||")
-          ];
-        },
-        GMmr2v2r(M2 = "M", r3 = "r", v3 = "v", $ = "***") {
-          let args = [M2, r3, v3];
-          let [_M, _r, _v] = $;
-          $ = [_M, _r, _v, _r].join("");
-          return [
-            makeFn(args, (M3, r4, v4) => PhyConst.G * M3 / r4 / r4 - v4 * v4 / r4),
-            makeLatex([M2, r3, v3, r3], "\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}", $, "|||:")
-          ];
-        },
-        GMmr2r\u03C92(M2 = "M", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-          let args = [M2, r3, \u03C9];
-          let [_M, _r, _\u03C9] = $;
-          $ = [_M, _r, _r, _\u03C9].join("");
-          return [
-            makeFn(args, (M3, r4, \u03C92) => PhyConst.G * M3 / r4 / r4 - r4 * \u03C92 * \u03C92),
-            makeLatex([M2, r3, r3, \u03C9], "\\dfrac{G@m}{@^2}=m@@^2", $, "||||")
-          ];
-        }
-      };
-    }
+    Motion = {
+      vuat(v3 = "v", u2 = "u", a2 = "a", t2 = "t", $ = "****") {
+        let args = [v3, u2, a2, t2];
+        return [
+          makeFn(args, (v4, u3, a3, t3) => v4 - u3 - a3 * t3),
+          makeLatex(args, "@=@+@@", $, "::||")
+        ];
+      },
+      vu2as(v3 = "v", u2 = "u", a2 = "a", s3 = "s", $ = "****") {
+        let args = [v3, u2, a2, s3];
+        return [
+          makeFn(args, (v4, u3, a3, s4) => v4 ** 2 - u3 ** 2 - 2 * a3 * s4),
+          makeLatex(args, "@^2=@^2+2@@", $, "||||")
+        ];
+      },
+      sutat2(s3 = "s", u2 = "u", t2 = "t", a2 = "a", $ = "****") {
+        let args = [s3, u2, t2, a2];
+        let [_s, _u, _t, _a] = $;
+        return [
+          makeFn(args, (s4, u3, t3, a3) => s4 - u3 * t3 - 0.5 * a3 * t3 * t3),
+          makeLatex([s3, u2, t2, a2, t2], "@=@@+\\dfrac{1}{2}@@^2", [_s, _u, _t, _a, _t].join(""), ":||||")
+        ];
+      },
+      suvt(s3 = "s", u2 = "u", v3 = "v", t2 = "t", $ = "****") {
+        let args = [s3, u2, v3, t2];
+        return [
+          makeFn(args, (s4, u3, v4, t3) => s4 - 0.5 * (u3 + v4) * t3),
+          makeLatex(args, "@=\\dfrac{1}{2}(@+@)@", $, ":::|")
+        ];
+      },
+      sat2(s3 = "s", a2 = "a", t2 = "t", $ = "***") {
+        let args = [s3, a2, t2];
+        return [
+          makeFn(args, (s4, a3, t3) => s4 - 0.5 * a3 * t3 * t3),
+          makeLatex(args, "@=\\dfrac{1}{2}@@^2", $, ":||")
+        ];
+      },
+      vat(v3 = "v", a2 = "a", t2 = "t", $ = "***") {
+        let args = [v3, a2, t2];
+        return [
+          makeFn(args, (v4, a3, t3) => v4 - a3 * t3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      v2as(v3 = "v", a2 = "a", s3 = "s", $ = "***") {
+        let args = [v3, a2, s3];
+        return [
+          makeFn(args, (v4, a3, s4) => v4 ** 2 - 2 * a3 * s4),
+          makeLatex(args, "@^2=2@@", $, "|||")
+        ];
+      }
+    };
+    CircularMotion = {
+      svt(s3 = "s", v3 = "v", t2 = "t", $ = "***") {
+        let args = [s3, v3, t2];
+        return [
+          makeFn(args, (s4, v4, t3) => s4 - v4 * t3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      \u03B8\u03C9t(\u03B8 = "\u03B8", \u03C9 = "\u03C9", t2 = "t", $ = "$$$") {
+        let args = [\u03B8, \u03C9, t2];
+        return [
+          makeFn(args, (\u03B82, \u03C92, t3) => \u03B82 - \u03C92 * t3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      \u03C9T(\u03C9 = "\u03C9", T2 = "T", $ = "$$") {
+        let args = [\u03C9, T2];
+        return [
+          makeFn(args, (\u03C92, T3) => \u03C92 - 2 * Math.PI / T3),
+          makeLatex(args, "@=\\dfrac{2\u03C0}{@}", $, "::")
+        ];
+      },
+      sr\u03B8(s3 = "s", r3 = "r", \u03B8 = "\u03B8", $ = "**$") {
+        let args = [s3, r3, \u03B8];
+        return [
+          makeFn(args, (s4, r4, \u03B82) => s4 - r4 * \u03B82),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      vr\u03C9(v3 = "v", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [v3, r3, \u03C9];
+        return [
+          makeFn(args, (v4, r4, \u03C92) => v4 - r4 * \u03C92),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      av\u03C9(a2 = "a", v3 = "v", \u03C9 = "\u03C9", $ = "***") {
+        let args = [a2, v3, \u03C9];
+        return [
+          makeFn(args, (a3, v4, \u03C92) => a3 - v4 * \u03C92),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      avr(a2 = "a", v3 = "v", r3 = "r", $ = "***") {
+        let args = [a2, v3, r3];
+        return [
+          makeFn(args, (a3, v4, r4) => a3 - v4 * v4 / r4),
+          makeLatex(args, "@=\\dfrac{@^2}{@}", $, ":|:")
+        ];
+      },
+      ar\u03C9(a2 = "a", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [a2, r3, \u03C9];
+        return [
+          makeFn(args, (a3, r4, \u03C92) => a3 - r4 * \u03C92 * \u03C92),
+          makeLatex(args, "@=@@^2", $, ":||")
+        ];
+      },
+      Fmv\u03C9(F2 = "F", m3 = "m", v3 = "v", \u03C9 = "\u03C9", $ = "****") {
+        let args = [F2, m3, v3, \u03C9];
+        return [
+          makeFn(args, (F3, m4, v4, \u03C92) => F3 - m4 * v4 * \u03C92),
+          makeLatex(args, "@=@@@", $, ":|||")
+        ];
+      },
+      Fmvr(F2 = "F", m3 = "m", v3 = "v", r3 = "r", $ = "****") {
+        let args = [F2, m3, v3, r3];
+        return [
+          makeFn(args, (F3, m4, v4, r4) => F3 - m4 * v4 * v4 / r4),
+          makeLatex(args, "@=\\dfrac{@@^2}{@}", $, ":||:")
+        ];
+      },
+      Fmr\u03C9(F2 = "F", m3 = "m", r3 = "r", \u03C9 = "\u03C9", $ = "****") {
+        let args = [F2, m3, r3, \u03C9];
+        return [
+          makeFn(args, (F3, m4, r4, \u03C92) => F3 - m4 * r4 * \u03C92 * \u03C92),
+          makeLatex(args, "@=@@@^2", $, ":|||")
+        ];
+      }
+    };
+    Gravitation = {
+      FGMmr2(F2 = "F", M2 = "M", m3 = "m", r3 = "r", $ = "****") {
+        let args = [F2, M2, m3, r3];
+        return [
+          makeFn(args, (F3, M3, m4, r4) => F3 - PhyConst.G * M3 * m4 / r4 ** 2),
+          makeLatex(args, "@=\\dfrac{G@@}{@^2}", $, ":|||")
+        ];
+      },
+      FGMmRh2(F2 = "F", M2 = "M", m3 = "m", R2 = "R", h2 = "h", $ = "*****") {
+        let args = [F2, M2, m3, R2, h2];
+        return [
+          makeFn(args, (F3, M3, m4, R3, h3) => F3 - PhyConst.G * M3 * m4 / (R3 + h3) ** 2),
+          makeLatex(args, "@=\\dfrac{G@@}{(@+@)^2}", $, ":||::")
+        ];
+      },
+      gGMr2(g2 = "g", M2 = "M", r3 = "r", $ = "***") {
+        let args = [g2, M2, r3];
+        return [
+          makeFn(args, (g3, M3, r4) => g3 - PhyConst.G * M3 / r4 ** 2),
+          makeLatex(args, "@=\\dfrac{G@}{@^2}", $, ":||")
+        ];
+      },
+      gGMRh2(g2 = "g", M2 = "M", R2 = "R", h2 = "h", $ = "****") {
+        let args = [g2, M2, R2, h2];
+        return [
+          makeFn(args, (g3, M3, R3, h3) => g3 - PhyConst.G * M3 / (R3 + h3) ** 2),
+          makeLatex(args, "@=\\dfrac{G@}{(@+@)^2}", $, ":|::")
+        ];
+      },
+      Fmg(F2 = "F", m3 = "m", g2 = "g", $ = "***") {
+        let args = [F2, m3, g2];
+        return [
+          makeFn(args, (F3, m4, g3) => F3 - m4 * g3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      GMmr2v2r(M2 = "M", r3 = "r", v3 = "v", $ = "***") {
+        let args = [M2, r3, v3];
+        let [_M, _r, _v] = $;
+        $ = [_M, _r, _v, _r].join("");
+        return [
+          makeFn(args, (M3, r4, v4) => PhyConst.G * M3 / r4 / r4 - v4 * v4 / r4),
+          makeLatex([M2, r3, v3, r3], "\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}", $, "|||:")
+        ];
+      },
+      GMmr2r\u03C92(M2 = "M", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [M2, r3, \u03C9];
+        let [_M, _r, _\u03C9] = $;
+        $ = [_M, _r, _r, _\u03C9].join("");
+        return [
+          makeFn(args, (M3, r4, \u03C92) => PhyConst.G * M3 / r4 / r4 - r4 * \u03C92 * \u03C92),
+          makeLatex([M2, r3, r3, \u03C9], "\\dfrac{G@m}{@^2}=m@@^2", $, "||||")
+        ];
+      }
+    };
   };
   globalThis.PhyEq = new PhyEqCls();
+
+  // ../packages/fate/lib/poker.js
+  var poker_exports = {};
+  __export(poker_exports, {
+    bool: () => bool2,
+    he: () => he,
+    integer: () => integer,
+    prime: () => prime,
+    real: () => real,
+    she: () => she
+  });
+
+  // ../packages/fate/lib/support.js
+  function isPrime(num2) {
+    if (!Number.isInteger(num2))
+      return false;
+    if (num2 <= 1)
+      return false;
+    if (num2 === 2)
+      return true;
+    if (num2 % 2 === 0)
+      return false;
+    for (let i2 = 3; i2 <= Math.sqrt(num2) + 1; i2 = i2 + 2) {
+      if (num2 % i2 === 0)
+        return false;
+    }
+    return true;
+  }
+  function primes(max) {
+    let arr = [];
+    for (let i2 = 2; i2 <= max; i2++) {
+      if (isPrime(i2))
+        arr.push(i2);
+    }
+    return arr;
+  }
+  function rndInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  function randomIndex(array2) {
+    return rndInt(0, array2.length - 1);
+  }
+  function draw(array2) {
+    let i2 = randomIndex(array2);
+    return array2[i2];
+  }
+
+  // ../packages/fate/lib/poker.js
+  function error2(msg) {
+    const e5 = new Error(msg);
+    e5.name = "PokerError";
+    return e5;
+  }
+  function integer(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    if (min > max)
+      throw error2("min must be less than max!");
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  function real(min, max) {
+    if (min > max)
+      throw error2("min must be less than max!");
+    return Math.random() * (max - min) + min;
+  }
+  function prime(min, max) {
+    if (min > max)
+      throw error2("min must be less than max!");
+    let ps = primes(max).filter(($) => $ >= min);
+    return draw(ps);
+  }
+  function he() {
+    return draw(["Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William"]);
+  }
+  function she() {
+    return draw(["Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe"]);
+  }
+  function bool2(trueChance = 0.5) {
+    return real(0, 1) < trueChance;
+  }
+
+  // ../packages/fate/lib/dice.js
+  function error3(msg) {
+    const e5 = new Error(msg);
+    e5.name = "DiceError";
+    return e5;
+  }
+  var Dice = class {
+    constructor(func) {
+      this.TRIAL = 1e4;
+      this.shields = [];
+      this.uniques = [];
+      this.distincts = [];
+      this.coherents = [];
+      this.func = func;
+    }
+    shield(predicate) {
+      this.shields.push(predicate);
+      return this;
+    }
+    forbid(...items) {
+      for (let item of items)
+        this.shield(($) => JSON.stringify($) !== JSON.stringify(item));
+      return this;
+    }
+    unique(mapper = ($) => $) {
+      let map = ($) => JSON.stringify(mapper($));
+      this.uniques.push(map);
+      return this;
+    }
+    distinct(equality) {
+      this.distincts.push(equality);
+      return this;
+    }
+    coherent(predicate) {
+      this.coherents.push(predicate);
+      return this;
+    }
+    roll() {
+      let counter = 0;
+      while (true) {
+        counter++;
+        if (counter > this.TRIAL) {
+          throw error3("No items can satisfy predicate after " + this.TRIAL + " trials!");
+        }
+        let item = this.func();
+        if (this.shields.every(($) => $(item)))
+          return item;
+      }
+    }
+    rolls(count) {
+      let counter = 0;
+      const genRandomCohort = () => {
+        let arr = [];
+        let mappeds = [];
+        for (let i2 = 0; i2 < this.uniques.length; i2++) {
+          mappeds.push([]);
+        }
+        const pushMap = (itemMap) => {
+          mappeds.forEach((mapped, i2) => mapped.push(itemMap[i2]));
+        };
+        const mapInclude = (itemMap) => {
+          return mappeds.some((mapped, i2) => mapped.includes(itemMap[i2]));
+        };
+        const someEqual = (item) => {
+          return this.distincts.some((equal2) => arr.some(($) => equal2($, item)));
+        };
+        while (arr.length < count) {
+          counter++;
+          if (counter > this.TRIAL) {
+            throw error3("rolls count is likely too large for sample set");
+          }
+          let item = this.roll();
+          let map = this.uniques.map(($) => $(item));
+          if (mapInclude(map))
+            continue;
+          if (someEqual(item))
+            continue;
+          arr.push(item);
+          pushMap(map);
+        }
+        return arr;
+      };
+      const isCoherent = (cohort) => {
+        return this.coherents.every(($) => $(cohort));
+      };
+      while (true) {
+        let cohort = genRandomCohort();
+        if (isCoherent(cohort))
+          return cohort;
+      }
+    }
+  };
+  function dice(func) {
+    return new Dice(func);
+  }
 
   // src/Math/Code/Random.ts
   var Host8 = class {
     static RndN(min, max) {
-      return poker.integer(min, max);
+      return poker_exports.integer(min, max);
     }
     static RndNs(min, max, n2 = 10) {
       n2 = Math.min(Math.floor(max - min + 1), n2);
       return dice(() => RndN(min, max)).unique().rolls(n2);
     }
     static RndR(min, max) {
-      return poker.real(min, max);
+      return poker_exports.real(min, max);
     }
     static RndRs(min, max, n2 = 10) {
       return dice(() => RndR(min, max)).unique().rolls(n2);
@@ -20806,7 +19632,7 @@
       return list(1, -1).draw();
     }
     static RndT() {
-      return poker.bool();
+      return poker_exports.bool();
     }
     static RndZ(min, max) {
       return RndN(min, max) * RndU();
@@ -20816,7 +19642,7 @@
       return dice(() => RndN(min, max)).unique().rolls(n2).map((x2) => x2 * RndU());
     }
     static RndP(max) {
-      return poker.prime(2, max);
+      return poker_exports.prime(2, max);
     }
     static RndOdd(min, max) {
       min = Math.ceil((min + 1) / 2);
@@ -21251,15 +20077,15 @@
         let nonzero = str3.split("").filter((_) => _ !== "0").length;
         for (let d2 of str3.split("")) {
           if (d2 === "0") {
-            let go = poker.bool(0.1);
+            let go = poker_exports.bool(0.1);
             s3.push(go ? toList(digits).draw() : "0");
           } else {
-            let go = poker.bool(1 / (nonzero + 2));
+            let go = poker_exports.bool(1 / (nonzero + 2));
             s3.push(go ? shake(d2) : d2);
           }
         }
         let T2 = s3.join("");
-        if (poker.bool(0.2))
+        if (poker_exports.bool(0.2))
           T2 += "0";
         return T2;
       }
@@ -21364,10 +20190,10 @@
       return [...toList(items).uniqueDeep().sample(n2)];
     }
     static RndHe() {
-      return poker.he();
+      return poker_exports.he();
     }
     static RndShe() {
-      return poker.she();
+      return poker_exports.she();
     }
     static RndLetters() {
       return RndPick(["a", "b", "c"], ["h", "k", "l"], ["m", "n", "l"], ["p", "q", "r"], ["r", "s", "t"], ["u", "v", "w"], ["x", "y", "z"]);
@@ -23158,8 +21984,6 @@
     constructor(sym, name, range, unit, display) {
       this.sym = sym;
       this.name = name;
-      this.val = NaN;
-      this.subscript = "";
       unit ??= findUnit(name);
       unit ??= "";
       this.unit = parseUnit(unit);
@@ -23169,6 +21993,11 @@
         throw "[Variable] Range must have max > min";
       this.display = display ?? this.sym;
     }
+    val = NaN;
+    subscript = "";
+    unit;
+    range;
+    display;
     set(val) {
       this.val = val;
     }
@@ -23821,9 +22650,10 @@
     constructor(variables, equations) {
       this.variables = variables;
       this.equations = equations;
-      this.tree = {};
       this.fs = equations.map(($) => $.zeroFunc);
     }
+    fs;
+    tree = {};
     fit() {
       let vals = fit(this.fs, this.variables.rangeObj(), this.variables.valObj());
       this.variables.setVal(vals);
@@ -26159,24 +24989,15 @@
   var DEFAULT_POINT_RADIUS_PIXEL = 2;
   var DEFAULT_CUTTER_LENGTH_PIXEL = 5;
   var PenCls = class {
+    cv = new Canvas10();
     constructor() {
-      this.cv = new Canvas10();
-      this.range = new PenRange(this, this.cv);
-      this.size = new PenSize(this, this.cv);
-      this.set = new PenSettings(this, this.cv);
-      this.graph = new PenGraph(this, this.cv);
-      this.fill = new PenFill(this, this.cv);
-      this.shade = new PenShade(this, this.cv);
-      this.linProg = new PenLinProg(this, this.cv);
-      this.label = new PenLabel(this, this.cv);
-      this.axis = new PenAxis(this, this.cv);
-      this.tick = new PenTick(this, this.cv);
-      this.grid = new PenGrid(this, this.cv);
-      this.d3 = new PenD3(this, this.cv);
       this.range.set([-5, 5], [-5, 5]);
       this.size.set(1);
       this.set.reset();
     }
+    range = new PenRange(this, this.cv);
+    size = new PenSize(this, this.cv);
+    set = new PenSettings(this, this.cv);
     plot(func, tStart, tEnd) {
       this.cv.plot(func, tStart, tEnd, 1e3);
     }
@@ -26186,6 +25007,7 @@
       this.cv.plot(func, tStart, tEnd, 1e3);
       this.cv.restore();
     }
+    graph = new PenGraph(this, this.cv);
     point(position, label) {
       this.cv.disc(position, DEFAULT_POINT_RADIUS_PIXEL);
       if (label !== void 0)
@@ -26307,6 +25129,9 @@
       this.polygon(...points);
       this.polyshade(...points);
     }
+    fill = new PenFill(this, this.cv);
+    shade = new PenShade(this, this.cv);
+    linProg = new PenLinProg(this, this.cv);
     angle(A2, O2, B2, label, arc = 1, radius = -1) {
       if (radius < 0)
         radius = 15 + this.cv.getAngleAllowance(A2, O2, B2, 40, 1.5);
@@ -26340,6 +25165,11 @@
     write(point, text) {
       this.cv.write(text, point);
     }
+    label = new PenLabel(this, this.cv);
+    axis = new PenAxis(this, this.cv);
+    tick = new PenTick(this, this.cv);
+    grid = new PenGrid(this, this.cv);
+    d3 = new PenD3(this, this.cv);
     background(url) {
       this.cv.backgroundURL = url;
     }
@@ -26362,6 +25192,7 @@
 
   // src/Pen/AutoPen.ts
   var AutoPenCls = class {
+    pen;
     constructor() {
       this.pen = new Pen();
     }
@@ -26370,8 +25201,8 @@
     }
     PrimeFactorization({ numbers: numbers2 }) {
       function lowestFactor(arr) {
-        const primes = [2, 3, 5, 7, 11, 13, 17, 19];
-        for (let p3 of primes) {
+        const primes2 = [2, 3, 5, 7, 11, 13, 17, 19];
+        for (let p3 of primes2) {
           if (HCF(...arr) % p3 === 0)
             return p3;
         }
@@ -27318,6 +26149,7 @@
 
   // src/Pen/PhyPen.ts
   var PhyPenCls = class {
+    pen;
     constructor() {
       this.pen = new Pen();
     }
@@ -27548,6 +26380,7 @@
 
   // src/Soil/tool/html.ts
   var QuestionHTML = class {
+    body;
     constructor(html = "") {
       this.body = new DOMParser().parseFromString(html, "text/html").getElementsByTagName("body")[0];
     }
@@ -28139,8 +26972,6 @@
       this.sol = sol;
       this.ans = ans;
       this.shuffle = shuffle2;
-      this.perm = [];
-      this.valid = false;
       this.Qn = new QuestionHTML(qn);
       if (!this.Qn.ul)
         return;
@@ -28148,6 +26979,9 @@
         return;
       this.valid = true;
     }
+    perm = [];
+    valid = false;
+    Qn;
     AreOptionsDuplicated() {
       return this.Qn.isLiDuplicated();
     }
@@ -28281,61 +27115,61 @@
       this.X = X2;
       this.Y = Y2;
       this.Z = Z2;
-      this.variables = [
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "o",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "u",
-        "v",
-        "w",
-        "x",
-        "y",
-        "z",
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z"
-      ];
     }
+    variables = [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z"
+    ];
     update(other) {
       for (let key of this.variables) {
         if (key in other)
@@ -28374,8 +27208,8 @@
   var Timer = class {
     constructor(limit) {
       this.limit = limit;
-      this.start = Date.now();
     }
+    start = Date.now();
     elapsed() {
       return (Date.now() - this.start) / 1e3;
     }
@@ -28388,9 +27222,7 @@
     }
   };
   var ErrorLogger = class {
-    constructor() {
-      this.pile = [];
-    }
+    pile = [];
     add(e5) {
       let err2 = toError(e5);
       this.pile.push("[" + err2.name + "] " + err2.message);
@@ -28415,15 +27247,15 @@
   var Soil = class {
     constructor(gene) {
       this.gene = gene;
-      this.qn = "";
-      this.sol = "";
-      this.dict = new Dict();
-      this.config = new Config();
-      this.counter = 0;
-      this.timer = new Timer(10);
-      this.logger = new ErrorLogger();
       this.reset();
     }
+    qn = "";
+    sol = "";
+    dict = new Dict();
+    config = new Config();
+    counter = 0;
+    timer = new Timer(10);
+    logger = new ErrorLogger();
     reset() {
       this.qn = this.gene.qn;
       this.sol = this.gene.sol;
