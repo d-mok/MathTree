@@ -1,5 +1,5 @@
 
-var PhyConst = {
+var PhyConstObj = {
     R: 8.31,
     N_A: 6.02e23,
     g: 9.81,
@@ -16,4 +16,10 @@ var PhyConst = {
     sigma: 5.67e-8,
     h: 6.63e-34,
 }
-globalThis.PhyConst = PhyConst
+globalThis.PhyConst = PhyConstObj
+
+declare global {
+    var PhyConst: typeof PhyConstObj
+}
+
+export { }

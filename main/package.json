@@ -25,10 +25,10 @@
   },
   "dependencies": {
     "contract": "file:../packages/contract",
-    "gauss": "file:../packages/gauss",
     "fate": "file:../packages/fate",
+    "gauss": "file:../packages/gauss",
     "katex": "^0.13.23",
     "paint": "file:../packages/paint",
-    "sapphire-js": "^1.0.59"
+    "ruby": "file:../packages/ruby"
   }
 }

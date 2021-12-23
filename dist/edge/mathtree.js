@@ -34,4391 +34,6 @@
     return result2;
   };
 
-  // node_modules/sapphire-js/lib/array/list.js
-  var require_list = __commonJS({
-    "node_modules/sapphire-js/lib/array/list.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toList = exports.list = exports.List = void 0;
-      var List = class extends Array {
-        create(elements) {
-          let ls = new this.constructor();
-          ls.push(...elements);
-          return ls;
-        }
-        clear() {
-          this.splice(0, this.length);
-        }
-        set(elements) {
-          this.clear();
-          this.push(...elements);
-        }
-        clone() {
-          return this.create([...this]);
-        }
-        indexValid(index) {
-          if (this.length === 0)
-            return false;
-          return index >= 0 && index <= this.length - 1;
-        }
-        isEmpty() {
-          return this.length === 0;
-        }
-        first() {
-          return this[0];
-        }
-        last() {
-          return this[this.length - 1];
-        }
-        cyclicAt(index) {
-          let n2 = this.length;
-          if (n2 === 0)
-            return void 0;
-          while (index < 0) {
-            index += n2;
-          }
-          while (index > n2 - 1) {
-            index -= n2;
-          }
-          return this[index];
-        }
-        pull(index) {
-          let n2 = this.length;
-          if (n2 === 0)
-            return void 0;
-          while (index < 0)
-            return void 0;
-          while (index > n2 - 1)
-            return void 0;
-          let element = this[index];
-          this.splice(index, 1);
-          return element;
-        }
-        head(n2) {
-          if (n2 <= 0)
-            return this.create([]);
-          return this.slice(0, n2);
-        }
-        tail(n2) {
-          if (n2 <= 0)
-            return this.create([]);
-          return this.slice(-n2);
-        }
-        before(index) {
-          if (index <= 0)
-            return this.create([]);
-          if (index >= this.length)
-            return this.clone();
-          return this.slice(0, index);
-        }
-        till(index) {
-          return this.before(index + 1);
-        }
-        after(index) {
-          if (index < 0)
-            return this.clone();
-          if (index >= this.length - 1)
-            return this.create([]);
-          return this.slice(index + 1);
-        }
-        since(index) {
-          return this.after(index - 1);
-        }
-        chunk(size) {
-          if (size <= 0)
-            return List.of();
-          let ls = List.of();
-          for (let i2 = 0; i2 < this.length; i2 += size) {
-            ls.push(this.slice(i2, i2 + size));
-          }
-          return ls;
-        }
-        split(delimitElement) {
-          let ls = List.of();
-          let clone = this.clone();
-          while (true) {
-            let firstDelimIndex = clone.findIndex(($) => $ === delimitElement);
-            if (firstDelimIndex === -1) {
-              let head = clone.splice(0);
-              ls.push(this.create(head));
-              break;
-            } else {
-              let head = clone.splice(0, firstDelimIndex);
-              ls.push(this.create(head));
-              clone.shift();
-              if (clone.length === 0) {
-                ls.push(this.create([]));
-                break;
-              }
-            }
-          }
-          return ls;
-        }
-        includesAll(elements) {
-          return elements.every(($) => this.includes($));
-        }
-        includesAny(elements) {
-          return elements.some(($) => this.includes($));
-        }
-        includesExact(elements) {
-          let other = List.of(...elements);
-          return this.includesAll(other) && this.belongs(other);
-        }
-        belongs(elements) {
-          return this.every(($) => elements.includes($));
-        }
-        unique() {
-          return this.create([...new Set(this)]);
-        }
-        uniqueBy(mapper) {
-          let ls = this.create([]);
-          let mapped = [];
-          for (let ele of this) {
-            let map = mapper(ele);
-            let found = mapped.findIndex(($) => $ === map) !== -1;
-            if (found)
-              continue;
-            ls.push(ele);
-            mapped.push(map);
-          }
-          return ls;
-        }
-        uniqueDeep() {
-          return this.uniqueBy(($) => JSON.stringify($));
-        }
-        freq(element) {
-          return this.filter(($) => $ === element).length;
-        }
-        distincts() {
-          return this.filter(($) => this.freq($) === 1);
-        }
-        duplicates() {
-          let distincts = this.distincts();
-          return this.except(distincts);
-        }
-        duplicated() {
-          return this.duplicates().unique();
-        }
-        dupless() {
-          return [...new Set(this)].length === this.length;
-        }
-        duplessDeep() {
-          return this.uniqueDeep().length === this.length;
-        }
-        duppy() {
-          return !this.dupless();
-        }
-        dedup() {
-          this.set(this.unique());
-        }
-        violate(predicate) {
-          return this.filter(($) => !predicate($));
-        }
-        inside(elements) {
-          return this.filter(($) => elements.includes($));
-        }
-        except(elements) {
-          return this.filter(($) => !elements.includes($));
-        }
-        filterIndex(predicate) {
-          let ls = this.create([]);
-          for (let i2 = 0; i2 < this.length; i2++) {
-            if (predicate(i2))
-              ls.push(this[i2]);
-          }
-          return ls;
-        }
-        countIf(predicate) {
-          return this.filter(predicate).length;
-        }
-        sieve(predicate) {
-          this.set(this.filter(predicate));
-        }
-        reject(predicate) {
-          this.set(this.violate(predicate));
-        }
-        keep(elements) {
-          this.set(this.inside(elements));
-        }
-        drop(elements) {
-          this.set(this.except(elements));
-        }
-        reversed() {
-          let ls = this.clone();
-          ls.reverse();
-          return ls;
-        }
-        ascending() {
-          let ls = this.clone();
-          ls.ascend();
-          return ls;
-        }
-        descending() {
-          let ls = this.clone();
-          ls.descend();
-          return ls;
-        }
-        sorted(...compareFns) {
-          let ls = this.clone();
-          ls.sorts(...compareFns);
-          return ls;
-        }
-        sortedBy(...mappers) {
-          let ls = this.clone();
-          ls.sortBy(...mappers);
-          return ls;
-        }
-        sortedByFreq() {
-          return this.sortedBy(($) => -this.freq($));
-        }
-        ascend() {
-          if (this.every(($) => typeof $ === "number")) {
-            this.sortBy(($) => Number($));
-          } else {
-            this.sortBy(($) => String($));
-          }
-        }
-        descend() {
-          this.ascend();
-          this.reverse();
-        }
-        arrange(newIndices) {
-          let newArr = Array(this.length);
-          for (let i2 = 0; i2 < this.length; i2++) {
-            const newIndex = newIndices[i2];
-            newArr[newIndex] = this[i2];
-          }
-          this.set(newArr);
-        }
-        permute(newOrder) {
-          let newArr = Array(this.length);
-          for (let i2 = 0; i2 < this.length; i2++) {
-            const newIndex = newOrder[i2];
-            newArr[i2] = this[newIndex];
-          }
-          this.set(newArr);
-        }
-        sorts(...compareFns) {
-          function compare(a2, b2) {
-            for (let fn of compareFns) {
-              let v3 = fn(a2, b2);
-              if (v3 > 0)
-                return 1;
-              if (v3 < 0)
-                return -1;
-            }
-            return 0;
-          }
-          this.sort(compare);
-        }
-        sortBy(...mappers) {
-          const compareFns = mappers.map((m3) => function(a2, b2) {
-            const va = m3(a2);
-            const vb = m3(b2);
-            return va === vb ? 0 : va > vb ? 1 : -1;
-          });
-          this.sorts(...compareFns);
-        }
-        cycle(n2) {
-          if (this.length === 0)
-            return;
-          if (n2 === 0)
-            return;
-          if (n2 > 0) {
-            for (let i2 = 1; i2 <= n2; i2++) {
-              this.push(this.shift());
-            }
-          }
-          if (n2 < 0) {
-            n2 = Math.abs(n2);
-            for (let i2 = 1; i2 <= n2; i2++) {
-              this.unshift(this.pop());
-            }
-          }
-        }
-        randomIndex() {
-          if (this.length === 0)
-            return void 0;
-          function rndInt2(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-          }
-          return rndInt2(0, this.length - 1);
-        }
-        draw() {
-          if (this.length === 0)
-            return void 0;
-          return this[this.randomIndex()];
-        }
-        draws(n2) {
-          if (this.length === 0)
-            return void 0;
-          let arr = this.create([]);
-          for (let i2 = 0; i2 < n2; i2++) {
-            arr.push(this.draw());
-          }
-          return arr;
-        }
-        sample(n2) {
-          if (n2 > this.length)
-            return void 0;
-          let ls = this.shuffled();
-          ls.length = n2;
-          return ls;
-        }
-        shuffled() {
-          let ls = this.clone();
-          ls.shuffle();
-          return ls;
-        }
-        deal() {
-          if (this.length === 0)
-            return void 0;
-          return this.pull(this.randomIndex());
-        }
-        shuffle() {
-          for (let i2 = this.length - 1; i2 > 0; i2--) {
-            let j2 = Math.floor(Math.random() * (i2 + 1));
-            [this[i2], this[j2]] = [this[j2], this[i2]];
-          }
-        }
-        combinations(k2) {
-          if (k2 > this.length || k2 <= 0)
-            return List.of();
-          if (k2 === this.length)
-            return List.of(this);
-          if (k2 === 1)
-            return List.of(...this.map(($) => this.create([$])));
-          const combs = List.of();
-          let tail_combs = List.of();
-          for (let i2 = 0; i2 <= this.length - k2 + 1; i2++) {
-            let tail = this.after(i2);
-            tail_combs = tail.combinations(k2 - 1);
-            for (let j2 = 0; j2 < tail_combs.length; j2++) {
-              combs.push(this.create([this[i2], ...tail_combs[j2]]));
-            }
-          }
-          return combs;
-        }
-        pairs() {
-          return this.combinations(2);
-        }
-        permutations() {
-          if (this.length === 0)
-            return List.of();
-          if (this.length === 1)
-            return List.of(this);
-          if (this.length === 2) {
-            let [a2, b2] = this;
-            return List.of(this.create([a2, b2]), this.create([b2, a2]));
-          }
-          const perm = List.of();
-          for (let i2 = 0; i2 < this.length; i2++) {
-            let clone = this.clone();
-            let pulled = clone.pull(i2);
-            for (let p3 of clone.permutations()) {
-              perm.push(this.create([pulled, ...p3]));
-            }
-          }
-          return perm;
-        }
-        zip(array2, mapper) {
-          let ls = new List();
-          for (let i2 = 0; i2 < this.length; i2++) {
-            ls.push(mapper(this[i2], array2[i2]));
-          }
-          return ls;
-        }
-        meanOf(metric) {
-          let metrics = this.map(metric);
-          let sum = metrics.reduce((a2, b2) => a2 + b2, 0);
-          return sum / metrics.length;
-        }
-        maxOf(metric, rank = 1) {
-          if (this.length === 0)
-            return NaN;
-          if (rank === 1) {
-            return this.map(metric).descending().first();
-          } else {
-            let sortedMetrics = this.map(metric).unique().descending();
-            return sortedMetrics[rank - 1] ?? NaN;
-          }
-        }
-        minOf(metric, rank = 1) {
-          if (this.length === 0)
-            return NaN;
-          if (rank === 1) {
-            return this.map(metric).ascending().first();
-          } else {
-            let sortedMetrics = this.map(metric).unique().ascending();
-            return sortedMetrics[rank - 1] ?? NaN;
-          }
-        }
-        maxsBy(metric, rank = 1) {
-          let max = this.maxOf(metric, rank);
-          return this.filter(($) => metric($) === max);
-        }
-        minsBy(metric, rank = 1) {
-          let min = this.minOf(metric, rank);
-          return this.filter(($) => metric($) === min);
-        }
-        maxBy(metric, rank = 1) {
-          if (this.length === 0)
-            return void 0;
-          return this.maxsBy(metric, rank).first();
-        }
-        minBy(metric, rank = 1) {
-          if (this.length === 0)
-            return void 0;
-          return this.minsBy(metric, rank).first();
-        }
-        padTail(length) {
-          if (length <= this.length)
-            return this.clone();
-          if (this.length === 0)
-            return this.clone();
-          let last = this.last();
-          let clone = this.clone();
-          for (let i2 = clone.length; i2 < length; i2++) {
-            clone.push(last);
-          }
-          return clone;
-        }
-        padHead(length) {
-          if (length <= this.length)
-            return this.clone();
-          if (this.length === 0)
-            return this.clone();
-          let first = this.first();
-          let clone = this.create([]);
-          for (let i2 = 0; i2 < length - this.length; i2++) {
-            clone.push(first);
-          }
-          clone.push(...this);
-          return clone;
-        }
-        padCyclic(length) {
-          if (length <= this.length)
-            return this.clone();
-          if (this.length === 0)
-            return this.clone();
-          let clone = this.create([]);
-          for (let i2 = 0; i2 < length; i2++) {
-            clone.push(this.cyclicAt(i2));
-          }
-          return clone;
-        }
-      };
-      exports.List = List;
-      function list2(...elements) {
-        let ls = new List();
-        ls.push(...elements);
-        return ls;
-      }
-      exports.list = list2;
-      function toList2(elements) {
-        return list2(...elements);
-      }
-      exports.toList = toList2;
-    }
-  });
-
-  // node_modules/decimal.js/decimal.js
-  var require_decimal = __commonJS({
-    "node_modules/decimal.js/decimal.js"(exports, module) {
-      (function(globalScope) {
-        "use strict";
-        var EXP_LIMIT = 9e15, MAX_DIGITS = 1e9, NUMERALS = "0123456789abcdef", LN10 = "2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058", PI = "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632789", DEFAULTS = {
-          precision: 20,
-          rounding: 4,
-          modulo: 1,
-          toExpNeg: -7,
-          toExpPos: 21,
-          minE: -EXP_LIMIT,
-          maxE: EXP_LIMIT,
-          crypto: false
-        }, Decimal, inexact, noConflict, quadrant2, external = true, decimalError = "[DecimalError] ", invalidArgument = decimalError + "Invalid argument: ", precisionLimitExceeded = decimalError + "Precision limit exceeded", cryptoUnavailable = decimalError + "crypto unavailable", tag = "[object Decimal]", mathfloor = Math.floor, mathpow = Math.pow, isBinary = /^0b([01]+(\.[01]*)?|\.[01]+)(p[+-]?\d+)?$/i, isHex = /^0x([0-9a-f]+(\.[0-9a-f]*)?|\.[0-9a-f]+)(p[+-]?\d+)?$/i, isOctal = /^0o([0-7]+(\.[0-7]*)?|\.[0-7]+)(p[+-]?\d+)?$/i, isDecimal = /^(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i, BASE = 1e7, LOG_BASE = 7, MAX_SAFE_INTEGER = 9007199254740991, LN10_PRECISION = LN10.length - 1, PI_PRECISION = PI.length - 1, P2 = { toStringTag: tag };
-        P2.absoluteValue = P2.abs = function() {
-          var x2 = new this.constructor(this);
-          if (x2.s < 0)
-            x2.s = 1;
-          return finalise(x2);
-        };
-        P2.ceil = function() {
-          return finalise(new this.constructor(this), this.e + 1, 2);
-        };
-        P2.clampedTo = P2.clamp = function(min2, max2) {
-          var k2, x2 = this, Ctor = x2.constructor;
-          min2 = new Ctor(min2);
-          max2 = new Ctor(max2);
-          if (!min2.s || !max2.s)
-            return new Ctor(NaN);
-          if (min2.gt(max2))
-            throw Error(invalidArgument + max2);
-          k2 = x2.cmp(min2);
-          return k2 < 0 ? min2 : x2.cmp(max2) > 0 ? max2 : new Ctor(x2);
-        };
-        P2.comparedTo = P2.cmp = function(y2) {
-          var i2, j2, xdL, ydL, x2 = this, xd = x2.d, yd = (y2 = new x2.constructor(y2)).d, xs = x2.s, ys = y2.s;
-          if (!xd || !yd) {
-            return !xs || !ys ? NaN : xs !== ys ? xs : xd === yd ? 0 : !xd ^ xs < 0 ? 1 : -1;
-          }
-          if (!xd[0] || !yd[0])
-            return xd[0] ? xs : yd[0] ? -ys : 0;
-          if (xs !== ys)
-            return xs;
-          if (x2.e !== y2.e)
-            return x2.e > y2.e ^ xs < 0 ? 1 : -1;
-          xdL = xd.length;
-          ydL = yd.length;
-          for (i2 = 0, j2 = xdL < ydL ? xdL : ydL; i2 < j2; ++i2) {
-            if (xd[i2] !== yd[i2])
-              return xd[i2] > yd[i2] ^ xs < 0 ? 1 : -1;
-          }
-          return xdL === ydL ? 0 : xdL > ydL ^ xs < 0 ? 1 : -1;
-        };
-        P2.cosine = P2.cos = function() {
-          var pr2, rm, x2 = this, Ctor = x2.constructor;
-          if (!x2.d)
-            return new Ctor(NaN);
-          if (!x2.d[0])
-            return new Ctor(1);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          Ctor.precision = pr2 + Math.max(x2.e, x2.sd()) + LOG_BASE;
-          Ctor.rounding = 1;
-          x2 = cosine(Ctor, toLessThanHalfPi(Ctor, x2));
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return finalise(quadrant2 == 2 || quadrant2 == 3 ? x2.neg() : x2, pr2, rm, true);
-        };
-        P2.cubeRoot = P2.cbrt = function() {
-          var e5, m3, n2, r3, rep, s3, sd, t2, t3, t3plusx, x2 = this, Ctor = x2.constructor;
-          if (!x2.isFinite() || x2.isZero())
-            return new Ctor(x2);
-          external = false;
-          s3 = x2.s * mathpow(x2.s * x2, 1 / 3);
-          if (!s3 || Math.abs(s3) == 1 / 0) {
-            n2 = digitsToString(x2.d);
-            e5 = x2.e;
-            if (s3 = (e5 - n2.length + 1) % 3)
-              n2 += s3 == 1 || s3 == -2 ? "0" : "00";
-            s3 = mathpow(n2, 1 / 3);
-            e5 = mathfloor((e5 + 1) / 3) - (e5 % 3 == (e5 < 0 ? -1 : 2));
-            if (s3 == 1 / 0) {
-              n2 = "5e" + e5;
-            } else {
-              n2 = s3.toExponential();
-              n2 = n2.slice(0, n2.indexOf("e") + 1) + e5;
-            }
-            r3 = new Ctor(n2);
-            r3.s = x2.s;
-          } else {
-            r3 = new Ctor(s3.toString());
-          }
-          sd = (e5 = Ctor.precision) + 3;
-          for (; ; ) {
-            t2 = r3;
-            t3 = t2.times(t2).times(t2);
-            t3plusx = t3.plus(x2);
-            r3 = divide(t3plusx.plus(x2).times(t2), t3plusx.plus(t3), sd + 2, 1);
-            if (digitsToString(t2.d).slice(0, sd) === (n2 = digitsToString(r3.d)).slice(0, sd)) {
-              n2 = n2.slice(sd - 3, sd + 1);
-              if (n2 == "9999" || !rep && n2 == "4999") {
-                if (!rep) {
-                  finalise(t2, e5 + 1, 0);
-                  if (t2.times(t2).times(t2).eq(x2)) {
-                    r3 = t2;
-                    break;
-                  }
-                }
-                sd += 4;
-                rep = 1;
-              } else {
-                if (!+n2 || !+n2.slice(1) && n2.charAt(0) == "5") {
-                  finalise(r3, e5 + 1, 1);
-                  m3 = !r3.times(r3).times(r3).eq(x2);
-                }
-                break;
-              }
-            }
-          }
-          external = true;
-          return finalise(r3, e5, Ctor.rounding, m3);
-        };
-        P2.decimalPlaces = P2.dp = function() {
-          var w2, d2 = this.d, n2 = NaN;
-          if (d2) {
-            w2 = d2.length - 1;
-            n2 = (w2 - mathfloor(this.e / LOG_BASE)) * LOG_BASE;
-            w2 = d2[w2];
-            if (w2)
-              for (; w2 % 10 == 0; w2 /= 10)
-                n2--;
-            if (n2 < 0)
-              n2 = 0;
-          }
-          return n2;
-        };
-        P2.dividedBy = P2.div = function(y2) {
-          return divide(this, new this.constructor(y2));
-        };
-        P2.dividedToIntegerBy = P2.divToInt = function(y2) {
-          var x2 = this, Ctor = x2.constructor;
-          return finalise(divide(x2, new Ctor(y2), 0, 1, 1), Ctor.precision, Ctor.rounding);
-        };
-        P2.equals = P2.eq = function(y2) {
-          return this.cmp(y2) === 0;
-        };
-        P2.floor = function() {
-          return finalise(new this.constructor(this), this.e + 1, 3);
-        };
-        P2.greaterThan = P2.gt = function(y2) {
-          return this.cmp(y2) > 0;
-        };
-        P2.greaterThanOrEqualTo = P2.gte = function(y2) {
-          var k2 = this.cmp(y2);
-          return k2 == 1 || k2 === 0;
-        };
-        P2.hyperbolicCosine = P2.cosh = function() {
-          var k2, n2, pr2, rm, len, x2 = this, Ctor = x2.constructor, one = new Ctor(1);
-          if (!x2.isFinite())
-            return new Ctor(x2.s ? 1 / 0 : NaN);
-          if (x2.isZero())
-            return one;
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          Ctor.precision = pr2 + Math.max(x2.e, x2.sd()) + 4;
-          Ctor.rounding = 1;
-          len = x2.d.length;
-          if (len < 32) {
-            k2 = Math.ceil(len / 3);
-            n2 = (1 / tinyPow(4, k2)).toString();
-          } else {
-            k2 = 16;
-            n2 = "2.3283064365386962890625e-10";
-          }
-          x2 = taylorSeries(Ctor, 1, x2.times(n2), new Ctor(1), true);
-          var cosh2_x, i2 = k2, d8 = new Ctor(8);
-          for (; i2--; ) {
-            cosh2_x = x2.times(x2);
-            x2 = one.minus(cosh2_x.times(d8.minus(cosh2_x.times(d8))));
-          }
-          return finalise(x2, Ctor.precision = pr2, Ctor.rounding = rm, true);
-        };
-        P2.hyperbolicSine = P2.sinh = function() {
-          var k2, pr2, rm, len, x2 = this, Ctor = x2.constructor;
-          if (!x2.isFinite() || x2.isZero())
-            return new Ctor(x2);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          Ctor.precision = pr2 + Math.max(x2.e, x2.sd()) + 4;
-          Ctor.rounding = 1;
-          len = x2.d.length;
-          if (len < 3) {
-            x2 = taylorSeries(Ctor, 2, x2, x2, true);
-          } else {
-            k2 = 1.4 * Math.sqrt(len);
-            k2 = k2 > 16 ? 16 : k2 | 0;
-            x2 = x2.times(1 / tinyPow(5, k2));
-            x2 = taylorSeries(Ctor, 2, x2, x2, true);
-            var sinh2_x, d5 = new Ctor(5), d16 = new Ctor(16), d20 = new Ctor(20);
-            for (; k2--; ) {
-              sinh2_x = x2.times(x2);
-              x2 = x2.times(d5.plus(sinh2_x.times(d16.times(sinh2_x).plus(d20))));
-            }
-          }
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return finalise(x2, pr2, rm, true);
-        };
-        P2.hyperbolicTangent = P2.tanh = function() {
-          var pr2, rm, x2 = this, Ctor = x2.constructor;
-          if (!x2.isFinite())
-            return new Ctor(x2.s);
-          if (x2.isZero())
-            return new Ctor(x2);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          Ctor.precision = pr2 + 7;
-          Ctor.rounding = 1;
-          return divide(x2.sinh(), x2.cosh(), Ctor.precision = pr2, Ctor.rounding = rm);
-        };
-        P2.inverseCosine = P2.acos = function() {
-          var halfPi, x2 = this, Ctor = x2.constructor, k2 = x2.abs().cmp(1), pr2 = Ctor.precision, rm = Ctor.rounding;
-          if (k2 !== -1) {
-            return k2 === 0 ? x2.isNeg() ? getPi(Ctor, pr2, rm) : new Ctor(0) : new Ctor(NaN);
-          }
-          if (x2.isZero())
-            return getPi(Ctor, pr2 + 4, rm).times(0.5);
-          Ctor.precision = pr2 + 6;
-          Ctor.rounding = 1;
-          x2 = x2.asin();
-          halfPi = getPi(Ctor, pr2 + 4, rm).times(0.5);
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return halfPi.minus(x2);
-        };
-        P2.inverseHyperbolicCosine = P2.acosh = function() {
-          var pr2, rm, x2 = this, Ctor = x2.constructor;
-          if (x2.lte(1))
-            return new Ctor(x2.eq(1) ? 0 : NaN);
-          if (!x2.isFinite())
-            return new Ctor(x2);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          Ctor.precision = pr2 + Math.max(Math.abs(x2.e), x2.sd()) + 4;
-          Ctor.rounding = 1;
-          external = false;
-          x2 = x2.times(x2).minus(1).sqrt().plus(x2);
-          external = true;
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return x2.ln();
-        };
-        P2.inverseHyperbolicSine = P2.asinh = function() {
-          var pr2, rm, x2 = this, Ctor = x2.constructor;
-          if (!x2.isFinite() || x2.isZero())
-            return new Ctor(x2);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          Ctor.precision = pr2 + 2 * Math.max(Math.abs(x2.e), x2.sd()) + 6;
-          Ctor.rounding = 1;
-          external = false;
-          x2 = x2.times(x2).plus(1).sqrt().plus(x2);
-          external = true;
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return x2.ln();
-        };
-        P2.inverseHyperbolicTangent = P2.atanh = function() {
-          var pr2, rm, wpr, xsd, x2 = this, Ctor = x2.constructor;
-          if (!x2.isFinite())
-            return new Ctor(NaN);
-          if (x2.e >= 0)
-            return new Ctor(x2.abs().eq(1) ? x2.s / 0 : x2.isZero() ? x2 : NaN);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          xsd = x2.sd();
-          if (Math.max(xsd, pr2) < 2 * -x2.e - 1)
-            return finalise(new Ctor(x2), pr2, rm, true);
-          Ctor.precision = wpr = xsd - x2.e;
-          x2 = divide(x2.plus(1), new Ctor(1).minus(x2), wpr + pr2, 1);
-          Ctor.precision = pr2 + 4;
-          Ctor.rounding = 1;
-          x2 = x2.ln();
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return x2.times(0.5);
-        };
-        P2.inverseSine = P2.asin = function() {
-          var halfPi, k2, pr2, rm, x2 = this, Ctor = x2.constructor;
-          if (x2.isZero())
-            return new Ctor(x2);
-          k2 = x2.abs().cmp(1);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          if (k2 !== -1) {
-            if (k2 === 0) {
-              halfPi = getPi(Ctor, pr2 + 4, rm).times(0.5);
-              halfPi.s = x2.s;
-              return halfPi;
-            }
-            return new Ctor(NaN);
-          }
-          Ctor.precision = pr2 + 6;
-          Ctor.rounding = 1;
-          x2 = x2.div(new Ctor(1).minus(x2.times(x2)).sqrt().plus(1)).atan();
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return x2.times(2);
-        };
-        P2.inverseTangent = P2.atan = function() {
-          var i2, j2, k2, n2, px, t2, r3, wpr, x2, x3 = this, Ctor = x3.constructor, pr2 = Ctor.precision, rm = Ctor.rounding;
-          if (!x3.isFinite()) {
-            if (!x3.s)
-              return new Ctor(NaN);
-            if (pr2 + 4 <= PI_PRECISION) {
-              r3 = getPi(Ctor, pr2 + 4, rm).times(0.5);
-              r3.s = x3.s;
-              return r3;
-            }
-          } else if (x3.isZero()) {
-            return new Ctor(x3);
-          } else if (x3.abs().eq(1) && pr2 + 4 <= PI_PRECISION) {
-            r3 = getPi(Ctor, pr2 + 4, rm).times(0.25);
-            r3.s = x3.s;
-            return r3;
-          }
-          Ctor.precision = wpr = pr2 + 10;
-          Ctor.rounding = 1;
-          k2 = Math.min(28, wpr / LOG_BASE + 2 | 0);
-          for (i2 = k2; i2; --i2)
-            x3 = x3.div(x3.times(x3).plus(1).sqrt().plus(1));
-          external = false;
-          j2 = Math.ceil(wpr / LOG_BASE);
-          n2 = 1;
-          x2 = x3.times(x3);
-          r3 = new Ctor(x3);
-          px = x3;
-          for (; i2 !== -1; ) {
-            px = px.times(x2);
-            t2 = r3.minus(px.div(n2 += 2));
-            px = px.times(x2);
-            r3 = t2.plus(px.div(n2 += 2));
-            if (r3.d[j2] !== void 0)
-              for (i2 = j2; r3.d[i2] === t2.d[i2] && i2--; )
-                ;
-          }
-          if (k2)
-            r3 = r3.times(2 << k2 - 1);
-          external = true;
-          return finalise(r3, Ctor.precision = pr2, Ctor.rounding = rm, true);
-        };
-        P2.isFinite = function() {
-          return !!this.d;
-        };
-        P2.isInteger = P2.isInt = function() {
-          return !!this.d && mathfloor(this.e / LOG_BASE) > this.d.length - 2;
-        };
-        P2.isNaN = function() {
-          return !this.s;
-        };
-        P2.isNegative = P2.isNeg = function() {
-          return this.s < 0;
-        };
-        P2.isPositive = P2.isPos = function() {
-          return this.s > 0;
-        };
-        P2.isZero = function() {
-          return !!this.d && this.d[0] === 0;
-        };
-        P2.lessThan = P2.lt = function(y2) {
-          return this.cmp(y2) < 0;
-        };
-        P2.lessThanOrEqualTo = P2.lte = function(y2) {
-          return this.cmp(y2) < 1;
-        };
-        P2.logarithm = P2.log = function(base2) {
-          var isBase10, d2, denominator, k2, inf, num2, sd, r3, arg = this, Ctor = arg.constructor, pr2 = Ctor.precision, rm = Ctor.rounding, guard = 5;
-          if (base2 == null) {
-            base2 = new Ctor(10);
-            isBase10 = true;
-          } else {
-            base2 = new Ctor(base2);
-            d2 = base2.d;
-            if (base2.s < 0 || !d2 || !d2[0] || base2.eq(1))
-              return new Ctor(NaN);
-            isBase10 = base2.eq(10);
-          }
-          d2 = arg.d;
-          if (arg.s < 0 || !d2 || !d2[0] || arg.eq(1)) {
-            return new Ctor(d2 && !d2[0] ? -1 / 0 : arg.s != 1 ? NaN : d2 ? 0 : 1 / 0);
-          }
-          if (isBase10) {
-            if (d2.length > 1) {
-              inf = true;
-            } else {
-              for (k2 = d2[0]; k2 % 10 === 0; )
-                k2 /= 10;
-              inf = k2 !== 1;
-            }
-          }
-          external = false;
-          sd = pr2 + guard;
-          num2 = naturalLogarithm(arg, sd);
-          denominator = isBase10 ? getLn10(Ctor, sd + 10) : naturalLogarithm(base2, sd);
-          r3 = divide(num2, denominator, sd, 1);
-          if (checkRoundingDigits(r3.d, k2 = pr2, rm)) {
-            do {
-              sd += 10;
-              num2 = naturalLogarithm(arg, sd);
-              denominator = isBase10 ? getLn10(Ctor, sd + 10) : naturalLogarithm(base2, sd);
-              r3 = divide(num2, denominator, sd, 1);
-              if (!inf) {
-                if (+digitsToString(r3.d).slice(k2 + 1, k2 + 15) + 1 == 1e14) {
-                  r3 = finalise(r3, pr2 + 1, 0);
-                }
-                break;
-              }
-            } while (checkRoundingDigits(r3.d, k2 += 10, rm));
-          }
-          external = true;
-          return finalise(r3, pr2, rm);
-        };
-        P2.minus = P2.sub = function(y2) {
-          var d2, e5, i2, j2, k2, len, pr2, rm, xd, xe, xLTy, yd, x2 = this, Ctor = x2.constructor;
-          y2 = new Ctor(y2);
-          if (!x2.d || !y2.d) {
-            if (!x2.s || !y2.s)
-              y2 = new Ctor(NaN);
-            else if (x2.d)
-              y2.s = -y2.s;
-            else
-              y2 = new Ctor(y2.d || x2.s !== y2.s ? x2 : NaN);
-            return y2;
-          }
-          if (x2.s != y2.s) {
-            y2.s = -y2.s;
-            return x2.plus(y2);
-          }
-          xd = x2.d;
-          yd = y2.d;
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          if (!xd[0] || !yd[0]) {
-            if (yd[0])
-              y2.s = -y2.s;
-            else if (xd[0])
-              y2 = new Ctor(x2);
-            else
-              return new Ctor(rm === 3 ? -0 : 0);
-            return external ? finalise(y2, pr2, rm) : y2;
-          }
-          e5 = mathfloor(y2.e / LOG_BASE);
-          xe = mathfloor(x2.e / LOG_BASE);
-          xd = xd.slice();
-          k2 = xe - e5;
-          if (k2) {
-            xLTy = k2 < 0;
-            if (xLTy) {
-              d2 = xd;
-              k2 = -k2;
-              len = yd.length;
-            } else {
-              d2 = yd;
-              e5 = xe;
-              len = xd.length;
-            }
-            i2 = Math.max(Math.ceil(pr2 / LOG_BASE), len) + 2;
-            if (k2 > i2) {
-              k2 = i2;
-              d2.length = 1;
-            }
-            d2.reverse();
-            for (i2 = k2; i2--; )
-              d2.push(0);
-            d2.reverse();
-          } else {
-            i2 = xd.length;
-            len = yd.length;
-            xLTy = i2 < len;
-            if (xLTy)
-              len = i2;
-            for (i2 = 0; i2 < len; i2++) {
-              if (xd[i2] != yd[i2]) {
-                xLTy = xd[i2] < yd[i2];
-                break;
-              }
-            }
-            k2 = 0;
-          }
-          if (xLTy) {
-            d2 = xd;
-            xd = yd;
-            yd = d2;
-            y2.s = -y2.s;
-          }
-          len = xd.length;
-          for (i2 = yd.length - len; i2 > 0; --i2)
-            xd[len++] = 0;
-          for (i2 = yd.length; i2 > k2; ) {
-            if (xd[--i2] < yd[i2]) {
-              for (j2 = i2; j2 && xd[--j2] === 0; )
-                xd[j2] = BASE - 1;
-              --xd[j2];
-              xd[i2] += BASE;
-            }
-            xd[i2] -= yd[i2];
-          }
-          for (; xd[--len] === 0; )
-            xd.pop();
-          for (; xd[0] === 0; xd.shift())
-            --e5;
-          if (!xd[0])
-            return new Ctor(rm === 3 ? -0 : 0);
-          y2.d = xd;
-          y2.e = getBase10Exponent(xd, e5);
-          return external ? finalise(y2, pr2, rm) : y2;
-        };
-        P2.modulo = P2.mod = function(y2) {
-          var q2, x2 = this, Ctor = x2.constructor;
-          y2 = new Ctor(y2);
-          if (!x2.d || !y2.s || y2.d && !y2.d[0])
-            return new Ctor(NaN);
-          if (!y2.d || x2.d && !x2.d[0]) {
-            return finalise(new Ctor(x2), Ctor.precision, Ctor.rounding);
-          }
-          external = false;
-          if (Ctor.modulo == 9) {
-            q2 = divide(x2, y2.abs(), 0, 3, 1);
-            q2.s *= y2.s;
-          } else {
-            q2 = divide(x2, y2, 0, Ctor.modulo, 1);
-          }
-          q2 = q2.times(y2);
-          external = true;
-          return x2.minus(q2);
-        };
-        P2.naturalExponential = P2.exp = function() {
-          return naturalExponential(this);
-        };
-        P2.naturalLogarithm = P2.ln = function() {
-          return naturalLogarithm(this);
-        };
-        P2.negated = P2.neg = function() {
-          var x2 = new this.constructor(this);
-          x2.s = -x2.s;
-          return finalise(x2);
-        };
-        P2.plus = P2.add = function(y2) {
-          var carry, d2, e5, i2, k2, len, pr2, rm, xd, yd, x2 = this, Ctor = x2.constructor;
-          y2 = new Ctor(y2);
-          if (!x2.d || !y2.d) {
-            if (!x2.s || !y2.s)
-              y2 = new Ctor(NaN);
-            else if (!x2.d)
-              y2 = new Ctor(y2.d || x2.s === y2.s ? x2 : NaN);
-            return y2;
-          }
-          if (x2.s != y2.s) {
-            y2.s = -y2.s;
-            return x2.minus(y2);
-          }
-          xd = x2.d;
-          yd = y2.d;
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          if (!xd[0] || !yd[0]) {
-            if (!yd[0])
-              y2 = new Ctor(x2);
-            return external ? finalise(y2, pr2, rm) : y2;
-          }
-          k2 = mathfloor(x2.e / LOG_BASE);
-          e5 = mathfloor(y2.e / LOG_BASE);
-          xd = xd.slice();
-          i2 = k2 - e5;
-          if (i2) {
-            if (i2 < 0) {
-              d2 = xd;
-              i2 = -i2;
-              len = yd.length;
-            } else {
-              d2 = yd;
-              e5 = k2;
-              len = xd.length;
-            }
-            k2 = Math.ceil(pr2 / LOG_BASE);
-            len = k2 > len ? k2 + 1 : len + 1;
-            if (i2 > len) {
-              i2 = len;
-              d2.length = 1;
-            }
-            d2.reverse();
-            for (; i2--; )
-              d2.push(0);
-            d2.reverse();
-          }
-          len = xd.length;
-          i2 = yd.length;
-          if (len - i2 < 0) {
-            i2 = len;
-            d2 = yd;
-            yd = xd;
-            xd = d2;
-          }
-          for (carry = 0; i2; ) {
-            carry = (xd[--i2] = xd[i2] + yd[i2] + carry) / BASE | 0;
-            xd[i2] %= BASE;
-          }
-          if (carry) {
-            xd.unshift(carry);
-            ++e5;
-          }
-          for (len = xd.length; xd[--len] == 0; )
-            xd.pop();
-          y2.d = xd;
-          y2.e = getBase10Exponent(xd, e5);
-          return external ? finalise(y2, pr2, rm) : y2;
-        };
-        P2.precision = P2.sd = function(z2) {
-          var k2, x2 = this;
-          if (z2 !== void 0 && z2 !== !!z2 && z2 !== 1 && z2 !== 0)
-            throw Error(invalidArgument + z2);
-          if (x2.d) {
-            k2 = getPrecision(x2.d);
-            if (z2 && x2.e + 1 > k2)
-              k2 = x2.e + 1;
-          } else {
-            k2 = NaN;
-          }
-          return k2;
-        };
-        P2.round = function() {
-          var x2 = this, Ctor = x2.constructor;
-          return finalise(new Ctor(x2), x2.e + 1, Ctor.rounding);
-        };
-        P2.sine = P2.sin = function() {
-          var pr2, rm, x2 = this, Ctor = x2.constructor;
-          if (!x2.isFinite())
-            return new Ctor(NaN);
-          if (x2.isZero())
-            return new Ctor(x2);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          Ctor.precision = pr2 + Math.max(x2.e, x2.sd()) + LOG_BASE;
-          Ctor.rounding = 1;
-          x2 = sine(Ctor, toLessThanHalfPi(Ctor, x2));
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return finalise(quadrant2 > 2 ? x2.neg() : x2, pr2, rm, true);
-        };
-        P2.squareRoot = P2.sqrt = function() {
-          var m3, n2, sd, r3, rep, t2, x2 = this, d2 = x2.d, e5 = x2.e, s3 = x2.s, Ctor = x2.constructor;
-          if (s3 !== 1 || !d2 || !d2[0]) {
-            return new Ctor(!s3 || s3 < 0 && (!d2 || d2[0]) ? NaN : d2 ? x2 : 1 / 0);
-          }
-          external = false;
-          s3 = Math.sqrt(+x2);
-          if (s3 == 0 || s3 == 1 / 0) {
-            n2 = digitsToString(d2);
-            if ((n2.length + e5) % 2 == 0)
-              n2 += "0";
-            s3 = Math.sqrt(n2);
-            e5 = mathfloor((e5 + 1) / 2) - (e5 < 0 || e5 % 2);
-            if (s3 == 1 / 0) {
-              n2 = "5e" + e5;
-            } else {
-              n2 = s3.toExponential();
-              n2 = n2.slice(0, n2.indexOf("e") + 1) + e5;
-            }
-            r3 = new Ctor(n2);
-          } else {
-            r3 = new Ctor(s3.toString());
-          }
-          sd = (e5 = Ctor.precision) + 3;
-          for (; ; ) {
-            t2 = r3;
-            r3 = t2.plus(divide(x2, t2, sd + 2, 1)).times(0.5);
-            if (digitsToString(t2.d).slice(0, sd) === (n2 = digitsToString(r3.d)).slice(0, sd)) {
-              n2 = n2.slice(sd - 3, sd + 1);
-              if (n2 == "9999" || !rep && n2 == "4999") {
-                if (!rep) {
-                  finalise(t2, e5 + 1, 0);
-                  if (t2.times(t2).eq(x2)) {
-                    r3 = t2;
-                    break;
-                  }
-                }
-                sd += 4;
-                rep = 1;
-              } else {
-                if (!+n2 || !+n2.slice(1) && n2.charAt(0) == "5") {
-                  finalise(r3, e5 + 1, 1);
-                  m3 = !r3.times(r3).eq(x2);
-                }
-                break;
-              }
-            }
-          }
-          external = true;
-          return finalise(r3, e5, Ctor.rounding, m3);
-        };
-        P2.tangent = P2.tan = function() {
-          var pr2, rm, x2 = this, Ctor = x2.constructor;
-          if (!x2.isFinite())
-            return new Ctor(NaN);
-          if (x2.isZero())
-            return new Ctor(x2);
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          Ctor.precision = pr2 + 10;
-          Ctor.rounding = 1;
-          x2 = x2.sin();
-          x2.s = 1;
-          x2 = divide(x2, new Ctor(1).minus(x2.times(x2)).sqrt(), pr2 + 10, 0);
-          Ctor.precision = pr2;
-          Ctor.rounding = rm;
-          return finalise(quadrant2 == 2 || quadrant2 == 4 ? x2.neg() : x2, pr2, rm, true);
-        };
-        P2.times = P2.mul = function(y2) {
-          var carry, e5, i2, k2, r3, rL, t2, xdL, ydL, x2 = this, Ctor = x2.constructor, xd = x2.d, yd = (y2 = new Ctor(y2)).d;
-          y2.s *= x2.s;
-          if (!xd || !xd[0] || !yd || !yd[0]) {
-            return new Ctor(!y2.s || xd && !xd[0] && !yd || yd && !yd[0] && !xd ? NaN : !xd || !yd ? y2.s / 0 : y2.s * 0);
-          }
-          e5 = mathfloor(x2.e / LOG_BASE) + mathfloor(y2.e / LOG_BASE);
-          xdL = xd.length;
-          ydL = yd.length;
-          if (xdL < ydL) {
-            r3 = xd;
-            xd = yd;
-            yd = r3;
-            rL = xdL;
-            xdL = ydL;
-            ydL = rL;
-          }
-          r3 = [];
-          rL = xdL + ydL;
-          for (i2 = rL; i2--; )
-            r3.push(0);
-          for (i2 = ydL; --i2 >= 0; ) {
-            carry = 0;
-            for (k2 = xdL + i2; k2 > i2; ) {
-              t2 = r3[k2] + yd[i2] * xd[k2 - i2 - 1] + carry;
-              r3[k2--] = t2 % BASE | 0;
-              carry = t2 / BASE | 0;
-            }
-            r3[k2] = (r3[k2] + carry) % BASE | 0;
-          }
-          for (; !r3[--rL]; )
-            r3.pop();
-          if (carry)
-            ++e5;
-          else
-            r3.shift();
-          y2.d = r3;
-          y2.e = getBase10Exponent(r3, e5);
-          return external ? finalise(y2, Ctor.precision, Ctor.rounding) : y2;
-        };
-        P2.toBinary = function(sd, rm) {
-          return toStringBinary(this, 2, sd, rm);
-        };
-        P2.toDecimalPlaces = P2.toDP = function(dp, rm) {
-          var x2 = this, Ctor = x2.constructor;
-          x2 = new Ctor(x2);
-          if (dp === void 0)
-            return x2;
-          checkInt32(dp, 0, MAX_DIGITS);
-          if (rm === void 0)
-            rm = Ctor.rounding;
-          else
-            checkInt32(rm, 0, 8);
-          return finalise(x2, dp + x2.e + 1, rm);
-        };
-        P2.toExponential = function(dp, rm) {
-          var str3, x2 = this, Ctor = x2.constructor;
-          if (dp === void 0) {
-            str3 = finiteToString(x2, true);
-          } else {
-            checkInt32(dp, 0, MAX_DIGITS);
-            if (rm === void 0)
-              rm = Ctor.rounding;
-            else
-              checkInt32(rm, 0, 8);
-            x2 = finalise(new Ctor(x2), dp + 1, rm);
-            str3 = finiteToString(x2, true, dp + 1);
-          }
-          return x2.isNeg() && !x2.isZero() ? "-" + str3 : str3;
-        };
-        P2.toFixed = function(dp, rm) {
-          var str3, y2, x2 = this, Ctor = x2.constructor;
-          if (dp === void 0) {
-            str3 = finiteToString(x2);
-          } else {
-            checkInt32(dp, 0, MAX_DIGITS);
-            if (rm === void 0)
-              rm = Ctor.rounding;
-            else
-              checkInt32(rm, 0, 8);
-            y2 = finalise(new Ctor(x2), dp + x2.e + 1, rm);
-            str3 = finiteToString(y2, false, dp + y2.e + 1);
-          }
-          return x2.isNeg() && !x2.isZero() ? "-" + str3 : str3;
-        };
-        P2.toFraction = function(maxD) {
-          var d2, d0, d1, d22, e5, k2, n2, n0, n1, pr2, q2, r3, x2 = this, xd = x2.d, Ctor = x2.constructor;
-          if (!xd)
-            return new Ctor(x2);
-          n1 = d0 = new Ctor(1);
-          d1 = n0 = new Ctor(0);
-          d2 = new Ctor(d1);
-          e5 = d2.e = getPrecision(xd) - x2.e - 1;
-          k2 = e5 % LOG_BASE;
-          d2.d[0] = mathpow(10, k2 < 0 ? LOG_BASE + k2 : k2);
-          if (maxD == null) {
-            maxD = e5 > 0 ? d2 : n1;
-          } else {
-            n2 = new Ctor(maxD);
-            if (!n2.isInt() || n2.lt(n1))
-              throw Error(invalidArgument + n2);
-            maxD = n2.gt(d2) ? e5 > 0 ? d2 : n1 : n2;
-          }
-          external = false;
-          n2 = new Ctor(digitsToString(xd));
-          pr2 = Ctor.precision;
-          Ctor.precision = e5 = xd.length * LOG_BASE * 2;
-          for (; ; ) {
-            q2 = divide(n2, d2, 0, 1, 1);
-            d22 = d0.plus(q2.times(d1));
-            if (d22.cmp(maxD) == 1)
-              break;
-            d0 = d1;
-            d1 = d22;
-            d22 = n1;
-            n1 = n0.plus(q2.times(d22));
-            n0 = d22;
-            d22 = d2;
-            d2 = n2.minus(q2.times(d22));
-            n2 = d22;
-          }
-          d22 = divide(maxD.minus(d0), d1, 0, 1, 1);
-          n0 = n0.plus(d22.times(n1));
-          d0 = d0.plus(d22.times(d1));
-          n0.s = n1.s = x2.s;
-          r3 = divide(n1, d1, e5, 1).minus(x2).abs().cmp(divide(n0, d0, e5, 1).minus(x2).abs()) < 1 ? [n1, d1] : [n0, d0];
-          Ctor.precision = pr2;
-          external = true;
-          return r3;
-        };
-        P2.toHexadecimal = P2.toHex = function(sd, rm) {
-          return toStringBinary(this, 16, sd, rm);
-        };
-        P2.toNearest = function(y2, rm) {
-          var x2 = this, Ctor = x2.constructor;
-          x2 = new Ctor(x2);
-          if (y2 == null) {
-            if (!x2.d)
-              return x2;
-            y2 = new Ctor(1);
-            rm = Ctor.rounding;
-          } else {
-            y2 = new Ctor(y2);
-            if (rm === void 0) {
-              rm = Ctor.rounding;
-            } else {
-              checkInt32(rm, 0, 8);
-            }
-            if (!x2.d)
-              return y2.s ? x2 : y2;
-            if (!y2.d) {
-              if (y2.s)
-                y2.s = x2.s;
-              return y2;
-            }
-          }
-          if (y2.d[0]) {
-            external = false;
-            x2 = divide(x2, y2, 0, rm, 1).times(y2);
-            external = true;
-            finalise(x2);
-          } else {
-            y2.s = x2.s;
-            x2 = y2;
-          }
-          return x2;
-        };
-        P2.toNumber = function() {
-          return +this;
-        };
-        P2.toOctal = function(sd, rm) {
-          return toStringBinary(this, 8, sd, rm);
-        };
-        P2.toPower = P2.pow = function(y2) {
-          var e5, k2, pr2, r3, rm, s3, x2 = this, Ctor = x2.constructor, yn = +(y2 = new Ctor(y2));
-          if (!x2.d || !y2.d || !x2.d[0] || !y2.d[0])
-            return new Ctor(mathpow(+x2, yn));
-          x2 = new Ctor(x2);
-          if (x2.eq(1))
-            return x2;
-          pr2 = Ctor.precision;
-          rm = Ctor.rounding;
-          if (y2.eq(1))
-            return finalise(x2, pr2, rm);
-          e5 = mathfloor(y2.e / LOG_BASE);
-          if (e5 >= y2.d.length - 1 && (k2 = yn < 0 ? -yn : yn) <= MAX_SAFE_INTEGER) {
-            r3 = intPow(Ctor, x2, k2, pr2);
-            return y2.s < 0 ? new Ctor(1).div(r3) : finalise(r3, pr2, rm);
-          }
-          s3 = x2.s;
-          if (s3 < 0) {
-            if (e5 < y2.d.length - 1)
-              return new Ctor(NaN);
-            if ((y2.d[e5] & 1) == 0)
-              s3 = 1;
-            if (x2.e == 0 && x2.d[0] == 1 && x2.d.length == 1) {
-              x2.s = s3;
-              return x2;
-            }
-          }
-          k2 = mathpow(+x2, yn);
-          e5 = k2 == 0 || !isFinite(k2) ? mathfloor(yn * (Math.log("0." + digitsToString(x2.d)) / Math.LN10 + x2.e + 1)) : new Ctor(k2 + "").e;
-          if (e5 > Ctor.maxE + 1 || e5 < Ctor.minE - 1)
-            return new Ctor(e5 > 0 ? s3 / 0 : 0);
-          external = false;
-          Ctor.rounding = x2.s = 1;
-          k2 = Math.min(12, (e5 + "").length);
-          r3 = naturalExponential(y2.times(naturalLogarithm(x2, pr2 + k2)), pr2);
-          if (r3.d) {
-            r3 = finalise(r3, pr2 + 5, 1);
-            if (checkRoundingDigits(r3.d, pr2, rm)) {
-              e5 = pr2 + 10;
-              r3 = finalise(naturalExponential(y2.times(naturalLogarithm(x2, e5 + k2)), e5), e5 + 5, 1);
-              if (+digitsToString(r3.d).slice(pr2 + 1, pr2 + 15) + 1 == 1e14) {
-                r3 = finalise(r3, pr2 + 1, 0);
-              }
-            }
-          }
-          r3.s = s3;
-          external = true;
-          Ctor.rounding = rm;
-          return finalise(r3, pr2, rm);
-        };
-        P2.toPrecision = function(sd, rm) {
-          var str3, x2 = this, Ctor = x2.constructor;
-          if (sd === void 0) {
-            str3 = finiteToString(x2, x2.e <= Ctor.toExpNeg || x2.e >= Ctor.toExpPos);
-          } else {
-            checkInt32(sd, 1, MAX_DIGITS);
-            if (rm === void 0)
-              rm = Ctor.rounding;
-            else
-              checkInt32(rm, 0, 8);
-            x2 = finalise(new Ctor(x2), sd, rm);
-            str3 = finiteToString(x2, sd <= x2.e || x2.e <= Ctor.toExpNeg, sd);
-          }
-          return x2.isNeg() && !x2.isZero() ? "-" + str3 : str3;
-        };
-        P2.toSignificantDigits = P2.toSD = function(sd, rm) {
-          var x2 = this, Ctor = x2.constructor;
-          if (sd === void 0) {
-            sd = Ctor.precision;
-            rm = Ctor.rounding;
-          } else {
-            checkInt32(sd, 1, MAX_DIGITS);
-            if (rm === void 0)
-              rm = Ctor.rounding;
-            else
-              checkInt32(rm, 0, 8);
-          }
-          return finalise(new Ctor(x2), sd, rm);
-        };
-        P2.toString = function() {
-          var x2 = this, Ctor = x2.constructor, str3 = finiteToString(x2, x2.e <= Ctor.toExpNeg || x2.e >= Ctor.toExpPos);
-          return x2.isNeg() && !x2.isZero() ? "-" + str3 : str3;
-        };
-        P2.truncated = P2.trunc = function() {
-          return finalise(new this.constructor(this), this.e + 1, 1);
-        };
-        P2.valueOf = P2.toJSON = function() {
-          var x2 = this, Ctor = x2.constructor, str3 = finiteToString(x2, x2.e <= Ctor.toExpNeg || x2.e >= Ctor.toExpPos);
-          return x2.isNeg() ? "-" + str3 : str3;
-        };
-        function digitsToString(d2) {
-          var i2, k2, ws, indexOfLastWord = d2.length - 1, str3 = "", w2 = d2[0];
-          if (indexOfLastWord > 0) {
-            str3 += w2;
-            for (i2 = 1; i2 < indexOfLastWord; i2++) {
-              ws = d2[i2] + "";
-              k2 = LOG_BASE - ws.length;
-              if (k2)
-                str3 += getZeroString(k2);
-              str3 += ws;
-            }
-            w2 = d2[i2];
-            ws = w2 + "";
-            k2 = LOG_BASE - ws.length;
-            if (k2)
-              str3 += getZeroString(k2);
-          } else if (w2 === 0) {
-            return "0";
-          }
-          for (; w2 % 10 === 0; )
-            w2 /= 10;
-          return str3 + w2;
-        }
-        function checkInt32(i2, min2, max2) {
-          if (i2 !== ~~i2 || i2 < min2 || i2 > max2) {
-            throw Error(invalidArgument + i2);
-          }
-        }
-        function checkRoundingDigits(d2, i2, rm, repeating) {
-          var di, k2, r3, rd;
-          for (k2 = d2[0]; k2 >= 10; k2 /= 10)
-            --i2;
-          if (--i2 < 0) {
-            i2 += LOG_BASE;
-            di = 0;
-          } else {
-            di = Math.ceil((i2 + 1) / LOG_BASE);
-            i2 %= LOG_BASE;
-          }
-          k2 = mathpow(10, LOG_BASE - i2);
-          rd = d2[di] % k2 | 0;
-          if (repeating == null) {
-            if (i2 < 3) {
-              if (i2 == 0)
-                rd = rd / 100 | 0;
-              else if (i2 == 1)
-                rd = rd / 10 | 0;
-              r3 = rm < 4 && rd == 99999 || rm > 3 && rd == 49999 || rd == 5e4 || rd == 0;
-            } else {
-              r3 = (rm < 4 && rd + 1 == k2 || rm > 3 && rd + 1 == k2 / 2) && (d2[di + 1] / k2 / 100 | 0) == mathpow(10, i2 - 2) - 1 || (rd == k2 / 2 || rd == 0) && (d2[di + 1] / k2 / 100 | 0) == 0;
-            }
-          } else {
-            if (i2 < 4) {
-              if (i2 == 0)
-                rd = rd / 1e3 | 0;
-              else if (i2 == 1)
-                rd = rd / 100 | 0;
-              else if (i2 == 2)
-                rd = rd / 10 | 0;
-              r3 = (repeating || rm < 4) && rd == 9999 || !repeating && rm > 3 && rd == 4999;
-            } else {
-              r3 = ((repeating || rm < 4) && rd + 1 == k2 || !repeating && rm > 3 && rd + 1 == k2 / 2) && (d2[di + 1] / k2 / 1e3 | 0) == mathpow(10, i2 - 3) - 1;
-            }
-          }
-          return r3;
-        }
-        function convertBase(str3, baseIn, baseOut) {
-          var j2, arr = [0], arrL, i2 = 0, strL = str3.length;
-          for (; i2 < strL; ) {
-            for (arrL = arr.length; arrL--; )
-              arr[arrL] *= baseIn;
-            arr[0] += NUMERALS.indexOf(str3.charAt(i2++));
-            for (j2 = 0; j2 < arr.length; j2++) {
-              if (arr[j2] > baseOut - 1) {
-                if (arr[j2 + 1] === void 0)
-                  arr[j2 + 1] = 0;
-                arr[j2 + 1] += arr[j2] / baseOut | 0;
-                arr[j2] %= baseOut;
-              }
-            }
-          }
-          return arr.reverse();
-        }
-        function cosine(Ctor, x2) {
-          var k2, len, y2;
-          if (x2.isZero())
-            return x2;
-          len = x2.d.length;
-          if (len < 32) {
-            k2 = Math.ceil(len / 3);
-            y2 = (1 / tinyPow(4, k2)).toString();
-          } else {
-            k2 = 16;
-            y2 = "2.3283064365386962890625e-10";
-          }
-          Ctor.precision += k2;
-          x2 = taylorSeries(Ctor, 1, x2.times(y2), new Ctor(1));
-          for (var i2 = k2; i2--; ) {
-            var cos2x = x2.times(x2);
-            x2 = cos2x.times(cos2x).minus(cos2x).times(8).plus(1);
-          }
-          Ctor.precision -= k2;
-          return x2;
-        }
-        var divide = function() {
-          function multiplyInteger(x2, k2, base2) {
-            var temp, carry = 0, i2 = x2.length;
-            for (x2 = x2.slice(); i2--; ) {
-              temp = x2[i2] * k2 + carry;
-              x2[i2] = temp % base2 | 0;
-              carry = temp / base2 | 0;
-            }
-            if (carry)
-              x2.unshift(carry);
-            return x2;
-          }
-          function compare(a2, b2, aL, bL) {
-            var i2, r3;
-            if (aL != bL) {
-              r3 = aL > bL ? 1 : -1;
-            } else {
-              for (i2 = r3 = 0; i2 < aL; i2++) {
-                if (a2[i2] != b2[i2]) {
-                  r3 = a2[i2] > b2[i2] ? 1 : -1;
-                  break;
-                }
-              }
-            }
-            return r3;
-          }
-          function subtract(a2, b2, aL, base2) {
-            var i2 = 0;
-            for (; aL--; ) {
-              a2[aL] -= i2;
-              i2 = a2[aL] < b2[aL] ? 1 : 0;
-              a2[aL] = i2 * base2 + a2[aL] - b2[aL];
-            }
-            for (; !a2[0] && a2.length > 1; )
-              a2.shift();
-          }
-          return function(x2, y2, pr2, rm, dp, base2) {
-            var cmp, e5, i2, k2, logBase, more, prod, prodL, q2, qd, rem, remL, rem0, sd, t2, xi, xL, yd0, yL, yz, Ctor = x2.constructor, sign2 = x2.s == y2.s ? 1 : -1, xd = x2.d, yd = y2.d;
-            if (!xd || !xd[0] || !yd || !yd[0]) {
-              return new Ctor(!x2.s || !y2.s || (xd ? yd && xd[0] == yd[0] : !yd) ? NaN : xd && xd[0] == 0 || !yd ? sign2 * 0 : sign2 / 0);
-            }
-            if (base2) {
-              logBase = 1;
-              e5 = x2.e - y2.e;
-            } else {
-              base2 = BASE;
-              logBase = LOG_BASE;
-              e5 = mathfloor(x2.e / logBase) - mathfloor(y2.e / logBase);
-            }
-            yL = yd.length;
-            xL = xd.length;
-            q2 = new Ctor(sign2);
-            qd = q2.d = [];
-            for (i2 = 0; yd[i2] == (xd[i2] || 0); i2++)
-              ;
-            if (yd[i2] > (xd[i2] || 0))
-              e5--;
-            if (pr2 == null) {
-              sd = pr2 = Ctor.precision;
-              rm = Ctor.rounding;
-            } else if (dp) {
-              sd = pr2 + (x2.e - y2.e) + 1;
-            } else {
-              sd = pr2;
-            }
-            if (sd < 0) {
-              qd.push(1);
-              more = true;
-            } else {
-              sd = sd / logBase + 2 | 0;
-              i2 = 0;
-              if (yL == 1) {
-                k2 = 0;
-                yd = yd[0];
-                sd++;
-                for (; (i2 < xL || k2) && sd--; i2++) {
-                  t2 = k2 * base2 + (xd[i2] || 0);
-                  qd[i2] = t2 / yd | 0;
-                  k2 = t2 % yd | 0;
-                }
-                more = k2 || i2 < xL;
-              } else {
-                k2 = base2 / (yd[0] + 1) | 0;
-                if (k2 > 1) {
-                  yd = multiplyInteger(yd, k2, base2);
-                  xd = multiplyInteger(xd, k2, base2);
-                  yL = yd.length;
-                  xL = xd.length;
-                }
-                xi = yL;
-                rem = xd.slice(0, yL);
-                remL = rem.length;
-                for (; remL < yL; )
-                  rem[remL++] = 0;
-                yz = yd.slice();
-                yz.unshift(0);
-                yd0 = yd[0];
-                if (yd[1] >= base2 / 2)
-                  ++yd0;
-                do {
-                  k2 = 0;
-                  cmp = compare(yd, rem, yL, remL);
-                  if (cmp < 0) {
-                    rem0 = rem[0];
-                    if (yL != remL)
-                      rem0 = rem0 * base2 + (rem[1] || 0);
-                    k2 = rem0 / yd0 | 0;
-                    if (k2 > 1) {
-                      if (k2 >= base2)
-                        k2 = base2 - 1;
-                      prod = multiplyInteger(yd, k2, base2);
-                      prodL = prod.length;
-                      remL = rem.length;
-                      cmp = compare(prod, rem, prodL, remL);
-                      if (cmp == 1) {
-                        k2--;
-                        subtract(prod, yL < prodL ? yz : yd, prodL, base2);
-                      }
-                    } else {
-                      if (k2 == 0)
-                        cmp = k2 = 1;
-                      prod = yd.slice();
-                    }
-                    prodL = prod.length;
-                    if (prodL < remL)
-                      prod.unshift(0);
-                    subtract(rem, prod, remL, base2);
-                    if (cmp == -1) {
-                      remL = rem.length;
-                      cmp = compare(yd, rem, yL, remL);
-                      if (cmp < 1) {
-                        k2++;
-                        subtract(rem, yL < remL ? yz : yd, remL, base2);
-                      }
-                    }
-                    remL = rem.length;
-                  } else if (cmp === 0) {
-                    k2++;
-                    rem = [0];
-                  }
-                  qd[i2++] = k2;
-                  if (cmp && rem[0]) {
-                    rem[remL++] = xd[xi] || 0;
-                  } else {
-                    rem = [xd[xi]];
-                    remL = 1;
-                  }
-                } while ((xi++ < xL || rem[0] !== void 0) && sd--);
-                more = rem[0] !== void 0;
-              }
-              if (!qd[0])
-                qd.shift();
-            }
-            if (logBase == 1) {
-              q2.e = e5;
-              inexact = more;
-            } else {
-              for (i2 = 1, k2 = qd[0]; k2 >= 10; k2 /= 10)
-                i2++;
-              q2.e = i2 + e5 * logBase - 1;
-              finalise(q2, dp ? pr2 + q2.e + 1 : pr2, rm, more);
-            }
-            return q2;
-          };
-        }();
-        function finalise(x2, sd, rm, isTruncated) {
-          var digits, i2, j2, k2, rd, roundUp, w2, xd, xdi, Ctor = x2.constructor;
-          out:
-            if (sd != null) {
-              xd = x2.d;
-              if (!xd)
-                return x2;
-              for (digits = 1, k2 = xd[0]; k2 >= 10; k2 /= 10)
-                digits++;
-              i2 = sd - digits;
-              if (i2 < 0) {
-                i2 += LOG_BASE;
-                j2 = sd;
-                w2 = xd[xdi = 0];
-                rd = w2 / mathpow(10, digits - j2 - 1) % 10 | 0;
-              } else {
-                xdi = Math.ceil((i2 + 1) / LOG_BASE);
-                k2 = xd.length;
-                if (xdi >= k2) {
-                  if (isTruncated) {
-                    for (; k2++ <= xdi; )
-                      xd.push(0);
-                    w2 = rd = 0;
-                    digits = 1;
-                    i2 %= LOG_BASE;
-                    j2 = i2 - LOG_BASE + 1;
-                  } else {
-                    break out;
-                  }
-                } else {
-                  w2 = k2 = xd[xdi];
-                  for (digits = 1; k2 >= 10; k2 /= 10)
-                    digits++;
-                  i2 %= LOG_BASE;
-                  j2 = i2 - LOG_BASE + digits;
-                  rd = j2 < 0 ? 0 : w2 / mathpow(10, digits - j2 - 1) % 10 | 0;
-                }
-              }
-              isTruncated = isTruncated || sd < 0 || xd[xdi + 1] !== void 0 || (j2 < 0 ? w2 : w2 % mathpow(10, digits - j2 - 1));
-              roundUp = rm < 4 ? (rd || isTruncated) && (rm == 0 || rm == (x2.s < 0 ? 3 : 2)) : rd > 5 || rd == 5 && (rm == 4 || isTruncated || rm == 6 && (i2 > 0 ? j2 > 0 ? w2 / mathpow(10, digits - j2) : 0 : xd[xdi - 1]) % 10 & 1 || rm == (x2.s < 0 ? 8 : 7));
-              if (sd < 1 || !xd[0]) {
-                xd.length = 0;
-                if (roundUp) {
-                  sd -= x2.e + 1;
-                  xd[0] = mathpow(10, (LOG_BASE - sd % LOG_BASE) % LOG_BASE);
-                  x2.e = -sd || 0;
-                } else {
-                  xd[0] = x2.e = 0;
-                }
-                return x2;
-              }
-              if (i2 == 0) {
-                xd.length = xdi;
-                k2 = 1;
-                xdi--;
-              } else {
-                xd.length = xdi + 1;
-                k2 = mathpow(10, LOG_BASE - i2);
-                xd[xdi] = j2 > 0 ? (w2 / mathpow(10, digits - j2) % mathpow(10, j2) | 0) * k2 : 0;
-              }
-              if (roundUp) {
-                for (; ; ) {
-                  if (xdi == 0) {
-                    for (i2 = 1, j2 = xd[0]; j2 >= 10; j2 /= 10)
-                      i2++;
-                    j2 = xd[0] += k2;
-                    for (k2 = 1; j2 >= 10; j2 /= 10)
-                      k2++;
-                    if (i2 != k2) {
-                      x2.e++;
-                      if (xd[0] == BASE)
-                        xd[0] = 1;
-                    }
-                    break;
-                  } else {
-                    xd[xdi] += k2;
-                    if (xd[xdi] != BASE)
-                      break;
-                    xd[xdi--] = 0;
-                    k2 = 1;
-                  }
-                }
-              }
-              for (i2 = xd.length; xd[--i2] === 0; )
-                xd.pop();
-            }
-          if (external) {
-            if (x2.e > Ctor.maxE) {
-              x2.d = null;
-              x2.e = NaN;
-            } else if (x2.e < Ctor.minE) {
-              x2.e = 0;
-              x2.d = [0];
-            }
-          }
-          return x2;
-        }
-        function finiteToString(x2, isExp, sd) {
-          if (!x2.isFinite())
-            return nonFiniteToString(x2);
-          var k2, e5 = x2.e, str3 = digitsToString(x2.d), len = str3.length;
-          if (isExp) {
-            if (sd && (k2 = sd - len) > 0) {
-              str3 = str3.charAt(0) + "." + str3.slice(1) + getZeroString(k2);
-            } else if (len > 1) {
-              str3 = str3.charAt(0) + "." + str3.slice(1);
-            }
-            str3 = str3 + (x2.e < 0 ? "e" : "e+") + x2.e;
-          } else if (e5 < 0) {
-            str3 = "0." + getZeroString(-e5 - 1) + str3;
-            if (sd && (k2 = sd - len) > 0)
-              str3 += getZeroString(k2);
-          } else if (e5 >= len) {
-            str3 += getZeroString(e5 + 1 - len);
-            if (sd && (k2 = sd - e5 - 1) > 0)
-              str3 = str3 + "." + getZeroString(k2);
-          } else {
-            if ((k2 = e5 + 1) < len)
-              str3 = str3.slice(0, k2) + "." + str3.slice(k2);
-            if (sd && (k2 = sd - len) > 0) {
-              if (e5 + 1 === len)
-                str3 += ".";
-              str3 += getZeroString(k2);
-            }
-          }
-          return str3;
-        }
-        function getBase10Exponent(digits, e5) {
-          var w2 = digits[0];
-          for (e5 *= LOG_BASE; w2 >= 10; w2 /= 10)
-            e5++;
-          return e5;
-        }
-        function getLn10(Ctor, sd, pr2) {
-          if (sd > LN10_PRECISION) {
-            external = true;
-            if (pr2)
-              Ctor.precision = pr2;
-            throw Error(precisionLimitExceeded);
-          }
-          return finalise(new Ctor(LN10), sd, 1, true);
-        }
-        function getPi(Ctor, sd, rm) {
-          if (sd > PI_PRECISION)
-            throw Error(precisionLimitExceeded);
-          return finalise(new Ctor(PI), sd, rm, true);
-        }
-        function getPrecision(digits) {
-          var w2 = digits.length - 1, len = w2 * LOG_BASE + 1;
-          w2 = digits[w2];
-          if (w2) {
-            for (; w2 % 10 == 0; w2 /= 10)
-              len--;
-            for (w2 = digits[0]; w2 >= 10; w2 /= 10)
-              len++;
-          }
-          return len;
-        }
-        function getZeroString(k2) {
-          var zs = "";
-          for (; k2--; )
-            zs += "0";
-          return zs;
-        }
-        function intPow(Ctor, x2, n2, pr2) {
-          var isTruncated, r3 = new Ctor(1), k2 = Math.ceil(pr2 / LOG_BASE + 4);
-          external = false;
-          for (; ; ) {
-            if (n2 % 2) {
-              r3 = r3.times(x2);
-              if (truncate(r3.d, k2))
-                isTruncated = true;
-            }
-            n2 = mathfloor(n2 / 2);
-            if (n2 === 0) {
-              n2 = r3.d.length - 1;
-              if (isTruncated && r3.d[n2] === 0)
-                ++r3.d[n2];
-              break;
-            }
-            x2 = x2.times(x2);
-            truncate(x2.d, k2);
-          }
-          external = true;
-          return r3;
-        }
-        function isOdd2(n2) {
-          return n2.d[n2.d.length - 1] & 1;
-        }
-        function maxOrMin(Ctor, args, ltgt) {
-          var y2, x2 = new Ctor(args[0]), i2 = 0;
-          for (; ++i2 < args.length; ) {
-            y2 = new Ctor(args[i2]);
-            if (!y2.s) {
-              x2 = y2;
-              break;
-            } else if (x2[ltgt](y2)) {
-              x2 = y2;
-            }
-          }
-          return x2;
-        }
-        function naturalExponential(x2, sd) {
-          var denominator, guard, j2, pow2, sum2, t2, wpr, rep = 0, i2 = 0, k2 = 0, Ctor = x2.constructor, rm = Ctor.rounding, pr2 = Ctor.precision;
-          if (!x2.d || !x2.d[0] || x2.e > 17) {
-            return new Ctor(x2.d ? !x2.d[0] ? 1 : x2.s < 0 ? 0 : 1 / 0 : x2.s ? x2.s < 0 ? 0 : x2 : 0 / 0);
-          }
-          if (sd == null) {
-            external = false;
-            wpr = pr2;
-          } else {
-            wpr = sd;
-          }
-          t2 = new Ctor(0.03125);
-          while (x2.e > -2) {
-            x2 = x2.times(t2);
-            k2 += 5;
-          }
-          guard = Math.log(mathpow(2, k2)) / Math.LN10 * 2 + 5 | 0;
-          wpr += guard;
-          denominator = pow2 = sum2 = new Ctor(1);
-          Ctor.precision = wpr;
-          for (; ; ) {
-            pow2 = finalise(pow2.times(x2), wpr, 1);
-            denominator = denominator.times(++i2);
-            t2 = sum2.plus(divide(pow2, denominator, wpr, 1));
-            if (digitsToString(t2.d).slice(0, wpr) === digitsToString(sum2.d).slice(0, wpr)) {
-              j2 = k2;
-              while (j2--)
-                sum2 = finalise(sum2.times(sum2), wpr, 1);
-              if (sd == null) {
-                if (rep < 3 && checkRoundingDigits(sum2.d, wpr - guard, rm, rep)) {
-                  Ctor.precision = wpr += 10;
-                  denominator = pow2 = t2 = new Ctor(1);
-                  i2 = 0;
-                  rep++;
-                } else {
-                  return finalise(sum2, Ctor.precision = pr2, rm, external = true);
-                }
-              } else {
-                Ctor.precision = pr2;
-                return sum2;
-              }
-            }
-            sum2 = t2;
-          }
-        }
-        function naturalLogarithm(y2, sd) {
-          var c3, c0, denominator, e5, numerator, rep, sum2, t2, wpr, x1, x2, n2 = 1, guard = 10, x3 = y2, xd = x3.d, Ctor = x3.constructor, rm = Ctor.rounding, pr2 = Ctor.precision;
-          if (x3.s < 0 || !xd || !xd[0] || !x3.e && xd[0] == 1 && xd.length == 1) {
-            return new Ctor(xd && !xd[0] ? -1 / 0 : x3.s != 1 ? NaN : xd ? 0 : x3);
-          }
-          if (sd == null) {
-            external = false;
-            wpr = pr2;
-          } else {
-            wpr = sd;
-          }
-          Ctor.precision = wpr += guard;
-          c3 = digitsToString(xd);
-          c0 = c3.charAt(0);
-          if (Math.abs(e5 = x3.e) < 15e14) {
-            while (c0 < 7 && c0 != 1 || c0 == 1 && c3.charAt(1) > 3) {
-              x3 = x3.times(y2);
-              c3 = digitsToString(x3.d);
-              c0 = c3.charAt(0);
-              n2++;
-            }
-            e5 = x3.e;
-            if (c0 > 1) {
-              x3 = new Ctor("0." + c3);
-              e5++;
-            } else {
-              x3 = new Ctor(c0 + "." + c3.slice(1));
-            }
-          } else {
-            t2 = getLn10(Ctor, wpr + 2, pr2).times(e5 + "");
-            x3 = naturalLogarithm(new Ctor(c0 + "." + c3.slice(1)), wpr - guard).plus(t2);
-            Ctor.precision = pr2;
-            return sd == null ? finalise(x3, pr2, rm, external = true) : x3;
-          }
-          x1 = x3;
-          sum2 = numerator = x3 = divide(x3.minus(1), x3.plus(1), wpr, 1);
-          x2 = finalise(x3.times(x3), wpr, 1);
-          denominator = 3;
-          for (; ; ) {
-            numerator = finalise(numerator.times(x2), wpr, 1);
-            t2 = sum2.plus(divide(numerator, new Ctor(denominator), wpr, 1));
-            if (digitsToString(t2.d).slice(0, wpr) === digitsToString(sum2.d).slice(0, wpr)) {
-              sum2 = sum2.times(2);
-              if (e5 !== 0)
-                sum2 = sum2.plus(getLn10(Ctor, wpr + 2, pr2).times(e5 + ""));
-              sum2 = divide(sum2, new Ctor(n2), wpr, 1);
-              if (sd == null) {
-                if (checkRoundingDigits(sum2.d, wpr - guard, rm, rep)) {
-                  Ctor.precision = wpr += guard;
-                  t2 = numerator = x3 = divide(x1.minus(1), x1.plus(1), wpr, 1);
-                  x2 = finalise(x3.times(x3), wpr, 1);
-                  denominator = rep = 1;
-                } else {
-                  return finalise(sum2, Ctor.precision = pr2, rm, external = true);
-                }
-              } else {
-                Ctor.precision = pr2;
-                return sum2;
-              }
-            }
-            sum2 = t2;
-            denominator += 2;
-          }
-        }
-        function nonFiniteToString(x2) {
-          return String(x2.s * x2.s / 0);
-        }
-        function parseDecimal(x2, str3) {
-          var e5, i2, len;
-          if ((e5 = str3.indexOf(".")) > -1)
-            str3 = str3.replace(".", "");
-          if ((i2 = str3.search(/e/i)) > 0) {
-            if (e5 < 0)
-              e5 = i2;
-            e5 += +str3.slice(i2 + 1);
-            str3 = str3.substring(0, i2);
-          } else if (e5 < 0) {
-            e5 = str3.length;
-          }
-          for (i2 = 0; str3.charCodeAt(i2) === 48; i2++)
-            ;
-          for (len = str3.length; str3.charCodeAt(len - 1) === 48; --len)
-            ;
-          str3 = str3.slice(i2, len);
-          if (str3) {
-            len -= i2;
-            x2.e = e5 = e5 - i2 - 1;
-            x2.d = [];
-            i2 = (e5 + 1) % LOG_BASE;
-            if (e5 < 0)
-              i2 += LOG_BASE;
-            if (i2 < len) {
-              if (i2)
-                x2.d.push(+str3.slice(0, i2));
-              for (len -= LOG_BASE; i2 < len; )
-                x2.d.push(+str3.slice(i2, i2 += LOG_BASE));
-              str3 = str3.slice(i2);
-              i2 = LOG_BASE - str3.length;
-            } else {
-              i2 -= len;
-            }
-            for (; i2--; )
-              str3 += "0";
-            x2.d.push(+str3);
-            if (external) {
-              if (x2.e > x2.constructor.maxE) {
-                x2.d = null;
-                x2.e = NaN;
-              } else if (x2.e < x2.constructor.minE) {
-                x2.e = 0;
-                x2.d = [0];
-              }
-            }
-          } else {
-            x2.e = 0;
-            x2.d = [0];
-          }
-          return x2;
-        }
-        function parseOther(x2, str3) {
-          var base2, Ctor, divisor, i2, isFloat, len, p3, xd, xe;
-          if (str3.indexOf("_") > -1) {
-            str3 = str3.replace(/(\d)_(?=\d)/g, "$1");
-            if (isDecimal.test(str3))
-              return parseDecimal(x2, str3);
-          } else if (str3 === "Infinity" || str3 === "NaN") {
-            if (!+str3)
-              x2.s = NaN;
-            x2.e = NaN;
-            x2.d = null;
-            return x2;
-          }
-          if (isHex.test(str3)) {
-            base2 = 16;
-            str3 = str3.toLowerCase();
-          } else if (isBinary.test(str3)) {
-            base2 = 2;
-          } else if (isOctal.test(str3)) {
-            base2 = 8;
-          } else {
-            throw Error(invalidArgument + str3);
-          }
-          i2 = str3.search(/p/i);
-          if (i2 > 0) {
-            p3 = +str3.slice(i2 + 1);
-            str3 = str3.substring(2, i2);
-          } else {
-            str3 = str3.slice(2);
-          }
-          i2 = str3.indexOf(".");
-          isFloat = i2 >= 0;
-          Ctor = x2.constructor;
-          if (isFloat) {
-            str3 = str3.replace(".", "");
-            len = str3.length;
-            i2 = len - i2;
-            divisor = intPow(Ctor, new Ctor(base2), i2, i2 * 2);
-          }
-          xd = convertBase(str3, base2, BASE);
-          xe = xd.length - 1;
-          for (i2 = xe; xd[i2] === 0; --i2)
-            xd.pop();
-          if (i2 < 0)
-            return new Ctor(x2.s * 0);
-          x2.e = getBase10Exponent(xd, xe);
-          x2.d = xd;
-          external = false;
-          if (isFloat)
-            x2 = divide(x2, divisor, len * 4);
-          if (p3)
-            x2 = x2.times(Math.abs(p3) < 54 ? mathpow(2, p3) : Decimal.pow(2, p3));
-          external = true;
-          return x2;
-        }
-        function sine(Ctor, x2) {
-          var k2, len = x2.d.length;
-          if (len < 3) {
-            return x2.isZero() ? x2 : taylorSeries(Ctor, 2, x2, x2);
-          }
-          k2 = 1.4 * Math.sqrt(len);
-          k2 = k2 > 16 ? 16 : k2 | 0;
-          x2 = x2.times(1 / tinyPow(5, k2));
-          x2 = taylorSeries(Ctor, 2, x2, x2);
-          var sin2_x, d5 = new Ctor(5), d16 = new Ctor(16), d20 = new Ctor(20);
-          for (; k2--; ) {
-            sin2_x = x2.times(x2);
-            x2 = x2.times(d5.plus(sin2_x.times(d16.times(sin2_x).minus(d20))));
-          }
-          return x2;
-        }
-        function taylorSeries(Ctor, n2, x2, y2, isHyperbolic) {
-          var j2, t2, u2, x22, i2 = 1, pr2 = Ctor.precision, k2 = Math.ceil(pr2 / LOG_BASE);
-          external = false;
-          x22 = x2.times(x2);
-          u2 = new Ctor(y2);
-          for (; ; ) {
-            t2 = divide(u2.times(x22), new Ctor(n2++ * n2++), pr2, 1);
-            u2 = isHyperbolic ? y2.plus(t2) : y2.minus(t2);
-            y2 = divide(t2.times(x22), new Ctor(n2++ * n2++), pr2, 1);
-            t2 = u2.plus(y2);
-            if (t2.d[k2] !== void 0) {
-              for (j2 = k2; t2.d[j2] === u2.d[j2] && j2--; )
-                ;
-              if (j2 == -1)
-                break;
-            }
-            j2 = u2;
-            u2 = y2;
-            y2 = t2;
-            t2 = j2;
-            i2++;
-          }
-          external = true;
-          t2.d.length = k2 + 1;
-          return t2;
-        }
-        function tinyPow(b2, e5) {
-          var n2 = b2;
-          while (--e5)
-            n2 *= b2;
-          return n2;
-        }
-        function toLessThanHalfPi(Ctor, x2) {
-          var t2, isNeg = x2.s < 0, pi = getPi(Ctor, Ctor.precision, 1), halfPi = pi.times(0.5);
-          x2 = x2.abs();
-          if (x2.lte(halfPi)) {
-            quadrant2 = isNeg ? 4 : 1;
-            return x2;
-          }
-          t2 = x2.divToInt(pi);
-          if (t2.isZero()) {
-            quadrant2 = isNeg ? 3 : 2;
-          } else {
-            x2 = x2.minus(t2.times(pi));
-            if (x2.lte(halfPi)) {
-              quadrant2 = isOdd2(t2) ? isNeg ? 2 : 3 : isNeg ? 4 : 1;
-              return x2;
-            }
-            quadrant2 = isOdd2(t2) ? isNeg ? 1 : 4 : isNeg ? 3 : 2;
-          }
-          return x2.minus(pi).abs();
-        }
-        function toStringBinary(x2, baseOut, sd, rm) {
-          var base2, e5, i2, k2, len, roundUp, str3, xd, y2, Ctor = x2.constructor, isExp = sd !== void 0;
-          if (isExp) {
-            checkInt32(sd, 1, MAX_DIGITS);
-            if (rm === void 0)
-              rm = Ctor.rounding;
-            else
-              checkInt32(rm, 0, 8);
-          } else {
-            sd = Ctor.precision;
-            rm = Ctor.rounding;
-          }
-          if (!x2.isFinite()) {
-            str3 = nonFiniteToString(x2);
-          } else {
-            str3 = finiteToString(x2);
-            i2 = str3.indexOf(".");
-            if (isExp) {
-              base2 = 2;
-              if (baseOut == 16) {
-                sd = sd * 4 - 3;
-              } else if (baseOut == 8) {
-                sd = sd * 3 - 2;
-              }
-            } else {
-              base2 = baseOut;
-            }
-            if (i2 >= 0) {
-              str3 = str3.replace(".", "");
-              y2 = new Ctor(1);
-              y2.e = str3.length - i2;
-              y2.d = convertBase(finiteToString(y2), 10, base2);
-              y2.e = y2.d.length;
-            }
-            xd = convertBase(str3, 10, base2);
-            e5 = len = xd.length;
-            for (; xd[--len] == 0; )
-              xd.pop();
-            if (!xd[0]) {
-              str3 = isExp ? "0p+0" : "0";
-            } else {
-              if (i2 < 0) {
-                e5--;
-              } else {
-                x2 = new Ctor(x2);
-                x2.d = xd;
-                x2.e = e5;
-                x2 = divide(x2, y2, sd, rm, 0, base2);
-                xd = x2.d;
-                e5 = x2.e;
-                roundUp = inexact;
-              }
-              i2 = xd[sd];
-              k2 = base2 / 2;
-              roundUp = roundUp || xd[sd + 1] !== void 0;
-              roundUp = rm < 4 ? (i2 !== void 0 || roundUp) && (rm === 0 || rm === (x2.s < 0 ? 3 : 2)) : i2 > k2 || i2 === k2 && (rm === 4 || roundUp || rm === 6 && xd[sd - 1] & 1 || rm === (x2.s < 0 ? 8 : 7));
-              xd.length = sd;
-              if (roundUp) {
-                for (; ++xd[--sd] > base2 - 1; ) {
-                  xd[sd] = 0;
-                  if (!sd) {
-                    ++e5;
-                    xd.unshift(1);
-                  }
-                }
-              }
-              for (len = xd.length; !xd[len - 1]; --len)
-                ;
-              for (i2 = 0, str3 = ""; i2 < len; i2++)
-                str3 += NUMERALS.charAt(xd[i2]);
-              if (isExp) {
-                if (len > 1) {
-                  if (baseOut == 16 || baseOut == 8) {
-                    i2 = baseOut == 16 ? 4 : 3;
-                    for (--len; len % i2; len++)
-                      str3 += "0";
-                    xd = convertBase(str3, base2, baseOut);
-                    for (len = xd.length; !xd[len - 1]; --len)
-                      ;
-                    for (i2 = 1, str3 = "1."; i2 < len; i2++)
-                      str3 += NUMERALS.charAt(xd[i2]);
-                  } else {
-                    str3 = str3.charAt(0) + "." + str3.slice(1);
-                  }
-                }
-                str3 = str3 + (e5 < 0 ? "p" : "p+") + e5;
-              } else if (e5 < 0) {
-                for (; ++e5; )
-                  str3 = "0" + str3;
-                str3 = "0." + str3;
-              } else {
-                if (++e5 > len)
-                  for (e5 -= len; e5--; )
-                    str3 += "0";
-                else if (e5 < len)
-                  str3 = str3.slice(0, e5) + "." + str3.slice(e5);
-              }
-            }
-            str3 = (baseOut == 16 ? "0x" : baseOut == 2 ? "0b" : baseOut == 8 ? "0o" : "") + str3;
-          }
-          return x2.s < 0 ? "-" + str3 : str3;
-        }
-        function truncate(arr, len) {
-          if (arr.length > len) {
-            arr.length = len;
-            return true;
-          }
-        }
-        function abs(x2) {
-          return new this(x2).abs();
-        }
-        function acos(x2) {
-          return new this(x2).acos();
-        }
-        function acosh(x2) {
-          return new this(x2).acosh();
-        }
-        function add(x2, y2) {
-          return new this(x2).plus(y2);
-        }
-        function asin(x2) {
-          return new this(x2).asin();
-        }
-        function asinh(x2) {
-          return new this(x2).asinh();
-        }
-        function atan(x2) {
-          return new this(x2).atan();
-        }
-        function atanh(x2) {
-          return new this(x2).atanh();
-        }
-        function atan2(y2, x2) {
-          y2 = new this(y2);
-          x2 = new this(x2);
-          var r3, pr2 = this.precision, rm = this.rounding, wpr = pr2 + 4;
-          if (!y2.s || !x2.s) {
-            r3 = new this(NaN);
-          } else if (!y2.d && !x2.d) {
-            r3 = getPi(this, wpr, 1).times(x2.s > 0 ? 0.25 : 0.75);
-            r3.s = y2.s;
-          } else if (!x2.d || y2.isZero()) {
-            r3 = x2.s < 0 ? getPi(this, pr2, rm) : new this(0);
-            r3.s = y2.s;
-          } else if (!y2.d || x2.isZero()) {
-            r3 = getPi(this, wpr, 1).times(0.5);
-            r3.s = y2.s;
-          } else if (x2.s < 0) {
-            this.precision = wpr;
-            this.rounding = 1;
-            r3 = this.atan(divide(y2, x2, wpr, 1));
-            x2 = getPi(this, wpr, 1);
-            this.precision = pr2;
-            this.rounding = rm;
-            r3 = y2.s < 0 ? r3.minus(x2) : r3.plus(x2);
-          } else {
-            r3 = this.atan(divide(y2, x2, wpr, 1));
-          }
-          return r3;
-        }
-        function cbrt(x2) {
-          return new this(x2).cbrt();
-        }
-        function ceil(x2) {
-          return finalise(x2 = new this(x2), x2.e + 1, 2);
-        }
-        function clamp(x2, min2, max2) {
-          return new this(x2).clamp(min2, max2);
-        }
-        function config(obj) {
-          if (!obj || typeof obj !== "object")
-            throw Error(decimalError + "Object expected");
-          var i2, p3, v3, useDefaults = obj.defaults === true, ps = [
-            "precision",
-            1,
-            MAX_DIGITS,
-            "rounding",
-            0,
-            8,
-            "toExpNeg",
-            -EXP_LIMIT,
-            0,
-            "toExpPos",
-            0,
-            EXP_LIMIT,
-            "maxE",
-            0,
-            EXP_LIMIT,
-            "minE",
-            -EXP_LIMIT,
-            0,
-            "modulo",
-            0,
-            9
-          ];
-          for (i2 = 0; i2 < ps.length; i2 += 3) {
-            if (p3 = ps[i2], useDefaults)
-              this[p3] = DEFAULTS[p3];
-            if ((v3 = obj[p3]) !== void 0) {
-              if (mathfloor(v3) === v3 && v3 >= ps[i2 + 1] && v3 <= ps[i2 + 2])
-                this[p3] = v3;
-              else
-                throw Error(invalidArgument + p3 + ": " + v3);
-            }
-          }
-          if (p3 = "crypto", useDefaults)
-            this[p3] = DEFAULTS[p3];
-          if ((v3 = obj[p3]) !== void 0) {
-            if (v3 === true || v3 === false || v3 === 0 || v3 === 1) {
-              if (v3) {
-                if (typeof crypto != "undefined" && crypto && (crypto.getRandomValues || crypto.randomBytes)) {
-                  this[p3] = true;
-                } else {
-                  throw Error(cryptoUnavailable);
-                }
-              } else {
-                this[p3] = false;
-              }
-            } else {
-              throw Error(invalidArgument + p3 + ": " + v3);
-            }
-          }
-          return this;
-        }
-        function cos3(x2) {
-          return new this(x2).cos();
-        }
-        function cosh(x2) {
-          return new this(x2).cosh();
-        }
-        function clone(obj) {
-          var i2, p3, ps;
-          function Decimal2(v3) {
-            var e5, i3, t2, x2 = this;
-            if (!(x2 instanceof Decimal2))
-              return new Decimal2(v3);
-            x2.constructor = Decimal2;
-            if (isDecimalInstance(v3)) {
-              x2.s = v3.s;
-              if (external) {
-                if (!v3.d || v3.e > Decimal2.maxE) {
-                  x2.e = NaN;
-                  x2.d = null;
-                } else if (v3.e < Decimal2.minE) {
-                  x2.e = 0;
-                  x2.d = [0];
-                } else {
-                  x2.e = v3.e;
-                  x2.d = v3.d.slice();
-                }
-              } else {
-                x2.e = v3.e;
-                x2.d = v3.d ? v3.d.slice() : v3.d;
-              }
-              return;
-            }
-            t2 = typeof v3;
-            if (t2 === "number") {
-              if (v3 === 0) {
-                x2.s = 1 / v3 < 0 ? -1 : 1;
-                x2.e = 0;
-                x2.d = [0];
-                return;
-              }
-              if (v3 < 0) {
-                v3 = -v3;
-                x2.s = -1;
-              } else {
-                x2.s = 1;
-              }
-              if (v3 === ~~v3 && v3 < 1e7) {
-                for (e5 = 0, i3 = v3; i3 >= 10; i3 /= 10)
-                  e5++;
-                if (external) {
-                  if (e5 > Decimal2.maxE) {
-                    x2.e = NaN;
-                    x2.d = null;
-                  } else if (e5 < Decimal2.minE) {
-                    x2.e = 0;
-                    x2.d = [0];
-                  } else {
-                    x2.e = e5;
-                    x2.d = [v3];
-                  }
-                } else {
-                  x2.e = e5;
-                  x2.d = [v3];
-                }
-                return;
-              } else if (v3 * 0 !== 0) {
-                if (!v3)
-                  x2.s = NaN;
-                x2.e = NaN;
-                x2.d = null;
-                return;
-              }
-              return parseDecimal(x2, v3.toString());
-            } else if (t2 !== "string") {
-              throw Error(invalidArgument + v3);
-            }
-            if ((i3 = v3.charCodeAt(0)) === 45) {
-              v3 = v3.slice(1);
-              x2.s = -1;
-            } else {
-              if (i3 === 43)
-                v3 = v3.slice(1);
-              x2.s = 1;
-            }
-            return isDecimal.test(v3) ? parseDecimal(x2, v3) : parseOther(x2, v3);
-          }
-          Decimal2.prototype = P2;
-          Decimal2.ROUND_UP = 0;
-          Decimal2.ROUND_DOWN = 1;
-          Decimal2.ROUND_CEIL = 2;
-          Decimal2.ROUND_FLOOR = 3;
-          Decimal2.ROUND_HALF_UP = 4;
-          Decimal2.ROUND_HALF_DOWN = 5;
-          Decimal2.ROUND_HALF_EVEN = 6;
-          Decimal2.ROUND_HALF_CEIL = 7;
-          Decimal2.ROUND_HALF_FLOOR = 8;
-          Decimal2.EUCLID = 9;
-          Decimal2.config = Decimal2.set = config;
-          Decimal2.clone = clone;
-          Decimal2.isDecimal = isDecimalInstance;
-          Decimal2.abs = abs;
-          Decimal2.acos = acos;
-          Decimal2.acosh = acosh;
-          Decimal2.add = add;
-          Decimal2.asin = asin;
-          Decimal2.asinh = asinh;
-          Decimal2.atan = atan;
-          Decimal2.atanh = atanh;
-          Decimal2.atan2 = atan2;
-          Decimal2.cbrt = cbrt;
-          Decimal2.ceil = ceil;
-          Decimal2.clamp = clamp;
-          Decimal2.cos = cos3;
-          Decimal2.cosh = cosh;
-          Decimal2.div = div;
-          Decimal2.exp = exp;
-          Decimal2.floor = floor;
-          Decimal2.hypot = hypot;
-          Decimal2.ln = ln;
-          Decimal2.log = log;
-          Decimal2.log10 = log10;
-          Decimal2.log2 = log2;
-          Decimal2.max = max;
-          Decimal2.min = min;
-          Decimal2.mod = mod;
-          Decimal2.mul = mul;
-          Decimal2.pow = pow;
-          Decimal2.random = random;
-          Decimal2.round = round;
-          Decimal2.sign = sign;
-          Decimal2.sin = sin3;
-          Decimal2.sinh = sinh;
-          Decimal2.sqrt = sqrt;
-          Decimal2.sub = sub;
-          Decimal2.sum = sum;
-          Decimal2.tan = tan2;
-          Decimal2.tanh = tanh;
-          Decimal2.trunc = trunc;
-          if (obj === void 0)
-            obj = {};
-          if (obj) {
-            if (obj.defaults !== true) {
-              ps = ["precision", "rounding", "toExpNeg", "toExpPos", "maxE", "minE", "modulo", "crypto"];
-              for (i2 = 0; i2 < ps.length; )
-                if (!obj.hasOwnProperty(p3 = ps[i2++]))
-                  obj[p3] = this[p3];
-            }
-          }
-          Decimal2.config(obj);
-          return Decimal2;
-        }
-        function div(x2, y2) {
-          return new this(x2).div(y2);
-        }
-        function exp(x2) {
-          return new this(x2).exp();
-        }
-        function floor(x2) {
-          return finalise(x2 = new this(x2), x2.e + 1, 3);
-        }
-        function hypot() {
-          var i2, n2, t2 = new this(0);
-          external = false;
-          for (i2 = 0; i2 < arguments.length; ) {
-            n2 = new this(arguments[i2++]);
-            if (!n2.d) {
-              if (n2.s) {
-                external = true;
-                return new this(1 / 0);
-              }
-              t2 = n2;
-            } else if (t2.d) {
-              t2 = t2.plus(n2.times(n2));
-            }
-          }
-          external = true;
-          return t2.sqrt();
-        }
-        function isDecimalInstance(obj) {
-          return obj instanceof Decimal || obj && obj.toStringTag === tag || false;
-        }
-        function ln(x2) {
-          return new this(x2).ln();
-        }
-        function log(x2, y2) {
-          return new this(x2).log(y2);
-        }
-        function log2(x2) {
-          return new this(x2).log(2);
-        }
-        function log10(x2) {
-          return new this(x2).log(10);
-        }
-        function max() {
-          return maxOrMin(this, arguments, "lt");
-        }
-        function min() {
-          return maxOrMin(this, arguments, "gt");
-        }
-        function mod(x2, y2) {
-          return new this(x2).mod(y2);
-        }
-        function mul(x2, y2) {
-          return new this(x2).mul(y2);
-        }
-        function pow(x2, y2) {
-          return new this(x2).pow(y2);
-        }
-        function random(sd) {
-          var d2, e5, k2, n2, i2 = 0, r3 = new this(1), rd = [];
-          if (sd === void 0)
-            sd = this.precision;
-          else
-            checkInt32(sd, 1, MAX_DIGITS);
-          k2 = Math.ceil(sd / LOG_BASE);
-          if (!this.crypto) {
-            for (; i2 < k2; )
-              rd[i2++] = Math.random() * 1e7 | 0;
-          } else if (crypto.getRandomValues) {
-            d2 = crypto.getRandomValues(new Uint32Array(k2));
-            for (; i2 < k2; ) {
-              n2 = d2[i2];
-              if (n2 >= 429e7) {
-                d2[i2] = crypto.getRandomValues(new Uint32Array(1))[0];
-              } else {
-                rd[i2++] = n2 % 1e7;
-              }
-            }
-          } else if (crypto.randomBytes) {
-            d2 = crypto.randomBytes(k2 *= 4);
-            for (; i2 < k2; ) {
-              n2 = d2[i2] + (d2[i2 + 1] << 8) + (d2[i2 + 2] << 16) + ((d2[i2 + 3] & 127) << 24);
-              if (n2 >= 214e7) {
-                crypto.randomBytes(4).copy(d2, i2);
-              } else {
-                rd.push(n2 % 1e7);
-                i2 += 4;
-              }
-            }
-            i2 = k2 / 4;
-          } else {
-            throw Error(cryptoUnavailable);
-          }
-          k2 = rd[--i2];
-          sd %= LOG_BASE;
-          if (k2 && sd) {
-            n2 = mathpow(10, LOG_BASE - sd);
-            rd[i2] = (k2 / n2 | 0) * n2;
-          }
-          for (; rd[i2] === 0; i2--)
-            rd.pop();
-          if (i2 < 0) {
-            e5 = 0;
-            rd = [0];
-          } else {
-            e5 = -1;
-            for (; rd[0] === 0; e5 -= LOG_BASE)
-              rd.shift();
-            for (k2 = 1, n2 = rd[0]; n2 >= 10; n2 /= 10)
-              k2++;
-            if (k2 < LOG_BASE)
-              e5 -= LOG_BASE - k2;
-          }
-          r3.e = e5;
-          r3.d = rd;
-          return r3;
-        }
-        function round(x2) {
-          return finalise(x2 = new this(x2), x2.e + 1, this.rounding);
-        }
-        function sign(x2) {
-          x2 = new this(x2);
-          return x2.d ? x2.d[0] ? x2.s : 0 * x2.s : x2.s || NaN;
-        }
-        function sin3(x2) {
-          return new this(x2).sin();
-        }
-        function sinh(x2) {
-          return new this(x2).sinh();
-        }
-        function sqrt(x2) {
-          return new this(x2).sqrt();
-        }
-        function sub(x2, y2) {
-          return new this(x2).sub(y2);
-        }
-        function sum() {
-          var i2 = 0, args = arguments, x2 = new this(args[i2]);
-          external = false;
-          for (; x2.s && ++i2 < args.length; )
-            x2 = x2.plus(args[i2]);
-          external = true;
-          return finalise(x2, this.precision, this.rounding);
-        }
-        function tan2(x2) {
-          return new this(x2).tan();
-        }
-        function tanh(x2) {
-          return new this(x2).tanh();
-        }
-        function trunc(x2) {
-          return finalise(x2 = new this(x2), x2.e + 1, 1);
-        }
-        Decimal = clone(DEFAULTS);
-        Decimal.prototype.constructor = Decimal;
-        Decimal["default"] = Decimal.Decimal = Decimal;
-        LN10 = new Decimal(LN10);
-        PI = new Decimal(PI);
-        if (typeof define == "function" && define.amd) {
-          define(function() {
-            return Decimal;
-          });
-        } else if (typeof module != "undefined" && module.exports) {
-          if (typeof Symbol == "function" && typeof Symbol.iterator == "symbol") {
-            P2[Symbol["for"]("nodejs.util.inspect.custom")] = P2.toString;
-            P2[Symbol.toStringTag] = "Decimal";
-          }
-          module.exports = Decimal;
-        } else {
-          if (!globalScope) {
-            globalScope = typeof self != "undefined" && self && self.self == self ? self : window;
-          }
-          noConflict = globalScope.Decimal;
-          Decimal.noConflict = function() {
-            globalScope.Decimal = noConflict;
-            return Decimal;
-          };
-          globalScope.Decimal = Decimal;
-        }
-      })(exports);
-    }
-  });
-
-  // node_modules/sapphire-js/lib/math/cal.js
-  var require_cal = __commonJS({
-    "node_modules/sapphire-js/lib/math/cal.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.crammer = exports.traceCircle = exports.trace = exports.range = exports.nPr = exports.nCr = exports.factorial = exports.primeFactors = exports.primes = exports.isPrime = exports.toSurd = exports.isRational = exports.toFraction = exports.logFloor = exports.logCeil = exports.mantissa = exports.e = exports.fix = exports.round = exports.dp = exports.sigfig = exports.eq = exports.correct = exports.blur = void 0;
-      var decimal_js_1 = require_decimal();
-      var STANDARD_SIGFIG = 14;
-      function blur(num2) {
-        let n2 = parseFloat(num2.toPrecision(STANDARD_SIGFIG));
-        return sigfig(n2) <= STANDARD_SIGFIG - 5 ? n2 : num2;
-      }
-      exports.blur = blur;
-      function correct(num2) {
-        return parseFloat(num2.toPrecision(STANDARD_SIGFIG - 2));
-      }
-      exports.correct = correct;
-      function eq(a2, b2) {
-        return correct(a2) === correct(b2);
-      }
-      exports.eq = eq;
-      function sigfig(num2) {
-        return new decimal_js_1.Decimal(num2).precision(false);
-      }
-      exports.sigfig = sigfig;
-      function dp(num2) {
-        return new decimal_js_1.Decimal(num2).decimalPlaces();
-      }
-      exports.dp = dp;
-      function round(num2, sigfig2 = 3) {
-        function exec(mode) {
-          return new decimal_js_1.Decimal(num2).toSignificantDigits(sigfig2, mode).toNumber();
-        }
-        return {
-          off: () => exec(decimal_js_1.Decimal.ROUND_HALF_UP),
-          up: () => exec(decimal_js_1.Decimal.ROUND_UP),
-          down: () => exec(decimal_js_1.Decimal.ROUND_DOWN)
-        };
-      }
-      exports.round = round;
-      function fix(num2, dp2 = 0) {
-        function exec(mode) {
-          return new decimal_js_1.Decimal(num2).toNearest(Number("1e" + String(-dp2)), mode).toNumber();
-        }
-        return {
-          off: () => exec(decimal_js_1.Decimal.ROUND_HALF_UP),
-          up: () => exec(decimal_js_1.Decimal.ROUND_UP),
-          down: () => exec(decimal_js_1.Decimal.ROUND_DOWN)
-        };
-      }
-      exports.fix = fix;
-      function e5(num2) {
-        return Number(num2.toExponential().split("e")[1]);
-      }
-      exports.e = e5;
-      function mantissa(num2) {
-        return Number(num2.toExponential().split("e")[0]);
-      }
-      exports.mantissa = mantissa;
-      function logCeil(num2) {
-        let exp = e5(num2) + 1;
-        return Number("1e" + exp);
-      }
-      exports.logCeil = logCeil;
-      function logFloor(num2) {
-        let exp = e5(num2);
-        return Number("1e" + exp);
-      }
-      exports.logFloor = logFloor;
-      function toFraction(num2) {
-        if (num2 === Infinity)
-          return [1, 0];
-        if (num2 === -Infinity)
-          return [-1, 0];
-        let f3 = new decimal_js_1.Decimal(num2).toFraction(1e5);
-        return [f3[0].toNumber(), f3[1].toNumber()];
-      }
-      exports.toFraction = toFraction;
-      function isRational(num2) {
-        function convert(num3, deno) {
-          let f3 = new decimal_js_1.Decimal(num3).toFraction(deno);
-          return [f3[0].toNumber(), f3[1].toNumber()];
-        }
-        if (num2 === Infinity)
-          return false;
-        if (num2 === -Infinity)
-          return false;
-        let rough = convert(num2, 1e5);
-        let accurate = convert(num2, 1e7);
-        return rough[0] === accurate[0] && rough[1] === accurate[1];
-      }
-      exports.isRational = isRational;
-      function toSurd(num2) {
-        num2 = blur(num2);
-        let s3 = Math.sign(num2);
-        let a2 = Math.abs(num2);
-        let square = blur(a2 ** 2);
-        if (square === 0)
-          return [0, 1];
-        let factors = [1];
-        let i2 = 2;
-        while (i2 <= a2) {
-          let s4 = i2 ** 2;
-          if (square % s4 === 0) {
-            square = square / s4;
-            factors.push(i2);
-          } else {
-            i2++;
-          }
-        }
-        let product = factors.reduce((a3, b2) => a3 * b2, 1);
-        return [s3 * product, square];
-      }
-      exports.toSurd = toSurd;
-      function isPrime2(num2) {
-        if (!Number.isInteger(num2))
-          return false;
-        if (num2 <= 1)
-          return false;
-        if (num2 === 2)
-          return true;
-        if (num2 % 2 === 0)
-          return false;
-        for (let i2 = 3; i2 <= Math.sqrt(num2) + 1; i2 = i2 + 2) {
-          if (num2 % i2 === 0)
-            return false;
-        }
-        return true;
-      }
-      exports.isPrime = isPrime2;
-      function primes2(max) {
-        let arr = [];
-        for (let i2 = 2; i2 <= max; i2++) {
-          if (isPrime2(i2))
-            arr.push(i2);
-        }
-        return arr;
-      }
-      exports.primes = primes2;
-      function primeFactors(num2) {
-        let arr = [];
-        let i2 = 2;
-        while (num2 > 1) {
-          if (!isPrime2(i2)) {
-            i2++;
-            continue;
-          }
-          if (num2 % i2 === 0) {
-            arr.push(i2);
-            num2 = num2 / i2;
-          } else {
-            i2++;
-          }
-        }
-        return arr;
-      }
-      exports.primeFactors = primeFactors;
-      function factorial(n2) {
-        if (n2 <= 1)
-          return 1;
-        return factorial(n2 - 1) * n2;
-      }
-      exports.factorial = factorial;
-      function nCr(n2, r3) {
-        return factorial(n2) / factorial(r3) / factorial(n2 - r3);
-      }
-      exports.nCr = nCr;
-      function nPr(n2, r3) {
-        return factorial(n2) / factorial(n2 - r3);
-      }
-      exports.nPr = nPr;
-      function range(min, max) {
-        let arr = [];
-        min = Math.ceil(min - Number.EPSILON);
-        for (let i2 = min; i2 <= max; i2++) {
-          arr.push(i2);
-        }
-        return arr;
-      }
-      exports.range = range;
-      function trace2(func, range2, dots = 1e3) {
-        function tracer(t3) {
-          let result2;
-          try {
-            result2 = func(t3);
-          } catch {
-            return [NaN, NaN];
-          }
-          if (!Array.isArray(result2))
-            result2 = [t3, result2];
-          return result2;
-        }
-        ;
-        let [t1, t2] = range2;
-        const step = (t2 - t1) / (dots - 1);
-        let points = [];
-        for (let t3 = t1; t3 <= t2; t3 += step) {
-          points.push(tracer(t3));
-        }
-        return points;
-      }
-      exports.trace = trace2;
-      function traceCircle2(center, radius, angleRange, dots = 100) {
-        const [h2, k2] = center;
-        function sin3(degree) {
-          return Math.sin(degree / 180 * Math.PI);
-        }
-        function cos3(degree) {
-          return Math.cos(degree / 180 * Math.PI);
-        }
-        return trace2((t2) => [h2 + radius * cos3(t2), k2 + radius * sin3(t2)], angleRange, dots);
-      }
-      exports.traceCircle = traceCircle2;
-      function crammer(a2, b2, c3, p3, q2, r3) {
-        if (a2 / b2 === p3 / q2)
-          return [NaN, NaN];
-        const D2 = a2 * q2 - b2 * p3;
-        const x2 = (c3 * q2 - b2 * r3) / D2;
-        const y2 = (a2 * r3 - c3 * p3) / D2;
-        return [blur(x2), blur(y2)];
-      }
-      exports.crammer = crammer;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/numbers.js
-  var require_numbers = __commonJS({
-    "node_modules/sapphire-js/lib/array/numbers.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toNumbers = exports.numbers = exports.Numbers = void 0;
-      var list_1 = require_list();
-      var cal_1 = require_cal();
-      var Numbers = class extends list_1.List {
-        sum() {
-          return this.reduce((a2, b2) => a2 + b2, 0);
-        }
-        product() {
-          if (this.length === 0)
-            return NaN;
-          return this.reduce((a2, b2) => a2 * b2, 1);
-        }
-        mean() {
-          if (this.length === 0)
-            return NaN;
-          return this.sum() / this.length;
-        }
-        max(rank = 1) {
-          if (this.length === 0)
-            return NaN;
-          if (rank === 1) {
-            return Math.max(...this);
-          } else {
-            let desc = this.unique().descending();
-            return desc[rank - 1] ?? NaN;
-          }
-        }
-        min(rank = 1) {
-          if (this.length === 0)
-            return NaN;
-          if (rank === 1) {
-            return Math.min(...this);
-          } else {
-            let asc = this.unique().ascending();
-            return asc[rank - 1] ?? NaN;
-          }
-        }
-        add(nums) {
-          if (!Array.isArray(nums))
-            nums = Array(this.length).fill(nums);
-          let zipped = this.zip(nums, (a2, b2) => a2 + b2);
-          return this.create(zipped);
-        }
-        minus(nums) {
-          if (!Array.isArray(nums))
-            nums = Array(this.length).fill(nums);
-          let zipped = this.zip(nums, (a2, b2) => a2 - b2);
-          return this.create(zipped);
-        }
-        times(nums) {
-          if (!Array.isArray(nums))
-            nums = Array(this.length).fill(nums);
-          let zipped = this.zip(nums, (a2, b2) => a2 * b2);
-          return this.create(zipped);
-        }
-        divide(nums) {
-          if (!Array.isArray(nums))
-            nums = Array(this.length).fill(nums);
-          let zipped = this.zip(nums, (a2, b2) => a2 / b2);
-          return this.create(zipped);
-        }
-        toPower(indices) {
-          if (!Array.isArray(indices))
-            indices = Array(this.length).fill(indices);
-          let zipped = this.zip(indices, (a2, b2) => a2 ** b2);
-          return this.create(zipped);
-        }
-        rootNth(nths) {
-          if (!Array.isArray(nths))
-            nths = Array(this.length).fill(nths);
-          let zipped = this.zip(nths, (a2, b2) => a2 ** (1 / b2));
-          return this.create(zipped);
-        }
-        square() {
-          return this.toPower(2);
-        }
-        squareRoot() {
-          return this.rootNth(2);
-        }
-        negate() {
-          return this.times(-1);
-        }
-        abs() {
-          const mapped = this.map(($) => Math.abs($));
-          return this.create(mapped);
-        }
-        blur() {
-          let blurred = this.map(($) => (0, cal_1.blur)($));
-          return this.create(blurred);
-        }
-        toFraction() {
-          let fracs = this.map(($) => (0, cal_1.toFraction)($));
-          return (0, list_1.list)(...fracs);
-        }
-        gaps() {
-          const sorted = this.ascending();
-          const gaps = this.create([]);
-          for (let i2 = 0; i2 < this.length - 1; i2++) {
-            let gap = sorted[i2 + 1] - sorted[i2];
-            gaps.push(gap);
-          }
-          return gaps;
-        }
-        gapsMod(mod) {
-          function reduce(x2) {
-            while (x2 >= mod) {
-              x2 = x2 - mod;
-            }
-            while (x2 < 0) {
-              x2 = x2 + mod;
-            }
-            return x2;
-          }
-          const reduced = this.map(reduce);
-          const sorted = reduced.ascending();
-          const patched = this.create([...sorted, sorted[0] + mod]);
-          return patched.gaps();
-        }
-        hcf() {
-          if (this.some(($) => !Number.isInteger($)))
-            return NaN;
-          let arr = this.except([0]).abs().unique();
-          if (arr.length === 0)
-            return NaN;
-          if (arr.length === 1)
-            return arr[0];
-          if (arr.length === 2) {
-            let [a2, b2] = arr;
-            while (true) {
-              if (a2 === 0)
-                return b2;
-              if (b2 === 0)
-                return a2;
-              if (a2 >= b2) {
-                a2 = a2 % b2;
-              } else {
-                b2 = b2 % a2;
-              }
-            }
-            return a2;
-          }
-          return arr.reduce((last, now) => this.create([last, now]).hcf());
-        }
-        lcm() {
-          if (this.some(($) => !Number.isInteger($)))
-            return NaN;
-          let arr = this.except([0]).abs().unique();
-          if (arr.length === 0)
-            return NaN;
-          if (arr.length === 1)
-            return arr[0];
-          if (arr.length === 2) {
-            let [a2, b2] = arr;
-            let hcf = arr.hcf();
-            return a2 * b2 / hcf;
-          }
-          return arr.reduce((last, now) => this.create([last, now]).lcm());
-        }
-        reduceRatio() {
-          if (this.except([0]).length === 0)
-            return this.clone();
-          if (this.some(($) => !Number.isInteger($)))
-            return this.clone();
-          let HCF2 = this.hcf();
-          return this.divide(HCF2).blur();
-        }
-        ratio() {
-          if (this.except([0]).length === 0)
-            return this.clone();
-          if (this.some(($) => !(0, cal_1.isRational)($)))
-            return this.clone();
-          let fracs = this.toFraction();
-          let denos = this.create(fracs.map(($) => $[1]));
-          return this.times(denos.lcm()).blur().reduceRatio();
-        }
-        ratioFactor() {
-          if (this.except([0]).length === 0)
-            return NaN;
-          if (this.some(($) => !(0, cal_1.isRational)($)))
-            return NaN;
-          let clone = this.except([0]);
-          let ratioed = clone.ratio();
-          return (0, cal_1.blur)(ratioed[0] / clone[0]);
-        }
-      };
-      exports.Numbers = Numbers;
-      function numbers2(...elements) {
-        let nums = new Numbers();
-        nums.push(...elements);
-        return nums;
-      }
-      exports.numbers = numbers2;
-      function toNumbers2(elements) {
-        return numbers2(...elements);
-      }
-      exports.toNumbers = toNumbers2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/data.js
-  var require_data = __commonJS({
-    "node_modules/sapphire-js/lib/array/data.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toData = exports.data = exports.Data = void 0;
-      var numbers_1 = require_numbers();
-      var Data = class extends numbers_1.Numbers {
-        median() {
-          if (this.length === 0)
-            return NaN;
-          const sorted = this.ascending();
-          if (sorted.length % 2 === 0) {
-            let i2 = sorted.length / 2;
-            let j2 = i2 + 1;
-            return (sorted[i2 - 1] + sorted[j2 - 1]) / 2;
-          } else {
-            let i2 = sorted.length / 2;
-            i2 = Math.ceil(i2);
-            return sorted[i2 - 1];
-          }
-        }
-        modes(Nth = 1) {
-          if (this.length === 0)
-            return this.create([]);
-          return this.maxsBy(($) => this.freq($), Nth).unique();
-        }
-        mode(Nth = 1) {
-          if (this.length === 0)
-            return NaN;
-          const modes = this.modes(Nth);
-          if (modes.length > 1)
-            return NaN;
-          return modes.first();
-        }
-        isSingleMode(Nth = 1) {
-          const modes = this.modes(Nth);
-          return modes.length === 1;
-        }
-        lowerQuartile() {
-          if (this.length === 0)
-            return NaN;
-          const sorted = this.ascending();
-          let n2 = sorted.length;
-          let m3 = n2 / 2;
-          if (n2 % 2 !== 0)
-            m3 = Math.floor(m3);
-          return sorted.head(m3).median();
-        }
-        upperQuartile() {
-          if (this.length === 0)
-            return NaN;
-          const sorted = this.ascending();
-          let n2 = sorted.length;
-          let m3 = n2 / 2;
-          if (n2 % 2 !== 0)
-            m3 = Math.floor(m3);
-          return sorted.tail(m3).median();
-        }
-        stdDev() {
-          if (this.length === 0)
-            return NaN;
-          let mean = this.mean();
-          let deviations = this.minus(mean);
-          let squaredDev = deviations.square();
-          let meanSq = squaredDev.mean();
-          return Math.sqrt(meanSq);
-        }
-        range() {
-          if (this.length === 0)
-            return NaN;
-          return this.max() - this.min();
-        }
-        IQR() {
-          if (this.length === 0)
-            return NaN;
-          return this.upperQuartile() - this.lowerQuartile();
-        }
-      };
-      exports.Data = Data;
-      function data(...elements) {
-        let dt = new Data();
-        dt.push(...elements);
-        return dt;
-      }
-      exports.data = data;
-      function toData2(elements) {
-        return data(...elements);
-      }
-      exports.toData = toData2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/vector.js
-  var require_vector = __commonJS({
-    "node_modules/sapphire-js/lib/array/vector.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toVector = exports.vector = exports.Vector = void 0;
-      var numbers_1 = require_numbers();
-      var Vector = class extends numbers_1.Numbers {
-        magnitude() {
-          let squares = this.square();
-          let sum = squares.sum();
-          return Math.sqrt(sum);
-        }
-        unit() {
-          let mag = this.magnitude();
-          return this.divide(mag);
-        }
-        scaledTo(magnitude2) {
-          return this.unit().times(magnitude2);
-        }
-        dot(vec3) {
-          let terms = this.zip(vec3, (a2, b2) => a2 * b2);
-          return this.create(terms).sum();
-        }
-        angleWith(vec3) {
-          let m1 = this.magnitude();
-          let m22 = this.create(vec3).magnitude();
-          let dot = this.dot(vec3);
-          let cos3 = dot / m1 / m22;
-          let angle2 = Math.acos(cos3) * 180 / Math.PI;
-          return angle2;
-        }
-        projectOn(vec3) {
-          let unit = this.create(vec3).unit();
-          let dot = this.dot(unit);
-          return unit.times(dot);
-        }
-        normalTo(vec3) {
-          let parallel = this.projectOn(vec3);
-          return this.minus(parallel);
-        }
-        distanceWith(vec3) {
-          let d2 = this.minus(vec3);
-          return d2.magnitude();
-        }
-        extrudeTo(vertex, scale) {
-          let v3 = this.create(vertex);
-          let d2 = this.minus(v3);
-          d2 = d2.times(scale);
-          return v3.add(d2);
-        }
-      };
-      exports.Vector = Vector;
-      function vector2(...elements) {
-        let vec3 = new Vector();
-        vec3.push(...elements);
-        return vec3;
-      }
-      exports.vector = vector2;
-      function toVector(elements) {
-        return vector2(...elements);
-      }
-      exports.toVector = toVector;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/shape.js
-  var require_shape = __commonJS({
-    "node_modules/sapphire-js/lib/array/shape.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toShape = exports.shape = exports.Shape = void 0;
-      var list_1 = require_list();
-      var numbers_1 = require_numbers();
-      var vector_1 = require_vector();
-      var Shape = class extends list_1.List {
-        distances() {
-          let ds = this.pairs().map(([A2, B2]) => A2.distanceWith(B2));
-          return (0, numbers_1.numbers)(...ds);
-        }
-        distancesFrom(point) {
-          let ds = this.map(($) => $.distanceWith(point));
-          return (0, numbers_1.numbers)(...ds);
-        }
-        mean() {
-          let sum = this.reduce((A2, B2) => A2.add(B2));
-          return sum.divide(this.length);
-        }
-        translate(vec3) {
-          let translated = this.map(($) => $.add(vec3));
-          return this.create(translated);
-        }
-        scale(scale) {
-          let scaled = this.map(($) => $.times(scale));
-          return this.create(scaled);
-        }
-        extrudeTo(vertex, scale) {
-          let extruded = this.map(($) => $.extrudeTo(vertex, scale));
-          return this.create(extruded);
-        }
-        extrudeToShape(shape2, scale) {
-          let extruded = this.map((v3, i2) => v3.extrudeTo(shape2[i2], scale));
-          return this.create(extruded);
-        }
-      };
-      exports.Shape = Shape;
-      function shape(...elements) {
-        let shp = new Shape();
-        shp.push(...elements.map(($) => (0, vector_1.vector)(...$)));
-        return shp;
-      }
-      exports.shape = shape;
-      function toShape(elements) {
-        return shape(...elements);
-      }
-      exports.toShape = toShape;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/vector2D.js
-  var require_vector2D = __commonJS({
-    "node_modules/sapphire-js/lib/array/vector2D.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.vec2D = exports.vector2D = exports.Vector2D = void 0;
-      var vector_1 = require_vector();
-      var Vector2D = class extends vector_1.Vector {
-        toArray() {
-          let [x2, y2] = this;
-          return [x2, y2];
-        }
-        argument() {
-          let [x2, y2] = this;
-          if (x2 === 0 && y2 === 0)
-            return 0;
-          let angle2 = Math.atan2(y2, x2) * 180 / Math.PI;
-          if (angle2 < 0)
-            angle2 += 360;
-          return angle2;
-        }
-        rotate(angle2) {
-          let a2 = angle2 * Math.PI / 180;
-          let s3 = Math.sin(a2);
-          let c3 = Math.cos(a2);
-          let [x2, y2] = this;
-          let x1 = x2 * c3 - y2 * s3;
-          let y1 = x2 * s3 + y2 * c3;
-          return this.create([x1, y1]);
-        }
-        cross2D(vec3) {
-          let [x1, y1] = this;
-          let [x2, y2] = vec3;
-          return x1 * y2 - y1 * x2;
-        }
-      };
-      exports.Vector2D = Vector2D;
-      function vector2D(x2, y2) {
-        let vec3 = new Vector2D();
-        vec3.push(x2, y2);
-        return vec3;
-      }
-      exports.vector2D = vector2D;
-      function vec2D2(p1, p22) {
-        if (p22 === void 0) {
-          let [x2, y2] = p1;
-          return vector2D(x2, y2);
-        } else {
-          let [x1, y1] = p1;
-          let [x2, y2] = p22;
-          return vector2D(x2 - x1, y2 - y1);
-        }
-      }
-      exports.vec2D = vec2D2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/vector3D.js
-  var require_vector3D = __commonJS({
-    "node_modules/sapphire-js/lib/array/vector3D.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.vec3D = exports.vector3D = exports.Vector3D = void 0;
-      var vector_1 = require_vector();
-      var vector2D_1 = require_vector2D();
-      var Vector3D = class extends vector_1.Vector {
-        toArray() {
-          let [x2, y2, z2] = this;
-          return [x2, y2, z2];
-        }
-        cross(vec3) {
-          let [x1, y1, z1] = this;
-          let [x2, y2, z2] = vec3;
-          let x3 = y1 * z2 - z1 * y2;
-          let y3 = z1 * x2 - x1 * z2;
-          let z3 = x1 * y2 - y1 * x2;
-          return this.create([x3, y3, z3]);
-        }
-        rotate(axis, angle2) {
-          let a2 = angle2 * Math.PI / 180;
-          let s3 = Math.sin(a2);
-          let c3 = Math.cos(a2);
-          let k2 = this.create(axis).unit();
-          let term1 = this.times(c3);
-          let term2 = k2.cross(this).times(s3);
-          let term3 = k2.times(k2.dot(this)).times(1 - c3);
-          return term1.add(term2).add(term3);
-        }
-        projectOnPlane(vec1, vec22) {
-          let normal = this.normalToPlane(vec1, vec22);
-          return this.minus(normal);
-        }
-        normalToPlane(vec1, vec22) {
-          let v1 = this.create(vec1);
-          let v22 = this.create(vec22);
-          let normal = v1.cross(v22);
-          return this.projectOn(normal);
-        }
-        projectTo2D(angle2 = 60, depth = 0.5) {
-          let a2 = angle2 * Math.PI / 180;
-          let s3 = Math.sin(a2);
-          let c3 = Math.cos(a2);
-          let [x2, y2, z2] = this;
-          let x_new = x2 + depth * y2 * c3;
-          let y_new = z2 + depth * y2 * s3;
-          return (0, vector2D_1.vector2D)(x_new, y_new);
-        }
-      };
-      exports.Vector3D = Vector3D;
-      function vector3D2(x2, y2, z2) {
-        let vec3 = new Vector3D();
-        vec3.push(x2, y2, z2);
-        return vec3;
-      }
-      exports.vector3D = vector3D2;
-      function vec3D2(p1, p22) {
-        if (p22 === void 0) {
-          let [x2, y2, z2] = p1;
-          return vector3D2(x2, y2, z2);
-        } else {
-          let [x1, y1, z1] = p1;
-          let [x2, y2, z2] = p22;
-          return vector3D2(x2 - x1, y2 - y1, z2 - z1);
-        }
-      }
-      exports.vec3D = vec3D2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/shape3D.js
-  var require_shape3D = __commonJS({
-    "node_modules/sapphire-js/lib/array/shape3D.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toShape3D = exports.shape3D = exports.Shape3D = void 0;
-      var shape_1 = require_shape();
-      var shape2D_1 = require_shape2D();
-      var vector3D_1 = require_vector3D();
-      var Shape3D = class extends shape_1.Shape {
-        toArray() {
-          return [...this.map(($) => $.toArray())];
-        }
-        projectTo2D(angle2 = 60, depth = 0.5) {
-          let projected = this.map(($) => $.projectTo2D(angle2, depth));
-          return (0, shape2D_1.shape2D)(...projected);
-        }
-      };
-      exports.Shape3D = Shape3D;
-      function shape3D(...elements) {
-        let shp = new Shape3D();
-        shp.push(...elements.map(($) => (0, vector3D_1.vec3D)($)));
-        return shp;
-      }
-      exports.shape3D = shape3D;
-      function toShape3D2(elements) {
-        return shape3D(...elements);
-      }
-      exports.toShape3D = toShape3D2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/shape2D.js
-  var require_shape2D = __commonJS({
-    "node_modules/sapphire-js/lib/array/shape2D.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toShape2D = exports.shape2D = exports.Shape2D = void 0;
-      var shape_1 = require_shape();
-      var shape3D_1 = require_shape3D();
-      var vector3D_1 = require_vector3D();
-      var vector2D_1 = require_vector2D();
-      var Shape2D = class extends shape_1.Shape {
-        toArray() {
-          return [...this.map(($) => $.toArray())];
-        }
-        sortAroundMean() {
-          let mean = this.mean();
-          this.sortBy(($) => $.minus(mean).argument());
-        }
-        isConvex() {
-          if (this.length <= 3)
-            return true;
-          let clone = this.clone();
-          clone.sortAroundMean();
-          let cross = [];
-          for (let i2 = 0; i2 < clone.length; i2++) {
-            let p1 = clone.cyclicAt(i2 - 1);
-            let p22 = clone.cyclicAt(i2);
-            let p3 = clone.cyclicAt(i2 + 1);
-            let u2 = (0, vector2D_1.vec2D)(p1, p22);
-            let v3 = (0, vector2D_1.vec2D)(p22, p3);
-            cross.push(u2.cross2D(v3));
-          }
-          cross.filter(($) => $ !== 0);
-          return cross.every(($) => $ > 0) || cross.every(($) => $ < 0);
-        }
-        erect(vecX, vecY) {
-          let vx = (0, vector3D_1.vec3D)(vecX);
-          let vy = (0, vector3D_1.vec3D)(vecY);
-          let erected = this.map(($) => {
-            let [x2, y2] = $;
-            let vx3D = vx.times(x2);
-            let vy3D = vy.times(y2);
-            return vx3D.add(vy3D);
-          });
-          return (0, shape3D_1.shape3D)(...erected);
-        }
-      };
-      exports.Shape2D = Shape2D;
-      function shape2D2(...elements) {
-        let shp = new Shape2D();
-        shp.push(...elements.map(($) => (0, vector2D_1.vec2D)($)));
-        return shp;
-      }
-      exports.shape2D = shape2D2;
-      function toShape2D2(elements) {
-        return shape2D2(...elements);
-      }
-      exports.toShape2D = toShape2D2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/array/sheet.js
-  var require_sheet = __commonJS({
-    "node_modules/sapphire-js/lib/array/sheet.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toSheet = exports.sheet = exports.Sheet = void 0;
-      var list_1 = require_list();
-      function isLike(item, criteria) {
-        for (const key in criteria) {
-          if (!(key in item))
-            return false;
-          const actualValue = item[key];
-          const requiredValue = criteria[key];
-          if (Array.isArray(requiredValue)) {
-            if (!requiredValue.includes(actualValue))
-              return false;
-          } else {
-            if (actualValue !== requiredValue)
-              return false;
-          }
-        }
-        return true;
-      }
-      function assignProperty(target, source) {
-        for (const k2 in source) {
-          target[k2] = source[k2];
-        }
-      }
-      var Sheet = class extends list_1.List {
-        match(criteria) {
-          return this.filter(($) => isLike($, criteria));
-        }
-        unmatch(criteria) {
-          return this.filter(($) => !isLike($, criteria));
-        }
-        get(criteria) {
-          return this.find(($) => isLike($, criteria));
-        }
-        exist(criteria) {
-          return this.get(criteria) !== void 0;
-        }
-        count(criteria) {
-          return this.match(criteria).length;
-        }
-        pluck(field2) {
-          const values = this.map(($) => $[field2]);
-          const ls = new list_1.List();
-          ls.set(values);
-          return ls;
-        }
-        scan(field2) {
-          return this.pluck(field2).unique();
-        }
-        distill(criteria) {
-          this.set(this.match(criteria));
-        }
-        discard(criteria) {
-          this.set(this.unmatch(criteria));
-        }
-        order(...ordering) {
-          this.sort((a2, b2) => {
-            for (let ord of ordering) {
-              if (typeof ord === "string") {
-                if (a2[ord] > b2[ord])
-                  return 1;
-                if (a2[ord] < b2[ord])
-                  return -1;
-              } else {
-                for (let k2 in ord) {
-                  let v3 = ord[k2];
-                  if (v3 === true) {
-                    if (a2[k2] > b2[k2])
-                      return 1;
-                    if (a2[k2] < b2[k2])
-                      return -1;
-                  }
-                  if (v3 === false) {
-                    if (a2[k2] < b2[k2])
-                      return 1;
-                    if (a2[k2] > b2[k2])
-                      return -1;
-                  }
-                  if (Array.isArray(v3)) {
-                    let i2 = v3.indexOf(a2[k2]);
-                    let j2 = v3.indexOf(b2[k2]);
-                    if (i2 === -1)
-                      i2 = Infinity;
-                    if (j2 === -1)
-                      j2 = Infinity;
-                    if (i2 > j2)
-                      return 1;
-                    if (i2 < j2)
-                      return -1;
-                  }
-                  break;
-                }
-              }
-            }
-            return 0;
-          });
-        }
-        merge(elements, idField) {
-          for (const newbie of elements) {
-            for (const oldie of this) {
-              if (!(idField in oldie))
-                continue;
-              if (!(idField in newbie))
-                continue;
-              if (newbie[idField] === oldie[idField])
-                assignProperty(oldie, newbie);
-            }
-          }
-        }
-        absorb(elements, idField) {
-          for (const newbie of elements) {
-            let found = false;
-            for (const oldie of this) {
-              if (!(idField in oldie))
-                continue;
-              if (!(idField in newbie))
-                continue;
-              if (newbie[idField] === oldie[idField]) {
-                assignProperty(oldie, newbie);
-                found = true;
-              }
-            }
-            if (!found)
-              this.push(newbie);
-          }
-        }
-      };
-      exports.Sheet = Sheet;
-      function sheet(...elements) {
-        let sh = new Sheet();
-        sh.push(...elements);
-        return sh;
-      }
-      exports.sheet = sheet;
-      function toSheet(elements) {
-        return sheet(...elements);
-      }
-      exports.toSheet = toSheet;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/linear_program/inequal.js
-  var require_inequal = __commonJS({
-    "node_modules/sapphire-js/lib/linear_program/inequal.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.ineq = void 0;
-      function toCode(ineq4) {
-        if (ineq4 === "\\ge")
-          return [true, true];
-        if (ineq4 === "\\gt")
-          return [true, false];
-        if (ineq4 === "\\le")
-          return [false, true];
-        if (ineq4 === "\\lt")
-          return [false, false];
-        if (ineq4 === ">=")
-          return [true, true];
-        if (ineq4 === ">")
-          return [true, false];
-        if (ineq4 === "<=")
-          return [false, true];
-        if (ineq4 === "<")
-          return [false, false];
-        throw "cannot recognise ineq symbol!";
-      }
-      function toIneq(code2) {
-        let [g2, e5] = code2;
-        if (g2 && e5)
-          return "\\ge";
-        if (g2 && !e5)
-          return "\\gt";
-        if (!g2 && e5)
-          return "\\le";
-        if (!g2 && !e5)
-          return "\\lt";
-        throw "cannot recognise code!";
-      }
-      var InequalSign = class {
-        constructor(sign) {
-          this.code = [true, true];
-          this.code = toCode(sign);
-        }
-        greaterThan() {
-          return this.code[0];
-        }
-        lessThan() {
-          return !this.code[0];
-        }
-        canEqual() {
-          return this.code[1];
-        }
-        print() {
-          return toIneq(this.code);
-        }
-        strict() {
-          let [g2, e5] = this.code;
-          return toIneq([g2, false]);
-        }
-        loose() {
-          let [g2, e5] = this.code;
-          return toIneq([g2, true]);
-        }
-        flip() {
-          let [g2, e5] = this.code;
-          return toIneq([!g2, e5]);
-        }
-        compare(a2, b2) {
-          let [g2, e5] = this.code;
-          if (g2 && e5)
-            return a2 >= b2;
-          if (g2 && !e5)
-            return a2 > b2;
-          if (!g2 && e5)
-            return a2 <= b2;
-          if (!g2 && !e5)
-            return a2 < b2;
-          throw "never, cannot recognise code!";
-        }
-      };
-      function ineq3(sign) {
-        return new InequalSign(sign);
-      }
-      exports.ineq = ineq3;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/linear_program/rein.js
-  var require_rein = __commonJS({
-    "node_modules/sapphire-js/lib/linear_program/rein.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.rein = exports.Rein = void 0;
-      var cal_1 = require_cal();
-      var inequal_1 = require_inequal();
-      var Rein = class {
-        constructor(constraint2) {
-          this.constraint = constraint2;
-        }
-        clone() {
-          return new Rein(this.constraint);
-        }
-        contains(point) {
-          let [a2, b2, i2, c3] = this.constraint;
-          let [x2, y2] = point;
-          return (0, inequal_1.ineq)(i2).compare(a2 * x2 + b2 * y2, c3);
-        }
-        canEqual() {
-          let [a2, b2, i2, c3] = this.constraint;
-          return (0, inequal_1.ineq)(i2).canEqual();
-        }
-        strict() {
-          let [a2, b2, i2, c3] = this.constraint;
-          let j2 = (0, inequal_1.ineq)(i2).strict();
-          return new Rein([a2, b2, j2, c3]);
-        }
-        loose() {
-          let [a2, b2, i2, c3] = this.constraint;
-          let j2 = (0, inequal_1.ineq)(i2).loose();
-          return new Rein([a2, b2, j2, c3]);
-        }
-        flip() {
-          let [a2, b2, i2, c3] = this.constraint;
-          let j2 = (0, inequal_1.ineq)(i2).flip();
-          return new Rein([a2, b2, j2, c3]);
-        }
-        intersectWith(another) {
-          let [a1, b1, i1, c1] = this.constraint;
-          let [a2, b2, i2, c22] = another.constraint;
-          if (a1 / b1 === a2 / b2)
-            return void 0;
-          return (0, cal_1.crammer)(a1, b1, c1, a2, b2, c22);
-        }
-        shake() {
-          return Math.random() > 0.5 ? this.clone() : this.flip();
-        }
-        toLinear() {
-          let [a2, b2, i2, c3] = this.constraint;
-          return [a2, b2, -c3];
-        }
-        toStandard() {
-          let [a2, b2, i2, c3] = this.constraint;
-          return [a2, b2, c3];
-        }
-      };
-      exports.Rein = Rein;
-      function rein2(constraint2) {
-        return new Rein(constraint2);
-      }
-      exports.rein = rein2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/linear_program/reins.js
-  var require_reins = __commonJS({
-    "node_modules/sapphire-js/lib/linear_program/reins.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.toReins = exports.reins = exports.Reins = void 0;
-      var rein_1 = require_rein();
-      var list_1 = require_list();
-      var shape2D_1 = require_shape2D();
-      var vector2D_1 = require_vector2D();
-      var Reins = class extends list_1.List {
-        constructor() {
-          super(...arguments);
-          this.EDGE = 100;
-          this.EDGE_CONSTRAINTS = [
-            new rein_1.Rein([1, 0, "<=", this.EDGE]),
-            new rein_1.Rein([1, 0, ">=", -this.EDGE]),
-            new rein_1.Rein([0, 1, "<=", this.EDGE]),
-            new rein_1.Rein([0, 1, ">=", -this.EDGE])
-          ];
-        }
-        fullConstraints() {
-          let cons = this.clone();
-          cons.push(...this.EDGE_CONSTRAINTS);
-          return cons;
-        }
-        constraints() {
-          return this.map(($) => $.constraint);
-        }
-        onEdge(point) {
-          let [x2, y2] = point;
-          return Math.abs(x2) + 1 >= this.EDGE || Math.abs(y2) + 1 >= this.EDGE;
-        }
-        contains(point) {
-          return this.every(($) => $.contains(point));
-        }
-        looseContains(point) {
-          return this.map(($) => $.loose()).every(($) => $.contains(point));
-        }
-        polygon() {
-          let cons = this.fullConstraints();
-          let vs = (0, shape2D_1.shape2D)();
-          for (let i2 = 0; i2 < cons.length; i2++) {
-            for (let j2 = i2 + 1; j2 < cons.length; j2++) {
-              let p3 = cons[i2].intersectWith(cons[j2]);
-              if (p3 === void 0)
-                continue;
-              let others = cons.clone();
-              others.pull(j2);
-              others.pull(i2);
-              if (others.looseContains(p3))
-                vs.push((0, vector2D_1.vec2D)(p3));
-            }
-          }
-          vs = vs.uniqueDeep();
-          vs.sortAroundMean();
-          return vs.toArray();
-        }
-        vertices() {
-          return this.polygon().filter(($) => !this.onEdge($));
-        }
-        isBounded() {
-          return this.polygon().every(($) => !this.onEdge($));
-        }
-        isConsistent() {
-          return this.polygon().length > 2;
-        }
-        integrals() {
-          let vs = (0, list_1.toList)(this.polygon());
-          let ymax = Math.ceil(vs.maxOf(([x2, y2]) => y2));
-          let xmax = Math.ceil(vs.maxOf(([x2, y2]) => x2));
-          let xmin = Math.floor(vs.minOf(([x2, y2]) => x2));
-          let ymin = Math.floor(vs.minOf(([x2, y2]) => y2));
-          let points = [];
-          for (let i2 = xmin; i2 <= xmax; i2++) {
-            for (let j2 = ymin; j2 <= ymax; j2++) {
-              let p3 = [i2, j2];
-              if (this.contains(p3))
-                points.push(p3);
-            }
-          }
-          return points;
-        }
-        shake() {
-          let cons = this.map(($) => $.shake());
-          return this.create(cons);
-        }
-      };
-      exports.Reins = Reins;
-      function reins(...constraints2) {
-        let cs = new Reins();
-        cs.push(...constraints2.map(($) => new rein_1.Rein($)));
-        return cs;
-      }
-      exports.reins = reins;
-      function toReins2(constraints2) {
-        return reins(...constraints2);
-      }
-      exports.toReins = toReins2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/linear_program/optimizer.js
-  var require_optimizer = __commonJS({
-    "node_modules/sapphire-js/lib/linear_program/optimizer.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.optimizer = exports.Optimizer = void 0;
-      var reins_1 = require_reins();
-      var list_1 = require_list();
-      var Optimizer = class {
-        constructor({ field: field2, feasiblePoints = [] }) {
-          this.field = [0, 0, 0];
-          this.feasiblePoints = (0, list_1.list)();
-          this.field = field2;
-          this.feasiblePoints = (0, list_1.toList)(feasiblePoints);
-        }
-        onEdge(point) {
-          return new reins_1.Reins().onEdge(point);
-        }
-        fieldAt(point) {
-          const [a2, b2, c3] = this.field;
-          const [x2, y2] = point;
-          return a2 * x2 + b2 * y2 + c3;
-        }
-        maxPoints() {
-          return this.feasiblePoints.maxsBy(($) => this.fieldAt($)).uniqueDeep().violate(($) => this.onEdge($));
-        }
-        minPoints() {
-          return this.feasiblePoints.minsBy(($) => this.fieldAt($)).uniqueDeep().violate(($) => this.onEdge($));
-        }
-        optimalPoints(max) {
-          return max ? this.maxPoints() : this.minPoints();
-        }
-        max() {
-          let pts = this.maxPoints();
-          if (pts.length === 0)
-            return null;
-          return this.fieldAt(pts[0]);
-        }
-        min() {
-          let pts = this.minPoints();
-          if (pts.length === 0)
-            return null;
-          return this.fieldAt(pts[0]);
-        }
-        optimal(max) {
-          return max ? this.max() : this.min();
-        }
-      };
-      exports.Optimizer = Optimizer;
-      function optimizer2({ field: field2, feasiblePoints = [] }) {
-        return new Optimizer({ field: field2, feasiblePoints });
-      }
-      exports.optimizer = optimizer2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/math/linear.js
-  var require_linear = __commonJS({
-    "node_modules/sapphire-js/lib/math/linear.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.lin = exports.Linear = void 0;
-      var numbers_1 = require_numbers();
-      function slope(A2, B2) {
-        let [x1, y1] = A2;
-        let [x2, y2] = B2;
-        return (y2 - y1) / (x2 - x1);
-      }
-      function midpoint(A2, B2) {
-        let [x1, y1] = A2;
-        let [x2, y2] = B2;
-        return [(x1 + x2) / 2, (y1 + y2) / 2];
-      }
-      var Linear = class {
-        constructor() {
-          this._linear = [NaN, NaN, NaN];
-          this.defined = false;
-        }
-        byLinear(linear) {
-          this._linear = linear;
-          this.defined = true;
-          return this;
-        }
-        byStandard(standard) {
-          let [a2, b2, _c] = standard;
-          this.byLinear([a2, b2, -_c]);
-          return this;
-        }
-        byTwoPoints(p1, p22) {
-          let [x1, y1] = p1;
-          let [x2, y2] = p22;
-          let dx = x1 - x2;
-          let dy = y1 - y2;
-          if (dx === 0 && dy === 0)
-            return this;
-          let [a2, b2, c3] = [dy, -dx, dx * y1 - dy * x1];
-          let s3 = Math.sign(a2) || Math.sign(b2) || 1;
-          [a2, b2, c3] = (0, numbers_1.numbers)(a2, b2, c3).times(s3).ratio();
-          this.byLinear([a2, b2, c3]);
-          return this;
-        }
-        byPointSlope(p3, m3) {
-          let p22 = [p3[0] + 1, p3[1] + m3];
-          this.byTwoPoints(p3, p22);
-          return this;
-        }
-        byIntercepts(x2, y2) {
-          if (x2 === 0 || y2 === 0)
-            return this;
-          this.byTwoPoints([x2, 0], [0, y2]);
-          return this;
-        }
-        byBisector(A2, B2) {
-          let [x1, y1] = A2;
-          let [x2, y2] = B2;
-          if (x1 === x2 && y1 === y2)
-            return this;
-          if (x1 === x2) {
-            this.byLinear([0, 1, -(y1 + y2) / 2]);
-          } else if (y1 === y2) {
-            this.byLinear([1, 0, -(x1 + x2) / 2]);
-          } else {
-            let m3 = -1 / slope(A2, B2);
-            let M2 = midpoint(A2, B2);
-            this.byPointSlope(M2, m3);
-          }
-          return this;
-        }
-        slope() {
-          let [a2, b2, c3] = this._linear;
-          return b2 === 0 ? NaN : -a2 / b2;
-        }
-        xInt() {
-          let [a2, b2, c3] = this._linear;
-          return a2 === 0 ? NaN : -c3 / a2;
-        }
-        yInt() {
-          let [a2, b2, c3] = this._linear;
-          return b2 === 0 ? NaN : -c3 / b2;
-        }
-        toLinear() {
-          if (!this.defined)
-            return [NaN, NaN, NaN];
-          return this._linear;
-        }
-        toLine() {
-          if (!this.defined)
-            return [NaN, NaN];
-          return [this.slope(), this.yInt()];
-        }
-        toStandard() {
-          if (!this.defined)
-            return [NaN, NaN, NaN];
-          let [a2, b2, c3] = this._linear;
-          return [a2, b2, -c3];
-        }
-        toConstraint(ineq3) {
-          let [a2, b2, c3] = this.toStandard();
-          return [a2, b2, ineq3, c3];
-        }
-      };
-      exports.Linear = Linear;
-      function lin2() {
-        return new Linear();
-      }
-      exports.lin = lin2;
-    }
-  });
-
-  // node_modules/sapphire-js/lib/index.js
-  var require_lib = __commonJS({
-    "node_modules/sapphire-js/lib/index.js"(exports) {
-      "use strict";
-      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o2, m3, k2, k22) {
-        if (k22 === void 0)
-          k22 = k2;
-        Object.defineProperty(o2, k22, { enumerable: true, get: function() {
-          return m3[k2];
-        } });
-      } : function(o2, m3, k2, k22) {
-        if (k22 === void 0)
-          k22 = k2;
-        o2[k22] = m3[k2];
-      });
-      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o2, v3) {
-        Object.defineProperty(o2, "default", { enumerable: true, value: v3 });
-      } : function(o2, v3) {
-        o2["default"] = v3;
-      });
-      var __importStar = exports && exports.__importStar || function(mod) {
-        if (mod && mod.__esModule)
-          return mod;
-        var result2 = {};
-        if (mod != null) {
-          for (var k2 in mod)
-            if (k2 !== "default" && Object.prototype.hasOwnProperty.call(mod, k2))
-              __createBinding(result2, mod, k2);
-        }
-        __setModuleDefault(result2, mod);
-        return result2;
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.lin = exports.cal = exports.rein = exports.Rein = exports.reins = exports.toReins = exports.Reins = exports.optimizer = exports.Optimizer = exports.ineq = exports.vec3D = exports.vector3D = exports.Vector3D = exports.vec2D = exports.vector2D = exports.Vector2D = exports.toVector = exports.vector = exports.Vector = exports.toSheet = exports.sheet = exports.Sheet = exports.toShape3D = exports.shape3D = exports.Shape3D = exports.toShape2D = exports.shape2D = exports.Shape2D = exports.toShape = exports.shape = exports.Shape = exports.toNumbers = exports.numbers = exports.Numbers = exports.toList = exports.list = exports.List = exports.toData = exports.data = exports.Data = void 0;
-      var data_1 = require_data();
-      Object.defineProperty(exports, "Data", { enumerable: true, get: function() {
-        return data_1.Data;
-      } });
-      Object.defineProperty(exports, "data", { enumerable: true, get: function() {
-        return data_1.data;
-      } });
-      Object.defineProperty(exports, "toData", { enumerable: true, get: function() {
-        return data_1.toData;
-      } });
-      var list_1 = require_list();
-      Object.defineProperty(exports, "List", { enumerable: true, get: function() {
-        return list_1.List;
-      } });
-      Object.defineProperty(exports, "list", { enumerable: true, get: function() {
-        return list_1.list;
-      } });
-      Object.defineProperty(exports, "toList", { enumerable: true, get: function() {
-        return list_1.toList;
-      } });
-      var numbers_1 = require_numbers();
-      Object.defineProperty(exports, "Numbers", { enumerable: true, get: function() {
-        return numbers_1.Numbers;
-      } });
-      Object.defineProperty(exports, "numbers", { enumerable: true, get: function() {
-        return numbers_1.numbers;
-      } });
-      Object.defineProperty(exports, "toNumbers", { enumerable: true, get: function() {
-        return numbers_1.toNumbers;
-      } });
-      var shape_1 = require_shape();
-      Object.defineProperty(exports, "Shape", { enumerable: true, get: function() {
-        return shape_1.Shape;
-      } });
-      Object.defineProperty(exports, "shape", { enumerable: true, get: function() {
-        return shape_1.shape;
-      } });
-      Object.defineProperty(exports, "toShape", { enumerable: true, get: function() {
-        return shape_1.toShape;
-      } });
-      var shape2D_1 = require_shape2D();
-      Object.defineProperty(exports, "Shape2D", { enumerable: true, get: function() {
-        return shape2D_1.Shape2D;
-      } });
-      Object.defineProperty(exports, "shape2D", { enumerable: true, get: function() {
-        return shape2D_1.shape2D;
-      } });
-      Object.defineProperty(exports, "toShape2D", { enumerable: true, get: function() {
-        return shape2D_1.toShape2D;
-      } });
-      var shape3D_1 = require_shape3D();
-      Object.defineProperty(exports, "Shape3D", { enumerable: true, get: function() {
-        return shape3D_1.Shape3D;
-      } });
-      Object.defineProperty(exports, "shape3D", { enumerable: true, get: function() {
-        return shape3D_1.shape3D;
-      } });
-      Object.defineProperty(exports, "toShape3D", { enumerable: true, get: function() {
-        return shape3D_1.toShape3D;
-      } });
-      var sheet_1 = require_sheet();
-      Object.defineProperty(exports, "Sheet", { enumerable: true, get: function() {
-        return sheet_1.Sheet;
-      } });
-      Object.defineProperty(exports, "sheet", { enumerable: true, get: function() {
-        return sheet_1.sheet;
-      } });
-      Object.defineProperty(exports, "toSheet", { enumerable: true, get: function() {
-        return sheet_1.toSheet;
-      } });
-      var vector_1 = require_vector();
-      Object.defineProperty(exports, "Vector", { enumerable: true, get: function() {
-        return vector_1.Vector;
-      } });
-      Object.defineProperty(exports, "vector", { enumerable: true, get: function() {
-        return vector_1.vector;
-      } });
-      Object.defineProperty(exports, "toVector", { enumerable: true, get: function() {
-        return vector_1.toVector;
-      } });
-      var vector2D_1 = require_vector2D();
-      Object.defineProperty(exports, "Vector2D", { enumerable: true, get: function() {
-        return vector2D_1.Vector2D;
-      } });
-      Object.defineProperty(exports, "vector2D", { enumerable: true, get: function() {
-        return vector2D_1.vector2D;
-      } });
-      Object.defineProperty(exports, "vec2D", { enumerable: true, get: function() {
-        return vector2D_1.vec2D;
-      } });
-      var vector3D_1 = require_vector3D();
-      Object.defineProperty(exports, "Vector3D", { enumerable: true, get: function() {
-        return vector3D_1.Vector3D;
-      } });
-      Object.defineProperty(exports, "vector3D", { enumerable: true, get: function() {
-        return vector3D_1.vector3D;
-      } });
-      Object.defineProperty(exports, "vec3D", { enumerable: true, get: function() {
-        return vector3D_1.vec3D;
-      } });
-      var inequal_1 = require_inequal();
-      Object.defineProperty(exports, "ineq", { enumerable: true, get: function() {
-        return inequal_1.ineq;
-      } });
-      var optimizer_1 = require_optimizer();
-      Object.defineProperty(exports, "Optimizer", { enumerable: true, get: function() {
-        return optimizer_1.Optimizer;
-      } });
-      Object.defineProperty(exports, "optimizer", { enumerable: true, get: function() {
-        return optimizer_1.optimizer;
-      } });
-      var reins_1 = require_reins();
-      Object.defineProperty(exports, "Reins", { enumerable: true, get: function() {
-        return reins_1.Reins;
-      } });
-      Object.defineProperty(exports, "toReins", { enumerable: true, get: function() {
-        return reins_1.toReins;
-      } });
-      Object.defineProperty(exports, "reins", { enumerable: true, get: function() {
-        return reins_1.reins;
-      } });
-      var rein_1 = require_rein();
-      Object.defineProperty(exports, "Rein", { enumerable: true, get: function() {
-        return rein_1.Rein;
-      } });
-      Object.defineProperty(exports, "rein", { enumerable: true, get: function() {
-        return rein_1.rein;
-      } });
-      exports.cal = __importStar(require_cal());
-      var linear_1 = require_linear();
-      Object.defineProperty(exports, "lin", { enumerable: true, get: function() {
-        return linear_1.lin;
-      } });
-    }
-  });
-
   // node_modules/katex/dist/katex.js
   var require_katex = __commonJS({
     "node_modules/katex/dist/katex.js"(exports, module) {
@@ -4494,8 +109,8 @@
           ParseError.prototype.__proto__ = Error.prototype;
           var src_ParseError = ParseError;
           ;
-          var contains = function contains2(list2, elem) {
-            return list2.indexOf(elem) !== -1;
+          var contains = function contains2(list3, elem) {
+            return list3.indexOf(elem) !== -1;
           };
           var deflt = function deflt2(setting, defaultIfUndefined) {
             return setting === void 0 ? defaultIfUndefined : setting;
@@ -7188,7 +2803,7 @@
             return style.size < 2 ? size : sizeStyleMap[size - 1][style.size - 1];
           };
           var Options = /* @__PURE__ */ function() {
-            function Options2(data) {
+            function Options2(data2) {
               this.style = void 0;
               this.color = void 0;
               this.size = void 0;
@@ -7202,23 +2817,23 @@
               this.maxSize = void 0;
               this.minRuleThickness = void 0;
               this._fontMetrics = void 0;
-              this.style = data.style;
-              this.color = data.color;
-              this.size = data.size || Options2.BASESIZE;
-              this.textSize = data.textSize || this.size;
-              this.phantom = !!data.phantom;
-              this.font = data.font || "";
-              this.fontFamily = data.fontFamily || "";
-              this.fontWeight = data.fontWeight || "";
-              this.fontShape = data.fontShape || "";
+              this.style = data2.style;
+              this.color = data2.color;
+              this.size = data2.size || Options2.BASESIZE;
+              this.textSize = data2.textSize || this.size;
+              this.phantom = !!data2.phantom;
+              this.font = data2.font || "";
+              this.fontFamily = data2.fontFamily || "";
+              this.fontWeight = data2.fontWeight || "";
+              this.fontShape = data2.fontShape || "";
               this.sizeMultiplier = sizeMultipliers[this.size - 1];
-              this.maxSize = data.maxSize;
-              this.minRuleThickness = data.minRuleThickness;
+              this.maxSize = data2.maxSize;
+              this.minRuleThickness = data2.minRuleThickness;
               this._fontMetrics = void 0;
             }
             var _proto = Options2.prototype;
             _proto.extend = function extend(extension) {
-              var data = {
+              var data2 = {
                 style: this.style,
                 size: this.size,
                 textSize: this.textSize,
@@ -7233,10 +2848,10 @@
               };
               for (var key in extension) {
                 if (extension.hasOwnProperty(key)) {
-                  data[key] = extension[key];
+                  data2[key] = extension[key];
                 }
               }
-              return new Options2(data);
+              return new Options2(data2);
             };
             _proto.havingStyle = function havingStyle(style) {
               if (this.style === style) {
@@ -9094,7 +4709,7 @@
           var _mathmlGroupBuilders = {};
           function defineFunction(_ref) {
             var type = _ref.type, names = _ref.names, props = _ref.props, handler = _ref.handler, htmlBuilder2 = _ref.htmlBuilder, mathmlBuilder2 = _ref.mathmlBuilder;
-            var data = {
+            var data2 = {
               type,
               numArgs: props.numArgs,
               argTypes: props.argTypes,
@@ -9107,7 +4722,7 @@
               handler
             };
             for (var i3 = 0; i3 < names.length; ++i3) {
-              _functions[names[i3]] = data;
+              _functions[names[i3]] = data2;
             }
             if (type) {
               if (htmlBuilder2) {
@@ -9313,9 +4928,9 @@
             return body;
           }
           function buildHTML(tree, options2) {
-            var tag = null;
+            var tag2 = null;
             if (tree.length === 1 && tree[0].type === "tag") {
-              tag = tree[0].tag;
+              tag2 = tree[0].tag;
               tree = tree[0].body;
             }
             var expression = buildExpression(tree, options2, "root");
@@ -9353,8 +4968,8 @@
               children.push(buildHTMLUnbreakable(parts, options2));
             }
             var tagChild;
-            if (tag) {
-              tagChild = buildHTMLUnbreakable(buildExpression(tag, options2, true));
+            if (tag2) {
+              tagChild = buildHTMLUnbreakable(buildExpression(tag2, options2, true));
               tagChild.classes = ["tag"];
               children.push(tagChild);
             } else if (eqnNum) {
@@ -9847,14 +5462,14 @@
                 };
               } else {
                 var spans = [];
-                var data = katexImagesData[label];
-                var paths = data[0], _minWidth = data[1], _viewBoxHeight = data[2];
+                var data2 = katexImagesData[label];
+                var paths = data2[0], _minWidth = data2[1], _viewBoxHeight = data2[2];
                 var _height2 = _viewBoxHeight / 1e3;
                 var numSvgChildren = paths.length;
                 var widthClasses;
                 var aligns;
                 if (numSvgChildren === 1) {
-                  var align1 = data[3];
+                  var align1 = data2[3];
                   widthClasses = ["hide-tail"];
                   aligns = [align1];
                 } else if (numSvgChildren === 2) {
@@ -11805,7 +7420,7 @@
           var _environments = {};
           function defineEnvironment(_ref) {
             var type = _ref.type, names = _ref.names, props = _ref.props, handler = _ref.handler, htmlBuilder2 = _ref.htmlBuilder, mathmlBuilder2 = _ref.mathmlBuilder;
-            var data = {
+            var data2 = {
               type,
               numArgs: props.numArgs || 0,
               allowedInText: false,
@@ -11813,7 +7428,7 @@
               handler
             };
             for (var i3 = 0; i3 < names.length; ++i3) {
-              _environments[names[i3]] = data;
+              _environments[names[i3]] = data2;
             }
             if (htmlBuilder2) {
               _htmlGroupBuilders[type] = htmlBuilder2;
@@ -12156,7 +7771,7 @@
           var array_mathmlBuilder = function mathmlBuilder2(group, options2) {
             var tbl = [];
             var glue = new mathMLTree.MathNode("mtd", [], ["mtr-glue"]);
-            var tag = new mathMLTree.MathNode("mtd", [], ["mml-eqn-num"]);
+            var tag2 = new mathMLTree.MathNode("mtd", [], ["mml-eqn-num"]);
             for (var i3 = 0; i3 < group.body.length; i3++) {
               var rw = group.body[i3];
               var row = [];
@@ -12167,9 +7782,9 @@
                 row.unshift(glue);
                 row.push(glue);
                 if (group.leqno) {
-                  row.unshift(tag);
+                  row.unshift(tag2);
                 } else {
-                  row.push(tag);
+                  row.push(tag2);
                 }
               }
               tbl.push(new mathMLTree.MathNode("mtr", row));
@@ -13551,9 +9166,9 @@
                   };
                   break;
                 case "\\htmlData": {
-                  var data = value.split(",");
-                  for (var i3 = 0; i3 < data.length; i3++) {
-                    var keyVal = data[i3].split("=");
+                  var data2 = value.split(",");
+                  for (var i3 = 0; i3 < data2.length; i3++) {
+                    var keyVal = data2[i3].split("=");
                     if (keyVal.length !== 2) {
                       throw new src_ParseError("Error parsing key-value for \\htmlData");
                     }
@@ -13633,14 +9248,14 @@
               if (!match3) {
                 throw new src_ParseError("Invalid size: '" + str3 + "' in \\includegraphics");
               }
-              var data = {
+              var data2 = {
                 number: +(match3[1] + match3[2]),
                 unit: match3[3]
               };
-              if (!validUnit(data)) {
-                throw new src_ParseError("Invalid unit: '" + data.unit + "' in \\includegraphics.");
+              if (!validUnit(data2)) {
+                throw new src_ParseError("Invalid unit: '" + data2.unit + "' in \\includegraphics.");
               }
-              return data;
+              return data2;
             }
           };
           defineFunction({
@@ -13826,8 +9441,8 @@
               } else {
                 inner2 = buildCommon.makeSpan(["inner"], [buildGroup(group.body, options2)]);
               }
-              var fix = buildCommon.makeSpan(["fix"], []);
-              var node = buildCommon.makeSpan([group.alignment], [inner2, fix], options2);
+              var fix2 = buildCommon.makeSpan(["fix"], []);
+              var node = buildCommon.makeSpan([group.alignment], [inner2, fix2], options2);
               var strut = buildCommon.makeSpan(["strut"]);
               strut.style.height = makeEm(node.height + node.depth);
               if (node.depth) {
@@ -14524,8 +10139,8 @@
             },
             htmlBuilder: function htmlBuilder2(group, options2) {
               var inner2 = buildCommon.makeSpan(["inner"], [buildGroup(group.body, options2.withPhantom())]);
-              var fix = buildCommon.makeSpan(["fix"], []);
-              return buildCommon.makeSpan(["mord", "rlap"], [inner2, fix], options2);
+              var fix2 = buildCommon.makeSpan(["fix"], []);
+              return buildCommon.makeSpan(["mord", "rlap"], [inner2, fix2], options2);
             },
             mathmlBuilder: function mathmlBuilder2(group, options2) {
               var inner2 = buildMathML_buildExpression(ordargument(group.body), options2);
@@ -15389,7 +11004,7 @@
               this.start = start;
               this.end = end;
             }
-            SourceLocation2.range = function range(first, second) {
+            SourceLocation2.range = function range2(first, second) {
               if (!second) {
                 return first && first.loc;
               } else if (!first || !first.loc || !second.loc || first.loc.lexer !== second.loc.lexer) {
@@ -15411,7 +11026,7 @@
               this.loc = loc;
             }
             var _proto = Token2.prototype;
-            _proto.range = function range(endToken, text) {
+            _proto.range = function range2(endToken, text) {
               return new Token2(text, SourceLocation.range(this, endToken));
             };
             return Token2;
@@ -17039,19 +12654,19 @@
                     mode: this.mode,
                     text: "\\prime"
                   };
-                  var primes2 = [prime2];
+                  var primes3 = [prime2];
                   this.consume();
                   while (this.fetch().text === "'") {
-                    primes2.push(prime2);
+                    primes3.push(prime2);
                     this.consume();
                   }
                   if (this.fetch().text === "^") {
-                    primes2.push(this.handleSupSubscript("superscript"));
+                    primes3.push(this.handleSupSubscript("superscript"));
                   }
                   superscript = {
                     type: "ordgroup",
                     mode: this.mode,
-                    body: primes2
+                    body: primes3
                   };
                 } else {
                   break;
@@ -17251,17 +12866,17 @@
               if (!match3) {
                 throw new src_ParseError("Invalid size: '" + res.text + "'", res);
               }
-              var data = {
+              var data2 = {
                 number: +(match3[1] + match3[2]),
                 unit: match3[3]
               };
-              if (!validUnit(data)) {
-                throw new src_ParseError("Invalid unit: '" + data.unit + "'", res);
+              if (!validUnit(data2)) {
+                throw new src_ParseError("Invalid unit: '" + data2.unit + "'", res);
               }
               return {
                 type: "size",
                 mode: this.mode,
-                value: data,
+                value: data2,
                 isBlank
               };
             };
@@ -17672,7 +13287,7 @@
             var amsRegex = /^\\begin{/;
             var splitAtDelimiters = function splitAtDelimiters2(text, delimiters) {
               var index;
-              var data = [];
+              var data2 = [];
               var regexLeft = new RegExp("(" + delimiters.map(function(x2) {
                 return escapeRegex(x2.left);
               }).join("|") + ")");
@@ -17682,7 +13297,7 @@
                   break;
                 }
                 if (index > 0) {
-                  data.push({
+                  data2.push({
                     type: "text",
                     data: text.slice(0, index)
                   });
@@ -17697,7 +13312,7 @@
                 }
                 var rawData = text.slice(0, index + delimiters[i2].right.length);
                 var math = amsRegex.test(rawData) ? rawData : text.slice(delimiters[i2].left.length, index);
-                data.push({
+                data2.push({
                   type: "math",
                   data: math,
                   rawData,
@@ -17706,39 +13321,39 @@
                 text = text.slice(index + delimiters[i2].right.length);
               }
               if (text !== "") {
-                data.push({
+                data2.push({
                   type: "text",
                   data: text
                 });
               }
-              return data;
+              return data2;
             };
             var auto_render_splitAtDelimiters = splitAtDelimiters;
             ;
             var renderMathInText = function renderMathInText2(text, optionsCopy) {
-              var data = auto_render_splitAtDelimiters(text, optionsCopy.delimiters);
-              if (data.length === 1 && data[0].type === "text") {
+              var data2 = auto_render_splitAtDelimiters(text, optionsCopy.delimiters);
+              if (data2.length === 1 && data2[0].type === "text") {
                 return null;
               }
               var fragment = document.createDocumentFragment();
-              for (var i2 = 0; i2 < data.length; i2++) {
-                if (data[i2].type === "text") {
-                  fragment.appendChild(document.createTextNode(data[i2].data));
+              for (var i2 = 0; i2 < data2.length; i2++) {
+                if (data2[i2].type === "text") {
+                  fragment.appendChild(document.createTextNode(data2[i2].data));
                 } else {
                   var span = document.createElement("span");
-                  var math = data[i2].data;
-                  optionsCopy.displayMode = data[i2].display;
+                  var math = data2[i2].data;
+                  optionsCopy.displayMode = data2[i2].display;
                   try {
                     if (optionsCopy.preProcess) {
                       math = optionsCopy.preProcess(math);
                     }
                     external_katex_default().render(math, span, optionsCopy);
-                  } catch (e5) {
-                    if (!(e5 instanceof external_katex_default().ParseError)) {
-                      throw e5;
+                  } catch (e6) {
+                    if (!(e6 instanceof external_katex_default().ParseError)) {
+                      throw e6;
                     }
-                    optionsCopy.errorCallback("KaTeX auto-render: Failed to parse `" + data[i2].data + "` with ", e5);
-                    fragment.appendChild(document.createTextNode(data[i2].rawData));
+                    optionsCopy.errorCallback("KaTeX auto-render: Failed to parse `" + data2[i2].data + "` with ", e6);
+                    fragment.appendChild(document.createTextNode(data2[i2].rawData));
                     continue;
                   }
                   fragment.appendChild(span);
@@ -17835,8 +13450,2763 @@
     }
   });
 
-  // src/Core/index.ts
-  var import_sapphire_js = __toESM(require_lib());
+  // ../packages/ruby/lib/array/list.js
+  var List = class extends Array {
+    static of(...items) {
+      let ls = new List();
+      ls.push(...items);
+      return ls;
+    }
+    create(elements) {
+      let ls = new this.constructor();
+      ls.push(...elements);
+      return ls;
+    }
+    clear() {
+      this.splice(0, this.length);
+    }
+    set(elements) {
+      this.clear();
+      this.push(...elements);
+    }
+    clone() {
+      return this.create([...this]);
+    }
+    indexValid(index) {
+      if (this.length === 0)
+        return false;
+      return index >= 0 && index <= this.length - 1;
+    }
+    isEmpty() {
+      return this.length === 0;
+    }
+    first() {
+      return this[0];
+    }
+    last() {
+      return this[this.length - 1];
+    }
+    cyclicAt(index) {
+      let n2 = this.length;
+      if (n2 === 0)
+        return void 0;
+      while (index < 0) {
+        index += n2;
+      }
+      while (index > n2 - 1) {
+        index -= n2;
+      }
+      return this[index];
+    }
+    pull(index) {
+      let n2 = this.length;
+      if (n2 === 0)
+        return void 0;
+      while (index < 0)
+        return void 0;
+      while (index > n2 - 1)
+        return void 0;
+      let element = this[index];
+      this.splice(index, 1);
+      return element;
+    }
+    head(n2) {
+      if (n2 <= 0)
+        return this.create([]);
+      return this.slice(0, n2);
+    }
+    tail(n2) {
+      if (n2 <= 0)
+        return this.create([]);
+      return this.slice(-n2);
+    }
+    before(index) {
+      if (index <= 0)
+        return this.create([]);
+      if (index >= this.length)
+        return this.clone();
+      return this.slice(0, index);
+    }
+    till(index) {
+      return this.before(index + 1);
+    }
+    after(index) {
+      if (index < 0)
+        return this.clone();
+      if (index >= this.length - 1)
+        return this.create([]);
+      return this.slice(index + 1);
+    }
+    since(index) {
+      return this.after(index - 1);
+    }
+    chunk(size) {
+      if (size <= 0)
+        return List.of();
+      let ls = List.of();
+      for (let i2 = 0; i2 < this.length; i2 += size) {
+        ls.push(this.slice(i2, i2 + size));
+      }
+      return ls;
+    }
+    split(delimitElement) {
+      let ls = List.of();
+      let clone2 = this.clone();
+      while (true) {
+        let firstDelimIndex = clone2.findIndex(($) => $ === delimitElement);
+        if (firstDelimIndex === -1) {
+          let head = clone2.splice(0);
+          ls.push(this.create(head));
+          break;
+        } else {
+          let head = clone2.splice(0, firstDelimIndex);
+          ls.push(this.create(head));
+          clone2.shift();
+          if (clone2.length === 0) {
+            ls.push(this.create([]));
+            break;
+          }
+        }
+      }
+      return ls;
+    }
+    includesAll(elements) {
+      return elements.every(($) => this.includes($));
+    }
+    includesAny(elements) {
+      return elements.some(($) => this.includes($));
+    }
+    includesExact(elements) {
+      let other = List.of(...elements);
+      return this.includesAll(other) && this.belongs(other);
+    }
+    belongs(elements) {
+      return this.every(($) => elements.includes($));
+    }
+    unique() {
+      return this.create([...new Set(this)]);
+    }
+    uniqueBy(mapper) {
+      let ls = this.create([]);
+      let mapped = [];
+      for (let ele of this) {
+        let map = mapper(ele);
+        let found = mapped.findIndex(($) => $ === map) !== -1;
+        if (found)
+          continue;
+        ls.push(ele);
+        mapped.push(map);
+      }
+      return ls;
+    }
+    uniqueDeep() {
+      return this.uniqueBy(($) => JSON.stringify($));
+    }
+    freq(element) {
+      return this.filter(($) => $ === element).length;
+    }
+    distincts() {
+      return this.filter(($) => this.freq($) === 1);
+    }
+    duplicates() {
+      let distincts = this.distincts();
+      return this.except(distincts);
+    }
+    duplicated() {
+      return this.duplicates().unique();
+    }
+    dupless() {
+      return [...new Set(this)].length === this.length;
+    }
+    duplessDeep() {
+      return this.uniqueDeep().length === this.length;
+    }
+    duppy() {
+      return !this.dupless();
+    }
+    dedup() {
+      this.set(this.unique());
+    }
+    violate(predicate) {
+      return this.filter(($) => !predicate($));
+    }
+    inside(elements) {
+      return this.filter(($) => elements.includes($));
+    }
+    except(elements) {
+      return this.filter(($) => !elements.includes($));
+    }
+    filterIndex(predicate) {
+      let ls = this.create([]);
+      for (let i2 = 0; i2 < this.length; i2++) {
+        if (predicate(i2))
+          ls.push(this[i2]);
+      }
+      return ls;
+    }
+    countIf(predicate) {
+      return this.filter(predicate).length;
+    }
+    sieve(predicate) {
+      this.set(this.filter(predicate));
+    }
+    reject(predicate) {
+      this.set(this.violate(predicate));
+    }
+    keep(elements) {
+      this.set(this.inside(elements));
+    }
+    drop(elements) {
+      this.set(this.except(elements));
+    }
+    reversed() {
+      let ls = this.clone();
+      ls.reverse();
+      return ls;
+    }
+    ascending() {
+      let ls = this.clone();
+      ls.ascend();
+      return ls;
+    }
+    descending() {
+      let ls = this.clone();
+      ls.descend();
+      return ls;
+    }
+    sorted(...compareFns) {
+      let ls = this.clone();
+      ls.sorts(...compareFns);
+      return ls;
+    }
+    sortedBy(...mappers) {
+      let ls = this.clone();
+      ls.sortBy(...mappers);
+      return ls;
+    }
+    sortedByFreq() {
+      return this.sortedBy(($) => -this.freq($));
+    }
+    ascend() {
+      if (this.every(($) => typeof $ === "number")) {
+        this.sortBy(($) => Number($));
+      } else {
+        this.sortBy(($) => String($));
+      }
+    }
+    descend() {
+      this.ascend();
+      this.reverse();
+    }
+    arrange(newIndices) {
+      let newArr = Array(this.length);
+      for (let i2 = 0; i2 < this.length; i2++) {
+        const newIndex = newIndices[i2];
+        newArr[newIndex] = this[i2];
+      }
+      this.set(newArr);
+    }
+    permute(newOrder) {
+      let newArr = Array(this.length);
+      for (let i2 = 0; i2 < this.length; i2++) {
+        const newIndex = newOrder[i2];
+        newArr[i2] = this[newIndex];
+      }
+      this.set(newArr);
+    }
+    sorts(...compareFns) {
+      function compare(a2, b2) {
+        for (let fn of compareFns) {
+          let v3 = fn(a2, b2);
+          if (v3 > 0)
+            return 1;
+          if (v3 < 0)
+            return -1;
+        }
+        return 0;
+      }
+      this.sort(compare);
+    }
+    sortBy(...mappers) {
+      const compareFns = mappers.map((m3) => function(a2, b2) {
+        const va = m3(a2);
+        const vb = m3(b2);
+        return va === vb ? 0 : va > vb ? 1 : -1;
+      });
+      this.sorts(...compareFns);
+    }
+    cycle(n2) {
+      if (this.length === 0)
+        return;
+      if (n2 === 0)
+        return;
+      if (n2 > 0) {
+        for (let i2 = 1; i2 <= n2; i2++) {
+          this.push(this.shift());
+        }
+      }
+      if (n2 < 0) {
+        n2 = Math.abs(n2);
+        for (let i2 = 1; i2 <= n2; i2++) {
+          this.unshift(this.pop());
+        }
+      }
+    }
+    randomIndex() {
+      if (this.length === 0)
+        return void 0;
+      function rndInt2(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      return rndInt2(0, this.length - 1);
+    }
+    draw() {
+      if (this.length === 0)
+        return void 0;
+      return this[this.randomIndex()];
+    }
+    draws(n2) {
+      if (this.length === 0)
+        return void 0;
+      let arr = this.create([]);
+      for (let i2 = 0; i2 < n2; i2++) {
+        arr.push(this.draw());
+      }
+      return arr;
+    }
+    sample(n2) {
+      if (n2 > this.length)
+        return void 0;
+      let ls = this.shuffled();
+      ls.length = n2;
+      return ls;
+    }
+    shuffled() {
+      let ls = this.clone();
+      ls.shuffle();
+      return ls;
+    }
+    deal() {
+      if (this.length === 0)
+        return void 0;
+      return this.pull(this.randomIndex());
+    }
+    shuffle() {
+      for (let i2 = this.length - 1; i2 > 0; i2--) {
+        let j2 = Math.floor(Math.random() * (i2 + 1));
+        [this[i2], this[j2]] = [this[j2], this[i2]];
+      }
+    }
+    combinations(k2) {
+      if (k2 > this.length || k2 <= 0)
+        return List.of();
+      if (k2 === this.length)
+        return List.of(this);
+      if (k2 === 1)
+        return List.of(...this.map(($) => this.create([$])));
+      const combs = List.of();
+      let tail_combs = List.of();
+      for (let i2 = 0; i2 <= this.length - k2 + 1; i2++) {
+        let tail = this.after(i2);
+        tail_combs = tail.combinations(k2 - 1);
+        for (let j2 = 0; j2 < tail_combs.length; j2++) {
+          combs.push(this.create([this[i2], ...tail_combs[j2]]));
+        }
+      }
+      return combs;
+    }
+    pairs() {
+      return this.combinations(2);
+    }
+    permutations() {
+      if (this.length === 0)
+        return List.of();
+      if (this.length === 1)
+        return List.of(this);
+      if (this.length === 2) {
+        let [a2, b2] = this;
+        return List.of(this.create([a2, b2]), this.create([b2, a2]));
+      }
+      const perm = List.of();
+      for (let i2 = 0; i2 < this.length; i2++) {
+        let clone2 = this.clone();
+        let pulled = clone2.pull(i2);
+        for (let p3 of clone2.permutations()) {
+          perm.push(this.create([pulled, ...p3]));
+        }
+      }
+      return perm;
+    }
+    zip(array2, mapper) {
+      let ls = new List();
+      for (let i2 = 0; i2 < this.length; i2++) {
+        ls.push(mapper(this[i2], array2[i2]));
+      }
+      return ls;
+    }
+    meanOf(metric) {
+      let metrics = this.map(metric);
+      let sum = metrics.reduce((a2, b2) => a2 + b2, 0);
+      return sum / metrics.length;
+    }
+    maxOf(metric, rank = 1) {
+      if (this.length === 0)
+        return NaN;
+      if (rank === 1) {
+        return this.map(metric).descending().first();
+      } else {
+        let sortedMetrics = this.map(metric).unique().descending();
+        return sortedMetrics[rank - 1] ?? NaN;
+      }
+    }
+    minOf(metric, rank = 1) {
+      if (this.length === 0)
+        return NaN;
+      if (rank === 1) {
+        return this.map(metric).ascending().first();
+      } else {
+        let sortedMetrics = this.map(metric).unique().ascending();
+        return sortedMetrics[rank - 1] ?? NaN;
+      }
+    }
+    maxsBy(metric, rank = 1) {
+      let max = this.maxOf(metric, rank);
+      return this.filter(($) => metric($) === max);
+    }
+    minsBy(metric, rank = 1) {
+      let min = this.minOf(metric, rank);
+      return this.filter(($) => metric($) === min);
+    }
+    maxBy(metric, rank = 1) {
+      if (this.length === 0)
+        return void 0;
+      return this.maxsBy(metric, rank).first();
+    }
+    minBy(metric, rank = 1) {
+      if (this.length === 0)
+        return void 0;
+      return this.minsBy(metric, rank).first();
+    }
+    padTail(length) {
+      if (length <= this.length)
+        return this.clone();
+      if (this.length === 0)
+        return this.clone();
+      let last = this.last();
+      let clone2 = this.clone();
+      for (let i2 = clone2.length; i2 < length; i2++) {
+        clone2.push(last);
+      }
+      return clone2;
+    }
+    padHead(length) {
+      if (length <= this.length)
+        return this.clone();
+      if (this.length === 0)
+        return this.clone();
+      let first = this.first();
+      let clone2 = this.create([]);
+      for (let i2 = 0; i2 < length - this.length; i2++) {
+        clone2.push(first);
+      }
+      clone2.push(...this);
+      return clone2;
+    }
+    padCyclic(length) {
+      if (length <= this.length)
+        return this.clone();
+      if (this.length === 0)
+        return this.clone();
+      let clone2 = this.create([]);
+      for (let i2 = 0; i2 < length; i2++) {
+        clone2.push(this.cyclicAt(i2));
+      }
+      return clone2;
+    }
+  };
+  function list2(...elements) {
+    let ls = new List();
+    ls.push(...elements);
+    return ls;
+  }
+  function toList2(elements) {
+    return list2(...elements);
+  }
+
+  // ../packages/ruby/lib/math/cal.js
+  var cal_exports = {};
+  __export(cal_exports, {
+    blur: () => blur,
+    correct: () => correct,
+    crammer: () => crammer,
+    dp: () => dp,
+    e: () => e2,
+    eq: () => eq,
+    factorial: () => factorial,
+    fix: () => fix,
+    isPrime: () => isPrime,
+    isRational: () => isRational,
+    logCeil: () => logCeil,
+    logFloor: () => logFloor,
+    mantissa: () => mantissa,
+    nCr: () => nCr,
+    nPr: () => nPr,
+    primeFactors: () => primeFactors,
+    primes: () => primes,
+    range: () => range,
+    round: () => round2,
+    sigfig: () => sigfig,
+    toFraction: () => toFraction,
+    toSurd: () => toSurd,
+    trace: () => trace,
+    traceCircle: () => traceCircle
+  });
+
+  // ../packages/ruby/lib/math/dec.js
+  var EXP_LIMIT = 9e15;
+  var MAX_DIGITS = 1e9;
+  var LN10 = "2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058";
+  var PI = "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632789";
+  var DEFAULTS = {
+    precision: 20,
+    rounding: 4,
+    modulo: 1,
+    toExpNeg: -7,
+    toExpPos: 21,
+    minE: -EXP_LIMIT,
+    maxE: EXP_LIMIT,
+    crypto: false
+  };
+  var inexact;
+  var external = true;
+  var decimalError = "[DecimalError] ";
+  var invalidArgument = decimalError + "Invalid argument: ";
+  var precisionLimitExceeded = decimalError + "Precision limit exceeded";
+  var cryptoUnavailable = decimalError + "crypto unavailable";
+  var tag = "[object Decimal]";
+  var mathfloor = Math.floor;
+  var mathpow = Math.pow;
+  var isBinary = /^0b([01]+(\.[01]*)?|\.[01]+)(p[+-]?\d+)?$/i;
+  var isHex = /^0x([0-9a-f]+(\.[0-9a-f]*)?|\.[0-9a-f]+)(p[+-]?\d+)?$/i;
+  var isOctal = /^0o([0-7]+(\.[0-7]*)?|\.[0-7]+)(p[+-]?\d+)?$/i;
+  var isDecimal = /^(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i;
+  var BASE = 1e7;
+  var LOG_BASE = 7;
+  var LN10_PRECISION = LN10.length - 1;
+  var PI_PRECISION = PI.length - 1;
+  var P2 = { toStringTag: tag };
+  P2.absoluteValue = P2.abs = function() {
+    var x2 = new this.constructor(this);
+    if (x2.s < 0)
+      x2.s = 1;
+    return finalise(x2);
+  };
+  P2.ceil = function() {
+    return finalise(new this.constructor(this), this.e + 1, 2);
+  };
+  P2.comparedTo = P2.cmp = function(y2) {
+    var i2, j2, xdL, ydL, x2 = this, xd = x2.d, yd = (y2 = new x2.constructor(y2)).d, xs = x2.s, ys = y2.s;
+    if (!xd || !yd) {
+      return !xs || !ys ? NaN : xs !== ys ? xs : xd === yd ? 0 : !xd ^ xs < 0 ? 1 : -1;
+    }
+    if (!xd[0] || !yd[0])
+      return xd[0] ? xs : yd[0] ? -ys : 0;
+    if (xs !== ys)
+      return xs;
+    if (x2.e !== y2.e)
+      return x2.e > y2.e ^ xs < 0 ? 1 : -1;
+    xdL = xd.length;
+    ydL = yd.length;
+    for (i2 = 0, j2 = xdL < ydL ? xdL : ydL; i2 < j2; ++i2) {
+      if (xd[i2] !== yd[i2])
+        return xd[i2] > yd[i2] ^ xs < 0 ? 1 : -1;
+    }
+    return xdL === ydL ? 0 : xdL > ydL ^ xs < 0 ? 1 : -1;
+  };
+  P2.decimalPlaces = P2.dp = function() {
+    var w2, d2 = this.d, n2 = NaN;
+    if (d2) {
+      w2 = d2.length - 1;
+      n2 = (w2 - mathfloor(this.e / LOG_BASE)) * LOG_BASE;
+      w2 = d2[w2];
+      if (w2)
+        for (; w2 % 10 == 0; w2 /= 10)
+          n2--;
+      if (n2 < 0)
+        n2 = 0;
+    }
+    return n2;
+  };
+  P2.dividedBy = P2.div = function(y2) {
+    return divide(this, new this.constructor(y2));
+  };
+  P2.dividedToIntegerBy = P2.divToInt = function(y2) {
+    var x2 = this, Ctor = x2.constructor;
+    return finalise(divide(x2, new Ctor(y2), 0, 1, 1), Ctor.precision, Ctor.rounding);
+  };
+  P2.equals = P2.eq = function(y2) {
+    return this.cmp(y2) === 0;
+  };
+  P2.floor = function() {
+    return finalise(new this.constructor(this), this.e + 1, 3);
+  };
+  P2.greaterThan = P2.gt = function(y2) {
+    return this.cmp(y2) > 0;
+  };
+  P2.greaterThanOrEqualTo = P2.gte = function(y2) {
+    var k2 = this.cmp(y2);
+    return k2 == 1 || k2 === 0;
+  };
+  P2.isFinite = function() {
+    return !!this.d;
+  };
+  P2.isInteger = P2.isInt = function() {
+    return !!this.d && mathfloor(this.e / LOG_BASE) > this.d.length - 2;
+  };
+  P2.isNaN = function() {
+    return !this.s;
+  };
+  P2.isNegative = P2.isNeg = function() {
+    return this.s < 0;
+  };
+  P2.isPositive = P2.isPos = function() {
+    return this.s > 0;
+  };
+  P2.isZero = function() {
+    return !!this.d && this.d[0] === 0;
+  };
+  P2.lessThan = P2.lt = function(y2) {
+    return this.cmp(y2) < 0;
+  };
+  P2.lessThanOrEqualTo = P2.lte = function(y2) {
+    return this.cmp(y2) < 1;
+  };
+  P2.minus = P2.sub = function(y2) {
+    var d2, e6, i2, j2, k2, len, pr2, rm, xd, xe, xLTy, yd, x2 = this, Ctor = x2.constructor;
+    y2 = new Ctor(y2);
+    if (!x2.d || !y2.d) {
+      if (!x2.s || !y2.s)
+        y2 = new Ctor(NaN);
+      else if (x2.d)
+        y2.s = -y2.s;
+      else
+        y2 = new Ctor(y2.d || x2.s !== y2.s ? x2 : NaN);
+      return y2;
+    }
+    if (x2.s != y2.s) {
+      y2.s = -y2.s;
+      return x2.plus(y2);
+    }
+    xd = x2.d;
+    yd = y2.d;
+    pr2 = Ctor.precision;
+    rm = Ctor.rounding;
+    if (!xd[0] || !yd[0]) {
+      if (yd[0])
+        y2.s = -y2.s;
+      else if (xd[0])
+        y2 = new Ctor(x2);
+      else
+        return new Ctor(rm === 3 ? -0 : 0);
+      return external ? finalise(y2, pr2, rm) : y2;
+    }
+    e6 = mathfloor(y2.e / LOG_BASE);
+    xe = mathfloor(x2.e / LOG_BASE);
+    xd = xd.slice();
+    k2 = xe - e6;
+    if (k2) {
+      xLTy = k2 < 0;
+      if (xLTy) {
+        d2 = xd;
+        k2 = -k2;
+        len = yd.length;
+      } else {
+        d2 = yd;
+        e6 = xe;
+        len = xd.length;
+      }
+      i2 = Math.max(Math.ceil(pr2 / LOG_BASE), len) + 2;
+      if (k2 > i2) {
+        k2 = i2;
+        d2.length = 1;
+      }
+      d2.reverse();
+      for (i2 = k2; i2--; )
+        d2.push(0);
+      d2.reverse();
+    } else {
+      i2 = xd.length;
+      len = yd.length;
+      xLTy = i2 < len;
+      if (xLTy)
+        len = i2;
+      for (i2 = 0; i2 < len; i2++) {
+        if (xd[i2] != yd[i2]) {
+          xLTy = xd[i2] < yd[i2];
+          break;
+        }
+      }
+      k2 = 0;
+    }
+    if (xLTy) {
+      d2 = xd;
+      xd = yd;
+      yd = d2;
+      y2.s = -y2.s;
+    }
+    len = xd.length;
+    for (i2 = yd.length - len; i2 > 0; --i2)
+      xd[len++] = 0;
+    for (i2 = yd.length; i2 > k2; ) {
+      if (xd[--i2] < yd[i2]) {
+        for (j2 = i2; j2 && xd[--j2] === 0; )
+          xd[j2] = BASE - 1;
+        --xd[j2];
+        xd[i2] += BASE;
+      }
+      xd[i2] -= yd[i2];
+    }
+    for (; xd[--len] === 0; )
+      xd.pop();
+    for (; xd[0] === 0; xd.shift())
+      --e6;
+    if (!xd[0])
+      return new Ctor(rm === 3 ? -0 : 0);
+    y2.d = xd;
+    y2.e = getBase10Exponent(xd, e6);
+    return external ? finalise(y2, pr2, rm) : y2;
+  };
+  P2.modulo = P2.mod = function(y2) {
+    var q2, x2 = this, Ctor = x2.constructor;
+    y2 = new Ctor(y2);
+    if (!x2.d || !y2.s || y2.d && !y2.d[0])
+      return new Ctor(NaN);
+    if (!y2.d || x2.d && !x2.d[0]) {
+      return finalise(new Ctor(x2), Ctor.precision, Ctor.rounding);
+    }
+    external = false;
+    if (Ctor.modulo == 9) {
+      q2 = divide(x2, y2.abs(), 0, 3, 1);
+      q2.s *= y2.s;
+    } else {
+      q2 = divide(x2, y2, 0, Ctor.modulo, 1);
+    }
+    q2 = q2.times(y2);
+    external = true;
+    return x2.minus(q2);
+  };
+  P2.negated = P2.neg = function() {
+    var x2 = new this.constructor(this);
+    x2.s = -x2.s;
+    return finalise(x2);
+  };
+  P2.plus = P2.add = function(y2) {
+    var carry, d2, e6, i2, k2, len, pr2, rm, xd, yd, x2 = this, Ctor = x2.constructor;
+    y2 = new Ctor(y2);
+    if (!x2.d || !y2.d) {
+      if (!x2.s || !y2.s)
+        y2 = new Ctor(NaN);
+      else if (!x2.d)
+        y2 = new Ctor(y2.d || x2.s === y2.s ? x2 : NaN);
+      return y2;
+    }
+    if (x2.s != y2.s) {
+      y2.s = -y2.s;
+      return x2.minus(y2);
+    }
+    xd = x2.d;
+    yd = y2.d;
+    pr2 = Ctor.precision;
+    rm = Ctor.rounding;
+    if (!xd[0] || !yd[0]) {
+      if (!yd[0])
+        y2 = new Ctor(x2);
+      return external ? finalise(y2, pr2, rm) : y2;
+    }
+    k2 = mathfloor(x2.e / LOG_BASE);
+    e6 = mathfloor(y2.e / LOG_BASE);
+    xd = xd.slice();
+    i2 = k2 - e6;
+    if (i2) {
+      if (i2 < 0) {
+        d2 = xd;
+        i2 = -i2;
+        len = yd.length;
+      } else {
+        d2 = yd;
+        e6 = k2;
+        len = xd.length;
+      }
+      k2 = Math.ceil(pr2 / LOG_BASE);
+      len = k2 > len ? k2 + 1 : len + 1;
+      if (i2 > len) {
+        i2 = len;
+        d2.length = 1;
+      }
+      d2.reverse();
+      for (; i2--; )
+        d2.push(0);
+      d2.reverse();
+    }
+    len = xd.length;
+    i2 = yd.length;
+    if (len - i2 < 0) {
+      i2 = len;
+      d2 = yd;
+      yd = xd;
+      xd = d2;
+    }
+    for (carry = 0; i2; ) {
+      carry = (xd[--i2] = xd[i2] + yd[i2] + carry) / BASE | 0;
+      xd[i2] %= BASE;
+    }
+    if (carry) {
+      xd.unshift(carry);
+      ++e6;
+    }
+    for (len = xd.length; xd[--len] == 0; )
+      xd.pop();
+    y2.d = xd;
+    y2.e = getBase10Exponent(xd, e6);
+    return external ? finalise(y2, pr2, rm) : y2;
+  };
+  P2.precision = P2.sd = function(z2) {
+    var k2, x2 = this;
+    if (z2 !== void 0 && z2 !== !!z2 && z2 !== 1 && z2 !== 0)
+      throw Error(invalidArgument + z2);
+    if (x2.d) {
+      k2 = getPrecision(x2.d);
+      if (z2 && x2.e + 1 > k2)
+        k2 = x2.e + 1;
+    } else {
+      k2 = NaN;
+    }
+    return k2;
+  };
+  P2.round = function() {
+    var x2 = this, Ctor = x2.constructor;
+    return finalise(new Ctor(x2), x2.e + 1, Ctor.rounding);
+  };
+  P2.times = P2.mul = function(y2) {
+    var carry, e6, i2, k2, r3, rL, t2, xdL, ydL, x2 = this, Ctor = x2.constructor, xd = x2.d, yd = (y2 = new Ctor(y2)).d;
+    y2.s *= x2.s;
+    if (!xd || !xd[0] || !yd || !yd[0]) {
+      return new Ctor(!y2.s || xd && !xd[0] && !yd || yd && !yd[0] && !xd ? NaN : !xd || !yd ? y2.s / 0 : y2.s * 0);
+    }
+    e6 = mathfloor(x2.e / LOG_BASE) + mathfloor(y2.e / LOG_BASE);
+    xdL = xd.length;
+    ydL = yd.length;
+    if (xdL < ydL) {
+      r3 = xd;
+      xd = yd;
+      yd = r3;
+      rL = xdL;
+      xdL = ydL;
+      ydL = rL;
+    }
+    r3 = [];
+    rL = xdL + ydL;
+    for (i2 = rL; i2--; )
+      r3.push(0);
+    for (i2 = ydL; --i2 >= 0; ) {
+      carry = 0;
+      for (k2 = xdL + i2; k2 > i2; ) {
+        t2 = r3[k2] + yd[i2] * xd[k2 - i2 - 1] + carry;
+        r3[k2--] = t2 % BASE | 0;
+        carry = t2 / BASE | 0;
+      }
+      r3[k2] = (r3[k2] + carry) % BASE | 0;
+    }
+    for (; !r3[--rL]; )
+      r3.pop();
+    if (carry)
+      ++e6;
+    else
+      r3.shift();
+    y2.d = r3;
+    y2.e = getBase10Exponent(r3, e6);
+    return external ? finalise(y2, Ctor.precision, Ctor.rounding) : y2;
+  };
+  P2.toDecimalPlaces = P2.toDP = function(dp2, rm) {
+    var x2 = this, Ctor = x2.constructor;
+    x2 = new Ctor(x2);
+    if (dp2 === void 0)
+      return x2;
+    checkInt32(dp2, 0, MAX_DIGITS);
+    if (rm === void 0)
+      rm = Ctor.rounding;
+    else
+      checkInt32(rm, 0, 8);
+    return finalise(x2, dp2 + x2.e + 1, rm);
+  };
+  P2.toFixed = function(dp2, rm) {
+    var str3, y2, x2 = this, Ctor = x2.constructor;
+    if (dp2 === void 0) {
+      str3 = finiteToString(x2);
+    } else {
+      checkInt32(dp2, 0, MAX_DIGITS);
+      if (rm === void 0)
+        rm = Ctor.rounding;
+      else
+        checkInt32(rm, 0, 8);
+      y2 = finalise(new Ctor(x2), dp2 + x2.e + 1, rm);
+      str3 = finiteToString(y2, false, dp2 + y2.e + 1);
+    }
+    return x2.isNeg() && !x2.isZero() ? "-" + str3 : str3;
+  };
+  P2.toFraction = function(maxD) {
+    var d2, d0, d1, d22, e6, k2, n2, n0, n1, pr2, q2, r3, x2 = this, xd = x2.d, Ctor = x2.constructor;
+    if (!xd)
+      return new Ctor(x2);
+    n1 = d0 = new Ctor(1);
+    d1 = n0 = new Ctor(0);
+    d2 = new Ctor(d1);
+    e6 = d2.e = getPrecision(xd) - x2.e - 1;
+    k2 = e6 % LOG_BASE;
+    d2.d[0] = mathpow(10, k2 < 0 ? LOG_BASE + k2 : k2);
+    if (maxD == null) {
+      maxD = e6 > 0 ? d2 : n1;
+    } else {
+      n2 = new Ctor(maxD);
+      if (!n2.isInt() || n2.lt(n1))
+        throw Error(invalidArgument + n2);
+      maxD = n2.gt(d2) ? e6 > 0 ? d2 : n1 : n2;
+    }
+    external = false;
+    n2 = new Ctor(digitsToString(xd));
+    pr2 = Ctor.precision;
+    Ctor.precision = e6 = xd.length * LOG_BASE * 2;
+    for (; ; ) {
+      q2 = divide(n2, d2, 0, 1, 1);
+      d22 = d0.plus(q2.times(d1));
+      if (d22.cmp(maxD) == 1)
+        break;
+      d0 = d1;
+      d1 = d22;
+      d22 = n1;
+      n1 = n0.plus(q2.times(d22));
+      n0 = d22;
+      d22 = d2;
+      d2 = n2.minus(q2.times(d22));
+      n2 = d22;
+    }
+    d22 = divide(maxD.minus(d0), d1, 0, 1, 1);
+    n0 = n0.plus(d22.times(n1));
+    d0 = d0.plus(d22.times(d1));
+    n0.s = n1.s = x2.s;
+    r3 = divide(n1, d1, e6, 1).minus(x2).abs().cmp(divide(n0, d0, e6, 1).minus(x2).abs()) < 1 ? [n1, d1] : [n0, d0];
+    Ctor.precision = pr2;
+    external = true;
+    return r3;
+  };
+  P2.toNearest = function(y2, rm) {
+    var x2 = this, Ctor = x2.constructor;
+    x2 = new Ctor(x2);
+    if (y2 == null) {
+      if (!x2.d)
+        return x2;
+      y2 = new Ctor(1);
+      rm = Ctor.rounding;
+    } else {
+      y2 = new Ctor(y2);
+      if (rm === void 0) {
+        rm = Ctor.rounding;
+      } else {
+        checkInt32(rm, 0, 8);
+      }
+      if (!x2.d)
+        return y2.s ? x2 : y2;
+      if (!y2.d) {
+        if (y2.s)
+          y2.s = x2.s;
+        return y2;
+      }
+    }
+    if (y2.d[0]) {
+      external = false;
+      x2 = divide(x2, y2, 0, rm, 1).times(y2);
+      external = true;
+      finalise(x2);
+    } else {
+      y2.s = x2.s;
+      x2 = y2;
+    }
+    return x2;
+  };
+  P2.toNumber = function() {
+    return +this;
+  };
+  P2.toPrecision = function(sd, rm) {
+    var str3, x2 = this, Ctor = x2.constructor;
+    if (sd === void 0) {
+      str3 = finiteToString(x2, x2.e <= Ctor.toExpNeg || x2.e >= Ctor.toExpPos);
+    } else {
+      checkInt32(sd, 1, MAX_DIGITS);
+      if (rm === void 0)
+        rm = Ctor.rounding;
+      else
+        checkInt32(rm, 0, 8);
+      x2 = finalise(new Ctor(x2), sd, rm);
+      str3 = finiteToString(x2, sd <= x2.e || x2.e <= Ctor.toExpNeg, sd);
+    }
+    return x2.isNeg() && !x2.isZero() ? "-" + str3 : str3;
+  };
+  P2.toSignificantDigits = P2.toSD = function(sd, rm) {
+    var x2 = this, Ctor = x2.constructor;
+    if (sd === void 0) {
+      sd = Ctor.precision;
+      rm = Ctor.rounding;
+    } else {
+      checkInt32(sd, 1, MAX_DIGITS);
+      if (rm === void 0)
+        rm = Ctor.rounding;
+      else
+        checkInt32(rm, 0, 8);
+    }
+    return finalise(new Ctor(x2), sd, rm);
+  };
+  P2.toString = function() {
+    var x2 = this, Ctor = x2.constructor, str3 = finiteToString(x2, x2.e <= Ctor.toExpNeg || x2.e >= Ctor.toExpPos);
+    return x2.isNeg() && !x2.isZero() ? "-" + str3 : str3;
+  };
+  P2.truncated = P2.trunc = function() {
+    return finalise(new this.constructor(this), this.e + 1, 1);
+  };
+  P2.valueOf = P2.toJSON = function() {
+    var x2 = this, Ctor = x2.constructor, str3 = finiteToString(x2, x2.e <= Ctor.toExpNeg || x2.e >= Ctor.toExpPos);
+    return x2.isNeg() ? "-" + str3 : str3;
+  };
+  function digitsToString(d2) {
+    var i2, k2, ws, indexOfLastWord = d2.length - 1, str3 = "", w2 = d2[0];
+    if (indexOfLastWord > 0) {
+      str3 += w2;
+      for (i2 = 1; i2 < indexOfLastWord; i2++) {
+        ws = d2[i2] + "";
+        k2 = LOG_BASE - ws.length;
+        if (k2)
+          str3 += getZeroString(k2);
+        str3 += ws;
+      }
+      w2 = d2[i2];
+      ws = w2 + "";
+      k2 = LOG_BASE - ws.length;
+      if (k2)
+        str3 += getZeroString(k2);
+    } else if (w2 === 0) {
+      return "0";
+    }
+    for (; w2 % 10 === 0; )
+      w2 /= 10;
+    return str3 + w2;
+  }
+  function checkInt32(i2, min, max) {
+    if (i2 !== ~~i2 || i2 < min || i2 > max) {
+      throw Error(invalidArgument + i2);
+    }
+  }
+  var divide = function() {
+    function multiplyInteger(x2, k2, base2) {
+      var temp, carry = 0, i2 = x2.length;
+      for (x2 = x2.slice(); i2--; ) {
+        temp = x2[i2] * k2 + carry;
+        x2[i2] = temp % base2 | 0;
+        carry = temp / base2 | 0;
+      }
+      if (carry)
+        x2.unshift(carry);
+      return x2;
+    }
+    function compare(a2, b2, aL, bL) {
+      var i2, r3;
+      if (aL != bL) {
+        r3 = aL > bL ? 1 : -1;
+      } else {
+        for (i2 = r3 = 0; i2 < aL; i2++) {
+          if (a2[i2] != b2[i2]) {
+            r3 = a2[i2] > b2[i2] ? 1 : -1;
+            break;
+          }
+        }
+      }
+      return r3;
+    }
+    function subtract(a2, b2, aL, base2) {
+      var i2 = 0;
+      for (; aL--; ) {
+        a2[aL] -= i2;
+        i2 = a2[aL] < b2[aL] ? 1 : 0;
+        a2[aL] = i2 * base2 + a2[aL] - b2[aL];
+      }
+      for (; !a2[0] && a2.length > 1; )
+        a2.shift();
+    }
+    return function(x2, y2, pr2, rm, dp2, base2) {
+      var cmp, e6, i2, k2, logBase, more, prod, prodL, q2, qd, rem, remL, rem0, sd, t2, xi, xL, yd0, yL, yz, Ctor = x2.constructor, sign = x2.s == y2.s ? 1 : -1, xd = x2.d, yd = y2.d;
+      if (!xd || !xd[0] || !yd || !yd[0]) {
+        return new Ctor(!x2.s || !y2.s || (xd ? yd && xd[0] == yd[0] : !yd) ? NaN : xd && xd[0] == 0 || !yd ? sign * 0 : sign / 0);
+      }
+      if (base2) {
+        logBase = 1;
+        e6 = x2.e - y2.e;
+      } else {
+        base2 = BASE;
+        logBase = LOG_BASE;
+        e6 = mathfloor(x2.e / logBase) - mathfloor(y2.e / logBase);
+      }
+      yL = yd.length;
+      xL = xd.length;
+      q2 = new Ctor(sign);
+      qd = q2.d = [];
+      for (i2 = 0; yd[i2] == (xd[i2] || 0); i2++)
+        ;
+      if (yd[i2] > (xd[i2] || 0))
+        e6--;
+      if (pr2 == null) {
+        sd = pr2 = Ctor.precision;
+        rm = Ctor.rounding;
+      } else if (dp2) {
+        sd = pr2 + (x2.e - y2.e) + 1;
+      } else {
+        sd = pr2;
+      }
+      if (sd < 0) {
+        qd.push(1);
+        more = true;
+      } else {
+        sd = sd / logBase + 2 | 0;
+        i2 = 0;
+        if (yL == 1) {
+          k2 = 0;
+          yd = yd[0];
+          sd++;
+          for (; (i2 < xL || k2) && sd--; i2++) {
+            t2 = k2 * base2 + (xd[i2] || 0);
+            qd[i2] = t2 / yd | 0;
+            k2 = t2 % yd | 0;
+          }
+          more = k2 || i2 < xL;
+        } else {
+          k2 = base2 / (yd[0] + 1) | 0;
+          if (k2 > 1) {
+            yd = multiplyInteger(yd, k2, base2);
+            xd = multiplyInteger(xd, k2, base2);
+            yL = yd.length;
+            xL = xd.length;
+          }
+          xi = yL;
+          rem = xd.slice(0, yL);
+          remL = rem.length;
+          for (; remL < yL; )
+            rem[remL++] = 0;
+          yz = yd.slice();
+          yz.unshift(0);
+          yd0 = yd[0];
+          if (yd[1] >= base2 / 2)
+            ++yd0;
+          do {
+            k2 = 0;
+            cmp = compare(yd, rem, yL, remL);
+            if (cmp < 0) {
+              rem0 = rem[0];
+              if (yL != remL)
+                rem0 = rem0 * base2 + (rem[1] || 0);
+              k2 = rem0 / yd0 | 0;
+              if (k2 > 1) {
+                if (k2 >= base2)
+                  k2 = base2 - 1;
+                prod = multiplyInteger(yd, k2, base2);
+                prodL = prod.length;
+                remL = rem.length;
+                cmp = compare(prod, rem, prodL, remL);
+                if (cmp == 1) {
+                  k2--;
+                  subtract(prod, yL < prodL ? yz : yd, prodL, base2);
+                }
+              } else {
+                if (k2 == 0)
+                  cmp = k2 = 1;
+                prod = yd.slice();
+              }
+              prodL = prod.length;
+              if (prodL < remL)
+                prod.unshift(0);
+              subtract(rem, prod, remL, base2);
+              if (cmp == -1) {
+                remL = rem.length;
+                cmp = compare(yd, rem, yL, remL);
+                if (cmp < 1) {
+                  k2++;
+                  subtract(rem, yL < remL ? yz : yd, remL, base2);
+                }
+              }
+              remL = rem.length;
+            } else if (cmp === 0) {
+              k2++;
+              rem = [0];
+            }
+            qd[i2++] = k2;
+            if (cmp && rem[0]) {
+              rem[remL++] = xd[xi] || 0;
+            } else {
+              rem = [xd[xi]];
+              remL = 1;
+            }
+          } while ((xi++ < xL || rem[0] !== void 0) && sd--);
+          more = rem[0] !== void 0;
+        }
+        if (!qd[0])
+          qd.shift();
+      }
+      if (logBase == 1) {
+        q2.e = e6;
+        inexact = more;
+      } else {
+        for (i2 = 1, k2 = qd[0]; k2 >= 10; k2 /= 10)
+          i2++;
+        q2.e = i2 + e6 * logBase - 1;
+        finalise(q2, dp2 ? pr2 + q2.e + 1 : pr2, rm, more);
+      }
+      return q2;
+    };
+  }();
+  function finalise(x2, sd, rm, isTruncated) {
+    var digits, i2, j2, k2, rd, roundUp, w2, xd, xdi, Ctor = x2.constructor;
+    out:
+      if (sd != null) {
+        xd = x2.d;
+        if (!xd)
+          return x2;
+        for (digits = 1, k2 = xd[0]; k2 >= 10; k2 /= 10)
+          digits++;
+        i2 = sd - digits;
+        if (i2 < 0) {
+          i2 += LOG_BASE;
+          j2 = sd;
+          w2 = xd[xdi = 0];
+          rd = w2 / mathpow(10, digits - j2 - 1) % 10 | 0;
+        } else {
+          xdi = Math.ceil((i2 + 1) / LOG_BASE);
+          k2 = xd.length;
+          if (xdi >= k2) {
+            if (isTruncated) {
+              for (; k2++ <= xdi; )
+                xd.push(0);
+              w2 = rd = 0;
+              digits = 1;
+              i2 %= LOG_BASE;
+              j2 = i2 - LOG_BASE + 1;
+            } else {
+              break out;
+            }
+          } else {
+            w2 = k2 = xd[xdi];
+            for (digits = 1; k2 >= 10; k2 /= 10)
+              digits++;
+            i2 %= LOG_BASE;
+            j2 = i2 - LOG_BASE + digits;
+            rd = j2 < 0 ? 0 : w2 / mathpow(10, digits - j2 - 1) % 10 | 0;
+          }
+        }
+        isTruncated = isTruncated || sd < 0 || xd[xdi + 1] !== void 0 || (j2 < 0 ? w2 : w2 % mathpow(10, digits - j2 - 1));
+        roundUp = rm < 4 ? (rd || isTruncated) && (rm == 0 || rm == (x2.s < 0 ? 3 : 2)) : rd > 5 || rd == 5 && (rm == 4 || isTruncated || rm == 6 && (i2 > 0 ? j2 > 0 ? w2 / mathpow(10, digits - j2) : 0 : xd[xdi - 1]) % 10 & 1 || rm == (x2.s < 0 ? 8 : 7));
+        if (sd < 1 || !xd[0]) {
+          xd.length = 0;
+          if (roundUp) {
+            sd -= x2.e + 1;
+            xd[0] = mathpow(10, (LOG_BASE - sd % LOG_BASE) % LOG_BASE);
+            x2.e = -sd || 0;
+          } else {
+            xd[0] = x2.e = 0;
+          }
+          return x2;
+        }
+        if (i2 == 0) {
+          xd.length = xdi;
+          k2 = 1;
+          xdi--;
+        } else {
+          xd.length = xdi + 1;
+          k2 = mathpow(10, LOG_BASE - i2);
+          xd[xdi] = j2 > 0 ? (w2 / mathpow(10, digits - j2) % mathpow(10, j2) | 0) * k2 : 0;
+        }
+        if (roundUp) {
+          for (; ; ) {
+            if (xdi == 0) {
+              for (i2 = 1, j2 = xd[0]; j2 >= 10; j2 /= 10)
+                i2++;
+              j2 = xd[0] += k2;
+              for (k2 = 1; j2 >= 10; j2 /= 10)
+                k2++;
+              if (i2 != k2) {
+                x2.e++;
+                if (xd[0] == BASE)
+                  xd[0] = 1;
+              }
+              break;
+            } else {
+              xd[xdi] += k2;
+              if (xd[xdi] != BASE)
+                break;
+              xd[xdi--] = 0;
+              k2 = 1;
+            }
+          }
+        }
+        for (i2 = xd.length; xd[--i2] === 0; )
+          xd.pop();
+      }
+    if (external) {
+      if (x2.e > Ctor.maxE) {
+        x2.d = null;
+        x2.e = NaN;
+      } else if (x2.e < Ctor.minE) {
+        x2.e = 0;
+        x2.d = [0];
+      }
+    }
+    return x2;
+  }
+  function finiteToString(x2, isExp, sd) {
+    if (!x2.isFinite())
+      return nonFiniteToString(x2);
+    var k2, e6 = x2.e, str3 = digitsToString(x2.d), len = str3.length;
+    if (isExp) {
+      if (sd && (k2 = sd - len) > 0) {
+        str3 = str3.charAt(0) + "." + str3.slice(1) + getZeroString(k2);
+      } else if (len > 1) {
+        str3 = str3.charAt(0) + "." + str3.slice(1);
+      }
+      str3 = str3 + (x2.e < 0 ? "e" : "e+") + x2.e;
+    } else if (e6 < 0) {
+      str3 = "0." + getZeroString(-e6 - 1) + str3;
+      if (sd && (k2 = sd - len) > 0)
+        str3 += getZeroString(k2);
+    } else if (e6 >= len) {
+      str3 += getZeroString(e6 + 1 - len);
+      if (sd && (k2 = sd - e6 - 1) > 0)
+        str3 = str3 + "." + getZeroString(k2);
+    } else {
+      if ((k2 = e6 + 1) < len)
+        str3 = str3.slice(0, k2) + "." + str3.slice(k2);
+      if (sd && (k2 = sd - len) > 0) {
+        if (e6 + 1 === len)
+          str3 += ".";
+        str3 += getZeroString(k2);
+      }
+    }
+    return str3;
+  }
+  function getBase10Exponent(digits, e6) {
+    var w2 = digits[0];
+    for (e6 *= LOG_BASE; w2 >= 10; w2 /= 10)
+      e6++;
+    return e6;
+  }
+  function getPrecision(digits) {
+    var w2 = digits.length - 1, len = w2 * LOG_BASE + 1;
+    w2 = digits[w2];
+    if (w2) {
+      for (; w2 % 10 == 0; w2 /= 10)
+        len--;
+      for (w2 = digits[0]; w2 >= 10; w2 /= 10)
+        len++;
+    }
+    return len;
+  }
+  function getZeroString(k2) {
+    var zs = "";
+    for (; k2--; )
+      zs += "0";
+    return zs;
+  }
+  function nonFiniteToString(x2) {
+    return String(x2.s * x2.s / 0);
+  }
+  function parseDecimal(x2, str3) {
+    var e6, i2, len;
+    if ((e6 = str3.indexOf(".")) > -1)
+      str3 = str3.replace(".", "");
+    if ((i2 = str3.search(/e/i)) > 0) {
+      if (e6 < 0)
+        e6 = i2;
+      e6 += +str3.slice(i2 + 1);
+      str3 = str3.substring(0, i2);
+    } else if (e6 < 0) {
+      e6 = str3.length;
+    }
+    for (i2 = 0; str3.charCodeAt(i2) === 48; i2++)
+      ;
+    for (len = str3.length; str3.charCodeAt(len - 1) === 48; --len)
+      ;
+    str3 = str3.slice(i2, len);
+    if (str3) {
+      len -= i2;
+      x2.e = e6 = e6 - i2 - 1;
+      x2.d = [];
+      i2 = (e6 + 1) % LOG_BASE;
+      if (e6 < 0)
+        i2 += LOG_BASE;
+      if (i2 < len) {
+        if (i2)
+          x2.d.push(+str3.slice(0, i2));
+        for (len -= LOG_BASE; i2 < len; )
+          x2.d.push(+str3.slice(i2, i2 += LOG_BASE));
+        str3 = str3.slice(i2);
+        i2 = LOG_BASE - str3.length;
+      } else {
+        i2 -= len;
+      }
+      for (; i2--; )
+        str3 += "0";
+      x2.d.push(+str3);
+      if (external) {
+        if (x2.e > x2.constructor.maxE) {
+          x2.d = null;
+          x2.e = NaN;
+        } else if (x2.e < x2.constructor.minE) {
+          x2.e = 0;
+          x2.d = [0];
+        }
+      }
+    } else {
+      x2.e = 0;
+      x2.d = [0];
+    }
+    return x2;
+  }
+  function parseOther(x2, str3) {
+    var base2, Ctor, divisor, i2, isFloat, len, p3, xd, xe;
+    if (str3.indexOf("_") > -1) {
+      str3 = str3.replace(/(\d)_(?=\d)/g, "$1");
+      if (isDecimal.test(str3))
+        return parseDecimal(x2, str3);
+    } else if (str3 === "Infinity" || str3 === "NaN") {
+      if (!+str3)
+        x2.s = NaN;
+      x2.e = NaN;
+      x2.d = null;
+      return x2;
+    }
+    if (isHex.test(str3)) {
+      base2 = 16;
+      str3 = str3.toLowerCase();
+    } else if (isBinary.test(str3)) {
+      base2 = 2;
+    } else if (isOctal.test(str3)) {
+      base2 = 8;
+    } else {
+      throw Error(invalidArgument + str3);
+    }
+    i2 = str3.search(/p/i);
+    if (i2 > 0) {
+      p3 = +str3.slice(i2 + 1);
+      str3 = str3.substring(2, i2);
+    } else {
+      str3 = str3.slice(2);
+    }
+    i2 = str3.indexOf(".");
+    isFloat = i2 >= 0;
+    Ctor = x2.constructor;
+    if (isFloat) {
+      str3 = str3.replace(".", "");
+      len = str3.length;
+      i2 = len - i2;
+      divisor = intPow(Ctor, new Ctor(base2), i2, i2 * 2);
+    }
+    xd = convertBase(str3, base2, BASE);
+    xe = xd.length - 1;
+    for (i2 = xe; xd[i2] === 0; --i2)
+      xd.pop();
+    if (i2 < 0)
+      return new Ctor(x2.s * 0);
+    x2.e = getBase10Exponent(xd, xe);
+    x2.d = xd;
+    external = false;
+    if (isFloat)
+      x2 = divide(x2, divisor, len * 4);
+    if (p3)
+      x2 = x2.times(Math.abs(p3) < 54 ? mathpow(2, p3) : Decimal.pow(2, p3));
+    external = true;
+    return x2;
+  }
+  function config(obj) {
+    if (!obj || typeof obj !== "object")
+      throw Error(decimalError + "Object expected");
+    var i2, p3, v3, useDefaults = obj.defaults === true, ps = [
+      "precision",
+      1,
+      MAX_DIGITS,
+      "rounding",
+      0,
+      8,
+      "toExpNeg",
+      -EXP_LIMIT,
+      0,
+      "toExpPos",
+      0,
+      EXP_LIMIT,
+      "maxE",
+      0,
+      EXP_LIMIT,
+      "minE",
+      -EXP_LIMIT,
+      0,
+      "modulo",
+      0,
+      9
+    ];
+    for (i2 = 0; i2 < ps.length; i2 += 3) {
+      if (p3 = ps[i2], useDefaults)
+        this[p3] = DEFAULTS[p3];
+      if ((v3 = obj[p3]) !== void 0) {
+        if (mathfloor(v3) === v3 && v3 >= ps[i2 + 1] && v3 <= ps[i2 + 2])
+          this[p3] = v3;
+        else
+          throw Error(invalidArgument + p3 + ": " + v3);
+      }
+    }
+    if (p3 = "crypto", useDefaults)
+      this[p3] = DEFAULTS[p3];
+    if ((v3 = obj[p3]) !== void 0) {
+      if (v3 === true || v3 === false || v3 === 0 || v3 === 1) {
+        if (v3) {
+          if (typeof crypto != "undefined" && crypto && (crypto.getRandomValues || crypto.randomBytes)) {
+            this[p3] = true;
+          } else {
+            throw Error(cryptoUnavailable);
+          }
+        } else {
+          this[p3] = false;
+        }
+      } else {
+        throw Error(invalidArgument + p3 + ": " + v3);
+      }
+    }
+    return this;
+  }
+  function clone(obj) {
+    var i2, p3, ps;
+    function Decimal2(v3) {
+      var e6, i3, t2, x2 = this;
+      if (!(x2 instanceof Decimal2))
+        return new Decimal2(v3);
+      x2.constructor = Decimal2;
+      if (isDecimalInstance(v3)) {
+        x2.s = v3.s;
+        if (external) {
+          if (!v3.d || v3.e > Decimal2.maxE) {
+            x2.e = NaN;
+            x2.d = null;
+          } else if (v3.e < Decimal2.minE) {
+            x2.e = 0;
+            x2.d = [0];
+          } else {
+            x2.e = v3.e;
+            x2.d = v3.d.slice();
+          }
+        } else {
+          x2.e = v3.e;
+          x2.d = v3.d ? v3.d.slice() : v3.d;
+        }
+        return;
+      }
+      t2 = typeof v3;
+      if (t2 === "number") {
+        if (v3 === 0) {
+          x2.s = 1 / v3 < 0 ? -1 : 1;
+          x2.e = 0;
+          x2.d = [0];
+          return;
+        }
+        if (v3 < 0) {
+          v3 = -v3;
+          x2.s = -1;
+        } else {
+          x2.s = 1;
+        }
+        if (v3 === ~~v3 && v3 < 1e7) {
+          for (e6 = 0, i3 = v3; i3 >= 10; i3 /= 10)
+            e6++;
+          if (external) {
+            if (e6 > Decimal2.maxE) {
+              x2.e = NaN;
+              x2.d = null;
+            } else if (e6 < Decimal2.minE) {
+              x2.e = 0;
+              x2.d = [0];
+            } else {
+              x2.e = e6;
+              x2.d = [v3];
+            }
+          } else {
+            x2.e = e6;
+            x2.d = [v3];
+          }
+          return;
+        } else if (v3 * 0 !== 0) {
+          if (!v3)
+            x2.s = NaN;
+          x2.e = NaN;
+          x2.d = null;
+          return;
+        }
+        return parseDecimal(x2, v3.toString());
+      } else if (t2 !== "string") {
+        throw Error(invalidArgument + v3);
+      }
+      if ((i3 = v3.charCodeAt(0)) === 45) {
+        v3 = v3.slice(1);
+        x2.s = -1;
+      } else {
+        if (i3 === 43)
+          v3 = v3.slice(1);
+        x2.s = 1;
+      }
+      return isDecimal.test(v3) ? parseDecimal(x2, v3) : parseOther(x2, v3);
+    }
+    Decimal2.prototype = P2;
+    Decimal2.ROUND_UP = 0;
+    Decimal2.ROUND_DOWN = 1;
+    Decimal2.ROUND_CEIL = 2;
+    Decimal2.ROUND_FLOOR = 3;
+    Decimal2.ROUND_HALF_UP = 4;
+    Decimal2.ROUND_HALF_DOWN = 5;
+    Decimal2.ROUND_HALF_EVEN = 6;
+    Decimal2.ROUND_HALF_CEIL = 7;
+    Decimal2.ROUND_HALF_FLOOR = 8;
+    Decimal2.EUCLID = 9;
+    Decimal2.config = Decimal2.set = config;
+    Decimal2.clone = clone;
+    Decimal2.isDecimal = isDecimalInstance;
+    Decimal2.round = round;
+    if (obj === void 0)
+      obj = {};
+    if (obj) {
+      if (obj.defaults !== true) {
+        ps = ["precision", "rounding", "toExpNeg", "toExpPos", "maxE", "minE", "modulo", "crypto"];
+        for (i2 = 0; i2 < ps.length; )
+          if (!obj.hasOwnProperty(p3 = ps[i2++]))
+            obj[p3] = this[p3];
+      }
+    }
+    Decimal2.config(obj);
+    return Decimal2;
+  }
+  function isDecimalInstance(obj) {
+    return obj instanceof Decimal || obj && obj.toStringTag === tag || false;
+  }
+  function round(x2) {
+    return finalise(x2 = new this(x2), x2.e + 1, this.rounding);
+  }
+  P2[Symbol.for("nodejs.util.inspect.custom")] = P2.toString;
+  P2[Symbol.toStringTag] = "Decimal";
+  var Decimal = P2.constructor = clone(DEFAULTS);
+  LN10 = new Decimal(LN10);
+  PI = new Decimal(PI);
+  var dec_default = Decimal;
+
+  // ../packages/ruby/lib/math/cal.js
+  var STANDARD_SIGFIG = 14;
+  function blur(num2) {
+    let n2 = parseFloat(num2.toPrecision(STANDARD_SIGFIG));
+    return sigfig(n2) <= STANDARD_SIGFIG - 5 ? n2 : num2;
+  }
+  function correct(num2) {
+    return parseFloat(num2.toPrecision(STANDARD_SIGFIG - 2));
+  }
+  function eq(a2, b2) {
+    return correct(a2) === correct(b2);
+  }
+  function sigfig(num2) {
+    return new dec_default(num2).precision(false);
+  }
+  function dp(num2) {
+    return new dec_default(num2).decimalPlaces();
+  }
+  function round2(num2, sigfig2 = 3) {
+    function exec(mode) {
+      return new dec_default(num2).toSignificantDigits(sigfig2, mode).toNumber();
+    }
+    return {
+      off: () => exec(dec_default.ROUND_HALF_UP),
+      up: () => exec(dec_default.ROUND_UP),
+      down: () => exec(dec_default.ROUND_DOWN)
+    };
+  }
+  function fix(num2, dp2 = 0) {
+    function exec(mode) {
+      return new dec_default(num2).toNearest(Number("1e" + String(-dp2)), mode).toNumber();
+    }
+    return {
+      off: () => exec(dec_default.ROUND_HALF_UP),
+      up: () => exec(dec_default.ROUND_UP),
+      down: () => exec(dec_default.ROUND_DOWN)
+    };
+  }
+  function e2(num2) {
+    return Number(num2.toExponential().split("e")[1]);
+  }
+  function mantissa(num2) {
+    return Number(num2.toExponential().split("e")[0]);
+  }
+  function logCeil(num2) {
+    let exp = e2(num2) + 1;
+    return Number("1e" + exp);
+  }
+  function logFloor(num2) {
+    let exp = e2(num2);
+    return Number("1e" + exp);
+  }
+  function toFraction(num2) {
+    if (num2 === Infinity)
+      return [1, 0];
+    if (num2 === -Infinity)
+      return [-1, 0];
+    let f3 = new dec_default(num2).toFraction(1e5);
+    return [f3[0].toNumber(), f3[1].toNumber()];
+  }
+  function isRational(num2) {
+    function convert(num3, deno) {
+      let f3 = new dec_default(num3).toFraction(deno);
+      return [f3[0].toNumber(), f3[1].toNumber()];
+    }
+    if (num2 === Infinity)
+      return false;
+    if (num2 === -Infinity)
+      return false;
+    let rough = convert(num2, 1e5);
+    let accurate = convert(num2, 1e7);
+    return rough[0] === accurate[0] && rough[1] === accurate[1];
+  }
+  function toSurd(num2) {
+    num2 = blur(num2);
+    let s3 = Math.sign(num2);
+    let a2 = Math.abs(num2);
+    let square = blur(a2 ** 2);
+    if (square === 0)
+      return [0, 1];
+    let factors = [1];
+    let i2 = 2;
+    while (i2 <= a2) {
+      let s4 = i2 ** 2;
+      if (square % s4 === 0) {
+        square = square / s4;
+        factors.push(i2);
+      } else {
+        i2++;
+      }
+    }
+    let product = factors.reduce((a3, b2) => a3 * b2, 1);
+    return [s3 * product, square];
+  }
+  function isPrime(num2) {
+    if (!Number.isInteger(num2))
+      return false;
+    if (num2 <= 1)
+      return false;
+    if (num2 === 2)
+      return true;
+    if (num2 % 2 === 0)
+      return false;
+    for (let i2 = 3; i2 <= Math.sqrt(num2) + 1; i2 = i2 + 2) {
+      if (num2 % i2 === 0)
+        return false;
+    }
+    return true;
+  }
+  function primes(max) {
+    let arr = [];
+    for (let i2 = 2; i2 <= max; i2++) {
+      if (isPrime(i2))
+        arr.push(i2);
+    }
+    return arr;
+  }
+  function primeFactors(num2) {
+    let arr = [];
+    let i2 = 2;
+    while (num2 > 1) {
+      if (!isPrime(i2)) {
+        i2++;
+        continue;
+      }
+      if (num2 % i2 === 0) {
+        arr.push(i2);
+        num2 = num2 / i2;
+      } else {
+        i2++;
+      }
+    }
+    return arr;
+  }
+  function factorial(n2) {
+    if (n2 <= 1)
+      return 1;
+    return factorial(n2 - 1) * n2;
+  }
+  function nCr(n2, r3) {
+    return factorial(n2) / factorial(r3) / factorial(n2 - r3);
+  }
+  function nPr(n2, r3) {
+    return factorial(n2) / factorial(n2 - r3);
+  }
+  function range(min, max) {
+    let arr = [];
+    min = Math.ceil(min - Number.EPSILON);
+    for (let i2 = min; i2 <= max; i2++) {
+      arr.push(i2);
+    }
+    return arr;
+  }
+  function trace(func, range2, dots = 1e3) {
+    function tracer(t3) {
+      let result2;
+      try {
+        result2 = func(t3);
+      } catch {
+        return [NaN, NaN];
+      }
+      if (!Array.isArray(result2))
+        result2 = [t3, result2];
+      return result2;
+    }
+    ;
+    let [t1, t2] = range2;
+    const step = (t2 - t1) / (dots - 1);
+    let points = [];
+    for (let t3 = t1; t3 <= t2; t3 += step) {
+      points.push(tracer(t3));
+    }
+    return points;
+  }
+  function traceCircle(center, radius, angleRange, dots = 100) {
+    const [h2, k2] = center;
+    function sin3(degree) {
+      return Math.sin(degree / 180 * Math.PI);
+    }
+    function cos3(degree) {
+      return Math.cos(degree / 180 * Math.PI);
+    }
+    return trace((t2) => [h2 + radius * cos3(t2), k2 + radius * sin3(t2)], angleRange, dots);
+  }
+  function crammer(a2, b2, c3, p3, q2, r3) {
+    if (a2 / b2 === p3 / q2)
+      return [NaN, NaN];
+    const D2 = a2 * q2 - b2 * p3;
+    const x2 = (c3 * q2 - b2 * r3) / D2;
+    const y2 = (a2 * r3 - c3 * p3) / D2;
+    return [blur(x2), blur(y2)];
+  }
+
+  // ../packages/ruby/lib/array/numbers.js
+  var Numbers = class extends List {
+    sum() {
+      return this.reduce((a2, b2) => a2 + b2, 0);
+    }
+    product() {
+      if (this.length === 0)
+        return NaN;
+      return this.reduce((a2, b2) => a2 * b2, 1);
+    }
+    mean() {
+      if (this.length === 0)
+        return NaN;
+      return this.sum() / this.length;
+    }
+    max(rank = 1) {
+      if (this.length === 0)
+        return NaN;
+      if (rank === 1) {
+        return Math.max(...this);
+      } else {
+        let desc = this.unique().descending();
+        return desc[rank - 1] ?? NaN;
+      }
+    }
+    min(rank = 1) {
+      if (this.length === 0)
+        return NaN;
+      if (rank === 1) {
+        return Math.min(...this);
+      } else {
+        let asc = this.unique().ascending();
+        return asc[rank - 1] ?? NaN;
+      }
+    }
+    add(nums) {
+      if (!Array.isArray(nums))
+        nums = Array(this.length).fill(nums);
+      let zipped = this.zip(nums, (a2, b2) => a2 + b2);
+      return this.create(zipped);
+    }
+    minus(nums) {
+      if (!Array.isArray(nums))
+        nums = Array(this.length).fill(nums);
+      let zipped = this.zip(nums, (a2, b2) => a2 - b2);
+      return this.create(zipped);
+    }
+    times(nums) {
+      if (!Array.isArray(nums))
+        nums = Array(this.length).fill(nums);
+      let zipped = this.zip(nums, (a2, b2) => a2 * b2);
+      return this.create(zipped);
+    }
+    divide(nums) {
+      if (!Array.isArray(nums))
+        nums = Array(this.length).fill(nums);
+      let zipped = this.zip(nums, (a2, b2) => a2 / b2);
+      return this.create(zipped);
+    }
+    toPower(indices) {
+      if (!Array.isArray(indices))
+        indices = Array(this.length).fill(indices);
+      let zipped = this.zip(indices, (a2, b2) => a2 ** b2);
+      return this.create(zipped);
+    }
+    rootNth(nths) {
+      if (!Array.isArray(nths))
+        nths = Array(this.length).fill(nths);
+      let zipped = this.zip(nths, (a2, b2) => a2 ** (1 / b2));
+      return this.create(zipped);
+    }
+    square() {
+      return this.toPower(2);
+    }
+    squareRoot() {
+      return this.rootNth(2);
+    }
+    negate() {
+      return this.times(-1);
+    }
+    abs() {
+      const mapped = this.map(($) => Math.abs($));
+      return this.create(mapped);
+    }
+    blur() {
+      let blurred = this.map(($) => blur($));
+      return this.create(blurred);
+    }
+    toFraction() {
+      let fracs = this.map(($) => toFraction($));
+      return list2(...fracs);
+    }
+    gaps() {
+      const sorted = this.ascending();
+      const gaps = this.create([]);
+      for (let i2 = 0; i2 < this.length - 1; i2++) {
+        let gap = sorted[i2 + 1] - sorted[i2];
+        gaps.push(gap);
+      }
+      return gaps;
+    }
+    gapsMod(mod) {
+      function reduce(x2) {
+        while (x2 >= mod) {
+          x2 = x2 - mod;
+        }
+        while (x2 < 0) {
+          x2 = x2 + mod;
+        }
+        return x2;
+      }
+      const reduced = this.map(reduce);
+      const sorted = reduced.ascending();
+      const patched = this.create([...sorted, sorted[0] + mod]);
+      return patched.gaps();
+    }
+    hcf() {
+      if (this.some(($) => !Number.isInteger($)))
+        return NaN;
+      let arr = this.except([0]).abs().unique();
+      if (arr.length === 0)
+        return NaN;
+      if (arr.length === 1)
+        return arr[0];
+      if (arr.length === 2) {
+        let [a2, b2] = arr;
+        while (true) {
+          if (a2 === 0)
+            return b2;
+          if (b2 === 0)
+            return a2;
+          if (a2 >= b2) {
+            a2 = a2 % b2;
+          } else {
+            b2 = b2 % a2;
+          }
+        }
+        return a2;
+      }
+      return arr.reduce((last, now) => this.create([last, now]).hcf());
+    }
+    lcm() {
+      if (this.some(($) => !Number.isInteger($)))
+        return NaN;
+      let arr = this.except([0]).abs().unique();
+      if (arr.length === 0)
+        return NaN;
+      if (arr.length === 1)
+        return arr[0];
+      if (arr.length === 2) {
+        let [a2, b2] = arr;
+        let hcf = arr.hcf();
+        return a2 * b2 / hcf;
+      }
+      return arr.reduce((last, now) => this.create([last, now]).lcm());
+    }
+    reduceRatio() {
+      if (this.except([0]).length === 0)
+        return this.clone();
+      if (this.some(($) => !Number.isInteger($)))
+        return this.clone();
+      let HCF2 = this.hcf();
+      return this.divide(HCF2).blur();
+    }
+    ratio() {
+      if (this.except([0]).length === 0)
+        return this.clone();
+      if (this.some(($) => !isRational($)))
+        return this.clone();
+      let fracs = this.toFraction();
+      let denos = this.create(fracs.map(($) => $[1]));
+      return this.times(denos.lcm()).blur().reduceRatio();
+    }
+    ratioFactor() {
+      if (this.except([0]).length === 0)
+        return NaN;
+      if (this.some(($) => !isRational($)))
+        return NaN;
+      let clone2 = this.except([0]);
+      let ratioed = clone2.ratio();
+      return blur(ratioed[0] / clone2[0]);
+    }
+  };
+  function numbers2(...elements) {
+    let nums = new Numbers();
+    nums.push(...elements);
+    return nums;
+  }
+  function toNumbers2(elements) {
+    return numbers2(...elements);
+  }
+
+  // ../packages/ruby/lib/array/data.js
+  var Data = class extends Numbers {
+    median() {
+      if (this.length === 0)
+        return NaN;
+      const sorted = this.ascending();
+      if (sorted.length % 2 === 0) {
+        let i2 = sorted.length / 2;
+        let j2 = i2 + 1;
+        return (sorted[i2 - 1] + sorted[j2 - 1]) / 2;
+      } else {
+        let i2 = sorted.length / 2;
+        i2 = Math.ceil(i2);
+        return sorted[i2 - 1];
+      }
+    }
+    modes(Nth = 1) {
+      if (this.length === 0)
+        return this.create([]);
+      return this.maxsBy(($) => this.freq($), Nth).unique();
+    }
+    mode(Nth = 1) {
+      if (this.length === 0)
+        return NaN;
+      const modes = this.modes(Nth);
+      if (modes.length > 1)
+        return NaN;
+      return modes.first();
+    }
+    isSingleMode(Nth = 1) {
+      const modes = this.modes(Nth);
+      return modes.length === 1;
+    }
+    lowerQuartile() {
+      if (this.length === 0)
+        return NaN;
+      const sorted = this.ascending();
+      let n2 = sorted.length;
+      let m3 = n2 / 2;
+      if (n2 % 2 !== 0)
+        m3 = Math.floor(m3);
+      return sorted.head(m3).median();
+    }
+    upperQuartile() {
+      if (this.length === 0)
+        return NaN;
+      const sorted = this.ascending();
+      let n2 = sorted.length;
+      let m3 = n2 / 2;
+      if (n2 % 2 !== 0)
+        m3 = Math.floor(m3);
+      return sorted.tail(m3).median();
+    }
+    stdDev() {
+      if (this.length === 0)
+        return NaN;
+      let mean = this.mean();
+      let deviations = this.minus(mean);
+      let squaredDev = deviations.square();
+      let meanSq = squaredDev.mean();
+      return Math.sqrt(meanSq);
+    }
+    range() {
+      if (this.length === 0)
+        return NaN;
+      return this.max() - this.min();
+    }
+    IQR() {
+      if (this.length === 0)
+        return NaN;
+      return this.upperQuartile() - this.lowerQuartile();
+    }
+  };
+  function data(...elements) {
+    let dt = new Data();
+    dt.push(...elements);
+    return dt;
+  }
+  function toData2(elements) {
+    return data(...elements);
+  }
+
+  // ../packages/ruby/lib/array/vector.js
+  var Vector = class extends Numbers {
+    magnitude() {
+      let squares = this.square();
+      let sum = squares.sum();
+      return Math.sqrt(sum);
+    }
+    unit() {
+      let mag = this.magnitude();
+      return this.divide(mag);
+    }
+    scaledTo(magnitude2) {
+      return this.unit().times(magnitude2);
+    }
+    dot(vec3) {
+      let terms = this.zip(vec3, (a2, b2) => a2 * b2);
+      return this.create(terms).sum();
+    }
+    angleWith(vec3) {
+      let m1 = this.magnitude();
+      let m22 = this.create(vec3).magnitude();
+      let dot = this.dot(vec3);
+      let cos3 = dot / m1 / m22;
+      let angle2 = Math.acos(cos3) * 180 / Math.PI;
+      return angle2;
+    }
+    projectOn(vec3) {
+      let unit = this.create(vec3).unit();
+      let dot = this.dot(unit);
+      return unit.times(dot);
+    }
+    normalTo(vec3) {
+      let parallel = this.projectOn(vec3);
+      return this.minus(parallel);
+    }
+    distanceWith(vec3) {
+      let d2 = this.minus(vec3);
+      return d2.magnitude();
+    }
+    extrudeTo(vertex, scale) {
+      let v3 = this.create(vertex);
+      let d2 = this.minus(v3);
+      d2 = d2.times(scale);
+      return v3.add(d2);
+    }
+  };
+  function vector(...elements) {
+    let vec3 = new Vector();
+    vec3.push(...elements);
+    return vec3;
+  }
+  function toVector(elements) {
+    return vector(...elements);
+  }
+
+  // ../packages/ruby/lib/array/shape.js
+  var Shape = class extends List {
+    distances() {
+      let ds = this.pairs().map(([A2, B2]) => A2.distanceWith(B2));
+      return numbers2(...ds);
+    }
+    distancesFrom(point) {
+      let ds = this.map(($) => $.distanceWith(point));
+      return numbers2(...ds);
+    }
+    mean() {
+      let sum = this.reduce((A2, B2) => A2.add(B2));
+      return sum.divide(this.length);
+    }
+    translate(vec3) {
+      let translated = this.map(($) => $.add(vec3));
+      return this.create(translated);
+    }
+    scale(scale) {
+      let scaled = this.map(($) => $.times(scale));
+      return this.create(scaled);
+    }
+    extrudeTo(vertex, scale) {
+      let extruded = this.map(($) => $.extrudeTo(vertex, scale));
+      return this.create(extruded);
+    }
+    extrudeToShape(shape2, scale) {
+      let extruded = this.map((v3, i2) => v3.extrudeTo(shape2[i2], scale));
+      return this.create(extruded);
+    }
+  };
+  function shape(...elements) {
+    let shp = new Shape();
+    shp.push(...elements.map(($) => vector(...$)));
+    return shp;
+  }
+  function toShape(elements) {
+    return shape(...elements);
+  }
+
+  // ../packages/ruby/lib/array/vector2D.js
+  var Vector2D = class extends Vector {
+    toArray() {
+      let [x2, y2] = this;
+      return [x2, y2];
+    }
+    argument() {
+      let [x2, y2] = this;
+      if (x2 === 0 && y2 === 0)
+        return 0;
+      let angle2 = Math.atan2(y2, x2) * 180 / Math.PI;
+      if (angle2 < 0)
+        angle2 += 360;
+      return angle2;
+    }
+    rotate(angle2) {
+      let a2 = angle2 * Math.PI / 180;
+      let s3 = Math.sin(a2);
+      let c3 = Math.cos(a2);
+      let [x2, y2] = this;
+      let x1 = x2 * c3 - y2 * s3;
+      let y1 = x2 * s3 + y2 * c3;
+      return this.create([x1, y1]);
+    }
+    cross2D(vec3) {
+      let [x1, y1] = this;
+      let [x2, y2] = vec3;
+      return x1 * y2 - y1 * x2;
+    }
+  };
+  function vector2D(x2, y2) {
+    let vec3 = new Vector2D();
+    vec3.push(x2, y2);
+    return vec3;
+  }
+  function vec2D2(p1, p22) {
+    if (p22 === void 0) {
+      let [x2, y2] = p1;
+      return vector2D(x2, y2);
+    } else {
+      let [x1, y1] = p1;
+      let [x2, y2] = p22;
+      return vector2D(x2 - x1, y2 - y1);
+    }
+  }
+
+  // ../packages/ruby/lib/array/vector3D.js
+  var Vector3D = class extends Vector {
+    toArray() {
+      let [x2, y2, z2] = this;
+      return [x2, y2, z2];
+    }
+    cross(vec3) {
+      let [x1, y1, z1] = this;
+      let [x2, y2, z2] = vec3;
+      let x3 = y1 * z2 - z1 * y2;
+      let y3 = z1 * x2 - x1 * z2;
+      let z3 = x1 * y2 - y1 * x2;
+      return this.create([x3, y3, z3]);
+    }
+    rotate(axis, angle2) {
+      let a2 = angle2 * Math.PI / 180;
+      let s3 = Math.sin(a2);
+      let c3 = Math.cos(a2);
+      let k2 = this.create(axis).unit();
+      let term1 = this.times(c3);
+      let term2 = k2.cross(this).times(s3);
+      let term3 = k2.times(k2.dot(this)).times(1 - c3);
+      return term1.add(term2).add(term3);
+    }
+    projectOnPlane(vec1, vec22) {
+      let normal = this.normalToPlane(vec1, vec22);
+      return this.minus(normal);
+    }
+    normalToPlane(vec1, vec22) {
+      let v1 = this.create(vec1);
+      let v22 = this.create(vec22);
+      let normal = v1.cross(v22);
+      return this.projectOn(normal);
+    }
+    projectTo2D(angle2 = 60, depth = 0.5) {
+      let a2 = angle2 * Math.PI / 180;
+      let s3 = Math.sin(a2);
+      let c3 = Math.cos(a2);
+      let [x2, y2, z2] = this;
+      let x_new = x2 + depth * y2 * c3;
+      let y_new = z2 + depth * y2 * s3;
+      return vector2D(x_new, y_new);
+    }
+  };
+  function vector3D(x2, y2, z2) {
+    let vec3 = new Vector3D();
+    vec3.push(x2, y2, z2);
+    return vec3;
+  }
+  function vec3D2(p1, p22) {
+    if (p22 === void 0) {
+      let [x2, y2, z2] = p1;
+      return vector3D(x2, y2, z2);
+    } else {
+      let [x1, y1, z1] = p1;
+      let [x2, y2, z2] = p22;
+      return vector3D(x2 - x1, y2 - y1, z2 - z1);
+    }
+  }
+
+  // ../packages/ruby/lib/array/shape3D.js
+  var Shape3D = class extends Shape {
+    toArray() {
+      return [...this.map(($) => $.toArray())];
+    }
+    projectTo2D(angle2 = 60, depth = 0.5) {
+      let projected = this.map(($) => $.projectTo2D(angle2, depth));
+      return shape2D2(...projected);
+    }
+  };
+  function shape3D(...elements) {
+    let shp = new Shape3D();
+    shp.push(...elements.map(($) => vec3D2($)));
+    return shp;
+  }
+  function toShape3D2(elements) {
+    return shape3D(...elements);
+  }
+
+  // ../packages/ruby/lib/array/shape2D.js
+  var Shape2D = class extends Shape {
+    toArray() {
+      return [...this.map(($) => $.toArray())];
+    }
+    sortAroundMean() {
+      let mean = this.mean();
+      this.sortBy(($) => $.minus(mean).argument());
+    }
+    isConvex() {
+      if (this.length <= 3)
+        return true;
+      let clone2 = this.clone();
+      clone2.sortAroundMean();
+      let cross = [];
+      for (let i2 = 0; i2 < clone2.length; i2++) {
+        let p1 = clone2.cyclicAt(i2 - 1);
+        let p22 = clone2.cyclicAt(i2);
+        let p3 = clone2.cyclicAt(i2 + 1);
+        let u2 = vec2D2(p1, p22);
+        let v3 = vec2D2(p22, p3);
+        cross.push(u2.cross2D(v3));
+      }
+      cross.filter(($) => $ !== 0);
+      return cross.every(($) => $ > 0) || cross.every(($) => $ < 0);
+    }
+    erect(vecX, vecY) {
+      let vx = vec3D2(vecX);
+      let vy = vec3D2(vecY);
+      let erected = this.map(($) => {
+        let [x2, y2] = $;
+        let vx3D = vx.times(x2);
+        let vy3D = vy.times(y2);
+        return vx3D.add(vy3D);
+      });
+      return shape3D(...erected);
+    }
+  };
+  function shape2D2(...elements) {
+    let shp = new Shape2D();
+    shp.push(...elements.map(($) => vec2D2($)));
+    return shp;
+  }
+  function toShape2D2(elements) {
+    return shape2D2(...elements);
+  }
+
+  // ../packages/ruby/lib/linear_program/inequal.js
+  function toCode(ineq4) {
+    if (ineq4 === "\\ge")
+      return [true, true];
+    if (ineq4 === "\\gt")
+      return [true, false];
+    if (ineq4 === "\\le")
+      return [false, true];
+    if (ineq4 === "\\lt")
+      return [false, false];
+    if (ineq4 === ">=")
+      return [true, true];
+    if (ineq4 === ">")
+      return [true, false];
+    if (ineq4 === "<=")
+      return [false, true];
+    if (ineq4 === "<")
+      return [false, false];
+    throw "cannot recognise ineq symbol!";
+  }
+  function toIneq(code2) {
+    let [g2, e6] = code2;
+    if (g2 && e6)
+      return "\\ge";
+    if (g2 && !e6)
+      return "\\gt";
+    if (!g2 && e6)
+      return "\\le";
+    if (!g2 && !e6)
+      return "\\lt";
+    throw "cannot recognise code!";
+  }
+  var InequalSign = class {
+    constructor(sign) {
+      this.code = [true, true];
+      this.code = toCode(sign);
+    }
+    greaterThan() {
+      return this.code[0];
+    }
+    lessThan() {
+      return !this.code[0];
+    }
+    canEqual() {
+      return this.code[1];
+    }
+    print() {
+      return toIneq(this.code);
+    }
+    strict() {
+      let [g2, e6] = this.code;
+      return toIneq([g2, false]);
+    }
+    loose() {
+      let [g2, e6] = this.code;
+      return toIneq([g2, true]);
+    }
+    flip() {
+      let [g2, e6] = this.code;
+      return toIneq([!g2, e6]);
+    }
+    compare(a2, b2) {
+      let [g2, e6] = this.code;
+      if (g2 && e6)
+        return a2 >= b2;
+      if (g2 && !e6)
+        return a2 > b2;
+      if (!g2 && e6)
+        return a2 <= b2;
+      if (!g2 && !e6)
+        return a2 < b2;
+      throw "never, cannot recognise code!";
+    }
+  };
+  function ineq2(sign) {
+    return new InequalSign(sign);
+  }
+
+  // ../packages/ruby/lib/linear_program/rein.js
+  var Rein = class {
+    constructor(constraint2) {
+      this.constraint = constraint2;
+    }
+    clone() {
+      return new Rein(this.constraint);
+    }
+    contains(point) {
+      let [a2, b2, i2, c3] = this.constraint;
+      let [x2, y2] = point;
+      return ineq2(i2).compare(a2 * x2 + b2 * y2, c3);
+    }
+    canEqual() {
+      let [a2, b2, i2, c3] = this.constraint;
+      return ineq2(i2).canEqual();
+    }
+    strict() {
+      let [a2, b2, i2, c3] = this.constraint;
+      let j2 = ineq2(i2).strict();
+      return new Rein([a2, b2, j2, c3]);
+    }
+    loose() {
+      let [a2, b2, i2, c3] = this.constraint;
+      let j2 = ineq2(i2).loose();
+      return new Rein([a2, b2, j2, c3]);
+    }
+    flip() {
+      let [a2, b2, i2, c3] = this.constraint;
+      let j2 = ineq2(i2).flip();
+      return new Rein([a2, b2, j2, c3]);
+    }
+    intersectWith(another) {
+      let [a1, b1, i1, c1] = this.constraint;
+      let [a2, b2, i2, c22] = another.constraint;
+      if (a1 / b1 === a2 / b2)
+        return void 0;
+      return crammer(a1, b1, c1, a2, b2, c22);
+    }
+    shake() {
+      return Math.random() > 0.5 ? this.clone() : this.flip();
+    }
+    toLinear() {
+      let [a2, b2, i2, c3] = this.constraint;
+      return [a2, b2, -c3];
+    }
+    toStandard() {
+      let [a2, b2, i2, c3] = this.constraint;
+      return [a2, b2, c3];
+    }
+  };
+  function rein2(constraint2) {
+    return new Rein(constraint2);
+  }
+
+  // ../packages/ruby/lib/linear_program/reins.js
+  var Reins = class extends List {
+    constructor() {
+      super(...arguments);
+      this.EDGE = 100;
+      this.EDGE_CONSTRAINTS = [
+        new Rein([1, 0, "<=", this.EDGE]),
+        new Rein([1, 0, ">=", -this.EDGE]),
+        new Rein([0, 1, "<=", this.EDGE]),
+        new Rein([0, 1, ">=", -this.EDGE])
+      ];
+    }
+    fullConstraints() {
+      let cons = this.clone();
+      cons.push(...this.EDGE_CONSTRAINTS);
+      return cons;
+    }
+    constraints() {
+      return this.map(($) => $.constraint);
+    }
+    onEdge(point) {
+      let [x2, y2] = point;
+      return Math.abs(x2) + 1 >= this.EDGE || Math.abs(y2) + 1 >= this.EDGE;
+    }
+    contains(point) {
+      return this.every(($) => $.contains(point));
+    }
+    looseContains(point) {
+      return this.map(($) => $.loose()).every(($) => $.contains(point));
+    }
+    polygon() {
+      let cons = this.fullConstraints();
+      let vs = shape2D2();
+      for (let i2 = 0; i2 < cons.length; i2++) {
+        for (let j2 = i2 + 1; j2 < cons.length; j2++) {
+          let p3 = cons[i2].intersectWith(cons[j2]);
+          if (p3 === void 0)
+            continue;
+          let others = cons.clone();
+          others.pull(j2);
+          others.pull(i2);
+          if (others.looseContains(p3))
+            vs.push(vec2D2(p3));
+        }
+      }
+      vs = vs.uniqueDeep();
+      vs.sortAroundMean();
+      return vs.toArray();
+    }
+    vertices() {
+      return this.polygon().filter(($) => !this.onEdge($));
+    }
+    isBounded() {
+      return this.polygon().every(($) => !this.onEdge($));
+    }
+    isConsistent() {
+      return this.polygon().length > 2;
+    }
+    integrals() {
+      let vs = toList2(this.polygon());
+      let ymax = Math.ceil(vs.maxOf(([x2, y2]) => y2));
+      let xmax = Math.ceil(vs.maxOf(([x2, y2]) => x2));
+      let xmin = Math.floor(vs.minOf(([x2, y2]) => x2));
+      let ymin = Math.floor(vs.minOf(([x2, y2]) => y2));
+      let points = [];
+      for (let i2 = xmin; i2 <= xmax; i2++) {
+        for (let j2 = ymin; j2 <= ymax; j2++) {
+          let p3 = [i2, j2];
+          if (this.contains(p3))
+            points.push(p3);
+        }
+      }
+      return points;
+    }
+    shake() {
+      let cons = this.map(($) => $.shake());
+      return this.create(cons);
+    }
+  };
+  function reins(...constraints2) {
+    let cs = new Reins();
+    cs.push(...constraints2.map(($) => new Rein($)));
+    return cs;
+  }
+  function toReins2(constraints2) {
+    return reins(...constraints2);
+  }
+
+  // ../packages/ruby/lib/linear_program/optimizer.js
+  var Optimizer = class {
+    constructor({ field: field2, feasiblePoints = [] }) {
+      this.field = [0, 0, 0];
+      this.feasiblePoints = list2();
+      this.field = field2;
+      this.feasiblePoints = toList2(feasiblePoints);
+    }
+    onEdge(point) {
+      return new Reins().onEdge(point);
+    }
+    fieldAt(point) {
+      const [a2, b2, c3] = this.field;
+      const [x2, y2] = point;
+      return a2 * x2 + b2 * y2 + c3;
+    }
+    maxPoints() {
+      return this.feasiblePoints.maxsBy(($) => this.fieldAt($)).uniqueDeep().violate(($) => this.onEdge($));
+    }
+    minPoints() {
+      return this.feasiblePoints.minsBy(($) => this.fieldAt($)).uniqueDeep().violate(($) => this.onEdge($));
+    }
+    optimalPoints(max) {
+      return max ? this.maxPoints() : this.minPoints();
+    }
+    max() {
+      let pts = this.maxPoints();
+      if (pts.length === 0)
+        return null;
+      return this.fieldAt(pts[0]);
+    }
+    min() {
+      let pts = this.minPoints();
+      if (pts.length === 0)
+        return null;
+      return this.fieldAt(pts[0]);
+    }
+    optimal(max) {
+      return max ? this.max() : this.min();
+    }
+  };
+  function optimizer2({ field: field2, feasiblePoints = [] }) {
+    return new Optimizer({ field: field2, feasiblePoints });
+  }
+
+  // ../packages/ruby/lib/math/linear.js
+  function slope(A2, B2) {
+    let [x1, y1] = A2;
+    let [x2, y2] = B2;
+    return (y2 - y1) / (x2 - x1);
+  }
+  function midpoint(A2, B2) {
+    let [x1, y1] = A2;
+    let [x2, y2] = B2;
+    return [(x1 + x2) / 2, (y1 + y2) / 2];
+  }
+  var Linear = class {
+    constructor() {
+      this._linear = [NaN, NaN, NaN];
+      this.defined = false;
+    }
+    byLinear(linear) {
+      this._linear = linear;
+      this.defined = true;
+      return this;
+    }
+    byStandard(standard) {
+      let [a2, b2, _c] = standard;
+      this.byLinear([a2, b2, -_c]);
+      return this;
+    }
+    byTwoPoints(p1, p22) {
+      let [x1, y1] = p1;
+      let [x2, y2] = p22;
+      let dx = x1 - x2;
+      let dy = y1 - y2;
+      if (dx === 0 && dy === 0)
+        return this;
+      let [a2, b2, c3] = [dy, -dx, dx * y1 - dy * x1];
+      let s3 = Math.sign(a2) || Math.sign(b2) || 1;
+      [a2, b2, c3] = numbers2(a2, b2, c3).times(s3).ratio();
+      this.byLinear([a2, b2, c3]);
+      return this;
+    }
+    byPointSlope(p3, m3) {
+      let p22 = [p3[0] + 1, p3[1] + m3];
+      this.byTwoPoints(p3, p22);
+      return this;
+    }
+    byIntercepts(x2, y2) {
+      if (x2 === 0 || y2 === 0)
+        return this;
+      this.byTwoPoints([x2, 0], [0, y2]);
+      return this;
+    }
+    byBisector(A2, B2) {
+      let [x1, y1] = A2;
+      let [x2, y2] = B2;
+      if (x1 === x2 && y1 === y2)
+        return this;
+      if (x1 === x2) {
+        this.byLinear([0, 1, -(y1 + y2) / 2]);
+      } else if (y1 === y2) {
+        this.byLinear([1, 0, -(x1 + x2) / 2]);
+      } else {
+        let m3 = -1 / slope(A2, B2);
+        let M2 = midpoint(A2, B2);
+        this.byPointSlope(M2, m3);
+      }
+      return this;
+    }
+    slope() {
+      let [a2, b2, c3] = this._linear;
+      return b2 === 0 ? NaN : -a2 / b2;
+    }
+    xInt() {
+      let [a2, b2, c3] = this._linear;
+      return a2 === 0 ? NaN : -c3 / a2;
+    }
+    yInt() {
+      let [a2, b2, c3] = this._linear;
+      return b2 === 0 ? NaN : -c3 / b2;
+    }
+    toLinear() {
+      if (!this.defined)
+        return [NaN, NaN, NaN];
+      return this._linear;
+    }
+    toLine() {
+      if (!this.defined)
+        return [NaN, NaN];
+      return [this.slope(), this.yInt()];
+    }
+    toStandard() {
+      if (!this.defined)
+        return [NaN, NaN, NaN];
+      let [a2, b2, c3] = this._linear;
+      return [a2, b2, -c3];
+    }
+    toConstraint(ineq4) {
+      let [a2, b2, c3] = this.toStandard();
+      return [a2, b2, ineq4, c3];
+    }
+  };
+  function lin2() {
+    return new Linear();
+  }
 
   // src/Core/Owl/index.ts
   var Owl_exports = {};
@@ -17863,7 +16233,7 @@
     fail: () => fail,
     field: () => field,
     fraction: () => fraction,
-    ineq: () => ineq2,
+    ineq: () => ineq3,
     int: () => int,
     interval: () => interval,
     irrational: () => irrational,
@@ -17909,8 +16279,8 @@
     trigExp: () => trigExp,
     trigValue: () => trigValue,
     triple: () => triple,
-    vector: () => vector,
-    vector3D: () => vector3D,
+    vector: () => vector2,
+    vector3D: () => vector3D2,
     whole: () => whole,
     zero: () => zero
   });
@@ -17957,8 +16327,8 @@
   var polar = (_) => couple(_) && _[0] >= 0;
   var fraction = (_) => couple(_);
   var properFraction = (_) => fraction(_) && _[1] !== 0;
-  var vector = (_) => couple(_);
-  var vector3D = (_) => triple(_);
+  var vector2 = (_) => couple(_);
+  var vector3D2 = (_) => triple(_);
   var triangleSides = (_) => {
     if (!triple(_))
       return false;
@@ -17977,12 +16347,12 @@
   var fail = (_) => false;
   var distinct = (_) => toList(_).duplessDeep();
   var alphabet = (_) => str(_) && _.length === 1 && _.toLowerCase() !== _.toUpperCase();
-  var ineq2 = (_) => str(_) && [">", "<", ">=", "<=", "\\gt", "\\lt", "\\ge", "\\le"].includes(_);
+  var ineq3 = (_) => str(_) && [">", "<", ">=", "<=", "\\gt", "\\lt", "\\ge", "\\le"].includes(_);
   var dfrac = (_) => {
     const f3 = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
     return str(_) && !!_.match(new RegExp(f3, "g"));
   };
-  var constraint = (_) => arrayOfLength(4)(_) && num(_[0]) && num(_[1]) && ineq2(_[2]) && num(_[3]);
+  var constraint = (_) => arrayOfLength(4)(_) && num(_[0]) && num(_[1]) && ineq3(_[2]) && num(_[3]);
   var constraints = (_) => arrayWith(constraint)(_);
   var field = (_) => triple(_);
   var quadrantCode = (_) => int(_) && [1, 2, 3, 4].includes(_);
@@ -18138,38 +16508,38 @@
   }
 
   // src/Core/index.ts
-  globalThis.cal = import_sapphire_js.cal;
-  globalThis.data = import_sapphire_js.data;
-  globalThis.list = import_sapphire_js.list;
-  globalThis.numbers = import_sapphire_js.numbers;
-  globalThis.shape = import_sapphire_js.shape;
-  globalThis.shape2D = import_sapphire_js.shape2D;
-  globalThis.shape3D = import_sapphire_js.shape3D;
-  globalThis.vector = import_sapphire_js.vector;
-  globalThis.vector2D = import_sapphire_js.vector2D;
-  globalThis.vector3D = import_sapphire_js.vector3D;
-  globalThis.toData = import_sapphire_js.toData;
-  globalThis.toList = import_sapphire_js.toList;
-  globalThis.toNumbers = import_sapphire_js.toNumbers;
-  globalThis.toShape = import_sapphire_js.toShape;
-  globalThis.toShape2D = import_sapphire_js.toShape2D;
-  globalThis.toShape3D = import_sapphire_js.toShape3D;
-  globalThis.toVector = import_sapphire_js.toVector;
-  globalThis.vec2D = import_sapphire_js.vec2D;
-  globalThis.vec3D = import_sapphire_js.vec3D;
-  globalThis.ineq = import_sapphire_js.ineq;
-  globalThis.optimizer = import_sapphire_js.optimizer;
-  globalThis.rein = import_sapphire_js.rein;
-  globalThis.toReins = import_sapphire_js.toReins;
-  globalThis.lin = import_sapphire_js.lin;
+  globalThis.cal = cal_exports;
+  globalThis.data = data;
+  globalThis.list = list2;
+  globalThis.numbers = numbers2;
+  globalThis.shape = shape;
+  globalThis.shape2D = shape2D2;
+  globalThis.shape3D = shape3D;
+  globalThis.vector = vector;
+  globalThis.vector2D = vector2D;
+  globalThis.vector3D = vector3D;
+  globalThis.toData = toData2;
+  globalThis.toList = toList2;
+  globalThis.toNumbers = toNumbers2;
+  globalThis.toShape = toShape;
+  globalThis.toShape2D = toShape2D2;
+  globalThis.toShape3D = toShape3D2;
+  globalThis.toVector = toVector;
+  globalThis.vec2D = vec2D2;
+  globalThis.vec3D = vec3D2;
+  globalThis.ineq = ineq2;
+  globalThis.optimizer = optimizer2;
+  globalThis.rein = rein2;
+  globalThis.toReins = toReins2;
+  globalThis.lin = lin2;
   globalThis.owl = Owl_exports;
   globalThis.ink = Ink_exports;
 
   // ../packages/contract/lib/util.js
   function error(msg) {
-    const e5 = new Error(msg);
-    e5.name = "ContractError";
-    return e5;
+    const e6 = new Error(msg);
+    e6.name = "ContractError";
+    return e6;
   }
   function signature(f3) {
     const s3 = f3.toString();
@@ -18207,37 +16577,37 @@
   }
 
   // ../packages/contract/lib/functions/capture.js
-  function catchString(f3, vals, e5) {
-    return err(f3, "args = (" + join(vals) + ")", "throw: " + e5);
+  function catchString(f3, vals, e6) {
+    return err(f3, "args = (" + join(vals) + ")", "throw: " + e6);
   }
-  function catchErrObj(f3, vals, e5) {
-    return err(f3, "args = (" + join(vals) + ")", "throw: " + e5.name, "message: " + e5.message);
+  function catchErrObj(f3, vals, e6) {
+    return err(f3, "args = (" + join(vals) + ")", "throw: " + e6.name, "message: " + e6.message);
   }
-  function catchAny(f3, vals, e5) {
-    return err(f3, "args = (" + join(vals) + ")", "throw: " + str2(e5));
+  function catchAny(f3, vals, e6) {
+    return err(f3, "args = (" + join(vals) + ")", "throw: " + str2(e6));
   }
-  function isError(e5) {
-    return typeof e5 === "object" && e5 !== null && "name" in e5 && "message" in e5;
+  function isError(e6) {
+    return typeof e6 === "object" && e6 !== null && "name" in e6 && "message" in e6;
   }
-  function isContractError(e5) {
-    return isError(e5) && e5.name === "ContractError";
+  function isContractError(e6) {
+    return isError(e6) && e6.name === "ContractError";
   }
-  function catchErr(f3, vals, e5) {
-    if (isContractError(e5))
-      return e5;
-    if (typeof e5 === "string")
-      return catchString(f3, vals, e5);
-    if (isError(e5))
-      return catchErrObj(f3, vals, e5);
-    return catchAny(f3, vals, e5);
+  function catchErr(f3, vals, e6) {
+    if (isContractError(e6))
+      return e6;
+    if (typeof e6 === "string")
+      return catchString(f3, vals, e6);
+    if (isError(e6))
+      return catchErrObj(f3, vals, e6);
+    return catchAny(f3, vals, e6);
   }
   function capture(f3) {
     brand(f3);
     const nf = (...args) => {
       try {
         return f3(...args);
-      } catch (e5) {
-        throw catchErr(f3, args, e5);
+      } catch (e6) {
+        throw catchErr(f3, args, e6);
       }
     };
     transferBrand(f3, nf);
@@ -18332,13 +16702,13 @@
     const i2 = Math.min(index, n2);
     return arr[i2];
   }
-  function e2(f3, argIndex, argValue, msg) {
+  function e3(f3, argIndex, argValue, msg) {
     return err(f3, "arg[" + argIndex + "] = " + str2(argValue), "violate: " + msg);
   }
   function match(f3, argIndex, argValue, rule) {
     const pass2 = matchRule(argValue, rule);
     if (pass2 !== true)
-      throw e2(f3, argIndex, argValue, pass2);
+      throw e3(f3, argIndex, argValue, pass2);
   }
   function check(f3, rules) {
     brand(f3);
@@ -18354,13 +16724,13 @@
   }
 
   // ../packages/contract/lib/functions/inspect.js
-  function e3(f3, vals, msg) {
+  function e4(f3, vals, msg) {
     return err(f3, "args = (" + join(vals) + ")", "violate: " + msg);
   }
   function match2(f3, vals, treaty) {
     const pass2 = matchTreaty(vals, treaty);
     if (pass2 !== true)
-      throw e3(f3, vals, pass2);
+      throw e4(f3, vals, pass2);
   }
   function inspect(f3, treaty) {
     brand(f3);
@@ -18443,8 +16813,8 @@
     static IsAbsBetween(min, max) {
       return (...items) => items.every(owl.absBetween(min, max));
     }
-    static IsAroundPoint(anchor, range) {
-      return (...points) => points.every((p3) => ChessboardDistance(anchor, p3) <= range);
+    static IsAroundPoint(anchor, range2) {
+      return (...points) => points.every((p3) => ChessboardDistance(anchor, p3) <= range2);
     }
     static IsTriangle(...triangles) {
       return triangles.every(owl.triangleSides);
@@ -18620,50 +16990,50 @@
       let s3 = 1 - r3;
       return [A2[0] * s3 + B2[0] * r3, A2[1] * s3 + B2[1] * r3];
     }
-    static Rotate(P2, q2, O2 = [0, 0]) {
-      return vec2D(O2, P2).rotate(q2).add(O2).blur().toArray();
+    static Rotate(P3, q2, O2 = [0, 0]) {
+      return vec2D(O2, P3).rotate(q2).add(O2).blur().toArray();
     }
     static Dir(A2, B2) {
       return vec2D(A2, B2).argument();
     }
-    static PdFoot(A2, B2, P2) {
-      return vec2D(A2, P2).projectOn(vec2D(A2, B2)).add(A2).toArray();
+    static PdFoot(A2, B2, P3) {
+      return vec2D(A2, P3).projectOn(vec2D(A2, B2)).add(A2).toArray();
     }
     static Intersection(A2, B2, C2, D2) {
       return Crammer(B2[1] - A2[1], A2[0] - B2[0], A2[0] * B2[1] - B2[0] * A2[1], D2[1] - C2[1], C2[0] - D2[0], C2[0] * D2[1] - D2[0] * C2[1]);
     }
-    static Move(P2, dir3, distance) {
+    static Move(P3, dir3, distance) {
       let q2 = 0;
       if (typeof dir3 === "number") {
         q2 = dir3;
       } else if (owl.point2D(dir3)) {
-        q2 = Dir(P2, dir3);
+        q2 = Dir(P3, dir3);
       } else {
         q2 = Dir(dir3[0], dir3[1]);
       }
-      let x2 = P2[0] + distance * cos(q2);
-      let y2 = P2[1] + distance * sin(q2);
+      let x2 = P3[0] + distance * cos(q2);
+      let y2 = P3[1] + distance * sin(q2);
       return [x2, y2];
     }
-    static MoveX(P2, distance) {
-      let [x2, y2] = P2;
+    static MoveX(P3, distance) {
+      let [x2, y2] = P3;
       return [x2 + distance, y2];
     }
-    static MoveY(P2, distance) {
-      let [x2, y2] = P2;
+    static MoveY(P3, distance) {
+      let [x2, y2] = P3;
       return [x2, y2 + distance];
     }
-    static Shift(P2, [A2, B2], scale = 1) {
-      let [x2, y2] = P2;
+    static Shift(P3, [A2, B2], scale = 1) {
+      let [x2, y2] = P3;
       let [xA, yA] = A2;
       let [xB, yB] = B2;
       return [x2 + (xB - xA) * scale, y2 + (yB - yA) * scale];
     }
-    static ReflectX(P2) {
-      return [P2[0], -P2[1]];
+    static ReflectX(P3) {
+      return [P3[0], -P3[1]];
     }
-    static ReflectY(P2) {
-      return [-P2[0], P2[1]];
+    static ReflectY(P3) {
+      return [-P3[0], P3[1]];
     }
     static IntersectAngle(slope1, slope2) {
       let A1 = arctan(slope1);
@@ -18754,7 +17124,7 @@
   ], Host4, "Dir", 1);
   __decorateClass([
     checkIt(owl.point2D),
-    inspectIt(function distinct_points(A2, B2, P2) {
+    inspectIt(function distinct_points(A2, B2, P3) {
       return owl.distinct([A2, B2]);
     })
   ], Host4, "PdFoot", 1);
@@ -18828,7 +17198,7 @@
 
   // src/Math/Code/Latex.ts
   var Host5 = class {
-    static StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }) {
+    static StemAndLeaf({ data: data2, labels, stem = "(tens)", leaf = "(units)" }) {
       let T2 = "";
       T2 += "\\begin{array}{r|l}";
       T2 += `\\text{Stem} & \\text{Leaf} \\\\ `;
@@ -18844,15 +17214,15 @@
           return unit(label).toString();
         return label;
       }
-      labels ??= [...data];
+      labels ??= [...data2];
       let parsedLabels = labels.map(parse);
-      let initTen = ten(Math.min(...data));
-      let endTen = ten(Math.max(...data));
+      let initTen = ten(Math.min(...data2));
+      let endTen = ten(Math.max(...data2));
       for (let t2 = initTen; t2 <= endTen; t2++) {
         T2 += t2 + " & { \\begin{array}{} ";
         let units = [];
-        for (let i2 = 0; i2 < data.length; i2++) {
-          if (ten(data[i2]) === t2)
+        for (let i2 = 0; i2 < data2.length; i2++) {
+          if (ten(data2[i2]) === t2)
             units.push(parsedLabels[i2]);
         }
         T2 += units.join(" & ");
@@ -18886,9 +17256,9 @@
       T2 += ` \\end{array}`;
       return T2;
     }
-    static FreqTable({ data, dataLabel, freqLabel }) {
-      let values = ListIntegers(Math.min(...data), Math.max(...data));
-      let freqs = Freqs(data, values);
+    static FreqTable({ data: data2, dataLabel, freqLabel }) {
+      let values = ListIntegers(Math.min(...data2), Math.max(...data2));
+      let freqs = Freqs(data2, values);
       return Table({
         content: [
           [dataLabel, ...values],
@@ -19103,29 +17473,29 @@
     static SigFig(num2) {
       return cal.sigfig(cal.blur(num2));
     }
-    static Round(num2, sigfig = 3) {
+    static Round(num2, sigfig2 = 3) {
       num2 = num2 * (1 + Number.EPSILON);
-      return cal.round(num2, sigfig).off();
+      return cal.round(num2, sigfig2).off();
     }
-    static RoundUp(num2, sigfig = 3) {
+    static RoundUp(num2, sigfig2 = 3) {
       num2 = num2 * (1 - Number.EPSILON);
-      return cal.round(num2, sigfig).up();
+      return cal.round(num2, sigfig2).up();
     }
-    static RoundDown(num2, sigfig = 3) {
+    static RoundDown(num2, sigfig2 = 3) {
       num2 = num2 * (1 + Number.EPSILON);
-      return cal.round(num2, sigfig).down();
+      return cal.round(num2, sigfig2).down();
     }
-    static Fix(num2, dp = 0) {
+    static Fix(num2, dp2 = 0) {
       num2 = num2 * (1 + Number.EPSILON);
-      return cal.fix(num2, dp).off();
+      return cal.fix(num2, dp2).off();
     }
-    static FixUp(num2, dp = 0) {
+    static FixUp(num2, dp2 = 0) {
       num2 = num2 * (1 - Number.EPSILON);
-      return cal.fix(num2, dp).up();
+      return cal.fix(num2, dp2).up();
     }
-    static FixDown(num2, dp = 0) {
+    static FixDown(num2, dp2 = 0) {
       num2 = num2 * (1 + Number.EPSILON);
-      return cal.fix(num2, dp).down();
+      return cal.fix(num2, dp2).down();
     }
     static Ceil(num2) {
       return Math.ceil(num2);
@@ -19200,7 +17570,7 @@
   ], Host7);
 
   // src/Math/Code/PhyConst.ts
-  var PhyConst2 = {
+  var PhyConstObj = {
     R: 8.31,
     N_A: 602e21,
     g: 9.81,
@@ -19217,7 +17587,7 @@
     sigma: 567e-10,
     h: 663e-36
   };
-  globalThis.PhyConst = PhyConst2;
+  globalThis.PhyConst = PhyConstObj;
 
   // src/Math/Code/PhyEq.ts
   function makeFn(args, body) {
@@ -19435,7 +17805,7 @@
   });
 
   // ../packages/fate/lib/support.js
-  function isPrime(num2) {
+  function isPrime2(num2) {
     if (!Number.isInteger(num2))
       return false;
     if (num2 <= 1)
@@ -19450,10 +17820,10 @@
     }
     return true;
   }
-  function primes(max) {
+  function primes2(max) {
     let arr = [];
     for (let i2 = 2; i2 <= max; i2++) {
-      if (isPrime(i2))
+      if (isPrime2(i2))
         arr.push(i2);
     }
     return arr;
@@ -19471,9 +17841,9 @@
 
   // ../packages/fate/lib/poker.js
   function error2(msg) {
-    const e5 = new Error(msg);
-    e5.name = "PokerError";
-    return e5;
+    const e6 = new Error(msg);
+    e6.name = "PokerError";
+    return e6;
   }
   function integer(min, max) {
     min = Math.ceil(min);
@@ -19490,7 +17860,7 @@
   function prime(min, max) {
     if (min > max)
       throw error2("min must be less than max!");
-    let ps = primes(max).filter(($) => $ >= min);
+    let ps = primes2(max).filter(($) => $ >= min);
     return draw(ps);
   }
   function he() {
@@ -19505,9 +17875,9 @@
 
   // ../packages/fate/lib/dice.js
   function error3(msg) {
-    const e5 = new Error(msg);
-    e5.name = "DiceError";
-    return e5;
+    const e6 = new Error(msg);
+    e6.name = "DiceError";
+    return e6;
   }
   var Dice = class {
     constructor(func) {
@@ -19614,19 +17984,19 @@
     static RndRs(min, max, n2 = 10) {
       return dice(() => RndR(min, max)).unique().rolls(n2);
     }
-    static RndQ(largest = 9, range) {
+    static RndQ(largest = 9, range2) {
       let L2 = Math.abs(largest);
       let sign = largest > 0 ? 1 : RndU();
       let f3 = () => RndN(1, L2) / RndN(2, L2) * sign;
       let d2 = dice(f3).shield((_) => owl.dec(_));
-      if (range) {
-        d2.shield((_) => _ >= range[0]).shield((_) => _ <= range[1]);
+      if (range2) {
+        d2.shield((_) => _ >= range2[0]).shield((_) => _ <= range2[1]);
       }
       return d2.roll();
     }
-    static RndQs(largest = 9, range, n2 = 10) {
+    static RndQs(largest = 9, range2, n2 = 10) {
       n2 = Math.min(Math.abs(largest) + 1, n2);
-      return dice(() => RndQ(largest, range)).unique().rolls(n2);
+      return dice(() => RndQ(largest, range2)).unique().rolls(n2);
     }
     static RndU() {
       return list(1, -1).draw();
@@ -19704,8 +18074,8 @@
       return vertices;
     }
     static RndData(min, max, n2) {
-      let data = dice(() => RndN(min, max)).coherent((d2) => toData(d2).isSingleMode()).rolls(n2);
-      return toList(data).ascending();
+      let data2 = dice(() => RndN(min, max)).coherent((d2) => toData(d2).isSingleMode()).rolls(n2);
+      return toList(data2).ascending();
     }
     static RndTriangle(xRange, yRange, {
       minAngle = 0,
@@ -19987,9 +18357,9 @@
       if (anchor === 0) {
         f3 = () => RndN(1, 3);
       } else {
-        let range = Max(3, a2 * 0.1);
-        let max = Min(Floor(a2 + range), cal.logCeil(a2) - 1);
-        let min = Max(Ceil(a2 - range), 1, cal.logFloor(a2));
+        let range2 = Max(3, a2 * 0.1);
+        let max = Min(Floor(a2 + range2), cal.logCeil(a2) - 1);
+        let min = Max(Ceil(a2 - range2), 1, cal.logFloor(a2));
         f3 = () => RndN(min, max) * s3;
       }
       return dice(f3).shield((x2) => x2 !== anchor).unique().rolls(3);
@@ -19999,8 +18369,8 @@
       let m3 = cal.blur(cal.mantissa(anchor));
       if (IsInteger(m3))
         return RndShakeN(m3).map((x2) => Number(x2 + "e" + exp));
-      let dp = cal.dp(m3);
-      return dice(() => Fix(m3 * (1 + RndR(0, 0.5) * RndU()), dp)).shield((x2) => x2 * m3 > 0).shield((x2) => cal.e(x2) === cal.e(m3)).shield((x2) => x2 !== m3).unique().rolls(3).map((x2) => Number(x2 + "e" + exp));
+      let dp2 = cal.dp(m3);
+      return dice(() => Fix(m3 * (1 + RndR(0, 0.5) * RndU()), dp2)).shield((x2) => x2 * m3 > 0).shield((x2) => cal.e(x2) === cal.e(m3)).shield((x2) => x2 !== m3).unique().rolls(3).map((x2) => Number(x2 + "e" + exp));
     }
     static RndShakeQ(anchor) {
       if (owl.int(anchor))
@@ -20417,14 +18787,14 @@
     static UpperQAt(total) {
       return total + 1 - LowerQAt(total);
     }
-    static ListRange(...data) {
-      let min = Math.min(...data);
-      let max = Math.max(...data);
+    static ListRange(...data2) {
+      let min = Math.min(...data2);
+      let max = Math.max(...data2);
       return cal.range(min, max);
     }
-    static Freqs(data, nums) {
-      let ls = toList(data);
-      nums ??= ListRange(...data);
+    static Freqs(data2, nums) {
+      let ls = toList(data2);
+      nums ??= ListRange(...data2);
       let arr = [];
       for (let v3 of nums) {
         arr.push(ls.freq(v3));
@@ -20433,14 +18803,14 @@
     }
     static DataFromFreqs(values, frequencies) {
       Should(values.length === frequencies.length, "values and frequencies must be the same length");
-      let data = [];
+      let data2 = [];
       for (let i2 = 0; i2 < values.length; i2++) {
-        data.push(...Array(frequencies[i2]).fill(values[i2]));
+        data2.push(...Array(frequencies[i2]).fill(values[i2]));
       }
-      return data;
+      return data2;
     }
-    static Summary(...data) {
-      let d2 = toData(data);
+    static Summary(...data2) {
+      let d2 = toData(data2);
       return [
         d2.min(),
         d2.lowerQuartile(),
@@ -20565,10 +18935,10 @@
     static IndexToSurd(text) {
       return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}");
     }
-    static Coord(point, dp = 1) {
+    static Coord(point, dp2 = 1) {
       let [a2, b2] = point.map((_) => cal.blur(_));
-      a2 = Fix(a2, dp);
-      b2 = Fix(b2, dp);
+      a2 = Fix(a2, dp2);
+      b2 = Fix(b2, dp2);
       return "(" + a2 + ", " + b2 + ")";
     }
     static Sci(num2) {
@@ -20836,14 +19206,14 @@
       let [ha, hb, hc] = HeightsBySAS(a2, C2, b2);
       return hc;
     }
-    static TriangleFromVertex(A2, B2, C2, fix = true) {
+    static TriangleFromVertex(A2, B2, C2, fix2 = true) {
       let sideC = Distance(A2, B2);
       let sideA = Distance(B2, C2);
       let sideB = Distance(C2, A2);
       let angleC = CosineLawAngle(sideA, sideB, sideC);
       let angleA = CosineLawAngle(sideB, sideC, sideA);
       let angleB = CosineLawAngle(sideA, sideC, sideB);
-      if (fix) {
+      if (fix2) {
         sideC = Fix(sideC);
         sideA = Fix(sideA);
         sideB = Fix(sideB);
@@ -21460,23 +19830,23 @@
         let [x1, x2] = QuadraticRoot(A2, B2, C2);
         let y1 = (-a2 * x1 - c3) / b2;
         let y2 = (-a2 * x2 - c3) / b2;
-        let P2 = [cal.blur(x1), cal.blur(y1)];
+        let P3 = [cal.blur(x1), cal.blur(y1)];
         let Q2 = [cal.blur(x2), cal.blur(y2)];
-        return [P2, Q2];
+        return [P3, Q2];
       } else {
         let x2 = -c3 / a2;
         let D2 = r3 * r3 - (x2 - h2) ** 2;
         Should(D2 >= 0, "no intersection");
         let y1 = k2 - Math.sqrt(D2);
         let y2 = k2 + Math.sqrt(D2);
-        let P2 = [cal.blur(x2), cal.blur(y1)];
+        let P3 = [cal.blur(x2), cal.blur(y1)];
         let Q2 = [cal.blur(x2), cal.blur(y2)];
-        return [P2, Q2];
+        return [P3, Q2];
       }
     }
     static CircleLineIntersect(center, radius, [A2, B2]) {
-      let lin2 = LinearFromTwoPoints(A2, B2);
-      return CircleLinearIntersect(center, radius, lin2);
+      let lin3 = LinearFromTwoPoints(A2, B2);
+      return CircleLinearIntersect(center, radius, lin3);
     }
   };
   __decorateClass([
@@ -21559,8 +19929,8 @@
     static LinearFromTwoPoints(point1, point2) {
       return lin().byTwoPoints(point1, point2).toLinear();
     }
-    static LinearFromPointSlope(point, slope) {
-      return lin().byPointSlope(point, slope).toLinear();
+    static LinearFromPointSlope(point, slope2) {
+      return lin().byPointSlope(point, slope2).toLinear();
     }
     static LinearFromBisector(A2, B2) {
       return lin().byBisector(A2, B2).toLinear();
@@ -21571,8 +19941,8 @@
     static LineFromTwoPoints(point1, point2) {
       return lin().byTwoPoints(point1, point2).toLine();
     }
-    static LineFromPointSlope(point, slope) {
-      return lin().byPointSlope(point, slope).toLine();
+    static LineFromPointSlope(point, slope2) {
+      return lin().byPointSlope(point, slope2).toLine();
     }
     static LineFromBisector(A2, B2) {
       return lin().byBisector(A2, B2).toLine();
@@ -21720,7 +20090,7 @@
         return M2;
       };
       let f3 = () => dice(RndMono).unique((M2) => M2.size()).rolls(terms);
-      return dice(f3).shield((P2) => Max(...P2.map((M2) => M2.degree())) === degree).roll();
+      return dice(f3).shield((P3) => Max(...P3.map((M2) => M2.degree())) === degree).roll();
     }
     static PolyPrint(poly) {
       return poly.map((M2) => M2.print()).filter((x2) => x2 !== "0").join("+");
@@ -21806,13 +20176,13 @@
     return new CustomErrorCls(name, message);
   }
   globalThis.CustomError = CustomError2;
-  function toError2(e5) {
-    if (e5 instanceof Error) {
-      return e5;
-    } else if (typeof e5 === "string") {
-      return CustomError2("UnknownError", e5);
+  function toError2(e6) {
+    if (e6 instanceof Error) {
+      return e6;
+    } else if (typeof e6 === "string") {
+      return CustomError2("UnknownError", e6);
     } else {
-      return CustomError2("UnknownError", JSON.stringify(e5));
+      return CustomError2("UnknownError", JSON.stringify(e6));
     }
   }
   globalThis.toError = toError2;
@@ -21981,13 +20351,13 @@
     }
   }
   var Variable = class {
-    constructor(sym, name, range, unit, display) {
+    constructor(sym, name, range2, unit, display) {
       this.sym = sym;
       this.name = name;
       unit ??= findUnit(name);
       unit ??= "";
       this.unit = parseUnit(unit);
-      this.range = parseRange(range);
+      this.range = parseRange(range2);
       let [min, max] = this.range;
       if (min > max)
         throw "[Variable] Range must have max > min";
@@ -22001,8 +20371,8 @@
     set(val) {
       this.val = val;
     }
-    round(sigfig = 2) {
-      this.set(Round(this.val, sigfig));
+    round(sigfig2 = 2) {
+      this.set(Round(this.val, sigfig2));
     }
     shake() {
       let ratio = RndT() ? 1.05 : 0.95;
@@ -22170,30 +20540,30 @@
   }
 
   // ../packages/gauss/lib/EquationFitter/Bisection/bisection.js
-  function randomUniform(range) {
-    const [min, max] = range;
+  function randomUniform(range2) {
+    const [min, max] = range2;
     return Math.random() * (max - min) + min;
   }
-  function randomLog(range) {
-    const [min, max] = range;
+  function randomLog(range2) {
+    const [min, max] = range2;
     const logmin = Math.log10(min);
     const logmax = Math.log10(max);
-    const e5 = randomUniform([logmin, logmax]);
-    return 10 ** e5;
+    const e6 = randomUniform([logmin, logmax]);
+    return 10 ** e6;
   }
-  function randomLogNeg(range) {
-    const [minNeg, maxNeg] = range;
+  function randomLogNeg(range2) {
+    const [minNeg, maxNeg] = range2;
     const min = -maxNeg;
     const max = -minNeg;
     return -randomLog([min, max]);
   }
-  function randomValue(range) {
-    let [min, max] = range;
+  function randomValue(range2) {
+    let [min, max] = range2;
     if (min > 0 && max > 0)
-      return randomLog(range);
+      return randomLog(range2);
     if (min < 0 && max < 0)
-      return randomLogNeg(range);
-    return randomUniform(range);
+      return randomLogNeg(range2);
+    return randomUniform(range2);
   }
   function mid(a2, b2) {
     return a2.map(($, i2) => ($ + b2[i2]) / 2);
@@ -22460,8 +20830,8 @@
       }
     }
     trySolveNext() {
-      for (let eq of this.equbes) {
-        const t2 = eq.trySolve();
+      for (let eq2 of this.equbes) {
+        const t2 = eq2.trySolve();
         if (t2 === true)
           return true;
       }
@@ -22517,8 +20887,8 @@
     for (let f3 of fs) {
       let syms = getVars(f3);
       const vs = syms.map(($) => vabes.find((_) => _.symbol === $));
-      let eq = new Eqube(vs);
-      equbes.push(eq);
+      let eq2 = new Eqube(vs);
+      equbes.push(eq2);
     }
     let analyzer = new Analyzer(vabes, equbes);
     return analyzer.getHealthyTrees();
@@ -22594,9 +20964,9 @@
       this.symbols = Object.keys(this.tree);
     }
     revealer(symbol) {
-      for (let eq of this.eqReaders) {
-        if (eq.solvingSymbol() === symbol)
-          return eq;
+      for (let eq2 of this.eqReaders) {
+        if (eq2.solvingSymbol() === symbol)
+          return eq2;
       }
       return void 0;
     }
@@ -22707,10 +21077,10 @@
       let info = readTree(this.tree);
       let givens = info.givens.map(($) => this.variables.find((_) => _.sym === $));
       let T2 = "";
-      for (let eq of eqs) {
-        let solved = solvingSymbol(eq.zeroFunc, this.tree);
+      for (let eq2 of eqs) {
+        let solved = solvingSymbol(eq2.zeroFunc, this.tree);
         let solvedVar = this.variables.find(($) => $.sym === solved);
-        T2 += latexAligned([eq.print(), eq.print(givens), solvedVar.full()]);
+        T2 += latexAligned([eq2.print(), eq2.print(givens), solvedVar.full()]);
         T2 += " \\\\~\\\\ ";
         givens.push(solvedVar);
       }
@@ -22753,15 +21123,15 @@
     return new Variables(...vs);
   }
   function toVariable(variable) {
-    let [sym, name, range, unit, display] = variable;
-    return new Variable(sym, name, range, unit, display);
+    let [sym, name, range2, unit, display] = variable;
+    return new Variable(sym, name, range2, unit, display);
   }
   function toVariables(vars) {
     let vs = vars.map(($) => toVariable($));
     return new Variables(...vs);
   }
-  function toEquation(eq, vars) {
-    let [func, latex] = eq;
+  function toEquation(eq2, vars) {
+    let [func, latex] = eq2;
     return new Equation(func, latex, getDeps(func, vars));
   }
   function toEquations(eqs, vars) {
@@ -22777,14 +21147,14 @@
   function BuildSolve(variables, equations, {
     listSym = false,
     avoids = [],
-    sigfig = {}
+    sigfig: sigfig2 = {}
   } = {}) {
     for (let i2 = 0; i2 <= 10; i2++) {
       try {
-        return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig });
-      } catch (e5) {
+        return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig: sigfig2 });
+      } catch (e6) {
         if (i2 === 10) {
-          throw e5;
+          throw e6;
         } else {
           continue;
         }
@@ -22795,19 +21165,19 @@
   function BuildSolveOnce(variables, equations, {
     listSym = false,
     avoids = [],
-    sigfig = {}
+    sigfig: sigfig2 = {}
   } = {}) {
     let system = toEquSystem(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables(avoids);
-    givens.forEach(($) => $.round(sigfig[$.sym]));
+    givens.forEach(($) => $.round(sigfig2[$.sym]));
     system.fitAgain(hiddens);
     function sol() {
       if (equations.length === 1) {
-        let eq = system.equations[0];
+        let eq2 = system.equations[0];
         return latexAligned([
-          eq.print(),
-          eq.print(givens),
+          eq2.print(),
+          eq2.print(givens),
           unknown.full()
         ]);
       } else {
@@ -22847,7 +21217,7 @@
         return trendWords[1];
       return "[error]";
     }
-    function toCode(change) {
+    function toCode2(change) {
       if (change > 0)
         return 0;
       if (change === 0)
@@ -22865,19 +21235,19 @@
         agent.symbol(),
         agent.name,
         toWord(agent.getVal()),
-        toCode(agent.getVal())
+        toCode2(agent.getVal())
       ],
       responses: responses.map((v3) => [
         v3.symbol(),
         v3.name,
         toWord(v3.getVal()),
-        toCode(v3.getVal())
+        toCode2(v3.getVal())
       ]),
       target: [
         target.symbol(),
         target.name,
         toWord(target.getVal()),
-        toCode(target.getVal())
+        toCode2(target.getVal())
       ],
       sol: system.print()
     };
@@ -22887,7 +21257,7 @@
   function BuildRatio(variables, func, latex, {
     cases = ["Before", "After"],
     subscript = [1, 2],
-    sigfig = {}
+    sigfig: sigfig2 = {}
   } = {}) {
     let system = toEquSystem(variables, [[func, latex]]);
     let vars = system.variables;
@@ -22895,14 +21265,14 @@
     let g2 = [];
     let u2 = [];
     system.fit();
-    given.round(sigfig[given.sym]);
-    unknown.round(sigfig[unknown.sym]);
+    given.round(sigfig2[given.sym]);
+    unknown.round(sigfig2[unknown.sym]);
     g2.push(given.getVal());
     u2.push(unknown.getVal());
     system.fitAgain(constants);
     for (let i2 = 0; i2 < 10; i2++) {
       system.fitAgain([given, unknown]);
-      given.round(sigfig[given.sym]);
+      given.round(sigfig2[given.sym]);
       if (given.getVal() !== g2[0])
         break;
     }
@@ -22993,14 +21363,14 @@
   function BuildSolve2(variables, equations, {
     listSym = false,
     avoids = [],
-    sigfig = {}
+    sigfig: sigfig2 = {}
   } = {}) {
     for (let i2 = 0; i2 <= 10; i2++) {
       try {
-        return BuildSolveOnce2(variables, equations, { listSym, avoids, sigfig });
-      } catch (e5) {
+        return BuildSolveOnce2(variables, equations, { listSym, avoids, sigfig: sigfig2 });
+      } catch (e6) {
         if (i2 === 10) {
-          throw e5;
+          throw e6;
         } else {
           continue;
         }
@@ -23011,19 +21381,19 @@
   function BuildSolveOnce2(variables, equations, {
     listSym = false,
     avoids = [],
-    sigfig = {}
+    sigfig: sigfig2 = {}
   } = {}) {
     let system = toEquSystem(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables(avoids);
-    givens.forEach(($) => $.round(sigfig[$.sym]));
+    givens.forEach(($) => $.round(sigfig2[$.sym]));
     system.fitAgain(hiddens);
     function sol() {
       if (equations.length === 1) {
-        let eq = system.equations[0];
+        let eq2 = system.equations[0];
         return latexAligned([
-          eq.print(),
-          eq.print(givens),
+          eq2.print(),
+          eq2.print(givens),
           unknown.full()
         ]);
       } else {
@@ -23649,16 +22019,16 @@
       this.ctx.beginPath();
       this.ctx.arc(x2, y2, radius, q1, q2, true);
     }
-    createArcByPoints(P2, O2, Q2, radius) {
-      let p3 = this.toPx(P2);
+    createArcByPoints(P3, O2, Q2, radius) {
+      let p3 = this.toPx(P3);
       let o2 = this.toPx(O2);
       let q2 = this.toPx(Q2);
       let q1 = dir(o2, p3);
       let q22 = dir(o2, q2);
       this.createArc(O2, radius, [q1, q22]);
     }
-    createRightAnglePath(P2, O2, Q2, size) {
-      let p3 = this.toPx(P2);
+    createRightAnglePath(P3, O2, Q2, size) {
+      let p3 = this.toPx(P3);
       let o2 = this.toPx(O2);
       let q2 = this.toPx(Q2);
       let a2 = moveDot(o2, p3, size);
@@ -23850,15 +22220,15 @@
     }
     getDirAngle(A2, O2, B2) {
       let flip = this.polarFlip(A2, O2, B2);
-      let [P2, Q2] = flip ? [B2, A2] : [A2, B2];
-      let a2 = this.getDir(O2, P2);
+      let [P3, Q2] = flip ? [B2, A2] : [A2, B2];
+      let a2 = this.getDir(O2, P3);
       let b2 = this.getDir(O2, Q2);
       return a2 <= b2 ? b2 - a2 : 360 + b2 - a2;
     }
     getMidDir(A2, O2, B2) {
       let flip = this.polarFlip(A2, O2, B2);
-      let [P2, Q2] = flip ? [B2, A2] : [A2, B2];
-      let a1 = this.getDir(O2, P2);
+      let [P3, Q2] = flip ? [B2, A2] : [A2, B2];
+      let a1 = this.getDir(O2, P3);
       let a2 = this.getDir(O2, Q2);
       if (a2 < a1)
         a2 += 360;
@@ -23978,12 +22348,12 @@
       this.createShape(pts);
       this.doShade();
     }
-    arc(P2, O2, Q2, radius) {
-      this.createArcByPoints(P2, O2, Q2, radius);
+    arc(P3, O2, Q2, radius) {
+      this.createArcByPoints(P3, O2, Q2, radius);
       this.doStroke();
     }
-    solidArc(P2, O2, Q2, radius) {
-      this.createArcByPoints(P2, O2, Q2, radius);
+    solidArc(P3, O2, Q2, radius) {
+      this.createArcByPoints(P3, O2, Q2, radius);
       this.doSolid();
     }
     circle(center, radius) {
@@ -24020,8 +22390,8 @@
     }
     angle(A2, O2, B2, radius, count, space) {
       let flip = this.polarFlip(A2, O2, B2);
-      let [P2, Q2] = flip ? [B2, A2] : [A2, B2];
-      this.anglePolar(P2, O2, Q2, radius, count, space);
+      let [P3, Q2] = flip ? [B2, A2] : [A2, B2];
+      this.anglePolar(P3, O2, Q2, radius, count, space);
     }
     rightAngle(A2, O2, B2, size) {
       this.createRightAnglePath(A2, O2, B2, size);
@@ -24172,7 +22542,7 @@
   };
 
   // ../packages/paint/lib/support/trace.js
-  function trace(func, range, dots = 1e3) {
+  function trace2(func, range2, dots = 1e3) {
     function tracer(t3) {
       let result2;
       try {
@@ -24185,7 +22555,7 @@
       return result2;
     }
     ;
-    let [t1, t2] = range;
+    let [t1, t2] = range2;
     const step = (t2 - t1) / (dots - 1);
     let points = [];
     for (let t3 = t1; t3 <= t2; t3 += step) {
@@ -24193,7 +22563,7 @@
     }
     return points;
   }
-  function traceCircle(center, radius, angleRange, dots = 100) {
+  function traceCircle2(center, radius, angleRange, dots = 100) {
     const [h2, k2] = center;
     function sin3(degree) {
       return Math.sin(degree / 180 * Math.PI);
@@ -24201,22 +22571,22 @@
     function cos3(degree) {
       return Math.cos(degree / 180 * Math.PI);
     }
-    return trace((t2) => [h2 + radius * cos3(t2), k2 + radius * sin3(t2)], angleRange, dots);
+    return trace2((t2) => [h2 + radius * cos3(t2), k2 + radius * sin3(t2)], angleRange, dots);
   }
   function splitNull(arr) {
     let ls = [];
-    let clone = [...arr];
+    let clone2 = [...arr];
     while (true) {
-      let index = clone.findIndex(($) => $ === null);
+      let index = clone2.findIndex(($) => $ === null);
       if (index === -1) {
-        let head = clone.splice(0);
+        let head = clone2.splice(0);
         ls.push(head);
         break;
       } else {
-        let head = clone.splice(0, index);
+        let head = clone2.splice(0, index);
         ls.push(head);
-        clone.shift();
-        if (clone.length === 0)
+        clone2.shift();
+        if (clone2.length === 0)
           break;
       }
     }
@@ -24251,14 +22621,14 @@
     let q2 = argument(v22);
     if (q2 < q1)
       q2 += 360;
-    let points = traceCircle(O2, r3, [q1, q2]);
+    let points = traceCircle2(O2, r3, [q1, q2]);
     return [A2, ...points, B2, ...vertices];
   }
 
   // ../packages/paint/lib/canvas/canvas09.js
   var Canvas09 = class extends Canvas08 {
     plot(func, tStart = this.xmin, tEnd = this.xmax, dots = 1e3) {
-      let points = trace(func, [tStart, tEnd], dots);
+      let points = trace2(func, [tStart, tEnd], dots);
       let { xmin, xmax, ymin, ymax } = this;
       let X2 = xmax - xmin;
       let Y2 = ymax - ymin;
@@ -24603,8 +22973,8 @@
       }
       if (envelope) {
         let env = this.envelope(lowerBase, upperBase);
-        for (let e5 of env) {
-          this.pen.line(e5[0], e5[1]);
+        for (let e6 of env) {
+          this.pen.line(e6[0], e6[1]);
         }
       } else {
         for (let i2 = 0; i2 < lowerBase.length; i2++) {
@@ -24717,15 +23087,15 @@
       });
     }
     angleBet(angle2, line, label) {
-      let [P2, O2, Q2] = angle2;
+      let [P3, O2, Q2] = angle2;
       let [A2, B2] = line;
-      this.pen.line(P2, O2);
+      this.pen.line(P3, O2);
       this.pen.line(Q2, O2);
-      this.pen.angle(P2, O2, Q2);
+      this.pen.angle(P3, O2, Q2);
       if (label !== void 0)
-        this.pen.label.angle([P2, O2, Q2], label);
+        this.pen.label.angle([P3, O2, Q2], label);
       if (A2 !== void 0)
-        this.pen.rightAngle(P2, O2, A2);
+        this.pen.rightAngle(P3, O2, A2);
       if (B2 !== void 0)
         this.pen.rightAngle(Q2, O2, B2);
     }
@@ -25082,16 +23452,16 @@
       if (label !== void 0)
         this.label.line([A2, B2], label);
     }
-    arrowCompo(O2, P2, dir3, angleLabel) {
+    arrowCompo(O2, P3, dir3, angleLabel) {
       let X2 = Move(O2, dir3, 1);
-      let Q2 = PdFoot(O2, X2, P2);
+      let Q2 = PdFoot(O2, X2, P3);
       this.arrow(O2, Q2);
       if (angleLabel !== void 0)
-        this.angle(Q2, O2, P2, angleLabel);
+        this.angle(Q2, O2, P3, angleLabel);
     }
-    arrowResolve(O2, P2, dir3, angleLabel) {
-      this.arrowCompo(O2, P2, dir3, angleLabel);
-      this.arrowCompo(O2, P2, dir3 + 90);
+    arrowResolve(O2, P3, dir3, angleLabel) {
+      this.arrowCompo(O2, P3, dir3, angleLabel);
+      this.arrowCompo(O2, P3, dir3 + 90);
     }
     length(A2, B2, label) {
       this.cv.line([A2, B2]);
@@ -25199,10 +23569,10 @@
     export(html, placeholder) {
       return this.pen.exportTrim(html, placeholder);
     }
-    PrimeFactorization({ numbers: numbers2 }) {
+    PrimeFactorization({ numbers: numbers3 }) {
       function lowestFactor(arr) {
-        const primes2 = [2, 3, 5, 7, 11, 13, 17, 19];
-        for (let p3 of primes2) {
+        const primes3 = [2, 3, 5, 7, 11, 13, 17, 19];
+        for (let p3 of primes3) {
           if (HCF(...arr) % p3 === 0)
             return p3;
         }
@@ -25240,9 +23610,9 @@
         return [arr, pivot2];
       }
       let pivot = [1, 0];
-      drawRow(numbers2, pivot);
-      while (HCF(...numbers2) > 1) {
-        [numbers2, pivot] = drawDiv(numbers2, pivot);
+      drawRow(numbers3, pivot);
+      while (HCF(...numbers3) > 1) {
+        [numbers3, pivot] = drawDiv(numbers3, pivot);
       }
       this.pen = pen;
     }
@@ -25282,10 +23652,10 @@
         solid ? pen.dot(T2) : pen.hole(T2);
         pen.label.point(B2, num2.toString(), 270);
       }
-      function tick(position, correct) {
+      function tick(position, correct2) {
         let align = -width + 2 * width * position;
         let y2 = -(ineqs.length - 1) * (height + 2) - height / 2;
-        pen.write([align, y2], correct ? "\u2714" : "\u2718");
+        pen.write([align, y2], correct2 ? "\u2714" : "\u2718");
       }
       ineqs.forEach((x2) => inequality(x2));
       let cutting = ineqs.map((x2) => x2.position);
@@ -25398,14 +23768,14 @@
           if (x2 > 180 && x2 < 360)
             anchor = 180;
         }
-        let P2 = [x2, y2];
+        let P3 = [x2, y2];
         let Q2 = [x2, 0];
         let R2 = [anchor, 0];
         pen.set.color();
-        pen.point(P2);
+        pen.point(P3);
         pen.set.color("red");
         if (y2 !== 0) {
-          pen.arrow(P2, Q2);
+          pen.arrow(P3, Q2);
         }
         if (y2 >= 0) {
           pen.label.point(Q2, label, 270);
@@ -25502,9 +23872,9 @@
       pen.axis.x("");
       if (p3 !== void 0 && q2 !== void 0 && p3 !== q2) {
         pen.plot((x2) => Sign(a2) * (x2 ** 2 - 4));
-        let P2 = [2, 0];
+        let P3 = [2, 0];
         let Q2 = [-2, 0];
-        pen.cutX(P2);
+        pen.cutX(P3);
         pen.cutX(Q2);
         pen.set.weight(3);
         pen.set.color("red");
@@ -25526,7 +23896,7 @@
         }
         pen.set.weight();
         pen.set.color();
-        pen.label.point(P2, p3.toString(), a2 > 0 ? 315 : 45);
+        pen.label.point(P3, p3.toString(), a2 > 0 ? 315 : 45);
         pen.label.point(Q2, q2.toString(), a2 > 0 ? 225 : 135);
       }
       if (p3 === void 0 && q2 === void 0) {
@@ -25664,13 +24034,13 @@
       writeSide(sideC, A2, B2);
       writeSide(sideA, B2, C2);
       writeSide(sideB, C2, A2);
-      function writeAngle(angle2, P2, O2, Q2) {
+      function writeAngle(angle2, P3, O2, Q2) {
         if (angle2) {
           if (typeof angle2 === "string")
             pen.set.textItalic(true);
           if (typeof angle2 === "number")
             angle2 = angle2 + "\xB0";
-          pen.angle(P2, O2, Q2, angle2);
+          pen.angle(P3, O2, Q2, angle2);
           pen.set.textItalic();
         }
       }
@@ -25903,7 +24273,7 @@
     }
     HeightChart({
       categories,
-      data,
+      data: data2,
       xLabel = "",
       yLabel = "",
       interval: interval2 = 5,
@@ -25916,7 +24286,7 @@
       const pen = new Pen();
       let endGap = barWidth + barGap / 2;
       let width = endGap + categories.length * (barWidth + barGap) + endGap;
-      let max = Max(...data);
+      let max = Max(...data2);
       let maxUnit = Ceil(max / interval2);
       let maxSubUnit = maxUnit * (interval2 / subInterval);
       let height = maxUnit * interval2 * 1.1;
@@ -25956,7 +24326,7 @@
       if (showBar) {
         for (let i2 = 0; i2 < categories.length; i2++) {
           let x2 = endGap + i2 * (barWidth + barGap) + barGap / 2;
-          bar(x2, barWidth, data[i2]);
+          bar(x2, barWidth, data2[i2]);
           writeCat(x2, barWidth, categories[i2]);
         }
       }
@@ -25964,7 +24334,7 @@
         let points = [];
         for (let i2 = 0; i2 < categories.length; i2++) {
           let x2 = endGap + i2 * (barWidth + barGap) + barGap / 2;
-          let p3 = [x2 + barWidth / 2, data[i2]];
+          let p3 = [x2 + barWidth / 2, data2[i2]];
           pen.point(p3);
           points.push(p3);
           writeCat(x2, barWidth, categories[i2]);
@@ -26098,13 +24468,13 @@
       const pen = new Pen();
       pen.range.set([-5, 15], [-12, 12]);
       pen.size.resolution(0.12);
-      function path(P2, Q2, prob2, event, selected, circle) {
+      function path(P3, Q2, prob2, event, selected, circle) {
         let T2 = MoveX(Q2, 2);
         pen.write(T2, event);
-        pen.line(P2, Q2, prob2);
+        pen.line(P3, Q2, prob2);
         if (selected) {
           pen.set.weight(3);
-          pen.line(P2, Q2, prob2);
+          pen.line(P3, Q2, prob2);
           if (circle)
             pen.halo(T2, circleSize ?? 30);
           pen.set.weight();
@@ -26171,14 +24541,14 @@
       let y2 = (t2) => uy * t2 - 0.5 * 9.81 * t2 * t2;
       let O2 = [0, 0];
       let U2 = [ux * arrowScale, uy * arrowScale];
-      let P2 = [x2(time), y2(time)];
-      pen.range.capture(O2, U2, P2);
+      let P3 = [x2(time), y2(time)];
+      pen.range.capture(O2, U2, P3);
       pen.size.lock(1.5);
       pen.disc(O2, 5);
       pen.arrow(O2, U2);
       pen.set.color("grey");
       pen.plotDash((t2) => [x2(t2), y2(t2)], 0, time);
-      pen.circle(P2, 5);
+      pen.circle(P3, 5);
       if (ground) {
         pen.graph.horizontal(0);
       }
@@ -26204,29 +24574,29 @@
       let r3 = carMid + carWidth / 2;
       let A2 = [l3, 0];
       let B2 = [r3, 0];
-      let P2 = MoveY(A2, wheelHeight);
-      let Q2 = MoveY(P2, carHeight);
+      let P3 = MoveY(A2, wheelHeight);
+      let Q2 = MoveY(P3, carHeight);
       let R2 = MoveY(B2, wheelHeight);
       let S2 = MoveY(R2, carHeight);
-      [A2, B2, P2, Q2, R2, S2] = [A2, B2, P2, Q2, R2, S2].map(($) => Rotate($, angle2, O2));
+      [A2, B2, P3, Q2, R2, S2] = [A2, B2, P3, Q2, R2, S2].map(($) => Rotate($, angle2, O2));
       let Z2 = [2 * r3, 0];
       let Y2 = Rotate(Z2, angle2, O2);
-      let G2 = Mid(P2, Q2, R2, S2);
+      let G2 = Mid(P3, Q2, R2, S2);
       let W2 = MoveY(G2, -weight);
       let N2 = Move(G2, 90 + angle2, normal);
       let g2 = friction > 0 ? A2 : B2;
       let f3 = Move(g2, friction > 0 ? 180 + angle2 : angle2, Math.abs(friction));
       let pen = new Pen();
-      pen.range.capture(O2, A2, B2, P2, Q2, R2, S2, N2, f3);
+      pen.range.capture(O2, A2, B2, P3, Q2, R2, S2, N2, f3);
       pen.size.lock(1.3);
       pen.set.labelCenter(G2);
       pen.set.textLatex(true);
-      pen.polygon(P2, Q2, S2, R2);
+      pen.polygon(P3, Q2, S2, R2);
       pen.line(O2, Z2);
       pen.line(O2, Y2);
       pen.angle(Y2, O2, Z2, angleLabel);
       pen.set.weight(4);
-      pen.line(A2, P2);
+      pen.line(A2, P3);
       pen.line(B2, R2);
       if (showAllForces) {
         pen.set.weight(3);
@@ -26263,20 +24633,20 @@
       showAllForces = false
     }) {
       let O2 = [0, 0];
-      let P2 = [-wingWidth, 0];
+      let P3 = [-wingWidth, 0];
       let Q2 = [+wingWidth, 0];
-      [P2, Q2] = [P2, Q2].map(($) => Rotate($, angle2, O2));
+      [P3, Q2] = [P3, Q2].map(($) => Rotate($, angle2, O2));
       let W2 = MoveY(O2, -weight);
       let N2 = Move(O2, 90 + angle2, lift);
       let pen = new Pen();
-      pen.range.capture(P2, Q2, W2, N2);
+      pen.range.capture(P3, Q2, W2, N2);
       pen.size.lock(1.3);
       pen.set.labelCenter(O2);
       pen.set.textLatex(true);
       pen.graph.circle(O2, planeRadius);
       pen.shade.circle(O2, planeRadius);
       pen.set.weight(3);
-      pen.line(P2, Q2);
+      pen.line(P3, Q2);
       pen.set.weight();
       pen.set.dash(true);
       pen.graph.horizontal(0);
@@ -26309,30 +24679,30 @@
       showAllForces = false
     }) {
       let O2 = [0, 0];
-      let P2 = Rotate([0, -length], angle2, O2);
-      let V2 = [0, P2[1]];
-      let W2 = MoveY(P2, -weight);
-      let T2 = Move(P2, 90 + angle2, tension);
+      let P3 = Rotate([0, -length], angle2, O2);
+      let V2 = [0, P3[1]];
+      let W2 = MoveY(P3, -weight);
+      let T2 = Move(P3, 90 + angle2, tension);
       let pen = new Pen();
       pen.set.border(0.3);
-      pen.range.capture(O2, P2, V2, ReflectY(P2), W2);
+      pen.range.capture(O2, P3, V2, ReflectY(P3), W2);
       pen.size.lock(1.3);
       pen.set.textLatex(true);
       pen.set.color("grey");
-      pen.plotDash((t2) => [P2[0] * cos(t2) + V2[0], 1 * sin(t2) + V2[1]], 0, 360);
+      pen.plotDash((t2) => [P3[0] * cos(t2) + V2[0], 1 * sin(t2) + V2[1]], 0, 360);
       pen.set.color();
       pen.dash(O2, V2);
-      pen.line(O2, P2);
-      pen.fill.circle(P2, bobRadius);
-      pen.angle(P2, O2, V2, angleLabel);
+      pen.line(O2, P3);
+      pen.fill.circle(P3, bobRadius);
+      pen.angle(P3, O2, V2, angleLabel);
       if (showAllForces) {
         pen.set.color("red");
         pen.set.weight(3);
-        pen.arrow(P2, W2, weightLabel);
+        pen.arrow(P3, W2, weightLabel);
         pen.set.color("blue");
-        pen.arrow(P2, T2);
+        pen.arrow(P3, T2);
         pen.set.weight(2);
-        pen.arrowResolve(P2, T2, 90, angleLabel);
+        pen.arrowResolve(P3, T2, 90, angleLabel);
         pen.set.weight();
         pen.label.point(T2, tensionLabel);
       }
@@ -26346,7 +24716,7 @@
     }) {
       let pen = new Pen();
       let O2 = [0, 0];
-      let P2 = PolToRect([orbitRadius, angle2]);
+      let P3 = PolToRect([orbitRadius, angle2]);
       let Q2 = PolToRect([orbitRadius, -angle2]);
       let A2 = [-planetRadius, 0];
       let B2 = PolToRect([planetRadius, angle2]);
@@ -26356,11 +24726,11 @@
       pen.shade.circle(O2, planetRadius);
       pen.graph.circle(O2, planetRadius);
       pen.label.point(C2, "M", 270);
-      pen.point(P2, "m");
+      pen.point(P3, "m");
       pen.point(O2);
       if (showHeight) {
         pen.set.color("red");
-        pen.line(B2, P2, "h");
+        pen.line(B2, P3, "h");
       }
       pen.set.color("blue");
       pen.line(O2, Q2, "r");
@@ -26646,16 +25016,16 @@
   }
 
   // src/Soil/tool/eval.ts
-  function detectVarErr(e5) {
-    if (e5 instanceof Error) {
-      let isVarErr = e5.message === "Cannot convert a Symbol value to a number";
+  function detectVarErr(e6) {
+    if (e6 instanceof Error) {
+      let isVarErr = e6.message === "Cannot convert a Symbol value to a number";
       if (isVarErr) {
         return CustomError("VariableError", "A variable is used before a value is defined.");
       } else {
-        return e5;
+        return e6;
       }
     }
-    return e5;
+    return e6;
   }
   function evaluate(code, context) {
     let {
@@ -26721,8 +25091,8 @@
     let result;
     try {
       result = eval(code);
-    } catch (e5) {
-      throw detectVarErr(e5);
+    } catch (e6) {
+      throw detectVarErr(e6);
     }
     if (typeof answer === "number")
       answer = ["A", "B", "C", "D"][answer];
@@ -26792,13 +25162,13 @@
     return { result, context: newContext };
   }
   function htmlDecode(str3) {
-    return str3.replace(/&amp;|&lt;|&gt;|&#39;|&quot;/g, (tag) => ({
+    return str3.replace(/&amp;|&lt;|&gt;|&#39;|&quot;/g, (tag2) => ({
       "&amp;": "&",
       "&lt;": "<",
       "&gt;": ">",
       "&#39;": "'",
       "&quot;": '"'
-    })[tag] || tag);
+    })[tag2] || tag2);
   }
   function evalInline(code, dict) {
     code = htmlDecode(code);
@@ -26858,8 +25228,8 @@
     } = dict;
     try {
       return eval(code);
-    } catch (e5) {
-      throw detectVarErr(e5);
+    } catch (e6) {
+      throw detectVarErr(e6);
     }
   }
   function intrapolate(html, dict2) {
@@ -26916,7 +25286,7 @@
   var s2 = String.raw`(?:\s|&nbsp;)*`;
   var p2 = String.raw`\+`;
   var m2 = String.raw`\-`;
-  var e4 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
+  var e5 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
   var l2 = String.raw`[\(\[\{]`;
   var r2 = String.raw`[\)\]\}]`;
   var pl = String.raw`[\(\[]`;
@@ -26934,7 +25304,7 @@
   function handleSigns(input) {
     input = regReplace(input, p2 + s2 + m2, "-");
     input = regReplace(input, m2 + s2 + p2, "-");
-    input = regReplace(input, or2(l2, e4, c2) + s2 + m2 + s2 + m2, "$1");
+    input = regReplace(input, or2(l2, e5, c2) + s2 + m2 + s2 + m2, "$1");
     input = regReplace(input, "(,)" + s2 + m2 + s2 + m2, "$1");
     input = regReplace(input, m2 + s2 + m2, "+");
     input = regReplace(input, m2 + s2 + m2, "+");
@@ -26949,7 +25319,7 @@
     return input;
   }
   function handleCoeff(input) {
-    input = regReplace(input, or2(p2, m2, e4, l2, sl, r2, c2) + s2 + 1 + s2 + or2(v2, f2, pl, left, sq2) + endtag, "$1 $2");
+    input = regReplace(input, or2(p2, m2, e5, l2, sl, r2, c2) + s2 + 1 + s2 + or2(v2, f2, pl, left, sq2) + endtag, "$1 $2");
     return input;
   }
   function handlePrime(input) {
@@ -27062,12 +25432,12 @@
     }
   };
   var Dict = class {
-    constructor(a2 = Symbol(), b2 = Symbol(), c3 = Symbol(), d2 = Symbol(), e5 = Symbol(), f3 = Symbol(), g2 = Symbol(), h2 = Symbol(), i2 = Symbol(), j2 = Symbol(), k2 = Symbol(), l3 = Symbol(), m3 = Symbol(), n2 = Symbol(), o2 = Symbol(), p3 = Symbol(), q2 = Symbol(), r3 = Symbol(), s3 = Symbol(), t2 = Symbol(), u2 = Symbol(), v3 = Symbol(), w2 = Symbol(), x2 = Symbol(), y2 = Symbol(), z2 = Symbol(), A2 = Symbol(), B2 = Symbol(), C2 = Symbol(), D2 = Symbol(), E2 = Symbol(), F2 = Symbol(), G2 = Symbol(), H2 = Symbol(), I2 = Symbol(), J2 = Symbol(), K2 = Symbol(), L2 = Symbol(), M2 = Symbol(), N2 = Symbol(), O2 = Symbol(), P2 = Symbol(), Q2 = Symbol(), R2 = Symbol(), S2 = Symbol(), T2 = Symbol(), U2 = Symbol(), V2 = Symbol(), W2 = Symbol(), X2 = Symbol(), Y2 = Symbol(), Z2 = Symbol()) {
+    constructor(a2 = Symbol(), b2 = Symbol(), c3 = Symbol(), d2 = Symbol(), e6 = Symbol(), f3 = Symbol(), g2 = Symbol(), h2 = Symbol(), i2 = Symbol(), j2 = Symbol(), k2 = Symbol(), l3 = Symbol(), m3 = Symbol(), n2 = Symbol(), o2 = Symbol(), p3 = Symbol(), q2 = Symbol(), r3 = Symbol(), s3 = Symbol(), t2 = Symbol(), u2 = Symbol(), v3 = Symbol(), w2 = Symbol(), x2 = Symbol(), y2 = Symbol(), z2 = Symbol(), A2 = Symbol(), B2 = Symbol(), C2 = Symbol(), D2 = Symbol(), E2 = Symbol(), F2 = Symbol(), G2 = Symbol(), H2 = Symbol(), I2 = Symbol(), J2 = Symbol(), K2 = Symbol(), L2 = Symbol(), M2 = Symbol(), N2 = Symbol(), O2 = Symbol(), P3 = Symbol(), Q2 = Symbol(), R2 = Symbol(), S2 = Symbol(), T2 = Symbol(), U2 = Symbol(), V2 = Symbol(), W2 = Symbol(), X2 = Symbol(), Y2 = Symbol(), Z2 = Symbol()) {
       this.a = a2;
       this.b = b2;
       this.c = c3;
       this.d = d2;
-      this.e = e5;
+      this.e = e6;
       this.f = f3;
       this.g = g2;
       this.h = h2;
@@ -27104,7 +25474,7 @@
       this.M = M2;
       this.N = N2;
       this.O = O2;
-      this.P = P2;
+      this.P = P3;
       this.Q = Q2;
       this.R = R2;
       this.S = S2;
@@ -27223,8 +25593,8 @@
   };
   var ErrorLogger = class {
     pile = [];
-    add(e5) {
-      let err2 = toError(e5);
+    add(e6) {
+      let err2 = toError(e6);
       this.pile.push("[" + err2.name + "] " + err2.message);
     }
     readHtml(delimiter) {
@@ -27304,23 +25674,23 @@
           if (!this.isValidated())
             throw CustomError("PopulationError", "Cannot pass validate.");
           return true;
-        } catch (e5) {
-          if (e5 instanceof Error) {
-            switch (e5.name) {
+        } catch (e6) {
+          if (e6 instanceof Error) {
+            switch (e6.name) {
               case "ContractError":
-                this.logger.add(e5);
+                this.logger.add(e6);
                 break;
               case "MathError":
-                this.logger.add(e5);
+                this.logger.add(e6);
                 break;
               case "PopulationError":
-                this.logger.add(e5);
+                this.logger.add(e6);
                 break;
               default:
-                throw e5;
+                throw e6;
             }
           } else {
-            throw e5;
+            throw e6;
           }
         }
       }
@@ -27343,8 +25713,8 @@
         try {
           this.qn = AutoOptions(this.config.options, this.qn, this.dict);
           return true;
-        } catch (e5) {
-          this.logger.add(e5);
+        } catch (e6) {
+          this.logger.add(e6);
           continue;
         }
       }
@@ -27422,8 +25792,8 @@
           break;
         } while (true);
         return this.successFruit();
-      } catch (e5) {
-        this.logger.add(e5);
+      } catch (e6) {
+        this.logger.add(e6);
         return this.errorFruit();
       }
     }

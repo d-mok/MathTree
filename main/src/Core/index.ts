@@ -23,7 +23,7 @@ import {
     rein as $rein,
     toReins as $toReins,
     lin as $lin,
-} from 'sapphire-js'
+} from 'ruby'
 
 
 globalThis.cal = $cal

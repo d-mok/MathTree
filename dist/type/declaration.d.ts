@@ -122,7 +122,7 @@ declare module "Core/Ink/index" {
     export function printLabeledValue(obj: LabeledValue, order?: number, isAngle?: boolean): string;
 }
 declare module "Core/index" {
-    import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'sapphire-js';
+    import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'ruby';
     import * as $Owl from "Core/Owl/index";
     import * as $Ink from "Core/Ink/index";
     global {
@@ -1733,23 +1733,29 @@ declare module "Math/Code/Numeracy" {
         var ToFrac: typeof Host.ToFrac;
     }
 }
-declare var PhyConst: {
-    R: number;
-    N_A: number;
-    g: number;
-    G: number;
-    c: number;
-    e: number;
-    m_e: number;
-    epsilon_0: number;
-    mu_0: number;
-    m_u: number;
-    au: number;
-    light_year: number;
-    parsec: number;
-    sigma: number;
-    h: number;
-};
+declare module "Math/Code/PhyConst" {
+    var PhyConstObj: {
+        R: number;
+        N_A: number;
+        g: number;
+        G: number;
+        c: number;
+        e: number;
+        m_e: number;
+        epsilon_0: number;
+        mu_0: number;
+        m_u: number;
+        au: number;
+        light_year: number;
+        parsec: number;
+        sigma: number;
+        h: number;
+    };
+    global {
+        var PhyConst: typeof PhyConstObj;
+    }
+    export {};
+}
 declare module "Math/Code/PhyEq" {
     type eq = [func: zeroFunction, latex: string];
     export class PhyEqCls {
