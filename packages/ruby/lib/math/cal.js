@@ -1,4 +1,5 @@
 import Decimal from './dec';
+import { convergent } from './frac';
 /**
  * The number of significant digits used in {@link blur}.
  */
@@ -182,8 +183,7 @@ export function toFraction(num) {
         return [1, 0];
     if (num === -Infinity)
         return [-1, 0];
-    let f = (new Decimal(num)).toFraction(100000);
-    return [f[0].toNumber(), f[1].toNumber()];
+    return convergent(num, 100000);
 }
 /**
  * Check if `num` is rational, approximately.
@@ -196,16 +196,12 @@ export function toFraction(num) {
  * ```
  */
 export function isRational(num) {
-    function convert(num, deno) {
-        let f = (new Decimal(num)).toFraction(deno);
-        return [f[0].toNumber(), f[1].toNumber()];
-    }
     if (num === Infinity)
         return false;
     if (num === -Infinity)
         return false;
-    let rough = convert(num, 100000);
-    let accurate = convert(num, 10000000);
+    let rough = convergent(num, 100000);
+    let accurate = convergent(num, 10000000);
     return rough[0] === accurate[0] && rough[1] === accurate[1];
 }
 /**

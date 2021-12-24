@@ -9,7 +9,7 @@
     "/lib"
   ],
   "scripts": {
-    "jest": "jest",
+    "jest": "jest ./src/math",
     "build": "tsc -p tsconfig.prod.json"
   },
   "devDependencies": {

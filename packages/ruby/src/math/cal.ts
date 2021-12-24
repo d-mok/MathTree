@@ -1,5 +1,5 @@
 import Decimal from './dec'
-
+import { convergent } from './frac'
 
 /**
  * The number of significant digits used in {@link blur}.
@@ -212,8 +212,7 @@ export function logFloor(num: number): number {
 export function toFraction(num: number): [number, number] {
     if (num === Infinity) return [1, 0]
     if (num === -Infinity) return [-1, 0]
-    let f = (new Decimal(num)).toFraction(100000)
-    return [f[0].toNumber(), f[1].toNumber()]
+    return convergent(num, 100000)
 }
 
 
@@ -232,14 +231,10 @@ export function toFraction(num: number): [number, number] {
  * ```
  */
 export function isRational(num: number): boolean {
-    function convert(num: number, deno: number) {
-        let f = (new Decimal(num)).toFraction(deno)
-        return [f[0].toNumber(), f[1].toNumber()]
-    }
     if (num === Infinity) return false
     if (num === -Infinity) return false
-    let rough = convert(num, 100000)
-    let accurate = convert(num, 10000000)
+    let rough = convergent(num, 100000)
+    let accurate = convergent(num, 10000000)
     return rough[0] === accurate[0] && rough[1] === accurate[1]
 }
 
