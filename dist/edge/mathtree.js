@@ -19661,8 +19661,24 @@
     captureAll()
   ], Host16);
 
-  // src/Math/Code/Vector3D.ts
+  // src/Math/Code/Vector.ts
   var Host17 = class {
+    static VecAdd(...vectors) {
+      const x2 = Sum(...vectors.map((p3) => p3[0]));
+      const y2 = Sum(...vectors.map((p3) => p3[1]));
+      return [x2, y2];
+    }
+  };
+  __decorateClass([
+    checkIt(owl.vector)
+  ], Host17, "VecAdd", 1);
+  Host17 = __decorateClass([
+    exposeAll(),
+    captureAll()
+  ], Host17);
+
+  // src/Math/Code/Vector3D.ts
+  var Host18 = class {
     static Mid3D(...vectors) {
       const x2 = Sum(...vectors.map((p3) => p3[0])) / vectors.length;
       const y2 = Sum(...vectors.map((p3) => p3[1])) / vectors.length;
@@ -19729,41 +19745,41 @@
   };
   __decorateClass([
     checkIt(owl.vector3D)
-  ], Host17, "Mid3D", 1);
+  ], Host18, "Mid3D", 1);
   __decorateClass([
     checkIt(owl.point3D, owl.point3D, owl.num)
-  ], Host17, "Slide3D", 1);
+  ], Host18, "Slide3D", 1);
   __decorateClass([
     checkIt(owl.point3D, owl.point3Ds)
-  ], Host17, "PdFoot3D", 1);
+  ], Host18, "PdFoot3D", 1);
   __decorateClass([
     checkIt(owl.point2Ds, owl.point3D, owl.vector3D, owl.vector3D)
-  ], Host17, "Embed", 1);
+  ], Host18, "Embed", 1);
   __decorateClass([
     checkIt(owl.point2Ds, owl.num)
-  ], Host17, "EmbedX", 1);
+  ], Host18, "EmbedX", 1);
   __decorateClass([
     checkIt(owl.point2Ds, owl.num)
-  ], Host17, "EmbedY", 1);
+  ], Host18, "EmbedY", 1);
   __decorateClass([
     checkIt(owl.point2Ds, owl.num)
-  ], Host17, "EmbedZ", 1);
+  ], Host18, "EmbedZ", 1);
   __decorateClass([
     checkIt(owl.point3Ds, owl.num)
-  ], Host17, "FlatZ", 1);
+  ], Host18, "FlatZ", 1);
   __decorateClass([
     checkIt(owl.point3Ds, owl.point3Ds, owl.num)
-  ], Host17, "Extrude", 1);
+  ], Host18, "Extrude", 1);
   __decorateClass([
     checkIt(owl.num, owl.num)
-  ], Host17, "Projector3D", 1);
-  Host17 = __decorateClass([
+  ], Host18, "Projector3D", 1);
+  Host18 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host17);
+  ], Host18);
 
   // src/Math/Algebra/Algebra.ts
-  var Host18 = class {
+  var Host19 = class {
     static Crammer(a2, b2, c3, p3, q2, r3) {
       const D2 = a2 * q2 - b2 * p3;
       const x2 = (c3 * q2 - b2 * r3) / D2;
@@ -19788,19 +19804,19 @@
     inspectIt(function has_unique_sol(a2, b2, c3, p3, q2, r3) {
       return a2 * q2 - b2 * p3 !== 0;
     })
-  ], Host18, "Crammer", 1);
+  ], Host19, "Crammer", 1);
   __decorateClass([
     checkIt([owl.ntuple, function non_zero_leading_coeff(_) {
       return _[0] !== 0;
     }])
-  ], Host18, "xPolynomial", 1);
-  Host18 = __decorateClass([
+  ], Host19, "xPolynomial", 1);
+  Host19 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host18);
+  ], Host19);
 
   // src/Math/Algebra/Circle.ts
-  var Host19 = class {
+  var Host20 = class {
     static CircleGeneral(centre, radius) {
       let [h2, k2] = centre;
       let r3 = radius;
@@ -19851,23 +19867,23 @@
   };
   __decorateClass([
     checkIt(owl.point2D, owl.positive)
-  ], Host19, "CircleGeneral", 1);
+  ], Host20, "CircleGeneral", 1);
   __decorateClass([
     checkIt(owl.num)
-  ], Host19, "CircleFromGeneral", 1);
+  ], Host20, "CircleFromGeneral", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.positive, owl.triple)
-  ], Host19, "CircleLinearIntersect", 1);
+  ], Host20, "CircleLinearIntersect", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.positive, owl.point2Ds)
-  ], Host19, "CircleLineIntersect", 1);
-  Host19 = __decorateClass([
+  ], Host20, "CircleLineIntersect", 1);
+  Host20 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host19);
+  ], Host20);
 
   // src/Math/Algebra/Quadratic.ts
-  var Host20 = class {
+  var Host21 = class {
     static Discriminant(a2, b2, c3) {
       return b2 * b2 - 4 * a2 * c3;
     }
@@ -19894,29 +19910,29 @@
   };
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num)
-  ], Host20, "Discriminant", 1);
+  ], Host21, "Discriminant", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num),
     inspectIt(function has_real_root(a2, b2, c3) {
       return b2 ** 2 - 4 * a2 * c3 >= 0;
     })
-  ], Host20, "QuadraticRoot", 1);
+  ], Host21, "QuadraticRoot", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num)
-  ], Host20, "QuadraticVertex", 1);
+  ], Host21, "QuadraticVertex", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num)
-  ], Host20, "QuadraticFromRoot", 1);
+  ], Host21, "QuadraticFromRoot", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num)
-  ], Host20, "QuadraticFromVertex", 1);
-  Host20 = __decorateClass([
+  ], Host21, "QuadraticFromVertex", 1);
+  Host21 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host20);
+  ], Host21);
 
   // src/Math/Algebra/Linear.ts
-  var Host21 = class {
+  var Host22 = class {
     static LineFeat(a2, b2, c3) {
       let x2 = -c3 / a2;
       let y2 = -c3 / b2;
@@ -19950,28 +19966,28 @@
   };
   __decorateClass([
     checkIt(owl.nonZero, owl.nonZero, owl.num)
-  ], Host21, "LineFeat", 1);
+  ], Host22, "LineFeat", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.nonZero)
-  ], Host21, "LinearFromIntercepts", 1);
+  ], Host22, "LinearFromIntercepts", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
     inspectIt(function different_points(p1, p22) {
       return owl.distinct([p1, p22]);
     })
-  ], Host21, "LinearFromTwoPoints", 1);
+  ], Host22, "LinearFromTwoPoints", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.num)
-  ], Host21, "LinearFromPointSlope", 1);
+  ], Host22, "LinearFromPointSlope", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
     inspectIt(function different_points(p1, p22) {
       return owl.distinct([p1, p22]);
     })
-  ], Host21, "LinearFromBisector", 1);
+  ], Host22, "LinearFromBisector", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.nonZero)
-  ], Host21, "LineFromIntercepts", 1);
+  ], Host22, "LineFromIntercepts", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
     inspectIt(function different_points(p1, p22) {
@@ -19980,10 +19996,10 @@
     inspectIt(function non_vertical(p1, p22) {
       return p1[0] !== p22[0];
     })
-  ], Host21, "LineFromTwoPoints", 1);
+  ], Host22, "LineFromTwoPoints", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.num)
-  ], Host21, "LineFromPointSlope", 1);
+  ], Host22, "LineFromPointSlope", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
     inspectIt(function different_points(p1, p22) {
@@ -19992,11 +20008,11 @@
     inspectIt(function non_horizontal(p1, p22) {
       return p1[1] !== p22[1];
     })
-  ], Host21, "LineFromBisector", 1);
-  Host21 = __decorateClass([
+  ], Host22, "LineFromBisector", 1);
+  Host22 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host21);
+  ], Host22);
 
   // src/Math/Algebra/PolynomialClass.ts
   var MonomialCls = class {
@@ -20076,7 +20092,7 @@
   };
 
   // src/Math/Algebra/Polynomial.ts
-  var Host22 = class {
+  var Host23 = class {
     static Monomial(coeff, vars) {
       return new MonomialCls(coeff, vars);
     }
@@ -20135,35 +20151,35 @@
   };
   __decorateClass([
     checkIt(owl.num, owl.array)
-  ], Host22, "Monomial", 1);
+  ], Host23, "Monomial", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host22, "PolyClone", 1);
+  ], Host23, "PolyClone", 1);
   __decorateClass([
     checkIt(owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num)
-  ], Host22, "RndPolynomial", 1);
+  ], Host23, "RndPolynomial", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host22, "PolyPrint", 1);
+  ], Host23, "PolyPrint", 1);
   __decorateClass([
     checkIt(owl.polynomial, owl.bool)
-  ], Host22, "PolySort", 1);
+  ], Host23, "PolySort", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host22, "PolyFunction", 1);
+  ], Host23, "PolyFunction", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host22, "PolyJoin", 1);
+  ], Host23, "PolyJoin", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host22, "PolySimplify", 1);
+  ], Host23, "PolySimplify", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host22, "PolyDegree", 1);
-  Host22 = __decorateClass([
+  ], Host23, "PolyDegree", 1);
+  Host23 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host22);
+  ], Host23);
 
   // src/Math/should.ts
   var CustomErrorCls = class extends Error {

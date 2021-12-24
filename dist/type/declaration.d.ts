@@ -3122,6 +3122,20 @@ declare module "Math/Code/Trigonometry" {
         var CompassBearing: typeof Host.CompassBearing;
     }
 }
+declare module "Math/Code/Vector" {
+    export class Host {
+        /**
+         * sum of all vectors
+         * ```
+         * VecAdd([1,2],[3,4],[5,6]) // [9,12]
+         * ```
+         */
+        static VecAdd(...vectors: Point2D[]): Point2D;
+    }
+    global {
+        var VecAdd: typeof Host.VecAdd;
+    }
+}
 declare module "Math/Code/Vector3D.test" { }
 declare module "Math/Code/Vector3D" {
     export class Host {
