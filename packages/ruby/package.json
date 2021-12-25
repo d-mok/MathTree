@@ -2,22 +2,11 @@
   "name": "ruby",
   "version": "0.0.0",
   "description": "a math lib",
-  "main": "lib/index.js",
-  "types": "lib",
+  "main": "lib/src/index.js",
+  "types": "lib/src",
   "type": "module",
-  "files": [
-    "/lib"
-  ],
   "scripts": {
-    "jest": "jest ./src/math",
-    "build": "tsc -p tsconfig.prod.json"
-  },
-  "devDependencies": {
-    "@types/jest": "^27.0.1",
-    "jest": "^27.1.0",
-    "jest-extended": "^1.1.0",
-    "jest-matcher-deep-close-to": "^3.0.2",
-    "ts-jest": "^27.0.5",
-    "typescript": "^4.4.2"
+    "jest": "jest",
+    "build": "tsc"
   }
 }

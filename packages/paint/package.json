@@ -5,13 +5,7 @@
   "main": "lib/index.js",
   "types": "lib",
   "type": "module",
-  "files": [
-    "/lib"
-  ],
   "scripts": {
-    "build": "tsc -p tsconfig.prod.json"
-  },
-  "devDependencies": {
-    "typescript": "^4.4.2"
+    "build": "tsc"
   }
 }

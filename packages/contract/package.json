@@ -2,22 +2,11 @@
   "name": "contract",
   "version": "1.0.0",
   "description": "a library for function validation",
-  "main": "lib/index.js",
-  "types": "lib",
+  "main": "lib/src/index.js",
+  "types": "lib/src",
   "type": "module",
-  "files": [
-    "/lib"
-  ],
   "scripts": {
     "jest": "jest",
-    "build": "tsc -p tsconfig.prod.json"
-  },
-  "devDependencies": {
-    "@testdeck/jest": "^0.2.0",
-    "@types/jest": "^27.0.3",
-    "jest": "^27.4.3",
-    "jest-extended": "^1.2.0",
-    "ts-jest": "^27.0.5",
-    "typescript": "^4.5.2"
+    "build": "tsc"
   }
 }

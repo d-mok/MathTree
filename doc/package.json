@@ -1,0 +1,10 @@
+{
+  "name": "mathtree",
+  "version": "1.0.0",
+  "scripts": {
+    "typedoc": "typedoc"
+  },
+  "devDependencies": {
+    "typedoc": "^0.22.9"
+  }
+}
