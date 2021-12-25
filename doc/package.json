@@ -1,5 +1,5 @@
 {
-  "name": "mathtree",
+  "name": "docgen",
   "version": "1.0.0",
   "scripts": {
     "typedoc": "typedoc"

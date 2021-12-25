@@ -3,8 +3,8 @@ module.exports = {
     globals: {
         'ts-jest': { useESM: true },
     },
-    "setupFiles": ["../dist/edge/mathtree.js",],
-    // setupFiles: ["./src/index.ts",],
+    // "setupFiles": ["../dist/edge/mathtree.js",],
+    setupFiles: ["./src/index.ts",],
     setupFilesAfterEnv: ["jest-extended/all", "./src/Math/Jest/JestExtend.ts"],
     transform: {
         "^.+\\.(ts|tsx)$": "ts-jest"
