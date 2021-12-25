@@ -421,6 +421,7 @@ declare module "Math/index" {
     import './Code/Vector.ts';
     import './Code/Vector3D.ts';
     import './Algebra/Algebra.ts';
+    import './Algebra/Calculus.ts';
     import './Algebra/Circle.ts';
     import './Algebra/Quadratic.ts';
     import './Algebra/Linear.ts';

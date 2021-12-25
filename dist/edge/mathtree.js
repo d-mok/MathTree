@@ -15131,6 +15131,56 @@
     return new Linear();
   }
 
+  // ../packages/ruby/lib/src/math/calculus.js
+  function intrapolateBetween([A2, B2], x2) {
+    let [x1, y1] = A2;
+    let [x22, y2] = B2;
+    let r3 = (x2 - x1) / (x22 - x1);
+    return y1 + (y2 - y1) * r3;
+  }
+  function intrapolate(sortedPts, x2) {
+    let first = sortedPts[0];
+    let last = sortedPts.at(-1);
+    if (x2 < first[0])
+      return first[1];
+    if (x2 > last[0])
+      return last[1];
+    let j2 = sortedPts.findIndex(([X2, Y2]) => X2 > x2);
+    let i2 = j2 - 1;
+    return intrapolateBetween([sortedPts[i2], sortedPts[j2]], x2);
+  }
+  function functionize(sortedPts) {
+    return function(x2) {
+      return intrapolate(sortedPts, x2);
+    };
+  }
+  function differentiate(fn) {
+    return function(x2) {
+      let dx = 1e-6;
+      let dy = fn(x2 + dx) - fn(x2);
+      return dy / dx;
+    };
+  }
+  function integrate(fn, fixPoint = [0, 0]) {
+    let cache = [...fixPoint];
+    return function(x2) {
+      let dx = 1e-3;
+      let [x0, y0] = cache;
+      if (x2 === x0)
+        return y0;
+      let D2 = Math.abs(x2 - x0);
+      let N2 = Math.round(D2 / dx);
+      N2 = Math.max(N2, 10);
+      dx = (x2 - x0) / N2;
+      for (let i2 = 0; i2 < N2; i2++) {
+        let X2 = x0 + i2 * dx;
+        y0 += 0.5 * (fn(X2) + fn(X2 + dx)) * dx;
+      }
+      cache = [x2, y0];
+      return y0;
+    };
+  }
+
   // src/Core/Owl/index.ts
   var Owl_exports = {};
   __export(Owl_exports, {
@@ -18747,8 +18797,28 @@
     captureAll()
   ], Host19);
 
-  // src/Math/Algebra/Circle.ts
+  // src/Math/Algebra/Calculus.ts
   var Host20 = class {
+    static differentiate(fn) {
+      return differentiate(fn);
+    }
+    static integrate(fn, fixPoint = [0, 0]) {
+      return integrate(fn, fixPoint);
+    }
+    static functionize(points) {
+      return functionize(points);
+    }
+  };
+  __decorateClass([
+    checkIt(owl.point2Ds)
+  ], Host20, "functionize", 1);
+  Host20 = __decorateClass([
+    exposeAll(),
+    captureAll()
+  ], Host20);
+
+  // src/Math/Algebra/Circle.ts
+  var Host21 = class {
     static CircleGeneral(centre, radius) {
       let [h2, k2] = centre;
       let r3 = radius;
@@ -18799,23 +18869,23 @@
   };
   __decorateClass([
     checkIt(owl.point2D, owl.positive)
-  ], Host20, "CircleGeneral", 1);
+  ], Host21, "CircleGeneral", 1);
   __decorateClass([
     checkIt(owl.num)
-  ], Host20, "CircleFromGeneral", 1);
+  ], Host21, "CircleFromGeneral", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.positive, owl.triple)
-  ], Host20, "CircleLinearIntersect", 1);
+  ], Host21, "CircleLinearIntersect", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.positive, owl.point2Ds)
-  ], Host20, "CircleLineIntersect", 1);
-  Host20 = __decorateClass([
+  ], Host21, "CircleLineIntersect", 1);
+  Host21 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host20);
+  ], Host21);
 
   // src/Math/Algebra/Quadratic.ts
-  var Host21 = class {
+  var Host22 = class {
     static Discriminant(a2, b2, c3) {
       return b2 * b2 - 4 * a2 * c3;
     }
@@ -18842,29 +18912,29 @@
   };
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num)
-  ], Host21, "Discriminant", 1);
+  ], Host22, "Discriminant", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num),
     inspectIt(function has_real_root(a2, b2, c3) {
       return b2 ** 2 - 4 * a2 * c3 >= 0;
     })
-  ], Host21, "QuadraticRoot", 1);
+  ], Host22, "QuadraticRoot", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num)
-  ], Host21, "QuadraticVertex", 1);
+  ], Host22, "QuadraticVertex", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num)
-  ], Host21, "QuadraticFromRoot", 1);
+  ], Host22, "QuadraticFromRoot", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num)
-  ], Host21, "QuadraticFromVertex", 1);
-  Host21 = __decorateClass([
+  ], Host22, "QuadraticFromVertex", 1);
+  Host22 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host21);
+  ], Host22);
 
   // src/Math/Algebra/Linear.ts
-  var Host22 = class {
+  var Host23 = class {
     static LineFeat(a2, b2, c3) {
       let x2 = -c3 / a2;
       let y2 = -c3 / b2;
@@ -18898,28 +18968,28 @@
   };
   __decorateClass([
     checkIt(owl.nonZero, owl.nonZero, owl.num)
-  ], Host22, "LineFeat", 1);
+  ], Host23, "LineFeat", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.nonZero)
-  ], Host22, "LinearFromIntercepts", 1);
+  ], Host23, "LinearFromIntercepts", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
     inspectIt(function different_points(p1, p22) {
       return owl.distinct([p1, p22]);
     })
-  ], Host22, "LinearFromTwoPoints", 1);
+  ], Host23, "LinearFromTwoPoints", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.num)
-  ], Host22, "LinearFromPointSlope", 1);
+  ], Host23, "LinearFromPointSlope", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
     inspectIt(function different_points(p1, p22) {
       return owl.distinct([p1, p22]);
     })
-  ], Host22, "LinearFromBisector", 1);
+  ], Host23, "LinearFromBisector", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.nonZero)
-  ], Host22, "LineFromIntercepts", 1);
+  ], Host23, "LineFromIntercepts", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
     inspectIt(function different_points(p1, p22) {
@@ -18928,10 +18998,10 @@
     inspectIt(function non_vertical(p1, p22) {
       return p1[0] !== p22[0];
     })
-  ], Host22, "LineFromTwoPoints", 1);
+  ], Host23, "LineFromTwoPoints", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.num)
-  ], Host22, "LineFromPointSlope", 1);
+  ], Host23, "LineFromPointSlope", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
     inspectIt(function different_points(p1, p22) {
@@ -18940,11 +19010,11 @@
     inspectIt(function non_horizontal(p1, p22) {
       return p1[1] !== p22[1];
     })
-  ], Host22, "LineFromBisector", 1);
-  Host22 = __decorateClass([
+  ], Host23, "LineFromBisector", 1);
+  Host23 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host22);
+  ], Host23);
 
   // src/Math/Algebra/PolynomialClass.ts
   var MonomialCls = class {
@@ -19024,7 +19094,7 @@
   };
 
   // src/Math/Algebra/Polynomial.ts
-  var Host23 = class {
+  var Host24 = class {
     static Monomial(coeff, vars) {
       return new MonomialCls(coeff, vars);
     }
@@ -19083,35 +19153,35 @@
   };
   __decorateClass([
     checkIt(owl.num, owl.array)
-  ], Host23, "Monomial", 1);
+  ], Host24, "Monomial", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host23, "PolyClone", 1);
+  ], Host24, "PolyClone", 1);
   __decorateClass([
     checkIt(owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num)
-  ], Host23, "RndPolynomial", 1);
+  ], Host24, "RndPolynomial", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host23, "PolyPrint", 1);
+  ], Host24, "PolyPrint", 1);
   __decorateClass([
     checkIt(owl.polynomial, owl.bool)
-  ], Host23, "PolySort", 1);
+  ], Host24, "PolySort", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host23, "PolyFunction", 1);
+  ], Host24, "PolyFunction", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host23, "PolyJoin", 1);
+  ], Host24, "PolyJoin", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host23, "PolySimplify", 1);
+  ], Host24, "PolySimplify", 1);
   __decorateClass([
     checkIt(owl.polynomial)
-  ], Host23, "PolyDegree", 1);
-  Host23 = __decorateClass([
+  ], Host24, "PolyDegree", 1);
+  Host24 = __decorateClass([
     exposeAll(),
     captureAll()
-  ], Host23);
+  ], Host24);
 
   // src/Math/should.ts
   var CustomErrorCls = class extends Error {
@@ -24290,7 +24360,7 @@
       throw detectVarErr(e6);
     }
   }
-  function intrapolate(html, dict2) {
+  function intrapolate2(html, dict2) {
     function intra(signal, prefix) {
       html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code2) => {
         let result2 = evalInline(code2, dict2);
@@ -24780,8 +24850,8 @@
       throw CustomError("OptionError", "No valid option generated after 100 trials");
     }
     runIntrapolate() {
-      this.qn = intrapolate(this.qn, this.dict);
-      this.sol = intrapolate(this.sol, this.dict);
+      this.qn = intrapolate2(this.qn, this.dict);
+      this.sol = intrapolate2(this.sol, this.dict);
       return true;
     }
     runSubstitute() {
