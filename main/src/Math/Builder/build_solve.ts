@@ -7,11 +7,13 @@ export function BuildSolve(
     {
         listSym = false,
         avoids = [],
-        sigfig = {}
+        sigfig = {},
+        solFormat = 'series'
     }: {
         listSym?: boolean
         avoids?: string[][]
         sigfig?: { [_: string]: number }
+        solFormat?: 'series' | 'parallel'
     } = {}
 ): {
     list: string
@@ -24,7 +26,7 @@ export function BuildSolve(
 
     for (let i = 0; i <= 10; i++) {
         try {
-            return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig })
+            return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig, solFormat })
         } catch (e) {
             if (i === 10) {
                 throw e

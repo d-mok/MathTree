@@ -328,12 +328,13 @@ declare module "Math/Builder/support/support" {
     export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
 }
 declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig }?: {
+    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig, solFormat }?: {
         listSym?: boolean;
         avoids?: string[][];
         sigfig?: {
             [_: string]: number;
         };
+        solFormat?: 'series' | 'parallel';
     }): {
         list: string;
         sol: string;

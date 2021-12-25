@@ -20092,11 +20092,12 @@
   function BuildSolve(variables, equations, {
     listSym = false,
     avoids = [],
-    sigfig: sigfig2 = {}
+    sigfig: sigfig2 = {},
+    solFormat = "series"
   } = {}) {
     for (let i2 = 0; i2 <= 10; i2++) {
       try {
-        return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig: sigfig2 });
+        return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig: sigfig2, solFormat });
       } catch (e6) {
         if (i2 === 10) {
           throw e6;
