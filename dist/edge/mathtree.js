@@ -20110,7 +20110,8 @@
   function BuildSolveOnce(variables, equations, {
     listSym = false,
     avoids = [],
-    sigfig: sigfig2 = {}
+    sigfig: sigfig2 = {},
+    solFormat = "series"
   } = {}) {
     let system = toEquSystem(variables, equations);
     system.fit();
@@ -20126,11 +20127,15 @@
           unknown.full()
         ]);
       } else {
-        let T2 = "";
-        T2 += system.print() + " \\\\~\\\\ ";
-        T2 += system.print(givens) + " \\\\~\\\\ ";
-        T2 += latexBraced(hiddens.map(($) => $.full()));
-        return T2;
+        if (solFormat === "series") {
+          return system.solInSteps(unknown);
+        } else {
+          let T2 = "";
+          T2 += system.print() + " \\\\~\\\\ ";
+          T2 += system.print(givens) + " \\\\~\\\\ ";
+          T2 += latexBraced(hiddens.map(($) => $.full()));
+          return T2;
+        }
       }
     }
     return {

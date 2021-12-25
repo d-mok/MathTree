@@ -44,11 +44,13 @@ function BuildSolveOnce(
     {
         listSym = false,
         avoids = [],
-        sigfig = {}
+        sigfig = {},
+        solFormat = 'series'
     }: {
         listSym?: boolean
         avoids?: string[][]
         sigfig?: { [_: string]: number }
+        solFormat?: 'series' | 'parallel'
     } = {}
 ): {
     list: string
@@ -75,13 +77,17 @@ function BuildSolveOnce(
                 unknown.full()
             ])
         } else {
-            let T = ""
-            T += system.print() + " \\\\~\\\\ "
-            T += system.print(givens) + " \\\\~\\\\ "
-            // let hds = [...hiddens]
-            // hds.sort((a, b) => a.order - b.order)
-            T += latexBraced(hiddens.map($ => $.full()))
-            return T
+            if (solFormat === 'series') {
+                return system.solInSteps(unknown)
+            } else {
+                let T = ""
+                T += system.print() + " \\\\~\\\\ "
+                T += system.print(givens) + " \\\\~\\\\ "
+                // let hds = [...hiddens]
+                // hds.sort((a, b) => a.order - b.order)
+                T += latexBraced(hiddens.map($ => $.full()))
+                return T
+            }
         }
     }
 
