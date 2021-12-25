@@ -67,6 +67,10 @@ export class Canvas07 extends Canvas06 {
         let B = this.edgeRight(y);
         this.line([A, B]);
     }
+    rod(anchor, dir) {
+        let edge = this.edgePoint(anchor, dir);
+        this.line([anchor, edge]);
+    }
     solid(pts) {
         this.createPath(pts);
         this.doSolid();
@@ -143,6 +147,9 @@ export class Canvas07 extends Canvas06 {
         for (let i = 0; i < count; i++) {
             this.arrowHead(start, M, size, i * space);
         }
+    }
+    midArrowHead(start, end, size) {
+        this.parallel(start, end, size, 1, 0);
     }
     tick(start, end, length, offset) {
         this.save();

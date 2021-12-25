@@ -63,9 +63,9 @@ export declare function dp(num: number): number;
  * ```
  */
 export declare function round(num: number, sigfig?: number): {
-    off: () => any;
-    up: () => any;
-    down: () => any;
+    off: () => number;
+    up: () => number;
+    down: () => number;
 };
 /**
  * Return `num` rounded to `dp`.
@@ -80,9 +80,9 @@ export declare function round(num: number, sigfig?: number): {
  * ```
  */
 export declare function fix(num: number, dp?: number): {
-    off: () => any;
-    up: () => any;
-    down: () => any;
+    off: () => number;
+    up: () => number;
+    down: () => number;
 };
 /**
  * Return the exponent part of `num`.

@@ -122,7 +122,8 @@ export class Canvas05 extends Canvas04 {
 
     private labelOffset(text: string, radius: px, dir: number): dot {
         let textWidth = this.textSemi(text)
-        let x = (radius + textWidth - 5) * cos(dir)
+        let extraX = this.$TEXT_ALIGN === 'center' ? (textWidth - 4) : 0
+        let x = (radius + extraX) * cos(dir)
         let y = radius * sin(dir)
         return [x, y]
     }

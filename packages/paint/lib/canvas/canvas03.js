@@ -28,6 +28,8 @@ export class Canvas03 extends Canvas02 {
         this.$LENGTH_UNIT = '';
         this.$BORDER = 0.2;
         this.$LINE_LABEL = 'auto';
+        this.$HALF_AXIS_X = false;
+        this.$HALF_AXIS_Y = false;
         this._$LABEL_CENTER = this.center();
         // setting meta
         this.states = [];
@@ -127,7 +129,9 @@ export class Canvas03 extends Canvas02 {
             $ANGLE_MODE: this.$ANGLE_MODE,
             $LENGTH_UNIT: this.$LENGTH_UNIT,
             $BORDER: this.$BORDER,
-            $LINE_LABEL: this.$LINE_LABEL
+            $LINE_LABEL: this.$LINE_LABEL,
+            $HALF_AXIS_X: this.$HALF_AXIS_X,
+            $HALF_AXIS_Y: this.$HALF_AXIS_Y
         });
     }
     restore() {
@@ -144,6 +148,8 @@ export class Canvas03 extends Canvas02 {
         this.$LENGTH_UNIT = state.$LENGTH_UNIT;
         this.$BORDER = state.$BORDER;
         this.$LINE_LABEL = state.$LINE_LABEL;
+        this.$HALF_AXIS_X = state.$HALF_AXIS_X;
+        this.$HALF_AXIS_Y = state.$HALF_AXIS_Y;
     }
 }
 function mid(Points) {

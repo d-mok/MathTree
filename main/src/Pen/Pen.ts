@@ -1,4 +1,4 @@
-import { capturable, Convas } from 'paint'
+import { Convas } from 'paint'
 import { PenRange } from './modules/range'
 import { PenSize } from './modules/size'
 import { PenSettings } from './modules/settings'
@@ -368,8 +368,31 @@ export class PenCls {
     }
 
 
+    /**
+     * Draw a ray from A to B.
+     * ```
+     * pen.ray([0,0],[1,1])
+     * ```
+     * @category draw
+     */
+    ray(A: Point2D, B: Point2D) {
+        this.cv.line([A, B])
+        this.cv.midArrowHead(A, B, 5)
+    }
 
 
+    /**
+     * Draw an endless ray from A in the direction.
+     * ```
+     * pen.rayTo([0,0], 45)
+     * ```
+     * @category draw
+     */
+    rayTo(A: Point2D, dir: number) {
+        let edgePoint = this.cv.edgePoint(A, dir)
+        this.cv.line([A, edgePoint])
+        this.cv.midArrowHead(A, edgePoint, 5)
+    }
 
 
     /**
@@ -519,7 +542,7 @@ export class PenCls {
      * @category decorator
      */
     parallel(A: Point, B: Point, tick = 1) {
-        this.cv.parallel(A, B, 4, tick, 6)
+        this.cv.parallel(A, B, 5, tick, 6)
     }
 
 

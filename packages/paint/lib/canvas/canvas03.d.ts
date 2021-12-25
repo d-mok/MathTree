@@ -38,6 +38,8 @@ export declare class Canvas03 extends Canvas02 {
     $LENGTH_UNIT: string;
     $BORDER: inch;
     $LINE_LABEL: LineLabel;
+    $HALF_AXIS_X: boolean;
+    $HALF_AXIS_Y: boolean;
     private _$LABEL_CENTER;
     set $LABEL_CENTER(centers: Point[]);
     get $LABEL_CENTER(): [Point2D];

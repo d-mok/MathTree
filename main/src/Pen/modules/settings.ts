@@ -49,6 +49,7 @@ export class PenSettings {
     dash(segments: (number[] | number | boolean) = []): void {
         this.cv.$DASH = segments
     }
+
     /**
      * Set the horizontal alignment of text.
      * ```
@@ -58,6 +59,7 @@ export class PenSettings {
     textAlign(align: CanvasTextAlign = "center"): void {
         this.cv.$TEXT_ALIGN = align
     }
+
     /**
      * Set the vertical alignment of text.
      * ```
@@ -152,7 +154,7 @@ export class PenSettings {
     }
 
     /**
-     * Ser the border inch when auto creating outer border.
+     * Set the border inch when auto creating outer border.
      * ```
      * pen.set.border(0.2) // 0.2 inch
      * ```
@@ -162,7 +164,7 @@ export class PenSettings {
     }
 
     /**
-     * Ser the mode for direction of line label.
+     * Set the mode for direction of line label.
      * ```
      * pen.set.lineLabel('auto') // {'auto', 'left', 'right'}
      * ```
@@ -170,6 +172,32 @@ export class PenSettings {
     lineLabel(setting: 'auto' | 'left' | 'right' = 'auto'): void {
         this.cv.$LINE_LABEL = setting
     }
+
+
+
+    /**
+     * Use positive x-axis only.
+     * ```
+     * pen.set.halfAxisX(true) // use half
+     * ```
+     */
+    halfAxisX(half: boolean = false): void {
+        this.cv.$HALF_AXIS_X = half
+    }
+
+
+
+    /**
+     * Use positive y-axis only.
+     * ```
+     * pen.set.halfAxisY(true) // use half
+     * ```
+     */
+    halfAxisY(half: boolean = false): void {
+        this.cv.$HALF_AXIS_Y = half
+    }
+
+
 
 
     /**
@@ -190,6 +218,8 @@ export class PenSettings {
         this.lengthUnit()
         this.angle()
         this.lineLabel()
+        this.halfAxisX()
+        this.halfAxisY()
     }
 
     /**

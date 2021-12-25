@@ -1,5 +1,6 @@
-import Decimal from './dec';
+// import Decimal from './dec'
 import { convergent } from './frac';
+import { adjustToDP, adjustToSF } from './round';
 /**
  * The number of significant digits used in {@link blur}.
  */
@@ -53,9 +54,9 @@ export function eq(a, b) {
  * ```
  */
 export function sigfig(num) {
-    // let mant = Math.abs(num).toExponential().split('e')[0]
-    // return mant.replace('.', '').length
-    return (new Decimal(num)).precision(false);
+    let mant = Math.abs(num).toExponential().split('e')[0];
+    return mant.replace('.', '').length;
+    // return (new Decimal(num)).precision(false)
 }
 ;
 /**
@@ -68,7 +69,12 @@ export function sigfig(num) {
  * ```
  */
 export function dp(num) {
-    return (new Decimal(num)).decimalPlaces();
+    if (Number.isInteger(num))
+        return 0;
+    let sf = sigfig(num);
+    let exp = e(num);
+    return sf - 1 - exp;
+    // return (new Decimal(num)).decimalPlaces()
 }
 ;
 /**
@@ -84,16 +90,21 @@ export function dp(num) {
  * ```
  */
 export function round(num, sigfig = 3) {
-    function exec(mode) {
-        return (new Decimal(num))
-            .toSignificantDigits(sigfig, mode)
-            .toNumber();
-    }
     return {
-        off: () => exec(Decimal.ROUND_HALF_UP),
-        up: () => exec(Decimal.ROUND_UP),
-        down: () => exec(Decimal.ROUND_DOWN),
+        off: () => adjustToSF(num, sigfig, 'off'),
+        up: () => adjustToSF(num, sigfig, 'up'),
+        down: () => adjustToSF(num, sigfig, 'down')
     };
+    // function exec(mode: number) {
+    //     return (new Decimal(num))
+    //         .toSignificantDigits(sigfig, mode)
+    //         .toNumber()
+    // }
+    // return {
+    //     off: () => exec(Decimal.ROUND_HALF_UP),
+    //     up: () => exec(Decimal.ROUND_UP),
+    //     down: () => exec(Decimal.ROUND_DOWN),
+    // }
 }
 /**
  * Return `num` rounded to `dp`.
@@ -108,16 +119,24 @@ export function round(num, sigfig = 3) {
  * ```
  */
 export function fix(num, dp = 0) {
-    function exec(mode) {
-        return (new Decimal(num))
-            .toNearest(Number('1e' + String(-dp)), mode)
-            .toNumber();
-    }
     return {
-        off: () => exec(Decimal.ROUND_HALF_UP),
-        up: () => exec(Decimal.ROUND_UP),
-        down: () => exec(Decimal.ROUND_DOWN),
+        off: () => adjustToDP(num, dp, 'off'),
+        up: () => adjustToDP(num, dp, 'up'),
+        down: () => adjustToDP(num, dp, 'down')
     };
+    // function exec(mode: number) {
+    //     if (mode === Decimal.ROUND_HALF_UP) {
+    //         return Number(Math.round(Number(num + 'e' + dp)) + 'e' + (-dp))
+    //     }
+    //     return (new Decimal(num))
+    //         .toNearest(Number('1e' + String(-dp)), mode)
+    //         .toNumber()
+    // }
+    // return {
+    //     off: () => exec(Decimal.ROUND_HALF_UP),
+    //     up: () => exec(Decimal.ROUND_UP),
+    //     down: () => exec(Decimal.ROUND_DOWN),
+    // }
 }
 /**
  * Return the exponent part of `num`.

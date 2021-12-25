@@ -6,6 +6,15 @@ function toPixelX(xmin, xmax, width, xCoord) {
 function toPixelY(ymin, ymax, height, yCoord) {
     return height - (yCoord - ymin) / (ymax - ymin) * height;
 }
+function sin(degree) {
+    return Math.sin(degree / 180 * Math.PI);
+}
+function cos(degree) {
+    return Math.cos(degree / 180 * Math.PI);
+}
+function tan(degree) {
+    return Math.tan(degree / 180 * Math.PI);
+}
 /**
  * Handle:
  * - 2D coordinate definition
@@ -45,6 +54,60 @@ export class Canvas01 extends Canvas00 {
     }
     edgeRight(y = 0) {
         return [this.xmax, y];
+    }
+    origin() {
+        return [0, 0];
+    }
+    // check in sight
+    isXVisible([x, y], buffer = 0) {
+        let X = this.dx() * buffer;
+        return this.xmin - X <= x && x <= this.xmax + X;
+    }
+    isYVisible([x, y], buffer = 0) {
+        let Y = this.dy() * buffer;
+        return this.ymin - Y <= y && y <= this.ymax + Y;
+    }
+    isVisible(point, buffer = 0) {
+        return this.isXVisible(point, buffer) && this.isYVisible(point, buffer);
+    }
+    // find edge point
+    toTopEdge([x, y], dir) {
+        let Dy = this.ymax - y;
+        let Dx = Dy / tan(dir);
+        return [x + Dx, this.ymax];
+    }
+    toBottomEdge([x, y], dir) {
+        let Dy = this.ymin - y;
+        let Dx = Dy / tan(dir);
+        return [x + Dx, this.ymin];
+    }
+    toRightEdge([x, y], dir) {
+        let Dx = this.xmax - x;
+        let Dy = Dx * tan(dir);
+        return [this.xmax, y + Dy];
+    }
+    toLeftEdge([x, y], dir) {
+        let Dx = this.xmin - x;
+        let Dy = Dx * tan(dir);
+        return [this.xmin, y + Dy];
+    }
+    edgePoint(anchor, dir) {
+        if (!this.isVisible(anchor))
+            return anchor;
+        let [x, y] = anchor;
+        let arr = [
+            this.toTopEdge(anchor, dir),
+            this.toBottomEdge(anchor, dir),
+            this.toRightEdge(anchor, dir),
+            this.toLeftEdge(anchor, dir)
+        ];
+        arr = arr
+            .filter($ => this.isVisible($))
+            .filter(([X, Y]) => (X - x) * cos(dir) >= 0)
+            .filter(([X, Y]) => (Y - y) * sin(dir) >= 0);
+        if (arr.length !== 1)
+            console.error('edgePoint not unique! from:' + anchor + ' to:' + arr);
+        return arr[0];
     }
     // capture
     capturePoints2D(pts) {

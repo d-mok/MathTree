@@ -3433,19 +3433,33 @@ declare module "Pen/modules/settings" {
          */
         projector3D(angle?: number, depth?: number): void;
         /**
-         * Ser the border inch when auto creating outer border.
+         * Set the border inch when auto creating outer border.
          * ```
          * pen.set.border(0.2) // 0.2 inch
          * ```
          */
         border(border?: number): void;
         /**
-         * Ser the mode for direction of line label.
+         * Set the mode for direction of line label.
          * ```
          * pen.set.lineLabel('auto') // {'auto', 'left', 'right'}
          * ```
          */
         lineLabel(setting?: 'auto' | 'left' | 'right'): void;
+        /**
+         * Use positive x-axis only.
+         * ```
+         * pen.set.halfAxisX(true) // use half
+         * ```
+         */
+        halfAxisX(half?: boolean): void;
+        /**
+         * Use positive y-axis only.
+         * ```
+         * pen.set.halfAxisY(true) // use half
+         * ```
+         */
+        halfAxisY(half?: boolean): void;
         /**
          * Reset all pen settings.
          */
@@ -4245,6 +4259,22 @@ declare module "Pen/Pen" {
          * @category draw
          */
         height(V: Point2D, [A, B]: [Point2D, Point2D], label?: string | number): void;
+        /**
+         * Draw a ray from A to B.
+         * ```
+         * pen.ray([0,0],[1,1])
+         * ```
+         * @category draw
+         */
+        ray(A: Point2D, B: Point2D): void;
+        /**
+         * Draw an endless ray from A in the direction.
+         * ```
+         * pen.rayTo([0,0], 45)
+         * ```
+         * @category draw
+         */
+        rayTo(A: Point2D, dir: number): void;
         /**
          * Draw a polyline given points.
          * ```

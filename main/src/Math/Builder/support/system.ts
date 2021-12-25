@@ -45,13 +45,15 @@ export class EquSystem {
             let info = readTree(tree)
             for (let top of RndShuffle(...info.tops)) {
                 let flow = solutionFlow(this.fs, tree, [top])
-                if (flow.length === this.fs.length && this.checkAvoids(info.givens, top, avoids))
+                if (flow.length === this.fs.length && this.checkAvoids(info.givens, top, avoids)) {
                     this.tree = tree // save the tree!
-                return {
-                    tree,
-                    top: this.getVariables([top])[0],
-                    info
+                    return {
+                        tree,
+                        top: this.getVariables([top])[0],
+                        info
+                    }
                 }
+
             }
         }
         throw 'no sensible set of solvables found!'
@@ -81,19 +83,24 @@ export class EquSystem {
 
     solInSteps(unknown: Variable): string {
         // use the tree stored in this
-        let fs = solutionFlow(this.fs, this.tree, [unknown.sym])
-        let eqs = fs.map($ => this.equations.find(_ => _.zeroFunc === $)!)
-        let info = readTree(this.tree)
-        let givens = info.givens.map($ => this.variables.find(_ => _.sym === $)!)
-        let T = ''
-        for (let eq of eqs) {
-            let solved = solvingSymbol(eq.zeroFunc, this.tree)!
-            let solvedVar = this.variables.find($ => $.sym === solved)!
-            T += latexAligned([eq.print(), eq.print(givens), solvedVar.full()])
-            T += " \\\\~\\\\ "
-            givens.push(solvedVar)
+        try {
+            let fs = solutionFlow(this.fs, this.tree, [unknown.sym])
+            let eqs = fs.map($ => this.equations.find(_ => _.zeroFunc === $)!)
+            let info = readTree(this.tree)
+            let givens = info.givens.map($ => this.variables.find(_ => _.sym === $)!)
+            let T = ''
+            for (let eq of eqs) {
+                let solved = solvingSymbol(eq.zeroFunc, this.tree)!
+                let solvedVar = this.variables.find($ => $.sym === solved)!
+                T += latexAligned([eq.print(), eq.print(givens), solvedVar.full()])
+                T += " \\\\~\\\\ "
+                givens.push(solvedVar)
+            }
+            return T
+        } catch (e) {
+            console.warn(e)
+            throw e
         }
-        return T
     }
 
 

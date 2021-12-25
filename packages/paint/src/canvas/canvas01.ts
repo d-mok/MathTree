@@ -14,6 +14,21 @@ function toPixelY(ymin: number, ymax: number, height: px, yCoord: number): px {
 
 
 
+function sin(degree: number): number {
+    return Math.sin(degree / 180 * Math.PI)
+}
+
+
+function cos(degree: number): number {
+    return Math.cos(degree / 180 * Math.PI)
+}
+
+
+
+function tan(degree: number): number {
+    return Math.tan(degree / 180 * Math.PI)
+}
+
 /**
  * Handle:
  * - 2D coordinate definition
@@ -62,6 +77,73 @@ export class Canvas01 extends Canvas00 {
         return [this.xmax, y]
     }
 
+    public origin(): Point2D {
+        return [0, 0]
+    }
+
+    // check in sight
+
+    private isXVisible([x, y]: Point2D, buffer = 0): boolean {
+        let X = this.dx() * buffer
+        return this.xmin - X <= x && x <= this.xmax + X
+    }
+
+    private isYVisible([x, y]: Point2D, buffer = 0): boolean {
+        let Y = this.dy() * buffer
+        return this.ymin - Y <= y && y <= this.ymax + Y
+    }
+
+    public isVisible(point: Point2D, buffer = 0): boolean {
+        return this.isXVisible(point, buffer) && this.isYVisible(point, buffer)
+    }
+
+    // find edge point
+
+    private toTopEdge([x, y]: Point2D, dir: number): Point2D {
+        let Dy = this.ymax - y
+        let Dx = Dy / tan(dir)
+        return [x + Dx, this.ymax]
+    }
+
+
+    private toBottomEdge([x, y]: Point2D, dir: number): Point2D {
+        let Dy = this.ymin - y
+        let Dx = Dy / tan(dir)
+        return [x + Dx, this.ymin]
+    }
+
+
+    private toRightEdge([x, y]: Point2D, dir: number): Point2D {
+        let Dx = this.xmax - x
+        let Dy = Dx * tan(dir)
+        return [this.xmax, y + Dy]
+    }
+
+
+    private toLeftEdge([x, y]: Point2D, dir: number): Point2D {
+        let Dx = this.xmin - x
+        let Dy = Dx * tan(dir)
+        return [this.xmin, y + Dy]
+    }
+
+
+    public edgePoint(anchor: Point2D, dir: number): Point2D {
+        if (!this.isVisible(anchor)) return anchor
+        let [x, y] = anchor
+        let arr = [
+            this.toTopEdge(anchor, dir),
+            this.toBottomEdge(anchor, dir),
+            this.toRightEdge(anchor, dir),
+            this.toLeftEdge(anchor, dir)
+        ]
+        arr = arr
+            .filter($ => this.isVisible($))
+            .filter(([X, Y]) => (X - x) * cos(dir) >= 0)
+            .filter(([X, Y]) => (Y - y) * sin(dir) >= 0)
+        if (arr.length !== 1)
+            console.error('edgePoint not unique! from:' + anchor + ' to:' + arr)
+        return arr[0]
+    }
 
     // capture
 
@@ -110,7 +192,7 @@ export class Canvas01 extends Canvas00 {
         this.ymax = ymax
     }
 
-    
+
 
     // border
 

@@ -20,17 +20,17 @@ export class Canvas09 extends Canvas08 {
         dots = 1000
     ): void {
         let points = trace(func, [tStart, tEnd], dots)
-        let { xmin, xmax, ymin, ymax } = this
-        let X = xmax - xmin
-        let Y = ymax - ymin
+        // let { xmin, xmax, ymin, ymax } = this
+        // let X = xmax - xmin
+        // let Y = ymax - ymin
 
-        function outOfRange([x, y]: Point2D): boolean {
-            return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y
-        }
+        // function outOfRange([x, y]: Point2D): boolean {
+        //     return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y
+        // }
 
-        function isIll(p: Point2D): boolean {
+        let isIll = (p: Point2D): boolean => {
             let [x, y] = p
-            return !Number.isFinite(x) || !Number.isFinite(y) || outOfRange(p)
+            return !Number.isFinite(x) || !Number.isFinite(y) || !this.isVisible(p, 1)
         }
 
         let filteredPoints = points.map(p => isIll(p) ? null : p)

@@ -1,4 +1,4 @@
-import { px, Point } from '../global';
+import { px, Point2D, Point } from '../global';
 import { Canvas06 } from "./canvas06";
 /**
  * Handle:
@@ -10,6 +10,7 @@ export declare class Canvas07 extends Canvas06 {
     line(pts: Point[]): void;
     lineVert(x: number): void;
     lineHori(y: number): void;
+    rod(anchor: Point2D, dir: number): void;
     solid(pts: Point[]): void;
     dash(pts: Point[]): void;
     shape(pts: Point[]): void;
@@ -26,6 +27,7 @@ export declare class Canvas07 extends Canvas06 {
     angle(A: Point, O: Point, B: Point, radius: px, count: number, space: px): void;
     rightAngle(A: Point, O: Point, B: Point, size: px): void;
     parallel(start: Point, end: Point, size: px, count: number, space: px): void;
+    midArrowHead(start: Point, end: Point, size: px): void;
     tick(start: Point, end: Point, length: px, offset: px): void;
     tickVert(pt: Point, length: px): void;
     tickHori(pt: Point, length: px): void;

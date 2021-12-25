@@ -8,16 +8,16 @@ import { sectoroid } from '../support/sectoroid';
 export class Canvas09 extends Canvas08 {
     plot(func, tStart = this.xmin, tEnd = this.xmax, dots = 1000) {
         let points = trace(func, [tStart, tEnd], dots);
-        let { xmin, xmax, ymin, ymax } = this;
-        let X = xmax - xmin;
-        let Y = ymax - ymin;
-        function outOfRange([x, y]) {
-            return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y;
-        }
-        function isIll(p) {
+        // let { xmin, xmax, ymin, ymax } = this
+        // let X = xmax - xmin
+        // let Y = ymax - ymin
+        // function outOfRange([x, y]: Point2D): boolean {
+        //     return x > xmax + X || x < xmin - X || y > ymax + Y || y < ymin - Y
+        // }
+        let isIll = (p) => {
             let [x, y] = p;
-            return !Number.isFinite(x) || !Number.isFinite(y) || outOfRange(p);
-        }
+            return !Number.isFinite(x) || !Number.isFinite(y) || !this.isVisible(p, 1);
+        };
         let filteredPoints = points.map(p => isIll(p) ? null : p);
         let segments = splitNull(filteredPoints);
         for (let seg of segments)

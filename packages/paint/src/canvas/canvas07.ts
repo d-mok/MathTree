@@ -86,6 +86,11 @@ export class Canvas07 extends Canvas06 {
         this.line([A, B])
     }
 
+    // rod(anchor: Point2D, dir: number) {
+    //     let edge = this.edgePoint(anchor, dir)
+    //     this.line([anchor, edge])
+    // }
+
     solid(pts: Point[]) {
         this.createPath(pts)
         this.doSolid()
@@ -189,6 +194,10 @@ export class Canvas07 extends Canvas06 {
         for (let i = 0; i < count; i++) {
             this.arrowHead(start, M, size, i * space)
         }
+    }
+
+    midArrowHead(start: Point, end: Point, size: px) {
+        this.parallel(start, end, size, 1, 0)
     }
 
 

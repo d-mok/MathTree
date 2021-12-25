@@ -1,5 +1,5 @@
 import { Canvas07 } from "./canvas07";
-const LABEL_OFFSET_PX = 15;
+const LABEL_OFFSET_PX = 20;
 const X_MARK_OFFSET_PX = 15;
 const Y_MARK_OFFSET_PX = 10;
 const TICK_LENGTH_PX = 5;
@@ -15,7 +15,9 @@ function getTicks(min, max, interval) {
     const arr = [];
     for (let i = start; i <= max; i += interval) {
         i = parseFloat(i.toPrecision(3));
-        if (i === min || i === max)
+        if (i === min)
+            continue;
+        if (i === max)
             continue;
         if (i === 0)
             continue;
@@ -28,13 +30,19 @@ function getTicks(min, max, interval) {
  * - Axis
  */
 export class Canvas08 extends Canvas07 {
+    bottomEnd(x) {
+        return this.$HALF_AXIS_Y ? [x, 0] : this.edgeBottom(x);
+    }
+    leftEnd(y) {
+        return this.$HALF_AXIS_X ? [0, y] : this.edgeLeft(y);
+    }
     xAxis() {
-        let A = this.edgeLeft(0);
+        let A = this.leftEnd(0);
         let B = this.edgeRight(0);
         this.arrow(A, B, 5);
     }
     yAxis() {
-        let A = this.edgeBottom(0);
+        let A = this.bottomEnd(0);
         let B = this.edgeTop(0);
         this.arrow(A, B, 5);
     }
@@ -42,21 +50,27 @@ export class Canvas08 extends Canvas07 {
         this.save();
         this.$TEXT_ALIGN = "right";
         this.$TEXT_BASELINE = "middle";
-        this.label(text, this.edgeRight(0), LABEL_OFFSET_PX, 90);
+        this.label(text, this.edgeRight(0), LABEL_OFFSET_PX, 120);
         this.restore();
     }
     yAxisLabel(text) {
         this.save();
         this.$TEXT_ALIGN = "left";
         this.$TEXT_BASELINE = "top";
-        this.label(text, this.edgeTop(0), LABEL_OFFSET_PX, 0);
+        this.label(text, this.edgeTop(0), LABEL_OFFSET_PX, -30);
         this.restore();
     }
     xTicks(interval) {
-        return getTicks(this.xmin, this.xmax, interval);
+        let min = this.$HALF_AXIS_X
+            ? Math.max(0, this.xmin)
+            : this.xmin;
+        return getTicks(min, this.xmax, interval);
     }
     yTicks(interval) {
-        return getTicks(this.ymin, this.ymax, interval);
+        let min = this.$HALF_AXIS_Y
+            ? Math.max(0, this.ymin)
+            : this.ymin;
+        return getTicks(min, this.ymax, interval);
     }
     xAxisTick(interval) {
         for (let x of this.xTicks(interval)) {
@@ -88,21 +102,31 @@ export class Canvas08 extends Canvas07 {
         }
         this.restore();
     }
+    gridLineVert(x) {
+        let A = this.bottomEnd(x);
+        let B = this.edgeTop(x);
+        this.line([A, B]);
+    }
+    gridLineHori(y) {
+        let A = this.leftEnd(y);
+        let B = this.edgeRight(y);
+        this.line([A, B]);
+    }
     xAxisGrid(interval) {
         this.save();
         this.$COLOR = "#d3d5db";
-        this.lineVert(0);
+        this.gridLineVert(0);
         for (let x of this.xTicks(interval)) {
-            this.lineVert(x);
+            this.gridLineVert(x);
         }
         this.restore();
     }
     yAxisGrid(interval) {
         this.save();
         this.$COLOR = "#d3d5db";
-        this.lineHori(0);
+        this.gridLineHori(0);
         for (let y of this.yTicks(interval)) {
-            this.lineHori(y);
+            this.gridLineHori(y);
         }
         this.restore();
     }
