@@ -21,7 +21,7 @@ export class Host {
      * integrate(x=>2*x, [0,3]) // x=>x**2+3
      * ```
      */
-    static integrate(fn: (x: number) => number, fixPoint = [0, 0]): (x: number) => number {
+    static integrate(fn: (x: number) => number, fixPoint: Point2D = [0, 0]): (x: number) => number {
         return integrate(fn, fixPoint)
     }
 

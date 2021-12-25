@@ -539,7 +539,7 @@ declare module "Math/Algebra/Calculus" {
          * integrate(x=>2*x, [0,3]) // x=>x**2+3
          * ```
          */
-        static integrate(fn: (x: number) => number, fixPoint?: number[]): (x: number) => number;
+        static integrate(fn: (x: number) => number, fixPoint?: Point2D): (x: number) => number;
         /**
          * Make a function passing through the points.
          * The points must be sorted in increasing x.
