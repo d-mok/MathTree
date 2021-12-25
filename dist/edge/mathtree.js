@@ -15131,6 +15131,34 @@
     return new Linear();
   }
 
+  // ../packages/ruby/lib/src/math/calculus.js
+  function differentiate(fn) {
+    return function(x2) {
+      let dx = 1e-5;
+      let dy = fn(x2 + dx) - fn(x2);
+      return dy / dx;
+    };
+  }
+  function integrate(fn, lowerLimit, dx = 1e-3) {
+    let cache;
+    let cached = false;
+    return function(x2) {
+      let [x0, y0] = cached ? cache : [lowerLimit, 0];
+      if (x2 >= x0) {
+        for (let X2 = x0; X2 < x2; X2 += dx) {
+          y0 += 0.5 * (fn(X2) + fn(X2 + dx)) * dx;
+        }
+      } else {
+        for (let X2 = x0; X2 > x2; X2 -= dx) {
+          y0 -= 0.5 * (fn(X2) + fn(X2 + dx)) * dx;
+        }
+      }
+      cache = [x2, y0];
+      cached = true;
+      return y0;
+    };
+  }
+
   // src/Core/Owl/index.ts
   var Owl_exports = {};
   __export(Owl_exports, {
@@ -18746,6 +18774,8 @@
     exposeAll(),
     captureAll()
   ], Host19);
+  globalThis.differentiate = differentiate;
+  globalThis.integrate = integrate;
 
   // src/Math/Algebra/Circle.ts
   var Host20 = class {
@@ -20021,24 +20051,19 @@
       ];
     }
     solInSteps(unknown) {
-      try {
-        let fs = solutionFlow(this.fs, this.tree, [unknown.sym]);
-        let eqs = fs.map(($) => this.equations.find((_) => _.zeroFunc === $));
-        let info = readTree(this.tree);
-        let givens = info.givens.map(($) => this.variables.find((_) => _.sym === $));
-        let T2 = "";
-        for (let eq2 of eqs) {
-          let solved = solvingSymbol(eq2.zeroFunc, this.tree);
-          let solvedVar = this.variables.find(($) => $.sym === solved);
-          T2 += latexAligned([eq2.print(), eq2.print(givens), solvedVar.full()]);
-          T2 += " \\\\~\\\\ ";
-          givens.push(solvedVar);
-        }
-        return T2;
-      } catch (e6) {
-        console.warn(e6);
-        throw e6;
+      let fs = solutionFlow(this.fs, this.tree, [unknown.sym]);
+      let eqs = fs.map(($) => this.equations.find((_) => _.zeroFunc === $));
+      let info = readTree(this.tree);
+      let givens = info.givens.map(($) => this.variables.find((_) => _.sym === $));
+      let T2 = "";
+      for (let eq2 of eqs) {
+        let solved = solvingSymbol(eq2.zeroFunc, this.tree);
+        let solvedVar = this.variables.find(($) => $.sym === solved);
+        T2 += latexAligned([eq2.print(), eq2.print(givens), solvedVar.full()]);
+        T2 += " \\\\~\\\\ ";
+        givens.push(solvedVar);
       }
+      return T2;
     }
     generateTrend() {
       let { tree, top, info } = this.getFullTree();
