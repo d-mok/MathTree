@@ -1790,6 +1790,12 @@ declare module "Math/Code/PhyEq" {
              */
             v2as(v?: string, a?: string, s?: string, $?: string): eq;
         };
+        Force: {
+            /**
+             * F = ma
+             */
+            Fma(F?: string, m?: string, a?: string, $?: string): eq;
+        };
         CircularMotion: {
             /**
              * s = vt

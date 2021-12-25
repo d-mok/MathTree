@@ -108,6 +108,24 @@ export class PhyEqCls {
         },
     }
 
+
+
+    Force = {
+
+
+        /**
+         * F = ma
+         */
+        Fma(F = 'F', m = 'm', a = 'a', $ = '***'): eq {
+            let args = [F, m, a]
+            return [
+                makeFn(args, (F, m, a) => F - m * a),
+                makeLatex(args, '@=@@', $, ':||')
+            ]
+        },
+
+    }
+
     CircularMotion = {
 
         /**

@@ -16579,6 +16579,15 @@
         ];
       }
     };
+    Force = {
+      Fma(F2 = "F", m3 = "m", a2 = "a", $ = "***") {
+        let args = [F2, m3, a2];
+        return [
+          makeFn(args, (F3, m4, a3) => F3 - m4 * a3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      }
+    };
     CircularMotion = {
       svt(s3 = "s", v3 = "v", t2 = "t", $ = "***") {
         let args = [s3, v3, t2];
