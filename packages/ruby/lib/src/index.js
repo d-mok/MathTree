@@ -13,5 +13,5 @@ export { Reins, toReins, reins } from './linear_program/reins';
 export { Rein, rein } from './linear_program/rein';
 export * as cal from './math/cal';
 export { lin } from './math/linear';
-export { differentiate, integrate } from './math/calculus';
+export { functionize, differentiate, integrate } from './math/calculus';
 //# sourceMappingURL=index.js.map

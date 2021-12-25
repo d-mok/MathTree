@@ -15131,6 +15131,55 @@
     return new Linear();
   }
 
+  // ../packages/ruby/lib/src/math/calculus.js
+  function intrapolateBetween([A2, B2], x2) {
+    let [x1, y1] = A2;
+    let [x22, y2] = B2;
+    let r3 = (x2 - x1) / (x22 - x1);
+    return y1 + (y2 - y1) * r3;
+  }
+  function intrapolate(sortedPts, x2) {
+    let first = sortedPts[0];
+    let last = sortedPts.at(-1);
+    if (x2 < first[0])
+      return first[1];
+    if (x2 > last[0])
+      return last[1];
+    let j2 = sortedPts.findIndex(([X2, Y2]) => X2 > x2);
+    let i2 = j2 - 1;
+    return intrapolateBetween([sortedPts[i2], sortedPts[j2]], x2);
+  }
+  function functionize(sortedPts) {
+    return function(x2) {
+      return intrapolate(sortedPts, x2);
+    };
+  }
+  function differentiate(fn) {
+    return function(x2) {
+      let dx = 1e-5;
+      let dy = fn(x2 + dx) - fn(x2);
+      return dy / dx;
+    };
+  }
+  function integrate(fn, lowerLimit = 0, dx = 1e-3) {
+    let cache = [lowerLimit, 0];
+    return function(x2) {
+      let [x0, y0] = cache;
+      if (x2 === x0)
+        return y0;
+      let D2 = Math.abs(x2 - x0);
+      let N2 = Math.round(D2 / dx);
+      N2 = Math.max(N2, 10);
+      dx = (x2 - x0) / N2;
+      for (let i2 = 0; i2 < N2; i2++) {
+        let X2 = x0 + i2 * dx;
+        y0 += 0.5 * (fn(X2) + fn(X2 + dx)) * dx;
+      }
+      cache = [x2, y0];
+      return y0;
+    };
+  }
+
   // src/Core/Owl/index.ts
   var Owl_exports = {};
   __export(Owl_exports, {
@@ -16576,6 +16625,15 @@
         return [
           makeFn(args, (v4, a3, s4) => v4 ** 2 - 2 * a3 * s4),
           makeLatex(args, "@^2=2@@", $, "|||")
+        ];
+      }
+    };
+    Force = {
+      Fma(F2 = "F", m3 = "m", a2 = "a", $ = "***") {
+        let args = [F2, m3, a2];
+        return [
+          makeFn(args, (F3, m4, a3) => F3 - m4 * a3),
+          makeLatex(args, "@=@@", $, ":||")
         ];
       }
     };
@@ -18737,6 +18795,9 @@
     exposeAll(),
     captureAll()
   ], Host19);
+  globalThis.differentiate = differentiate;
+  globalThis.integrate = integrate;
+  globalThis.functionize = functionize;
 
   // src/Math/Algebra/Circle.ts
   var Host20 = class {
@@ -19982,13 +20043,14 @@
         let info = readTree(tree);
         for (let top of RndShuffle(...info.tops)) {
           let flow = solutionFlow(this.fs, tree, [top]);
-          if (flow.length === this.fs.length && this.checkAvoids(info.givens, top, avoids))
+          if (flow.length === this.fs.length && this.checkAvoids(info.givens, top, avoids)) {
             this.tree = tree;
-          return {
-            tree,
-            top: this.getVariables([top])[0],
-            info
-          };
+            return {
+              tree,
+              top: this.getVariables([top])[0],
+              info
+            };
+          }
         }
       }
       throw "no sensible set of solvables found!";
@@ -20086,11 +20148,12 @@
   function BuildSolve(variables, equations, {
     listSym = false,
     avoids = [],
-    sigfig: sigfig2 = {}
+    sigfig: sigfig2 = {},
+    solFormat = "series"
   } = {}) {
     for (let i2 = 0; i2 <= 10; i2++) {
       try {
-        return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig: sigfig2 });
+        return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig: sigfig2, solFormat });
       } catch (e6) {
         if (i2 === 10) {
           throw e6;
@@ -20104,7 +20167,8 @@
   function BuildSolveOnce(variables, equations, {
     listSym = false,
     avoids = [],
-    sigfig: sigfig2 = {}
+    sigfig: sigfig2 = {},
+    solFormat = "series"
   } = {}) {
     let system = toEquSystem(variables, equations);
     system.fit();
@@ -20120,11 +20184,15 @@
           unknown.full()
         ]);
       } else {
-        let T2 = "";
-        T2 += system.print() + " \\\\~\\\\ ";
-        T2 += system.print(givens) + " \\\\~\\\\ ";
-        T2 += latexBraced(hiddens.map(($) => $.full()));
-        return T2;
+        if (solFormat === "series") {
+          return system.solInSteps(unknown);
+        } else {
+          let T2 = "";
+          T2 += system.print() + " \\\\~\\\\ ";
+          T2 += system.print(givens) + " \\\\~\\\\ ";
+          T2 += latexBraced(hiddens.map(($) => $.full()));
+          return T2;
+        }
       }
     }
     return {
@@ -24274,7 +24342,7 @@
       throw detectVarErr(e6);
     }
   }
-  function intrapolate(html, dict2) {
+  function intrapolate2(html, dict2) {
     function intra(signal, prefix) {
       html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code2) => {
         let result2 = evalInline(code2, dict2);
@@ -24764,8 +24832,8 @@
       throw CustomError("OptionError", "No valid option generated after 100 trials");
     }
     runIntrapolate() {
-      this.qn = intrapolate(this.qn, this.dict);
-      this.sol = intrapolate(this.sol, this.dict);
+      this.qn = intrapolate2(this.qn, this.dict);
+      this.sol = intrapolate2(this.sol, this.dict);
       return true;
     }
     runSubstitute() {

@@ -15131,34 +15131,6 @@
     return new Linear();
   }
 
-  // ../packages/ruby/lib/src/math/calculus.js
-  function differentiate(fn) {
-    return function(x2) {
-      let dx = 1e-5;
-      let dy = fn(x2 + dx) - fn(x2);
-      return dy / dx;
-    };
-  }
-  function integrate(fn, lowerLimit, dx = 1e-3) {
-    let cache;
-    let cached = false;
-    return function(x2) {
-      let [x0, y0] = cached ? cache : [lowerLimit, 0];
-      if (x2 >= x0) {
-        for (let X2 = x0; X2 < x2; X2 += dx) {
-          y0 += 0.5 * (fn(X2) + fn(X2 + dx)) * dx;
-        }
-      } else {
-        for (let X2 = x0; X2 > x2; X2 -= dx) {
-          y0 -= 0.5 * (fn(X2) + fn(X2 + dx)) * dx;
-        }
-      }
-      cache = [x2, y0];
-      cached = true;
-      return y0;
-    };
-  }
-
   // src/Core/Owl/index.ts
   var Owl_exports = {};
   __export(Owl_exports, {
@@ -18774,8 +18746,6 @@
     exposeAll(),
     captureAll()
   ], Host19);
-  globalThis.differentiate = differentiate;
-  globalThis.integrate = integrate;
 
   // src/Math/Algebra/Circle.ts
   var Host20 = class {

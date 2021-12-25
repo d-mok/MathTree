@@ -523,6 +523,37 @@ declare module "Math/Algebra/Algebra" {
         var xPolynomial: typeof Host.xPolynomial;
     }
 }
+declare module "Math/Algebra/Calculus" {
+    export class Host {
+        /**
+         * Derivative of the function.
+         * ```
+         * differentiate(x=>x**2) // x=>2*x
+         * ```
+         */
+        static differentiate(fn: (x: number) => number): (x: number) => number;
+        /**
+         * Integral of the function, passing through the fix point.
+         * ```
+         * integrate(x=>2*x, [0,3]) // x=>x**2+3
+         * ```
+         */
+        static integrate(fn: (x: number) => number, fixPoint?: number[]): (x: number) => number;
+        /**
+         * Make a function passing through the points.
+         * The points must be sorted in increasing x.
+         * ```
+         * functionize([[0,0],[1,2]]) // like x=>2*x within 0<x<1
+         * ```
+         */
+        static functionize(points: Point2D[]): (x: number) => number;
+    }
+    global {
+        var differentiate: typeof Host.differentiate;
+        var integrate: typeof Host.integrate;
+        var functionize: typeof Host.functionize;
+    }
+}
 declare module "Math/Algebra/Circle" {
     export class Host {
         /**

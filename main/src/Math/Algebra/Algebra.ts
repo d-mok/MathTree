@@ -1,5 +1,4 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-import { differentiate, integrate } from 'ruby'
 
 @exposeAll()
 @captureAll()
@@ -45,11 +44,6 @@ export class Host {
 
 
 }
-
-// @ts-ignore
-globalThis.differentiate = differentiate
-// @ts-ignore
-globalThis.integrate = integrate
 
 
 declare global {

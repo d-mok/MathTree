@@ -1,5 +1,4 @@
 
-
 test('Crammer', () => {
     expect(Crammer(1, 1, 5, 1, -1, 1)).toEqual([3, 2]);
     expect(Crammer(2, 3, 23, 4, -5, -9)).toEqual([4, 5]);
