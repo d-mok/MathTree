@@ -30,24 +30,27 @@ export class PhyPenCls {
 
 
     /**
-     * A car on a banked road.
-     * Circular Motion.
+     * Box on incline plane.
+     * Force.
      * ```
      * let pen = new PhyPen()
      * pen.CarOnBankedRoad({
-     *  carMid : 10,
-     *  carWidth : 3,
-     *  wheelHeight : 1,
-     *  carHeight : 2,
+     *  boxMid : 10,
+     *  boxWidth : 3,
+     *  boxHeight : 2,
      *  angle : 25,
      *  angleLabel : 'θ',
      *  weight : 4,
      *  weightLabel : 'mg',
-     *  normal : 5,
+     *  weightXLabel = 'mg\\sinθ',
+     *  weightYLabel = 'mg\\cosθ',
+     *  weightAngleLabel = true,
+     *  normal : 3,
      *  normalLabel : 'R',
      *  friction : 0,
      *  frictionLabel : 'f',
-     *  showAllForces : false
+     *  showForces = false,
+     *  showWeightCompo = showForces
      * })
      * ```
      */
@@ -134,26 +137,25 @@ export class PhyPenCls {
             // weight
             pen.set.weight(3)
             pen.set.color('red')
-            pen.set.lineLabel('left')
-            pen.arrow(G, W, weightLabel)
-            pen.set.lineLabel()
+            pen.arrow(G, W)
+            pen.label.point(W, weightLabel)
 
-            // mgsin
-            pen.arrowCompo(G, W, angle, weightXLabel)
+            // normal
+            pen.set.weight(3)
+            pen.set.color('purple')
+            pen.arrow(G, N)
+            pen.label.point(N, normalLabel)
 
             if (showWeightCompo) {
+                pen.set.weight(2)
+                // mgsin
+                pen.arrowCompo(G, W, angle, weightXLabel)
                 // mgcos
                 let a: string | undefined
                 if (weightAngleLabel === true) a = angleLabel
                 if (weightAngleLabel === false) a = undefined
                 if (typeof weightAngleLabel === 'string') a = weightAngleLabel
-                pen.arrowCompo(G, W, angle, weightYLabel, a)
-
-                // normal
-                pen.set.weight(3)
-                pen.set.color('purple')
-                pen.arrow(G, N)
-                pen.label.point(N, normalLabel)
+                pen.arrowCompo(G, W, angle + 90, weightYLabel, a)
             }
 
             // friction

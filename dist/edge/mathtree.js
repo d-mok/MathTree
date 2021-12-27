@@ -23704,11 +23704,15 @@
       if (showForces) {
         pen.set.weight(3);
         pen.set.color("red");
-        pen.set.lineLabel("left");
-        pen.arrow(G2, W2, weightLabel);
-        pen.set.lineLabel();
-        pen.arrowCompo(G2, W2, angle2, weightXLabel);
+        pen.arrow(G2, W2);
+        pen.label.point(W2, weightLabel);
+        pen.set.weight(3);
+        pen.set.color("purple");
+        pen.arrow(G2, N2);
+        pen.label.point(N2, normalLabel);
         if (showWeightCompo) {
+          pen.set.weight(2);
+          pen.arrowCompo(G2, W2, angle2, weightXLabel);
           let a2;
           if (weightAngleLabel === true)
             a2 = angleLabel;
@@ -23716,11 +23720,7 @@
             a2 = void 0;
           if (typeof weightAngleLabel === "string")
             a2 = weightAngleLabel;
-          pen.arrowCompo(G2, W2, angle2, weightYLabel, a2);
-          pen.set.weight(3);
-          pen.set.color("purple");
-          pen.arrow(G2, N2);
-          pen.label.point(N2, normalLabel);
+          pen.arrowCompo(G2, W2, angle2 + 90, weightYLabel, a2);
         }
         if (friction !== 0) {
           pen.set.weight(3);

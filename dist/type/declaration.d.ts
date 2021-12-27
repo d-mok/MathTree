@@ -4839,24 +4839,27 @@ declare module "Pen/PhyPen" {
          */
         export(html: string, placeholder: string): string;
         /**
-         * A car on a banked road.
-         * Circular Motion.
+         * Box on incline plane.
+         * Force.
          * ```
          * let pen = new PhyPen()
          * pen.CarOnBankedRoad({
-         *  carMid : 10,
-         *  carWidth : 3,
-         *  wheelHeight : 1,
-         *  carHeight : 2,
+         *  boxMid : 10,
+         *  boxWidth : 3,
+         *  boxHeight : 2,
          *  angle : 25,
          *  angleLabel : 'θ',
          *  weight : 4,
          *  weightLabel : 'mg',
-         *  normal : 5,
+         *  weightXLabel = 'mg\\sinθ',
+         *  weightYLabel = 'mg\\cosθ',
+         *  weightAngleLabel = true,
+         *  normal : 3,
          *  normalLabel : 'R',
          *  friction : 0,
          *  frictionLabel : 'f',
-         *  showAllForces : false
+         *  showForces = false,
+         *  showWeightCompo = showForces
          * })
          * ```
          */
