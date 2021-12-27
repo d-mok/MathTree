@@ -253,7 +253,7 @@ export class Host {
      * CompassBearing(30) // 'N60°E'
      * ```
      */
-    @checkIt(owl.int)
+    @checkIt(owl.num)
     static CompassBearing(polarAngle: number): string {
         let q = polarAngle
         q = PolarReduce(q)

@@ -4269,7 +4269,7 @@ declare module "Pen/Pen" {
          * ```
          * @category draw
          */
-        arrowCompo(O: Point2D, P: Point2D, dir: number, angleLabel?: string | number): void;
+        arrowCompo(O: Point2D, P: Point2D, dir: number, arrowLabel?: string | number, angleLabel?: string | number): void;
         /**
          * Draw both components of the arrow.
          * ```
@@ -4279,7 +4279,7 @@ declare module "Pen/Pen" {
          * ```
          * @category draw
          */
-        arrowResolve(O: Point2D, P: Point2D, dir: number, angleLabel?: string | number): void;
+        arrowResolve(O: Point2D, P: Point2D, dir: number, arrowLabels?: (string | number | undefined)[], angleLabel?: string | number): void;
         /**
          * Draw a length between two points.
          * ```

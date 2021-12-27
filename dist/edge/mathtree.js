@@ -18636,7 +18636,7 @@
     checkIt(owl.int)
   ], Host16, "WholeBearing", 1);
   __decorateClass([
-    checkIt(owl.int)
+    checkIt(owl.num)
   ], Host16, "CompassBearing", 1);
   Host16 = __decorateClass([
     exposeAll(),
@@ -22571,16 +22571,17 @@
       if (label !== void 0)
         this.label.line([A2, B2], label);
     }
-    arrowCompo(O2, P2, dir3, angleLabel) {
+    arrowCompo(O2, P2, dir3, arrowLabel, angleLabel) {
       let X2 = Move(O2, dir3, 1);
       let Q2 = PdFoot(O2, X2, P2);
-      this.arrow(O2, Q2);
+      this.arrow(O2, Q2, arrowLabel);
       if (angleLabel !== void 0)
         this.angle(Q2, O2, P2, angleLabel);
     }
-    arrowResolve(O2, P2, dir3, angleLabel) {
-      this.arrowCompo(O2, P2, dir3, angleLabel);
-      this.arrowCompo(O2, P2, dir3 + 90);
+    arrowResolve(O2, P2, dir3, arrowLabels = [], angleLabel) {
+      let [l1, l22] = arrowLabels;
+      this.arrowCompo(O2, P2, dir3, l1, angleLabel);
+      this.arrowCompo(O2, P2, dir3 + 90, l22);
     }
     length(A2, B2, label) {
       this.cv.line([A2, B2]);
@@ -23737,14 +23738,14 @@
         pen.arrow(G2, N2);
         pen.label.point(N2, normalLabel);
         pen.set.weight(2);
-        pen.arrowResolve(G2, N2, 90, angleLabel);
+        pen.arrowResolve(G2, N2, 90, [], angleLabel);
         if (friction !== 0) {
           pen.set.weight(3);
           pen.set.color("blue");
           pen.arrow(g2, f3);
           pen.label.point(f3, frictionLabel);
           pen.set.weight(2);
-          pen.arrowResolve(g2, f3, 0, angleLabel);
+          pen.arrowResolve(g2, f3, 0, [], angleLabel);
         }
       }
       this.pen = pen;
@@ -23791,7 +23792,7 @@
         pen.arrow(O2, N2);
         pen.label.point(N2, liftLabel);
         pen.set.weight(2);
-        pen.arrowResolve(O2, N2, 90, angleLabel);
+        pen.arrowResolve(O2, N2, 90, [], angleLabel);
       }
       this.pen = pen;
     }
@@ -23830,7 +23831,7 @@
         pen.set.color("blue");
         pen.arrow(P2, T2);
         pen.set.weight(2);
-        pen.arrowResolve(P2, T2, 90, angleLabel);
+        pen.arrowResolve(P2, T2, 90, [], angleLabel);
         pen.set.weight();
         pen.label.point(T2, tensionLabel);
       }

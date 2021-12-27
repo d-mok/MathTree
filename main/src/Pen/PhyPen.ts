@@ -198,7 +198,7 @@ export class PhyPenCls {
             pen.arrow(G, N)
             pen.label.point(N, normalLabel)
             pen.set.weight(2)
-            pen.arrowResolve(G, N, 90, angleLabel)
+            pen.arrowResolve(G, N, 90, [], angleLabel)
 
             if (friction !== 0) {
                 pen.set.weight(3)
@@ -206,7 +206,7 @@ export class PhyPenCls {
                 pen.arrow(g, f)
                 pen.label.point(f, frictionLabel)
                 pen.set.weight(2)
-                pen.arrowResolve(g, f, 0, angleLabel)
+                pen.arrowResolve(g, f, 0, [], angleLabel)
             }
         }
 
@@ -300,7 +300,7 @@ export class PhyPenCls {
             pen.arrow(O, N)
             pen.label.point(N, liftLabel)
             pen.set.weight(2)
-            pen.arrowResolve(O, N, 90, angleLabel)
+            pen.arrowResolve(O, N, 90, [], angleLabel)
         }
 
         this.pen = pen
@@ -385,7 +385,7 @@ export class PhyPenCls {
             pen.set.color('blue')
             pen.arrow(P, T,)
             pen.set.weight(2)
-            pen.arrowResolve(P, T, 90, angleLabel)
+            pen.arrowResolve(P, T, 90, [], angleLabel)
             pen.set.weight()
             pen.label.point(T, tensionLabel)
 

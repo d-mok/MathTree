@@ -304,10 +304,10 @@ export class PenCls {
      * ```
      * @category draw
      */
-    arrowCompo(O: Point2D, P: Point2D, dir: number, angleLabel?: string | number) {
+    arrowCompo(O: Point2D, P: Point2D, dir: number, arrowLabel?: string | number, angleLabel?: string | number) {
         let X = Move(O, dir, 1)
         let Q = PdFoot(O, X, P)
-        this.arrow(O, Q)
+        this.arrow(O, Q, arrowLabel)
         if (angleLabel !== undefined)
             this.angle(Q, O, P, angleLabel)
     }
@@ -322,9 +322,14 @@ export class PenCls {
      * ```
      * @category draw
      */
-    arrowResolve(O: Point2D, P: Point2D, dir: number, angleLabel?: string | number) {
-        this.arrowCompo(O, P, dir, angleLabel)
-        this.arrowCompo(O, P, dir + 90)
+    arrowResolve(
+        O: Point2D, P: Point2D, dir: number,
+        arrowLabels: (string | number | undefined)[] = [],
+        angleLabel?: string | number
+    ) {
+        let [l1, l2] = arrowLabels
+        this.arrowCompo(O, P, dir, l1, angleLabel)
+        this.arrowCompo(O, P, dir + 90, l2)
     }
 
 
