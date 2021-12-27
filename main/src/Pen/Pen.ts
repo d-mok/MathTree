@@ -298,9 +298,10 @@ export class PenCls {
     /**
      * Draw the component of the arrow.
      * ```
-     * pen.arrowCompo([1,2],[3,4],0,'x')
+     * pen.arrowCompo([1,2],[3,4],0,'F','θ')
      * // draw the horizontal component of arrow from [1,2] to [3,4]
-     * // label the angle as 'x'
+     * // label the arrow as 'F'
+     * // label the angle as 'θ'
      * ```
      * @category draw
      */
@@ -316,9 +317,10 @@ export class PenCls {
     /**
      * Draw both components of the arrow.
      * ```
-     * pen.arrowResolve([1,2],[3,4],0,'x')
+     * pen.arrowResolve([1,2],[3,4],0,['Fx','Fy'],'θ')
      * // draw the horizontal and vertical components of arrow from [1,2] to [3,4]
-     * // label the angle with the horizontal as 'x'
+     * // label the arrows as 'Fx' and 'Fy'
+     * // label the angle with the horizontal as 'θ'
      * ```
      * @category draw
      */
