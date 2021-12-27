@@ -23690,7 +23690,7 @@
       let W2 = MoveY(G2, -weight);
       let N2 = Move(G2, 90 + angle2, normal);
       let g2 = friction < 0 ? P2 : R2;
-      let f3 = Move(g2, friction > 0 ? 180 + angle2 : angle2, Math.abs(friction));
+      let f3 = Move(g2, friction < 0 ? 180 + angle2 : angle2, Math.abs(friction));
       let pen = new Pen();
       pen.set.border(0.5);
       pen.range.capture(O2, P2, Q2, R2, S2, N2, f3);

@@ -116,7 +116,7 @@ export class PhyPenCls {
 
         // friction
         let g = friction < 0 ? P : R
-        let f = Move(g, friction > 0 ? 180 + angle : angle, Math.abs(friction))
+        let f = Move(g, friction < 0 ? 180 + angle : angle, Math.abs(friction))
 
         let pen = new Pen()
 
