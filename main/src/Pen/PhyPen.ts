@@ -95,8 +95,6 @@ export class PhyPenCls {
         let l = boxMid - boxWidth / 2
         let r = boxMid + boxWidth / 2
 
-
-
         // car body
         let P: Point2D = [l, 0]
         let Q = MoveY(P, boxHeight)
@@ -117,11 +115,12 @@ export class PhyPenCls {
         let N = Move(G, 90 + angle, normal)
 
         // friction
-        let g = friction > 0 ? P : Q
+        let g = friction < 0 ? P : R
         let f = Move(g, friction > 0 ? 180 + angle : angle, Math.abs(friction))
 
         let pen = new Pen()
 
+        pen.set.border(0.5)
         pen.range.capture(O, P, Q, R, S, N, f)
         pen.size.lock(1.3)
         pen.set.labelCenter(G)
@@ -148,6 +147,7 @@ export class PhyPenCls {
 
             if (showWeightCompo) {
                 pen.set.weight(2)
+                pen.set.color('red')
                 // mgsin
                 pen.arrowCompo(G, W, angle, weightXLabel)
                 // mgcos
