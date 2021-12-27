@@ -29,6 +29,147 @@ export class PhyPenCls {
 
 
 
+    /**
+     * A car on a banked road.
+     * Circular Motion.
+     * ```
+     * let pen = new PhyPen()
+     * pen.CarOnBankedRoad({
+     *  carMid : 10,
+     *  carWidth : 3,
+     *  wheelHeight : 1,
+     *  carHeight : 2,
+     *  angle : 25,
+     *  angleLabel : 'θ',
+     *  weight : 4,
+     *  weightLabel : 'mg',
+     *  normal : 5,
+     *  normalLabel : 'R',
+     *  friction : 0,
+     *  frictionLabel : 'f',
+     *  showAllForces : false
+     * })
+     * ```
+     */
+    InclinedPlane({
+        boxMid = 10,
+        boxWidth = 3,
+        boxHeight = 2,
+        angle = 25,
+        angleLabel = 'θ',
+        weight = 4,
+        weightLabel = 'mg',
+        weightXLabel = 'mg\\sinθ',
+        weightYLabel = 'mg\\cosθ',
+        weightAngleLabel = true,
+        normal = 3,
+        normalLabel = 'R',
+        friction = 0,
+        frictionLabel = 'f',
+        showForces = false,
+        showWeightCompo = showForces
+    }: {
+        boxMid?: number
+        boxWidth?: number
+        boxHeight?: number
+        angle?: number
+        angleLabel?: string
+        weight?: number
+        weightLabel?: string
+        weightXLabel?: string
+        weightYLabel?: string
+        weightAngleLabel?: string | boolean
+        normal?: number
+        normalLabel?: string
+        friction?: number
+        frictionLabel?: string
+        showForces?: boolean
+        showWeightCompo?: boolean
+    }) {
+
+
+        let O: Point2D = [0, 0]
+        let l = boxMid - boxWidth / 2
+        let r = boxMid + boxWidth / 2
+
+
+
+        // car body
+        let P: Point2D = [l, 0]
+        let Q = MoveY(P, boxHeight)
+        let R: Point2D = [r, 0]
+        let S = MoveY(R, boxHeight);
+
+        [P, Q, R, S] = [P, Q, R, S].map($ => Rotate($, angle, O))
+
+        // road
+        let Z: Point2D = [2 * r, 0]
+        let Y = Rotate(Z, angle, O)
+
+        // mg
+        let G = Mid(P, Q, R, S)
+        let W = MoveY(G, -weight)
+
+        // normal reaction
+        let N = Move(G, 90 + angle, normal)
+
+        // friction
+        let g = friction > 0 ? P : Q
+        let f = Move(g, friction > 0 ? 180 + angle : angle, Math.abs(friction))
+
+        let pen = new Pen()
+
+        pen.range.capture(O, P, Q, R, S, N, f)
+        pen.size.lock(1.3)
+        pen.set.labelCenter(G)
+        pen.set.textLatex(true)
+
+        pen.polygon(P, Q, S, R)
+        pen.line(O, Z)
+        pen.line(O, Y)
+        pen.angle(Y, O, Z, angleLabel)
+        pen.set.weight(4)
+
+        if (showForces) {
+            // weight
+            pen.set.weight(3)
+            pen.set.color('red')
+            pen.set.lineLabel('left')
+            pen.arrow(G, W, weightLabel)
+            pen.set.lineLabel()
+
+            // mgsin
+            pen.arrowCompo(G, W, angle, weightXLabel)
+
+            if (showWeightCompo) {
+                // mgcos
+                let a: string | undefined
+                if (weightAngleLabel === true) a = angleLabel
+                if (weightAngleLabel === false) a = undefined
+                if (typeof weightAngleLabel === 'string') a = weightAngleLabel
+                pen.arrowCompo(G, W, angle, weightYLabel, a)
+
+                // normal
+                pen.set.weight(3)
+                pen.set.color('purple')
+                pen.arrow(G, N)
+                pen.label.point(N, normalLabel)
+            }
+
+            // friction
+            if (friction !== 0) {
+                pen.set.weight(3)
+                pen.set.color('blue')
+                pen.arrow(g, f)
+                pen.label.point(f, frictionLabel)
+            }
+        }
+
+        this.pen = pen
+
+    }
+
+
 
     /**
      * A projectile trajectory.

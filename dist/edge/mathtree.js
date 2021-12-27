@@ -22574,7 +22574,10 @@
     arrowCompo(O2, P2, dir3, arrowLabel, angleLabel) {
       let X2 = Move(O2, dir3, 1);
       let Q2 = PdFoot(O2, X2, P2);
+      this.cv.save();
+      this.set.labelCenter(O2, P2);
       this.arrow(O2, Q2, arrowLabel);
+      this.cv.restore();
       if (angleLabel !== void 0)
         this.angle(Q2, O2, P2, angleLabel);
     }
@@ -23654,6 +23657,79 @@
     }
     export(html, placeholder) {
       return this.pen.exportTrim(html, placeholder);
+    }
+    InclinedPlane({
+      boxMid = 10,
+      boxWidth = 3,
+      boxHeight = 2,
+      angle: angle2 = 25,
+      angleLabel = "\u03B8",
+      weight = 4,
+      weightLabel = "mg",
+      weightXLabel = "mg\\sin\u03B8",
+      weightYLabel = "mg\\cos\u03B8",
+      weightAngleLabel = true,
+      normal = 3,
+      normalLabel = "R",
+      friction = 0,
+      frictionLabel = "f",
+      showForces = false,
+      showWeightCompo = showForces
+    }) {
+      let O2 = [0, 0];
+      let l3 = boxMid - boxWidth / 2;
+      let r3 = boxMid + boxWidth / 2;
+      let P2 = [l3, 0];
+      let Q2 = MoveY(P2, boxHeight);
+      let R2 = [r3, 0];
+      let S2 = MoveY(R2, boxHeight);
+      [P2, Q2, R2, S2] = [P2, Q2, R2, S2].map(($) => Rotate($, angle2, O2));
+      let Z2 = [2 * r3, 0];
+      let Y2 = Rotate(Z2, angle2, O2);
+      let G2 = Mid(P2, Q2, R2, S2);
+      let W2 = MoveY(G2, -weight);
+      let N2 = Move(G2, 90 + angle2, normal);
+      let g2 = friction > 0 ? P2 : Q2;
+      let f3 = Move(g2, friction > 0 ? 180 + angle2 : angle2, Math.abs(friction));
+      let pen = new Pen();
+      pen.range.capture(O2, P2, Q2, R2, S2, N2, f3);
+      pen.size.lock(1.3);
+      pen.set.labelCenter(G2);
+      pen.set.textLatex(true);
+      pen.polygon(P2, Q2, S2, R2);
+      pen.line(O2, Z2);
+      pen.line(O2, Y2);
+      pen.angle(Y2, O2, Z2, angleLabel);
+      pen.set.weight(4);
+      if (showForces) {
+        pen.set.weight(3);
+        pen.set.color("red");
+        pen.set.lineLabel("left");
+        pen.arrow(G2, W2, weightLabel);
+        pen.set.lineLabel();
+        pen.arrowCompo(G2, W2, angle2, weightXLabel);
+        if (showWeightCompo) {
+          let a2;
+          if (weightAngleLabel === true)
+            a2 = angleLabel;
+          if (weightAngleLabel === false)
+            a2 = void 0;
+          if (typeof weightAngleLabel === "string")
+            a2 = weightAngleLabel;
+          pen.arrowCompo(G2, W2, angle2, weightYLabel, a2);
+          pen.set.weight(3);
+          pen.set.color("purple");
+          pen.arrow(G2, N2);
+          pen.label.point(N2, normalLabel);
+        }
+        if (friction !== 0) {
+          pen.set.weight(3);
+          pen.set.color("blue");
+          pen.arrow(g2, f3);
+          pen.label.point(f3, frictionLabel);
+        }
+      }
+      this.pen = pen;
     }
     Projectile({
       speed,

@@ -4839,6 +4839,46 @@ declare module "Pen/PhyPen" {
          */
         export(html: string, placeholder: string): string;
         /**
+         * A car on a banked road.
+         * Circular Motion.
+         * ```
+         * let pen = new PhyPen()
+         * pen.CarOnBankedRoad({
+         *  carMid : 10,
+         *  carWidth : 3,
+         *  wheelHeight : 1,
+         *  carHeight : 2,
+         *  angle : 25,
+         *  angleLabel : 'θ',
+         *  weight : 4,
+         *  weightLabel : 'mg',
+         *  normal : 5,
+         *  normalLabel : 'R',
+         *  friction : 0,
+         *  frictionLabel : 'f',
+         *  showAllForces : false
+         * })
+         * ```
+         */
+        InclinedPlane({ boxMid, boxWidth, boxHeight, angle, angleLabel, weight, weightLabel, weightXLabel, weightYLabel, weightAngleLabel, normal, normalLabel, friction, frictionLabel, showForces, showWeightCompo }: {
+            boxMid?: number;
+            boxWidth?: number;
+            boxHeight?: number;
+            angle?: number;
+            angleLabel?: string;
+            weight?: number;
+            weightLabel?: string;
+            weightXLabel?: string;
+            weightYLabel?: string;
+            weightAngleLabel?: string | boolean;
+            normal?: number;
+            normalLabel?: string;
+            friction?: number;
+            frictionLabel?: string;
+            showForces?: boolean;
+            showWeightCompo?: boolean;
+        }): void;
+        /**
          * A projectile trajectory.
          * ```
          * let pen = new PhyPen()
