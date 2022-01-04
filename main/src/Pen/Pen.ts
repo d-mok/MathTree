@@ -11,6 +11,7 @@ import { PenAxis } from './modules/axis'
 import { PenTick } from './modules/tick'
 import { PenGrid } from './modules/grid'
 import { PenLinProg } from './modules/linProg'
+import { PenRod } from './modules/rod'
 
 
 /**
@@ -310,8 +311,8 @@ export class PenCls {
      * ```
      * @category draw
      */
-    arrowCompo(O: Point2D, P: Point2D, dir: number, arrowLabel?: string | number, angleLabel?: string | number) {
-        let Q = PdFoot(P, [O, dir])
+    arrowCompo(O: Point2D, P: Point2D, alongDir: number, arrowLabel?: string | number, angleLabel?: string | number) {
+        let Q = PdFoot(P, [O, alongDir])
         this.cv.save()
         if (this.cv.$ARROW_LABEL === 'line')
             this.set.labelCenter(O, P)
@@ -333,13 +334,13 @@ export class PenCls {
      * @category draw
      */
     arrowResolve(
-        O: Point2D, P: Point2D, dir: number,
+        O: Point2D, P: Point2D, alongDir: number,
         arrowLabels: (string | number | undefined)[] = [],
         angleLabel?: string | number
     ) {
         let [l1, l2] = arrowLabels
-        this.arrowCompo(O, P, dir, l1, angleLabel)
-        this.arrowCompo(O, P, dir + 90, l2)
+        this.arrowCompo(O, P, alongDir, l1, angleLabel)
+        this.arrowCompo(O, P, alongDir + 90, l2)
     }
 
 
@@ -390,24 +391,13 @@ export class PenCls {
      * ```
      * @category draw
      */
-    ray(A: Point2D, B: Point2D) {
+    ray(A: Point2D, B: Point2D, label?: string | number) {
         this.cv.line([A, B])
+        if (label !== undefined) this.label.line([A, B], label)
         this.cv.midArrowHead(A, B, 5)
     }
 
 
-    /**
-     * Draw an endless ray from A in the direction.
-     * ```
-     * pen.rayTo([0,0], 45)
-     * ```
-     * @category draw
-     */
-    rayTo(A: Point2D, dir: number) {
-        let edgePoint = this.cv.edgePoint(A, dir)
-        this.cv.line([A, edgePoint])
-        this.cv.midArrowHead(A, edgePoint, 5)
-    }
 
 
     /**
@@ -468,6 +458,14 @@ export class PenCls {
         this.polyshade(...points)
     }
 
+
+
+
+    /**
+     * Draw a rod.
+     * @category rod
+     */
+    rod = new PenRod(this, this.cv)
 
     /**
      * Fill a shape.

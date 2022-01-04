@@ -4102,6 +4102,51 @@ declare module "Pen/modules/linProg" {
         verticesCoord(constraints: Constraint[]): void;
     }
 }
+declare module "Pen/modules/rod" {
+    import { PenCls } from "Pen/Pen";
+    import { Convas } from 'paint';
+    export class PenRod {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        private end;
+        /**
+         * Draw a line from `A` in `dir` with `length`.
+         * ```
+         * pen.rod.line([0,0],2,90) // from [0,0] to [0,2]
+         * ```
+         */
+        line(A: Point2D, dir: number, length?: number, label?: string | number): void;
+        /**
+         * Draw a dash line from `A` in `dir` with `length`.
+         * ```
+         * pen.rod.dash([0,0],2,90) // from [0,0] to [0,2]
+         * ```
+         */
+        dash(A: Point2D, dir: number, length?: number, label?: string | number): void;
+        /**
+         * Draw an arrow from `A` in `dir` with `length`.
+         * ```
+         * pen.rod.arrow([0,0],2,90) // from [0,0] to [0,2]
+         * ```
+         */
+        arrow(A: Point2D, dir: number, length?: number, label?: string | number): void;
+        /**
+         * Draw a ray from `A` in `dir` with `length`.
+         * ```
+         * pen.rod.rayFrom([0,0],2,90) // from [0,0] to [0,2]
+         * ```
+         */
+        rayFrom(A: Point2D, dir: number, length?: number, label?: string | number): void;
+        /**
+         * Draw a ray to `A` in `dir` with `length`.
+         * ```
+         * pen.rod.rayTo([0,0],2,90) // from [0,2] to [0,0]
+         * ```
+         */
+        rayTo(A: Point2D, dir: number, length?: number, label?: string | number): void;
+    }
+}
 declare module "Pen/Pen" {
     import { Convas } from 'paint';
     import { PenRange } from "Pen/modules/range";
@@ -4116,6 +4161,7 @@ declare module "Pen/Pen" {
     import { PenTick } from "Pen/modules/tick";
     import { PenGrid } from "Pen/modules/grid";
     import { PenLinProg } from "Pen/modules/linProg";
+    import { PenRod } from "Pen/modules/rod";
     export class PenCls {
         protected cv: Convas;
         constructor();
@@ -4284,7 +4330,7 @@ declare module "Pen/Pen" {
          * ```
          * @category draw
          */
-        arrowCompo(O: Point2D, P: Point2D, dir: number, arrowLabel?: string | number, angleLabel?: string | number): void;
+        arrowCompo(O: Point2D, P: Point2D, alongDir: number, arrowLabel?: string | number, angleLabel?: string | number): void;
         /**
          * Draw both components of the arrow.
          * ```
@@ -4295,7 +4341,7 @@ declare module "Pen/Pen" {
          * ```
          * @category draw
          */
-        arrowResolve(O: Point2D, P: Point2D, dir: number, arrowLabels?: (string | number | undefined)[], angleLabel?: string | number): void;
+        arrowResolve(O: Point2D, P: Point2D, alongDir: number, arrowLabels?: (string | number | undefined)[], angleLabel?: string | number): void;
         /**
          * Draw a length between two points.
          * ```
@@ -4321,15 +4367,7 @@ declare module "Pen/Pen" {
          * ```
          * @category draw
          */
-        ray(A: Point2D, B: Point2D): void;
-        /**
-         * Draw an endless ray from A in the direction.
-         * ```
-         * pen.rayTo([0,0], 45)
-         * ```
-         * @category draw
-         */
-        rayTo(A: Point2D, dir: number): void;
+        ray(A: Point2D, B: Point2D, label?: string | number): void;
         /**
          * Draw a polyline given points.
          * ```
@@ -4370,6 +4408,11 @@ declare module "Pen/Pen" {
          * @category draw
          */
         polyshape(...points: Point[]): void;
+        /**
+         * Draw a rod.
+         * @category rod
+         */
+        rod: PenRod;
         /**
          * Fill a shape.
          * @category fill
@@ -4863,12 +4906,12 @@ declare module "Pen/PhyPen" {
          *  boxHeight: 3,
          *  angle: 30,
          *  angleLabel: 'θ',
-         *  weight: 4,
+         *  weight: 5,
          *  weightLabel: 'mg',
          *  weightXLabel: 'mg\\sinθ',
          *  weightYLabel: 'mg\\cosθ',
          *  weightAngleLabel: true,
-         *  normal: 3,
+         *  normal: 4,
          *  normalLabel: 'R',
          *  friction: 0,
          *  frictionLabel: 'f',

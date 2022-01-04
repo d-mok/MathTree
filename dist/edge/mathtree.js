@@ -22486,6 +22486,37 @@
     }
   };
 
+  // src/Pen/modules/rod.ts
+  var PenRod = class {
+    constructor(pen, cv) {
+      this.pen = pen;
+      this.cv = cv;
+    }
+    end(A2, dir3, length) {
+      return length === void 0 ? this.cv.edgePoint(A2, dir3) : Move(A2, dir3, length);
+    }
+    line(A2, dir3, length, label) {
+      let B2 = this.end(A2, dir3, length);
+      this.pen.line(A2, B2, label);
+    }
+    dash(A2, dir3, length, label) {
+      let B2 = this.end(A2, dir3, length);
+      this.pen.dash(A2, B2, label);
+    }
+    arrow(A2, dir3, length, label) {
+      let B2 = this.end(A2, dir3, length);
+      this.pen.arrow(A2, B2, label);
+    }
+    rayFrom(A2, dir3, length, label) {
+      let B2 = this.end(A2, dir3, length);
+      this.pen.ray(A2, B2, label);
+    }
+    rayTo(A2, dir3, length, label) {
+      let B2 = this.end(A2, dir3, length);
+      this.pen.ray(B2, A2, label);
+    }
+  };
+
   // src/Pen/Pen.ts
   var DEFAULT_POINT_RADIUS_PIXEL = 2;
   var DEFAULT_CUTTER_LENGTH_PIXEL = 5;
@@ -22590,8 +22621,8 @@
           this.label.front([A2, B2], String(label));
       }
     }
-    arrowCompo(O2, P2, dir3, arrowLabel, angleLabel) {
-      let Q2 = PdFoot(P2, [O2, dir3]);
+    arrowCompo(O2, P2, alongDir, arrowLabel, angleLabel) {
+      let Q2 = PdFoot(P2, [O2, alongDir]);
       this.cv.save();
       if (this.cv.$ARROW_LABEL === "line")
         this.set.labelCenter(O2, P2);
@@ -22600,10 +22631,10 @@
       if (angleLabel !== void 0)
         this.angle(Q2, O2, P2, angleLabel);
     }
-    arrowResolve(O2, P2, dir3, arrowLabels = [], angleLabel) {
+    arrowResolve(O2, P2, alongDir, arrowLabels = [], angleLabel) {
       let [l1, l22] = arrowLabels;
-      this.arrowCompo(O2, P2, dir3, l1, angleLabel);
-      this.arrowCompo(O2, P2, dir3 + 90, l22);
+      this.arrowCompo(O2, P2, alongDir, l1, angleLabel);
+      this.arrowCompo(O2, P2, alongDir + 90, l22);
     }
     length(A2, B2, label) {
       this.cv.line([A2, B2]);
@@ -22625,14 +22656,11 @@
         }
       }
     }
-    ray(A2, B2) {
+    ray(A2, B2, label) {
       this.cv.line([A2, B2]);
+      if (label !== void 0)
+        this.label.line([A2, B2], label);
       this.cv.midArrowHead(A2, B2, 5);
-    }
-    rayTo(A2, dir3) {
-      let edgePoint = this.cv.edgePoint(A2, dir3);
-      this.cv.line([A2, edgePoint]);
-      this.cv.midArrowHead(A2, edgePoint, 5);
     }
     polyline(...points) {
       this.cv.line(points);
@@ -22650,6 +22678,7 @@
       this.polygon(...points);
       this.polyshade(...points);
     }
+    rod = new PenRod(this, this.cv);
     fill = new PenFill(this, this.cv);
     shade = new PenShade(this, this.cv);
     linProg = new PenLinProg(this, this.cv);
@@ -23683,12 +23712,12 @@
       boxHeight = 3,
       angle: angle2 = 30,
       angleLabel = "\u03B8",
-      weight = 4,
+      weight = 5,
       weightLabel = "mg",
       weightXLabel = "mg\\sin\u03B8",
       weightYLabel = "mg\\cos\u03B8",
       weightAngleLabel = true,
-      normal = 3,
+      normal = 4,
       normalLabel = "R",
       friction = 0,
       frictionLabel = "f",
