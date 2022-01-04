@@ -22311,6 +22311,11 @@
       let [a2, b2, c3] = lin().byBisector(A2, B2).toLinear();
       this.linear(a2, b2, c3);
     }
+    rect(A2, C2) {
+      let [a2, b2] = A2;
+      let [c3, d2] = C2;
+      this.pen.polygon([a2, b2], [c3, b2], [c3, d2], [a2, d2]);
+    }
   };
 
   // src/Pen/modules/fill.ts

@@ -131,4 +131,17 @@ export class PenGraph {
     }
 
 
+    /**
+     * Draw a rectangle.
+     * ```
+     * pen.graph.rect([0,0],[2,3]) // draw a rectangle [[0,0],[2,0],[2,3],[0,3]]
+     * ```
+     */
+    rect(A: Point2D, C: Point2D) {
+        let [a, b] = A
+        let [c, d] = C
+        this.pen.polygon([a, b], [c, b], [c, d], [a, d])
+    }
+
+
 }

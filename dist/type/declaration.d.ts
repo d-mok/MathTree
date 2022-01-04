@@ -3816,6 +3816,13 @@ declare module "Pen/modules/graph" {
          * ```
          */
         perpBisector(A: Point2D, B: Point2D): void;
+        /**
+         * Draw a rectangle.
+         * ```
+         * pen.graph.rect([0,0],[2,3]) // draw a rectangle [[0,0],[2,0],[2,3],[0,3]]
+         * ```
+         */
+        rect(A: Point2D, C: Point2D): void;
     }
 }
 declare module "Pen/modules/fill" {
