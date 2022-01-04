@@ -133,7 +133,8 @@ export class PhyPenCls {
         let W = MoveY(G, -weight)
 
         // normal reaction
-        let N = Move(G, 90 + angle, normal)
+        let M = Slide(P,R,0.6)
+        let N = Move(M, 90 + angle, normal)
 
         // friction
         let g = friction < 0 ? P : R
@@ -173,7 +174,7 @@ export class PhyPenCls {
             // normal
             pen.set.weight(3)
             pen.set.color('purple')
-            pen.arrow(G, N, normalLabel)
+            pen.arrow(M, N, normalLabel)
 
             if (showWeightCompo) {
                 pen.set.labelCenter(G)

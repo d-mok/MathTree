@@ -23714,7 +23714,8 @@
       let Y2 = Rotate(Z2, angle2, O2);
       let G2 = Mid(P2, Q2, R2, S2);
       let W2 = MoveY(G2, -weight);
-      let N2 = Move(G2, 90 + angle2, normal);
+      let M2 = Slide(P2, R2, 0.6);
+      let N2 = Move(M2, 90 + angle2, normal);
       let g2 = friction < 0 ? P2 : R2;
       let f3 = Move(g2, friction < 0 ? 180 + angle2 : angle2, Math.abs(friction));
       let E2 = S2;
@@ -23742,7 +23743,7 @@
         pen.arrow(G2, W2, weightLabel);
         pen.set.weight(3);
         pen.set.color("purple");
-        pen.arrow(G2, N2, normalLabel);
+        pen.arrow(M2, N2, normalLabel);
         if (showWeightCompo) {
           pen.set.labelCenter(G2);
           pen.set.weight(2);
