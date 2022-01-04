@@ -130,9 +130,10 @@ export class Host {
      * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
      * ```
      */
-    @checkIt(owl.point2D)
-    @inspectIt(function distinct_points(A, B, P) { return owl.distinct([A, B]) })
-    static PdFoot(A: Point2D, B: Point2D, P: Point2D): Point2D {
+    @checkIt(owl.point2D, owl.arrayWith(owl.or([owl.point2D, owl.num])))
+    @inspectIt(function distinct_points(P, [A, B]) { return owl.distinct([A, B]) })
+    static PdFoot(P: Point2D, [A, B]: [Point2D, Point2D | number]): Point2D {
+        if (typeof B === 'number') B = Move(A, B, 1)
         return vec2D(A, P).projectOn(vec2D(A, B)).add(A).toArray()
     }
 

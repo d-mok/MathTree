@@ -306,8 +306,7 @@ export class PenCls {
      * @category draw
      */
     arrowCompo(O: Point2D, P: Point2D, dir: number, arrowLabel?: string | number, angleLabel?: string | number) {
-        let X = Move(O, dir, 1)
-        let Q = PdFoot(O, X, P)
+        let Q = PdFoot(P, [O, dir])
         this.cv.save()
         this.set.labelCenter(O, P)
         this.arrow(O, Q, arrowLabel)
@@ -364,7 +363,7 @@ export class PenCls {
      * @category draw
      */
     height(V: Point2D, [A, B]: [Point2D, Point2D], label?: string | number) {
-        let F = PdFoot(A, B, V)
+        let F = PdFoot(V, [A, B])
         this.dash(V, F)
         this.rightAngle(A, F, V)
         if (label !== undefined) {

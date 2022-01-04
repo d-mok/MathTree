@@ -1147,7 +1147,7 @@ declare module "Math/Code/Geometry" {
          * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
          * ```
          */
-        static PdFoot(A: Point2D, B: Point2D, P: Point2D): Point2D;
+        static PdFoot(P: Point2D, [A, B]: [Point2D, Point2D | number]): Point2D;
         /**
          * the intersection point of AB and CD.
          * ```

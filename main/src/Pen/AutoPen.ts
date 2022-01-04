@@ -562,8 +562,8 @@ export class AutoPenCls {
         pen.size.set(scale)
 
 
-        function drawHeight(vertex: [number, number], base: [number, number][]) {
-            let F = PdFoot(base[0], base[1], vertex)
+        function drawHeight(vertex: Point2D, base: Point2D[]) {
+            let F = PdFoot(vertex,[base[0], base[1]])
             pen.set.dash([5, 5])
             pen.set.color('grey')
             pen.line(vertex, F)

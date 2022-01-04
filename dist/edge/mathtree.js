@@ -15969,7 +15969,9 @@
     static Dir(A2, B2) {
       return vec2D(A2, B2).argument();
     }
-    static PdFoot(A2, B2, P2) {
+    static PdFoot(P2, [A2, B2]) {
+      if (typeof B2 === "number")
+        B2 = Move(A2, B2, 1);
       return vec2D(A2, P2).projectOn(vec2D(A2, B2)).add(A2).toArray();
     }
     static Intersection(A2, B2, C2, D2) {
@@ -16096,8 +16098,8 @@
     })
   ], Host4, "Dir", 1);
   __decorateClass([
-    checkIt(owl.point2D),
-    inspectIt(function distinct_points(A2, B2, P2) {
+    checkIt(owl.point2D, owl.arrayWith(owl.or([owl.point2D, owl.num]))),
+    inspectIt(function distinct_points(P2, [A2, B2]) {
       return owl.distinct([A2, B2]);
     })
   ], Host4, "PdFoot", 1);
@@ -18275,8 +18277,8 @@
       throw "never";
     }
     static Orthocentre(A2, B2, C2) {
-      let H2 = PdFoot(A2, B2, C2);
-      let G2 = PdFoot(B2, C2, A2);
+      let H2 = PdFoot(C2, [A2, B2]);
+      let G2 = PdFoot(A2, [B2, C2]);
       let [x2, y2] = Intersection(C2, H2, A2, G2);
       return [cal.blur(x2), cal.blur(y2)];
     }
@@ -22572,8 +22574,7 @@
         this.label.line([A2, B2], label);
     }
     arrowCompo(O2, P2, dir3, arrowLabel, angleLabel) {
-      let X2 = Move(O2, dir3, 1);
-      let Q2 = PdFoot(O2, X2, P2);
+      let Q2 = PdFoot(P2, [O2, dir3]);
       this.cv.save();
       this.set.labelCenter(O2, P2);
       this.arrow(O2, Q2, arrowLabel);
@@ -22594,7 +22595,7 @@
         this.label.line([A2, B2], label);
     }
     height(V2, [A2, B2], label) {
-      let F2 = PdFoot(A2, B2, V2);
+      let F2 = PdFoot(V2, [A2, B2]);
       this.dash(V2, F2);
       this.rightAngle(A2, F2, V2);
       if (label !== void 0) {
@@ -23116,7 +23117,7 @@
       pen.range.set([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax]);
       pen.size.set(scale);
       function drawHeight(vertex, base2) {
-        let F2 = PdFoot(base2[0], base2[1], vertex);
+        let F2 = PdFoot(vertex, [base2[0], base2[1]]);
         pen.set.dash([5, 5]);
         pen.set.color("grey");
         pen.line(vertex, F2);
