@@ -4872,12 +4872,19 @@ declare module "Pen/PhyPen" {
          *  normalLabel: 'R',
          *  friction: 0,
          *  frictionLabel: 'f',
+         *  applied: 2,
+         *  appliedLabel: 'F',
+         *  appliedXLabel: 'F\\cosφ',
+         *  appliedYLabel: 'F\\sinφ',
+         *  appliedAngle: 20,
+         *  appliedAngleLabel: 'φ',
          *  showForces: false,
-         *  showWeightCompo: false
+         *  showWeightCompo: false,
+         *  showAppliedCompo: false
          * })
          * ```
          */
-        InclinedPlane({ boxMid, boxWidth, boxHeight, angle, angleLabel, weight, weightLabel, weightXLabel, weightYLabel, weightAngleLabel, normal, normalLabel, friction, frictionLabel, showForces, showWeightCompo }: {
+        InclinedPlane({ boxMid, boxWidth, boxHeight, angle, angleLabel, weight, weightLabel, weightXLabel, weightYLabel, weightAngleLabel, normal, normalLabel, friction, frictionLabel, applied, appliedLabel, appliedXLabel, appliedYLabel, appliedAngle, appliedAngleLabel, showForces, showWeightCompo, showAppliedCompo }: {
             boxMid?: number;
             boxWidth?: number;
             boxHeight?: number;
@@ -4892,8 +4899,15 @@ declare module "Pen/PhyPen" {
             normalLabel?: string;
             friction?: number;
             frictionLabel?: string;
+            applied?: number;
+            appliedLabel?: string;
+            appliedXLabel?: string;
+            appliedYLabel?: string;
+            appliedAngle?: number;
+            appliedAngleLabel?: string | boolean;
             showForces?: boolean;
             showWeightCompo?: boolean;
+            showAppliedCompo?: boolean;
         }): void;
         /**
          * A projectile trajectory.

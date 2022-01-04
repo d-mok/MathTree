@@ -23692,8 +23692,15 @@
       normalLabel = "R",
       friction = 0,
       frictionLabel = "f",
+      applied = 2,
+      appliedLabel = "F",
+      appliedXLabel = "F\\cos\u03C6",
+      appliedYLabel = "F\\sin\u03C6",
+      appliedAngle = 20,
+      appliedAngleLabel = "\u03C6",
       showForces = false,
-      showWeightCompo = showForces
+      showWeightCompo = showForces,
+      showAppliedCompo = showForces
     }) {
       let O2 = [0, 0];
       let l3 = boxMid - boxWidth / 2;
@@ -23710,6 +23717,11 @@
       let N2 = Move(G2, 90 + angle2, normal);
       let g2 = friction < 0 ? P2 : R2;
       let f3 = Move(g2, friction < 0 ? 180 + angle2 : angle2, Math.abs(friction));
+      let E2 = S2;
+      let F2 = Move(E2, angle2 + appliedAngle, applied);
+      let apA = Dir(E2, F2);
+      if (apA > angle2 + 90 && apA < angle2 + 270)
+        [E2, F2] = [F2, E2];
       let pen = new Pen();
       pen.set.border(0.5);
       pen.range.capture(O2, P2, Q2, R2, S2, N2, f3);
@@ -23748,6 +23760,26 @@
           pen.set.weight(3);
           pen.set.color("blue");
           pen.arrow(g2, f3, frictionLabel);
+        }
+        if (applied !== 0) {
+          pen.set.weight(3);
+          pen.set.color("grey");
+          pen.arrow(E2, F2, appliedLabel);
+        }
+        if (showAppliedCompo) {
+          pen.set.labelCenter(E2);
+          pen.set.weight(2);
+          pen.set.color("grey");
+          pen.arrowCompo(E2, F2, angle2 + 90, appliedYLabel);
+          let a2;
+          if (appliedAngleLabel === true)
+            a2 = "";
+          if (appliedAngleLabel === false)
+            a2 = void 0;
+          if (typeof appliedAngleLabel === "string")
+            a2 = appliedAngleLabel;
+          pen.arrowCompo(E2, F2, angle2 + 90, appliedXLabel, a2);
+          pen.set.labelCenter();
         }
       }
       this.pen = pen;

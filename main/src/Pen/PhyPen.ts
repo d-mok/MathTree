@@ -49,8 +49,15 @@ export class PhyPenCls {
      *  normalLabel: 'R',
      *  friction: 0,
      *  frictionLabel: 'f',
+     *  applied: 2,
+     *  appliedLabel: 'F',
+     *  appliedXLabel: 'F\\cosφ',
+     *  appliedYLabel: 'F\\sinφ',
+     *  appliedAngle: 20,
+     *  appliedAngleLabel: 'φ',
      *  showForces: false,
-     *  showWeightCompo: false
+     *  showWeightCompo: false,
+     *  showAppliedCompo: false
      * })
      * ```
      */
@@ -69,8 +76,15 @@ export class PhyPenCls {
         normalLabel = 'R',
         friction = 0,
         frictionLabel = 'f',
+        applied = 2,
+        appliedLabel = 'F',
+        appliedXLabel = 'F\\cosφ',
+        appliedYLabel = 'F\\sinφ',
+        appliedAngle = 20,
+        appliedAngleLabel = 'φ',
         showForces = false,
-        showWeightCompo = showForces
+        showWeightCompo = showForces,
+        showAppliedCompo = showForces
     }: {
         boxMid?: number
         boxWidth?: number
@@ -86,8 +100,15 @@ export class PhyPenCls {
         normalLabel?: string
         friction?: number
         frictionLabel?: string
+        applied?: number
+        appliedLabel?: string
+        appliedXLabel?: string
+        appliedYLabel?: string
+        appliedAngle?: number
+        appliedAngleLabel?: string | boolean
         showForces?: boolean
         showWeightCompo?: boolean
+        showAppliedCompo?: boolean
     }) {
 
 
@@ -118,6 +139,13 @@ export class PhyPenCls {
         let g = friction < 0 ? P : R
         let f = Move(g, friction < 0 ? 180 + angle : angle, Math.abs(friction))
 
+        // applied force
+        let E = S
+        let F = Move(E, angle + appliedAngle, applied)
+        let apA = Dir(E, F)
+        if (apA > angle + 90 && apA < angle + 270)
+            [E, F] = [F, E]
+
         let pen = new Pen()
 
         pen.set.border(0.5)
@@ -139,32 +167,24 @@ export class PhyPenCls {
             pen.set.weight(3)
             pen.set.color('red')
             pen.arrow(G, W, weightLabel)
-            // pen.label.point(W, weightLabel)
 
             // normal
             pen.set.weight(3)
             pen.set.color('purple')
             pen.arrow(G, N, normalLabel)
-            // pen.label.point(N, normalLabel)
 
             if (showWeightCompo) {
                 pen.set.labelCenter(G)
-
                 pen.set.weight(2)
                 pen.set.color('red')
                 // mgsin
                 pen.arrowCompo(G, W, angle, weightXLabel)
-                // let sinHead = PdFoot(W, [G, angle])
-                // pen.label.point(sinHead, weightXLabel)
                 // mgcos
                 let a: string | undefined
                 if (weightAngleLabel === true) a = angleLabel
                 if (weightAngleLabel === false) a = undefined
                 if (typeof weightAngleLabel === 'string') a = weightAngleLabel
-                // let cosHead = PdFoot(W, [G, angle + 90])
                 pen.arrowCompo(G, W, angle + 90, weightYLabel, a)
-                // pen.label.point(cosHead, weightYLabel)
-
                 pen.set.labelCenter()
             }
 
@@ -173,7 +193,30 @@ export class PhyPenCls {
                 pen.set.weight(3)
                 pen.set.color('blue')
                 pen.arrow(g, f, frictionLabel)
-                // pen.label.point(f, frictionLabel)
+            }
+
+
+            // applied
+            if (applied !== 0) {
+                pen.set.weight(3)
+                pen.set.color('grey')
+                pen.arrow(E, F, appliedLabel)
+            }
+
+            // applied comp
+            if (showAppliedCompo) {
+                pen.set.labelCenter(E)
+                pen.set.weight(2)
+                pen.set.color('grey')
+                // Fsin
+                pen.arrowCompo(E, F, angle + 90, appliedYLabel)
+                // Fcos
+                let a: string | undefined
+                if (appliedAngleLabel === true) a = ''
+                if (appliedAngleLabel === false) a = undefined
+                if (typeof appliedAngleLabel === 'string') a = appliedAngleLabel
+                pen.arrowCompo(E, F, angle + 90, appliedXLabel, a)
+                pen.set.labelCenter()
             }
         }
 
