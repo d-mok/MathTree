@@ -36,9 +36,9 @@ export class PhyPenCls {
      * let pen = new PhyPen()
      * pen.InclinedPlane({
      *  boxMid: 10,
-     *  boxWidth: 3,
-     *  boxHeight: 2,
-     *  angle: 25,
+     *  boxWidth: 6,
+     *  boxHeight: 3,
+     *  angle: 30,
      *  angleLabel: 'θ',
      *  weight: 4,
      *  weightLabel: 'mg',
@@ -49,7 +49,7 @@ export class PhyPenCls {
      *  normalLabel: 'R',
      *  friction: 0,
      *  frictionLabel: 'f',
-     *  applied: 2,
+     *  applied: 0,
      *  appliedLabel: 'F',
      *  appliedXLabel: 'F\\cosφ',
      *  appliedYLabel: 'F\\sinφ',
@@ -63,9 +63,9 @@ export class PhyPenCls {
      */
     InclinedPlane({
         boxMid = 10,
-        boxWidth = 3,
-        boxHeight = 2,
-        angle = 25,
+        boxWidth = 6,
+        boxHeight = 3,
+        angle = 30,
         angleLabel = 'θ',
         weight = 4,
         weightLabel = 'mg',
@@ -76,7 +76,7 @@ export class PhyPenCls {
         normalLabel = 'R',
         friction = 0,
         frictionLabel = 'f',
-        applied = 2,
+        applied = 0,
         appliedLabel = 'F',
         appliedXLabel = 'F\\cosφ',
         appliedYLabel = 'F\\sinφ',
@@ -204,7 +204,7 @@ export class PhyPenCls {
             }
 
             // applied comp
-            if (showAppliedCompo) {
+            if (applied !== 0 && showAppliedCompo) {
                 pen.set.labelCenter(E)
                 pen.set.weight(2)
                 pen.set.color('grey')
@@ -215,7 +215,7 @@ export class PhyPenCls {
                 if (appliedAngleLabel === true) a = ''
                 if (appliedAngleLabel === false) a = undefined
                 if (typeof appliedAngleLabel === 'string') a = appliedAngleLabel
-                pen.arrowCompo(E, F, angle + 90, appliedXLabel, a)
+                pen.arrowCompo(E, F, angle, appliedXLabel, a)
                 pen.set.labelCenter()
             }
         }

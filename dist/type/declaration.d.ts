@@ -4859,9 +4859,9 @@ declare module "Pen/PhyPen" {
          * let pen = new PhyPen()
          * pen.InclinedPlane({
          *  boxMid: 10,
-         *  boxWidth: 3,
-         *  boxHeight: 2,
-         *  angle: 25,
+         *  boxWidth: 6,
+         *  boxHeight: 3,
+         *  angle: 30,
          *  angleLabel: 'θ',
          *  weight: 4,
          *  weightLabel: 'mg',
@@ -4872,7 +4872,7 @@ declare module "Pen/PhyPen" {
          *  normalLabel: 'R',
          *  friction: 0,
          *  frictionLabel: 'f',
-         *  applied: 2,
+         *  applied: 0,
          *  appliedLabel: 'F',
          *  appliedXLabel: 'F\\cosφ',
          *  appliedYLabel: 'F\\sinφ',

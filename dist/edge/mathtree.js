@@ -23679,9 +23679,9 @@
     }
     InclinedPlane({
       boxMid = 10,
-      boxWidth = 3,
-      boxHeight = 2,
-      angle: angle2 = 25,
+      boxWidth = 6,
+      boxHeight = 3,
+      angle: angle2 = 30,
       angleLabel = "\u03B8",
       weight = 4,
       weightLabel = "mg",
@@ -23692,7 +23692,7 @@
       normalLabel = "R",
       friction = 0,
       frictionLabel = "f",
-      applied = 2,
+      applied = 0,
       appliedLabel = "F",
       appliedXLabel = "F\\cos\u03C6",
       appliedYLabel = "F\\sin\u03C6",
@@ -23766,7 +23766,7 @@
           pen.set.color("grey");
           pen.arrow(E2, F2, appliedLabel);
         }
-        if (showAppliedCompo) {
+        if (applied !== 0 && showAppliedCompo) {
           pen.set.labelCenter(E2);
           pen.set.weight(2);
           pen.set.color("grey");
@@ -23778,7 +23778,7 @@
             a2 = void 0;
           if (typeof appliedAngleLabel === "string")
             a2 = appliedAngleLabel;
-          pen.arrowCompo(E2, F2, angle2 + 90, appliedXLabel, a2);
+          pen.arrowCompo(E2, F2, angle2, appliedXLabel, a2);
           pen.set.labelCenter();
         }
       }
