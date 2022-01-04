@@ -2,6 +2,7 @@ import { px, Point2D, Point, inch } from '../global';
 import { Canvas02 } from './canvas02';
 declare type AngleMode = 'normal' | 'polar' | 'reflex';
 declare type LineLabel = 'auto' | 'left' | 'right';
+declare type ArrowLabel = 'line' | 'head' | 'front';
 /**
  * Handle:
  * - Settings
@@ -38,6 +39,7 @@ export declare class Canvas03 extends Canvas02 {
     $LENGTH_UNIT: string;
     $BORDER: inch;
     $LINE_LABEL: LineLabel;
+    $ARROW_LABEL: ArrowLabel;
     $HALF_AXIS_X: boolean;
     $HALF_AXIS_Y: boolean;
     private _$LABEL_CENTER;

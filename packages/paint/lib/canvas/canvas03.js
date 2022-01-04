@@ -28,6 +28,7 @@ export class Canvas03 extends Canvas02 {
         this.$LENGTH_UNIT = '';
         this.$BORDER = 0.2;
         this.$LINE_LABEL = 'auto';
+        this.$ARROW_LABEL = 'line';
         this.$HALF_AXIS_X = false;
         this.$HALF_AXIS_Y = false;
         this._$LABEL_CENTER = this.center();
@@ -130,6 +131,7 @@ export class Canvas03 extends Canvas02 {
             $LENGTH_UNIT: this.$LENGTH_UNIT,
             $BORDER: this.$BORDER,
             $LINE_LABEL: this.$LINE_LABEL,
+            $ARROW_LABEL: this.$ARROW_LABEL,
             $HALF_AXIS_X: this.$HALF_AXIS_X,
             $HALF_AXIS_Y: this.$HALF_AXIS_Y
         });
@@ -148,6 +150,7 @@ export class Canvas03 extends Canvas02 {
         this.$LENGTH_UNIT = state.$LENGTH_UNIT;
         this.$BORDER = state.$BORDER;
         this.$LINE_LABEL = state.$LINE_LABEL;
+        this.$ARROW_LABEL = state.$ARROW_LABEL;
         this.$HALF_AXIS_X = state.$HALF_AXIS_X;
         this.$HALF_AXIS_Y = state.$HALF_AXIS_Y;
     }

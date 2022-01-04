@@ -39,5 +39,9 @@ export class Canvas10 extends Canvas09 {
         let normal = this.getLineDir(A, B);
         this.label(text, M, radius, normal + dir);
     }
+    labelFront(text, [A, B], dir, radius) {
+        let arrowDir = this.getDir(A, B);
+        this.labelPoint(text, B, arrowDir + dir, radius);
+    }
 }
 //# sourceMappingURL=canvas10.js.map

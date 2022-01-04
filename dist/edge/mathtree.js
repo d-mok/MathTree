@@ -20871,6 +20871,7 @@
       this.$LENGTH_UNIT = "";
       this.$BORDER = 0.2;
       this.$LINE_LABEL = "auto";
+      this.$ARROW_LABEL = "line";
       this.$HALF_AXIS_X = false;
       this.$HALF_AXIS_Y = false;
       this._$LABEL_CENTER = this.center();
@@ -20970,6 +20971,7 @@
         $LENGTH_UNIT: this.$LENGTH_UNIT,
         $BORDER: this.$BORDER,
         $LINE_LABEL: this.$LINE_LABEL,
+        $ARROW_LABEL: this.$ARROW_LABEL,
         $HALF_AXIS_X: this.$HALF_AXIS_X,
         $HALF_AXIS_Y: this.$HALF_AXIS_Y
       });
@@ -20988,6 +20990,7 @@
       this.$LENGTH_UNIT = state.$LENGTH_UNIT;
       this.$BORDER = state.$BORDER;
       this.$LINE_LABEL = state.$LINE_LABEL;
+      this.$ARROW_LABEL = state.$ARROW_LABEL;
       this.$HALF_AXIS_X = state.$HALF_AXIS_X;
       this.$HALF_AXIS_Y = state.$HALF_AXIS_Y;
     }
@@ -21420,10 +21423,6 @@
       let B2 = this.edgeRight(y2);
       this.line([A2, B2]);
     }
-    rod(anchor, dir3) {
-      let edge = this.edgePoint(anchor, dir3);
-      this.line([anchor, edge]);
-    }
     solid(pts) {
       this.createPath(pts);
       this.doSolid();
@@ -21805,6 +21804,10 @@
       let normal = this.getLineDir(A2, B2);
       this.label(text, M2, radius, normal + dir3);
     }
+    labelFront(text, [A2, B2], dir3, radius) {
+      let arrowDir = this.getDir(A2, B2);
+      this.labelPoint(text, B2, arrowDir + dir3, radius);
+    }
   };
 
   // src/Pen/modules/range.ts
@@ -21928,6 +21931,9 @@
     lineLabel(setting = "auto") {
       this.cv.$LINE_LABEL = setting;
     }
+    arrowLabel(setting = "line") {
+      this.cv.$ARROW_LABEL = setting;
+    }
     halfAxisX(half = false) {
       this.cv.$HALF_AXIS_X = half;
     }
@@ -21949,6 +21955,7 @@
       this.lengthUnit();
       this.angle();
       this.lineLabel();
+      this.arrowLabel();
       this.halfAxisX();
       this.halfAxisY();
     }
@@ -22374,6 +22381,9 @@
     line([A2, B2], text, dir3 = 0, radius = 15) {
       this.cv.labelLine(text, [A2, B2], dir3, radius);
     }
+    front([A2, B2], text, dir3 = 0, radius = 15) {
+      this.cv.labelFront(text, [A2, B2], dir3, radius);
+    }
     polygon(points, text) {
       let pts = this.cv.pjs(points);
       this.cv.labelPoint(String(text), Mid(...pts), 0, 0);
@@ -22570,8 +22580,15 @@
     }
     arrow(A2, B2, label) {
       this.cv.arrow(A2, B2, 5);
-      if (label !== void 0)
-        this.label.line([A2, B2], label);
+      if (label !== void 0) {
+        let mode = this.cv.$ARROW_LABEL;
+        if (mode === "line")
+          this.label.line([A2, B2], label);
+        if (mode === "head")
+          this.label.point(B2, String(label));
+        if (mode === "front")
+          this.label.front([A2, B2], String(label));
+      }
     }
     arrowCompo(O2, P2, dir3, arrowLabel, angleLabel) {
       let Q2 = PdFoot(P2, [O2, dir3]);

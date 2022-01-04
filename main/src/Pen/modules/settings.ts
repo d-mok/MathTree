@@ -174,6 +174,16 @@ export class PenSettings {
     }
 
 
+    /**
+     * Set the mode for arrow label.
+     * ```
+     * pen.set.arrowLabel('line') // {'line', 'head', 'front'}
+     * ```
+     */
+    arrowLabel(setting: 'line' | 'head' | 'front' = 'line'): void {
+        this.cv.$ARROW_LABEL = setting
+    }
+
 
     /**
      * Use positive x-axis only.
@@ -218,6 +228,7 @@ export class PenSettings {
         this.lengthUnit()
         this.angle()
         this.lineLabel()
+        this.arrowLabel()
         this.halfAxisX()
         this.halfAxisY()
     }

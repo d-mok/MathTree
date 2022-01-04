@@ -78,6 +78,20 @@ export class PenLabel {
 
 
     /**
+     * Add a label at the front of arrow AB.
+     * ```
+     * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
+     * ```
+     */
+    front([A, B]: [Point, Point], text: string, dir = 0, radius = 15) {
+        this.cv.labelFront(text, [A, B], dir, radius)
+    }
+
+
+
+
+
+    /**
      * Add a label to a polygon.
      * ```
      * pen.label.polygon([[0,0],[1,0],[0,1]],'L') // label the polygon as 'L'

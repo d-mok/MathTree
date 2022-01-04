@@ -4,6 +4,7 @@ import { Canvas02 } from './canvas02'
 
 type AngleMode = 'normal' | 'polar' | 'reflex'
 type LineLabel = 'auto' | 'left' | 'right'
+type ArrowLabel = 'line' | 'head' | 'front'
 
 type state = {
     $3D_ANGLE: number
@@ -15,6 +16,7 @@ type state = {
     $LENGTH_UNIT: string
     $BORDER: number
     $LINE_LABEL: LineLabel
+    $ARROW_LABEL: ArrowLabel
     $HALF_AXIS_X: boolean
     $HALF_AXIS_Y: boolean
 }
@@ -162,6 +164,7 @@ export class Canvas03 extends Canvas02 {
     public $LENGTH_UNIT: string = ''
     public $BORDER: inch = 0.2
     public $LINE_LABEL: LineLabel = 'auto'
+    public $ARROW_LABEL: ArrowLabel = 'line'
     public $HALF_AXIS_X: boolean = false
     public $HALF_AXIS_Y: boolean = false
 
@@ -196,6 +199,7 @@ export class Canvas03 extends Canvas02 {
             $LENGTH_UNIT: this.$LENGTH_UNIT,
             $BORDER: this.$BORDER,
             $LINE_LABEL: this.$LINE_LABEL,
+            $ARROW_LABEL: this.$ARROW_LABEL,
             $HALF_AXIS_X: this.$HALF_AXIS_X,
             $HALF_AXIS_Y: this.$HALF_AXIS_Y
         })
@@ -214,6 +218,7 @@ export class Canvas03 extends Canvas02 {
         this.$LENGTH_UNIT = state.$LENGTH_UNIT
         this.$BORDER = state.$BORDER
         this.$LINE_LABEL = state.$LINE_LABEL
+        this.$ARROW_LABEL = state.$ARROW_LABEL
         this.$HALF_AXIS_X = state.$HALF_AXIS_X
         this.$HALF_AXIS_Y = state.$HALF_AXIS_Y
     }

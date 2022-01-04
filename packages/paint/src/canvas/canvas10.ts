@@ -56,4 +56,9 @@ export class Canvas10 extends Canvas09 {
         this.label(text, M, radius, normal + dir)
     }
 
+    labelFront(text: string, [A, B]: [Point, Point], dir: number, radius: px): void {
+        let arrowDir = this.getDir(A, B)
+        this.labelPoint(text, B, arrowDir + dir, radius)
+    }
+
 }

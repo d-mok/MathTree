@@ -3486,6 +3486,13 @@ declare module "Pen/modules/settings" {
          */
         lineLabel(setting?: 'auto' | 'left' | 'right'): void;
         /**
+         * Set the mode for arrow label.
+         * ```
+         * pen.set.arrowLabel('line') // {'line', 'head', 'front'}
+         * ```
+         */
+        arrowLabel(setting?: 'line' | 'head' | 'front'): void;
+        /**
          * Use positive x-axis only.
          * ```
          * pen.set.halfAxisX(true) // use half
@@ -3947,6 +3954,13 @@ declare module "Pen/modules/label" {
          * ```
          */
         line([A, B]: [Point, Point], text: string | number, dir?: number, radius?: number): void;
+        /**
+         * Add a label at the front of arrow AB.
+         * ```
+         * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
+         * ```
+         */
+        front([A, B]: [Point, Point], text: string, dir?: number, radius?: number): void;
         /**
          * Add a label to a polygon.
          * ```

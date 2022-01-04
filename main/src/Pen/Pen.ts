@@ -292,7 +292,12 @@ export class PenCls {
      */
     arrow(A: Point, B: Point, label?: string | number) {
         this.cv.arrow(A, B, 5)
-        if (label !== undefined) this.label.line([A, B], label)
+        if (label !== undefined) {
+            let mode = this.cv.$ARROW_LABEL
+            if (mode === 'line') this.label.line([A, B], label)
+            if (mode === 'head') this.label.point(B, String(label))
+            if (mode === 'front') this.label.front([A, B], String(label))
+        }
     }
 
     /**
