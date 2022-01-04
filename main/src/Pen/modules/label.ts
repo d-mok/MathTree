@@ -17,7 +17,7 @@ export class PenLabel {
     * // label the point [1,2] as 'A', place the label on the left (180 degree)
     * ```
     */
-    point(point: Point, text = '', dir?: number, radius = 15) {
+    point(point: Point, text: string, dir?: number, radius = 15) {
         if (dir !== undefined) {
             this.cv.labelPoint(text, point, dir, radius)
         } else {

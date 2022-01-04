@@ -34,23 +34,23 @@ export class PhyPenCls {
      * Force.
      * ```
      * let pen = new PhyPen()
-     * pen.CarOnBankedRoad({
-     *  boxMid : 10,
-     *  boxWidth : 3,
-     *  boxHeight : 2,
-     *  angle : 25,
-     *  angleLabel : 'θ',
-     *  weight : 4,
-     *  weightLabel : 'mg',
-     *  weightXLabel = 'mg\\sinθ',
-     *  weightYLabel = 'mg\\cosθ',
-     *  weightAngleLabel = true,
-     *  normal : 3,
-     *  normalLabel : 'R',
-     *  friction : 0,
-     *  frictionLabel : 'f',
-     *  showForces = false,
-     *  showWeightCompo = showForces
+     * pen.InclinedPlane({
+     *  boxMid: 10,
+     *  boxWidth: 3,
+     *  boxHeight: 2,
+     *  angle: 25,
+     *  angleLabel: 'θ',
+     *  weight: 4,
+     *  weightLabel: 'mg',
+     *  weightXLabel: 'mg\\sinθ',
+     *  weightYLabel: 'mg\\cosθ',
+     *  weightAngleLabel: true,
+     *  normal: 3,
+     *  normalLabel: 'R',
+     *  friction: 0,
+     *  frictionLabel: 'f',
+     *  showForces: false,
+     *  showWeightCompo: false
      * })
      * ```
      */
@@ -146,16 +146,24 @@ export class PhyPenCls {
             pen.label.point(N, normalLabel)
 
             if (showWeightCompo) {
+                pen.set.labelCenter(G)
+
                 pen.set.weight(2)
                 pen.set.color('red')
                 // mgsin
-                pen.arrowCompo(G, W, angle, weightXLabel)
+                pen.arrowCompo(G, W, angle)
+                let sinHead = PdFoot(W, [G, angle])
+                pen.label.point(sinHead, weightXLabel)
                 // mgcos
                 let a: string | undefined
                 if (weightAngleLabel === true) a = angleLabel
                 if (weightAngleLabel === false) a = undefined
                 if (typeof weightAngleLabel === 'string') a = weightAngleLabel
-                pen.arrowCompo(G, W, angle + 90, weightYLabel, a)
+                let cosHead = PdFoot(W, [G, angle + 90])
+                pen.arrowCompo(G, W, angle + 90, undefined, a)
+                pen.label.point(cosHead, weightYLabel)
+
+                pen.set.labelCenter()
             }
 
             // friction

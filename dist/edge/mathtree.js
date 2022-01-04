@@ -22347,7 +22347,7 @@
       this.pen = pen;
       this.cv = cv;
     }
-    point(point, text = "", dir3, radius = 15) {
+    point(point, text, dir3, radius = 15) {
       if (dir3 !== void 0) {
         this.cv.labelPoint(text, point, dir3, radius);
       } else {
@@ -23713,9 +23713,12 @@
         pen.arrow(G2, N2);
         pen.label.point(N2, normalLabel);
         if (showWeightCompo) {
+          pen.set.labelCenter(G2);
           pen.set.weight(2);
           pen.set.color("red");
-          pen.arrowCompo(G2, W2, angle2, weightXLabel);
+          pen.arrowCompo(G2, W2, angle2);
+          let sinHead = PdFoot(W2, [G2, angle2]);
+          pen.label.point(sinHead, weightXLabel);
           let a2;
           if (weightAngleLabel === true)
             a2 = angleLabel;
@@ -23723,7 +23726,10 @@
             a2 = void 0;
           if (typeof weightAngleLabel === "string")
             a2 = weightAngleLabel;
-          pen.arrowCompo(G2, W2, angle2 + 90, weightYLabel, a2);
+          let cosHead = PdFoot(W2, [G2, angle2 + 90]);
+          pen.arrowCompo(G2, W2, angle2 + 90, void 0, a2);
+          pen.label.point(cosHead, weightYLabel);
+          pen.set.labelCenter();
         }
         if (friction !== 0) {
           pen.set.weight(3);

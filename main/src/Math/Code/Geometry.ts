@@ -127,7 +127,7 @@ export class Host {
     /**
      * the foot of perpendicular from P to AB.
      * ```
-     * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
+     * PdFoot([-2,2],[[-1,-1],[1,1]]) // [0,0]
      * ```
      */
     @checkIt(owl.point2D, owl.arrayWith(owl.or([owl.point2D, owl.num])))

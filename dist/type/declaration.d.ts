@@ -1144,7 +1144,7 @@ declare module "Math/Code/Geometry" {
         /**
          * the foot of perpendicular from P to AB.
          * ```
-         * PdFoot([-1,-1],[1,1],[-2,2]) // [0,0]
+         * PdFoot([-2,2],[[-1,-1],[1,1]]) // [0,0]
          * ```
          */
         static PdFoot(P: Point2D, [A, B]: [Point2D, Point2D | number]): Point2D;
@@ -3913,7 +3913,7 @@ declare module "Pen/modules/label" {
         * // label the point [1,2] as 'A', place the label on the left (180 degree)
         * ```
         */
-        point(point: Point, text?: string, dir?: number, radius?: number): void;
+        point(point: Point, text: string, dir?: number, radius?: number): void;
         /**
          * Add a label to points, using index as text.
          * ```
@@ -4843,23 +4843,23 @@ declare module "Pen/PhyPen" {
          * Force.
          * ```
          * let pen = new PhyPen()
-         * pen.CarOnBankedRoad({
-         *  boxMid : 10,
-         *  boxWidth : 3,
-         *  boxHeight : 2,
-         *  angle : 25,
-         *  angleLabel : 'θ',
-         *  weight : 4,
-         *  weightLabel : 'mg',
-         *  weightXLabel = 'mg\\sinθ',
-         *  weightYLabel = 'mg\\cosθ',
-         *  weightAngleLabel = true,
-         *  normal : 3,
-         *  normalLabel : 'R',
-         *  friction : 0,
-         *  frictionLabel : 'f',
-         *  showForces = false,
-         *  showWeightCompo = showForces
+         * pen.InclinedPlane({
+         *  boxMid: 10,
+         *  boxWidth: 3,
+         *  boxHeight: 2,
+         *  angle: 25,
+         *  angleLabel: 'θ',
+         *  weight: 4,
+         *  weightLabel: 'mg',
+         *  weightXLabel: 'mg\\sinθ',
+         *  weightYLabel: 'mg\\cosθ',
+         *  weightAngleLabel: true,
+         *  normal: 3,
+         *  normalLabel: 'R',
+         *  friction: 0,
+         *  frictionLabel: 'f',
+         *  showForces: false,
+         *  showWeightCompo: false
          * })
          * ```
          */
