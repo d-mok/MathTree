@@ -23764,23 +23764,23 @@
           pen.arrow(g2, f3, frictionLabel);
         }
         if (applied !== 0) {
+          pen.set.labelCenter(R2, S2);
           pen.set.weight(3);
           pen.set.color("grey");
           pen.arrow(E2, F2, appliedLabel);
-        }
-        if (applied !== 0 && showAppliedCompo) {
-          pen.set.labelCenter(E2);
-          pen.set.weight(2);
-          pen.set.color("grey");
-          pen.arrowCompo(E2, F2, angle2 + 90, appliedYLabel);
-          let a2;
-          if (appliedAngleLabel === true)
-            a2 = "";
-          if (appliedAngleLabel === false)
-            a2 = void 0;
-          if (typeof appliedAngleLabel === "string")
-            a2 = appliedAngleLabel;
-          pen.arrowCompo(E2, F2, angle2, appliedXLabel, a2);
+          if (showAppliedCompo) {
+            pen.set.labelCenter(E2);
+            pen.set.weight(2);
+            pen.arrowCompo(E2, F2, angle2 + 90, appliedYLabel);
+            let a2;
+            if (appliedAngleLabel === true)
+              a2 = "";
+            if (appliedAngleLabel === false)
+              a2 = void 0;
+            if (typeof appliedAngleLabel === "string")
+              a2 = appliedAngleLabel;
+            pen.arrowCompo(E2, F2, angle2, appliedXLabel, a2);
+          }
           pen.set.labelCenter();
         }
       }

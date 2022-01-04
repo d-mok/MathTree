@@ -200,26 +200,27 @@ export class PhyPenCls {
 
             // applied
             if (applied !== 0) {
+                pen.set.labelCenter(R, S)
                 pen.set.weight(3)
                 pen.set.color('grey')
                 pen.arrow(E, F, appliedLabel)
-            }
 
-            // applied comp
-            if (applied !== 0 && showAppliedCompo) {
-                pen.set.labelCenter(E)
-                pen.set.weight(2)
-                pen.set.color('grey')
-                // Fsin
-                pen.arrowCompo(E, F, angle + 90, appliedYLabel)
-                // Fcos
-                let a: string | undefined
-                if (appliedAngleLabel === true) a = ''
-                if (appliedAngleLabel === false) a = undefined
-                if (typeof appliedAngleLabel === 'string') a = appliedAngleLabel
-                pen.arrowCompo(E, F, angle, appliedXLabel, a)
+                // applied comp
+                if (showAppliedCompo) {
+                    pen.set.labelCenter(E)
+                    pen.set.weight(2)
+                    // Fsin
+                    pen.arrowCompo(E, F, angle + 90, appliedYLabel)
+                    // Fcos
+                    let a: string | undefined
+                    if (appliedAngleLabel === true) a = ''
+                    if (appliedAngleLabel === false) a = undefined
+                    if (typeof appliedAngleLabel === 'string') a = appliedAngleLabel
+                    pen.arrowCompo(E, F, angle, appliedXLabel, a)
+                }
                 pen.set.labelCenter()
             }
+
         }
 
         this.pen = pen
