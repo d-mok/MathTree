@@ -142,14 +142,16 @@ export class PhyPenCls {
         // applied force
         let E = S
         let F = Move(E, angle + appliedAngle, applied)
-        let apA = Dir(E, F)
-        if (apA > angle + 90 && apA < angle + 270)
+        let apA = applied === 0 ? 0 : Dir(E, F)
+        if (apA > angle + 90 && apA < angle + 270) {
+            F = Rotate(F, 180, E);
             [E, F] = [F, E]
+        }
 
         let pen = new Pen()
 
         pen.set.border(0.5)
-        pen.range.capture(O, P, Q, R, S, N, f)
+        pen.range.capture(O, P, Q, R, S, N, f, E, F)
         pen.size.lock(1.3)
         pen.set.labelCenter(G)
         pen.set.textLatex(true)

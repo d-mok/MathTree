@@ -23719,12 +23719,14 @@
       let f3 = Move(g2, friction < 0 ? 180 + angle2 : angle2, Math.abs(friction));
       let E2 = S2;
       let F2 = Move(E2, angle2 + appliedAngle, applied);
-      let apA = Dir(E2, F2);
-      if (apA > angle2 + 90 && apA < angle2 + 270)
+      let apA = applied === 0 ? 0 : Dir(E2, F2);
+      if (apA > angle2 + 90 && apA < angle2 + 270) {
+        F2 = Rotate(F2, 180, E2);
         [E2, F2] = [F2, E2];
+      }
       let pen = new Pen();
       pen.set.border(0.5);
-      pen.range.capture(O2, P2, Q2, R2, S2, N2, f3);
+      pen.range.capture(O2, P2, Q2, R2, S2, N2, f3, E2, F2);
       pen.size.lock(1.3);
       pen.set.labelCenter(G2);
       pen.set.textLatex(true);
