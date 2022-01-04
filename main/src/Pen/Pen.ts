@@ -313,7 +313,8 @@ export class PenCls {
     arrowCompo(O: Point2D, P: Point2D, dir: number, arrowLabel?: string | number, angleLabel?: string | number) {
         let Q = PdFoot(P, [O, dir])
         this.cv.save()
-        this.set.labelCenter(O, P)
+        if (this.cv.$ARROW_LABEL === 'line')
+            this.set.labelCenter(O, P)
         this.arrow(O, Q, arrowLabel)
         this.cv.restore()
         if (angleLabel !== undefined)

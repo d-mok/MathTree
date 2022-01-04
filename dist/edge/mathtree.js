@@ -22593,7 +22593,8 @@
     arrowCompo(O2, P2, dir3, arrowLabel, angleLabel) {
       let Q2 = PdFoot(P2, [O2, dir3]);
       this.cv.save();
-      this.set.labelCenter(O2, P2);
+      if (this.cv.$ARROW_LABEL === "line")
+        this.set.labelCenter(O2, P2);
       this.arrow(O2, Q2, arrowLabel);
       this.cv.restore();
       if (angleLabel !== void 0)
