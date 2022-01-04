@@ -23721,21 +23721,18 @@
       pen.angle(Y2, O2, Z2, angleLabel);
       pen.set.weight(4);
       if (showForces) {
+        pen.set.arrowLabel("head");
         pen.set.weight(3);
         pen.set.color("red");
-        pen.arrow(G2, W2);
-        pen.label.point(W2, weightLabel);
+        pen.arrow(G2, W2, weightLabel);
         pen.set.weight(3);
         pen.set.color("purple");
-        pen.arrow(G2, N2);
-        pen.label.point(N2, normalLabel);
+        pen.arrow(G2, N2, normalLabel);
         if (showWeightCompo) {
           pen.set.labelCenter(G2);
           pen.set.weight(2);
           pen.set.color("red");
-          pen.arrowCompo(G2, W2, angle2);
-          let sinHead = PdFoot(W2, [G2, angle2]);
-          pen.label.point(sinHead, weightXLabel);
+          pen.arrowCompo(G2, W2, angle2, weightXLabel);
           let a2;
           if (weightAngleLabel === true)
             a2 = angleLabel;
@@ -23743,16 +23740,13 @@
             a2 = void 0;
           if (typeof weightAngleLabel === "string")
             a2 = weightAngleLabel;
-          let cosHead = PdFoot(W2, [G2, angle2 + 90]);
-          pen.arrowCompo(G2, W2, angle2 + 90, void 0, a2);
-          pen.label.point(cosHead, weightYLabel);
+          pen.arrowCompo(G2, W2, angle2 + 90, weightYLabel, a2);
           pen.set.labelCenter();
         }
         if (friction !== 0) {
           pen.set.weight(3);
           pen.set.color("blue");
-          pen.arrow(g2, f3);
-          pen.label.point(f3, frictionLabel);
+          pen.arrow(g2, f3, frictionLabel);
         }
       }
       this.pen = pen;

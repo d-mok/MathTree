@@ -133,17 +133,19 @@ export class PhyPenCls {
         pen.set.weight(4)
 
         if (showForces) {
+            pen.set.arrowLabel('head')
+
             // weight
             pen.set.weight(3)
             pen.set.color('red')
-            pen.arrow(G, W)
-            pen.label.point(W, weightLabel)
+            pen.arrow(G, W, weightLabel)
+            // pen.label.point(W, weightLabel)
 
             // normal
             pen.set.weight(3)
             pen.set.color('purple')
-            pen.arrow(G, N)
-            pen.label.point(N, normalLabel)
+            pen.arrow(G, N, normalLabel)
+            // pen.label.point(N, normalLabel)
 
             if (showWeightCompo) {
                 pen.set.labelCenter(G)
@@ -151,17 +153,17 @@ export class PhyPenCls {
                 pen.set.weight(2)
                 pen.set.color('red')
                 // mgsin
-                pen.arrowCompo(G, W, angle)
-                let sinHead = PdFoot(W, [G, angle])
-                pen.label.point(sinHead, weightXLabel)
+                pen.arrowCompo(G, W, angle, weightXLabel)
+                // let sinHead = PdFoot(W, [G, angle])
+                // pen.label.point(sinHead, weightXLabel)
                 // mgcos
                 let a: string | undefined
                 if (weightAngleLabel === true) a = angleLabel
                 if (weightAngleLabel === false) a = undefined
                 if (typeof weightAngleLabel === 'string') a = weightAngleLabel
-                let cosHead = PdFoot(W, [G, angle + 90])
-                pen.arrowCompo(G, W, angle + 90, undefined, a)
-                pen.label.point(cosHead, weightYLabel)
+                // let cosHead = PdFoot(W, [G, angle + 90])
+                pen.arrowCompo(G, W, angle + 90, weightYLabel, a)
+                // pen.label.point(cosHead, weightYLabel)
 
                 pen.set.labelCenter()
             }
@@ -170,8 +172,8 @@ export class PhyPenCls {
             if (friction !== 0) {
                 pen.set.weight(3)
                 pen.set.color('blue')
-                pen.arrow(g, f)
-                pen.label.point(f, frictionLabel)
+                pen.arrow(g, f, frictionLabel)
+                // pen.label.point(f, frictionLabel)
             }
         }
 
