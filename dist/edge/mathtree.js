@@ -14204,13 +14204,13 @@
   }
   function traceCircle(center, radius, angleRange, dots = 100) {
     const [h2, k2] = center;
-    function sin4(degree) {
+    function sin5(degree) {
       return Math.sin(degree / 180 * Math.PI);
     }
-    function cos4(degree) {
+    function cos5(degree) {
       return Math.cos(degree / 180 * Math.PI);
     }
-    return trace((t2) => [h2 + radius * cos4(t2), k2 + radius * sin4(t2)], angleRange, dots);
+    return trace((t2) => [h2 + radius * cos5(t2), k2 + radius * sin5(t2)], angleRange, dots);
   }
   function crammer(a2, b2, c3, p3, q2, r3) {
     if (a2 / b2 === p3 / q2)
@@ -14517,8 +14517,8 @@
       let m1 = this.magnitude();
       let m22 = this.create(vec3).magnitude();
       let dot = this.dot(vec3);
-      let cos4 = dot / m1 / m22;
-      let angle2 = Math.acos(cos4) * 180 / Math.PI;
+      let cos5 = dot / m1 / m22;
+      let angle2 = Math.acos(cos5) * 180 / Math.PI;
       return angle2;
     }
     projectOn(vec3) {
@@ -21269,6 +21269,17 @@
   };
 
   // ../packages/paint/lib/canvas/canvas06.js
+  function sin4(degree) {
+    return Math.sin(degree / 180 * Math.PI);
+  }
+  function cos4(degree) {
+    return Math.cos(degree / 180 * Math.PI);
+  }
+  function Move2([x2, y2], dir3, length) {
+    x2 += length * cos4(dir3);
+    y2 += length * sin4(dir3);
+    return [x2, y2];
+  }
   function deg2(radian) {
     return radian / Math.PI * 180;
   }
@@ -21359,6 +21370,12 @@
       let angle2 = this.getDirAngle(A2, O2, B2);
       let angleUnderThreshold = Math.max(threshold - angle2, 0);
       return angleUnderThreshold * pixelPerDeg;
+    }
+    getApexFromDial(A2, O2, B2) {
+      let V2 = this.pj(O2);
+      let P2 = typeof A2 === "number" ? Move2(V2, A2, 1) : this.pj(A2);
+      let Q2 = typeof B2 === "number" ? Move2(V2, B2, 1) : this.pj(B2);
+      return [P2, V2, Q2];
     }
   };
 
@@ -21683,13 +21700,13 @@
   }
   function traceCircle2(center, radius, angleRange, dots = 100) {
     const [h2, k2] = center;
-    function sin4(degree) {
+    function sin5(degree) {
       return Math.sin(degree / 180 * Math.PI);
     }
-    function cos4(degree) {
+    function cos5(degree) {
       return Math.cos(degree / 180 * Math.PI);
     }
-    return trace2((t2) => [h2 + radius * cos4(t2), k2 + radius * sin4(t2)], angleRange, dots);
+    return trace2((t2) => [h2 + radius * cos5(t2), k2 + radius * sin5(t2)], angleRange, dots);
   }
   function splitNull(arr) {
     let ls = [];
@@ -22647,14 +22664,8 @@
       let F2 = PdFoot(V2, [A2, B2]);
       this.dash(V2, F2);
       this.rightAngle(A2, F2, V2);
-      if (label !== void 0) {
-        const c3 = vec2D(V2, A2).cross2D(vec2D(V2, B2));
-        if (c3 > 0) {
-          this.label.line([V2, F2], label);
-        } else {
-          this.label.line([F2, V2], label);
-        }
-      }
+      if (label !== void 0)
+        this.label.line([V2, F2], label);
     }
     ray(A2, B2, label) {
       this.cv.line([A2, B2]);
@@ -22689,6 +22700,10 @@
       this.cv.angle(A2, O2, B2, radius, arc, space);
       if (label !== void 0 && label !== "")
         this.label.angle([A2, O2, B2], label, void 0, radius < 0 ? radius : radius + 13);
+    }
+    angleDir(A2, O2, B2, label, arc = 1, radius = -1) {
+      [A2, O2, B2] = this.cv.getApexFromDial(A2, O2, B2);
+      this.angle(A2, O2, B2, label, arc, radius);
     }
     equalSide(A2, B2, tick = 1) {
       this.cv.equalSide(A2, B2, 5, tick, 3);

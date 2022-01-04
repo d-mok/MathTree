@@ -4437,6 +4437,14 @@ declare module "Pen/Pen" {
          */
         angle(A: Point, O: Point, B: Point, label?: string | number, arc?: number, radius?: number): void;
         /**
+         * Draw an angle by direction.
+         * ```
+         * pen.angleDir(0,[0,0],60,'x')
+         * ```
+         * @category draw
+         */
+        angleDir(A: Point2D | number, O: Point2D, B: Point2D | number, label?: string | number, arc?: number, radius?: number): void;
+        /**
          * Decorate equal side lengths.
          * ```
          * pen.decorate.equalSide([1,0],[3,2],2)

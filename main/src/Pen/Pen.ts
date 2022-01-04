@@ -357,7 +357,8 @@ export class PenCls {
         this.cv.line([A, B])
         this.cv.tick(A, B, 5, 0)
         this.cv.tick(B, A, 5, 0)
-        if (label !== undefined) this.label.line([A, B], label)
+        if (label !== undefined)
+            this.label.line([A, B], label)
     }
 
 
@@ -373,14 +374,8 @@ export class PenCls {
         let F = PdFoot(V, [A, B])
         this.dash(V, F)
         this.rightAngle(A, F, V)
-        if (label !== undefined) {
-            const c = vec2D(V, A).cross2D(vec2D(V, B))
-            if (c > 0) {
-                this.label.line([V, F], label)
-            } else {
-                this.label.line([F, V], label)
-            }
-        }
+        if (label !== undefined)
+            this.label.line([V, F], label)
     }
 
 
@@ -393,7 +388,8 @@ export class PenCls {
      */
     ray(A: Point2D, B: Point2D, label?: string | number) {
         this.cv.line([A, B])
-        if (label !== undefined) this.label.line([A, B], label)
+        if (label !== undefined)
+            this.label.line([A, B], label)
         this.cv.midArrowHead(A, B, 5)
     }
 
@@ -513,6 +509,19 @@ export class PenCls {
             this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13)
     }
 
+
+
+    /**
+     * Draw an angle by direction.
+     * ```
+     * pen.angleDir(0,[0,0],60,'x')
+     * ```
+     * @category draw
+     */
+    angleDir(A: Point2D | number, O: Point2D, B: Point2D | number, label?: string | number, arc = 1, radius = -1) {
+        [A, O, B] = this.cv.getApexFromDial(A, O, B)
+        this.angle(A, O, B, label, arc, radius)
+    }
 
 
 

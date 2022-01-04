@@ -67,10 +67,6 @@ export class Canvas07 extends Canvas06 {
         let B = this.edgeRight(y);
         this.line([A, B]);
     }
-    // rod(anchor: Point2D, dir: number) {
-    //     let edge = this.edgePoint(anchor, dir)
-    //     this.line([anchor, edge])
-    // }
     solid(pts) {
         this.createPath(pts);
         this.doSolid();

@@ -1,5 +1,16 @@
 import { Canvas05 } from './canvas05';
 // math
+function sin(degree) {
+    return Math.sin(degree / 180 * Math.PI);
+}
+function cos(degree) {
+    return Math.cos(degree / 180 * Math.PI);
+}
+function Move([x, y], dir, length) {
+    x += length * cos(dir);
+    y += length * sin(dir);
+    return [x, y];
+}
 function deg(radian) {
     return radian / Math.PI * 180;
 }
@@ -38,6 +49,7 @@ function polarFlip(A, O, B, mode) {
 /**
  * Handle:
  * - direction helper
+ * - other helper functions
  */
 export class Canvas06 extends Canvas05 {
     // dir
@@ -103,6 +115,12 @@ export class Canvas06 extends Canvas05 {
         let angle = this.getDirAngle(A, O, B);
         let angleUnderThreshold = Math.max(threshold - angle, 0);
         return angleUnderThreshold * pixelPerDeg;
+    }
+    getApexFromDial(A, O, B) {
+        let V = this.pj(O);
+        let P = typeof A === 'number' ? Move(V, A, 1) : this.pj(A);
+        let Q = typeof B === 'number' ? Move(V, B, 1) : this.pj(B);
+        return [P, V, Q];
     }
 }
 //# sourceMappingURL=canvas06.js.map
