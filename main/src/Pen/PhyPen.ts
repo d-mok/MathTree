@@ -28,7 +28,7 @@ export class PhyPenCls {
     /**
      * Return the originally pen object.
      * ```
-     * pen = pen.exposePen()
+     * let pen2 = pen.exposePen()
      * ```
      */
     exposePen(): PenCls {
