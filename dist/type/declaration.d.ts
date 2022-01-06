@@ -4893,6 +4893,7 @@ declare module "Pen/AutoPen" {
     }
 }
 declare module "Pen/PhyPen" {
+    import { PenCls } from "Pen/Pen";
     export class PhyPenCls {
         /**
          * @ignore
@@ -4910,6 +4911,13 @@ declare module "Pen/PhyPen" {
          * ```
          */
         export(html: string, placeholder: string): string;
+        /**
+         * Return the originally pen object.
+         * ```
+         * pen = pen.exposePen()
+         * ```
+         */
+        exposePen(): PenCls;
         /**
          * Box on incline plane.
          * Force.

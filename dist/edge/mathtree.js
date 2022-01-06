@@ -23726,6 +23726,9 @@
     export(html, placeholder) {
       return this.pen.exportTrim(html, placeholder);
     }
+    exposePen() {
+      return this.pen;
+    }
     InclinedPlane({
       boxMid = 10,
       boxWidth = 6,

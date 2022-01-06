@@ -25,9 +25,15 @@ export class PhyPenCls {
         return this.pen.exportTrim(html, placeholder)
     }
 
-
-
-
+    /**
+     * Return the originally pen object.
+     * ```
+     * pen = pen.exposePen()
+     * ```
+     */
+    exposePen(): PenCls {
+        return this.pen
+    }
 
     /**
      * Box on incline plane.
