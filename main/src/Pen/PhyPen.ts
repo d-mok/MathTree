@@ -53,7 +53,7 @@ export class PhyPenCls {
      *  appliedLabel: 'F',
      *  appliedXLabel: 'F\\cosφ',
      *  appliedYLabel: 'F\\sinφ',
-     *  appliedAngle: 20,
+     *  appliedAngle: 0,
      *  appliedAngleLabel: 'φ',
      *  showForces: false,
      *  showWeightCompo: false,
@@ -65,6 +65,7 @@ export class PhyPenCls {
         boxMid = 10,
         boxWidth = 6,
         boxHeight = 3,
+        length = boxMid * 2,
         angle = 30,
         angleLabel = 'θ',
         weight = 5,
@@ -80,7 +81,7 @@ export class PhyPenCls {
         appliedLabel = 'F',
         appliedXLabel = 'F\\cosφ',
         appliedYLabel = 'F\\sinφ',
-        appliedAngle = 20,
+        appliedAngle = 0,
         appliedAngleLabel = 'φ',
         showForces = false,
         showWeightCompo = showForces,
@@ -89,6 +90,7 @@ export class PhyPenCls {
         boxMid?: number
         boxWidth?: number
         boxHeight?: number
+        length?: number
         angle?: number
         angleLabel?: string
         weight?: number
@@ -125,15 +127,16 @@ export class PhyPenCls {
         [P, Q, R, S] = [P, Q, R, S].map($ => Rotate($, angle, O))
 
         // road
-        let Z: Point2D = [2 * r, 0]
+        let Z: Point2D = [length, 0]
         let Y = Rotate(Z, angle, O)
+        Z = [Y[0], 0]
 
         // mg
         let G = Mid(P, Q, R, S)
         let W = MoveY(G, -weight)
 
         // normal reaction
-        let M = Slide(P,R,0.6)
+        let M = Slide(P, R, 0.6)
         let N = Move(M, 90 + angle, normal)
 
         // friction
@@ -152,14 +155,13 @@ export class PhyPenCls {
         let pen = new Pen()
 
         pen.set.border(0.5)
-        pen.range.capture(O, P, Q, R, S, N, f, E, F)
+        pen.range.capture(O, P, Q, R, S, N, f, E, F, Y, Z)
         pen.size.lock(1.3)
         pen.set.labelCenter(G)
         pen.set.textLatex(true)
 
         pen.polygon(P, Q, S, R)
-        pen.line(O, Z)
-        pen.line(O, Y)
+        pen.polygon(O, Y, Z)
         pen.angle(Y, O, Z, angleLabel)
         pen.set.weight(4)
 
@@ -167,29 +169,37 @@ export class PhyPenCls {
             pen.set.arrowLabel('head')
 
             // weight
-            pen.set.weight(3)
-            pen.set.color('red')
-            pen.arrow(G, W, weightLabel)
+            if (weight !== 0) {
+                pen.set.weight(3)
+                pen.set.color('red')
+                pen.arrow(G, W, weightLabel)
+
+                if (showWeightCompo) {
+                    pen.set.labelCenter(G)
+                    pen.set.weight(2)
+                    pen.set.color('red')
+                    pen.set.dash(true)
+                    // mgsin
+                    pen.arrowCompo(G, W, angle, weightXLabel)
+                    // mgcos
+                    let a: string | undefined
+                    if (weightAngleLabel === true) a = angleLabel
+                    if (weightAngleLabel === false) a = undefined
+                    if (typeof weightAngleLabel === 'string') a = weightAngleLabel
+                    pen.arrowCompo(G, W, angle + 90, weightYLabel, a)
+                    pen.set.labelCenter()
+                    pen.set.dash()
+                }
+            }
 
             // normal
-            pen.set.weight(3)
-            pen.set.color('purple')
-            pen.arrow(M, N, normalLabel)
 
-            if (showWeightCompo) {
-                pen.set.labelCenter(G)
-                pen.set.weight(2)
-                pen.set.color('red')
-                // mgsin
-                pen.arrowCompo(G, W, angle, weightXLabel)
-                // mgcos
-                let a: string | undefined
-                if (weightAngleLabel === true) a = angleLabel
-                if (weightAngleLabel === false) a = undefined
-                if (typeof weightAngleLabel === 'string') a = weightAngleLabel
-                pen.arrowCompo(G, W, angle + 90, weightYLabel, a)
-                pen.set.labelCenter()
+            if (normal !== 0) {
+                pen.set.weight(3)
+                pen.set.color('purple')
+                pen.arrow(M, N, normalLabel)
             }
+
 
             // friction
             if (friction !== 0) {
@@ -210,6 +220,7 @@ export class PhyPenCls {
                 if (showAppliedCompo) {
                     pen.set.labelCenter(E)
                     pen.set.weight(2)
+                    pen.set.dash(true)
                     // Fsin
                     pen.arrowCompo(E, F, angle + 90, appliedYLabel)
                     // Fcos
@@ -218,6 +229,7 @@ export class PhyPenCls {
                     if (appliedAngleLabel === false) a = undefined
                     if (typeof appliedAngleLabel === 'string') a = appliedAngleLabel
                     pen.arrowCompo(E, F, angle, appliedXLabel, a)
+                    pen.set.dash()
                 }
                 pen.set.labelCenter()
             }

@@ -23730,6 +23730,7 @@
       boxMid = 10,
       boxWidth = 6,
       boxHeight = 3,
+      length = boxMid * 2,
       angle: angle2 = 30,
       angleLabel = "\u03B8",
       weight = 5,
@@ -23745,7 +23746,7 @@
       appliedLabel = "F",
       appliedXLabel = "F\\cos\u03C6",
       appliedYLabel = "F\\sin\u03C6",
-      appliedAngle = 20,
+      appliedAngle = 0,
       appliedAngleLabel = "\u03C6",
       showForces = false,
       showWeightCompo = showForces,
@@ -23759,8 +23760,9 @@
       let R2 = [r3, 0];
       let S2 = MoveY(R2, boxHeight);
       [P2, Q2, R2, S2] = [P2, Q2, R2, S2].map(($) => Rotate($, angle2, O2));
-      let Z2 = [2 * r3, 0];
+      let Z2 = [length, 0];
       let Y2 = Rotate(Z2, angle2, O2);
+      Z2 = [Y2[0], 0];
       let G2 = Mid(P2, Q2, R2, S2);
       let W2 = MoveY(G2, -weight);
       let M2 = Slide(P2, R2, 0.6);
@@ -23776,37 +23778,42 @@
       }
       let pen = new Pen();
       pen.set.border(0.5);
-      pen.range.capture(O2, P2, Q2, R2, S2, N2, f3, E2, F2);
+      pen.range.capture(O2, P2, Q2, R2, S2, N2, f3, E2, F2, Y2, Z2);
       pen.size.lock(1.3);
       pen.set.labelCenter(G2);
       pen.set.textLatex(true);
       pen.polygon(P2, Q2, S2, R2);
-      pen.line(O2, Z2);
-      pen.line(O2, Y2);
+      pen.polygon(O2, Y2, Z2);
       pen.angle(Y2, O2, Z2, angleLabel);
       pen.set.weight(4);
       if (showForces) {
         pen.set.arrowLabel("head");
-        pen.set.weight(3);
-        pen.set.color("red");
-        pen.arrow(G2, W2, weightLabel);
-        pen.set.weight(3);
-        pen.set.color("purple");
-        pen.arrow(M2, N2, normalLabel);
-        if (showWeightCompo) {
-          pen.set.labelCenter(G2);
-          pen.set.weight(2);
+        if (weight !== 0) {
+          pen.set.weight(3);
           pen.set.color("red");
-          pen.arrowCompo(G2, W2, angle2, weightXLabel);
-          let a2;
-          if (weightAngleLabel === true)
-            a2 = angleLabel;
-          if (weightAngleLabel === false)
-            a2 = void 0;
-          if (typeof weightAngleLabel === "string")
-            a2 = weightAngleLabel;
-          pen.arrowCompo(G2, W2, angle2 + 90, weightYLabel, a2);
-          pen.set.labelCenter();
+          pen.arrow(G2, W2, weightLabel);
+          if (showWeightCompo) {
+            pen.set.labelCenter(G2);
+            pen.set.weight(2);
+            pen.set.color("red");
+            pen.set.dash(true);
+            pen.arrowCompo(G2, W2, angle2, weightXLabel);
+            let a2;
+            if (weightAngleLabel === true)
+              a2 = angleLabel;
+            if (weightAngleLabel === false)
+              a2 = void 0;
+            if (typeof weightAngleLabel === "string")
+              a2 = weightAngleLabel;
+            pen.arrowCompo(G2, W2, angle2 + 90, weightYLabel, a2);
+            pen.set.labelCenter();
+            pen.set.dash();
+          }
+        }
+        if (normal !== 0) {
+          pen.set.weight(3);
+          pen.set.color("purple");
+          pen.arrow(M2, N2, normalLabel);
         }
         if (friction !== 0) {
           pen.set.weight(3);
@@ -23821,6 +23828,7 @@
           if (showAppliedCompo) {
             pen.set.labelCenter(E2);
             pen.set.weight(2);
+            pen.set.dash(true);
             pen.arrowCompo(E2, F2, angle2 + 90, appliedYLabel);
             let a2;
             if (appliedAngleLabel === true)
@@ -23830,6 +23838,7 @@
             if (typeof appliedAngleLabel === "string")
               a2 = appliedAngleLabel;
             pen.arrowCompo(E2, F2, angle2, appliedXLabel, a2);
+            pen.set.dash();
           }
           pen.set.labelCenter();
         }
