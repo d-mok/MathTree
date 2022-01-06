@@ -23779,7 +23779,7 @@
       let pen = new Pen();
       pen.set.border(0.5);
       pen.range.capture(O2, P2, Q2, R2, S2, N2, f3, E2, F2, Y2, Z2);
-      pen.size.lock(1.3);
+      pen.size.lock(1.8);
       pen.set.labelCenter(G2);
       pen.set.textLatex(true);
       pen.polygon(P2, Q2, S2, R2);

@@ -156,7 +156,7 @@ export class PhyPenCls {
 
         pen.set.border(0.5)
         pen.range.capture(O, P, Q, R, S, N, f, E, F, Y, Z)
-        pen.size.lock(1.3)
+        pen.size.lock(1.8)
         pen.set.labelCenter(G)
         pen.set.textLatex(true)
 
