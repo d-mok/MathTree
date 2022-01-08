@@ -5101,6 +5101,31 @@ declare module "Pen/PhyPen" {
             angle?: number;
             showHeight?: boolean;
         }): void;
+        /**
+         * Refraction between two media.
+         * ```
+         * let pen = new PhyPen()
+         * pen.RefractionMedia({
+         *  rays: [
+         *     [60,true,'a','b'],
+         *     [250, false, false, true],
+         *  ],
+         *  UpMedLabel: 'A',
+         *  LowMedLabel: 'B',
+         *  UpMedColor: 'white',
+         *  LowMedColor: 'black',
+         *  roundTo: 5
+         * })
+         * ```
+         */
+        RefractionMedia({ rays, upMedLabel, lowMedLabel, upMedColor, lowMedColor, roundTo }: {
+            rays: [dir: number, to: boolean, angleV: boolean | string, angleH: boolean | string][];
+            upMedLabel: string;
+            lowMedLabel: string;
+            upMedColor: string;
+            lowMedColor: string;
+            roundTo: number;
+        }): void;
     }
 }
 declare module "Pen/index" {

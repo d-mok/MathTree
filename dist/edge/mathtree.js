@@ -24051,6 +24051,56 @@
       pen.graph.circle(O2, orbitRadius);
       this.pen = pen;
     }
+    RefractionMedia({
+      rays = [],
+      upMedLabel = "",
+      lowMedLabel = "",
+      upMedColor = "white",
+      lowMedColor = "black",
+      roundTo = 5
+    }) {
+      let O2 = [0, 0];
+      let pen = new Pen();
+      pen.range.square(10);
+      pen.size.lock(1.5);
+      pen.set.color(upMedColor);
+      pen.linProg.shadeConstraints([[0, 1, ">", 0]]);
+      pen.set.color(lowMedColor);
+      pen.linProg.shadeConstraints([[0, 1, "<", 0]]);
+      pen.set.color();
+      pen.rod.dash(O2, 90, 10);
+      pen.rod.dash(O2, -90, 10);
+      let B2 = [-10, 0];
+      pen.label.point(B2, upMedLabel, 45, 20);
+      pen.label.point(B2, lowMedLabel, -45, 20);
+      function angleWtihYAxis(dir3) {
+        dir3 = PolarReduce(dir3);
+        return Math.min(Math.abs(dir3 - 90), Math.abs(dir3 - 270));
+      }
+      function angleWtihXAxis(dir3) {
+        return 90 - angleWtihYAxis(dir3);
+      }
+      for (let ray of rays) {
+        let [dir3, isTo, angleV, angleH] = ray;
+        dir3 = PolarReduce(dir3);
+        isTo ? pen.rod.rayTo(O2, dir3) : pen.rod.rayFrom(O2, dir3);
+        if (angleV !== void 0 && angleV !== false) {
+          let V2 = [0, sin(dir3)];
+          let label = angleV === true ? angleWtihYAxis(dir3) : angleV;
+          if (typeof label === "number")
+            label = Round(label, roundTo);
+          pen.angleDir(V2, O2, dir3, label);
+        }
+        if (angleH !== void 0 && angleH !== false) {
+          let H2 = [cos(dir3), 0];
+          let label = angleH === true ? angleWtihXAxis(dir3) : angleH;
+          if (typeof label === "number")
+            label = Round(label, roundTo);
+          pen.angleDir(H2, O2, dir3, label);
+        }
+      }
+      this.pen = pen;
+    }
   };
 
   // src/Pen/index.ts

@@ -133,7 +133,7 @@ export class PhyPenCls {
         let W = MoveY(G, -weight)
 
         // normal reaction
-        let M = Slide(P,R,0.6)
+        let M = Slide(P, R, 0.6)
         let N = Move(M, 90 + angle, normal)
 
         // friction
@@ -659,6 +659,124 @@ export class PhyPenCls {
 
         this.pen = pen
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Refraction between two media.
+     * ```
+     * let pen = new PhyPen()
+     * pen.RefractionMedia({
+     *  rays: [
+     *     [60,true,'a','b'],
+     *     [250, false, false, true],
+     *  ],
+     *  UpMedLabel: 'A',
+     *  LowMedLabel: 'B',
+     *  UpMedColor: 'white',
+     *  LowMedColor: 'black',
+     *  roundTo: 5
+     * })
+     * ```
+     */
+    RefractionMedia(
+        {
+            rays = [],
+            upMedLabel = '',
+            lowMedLabel = '',
+            upMedColor = 'white',
+            lowMedColor = 'black',
+            roundTo = 5
+        }: {
+            rays: [dir: number, to: boolean, angleV: boolean | string, angleH: boolean | string][]
+            upMedLabel: string
+            lowMedLabel: string
+            upMedColor: string
+            lowMedColor: string
+            roundTo: number
+        }) {
+
+        let O: Point2D = [0, 0]
+
+        // pen setup
+        let pen = new Pen()
+        pen.range.square(10)
+        pen.size.lock(1.5)
+
+        //shade media
+        pen.set.color(upMedColor)
+        pen.linProg.shadeConstraints([[0, 1, '>', 0]])
+        pen.set.color(lowMedColor)
+        pen.linProg.shadeConstraints([[0, 1, '<', 0]])
+        pen.set.color()
+
+        //normal
+        pen.rod.dash(O, 90, 10)
+        pen.rod.dash(O, -90, 10)
+
+        //label the medium
+        let B: Point2D = [-10, 0]
+        pen.label.point(B, upMedLabel, 45, 20)
+        pen.label.point(B, lowMedLabel, -45, 20)
+
+        function angleWtihYAxis(dir: number) {
+            dir = PolarReduce(dir)
+            return Math.min(
+                Math.abs(dir - 90),
+                Math.abs(dir - 270)
+            )
+        }
+
+        function angleWtihXAxis(dir: number) {
+            return 90 - angleWtihYAxis(dir)
+        }
+
+
+        for (let ray of rays) {
+            let [dir, isTo, angleV, angleH] = ray
+            dir = PolarReduce(dir)
+
+            //draw ray
+            isTo
+                ? pen.rod.rayTo(O, dir)
+                : pen.rod.rayFrom(O, dir)
+
+            // draw angle with vertical
+            if (angleV !== undefined && angleV !== false) {
+                let V: Point2D = [0, sin(dir)]
+                let label = angleV === true
+                    ? angleWtihYAxis(dir)
+                    : angleV
+                if (typeof label === 'number')
+                    label = Round(label, roundTo)
+                pen.angleDir(V, O, dir, label)
+            }
+
+            // draw angle with horizontal
+            if (angleH !== undefined && angleH !== false) {
+                let H: Point2D = [cos(dir), 0]
+                let label = angleH === true
+                    ? angleWtihXAxis(dir)
+                    : angleH
+                if (typeof label === 'number')
+                    label = Round(label, roundTo)
+                pen.angleDir(H, O, dir, label)
+            }
+
+        }
+        this.pen = pen
+    }
+
+
 
 
 }
