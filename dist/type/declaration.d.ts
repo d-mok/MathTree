@@ -4893,6 +4893,7 @@ declare module "Pen/AutoPen" {
     }
 }
 declare module "Pen/PhyPen" {
+    import { PenCls } from "Pen/Pen";
     export class PhyPenCls {
         /**
          * @ignore
@@ -4910,6 +4911,13 @@ declare module "Pen/PhyPen" {
          * ```
          */
         export(html: string, placeholder: string): string;
+        /**
+         * Return the originally pen object.
+         * ```
+         * let pen2 = pen.exposePen()
+         * ```
+         */
+        exposePen(): PenCls;
         /**
          * Box on incline plane.
          * Force.
@@ -4934,7 +4942,7 @@ declare module "Pen/PhyPen" {
          *  appliedLabel: 'F',
          *  appliedXLabel: 'F\\cosφ',
          *  appliedYLabel: 'F\\sinφ',
-         *  appliedAngle: 20,
+         *  appliedAngle: 0,
          *  appliedAngleLabel: 'φ',
          *  showForces: false,
          *  showWeightCompo: false,
@@ -4942,10 +4950,11 @@ declare module "Pen/PhyPen" {
          * })
          * ```
          */
-        InclinedPlane({ boxMid, boxWidth, boxHeight, angle, angleLabel, weight, weightLabel, weightXLabel, weightYLabel, weightAngleLabel, normal, normalLabel, friction, frictionLabel, applied, appliedLabel, appliedXLabel, appliedYLabel, appliedAngle, appliedAngleLabel, showForces, showWeightCompo, showAppliedCompo }: {
+        InclinedPlane({ boxMid, boxWidth, boxHeight, length, angle, angleLabel, weight, weightLabel, weightXLabel, weightYLabel, weightAngleLabel, normal, normalLabel, friction, frictionLabel, applied, appliedLabel, appliedXLabel, appliedYLabel, appliedAngle, appliedAngleLabel, showForces, showWeightCompo, showAppliedCompo }: {
             boxMid?: number;
             boxWidth?: number;
             boxHeight?: number;
+            length?: number;
             angle?: number;
             angleLabel?: string;
             weight?: number;
