@@ -698,10 +698,10 @@ export class PhyPenCls {
      *     [60,true,'a','b'],
      *     [250, false, false, true],
      *  ],
-     *  UpMedLabel: 'A',
-     *  LowMedLabel: 'B',
-     *  UpMedColor: 'white',
-     *  LowMedColor: 'black',
+     *  upMedLabel: 'A',
+     *  lowMedLabel: 'B',
+     *  upMedColor: 'white',
+     *  lowMedColor: 'black',
      *  roundTo: 5
      * })
      * ```
