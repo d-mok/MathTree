@@ -563,7 +563,7 @@ export class AutoPenCls {
 
 
         function drawHeight(vertex: Point2D, base: Point2D[]) {
-            let F = PdFoot(vertex,[base[0], base[1]])
+            let F = PdFoot(vertex, [base[0], base[1]])
             pen.set.dash([5, 5])
             pen.set.color('grey')
             pen.line(vertex, F)
@@ -604,6 +604,7 @@ export class AutoPenCls {
 
 
         function writeSide(side: any, start: Point2D, end: Point2D): void {
+            pen.set.lineLabel('right')
             if (side) {
                 if (typeof side === 'string' && !(/\d/.test(side)))
                     pen.set.textItalic(true)
@@ -614,6 +615,7 @@ export class AutoPenCls {
                 }
                 pen.set.textItalic()
             }
+            pen.set.lineLabel()
         }
 
         writeSide(sideC, A, B)

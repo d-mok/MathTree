@@ -23220,6 +23220,7 @@
       let BC = [C2[0] - B2[0], C2[1] - B2[1]];
       let anticlockwise = AB[0] * BC[1] - AB[1] * BC[0] > 0;
       function writeSide(side2, start, end) {
+        pen.set.lineLabel("right");
         if (side2) {
           if (typeof side2 === "string" && !/\d/.test(side2))
             pen.set.textItalic(true);
@@ -23230,6 +23231,7 @@
           }
           pen.set.textItalic();
         }
+        pen.set.lineLabel();
       }
       writeSide(sideC, A2, B2);
       writeSide(sideA, B2, C2);
