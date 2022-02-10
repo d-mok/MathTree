@@ -23238,12 +23238,11 @@
       writeSide(sideB, C2, A2);
       function writeAngle(angle2, P2, O2, Q2) {
         if (angle2) {
-          if (typeof angle2 === "string")
-            pen.set.textItalic(true);
-          if (typeof angle2 === "number")
-            angle2 = angle2 + "\xB0";
-          pen.angle(P2, O2, Q2, angle2);
-          pen.set.textItalic();
+          if (typeof angle2 === "number" && cal.correct(angle2) === 90) {
+            pen.rightAngle(P2, O2, Q2);
+          } else {
+            pen.angle(P2, O2, Q2, angle2);
+          }
         }
       }
       writeAngle(angleA, B2, A2, C2);

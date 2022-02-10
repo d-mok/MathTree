@@ -624,10 +624,11 @@ export class AutoPenCls {
 
         function writeAngle(angle: any, P: Point2D, O: Point2D, Q: Point2D): void {
             if (angle) {
-                if (typeof angle === 'string') pen.set.textItalic(true)
-                if (typeof angle === 'number') angle = angle + '°'
-                pen.angle(P, O, Q, angle)
-                pen.set.textItalic()
+                if (typeof angle === 'number' && cal.correct(angle) === 90) {
+                    pen.rightAngle(P, O, Q)
+                } else {
+                    pen.angle(P, O, Q, angle)
+                }
             }
         }
 
