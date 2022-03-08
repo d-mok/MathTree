@@ -348,6 +348,35 @@ export class PhyEqCls {
     }
 
 
+
+
+    Radioactive = {
+
+        /**
+         * N = n(1/2)^(t/T)
+         */
+        NntT(N = 'N', n = 'n', t = 't', T = 'T', $ = '****'): eq {
+            let args = [N, n, t, T]
+            return [
+                makeFn(args, (N, n, T, t) => N - (n * 0.5 ** (t / T))),
+                makeLatex(args, '@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}', $, '::::')
+            ]
+        },
+
+        /**
+         * A = a(1/2)^(t/T)
+         */
+        AatT(A = 'A', a = 'a', t = 't', T = 'T', $ = '****'): eq {
+            let args = [A, a, t, T]
+            return [
+                makeFn(args, (A, a, T, t) => A - (a * 0.5 ** (t / T))),
+                makeLatex(args, '@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}', $, '::::')
+            ]
+        },
+
+    }
+
+
 }
 
 declare global {

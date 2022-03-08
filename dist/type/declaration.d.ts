@@ -1904,6 +1904,16 @@ declare module "Math/Code/PhyEq" {
              */
             GMmr2rω2(M?: string, r?: string, ω?: string, $?: string): eq;
         };
+        Radioactive: {
+            /**
+             * N = n(1/2)^(t/T)
+             */
+            NntT(N?: string, n?: string, t?: string, T?: string, $?: string): eq;
+            /**
+             * A = a(1/2)^(t/T)
+             */
+            AatT(A?: string, a?: string, t?: string, T?: string, $?: string): eq;
+        };
     }
     global {
         var PhyEq: PhyEqCls;
