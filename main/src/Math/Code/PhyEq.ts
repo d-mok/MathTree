@@ -374,6 +374,32 @@ export class PhyEqCls {
             ]
         },
 
+
+        /**
+         * A = kN
+         */
+        AkN(A = 'A', k = 'k', N = 'N', $ = '***'): eq {
+            let args = [A, k, N]
+            return [
+                makeFn(args, (A, k, N) => A - k * N),
+                makeLatex(args, '@=@@', $, ':||')
+            ]
+        },
+
+
+        /**
+         * kT = ln2
+         */
+        kTln2(k = 'k', T = 'T', $ = '**'): eq {
+            let args = [k, T]
+            return [
+                makeFn(args, (k, T) => k * T - Math.log(2)),
+                makeLatex(args, '@@=\\ln2', $, ':||')
+            ]
+        },
+
+
+
     }
 
 

@@ -1913,6 +1913,14 @@ declare module "Math/Code/PhyEq" {
              * A = a(1/2)^(t/T)
              */
             AatT(A?: string, a?: string, t?: string, T?: string, $?: string): eq;
+            /**
+             * A = kN
+             */
+            AkN(A?: string, k?: string, N?: string, $?: string): eq;
+            /**
+             * kT = ln2
+             */
+            kTln2(k?: string, T?: string, $?: string): eq;
         };
     }
     global {

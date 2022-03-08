@@ -16788,6 +16788,20 @@
           makeFn(args, (A3, a3, T3, t3) => A3 - a3 * 0.5 ** (t3 / T3)),
           makeLatex(args, "@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}", $, "::::")
         ];
+      },
+      AkN(A2 = "A", k2 = "k", N2 = "N", $ = "***") {
+        let args = [A2, k2, N2];
+        return [
+          makeFn(args, (A3, k3, N3) => A3 - k3 * N3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      },
+      kTln2(k2 = "k", T2 = "T", $ = "**") {
+        let args = [k2, T2];
+        return [
+          makeFn(args, (k3, T3) => k3 * T3 - Math.log(2)),
+          makeLatex(args, "@@=\\ln2", $, ":||")
+        ];
       }
     };
   };
