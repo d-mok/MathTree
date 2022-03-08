@@ -16778,14 +16778,14 @@
       NntT(N2 = "N", n2 = "n", t2 = "t", T2 = "T", $ = "****") {
         let args = [N2, n2, t2, T2];
         return [
-          makeFn(args, (N3, n3, T3, t3) => N3 - n3 * 0.5 ** (t3 / T3)),
+          makeFn(args, (N3, n3, t3, T3) => N3 - n3 * 0.5 ** (t3 / T3)),
           makeLatex(args, "@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}", $, "::::")
         ];
       },
       AatT(A2 = "A", a2 = "a", t2 = "t", T2 = "T", $ = "****") {
         let args = [A2, a2, t2, T2];
         return [
-          makeFn(args, (A3, a3, T3, t3) => A3 - a3 * 0.5 ** (t3 / T3)),
+          makeFn(args, (A3, a3, t3, T3) => A3 - a3 * 0.5 ** (t3 / T3)),
           makeLatex(args, "@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}", $, "::::")
         ];
       },

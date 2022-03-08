@@ -358,7 +358,7 @@ export class PhyEqCls {
         NntT(N = 'N', n = 'n', t = 't', T = 'T', $ = '****'): eq {
             let args = [N, n, t, T]
             return [
-                makeFn(args, (N, n, T, t) => N - (n * 0.5 ** (t / T))),
+                makeFn(args, (N, n, t, T) => N - (n * 0.5 ** (t / T))),
                 makeLatex(args, '@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}', $, '::::')
             ]
         },
@@ -369,7 +369,7 @@ export class PhyEqCls {
         AatT(A = 'A', a = 'a', t = 't', T = 'T', $ = '****'): eq {
             let args = [A, a, t, T]
             return [
-                makeFn(args, (A, a, T, t) => A - (a * 0.5 ** (t / T))),
+                makeFn(args, (A, a, t, T) => A - (a * 0.5 ** (t / T))),
                 makeLatex(args, '@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}', $, '::::')
             ]
         },
