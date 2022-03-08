@@ -16800,7 +16800,7 @@
         let args = [k2, T2];
         return [
           makeFn(args, (k3, T3) => k3 * T3 - Math.log(2)),
-          makeLatex(args, "@@=\\ln2", $, ":||")
+          makeLatex(args, "@@=\\ln2", $, "||")
         ];
       }
     };

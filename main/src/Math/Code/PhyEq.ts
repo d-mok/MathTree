@@ -394,7 +394,7 @@ export class PhyEqCls {
             let args = [k, T]
             return [
                 makeFn(args, (k, T) => k * T - Math.log(2)),
-                makeLatex(args, '@@=\\ln2', $, ':||')
+                makeLatex(args, '@@=\\ln2', $, '||')
             ]
         },
 
