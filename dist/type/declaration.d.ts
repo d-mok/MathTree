@@ -518,10 +518,19 @@ declare module "Math/Algebra/Algebra" {
          * ```
          */
         static xPolynomial(poly1: number[], poly2: number[]): number[];
+        /**
+         * Expansion coeff of (Ax+B)^n in descending power of x.
+         * ```
+         * Binomial(2,3,2) // (2x+3)^2 = [4,12,9]
+         * Binomial(2,3) // power default to n = 2
+         * ```
+         */
+        static Binomial(A: number, B: number, n?: number): number[];
     }
     global {
         var Crammer: typeof Host.Crammer;
         var xPolynomial: typeof Host.xPolynomial;
+        var Binomial: typeof Host.Binomial;
     }
 }
 declare module "Math/Algebra/Calculus" {

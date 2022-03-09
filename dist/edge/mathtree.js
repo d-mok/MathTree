@@ -13949,7 +13949,7 @@
     logCeil: () => logCeil,
     logFloor: () => logFloor,
     mantissa: () => mantissa,
-    nCr: () => nCr,
+    nCr: () => nCr2,
     nPr: () => nPr,
     primeFactors: () => primeFactors,
     primes: () => primes,
@@ -14167,7 +14167,7 @@
       return 1;
     return factorial(n2 - 1) * n2;
   }
-  function nCr(n2, r3) {
+  function nCr2(n2, r3) {
     return factorial(n2) / factorial(r3) / factorial(n2 - r3);
   }
   function nPr(n2, r3) {
@@ -18828,6 +18828,13 @@
       }
       return result2;
     }
+    static Binomial(A2, B2, n2 = 2) {
+      let coeff = [];
+      for (let i2 = 0; i2 <= n2; i2++) {
+        coeff.push(nCr(n2, i2) * A2 ** (n2 - i2) * B2 ** i2);
+      }
+      return coeff;
+    }
   };
   __decorateClass([
     checkIt(owl.num),
@@ -18840,6 +18847,9 @@
       return _[0] !== 0;
     }])
   ], Host19, "xPolynomial", 1);
+  __decorateClass([
+    checkIt(owl.num, owl.num, owl.positiveInt)
+  ], Host19, "Binomial", 1);
   Host19 = __decorateClass([
     exposeAll(),
     captureAll()
