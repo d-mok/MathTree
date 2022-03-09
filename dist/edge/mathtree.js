@@ -20833,6 +20833,17 @@
       [a2 - r3, b2 - r3, c3 - r3]
     ];
   }
+  function getQuadraticCorners(a2, b2, c3, scale) {
+    let f3 = (x2) => a2 * x2 * x2 + b2 * x2 + c3;
+    let h2 = -b2 / (2 * a2);
+    let k2 = f3(h2);
+    let V2 = [h2, k2];
+    let dx = 1 / (2 * a2);
+    let Dx = dx * scale;
+    let A2 = [h2 + Dx, f3(h2 + Dx)];
+    let B2 = [h2 - Dx, f3(h2 - Dx)];
+    return [A2, B2, V2];
+  }
   function isPoint2D(thing) {
     return Array.isArray(thing) && thing.length === 2 && typeof thing[0] === "number" && typeof thing[1] === "number";
   }
@@ -20840,10 +20851,13 @@
     return Array.isArray(thing) && thing.length === 3 && typeof thing[0] === "number" && typeof thing[1] === "number" && typeof thing[2] === "number";
   }
   function isCircle(thing) {
-    return thing.length === 2 && isPoint2D(thing[0]) && typeof thing[1] === "number";
+    return Array.isArray(thing) && thing.length === 2 && isPoint2D(thing[0]) && typeof thing[1] === "number";
   }
   function isSphere(thing) {
-    return thing.length === 2 && isPoint3D(thing[0]) && typeof thing[1] === "number";
+    return Array.isArray(thing) && thing.length === 2 && isPoint3D(thing[0]) && typeof thing[1] === "number";
+  }
+  function isQuadratic(thing) {
+    return Array.isArray(thing) && thing.length === 4;
   }
   function thingsToPoints(things) {
     let pts = [];
@@ -20862,6 +20876,10 @@
       }
       if (isSphere(th)) {
         pts.push(...getSphereCorners(...th));
+        continue;
+      }
+      if (isQuadratic(th)) {
+        pts.push(...getQuadraticCorners(...th));
         continue;
       }
     }

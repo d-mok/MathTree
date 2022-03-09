@@ -1,4 +1,4 @@
-import  { Point2D, Point3D, Point, circle, sphere, capturable } from '../global'
+import { Point2D, Point3D, Point, circle, sphere, quadratic, capturable } from '../global'
 
 
 function getCircleCorners(center: Point2D, radius: number):
@@ -32,6 +32,19 @@ function getSphereCorners(center: Point3D, radius: number):
 }
 
 
+function getQuadraticCorners(a: number, b: number, c: number, scale: number): [Point2D, Point2D, Point2D] {
+    // scale = 1 -> horizontal extension by the focus
+    let f = (x: number) => a * x * x + b * x + c
+    let h = -b / (2 * a)
+    let k = f(h)
+    let V: Point2D = [h, k]
+    let dx = 1 / (2 * a)
+    let Dx = dx * scale
+    let A: Point2D = [h + Dx, f(h + Dx)]
+    let B: Point2D = [h - Dx, f(h - Dx)]
+    return [A, B, V]
+}
+
 function isPoint2D(thing: any): thing is Point2D {
     return Array.isArray(thing)
         && thing.length === 2
@@ -49,16 +62,23 @@ function isPoint3D(thing: any): thing is Point3D {
 }
 
 function isCircle(thing: any): thing is circle {
-    return thing.length === 2
+    return Array.isArray(thing)
+        && thing.length === 2
         && isPoint2D(thing[0])
         && typeof thing[1] === 'number'
 }
 
 
 function isSphere(thing: any): thing is sphere {
-    return thing.length === 2
+    return Array.isArray(thing)
+        && thing.length === 2
         && isPoint3D(thing[0])
         && typeof thing[1] === 'number'
+}
+
+function isQuadratic(thing: any): thing is quadratic {
+    return Array.isArray(thing)
+        && thing.length === 4
 }
 
 export function thingsToPoints(things: capturable[]): Point[] {
@@ -78,6 +98,10 @@ export function thingsToPoints(things: capturable[]): Point[] {
         }
         if (isSphere(th)) {
             pts.push(...getSphereCorners(...th))
+            continue
+        }
+        if (isQuadratic(th)) {
+            pts.push(...getQuadraticCorners(...th))
             continue
         }
     }

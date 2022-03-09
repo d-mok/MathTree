@@ -22,6 +22,18 @@ function getSphereCorners(center, radius) {
         [a - r, b - r, c - r],
     ];
 }
+function getQuadraticCorners(a, b, c, scale) {
+    // scale = 1 -> horizontal extension by the focus
+    let f = (x) => a * x * x + b * x + c;
+    let h = -b / (2 * a);
+    let k = f(h);
+    let V = [h, k];
+    let dx = 1 / (2 * a);
+    let Dx = dx * scale;
+    let A = [h + Dx, f(h + Dx)];
+    let B = [h - Dx, f(h - Dx)];
+    return [A, B, V];
+}
 function isPoint2D(thing) {
     return Array.isArray(thing)
         && thing.length === 2
@@ -36,14 +48,20 @@ function isPoint3D(thing) {
         && typeof thing[2] === 'number';
 }
 function isCircle(thing) {
-    return thing.length === 2
+    return Array.isArray(thing)
+        && thing.length === 2
         && isPoint2D(thing[0])
         && typeof thing[1] === 'number';
 }
 function isSphere(thing) {
-    return thing.length === 2
+    return Array.isArray(thing)
+        && thing.length === 2
         && isPoint3D(thing[0])
         && typeof thing[1] === 'number';
+}
+function isQuadratic(thing) {
+    return Array.isArray(thing)
+        && thing.length === 4;
 }
 export function thingsToPoints(things) {
     let pts = [];
@@ -62,6 +80,10 @@ export function thingsToPoints(things) {
         }
         if (isSphere(th)) {
             pts.push(...getSphereCorners(...th));
+            continue;
+        }
+        if (isQuadratic(th)) {
+            pts.push(...getQuadraticCorners(...th));
             continue;
         }
     }
