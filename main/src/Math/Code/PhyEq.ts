@@ -23,6 +23,22 @@ type eq = [func: zeroFunction, latex: string]
 export class PhyEqCls {
 
 
+    Heat = {
+
+        /**
+         * E = Pt
+         */
+        EPt(E = 'E', P = 'P', t = 't', $ = '***'): eq {
+            let args = [E, P, t]
+            return [
+                makeFn(args, (E, P, t) => E - P * t),
+                makeLatex(args, '@=@@', $, ':||')
+            ]
+        },
+
+    }
+
+
     Motion = {
 
 
@@ -399,6 +415,16 @@ export class PhyEqCls {
         },
 
 
+        /**
+         * E = mc2
+         */
+        Emc2(E = 'E', m = 'm', $ = '**'): eq {
+            let args = [E, m]
+            return [
+                makeFn(args, (E, m) => E - m * PhyConst.c ** 2),
+                makeLatex(args, '@=@c^2', $, ':|')
+            ]
+        },
 
     }
 

@@ -16579,6 +16579,15 @@
     return T2;
   }
   var PhyEqCls = class {
+    Heat = {
+      EPt(E2 = "E", P2 = "P", t2 = "t", $ = "***") {
+        let args = [E2, P2, t2];
+        return [
+          makeFn(args, (E3, P3, t3) => E3 - P3 * t3),
+          makeLatex(args, "@=@@", $, ":||")
+        ];
+      }
+    };
     Motion = {
       vuat(v3 = "v", u2 = "u", a2 = "a", t2 = "t", $ = "****") {
         let args = [v3, u2, a2, t2];
@@ -16801,6 +16810,13 @@
         return [
           makeFn(args, (k3, T3) => k3 * T3 - Math.log(2)),
           makeLatex(args, "@@=\\ln2", $, "||")
+        ];
+      },
+      Emc2(E2 = "E", m3 = "m", $ = "**") {
+        let args = [E2, m3];
+        return [
+          makeFn(args, (E3, m4) => E3 - m4 * PhyConst.c ** 2),
+          makeLatex(args, "@=@c^2", $, ":|")
         ];
       }
     };

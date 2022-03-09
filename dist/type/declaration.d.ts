@@ -1792,6 +1792,12 @@ declare module "Math/Code/PhyConst" {
 declare module "Math/Code/PhyEq" {
     type eq = [func: zeroFunction, latex: string];
     export class PhyEqCls {
+        Heat: {
+            /**
+             * E = Pt
+             */
+            EPt(E?: string, P?: string, t?: string, $?: string): eq;
+        };
         Motion: {
             /**
              * v = u + at
@@ -1921,6 +1927,10 @@ declare module "Math/Code/PhyEq" {
              * kT = ln2
              */
             kTln2(k?: string, T?: string, $?: string): eq;
+            /**
+             * E = mc2
+             */
+            Emc2(E?: string, m?: string, $?: string): eq;
         };
     }
     global {
