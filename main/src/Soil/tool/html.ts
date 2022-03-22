@@ -60,7 +60,7 @@ export class QuestionHTML {
 
 
 
-type transform = (val: any, type: string) => any
+type transform = (val: any, type: string) => string | void
 type rule = [pattern: string, fn: transform]
 
 
@@ -80,13 +80,17 @@ class Blacksmith {
     private smash([pattern, fn]: rule) {
         let searchStr = pattern.replaceAll('@', this.symbol)
         if (!this.text.includes(searchStr)) return
-        let content = String(fn(this.val, typeof this.val) ?? this.val)
+        let content = fn(this.val, typeof this.val) ?? String(this.val)
         this.text = this.text.replaceAll(searchStr, content)
     }
 
     addRule(pattern: string, fn: transform) {
         this.rules.push([pattern, fn])
     }
+
+
+
+
 
     forge(symbol: string, val: any): string {
         this.symbol = symbol
@@ -96,24 +100,27 @@ class Blacksmith {
         return this.text
     }
 
+
+    
+
 }
 
 const Smith = new Blacksmith()
 
 // print **x as sci notation
-Smith.addRule('**@', (value: any) => {
+Smith.addRule('**@', (value) => {
 
     if (owl.num(value)) {
         let v = cal.blur(Round(value, 3))
         let abs = Math.abs(v)
-        return (abs >= 10000 || abs <= 0.01) ? Sci(v) : v
+        return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v)
     }
 
     if (owl.quantity(value)) {
         let { val, unit } = value
         let v = cal.blur(Round(val, 3))
         let abs = Math.abs(v)
-        return ((abs >= 10000 || abs <= 0.01) ? Sci(v) : v) + unit
+        return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v) + unit
     }
 
 })
@@ -150,7 +157,7 @@ Smith.addRule('*/(@)', (value) => {
 Smith.addRule('*(@)', (value) => {
     if (owl.num(value)) {
         let v = numberDefault(value)
-        return v >= 0 ? v : '(' + v + ')'
+        return String(v >= 0 ? v : '(' + v + ')')
     }
 })
 
@@ -170,7 +177,7 @@ Smith.addRule('*!@', (value) => {
 // print *|x| as abs(x)
 Smith.addRule('*|@|', (value) => {
     if (owl.num(value)) {
-        return numberDefault(Math.abs(value))
+        return String(numberDefault(Math.abs(value)))
     }
 })
 
@@ -333,7 +340,6 @@ Smith.addRule('*==.@', (value, T) => {
 
 
 export function PrintVariable(html: string, symbol: string, value: any): string {
-    console.log('blacksmith2')
     Smith.setText(html)
     return Smith.forge(symbol, value)
 

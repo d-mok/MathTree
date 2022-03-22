@@ -24252,7 +24252,7 @@
       let searchStr = pattern.replaceAll("@", this.symbol);
       if (!this.text.includes(searchStr))
         return;
-      let content = String(fn(this.val, typeof this.val) ?? this.val);
+      let content = fn(this.val, typeof this.val) ?? String(this.val);
       this.text = this.text.replaceAll(searchStr, content);
     }
     addRule(pattern, fn) {
@@ -24271,13 +24271,13 @@
     if (owl.num(value)) {
       let v3 = cal.blur(Round(value, 3));
       let abs = Math.abs(v3);
-      return abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3;
+      return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3);
     }
     if (owl.quantity(value)) {
       let { val: val2, unit } = value;
       let v3 = cal.blur(Round(val2, 3));
       let abs = Math.abs(v3);
-      return (abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3) + unit;
+      return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3) + unit;
     }
   });
   Smith.addRule("*/@", (value) => {
@@ -24305,7 +24305,7 @@
   Smith.addRule("*(@)", (value) => {
     if (owl.num(value)) {
       let v3 = numberDefault(value);
-      return v3 >= 0 ? v3 : "(" + v3 + ")";
+      return String(v3 >= 0 ? v3 : "(" + v3 + ")");
     }
   });
   Smith.addRule("*!@", (value) => {
@@ -24319,7 +24319,7 @@
   });
   Smith.addRule("*|@|", (value) => {
     if (owl.num(value)) {
-      return numberDefault(Math.abs(value));
+      return String(numberDefault(Math.abs(value)));
     }
   });
   Smith.addRule("*^+_@", (value) => {
@@ -24447,7 +24447,6 @@
     }
   });
   function PrintVariable(html, symbol, value) {
-    console.log("blacksmith2");
     Smith.setText(html);
     return Smith.forge(symbol, value);
   }
