@@ -1,0 +1,12 @@
+{
+  "name": "bot",
+  "version": "0.0.0",
+  "description": "a transformer for seed",
+  "main": "lib/src/index.js",
+  "types": "lib/src",
+  "type": "module",
+  "scripts": {
+    "jest": "jest",
+    "build": "tsc"
+  }
+}

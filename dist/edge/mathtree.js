@@ -24240,34 +24240,214 @@
       return oldHTMLs.map((x2) => newHTMLs.indexOf(x2));
     }
   };
+  var Blacksmith = class {
+    text = "";
+    symbol = "";
+    val = void 0;
+    rules = [];
+    setText(text) {
+      this.text = text;
+    }
+    smash([pattern, fn]) {
+      let searchStr = pattern.replaceAll("@", this.symbol);
+      let content = String(fn(this.val, typeof this.val) ?? this.val);
+      this.text = this.text.replaceAll(searchStr, content);
+    }
+    addRule(pattern, fn) {
+      this.rules.push([pattern, fn]);
+    }
+    forge(symbol, val2) {
+      this.symbol = symbol;
+      this.val = val2;
+      for (let rule of this.rules)
+        this.smash(rule);
+      return this.text;
+    }
+  };
+  var Smith = new Blacksmith();
+  Smith.addRule("**@", (value) => {
+    if (owl.num(value)) {
+      let v3 = cal.blur(Round(value, 3));
+      let abs = Math.abs(v3);
+      return abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3;
+    }
+    if (owl.quantity(value)) {
+      let { val: val2, unit } = value;
+      let v3 = cal.blur(Round(val2, 3));
+      let abs = Math.abs(v3);
+      return (abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3) + unit;
+    }
+  });
+  Smith.addRule("*/@", (value) => {
+    if (owl.num(value)) {
+      let [p3, q2] = ToFrac(value);
+      return Dfrac(p3, q2);
+    }
+  });
+  Smith.addRule("*//@", (value) => {
+    if (owl.num(value)) {
+      let [p3, q2] = ToFrac(value);
+      return Dfrac(p3, q2).replaceAll("dfrac", "frac");
+    }
+  });
+  Smith.addRule("*/(@)", (value) => {
+    if (owl.num(value)) {
+      let [p3, q2] = ToFrac(value);
+      if (q2 === 1 && p3 >= 0)
+        return Dfrac(p3, q2);
+      if (q2 === 1 && p3 < 0)
+        return "(" + Dfrac(p3, q2) + ")";
+      return "\\left ( " + Dfrac(p3, q2) + " \\right )";
+    }
+  });
+  Smith.addRule("*(@)", (value) => {
+    if (owl.num(value)) {
+      let v3 = numberDefault(value);
+      return v3 >= 0 ? v3 : "(" + v3 + ")";
+    }
+  });
+  Smith.addRule("*!@", (value) => {
+    if (owl.num(value)) {
+      return ink.printSurd(value);
+    }
+    if (owl.point2D(value)) {
+      let [a2, b2] = value;
+      return "(" + ink.printSurd(a2) + "," + ink.printSurd(b2) + ")";
+    }
+  });
+  Smith.addRule("*|@|", (value) => {
+    if (owl.num(value)) {
+      return numberDefault(Math.abs(value));
+    }
+  });
+  Smith.addRule("*^+_@", (value) => {
+    if (owl.num(value)) {
+      return value >= 0 ? "+" : "-";
+    }
+  });
+  Smith.addRule("*^-_@", (value) => {
+    if (owl.num(value)) {
+      return value >= 0 ? "-" : "+";
+    }
+  });
+  Smith.addRule("*^\\gt_@", (value, T2) => {
+    if (T2 === "boolean")
+      return value ? "\\gt" : "\\lt";
+    if (T2 === "number")
+      return value > 0 ? "\\gt" : value < 0 ? "\\lt" : "=";
+  });
+  Smith.addRule("*^\\lt_@", (value, T2) => {
+    if (T2 === "boolean")
+      return value ? "\\lt" : "\\gt";
+    if (T2 === "number")
+      return value > 0 ? "\\lt" : value < 0 ? "\\gt" : "=";
+  });
+  Smith.addRule("*^\\ge_@", (value, T2) => {
+    if (T2 === "boolean")
+      return value ? "\\ge" : "\\le";
+    if (T2 === "number")
+      return value > 0 ? "\\ge" : value < 0 ? "\\le" : "=";
+  });
+  Smith.addRule("*^\\le_@", (value, T2) => {
+    if (T2 === "boolean")
+      return value ? "\\le" : "\\ge";
+    if (T2 === "number")
+      return value > 0 ? "\\le" : value < 0 ? "\\ge" : "=";
+  });
+  Smith.addRule("*%@", (value, T2) => {
+    if (T2 === "number") {
+      return numberDefault(value * 100) + "%";
+    }
+  });
+  Smith.addRule("*\\%@", (value, T2) => {
+    if (T2 === "number") {
+      return numberDefault(value * 100) + "\\%";
+    }
+  });
+  Smith.addRule("*:@", (value, T2) => {
+    if (owl.ntuple(value)) {
+      return toNumbers(value).ratio().join(":");
+    }
+    if (T2 === "number") {
+      let [p3, q2] = cal.toFraction(value);
+      return p3 + ":" + q2;
+    }
+  });
+  Smith.addRule("*@", (value, T2) => {
+    if (T2 === "number") {
+      return String(numberDefault(value));
+    }
+    if (T2 === "boolean") {
+      return value ? "\u2714" : "\u2718";
+    }
+    if (owl.quantity(value)) {
+      let { val: val2, unit } = value;
+      return String(numberDefault(val2)) + unit;
+    }
+    if (owl.point2D(value)) {
+      return Coord(value);
+    }
+    if (owl.combo(value)) {
+      return ink.printCombo(value);
+    }
+    if (owl.polynomial(value)) {
+      return PolyPrint(value);
+    }
+    if (owl.trigValue(value)) {
+      return ink.printTrigValue(value);
+    }
+    if (owl.trigExp(value)) {
+      return ink.printTrigExp(value);
+    }
+    if (owl.constraint(value)) {
+      return ink.printConstraint(value);
+    }
+    if (owl.constraints(value)) {
+      return ink.printConstraints(value);
+    }
+  });
+  Smith.addRule("*|.@", (value, T2) => {
+    if (owl.array(value)) {
+      return ink.printOrTrigRoots(value);
+    }
+  });
+  Smith.addRule("*.@", (value, T2) => {
+    if (owl.point2D(value)) {
+      return ink.printPointPolar(value);
+    }
+  });
+  Smith.addRule("*=@", (value, T2) => {
+    if (owl.labeledValue(value)) {
+      let v3 = [...value];
+      v3[0] = numberDefault(v3[0]);
+      return ink.printLabeledValue(v3, 1, false);
+    }
+  });
+  Smith.addRule("*==@", (value, T2) => {
+    if (owl.labeledValue2(value)) {
+      let v3 = [...value];
+      v3[0] = numberDefault(v3[0]);
+      return ink.printLabeledValue(v3, 2, false);
+    }
+  });
+  Smith.addRule("*=.@", (value, T2) => {
+    if (owl.labeledValue(value)) {
+      let v3 = [...value];
+      v3[0] = numberDefault(v3[0]);
+      return ink.printLabeledValue(v3, 1, true);
+    }
+  });
+  Smith.addRule("*==.@", (value, T2) => {
+    if (owl.labeledValue2(value)) {
+      let v3 = [...value];
+      v3[0] = numberDefault(v3[0]);
+      return ink.printLabeledValue(v3, 2, true);
+    }
+  });
   function PrintVariable(html, symbol, value) {
-    let print = (signal, prefix, suffix = "") => {
-      html = html.replace(new RegExp(prefix + symbol + suffix, "g"), () => ParseForPrint(value, signal));
-    };
-    print("*", "\\*\\*");
-    print("/", "\\*\\/");
-    print("//", "\\*\\/\\/");
-    print("/()", "\\*\\/\\(", "\\)");
-    print("()", "\\*\\(", "\\)");
-    print("!", "\\*\\!");
-    print("||", "\\*\\|", "\\|");
-    print("+", "\\*\\^\\+\\_");
-    print("-", "\\*\\^\\-\\_");
-    print(">", "\\*\\^\\\\gt\\_");
-    print("<", "\\*\\^\\\\lt\\_");
-    print(">=", "\\*\\^\\\\ge\\_");
-    print("<=", "\\*\\^\\\\le\\_");
-    print("%", "\\*\\%");
-    print("\\%", "\\*\\\\\\%");
-    print(":", "\\*\\:");
-    print("", "\\*");
-    print("|.", "\\*\\|\\.");
-    print(".", "\\*\\.");
-    print("=", "\\*\\=");
-    print("==", "\\*\\=\\=");
-    print("=.", "\\*\\=\\.");
-    print("==.", "\\*\\=\\=\\.");
-    return html;
+    console.log("blacksmith");
+    Smith.setText(html);
+    return Smith.forge(symbol, value);
   }
   function numberDefault(num2) {
     let v3 = num2;
