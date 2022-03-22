@@ -79,6 +79,7 @@ class Blacksmith {
 
     private smash([pattern, fn]: rule) {
         let searchStr = pattern.replaceAll('@', this.symbol)
+        if (!this.text.includes(searchStr)) return
         let content = String(fn(this.val, typeof this.val) ?? this.val)
         this.text = this.text.replaceAll(searchStr, content)
     }
@@ -332,7 +333,7 @@ Smith.addRule('*==.@', (value, T) => {
 
 
 export function PrintVariable(html: string, symbol: string, value: any): string {
-    console.log('blacksmith')
+    console.log('blacksmith2')
     Smith.setText(html)
     return Smith.forge(symbol, value)
 

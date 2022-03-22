@@ -24250,6 +24250,8 @@
     }
     smash([pattern, fn]) {
       let searchStr = pattern.replaceAll("@", this.symbol);
+      if (!this.text.includes(searchStr))
+        return;
       let content = String(fn(this.val, typeof this.val) ?? this.val);
       this.text = this.text.replaceAll(searchStr, content);
     }
@@ -24445,7 +24447,7 @@
     }
   });
   function PrintVariable(html, symbol, value) {
-    console.log("blacksmith");
+    console.log("blacksmith2");
     Smith.setText(html);
     return Smith.forge(symbol, value);
   }
