@@ -24598,7 +24598,7 @@
   };
   var Smith = new Blacksmith();
   function PrintVariable(html, symbol, value) {
-    console.log("b");
+    console.log("c");
     Smith.setText(html);
     return Smith.forge(symbol, value);
   }
