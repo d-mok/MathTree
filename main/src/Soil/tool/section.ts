@@ -1,6 +1,6 @@
 
 import { Dict } from '../cls'
-import { evalInline } from './eval'
+import { exprCtxHTML } from 'bot'
 
 function DropVersion(html: string, section: string, version: number) {
     let id = section + '.' + version;
@@ -37,6 +37,6 @@ export function ExecSection(html: string, sections: section[], dict: Dict) {
 function DropCondition(html: string, dict: Dict): string {
     return html.replace(
         new RegExp('<p>##\{([^\{\}]*)\}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>', 'g'),
-        (match, p1) => evalInline(p1, dict) ? match : ""
+        (match, p1) => exprCtxHTML(p1, dict) ? match : ""
     );
 }

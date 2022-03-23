@@ -1,3 +1,3 @@
 export { dress } from './dress';
-export { evalCtx } from './eval';
+export { evalCtx, exprCtx, exprCtxHTML } from './eval';
 //# sourceMappingURL=index.js.map

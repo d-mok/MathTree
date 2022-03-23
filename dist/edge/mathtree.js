@@ -27,8 +27,8 @@
   };
   var __decorateClass = (decorators, target, key, kind) => {
     var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-    for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-      if (decorator = decorators[i2])
+    for (var i = decorators.length - 1, decorator; i >= 0; i--)
+      if (decorator = decorators[i])
         result = (kind ? decorator(target, key, result) : decorator(result)) || result;
     if (kind && result)
       __defProp(target, key, result);
@@ -292,25 +292,25 @@
             };
             return Style2;
           }();
-          var D2 = 0;
+          var D = 0;
           var Dc = 1;
-          var T2 = 2;
+          var T = 2;
           var Tc = 3;
-          var S2 = 4;
+          var S = 4;
           var Sc = 5;
           var SS = 6;
           var SSc = 7;
-          var styles = [new Style(D2, 0, false), new Style(Dc, 0, true), new Style(T2, 1, false), new Style(Tc, 1, true), new Style(S2, 2, false), new Style(Sc, 2, true), new Style(SS, 3, false), new Style(SSc, 3, true)];
-          var _sup = [S2, Sc, S2, Sc, SS, SSc, SS, SSc];
+          var styles = [new Style(D, 0, false), new Style(Dc, 0, true), new Style(T, 1, false), new Style(Tc, 1, true), new Style(S, 2, false), new Style(Sc, 2, true), new Style(SS, 3, false), new Style(SSc, 3, true)];
+          var _sup = [S, Sc, S, Sc, SS, SSc, SS, SSc];
           var _sub = [Sc, Sc, Sc, Sc, SSc, SSc, SSc, SSc];
-          var _fracNum = [T2, Tc, S2, Sc, SS, SSc, SS, SSc];
+          var _fracNum = [T, Tc, S, Sc, SS, SSc, SS, SSc];
           var _fracDen = [Tc, Tc, Sc, Sc, SSc, SSc, SSc, SSc];
           var _cramp = [Dc, Dc, Tc, Tc, Sc, Sc, SSc, SSc];
-          var _text = [D2, Dc, T2, Tc, T2, Tc, T2, Tc];
+          var _text = [D, Dc, T, Tc, T, Tc, T, Tc];
           var src_Style = {
-            DISPLAY: styles[D2],
-            TEXT: styles[T2],
-            SCRIPT: styles[S2],
+            DISPLAY: styles[D],
+            TEXT: styles[T],
+            SCRIPT: styles[S],
             SCRIPTSCRIPT: styles[SS]
           };
           ;
@@ -344,8 +344,8 @@
             blocks: [[44032, 55215]]
           }];
           function scriptFromCodepoint(codepoint) {
-            for (var i3 = 0; i3 < scriptData.length; i3++) {
-              var script = scriptData[i3];
+            for (var i2 = 0; i2 < scriptData.length; i2++) {
+              var script = scriptData[i2];
               for (var _i6 = 0; _i6 < script.blocks.length; _i6++) {
                 var block = script.blocks[_i6];
                 if (codepoint >= block[0] && codepoint <= block[1]) {
@@ -356,14 +356,14 @@
             return null;
           }
           var allBlocks = [];
-          scriptData.forEach(function(s3) {
-            return s3.blocks.forEach(function(b2) {
-              return allBlocks.push.apply(allBlocks, b2);
+          scriptData.forEach(function(s2) {
+            return s2.blocks.forEach(function(b) {
+              return allBlocks.push.apply(allBlocks, b);
             });
           });
           function supportedCodepoint(codepoint) {
-            for (var i3 = 0; i3 < allBlocks.length; i3 += 2) {
-              if (codepoint >= allBlocks[i3] && codepoint <= allBlocks[i3 + 1]) {
+            for (var i2 = 0; i2 < allBlocks.length; i2 += 2) {
+              if (codepoint >= allBlocks[i2] && codepoint <= allBlocks[i2 + 1]) {
                 return true;
               }
             }
@@ -386,9 +386,9 @@
           var sqrtSize4 = function sqrtSize42(extraViniculum, hLinePad2) {
             return "M473," + (2713 + extraViniculum + hLinePad2) + "\nc339.3,-1799.3,509.3,-2700,510,-2702 l" + extraViniculum / 5.298 + " -" + extraViniculum + "\nc3.3,-7.3,9.3,-11,18,-11 H400000v" + (40 + extraViniculum) + "H1017.7\ns-90.5,478,-276.2,1466c-185.7,988,-279.5,1483,-281.5,1485c-2,6,-10,9,-24,9\nc-8,0,-12,-0.7,-12,-2c0,-1.3,-5.3,-32,-16,-92c-50.7,-293.3,-119.7,-693.3,-207,-1200\nc0,-1.3,-5.3,8.7,-16,30c-10.7,21.3,-21.3,42.7,-32,64s-16,33,-16,33s-26,-26,-26,-26\ns76,-153,76,-153s77,-151,77,-151c0.7,0.7,35.7,202,105,604c67.3,400.7,102,602.7,104,\n606zM" + (1001 + extraViniculum) + " " + hLinePad2 + "h400000v" + (40 + extraViniculum) + "H1017.7z";
           };
-          var phasePath = function phasePath2(y2) {
-            var x2 = y2 / 2;
-            return "M400000 " + y2 + " H0 L" + x2 + " 0 l65 45 L145 " + (y2 - 80) + " H400000z";
+          var phasePath = function phasePath2(y) {
+            var x = y / 2;
+            return "M400000 " + y + " H0 L" + x + " 0 l65 45 L145 " + (y - 80) + " H400000z";
           };
           var sqrtTall = function sqrtTall2(extraViniculum, hLinePad2, viewBoxHeight) {
             var vertSegment = viewBoxHeight - 54 - hLinePad2 - extraViniculum;
@@ -521,15 +521,15 @@
             };
             _proto.toNode = function toNode() {
               var frag = document.createDocumentFragment();
-              for (var i3 = 0; i3 < this.children.length; i3++) {
-                frag.appendChild(this.children[i3].toNode());
+              for (var i2 = 0; i2 < this.children.length; i2++) {
+                frag.appendChild(this.children[i2].toNode());
               }
               return frag;
             };
             _proto.toMarkup = function toMarkup() {
               var markup = "";
-              for (var i3 = 0; i3 < this.children.length; i3++) {
-                markup += this.children[i3].toMarkup();
+              for (var i2 = 0; i2 < this.children.length; i2++) {
+                markup += this.children[i2].toMarkup();
               }
               return markup;
             };
@@ -3030,8 +3030,8 @@
             }
             return Math.min(sizeValue.number * scale, options.maxSize);
           };
-          var makeEm = function makeEm2(n2) {
-            return +n2.toFixed(4) + "em";
+          var makeEm = function makeEm2(n) {
+            return +n.toFixed(4) + "em";
           };
           ;
           var createClass = function createClass2(classes) {
@@ -3069,8 +3069,8 @@
                 node.setAttribute(attr, this.attributes[attr]);
               }
             }
-            for (var i3 = 0; i3 < this.children.length; i3++) {
-              node.appendChild(this.children[i3].toNode());
+            for (var i2 = 0; i2 < this.children.length; i2++) {
+              node.appendChild(this.children[i2].toNode());
             }
             return node;
           };
@@ -3094,8 +3094,8 @@
               }
             }
             markup += ">";
-            for (var i3 = 0; i3 < this.children.length; i3++) {
-              markup += this.children[i3].toMarkup();
+            for (var i2 = 0; i2 < this.children.length; i2++) {
+              markup += this.children[i2].toMarkup();
             }
             markup += "</" + tagName + ">";
             return markup;
@@ -3314,8 +3314,8 @@
                   node.setAttribute(attr, this.attributes[attr]);
                 }
               }
-              for (var i3 = 0; i3 < this.children.length; i3++) {
-                node.appendChild(this.children[i3].toNode());
+              for (var i2 = 0; i2 < this.children.length; i2++) {
+                node.appendChild(this.children[i2].toNode());
               }
               return node;
             };
@@ -3327,8 +3327,8 @@
                 }
               }
               markup += ">";
-              for (var i3 = 0; i3 < this.children.length; i3++) {
-                markup += this.children[i3].toMarkup();
+              for (var i2 = 0; i2 < this.children.length; i2++) {
+                markup += this.children[i2].toMarkup();
               }
               markup += "</svg>";
               return markup;
@@ -4048,8 +4048,8 @@
           defineSymbol(math, ams, textord, "\u2720", "\\maltese");
           defineSymbol(symbols_text, ams, textord, "\u2720", "\\maltese");
           var mathTextSymbols = '0123456789/@."';
-          for (var i2 = 0; i2 < mathTextSymbols.length; i2++) {
-            var ch = mathTextSymbols.charAt(i2);
+          for (var i = 0; i < mathTextSymbols.length; i++) {
+            var ch = mathTextSymbols.charAt(i);
             defineSymbol(math, main, textord, ch, ch);
           }
           var textSymbols = '0123456789!@*()-=+";:?/.,';
@@ -4176,18 +4176,18 @@
             ["mathtt", "texttt", "Typewriter-Regular"]
           ];
           var wideCharacterFont = function wideCharacterFont2(wideChar2, mode) {
-            var H2 = wideChar2.charCodeAt(0);
-            var L2 = wideChar2.charCodeAt(1);
-            var codePoint = (H2 - 55296) * 1024 + (L2 - 56320) + 65536;
-            var j2 = mode === "math" ? 0 : 1;
+            var H = wideChar2.charCodeAt(0);
+            var L = wideChar2.charCodeAt(1);
+            var codePoint = (H - 55296) * 1024 + (L - 56320) + 65536;
+            var j = mode === "math" ? 0 : 1;
             if (119808 <= codePoint && codePoint < 120484) {
-              var i3 = Math.floor((codePoint - 119808) / 26);
-              return [wideLatinLetterData[i3][2], wideLatinLetterData[i3][j2]];
+              var i2 = Math.floor((codePoint - 119808) / 26);
+              return [wideLatinLetterData[i2][2], wideLatinLetterData[i2][j]];
             } else if (120782 <= codePoint && codePoint <= 120831) {
               var _i6 = Math.floor((codePoint - 120782) / 10);
-              return [wideNumeralData[_i6][2], wideNumeralData[_i6][j2]];
+              return [wideNumeralData[_i6][2], wideNumeralData[_i6][j]];
             } else if (codePoint === 120485 || codePoint === 120486) {
-              return [wideLatinLetterData[0][2], wideLatinLetterData[0][j2]];
+              return [wideLatinLetterData[0][2], wideLatinLetterData[0][j]];
             } else if (120486 < codePoint && codePoint < 120782) {
               return ["", ""];
             } else {
@@ -4283,8 +4283,8 @@
                 return makeSymbol(text, fontName, mode, options, classes.concat(fontClasses));
               } else if (ligatures.hasOwnProperty(text) && fontName.substr(0, 10) === "Typewriter") {
                 var parts = [];
-                for (var i3 = 0; i3 < text.length; i3++) {
-                  parts.push(makeSymbol(text[i3], fontName, mode, options, classes.concat(fontClasses)));
+                for (var i2 = 0; i2 < text.length; i2++) {
+                  parts.push(makeSymbol(text[i2], fontName, mode, options, classes.concat(fontClasses)));
                 }
                 return makeFragment(parts);
               }
@@ -4330,16 +4330,16 @@
             return true;
           };
           var tryCombineChars = function tryCombineChars2(chars) {
-            for (var i3 = 0; i3 < chars.length - 1; i3++) {
-              var prev = chars[i3];
-              var next = chars[i3 + 1];
+            for (var i2 = 0; i2 < chars.length - 1; i2++) {
+              var prev = chars[i2];
+              var next = chars[i2 + 1];
               if (prev instanceof SymbolNode && next instanceof SymbolNode && canCombine(prev, next)) {
                 prev.text += next.text;
                 prev.height = Math.max(prev.height, next.height);
                 prev.depth = Math.max(prev.depth, next.depth);
                 prev.italic = next.italic;
-                chars.splice(i3 + 1, 1);
-                i3--;
+                chars.splice(i2 + 1, 1);
+                i2--;
               }
             }
             return chars;
@@ -4348,8 +4348,8 @@
             var height = 0;
             var depth = 0;
             var maxFontSize = 0;
-            for (var i3 = 0; i3 < elem.children.length; i3++) {
-              var child = elem.children[i3];
+            for (var i2 = 0; i2 < elem.children.length; i2++) {
+              var child = elem.children[i2];
               if (child.height > height) {
                 height = child.height;
               }
@@ -4401,15 +4401,15 @@
               var children = [oldChildren[0]];
               var _depth = -oldChildren[0].shift - oldChildren[0].elem.depth;
               var currPos = _depth;
-              for (var i3 = 1; i3 < oldChildren.length; i3++) {
-                var diff = -oldChildren[i3].shift - currPos - oldChildren[i3].elem.depth;
-                var size = diff - (oldChildren[i3 - 1].elem.height + oldChildren[i3 - 1].elem.depth);
+              for (var i2 = 1; i2 < oldChildren.length; i2++) {
+                var diff = -oldChildren[i2].shift - currPos - oldChildren[i2].elem.depth;
+                var size = diff - (oldChildren[i2 - 1].elem.height + oldChildren[i2 - 1].elem.depth);
                 currPos = currPos + diff;
                 children.push({
                   type: "kern",
                   size
                 });
-                children.push(oldChildren[i3]);
+                children.push(oldChildren[i2]);
               }
               return {
                 children,
@@ -4447,8 +4447,8 @@
           var makeVList = function makeVList2(params, options) {
             var _getVListChildrenAndD = getVListChildrenAndDepth(params), children = _getVListChildrenAndD.children, depth = _getVListChildrenAndD.depth;
             var pstrutSize = 0;
-            for (var i3 = 0; i3 < children.length; i3++) {
-              var child = children[i3];
+            for (var i2 = 0; i2 < children.length; i2++) {
+              var child = children[i2];
               if (child.type === "elem") {
                 var elem = child.elem;
                 pstrutSize = Math.max(pstrutSize, elem.maxFontSize, elem.height);
@@ -4726,8 +4726,8 @@
               primitive: !!props.primitive,
               handler
             };
-            for (var i3 = 0; i3 < names.length; ++i3) {
-              _functions[names[i3]] = data2;
+            for (var i2 = 0; i2 < names.length; ++i2) {
+              _functions[names[i2]] = data2;
             }
             if (type) {
               if (htmlBuilder2) {
@@ -4784,8 +4784,8 @@
               surrounding = [null, null];
             }
             var groups = [];
-            for (var i3 = 0; i3 < expression.length; i3++) {
-              var output = buildGroup(expression[i3], options);
+            for (var i2 = 0; i2 < expression.length; i2++) {
+              var output = buildGroup(expression[i2], options);
               if (output instanceof DocumentFragment) {
                 var children = output.children;
                 groups.push.apply(groups, children);
@@ -4836,9 +4836,9 @@
             if (next) {
               nodes.push(next);
             }
-            var i3 = 0;
-            for (; i3 < nodes.length; i3++) {
-              var node = nodes[i3];
+            var i2 = 0;
+            for (; i2 < nodes.length; i2++) {
+              var node = nodes[i2];
               var partialGroup = checkPartialGroup(node);
               if (partialGroup) {
                 traverseNonSpaceNodes2(partialGroup.children, callback, prev, null, isRoot);
@@ -4852,7 +4852,7 @@
                     prev.insertAfter(result);
                   } else {
                     nodes.unshift(result);
-                    i3++;
+                    i2++;
                   }
                 }
               }
@@ -4862,11 +4862,11 @@
                 prev.node = buildHTML_makeSpan(["leftmost"]);
               }
               prev.insertAfter = function(index) {
-                return function(n2) {
-                  nodes.splice(index + 1, 0, n2);
-                  i3++;
+                return function(n) {
+                  nodes.splice(index + 1, 0, n);
+                  i2++;
                 };
-              }(i3);
+              }(i2);
             }
             if (next) {
               nodes.pop();
@@ -4945,14 +4945,14 @@
             }
             var children = [];
             var parts = [];
-            for (var i3 = 0; i3 < expression.length; i3++) {
-              parts.push(expression[i3]);
-              if (expression[i3].hasClass("mbin") || expression[i3].hasClass("mrel") || expression[i3].hasClass("allowbreak")) {
+            for (var i2 = 0; i2 < expression.length; i2++) {
+              parts.push(expression[i2]);
+              if (expression[i2].hasClass("mbin") || expression[i2].hasClass("mrel") || expression[i2].hasClass("allowbreak")) {
                 var nobreak = false;
-                while (i3 < expression.length - 1 && expression[i3 + 1].hasClass("mspace") && !expression[i3 + 1].hasClass("newline")) {
-                  i3++;
-                  parts.push(expression[i3]);
-                  if (expression[i3].hasClass("nobreak")) {
+                while (i2 < expression.length - 1 && expression[i2 + 1].hasClass("mspace") && !expression[i2 + 1].hasClass("newline")) {
+                  i2++;
+                  parts.push(expression[i2]);
+                  if (expression[i2].hasClass("nobreak")) {
                     nobreak = true;
                   }
                 }
@@ -4960,13 +4960,13 @@
                   children.push(buildHTMLUnbreakable(parts, options));
                   parts = [];
                 }
-              } else if (expression[i3].hasClass("newline")) {
+              } else if (expression[i2].hasClass("newline")) {
                 parts.pop();
                 if (parts.length > 0) {
                   children.push(buildHTMLUnbreakable(parts, options));
                   parts = [];
                 }
-                children.push(expression[i3]);
+                children.push(expression[i2]);
               }
             }
             if (parts.length > 0) {
@@ -5023,8 +5023,8 @@
               if (this.classes.length > 0) {
                 node.className = createClass(this.classes);
               }
-              for (var i3 = 0; i3 < this.children.length; i3++) {
-                node.appendChild(this.children[i3].toNode());
+              for (var i2 = 0; i2 < this.children.length; i2++) {
+                node.appendChild(this.children[i2].toNode());
               }
               return node;
             };
@@ -5041,8 +5041,8 @@
                 markup += ' class ="' + utils.escape(createClass(this.classes)) + '"';
               }
               markup += ">";
-              for (var i3 = 0; i3 < this.children.length; i3++) {
-                markup += this.children[i3].toMarkup();
+              for (var i2 = 0; i2 < this.children.length; i2++) {
+                markup += this.children[i2].toMarkup();
               }
               markup += "</" + this.type + ">";
               return markup;
@@ -5208,8 +5208,8 @@
             }
             var groups = [];
             var lastGroup;
-            for (var i3 = 0; i3 < expression.length; i3++) {
-              var _group = buildMathML_buildGroup(expression[i3], options);
+            for (var i2 = 0; i2 < expression.length; i2++) {
+              var _group = buildMathML_buildGroup(expression[i2], options);
               if (_group instanceof MathNode && lastGroup instanceof MathNode) {
                 if (_group.type === "mtext" && lastGroup.type === "mtext" && _group.getAttribute("mathvariant") === lastGroup.getAttribute("mathvariant")) {
                   var _lastGroup$children;
@@ -5486,15 +5486,15 @@
                 } else {
                   throw new Error("Correct katexImagesData or update code here to support\n                    " + numSvgChildren + " children.");
                 }
-                for (var i3 = 0; i3 < numSvgChildren; i3++) {
-                  var _path = new PathNode(paths[i3]);
+                for (var i2 = 0; i2 < numSvgChildren; i2++) {
+                  var _path = new PathNode(paths[i2]);
                   var _svgNode = new SvgNode([_path], {
                     "width": "400em",
                     "height": makeEm(_height2),
                     "viewBox": "0 0 " + viewBoxWidth + " " + _viewBoxHeight,
-                    "preserveAspectRatio": aligns[i3] + " slice"
+                    "preserveAspectRatio": aligns[i2] + " slice"
                   });
-                  var _span = buildCommon.makeSvgSpan([widthClasses[i3]], [_svgNode], options);
+                  var _span = buildCommon.makeSvgSpan([widthClasses[i2]], [_svgNode], options);
                   if (numSvgChildren === 1) {
                     return {
                       span: _span,
@@ -6005,16 +6005,16 @@
             }
             var row = [];
             var body = [row];
-            for (var i3 = 0; i3 < parsedRows.length; i3++) {
-              var rowNodes = parsedRows[i3];
+            for (var i2 = 0; i2 < parsedRows.length; i2++) {
+              var rowNodes = parsedRows[i2];
               var cell = newCell();
-              for (var j2 = 0; j2 < rowNodes.length; j2++) {
-                if (!isStartOfArrow(rowNodes[j2])) {
-                  cell.body.push(rowNodes[j2]);
+              for (var j = 0; j < rowNodes.length; j++) {
+                if (!isStartOfArrow(rowNodes[j])) {
+                  cell.body.push(rowNodes[j]);
                 } else {
                   row.push(cell);
-                  j2 += 1;
-                  var arrowChar = assertSymbolNodeType(rowNodes[j2]).text;
+                  j += 1;
+                  var arrowChar = assertSymbolNodeType(rowNodes[j]).text;
                   var labels = new Array(2);
                   labels[0] = {
                     type: "ordgroup",
@@ -6030,23 +6030,23 @@
                   } else if ("<>AV".indexOf(arrowChar) > -1) {
                     for (var labelNum = 0; labelNum < 2; labelNum++) {
                       var inLabel = true;
-                      for (var k2 = j2 + 1; k2 < rowNodes.length; k2++) {
-                        if (isLabelEnd(rowNodes[k2], arrowChar)) {
+                      for (var k = j + 1; k < rowNodes.length; k++) {
+                        if (isLabelEnd(rowNodes[k], arrowChar)) {
                           inLabel = false;
-                          j2 = k2;
+                          j = k;
                           break;
                         }
-                        if (isStartOfArrow(rowNodes[k2])) {
-                          throw new src_ParseError("Missing a " + arrowChar + " character to complete a CD arrow.", rowNodes[k2]);
+                        if (isStartOfArrow(rowNodes[k])) {
+                          throw new src_ParseError("Missing a " + arrowChar + " character to complete a CD arrow.", rowNodes[k]);
                         }
-                        labels[labelNum].body.push(rowNodes[k2]);
+                        labels[labelNum].body.push(rowNodes[k]);
                       }
                       if (inLabel) {
-                        throw new src_ParseError("Missing a " + arrowChar + " character to complete a CD arrow.", rowNodes[j2]);
+                        throw new src_ParseError("Missing a " + arrowChar + " character to complete a CD arrow.", rowNodes[j]);
                       }
                     }
                   } else {
-                    throw new src_ParseError('Expected one of "<>AV=|." after @', rowNodes[j2]);
+                    throw new src_ParseError('Expected one of "<>AV=|." after @', rowNodes[j]);
                   }
                   var arrow = cdArrow(arrowChar, labels, parser);
                   var wrappedArrow = {
@@ -6059,7 +6059,7 @@
                   cell = newCell();
                 }
               }
-              if (i3 % 2 === 0) {
+              if (i2 % 2 === 0) {
                 row.push(cell);
               } else {
                 row.shift();
@@ -6161,21 +6161,21 @@
               var arg = assertNodeType(args[0], "ordgroup");
               var group = arg.body;
               var number = "";
-              for (var i3 = 0; i3 < group.length; i3++) {
-                var node = assertNodeType(group[i3], "textord");
+              for (var i2 = 0; i2 < group.length; i2++) {
+                var node = assertNodeType(group[i2], "textord");
                 number += node.text;
               }
-              var code2 = parseInt(number);
+              var code = parseInt(number);
               var text;
-              if (isNaN(code2)) {
+              if (isNaN(code)) {
                 throw new src_ParseError("\\@char has non-numeric argument " + number);
-              } else if (code2 < 0 || code2 >= 1114111) {
+              } else if (code < 0 || code >= 1114111) {
                 throw new src_ParseError("\\@char with invalid code point " + number);
-              } else if (code2 <= 65535) {
-                text = String.fromCharCode(code2);
+              } else if (code <= 65535) {
+                text = String.fromCharCode(code);
               } else {
-                code2 -= 65536;
-                text = String.fromCharCode((code2 >> 10) + 55296, (code2 & 1023) + 56320);
+                code -= 65536;
+                text = String.fromCharCode((code >> 10) + 55296, (code & 1023) + 56320);
               }
               return {
                 type: "textord",
@@ -6828,18 +6828,18 @@
           };
           var traverseSequence = function traverseSequence2(delim, height, sequence, options) {
             var start = Math.min(2, 3 - options.style.size);
-            for (var i3 = start; i3 < sequence.length; i3++) {
-              if (sequence[i3].type === "stack") {
+            for (var i2 = start; i2 < sequence.length; i2++) {
+              if (sequence[i2].type === "stack") {
                 break;
               }
-              var metrics = getMetrics(delim, delimTypeToFont(sequence[i3]), "math");
+              var metrics = getMetrics(delim, delimTypeToFont(sequence[i2]), "math");
               var heightDepth = metrics.height + metrics.depth;
-              if (sequence[i3].type === "small") {
-                var newOptions = options.havingBaseStyle(sequence[i3].style);
+              if (sequence[i2].type === "small") {
+                var newOptions = options.havingBaseStyle(sequence[i2].style);
                 heightDepth *= newOptions.sizeMultiplier;
               }
               if (heightDepth > height) {
-                return sequence[i3];
+                return sequence[i2];
               }
             }
             return sequence[sequence.length - 1];
@@ -7056,12 +7056,12 @@
               var innerHeight = 0;
               var innerDepth = 0;
               var hadMiddle = false;
-              for (var i3 = 0; i3 < inner2.length; i3++) {
-                if (inner2[i3].isMiddle) {
+              for (var i2 = 0; i2 < inner2.length; i2++) {
+                if (inner2[i2].isMiddle) {
                   hadMiddle = true;
                 } else {
-                  innerHeight = Math.max(inner2[i3].height, innerHeight);
-                  innerDepth = Math.max(inner2[i3].depth, innerDepth);
+                  innerHeight = Math.max(inner2[i2].height, innerHeight);
+                  innerDepth = Math.max(inner2[i2].depth, innerDepth);
                 }
               }
               innerHeight *= options.sizeMultiplier;
@@ -7432,8 +7432,8 @@
               numOptionalArgs: 0,
               handler
             };
-            for (var i3 = 0; i3 < names.length; ++i3) {
-              _environments[names[i3]] = data2;
+            for (var i2 = 0; i2 < names.length; ++i2) {
+              _environments[names[i2]] = data2;
             }
             if (htmlBuilder2) {
               _htmlGroupBuilders[type] = htmlBuilder2;
@@ -7559,8 +7559,8 @@
             }
           }
           var array_htmlBuilder = function htmlBuilder2(group, options) {
-            var r3;
-            var c3;
+            var r2;
+            var c2;
             var nr = group.body.length;
             var hLinesBeforeRow = group.hLinesBeforeRow;
             var nc = 0;
@@ -7583,36 +7583,36 @@
             var arstrutDepth = 0.3 * arrayskip;
             var totalHeight = 0;
             function setHLinePos(hlinesInGap) {
-              for (var i3 = 0; i3 < hlinesInGap.length; ++i3) {
-                if (i3 > 0) {
+              for (var i2 = 0; i2 < hlinesInGap.length; ++i2) {
+                if (i2 > 0) {
                   totalHeight += 0.25;
                 }
                 hlines.push({
                   pos: totalHeight,
-                  isDashed: hlinesInGap[i3]
+                  isDashed: hlinesInGap[i2]
                 });
               }
             }
             setHLinePos(hLinesBeforeRow[0]);
-            for (r3 = 0; r3 < group.body.length; ++r3) {
-              var inrow = group.body[r3];
+            for (r2 = 0; r2 < group.body.length; ++r2) {
+              var inrow = group.body[r2];
               var height = arstrutHeight;
               var depth = arstrutDepth;
               if (nc < inrow.length) {
                 nc = inrow.length;
               }
               var outrow = new Array(inrow.length);
-              for (c3 = 0; c3 < inrow.length; ++c3) {
-                var elt = buildGroup(inrow[c3], options);
+              for (c2 = 0; c2 < inrow.length; ++c2) {
+                var elt = buildGroup(inrow[c2], options);
                 if (depth < elt.depth) {
                   depth = elt.depth;
                 }
                 if (height < elt.height) {
                   height = elt.height;
                 }
-                outrow[c3] = elt;
+                outrow[c2] = elt;
               }
-              var rowGap = group.rowGaps[r3];
+              var rowGap = group.rowGaps[r2];
               var gap = 0;
               if (rowGap) {
                 gap = calculateSize(rowGap, options);
@@ -7632,8 +7632,8 @@
               totalHeight += height;
               outrow.pos = totalHeight;
               totalHeight += depth + gap;
-              body[r3] = outrow;
-              setHLinePos(hLinesBeforeRow[r3 + 1]);
+              body[r2] = outrow;
+              setHLinePos(hLinesBeforeRow[r2 + 1]);
             }
             var offset = totalHeight / 2 + options.fontMetrics().axisHeight;
             var colDescriptions = group.cols || [];
@@ -7642,8 +7642,8 @@
             var colDescrNum;
             var eqnNumSpans = [];
             if (group.addEqnNum) {
-              for (r3 = 0; r3 < nr; ++r3) {
-                var rw = body[r3];
+              for (r2 = 0; r2 < nr; ++r2) {
+                var rw = body[r2];
                 var shift = rw.pos - offset;
                 var eqnTag = buildCommon.makeSpan(["eqn-num"], [], options);
                 eqnTag.depth = rw.depth;
@@ -7655,7 +7655,7 @@
                 });
               }
             }
-            for (c3 = 0, colDescrNum = 0; c3 < nc || colDescrNum < colDescriptions.length; ++c3, ++colDescrNum) {
+            for (c2 = 0, colDescrNum = 0; c2 < nc || colDescrNum < colDescriptions.length; ++c2, ++colDescrNum) {
               var colDescr = colDescriptions[colDescrNum] || {};
               var firstSeparator = true;
               while (colDescr.type === "separator") {
@@ -7683,11 +7683,11 @@
                 colDescr = colDescriptions[colDescrNum] || {};
                 firstSeparator = false;
               }
-              if (c3 >= nc) {
+              if (c2 >= nc) {
                 continue;
               }
               var sepwidth = void 0;
-              if (c3 > 0 || group.hskipBeforeAndAfter) {
+              if (c2 > 0 || group.hskipBeforeAndAfter) {
                 sepwidth = utils.deflt(colDescr.pregap, arraycolsep);
                 if (sepwidth !== 0) {
                   colSep = buildCommon.makeSpan(["arraycolsep"], []);
@@ -7696,9 +7696,9 @@
                 }
               }
               var col = [];
-              for (r3 = 0; r3 < nr; ++r3) {
-                var row = body[r3];
-                var elem = row[c3];
+              for (r2 = 0; r2 < nr; ++r2) {
+                var row = body[r2];
+                var elem = row[c2];
                 if (!elem) {
                   continue;
                 }
@@ -7717,7 +7717,7 @@
               }, options);
               col = buildCommon.makeSpan(["col-align-" + (colDescr.align || "c")], [col]);
               cols.push(col);
-              if (c3 < nc - 1 || group.hskipBeforeAndAfter) {
+              if (c2 < nc - 1 || group.hskipBeforeAndAfter) {
                 sepwidth = utils.deflt(colDescr.postgap, arraycolsep);
                 if (sepwidth !== 0) {
                   colSep = buildCommon.makeSpan(["arraycolsep"], []);
@@ -7777,11 +7777,11 @@
             var tbl = [];
             var glue = new mathMLTree.MathNode("mtd", [], ["mtr-glue"]);
             var tag = new mathMLTree.MathNode("mtd", [], ["mml-eqn-num"]);
-            for (var i3 = 0; i3 < group.body.length; i3++) {
-              var rw = group.body[i3];
+            for (var i2 = 0; i2 < group.body.length; i2++) {
+              var rw = group.body[i2];
               var row = [];
-              for (var j2 = 0; j2 < rw.length; j2++) {
-                row.push(new mathMLTree.MathNode("mtd", [buildMathML_buildGroup(rw[j2], options)]));
+              for (var j = 0; j < rw.length; j++) {
+                row.push(new mathMLTree.MathNode("mtd", [buildMathML_buildGroup(rw[j], options)]));
               }
               if (group.addEqnNum) {
                 row.unshift(glue);
@@ -7892,8 +7892,8 @@
             };
             if (args[0] && args[0].type === "ordgroup") {
               var arg0 = "";
-              for (var i3 = 0; i3 < args[0].body.length; i3++) {
-                var textord2 = assertNodeType(args[0].body[i3], "textord");
+              for (var i2 = 0; i2 < args[0].body.length; i2++) {
+                var textord2 = assertNodeType(args[0].body[i2], "textord");
                 arg0 += textord2.text;
               }
               numMaths = Number(arg0);
@@ -8233,8 +8233,8 @@
                 throw new src_ParseError("Invalid environment name", nameGroup);
               }
               var envName = "";
-              for (var i3 = 0; i3 < nameGroup.body.length; ++i3) {
-                envName += assertNodeType(nameGroup.body[i3], "textord").text;
+              for (var i2 = 0; i2 < nameGroup.body.length; ++i2) {
+                envName += assertNodeType(nameGroup.body[i2], "textord").text;
               }
               if (funcName === "\\begin") {
                 if (!src_environments.hasOwnProperty(envName)) {
@@ -9079,15 +9079,15 @@
                 return parser.formatUnsupportedCmd("\\url");
               }
               var chars = [];
-              for (var i3 = 0; i3 < href.length; i3++) {
-                var c3 = href[i3];
-                if (c3 === "~") {
-                  c3 = "\\textasciitilde";
+              for (var i2 = 0; i2 < href.length; i2++) {
+                var c2 = href[i2];
+                if (c2 === "~") {
+                  c2 = "\\textasciitilde";
                 }
                 chars.push({
                   type: "textord",
                   mode: "text",
-                  text: c3
+                  text: c2
                 });
               }
               var body = {
@@ -9172,8 +9172,8 @@
                   break;
                 case "\\htmlData": {
                   var data2 = value.split(",");
-                  for (var i3 = 0; i3 < data2.length; i3++) {
-                    var keyVal = data2[i3].split("=");
+                  for (var i2 = 0; i2 < data2.length; i2++) {
+                    var keyVal = data2[i2].split("=");
                     if (keyVal.length !== 2) {
                       throw new src_ParseError("Error parsing key-value for \\htmlData");
                     }
@@ -9290,8 +9290,8 @@
               if (optArgs[0]) {
                 var attributeStr = assertNodeType(optArgs[0], "raw").string;
                 var attributes = attributeStr.split(",");
-                for (var i3 = 0; i3 < attributes.length; i3++) {
-                  var keyVal = attributes[i3].split("=");
+                for (var i2 = 0; i2 < attributes.length; i2++) {
+                  var keyVal = attributes[i2].split("=");
                   if (keyVal.length === 2) {
                     var str3 = keyVal[1].trim();
                     switch (keyVal[0].trim()) {
@@ -9707,8 +9707,8 @@
               }
             } else {
               var output = [];
-              for (var i3 = 1; i3 < group.name.length; i3++) {
-                output.push(buildCommon.mathsym(group.name[i3], group.mode, options));
+              for (var i2 = 1; i2 < group.name.length; i2++) {
+                output.push(buildCommon.mathsym(group.name[i2], group.mode, options));
               }
               base2 = buildCommon.makeSpan(["mop"], output, options);
             }
@@ -9914,8 +9914,8 @@
                 }
               });
               var expression = buildExpression(body, options.withFont("mathrm"), true);
-              for (var i3 = 0; i3 < expression.length; i3++) {
-                var child = expression[i3];
+              for (var i2 = 0; i2 < expression.length; i2++) {
+                var child = expression[i2];
                 if (child instanceof SymbolNode) {
                   child.text = child.text.replace(/\u2212/, "-").replace(/\u2217/, "*");
                 }
@@ -9933,8 +9933,8 @@
           var operatorname_mathmlBuilder = function mathmlBuilder2(group, options) {
             var expression = buildMathML_buildExpression(group.body, options.withFont("mathrm"));
             var isAllString = true;
-            for (var i3 = 0; i3 < expression.length; i3++) {
-              var node = expression[i3];
+            for (var i2 = 0; i2 < expression.length; i2++) {
+              var node = expression[i2];
               if (node instanceof mathMLTree.SpaceNode) {
               } else if (node instanceof mathMLTree.MathNode) {
                 switch (node.type) {
@@ -10103,9 +10103,9 @@
               node.height = 0;
               node.depth = 0;
               if (node.children) {
-                for (var i3 = 0; i3 < node.children.length; i3++) {
-                  node.children[i3].height = 0;
-                  node.children[i3].depth = 0;
+                for (var i2 = 0; i2 < node.children.length; i2++) {
+                  node.children[i2].height = 0;
+                  node.children[i2].depth = 0;
                 }
               }
               node = buildCommon.makeVList({
@@ -10254,15 +10254,15 @@
           function sizingGroup(value, options, baseOptions) {
             var inner2 = buildExpression(value, options, false);
             var multiplier = options.sizeMultiplier / baseOptions.sizeMultiplier;
-            for (var i3 = 0; i3 < inner2.length; i3++) {
-              var pos = inner2[i3].classes.indexOf("sizing");
+            for (var i2 = 0; i2 < inner2.length; i2++) {
+              var pos = inner2[i2].classes.indexOf("sizing");
               if (pos < 0) {
-                Array.prototype.push.apply(inner2[i3].classes, options.sizingClasses(baseOptions));
-              } else if (inner2[i3].classes[pos + 1] === "reset-size" + options.size) {
-                inner2[i3].classes[pos + 1] = "reset-size" + baseOptions.size;
+                Array.prototype.push.apply(inner2[i2].classes, options.sizingClasses(baseOptions));
+              } else if (inner2[i2].classes[pos + 1] === "reset-size" + options.size) {
+                inner2[i2].classes[pos + 1] = "reset-size" + baseOptions.size;
               }
-              inner2[i3].height *= multiplier;
-              inner2[i3].depth *= multiplier;
+              inner2[i2].height *= multiplier;
+              inner2[i2].depth *= multiplier;
             }
             return buildCommon.makeFragment(inner2);
           }
@@ -10313,8 +10313,8 @@
               var tbArg = optArgs[0] && assertNodeType(optArgs[0], "ordgroup");
               if (tbArg) {
                 var letter = "";
-                for (var i3 = 0; i3 < tbArg.body.length; ++i3) {
-                  var node = tbArg.body[i3];
+                for (var i2 = 0; i2 < tbArg.body.length; ++i2) {
+                  var node = tbArg.body[i2];
                   letter = node.text;
                   if (letter === "t") {
                     smashHeight = true;
@@ -10347,8 +10347,8 @@
               if (group.smashHeight) {
                 node.height = 0;
                 if (node.children) {
-                  for (var i3 = 0; i3 < node.children.length; i3++) {
-                    node.children[i3].height = 0;
+                  for (var i2 = 0; i2 < node.children.length; i2++) {
+                    node.children[i2].height = 0;
                   }
                 }
               }
@@ -10977,12 +10977,12 @@
               var text = makeVerb(group);
               var body = [];
               var newOptions = options.havingStyle(options.style.text());
-              for (var i3 = 0; i3 < text.length; i3++) {
-                var c3 = text[i3];
-                if (c3 === "~") {
-                  c3 = "\\textasciitilde";
+              for (var i2 = 0; i2 < text.length; i2++) {
+                var c2 = text[i2];
+                if (c2 === "~") {
+                  c2 = "\\textasciitilde";
                 }
-                body.push(buildCommon.makeSymbol(c3, "Typewriter-Regular", group.mode, newOptions, ["mord", "texttt"]));
+                body.push(buildCommon.makeSymbol(c2, "Typewriter-Regular", group.mode, newOptions, ["mord", "texttt"]));
               }
               return buildCommon.makeSpan(["mord", "text"].concat(newOptions.sizingClasses(options)), buildCommon.tryCombineChars(body), newOptions);
             },
@@ -11060,8 +11060,8 @@
               };
             }
             var _proto = Lexer2.prototype;
-            _proto.setCatcode = function setCatcode(char, code2) {
-              this.catcodes[char] = code2;
+            _proto.setCatcode = function setCatcode(char, code) {
+              this.catcodes[char] = code;
             };
             _proto.lex = function lex() {
               var input = this.input;
@@ -11143,8 +11143,8 @@
                 global = false;
               }
               if (global) {
-                for (var i3 = 0; i3 < this.undefStack.length; i3++) {
-                  delete this.undefStack[i3][name];
+                for (var i2 = 0; i2 < this.undefStack.length; i2++) {
+                  delete this.undefStack[i2][name];
                 }
                 if (this.undefStack.length > 0) {
                   this.undefStack[this.undefStack.length - 1][name] = value;
@@ -11163,21 +11163,21 @@
           var macros = _macros;
           var src_macros = macros;
           defineMacro("\\noexpand", function(context) {
-            var t2 = context.popToken();
-            if (context.isExpandable(t2.text)) {
-              t2.noexpand = true;
-              t2.treatAsRelax = true;
+            var t = context.popToken();
+            if (context.isExpandable(t.text)) {
+              t.noexpand = true;
+              t.treatAsRelax = true;
             }
             return {
-              tokens: [t2],
+              tokens: [t],
               numArgs: 0
             };
           });
           defineMacro("\\expandafter", function(context) {
-            var t2 = context.popToken();
+            var t = context.popToken();
             context.expandOnce(true);
             return {
-              tokens: [t2],
+              tokens: [t],
               numArgs: 0
             };
           });
@@ -11915,9 +11915,9 @@
                   throw new src_ParseError("The length of delimiters doesn't match the number of args!");
                 }
                 var delims = delimiters2[0];
-                for (var i3 = 0; i3 < delims.length; i3++) {
+                for (var i2 = 0; i2 < delims.length; i2++) {
                   var tok = this.popToken();
-                  if (delims[i3] !== tok.text) {
+                  if (delims[i2] !== tok.text) {
                     throw new src_ParseError("Use of the macro doesn't match its definition", tok);
                   }
                 }
@@ -11947,18 +11947,18 @@
               var args = this.consumeArgs(expansion.numArgs, expansion.delimiters);
               if (expansion.numArgs) {
                 tokens = tokens.slice();
-                for (var i3 = tokens.length - 1; i3 >= 0; --i3) {
-                  var tok = tokens[i3];
+                for (var i2 = tokens.length - 1; i2 >= 0; --i2) {
+                  var tok = tokens[i2];
                   if (tok.text === "#") {
-                    if (i3 === 0) {
+                    if (i2 === 0) {
                       throw new src_ParseError("Incomplete placeholder at end of macro body", tok);
                     }
-                    tok = tokens[--i3];
+                    tok = tokens[--i2];
                     if (tok.text === "#") {
-                      tokens.splice(i3 + 1, 1);
+                      tokens.splice(i2 + 1, 1);
                     } else if (/^[1-9]$/.test(tok.text)) {
                       var _tokens;
-                      (_tokens = tokens).splice.apply(_tokens, [i3, 2].concat(args[+tok.text - 1]));
+                      (_tokens = tokens).splice.apply(_tokens, [i2, 2].concat(args[+tok.text - 1]));
                     } else {
                       throw new src_ParseError("Not a valid argument number", tok);
                     }
@@ -12541,13 +12541,13 @@
             _proto.handleInfixNodes = function handleInfixNodes(body) {
               var overIndex = -1;
               var funcName;
-              for (var i3 = 0; i3 < body.length; i3++) {
-                if (body[i3].type === "infix") {
+              for (var i2 = 0; i2 < body.length; i2++) {
+                if (body[i2].type === "infix") {
                   if (overIndex !== -1) {
-                    throw new src_ParseError("only one infix operator per group", body[i3].token);
+                    throw new src_ParseError("only one infix operator per group", body[i2].token);
                   }
-                  overIndex = i3;
-                  funcName = body[i3].replaceWith;
+                  overIndex = i2;
+                  funcName = body[i2].replaceWith;
                 }
               }
               if (overIndex !== -1 && funcName) {
@@ -12597,11 +12597,11 @@
             };
             _proto.formatUnsupportedCmd = function formatUnsupportedCmd(text) {
               var textordArray = [];
-              for (var i3 = 0; i3 < text.length; i3++) {
+              for (var i2 = 0; i2 < text.length; i2++) {
                 textordArray.push({
                   type: "textord",
                   mode: "text",
-                  text: text[i3]
+                  text: text[i2]
                 });
               }
               var textNode = {
@@ -12731,10 +12731,10 @@
               }
               var args = [];
               var optArgs = [];
-              for (var i3 = 0; i3 < totalArgs; i3++) {
-                var argType = funcData.argTypes && funcData.argTypes[i3];
-                var isOptional = i3 < funcData.numOptionalArgs;
-                if (funcData.primitive && argType == null || funcData.type === "sqrt" && i3 === 1 && optArgs[0] == null) {
+              for (var i2 = 0; i2 < totalArgs; i2++) {
+                var argType = funcData.argTypes && funcData.argTypes[i2];
+                var isOptional = i2 < funcData.numOptionalArgs;
+                if (funcData.primitive && argType == null || funcData.type === "sqrt" && i2 === 1 && optArgs[0] == null) {
                   argType = "primitive";
                 }
                 var arg = this.parseGroupOfType("argument to '" + func + "'", argType, isOptional);
@@ -12957,37 +12957,37 @@
               return result;
             };
             _proto.formLigatures = function formLigatures(group) {
-              var n2 = group.length - 1;
-              for (var i3 = 0; i3 < n2; ++i3) {
-                var a2 = group[i3];
-                var v3 = a2.text;
-                if (v3 === "-" && group[i3 + 1].text === "-") {
-                  if (i3 + 1 < n2 && group[i3 + 2].text === "-") {
-                    group.splice(i3, 3, {
+              var n = group.length - 1;
+              for (var i2 = 0; i2 < n; ++i2) {
+                var a = group[i2];
+                var v2 = a.text;
+                if (v2 === "-" && group[i2 + 1].text === "-") {
+                  if (i2 + 1 < n && group[i2 + 2].text === "-") {
+                    group.splice(i2, 3, {
                       type: "textord",
                       mode: "text",
-                      loc: SourceLocation.range(a2, group[i3 + 2]),
+                      loc: SourceLocation.range(a, group[i2 + 2]),
                       text: "---"
                     });
-                    n2 -= 2;
+                    n -= 2;
                   } else {
-                    group.splice(i3, 2, {
+                    group.splice(i2, 2, {
                       type: "textord",
                       mode: "text",
-                      loc: SourceLocation.range(a2, group[i3 + 1]),
+                      loc: SourceLocation.range(a, group[i2 + 1]),
                       text: "--"
                     });
-                    n2 -= 1;
+                    n -= 1;
                   }
                 }
-                if ((v3 === "'" || v3 === "`") && group[i3 + 1].text === v3) {
-                  group.splice(i3, 2, {
+                if ((v2 === "'" || v2 === "`") && group[i2 + 1].text === v2) {
+                  group.splice(i2, 2, {
                     type: "textord",
                     mode: "text",
-                    loc: SourceLocation.range(a2, group[i3 + 1]),
-                    text: v3 + v3
+                    loc: SourceLocation.range(a, group[i2 + 1]),
+                    text: v2 + v2
                   });
-                  n2 -= 1;
+                  n -= 1;
                 }
               }
             };
@@ -13034,10 +13034,10 @@
                 }
                 var group = src_symbols[this.mode][text].group;
                 var loc = SourceLocation.range(nucleus);
-                var s3;
+                var s2;
                 if (ATOMS.hasOwnProperty(group)) {
                   var family = group;
-                  s3 = {
+                  s2 = {
                     type: "atom",
                     mode: this.mode,
                     family,
@@ -13045,14 +13045,14 @@
                     text
                   };
                 } else {
-                  s3 = {
+                  s2 = {
                     type: group,
                     mode: this.mode,
                     loc,
                     text
                   };
                 }
-                symbol = s3;
+                symbol = s2;
               } else if (text.charCodeAt(0) >= 128) {
                 if (this.settings.strict) {
                   if (!supportedCodepoint(text.charCodeAt(0))) {
@@ -13072,8 +13072,8 @@
               }
               this.consume();
               if (match3) {
-                for (var i3 = 0; i3 < match3[0].length; i3++) {
-                  var accent2 = match3[0][i3];
+                for (var i2 = 0; i2 < match3[0].length; i2++) {
+                  var accent2 = match3[0][i2];
                   if (!unicodeAccents[accent2]) {
                     throw new src_ParseError("Unknown accent ' " + accent2 + "'", nucleus);
                   }
@@ -13293,8 +13293,8 @@
             var splitAtDelimiters = function splitAtDelimiters2(text, delimiters) {
               var index;
               var data2 = [];
-              var regexLeft = new RegExp("(" + delimiters.map(function(x2) {
-                return escapeRegex(x2.left);
+              var regexLeft = new RegExp("(" + delimiters.map(function(x) {
+                return escapeRegex(x.left);
               }).join("|") + ")");
               while (true) {
                 index = text.search(regexLeft);
@@ -13308,22 +13308,22 @@
                   });
                   text = text.slice(index);
                 }
-                var i2 = delimiters.findIndex(function(delim) {
+                var i = delimiters.findIndex(function(delim) {
                   return text.startsWith(delim.left);
                 });
-                index = findEndOfMath(delimiters[i2].right, text, delimiters[i2].left.length);
+                index = findEndOfMath(delimiters[i].right, text, delimiters[i].left.length);
                 if (index === -1) {
                   break;
                 }
-                var rawData = text.slice(0, index + delimiters[i2].right.length);
-                var math = amsRegex.test(rawData) ? rawData : text.slice(delimiters[i2].left.length, index);
+                var rawData = text.slice(0, index + delimiters[i].right.length);
+                var math = amsRegex.test(rawData) ? rawData : text.slice(delimiters[i].left.length, index);
                 data2.push({
                   type: "math",
                   data: math,
                   rawData,
-                  display: delimiters[i2].display
+                  display: delimiters[i].display
                 });
-                text = text.slice(index + delimiters[i2].right.length);
+                text = text.slice(index + delimiters[i].right.length);
               }
               if (text !== "") {
                 data2.push({
@@ -13341,24 +13341,24 @@
                 return null;
               }
               var fragment = document.createDocumentFragment();
-              for (var i2 = 0; i2 < data2.length; i2++) {
-                if (data2[i2].type === "text") {
-                  fragment.appendChild(document.createTextNode(data2[i2].data));
+              for (var i = 0; i < data2.length; i++) {
+                if (data2[i].type === "text") {
+                  fragment.appendChild(document.createTextNode(data2[i].data));
                 } else {
                   var span = document.createElement("span");
-                  var math = data2[i2].data;
-                  optionsCopy.displayMode = data2[i2].display;
+                  var math = data2[i].data;
+                  optionsCopy.displayMode = data2[i].display;
                   try {
                     if (optionsCopy.preProcess) {
                       math = optionsCopy.preProcess(math);
                     }
                     external_katex_default().render(math, span, optionsCopy);
-                  } catch (e6) {
-                    if (!(e6 instanceof external_katex_default().ParseError)) {
-                      throw e6;
+                  } catch (e5) {
+                    if (!(e5 instanceof external_katex_default().ParseError)) {
+                      throw e5;
                     }
-                    optionsCopy.errorCallback("KaTeX auto-render: Failed to parse `" + data2[i2].data + "` with ", e6);
-                    fragment.appendChild(document.createTextNode(data2[i2].rawData));
+                    optionsCopy.errorCallback("KaTeX auto-render: Failed to parse `" + data2[i].data + "` with ", e5);
+                    fragment.appendChild(document.createTextNode(data2[i].rawData));
                     continue;
                   }
                   fragment.appendChild(span);
@@ -13367,19 +13367,19 @@
               return fragment;
             };
             var renderElem = function renderElem2(elem, optionsCopy) {
-              for (var i2 = 0; i2 < elem.childNodes.length; i2++) {
-                var childNode = elem.childNodes[i2];
+              for (var i = 0; i < elem.childNodes.length; i++) {
+                var childNode = elem.childNodes[i];
                 if (childNode.nodeType === 3) {
                   var frag = renderMathInText(childNode.textContent, optionsCopy);
                   if (frag) {
-                    i2 += frag.childNodes.length - 1;
+                    i += frag.childNodes.length - 1;
                     elem.replaceChild(frag, childNode);
                   }
                 } else if (childNode.nodeType === 1) {
                   (function() {
                     var className = " " + childNode.className + " ";
-                    var shouldRender = optionsCopy.ignoredTags.indexOf(childNode.nodeName.toLowerCase()) === -1 && optionsCopy.ignoredClasses.every(function(x2) {
-                      return className.indexOf(" " + x2 + " ") === -1;
+                    var shouldRender = optionsCopy.ignoredTags.indexOf(childNode.nodeName.toLowerCase()) === -1 && optionsCopy.ignoredClasses.every(function(x) {
+                      return className.indexOf(" " + x + " ") === -1;
                     });
                     if (shouldRender) {
                       renderElem2(childNode, optionsCopy);
@@ -13492,38 +13492,38 @@
       return this[this.length - 1];
     }
     cyclicAt(index) {
-      let n2 = this.length;
-      if (n2 === 0)
+      let n = this.length;
+      if (n === 0)
         return void 0;
       while (index < 0) {
-        index += n2;
+        index += n;
       }
-      while (index > n2 - 1) {
-        index -= n2;
+      while (index > n - 1) {
+        index -= n;
       }
       return this[index];
     }
     pull(index) {
-      let n2 = this.length;
-      if (n2 === 0)
+      let n = this.length;
+      if (n === 0)
         return void 0;
       while (index < 0)
         return void 0;
-      while (index > n2 - 1)
+      while (index > n - 1)
         return void 0;
       let element = this[index];
       this.splice(index, 1);
       return element;
     }
-    head(n2) {
-      if (n2 <= 0)
+    head(n) {
+      if (n <= 0)
         return this.create([]);
-      return this.slice(0, n2);
+      return this.slice(0, n);
     }
-    tail(n2) {
-      if (n2 <= 0)
+    tail(n) {
+      if (n <= 0)
         return this.create([]);
-      return this.slice(-n2);
+      return this.slice(-n);
     }
     before(index) {
       if (index <= 0)
@@ -13549,8 +13549,8 @@
       if (size <= 0)
         return List.of();
       let ls = List.of();
-      for (let i2 = 0; i2 < this.length; i2 += size) {
-        ls.push(this.slice(i2, i2 + size));
+      for (let i = 0; i < this.length; i += size) {
+        ls.push(this.slice(i, i + size));
       }
       return ls;
     }
@@ -13643,9 +13643,9 @@
     }
     filterIndex(predicate) {
       let ls = this.create([]);
-      for (let i2 = 0; i2 < this.length; i2++) {
-        if (predicate(i2))
-          ls.push(this[i2]);
+      for (let i = 0; i < this.length; i++) {
+        if (predicate(i))
+          ls.push(this[i]);
       }
       return ls;
     }
@@ -13705,27 +13705,27 @@
     }
     arrange(newIndices) {
       let newArr = Array(this.length);
-      for (let i2 = 0; i2 < this.length; i2++) {
-        const newIndex = newIndices[i2];
-        newArr[newIndex] = this[i2];
+      for (let i = 0; i < this.length; i++) {
+        const newIndex = newIndices[i];
+        newArr[newIndex] = this[i];
       }
       this.set(newArr);
     }
     permute(newOrder) {
       let newArr = Array(this.length);
-      for (let i2 = 0; i2 < this.length; i2++) {
-        const newIndex = newOrder[i2];
-        newArr[i2] = this[newIndex];
+      for (let i = 0; i < this.length; i++) {
+        const newIndex = newOrder[i];
+        newArr[i] = this[newIndex];
       }
       this.set(newArr);
     }
     sorts(...compareFns) {
-      function compare(a2, b2) {
+      function compare(a, b) {
         for (let fn of compareFns) {
-          let v3 = fn(a2, b2);
-          if (v3 > 0)
+          let v2 = fn(a, b);
+          if (v2 > 0)
             return 1;
-          if (v3 < 0)
+          if (v2 < 0)
             return -1;
         }
         return 0;
@@ -13733,26 +13733,26 @@
       this.sort(compare);
     }
     sortBy(...mappers) {
-      const compareFns = mappers.map((m3) => function(a2, b2) {
-        const va = m3(a2);
-        const vb = m3(b2);
+      const compareFns = mappers.map((m2) => function(a, b) {
+        const va = m2(a);
+        const vb = m2(b);
         return va === vb ? 0 : va > vb ? 1 : -1;
       });
       this.sorts(...compareFns);
     }
-    cycle(n2) {
+    cycle(n) {
       if (this.length === 0)
         return;
-      if (n2 === 0)
+      if (n === 0)
         return;
-      if (n2 > 0) {
-        for (let i2 = 1; i2 <= n2; i2++) {
+      if (n > 0) {
+        for (let i = 1; i <= n; i++) {
           this.push(this.shift());
         }
       }
-      if (n2 < 0) {
-        n2 = Math.abs(n2);
-        for (let i2 = 1; i2 <= n2; i2++) {
+      if (n < 0) {
+        n = Math.abs(n);
+        for (let i = 1; i <= n; i++) {
           this.unshift(this.pop());
         }
       }
@@ -13770,20 +13770,20 @@
         return void 0;
       return this[this.randomIndex()];
     }
-    draws(n2) {
+    draws(n) {
       if (this.length === 0)
         return void 0;
       let arr = this.create([]);
-      for (let i2 = 0; i2 < n2; i2++) {
+      for (let i = 0; i < n; i++) {
         arr.push(this.draw());
       }
       return arr;
     }
-    sample(n2) {
-      if (n2 > this.length)
+    sample(n) {
+      if (n > this.length)
         return void 0;
       let ls = this.shuffled();
-      ls.length = n2;
+      ls.length = n;
       return ls;
     }
     shuffled() {
@@ -13797,25 +13797,25 @@
       return this.pull(this.randomIndex());
     }
     shuffle() {
-      for (let i2 = this.length - 1; i2 > 0; i2--) {
-        let j2 = Math.floor(Math.random() * (i2 + 1));
-        [this[i2], this[j2]] = [this[j2], this[i2]];
+      for (let i = this.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [this[i], this[j]] = [this[j], this[i]];
       }
     }
-    combinations(k2) {
-      if (k2 > this.length || k2 <= 0)
+    combinations(k) {
+      if (k > this.length || k <= 0)
         return List.of();
-      if (k2 === this.length)
+      if (k === this.length)
         return List.of(this);
-      if (k2 === 1)
+      if (k === 1)
         return List.of(...this.map(($) => this.create([$])));
       const combs = List.of();
       let tail_combs = List.of();
-      for (let i2 = 0; i2 <= this.length - k2 + 1; i2++) {
-        let tail = this.after(i2);
-        tail_combs = tail.combinations(k2 - 1);
-        for (let j2 = 0; j2 < tail_combs.length; j2++) {
-          combs.push(this.create([this[i2], ...tail_combs[j2]]));
+      for (let i = 0; i <= this.length - k + 1; i++) {
+        let tail = this.after(i);
+        tail_combs = tail.combinations(k - 1);
+        for (let j = 0; j < tail_combs.length; j++) {
+          combs.push(this.create([this[i], ...tail_combs[j]]));
         }
       }
       return combs;
@@ -13829,29 +13829,29 @@
       if (this.length === 1)
         return List.of(this);
       if (this.length === 2) {
-        let [a2, b2] = this;
-        return List.of(this.create([a2, b2]), this.create([b2, a2]));
+        let [a, b] = this;
+        return List.of(this.create([a, b]), this.create([b, a]));
       }
       const perm = List.of();
-      for (let i2 = 0; i2 < this.length; i2++) {
+      for (let i = 0; i < this.length; i++) {
         let clone = this.clone();
-        let pulled = clone.pull(i2);
-        for (let p3 of clone.permutations()) {
-          perm.push(this.create([pulled, ...p3]));
+        let pulled = clone.pull(i);
+        for (let p2 of clone.permutations()) {
+          perm.push(this.create([pulled, ...p2]));
         }
       }
       return perm;
     }
     zip(array2, mapper) {
       let ls = new List();
-      for (let i2 = 0; i2 < this.length; i2++) {
-        ls.push(mapper(this[i2], array2[i2]));
+      for (let i = 0; i < this.length; i++) {
+        ls.push(mapper(this[i], array2[i]));
       }
       return ls;
     }
     meanOf(metric) {
       let metrics = this.map(metric);
-      let sum = metrics.reduce((a2, b2) => a2 + b2, 0);
+      let sum = metrics.reduce((a, b) => a + b, 0);
       return sum / metrics.length;
     }
     maxOf(metric, rank = 1) {
@@ -13899,7 +13899,7 @@
         return this.clone();
       let last = this.last();
       let clone = this.clone();
-      for (let i2 = clone.length; i2 < length; i2++) {
+      for (let i = clone.length; i < length; i++) {
         clone.push(last);
       }
       return clone;
@@ -13911,7 +13911,7 @@
         return this.clone();
       let first = this.first();
       let clone = this.create([]);
-      for (let i2 = 0; i2 < length - this.length; i2++) {
+      for (let i = 0; i < length - this.length; i++) {
         clone.push(first);
       }
       clone.push(...this);
@@ -13923,8 +13923,8 @@
       if (this.length === 0)
         return this.clone();
       let clone = this.create([]);
-      for (let i2 = 0; i2 < length; i2++) {
-        clone.push(this.cyclicAt(i2));
+      for (let i = 0; i < length; i++) {
+        clone.push(this.cyclicAt(i));
       }
       return clone;
     }
@@ -13945,7 +13945,7 @@
     correct: () => correct,
     crammer: () => crammer,
     dp: () => dp,
-    e: () => e2,
+    e: () => e,
     eq: () => eq,
     factorial: () => factorial,
     fix: () => fix,
@@ -13968,40 +13968,40 @@
   });
 
   // ../packages/ruby/lib/src/math/frac.js
-  function val(f3) {
-    let [a2, b2] = f3;
-    return a2 / b2;
+  function val(f2) {
+    let [a, b] = f2;
+    return a / b;
   }
-  function nextTerm(f22, f1, a2) {
+  function nextTerm(f2, f1, a) {
     let [h1, k1] = f1;
-    let [h2, k2] = f22;
-    return [h2 + a2 * h1, k2 + a2 * k1];
+    let [h2, k2] = f2;
+    return [h2 + a * h1, k2 + a * k1];
   }
-  function getCloser(x2, f1, f22) {
-    let a2 = Math.abs(val(f1) - x2);
-    let b2 = Math.abs(val(f22) - x2);
-    return a2 > b2 ? f22 : f1;
+  function getCloser(x, f1, f2) {
+    let a = Math.abs(val(f1) - x);
+    let b = Math.abs(val(f2) - x);
+    return a > b ? f2 : f1;
   }
   function convergent(num2, maxD) {
     let sign = Math.sign(num2);
     num2 = Math.abs(num2);
-    let x2 = num2;
-    let a2;
-    let f22 = [0, 1];
+    let x = num2;
+    let a;
+    let f2 = [0, 1];
     let f1 = [1, 0];
     let f3;
     while (true) {
-      a2 = Math.floor(x2);
-      f3 = nextTerm(f22, f1, a2);
+      a = Math.floor(x);
+      f3 = nextTerm(f2, f1, a);
       if (f3[1] > maxD)
         break;
-      x2 = 1 / (x2 - a2);
-      x2 = Math.abs(x2);
-      f22 = f1;
+      x = 1 / (x - a);
+      x = Math.abs(x);
+      f2 = f1;
       f1 = f3;
     }
-    let [p3, q2] = getCloser(num2, f1, f22);
-    return [sign * p3, q2];
+    let [p2, q] = getCloser(num2, f1, f2);
+    return [sign * p2, q];
   }
 
   // ../packages/ruby/lib/src/math/round.js
@@ -14010,8 +14010,8 @@
     return Number(mant + "e" + (exp + right));
   }
   function toSci(num2) {
-    let [m3, e6] = num2.toExponential().split("e");
-    return [Number(m3), Number(e6)];
+    let [m2, e5] = num2.toExponential().split("e");
+    return [Number(m2), Number(e5)];
   }
   function unshiftDec(num2, right) {
     return shiftDec(num2, -right);
@@ -14042,14 +14042,14 @@
   // ../packages/ruby/lib/src/math/cal.js
   var STANDARD_SIGFIG = 14;
   function blur(num2) {
-    let n2 = parseFloat(num2.toPrecision(STANDARD_SIGFIG));
-    return sigfig(n2) <= STANDARD_SIGFIG - 5 ? n2 : num2;
+    let n = parseFloat(num2.toPrecision(STANDARD_SIGFIG));
+    return sigfig(n) <= STANDARD_SIGFIG - 5 ? n : num2;
   }
   function correct(num2) {
     return parseFloat(num2.toPrecision(STANDARD_SIGFIG - 2));
   }
-  function eq(a2, b2) {
-    return correct(a2) === correct(b2);
+  function eq(a, b) {
+    return correct(a) === correct(b);
   }
   function sigfig(num2) {
     let mant = Math.abs(num2).toExponential().split("e")[0];
@@ -14059,7 +14059,7 @@
     if (Number.isInteger(num2))
       return 0;
     let sf = sigfig(num2);
-    let exp = e2(num2);
+    let exp = e(num2);
     return sf - 1 - exp;
   }
   function round(num2, sigfig2 = 3) {
@@ -14076,18 +14076,18 @@
       down: () => adjustToDP(num2, dp2, "down")
     };
   }
-  function e2(num2) {
+  function e(num2) {
     return Number(num2.toExponential().split("e")[1]);
   }
   function mantissa(num2) {
     return Number(num2.toExponential().split("e")[0]);
   }
   function logCeil(num2) {
-    let exp = e2(num2) + 1;
+    let exp = e(num2) + 1;
     return Number("1e" + exp);
   }
   function logFloor(num2) {
-    let exp = e2(num2);
+    let exp = e(num2);
     return Number("1e" + exp);
   }
   function toFraction(num2) {
@@ -14108,24 +14108,24 @@
   }
   function toSurd(num2) {
     num2 = blur(num2);
-    let s3 = Math.sign(num2);
-    let a2 = Math.abs(num2);
-    let square = blur(a2 ** 2);
+    let s2 = Math.sign(num2);
+    let a = Math.abs(num2);
+    let square = blur(a ** 2);
     if (square === 0)
       return [0, 1];
     let factors = [1];
-    let i2 = 2;
-    while (i2 <= a2) {
-      let s4 = i2 ** 2;
-      if (square % s4 === 0) {
-        square = square / s4;
-        factors.push(i2);
+    let i = 2;
+    while (i <= a) {
+      let s3 = i ** 2;
+      if (square % s3 === 0) {
+        square = square / s3;
+        factors.push(i);
       } else {
-        i2++;
+        i++;
       }
     }
-    let product = factors.reduce((a3, b2) => a3 * b2, 1);
-    return [s3 * product, square];
+    let product = factors.reduce((a2, b) => a2 * b, 1);
+    return [s2 * product, square];
   }
   function isPrime(num2) {
     if (!Number.isInteger(num2))
@@ -14136,105 +14136,105 @@
       return true;
     if (num2 % 2 === 0)
       return false;
-    for (let i2 = 3; i2 <= Math.sqrt(num2) + 1; i2 = i2 + 2) {
-      if (num2 % i2 === 0)
+    for (let i = 3; i <= Math.sqrt(num2) + 1; i = i + 2) {
+      if (num2 % i === 0)
         return false;
     }
     return true;
   }
   function primes(max) {
     let arr = [];
-    for (let i2 = 2; i2 <= max; i2++) {
-      if (isPrime(i2))
-        arr.push(i2);
+    for (let i = 2; i <= max; i++) {
+      if (isPrime(i))
+        arr.push(i);
     }
     return arr;
   }
   function primeFactors(num2) {
     let arr = [];
-    let i2 = 2;
+    let i = 2;
     while (num2 > 1) {
-      if (!isPrime(i2)) {
-        i2++;
+      if (!isPrime(i)) {
+        i++;
         continue;
       }
-      if (num2 % i2 === 0) {
-        arr.push(i2);
-        num2 = num2 / i2;
+      if (num2 % i === 0) {
+        arr.push(i);
+        num2 = num2 / i;
       } else {
-        i2++;
+        i++;
       }
     }
     return arr;
   }
-  function factorial(n2) {
-    if (n2 <= 1)
+  function factorial(n) {
+    if (n <= 1)
       return 1;
-    return factorial(n2 - 1) * n2;
+    return factorial(n - 1) * n;
   }
-  function nCr2(n2, r3) {
-    return factorial(n2) / factorial(r3) / factorial(n2 - r3);
+  function nCr2(n, r2) {
+    return factorial(n) / factorial(r2) / factorial(n - r2);
   }
-  function nPr(n2, r3) {
-    return factorial(n2) / factorial(n2 - r3);
+  function nPr(n, r2) {
+    return factorial(n) / factorial(n - r2);
   }
   function range(min, max) {
     let arr = [];
     min = Math.ceil(min - Number.EPSILON);
-    for (let i2 = min; i2 <= max; i2++) {
-      arr.push(i2);
+    for (let i = min; i <= max; i++) {
+      arr.push(i);
     }
     return arr;
   }
   function trace(func, range2, dots = 1e3) {
-    function tracer(t3) {
+    function tracer(t) {
       let result;
       try {
-        result = func(t3);
+        result = func(t);
       } catch {
         return [NaN, NaN];
       }
       if (!Array.isArray(result))
-        result = [t3, result];
+        result = [t, result];
       return result;
     }
     ;
     let [t1, t2] = range2;
     const step = (t2 - t1) / (dots - 1);
     let points = [];
-    for (let t3 = t1; t3 <= t2; t3 += step) {
-      points.push(tracer(t3));
+    for (let t = t1; t <= t2; t += step) {
+      points.push(tracer(t));
     }
     return points;
   }
   function traceCircle(center, radius, angleRange, dots = 100) {
-    const [h2, k2] = center;
+    const [h, k] = center;
     function sin5(degree) {
       return Math.sin(degree / 180 * Math.PI);
     }
     function cos5(degree) {
       return Math.cos(degree / 180 * Math.PI);
     }
-    return trace((t2) => [h2 + radius * cos5(t2), k2 + radius * sin5(t2)], angleRange, dots);
+    return trace((t) => [h + radius * cos5(t), k + radius * sin5(t)], angleRange, dots);
   }
-  function crammer(a2, b2, c3, p3, q2, r3) {
-    if (a2 / b2 === p3 / q2)
+  function crammer(a, b, c2, p2, q, r2) {
+    if (a / b === p2 / q)
       return [NaN, NaN];
-    const D2 = a2 * q2 - b2 * p3;
-    const x2 = (c3 * q2 - b2 * r3) / D2;
-    const y2 = (a2 * r3 - c3 * p3) / D2;
-    return [blur(x2), blur(y2)];
+    const D = a * q - b * p2;
+    const x = (c2 * q - b * r2) / D;
+    const y = (a * r2 - c2 * p2) / D;
+    return [blur(x), blur(y)];
   }
 
   // ../packages/ruby/lib/src/array/numbers.js
   var Numbers = class extends List {
     sum() {
-      return this.reduce((a2, b2) => a2 + b2, 0);
+      return this.reduce((a, b) => a + b, 0);
     }
     product() {
       if (this.length === 0)
         return NaN;
-      return this.reduce((a2, b2) => a2 * b2, 1);
+      return this.reduce((a, b) => a * b, 1);
     }
     mean() {
       if (this.length === 0)
@@ -14264,37 +14264,37 @@
     add(nums) {
       if (!Array.isArray(nums))
         nums = Array(this.length).fill(nums);
-      let zipped = this.zip(nums, (a2, b2) => a2 + b2);
+      let zipped = this.zip(nums, (a, b) => a + b);
       return this.create(zipped);
     }
     minus(nums) {
       if (!Array.isArray(nums))
         nums = Array(this.length).fill(nums);
-      let zipped = this.zip(nums, (a2, b2) => a2 - b2);
+      let zipped = this.zip(nums, (a, b) => a - b);
       return this.create(zipped);
     }
     times(nums) {
       if (!Array.isArray(nums))
         nums = Array(this.length).fill(nums);
-      let zipped = this.zip(nums, (a2, b2) => a2 * b2);
+      let zipped = this.zip(nums, (a, b) => a * b);
       return this.create(zipped);
     }
     divide(nums) {
       if (!Array.isArray(nums))
         nums = Array(this.length).fill(nums);
-      let zipped = this.zip(nums, (a2, b2) => a2 / b2);
+      let zipped = this.zip(nums, (a, b) => a / b);
       return this.create(zipped);
     }
     toPower(indices) {
       if (!Array.isArray(indices))
         indices = Array(this.length).fill(indices);
-      let zipped = this.zip(indices, (a2, b2) => a2 ** b2);
+      let zipped = this.zip(indices, (a, b) => a ** b);
       return this.create(zipped);
     }
     rootNth(nths) {
       if (!Array.isArray(nths))
         nths = Array(this.length).fill(nths);
-      let zipped = this.zip(nths, (a2, b2) => a2 ** (1 / b2));
+      let zipped = this.zip(nths, (a, b) => a ** (1 / b));
       return this.create(zipped);
     }
     square() {
@@ -14321,21 +14321,21 @@
     gaps() {
       const sorted = this.ascending();
       const gaps = this.create([]);
-      for (let i2 = 0; i2 < this.length - 1; i2++) {
-        let gap = sorted[i2 + 1] - sorted[i2];
+      for (let i = 0; i < this.length - 1; i++) {
+        let gap = sorted[i + 1] - sorted[i];
         gaps.push(gap);
       }
       return gaps;
     }
     gapsMod(mod) {
-      function reduce(x2) {
-        while (x2 >= mod) {
-          x2 = x2 - mod;
+      function reduce(x) {
+        while (x >= mod) {
+          x = x - mod;
         }
-        while (x2 < 0) {
-          x2 = x2 + mod;
+        while (x < 0) {
+          x = x + mod;
         }
-        return x2;
+        return x;
       }
       const reduced = this.map(reduce);
       const sorted = reduced.ascending();
@@ -14351,19 +14351,19 @@
       if (arr.length === 1)
         return arr[0];
       if (arr.length === 2) {
-        let [a2, b2] = arr;
+        let [a, b] = arr;
         while (true) {
-          if (a2 === 0)
-            return b2;
-          if (b2 === 0)
-            return a2;
-          if (a2 >= b2) {
-            a2 = a2 % b2;
+          if (a === 0)
+            return b;
+          if (b === 0)
+            return a;
+          if (a >= b) {
+            a = a % b;
           } else {
-            b2 = b2 % a2;
+            b = b % a;
           }
         }
-        return a2;
+        return a;
       }
       return arr.reduce((last, now) => this.create([last, now]).hcf());
     }
@@ -14376,9 +14376,9 @@
       if (arr.length === 1)
         return arr[0];
       if (arr.length === 2) {
-        let [a2, b2] = arr;
+        let [a, b] = arr;
         let hcf = arr.hcf();
-        return a2 * b2 / hcf;
+        return a * b / hcf;
       }
       return arr.reduce((last, now) => this.create([last, now]).lcm());
     }
@@ -14425,13 +14425,13 @@
         return NaN;
       const sorted = this.ascending();
       if (sorted.length % 2 === 0) {
-        let i2 = sorted.length / 2;
-        let j2 = i2 + 1;
-        return (sorted[i2 - 1] + sorted[j2 - 1]) / 2;
+        let i = sorted.length / 2;
+        let j = i + 1;
+        return (sorted[i - 1] + sorted[j - 1]) / 2;
       } else {
-        let i2 = sorted.length / 2;
-        i2 = Math.ceil(i2);
-        return sorted[i2 - 1];
+        let i = sorted.length / 2;
+        i = Math.ceil(i);
+        return sorted[i - 1];
       }
     }
     modes(Nth = 1) {
@@ -14455,21 +14455,21 @@
       if (this.length === 0)
         return NaN;
       const sorted = this.ascending();
-      let n2 = sorted.length;
-      let m3 = n2 / 2;
-      if (n2 % 2 !== 0)
-        m3 = Math.floor(m3);
-      return sorted.head(m3).median();
+      let n = sorted.length;
+      let m2 = n / 2;
+      if (n % 2 !== 0)
+        m2 = Math.floor(m2);
+      return sorted.head(m2).median();
     }
     upperQuartile() {
       if (this.length === 0)
         return NaN;
       const sorted = this.ascending();
-      let n2 = sorted.length;
-      let m3 = n2 / 2;
-      if (n2 % 2 !== 0)
-        m3 = Math.floor(m3);
-      return sorted.tail(m3).median();
+      let n = sorted.length;
+      let m2 = n / 2;
+      if (n % 2 !== 0)
+        m2 = Math.floor(m2);
+      return sorted.tail(m2).median();
     }
     stdDev() {
       if (this.length === 0)
@@ -14515,14 +14515,14 @@
       return this.unit().times(magnitude2);
     }
     dot(vec3) {
-      let terms = this.zip(vec3, (a2, b2) => a2 * b2);
+      let terms = this.zip(vec3, (a, b) => a * b);
       return this.create(terms).sum();
     }
     angleWith(vec3) {
       let m1 = this.magnitude();
-      let m22 = this.create(vec3).magnitude();
+      let m2 = this.create(vec3).magnitude();
       let dot = this.dot(vec3);
-      let cos5 = dot / m1 / m22;
+      let cos5 = dot / m1 / m2;
       let angle2 = Math.acos(cos5) * 180 / Math.PI;
       return angle2;
     }
@@ -14536,14 +14536,14 @@
       return this.minus(parallel);
     }
     distanceWith(vec3) {
-      let d2 = this.minus(vec3);
-      return d2.magnitude();
+      let d = this.minus(vec3);
+      return d.magnitude();
     }
     extrudeTo(vertex, scale) {
-      let v3 = this.create(vertex);
-      let d2 = this.minus(v3);
-      d2 = d2.times(scale);
-      return v3.add(d2);
+      let v2 = this.create(vertex);
+      let d = this.minus(v2);
+      d = d.times(scale);
+      return v2.add(d);
     }
   };
   function vector(...elements) {
@@ -14558,7 +14558,7 @@
   // ../packages/ruby/lib/src/array/shape.js
   var Shape = class extends List {
     distances() {
-      let ds = this.pairs().map(([A2, B2]) => A2.distanceWith(B2));
+      let ds = this.pairs().map(([A, B]) => A.distanceWith(B));
       return numbers2(...ds);
     }
     distancesFrom(point) {
@@ -14566,7 +14566,7 @@
       return numbers2(...ds);
     }
     mean() {
-      let sum = this.reduce((A2, B2) => A2.add(B2));
+      let sum = this.reduce((A, B) => A.add(B));
       return sum.divide(this.length);
     }
     translate(vec3) {
@@ -14582,7 +14582,7 @@
       return this.create(extruded);
     }
     extrudeToShape(shape2, scale) {
-      let extruded = this.map((v3, i2) => v3.extrudeTo(shape2[i2], scale));
+      let extruded = this.map((v2, i) => v2.extrudeTo(shape2[i], scale));
       return this.create(extruded);
     }
   };
@@ -14598,25 +14598,25 @@
   // ../packages/ruby/lib/src/array/vector2D.js
   var Vector2D = class extends Vector {
     toArray() {
-      let [x2, y2] = this;
-      return [x2, y2];
+      let [x, y] = this;
+      return [x, y];
     }
     argument() {
-      let [x2, y2] = this;
-      if (x2 === 0 && y2 === 0)
+      let [x, y] = this;
+      if (x === 0 && y === 0)
         return 0;
-      let angle2 = Math.atan2(y2, x2) * 180 / Math.PI;
+      let angle2 = Math.atan2(y, x) * 180 / Math.PI;
       if (angle2 < 0)
         angle2 += 360;
       return angle2;
     }
     rotate(angle2) {
-      let a2 = angle2 * Math.PI / 180;
-      let s3 = Math.sin(a2);
-      let c3 = Math.cos(a2);
-      let [x2, y2] = this;
-      let x1 = x2 * c3 - y2 * s3;
-      let y1 = x2 * s3 + y2 * c3;
+      let a = angle2 * Math.PI / 180;
+      let s2 = Math.sin(a);
+      let c2 = Math.cos(a);
+      let [x, y] = this;
+      let x1 = x * c2 - y * s2;
+      let y1 = x * s2 + y * c2;
       return this.create([x1, y1]);
     }
     cross2D(vec3) {
@@ -14625,18 +14625,18 @@
       return x1 * y2 - y1 * x2;
     }
   };
-  function vector2D(x2, y2) {
+  function vector2D(x, y) {
     let vec3 = new Vector2D();
-    vec3.push(x2, y2);
+    vec3.push(x, y);
     return vec3;
   }
-  function vec2D2(p1, p22) {
-    if (p22 === void 0) {
-      let [x2, y2] = p1;
-      return vector2D(x2, y2);
+  function vec2D2(p1, p2) {
+    if (p2 === void 0) {
+      let [x, y] = p1;
+      return vector2D(x, y);
     } else {
       let [x1, y1] = p1;
-      let [x2, y2] = p22;
+      let [x2, y2] = p2;
       return vector2D(x2 - x1, y2 - y1);
     }
   }
@@ -14644,25 +14644,25 @@
   // ../packages/ruby/lib/src/array/vector3D.js
   var Vector3D = class extends Vector {
     toArray() {
-      let [x2, y2, z2] = this;
-      return [x2, y2, z2];
+      let [x, y, z] = this;
+      return [x, y, z];
     }
     cross(vec3) {
       let [x1, y1, z1] = this;
       let [x2, y2, z2] = vec3;
-      let x3 = y1 * z2 - z1 * y2;
-      let y3 = z1 * x2 - x1 * z2;
-      let z3 = x1 * y2 - y1 * x2;
-      return this.create([x3, y3, z3]);
+      let x = y1 * z2 - z1 * y2;
+      let y = z1 * x2 - x1 * z2;
+      let z = x1 * y2 - y1 * x2;
+      return this.create([x, y, z]);
     }
     rotate(axis, angle2) {
-      let a2 = angle2 * Math.PI / 180;
-      let s3 = Math.sin(a2);
-      let c3 = Math.cos(a2);
-      let k2 = this.create(axis).unit();
-      let term1 = this.times(c3);
-      let term2 = k2.cross(this).times(s3);
-      let term3 = k2.times(k2.dot(this)).times(1 - c3);
+      let a = angle2 * Math.PI / 180;
+      let s2 = Math.sin(a);
+      let c2 = Math.cos(a);
+      let k = this.create(axis).unit();
+      let term1 = this.times(c2);
+      let term2 = k.cross(this).times(s2);
+      let term3 = k.times(k.dot(this)).times(1 - c2);
       return term1.add(term2).add(term3);
     }
     projectOnPlane(vec1, vec22) {
@@ -14671,32 +14671,32 @@
     }
     normalToPlane(vec1, vec22) {
       let v1 = this.create(vec1);
-      let v22 = this.create(vec22);
-      let normal = v1.cross(v22);
+      let v2 = this.create(vec22);
+      let normal = v1.cross(v2);
       return this.projectOn(normal);
     }
     projectTo2D(angle2 = 60, depth = 0.5) {
-      let a2 = angle2 * Math.PI / 180;
-      let s3 = Math.sin(a2);
-      let c3 = Math.cos(a2);
-      let [x2, y2, z2] = this;
-      let x_new = x2 + depth * y2 * c3;
-      let y_new = z2 + depth * y2 * s3;
+      let a = angle2 * Math.PI / 180;
+      let s2 = Math.sin(a);
+      let c2 = Math.cos(a);
+      let [x, y, z] = this;
+      let x_new = x + depth * y * c2;
+      let y_new = z + depth * y * s2;
       return vector2D(x_new, y_new);
     }
   };
-  function vector3D(x2, y2, z2) {
+  function vector3D(x, y, z) {
     let vec3 = new Vector3D();
-    vec3.push(x2, y2, z2);
+    vec3.push(x, y, z);
     return vec3;
   }
-  function vec3D2(p1, p22) {
-    if (p22 === void 0) {
-      let [x2, y2, z2] = p1;
-      return vector3D(x2, y2, z2);
+  function vec3D2(p1, p2) {
+    if (p2 === void 0) {
+      let [x, y, z] = p1;
+      return vector3D(x, y, z);
     } else {
       let [x1, y1, z1] = p1;
-      let [x2, y2, z2] = p22;
+      let [x2, y2, z2] = p2;
       return vector3D(x2 - x1, y2 - y1, z2 - z1);
     }
   }
@@ -14735,13 +14735,13 @@
       let clone = this.clone();
       clone.sortAroundMean();
       let cross = [];
-      for (let i2 = 0; i2 < clone.length; i2++) {
-        let p1 = clone.cyclicAt(i2 - 1);
-        let p22 = clone.cyclicAt(i2);
-        let p3 = clone.cyclicAt(i2 + 1);
-        let u2 = vec2D2(p1, p22);
-        let v3 = vec2D2(p22, p3);
-        cross.push(u2.cross2D(v3));
+      for (let i = 0; i < clone.length; i++) {
+        let p1 = clone.cyclicAt(i - 1);
+        let p2 = clone.cyclicAt(i);
+        let p3 = clone.cyclicAt(i + 1);
+        let u = vec2D2(p1, p2);
+        let v2 = vec2D2(p2, p3);
+        cross.push(u.cross2D(v2));
       }
       cross.filter(($) => $ !== 0);
       return cross.every(($) => $ > 0) || cross.every(($) => $ < 0);
@@ -14750,9 +14750,9 @@
       let vx = vec3D2(vecX);
       let vy = vec3D2(vecY);
       let erected = this.map(($) => {
-        let [x2, y2] = $;
-        let vx3D = vx.times(x2);
-        let vy3D = vy.times(y2);
+        let [x, y] = $;
+        let vx3D = vx.times(x);
+        let vy3D = vy.times(y);
         return vx3D.add(vy3D);
       });
       return shape3D(...erected);
@@ -14787,15 +14787,15 @@
       return [false, false];
     throw "cannot recognise ineq symbol!";
   }
-  function toIneq(code2) {
-    let [g2, e6] = code2;
-    if (g2 && e6)
+  function toIneq(code) {
+    let [g, e5] = code;
+    if (g && e5)
       return "\\ge";
-    if (g2 && !e6)
+    if (g && !e5)
       return "\\gt";
-    if (!g2 && e6)
+    if (!g && e5)
       return "\\le";
-    if (!g2 && !e6)
+    if (!g && !e5)
       return "\\lt";
     throw "cannot recognise code!";
   }
@@ -14817,27 +14817,27 @@
       return toIneq(this.code);
     }
     strict() {
-      let [g2, e6] = this.code;
-      return toIneq([g2, false]);
+      let [g, e5] = this.code;
+      return toIneq([g, false]);
     }
     loose() {
-      let [g2, e6] = this.code;
-      return toIneq([g2, true]);
+      let [g, e5] = this.code;
+      return toIneq([g, true]);
     }
     flip() {
-      let [g2, e6] = this.code;
-      return toIneq([!g2, e6]);
+      let [g, e5] = this.code;
+      return toIneq([!g, e5]);
     }
-    compare(a2, b2) {
-      let [g2, e6] = this.code;
-      if (g2 && e6)
-        return a2 >= b2;
-      if (g2 && !e6)
-        return a2 > b2;
-      if (!g2 && e6)
-        return a2 <= b2;
-      if (!g2 && !e6)
-        return a2 < b2;
+    compare(a, b) {
+      let [g, e5] = this.code;
+      if (g && e5)
+        return a >= b;
+      if (g && !e5)
+        return a > b;
+      if (!g && e5)
+        return a <= b;
+      if (!g && !e5)
+        return a < b;
       throw "never, cannot recognise code!";
     }
   };
@@ -14854,46 +14854,46 @@
       return new Rein(this.constraint);
     }
     contains(point) {
-      let [a2, b2, i2, c3] = this.constraint;
-      let [x2, y2] = point;
-      return ineq2(i2).compare(a2 * x2 + b2 * y2, c3);
+      let [a, b, i, c2] = this.constraint;
+      let [x, y] = point;
+      return ineq2(i).compare(a * x + b * y, c2);
     }
     canEqual() {
-      let [a2, b2, i2, c3] = this.constraint;
-      return ineq2(i2).canEqual();
+      let [a, b, i, c2] = this.constraint;
+      return ineq2(i).canEqual();
     }
     strict() {
-      let [a2, b2, i2, c3] = this.constraint;
-      let j2 = ineq2(i2).strict();
-      return new Rein([a2, b2, j2, c3]);
+      let [a, b, i, c2] = this.constraint;
+      let j = ineq2(i).strict();
+      return new Rein([a, b, j, c2]);
     }
     loose() {
-      let [a2, b2, i2, c3] = this.constraint;
-      let j2 = ineq2(i2).loose();
-      return new Rein([a2, b2, j2, c3]);
+      let [a, b, i, c2] = this.constraint;
+      let j = ineq2(i).loose();
+      return new Rein([a, b, j, c2]);
     }
     flip() {
-      let [a2, b2, i2, c3] = this.constraint;
-      let j2 = ineq2(i2).flip();
-      return new Rein([a2, b2, j2, c3]);
+      let [a, b, i, c2] = this.constraint;
+      let j = ineq2(i).flip();
+      return new Rein([a, b, j, c2]);
     }
     intersectWith(another) {
       let [a1, b1, i1, c1] = this.constraint;
-      let [a2, b2, i2, c22] = another.constraint;
+      let [a2, b2, i2, c2] = another.constraint;
       if (a1 / b1 === a2 / b2)
         return void 0;
-      return crammer(a1, b1, c1, a2, b2, c22);
+      return crammer(a1, b1, c1, a2, b2, c2);
     }
     shake() {
       return Math.random() > 0.5 ? this.clone() : this.flip();
     }
     toLinear() {
-      let [a2, b2, i2, c3] = this.constraint;
-      return [a2, b2, -c3];
+      let [a, b, i, c2] = this.constraint;
+      return [a, b, -c2];
     }
     toStandard() {
-      let [a2, b2, i2, c3] = this.constraint;
-      return [a2, b2, c3];
+      let [a, b, i, c2] = this.constraint;
+      return [a, b, c2];
     }
   };
   function rein2(constraint2) {
@@ -14921,8 +14921,8 @@
       return this.map(($) => $.constraint);
     }
     onEdge(point) {
-      let [x2, y2] = point;
-      return Math.abs(x2) + 1 >= this.EDGE || Math.abs(y2) + 1 >= this.EDGE;
+      let [x, y] = point;
+      return Math.abs(x) + 1 >= this.EDGE || Math.abs(y) + 1 >= this.EDGE;
     }
     contains(point) {
       return this.every(($) => $.contains(point));
@@ -14933,16 +14933,16 @@
     polygon() {
       let cons = this.fullConstraints();
       let vs = shape2D2();
-      for (let i2 = 0; i2 < cons.length; i2++) {
-        for (let j2 = i2 + 1; j2 < cons.length; j2++) {
-          let p3 = cons[i2].intersectWith(cons[j2]);
-          if (p3 === void 0)
+      for (let i = 0; i < cons.length; i++) {
+        for (let j = i + 1; j < cons.length; j++) {
+          let p2 = cons[i].intersectWith(cons[j]);
+          if (p2 === void 0)
             continue;
           let others = cons.clone();
-          others.pull(j2);
-          others.pull(i2);
-          if (others.looseContains(p3))
-            vs.push(vec2D2(p3));
+          others.pull(j);
+          others.pull(i);
+          if (others.looseContains(p2))
+            vs.push(vec2D2(p2));
         }
       }
       vs = vs.uniqueDeep();
@@ -14960,16 +14960,16 @@
     }
     integrals() {
       let vs = toList2(this.polygon());
-      let ymax = Math.ceil(vs.maxOf(([x2, y2]) => y2));
-      let xmax = Math.ceil(vs.maxOf(([x2, y2]) => x2));
-      let xmin = Math.floor(vs.minOf(([x2, y2]) => x2));
-      let ymin = Math.floor(vs.minOf(([x2, y2]) => y2));
+      let ymax = Math.ceil(vs.maxOf(([x, y]) => y));
+      let xmax = Math.ceil(vs.maxOf(([x, y]) => x));
+      let xmin = Math.floor(vs.minOf(([x, y]) => x));
+      let ymin = Math.floor(vs.minOf(([x, y]) => y));
       let points = [];
-      for (let i2 = xmin; i2 <= xmax; i2++) {
-        for (let j2 = ymin; j2 <= ymax; j2++) {
-          let p3 = [i2, j2];
-          if (this.contains(p3))
-            points.push(p3);
+      for (let i = xmin; i <= xmax; i++) {
+        for (let j = ymin; j <= ymax; j++) {
+          let p2 = [i, j];
+          if (this.contains(p2))
+            points.push(p2);
         }
       }
       return points;
@@ -15000,9 +15000,9 @@
       return new Reins().onEdge(point);
     }
     fieldAt(point) {
-      const [a2, b2, c3] = this.field;
-      const [x2, y2] = point;
-      return a2 * x2 + b2 * y2 + c3;
+      const [a, b, c2] = this.field;
+      const [x, y] = point;
+      return a * x + b * y + c2;
     }
     maxPoints() {
       return this.feasiblePoints.maxsBy(($) => this.fieldAt($)).uniqueDeep().violate(($) => this.onEdge($));
@@ -15034,14 +15034,14 @@
   }
 
   // ../packages/ruby/lib/src/math/linear.js
-  function slope(A2, B2) {
-    let [x1, y1] = A2;
-    let [x2, y2] = B2;
+  function slope(A, B) {
+    let [x1, y1] = A;
+    let [x2, y2] = B;
     return (y2 - y1) / (x2 - x1);
   }
-  function midpoint(A2, B2) {
-    let [x1, y1] = A2;
-    let [x2, y2] = B2;
+  function midpoint(A, B) {
+    let [x1, y1] = A;
+    let [x2, y2] = B;
     return [(x1 + x2) / 2, (y1 + y2) / 2];
   }
   var Linear = class {
@@ -15055,37 +15055,37 @@
       return this;
     }
     byStandard(standard) {
-      let [a2, b2, _c] = standard;
-      this.byLinear([a2, b2, -_c]);
+      let [a, b, _c] = standard;
+      this.byLinear([a, b, -_c]);
       return this;
     }
-    byTwoPoints(p1, p22) {
+    byTwoPoints(p1, p2) {
       let [x1, y1] = p1;
-      let [x2, y2] = p22;
+      let [x2, y2] = p2;
       let dx = x1 - x2;
       let dy = y1 - y2;
       if (dx === 0 && dy === 0)
         return this;
-      let [a2, b2, c3] = [dy, -dx, dx * y1 - dy * x1];
-      let s3 = Math.sign(a2) || Math.sign(b2) || 1;
-      [a2, b2, c3] = numbers2(a2, b2, c3).times(s3).ratio();
-      this.byLinear([a2, b2, c3]);
+      let [a, b, c2] = [dy, -dx, dx * y1 - dy * x1];
+      let s2 = Math.sign(a) || Math.sign(b) || 1;
+      [a, b, c2] = numbers2(a, b, c2).times(s2).ratio();
+      this.byLinear([a, b, c2]);
       return this;
     }
-    byPointSlope(p3, m3) {
-      let p22 = [p3[0] + 1, p3[1] + m3];
-      this.byTwoPoints(p3, p22);
+    byPointSlope(p2, m2) {
+      let p22 = [p2[0] + 1, p2[1] + m2];
+      this.byTwoPoints(p2, p22);
       return this;
     }
-    byIntercepts(x2, y2) {
-      if (x2 === 0 || y2 === 0)
+    byIntercepts(x, y) {
+      if (x === 0 || y === 0)
         return this;
-      this.byTwoPoints([x2, 0], [0, y2]);
+      this.byTwoPoints([x, 0], [0, y]);
       return this;
     }
-    byBisector(A2, B2) {
-      let [x1, y1] = A2;
-      let [x2, y2] = B2;
+    byBisector(A, B) {
+      let [x1, y1] = A;
+      let [x2, y2] = B;
       if (x1 === x2 && y1 === y2)
         return this;
       if (x1 === x2) {
@@ -15093,23 +15093,23 @@
       } else if (y1 === y2) {
         this.byLinear([1, 0, -(x1 + x2) / 2]);
       } else {
-        let m3 = -1 / slope(A2, B2);
-        let M2 = midpoint(A2, B2);
-        this.byPointSlope(M2, m3);
+        let m2 = -1 / slope(A, B);
+        let M = midpoint(A, B);
+        this.byPointSlope(M, m2);
       }
       return this;
     }
     slope() {
-      let [a2, b2, c3] = this._linear;
-      return b2 === 0 ? NaN : -a2 / b2;
+      let [a, b, c2] = this._linear;
+      return b === 0 ? NaN : -a / b;
     }
     xInt() {
-      let [a2, b2, c3] = this._linear;
-      return a2 === 0 ? NaN : -c3 / a2;
+      let [a, b, c2] = this._linear;
+      return a === 0 ? NaN : -c2 / a;
     }
     yInt() {
-      let [a2, b2, c3] = this._linear;
-      return b2 === 0 ? NaN : -c3 / b2;
+      let [a, b, c2] = this._linear;
+      return b === 0 ? NaN : -c2 / b;
     }
     toLinear() {
       if (!this.defined)
@@ -15124,12 +15124,12 @@
     toStandard() {
       if (!this.defined)
         return [NaN, NaN, NaN];
-      let [a2, b2, c3] = this._linear;
-      return [a2, b2, -c3];
+      let [a, b, c2] = this._linear;
+      return [a, b, -c2];
     }
     toConstraint(ineq4) {
-      let [a2, b2, c3] = this.toStandard();
-      return [a2, b2, ineq4, c3];
+      let [a, b, c2] = this.toStandard();
+      return [a, b, ineq4, c2];
     }
   };
   function lin2() {
@@ -15137,51 +15137,51 @@
   }
 
   // ../packages/ruby/lib/src/math/calculus.js
-  function intrapolateBetween([A2, B2], x2) {
-    let [x1, y1] = A2;
-    let [x22, y2] = B2;
-    let r3 = (x2 - x1) / (x22 - x1);
-    return y1 + (y2 - y1) * r3;
+  function intrapolateBetween([A, B], x) {
+    let [x1, y1] = A;
+    let [x2, y2] = B;
+    let r2 = (x - x1) / (x2 - x1);
+    return y1 + (y2 - y1) * r2;
   }
-  function intrapolate(sortedPts, x2) {
+  function intrapolate(sortedPts, x) {
     let first = sortedPts[0];
     let last = sortedPts.at(-1);
-    if (x2 < first[0])
+    if (x < first[0])
       return first[1];
-    if (x2 > last[0])
+    if (x > last[0])
       return last[1];
-    let j2 = sortedPts.findIndex(([X2, Y2]) => X2 > x2);
-    let i2 = j2 - 1;
-    return intrapolateBetween([sortedPts[i2], sortedPts[j2]], x2);
+    let j = sortedPts.findIndex(([X, Y]) => X > x);
+    let i = j - 1;
+    return intrapolateBetween([sortedPts[i], sortedPts[j]], x);
   }
   function functionize(sortedPts) {
-    return function(x2) {
-      return intrapolate(sortedPts, x2);
+    return function(x) {
+      return intrapolate(sortedPts, x);
     };
   }
   function differentiate(fn) {
-    return function(x2) {
+    return function(x) {
       let dx = 1e-6;
-      let dy = fn(x2 + dx) - fn(x2);
+      let dy = fn(x + dx) - fn(x);
       return dy / dx;
     };
   }
   function integrate(fn, fixPoint = [0, 0]) {
     let cache = [...fixPoint];
-    return function(x2) {
+    return function(x) {
       let dx = 1e-3;
       let [x0, y0] = cache;
-      if (x2 === x0)
+      if (x === x0)
         return y0;
-      let D2 = Math.abs(x2 - x0);
-      let N2 = Math.round(D2 / dx);
-      N2 = Math.max(N2, 10);
-      dx = (x2 - x0) / N2;
-      for (let i2 = 0; i2 < N2; i2++) {
-        let X2 = x0 + i2 * dx;
-        y0 += 0.5 * (fn(X2) + fn(X2 + dx)) * dx;
+      let D = Math.abs(x - x0);
+      let N = Math.round(D / dx);
+      N = Math.max(N, 10);
+      dx = (x - x0) / N;
+      for (let i = 0; i < N; i++) {
+        let X = x0 + i * dx;
+        y0 += 0.5 * (fn(X) + fn(X + dx)) * dx;
       }
-      cache = [x2, y0];
+      cache = [x, y0];
       return y0;
     };
   }
@@ -15310,8 +15310,8 @@
   var triangleSides = (_) => {
     if (!triple(_))
       return false;
-    let [a2, b2, c3] = _;
-    return _.every(positive) && a2 + b2 > c3 && b2 + c3 > a2 && c3 + a2 > b2;
+    let [a, b, c2] = _;
+    return _.every(positive) && a + b > c2 && b + c2 > a && c2 + a > b;
   };
   var monomial = (_) => object(_) && "coeff" in _ && "vars" in _;
   var polynomial = (_) => arrayWith(monomial)(_);
@@ -15327,8 +15327,8 @@
   var alphabet = (_) => str(_) && _.length === 1 && _.toLowerCase() !== _.toUpperCase();
   var ineq3 = (_) => str(_) && [">", "<", ">=", "<=", "\\gt", "\\lt", "\\ge", "\\le"].includes(_);
   var dfrac = (_) => {
-    const f3 = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
-    return str(_) && !!_.match(new RegExp(f3, "g"));
+    const f2 = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`;
+    return str(_) && !!_.match(new RegExp(f2, "g"));
   };
   var constraint = (_) => arrayOfLength(4)(_) && num(_[0]) && num(_[1]) && ineq3(_[2]) && num(_[3]);
   var constraints = (_) => arrayWith(constraint)(_);
@@ -15346,12 +15346,12 @@
     return holder[funcName];
   }
   function and(pds, name) {
-    name ??= "(" + pds.map((f3) => f3.name).join(" && ") + ")";
-    return build(name, (_) => pds.every((p3) => p3(_)));
+    name ??= "(" + pds.map((f2) => f2.name).join(" && ") + ")";
+    return build(name, (_) => pds.every((p2) => p2(_)));
   }
   function or(pds, name) {
-    name ??= "(" + pds.map((f3) => f3.name).join(" || ") + ")";
-    return build(name, (_) => pds.some((p3) => p3(_)));
+    name ??= "(" + pds.map((f2) => f2.name).join(" || ") + ")";
+    return build(name, (_) => pds.some((p2) => p2(_)));
   }
   function every(pd, name) {
     name ??= "(every." + pd.name + ")";
@@ -15373,53 +15373,53 @@
     printTrigValue: () => printTrigValue
   });
   function printDfrac(numerator, denominator, upSign = false) {
-    let p3 = numerator;
-    let q2 = denominator;
-    if (p3 === 0)
+    let p2 = numerator;
+    let q = denominator;
+    if (p2 === 0)
       return "0";
-    [p3, q2] = cal.toFraction(p3 / q2);
-    if (q2 === 1)
-      return p3.toString();
+    [p2, q] = cal.toFraction(p2 / q);
+    if (q === 1)
+      return p2.toString();
     if (upSign) {
-      return "\\dfrac{" + p3 + "}{" + q2 + "}";
+      return "\\dfrac{" + p2 + "}{" + q + "}";
     } else {
-      return p3 > 0 ? "\\dfrac{" + p3 + "}{" + q2 + "}" : "-\\dfrac{" + Math.abs(p3) + "}{" + q2 + "}";
+      return p2 > 0 ? "\\dfrac{" + p2 + "}{" + q + "}" : "-\\dfrac{" + Math.abs(p2) + "}{" + q + "}";
     }
   }
   function printCombo(combo2) {
-    let [a2, b2, c3] = combo2;
-    if (a2 && b2 && c3)
+    let [a, b, c2] = combo2;
+    if (a && b && c2)
       return "I, II and III";
-    if (a2 && b2 && !c3)
+    if (a && b && !c2)
       return "I and II only";
-    if (a2 && !b2 && c3)
+    if (a && !b && c2)
       return "I and III only";
-    if (a2 && !b2 && !c3)
+    if (a && !b && !c2)
       return "I only";
-    if (!a2 && b2 && c3)
+    if (!a && b && c2)
       return "II and III only";
-    if (!a2 && b2 && !c3)
+    if (!a && b && !c2)
       return "II only";
-    if (!a2 && !b2 && c3)
+    if (!a && !b && c2)
       return "III only";
-    if (!a2 && !b2 && !c3)
+    if (!a && !b && !c2)
       return "None of the above";
     throw "never";
   }
-  function printTrigValue(T2) {
-    if (typeof T2[1] === "number") {
-      return "\\" + T2[0] + " " + T2[1] + "\xB0";
+  function printTrigValue(T) {
+    if (typeof T[1] === "number") {
+      return "\\" + T[0] + " " + T[1] + "\xB0";
     } else {
-      return "\\" + T2[0] + " " + T2[1];
+      return "\\" + T[0] + " " + T[1];
     }
   }
-  function printTrigExp(T2) {
-    return "\\" + T2[0] + "(" + T2[1] + "\xB0" + (T2[2] > 0 ? "+" : "-") + T2[3] + ")";
+  function printTrigExp(T) {
+    return "\\" + T[0] + "(" + T[1] + "\xB0" + (T[2] > 0 ? "+" : "-") + T[3] + ")";
   }
   function printOrTrigRoots(roots) {
     roots = roots.filter(owl.num);
-    roots = roots.map((x2) => Round(x2, 5));
-    let ss = roots.map((x2) => x2 + "\xB0");
+    roots = roots.map((x) => Round(x, 5));
+    let ss = roots.map((x) => x + "\xB0");
     if (ss.length === 0)
       return "no solution";
     if (ss.length === 1)
@@ -15428,61 +15428,61 @@
     return ss.join(",") + "~\\text{or}~" + last;
   }
   function printSurd(num2) {
-    let [p3, q2] = cal.toSurd(num2);
-    let T2;
-    if (p3 === 1) {
-      T2 = q2 === 1 ? "1" : "\\sqrt{" + q2 + "}";
-    } else if (p3 === -1) {
-      T2 = q2 === 1 ? "-1" : "-\\sqrt{" + q2 + "}";
+    let [p2, q] = cal.toSurd(num2);
+    let T;
+    if (p2 === 1) {
+      T = q === 1 ? "1" : "\\sqrt{" + q + "}";
+    } else if (p2 === -1) {
+      T = q === 1 ? "-1" : "-\\sqrt{" + q + "}";
     } else {
-      T2 = q2 === 1 ? p3.toString() : p3 + "\\sqrt{" + q2 + "}";
+      T = q === 1 ? p2.toString() : p2 + "\\sqrt{" + q + "}";
     }
-    return T2;
+    return T;
   }
   function printPointPolar(point) {
-    let [r3, q2] = RectToPol(point);
-    q2 = cal.blur(q2);
-    return `(${printSurd(r3)},${q2}\xB0)`;
+    let [r2, q] = RectToPol(point);
+    q = cal.blur(q);
+    return `(${printSurd(r2)},${q}\xB0)`;
   }
   function printConstraint(con, align = false, replaceEqual = false) {
-    let [a2, b2, i2, c3] = con;
-    if (i2 === ">=")
-      i2 = "\\ge";
-    if (i2 === ">")
-      i2 = "\\gt";
-    if (i2 === "<=")
-      i2 = "\\le";
-    if (i2 === "<")
-      i2 = "\\lt";
-    let j2 = i2;
+    let [a, b, i, c2] = con;
+    if (i === ">=")
+      i = "\\ge";
+    if (i === ">")
+      i = "\\gt";
+    if (i === "<=")
+      i = "\\le";
+    if (i === "<")
+      i = "\\lt";
+    let j = i;
     if (replaceEqual)
-      j2 = "=";
+      j = "=";
     if (align)
-      j2 = " & " + j2;
-    if (a2 === 0 && b2 === 0)
-      return ` 0 ${j2} ${c3} `;
-    if (a2 !== 0 && b2 === 0)
-      return ` ${a2}x ${j2} ${c3} `;
-    if (a2 === 0 && b2 !== 0)
-      return ` ${b2}y ${j2} ${c3} `;
-    return ` ${a2}x + ${b2}y ${j2} ${c3} `;
+      j = " & " + j;
+    if (a === 0 && b === 0)
+      return ` 0 ${j} ${c2} `;
+    if (a !== 0 && b === 0)
+      return ` ${a}x ${j} ${c2} `;
+    if (a === 0 && b !== 0)
+      return ` ${b}y ${j} ${c2} `;
+    return ` ${a}x + ${b}y ${j} ${c2} `;
   }
   function printConstraints(cons) {
-    let T2 = "";
-    T2 += " \\left\\{ \\begin{aligned} ";
-    for (let c3 of cons) {
-      T2 += printConstraint(c3, true) + " \\\\ ";
+    let T = "";
+    T += " \\left\\{ \\begin{aligned} ";
+    for (let c2 of cons) {
+      T += printConstraint(c2, true) + " \\\\ ";
     }
-    T2 += " \\end{aligned} \\right. ";
-    return T2;
+    T += " \\end{aligned} \\right. ";
+    return T;
   }
   function printLabeledValue(obj, order = 1, isAngle = false) {
     let value = obj[0];
     let label = obj[order];
-    let T2 = label + " = " + value;
+    let T = label + " = " + value;
     if (isAngle)
-      T2 += "\xB0";
-    return T2;
+      T += "\xB0";
+    return T;
   }
 
   // src/Core/index.ts
@@ -15515,13 +15515,13 @@
 
   // ../packages/contract/lib/src/util.js
   function error(msg) {
-    const e6 = new Error(msg);
-    e6.name = "ContractError";
-    return e6;
+    const e5 = new Error(msg);
+    e5.name = "ContractError";
+    return e5;
   }
-  function signature(f3) {
-    const s3 = f3.toString();
-    return s3.slice(s3.indexOf("(") + 1, s3.indexOf(")"));
+  function signature(f2) {
+    const s2 = f2.toString();
+    return s2.slice(s2.indexOf("(") + 1, s2.indexOf(")"));
   }
   function str2(obj) {
     return JSON.stringify(obj);
@@ -15529,16 +15529,16 @@
   function join(arr) {
     return arr.map(str2).join(",");
   }
-  function err(f3, ...msgs) {
-    const h2 = `${f3.wax_name}(${f3.wax_signature})`;
-    const ms = [h2, ...msgs];
+  function err(f2, ...msgs) {
+    const h = `${f2.wax_name}(${f2.wax_signature})`;
+    const ms = [h, ...msgs];
     return error(ms.join("\n"));
   }
-  function brand(f3) {
-    if (!("wax_name" in f3))
-      f3.wax_name = f3.name ?? f3.toString();
-    if (!("wax_signature" in f3))
-      f3.wax_signature = signature(f3);
+  function brand(f2) {
+    if (!("wax_name" in f2))
+      f2.wax_name = f2.name ?? f2.toString();
+    if (!("wax_signature" in f2))
+      f2.wax_signature = signature(f2);
   }
   function transferBrand(source, target) {
     target.wax_name = source.wax_name;
@@ -15555,40 +15555,40 @@
   }
 
   // ../packages/contract/lib/src/functions/capture.js
-  function catchString(f3, vals, e6) {
-    return err(f3, "args = (" + join(vals) + ")", "throw: " + e6);
+  function catchString(f2, vals, e5) {
+    return err(f2, "args = (" + join(vals) + ")", "throw: " + e5);
   }
-  function catchErrObj(f3, vals, e6) {
-    return err(f3, "args = (" + join(vals) + ")", "throw: " + e6.name, "message: " + e6.message);
+  function catchErrObj(f2, vals, e5) {
+    return err(f2, "args = (" + join(vals) + ")", "throw: " + e5.name, "message: " + e5.message);
   }
-  function catchAny(f3, vals, e6) {
-    return err(f3, "args = (" + join(vals) + ")", "throw: " + str2(e6));
+  function catchAny(f2, vals, e5) {
+    return err(f2, "args = (" + join(vals) + ")", "throw: " + str2(e5));
   }
-  function isError(e6) {
-    return typeof e6 === "object" && e6 !== null && "name" in e6 && "message" in e6;
+  function isError(e5) {
+    return typeof e5 === "object" && e5 !== null && "name" in e5 && "message" in e5;
   }
-  function isContractError(e6) {
-    return isError(e6) && e6.name === "ContractError";
+  function isContractError(e5) {
+    return isError(e5) && e5.name === "ContractError";
   }
-  function catchErr(f3, vals, e6) {
-    if (isContractError(e6))
-      return e6;
-    if (typeof e6 === "string")
-      return catchString(f3, vals, e6);
-    if (isError(e6))
-      return catchErrObj(f3, vals, e6);
-    return catchAny(f3, vals, e6);
+  function catchErr(f2, vals, e5) {
+    if (isContractError(e5))
+      return e5;
+    if (typeof e5 === "string")
+      return catchString(f2, vals, e5);
+    if (isError(e5))
+      return catchErrObj(f2, vals, e5);
+    return catchAny(f2, vals, e5);
   }
-  function capture(f3) {
-    brand(f3);
+  function capture(f2) {
+    brand(f2);
     const nf = (...args) => {
       try {
-        return f3(...args);
-      } catch (e6) {
-        throw catchErr(f3, args, e6);
+        return f2(...args);
+      } catch (e5) {
+        throw catchErr(f2, args, e5);
       }
     };
-    transferBrand(f3, nf);
+    transferBrand(f2, nf);
     return nf;
   }
   function captureAll() {
@@ -15604,27 +15604,27 @@
   }
 
   // ../packages/contract/lib/src/assertion/rule.js
-  function nameOf(f3) {
-    return f3.name ?? f3.toString();
+  function nameOf(f2) {
+    return f2.name ?? f2.toString();
   }
   function matchOne(val2, rule) {
     return rule(val2) ? true : nameOf(rule);
   }
   function matchAnd(val2, rule) {
-    for (let p3 of rule)
-      if (!p3(val2))
-        return nameOf(p3);
+    for (let p2 of rule)
+      if (!p2(val2))
+        return nameOf(p2);
     return true;
   }
   function matchObj(val2, rule) {
-    for (let k2 in rule) {
-      const has = k2 in val2;
+    for (let k in rule) {
+      const has = k in val2;
       if (!has)
-        return "should have property: " + k2;
-      const p3 = rule[k2];
-      const pass2 = p3(val2[k2]);
+        return "should have property: " + k;
+      const p2 = rule[k];
+      const pass2 = p2(val2[k]);
       if (!pass2)
-        return k2 + " -> " + nameOf(p3);
+        return k + " -> " + nameOf(p2);
     }
     return true;
   }
@@ -15648,16 +15648,16 @@
   }
 
   // ../packages/contract/lib/src/assertion/treaty.js
-  function nameOf2(f3) {
-    return f3.name ?? f3.toString();
+  function nameOf2(f2) {
+    return f2.name ?? f2.toString();
   }
   function matchOne2(vals, treaty) {
     return treaty(...vals) ? true : nameOf2(treaty);
   }
   function matchAnd2(vals, treaty) {
-    for (let p3 of treaty)
-      if (!p3(...vals))
-        return nameOf2(p3);
+    for (let p2 of treaty)
+      if (!p2(...vals))
+        return nameOf2(p2);
     return true;
   }
   function isOne2(treaty) {
@@ -15676,25 +15676,25 @@
 
   // ../packages/contract/lib/src/functions/check.js
   function getToTail(arr, index) {
-    const n2 = arr.length - 1;
-    const i2 = Math.min(index, n2);
-    return arr[i2];
+    const n = arr.length - 1;
+    const i = Math.min(index, n);
+    return arr[i];
   }
-  function e3(f3, argIndex, argValue, msg) {
-    return err(f3, "arg[" + argIndex + "] = " + str2(argValue), "violate: " + msg);
+  function e2(f2, argIndex, argValue, msg) {
+    return err(f2, "arg[" + argIndex + "] = " + str2(argValue), "violate: " + msg);
   }
-  function match(f3, argIndex, argValue, rule) {
+  function match(f2, argIndex, argValue, rule) {
     const pass2 = matchRule(argValue, rule);
     if (pass2 !== true)
-      throw e3(f3, argIndex, argValue, pass2);
+      throw e2(f2, argIndex, argValue, pass2);
   }
-  function check(f3, rules) {
-    brand(f3);
+  function check(f2, rules) {
+    brand(f2);
     const nf = (...args) => {
-      args.forEach((v3, i2) => match(f3, i2, v3, getToTail(rules, i2)));
-      return f3(...args);
+      args.forEach((v2, i) => match(f2, i, v2, getToTail(rules, i)));
+      return f2(...args);
     };
-    transferBrand(f3, nf);
+    transferBrand(f2, nf);
     return nf;
   }
   function checkIt(...rules) {
@@ -15702,21 +15702,21 @@
   }
 
   // ../packages/contract/lib/src/functions/inspect.js
-  function e4(f3, vals, msg) {
-    return err(f3, "args = (" + join(vals) + ")", "violate: " + msg);
+  function e3(f2, vals, msg) {
+    return err(f2, "args = (" + join(vals) + ")", "violate: " + msg);
   }
-  function match2(f3, vals, treaty) {
+  function match2(f2, vals, treaty) {
     const pass2 = matchTreaty(vals, treaty);
     if (pass2 !== true)
-      throw e4(f3, vals, pass2);
+      throw e3(f2, vals, pass2);
   }
-  function inspect(f3, treaty) {
-    brand(f3);
+  function inspect(f2, treaty) {
+    brand(f2);
     const nf = (...args) => {
-      match2(f3, args, treaty);
-      return f3(...args);
+      match2(f2, args, treaty);
+      return f2(...args);
     };
-    transferBrand(f3, nf);
+    transferBrand(f2, nf);
     return nf;
   }
   function inspectIt(treaty) {
@@ -15724,8 +15724,8 @@
   }
 
   // ../packages/contract/lib/src/functions/expose.js
-  function expose(name, f3) {
-    globalThis[String(name)] = f3;
+  function expose(name, f2) {
+    globalThis[String(name)] = f2;
   }
   function exposeAll() {
     return function(constructor) {
@@ -15792,7 +15792,7 @@
       return (...items) => items.every(owl.absBetween(min, max));
     }
     static IsAroundPoint(anchor, range2) {
-      return (...points) => points.every((p3) => ChessboardDistance(anchor, p3) <= range2);
+      return (...points) => points.every((p2) => ChessboardDistance(anchor, p2) <= range2);
     }
     static IsTriangle(...triangles) {
       return triangles.every(owl.triangleSides);
@@ -15823,14 +15823,14 @@
 
   // src/Math/Code/Combinatorics.ts
   var Host2 = class {
-    static Factorial(n2) {
-      return cal.factorial(n2);
+    static Factorial(n) {
+      return cal.factorial(n);
     }
-    static nCr(n2, r3) {
-      return cal.nCr(n2, r3);
+    static nCr(n, r2) {
+      return cal.nCr(n, r2);
     }
-    static nPr(n2, r3) {
-      return cal.nPr(n2, r3);
+    static nPr(n, r2) {
+      return cal.nPr(n, r2);
     }
   };
   __decorateClass([
@@ -15838,14 +15838,14 @@
   ], Host2, "Factorial", 1);
   __decorateClass([
     checkIt(owl.nonNegativeInt),
-    inspectIt(function r_less_than_n(n2, r3) {
-      return n2 >= r3;
+    inspectIt(function r_less_than_n(n, r2) {
+      return n >= r2;
     })
   ], Host2, "nCr", 1);
   __decorateClass([
     checkIt(owl.nonNegativeInt),
-    inspectIt(function r_less_than_n(n2, r3) {
-      return n2 >= r3;
+    inspectIt(function r_less_than_n(n, r2) {
+      return n >= r2;
     })
   ], Host2, "nPr", 1);
   Host2 = __decorateClass([
@@ -15855,55 +15855,55 @@
 
   // src/Math/Code/Function.ts
   var Host3 = class {
-    static log(b2, N2) {
-      const v3 = Math.log(N2) / Math.log(b2);
-      return cal.blur(v3);
+    static log(b, N) {
+      const v2 = Math.log(N) / Math.log(b);
+      return cal.blur(v2);
     }
-    static Power(a2, b2) {
-      const v3 = Math.pow(a2, b2);
-      return cal.blur(v3);
+    static Power(a, b) {
+      const v2 = Math.pow(a, b);
+      return cal.blur(v2);
     }
-    static Sqrt(x2) {
-      const v3 = Math.sqrt(x2);
-      return cal.blur(v3);
+    static Sqrt(x) {
+      const v2 = Math.sqrt(x);
+      return cal.blur(v2);
     }
     static Radian(degree) {
-      const v3 = degree / 180 * Math.PI;
-      return cal.blur(v3);
+      const v2 = degree / 180 * Math.PI;
+      return cal.blur(v2);
     }
     static Degree(radian) {
-      const v3 = radian * 180 / Math.PI;
-      return cal.blur(v3);
+      const v2 = radian * 180 / Math.PI;
+      return cal.blur(v2);
     }
-    static sin(x2) {
-      if (x2 % 180 === 0)
+    static sin(x) {
+      if (x % 180 === 0)
         return 0;
-      let v3 = Math.sin(x2 / 180 * Math.PI);
-      return cal.blur(v3);
+      let v2 = Math.sin(x / 180 * Math.PI);
+      return cal.blur(v2);
     }
-    static cos(x2) {
-      if ((x2 - 90) % 180 === 0)
+    static cos(x) {
+      if ((x - 90) % 180 === 0)
         return 0;
-      let v3 = Math.cos(x2 / 180 * Math.PI);
-      return cal.blur(v3);
+      let v2 = Math.cos(x / 180 * Math.PI);
+      return cal.blur(v2);
     }
-    static tan(x2) {
-      if (x2 % 180 === 0)
+    static tan(x) {
+      if (x % 180 === 0)
         return 0;
-      let v3 = Math.tan(x2 / 180 * Math.PI);
-      return cal.blur(v3);
+      let v2 = Math.tan(x / 180 * Math.PI);
+      return cal.blur(v2);
     }
-    static arcsin(x2) {
-      let v3 = Math.asin(x2) * 180 / Math.PI;
-      return cal.blur(v3);
+    static arcsin(x) {
+      let v2 = Math.asin(x) * 180 / Math.PI;
+      return cal.blur(v2);
     }
-    static arccos(x2) {
-      let v3 = Math.acos(x2) * 180 / Math.PI;
-      return cal.blur(v3);
+    static arccos(x) {
+      let v2 = Math.acos(x) * 180 / Math.PI;
+      return cal.blur(v2);
     }
-    static arctan(x2) {
-      let v3 = Math.atan(x2) * 180 / Math.PI;
-      return cal.blur(v3);
+    static arctan(x) {
+      let v2 = Math.atan(x) * 180 / Math.PI;
+      return cal.blur(v2);
     }
   };
   __decorateClass([
@@ -15946,107 +15946,107 @@
 
   // src/Math/Code/Geometry.ts
   var Host4 = class {
-    static Slope(A2, B2) {
-      return (A2[1] - B2[1]) / (A2[0] - B2[0]);
+    static Slope(A, B) {
+      return (A[1] - B[1]) / (A[0] - B[0]);
     }
-    static SlopePd(A2, B2) {
-      return -1 / Slope(A2, B2);
+    static SlopePd(A, B) {
+      return -1 / Slope(A, B);
     }
-    static Distance(A2, B2) {
-      return ((A2[0] - B2[0]) ** 2 + (A2[1] - B2[1]) ** 2) ** 0.5;
+    static Distance(A, B) {
+      return ((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2) ** 0.5;
     }
-    static ChessboardDistance(A2, B2) {
-      let x2 = Abs(A2[0] - B2[0]);
-      let y2 = Abs(A2[1] - B2[1]);
-      return Max(x2, y2);
+    static ChessboardDistance(A, B) {
+      let x = Abs(A[0] - B[0]);
+      let y = Abs(A[1] - B[1]);
+      return Max(x, y);
     }
     static Mid(...points) {
       return toShape2D(points).mean().toArray();
     }
-    static Slide(A2, B2, ratio) {
-      let r3 = ratio;
-      let s3 = 1 - r3;
-      return [A2[0] * s3 + B2[0] * r3, A2[1] * s3 + B2[1] * r3];
+    static Slide(A, B, ratio) {
+      let r2 = ratio;
+      let s2 = 1 - r2;
+      return [A[0] * s2 + B[0] * r2, A[1] * s2 + B[1] * r2];
     }
-    static Rotate(P2, q2, O2 = [0, 0]) {
-      return vec2D(O2, P2).rotate(q2).add(O2).blur().toArray();
+    static Rotate(P, q, O = [0, 0]) {
+      return vec2D(O, P).rotate(q).add(O).blur().toArray();
     }
-    static Dir(A2, B2) {
-      return vec2D(A2, B2).argument();
+    static Dir(A, B) {
+      return vec2D(A, B).argument();
     }
-    static PdFoot(P2, [A2, B2]) {
-      if (typeof B2 === "number")
-        B2 = Move(A2, B2, 1);
-      return vec2D(A2, P2).projectOn(vec2D(A2, B2)).add(A2).toArray();
+    static PdFoot(P, [A, B]) {
+      if (typeof B === "number")
+        B = Move(A, B, 1);
+      return vec2D(A, P).projectOn(vec2D(A, B)).add(A).toArray();
     }
-    static Intersection(A2, B2, C2, D2) {
-      return Crammer(B2[1] - A2[1], A2[0] - B2[0], A2[0] * B2[1] - B2[0] * A2[1], D2[1] - C2[1], C2[0] - D2[0], C2[0] * D2[1] - D2[0] * C2[1]);
+    static Intersection(A, B, C, D) {
+      return Crammer(B[1] - A[1], A[0] - B[0], A[0] * B[1] - B[0] * A[1], D[1] - C[1], C[0] - D[0], C[0] * D[1] - D[0] * C[1]);
     }
-    static Move(P2, dir3, distance) {
-      let q2 = 0;
+    static Move(P, dir3, distance) {
+      let q = 0;
       if (typeof dir3 === "number") {
-        q2 = dir3;
+        q = dir3;
       } else if (owl.point2D(dir3)) {
-        q2 = Dir(P2, dir3);
+        q = Dir(P, dir3);
       } else {
-        q2 = Dir(dir3[0], dir3[1]);
+        q = Dir(dir3[0], dir3[1]);
       }
-      let x2 = P2[0] + distance * cos(q2);
-      let y2 = P2[1] + distance * sin(q2);
-      return [x2, y2];
+      let x = P[0] + distance * cos(q);
+      let y = P[1] + distance * sin(q);
+      return [x, y];
     }
-    static MoveX(P2, distance) {
-      let [x2, y2] = P2;
-      return [x2 + distance, y2];
+    static MoveX(P, distance) {
+      let [x, y] = P;
+      return [x + distance, y];
     }
-    static MoveY(P2, distance) {
-      let [x2, y2] = P2;
-      return [x2, y2 + distance];
+    static MoveY(P, distance) {
+      let [x, y] = P;
+      return [x, y + distance];
     }
-    static Shift(P2, [A2, B2], scale = 1) {
-      let [x2, y2] = P2;
-      let [xA, yA] = A2;
-      let [xB, yB] = B2;
-      return [x2 + (xB - xA) * scale, y2 + (yB - yA) * scale];
+    static Shift(P, [A, B], scale = 1) {
+      let [x, y] = P;
+      let [xA, yA] = A;
+      let [xB, yB] = B;
+      return [x + (xB - xA) * scale, y + (yB - yA) * scale];
     }
-    static ReflectX(P2) {
-      return [P2[0], -P2[1]];
+    static ReflectX(P) {
+      return [P[0], -P[1]];
     }
-    static ReflectY(P2) {
-      return [-P2[0], P2[1]];
+    static ReflectY(P) {
+      return [-P[0], P[1]];
     }
     static IntersectAngle(slope1, slope2) {
       let A1 = arctan(slope1);
       let A2 = arctan(slope2);
-      let d2 = Abs(A1 - A2);
-      if (d2 > 90)
-        d2 = 180 - d2;
-      return d2;
+      let d = Abs(A1 - A2);
+      if (d > 90)
+        d = 180 - d;
+      return d;
     }
-    static Angle(A2, O2, B2) {
-      let anglePolar = AnglePolar(A2, O2, B2);
-      let a2 = IsReflex(A2, O2, B2) ? 360 - anglePolar : anglePolar;
-      return cal.blur(a2);
+    static Angle(A, O, B) {
+      let anglePolar = AnglePolar(A, O, B);
+      let a = IsReflex(A, O, B) ? 360 - anglePolar : anglePolar;
+      return cal.blur(a);
     }
-    static AnglePolar(A2, O2, B2) {
-      let a2 = vec2D(O2, A2).argument();
-      let b2 = vec2D(O2, B2).argument();
-      return a2 <= b2 ? b2 - a2 : 360 + b2 - a2;
+    static AnglePolar(A, O, B) {
+      let a = vec2D(O, A).argument();
+      let b = vec2D(O, B).argument();
+      return a <= b ? b - a : 360 + b - a;
     }
-    static IsReflex(A2, O2, B2) {
-      let angle2 = AnglePolar(A2, O2, B2);
+    static IsReflex(A, O, B) {
+      let angle2 = AnglePolar(A, O, B);
       return angle2 > 180;
     }
-    static RegularPolygon(n2, center, radius, startAngle) {
-      let a2 = 360 / n2;
+    static RegularPolygon(n, center, radius, startAngle) {
+      let a = 360 / n;
       let arr = [];
-      for (let i2 = 0; i2 < n2; i2++) {
-        let p3 = PolToRect([radius, startAngle + i2 * a2]);
-        p3[0] += center[0];
-        p3[1] += center[1];
-        p3[0] = cal.blur(p3[0]);
-        p3[1] = cal.blur(p3[1]);
-        arr.push(p3);
+      for (let i = 0; i < n; i++) {
+        let p2 = PolToRect([radius, startAngle + i * a]);
+        p2[0] += center[0];
+        p2[1] += center[1];
+        p2[0] = cal.blur(p2[0]);
+        p2[1] = cal.blur(p2[1]);
+        arr.push(p2);
       }
       return arr;
     }
@@ -16071,14 +16071,14 @@
   };
   __decorateClass([
     checkIt(owl.point2D),
-    inspectIt(function not_vertical(A2, B2) {
-      return !cal.eq(A2[0], B2[0]);
+    inspectIt(function not_vertical(A, B) {
+      return !cal.eq(A[0], B[0]);
     })
   ], Host4, "Slope", 1);
   __decorateClass([
     checkIt(owl.point2D),
-    inspectIt(function not_horizontal(A2, B2) {
-      return !cal.eq(A2[1], B2[1]);
+    inspectIt(function not_horizontal(A, B) {
+      return !cal.eq(A[1], B[1]);
     })
   ], Host4, "SlopePd", 1);
   __decorateClass([
@@ -16098,20 +16098,20 @@
   ], Host4, "Rotate", 1);
   __decorateClass([
     checkIt(owl.point2D),
-    inspectIt(function distinct_points(A2, B2) {
-      return owl.distinct([A2, B2]);
+    inspectIt(function distinct_points(A, B) {
+      return owl.distinct([A, B]);
     })
   ], Host4, "Dir", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.arrayWith(owl.or([owl.point2D, owl.num]))),
-    inspectIt(function distinct_points(P2, [A2, B2]) {
-      return owl.distinct([A2, B2]);
+    inspectIt(function distinct_points(P, [A, B]) {
+      return owl.distinct([A, B]);
     })
   ], Host4, "PdFoot", 1);
   __decorateClass([
     checkIt(owl.point2D),
-    inspectIt(function distinct_points(A2, B2, C2, D2) {
-      return owl.distinct([A2, B2]) && owl.distinct([C2, D2]);
+    inspectIt(function distinct_points(A, B, C, D) {
+      return owl.distinct([A, B]) && owl.distinct([C, D]);
     })
   ], Host4, "Intersection", 1);
   __decorateClass([
@@ -16137,20 +16137,20 @@
   ], Host4, "IntersectAngle", 1);
   __decorateClass([
     checkIt(owl.point2D),
-    inspectIt(function distinct_points(A2, O2, B2) {
-      return owl.distinct([A2, O2]) && owl.distinct([B2, O2]);
+    inspectIt(function distinct_points(A, O, B) {
+      return owl.distinct([A, O]) && owl.distinct([B, O]);
     })
   ], Host4, "Angle", 1);
   __decorateClass([
     checkIt(owl.point2D),
-    inspectIt(function distinct_points(A2, O2, B2) {
-      return owl.distinct([A2, O2]) && owl.distinct([B2, O2]);
+    inspectIt(function distinct_points(A, O, B) {
+      return owl.distinct([A, O]) && owl.distinct([B, O]);
     })
   ], Host4, "AnglePolar", 1);
   __decorateClass([
     checkIt(owl.point2D),
-    inspectIt(function distinct_points(A2, O2, B2) {
-      return owl.distinct([A2, O2]) && owl.distinct([B2, O2]);
+    inspectIt(function distinct_points(A, O, B) {
+      return owl.distinct([A, O]) && owl.distinct([B, O]);
     })
   ], Host4, "IsReflex", 1);
   __decorateClass([
@@ -16179,10 +16179,10 @@
   // src/Math/Code/Latex.ts
   var Host5 = class {
     static StemAndLeaf({ data: data2, labels, stem = "(tens)", leaf = "(units)" }) {
-      let T2 = "";
-      T2 += "\\begin{array}{r|l}";
-      T2 += `\\text{Stem} & \\text{Leaf} \\\\ `;
-      T2 += `\\text{${stem}} & \\text{${leaf}} \\\\ \\hline `;
+      let T = "";
+      T += "\\begin{array}{r|l}";
+      T += `\\text{Stem} & \\text{Leaf} \\\\ `;
+      T += `\\text{${stem}} & \\text{${leaf}} \\\\ \\hline `;
       function ten(num2) {
         return Math.floor(num2 / 10 + Number.EPSILON);
       }
@@ -16198,18 +16198,18 @@
       let parsedLabels = labels.map(parse);
       let initTen = ten(Math.min(...data2));
       let endTen = ten(Math.max(...data2));
-      for (let t2 = initTen; t2 <= endTen; t2++) {
-        T2 += t2 + " & { \\begin{array}{} ";
+      for (let t = initTen; t <= endTen; t++) {
+        T += t + " & { \\begin{array}{} ";
         let units = [];
-        for (let i2 = 0; i2 < data2.length; i2++) {
-          if (ten(data2[i2]) === t2)
-            units.push(parsedLabels[i2]);
+        for (let i = 0; i < data2.length; i++) {
+          if (ten(data2[i]) === t)
+            units.push(parsedLabels[i]);
         }
-        T2 += units.join(" & ");
-        T2 += " \\end{array} } \\\\ ";
+        T += units.join(" & ");
+        T += " \\end{array} } \\\\ ";
       }
-      T2 += " \\end{array}";
-      return T2;
+      T += " \\end{array}";
+      return T;
     }
     static Table({ content, columns, rows, stretch }) {
       let nCol = Math.max(...content.map(($) => $.length));
@@ -16217,24 +16217,24 @@
       let nRow = content.length;
       rows ??= Array(nRow + 1).fill("|").join("r");
       let rowsArr = rows.split("r").map(($) => $.replace(/\|/g, " \\hline ").replace(/\:/g, " \\hdashline "));
-      let T2 = "";
+      let T = "";
       if (stretch)
-        T2 += "\\def \\arraystretch{1.5} ";
-      T2 += `\\begin{array}{${columns}}`;
+        T += "\\def \\arraystretch{1.5} ";
+      T += `\\begin{array}{${columns}}`;
       function parseCell(cell) {
         if (typeof cell === "number")
           return String(cell);
         return cell.startsWith("$") ? cell.substring(1) : `\\text{${cell}}`;
       }
-      let i2 = 0;
+      let i = 0;
       for (let row of content) {
-        T2 += rowsArr[i2] ?? "";
-        T2 += row.map(parseCell).join(" & ") + " \\\\ ";
-        i2++;
+        T += rowsArr[i] ?? "";
+        T += row.map(parseCell).join(" & ") + " \\\\ ";
+        i++;
       }
-      T2 += rowsArr[i2] ?? "";
-      T2 += ` \\end{array}`;
-      return T2;
+      T += rowsArr[i] ?? "";
+      T += ` \\end{array}`;
+      return T;
     }
     static FreqTable({ data: data2, dataLabel, freqLabel }) {
       let values = ListIntegers(Math.min(...data2), Math.max(...data2));
@@ -16260,8 +16260,8 @@
       }
       colTitle = parseCell(colTitle);
       rowTitle = parseCell(rowTitle);
-      function cellMap(r3, c3) {
-        let val2 = cell(r3, c3);
+      function cellMap(r2, c2) {
+        let val2 = cell(r2, c2);
         if (typeof val2 === "number")
           return String(val2);
         if (typeof val2 === "string")
@@ -16270,30 +16270,30 @@
           return val2 ? "\u2714" : "\u2718";
         return String(val2);
       }
-      let T2 = "";
-      T2 += "\\begin{matrix}";
-      T2 += ` & ${colTitle} \\\\`;
-      T2 += ` ${rowTitle} & {`;
-      T2 += `\\begin{array}{c|ccc}`;
-      T2 += ` & ` + cols.join(" & ") + " \\\\ \\hline ";
-      for (let r3 of rows) {
-        T2 += " " + String(r3) + " & ";
-        T2 += cols.map((c3) => cellMap(r3, c3)).join(" & ");
-        T2 += " \\\\";
+      let T = "";
+      T += "\\begin{matrix}";
+      T += ` & ${colTitle} \\\\`;
+      T += ` ${rowTitle} & {`;
+      T += `\\begin{array}{c|ccc}`;
+      T += ` & ` + cols.join(" & ") + " \\\\ \\hline ";
+      for (let r2 of rows) {
+        T += " " + String(r2) + " & ";
+        T += cols.map((c2) => cellMap(r2, c2)).join(" & ");
+        T += " \\\\";
       }
-      T2 += " \\end{array}";
-      T2 += ` } `;
-      T2 += `\\end{matrix}`;
-      return T2;
+      T += " \\end{array}";
+      T += ` } `;
+      T += `\\end{matrix}`;
+      return T;
     }
     static CheckVertices({ constraints: constraints2, field: field2, label }) {
-      let T2 = "";
+      let T = "";
       let vs = toReins(constraints2).vertices();
-      for (let v3 of vs) {
-        T2 += "\\text{At } " + Coord(v3) + ":~~~";
-        T2 += label + " = " + optimizer({ field: field2 }).fieldAt(v3) + " \\\\ ";
+      for (let v2 of vs) {
+        T += "\\text{At } " + Coord(v2) + ":~~~";
+        T += label + " = " + optimizer({ field: field2 }).fieldAt(v2) + " \\\\ ";
       }
-      return T2;
+      return T;
     }
   };
   Host5 = __decorateClass([
@@ -16378,12 +16378,12 @@
       let pts = ArrangePoints(...points);
       pts = [...pts, pts[0]];
       let constraints2 = [];
-      for (let i2 = 0; i2 < points.length; i2++) {
-        let A2 = pts[i2];
-        let B2 = pts[i2 + 1];
-        let [a2, b2, c3] = LinearFromTwoPoints(A2, B2);
-        let sign = FieldAt(mean, [a2, b2, c3]) > 0 ? "\\ge" : "\\le";
-        constraints2.push([a2, b2, sign, -c3]);
+      for (let i = 0; i < points.length; i++) {
+        let A = pts[i];
+        let B = pts[i + 1];
+        let [a, b, c2] = LinearFromTwoPoints(A, B);
+        let sign = FieldAt(mean, [a, b, c2]) > 0 ? "\\ge" : "\\le";
+        constraints2.push([a, b, sign, -c2]);
       }
       return constraints2;
     }
@@ -16575,252 +16575,252 @@
     return new Function("return (" + paras + ") => (" + body.toString() + ").apply(null,[" + args + "])")();
   }
   function makeLatex(args, template, units, brackets) {
-    let T2 = template;
-    for (let i2 = 0; i2 < args.length; i2++) {
-      const [l3, r3] = brackets[i2] === "|" ? ["(", ")"] : ["", ""];
-      const u2 = units[i2];
-      T2 = T2.replace("@", u2 + l3 + args[i2] + r3);
+    let T = template;
+    for (let i = 0; i < args.length; i++) {
+      const [l2, r2] = brackets[i] === "|" ? ["(", ")"] : ["", ""];
+      const u = units[i];
+      T = T.replace("@", u + l2 + args[i] + r2);
     }
-    return T2;
+    return T;
   }
   var PhyEqCls = class {
     Heat = {
-      EPt(E2 = "E", P2 = "P", t2 = "t", $ = "***") {
-        let args = [E2, P2, t2];
+      EPt(E = "E", P = "P", t = "t", $ = "***") {
+        let args = [E, P, t];
         return [
-          makeFn(args, (E3, P3, t3) => E3 - P3 * t3),
+          makeFn(args, (E2, P2, t2) => E2 - P2 * t2),
           makeLatex(args, "@=@@", $, ":||")
         ];
       }
     };
     Motion = {
-      vuat(v3 = "v", u2 = "u", a2 = "a", t2 = "t", $ = "****") {
-        let args = [v3, u2, a2, t2];
+      vuat(v2 = "v", u = "u", a = "a", t = "t", $ = "****") {
+        let args = [v2, u, a, t];
         return [
-          makeFn(args, (v4, u3, a3, t3) => v4 - u3 - a3 * t3),
+          makeFn(args, (v3, u2, a2, t2) => v3 - u2 - a2 * t2),
           makeLatex(args, "@=@+@@", $, "::||")
         ];
       },
-      vu2as(v3 = "v", u2 = "u", a2 = "a", s3 = "s", $ = "****") {
-        let args = [v3, u2, a2, s3];
+      vu2as(v2 = "v", u = "u", a = "a", s2 = "s", $ = "****") {
+        let args = [v2, u, a, s2];
         return [
-          makeFn(args, (v4, u3, a3, s4) => v4 ** 2 - u3 ** 2 - 2 * a3 * s4),
+          makeFn(args, (v3, u2, a2, s3) => v3 ** 2 - u2 ** 2 - 2 * a2 * s3),
           makeLatex(args, "@^2=@^2+2@@", $, "||||")
         ];
       },
-      sutat2(s3 = "s", u2 = "u", t2 = "t", a2 = "a", $ = "****") {
-        let args = [s3, u2, t2, a2];
+      sutat2(s2 = "s", u = "u", t = "t", a = "a", $ = "****") {
+        let args = [s2, u, t, a];
         let [_s, _u, _t, _a] = $;
         return [
-          makeFn(args, (s4, u3, t3, a3) => s4 - u3 * t3 - 0.5 * a3 * t3 * t3),
-          makeLatex([s3, u2, t2, a2, t2], "@=@@+\\dfrac{1}{2}@@^2", [_s, _u, _t, _a, _t].join(""), ":||||")
+          makeFn(args, (s3, u2, t2, a2) => s3 - u2 * t2 - 0.5 * a2 * t2 * t2),
+          makeLatex([s2, u, t, a, t], "@=@@+\\dfrac{1}{2}@@^2", [_s, _u, _t, _a, _t].join(""), ":||||")
         ];
       },
-      suvt(s3 = "s", u2 = "u", v3 = "v", t2 = "t", $ = "****") {
-        let args = [s3, u2, v3, t2];
+      suvt(s2 = "s", u = "u", v2 = "v", t = "t", $ = "****") {
+        let args = [s2, u, v2, t];
         return [
-          makeFn(args, (s4, u3, v4, t3) => s4 - 0.5 * (u3 + v4) * t3),
+          makeFn(args, (s3, u2, v3, t2) => s3 - 0.5 * (u2 + v3) * t2),
           makeLatex(args, "@=\\dfrac{1}{2}(@+@)@", $, ":::|")
         ];
       },
-      sat2(s3 = "s", a2 = "a", t2 = "t", $ = "***") {
-        let args = [s3, a2, t2];
+      sat2(s2 = "s", a = "a", t = "t", $ = "***") {
+        let args = [s2, a, t];
         return [
-          makeFn(args, (s4, a3, t3) => s4 - 0.5 * a3 * t3 * t3),
+          makeFn(args, (s3, a2, t2) => s3 - 0.5 * a2 * t2 * t2),
           makeLatex(args, "@=\\dfrac{1}{2}@@^2", $, ":||")
         ];
       },
-      vat(v3 = "v", a2 = "a", t2 = "t", $ = "***") {
-        let args = [v3, a2, t2];
+      vat(v2 = "v", a = "a", t = "t", $ = "***") {
+        let args = [v2, a, t];
         return [
-          makeFn(args, (v4, a3, t3) => v4 - a3 * t3),
+          makeFn(args, (v3, a2, t2) => v3 - a2 * t2),
           makeLatex(args, "@=@@", $, ":||")
         ];
       },
-      v2as(v3 = "v", a2 = "a", s3 = "s", $ = "***") {
-        let args = [v3, a2, s3];
+      v2as(v2 = "v", a = "a", s2 = "s", $ = "***") {
+        let args = [v2, a, s2];
         return [
-          makeFn(args, (v4, a3, s4) => v4 ** 2 - 2 * a3 * s4),
+          makeFn(args, (v3, a2, s3) => v3 ** 2 - 2 * a2 * s3),
           makeLatex(args, "@^2=2@@", $, "|||")
         ];
       }
     };
     Force = {
-      Fma(F2 = "F", m3 = "m", a2 = "a", $ = "***") {
-        let args = [F2, m3, a2];
+      Fma(F = "F", m2 = "m", a = "a", $ = "***") {
+        let args = [F, m2, a];
         return [
-          makeFn(args, (F3, m4, a3) => F3 - m4 * a3),
+          makeFn(args, (F2, m3, a2) => F2 - m3 * a2),
           makeLatex(args, "@=@@", $, ":||")
         ];
       }
     };
     CircularMotion = {
-      svt(s3 = "s", v3 = "v", t2 = "t", $ = "***") {
-        let args = [s3, v3, t2];
+      svt(s2 = "s", v2 = "v", t = "t", $ = "***") {
+        let args = [s2, v2, t];
         return [
-          makeFn(args, (s4, v4, t3) => s4 - v4 * t3),
+          makeFn(args, (s3, v3, t2) => s3 - v3 * t2),
           makeLatex(args, "@=@@", $, ":||")
         ];
       },
-      \u03B8\u03C9t(\u03B8 = "\u03B8", \u03C9 = "\u03C9", t2 = "t", $ = "$$$") {
-        let args = [\u03B8, \u03C9, t2];
+      \u03B8\u03C9t(\u03B8 = "\u03B8", \u03C9 = "\u03C9", t = "t", $ = "$$$") {
+        let args = [\u03B8, \u03C9, t];
         return [
-          makeFn(args, (\u03B82, \u03C92, t3) => \u03B82 - \u03C92 * t3),
+          makeFn(args, (\u03B82, \u03C92, t2) => \u03B82 - \u03C92 * t2),
           makeLatex(args, "@=@@", $, ":||")
         ];
       },
-      \u03C9T(\u03C9 = "\u03C9", T2 = "T", $ = "$$") {
-        let args = [\u03C9, T2];
+      \u03C9T(\u03C9 = "\u03C9", T = "T", $ = "$$") {
+        let args = [\u03C9, T];
         return [
-          makeFn(args, (\u03C92, T3) => \u03C92 - 2 * Math.PI / T3),
+          makeFn(args, (\u03C92, T2) => \u03C92 - 2 * Math.PI / T2),
           makeLatex(args, "@=\\dfrac{2\u03C0}{@}", $, "::")
         ];
       },
-      sr\u03B8(s3 = "s", r3 = "r", \u03B8 = "\u03B8", $ = "**$") {
-        let args = [s3, r3, \u03B8];
+      sr\u03B8(s2 = "s", r2 = "r", \u03B8 = "\u03B8", $ = "**$") {
+        let args = [s2, r2, \u03B8];
         return [
-          makeFn(args, (s4, r4, \u03B82) => s4 - r4 * \u03B82),
+          makeFn(args, (s3, r3, \u03B82) => s3 - r3 * \u03B82),
           makeLatex(args, "@=@@", $, ":||")
         ];
       },
-      vr\u03C9(v3 = "v", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-        let args = [v3, r3, \u03C9];
+      vr\u03C9(v2 = "v", r2 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [v2, r2, \u03C9];
         return [
-          makeFn(args, (v4, r4, \u03C92) => v4 - r4 * \u03C92),
+          makeFn(args, (v3, r3, \u03C92) => v3 - r3 * \u03C92),
           makeLatex(args, "@=@@", $, ":||")
         ];
       },
-      av\u03C9(a2 = "a", v3 = "v", \u03C9 = "\u03C9", $ = "***") {
-        let args = [a2, v3, \u03C9];
+      av\u03C9(a = "a", v2 = "v", \u03C9 = "\u03C9", $ = "***") {
+        let args = [a, v2, \u03C9];
         return [
-          makeFn(args, (a3, v4, \u03C92) => a3 - v4 * \u03C92),
+          makeFn(args, (a2, v3, \u03C92) => a2 - v3 * \u03C92),
           makeLatex(args, "@=@@", $, ":||")
         ];
       },
-      avr(a2 = "a", v3 = "v", r3 = "r", $ = "***") {
-        let args = [a2, v3, r3];
+      avr(a = "a", v2 = "v", r2 = "r", $ = "***") {
+        let args = [a, v2, r2];
         return [
-          makeFn(args, (a3, v4, r4) => a3 - v4 * v4 / r4),
+          makeFn(args, (a2, v3, r3) => a2 - v3 * v3 / r3),
           makeLatex(args, "@=\\dfrac{@^2}{@}", $, ":|:")
         ];
       },
-      ar\u03C9(a2 = "a", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-        let args = [a2, r3, \u03C9];
+      ar\u03C9(a = "a", r2 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [a, r2, \u03C9];
         return [
-          makeFn(args, (a3, r4, \u03C92) => a3 - r4 * \u03C92 * \u03C92),
+          makeFn(args, (a2, r3, \u03C92) => a2 - r3 * \u03C92 * \u03C92),
           makeLatex(args, "@=@@^2", $, ":||")
         ];
       },
-      Fmv\u03C9(F2 = "F", m3 = "m", v3 = "v", \u03C9 = "\u03C9", $ = "****") {
-        let args = [F2, m3, v3, \u03C9];
+      Fmv\u03C9(F = "F", m2 = "m", v2 = "v", \u03C9 = "\u03C9", $ = "****") {
+        let args = [F, m2, v2, \u03C9];
         return [
-          makeFn(args, (F3, m4, v4, \u03C92) => F3 - m4 * v4 * \u03C92),
+          makeFn(args, (F2, m3, v3, \u03C92) => F2 - m3 * v3 * \u03C92),
           makeLatex(args, "@=@@@", $, ":|||")
         ];
       },
-      Fmvr(F2 = "F", m3 = "m", v3 = "v", r3 = "r", $ = "****") {
-        let args = [F2, m3, v3, r3];
+      Fmvr(F = "F", m2 = "m", v2 = "v", r2 = "r", $ = "****") {
+        let args = [F, m2, v2, r2];
         return [
-          makeFn(args, (F3, m4, v4, r4) => F3 - m4 * v4 * v4 / r4),
+          makeFn(args, (F2, m3, v3, r3) => F2 - m3 * v3 * v3 / r3),
           makeLatex(args, "@=\\dfrac{@@^2}{@}", $, ":||:")
         ];
       },
-      Fmr\u03C9(F2 = "F", m3 = "m", r3 = "r", \u03C9 = "\u03C9", $ = "****") {
-        let args = [F2, m3, r3, \u03C9];
+      Fmr\u03C9(F = "F", m2 = "m", r2 = "r", \u03C9 = "\u03C9", $ = "****") {
+        let args = [F, m2, r2, \u03C9];
         return [
-          makeFn(args, (F3, m4, r4, \u03C92) => F3 - m4 * r4 * \u03C92 * \u03C92),
+          makeFn(args, (F2, m3, r3, \u03C92) => F2 - m3 * r3 * \u03C92 * \u03C92),
           makeLatex(args, "@=@@@^2", $, ":|||")
         ];
       }
     };
     Gravitation = {
-      FGMmr2(F2 = "F", M2 = "M", m3 = "m", r3 = "r", $ = "****") {
-        let args = [F2, M2, m3, r3];
+      FGMmr2(F = "F", M = "M", m2 = "m", r2 = "r", $ = "****") {
+        let args = [F, M, m2, r2];
         return [
-          makeFn(args, (F3, M3, m4, r4) => F3 - PhyConst.G * M3 * m4 / r4 ** 2),
+          makeFn(args, (F2, M2, m3, r3) => F2 - PhyConst.G * M2 * m3 / r3 ** 2),
           makeLatex(args, "@=\\dfrac{G@@}{@^2}", $, ":|||")
         ];
       },
-      FGMmRh2(F2 = "F", M2 = "M", m3 = "m", R2 = "R", h2 = "h", $ = "*****") {
-        let args = [F2, M2, m3, R2, h2];
+      FGMmRh2(F = "F", M = "M", m2 = "m", R = "R", h = "h", $ = "*****") {
+        let args = [F, M, m2, R, h];
         return [
-          makeFn(args, (F3, M3, m4, R3, h3) => F3 - PhyConst.G * M3 * m4 / (R3 + h3) ** 2),
+          makeFn(args, (F2, M2, m3, R2, h2) => F2 - PhyConst.G * M2 * m3 / (R2 + h2) ** 2),
           makeLatex(args, "@=\\dfrac{G@@}{(@+@)^2}", $, ":||::")
         ];
       },
-      gGMr2(g2 = "g", M2 = "M", r3 = "r", $ = "***") {
-        let args = [g2, M2, r3];
+      gGMr2(g = "g", M = "M", r2 = "r", $ = "***") {
+        let args = [g, M, r2];
         return [
-          makeFn(args, (g3, M3, r4) => g3 - PhyConst.G * M3 / r4 ** 2),
+          makeFn(args, (g2, M2, r3) => g2 - PhyConst.G * M2 / r3 ** 2),
           makeLatex(args, "@=\\dfrac{G@}{@^2}", $, ":||")
         ];
       },
-      gGMRh2(g2 = "g", M2 = "M", R2 = "R", h2 = "h", $ = "****") {
-        let args = [g2, M2, R2, h2];
+      gGMRh2(g = "g", M = "M", R = "R", h = "h", $ = "****") {
+        let args = [g, M, R, h];
         return [
-          makeFn(args, (g3, M3, R3, h3) => g3 - PhyConst.G * M3 / (R3 + h3) ** 2),
+          makeFn(args, (g2, M2, R2, h2) => g2 - PhyConst.G * M2 / (R2 + h2) ** 2),
           makeLatex(args, "@=\\dfrac{G@}{(@+@)^2}", $, ":|::")
         ];
       },
-      Fmg(F2 = "F", m3 = "m", g2 = "g", $ = "***") {
-        let args = [F2, m3, g2];
+      Fmg(F = "F", m2 = "m", g = "g", $ = "***") {
+        let args = [F, m2, g];
         return [
-          makeFn(args, (F3, m4, g3) => F3 - m4 * g3),
+          makeFn(args, (F2, m3, g2) => F2 - m3 * g2),
           makeLatex(args, "@=@@", $, ":||")
         ];
       },
-      GMmr2v2r(M2 = "M", r3 = "r", v3 = "v", $ = "***") {
-        let args = [M2, r3, v3];
+      GMmr2v2r(M = "M", r2 = "r", v2 = "v", $ = "***") {
+        let args = [M, r2, v2];
         let [_M, _r, _v] = $;
         $ = [_M, _r, _v, _r].join("");
         return [
-          makeFn(args, (M3, r4, v4) => PhyConst.G * M3 / r4 / r4 - v4 * v4 / r4),
-          makeLatex([M2, r3, v3, r3], "\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}", $, "|||:")
+          makeFn(args, (M2, r3, v3) => PhyConst.G * M2 / r3 / r3 - v3 * v3 / r3),
+          makeLatex([M, r2, v2, r2], "\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}", $, "|||:")
         ];
       },
-      GMmr2r\u03C92(M2 = "M", r3 = "r", \u03C9 = "\u03C9", $ = "***") {
-        let args = [M2, r3, \u03C9];
+      GMmr2r\u03C92(M = "M", r2 = "r", \u03C9 = "\u03C9", $ = "***") {
+        let args = [M, r2, \u03C9];
         let [_M, _r, _\u03C9] = $;
         $ = [_M, _r, _r, _\u03C9].join("");
         return [
-          makeFn(args, (M3, r4, \u03C92) => PhyConst.G * M3 / r4 / r4 - r4 * \u03C92 * \u03C92),
-          makeLatex([M2, r3, r3, \u03C9], "\\dfrac{G@m}{@^2}=m@@^2", $, "||||")
+          makeFn(args, (M2, r3, \u03C92) => PhyConst.G * M2 / r3 / r3 - r3 * \u03C92 * \u03C92),
+          makeLatex([M, r2, r2, \u03C9], "\\dfrac{G@m}{@^2}=m@@^2", $, "||||")
         ];
       }
     };
     Radioactive = {
-      NntT(N2 = "N", n2 = "n", t2 = "t", T2 = "T", $ = "****") {
-        let args = [N2, n2, t2, T2];
+      NntT(N = "N", n = "n", t = "t", T = "T", $ = "****") {
+        let args = [N, n, t, T];
         return [
-          makeFn(args, (N3, n3, t3, T3) => N3 - n3 * 0.5 ** (t3 / T3)),
+          makeFn(args, (N2, n2, t2, T2) => N2 - n2 * 0.5 ** (t2 / T2)),
           makeLatex(args, "@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}", $, "::::")
         ];
       },
-      AatT(A2 = "A", a2 = "a", t2 = "t", T2 = "T", $ = "****") {
-        let args = [A2, a2, t2, T2];
+      AatT(A = "A", a = "a", t = "t", T = "T", $ = "****") {
+        let args = [A, a, t, T];
         return [
-          makeFn(args, (A3, a3, t3, T3) => A3 - a3 * 0.5 ** (t3 / T3)),
+          makeFn(args, (A2, a2, t2, T2) => A2 - a2 * 0.5 ** (t2 / T2)),
           makeLatex(args, "@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}", $, "::::")
         ];
       },
-      AkN(A2 = "A", k2 = "k", N2 = "N", $ = "***") {
-        let args = [A2, k2, N2];
+      AkN(A = "A", k = "k", N = "N", $ = "***") {
+        let args = [A, k, N];
         return [
-          makeFn(args, (A3, k3, N3) => A3 - k3 * N3),
+          makeFn(args, (A2, k2, N2) => A2 - k2 * N2),
           makeLatex(args, "@=@@", $, ":||")
         ];
       },
-      kTln2(k2 = "k", T2 = "T", $ = "**") {
-        let args = [k2, T2];
+      kTln2(k = "k", T = "T", $ = "**") {
+        let args = [k, T];
         return [
-          makeFn(args, (k3, T3) => k3 * T3 - Math.log(2)),
+          makeFn(args, (k2, T2) => k2 * T2 - Math.log(2)),
           makeLatex(args, "@@=\\ln2", $, "||")
         ];
       },
-      Emc2(E2 = "E", m3 = "m", $ = "**") {
-        let args = [E2, m3];
+      Emc2(E = "E", m2 = "m", $ = "**") {
+        let args = [E, m2];
         return [
-          makeFn(args, (E3, m4) => E3 - m4 * PhyConst.c ** 2),
+          makeFn(args, (E2, m3) => E2 - m3 * PhyConst.c ** 2),
           makeLatex(args, "@=@c^2", $, ":|")
         ];
       }
@@ -16849,17 +16849,17 @@
       return true;
     if (num2 % 2 === 0)
       return false;
-    for (let i2 = 3; i2 <= Math.sqrt(num2) + 1; i2 = i2 + 2) {
-      if (num2 % i2 === 0)
+    for (let i = 3; i <= Math.sqrt(num2) + 1; i = i + 2) {
+      if (num2 % i === 0)
         return false;
     }
     return true;
   }
   function primes2(max) {
     let arr = [];
-    for (let i2 = 2; i2 <= max; i2++) {
-      if (isPrime2(i2))
-        arr.push(i2);
+    for (let i = 2; i <= max; i++) {
+      if (isPrime2(i))
+        arr.push(i);
     }
     return arr;
   }
@@ -16870,15 +16870,15 @@
     return rndInt(0, array2.length - 1);
   }
   function draw(array2) {
-    let i2 = randomIndex(array2);
-    return array2[i2];
+    let i = randomIndex(array2);
+    return array2[i];
   }
 
   // ../packages/fate/lib/src/poker.js
   function error2(msg) {
-    const e6 = new Error(msg);
-    e6.name = "PokerError";
-    return e6;
+    const e5 = new Error(msg);
+    e5.name = "PokerError";
+    return e5;
   }
   function integer(min, max) {
     min = Math.ceil(min);
@@ -16910,9 +16910,9 @@
 
   // ../packages/fate/lib/src/dice.js
   function error3(msg) {
-    const e6 = new Error(msg);
-    e6.name = "DiceError";
-    return e6;
+    const e5 = new Error(msg);
+    e5.name = "DiceError";
+    return e5;
   }
   var Dice = class {
     constructor(func) {
@@ -16962,14 +16962,14 @@
       const genRandomCohort = () => {
         let arr = [];
         let mappeds = [];
-        for (let i2 = 0; i2 < this.uniques.length; i2++) {
+        for (let i = 0; i < this.uniques.length; i++) {
           mappeds.push([]);
         }
         const pushMap = (itemMap) => {
-          mappeds.forEach((mapped, i2) => mapped.push(itemMap[i2]));
+          mappeds.forEach((mapped, i) => mapped.push(itemMap[i]));
         };
         const mapInclude = (itemMap) => {
-          return mappeds.some((mapped, i2) => mapped.includes(itemMap[i2]));
+          return mappeds.some((mapped, i) => mapped.includes(itemMap[i]));
         };
         const someEqual = (item) => {
           return this.distincts.some((equal2) => arr.some(($) => equal2($, item)));
@@ -17009,29 +17009,29 @@
     static RndN(min, max) {
       return poker_exports.integer(min, max);
     }
-    static RndNs(min, max, n2 = 10) {
-      n2 = Math.min(Math.floor(max - min + 1), n2);
-      return dice(() => RndN(min, max)).unique().rolls(n2);
+    static RndNs(min, max, n = 10) {
+      n = Math.min(Math.floor(max - min + 1), n);
+      return dice(() => RndN(min, max)).unique().rolls(n);
     }
     static RndR(min, max) {
       return poker_exports.real(min, max);
     }
-    static RndRs(min, max, n2 = 10) {
-      return dice(() => RndR(min, max)).unique().rolls(n2);
+    static RndRs(min, max, n = 10) {
+      return dice(() => RndR(min, max)).unique().rolls(n);
     }
     static RndQ(largest = 9, range2) {
-      let L2 = Math.abs(largest);
+      let L = Math.abs(largest);
       let sign = largest > 0 ? 1 : RndU();
-      let f3 = () => RndN(1, L2) / RndN(2, L2) * sign;
-      let d2 = dice(f3).shield((_) => owl.dec(_));
+      let f2 = () => RndN(1, L) / RndN(2, L) * sign;
+      let d = dice(f2).shield((_) => owl.dec(_));
       if (range2) {
-        d2.shield((_) => _ >= range2[0]).shield((_) => _ <= range2[1]);
+        d.shield((_) => _ >= range2[0]).shield((_) => _ <= range2[1]);
       }
-      return d2.roll();
+      return d.roll();
     }
-    static RndQs(largest = 9, range2, n2 = 10) {
-      n2 = Math.min(Math.abs(largest) + 1, n2);
-      return dice(() => RndQ(largest, range2)).unique().rolls(n2);
+    static RndQs(largest = 9, range2, n = 10) {
+      n = Math.min(Math.abs(largest) + 1, n);
+      return dice(() => RndQ(largest, range2)).unique().rolls(n);
     }
     static RndU() {
       return list(1, -1).draw();
@@ -17042,9 +17042,9 @@
     static RndZ(min, max) {
       return RndN(min, max) * RndU();
     }
-    static RndZs(min, max, n2 = 10) {
-      n2 = Math.min(Math.floor(max - min + 1), n2);
-      return dice(() => RndN(min, max)).unique().rolls(n2).map((x2) => x2 * RndU());
+    static RndZs(min, max, n = 10) {
+      n = Math.min(Math.floor(max - min + 1), n);
+      return dice(() => RndN(min, max)).unique().rolls(n).map((x) => x * RndU());
     }
     static RndP(max) {
       return poker_exports.prime(2, max);
@@ -17060,20 +17060,20 @@
       return 2 * RndN(min, max);
     }
     static RndPoly(...coeff) {
-      let arr = coeff.map((x2) => RndZ(1, x2));
+      let arr = coeff.map((x) => RndZ(1, x));
       arr[0] = Math.abs(arr[0]);
       return arr;
     }
     static RndPyth(max = 100) {
       let arr = [];
-      for (let m3 = 1; m3 < 10; m3++) {
-        for (let n2 = 1; n2 < m3; n2++) {
-          for (let k2 = 1; k2 < 10; k2++) {
-            let a2 = m3 * m3 - n2 * n2;
-            let b2 = 2 * m3 * n2;
-            let c3 = m3 * m3 + n2 * n2;
-            if (c3 <= max)
-              arr.push([a2, b2, c3]);
+      for (let m2 = 1; m2 < 10; m2++) {
+        for (let n = 1; n < m2; n++) {
+          for (let k = 1; k < 10; k++) {
+            let a = m2 * m2 - n * n;
+            let b = 2 * m2 * n;
+            let c2 = m2 * m2 + n * n;
+            if (c2 <= max)
+              arr.push([a, b, c2]);
           }
         }
       }
@@ -17086,30 +17086,30 @@
         yRange = [-yRange, yRange];
       let [x1, x2] = xRange;
       let [y1, y2] = yRange;
-      let f3 = () => [RndN(x1, x2), RndN(y1, y2)];
-      return dice(f3).shield(([x3, y3]) => x3 !== 0).shield(([x3, y3]) => y3 !== 0).shield(([x3, y3]) => x3 !== y3).roll();
+      let f2 = () => [RndN(x1, x2), RndN(y1, y2)];
+      return dice(f2).shield(([x, y]) => x !== 0).shield(([x, y]) => y !== 0).shield(([x, y]) => x !== y).roll();
     }
-    static RndPoints(xRange, yRange = xRange, n2 = 10) {
-      return dice(() => RndPoint(xRange, yRange)).unique(([x2, y2]) => x2).unique(([x2, y2]) => y2).coherent(($) => toList($).combinations(3).every(([A2, B2, C2]) => Slope(A2, B2) !== Slope(B2, C2))).rolls(n2);
+    static RndPoints(xRange, yRange = xRange, n = 10) {
+      return dice(() => RndPoint(xRange, yRange)).unique(([x, y]) => x).unique(([x, y]) => y).coherent(($) => toList($).combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C))).rolls(n);
     }
-    static RndAngles(n2, separation) {
-      let angles = dice(() => RndN(0, 360)).coherent((angles2) => toNumbers(angles2).gapsMod(360).min() > separation).unique().rolls(n2);
+    static RndAngles(n, separation) {
+      let angles = dice(() => RndN(0, 360)).coherent((angles2) => toNumbers(angles2).gapsMod(360).min() > separation).unique().rolls(n);
       return [...toList(angles).ascending()];
     }
-    static RndOnCircle(n2, separation) {
-      let t2 = RndN(0, 360);
-      return RndAngles(n2, separation).map(($) => OnCircle($ + t2));
+    static RndOnCircle(n, separation) {
+      let t = RndN(0, 360);
+      return RndAngles(n, separation).map(($) => OnCircle($ + t));
     }
-    static RndConvexPolygon(n2, center, radius, separation) {
-      let [h2, k2] = center;
-      let r3 = radius;
-      let angles = RndAngles(n2, separation);
-      let vertices = angles.map((a2) => [h2 + r3 * cos(a2), k2 + r3 * sin(a2)]);
-      vertices = vertices.map(([x2, y2]) => [Fix(x2), Fix(y2)]);
+    static RndConvexPolygon(n, center, radius, separation) {
+      let [h, k] = center;
+      let r2 = radius;
+      let angles = RndAngles(n, separation);
+      let vertices = angles.map((a) => [h + r2 * cos(a), k + r2 * sin(a)]);
+      vertices = vertices.map(([x, y]) => [Fix(x), Fix(y)]);
       return vertices;
     }
-    static RndData(min, max, n2) {
-      let data2 = dice(() => RndN(min, max)).coherent((d2) => toData(d2).isSingleMode()).rolls(n2);
+    static RndData(min, max, n) {
+      let data2 = dice(() => RndN(min, max)).coherent((d) => toData(d).isSingleMode()).rolls(n);
       return toList(data2).ascending();
     }
     static RndTriangle(xRange, yRange, {
@@ -17121,63 +17121,63 @@
       let [x1, x2] = xRange;
       let [y1, y2] = yRange;
       let arr = [];
-      for (let i2 = x1; i2 <= x2; i2++) {
-        for (let j2 = y1; j2 <= y2; j2++) {
-          arr.push([i2, j2]);
+      for (let i = x1; i <= x2; i++) {
+        for (let j = y1; j <= y2; j++) {
+          arr.push([i, j]);
         }
       }
       arr = RndShuffle(...arr);
-      for (let i2 = 0; i2 < arr.length; i2++) {
-        for (let j2 = i2 + 1; j2 < arr.length; j2++) {
-          for (let k2 = j2 + 1; k2 < arr.length; k2++) {
-            let A2 = arr[i2];
-            let B2 = arr[j2];
-            let C2 = arr[k2];
-            if (A2[0] === B2[0])
+      for (let i = 0; i < arr.length; i++) {
+        for (let j = i + 1; j < arr.length; j++) {
+          for (let k = j + 1; k < arr.length; k++) {
+            let A = arr[i];
+            let B = arr[j];
+            let C = arr[k];
+            if (A[0] === B[0])
               continue;
-            if (B2[0] === C2[0])
+            if (B[0] === C[0])
               continue;
-            if (C2[0] === A2[0])
+            if (C[0] === A[0])
               continue;
-            if (A2[1] === B2[1])
+            if (A[1] === B[1])
               continue;
-            if (B2[1] === C2[1])
+            if (B[1] === C[1])
               continue;
-            if (C2[1] === A2[1])
+            if (C[1] === A[1])
               continue;
-            if (Slope(A2, B2) === Slope(B2, C2))
+            if (Slope(A, B) === Slope(B, C))
               continue;
-            let A_ = Angle(C2, A2, B2);
-            let B_ = Angle(A2, B2, C2);
-            let C_ = Angle(B2, C2, A2);
+            let A_ = Angle(C, A, B);
+            let B_ = Angle(A, B, C);
+            let C_ = Angle(B, C, A);
             let smallestAngle = Min(A_, B_, C_);
             let largestAngle = Max(A_, B_, C_);
             if (smallestAngle < minAngle)
               continue;
             if (largestAngle > maxAngle)
               continue;
-            if (Distance(A2, B2) < minLength)
+            if (Distance(A, B) < minLength)
               continue;
-            if (Distance(B2, C2) < minLength)
+            if (Distance(B, C) < minLength)
               continue;
-            if (Distance(C2, A2) < minLength)
+            if (Distance(C, A) < minLength)
               continue;
             if (obtuse && largestAngle <= 90)
               continue;
-            return [A2, B2, C2];
+            return [A, B, C];
           }
         }
       }
       throw "RndTriangle fail to find a suitable triangle.";
     }
     static RndTrigValue(func, angle2) {
-      let trig2 = (funcName, q2) => {
+      let trig2 = (funcName, q) => {
         if (funcName === "sin")
-          return sin(q2);
+          return sin(q);
         if (funcName === "cos")
-          return cos(q2);
+          return cos(q);
         if (funcName === "tan")
-          return tan(q2);
+          return tan(q);
         throw "never";
       };
       let atrig = (funcName, val2) => {
@@ -17189,19 +17189,19 @@
           return arctan(val2);
         throw "never";
       };
-      let v3 = trig2(func, angle2);
+      let v2 = trig2(func, angle2);
       angle2 = atrig(func, Abs(trig2(func, angle2)));
       angle2 = cal.blur(angle2);
       let arr = [];
-      for (let f3 of ["sin", "cos", "tan"]) {
-        for (let a2 of [0, 90, 180, 270, 360]) {
-          for (let s3 of [angle2, -angle2]) {
-            if (a2 === 360 && s3 > 0)
+      for (let f2 of ["sin", "cos", "tan"]) {
+        for (let a of [0, 90, 180, 270, 360]) {
+          for (let s2 of [angle2, -angle2]) {
+            if (a === 360 && s2 > 0)
               continue;
-            if (a2 === 0 && s3 < 0)
+            if (a === 0 && s2 < 0)
               continue;
-            if (cal.eq(trig2(f3, a2 + s3), v3))
-              arr.push([f3, a2 + s3]);
+            if (cal.eq(trig2(f2, a + s2), v2))
+              arr.push([f2, a + s2]);
           }
         }
       }
@@ -17217,31 +17217,31 @@
           return tan(angle2);
         throw "never";
       };
-      let v3 = 0;
+      let v2 = 0;
       if (result === "sin")
-        v3 = sin(1);
+        v2 = sin(1);
       if (result === "-sin")
-        v3 = -sin(1);
+        v2 = -sin(1);
       if (result === "cos")
-        v3 = cos(1);
+        v2 = cos(1);
       if (result === "-cos")
-        v3 = -cos(1);
+        v2 = -cos(1);
       if (result === "tan")
-        v3 = tan(1);
+        v2 = tan(1);
       if (result === "-tan")
-        v3 = -tan(1);
+        v2 = -tan(1);
       if (result === "1/tan")
-        v3 = 1 / tan(1);
+        v2 = 1 / tan(1);
       if (result === "-1/tan")
-        v3 = -1 / tan(1);
+        v2 = -1 / tan(1);
       let arr = [];
-      for (let f3 of ["sin", "cos", "tan"]) {
-        for (let a2 of [90, 180, 270, 360]) {
-          for (let s3 of [1, -1]) {
-            if (a2 === 360 && s3 > 0)
+      for (let f2 of ["sin", "cos", "tan"]) {
+        for (let a of [90, 180, 270, 360]) {
+          for (let s2 of [1, -1]) {
+            if (a === 360 && s2 > 0)
               continue;
-            if (cal.eq(trig2(f3, a2 + s3), v3))
-              arr.push([f3, a2, s3, label]);
+            if (cal.eq(trig2(f2, a + s2), v2))
+              arr.push([f2, a, s2, label]);
           }
         }
       }
@@ -17249,13 +17249,13 @@
     }
     static RndPointPolar() {
       let angle2 = RndPick(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330);
-      let a2 = RndEven(2, 6);
-      let b2 = RndPick(1, 2, 3);
-      let r3 = a2 * Math.sqrt(b2);
-      return PolToRect([r3, angle2]);
+      let a = RndEven(2, 6);
+      let b = RndPick(1, 2, 3);
+      let r2 = a * Math.sqrt(b);
+      return PolToRect([r2, angle2]);
     }
-    static RndRatio(min, max, n2 = 10) {
-      let nums = RndNs(min, max, n2);
+    static RndRatio(min, max, n = 10) {
+      let nums = RndNs(min, max, n);
       return toNumbers(nums).ratio();
     }
   };
@@ -17386,138 +17386,138 @@
     }
     static RndShakeN(anchor) {
       anchor = cal.blur(anchor);
-      let a2 = Abs(anchor);
-      let s3 = Sign(anchor);
-      let f3;
+      let a = Abs(anchor);
+      let s2 = Sign(anchor);
+      let f2;
       if (anchor === 0) {
-        f3 = () => RndN(1, 3);
+        f2 = () => RndN(1, 3);
       } else {
-        let range2 = Max(3, a2 * 0.1);
-        let max = Min(Floor(a2 + range2), cal.logCeil(a2) - 1);
-        let min = Max(Ceil(a2 - range2), 1, cal.logFloor(a2));
-        f3 = () => RndN(min, max) * s3;
+        let range2 = Max(3, a * 0.1);
+        let max = Min(Floor(a + range2), cal.logCeil(a) - 1);
+        let min = Max(Ceil(a - range2), 1, cal.logFloor(a));
+        f2 = () => RndN(min, max) * s2;
       }
-      return dice(f3).shield((x2) => x2 !== anchor).unique().rolls(3);
+      return dice(f2).shield((x) => x !== anchor).unique().rolls(3);
     }
     static RndShakeR(anchor) {
       let exp = cal.e(anchor);
-      let m3 = cal.blur(cal.mantissa(anchor));
-      if (IsInteger(m3))
-        return RndShakeN(m3).map((x2) => Number(x2 + "e" + exp));
-      let dp2 = cal.dp(m3);
-      return dice(() => Fix(m3 * (1 + RndR(0, 0.5) * RndU()), dp2)).shield((x2) => x2 * m3 > 0).shield((x2) => cal.e(x2) === cal.e(m3)).shield((x2) => x2 !== m3).unique().rolls(3).map((x2) => Number(x2 + "e" + exp));
+      let m2 = cal.blur(cal.mantissa(anchor));
+      if (IsInteger(m2))
+        return RndShakeN(m2).map((x) => Number(x + "e" + exp));
+      let dp2 = cal.dp(m2);
+      return dice(() => Fix(m2 * (1 + RndR(0, 0.5) * RndU()), dp2)).shield((x) => x * m2 > 0).shield((x) => cal.e(x) === cal.e(m2)).shield((x) => x !== m2).unique().rolls(3).map((x) => Number(x + "e" + exp));
     }
     static RndShakeQ(anchor) {
       if (owl.int(anchor))
         return RndShakeN(anchor);
-      let [p3, q2] = ToFrac(anchor);
-      [p3, q2] = [p3, q2].map(cal.blur);
-      Should(IsInteger(p3, q2), "input should be integral fraction");
+      let [p2, q] = ToFrac(anchor);
+      [p2, q] = [p2, q].map(cal.blur);
+      Should(IsInteger(p2, q), "input should be integral fraction");
       return dice(() => {
-        const h2 = RndShakeN(p3)[0];
-        const k2 = RndShakeN(q2)[0];
-        let a2 = RndR(0, 1) < 1 / Math.abs(p3) ? p3 : h2;
-        let b2 = RndR(0, 1) < 1 / Math.abs(q2) ? q2 : k2;
-        if (a2 === p3 && b2 === q2)
-          return [h2, k2];
-        return [a2, b2];
-      }).shield(([a2, b2]) => AreCoprime(a2, b2)).shield(([a2, b2]) => a2 !== 0).shield(([a2, b2]) => b2 !== 0).shield(([a2, b2]) => b2 !== 1).shield(([a2, b2]) => b2 !== 1).shield(([a2, b2]) => IsProbability(p3 / q2) ? IsProbability(a2 / b2) : true).unique(([p4, q3]) => p4 / q3).rolls(3).map(([p4, q3]) => p4 / q3);
+        const h = RndShakeN(p2)[0];
+        const k = RndShakeN(q)[0];
+        let a = RndR(0, 1) < 1 / Math.abs(p2) ? p2 : h;
+        let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k;
+        if (a === p2 && b === q)
+          return [h, k];
+        return [a, b];
+      }).shield(([a, b]) => AreCoprime(a, b)).shield(([a, b]) => a !== 0).shield(([a, b]) => b !== 0).shield(([a, b]) => b !== 1).shield(([a, b]) => b !== 1).shield(([a, b]) => IsProbability(p2 / q) ? IsProbability(a / b) : true).unique(([p3, q2]) => p3 / q2).rolls(3).map(([p3, q2]) => p3 / q2);
     }
     static RndShakeIneq(anchor) {
-      let i2 = ineq(anchor);
-      let me = i2.print();
-      let flip = i2.flip();
+      let i = ineq(anchor);
+      let me = i.print();
+      let flip = i.flip();
       return list(me, flip, flip).shuffled();
     }
     static RndShakePoint(anchor) {
-      let [x2, y2] = anchor;
+      let [x, y] = anchor;
       let func = () => {
-        const h2 = IsInteger(x2) ? RndShakeN(x2)[0] : RndShakeR(x2)[0];
-        const k2 = IsInteger(y2) ? RndShakeN(y2)[0] : RndShakeR(y2)[0];
-        return [h2, k2];
+        const h = IsInteger(x) ? RndShakeN(x)[0] : RndShakeR(x)[0];
+        const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0];
+        return [h, k];
       };
-      return dice(func).unique(([x3, y3]) => x3).unique(([x3, y3]) => y3).rolls(3);
+      return dice(func).unique(([x2, y2]) => x2).unique(([x2, y2]) => y2).rolls(3);
     }
     static RndShakeCombo(anchor) {
-      let [a2, b2, c3] = anchor;
+      let [a, b, c2] = anchor;
       let func = () => {
         return [
-          RndT() ? a2 : !a2,
-          RndT() ? b2 : !b2,
-          RndT() ? c3 : !c3
+          RndT() ? a : !a,
+          RndT() ? b : !b,
+          RndT() ? c2 : !c2
         ];
       };
       let diff = (bools) => {
         return bools.some(($) => $) && bools.some(($) => !$);
       };
-      return dice(func).unique().coherent((all) => diff([a2, ...all.map(($) => $[0])])).coherent((all) => diff([b2, ...all.map(($) => $[1])])).coherent((all) => diff([c3, ...all.map(($) => $[2])])).rolls(3);
+      return dice(func).unique().coherent((all) => diff([a, ...all.map(($) => $[0])])).coherent((all) => diff([b, ...all.map(($) => $[1])])).coherent((all) => diff([c2, ...all.map(($) => $[2])])).rolls(3);
     }
     static RndShakeTrig(anchor) {
       return [...list("sin", "cos", "tan").draws(3)];
     }
     static RndShakeTrigValue(anchor) {
-      return RndShakeTrig(anchor[0]).map((x2) => [x2, anchor[1]]);
+      return RndShakeTrig(anchor[0]).map((x) => [x, anchor[1]]);
     }
     static RndShakeRatio(anchor) {
       anchor = [...toNumbers(anchor).ratio()];
       let func = () => {
-        return anchor.map((x2) => RndR(0, 1) < 1 / (Math.abs(x2) + 1) ? x2 : RndShakeN(x2)[0]);
+        return anchor.map((x) => RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0]);
       };
-      return dice(func).shield((r3) => toNumbers(r3).hcf() === 1).shield((r3) => AreDifferent(anchor, r3)).unique().rolls(3);
+      return dice(func).shield((r2) => toNumbers(r2).hcf() === 1).shield((r2) => AreDifferent(anchor, r2)).unique().rolls(3);
     }
     static RndShakeBase(anchor) {
       let [num2, base2] = anchor.split("_");
       base2 = base2.replace("{", "").replace("}", "");
       let digits = "0123456789ABCDEF".substring(0, Number(base2)).split("");
-      function shake(d2) {
-        let x2 = digits.indexOf(d2) + RndU();
-        if (x2 < 0)
-          x2 = 0;
-        if (x2 > digits.length - 1)
-          x2 = digits.length - 1;
-        return digits[x2];
+      function shake(d) {
+        let x = digits.indexOf(d) + RndU();
+        if (x < 0)
+          x = 0;
+        if (x > digits.length - 1)
+          x = digits.length - 1;
+        return digits[x];
       }
       function mutate(str3) {
-        let s3 = [];
+        let s2 = [];
         let nonzero = str3.split("").filter((_) => _ !== "0").length;
-        for (let d2 of str3.split("")) {
-          if (d2 === "0") {
+        for (let d of str3.split("")) {
+          if (d === "0") {
             let go = poker_exports.bool(0.1);
-            s3.push(go ? toList(digits).draw() : "0");
+            s2.push(go ? toList(digits).draw() : "0");
           } else {
             let go = poker_exports.bool(1 / (nonzero + 2));
-            s3.push(go ? shake(d2) : d2);
+            s2.push(go ? shake(d) : d);
           }
         }
-        let T2 = s3.join("");
+        let T = s2.join("");
         if (poker_exports.bool(0.2))
-          T2 += "0";
-        return T2;
+          T += "0";
+        return T;
       }
       function dress2(str3) {
         str3 = str3.replace(/^0+/, "");
         return str3 + "_{" + base2 + "}";
       }
-      let f3 = () => {
+      let f2 = () => {
         let middle = Math.ceil(num2.length / 2);
         let s1 = num2.slice(0, middle);
-        let s22 = num2.slice(middle);
+        let s2 = num2.slice(middle);
         let t1 = mutate(s1);
-        let t2 = mutate(s22);
+        let t2 = mutate(s2);
         let B1 = dress2(s1 + t2);
-        let B2 = dress2(t1 + s22);
+        let B2 = dress2(t1 + s2);
         let B3 = dress2(t1 + t2);
         return [B1, B2, B3];
       };
-      return dice(f3).shield((_) => toList([num2, ..._]).dupless()).roll();
+      return dice(f2).shield((_) => toList([num2, ..._]).dupless()).roll();
     }
     static RndShakePointPolar(anchor) {
       let [r1, q1] = RectToPol(anchor);
-      let [a2, b2] = cal.toSurd(r1);
-      let r22 = b2 === 1 ? a2 * Math.sqrt(RndPick(2, 3)) : a2;
+      let [a, b] = cal.toSurd(r1);
+      let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a;
       let angles = list(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330);
       let q2 = angles.except([q1]).draw();
-      return RndShuffle([r1, q2], [r22, q1], [r22, q2]).map(($) => PolToRect($));
+      return RndShuffle([r1, q2], [r2, q1], [r2, q2]).map(($) => PolToRect($));
     }
     static RndShakeConstraint(anchor) {
       let flip = rein(anchor).flip().constraint;
@@ -17588,11 +17588,11 @@
     static RndShuffle(...items) {
       return [...toList(items).shuffled()];
     }
-    static RndPickN(items, n2) {
-      return [...toList(items).sample(n2)];
+    static RndPickN(items, n) {
+      return [...toList(items).sample(n)];
     }
-    static RndPickUnique(items, n2) {
-      return [...toList(items).uniqueDeep().sample(n2)];
+    static RndPickUnique(items, n) {
+      return [...toList(items).uniqueDeep().sample(n)];
     }
     static RndHe() {
       return poker_exports.he();
@@ -17636,7 +17636,7 @@
         return true;
       if (!IsNonZero(...nums))
         return true;
-      return toList(nums).pairs().every(([a2, b2]) => HCF(a2, b2) === 1);
+      return toList(nums).pairs().every(([a, b]) => HCF(a, b) === 1);
     }
     static AreDistantPoint(distance) {
       let AreDistant = function(...points) {
@@ -17646,7 +17646,7 @@
     }
     static AreOblique(minAngle) {
       let areOblique = function(...slopes) {
-        return toList(slopes).pairs().every(([a2, b2]) => IntersectAngle(a2, b2) >= minAngle);
+        return toList(slopes).pairs().every(([a, b]) => IntersectAngle(a, b) >= minAngle);
       };
       return check(areOblique, [owl.num]);
     }
@@ -17682,49 +17682,49 @@
     static ListIntegers(start, end) {
       return cal.range(start, end);
     }
-    static ASterm(a2, d2, n2) {
-      return a2 + (n2 - 1) * d2;
+    static ASterm(a, d, n) {
+      return a + (n - 1) * d;
     }
-    static ASsum(a2, d2, n2) {
-      return 0.5 * n2 * (2 * a2 + (n2 - 1) * d2);
+    static ASsum(a, d, n) {
+      return 0.5 * n * (2 * a + (n - 1) * d);
     }
-    static ASequence(a2, d2, n2 = 10) {
+    static ASequence(a, d, n = 10) {
       let arr = [];
-      for (let i2 = 1; i2 <= n2; i2++) {
-        arr.push(ASterm(a2, d2, i2));
+      for (let i = 1; i <= n; i++) {
+        arr.push(ASterm(a, d, i));
       }
       return arr;
     }
-    static GSterm(a2, r3, n2) {
-      return a2 * r3 ** (n2 - 1);
+    static GSterm(a, r2, n) {
+      return a * r2 ** (n - 1);
     }
-    static GSsum(a2, r3, n2 = -1) {
-      return n2 > 0 ? a2 * (r3 ** n2 - 1) / (r3 - 1) : a2 / (1 - r3);
+    static GSsum(a, r2, n = -1) {
+      return n > 0 ? a * (r2 ** n - 1) / (r2 - 1) : a / (1 - r2);
     }
-    static GSequence(a2, r3, n2 = 10) {
+    static GSequence(a, r2, n = 10) {
       let arr = [];
-      for (let i2 = 1; i2 <= n2; i2++) {
-        arr.push(GSterm(a2, r3, i2));
+      for (let i = 1; i <= n; i++) {
+        arr.push(GSterm(a, r2, i));
       }
       return arr;
     }
-    static QuadraticSequence(a2, p3, q2, n2) {
-      let c3 = a2;
-      for (let i2 = 2; i2 <= n2; i2++) {
-        c3 += p3 * (i2 - 1) + q2;
+    static QuadraticSequence(a, p2, q, n) {
+      let c2 = a;
+      for (let i = 2; i <= n; i++) {
+        c2 += p2 * (i - 1) + q;
       }
-      return c3;
+      return c2;
     }
-    static LucasSequence(first, second, p3, q2, n2) {
-      if (n2 === 1)
+    static LucasSequence(first, second, p2, q, n) {
+      if (n === 1)
         return first;
-      if (n2 === 2)
+      if (n === 2)
         return second;
-      let S2 = [first, second];
-      for (let i2 = 3; i2 <= n2; i2++) {
-        S2.push(p3 * S2[i2 - 2] + q2 * S2[i2 - 3]);
+      let S = [first, second];
+      for (let i = 3; i <= n; i++) {
+        S.push(p2 * S[i - 2] + q * S[i - 3]);
       }
-      return S2[n2 - 1];
+      return S[n - 1];
     }
   };
   __decorateClass([
@@ -17771,10 +17771,10 @@
       return Math.max(...nums);
     }
     static Sort(...nums) {
-      return [...nums].sort((a2, b2) => a2 - b2);
+      return [...nums].sort((a, b) => a - b);
     }
     static SortBy(items, valueFunc) {
-      return [...items].sort((a2, b2) => valueFunc(a2) - valueFunc(b2));
+      return [...items].sort((a, b) => valueFunc(a) - valueFunc(b));
     }
     static Sum(...nums) {
       return toData(nums).sum();
@@ -17831,27 +17831,27 @@
       let ls = toList(data2);
       nums ??= ListRange(...data2);
       let arr = [];
-      for (let v3 of nums) {
-        arr.push(ls.freq(v3));
+      for (let v2 of nums) {
+        arr.push(ls.freq(v2));
       }
       return arr;
     }
     static DataFromFreqs(values, frequencies) {
       Should(values.length === frequencies.length, "values and frequencies must be the same length");
       let data2 = [];
-      for (let i2 = 0; i2 < values.length; i2++) {
-        data2.push(...Array(frequencies[i2]).fill(values[i2]));
+      for (let i = 0; i < values.length; i++) {
+        data2.push(...Array(frequencies[i]).fill(values[i]));
       }
       return data2;
     }
     static Summary(...data2) {
-      let d2 = toData(data2);
+      let d = toData(data2);
       return [
-        d2.min(),
-        d2.lowerQuartile(),
-        d2.median(),
-        d2.upperQuartile(),
-        d2.max()
+        d.min(),
+        d.lowerQuartile(),
+        d.median(),
+        d.upperQuartile(),
+        d.max()
       ];
     }
   };
@@ -17938,14 +17938,14 @@
   // src/Math/Code/Text.ts
   var Host14 = class {
     static GrammarJoin(...items) {
-      let L2 = items.length;
-      if (L2 === 0)
+      let L = items.length;
+      if (L === 0)
         return "";
-      if (L2 === 1)
+      if (L === 1)
         return String(items[0]);
       let arr = [];
-      for (let i2 = 0; i2 < L2 - 1; i2++) {
-        arr.push(items[i2]);
+      for (let i = 0; i < L - 1; i++) {
+        arr.push(items[i]);
       }
       return arr.join(", ") + " and " + items[items.length - 1];
     }
@@ -17971,20 +17971,20 @@
       return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}");
     }
     static Coord(point, dp2 = 1) {
-      let [a2, b2] = point.map((_) => cal.blur(_));
-      a2 = Fix(a2, dp2);
-      b2 = Fix(b2, dp2);
-      return "(" + a2 + ", " + b2 + ")";
+      let [a, b] = point.map((_) => cal.blur(_));
+      a = Fix(a, dp2);
+      b = Fix(b, dp2);
+      return "(" + a + ", " + b + ")";
     }
     static Sci(num2) {
       if (num2 === 0)
         return "0";
-      let m3 = cal.e(cal.blur(num2));
-      if (m3 === 0)
+      let m2 = cal.e(cal.blur(num2));
+      if (m2 === 0)
         return num2.toString();
-      num2 = num2 / 10 ** m3;
+      num2 = num2 / 10 ** m2;
       num2 = cal.blur(num2);
-      return num2.toString() + " \\times 10^{ " + m3 + "}";
+      return num2.toString() + " \\times 10^{ " + m2 + "}";
     }
     static LongDivision(dividend, divisor) {
       dividend = dividend.reverse();
@@ -17998,9 +17998,9 @@
       }
       function printSolid(poly) {
         let arr = [];
-        poly.forEach((v3, i2) => {
-          if (v3 !== null)
-            arr.push(v3 + xTerm(i2));
+        poly.forEach((v2, i) => {
+          if (v2 !== null)
+            arr.push(v2 + xTerm(i));
         });
         return arr.reverse().join("+");
       }
@@ -18009,14 +18009,14 @@
       }
       function printPhantom(poly) {
         let arr = [];
-        poly.forEach((v3, i2) => {
-          if (v3 === null)
-            arr.push(dividend[i2] + xTerm(i2));
+        poly.forEach((v2, i) => {
+          if (v2 === null)
+            arr.push(dividend[i] + xTerm(i));
         });
-        let T2 = arr.reverse().join("+");
-        if (T2.length === 0)
+        let T = arr.reverse().join("+");
+        if (T.length === 0)
           return "";
-        return "\\phantom{+" + T2 + "}";
+        return "\\phantom{+" + T + "}";
       }
       function writeSolid(poly) {
         return printSolid(poly) + printPhantom(poly);
@@ -18030,42 +18030,42 @@
         return t1 / t2;
       }
       function step(current, divisor2) {
-        let q2 = pushDivide(current, divisor2);
-        let under = divisor2.map((x2) => x2 * q2);
-        for (let i2 = 1; i2 <= current.length - divisor2.length; i2++)
+        let q = pushDivide(current, divisor2);
+        let under = divisor2.map((x) => x * q);
+        for (let i = 1; i <= current.length - divisor2.length; i++)
           under.unshift(null);
         let next = [];
-        for (let i2 = 0; i2 < current.length - 1; i2++)
-          next.push(current[i2] - Number(under[i2]));
+        for (let i = 0; i < current.length - 1; i++)
+          next.push(current[i] - Number(under[i]));
         let nextPrint = [...next].reverse();
-        for (let i2 = 0; i2 < nextPrint.length; i2++)
-          if (i2 > divisor2.length - 1)
-            nextPrint[i2] = null;
+        for (let i = 0; i < nextPrint.length; i++)
+          if (i > divisor2.length - 1)
+            nextPrint[i] = null;
         nextPrint.reverse();
-        return { next, nextPrint, under, q: q2 };
+        return { next, nextPrint, under, q };
       }
       function compose(dividend2, divisor2) {
-        let T2 = "\\begin{array}{r}";
-        T2 += "QUOTIENT \\\\";
-        T2 += writeSolid(divisor2);
-        T2 += "{\\overline{\\smash{\\big)}";
-        T2 += writeSolid(dividend2);
-        T2 += "}}\\\\";
+        let T = "\\begin{array}{r}";
+        T += "QUOTIENT \\\\";
+        T += writeSolid(divisor2);
+        T += "{\\overline{\\smash{\\big)}";
+        T += writeSolid(dividend2);
+        T += "}}\\\\";
         let current = dividend2;
         let quotient = [];
         while (true) {
-          let { next, nextPrint, under, q: q2 } = step(current, divisor2);
-          T2 += writeUnderline(under) + "\\\\";
-          T2 += writeSolid(nextPrint) + "\\\\";
+          let { next, nextPrint, under, q } = step(current, divisor2);
+          T += writeUnderline(under) + "\\\\";
+          T += writeSolid(nextPrint) + "\\\\";
           current = next;
-          quotient.push(q2);
+          quotient.push(q);
           if (current.length < divisor2.length)
             break;
         }
-        T2 += "\\end{array}";
+        T += "\\end{array}";
         quotient.reverse();
-        T2 = T2.replace("QUOTIENT", writeSolid(quotient));
-        return T2;
+        T = T.replace("QUOTIENT", writeSolid(quotient));
+        return T;
       }
       return compose(dividend, divisor);
     }
@@ -18073,63 +18073,63 @@
       return num2.toString(base2).toUpperCase() + "_{" + base2 + "}";
     }
     static PrimeFactorize(val2, { hcf = false, lcm = false, multiply = false }) {
-      let T2 = "\\begin{matrix} ";
+      let T = "\\begin{matrix} ";
       function add(variable, power) {
-        let s3 = multiply ? "& \\times &" : "&";
+        let s2 = multiply ? "& \\times &" : "&";
         if (power > 1) {
-          T2 += s3 + variable + "^{" + power + "}";
+          T += s2 + variable + "^{" + power + "}";
         } else if (power === 1) {
-          T2 += s3 + variable;
+          T += s2 + variable;
         } else {
-          T2 += multiply ? "& &" : " & ";
+          T += multiply ? "& &" : " & ";
         }
       }
       let keys = Object.keys(val2);
-      let n2 = val2[keys[0]].length;
-      for (let i2 = 0; i2 < n2; i2++) {
-        T2 += " & ";
+      let n = val2[keys[0]].length;
+      for (let i = 0; i < n; i++) {
+        T += " & ";
         if (keys.includes("number"))
-          T2 += " & " + val2.number[i2];
-        for (let k2 of keys) {
-          if (k2 === "number")
+          T += " & " + val2.number[i];
+        for (let k of keys) {
+          if (k === "number")
             continue;
-          add(k2, val2[k2][i2]);
+          add(k, val2[k][i]);
         }
-        T2 += " \\\\ ";
+        T += " \\\\ ";
       }
-      T2 += "\\hline";
+      T += "\\hline";
       if (hcf) {
-        T2 += " \\text{HCF} & = ";
+        T += " \\text{HCF} & = ";
         if (keys.includes("number"))
-          T2 += " & " + HCF(...val2.number);
-        for (let k2 of keys) {
-          if (k2 === "number")
+          T += " & " + HCF(...val2.number);
+        for (let k of keys) {
+          if (k === "number")
             continue;
-          add(k2, Min(...val2[k2]));
+          add(k, Min(...val2[k]));
         }
-        T2 += " \\\\ ";
+        T += " \\\\ ";
       }
       if (lcm) {
-        T2 += " \\text{LCM} & = ";
+        T += " \\text{LCM} & = ";
         if (keys.includes("number"))
-          T2 += " & " + LCM(...val2.number);
-        for (let k2 of keys) {
-          if (k2 === "number")
+          T += " & " + LCM(...val2.number);
+        for (let k of keys) {
+          if (k === "number")
             continue;
-          add(k2, Max(...val2[k2]));
+          add(k, Max(...val2[k]));
         }
-        T2 += " \\\\ ";
+        T += " \\\\ ";
       }
-      T2 += "\\end{matrix}";
-      return T2;
+      T += "\\end{matrix}";
+      return T;
     }
     static ConstraintText(constraint2, sign = true, xReplace = "x", yReplace = "y") {
       if (sign === false)
         constraint2 = rein(constraint2).flip().constraint;
-      let T2 = ink.printConstraint(constraint2, false, sign === null);
-      T2 = T2.replace(/x/g, xReplace);
-      T2 = T2.replace(/y/g, yReplace);
-      return T2;
+      let T = ink.printConstraint(constraint2, false, sign === null);
+      T = T.replace(/x/g, xReplace);
+      T = T.replace(/y/g, yReplace);
+      return T;
     }
   };
   __decorateClass([
@@ -18167,84 +18167,84 @@
   // src/Math/Code/Triangle.ts
   var angle = owl.between(0, 180);
   var side = owl.positive;
-  function triangle_ineq(a2, b2, c3) {
-    return owl.triangleSides([a2, b2, c3]);
+  function triangle_ineq(a, b, c2) {
+    return owl.triangleSides([a, b, c2]);
   }
   var Host15 = class {
-    static Pyth(a2, b2) {
-      return (a2 ** 2 + b2 ** 2) ** 0.5;
+    static Pyth(a, b) {
+      return (a ** 2 + b ** 2) ** 0.5;
     }
-    static PythLeg(c3, a2) {
-      return (c3 ** 2 - a2 ** 2) ** 0.5;
+    static PythLeg(c2, a) {
+      return (c2 ** 2 - a ** 2) ** 0.5;
     }
-    static CosineLawLength(a2, b2, C2) {
-      return (a2 ** 2 + b2 ** 2 - 2 * a2 * b2 * cos(C2)) ** 0.5;
+    static CosineLawLength(a, b, C) {
+      return (a ** 2 + b ** 2 - 2 * a * b * cos(C)) ** 0.5;
     }
-    static CosineLawAngle(a2, b2, c3) {
-      return arccos((c3 ** 2 - a2 ** 2 - b2 ** 2) / (-2 * a2 * b2));
+    static CosineLawAngle(a, b, c2) {
+      return arccos((c2 ** 2 - a ** 2 - b ** 2) / (-2 * a * b));
     }
-    static SineLawLength(A2, a2, B2) {
-      return a2 / sin(A2) * sin(B2);
+    static SineLawLength(A, a, B) {
+      return a / sin(A) * sin(B);
     }
-    static SineLawAngle(a2, A2, b2) {
-      return arcsin(sin(A2) / a2 * b2);
+    static SineLawAngle(a, A, b) {
+      return arcsin(sin(A) / a * b);
     }
-    static Heron(a2, b2, c3) {
-      let s3 = (a2 + b2 + c3) / 2;
-      return (s3 * (s3 - a2) * (s3 - b2) * (s3 - c3)) ** 0.5;
+    static Heron(a, b, c2) {
+      let s2 = (a + b + c2) / 2;
+      return (s2 * (s2 - a) * (s2 - b) * (s2 - c2)) ** 0.5;
     }
-    static SolveSSS(a2, b2, c3) {
-      let A2 = CosineLawAngle(b2, c3, a2);
-      let B2 = CosineLawAngle(c3, a2, b2);
-      let C2 = CosineLawAngle(a2, b2, c3);
-      return [C2, A2, B2];
+    static SolveSSS(a, b, c2) {
+      let A = CosineLawAngle(b, c2, a);
+      let B = CosineLawAngle(c2, a, b);
+      let C = CosineLawAngle(a, b, c2);
+      return [C, A, B];
     }
-    static SolveSAS(a2, C2, b2) {
-      let c3 = CosineLawLength(a2, b2, C2);
-      let [_, A2, B2] = SolveSSS(a2, b2, c3);
-      return [A2, c3, B2];
+    static SolveSAS(a, C, b) {
+      let c2 = CosineLawLength(a, b, C);
+      let [_, A, B] = SolveSSS(a, b, c2);
+      return [A, c2, B];
     }
-    static SolveAAS(A2, B2, a2) {
-      let C2 = 180 - A2 - B2;
-      let b2 = SineLawLength(A2, a2, B2);
-      let c3 = CosineLawLength(a2, b2, C2);
-      return [c3, C2, b2];
+    static SolveAAS(A, B, a) {
+      let C = 180 - A - B;
+      let b = SineLawLength(A, a, B);
+      let c2 = CosineLawLength(a, b, C);
+      return [c2, C, b];
     }
-    static SolveASA(A2, c3, B2) {
-      let C2 = 180 - A2 - B2;
-      let a2 = SineLawLength(C2, c3, A2);
-      let b2 = SineLawLength(C2, c3, B2);
-      return [a2, C2, b2];
+    static SolveASA(A, c2, B) {
+      let C = 180 - A - B;
+      let a = SineLawLength(C, c2, A);
+      let b = SineLawLength(C, c2, B);
+      return [a, C, b];
     }
-    static SolveSSA(a2, b2, A2) {
-      let B2 = SineLawAngle(a2, A2, b2);
-      let C2 = 180 - A2 - B2;
-      let c3 = SineLawLength(A2, a2, C2);
-      return [C2, c3, B2];
+    static SolveSSA(a, b, A) {
+      let B = SineLawAngle(a, A, b);
+      let C = 180 - A - B;
+      let c2 = SineLawLength(A, a, C);
+      return [C, c2, B];
     }
-    static HeightsBySSS(a2, b2, c3) {
-      let area = Heron(a2, b2, c3);
-      let Ha = 2 * area / a2;
-      let Hb = 2 * area / b2;
-      let Hc = 2 * area / c3;
+    static HeightsBySSS(a, b, c2) {
+      let area = Heron(a, b, c2);
+      let Ha = 2 * area / a;
+      let Hb = 2 * area / b;
+      let Hc = 2 * area / c2;
       return [Ha, Hb, Hc];
     }
-    static HeightBySSS(a2, b2, c3) {
-      let area = Heron(a2, b2, c3);
-      return 2 * area / a2;
+    static HeightBySSS(a, b, c2) {
+      let area = Heron(a, b, c2);
+      return 2 * area / a;
     }
-    static HeightsBySAS(a2, C2, b2) {
-      let [A2, c3, B2] = SolveSAS(a2, C2, b2);
-      return HeightsBySSS(a2, b2, c3);
+    static HeightsBySAS(a, C, b) {
+      let [A, c2, B] = SolveSAS(a, C, b);
+      return HeightsBySSS(a, b, c2);
     }
-    static HeightBySAS(a2, C2, b2) {
-      let [ha, hb, hc] = HeightsBySAS(a2, C2, b2);
+    static HeightBySAS(a, C, b) {
+      let [ha, hb, hc] = HeightsBySAS(a, C, b);
       return hc;
     }
-    static TriangleFromVertex(A2, B2, C2, fix2 = true) {
-      let sideC = Distance(A2, B2);
-      let sideA = Distance(B2, C2);
-      let sideB = Distance(C2, A2);
+    static TriangleFromVertex(A, B, C, fix2 = true) {
+      let sideC = Distance(A, B);
+      let sideA = Distance(B, C);
+      let sideB = Distance(C, A);
       let angleC = CosineLawAngle(sideA, sideB, sideC);
       let angleA = CosineLawAngle(sideB, sideC, sideA);
       let angleB = CosineLawAngle(sideA, sideC, sideB);
@@ -18259,65 +18259,65 @@
       return { sideC, angleB, sideA, angleC, sideB, angleA };
     }
     static SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }) {
-      let a2 = sideA;
-      let b2 = sideB;
-      let c3 = sideC;
-      let A2 = angleA;
-      let B2 = angleB;
-      let C2 = angleC;
-      if (a2 === null)
+      let a = sideA;
+      let b = sideB;
+      let c2 = sideC;
+      let A = angleA;
+      let B = angleB;
+      let C = angleC;
+      if (a === null)
         throw "SolveTriangle not accept null now";
-      if (b2 === null)
+      if (b === null)
         throw "SolveTriangle not accept null now";
-      if (c3 === null)
+      if (c2 === null)
         throw "SolveTriangle not accept null now";
-      if (A2 === null)
+      if (A === null)
         throw "SolveTriangle not accept null now";
-      if (B2 === null)
+      if (B === null)
         throw "SolveTriangle not accept null now";
-      if (C2 === null)
+      if (C === null)
         throw "SolveTriangle not accept null now";
       function angleSum() {
-        if (A2 === void 0 && B2 !== void 0 && C2 !== void 0)
-          A2 = 180 - B2 - C2;
-        if (B2 === void 0 && A2 !== void 0 && C2 !== void 0)
-          B2 = 180 - A2 - C2;
-        if (C2 === void 0 && B2 !== void 0 && A2 !== void 0)
-          C2 = 180 - A2 - B2;
+        if (A === void 0 && B !== void 0 && C !== void 0)
+          A = 180 - B - C;
+        if (B === void 0 && A !== void 0 && C !== void 0)
+          B = 180 - A - C;
+        if (C === void 0 && B !== void 0 && A !== void 0)
+          C = 180 - A - B;
       }
       function SSS() {
-        if (a2 !== void 0 && b2 !== void 0 && c3 !== void 0) {
-          A2 = CosineLawAngle(b2, c3, a2);
-          B2 = CosineLawAngle(c3, a2, b2);
-          C2 = CosineLawAngle(a2, b2, c3);
+        if (a !== void 0 && b !== void 0 && c2 !== void 0) {
+          A = CosineLawAngle(b, c2, a);
+          B = CosineLawAngle(c2, a, b);
+          C = CosineLawAngle(a, b, c2);
         }
       }
       function SAS() {
-        if (a2 !== void 0 && b2 !== void 0 && C2 !== void 0 && c3 === void 0)
-          c3 = CosineLawLength(a2, b2, C2);
-        if (b2 !== void 0 && c3 !== void 0 && A2 !== void 0 && a2 === void 0)
-          a2 = CosineLawLength(b2, c3, A2);
-        if (c3 !== void 0 && a2 !== void 0 && B2 !== void 0 && b2 === void 0)
-          b2 = CosineLawLength(c3, a2, B2);
+        if (a !== void 0 && b !== void 0 && C !== void 0 && c2 === void 0)
+          c2 = CosineLawLength(a, b, C);
+        if (b !== void 0 && c2 !== void 0 && A !== void 0 && a === void 0)
+          a = CosineLawLength(b, c2, A);
+        if (c2 !== void 0 && a !== void 0 && B !== void 0 && b === void 0)
+          b = CosineLawLength(c2, a, B);
       }
       function AAS() {
-        let r3 = void 0;
-        if (A2 !== void 0 && a2 !== void 0 && r3 === void 0)
-          r3 = sin(A2) / a2;
-        if (B2 !== void 0 && b2 !== void 0 && r3 === void 0)
-          r3 = sin(B2) / b2;
-        if (C2 !== void 0 && c3 !== void 0 && r3 === void 0)
-          r3 = sin(C2) / c3;
-        if (r3 !== void 0 && A2 !== void 0 && a2 === void 0)
-          a2 = sin(A2) / r3;
-        if (r3 !== void 0 && B2 !== void 0 && b2 === void 0)
-          b2 = sin(B2) / r3;
-        if (r3 !== void 0 && C2 !== void 0 && c3 === void 0)
-          c3 = sin(C2) / r3;
+        let r2 = void 0;
+        if (A !== void 0 && a !== void 0 && r2 === void 0)
+          r2 = sin(A) / a;
+        if (B !== void 0 && b !== void 0 && r2 === void 0)
+          r2 = sin(B) / b;
+        if (C !== void 0 && c2 !== void 0 && r2 === void 0)
+          r2 = sin(C) / c2;
+        if (r2 !== void 0 && A !== void 0 && a === void 0)
+          a = sin(A) / r2;
+        if (r2 !== void 0 && B !== void 0 && b === void 0)
+          b = sin(B) / r2;
+        if (r2 !== void 0 && C !== void 0 && c2 === void 0)
+          c2 = sin(C) / r2;
       }
-      for (let i2 = 0; i2 < 10; i2++) {
-        if (a2 !== void 0 && b2 !== void 0 && c3 !== void 0 && A2 !== void 0 && B2 !== void 0 && C2 !== void 0) {
-          return { sideA: a2, sideB: b2, sideC: c3, angleA: A2, angleB: B2, angleC: C2 };
+      for (let i = 0; i < 10; i++) {
+        if (a !== void 0 && b !== void 0 && c2 !== void 0 && A !== void 0 && B !== void 0 && C !== void 0) {
+          return { sideA: a, sideB: b, sideC: c2, angleA: A, angleB: B, angleC: C };
         }
         angleSum();
         SSS();
@@ -18327,54 +18327,54 @@
       Should(false, "Solve Triangle Fail!");
       throw "never";
     }
-    static Orthocentre(A2, B2, C2) {
-      let H2 = PdFoot(C2, [A2, B2]);
-      let G2 = PdFoot(A2, [B2, C2]);
-      let [x2, y2] = Intersection(C2, H2, A2, G2);
-      return [cal.blur(x2), cal.blur(y2)];
+    static Orthocentre(A, B, C) {
+      let H = PdFoot(C, [A, B]);
+      let G = PdFoot(A, [B, C]);
+      let [x, y] = Intersection(C, H, A, G);
+      return [cal.blur(x), cal.blur(y)];
     }
-    static Circumcentre(A2, B2, C2) {
-      let [a1, b1, c1] = LinearFromBisector(A2, B2);
-      let [a2, b2, c22] = LinearFromBisector(B2, C2);
-      let [x2, y2] = Crammer(a1, b1, -c1, a2, b2, -c22);
-      return [cal.blur(x2), cal.blur(y2)];
+    static Circumcentre(A, B, C) {
+      let [a1, b1, c1] = LinearFromBisector(A, B);
+      let [a2, b2, c2] = LinearFromBisector(B, C);
+      let [x, y] = Crammer(a1, b1, -c1, a2, b2, -c2);
+      return [cal.blur(x), cal.blur(y)];
     }
-    static Centroid(A2, B2, C2) {
-      let [x2, y2] = [(A2[0] + B2[0] + C2[0]) / 3, (A2[1] + B2[1] + C2[1]) / 3];
-      return [cal.blur(x2), cal.blur(y2)];
+    static Centroid(A, B, C) {
+      let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3];
+      return [cal.blur(x), cal.blur(y)];
     }
-    static Incentre(A2, B2, C2) {
-      let a2 = Distance(B2, C2);
-      let b2 = Distance(A2, C2);
-      let c3 = Distance(A2, B2);
-      let p3 = a2 + b2 + c3;
-      let x2 = (a2 * A2[0] + b2 * B2[0] + c3 * C2[0]) / p3;
-      let y2 = (a2 * A2[1] + b2 * B2[1] + c3 * C2[1]) / p3;
-      return [cal.blur(x2), cal.blur(y2)];
+    static Incentre(A, B, C) {
+      let a = Distance(B, C);
+      let b = Distance(A, C);
+      let c2 = Distance(A, B);
+      let p2 = a + b + c2;
+      let x = (a * A[0] + b * B[0] + c2 * C[0]) / p2;
+      let y = (a * A[1] + b * B[1] + c2 * C[1]) / p2;
+      return [cal.blur(x), cal.blur(y)];
     }
-    static ScaleOrthocentreToInt(A2, B2, C2) {
-      let [x2, y2] = Orthocentre(A2, B2, C2);
-      let q2 = numbers(x2, y2, ...A2, ...B2, ...C2).ratioFactor();
-      Should(owl.num(q2), "original orthocentre must be rational");
-      return shape2D(A2, B2, C2).scale(q2).toArray();
+    static ScaleOrthocentreToInt(A, B, C) {
+      let [x, y] = Orthocentre(A, B, C);
+      let q = numbers(x, y, ...A, ...B, ...C).ratioFactor();
+      Should(owl.num(q), "original orthocentre must be rational");
+      return shape2D(A, B, C).scale(q).toArray();
     }
-    static ScaleCircumcentreToInt(A2, B2, C2) {
-      let [x2, y2] = Circumcentre(A2, B2, C2);
-      let q2 = numbers(x2, y2, ...A2, ...B2, ...C2).ratioFactor();
-      Should(owl.num(q2), "original circumcentre must be rational");
-      return shape2D(A2, B2, C2).scale(q2).toArray();
+    static ScaleCircumcentreToInt(A, B, C) {
+      let [x, y] = Circumcentre(A, B, C);
+      let q = numbers(x, y, ...A, ...B, ...C).ratioFactor();
+      Should(owl.num(q), "original circumcentre must be rational");
+      return shape2D(A, B, C).scale(q).toArray();
     }
-    static ScaleCentroidToInt(A2, B2, C2) {
-      let [x2, y2] = Centroid(A2, B2, C2);
-      let q2 = numbers(x2, y2, ...A2, ...B2, ...C2).ratioFactor();
-      Should(owl.num(q2), "original centroid must be rational");
-      return shape2D(A2, B2, C2).scale(q2).toArray();
+    static ScaleCentroidToInt(A, B, C) {
+      let [x, y] = Centroid(A, B, C);
+      let q = numbers(x, y, ...A, ...B, ...C).ratioFactor();
+      Should(owl.num(q), "original centroid must be rational");
+      return shape2D(A, B, C).scale(q).toArray();
     }
-    static ScaleIncentreToInt(A2, B2, C2) {
-      let [x2, y2] = Incentre(A2, B2, C2);
-      let q2 = numbers(x2, y2, ...A2, ...B2, ...C2).ratioFactor();
-      Should(owl.num(q2), "original incentre must be rational");
-      return shape2D(A2, B2, C2).scale(q2).toArray();
+    static ScaleIncentreToInt(A, B, C) {
+      let [x, y] = Incentre(A, B, C);
+      let q = numbers(x, y, ...A, ...B, ...C).ratioFactor();
+      Should(owl.num(q), "original incentre must be rational");
+      return shape2D(A, B, C).scale(q).toArray();
     }
   };
   __decorateClass([
@@ -18382,8 +18382,8 @@
   ], Host15, "Pyth", 1);
   __decorateClass([
     checkIt(side),
-    inspectIt(function is_triangle(c3, a2) {
-      return c3 >= a2;
+    inspectIt(function is_triangle(c2, a) {
+      return c2 >= a;
     })
   ], Host15, "PythLeg", 1);
   __decorateClass([
@@ -18398,8 +18398,8 @@
   ], Host15, "SineLawLength", 1);
   __decorateClass([
     checkIt(side, angle, side),
-    inspectIt(function is_triangle(a2, A2, b2) {
-      return sin(A2) / a2 * b2 >= 0 && sin(A2) / a2 * b2 <= 1;
+    inspectIt(function is_triangle(a, A, b) {
+      return sin(A) / a * b >= 0 && sin(A) / a * b <= 1;
     })
   ], Host15, "SineLawAngle", 1);
   __decorateClass([
@@ -18473,27 +18473,27 @@
     static Quadrant(rect) {
       if (!Array.isArray(rect))
         rect = PolToRect([1, rect]);
-      const q2 = RectToPol(rect)[1];
-      if (q2 >= 0 && q2 < 90)
+      const q = RectToPol(rect)[1];
+      if (q >= 0 && q < 90)
         return "I";
-      if (q2 >= 90 && q2 < 180)
+      if (q >= 90 && q < 180)
         return "II";
-      if (q2 >= 180 && q2 < 270)
+      if (q >= 180 && q < 270)
         return "III";
-      if (q2 >= 270 && q2 < 360)
+      if (q >= 270 && q < 360)
         return "IV";
       Should(false, "fail to parse quadrant!");
       throw "never";
     }
-    static PolToRect([r3, q2]) {
-      return [r3 * cos(q2), r3 * sin(q2)];
+    static PolToRect([r2, q]) {
+      return [r2 * cos(q), r2 * sin(q)];
     }
-    static RectToPol([x2, y2]) {
-      const r3 = Math.sqrt(x2 * x2 + y2 * y2);
-      let q2 = Math.atan2(y2, x2) * 180 / Math.PI;
-      if (q2 < 0)
-        q2 = q2 + 360;
-      return [r3, q2];
+    static RectToPol([x, y]) {
+      const r2 = Math.sqrt(x * x + y * y);
+      let q = Math.atan2(y, x) * 180 / Math.PI;
+      if (q < 0)
+        q = q + 360;
+      return [r2, q];
     }
     static ASTC(quadrant2, func) {
       if (quadrant2 == "I")
@@ -18514,150 +18514,150 @@
         return func === "cos" ? 1 : -1;
       return 0;
     }
-    static TrigRoot(func, k2) {
+    static TrigRoot(func, k) {
       if (func == "sin") {
-        if (k2 > 1 || k2 < -1)
+        if (k > 1 || k < -1)
           return [void 0, void 0, void 0];
-        if (k2 == 0)
+        if (k == 0)
           return [0, 180, 360];
-        if (k2 == 1)
+        if (k == 1)
           return [90, void 0, void 0];
-        if (k2 == -1)
+        if (k == -1)
           return [270, void 0, void 0];
-        if (k2 > 0) {
-          let a2 = arcsin(k2);
-          let b2 = 180 - a2;
-          return [a2, b2, void 0];
+        if (k > 0) {
+          let a = arcsin(k);
+          let b = 180 - a;
+          return [a, b, void 0];
         }
-        if (k2 < 0) {
-          let x2 = -arcsin(k2);
-          let a2 = 180 + x2;
-          let b2 = 360 - x2;
-          return [a2, b2, void 0];
+        if (k < 0) {
+          let x = -arcsin(k);
+          let a = 180 + x;
+          let b = 360 - x;
+          return [a, b, void 0];
         }
       }
       if (func == "cos") {
-        if (k2 > 1 || k2 < -1)
+        if (k > 1 || k < -1)
           return [void 0, void 0, void 0];
-        if (k2 == 0)
+        if (k == 0)
           return [90, 270, void 0];
-        if (k2 == 1)
+        if (k == 1)
           return [0, 360, void 0];
-        if (k2 == -1)
+        if (k == -1)
           return [180, void 0, void 0];
-        let a2 = arccos(k2);
-        let b2 = 360 - a2;
-        return [a2, b2, void 0];
+        let a = arccos(k);
+        let b = 360 - a;
+        return [a, b, void 0];
       }
       if (func == "tan") {
-        if (k2 == 0)
+        if (k == 0)
           return [0, 180, 360];
-        if (k2 > 0) {
-          let a2 = arctan(k2);
-          let b2 = 180 + a2;
-          return [a2, b2, void 0];
+        if (k > 0) {
+          let a = arctan(k);
+          let b = 180 + a;
+          return [a, b, void 0];
         }
-        if (k2 < 0) {
-          let x2 = -arctan(k2);
-          let a2 = 180 - x2;
-          let b2 = 360 - x2;
-          return [a2, b2, void 0];
+        if (k < 0) {
+          let x = -arctan(k);
+          let a = 180 - x;
+          let b = 360 - x;
+          return [a, b, void 0];
         }
       }
       return [void 0, void 0, void 0];
     }
-    static TrigSolve(func, k2) {
+    static TrigSolve(func, k) {
       if (func == "sin") {
-        if (k2 > 1 || k2 < -1)
+        if (k > 1 || k < -1)
           return [];
-        if (k2 == 0)
+        if (k == 0)
           return [0, 180, 360];
-        if (k2 == 1)
+        if (k == 1)
           return [90];
-        if (k2 == -1)
+        if (k == -1)
           return [270];
-        if (k2 > 0) {
-          let a2 = arcsin(k2);
-          let b2 = 180 - a2;
-          return [a2, b2];
+        if (k > 0) {
+          let a = arcsin(k);
+          let b = 180 - a;
+          return [a, b];
         }
-        if (k2 < 0) {
-          let x2 = -arcsin(k2);
-          let a2 = 180 + x2;
-          let b2 = 360 - x2;
-          return [a2, b2];
+        if (k < 0) {
+          let x = -arcsin(k);
+          let a = 180 + x;
+          let b = 360 - x;
+          return [a, b];
         }
       }
       if (func == "cos") {
-        if (k2 > 1 || k2 < -1)
+        if (k > 1 || k < -1)
           return [];
-        if (k2 == 0)
+        if (k == 0)
           return [90, 270];
-        if (k2 == 1)
+        if (k == 1)
           return [0, 360];
-        if (k2 == -1)
+        if (k == -1)
           return [180];
-        let a2 = arccos(k2);
-        let b2 = 360 - a2;
-        return [a2, b2];
+        let a = arccos(k);
+        let b = 360 - a;
+        return [a, b];
       }
       if (func == "tan") {
-        if (k2 == 0)
+        if (k == 0)
           return [0, 180, 360];
-        if (k2 > 0) {
-          let a2 = arctan(k2);
-          let b2 = 180 + a2;
-          return [a2, b2];
+        if (k > 0) {
+          let a = arctan(k);
+          let b = 180 + a;
+          return [a, b];
         }
-        if (k2 < 0) {
-          let x2 = -arctan(k2);
-          let a2 = 180 - x2;
-          let b2 = 360 - x2;
-          return [a2, b2];
+        if (k < 0) {
+          let x = -arctan(k);
+          let a = 180 - x;
+          let b = 360 - x;
+          return [a, b];
         }
       }
       return [];
     }
-    static PolarReduce(q2) {
-      q2 = q2 % 360;
-      if (q2 < 0)
-        q2 += 360;
-      return q2;
+    static PolarReduce(q) {
+      q = q % 360;
+      if (q < 0)
+        q += 360;
+      return q;
     }
     static PolarDiff(angle1, angle2) {
       angle1 = PolarReduce(angle1);
       angle2 = PolarReduce(angle2);
-      let d2 = Abs(angle1 - angle2);
-      return Math.min(d2, 360 - d2);
+      let d = Abs(angle1 - angle2);
+      return Math.min(d, 360 - d);
     }
     static WholeBearing(polarAngle) {
-      let q2 = polarAngle;
-      q2 = PolarReduce(q2);
-      q2 = cal.blur(q2);
-      q2 = q2 <= 90 ? 90 - q2 : 450 - q2;
-      q2 = cal.blur(q2);
-      return q2.toString().padStart(3, "0") + "\xB0";
+      let q = polarAngle;
+      q = PolarReduce(q);
+      q = cal.blur(q);
+      q = q <= 90 ? 90 - q : 450 - q;
+      q = cal.blur(q);
+      return q.toString().padStart(3, "0") + "\xB0";
     }
     static CompassBearing(polarAngle) {
-      let q2 = polarAngle;
-      q2 = PolarReduce(q2);
-      q2 = cal.blur(q2);
-      if (q2 === 0)
+      let q = polarAngle;
+      q = PolarReduce(q);
+      q = cal.blur(q);
+      if (q === 0)
         return "east";
-      if (q2 === 270)
+      if (q === 270)
         return "south";
-      if (q2 === 180)
+      if (q === 180)
         return "west";
-      if (q2 === 90)
+      if (q === 90)
         return "north";
-      if (0 < q2 && q2 < 90)
-        return "N" + (90 - q2) + "\xB0E";
-      if (90 < q2 && q2 < 180)
-        return "N" + (q2 - 90) + "\xB0W";
-      if (180 < q2 && q2 < 270)
-        return "S" + (270 - q2) + "\xB0W";
-      if (270 < q2 && q2 < 360)
-        return "S" + (q2 - 270) + "\xB0E";
+      if (0 < q && q < 90)
+        return "N" + (90 - q) + "\xB0E";
+      if (90 < q && q < 180)
+        return "N" + (q - 90) + "\xB0W";
+      if (180 < q && q < 270)
+        return "S" + (270 - q) + "\xB0W";
+      if (270 < q && q < 360)
+        return "S" + (q - 270) + "\xB0E";
       throw "never";
     }
   };
@@ -18699,9 +18699,9 @@
   // src/Math/Code/Vector.ts
   var Host17 = class {
     static VecAdd(...vectors) {
-      const x2 = Sum(...vectors.map((p3) => p3[0]));
-      const y2 = Sum(...vectors.map((p3) => p3[1]));
-      return [x2, y2];
+      const x = Sum(...vectors.map((p2) => p2[0]));
+      const y = Sum(...vectors.map((p2) => p2[1]));
+      return [x, y];
     }
   };
   __decorateClass([
@@ -18715,27 +18715,27 @@
   // src/Math/Code/Vector3D.ts
   var Host18 = class {
     static Mid3D(...vectors) {
-      const x2 = Sum(...vectors.map((p3) => p3[0])) / vectors.length;
-      const y2 = Sum(...vectors.map((p3) => p3[1])) / vectors.length;
-      const z2 = Sum(...vectors.map((p3) => p3[2])) / vectors.length;
-      return [x2, y2, z2];
+      const x = Sum(...vectors.map((p2) => p2[0])) / vectors.length;
+      const y = Sum(...vectors.map((p2) => p2[1])) / vectors.length;
+      const z = Sum(...vectors.map((p2) => p2[2])) / vectors.length;
+      return [x, y, z];
     }
-    static Slide3D(A2, B2, ratio) {
-      let r3 = ratio;
-      let s3 = 1 - r3;
+    static Slide3D(A, B, ratio) {
+      let r2 = ratio;
+      let s2 = 1 - r2;
       return [
-        A2[0] * s3 + B2[0] * r3,
-        A2[1] * s3 + B2[1] * r3,
-        A2[2] * s3 + B2[2] * r3
+        A[0] * s2 + B[0] * r2,
+        A[1] * s2 + B[1] * r2,
+        A[2] * s2 + B[2] * r2
       ];
     }
     static PdFoot3D(point, base2) {
       if (base2.length === 3) {
-        let [A2, B2, C2] = base2;
-        return vec3D(A2, point).projectOnPlane(vec3D(A2, B2), vec3D(B2, C2)).add(A2).toArray();
+        let [A, B, C] = base2;
+        return vec3D(A, point).projectOnPlane(vec3D(A, B), vec3D(B, C)).add(A).toArray();
       } else if (base2.length === 2) {
-        let [A2, B2] = base2;
-        return vec3D(A2, point).projectOn(vec3D(A2, B2)).add(A2).toArray();
+        let [A, B] = base2;
+        return vec3D(A, point).projectOn(vec3D(A, B)).add(A).toArray();
       }
       Should(false, "base must have 2 or 3 points");
       throw "never";
@@ -18743,17 +18743,17 @@
     static Embed(plane2D, origin, xVec, yVec) {
       return toShape2D(plane2D).erect(xVec, yVec).translate(origin).toArray();
     }
-    static EmbedX(plane2D, x2 = 0) {
-      return Embed(plane2D, [x2, 0, 0], [0, 1, 0], [0, 0, 1]);
+    static EmbedX(plane2D, x = 0) {
+      return Embed(plane2D, [x, 0, 0], [0, 1, 0], [0, 0, 1]);
     }
-    static EmbedY(plane2D, y2 = 0) {
-      return Embed(plane2D, [0, y2, 0], [1, 0, 0], [0, 0, 1]);
+    static EmbedY(plane2D, y = 0) {
+      return Embed(plane2D, [0, y, 0], [1, 0, 0], [0, 0, 1]);
     }
-    static EmbedZ(plane2D, z2 = 0) {
-      return Embed(plane2D, [0, 0, z2], [1, 0, 0], [0, 1, 0]);
+    static EmbedZ(plane2D, z = 0) {
+      return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0]);
     }
-    static FlatZ(points, z2 = 0) {
-      return points.map(([x2, y2, _]) => [x2, y2, z2]);
+    static FlatZ(points, z = 0) {
+      return points.map(([x, y, _]) => [x, y, z]);
     }
     static Extrude(lowerBase, upperBase, scale) {
       let max = Math.max(lowerBase.length, upperBase.length);
@@ -18762,17 +18762,17 @@
       return LB.extrudeToShape(UB, scale).toArray();
     }
     static Projector(angle2 = 60, depth = 0.5) {
-      return function(x2, y2, z2) {
-        let x_new = x2 + depth * y2 * cos(angle2);
-        let y_new = z2 + depth * y2 * sin(angle2);
+      return function(x, y, z) {
+        let x_new = x + depth * y * cos(angle2);
+        let y_new = z + depth * y * sin(angle2);
         return [x_new, y_new];
       };
     }
     static Projector3D(angle2 = 60, depth = 0.5) {
       let projector = function(point3D2) {
-        let [x2, y2, z2] = point3D2;
-        let x_new = x2 + depth * y2 * cos(angle2);
-        let y_new = z2 + depth * y2 * sin(angle2);
+        let [x, y, z] = point3D2;
+        let x_new = x + depth * y * cos(angle2);
+        let y_new = z + depth * y * sin(angle2);
         return [x_new, y_new];
       };
       return check(projector, [owl.point3D]);
@@ -18815,36 +18815,36 @@
 
   // src/Math/Algebra/Algebra.ts
   var Host19 = class {
-    static Crammer(a2, b2, c3, p3, q2, r3) {
-      const D2 = a2 * q2 - b2 * p3;
-      const x2 = (c3 * q2 - b2 * r3) / D2;
-      const y2 = (a2 * r3 - c3 * p3) / D2;
-      return [x2, y2];
+    static Crammer(a, b, c2, p2, q, r2) {
+      const D = a * q - b * p2;
+      const x = (c2 * q - b * r2) / D;
+      const y = (a * r2 - c2 * p2) / D;
+      return [x, y];
     }
     static xPolynomial(poly1, poly2) {
       const deg1 = poly1.length - 1;
       const deg22 = poly2.length - 1;
       const deg4 = deg1 + deg22;
       const result = Array(deg4 + 1).fill(0);
-      for (let i2 = 0; i2 <= deg1; i2++) {
-        for (let j2 = 0; j2 <= deg22; j2++) {
-          result[i2 + j2] += poly1[i2] * poly2[j2];
+      for (let i = 0; i <= deg1; i++) {
+        for (let j = 0; j <= deg22; j++) {
+          result[i + j] += poly1[i] * poly2[j];
         }
       }
       return result;
     }
-    static Binomial(A2, B2, n2 = 2) {
+    static Binomial(A, B, n = 2) {
       let coeff = [];
-      for (let i2 = 0; i2 <= n2; i2++) {
-        coeff.push(nCr(n2, i2) * A2 ** (n2 - i2) * B2 ** i2);
+      for (let i = 0; i <= n; i++) {
+        coeff.push(nCr(n, i) * A ** (n - i) * B ** i);
       }
       return coeff;
     }
   };
   __decorateClass([
     checkIt(owl.num),
-    inspectIt(function has_unique_sol(a2, b2, c3, p3, q2, r3) {
-      return a2 * q2 - b2 * p3 !== 0;
+    inspectIt(function has_unique_sol(a, b, c2, p2, q, r2) {
+      return a * q - b * p2 !== 0;
     })
   ], Host19, "Crammer", 1);
   __decorateClass([
@@ -18883,50 +18883,50 @@
   // src/Math/Algebra/Circle.ts
   var Host21 = class {
     static CircleGeneral(centre, radius) {
-      let [h2, k2] = centre;
-      let r3 = radius;
-      let D2 = -2 * h2;
-      let E2 = -2 * k2;
-      let F2 = h2 ** 2 + k2 ** 2 - r3 ** 2;
-      return [D2, E2, F2];
+      let [h, k] = centre;
+      let r2 = radius;
+      let D = -2 * h;
+      let E = -2 * k;
+      let F = h ** 2 + k ** 2 - r2 ** 2;
+      return [D, E, F];
     }
-    static CircleFromGeneral(D2, E2, F2) {
-      let [h2, k2] = [-D2 / 2, -E2 / 2];
-      let R2 = (D2 / 2) ** 2 + (E2 / 2) ** 2 - F2;
-      Should(R2 >= 0, "radius should be real");
-      let r3 = R2 ** 0.5;
-      return [[h2, k2], r3];
+    static CircleFromGeneral(D, E, F) {
+      let [h, k] = [-D / 2, -E / 2];
+      let R = (D / 2) ** 2 + (E / 2) ** 2 - F;
+      Should(R >= 0, "radius should be real");
+      let r2 = R ** 0.5;
+      return [[h, k], r2];
     }
     static CircleLinearIntersect(center, radius, linear) {
-      let [a2, b2, c3] = linear;
-      let [h2, k2] = center;
-      let r3 = radius;
-      if (b2 !== 0) {
-        let m3 = -a2 / b2;
-        let n2 = -c3 / b2 - k2;
-        let A2 = 1 + m3 * m3;
-        let B2 = -2 * h2 + 2 * m3 * n2;
-        let C2 = h2 * h2 + n2 * n2 - r3 * r3;
-        Should(Discriminant(A2, B2, C2) >= 0, "no intersection");
-        let [x1, x2] = QuadraticRoot(A2, B2, C2);
-        let y1 = (-a2 * x1 - c3) / b2;
-        let y2 = (-a2 * x2 - c3) / b2;
-        let P2 = [cal.blur(x1), cal.blur(y1)];
-        let Q2 = [cal.blur(x2), cal.blur(y2)];
-        return [P2, Q2];
+      let [a, b, c2] = linear;
+      let [h, k] = center;
+      let r2 = radius;
+      if (b !== 0) {
+        let m2 = -a / b;
+        let n = -c2 / b - k;
+        let A = 1 + m2 * m2;
+        let B = -2 * h + 2 * m2 * n;
+        let C = h * h + n * n - r2 * r2;
+        Should(Discriminant(A, B, C) >= 0, "no intersection");
+        let [x1, x2] = QuadraticRoot(A, B, C);
+        let y1 = (-a * x1 - c2) / b;
+        let y2 = (-a * x2 - c2) / b;
+        let P = [cal.blur(x1), cal.blur(y1)];
+        let Q = [cal.blur(x2), cal.blur(y2)];
+        return [P, Q];
       } else {
-        let x2 = -c3 / a2;
-        let D2 = r3 * r3 - (x2 - h2) ** 2;
-        Should(D2 >= 0, "no intersection");
-        let y1 = k2 - Math.sqrt(D2);
-        let y2 = k2 + Math.sqrt(D2);
-        let P2 = [cal.blur(x2), cal.blur(y1)];
-        let Q2 = [cal.blur(x2), cal.blur(y2)];
-        return [P2, Q2];
+        let x = -c2 / a;
+        let D = r2 * r2 - (x - h) ** 2;
+        Should(D >= 0, "no intersection");
+        let y1 = k - Math.sqrt(D);
+        let y2 = k + Math.sqrt(D);
+        let P = [cal.blur(x), cal.blur(y1)];
+        let Q = [cal.blur(x), cal.blur(y2)];
+        return [P, Q];
       }
     }
-    static CircleLineIntersect(center, radius, [A2, B2]) {
-      let lin3 = LinearFromTwoPoints(A2, B2);
+    static CircleLineIntersect(center, radius, [A, B]) {
+      let lin3 = LinearFromTwoPoints(A, B);
       return CircleLinearIntersect(center, radius, lin3);
     }
   };
@@ -18949,28 +18949,28 @@
 
   // src/Math/Algebra/Quadratic.ts
   var Host22 = class {
-    static Discriminant(a2, b2, c3) {
-      return b2 * b2 - 4 * a2 * c3;
+    static Discriminant(a, b, c2) {
+      return b * b - 4 * a * c2;
     }
-    static QuadraticRoot(a2, b2, c3) {
-      const d2 = Discriminant(a2, b2, c3);
-      const s3 = Math.sqrt(d2);
-      const r1 = Divide(-b2 - s3, 2 * a2);
-      const r22 = Divide(-b2 + s3, 2 * a2);
-      return [Min(r1, r22), Max(r1, r22)];
+    static QuadraticRoot(a, b, c2) {
+      const d = Discriminant(a, b, c2);
+      const s2 = Math.sqrt(d);
+      const r1 = Divide(-b - s2, 2 * a);
+      const r2 = Divide(-b + s2, 2 * a);
+      return [Min(r1, r2), Max(r1, r2)];
     }
-    static QuadraticVertex(a2, b2, c3) {
-      const h2 = Divide(-b2, 2 * a2);
-      const k2 = a2 * h2 * h2 + b2 * h2 + c3;
-      return [h2, k2];
+    static QuadraticVertex(a, b, c2) {
+      const h = Divide(-b, 2 * a);
+      const k = a * h * h + b * h + c2;
+      return [h, k];
     }
-    static QuadraticFromRoot(a2, p3, q2) {
-      return [a2, -a2 * (p3 + q2), a2 * p3 * q2];
+    static QuadraticFromRoot(a, p2, q) {
+      return [a, -a * (p2 + q), a * p2 * q];
     }
-    static QuadraticFromVertex(a2, h2, k2) {
-      const b2 = -2 * a2 * h2;
-      const c3 = k2 - a2 * h2 * h2 - b2 * h2;
-      return [a2, b2, c3];
+    static QuadraticFromVertex(a, h, k) {
+      const b = -2 * a * h;
+      const c2 = k - a * h * h - b * h;
+      return [a, b, c2];
     }
   };
   __decorateClass([
@@ -18978,8 +18978,8 @@
   ], Host22, "Discriminant", 1);
   __decorateClass([
     checkIt(owl.nonZero, owl.num, owl.num),
-    inspectIt(function has_real_root(a2, b2, c3) {
-      return b2 ** 2 - 4 * a2 * c3 >= 0;
+    inspectIt(function has_real_root(a, b, c2) {
+      return b ** 2 - 4 * a * c2 >= 0;
     })
   ], Host22, "QuadraticRoot", 1);
   __decorateClass([
@@ -18998,11 +18998,11 @@
 
   // src/Math/Algebra/Linear.ts
   var Host23 = class {
-    static LineFeat(a2, b2, c3) {
-      let x2 = -c3 / a2;
-      let y2 = -c3 / b2;
-      let m3 = -a2 / b2;
-      return [m3, y2, x2];
+    static LineFeat(a, b, c2) {
+      let x = -c2 / a;
+      let y = -c2 / b;
+      let m2 = -a / b;
+      return [m2, y, x];
     }
     static LinearFromIntercepts(xInt, yInt) {
       return lin().byIntercepts(xInt, yInt).toLinear();
@@ -19013,8 +19013,8 @@
     static LinearFromPointSlope(point, slope2) {
       return lin().byPointSlope(point, slope2).toLinear();
     }
-    static LinearFromBisector(A2, B2) {
-      return lin().byBisector(A2, B2).toLinear();
+    static LinearFromBisector(A, B) {
+      return lin().byBisector(A, B).toLinear();
     }
     static LineFromIntercepts(xInt, yInt) {
       return lin().byIntercepts(xInt, yInt).toLine();
@@ -19025,8 +19025,8 @@
     static LineFromPointSlope(point, slope2) {
       return lin().byPointSlope(point, slope2).toLine();
     }
-    static LineFromBisector(A2, B2) {
-      return lin().byBisector(A2, B2).toLine();
+    static LineFromBisector(A, B) {
+      return lin().byBisector(A, B).toLine();
     }
   };
   __decorateClass([
@@ -19037,8 +19037,8 @@
   ], Host23, "LinearFromIntercepts", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
-    inspectIt(function different_points(p1, p22) {
-      return owl.distinct([p1, p22]);
+    inspectIt(function different_points(p1, p2) {
+      return owl.distinct([p1, p2]);
     })
   ], Host23, "LinearFromTwoPoints", 1);
   __decorateClass([
@@ -19046,8 +19046,8 @@
   ], Host23, "LinearFromPointSlope", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
-    inspectIt(function different_points(p1, p22) {
-      return owl.distinct([p1, p22]);
+    inspectIt(function different_points(p1, p2) {
+      return owl.distinct([p1, p2]);
     })
   ], Host23, "LinearFromBisector", 1);
   __decorateClass([
@@ -19055,11 +19055,11 @@
   ], Host23, "LineFromIntercepts", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
-    inspectIt(function different_points(p1, p22) {
-      return owl.distinct([p1, p22]);
+    inspectIt(function different_points(p1, p2) {
+      return owl.distinct([p1, p2]);
     }),
-    inspectIt(function non_vertical(p1, p22) {
-      return p1[0] !== p22[0];
+    inspectIt(function non_vertical(p1, p2) {
+      return p1[0] !== p2[0];
     })
   ], Host23, "LineFromTwoPoints", 1);
   __decorateClass([
@@ -19067,11 +19067,11 @@
   ], Host23, "LineFromPointSlope", 1);
   __decorateClass([
     checkIt(owl.point2D, owl.point2D),
-    inspectIt(function different_points(p1, p22) {
-      return owl.distinct([p1, p22]);
+    inspectIt(function different_points(p1, p2) {
+      return owl.distinct([p1, p2]);
     }),
-    inspectIt(function non_horizontal(p1, p22) {
-      return p1[1] !== p22[1];
+    inspectIt(function non_horizontal(p1, p2) {
+      return p1[1] !== p2[1];
     })
   ], Host23, "LineFromBisector", 1);
   Host23 = __decorateClass([
@@ -19091,19 +19091,19 @@
       return new MonomialCls(coeff, vars);
     }
     random(degree, variables, maxCoeff) {
-      let f3 = () => {
-        let M2 = new MonomialCls();
-        M2.coeff = RndZ(1, maxCoeff);
-        for (let v3 of variables) {
+      let f2 = () => {
+        let M = new MonomialCls();
+        M.coeff = RndZ(1, maxCoeff);
+        for (let v2 of variables) {
           if (variables.length === 1) {
-            M2.vars.push({ variable: v3, power: degree });
+            M.vars.push({ variable: v2, power: degree });
           } else {
-            M2.vars.push({ variable: v3, power: RndN(0, degree) });
+            M.vars.push({ variable: v2, power: RndN(0, degree) });
           }
         }
-        return M2;
+        return M;
       };
-      let mon = dice(f3).shield((M2) => M2.degree() === degree).roll();
+      let mon = dice(f2).shield((M) => M.degree() === degree).roll();
       this.coeff = mon.coeff;
       this.vars = mon.vars;
     }
@@ -19114,13 +19114,13 @@
       return SortBy([...this.vars], (_) => _.variable.charCodeAt(0));
     }
     size() {
-      let s3 = this.degree();
+      let s2 = this.degree();
       let order = 1;
       for (let { variable, power } of this.sortedVars()) {
         order = order / 10;
-        s3 += order * power;
+        s2 += order * power;
       }
-      return s3;
+      return s2;
     }
     signature() {
       return JSON.stringify(this.sortedVars());
@@ -19132,26 +19132,26 @@
       let term = String(this.coeff);
       if (this.coeff === 0)
         return term;
-      for (let v3 of this.vars) {
-        let l3 = v3.variable;
-        let p3 = v3.power;
-        if (p3 === 0) {
+      for (let v2 of this.vars) {
+        let l2 = v2.variable;
+        let p2 = v2.power;
+        if (p2 === 0) {
           continue;
-        } else if (p3 === 1) {
-          term += l3;
+        } else if (p2 === 1) {
+          term += l2;
         } else {
-          term += l3 + "^{" + p3 + "}";
+          term += l2 + "^{" + p2 + "}";
         }
       }
       return term;
     }
     func() {
       return (input) => {
-        let x2 = this.coeff;
+        let x = this.coeff;
         for (let { variable, power } of this.vars) {
-          x2 = x2 * input[variable] ** power;
+          x = x * input[variable] ** power;
         }
-        return x2;
+        return x;
       };
     }
   };
@@ -19162,56 +19162,56 @@
       return new MonomialCls(coeff, vars);
     }
     static PolyClone(poly) {
-      return poly.map((M2) => M2.clone());
+      return poly.map((M) => M.clone());
     }
     static RndPolynomial(degree, vars = ["x"], terms = degree + 1, maxCoeff = 9) {
       let RndMono = () => {
-        let M2 = new MonomialCls();
-        M2.random(RndN(0, degree), vars, maxCoeff);
-        return M2;
+        let M = new MonomialCls();
+        M.random(RndN(0, degree), vars, maxCoeff);
+        return M;
       };
-      let f3 = () => dice(RndMono).unique((M2) => M2.size()).rolls(terms);
-      return dice(f3).shield((P2) => Max(...P2.map((M2) => M2.degree())) === degree).roll();
+      let f2 = () => dice(RndMono).unique((M) => M.size()).rolls(terms);
+      return dice(f2).shield((P) => Max(...P.map((M) => M.degree())) === degree).roll();
     }
     static PolyPrint(poly) {
-      return poly.map((M2) => M2.print()).filter((x2) => x2 !== "0").join("+");
+      return poly.map((M) => M.print()).filter((x) => x !== "0").join("+");
     }
     static PolySort(poly, desc = true) {
       poly = PolyClone(poly);
-      let arr = SortBy(poly, (M2) => desc ? -M2.size() : M2.size());
+      let arr = SortBy(poly, (M) => desc ? -M.size() : M.size());
       return arr;
     }
     static PolyFunction(poly) {
       poly = PolyClone(poly);
       return (values) => {
-        return Sum(...poly.map((M2) => M2.func()(values)));
+        return Sum(...poly.map((M) => M.func()(values)));
       };
     }
     static PolyJoin(...polys) {
-      polys = polys.map((p3) => PolyClone(p3));
+      polys = polys.map((p2) => PolyClone(p2));
       let arr = [];
-      for (let p3 of polys)
-        arr.push(...p3);
+      for (let p2 of polys)
+        arr.push(...p2);
       return arr;
     }
     static PolySimplify(poly) {
       poly = PolyClone(poly);
       let arr = [];
-      function findLikeTerm(M2) {
-        return arr.find((m3) => m3.signature() === M2.signature());
+      function findLikeTerm(M) {
+        return arr.find((m2) => m2.signature() === M.signature());
       }
-      for (let M2 of poly) {
-        let like = findLikeTerm(M2);
+      for (let M of poly) {
+        let like = findLikeTerm(M);
         if (like) {
-          like.coeff += M2.coeff;
+          like.coeff += M.coeff;
         } else {
-          arr.push(M2);
+          arr.push(M);
         }
       }
-      return arr.filter((m3) => m3.coeff !== 0);
+      return arr.filter((m2) => m2.coeff !== 0);
     }
     static PolyDegree(poly) {
-      return Max(...poly.map((M2) => M2.degree()));
+      return Max(...poly.map((M) => M.degree()));
     }
   };
   __decorateClass([
@@ -19257,13 +19257,13 @@
     return new CustomErrorCls(name, message);
   }
   globalThis.CustomError = CustomError2;
-  function toError2(e6) {
-    if (e6 instanceof Error) {
-      return e6;
-    } else if (typeof e6 === "string") {
-      return CustomError2("UnknownError", e6);
+  function toError2(e5) {
+    if (e5 instanceof Error) {
+      return e5;
+    } else if (typeof e5 === "string") {
+      return CustomError2("UnknownError", e5);
     } else {
-      return CustomError2("UnknownError", JSON.stringify(e6));
+      return CustomError2("UnknownError", JSON.stringify(e5));
     }
   }
   globalThis.toError = toError2;
@@ -19282,14 +19282,14 @@
 
   // src/Math/Builder/support/latex.ts
   function latexAligned(texts) {
-    let T2 = "";
-    T2 += "\\begin{aligned}";
-    for (let t2 of texts)
-      T2 += t2 + " \\\\ ";
-    T2 += " \\end{aligned}";
-    T2 = T2.replaceAll("=", "&=");
-    T2 = T2.replaceAll("&&=", "&=");
-    return T2;
+    let T = "";
+    T += "\\begin{aligned}";
+    for (let t of texts)
+      T += t + " \\\\ ";
+    T += " \\end{aligned}";
+    T = T.replaceAll("=", "&=");
+    T = T.replaceAll("&&=", "&=");
+    return T;
   }
   function latexBraced(texts) {
     return "\\left\\{" + latexAligned(texts) + "\\right.";
@@ -19403,24 +19403,24 @@
   var BASE_PREFIX = ["n", "u", "m", "c", "k", "M", "G", "T", ""];
   var BASE_INDEX = ["-4", "-3", "-2", "-1", "1", "2", "3", "4"];
   function findUnit(name) {
-    for (let k2 in DEFAULT_UNIT) {
-      if (name.includes(k2))
-        return DEFAULT_UNIT[k2];
+    for (let k in DEFAULT_UNIT) {
+      if (name.includes(k))
+        return DEFAULT_UNIT[k];
     }
     return void 0;
   }
   function parseUnit(raw) {
-    let T2 = " " + raw + " ";
-    for (let u2 of BASE_UNITS) {
-      if (!T2.includes(u2))
+    let T = " " + raw + " ";
+    for (let u of BASE_UNITS) {
+      if (!T.includes(u))
         continue;
-      for (let p3 of BASE_PREFIX) {
-        T2 = T2.replaceAll(new RegExp("([^a-zA-z\xB0])" + p3 + u2 + "([^a-zA-z\xB0])", "g"), "$1~\\text{" + p3 + u2 + "}$2");
+      for (let p2 of BASE_PREFIX) {
+        T = T.replaceAll(new RegExp("([^a-zA-z\xB0])" + p2 + u + "([^a-zA-z\xB0])", "g"), "$1~\\text{" + p2 + u + "}$2");
       }
     }
-    for (let i2 of BASE_INDEX)
-      T2 = T2.replaceAll(new RegExp("([^0123456789-])" + i2 + "([^0123456789-])", "g"), "$1^{" + i2 + "}$2");
-    return T2;
+    for (let i of BASE_INDEX)
+      T = T.replaceAll(new RegExp("([^0123456789-])" + i + "([^0123456789-])", "g"), "$1^{" + i + "}$2");
+    return T;
   }
 
   // src/Math/Builder/support/variable.ts
@@ -19481,9 +19481,9 @@
       return this.display;
     }
     short() {
-      let v3 = cal.blur(Round(this.val, 3));
-      let abs = Math.abs(v3);
-      return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3);
+      let v2 = cal.blur(Round(this.val, 3));
+      let abs = Math.abs(v2);
+      return String(abs >= 1e4 || abs <= 0.01 ? Sci(v2) : v2);
     }
     long() {
       return this.short() + this.unit;
@@ -19498,25 +19498,25 @@
       return "\\text{" + this.name + "}~" + this.symbol() + " = " + this.long();
     }
     writeSymbol(latex) {
-      let T2 = latex;
+      let T = latex;
       let sym = this.sym;
-      let s3 = this.symbol();
-      T2 = T2.replaceAll("*(" + sym + ")", s3);
-      T2 = T2.replaceAll("*" + sym, s3);
-      T2 = T2.replaceAll("$(" + sym + ")", s3);
-      T2 = T2.replaceAll("$" + sym, s3);
-      return T2;
+      let s2 = this.symbol();
+      T = T.replaceAll("*(" + sym + ")", s2);
+      T = T.replaceAll("*" + sym, s2);
+      T = T.replaceAll("$(" + sym + ")", s2);
+      T = T.replaceAll("$" + sym, s2);
+      return T;
     }
     writeValue(latex) {
-      let T2 = latex;
+      let T = latex;
       let sym = this.sym;
-      let S2 = this.short();
-      let L2 = this.long();
-      T2 = T2.replaceAll("*(" + sym + ")", "(" + S2 + ")");
-      T2 = T2.replaceAll("*" + sym, S2);
-      T2 = T2.replaceAll("$(" + sym + ")", "(" + L2 + ")");
-      T2 = T2.replaceAll("$" + sym, L2);
-      return T2;
+      let S = this.short();
+      let L = this.long();
+      T = T.replaceAll("*(" + sym + ")", "(" + S + ")");
+      T = T.replaceAll("*" + sym, S);
+      T = T.replaceAll("$(" + sym + ")", "(" + L + ")");
+      T = T.replaceAll("$" + sym, L);
+      return T;
     }
   };
   var Variables = class extends Array {
@@ -19530,47 +19530,47 @@
       return this.map(($) => $.getVal());
     }
     setVal(obj) {
-      for (let k2 in obj) {
-        let val2 = obj[k2];
-        let variable = this.find(($) => $.sym === k2);
+      for (let k in obj) {
+        let val2 = obj[k];
+        let variable = this.find(($) => $.sym === k);
         variable.set(val2);
       }
     }
     write(latex, showVars) {
-      let T2 = latex;
+      let T = latex;
       let shows = [...showVars];
-      shows.sort((a2, b2) => b2.sym.length - a2.sym.length);
-      for (let v3 of this) {
-        T2 = showVars.includes(v3) ? v3.writeValue(T2) : v3.writeSymbol(T2);
+      shows.sort((a, b) => b.sym.length - a.sym.length);
+      for (let v2 of this) {
+        T = showVars.includes(v2) ? v2.writeValue(T) : v2.writeSymbol(T);
       }
-      return T2;
+      return T;
     }
     compareWith(oldVals) {
-      this.forEach((v3, i2) => {
-        let b2 = v3.getVal();
-        let a2 = oldVals[i2];
-        let mid5 = (Math.abs(a2) + Math.abs(b2)) / 2;
-        let percent = (b2 - a2) / mid5;
+      this.forEach((v2, i) => {
+        let b = v2.getVal();
+        let a = oldVals[i];
+        let mid5 = (Math.abs(a) + Math.abs(b)) / 2;
+        let percent = (b - a) / mid5;
         let THRESHOLD = 1e-7;
         let sign = 0;
         if (percent > THRESHOLD)
           sign = 1;
         if (percent < -THRESHOLD)
           sign = -1;
-        v3.set(sign);
+        v2.set(sign);
       });
     }
     rangeObj() {
       let obj = {};
-      for (let v3 of this) {
-        obj[v3.sym] = v3.range;
+      for (let v2 of this) {
+        obj[v2.sym] = v2.range;
       }
       return obj;
     }
     valObj() {
       let obj = {};
-      for (let v3 of this) {
-        obj[v3.sym] = v3.getVal();
+      for (let v2 of this) {
+        obj[v2.sym] = v2.getVal();
       }
       return obj;
     }
@@ -19591,9 +19591,9 @@
       return [];
     if (arr.length === 1)
       return [arr];
-    for (let i2 = 0; i2 < arr.length; i2++) {
-      const current = arr[i2];
-      const remaining = [...arr.slice(0, i2), ...arr.slice(i2 + 1)];
+    for (let i = 0; i < arr.length; i++) {
+      const current = arr[i];
+      const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];
       const remainingPermuted = permute(remaining);
       for (let permuted of remainingPermuted) {
         result.push([current, ...permuted]);
@@ -19601,20 +19601,20 @@
     }
     return result;
   }
-  function combinations(arr, k2) {
-    if (k2 > arr.length || k2 <= 0)
+  function combinations(arr, k) {
+    if (k > arr.length || k <= 0)
       return [];
-    if (k2 === arr.length)
+    if (k === arr.length)
       return [[...arr]];
-    if (k2 === 1)
+    if (k === 1)
       return arr.map(($) => [$]);
     const combs = [];
     let tail_combs = [];
-    for (let i2 = 0; i2 <= arr.length - k2 + 1; i2++) {
-      let tail = arr.slice(i2 + 1);
-      tail_combs = combinations(tail, k2 - 1);
-      for (let j2 = 0; j2 < tail_combs.length; j2++) {
-        combs.push([arr[i2], ...tail_combs[j2]]);
+    for (let i = 0; i <= arr.length - k + 1; i++) {
+      let tail = arr.slice(i + 1);
+      tail_combs = combinations(tail, k - 1);
+      for (let j = 0; j < tail_combs.length; j++) {
+        combs.push([arr[i], ...tail_combs[j]]);
       }
     }
     return combs;
@@ -19629,8 +19629,8 @@
     const [min, max] = range2;
     const logmin = Math.log10(min);
     const logmax = Math.log10(max);
-    const e6 = randomUniform([logmin, logmax]);
-    return 10 ** e6;
+    const e5 = randomUniform([logmin, logmax]);
+    return 10 ** e5;
   }
   function randomLogNeg(range2) {
     const [minNeg, maxNeg] = range2;
@@ -19646,11 +19646,11 @@
       return randomLogNeg(range2);
     return randomUniform(range2);
   }
-  function mid(a2, b2) {
-    return a2.map(($, i2) => ($ + b2[i2]) / 2);
+  function mid(a, b) {
+    return a.map(($, i) => ($ + b[i]) / 2);
   }
-  function equal(a2, b2) {
-    return a2.every(($, i2) => $ === b2[i2]) && a2.length === b2.length;
+  function equal(a, b) {
+    return a.every(($, i) => $ === b[i]) && a.length === b.length;
   }
   var Bisection = class {
     constructor(equation, ranges) {
@@ -19664,7 +19664,7 @@
       return this.ranges.map(randomValue);
     }
     randomSignedPoint(sign) {
-      for (let i2 = 0; i2 < 100; i2++) {
+      for (let i = 0; i < 100; i++) {
         const point = this.randomPoint();
         const value = this.equation(...point);
         const sameSign = value * sign > 0;
@@ -19679,16 +19679,16 @@
       this.b = this.randomSignedPoint(-1);
     }
     iterate() {
-      const m3 = mid(this.a, this.b);
-      const M2 = this.equation(...m3);
-      if (!Number.isFinite(M2)) {
+      const m2 = mid(this.a, this.b);
+      const M = this.equation(...m2);
+      if (!Number.isFinite(M)) {
         console.error("[bisection] The function value is not a finite number!");
         throw "";
       }
-      if (M2 >= 0)
-        this.a = m3;
-      if (M2 <= 0)
-        this.b = m3;
+      if (M >= 0)
+        this.a = m2;
+      if (M <= 0)
+        this.b = m2;
     }
     done() {
       const precision_a = this.a.map(($) => $.toPrecision(this.precision));
@@ -19705,7 +19705,7 @@
     run() {
       this.assertRange();
       this.intialize();
-      for (let i2 = 0; i2 < 100; i2++) {
+      for (let i = 0; i < 100; i++) {
         this.iterate();
         if (this.done())
           return [...this.a];
@@ -19725,25 +19725,25 @@
   // ../packages/gauss/lib/src/EquationFitter/Bisection/index.js
   function toObject(keys, vals) {
     const obj = {};
-    for (let i2 = 0; i2 < keys.length; i2++) {
-      obj[keys[i2]] = vals[i2];
+    for (let i = 0; i < keys.length; i++) {
+      obj[keys[i]] = vals[i];
     }
     return obj;
   }
   function narrowRange(ranges, preset) {
     const rngs = { ...ranges };
-    for (let k2 in preset) {
-      const val2 = preset[k2];
-      if (k2 in rngs && Number.isFinite(val2))
-        rngs[k2] = [val2, val2];
+    for (let k in preset) {
+      const val2 = preset[k];
+      if (k in rngs && Number.isFinite(val2))
+        rngs[k] = [val2, val2];
     }
     return rngs;
   }
-  function bisect(f3, ranges, preset) {
-    const vars = getVars(f3);
+  function bisect(f2, ranges, preset) {
+    const vars = getVars(f2);
     const narrowedRngs = narrowRange(ranges, preset);
     const bounds = vars.map(($) => narrowedRngs[$]);
-    const bi = new Bisection(f3, bounds);
+    const bi = new Bisection(f2, bounds);
     const sol = bi.exec();
     return toObject(vars, sol);
   }
@@ -19758,18 +19758,18 @@
     reset() {
       this.founds = new Set(this.givens);
     }
-    isFull(f3) {
-      return getVars(f3).every(($) => this.founds.has($));
+    isFull(f2) {
+      return getVars(f2).every(($) => this.founds.has($));
     }
-    fit(f3) {
-      getVars(f3).forEach(($) => this.founds.add($));
+    fit(f2) {
+      getVars(f2).forEach(($) => this.founds.add($));
     }
     isFittableOrder(fs) {
       this.reset();
-      for (let f3 of fs) {
-        if (this.isFull(f3))
+      for (let f2 of fs) {
+        if (this.isFull(f2))
           return false;
-        this.fit(f3);
+        this.fit(f2);
       }
       return true;
     }
@@ -19783,10 +19783,10 @@
   };
   function getFittableOrder(fs, preset) {
     const givens = [];
-    for (let k2 in preset) {
-      let v3 = preset[k2];
-      if (Number.isFinite(v3))
-        givens.push(k2);
+    for (let k in preset) {
+      let v2 = preset[k];
+      if (Number.isFinite(v2))
+        givens.push(k);
     }
     const sr = new Searcher(fs, givens);
     return sr.getFittableOrder();
@@ -19810,15 +19810,15 @@
     setVals(vals) {
       this.vals = { ...this.vals, ...vals };
     }
-    fitOne(f3) {
-      const sol = bisect(f3, this.ranges, this.vals);
+    fitOne(f2) {
+      const sol = bisect(f2, this.ranges, this.vals);
       this.setVals(sol);
     }
     fit() {
       const orderedFS = getFittableOrder(this.fs, this.preset);
       if (orderedFS === void 0)
         throw "There is no fittable order for this system.";
-      for (let i2 = 0; i2 < 10; i2++) {
+      for (let i = 0; i < 10; i++) {
         try {
           this.reset();
           orderedFS.forEach(($) => this.fitOne($));
@@ -19885,8 +19885,8 @@
     }
     forceSolve() {
       let nextOrder = this.nextOrder();
-      for (let v3 of this.unsolvedVabes()) {
-        v3.solve(nextOrder);
+      for (let v2 of this.unsolvedVabes()) {
+        v2.solve(nextOrder);
       }
     }
     trySolve() {
@@ -19905,31 +19905,31 @@
       this.preset = preset;
     }
     reset() {
-      for (let v3 of this.vabes) {
-        const isPreset = this.preset.includes(v3);
-        isPreset ? v3.setZero() : v3.reset();
+      for (let v2 of this.vabes) {
+        const isPreset = this.preset.includes(v2);
+        isPreset ? v2.setZero() : v2.reset();
       }
     }
     trySolveNext() {
       for (let eq2 of this.equbes) {
-        const t2 = eq2.trySolve();
-        if (t2 === true)
+        const t = eq2.trySolve();
+        if (t === true)
           return true;
       }
       return false;
     }
     exportOrder() {
       const orders = {};
-      for (let v3 of this.vabes) {
-        orders[v3.symbol] = v3.order;
+      for (let v2 of this.vabes) {
+        orders[v2.symbol] = v2.order;
       }
       return orders;
     }
     getTree() {
       this.reset();
-      for (let i2 = 0; i2 <= this.equbes.length; i2++) {
-        const t2 = this.trySolveNext();
-        if (!t2)
+      for (let i = 0; i <= this.equbes.length; i++) {
+        const t = this.trySolveNext();
+        if (!t)
           break;
       }
       return this.exportOrder();
@@ -19941,14 +19941,14 @@
       this.equbes = equbes;
     }
     allVabeCombinations() {
-      const n2 = this.vabes.length - this.equbes.length;
-      return combinations(this.vabes, n2);
+      const n = this.vabes.length - this.equbes.length;
+      return combinations(this.vabes, n);
     }
     getTrees() {
       const combs = this.allVabeCombinations();
       const ts = [];
-      for (let c3 of combs) {
-        const ana = new PresetAnalyzer(this.vabes, this.equbes, c3);
+      for (let c2 of combs) {
+        const ana = new PresetAnalyzer(this.vabes, this.equbes, c2);
         ts.push(ana.getTree());
       }
       return ts;
@@ -19965,8 +19965,8 @@
     const symbols = getAllVars(fs);
     const vabes = symbols.map(($) => new Vabe($));
     const equbes = [];
-    for (let f3 of fs) {
-      let syms = getVars(f3);
+    for (let f2 of fs) {
+      let syms = getVars(f2);
       const vs = syms.map(($) => vabes.find((_) => _.symbol === $));
       let eq2 = new Eqube(vs);
       equbes.push(eq2);
@@ -19995,8 +19995,8 @@
     }
     stepSymbols() {
       const arr = [];
-      for (let i2 = 1; i2 < this.maxOrder; i2++) {
-        arr.push(...this.symbolsWithOrder(i2));
+      for (let i = 1; i < this.maxOrder; i++) {
+        arr.push(...this.symbolsWithOrder(i));
       }
       return arr;
     }
@@ -20005,20 +20005,20 @@
     }
   };
   var EquationReader = class {
-    constructor(f3, tree) {
-      this.f = f3;
+    constructor(f2, tree) {
+      this.f = f2;
       this.tree = tree;
       this.myTree = {};
-      this.symbols = getVars(f3);
-      for (let k2 in tree) {
-        if (this.symbols.includes(k2))
-          this.myTree[k2] = tree[k2];
+      this.symbols = getVars(f2);
+      for (let k in tree) {
+        if (this.symbols.includes(k))
+          this.myTree[k] = tree[k];
       }
       this.reader = new TreeReader(this.myTree);
     }
     isActiveSolve() {
-      const m3 = this.maxOrder();
-      return m3 !== 0 && this.symbolsWithOrder(m3).length === 1;
+      const m2 = this.maxOrder();
+      return m2 !== 0 && this.symbolsWithOrder(m2).length === 1;
     }
     maxOrder() {
       return this.reader.maxOrder;
@@ -20061,16 +20061,16 @@
       if (order === 1)
         return [this.revealer(symbol)];
       let eqs = [];
-      for (let s3 of this.prerequisites(symbol)) {
-        eqs.push(...this.flowForOne(s3));
+      for (let s2 of this.prerequisites(symbol)) {
+        eqs.push(...this.flowForOne(s2));
       }
       eqs.push(this.revealer(symbol));
       return [...new Set(eqs)];
     }
     flow(unknowns) {
       let eqs = [];
-      for (let u2 of unknowns) {
-        eqs.push(...this.flowForOne(u2));
+      for (let u of unknowns) {
+        eqs.push(...this.flowForOne(u));
       }
       return [...new Set(eqs)];
     }
@@ -20081,8 +20081,8 @@
     let flow = tracer.flow(unknownSymbols);
     return flow.map(($) => $.f);
   }
-  function solvingSymbol(f3, tree) {
-    const eqReader = new EquationReader(f3, tree);
+  function solvingSymbol(f2, tree) {
+    const eqReader = new EquationReader(f2, tree);
     return eqReader.solvingSymbol();
   }
   function readTree(tree) {
@@ -20158,15 +20158,15 @@
       let eqs = fs.map(($) => this.equations.find((_) => _.zeroFunc === $));
       let info = readTree(this.tree);
       let givens = info.givens.map(($) => this.variables.find((_) => _.sym === $));
-      let T2 = "";
+      let T = "";
       for (let eq2 of eqs) {
         let solved = solvingSymbol(eq2.zeroFunc, this.tree);
         let solvedVar = this.variables.find(($) => $.sym === solved);
-        T2 += latexAligned([eq2.print(), eq2.print(givens), solvedVar.full()]);
-        T2 += " \\\\~\\\\ ";
+        T += latexAligned([eq2.print(), eq2.print(givens), solvedVar.full()]);
+        T += " \\\\~\\\\ ";
         givens.push(solvedVar);
       }
-      return T2;
+      return T;
     }
     generateTrend() {
       let { tree, top, info } = this.getFullTree();
@@ -20194,10 +20194,10 @@
     return fnStr.slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")")).replaceAll(" ", "").split(",");
   }
   function findVarBySym(sym, vars) {
-    let v3 = vars.find((v4) => v4.sym === sym);
-    if (v3 === void 0)
+    let v2 = vars.find((v3) => v3.sym === sym);
+    if (v2 === void 0)
       throw "Fail to find variable: " + sym;
-    return v3;
+    return v2;
   }
   function getDeps(func, vars) {
     let dep = getSignature(func);
@@ -20232,12 +20232,12 @@
     sigfig: sigfig2 = {},
     solFormat = "series"
   } = {}) {
-    for (let i2 = 0; i2 <= 10; i2++) {
+    for (let i = 0; i <= 10; i++) {
       try {
         return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig: sigfig2, solFormat });
-      } catch (e6) {
-        if (i2 === 10) {
-          throw e6;
+      } catch (e5) {
+        if (i === 10) {
+          throw e5;
         } else {
           continue;
         }
@@ -20268,18 +20268,18 @@
         if (solFormat === "series") {
           return system.solInSteps(unknown);
         } else {
-          let T2 = "";
-          T2 += system.print() + " \\\\~\\\\ ";
-          T2 += system.print(givens) + " \\\\~\\\\ ";
-          T2 += latexBraced(hiddens.map(($) => $.full()));
-          return T2;
+          let T = "";
+          T += system.print() + " \\\\~\\\\ ";
+          T += system.print(givens) + " \\\\~\\\\ ";
+          T += latexBraced(hiddens.map(($) => $.full()));
+          return T;
         }
       }
     }
     return {
       list: givens.map(($) => listSym ? $.rich() : $.whole()).join("\\\\"),
       sol: sol(),
-      vars: system.variables.map((v3) => givens.includes(v3) ? v3.long() : v3.symbol()),
+      vars: system.variables.map((v2) => givens.includes(v2) ? v2.long() : v2.symbol()),
       vals: system.variables.map(($) => $.getVal()),
       unknown: [
         unknown.symbol(),
@@ -20316,8 +20316,8 @@
     }
     return {
       consts: [
-        constants.map((v3) => v3.symbol()),
-        constants.map((v3) => v3.name)
+        constants.map((v2) => v2.symbol()),
+        constants.map((v2) => v2.name)
       ],
       agent: [
         agent.symbol(),
@@ -20325,11 +20325,11 @@
         toWord(agent.getVal()),
         toCode2(agent.getVal())
       ],
-      responses: responses.map((v3) => [
-        v3.symbol(),
-        v3.name,
-        toWord(v3.getVal()),
-        toCode2(v3.getVal())
+      responses: responses.map((v2) => [
+        v2.symbol(),
+        v2.name,
+        toWord(v2.getVal()),
+        toCode2(v2.getVal())
       ]),
       target: [
         target.symbol(),
@@ -20350,23 +20350,23 @@
     let system = toEquSystem(variables, [[func, latex]]);
     let vars = system.variables;
     let [given, unknown, ...constants] = RndShuffle(...vars);
-    let g2 = [];
-    let u2 = [];
+    let g = [];
+    let u = [];
     system.fit();
     given.round(sigfig2[given.sym]);
     unknown.round(sigfig2[unknown.sym]);
-    g2.push(given.getVal());
-    u2.push(unknown.getVal());
+    g.push(given.getVal());
+    u.push(unknown.getVal());
     system.fitAgain(constants);
-    for (let i2 = 0; i2 < 10; i2++) {
+    for (let i = 0; i < 10; i++) {
       system.fitAgain([given, unknown]);
       given.round(sigfig2[given.sym]);
-      if (given.getVal() !== g2[0])
+      if (given.getVal() !== g[0])
         break;
     }
     system.fitAgain([unknown]);
-    g2.push(given.getVal());
-    u2.push(unknown.getVal());
+    g.push(given.getVal());
+    u.push(unknown.getVal());
     function setSubscript(order) {
       if (order === 0) {
         given.label();
@@ -20379,8 +20379,8 @@
     function setVal(order) {
       if (order === 0)
         return;
-      given.set(g2[order - 1]);
-      unknown.set(u2[order - 1]);
+      given.set(g[order - 1]);
+      unknown.set(u[order - 1]);
     }
     function setCase(order) {
       setSubscript(order);
@@ -20435,8 +20435,8 @@
       table: table(),
       sol: sol(),
       consts: [
-        constants.map((v3) => v3.symbol()),
-        constants.map((v3) => v3.name)
+        constants.map((v2) => v2.symbol()),
+        constants.map((v2) => v2.name)
       ],
       given: [
         given.symbol(),
@@ -20453,12 +20453,12 @@
     avoids = [],
     sigfig: sigfig2 = {}
   } = {}) {
-    for (let i2 = 0; i2 <= 10; i2++) {
+    for (let i = 0; i <= 10; i++) {
       try {
         return BuildSolveOnce2(variables, equations, { listSym, avoids, sigfig: sigfig2 });
-      } catch (e6) {
-        if (i2 === 10) {
-          throw e6;
+      } catch (e5) {
+        if (i === 10) {
+          throw e5;
         } else {
           continue;
         }
@@ -20491,7 +20491,7 @@
     return {
       list: givens.map(($) => listSym ? $.rich() : $.whole()).join("\\\\"),
       sol: sol(),
-      vars: system.variables.map((v3) => givens.includes(v3) ? v3.long() : v3.symbol()),
+      vars: system.variables.map((v2) => givens.includes(v2) ? v2.long() : v2.symbol()),
       vals: system.variables.map(($) => $.getVal()),
       unknown: [
         unknown.symbol(),
@@ -20510,25 +20510,25 @@
   globalThis.BuildSolve2 = BuildSolve2;
 
   // ../packages/paint/lib/support/trim.js
-  function getAlpha(img, x2, y2) {
-    let i2 = 0;
-    i2 += y2 * img.width;
-    i2 += x2;
-    return img.data[4 * i2 + 3];
+  function getAlpha(img, x, y) {
+    let i = 0;
+    i += y * img.width;
+    i += x;
+    return img.data[4 * i + 3];
   }
-  function isPainted(img, x2, y2) {
-    return getAlpha(img, x2, y2) !== 0;
+  function isPainted(img, x, y) {
+    return getAlpha(img, x, y) !== 0;
   }
-  function rowBlank(img, y2) {
-    for (let x2 = 0; x2 < img.width; x2++) {
-      if (isPainted(img, x2, y2))
+  function rowBlank(img, y) {
+    for (let x = 0; x < img.width; x++) {
+      if (isPainted(img, x, y))
         return false;
     }
     return true;
   }
-  function colBlank(img, x2) {
-    for (let y2 = 0; y2 < img.height; y2++) {
-      if (isPainted(img, x2, y2))
+  function colBlank(img, x) {
+    for (let y = 0; y < img.height; y++) {
+      if (isPainted(img, x, y))
         return false;
     }
     return true;
@@ -20614,18 +20614,18 @@
       this.height = inchToPx(value);
     }
     saveImg() {
-      const w2 = this.canvas.width;
-      const h2 = this.canvas.height;
-      this.imgStore = this.ctx.getImageData(0, 0, w2, h2);
+      const w = this.canvas.width;
+      const h = this.canvas.height;
+      this.imgStore = this.ctx.getImageData(0, 0, w, h);
     }
     restoreImg() {
       if (this.imgStore !== null)
         this.ctx.putImageData(this.imgStore, 0, 0);
     }
     clearImg() {
-      const w2 = this.canvas.width;
-      const h2 = this.canvas.height;
-      this.ctx.clearRect(0, 0, w2, h2);
+      const w = this.canvas.width;
+      const h = this.canvas.height;
+      this.ctx.clearRect(0, 0, w, h);
     }
     export(html, placeholder, trim) {
       let cv = cloneCanvas(this.canvas);
@@ -20684,67 +20684,67 @@
       return this.dy() / this.dx();
     }
     center() {
-      let x2 = (this.xmin + this.xmax) / 2;
-      let y2 = (this.ymin + this.ymax) / 2;
-      return [x2, y2];
+      let x = (this.xmin + this.xmax) / 2;
+      let y = (this.ymin + this.ymax) / 2;
+      return [x, y];
     }
-    edgeTop(x2 = 0) {
-      return [x2, this.ymax];
+    edgeTop(x = 0) {
+      return [x, this.ymax];
     }
-    edgeBottom(x2 = 0) {
-      return [x2, this.ymin];
+    edgeBottom(x = 0) {
+      return [x, this.ymin];
     }
-    edgeLeft(y2 = 0) {
-      return [this.xmin, y2];
+    edgeLeft(y = 0) {
+      return [this.xmin, y];
     }
-    edgeRight(y2 = 0) {
-      return [this.xmax, y2];
+    edgeRight(y = 0) {
+      return [this.xmax, y];
     }
     origin() {
       return [0, 0];
     }
-    isXVisible([x2, y2], buffer = 0) {
-      let X2 = this.dx() * buffer;
-      return this.xmin - X2 <= x2 && x2 <= this.xmax + X2;
+    isXVisible([x, y], buffer = 0) {
+      let X = this.dx() * buffer;
+      return this.xmin - X <= x && x <= this.xmax + X;
     }
-    isYVisible([x2, y2], buffer = 0) {
-      let Y2 = this.dy() * buffer;
-      return this.ymin - Y2 <= y2 && y2 <= this.ymax + Y2;
+    isYVisible([x, y], buffer = 0) {
+      let Y = this.dy() * buffer;
+      return this.ymin - Y <= y && y <= this.ymax + Y;
     }
     isVisible(point, buffer = 0) {
       return this.isXVisible(point, buffer) && this.isYVisible(point, buffer);
     }
-    toTopEdge([x2, y2], dir3) {
-      let Dy = this.ymax - y2;
+    toTopEdge([x, y], dir3) {
+      let Dy = this.ymax - y;
       let Dx = Dy / tan2(dir3);
-      return [x2 + Dx, this.ymax];
+      return [x + Dx, this.ymax];
     }
-    toBottomEdge([x2, y2], dir3) {
-      let Dy = this.ymin - y2;
+    toBottomEdge([x, y], dir3) {
+      let Dy = this.ymin - y;
       let Dx = Dy / tan2(dir3);
-      return [x2 + Dx, this.ymin];
+      return [x + Dx, this.ymin];
     }
-    toRightEdge([x2, y2], dir3) {
-      let Dx = this.xmax - x2;
+    toRightEdge([x, y], dir3) {
+      let Dx = this.xmax - x;
       let Dy = Dx * tan2(dir3);
-      return [this.xmax, y2 + Dy];
+      return [this.xmax, y + Dy];
     }
-    toLeftEdge([x2, y2], dir3) {
-      let Dx = this.xmin - x2;
+    toLeftEdge([x, y], dir3) {
+      let Dx = this.xmin - x;
       let Dy = Dx * tan2(dir3);
-      return [this.xmin, y2 + Dy];
+      return [this.xmin, y + Dy];
     }
     edgePoint(anchor, dir3) {
       if (!this.isVisible(anchor))
         return anchor;
-      let [x2, y2] = anchor;
+      let [x, y] = anchor;
       let arr = [
         this.toTopEdge(anchor, dir3),
         this.toBottomEdge(anchor, dir3),
         this.toRightEdge(anchor, dir3),
         this.toLeftEdge(anchor, dir3)
       ];
-      arr = arr.filter(($) => this.isVisible($)).filter(([X2, Y2]) => (X2 - x2) * cos2(dir3) >= 0).filter(([X2, Y2]) => (Y2 - y2) * sin2(dir3) >= 0);
+      arr = arr.filter(($) => this.isVisible($)).filter(([X, Y]) => (X - x) * cos2(dir3) >= 0).filter(([X, Y]) => (Y - y) * sin2(dir3) >= 0);
       if (arr.length !== 1)
         console.error("edgePoint not unique! from:" + anchor + " to:" + arr);
       return arr[0];
@@ -20757,15 +20757,15 @@
       let xmax = first[0];
       let ymin = first[1];
       let ymax = first[1];
-      for (let [x2, y2] of rest) {
-        if (x2 < xmin)
-          xmin = x2;
-        if (x2 > xmax)
-          xmax = x2;
-        if (y2 < ymin)
-          ymin = y2;
-        if (y2 > ymax)
-          ymax = y2;
+      for (let [x, y] of rest) {
+        if (x < xmin)
+          xmin = x;
+        if (x > xmax)
+          xmax = x;
+        if (y < ymin)
+          ymin = y;
+        if (y > ymax)
+          ymax = y;
       }
       this.xmin = xmin;
       this.xmax = xmax;
@@ -20807,47 +20807,47 @@
     }
     point2DtoPx(point) {
       let [xCoord, yCoord] = point;
-      let x2 = toPixelX(this.xmin, this.xmax, this.width, xCoord);
-      let y2 = toPixelY(this.ymin, this.ymax, this.height, yCoord);
-      return [x2, y2];
+      let x = toPixelX(this.xmin, this.xmax, this.width, xCoord);
+      let y = toPixelY(this.ymin, this.ymax, this.height, yCoord);
+      return [x, y];
     }
   };
 
   // ../packages/paint/lib/support/capture.js
   function getCircleCorners(center, radius) {
-    let [h2, k2] = center;
-    let r3 = radius;
+    let [h, k] = center;
+    let r2 = radius;
     return [
-      [h2 + r3, k2 + r3],
-      [h2 + r3, k2 - r3],
-      [h2 - r3, k2 + r3],
-      [h2 - r3, k2 - r3]
+      [h + r2, k + r2],
+      [h + r2, k - r2],
+      [h - r2, k + r2],
+      [h - r2, k - r2]
     ];
   }
   function getSphereCorners(center, radius) {
-    let [a2, b2, c3] = center;
-    let r3 = radius;
+    let [a, b, c2] = center;
+    let r2 = radius;
     return [
-      [a2 + r3, b2 + r3, c3 + r3],
-      [a2 + r3, b2 + r3, c3 - r3],
-      [a2 + r3, b2 - r3, c3 + r3],
-      [a2 + r3, b2 - r3, c3 - r3],
-      [a2 - r3, b2 + r3, c3 + r3],
-      [a2 - r3, b2 + r3, c3 - r3],
-      [a2 - r3, b2 - r3, c3 + r3],
-      [a2 - r3, b2 - r3, c3 - r3]
+      [a + r2, b + r2, c2 + r2],
+      [a + r2, b + r2, c2 - r2],
+      [a + r2, b - r2, c2 + r2],
+      [a + r2, b - r2, c2 - r2],
+      [a - r2, b + r2, c2 + r2],
+      [a - r2, b + r2, c2 - r2],
+      [a - r2, b - r2, c2 + r2],
+      [a - r2, b - r2, c2 - r2]
     ];
   }
-  function getQuadraticCorners(a2, b2, c3, scale) {
-    let f3 = (x2) => a2 * x2 * x2 + b2 * x2 + c3;
-    let h2 = -b2 / (2 * a2);
-    let k2 = f3(h2);
-    let V2 = [h2, k2];
-    let dx = 1 / (2 * a2);
+  function getQuadraticCorners(a, b, c2, scale) {
+    let f2 = (x) => a * x * x + b * x + c2;
+    let h = -b / (2 * a);
+    let k = f2(h);
+    let V = [h, k];
+    let dx = 1 / (2 * a);
     let Dx = dx * scale;
-    let A2 = [h2 + Dx, f3(h2 + Dx)];
-    let B2 = [h2 - Dx, f3(h2 - Dx)];
-    return [A2, B2, V2];
+    let A = [h + Dx, f2(h + Dx)];
+    let B = [h - Dx, f2(h - Dx)];
+    return [A, B, V];
   }
   function isPoint2D(thing) {
     return Array.isArray(thing) && thing.length === 2 && typeof thing[0] === "number" && typeof thing[1] === "number";
@@ -20893,12 +20893,12 @@
 
   // ../packages/paint/lib/canvas/canvas02.js
   function proj(point3D2, angle2, depth) {
-    let a2 = angle2 * Math.PI / 180;
-    let s3 = Math.sin(a2);
-    let c3 = Math.cos(a2);
-    let [x2, y2, z2] = point3D2;
-    let x_new = x2 + depth * y2 * c3;
-    let y_new = z2 + depth * y2 * s3;
+    let a = angle2 * Math.PI / 180;
+    let s2 = Math.sin(a);
+    let c2 = Math.cos(a);
+    let [x, y, z] = point3D2;
+    let x_new = x + depth * y * c2;
+    let y_new = z + depth * y * s2;
     return [x_new, y_new];
   }
   function forceProj(point, angle2, depth) {
@@ -20963,8 +20963,8 @@
       this.ctx.lineWidth = value;
     }
     get $COLOR() {
-      let c3 = this.ctx.fillStyle;
-      return typeof c3 === "string" ? c3 : "";
+      let c2 = this.ctx.fillStyle;
+      return typeof c2 === "string" ? c2 : "";
     }
     set $COLOR(value) {
       this.ctx.strokeStyle = value;
@@ -21077,14 +21077,14 @@
   function mid2(Points) {
     if (Points.length === 0)
       return [0, 0];
-    let X2 = 0;
-    let Y2 = 0;
-    for (let p3 of Points) {
-      X2 += p3[0];
-      Y2 += p3[1];
+    let X = 0;
+    let Y = 0;
+    for (let p2 of Points) {
+      X += p2[0];
+      Y += p2[1];
     }
-    let n2 = Points.length;
-    return [X2 / n2, Y2 / n2];
+    let n = Points.length;
+    return [X / n, Y / n];
   }
 
   // ../packages/paint/lib/canvas/canvas04.js
@@ -21097,35 +21097,35 @@
   function dotVec([x1, y1], [x2, y2]) {
     return [x2 - x1, y2 - y1];
   }
-  function dir(A2, B2) {
-    let [dx, dy] = dotVec(A2, B2);
+  function dir(A, B) {
+    let [dx, dy] = dotVec(A, B);
     let rad2 = -Math.atan2(dy, dx);
     return deg(rad2);
   }
-  function scaleDot([x2, y2], ratio) {
-    return [x2 * ratio, y2 * ratio];
+  function scaleDot([x, y], ratio) {
+    return [x * ratio, y * ratio];
   }
-  function dist(A2, B2) {
-    let [dx, dy] = dotVec(A2, B2);
+  function dist(A, B) {
+    let [dx, dy] = dotVec(A, B);
     return (dx * dx + dy * dy) ** 0.5;
   }
   function addDot([x1, y1], [x2, y2]) {
     return [x1 + x2, y1 + y2];
   }
-  function scaleDotTo(A2, length) {
-    let oldLength = dist([0, 0], A2);
+  function scaleDotTo(A, length) {
+    let oldLength = dist([0, 0], A);
     let ratio = length / oldLength;
-    return scaleDot(A2, ratio);
+    return scaleDot(A, ratio);
   }
-  function moveDot(A2, B2, dist2) {
-    let AB = dotVec(A2, B2);
-    let d2 = scaleDotTo(AB, dist2);
-    return addDot(A2, d2);
+  function moveDot(A, B, dist2) {
+    let AB = dotVec(A, B);
+    let d = scaleDotTo(AB, dist2);
+    return addDot(A, d);
   }
   var Canvas04 = class extends Canvas03 {
     translateTo(pt) {
-      let [x2, y2] = this.toPx(pt);
-      this.ctx.translate(x2, y2);
+      let [x, y] = this.toPx(pt);
+      this.ctx.translate(x, y);
     }
     rotate(degreePolar) {
       this.ctx.rotate(-rad(degreePolar));
@@ -21135,18 +21135,18 @@
       let [x2, y2] = this.toPx(end);
       let dx = x2 - x1;
       let dy = y2 - y1;
-      let q2 = Math.atan2(dy, dx);
-      this.ctx.rotate(q2);
+      let q = Math.atan2(dy, dx);
+      this.ctx.rotate(q);
     }
     alignTo(start, end) {
       this.translateTo(end);
       this.rotateTo(start, end);
     }
-    moveToPx([x2, y2]) {
-      this.ctx.moveTo(x2, y2);
+    moveToPx([x, y]) {
+      this.ctx.moveTo(x, y);
     }
-    lineToPx([x2, y2]) {
-      this.ctx.lineTo(x2, y2);
+    lineToPx([x, y]) {
+      this.ctx.lineTo(x, y);
     }
     createPathPx(dots) {
       this.ctx.beginPath();
@@ -21154,8 +21154,8 @@
         return;
       let [first, ...rest] = dots;
       this.moveToPx(first);
-      for (let d2 of rest) {
-        this.lineToPx(d2);
+      for (let d of rest) {
+        this.lineToPx(d);
       }
     }
     createShapePx(dots) {
@@ -21163,12 +21163,12 @@
       this.ctx.closePath();
     }
     moveTo(pt) {
-      let [x2, y2] = this.toPx(pt);
-      this.ctx.moveTo(x2, y2);
+      let [x, y] = this.toPx(pt);
+      this.ctx.moveTo(x, y);
     }
     lineTo(pt) {
-      let [x2, y2] = this.toPx(pt);
-      this.ctx.lineTo(x2, y2);
+      let [x, y] = this.toPx(pt);
+      this.ctx.lineTo(x, y);
     }
     createPath(pts) {
       this.ctx.beginPath();
@@ -21176,8 +21176,8 @@
         return;
       let [first, ...rest] = pts;
       this.moveTo(first);
-      for (let p3 of rest) {
-        this.lineTo(p3);
+      for (let p2 of rest) {
+        this.lineTo(p2);
       }
     }
     createShape(pts) {
@@ -21185,29 +21185,29 @@
       this.ctx.closePath();
     }
     createArc(center, radius, angle2) {
-      let [x2, y2] = this.toPx(center);
+      let [x, y] = this.toPx(center);
       let [q1, q2] = angle2;
       q1 = -rad(q1);
       q2 = -rad(q2);
       this.ctx.beginPath();
-      this.ctx.arc(x2, y2, radius, q1, q2, true);
+      this.ctx.arc(x, y, radius, q1, q2, true);
     }
-    createArcByPoints(P2, O2, Q2, radius) {
-      let p3 = this.toPx(P2);
-      let o2 = this.toPx(O2);
-      let q2 = this.toPx(Q2);
-      let q1 = dir(o2, p3);
-      let q22 = dir(o2, q2);
-      this.createArc(O2, radius, [q1, q22]);
+    createArcByPoints(P, O, Q, radius) {
+      let p2 = this.toPx(P);
+      let o = this.toPx(O);
+      let q = this.toPx(Q);
+      let q1 = dir(o, p2);
+      let q2 = dir(o, q);
+      this.createArc(O, radius, [q1, q2]);
     }
-    createRightAnglePath(P2, O2, Q2, size) {
-      let p3 = this.toPx(P2);
-      let o2 = this.toPx(O2);
-      let q2 = this.toPx(Q2);
-      let a2 = moveDot(o2, p3, size);
-      let b2 = moveDot(o2, q2, size);
-      let c3 = addDot(b2, dotVec(o2, a2));
-      this.createPathPx([a2, c3, b2]);
+    createRightAnglePath(P, O, Q, size) {
+      let p2 = this.toPx(P);
+      let o = this.toPx(O);
+      let q = this.toPx(Q);
+      let a = moveDot(o, p2, size);
+      let b = moveDot(o, q, size);
+      let c2 = addDot(b, dotVec(o, a));
+      this.createPathPx([a, c2, b]);
     }
     doStroke() {
       this.ctx.stroke();
@@ -21252,23 +21252,23 @@
     });
     return widget;
   }
-  function latexTuneX(x2, width, textAlign) {
+  function latexTuneX(x, width, textAlign) {
     if (textAlign === "left")
-      return -x2;
+      return -x;
     if (textAlign === "right")
-      return -x2 - width;
+      return -x - width;
     if (textAlign === "center")
-      return -x2 - width / 2;
-    return -x2 - width / 2;
+      return -x - width / 2;
+    return -x - width / 2;
   }
-  function latexTuneY(y2, height, textBaseline) {
+  function latexTuneY(y, height, textBaseline) {
     if (textBaseline === "top")
-      return -y2;
+      return -y;
     if (textBaseline === "bottom")
-      return -y2 - height;
+      return -y - height;
     if (textBaseline === "middle")
-      return -y2 - height / 2;
-    return -y2 / 2;
+      return -y - height / 2;
+    return -y / 2;
   }
   function isAlphabet(_) {
     return _.length === 1 && _.toLowerCase() !== _.toUpperCase();
@@ -21311,10 +21311,10 @@
       }
     }
     text(text, point, offset) {
-      let [x2, y2] = this.toPx(point);
-      x2 += offset[0];
-      y2 -= offset[1];
-      this.textPx(text, [x2, y2]);
+      let [x, y] = this.toPx(point);
+      x += offset[0];
+      y -= offset[1];
+      this.textPx(text, [x, y]);
     }
     write(text, point) {
       this.text(text, point, [0, 0]);
@@ -21322,9 +21322,9 @@
     labelOffset(text, radius, dir3) {
       let textWidth = this.textSemi(text);
       let extraX = this.$TEXT_ALIGN === "center" ? textWidth - 4 : 0;
-      let x2 = (radius + extraX) * cos3(dir3);
-      let y2 = radius * sin3(dir3);
-      return [x2, y2];
+      let x = (radius + extraX) * cos3(dir3);
+      let y = radius * sin3(dir3);
+      return [x, y];
     }
     label(text, point, radius, dir3) {
       let italic = this.$TEXT_ITALIC;
@@ -21354,10 +21354,10 @@
   function cos4(degree) {
     return Math.cos(degree / 180 * Math.PI);
   }
-  function Move2([x2, y2], dir3, length) {
-    x2 += length * cos4(dir3);
-    y2 += length * sin4(dir3);
-    return [x2, y2];
+  function Move2([x, y], dir3, length) {
+    x += length * cos4(dir3);
+    y += length * sin4(dir3);
+    return [x, y];
   }
   function deg2(radian) {
     return radian / Math.PI * 180;
@@ -21365,14 +21365,14 @@
   function dotVec2([x1, y1], [x2, y2]) {
     return [x2 - x1, y2 - y1];
   }
-  function dir2(A2, B2) {
-    let [dx, dy] = dotVec2(A2, B2);
+  function dir2(A, B) {
+    let [dx, dy] = dotVec2(A, B);
     let rad2 = -Math.atan2(dy, dx);
     return deg2(rad2);
   }
-  function vec(p1, p22) {
+  function vec(p1, p2) {
     let [x1, y1] = p1;
-    let [x2, y2] = p22;
+    let [x2, y2] = p2;
     return [x2 - x1, y2 - y1];
   }
   function cross2D(vec1, vec22) {
@@ -21380,13 +21380,13 @@
     let [x2, y2] = vec22;
     return x1 * y2 - y1 * x2;
   }
-  function IsReflex2(A2, O2, B2) {
-    let OA = vec(O2, A2);
-    let OB = vec(O2, B2);
+  function IsReflex2(A, O, B) {
+    let OA = vec(O, A);
+    let OB = vec(O, B);
     return cross2D(OA, OB) < 0;
   }
-  function polarFlip(A2, O2, B2, mode) {
-    let isReflex = IsReflex2(A2, O2, B2);
+  function polarFlip(A, O, B, mode) {
+    let isReflex = IsReflex2(A, O, B);
     if (mode === "normal" && isReflex)
       return true;
     if (mode === "reflex" && !isReflex)
@@ -21395,44 +21395,44 @@
   }
   var Canvas06 = class extends Canvas05 {
     getDir(start, end) {
-      let A2 = this.toPx(start);
-      let B2 = this.toPx(end);
-      return dir2(A2, B2);
+      let A = this.toPx(start);
+      let B = this.toPx(end);
+      return dir2(A, B);
     }
     getCenterDir(point) {
-      let C2 = this.$LABEL_CENTER[0];
-      return this.getDir(C2, point);
+      let C = this.$LABEL_CENTER[0];
+      return this.getDir(C, point);
     }
-    getDirAngle(A2, O2, B2) {
-      let flip = this.polarFlip(A2, O2, B2);
-      let [P2, Q2] = flip ? [B2, A2] : [A2, B2];
-      let a2 = this.getDir(O2, P2);
-      let b2 = this.getDir(O2, Q2);
-      return a2 <= b2 ? b2 - a2 : 360 + b2 - a2;
+    getDirAngle(A, O, B) {
+      let flip = this.polarFlip(A, O, B);
+      let [P, Q] = flip ? [B, A] : [A, B];
+      let a = this.getDir(O, P);
+      let b = this.getDir(O, Q);
+      return a <= b ? b - a : 360 + b - a;
     }
-    getMidDir(A2, O2, B2) {
-      let flip = this.polarFlip(A2, O2, B2);
-      let [P2, Q2] = flip ? [B2, A2] : [A2, B2];
-      let a1 = this.getDir(O2, P2);
-      let a2 = this.getDir(O2, Q2);
+    getMidDir(A, O, B) {
+      let flip = this.polarFlip(A, O, B);
+      let [P, Q] = flip ? [B, A] : [A, B];
+      let a1 = this.getDir(O, P);
+      let a2 = this.getDir(O, Q);
       if (a2 < a1)
         a2 += 360;
       return (a1 + a2) / 2;
     }
-    getLineDir(A2, B2) {
-      let q2 = this.getDir(A2, B2);
+    getLineDir(A, B) {
+      let q = this.getDir(A, B);
       let mode = this.$LINE_LABEL;
       if (mode === "left")
-        return q2 + 90;
+        return q + 90;
       if (mode === "right")
-        return q2 - 90;
-      let [a2, b2, c3] = this.pjs([A2, B2, this.$LABEL_CENTER[0]]);
-      let right = IsReflex2(a2, b2, c3);
-      return right ? q2 - 90 : q2 + 90;
+        return q - 90;
+      let [a, b, c2] = this.pjs([A, B, this.$LABEL_CENTER[0]]);
+      let right = IsReflex2(a, b, c2);
+      return right ? q - 90 : q + 90;
     }
-    polarFlip(A2, O2, B2) {
-      let [a2, o2, b2] = this.pjs([A2, O2, B2]);
-      return polarFlip(a2, o2, b2, this.$ANGLE_MODE);
+    polarFlip(A, O, B) {
+      let [a, o, b] = this.pjs([A, O, B]);
+      return polarFlip(a, o, b, this.$ANGLE_MODE);
     }
     unitize(text) {
       if (typeof text === "number") {
@@ -21445,55 +21445,55 @@
         return text;
       }
     }
-    getAngleAllowance(A2, O2, B2, threshold, pixelPerDeg) {
-      let angle2 = this.getDirAngle(A2, O2, B2);
+    getAngleAllowance(A, O, B, threshold, pixelPerDeg) {
+      let angle2 = this.getDirAngle(A, O, B);
       let angleUnderThreshold = Math.max(threshold - angle2, 0);
       return angleUnderThreshold * pixelPerDeg;
     }
-    getApexFromDial(A2, O2, B2) {
-      let V2 = this.pj(O2);
-      let P2 = typeof A2 === "number" ? Move2(V2, A2, 1) : this.pj(A2);
-      let Q2 = typeof B2 === "number" ? Move2(V2, B2, 1) : this.pj(B2);
-      return [P2, V2, Q2];
+    getApexFromDial(A, O, B) {
+      let V = this.pj(O);
+      let P = typeof A === "number" ? Move2(V, A, 1) : this.pj(A);
+      let Q = typeof B === "number" ? Move2(V, B, 1) : this.pj(B);
+      return [P, V, Q];
     }
   };
 
   // ../packages/paint/lib/canvas/canvas07.js
-  function isOdd(n2) {
-    return n2 % 2 !== 0;
+  function isOdd(n) {
+    return n % 2 !== 0;
   }
-  function floorHalf(n2) {
-    if (isOdd(n2))
-      n2 = n2 - 1;
-    return n2 / 2;
+  function floorHalf(n) {
+    if (isOdd(n))
+      n = n - 1;
+    return n / 2;
   }
-  function steps(n2) {
-    let N2 = floorHalf(n2);
+  function steps(n) {
+    let N = floorHalf(n);
     let arr = [];
-    if (isOdd(n2)) {
+    if (isOdd(n)) {
       arr.push(0);
-      for (let i2 = 1; i2 <= N2; i2++) {
-        arr.push(i2);
-        arr.push(-i2);
+      for (let i = 1; i <= N; i++) {
+        arr.push(i);
+        arr.push(-i);
       }
     } else {
-      for (let i2 = 1; i2 <= N2; i2++) {
-        let s3 = i2 - 0.5;
-        arr.push(s3);
-        arr.push(-s3);
+      for (let i = 1; i <= N; i++) {
+        let s2 = i - 0.5;
+        arr.push(s2);
+        arr.push(-s2);
       }
     }
     return arr;
   }
-  function mid3(A2, B2) {
-    if (A2.length === 3 && B2.length === 3) {
-      let [x2, y2, z2] = A2;
-      let [X2, Y2, Z2] = B2;
-      return [(x2 + X2) / 2, (y2 + Y2) / 2, (z2 + Z2) / 2];
+  function mid3(A, B) {
+    if (A.length === 3 && B.length === 3) {
+      let [x, y, z] = A;
+      let [X, Y, Z] = B;
+      return [(x + X) / 2, (y + Y) / 2, (z + Z) / 2];
     } else {
-      let [x2, y2] = A2;
-      let [X2, Y2] = B2;
-      return [(x2 + X2) / 2, (y2 + Y2) / 2];
+      let [x, y] = A;
+      let [X, Y] = B;
+      return [(x + X) / 2, (y + Y) / 2];
     }
   }
   var Canvas07 = class extends Canvas06 {
@@ -21509,15 +21509,15 @@
       this.createPath(pts);
       this.doStroke();
     }
-    lineVert(x2) {
-      let A2 = this.edgeBottom(x2);
-      let B2 = this.edgeTop(x2);
-      this.line([A2, B2]);
+    lineVert(x) {
+      let A = this.edgeBottom(x);
+      let B = this.edgeTop(x);
+      this.line([A, B]);
     }
-    lineHori(y2) {
-      let A2 = this.edgeLeft(y2);
-      let B2 = this.edgeRight(y2);
-      this.line([A2, B2]);
+    lineHori(y) {
+      let A = this.edgeLeft(y);
+      let B = this.edgeRight(y);
+      this.line([A, B]);
     }
     solid(pts) {
       this.createPath(pts);
@@ -21539,12 +21539,12 @@
       this.createShape(pts);
       this.doShade();
     }
-    arc(P2, O2, Q2, radius) {
-      this.createArcByPoints(P2, O2, Q2, radius);
+    arc(P, O, Q, radius) {
+      this.createArcByPoints(P, O, Q, radius);
       this.doStroke();
     }
-    solidArc(P2, O2, Q2, radius) {
-      this.createArcByPoints(P2, O2, Q2, radius);
+    solidArc(P, O, Q, radius) {
+      this.createArcByPoints(P, O, Q, radius);
       this.doSolid();
     }
     circle(center, radius) {
@@ -21563,35 +21563,35 @@
       this.save();
       this.translateTo(end);
       this.rotateTo(start, end);
-      let A2 = [offset - 2 * size, -size];
-      let O2 = [offset, 0];
-      let B2 = [offset - 2 * size, +size];
-      this.solidPx([A2, O2, B2]);
+      let A = [offset - 2 * size, -size];
+      let O = [offset, 0];
+      let B = [offset - 2 * size, +size];
+      this.solidPx([A, O, B]);
       this.restore();
     }
     arrow(start, end, size) {
       this.line([start, end]);
       this.arrowHead(start, end, size, 0);
     }
-    anglePolar(A2, O2, B2, radius, count, space) {
-      for (let s3 of steps(count)) {
-        let r3 = radius + s3 * space;
-        this.solidArc(A2, O2, B2, r3);
+    anglePolar(A, O, B, radius, count, space) {
+      for (let s2 of steps(count)) {
+        let r2 = radius + s2 * space;
+        this.solidArc(A, O, B, r2);
       }
     }
-    angle(A2, O2, B2, radius, count, space) {
-      let flip = this.polarFlip(A2, O2, B2);
-      let [P2, Q2] = flip ? [B2, A2] : [A2, B2];
-      this.anglePolar(P2, O2, Q2, radius, count, space);
+    angle(A, O, B, radius, count, space) {
+      let flip = this.polarFlip(A, O, B);
+      let [P, Q] = flip ? [B, A] : [A, B];
+      this.anglePolar(P, O, Q, radius, count, space);
     }
-    rightAngle(A2, O2, B2, size) {
-      this.createRightAnglePath(A2, O2, B2, size);
+    rightAngle(A, O, B, size) {
+      this.createRightAnglePath(A, O, B, size);
       this.doSolid();
     }
     parallel(start, end, size, count, space) {
-      let M2 = mid3(start, end);
-      for (let i2 = 0; i2 < count; i2++) {
-        this.arrowHead(start, M2, size, i2 * space);
+      let M = mid3(start, end);
+      for (let i = 0; i < count; i++) {
+        this.arrowHead(start, M, size, i * space);
       }
     }
     midArrowHead(start, end, size) {
@@ -21601,37 +21601,37 @@
       this.save();
       this.translateTo(end);
       this.rotateTo(start, end);
-      let A2 = [offset, -length];
-      let B2 = [offset, +length];
-      this.solidPx([A2, B2]);
+      let A = [offset, -length];
+      let B = [offset, +length];
+      this.solidPx([A, B]);
       this.restore();
     }
     tickVert(pt, length) {
-      let [x2, y2] = pt;
-      this.tick([x2 - 1, y2], pt, length, 0);
+      let [x, y] = pt;
+      this.tick([x - 1, y], pt, length, 0);
     }
     tickHori(pt, length) {
-      let [x2, y2] = pt;
-      this.tick([x2, y2 - 1], pt, length, 0);
+      let [x, y] = pt;
+      this.tick([x, y - 1], pt, length, 0);
     }
     equalSide(start, end, length, count, space) {
-      let M2 = mid3(start, end);
-      for (let s3 of steps(count)) {
-        this.tick(start, M2, length, s3 * space);
+      let M = mid3(start, end);
+      for (let s2 of steps(count)) {
+        this.tick(start, M, length, s2 * space);
       }
     }
     compass(center, xSize, ySize, arrowSize) {
       this.save();
       this.translateTo(center);
-      let E2 = [xSize, 0];
-      let W2 = [-xSize, 0];
-      let S2 = [0, ySize];
-      let N2 = [0, -ySize];
-      let A2 = [-arrowSize, -ySize + arrowSize * 2];
-      let B2 = [+arrowSize, -ySize + arrowSize * 2];
-      this.solidPx([E2, W2]);
-      this.solidPx([N2, S2]);
-      this.solidPx([A2, N2, B2]);
+      let E = [xSize, 0];
+      let W = [-xSize, 0];
+      let S = [0, ySize];
+      let N = [0, -ySize];
+      let A = [-arrowSize, -ySize + arrowSize * 2];
+      let B = [+arrowSize, -ySize + arrowSize * 2];
+      this.solidPx([E, W]);
+      this.solidPx([N, S]);
+      this.solidPx([A, N, B]);
       this.restore();
     }
   };
@@ -21644,34 +21644,34 @@
   function getTicks(min, max, interval2) {
     const start = Math.floor(min / interval2) * interval2;
     const arr = [];
-    for (let i2 = start; i2 <= max; i2 += interval2) {
-      i2 = parseFloat(i2.toPrecision(3));
-      if (i2 === min)
+    for (let i = start; i <= max; i += interval2) {
+      i = parseFloat(i.toPrecision(3));
+      if (i === min)
         continue;
-      if (i2 === max)
+      if (i === max)
         continue;
-      if (i2 === 0)
+      if (i === 0)
         continue;
-      arr.push(i2);
+      arr.push(i);
     }
     return arr;
   }
   var Canvas08 = class extends Canvas07 {
-    bottomEnd(x2) {
-      return this.$HALF_AXIS_Y ? [x2, 0] : this.edgeBottom(x2);
+    bottomEnd(x) {
+      return this.$HALF_AXIS_Y ? [x, 0] : this.edgeBottom(x);
     }
-    leftEnd(y2) {
-      return this.$HALF_AXIS_X ? [0, y2] : this.edgeLeft(y2);
+    leftEnd(y) {
+      return this.$HALF_AXIS_X ? [0, y] : this.edgeLeft(y);
     }
     xAxis() {
-      let A2 = this.leftEnd(0);
-      let B2 = this.edgeRight(0);
-      this.arrow(A2, B2, 5);
+      let A = this.leftEnd(0);
+      let B = this.edgeRight(0);
+      this.arrow(A, B, 5);
     }
     yAxis() {
-      let A2 = this.bottomEnd(0);
-      let B2 = this.edgeTop(0);
-      this.arrow(A2, B2, 5);
+      let A = this.bottomEnd(0);
+      let B = this.edgeTop(0);
+      this.arrow(A, B, 5);
     }
     xAxisLabel(text) {
       this.save();
@@ -21696,13 +21696,13 @@
       return getTicks(min, this.ymax, interval2);
     }
     xAxisTick(interval2) {
-      for (let x2 of this.xTicks(interval2)) {
-        this.tickVert([x2, 0], TICK_LENGTH_PX);
+      for (let x of this.xTicks(interval2)) {
+        this.tickVert([x, 0], TICK_LENGTH_PX);
       }
     }
     yAxisTick(interval2) {
-      for (let y2 of this.yTicks(interval2)) {
-        this.tickHori([0, y2], TICK_LENGTH_PX);
+      for (let y of this.yTicks(interval2)) {
+        this.tickHori([0, y], TICK_LENGTH_PX);
       }
     }
     xAxisTickMark(interval2) {
@@ -21710,8 +21710,8 @@
       this.$TEXT_ITALIC = false;
       this.$TEXT_ALIGN = "center";
       this.$TEXT_BASELINE = "middle";
-      for (let x2 of this.xTicks(interval2)) {
-        this.label(String(x2), [x2, 0], X_MARK_OFFSET_PX, 270);
+      for (let x of this.xTicks(interval2)) {
+        this.label(String(x), [x, 0], X_MARK_OFFSET_PX, 270);
       }
       this.restore();
     }
@@ -21720,27 +21720,27 @@
       this.$TEXT_ITALIC = false;
       this.$TEXT_ALIGN = "right";
       this.$TEXT_BASELINE = "middle";
-      for (let y2 of this.yTicks(interval2)) {
-        this.label(String(y2), [0, y2], Y_MARK_OFFSET_PX, 180);
+      for (let y of this.yTicks(interval2)) {
+        this.label(String(y), [0, y], Y_MARK_OFFSET_PX, 180);
       }
       this.restore();
     }
-    gridLineVert(x2) {
-      let A2 = this.bottomEnd(x2);
-      let B2 = this.edgeTop(x2);
-      this.line([A2, B2]);
+    gridLineVert(x) {
+      let A = this.bottomEnd(x);
+      let B = this.edgeTop(x);
+      this.line([A, B]);
     }
-    gridLineHori(y2) {
-      let A2 = this.leftEnd(y2);
-      let B2 = this.edgeRight(y2);
-      this.line([A2, B2]);
+    gridLineHori(y) {
+      let A = this.leftEnd(y);
+      let B = this.edgeRight(y);
+      this.line([A, B]);
     }
     xAxisGrid(interval2) {
       this.save();
       this.$COLOR = "#d3d5db";
       this.gridLineVert(0);
-      for (let x2 of this.xTicks(interval2)) {
-        this.gridLineVert(x2);
+      for (let x of this.xTicks(interval2)) {
+        this.gridLineVert(x);
       }
       this.restore();
     }
@@ -21748,8 +21748,8 @@
       this.save();
       this.$COLOR = "#d3d5db";
       this.gridLineHori(0);
-      for (let y2 of this.yTicks(interval2)) {
-        this.gridLineHori(y2);
+      for (let y of this.yTicks(interval2)) {
+        this.gridLineHori(y);
       }
       this.restore();
     }
@@ -21757,35 +21757,35 @@
 
   // ../packages/paint/lib/support/trace.js
   function trace2(func, range2, dots = 1e3) {
-    function tracer(t3) {
+    function tracer(t) {
       let result;
       try {
-        result = func(t3);
+        result = func(t);
       } catch {
         return [NaN, NaN];
       }
       if (!Array.isArray(result))
-        result = [t3, result];
+        result = [t, result];
       return result;
     }
     ;
     let [t1, t2] = range2;
     const step = (t2 - t1) / (dots - 1);
     let points = [];
-    for (let t3 = t1; t3 <= t2; t3 += step) {
-      points.push(tracer(t3));
+    for (let t = t1; t <= t2; t += step) {
+      points.push(tracer(t));
     }
     return points;
   }
   function traceCircle2(center, radius, angleRange, dots = 100) {
-    const [h2, k2] = center;
+    const [h, k] = center;
     function sin5(degree) {
       return Math.sin(degree / 180 * Math.PI);
     }
     function cos5(degree) {
       return Math.cos(degree / 180 * Math.PI);
     }
-    return trace2((t2) => [h2 + radius * cos5(t2), k2 + radius * sin5(t2)], angleRange, dots);
+    return trace2((t) => [h + radius * cos5(t), k + radius * sin5(t)], angleRange, dots);
   }
   function splitNull(arr) {
     let ls = [];
@@ -21809,59 +21809,59 @@
   }
 
   // ../packages/paint/lib/support/sectoroid.js
-  function vec2(p1, p22) {
+  function vec2(p1, p2) {
     let [x1, y1] = p1;
-    let [x2, y2] = p22;
+    let [x2, y2] = p2;
     return [x2 - x1, y2 - y1];
   }
   function deg3(radian) {
     return radian / Math.PI * 180;
   }
-  function magnitude([x2, y2]) {
-    return (x2 * x2 + y2 * y2) ** 0.5;
+  function magnitude([x, y]) {
+    return (x * x + y * y) ** 0.5;
   }
-  function argument([x2, y2]) {
-    let rad2 = Math.atan2(y2, x2);
+  function argument([x, y]) {
+    let rad2 = Math.atan2(y, x);
     let angle2 = deg3(rad2);
     if (angle2 < 0)
       angle2 += 360;
     return angle2;
   }
-  function sectoroid(O2, A2, B2, vertices) {
-    let v1 = vec2(O2, A2);
-    let v22 = vec2(O2, B2);
-    let r3 = magnitude(v1);
+  function sectoroid(O, A, B, vertices) {
+    let v1 = vec2(O, A);
+    let v2 = vec2(O, B);
+    let r2 = magnitude(v1);
     let q1 = argument(v1);
-    let q2 = argument(v22);
+    let q2 = argument(v2);
     if (q2 < q1)
       q2 += 360;
-    let points = traceCircle2(O2, r3, [q1, q2]);
-    return [A2, ...points, B2, ...vertices];
+    let points = traceCircle2(O, r2, [q1, q2]);
+    return [A, ...points, B, ...vertices];
   }
 
   // ../packages/paint/lib/canvas/canvas09.js
   var Canvas09 = class extends Canvas08 {
     plot(func, tStart = this.xmin, tEnd = this.xmax, dots = 1e3) {
       let points = trace2(func, [tStart, tEnd], dots);
-      let isIll = (p3) => {
-        let [x2, y2] = p3;
-        return !Number.isFinite(x2) || !Number.isFinite(y2) || !this.isVisible(p3, 1);
+      let isIll = (p2) => {
+        let [x, y] = p2;
+        return !Number.isFinite(x) || !Number.isFinite(y) || !this.isVisible(p2, 1);
       };
-      let filteredPoints = points.map((p3) => isIll(p3) ? null : p3);
+      let filteredPoints = points.map((p2) => isIll(p2) ? null : p2);
       let segments = splitNull(filteredPoints);
       for (let seg of segments)
         this.line(seg);
     }
-    sectoroidLine(O2, A2, B2, vertices) {
-      let pts = sectoroid(O2, A2, B2, vertices);
+    sectoroidLine(O, A, B, vertices) {
+      let pts = sectoroid(O, A, B, vertices);
       this.line(pts);
     }
-    sectoroidFill(O2, A2, B2, vertices) {
-      let pts = sectoroid(O2, A2, B2, vertices);
+    sectoroidFill(O, A, B, vertices) {
+      let pts = sectoroid(O, A, B, vertices);
       this.fill(pts);
     }
-    sectoroidShade(O2, A2, B2, vertices) {
-      let pts = sectoroid(O2, A2, B2, vertices);
+    sectoroidShade(O, A, B, vertices) {
+      let pts = sectoroid(O, A, B, vertices);
       this.shade(pts);
     }
   };
@@ -21870,15 +21870,15 @@
   function degrize(text) {
     return typeof text === "number" ? text + "\xB0" : text;
   }
-  function mid4(A2, B2) {
-    if (A2.length === 3 && B2.length === 3) {
-      let [x2, y2, z2] = A2;
-      let [X2, Y2, Z2] = B2;
-      return [(x2 + X2) / 2, (y2 + Y2) / 2, (z2 + Z2) / 2];
+  function mid4(A, B) {
+    if (A.length === 3 && B.length === 3) {
+      let [x, y, z] = A;
+      let [X, Y, Z] = B;
+      return [(x + X) / 2, (y + Y) / 2, (z + Z) / 2];
     } else {
-      let [x2, y2] = A2;
-      let [X2, Y2] = B2;
-      return [(x2 + X2) / 2, (y2 + Y2) / 2];
+      let [x, y] = A;
+      let [X, Y] = B;
+      return [(x + X) / 2, (y + Y) / 2];
     }
   }
   var Canvas10 = class extends Canvas09 {
@@ -21889,20 +21889,20 @@
       let dir3 = this.getCenterDir(point);
       this.label(text, point, radius, dir3);
     }
-    labelAngle(text, [A2, O2, B2], dir3, radius) {
-      let T2 = degrize(text);
-      let mid5 = this.getMidDir(A2, O2, B2);
-      this.label(T2, O2, radius, mid5 + dir3);
+    labelAngle(text, [A, O, B], dir3, radius) {
+      let T = degrize(text);
+      let mid5 = this.getMidDir(A, O, B);
+      this.label(T, O, radius, mid5 + dir3);
     }
-    labelLine(text, [A2, B2], dir3, radius) {
+    labelLine(text, [A, B], dir3, radius) {
       text = this.unitize(text);
-      let M2 = mid4(A2, B2);
-      let normal = this.getLineDir(A2, B2);
-      this.label(text, M2, radius, normal + dir3);
+      let M = mid4(A, B);
+      let normal = this.getLineDir(A, B);
+      this.label(text, M, radius, normal + dir3);
     }
-    labelFront(text, [A2, B2], dir3, radius) {
-      let arrowDir = this.getDir(A2, B2);
-      this.labelPoint(text, B2, arrowDir + dir3, radius);
+    labelFront(text, [A, B], dir3, radius) {
+      let arrowDir = this.getDir(A, B);
+      this.labelPoint(text, B, arrowDir + dir3, radius);
     }
   };
 
@@ -21919,8 +21919,8 @@
       this.cv.ymax = ymax;
       this.cv.RANGE_DONE = true;
     }
-    square(size, [x2, y2] = [0, 0]) {
-      this.set([x2 - size, x2 + size], [y2 - size, y2 + size]);
+    square(size, [x, y] = [0, 0]) {
+      this.set([x - size, x + size], [y - size, y + size]);
     }
     capture(...things) {
       this.cv.capture(things);
@@ -22170,13 +22170,13 @@
     envelope(lowerBase, upperBase) {
       const LB = toList(lowerBase);
       const UB = toList(upperBase);
-      let isPolar = (A2, O2, B2) => AnglePolar(this.cv.pj(A2), this.cv.pj(O2), this.cv.pj(B2)) < 180 ? 1 : -1;
+      let isPolar = (A, O, B) => AnglePolar(this.cv.pj(A), this.cv.pj(O), this.cv.pj(B)) < 180 ? 1 : -1;
       let lastPolarwise = isPolar(LB.cyclicAt(-1), UB.cyclicAt(-1), LB.cyclicAt(0));
       let arr = [];
-      for (let i2 = 0; i2 < LB.length; i2++) {
-        let polarwise = isPolar(LB.cyclicAt(i2), UB.cyclicAt(i2), LB.cyclicAt(i2 + 1));
+      for (let i = 0; i < LB.length; i++) {
+        let polarwise = isPolar(LB.cyclicAt(i), UB.cyclicAt(i), LB.cyclicAt(i + 1));
         if (lastPolarwise * polarwise === -1)
-          arr.push([LB.cyclicAt(i2), UB.cyclicAt(i2)]);
+          arr.push([LB.cyclicAt(i), UB.cyclicAt(i)]);
         lastPolarwise = polarwise;
       }
       return arr;
@@ -22197,19 +22197,19 @@
       }
       if (envelope) {
         let env = this.envelope(lowerBase, upperBase);
-        for (let e6 of env) {
-          this.pen.line(e6[0], e6[1]);
+        for (let e5 of env) {
+          this.pen.line(e5[0], e5[1]);
         }
       } else {
-        for (let i2 = 0; i2 < lowerBase.length; i2++) {
-          this.pen.line(lowerBase[i2], upperBase[i2]);
+        for (let i = 0; i < lowerBase.length; i++) {
+          this.pen.line(lowerBase[i], upperBase[i]);
         }
       }
       if (height) {
-        let V2 = toShape3D(upperBase).mean().toArray();
-        let [A2, B2, C2] = lowerBase;
-        let O2 = PdFoot3D(V2, [A2, B2, C2]);
-        this.pen.dash(O2, V2);
+        let V = toShape3D(upperBase).mean().toArray();
+        let [A, B, C] = lowerBase;
+        let O = PdFoot3D(V, [A, B, C]);
+        this.pen.dash(O, V);
       }
       if (shadeLower)
         this.pen.polyshade(...lowerBase);
@@ -22311,17 +22311,17 @@
       });
     }
     angleBet(angle2, line, label) {
-      let [P2, O2, Q2] = angle2;
-      let [A2, B2] = line;
-      this.pen.line(P2, O2);
-      this.pen.line(Q2, O2);
-      this.pen.angle(P2, O2, Q2);
+      let [P, O, Q] = angle2;
+      let [A, B] = line;
+      this.pen.line(P, O);
+      this.pen.line(Q, O);
+      this.pen.angle(P, O, Q);
       if (label !== void 0)
-        this.pen.label.angle([P2, O2, Q2], label);
-      if (A2 !== void 0)
-        this.pen.rightAngle(P2, O2, A2);
-      if (B2 !== void 0)
-        this.pen.rightAngle(Q2, O2, B2);
+        this.pen.label.angle([P, O, Q], label);
+      if (A !== void 0)
+        this.pen.rightAngle(P, O, A);
+      if (B !== void 0)
+        this.pen.rightAngle(Q, O, B);
     }
     height(vertex, foot, leg, label) {
       this.pen.dash(vertex, foot);
@@ -22346,54 +22346,54 @@
       this.cv = cv;
     }
     circle(center, radius) {
-      const [h2, k2] = center;
-      this.pen.plot((t2) => [h2 + radius * cos(t2), k2 + radius * sin(t2)], 0, 365);
+      const [h, k] = center;
+      this.pen.plot((t) => [h + radius * cos(t), k + radius * sin(t)], 0, 365);
     }
-    arc(O2, A2, B2) {
-      this.cv.sectoroidLine(O2, A2, B2, []);
+    arc(O, A, B) {
+      this.cv.sectoroidLine(O, A, B, []);
     }
-    sector(O2, A2, B2) {
-      this.cv.sectoroidLine(O2, A2, B2, [O2, A2]);
+    sector(O, A, B) {
+      this.cv.sectoroidLine(O, A, B, [O, A]);
     }
-    segment(O2, A2, B2) {
-      this.cv.sectoroidLine(O2, A2, B2, [A2]);
+    segment(O, A, B) {
+      this.cv.sectoroidLine(O, A, B, [A]);
     }
-    quadratic(a2, b2, c3) {
-      this.pen.plot((x2) => a2 * x2 * x2 + b2 * x2 + c3);
+    quadratic(a, b, c2) {
+      this.pen.plot((x) => a * x * x + b * x + c2);
     }
-    line(m3, c3) {
+    line(m2, c2) {
       const { xmin, xmax } = this.cv;
-      const y2 = (x2) => m3 * x2 + c3;
-      this.pen.line([xmin, y2(xmin)], [xmax, y2(xmax)]);
+      const y = (x) => m2 * x + c2;
+      this.pen.line([xmin, y(xmin)], [xmax, y(xmax)]);
     }
-    horizontal(y2) {
-      this.cv.lineHori(y2);
+    horizontal(y) {
+      this.cv.lineHori(y);
     }
-    vertical(x2) {
-      this.cv.lineVert(x2);
+    vertical(x) {
+      this.cv.lineVert(x);
     }
-    linear(a2, b2, c3) {
-      if (a2 === 0 && b2 !== 0)
-        this.horizontal(-c3 / b2);
-      if (b2 == 0 && a2 !== 0)
-        this.vertical(-c3 / a2);
-      if (a2 !== 0 && b2 !== 0)
-        this.line(-a2 / b2, -c3 / b2);
+    linear(a, b, c2) {
+      if (a === 0 && b !== 0)
+        this.horizontal(-c2 / b);
+      if (b == 0 && a !== 0)
+        this.vertical(-c2 / a);
+      if (a !== 0 && b !== 0)
+        this.line(-a / b, -c2 / b);
     }
-    through(A2, B2) {
-      let ptA = this.cv.pj(A2);
-      let ptB = this.cv.pj(B2);
-      let [a2, b2, c3] = lin().byTwoPoints(ptA, ptB).toLinear();
-      this.linear(a2, b2, c3);
+    through(A, B) {
+      let ptA = this.cv.pj(A);
+      let ptB = this.cv.pj(B);
+      let [a, b, c2] = lin().byTwoPoints(ptA, ptB).toLinear();
+      this.linear(a, b, c2);
     }
-    perpBisector(A2, B2) {
-      let [a2, b2, c3] = lin().byBisector(A2, B2).toLinear();
-      this.linear(a2, b2, c3);
+    perpBisector(A, B) {
+      let [a, b, c2] = lin().byBisector(A, B).toLinear();
+      this.linear(a, b, c2);
     }
-    rect(A2, C2) {
-      let [a2, b2] = A2;
-      let [c3, d2] = C2;
-      this.pen.polygon([a2, b2], [c3, b2], [c3, d2], [a2, d2]);
+    rect(A, C) {
+      let [a, b] = A;
+      let [c2, d] = C;
+      this.pen.polygon([a, b], [c2, b], [c2, d], [a, d]);
     }
   };
 
@@ -22407,19 +22407,19 @@
       let points = cal.traceCircle(center, radius, [0, 360]);
       this.pen.polyfill(...points);
     }
-    sector(O2, A2, B2) {
-      this.cv.sectoroidFill(O2, A2, B2, [O2]);
+    sector(O, A, B) {
+      this.cv.sectoroidFill(O, A, B, [O]);
     }
-    segment(O2, A2, B2) {
-      this.cv.sectoroidFill(O2, A2, B2, []);
+    segment(O, A, B) {
+      this.cv.sectoroidFill(O, A, B, []);
     }
-    sectoroid(O2, A2, B2, vertices) {
-      this.cv.sectoroidFill(O2, A2, B2, vertices);
+    sectoroid(O, A, B, vertices) {
+      this.cv.sectoroidFill(O, A, B, vertices);
     }
-    rect(A2, C2) {
-      let [a2, b2] = A2;
-      let [c3, d2] = C2;
-      this.pen.polyfill([a2, b2], [c3, b2], [c3, d2], [a2, d2]);
+    rect(A, C) {
+      let [a, b] = A;
+      let [c2, d] = C;
+      this.pen.polyfill([a, b], [c2, b], [c2, d], [a, d]);
     }
   };
 
@@ -22433,19 +22433,19 @@
       let points = cal.traceCircle(center, radius, [0, 360]);
       this.pen.polyshade(...points);
     }
-    sector(O2, A2, B2) {
-      this.cv.sectoroidShade(O2, A2, B2, [O2]);
+    sector(O, A, B) {
+      this.cv.sectoroidShade(O, A, B, [O]);
     }
-    segment(O2, A2, B2) {
-      this.cv.sectoroidShade(O2, A2, B2, []);
+    segment(O, A, B) {
+      this.cv.sectoroidShade(O, A, B, []);
     }
-    sectoroid(O2, A2, B2, vertices) {
-      this.cv.sectoroidShade(O2, A2, B2, vertices);
+    sectoroid(O, A, B, vertices) {
+      this.cv.sectoroidShade(O, A, B, vertices);
     }
-    rect(A2, C2) {
-      let [a2, b2] = A2;
-      let [c3, d2] = C2;
-      this.pen.polyshade([a2, b2], [c3, b2], [c3, d2], [a2, d2]);
+    rect(A, C) {
+      let [a, b] = A;
+      let [c2, d] = C;
+      this.pen.polyshade([a, b], [c2, b], [c2, d], [a, d]);
     }
   };
 
@@ -22463,8 +22463,8 @@
       }
     }
     points(points) {
-      for (let k2 in points) {
-        this.point(points[k2], k2);
+      for (let k in points) {
+        this.point(points[k], k);
       }
     }
     vertices(points) {
@@ -22473,27 +22473,27 @@
       this.points(points);
       this.cv.restore();
     }
-    angle([A2, O2, B2], text, dir3 = 0, radius = -1) {
+    angle([A, O, B], text, dir3 = 0, radius = -1) {
       if (radius < 0) {
-        radius = 28 + this.cv.getAngleAllowance(A2, O2, B2, 40, 1.5);
+        radius = 28 + this.cv.getAngleAllowance(A, O, B, 40, 1.5);
       }
-      this.cv.labelAngle(text, [A2, O2, B2], dir3, radius);
+      this.cv.labelAngle(text, [A, O, B], dir3, radius);
     }
-    line([A2, B2], text, dir3 = 0, radius = 15) {
-      this.cv.labelLine(text, [A2, B2], dir3, radius);
+    line([A, B], text, dir3 = 0, radius = 15) {
+      this.cv.labelLine(text, [A, B], dir3, radius);
     }
-    front([A2, B2], text, dir3 = 0, radius = 15) {
-      this.cv.labelFront(text, [A2, B2], dir3, radius);
+    front([A, B], text, dir3 = 0, radius = 15) {
+      this.cv.labelFront(text, [A, B], dir3, radius);
     }
     polygon(points, text) {
       let pts = this.cv.pjs(points);
       this.cv.labelPoint(String(text), Mid(...pts), 0, 0);
     }
     coordinates(point, dir3, radius = 15) {
-      let [x2, y2] = point;
-      x2 = Fix(x2, 1);
-      y2 = Fix(y2, 1);
-      let text = `(${x2}, ${y2})`;
+      let [x, y] = point;
+      x = Fix(x, 1);
+      y = Fix(y, 1);
+      let text = `(${x}, ${y})`;
       this.point(point, text, dir3, radius);
     }
   };
@@ -22565,12 +22565,12 @@
       this.cv = cv;
     }
     drawConstraints(...constraints2) {
-      for (let c3 of toReins(constraints2)) {
-        if (c3.canEqual()) {
-          this.pen.graph.linear(...c3.toLinear());
+      for (let c2 of toReins(constraints2)) {
+        if (c2.canEqual()) {
+          this.pen.graph.linear(...c2.toLinear());
         } else {
           this.pen.set.dash(true);
-          this.pen.graph.linear(...c3.toLinear());
+          this.pen.graph.linear(...c2.toLinear());
           this.pen.set.dash();
         }
       }
@@ -22581,8 +22581,8 @@
     }
     verticesCoord(constraints2) {
       let vs = toReins(constraints2).vertices();
-      for (let v3 of vs) {
-        this.pen.label.coordinates(v3);
+      for (let v2 of vs) {
+        this.pen.label.coordinates(v2);
       }
     }
   };
@@ -22593,28 +22593,28 @@
       this.pen = pen;
       this.cv = cv;
     }
-    end(A2, dir3, length) {
-      return length === void 0 ? this.cv.edgePoint(A2, dir3) : Move(A2, dir3, length);
+    end(A, dir3, length) {
+      return length === void 0 ? this.cv.edgePoint(A, dir3) : Move(A, dir3, length);
     }
-    line(A2, dir3, length, label) {
-      let B2 = this.end(A2, dir3, length);
-      this.pen.line(A2, B2, label);
+    line(A, dir3, length, label) {
+      let B = this.end(A, dir3, length);
+      this.pen.line(A, B, label);
     }
-    dash(A2, dir3, length, label) {
-      let B2 = this.end(A2, dir3, length);
-      this.pen.dash(A2, B2, label);
+    dash(A, dir3, length, label) {
+      let B = this.end(A, dir3, length);
+      this.pen.dash(A, B, label);
     }
-    arrow(A2, dir3, length, label) {
-      let B2 = this.end(A2, dir3, length);
-      this.pen.arrow(A2, B2, label);
+    arrow(A, dir3, length, label) {
+      let B = this.end(A, dir3, length);
+      this.pen.arrow(A, B, label);
     }
-    rayFrom(A2, dir3, length, label) {
-      let B2 = this.end(A2, dir3, length);
-      this.pen.ray(A2, B2, label);
+    rayFrom(A, dir3, length, label) {
+      let B = this.end(A, dir3, length);
+      this.pen.ray(A, B, label);
     }
-    rayTo(A2, dir3, length, label) {
-      let B2 = this.end(A2, dir3, length);
-      this.pen.ray(B2, A2, label);
+    rayTo(A, dir3, length, label) {
+      let B = this.end(A, dir3, length);
+      this.pen.ray(B, A, label);
     }
   };
 
@@ -22647,8 +22647,8 @@
         this.label.point(position, label);
     }
     points(positions) {
-      for (let k2 in positions) {
-        this.point(positions[k2], k2);
+      for (let k in positions) {
+        this.point(positions[k], k);
       }
     }
     cutX(position, label) {
@@ -22666,19 +22666,19 @@
         this.label.point(position, label, 180);
     }
     guideX(point, label) {
-      let [x2, y2] = point;
-      this.dash([x2, 0], point);
+      let [x, y] = point;
+      this.dash([x, 0], point);
       if (label !== void 0) {
-        this.cutX(x2);
-        this.label.point([x2, 0], label, y2 >= 0 ? 270 : 90);
+        this.cutX(x);
+        this.label.point([x, 0], label, y >= 0 ? 270 : 90);
       }
     }
     guideY(point, label) {
-      let [x2, y2] = point;
-      this.dash([0, y2], point);
+      let [x, y] = point;
+      this.dash([0, y], point);
       if (label !== void 0) {
-        this.cutY(y2);
-        this.label.point([0, y2], label, x2 >= 0 ? 180 : 0);
+        this.cutY(y);
+        this.label.point([0, y], label, x >= 0 ? 180 : 0);
       }
     }
     circle(center, radius) {
@@ -22700,62 +22700,62 @@
       this.cv.restore();
       this.circle(point, 4);
     }
-    line(A2, B2, label) {
-      this.cv.line([A2, B2]);
+    line(A, B, label) {
+      this.cv.line([A, B]);
       if (label !== void 0)
-        this.label.line([A2, B2], label);
+        this.label.line([A, B], label);
     }
-    dash(A2, B2, label) {
-      this.cv.dash([A2, B2]);
+    dash(A, B, label) {
+      this.cv.dash([A, B]);
       if (label !== void 0)
-        this.label.line([A2, B2], label);
+        this.label.line([A, B], label);
     }
-    arrow(A2, B2, label) {
-      this.cv.arrow(A2, B2, 5);
+    arrow(A, B, label) {
+      this.cv.arrow(A, B, 5);
       if (label !== void 0) {
         let mode = this.cv.$ARROW_LABEL;
         if (mode === "line")
-          this.label.line([A2, B2], label);
+          this.label.line([A, B], label);
         if (mode === "head")
-          this.label.point(B2, String(label));
+          this.label.point(B, String(label));
         if (mode === "front")
-          this.label.front([A2, B2], String(label));
+          this.label.front([A, B], String(label));
       }
     }
-    arrowCompo(O2, P2, alongDir, arrowLabel, angleLabel) {
-      let Q2 = PdFoot(P2, [O2, alongDir]);
+    arrowCompo(O, P, alongDir, arrowLabel, angleLabel) {
+      let Q = PdFoot(P, [O, alongDir]);
       this.cv.save();
       if (this.cv.$ARROW_LABEL === "line")
-        this.set.labelCenter(O2, P2);
-      this.arrow(O2, Q2, arrowLabel);
+        this.set.labelCenter(O, P);
+      this.arrow(O, Q, arrowLabel);
       this.cv.restore();
       if (angleLabel !== void 0)
-        this.angle(Q2, O2, P2, angleLabel);
+        this.angle(Q, O, P, angleLabel);
     }
-    arrowResolve(O2, P2, alongDir, arrowLabels = [], angleLabel) {
-      let [l1, l22] = arrowLabels;
-      this.arrowCompo(O2, P2, alongDir, l1, angleLabel);
-      this.arrowCompo(O2, P2, alongDir + 90, l22);
+    arrowResolve(O, P, alongDir, arrowLabels = [], angleLabel) {
+      let [l1, l2] = arrowLabels;
+      this.arrowCompo(O, P, alongDir, l1, angleLabel);
+      this.arrowCompo(O, P, alongDir + 90, l2);
     }
-    length(A2, B2, label) {
-      this.cv.line([A2, B2]);
-      this.cv.tick(A2, B2, 5, 0);
-      this.cv.tick(B2, A2, 5, 0);
+    length(A, B, label) {
+      this.cv.line([A, B]);
+      this.cv.tick(A, B, 5, 0);
+      this.cv.tick(B, A, 5, 0);
       if (label !== void 0)
-        this.label.line([A2, B2], label);
+        this.label.line([A, B], label);
     }
-    height(V2, [A2, B2], label) {
-      let F2 = PdFoot(V2, [A2, B2]);
-      this.dash(V2, F2);
-      this.rightAngle(A2, F2, V2);
+    height(V, [A, B], label) {
+      let F = PdFoot(V, [A, B]);
+      this.dash(V, F);
+      this.rightAngle(A, F, V);
       if (label !== void 0)
-        this.label.line([V2, F2], label);
+        this.label.line([V, F], label);
     }
-    ray(A2, B2, label) {
-      this.cv.line([A2, B2]);
+    ray(A, B, label) {
+      this.cv.line([A, B]);
       if (label !== void 0)
-        this.label.line([A2, B2], label);
-      this.cv.midArrowHead(A2, B2, 5);
+        this.label.line([A, B], label);
+      this.cv.midArrowHead(A, B, 5);
     }
     polyline(...points) {
       this.cv.line(points);
@@ -22777,36 +22777,36 @@
     fill = new PenFill(this, this.cv);
     shade = new PenShade(this, this.cv);
     linProg = new PenLinProg(this, this.cv);
-    angle(A2, O2, B2, label, arc = 1, radius = -1) {
+    angle(A, O, B, label, arc = 1, radius = -1) {
       if (radius < 0)
-        radius = 15 + this.cv.getAngleAllowance(A2, O2, B2, 40, 1.5);
+        radius = 15 + this.cv.getAngleAllowance(A, O, B, 40, 1.5);
       let space = 3;
-      this.cv.angle(A2, O2, B2, radius, arc, space);
+      this.cv.angle(A, O, B, radius, arc, space);
       if (label !== void 0 && label !== "")
-        this.label.angle([A2, O2, B2], label, void 0, radius < 0 ? radius : radius + 13);
+        this.label.angle([A, O, B], label, void 0, radius < 0 ? radius : radius + 13);
     }
-    angleDir(A2, O2, B2, label, arc = 1, radius = -1) {
-      [A2, O2, B2] = this.cv.getApexFromDial(A2, O2, B2);
-      this.angle(A2, O2, B2, label, arc, radius);
+    angleDir(A, O, B, label, arc = 1, radius = -1) {
+      [A, O, B] = this.cv.getApexFromDial(A, O, B);
+      this.angle(A, O, B, label, arc, radius);
     }
-    equalSide(A2, B2, tick = 1) {
-      this.cv.equalSide(A2, B2, 5, tick, 3);
+    equalSide(A, B, tick = 1) {
+      this.cv.equalSide(A, B, 5, tick, 3);
     }
-    bisectSide(A2, B2, tick = 1) {
-      [A2, B2] = this.cv.pjs([A2, B2]);
-      let M2 = Mid(A2, B2);
-      this.equalSide(A2, M2, tick);
-      this.equalSide(B2, M2, tick);
+    bisectSide(A, B, tick = 1) {
+      [A, B] = this.cv.pjs([A, B]);
+      let M = Mid(A, B);
+      this.equalSide(A, M, tick);
+      this.equalSide(B, M, tick);
     }
-    parallel(A2, B2, tick = 1) {
-      this.cv.parallel(A2, B2, 5, tick, 6);
+    parallel(A, B, tick = 1) {
+      this.cv.parallel(A, B, 5, tick, 6);
     }
-    rightAngle(A2, O2, B2, size = 12) {
-      A2 = this.cv.pj(A2);
-      O2 = this.cv.pj(O2);
-      B2 ??= Rotate(A2, 90, O2);
-      B2 = this.cv.pj(B2);
-      this.cv.rightAngle(A2, O2, B2, size);
+    rightAngle(A, O, B, size = 12) {
+      A = this.cv.pj(A);
+      O = this.cv.pj(O);
+      B ??= Rotate(A, 90, O);
+      B = this.cv.pj(B);
+      this.cv.rightAngle(A, O, B, size);
     }
     compass(point) {
       this.cv.compass(point, 17, 20, 3.5);
@@ -22851,40 +22851,40 @@
     PrimeFactorization({ numbers: numbers3 }) {
       function lowestFactor(arr) {
         const primes3 = [2, 3, 5, 7, 11, 13, 17, 19];
-        for (let p3 of primes3) {
-          if (HCF(...arr) % p3 === 0)
-            return p3;
+        for (let p2 of primes3) {
+          if (HCF(...arr) % p2 === 0)
+            return p2;
         }
         return 1;
       }
       const pen = new Pen();
       pen.range.set([-10, 10], [-15, 5]);
       pen.size.set(4);
-      const w2 = 1;
-      const h2 = 1;
+      const w = 1;
+      const h = 1;
       function drawRow(arr, pivot2) {
-        for (let i2 = 0; i2 < arr.length; i2++) {
-          pen.write([pivot2[0] + i2 * w2, pivot2[1]], arr[i2].toString());
+        for (let i = 0; i < arr.length; i++) {
+          pen.write([pivot2[0] + i * w, pivot2[1]], arr[i].toString());
         }
       }
       function drawVert(pivot2) {
-        pen.line([pivot2[0] - 0.5 * w2, pivot2[1] - h2 / 2], [pivot2[0] - 0.5 * w2, pivot2[1] + h2 / 2]);
+        pen.line([pivot2[0] - 0.5 * w, pivot2[1] - h / 2], [pivot2[0] - 0.5 * w, pivot2[1] + h / 2]);
       }
       function drawUnderline(arr, pivot2) {
-        for (let i2 = 0; i2 < arr.length; i2++) {
-          pen.line([pivot2[0] + i2 * w2 - 0.5 * w2, pivot2[1] - h2 / 2], [pivot2[0] + i2 * w2 + 0.5 * w2, pivot2[1] - h2 / 2]);
+        for (let i = 0; i < arr.length; i++) {
+          pen.line([pivot2[0] + i * w - 0.5 * w, pivot2[1] - h / 2], [pivot2[0] + i * w + 0.5 * w, pivot2[1] - h / 2]);
         }
       }
       function drawDivisor(pivot2, divisor) {
-        pen.write([pivot2[0] - w2, pivot2[1]], divisor.toString());
+        pen.write([pivot2[0] - w, pivot2[1]], divisor.toString());
       }
       function drawDiv(arr, pivot2) {
-        const d2 = lowestFactor(arr);
+        const d = lowestFactor(arr);
         drawVert(pivot2);
         drawUnderline(arr, pivot2);
-        drawDivisor(pivot2, d2);
-        arr = arr.map((x2) => x2 / d2);
-        pivot2 = [pivot2[0], pivot2[1] - h2];
+        drawDivisor(pivot2, d);
+        arr = arr.map((x) => x / d);
+        pivot2 = [pivot2[0], pivot2[1] - h];
         drawRow(arr, pivot2);
         return [arr, pivot2];
       }
@@ -22903,7 +22903,7 @@
     }) {
       const width = 5;
       const height = 2;
-      let ineqs = items.map((x2, i2) => ({ base: -i2 * (height + 2), ...x2 }));
+      let ineqs = items.map((x, i) => ({ base: -i * (height + 2), ...x }));
       const pen = new Pen();
       pen.range.set([-width - 2, width + 2], [-ineqs.length * (height + 2) + 2, height + 1]);
       pen.size.set(scale, scale * ratio);
@@ -22912,11 +22912,11 @@
         let greater = sign.includes(">") || sign.includes("g");
         let solid = sign.includes("=") || sign.includes("e");
         let align = -width + 2 * width * position;
-        let B2 = [align, base2];
-        let T2 = [align, base2 + height];
-        let E2 = [greater ? align + 0.4 * width : align - 0.4 * width, base2 + height];
+        let B = [align, base2];
+        let T = [align, base2 + height];
+        let E = [greater ? align + 0.4 * width : align - 0.4 * width, base2 + height];
         let E1 = [greater ? width : -width, base2 + height];
-        let E22 = [greater ? width : -width, base2];
+        let E2 = [greater ? width : -width, base2];
         if (vertical) {
           pen.set.color("grey");
           pen.set.dash(10);
@@ -22924,60 +22924,60 @@
           pen.set.color();
           pen.set.dash();
         }
-        pen.polyshade(B2, T2, E1, E22);
+        pen.polyshade(B, T, E1, E2);
         pen.arrow([-width, base2], [width, base2]);
-        pen.line(B2, T2);
-        pen.arrow(T2, E2);
-        solid ? pen.dot(T2) : pen.hole(T2);
-        pen.label.point(B2, num2.toString(), 270);
+        pen.line(B, T);
+        pen.arrow(T, E);
+        solid ? pen.dot(T) : pen.hole(T);
+        pen.label.point(B, num2.toString(), 270);
       }
       function tick(position, correct2) {
         let align = -width + 2 * width * position;
-        let y2 = -(ineqs.length - 1) * (height + 2) - height / 2;
-        pen.write([align, y2], correct2 ? "\u2714" : "\u2718");
+        let y = -(ineqs.length - 1) * (height + 2) - height / 2;
+        pen.write([align, y], correct2 ? "\u2714" : "\u2718");
       }
-      ineqs.forEach((x2) => inequality(x2));
-      let cutting = ineqs.map((x2) => x2.position);
+      ineqs.forEach((x) => inequality(x));
+      let cutting = ineqs.map((x) => x.position);
       cutting = [0, ...cutting, 1];
-      for (let i2 = 0; i2 < ticks.length; i2++) {
-        let p3 = (cutting[i2] + cutting[i2 + 1]) / 2;
-        tick(p3, ticks[i2]);
+      for (let i = 0; i < ticks.length; i++) {
+        let p2 = (cutting[i] + cutting[i + 1]) / 2;
+        tick(p2, ticks[i]);
       }
       this.pen = pen;
     }
     TrigSolution({
       trig: trig2 = "sin",
-      k: k2 = 0,
+      k = 0,
       scale = 1.4,
       ratio = 0.7
     }) {
       if (trig2 === "sin" || trig2 === "cos") {
-        if (k2 > 2)
-          k2 = 2;
-        if (0.9 < k2 && k2 < 1)
-          k2 = 0.9;
-        if (0 < k2 && k2 < 0.3)
-          k2 = 0.3;
-        if (-1 < k2 && k2 < -0.9)
-          k2 = -0.9;
-        if (-0.3 < k2 && k2 < 0)
-          k2 = -0.3;
-        if (k2 < -2)
-          k2 = -2;
+        if (k > 2)
+          k = 2;
+        if (0.9 < k && k < 1)
+          k = 0.9;
+        if (0 < k && k < 0.3)
+          k = 0.3;
+        if (-1 < k && k < -0.9)
+          k = -0.9;
+        if (-0.3 < k && k < 0)
+          k = -0.3;
+        if (k < -2)
+          k = -2;
       }
       if (trig2 === "tan") {
-        if (k2 > 4)
-          k2 = 4;
-        if (k2 < -4)
-          k2 = -4;
-        if (0 < k2 && k2 < 0.9)
-          k2 = 0.9;
-        if (0 > k2 && k2 > -0.9)
-          k2 = -0.9;
+        if (k > 4)
+          k = 4;
+        if (k < -4)
+          k = -4;
+        if (0 < k && k < 0.9)
+          k = 0.9;
+        if (0 > k && k > -0.9)
+          k = -0.9;
       }
-      let [a2, b2, c3] = TrigRoot(trig2, k2);
+      let [a, b, c2] = TrigRoot(trig2, k);
       const pen = new Pen();
-      let limit = Max(1, Abs(k2)) + 0.2;
+      let limit = Max(1, Abs(k)) + 0.2;
       if (trig2 === "sin")
         pen.range.set([-40, 390], [-limit, limit]);
       if (trig2 === "cos")
@@ -23001,11 +23001,11 @@
       }
       pen.set.weight(1.5);
       if (trig2 === "sin")
-        pen.plot((x2) => sin(x2), 0, 360);
+        pen.plot((x) => sin(x), 0, 360);
       if (trig2 === "cos")
-        pen.plot((x2) => cos(x2), 0, 360);
+        pen.plot((x) => cos(x), 0, 360);
       if (trig2 === "tan") {
-        pen.plot((x2) => tan(x2), 0, 360);
+        pen.plot((x) => tan(x), 0, 360);
         pen.set.color("grey");
         pen.set.dash([5, 10]);
         pen.set.weight(0.7);
@@ -23016,107 +23016,107 @@
         pen.set.weight(1);
       }
       pen.set.weight(1);
-      function arrow(x2, y2, func, label = "") {
-        if (x2 === void 0)
+      function arrow(x, y, func, label = "") {
+        if (x === void 0)
           return;
         let anchor = 0;
         let skipAnchor = false;
         if (func === "sin") {
-          if ([0, 90, 180, 270, 360].includes(x2))
+          if ([0, 90, 180, 270, 360].includes(x))
             skipAnchor = true;
-          if (x2 > 0 && x2 < 90)
+          if (x > 0 && x < 90)
             anchor = 0;
-          if (x2 > 90 && x2 < 270)
+          if (x > 90 && x < 270)
             anchor = 180;
-          if (x2 > 270 && x2 < 360)
+          if (x > 270 && x < 360)
             anchor = 360;
         }
         if (func === "cos") {
-          if ([0, 90, 180, 270, 360].includes(x2))
+          if ([0, 90, 180, 270, 360].includes(x))
             skipAnchor = true;
-          if (x2 > 0 && x2 < 180 && x2 !== 90)
+          if (x > 0 && x < 180 && x !== 90)
             anchor = 0;
-          if (x2 > 180 && x2 < 360 && x2 !== 270)
+          if (x > 180 && x < 360 && x !== 270)
             anchor = 360;
         }
         if (func === "tan") {
-          if ([0, 90, 180, 270, 360].includes(x2))
+          if ([0, 90, 180, 270, 360].includes(x))
             skipAnchor = true;
-          if (x2 > 0 && x2 < 180)
+          if (x > 0 && x < 180)
             anchor = 0;
-          if (x2 > 180 && x2 < 360)
+          if (x > 180 && x < 360)
             anchor = 180;
         }
-        let P2 = [x2, y2];
-        let Q2 = [x2, 0];
-        let R2 = [anchor, 0];
+        let P = [x, y];
+        let Q = [x, 0];
+        let R = [anchor, 0];
         pen.set.color();
-        pen.point(P2);
+        pen.point(P);
         pen.set.color("red");
-        if (y2 !== 0) {
-          pen.arrow(P2, Q2);
+        if (y !== 0) {
+          pen.arrow(P, Q);
         }
-        if (y2 >= 0) {
-          pen.label.point(Q2, label, 270);
+        if (y >= 0) {
+          pen.label.point(Q, label, 270);
         }
-        if (y2 < 0) {
-          pen.label.point(Q2, label, 90);
+        if (y < 0) {
+          pen.label.point(Q, label, 90);
         }
         if (skipAnchor)
           return;
         pen.set.weight(3);
         pen.set.color("blue");
-        pen.line(R2, Q2);
+        pen.line(R, Q);
         pen.set.weight(1);
         pen.set.color("red");
       }
       pen.set.color("red");
       pen.set.dash([5, 5]);
-      pen.graph.horizontal(k2);
+      pen.graph.horizontal(k);
       pen.set.dash();
       if (trig2 === "sin") {
-        if (k2 === 0) {
-          arrow(a2, k2, "sin", "0");
-          arrow(b2, k2, "sin", "180");
-          arrow(c3, k2, "sin", "360");
+        if (k === 0) {
+          arrow(a, k, "sin", "0");
+          arrow(b, k, "sin", "180");
+          arrow(c2, k, "sin", "360");
         }
-        if (k2 === 1) {
-          arrow(a2, k2, "sin", "90");
+        if (k === 1) {
+          arrow(a, k, "sin", "90");
         }
-        if (k2 === -1) {
-          arrow(a2, k2, "sin", "270");
+        if (k === -1) {
+          arrow(a, k, "sin", "270");
         }
-        if (k2 > -1 && k2 < 1 && k2 !== 0) {
-          arrow(a2, k2, "sin", "\u03B1");
-          arrow(b2, k2, "sin", "\u03B2");
+        if (k > -1 && k < 1 && k !== 0) {
+          arrow(a, k, "sin", "\u03B1");
+          arrow(b, k, "sin", "\u03B2");
         }
       }
       if (trig2 === "cos") {
-        if (k2 === 0) {
-          arrow(a2, k2, "cos", "90");
-          arrow(b2, k2, "cos", "270");
+        if (k === 0) {
+          arrow(a, k, "cos", "90");
+          arrow(b, k, "cos", "270");
         }
-        if (k2 === 1) {
-          arrow(a2, k2, "cos", "0");
-          arrow(b2, k2, "cos", "360");
+        if (k === 1) {
+          arrow(a, k, "cos", "0");
+          arrow(b, k, "cos", "360");
         }
-        if (k2 === -1) {
-          arrow(a2, k2, "cos", "180");
+        if (k === -1) {
+          arrow(a, k, "cos", "180");
         }
-        if (k2 > -1 && k2 < 1 && k2 !== 0) {
-          arrow(a2, k2, "cos", "\u03B1");
-          arrow(b2, k2, "cos", "\u03B2");
+        if (k > -1 && k < 1 && k !== 0) {
+          arrow(a, k, "cos", "\u03B1");
+          arrow(b, k, "cos", "\u03B2");
         }
       }
       if (trig2 === "tan") {
-        if (k2 === 0) {
-          arrow(a2, k2, "tan", "0");
-          arrow(b2, k2, "tan", "180");
-          arrow(c3, k2, "tan", "360");
+        if (k === 0) {
+          arrow(a, k, "tan", "0");
+          arrow(b, k, "tan", "180");
+          arrow(c2, k, "tan", "360");
         }
-        if (k2 !== 0) {
-          arrow(a2, k2, "tan", "\u03B1");
-          arrow(b2, k2, "tan", "\u03B2");
+        if (k !== 0) {
+          arrow(a, k, "tan", "\u03B1");
+          arrow(b, k, "tan", "\u03B2");
         }
       }
       this.pen = pen;
@@ -23127,72 +23127,72 @@
       scale = 1,
       ratio = 0.8
     }) {
-      let a2 = quadratic[0];
-      let b2 = quadratic[1];
-      let c3 = quadratic[2];
+      let a = quadratic[0];
+      let b = quadratic[1];
+      let c2 = quadratic[2];
       let greater = sign.includes(">") || sign.includes("g");
       let equal2 = sign.includes("=") || sign.includes("e");
-      let p3;
-      let q2;
+      let p2;
+      let q;
       try {
-        [p3, q2] = QuadraticRoot(a2, b2, c3);
+        [p2, q] = QuadraticRoot(a, b, c2);
       } catch {
-        [p3, q2] = [void 0, void 0];
+        [p2, q] = [void 0, void 0];
       }
-      if (p3 !== void 0 && q2 !== void 0) {
-        [p3, q2] = [Max(p3, q2), Min(p3, q2)];
-        p3 = Fix(p3, 2);
-        q2 = Fix(q2, 2);
+      if (p2 !== void 0 && q !== void 0) {
+        [p2, q] = [Max(p2, q), Min(p2, q)];
+        p2 = Fix(p2, 2);
+        q = Fix(q, 2);
       }
       const pen = new Pen();
       pen.range.set([-5, 5], [-5, 5]);
       pen.size.set(scale, scale * ratio);
       pen.set.textLatex(true);
       pen.axis.x("");
-      if (p3 !== void 0 && q2 !== void 0 && p3 !== q2) {
-        pen.plot((x2) => Sign(a2) * (x2 ** 2 - 4));
-        let P2 = [2, 0];
-        let Q2 = [-2, 0];
-        pen.cutX(P2);
-        pen.cutX(Q2);
+      if (p2 !== void 0 && q !== void 0 && p2 !== q) {
+        pen.plot((x) => Sign(a) * (x ** 2 - 4));
+        let P = [2, 0];
+        let Q = [-2, 0];
+        pen.cutX(P);
+        pen.cutX(Q);
         pen.set.weight(3);
         pen.set.color("red");
-        if (a2 > 0) {
+        if (a > 0) {
           if (greater) {
-            pen.plot((x2) => Sign(a2) * (x2 ** 2 - 4), -5, -2);
-            pen.plot((x2) => Sign(a2) * (x2 ** 2 - 4), 2, 5);
+            pen.plot((x) => Sign(a) * (x ** 2 - 4), -5, -2);
+            pen.plot((x) => Sign(a) * (x ** 2 - 4), 2, 5);
           } else {
-            pen.plot((x2) => Sign(a2) * (x2 ** 2 - 4), -2, 2);
+            pen.plot((x) => Sign(a) * (x ** 2 - 4), -2, 2);
           }
         }
-        if (a2 < 0) {
+        if (a < 0) {
           if (greater) {
-            pen.plot((x2) => Sign(a2) * (x2 ** 2 - 4), -2, 2);
+            pen.plot((x) => Sign(a) * (x ** 2 - 4), -2, 2);
           } else {
-            pen.plot((x2) => Sign(a2) * (x2 ** 2 - 4), -5, -2);
-            pen.plot((x2) => Sign(a2) * (x2 ** 2 - 4), 2, 5);
+            pen.plot((x) => Sign(a) * (x ** 2 - 4), -5, -2);
+            pen.plot((x) => Sign(a) * (x ** 2 - 4), 2, 5);
           }
         }
         pen.set.weight();
         pen.set.color();
-        pen.label.point(P2, p3.toString(), a2 > 0 ? 315 : 45);
-        pen.label.point(Q2, q2.toString(), a2 > 0 ? 225 : 135);
+        pen.label.point(P, p2.toString(), a > 0 ? 315 : 45);
+        pen.label.point(Q, q.toString(), a > 0 ? 225 : 135);
       }
-      if (p3 === void 0 && q2 === void 0) {
-        if (a2 > 0 && greater || a2 < 0 && !greater) {
+      if (p2 === void 0 && q === void 0) {
+        if (a > 0 && greater || a < 0 && !greater) {
           pen.set.weight(3);
           pen.set.color("red");
         }
-        if (a2 > 0)
-          pen.plot((x2) => x2 ** 2 + 2);
-        if (a2 < 0)
-          pen.plot((x2) => -(x2 ** 2) - 2);
+        if (a > 0)
+          pen.plot((x) => x ** 2 + 2);
+        if (a < 0)
+          pen.plot((x) => -(x ** 2) - 2);
       }
-      if (p3 !== void 0 && q2 !== void 0 && p3 === q2) {
-        let func = a2 > 0 ? (x2) => x2 ** 2 : (x2) => -(x2 ** 2);
+      if (p2 !== void 0 && q !== void 0 && p2 === q) {
+        let func = a > 0 ? (x) => x ** 2 : (x) => -(x ** 2);
         pen.plot(func);
-        pen.label.point([0, 0], p3.toString(), a2 > 0 ? 270 : 90);
-        if (a2 > 0) {
+        pen.label.point([0, 0], p2.toString(), a > 0 ? 270 : 90);
+        if (a > 0) {
           pen.set.weight(3);
           pen.set.color("red");
           if (greater && equal2)
@@ -23209,7 +23209,7 @@
           if (!greater && !equal2) {
           }
         }
-        if (a2 < 0) {
+        if (a < 0) {
           pen.set.weight(3);
           pen.set.color("red");
           if (!greater && equal2)
@@ -23236,26 +23236,26 @@
       heights = [false, false, false],
       scale = 1.6
     }) {
-      let A2 = vertices[0];
-      let B2 = vertices[1];
-      let C2 = vertices[2];
-      let xmax = Math.max(A2[0], B2[0], C2[0]);
-      let xmin = Math.min(A2[0], B2[0], C2[0]);
+      let A = vertices[0];
+      let B = vertices[1];
+      let C = vertices[2];
+      let xmax = Math.max(A[0], B[0], C[0]);
+      let xmin = Math.min(A[0], B[0], C[0]);
       let xmid = (xmax + xmin) / 2;
-      let ymax = Math.max(A2[1], B2[1], C2[1]);
-      let ymin = Math.min(A2[1], B2[1], C2[1]);
+      let ymax = Math.max(A[1], B[1], C[1]);
+      let ymin = Math.min(A[1], B[1], C[1]);
       let ymid = (ymax + ymin) / 2;
       let dx = xmax - xmin;
       let dy = ymax - ymin;
       let dmax = Math.max(dx, dy) * 0.8;
-      let G2 = Mid(A2, B2, C2);
-      let T2 = triangle;
-      let sideA = T2.sideA;
-      let sideB = T2.sideB;
-      let sideC = T2.sideC;
-      let angleA = T2.angleA;
-      let angleB = T2.angleB;
-      let angleC = T2.angleC;
+      let G = Mid(A, B, C);
+      let T = triangle;
+      let sideA = T.sideA;
+      let sideB = T.sideB;
+      let sideC = T.sideC;
+      let angleA = T.angleA;
+      let angleB = T.angleB;
+      let angleC = T.angleC;
       let labelA = labels[0];
       let labelB = labels[1];
       let labelC = labels[2];
@@ -23263,40 +23263,40 @@
       pen.range.set([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax]);
       pen.size.set(scale);
       function drawHeight(vertex, base2) {
-        let F2 = PdFoot(vertex, [base2[0], base2[1]]);
+        let F = PdFoot(vertex, [base2[0], base2[1]]);
         pen.set.dash([5, 5]);
         pen.set.color("grey");
-        pen.line(vertex, F2);
-        if (F2[0] === base2[0][0] && F2[1] === base2[0][1]) {
-          pen.line(F2, base2[1]);
+        pen.line(vertex, F);
+        if (F[0] === base2[0][0] && F[1] === base2[0][1]) {
+          pen.line(F, base2[1]);
         } else {
-          pen.line(F2, base2[0]);
+          pen.line(F, base2[0]);
         }
         pen.set.dash();
-        if (F2[0] === base2[0][0] && F2[1] === base2[0][1]) {
-          pen.rightAngle(vertex, F2, base2[1]);
+        if (F[0] === base2[0][0] && F[1] === base2[0][1]) {
+          pen.rightAngle(vertex, F, base2[1]);
         } else {
-          pen.rightAngle(vertex, F2, base2[0]);
+          pen.rightAngle(vertex, F, base2[0]);
         }
         pen.set.color();
       }
       if (heights[0])
-        drawHeight(A2, [B2, C2]);
+        drawHeight(A, [B, C]);
       if (heights[1])
-        drawHeight(B2, [C2, A2]);
+        drawHeight(B, [C, A]);
       if (heights[2])
-        drawHeight(C2, [A2, B2]);
-      pen.polygon(A2, B2, C2);
+        drawHeight(C, [A, B]);
+      pen.polygon(A, B, C);
       pen.set.textItalic(true);
       if (labelA)
-        pen.label.point(A2, labelA.toString(), Dir(G2, A2));
+        pen.label.point(A, labelA.toString(), Dir(G, A));
       if (labelB)
-        pen.label.point(B2, labelB.toString(), Dir(G2, B2));
+        pen.label.point(B, labelB.toString(), Dir(G, B));
       if (labelC)
-        pen.label.point(C2, labelC.toString(), Dir(G2, C2));
+        pen.label.point(C, labelC.toString(), Dir(G, C));
       pen.set.textItalic();
-      let AB = [B2[0] - A2[0], B2[1] - A2[1]];
-      let BC = [C2[0] - B2[0], C2[1] - B2[1]];
+      let AB = [B[0] - A[0], B[1] - A[1]];
+      let BC = [C[0] - B[0], C[1] - B[1]];
       let anticlockwise = AB[0] * BC[1] - AB[1] * BC[0] > 0;
       function writeSide(side2, start, end) {
         pen.set.lineLabel("right");
@@ -23312,21 +23312,21 @@
         }
         pen.set.lineLabel();
       }
-      writeSide(sideC, A2, B2);
-      writeSide(sideA, B2, C2);
-      writeSide(sideB, C2, A2);
-      function writeAngle(angle2, P2, O2, Q2) {
+      writeSide(sideC, A, B);
+      writeSide(sideA, B, C);
+      writeSide(sideB, C, A);
+      function writeAngle(angle2, P, O, Q) {
         if (angle2) {
           if (typeof angle2 === "number" && cal.correct(angle2) === 90) {
-            pen.rightAngle(P2, O2, Q2);
+            pen.rightAngle(P, O, Q);
           } else {
-            pen.angle(P2, O2, Q2, angle2);
+            pen.angle(P, O, Q, angle2);
           }
         }
       }
-      writeAngle(angleA, B2, A2, C2);
-      writeAngle(angleB, C2, B2, A2);
-      writeAngle(angleC, A2, C2, B2);
+      writeAngle(angleA, B, A, C);
+      writeAngle(angleB, C, B, A);
+      writeAngle(angleC, A, C, B);
       this.pen = pen;
     }
     LinearProgram({
@@ -23354,10 +23354,10 @@
       contourColor = "grey",
       constraintColors = []
     }) {
-      function fieldAt(p3) {
-        const [a2, b2, c3] = field2;
-        const [x2, y2] = p3;
-        return Fix(a2 * x2 + b2 * y2 + c3, 1);
+      function fieldAt(p2) {
+        const [a, b, c2] = field2;
+        const [x, y] = p2;
+        return Fix(a * x + b * y + c2, 1);
       }
       let vertices = FeasiblePolygon(...constraints2);
       let integrals = [];
@@ -23396,39 +23396,39 @@
         pen.set.textSize();
       }
       function drawLines() {
-        for (let i2 = 0; i2 < constraints2.length; i2++) {
-          let [a2, b2, s3, c3] = constraints2[i2];
-          if (!ineq(s3).canEqual())
+        for (let i = 0; i < constraints2.length; i++) {
+          let [a, b, s2, c2] = constraints2[i];
+          if (!ineq(s2).canEqual())
             pen.set.dash([5, 5]);
-          pen.set.color(constraintColors[i2] ?? "black");
-          pen.graph.linear(a2, b2, -c3);
+          pen.set.color(constraintColors[i] ?? "black");
+          pen.graph.linear(a, b, -c2);
           pen.set.color();
           pen.set.dash();
         }
       }
-      labelConstraints.push((x2, y2) => x2 > xmin);
-      labelConstraints.push((x2, y2) => x2 < xmax);
-      labelConstraints.push((x2, y2) => y2 > ymin);
-      labelConstraints.push((x2, y2) => y2 < ymax);
-      function labelField(p3) {
+      labelConstraints.push((x, y) => x > xmin);
+      labelConstraints.push((x, y) => x < xmax);
+      labelConstraints.push((x, y) => y > ymin);
+      labelConstraints.push((x, y) => y < ymax);
+      function labelField(p2) {
         pen.set.textAlign("left");
-        pen.label.point(p3, fieldAt(p3).toString(), 60, 10);
+        pen.label.point(p2, fieldAt(p2).toString(), 60, 10);
         pen.set.textAlign();
       }
       function drawIntegral(label = false) {
-        integrals.forEach((p3) => {
-          pen.point(p3);
-          if (label && labelConstraints.every((f3) => f3(...p3)))
-            labelField(p3);
+        integrals.forEach((p2) => {
+          pen.point(p2);
+          if (label && labelConstraints.every((f2) => f2(...p2)))
+            labelField(p2);
         });
       }
       function drawVertex(coordinates = false, label = false) {
-        vertices.forEach((p3) => {
-          pen.point(p3);
+        vertices.forEach((p2) => {
+          pen.point(p2);
           if (coordinates)
-            pen.label.coordinates(p3, 270);
-          if (label && labelConstraints.every((f3) => f3(...p3)))
-            labelField(p3);
+            pen.label.coordinates(p2, 270);
+          if (label && labelConstraints.every((f2) => f2(...p2)))
+            labelField(p2);
         });
       }
       function drawShade() {
@@ -23463,7 +23463,7 @@
         pen.set.color();
       }
       function drawHighlights() {
-        highlights.forEach((h2) => drawHighlight(h2));
+        highlights.forEach((h) => drawHighlight(h));
       }
       if (showLine)
         drawLines();
@@ -23497,29 +23497,29 @@
         });
       this.pen = pen;
     }
-    DotPattern({ a: a2, p: p3, q: q2, n: n2, offset }) {
+    DotPattern({ a, p: p2, q, n, offset }) {
       const pen = new Pen();
       pen.range.set([-2, 30], [-4, 10]);
       pen.size.resolution(0.08);
-      function drawRow(n3, j2, offset2 = 0) {
-        for (let i2 = 1 + offset2; i2 <= n3 + offset2; i2++) {
-          pen.point([i2, j2]);
+      function drawRow(n2, j, offset2 = 0) {
+        for (let i = 1 + offset2; i <= n2 + offset2; i++) {
+          pen.point([i, j]);
         }
       }
-      drawRow(a2 + (n2 - 1) * p3, 1);
-      for (let j2 = 2; j2 <= n2; j2++) {
-        drawRow(q2 + (n2 - j2) * p3, j2, (j2 - 1) * offset);
+      drawRow(a + (n - 1) * p2, 1);
+      for (let j = 2; j <= n; j++) {
+        drawRow(q + (n - j) * p2, j, (j - 1) * offset);
       }
-      let m3 = "";
-      if (n2 === 1)
-        m3 = "1st";
-      if (n2 === 2)
-        m3 = "2nd";
-      if (n2 === 3)
-        m3 = "3rd";
-      if (n2 >= 3)
-        m3 = n2 + "th";
-      pen.write([(1 + a2 + (n2 - 1) * p3) / 2, -1], m3 + " pattern");
+      let m2 = "";
+      if (n === 1)
+        m2 = "1st";
+      if (n === 2)
+        m2 = "2nd";
+      if (n === 3)
+        m2 = "3rd";
+      if (n >= 3)
+        m2 = n + "th";
+      pen.write([(1 + a + (n - 1) * p2) / 2, -1], m2 + " pattern");
       this.pen = pen;
     }
     PieChart({ categories, labels, angles, angleLabels, size = 2 }) {
@@ -23528,26 +23528,26 @@
       pen.size.set(size);
       pen.graph.circle([0, 0], 1);
       pen.set.angle("polar");
-      let O2 = [0, 0];
-      pen.line(O2, [1, 0]);
+      let O = [0, 0];
+      pen.line(O, [1, 0]);
       let current = 0;
-      for (let i2 = 0; i2 < angles.length; i2++) {
-        let a2 = angles[i2];
-        let next = current + a2;
-        let mid5 = current + a2 / 2;
-        pen.line(O2, PolToRect([1, next]));
-        if (categories[i2] === "") {
-          pen.write(PolToRect([0.7, mid5]), labels[i2]);
-        } else if (labels[i2] === "") {
-          pen.write(PolToRect([0.7, mid5]), categories[i2]);
+      for (let i = 0; i < angles.length; i++) {
+        let a = angles[i];
+        let next = current + a;
+        let mid5 = current + a / 2;
+        pen.line(O, PolToRect([1, next]));
+        if (categories[i] === "") {
+          pen.write(PolToRect([0.7, mid5]), labels[i]);
+        } else if (labels[i] === "") {
+          pen.write(PolToRect([0.7, mid5]), categories[i]);
         } else {
-          pen.label.point(PolToRect([0.7, mid5]), categories[i2], 90, 10);
-          pen.label.point(PolToRect([0.7, mid5]), labels[i2], 270, 10);
+          pen.label.point(PolToRect([0.7, mid5]), categories[i], 90, 10);
+          pen.label.point(PolToRect([0.7, mid5]), labels[i], 270, 10);
         }
-        if (angleLabels[i2] !== void 0) {
-          pen.angle(PolToRect([1, current]), O2, PolToRect([1, next]), angleLabels[i2] ?? angles[i2] + "\xB0");
+        if (angleLabels[i] !== void 0) {
+          pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), angleLabels[i] ?? angles[i] + "\xB0");
         }
-        current += a2;
+        current += a;
       }
       this.pen = pen;
     }
@@ -23578,46 +23578,46 @@
       pen.write([-1.5, height / 2], yLabel);
       pen.set.textDir();
       pen.label.point([width / 2, 0], xLabel, 270, 40);
-      function grid(y2) {
-        pen.line([0, y2], [width, y2]);
+      function grid(y) {
+        pen.line([0, y], [width, y]);
       }
-      for (let y2 = 1; y2 <= maxUnit; y2++) {
-        let h2 = y2 * interval2;
+      for (let y = 1; y <= maxUnit; y++) {
+        let h = y * interval2;
         pen.set.alpha(0.2);
-        grid(h2);
-        pen.cutY([0, h2]);
+        grid(h);
+        pen.cutY([0, h]);
         pen.set.alpha();
-        pen.label.point([0, h2], h2.toString(), 180);
+        pen.label.point([0, h], h.toString(), 180);
       }
-      for (let y2 = 1; y2 <= maxSubUnit; y2++) {
+      for (let y = 1; y <= maxSubUnit; y++) {
         pen.set.alpha(0.1);
-        grid(y2 * subInterval);
+        grid(y * subInterval);
         pen.set.alpha();
       }
-      function bar(x2, w2, h2) {
+      function bar(x, w, h) {
         pen.set.color("grey");
-        pen.polyfill([x2, 0], [x2, h2], [x2 + w2, h2], [x2 + w2, 0]);
+        pen.polyfill([x, 0], [x, h], [x + w, h], [x + w, 0]);
         pen.set.color();
-        pen.polygon([x2, 0], [x2, h2], [x2 + w2, h2], [x2 + w2, 0]);
+        pen.polygon([x, 0], [x, h], [x + w, h], [x + w, 0]);
       }
-      function writeCat(x2, w2, text) {
-        pen.label.point([x2 + w2 / 2, 0], text, 270, 15);
+      function writeCat(x, w, text) {
+        pen.label.point([x + w / 2, 0], text, 270, 15);
       }
       if (showBar) {
-        for (let i2 = 0; i2 < categories.length; i2++) {
-          let x2 = endGap + i2 * (barWidth + barGap) + barGap / 2;
-          bar(x2, barWidth, data2[i2]);
-          writeCat(x2, barWidth, categories[i2]);
+        for (let i = 0; i < categories.length; i++) {
+          let x = endGap + i * (barWidth + barGap) + barGap / 2;
+          bar(x, barWidth, data2[i]);
+          writeCat(x, barWidth, categories[i]);
         }
       }
       if (showLine) {
         let points = [];
-        for (let i2 = 0; i2 < categories.length; i2++) {
-          let x2 = endGap + i2 * (barWidth + barGap) + barGap / 2;
-          let p3 = [x2 + barWidth / 2, data2[i2]];
-          pen.point(p3);
-          points.push(p3);
-          writeCat(x2, barWidth, categories[i2]);
+        for (let i = 0; i < categories.length; i++) {
+          let x = endGap + i * (barWidth + barGap) + barGap / 2;
+          let p2 = [x + barWidth / 2, data2[i]];
+          pen.point(p2);
+          points.push(p2);
+          writeCat(x, barWidth, categories[i]);
         }
         pen.set.weight(2);
         pen.polyline(...points);
@@ -23640,19 +23640,19 @@
       let [Q0, Q1, Q2, Q3, Q4] = summary;
       let height = showDash ? 1 : 0.5;
       let thickness = 1;
-      let b2 = height;
-      let t2 = b2 + thickness;
-      let m3 = (b2 + t2) / 2;
-      let L2 = [Q0, m3];
-      let R2 = [Q4, m3];
-      let A1 = [Q1, t2];
-      let A2 = [Q1, b2];
-      let Am = [Q1, m3];
-      let B1 = [Q2, t2];
-      let B2 = [Q2, b2];
-      let C1 = [Q3, t2];
-      let C2 = [Q3, b2];
-      let Cm = [Q3, m3];
+      let b = height;
+      let t = b + thickness;
+      let m2 = (b + t) / 2;
+      let L = [Q0, m2];
+      let R = [Q4, m2];
+      let A1 = [Q1, t];
+      let A2 = [Q1, b];
+      let Am = [Q1, m2];
+      let B1 = [Q2, t];
+      let B2 = [Q2, b];
+      let C1 = [Q3, t];
+      let C2 = [Q3, b];
+      let Cm = [Q3, m2];
       let L_ = [Q0, 0];
       let R_ = [Q4, 0];
       let A_ = [Q1, 0];
@@ -23660,7 +23660,7 @@
       let C_ = [Q3, 0];
       start ??= Q0 - (Q4 - Q0) * 0.2;
       end ??= Q4 + (Q4 - Q0) * 0.2;
-      pen.range.set([start, end], [-(t2 + 1), t2 + 1]);
+      pen.range.set([start, end], [-(t + 1), t + 1]);
       pen.size.set(size, 1);
       if (showTick) {
         pen.tick.x(tick);
@@ -23668,14 +23668,14 @@
       pen.axis.x("");
       pen.polygon(A1, A2, C2, C1);
       pen.line(B1, B2);
-      pen.line(L2, Am);
-      pen.line(R2, Cm);
+      pen.line(L, Am);
+      pen.line(R, Cm);
       if (showDash) {
-        pen.dash(L2, L_);
+        pen.dash(L, L_);
         pen.dash(A2, A_);
         pen.dash(B2, B_);
         pen.dash(C2, C_);
-        pen.dash(R2, R_);
+        pen.dash(R, R_);
       }
       if (showValue) {
         pen.cutX(L_);
@@ -23704,9 +23704,9 @@
       pen.polygon(...gon);
       if (diagonal) {
         pen.set.alpha(0.3);
-        for (let i2 = 0; i2 < side2; i2++) {
-          for (let j2 = i2 + 1; j2 < side2; j2++) {
-            pen.line(gon[i2], gon[j2]);
+        for (let i = 0; i < side2; i++) {
+          for (let j = i + 1; j < side2; j++) {
+            pen.line(gon[i], gon[j]);
           }
         }
         pen.set.alpha();
@@ -23716,24 +23716,24 @@
         pen.set.dash(true);
         if (side2 % 2 === 0) {
           pen.set.color("red");
-          for (let n2 = 0; n2 < side2; n2 += 2) {
-            pen.graph.through([0, 0], PolToRect([1, n2 * 180 / side2]));
+          for (let n = 0; n < side2; n += 2) {
+            pen.graph.through([0, 0], PolToRect([1, n * 180 / side2]));
           }
           pen.set.color("blue");
-          for (let n2 = 1; n2 < side2; n2 += 2) {
-            pen.graph.through([0, 0], PolToRect([1, n2 * 180 / side2]));
+          for (let n = 1; n < side2; n += 2) {
+            pen.graph.through([0, 0], PolToRect([1, n * 180 / side2]));
           }
         } else {
-          for (let n2 = 0; n2 < side2; n2++) {
-            pen.graph.through([0, 0], PolToRect([1, n2 * 180 / side2]));
+          for (let n = 0; n < side2; n++) {
+            pen.graph.through([0, 0], PolToRect([1, n * 180 / side2]));
           }
         }
         pen.set.alpha();
         pen.set.dash();
       }
       if (rotational) {
-        for (let i2 = 0; i2 < side2; i2++) {
-          pen.line(gon[i2], [0, 0]);
+        for (let i = 0; i < side2; i++) {
+          pen.line(gon[i], [0, 0]);
         }
       }
       this.pen = pen;
@@ -23748,20 +23748,20 @@
       const pen = new Pen();
       pen.range.set([-5, 15], [-12, 12]);
       pen.size.resolution(0.12);
-      function path(P2, Q2, prob2, event, selected, circle) {
-        let T2 = MoveX(Q2, 2);
-        pen.write(T2, event);
-        pen.line(P2, Q2, prob2);
+      function path(P, Q, prob2, event, selected, circle) {
+        let T = MoveX(Q, 2);
+        pen.write(T, event);
+        pen.line(P, Q, prob2);
         if (selected) {
           pen.set.weight(3);
-          pen.line(P2, Q2, prob2);
+          pen.line(P, Q, prob2);
           if (circle)
-            pen.halo(T2, circleSize ?? 30);
+            pen.halo(T, circleSize ?? 30);
           pen.set.weight();
         }
       }
-      function branch(C2, w2, h1, h2, prob2, [eventA, eventB], [selectedA, selectedB], circle, [title, titleHeight] = ["", 0]) {
-        let D2 = MoveX(C2, w2);
+      function branch(C, w, h1, h2, prob2, [eventA, eventB], [selectedA, selectedB], circle, [title, titleHeight] = ["", 0]) {
+        let D = MoveX(C, w);
         let probA;
         let probB;
         if (typeof prob2 === "number") {
@@ -23771,27 +23771,27 @@
           probA = prob2[0];
           probB = prob2[1];
         }
-        let A1 = MoveY(C2, h1);
-        let A2 = MoveY(D2, h2);
+        let A1 = MoveY(C, h1);
+        let A2 = MoveY(D, h2);
         path(A1, A2, probA, eventA, selectedA, circle);
-        let B1 = MoveY(C2, -h1);
-        let B2 = MoveY(D2, -h2);
+        let B1 = MoveY(C, -h1);
+        let B2 = MoveY(D, -h2);
         path(B1, B2, probB, eventB, selectedB, circle);
         if (title && titleHeight) {
-          let M2 = Mid(C2, D2);
-          let T2 = MoveY(M2, titleHeight);
-          pen.write(T2, title);
+          let M = Mid(C, D);
+          let T = MoveY(M, titleHeight);
+          pen.write(T, title);
         }
       }
       let s1 = select.includes(1);
-      let s22 = select.includes(2);
+      let s2 = select.includes(2);
       let s3 = select.includes(3);
       let s4 = select.includes(4);
       let [t1, t2] = titles;
       let [[p00], [p10, p11]] = probabilities;
       let [[e00], [e10, e11]] = events;
-      branch([0, 0], 2, 2, 4, p00, e00, [s1 || s22, s3 || s4], false, [t1, 8]);
-      branch([6, 4], 3, 1, 2, p10, e10, [s1, s22], true, [t2, 5]);
+      branch([0, 0], 2, 2, 4, p00, e00, [s1 || s2, s3 || s4], false, [t1, 8]);
+      branch([6, 4], 3, 1, 2, p10, e10, [s1, s2], true, [t2, 5]);
       branch([6, -4], 3, 1, 2, p11, e11, [s3, s4], true);
       this.pen = pen;
     }
@@ -23835,60 +23835,60 @@
       showWeightCompo = showForces,
       showAppliedCompo = showForces
     }) {
-      let O2 = [0, 0];
-      let l3 = boxMid - boxWidth / 2;
-      let r3 = boxMid + boxWidth / 2;
-      let P2 = [l3, 0];
-      let Q2 = MoveY(P2, boxHeight);
-      let R2 = [r3, 0];
-      let S2 = MoveY(R2, boxHeight);
-      [P2, Q2, R2, S2] = [P2, Q2, R2, S2].map(($) => Rotate($, angle2, O2));
-      let Z2 = [length, 0];
-      let Y2 = Rotate(Z2, angle2, O2);
-      Z2 = [Y2[0], 0];
-      let G2 = Mid(P2, Q2, R2, S2);
-      let W2 = MoveY(G2, -weight);
-      let M2 = Slide(P2, R2, 0.6);
-      let N2 = Move(M2, 90 + angle2, normal);
-      let g2 = friction < 0 ? P2 : R2;
-      let f3 = Move(g2, friction < 0 ? 180 + angle2 : angle2, Math.abs(friction));
-      let E2 = S2;
-      let F2 = Move(E2, angle2 + appliedAngle, applied);
-      let apA = applied === 0 ? 0 : Dir(E2, F2);
+      let O = [0, 0];
+      let l2 = boxMid - boxWidth / 2;
+      let r2 = boxMid + boxWidth / 2;
+      let P = [l2, 0];
+      let Q = MoveY(P, boxHeight);
+      let R = [r2, 0];
+      let S = MoveY(R, boxHeight);
+      [P, Q, R, S] = [P, Q, R, S].map(($) => Rotate($, angle2, O));
+      let Z = [length, 0];
+      let Y = Rotate(Z, angle2, O);
+      Z = [Y[0], 0];
+      let G = Mid(P, Q, R, S);
+      let W = MoveY(G, -weight);
+      let M = Slide(P, R, 0.6);
+      let N = Move(M, 90 + angle2, normal);
+      let g = friction < 0 ? P : R;
+      let f2 = Move(g, friction < 0 ? 180 + angle2 : angle2, Math.abs(friction));
+      let E = S;
+      let F = Move(E, angle2 + appliedAngle, applied);
+      let apA = applied === 0 ? 0 : Dir(E, F);
       if (apA > angle2 + 90 && apA < angle2 + 270) {
-        F2 = Rotate(F2, 180, E2);
-        [E2, F2] = [F2, E2];
+        F = Rotate(F, 180, E);
+        [E, F] = [F, E];
       }
       let pen = new Pen();
       pen.set.border(0.5);
-      pen.range.capture(O2, P2, Q2, R2, S2, N2, f3, E2, F2, Y2, Z2);
+      pen.range.capture(O, P, Q, R, S, N, f2, E, F, Y, Z);
       pen.size.lock(1.8);
-      pen.set.labelCenter(G2);
+      pen.set.labelCenter(G);
       pen.set.textLatex(true);
-      pen.polygon(P2, Q2, S2, R2);
-      pen.polygon(O2, Y2, Z2);
-      pen.angle(Y2, O2, Z2, angleLabel);
+      pen.polygon(P, Q, S, R);
+      pen.polygon(O, Y, Z);
+      pen.angle(Y, O, Z, angleLabel);
       pen.set.weight(4);
       if (showForces) {
         pen.set.arrowLabel("head");
         if (weight !== 0) {
           pen.set.weight(3);
           pen.set.color("red");
-          pen.arrow(G2, W2, weightLabel);
+          pen.arrow(G, W, weightLabel);
           if (showWeightCompo) {
-            pen.set.labelCenter(G2);
+            pen.set.labelCenter(G);
             pen.set.weight(2);
             pen.set.color("red");
             pen.set.dash(true);
-            pen.arrowCompo(G2, W2, angle2, weightXLabel);
-            let a2;
+            pen.arrowCompo(G, W, angle2, weightXLabel);
+            let a;
             if (weightAngleLabel === true)
-              a2 = angleLabel;
+              a = angleLabel;
             if (weightAngleLabel === false)
-              a2 = void 0;
+              a = void 0;
             if (typeof weightAngleLabel === "string")
-              a2 = weightAngleLabel;
-            pen.arrowCompo(G2, W2, angle2 + 90, weightYLabel, a2);
+              a = weightAngleLabel;
+            pen.arrowCompo(G, W, angle2 + 90, weightYLabel, a);
             pen.set.labelCenter();
             pen.set.dash();
           }
@@ -23896,31 +23896,31 @@
         if (normal !== 0) {
           pen.set.weight(3);
           pen.set.color("purple");
-          pen.arrow(M2, N2, normalLabel);
+          pen.arrow(M, N, normalLabel);
         }
         if (friction !== 0) {
           pen.set.weight(3);
           pen.set.color("blue");
-          pen.arrow(g2, f3, frictionLabel);
+          pen.arrow(g, f2, frictionLabel);
         }
         if (applied !== 0) {
-          pen.set.labelCenter(R2, S2);
+          pen.set.labelCenter(R, S);
           pen.set.weight(3);
           pen.set.color("grey");
-          pen.arrow(E2, F2, appliedLabel);
+          pen.arrow(E, F, appliedLabel);
           if (showAppliedCompo) {
-            pen.set.labelCenter(E2);
+            pen.set.labelCenter(E);
             pen.set.weight(2);
             pen.set.dash(true);
-            pen.arrowCompo(E2, F2, angle2 + 90, appliedYLabel);
-            let a2;
+            pen.arrowCompo(E, F, angle2 + 90, appliedYLabel);
+            let a;
             if (appliedAngleLabel === true)
-              a2 = "";
+              a = "";
             if (appliedAngleLabel === false)
-              a2 = void 0;
+              a = void 0;
             if (typeof appliedAngleLabel === "string")
-              a2 = appliedAngleLabel;
-            pen.arrowCompo(E2, F2, angle2, appliedXLabel, a2);
+              a = appliedAngleLabel;
+            pen.arrowCompo(E, F, angle2, appliedXLabel, a);
             pen.set.dash();
           }
           pen.set.labelCenter();
@@ -23939,18 +23939,18 @@
       let ux = speed * cos(angle2);
       let uy = speed * sin(angle2);
       time ??= 2 * uy / 9.81;
-      let x2 = (t2) => ux * t2;
-      let y2 = (t2) => uy * t2 - 0.5 * 9.81 * t2 * t2;
-      let O2 = [0, 0];
-      let U2 = [ux * arrowScale, uy * arrowScale];
-      let P2 = [x2(time), y2(time)];
-      pen.range.capture(O2, U2, P2);
+      let x = (t) => ux * t;
+      let y = (t) => uy * t - 0.5 * 9.81 * t * t;
+      let O = [0, 0];
+      let U = [ux * arrowScale, uy * arrowScale];
+      let P = [x(time), y(time)];
+      pen.range.capture(O, U, P);
       pen.size.lock(1.5);
-      pen.disc(O2, 5);
-      pen.arrow(O2, U2);
+      pen.disc(O, 5);
+      pen.arrow(O, U);
       pen.set.color("grey");
-      pen.plotDash((t2) => [x2(t2), y2(t2)], 0, time);
-      pen.circle(P2, 5);
+      pen.plotDash((t) => [x(t), y(t)], 0, time);
+      pen.circle(P, 5);
       if (ground) {
         pen.graph.horizontal(0);
       }
@@ -23971,54 +23971,54 @@
       frictionLabel = "f",
       showAllForces = false
     }) {
-      let O2 = [0, 0];
-      let l3 = carMid - carWidth / 2;
-      let r3 = carMid + carWidth / 2;
-      let A2 = [l3, 0];
-      let B2 = [r3, 0];
-      let P2 = MoveY(A2, wheelHeight);
-      let Q2 = MoveY(P2, carHeight);
-      let R2 = MoveY(B2, wheelHeight);
-      let S2 = MoveY(R2, carHeight);
-      [A2, B2, P2, Q2, R2, S2] = [A2, B2, P2, Q2, R2, S2].map(($) => Rotate($, angle2, O2));
-      let Z2 = [2 * r3, 0];
-      let Y2 = Rotate(Z2, angle2, O2);
-      let G2 = Mid(P2, Q2, R2, S2);
-      let W2 = MoveY(G2, -weight);
-      let N2 = Move(G2, 90 + angle2, normal);
-      let g2 = friction > 0 ? A2 : B2;
-      let f3 = Move(g2, friction > 0 ? 180 + angle2 : angle2, Math.abs(friction));
+      let O = [0, 0];
+      let l2 = carMid - carWidth / 2;
+      let r2 = carMid + carWidth / 2;
+      let A = [l2, 0];
+      let B = [r2, 0];
+      let P = MoveY(A, wheelHeight);
+      let Q = MoveY(P, carHeight);
+      let R = MoveY(B, wheelHeight);
+      let S = MoveY(R, carHeight);
+      [A, B, P, Q, R, S] = [A, B, P, Q, R, S].map(($) => Rotate($, angle2, O));
+      let Z = [2 * r2, 0];
+      let Y = Rotate(Z, angle2, O);
+      let G = Mid(P, Q, R, S);
+      let W = MoveY(G, -weight);
+      let N = Move(G, 90 + angle2, normal);
+      let g = friction > 0 ? A : B;
+      let f2 = Move(g, friction > 0 ? 180 + angle2 : angle2, Math.abs(friction));
       let pen = new Pen();
-      pen.range.capture(O2, A2, B2, P2, Q2, R2, S2, N2, f3);
+      pen.range.capture(O, A, B, P, Q, R, S, N, f2);
       pen.size.lock(1.3);
-      pen.set.labelCenter(G2);
+      pen.set.labelCenter(G);
       pen.set.textLatex(true);
-      pen.polygon(P2, Q2, S2, R2);
-      pen.line(O2, Z2);
-      pen.line(O2, Y2);
-      pen.angle(Y2, O2, Z2, angleLabel);
+      pen.polygon(P, Q, S, R);
+      pen.line(O, Z);
+      pen.line(O, Y);
+      pen.angle(Y, O, Z, angleLabel);
       pen.set.weight(4);
-      pen.line(A2, P2);
-      pen.line(B2, R2);
+      pen.line(A, P);
+      pen.line(B, R);
       if (showAllForces) {
         pen.set.weight(3);
         pen.set.color("red");
         pen.set.lineLabel("left");
-        pen.arrow(G2, W2, weightLabel);
+        pen.arrow(G, W, weightLabel);
         pen.set.lineLabel();
         pen.set.weight(3);
         pen.set.color("purple");
-        pen.arrow(G2, N2);
-        pen.label.point(N2, normalLabel);
+        pen.arrow(G, N);
+        pen.label.point(N, normalLabel);
         pen.set.weight(2);
-        pen.arrowResolve(G2, N2, 90, [], angleLabel);
+        pen.arrowResolve(G, N, 90, [], angleLabel);
         if (friction !== 0) {
           pen.set.weight(3);
           pen.set.color("blue");
-          pen.arrow(g2, f3);
-          pen.label.point(f3, frictionLabel);
+          pen.arrow(g, f2);
+          pen.label.point(f2, frictionLabel);
           pen.set.weight(2);
-          pen.arrowResolve(g2, f3, 0, [], angleLabel);
+          pen.arrowResolve(g, f2, 0, [], angleLabel);
         }
       }
       this.pen = pen;
@@ -24034,38 +24034,38 @@
       liftLabel = "L",
       showAllForces = false
     }) {
-      let O2 = [0, 0];
-      let P2 = [-wingWidth, 0];
-      let Q2 = [+wingWidth, 0];
-      [P2, Q2] = [P2, Q2].map(($) => Rotate($, angle2, O2));
-      let W2 = MoveY(O2, -weight);
-      let N2 = Move(O2, 90 + angle2, lift);
+      let O = [0, 0];
+      let P = [-wingWidth, 0];
+      let Q = [+wingWidth, 0];
+      [P, Q] = [P, Q].map(($) => Rotate($, angle2, O));
+      let W = MoveY(O, -weight);
+      let N = Move(O, 90 + angle2, lift);
       let pen = new Pen();
-      pen.range.capture(P2, Q2, W2, N2);
+      pen.range.capture(P, Q, W, N);
       pen.size.lock(1.3);
-      pen.set.labelCenter(O2);
+      pen.set.labelCenter(O);
       pen.set.textLatex(true);
-      pen.graph.circle(O2, planeRadius);
-      pen.shade.circle(O2, planeRadius);
+      pen.graph.circle(O, planeRadius);
+      pen.shade.circle(O, planeRadius);
       pen.set.weight(3);
-      pen.line(P2, Q2);
+      pen.line(P, Q);
       pen.set.weight();
       pen.set.dash(true);
       pen.graph.horizontal(0);
       pen.set.dash();
-      pen.angle(Q2, O2, [1, 0], angleLabel);
+      pen.angle(Q, O, [1, 0], angleLabel);
       if (showAllForces) {
         pen.set.weight(3);
         pen.set.color("red");
         pen.set.lineLabel("left");
-        pen.arrow(O2, W2, weightLabel);
+        pen.arrow(O, W, weightLabel);
         pen.set.lineLabel();
         pen.set.weight(3);
         pen.set.color("purple");
-        pen.arrow(O2, N2);
-        pen.label.point(N2, liftLabel);
+        pen.arrow(O, N);
+        pen.label.point(N, liftLabel);
         pen.set.weight(2);
-        pen.arrowResolve(O2, N2, 90, [], angleLabel);
+        pen.arrowResolve(O, N, 90, [], angleLabel);
       }
       this.pen = pen;
     }
@@ -24080,33 +24080,33 @@
       tensionLabel = "T",
       showAllForces = false
     }) {
-      let O2 = [0, 0];
-      let P2 = Rotate([0, -length], angle2, O2);
-      let V2 = [0, P2[1]];
-      let W2 = MoveY(P2, -weight);
-      let T2 = Move(P2, 90 + angle2, tension);
+      let O = [0, 0];
+      let P = Rotate([0, -length], angle2, O);
+      let V = [0, P[1]];
+      let W = MoveY(P, -weight);
+      let T = Move(P, 90 + angle2, tension);
       let pen = new Pen();
       pen.set.border(0.3);
-      pen.range.capture(O2, P2, V2, ReflectY(P2), W2);
+      pen.range.capture(O, P, V, ReflectY(P), W);
       pen.size.lock(1.3);
       pen.set.textLatex(true);
       pen.set.color("grey");
-      pen.plotDash((t2) => [P2[0] * cos(t2) + V2[0], 1 * sin(t2) + V2[1]], 0, 360);
+      pen.plotDash((t) => [P[0] * cos(t) + V[0], 1 * sin(t) + V[1]], 0, 360);
       pen.set.color();
-      pen.dash(O2, V2);
-      pen.line(O2, P2);
-      pen.fill.circle(P2, bobRadius);
-      pen.angle(P2, O2, V2, angleLabel);
+      pen.dash(O, V);
+      pen.line(O, P);
+      pen.fill.circle(P, bobRadius);
+      pen.angle(P, O, V, angleLabel);
       if (showAllForces) {
         pen.set.color("red");
         pen.set.weight(3);
-        pen.arrow(P2, W2, weightLabel);
+        pen.arrow(P, W, weightLabel);
         pen.set.color("blue");
-        pen.arrow(P2, T2);
+        pen.arrow(P, T);
         pen.set.weight(2);
-        pen.arrowResolve(P2, T2, 90, [], angleLabel);
+        pen.arrowResolve(P, T, 90, [], angleLabel);
         pen.set.weight();
-        pen.label.point(T2, tensionLabel);
+        pen.label.point(T, tensionLabel);
       }
       this.pen = pen;
     }
@@ -24117,30 +24117,30 @@
       showHeight = false
     }) {
       let pen = new Pen();
-      let O2 = [0, 0];
-      let P2 = PolToRect([orbitRadius, angle2]);
-      let Q2 = PolToRect([orbitRadius, -angle2]);
-      let A2 = [-planetRadius, 0];
-      let B2 = PolToRect([planetRadius, angle2]);
-      let C2 = [0, -planetRadius];
-      pen.range.capture([O2, orbitRadius]);
+      let O = [0, 0];
+      let P = PolToRect([orbitRadius, angle2]);
+      let Q = PolToRect([orbitRadius, -angle2]);
+      let A = [-planetRadius, 0];
+      let B = PolToRect([planetRadius, angle2]);
+      let C = [0, -planetRadius];
+      pen.range.capture([O, orbitRadius]);
       pen.size.set(1.2);
-      pen.shade.circle(O2, planetRadius);
-      pen.graph.circle(O2, planetRadius);
-      pen.label.point(C2, "M", 270);
-      pen.point(P2, "m");
-      pen.point(O2);
+      pen.shade.circle(O, planetRadius);
+      pen.graph.circle(O, planetRadius);
+      pen.label.point(C, "M", 270);
+      pen.point(P, "m");
+      pen.point(O);
       if (showHeight) {
         pen.set.color("red");
-        pen.line(B2, P2, "h");
+        pen.line(B, P, "h");
       }
       pen.set.color("blue");
-      pen.line(O2, Q2, "r");
+      pen.line(O, Q, "r");
       pen.set.color("grey");
-      pen.line(O2, A2, "R");
+      pen.line(O, A, "R");
       pen.set.color();
       pen.set.dash(true);
-      pen.graph.circle(O2, orbitRadius);
+      pen.graph.circle(O, orbitRadius);
       this.pen = pen;
     }
     RefractionMedia({
@@ -24151,7 +24151,7 @@
       lowMedColor = "black",
       roundTo = 5
     }) {
-      let O2 = [0, 0];
+      let O = [0, 0];
       let pen = new Pen();
       pen.range.square(10);
       pen.size.lock(1.5);
@@ -24160,11 +24160,11 @@
       pen.set.color(lowMedColor);
       pen.linProg.shadeConstraints([[0, 1, "<", 0]]);
       pen.set.color();
-      pen.rod.dash(O2, 90, 10);
-      pen.rod.dash(O2, -90, 10);
-      let B2 = [-10, 0];
-      pen.label.point(B2, upMedLabel, 45, 20);
-      pen.label.point(B2, lowMedLabel, -45, 20);
+      pen.rod.dash(O, 90, 10);
+      pen.rod.dash(O, -90, 10);
+      let B = [-10, 0];
+      pen.label.point(B, upMedLabel, 45, 20);
+      pen.label.point(B, lowMedLabel, -45, 20);
       function angleWtihYAxis(dir3) {
         dir3 = PolarReduce(dir3);
         return Math.min(Math.abs(dir3 - 90), Math.abs(dir3 - 270));
@@ -24175,20 +24175,20 @@
       for (let ray of rays) {
         let [dir3, isTo, angleV, angleH] = ray;
         dir3 = PolarReduce(dir3);
-        isTo ? pen.rod.rayTo(O2, dir3) : pen.rod.rayFrom(O2, dir3);
+        isTo ? pen.rod.rayTo(O, dir3) : pen.rod.rayFrom(O, dir3);
         if (angleV !== void 0 && angleV !== false) {
-          let V2 = [0, sin(dir3)];
+          let V = [0, sin(dir3)];
           let label = angleV === true ? angleWtihYAxis(dir3) : angleV;
           if (typeof label === "number")
             label = Round(label, roundTo);
-          pen.angleDir(V2, O2, dir3, label);
+          pen.angleDir(V, O, dir3, label);
         }
         if (angleH !== void 0 && angleH !== false) {
-          let H2 = [cos(dir3), 0];
+          let H = [cos(dir3), 0];
           let label = angleH === true ? angleWtihXAxis(dir3) : angleH;
           if (typeof label === "number")
             label = Round(label, roundTo);
-          pen.angleDir(H2, O2, dir3, label);
+          pen.angleDir(H, O, dir3, label);
         }
       }
       this.pen = pen;
@@ -24199,132 +24199,6 @@
   globalThis.Pen = PenCls;
   globalThis.AutoPen = AutoPenCls;
   globalThis.PhyPen = PhyPenCls;
-
-  // src/Soil/tool/stringify.ts
-  function numberDefault(num2) {
-    let v3 = num2;
-    if (owl.zero(v3))
-      return 0;
-    if (IsInteger(v3)) {
-      v3 = Fix(v3, 0);
-    } else {
-      v3 = Math.abs(v3) > 100 ? Fix(v3, 2) : Round(v3, 5);
-    }
-    return v3;
-  }
-  var Stringifier = class {
-    constructor(pattern3, condition, transformer) {
-      this.pattern = pattern3;
-      this.condition = condition;
-      this.transformer = transformer;
-    }
-    check(val2) {
-      return owl[this.condition](val2);
-    }
-    exec(val2) {
-      return this.transformer(val2);
-    }
-  };
-  var Stringifiers = class {
-    static add(pattern3, condition, fn) {
-      this.store.push(new Stringifier(pattern3, condition, fn));
-    }
-    static transform(pattern3, val2) {
-      let ss = this.store.filter((s3) => s3.pattern === pattern3);
-      for (let s3 of ss) {
-        if (s3.check(val2))
-          return s3.exec(val2);
-      }
-      return String(val2);
-    }
-    static allPatterns() {
-      let ps = this.store.map((s3) => s3.pattern);
-      return [...new Set(ps)];
-    }
-  };
-  __publicField(Stringifiers, "store", []);
-  Stringifiers.add("*@", "num", ($) => String(numberDefault($)));
-  Stringifiers.add("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
-  Stringifiers.add("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
-  Stringifiers.add("*@", "point2D", ($) => Coord($));
-  Stringifiers.add("*@", "combo", ($) => ink.printCombo($));
-  Stringifiers.add("*@", "polynomial", ($) => PolyPrint($));
-  Stringifiers.add("*@", "trigValue", ($) => ink.printTrigValue($));
-  Stringifiers.add("*@", "trigExp", ($) => ink.printTrigExp($));
-  Stringifiers.add("*@", "constraint", ($) => ink.printConstraint($));
-  Stringifiers.add("*@", "constraints", ($) => ink.printConstraints($));
-  Stringifiers.add("**@", "num", ($) => {
-    let v3 = cal.blur(Round($, 3));
-    let abs = Math.abs(v3);
-    return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3);
-  });
-  Stringifiers.add("**@", "quantity", ({ val: val2, unit }) => {
-    let v3 = cal.blur(Round(val2, 3));
-    let abs = Math.abs(v3);
-    return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3) + unit;
-  });
-  Stringifiers.add("*/@", "num", ($) => {
-    let [p3, q2] = ToFrac($);
-    return Dfrac(p3, q2);
-  });
-  Stringifiers.add("*/(@)", "num", ($) => {
-    let [p3, q2] = ToFrac($);
-    if (q2 === 1 && p3 >= 0)
-      return Dfrac(p3, q2);
-    if (q2 === 1 && p3 < 0)
-      return "(" + Dfrac(p3, q2) + ")";
-    return "\\left ( " + Dfrac(p3, q2) + " \\right )";
-  });
-  Stringifiers.add("*//@", "num", ($) => {
-    let [p3, q2] = ToFrac($);
-    return Dfrac(p3, q2).replace(/dfrac/g, "frac");
-  });
-  Stringifiers.add("*(@)", "num", ($) => {
-    let v3 = numberDefault($);
-    return String(v3 >= 0 ? v3 : "(" + v3 + ")");
-  });
-  Stringifiers.add("*!@", "num", ($) => ink.printSurd($));
-  Stringifiers.add("*!@", "point2D", ([a2, b2]) => "(" + ink.printSurd(a2) + "," + ink.printSurd(b2) + ")");
-  Stringifiers.add("*^+_@", "num", ($) => $ >= 0 ? "+" : "-");
-  Stringifiers.add("*^-_@", "num", ($) => $ >= 0 ? "-" : "+");
-  Stringifiers.add("*|@|", "num", ($) => String(numberDefault(Math.abs($))));
-  Stringifiers.add("*^\\gt_@", "bool", ($) => $ ? "\\gt" : "\\lt");
-  Stringifiers.add("*^\\gt_@", "num", ($) => $ > 0 ? "\\gt" : $ < 0 ? "\\lt" : "=");
-  Stringifiers.add("*^\\lt_@", "bool", ($) => $ ? "\\lt" : "\\gt");
-  Stringifiers.add("*^\\lt_@", "num", ($) => $ > 0 ? "\\lt" : $ < 0 ? "\\gt" : "=");
-  Stringifiers.add("*^\\ge_@", "bool", ($) => $ ? "\\ge" : "\\le");
-  Stringifiers.add("*^\\ge_@", "num", ($) => $ > 0 ? "\\ge" : $ < 0 ? "\\le" : "=");
-  Stringifiers.add("*^\\le_@", "bool", ($) => $ ? "\\le" : "\\ge");
-  Stringifiers.add("*^\\le_@", "num", ($) => $ > 0 ? "\\le" : $ < 0 ? "\\ge" : "=");
-  Stringifiers.add("*%@", "num", ($) => numberDefault($ * 100) + "%");
-  Stringifiers.add("*\\%@", "num", ($) => numberDefault($ * 100) + "\\%");
-  Stringifiers.add("*:@", "ntuple", ($) => toNumbers($).ratio().join(":"));
-  Stringifiers.add("*:@", "num", ($) => {
-    let [p3, q2] = cal.toFraction($);
-    return p3 + ":" + q2;
-  });
-  Stringifiers.add("*|.@", "array", ($) => ink.printOrTrigRoots($));
-  Stringifiers.add("*.@", "point2D", ($) => ink.printPointPolar($));
-  Stringifiers.add("*=@", "labeledValue", ($) => {
-    let v3 = [...$];
-    v3[0] = numberDefault(v3[0]);
-    return ink.printLabeledValue(v3, 1, false);
-  });
-  Stringifiers.add("*==@", "labeledValue2", ($) => {
-    let v3 = [...$];
-    v3[0] = numberDefault(v3[0]);
-    return ink.printLabeledValue(v3, 2, false);
-  });
-  Stringifiers.add("*=.@", "labeledValue", ($) => {
-    let v3 = [...$];
-    v3[0] = numberDefault(v3[0]);
-    return ink.printLabeledValue(v3, 1, true);
-  });
-  Stringifiers.add("*==.@", "labeledValue2", ($) => {
-    let v3 = [...$];
-    v3[0] = numberDefault(v3[0]);
-    return ink.printLabeledValue(v3, 2, true);
-  });
 
   // ../packages/bot/lib/src/dress/dressor.js
   var END_TAG = String.raw`(?=[^<>]*</span>)`;
@@ -24350,153 +24224,72 @@
   function cap(reg) {
     return "(" + reg + ")";
   }
-  var s2 = String.raw`(?:\s|&nbsp;)*`;
-  var p2 = String.raw`\+`;
-  var m2 = String.raw`\-`;
-  var e5 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
-  var l2 = String.raw`[\(\[\{]`;
-  var r2 = String.raw`[\)\]\}]`;
+  var s = String.raw`(?:\s|&nbsp;)*`;
+  var p = String.raw`\+`;
+  var m = String.raw`\-`;
+  var e4 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
+  var l = String.raw`[\(\[\{]`;
+  var r = String.raw`[\)\]\}]`;
   var pl = String.raw`[\(\[]`;
   var pr = String.raw`[\)\]]`;
-  var c2 = String.raw`\,`;
-  var v2 = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`;
-  var f2 = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`;
+  var c = String.raw`\,`;
+  var v = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`;
+  var f = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`;
   var sl = String.raw`\\`;
   var left = String.raw`\\left`;
   var sq2 = String.raw`\\sqrt`;
   function dress(html) {
-    let d2 = new Dressor(html);
-    d2.do([p2, m2], "-");
-    d2.do([m2, p2], "-");
-    d2.do([capOr(l2, e5, c2), m2, m2], "$1");
-    d2.do([m2, m2], "+");
-    d2.do([m2, m2], "+");
-    d2.do([String.raw`\^\{1\}`], "");
-    d2.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
-    d2.do([capOr(p2, m2, e5, l2, sl, r2, c2), "1", capOr(v2, f2, pl, left, sq2)], "$1 $2", true);
-    d2.do([cap(v2) + "'"], "$1 \\prime ", true);
-    return d2.get();
+    let d = new Dressor(html);
+    d.do([p, m], "-");
+    d.do([m, p], "-");
+    d.do([capOr(l, e4, c), m, m], "$1");
+    d.do([m, m], "+");
+    d.do([m, m], "+");
+    d.do([String.raw`\^\{1\}`], "");
+    d.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
+    d.do([capOr(p, m, e4, l, sl, r, c), "1", capOr(v, f, pl, left, sq2)], "$1 $2", true);
+    d.do([cap(v) + "'"], "$1 \\prime ", true);
+    return d.get();
   }
 
   // ../packages/bot/lib/src/eval/index.js
-  function evalCtx(code, errorProxy, ...contexts) {
+  var VariableError = Error("A variable is used before a value is defined.");
+  VariableError.name = "VariableError";
+  function isVarError(e5) {
+    return e5 instanceof Error && e5.message.startsWith("Cannot convert a Symbol value to");
+  }
+  function assembleCtx(code, ...contexts) {
+    let T = "";
+    contexts.forEach((ctx, i) => {
+      T += Object.keys(ctx).map((_) => `let ${_} = this[${i}].${_};`).join("");
+    });
+    T += code + ";";
+    contexts.forEach((ctx, i) => {
+      T += Object.keys(ctx).map((_) => `this[${i}].${_} = ${_};`).join("");
+    });
+    return T;
+  }
+  function evalCtx(_myCODE_, ..._myCONTEXTS_) {
     function evaluateEval() {
-      let execCode = "";
-      contexts.forEach((ctx, i2) => {
-        execCode += Object.keys(ctx).map((_) => `let ${_} = this[${i2}].${_};`).join("");
-      });
-      execCode += code + ";";
-      contexts.forEach((ctx, i2) => {
-        execCode += Object.keys(ctx).map((_) => `this[${i2}].${_} = ${_};`).join("");
-      });
-      return eval(execCode);
+      return eval(assembleCtx(_myCODE_));
     }
     try {
-      evaluateEval.call(contexts);
-    } catch (e6) {
-      throw errorProxy(e6);
+      evaluateEval.call(_myCONTEXTS_);
+    } catch (e5) {
+      throw isVarError(e5) ? VariableError : e5;
     }
   }
-
-  // src/Soil/tool/eval.ts
-  function detectVarErr(e6) {
-    if (e6 instanceof Error) {
-      let isVarErr = e6.message === "Cannot convert a Symbol value to a number";
-      if (isVarErr) {
-        return CustomError("VariableError", "A variable is used before a value is defined.");
-      }
-    }
-    return e6;
-  }
-  function evaluate(code2, ...contexts2) {
-    evalCtx(code2, detectVarErr, ...contexts2);
+  function exprCtx(_myCODE_2, ..._myCONTEXTS_2) {
+    let _xxxresultxxx_ = { ____xxxRESULTxxx____: void 0 };
+    evalCtx("____xxxRESULTxxx____ = " + _myCODE_2, _xxxresultxxx_, ..._myCONTEXTS_2);
+    return _xxxresultxxx_.____xxxRESULTxxx____;
   }
   function htmlDecode(str3) {
-    return str3.replace(/&amp;|&lt;|&gt;|&#39;|&quot;/g, (tag) => ({
-      "&amp;": "&",
-      "&lt;": "<",
-      "&gt;": ">",
-      "&#39;": "'",
-      "&quot;": '"'
-    })[tag] || tag);
+    return str3.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
   }
-  function evalInline(code, dict) {
-    code = htmlDecode(code);
-    let {
-      a,
-      b,
-      c,
-      d,
-      e,
-      f,
-      g,
-      h,
-      i,
-      j,
-      k,
-      l,
-      m,
-      n,
-      o,
-      p,
-      q,
-      r,
-      s,
-      t,
-      u,
-      v,
-      w,
-      x,
-      y,
-      z,
-      A,
-      B,
-      C,
-      D,
-      E,
-      F,
-      G,
-      H,
-      I,
-      J,
-      K,
-      L,
-      M,
-      N,
-      O,
-      P,
-      Q,
-      R,
-      S,
-      T,
-      U,
-      V,
-      W,
-      X,
-      Y,
-      Z
-    } = dict;
-    try {
-      return eval(code);
-    } catch (e6) {
-      throw detectVarErr(e6);
-    }
-  }
-  function intrapolate2(html, dict2) {
-    function intra(pattern3, prefix) {
-      html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code2) => {
-        let result = evalInline(code2, dict2);
-        return Stringifiers.transform(pattern3, result);
-      });
-      html = html.replace(new RegExp(String.raw`\*${prefix}\{([^\{\}]*)\}`, "g"), (match3, code2) => {
-        let result = evalInline(code2, dict2);
-        return Stringifiers.transform(pattern3, result);
-      });
-    }
-    intra("*@", "");
-    intra("*/@", "\\/");
-    intra("**@", "\\*");
-    return html;
+  function exprCtxHTML(_myCODE_2, ..._myCONTEXTS_2) {
+    _myCODE_2 = htmlDecode(_myCODE_2);
+    return exprCtx(_myCODE_2, ..._myCONTEXTS_2);
   }
 
   // src/Soil/tool/section.ts
@@ -24509,25 +24302,151 @@
     return html;
   }
   function KeepVersion(html, section, version) {
-    for (let i2 = 0; i2 < 10; i2++) {
-      if (i2 === version)
+    for (let i = 0; i < 10; i++) {
+      if (i === version)
         continue;
-      html = DropVersion(html, section, i2);
+      html = DropVersion(html, section, i);
     }
     return html;
   }
-  function ExecSection(html, sections, dict2) {
-    for (let i2 = 0; i2 < sections.length; i2++) {
-      let [section, version] = sections[i2];
+  function ExecSection(html, sections, dict) {
+    for (let i = 0; i < sections.length; i++) {
+      let [section, version] = sections[i];
       html = KeepVersion(html, section.toString(), version);
     }
-    html = DropCondition(html, dict2);
+    html = DropCondition(html, dict);
     html = DropTags(html);
     return html;
   }
-  function DropCondition(html, dict2) {
-    return html.replace(new RegExp("<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), (match3, p1) => evalInline(p1, dict2) ? match3 : "");
+  function DropCondition(html, dict) {
+    return html.replace(new RegExp("<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), (match3, p1) => exprCtxHTML(p1, dict) ? match3 : "");
   }
+
+  // src/Soil/tool/stringify.ts
+  function numberDefault(num2) {
+    let v2 = num2;
+    if (owl.zero(v2))
+      return 0;
+    if (IsInteger(v2)) {
+      v2 = Fix(v2, 0);
+    } else {
+      v2 = Math.abs(v2) > 100 ? Fix(v2, 2) : Round(v2, 5);
+    }
+    return v2;
+  }
+  var Stringifier = class {
+    constructor(pattern3, condition, transformer) {
+      this.pattern = pattern3;
+      this.condition = condition;
+      this.transformer = transformer;
+    }
+    check(val2) {
+      return owl[this.condition](val2);
+    }
+    exec(val2) {
+      return this.transformer(val2);
+    }
+  };
+  var Stringifiers = class {
+    static add(pattern3, condition, fn) {
+      this.store.push(new Stringifier(pattern3, condition, fn));
+    }
+    static transform(pattern3, val2) {
+      let ss = this.store.filter((s2) => s2.pattern === pattern3);
+      for (let s2 of ss) {
+        if (s2.check(val2))
+          return s2.exec(val2);
+      }
+      return String(val2);
+    }
+    static allPatterns() {
+      let ps = this.store.map((s2) => s2.pattern);
+      return [...new Set(ps)];
+    }
+  };
+  __publicField(Stringifiers, "store", []);
+  Stringifiers.add("*@", "num", ($) => String(numberDefault($)));
+  Stringifiers.add("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
+  Stringifiers.add("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
+  Stringifiers.add("*@", "point2D", ($) => Coord($));
+  Stringifiers.add("*@", "combo", ($) => ink.printCombo($));
+  Stringifiers.add("*@", "polynomial", ($) => PolyPrint($));
+  Stringifiers.add("*@", "trigValue", ($) => ink.printTrigValue($));
+  Stringifiers.add("*@", "trigExp", ($) => ink.printTrigExp($));
+  Stringifiers.add("*@", "constraint", ($) => ink.printConstraint($));
+  Stringifiers.add("*@", "constraints", ($) => ink.printConstraints($));
+  Stringifiers.add("**@", "num", ($) => {
+    let v2 = cal.blur(Round($, 3));
+    let abs = Math.abs(v2);
+    return String(abs >= 1e4 || abs <= 0.01 ? Sci(v2) : v2);
+  });
+  Stringifiers.add("**@", "quantity", ({ val: val2, unit }) => {
+    let v2 = cal.blur(Round(val2, 3));
+    let abs = Math.abs(v2);
+    return String(abs >= 1e4 || abs <= 0.01 ? Sci(v2) : v2) + unit;
+  });
+  Stringifiers.add("*/@", "num", ($) => {
+    let [p2, q] = ToFrac($);
+    return Dfrac(p2, q);
+  });
+  Stringifiers.add("*/(@)", "num", ($) => {
+    let [p2, q] = ToFrac($);
+    if (q === 1 && p2 >= 0)
+      return Dfrac(p2, q);
+    if (q === 1 && p2 < 0)
+      return "(" + Dfrac(p2, q) + ")";
+    return "\\left ( " + Dfrac(p2, q) + " \\right )";
+  });
+  Stringifiers.add("*//@", "num", ($) => {
+    let [p2, q] = ToFrac($);
+    return Dfrac(p2, q).replace(/dfrac/g, "frac");
+  });
+  Stringifiers.add("*(@)", "num", ($) => {
+    let v2 = numberDefault($);
+    return String(v2 >= 0 ? v2 : "(" + v2 + ")");
+  });
+  Stringifiers.add("*!@", "num", ($) => ink.printSurd($));
+  Stringifiers.add("*!@", "point2D", ([a, b]) => "(" + ink.printSurd(a) + "," + ink.printSurd(b) + ")");
+  Stringifiers.add("*^+_@", "num", ($) => $ >= 0 ? "+" : "-");
+  Stringifiers.add("*^-_@", "num", ($) => $ >= 0 ? "-" : "+");
+  Stringifiers.add("*|@|", "num", ($) => String(numberDefault(Math.abs($))));
+  Stringifiers.add("*^\\gt_@", "bool", ($) => $ ? "\\gt" : "\\lt");
+  Stringifiers.add("*^\\gt_@", "num", ($) => $ > 0 ? "\\gt" : $ < 0 ? "\\lt" : "=");
+  Stringifiers.add("*^\\lt_@", "bool", ($) => $ ? "\\lt" : "\\gt");
+  Stringifiers.add("*^\\lt_@", "num", ($) => $ > 0 ? "\\lt" : $ < 0 ? "\\gt" : "=");
+  Stringifiers.add("*^\\ge_@", "bool", ($) => $ ? "\\ge" : "\\le");
+  Stringifiers.add("*^\\ge_@", "num", ($) => $ > 0 ? "\\ge" : $ < 0 ? "\\le" : "=");
+  Stringifiers.add("*^\\le_@", "bool", ($) => $ ? "\\le" : "\\ge");
+  Stringifiers.add("*^\\le_@", "num", ($) => $ > 0 ? "\\le" : $ < 0 ? "\\ge" : "=");
+  Stringifiers.add("*%@", "num", ($) => numberDefault($ * 100) + "%");
+  Stringifiers.add("*\\%@", "num", ($) => numberDefault($ * 100) + "\\%");
+  Stringifiers.add("*:@", "ntuple", ($) => toNumbers($).ratio().join(":"));
+  Stringifiers.add("*:@", "num", ($) => {
+    let [p2, q] = cal.toFraction($);
+    return p2 + ":" + q;
+  });
+  Stringifiers.add("*|.@", "array", ($) => ink.printOrTrigRoots($));
+  Stringifiers.add("*.@", "point2D", ($) => ink.printPointPolar($));
+  Stringifiers.add("*=@", "labeledValue", ($) => {
+    let v2 = [...$];
+    v2[0] = numberDefault(v2[0]);
+    return ink.printLabeledValue(v2, 1, false);
+  });
+  Stringifiers.add("*==@", "labeledValue2", ($) => {
+    let v2 = [...$];
+    v2[0] = numberDefault(v2[0]);
+    return ink.printLabeledValue(v2, 2, false);
+  });
+  Stringifiers.add("*=.@", "labeledValue", ($) => {
+    let v2 = [...$];
+    v2[0] = numberDefault(v2[0]);
+    return ink.printLabeledValue(v2, 1, true);
+  });
+  Stringifiers.add("*==.@", "labeledValue2", ($) => {
+    let v2 = [...$];
+    v2[0] = numberDefault(v2[0]);
+    return ink.printLabeledValue(v2, 2, true);
+  });
 
   // src/Soil/tool/html.ts
   var QuestionHTML = class {
@@ -24545,7 +24464,7 @@
       return this.body.getElementsByTagName("ul")[0];
     }
     cloneLi(sourceIndex, repeat = 1) {
-      for (let i2 = 1; i2 <= repeat; i2++) {
+      for (let i = 1; i <= repeat; i++) {
         this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
       }
     }
@@ -24557,21 +24476,21 @@
       li.innerHTML = PrintVariable(li.innerHTML, symbol, value);
     }
     isLiDuplicated() {
-      let htmls = this.li.map((x2) => x2.innerHTML.replace(/\s+/g, ""));
+      let htmls = this.li.map((x) => x.innerHTML.replace(/\s+/g, ""));
       return new Set(htmls).size !== htmls.length;
     }
     shuffleLi(shuffle = true) {
-      let oldHTMLs = this.li.map((x2) => x2.innerHTML);
+      let oldHTMLs = this.li.map((x) => x.innerHTML);
       let newHTMLs;
       if (shuffle) {
         newHTMLs = RndShuffle(...oldHTMLs);
       } else {
         newHTMLs = [...oldHTMLs];
       }
-      for (let i2 = 0; i2 < newHTMLs.length; i2++) {
-        this.li[i2].innerHTML = newHTMLs[i2];
+      for (let i = 0; i < newHTMLs.length; i++) {
+        this.li[i].innerHTML = newHTMLs[i];
       }
-      return oldHTMLs.map((x2) => newHTMLs.indexOf(x2));
+      return oldHTMLs.map((x) => newHTMLs.indexOf(x));
     }
   };
   var Blacksmith = class {
@@ -24591,8 +24510,8 @@
     forge(symbol, val2) {
       this.symbol = symbol;
       this.val = val2;
-      for (let p3 of Stringifiers.allPatterns())
-        this.smash(p3);
+      for (let p2 of Stringifiers.allPatterns())
+        this.smash(p2);
       return this.text;
     }
   };
@@ -24645,8 +24564,8 @@
       let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol;
       let ansList = ["A", "B", "C", "D", "E", "F"];
       ansList.length = this.perm.length;
-      for (let x2 of ansList) {
-        newSol = newSol.replace(new RegExp("{#" + x2 + "}", "g"), this.mapLetter(x2));
+      for (let x of ansList) {
+        newSol = newSol.replace(new RegExp("{#" + x + "}", "g"), this.mapLetter(x));
       }
       return newSol;
     }
@@ -24658,9 +24577,9 @@
   }
   function ExecInstructions(instructions, source) {
     let products = {};
-    let k2;
-    for (k2 in instructions) {
-      products[k2] = Produce(source[k2], instructions[k2]);
+    let k;
+    for (k in instructions) {
+      products[k] = Produce(source[k], instructions[k]);
     }
     return products;
   }
@@ -24671,19 +24590,19 @@
     let products = ExecInstructions(instructions, source);
     if (Qn.li.length === 1) {
       Qn.cloneLi(0, 3);
-      for (let k2 in products) {
-        Qn.printInLi(1, k2, products[k2][0]);
-        Qn.printInLi(2, k2, products[k2][1]);
-        Qn.printInLi(3, k2, products[k2][2]);
+      for (let k in products) {
+        Qn.printInLi(1, k, products[k][0]);
+        Qn.printInLi(2, k, products[k][1]);
+        Qn.printInLi(3, k, products[k][2]);
       }
       return Qn.export();
     }
     if (Qn.li.length === 2) {
       Qn.cloneLi(0);
       Qn.cloneLi(1);
-      for (let k2 in products) {
-        Qn.printInLi(2, k2, products[k2][0]);
-        Qn.printInLi(3, k2, products[k2][0]);
+      for (let k in products) {
+        Qn.printInLi(2, k, products[k][0]);
+        Qn.printInLi(3, k, products[k][0]);
       }
       return Qn.export();
     }
@@ -24700,59 +24619,59 @@
     }
   };
   var Dict = class {
-    constructor(a2 = Symbol(), b2 = Symbol(), c3 = Symbol(), d2 = Symbol(), e6 = Symbol(), f3 = Symbol(), g2 = Symbol(), h2 = Symbol(), i2 = Symbol(), j2 = Symbol(), k2 = Symbol(), l3 = Symbol(), m3 = Symbol(), n2 = Symbol(), o2 = Symbol(), p3 = Symbol(), q2 = Symbol(), r3 = Symbol(), s3 = Symbol(), t2 = Symbol(), u2 = Symbol(), v3 = Symbol(), w2 = Symbol(), x2 = Symbol(), y2 = Symbol(), z2 = Symbol(), A2 = Symbol(), B2 = Symbol(), C2 = Symbol(), D2 = Symbol(), E2 = Symbol(), F2 = Symbol(), G2 = Symbol(), H2 = Symbol(), I2 = Symbol(), J2 = Symbol(), K2 = Symbol(), L2 = Symbol(), M2 = Symbol(), N2 = Symbol(), O2 = Symbol(), P2 = Symbol(), Q2 = Symbol(), R2 = Symbol(), S2 = Symbol(), T2 = Symbol(), U2 = Symbol(), V2 = Symbol(), W2 = Symbol(), X2 = Symbol(), Y2 = Symbol(), Z2 = Symbol()) {
-      this.a = a2;
-      this.b = b2;
-      this.c = c3;
-      this.d = d2;
-      this.e = e6;
-      this.f = f3;
-      this.g = g2;
-      this.h = h2;
-      this.i = i2;
-      this.j = j2;
-      this.k = k2;
-      this.l = l3;
-      this.m = m3;
-      this.n = n2;
-      this.o = o2;
-      this.p = p3;
-      this.q = q2;
-      this.r = r3;
-      this.s = s3;
-      this.t = t2;
-      this.u = u2;
-      this.v = v3;
-      this.w = w2;
-      this.x = x2;
-      this.y = y2;
-      this.z = z2;
-      this.A = A2;
-      this.B = B2;
-      this.C = C2;
-      this.D = D2;
-      this.E = E2;
-      this.F = F2;
-      this.G = G2;
-      this.H = H2;
-      this.I = I2;
-      this.J = J2;
-      this.K = K2;
-      this.L = L2;
-      this.M = M2;
-      this.N = N2;
-      this.O = O2;
-      this.P = P2;
-      this.Q = Q2;
-      this.R = R2;
-      this.S = S2;
-      this.T = T2;
-      this.U = U2;
-      this.V = V2;
-      this.W = W2;
-      this.X = X2;
-      this.Y = Y2;
-      this.Z = Z2;
+    constructor(a = Symbol(), b = Symbol(), c2 = Symbol(), d = Symbol(), e5 = Symbol(), f2 = Symbol(), g = Symbol(), h = Symbol(), i = Symbol(), j = Symbol(), k = Symbol(), l2 = Symbol(), m2 = Symbol(), n = Symbol(), o = Symbol(), p2 = Symbol(), q = Symbol(), r2 = Symbol(), s2 = Symbol(), t = Symbol(), u = Symbol(), v2 = Symbol(), w = Symbol(), x = Symbol(), y = Symbol(), z = Symbol(), A = Symbol(), B = Symbol(), C = Symbol(), D = Symbol(), E = Symbol(), F = Symbol(), G = Symbol(), H = Symbol(), I = Symbol(), J = Symbol(), K = Symbol(), L = Symbol(), M = Symbol(), N = Symbol(), O = Symbol(), P = Symbol(), Q = Symbol(), R = Symbol(), S = Symbol(), T = Symbol(), U = Symbol(), V = Symbol(), W = Symbol(), X = Symbol(), Y = Symbol(), Z = Symbol()) {
+      this.a = a;
+      this.b = b;
+      this.c = c2;
+      this.d = d;
+      this.e = e5;
+      this.f = f2;
+      this.g = g;
+      this.h = h;
+      this.i = i;
+      this.j = j;
+      this.k = k;
+      this.l = l2;
+      this.m = m2;
+      this.n = n;
+      this.o = o;
+      this.p = p2;
+      this.q = q;
+      this.r = r2;
+      this.s = s2;
+      this.t = t;
+      this.u = u;
+      this.v = v2;
+      this.w = w;
+      this.x = x;
+      this.y = y;
+      this.z = z;
+      this.A = A;
+      this.B = B;
+      this.C = C;
+      this.D = D;
+      this.E = E;
+      this.F = F;
+      this.G = G;
+      this.H = H;
+      this.I = I;
+      this.J = J;
+      this.K = K;
+      this.L = L;
+      this.M = M;
+      this.N = N;
+      this.O = O;
+      this.P = P;
+      this.Q = Q;
+      this.R = R;
+      this.S = S;
+      this.T = T;
+      this.U = U;
+      this.V = V;
+      this.W = W;
+      this.X = X;
+      this.Y = Y;
+      this.Z = Z;
     }
     variables = [
       "a",
@@ -24816,8 +24735,8 @@
     }
     checked() {
       for (let key of this.variables) {
-        let v3 = this[key];
-        if (v3 === void 0 || typeof v3 === "number" && !Number.isFinite(v3))
+        let v2 = this[key];
+        if (v2 === void 0 || typeof v2 === "number" && !Number.isFinite(v2))
           return false;
       }
       return true;
@@ -24833,15 +24752,33 @@
     }
   };
 
+  // src/Soil/tool/eval.ts
+  function intrapolate2(html, dict) {
+    function intra(pattern3, prefix) {
+      html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code) => {
+        let result = exprCtxHTML(code, dict);
+        return Stringifiers.transform(pattern3, result);
+      });
+      html = html.replace(new RegExp(String.raw`\*${prefix}\{([^\{\}]*)\}`, "g"), (match3, code) => {
+        let result = exprCtxHTML(code, dict);
+        return Stringifiers.transform(pattern3, result);
+      });
+    }
+    intra("*@", "");
+    intra("*/@", "\\/");
+    intra("**@", "\\*");
+    return html;
+  }
+
   // src/Soil/soil.ts
   var import_auto_render = __toESM(require_auto_render());
   function katex(html) {
     let ele = document.createElement("div");
     ele.innerHTML = html;
     (0, import_auto_render.default)(ele);
-    let T2 = ele.innerHTML;
+    let T = ele.innerHTML;
     ele.remove();
-    return T2;
+    return T;
   }
   var Timer = class {
     constructor(limit) {
@@ -24861,8 +24798,8 @@
   };
   var ErrorLogger = class {
     pile = [];
-    add(e6) {
-      let err2 = toError(e6);
+    add(e5) {
+      let err2 = toError(e5);
       this.pile.push("[" + err2.name + "] " + err2.message);
     }
     readHtml(delimiter) {
@@ -24900,9 +24837,11 @@
       this.dict = new Dict();
       this.config = new Config();
     }
-    evalCode(code2) {
+    evalCode(code) {
       let content = { question: this.qn, solution: this.sol };
-      evaluate(code2, this.dict, this.config, content);
+      evalCtx(code, this.dict, this.config, content);
+      if (typeof this.config.answer === "number")
+        this.config.answer = ["A", "B", "C", "D"][this.config.answer];
       this.qn = content.question;
       this.sol = content.solution;
     }
@@ -24911,13 +24850,11 @@
       this.evalCode(this.gene.populate);
     }
     isValidated() {
-      let v3 = this.gene.validate;
-      if (v3 === "")
+      let v2 = this.gene.validate;
+      if (v2 === "")
         return true;
-      v3 = v3.replace("\n", " ");
-      let bool3 = { _bool_: false };
-      evaluate("_bool_ = " + v3, bool3, { ...this.dict });
-      return bool3._bool_ === true;
+      v2 = v2.replace("\n", " ");
+      return exprCtx(v2, { ...this.dict }) === true;
     }
     runPopulate() {
       while (this.counter <= 1e3) {
@@ -24929,23 +24866,23 @@
           if (!this.isValidated())
             throw CustomError("PopulationError", "Cannot pass validate.");
           return true;
-        } catch (e6) {
-          if (e6 instanceof Error) {
-            switch (e6.name) {
+        } catch (e5) {
+          if (e5 instanceof Error) {
+            switch (e5.name) {
               case "ContractError":
-                this.logger.add(e6);
+                this.logger.add(e5);
                 break;
               case "MathError":
-                this.logger.add(e6);
+                this.logger.add(e5);
                 break;
               case "PopulationError":
-                this.logger.add(e6);
+                this.logger.add(e5);
                 break;
               default:
-                throw e6;
+                throw e5;
             }
           } else {
-            throw e6;
+            throw e5;
           }
         }
       }
@@ -24968,8 +24905,8 @@
         try {
           this.qn = AutoOptions(this.config.options, this.qn, this.dict);
           return true;
-        } catch (e6) {
-          this.logger.add(e6);
+        } catch (e5) {
+          this.logger.add(e5);
           continue;
         }
       }
@@ -25047,8 +24984,8 @@
           break;
         } while (true);
         return this.successFruit();
-      } catch (e6) {
-        this.logger.add(e6);
+      } catch (e5) {
+        this.logger.add(e5);
         return this.errorFruit();
       }
     }
@@ -25064,11 +25001,11 @@
       seed.fruit = this.reap(seed);
     }
     growAll(seeds) {
-      seeds.forEach((x2) => this.grow(x2));
+      seeds.forEach((x) => this.grow(x));
     }
     test(seed, repeat = 100) {
       let counters = [];
-      for (let i2 = 1; i2 <= repeat; i2++) {
+      for (let i = 1; i <= repeat; i++) {
         this.grow(seed);
         if (!seed.fruit.success)
           return;
@@ -25087,7 +25024,7 @@
     inspect(gene, repeat) {
       let counters = [];
       let times = [];
-      for (let i2 = 1; i2 <= repeat; i2++) {
+      for (let i = 1; i <= repeat; i++) {
         let fruit = this.reap(gene);
         if (!fruit.success)
           return {
@@ -25111,17 +25048,17 @@
   globalThis.MathSoil2 = MathSoil2;
 
   // src/index.ts
-  function at(n2) {
-    n2 = Math.trunc(n2) || 0;
-    if (n2 < 0)
-      n2 += this.length;
-    if (n2 < 0 || n2 >= this.length)
+  function at(n) {
+    n = Math.trunc(n) || 0;
+    if (n < 0)
+      n += this.length;
+    if (n < 0 || n >= this.length)
       return void 0;
-    return this[n2];
+    return this[n];
   }
   var TypedArray = Reflect.getPrototypeOf(Int8Array);
-  for (const C2 of [Array, String, TypedArray]) {
-    Object.defineProperty(C2.prototype, "at", {
+  for (const C of [Array, String, TypedArray]) {
+    Object.defineProperty(C.prototype, "at", {
       value: at,
       writable: true,
       enumerable: false,

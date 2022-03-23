@@ -3,8 +3,9 @@ import { dress } from 'bot'
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Dict, Config } from './cls'
-import { evaluate, intrapolate } from './tool/eval'
+import { intrapolate } from './tool/eval'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
+import { evalCtx, exprCtx } from 'bot'
 
 // util functions
 
@@ -100,7 +101,7 @@ export class Soil {
     private evalCode(code: string): void {
 
         let content = { question: this.qn, solution: this.sol }
-        evaluate(code, this.dict, this.config, content)
+        evalCtx(code, this.dict, this.config, content)
 
         // let { result, context } = evaluate(code, {
         //     dict: this.dict,
@@ -119,6 +120,9 @@ export class Soil {
         //     options: context.options,
         //     shuffle: context.shuffle
         // }
+        if (typeof this.config.answer === 'number')
+            this.config.answer = ['A', 'B', 'C', 'D'][this.config.answer]
+
         this.qn = content.question
         this.sol = content.solution
 
@@ -133,10 +137,7 @@ export class Soil {
         let v = this.gene.validate
         if (v === '') return true
         v = v.replace('\n', ' ') //is it a bug? only once?
-
-        let bool = { _bool_: false }
-        evaluate('_bool_ = ' + v, bool, { ...this.dict })
-        return bool._bool_ === true
+        return exprCtx(v, { ...this.dict }) === true
     }
 
 

@@ -5343,12 +5343,6 @@ declare var options: object;
 declare var shuffle: boolean;
 declare var question: string;
 declare var solution: string;
-declare module "Soil/tool/eval" {
-    import { Dict } from "Soil/cls";
-    export function evaluate(code: string, ...contexts: object[]): void;
-    export function evalInline(code: string, dict: Dict): any;
-    export function intrapolate(html: string, dict: Dict): string;
-}
 declare module "Soil/tool/section" {
     import { Dict } from "Soil/cls";
     export function ExecSection(html: string, sections: section[], dict: Dict): string;
@@ -5381,6 +5375,10 @@ declare module "Soil/tool/option" {
     * ```
     */
     export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string;
+}
+declare module "Soil/tool/eval" {
+    import { Dict } from "Soil/cls";
+    export function intrapolate(html: string, dict: Dict): string;
 }
 declare module "Soil/soil" {
     export class Soil {
