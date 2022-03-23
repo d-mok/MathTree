@@ -5,6 +5,7 @@
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
   var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
@@ -32,6 +33,10 @@
     if (kind && result2)
       __defProp(target, key, result2);
     return result2;
+  };
+  var __publicField = (obj, key, value) => {
+    __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+    return value;
   };
 
   // node_modules/katex/dist/katex.js
@@ -24195,261 +24200,7 @@
   globalThis.AutoPen = AutoPenCls;
   globalThis.PhyPen = PhyPenCls;
 
-  // src/Soil/tool/html.ts
-  var QuestionHTML = class {
-    body;
-    constructor(html = "") {
-      this.body = new DOMParser().parseFromString(html, "text/html").getElementsByTagName("body")[0];
-    }
-    export() {
-      return this.body.innerHTML;
-    }
-    get li() {
-      return [...this.body.getElementsByTagName("li")];
-    }
-    get ul() {
-      return this.body.getElementsByTagName("ul")[0];
-    }
-    cloneLi(sourceIndex, repeat = 1) {
-      for (let i2 = 1; i2 <= repeat; i2++) {
-        this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
-      }
-    }
-    printInWhole(symbol, value) {
-      this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value);
-    }
-    printInLi(index, symbol, value) {
-      let li = this.li[index];
-      li.innerHTML = PrintVariable(li.innerHTML, symbol, value);
-    }
-    isLiDuplicated() {
-      let htmls = this.li.map((x2) => x2.innerHTML.replace(/\s+/g, ""));
-      return new Set(htmls).size !== htmls.length;
-    }
-    shuffleLi(shuffle2 = true) {
-      let oldHTMLs = this.li.map((x2) => x2.innerHTML);
-      let newHTMLs;
-      if (shuffle2) {
-        newHTMLs = RndShuffle(...oldHTMLs);
-      } else {
-        newHTMLs = [...oldHTMLs];
-      }
-      for (let i2 = 0; i2 < newHTMLs.length; i2++) {
-        this.li[i2].innerHTML = newHTMLs[i2];
-      }
-      return oldHTMLs.map((x2) => newHTMLs.indexOf(x2));
-    }
-  };
-  var Blacksmith = class {
-    text = "";
-    symbol = "";
-    val = void 0;
-    rules = [];
-    setText(text) {
-      this.text = text;
-    }
-    smash([pattern, fn]) {
-      let searchStr = pattern.replaceAll("@", this.symbol);
-      if (!this.text.includes(searchStr))
-        return;
-      let content = fn(this.val, typeof this.val) ?? String(this.val);
-      this.text = this.text.replaceAll(searchStr, content);
-    }
-    addRule(pattern, fn) {
-      this.rules.push([pattern, fn]);
-    }
-    forge(symbol, val2) {
-      this.symbol = symbol;
-      this.val = val2;
-      for (let rule of this.rules)
-        this.smash(rule);
-      return this.text;
-    }
-  };
-  var Smith = new Blacksmith();
-  Smith.addRule("**@", (value) => {
-    if (owl.num(value)) {
-      let v3 = cal.blur(Round(value, 3));
-      let abs = Math.abs(v3);
-      return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3);
-    }
-    if (owl.quantity(value)) {
-      let { val: val2, unit } = value;
-      let v3 = cal.blur(Round(val2, 3));
-      let abs = Math.abs(v3);
-      return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3) + unit;
-    }
-  });
-  Smith.addRule("*/@", (value) => {
-    if (owl.num(value)) {
-      let [p3, q2] = ToFrac(value);
-      return Dfrac(p3, q2);
-    }
-  });
-  Smith.addRule("*//@", (value) => {
-    if (owl.num(value)) {
-      let [p3, q2] = ToFrac(value);
-      return Dfrac(p3, q2).replaceAll("dfrac", "frac");
-    }
-  });
-  Smith.addRule("*/(@)", (value) => {
-    if (owl.num(value)) {
-      let [p3, q2] = ToFrac(value);
-      if (q2 === 1 && p3 >= 0)
-        return Dfrac(p3, q2);
-      if (q2 === 1 && p3 < 0)
-        return "(" + Dfrac(p3, q2) + ")";
-      return "\\left ( " + Dfrac(p3, q2) + " \\right )";
-    }
-  });
-  Smith.addRule("*(@)", (value) => {
-    if (owl.num(value)) {
-      let v3 = numberDefault(value);
-      return String(v3 >= 0 ? v3 : "(" + v3 + ")");
-    }
-  });
-  Smith.addRule("*!@", (value) => {
-    if (owl.num(value)) {
-      return ink.printSurd(value);
-    }
-    if (owl.point2D(value)) {
-      let [a2, b2] = value;
-      return "(" + ink.printSurd(a2) + "," + ink.printSurd(b2) + ")";
-    }
-  });
-  Smith.addRule("*|@|", (value) => {
-    if (owl.num(value)) {
-      return String(numberDefault(Math.abs(value)));
-    }
-  });
-  Smith.addRule("*^+_@", (value) => {
-    if (owl.num(value)) {
-      return value >= 0 ? "+" : "-";
-    }
-  });
-  Smith.addRule("*^-_@", (value) => {
-    if (owl.num(value)) {
-      return value >= 0 ? "-" : "+";
-    }
-  });
-  Smith.addRule("*^\\gt_@", (value, T2) => {
-    if (T2 === "boolean")
-      return value ? "\\gt" : "\\lt";
-    if (T2 === "number")
-      return value > 0 ? "\\gt" : value < 0 ? "\\lt" : "=";
-  });
-  Smith.addRule("*^\\lt_@", (value, T2) => {
-    if (T2 === "boolean")
-      return value ? "\\lt" : "\\gt";
-    if (T2 === "number")
-      return value > 0 ? "\\lt" : value < 0 ? "\\gt" : "=";
-  });
-  Smith.addRule("*^\\ge_@", (value, T2) => {
-    if (T2 === "boolean")
-      return value ? "\\ge" : "\\le";
-    if (T2 === "number")
-      return value > 0 ? "\\ge" : value < 0 ? "\\le" : "=";
-  });
-  Smith.addRule("*^\\le_@", (value, T2) => {
-    if (T2 === "boolean")
-      return value ? "\\le" : "\\ge";
-    if (T2 === "number")
-      return value > 0 ? "\\le" : value < 0 ? "\\ge" : "=";
-  });
-  Smith.addRule("*%@", (value, T2) => {
-    if (T2 === "number") {
-      return numberDefault(value * 100) + "%";
-    }
-  });
-  Smith.addRule("*\\%@", (value, T2) => {
-    if (T2 === "number") {
-      return numberDefault(value * 100) + "\\%";
-    }
-  });
-  Smith.addRule("*:@", (value, T2) => {
-    if (owl.ntuple(value)) {
-      return toNumbers(value).ratio().join(":");
-    }
-    if (T2 === "number") {
-      let [p3, q2] = cal.toFraction(value);
-      return p3 + ":" + q2;
-    }
-  });
-  Smith.addRule("*@", (value, T2) => {
-    if (T2 === "number") {
-      return String(numberDefault(value));
-    }
-    if (T2 === "boolean") {
-      return value ? "\u2714" : "\u2718";
-    }
-    if (owl.quantity(value)) {
-      let { val: val2, unit } = value;
-      return String(numberDefault(val2)) + unit;
-    }
-    if (owl.point2D(value)) {
-      return Coord(value);
-    }
-    if (owl.combo(value)) {
-      return ink.printCombo(value);
-    }
-    if (owl.polynomial(value)) {
-      return PolyPrint(value);
-    }
-    if (owl.trigValue(value)) {
-      return ink.printTrigValue(value);
-    }
-    if (owl.trigExp(value)) {
-      return ink.printTrigExp(value);
-    }
-    if (owl.constraint(value)) {
-      return ink.printConstraint(value);
-    }
-    if (owl.constraints(value)) {
-      return ink.printConstraints(value);
-    }
-  });
-  Smith.addRule("*|.@", (value, T2) => {
-    if (owl.array(value)) {
-      return ink.printOrTrigRoots(value);
-    }
-  });
-  Smith.addRule("*.@", (value, T2) => {
-    if (owl.point2D(value)) {
-      return ink.printPointPolar(value);
-    }
-  });
-  Smith.addRule("*=@", (value, T2) => {
-    if (owl.labeledValue(value)) {
-      let v3 = [...value];
-      v3[0] = numberDefault(v3[0]);
-      return ink.printLabeledValue(v3, 1, false);
-    }
-  });
-  Smith.addRule("*==@", (value, T2) => {
-    if (owl.labeledValue2(value)) {
-      let v3 = [...value];
-      v3[0] = numberDefault(v3[0]);
-      return ink.printLabeledValue(v3, 2, false);
-    }
-  });
-  Smith.addRule("*=.@", (value, T2) => {
-    if (owl.labeledValue(value)) {
-      let v3 = [...value];
-      v3[0] = numberDefault(v3[0]);
-      return ink.printLabeledValue(v3, 1, true);
-    }
-  });
-  Smith.addRule("*==.@", (value, T2) => {
-    if (owl.labeledValue2(value)) {
-      let v3 = [...value];
-      v3[0] = numberDefault(v3[0]);
-      return ink.printLabeledValue(v3, 2, true);
-    }
-  });
-  function PrintVariable(html, symbol, value) {
-    Smith.setText(html);
-    return Smith.forge(symbol, value);
-  }
+  // src/Soil/tool/stringify.ts
   function numberDefault(num2) {
     let v3 = num2;
     if (owl.zero(v3))
@@ -24461,187 +24212,122 @@
     }
     return v3;
   }
-  function ParseForPrint(value, signal = "") {
-    let T2 = typeof value;
-    if (signal === "") {
-      if (T2 === "number") {
-        return String(numberDefault(value));
-      }
-      if (T2 === "boolean") {
-        return value ? "\u2714" : "\u2718";
-      }
-      if (owl.quantity(value)) {
-        let { val: val2, unit } = value;
-        return String(numberDefault(val2)) + unit;
-      }
-      if (owl.point2D(value)) {
-        return Coord(value);
-      }
-      if (owl.combo(value)) {
-        return ink.printCombo(value);
-      }
-      if (owl.polynomial(value)) {
-        return PolyPrint(value);
-      }
-      if (owl.trigValue(value)) {
-        return ink.printTrigValue(value);
-      }
-      if (owl.trigExp(value)) {
-        return ink.printTrigExp(value);
-      }
-      if (owl.constraint(value)) {
-        return ink.printConstraint(value);
-      }
-      if (owl.constraints(value)) {
-        return ink.printConstraints(value);
-      }
+  var Stringifier = class {
+    constructor(pattern3, condition, transformer) {
+      this.pattern = pattern3;
+      this.condition = condition;
+      this.transformer = transformer;
     }
-    if (signal === "*") {
-      if (T2 === "number") {
-        let v3 = cal.blur(Round(value, 3));
+    check(val2) {
+      return owl[this.condition](val2);
+    }
+    exec(val2) {
+      return this.transformer(val2);
+    }
+  };
+  var _Stringifiers = class {
+    static add(pattern3, condition, fn) {
+      this.store.push(new Stringifier(pattern3, condition, fn));
+    }
+    static transform(pattern3, val2) {
+      let ss = this.store.filter((s3) => s3.pattern === pattern3);
+      for (let s3 of ss) {
+        if (s3.check(val2))
+          return s3.exec(val2);
+      }
+      return String(val2);
+    }
+    static allPatterns() {
+      let ps = this.store.map((s3) => s3.pattern);
+      return [...new Set(ps)];
+    }
+    static {
+      _Stringifiers.add("*@", "num", ($) => String(numberDefault($)));
+      _Stringifiers.add("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
+      _Stringifiers.add("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
+      _Stringifiers.add("*@", "point2D", ($) => Coord($));
+      _Stringifiers.add("*@", "combo", ($) => ink.printCombo($));
+      _Stringifiers.add("*@", "polynomial", ($) => PolyPrint($));
+      _Stringifiers.add("*@", "trigValue", ($) => ink.printTrigValue($));
+      _Stringifiers.add("*@", "trigExp", ($) => ink.printTrigExp($));
+      _Stringifiers.add("*@", "constraint", ($) => ink.printConstraint($));
+      _Stringifiers.add("*@", "constraints", ($) => ink.printConstraints($));
+      _Stringifiers.add("**@", "num", ($) => {
+        let v3 = cal.blur(Round($, 3));
         let abs = Math.abs(v3);
         return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3);
-      }
-      if (owl.quantity(value)) {
-        let { val: val2, unit } = value;
+      });
+      _Stringifiers.add("**@", "quantity", ({ val: val2, unit }) => {
         let v3 = cal.blur(Round(val2, 3));
         let abs = Math.abs(v3);
         return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3) + unit;
-      }
-    }
-    if (signal === "/") {
-      if (T2 === "number") {
-        let [p3, q2] = ToFrac(value);
+      });
+      _Stringifiers.add("*/@", "num", ($) => {
+        let [p3, q2] = ToFrac($);
         return Dfrac(p3, q2);
-      }
-    }
-    if (signal === "/()") {
-      if (T2 === "number") {
-        let [p3, q2] = ToFrac(value);
+      });
+      _Stringifiers.add("*/(@)", "num", ($) => {
+        let [p3, q2] = ToFrac($);
         if (q2 === 1 && p3 >= 0)
           return Dfrac(p3, q2);
         if (q2 === 1 && p3 < 0)
           return "(" + Dfrac(p3, q2) + ")";
         return "\\left ( " + Dfrac(p3, q2) + " \\right )";
-      }
-    }
-    if (signal === "//") {
-      if (T2 === "number") {
-        let [p3, q2] = ToFrac(value);
+      });
+      _Stringifiers.add("*//@", "num", ($) => {
+        let [p3, q2] = ToFrac($);
         return Dfrac(p3, q2).replace(/dfrac/g, "frac");
-      }
-    }
-    if (signal === "()") {
-      if (T2 === "number") {
-        let v3 = numberDefault(value);
+      });
+      _Stringifiers.add("*(@)", "num", ($) => {
+        let v3 = numberDefault($);
         return String(v3 >= 0 ? v3 : "(" + v3 + ")");
-      }
-    }
-    if (signal === "!") {
-      if (T2 === "number") {
-        return ink.printSurd(value);
-      }
-      if (owl.point2D(value)) {
-        let [a2, b2] = value;
-        return "(" + ink.printSurd(a2) + "," + ink.printSurd(b2) + ")";
-      }
-    }
-    if (signal === "+") {
-      if (T2 === "number")
-        return value >= 0 ? "+" : "-";
-    }
-    if (signal === "-") {
-      if (T2 === "number")
-        return value >= 0 ? "-" : "+";
-    }
-    if (signal === "||") {
-      if (T2 === "number") {
-        return String(numberDefault(Math.abs(value)));
-      }
-    }
-    if (signal === ">") {
-      if (T2 === "boolean")
-        return value ? "\\gt" : "\\lt";
-      if (T2 === "number")
-        return value > 0 ? "\\gt" : value < 0 ? "\\lt" : "=";
-    }
-    if (signal === "<") {
-      if (T2 === "boolean")
-        return value ? "\\lt" : "\\gt";
-      if (T2 === "number")
-        return value > 0 ? "\\lt" : value < 0 ? "\\gt" : "=";
-    }
-    if (signal === ">=") {
-      if (T2 === "boolean")
-        return value ? "\\ge" : "\\le";
-      if (T2 === "number")
-        return value > 0 ? "\\ge" : value < 0 ? "\\le" : "=";
-    }
-    if (signal === "<=") {
-      if (T2 === "boolean")
-        return value ? "\\le" : "\\ge";
-      if (T2 === "number")
-        return value > 0 ? "\\le" : value < 0 ? "\\ge" : "=";
-    }
-    if (signal === "%") {
-      if (T2 === "number") {
-        return numberDefault(value * 100) + "%";
-      }
-    }
-    if (signal === "\\%") {
-      if (T2 === "number") {
-        return numberDefault(value * 100) + "\\%";
-      }
-    }
-    if (signal === ":") {
-      if (owl.ntuple(value)) {
-        return toNumbers(value).ratio().join(":");
-      }
-      if (T2 === "number") {
-        let [p3, q2] = cal.toFraction(value);
+      });
+      _Stringifiers.add("*!@", "num", ($) => ink.printSurd($));
+      _Stringifiers.add("*!@", "point2D", ([a2, b2]) => "(" + ink.printSurd(a2) + "," + ink.printSurd(b2) + ")");
+      _Stringifiers.add("*^+_@", "num", ($) => $ >= 0 ? "+" : "-");
+      _Stringifiers.add("*^-_@", "num", ($) => $ >= 0 ? "-" : "+");
+      _Stringifiers.add("*|@|", "num", ($) => String(numberDefault(Math.abs($))));
+      _Stringifiers.add("*^\\gt_@", "bool", ($) => $ ? "\\gt" : "\\lt");
+      _Stringifiers.add("*^\\gt_@", "num", ($) => $ > 0 ? "\\gt" : $ < 0 ? "\\lt" : "=");
+      _Stringifiers.add("*^\\lt_@", "bool", ($) => $ ? "\\lt" : "\\gt");
+      _Stringifiers.add("*^\\lt_@", "num", ($) => $ > 0 ? "\\lt" : $ < 0 ? "\\gt" : "=");
+      _Stringifiers.add("*^\\ge_@", "bool", ($) => $ ? "\\ge" : "\\le");
+      _Stringifiers.add("*^\\ge_@", "num", ($) => $ > 0 ? "\\ge" : $ < 0 ? "\\le" : "=");
+      _Stringifiers.add("*^\\le_@", "bool", ($) => $ ? "\\le" : "\\ge");
+      _Stringifiers.add("*^\\le_@", "num", ($) => $ > 0 ? "\\le" : $ < 0 ? "\\ge" : "=");
+      _Stringifiers.add("*%@", "num", ($) => numberDefault($ * 100) + "%");
+      _Stringifiers.add("*\\%@", "num", ($) => numberDefault($ * 100) + "\\%");
+      _Stringifiers.add("*:@", "ntuple", ($) => toNumbers($).ratio().join(":"));
+      _Stringifiers.add("*:@", "num", ($) => {
+        let [p3, q2] = cal.toFraction($);
         return p3 + ":" + q2;
-      }
-    }
-    if (signal === "|.") {
-      if (owl.array(value)) {
-        return ink.printOrTrigRoots(value);
-      }
-    }
-    if (signal === ".") {
-      if (owl.point2D(value)) {
-        return ink.printPointPolar(value);
-      }
-    }
-    if (signal === "=") {
-      if (owl.labeledValue(value)) {
-        let v3 = [...value];
+      });
+      _Stringifiers.add("*|.@", "array", ($) => ink.printOrTrigRoots($));
+      _Stringifiers.add("*.@", "point2D", ($) => ink.printPointPolar($));
+      _Stringifiers.add("*=@", "labeledValue", ($) => {
+        let v3 = [...$];
         v3[0] = numberDefault(v3[0]);
         return ink.printLabeledValue(v3, 1, false);
-      }
-    }
-    if (signal === "==") {
-      if (owl.labeledValue2(value)) {
-        let v3 = [...value];
+      });
+      _Stringifiers.add("*==@", "labeledValue2", ($) => {
+        let v3 = [...$];
         v3[0] = numberDefault(v3[0]);
         return ink.printLabeledValue(v3, 2, false);
-      }
-    }
-    if (signal === "=.") {
-      if (owl.labeledValue(value)) {
-        let v3 = [...value];
+      });
+      _Stringifiers.add("*=.@", "labeledValue", ($) => {
+        let v3 = [...$];
         v3[0] = numberDefault(v3[0]);
         return ink.printLabeledValue(v3, 1, true);
-      }
-    }
-    if (signal === "==.") {
-      if (owl.labeledValue2(value)) {
-        let v3 = [...value];
+      });
+      _Stringifiers.add("*==.@", "labeledValue2", ($) => {
+        let v3 = [...$];
         v3[0] = numberDefault(v3[0]);
         return ink.printLabeledValue(v3, 2, true);
-      }
+      });
     }
-    return String(value);
-  }
+  };
+  var Stringifiers = _Stringifiers;
+  __publicField(Stringifiers, "store", []);
 
   // src/Soil/tool/eval.ts
   function detectVarErr(e6) {
@@ -24861,19 +24547,19 @@
     }
   }
   function intrapolate2(html, dict2) {
-    function intra(signal, prefix) {
+    function intra(pattern3, prefix) {
       html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code2) => {
         let result2 = evalInline(code2, dict2);
-        return ParseForPrint(result2, signal);
+        return Stringifiers.transform(pattern3, result2);
       });
       html = html.replace(new RegExp(String.raw`\*${prefix}\{([^\{\}]*)\}`, "g"), (match3, code2) => {
         let result2 = evalInline(code2, dict2);
-        return ParseForPrint(result2, signal);
+        return Stringifiers.transform(pattern3, result2);
       });
     }
-    intra("", "");
-    intra("/", "\\/");
-    intra("*", "\\*");
+    intra("*@", "");
+    intra("*/@", "\\/");
+    intra("**@", "\\*");
     return html;
   }
 
@@ -24961,6 +24647,80 @@
     html = handleCoeff(html);
     html = handlePrime(html);
     return html;
+  }
+
+  // src/Soil/tool/html.ts
+  var QuestionHTML = class {
+    body;
+    constructor(html = "") {
+      this.body = new DOMParser().parseFromString(html, "text/html").getElementsByTagName("body")[0];
+    }
+    export() {
+      return this.body.innerHTML;
+    }
+    get li() {
+      return [...this.body.getElementsByTagName("li")];
+    }
+    get ul() {
+      return this.body.getElementsByTagName("ul")[0];
+    }
+    cloneLi(sourceIndex, repeat = 1) {
+      for (let i2 = 1; i2 <= repeat; i2++) {
+        this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
+      }
+    }
+    printInWhole(symbol, value) {
+      this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value);
+    }
+    printInLi(index, symbol, value) {
+      let li = this.li[index];
+      li.innerHTML = PrintVariable(li.innerHTML, symbol, value);
+    }
+    isLiDuplicated() {
+      let htmls = this.li.map((x2) => x2.innerHTML.replace(/\s+/g, ""));
+      return new Set(htmls).size !== htmls.length;
+    }
+    shuffleLi(shuffle2 = true) {
+      let oldHTMLs = this.li.map((x2) => x2.innerHTML);
+      let newHTMLs;
+      if (shuffle2) {
+        newHTMLs = RndShuffle(...oldHTMLs);
+      } else {
+        newHTMLs = [...oldHTMLs];
+      }
+      for (let i2 = 0; i2 < newHTMLs.length; i2++) {
+        this.li[i2].innerHTML = newHTMLs[i2];
+      }
+      return oldHTMLs.map((x2) => newHTMLs.indexOf(x2));
+    }
+  };
+  var Blacksmith = class {
+    text = "";
+    symbol = "";
+    val = void 0;
+    setText(text) {
+      this.text = text;
+    }
+    smash(pattern3) {
+      let searchStr = pattern3.replaceAll("@", this.symbol);
+      if (!this.text.includes(searchStr))
+        return;
+      let content = Stringifiers.transform(pattern3, this.val);
+      this.text = this.text.replaceAll(searchStr, content);
+    }
+    forge(symbol, val2) {
+      this.symbol = symbol;
+      this.val = val2;
+      for (let p3 of Stringifiers.allPatterns())
+        this.smash(p3);
+      return this.text;
+    }
+  };
+  var Smith = new Blacksmith();
+  function PrintVariable(html, symbol, value) {
+    console.log("b");
+    Smith.setText(html);
+    return Smith.forge(symbol, value);
   }
 
   // src/Soil/tool/shuffle.ts

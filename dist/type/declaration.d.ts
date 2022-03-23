@@ -5184,6 +5184,15 @@ declare module "Pen/index" {
         var PhyPen: typeof PhyPenCls;
     }
 }
+declare module "Soil/tool/stringify" {
+    export type pattern = '*@' | '**@' | '*/@' | '*/(@)' | '*//@' | '*(@)' | '*!@' | '*^+_@' | '*^-_@' | '*|@|' | '*^\\gt_@' | '*^\\lt_@' | '*^\\ge_@' | '*^\\le_@' | '*%@' | '*\\%@' | '*:@' | '*|.@' | '*.@' | '*=@' | '*==@' | '*=.@' | '*==.@';
+    export class Stringifiers {
+        private static store;
+        private static add;
+        static transform(pattern: pattern, val: unknown): string;
+        static allPatterns(): pattern[];
+    }
+}
 declare module "Soil/tool/html" {
     export class QuestionHTML {
         private body;
@@ -5198,7 +5207,6 @@ declare module "Soil/tool/html" {
         shuffleLi(shuffle?: boolean): number[];
     }
     export function PrintVariable(html: string, symbol: string, value: any): string;
-    export function ParseForPrint(value: any, signal?: string): string;
 }
 declare module "Soil/cls" {
     export class Config {

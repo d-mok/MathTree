@@ -1,5 +1,5 @@
 import { Dict, Config } from '../cls'
-import { ParseForPrint } from './html'
+import { Stringifiers, pattern } from './stringify'
 
 type Context = {
     dict: Dict
@@ -117,21 +117,21 @@ export function evalInline(code: string, dict: Dict) {
 
 export function intrapolate(html: string, dict: Dict) {
 
-    function intra(signal: string, prefix: string) {
+    function intra(pattern: pattern, prefix: string) {
         html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, 'g'),
             (match, code) => {
                 let result = evalInline(code, dict)
-                return ParseForPrint(result, signal)
+                return Stringifiers.transform(pattern, result)
             })
         html = html.replace(new RegExp(String.raw`\*${prefix}\{([^\{\}]*)\}`, 'g'),
             (match, code) => {
                 let result = evalInline(code, dict)
-                return ParseForPrint(result, signal)
+                return Stringifiers.transform(pattern, result)
             })
     }
-    intra('', '')
-    intra('/', '\\/')
-    intra('*', '\\*')
+    intra('*@', '')
+    intra('*/@', '\\/')
+    intra('**@', '\\*')
     return html
 }
 
