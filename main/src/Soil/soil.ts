@@ -119,7 +119,6 @@ export class Soil {
     private isValidated() {
         let v = this.gene.validate
         if (v === '') return true
-        // v = v.replace('\n', ' ') //is it a bug? only once?
         return exprCtx(v, { ...this.dict }) === true
     }
 
