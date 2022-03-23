@@ -1,5 +1,5 @@
 import { ExecSection } from './tool/section'
-import { dress } from './tool/dress'
+import { dress } from 'bot'
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Dict, Config } from './cls'
@@ -62,7 +62,7 @@ class ErrorLogger {
         let text = this.readHtml("<br/><br/>")
         let len = text.length
         if (len > 1000)
-            text = text.substring(0, 1000) + ` ... (${len} chars)`;
+            text = text.substring(0, 1000) + ` ... (${len} chars)`
         return text
     }
 
@@ -144,19 +144,19 @@ export class Soil {
                     throw CustomError('PopulationError', 'Dict Check Failed.')
                 if (!this.isValidated())
                     throw CustomError('PopulationError', 'Cannot pass validate.')
-                return true;
+                return true
             } catch (e) {
                 if (e instanceof Error) {
                     switch (e.name) {
                         case 'ContractError':
                             this.logger.add(e)
-                            break;
+                            break
                         case 'MathError':
                             this.logger.add(e)
-                            break;
+                            break
                         case 'PopulationError':
                             this.logger.add(e)
-                            break;
+                            break
                         default:
                             throw e
                     }
@@ -170,8 +170,8 @@ export class Soil {
 
     private runSection(): boolean {
         // crop section
-        this.qn = ExecSection(this.qn, this.config.sections, this.dict);
-        this.sol = ExecSection(this.sol, this.config.sections, this.dict);
+        this.qn = ExecSection(this.qn, this.config.sections, this.dict)
+        this.sol = ExecSection(this.sol, this.config.sections, this.dict)
         return true
     }
 
@@ -206,8 +206,8 @@ export class Soil {
         this.qn = this.dict.substitute(this.qn)
         this.sol = this.dict.substitute(this.sol)
         // dress
-        this.qn = dress(this.qn);
-        this.sol = dress(this.sol);
+        this.qn = dress(this.qn)
+        this.sol = dress(this.sol)
         return true
     }
 
@@ -271,16 +271,16 @@ export class Soil {
             do {
                 this.reset()
                 this.runPopulate()
-                this.runSection();
-                this.runPreprocess();
+                this.runSection()
+                this.runPreprocess()
                 this.runOption()
                 this.runIntrapolate()
-                this.runSubstitute();
-                this.runPostprocess();
+                this.runSubstitute()
+                this.runPostprocess()
                 if (!this.runShuffle()) continue
                 this.runKatex()
                 break
-            } while (true);
+            } while (true)
             return this.successFruit()
         }
         catch (e) {

@@ -24590,9 +24590,29 @@
     return html.replace(new RegExp("<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), (match3, p1) => evalInline(p1, dict2) ? match3 : "");
   }
 
-  // src/Soil/tool/dress.ts
-  function or2(...reg) {
+  // ../packages/bot/lib/src/dress/dressor.js
+  var END_TAG = String.raw`(?=[^<>]*</span>)`;
+  var SPACES = String.raw`(?:\s|&nbsp;)*`;
+  var Dressor = class {
+    constructor(html) {
+      this.html = html;
+    }
+    do(reg, replace, inTag = false) {
+      let tail = inTag ? END_TAG : "";
+      let regex = new RegExp(reg.join(SPACES) + tail, "g");
+      this.html = this.html.replaceAll(regex, replace);
+    }
+    get() {
+      return this.html;
+    }
+  };
+
+  // ../packages/bot/lib/src/dress/index.js
+  function capOr(...reg) {
     return "(" + reg.join("|") + ")";
+  }
+  function cap(reg) {
+    return "(" + reg + ")";
   }
   var s2 = String.raw`(?:\s|&nbsp;)*`;
   var p2 = String.raw`\+`;
@@ -24608,42 +24628,18 @@
   var sl = String.raw`\\`;
   var left = String.raw`\\left`;
   var sq2 = String.raw`\\sqrt`;
-  var endtag = String.raw`(?=[^<>]*</span>)`;
-  function regReplace(input, reg, replace) {
-    return input.replace(new RegExp(reg, "g"), replace);
-  }
-  function handleSigns(input) {
-    input = regReplace(input, p2 + s2 + m2, "-");
-    input = regReplace(input, m2 + s2 + p2, "-");
-    input = regReplace(input, or2(l2, e5, c2) + s2 + m2 + s2 + m2, "$1");
-    input = regReplace(input, "(,)" + s2 + m2 + s2 + m2, "$1");
-    input = regReplace(input, m2 + s2 + m2, "+");
-    input = regReplace(input, m2 + s2 + m2, "+");
-    return input;
-  }
-  function handlePower(input) {
-    input = regReplace(input, String.raw`\^\{1\}`, "");
-    return input;
-  }
-  function handleSqrt(input) {
-    input = regReplace(input, String.raw`\\sqrt\[2\]`, "\\sqrt");
-    return input;
-  }
-  function handleCoeff(input) {
-    input = regReplace(input, or2(p2, m2, e5, l2, sl, r2, c2) + s2 + 1 + s2 + or2(v2, f2, pl, left, sq2) + endtag, "$1 $2");
-    return input;
-  }
-  function handlePrime(input) {
-    input = regReplace(input, "(" + v2 + ")'" + endtag, "$1 \\prime ");
-    return input;
-  }
   function dress(html) {
-    html = handleSigns(html);
-    html = handlePower(html);
-    html = handleSqrt(html);
-    html = handleCoeff(html);
-    html = handlePrime(html);
-    return html;
+    let d2 = new Dressor(html);
+    d2.do([p2, m2], "-");
+    d2.do([m2, p2], "-");
+    d2.do([capOr(l2, e5, c2), m2, m2], "$1");
+    d2.do([m2, m2], "+");
+    d2.do([m2, m2], "+");
+    d2.do([String.raw`\^\{1\}`], "");
+    d2.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
+    d2.do([capOr(p2, m2, e5, l2, sl, r2, c2), "1", capOr(v2, f2, pl, left, sq2)], "$1 $2", true);
+    d2.do([cap(v2) + "'"], "$1 \\prime ", true);
+    return d2.get();
   }
 
   // src/Soil/tool/html.ts

@@ -5365,9 +5365,6 @@ declare module "Soil/tool/section" {
     import { Dict } from "Soil/cls";
     export function ExecSection(html: string, sections: section[], dict: Dict): string;
 }
-declare module "Soil/tool/dress" {
-    export function dress(html: string): string;
-}
 declare module "Soil/tool/shuffle" {
     export class OptionShuffler {
         private qn;

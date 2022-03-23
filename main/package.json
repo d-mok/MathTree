@@ -14,6 +14,7 @@
     "esbuild": "^0.14.7"
   },
   "dependencies": {
+    "bot": "file:../packages/bot",
     "contract": "file:../packages/contract",
     "fate": "file:../packages/fate",
     "gauss": "file:../packages/gauss",

@@ -10,7 +10,7 @@ export class Dressor {
     do(reg: string[], replace: string, inTag: boolean = false) {
         let tail = inTag ? END_TAG : ''
         let regex = new RegExp(reg.join(SPACES) + tail, 'g')
-        this.html = this.html.replace(regex, replace)
+        this.html = this.html.replaceAll(regex, replace)
     }
 
     get(): string {
