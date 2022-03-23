@@ -24258,7 +24258,7 @@
   function isVarError(e5) {
     return e5 instanceof Error && e5.message.startsWith("Cannot convert a Symbol value to");
   }
-  function assembleCtx(code, ...contexts) {
+  function assembleCtx(code, contexts) {
     let T = "";
     contexts.forEach((ctx, i) => {
       T += Object.keys(ctx).map((_) => `let ${_} = this[${i}].${_};`).join("");
@@ -24271,7 +24271,7 @@
   }
   function evalCtx(_myCODE_, ..._myCONTEXTS_) {
     function evaluateEval() {
-      return eval(assembleCtx(_myCODE_));
+      return eval(assembleCtx(_myCODE_, _myCONTEXTS_));
     }
     try {
       evaluateEval.call(_myCONTEXTS_);
@@ -24284,11 +24284,8 @@
     evalCtx("____xxxRESULTxxx____ = " + _myCODE_2, _xxxresultxxx_, ..._myCONTEXTS_2);
     return _xxxresultxxx_.____xxxRESULTxxx____;
   }
-  function htmlDecode(str3) {
-    return str3.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
-  }
   function exprCtxHTML(_myCODE_2, ..._myCONTEXTS_2) {
-    _myCODE_2 = htmlDecode(_myCODE_2);
+    _myCODE_2 = _myCODE_2.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
     return exprCtx(_myCODE_2, ..._myCONTEXTS_2);
   }
 
