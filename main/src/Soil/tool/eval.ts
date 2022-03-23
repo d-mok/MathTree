@@ -1,25 +1,24 @@
 import { Dict, Config } from '../cls'
 import { Stringifiers, pattern } from './stringify'
+import { evalCtx } from 'bot'
 
-type Context = {
-    dict: Dict
-    sections: section[]
-    answer: string
-    options: Partial<Dict>
-    shuffle: boolean
-    qn: string
-    sol: string
-}
+// type Context = {
+//     dict: Dict
+//     sections: section[]
+//     answer: string
+//     options: Partial<Dict>
+//     shuffle: boolean
+//     qn: string
+//     sol: string
+// }
 
 
 
-function detectVarErr(e: unknown) {
+function detectVarErr(e: unknown) :any{
     if (e instanceof Error) {
         let isVarErr = e.message === 'Cannot convert a Symbol value to a number'
         if (isVarErr) {
             return CustomError('VariableError', "A variable is used before a value is defined.")
-        } else {
-            return e
         }
     }
 
@@ -30,51 +29,53 @@ function detectVarErr(e: unknown) {
 
 
 
-export function evaluate(code: string, context: Context) {
+export function evaluate(code: string, ...contexts: object[]): void {
     // injectables
-    let {
-        a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-        o, p, q, r, s, t, u, v, w, x, y, z,
-        A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-        O, P, Q, R, S, T, U, V, W, X, Y, Z
-    } = context.dict
-    let sections: section[] = context.sections
-    let answer: string = context.answer
-    let options: Partial<Dict> = context.options
-    let shuffle: boolean = context.shuffle
-    let question: string = context.qn
-    let solution: string = context.sol
+    // let {
+    //     a, b, c, d, e, f, g, h, i, j, k, l, m, n,
+    //     o, p, q, r, s, t, u, v, w, x, y, z,
+    //     A, B, C, D, E, F, G, H, I, J, K, L, M, N,
+    //     O, P, Q, R, S, T, U, V, W, X, Y, Z
+    // } = context.dict
+    // let sections: section[] = context.sections
+    // let answer: string = context.answer
+    // let options: Partial<Dict> = context.options
+    // let shuffle: boolean = context.shuffle
+    // let question: string = context.qn
+    // let solution: string = context.sol
 
-    // execute
-    let result: any
-    try {
-        result = eval(code)
-    } catch (e) {
-        throw detectVarErr(e)
-    }
+    // // execute
+    // let result: any
+    // try {
+    //     result =
+    // } catch (e) {
+    //     throw detectVarErr(e)
+    // }
+
+    evalCtx(code, detectVarErr,...contexts)
 
     // allow answer to be number
-    if (typeof answer === 'number') answer = ['A', 'B', 'C', 'D'][answer]
+    // if (typeof answer === 'number') answer = ['A', 'B', 'C', 'D'][answer]
 
 
     //retrieve
 
-    context.dict.update({
-        a, b, c, d, e, f, g, h, i, j, k, l, m, n,
-        o, p, q, r, s, t, u, v, w, x, y, z,
-        A, B, C, D, E, F, G, H, I, J, K, L, M, N,
-        O, P, Q, R, S, T, U, V, W, X, Y, Z
-    })
-    let newContext: Context = {
-        dict: context.dict,
-        sections,
-        answer,
-        options,
-        shuffle,
-        qn: question,
-        sol: solution
-    }
-    return { result, context: newContext }
+    // context.dict.update({
+    //     a, b, c, d, e, f, g, h, i, j, k, l, m, n,
+    //     o, p, q, r, s, t, u, v, w, x, y, z,
+    //     A, B, C, D, E, F, G, H, I, J, K, L, M, N,
+    //     O, P, Q, R, S, T, U, V, W, X, Y, Z
+    // })
+    // let newContext: Context = {
+    //     dict: context.dict,
+    //     sections,
+    //     answer,
+    //     options,
+    //     shuffle,
+    //     qn: question,
+    //     sol: solution
+    // }
+    // return { result, context: newContext }
 }
 
 

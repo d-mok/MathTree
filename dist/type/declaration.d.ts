@@ -5345,19 +5345,7 @@ declare var question: string;
 declare var solution: string;
 declare module "Soil/tool/eval" {
     import { Dict } from "Soil/cls";
-    type Context = {
-        dict: Dict;
-        sections: section[];
-        answer: string;
-        options: Partial<Dict>;
-        shuffle: boolean;
-        qn: string;
-        sol: string;
-    };
-    export function evaluate(code: string, context: Context): {
-        result: any;
-        context: Context;
-    };
+    export function evaluate(code: string, ...contexts: object[]): void;
     export function evalInline(code: string, dict: Dict): any;
     export function intrapolate(html: string, dict: Dict): string;
 }

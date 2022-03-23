@@ -26,13 +26,13 @@
     return __reExport(__markAsModule(__defProp(module != null ? __create(__getProtoOf(module)) : {}, "default", !isNodeMode && module && module.__esModule ? { get: () => module.default, enumerable: true } : { value: module, enumerable: true })), module);
   };
   var __decorateClass = (decorators, target, key, kind) => {
-    var result2 = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
+    var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
     for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
       if (decorator = decorators[i2])
-        result2 = (kind ? decorator(target, key, result2) : decorator(result2)) || result2;
-    if (kind && result2)
-      __defProp(target, key, result2);
-    return result2;
+        result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+    if (kind && result)
+      __defProp(target, key, result);
+    return result;
   };
   var __publicField = (obj, key, value) => {
     __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -181,7 +181,7 @@
           };
           ;
           var Settings = /* @__PURE__ */ function() {
-            function Settings2(options2) {
+            function Settings2(options) {
               this.displayMode = void 0;
               this.output = void 0;
               this.leqno = void 0;
@@ -196,21 +196,21 @@
               this.maxSize = void 0;
               this.maxExpand = void 0;
               this.globalGroup = void 0;
-              options2 = options2 || {};
-              this.displayMode = utils.deflt(options2.displayMode, false);
-              this.output = utils.deflt(options2.output, "htmlAndMathml");
-              this.leqno = utils.deflt(options2.leqno, false);
-              this.fleqn = utils.deflt(options2.fleqn, false);
-              this.throwOnError = utils.deflt(options2.throwOnError, true);
-              this.errorColor = utils.deflt(options2.errorColor, "#cc0000");
-              this.macros = options2.macros || {};
-              this.minRuleThickness = Math.max(0, utils.deflt(options2.minRuleThickness, 0));
-              this.colorIsTextColor = utils.deflt(options2.colorIsTextColor, false);
-              this.strict = utils.deflt(options2.strict, "warn");
-              this.trust = utils.deflt(options2.trust, false);
-              this.maxSize = Math.max(0, utils.deflt(options2.maxSize, Infinity));
-              this.maxExpand = Math.max(0, utils.deflt(options2.maxExpand, 1e3));
-              this.globalGroup = utils.deflt(options2.globalGroup, false);
+              options = options || {};
+              this.displayMode = utils.deflt(options.displayMode, false);
+              this.output = utils.deflt(options.output, "htmlAndMathml");
+              this.leqno = utils.deflt(options.leqno, false);
+              this.fleqn = utils.deflt(options.fleqn, false);
+              this.throwOnError = utils.deflt(options.throwOnError, true);
+              this.errorColor = utils.deflt(options.errorColor, "#cc0000");
+              this.macros = options.macros || {};
+              this.minRuleThickness = Math.max(0, utils.deflt(options.minRuleThickness, 0));
+              this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);
+              this.strict = utils.deflt(options.strict, "warn");
+              this.trust = utils.deflt(options.trust, false);
+              this.maxSize = Math.max(0, utils.deflt(options.maxSize, Infinity));
+              this.maxExpand = Math.max(0, utils.deflt(options.maxExpand, 1e3));
+              this.globalGroup = utils.deflt(options.globalGroup, false);
             }
             var _proto = Settings2.prototype;
             _proto.reportNonstrict = function reportNonstrict(errorCode, errorMsg, token) {
@@ -249,11 +249,11 @@
                 return false;
               }
             };
-            _proto.isTrusted = function isTrusted(context2) {
-              if (context2.url && !context2.protocol) {
-                context2.protocol = utils.protocolFromUrl(context2.url);
+            _proto.isTrusted = function isTrusted(context) {
+              if (context.url && !context.protocol) {
+                context.protocol = utils.protocolFromUrl(context.url);
               }
-              var trust = typeof this.trust === "function" ? this.trust(context2) : this.trust;
+              var trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
               return Boolean(trust);
             };
             return Settings2;
@@ -3004,18 +3004,18 @@
             }
             return unit in ptPerUnit || unit in relativeUnit || unit === "ex";
           };
-          var calculateSize = function calculateSize2(sizeValue, options2) {
+          var calculateSize = function calculateSize2(sizeValue, options) {
             var scale;
             if (sizeValue.unit in ptPerUnit) {
-              scale = ptPerUnit[sizeValue.unit] / options2.fontMetrics().ptPerEm / options2.sizeMultiplier;
+              scale = ptPerUnit[sizeValue.unit] / options.fontMetrics().ptPerEm / options.sizeMultiplier;
             } else if (sizeValue.unit === "mu") {
-              scale = options2.fontMetrics().cssEmPerMu;
+              scale = options.fontMetrics().cssEmPerMu;
             } else {
               var unitOptions;
-              if (options2.style.isTight()) {
-                unitOptions = options2.havingStyle(options2.style.text());
+              if (options.style.isTight()) {
+                unitOptions = options.havingStyle(options.style.text());
               } else {
-                unitOptions = options2;
+                unitOptions = options;
               }
               if (sizeValue.unit === "ex") {
                 scale = unitOptions.fontMetrics().xHeight;
@@ -3024,11 +3024,11 @@
               } else {
                 throw new src_ParseError("Invalid unit: '" + sizeValue.unit + "'");
               }
-              if (unitOptions !== options2) {
-                scale *= unitOptions.sizeMultiplier / options2.sizeMultiplier;
+              if (unitOptions !== options) {
+                scale *= unitOptions.sizeMultiplier / options.sizeMultiplier;
               }
             }
-            return Math.min(sizeValue.number * scale, options2.maxSize);
+            return Math.min(sizeValue.number * scale, options.maxSize);
           };
           var makeEm = function makeEm2(n2) {
             return +n2.toFixed(4) + "em";
@@ -3039,18 +3039,18 @@
               return cls;
             }).join(" ");
           };
-          var initNode = function initNode2(classes, options2, style) {
+          var initNode = function initNode2(classes, options, style) {
             this.classes = classes || [];
             this.attributes = {};
             this.height = 0;
             this.depth = 0;
             this.maxFontSize = 0;
             this.style = style || {};
-            if (options2) {
-              if (options2.style.isTight()) {
+            if (options) {
+              if (options.style.isTight()) {
                 this.classes.push("mtight");
               }
-              var color = options2.getColor();
+              var color = options.getColor();
               if (color) {
                 this.style.color = color;
               }
@@ -3101,7 +3101,7 @@
             return markup;
           };
           var Span = /* @__PURE__ */ function() {
-            function Span2(classes, children, options2, style) {
+            function Span2(classes, children, options, style) {
               this.children = void 0;
               this.attributes = void 0;
               this.classes = void 0;
@@ -3110,7 +3110,7 @@
               this.width = void 0;
               this.maxFontSize = void 0;
               this.style = void 0;
-              initNode.call(this, classes, options2, style);
+              initNode.call(this, classes, options, style);
               this.children = children || [];
             }
             var _proto = Span2.prototype;
@@ -3129,7 +3129,7 @@
             return Span2;
           }();
           var Anchor = /* @__PURE__ */ function() {
-            function Anchor2(href, classes, children, options2) {
+            function Anchor2(href, classes, children, options) {
               this.children = void 0;
               this.attributes = void 0;
               this.classes = void 0;
@@ -3137,7 +3137,7 @@
               this.depth = void 0;
               this.maxFontSize = void 0;
               this.style = void 0;
-              initNode.call(this, classes, options2);
+              initNode.call(this, classes, options);
               this.children = children || [];
               this.setAttribute("href", href);
             }
@@ -4204,14 +4204,14 @@
               metrics: getCharacterMetrics(value, fontName, mode)
             };
           };
-          var makeSymbol = function makeSymbol2(value, fontName, mode, options2, classes) {
+          var makeSymbol = function makeSymbol2(value, fontName, mode, options, classes) {
             var lookup = lookupSymbol(value, fontName, mode);
             var metrics = lookup.metrics;
             value = lookup.value;
             var symbolNode;
             if (metrics) {
               var italic = metrics.italic;
-              if (mode === "text" || options2 && options2.font === "mathit") {
+              if (mode === "text" || options && options.font === "mathit") {
                 italic = 0;
               }
               symbolNode = new SymbolNode(value, metrics.height, metrics.depth, italic, metrics.skew, metrics.width, classes);
@@ -4219,31 +4219,31 @@
               typeof console !== "undefined" && console.warn("No character metrics " + ("for '" + value + "' in style '" + fontName + "' and mode '" + mode + "'"));
               symbolNode = new SymbolNode(value, 0, 0, 0, 0, 0, classes);
             }
-            if (options2) {
-              symbolNode.maxFontSize = options2.sizeMultiplier;
-              if (options2.style.isTight()) {
+            if (options) {
+              symbolNode.maxFontSize = options.sizeMultiplier;
+              if (options.style.isTight()) {
                 symbolNode.classes.push("mtight");
               }
-              var color = options2.getColor();
+              var color = options.getColor();
               if (color) {
                 symbolNode.style.color = color;
               }
             }
             return symbolNode;
           };
-          var mathsym = function mathsym2(value, mode, options2, classes) {
+          var mathsym = function mathsym2(value, mode, options, classes) {
             if (classes === void 0) {
               classes = [];
             }
-            if (options2.font === "boldsymbol" && lookupSymbol(value, "Main-Bold", mode).metrics) {
-              return makeSymbol(value, "Main-Bold", mode, options2, classes.concat(["mathbf"]));
+            if (options.font === "boldsymbol" && lookupSymbol(value, "Main-Bold", mode).metrics) {
+              return makeSymbol(value, "Main-Bold", mode, options, classes.concat(["mathbf"]));
             } else if (value === "\\" || src_symbols[mode][value].font === "main") {
-              return makeSymbol(value, "Main-Regular", mode, options2, classes);
+              return makeSymbol(value, "Main-Regular", mode, options, classes);
             } else {
-              return makeSymbol(value, "AMS-Regular", mode, options2, classes.concat(["amsrm"]));
+              return makeSymbol(value, "AMS-Regular", mode, options, classes.concat(["amsrm"]));
             }
           };
-          var boldsymbol = function boldsymbol2(value, mode, options2, classes, type) {
+          var boldsymbol = function boldsymbol2(value, mode, options, classes, type) {
             if (type !== "textord" && lookupSymbol(value, "Math-BoldItalic", mode).metrics) {
               return {
                 fontName: "Math-BoldItalic",
@@ -4256,52 +4256,52 @@
               };
             }
           };
-          var makeOrd = function makeOrd2(group, options2, type) {
+          var makeOrd = function makeOrd2(group, options, type) {
             var mode = group.mode;
             var text = group.text;
             var classes = ["mord"];
-            var isFont = mode === "math" || mode === "text" && options2.font;
-            var fontOrFamily = isFont ? options2.font : options2.fontFamily;
+            var isFont = mode === "math" || mode === "text" && options.font;
+            var fontOrFamily = isFont ? options.font : options.fontFamily;
             if (text.charCodeAt(0) === 55349) {
               var _wideCharacterFont = wideCharacterFont(text, mode), wideFontName = _wideCharacterFont[0], wideFontClass = _wideCharacterFont[1];
-              return makeSymbol(text, wideFontName, mode, options2, classes.concat(wideFontClass));
+              return makeSymbol(text, wideFontName, mode, options, classes.concat(wideFontClass));
             } else if (fontOrFamily) {
               var fontName;
               var fontClasses;
               if (fontOrFamily === "boldsymbol") {
-                var fontData = boldsymbol(text, mode, options2, classes, type);
+                var fontData = boldsymbol(text, mode, options, classes, type);
                 fontName = fontData.fontName;
                 fontClasses = [fontData.fontClass];
               } else if (isFont) {
                 fontName = fontMap[fontOrFamily].fontName;
                 fontClasses = [fontOrFamily];
               } else {
-                fontName = retrieveTextFontName(fontOrFamily, options2.fontWeight, options2.fontShape);
-                fontClasses = [fontOrFamily, options2.fontWeight, options2.fontShape];
+                fontName = retrieveTextFontName(fontOrFamily, options.fontWeight, options.fontShape);
+                fontClasses = [fontOrFamily, options.fontWeight, options.fontShape];
               }
               if (lookupSymbol(text, fontName, mode).metrics) {
-                return makeSymbol(text, fontName, mode, options2, classes.concat(fontClasses));
+                return makeSymbol(text, fontName, mode, options, classes.concat(fontClasses));
               } else if (ligatures.hasOwnProperty(text) && fontName.substr(0, 10) === "Typewriter") {
                 var parts = [];
                 for (var i3 = 0; i3 < text.length; i3++) {
-                  parts.push(makeSymbol(text[i3], fontName, mode, options2, classes.concat(fontClasses)));
+                  parts.push(makeSymbol(text[i3], fontName, mode, options, classes.concat(fontClasses)));
                 }
                 return makeFragment(parts);
               }
             }
             if (type === "mathord") {
-              return makeSymbol(text, "Math-Italic", mode, options2, classes.concat(["mathnormal"]));
+              return makeSymbol(text, "Math-Italic", mode, options, classes.concat(["mathnormal"]));
             } else if (type === "textord") {
               var font = src_symbols[mode][text] && src_symbols[mode][text].font;
               if (font === "ams") {
-                var _fontName = retrieveTextFontName("amsrm", options2.fontWeight, options2.fontShape);
-                return makeSymbol(text, _fontName, mode, options2, classes.concat("amsrm", options2.fontWeight, options2.fontShape));
+                var _fontName = retrieveTextFontName("amsrm", options.fontWeight, options.fontShape);
+                return makeSymbol(text, _fontName, mode, options, classes.concat("amsrm", options.fontWeight, options.fontShape));
               } else if (font === "main" || !font) {
-                var _fontName2 = retrieveTextFontName("textrm", options2.fontWeight, options2.fontShape);
-                return makeSymbol(text, _fontName2, mode, options2, classes.concat(options2.fontWeight, options2.fontShape));
+                var _fontName2 = retrieveTextFontName("textrm", options.fontWeight, options.fontShape);
+                return makeSymbol(text, _fontName2, mode, options, classes.concat(options.fontWeight, options.fontShape));
               } else {
-                var _fontName3 = retrieveTextFontName(font, options2.fontWeight, options2.fontShape);
-                return makeSymbol(text, _fontName3, mode, options2, classes.concat(_fontName3, options2.fontWeight, options2.fontShape));
+                var _fontName3 = retrieveTextFontName(font, options.fontWeight, options.fontShape);
+                return makeSymbol(text, _fontName3, mode, options, classes.concat(_fontName3, options.fontWeight, options.fontShape));
               }
             } else {
               throw new Error("unexpected type: " + type + " in makeOrd");
@@ -4364,23 +4364,23 @@
             elem.depth = depth;
             elem.maxFontSize = maxFontSize;
           };
-          var makeSpan = function makeSpan2(classes, children, options2, style) {
-            var span = new Span(classes, children, options2, style);
+          var makeSpan = function makeSpan2(classes, children, options, style) {
+            var span = new Span(classes, children, options, style);
             sizeElementFromChildren(span);
             return span;
           };
-          var makeSvgSpan = function makeSvgSpan2(classes, children, options2, style) {
-            return new Span(classes, children, options2, style);
+          var makeSvgSpan = function makeSvgSpan2(classes, children, options, style) {
+            return new Span(classes, children, options, style);
           };
-          var makeLineSpan = function makeLineSpan2(className, options2, thickness) {
-            var line = makeSpan([className], [], options2);
-            line.height = Math.max(thickness || options2.fontMetrics().defaultRuleThickness, options2.minRuleThickness);
+          var makeLineSpan = function makeLineSpan2(className, options, thickness) {
+            var line = makeSpan([className], [], options);
+            line.height = Math.max(thickness || options.fontMetrics().defaultRuleThickness, options.minRuleThickness);
             line.style.borderBottomWidth = makeEm(line.height);
             line.maxFontSize = 1;
             return line;
           };
-          var makeAnchor = function makeAnchor2(href, classes, children, options2) {
-            var anchor = new Anchor(href, classes, children, options2);
+          var makeAnchor = function makeAnchor2(href, classes, children, options) {
+            var anchor = new Anchor(href, classes, children, options);
             sizeElementFromChildren(anchor);
             return anchor;
           };
@@ -4389,9 +4389,9 @@
             sizeElementFromChildren(fragment);
             return fragment;
           };
-          var wrapFragment = function wrapFragment2(group, options2) {
+          var wrapFragment = function wrapFragment2(group, options) {
             if (group instanceof DocumentFragment) {
-              return makeSpan([], [group], options2);
+              return makeSpan([], [group], options);
             }
             return group;
           };
@@ -4444,7 +4444,7 @@
               depth
             };
           };
-          var makeVList = function makeVList2(params, options2) {
+          var makeVList = function makeVList2(params, options) {
             var _getVListChildrenAndD = getVListChildrenAndDepth(params), children = _getVListChildrenAndD.children, depth = _getVListChildrenAndD.depth;
             var pstrutSize = 0;
             for (var i3 = 0; i3 < children.length; i3++) {
@@ -4503,9 +4503,9 @@
             vtable.depth = -minPos;
             return vtable;
           };
-          var makeGlue = function makeGlue2(measurement, options2) {
-            var rule = makeSpan(["mspace"], [], options2);
-            var size = calculateSize(measurement, options2);
+          var makeGlue = function makeGlue2(measurement, options) {
+            var rule = makeSpan(["mspace"], [], options);
+            var size = calculateSize(measurement, options);
             rule.style.marginRight = makeEm(size);
             return rule;
           };
@@ -4592,7 +4592,7 @@
             oiiintSize1: ["oiiintSize1", 1.304, 0.499],
             oiiintSize2: ["oiiintSize2", 1.98, 0.659]
           };
-          var staticSvg = function staticSvg2(value, options2) {
+          var staticSvg = function staticSvg2(value, options) {
             var _svgData$value = svgData[value], pathName = _svgData$value[0], width = _svgData$value[1], height = _svgData$value[2];
             var path2 = new PathNode(pathName);
             var svgNode = new SvgNode([path2], {
@@ -4602,7 +4602,7 @@
               "viewBox": "0 0 " + 1e3 * width + " " + 1e3 * height,
               "preserveAspectRatio": "xMinYMin"
             });
-            var span = makeSvgSpan(["overlay"], [svgNode], options2);
+            var span = makeSvgSpan(["overlay"], [svgNode], options);
             span.height = height;
             span.style.height = makeEm(height);
             span.style.width = makeEm(width);
@@ -4779,13 +4779,13 @@
             mpunct: "mpunct",
             minner: "minner"
           };
-          var buildExpression = function buildExpression2(expression, options2, isRealGroup, surrounding) {
+          var buildExpression = function buildExpression2(expression, options, isRealGroup, surrounding) {
             if (surrounding === void 0) {
               surrounding = [null, null];
             }
             var groups = [];
             for (var i3 = 0; i3 < expression.length; i3++) {
-              var output = buildGroup(expression[i3], options2);
+              var output = buildGroup(expression[i3], options);
               if (output instanceof DocumentFragment) {
                 var children = output.children;
                 groups.push.apply(groups, children);
@@ -4797,17 +4797,17 @@
             if (!isRealGroup) {
               return groups;
             }
-            var glueOptions = options2;
+            var glueOptions = options;
             if (expression.length === 1) {
               var node = expression[0];
               if (node.type === "sizing") {
-                glueOptions = options2.havingSize(node.size);
+                glueOptions = options.havingSize(node.size);
               } else if (node.type === "styling") {
-                glueOptions = options2.havingStyle(styleMap[node.style]);
+                glueOptions = options.havingStyle(styleMap[node.style]);
               }
             }
-            var dummyPrev = buildHTML_makeSpan([surrounding[0] || "leftmost"], [], options2);
-            var dummyNext = buildHTML_makeSpan([surrounding[1] || "rightmost"], [], options2);
+            var dummyPrev = buildHTML_makeSpan([surrounding[0] || "leftmost"], [], options);
+            var dummyNext = buildHTML_makeSpan([surrounding[1] || "rightmost"], [], options);
             var isRoot = isRealGroup === "root";
             traverseNonSpaceNodes(groups, function(node2, prev) {
               var prevType = prev.classes[0];
@@ -4846,12 +4846,12 @@
               }
               var nonspace = !node.hasClass("mspace");
               if (nonspace) {
-                var result2 = callback(node, prev.node);
-                if (result2) {
+                var result = callback(node, prev.node);
+                if (result) {
                   if (prev.insertAfter) {
-                    prev.insertAfter(result2);
+                    prev.insertAfter(result);
                   } else {
-                    nodes.unshift(result2);
+                    nodes.unshift(result);
                     i3++;
                   }
                 }
@@ -4901,19 +4901,19 @@
             }
             return DomEnum[node.classes[0]] || null;
           };
-          var makeNullDelimiter = function makeNullDelimiter2(options2, classes) {
-            var moreClasses = ["nulldelimiter"].concat(options2.baseSizingClasses());
+          var makeNullDelimiter = function makeNullDelimiter2(options, classes) {
+            var moreClasses = ["nulldelimiter"].concat(options.baseSizingClasses());
             return buildHTML_makeSpan(classes.concat(moreClasses));
           };
-          var buildGroup = function buildGroup2(group, options2, baseOptions) {
+          var buildGroup = function buildGroup2(group, options, baseOptions) {
             if (!group) {
               return buildHTML_makeSpan();
             }
             if (_htmlGroupBuilders[group.type]) {
-              var groupNode = _htmlGroupBuilders[group.type](group, options2);
-              if (baseOptions && options2.size !== baseOptions.size) {
-                groupNode = buildHTML_makeSpan(options2.sizingClasses(baseOptions), [groupNode], options2);
-                var multiplier = options2.sizeMultiplier / baseOptions.sizeMultiplier;
+              var groupNode = _htmlGroupBuilders[group.type](group, options);
+              if (baseOptions && options.size !== baseOptions.size) {
+                groupNode = buildHTML_makeSpan(options.sizingClasses(baseOptions), [groupNode], options);
+                var multiplier = options.sizeMultiplier / baseOptions.sizeMultiplier;
                 groupNode.height *= multiplier;
                 groupNode.depth *= multiplier;
               }
@@ -4922,8 +4922,8 @@
               throw new src_ParseError("Got group of unknown type: '" + group.type + "'");
             }
           };
-          function buildHTMLUnbreakable(children, options2) {
-            var body = buildHTML_makeSpan(["base"], children, options2);
+          function buildHTMLUnbreakable(children, options) {
+            var body = buildHTML_makeSpan(["base"], children, options);
             var strut = buildHTML_makeSpan(["strut"]);
             strut.style.height = makeEm(body.height + body.depth);
             if (body.depth) {
@@ -4932,13 +4932,13 @@
             body.children.unshift(strut);
             return body;
           }
-          function buildHTML(tree, options2) {
+          function buildHTML(tree, options) {
             var tag = null;
             if (tree.length === 1 && tree[0].type === "tag") {
               tag = tree[0].tag;
               tree = tree[0].body;
             }
-            var expression = buildExpression(tree, options2, "root");
+            var expression = buildExpression(tree, options, "root");
             var eqnNum;
             if (expression.length === 2 && expression[1].hasClass("tag")) {
               eqnNum = expression.pop();
@@ -4957,24 +4957,24 @@
                   }
                 }
                 if (!nobreak) {
-                  children.push(buildHTMLUnbreakable(parts, options2));
+                  children.push(buildHTMLUnbreakable(parts, options));
                   parts = [];
                 }
               } else if (expression[i3].hasClass("newline")) {
                 parts.pop();
                 if (parts.length > 0) {
-                  children.push(buildHTMLUnbreakable(parts, options2));
+                  children.push(buildHTMLUnbreakable(parts, options));
                   parts = [];
                 }
                 children.push(expression[i3]);
               }
             }
             if (parts.length > 0) {
-              children.push(buildHTMLUnbreakable(parts, options2));
+              children.push(buildHTMLUnbreakable(parts, options));
             }
             var tagChild;
             if (tag) {
-              tagChild = buildHTMLUnbreakable(buildExpression(tag, options2, true));
+              tagChild = buildHTMLUnbreakable(buildExpression(tag, options, true));
               tagChild.classes = ["tag"];
               children.push(tagChild);
             } else if (eqnNum) {
@@ -5129,8 +5129,8 @@
             newDocumentFragment
           };
           ;
-          var makeText = function makeText2(text, mode, options2) {
-            if (src_symbols[mode][text] && src_symbols[mode][text].replace && text.charCodeAt(0) !== 55349 && !(ligatures.hasOwnProperty(text) && options2 && (options2.fontFamily && options2.fontFamily.substr(4, 2) === "tt" || options2.font && options2.font.substr(4, 2) === "tt"))) {
+          var makeText = function makeText2(text, mode, options) {
+            if (src_symbols[mode][text] && src_symbols[mode][text].replace && text.charCodeAt(0) !== 55349 && !(ligatures.hasOwnProperty(text) && options && (options.fontFamily && options.fontFamily.substr(4, 2) === "tt" || options.font && options.font.substr(4, 2) === "tt"))) {
               text = src_symbols[mode][text].replace;
             }
             return new mathMLTree.TextNode(text);
@@ -5142,27 +5142,27 @@
               return new mathMLTree.MathNode("mrow", body);
             }
           };
-          var getVariant = function getVariant2(group, options2) {
-            if (options2.fontFamily === "texttt") {
+          var getVariant = function getVariant2(group, options) {
+            if (options.fontFamily === "texttt") {
               return "monospace";
-            } else if (options2.fontFamily === "textsf") {
-              if (options2.fontShape === "textit" && options2.fontWeight === "textbf") {
+            } else if (options.fontFamily === "textsf") {
+              if (options.fontShape === "textit" && options.fontWeight === "textbf") {
                 return "sans-serif-bold-italic";
-              } else if (options2.fontShape === "textit") {
+              } else if (options.fontShape === "textit") {
                 return "sans-serif-italic";
-              } else if (options2.fontWeight === "textbf") {
+              } else if (options.fontWeight === "textbf") {
                 return "bold-sans-serif";
               } else {
                 return "sans-serif";
               }
-            } else if (options2.fontShape === "textit" && options2.fontWeight === "textbf") {
+            } else if (options.fontShape === "textit" && options.fontWeight === "textbf") {
               return "bold-italic";
-            } else if (options2.fontShape === "textit") {
+            } else if (options.fontShape === "textit") {
               return "italic";
-            } else if (options2.fontWeight === "textbf") {
+            } else if (options.fontWeight === "textbf") {
               return "bold";
             }
-            var font = options2.font;
+            var font = options.font;
             if (!font || font === "mathnormal") {
               return null;
             }
@@ -5197,9 +5197,9 @@
             }
             return null;
           };
-          var buildMathML_buildExpression = function buildExpression2(expression, options2, isOrdgroup) {
+          var buildMathML_buildExpression = function buildExpression2(expression, options, isOrdgroup) {
             if (expression.length === 1) {
-              var group = buildMathML_buildGroup(expression[0], options2);
+              var group = buildMathML_buildGroup(expression[0], options);
               if (isOrdgroup && group instanceof MathNode && group.type === "mo") {
                 group.setAttribute("lspace", "0em");
                 group.setAttribute("rspace", "0em");
@@ -5209,7 +5209,7 @@
             var groups = [];
             var lastGroup;
             for (var i3 = 0; i3 < expression.length; i3++) {
-              var _group = buildMathML_buildGroup(expression[i3], options2);
+              var _group = buildMathML_buildGroup(expression[i3], options);
               if (_group instanceof MathNode && lastGroup instanceof MathNode) {
                 if (_group.type === "mtext" && lastGroup.type === "mtext" && _group.getAttribute("mathvariant") === lastGroup.getAttribute("mathvariant")) {
                   var _lastGroup$children;
@@ -5242,22 +5242,22 @@
             }
             return groups;
           };
-          var buildExpressionRow = function buildExpressionRow2(expression, options2, isOrdgroup) {
-            return makeRow(buildMathML_buildExpression(expression, options2, isOrdgroup));
+          var buildExpressionRow = function buildExpressionRow2(expression, options, isOrdgroup) {
+            return makeRow(buildMathML_buildExpression(expression, options, isOrdgroup));
           };
-          var buildMathML_buildGroup = function buildGroup2(group, options2) {
+          var buildMathML_buildGroup = function buildGroup2(group, options) {
             if (!group) {
               return new mathMLTree.MathNode("mrow");
             }
             if (_mathmlGroupBuilders[group.type]) {
-              var result2 = _mathmlGroupBuilders[group.type](group, options2);
-              return result2;
+              var result = _mathmlGroupBuilders[group.type](group, options);
+              return result;
             } else {
               throw new src_ParseError("Got group of unknown type: '" + group.type + "'");
             }
           };
-          function buildMathML(tree, texExpression, options2, isDisplayMode, forMathmlOnly) {
-            var expression = buildMathML_buildExpression(tree, options2);
+          function buildMathML(tree, texExpression, options, isDisplayMode, forMathmlOnly) {
+            var expression = buildMathML_buildExpression(tree, options);
             var wrapper;
             if (expression.length === 1 && expression[0] instanceof MathNode && utils.contains(["mrow", "mtable"], expression[0].type)) {
               wrapper = expression[0];
@@ -5297,23 +5297,23 @@
             return node;
           };
           var buildTree = function buildTree2(tree, expression, settings) {
-            var options2 = optionsFromSettings(settings);
+            var options = optionsFromSettings(settings);
             var katexNode;
             if (settings.output === "mathml") {
-              return buildMathML(tree, expression, options2, settings.displayMode, true);
+              return buildMathML(tree, expression, options, settings.displayMode, true);
             } else if (settings.output === "html") {
-              var htmlNode = buildHTML(tree, options2);
+              var htmlNode = buildHTML(tree, options);
               katexNode = buildCommon.makeSpan(["katex"], [htmlNode]);
             } else {
-              var mathMLNode = buildMathML(tree, expression, options2, settings.displayMode, false);
-              var _htmlNode = buildHTML(tree, options2);
+              var mathMLNode = buildMathML(tree, expression, options, settings.displayMode, false);
+              var _htmlNode = buildHTML(tree, options);
               katexNode = buildCommon.makeSpan(["katex"], [mathMLNode, _htmlNode]);
             }
             return displayWrap(katexNode, settings);
           };
           var buildHTMLTree = function buildHTMLTree2(tree, expression, settings) {
-            var options2 = optionsFromSettings(settings);
-            var htmlNode = buildHTML(tree, options2);
+            var options = optionsFromSettings(settings);
+            var htmlNode = buildHTML(tree, options);
             var katexNode = buildCommon.makeSpan(["katex"], [htmlNode]);
             return displayWrap(katexNode, settings);
           };
@@ -5417,7 +5417,7 @@
               return 1;
             }
           };
-          var svgSpan = function svgSpan2(group, options2) {
+          var svgSpan = function svgSpan2(group, options) {
             function buildSvgSpan_() {
               var viewBoxWidth = 4e5;
               var label = group.label.substr(1);
@@ -5461,7 +5461,7 @@
                   "preserveAspectRatio": "none"
                 });
                 return {
-                  span: buildCommon.makeSvgSpan([], [svgNode], options2),
+                  span: buildCommon.makeSvgSpan([], [svgNode], options),
                   minWidth: 0,
                   height: _height
                 };
@@ -5494,7 +5494,7 @@
                     "viewBox": "0 0 " + viewBoxWidth + " " + _viewBoxHeight,
                     "preserveAspectRatio": aligns[i3] + " slice"
                   });
-                  var _span = buildCommon.makeSvgSpan([widthClasses[i3]], [_svgNode], options2);
+                  var _span = buildCommon.makeSvgSpan([widthClasses[i3]], [_svgNode], options);
                   if (numSvgChildren === 1) {
                     return {
                       span: _span,
@@ -5507,7 +5507,7 @@
                   }
                 }
                 return {
-                  span: buildCommon.makeSpan(["stretchy"], spans, options2),
+                  span: buildCommon.makeSpan(["stretchy"], spans, options),
                   minWidth: _minWidth,
                   height: _height2
                 };
@@ -5521,13 +5521,13 @@
             }
             return span;
           };
-          var encloseSpan = function encloseSpan2(inner2, label, topPad, bottomPad, options2) {
+          var encloseSpan = function encloseSpan2(inner2, label, topPad, bottomPad, options) {
             var img;
             var totalHeight = inner2.height + inner2.depth + topPad + bottomPad;
             if (/fbox|color|angl/.test(label)) {
-              img = buildCommon.makeSpan(["stretchy", label], [], options2);
+              img = buildCommon.makeSpan(["stretchy", label], [], options);
               if (label === "fbox") {
-                var color = options2.color && options2.getColor();
+                var color = options.color && options.getColor();
                 if (color) {
                   img.style.borderColor = color;
                 }
@@ -5556,7 +5556,7 @@
                 "width": "100%",
                 "height": makeEm(totalHeight)
               });
-              img = buildCommon.makeSvgSpan([], [svgNode], options2);
+              img = buildCommon.makeSvgSpan([], [svgNode], options);
             }
             img.height = totalHeight;
             img.style.height = makeEm(totalHeight);
@@ -5588,7 +5588,7 @@
             return null;
           }
           ;
-          var htmlBuilder = function htmlBuilder2(grp, options2) {
+          var htmlBuilder = function htmlBuilder2(grp, options) {
             var base2;
             var group;
             var supSubGroup;
@@ -5596,34 +5596,34 @@
               group = assertNodeType(grp.base, "accent");
               base2 = group.base;
               grp.base = base2;
-              supSubGroup = assertSpan(buildGroup(grp, options2));
+              supSubGroup = assertSpan(buildGroup(grp, options));
               grp.base = group;
             } else {
               group = assertNodeType(grp, "accent");
               base2 = group.base;
             }
-            var body = buildGroup(base2, options2.havingCrampedStyle());
+            var body = buildGroup(base2, options.havingCrampedStyle());
             var mustShift = group.isShifty && utils.isCharacterBox(base2);
             var skew = 0;
             if (mustShift) {
               var baseChar = utils.getBaseElem(base2);
-              var baseGroup = buildGroup(baseChar, options2.havingCrampedStyle());
+              var baseGroup = buildGroup(baseChar, options.havingCrampedStyle());
               skew = assertSymbolDomNode(baseGroup).skew;
             }
             var accentBelow = group.label === "\\c";
-            var clearance = accentBelow ? body.height + body.depth : Math.min(body.height, options2.fontMetrics().xHeight);
+            var clearance = accentBelow ? body.height + body.depth : Math.min(body.height, options.fontMetrics().xHeight);
             var accentBody;
             if (!group.isStretchy) {
               var accent2;
               var width;
               if (group.label === "\\vec") {
-                accent2 = buildCommon.staticSvg("vec", options2);
+                accent2 = buildCommon.staticSvg("vec", options);
                 width = buildCommon.svgData.vec[1];
               } else {
                 accent2 = buildCommon.makeOrd({
                   mode: group.mode,
                   text: group.label
-                }, options2, "textord");
+                }, options, "textord");
                 accent2 = assertSymbolDomNode(accent2);
                 accent2.italic = 0;
                 width = accent2.width;
@@ -5657,9 +5657,9 @@
                   type: "elem",
                   elem: accentBody
                 }]
-              }, options2);
+              }, options);
             } else {
-              accentBody = stretchy.svgSpan(group, options2);
+              accentBody = stretchy.svgSpan(group, options);
               accentBody = buildCommon.makeVList({
                 positionType: "firstBaseline",
                 children: [{
@@ -5674,9 +5674,9 @@
                     marginLeft: makeEm(2 * skew)
                   } : void 0
                 }]
-              }, options2);
+              }, options);
             }
-            var accentWrap = buildCommon.makeSpan(["mord", "accent"], [accentBody], options2);
+            var accentWrap = buildCommon.makeSpan(["mord", "accent"], [accentBody], options);
             if (supSubGroup) {
               supSubGroup.children[0] = accentWrap;
               supSubGroup.height = Math.max(accentWrap.height, supSubGroup.height);
@@ -5686,9 +5686,9 @@
               return accentWrap;
             }
           };
-          var mathmlBuilder = function mathmlBuilder2(group, options2) {
+          var mathmlBuilder = function mathmlBuilder2(group, options) {
             var accentNode = group.isStretchy ? stretchy.mathMLnode(group.label) : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
-            var node = new mathMLTree.MathNode("mover", [buildMathML_buildGroup(group.base, options2), accentNode]);
+            var node = new mathMLTree.MathNode("mover", [buildMathML_buildGroup(group.base, options), accentNode]);
             node.setAttribute("accent", "true");
             return node;
           };
@@ -5701,14 +5701,14 @@
             props: {
               numArgs: 1
             },
-            handler: function handler(context2, args) {
+            handler: function handler(context, args) {
               var base2 = normalizeArgument(args[0]);
-              var isStretchy = !NON_STRETCHY_ACCENT_REGEX.test(context2.funcName);
-              var isShifty = !isStretchy || context2.funcName === "\\widehat" || context2.funcName === "\\widetilde" || context2.funcName === "\\widecheck";
+              var isStretchy = !NON_STRETCHY_ACCENT_REGEX.test(context.funcName);
+              var isShifty = !isStretchy || context.funcName === "\\widehat" || context.funcName === "\\widetilde" || context.funcName === "\\widecheck";
               return {
                 type: "accent",
-                mode: context2.parser.mode,
-                label: context2.funcName,
+                mode: context.parser.mode,
+                label: context.funcName,
                 isStretchy,
                 isShifty,
                 base: base2
@@ -5726,17 +5726,17 @@
               allowedInMath: true,
               argTypes: ["primitive"]
             },
-            handler: function handler(context2, args) {
+            handler: function handler(context, args) {
               var base2 = args[0];
-              var mode = context2.parser.mode;
+              var mode = context.parser.mode;
               if (mode === "math") {
-                context2.parser.settings.reportNonstrict("mathVsTextAccents", "LaTeX's accent " + context2.funcName + " works only in text mode");
+                context.parser.settings.reportNonstrict("mathVsTextAccents", "LaTeX's accent " + context.funcName + " works only in text mode");
                 mode = "text";
               }
               return {
                 type: "accent",
                 mode,
-                label: context2.funcName,
+                label: context.funcName,
                 isStretchy: false,
                 isShifty: true,
                 base: base2
@@ -5762,9 +5762,9 @@
                 base: base2
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var innerGroup = buildGroup(group.base, options2);
-              var accentBody = stretchy.svgSpan(group, options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var innerGroup = buildGroup(group.base, options);
+              var accentBody = stretchy.svgSpan(group, options);
               var kern = group.label === "\\utilde" ? 0.12 : 0;
               var vlist = buildCommon.makeVList({
                 positionType: "top",
@@ -5780,12 +5780,12 @@
                   type: "elem",
                   elem: innerGroup
                 }]
-              }, options2);
-              return buildCommon.makeSpan(["mord", "accentunder"], [vlist], options2);
+              }, options);
+              return buildCommon.makeSpan(["mord", "accentunder"], [vlist], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var accentNode = stretchy.mathMLnode(group.label);
-              var node = new mathMLTree.MathNode("munder", [buildMathML_buildGroup(group.base, options2), accentNode]);
+              var node = new mathMLTree.MathNode("munder", [buildMathML_buildGroup(group.base, options), accentNode]);
               node.setAttribute("accentunder", "true");
               return node;
             }
@@ -5840,27 +5840,27 @@
                 below: optArgs[0]
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var style = options2.style;
-              var newOptions = options2.havingStyle(style.sup());
-              var upperGroup = buildCommon.wrapFragment(buildGroup(group.body, newOptions, options2), options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var style = options.style;
+              var newOptions = options.havingStyle(style.sup());
+              var upperGroup = buildCommon.wrapFragment(buildGroup(group.body, newOptions, options), options);
               var arrowPrefix = group.label.slice(0, 2) === "\\x" ? "x" : "cd";
               upperGroup.classes.push(arrowPrefix + "-arrow-pad");
               var lowerGroup;
               if (group.below) {
-                newOptions = options2.havingStyle(style.sub());
-                lowerGroup = buildCommon.wrapFragment(buildGroup(group.below, newOptions, options2), options2);
+                newOptions = options.havingStyle(style.sub());
+                lowerGroup = buildCommon.wrapFragment(buildGroup(group.below, newOptions, options), options);
                 lowerGroup.classes.push(arrowPrefix + "-arrow-pad");
               }
-              var arrowBody = stretchy.svgSpan(group, options2);
-              var arrowShift = -options2.fontMetrics().axisHeight + 0.5 * arrowBody.height;
-              var upperShift = -options2.fontMetrics().axisHeight - 0.5 * arrowBody.height - 0.111;
+              var arrowBody = stretchy.svgSpan(group, options);
+              var arrowShift = -options.fontMetrics().axisHeight + 0.5 * arrowBody.height;
+              var upperShift = -options.fontMetrics().axisHeight - 0.5 * arrowBody.height - 0.111;
               if (upperGroup.depth > 0.25 || group.label === "\\xleftequilibrium") {
                 upperShift -= upperGroup.depth;
               }
               var vlist;
               if (lowerGroup) {
-                var lowerShift = -options2.fontMetrics().axisHeight + lowerGroup.height + 0.5 * arrowBody.height + 0.111;
+                var lowerShift = -options.fontMetrics().axisHeight + lowerGroup.height + 0.5 * arrowBody.height + 0.111;
                 vlist = buildCommon.makeVList({
                   positionType: "individualShift",
                   children: [{
@@ -5876,7 +5876,7 @@
                     elem: lowerGroup,
                     shift: lowerShift
                   }]
-                }, options2);
+                }, options);
               } else {
                 vlist = buildCommon.makeVList({
                   positionType: "individualShift",
@@ -5889,25 +5889,25 @@
                     elem: arrowBody,
                     shift: arrowShift
                   }]
-                }, options2);
+                }, options);
               }
               vlist.children[0].children[0].children[1].classes.push("svg-align");
-              return buildCommon.makeSpan(["mrel", "x-arrow"], [vlist], options2);
+              return buildCommon.makeSpan(["mrel", "x-arrow"], [vlist], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var arrowNode = stretchy.mathMLnode(group.label);
               arrowNode.setAttribute("minsize", group.label.charAt(0) === "x" ? "1.75em" : "3.0em");
               var node;
               if (group.body) {
-                var upperNode = paddedNode(buildMathML_buildGroup(group.body, options2));
+                var upperNode = paddedNode(buildMathML_buildGroup(group.body, options));
                 if (group.below) {
-                  var lowerNode = paddedNode(buildMathML_buildGroup(group.below, options2));
+                  var lowerNode = paddedNode(buildMathML_buildGroup(group.below, options));
                   node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
                 } else {
                   node = new mathMLTree.MathNode("mover", [arrowNode, upperNode]);
                 }
               } else if (group.below) {
-                var _lowerNode = paddedNode(buildMathML_buildGroup(group.below, options2));
+                var _lowerNode = paddedNode(buildMathML_buildGroup(group.below, options));
                 node = new mathMLTree.MathNode("munder", [arrowNode, _lowerNode]);
               } else {
                 node = paddedNode();
@@ -6102,17 +6102,17 @@
                 label: args[0]
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var newOptions = options2.havingStyle(options2.style.sup());
-              var label = buildCommon.wrapFragment(buildGroup(group.label, newOptions, options2), options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var newOptions = options.havingStyle(options.style.sup());
+              var label = buildCommon.wrapFragment(buildGroup(group.label, newOptions, options), options);
               label.classes.push("cd-label-" + group.side);
               label.style.bottom = makeEm(0.8 - label.depth);
               label.height = 0;
               label.depth = 0;
               return label;
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var label = new mathMLTree.MathNode("mrow", [buildMathML_buildGroup(group.label, options2)]);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var label = new mathMLTree.MathNode("mrow", [buildMathML_buildGroup(group.label, options)]);
               label = new mathMLTree.MathNode("mpadded", [label]);
               label.setAttribute("width", "0");
               if (group.side === "left") {
@@ -6139,13 +6139,13 @@
                 fragment: args[0]
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var parent = buildCommon.wrapFragment(buildGroup(group.fragment, options2), options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var parent = buildCommon.wrapFragment(buildGroup(group.fragment, options), options);
               parent.classes.push("cd-vert-arrow");
               return parent;
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              return new mathMLTree.MathNode("mrow", [buildMathML_buildGroup(group.fragment, options2)]);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              return new mathMLTree.MathNode("mrow", [buildMathML_buildGroup(group.fragment, options)]);
             }
           });
           ;
@@ -6185,12 +6185,12 @@
             }
           });
           ;
-          var color_htmlBuilder = function htmlBuilder2(group, options2) {
-            var elements = buildExpression(group.body, options2.withColor(group.color), false);
+          var color_htmlBuilder = function htmlBuilder2(group, options) {
+            var elements = buildExpression(group.body, options.withColor(group.color), false);
             return buildCommon.makeFragment(elements);
           };
-          var color_mathmlBuilder = function mathmlBuilder2(group, options2) {
-            var inner2 = buildMathML_buildExpression(group.body, options2.withColor(group.color));
+          var color_mathmlBuilder = function mathmlBuilder2(group, options) {
+            var inner2 = buildMathML_buildExpression(group.body, options.withColor(group.color));
             var node = new mathMLTree.MathNode("mstyle", inner2);
             node.setAttribute("mathcolor", group.color);
             return node;
@@ -6261,22 +6261,22 @@
                 size: size && assertNodeType(size, "size").value
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var span = buildCommon.makeSpan(["mspace"], [], options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var span = buildCommon.makeSpan(["mspace"], [], options);
               if (group.newLine) {
                 span.classes.push("newline");
                 if (group.size) {
-                  span.style.marginTop = makeEm(calculateSize(group.size, options2));
+                  span.style.marginTop = makeEm(calculateSize(group.size, options));
                 }
               }
               return span;
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var node = new mathMLTree.MathNode("mspace");
               if (group.newLine) {
                 node.setAttribute("linebreak", "newline");
                 if (group.size) {
-                  node.setAttribute("height", makeEm(calculateSize(group.size, options2)));
+                  node.setAttribute("height", makeEm(calculateSize(group.size, options)));
                 }
               }
               return node;
@@ -6464,39 +6464,39 @@
             }
             return metrics;
           };
-          var styleWrap = function styleWrap2(delim, toStyle, options2, classes) {
-            var newOptions = options2.havingBaseStyle(toStyle);
-            var span = buildCommon.makeSpan(classes.concat(newOptions.sizingClasses(options2)), [delim], options2);
-            var delimSizeMultiplier = newOptions.sizeMultiplier / options2.sizeMultiplier;
+          var styleWrap = function styleWrap2(delim, toStyle, options, classes) {
+            var newOptions = options.havingBaseStyle(toStyle);
+            var span = buildCommon.makeSpan(classes.concat(newOptions.sizingClasses(options)), [delim], options);
+            var delimSizeMultiplier = newOptions.sizeMultiplier / options.sizeMultiplier;
             span.height *= delimSizeMultiplier;
             span.depth *= delimSizeMultiplier;
             span.maxFontSize = newOptions.sizeMultiplier;
             return span;
           };
-          var centerSpan = function centerSpan2(span, options2, style) {
-            var newOptions = options2.havingBaseStyle(style);
-            var shift = (1 - options2.sizeMultiplier / newOptions.sizeMultiplier) * options2.fontMetrics().axisHeight;
+          var centerSpan = function centerSpan2(span, options, style) {
+            var newOptions = options.havingBaseStyle(style);
+            var shift = (1 - options.sizeMultiplier / newOptions.sizeMultiplier) * options.fontMetrics().axisHeight;
             span.classes.push("delimcenter");
             span.style.top = makeEm(shift);
             span.height -= shift;
             span.depth += shift;
           };
-          var makeSmallDelim = function makeSmallDelim2(delim, style, center, options2, mode, classes) {
-            var text = buildCommon.makeSymbol(delim, "Main-Regular", mode, options2);
-            var span = styleWrap(text, style, options2, classes);
+          var makeSmallDelim = function makeSmallDelim2(delim, style, center, options, mode, classes) {
+            var text = buildCommon.makeSymbol(delim, "Main-Regular", mode, options);
+            var span = styleWrap(text, style, options, classes);
             if (center) {
-              centerSpan(span, options2, style);
+              centerSpan(span, options, style);
             }
             return span;
           };
-          var mathrmSize = function mathrmSize2(value, size, mode, options2) {
-            return buildCommon.makeSymbol(value, "Size" + size + "-Regular", mode, options2);
+          var mathrmSize = function mathrmSize2(value, size, mode, options) {
+            return buildCommon.makeSymbol(value, "Size" + size + "-Regular", mode, options);
           };
-          var makeLargeDelim = function makeLargeDelim2(delim, size, center, options2, mode, classes) {
-            var inner2 = mathrmSize(delim, size, mode, options2);
-            var span = styleWrap(buildCommon.makeSpan(["delimsizing", "size" + size], [inner2], options2), src_Style.TEXT, options2, classes);
+          var makeLargeDelim = function makeLargeDelim2(delim, size, center, options, mode, classes) {
+            var inner2 = mathrmSize(delim, size, mode, options);
+            var span = styleWrap(buildCommon.makeSpan(["delimsizing", "size" + size], [inner2], options), src_Style.TEXT, options, classes);
             if (center) {
-              centerSpan(span, options2, src_Style.TEXT);
+              centerSpan(span, options, src_Style.TEXT);
             }
             return span;
           };
@@ -6513,7 +6513,7 @@
               elem: corner
             };
           };
-          var makeInner = function makeInner2(ch2, height, options2) {
+          var makeInner = function makeInner2(ch2, height, options) {
             var width = fontMetricsData["Size4-Regular"][ch2.charCodeAt(0)] ? fontMetricsData["Size4-Regular"][ch2.charCodeAt(0)][4] : fontMetricsData["Size1-Regular"][ch2.charCodeAt(0)][4];
             var path2 = new PathNode("inner", innerPath(ch2, Math.round(1e3 * height)));
             var svgNode = new SvgNode([path2], {
@@ -6523,7 +6523,7 @@
               "viewBox": "0 0 " + 1e3 * width + " " + Math.round(1e3 * height),
               "preserveAspectRatio": "xMinYMin"
             });
-            var span = buildCommon.makeSvgSpan([], [svgNode], options2);
+            var span = buildCommon.makeSvgSpan([], [svgNode], options);
             span.height = height;
             span.style.height = makeEm(height);
             span.style.width = makeEm(width);
@@ -6539,7 +6539,7 @@
           };
           var verts = ["|", "\\lvert", "\\rvert", "\\vert"];
           var doubleVerts = ["\\|", "\\lVert", "\\rVert", "\\Vert"];
-          var makeStackedDelim = function makeStackedDelim2(delim, heightTotal, center, options2, mode, classes) {
+          var makeStackedDelim = function makeStackedDelim2(delim, heightTotal, center, options, mode, classes) {
             var top;
             var middle;
             var repeat;
@@ -6652,9 +6652,9 @@
             var minHeight = topHeightTotal + bottomHeightTotal + middleHeightTotal;
             var repeatCount = Math.max(0, Math.ceil((heightTotal - minHeight) / (middleFactor * repeatHeightTotal)));
             var realHeightTotal = minHeight + repeatCount * middleFactor * repeatHeightTotal;
-            var axisHeight = options2.fontMetrics().axisHeight;
+            var axisHeight = options.fontMetrics().axisHeight;
             if (center) {
-              axisHeight *= options2.sizeMultiplier;
+              axisHeight *= options.sizeMultiplier;
             }
             var depth = realHeightTotal / 2 - axisHeight;
             var stack = [];
@@ -6662,28 +6662,28 @@
             stack.push(lap);
             if (middle === null) {
               var innerHeight = realHeightTotal - topHeightTotal - bottomHeightTotal + 2 * lapInEms;
-              stack.push(makeInner(repeat, innerHeight, options2));
+              stack.push(makeInner(repeat, innerHeight, options));
             } else {
               var _innerHeight = (realHeightTotal - topHeightTotal - bottomHeightTotal - middleHeightTotal) / 2 + 2 * lapInEms;
-              stack.push(makeInner(repeat, _innerHeight, options2));
+              stack.push(makeInner(repeat, _innerHeight, options));
               stack.push(lap);
               stack.push(makeGlyphSpan(middle, font, mode));
               stack.push(lap);
-              stack.push(makeInner(repeat, _innerHeight, options2));
+              stack.push(makeInner(repeat, _innerHeight, options));
             }
             stack.push(lap);
             stack.push(makeGlyphSpan(top, font, mode));
-            var newOptions = options2.havingBaseStyle(src_Style.TEXT);
+            var newOptions = options.havingBaseStyle(src_Style.TEXT);
             var inner2 = buildCommon.makeVList({
               positionType: "bottom",
               positionData: depth,
               children: stack
             }, newOptions);
-            return styleWrap(buildCommon.makeSpan(["delimsizing", "mult"], [inner2], newOptions), src_Style.TEXT, options2, classes);
+            return styleWrap(buildCommon.makeSpan(["delimsizing", "mult"], [inner2], newOptions), src_Style.TEXT, options, classes);
           };
           var vbPad = 80;
           var emPad = 0.08;
-          var sqrtSvg = function sqrtSvg2(sqrtName, height, viewBoxHeight, extraViniculum, options2) {
+          var sqrtSvg = function sqrtSvg2(sqrtName, height, viewBoxHeight, extraViniculum, options) {
             var path2 = sqrtPath(sqrtName, extraViniculum, viewBoxHeight);
             var pathNode = new PathNode(sqrtName, path2);
             var svg = new SvgNode([pathNode], {
@@ -6692,13 +6692,13 @@
               "viewBox": "0 0 400000 " + viewBoxHeight,
               "preserveAspectRatio": "xMinYMin slice"
             });
-            return buildCommon.makeSvgSpan(["hide-tail"], [svg], options2);
+            return buildCommon.makeSvgSpan(["hide-tail"], [svg], options);
           };
-          var makeSqrtImage = function makeSqrtImage2(height, options2) {
-            var newOptions = options2.havingBaseSizing();
+          var makeSqrtImage = function makeSqrtImage2(height, options) {
+            var newOptions = options.havingBaseSizing();
             var delim = traverseSequence("\\surd", height * newOptions.sizeMultiplier, stackLargeDelimiterSequence, newOptions);
             var sizeMultiplier = newOptions.sizeMultiplier;
-            var extraViniculum = Math.max(0, options2.minRuleThickness - options2.fontMetrics().sqrtRuleThickness);
+            var extraViniculum = Math.max(0, options.minRuleThickness - options.fontMetrics().sqrtRuleThickness);
             var span;
             var spanHeight = 0;
             var texHeight = 0;
@@ -6713,21 +6713,21 @@
               }
               spanHeight = (1 + extraViniculum + emPad) / sizeMultiplier;
               texHeight = (1 + extraViniculum) / sizeMultiplier;
-              span = sqrtSvg("sqrtMain", spanHeight, viewBoxHeight, extraViniculum, options2);
+              span = sqrtSvg("sqrtMain", spanHeight, viewBoxHeight, extraViniculum, options);
               span.style.minWidth = "0.853em";
               advanceWidth = 0.833 / sizeMultiplier;
             } else if (delim.type === "large") {
               viewBoxHeight = (1e3 + vbPad) * sizeToMaxHeight[delim.size];
               texHeight = (sizeToMaxHeight[delim.size] + extraViniculum) / sizeMultiplier;
               spanHeight = (sizeToMaxHeight[delim.size] + extraViniculum + emPad) / sizeMultiplier;
-              span = sqrtSvg("sqrtSize" + delim.size, spanHeight, viewBoxHeight, extraViniculum, options2);
+              span = sqrtSvg("sqrtSize" + delim.size, spanHeight, viewBoxHeight, extraViniculum, options);
               span.style.minWidth = "1.02em";
               advanceWidth = 1 / sizeMultiplier;
             } else {
               spanHeight = height + extraViniculum + emPad;
               texHeight = height + extraViniculum;
               viewBoxHeight = Math.floor(1e3 * height + extraViniculum) + vbPad;
-              span = sqrtSvg("sqrtTall", spanHeight, viewBoxHeight, extraViniculum, options2);
+              span = sqrtSvg("sqrtTall", spanHeight, viewBoxHeight, extraViniculum, options);
               span.style.minWidth = "0.742em";
               advanceWidth = 1.056;
             }
@@ -6736,23 +6736,23 @@
             return {
               span,
               advanceWidth,
-              ruleWidth: (options2.fontMetrics().sqrtRuleThickness + extraViniculum) * sizeMultiplier
+              ruleWidth: (options.fontMetrics().sqrtRuleThickness + extraViniculum) * sizeMultiplier
             };
           };
           var stackLargeDelimiters = ["(", "\\lparen", ")", "\\rparen", "[", "\\lbrack", "]", "\\rbrack", "\\{", "\\lbrace", "\\}", "\\rbrace", "\\lfloor", "\\rfloor", "\u230A", "\u230B", "\\lceil", "\\rceil", "\u2308", "\u2309", "\\surd"];
           var stackAlwaysDelimiters = ["\\uparrow", "\\downarrow", "\\updownarrow", "\\Uparrow", "\\Downarrow", "\\Updownarrow", "|", "\\|", "\\vert", "\\Vert", "\\lvert", "\\rvert", "\\lVert", "\\rVert", "\\lgroup", "\\rgroup", "\u27EE", "\u27EF", "\\lmoustache", "\\rmoustache", "\u23B0", "\u23B1"];
           var stackNeverDelimiters = ["<", ">", "\\langle", "\\rangle", "/", "\\backslash", "\\lt", "\\gt"];
           var sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3];
-          var makeSizedDelim = function makeSizedDelim2(delim, size, options2, mode, classes) {
+          var makeSizedDelim = function makeSizedDelim2(delim, size, options, mode, classes) {
             if (delim === "<" || delim === "\\lt" || delim === "\u27E8") {
               delim = "\\langle";
             } else if (delim === ">" || delim === "\\gt" || delim === "\u27E9") {
               delim = "\\rangle";
             }
             if (utils.contains(stackLargeDelimiters, delim) || utils.contains(stackNeverDelimiters, delim)) {
-              return makeLargeDelim(delim, size, false, options2, mode, classes);
+              return makeLargeDelim(delim, size, false, options, mode, classes);
             } else if (utils.contains(stackAlwaysDelimiters, delim)) {
-              return makeStackedDelim(delim, sizeToMaxHeight[size], false, options2, mode, classes);
+              return makeStackedDelim(delim, sizeToMaxHeight[size], false, options, mode, classes);
             } else {
               throw new src_ParseError("Illegal delimiter: '" + delim + "'");
             }
@@ -6826,8 +6826,8 @@
               throw new Error("Add support for delim type '" + type.type + "' here.");
             }
           };
-          var traverseSequence = function traverseSequence2(delim, height, sequence, options2) {
-            var start = Math.min(2, 3 - options2.style.size);
+          var traverseSequence = function traverseSequence2(delim, height, sequence, options) {
+            var start = Math.min(2, 3 - options.style.size);
             for (var i3 = start; i3 < sequence.length; i3++) {
               if (sequence[i3].type === "stack") {
                 break;
@@ -6835,7 +6835,7 @@
               var metrics = getMetrics(delim, delimTypeToFont(sequence[i3]), "math");
               var heightDepth = metrics.height + metrics.depth;
               if (sequence[i3].type === "small") {
-                var newOptions = options2.havingBaseStyle(sequence[i3].style);
+                var newOptions = options.havingBaseStyle(sequence[i3].style);
                 heightDepth *= newOptions.sizeMultiplier;
               }
               if (heightDepth > height) {
@@ -6844,7 +6844,7 @@
             }
             return sequence[sequence.length - 1];
           };
-          var makeCustomSizedDelim = function makeCustomSizedDelim2(delim, height, center, options2, mode, classes) {
+          var makeCustomSizedDelim = function makeCustomSizedDelim2(delim, height, center, options, mode, classes) {
             if (delim === "<" || delim === "\\lt" || delim === "\u27E8") {
               delim = "\\langle";
             } else if (delim === ">" || delim === "\\gt" || delim === "\u27E9") {
@@ -6858,22 +6858,22 @@
             } else {
               sequence = stackAlwaysDelimiterSequence;
             }
-            var delimType = traverseSequence(delim, height, sequence, options2);
+            var delimType = traverseSequence(delim, height, sequence, options);
             if (delimType.type === "small") {
-              return makeSmallDelim(delim, delimType.style, center, options2, mode, classes);
+              return makeSmallDelim(delim, delimType.style, center, options, mode, classes);
             } else if (delimType.type === "large") {
-              return makeLargeDelim(delim, delimType.size, center, options2, mode, classes);
+              return makeLargeDelim(delim, delimType.size, center, options, mode, classes);
             } else {
-              return makeStackedDelim(delim, height, center, options2, mode, classes);
+              return makeStackedDelim(delim, height, center, options, mode, classes);
             }
           };
-          var makeLeftRightDelim = function makeLeftRightDelim2(delim, height, depth, options2, mode, classes) {
-            var axisHeight = options2.fontMetrics().axisHeight * options2.sizeMultiplier;
+          var makeLeftRightDelim = function makeLeftRightDelim2(delim, height, depth, options, mode, classes) {
+            var axisHeight = options.fontMetrics().axisHeight * options.sizeMultiplier;
             var delimiterFactor = 901;
-            var delimiterExtend = 5 / options2.fontMetrics().ptPerEm;
+            var delimiterExtend = 5 / options.fontMetrics().ptPerEm;
             var maxDistFromAxis = Math.max(height - axisHeight, depth + axisHeight);
             var totalHeight = Math.max(maxDistFromAxis / 500 * delimiterFactor, 2 * maxDistFromAxis - delimiterExtend);
-            return makeCustomSizedDelim(delim, totalHeight, true, options2, mode, classes);
+            return makeCustomSizedDelim(delim, totalHeight, true, options, mode, classes);
           };
           var delimiter = {
             sqrtImage: makeSqrtImage,
@@ -6950,12 +6950,12 @@
             }
           };
           var delimiters = ["(", "\\lparen", ")", "\\rparen", "[", "\\lbrack", "]", "\\rbrack", "\\{", "\\lbrace", "\\}", "\\rbrace", "\\lfloor", "\\rfloor", "\u230A", "\u230B", "\\lceil", "\\rceil", "\u2308", "\u2309", "<", ">", "\\langle", "\u27E8", "\\rangle", "\u27E9", "\\lt", "\\gt", "\\lvert", "\\rvert", "\\lVert", "\\rVert", "\\lgroup", "\\rgroup", "\u27EE", "\u27EF", "\\lmoustache", "\\rmoustache", "\u23B0", "\u23B1", "/", "\\backslash", "|", "\\vert", "\\|", "\\Vert", "\\uparrow", "\\Uparrow", "\\downarrow", "\\Downarrow", "\\updownarrow", "\\Updownarrow", "."];
-          function checkDelimiter(delim, context2) {
+          function checkDelimiter(delim, context) {
             var symDelim = checkSymbolNodeType(delim);
             if (symDelim && utils.contains(delimiters, symDelim.text)) {
               return symDelim;
             } else if (symDelim) {
-              throw new src_ParseError("Invalid delimiter '" + symDelim.text + "' after '" + context2.funcName + "'", delim);
+              throw new src_ParseError("Invalid delimiter '" + symDelim.text + "' after '" + context.funcName + "'", delim);
             } else {
               throw new src_ParseError("Invalid delimiter type '" + delim.type + "'", delim);
             }
@@ -6967,21 +6967,21 @@
               numArgs: 1,
               argTypes: ["primitive"]
             },
-            handler: function handler(context2, args) {
-              var delim = checkDelimiter(args[0], context2);
+            handler: function handler(context, args) {
+              var delim = checkDelimiter(args[0], context);
               return {
                 type: "delimsizing",
-                mode: context2.parser.mode,
-                size: delimiterSizes[context2.funcName].size,
-                mclass: delimiterSizes[context2.funcName].mclass,
+                mode: context.parser.mode,
+                size: delimiterSizes[context.funcName].size,
+                mclass: delimiterSizes[context.funcName].mclass,
                 delim: delim.text
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
+            htmlBuilder: function htmlBuilder2(group, options) {
               if (group.delim === ".") {
                 return buildCommon.makeSpan([group.mclass]);
               }
-              return delimiter.sizedDelim(group.delim, group.size, options2, group.mode, [group.mclass]);
+              return delimiter.sizedDelim(group.delim, group.size, options, group.mode, [group.mclass]);
             },
             mathmlBuilder: function mathmlBuilder2(group) {
               var children = [];
@@ -7013,15 +7013,15 @@
               numArgs: 1,
               primitive: true
             },
-            handler: function handler(context2, args) {
-              var color = context2.parser.gullet.macros.get("\\current@color");
+            handler: function handler(context, args) {
+              var color = context.parser.gullet.macros.get("\\current@color");
               if (color && typeof color !== "string") {
                 throw new src_ParseError("\\current@color set to non-string in \\right");
               }
               return {
                 type: "leftright-right",
-                mode: context2.parser.mode,
-                delim: checkDelimiter(args[0], context2).text,
+                mode: context.parser.mode,
+                delim: checkDelimiter(args[0], context).text,
                 color
               };
             }
@@ -7033,9 +7033,9 @@
               numArgs: 1,
               primitive: true
             },
-            handler: function handler(context2, args) {
-              var delim = checkDelimiter(args[0], context2);
-              var parser = context2.parser;
+            handler: function handler(context, args) {
+              var delim = checkDelimiter(args[0], context);
+              var parser = context.parser;
               ++parser.leftrightDepth;
               var body = parser.parseExpression(false);
               --parser.leftrightDepth;
@@ -7050,9 +7050,9 @@
                 rightColor: right.color
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
+            htmlBuilder: function htmlBuilder2(group, options) {
               assertParsed(group);
-              var inner2 = buildExpression(group.body, options2, true, ["mopen", "mclose"]);
+              var inner2 = buildExpression(group.body, options, true, ["mopen", "mclose"]);
               var innerHeight = 0;
               var innerDepth = 0;
               var hadMiddle = false;
@@ -7064,13 +7064,13 @@
                   innerDepth = Math.max(inner2[i3].depth, innerDepth);
                 }
               }
-              innerHeight *= options2.sizeMultiplier;
-              innerDepth *= options2.sizeMultiplier;
+              innerHeight *= options.sizeMultiplier;
+              innerDepth *= options.sizeMultiplier;
               var leftDelim;
               if (group.left === ".") {
-                leftDelim = makeNullDelimiter(options2, ["mopen"]);
+                leftDelim = makeNullDelimiter(options, ["mopen"]);
               } else {
-                leftDelim = delimiter.leftRightDelim(group.left, innerHeight, innerDepth, options2, group.mode, ["mopen"]);
+                leftDelim = delimiter.leftRightDelim(group.left, innerHeight, innerDepth, options, group.mode, ["mopen"]);
               }
               inner2.unshift(leftDelim);
               if (hadMiddle) {
@@ -7084,17 +7084,17 @@
               }
               var rightDelim;
               if (group.right === ".") {
-                rightDelim = makeNullDelimiter(options2, ["mclose"]);
+                rightDelim = makeNullDelimiter(options, ["mclose"]);
               } else {
-                var colorOptions = group.rightColor ? options2.withColor(group.rightColor) : options2;
+                var colorOptions = group.rightColor ? options.withColor(group.rightColor) : options;
                 rightDelim = delimiter.leftRightDelim(group.right, innerHeight, innerDepth, colorOptions, group.mode, ["mclose"]);
               }
               inner2.push(rightDelim);
-              return buildCommon.makeSpan(["minner"], inner2, options2);
+              return buildCommon.makeSpan(["minner"], inner2, options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               assertParsed(group);
-              var inner2 = buildMathML_buildExpression(group.body, options2);
+              var inner2 = buildMathML_buildExpression(group.body, options);
               if (group.left !== ".") {
                 var leftNode = new mathMLTree.MathNode("mo", [makeText(group.left, group.mode)]);
                 leftNode.setAttribute("fence", "true");
@@ -7118,32 +7118,32 @@
               numArgs: 1,
               primitive: true
             },
-            handler: function handler(context2, args) {
-              var delim = checkDelimiter(args[0], context2);
-              if (!context2.parser.leftrightDepth) {
+            handler: function handler(context, args) {
+              var delim = checkDelimiter(args[0], context);
+              if (!context.parser.leftrightDepth) {
                 throw new src_ParseError("\\middle without preceding \\left", delim);
               }
               return {
                 type: "middle",
-                mode: context2.parser.mode,
+                mode: context.parser.mode,
                 delim: delim.text
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
+            htmlBuilder: function htmlBuilder2(group, options) {
               var middleDelim;
               if (group.delim === ".") {
-                middleDelim = makeNullDelimiter(options2, []);
+                middleDelim = makeNullDelimiter(options, []);
               } else {
-                middleDelim = delimiter.sizedDelim(group.delim, 1, options2, group.mode, []);
+                middleDelim = delimiter.sizedDelim(group.delim, 1, options, group.mode, []);
                 var isMiddle = {
                   delim: group.delim,
-                  options: options2
+                  options
                 };
                 middleDelim.isMiddle = isMiddle;
               }
               return middleDelim;
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var textNode = group.delim === "\\vert" || group.delim === "|" ? makeText("|", "text") : makeText(group.delim, group.mode);
               var middleNode = new mathMLTree.MathNode("mo", [textNode]);
               middleNode.setAttribute("fence", "true");
@@ -7153,27 +7153,27 @@
             }
           });
           ;
-          var enclose_htmlBuilder = function htmlBuilder2(group, options2) {
-            var inner2 = buildCommon.wrapFragment(buildGroup(group.body, options2), options2);
+          var enclose_htmlBuilder = function htmlBuilder2(group, options) {
+            var inner2 = buildCommon.wrapFragment(buildGroup(group.body, options), options);
             var label = group.label.substr(1);
-            var scale = options2.sizeMultiplier;
+            var scale = options.sizeMultiplier;
             var img;
             var imgShift = 0;
             var isSingleChar = utils.isCharacterBox(group.body);
             if (label === "sout") {
               img = buildCommon.makeSpan(["stretchy", "sout"]);
-              img.height = options2.fontMetrics().defaultRuleThickness / scale;
-              imgShift = -0.5 * options2.fontMetrics().xHeight;
+              img.height = options.fontMetrics().defaultRuleThickness / scale;
+              imgShift = -0.5 * options.fontMetrics().xHeight;
             } else if (label === "phase") {
               var lineWeight = calculateSize({
                 number: 0.6,
                 unit: "pt"
-              }, options2);
+              }, options);
               var clearance = calculateSize({
                 number: 0.35,
                 unit: "ex"
-              }, options2);
-              var newOptions = options2.havingBaseSizing();
+              }, options);
+              var newOptions = options.havingBaseSizing();
               scale = scale / newOptions.sizeMultiplier;
               var angleHeight = inner2.height + inner2.depth + lineWeight + clearance;
               inner2.style.paddingLeft = makeEm(angleHeight / 2 + lineWeight);
@@ -7185,7 +7185,7 @@
                 "viewBox": "0 0 400000 " + viewBoxHeight,
                 "preserveAspectRatio": "xMinYMin slice"
               });
-              img = buildCommon.makeSvgSpan(["hide-tail"], [svgNode], options2);
+              img = buildCommon.makeSvgSpan(["hide-tail"], [svgNode], options);
               img.style.height = makeEm(angleHeight);
               imgShift = inner2.depth + lineWeight + clearance;
             } else {
@@ -7202,18 +7202,18 @@
               var bottomPad = 0;
               var ruleThickness = 0;
               if (/box/.test(label)) {
-                ruleThickness = Math.max(options2.fontMetrics().fboxrule, options2.minRuleThickness);
-                topPad = options2.fontMetrics().fboxsep + (label === "colorbox" ? 0 : ruleThickness);
+                ruleThickness = Math.max(options.fontMetrics().fboxrule, options.minRuleThickness);
+                topPad = options.fontMetrics().fboxsep + (label === "colorbox" ? 0 : ruleThickness);
                 bottomPad = topPad;
               } else if (label === "angl") {
-                ruleThickness = Math.max(options2.fontMetrics().defaultRuleThickness, options2.minRuleThickness);
+                ruleThickness = Math.max(options.fontMetrics().defaultRuleThickness, options.minRuleThickness);
                 topPad = 4 * ruleThickness;
                 bottomPad = Math.max(0, 0.25 - inner2.depth);
               } else {
                 topPad = isSingleChar ? 0.2 : 0;
                 bottomPad = topPad;
               }
-              img = stretchy.encloseSpan(inner2, label, topPad, bottomPad, options2);
+              img = stretchy.encloseSpan(inner2, label, topPad, bottomPad, options);
               if (/fbox|boxed|fcolorbox/.test(label)) {
                 img.style.borderStyle = "solid";
                 img.style.borderWidth = makeEm(ruleThickness);
@@ -7245,7 +7245,7 @@
                     shift: 0
                   }
                 ]
-              }, options2);
+              }, options);
             } else {
               var classes = /cancel|phase/.test(label) ? ["svg-align"] : [];
               vlist = buildCommon.makeVList({
@@ -7263,21 +7263,21 @@
                     wrapperClasses: classes
                   }
                 ]
-              }, options2);
+              }, options);
             }
             if (/cancel/.test(label)) {
               vlist.height = inner2.height;
               vlist.depth = inner2.depth;
             }
             if (/cancel/.test(label) && !isSingleChar) {
-              return buildCommon.makeSpan(["mord", "cancel-lap"], [vlist], options2);
+              return buildCommon.makeSpan(["mord", "cancel-lap"], [vlist], options);
             } else {
-              return buildCommon.makeSpan(["mord"], [vlist], options2);
+              return buildCommon.makeSpan(["mord"], [vlist], options);
             }
           };
-          var enclose_mathmlBuilder = function mathmlBuilder2(group, options2) {
+          var enclose_mathmlBuilder = function mathmlBuilder2(group, options) {
             var fboxsep = 0;
-            var node = new mathMLTree.MathNode(group.label.indexOf("colorbox") > -1 ? "mpadded" : "menclose", [buildMathML_buildGroup(group.body, options2)]);
+            var node = new mathMLTree.MathNode(group.label.indexOf("colorbox") > -1 ? "mpadded" : "menclose", [buildMathML_buildGroup(group.body, options)]);
             switch (group.label) {
               case "\\cancel":
                 node.setAttribute("notation", "updiagonalstrike");
@@ -7299,13 +7299,13 @@
                 break;
               case "\\fcolorbox":
               case "\\colorbox":
-                fboxsep = options2.fontMetrics().fboxsep * options2.fontMetrics().ptPerEm;
+                fboxsep = options.fontMetrics().fboxsep * options.fontMetrics().ptPerEm;
                 node.setAttribute("width", "+" + 2 * fboxsep + "pt");
                 node.setAttribute("height", "+" + 2 * fboxsep + "pt");
                 node.setAttribute("lspace", fboxsep + "pt");
                 node.setAttribute("voffset", fboxsep + "pt");
                 if (group.label === "\\fcolorbox") {
-                  var thk = Math.max(options2.fontMetrics().fboxrule, options2.minRuleThickness);
+                  var thk = Math.max(options.fontMetrics().fboxrule, options.minRuleThickness);
                   node.setAttribute("style", "border: " + thk + "em solid " + String(group.borderColor));
                 }
                 break;
@@ -7455,10 +7455,10 @@
             }
             return hlineInfo;
           }
-          var validateAmsEnvironmentContext = function validateAmsEnvironmentContext2(context2) {
-            var settings = context2.parser.settings;
+          var validateAmsEnvironmentContext = function validateAmsEnvironmentContext2(context) {
+            var settings = context.parser.settings;
             if (!settings.displayMode) {
-              throw new src_ParseError("{" + context2.envName + "} can be used only in display mode.");
+              throw new src_ParseError("{" + context.envName + "} can be used only in display mode.");
             }
           };
           function parseArray(parser, _ref, style) {
@@ -7558,7 +7558,7 @@
               return "text";
             }
           }
-          var array_htmlBuilder = function htmlBuilder2(group, options2) {
+          var array_htmlBuilder = function htmlBuilder2(group, options) {
             var r3;
             var c3;
             var nr = group.body.length;
@@ -7566,17 +7566,17 @@
             var nc = 0;
             var body = new Array(nr);
             var hlines = [];
-            var ruleThickness = Math.max(options2.fontMetrics().arrayRuleWidth, options2.minRuleThickness);
-            var pt = 1 / options2.fontMetrics().ptPerEm;
+            var ruleThickness = Math.max(options.fontMetrics().arrayRuleWidth, options.minRuleThickness);
+            var pt = 1 / options.fontMetrics().ptPerEm;
             var arraycolsep = 5 * pt;
             if (group.colSeparationType && group.colSeparationType === "small") {
-              var localMultiplier = options2.havingStyle(src_Style.SCRIPT).sizeMultiplier;
-              arraycolsep = 0.2778 * (localMultiplier / options2.sizeMultiplier);
+              var localMultiplier = options.havingStyle(src_Style.SCRIPT).sizeMultiplier;
+              arraycolsep = 0.2778 * (localMultiplier / options.sizeMultiplier);
             }
             var baselineskip = group.colSeparationType === "CD" ? calculateSize({
               number: 3,
               unit: "ex"
-            }, options2) : 12 * pt;
+            }, options) : 12 * pt;
             var jot = 3 * pt;
             var arrayskip = group.arraystretch * baselineskip;
             var arstrutHeight = 0.7 * arrayskip;
@@ -7603,7 +7603,7 @@
               }
               var outrow = new Array(inrow.length);
               for (c3 = 0; c3 < inrow.length; ++c3) {
-                var elt = buildGroup(inrow[c3], options2);
+                var elt = buildGroup(inrow[c3], options);
                 if (depth < elt.depth) {
                   depth = elt.depth;
                 }
@@ -7615,7 +7615,7 @@
               var rowGap = group.rowGaps[r3];
               var gap = 0;
               if (rowGap) {
-                gap = calculateSize(rowGap, options2);
+                gap = calculateSize(rowGap, options);
                 if (gap > 0) {
                   gap += arstrutDepth;
                   if (depth < gap) {
@@ -7635,7 +7635,7 @@
               body[r3] = outrow;
               setHLinePos(hLinesBeforeRow[r3 + 1]);
             }
-            var offset = totalHeight / 2 + options2.fontMetrics().axisHeight;
+            var offset = totalHeight / 2 + options.fontMetrics().axisHeight;
             var colDescriptions = group.cols || [];
             var cols = [];
             var colSep;
@@ -7645,7 +7645,7 @@
               for (r3 = 0; r3 < nr; ++r3) {
                 var rw = body[r3];
                 var shift = rw.pos - offset;
-                var eqnTag = buildCommon.makeSpan(["eqn-num"], [], options2);
+                var eqnTag = buildCommon.makeSpan(["eqn-num"], [], options);
                 eqnTag.depth = rw.depth;
                 eqnTag.height = rw.height;
                 eqnNumSpans.push({
@@ -7661,12 +7661,12 @@
               while (colDescr.type === "separator") {
                 if (!firstSeparator) {
                   colSep = buildCommon.makeSpan(["arraycolsep"], []);
-                  colSep.style.width = makeEm(options2.fontMetrics().doubleRuleSep);
+                  colSep.style.width = makeEm(options.fontMetrics().doubleRuleSep);
                   cols.push(colSep);
                 }
                 if (colDescr.separator === "|" || colDescr.separator === ":") {
                   var lineType = colDescr.separator === "|" ? "solid" : "dashed";
-                  var separator = buildCommon.makeSpan(["vertical-separator"], [], options2);
+                  var separator = buildCommon.makeSpan(["vertical-separator"], [], options);
                   separator.style.height = makeEm(totalHeight);
                   separator.style.borderRightWidth = makeEm(ruleThickness);
                   separator.style.borderRightStyle = lineType;
@@ -7714,7 +7714,7 @@
               col = buildCommon.makeVList({
                 positionType: "individualShift",
                 children: col
-              }, options2);
+              }, options);
               col = buildCommon.makeSpan(["col-align-" + (colDescr.align || "c")], [col]);
               cols.push(col);
               if (c3 < nc - 1 || group.hskipBeforeAndAfter) {
@@ -7728,8 +7728,8 @@
             }
             body = buildCommon.makeSpan(["mtable"], cols);
             if (hlines.length > 0) {
-              var line = buildCommon.makeLineSpan("hline", options2, ruleThickness);
-              var dashes = buildCommon.makeLineSpan("hdashline", options2, ruleThickness);
+              var line = buildCommon.makeLineSpan("hline", options, ruleThickness);
+              var dashes = buildCommon.makeLineSpan("hdashline", options, ruleThickness);
               var vListElems = [{
                 type: "elem",
                 elem: body,
@@ -7755,16 +7755,16 @@
               body = buildCommon.makeVList({
                 positionType: "individualShift",
                 children: vListElems
-              }, options2);
+              }, options);
             }
             if (!group.addEqnNum) {
-              return buildCommon.makeSpan(["mord"], [body], options2);
+              return buildCommon.makeSpan(["mord"], [body], options);
             } else {
               var eqnNumCol = buildCommon.makeVList({
                 positionType: "individualShift",
                 children: eqnNumSpans
-              }, options2);
-              eqnNumCol = buildCommon.makeSpan(["tag"], [eqnNumCol], options2);
+              }, options);
+              eqnNumCol = buildCommon.makeSpan(["tag"], [eqnNumCol], options);
               return buildCommon.makeFragment([body, eqnNumCol]);
             }
           };
@@ -7773,7 +7773,7 @@
             l: "left ",
             r: "right "
           };
-          var array_mathmlBuilder = function mathmlBuilder2(group, options2) {
+          var array_mathmlBuilder = function mathmlBuilder2(group, options) {
             var tbl = [];
             var glue = new mathMLTree.MathNode("mtd", [], ["mtr-glue"]);
             var tag = new mathMLTree.MathNode("mtd", [], ["mml-eqn-num"]);
@@ -7781,7 +7781,7 @@
               var rw = group.body[i3];
               var row = [];
               for (var j2 = 0; j2 < rw.length; j2++) {
-                row.push(new mathMLTree.MathNode("mtd", [buildMathML_buildGroup(rw[j2], options2)]));
+                row.push(new mathMLTree.MathNode("mtd", [buildMathML_buildGroup(rw[j2], options)]));
               }
               if (group.addEqnNum) {
                 row.unshift(glue);
@@ -7868,26 +7868,26 @@
             }
             return table;
           };
-          var alignedHandler = function alignedHandler2(context2, args) {
-            if (context2.envName.indexOf("ed") === -1) {
-              validateAmsEnvironmentContext(context2);
+          var alignedHandler = function alignedHandler2(context, args) {
+            if (context.envName.indexOf("ed") === -1) {
+              validateAmsEnvironmentContext(context);
             }
             var cols = [];
-            var separationType = context2.envName.indexOf("at") > -1 ? "alignat" : "align";
-            var res = parseArray(context2.parser, {
+            var separationType = context.envName.indexOf("at") > -1 ? "alignat" : "align";
+            var res = parseArray(context.parser, {
               cols,
               addJot: true,
-              addEqnNum: context2.envName === "align" || context2.envName === "alignat",
+              addEqnNum: context.envName === "align" || context.envName === "alignat",
               emptySingleRow: true,
               colSeparationType: separationType,
-              maxNumCols: context2.envName === "split" ? 2 : void 0,
-              leqno: context2.parser.settings.leqno
+              maxNumCols: context.envName === "split" ? 2 : void 0,
+              leqno: context.parser.settings.leqno
             }, "display");
             var numMaths;
             var numCols = 0;
             var emptyGroup = {
               type: "ordgroup",
-              mode: context2.mode,
+              mode: context.mode,
               body: []
             };
             if (args[0] && args[0].type === "ordgroup") {
@@ -7939,7 +7939,7 @@
             props: {
               numArgs: 1
             },
-            handler: function handler(context2, args) {
+            handler: function handler(context, args) {
               var symNode = checkSymbolNodeType(args[0]);
               var colalign = symNode ? [args[0]] : assertNodeType(args[0], "ordgroup").body;
               var cols = colalign.map(function(nde) {
@@ -7968,7 +7968,7 @@
                 hskipBeforeAndAfter: true,
                 maxNumCols: cols.length
               };
-              return parseArray(context2.parser, res, dCellStyle(context2.envName));
+              return parseArray(context.parser, res, dCellStyle(context.envName));
             },
             htmlBuilder: array_htmlBuilder,
             mathmlBuilder: array_mathmlBuilder
@@ -7979,7 +7979,7 @@
             props: {
               numArgs: 0
             },
-            handler: function handler(context2) {
+            handler: function handler(context) {
               var delimiters2 = {
                 "matrix": null,
                 "pmatrix": ["(", ")"],
@@ -7987,7 +7987,7 @@
                 "Bmatrix": ["\\{", "\\}"],
                 "vmatrix": ["|", "|"],
                 "Vmatrix": ["\\Vert", "\\Vert"]
-              }[context2.envName.replace("*", "")];
+              }[context.envName.replace("*", "")];
               var colAlign = "c";
               var payload = {
                 hskipBeforeAndAfter: false,
@@ -7996,8 +7996,8 @@
                   align: colAlign
                 }]
               };
-              if (context2.envName.charAt(context2.envName.length - 1) === "*") {
-                var parser = context2.parser;
+              if (context.envName.charAt(context.envName.length - 1) === "*") {
+                var parser = context.parser;
                 parser.consumeSpaces();
                 if (parser.fetch().text === "[") {
                   parser.consume();
@@ -8016,7 +8016,7 @@
                   }];
                 }
               }
-              var res = parseArray(context2.parser, payload, dCellStyle(context2.envName));
+              var res = parseArray(context.parser, payload, dCellStyle(context.envName));
               var numCols = Math.max.apply(Math, [0].concat(res.body.map(function(row) {
                 return row.length;
               })));
@@ -8026,7 +8026,7 @@
               });
               return delimiters2 ? {
                 type: "leftright",
-                mode: context2.mode,
+                mode: context.mode,
                 body: [res],
                 left: delimiters2[0],
                 right: delimiters2[1],
@@ -8042,11 +8042,11 @@
             props: {
               numArgs: 0
             },
-            handler: function handler(context2) {
+            handler: function handler(context) {
               var payload = {
                 arraystretch: 0.5
               };
-              var res = parseArray(context2.parser, payload, "script");
+              var res = parseArray(context.parser, payload, "script");
               res.colSeparationType = "small";
               return res;
             },
@@ -8059,7 +8059,7 @@
             props: {
               numArgs: 1
             },
-            handler: function handler(context2, args) {
+            handler: function handler(context, args) {
               var symNode = checkSymbolNodeType(args[0]);
               var colalign = symNode ? [args[0]] : assertNodeType(args[0], "ordgroup").body;
               var cols = colalign.map(function(nde) {
@@ -8081,7 +8081,7 @@
                 hskipBeforeAndAfter: false,
                 arraystretch: 0.5
               };
-              res = parseArray(context2.parser, res, "script");
+              res = parseArray(context.parser, res, "script");
               if (res.body.length > 0 && res.body[0].length > 1) {
                 throw new src_ParseError("{subarray} can contain only one column");
               }
@@ -8096,7 +8096,7 @@
             props: {
               numArgs: 0
             },
-            handler: function handler(context2) {
+            handler: function handler(context) {
               var payload = {
                 arraystretch: 1.2,
                 cols: [{
@@ -8111,13 +8111,13 @@
                   postgap: 0
                 }]
               };
-              var res = parseArray(context2.parser, payload, dCellStyle(context2.envName));
+              var res = parseArray(context.parser, payload, dCellStyle(context.envName));
               return {
                 type: "leftright",
-                mode: context2.mode,
+                mode: context.mode,
                 body: [res],
-                left: context2.envName.indexOf("r") > -1 ? "." : "\\{",
-                right: context2.envName.indexOf("r") > -1 ? "\\}" : ".",
+                left: context.envName.indexOf("r") > -1 ? "." : "\\{",
+                right: context.envName.indexOf("r") > -1 ? "\\}" : ".",
                 rightColor: void 0
               };
             },
@@ -8140,9 +8140,9 @@
             props: {
               numArgs: 0
             },
-            handler: function handler(context2) {
-              if (utils.contains(["gather", "gather*"], context2.envName)) {
-                validateAmsEnvironmentContext(context2);
+            handler: function handler(context) {
+              if (utils.contains(["gather", "gather*"], context.envName)) {
+                validateAmsEnvironmentContext(context);
               }
               var res = {
                 cols: [{
@@ -8151,11 +8151,11 @@
                 }],
                 addJot: true,
                 colSeparationType: "gather",
-                addEqnNum: context2.envName === "gather",
+                addEqnNum: context.envName === "gather",
                 emptySingleRow: true,
-                leqno: context2.parser.settings.leqno
+                leqno: context.parser.settings.leqno
               };
-              return parseArray(context2.parser, res, "display");
+              return parseArray(context.parser, res, "display");
             },
             htmlBuilder: array_htmlBuilder,
             mathmlBuilder: array_mathmlBuilder
@@ -8176,16 +8176,16 @@
             props: {
               numArgs: 0
             },
-            handler: function handler(context2) {
-              validateAmsEnvironmentContext(context2);
+            handler: function handler(context) {
+              validateAmsEnvironmentContext(context);
               var res = {
-                addEqnNum: context2.envName === "equation",
+                addEqnNum: context.envName === "equation",
                 emptySingleRow: true,
                 singleRow: true,
                 maxNumCols: 1,
-                leqno: context2.parser.settings.leqno
+                leqno: context.parser.settings.leqno
               };
-              return parseArray(context2.parser, res, "display");
+              return parseArray(context.parser, res, "display");
             },
             htmlBuilder: array_htmlBuilder,
             mathmlBuilder: array_mathmlBuilder
@@ -8196,9 +8196,9 @@
             props: {
               numArgs: 0
             },
-            handler: function handler(context2) {
-              validateAmsEnvironmentContext(context2);
-              return parseCD(context2.parser);
+            handler: function handler(context) {
+              validateAmsEnvironmentContext(context);
+              return parseCD(context.parser);
             },
             htmlBuilder: array_htmlBuilder,
             mathmlBuilder: array_mathmlBuilder
@@ -8211,8 +8211,8 @@
               allowedInText: true,
               allowedInMath: true
             },
-            handler: function handler(context2, args) {
-              throw new src_ParseError(context2.funcName + " valid only within array environment");
+            handler: function handler(context, args) {
+              throw new src_ParseError(context.funcName + " valid only within array environment");
             }
           });
           ;
@@ -8242,19 +8242,19 @@
                 }
                 var env = src_environments[envName];
                 var _parser$parseArgument = parser.parseArguments("\\begin{" + envName + "}", env), _args = _parser$parseArgument.args, optArgs = _parser$parseArgument.optArgs;
-                var context2 = {
+                var context = {
                   mode: parser.mode,
                   envName,
                   parser
                 };
-                var result2 = env.handler(context2, _args, optArgs);
+                var result = env.handler(context, _args, optArgs);
                 parser.expect("\\end", false);
                 var endNameToken = parser.nextToken;
                 var end = assertNodeType(parser.parseFunction(), "environment");
                 if (end.name !== envName) {
                   throw new src_ParseError("Mismatch: \\begin{" + envName + "} matched by \\end{" + end.name + "}", endNameToken);
                 }
-                return result2;
+                return result;
               }
               return {
                 type: "environment",
@@ -8266,13 +8266,13 @@
           });
           ;
           var mclass_makeSpan = buildCommon.makeSpan;
-          function mclass_htmlBuilder(group, options2) {
-            var elements = buildExpression(group.body, options2, true);
-            return mclass_makeSpan([group.mclass], elements, options2);
+          function mclass_htmlBuilder(group, options) {
+            var elements = buildExpression(group.body, options, true);
+            return mclass_makeSpan([group.mclass], elements, options);
           }
-          function mclass_mathmlBuilder(group, options2) {
+          function mclass_mathmlBuilder(group, options) {
             var node;
-            var inner2 = buildMathML_buildExpression(group.body, options2);
+            var inner2 = buildMathML_buildExpression(group.body, options);
             if (group.mclass === "minner") {
               return mathMLTree.newDocumentFragment(inner2);
             } else if (group.mclass === "mord") {
@@ -8393,14 +8393,14 @@
             mathmlBuilder: mclass_mathmlBuilder
           });
           ;
-          var font_htmlBuilder = function htmlBuilder2(group, options2) {
+          var font_htmlBuilder = function htmlBuilder2(group, options) {
             var font = group.font;
-            var newOptions = options2.withFont(font);
+            var newOptions = options.withFont(font);
             return buildGroup(group.body, newOptions);
           };
-          var font_mathmlBuilder = function mathmlBuilder2(group, options2) {
+          var font_mathmlBuilder = function mathmlBuilder2(group, options) {
             var font = group.font;
-            var newOptions = options2.withFont(font);
+            var newOptions = options.withFont(font);
             return buildMathML_buildGroup(group.body, newOptions);
           };
           var fontAliases = {
@@ -8511,58 +8511,58 @@
             }
             return style;
           };
-          var genfrac_htmlBuilder = function htmlBuilder2(group, options2) {
-            var style = adjustStyle(group.size, options2.style);
+          var genfrac_htmlBuilder = function htmlBuilder2(group, options) {
+            var style = adjustStyle(group.size, options.style);
             var nstyle = style.fracNum();
             var dstyle = style.fracDen();
             var newOptions;
-            newOptions = options2.havingStyle(nstyle);
-            var numerm = buildGroup(group.numer, newOptions, options2);
+            newOptions = options.havingStyle(nstyle);
+            var numerm = buildGroup(group.numer, newOptions, options);
             if (group.continued) {
-              var hStrut = 8.5 / options2.fontMetrics().ptPerEm;
-              var dStrut = 3.5 / options2.fontMetrics().ptPerEm;
+              var hStrut = 8.5 / options.fontMetrics().ptPerEm;
+              var dStrut = 3.5 / options.fontMetrics().ptPerEm;
               numerm.height = numerm.height < hStrut ? hStrut : numerm.height;
               numerm.depth = numerm.depth < dStrut ? dStrut : numerm.depth;
             }
-            newOptions = options2.havingStyle(dstyle);
-            var denomm = buildGroup(group.denom, newOptions, options2);
+            newOptions = options.havingStyle(dstyle);
+            var denomm = buildGroup(group.denom, newOptions, options);
             var rule;
             var ruleWidth;
             var ruleSpacing;
             if (group.hasBarLine) {
               if (group.barSize) {
-                ruleWidth = calculateSize(group.barSize, options2);
-                rule = buildCommon.makeLineSpan("frac-line", options2, ruleWidth);
+                ruleWidth = calculateSize(group.barSize, options);
+                rule = buildCommon.makeLineSpan("frac-line", options, ruleWidth);
               } else {
-                rule = buildCommon.makeLineSpan("frac-line", options2);
+                rule = buildCommon.makeLineSpan("frac-line", options);
               }
               ruleWidth = rule.height;
               ruleSpacing = rule.height;
             } else {
               rule = null;
               ruleWidth = 0;
-              ruleSpacing = options2.fontMetrics().defaultRuleThickness;
+              ruleSpacing = options.fontMetrics().defaultRuleThickness;
             }
             var numShift;
             var clearance;
             var denomShift;
             if (style.size === src_Style.DISPLAY.size || group.size === "display") {
-              numShift = options2.fontMetrics().num1;
+              numShift = options.fontMetrics().num1;
               if (ruleWidth > 0) {
                 clearance = 3 * ruleSpacing;
               } else {
                 clearance = 7 * ruleSpacing;
               }
-              denomShift = options2.fontMetrics().denom1;
+              denomShift = options.fontMetrics().denom1;
             } else {
               if (ruleWidth > 0) {
-                numShift = options2.fontMetrics().num2;
+                numShift = options.fontMetrics().num2;
                 clearance = ruleSpacing;
               } else {
-                numShift = options2.fontMetrics().num3;
+                numShift = options.fontMetrics().num3;
                 clearance = 3 * ruleSpacing;
               }
-              denomShift = options2.fontMetrics().denom2;
+              denomShift = options.fontMetrics().denom2;
             }
             var frac;
             if (!rule) {
@@ -8582,9 +8582,9 @@
                   elem: numerm,
                   shift: -numShift
                 }]
-              }, options2);
+              }, options);
             } else {
-              var axisHeight = options2.fontMetrics().axisHeight;
+              var axisHeight = options.fontMetrics().axisHeight;
               if (numShift - numerm.depth - (axisHeight + 0.5 * ruleWidth) < clearance) {
                 numShift += clearance - (numShift - numerm.depth - (axisHeight + 0.5 * ruleWidth));
               }
@@ -8607,45 +8607,45 @@
                   elem: numerm,
                   shift: -numShift
                 }]
-              }, options2);
+              }, options);
             }
-            newOptions = options2.havingStyle(style);
-            frac.height *= newOptions.sizeMultiplier / options2.sizeMultiplier;
-            frac.depth *= newOptions.sizeMultiplier / options2.sizeMultiplier;
+            newOptions = options.havingStyle(style);
+            frac.height *= newOptions.sizeMultiplier / options.sizeMultiplier;
+            frac.depth *= newOptions.sizeMultiplier / options.sizeMultiplier;
             var delimSize;
             if (style.size === src_Style.DISPLAY.size) {
-              delimSize = options2.fontMetrics().delim1;
+              delimSize = options.fontMetrics().delim1;
             } else if (style.size === src_Style.SCRIPTSCRIPT.size) {
-              delimSize = options2.havingStyle(src_Style.SCRIPT).fontMetrics().delim2;
+              delimSize = options.havingStyle(src_Style.SCRIPT).fontMetrics().delim2;
             } else {
-              delimSize = options2.fontMetrics().delim2;
+              delimSize = options.fontMetrics().delim2;
             }
             var leftDelim;
             var rightDelim;
             if (group.leftDelim == null) {
-              leftDelim = makeNullDelimiter(options2, ["mopen"]);
+              leftDelim = makeNullDelimiter(options, ["mopen"]);
             } else {
-              leftDelim = delimiter.customSizedDelim(group.leftDelim, delimSize, true, options2.havingStyle(style), group.mode, ["mopen"]);
+              leftDelim = delimiter.customSizedDelim(group.leftDelim, delimSize, true, options.havingStyle(style), group.mode, ["mopen"]);
             }
             if (group.continued) {
               rightDelim = buildCommon.makeSpan([]);
             } else if (group.rightDelim == null) {
-              rightDelim = makeNullDelimiter(options2, ["mclose"]);
+              rightDelim = makeNullDelimiter(options, ["mclose"]);
             } else {
-              rightDelim = delimiter.customSizedDelim(group.rightDelim, delimSize, true, options2.havingStyle(style), group.mode, ["mclose"]);
+              rightDelim = delimiter.customSizedDelim(group.rightDelim, delimSize, true, options.havingStyle(style), group.mode, ["mclose"]);
             }
-            return buildCommon.makeSpan(["mord"].concat(newOptions.sizingClasses(options2)), [leftDelim, buildCommon.makeSpan(["mfrac"], [frac]), rightDelim], options2);
+            return buildCommon.makeSpan(["mord"].concat(newOptions.sizingClasses(options)), [leftDelim, buildCommon.makeSpan(["mfrac"], [frac]), rightDelim], options);
           };
-          var genfrac_mathmlBuilder = function mathmlBuilder2(group, options2) {
-            var node = new mathMLTree.MathNode("mfrac", [buildMathML_buildGroup(group.numer, options2), buildMathML_buildGroup(group.denom, options2)]);
+          var genfrac_mathmlBuilder = function mathmlBuilder2(group, options) {
+            var node = new mathMLTree.MathNode("mfrac", [buildMathML_buildGroup(group.numer, options), buildMathML_buildGroup(group.denom, options)]);
             if (!group.hasBarLine) {
               node.setAttribute("linethickness", "0px");
             } else if (group.barSize) {
-              var ruleWidth = calculateSize(group.barSize, options2);
+              var ruleWidth = calculateSize(group.barSize, options);
               node.setAttribute("linethickness", makeEm(ruleWidth));
             }
-            var style = adjustStyle(group.size, options2.style);
-            if (style.size !== options2.style.size) {
+            var style = adjustStyle(group.size, options.style);
+            if (style.size !== options.style.size) {
               node = new mathMLTree.MathNode("mstyle", [node]);
               var isDisplay = style.size === src_Style.DISPLAY.size ? "true" : "false";
               node.setAttribute("displaystyle", isDisplay);
@@ -8919,18 +8919,18 @@
             mathmlBuilder: genfrac_mathmlBuilder
           });
           ;
-          var horizBrace_htmlBuilder = function htmlBuilder2(grp, options2) {
-            var style = options2.style;
+          var horizBrace_htmlBuilder = function htmlBuilder2(grp, options) {
+            var style = options.style;
             var supSubGroup;
             var group;
             if (grp.type === "supsub") {
-              supSubGroup = grp.sup ? buildGroup(grp.sup, options2.havingStyle(style.sup()), options2) : buildGroup(grp.sub, options2.havingStyle(style.sub()), options2);
+              supSubGroup = grp.sup ? buildGroup(grp.sup, options.havingStyle(style.sup()), options) : buildGroup(grp.sub, options.havingStyle(style.sub()), options);
               group = assertNodeType(grp.base, "horizBrace");
             } else {
               group = assertNodeType(grp, "horizBrace");
             }
-            var body = buildGroup(group.base, options2.havingBaseStyle(src_Style.DISPLAY));
-            var braceBody = stretchy.svgSpan(group, options2);
+            var body = buildGroup(group.base, options.havingBaseStyle(src_Style.DISPLAY));
+            var braceBody = stretchy.svgSpan(group, options);
             var vlist;
             if (group.isOver) {
               vlist = buildCommon.makeVList({
@@ -8945,7 +8945,7 @@
                   type: "elem",
                   elem: braceBody
                 }]
-              }, options2);
+              }, options);
               vlist.children[0].children[0].children[1].classes.push("svg-align");
             } else {
               vlist = buildCommon.makeVList({
@@ -8961,11 +8961,11 @@
                   type: "elem",
                   elem: body
                 }]
-              }, options2);
+              }, options);
               vlist.children[0].children[0].children[0].classes.push("svg-align");
             }
             if (supSubGroup) {
-              var vSpan = buildCommon.makeSpan(["mord", group.isOver ? "mover" : "munder"], [vlist], options2);
+              var vSpan = buildCommon.makeSpan(["mord", group.isOver ? "mover" : "munder"], [vlist], options);
               if (group.isOver) {
                 vlist = buildCommon.makeVList({
                   positionType: "firstBaseline",
@@ -8979,7 +8979,7 @@
                     type: "elem",
                     elem: supSubGroup
                   }]
-                }, options2);
+                }, options);
               } else {
                 vlist = buildCommon.makeVList({
                   positionType: "bottom",
@@ -8994,14 +8994,14 @@
                     type: "elem",
                     elem: vSpan
                   }]
-                }, options2);
+                }, options);
               }
             }
-            return buildCommon.makeSpan(["mord", group.isOver ? "mover" : "munder"], [vlist], options2);
+            return buildCommon.makeSpan(["mord", group.isOver ? "mover" : "munder"], [vlist], options);
           };
-          var horizBrace_mathmlBuilder = function mathmlBuilder2(group, options2) {
+          var horizBrace_mathmlBuilder = function mathmlBuilder2(group, options) {
             var accentNode = stretchy.mathMLnode(group.label);
-            return new mathMLTree.MathNode(group.isOver ? "mover" : "munder", [buildMathML_buildGroup(group.base, options2), accentNode]);
+            return new mathMLTree.MathNode(group.isOver ? "mover" : "munder", [buildMathML_buildGroup(group.base, options), accentNode]);
           };
           defineFunction({
             type: "horizBrace",
@@ -9048,12 +9048,12 @@
                 body: ordargument(body)
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var elements = buildExpression(group.body, options2, false);
-              return buildCommon.makeAnchor(group.href, [], elements, options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var elements = buildExpression(group.body, options, false);
+              return buildCommon.makeAnchor(group.href, [], elements, options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var math2 = buildExpressionRow(group.body, options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var math2 = buildExpressionRow(group.body, options);
               if (!(math2 instanceof MathNode)) {
                 math2 = new MathNode("mrow", [math2]);
               }
@@ -9122,12 +9122,12 @@
                 body: ordargument(args[0])
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var elements = buildExpression(group.body, options2, false);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var elements = buildExpression(group.body, options, false);
               return buildCommon.makeFragment(elements);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              return new mathMLTree.MathNode("mrow", buildMathML_buildExpression(group.body, options2));
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              return new mathMLTree.MathNode("mrow", buildMathML_buildExpression(group.body, options));
             }
           });
           ;
@@ -9198,13 +9198,13 @@
                 body: ordargument(body)
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var elements = buildExpression(group.body, options2, false);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var elements = buildExpression(group.body, options, false);
               var classes = ["enclosing"];
               if (group.attributes.class) {
                 classes.push.apply(classes, group.attributes.class.trim().split(/\s+/));
               }
-              var span = buildCommon.makeSpan(classes, elements, options2);
+              var span = buildCommon.makeSpan(classes, elements, options);
               for (var attr in group.attributes) {
                 if (attr !== "class" && group.attributes.hasOwnProperty(attr)) {
                   span.setAttribute(attr, group.attributes[attr]);
@@ -9212,8 +9212,8 @@
               }
               return span;
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              return buildExpressionRow(group.body, options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              return buildExpressionRow(group.body, options);
             }
           });
           ;
@@ -9233,12 +9233,12 @@
                 mathml: ordargument(args[1])
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var elements = buildExpression(group.html, options2, false);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var elements = buildExpression(group.html, options, false);
               return buildCommon.makeFragment(elements);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              return buildExpressionRow(group.mathml, options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              return buildExpressionRow(group.mathml, options);
             }
           });
           ;
@@ -9335,15 +9335,15 @@
                 src
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var height = calculateSize(group.height, options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var height = calculateSize(group.height, options);
               var depth = 0;
               if (group.totalheight.number > 0) {
-                depth = calculateSize(group.totalheight, options2) - height;
+                depth = calculateSize(group.totalheight, options) - height;
               }
               var width = 0;
               if (group.width.number > 0) {
-                width = calculateSize(group.width, options2);
+                width = calculateSize(group.width, options);
               }
               var style = {
                 height: makeEm(height + depth)
@@ -9359,18 +9359,18 @@
               node.depth = depth;
               return node;
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var node = new mathMLTree.MathNode("mglyph", []);
               node.setAttribute("alt", group.alt);
-              var height = calculateSize(group.height, options2);
+              var height = calculateSize(group.height, options);
               var depth = 0;
               if (group.totalheight.number > 0) {
-                depth = calculateSize(group.totalheight, options2) - height;
+                depth = calculateSize(group.totalheight, options) - height;
                 node.setAttribute("valign", makeEm(-depth));
               }
               node.setAttribute("height", makeEm(height + depth));
               if (group.width.number > 0) {
-                var width = calculateSize(group.width, options2);
+                var width = calculateSize(group.width, options);
                 node.setAttribute("width", makeEm(width));
               }
               node.setAttribute("src", group.src);
@@ -9412,11 +9412,11 @@
                 dimension: size.value
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              return buildCommon.makeGlue(group.dimension, options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              return buildCommon.makeGlue(group.dimension, options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var dimension = calculateSize(group.dimension, options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var dimension = calculateSize(group.dimension, options);
               return new mathMLTree.SpaceNode(dimension);
             }
           });
@@ -9438,27 +9438,27 @@
                 body
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
+            htmlBuilder: function htmlBuilder2(group, options) {
               var inner2;
               if (group.alignment === "clap") {
-                inner2 = buildCommon.makeSpan([], [buildGroup(group.body, options2)]);
-                inner2 = buildCommon.makeSpan(["inner"], [inner2], options2);
+                inner2 = buildCommon.makeSpan([], [buildGroup(group.body, options)]);
+                inner2 = buildCommon.makeSpan(["inner"], [inner2], options);
               } else {
-                inner2 = buildCommon.makeSpan(["inner"], [buildGroup(group.body, options2)]);
+                inner2 = buildCommon.makeSpan(["inner"], [buildGroup(group.body, options)]);
               }
               var fix2 = buildCommon.makeSpan(["fix"], []);
-              var node = buildCommon.makeSpan([group.alignment], [inner2, fix2], options2);
+              var node = buildCommon.makeSpan([group.alignment], [inner2, fix2], options);
               var strut = buildCommon.makeSpan(["strut"]);
               strut.style.height = makeEm(node.height + node.depth);
               if (node.depth) {
                 strut.style.verticalAlign = makeEm(-node.depth);
               }
               node.children.unshift(strut);
-              node = buildCommon.makeSpan(["thinbox"], [node], options2);
-              return buildCommon.makeSpan(["mord", "vbox"], [node], options2);
+              node = buildCommon.makeSpan(["thinbox"], [node], options);
+              return buildCommon.makeSpan(["mord", "vbox"], [node], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var node = new mathMLTree.MathNode("mpadded", [buildMathML_buildGroup(group.body, options2)]);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var node = new mathMLTree.MathNode("mpadded", [buildMathML_buildGroup(group.body, options)]);
               if (group.alignment !== "rlap") {
                 var offset = group.alignment === "llap" ? "-1" : "-0.5";
                 node.setAttribute("lspace", offset + "width");
@@ -9500,13 +9500,13 @@
               allowedInText: true,
               allowedInMath: false
             },
-            handler: function handler(context2, args) {
-              throw new src_ParseError("Mismatched " + context2.funcName);
+            handler: function handler(context, args) {
+              throw new src_ParseError("Mismatched " + context.funcName);
             }
           });
           ;
-          var chooseMathStyle = function chooseMathStyle2(group, options2) {
-            switch (options2.style.size) {
+          var chooseMathStyle = function chooseMathStyle2(group, options) {
+            switch (options.style.size) {
               case src_Style.DISPLAY.size:
                 return group.display;
               case src_Style.TEXT.size:
@@ -9537,45 +9537,45 @@
                 scriptscript: ordargument(args[3])
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var body = chooseMathStyle(group, options2);
-              var elements = buildExpression(body, options2, false);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var body = chooseMathStyle(group, options);
+              var elements = buildExpression(body, options, false);
               return buildCommon.makeFragment(elements);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var body = chooseMathStyle(group, options2);
-              return buildExpressionRow(body, options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var body = chooseMathStyle(group, options);
+              return buildExpressionRow(body, options);
             }
           });
           ;
-          var assembleSupSub = function assembleSupSub2(base2, supGroup, subGroup, options2, style, slant, baseShift) {
+          var assembleSupSub = function assembleSupSub2(base2, supGroup, subGroup, options, style, slant, baseShift) {
             base2 = buildCommon.makeSpan([], [base2]);
             var subIsSingleCharacter = subGroup && utils.isCharacterBox(subGroup);
             var sub;
             var sup;
             if (supGroup) {
-              var elem = buildGroup(supGroup, options2.havingStyle(style.sup()), options2);
+              var elem = buildGroup(supGroup, options.havingStyle(style.sup()), options);
               sup = {
                 elem,
-                kern: Math.max(options2.fontMetrics().bigOpSpacing1, options2.fontMetrics().bigOpSpacing3 - elem.depth)
+                kern: Math.max(options.fontMetrics().bigOpSpacing1, options.fontMetrics().bigOpSpacing3 - elem.depth)
               };
             }
             if (subGroup) {
-              var _elem = buildGroup(subGroup, options2.havingStyle(style.sub()), options2);
+              var _elem = buildGroup(subGroup, options.havingStyle(style.sub()), options);
               sub = {
                 elem: _elem,
-                kern: Math.max(options2.fontMetrics().bigOpSpacing2, options2.fontMetrics().bigOpSpacing4 - _elem.height)
+                kern: Math.max(options.fontMetrics().bigOpSpacing2, options.fontMetrics().bigOpSpacing4 - _elem.height)
               };
             }
             var finalGroup;
             if (sup && sub) {
-              var bottom = options2.fontMetrics().bigOpSpacing5 + sub.elem.height + sub.elem.depth + sub.kern + base2.depth + baseShift;
+              var bottom = options.fontMetrics().bigOpSpacing5 + sub.elem.height + sub.elem.depth + sub.kern + base2.depth + baseShift;
               finalGroup = buildCommon.makeVList({
                 positionType: "bottom",
                 positionData: bottom,
                 children: [{
                   type: "kern",
-                  size: options2.fontMetrics().bigOpSpacing5
+                  size: options.fontMetrics().bigOpSpacing5
                 }, {
                   type: "elem",
                   elem: sub.elem,
@@ -9595,9 +9595,9 @@
                   marginLeft: makeEm(slant)
                 }, {
                   type: "kern",
-                  size: options2.fontMetrics().bigOpSpacing5
+                  size: options.fontMetrics().bigOpSpacing5
                 }]
-              }, options2);
+              }, options);
             } else if (sub) {
               var top = base2.height - baseShift;
               finalGroup = buildCommon.makeVList({
@@ -9605,7 +9605,7 @@
                 positionData: top,
                 children: [{
                   type: "kern",
-                  size: options2.fontMetrics().bigOpSpacing5
+                  size: options.fontMetrics().bigOpSpacing5
                 }, {
                   type: "elem",
                   elem: sub.elem,
@@ -9617,7 +9617,7 @@
                   type: "elem",
                   elem: base2
                 }]
-              }, options2);
+              }, options);
             } else if (sup) {
               var _bottom = base2.depth + baseShift;
               finalGroup = buildCommon.makeVList({
@@ -9635,23 +9635,23 @@
                   marginLeft: makeEm(slant)
                 }, {
                   type: "kern",
-                  size: options2.fontMetrics().bigOpSpacing5
+                  size: options.fontMetrics().bigOpSpacing5
                 }]
-              }, options2);
+              }, options);
             } else {
               return base2;
             }
             var parts = [finalGroup];
             if (sub && slant !== 0 && !subIsSingleCharacter) {
-              var spacer = buildCommon.makeSpan(["mspace"], [], options2);
+              var spacer = buildCommon.makeSpan(["mspace"], [], options);
               spacer.style.marginRight = makeEm(slant);
               parts.unshift(spacer);
             }
-            return buildCommon.makeSpan(["mop", "op-limits"], parts, options2);
+            return buildCommon.makeSpan(["mop", "op-limits"], parts, options);
           };
           ;
           var noSuccessor = ["\\smallint"];
-          var op_htmlBuilder = function htmlBuilder2(grp, options2) {
+          var op_htmlBuilder = function htmlBuilder2(grp, options) {
             var supGroup;
             var subGroup;
             var hasLimits = false;
@@ -9664,7 +9664,7 @@
             } else {
               group = assertNodeType(grp, "op");
             }
-            var style = options2.style;
+            var style = options.style;
             var large = false;
             if (style.size === src_Style.DISPLAY.size && group.symbol && !utils.contains(noSuccessor, group.name)) {
               large = true;
@@ -9677,10 +9677,10 @@
                 stash = group.name.substr(1);
                 group.name = stash === "oiint" ? "\\iint" : "\\iiint";
               }
-              base2 = buildCommon.makeSymbol(group.name, fontName, "math", options2, ["mop", "op-symbol", large ? "large-op" : "small-op"]);
+              base2 = buildCommon.makeSymbol(group.name, fontName, "math", options, ["mop", "op-symbol", large ? "large-op" : "small-op"]);
               if (stash.length > 0) {
                 var italic = base2.italic;
-                var oval = buildCommon.staticSvg(stash + "Size" + (large ? "2" : "1"), options2);
+                var oval = buildCommon.staticSvg(stash + "Size" + (large ? "2" : "1"), options);
                 base2 = buildCommon.makeVList({
                   positionType: "individualShift",
                   children: [{
@@ -9692,34 +9692,34 @@
                     elem: oval,
                     shift: large ? 0.08 : 0
                   }]
-                }, options2);
+                }, options);
                 group.name = "\\" + stash;
                 base2.classes.unshift("mop");
                 base2.italic = italic;
               }
             } else if (group.body) {
-              var inner2 = buildExpression(group.body, options2, true);
+              var inner2 = buildExpression(group.body, options, true);
               if (inner2.length === 1 && inner2[0] instanceof SymbolNode) {
                 base2 = inner2[0];
                 base2.classes[0] = "mop";
               } else {
-                base2 = buildCommon.makeSpan(["mop"], inner2, options2);
+                base2 = buildCommon.makeSpan(["mop"], inner2, options);
               }
             } else {
               var output = [];
               for (var i3 = 1; i3 < group.name.length; i3++) {
-                output.push(buildCommon.mathsym(group.name[i3], group.mode, options2));
+                output.push(buildCommon.mathsym(group.name[i3], group.mode, options));
               }
-              base2 = buildCommon.makeSpan(["mop"], output, options2);
+              base2 = buildCommon.makeSpan(["mop"], output, options);
             }
             var baseShift = 0;
             var slant = 0;
             if ((base2 instanceof SymbolNode || group.name === "\\oiint" || group.name === "\\oiiint") && !group.suppressBaseShift) {
-              baseShift = (base2.height - base2.depth) / 2 - options2.fontMetrics().axisHeight;
+              baseShift = (base2.height - base2.depth) / 2 - options.fontMetrics().axisHeight;
               slant = base2.italic;
             }
             if (hasLimits) {
-              return assembleSupSub(base2, supGroup, subGroup, options2, style, slant, baseShift);
+              return assembleSupSub(base2, supGroup, subGroup, options, style, slant, baseShift);
             } else {
               if (baseShift) {
                 base2.style.position = "relative";
@@ -9728,7 +9728,7 @@
               return base2;
             }
           };
-          var op_mathmlBuilder = function mathmlBuilder2(group, options2) {
+          var op_mathmlBuilder = function mathmlBuilder2(group, options) {
             var node;
             if (group.symbol) {
               node = new MathNode("mo", [makeText(group.name, group.mode)]);
@@ -9736,7 +9736,7 @@
                 node.setAttribute("largeop", "false");
               }
             } else if (group.body) {
-              node = new MathNode("mo", buildMathML_buildExpression(group.body, options2));
+              node = new MathNode("mo", buildMathML_buildExpression(group.body, options));
             } else {
               node = new MathNode("mi", [new TextNode(group.name.slice(1))]);
               var operator = new MathNode("mo", [makeText("\u2061", "text")]);
@@ -9886,7 +9886,7 @@
             _macros[name] = body;
           }
           ;
-          var operatorname_htmlBuilder = function htmlBuilder2(grp, options2) {
+          var operatorname_htmlBuilder = function htmlBuilder2(grp, options) {
             var supGroup;
             var subGroup;
             var hasLimits = false;
@@ -9913,25 +9913,25 @@
                   return child2;
                 }
               });
-              var expression = buildExpression(body, options2.withFont("mathrm"), true);
+              var expression = buildExpression(body, options.withFont("mathrm"), true);
               for (var i3 = 0; i3 < expression.length; i3++) {
                 var child = expression[i3];
                 if (child instanceof SymbolNode) {
                   child.text = child.text.replace(/\u2212/, "-").replace(/\u2217/, "*");
                 }
               }
-              base2 = buildCommon.makeSpan(["mop"], expression, options2);
+              base2 = buildCommon.makeSpan(["mop"], expression, options);
             } else {
-              base2 = buildCommon.makeSpan(["mop"], [], options2);
+              base2 = buildCommon.makeSpan(["mop"], [], options);
             }
             if (hasLimits) {
-              return assembleSupSub(base2, supGroup, subGroup, options2, options2.style, 0, 0);
+              return assembleSupSub(base2, supGroup, subGroup, options, options.style, 0, 0);
             } else {
               return base2;
             }
           };
-          var operatorname_mathmlBuilder = function mathmlBuilder2(group, options2) {
-            var expression = buildMathML_buildExpression(group.body, options2.withFont("mathrm"));
+          var operatorname_mathmlBuilder = function mathmlBuilder2(group, options) {
+            var expression = buildMathML_buildExpression(group.body, options.withFont("mathrm"));
             var isAllString = true;
             for (var i3 = 0; i3 < expression.length; i3++) {
               var node = expression[i3];
@@ -10000,14 +10000,14 @@
           ;
           defineFunctionBuilders({
             type: "ordgroup",
-            htmlBuilder: function htmlBuilder2(group, options2) {
+            htmlBuilder: function htmlBuilder2(group, options) {
               if (group.semisimple) {
-                return buildCommon.makeFragment(buildExpression(group.body, options2, false));
+                return buildCommon.makeFragment(buildExpression(group.body, options, false));
               }
-              return buildCommon.makeSpan(["mord"], buildExpression(group.body, options2, true), options2);
+              return buildCommon.makeSpan(["mord"], buildExpression(group.body, options, true), options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              return buildExpressionRow(group.body, options2, true);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              return buildExpressionRow(group.body, options, true);
             }
           });
           ;
@@ -10026,10 +10026,10 @@
                 body
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var innerGroup = buildGroup(group.body, options2.havingCrampedStyle());
-              var line = buildCommon.makeLineSpan("overline-line", options2);
-              var defaultRuleThickness = options2.fontMetrics().defaultRuleThickness;
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var innerGroup = buildGroup(group.body, options.havingCrampedStyle());
+              var line = buildCommon.makeLineSpan("overline-line", options);
+              var defaultRuleThickness = options.fontMetrics().defaultRuleThickness;
               var vlist = buildCommon.makeVList({
                 positionType: "firstBaseline",
                 children: [{
@@ -10045,13 +10045,13 @@
                   type: "kern",
                   size: defaultRuleThickness
                 }]
-              }, options2);
-              return buildCommon.makeSpan(["mord", "overline"], [vlist], options2);
+              }, options);
+              return buildCommon.makeSpan(["mord", "overline"], [vlist], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u203E")]);
               operator.setAttribute("stretchy", "true");
-              var node = new mathMLTree.MathNode("mover", [buildMathML_buildGroup(group.body, options2), operator]);
+              var node = new mathMLTree.MathNode("mover", [buildMathML_buildGroup(group.body, options), operator]);
               node.setAttribute("accent", "true");
               return node;
             }
@@ -10073,12 +10073,12 @@
                 body: ordargument(body)
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var elements = buildExpression(group.body, options2.withPhantom(), false);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var elements = buildExpression(group.body, options.withPhantom(), false);
               return buildCommon.makeFragment(elements);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var inner2 = buildMathML_buildExpression(group.body, options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var inner2 = buildMathML_buildExpression(group.body, options);
               return new mathMLTree.MathNode("mphantom", inner2);
             }
           });
@@ -10098,8 +10098,8 @@
                 body
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var node = buildCommon.makeSpan([], [buildGroup(group.body, options2.withPhantom())]);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var node = buildCommon.makeSpan([], [buildGroup(group.body, options.withPhantom())]);
               node.height = 0;
               node.depth = 0;
               if (node.children) {
@@ -10114,11 +10114,11 @@
                   type: "elem",
                   elem: node
                 }]
-              }, options2);
-              return buildCommon.makeSpan(["mord"], [node], options2);
+              }, options);
+              return buildCommon.makeSpan(["mord"], [node], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var inner2 = buildMathML_buildExpression(ordargument(group.body), options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var inner2 = buildMathML_buildExpression(ordargument(group.body), options);
               var phantom = new mathMLTree.MathNode("mphantom", inner2);
               var node = new mathMLTree.MathNode("mpadded", [phantom]);
               node.setAttribute("height", "0px");
@@ -10142,13 +10142,13 @@
                 body
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var inner2 = buildCommon.makeSpan(["inner"], [buildGroup(group.body, options2.withPhantom())]);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var inner2 = buildCommon.makeSpan(["inner"], [buildGroup(group.body, options.withPhantom())]);
               var fix2 = buildCommon.makeSpan(["fix"], []);
-              return buildCommon.makeSpan(["mord", "rlap"], [inner2, fix2], options2);
+              return buildCommon.makeSpan(["mord", "rlap"], [inner2, fix2], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var inner2 = buildMathML_buildExpression(ordargument(group.body), options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var inner2 = buildMathML_buildExpression(ordargument(group.body), options);
               var phantom = new mathMLTree.MathNode("mphantom", inner2);
               var node = new mathMLTree.MathNode("mpadded", [phantom]);
               node.setAttribute("width", "0px");
@@ -10175,9 +10175,9 @@
                 body
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var body = buildGroup(group.body, options2);
-              var dy = calculateSize(group.dy, options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var body = buildGroup(group.body, options);
+              var dy = calculateSize(group.dy, options);
               return buildCommon.makeVList({
                 positionType: "shift",
                 positionData: -dy,
@@ -10185,10 +10185,10 @@
                   type: "elem",
                   elem: body
                 }]
-              }, options2);
+              }, options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var node = new mathMLTree.MathNode("mpadded", [buildMathML_buildGroup(group.body, options2)]);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var node = new mathMLTree.MathNode("mpadded", [buildMathML_buildGroup(group.body, options)]);
               var dy = group.dy.number + group.dy.unit;
               node.setAttribute("voffset", dy);
               return node;
@@ -10216,25 +10216,25 @@
                 height: height.value
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var rule = buildCommon.makeSpan(["mord", "rule"], [], options2);
-              var width = calculateSize(group.width, options2);
-              var height = calculateSize(group.height, options2);
-              var shift = group.shift ? calculateSize(group.shift, options2) : 0;
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var rule = buildCommon.makeSpan(["mord", "rule"], [], options);
+              var width = calculateSize(group.width, options);
+              var height = calculateSize(group.height, options);
+              var shift = group.shift ? calculateSize(group.shift, options) : 0;
               rule.style.borderRightWidth = makeEm(width);
               rule.style.borderTopWidth = makeEm(height);
               rule.style.bottom = makeEm(shift);
               rule.width = width;
               rule.height = height + shift;
               rule.depth = -shift;
-              rule.maxFontSize = height * 1.125 * options2.sizeMultiplier;
+              rule.maxFontSize = height * 1.125 * options.sizeMultiplier;
               return rule;
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var width = calculateSize(group.width, options2);
-              var height = calculateSize(group.height, options2);
-              var shift = group.shift ? calculateSize(group.shift, options2) : 0;
-              var color = options2.color && options2.getColor() || "black";
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var width = calculateSize(group.width, options);
+              var height = calculateSize(group.height, options);
+              var shift = group.shift ? calculateSize(group.shift, options) : 0;
+              var color = options.color && options.getColor() || "black";
               var rule = new mathMLTree.MathNode("mspace");
               rule.setAttribute("mathbackground", color);
               rule.setAttribute("width", makeEm(width));
@@ -10251,14 +10251,14 @@
             }
           });
           ;
-          function sizingGroup(value, options2, baseOptions) {
-            var inner2 = buildExpression(value, options2, false);
-            var multiplier = options2.sizeMultiplier / baseOptions.sizeMultiplier;
+          function sizingGroup(value, options, baseOptions) {
+            var inner2 = buildExpression(value, options, false);
+            var multiplier = options.sizeMultiplier / baseOptions.sizeMultiplier;
             for (var i3 = 0; i3 < inner2.length; i3++) {
               var pos = inner2[i3].classes.indexOf("sizing");
               if (pos < 0) {
-                Array.prototype.push.apply(inner2[i3].classes, options2.sizingClasses(baseOptions));
-              } else if (inner2[i3].classes[pos + 1] === "reset-size" + options2.size) {
+                Array.prototype.push.apply(inner2[i3].classes, options.sizingClasses(baseOptions));
+              } else if (inner2[i3].classes[pos + 1] === "reset-size" + options.size) {
                 inner2[i3].classes[pos + 1] = "reset-size" + baseOptions.size;
               }
               inner2[i3].height *= multiplier;
@@ -10267,9 +10267,9 @@
             return buildCommon.makeFragment(inner2);
           }
           var sizeFuncs = ["\\tiny", "\\sixptsize", "\\scriptsize", "\\footnotesize", "\\small", "\\normalsize", "\\large", "\\Large", "\\LARGE", "\\huge", "\\Huge"];
-          var sizing_htmlBuilder = function htmlBuilder2(group, options2) {
-            var newOptions = options2.havingSize(group.size);
-            return sizingGroup(group.body, newOptions, options2);
+          var sizing_htmlBuilder = function htmlBuilder2(group, options) {
+            var newOptions = options.havingSize(group.size);
+            return sizingGroup(group.body, newOptions, options);
           };
           defineFunction({
             type: "sizing",
@@ -10289,8 +10289,8 @@
               };
             },
             htmlBuilder: sizing_htmlBuilder,
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var newOptions = options2.havingSize(group.size);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var newOptions = options.havingSize(group.size);
               var inner2 = buildMathML_buildExpression(group.body, newOptions);
               var node = new mathMLTree.MathNode("mstyle", inner2);
               node.setAttribute("mathsize", makeEm(newOptions.sizeMultiplier));
@@ -10339,8 +10339,8 @@
                 smashDepth
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var node = buildCommon.makeSpan([], [buildGroup(group.body, options2)]);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var node = buildCommon.makeSpan([], [buildGroup(group.body, options)]);
               if (!group.smashHeight && !group.smashDepth) {
                 return node;
               }
@@ -10366,11 +10366,11 @@
                   type: "elem",
                   elem: node
                 }]
-              }, options2);
-              return buildCommon.makeSpan(["mord"], [smashedNode], options2);
+              }, options);
+              return buildCommon.makeSpan(["mord"], [smashedNode], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var node = new mathMLTree.MathNode("mpadded", [buildMathML_buildGroup(group.body, options2)]);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var node = new mathMLTree.MathNode("mpadded", [buildMathML_buildGroup(group.body, options)]);
               if (group.smashHeight) {
                 node.setAttribute("height", "0px");
               }
@@ -10399,21 +10399,21 @@
                 index
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var inner2 = buildGroup(group.body, options2.havingCrampedStyle());
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var inner2 = buildGroup(group.body, options.havingCrampedStyle());
               if (inner2.height === 0) {
-                inner2.height = options2.fontMetrics().xHeight;
+                inner2.height = options.fontMetrics().xHeight;
               }
-              inner2 = buildCommon.wrapFragment(inner2, options2);
-              var metrics = options2.fontMetrics();
+              inner2 = buildCommon.wrapFragment(inner2, options);
+              var metrics = options.fontMetrics();
               var theta = metrics.defaultRuleThickness;
               var phi = theta;
-              if (options2.style.id < src_Style.TEXT.id) {
-                phi = options2.fontMetrics().xHeight;
+              if (options.style.id < src_Style.TEXT.id) {
+                phi = options.fontMetrics().xHeight;
               }
               var lineClearance = theta + phi / 4;
               var minDelimiterHeight = inner2.height + inner2.depth + lineClearance + theta;
-              var _delimiter$sqrtImage = delimiter.sqrtImage(minDelimiterHeight, options2), img = _delimiter$sqrtImage.span, ruleWidth = _delimiter$sqrtImage.ruleWidth, advanceWidth = _delimiter$sqrtImage.advanceWidth;
+              var _delimiter$sqrtImage = delimiter.sqrtImage(minDelimiterHeight, options), img = _delimiter$sqrtImage.span, ruleWidth = _delimiter$sqrtImage.ruleWidth, advanceWidth = _delimiter$sqrtImage.advanceWidth;
               var delimDepth = img.height - ruleWidth;
               if (delimDepth > inner2.height + inner2.depth + lineClearance) {
                 lineClearance = (lineClearance + delimDepth - inner2.height - inner2.depth) / 2;
@@ -10436,12 +10436,12 @@
                   type: "kern",
                   size: ruleWidth
                 }]
-              }, options2);
+              }, options);
               if (!group.index) {
-                return buildCommon.makeSpan(["mord", "sqrt"], [body], options2);
+                return buildCommon.makeSpan(["mord", "sqrt"], [body], options);
               } else {
-                var newOptions = options2.havingStyle(src_Style.SCRIPTSCRIPT);
-                var rootm = buildGroup(group.index, newOptions, options2);
+                var newOptions = options.havingStyle(src_Style.SCRIPTSCRIPT);
+                var rootm = buildGroup(group.index, newOptions, options);
                 var toShift = 0.6 * (body.height - body.depth);
                 var rootVList = buildCommon.makeVList({
                   positionType: "shift",
@@ -10450,14 +10450,14 @@
                     type: "elem",
                     elem: rootm
                   }]
-                }, options2);
+                }, options);
                 var rootVListWrap = buildCommon.makeSpan(["root"], [rootVList]);
-                return buildCommon.makeSpan(["mord", "sqrt"], [rootVListWrap, body], options2);
+                return buildCommon.makeSpan(["mord", "sqrt"], [rootVListWrap, body], options);
               }
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var body = group.body, index = group.index;
-              return index ? new mathMLTree.MathNode("mroot", [buildMathML_buildGroup(body, options2), buildMathML_buildGroup(index, options2)]) : new mathMLTree.MathNode("msqrt", [buildMathML_buildGroup(body, options2)]);
+              return index ? new mathMLTree.MathNode("mroot", [buildMathML_buildGroup(body, options), buildMathML_buildGroup(index, options)]) : new mathMLTree.MathNode("msqrt", [buildMathML_buildGroup(body, options)]);
             }
           });
           ;
@@ -10486,14 +10486,14 @@
                 body
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
+            htmlBuilder: function htmlBuilder2(group, options) {
               var newStyle = styling_styleMap[group.style];
-              var newOptions = options2.havingStyle(newStyle).withFont("");
-              return sizingGroup(group.body, newOptions, options2);
+              var newOptions = options.havingStyle(newStyle).withFont("");
+              return sizingGroup(group.body, newOptions, options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var newStyle = styling_styleMap[group.style];
-              var newOptions = options2.havingStyle(newStyle);
+              var newOptions = options.havingStyle(newStyle);
               var inner2 = buildMathML_buildExpression(group.body, newOptions);
               var node = new mathMLTree.MathNode("mstyle", inner2);
               var styleAttributes = {
@@ -10509,15 +10509,15 @@
             }
           });
           ;
-          var htmlBuilderDelegate = function htmlBuilderDelegate2(group, options2) {
+          var htmlBuilderDelegate = function htmlBuilderDelegate2(group, options) {
             var base2 = group.base;
             if (!base2) {
               return null;
             } else if (base2.type === "op") {
-              var delegate = base2.limits && (options2.style.size === src_Style.DISPLAY.size || base2.alwaysHandleSupSub);
+              var delegate = base2.limits && (options.style.size === src_Style.DISPLAY.size || base2.alwaysHandleSupSub);
               return delegate ? op_htmlBuilder : null;
             } else if (base2.type === "operatorname") {
-              var _delegate = base2.alwaysHandleSupSub && (options2.style.size === src_Style.DISPLAY.size || base2.limits);
+              var _delegate = base2.alwaysHandleSupSub && (options.style.size === src_Style.DISPLAY.size || base2.limits);
               return _delegate ? operatorname_htmlBuilder : null;
             } else if (base2.type === "accent") {
               return utils.isCharacterBox(base2.base) ? htmlBuilder : null;
@@ -10530,42 +10530,42 @@
           };
           defineFunctionBuilders({
             type: "supsub",
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var builderDelegate = htmlBuilderDelegate(group, options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var builderDelegate = htmlBuilderDelegate(group, options);
               if (builderDelegate) {
-                return builderDelegate(group, options2);
+                return builderDelegate(group, options);
               }
               var valueBase = group.base, valueSup = group.sup, valueSub = group.sub;
-              var base2 = buildGroup(valueBase, options2);
+              var base2 = buildGroup(valueBase, options);
               var supm;
               var subm;
-              var metrics = options2.fontMetrics();
+              var metrics = options.fontMetrics();
               var supShift = 0;
               var subShift = 0;
               var isCharacterBox2 = valueBase && utils.isCharacterBox(valueBase);
               if (valueSup) {
-                var newOptions = options2.havingStyle(options2.style.sup());
-                supm = buildGroup(valueSup, newOptions, options2);
+                var newOptions = options.havingStyle(options.style.sup());
+                supm = buildGroup(valueSup, newOptions, options);
                 if (!isCharacterBox2) {
-                  supShift = base2.height - newOptions.fontMetrics().supDrop * newOptions.sizeMultiplier / options2.sizeMultiplier;
+                  supShift = base2.height - newOptions.fontMetrics().supDrop * newOptions.sizeMultiplier / options.sizeMultiplier;
                 }
               }
               if (valueSub) {
-                var _newOptions = options2.havingStyle(options2.style.sub());
-                subm = buildGroup(valueSub, _newOptions, options2);
+                var _newOptions = options.havingStyle(options.style.sub());
+                subm = buildGroup(valueSub, _newOptions, options);
                 if (!isCharacterBox2) {
-                  subShift = base2.depth + _newOptions.fontMetrics().subDrop * _newOptions.sizeMultiplier / options2.sizeMultiplier;
+                  subShift = base2.depth + _newOptions.fontMetrics().subDrop * _newOptions.sizeMultiplier / options.sizeMultiplier;
                 }
               }
               var minSupShift;
-              if (options2.style === src_Style.DISPLAY) {
+              if (options.style === src_Style.DISPLAY) {
                 minSupShift = metrics.sup1;
-              } else if (options2.style.cramped) {
+              } else if (options.style.cramped) {
                 minSupShift = metrics.sup3;
               } else {
                 minSupShift = metrics.sup2;
               }
-              var multiplier = options2.sizeMultiplier;
+              var multiplier = options.sizeMultiplier;
               var marginRight = makeEm(0.5 / metrics.ptPerEm / multiplier);
               var marginLeft = null;
               if (subm) {
@@ -10603,7 +10603,7 @@
                 supsub = buildCommon.makeVList({
                   positionType: "individualShift",
                   children: vlistElem
-                }, options2);
+                }, options);
               } else if (subm) {
                 subShift = Math.max(subShift, metrics.sub1, subm.height - 0.8 * metrics.xHeight);
                 var _vlistElem = [{
@@ -10616,7 +10616,7 @@
                   positionType: "shift",
                   positionData: subShift,
                   children: _vlistElem
-                }, options2);
+                }, options);
               } else if (supm) {
                 supShift = Math.max(supShift, minSupShift, supm.depth + 0.25 * metrics.xHeight);
                 supsub = buildCommon.makeVList({
@@ -10627,14 +10627,14 @@
                     elem: supm,
                     marginRight
                   }]
-                }, options2);
+                }, options);
               } else {
                 throw new Error("supsub must have either sup or sub.");
               }
               var mclass = getTypeOfDomTree(base2, "right") || "mord";
-              return buildCommon.makeSpan([mclass], [base2, buildCommon.makeSpan(["msupsub"], [supsub])], options2);
+              return buildCommon.makeSpan([mclass], [base2, buildCommon.makeSpan(["msupsub"], [supsub])], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var isBrace = false;
               var isOver;
               var isSup;
@@ -10648,39 +10648,39 @@
               if (group.base && (group.base.type === "op" || group.base.type === "operatorname")) {
                 group.base.parentIsSupSub = true;
               }
-              var children = [buildMathML_buildGroup(group.base, options2)];
+              var children = [buildMathML_buildGroup(group.base, options)];
               if (group.sub) {
-                children.push(buildMathML_buildGroup(group.sub, options2));
+                children.push(buildMathML_buildGroup(group.sub, options));
               }
               if (group.sup) {
-                children.push(buildMathML_buildGroup(group.sup, options2));
+                children.push(buildMathML_buildGroup(group.sup, options));
               }
               var nodeType;
               if (isBrace) {
                 nodeType = isOver ? "mover" : "munder";
               } else if (!group.sub) {
                 var base2 = group.base;
-                if (base2 && base2.type === "op" && base2.limits && (options2.style === src_Style.DISPLAY || base2.alwaysHandleSupSub)) {
+                if (base2 && base2.type === "op" && base2.limits && (options.style === src_Style.DISPLAY || base2.alwaysHandleSupSub)) {
                   nodeType = "mover";
-                } else if (base2 && base2.type === "operatorname" && base2.alwaysHandleSupSub && (base2.limits || options2.style === src_Style.DISPLAY)) {
+                } else if (base2 && base2.type === "operatorname" && base2.alwaysHandleSupSub && (base2.limits || options.style === src_Style.DISPLAY)) {
                   nodeType = "mover";
                 } else {
                   nodeType = "msup";
                 }
               } else if (!group.sup) {
                 var _base = group.base;
-                if (_base && _base.type === "op" && _base.limits && (options2.style === src_Style.DISPLAY || _base.alwaysHandleSupSub)) {
+                if (_base && _base.type === "op" && _base.limits && (options.style === src_Style.DISPLAY || _base.alwaysHandleSupSub)) {
                   nodeType = "munder";
-                } else if (_base && _base.type === "operatorname" && _base.alwaysHandleSupSub && (_base.limits || options2.style === src_Style.DISPLAY)) {
+                } else if (_base && _base.type === "operatorname" && _base.alwaysHandleSupSub && (_base.limits || options.style === src_Style.DISPLAY)) {
                   nodeType = "munder";
                 } else {
                   nodeType = "msub";
                 }
               } else {
                 var _base2 = group.base;
-                if (_base2 && _base2.type === "op" && _base2.limits && options2.style === src_Style.DISPLAY) {
+                if (_base2 && _base2.type === "op" && _base2.limits && options.style === src_Style.DISPLAY) {
                   nodeType = "munderover";
-                } else if (_base2 && _base2.type === "operatorname" && _base2.alwaysHandleSupSub && (options2.style === src_Style.DISPLAY || _base2.limits)) {
+                } else if (_base2 && _base2.type === "operatorname" && _base2.alwaysHandleSupSub && (options.style === src_Style.DISPLAY || _base2.limits)) {
                   nodeType = "munderover";
                 } else {
                   nodeType = "msubsup";
@@ -10692,13 +10692,13 @@
           ;
           defineFunctionBuilders({
             type: "atom",
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              return buildCommon.mathsym(group.text, group.mode, options2, ["m" + group.family]);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              return buildCommon.mathsym(group.text, group.mode, options, ["m" + group.family]);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var node = new mathMLTree.MathNode("mo", [makeText(group.text, group.mode)]);
               if (group.family === "bin") {
-                var variant = getVariant(group, options2);
+                var variant = getVariant(group, options);
                 if (variant === "bold-italic") {
                   node.setAttribute("mathvariant", variant);
                 }
@@ -10718,12 +10718,12 @@
           };
           defineFunctionBuilders({
             type: "mathord",
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              return buildCommon.makeOrd(group, options2, "mathord");
+            htmlBuilder: function htmlBuilder2(group, options) {
+              return buildCommon.makeOrd(group, options, "mathord");
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var node = new mathMLTree.MathNode("mi", [makeText(group.text, group.mode, options2)]);
-              var variant = getVariant(group, options2) || "italic";
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var node = new mathMLTree.MathNode("mi", [makeText(group.text, group.mode, options)]);
+              var variant = getVariant(group, options) || "italic";
               if (variant !== defaultVariant[node.type]) {
                 node.setAttribute("mathvariant", variant);
               }
@@ -10732,12 +10732,12 @@
           });
           defineFunctionBuilders({
             type: "textord",
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              return buildCommon.makeOrd(group, options2, "textord");
+            htmlBuilder: function htmlBuilder2(group, options) {
+              return buildCommon.makeOrd(group, options, "textord");
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var text = makeText(group.text, group.mode, options2);
-              var variant = getVariant(group, options2) || "normal";
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var text = makeText(group.text, group.mode, options);
+              var variant = getVariant(group, options) || "normal";
               var node;
               if (group.mode === "text") {
                 node = new mathMLTree.MathNode("mtext", [text]);
@@ -10772,23 +10772,23 @@
           };
           defineFunctionBuilders({
             type: "spacing",
-            htmlBuilder: function htmlBuilder2(group, options2) {
+            htmlBuilder: function htmlBuilder2(group, options) {
               if (regularSpace.hasOwnProperty(group.text)) {
                 var className = regularSpace[group.text].className || "";
                 if (group.mode === "text") {
-                  var ord = buildCommon.makeOrd(group, options2, "textord");
+                  var ord = buildCommon.makeOrd(group, options, "textord");
                   ord.classes.push(className);
                   return ord;
                 } else {
-                  return buildCommon.makeSpan(["mspace", className], [buildCommon.mathsym(group.text, group.mode, options2)], options2);
+                  return buildCommon.makeSpan(["mspace", className], [buildCommon.mathsym(group.text, group.mode, options)], options);
                 }
               } else if (cssSpace.hasOwnProperty(group.text)) {
-                return buildCommon.makeSpan(["mspace", cssSpace[group.text]], [], options2);
+                return buildCommon.makeSpan(["mspace", cssSpace[group.text]], [], options);
               } else {
                 throw new src_ParseError('Unknown type of space "' + group.text + '"');
               }
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var node;
               if (regularSpace.hasOwnProperty(group.text)) {
                 node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode("\xA0")]);
@@ -10808,8 +10808,8 @@
           };
           defineFunctionBuilders({
             type: "tag",
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var table = new mathMLTree.MathNode("mtable", [new mathMLTree.MathNode("mtr", [pad(), new mathMLTree.MathNode("mtd", [buildExpressionRow(group.body, options2)]), pad(), new mathMLTree.MathNode("mtd", [buildExpressionRow(group.tag, options2)])])]);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var table = new mathMLTree.MathNode("mtable", [new mathMLTree.MathNode("mtr", [pad(), new mathMLTree.MathNode("mtd", [buildExpressionRow(group.body, options)]), pad(), new mathMLTree.MathNode("mtd", [buildExpressionRow(group.tag, options)])])]);
               table.setAttribute("width", "100%");
               return table;
             }
@@ -10830,16 +10830,16 @@
             "\\textit": "textit",
             "\\textup": "textup"
           };
-          var optionsWithFont = function optionsWithFont2(group, options2) {
+          var optionsWithFont = function optionsWithFont2(group, options) {
             var font = group.font;
             if (!font) {
-              return options2;
+              return options;
             } else if (textFontFamilies[font]) {
-              return options2.withTextFontFamily(textFontFamilies[font]);
+              return options.withTextFontFamily(textFontFamilies[font]);
             } else if (textFontWeights[font]) {
-              return options2.withTextFontWeight(textFontWeights[font]);
+              return options.withTextFontWeight(textFontWeights[font]);
             } else {
-              return options2.withTextFontShape(textFontShapes[font]);
+              return options.withTextFontShape(textFontShapes[font]);
             }
           };
           defineFunction({
@@ -10871,13 +10871,13 @@
                 font: funcName
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var newOptions = optionsWithFont(group, options2);
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var newOptions = optionsWithFont(group, options);
               var inner2 = buildExpression(group.body, newOptions, true);
               return buildCommon.makeSpan(["mord", "text"], inner2, newOptions);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              var newOptions = optionsWithFont(group, options2);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              var newOptions = optionsWithFont(group, options);
               return buildExpressionRow(group.body, newOptions);
             }
           });
@@ -10897,10 +10897,10 @@
                 body: args[0]
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var innerGroup = buildGroup(group.body, options2);
-              var line = buildCommon.makeLineSpan("underline-line", options2);
-              var defaultRuleThickness = options2.fontMetrics().defaultRuleThickness;
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var innerGroup = buildGroup(group.body, options);
+              var line = buildCommon.makeLineSpan("underline-line", options);
+              var defaultRuleThickness = options.fontMetrics().defaultRuleThickness;
               var vlist = buildCommon.makeVList({
                 positionType: "top",
                 positionData: innerGroup.height,
@@ -10917,13 +10917,13 @@
                   type: "elem",
                   elem: innerGroup
                 }]
-              }, options2);
-              return buildCommon.makeSpan(["mord", "underline"], [vlist], options2);
+              }, options);
+              return buildCommon.makeSpan(["mord", "underline"], [vlist], options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u203E")]);
               operator.setAttribute("stretchy", "true");
-              var node = new mathMLTree.MathNode("munder", [buildMathML_buildGroup(group.body, options2), operator]);
+              var node = new mathMLTree.MathNode("munder", [buildMathML_buildGroup(group.body, options), operator]);
               node.setAttribute("accentunder", "true");
               return node;
             }
@@ -10945,9 +10945,9 @@
                 body: args[0]
               };
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
-              var body = buildGroup(group.body, options2);
-              var axisHeight = options2.fontMetrics().axisHeight;
+            htmlBuilder: function htmlBuilder2(group, options) {
+              var body = buildGroup(group.body, options);
+              var axisHeight = options.fontMetrics().axisHeight;
               var dy = 0.5 * (body.height - axisHeight - (body.depth + axisHeight));
               return buildCommon.makeVList({
                 positionType: "shift",
@@ -10956,10 +10956,10 @@
                   type: "elem",
                   elem: body
                 }]
-              }, options2);
+              }, options);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
-              return new mathMLTree.MathNode("mpadded", [buildMathML_buildGroup(group.body, options2)], ["vcenter"]);
+            mathmlBuilder: function mathmlBuilder2(group, options) {
+              return new mathMLTree.MathNode("mpadded", [buildMathML_buildGroup(group.body, options)], ["vcenter"]);
             }
           });
           ;
@@ -10970,13 +10970,13 @@
               numArgs: 0,
               allowedInText: true
             },
-            handler: function handler(context2, args, optArgs) {
+            handler: function handler(context, args, optArgs) {
               throw new src_ParseError("\\verb ended by end of line instead of matching delimiter");
             },
-            htmlBuilder: function htmlBuilder2(group, options2) {
+            htmlBuilder: function htmlBuilder2(group, options) {
               var text = makeVerb(group);
               var body = [];
-              var newOptions = options2.havingStyle(options2.style.text());
+              var newOptions = options.havingStyle(options.style.text());
               for (var i3 = 0; i3 < text.length; i3++) {
                 var c3 = text[i3];
                 if (c3 === "~") {
@@ -10984,9 +10984,9 @@
                 }
                 body.push(buildCommon.makeSymbol(c3, "Typewriter-Regular", group.mode, newOptions, ["mord", "texttt"]));
               }
-              return buildCommon.makeSpan(["mord", "text"].concat(newOptions.sizingClasses(options2)), buildCommon.tryCombineChars(body), newOptions);
+              return buildCommon.makeSpan(["mord", "text"].concat(newOptions.sizingClasses(options)), buildCommon.tryCombineChars(body), newOptions);
             },
-            mathmlBuilder: function mathmlBuilder2(group, options2) {
+            mathmlBuilder: function mathmlBuilder2(group, options) {
               var text = new mathMLTree.TextNode(makeVerb(group));
               var node = new mathMLTree.MathNode("mtext", [text]);
               node.setAttribute("mathvariant", "monospace");
@@ -11162,9 +11162,9 @@
           ;
           var macros = _macros;
           var src_macros = macros;
-          defineMacro("\\noexpand", function(context2) {
-            var t2 = context2.popToken();
-            if (context2.isExpandable(t2.text)) {
+          defineMacro("\\noexpand", function(context) {
+            var t2 = context.popToken();
+            if (context.isExpandable(t2.text)) {
               t2.noexpand = true;
               t2.treatAsRelax = true;
             }
@@ -11173,32 +11173,32 @@
               numArgs: 0
             };
           });
-          defineMacro("\\expandafter", function(context2) {
-            var t2 = context2.popToken();
-            context2.expandOnce(true);
+          defineMacro("\\expandafter", function(context) {
+            var t2 = context.popToken();
+            context.expandOnce(true);
             return {
               tokens: [t2],
               numArgs: 0
             };
           });
-          defineMacro("\\@firstoftwo", function(context2) {
-            var args = context2.consumeArgs(2);
+          defineMacro("\\@firstoftwo", function(context) {
+            var args = context.consumeArgs(2);
             return {
               tokens: args[0],
               numArgs: 0
             };
           });
-          defineMacro("\\@secondoftwo", function(context2) {
-            var args = context2.consumeArgs(2);
+          defineMacro("\\@secondoftwo", function(context) {
+            var args = context.consumeArgs(2);
             return {
               tokens: args[1],
               numArgs: 0
             };
           });
-          defineMacro("\\@ifnextchar", function(context2) {
-            var args = context2.consumeArgs(3);
-            context2.consumeSpaces();
-            var nextToken = context2.future();
+          defineMacro("\\@ifnextchar", function(context) {
+            var args = context.consumeArgs(3);
+            context.consumeSpaces();
+            var nextToken = context.future();
             if (args[0].length === 1 && args[0][0].text === nextToken.text) {
               return {
                 tokens: args[1],
@@ -11212,9 +11212,9 @@
             }
           });
           defineMacro("\\@ifstar", "\\@ifnextchar *{\\@firstoftwo{#1}}");
-          defineMacro("\\TextOrMath", function(context2) {
-            var args = context2.consumeArgs(2);
-            if (context2.mode === "text") {
+          defineMacro("\\TextOrMath", function(context) {
+            var args = context.consumeArgs(2);
+            if (context.mode === "text") {
               return {
                 tokens: args[0],
                 numArgs: 0
@@ -11250,18 +11250,18 @@
             "f": 15,
             "F": 15
           };
-          defineMacro("\\char", function(context2) {
-            var token = context2.popToken();
+          defineMacro("\\char", function(context) {
+            var token = context.popToken();
             var base2;
             var number = "";
             if (token.text === "'") {
               base2 = 8;
-              token = context2.popToken();
+              token = context.popToken();
             } else if (token.text === '"') {
               base2 = 16;
-              token = context2.popToken();
+              token = context.popToken();
             } else if (token.text === "`") {
-              token = context2.popToken();
+              token = context.popToken();
               if (token.text[0] === "\\") {
                 number = token.text.charCodeAt(1);
               } else if (token.text === "EOF") {
@@ -11278,21 +11278,21 @@
                 throw new src_ParseError("Invalid base-" + base2 + " digit " + token.text);
               }
               var digit;
-              while ((digit = digitToNumber[context2.future().text]) != null && digit < base2) {
+              while ((digit = digitToNumber[context.future().text]) != null && digit < base2) {
                 number *= base2;
                 number += digit;
-                context2.popToken();
+                context.popToken();
               }
             }
             return "\\@char{" + number + "}";
           });
-          var newcommand = function newcommand2(context2, existsOK, nonexistsOK) {
-            var arg = context2.consumeArg().tokens;
+          var newcommand = function newcommand2(context, existsOK, nonexistsOK) {
+            var arg = context.consumeArg().tokens;
             if (arg.length !== 1) {
               throw new src_ParseError("\\newcommand's first argument must be a macro name");
             }
             var name = arg[0].text;
-            var exists = context2.isDefined(name);
+            var exists = context.isDefined(name);
             if (exists && !existsOK) {
               throw new src_ParseError("\\newcommand{" + name + "} attempting to redefine " + (name + "; use \\renewcommand"));
             }
@@ -11300,53 +11300,53 @@
               throw new src_ParseError("\\renewcommand{" + name + "} when command " + name + " does not yet exist; use \\newcommand");
             }
             var numArgs = 0;
-            arg = context2.consumeArg().tokens;
+            arg = context.consumeArg().tokens;
             if (arg.length === 1 && arg[0].text === "[") {
               var argText = "";
-              var token = context2.expandNextToken();
+              var token = context.expandNextToken();
               while (token.text !== "]" && token.text !== "EOF") {
                 argText += token.text;
-                token = context2.expandNextToken();
+                token = context.expandNextToken();
               }
               if (!argText.match(/^\s*[0-9]+\s*$/)) {
                 throw new src_ParseError("Invalid number of arguments: " + argText);
               }
               numArgs = parseInt(argText);
-              arg = context2.consumeArg().tokens;
+              arg = context.consumeArg().tokens;
             }
-            context2.macros.set(name, {
+            context.macros.set(name, {
               tokens: arg,
               numArgs
             });
             return "";
           };
-          defineMacro("\\newcommand", function(context2) {
-            return newcommand(context2, false, true);
+          defineMacro("\\newcommand", function(context) {
+            return newcommand(context, false, true);
           });
-          defineMacro("\\renewcommand", function(context2) {
-            return newcommand(context2, true, false);
+          defineMacro("\\renewcommand", function(context) {
+            return newcommand(context, true, false);
           });
-          defineMacro("\\providecommand", function(context2) {
-            return newcommand(context2, true, true);
+          defineMacro("\\providecommand", function(context) {
+            return newcommand(context, true, true);
           });
-          defineMacro("\\message", function(context2) {
-            var arg = context2.consumeArgs(1)[0];
+          defineMacro("\\message", function(context) {
+            var arg = context.consumeArgs(1)[0];
             console.log(arg.reverse().map(function(token) {
               return token.text;
             }).join(""));
             return "";
           });
-          defineMacro("\\errmessage", function(context2) {
-            var arg = context2.consumeArgs(1)[0];
+          defineMacro("\\errmessage", function(context) {
+            var arg = context.consumeArgs(1)[0];
             console.error(arg.reverse().map(function(token) {
               return token.text;
             }).join(""));
             return "";
           });
-          defineMacro("\\show", function(context2) {
-            var tok = context2.popToken();
+          defineMacro("\\show", function(context) {
+            var tok = context.popToken();
             var name = tok.text;
-            console.log(tok, context2.macros.get(name), src_functions[name], src_symbols.math[name], src_symbols.text[name]);
+            console.log(tok, context.macros.get(name), src_functions[name], src_symbols.math[name], src_symbols.text[name]);
             return "";
           });
           defineMacro("\\bgroup", "{");
@@ -11472,9 +11472,9 @@
             "\\idotsint": "\\dotsi",
             "\\DOTSX": "\\dotsx"
           };
-          defineMacro("\\dots", function(context2) {
+          defineMacro("\\dots", function(context) {
             var thedots = "\\dotso";
-            var next = context2.expandAfterFuture().text;
+            var next = context.expandAfterFuture().text;
             if (next in dotsByToken) {
               thedots = dotsByToken[next];
             } else if (next.substr(0, 4) === "\\not") {
@@ -11507,24 +11507,24 @@
             ".": true,
             ",": true
           };
-          defineMacro("\\dotso", function(context2) {
-            var next = context2.future().text;
+          defineMacro("\\dotso", function(context) {
+            var next = context.future().text;
             if (next in spaceAfterDots) {
               return "\\ldots\\,";
             } else {
               return "\\ldots";
             }
           });
-          defineMacro("\\dotsc", function(context2) {
-            var next = context2.future().text;
+          defineMacro("\\dotsc", function(context) {
+            var next = context.future().text;
             if (next in spaceAfterDots && next !== ",") {
               return "\\ldots\\,";
             } else {
               return "\\ldots";
             }
           });
-          defineMacro("\\cdots", function(context2) {
-            var next = context2.future().text;
+          defineMacro("\\cdots", function(context) {
+            var next = context.future().text;
             if (next in spaceAfterDots) {
               return "\\@cdots\\,";
             } else {
@@ -11556,8 +11556,8 @@
           defineMacro("\\qquad", "\\hskip2em\\relax");
           defineMacro("\\tag", "\\@ifstar\\tag@literal\\tag@paren");
           defineMacro("\\tag@paren", "\\tag@literal{({#1})}");
-          defineMacro("\\tag@literal", function(context2) {
-            if (context2.macros.get("\\df@tag")) {
+          defineMacro("\\tag@literal", function(context) {
+            if (context.macros.get("\\df@tag")) {
               throw new src_ParseError("Multiple \\tag");
             }
             return "\\gdef\\df@tag{\\text{#1}}";
@@ -12708,7 +12708,7 @@
               return this.callFunction(func, args, optArgs, token, breakOnTokenText);
             };
             _proto.callFunction = function callFunction(name, args, optArgs, token, breakOnTokenText) {
-              var context2 = {
+              var context = {
                 funcName: name,
                 parser: this,
                 token,
@@ -12716,7 +12716,7 @@
               };
               var func = src_functions[name];
               if (func && func.handler) {
-                return func.handler(context2, args, optArgs);
+                return func.handler(context, args, optArgs);
               } else {
                 throw new src_ParseError("No function handler for " + name);
               }
@@ -12914,7 +12914,7 @@
               var expression = this.parseExpression(false, "EOF");
               this.expect("EOF");
               this.gullet.endGroup();
-              var result2 = {
+              var result = {
                 type: "ordgroup",
                 mode: this.mode,
                 loc: argToken.loc,
@@ -12923,12 +12923,12 @@
               if (mode) {
                 this.switchMode(outerMode);
               }
-              return result2;
+              return result;
             };
             _proto.parseGroup = function parseGroup(name, breakOnTokenText) {
               var firstToken = this.fetch();
               var text = firstToken.text;
-              var result2;
+              var result;
               if (text === "{" || text === "\\begingroup") {
                 this.consume();
                 var groupEnd = text === "{" ? "}" : "\\endgroup";
@@ -12937,7 +12937,7 @@
                 var lastToken = this.fetch();
                 this.expect(groupEnd);
                 this.gullet.endGroup();
-                result2 = {
+                result = {
                   type: "ordgroup",
                   mode: this.mode,
                   loc: SourceLocation.range(firstToken, lastToken),
@@ -12945,16 +12945,16 @@
                   semisimple: text === "\\begingroup" || void 0
                 };
               } else {
-                result2 = this.parseFunction(breakOnTokenText, name) || this.parseSymbol();
-                if (result2 == null && text[0] === "\\" && !implicitCommands.hasOwnProperty(text)) {
+                result = this.parseFunction(breakOnTokenText, name) || this.parseSymbol();
+                if (result == null && text[0] === "\\" && !implicitCommands.hasOwnProperty(text)) {
                   if (this.settings.throwOnError) {
                     throw new src_ParseError("Undefined control sequence: " + text, firstToken);
                   }
-                  result2 = this.formatUnsupportedCmd(text);
+                  result = this.formatUnsupportedCmd(text);
                   this.consume();
                 }
               }
-              return result2;
+              return result;
             };
             _proto.formLigatures = function formLigatures(group) {
               var n2 = group.length - 1;
@@ -13123,9 +13123,9 @@
           };
           var src_parseTree = parseTree;
           ;
-          var render = function render2(expression, baseNode, options2) {
+          var render = function render2(expression, baseNode, options) {
             baseNode.textContent = "";
-            var node = renderToDomTree(expression, options2).toNode();
+            var node = renderToDomTree(expression, options).toNode();
             baseNode.appendChild(node);
           };
           if (typeof document !== "undefined") {
@@ -13136,25 +13136,25 @@
               };
             }
           }
-          var renderToString = function renderToString2(expression, options2) {
-            var markup = renderToDomTree(expression, options2).toMarkup();
+          var renderToString = function renderToString2(expression, options) {
+            var markup = renderToDomTree(expression, options).toMarkup();
             return markup;
           };
-          var generateParseTree = function generateParseTree2(expression, options2) {
-            var settings = new Settings(options2);
+          var generateParseTree = function generateParseTree2(expression, options) {
+            var settings = new Settings(options);
             return src_parseTree(expression, settings);
           };
-          var renderError = function renderError2(error4, expression, options2) {
-            if (options2.throwOnError || !(error4 instanceof src_ParseError)) {
+          var renderError = function renderError2(error4, expression, options) {
+            if (options.throwOnError || !(error4 instanceof src_ParseError)) {
               throw error4;
             }
             var node = buildCommon.makeSpan(["katex-error"], [new SymbolNode(expression)]);
             node.setAttribute("title", error4.toString());
-            node.setAttribute("style", "color:" + options2.errorColor);
+            node.setAttribute("style", "color:" + options.errorColor);
             return node;
           };
-          var renderToDomTree = function renderToDomTree2(expression, options2) {
-            var settings = new Settings(options2);
+          var renderToDomTree = function renderToDomTree2(expression, options) {
+            var settings = new Settings(options);
             try {
               var tree = src_parseTree(expression, settings);
               return buildTree(tree, expression, settings);
@@ -13162,8 +13162,8 @@
               return renderError(error4, expression, settings);
             }
           };
-          var renderToHTMLTree = function renderToHTMLTree2(expression, options2) {
-            var settings = new Settings(options2);
+          var renderToHTMLTree = function renderToHTMLTree2(expression, options) {
+            var settings = new Settings(options);
             try {
               var tree = src_parseTree(expression, settings);
               return buildHTMLTree(tree, expression, settings);
@@ -13388,14 +13388,14 @@
                 }
               }
             };
-            var renderMathInElement2 = function renderMathInElement3(elem, options2) {
+            var renderMathInElement2 = function renderMathInElement3(elem, options) {
               if (!elem) {
                 throw new Error("No element provided to render");
               }
               var optionsCopy = {};
-              for (var option in options2) {
-                if (options2.hasOwnProperty(option)) {
-                  optionsCopy[option] = options2[option];
+              for (var option in options) {
+                if (options.hasOwnProperty(option)) {
+                  optionsCopy[option] = options[option];
                 }
               }
               optionsCopy.delimiters = optionsCopy.delimiters || [
@@ -14188,15 +14188,15 @@
   }
   function trace(func, range2, dots = 1e3) {
     function tracer(t3) {
-      let result2;
+      let result;
       try {
-        result2 = func(t3);
+        result = func(t3);
       } catch {
         return [NaN, NaN];
       }
-      if (!Array.isArray(result2))
-        result2 = [t3, result2];
-      return result2;
+      if (!Array.isArray(result))
+        result = [t3, result];
+      return result;
     }
     ;
     let [t1, t2] = range2;
@@ -17207,7 +17207,7 @@
       }
       return RndPick(...arr);
     }
-    static RndTrigEqv(result2, label) {
+    static RndTrigEqv(result, label) {
       let trig2 = (funcName, angle2) => {
         if (funcName === "sin")
           return sin(angle2);
@@ -17218,21 +17218,21 @@
         throw "never";
       };
       let v3 = 0;
-      if (result2 === "sin")
+      if (result === "sin")
         v3 = sin(1);
-      if (result2 === "-sin")
+      if (result === "-sin")
         v3 = -sin(1);
-      if (result2 === "cos")
+      if (result === "cos")
         v3 = cos(1);
-      if (result2 === "-cos")
+      if (result === "-cos")
         v3 = -cos(1);
-      if (result2 === "tan")
+      if (result === "tan")
         v3 = tan(1);
-      if (result2 === "-tan")
+      if (result === "-tan")
         v3 = -tan(1);
-      if (result2 === "1/tan")
+      if (result === "1/tan")
         v3 = 1 / tan(1);
-      if (result2 === "-1/tan")
+      if (result === "-1/tan")
         v3 = -1 / tan(1);
       let arr = [];
       for (let f3 of ["sin", "cos", "tan"]) {
@@ -18825,13 +18825,13 @@
       const deg1 = poly1.length - 1;
       const deg22 = poly2.length - 1;
       const deg4 = deg1 + deg22;
-      const result2 = Array(deg4 + 1).fill(0);
+      const result = Array(deg4 + 1).fill(0);
       for (let i2 = 0; i2 <= deg1; i2++) {
         for (let j2 = 0; j2 <= deg22; j2++) {
-          result2[i2 + j2] += poly1[i2] * poly2[j2];
+          result[i2 + j2] += poly1[i2] * poly2[j2];
         }
       }
-      return result2;
+      return result;
     }
     static Binomial(A2, B2, n2 = 2) {
       let coeff = [];
@@ -19586,7 +19586,7 @@
     return [...new Set(vars)];
   }
   function permute(arr) {
-    let result2 = [];
+    let result = [];
     if (arr.length === 0)
       return [];
     if (arr.length === 1)
@@ -19596,10 +19596,10 @@
       const remaining = [...arr.slice(0, i2), ...arr.slice(i2 + 1)];
       const remainingPermuted = permute(remaining);
       for (let permuted of remainingPermuted) {
-        result2.push([current, ...permuted]);
+        result.push([current, ...permuted]);
       }
     }
-    return result2;
+    return result;
   }
   function combinations(arr, k2) {
     if (k2 > arr.length || k2 <= 0)
@@ -20643,10 +20643,10 @@
   function cloneCanvas(canvas) {
     let oldCanvas = canvas;
     let newCanvas = document.createElement("canvas");
-    let context2 = newCanvas.getContext("2d");
+    let context = newCanvas.getContext("2d");
     newCanvas.width = oldCanvas.width;
     newCanvas.height = oldCanvas.height;
-    context2.drawImage(oldCanvas, 0, 0);
+    context.drawImage(oldCanvas, 0, 0);
     return newCanvas;
   }
 
@@ -21758,15 +21758,15 @@
   // ../packages/paint/lib/support/trace.js
   function trace2(func, range2, dots = 1e3) {
     function tracer(t3) {
-      let result2;
+      let result;
       try {
-        result2 = func(t3);
+        result = func(t3);
       } catch {
         return [NaN, NaN];
       }
-      if (!Array.isArray(result2))
-        result2 = [t3, result2];
-      return result2;
+      if (!Array.isArray(result))
+        result = [t3, result];
+      return result;
     }
     ;
     let [t1, t2] = range2;
@@ -24326,151 +24326,90 @@
     return ink.printLabeledValue(v3, 2, true);
   });
 
+  // ../packages/bot/lib/src/dress/dressor.js
+  var END_TAG = String.raw`(?=[^<>]*</span>)`;
+  var SPACES = String.raw`(?:\s|&nbsp;)*`;
+  var Dressor = class {
+    constructor(html) {
+      this.html = html;
+    }
+    do(reg, replace, inTag = false) {
+      let tail = inTag ? END_TAG : "";
+      let regex = new RegExp(reg.join(SPACES) + tail, "g");
+      this.html = this.html.replaceAll(regex, replace);
+    }
+    get() {
+      return this.html;
+    }
+  };
+
+  // ../packages/bot/lib/src/dress/index.js
+  function capOr(...reg) {
+    return "(" + reg.join("|") + ")";
+  }
+  function cap(reg) {
+    return "(" + reg + ")";
+  }
+  var s2 = String.raw`(?:\s|&nbsp;)*`;
+  var p2 = String.raw`\+`;
+  var m2 = String.raw`\-`;
+  var e5 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
+  var l2 = String.raw`[\(\[\{]`;
+  var r2 = String.raw`[\)\]\}]`;
+  var pl = String.raw`[\(\[]`;
+  var pr = String.raw`[\)\]]`;
+  var c2 = String.raw`\,`;
+  var v2 = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`;
+  var f2 = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`;
+  var sl = String.raw`\\`;
+  var left = String.raw`\\left`;
+  var sq2 = String.raw`\\sqrt`;
+  function dress(html) {
+    let d2 = new Dressor(html);
+    d2.do([p2, m2], "-");
+    d2.do([m2, p2], "-");
+    d2.do([capOr(l2, e5, c2), m2, m2], "$1");
+    d2.do([m2, m2], "+");
+    d2.do([m2, m2], "+");
+    d2.do([String.raw`\^\{1\}`], "");
+    d2.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
+    d2.do([capOr(p2, m2, e5, l2, sl, r2, c2), "1", capOr(v2, f2, pl, left, sq2)], "$1 $2", true);
+    d2.do([cap(v2) + "'"], "$1 \\prime ", true);
+    return d2.get();
+  }
+
+  // ../packages/bot/lib/src/eval/index.js
+  function evalCtx(code, errorProxy, ...contexts) {
+    function evaluateEval() {
+      let execCode = "";
+      contexts.forEach((ctx, i2) => {
+        execCode += Object.keys(ctx).map((_) => `let ${_} = this[${i2}].${_};`).join("");
+      });
+      execCode += code + ";";
+      contexts.forEach((ctx, i2) => {
+        execCode += Object.keys(ctx).map((_) => `this[${i2}].${_} = ${_};`).join("");
+      });
+      return eval(execCode);
+    }
+    try {
+      evaluateEval.call(contexts);
+    } catch (e6) {
+      throw errorProxy(e6);
+    }
+  }
+
   // src/Soil/tool/eval.ts
   function detectVarErr(e6) {
     if (e6 instanceof Error) {
       let isVarErr = e6.message === "Cannot convert a Symbol value to a number";
       if (isVarErr) {
         return CustomError("VariableError", "A variable is used before a value is defined.");
-      } else {
-        return e6;
       }
     }
     return e6;
   }
-  function evaluate(code, context) {
-    let {
-      a,
-      b,
-      c,
-      d,
-      e,
-      f,
-      g,
-      h,
-      i,
-      j,
-      k,
-      l,
-      m,
-      n,
-      o,
-      p,
-      q,
-      r,
-      s,
-      t,
-      u,
-      v,
-      w,
-      x,
-      y,
-      z,
-      A,
-      B,
-      C,
-      D,
-      E,
-      F,
-      G,
-      H,
-      I,
-      J,
-      K,
-      L,
-      M,
-      N,
-      O,
-      P,
-      Q,
-      R,
-      S,
-      T,
-      U,
-      V,
-      W,
-      X,
-      Y,
-      Z
-    } = context.dict;
-    let sections = context.sections;
-    let answer = context.answer;
-    let options = context.options;
-    let shuffle = context.shuffle;
-    let question = context.qn;
-    let solution = context.sol;
-    let result;
-    try {
-      result = eval(code);
-    } catch (e6) {
-      throw detectVarErr(e6);
-    }
-    if (typeof answer === "number")
-      answer = ["A", "B", "C", "D"][answer];
-    context.dict.update({
-      a,
-      b,
-      c,
-      d,
-      e,
-      f,
-      g,
-      h,
-      i,
-      j,
-      k,
-      l,
-      m,
-      n,
-      o,
-      p,
-      q,
-      r,
-      s,
-      t,
-      u,
-      v,
-      w,
-      x,
-      y,
-      z,
-      A,
-      B,
-      C,
-      D,
-      E,
-      F,
-      G,
-      H,
-      I,
-      J,
-      K,
-      L,
-      M,
-      N,
-      O,
-      P,
-      Q,
-      R,
-      S,
-      T,
-      U,
-      V,
-      W,
-      X,
-      Y,
-      Z
-    });
-    let newContext = {
-      dict: context.dict,
-      sections,
-      answer,
-      options,
-      shuffle,
-      qn: question,
-      sol: solution
-    };
-    return { result, context: newContext };
+  function evaluate(code2, ...contexts2) {
+    evalCtx(code2, detectVarErr, ...contexts2);
   }
   function htmlDecode(str3) {
     return str3.replace(/&amp;|&lt;|&gt;|&#39;|&quot;/g, (tag) => ({
@@ -24546,12 +24485,12 @@
   function intrapolate2(html, dict2) {
     function intra(pattern3, prefix) {
       html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code2) => {
-        let result2 = evalInline(code2, dict2);
-        return Stringifiers.transform(pattern3, result2);
+        let result = evalInline(code2, dict2);
+        return Stringifiers.transform(pattern3, result);
       });
       html = html.replace(new RegExp(String.raw`\*${prefix}\{([^\{\}]*)\}`, "g"), (match3, code2) => {
-        let result2 = evalInline(code2, dict2);
-        return Stringifiers.transform(pattern3, result2);
+        let result = evalInline(code2, dict2);
+        return Stringifiers.transform(pattern3, result);
       });
     }
     intra("*@", "");
@@ -24577,9 +24516,9 @@
     }
     return html;
   }
-  function ExecSection(html, sections2, dict2) {
-    for (let i2 = 0; i2 < sections2.length; i2++) {
-      let [section, version] = sections2[i2];
+  function ExecSection(html, sections, dict2) {
+    for (let i2 = 0; i2 < sections.length; i2++) {
+      let [section, version] = sections[i2];
       html = KeepVersion(html, section.toString(), version);
     }
     html = DropCondition(html, dict2);
@@ -24588,58 +24527,6 @@
   }
   function DropCondition(html, dict2) {
     return html.replace(new RegExp("<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), (match3, p1) => evalInline(p1, dict2) ? match3 : "");
-  }
-
-  // ../packages/bot/lib/src/dress/dressor.js
-  var END_TAG = String.raw`(?=[^<>]*</span>)`;
-  var SPACES = String.raw`(?:\s|&nbsp;)*`;
-  var Dressor = class {
-    constructor(html) {
-      this.html = html;
-    }
-    do(reg, replace, inTag = false) {
-      let tail = inTag ? END_TAG : "";
-      let regex = new RegExp(reg.join(SPACES) + tail, "g");
-      this.html = this.html.replaceAll(regex, replace);
-    }
-    get() {
-      return this.html;
-    }
-  };
-
-  // ../packages/bot/lib/src/dress/index.js
-  function capOr(...reg) {
-    return "(" + reg.join("|") + ")";
-  }
-  function cap(reg) {
-    return "(" + reg + ")";
-  }
-  var s2 = String.raw`(?:\s|&nbsp;)*`;
-  var p2 = String.raw`\+`;
-  var m2 = String.raw`\-`;
-  var e5 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
-  var l2 = String.raw`[\(\[\{]`;
-  var r2 = String.raw`[\)\]\}]`;
-  var pl = String.raw`[\(\[]`;
-  var pr = String.raw`[\)\]]`;
-  var c2 = String.raw`\,`;
-  var v2 = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`;
-  var f2 = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`;
-  var sl = String.raw`\\`;
-  var left = String.raw`\\left`;
-  var sq2 = String.raw`\\sqrt`;
-  function dress(html) {
-    let d2 = new Dressor(html);
-    d2.do([p2, m2], "-");
-    d2.do([m2, p2], "-");
-    d2.do([capOr(l2, e5, c2), m2, m2], "$1");
-    d2.do([m2, m2], "+");
-    d2.do([m2, m2], "+");
-    d2.do([String.raw`\^\{1\}`], "");
-    d2.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
-    d2.do([capOr(p2, m2, e5, l2, sl, r2, c2), "1", capOr(v2, f2, pl, left, sq2)], "$1 $2", true);
-    d2.do([cap(v2) + "'"], "$1 \\prime ", true);
-    return d2.get();
   }
 
   // src/Soil/tool/html.ts
@@ -24673,10 +24560,10 @@
       let htmls = this.li.map((x2) => x2.innerHTML.replace(/\s+/g, ""));
       return new Set(htmls).size !== htmls.length;
     }
-    shuffleLi(shuffle2 = true) {
+    shuffleLi(shuffle = true) {
       let oldHTMLs = this.li.map((x2) => x2.innerHTML);
       let newHTMLs;
-      if (shuffle2) {
+      if (shuffle) {
         newHTMLs = RndShuffle(...oldHTMLs);
       } else {
         newHTMLs = [...oldHTMLs];
@@ -24718,11 +24605,11 @@
 
   // src/Soil/tool/shuffle.ts
   var OptionShuffler = class {
-    constructor(qn, sol, ans, shuffle2) {
+    constructor(qn, sol, ans, shuffle) {
       this.qn = qn;
       this.sol = sol;
       this.ans = ans;
-      this.shuffle = shuffle2;
+      this.shuffle = shuffle;
       this.Qn = new QuestionHTML(qn);
       if (!this.Qn.ul)
         return;
@@ -24777,10 +24664,10 @@
     }
     return products;
   }
-  function AutoOptions(instructions, question2, source) {
+  function AutoOptions(instructions, question, source) {
     if (owl.emptyObject(instructions))
-      return question2;
-    let Qn = new QuestionHTML(question2);
+      return question;
+    let Qn = new QuestionHTML(question);
     let products = ExecInstructions(instructions, source);
     if (Qn.li.length === 1) {
       Qn.cloneLi(0, 3);
@@ -24800,16 +24687,16 @@
       }
       return Qn.export();
     }
-    return question2;
+    return question;
   }
 
   // src/Soil/cls.ts
   var Config = class {
-    constructor(sections2 = [], answer2 = "A", options2 = {}, shuffle2 = true) {
-      this.sections = sections2;
-      this.answer = answer2;
-      this.options = options2;
-      this.shuffle = shuffle2;
+    constructor(sections = [], answer = "A", options = {}, shuffle = true) {
+      this.sections = sections;
+      this.answer = answer;
+      this.options = options;
+      this.shuffle = shuffle;
     }
   };
   var Dict = class {
@@ -25014,25 +24901,10 @@
       this.config = new Config();
     }
     evalCode(code2) {
-      let { result: result2, context: context2 } = evaluate(code2, {
-        dict: this.dict,
-        sections: this.config.sections,
-        answer: this.config.answer,
-        options: this.config.options,
-        shuffle: this.config.shuffle,
-        qn: this.qn,
-        sol: this.sol
-      });
-      this.dict = context2.dict;
-      this.config = {
-        sections: context2.sections,
-        answer: context2.answer,
-        options: context2.options,
-        shuffle: context2.shuffle
-      };
-      this.qn = context2.qn;
-      this.sol = context2.sol;
-      return result2;
+      let content = { question: this.qn, solution: this.sol };
+      evaluate(code2, this.dict, this.config, content);
+      this.qn = content.question;
+      this.sol = content.solution;
     }
     pushDict() {
       this.counter++;
@@ -25043,7 +24915,9 @@
       if (v3 === "")
         return true;
       v3 = v3.replace("\n", " ");
-      return this.evalCode(v3) === true;
+      let bool3 = { _bool_: false };
+      evaluate("_bool_ = " + v3, bool3, { ...this.dict });
+      return bool3._bool_ === true;
     }
     runPopulate() {
       while (this.counter <= 1e3) {

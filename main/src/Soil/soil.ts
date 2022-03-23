@@ -97,29 +97,31 @@ export class Soil {
         this.config = new Config()
     }
 
-    private evalCode(code: string): any {
+    private evalCode(code: string): void {
 
-        let { result, context } = evaluate(code, {
-            dict: this.dict,
-            sections: this.config.sections,
-            answer: this.config.answer,
-            options: this.config.options,
-            shuffle: this.config.shuffle,
-            qn: this.qn,
-            sol: this.sol
-        })
+        let content = { question: this.qn, solution: this.sol }
+        evaluate(code, this.dict, this.config, content)
 
-        this.dict = context.dict
-        this.config = {
-            sections: context.sections,
-            answer: context.answer,
-            options: context.options,
-            shuffle: context.shuffle
-        }
-        this.qn = context.qn
-        this.sol = context.sol
+        // let { result, context } = evaluate(code, {
+        //     dict: this.dict,
+        //     sections: this.config.sections,
+        //     answer: this.config.answer,
+        //     options: this.config.options,
+        //     shuffle: this.config.shuffle,
+        //     qn: this.qn,
+        //     sol: this.sol
+        // })
 
-        return result
+        // this.dict = context.dict
+        // this.config = {
+        //     sections: context.sections,
+        //     answer: context.answer,
+        //     options: context.options,
+        //     shuffle: context.shuffle
+        // }
+        this.qn = content.question
+        this.sol = content.solution
+
     }
 
     private pushDict() {
@@ -129,9 +131,12 @@ export class Soil {
 
     private isValidated() {
         let v = this.gene.validate
-        if (v === "") return true
+        if (v === '') return true
         v = v.replace('\n', ' ') //is it a bug? only once?
-        return this.evalCode(v) === true
+
+        let bool = { _bool_: false }
+        evaluate('_bool_ = ' + v, bool, { ...this.dict })
+        return bool._bool_ === true
     }
 
 
