@@ -103,23 +103,6 @@ export class Soil {
         let content = { question: this.qn, solution: this.sol }
         evalCtx(code, this.dict, this.config, content)
 
-        // let { result, context } = evaluate(code, {
-        //     dict: this.dict,
-        //     sections: this.config.sections,
-        //     answer: this.config.answer,
-        //     options: this.config.options,
-        //     shuffle: this.config.shuffle,
-        //     qn: this.qn,
-        //     sol: this.sol
-        // })
-
-        // this.dict = context.dict
-        // this.config = {
-        //     sections: context.sections,
-        //     answer: context.answer,
-        //     options: context.options,
-        //     shuffle: context.shuffle
-        // }
         if (typeof this.config.answer === 'number')
             this.config.answer = ['A', 'B', 'C', 'D'][this.config.answer]
 
@@ -136,7 +119,7 @@ export class Soil {
     private isValidated() {
         let v = this.gene.validate
         if (v === '') return true
-        v = v.replace('\n', ' ') //is it a bug? only once?
+        // v = v.replace('\n', ' ') //is it a bug? only once?
         return exprCtx(v, { ...this.dict }) === true
     }
 

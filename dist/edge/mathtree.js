@@ -24514,7 +24514,7 @@
   };
   var Smith = new Blacksmith();
   function PrintVariable(html, symbol, value) {
-    console.log("c");
+    console.log("d");
     Smith.setText(html);
     return Smith.forge(symbol, value);
   }
@@ -24850,7 +24850,6 @@
       let v2 = this.gene.validate;
       if (v2 === "")
         return true;
-      v2 = v2.replace("\n", " ");
       return exprCtx(v2, { ...this.dict }) === true;
     }
     runPopulate() {
