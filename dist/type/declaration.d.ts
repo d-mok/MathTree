@@ -5185,10 +5185,16 @@ declare module "Pen/index" {
     }
 }
 declare module "Soil/tool/stringify" {
+    type ConditionKeys<T> = {
+        [k in keyof T]: T[k] extends (...args: any[]) => boolean ? k : never;
+    }[keyof T];
+    type condition = ConditionKeys<typeof owl>;
+    type GuardType<T extends condition> = (typeof owl)[T] extends (_: any) => _ is infer R ? R : unknown;
+    type transformer<T extends condition> = ($: GuardType<T>) => string;
     export type pattern = '*@' | '**@' | '*/@' | '*/(@)' | '*//@' | '*(@)' | '*!@' | '*^+_@' | '*^-_@' | '*|@|' | '*^\\gt_@' | '*^\\lt_@' | '*^\\ge_@' | '*^\\le_@' | '*%@' | '*\\%@' | '*:@' | '*|.@' | '*.@' | '*=@' | '*==@' | '*=.@' | '*==.@';
     export class Stringifiers {
         private static store;
-        private static add;
+        static add<T extends condition>(pattern: pattern, condition: T, fn: transformer<T>): void;
         static transform(pattern: pattern, val: unknown): string;
         static allPatterns(): pattern[];
     }

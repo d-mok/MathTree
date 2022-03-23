@@ -24225,7 +24225,7 @@
       return this.transformer(val2);
     }
   };
-  var _Stringifiers = class {
+  var Stringifiers = class {
     static add(pattern3, condition, fn) {
       this.store.push(new Stringifier(pattern3, condition, fn));
     }
@@ -24241,93 +24241,90 @@
       let ps = this.store.map((s3) => s3.pattern);
       return [...new Set(ps)];
     }
-    static {
-      _Stringifiers.add("*@", "num", ($) => String(numberDefault($)));
-      _Stringifiers.add("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
-      _Stringifiers.add("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
-      _Stringifiers.add("*@", "point2D", ($) => Coord($));
-      _Stringifiers.add("*@", "combo", ($) => ink.printCombo($));
-      _Stringifiers.add("*@", "polynomial", ($) => PolyPrint($));
-      _Stringifiers.add("*@", "trigValue", ($) => ink.printTrigValue($));
-      _Stringifiers.add("*@", "trigExp", ($) => ink.printTrigExp($));
-      _Stringifiers.add("*@", "constraint", ($) => ink.printConstraint($));
-      _Stringifiers.add("*@", "constraints", ($) => ink.printConstraints($));
-      _Stringifiers.add("**@", "num", ($) => {
-        let v3 = cal.blur(Round($, 3));
-        let abs = Math.abs(v3);
-        return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3);
-      });
-      _Stringifiers.add("**@", "quantity", ({ val: val2, unit }) => {
-        let v3 = cal.blur(Round(val2, 3));
-        let abs = Math.abs(v3);
-        return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3) + unit;
-      });
-      _Stringifiers.add("*/@", "num", ($) => {
-        let [p3, q2] = ToFrac($);
-        return Dfrac(p3, q2);
-      });
-      _Stringifiers.add("*/(@)", "num", ($) => {
-        let [p3, q2] = ToFrac($);
-        if (q2 === 1 && p3 >= 0)
-          return Dfrac(p3, q2);
-        if (q2 === 1 && p3 < 0)
-          return "(" + Dfrac(p3, q2) + ")";
-        return "\\left ( " + Dfrac(p3, q2) + " \\right )";
-      });
-      _Stringifiers.add("*//@", "num", ($) => {
-        let [p3, q2] = ToFrac($);
-        return Dfrac(p3, q2).replace(/dfrac/g, "frac");
-      });
-      _Stringifiers.add("*(@)", "num", ($) => {
-        let v3 = numberDefault($);
-        return String(v3 >= 0 ? v3 : "(" + v3 + ")");
-      });
-      _Stringifiers.add("*!@", "num", ($) => ink.printSurd($));
-      _Stringifiers.add("*!@", "point2D", ([a2, b2]) => "(" + ink.printSurd(a2) + "," + ink.printSurd(b2) + ")");
-      _Stringifiers.add("*^+_@", "num", ($) => $ >= 0 ? "+" : "-");
-      _Stringifiers.add("*^-_@", "num", ($) => $ >= 0 ? "-" : "+");
-      _Stringifiers.add("*|@|", "num", ($) => String(numberDefault(Math.abs($))));
-      _Stringifiers.add("*^\\gt_@", "bool", ($) => $ ? "\\gt" : "\\lt");
-      _Stringifiers.add("*^\\gt_@", "num", ($) => $ > 0 ? "\\gt" : $ < 0 ? "\\lt" : "=");
-      _Stringifiers.add("*^\\lt_@", "bool", ($) => $ ? "\\lt" : "\\gt");
-      _Stringifiers.add("*^\\lt_@", "num", ($) => $ > 0 ? "\\lt" : $ < 0 ? "\\gt" : "=");
-      _Stringifiers.add("*^\\ge_@", "bool", ($) => $ ? "\\ge" : "\\le");
-      _Stringifiers.add("*^\\ge_@", "num", ($) => $ > 0 ? "\\ge" : $ < 0 ? "\\le" : "=");
-      _Stringifiers.add("*^\\le_@", "bool", ($) => $ ? "\\le" : "\\ge");
-      _Stringifiers.add("*^\\le_@", "num", ($) => $ > 0 ? "\\le" : $ < 0 ? "\\ge" : "=");
-      _Stringifiers.add("*%@", "num", ($) => numberDefault($ * 100) + "%");
-      _Stringifiers.add("*\\%@", "num", ($) => numberDefault($ * 100) + "\\%");
-      _Stringifiers.add("*:@", "ntuple", ($) => toNumbers($).ratio().join(":"));
-      _Stringifiers.add("*:@", "num", ($) => {
-        let [p3, q2] = cal.toFraction($);
-        return p3 + ":" + q2;
-      });
-      _Stringifiers.add("*|.@", "array", ($) => ink.printOrTrigRoots($));
-      _Stringifiers.add("*.@", "point2D", ($) => ink.printPointPolar($));
-      _Stringifiers.add("*=@", "labeledValue", ($) => {
-        let v3 = [...$];
-        v3[0] = numberDefault(v3[0]);
-        return ink.printLabeledValue(v3, 1, false);
-      });
-      _Stringifiers.add("*==@", "labeledValue2", ($) => {
-        let v3 = [...$];
-        v3[0] = numberDefault(v3[0]);
-        return ink.printLabeledValue(v3, 2, false);
-      });
-      _Stringifiers.add("*=.@", "labeledValue", ($) => {
-        let v3 = [...$];
-        v3[0] = numberDefault(v3[0]);
-        return ink.printLabeledValue(v3, 1, true);
-      });
-      _Stringifiers.add("*==.@", "labeledValue2", ($) => {
-        let v3 = [...$];
-        v3[0] = numberDefault(v3[0]);
-        return ink.printLabeledValue(v3, 2, true);
-      });
-    }
   };
-  var Stringifiers = _Stringifiers;
   __publicField(Stringifiers, "store", []);
+  Stringifiers.add("*@", "num", ($) => String(numberDefault($)));
+  Stringifiers.add("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
+  Stringifiers.add("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
+  Stringifiers.add("*@", "point2D", ($) => Coord($));
+  Stringifiers.add("*@", "combo", ($) => ink.printCombo($));
+  Stringifiers.add("*@", "polynomial", ($) => PolyPrint($));
+  Stringifiers.add("*@", "trigValue", ($) => ink.printTrigValue($));
+  Stringifiers.add("*@", "trigExp", ($) => ink.printTrigExp($));
+  Stringifiers.add("*@", "constraint", ($) => ink.printConstraint($));
+  Stringifiers.add("*@", "constraints", ($) => ink.printConstraints($));
+  Stringifiers.add("**@", "num", ($) => {
+    let v3 = cal.blur(Round($, 3));
+    let abs = Math.abs(v3);
+    return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3);
+  });
+  Stringifiers.add("**@", "quantity", ({ val: val2, unit }) => {
+    let v3 = cal.blur(Round(val2, 3));
+    let abs = Math.abs(v3);
+    return String(abs >= 1e4 || abs <= 0.01 ? Sci(v3) : v3) + unit;
+  });
+  Stringifiers.add("*/@", "num", ($) => {
+    let [p3, q2] = ToFrac($);
+    return Dfrac(p3, q2);
+  });
+  Stringifiers.add("*/(@)", "num", ($) => {
+    let [p3, q2] = ToFrac($);
+    if (q2 === 1 && p3 >= 0)
+      return Dfrac(p3, q2);
+    if (q2 === 1 && p3 < 0)
+      return "(" + Dfrac(p3, q2) + ")";
+    return "\\left ( " + Dfrac(p3, q2) + " \\right )";
+  });
+  Stringifiers.add("*//@", "num", ($) => {
+    let [p3, q2] = ToFrac($);
+    return Dfrac(p3, q2).replace(/dfrac/g, "frac");
+  });
+  Stringifiers.add("*(@)", "num", ($) => {
+    let v3 = numberDefault($);
+    return String(v3 >= 0 ? v3 : "(" + v3 + ")");
+  });
+  Stringifiers.add("*!@", "num", ($) => ink.printSurd($));
+  Stringifiers.add("*!@", "point2D", ([a2, b2]) => "(" + ink.printSurd(a2) + "," + ink.printSurd(b2) + ")");
+  Stringifiers.add("*^+_@", "num", ($) => $ >= 0 ? "+" : "-");
+  Stringifiers.add("*^-_@", "num", ($) => $ >= 0 ? "-" : "+");
+  Stringifiers.add("*|@|", "num", ($) => String(numberDefault(Math.abs($))));
+  Stringifiers.add("*^\\gt_@", "bool", ($) => $ ? "\\gt" : "\\lt");
+  Stringifiers.add("*^\\gt_@", "num", ($) => $ > 0 ? "\\gt" : $ < 0 ? "\\lt" : "=");
+  Stringifiers.add("*^\\lt_@", "bool", ($) => $ ? "\\lt" : "\\gt");
+  Stringifiers.add("*^\\lt_@", "num", ($) => $ > 0 ? "\\lt" : $ < 0 ? "\\gt" : "=");
+  Stringifiers.add("*^\\ge_@", "bool", ($) => $ ? "\\ge" : "\\le");
+  Stringifiers.add("*^\\ge_@", "num", ($) => $ > 0 ? "\\ge" : $ < 0 ? "\\le" : "=");
+  Stringifiers.add("*^\\le_@", "bool", ($) => $ ? "\\le" : "\\ge");
+  Stringifiers.add("*^\\le_@", "num", ($) => $ > 0 ? "\\le" : $ < 0 ? "\\ge" : "=");
+  Stringifiers.add("*%@", "num", ($) => numberDefault($ * 100) + "%");
+  Stringifiers.add("*\\%@", "num", ($) => numberDefault($ * 100) + "\\%");
+  Stringifiers.add("*:@", "ntuple", ($) => toNumbers($).ratio().join(":"));
+  Stringifiers.add("*:@", "num", ($) => {
+    let [p3, q2] = cal.toFraction($);
+    return p3 + ":" + q2;
+  });
+  Stringifiers.add("*|.@", "array", ($) => ink.printOrTrigRoots($));
+  Stringifiers.add("*.@", "point2D", ($) => ink.printPointPolar($));
+  Stringifiers.add("*=@", "labeledValue", ($) => {
+    let v3 = [...$];
+    v3[0] = numberDefault(v3[0]);
+    return ink.printLabeledValue(v3, 1, false);
+  });
+  Stringifiers.add("*==@", "labeledValue2", ($) => {
+    let v3 = [...$];
+    v3[0] = numberDefault(v3[0]);
+    return ink.printLabeledValue(v3, 2, false);
+  });
+  Stringifiers.add("*=.@", "labeledValue", ($) => {
+    let v3 = [...$];
+    v3[0] = numberDefault(v3[0]);
+    return ink.printLabeledValue(v3, 1, true);
+  });
+  Stringifiers.add("*==.@", "labeledValue2", ($) => {
+    let v3 = [...$];
+    v3[0] = numberDefault(v3[0]);
+    return ink.printLabeledValue(v3, 2, true);
+  });
 
   // src/Soil/tool/eval.ts
   function detectVarErr(e6) {
