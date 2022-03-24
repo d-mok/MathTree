@@ -10,6 +10,7 @@ import { PenLabel } from './modules/label'
 import { PenAxis } from './modules/axis'
 import { PenTick } from './modules/tick'
 import { PenGrid } from './modules/grid'
+import { PenGridTick } from './modules/gridTick'
 import { PenLinProg } from './modules/linProg'
 import { PenRod } from './modules/rod'
 
@@ -161,30 +162,26 @@ export class PenCls {
 
 
     /**
-     * Draw a tick to a horizontal line. Equivalent to a cut with x-coordinate marked.
+     * Draw a tick on the x-axis.
      * ```
-     * pen.tickX([1,2]) // draw a vertical tick at [1,2]
-     * pen.tickX(1) // same as pen.tickX([1,0])
+     * pen.tickX(1) // draw a tick at x=1
      * ```
      * @category draw
      */
-    tickX(position: Point2D | number) {
-        if (typeof position === 'number') position = [position, 0]
-        this.cutX(position, position[0])
+    tickX(x: number) {
+        this.cutX(x, x)
     }
 
 
     /**
-     * Draw a tick to a vertical line. Equivalent to a cut with y-coordinate marked.
+     * Draw a tick on the y-axis.
      * ```
-     * pen.tickY([1,2]) // draw a horizontal tick at [1,2]
-     * pen.tickY(1) // same as pen.tickY([0,1])
+     * pen.tickY(1) // draw a tick at y=1
      * ```
      * @category draw
      */
-    tickY(position: Point2D | number) {
-        if (typeof position === 'number') position = [0, position]
-        this.cutY(position, position[1])
+    tickY(y: number) {
+        this.cutY(y, y)
     }
 
 
@@ -712,6 +709,16 @@ export class PenCls {
     axis = new PenAxis(this, this.cv)
 
 
+    /**
+     * Draw both axis. Default no label.
+     * ```
+     * pen.axes() // draw both axis
+     * pen.axes('x','y') // label as 'x' and 'y'
+     * ```
+     */
+    axes(xlabel = "", ylabel = "") {
+        this.axis.xy(xlabel, ylabel)
+    }
 
 
     /**
@@ -725,6 +732,13 @@ export class PenCls {
      * @category axis
      */
     grid = new PenGrid(this, this.cv)
+
+
+    /**
+     * The axis gridlines and ticks.
+     * @category axis
+     */
+    gridTick = new PenGridTick(this, this.cv)
 
 
 

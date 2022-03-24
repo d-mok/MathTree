@@ -22037,6 +22037,10 @@
     halfAxisY(half = false) {
       this.cv.$HALF_AXIS_Y = half;
     }
+    halfAxis(half = false) {
+      this.halfAxisX(half);
+      this.halfAxisY(half);
+    }
     reset() {
       this.weight();
       this.color();
@@ -22053,8 +22057,7 @@
       this.angle();
       this.lineLabel();
       this.arrowLabel();
-      this.halfAxisX();
-      this.halfAxisY();
+      this.halfAxis();
     }
     resetAll() {
       this.reset();
@@ -22497,6 +22500,9 @@
       let text = `(${x}, ${y})`;
       this.point(point, text, dir3, radius);
     }
+    origin(text, dir3 = 225) {
+      this.point([0, 0], text, dir3);
+    }
   };
 
   // src/Pen/modules/axis.ts
@@ -22556,6 +22562,26 @@
     xy(interval2 = 1) {
       this.x(interval2);
       this.y(interval2);
+    }
+  };
+
+  // src/Pen/modules/gridTick.ts
+  var PenGridTick = class {
+    constructor(pen, cv) {
+      this.pen = pen;
+      this.cv = cv;
+    }
+    x(interval2 = 1, mark = true) {
+      this.pen.grid.x(interval2);
+      this.pen.tick.x(interval2, mark);
+    }
+    y(interval2 = 1, mark = true) {
+      this.pen.grid.y(interval2);
+      this.pen.tick.y(interval2, mark);
+    }
+    xy(interval2 = 1, mark = true) {
+      this.x(interval2, mark);
+      this.y(interval2, mark);
     }
   };
 
@@ -22666,15 +22692,11 @@
       if (label !== void 0)
         this.label.point(position, label, 180);
     }
-    tickX(position) {
-      if (typeof position === "number")
-        position = [position, 0];
-      this.cutX(position, position[0]);
+    tickX(x) {
+      this.cutX(x, x);
     }
-    tickY(position) {
-      if (typeof position === "number")
-        position = [0, position];
-      this.cutY(position, position[1]);
+    tickY(y) {
+      this.cutY(y, y);
     }
     guideX(point, label) {
       let [x, y] = point;
@@ -22841,8 +22863,12 @@
     }
     label = new PenLabel(this, this.cv);
     axis = new PenAxis(this, this.cv);
+    axes(xlabel = "", ylabel = "") {
+      this.axis.xy(xlabel, ylabel);
+    }
     tick = new PenTick(this, this.cv);
     grid = new PenGrid(this, this.cv);
+    gridTick = new PenGridTick(this, this.cv);
     d3 = new PenD3(this, this.cv);
     background(url) {
       this.cv.backgroundURL = url;

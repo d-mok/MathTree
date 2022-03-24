@@ -116,4 +116,15 @@ export class PenLabel {
         let text = `(${x}, ${y})`
         this.point(point, text, dir, radius)
     }
+
+
+    /**
+     * Add a label to the origin.
+     * ```
+     * pen.label.origin('O') // label the origin as 'O'
+     * ```
+     */
+    origin(text: string | number, dir: number = 225) {
+        this.point([0, 0], text, dir)
+    }
 }

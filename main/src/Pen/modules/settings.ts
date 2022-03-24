@@ -208,6 +208,18 @@ export class PenSettings {
     }
 
 
+    /**
+     * Use positive axis only.
+     * ```
+     * pen.set.halfAxis(true) // use half
+     * ```
+     */
+    halfAxis(half: boolean = false): void {
+        this.halfAxisX(half)
+        this.halfAxisY(half)
+    }
+
+
 
 
     /**
@@ -229,8 +241,7 @@ export class PenSettings {
         this.angle()
         this.lineLabel()
         this.arrowLabel()
-        this.halfAxisX()
-        this.halfAxisY()
+        this.halfAxis()
     }
 
     /**

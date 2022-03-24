@@ -3544,6 +3544,13 @@ declare module "Pen/modules/settings" {
          */
         halfAxisY(half?: boolean): void;
         /**
+         * Use positive axis only.
+         * ```
+         * pen.set.halfAxis(true) // use half
+         * ```
+         */
+        halfAxis(half?: boolean): void;
+        /**
          * Reset all pen settings.
          */
         reset(): void;
@@ -4020,6 +4027,13 @@ declare module "Pen/modules/label" {
          * ```
          */
         coordinates(point: Point2D, dir?: number, radius?: number): void;
+        /**
+         * Add a label to the origin.
+         * ```
+         * pen.label.origin('O') // label the origin as 'O'
+         * ```
+         */
+        origin(text: string | number, dir?: number): void;
     }
 }
 declare module "Pen/modules/axis" {
@@ -4110,6 +4124,36 @@ declare module "Pen/modules/grid" {
          * ```
          */
         xy(interval?: number): void;
+    }
+}
+declare module "Pen/modules/gridTick" {
+    import { PenCls } from "Pen/Pen";
+    import { Convas } from 'paint';
+    export class PenGridTick {
+        private pen;
+        private cv;
+        constructor(pen: PenCls, cv: Convas);
+        /**
+         * Draw gridlines and ticks on the x-axis.
+         * ```
+         * pen.gridTick.x(2) // at interval 2 units
+         * ```
+         */
+        x(interval?: number, mark?: boolean): void;
+        /**
+         * Draw gridlines and ticks on the y-axis.
+         * ```
+         * pen.gridTick.y(2) // at interval 2 units
+         * ```
+         */
+        y(interval?: number, mark?: boolean): void;
+        /**
+         * Draw gridlines and ticks on both axis.
+         * ```
+         * pen.gridTick.xy(2) // at interval 2 units
+         * ```
+         */
+        xy(interval?: number, mark?: boolean): void;
     }
 }
 declare module "Pen/modules/linProg" {
@@ -4204,6 +4248,7 @@ declare module "Pen/Pen" {
     import { PenAxis } from "Pen/modules/axis";
     import { PenTick } from "Pen/modules/tick";
     import { PenGrid } from "Pen/modules/grid";
+    import { PenGridTick } from "Pen/modules/gridTick";
     import { PenLinProg } from "Pen/modules/linProg";
     import { PenRod } from "Pen/modules/rod";
     export class PenCls {
@@ -4285,23 +4330,21 @@ declare module "Pen/Pen" {
          */
         cutY(position: Point2D | number, label?: string | number): void;
         /**
-         * Draw a tick to a horizontal line. Equivalent to a cut with x-coordinate marked.
+         * Draw a tick on the x-axis.
          * ```
-         * pen.tickX([1,2]) // draw a vertical tick at [1,2]
-         * pen.tickX(1) // same as pen.tickX([1,0])
+         * pen.tickX(1) // draw a tick at x=1
          * ```
          * @category draw
          */
-        tickX(position: Point2D | number): void;
+        tickX(x: number): void;
         /**
-         * Draw a tick to a vertical line. Equivalent to a cut with y-coordinate marked.
+         * Draw a tick on the y-axis.
          * ```
-         * pen.tickY([1,2]) // draw a horizontal tick at [1,2]
-         * pen.tickY(1) // same as pen.tickY([0,1])
+         * pen.tickY(1) // draw a tick at y=1
          * ```
          * @category draw
          */
-        tickY(position: Point2D | number): void;
+        tickY(y: number): void;
         /**
          * Draw a guide line from `point` to the x-axis.
          * ```
@@ -4603,6 +4646,14 @@ declare module "Pen/Pen" {
          */
         axis: PenAxis;
         /**
+         * Draw both axis. Default no label.
+         * ```
+         * pen.axes() // draw both axis
+         * pen.axes('x','y') // label as 'x' and 'y'
+         * ```
+         */
+        axes(xlabel?: string, ylabel?: string): void;
+        /**
          * The axis ticks.
          * @category axis
          */
@@ -4612,6 +4663,11 @@ declare module "Pen/Pen" {
          * @category axis
          */
         grid: PenGrid;
+        /**
+         * The axis gridlines and ticks.
+         * @category axis
+         */
+        gridTick: PenGridTick;
         /**
          * The 3D pen
          * @category 3D
