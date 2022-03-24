@@ -18,14 +18,12 @@ function assembleCtx(code: string, contexts: object[]): string {
 }
 
 /** Run the code under contexts. The contexts can be mutated in-place. */
-export function evalCtx(_myCODE_: string, ..._myCONTEXTS_: object[]): void {
-
-    function evaluateEval() {
-        return eval(assembleCtx(_myCODE_, _myCONTEXTS_))
-    }
+export function evalCtx(code: string, ...contexts: object[]): void {
 
     try {
-        evaluateEval.call(_myCONTEXTS_)
+        const fullCode = assembleCtx(code, contexts)
+        const fn = new Function(fullCode)
+        fn.call(contexts)
     } catch (e) {
         throw isVarError(e) ? VariableError : e
     }
@@ -33,20 +31,20 @@ export function evalCtx(_myCODE_: string, ..._myCONTEXTS_: object[]): void {
 }
 
 /** Evaluate one expression under contexts. The contexts can be mutated in-place. */
-export function exprCtx(_myCODE_: string, ..._myCONTEXTS_: object[]): any {
-    let _xxxresultxxx_ = { ____xxxRESULTxxx____: undefined }
-    evalCtx('____xxxRESULTxxx____ = ' + _myCODE_, _xxxresultxxx_, ..._myCONTEXTS_)
-    return _xxxresultxxx_.____xxxRESULTxxx____
+export function exprCtx(code: string, ...contexts: object[]): any {
+    let result = { ____xxxRESULTxxx____: undefined }
+    evalCtx('____xxxRESULTxxx____ = ' + code, result, ...contexts)
+    return result.____xxxRESULTxxx____
 }
 
 
 /** Evaluate one expression under contexts. The code is HTML decoded first. */
-export function exprCtxHTML(_myCODE_: string, ..._myCONTEXTS_: object[]): any {
-    _myCODE_ = _myCODE_
+export function exprCtxHTML(code: string, ...contexts: object[]): any {
+    code = code
         .replaceAll('&amp;', '&')
         .replaceAll('&lt;', '<')
         .replaceAll('&gt;', '>')
         .replaceAll('&#39;', "'")
         .replaceAll('&quot;', '"')
-    return exprCtx(_myCODE_, ..._myCONTEXTS_)
+    return exprCtx(code, ...contexts)
 }

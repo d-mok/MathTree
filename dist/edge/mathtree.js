@@ -24259,7 +24259,7 @@
     return e5 instanceof Error && e5.message.startsWith("Cannot convert a Symbol value to");
   }
   function assembleCtx(code, contexts) {
-    let T = "";
+    let T = '"use strict";';
     contexts.forEach((ctx, i) => {
       T += Object.keys(ctx).map((_) => `let ${_} = this[${i}].${_};`).join("");
     });
@@ -24269,24 +24269,23 @@
     });
     return T;
   }
-  function evalCtx(_myCODE_, ..._myCONTEXTS_) {
-    function evaluateEval() {
-      return eval(assembleCtx(_myCODE_, _myCONTEXTS_));
-    }
+  function evalCtx(code, ...contexts) {
     try {
-      evaluateEval.call(_myCONTEXTS_);
+      const fullCode = assembleCtx(code, contexts);
+      const fn = new Function(fullCode);
+      fn.call(contexts);
     } catch (e5) {
       throw isVarError(e5) ? VariableError : e5;
     }
   }
-  function exprCtx(_myCODE_2, ..._myCONTEXTS_2) {
-    let _xxxresultxxx_ = { ____xxxRESULTxxx____: void 0 };
-    evalCtx("____xxxRESULTxxx____ = " + _myCODE_2, _xxxresultxxx_, ..._myCONTEXTS_2);
-    return _xxxresultxxx_.____xxxRESULTxxx____;
+  function exprCtx(code, ...contexts) {
+    let result = { ____xxxRESULTxxx____: void 0 };
+    evalCtx("____xxxRESULTxxx____ = " + code, result, ...contexts);
+    return result.____xxxRESULTxxx____;
   }
-  function exprCtxHTML(_myCODE_2, ..._myCONTEXTS_2) {
-    _myCODE_2 = _myCODE_2.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
-    return exprCtx(_myCODE_2, ..._myCONTEXTS_2);
+  function exprCtxHTML(code, ...contexts) {
+    code = code.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
+    return exprCtx(code, ...contexts);
   }
 
   // src/Soil/tool/section.ts
