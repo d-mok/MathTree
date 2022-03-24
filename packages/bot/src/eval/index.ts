@@ -10,7 +10,7 @@ function assembleCtx(code: string, contexts: object[]): string {
     contexts.forEach((ctx, i) => {
         T += Object.keys(ctx).map(_ => `let ${_} = this[${i}].${_};`).join('')
     })
-    T += code + ';'
+    T += code + '\n;'
     contexts.forEach((ctx, i) => {
         T += Object.keys(ctx).map(_ => `this[${i}].${_} = ${_};`).join('')
     })
