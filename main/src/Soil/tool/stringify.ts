@@ -89,18 +89,6 @@ export class Stringifiers {
 
 }
 
-// print *x as normal
-Stringifiers.add('*@', 'num', $ => String(numberDefault($)))
-Stringifiers.add('*@', 'bool', $ => $ ? '✔' : '✘')
-Stringifiers.add('*@', 'quantity', ({ val, unit }) => String(numberDefault(val)) + unit)
-Stringifiers.add('*@', 'point2D', $ => Coord($))
-Stringifiers.add('*@', 'combo', $ => ink.printCombo($))
-Stringifiers.add('*@', 'polynomial', $ => PolyPrint($))
-Stringifiers.add('*@', 'trigValue', $ => ink.printTrigValue($))
-Stringifiers.add('*@', 'trigExp', $ => ink.printTrigExp($))
-Stringifiers.add('*@', 'constraint', $ => ink.printConstraint($))
-Stringifiers.add('*@', 'constraints', $ => ink.printConstraints($))
-
 // print **x as sci notation
 Stringifiers.add('**@', 'num', $ => {
     let v = cal.blur(Round($, 3))
@@ -223,3 +211,17 @@ Stringifiers.add('*==.@', 'labeledValue2', $ => {
     v[0] = numberDefault(v[0])
     return ink.printLabeledValue(v, 2, true)
 })
+
+
+
+// print *x as normal
+Stringifiers.add('*@', 'num', $ => String(numberDefault($)))
+Stringifiers.add('*@', 'bool', $ => $ ? '✔' : '✘')
+Stringifiers.add('*@', 'quantity', ({ val, unit }) => String(numberDefault(val)) + unit)
+Stringifiers.add('*@', 'point2D', $ => Coord($))
+Stringifiers.add('*@', 'combo', $ => ink.printCombo($))
+Stringifiers.add('*@', 'polynomial', $ => PolyPrint($))
+Stringifiers.add('*@', 'trigValue', $ => ink.printTrigValue($))
+Stringifiers.add('*@', 'trigExp', $ => ink.printTrigExp($))
+Stringifiers.add('*@', 'constraint', $ => ink.printConstraint($))
+Stringifiers.add('*@', 'constraints', $ => ink.printConstraints($))

@@ -24362,16 +24362,6 @@
     }
   };
   __publicField(Stringifiers, "store", []);
-  Stringifiers.add("*@", "num", ($) => String(numberDefault($)));
-  Stringifiers.add("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
-  Stringifiers.add("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
-  Stringifiers.add("*@", "point2D", ($) => Coord($));
-  Stringifiers.add("*@", "combo", ($) => ink.printCombo($));
-  Stringifiers.add("*@", "polynomial", ($) => PolyPrint($));
-  Stringifiers.add("*@", "trigValue", ($) => ink.printTrigValue($));
-  Stringifiers.add("*@", "trigExp", ($) => ink.printTrigExp($));
-  Stringifiers.add("*@", "constraint", ($) => ink.printConstraint($));
-  Stringifiers.add("*@", "constraints", ($) => ink.printConstraints($));
   Stringifiers.add("**@", "num", ($) => {
     let v2 = cal.blur(Round($, 3));
     let abs = Math.abs(v2);
@@ -24444,6 +24434,16 @@
     v2[0] = numberDefault(v2[0]);
     return ink.printLabeledValue(v2, 2, true);
   });
+  Stringifiers.add("*@", "num", ($) => String(numberDefault($)));
+  Stringifiers.add("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
+  Stringifiers.add("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
+  Stringifiers.add("*@", "point2D", ($) => Coord($));
+  Stringifiers.add("*@", "combo", ($) => ink.printCombo($));
+  Stringifiers.add("*@", "polynomial", ($) => PolyPrint($));
+  Stringifiers.add("*@", "trigValue", ($) => ink.printTrigValue($));
+  Stringifiers.add("*@", "trigExp", ($) => ink.printTrigExp($));
+  Stringifiers.add("*@", "constraint", ($) => ink.printConstraint($));
+  Stringifiers.add("*@", "constraints", ($) => ink.printConstraints($));
 
   // src/Soil/tool/html.ts
   var QuestionHTML = class {
