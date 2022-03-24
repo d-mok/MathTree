@@ -4,7 +4,7 @@ function isVarError(e) {
     return e instanceof Error && e.message.startsWith('Cannot convert a Symbol value to');
 }
 function assembleCtx(code, contexts) {
-    let T = '';
+    let T = '"use strict";';
     contexts.forEach((ctx, i) => {
         T += Object.keys(ctx).map(_ => `let ${_} = this[${i}].${_};`).join('');
     });

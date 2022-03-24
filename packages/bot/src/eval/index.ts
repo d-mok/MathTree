@@ -6,7 +6,7 @@ function isVarError(e: unknown) {
 }
 
 function assembleCtx(code: string, contexts: object[]): string {
-    let T = ''
+    let T = '"use strict";'
     contexts.forEach((ctx, i) => {
         T += Object.keys(ctx).map(_ => `let ${_} = this[${i}].${_};`).join('')
     })
