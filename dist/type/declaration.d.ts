@@ -3964,7 +3964,7 @@ declare module "Pen/modules/label" {
         * // label the point [1,2] as 'A', place the label on the left (180 degree)
         * ```
         */
-        point(point: Point, text: string, dir?: number, radius?: number): void;
+        point(point: Point, text: string | number, dir?: number, radius?: number): void;
         /**
          * Add a label to points, using index as text.
          * ```
@@ -4004,7 +4004,7 @@ declare module "Pen/modules/label" {
          * pen.label.line([[0,0],[2,4]],'L') // label the line as 'L'
          * ```
          */
-        front([A, B]: [Point, Point], text: string, dir?: number, radius?: number): void;
+        front([A, B]: [Point, Point], text: string | number, dir?: number, radius?: number): void;
         /**
          * Add a label to a polygon.
          * ```
@@ -4269,19 +4269,39 @@ declare module "Pen/Pen" {
          * ```
          * pen.cutX([1,2]) // draw a vertical cutter at [1,2]
          * pen.cutX(1) // same as cutX([1,0])
+         * pen.cutX(1,'x') // label 'x'
          * ```
          * @category draw
          */
-        cutX(position: Point2D | number, label?: string): void;
+        cutX(position: Point2D | number, label?: string | number): void;
         /**
          * Draw a cutter to a vertical line.
          * ```
          * pen.cutY([1,2]) // draw a horizontal cutter at [1,2]
          * pen.cutY(1) // same as cutY([0,1])
+         * pen.cutY(1,'y') // label 'y'
          * ```
          * @category draw
          */
-        cutY(position: Point2D | number, label?: string): void;
+        cutY(position: Point2D | number, label?: string | number): void;
+        /**
+         * Draw a tick to a horizontal line. Equivalent to a cut with x-coordinate marked.
+         * ```
+         * pen.tickX([1,2]) // draw a vertical tick at [1,2]
+         * pen.tickX(1) // same as pen.tickX([1,0])
+         * ```
+         * @category draw
+         */
+        tickX(position: Point2D | number): void;
+        /**
+         * Draw a tick to a vertical line. Equivalent to a cut with y-coordinate marked.
+         * ```
+         * pen.tickY([1,2]) // draw a horizontal tick at [1,2]
+         * pen.tickY(1) // same as pen.tickY([0,1])
+         * ```
+         * @category draw
+         */
+        tickY(position: Point2D | number): void;
         /**
          * Draw a guide line from `point` to the x-axis.
          * ```
@@ -4289,7 +4309,7 @@ declare module "Pen/Pen" {
          * ```
          * @category draw
          */
-        guideX(point: Point2D, label?: string): void;
+        guideX(point: Point2D, label?: string | number): void;
         /**
          * Draw a guide line from `point` to the y-axis.
          * ```
@@ -4297,9 +4317,41 @@ declare module "Pen/Pen" {
          * ```
          * @category draw
          */
-        guideY(point: Point2D, label?: string): void;
+        guideY(point: Point2D, label?: string | number): void;
         /**
-         * Draw a circle or arc.
+         * Draw two guide lines from `point` to the x-axis and y-axis.
+         * ```
+         * pen.guide([1,2],['a','b']) // draw guide from [1,2] and label 'a' on x-axis and 'b' on y-axis
+         * ```
+         * @category draw
+         */
+        guide(point: Point2D, labels?: [string | number | undefined, string | number | undefined]): void;
+        /**
+         * Draw a guide line from `point` to the x-axis, and mark the x-coord.
+         * ```
+         * pen.leadX([1,2]) // draw guide from [1,2] and label 1 on x-axis
+         * ```
+         * @category draw
+         */
+        leadX(point: Point2D): void;
+        /**
+         * Draw a guide line from `point` to the y-axis, and mark the y-coord.
+         * ```
+         * pen.leadY([1,2]) // draw guide from [1,2] and label 2 on y-axis
+         * ```
+         * @category draw
+         */
+        leadY(point: Point2D): void;
+        /**
+         * Draw two guide lines from `point` to the x-axis and y-axis, and mark the x-coord and y-coord.
+         * ```
+         * pen.lead([1,2]) // draw guide from [1,2] and label 1 on x-axis and 2 on y-axis
+         * ```
+         * @category draw
+         */
+        lead(point: Point2D): void;
+        /**
+         * Draw a circle.
          * ```
          * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
          * ```

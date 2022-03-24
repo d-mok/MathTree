@@ -11,7 +11,7 @@ export declare class Canvas05 extends Canvas04 {
     private text;
     write(text: string, point: Point): void;
     private labelOffset;
-    label(text: string, point: Point, radius: px, dir: number): void;
+    label(text: string | number, point: Point, radius: px, dir: number): void;
     private plainSemi;
     private latexSemi;
     private textSemi;

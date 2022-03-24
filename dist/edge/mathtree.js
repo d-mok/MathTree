@@ -21327,6 +21327,7 @@
       return [x, y];
     }
     label(text, point, radius, dir3) {
+      text = String(text);
       let italic = this.$TEXT_ITALIC;
       if (isAlphabet(text))
         this.$TEXT_ITALIC = true;
@@ -22665,6 +22666,16 @@
       if (label !== void 0)
         this.label.point(position, label, 180);
     }
+    tickX(position) {
+      if (typeof position === "number")
+        position = [position, 0];
+      this.cutX(position, position[0]);
+    }
+    tickY(position) {
+      if (typeof position === "number")
+        position = [0, position];
+      this.cutY(position, position[1]);
+    }
     guideX(point, label) {
       let [x, y] = point;
       this.dash([x, 0], point);
@@ -22680,6 +22691,20 @@
         this.cutY(y);
         this.label.point([0, y], label, x >= 0 ? 180 : 0);
       }
+    }
+    guide(point, labels = [void 0, void 0]) {
+      this.guideX(point, labels[0]);
+      this.guideY(point, labels[1]);
+    }
+    leadX(point) {
+      this.guideX(point, point[0]);
+    }
+    leadY(point) {
+      this.guideY(point, point[1]);
+    }
+    lead(point) {
+      this.leadX(point);
+      this.leadY(point);
     }
     circle(center, radius) {
       this.cv.circle(center, radius);

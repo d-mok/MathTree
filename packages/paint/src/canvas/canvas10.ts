@@ -32,11 +32,11 @@ function mid(A: Point, B: Point): Point {
 export class Canvas10 extends Canvas09 {
 
 
-    labelPoint(text: string, point: Point, dir: number, radius: px): void {
+    labelPoint(text: string | number, point: Point, dir: number, radius: px): void {
         this.label(text, point, radius, dir)
     }
 
-    labelPointAuto(text: string, point: Point, radius: px): void {
+    labelPointAuto(text: string | number, point: Point, radius: px): void {
         let dir = this.getCenterDir(point)
         this.label(text, point, radius, dir)
     }
@@ -56,7 +56,7 @@ export class Canvas10 extends Canvas09 {
         this.label(text, M, radius, normal + dir)
     }
 
-    labelFront(text: string, [A, B]: [Point, Point], dir: number, radius: px): void {
+    labelFront(text: string | number, [A, B]: [Point, Point], dir: number, radius: px): void {
         let arrowDir = this.getDir(A, B)
         this.labelPoint(text, B, arrowDir + dir, radius)
     }

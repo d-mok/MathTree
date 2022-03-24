@@ -100,6 +100,7 @@ export class Canvas05 extends Canvas04 {
         return [x, y];
     }
     label(text, point, radius, dir) {
+        text = String(text);
         let italic = this.$TEXT_ITALIC;
         if (isAlphabet(text))
             this.$TEXT_ITALIC = true;

@@ -134,10 +134,11 @@ export class PenCls {
      * ```
      * pen.cutX([1,2]) // draw a vertical cutter at [1,2]
      * pen.cutX(1) // same as cutX([1,0])
+     * pen.cutX(1,'x') // label 'x'
      * ```
      * @category draw
      */
-    cutX(position: Point2D | number, label?: string) {
+    cutX(position: Point2D | number, label?: string | number) {
         if (typeof position === 'number') position = [position, 0]
         this.cv.tickVert(position, DEFAULT_CUTTER_LENGTH_PIXEL)
         if (label !== undefined) this.label.point(position, label, 270)
@@ -148,14 +149,44 @@ export class PenCls {
      * ```
      * pen.cutY([1,2]) // draw a horizontal cutter at [1,2]
      * pen.cutY(1) // same as cutY([0,1])
+     * pen.cutY(1,'y') // label 'y'
      * ```
      * @category draw
      */
-    cutY(position: Point2D | number, label?: string) {
+    cutY(position: Point2D | number, label?: string | number) {
         if (typeof position === 'number') position = [0, position]
         this.cv.tickHori(position, DEFAULT_CUTTER_LENGTH_PIXEL)
         if (label !== undefined) this.label.point(position, label, 180)
     }
+
+
+    /**
+     * Draw a tick to a horizontal line. Equivalent to a cut with x-coordinate marked.
+     * ```
+     * pen.tickX([1,2]) // draw a vertical tick at [1,2]
+     * pen.tickX(1) // same as pen.tickX([1,0])
+     * ```
+     * @category draw
+     */
+    tickX(position: Point2D | number) {
+        if (typeof position === 'number') position = [position, 0]
+        this.cutX(position, position[0])
+    }
+
+
+    /**
+     * Draw a tick to a vertical line. Equivalent to a cut with y-coordinate marked.
+     * ```
+     * pen.tickY([1,2]) // draw a horizontal tick at [1,2]
+     * pen.tickY(1) // same as pen.tickY([0,1])
+     * ```
+     * @category draw
+     */
+    tickY(position: Point2D | number) {
+        if (typeof position === 'number') position = [0, position]
+        this.cutY(position, position[1])
+    }
+
 
 
     /**
@@ -165,7 +196,7 @@ export class PenCls {
      * ```
      * @category draw
      */
-    guideX(point: Point2D, label?: string) {
+    guideX(point: Point2D, label?: string | number) {
         let [x, y] = point
         this.dash([x, 0], point)
         if (label !== undefined) {
@@ -182,7 +213,7 @@ export class PenCls {
      * ```
      * @category draw
      */
-    guideY(point: Point2D, label?: string) {
+    guideY(point: Point2D, label?: string | number) {
         let [x, y] = point
         this.dash([0, y], point)
         if (label !== undefined) {
@@ -191,8 +222,63 @@ export class PenCls {
         }
     }
 
+
     /**
-     * Draw a circle or arc.
+     * Draw two guide lines from `point` to the x-axis and y-axis.
+     * ```
+     * pen.guide([1,2],['a','b']) // draw guide from [1,2] and label 'a' on x-axis and 'b' on y-axis
+     * ```
+     * @category draw
+     */
+    guide(
+        point: Point2D,
+        labels: [string | number | undefined, string | number | undefined] = [undefined, undefined]
+    ) {
+        this.guideX(point, labels[0])
+        this.guideY(point, labels[1])
+    }
+
+
+    /**
+     * Draw a guide line from `point` to the x-axis, and mark the x-coord.
+     * ```
+     * pen.leadX([1,2]) // draw guide from [1,2] and label 1 on x-axis
+     * ```
+     * @category draw
+     */
+    leadX(point: Point2D) {
+        this.guideX(point, point[0])
+    }
+
+
+    /**
+     * Draw a guide line from `point` to the y-axis, and mark the y-coord.
+     * ```
+     * pen.leadY([1,2]) // draw guide from [1,2] and label 2 on y-axis
+     * ```
+     * @category draw
+     */
+    leadY(point: Point2D) {
+        this.guideY(point, point[1])
+    }
+
+
+    /**
+     * Draw two guide lines from `point` to the x-axis and y-axis, and mark the x-coord and y-coord.
+     * ```
+     * pen.lead([1,2]) // draw guide from [1,2] and label 1 on x-axis and 2 on y-axis
+     * ```
+     * @category draw
+     */
+    lead(point: Point2D) {
+        this.leadX(point)
+        this.leadY(point)
+    }
+
+
+
+    /**
+     * Draw a circle.
      * ```
      * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
      * ```

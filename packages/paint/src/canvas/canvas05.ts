@@ -128,7 +128,8 @@ export class Canvas05 extends Canvas04 {
         return [x, y]
     }
 
-    public label(text: string, point: Point, radius: px, dir: number) {
+    public label(text: string | number, point: Point, radius: px, dir: number) {
+        text = String(text)
         let italic = this.$TEXT_ITALIC
         if (isAlphabet(text))
             this.$TEXT_ITALIC = true
