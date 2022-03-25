@@ -5324,11 +5324,10 @@ declare module "Soil/tool/html" {
 }
 declare module "Soil/cls" {
     export class Config {
-        sections: section[];
         answer: string;
         options: Partial<Dict>;
         shuffle: boolean;
-        constructor(sections?: section[], answer?: string, options?: Partial<Dict>, shuffle?: boolean);
+        constructor(answer?: string, options?: Partial<Dict>, shuffle?: boolean);
     }
     export class Dict {
         a: any;
@@ -5445,7 +5444,6 @@ declare var Z: any;
 /**
  * @deprecated
  */
-declare var sections: [number | string, number][];
 declare var answer: string | number;
 declare var options: object;
 declare var shuffle: boolean;
@@ -5453,7 +5451,7 @@ declare var question: string;
 declare var solution: string;
 declare module "Soil/tool/section" {
     import { Dict } from "Soil/cls";
-    export function ExecSection(html: string, sections: section[], dict: Dict): string;
+    export function ExecSection(html: string, dict: Dict): string;
 }
 declare module "Soil/tool/shuffle" {
     export class OptionShuffler {
@@ -5549,7 +5547,6 @@ declare module "Soil/index" {
         inspect(gene: Gene, repeat: number): inspection;
     }
 }
-declare type section = [number | string, number];
 declare type Fruit = {
     readonly qn: string;
     readonly sol: string;

@@ -1,4 +1,3 @@
-type section = [number | string, number]
 
 type Fruit = {
     readonly qn: string,

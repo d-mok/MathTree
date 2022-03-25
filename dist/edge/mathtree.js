@@ -24340,27 +24340,11 @@
   }
 
   // src/Soil/tool/section.ts
-  function DropVersion(html, section, version) {
-    let id = section + "." + version;
-    return html.replace(new RegExp("<p>##" + id + "<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), "");
-  }
   function DropTags(html) {
     html = html.replace(new RegExp("<[^#<]*##[^#>]*>", "g"), "");
     return html;
   }
-  function KeepVersion(html, section, version) {
-    for (let i = 0; i < 10; i++) {
-      if (i === version)
-        continue;
-      html = DropVersion(html, section, i);
-    }
-    return html;
-  }
-  function ExecSection(html, sections, dict) {
-    for (let i = 0; i < sections.length; i++) {
-      let [section, version] = sections[i];
-      html = KeepVersion(html, section.toString(), version);
-    }
+  function ExecSection(html, dict) {
     html = DropCondition(html, dict);
     html = DropTags(html);
     return html;
@@ -24658,8 +24642,7 @@
 
   // src/Soil/cls.ts
   var Config = class {
-    constructor(sections = [], answer = "A", options = {}, shuffle = true) {
-      this.sections = sections;
+    constructor(answer = "A", options = {}, shuffle = true) {
       this.answer = answer;
       this.options = options;
       this.shuffle = shuffle;
@@ -24936,8 +24919,8 @@
       throw CustomError("PopulationError", "No population found after 1000 trials!");
     }
     runSection() {
-      this.qn = ExecSection(this.qn, this.config.sections, this.dict);
-      this.sol = ExecSection(this.sol, this.config.sections, this.dict);
+      this.qn = ExecSection(this.qn, this.dict);
+      this.sol = ExecSection(this.sol, this.dict);
       return true;
     }
     runPreprocess() {
