@@ -17,10 +17,10 @@ export class OptionShuffler {
 
     private exec() {
         let Qn = new QuestionHTML(this.qn)
-        let liCount = Qn.li.length
+        let liCount = Qn.liCount()
         this.hasDuplicatedOptions = Qn.isLiDuplicated()
 
-        if (liCount === 0 || !Qn.ul) {// blank <ul></ul> || no <ul></ul>
+        if (liCount === 0 || !Qn.hasOneUl()) {// blank <ul></ul> || no <ul></ul>
             this.ans = 'X'
             return
         }

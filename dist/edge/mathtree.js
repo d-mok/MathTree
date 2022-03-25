@@ -24628,21 +24628,20 @@
 
   // src/Soil/tool/html.ts
   var QuestionHTML = class extends HTMLWorker {
-    get li() {
-      return this.all("li");
+    hasOneUl() {
+      return this.all("ul").length === 1;
     }
-    get ul() {
-      return this.one("ul");
+    liCount() {
+      return this.all("li").length;
     }
     cloneLi(sourceIndex, repeat = 1) {
       for (let i = 1; i <= repeat; i++) {
         let clone = this.clone("li", sourceIndex);
-        this.ul.appendChild(clone);
+        this.one("ul").appendChild(clone);
       }
     }
-    printInLi(index, symbol, value) {
-      let li = this.li[index];
-      li.innerHTML = blacksmith.forge(li.innerHTML, symbol, value);
+    printInLi(index, dict) {
+      this.tranformInnerHTML(($) => blacksmith.quickForge($, dict), "li", index);
     }
     isLiDuplicated() {
       return this.hasDuplicate("li");
@@ -24664,9 +24663,9 @@
     hasDuplicatedOptions = false;
     exec() {
       let Qn = new QuestionHTML(this.qn);
-      let liCount = Qn.li.length;
+      let liCount = Qn.liCount();
       this.hasDuplicatedOptions = Qn.isLiDuplicated();
-      if (liCount === 0 || !Qn.ul) {
+      if (liCount === 0 || !Qn.hasOneUl()) {
         this.ans = "X";
         return;
       }
@@ -24693,10 +24692,11 @@
     return Array.isArray(assigned) && assigned !== source ? RndShuffle(...assigned) : RndShake(source);
   }
   function ExecInstructions(instructions, source) {
-    let products = {};
+    let products = Array(20).fill({});
     let k;
     for (k in instructions) {
-      products[k] = Produce(source[k], instructions[k]);
+      let arr = Produce(source[k], instructions[k]);
+      arr.forEach((v2, i) => products[i][k] = v2);
     }
     return products;
   }
@@ -24705,22 +24705,18 @@
       return question;
     let Qn = new QuestionHTML(question);
     let products = ExecInstructions(instructions, source);
-    if (Qn.li.length === 1) {
+    if (Qn.liCount() === 1) {
       Qn.cloneLi(0, 3);
-      for (let k in products) {
-        Qn.printInLi(1, k, products[k][0]);
-        Qn.printInLi(2, k, products[k][1]);
-        Qn.printInLi(3, k, products[k][2]);
-      }
+      Qn.printInLi(1, products[0]);
+      Qn.printInLi(2, products[1]);
+      Qn.printInLi(3, products[2]);
       return Qn.export();
     }
-    if (Qn.li.length === 2) {
+    if (Qn.liCount() === 2) {
       Qn.cloneLi(0);
       Qn.cloneLi(1);
-      for (let k in products) {
-        Qn.printInLi(2, k, products[k][0]);
-        Qn.printInLi(3, k, products[k][0]);
-      }
+      Qn.printInLi(2, products[0]);
+      Qn.printInLi(3, products[0]);
       return Qn.export();
     }
     return question;
@@ -24788,7 +24784,7 @@
     "Y",
     "Z"
   ];
-  var Dict = class {
+  var PlainDict = class {
     constructor(a = Symbol(), b = Symbol(), c2 = Symbol(), d = Symbol(), e5 = Symbol(), f2 = Symbol(), g = Symbol(), h = Symbol(), i = Symbol(), j = Symbol(), k = Symbol(), l2 = Symbol(), m2 = Symbol(), n = Symbol(), o = Symbol(), p2 = Symbol(), q = Symbol(), r2 = Symbol(), s2 = Symbol(), t = Symbol(), u = Symbol(), v2 = Symbol(), w = Symbol(), x = Symbol(), y = Symbol(), z = Symbol(), A = Symbol(), B = Symbol(), C = Symbol(), D = Symbol(), E = Symbol(), F = Symbol(), G = Symbol(), H = Symbol(), I = Symbol(), J = Symbol(), K = Symbol(), L = Symbol(), M = Symbol(), N = Symbol(), O = Symbol(), P = Symbol(), Q = Symbol(), R = Symbol(), S = Symbol(), T = Symbol(), U = Symbol(), V = Symbol(), W = Symbol(), X = Symbol(), Y = Symbol(), Z = Symbol()) {
       this.a = a;
       this.b = b;
@@ -24843,6 +24839,8 @@
       this.Y = Y;
       this.Z = Z;
     }
+  };
+  var Dict = class extends PlainDict {
     used() {
       let obj = {};
       for (let key of variables) {
@@ -24858,7 +24856,7 @@
       for (let key of variables) {
         let v2 = this[key];
         if (v2 === void 0 || typeof v2 === "number" && !Number.isFinite(v2))
-          undefs.push({ key: v2 });
+          undefs.push([key, v2]);
       }
       return undefs;
     }

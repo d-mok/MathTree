@@ -2,20 +2,16 @@ import { blacksmith } from './tool/blacksmith'
 
 
 
-
-
-
-
 export class Config {
     constructor(
         public answer: string = "A",
-        public options: Partial<Dict> = {},
+        public options: Partial<PlainDict> = {},
         public shuffle: boolean = true
     ) { }
 }
 
 
-const variables: (keyof Dict)[] = [
+const variables: (keyof PlainDict)[] = [
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
     'i', 'j', 'k', 'l', 'm', 'n', 'o',
     'p', 'q', 'r', 's', 't', 'u', 'v',
@@ -26,7 +22,7 @@ const variables: (keyof Dict)[] = [
     'W', 'X', 'Y', 'Z'
 ]
 
-export class Dict {
+export class PlainDict {
 
     constructor(
         public a: any = Symbol(),
@@ -83,6 +79,9 @@ export class Dict {
         public Z: any = Symbol(),
     ) { }
 
+}
+
+export class Dict extends PlainDict {
 
     private used(): { [_: string]: string } {
         let obj: { [_: string]: string } = {}
@@ -94,21 +93,17 @@ export class Dict {
         return obj
     }
 
-    // update(other: Partial<Dict>): void {
-    //     for (let key of variables) {
-    //         if (key in other) this[key] = other[key]
-    //     }
-    // }
 
-    private undefs(): { [_: string]: any }[] {
-        let undefs: { [_: string]: any }[] = []
+
+    private undefs(): [string, any][] {
+        let undefs: [string, any][] = []
         for (let key of variables) {
             let v = this[key]
             if (
                 v === undefined ||
                 // v === null ||
                 (typeof v === 'number' && !Number.isFinite(v))
-            ) undefs.push({ key: v })
+            ) undefs.push([key, v])
         }
         return undefs
     }
@@ -123,14 +118,6 @@ export class Dict {
 
     substitute(text: string): string {
         return blacksmith.quickForge(text, this.used())
-
-
-        // for (let key of variables) {
-        //     let num = this[key]
-        //     if (typeof num === 'symbol') continue
-        //     text = blacksmith.forge(text, key, num)
-        // }
-        // return text
     }
 }
 

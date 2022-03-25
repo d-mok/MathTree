@@ -1,5 +1,6 @@
 import { blacksmith } from './blacksmith'
 import { HTMLWorker } from 'bot'
+import { PlainDict } from '../cls'
 
 
 
@@ -7,28 +8,24 @@ export class QuestionHTML extends HTMLWorker {
     // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
     // there must be no ul or li tags except the answer options
 
-    get li(): HTMLLIElement[] {
-        return this.all('li')
+    hasOneUl(): boolean {
+        return this.all('ul').length === 1
     }
 
-    get ul(): HTMLUListElement {
-        return this.one('ul')
+    liCount(): number {
+        return this.all('li').length
     }
 
     cloneLi(sourceIndex: number, repeat = 1) {
         for (let i = 1; i <= repeat; i++) {
             let clone = this.clone('li', sourceIndex)
-            this.ul.appendChild(clone)
+            this.one('ul').appendChild(clone)
         }
     }
 
-    // printInWhole(symbol: string, value: any) {
-    //     this.body.innerHTML = blacksmith.forge(this.body.innerHTML, symbol, value)
-    // }
 
-    printInLi(index: number, symbol: string, value: any) {
-        let li = this.li[index]
-        li.innerHTML = blacksmith.forge(li.innerHTML, symbol, value)
+    printInLi(index: number, dict: Partial<PlainDict>) {
+        this.tranformInnerHTML($ => blacksmith.quickForge($, dict), 'li', index)
     }
 
     isLiDuplicated(): boolean {
@@ -38,7 +35,6 @@ export class QuestionHTML extends HTMLWorker {
     shuffleLi(indexArr: number[]) {
         this.shuffleChildren(indexArr, 'ul')
     }
-
 
 
 }
