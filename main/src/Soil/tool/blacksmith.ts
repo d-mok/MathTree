@@ -2,9 +2,6 @@
 import { Blacksmith } from 'bot'
 
 
-
-
-
 function numberDefault(num: number): number {
     let v = num
     if (owl.zero(v))
@@ -24,7 +21,7 @@ type condition = ConditionKeys<typeof owl>
 type GuardType<T extends condition> = (typeof owl)[T] extends (_: any) => _ is infer R ? R : unknown
 type transformer<T extends condition> = ($: GuardType<T>) => string
 
-export type pattern =
+type pattern =
     | '*@'
     | '**@'
     | '*/@'

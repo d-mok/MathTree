@@ -19085,12 +19085,12 @@
       let vars = JSON.parse(JSON.stringify(this.vars));
       return new MonomialCls(coeff, vars);
     }
-    random(degree, variables, maxCoeff) {
+    random(degree, variables2, maxCoeff) {
       let f2 = () => {
         let M = new MonomialCls();
         M.coeff = RndZ(1, maxCoeff);
-        for (let v2 of variables) {
-          if (variables.length === 1) {
+        for (let v2 of variables2) {
+          if (variables2.length === 1) {
             M.vars.push({ variable: v2, power: degree });
           } else {
             M.vars.push({ variable: v2, power: RndN(0, degree) });
@@ -20093,8 +20093,8 @@
 
   // src/Math/Builder/support/system.ts
   var EquSystem = class {
-    constructor(variables, equations) {
-      this.variables = variables;
+    constructor(variables2, equations) {
+      this.variables = variables2;
       this.equations = equations;
       this.fs = equations.map(($) => $.zeroFunc);
     }
@@ -20214,14 +20214,14 @@
   function toEquations(eqs, vars) {
     return eqs.map(($) => toEquation($, vars));
   }
-  function toEquSystem(variables, equations) {
-    let vars = toVariables(variables);
+  function toEquSystem(variables2, equations) {
+    let vars = toVariables(variables2);
     let eqs = toEquations(equations, vars);
     return new EquSystem(vars, eqs);
   }
 
   // src/Math/Builder/build_solve.ts
-  function BuildSolve(variables, equations, {
+  function BuildSolve(variables2, equations, {
     listSym = false,
     avoids = [],
     sigfig: sigfig2 = {},
@@ -20229,7 +20229,7 @@
   } = {}) {
     for (let i = 0; i <= 10; i++) {
       try {
-        return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig: sigfig2, solFormat });
+        return BuildSolveOnce(variables2, equations, { listSym, avoids, sigfig: sigfig2, solFormat });
       } catch (e5) {
         if (i === 10) {
           throw e5;
@@ -20240,13 +20240,13 @@
     }
     throw "never";
   }
-  function BuildSolveOnce(variables, equations, {
+  function BuildSolveOnce(variables2, equations, {
     listSym = false,
     avoids = [],
     sigfig: sigfig2 = {},
     solFormat = "series"
   } = {}) {
-    let system = toEquSystem(variables, equations);
+    let system = toEquSystem(variables2, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables(avoids);
     givens.forEach(($) => $.round(sigfig2[$.sym]));
@@ -20287,8 +20287,8 @@
   }
 
   // src/Math/Builder/build_trend.ts
-  function BuildTrend(variables, equations, settings = {}) {
-    let system = toEquSystem(variables, equations);
+  function BuildTrend(variables2, equations, settings = {}) {
+    let system = toEquSystem(variables2, equations);
     let [constants, agent, responses, target] = system.generateTrend();
     function toWord(change) {
       let trendWords = settings.trends ?? ["increases", "decreases", "is unchanged"];
@@ -20337,12 +20337,12 @@
   }
 
   // src/Math/Builder/build_ratio.ts
-  function BuildRatio(variables, func, latex, {
+  function BuildRatio(variables2, func, latex, {
     cases = ["Before", "After"],
     subscript = [1, 2],
     sigfig: sigfig2 = {}
   } = {}) {
-    let system = toEquSystem(variables, [[func, latex]]);
+    let system = toEquSystem(variables2, [[func, latex]]);
     let vars = system.variables;
     let [given, unknown, ...constants] = RndShuffle(...vars);
     let g = [];
@@ -20443,14 +20443,14 @@
   }
 
   // src/Math/Builder/build_solve2.ts
-  function BuildSolve2(variables, equations, {
+  function BuildSolve2(variables2, equations, {
     listSym = false,
     avoids = [],
     sigfig: sigfig2 = {}
   } = {}) {
     for (let i = 0; i <= 10; i++) {
       try {
-        return BuildSolveOnce2(variables, equations, { listSym, avoids, sigfig: sigfig2 });
+        return BuildSolveOnce2(variables2, equations, { listSym, avoids, sigfig: sigfig2 });
       } catch (e5) {
         if (i === 10) {
           throw e5;
@@ -20461,12 +20461,12 @@
     }
     throw "never";
   }
-  function BuildSolveOnce2(variables, equations, {
+  function BuildSolveOnce2(variables2, equations, {
     listSym = false,
     avoids = [],
     sigfig: sigfig2 = {}
   } = {}) {
-    let system = toEquSystem(variables, equations);
+    let system = toEquSystem(variables2, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables(avoids);
     givens.forEach(($) => $.round(sigfig2[$.sym]));
@@ -24349,6 +24349,9 @@
   }
 
   // ../packages/bot/lib/src/blacksmith/index.js
+  function escapeRegExp(text) {
+    return text.replaceAll(/[.*+!?^${}()|[\]\\]/g, "\\$&");
+  }
   var Stringifier = class {
     constructor(pattern, checker, transformer) {
       this.pattern = pattern;
@@ -24399,6 +24402,15 @@
         text = this.forgeOne(text, symbol, val2, p2);
       return text;
     }
+    quickForge(text, dict) {
+      for (let p2 of this.forgePatterns) {
+        let reg = escapeRegExp(p2);
+        let symbols = "(" + Object.keys(dict).join("|") + ")";
+        reg = reg.replace("@", symbols);
+        text = text.replaceAll(new RegExp(reg, "g"), (match3, p1) => this.transform(p2, dict[p1]));
+      }
+      return text;
+    }
   };
   var BlacksmithIntra = class extends BlacksmithForge {
     constructor() {
@@ -24409,7 +24421,7 @@
       this.intraPatterns = patterns ?? this.allPatterns();
     }
     intraOne(text, pattern, context) {
-      let prefix = pattern.split("@")[0].split("").map(($) => "\\" + $).join("");
+      let prefix = escapeRegExp(pattern.split("@")[0]);
       text = text.replaceAll(new RegExp(String.raw`${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code) => {
         let result = exprCtxHTML(code, context);
         return this.transform(pattern, result);
@@ -24628,9 +24640,6 @@
         this.ul.appendChild(clone);
       }
     }
-    printInWhole(symbol, value) {
-      this.body.innerHTML = blacksmith.forge(this.body.innerHTML, symbol, value);
-    }
     printInLi(index, symbol, value) {
       let li = this.li[index];
       li.innerHTML = blacksmith.forge(li.innerHTML, symbol, value);
@@ -24725,6 +24734,60 @@
       this.shuffle = shuffle;
     }
   };
+  var variables = [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z"
+  ];
   var Dict = class {
     constructor(a = Symbol(), b = Symbol(), c2 = Symbol(), d = Symbol(), e5 = Symbol(), f2 = Symbol(), g = Symbol(), h = Symbol(), i = Symbol(), j = Symbol(), k = Symbol(), l2 = Symbol(), m2 = Symbol(), n = Symbol(), o = Symbol(), p2 = Symbol(), q = Symbol(), r2 = Symbol(), s2 = Symbol(), t = Symbol(), u = Symbol(), v2 = Symbol(), w = Symbol(), x = Symbol(), y = Symbol(), z = Symbol(), A = Symbol(), B = Symbol(), C = Symbol(), D = Symbol(), E = Symbol(), F = Symbol(), G = Symbol(), H = Symbol(), I = Symbol(), J = Symbol(), K = Symbol(), L = Symbol(), M = Symbol(), N = Symbol(), O = Symbol(), P = Symbol(), Q = Symbol(), R = Symbol(), S = Symbol(), T = Symbol(), U = Symbol(), V = Symbol(), W = Symbol(), X = Symbol(), Y = Symbol(), Z = Symbol()) {
       this.a = a;
@@ -24780,82 +24843,33 @@
       this.Y = Y;
       this.Z = Z;
     }
-    variables = [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "j",
-      "k",
-      "l",
-      "m",
-      "n",
-      "o",
-      "p",
-      "q",
-      "r",
-      "s",
-      "t",
-      "u",
-      "v",
-      "w",
-      "x",
-      "y",
-      "z",
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      "R",
-      "S",
-      "T",
-      "U",
-      "V",
-      "W",
-      "X",
-      "Y",
-      "Z"
-    ];
-    update(other) {
-      for (let key of this.variables) {
-        if (key in other)
-          this[key] = other[key];
+    used() {
+      let obj = {};
+      for (let key of variables) {
+        let val2 = this[key];
+        if (typeof val2 === "symbol")
+          continue;
+        obj[key] = val2;
       }
+      return obj;
     }
-    checked() {
-      for (let key of this.variables) {
+    undefs() {
+      let undefs = [];
+      for (let key of variables) {
         let v2 = this[key];
         if (v2 === void 0 || typeof v2 === "number" && !Number.isFinite(v2))
-          return false;
+          undefs.push({ key: v2 });
       }
-      return true;
+      return undefs;
+    }
+    undefsJSON() {
+      return JSON.stringify(this.undefs());
+    }
+    checked() {
+      return this.undefs().length === 0;
     }
     substitute(text) {
-      for (let key of this.variables) {
-        let num2 = this[key];
-        if (typeof num2 === "symbol")
-          continue;
-        text = blacksmith.forge(text, key, num2);
-      }
-      return text;
+      return blacksmith.quickForge(text, this.used());
     }
   };
 
@@ -24934,7 +24948,7 @@
         try {
           this.pushDict();
           if (!this.dict.checked())
-            throw CustomError("PopulationError", "Dict Check Failed.");
+            throw CustomError("PopulationError", "Dict Check Failed: " + this.dict.undefsJSON());
           if (!this.isValidated())
             throw CustomError("PopulationError", "Cannot pass validate.");
           return true;

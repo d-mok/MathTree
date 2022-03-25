@@ -1,4 +1,7 @@
 import { exprCtxHTML } from '../eval';
+function escapeRegExp(text) {
+    return text.replaceAll(/[.*+!?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 class Stringifier {
     constructor(pattern, checker, transformer) {
         this.pattern = pattern;
@@ -53,6 +56,15 @@ export class BlacksmithForge extends BlacksmithBase {
             text = this.forgeOne(text, symbol, val, p);
         return text;
     }
+    quickForge(text, dict) {
+        for (let p of this.forgePatterns) {
+            let reg = escapeRegExp(p);
+            let symbols = '(' + Object.keys(dict).join('|') + ')';
+            reg = reg.replace('@', symbols);
+            text = text.replaceAll(new RegExp(reg, 'g'), (match, p1) => this.transform(p, dict[p1]));
+        }
+        return text;
+    }
 }
 class BlacksmithIntra extends BlacksmithForge {
     constructor() {
@@ -65,7 +77,7 @@ class BlacksmithIntra extends BlacksmithForge {
     }
     /** Intrapolate js *{...js...} or *\\{...js...\\} */
     intraOne(text, pattern, context) {
-        let prefix = pattern.split('@')[0].split('').map($ => '\\' + $).join('');
+        let prefix = escapeRegExp(pattern.split('@')[0]);
         text = text.replaceAll(new RegExp(String.raw `${prefix}\\\{([^\{\}]*)\\\}`, 'g'), (match, code) => {
             let result = exprCtxHTML(code, context);
             return this.transform(pattern, result);

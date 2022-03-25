@@ -15,19 +15,19 @@ export class Config {
 }
 
 
-
+const variables: (keyof Dict)[] = [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+    'i', 'j', 'k', 'l', 'm', 'n', 'o',
+    'p', 'q', 'r', 's', 't', 'u', 'v',
+    'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+    'I', 'J', 'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+    'W', 'X', 'Y', 'Z'
+]
 
 export class Dict {
-    private variables: (keyof Dict)[] = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-        'i', 'j', 'k', 'l', 'm', 'n', 'o',
-        'p', 'q', 'r', 's', 't', 'u', 'v',
-        'w', 'x', 'y', 'z',
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-        'I', 'J', 'K', 'L', 'M', 'N', 'O',
-        'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-        'W', 'X', 'Y', 'Z'
-    ]
+
     constructor(
         public a: any = Symbol(),
         public b: any = Symbol(),
@@ -82,29 +82,55 @@ export class Dict {
         public Y: any = Symbol(),
         public Z: any = Symbol(),
     ) { }
-    update(other: Partial<Dict>) {
-        for (let key of this.variables) {
-            if (key in other) this[key] = other[key]
+
+
+    private used(): { [_: string]: string } {
+        let obj: { [_: string]: string } = {}
+        for (let key of variables) {
+            let val = this[key]
+            if (typeof val === 'symbol') continue
+            obj[key] = val
         }
+        return obj
     }
-    checked() {
-        for (let key of this.variables) {
+
+    // update(other: Partial<Dict>): void {
+    //     for (let key of variables) {
+    //         if (key in other) this[key] = other[key]
+    //     }
+    // }
+
+    private undefs(): { [_: string]: any }[] {
+        let undefs: { [_: string]: any }[] = []
+        for (let key of variables) {
             let v = this[key]
             if (
                 v === undefined ||
                 // v === null ||
                 (typeof v === 'number' && !Number.isFinite(v))
-            ) return false
+            ) undefs.push({ key: v })
         }
-        return true
+        return undefs
     }
+
+    undefsJSON(): string {
+        return JSON.stringify(this.undefs())
+    }
+
+    checked(): boolean {
+        return this.undefs().length === 0
+    }
+
     substitute(text: string): string {
-        for (let key of this.variables) {
-            let num = this[key]
-            if (typeof num === 'symbol') continue
-            text = blacksmith.forge(text, key, num)
-        }
-        return text
+        return blacksmith.quickForge(text, this.used())
+
+
+        // for (let key of variables) {
+        //     let num = this[key]
+        //     if (typeof num === 'symbol') continue
+        //     text = blacksmith.forge(text, key, num)
+        // }
+        // return text
     }
 }
 

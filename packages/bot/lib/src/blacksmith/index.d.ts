@@ -12,6 +12,9 @@ export declare class BlacksmithForge extends BlacksmithBase {
     private forgeOne;
     /** Replace all patterns like *A, **A, etc */
     forge(text: string, symbol: string, val: unknown): string;
+    quickForge(text: string, dict: {
+        [symbol: string]: string;
+    }): string;
 }
 declare class BlacksmithIntra extends BlacksmithForge {
     private intraPatterns;
