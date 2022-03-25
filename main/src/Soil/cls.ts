@@ -95,7 +95,7 @@ export class Dict extends PlainDict {
 
 
 
-    private undefs(): [string, any][] {
+    undefs(): [string, any][] {
         let undefs: [string, any][] = []
         for (let key of variables) {
             let v = this[key]
@@ -108,9 +108,6 @@ export class Dict extends PlainDict {
         return undefs
     }
 
-    undefsJSON(): string {
-        return JSON.stringify(this.undefs())
-    }
 
     checked(): boolean {
         return this.undefs().length === 0

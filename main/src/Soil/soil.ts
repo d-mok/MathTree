@@ -105,7 +105,7 @@ export class Soil {
             try {
                 this.pushDict()
                 if (!this.dict.checked())
-                    throw CustomError('PopulationError', 'Dict Check Failed: ' + this.dict.undefsJSON())
+                    throw CustomError('PopulationError', 'Dict Check Failed: ' + this.dict.undefs())
                 if (!this.isValidated())
                     throw CustomError('PopulationError', 'Cannot pass validate.')
                 return true
