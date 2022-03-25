@@ -199,4 +199,4 @@ addRule('*@', 'constraints', $ => ink.printConstraints($))
 
 
 blacksmith.setForgePatterns()
-blacksmith.setIntraPatterns(['*@', '*/@', '**@'])
+blacksmith.setIntraPatterns(['**@', '*@', '*/@'])

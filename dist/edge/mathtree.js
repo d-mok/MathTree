@@ -24529,7 +24529,7 @@
   addRule("*@", "constraint", ($) => ink.printConstraint($));
   addRule("*@", "constraints", ($) => ink.printConstraints($));
   blacksmith.setForgePatterns();
-  blacksmith.setIntraPatterns(["*@", "*/@", "**@"]);
+  blacksmith.setIntraPatterns(["**@", "*@", "*/@"]);
 
   // src/Soil/tool/html.ts
   var QuestionHTML = class {
