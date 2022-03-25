@@ -24688,7 +24688,7 @@
   };
 
   // src/Soil/tool/option.ts
-  function Produce(source, assigned) {
+  function produce(source, assigned) {
     return Array.isArray(assigned) && assigned !== source ? RndShuffle(...assigned) : RndShake(source);
   }
   function blankDicts(count) {
@@ -24697,11 +24697,11 @@
       arr.push({});
     return arr;
   }
-  function ExecInstructions(instructions, source) {
+  function execInstructions(instructions, source) {
     let dicts = blankDicts(20);
     let k;
     for (k in instructions) {
-      let arr = Produce(source[k], instructions[k]);
+      let arr = produce(source[k], instructions[k]);
       arr.forEach((v2, i) => dicts[i][k] = v2);
     }
     return dicts;
@@ -24710,7 +24710,7 @@
     if (owl.emptyObject(instructions))
       return question;
     let Qn = new QuestionHTML(question);
-    let dicts = ExecInstructions(instructions, source);
+    let dicts = execInstructions(instructions, source);
     if (Qn.liCount() === 1) {
       Qn.cloneLi(0, 3);
       Qn.printInLi(1, dicts[0]);
@@ -24866,8 +24866,8 @@
       }
       return undefs;
     }
-    undefsJSON() {
-      return JSON.stringify(this.undefs());
+    undefsStr() {
+      return this.undefs().map(([k, v2]) => "[" + k + ":" + String(v2) + "]").join(",");
     }
     checked() {
       return this.undefs().length === 0;
@@ -24952,7 +24952,7 @@
         try {
           this.pushDict();
           if (!this.dict.checked())
-            throw CustomError("PopulationError", "Dict Check Failed: " + this.dict.undefsJSON());
+            throw CustomError("PopulationError", "Dict Check Failed: " + this.dict.undefsStr());
           if (!this.isValidated())
             throw CustomError("PopulationError", "Cannot pass validate.");
           return true;

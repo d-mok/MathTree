@@ -5361,7 +5361,7 @@ declare module "Soil/cls" {
     export class Dict extends PlainDict {
         private used;
         private undefs;
-        undefsJSON(): string;
+        undefsStr(): string;
         checked(): boolean;
         substitute(text: string): string;
     }
@@ -5454,7 +5454,7 @@ declare module "Soil/tool/option" {
     import { PlainDict } from "Soil/cls";
     /**
     * append the array of options to question
-    * ```typescript
+    * ```
     * let question = 'abc<ul><li>*x</li></ul>'
     * AutoOptions(question,{x:3})
     * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
