@@ -2,7 +2,7 @@ import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Dict, Config } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
-import { dress, evalCtx, exprCtx, cropSection } from 'bot'
+import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
 
 // util functions
@@ -17,28 +17,6 @@ function katex(html: string): string {
     return T
 }
 
-
-
-class Timer {
-    private start: number = Date.now()
-
-    constructor(
-        private limit: number // in second
-    ) { }
-
-    elapsed(): number {
-        return (Date.now() - this.start) / 1000 // in second
-    }
-
-    over(): boolean {
-        return this.elapsed() > this.limit
-    }
-
-    check(): void {
-        if (this.over())
-            throw CustomError('TimeoutError', 'running too long: > ' + this.limit + 's')
-    }
-}
 
 
 class ErrorLogger {
@@ -182,8 +160,8 @@ export class Soil {
     }
 
     private runIntrapolate(): boolean {
-        this.qn = blacksmith.intra(this.qn,  this.dict)
-        this.sol = blacksmith.intra(this.sol,  this.dict)
+        this.qn = blacksmith.intra(this.qn, this.dict)
+        this.sol = blacksmith.intra(this.sol, this.dict)
         return true
     }
 
@@ -209,16 +187,17 @@ export class Soil {
             this.config.answer,
             this.config.shuffle
         )
-        if (shuffler.AreOptionsDuplicated()) {
+
+        if (shuffler.hasDuplicatedOptions) {
             this.logger.add(CustomError(
                 'ShuffleError',
                 'Duplicated options found!'
             ))
             return false
         }
-        this.qn = shuffler.genQn()
-        this.sol = shuffler.genSol()
-        this.config.answer = shuffler.genAns()
+        this.qn = shuffler.qn
+        this.sol = shuffler.sol
+        this.config.answer = shuffler.ans
         return true
     }
 

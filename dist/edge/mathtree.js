@@ -24429,6 +24429,89 @@
   var Blacksmith = class extends BlacksmithIntra {
   };
 
+  // ../packages/bot/lib/src/coshuffle/index.js
+  function shuffledArray(arr) {
+    let a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function shuffleIndex(count, shuffle = true) {
+    let nums = [...Array(count).keys()];
+    return shuffle ? shuffledArray(nums) : nums;
+  }
+  function shuffleAs(arr, indexArr) {
+    if (arr.length !== indexArr.length)
+      throw "ShuffleAs arr.length not equal to indexArr.length!";
+    let newArr = Array(arr.length).fill(void 0);
+    for (let i = 0; i < arr.length; i++) {
+      const j = indexArr[i];
+      newArr[i] = arr[j];
+    }
+    return newArr;
+  }
+
+  // ../packages/bot/lib/src/dom/index.js
+  var HTMLWorker = class {
+    constructor(html = "") {
+      this.body = new DOMParser().parseFromString(html, "text/html").getElementsByTagName("body")[0];
+    }
+    all(tag) {
+      return [...this.body.getElementsByTagName(tag)];
+    }
+    one(tag, index = 0) {
+      return this.all(tag)[index];
+    }
+    childrenOf(tag, index = 0) {
+      return [...this.one(tag, index).children];
+    }
+    clone(tag, index = 0) {
+      return this.one(tag, index).cloneNode(true);
+    }
+    hasDuplicate(tag) {
+      let htmls = this.all(tag).map(($) => $.innerHTML.replaceAll(" ", ""));
+      return new Set(htmls).size !== htmls.length;
+    }
+    shuffleChildren(indexArr, tag, index = 0) {
+      let children = this.childrenOf(tag, index);
+      let htmls = children.map(($) => $.innerHTML);
+      htmls = shuffleAs(htmls, indexArr);
+      for (let i = 0; i < children.length; i++)
+        children[i].innerHTML = htmls[i];
+      return indexArr;
+    }
+    export() {
+      return this.body.innerHTML;
+    }
+    tranformInnerHTML(fn, tag, index = 0) {
+      let ele = this.one(tag, index);
+      ele.innerHTML = fn(ele.innerHTML);
+    }
+  };
+
+  // ../packages/bot/lib/src/timer/index.js
+  var Timer = class {
+    constructor(limit) {
+      this.limit = limit;
+      this.start = Date.now();
+    }
+    elapsed() {
+      return (Date.now() - this.start) / 1e3;
+    }
+    over() {
+      return this.elapsed() > this.limit;
+    }
+    check() {
+      if (this.over()) {
+        let e5 = Error(`running too long: > ${this.limit}s`);
+        e5.name = "TimeoutError";
+        throw e5;
+      }
+    }
+  };
+
   // src/Soil/tool/blacksmith.ts
   function numberDefault(num2) {
     let v2 = num2;
@@ -24532,23 +24615,17 @@
   blacksmith.setIntraPatterns(["**@", "*@", "*/@"]);
 
   // src/Soil/tool/html.ts
-  var QuestionHTML = class {
-    body;
-    constructor(html = "") {
-      this.body = new DOMParser().parseFromString(html, "text/html").getElementsByTagName("body")[0];
-    }
-    export() {
-      return this.body.innerHTML;
-    }
+  var QuestionHTML = class extends HTMLWorker {
     get li() {
-      return [...this.body.getElementsByTagName("li")];
+      return this.all("li");
     }
     get ul() {
-      return this.body.getElementsByTagName("ul")[0];
+      return this.one("ul");
     }
     cloneLi(sourceIndex, repeat = 1) {
       for (let i = 1; i <= repeat; i++) {
-        this.ul.appendChild(this.li[sourceIndex].cloneNode(true));
+        let clone = this.clone("li", sourceIndex);
+        this.ul.appendChild(clone);
       }
     }
     printInWhole(symbol, value) {
@@ -24559,21 +24636,10 @@
       li.innerHTML = blacksmith.forge(li.innerHTML, symbol, value);
     }
     isLiDuplicated() {
-      let htmls = this.li.map((x) => x.innerHTML.replace(/\s+/g, ""));
-      return new Set(htmls).size !== htmls.length;
+      return this.hasDuplicate("li");
     }
-    shuffleLi(shuffle = true) {
-      let oldHTMLs = this.li.map((x) => x.innerHTML);
-      let newHTMLs;
-      if (shuffle) {
-        newHTMLs = RndShuffle(...oldHTMLs);
-      } else {
-        newHTMLs = [...oldHTMLs];
-      }
-      for (let i = 0; i < newHTMLs.length; i++) {
-        this.li[i].innerHTML = newHTMLs[i];
-      }
-      return oldHTMLs.map((x) => newHTMLs.indexOf(x));
+    shuffleLi(indexArr) {
+      this.shuffleChildren(indexArr, "ul");
     }
   };
 
@@ -24584,45 +24650,32 @@
       this.sol = sol;
       this.ans = ans;
       this.shuffle = shuffle;
-      this.Qn = new QuestionHTML(qn);
-      if (!this.Qn.ul)
+      this.exec();
+    }
+    hasDuplicatedOptions = false;
+    exec() {
+      let Qn = new QuestionHTML(this.qn);
+      let liCount = Qn.li.length;
+      this.hasDuplicatedOptions = Qn.isLiDuplicated();
+      if (liCount === 0 || !Qn.ul) {
+        this.ans = "X";
         return;
-      if (this.Qn.li.length === 0)
-        return;
-      this.valid = true;
-    }
-    perm = [];
-    valid = false;
-    Qn;
-    AreOptionsDuplicated() {
-      return this.Qn.isLiDuplicated();
-    }
-    genQn() {
-      if (!this.valid)
-        return this.qn;
-      this.perm = this.Qn.shuffleLi(this.shuffle);
-      return this.Qn.export();
-    }
-    mapLetter(oldLetter) {
-      let oldIndex = ["A", "B", "C", "D", "E", "F"].indexOf(oldLetter);
-      let newIndex = this.perm[oldIndex];
-      return ["A", "B", "C", "D", "E", "F"][newIndex];
-    }
-    genAns() {
-      if (!this.valid)
-        return "X";
-      return this.mapLetter(this.ans);
-    }
-    genSol() {
-      if (!this.valid)
-        return this.sol;
-      let newSol = "<p>Answer: " + this.genAns() + "</p><p><b>Solution:</b></p>" + this.sol;
-      let ansList = ["A", "B", "C", "D", "E", "F"];
-      ansList.length = this.perm.length;
-      for (let x of ansList) {
-        newSol = newSol.replace(new RegExp("{#" + x + "}", "g"), this.mapLetter(x));
       }
-      return newSol;
+      let perm = shuffleIndex(liCount, this.shuffle);
+      let map = this.letterMap(perm);
+      Qn.shuffleLi(perm);
+      this.qn = Qn.export();
+      this.ans = map[this.ans];
+      this.sol = `<p>Answer: ${this.ans}</p><p><b>Solution:</b></p>${this.sol}`;
+      this.sol = this.sol.replaceAll(/{#([A-Z])}/g, (match3, p1) => map[p1]);
+    }
+    letterMap(perm) {
+      let ansList = ["A", "B", "C", "D", "E", "F"].slice(0, perm.length);
+      let shuffled = shuffleAs(ansList, perm);
+      let map = {};
+      for (let i = 0; i < perm.length; i++)
+        map[shuffled[i]] = ansList[i];
+      return map;
     }
   };
 
@@ -24816,22 +24869,6 @@
     ele.remove();
     return T;
   }
-  var Timer = class {
-    constructor(limit) {
-      this.limit = limit;
-    }
-    start = Date.now();
-    elapsed() {
-      return (Date.now() - this.start) / 1e3;
-    }
-    over() {
-      return this.elapsed() > this.limit;
-    }
-    check() {
-      if (this.over())
-        throw CustomError("TimeoutError", "running too long: > " + this.limit + "s");
-    }
-  };
   var ErrorLogger = class {
     pile = [];
     add(e5) {
@@ -24966,13 +25003,13 @@
     }
     runShuffle() {
       let shuffler = new OptionShuffler(this.qn, this.sol, this.config.answer, this.config.shuffle);
-      if (shuffler.AreOptionsDuplicated()) {
+      if (shuffler.hasDuplicatedOptions) {
         this.logger.add(CustomError("ShuffleError", "Duplicated options found!"));
         return false;
       }
-      this.qn = shuffler.genQn();
-      this.sol = shuffler.genSol();
-      this.config.answer = shuffler.genAns();
+      this.qn = shuffler.qn;
+      this.sol = shuffler.sol;
+      this.config.answer = shuffler.ans;
       return true;
     }
     runKatex() {

@@ -5425,34 +5425,27 @@ declare var shuffle: boolean;
 declare var question: string;
 declare var solution: string;
 declare module "Soil/tool/html" {
-    export class QuestionHTML {
-        private body;
-        constructor(html?: string);
-        export(): string;
+    import { HTMLWorker } from 'bot';
+    export class QuestionHTML extends HTMLWorker {
         get li(): HTMLLIElement[];
         get ul(): HTMLUListElement;
         cloneLi(sourceIndex: number, repeat?: number): void;
         printInWhole(symbol: string, value: any): void;
         printInLi(index: number, symbol: string, value: any): void;
         isLiDuplicated(): boolean;
-        shuffleLi(shuffle?: boolean): number[];
+        shuffleLi(indexArr: number[]): void;
     }
 }
 declare module "Soil/tool/shuffle" {
     export class OptionShuffler {
-        private qn;
-        private sol;
-        private ans;
+        qn: string;
+        sol: string;
+        ans: string;
         private shuffle;
-        private perm;
-        private valid;
-        private Qn;
+        hasDuplicatedOptions: boolean;
         constructor(qn: string, sol: string, ans: string, shuffle: boolean);
-        AreOptionsDuplicated(): boolean;
-        genQn(): string;
-        private mapLetter;
-        genAns(): string;
-        genSol(): string;
+        private exec;
+        private letterMap;
     }
 }
 declare module "Soil/tool/option" {

@@ -8,18 +8,18 @@ export declare class BlacksmithForge extends BlacksmithBase {
     private forgePatterns;
     /** Set patterns for forge. Default to all patterns. */
     setForgePatterns(patterns?: string[]): void;
-    /** replace specific pattern like *A */
+    /** Replace specific pattern like *A */
     private forgeOne;
-    /** replace all patterns like *A, **A, etc */
+    /** Replace all patterns like *A, **A, etc */
     forge(text: string, symbol: string, val: unknown): string;
 }
 declare class BlacksmithIntra extends BlacksmithForge {
     private intraPatterns;
     /** Set patterns for intra. Default to all patterns. */
     setIntraPatterns(patterns?: string[]): void;
-    /** intrapolate js *{...js...} or *\\{...js...\\} */
+    /** Intrapolate js *{...js...} or *\\{...js...\\} */
     private intraOne;
-    /** intrapolate js *{...js...} or *\\{...js...\\} */
+    /** Intrapolate js *{...js...} or *\\{...js...\\} */
     intra(text: string, context: object): string;
 }
 export declare class Blacksmith extends BlacksmithIntra {

@@ -1,44 +1,48 @@
-import { HTMLWorker } from "./worker";
-export class QuestionHTML extends HTMLWorker {
-    // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
-    // there must be no ul or li tags except the answer options
-    get li() {
-        return this.all('li');
+import { shuffleAs } from '../coshuffle';
+export class HTMLWorker {
+    constructor(html = '') {
+        this.body = (new DOMParser())
+            .parseFromString(html, 'text/html')
+            .getElementsByTagName('body')[0];
     }
-    get ul() {
-        return this.one('ul');
+    /** Get all elements by tag name. */
+    all(tag) {
+        return [...this.body.getElementsByTagName(tag)];
     }
-    cloneLi(sourceIndex, repeat = 1) {
-        for (let i = 1; i <= repeat; i++) {
-            let clone = this.clone('li', sourceIndex);
-            this.ul.appendChild(clone);
-        }
+    /** Get one element. */
+    one(tag, index = 0) {
+        return this.all(tag)[index];
     }
-    // printInWhole(symbol: string, value: any) {
-    //     this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value)
-    // }
-    // printInLi(index: number, symbol: string, value: any) {
-    //     let li = this.li[index]
-    //     li.innerHTML = PrintVariable(li.innerHTML, symbol, value)
-    // }
-    isLiDuplicated() {
-        return this.hasDuplicate('li');
+    /** Get all children of an element. */
+    childrenOf(tag, index = 0) {
+        return [...this.one(tag, index).children];
     }
-    // shuffleLi1(shuffle: boolean = true): number[] {
-    //     let oldHTMLs: string[] = this.li.map(x => x.innerHTML)
-    //     let newHTMLs: string[]
-    //     if (shuffle) {
-    //         newHTMLs = RndShuffle(...oldHTMLs)
-    //     } else {
-    //         newHTMLs = [...oldHTMLs]
-    //     }
-    //     for (let i = 0; i < newHTMLs.length; i++) {
-    //         this.li[i].innerHTML = newHTMLs[i]
-    //     }
-    //     return oldHTMLs.map(x => newHTMLs.indexOf(x))
-    // }
-    shuffleLi2() {
-        return this.shuffleChildren('ul');
+    /** Get a clone of an element. */
+    clone(tag, index = 0) {
+        return this.one(tag, index).cloneNode(true);
+    }
+    /** Check if the elements have duplicates. */
+    hasDuplicate(tag) {
+        let htmls = this.all(tag).map($ => $.innerHTML.replaceAll(' ', ''));
+        return (new Set(htmls)).size !== htmls.length;
+    }
+    /** Shuffle in-place the children of an element. */
+    shuffleChildren(indexArr, tag, index = 0) {
+        let children = this.childrenOf(tag, index);
+        let htmls = children.map($ => $.innerHTML);
+        htmls = shuffleAs(htmls, indexArr);
+        for (let i = 0; i < children.length; i++)
+            children[i].innerHTML = htmls[i];
+        return indexArr;
+    }
+    /** Get the body tag's innerHTML */
+    export() {
+        return this.body.innerHTML;
+    }
+    /** Transform innerHTML of an element. */
+    tranformInnerHTML(fn, tag, index = 0) {
+        let ele = this.one(tag, index);
+        ele.innerHTML = fn(ele.innerHTML);
     }
 }
 //# sourceMappingURL=index.js.map

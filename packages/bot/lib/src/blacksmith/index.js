@@ -36,7 +36,7 @@ export class BlacksmithForge extends BlacksmithBase {
     setForgePatterns(patterns) {
         this.forgePatterns = patterns ?? this.allPatterns();
     }
-    /** replace specific pattern like *A */
+    /** Replace specific pattern like *A */
     forgeOne(text, symbol, val, pattern) {
         let pn = pattern.replaceAll('@', symbol);
         if (text.includes(pn)) {
@@ -47,7 +47,7 @@ export class BlacksmithForge extends BlacksmithBase {
             return text;
         }
     }
-    /** replace all patterns like *A, **A, etc */
+    /** Replace all patterns like *A, **A, etc */
     forge(text, symbol, val) {
         for (let p of this.forgePatterns)
             text = this.forgeOne(text, symbol, val, p);
@@ -63,7 +63,7 @@ class BlacksmithIntra extends BlacksmithForge {
     setIntraPatterns(patterns) {
         this.intraPatterns = patterns ?? this.allPatterns();
     }
-    /** intrapolate js *{...js...} or *\\{...js...\\} */
+    /** Intrapolate js *{...js...} or *\\{...js...\\} */
     intraOne(text, pattern, context) {
         let prefix = pattern.split('@')[0].split('').map($ => '\\' + $).join('');
         text = text.replaceAll(new RegExp(String.raw `${prefix}\\\{([^\{\}]*)\\\}`, 'g'), (match, code) => {
@@ -76,7 +76,7 @@ class BlacksmithIntra extends BlacksmithForge {
         });
         return text;
     }
-    /** intrapolate js *{...js...} or *\\{...js...\\} */
+    /** Intrapolate js *{...js...} or *\\{...js...\\} */
     intra(text, context) {
         for (let p of this.intraPatterns)
             text = this.intraOne(text, p, context);
