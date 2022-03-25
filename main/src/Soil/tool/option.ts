@@ -7,15 +7,23 @@ function Produce(source: any, assigned: any): (typeof source)[] {
         : RndShake(source)
 }
 
+function blankDicts(count: number): Partial<PlainDict>[] {
+    let arr: Partial<PlainDict>[] = []
+    for (let i = 0; i < count; i++)
+        arr.push({})
+    return arr
+}
+
+
 function ExecInstructions(instructions: Partial<PlainDict>, source: PlainDict): Partial<PlainDict>[] {
-    let products: Partial<PlainDict>[] = Array(20).fill({})
+    let dicts = blankDicts(20)
     let k: keyof PlainDict
     for (k in instructions) {
         let arr = Produce(source[k], instructions[k])
-        arr.forEach((v, i) => products[i][k] = v)
+        arr.forEach((v, i) => dicts[i][k] = v)
         // products[k] = Produce(source[k], instructions[k])
     }
-    return products
+    return dicts
 }
 
 
@@ -30,13 +38,13 @@ function ExecInstructions(instructions: Partial<PlainDict>, source: PlainDict): 
 export function AutoOptions(instructions: Partial<PlainDict>, question: string, source: PlainDict): string {
     if (owl.emptyObject(instructions)) return question
     let Qn = new QuestionHTML(question)
-    let products = ExecInstructions(instructions, source)
+    let dicts = ExecInstructions(instructions, source)
 
     if (Qn.liCount() === 1) {
         Qn.cloneLi(0, 3)
-        Qn.printInLi(1, products[0])
-        Qn.printInLi(2, products[1])
-        Qn.printInLi(3, products[2])
+        Qn.printInLi(1, dicts[0])
+        Qn.printInLi(2, dicts[1])
+        Qn.printInLi(3, dicts[2])
 
 
         // for (let k in products) {
@@ -50,8 +58,8 @@ export function AutoOptions(instructions: Partial<PlainDict>, question: string, 
     if (Qn.liCount() === 2) {
         Qn.cloneLi(0)
         Qn.cloneLi(1)
-        Qn.printInLi(2, products[0])
-        Qn.printInLi(3, products[0])
+        Qn.printInLi(2, dicts[0])
+        Qn.printInLi(3, dicts[0])
 
         // for (let k in products) {
         //     Qn.printInLi(2, k, products[k as keyof PlainDict][0])
