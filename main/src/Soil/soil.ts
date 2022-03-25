@@ -1,9 +1,9 @@
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Dict, Config } from './cls'
-import { intrapolate } from './tool/eval'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 import { dress, evalCtx, exprCtx, cropSection } from 'bot'
+import { blacksmith } from './tool/blacksmith'
 
 // util functions
 
@@ -182,8 +182,8 @@ export class Soil {
     }
 
     private runIntrapolate(): boolean {
-        this.qn = intrapolate(this.qn, this.dict)
-        this.sol = intrapolate(this.sol, this.dict)
+        this.qn = blacksmith.intra(this.qn,  this.dict)
+        this.sol = blacksmith.intra(this.sol,  this.dict)
         return true
     }
 

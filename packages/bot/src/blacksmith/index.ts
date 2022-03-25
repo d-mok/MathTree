@@ -1,0 +1,114 @@
+import { exprCtxHTML } from '../eval'
+
+
+class Stringifier<T> {
+
+    constructor(
+        public pattern: string,
+        public checker: ($: any) => $ is T,
+        public transformer: ($: T) => string
+    ) { }
+
+}
+
+
+
+class BlacksmithBase {
+
+    private sfrs: Stringifier<any>[] = []
+
+    add<T>(pattern: string, checker: ($: any) => $ is T, transformer: ($: T) => string) {
+        let s = new Stringifier<T>(pattern, checker, transformer)
+        this.sfrs.push(s)
+    }
+
+    protected transform(pattern: string, val: unknown): string {
+        let ss = this.sfrs.filter($ => $.pattern === pattern)
+        for (let s of ss) {
+            if (s.checker(val))
+                return s.transformer(val)
+        }
+        return String(val)
+    }
+
+    protected allPatterns(): string[] {
+        let ps = this.sfrs.map(s => s.pattern)
+        return [...new Set(ps)]
+    }
+
+
+}
+
+export class BlacksmithForge extends BlacksmithBase {
+
+    private forgePatterns: string[] = []
+
+    /** Set patterns for forge. Default to all patterns. */
+    setForgePatterns(patterns?: string[]) {
+        this.forgePatterns = patterns ?? this.allPatterns()
+    }
+
+    /** Replace specific pattern like *A */
+    private forgeOne(text: string, symbol: string, val: unknown, pattern: string): string {
+        let pn = pattern.replaceAll('@', symbol)
+        if (text.includes(pn)) {
+            let content = this.transform(pattern, val)
+            return text.replaceAll(pn, content)
+        } else {
+            return text
+        }
+    }
+
+    /** Replace all patterns like *A, **A, etc */
+    forge(text: string, symbol: string, val: unknown): string {
+        for (let p of this.forgePatterns)
+            text = this.forgeOne(text, symbol, val, p)
+        return text
+    }
+
+
+
+}
+
+
+
+
+class BlacksmithIntra extends BlacksmithForge {
+
+    private intraPatterns: string[] = []
+
+
+    /** Set patterns for intra. Default to all patterns. */
+    setIntraPatterns(patterns?: string[]) {
+        this.intraPatterns = patterns ?? this.allPatterns()
+    }
+
+    /** Intrapolate js *{...js...} or *\\{...js...\\} */
+    private intraOne(text: string, pattern: string, context: object): string {
+        let prefix = pattern.split('@')[0].split('').map($ => '\\' + $).join('')
+        text = text.replaceAll(
+            new RegExp(String.raw`${prefix}\\\{([^\{\}]*)\\\}`, 'g'),
+            (match, code) => {
+                let result = exprCtxHTML(code, context)
+                return this.transform(pattern, result)
+            })
+        text = text.replaceAll(
+            new RegExp(String.raw`${prefix}\{([^\{\}]*)\}`, 'g'),
+            (match, code) => {
+                let result = exprCtxHTML(code, context)
+                return this.transform(pattern, result)
+            })
+        return text
+    }
+
+    /** Intrapolate js *{...js...} or *\\{...js...\\} */
+    intra(text: string, context: object): string {
+        for (let p of this.intraPatterns)
+            text = this.intraOne(text, p, context)
+        return text
+    }
+
+
+}
+
+export class Blacksmith extends BlacksmithIntra { }

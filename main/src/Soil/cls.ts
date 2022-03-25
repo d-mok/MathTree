@@ -1,4 +1,4 @@
-import { PrintVariable } from "./tool/html"
+import { blacksmith } from './tool/blacksmith'
 
 
 
@@ -101,8 +101,8 @@ export class Dict {
     substitute(text: string): string {
         for (let key of this.variables) {
             let num = this[key]
-            if (typeof num === 'symbol') continue;
-            text = PrintVariable(text, key, num)
+            if (typeof num === 'symbol') continue
+            text = blacksmith.forge(text, key, num)
         }
         return text
     }

@@ -5,7 +5,6 @@
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
   var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
@@ -33,10 +32,6 @@
     if (kind && result)
       __defProp(target, key, result);
     return result;
-  };
-  var __publicField = (obj, key, value) => {
-    __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-    return value;
   };
 
   // node_modules/katex/dist/katex.js
@@ -24251,7 +24246,190 @@
   globalThis.AutoPen = AutoPenCls;
   globalThis.PhyPen = PhyPenCls;
 
-  // src/Soil/tool/stringify.ts
+  // ../packages/bot/lib/src/dress/dressor.js
+  var END_TAG = String.raw`(?=[^<>]*</span>)`;
+  var SPACES = String.raw`(?:\s|&nbsp;)*`;
+  var Dressor = class {
+    constructor(html) {
+      this.html = html;
+    }
+    do(reg, replace, inTag = false) {
+      let tail = inTag ? END_TAG : "";
+      let regex = new RegExp(reg.join(SPACES) + tail, "g");
+      this.html = this.html.replaceAll(regex, replace);
+    }
+    get() {
+      return this.html;
+    }
+  };
+
+  // ../packages/bot/lib/src/dress/index.js
+  function capOr(...reg) {
+    return "(" + reg.join("|") + ")";
+  }
+  function cap(reg) {
+    return "(" + reg + ")";
+  }
+  var s = String.raw`(?:\s|&nbsp;)*`;
+  var p = String.raw`\+`;
+  var m = String.raw`\-`;
+  var e4 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
+  var l = String.raw`[\(\[\{]`;
+  var r = String.raw`[\)\]\}]`;
+  var pl = String.raw`[\(\[]`;
+  var pr = String.raw`[\)\]]`;
+  var c = String.raw`\,`;
+  var v = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`;
+  var f = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`;
+  var sl = String.raw`\\`;
+  var left = String.raw`\\left`;
+  var sq2 = String.raw`\\sqrt`;
+  function dress(html) {
+    let d = new Dressor(html);
+    d.do([p, m], "-");
+    d.do([m, p], "-");
+    d.do([capOr(l, e4, c), m, m], "$1");
+    d.do([m, m], "+");
+    d.do([m, m], "+");
+    d.do([String.raw`\^\{1\}`], "");
+    d.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
+    d.do([capOr(p, m, e4, l, sl, r, c), "1", capOr(v, f, pl, left, sq2)], "$1 $2", true);
+    d.do([cap(v) + "'"], "$1 \\prime ", true);
+    return d.get();
+  }
+
+  // ../packages/bot/lib/src/eval/index.js
+  var VariableError = Error("A variable is used before a value is defined.");
+  VariableError.name = "VariableError";
+  function isVarError(e5) {
+    return e5 instanceof Error && e5.message.startsWith("Cannot convert a Symbol value to");
+  }
+  function assembleCtx(code, contexts) {
+    let T = '"use strict";';
+    contexts.forEach((ctx, i) => {
+      T += Object.keys(ctx).map((_) => `let ${_} = this[${i}].${_};`).join("");
+    });
+    T += code + "\n;";
+    contexts.forEach((ctx, i) => {
+      T += Object.keys(ctx).map((_) => `this[${i}].${_} = ${_};`).join("");
+    });
+    return T;
+  }
+  function evalCtx(code, ...contexts) {
+    try {
+      const fullCode = assembleCtx(code, contexts);
+      const fn = new Function(fullCode);
+      fn.call(contexts);
+    } catch (e5) {
+      throw isVarError(e5) ? VariableError : e5;
+    }
+  }
+  function exprCtx(code, ...contexts) {
+    let result = { ____xxxRESULTxxx____: void 0 };
+    evalCtx("____xxxRESULTxxx____ = " + code, result, ...contexts);
+    return result.____xxxRESULTxxx____;
+  }
+  function exprCtxHTML(code, ...contexts) {
+    code = code.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
+    return exprCtx(code, ...contexts);
+  }
+
+  // ../packages/bot/lib/src/section/index.js
+  function dropTags(html) {
+    html = html.replaceAll(new RegExp("<[^#<]*##[^#>]*>", "g"), "");
+    return html;
+  }
+  function dropCondition(html, context) {
+    return html.replaceAll(new RegExp("<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), (match3, p1) => exprCtxHTML(p1, context) ? match3 : "");
+  }
+  function cropSection(html, context) {
+    html = dropCondition(html, context);
+    html = dropTags(html);
+    return html;
+  }
+
+  // ../packages/bot/lib/src/blacksmith/index.js
+  var Stringifier = class {
+    constructor(pattern, checker, transformer) {
+      this.pattern = pattern;
+      this.checker = checker;
+      this.transformer = transformer;
+    }
+  };
+  var BlacksmithBase = class {
+    constructor() {
+      this.sfrs = [];
+    }
+    add(pattern, checker, transformer) {
+      let s2 = new Stringifier(pattern, checker, transformer);
+      this.sfrs.push(s2);
+    }
+    transform(pattern, val2) {
+      let ss = this.sfrs.filter(($) => $.pattern === pattern);
+      for (let s2 of ss) {
+        if (s2.checker(val2))
+          return s2.transformer(val2);
+      }
+      return String(val2);
+    }
+    allPatterns() {
+      let ps = this.sfrs.map((s2) => s2.pattern);
+      return [...new Set(ps)];
+    }
+  };
+  var BlacksmithForge = class extends BlacksmithBase {
+    constructor() {
+      super(...arguments);
+      this.forgePatterns = [];
+    }
+    setForgePatterns(patterns) {
+      this.forgePatterns = patterns ?? this.allPatterns();
+    }
+    forgeOne(text, symbol, val2, pattern) {
+      let pn = pattern.replaceAll("@", symbol);
+      if (text.includes(pn)) {
+        let content = this.transform(pattern, val2);
+        return text.replaceAll(pn, content);
+      } else {
+        return text;
+      }
+    }
+    forge(text, symbol, val2) {
+      for (let p2 of this.forgePatterns)
+        text = this.forgeOne(text, symbol, val2, p2);
+      return text;
+    }
+  };
+  var BlacksmithIntra = class extends BlacksmithForge {
+    constructor() {
+      super(...arguments);
+      this.intraPatterns = [];
+    }
+    setIntraPatterns(patterns) {
+      this.intraPatterns = patterns ?? this.allPatterns();
+    }
+    intraOne(text, pattern, context) {
+      let prefix = pattern.split("@")[0].split("").map(($) => "\\" + $).join("");
+      text = text.replaceAll(new RegExp(String.raw`${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code) => {
+        let result = exprCtxHTML(code, context);
+        return this.transform(pattern, result);
+      });
+      text = text.replaceAll(new RegExp(String.raw`${prefix}\{([^\{\}]*)\}`, "g"), (match3, code) => {
+        let result = exprCtxHTML(code, context);
+        return this.transform(pattern, result);
+      });
+      return text;
+    }
+    intra(text, context) {
+      for (let p2 of this.intraPatterns)
+        text = this.intraOne(text, p2, context);
+      return text;
+    }
+  };
+  var Blacksmith = class extends BlacksmithIntra {
+  };
+
+  // src/Soil/tool/blacksmith.ts
   function numberDefault(num2) {
     let v2 = num2;
     if (owl.zero(v2))
@@ -24263,52 +24441,26 @@
     }
     return v2;
   }
-  var Stringifier = class {
-    constructor(pattern3, condition, transformer) {
-      this.pattern = pattern3;
-      this.condition = condition;
-      this.transformer = transformer;
-    }
-    check(val2) {
-      return owl[this.condition](val2);
-    }
-    exec(val2) {
-      return this.transformer(val2);
-    }
-  };
-  var Stringifiers = class {
-    static add(pattern3, condition, fn) {
-      this.store.push(new Stringifier(pattern3, condition, fn));
-    }
-    static transform(pattern3, val2) {
-      let ss = this.store.filter((s2) => s2.pattern === pattern3);
-      for (let s2 of ss) {
-        if (s2.check(val2))
-          return s2.exec(val2);
-      }
-      return String(val2);
-    }
-    static allPatterns() {
-      let ps = this.store.map((s2) => s2.pattern);
-      return [...new Set(ps)];
-    }
-  };
-  __publicField(Stringifiers, "store", []);
-  Stringifiers.add("**@", "num", ($) => {
+  var blacksmith = new Blacksmith();
+  function addRule(pattern, condition, fn) {
+    let checker = ($) => owl[condition]($);
+    blacksmith.add(pattern, checker, fn);
+  }
+  addRule("**@", "num", ($) => {
     let v2 = cal.blur(Round($, 3));
     let abs = Math.abs(v2);
     return String(abs >= 1e4 || abs <= 0.01 ? Sci(v2) : v2);
   });
-  Stringifiers.add("**@", "quantity", ({ val: val2, unit }) => {
+  addRule("**@", "quantity", ({ val: val2, unit }) => {
     let v2 = cal.blur(Round(val2, 3));
     let abs = Math.abs(v2);
     return String(abs >= 1e4 || abs <= 0.01 ? Sci(v2) : v2) + unit;
   });
-  Stringifiers.add("*/@", "num", ($) => {
+  addRule("*/@", "num", ($) => {
     let [p2, q] = ToFrac($);
     return Dfrac(p2, q);
   });
-  Stringifiers.add("*/(@)", "num", ($) => {
+  addRule("*/(@)", "num", ($) => {
     let [p2, q] = ToFrac($);
     if (q === 1 && p2 >= 0)
       return Dfrac(p2, q);
@@ -24316,66 +24468,68 @@
       return "(" + Dfrac(p2, q) + ")";
     return "\\left ( " + Dfrac(p2, q) + " \\right )";
   });
-  Stringifiers.add("*//@", "num", ($) => {
+  addRule("*//@", "num", ($) => {
     let [p2, q] = ToFrac($);
     return Dfrac(p2, q).replace(/dfrac/g, "frac");
   });
-  Stringifiers.add("*(@)", "num", ($) => {
+  addRule("*(@)", "num", ($) => {
     let v2 = numberDefault($);
     return String(v2 >= 0 ? v2 : "(" + v2 + ")");
   });
-  Stringifiers.add("*!@", "num", ($) => ink.printSurd($));
-  Stringifiers.add("*!@", "point2D", ([a, b]) => "(" + ink.printSurd(a) + "," + ink.printSurd(b) + ")");
-  Stringifiers.add("*^+_@", "num", ($) => $ >= 0 ? "+" : "-");
-  Stringifiers.add("*^-_@", "num", ($) => $ >= 0 ? "-" : "+");
-  Stringifiers.add("*|@|", "num", ($) => String(numberDefault(Math.abs($))));
-  Stringifiers.add("*^\\gt_@", "bool", ($) => $ ? "\\gt" : "\\lt");
-  Stringifiers.add("*^\\gt_@", "num", ($) => $ > 0 ? "\\gt" : $ < 0 ? "\\lt" : "=");
-  Stringifiers.add("*^\\lt_@", "bool", ($) => $ ? "\\lt" : "\\gt");
-  Stringifiers.add("*^\\lt_@", "num", ($) => $ > 0 ? "\\lt" : $ < 0 ? "\\gt" : "=");
-  Stringifiers.add("*^\\ge_@", "bool", ($) => $ ? "\\ge" : "\\le");
-  Stringifiers.add("*^\\ge_@", "num", ($) => $ > 0 ? "\\ge" : $ < 0 ? "\\le" : "=");
-  Stringifiers.add("*^\\le_@", "bool", ($) => $ ? "\\le" : "\\ge");
-  Stringifiers.add("*^\\le_@", "num", ($) => $ > 0 ? "\\le" : $ < 0 ? "\\ge" : "=");
-  Stringifiers.add("*%@", "num", ($) => numberDefault($ * 100) + "%");
-  Stringifiers.add("*\\%@", "num", ($) => numberDefault($ * 100) + "\\%");
-  Stringifiers.add("*:@", "ntuple", ($) => toNumbers($).ratio().join(":"));
-  Stringifiers.add("*:@", "num", ($) => {
+  addRule("*!@", "num", ($) => ink.printSurd($));
+  addRule("*!@", "point2D", ([a, b]) => "(" + ink.printSurd(a) + "," + ink.printSurd(b) + ")");
+  addRule("*^+_@", "num", ($) => $ >= 0 ? "+" : "-");
+  addRule("*^-_@", "num", ($) => $ >= 0 ? "-" : "+");
+  addRule("*|@|", "num", ($) => String(numberDefault(Math.abs($))));
+  addRule("*^\\gt_@", "bool", ($) => $ ? "\\gt" : "\\lt");
+  addRule("*^\\gt_@", "num", ($) => $ > 0 ? "\\gt" : $ < 0 ? "\\lt" : "=");
+  addRule("*^\\lt_@", "bool", ($) => $ ? "\\lt" : "\\gt");
+  addRule("*^\\lt_@", "num", ($) => $ > 0 ? "\\lt" : $ < 0 ? "\\gt" : "=");
+  addRule("*^\\ge_@", "bool", ($) => $ ? "\\ge" : "\\le");
+  addRule("*^\\ge_@", "num", ($) => $ > 0 ? "\\ge" : $ < 0 ? "\\le" : "=");
+  addRule("*^\\le_@", "bool", ($) => $ ? "\\le" : "\\ge");
+  addRule("*^\\le_@", "num", ($) => $ > 0 ? "\\le" : $ < 0 ? "\\ge" : "=");
+  addRule("*%@", "num", ($) => numberDefault($ * 100) + "%");
+  addRule("*\\%@", "num", ($) => numberDefault($ * 100) + "\\%");
+  addRule("*:@", "ntuple", ($) => toNumbers($).ratio().join(":"));
+  addRule("*:@", "num", ($) => {
     let [p2, q] = cal.toFraction($);
     return p2 + ":" + q;
   });
-  Stringifiers.add("*|.@", "array", ($) => ink.printOrTrigRoots($));
-  Stringifiers.add("*.@", "point2D", ($) => ink.printPointPolar($));
-  Stringifiers.add("*=@", "labeledValue", ($) => {
+  addRule("*|.@", "array", ($) => ink.printOrTrigRoots($));
+  addRule("*.@", "point2D", ($) => ink.printPointPolar($));
+  addRule("*=@", "labeledValue", ($) => {
     let v2 = [...$];
     v2[0] = numberDefault(v2[0]);
     return ink.printLabeledValue(v2, 1, false);
   });
-  Stringifiers.add("*==@", "labeledValue2", ($) => {
+  addRule("*==@", "labeledValue2", ($) => {
     let v2 = [...$];
     v2[0] = numberDefault(v2[0]);
     return ink.printLabeledValue(v2, 2, false);
   });
-  Stringifiers.add("*=.@", "labeledValue", ($) => {
+  addRule("*=.@", "labeledValue", ($) => {
     let v2 = [...$];
     v2[0] = numberDefault(v2[0]);
     return ink.printLabeledValue(v2, 1, true);
   });
-  Stringifiers.add("*==.@", "labeledValue2", ($) => {
+  addRule("*==.@", "labeledValue2", ($) => {
     let v2 = [...$];
     v2[0] = numberDefault(v2[0]);
     return ink.printLabeledValue(v2, 2, true);
   });
-  Stringifiers.add("*@", "num", ($) => String(numberDefault($)));
-  Stringifiers.add("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
-  Stringifiers.add("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
-  Stringifiers.add("*@", "point2D", ($) => Coord($));
-  Stringifiers.add("*@", "combo", ($) => ink.printCombo($));
-  Stringifiers.add("*@", "polynomial", ($) => PolyPrint($));
-  Stringifiers.add("*@", "trigValue", ($) => ink.printTrigValue($));
-  Stringifiers.add("*@", "trigExp", ($) => ink.printTrigExp($));
-  Stringifiers.add("*@", "constraint", ($) => ink.printConstraint($));
-  Stringifiers.add("*@", "constraints", ($) => ink.printConstraints($));
+  addRule("*@", "num", ($) => String(numberDefault($)));
+  addRule("*@", "bool", ($) => $ ? "\u2714" : "\u2718");
+  addRule("*@", "quantity", ({ val: val2, unit }) => String(numberDefault(val2)) + unit);
+  addRule("*@", "point2D", ($) => Coord($));
+  addRule("*@", "combo", ($) => ink.printCombo($));
+  addRule("*@", "polynomial", ($) => PolyPrint($));
+  addRule("*@", "trigValue", ($) => ink.printTrigValue($));
+  addRule("*@", "trigExp", ($) => ink.printTrigExp($));
+  addRule("*@", "constraint", ($) => ink.printConstraint($));
+  addRule("*@", "constraints", ($) => ink.printConstraints($));
+  blacksmith.setForgePatterns();
+  blacksmith.setIntraPatterns(["*@", "*/@", "**@"]);
 
   // src/Soil/tool/html.ts
   var QuestionHTML = class {
@@ -24398,11 +24552,11 @@
       }
     }
     printInWhole(symbol, value) {
-      this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value);
+      this.body.innerHTML = blacksmith.forge(this.body.innerHTML, symbol, value);
     }
     printInLi(index, symbol, value) {
       let li = this.li[index];
-      li.innerHTML = PrintVariable(li.innerHTML, symbol, value);
+      li.innerHTML = blacksmith.forge(li.innerHTML, symbol, value);
     }
     isLiDuplicated() {
       let htmls = this.li.map((x) => x.innerHTML.replace(/\s+/g, ""));
@@ -24422,34 +24576,6 @@
       return oldHTMLs.map((x) => newHTMLs.indexOf(x));
     }
   };
-  var Blacksmith = class {
-    text = "";
-    symbol = "";
-    val = void 0;
-    setText(text) {
-      this.text = text;
-    }
-    smash(pattern3) {
-      let searchStr = pattern3.replaceAll("@", this.symbol);
-      if (!this.text.includes(searchStr))
-        return;
-      let content = Stringifiers.transform(pattern3, this.val);
-      this.text = this.text.replaceAll(searchStr, content);
-    }
-    forge(symbol, val2) {
-      this.symbol = symbol;
-      this.val = val2;
-      for (let p2 of Stringifiers.allPatterns())
-        this.smash(p2);
-      return this.text;
-    }
-  };
-  var Smith = new Blacksmith();
-  function PrintVariable(html, symbol, value) {
-    console.log("e");
-    Smith.setText(html);
-    return Smith.forge(symbol, value);
-  }
 
   // src/Soil/tool/shuffle.ts
   var OptionShuffler = class {
@@ -24674,131 +24800,11 @@
         let num2 = this[key];
         if (typeof num2 === "symbol")
           continue;
-        text = PrintVariable(text, key, num2);
+        text = blacksmith.forge(text, key, num2);
       }
       return text;
     }
   };
-
-  // ../packages/bot/lib/src/dress/dressor.js
-  var END_TAG = String.raw`(?=[^<>]*</span>)`;
-  var SPACES = String.raw`(?:\s|&nbsp;)*`;
-  var Dressor = class {
-    constructor(html) {
-      this.html = html;
-    }
-    do(reg, replace, inTag = false) {
-      let tail = inTag ? END_TAG : "";
-      let regex = new RegExp(reg.join(SPACES) + tail, "g");
-      this.html = this.html.replaceAll(regex, replace);
-    }
-    get() {
-      return this.html;
-    }
-  };
-
-  // ../packages/bot/lib/src/dress/index.js
-  function capOr(...reg) {
-    return "(" + reg.join("|") + ")";
-  }
-  function cap(reg) {
-    return "(" + reg + ")";
-  }
-  var s = String.raw`(?:\s|&nbsp;)*`;
-  var p = String.raw`\+`;
-  var m = String.raw`\-`;
-  var e4 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
-  var l = String.raw`[\(\[\{]`;
-  var r = String.raw`[\)\]\}]`;
-  var pl = String.raw`[\(\[]`;
-  var pr = String.raw`[\)\]]`;
-  var c = String.raw`\,`;
-  var v = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`;
-  var f = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`;
-  var sl = String.raw`\\`;
-  var left = String.raw`\\left`;
-  var sq2 = String.raw`\\sqrt`;
-  function dress(html) {
-    let d = new Dressor(html);
-    d.do([p, m], "-");
-    d.do([m, p], "-");
-    d.do([capOr(l, e4, c), m, m], "$1");
-    d.do([m, m], "+");
-    d.do([m, m], "+");
-    d.do([String.raw`\^\{1\}`], "");
-    d.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
-    d.do([capOr(p, m, e4, l, sl, r, c), "1", capOr(v, f, pl, left, sq2)], "$1 $2", true);
-    d.do([cap(v) + "'"], "$1 \\prime ", true);
-    return d.get();
-  }
-
-  // ../packages/bot/lib/src/eval/index.js
-  var VariableError = Error("A variable is used before a value is defined.");
-  VariableError.name = "VariableError";
-  function isVarError(e5) {
-    return e5 instanceof Error && e5.message.startsWith("Cannot convert a Symbol value to");
-  }
-  function assembleCtx(code, contexts) {
-    let T = '"use strict";';
-    contexts.forEach((ctx, i) => {
-      T += Object.keys(ctx).map((_) => `let ${_} = this[${i}].${_};`).join("");
-    });
-    T += code + "\n;";
-    contexts.forEach((ctx, i) => {
-      T += Object.keys(ctx).map((_) => `this[${i}].${_} = ${_};`).join("");
-    });
-    return T;
-  }
-  function evalCtx(code, ...contexts) {
-    try {
-      const fullCode = assembleCtx(code, contexts);
-      const fn = new Function(fullCode);
-      fn.call(contexts);
-    } catch (e5) {
-      throw isVarError(e5) ? VariableError : e5;
-    }
-  }
-  function exprCtx(code, ...contexts) {
-    let result = { ____xxxRESULTxxx____: void 0 };
-    evalCtx("____xxxRESULTxxx____ = " + code, result, ...contexts);
-    return result.____xxxRESULTxxx____;
-  }
-  function exprCtxHTML(code, ...contexts) {
-    code = code.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
-    return exprCtx(code, ...contexts);
-  }
-
-  // ../packages/bot/lib/src/section/index.js
-  function dropTags(html) {
-    html = html.replaceAll(new RegExp("<[^#<]*##[^#>]*>", "g"), "");
-    return html;
-  }
-  function dropCondition(html, context) {
-    return html.replaceAll(new RegExp("<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), (match3, p1) => exprCtxHTML(p1, context) ? match3 : "");
-  }
-  function cropSection(html, context) {
-    html = dropCondition(html, context);
-    html = dropTags(html);
-    return html;
-  }
-
-  // src/Soil/tool/eval.ts
-  function intrapolate2(html, dict) {
-    function intra(pattern3, prefix) {
-      html = html.replace(new RegExp(String.raw`\*${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code) => {
-        let result = exprCtxHTML(code, dict);
-        return Stringifiers.transform(pattern3, result);
-      });
-      html = html.replace(new RegExp(String.raw`\*${prefix}\{([^\{\}]*)\}`, "g"), (match3, code) => {
-        let result = exprCtxHTML(code, dict);
-        return Stringifiers.transform(pattern3, result);
-      });
-    }
-    intra("*@", "");
-    intra("*/@", "\\/");
-    intra("**@", "\\*");
-    return html;
-  }
 
   // src/Soil/soil.ts
   var import_auto_render = __toESM(require_auto_render());
@@ -24943,8 +24949,8 @@
       throw CustomError("OptionError", "No valid option generated after 100 trials");
     }
     runIntrapolate() {
-      this.qn = intrapolate2(this.qn, this.dict);
-      this.sol = intrapolate2(this.sol, this.dict);
+      this.qn = blacksmith.intra(this.qn, this.dict);
+      this.sol = blacksmith.intra(this.sol, this.dict);
       return true;
     }
     runSubstitute() {

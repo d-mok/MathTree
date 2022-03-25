@@ -1,3 +1,7 @@
+import { blacksmith } from './blacksmith'
+
+
+
 export class QuestionHTML {
     private body: HTMLBodyElement
     // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
@@ -28,12 +32,12 @@ export class QuestionHTML {
     }
 
     printInWhole(symbol: string, value: any) {
-        this.body.innerHTML = PrintVariable(this.body.innerHTML, symbol, value)
+        this.body.innerHTML = blacksmith.forge(this.body.innerHTML, symbol, value)
     }
 
     printInLi(index: number, symbol: string, value: any) {
         let li = this.li[index]
-        li.innerHTML = PrintVariable(li.innerHTML, symbol, value)
+        li.innerHTML = blacksmith.forge(li.innerHTML, symbol, value)
     }
 
     isLiDuplicated(): boolean {
@@ -57,49 +61,6 @@ export class QuestionHTML {
 }
 
 
-
-import { Stringifiers, pattern } from './stringify'
-
-
-class Blacksmith {
-
-    private text: string = ''
-    private symbol: string = ''
-    private val: unknown = undefined
-
-
-    setText(text: string) {
-        this.text = text
-    }
-
-    private smash(pattern: pattern) {
-        let searchStr = pattern.replaceAll('@', this.symbol)
-        if (!this.text.includes(searchStr)) return
-        let content = Stringifiers.transform(pattern, this.val)
-        this.text = this.text.replaceAll(searchStr, content)
-    }
-
-
-    forge(symbol: string, val: unknown): string {
-        this.symbol = symbol
-        this.val = val
-        for (let p of Stringifiers.allPatterns())
-            this.smash(p)
-        return this.text
-    }
-
-
-
-
-}
-
-let Smith = new Blacksmith()
-
-export function PrintVariable(html: string, symbol: string, value: any): string {
-    console.log('e')
-    Smith.setText(html)
-    return Smith.forge(symbol, value)
-}
 
 
 

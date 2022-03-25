@@ -5292,35 +5292,10 @@ declare module "Pen/index" {
         var PhyPen: typeof PhyPenCls;
     }
 }
-declare module "Soil/tool/stringify" {
-    type ConditionKeys<T> = {
-        [k in keyof T]: T[k] extends (...args: any[]) => boolean ? k : never;
-    }[keyof T];
-    type condition = ConditionKeys<typeof owl>;
-    type GuardType<T extends condition> = (typeof owl)[T] extends (_: any) => _ is infer R ? R : unknown;
-    type transformer<T extends condition> = ($: GuardType<T>) => string;
+declare module "Soil/tool/blacksmith" {
+    import { Blacksmith } from 'bot';
     export type pattern = '*@' | '**@' | '*/@' | '*/(@)' | '*//@' | '*(@)' | '*!@' | '*^+_@' | '*^-_@' | '*|@|' | '*^\\gt_@' | '*^\\lt_@' | '*^\\ge_@' | '*^\\le_@' | '*%@' | '*\\%@' | '*:@' | '*|.@' | '*.@' | '*=@' | '*==@' | '*=.@' | '*==.@';
-    export class Stringifiers {
-        private static store;
-        static add<T extends condition>(pattern: pattern, condition: T, fn: transformer<T>): void;
-        static transform(pattern: pattern, val: unknown): string;
-        static allPatterns(): pattern[];
-    }
-}
-declare module "Soil/tool/html" {
-    export class QuestionHTML {
-        private body;
-        constructor(html?: string);
-        export(): string;
-        get li(): HTMLLIElement[];
-        get ul(): HTMLUListElement;
-        cloneLi(sourceIndex: number, repeat?: number): void;
-        printInWhole(symbol: string, value: any): void;
-        printInLi(index: number, symbol: string, value: any): void;
-        isLiDuplicated(): boolean;
-        shuffleLi(shuffle?: boolean): number[];
-    }
-    export function PrintVariable(html: string, symbol: string, value: any): string;
+    export let blacksmith: Blacksmith;
 }
 declare module "Soil/cls" {
     export class Config {
@@ -5449,6 +5424,20 @@ declare var options: object;
 declare var shuffle: boolean;
 declare var question: string;
 declare var solution: string;
+declare module "Soil/tool/html" {
+    export class QuestionHTML {
+        private body;
+        constructor(html?: string);
+        export(): string;
+        get li(): HTMLLIElement[];
+        get ul(): HTMLUListElement;
+        cloneLi(sourceIndex: number, repeat?: number): void;
+        printInWhole(symbol: string, value: any): void;
+        printInLi(index: number, symbol: string, value: any): void;
+        isLiDuplicated(): boolean;
+        shuffleLi(shuffle?: boolean): number[];
+    }
+}
 declare module "Soil/tool/shuffle" {
     export class OptionShuffler {
         private qn;
@@ -5477,10 +5466,6 @@ declare module "Soil/tool/option" {
     * ```
     */
     export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string;
-}
-declare module "Soil/tool/eval" {
-    import { Dict } from "Soil/cls";
-    export function intrapolate(html: string, dict: Dict): string;
 }
 declare module "Soil/soil" {
     export class Soil {
