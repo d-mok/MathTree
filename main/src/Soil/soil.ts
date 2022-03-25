@@ -1,11 +1,9 @@
-import { ExecSection } from './tool/section'
-import { dress } from 'bot'
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Dict, Config } from './cls'
 import { intrapolate } from './tool/eval'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
-import { evalCtx, exprCtx } from 'bot'
+import { dress, evalCtx, exprCtx, cropSection } from 'bot'
 
 // util functions
 
@@ -158,8 +156,8 @@ export class Soil {
 
     private runSection(): boolean {
         // crop section
-        this.qn = ExecSection(this.qn, this.dict)
-        this.sol = ExecSection(this.sol, this.dict)
+        this.qn = cropSection(this.qn, this.dict)
+        this.sol = cropSection(this.sol, this.dict)
         return true
     }
 

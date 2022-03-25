@@ -24251,108 +24251,6 @@
   globalThis.AutoPen = AutoPenCls;
   globalThis.PhyPen = PhyPenCls;
 
-  // ../packages/bot/lib/src/dress/dressor.js
-  var END_TAG = String.raw`(?=[^<>]*</span>)`;
-  var SPACES = String.raw`(?:\s|&nbsp;)*`;
-  var Dressor = class {
-    constructor(html) {
-      this.html = html;
-    }
-    do(reg, replace, inTag = false) {
-      let tail = inTag ? END_TAG : "";
-      let regex = new RegExp(reg.join(SPACES) + tail, "g");
-      this.html = this.html.replaceAll(regex, replace);
-    }
-    get() {
-      return this.html;
-    }
-  };
-
-  // ../packages/bot/lib/src/dress/index.js
-  function capOr(...reg) {
-    return "(" + reg.join("|") + ")";
-  }
-  function cap(reg) {
-    return "(" + reg + ")";
-  }
-  var s = String.raw`(?:\s|&nbsp;)*`;
-  var p = String.raw`\+`;
-  var m = String.raw`\-`;
-  var e4 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
-  var l = String.raw`[\(\[\{]`;
-  var r = String.raw`[\)\]\}]`;
-  var pl = String.raw`[\(\[]`;
-  var pr = String.raw`[\)\]]`;
-  var c = String.raw`\,`;
-  var v = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`;
-  var f = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`;
-  var sl = String.raw`\\`;
-  var left = String.raw`\\left`;
-  var sq2 = String.raw`\\sqrt`;
-  function dress(html) {
-    let d = new Dressor(html);
-    d.do([p, m], "-");
-    d.do([m, p], "-");
-    d.do([capOr(l, e4, c), m, m], "$1");
-    d.do([m, m], "+");
-    d.do([m, m], "+");
-    d.do([String.raw`\^\{1\}`], "");
-    d.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
-    d.do([capOr(p, m, e4, l, sl, r, c), "1", capOr(v, f, pl, left, sq2)], "$1 $2", true);
-    d.do([cap(v) + "'"], "$1 \\prime ", true);
-    return d.get();
-  }
-
-  // ../packages/bot/lib/src/eval/index.js
-  var VariableError = Error("A variable is used before a value is defined.");
-  VariableError.name = "VariableError";
-  function isVarError(e5) {
-    return e5 instanceof Error && e5.message.startsWith("Cannot convert a Symbol value to");
-  }
-  function assembleCtx(code, contexts) {
-    let T = '"use strict";';
-    contexts.forEach((ctx, i) => {
-      T += Object.keys(ctx).map((_) => `let ${_} = this[${i}].${_};`).join("");
-    });
-    T += code + "\n;";
-    contexts.forEach((ctx, i) => {
-      T += Object.keys(ctx).map((_) => `this[${i}].${_} = ${_};`).join("");
-    });
-    return T;
-  }
-  function evalCtx(code, ...contexts) {
-    try {
-      const fullCode = assembleCtx(code, contexts);
-      const fn = new Function(fullCode);
-      fn.call(contexts);
-    } catch (e5) {
-      throw isVarError(e5) ? VariableError : e5;
-    }
-  }
-  function exprCtx(code, ...contexts) {
-    let result = { ____xxxRESULTxxx____: void 0 };
-    evalCtx("____xxxRESULTxxx____ = " + code, result, ...contexts);
-    return result.____xxxRESULTxxx____;
-  }
-  function exprCtxHTML(code, ...contexts) {
-    code = code.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
-    return exprCtx(code, ...contexts);
-  }
-
-  // src/Soil/tool/section.ts
-  function DropTags(html) {
-    html = html.replace(new RegExp("<[^#<]*##[^#>]*>", "g"), "");
-    return html;
-  }
-  function ExecSection(html, dict) {
-    html = DropCondition(html, dict);
-    html = DropTags(html);
-    return html;
-  }
-  function DropCondition(html, dict) {
-    return html.replace(new RegExp("<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), (match3, p1) => exprCtxHTML(p1, dict) ? match3 : "");
-  }
-
   // src/Soil/tool/stringify.ts
   function numberDefault(num2) {
     let v2 = num2;
@@ -24548,7 +24446,7 @@
   };
   var Smith = new Blacksmith();
   function PrintVariable(html, symbol, value) {
-    console.log("d");
+    console.log("e");
     Smith.setText(html);
     return Smith.forge(symbol, value);
   }
@@ -24782,6 +24680,108 @@
     }
   };
 
+  // ../packages/bot/lib/src/dress/dressor.js
+  var END_TAG = String.raw`(?=[^<>]*</span>)`;
+  var SPACES = String.raw`(?:\s|&nbsp;)*`;
+  var Dressor = class {
+    constructor(html) {
+      this.html = html;
+    }
+    do(reg, replace, inTag = false) {
+      let tail = inTag ? END_TAG : "";
+      let regex = new RegExp(reg.join(SPACES) + tail, "g");
+      this.html = this.html.replaceAll(regex, replace);
+    }
+    get() {
+      return this.html;
+    }
+  };
+
+  // ../packages/bot/lib/src/dress/index.js
+  function capOr(...reg) {
+    return "(" + reg.join("|") + ")";
+  }
+  function cap(reg) {
+    return "(" + reg + ")";
+  }
+  var s = String.raw`(?:\s|&nbsp;)*`;
+  var p = String.raw`\+`;
+  var m = String.raw`\-`;
+  var e4 = String.raw`(?:\=|\>|\<|&lt;|&gt;|\\ge|\\le|\\gt|\\lt)`;
+  var l = String.raw`[\(\[\{]`;
+  var r = String.raw`[\)\]\}]`;
+  var pl = String.raw`[\(\[]`;
+  var pr = String.raw`[\)\]]`;
+  var c = String.raw`\,`;
+  var v = String.raw`(?:[A-Za-z]|\\alpha|\\beta|\\theta|\\phi|\\pi|\\sigma|\\mu|α|β|θ|φ|μ|π|σ)`;
+  var f = String.raw`(?:\\sin|\\cos|\\tan|\\log|\\ln)`;
+  var sl = String.raw`\\`;
+  var left = String.raw`\\left`;
+  var sq2 = String.raw`\\sqrt`;
+  function dress(html) {
+    let d = new Dressor(html);
+    d.do([p, m], "-");
+    d.do([m, p], "-");
+    d.do([capOr(l, e4, c), m, m], "$1");
+    d.do([m, m], "+");
+    d.do([m, m], "+");
+    d.do([String.raw`\^\{1\}`], "");
+    d.do([String.raw`\\sqrt\[2\]`], "\\sqrt");
+    d.do([capOr(p, m, e4, l, sl, r, c), "1", capOr(v, f, pl, left, sq2)], "$1 $2", true);
+    d.do([cap(v) + "'"], "$1 \\prime ", true);
+    return d.get();
+  }
+
+  // ../packages/bot/lib/src/eval/index.js
+  var VariableError = Error("A variable is used before a value is defined.");
+  VariableError.name = "VariableError";
+  function isVarError(e5) {
+    return e5 instanceof Error && e5.message.startsWith("Cannot convert a Symbol value to");
+  }
+  function assembleCtx(code, contexts) {
+    let T = '"use strict";';
+    contexts.forEach((ctx, i) => {
+      T += Object.keys(ctx).map((_) => `let ${_} = this[${i}].${_};`).join("");
+    });
+    T += code + "\n;";
+    contexts.forEach((ctx, i) => {
+      T += Object.keys(ctx).map((_) => `this[${i}].${_} = ${_};`).join("");
+    });
+    return T;
+  }
+  function evalCtx(code, ...contexts) {
+    try {
+      const fullCode = assembleCtx(code, contexts);
+      const fn = new Function(fullCode);
+      fn.call(contexts);
+    } catch (e5) {
+      throw isVarError(e5) ? VariableError : e5;
+    }
+  }
+  function exprCtx(code, ...contexts) {
+    let result = { ____xxxRESULTxxx____: void 0 };
+    evalCtx("____xxxRESULTxxx____ = " + code, result, ...contexts);
+    return result.____xxxRESULTxxx____;
+  }
+  function exprCtxHTML(code, ...contexts) {
+    code = code.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&#39;", "'").replaceAll("&quot;", '"');
+    return exprCtx(code, ...contexts);
+  }
+
+  // ../packages/bot/lib/src/section/index.js
+  function dropTags(html) {
+    html = html.replaceAll(new RegExp("<[^#<]*##[^#>]*>", "g"), "");
+    return html;
+  }
+  function dropCondition(html, context) {
+    return html.replaceAll(new RegExp("<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>", "g"), (match3, p1) => exprCtxHTML(p1, context) ? match3 : "");
+  }
+  function cropSection(html, context) {
+    html = dropCondition(html, context);
+    html = dropTags(html);
+    return html;
+  }
+
   // src/Soil/tool/eval.ts
   function intrapolate2(html, dict) {
     function intra(pattern3, prefix) {
@@ -24919,8 +24919,8 @@
       throw CustomError("PopulationError", "No population found after 1000 trials!");
     }
     runSection() {
-      this.qn = ExecSection(this.qn, this.dict);
-      this.sol = ExecSection(this.sol, this.dict);
+      this.qn = cropSection(this.qn, this.dict);
+      this.sol = cropSection(this.sol, this.dict);
       return true;
     }
     runPreprocess() {

@@ -5449,10 +5449,6 @@ declare var options: object;
 declare var shuffle: boolean;
 declare var question: string;
 declare var solution: string;
-declare module "Soil/tool/section" {
-    import { Dict } from "Soil/cls";
-    export function ExecSection(html: string, dict: Dict): string;
-}
 declare module "Soil/tool/shuffle" {
     export class OptionShuffler {
         private qn;

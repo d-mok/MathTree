@@ -96,7 +96,7 @@ class Blacksmith {
 let Smith = new Blacksmith()
 
 export function PrintVariable(html: string, symbol: string, value: any): string {
-    console.log('d')
+    console.log('e')
     Smith.setText(html)
     return Smith.forge(symbol, value)
 }
