@@ -230,16 +230,10 @@ export class Host {
     @checkIt(owl.combo)
     static RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, boolean][] {
         let [a, b, c] = anchor
-        let func = (): [boolean, boolean, boolean] => {
-            return [
-                RndT() ? a : !a,
-                RndT() ? b : !b,
-                RndT() ? c : !c
-            ]
-        }
-
-        let diff = (bools: boolean[]) => { return bools.some($ => $) && bools.some($ => !$) }
-        return dice(func).unique()
+        let func = (): [boolean, boolean, boolean] => [RndT(), RndT(), RndT()]
+        let diff = (bools: boolean[]) => bools.some($ => $) && bools.some($ => !$)
+        return dice(func)
+            .unique()
             .coherent(all => diff([a, ...all.map($ => $[0])]))
             .coherent(all => diff([b, ...all.map($ => $[1])]))
             .coherent(all => diff([c, ...all.map($ => $[2])]))

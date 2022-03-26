@@ -17435,16 +17435,8 @@
     }
     static RndShakeCombo(anchor) {
       let [a, b, c2] = anchor;
-      let func = () => {
-        return [
-          RndT() ? a : !a,
-          RndT() ? b : !b,
-          RndT() ? c2 : !c2
-        ];
-      };
-      let diff = (bools) => {
-        return bools.some(($) => $) && bools.some(($) => !$);
-      };
+      let func = () => [RndT(), RndT(), RndT()];
+      let diff = (bools) => bools.some(($) => $) && bools.some(($) => !$);
       return dice(func).unique().coherent((all) => diff([a, ...all.map(($) => $[0])])).coherent((all) => diff([b, ...all.map(($) => $[1])])).coherent((all) => diff([c2, ...all.map(($) => $[2])])).rolls(3);
     }
     static RndShakeTrig(anchor) {
