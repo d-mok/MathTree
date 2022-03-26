@@ -11,16 +11,16 @@ export class Config {
 }
 
 
-const variables: (keyof PlainDict)[] = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-    'i', 'j', 'k', 'l', 'm', 'n', 'o',
-    'p', 'q', 'r', 's', 't', 'u', 'v',
-    'w', 'x', 'y', 'z',
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-    'I', 'J', 'K', 'L', 'M', 'N', 'O',
-    'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-    'W', 'X', 'Y', 'Z'
-]
+// const variables: (keyof PlainDict)[] = [
+//     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+//     'i', 'j', 'k', 'l', 'm', 'n', 'o',
+//     'p', 'q', 'r', 's', 't', 'u', 'v',
+//     'w', 'x', 'y', 'z',
+//     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+//     'I', 'J', 'K', 'L', 'M', 'N', 'O',
+//     'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+//     'W', 'X', 'Y', 'Z'
+// ]
 
 export class PlainDict {
 
@@ -83,41 +83,41 @@ export class PlainDict {
 
 export class Dict extends PlainDict {
 
-    private used(): { [_: string]: string } {
-        let obj: { [_: string]: string } = {}
-        for (let key of variables) {
-            let val = this[key]
-            if (typeof val === 'symbol') continue
-            obj[key] = val
-        }
-        return obj
-    }
+    // private used(): { [_: string]: string } {
+    //     let obj: { [_: string]: string } = {}
+    //     for (let key of variables) {
+    //         let val = this[key]
+    //         if (typeof val === 'symbol') continue
+    //         obj[key] = val
+    //     }
+    //     return obj
+    // }
 
 
 
-    private undefs(): [string, any][] {
-        let undefs: [string, any][] = []
-        for (let key of variables) {
-            let v = this[key]
-            if (
-                v === undefined ||
-                // v === null ||
-                (typeof v === 'number' && !Number.isFinite(v))
-            ) undefs.push([key, v])
-        }
-        return undefs
-    }
+    // private undefs(): [string, any][] {
+    //     let undefs: [string, any][] = []
+    //     for (let key of variables) {
+    //         let v = this[key]
+    //         if (
+    //             v === undefined ||
+    //             // v === null ||
+    //             (typeof v === 'number' && !Number.isFinite(v))
+    //         ) undefs.push([key, v])
+    //     }
+    //     return undefs
+    // }
 
-    undefsStr(): string {
-        return this.undefs().map(([k, v]) => '[' + k + ':' + String(v) + ']').join(',')
-    }
+    // undefsStr(): string {
+    //     return this.undefs().map(([k, v]) => '[' + k + ':' + String(v) + ']').join(',')
+    // }
 
-    checked(): boolean {
-        return this.undefs().length === 0
-    }
+    // checked(): boolean {
+    //     return this.undefs().length === 0
+    // }
 
-    substitute(text: string): string {
-        return blacksmith.quickForge(text, this.used())
-    }
+    // substitute(text: string): string {
+    //     return blacksmith.quickForge(text, this.used())
+    // }
 }
 

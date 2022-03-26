@@ -19085,12 +19085,12 @@
       let vars = JSON.parse(JSON.stringify(this.vars));
       return new MonomialCls(coeff, vars);
     }
-    random(degree, variables2, maxCoeff) {
+    random(degree, variables, maxCoeff) {
       let f2 = () => {
         let M = new MonomialCls();
         M.coeff = RndZ(1, maxCoeff);
-        for (let v2 of variables2) {
-          if (variables2.length === 1) {
+        for (let v2 of variables) {
+          if (variables.length === 1) {
             M.vars.push({ variable: v2, power: degree });
           } else {
             M.vars.push({ variable: v2, power: RndN(0, degree) });
@@ -20093,8 +20093,8 @@
 
   // src/Math/Builder/support/system.ts
   var EquSystem = class {
-    constructor(variables2, equations) {
-      this.variables = variables2;
+    constructor(variables, equations) {
+      this.variables = variables;
       this.equations = equations;
       this.fs = equations.map(($) => $.zeroFunc);
     }
@@ -20214,14 +20214,14 @@
   function toEquations(eqs, vars) {
     return eqs.map(($) => toEquation($, vars));
   }
-  function toEquSystem(variables2, equations) {
-    let vars = toVariables(variables2);
+  function toEquSystem(variables, equations) {
+    let vars = toVariables(variables);
     let eqs = toEquations(equations, vars);
     return new EquSystem(vars, eqs);
   }
 
   // src/Math/Builder/build_solve.ts
-  function BuildSolve(variables2, equations, {
+  function BuildSolve(variables, equations, {
     listSym = false,
     avoids = [],
     sigfig: sigfig2 = {},
@@ -20229,7 +20229,7 @@
   } = {}) {
     for (let i = 0; i <= 10; i++) {
       try {
-        return BuildSolveOnce(variables2, equations, { listSym, avoids, sigfig: sigfig2, solFormat });
+        return BuildSolveOnce(variables, equations, { listSym, avoids, sigfig: sigfig2, solFormat });
       } catch (e5) {
         if (i === 10) {
           throw e5;
@@ -20240,13 +20240,13 @@
     }
     throw "never";
   }
-  function BuildSolveOnce(variables2, equations, {
+  function BuildSolveOnce(variables, equations, {
     listSym = false,
     avoids = [],
     sigfig: sigfig2 = {},
     solFormat = "series"
   } = {}) {
-    let system = toEquSystem(variables2, equations);
+    let system = toEquSystem(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables(avoids);
     givens.forEach(($) => $.round(sigfig2[$.sym]));
@@ -20287,8 +20287,8 @@
   }
 
   // src/Math/Builder/build_trend.ts
-  function BuildTrend(variables2, equations, settings = {}) {
-    let system = toEquSystem(variables2, equations);
+  function BuildTrend(variables, equations, settings = {}) {
+    let system = toEquSystem(variables, equations);
     let [constants, agent, responses, target] = system.generateTrend();
     function toWord(change) {
       let trendWords = settings.trends ?? ["increases", "decreases", "is unchanged"];
@@ -20337,12 +20337,12 @@
   }
 
   // src/Math/Builder/build_ratio.ts
-  function BuildRatio(variables2, func, latex, {
+  function BuildRatio(variables, func, latex, {
     cases = ["Before", "After"],
     subscript = [1, 2],
     sigfig: sigfig2 = {}
   } = {}) {
-    let system = toEquSystem(variables2, [[func, latex]]);
+    let system = toEquSystem(variables, [[func, latex]]);
     let vars = system.variables;
     let [given, unknown, ...constants] = RndShuffle(...vars);
     let g = [];
@@ -20443,14 +20443,14 @@
   }
 
   // src/Math/Builder/build_solve2.ts
-  function BuildSolve2(variables2, equations, {
+  function BuildSolve2(variables, equations, {
     listSym = false,
     avoids = [],
     sigfig: sigfig2 = {}
   } = {}) {
     for (let i = 0; i <= 10; i++) {
       try {
-        return BuildSolveOnce2(variables2, equations, { listSym, avoids, sigfig: sigfig2 });
+        return BuildSolveOnce2(variables, equations, { listSym, avoids, sigfig: sigfig2 });
       } catch (e5) {
         if (i === 10) {
           throw e5;
@@ -20461,12 +20461,12 @@
     }
     throw "never";
   }
-  function BuildSolveOnce2(variables2, equations, {
+  function BuildSolveOnce2(variables, equations, {
     listSym = false,
     avoids = [],
     sigfig: sigfig2 = {}
   } = {}) {
-    let system = toEquSystem(variables2, equations);
+    let system = toEquSystem(variables, equations);
     system.fit();
     let [givens, hiddens, unknown] = system.generateSolvables(avoids);
     givens.forEach(($) => $.round(sigfig2[$.sym]));
@@ -24368,6 +24368,8 @@
       this.sfrs.push(s2);
     }
     transform(pattern, val2) {
+      if (typeof val2 === "symbol")
+        return void 0;
       let ss = this.sfrs.filter(($) => $.pattern === pattern);
       for (let s2 of ss) {
         if (s2.checker(val2))
@@ -24388,26 +24390,12 @@
     setForgePatterns(patterns) {
       this.forgePatterns = patterns ?? this.allPatterns();
     }
-    forgeOne(text, symbol, val2, pattern) {
-      let pn = pattern.replaceAll("@", symbol);
-      if (text.includes(pn)) {
-        let content = this.transform(pattern, val2);
-        return text.replaceAll(pn, content);
-      } else {
-        return text;
-      }
-    }
-    forge(text, symbol, val2) {
-      for (let p2 of this.forgePatterns)
-        text = this.forgeOne(text, symbol, val2, p2);
-      return text;
-    }
     quickForge(text, dict) {
       for (let p2 of this.forgePatterns) {
         let reg = escapeRegExp(p2);
         let symbols = "(" + Object.keys(dict).join("|") + ")";
         reg = reg.replace("@", symbols);
-        text = text.replaceAll(new RegExp(reg, "g"), (match3, p1) => this.transform(p2, dict[p1]));
+        text = text.replaceAll(new RegExp(reg, "g"), (match3, p1) => this.transform(p2, dict[p1]) ?? match3);
       }
       return text;
     }
@@ -24424,11 +24412,11 @@
       let prefix = escapeRegExp(pattern.split("@")[0]);
       text = text.replaceAll(new RegExp(String.raw`${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code) => {
         let result = exprCtxHTML(code, context);
-        return this.transform(pattern, result);
+        return this.transform(pattern, result) ?? match3;
       });
       text = text.replaceAll(new RegExp(String.raw`${prefix}\{([^\{\}]*)\}`, "g"), (match3, code) => {
         let result = exprCtxHTML(code, context);
-        return this.transform(pattern, result);
+        return this.transform(pattern, result) ?? match3;
       });
       return text;
     }
@@ -24736,60 +24724,6 @@
       this.shuffle = shuffle;
     }
   };
-  var variables = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z"
-  ];
   var PlainDict = class {
     constructor(a = Symbol(), b = Symbol(), c2 = Symbol(), d = Symbol(), e5 = Symbol(), f2 = Symbol(), g = Symbol(), h = Symbol(), i = Symbol(), j = Symbol(), k = Symbol(), l2 = Symbol(), m2 = Symbol(), n = Symbol(), o = Symbol(), p2 = Symbol(), q = Symbol(), r2 = Symbol(), s2 = Symbol(), t = Symbol(), u = Symbol(), v2 = Symbol(), w = Symbol(), x = Symbol(), y = Symbol(), z = Symbol(), A = Symbol(), B = Symbol(), C = Symbol(), D = Symbol(), E = Symbol(), F = Symbol(), G = Symbol(), H = Symbol(), I = Symbol(), J = Symbol(), K = Symbol(), L = Symbol(), M = Symbol(), N = Symbol(), O = Symbol(), P = Symbol(), Q = Symbol(), R = Symbol(), S = Symbol(), T = Symbol(), U = Symbol(), V = Symbol(), W = Symbol(), X = Symbol(), Y = Symbol(), Z = Symbol()) {
       this.a = a;
@@ -24847,34 +24781,6 @@
     }
   };
   var Dict = class extends PlainDict {
-    used() {
-      let obj = {};
-      for (let key of variables) {
-        let val2 = this[key];
-        if (typeof val2 === "symbol")
-          continue;
-        obj[key] = val2;
-      }
-      return obj;
-    }
-    undefs() {
-      let undefs = [];
-      for (let key of variables) {
-        let v2 = this[key];
-        if (v2 === void 0 || typeof v2 === "number" && !Number.isFinite(v2))
-          undefs.push([key, v2]);
-      }
-      return undefs;
-    }
-    undefsStr() {
-      return this.undefs().map(([k, v2]) => "[" + k + ":" + String(v2) + "]").join(",");
-    }
-    checked() {
-      return this.undefs().length === 0;
-    }
-    substitute(text) {
-      return blacksmith.quickForge(text, this.used());
-    }
   };
 
   // src/Soil/soil.ts
@@ -24940,6 +24846,15 @@
       this.counter++;
       this.evalCode(this.gene.populate);
     }
+    checkDict() {
+      let report = "";
+      const notOK = (v2) => v2 === void 0 || typeof v2 === "number" && !Number.isFinite(v2);
+      for (const [k, v2] of Object.entries(this.dict)) {
+        if (notOK(v2))
+          report += `[${k}: ${v2}]`;
+      }
+      return [report === "", report];
+    }
     isValidated() {
       let v2 = this.gene.validate;
       if (v2 === "")
@@ -24951,8 +24866,9 @@
         this.timer.check();
         try {
           this.pushDict();
-          if (!this.dict.checked())
-            throw CustomError("PopulationError", "Dict Check Failed: " + this.dict.undefsStr());
+          const [ok, dictReport] = this.checkDict();
+          if (!ok)
+            throw CustomError("PopulationError", "Dict Check Failed: " + dictReport);
           if (!this.isValidated())
             throw CustomError("PopulationError", "Cannot pass validate.");
           return true;
@@ -25009,8 +24925,8 @@
       return true;
     }
     runSubstitute() {
-      this.qn = this.dict.substitute(this.qn);
-      this.sol = this.dict.substitute(this.sol);
+      this.qn = blacksmith.quickForge(this.qn, this.dict);
+      this.sol = blacksmith.quickForge(this.sol, this.dict);
       this.qn = dress(this.qn);
       this.sol = dress(this.sol);
       return true;

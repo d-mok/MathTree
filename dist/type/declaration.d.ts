@@ -5359,11 +5359,6 @@ declare module "Soil/cls" {
         constructor(a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any, i?: any, j?: any, k?: any, l?: any, m?: any, n?: any, o?: any, p?: any, q?: any, r?: any, s?: any, t?: any, u?: any, v?: any, w?: any, x?: any, y?: any, z?: any, A?: any, B?: any, C?: any, D?: any, E?: any, F?: any, G?: any, H?: any, I?: any, J?: any, K?: any, L?: any, M?: any, N?: any, O?: any, P?: any, Q?: any, R?: any, S?: any, T?: any, U?: any, V?: any, W?: any, X?: any, Y?: any, Z?: any);
     }
     export class Dict extends PlainDict {
-        private used;
-        private undefs;
-        undefsStr(): string;
-        checked(): boolean;
-        substitute(text: string): string;
     }
 }
 declare var a: any;
@@ -5452,14 +5447,6 @@ declare module "Soil/tool/shuffle" {
 }
 declare module "Soil/tool/option" {
     import { PlainDict } from "Soil/cls";
-    /**
-    * append the array of options to question
-    * ```
-    * let question = 'abc<ul><li>*x</li></ul>'
-    * AutoOptions(question,{x:3})
-    * // 'abc<ul><li>*x</li><li>2</li><li>4</li><li>5</li></ul>'
-    * ```
-    */
     export function AutoOptions(instructions: Partial<PlainDict>, question: string, source: PlainDict): string;
 }
 declare module "Soil/soil" {
@@ -5476,6 +5463,7 @@ declare module "Soil/soil" {
         private reset;
         private evalCode;
         private pushDict;
+        private checkDict;
         private isValidated;
         private runPopulate;
         private runSection;

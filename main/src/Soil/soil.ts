@@ -92,6 +92,19 @@ export class Soil {
         this.evalCode(this.gene.populate)
     }
 
+    private checkDict(): [boolean, string] {
+        let report = ''
+
+        const notOK = (v: any) =>
+            v === undefined || // v === null ||
+            (typeof v === 'number' && !Number.isFinite(v))
+
+        for (const [k, v] of Object.entries(this.dict)) {
+            if (notOK(v)) report += `[${k}: ${v}]`
+        }
+        return [report === '', report]
+    }
+
     private isValidated() {
         let v = this.gene.validate
         if (v === '') return true
@@ -104,8 +117,9 @@ export class Soil {
             this.timer.check()
             try {
                 this.pushDict()
-                if (!this.dict.checked())
-                    throw CustomError('PopulationError', 'Dict Check Failed: ' + this.dict.undefsStr())
+                const [ok, dictReport] = this.checkDict()
+                if (!ok)
+                    throw CustomError('PopulationError', 'Dict Check Failed: ' + dictReport)
                 if (!this.isValidated())
                     throw CustomError('PopulationError', 'Cannot pass validate.')
                 return true
@@ -167,8 +181,8 @@ export class Soil {
 
     private runSubstitute(): boolean {
         // pour
-        this.qn = this.dict.substitute(this.qn)
-        this.sol = this.dict.substitute(this.sol)
+        this.qn = blacksmith.quickForge(this.qn, this.dict) //this.dict.substitute(this.qn)
+        this.sol = blacksmith.quickForge(this.sol, this.dict) //this.dict.substitute(this.sol)
         // dress
         this.qn = dress(this.qn)
         this.sol = dress(this.sol)

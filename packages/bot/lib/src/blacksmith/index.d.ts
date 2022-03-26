@@ -1,19 +1,15 @@
 declare class BlacksmithBase {
     private sfrs;
     add<T>(pattern: string, checker: ($: any) => $ is T, transformer: ($: T) => string): void;
-    protected transform(pattern: string, val: unknown): string;
+    protected transform(pattern: string, val: unknown): string | undefined;
     protected allPatterns(): string[];
 }
 export declare class BlacksmithForge extends BlacksmithBase {
     private forgePatterns;
     /** Set patterns for forge. Default to all patterns. */
     setForgePatterns(patterns?: string[]): void;
-    /** Replace specific pattern like *A */
-    private forgeOne;
-    /** Replace all patterns like *A, **A, etc */
-    forge(text: string, symbol: string, val: unknown): string;
     quickForge(text: string, dict: {
-        [symbol: string]: string;
+        [symbol: string]: any;
     }): string;
 }
 declare class BlacksmithIntra extends BlacksmithForge {
