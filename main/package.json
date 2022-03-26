@@ -7,7 +7,6 @@
     "build-type": "npx tsc --project tsconfig.d.json",
     "build-stable": "esbuild src/index.ts --bundle --minify --outfile=../dist/stable/mathtree.js",
     "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./src/Math",
-    "jest_soil": "jest ./src/Soil -debug",
     "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js"
   },
   "devDependencies": {
