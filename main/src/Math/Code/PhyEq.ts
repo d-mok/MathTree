@@ -67,7 +67,7 @@ export class PhyEqCls {
         /**
          * s = ut + 0.5at^2
          */
-        sutat2(s = 's', u = 'u', t = 't', a = 'a', $ = '****') {
+        sutat2(s = 's', u = 'u', t = 't', a = 'a', $ = '****'): eq {
             let args = [s, u, t, a]
             let [_s, _u, _t, _a] = $
             return [
@@ -79,7 +79,7 @@ export class PhyEqCls {
         /**
          * s = 0.5(u+v)t
          */
-        suvt(s = 's', u = 'u', v = 'v', t = 't', $ = '****') {
+        suvt(s = 's', u = 'u', v = 'v', t = 't', $ = '****'): eq {
             let args = [s, u, v, t]
             return [
                 makeFn(args, (s, u, v, t) => s - 0.5 * (u + v) * t),
@@ -91,7 +91,7 @@ export class PhyEqCls {
         /**
          * s  = 0.5at^2
          */
-        sat2(s = 's', a = 'a', t = 't', $ = '***') {
+        sat2(s = 's', a = 'a', t = 't', $ = '***'): eq {
             let args = [s, a, t]
             return [
                 makeFn(args, (s, a, t) => s - 0.5 * a * t * t),

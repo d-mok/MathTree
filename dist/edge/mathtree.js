@@ -20434,67 +20434,10 @@
     };
   }
 
-  // src/Math/Builder/build_solve2.ts
-  function BuildSolve2(variables, equations, {
-    listSym = false,
-    avoids = [],
-    sigfig: sigfig2 = {}
-  } = {}) {
-    for (let i = 0; i <= 10; i++) {
-      try {
-        return BuildSolveOnce2(variables, equations, { listSym, avoids, sigfig: sigfig2 });
-      } catch (e5) {
-        if (i === 10) {
-          throw e5;
-        } else {
-          continue;
-        }
-      }
-    }
-    throw "never";
-  }
-  function BuildSolveOnce2(variables, equations, {
-    listSym = false,
-    avoids = [],
-    sigfig: sigfig2 = {}
-  } = {}) {
-    let system = toEquSystem(variables, equations);
-    system.fit();
-    let [givens, hiddens, unknown] = system.generateSolvables(avoids);
-    givens.forEach(($) => $.round(sigfig2[$.sym]));
-    system.fitAgain(hiddens);
-    function sol() {
-      if (equations.length === 1) {
-        let eq2 = system.equations[0];
-        return latexAligned([
-          eq2.print(),
-          eq2.print(givens),
-          unknown.full()
-        ]);
-      } else {
-        return system.solInSteps(unknown);
-      }
-    }
-    return {
-      list: givens.map(($) => listSym ? $.rich() : $.whole()).join("\\\\"),
-      sol: sol(),
-      vars: system.variables.map((v2) => givens.includes(v2) ? v2.long() : v2.symbol()),
-      vals: system.variables.map(($) => $.getVal()),
-      unknown: [
-        unknown.symbol(),
-        unknown.name,
-        unknown.getVal(),
-        unknown.unit
-      ],
-      ans: { val: unknown.getVal(), unit: unknown.unit }
-    };
-  }
-
   // src/Math/Builder/index.ts
   globalThis.BuildSolve = BuildSolve;
   globalThis.BuildTrend = BuildTrend;
   globalThis.BuildRatio = BuildRatio;
-  globalThis.BuildSolve2 = BuildSolve2;
 
   // ../packages/paint/lib/support/trim.js
   function getAlpha(img, x, y) {

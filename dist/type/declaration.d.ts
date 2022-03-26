@@ -371,32 +371,14 @@ declare module "Math/Builder/build_ratio" {
         ans: quantity;
     };
 }
-declare module "Math/Builder/build_solve2" {
-    export function BuildSolve2(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig }?: {
-        listSym?: boolean;
-        avoids?: string[][];
-        sigfig?: {
-            [_: string]: number;
-        };
-    }): {
-        list: string;
-        sol: string;
-        vars: string[];
-        vals: number[];
-        unknown: [symbol: string, name: string, val: number, unit: string];
-        ans: quantity;
-    };
-}
 declare module "Math/Builder/index" {
     import { BuildSolve as $BuildSolve } from "Math/Builder/build_solve";
     import { BuildTrend as $BuildTrend } from "Math/Builder/build_trend";
     import { BuildRatio as $BuildRatio } from "Math/Builder/build_ratio";
-    import { BuildSolve2 as $BuildSolve2 } from "Math/Builder/build_solve2";
     global {
         var BuildSolve: typeof $BuildSolve;
         var BuildTrend: typeof $BuildTrend;
         var BuildRatio: typeof $BuildRatio;
-        var BuildSolve2: typeof $BuildSolve2;
     }
 }
 declare module "Math/index" {
@@ -1819,15 +1801,15 @@ declare module "Math/Code/PhyEq" {
             /**
              * s = ut + 0.5at^2
              */
-            sutat2(s?: string, u?: string, t?: string, a?: string, $?: string): (string | zeroFunction)[];
+            sutat2(s?: string, u?: string, t?: string, a?: string, $?: string): eq;
             /**
              * s = 0.5(u+v)t
              */
-            suvt(s?: string, u?: string, v?: string, t?: string, $?: string): (string | zeroFunction)[];
+            suvt(s?: string, u?: string, v?: string, t?: string, $?: string): eq;
             /**
              * s  = 0.5at^2
              */
-            sat2(s?: string, a?: string, t?: string, $?: string): (string | zeroFunction)[];
+            sat2(s?: string, a?: string, t?: string, $?: string): eq;
             /**
              * v = at
              */
