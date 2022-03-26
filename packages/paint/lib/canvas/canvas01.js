@@ -28,6 +28,8 @@ export class Canvas01 extends Canvas00 {
         this.xmax = 0;
         this.ymin = 0;
         this.ymax = 0;
+        // capture
+        this.firstCapture = true;
     }
     dx() {
         return this.xmax - this.xmin;
@@ -109,16 +111,15 @@ export class Canvas01 extends Canvas00 {
             console.error('edgePoint not unique! from:' + anchor + ' to:' + arr);
         return arr[0];
     }
-    // capture
     capturePoints2D(pts) {
         if (pts.length === 0)
             return;
         let [first, ...rest] = pts;
-        let xmin = first[0];
-        let xmax = first[0];
-        let ymin = first[1];
-        let ymax = first[1];
-        for (let [x, y] of rest) {
+        let xmin = this.firstCapture ? first[0] : this.xmin;
+        let xmax = this.firstCapture ? first[0] : this.xmax;
+        let ymin = this.firstCapture ? first[1] : this.ymin;
+        let ymax = this.firstCapture ? first[1] : this.ymax;
+        for (let [x, y] of pts) {
             if (x < xmin)
                 xmin = x;
             if (x > xmax)
@@ -132,25 +133,29 @@ export class Canvas01 extends Canvas00 {
         this.xmax = xmax;
         this.ymin = ymin;
         this.ymax = ymax;
+        this.firstCapture = false;
+        this.fixCollapsedRange();
     }
     fixCollapsedRange() {
         let { xmin, xmax, ymin, ymax } = this;
-        let xSize = xmax - xmin;
-        let ySize = ymax - ymin;
-        if (xSize === 0 && ySize === 0) {
+        // let xSize = xmax - xmin
+        // let ySize = ymax - ymin
+        if (xmax === xmin) {
             xmax++;
             xmin--;
+        }
+        if (ymax === ymin) {
             ymax++;
             ymin--;
         }
-        if (xSize === 0 && ySize !== 0) {
-            xmax += ySize / 2;
-            xmin -= ySize / 2;
-        }
-        if (xSize !== 0 && ySize === 0) {
-            ymax += xSize / 2;
-            ymin -= xSize / 2;
-        }
+        // if (xSize === 0 && ySize !== 0) {
+        //     xmax += ySize / 2
+        //     xmin -= ySize / 2
+        // }
+        // if (xSize !== 0 && ySize === 0) {
+        //     ymax += xSize / 2
+        //     ymin -= xSize / 2
+        // }
         this.xmin = xmin;
         this.xmax = xmax;
         this.ymin = ymin;

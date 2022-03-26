@@ -27,8 +27,9 @@ export declare class Canvas01 extends Canvas00 {
     private toRightEdge;
     private toLeftEdge;
     edgePoint(anchor: Point2D, dir: number): Point2D;
+    private firstCapture;
     protected capturePoints2D(pts: Point2D[]): void;
-    protected fixCollapsedRange(): void;
+    private fixCollapsedRange;
     addBorder(borderInch: inch): void;
     protected point2DtoPx(point: Point2D): dot;
 }
