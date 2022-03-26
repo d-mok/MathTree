@@ -3,12 +3,14 @@ declare class BlacksmithBase {
     add<T>(pattern: string, checker: ($: any) => $ is T, transformer: ($: T) => string): void;
     protected transform(pattern: string, val: unknown): string | undefined;
     protected allPatterns(): string[];
+    protected reg(pattern: string, innerRegex: string): RegExp;
 }
 export declare class BlacksmithForge extends BlacksmithBase {
     private forgePatterns;
     /** Set patterns for forge. Default to all patterns. */
     setForgePatterns(patterns?: string[]): void;
-    quickForge(text: string, dict: {
+    /** Replace all patterns like *A, **A, etc */
+    forge(text: string, dict: {
         [symbol: string]: any;
     }): string;
 }

@@ -1,4 +1,4 @@
-import { PlainDict } from '../cls'
+import { Dict } from '../cls'
 import { QuestionHTML } from './html'
 
 function produce(source: any, assigned: any): (typeof source)[] {
@@ -7,17 +7,17 @@ function produce(source: any, assigned: any): (typeof source)[] {
         : RndShake(source)
 }
 
-function blankDicts(count: number): Partial<PlainDict>[] {
-    let arr: Partial<PlainDict>[] = []
+function blankDicts(count: number): Partial<Dict>[] {
+    let arr: Partial<Dict>[] = []
     for (let i = 0; i < count; i++)
         arr.push({})
     return arr
 }
 
 
-function execInstructions(instructions: Partial<PlainDict>, source: PlainDict): Partial<PlainDict>[] {
+function execInstructions(instructions: Partial<Dict>, source: Dict): Partial<Dict>[] {
     let dicts = blankDicts(20)
-    let k: keyof PlainDict
+    let k: keyof Dict
     for (k in instructions) {
         let arr = produce(source[k], instructions[k])
         arr.forEach((v, i) => dicts[i][k] = v)
@@ -26,7 +26,7 @@ function execInstructions(instructions: Partial<PlainDict>, source: PlainDict): 
 }
 
 
-export function AutoOptions(instructions: Partial<PlainDict>, question: string, source: PlainDict): string {
+export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
     if (owl.emptyObject(instructions)) return question
     let Qn = new QuestionHTML(question)
     let dicts = execInstructions(instructions, source)

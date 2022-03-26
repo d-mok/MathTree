@@ -5299,11 +5299,11 @@ declare module "Soil/tool/blacksmith" {
 declare module "Soil/cls" {
     export class Config {
         answer: string;
-        options: Partial<PlainDict>;
+        options: Partial<Dict>;
         shuffle: boolean;
-        constructor(answer?: string, options?: Partial<PlainDict>, shuffle?: boolean);
+        constructor(answer?: string, options?: Partial<Dict>, shuffle?: boolean);
     }
-    export class PlainDict {
+    export class Dict {
         a: any;
         b: any;
         c: any;
@@ -5357,8 +5357,6 @@ declare module "Soil/cls" {
         Y: any;
         Z: any;
         constructor(a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any, i?: any, j?: any, k?: any, l?: any, m?: any, n?: any, o?: any, p?: any, q?: any, r?: any, s?: any, t?: any, u?: any, v?: any, w?: any, x?: any, y?: any, z?: any, A?: any, B?: any, C?: any, D?: any, E?: any, F?: any, G?: any, H?: any, I?: any, J?: any, K?: any, L?: any, M?: any, N?: any, O?: any, P?: any, Q?: any, R?: any, S?: any, T?: any, U?: any, V?: any, W?: any, X?: any, Y?: any, Z?: any);
-    }
-    export class Dict extends PlainDict {
     }
 }
 declare var a: any;
@@ -5423,12 +5421,12 @@ declare var question: string;
 declare var solution: string;
 declare module "Soil/tool/html" {
     import { HTMLWorker } from 'bot';
-    import { PlainDict } from "Soil/cls";
+    import { Dict } from "Soil/cls";
     export class QuestionHTML extends HTMLWorker {
         hasOneUl(): boolean;
         liCount(): number;
         cloneLi(sourceIndex: number, repeat?: number): void;
-        printInLi(index: number, dict: Partial<PlainDict>): void;
+        printInLi(index: number, dict: Partial<Dict>): void;
         isLiDuplicated(): boolean;
         shuffleLi(indexArr: number[]): void;
     }
@@ -5446,8 +5444,8 @@ declare module "Soil/tool/shuffle" {
     }
 }
 declare module "Soil/tool/option" {
-    import { PlainDict } from "Soil/cls";
-    export function AutoOptions(instructions: Partial<PlainDict>, question: string, source: PlainDict): string;
+    import { Dict } from "Soil/cls";
+    export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string;
 }
 declare module "Soil/soil" {
     export class Soil {

@@ -24381,6 +24381,10 @@
       let ps = this.sfrs.map((s2) => s2.pattern);
       return [...new Set(ps)];
     }
+    reg(pattern, innerRegex) {
+      let reg = escapeRegExp(pattern).replace("@", innerRegex);
+      return new RegExp(reg, "g");
+    }
   };
   var BlacksmithForge = class extends BlacksmithBase {
     constructor() {
@@ -24390,12 +24394,10 @@
     setForgePatterns(patterns) {
       this.forgePatterns = patterns ?? this.allPatterns();
     }
-    quickForge(text, dict) {
+    forge(text, dict) {
       for (let p2 of this.forgePatterns) {
-        let reg = escapeRegExp(p2);
         let symbols = "(" + Object.keys(dict).join("|") + ")";
-        reg = reg.replace("@", symbols);
-        text = text.replaceAll(new RegExp(reg, "g"), (match3, p1) => this.transform(p2, dict[p1]) ?? match3);
+        text = text.replaceAll(this.reg(p2, symbols), (match3, p1) => this.transform(p2, dict[p1]) ?? match3);
       }
       return text;
     }
@@ -24409,16 +24411,13 @@
       this.intraPatterns = patterns ?? this.allPatterns();
     }
     intraOne(text, pattern, context) {
-      let prefix = escapeRegExp(pattern.split("@")[0]);
-      text = text.replaceAll(new RegExp(String.raw`${prefix}\\\{([^\{\}]*)\\\}`, "g"), (match3, code) => {
+      return text.replaceAll(this.reg(pattern, String.raw`\\\{([^\{\}]*)\\\}`), (match3, code) => {
+        let result = exprCtxHTML(code, context);
+        return this.transform(pattern, result) ?? match3;
+      }).replaceAll(this.reg(pattern, String.raw`\{([^\{\}]*)\}`), (match3, code) => {
         let result = exprCtxHTML(code, context);
         return this.transform(pattern, result) ?? match3;
       });
-      text = text.replaceAll(new RegExp(String.raw`${prefix}\{([^\{\}]*)\}`, "g"), (match3, code) => {
-        let result = exprCtxHTML(code, context);
-        return this.transform(pattern, result) ?? match3;
-      });
-      return text;
     }
     intra(text, context) {
       for (let p2 of this.intraPatterns)
@@ -24629,7 +24628,7 @@
       }
     }
     printInLi(index, dict) {
-      this.tranformInnerHTML(($) => blacksmith.quickForge($, dict), "li", index);
+      this.tranformInnerHTML(($) => blacksmith.forge($, dict), "li", index);
     }
     isLiDuplicated() {
       return this.hasDuplicate("li");
@@ -24724,7 +24723,7 @@
       this.shuffle = shuffle;
     }
   };
-  var PlainDict = class {
+  var Dict = class {
     constructor(a = Symbol(), b = Symbol(), c2 = Symbol(), d = Symbol(), e5 = Symbol(), f2 = Symbol(), g = Symbol(), h = Symbol(), i = Symbol(), j = Symbol(), k = Symbol(), l2 = Symbol(), m2 = Symbol(), n = Symbol(), o = Symbol(), p2 = Symbol(), q = Symbol(), r2 = Symbol(), s2 = Symbol(), t = Symbol(), u = Symbol(), v2 = Symbol(), w = Symbol(), x = Symbol(), y = Symbol(), z = Symbol(), A = Symbol(), B = Symbol(), C = Symbol(), D = Symbol(), E = Symbol(), F = Symbol(), G = Symbol(), H = Symbol(), I = Symbol(), J = Symbol(), K = Symbol(), L = Symbol(), M = Symbol(), N = Symbol(), O = Symbol(), P = Symbol(), Q = Symbol(), R = Symbol(), S = Symbol(), T = Symbol(), U = Symbol(), V = Symbol(), W = Symbol(), X = Symbol(), Y = Symbol(), Z = Symbol()) {
       this.a = a;
       this.b = b;
@@ -24779,8 +24778,6 @@
       this.Y = Y;
       this.Z = Z;
     }
-  };
-  var Dict = class extends PlainDict {
   };
 
   // src/Soil/soil.ts
@@ -24925,8 +24922,8 @@
       return true;
     }
     runSubstitute() {
-      this.qn = blacksmith.quickForge(this.qn, this.dict);
-      this.sol = blacksmith.quickForge(this.sol, this.dict);
+      this.qn = blacksmith.forge(this.qn, this.dict);
+      this.sol = blacksmith.forge(this.sol, this.dict);
       this.qn = dress(this.qn);
       this.sol = dress(this.sol);
       return true;

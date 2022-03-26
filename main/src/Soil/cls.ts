@@ -5,7 +5,7 @@ import { blacksmith } from './tool/blacksmith'
 export class Config {
     constructor(
         public answer: string = "A",
-        public options: Partial<PlainDict> = {},
+        public options: Partial<Dict> = {},
         public shuffle: boolean = true
     ) { }
 }
@@ -22,7 +22,7 @@ export class Config {
 //     'W', 'X', 'Y', 'Z'
 // ]
 
-export class PlainDict {
+export class Dict {
 
     constructor(
         public a: any = Symbol(),
@@ -80,44 +80,3 @@ export class PlainDict {
     ) { }
 
 }
-
-export class Dict extends PlainDict {
-
-    // private used(): { [_: string]: string } {
-    //     let obj: { [_: string]: string } = {}
-    //     for (let key of variables) {
-    //         let val = this[key]
-    //         if (typeof val === 'symbol') continue
-    //         obj[key] = val
-    //     }
-    //     return obj
-    // }
-
-
-
-    // private undefs(): [string, any][] {
-    //     let undefs: [string, any][] = []
-    //     for (let key of variables) {
-    //         let v = this[key]
-    //         if (
-    //             v === undefined ||
-    //             // v === null ||
-    //             (typeof v === 'number' && !Number.isFinite(v))
-    //         ) undefs.push([key, v])
-    //     }
-    //     return undefs
-    // }
-
-    // undefsStr(): string {
-    //     return this.undefs().map(([k, v]) => '[' + k + ':' + String(v) + ']').join(',')
-    // }
-
-    // checked(): boolean {
-    //     return this.undefs().length === 0
-    // }
-
-    // substitute(text: string): string {
-    //     return blacksmith.quickForge(text, this.used())
-    // }
-}
-

@@ -31,6 +31,10 @@ class BlacksmithBase {
         let ps = this.sfrs.map(s => s.pattern);
         return [...new Set(ps)];
     }
+    reg(pattern, innerRegex) {
+        let reg = escapeRegExp(pattern).replace('@', innerRegex);
+        return new RegExp(reg, 'g');
+    }
 }
 export class BlacksmithForge extends BlacksmithBase {
     constructor() {
@@ -41,28 +45,11 @@ export class BlacksmithForge extends BlacksmithBase {
     setForgePatterns(patterns) {
         this.forgePatterns = patterns ?? this.allPatterns();
     }
-    // /** Replace specific pattern like *A */
-    // private forgeOne(text: string, symbol: string, val: unknown, pattern: string): string {
-    //     let pn = pattern.replaceAll('@', symbol)
-    //     if (text.includes(pn)) {
-    //         let content = this.transform(pattern, val)
-    //         return text.replaceAll(pn, content)
-    //     } else {
-    //         return text
-    //     }
-    // }
-    // /** Replace all patterns like *A, **A, etc */
-    // forge(text: string, symbol: string, val: unknown): string {
-    //     for (let p of this.forgePatterns)
-    //         text = this.forgeOne(text, symbol, val, p)
-    //     return text
-    // }
-    quickForge(text, dict) {
+    /** Replace all patterns like *A, **A, etc */
+    forge(text, dict) {
         for (let p of this.forgePatterns) {
-            let reg = escapeRegExp(p);
             let symbols = '(' + Object.keys(dict).join('|') + ')';
-            reg = reg.replace('@', symbols);
-            text = text.replaceAll(new RegExp(reg, 'g'), (match, p1) => this.transform(p, dict[p1]) ?? match);
+            text = text.replaceAll(this.reg(p, symbols), (match, p1) => this.transform(p, dict[p1]) ?? match);
         }
         return text;
     }
@@ -78,16 +65,15 @@ class BlacksmithIntra extends BlacksmithForge {
     }
     /** Intrapolate js *{...js...} or *\\{...js...\\} */
     intraOne(text, pattern, context) {
-        let prefix = escapeRegExp(pattern.split('@')[0]);
-        text = text.replaceAll(new RegExp(String.raw `${prefix}\\\{([^\{\}]*)\\\}`, 'g'), (match, code) => {
+        return text
+            .replaceAll(this.reg(pattern, String.raw `\\\{([^\{\}]*)\\\}`), (match, code) => {
+            let result = exprCtxHTML(code, context);
+            return this.transform(pattern, result) ?? match;
+        })
+            .replaceAll(this.reg(pattern, String.raw `\{([^\{\}]*)\}`), (match, code) => {
             let result = exprCtxHTML(code, context);
             return this.transform(pattern, result) ?? match;
         });
-        text = text.replaceAll(new RegExp(String.raw `${prefix}\{([^\{\}]*)\}`, 'g'), (match, code) => {
-            let result = exprCtxHTML(code, context);
-            return this.transform(pattern, result) ?? match;
-        });
-        return text;
     }
     /** Intrapolate js *{...js...} or *\\{...js...\\} */
     intra(text, context) {

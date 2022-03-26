@@ -1,6 +1,6 @@
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
-import { Dict, Config } from './cls'
+import { Config, Dict } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
@@ -181,8 +181,8 @@ export class Soil {
 
     private runSubstitute(): boolean {
         // pour
-        this.qn = blacksmith.quickForge(this.qn, this.dict) //this.dict.substitute(this.qn)
-        this.sol = blacksmith.quickForge(this.sol, this.dict) //this.dict.substitute(this.sol)
+        this.qn = blacksmith.forge(this.qn, this.dict) //this.dict.substitute(this.qn)
+        this.sol = blacksmith.forge(this.sol, this.dict) //this.dict.substitute(this.sol)
         // dress
         this.qn = dress(this.qn)
         this.sol = dress(this.sol)

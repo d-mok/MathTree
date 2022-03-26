@@ -1,6 +1,6 @@
 import { blacksmith } from './blacksmith'
 import { HTMLWorker } from 'bot'
-import { PlainDict } from '../cls'
+import { Dict } from '../cls'
 
 
 
@@ -24,8 +24,8 @@ export class QuestionHTML extends HTMLWorker {
     }
 
 
-    printInLi(index: number, dict: Partial<PlainDict>) {
-        this.tranformInnerHTML($ => blacksmith.quickForge($, dict), 'li', index)
+    printInLi(index: number, dict: Partial<Dict>) {
+        this.tranformInnerHTML($ => blacksmith.forge($, dict), 'li', index)
     }
 
     isLiDuplicated(): boolean {
