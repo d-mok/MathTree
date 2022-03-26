@@ -152,7 +152,7 @@ export class Canvas01 extends Canvas00 {
     protected capturePoints2D(pts: Point2D[]): void {
         if (pts.length === 0) return
 
-        let [first, ...rest] = pts
+        let first = pts[0]
         let xmin = this.firstCapture ? first[0] : this.xmin
         let xmax = this.firstCapture ? first[0] : this.xmax
         let ymin = this.firstCapture ? first[1] : this.ymin
@@ -176,8 +176,6 @@ export class Canvas01 extends Canvas00 {
 
     private fixCollapsedRange(): void {
         let { xmin, xmax, ymin, ymax } = this
-        // let xSize = xmax - xmin
-        // let ySize = ymax - ymin
         if (xmax === xmin) {
             xmax++
             xmin--
@@ -186,14 +184,6 @@ export class Canvas01 extends Canvas00 {
             ymax++
             ymin--
         }
-        // if (xSize === 0 && ySize !== 0) {
-        //     xmax += ySize / 2
-        //     xmin -= ySize / 2
-        // }
-        // if (xSize !== 0 && ySize === 0) {
-        //     ymax += xSize / 2
-        //     ymin -= xSize / 2
-        // }
         this.xmin = xmin
         this.xmax = xmax
         this.ymin = ymin

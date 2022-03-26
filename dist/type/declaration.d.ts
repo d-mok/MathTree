@@ -3335,6 +3335,10 @@ declare module "Pen/modules/range" {
          * ```
          */
         capture(...things: capturable[]): void;
+        captureCircle(center: Point2D, radius: number): void;
+        captureSphere(center: Point3D, radius: number): void;
+        captureQuadratic(a: number, b: number, c: number, scale: number): void;
+        captureLine(m: number, c: number): void;
         /**
          * Set the coordinate range by capture points or objects, include O(0,0).
          * ```

@@ -1,5 +1,5 @@
 import { PenCls } from '../Pen'
-import {  capturable, Convas } from 'paint'
+import { capturable, Convas } from 'paint'
 
 
 export class PenRange {
@@ -50,6 +50,34 @@ export class PenRange {
         this.cv.capture(things)
         this.cv.AUTO_BORDER = true
     }
+
+
+    captureCircle(center: Point2D, radius: number) {
+        this.cv.capture([[center, radius]])
+        this.cv.AUTO_BORDER = true
+    }
+
+
+    captureSphere(center: Point3D, radius: number) {
+        this.cv.capture([[center, radius]])
+        this.cv.AUTO_BORDER = true
+    }
+
+    captureQuadratic(a: number, b: number, c: number, scale: number) {
+        this.cv.capture([[a, b, c, scale]])
+        this.cv.AUTO_BORDER = true
+    }
+
+    captureLine(m: number, c: number) {
+        let x = -c / m
+        if (m === 0) {
+            this.cv.capture([[0, c]])
+        } else {
+            this.cv.capture([[x, 0], [0, c]])
+        }
+        this.cv.AUTO_BORDER = true
+    }
+
 
     /**
      * Set the coordinate range by capture points or objects, include O(0,0).

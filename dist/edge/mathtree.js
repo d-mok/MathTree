@@ -21852,6 +21852,27 @@
       this.cv.capture(things);
       this.cv.AUTO_BORDER = true;
     }
+    captureCircle(center, radius) {
+      this.cv.capture([[center, radius]]);
+      this.cv.AUTO_BORDER = true;
+    }
+    captureSphere(center, radius) {
+      this.cv.capture([[center, radius]]);
+      this.cv.AUTO_BORDER = true;
+    }
+    captureQuadratic(a, b, c2, scale) {
+      this.cv.capture([[a, b, c2, scale]]);
+      this.cv.AUTO_BORDER = true;
+    }
+    captureLine(m2, c2) {
+      let x = -c2 / m2;
+      if (m2 === 0) {
+        this.cv.capture([[0, c2]]);
+      } else {
+        this.cv.capture([[x, 0], [0, c2]]);
+      }
+      this.cv.AUTO_BORDER = true;
+    }
     extend(...things) {
       this.capture([0, 0], ...things);
     }
