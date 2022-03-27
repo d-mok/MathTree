@@ -177,12 +177,12 @@ export class Canvas01 extends Canvas00 {
     private fixCollapsedRange(): void {
         let { xmin, xmax, ymin, ymax } = this
         if (xmax === xmin) {
-            xmax++
-            xmin--
+            xmax += 0.01
+            xmin -= 0.01
         }
         if (ymax === ymin) {
-            ymax++
-            ymin--
+            ymax += 0.01
+            ymin -= 0.01
         }
         this.xmin = xmin
         this.xmax = xmax
