@@ -17009,8 +17009,7 @@
       return dice(() => RndN(min, max)).unique().rolls(n);
     }
     static RndAscNs(min, max, n = 10) {
-      let arr = RndNs(min, max, n);
-      return Sort(...arr);
+      return Sort(...RndNs(min, max, n));
     }
     static RndR(min, max) {
       return poker_exports.real(min, max);
@@ -17044,6 +17043,9 @@
     static RndZs(min, max, n = 10) {
       n = Math.min(Math.floor(max - min + 1), n);
       return dice(() => RndN(min, max)).unique().rolls(n).map((x) => x * RndU());
+    }
+    static RndAscZs(min, max, n = 10) {
+      return Sort(...RndZs(min, max, n));
     }
     static RndP(max) {
       return poker_exports.prime(2, max);
@@ -17285,6 +17287,9 @@
   __decorateClass([
     checkIt(owl.nonNegative, owl.nonNegative, owl.positiveInt)
   ], Host8, "RndZs", 1);
+  __decorateClass([
+    checkIt(owl.nonNegative, owl.nonNegative, owl.positiveInt)
+  ], Host8, "RndAscZs", 1);
   __decorateClass([
     checkIt(owl.positive)
   ], Host8, "RndP", 1);

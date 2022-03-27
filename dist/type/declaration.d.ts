@@ -2011,6 +2011,14 @@ declare module "Math/Code/Random" {
          */
         static RndZs(min: number, max: number, n?: number): number[];
         /**
+         * @param n - default to 10
+         * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive, sorted in ascending order.
+         * ```
+         * RndAscZs(2,8,3) // may return [-3,5,7]
+         * ```
+         */
+        static RndAscZs(min: number, max: number, n?: number): number[];
+        /**
          * a random prime number less than or equal to max.
          * ```
          * RndP(10) // may return 2, 3, 5 or 7
@@ -2143,6 +2151,7 @@ declare module "Math/Code/Random" {
         var RndT: typeof Host.RndT;
         var RndZ: typeof Host.RndZ;
         var RndZs: typeof Host.RndZs;
+        var RndAscZs: typeof Host.RndAscZs;
         var RndP: typeof Host.RndP;
         var RndOdd: typeof Host.RndOdd;
         var RndEven: typeof Host.RndEven;

@@ -129,6 +129,20 @@ test('RndZs', () => {
 })
 
 
+
+test('RndAscZs', () => {
+    repeat(10, () => {
+        expect(RndAscZs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
+        expect(RndAscZs(5, 10, 3)).toAllBeInteger()
+        expect(RndAscZs(5, 10, 3)).toHaveLength(3)
+        expect(RndAscZs(5, 10, 3)).toBeDupless()
+        expect(() => RndAscZs(5, 10, 3)).toSpanSame([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10], 1)
+        let [a, b] = RndAscZs(1, 10, 2)
+        expect(a < b).toBeTrue()
+    })
+})
+
+
 test('RndP', () => {
 
     repeat(10, () => {
