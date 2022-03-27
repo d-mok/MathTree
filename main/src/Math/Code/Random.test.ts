@@ -7,7 +7,7 @@ test('RndN', () => {
         expect(RndN(5, 10)).toBeInteger()
         expect(() => RndN(5, 10)).toSpanSame([5, 6, 7, 8, 9, 10])
     })
-});
+})
 
 
 test('RndNs', () => {
@@ -18,8 +18,21 @@ test('RndNs', () => {
         expect(RndNs(5, 10, 3)).toBeDupless()
         expect(RndNs(5, 10, 6)).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
     })
-});
+})
 
+
+
+test('RndAscNs', () => {
+    repeat(10, () => {
+        expect(RndAscNs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10])
+        expect(RndAscNs(5, 10, 3)).toAllBeInteger()
+        expect(RndAscNs(5, 10, 3)).toHaveLength(3)
+        expect(RndAscNs(5, 10, 3)).toBeDupless()
+        expect(RndAscNs(5, 10, 6)).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
+        let [a, b] = RndAscNs(1, 10, 2)
+        expect(a < b).toBeTrue()
+    })
+})
 
 test('RndR', () => {
     repeat(10, () => {
@@ -31,7 +44,7 @@ test('RndR', () => {
         expect(RndR(-5, 5)).not.toBeInteger()
         expect(() => RndR(-5, 5)).toSpanRange(-5, 5)
     })
-});
+})
 
 
 test('RndRs', () => {
@@ -44,7 +57,7 @@ test('RndRs', () => {
     })
 
 
-});
+})
 
 test('RndQ', () => {
 
@@ -59,7 +72,7 @@ test('RndQ', () => {
         expect(RndQ(-8, [-6, 6])).toSatisfy(owl.dec)
         expect(() => RndQ(-8, [-6, 6])).toSpanLength(70)
     })
-});
+})
 
 
 test('RndQs', () => {
@@ -71,7 +84,7 @@ test('RndQs', () => {
         expect(RndQs(8, [0, 6], 3)).toBeDupless()
         expect(() => RndQs(8, [0, 6], 3)).toSpanLength(35, 1)
     })
-});
+})
 
 
 test('RndU', () => {
@@ -80,7 +93,7 @@ test('RndU', () => {
         expect(RndU()).toBeOneOf([1, -1])
         expect(() => RndU()).toSpanSame([-1, 1])
     })
-});
+})
 
 
 test('RndT', () => {
@@ -89,7 +102,7 @@ test('RndT', () => {
         expect(RndT()).toBeOneOf([true, false])
         expect(() => RndT()).toSpanSame([true, false])
     })
-});
+})
 
 
 test('RndZ', () => {
@@ -100,7 +113,7 @@ test('RndZ', () => {
         expect(() => RndZ(5, 10)).toSpanSame([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
     })
 
-});
+})
 
 
 test('RndZs', () => {
@@ -113,7 +126,7 @@ test('RndZs', () => {
         expect(() => RndZs(5, 10, 3)).toSpanSame([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10], 1)
     })
 
-});
+})
 
 
 test('RndP', () => {
@@ -124,7 +137,7 @@ test('RndP', () => {
         expect(() => RndP(100)).toSpanSame(cal.primes(100))
     })
 
-});
+})
 
 
 
@@ -136,7 +149,7 @@ test('RndOdd', () => {
         expect(RndOdd(5, 10)).toBeOdd()
         expect(() => RndOdd(5, 10)).toSpanSame([5, 7, 9])
     })
-});
+})
 
 
 
@@ -150,7 +163,7 @@ test('RndEven', () => {
         expect(() => RndEven(5, 10)).toSpanSame([6, 8, 10])
     })
 
-});
+})
 
 
 
@@ -167,7 +180,7 @@ test('RndPoly', () => {
         expect(() => RndPoly(3, 4, 5)[2]).toSpanSame([1, 2, 3, 4, 5, -1, -2, -3, -4, -5])
     })
 
-});
+})
 
 
 test('RndPyth', () => {
@@ -181,7 +194,7 @@ test('RndPyth', () => {
 
     })
 
-});
+})
 
 
 
@@ -201,7 +214,7 @@ test('RndPoint', () => {
         expect(() => RndPoint([1, 4], [-10, 14])[1]).toSpanRange(-10, 14)
     })
 
-});
+})
 
 
 
@@ -219,7 +232,7 @@ test('RndPoints', () => {
         expect(() => RndPoints([1, 4], [-10, 14], 3).map($ => $[0])).toSpanRange(1, 4, 1)
         expect(() => RndPoints([1, 4], [-10, 14], 3).map($ => $[1])).toSpanRange(-10, 14, 1)
     })
-});
+})
 
 
 
@@ -241,7 +254,7 @@ test('RndAngles', () => {
     })
 
 
-});
+})
 
 
 test('RndOnCircle', () => {
@@ -262,7 +275,7 @@ test('RndOnCircle', () => {
     })
 
 
-});
+})
 
 
 test('RndConvexPolygon', () => {
@@ -285,7 +298,7 @@ test('RndConvexPolygon', () => {
         expect([d1, d2, d3]).toAllBeBetween(40, 360)
     })
 
-});
+})
 
 
 
@@ -299,7 +312,7 @@ test('RndData', () => {
         expect(data).toSatisfy($ => Mode(...$).length === 1)
     })
 
-});
+})
 
 
 test('RndTriangle', () => {
@@ -319,18 +332,18 @@ test('RndTriangle', () => {
         expect(Angle(C, A, B)).toBeLessThanOrEqual(70)
     })
 
-});
+})
 
 
 
 test('RndTrigValue', () => {
 
     let trig = (funcName: string, angle: number) => {
-        if (funcName === 'sin') return sin(angle);
-        if (funcName === 'cos') return cos(angle);
-        if (funcName === 'tan') return tan(angle);
-        throw 'never';
-    };
+        if (funcName === 'sin') return sin(angle)
+        if (funcName === 'cos') return cos(angle)
+        if (funcName === 'tan') return tan(angle)
+        throw 'never'
+    }
 
     repeat(10, () => {
         let [t, v] = RndTrigValue('sin', 60)
@@ -353,16 +366,16 @@ test('RndTrigValue', () => {
         expect(RndTrigValue('tan', 60)).toHaveLength(2)
     })
 
-});
+})
 
 
 test('RndTrigEqv', () => {
     let trig = (funcName: string, angle: number) => {
-        if (funcName === 'sin') return sin(angle);
-        if (funcName === 'cos') return cos(angle);
-        if (funcName === 'tan') return tan(angle);
-        throw 'never';
-    };
+        if (funcName === 'sin') return sin(angle)
+        if (funcName === 'cos') return cos(angle)
+        if (funcName === 'tan') return tan(angle)
+        throw 'never'
+    }
 
 
     repeat(10, () => {
@@ -388,7 +401,7 @@ test('RndTrigEqv', () => {
         expect(RndTrigEqv('1/tan', 'x')).toHaveLength(4)
     })
 
-});
+})
 
 
 
@@ -418,7 +431,7 @@ test('RndPointPolar', () => {
         ])
     })
 
-});
+})
 
 
 
@@ -433,4 +446,4 @@ test('RndRatio', () => {
         expect(nums).toAllBeInteger()
     })
 
-});
+})

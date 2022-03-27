@@ -32,6 +32,19 @@ export class Host {
 
 
     /**
+     * an array of n unique random integer in [min, max] inclusive, sorted in ascending order.
+     * ```
+     * RndAscNs(2,8,3) // may return [3,5,7]
+     * ```
+     */
+    @checkIt(owl.num, owl.num, owl.positiveInt)
+    static RndAscNs(min: number, max: number, n: number = 10): number[] {
+        let arr = RndNs(min, max, n)
+        return Sort(...arr)
+    }
+
+
+    /**
      * a random real number in [min, max] inclusive
      * ```
      * RndR(1,2) // may return 1.242574363
@@ -515,6 +528,7 @@ export class Host {
 declare global {
     var RndN: typeof Host.RndN
     var RndNs: typeof Host.RndNs
+    var RndAscNs: typeof Host.RndAscNs
     var RndR: typeof Host.RndR
     var RndRs: typeof Host.RndRs
     var RndQ: typeof Host.RndQ

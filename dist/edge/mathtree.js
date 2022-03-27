@@ -17008,6 +17008,10 @@
       n = Math.min(Math.floor(max - min + 1), n);
       return dice(() => RndN(min, max)).unique().rolls(n);
     }
+    static RndAscNs(min, max, n = 10) {
+      let arr = RndNs(min, max, n);
+      return Sort(...arr);
+    }
     static RndR(min, max) {
       return poker_exports.real(min, max);
     }
@@ -17260,6 +17264,9 @@
   __decorateClass([
     checkIt(owl.num, owl.num, owl.positiveInt)
   ], Host8, "RndNs", 1);
+  __decorateClass([
+    checkIt(owl.num, owl.num, owl.positiveInt)
+  ], Host8, "RndAscNs", 1);
   __decorateClass([
     checkIt(owl.num)
   ], Host8, "RndR", 1);

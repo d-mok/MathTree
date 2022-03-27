@@ -105,6 +105,25 @@ test('RndShakeQ', () => {
 
 
 
+test('RndShakeG', () => {
+
+    function run(anchor: number, base: number) {
+        let shaked = RndShakeG(anchor, base)
+        expect(shaked).toHaveLength(3)
+        expect(shaked).toSatisfyAll($ => IsInteger(log(base, $ / anchor)))
+    }
+
+    repeat(100, () => {
+        run(24, 2)
+        run(13.123, 0.3)
+    })
+
+})
+
+
+
+
+
 // test('RndShakeDfrac', () => {
 //     function run(anchor:number, isPositive) {
 //         let arr = sample(() => RndShakeDfrac(anchor));

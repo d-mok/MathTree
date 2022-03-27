@@ -178,6 +178,18 @@ export class Host {
 
 
 
+    /**
+     * 3 numbers by multiplying / dividing the `anchor` by the `base` a few times.
+     * ```
+     * RndShakeG(24,2) // any 3 of [6,12,48,96]
+     * ```
+     */
+    @checkIt(owl.num)
+    static RndShakeG(anchor: number, base: number): number[] {
+        let arr = RndPickN([-2, -1, 1, 2], 3)
+        return arr.map($ => anchor * (base ** $))
+    }
+
 
     /**
      * an array of 3 ineq signs, balanced in number.
@@ -439,6 +451,7 @@ declare global {
     var RndShakeN: typeof Host.RndShakeN
     var RndShakeR: typeof Host.RndShakeR
     var RndShakeQ: typeof Host.RndShakeQ
+    var RndShakeG: typeof Host.RndShakeG
     var RndShakeIneq: typeof Host.RndShakeIneq
     var RndShakePoint: typeof Host.RndShakePoint
     var RndShakeCombo: typeof Host.RndShakeCombo
