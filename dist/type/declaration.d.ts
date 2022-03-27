@@ -3338,14 +3338,14 @@ declare module "Pen/modules/range" {
         /**
          * Set the coordinate range by capturing a circle.
          * ```
-         * pen.range.capture([1,2], 3)
+         * pen.range.captureCircle([1,2], 3)
          * ```
          */
         captureCircle(center: Point2D, radius: number): void;
         /**
          * Set the coordinate range by capturing a sphere.
          * ```
-         * pen.range.capture([0,0,0], 3)
+         * pen.range.captureSphere([0,0,0], 3)
          * ```
          */
         captureSphere(center: Point3D, radius: number): void;
@@ -3388,6 +3388,13 @@ declare module "Pen/modules/range" {
          * ```
          */
         extend(...things: capturable[]): void;
+        /**
+         * Set the coordinate range by capturing a circle, include O(0,0).
+         * ```
+         * pen.range.extendCircle([1,2], 3)
+         * ```
+         */
+        extendCircle(center: Point2D, radius: number): void;
     }
 }
 declare module "Pen/modules/size" {

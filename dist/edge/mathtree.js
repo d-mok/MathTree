@@ -21902,6 +21902,11 @@
     extend(...things) {
       this.capture([0, 0], ...things);
     }
+    extendCircle(center, radius) {
+      this.cv.capture([[0, 0]]);
+      this.cv.capture([[center, radius]]);
+      this.cv.AUTO_BORDER = true;
+    }
   };
 
   // src/Pen/modules/size.ts
