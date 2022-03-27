@@ -59,9 +59,13 @@ function isSphere(thing) {
         && isPoint3D(thing[0])
         && typeof thing[1] === 'number';
 }
+// function isQuadraticOLD(thing: any): thing is quadraticOLD {
+//     return Array.isArray(thing)
+//         && thing.length === 4
+// }
 function isQuadratic(thing) {
     return Array.isArray(thing)
-        && thing.length === 4;
+        && thing[0] === 'quadratic';
 }
 export function thingsToPoints(things) {
     let pts = [];
@@ -82,8 +86,13 @@ export function thingsToPoints(things) {
             pts.push(...getSphereCorners(...th));
             continue;
         }
+        // if (isQuadraticOLD(th)) {
+        //     pts.push(...getQuadraticCorners(...th))
+        //     continue
+        // }
         if (isQuadratic(th)) {
-            pts.push(...getQuadraticCorners(...th));
+            let [type, a, b, c, scale] = th;
+            pts.push(...getQuadraticCorners(a, b, c, scale));
             continue;
         }
     }

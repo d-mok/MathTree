@@ -3334,11 +3334,52 @@ declare module "Pen/modules/range" {
          * // point | circle [[h,k],r] | sphere [[a,b,c],r]
          * ```
          */
-        capture(...things: capturable[]): void;
+        capture(...things: any[]): void;
+        /**
+         * Set the coordinate range by capturing a circle.
+         * ```
+         * pen.range.capture([1,2], 3)
+         * ```
+         */
         captureCircle(center: Point2D, radius: number): void;
+        /**
+         * Set the coordinate range by capturing a sphere.
+         * ```
+         * pen.range.capture([0,0,0], 3)
+         * ```
+         */
         captureSphere(center: Point3D, radius: number): void;
-        captureQuadratic(a: number, b: number, c: number, scale: number): void;
-        captureLine(m: number, c: number): void;
+        private capQuadX;
+        private capQuadY;
+        private capQuadV;
+        /**
+         * Set the coordinate range by capturing a quadratic graph (with vertex and x-int if any).
+         * ```
+         * pen.range.captureQuadX(1,2,3) // y=x^2+2x+3
+         * ```
+         */
+        captureQuadX(a: number, b: number, c: number): void;
+        /**
+         * Set the coordinate range by capturing a quadratic graph (with vertex and y-int).
+         * ```
+         * pen.range.captureQuadY(1,2,3) // y=x^2+2x+3
+         * ```
+         */
+        captureQuadY(a: number, b: number, c: number): void;
+        /**
+         * Set the coordinate range by capturing a quadratic graph (with vertex).
+         * ```
+         * pen.range.captureQuadV(1,2,3) // y=x^2+2x+3
+         * ```
+         */
+        captureQuadV(a: number, b: number, c: number): void;
+        /**
+         * Set the coordinate range by capturing a quadratic graph (with vertex, y-int and x-int if any).
+         * ```
+         * pen.range.captureQuad(1,2,3) // y=x^2+2x+3
+         * ```
+         */
+        captureQuad(a: number, b: number, c: number): void;
         /**
          * Set the coordinate range by capture points or objects, include O(0,0).
          * ```

@@ -46,37 +46,109 @@ export class PenRange {
      * // point | circle [[h,k],r] | sphere [[a,b,c],r]
      * ```
      */
-    capture(...things: capturable[]) {
+    capture(...things: any[]) {
+        if (things.some($ => Array.isArray($) && $.length === 4))
+            throw 'capture quad'
         this.cv.capture(things)
         this.cv.AUTO_BORDER = true
     }
 
-
+    /**
+     * Set the coordinate range by capturing a circle.
+     * ```
+     * pen.range.capture([1,2], 3)
+     * ```
+     */
     captureCircle(center: Point2D, radius: number) {
         this.cv.capture([[center, radius]])
         this.cv.AUTO_BORDER = true
     }
 
-
+    /**
+     * Set the coordinate range by capturing a sphere.
+     * ```
+     * pen.range.capture([0,0,0], 3)
+     * ```
+     */
     captureSphere(center: Point3D, radius: number) {
         this.cv.capture([[center, radius]])
         this.cv.AUTO_BORDER = true
     }
 
-    captureQuadratic(a: number, b: number, c: number, scale: number) {
-        this.cv.capture([[a, b, c, scale]])
+
+    private capQuadX(a: number, b: number, c: number) {
+        if (Discriminant(a, b, c) >= 0) {
+            let [p, q] = QuadraticRoot(a, b, c)
+            this.cv.capture([[p, 0], [q, 0]])
+        }
+    }
+
+    private capQuadY(a: number, b: number, c: number) {
+        this.cv.capture([[0, c]])
+    }
+
+
+    private capQuadV(a: number, b: number, c: number) {
+        this.cv.capture([['quadratic', a, b, c, 1]])
+    }
+
+    /**
+     * Set the coordinate range by capturing a quadratic graph (with vertex and x-int if any).
+     * ```
+     * pen.range.captureQuadX(1,2,3) // y=x^2+2x+3
+     * ```
+     */
+    captureQuadX(a: number, b: number, c: number) {
+        this.capQuadV(a, b, c)
+        this.capQuadX(a, b, c)
         this.cv.AUTO_BORDER = true
     }
 
-    captureLine(m: number, c: number) {
-        let x = -c / m
-        if (m === 0) {
-            this.cv.capture([[0, c]])
-        } else {
-            this.cv.capture([[x, 0], [0, c]])
-        }
+    /**
+     * Set the coordinate range by capturing a quadratic graph (with vertex and y-int).
+     * ```
+     * pen.range.captureQuadY(1,2,3) // y=x^2+2x+3
+     * ```
+     */
+    captureQuadY(a: number, b: number, c: number) {
+        this.capQuadV(a, b, c)
+        this.capQuadY(a, b, c)
         this.cv.AUTO_BORDER = true
     }
+
+    /**
+     * Set the coordinate range by capturing a quadratic graph (with vertex).
+     * ```
+     * pen.range.captureQuadV(1,2,3) // y=x^2+2x+3
+     * ```
+     */
+    captureQuadV(a: number, b: number, c: number) {
+        this.capQuadV(a, b, c)
+        this.cv.AUTO_BORDER = true
+    }
+
+    /**
+     * Set the coordinate range by capturing a quadratic graph (with vertex, y-int and x-int if any).
+     * ```
+     * pen.range.captureQuad(1,2,3) // y=x^2+2x+3
+     * ```
+     */
+    captureQuad(a: number, b: number, c: number) {
+        this.capQuadV(a, b, c)
+        this.capQuadX(a, b, c)
+        this.capQuadY(a, b, c)
+        this.cv.AUTO_BORDER = true
+    }
+
+    // captureLine(m: number, c: number) {
+    //     let x = -c / m
+    //     if (m === 0) {
+    //         this.cv.capture([[0, c]])
+    //     } else {
+    //         this.cv.capture([[x, 0], [0, c]])
+    //     }
+    //     this.cv.AUTO_BORDER = true
+    // }
 
 
     /**

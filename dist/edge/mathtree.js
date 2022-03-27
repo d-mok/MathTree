@@ -20683,7 +20683,7 @@
     capturePoints2D(pts) {
       if (pts.length === 0)
         return;
-      let [first, ...rest] = pts;
+      let first = pts[0];
       let xmin = this.firstCapture ? first[0] : this.xmin;
       let xmax = this.firstCapture ? first[0] : this.xmax;
       let ymin = this.firstCapture ? first[1] : this.ymin;
@@ -20787,7 +20787,7 @@
     return Array.isArray(thing) && thing.length === 2 && isPoint3D(thing[0]) && typeof thing[1] === "number";
   }
   function isQuadratic(thing) {
-    return Array.isArray(thing) && thing.length === 4;
+    return Array.isArray(thing) && thing[0] === "quadratic";
   }
   function thingsToPoints(things) {
     let pts = [];
@@ -20809,7 +20809,8 @@
         continue;
       }
       if (isQuadratic(th)) {
-        pts.push(...getQuadraticCorners(...th));
+        let [type, a, b, c2, scale] = th;
+        pts.push(...getQuadraticCorners(a, b, c2, scale));
         continue;
       }
     }
@@ -21849,6 +21850,8 @@
       this.set([x - size, x + size], [y - size, y + size]);
     }
     capture(...things) {
+      if (things.some(($) => Array.isArray($) && $.length === 4))
+        throw "capture quad";
       this.cv.capture(things);
       this.cv.AUTO_BORDER = true;
     }
@@ -21860,17 +21863,36 @@
       this.cv.capture([[center, radius]]);
       this.cv.AUTO_BORDER = true;
     }
-    captureQuadratic(a, b, c2, scale) {
-      this.cv.capture([[a, b, c2, scale]]);
+    capQuadX(a, b, c2) {
+      if (Discriminant(a, b, c2) >= 0) {
+        let [p2, q] = QuadraticRoot(a, b, c2);
+        this.cv.capture([[p2, 0], [q, 0]]);
+      }
+    }
+    capQuadY(a, b, c2) {
+      this.cv.capture([[0, c2]]);
+    }
+    capQuadV(a, b, c2) {
+      this.cv.capture([["quadratic", a, b, c2, 1]]);
+    }
+    captureQuadX(a, b, c2) {
+      this.capQuadV(a, b, c2);
+      this.capQuadX(a, b, c2);
       this.cv.AUTO_BORDER = true;
     }
-    captureLine(m2, c2) {
-      let x = -c2 / m2;
-      if (m2 === 0) {
-        this.cv.capture([[0, c2]]);
-      } else {
-        this.cv.capture([[x, 0], [0, c2]]);
-      }
+    captureQuadY(a, b, c2) {
+      this.capQuadV(a, b, c2);
+      this.capQuadY(a, b, c2);
+      this.cv.AUTO_BORDER = true;
+    }
+    captureQuadV(a, b, c2) {
+      this.capQuadV(a, b, c2);
+      this.cv.AUTO_BORDER = true;
+    }
+    captureQuad(a, b, c2) {
+      this.capQuadV(a, b, c2);
+      this.capQuadX(a, b, c2);
+      this.capQuadY(a, b, c2);
       this.cv.AUTO_BORDER = true;
     }
     extend(...things) {
