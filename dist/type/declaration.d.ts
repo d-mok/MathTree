@@ -2200,6 +2200,13 @@ declare module "Math/Code/RandomShake" {
          */
         static RndShakeQ(anchor: number): number[];
         /**
+         * 3 numbers by multiplying / dividing the `anchor` by the `base` a few times.
+         * ```
+         * RndShakeG(24,2) // any 3 of [6,12,48,96]
+         * ```
+         */
+        static RndShakeG(anchor: number, base: number): number[];
+        /**
          * an array of 3 ineq signs, balanced in number.
          * ```
          * RndShakeIneq('\\ge')
@@ -2292,6 +2299,7 @@ declare module "Math/Code/RandomShake" {
         var RndShakeN: typeof Host.RndShakeN;
         var RndShakeR: typeof Host.RndShakeR;
         var RndShakeQ: typeof Host.RndShakeQ;
+        var RndShakeG: typeof Host.RndShakeG;
         var RndShakeIneq: typeof Host.RndShakeIneq;
         var RndShakePoint: typeof Host.RndShakePoint;
         var RndShakeCombo: typeof Host.RndShakeCombo;

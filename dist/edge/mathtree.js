@@ -17425,6 +17425,10 @@
         return [a, b];
       }).shield(([a, b]) => AreCoprime(a, b)).shield(([a, b]) => a !== 0).shield(([a, b]) => b !== 0).shield(([a, b]) => b !== 1).shield(([a, b]) => b !== 1).shield(([a, b]) => IsProbability(p2 / q) ? IsProbability(a / b) : true).unique(([p3, q2]) => p3 / q2).rolls(3).map(([p3, q2]) => p3 / q2);
     }
+    static RndShakeG(anchor, base2) {
+      let arr = RndPickN([-2, -1, 1, 2], 3);
+      return arr.map(($) => anchor * base2 ** $);
+    }
     static RndShakeIneq(anchor) {
       let i = ineq(anchor);
       let me = i.print();
@@ -17536,6 +17540,9 @@
   __decorateClass([
     checkIt(owl.rational)
   ], Host9, "RndShakeQ", 1);
+  __decorateClass([
+    checkIt(owl.num)
+  ], Host9, "RndShakeG", 1);
   __decorateClass([
     checkIt(owl.ineq)
   ], Host9, "RndShakeIneq", 1);
