@@ -63,24 +63,31 @@ function isPoint3D(thing: any): thing is Point3D {
 
 function isCircle(thing: any): thing is circle {
     return Array.isArray(thing)
-        && thing.length === 2
-        && isPoint2D(thing[0])
-        && typeof thing[1] === 'number'
+        && thing.length === 3
+        && thing[0] === 'circle'
+        && isPoint2D(thing[1])
+        && typeof thing[2] === 'number'
 }
 
 
 function isSphere(thing: any): thing is sphere {
     return Array.isArray(thing)
-        && thing.length === 2
-        && isPoint3D(thing[0])
-        && typeof thing[1] === 'number'
+        && thing.length === 3
+        && thing[0] === 'sphere'
+        && isPoint3D(thing[1])
+        && typeof thing[2] === 'number'
 }
 
 
 
 function isQuadratic(thing: any): thing is quadratic {
     return Array.isArray(thing)
+        && thing.length === 5
         && thing[0] === 'quadratic'
+        && typeof thing[1] === 'number'
+        && typeof thing[2] === 'number'
+        && typeof thing[3] === 'number'
+        && typeof thing[4] === 'number'
 }
 
 
@@ -98,11 +105,13 @@ export function thingsToPoints(things: capturable[]): Point[] {
             continue
         }
         if (isCircle(th)) {
-            pts.push(...getCircleCorners(...th))
+            let [type, C, r] = th
+            pts.push(...getCircleCorners(C, r))
             continue
         }
         if (isSphere(th)) {
-            pts.push(...getSphereCorners(...th))
+            let [type, C, r] = th
+            pts.push(...getSphereCorners(C, r))
             continue
         }
         if (isQuadratic(th)) {
@@ -110,6 +119,7 @@ export function thingsToPoints(things: capturable[]): Point[] {
             pts.push(...getQuadraticCorners(a, b, c, scale))
             continue
         }
+        throw 'Unrecognized capture: ' + JSON.stringify(th)
     }
     return pts
 }

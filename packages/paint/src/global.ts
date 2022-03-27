@@ -6,9 +6,8 @@ export type Point3D = [number, number, number]
 export type Point = Point2D | Point3D
 
 
-export type circle = [center: Point2D, radius: number]
-export type sphere = [center: Point3D, radius: number]
-// export type quadraticOLD = [a: number, b: number, c: number, scale: number]
+export type circle = [type: 'circle', center: Point2D, radius: number]
+export type sphere = [type: 'sphere', center: Point3D, radius: number]
 export type quadratic = [type: 'quadratic', a: number, b: number, c: number, scale: number]
 
 

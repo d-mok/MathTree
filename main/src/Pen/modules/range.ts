@@ -58,7 +58,7 @@ export class PenRange {
      * ```
      */
     captureCircle(center: Point2D, radius: number) {
-        this.cv.capture([[center, radius]])
+        this.cv.capture([['circle', center, radius]])
         this.cv.AUTO_BORDER = true
     }
 
@@ -69,7 +69,7 @@ export class PenRange {
      * ```
      */
     captureSphere(center: Point3D, radius: number) {
-        this.cv.capture([[center, radius]])
+        this.cv.capture([['sphere', center, radius]])
         this.cv.AUTO_BORDER = true
     }
 
@@ -169,7 +169,7 @@ export class PenRange {
      */
     extendCircle(center: Point2D, radius: number) {
         this.cv.capture([[0, 0]])
-        this.cv.capture([[center, radius]])
+        this.cv.capture([['circle', center, radius]])
         this.cv.AUTO_BORDER = true
     }
 
