@@ -3306,7 +3306,7 @@ declare module "Math/Code/Vector3D" {
 }
 declare module "Pen/modules/range" {
     import { PenCls } from "Pen/Pen";
-    import { capturable, Convas } from 'paint';
+    import { Convas } from 'paint';
     export class PenRange {
         private pen;
         private cv;
@@ -3334,7 +3334,7 @@ declare module "Pen/modules/range" {
          * // point | circle [[h,k],r] | sphere [[a,b,c],r]
          * ```
          */
-        capture(...things: any[]): void;
+        capture(...points: Point[]): void;
         /**
          * Set the coordinate range by capturing a circle.
          * ```
@@ -3387,7 +3387,7 @@ declare module "Pen/modules/range" {
          * // point | circle [[h,k],r] | sphere [[a,b,c],r]
          * ```
          */
-        extend(...things: capturable[]): void;
+        extend(...points: Point[]): void;
         /**
          * Set the coordinate range by capturing a circle, include O(0,0).
          * ```

@@ -21849,14 +21849,8 @@
     square(size, [x, y] = [0, 0]) {
       this.set([x - size, x + size], [y - size, y + size]);
     }
-    capture(...things) {
-      if (things.some(($) => Array.isArray($) && $.length === 4))
-        throw "capture quad";
-      if (things.some(($) => Array.isArray($) && owl.point2D($[0])))
-        throw "capture circle";
-      if (things.some(($) => Array.isArray($) && owl.point3D($[0])))
-        throw "capture sphere";
-      this.cv.capture(things);
+    capture(...points) {
+      this.cv.capture(points);
       this.cv.AUTO_BORDER = true;
     }
     captureCircle(center, radius) {
@@ -21899,8 +21893,8 @@
       this.capQuadY(a, b, c2);
       this.cv.AUTO_BORDER = true;
     }
-    extend(...things) {
-      this.capture([0, 0], ...things);
+    extend(...points) {
+      this.capture([0, 0], ...points);
     }
     extendCircle(center, radius) {
       this.cv.capture([[0, 0]]);
@@ -24151,7 +24145,7 @@
       let A = [-planetRadius, 0];
       let B = PolToRect([planetRadius, angle2]);
       let C = [0, -planetRadius];
-      pen.range.capture([O, orbitRadius]);
+      pen.range.captureCircle(O, orbitRadius);
       pen.size.set(1.2);
       pen.shade.circle(O, planetRadius);
       pen.graph.circle(O, planetRadius);

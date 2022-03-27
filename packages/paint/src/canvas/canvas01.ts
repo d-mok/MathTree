@@ -210,8 +210,7 @@ export class Canvas01 extends Canvas00 {
 
 
     // conversion
-
-
+    
     protected point2DtoPx(point: Point2D): dot {
         let [xCoord, yCoord] = point
         let x = toPixelX(this.xmin, this.xmax, this.width, xCoord)

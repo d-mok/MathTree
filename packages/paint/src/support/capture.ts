@@ -76,10 +76,7 @@ function isSphere(thing: any): thing is sphere {
         && typeof thing[1] === 'number'
 }
 
-// function isQuadraticOLD(thing: any): thing is quadraticOLD {
-//     return Array.isArray(thing)
-//         && thing.length === 4
-// }
+
 
 function isQuadratic(thing: any): thing is quadratic {
     return Array.isArray(thing)
@@ -108,10 +105,6 @@ export function thingsToPoints(things: capturable[]): Point[] {
             pts.push(...getSphereCorners(...th))
             continue
         }
-        // if (isQuadraticOLD(th)) {
-        //     pts.push(...getQuadraticCorners(...th))
-        //     continue
-        // }
         if (isQuadratic(th)) {
             let [type, a, b, c, scale] = th
             pts.push(...getQuadraticCorners(a, b, c, scale))

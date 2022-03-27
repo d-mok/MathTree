@@ -655,7 +655,7 @@ export class PhyPenCls {
         // M label
         let C: Point2D = [0, -planetRadius]
 
-        pen.range.capture([O, orbitRadius])
+        pen.range.captureCircle(O, orbitRadius)
         pen.size.set(1.2)
 
         pen.shade.circle(O, planetRadius)
