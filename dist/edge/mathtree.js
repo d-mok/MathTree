@@ -21852,6 +21852,10 @@
     capture(...things) {
       if (things.some(($) => Array.isArray($) && $.length === 4))
         throw "capture quad";
+      if (things.some(($) => Array.isArray($) && owl.point2D($[0])))
+        throw "capture circle";
+      if (things.some(($) => Array.isArray($) && owl.point3D($[0])))
+        throw "capture sphere";
       this.cv.capture(things);
       this.cv.AUTO_BORDER = true;
     }
