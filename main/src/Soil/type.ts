@@ -9,7 +9,7 @@ type Fruit = {
     readonly time: number
 }
 
-type inspection = {
+type Inspection = {
     readonly counter: number
     readonly success: boolean
     readonly logs: string[]

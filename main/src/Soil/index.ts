@@ -13,9 +13,6 @@ type Seed = {
     folder: string
     gene: Gene
     fruit?: Fruit
-
-    // content?: any // for backward compatible
-    // question?: any // for backward compatible
 }
 
 
@@ -80,7 +77,7 @@ class MathSoil2Cls {
     }
 
 
-    public inspect(gene: Gene, repeat: number): inspection {
+    public inspect(gene: Gene, repeat: number): Inspection {
         let counters = [];
         let times = []
         for (let i = 1; i <= repeat; i++) {
