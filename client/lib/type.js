@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Seed = void 0;
+exports.Seed = exports.Fruit = void 0;
 class Fruit {
     constructor(id = '', rawFruit) {
         this.qn = 'Loading...';
@@ -17,6 +17,7 @@ class Fruit {
             Object.assign(this, rawFruit);
     }
 }
+exports.Fruit = Fruit;
 class Seed {
     constructor(seedFetch) {
         this.fruit = new Fruit();

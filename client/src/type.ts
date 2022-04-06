@@ -24,7 +24,7 @@ type RawFruit = {
 
 
 
-class Fruit implements RawFruit {
+export class Fruit implements RawFruit {
     readonly qn: string = 'Loading...'
     readonly sol: string = 'Loading...'
     readonly ans: string = 'X'

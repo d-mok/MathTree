@@ -13,7 +13,7 @@ declare type RawFruit = {
     readonly logs: string[];
     readonly time: number;
 };
-declare class Fruit implements RawFruit {
+export declare class Fruit implements RawFruit {
     readonly qn: string;
     readonly sol: string;
     readonly ans: string;

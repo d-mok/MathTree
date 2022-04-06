@@ -32,6 +32,12 @@ class SeedArray extends Array {
         let seeds = await this.fetchAPI([id]);
         this[index] = seeds[0];
     }
+    ids() {
+        return this.map($ => $.id);
+    }
+    fruits() {
+        return this.map($ => $.fruit);
+    }
     growAll() {
         for (let s of this)
             s.grow();

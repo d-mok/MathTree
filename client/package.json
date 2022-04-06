@@ -1,6 +1,6 @@
 {
   "name": "mathtree-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a private package",
   "main": "lib/index.js",
   "types": "lib",

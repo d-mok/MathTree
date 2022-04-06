@@ -1,4 +1,4 @@
-import { Seed, SeedFetch } from './type'
+import { Seed, SeedFetch, Fruit } from './type'
 
 
 function cloneJSON<T>(obj: T): T {
@@ -46,6 +46,14 @@ export abstract class SeedArray extends Array<Seed> {
     async replaceById(index: number, id: string) {
         let seeds = await this.fetchAPI([id])
         this[index] = seeds[0]
+    }
+
+    ids(): string[] {
+        return this.map($ => $.id)
+    }
+
+    fruits(): Fruit[] {
+        return this.map($ => $.fruit)
     }
 
 
