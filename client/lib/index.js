@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Seeds = void 0;
+exports.SeedArray = void 0;
 const type_1 = require("./type");
 function cloneJSON(obj) {
     return JSON.parse(JSON.stringify(obj));
@@ -8,7 +8,7 @@ function cloneJSON(obj) {
 function ErrIdNotFound(id) {
     throw 'Error! Seed ' + id + ' not found during fetching!';
 }
-class Seeds extends Array {
+class SeedArray extends Array {
     async fetchAPI(ids) {
         const url = this.SUPABASE_URL + '(' + ids.join(',') + ')';
         const response = await fetch(url, {
@@ -84,5 +84,5 @@ class Seeds extends Array {
         this.length = 0;
     }
 }
-exports.Seeds = Seeds;
+exports.SeedArray = SeedArray;
 //# sourceMappingURL=index.js.map

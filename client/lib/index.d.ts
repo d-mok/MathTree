@@ -1,5 +1,5 @@
 import { Seed } from './type';
-export declare abstract class Seeds extends Array<Seed> {
+export declare abstract class SeedArray extends Array<Seed> {
     protected abstract SUPABASE_URL: string;
     protected abstract SUPABASE_ANON_KEY: string;
     private fetchAPI;

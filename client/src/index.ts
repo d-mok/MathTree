@@ -11,7 +11,7 @@ function ErrIdNotFound(id: string): never {
 
 
 
-export abstract class Seeds extends Array<Seed> {
+export abstract class SeedArray extends Array<Seed> {
 
     protected abstract SUPABASE_URL: string
     protected abstract SUPABASE_ANON_KEY: string
