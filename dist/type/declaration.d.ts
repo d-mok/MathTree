@@ -4851,8 +4851,8 @@ declare module "Pen/AutoPen" {
         TrigSolution({ trig, k, scale, ratio }: {
             trig: TrigFunc;
             k: number;
-            scale: number;
-            ratio: number;
+            scale?: number;
+            ratio?: number;
         }): void;
         /**
          * Sketch for solving quadratic inequality.
@@ -5565,7 +5565,7 @@ declare module "Soil/index" {
     }
     class MathSoil2Cls {
         reap(gene: Gene): Fruit;
-        inspect(gene: Gene, repeat: number): inspection;
+        inspect(gene: Gene, repeat: number): Inspection;
     }
 }
 declare type Fruit = {
@@ -5577,7 +5577,7 @@ declare type Fruit = {
     readonly logs: string[];
     readonly time: number;
 };
-declare type inspection = {
+declare type Inspection = {
     readonly counter: number;
     readonly success: boolean;
     readonly logs: string[];

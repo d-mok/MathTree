@@ -192,13 +192,13 @@ export class AutoPenCls {
     TrigSolution({
         trig = 'sin',
         k = 0,
-        scale = 1.4,
+        scale = 1.5,
         ratio = 0.7
     }: {
         trig: TrigFunc,
         k: number,
-        scale: number,
-        ratio: number
+        scale?: number,
+        ratio?: number
     }) {
 
         if (trig === 'sin' || trig === 'cos') {
@@ -219,18 +219,17 @@ export class AutoPenCls {
 
         let [a, b, c] = TrigRoot(trig, k)
 
-
         const pen = new Pen()
 
         let limit = Max(1, Abs(k)) + 0.2
 
-        if (trig === 'sin') pen.range.set([-40, 390], [-limit, limit])
-        if (trig === 'cos') pen.range.set([-40, 390], [-limit, limit])
-        if (trig === 'tan') pen.range.set([-40, 390], [-5, 5])
+        if (trig === 'sin') pen.range.set([-60, 390], [-limit, limit])
+        if (trig === 'cos') pen.range.set([-60, 390], [-limit, limit])
+        if (trig === 'tan') pen.range.set([-60, 390], [-5, 5])
         pen.size.set(scale, scale * ratio)
 
-        pen.axis.x()
-        pen.axis.y()
+        pen.axis.x('')
+        pen.axis.y('')
         if (trig === 'sin' || trig === 'cos') {
             pen.tick.x(360)
         }
