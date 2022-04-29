@@ -4826,7 +4826,7 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        Inequalities({ items, ticks, scale, ratio }: {
+        Inequalities({ items, ticks, scale, ratio, }: {
             items: {
                 position: number;
                 sign: string;
@@ -4848,7 +4848,7 @@ declare module "Pen/AutoPen" {
          * pen.TrigSolution({trig:'sin', k:0.5})
          * ```
          */
-        TrigSolution({ trig, k, scale, ratio }: {
+        TrigSolution({ trig, k, scale, ratio, }: {
             trig: TrigFunc;
             k: number;
             scale?: number;
@@ -4865,7 +4865,7 @@ declare module "Pen/AutoPen" {
          * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
          * ```
          */
-        QuadraticInequality({ quadratic, sign, scale, ratio }: {
+        QuadraticInequality({ quadratic, sign, scale, ratio, }: {
             quadratic: [number, number, number];
             sign: string;
             scale: number;
@@ -4888,7 +4888,7 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        Triangle({ vertices, triangle, labels, heights, scale }: {
+        Triangle({ vertices, triangle, labels, heights, scale, }: {
             vertices: Point2D[];
             triangle: any;
             labels: string[];
@@ -4972,7 +4972,7 @@ declare module "Pen/AutoPen" {
          * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
          * ```
          */
-        DotPattern({ a, p, q, n, offset }: {
+        DotPattern({ a, p, q, n, offset, }: {
             a: number;
             p: number;
             q: number;
@@ -4992,7 +4992,7 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        PieChart({ categories, labels, angles, angleLabels, size }: {
+        PieChart({ categories, labels, angles, angleLabels, size, }: {
             categories: string[];
             labels: string[];
             angles: number[];
@@ -5017,7 +5017,7 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        HeightChart({ categories, data, xLabel, yLabel, interval, subInterval, barWidth, barGap, showBar, showLine }: {
+        HeightChart({ categories, data, xLabel, yLabel, interval, subInterval, barWidth, barGap, showBar, showLine, }: {
             categories: string[];
             data: number[];
             xLabel?: string;
@@ -5046,7 +5046,7 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        Boxplot({ summary, labels, size, tick, start, end, showDash, showValue, showTick }: {
+        Boxplot({ summary, labels, size, tick, start, end, showDash, showValue, showTick, }: {
             summary: number[];
             labels?: (string | null)[];
             size?: number;
@@ -5087,7 +5087,7 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        TreeDiagram({ titles, probabilities, events, select, circleSize }: {
+        TreeDiagram({ titles, probabilities, events, select, circleSize, }: {
             titles: [string, string];
             probabilities: (number | [string, string])[][];
             events: [string, string][][];

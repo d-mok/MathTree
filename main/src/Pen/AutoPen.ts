@@ -1,6 +1,5 @@
 import { PenCls } from './Pen'
 
-
 /**
  * @category DrawingPen
  */
@@ -57,11 +56,17 @@ export class AutoPenCls {
             }
         }
         function drawVert(pivot: number[]) {
-            pen.line([pivot[0] - 0.5 * w, pivot[1] - h / 2], [pivot[0] - 0.5 * w, pivot[1] + h / 2])
+            pen.line(
+                [pivot[0] - 0.5 * w, pivot[1] - h / 2],
+                [pivot[0] - 0.5 * w, pivot[1] + h / 2]
+            )
         }
         function drawUnderline(arr: number[], pivot: number[]) {
             for (let i = 0; i < arr.length; i++) {
-                pen.line([pivot[0] + i * w - 0.5 * w, pivot[1] - h / 2], [pivot[0] + i * w + 0.5 * w, pivot[1] - h / 2])
+                pen.line(
+                    [pivot[0] + i * w - 0.5 * w, pivot[1] - h / 2],
+                    [pivot[0] + i * w + 0.5 * w, pivot[1] - h / 2]
+                )
             }
         }
         function drawDivisor(pivot: number[], divisor: number) {
@@ -80,7 +85,7 @@ export class AutoPenCls {
         let pivot = [1, 0]
         drawRow(numbers, pivot)
         while (HCF(...numbers) > 1) {
-            [numbers, pivot] = drawDiv(numbers, pivot)
+            ;[numbers, pivot] = drawDiv(numbers, pivot)
         }
         this.pen = pen
     }
@@ -106,34 +111,61 @@ export class AutoPenCls {
         items = [],
         ticks = [],
         scale = 1.6,
-        ratio = 0.5
+        ratio = 0.5,
     }: {
-        items: { position: number, sign: string, num: number | string, vertical: boolean }[],
-        ticks: boolean[],
-        scale?: number,
+        items: {
+            position: number
+            sign: string
+            num: number | string
+            vertical: boolean
+        }[]
+        ticks: boolean[]
+        scale?: number
         ratio?: number
     }) {
-
         const width = 5
         const height = 2
 
-        let ineqs: { position: number, sign: string, num: number | string, vertical: boolean, base: number }[]
-            = items.map((x, i) => ({ base: -i * (height + 2), ...x }))
+        let ineqs: {
+            position: number
+            sign: string
+            num: number | string
+            vertical: boolean
+            base: number
+        }[] = items.map((x, i) => ({ base: -i * (height + 2), ...x }))
 
         const pen = new Pen()
-        pen.range.set([-width - 2, width + 2], [-(ineqs.length) * (height + 2) + 2, height + 1])
+        pen.range.set(
+            [-width - 2, width + 2],
+            [-ineqs.length * (height + 2) + 2, height + 1]
+        )
         pen.size.set(scale, scale * ratio)
 
         pen.set.textLatex(true)
 
-        function inequality({ position, sign, num, base, vertical }: { position: number, sign: string, num: number | string, base: number, vertical: boolean }) {
+        function inequality({
+            position,
+            sign,
+            num,
+            base,
+            vertical,
+        }: {
+            position: number
+            sign: string
+            num: number | string
+            base: number
+            vertical: boolean
+        }) {
             let greater = sign.includes('>') || sign.includes('g')
             let solid = sign.includes('=') || sign.includes('e')
             let align = -width + 2 * width * position
 
             let B: Point2D = [align, base]
             let T: Point2D = [align, base + height]
-            let E: Point2D = [greater ? align + 0.4 * width : align - 0.4 * width, base + height]
+            let E: Point2D = [
+                greater ? align + 0.4 * width : align - 0.4 * width,
+                base + height,
+            ]
             let E1: Point2D = [greater ? width : -width, base + height]
             let E2: Point2D = [greater ? width : -width, base]
 
@@ -163,7 +195,6 @@ export class AutoPenCls {
 
         ineqs.forEach(x => inequality(x))
 
-
         let cutting = ineqs.map(x => x.position)
         cutting = [0, ...cutting, 1]
 
@@ -174,9 +205,6 @@ export class AutoPenCls {
 
         this.pen = pen
     }
-
-
-
 
     /**
      * Trig Graph for solving basic trig equation.
@@ -193,14 +221,13 @@ export class AutoPenCls {
         trig = 'sin',
         k = 0,
         scale = 1.5,
-        ratio = 0.7
+        ratio = 0.7,
     }: {
-        trig: TrigFunc,
-        k: number,
-        scale?: number,
+        trig: TrigFunc
+        k: number
+        scale?: number
         ratio?: number
     }) {
-
         if (trig === 'sin' || trig === 'cos') {
             if (k > 2) k = 2
             if (0.9 < k && k < 1) k = 0.9
@@ -225,7 +252,7 @@ export class AutoPenCls {
 
         if (trig === 'sin') pen.range.set([-60, 390], [-limit, limit])
         if (trig === 'cos') pen.range.set([-60, 390], [-limit, limit])
-        if (trig === 'tan') pen.range.set([-60, 390], [-5, 5])
+        if (trig === 'tan') pen.range.set([-40, 390], [-5, 5])
         pen.size.set(scale, scale * ratio)
 
         pen.axis.x('')
@@ -244,7 +271,6 @@ export class AutoPenCls {
             pen.label.point([0, -1], '-1', 180)
         }
 
-
         pen.set.weight(1.5)
         if (trig === 'sin') pen.plot(x => sin(x), 0, 360)
         if (trig === 'cos') pen.plot(x => cos(x), 0, 360)
@@ -261,8 +287,12 @@ export class AutoPenCls {
         }
         pen.set.weight(1)
 
-
-        function arrow(x: number | undefined, y: number, func: string, label = '') {
+        function arrow(
+            x: number | undefined,
+            y: number,
+            func: string,
+            label = ''
+        ) {
             if (x === undefined) return
             let anchor = 0
             let skipAnchor = false
@@ -286,16 +316,21 @@ export class AutoPenCls {
                 if (x > 180 && x < 360) anchor = 180
             }
 
-
             let P: Point2D = [x, y]
             let Q: Point2D = [x, 0]
             let R: Point2D = [anchor, 0]
             pen.set.color()
             pen.point(P)
             pen.set.color('red')
-            if (y !== 0) { pen.arrow(P, Q) }
-            if (y >= 0) { pen.label.point(Q, label, 270) }
-            if (y < 0) { pen.label.point(Q, label, 90) }
+            if (y !== 0) {
+                pen.arrow(P, Q)
+            }
+            if (y >= 0) {
+                pen.label.point(Q, label, 270)
+            }
+            if (y < 0) {
+                pen.label.point(Q, label, 90)
+            }
 
             if (skipAnchor) return
             pen.set.weight(3)
@@ -361,8 +396,6 @@ export class AutoPenCls {
         this.pen = pen
     }
 
-
-
     /**
      * Sketch for solving quadratic inequality.
      * @param quadratic - [a,b,c] representing coeff of quadratic inequality.
@@ -378,11 +411,11 @@ export class AutoPenCls {
         quadratic,
         sign,
         scale = 1,
-        ratio = 0.8
+        ratio = 0.8,
     }: {
-        quadratic: [number, number, number],
-        sign: string,
-        scale: number,
+        quadratic: [number, number, number]
+        sign: string
+        scale: number
         ratio: number
     }) {
         let a = quadratic[0]
@@ -395,12 +428,12 @@ export class AutoPenCls {
         let p: number | undefined
         let q: number | undefined
         try {
-            [p, q] = QuadraticRoot(a, b, c)
+            ;[p, q] = QuadraticRoot(a, b, c)
         } catch {
-            [p, q] = [undefined, undefined]
+            ;[p, q] = [undefined, undefined]
         }
         if (p !== undefined && q !== undefined) {
-            [p, q] = [Max(p, q), Min(p, q)]
+            ;[p, q] = [Max(p, q), Min(p, q)]
             p = Fix(p, 2)
             q = Fix(q, 2)
         }
@@ -471,7 +504,8 @@ export class AutoPenCls {
                     pen.set.color('red')
                     pen.dot([0, 0])
                 }
-                if (!greater && !equal) { }
+                if (!greater && !equal) {
+                }
             }
 
             if (a < 0) {
@@ -487,12 +521,12 @@ export class AutoPenCls {
                     pen.set.color('red')
                     pen.dot([0, 0])
                 }
-                if (greater && !equal) { }
+                if (greater && !equal) {
+                }
             }
         }
         this.pen = pen
     }
-
 
     /**
      * Draw a triangle.
@@ -516,15 +550,14 @@ export class AutoPenCls {
         triangle = {},
         labels = ['', '', ''],
         heights = [false, false, false],
-        scale = 1.6
+        scale = 1.6,
     }: {
-        vertices: Point2D[],
-        triangle: any,
-        labels: string[],
-        heights: [boolean, boolean, boolean],
+        vertices: Point2D[]
+        triangle: any
+        labels: string[]
+        heights: [boolean, boolean, boolean]
         scale: number
     }) {
-
         let A = vertices[0]
         let B = vertices[1]
         let C = vertices[2]
@@ -560,7 +593,6 @@ export class AutoPenCls {
         pen.range.set([xmid - dmax, xmid + dmax], [ymid - dmax, ymid + dmax])
         pen.size.set(scale)
 
-
         function drawHeight(vertex: Point2D, base: Point2D[]) {
             let F = PdFoot(vertex, [base[0], base[1]])
             pen.set.dash([5, 5])
@@ -578,13 +610,11 @@ export class AutoPenCls {
                 pen.rightAngle(vertex, F, base[0])
             }
             pen.set.color()
-
         }
 
         if (heights[0]) drawHeight(A, [B, C])
         if (heights[1]) drawHeight(B, [C, A])
         if (heights[2]) drawHeight(C, [A, B])
-
 
         pen.polygon(A, B, C)
 
@@ -596,16 +626,12 @@ export class AutoPenCls {
 
         let AB = [B[0] - A[0], B[1] - A[1]]
         let BC = [C[0] - B[0], C[1] - B[1]]
-        let anticlockwise = (AB[0] * BC[1] - AB[1] * BC[0]) > 0
-
-
-
-
+        let anticlockwise = AB[0] * BC[1] - AB[1] * BC[0] > 0
 
         function writeSide(side: any, start: Point2D, end: Point2D): void {
             pen.set.lineLabel('right')
             if (side) {
-                if (typeof side === 'string' && !(/\d/.test(side)))
+                if (typeof side === 'string' && !/\d/.test(side))
                     pen.set.textItalic(true)
                 if (anticlockwise) {
                     pen.label.line([start, end], side.toString())
@@ -621,7 +647,12 @@ export class AutoPenCls {
         writeSide(sideA, B, C)
         writeSide(sideB, C, A)
 
-        function writeAngle(angle: any, P: Point2D, O: Point2D, Q: Point2D): void {
+        function writeAngle(
+            angle: any,
+            P: Point2D,
+            O: Point2D,
+            Q: Point2D
+        ): void {
             if (angle) {
                 if (typeof angle === 'number' && cal.correct(angle) === 90) {
                     pen.rightAngle(P, O, Q)
@@ -637,17 +668,6 @@ export class AutoPenCls {
 
         this.pen = pen
     }
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Draw a graph for linear programming.
@@ -695,7 +715,10 @@ export class AutoPenCls {
         contours = [],
         labelConstraints = [],
         highlights = [],
-        ranges = [[-10, 10], [-10, 10]],
+        ranges = [
+            [-10, 10],
+            [-10, 10],
+        ],
         resolution = 0.2,
         grid = 0,
         subGrid = 0,
@@ -711,33 +734,32 @@ export class AutoPenCls {
         showIntegralLabel = false,
         showIntegralMax = false,
         showIntegralMin = false,
-        contourColor = "grey",
+        contourColor = 'grey',
         constraintColors = [],
     }: {
-        constraints: Constraint[],
-        field: Field,
-        contours: number[],
-        labelConstraints: ((x: number, y: number) => boolean)[],
-        highlights: Highlight[],
-        ranges: [[number, number], [number, number]],
-        resolution: number,
-        grid: number,
-        subGrid: number,
-        tick: number,
-        showLine: boolean,
-        showShade: boolean,
-        showVertex: boolean,
-        showVertexCoordinates: boolean,
-        showVertexLabel: boolean,
-        showVertexMax: boolean,
-        showVertexMin: boolean,
-        showIntegral: boolean,
-        showIntegralLabel: boolean,
-        showIntegralMax: boolean,
-        showIntegralMin: boolean,
-        contourColor: string,
+        constraints: Constraint[]
+        field: Field
+        contours: number[]
+        labelConstraints: ((x: number, y: number) => boolean)[]
+        highlights: Highlight[]
+        ranges: [[number, number], [number, number]]
+        resolution: number
+        grid: number
+        subGrid: number
+        tick: number
+        showLine: boolean
+        showShade: boolean
+        showVertex: boolean
+        showVertexCoordinates: boolean
+        showVertexLabel: boolean
+        showVertexMax: boolean
+        showVertexMin: boolean
+        showIntegral: boolean
+        showIntegralLabel: boolean
+        showIntegralMax: boolean
+        showIntegralMin: boolean
+        contourColor: string
         constraintColors: string[]
-
     }) {
         function fieldAt(p: Point2D): number {
             const [a, b, c] = field
@@ -780,7 +802,7 @@ export class AutoPenCls {
         }
 
         if (tick > 0) {
-            pen.set.color("grey")
+            pen.set.color('grey')
             pen.set.textSize(0.8)
             pen.tick.x(tick)
             pen.tick.y(tick)
@@ -791,8 +813,7 @@ export class AutoPenCls {
         function drawLines() {
             for (let i = 0; i < constraints.length; i++) {
                 let [a, b, s, c] = constraints[i]
-                if (!ineq(s).canEqual())
-                    pen.set.dash([5, 5])
+                if (!ineq(s).canEqual()) pen.set.dash([5, 5])
                 pen.set.color(constraintColors[i] ?? 'black')
                 pen.graph.linear(a, b, -c)
                 pen.set.color()
@@ -806,23 +827,23 @@ export class AutoPenCls {
         labelConstraints.push((x, y) => y < ymax)
 
         function labelField(p: Point2D) {
-            pen.set.textAlign("left")
+            pen.set.textAlign('left')
             pen.label.point(p, fieldAt(p).toString(), 60, 10)
             pen.set.textAlign()
         }
 
         function drawIntegral(label = false) {
-            integrals.forEach((p) => {
+            integrals.forEach(p => {
                 pen.point(p)
-                if (label && labelConstraints.every((f) => f(...p))) labelField(p)
+                if (label && labelConstraints.every(f => f(...p))) labelField(p)
             })
         }
 
         function drawVertex(coordinates = false, label = false) {
-            vertices.forEach((p) => {
+            vertices.forEach(p => {
                 pen.point(p)
                 if (coordinates) pen.label.coordinates(p, 270)
-                if (label && labelConstraints.every((f) => f(...p))) labelField(p)
+                if (label && labelConstraints.every(f => f(...p))) labelField(p)
             })
         }
 
@@ -842,7 +863,7 @@ export class AutoPenCls {
 
         function drawHighlight({
             point = [0, 0],
-            color = "red",
+            color = 'red',
             circle = true,
             contour = true,
             coordinates = true,
@@ -858,7 +879,7 @@ export class AutoPenCls {
         }
 
         function drawHighlights() {
-            highlights.forEach((h) => drawHighlight(h))
+            highlights.forEach(h => drawHighlight(h))
         }
 
         if (showLine) drawLines()
@@ -868,26 +889,29 @@ export class AutoPenCls {
         drawHighlights()
         drawContours()
 
-        if (showVertexMax) drawHighlight({
-            point: MaximizePoint(vertices, field),
-            color: "red"
-        })
-        if (showVertexMin) drawHighlight({
-            point: MinimizePoint(vertices, field),
-            color: "blue"
-        })
-        if (showIntegralMax) drawHighlight({
-            point: MaximizePoint(integrals, field),
-            color: "red"
-        })
-        if (showIntegralMin) drawHighlight({
-            point: MinimizePoint(integrals, field),
-            color: "blue"
-        })
+        if (showVertexMax)
+            drawHighlight({
+                point: MaximizePoint(vertices, field),
+                color: 'red',
+            })
+        if (showVertexMin)
+            drawHighlight({
+                point: MinimizePoint(vertices, field),
+                color: 'blue',
+            })
+        if (showIntegralMax)
+            drawHighlight({
+                point: MaximizePoint(integrals, field),
+                color: 'red',
+            })
+        if (showIntegralMin)
+            drawHighlight({
+                point: MinimizePoint(integrals, field),
+                color: 'blue',
+            })
 
         this.pen = pen
     }
-
 
     /**
      * A dot pattern
@@ -901,9 +925,19 @@ export class AutoPenCls {
      * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
      * ```
      */
-    DotPattern({ a, p, q, n, offset }:
-        { a: number, p: number, q: number, n: number, offset: number }) {
-
+    DotPattern({
+        a,
+        p,
+        q,
+        n,
+        offset,
+    }: {
+        a: number
+        p: number
+        q: number
+        n: number
+        offset: number
+    }) {
         const pen = new Pen()
         pen.range.set([-2, 30], [-4, 10])
         pen.size.resolution(0.08)
@@ -917,7 +951,7 @@ export class AutoPenCls {
         for (let j = 2; j <= n; j++) {
             drawRow(q + (n - j) * p, j, (j - 1) * offset)
         }
-        let m = ""
+        let m = ''
         if (n === 1) m = '1st'
         if (n === 2) m = '2nd'
         if (n === 3) m = '3rd'
@@ -925,7 +959,6 @@ export class AutoPenCls {
         pen.write([(1 + a + (n - 1) * p) / 2, -1], m + ' pattern')
         this.pen = pen
     }
-
 
     /**
      * A pie chart
@@ -940,11 +973,17 @@ export class AutoPenCls {
      * })
      * ```
      */
-    PieChart({ categories, labels, angles, angleLabels, size = 2 }: {
-        categories: string[],
-        labels: string[],
-        angles: number[],
-        angleLabels: (string | null | undefined)[],
+    PieChart({
+        categories,
+        labels,
+        angles,
+        angleLabels,
+        size = 2,
+    }: {
+        categories: string[]
+        labels: string[]
+        angles: number[]
+        angleLabels: (string | null | undefined)[]
         size?: number
     }) {
         const pen = new Pen()
@@ -972,20 +1011,17 @@ export class AutoPenCls {
             }
 
             if (angleLabels[i] !== undefined) {
-                pen.angle(PolToRect([1, current]), O, PolToRect([1, next]), angleLabels[i] ?? angles[i] + "°")
+                pen.angle(
+                    PolToRect([1, current]),
+                    O,
+                    PolToRect([1, next]),
+                    angleLabels[i] ?? angles[i] + '°'
+                )
             }
             current += a
         }
         this.pen = pen
     }
-
-
-
-
-
-
-
-
 
     /**
      * A bar chart / line chart / histogram / frequency polygon / cf polygon
@@ -1008,26 +1044,26 @@ export class AutoPenCls {
     HeightChart({
         categories,
         data,
-        xLabel = "",
-        yLabel = "",
+        xLabel = '',
+        yLabel = '',
         interval = 5,
         subInterval = 1,
         barWidth = 1,
         barGap = 1,
         showBar = false,
-        showLine = false }: {
-            categories: string[],
-            data: number[],
-            xLabel?: string,
-            yLabel?: string,
-            interval?: number,
-            subInterval?: number,
-            barWidth?: number,
-            barGap?: number,
-            showBar?: boolean,
-            showLine?: boolean
-        }) {
-
+        showLine = false,
+    }: {
+        categories: string[]
+        data: number[]
+        xLabel?: string
+        yLabel?: string
+        interval?: number
+        subInterval?: number
+        barWidth?: number
+        barGap?: number
+        showBar?: boolean
+        showLine?: boolean
+    }) {
         const pen = new Pen()
 
         let endGap = barWidth + barGap / 2
@@ -1035,7 +1071,7 @@ export class AutoPenCls {
         let max = Max(...data)
         let maxUnit = Ceil(max / interval)
         let maxSubUnit = maxUnit * (interval / subInterval)
-        let height = (maxUnit) * interval * 1.1
+        let height = maxUnit * interval * 1.1
 
         pen.range.set([-width * 0.5, width], [-height, height])
         pen.size.resolution(0.2, 1.4 / height)
@@ -1062,7 +1098,6 @@ export class AutoPenCls {
             pen.label.point([0, h], h.toString(), 180)
         }
 
-
         for (let y = 1; y <= maxSubUnit; y++) {
             pen.set.alpha(0.1)
             grid(y * subInterval)
@@ -1079,7 +1114,6 @@ export class AutoPenCls {
         function writeCat(x: number, w: number, text: string) {
             pen.label.point([x + w / 2, 0], text, 270, 15)
         }
-
 
         if (showBar) {
             for (let i = 0; i < categories.length; i++) {
@@ -1105,12 +1139,6 @@ export class AutoPenCls {
 
         this.pen = pen
     }
-
-
-
-
-
-
 
     /**
      * A boxplot
@@ -1138,17 +1166,17 @@ export class AutoPenCls {
         end,
         showDash = false,
         showValue = false,
-        showTick = false
+        showTick = false,
     }: {
-        summary: number[],
-        labels?: (string | null)[],
-        size?: number,
-        tick?: number,
-        start?: number,
-        end?: number,
-        showDash?: boolean,
-        showValue?: boolean,
-        showTick?: boolean,
+        summary: number[]
+        labels?: (string | null)[]
+        size?: number
+        tick?: number
+        start?: number
+        end?: number
+        showDash?: boolean
+        showValue?: boolean
+        showTick?: boolean
     }) {
         const pen = new Pen()
         let [Q0, Q1, Q2, Q3, Q4] = summary
@@ -1177,7 +1205,6 @@ export class AutoPenCls {
         let A_: Point2D = [Q1, 0]
         let B_: Point2D = [Q2, 0]
         let C_: Point2D = [Q3, 0]
-
 
         start ??= Q0 - (Q4 - Q0) * 0.2
         end ??= Q4 + (Q4 - Q0) * 0.2
@@ -1220,9 +1247,6 @@ export class AutoPenCls {
         this.pen = pen
     }
 
-
-
-
     /**
      * A regular polygon
      * ```
@@ -1240,14 +1264,12 @@ export class AutoPenCls {
         diagonal = false,
         reflectional = false,
         rotational = false,
-
     }: {
-        side: number,
-        diagonal?: boolean,
-        reflectional?: boolean,
-        rotational?: boolean,
+        side: number
+        diagonal?: boolean
+        reflectional?: boolean
+        rotational?: boolean
     }) {
-
         const pen = new Pen()
 
         pen.range.square(1.3)
@@ -1255,7 +1277,6 @@ export class AutoPenCls {
 
         let gon = RegularPolygon(side, [0, 0], 1, 0)
         pen.polygon(...gon)
-
 
         if (diagonal) {
             pen.set.alpha(0.3)
@@ -1268,34 +1289,28 @@ export class AutoPenCls {
         }
 
         if (reflectional) {
-
             pen.set.alpha(0.5)
             pen.set.dash(true)
 
             if (side % 2 === 0) {
-
                 pen.set.color('red')
                 for (let n = 0; n < side; n += 2) {
-                    pen.graph.through([0, 0], PolToRect([1, n * 180 / side]))
+                    pen.graph.through([0, 0], PolToRect([1, (n * 180) / side]))
                 }
 
                 pen.set.color('blue')
                 for (let n = 1; n < side; n += 2) {
-                    pen.graph.through([0, 0], PolToRect([1, n * 180 / side]))
+                    pen.graph.through([0, 0], PolToRect([1, (n * 180) / side]))
                 }
-
             } else {
-
                 for (let n = 0; n < side; n++) {
-                    pen.graph.through([0, 0], PolToRect([1, n * 180 / side]))
+                    pen.graph.through([0, 0], PolToRect([1, (n * 180) / side]))
                 }
-
             }
 
             pen.set.alpha()
             pen.set.dash()
         }
-
 
         if (rotational) {
             for (let i = 0; i < side; i++) {
@@ -1305,11 +1320,6 @@ export class AutoPenCls {
 
         this.pen = pen
     }
-
-
-
-
-
 
     /**
      * A 2x2 binary tree diagram for probability.
@@ -1328,7 +1338,7 @@ export class AutoPenCls {
         probabilities,
         events,
         select,
-        circleSize
+        circleSize,
     }: {
         titles: [string, string]
         probabilities: (number | [string, string])[][]
@@ -1336,16 +1346,17 @@ export class AutoPenCls {
         select: (1 | 2 | 3 | 4)[]
         circleSize?: number
     }) {
-
         const pen = new Pen()
         pen.range.set([-5, 15], [-12, 12])
         pen.size.resolution(0.12)
 
-
         function path(
-            P: Point2D, Q: Point2D,
-            prob: string, event: string,
-            selected: boolean, circle: boolean
+            P: Point2D,
+            Q: Point2D,
+            prob: string,
+            event: string,
+            selected: boolean,
+            circle: boolean
         ) {
             let T = MoveX(Q, 2)
             pen.write(T, event)
@@ -1359,7 +1370,10 @@ export class AutoPenCls {
         }
 
         function branch(
-            C: Point2D, w: number, h1: number, h2: number,
+            C: Point2D,
+            w: number,
+            h1: number,
+            h2: number,
             prob: number | [string, string],
             [eventA, eventB]: [string, string],
             [selectedA, selectedB]: [boolean, boolean],
@@ -1411,13 +1425,4 @@ export class AutoPenCls {
 
         this.pen = pen
     }
-
-
-
-
-
-
-
-
 }
-

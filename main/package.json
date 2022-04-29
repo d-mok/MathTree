@@ -20,5 +20,12 @@
     "katex": "^0.13.23",
     "paint": "file:../packages/paint",
     "ruby": "file:../packages/ruby"
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "singleAttributePerLine": true
   }
 }

@@ -22935,6 +22935,7 @@
       let pivot = [1, 0];
       drawRow(numbers3, pivot);
       while (HCF(...numbers3) > 1) {
+        ;
         [numbers3, pivot] = drawDiv(numbers3, pivot);
       }
       this.pen = pen;
@@ -22952,13 +22953,22 @@
       pen.range.set([-width - 2, width + 2], [-ineqs.length * (height + 2) + 2, height + 1]);
       pen.size.set(scale, scale * ratio);
       pen.set.textLatex(true);
-      function inequality({ position, sign, num: num2, base: base2, vertical }) {
+      function inequality({
+        position,
+        sign,
+        num: num2,
+        base: base2,
+        vertical
+      }) {
         let greater = sign.includes(">") || sign.includes("g");
         let solid = sign.includes("=") || sign.includes("e");
         let align = -width + 2 * width * position;
         let B = [align, base2];
         let T = [align, base2 + height];
-        let E = [greater ? align + 0.4 * width : align - 0.4 * width, base2 + height];
+        let E = [
+          greater ? align + 0.4 * width : align - 0.4 * width,
+          base2 + height
+        ];
         let E1 = [greater ? width : -width, base2 + height];
         let E2 = [greater ? width : -width, base2];
         if (vertical) {
@@ -23027,7 +23037,7 @@
       if (trig2 === "cos")
         pen.range.set([-60, 390], [-limit, limit]);
       if (trig2 === "tan")
-        pen.range.set([-60, 390], [-5, 5]);
+        pen.range.set([-40, 390], [-5, 5]);
       pen.size.set(scale, scale * ratio);
       pen.axis.x("");
       pen.axis.y("");
@@ -23179,11 +23189,14 @@
       let p2;
       let q;
       try {
+        ;
         [p2, q] = QuadraticRoot(a, b, c2);
       } catch {
+        ;
         [p2, q] = [void 0, void 0];
       }
       if (p2 !== void 0 && q !== void 0) {
+        ;
         [p2, q] = [Max(p2, q), Min(p2, q)];
         p2 = Fix(p2, 2);
         q = Fix(q, 2);
@@ -23379,7 +23392,10 @@
       contours = [],
       labelConstraints = [],
       highlights = [],
-      ranges = [[-10, 10], [-10, 10]],
+      ranges = [
+        [-10, 10],
+        [-10, 10]
+      ],
       resolution = 0.2,
       grid = 0,
       subGrid = 0,
@@ -23541,7 +23557,13 @@
         });
       this.pen = pen;
     }
-    DotPattern({ a, p: p2, q, n, offset }) {
+    DotPattern({
+      a,
+      p: p2,
+      q,
+      n,
+      offset
+    }) {
       const pen = new Pen();
       pen.range.set([-2, 30], [-4, 10]);
       pen.size.resolution(0.08);
@@ -23566,7 +23588,13 @@
       pen.write([(1 + a + (n - 1) * p2) / 2, -1], m2 + " pattern");
       this.pen = pen;
     }
-    PieChart({ categories, labels, angles, angleLabels, size = 2 }) {
+    PieChart({
+      categories,
+      labels,
+      angles,
+      angleLabels,
+      size = 2
+    }) {
       const pen = new Pen();
       pen.range.set([-1.2, 1.2], [-1.2, 1.2]);
       pen.size.set(size);
