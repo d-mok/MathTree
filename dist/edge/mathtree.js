@@ -18076,7 +18076,7 @@
       return compose(dividend, divisor);
     }
     static ToBase(num2, base2) {
-      return num2.toString(base2).toUpperCase() + "_{" + base2 + "}";
+      return num2.toString(base2).toUpperCase().split("").map(($) => "{" + $ + "}").join("") + "_{" + base2 + "}";
     }
     static PrimeFactorize(val2, { hcf = false, lcm = false, multiply = false }) {
       let T = "\\begin{matrix} ";

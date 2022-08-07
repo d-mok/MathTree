@@ -1,19 +1,15 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
-
-
-
     /**
-    * a string of joined elements. [1,2,3] --> '1, 2 and 3'
-    * ```
-    * GrammarJoin(1,2,3,4) // '1, 2, 3 and 4'
-    * GrammarJoin('a','b','c') // 'a, b and c'
-    * ```
-    */
+     * a string of joined elements. [1,2,3] --> '1, 2 and 3'
+     * ```
+     * GrammarJoin(1,2,3,4) // '1, 2, 3 and 4'
+     * GrammarJoin('a','b','c') // 'a, b and c'
+     * ```
+     */
     static GrammarJoin(...items: unknown[]): string {
         let L = items.length
         if (L === 0) return ''
@@ -25,54 +21,54 @@ export class Host {
         return arr.join(', ') + ' and ' + items[items.length - 1]
     }
 
-
-
-
-
-
-
     /**
-    * @deprecated use symbol printing instead!!!
-    * a pair of latex inequalities sign array like ['\\ge', '\\le'].
-    * ```typescript
-    * IneqSign(true,true) // ['\\ge', '\\le']
-    * IneqSign(true,false) // ['\\gt', '\\lt']
-    * IneqSign(false,true) // ['\\le', '\\ge']
-    * IneqSign(false,false) // ['\\lt', '\\gt']
-    * ```
-    */
+     * @deprecated use symbol printing instead!!!
+     * a pair of latex inequalities sign array like ['\\ge', '\\le'].
+     * ```typescript
+     * IneqSign(true,true) // ['\\ge', '\\le']
+     * IneqSign(true,false) // ['\\gt', '\\lt']
+     * IneqSign(false,true) // ['\\le', '\\ge']
+     * IneqSign(false,false) // ['\\lt', '\\gt']
+     * ```
+     */
     @checkIt(owl.bool, owl.bool)
     static IneqSign(greater: boolean, equal: boolean = false): [Ineq, Ineq] {
-        if (greater && equal) { return ['\\ge', '\\le'] }
-        if (greater && !equal) { return ['\\gt', '\\lt'] }
-        if (!greater && equal) { return ['\\le', '\\ge'] }
-        if (!greater && !equal) { return ['\\lt', '\\gt'] }
+        if (greater && equal) {
+            return ['\\ge', '\\le']
+        }
+        if (greater && !equal) {
+            return ['\\gt', '\\lt']
+        }
+        if (!greater && equal) {
+            return ['\\le', '\\ge']
+        }
+        if (!greater && !equal) {
+            return ['\\lt', '\\gt']
+        }
         throw 'never'
     }
 
-
-
-
     /**
-    * @deprecated
-    * @param upSign - put -ve sign on numerator instead of the front.
-    * latex of dfrac p/q like \dfrac{1}{2}.
-    * ```
-    * Dfrac(1,2) // '\\dfrac{1}{2}'
-    * Dfrac(1,-2) // '\\dfrac{-1}{2}'
-    * Dfrac(6,4) // '\\dfrac{3}{2}'
-    * Dfrac(6,-2) // '-3'
-    * Dfrac(0,2) // '0'
-    * Dfrac(5,0) // undefined
-    * ```
-    */
+     * @deprecated
+     * @param upSign - put -ve sign on numerator instead of the front.
+     * latex of dfrac p/q like \dfrac{1}{2}.
+     * ```
+     * Dfrac(1,2) // '\\dfrac{1}{2}'
+     * Dfrac(1,-2) // '\\dfrac{-1}{2}'
+     * Dfrac(6,4) // '\\dfrac{3}{2}'
+     * Dfrac(6,-2) // '-3'
+     * Dfrac(0,2) // '0'
+     * Dfrac(5,0) // undefined
+     * ```
+     */
     @checkIt(owl.num, owl.nonZero, owl.bool)
-    static Dfrac(numerator: number, denominator: number, upSign = false): string {
+    static Dfrac(
+        numerator: number,
+        denominator: number,
+        upSign = false
+    ): string {
         return ink.printDfrac(numerator, denominator, upSign)
     }
-
-
-
 
     /**
 
@@ -84,13 +80,8 @@ export class Host {
      */
     @checkIt(owl.str)
     static IndexToSurd(text: string) {
-        return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, "\\sqrt{$1}")
+        return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, '\\sqrt{$1}')
     }
-
-
-
-
-
 
     /**
 
@@ -108,8 +99,6 @@ export class Host {
         return '(' + a + ', ' + b + ')'
     }
 
-
-
     /**
 
      * @deprecated
@@ -124,14 +113,10 @@ export class Host {
         if (num === 0) return '0'
         let m = cal.e(cal.blur(num))
         if (m === 0) return num.toString()
-        num = num / (10 ** m)
+        num = num / 10 ** m
         num = cal.blur(num)
         return num.toString() + ' \\times ' + '10^{ ' + m + '}'
     }
-
-
-
-
 
     /**
 
@@ -143,14 +128,13 @@ export class Host {
      */
     @checkIt(owl.ntuple, owl.ntuple)
     static LongDivision(dividend: number[], divisor: number[]): string {
-
         dividend = dividend.reverse()
         divisor = divisor.reverse()
 
         function xTerm(power: number): string {
-            if (power === 0) return ""
-            if (power === 1) return "x"
-            return "x^" + power
+            if (power === 0) return ''
+            if (power === 1) return 'x'
+            return 'x^' + power
         }
 
         function printSolid(poly: (number | null)[]) {
@@ -158,11 +142,11 @@ export class Host {
             poly.forEach((v, i) => {
                 if (v !== null) arr.push(v + xTerm(i))
             })
-            return arr.reverse().join("+")
+            return arr.reverse().join('+')
         }
 
         function printUnderline(poly: (number | null)[]) {
-            return "\\underline{" + printSolid(poly) + "}"
+            return '\\underline{' + printSolid(poly) + '}'
         }
 
         function printPhantom(poly: (number | null)[]) {
@@ -170,9 +154,9 @@ export class Host {
             poly.forEach((v, i) => {
                 if (v === null) arr.push(dividend[i] + xTerm(i))
             })
-            let T = arr.reverse().join("+")
-            if (T.length === 0) return ""
-            return "\\phantom{" + "+" + T + "}"
+            let T = arr.reverse().join('+')
+            if (T.length === 0) return ''
+            return '\\phantom{' + '+' + T + '}'
         }
 
         function writeSolid(poly: (number | null)[]) {
@@ -205,35 +189,30 @@ export class Host {
         }
 
         function compose(dividend: number[], divisor: number[]) {
-            let T = "\\begin{array}{r}"
-            T += "QUOTIENT \\\\"
+            let T = '\\begin{array}{r}'
+            T += 'QUOTIENT \\\\'
             T += writeSolid(divisor)
-            T += "{\\overline{\\smash{\\big)}"
+            T += '{\\overline{\\smash{\\big)}'
             T += writeSolid(dividend)
-            T += "}}\\\\"
+            T += '}}\\\\'
             let current: number[] = dividend
             let quotient = []
 
             while (true) {
                 let { next, nextPrint, under, q } = step(current, divisor)
-                T += writeUnderline(under) + "\\\\"
-                T += writeSolid(nextPrint) + "\\\\"
+                T += writeUnderline(under) + '\\\\'
+                T += writeSolid(nextPrint) + '\\\\'
                 current = next
                 quotient.push(q)
                 if (current.length < divisor.length) break
             }
-            T += "\\end{array}"
+            T += '\\end{array}'
             quotient.reverse()
             T = T.replace('QUOTIENT', writeSolid(quotient))
             return T
         }
         return compose(dividend, divisor)
     }
-
-
-
-
-
 
     /**
 
@@ -245,9 +224,18 @@ export class Host {
      */
     @checkIt([owl.num, Number.isSafeInteger], owl.positiveInt)
     static ToBase(num: number, base: number): string {
-        return num.toString(base).toUpperCase() + '_{' + base + '}'
+        return (
+            num
+                .toString(base)
+                .toUpperCase()
+                .split('')
+                .map($ => '{' + $ + '}')
+                .join('') +
+            '_{' +
+            base +
+            '}'
+        )
     }
-
 
     /**
 
@@ -264,7 +252,10 @@ export class Host {
      * ```
      */
     @checkIt(owl.object, owl.object)
-    static PrimeFactorize(val: { [_: string]: number[] }, { hcf = false, lcm = false, multiply = false }) {
+    static PrimeFactorize(
+        val: { [_: string]: number[] },
+        { hcf = false, lcm = false, multiply = false }
+    ) {
         let T = '\\begin{matrix} '
         function add(variable: string, power: number) {
             let s = multiply ? '& \\times &' : '&'
@@ -281,20 +272,17 @@ export class Host {
         let n = val[keys[0]].length
         for (let i = 0; i < n; i++) {
             T += ' & '
-            if (keys.includes('number'))
-                T += ' & ' + val.number[i]
+            if (keys.includes('number')) T += ' & ' + val.number[i]
             for (let k of keys) {
                 if (k === 'number') continue
                 add(k, val[k][i])
-
             }
             T += ' \\\\ '
         }
         T += '\\hline'
         if (hcf) {
             T += ' \\text{HCF} & = '
-            if (keys.includes('number'))
-                T += ' & ' + HCF(...val.number)
+            if (keys.includes('number')) T += ' & ' + HCF(...val.number)
             for (let k of keys) {
                 if (k === 'number') continue
                 add(k, Min(...val[k]))
@@ -303,8 +291,7 @@ export class Host {
         }
         if (lcm) {
             T += ' \\text{LCM} & = '
-            if (keys.includes('number'))
-                T += ' & ' + LCM(...val.number)
+            if (keys.includes('number')) T += ' & ' + LCM(...val.number)
             for (let k of keys) {
                 if (k === 'number') continue
                 add(k, Max(...val[k]))
@@ -314,10 +301,6 @@ export class Host {
         T += '\\end{matrix}'
         return T
     }
-
-
-
-
 
     /**
 
@@ -329,19 +312,19 @@ export class Host {
      * ```
      */
     @checkIt(owl.constraint, owl.pass, owl.str, owl.str)
-    static ConstraintText(constraint: Constraint, sign: boolean | null = true, xReplace = 'x', yReplace = 'y'): string {
-        if (sign === false)
-            constraint = rein(constraint).flip().constraint
+    static ConstraintText(
+        constraint: Constraint,
+        sign: boolean | null = true,
+        xReplace = 'x',
+        yReplace = 'y'
+    ): string {
+        if (sign === false) constraint = rein(constraint).flip().constraint
         let T = ink.printConstraint(constraint, false, sign === null)
         T = T.replace(/x/g, xReplace)
         T = T.replace(/y/g, yReplace)
         return T
     }
-
 }
-
-
-
 
 declare global {
     var GrammarJoin: typeof Host.GrammarJoin
@@ -354,9 +337,4 @@ declare global {
     var ToBase: typeof Host.ToBase
     var PrimeFactorize: typeof Host.PrimeFactorize
     var ConstraintText: typeof Host.ConstraintText
-
 }
-
-
-
-
