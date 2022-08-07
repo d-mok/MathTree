@@ -15333,7 +15333,7 @@
   var quadrant = (_) => quadrantCode(_) || quadrantName(_);
   var trig = (_) => str(_) && ["sin", "cos", "tan"].includes(_);
   var roman = (_) => str(_) && ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"].includes(_);
-  var base = (_) => str(_) && _.match(/[0-9A-Z]+\_\{[0-9]+\}/g) !== null;
+  var base = (_) => str(_) && _.match(/[\{\}0-9A-Z]+\_\{[0-9]+\}/g) !== null;
   function build(funcName, func) {
     const holder = { [funcName](arg) {
       return func(arg);
@@ -17471,6 +17471,7 @@
     static RndShakeBase(anchor) {
       let [num2, base2] = anchor.split("_");
       base2 = base2.replace("{", "").replace("}", "");
+      num2 = num2.replace("{", "").replace("}", "");
       let digits = "0123456789ABCDEF".substring(0, Number(base2)).split("");
       function shake(d) {
         let x = digits.indexOf(d) + RndU();
@@ -17499,6 +17500,7 @@
       }
       function dress2(str3) {
         str3 = str3.replace(/^0+/, "");
+        str3 = str3.split("").map(($) => "{" + $ + "}").join("");
         return str3 + "_{" + base2 + "}";
       }
       let f2 = () => {

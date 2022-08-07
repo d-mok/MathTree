@@ -289,7 +289,7 @@ test('RndShakeBase', () => {
     }
 
     repeat(10, () => {
-        run('AB0CD_{16}')
+        run('{A}{B}{0}{C}{D}_{16}')
     })
 
 })

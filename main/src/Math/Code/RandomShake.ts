@@ -322,6 +322,7 @@ export class Host {
     static RndShakeBase(anchor: string): string[] {
         let [num, base] = anchor.split('_')
         base = base.replace('{', '').replace('}', '')
+        num = num.replace('{', '').replace('}', '')
         let digits = '0123456789ABCDEF'.substring(0, Number(base)).split('')
 
         function shake(d: string): string {
@@ -350,6 +351,7 @@ export class Host {
 
         function dress(str: string): string {
             str = str.replace(/^0+/, '')
+            str = str.split('').map($ => '{' + $ +'}').join('')
             return str + '_{' + base + '}'
         }
 

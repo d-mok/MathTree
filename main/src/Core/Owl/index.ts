@@ -180,7 +180,7 @@ export const trig = (_: unknown): _ is TrigFunc => str(_) && ['sin', 'cos', 'tan
 
 export const roman = (_: unknown): _ is string => str(_) && ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'].includes(_)
 
-export const base = (_: unknown): _ is string => str(_) && _.match(/[0-9A-Z]+\_\{[0-9]+\}/g) !== null
+export const base = (_: unknown): _ is string => str(_) && _.match(/[\{\}0-9A-Z]+\_\{[0-9]+\}/g) !== null
 
 
 
