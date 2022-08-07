@@ -17471,7 +17471,7 @@
     static RndShakeBase(anchor) {
       let [num2, base2] = anchor.split("_");
       base2 = base2.replace("{", "").replace("}", "");
-      num2 = num2.replace("{", "").replace("}", "");
+      num2 = num2.replaceAll("{", "").replaceAll("}", "");
       let digits = "0123456789ABCDEF".substring(0, Number(base2)).split("");
       function shake(d) {
         let x = digits.indexOf(d) + RndU();

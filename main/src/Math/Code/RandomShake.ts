@@ -322,7 +322,7 @@ export class Host {
     static RndShakeBase(anchor: string): string[] {
         let [num, base] = anchor.split('_')
         base = base.replace('{', '').replace('}', '')
-        num = num.replace('{', '').replace('}', '')
+        num = num.replaceAll('{', '').replaceAll('}', '')
         let digits = '0123456789ABCDEF'.substring(0, Number(base)).split('')
 
         function shake(d: string): string {
