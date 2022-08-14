@@ -1,2 +1,2 @@
-import 'jest-extended';
+export {};
 //# sourceMappingURL=shape3D.test.d.ts.map

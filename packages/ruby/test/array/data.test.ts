@@ -1,4 +1,4 @@
-import 'jest-extended'
+import { describe, expect, it } from 'vitest'
 import { Data, data } from '../../src/array/data'
 
 class SubData extends Data { }

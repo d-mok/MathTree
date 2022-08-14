@@ -1,8 +1,8 @@
-import * as cal from '../../src/math/cal';
-import 'jest-extended';
-import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
+import * as cal from "../../src/math/cal";
+import { describe, expect, it } from "vitest";
+import { toBeDeepCloseTo, toMatchCloseTo } from "jest-matcher-deep-close-to";
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
-describe('blur', () => {
+describe("blur", () => {
     const cases = [
         [0.1 + 0.2, 0.3],
         [0.81 - 1, -0.19],
@@ -10,27 +10,27 @@ describe('blur', () => {
         [0.123000001000001, 0.123000001],
         [0.123000000100001, 0.123000000100001],
     ];
-    it.each(cases)('blur(%p)', (num, expected) => {
+    it.each(cases)("blur(%p)", (num, expected) => {
         expect(cal.blur(num)).toBe(expected);
     });
 });
-describe('correct', () => {
+describe("correct", () => {
     const cases = [
         [0.1 + 0.2, 0.3],
         [0.81 - 1, -0.19],
         [1.1 ** 2, 1.21], //1.2100000000000002
     ];
-    it.each(cases)('correct(%p)', (num, expected) => {
+    it.each(cases)("correct(%p)", (num, expected) => {
         expect(cal.correct(num)).toBe(expected);
     });
 });
-describe('eq', () => {
+describe("eq", () => {
     const trueCases = [
         [0.1 + 0.2, 0.3],
         [0.81 - 1, -0.19],
         [1.1 ** 2, 1.21], //1.2100000000000002
     ];
-    it.each(trueCases)('correct(%p)', (a, b) => {
+    it.each(trueCases)("correct(%p)", (a, b) => {
         expect(cal.eq(a, b)).toBeTrue();
     });
     const falseCases = [
@@ -38,11 +38,11 @@ describe('eq', () => {
         [0.81 - 1, -0.190000000001],
         [1.1 ** 2, 1.20999999999], //1.2100000000000002
     ];
-    it.each(falseCases)('correct(%p)', (a, b) => {
+    it.each(falseCases)("correct(%p)", (a, b) => {
         expect(cal.eq(a, b)).toBeFalse();
     });
 });
-describe('sigfig dp', () => {
+describe("sigfig dp", () => {
     const cases = [
         [1, 1, 0],
         [12, 2, 0],
@@ -56,17 +56,17 @@ describe('sigfig dp', () => {
         [10, 1, 0],
         [1200, 2, 0],
         [1200.0001, 8, 4],
-        [1200.0001000, 8, 4],
+        [1200.0001, 8, 4],
         [-1200.0001, 8, 4],
         [0.81 - 1, 17, 17],
         [1.1 ** 2, 17, 16], //1.2100000000000002
     ];
-    it.each(cases)('sigfig dp(%p)', (num, sf, dp) => {
+    it.each(cases)("sigfig dp(%p)", (num, sf, dp) => {
         expect(cal.sigfig(num)).toBe(sf);
         expect(cal.dp(num)).toBe(dp);
     });
 });
-describe('round', () => {
+describe("round", () => {
     const cases = [
         [123.4567, 1, 100, 200, 100],
         [123.4567, 2, 120, 130, 120],
@@ -97,13 +97,13 @@ describe('round', () => {
         [0.81 - 1, 5, -0.19, -0.19, -0.18999],
         [1.2345e-30, 5, 1.2345e-30, 1.2345e-30, 1.2345e-30],
     ];
-    it.each(cases)('round(%p,%p)', (num, sf, off, up, down) => {
+    it.each(cases)("round(%p,%p)", (num, sf, off, up, down) => {
         expect(cal.round(num, sf).off()).toBe(off);
         expect(cal.round(num, sf).up()).toBe(up);
         expect(cal.round(num, sf).down()).toBe(down);
     });
 });
-describe('fix', () => {
+describe("fix", () => {
     const cases = [
         [123.4567, -2, 100, 200, 100],
         [123.4567, -1, 120, 130, 120],
@@ -132,19 +132,19 @@ describe('fix', () => {
         [-0.5, 0, -1, -1, -0],
         [0, 1, 0, 0, 0],
         [0, 2, 0, 0, 0],
-        [1.23455E-30, 34, 1.2346E-30, 1.2346E-30, 1.2345E-30],
+        [1.23455e-30, 34, 1.2346e-30, 1.2346e-30, 1.2345e-30],
         [123.0001, 2, 123, 123.01, 123],
         [0.1 + 0.2, 1, 0.3, 0.4, 0.3],
         [0.81 - 1, 5, -0.19, -0.19, -0.18999],
-        [1.2345E-30, 34, 1.2345E-30, 1.2345E-30, 1.2345E-30],
+        [1.2345e-30, 34, 1.2345e-30, 1.2345e-30, 1.2345e-30],
     ];
-    it.each(cases)('fix(%p,%p)', (num, sf, off, up, down) => {
+    it.each(cases)("fix(%p,%p)", (num, sf, off, up, down) => {
         expect(cal.fix(num, sf).off()).toBe(off);
         expect(cal.fix(num, sf).up()).toBe(up);
         expect(cal.fix(num, sf).down()).toBe(down);
     });
 });
-describe('e mantissa', () => {
+describe("e mantissa", () => {
     const cases = [
         [1, 0, 1],
         [1.001, 0, 1.001],
@@ -163,24 +163,24 @@ describe('e mantissa', () => {
         [0, 0, 0],
         [-0.1234, -1, -1.234],
     ];
-    it.each(cases)('e mantissa(%p)', (num, e, m) => {
+    it.each(cases)("e mantissa(%p)", (num, e, m) => {
         expect(cal.e(num)).toBe(e);
         expect(cal.mantissa(num)).toBe(m);
     });
 });
-describe('logCeil logFloor', () => {
+describe("logCeil logFloor", () => {
     const cases = [
         [5, 10, 1],
         [23, 100, 10],
         [0.456, 1, 0.1],
         [0.00235, 0.01, 0.001],
     ];
-    it.each(cases)('logCeil logFloor(%p)', (num, ceil, floor) => {
+    it.each(cases)("logCeil logFloor(%p)", (num, ceil, floor) => {
         expect(cal.logCeil(num)).toBe(ceil);
         expect(cal.logFloor(num)).toBe(floor);
     });
 });
-describe('toFraction', () => {
+describe("toFraction", () => {
     const cases = [
         [0.5, 1, 2],
         [-456 / 123, -152, 41],
@@ -188,10 +188,10 @@ describe('toFraction', () => {
         [1 / 0, 1, 0],
         [-1 / 0, -1, 0],
     ];
-    it.each(cases)('toFraction(%p)', (num, p, q) => {
+    it.each(cases)("toFraction(%p)", (num, p, q) => {
         expect(cal.toFraction(num)).toStrictEqual([p, q]);
     });
-    it('pass within 100000', () => {
+    it("pass within 100000", () => {
         function jump(i, ratio) {
             if (i <= 100)
                 return 1;
@@ -217,8 +217,8 @@ describe('toFraction', () => {
         }
     });
 });
-describe('isRational', () => {
-    it('true within 100000', () => {
+describe("isRational", () => {
+    it("true within 100000", () => {
         function jump(i, ratio) {
             if (i <= 100)
                 return 1;
@@ -234,7 +234,7 @@ describe('isRational', () => {
             }
         }
     });
-    it('false if surd', () => {
+    it("false if surd", () => {
         for (let i = 0; i <= 1000; i++) {
             let r = Math.sqrt(i);
             if (Number.isInteger(r)) {
@@ -248,13 +248,13 @@ describe('isRational', () => {
             }
         }
     });
-    it('handle special cases', () => {
+    it("handle special cases", () => {
         expect(cal.isRational(0)).toBeTrue();
         expect(cal.isRational(1 / 0)).toBeFalse();
         expect(cal.isRational(-1 / 0)).toBeFalse();
     });
 });
-describe('toSurd', () => {
+describe("toSurd", () => {
     const cases = [
         [Math.sqrt(0), 0, 1],
         [Math.sqrt(1), 1, 1],
@@ -274,32 +274,38 @@ describe('toSurd', () => {
         [Math.sqrt(737100), 90, 91],
         [-Math.sqrt(20), -2, 5],
         [Math.sqrt((4 * Math.sqrt(3)) ** 2), 4, 3],
-        [1.999999999999999, 2, 1]
+        [1.999999999999999, 2, 1],
     ];
-    it.each(cases)('simplifySurd(%p)', (num, a, b) => {
+    it.each(cases)("simplifySurd(%p)", (num, a, b) => {
         expect(cal.toSurd(num)).toStrictEqual([a, b]);
     });
 });
-describe('isPrime', () => {
-    const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113];
-    it('pass first 100 primes', () => {
+describe("isPrime", () => {
+    const primes = [
+        2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+        73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
+    ];
+    it("pass first 100 primes", () => {
         for (let i = 0; i <= 100; i++) {
             expect(cal.isPrime(i)).toBe(primes.includes(i));
         }
     });
-    it('return false for non-integer', () => {
+    it("return false for non-integer", () => {
         expect(cal.isPrime(0.5)).toBeFalse();
     });
 });
-describe('primes', () => {
-    const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113];
-    it('pass first 100 primes', () => {
+describe("primes", () => {
+    const primes = [
+        2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+        73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
+    ];
+    it("pass first 100 primes", () => {
         for (let i = 0; i <= 100; i++) {
-            expect(cal.primes(i)).toStrictEqual(primes.filter($ => $ <= i));
+            expect(cal.primes(i)).toStrictEqual(primes.filter(($) => $ <= i));
         }
     });
 });
-describe('primeFactors', () => {
+describe("primeFactors", () => {
     const cases = [
         [1, []],
         [2, [2]],
@@ -312,13 +318,13 @@ describe('primeFactors', () => {
         [9, [3, 3]],
         [10, [2, 5]],
         [12, [2, 2, 3]],
-        [32659200, [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 5, 5, 7]]
+        [32659200, [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 5, 5, 7]],
     ];
-    it.each(cases)('primeFactors(%p)', (num, arr) => {
+    it.each(cases)("primeFactors(%p)", (num, arr) => {
         expect(cal.primeFactors(num)).toStrictEqual(arr);
     });
 });
-describe('factorial', () => {
+describe("factorial", () => {
     const cases = [
         [0, 1],
         [1, 1],
@@ -328,11 +334,11 @@ describe('factorial', () => {
         [5, 120],
         [6, 720],
     ];
-    it.each(cases)('factorial(%p)', (num, expected) => {
+    it.each(cases)("factorial(%p)", (num, expected) => {
         expect(cal.factorial(num)).toStrictEqual(expected);
     });
 });
-describe('nCr nPr', () => {
+describe("nCr nPr", () => {
     const cases = [
         [8, 0, 1, 1],
         [8, 1, 8, 8],
@@ -341,42 +347,58 @@ describe('nCr nPr', () => {
         [6, 2, 15, 30],
         [15, 7, 6435, 32432400],
     ];
-    it.each(cases)('nCr nPr(%p,%p)', (n, r, nCr, nPr) => {
+    it.each(cases)("nCr nPr(%p,%p)", (n, r, nCr, nPr) => {
         expect(cal.nCr(n, r)).toStrictEqual(nCr);
         expect(cal.nPr(n, r)).toStrictEqual(nPr);
     });
 });
-describe('range', () => {
+describe("range", () => {
     const cases = [
         [2, 5, [2, 3, 4, 5]],
         [1.1, 9.3, [2, 3, 4, 5, 6, 7, 8, 9]],
         [-2, 3, [-2, -1, 0, 1, 2, 3]],
         [-2.3, 2.3, [-2, -1, 0, 1, 2]],
     ];
-    it.each(cases)('range(%p,%p)', (min, max, expected) => {
+    it.each(cases)("range(%p,%p)", (min, max, expected) => {
         expect(cal.range(min, max)).toStrictEqual(expected);
     });
 });
-describe('trace', () => {
-    it('return the points', () => {
-        expect(cal.trace(x => x ** 2, [0, 4], 5))
-            .toStrictEqual([[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]);
-        expect(cal.trace(t => [t, t ** 2], [0, 4], 5))
-            .toStrictEqual([[0, 0], [1, 1], [2, 4], [3, 9], [4, 16]]);
-    });
-    it('handles NaN', () => {
-        expect(cal.trace(x => Math.sqrt(x), [-2, 2], 5))
-            .toStrictEqual([
-            [-2, NaN], [-1, NaN], [0, 0], [1, 1], [2, Math.sqrt(2)]
+describe("trace", () => {
+    it("return the points", () => {
+        expect(cal.trace((x) => x ** 2, [0, 4], 5)).toStrictEqual([
+            [0, 0],
+            [1, 1],
+            [2, 4],
+            [3, 9],
+            [4, 16],
         ]);
-        expect(cal.trace(t => [t, Math.sqrt(t)], [-2, 2], 5))
-            .toStrictEqual([
-            [-2, NaN], [-1, NaN], [0, 0], [1, 1], [2, Math.sqrt(2)]
+        expect(cal.trace((t) => [t, t ** 2], [0, 4], 5)).toStrictEqual([
+            [0, 0],
+            [1, 1],
+            [2, 4],
+            [3, 9],
+            [4, 16],
+        ]);
+    });
+    it("handles NaN", () => {
+        expect(cal.trace((x) => Math.sqrt(x), [-2, 2], 5)).toStrictEqual([
+            [-2, NaN],
+            [-1, NaN],
+            [0, 0],
+            [1, 1],
+            [2, Math.sqrt(2)],
+        ]);
+        expect(cal.trace((t) => [t, Math.sqrt(t)], [-2, 2], 5)).toStrictEqual([
+            [-2, NaN],
+            [-1, NaN],
+            [0, 0],
+            [1, 1],
+            [2, Math.sqrt(2)],
         ]);
     });
 });
-describe('traceCircle', () => {
-    test('return points on circle', () => {
+describe("traceCircle", () => {
+    it("return points on circle", () => {
         let arr = cal.traceCircle([1, 2], 3, [0, 360]);
         expect(arr).toBeDeepCloseTo([
             [4, 2],
@@ -478,12 +500,12 @@ describe('traceCircle', () => {
             [3.9457860917881145, 1.4322462669187392],
             [3.975864438492382, 1.6202226392787211],
             [3.9939600294156508, 1.809728241030272],
-            [4, 1.9999999999999647]
+            [4, 1.9999999999999647],
         ]);
     });
 });
-describe('crammer', () => {
-    it('solve equations', () => {
+describe("crammer", () => {
+    it("solve equations", () => {
         expect(cal.crammer(1, 1, 5, 1, -1, 1)).toEqual([3, 2]);
         expect(cal.crammer(2, 3, 23, 4, -5, -9)).toEqual([4, 5]);
         expect(cal.crammer(1, 1, 2, 2, 2, 4)).toEqual([NaN, NaN]);

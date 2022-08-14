@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "jest": "jest",
+    "test": "vitest run",
     "build": "tsc"
   }
 }

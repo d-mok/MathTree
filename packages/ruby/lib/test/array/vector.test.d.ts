@@ -1,2 +1,2 @@
-import 'jest-extended';
+export {};
 //# sourceMappingURL=vector.test.d.ts.map
