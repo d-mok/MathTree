@@ -1,9 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Shape, shape } from "../../src/array/shape";
-import { toBeDeepCloseTo, toMatchCloseTo } from "jest-matcher-deep-close-to";
 import { Vector, vector } from "../../src/array/vector";
 import { Numbers, numbers } from "../../src/array/numbers";
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 class SubShape extends Shape<Vector> {}
 

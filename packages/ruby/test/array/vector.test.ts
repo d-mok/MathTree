@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { Vector, vector } from "../../src/array/vector";
-import { toBeDeepCloseTo, toMatchCloseTo } from "jest-matcher-deep-close-to";
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 class SubVector extends Vector {}
 
