@@ -2763,37 +2763,37 @@ declare module "Math/Code/Stat" {
 declare module "Math/Code/Text" {
     export class Host {
         /**
-        * a string of joined elements. [1,2,3] --> '1, 2 and 3'
-        * ```
-        * GrammarJoin(1,2,3,4) // '1, 2, 3 and 4'
-        * GrammarJoin('a','b','c') // 'a, b and c'
-        * ```
-        */
+         * a string of joined elements. [1,2,3] --> '1, 2 and 3'
+         * ```
+         * GrammarJoin(1,2,3,4) // '1, 2, 3 and 4'
+         * GrammarJoin('a','b','c') // 'a, b and c'
+         * ```
+         */
         static GrammarJoin(...items: unknown[]): string;
         /**
-        * @deprecated use symbol printing instead!!!
-        * a pair of latex inequalities sign array like ['\\ge', '\\le'].
-        * ```typescript
-        * IneqSign(true,true) // ['\\ge', '\\le']
-        * IneqSign(true,false) // ['\\gt', '\\lt']
-        * IneqSign(false,true) // ['\\le', '\\ge']
-        * IneqSign(false,false) // ['\\lt', '\\gt']
-        * ```
-        */
+         * @deprecated use symbol printing instead!!!
+         * a pair of latex inequalities sign array like ['\\ge', '\\le'].
+         * ```typescript
+         * IneqSign(true,true) // ['\\ge', '\\le']
+         * IneqSign(true,false) // ['\\gt', '\\lt']
+         * IneqSign(false,true) // ['\\le', '\\ge']
+         * IneqSign(false,false) // ['\\lt', '\\gt']
+         * ```
+         */
         static IneqSign(greater: boolean, equal?: boolean): [Ineq, Ineq];
         /**
-        * @deprecated
-        * @param upSign - put -ve sign on numerator instead of the front.
-        * latex of dfrac p/q like \dfrac{1}{2}.
-        * ```
-        * Dfrac(1,2) // '\\dfrac{1}{2}'
-        * Dfrac(1,-2) // '\\dfrac{-1}{2}'
-        * Dfrac(6,4) // '\\dfrac{3}{2}'
-        * Dfrac(6,-2) // '-3'
-        * Dfrac(0,2) // '0'
-        * Dfrac(5,0) // undefined
-        * ```
-        */
+         * @deprecated
+         * @param upSign - put -ve sign on numerator instead of the front.
+         * latex of dfrac p/q like \dfrac{1}{2}.
+         * ```
+         * Dfrac(1,2) // '\\dfrac{1}{2}'
+         * Dfrac(1,-2) // '\\dfrac{-1}{2}'
+         * Dfrac(6,4) // '\\dfrac{3}{2}'
+         * Dfrac(6,-2) // '-3'
+         * Dfrac(0,2) // '0'
+         * Dfrac(5,0) // undefined
+         * ```
+         */
         static Dfrac(numerator: number, denominator: number, upSign?: boolean): string;
         /**
     

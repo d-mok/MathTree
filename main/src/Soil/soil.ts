@@ -7,17 +7,18 @@ import { blacksmith } from './tool/blacksmith'
 
 // util functions
 
-
 function katex(html: string): string {
     let ele = document.createElement('div')
     ele.innerHTML = html
-    renderMathInElement(ele)
+    renderMathInElement(ele, {
+        macros: {
+            '\\neq': '\\mathrel{\\mathrlap{\\,/}{=}}',
+        },
+    })
     let T = ele.innerHTML
     ele.remove()
     return T
 }
-
-
 
 class ErrorLogger {
     private pile: string[] = []
@@ -36,23 +37,20 @@ class ErrorLogger {
     }
 
     html(): string {
-        let text = this.readHtml("<br/><br/>")
+        let text = this.readHtml('<br/><br/>')
         let len = text.length
-        if (len > 1000)
-            text = text.substring(0, 1000) + ` ... (${len} chars)`
+        if (len > 1000) text = text.substring(0, 1000) + ` ... (${len} chars)`
         return text
     }
 
     lastLogHtml(): string {
         return this.pile[this.pile.length - 1].replaceAll('\n', '<br/>')
     }
-
 }
 
-
 export class Soil {
-    private qn: string = ""
-    private sol: string = ""
+    private qn: string = ''
+    private sol: string = ''
     // working variables during growth
     private dict: Dict = new Dict()
     private config: Config = new Config()
@@ -61,9 +59,7 @@ export class Soil {
     private timer: Timer = new Timer(10)
     private logger: ErrorLogger = new ErrorLogger()
 
-    constructor(
-        private readonly gene: Gene
-    ) {
+    constructor(private readonly gene: Gene) {
         this.reset()
     }
 
@@ -75,7 +71,6 @@ export class Soil {
     }
 
     private evalCode(code: string): void {
-
         let content = { question: this.qn, solution: this.sol }
         evalCtx(code, this.dict, this.config, content)
 
@@ -84,7 +79,6 @@ export class Soil {
 
         this.qn = content.question
         this.sol = content.solution
-
     }
 
     private pushDict() {
@@ -111,7 +105,6 @@ export class Soil {
         return exprCtx(v, { ...this.dict }) === true
     }
 
-
     private runPopulate(): boolean {
         while (this.counter <= 1000) {
             this.timer.check()
@@ -119,9 +112,15 @@ export class Soil {
                 this.pushDict()
                 const [ok, dictReport] = this.checkDict()
                 if (!ok)
-                    throw CustomError('PopulationError', 'Dict Check Failed: ' + dictReport)
+                    throw CustomError(
+                        'PopulationError',
+                        'Dict Check Failed: ' + dictReport
+                    )
                 if (!this.isValidated())
-                    throw CustomError('PopulationError', 'Cannot pass validate.')
+                    throw CustomError(
+                        'PopulationError',
+                        'Cannot pass validate.'
+                    )
                 return true
             } catch (e) {
                 if (e instanceof Error) {
@@ -142,8 +141,11 @@ export class Soil {
                     throw e
                 }
             }
-        };
-        throw CustomError('PopulationError', "No population found after 1000 trials!")
+        }
+        throw CustomError(
+            'PopulationError',
+            'No population found after 1000 trials!'
+        )
     }
 
     private runSection(): boolean {
@@ -169,8 +171,11 @@ export class Soil {
                 this.logger.add(e)
                 continue
             }
-        };
-        throw CustomError('OptionError', "No valid option generated after 100 trials")
+        }
+        throw CustomError(
+            'OptionError',
+            'No valid option generated after 100 trials'
+        )
     }
 
     private runIntrapolate(): boolean {
@@ -203,10 +208,9 @@ export class Soil {
         )
 
         if (shuffler.hasDuplicatedOptions) {
-            this.logger.add(CustomError(
-                'ShuffleError',
-                'Duplicated options found!'
-            ))
+            this.logger.add(
+                CustomError('ShuffleError', 'Duplicated options found!')
+            )
             return false
         }
         this.qn = shuffler.qn
@@ -229,19 +233,19 @@ export class Soil {
             counter: this.counter,
             success: true,
             logs: this.logger.logs(),
-            time: this.timer.elapsed()
+            time: this.timer.elapsed(),
         }
     }
 
     private errorFruit(): Fruit {
         return {
-            qn: "Error!<br/>" + this.logger.lastLogHtml(),
+            qn: 'Error!<br/>' + this.logger.lastLogHtml(),
             sol: this.logger.html(),
-            ans: "X",
+            ans: 'X',
             counter: this.counter,
             success: false,
             logs: this.logger.logs(),
-            time: this.timer.elapsed()
+            time: this.timer.elapsed(),
         }
     }
 
@@ -261,8 +265,7 @@ export class Soil {
                 break
             } while (true)
             return this.successFruit()
-        }
-        catch (e) {
+        } catch (e) {
             this.logger.add(e)
             return this.errorFruit()
         }

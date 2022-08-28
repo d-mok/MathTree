@@ -24813,7 +24813,11 @@
   function katex(html) {
     let ele = document.createElement("div");
     ele.innerHTML = html;
-    (0, import_auto_render.default)(ele);
+    (0, import_auto_render.default)(ele, {
+      macros: {
+        "\\neq": "\\mathrel{\\mathrlap{\\,/}{=}}"
+      }
+    });
     let T = ele.innerHTML;
     ele.remove();
     return T;
@@ -24917,7 +24921,6 @@
           }
         }
       }
-      ;
       throw CustomError("PopulationError", "No population found after 1000 trials!");
     }
     runSection() {
@@ -24941,7 +24944,6 @@
           continue;
         }
       }
-      ;
       throw CustomError("OptionError", "No valid option generated after 100 trials");
     }
     runIntrapolate() {
