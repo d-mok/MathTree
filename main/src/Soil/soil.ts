@@ -5,6 +5,7 @@ import renderMathInElement from 'katex/dist/contrib/auto-render'
 import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
 import * as esbuild from 'esbuild-wasm'
+import ts from 'typescript'
 
 esbuild
     .initialize({
@@ -14,15 +15,20 @@ esbuild
         console.log('esbuild ready')
     })
 
-async function transpile(code: string) {
-    let res = await esbuild.transform(code, {
-        loader: 'ts',
-        minify: false,
-        keepNames: true,
-        charset: 'utf8',
-        reserveProps: /^[\s\S]+$/,
+async function transpile(code: string): Promise<string> {
+    return ts.transpile(code, {
+        target: ts.ScriptTarget.ESNext,
     })
-    return res.code
+    // let res = await esbuild.transform(code, {
+    //     loader: 'ts',
+    //     minify: false,
+    //     minifyIdentifiers: false,
+    //     format: 'esm',
+    //     keepNames: true,
+    //     charset: 'utf8',
+    //     reserveProps: /^[\s\S]+$/,
+    // })
+    // return res.code
 }
 
 // @ts-ignore
