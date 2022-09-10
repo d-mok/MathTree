@@ -27381,7 +27381,12 @@ ${file}:${line}:${column}: ERROR: ${pluginText}${e5.text}`;
     console.log("esbuild ready");
   });
   async function transpile(code) {
-    let res = await esbuild.transform(code, { loader: "ts" });
+    let res = await esbuild.transform(code, {
+      loader: "ts",
+      minify: false,
+      keepNames: true,
+      charset: "utf8"
+    });
     return res.code;
   }
   globalThis.transpile = transpile;

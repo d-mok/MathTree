@@ -15,7 +15,12 @@ esbuild
     })
 
 async function transpile(code: string) {
-    let res = await esbuild.transform(code, { loader: 'ts' })
+    let res = await esbuild.transform(code, {
+        loader: 'ts',
+        minify: false,
+        keepNames: true,
+        charset: 'utf8',
+    })
     return res.code
 }
 
