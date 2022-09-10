@@ -10,7 +10,7 @@ function assembleCtx(code, contexts) {
     let contextVars = contexts.flatMap($ => Object.keys($));
     let declaredVars = getAllDeclaredVars(code);
     let newVars = allVars.filter($ => !contextVars.includes($));
-    // for backward compatible
+    // for backward compatible alphabets
     let missingAlphabetVars = newVars
         .filter($ => !declaredVars.includes($))
         .filter($ => $.length === 1);
@@ -20,7 +20,7 @@ function assembleCtx(code, contexts) {
             .map(k => `let ${k} = this[${i}].${k};`)
             .join('');
     });
-    // for backward compatible
+    // for backward compatible alphabets
     for (let k of missingAlphabetVars) {
         T += `let ${k} = Symbol();`;
     }

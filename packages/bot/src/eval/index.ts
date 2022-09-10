@@ -17,7 +17,7 @@ function assembleCtx(code: string, contexts: object[]): string {
 
     let newVars = allVars.filter($ => !contextVars.includes($))
 
-    // for backward compatible
+    // for backward compatible alphabets
     let missingAlphabetVars = newVars
         .filter($ => !declaredVars.includes($))
         .filter($ => $.length === 1)
@@ -29,7 +29,7 @@ function assembleCtx(code: string, contexts: object[]): string {
             .join('')
     })
 
-    // for backward compatible
+    // for backward compatible alphabets
     for (let k of missingAlphabetVars) {
         T += `let ${k} = Symbol();`
     }
