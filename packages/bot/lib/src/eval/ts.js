@@ -1,6 +1,12 @@
 import ts from 'typescript';
+function getSourceFile(code) {
+    return ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
+}
+function handleIds(ids) {
+    return [...new Set(ids)].filter($ => !['export', 'undefined'].includes($));
+}
 export function getAllVars(code) {
-    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
+    const sourceFile = getSourceFile(code);
     let identifiers = [];
     function visit(node) {
         if (ts.isIdentifier(node)) {
@@ -9,12 +15,10 @@ export function getAllVars(code) {
         node.forEachChild(visit);
     }
     visit(sourceFile);
-    identifiers = [...new Set(identifiers)];
-    identifiers = identifiers.filter($ => !['export'].includes($));
-    return identifiers;
+    return handleIds(identifiers);
 }
 export function getAllDeclaredVars(code) {
-    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
+    const sourceFile = getSourceFile(code);
     let identifiers = [];
     function visit(node) {
         if (ts.isIdentifier(node) &&
@@ -25,12 +29,10 @@ export function getAllDeclaredVars(code) {
         node.forEachChild(visit);
     }
     visit(sourceFile);
-    identifiers = [...new Set(identifiers)];
-    identifiers = identifiers.filter($ => !['export'].includes($));
-    return identifiers;
+    return handleIds(identifiers);
 }
 export function getTopLevelVars(code) {
-    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
+    const sourceFile = getSourceFile(code);
     function getKind(node) {
         return ts.SyntaxKind[node.kind];
     }
@@ -53,7 +55,7 @@ export function getTopLevelVars(code) {
     return variables;
 }
 export function getAST(code) {
-    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
+    const sourceFile = getSourceFile(code);
     let indent = 0;
     function printTree(node) {
         console.log(new Array(indent + 1).join(' ') + ts.SyntaxKind[node.kind]);

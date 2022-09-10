@@ -1,12 +1,15 @@
 import ts from 'typescript'
 
+function getSourceFile(code: string): ts.SourceFile {
+    return ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true)
+}
+
+function handleIds(ids: string[]): string[] {
+    return [...new Set(ids)].filter($ => !['export', 'undefined'].includes($))
+}
+
 export function getAllVars(code: string): string[] {
-    const sourceFile = ts.createSourceFile(
-        'xxx.ts',
-        code,
-        ts.ScriptTarget.ESNext,
-        true
-    )
+    const sourceFile = getSourceFile(code)
 
     let identifiers: string[] = []
 
@@ -18,18 +21,11 @@ export function getAllVars(code: string): string[] {
     }
 
     visit(sourceFile)
-    identifiers = [...new Set(identifiers)]
-    identifiers = identifiers.filter($ => !['export'].includes($))
-    return identifiers
+    return handleIds(identifiers)
 }
 
 export function getAllDeclaredVars(code: string): string[] {
-    const sourceFile = ts.createSourceFile(
-        'xxx.ts',
-        code,
-        ts.ScriptTarget.ESNext,
-        true
-    )
+    const sourceFile = getSourceFile(code)
 
     let identifiers: string[] = []
 
@@ -45,18 +41,11 @@ export function getAllDeclaredVars(code: string): string[] {
     }
 
     visit(sourceFile)
-    identifiers = [...new Set(identifiers)]
-    identifiers = identifiers.filter($ => !['export'].includes($))
-    return identifiers
+    return handleIds(identifiers)
 }
 
 export function getTopLevelVars(code: string): string[] {
-    const sourceFile = ts.createSourceFile(
-        'xxx.ts',
-        code,
-        ts.ScriptTarget.ESNext,
-        true
-    )
+    const sourceFile = getSourceFile(code)
 
     function getKind(node: ts.Node) {
         return ts.SyntaxKind[node.kind]
@@ -88,12 +77,7 @@ export function getTopLevelVars(code: string): string[] {
 }
 
 export function getAST(code: string) {
-    const sourceFile = ts.createSourceFile(
-        'xxx.ts',
-        code,
-        ts.ScriptTarget.ESNext,
-        true
-    )
+    const sourceFile = getSourceFile(code)
     let indent = 0
 
     function printTree(node: ts.Node) {
