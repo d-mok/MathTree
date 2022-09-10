@@ -5,6 +5,25 @@ import renderMathInElement from 'katex/dist/contrib/auto-render'
 import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
 
+import * as esbuild from 'esbuild-wasm'
+
+esbuild
+    .initialize({
+        worker: true,
+        wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
+    })
+    .then(() => console.log('esbuild ready'))
+
+async function transpile(code: string): Promise<string> {
+    let result = await esbuild.transform(code, {
+        loader: 'ts',
+    })
+    return result.code
+}
+
+// @ts-ignore
+globalThis.transpile = transpile
+
 // util functions
 
 function katex(html: string): string {
@@ -69,6 +88,10 @@ export class Soil {
         this.dict = new Dict()
         this.config = new Config()
     }
+
+    // async transpile() {
+    //     this.gene.populate = await transpile(this.gene.populate)
+    // }
 
     private evalCode(code: string): void {
         let content = { question: this.qn, solution: this.sol }

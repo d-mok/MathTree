@@ -2863,7 +2863,6 @@ declare module "Math/Code/Text" {
             multiply?: boolean | undefined;
         }): string;
         /**
-    
          * the latex representing the `constraint`
          * ```
          * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
