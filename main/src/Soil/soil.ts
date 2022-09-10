@@ -20,6 +20,7 @@ async function transpile(code: string) {
         minify: false,
         keepNames: true,
         charset: 'utf8',
+        reserveProps: /^[\s\S]+$/,
     })
     return res.code
 }

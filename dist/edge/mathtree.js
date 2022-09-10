@@ -27385,7 +27385,8 @@ ${file}:${line}:${column}: ERROR: ${pluginText}${e5.text}`;
       loader: "ts",
       minify: false,
       keepNames: true,
-      charset: "utf8"
+      charset: "utf8",
+      reserveProps: /^[\s\S]+$/
     });
     return res.code;
   }
