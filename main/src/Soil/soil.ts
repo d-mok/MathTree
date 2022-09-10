@@ -8,12 +8,19 @@ import * as esbuild from 'esbuild-wasm'
 
 esbuild
     .initialize({
-        wasmURL:
-            'https://d-mok.github.io/MathTree/extension/esbuild.wasm',
+        wasmURL: 'https://d-mok.github.io/MathTree/extension/esbuild.wasm',
     })
     .then(() => {
         console.log('esbuild ready')
     })
+
+async function transpile(code: string) {
+    let res = await esbuild.transform(code, { loader: 'ts' })
+    return res.code
+}
+
+// @ts-ignore
+globalThis.transpile = transpile
 
 // util functions
 
@@ -78,6 +85,13 @@ export class Soil {
         this.sol = this.gene.sol
         this.dict = new Dict()
         this.config = new Config()
+    }
+
+    async transpile() {
+        this.gene.populate = await transpile(this.gene.populate)
+        this.gene.validate = await transpile(this.gene.validate)
+        this.gene.preprocess = await transpile(this.gene.preprocess)
+        this.gene.postprocess = await transpile(this.gene.postprocess)
     }
 
     private evalCode(code: string): void {

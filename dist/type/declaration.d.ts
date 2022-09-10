@@ -5517,6 +5517,7 @@ declare module "Soil/soil" {
         private logger;
         constructor(gene: Gene);
         private reset;
+        transpile(): Promise<void>;
         private evalCode;
         private pushDict;
         private checkDict;
@@ -5539,6 +5540,7 @@ declare module "Soil/index" {
     global {
         var MathSoil: MathSoilCls;
         var MathSoil2: MathSoil2Cls;
+        var MathSoil3: MathSoil3Cls;
     }
     type Seed = {
         id: string;
@@ -5566,6 +5568,10 @@ declare module "Soil/index" {
         reap(gene: Gene): Fruit;
         inspect(gene: Gene, repeat: number): Inspection;
     }
+    class MathSoil3Cls {
+        reap(gene: Gene): Promise<Fruit>;
+        inspect(gene: Gene, repeat: number): Promise<Inspection>;
+    }
 }
 declare type Fruit = {
     readonly qn: string;
@@ -5585,8 +5591,8 @@ declare type Inspection = {
 declare type Gene = {
     readonly qn: string;
     readonly sol: string;
-    readonly populate: string;
-    readonly validate: string;
-    readonly preprocess: string;
-    readonly postprocess: string;
+    populate: string;
+    validate: string;
+    preprocess: string;
+    postprocess: string;
 };

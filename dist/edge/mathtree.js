@@ -13533,7 +13533,7 @@
           formatMessagesSync: () => formatMessagesSync,
           initialize: () => initialize2,
           serve: () => serve,
-          transform: () => transform,
+          transform: () => transform2,
           transformSync: () => transformSync,
           version: () => version
         });
@@ -14869,7 +14869,7 @@
               return buildResponseToResult(response, callback);
             });
           };
-          let transform2 = ({ callName, refs, input, options, isTTY, fs, callback }) => {
+          let transform22 = ({ callName, refs, input, options, isTTY, fs, callback }) => {
             const details = createObjectStash();
             let start = (inputPath) => {
               try {
@@ -15000,7 +15000,7 @@
             afterClose,
             service: {
               buildOrServe,
-              transform: transform2,
+              transform: transform22,
               formatMessages: formatMessages2,
               analyzeMetafile: analyzeMetafile2
             }
@@ -15213,7 +15213,7 @@ ${file}:${line}:${column}: ERROR: ${pluginText}${e5.text}`;
         var serve = () => {
           throw new Error(`The "serve" API only works in node`);
         };
-        var transform = (input, options) => ensureServiceIsRunning().transform(input, options);
+        var transform2 = (input, options) => ensureServiceIsRunning().transform(input, options);
         var formatMessages = (messages, options) => ensureServiceIsRunning().formatMessages(messages, options);
         var analyzeMetafile = (metafile, options) => ensureServiceIsRunning().analyzeMetafile(metafile, options);
         var buildSync = () => {
@@ -18041,9 +18041,9 @@ ${file}:${line}:${column}: ERROR: ${pluginText}${e5.text}`;
     target.wax_name = source.wax_name;
     target.wax_signature = source.wax_signature;
   }
-  function makeStaticDecorator(transform) {
+  function makeStaticDecorator(transform2) {
     return function(target, key, descriptor) {
-      descriptor.value = transform(descriptor.value);
+      descriptor.value = transform2(descriptor.value);
       return descriptor;
     };
   }
@@ -27380,6 +27380,11 @@ ${file}:${line}:${column}: ERROR: ${pluginText}${e5.text}`;
   }).then(() => {
     console.log("esbuild ready");
   });
+  async function transpile(code) {
+    let res = await esbuild.transform(code, { loader: "ts" });
+    return res.code;
+  }
+  globalThis.transpile = transpile;
   function katex(html) {
     let ele = document.createElement("div");
     ele.innerHTML = html;
@@ -27432,6 +27437,12 @@ ${file}:${line}:${column}: ERROR: ${pluginText}${e5.text}`;
       this.sol = this.gene.sol;
       this.dict = new Dict();
       this.config = new Config();
+    }
+    async transpile() {
+      this.gene.populate = await transpile(this.gene.populate);
+      this.gene.validate = await transpile(this.gene.validate);
+      this.gene.preprocess = await transpile(this.gene.preprocess);
+      this.gene.postprocess = await transpile(this.gene.postprocess);
     }
     evalCode(code) {
       let content = { question: this.qn, solution: this.sol };
@@ -27668,6 +27679,37 @@ ${file}:${line}:${column}: ERROR: ${pluginText}${e5.text}`;
   };
   var MathSoil2 = new MathSoil2Cls();
   globalThis.MathSoil2 = MathSoil2;
+  var MathSoil3Cls = class {
+    async reap(gene) {
+      let soil = new Soil(gene);
+      await soil.transpile();
+      return soil.nurture();
+    }
+    async inspect(gene, repeat) {
+      let counters = [];
+      let times = [];
+      for (let i = 1; i <= repeat; i++) {
+        let fruit = await this.reap(gene);
+        if (!fruit.success)
+          return {
+            counter: 0,
+            success: false,
+            logs: fruit.logs,
+            time: 0
+          };
+        counters.push(fruit.counter);
+        times.push(fruit.time);
+      }
+      return {
+        counter: Mean(...counters),
+        success: true,
+        logs: [],
+        time: Mean(...times)
+      };
+    }
+  };
+  var MathSoil3 = new MathSoil3Cls();
+  globalThis.MathSoil3 = MathSoil3;
 
   // src/index.ts
   function at(n) {

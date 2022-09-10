@@ -1,11 +1,10 @@
-
 import { Soil } from './soil'
 
 declare global {
     var MathSoil: MathSoilCls
     var MathSoil2: MathSoil2Cls
+    var MathSoil3: MathSoil3Cls
 }
-
 
 type Seed = {
     id: string
@@ -15,17 +14,11 @@ type Seed = {
     fruit?: Fruit
 }
 
-
 class MathSoilCls {
-
-
-
     private reap(seed: Seed): Fruit {
         let soil = new Soil(seed.gene)
         return soil.nurture()
     }
-
-
 
     /**
      * @deprecated
@@ -47,64 +40,82 @@ class MathSoilCls {
      * @deprecated
      */
     public test(seed: Seed, repeat = 100): void {
-        let counters = [];
+        let counters = []
         for (let i = 1; i <= repeat; i++) {
-            this.grow(seed);
+            this.grow(seed)
             if (!seed.fruit!.success) return
-            counters.push(seed.fruit!.counter);
+            counters.push(seed.fruit!.counter)
         }
         seed.fruit!.counter = Mean(...counters)
     }
-
 }
 
 var MathSoil = new MathSoilCls()
 globalThis.MathSoil = MathSoil
 
-
-
-
-
-
-
-
 class MathSoil2Cls {
-
-
     public reap(gene: Gene): Fruit {
         let soil = new Soil(gene)
         return soil.nurture()
     }
 
-
     public inspect(gene: Gene, repeat: number): Inspection {
-        let counters = [];
+        let counters = []
         let times = []
         for (let i = 1; i <= repeat; i++) {
-            let fruit: Fruit = this.reap(gene);
+            let fruit: Fruit = this.reap(gene)
             if (!fruit.success)
                 return {
                     counter: 0,
                     success: false,
                     logs: fruit.logs,
-                    time: 0
+                    time: 0,
                 }
-            counters.push(fruit.counter);
+            counters.push(fruit.counter)
             times.push(fruit.time)
         }
         return {
             counter: Mean(...counters),
             success: true,
             logs: [],
-            time: Mean(...times)
+            time: Mean(...times),
         }
     }
-
-
 }
 
 var MathSoil2 = new MathSoil2Cls()
 globalThis.MathSoil2 = MathSoil2
 
+class MathSoil3Cls {
+    public async reap(gene: Gene): Promise<Fruit> {
+        let soil = new Soil(gene)
+        await soil.transpile()
+        return soil.nurture()
+    }
 
+    public async inspect(gene: Gene, repeat: number): Promise<Inspection> {
+        let counters = []
+        let times = []
+        for (let i = 1; i <= repeat; i++) {
+            let fruit: Fruit = await this.reap(gene)
+            if (!fruit.success)
+                return {
+                    counter: 0,
+                    success: false,
+                    logs: fruit.logs,
+                    time: 0,
+                }
+            counters.push(fruit.counter)
+            times.push(fruit.time)
+        }
+        return {
+            counter: Mean(...counters),
+            success: true,
+            logs: [],
+            time: Mean(...times),
+        }
+    }
+}
 
+var MathSoil3 = new MathSoil3Cls()
+globalThis.MathSoil3 = MathSoil3
