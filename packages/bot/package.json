@@ -8,5 +8,12 @@
   "scripts": {
     "jest": "jest",
     "build": "tsc"
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "singleAttributePerLine": true
   }
 }

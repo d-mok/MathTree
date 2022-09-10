@@ -2,37 +2,8 @@ import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Config, Dict } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
-import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
+import { dress, evalCtx, exprCtx, cropSection, Timer, transpile } from 'bot'
 import { blacksmith } from './tool/blacksmith'
-// import * as esbuild from 'esbuild-wasm'
-import ts from 'typescript'
-
-// esbuild
-//     .initialize({
-//         wasmURL: 'https://d-mok.github.io/MathTree/extension/esbuild.wasm',
-//     })
-//     .then(() => {
-//         console.log('esbuild ready')
-//     })
-
-function transpile(code: string): string {
-    return ts.transpile(code, {
-        target: ts.ScriptTarget.ESNext,
-    })
-    // let res = await esbuild.transform(code, {
-    //     loader: 'ts',
-    //     minify: false,
-    //     minifyIdentifiers: false,
-    //     format: 'esm',
-    //     keepNames: true,
-    //     charset: 'utf8',
-    //     reserveProps: /^[\s\S]+$/,
-    // })
-    // return res.code
-}
-
-// @ts-ignore
-globalThis.transpile = transpile
 
 // util functions
 
