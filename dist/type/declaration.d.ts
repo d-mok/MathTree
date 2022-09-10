@@ -5538,30 +5538,7 @@ declare module "Soil/soil" {
 }
 declare module "Soil/index" {
     global {
-        var MathSoil: MathSoilCls;
         var MathSoil2: MathSoil2Cls;
-    }
-    type Seed = {
-        id: string;
-        bank: string;
-        folder: string;
-        gene: Gene;
-        fruit?: Fruit;
-    };
-    class MathSoilCls {
-        private reap;
-        /**
-         * @deprecated
-         */
-        grow(seed: Seed): void;
-        /**
-         * @deprecated
-         */
-        growAll(seeds: Seed[]): void;
-        /**
-         * @deprecated
-         */
-        test(seed: Seed, repeat?: number): void;
     }
     class MathSoil2Cls {
         reap(gene: Gene): Fruit;
