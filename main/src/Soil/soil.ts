@@ -4,6 +4,16 @@ import { Config, Dict } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
+import * as esbuild from 'esbuild-wasm'
+
+esbuild
+    .initialize({
+        wasmURL:
+            'https://d-mok.github.io/MathTree/extension/esbuild.wasm',
+    })
+    .then(() => {
+        console.log('esbuild ready')
+    })
 
 // util functions
 
