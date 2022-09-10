@@ -1,4 +1,4 @@
-import { getAllVars } from './ts'
+import { getAllVars, getAllDeclaredVars } from './ts'
 
 const VariableError = Error('A variable is used before a value is defined.')
 VariableError.name = 'VariableError'
@@ -13,8 +13,14 @@ function isVarError(e: unknown) {
 function assembleCtx(code: string, contexts: object[]): string {
     let allVars = getAllVars(code)
     let contextVars = contexts.flatMap($ => Object.keys($))
+    let declaredVars = getAllDeclaredVars(code)
 
-    let newDeclaredVars = allVars.filter($ => !contextVars.includes($))
+    let newVars = allVars.filter($ => !contextVars.includes($))
+
+    // for backward compatible
+    let missingAlphabetVars = newVars
+        .filter($ => !declaredVars.includes($))
+        .filter($ => $.length === 1)
 
     let T = '"use strict";'
     contexts.forEach((ctx, i) => {
@@ -22,16 +28,23 @@ function assembleCtx(code: string, contexts: object[]): string {
             .map(k => `let ${k} = this[${i}].${k};`)
             .join('')
     })
+
+    // for backward compatible
+    for (let k of missingAlphabetVars) {
+        T += `let ${k} = Symbol();`
+    }
+
     T += code + '\n;'
+
     contexts.forEach((ctx, i) => {
         T += Object.keys(ctx)
             .map(k => `this[${i}].${k} = ${k};`)
             .join('')
     })
 
-    T += `this.newDeclaredVars = {};`
-    for (let k of newDeclaredVars) {
-        T += `try { this.newDeclaredVars.${k} = ${k} } catch (e) { }`
+    T += `this.newVars = {};`
+    for (let k of newVars) {
+        T += `try { this.newVars.${k} = ${k} } catch (e) { }`
     }
     return T
 }
@@ -46,7 +59,7 @@ export function evalCtx(code: string, ...contexts: object[]): object {
         const fn = new Function(fullCode)
         fn.call(contexts)
         // @ts-ignore
-        return contexts.newDeclaredVars
+        return contexts.newVars
     } catch (e) {
         throw isVarError(e) ? VariableError : e
     }
