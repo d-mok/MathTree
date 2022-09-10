@@ -1,32 +1,35 @@
-import { Dict } from '../cls'
 import { QuestionHTML } from './html'
 
-function produce(source: any, assigned: any): (typeof source)[] {
+function produce(source: any, assigned: any): typeof source[] {
     return Array.isArray(assigned) && assigned !== source
         ? RndShuffle(...assigned)
         : RndShake(source)
 }
 
-function blankDicts(count: number): Partial<Dict>[] {
-    let arr: Partial<Dict>[] = []
-    for (let i = 0; i < count; i++)
-        arr.push({})
+function blankDicts<D>(count: number): D[] {
+    let arr: D[] = []
+    for (let i = 0; i < count; i++) arr.push({} as D)
     return arr
 }
 
-
-function execInstructions(instructions: Partial<Dict>, source: Dict): Partial<Dict>[] {
-    let dicts = blankDicts(20)
-    let k: keyof Dict
+function execInstructions<D extends object>(
+    instructions: Partial<D>,
+    source: D
+): Partial<D>[] {
+    let dicts = blankDicts<D>(20)
+    let k: keyof typeof instructions
     for (k in instructions) {
         let arr = produce(source[k], instructions[k])
-        arr.forEach((v, i) => dicts[i][k] = v)
+        arr.forEach((v, i) => (dicts[i][k] = v))
     }
     return dicts
 }
 
-
-export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string {
+export function AutoOptions<D extends object>(
+    instructions: Partial<D>,
+    question: string,
+    source: D
+): string {
     if (owl.emptyObject(instructions)) return question
     let Qn = new QuestionHTML(question)
     let dicts = execInstructions(instructions, source)

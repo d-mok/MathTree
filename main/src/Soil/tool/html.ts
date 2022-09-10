@@ -1,8 +1,5 @@
 import { blacksmith } from './blacksmith'
 import { HTMLWorker } from 'bot'
-import { Dict } from '../cls'
-
-
 
 export class QuestionHTML extends HTMLWorker {
     // assume a structure '...<ul><li>...</li><li>...</li><li>...</li></ul>'
@@ -23,8 +20,7 @@ export class QuestionHTML extends HTMLWorker {
         }
     }
 
-
-    printInLi(index: number, dict: Partial<Dict>) {
+    printInLi(index: number, dict: object) {
         this.tranformInnerHTML($ => blacksmith.forge($, dict), 'li', index)
     }
 
@@ -35,9 +31,4 @@ export class QuestionHTML extends HTMLWorker {
     shuffleLi(indexArr: number[]) {
         this.shuffleChildren(indexArr, 'ul')
     }
-
-
 }
-
-
-

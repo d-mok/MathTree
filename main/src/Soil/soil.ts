@@ -1,6 +1,6 @@
 import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
-import { Config, Dict } from './cls'
+import { Config } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 import { dress, evalCtx, exprCtx, cropSection, Timer, transpile } from 'bot'
 import { blacksmith } from './tool/blacksmith'
@@ -52,7 +52,7 @@ export class Soil {
     private qn: string = ''
     private sol: string = ''
     // working variables during growth
-    private dict: Dict = new Dict()
+    private dict: Record<string, unknown> = {}
     private config: Config = new Config()
     // state
     private counter: number = 0
@@ -66,7 +66,7 @@ export class Soil {
     private reset() {
         this.qn = this.gene.qn
         this.sol = this.gene.sol
-        this.dict = new Dict()
+        this.dict = {}
         this.config = new Config()
     }
 
@@ -79,18 +79,14 @@ export class Soil {
 
     private evalCode(code: string): void {
         let content = { question: this.qn, solution: this.sol }
-        evalCtx(code, this.dict, this.config, content)
+        let topVars = evalCtx(code, this.dict, this.config, content)
 
         if (typeof this.config.answer === 'number')
             this.config.answer = ['A', 'B', 'C', 'D'][this.config.answer]
 
+        this.dict = { ...this.dict, ...topVars }
         this.qn = content.question
         this.sol = content.solution
-    }
-
-    private pushDict() {
-        this.counter++
-        this.evalCode(this.gene.populate)
     }
 
     private checkDict(): [boolean, string] {
@@ -116,7 +112,9 @@ export class Soil {
         while (this.counter <= 1000) {
             this.timer.check()
             try {
-                this.pushDict()
+                this.counter++
+                this.reset()
+                this.evalCode(this.gene.populate)
                 const [ok, dictReport] = this.checkDict()
                 if (!ok)
                     throw CustomError(

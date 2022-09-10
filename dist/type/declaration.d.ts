@@ -5350,125 +5350,14 @@ declare module "Pen/index" {
         var PhyPen: typeof PhyPenCls;
     }
 }
-declare module "Soil/tool/blacksmith" {
-    import { Blacksmith } from 'bot';
-    export let blacksmith: Blacksmith;
-}
 declare module "Soil/cls" {
     export class Config {
         answer: string;
-        options: Partial<Dict>;
+        options: {};
         shuffle: boolean;
-        constructor(answer?: string, options?: Partial<Dict>, shuffle?: boolean);
-    }
-    export class Dict {
-        a: any;
-        b: any;
-        c: any;
-        d: any;
-        e: any;
-        f: any;
-        g: any;
-        h: any;
-        i: any;
-        j: any;
-        k: any;
-        l: any;
-        m: any;
-        n: any;
-        o: any;
-        p: any;
-        q: any;
-        r: any;
-        s: any;
-        t: any;
-        u: any;
-        v: any;
-        w: any;
-        x: any;
-        y: any;
-        z: any;
-        A: any;
-        B: any;
-        C: any;
-        D: any;
-        E: any;
-        F: any;
-        G: any;
-        H: any;
-        I: any;
-        J: any;
-        K: any;
-        L: any;
-        M: any;
-        N: any;
-        O: any;
-        P: any;
-        Q: any;
-        R: any;
-        S: any;
-        T: any;
-        U: any;
-        V: any;
-        W: any;
-        X: any;
-        Y: any;
-        Z: any;
-        constructor(a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any, i?: any, j?: any, k?: any, l?: any, m?: any, n?: any, o?: any, p?: any, q?: any, r?: any, s?: any, t?: any, u?: any, v?: any, w?: any, x?: any, y?: any, z?: any, A?: any, B?: any, C?: any, D?: any, E?: any, F?: any, G?: any, H?: any, I?: any, J?: any, K?: any, L?: any, M?: any, N?: any, O?: any, P?: any, Q?: any, R?: any, S?: any, T?: any, U?: any, V?: any, W?: any, X?: any, Y?: any, Z?: any);
+        constructor(answer?: string, options?: {}, shuffle?: boolean);
     }
 }
-declare var a: any;
-declare var b: any;
-declare var c: any;
-declare var d: any;
-declare var e: any;
-declare var f: any;
-declare var g: any;
-declare var h: any;
-declare var i: any;
-declare var j: any;
-declare var k: any;
-declare var l: any;
-declare var m: any;
-declare var n: any;
-declare var o: any;
-declare var p: any;
-declare var q: any;
-declare var r: any;
-declare var s: any;
-declare var t: any;
-declare var u: any;
-declare var v: any;
-declare var w: any;
-declare var x: any;
-declare var y: any;
-declare var z: any;
-declare var A: any;
-declare var B: any;
-declare var C: any;
-declare var D: any;
-declare var E: any;
-declare var F: any;
-declare var G: any;
-declare var H: any;
-declare var I: any;
-declare var J: any;
-declare var K: any;
-declare var L: any;
-declare var M: any;
-declare var N: any;
-declare var O: any;
-declare var P: any;
-declare var Q: any;
-declare var R: any;
-declare var S: any;
-declare var T: any;
-declare var U: any;
-declare var V: any;
-declare var W: any;
-declare var X: any;
-declare var Y: any;
-declare var Z: any;
 /**
  * @deprecated
  */
@@ -5477,14 +5366,17 @@ declare var options: object;
 declare var shuffle: boolean;
 declare var question: string;
 declare var solution: string;
+declare module "Soil/tool/blacksmith" {
+    import { Blacksmith } from 'bot';
+    export let blacksmith: Blacksmith;
+}
 declare module "Soil/tool/html" {
     import { HTMLWorker } from 'bot';
-    import { Dict } from "Soil/cls";
     export class QuestionHTML extends HTMLWorker {
         hasOneUl(): boolean;
         liCount(): number;
         cloneLi(sourceIndex: number, repeat?: number): void;
-        printInLi(index: number, dict: Partial<Dict>): void;
+        printInLi(index: number, dict: object): void;
         isLiDuplicated(): boolean;
         shuffleLi(indexArr: number[]): void;
     }
@@ -5502,8 +5394,7 @@ declare module "Soil/tool/shuffle" {
     }
 }
 declare module "Soil/tool/option" {
-    import { Dict } from "Soil/cls";
-    export function AutoOptions(instructions: Partial<Dict>, question: string, source: Dict): string;
+    export function AutoOptions<D extends object>(instructions: Partial<D>, question: string, source: D): string;
 }
 declare module "Soil/soil" {
     export class Soil {
@@ -5519,7 +5410,6 @@ declare module "Soil/soil" {
         private reset;
         transpile(): void;
         private evalCode;
-        private pushDict;
         private checkDict;
         private isValidated;
         private runPopulate;
