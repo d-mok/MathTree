@@ -3,7 +3,6 @@ import { Soil } from './soil'
 declare global {
     var MathSoil: MathSoilCls
     var MathSoil2: MathSoil2Cls
-    var MathSoil3: MathSoil3Cls
 }
 
 type Seed = {
@@ -56,6 +55,7 @@ globalThis.MathSoil = MathSoil
 class MathSoil2Cls {
     public reap(gene: Gene): Fruit {
         let soil = new Soil(gene)
+        soil.transpile()
         return soil.nurture()
     }
 
@@ -85,37 +85,3 @@ class MathSoil2Cls {
 
 var MathSoil2 = new MathSoil2Cls()
 globalThis.MathSoil2 = MathSoil2
-
-class MathSoil3Cls {
-    public async reap(gene: Gene): Promise<Fruit> {
-        let soil = new Soil(gene)
-        await soil.transpile()
-        return soil.nurture()
-    }
-
-    public async inspect(gene: Gene, repeat: number): Promise<Inspection> {
-        let counters = []
-        let times = []
-        for (let i = 1; i <= repeat; i++) {
-            let fruit: Fruit = await this.reap(gene)
-            if (!fruit.success)
-                return {
-                    counter: 0,
-                    success: false,
-                    logs: fruit.logs,
-                    time: 0,
-                }
-            counters.push(fruit.counter)
-            times.push(fruit.time)
-        }
-        return {
-            counter: Mean(...counters),
-            success: true,
-            logs: [],
-            time: Mean(...times),
-        }
-    }
-}
-
-var MathSoil3 = new MathSoil3Cls()
-globalThis.MathSoil3 = MathSoil3

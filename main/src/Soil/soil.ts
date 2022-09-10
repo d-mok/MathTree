@@ -4,18 +4,18 @@ import { Config, Dict } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
-import * as esbuild from 'esbuild-wasm'
+// import * as esbuild from 'esbuild-wasm'
 import ts from 'typescript'
 
-esbuild
-    .initialize({
-        wasmURL: 'https://d-mok.github.io/MathTree/extension/esbuild.wasm',
-    })
-    .then(() => {
-        console.log('esbuild ready')
-    })
+// esbuild
+//     .initialize({
+//         wasmURL: 'https://d-mok.github.io/MathTree/extension/esbuild.wasm',
+//     })
+//     .then(() => {
+//         console.log('esbuild ready')
+//     })
 
-async function transpile(code: string): Promise<string> {
+function transpile(code: string): string {
     return ts.transpile(code, {
         target: ts.ScriptTarget.ESNext,
     })
@@ -99,11 +99,11 @@ export class Soil {
         this.config = new Config()
     }
 
-    async transpile() {
-        this.gene.populate = await transpile(this.gene.populate)
-        this.gene.validate = await transpile(this.gene.validate)
-        this.gene.preprocess = await transpile(this.gene.preprocess)
-        this.gene.postprocess = await transpile(this.gene.postprocess)
+    transpile() {
+        this.gene.populate = transpile(this.gene.populate)
+        this.gene.validate = transpile(this.gene.validate)
+        this.gene.preprocess = transpile(this.gene.preprocess)
+        this.gene.postprocess = transpile(this.gene.postprocess)
     }
 
     private evalCode(code: string): void {
