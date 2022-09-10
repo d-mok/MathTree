@@ -1,6 +1,6 @@
 import ts from 'typescript';
 export function getAllVars(code) {
-    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, false);
+    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
     let identifiers = [];
     function visit(node) {
         if (ts.isIdentifier(node)) {
@@ -10,10 +10,27 @@ export function getAllVars(code) {
     }
     visit(sourceFile);
     identifiers = [...new Set(identifiers)];
+    identifiers = identifiers.filter($ => !['export'].includes($));
+    return identifiers;
+}
+export function getAllDeclaredVars(code) {
+    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
+    let identifiers = [];
+    function visit(node) {
+        if (ts.isIdentifier(node) &&
+            (ts.isVariableDeclaration(node.parent) ||
+                ts.isBindingElement(node.parent))) {
+            identifiers.push(ts.idText(node));
+        }
+        node.forEachChild(visit);
+    }
+    visit(sourceFile);
+    identifiers = [...new Set(identifiers)];
+    identifiers = identifiers.filter($ => !['export'].includes($));
     return identifiers;
 }
 export function getTopLevelVars(code) {
-    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, false);
+    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
     function getKind(node) {
         return ts.SyntaxKind[node.kind];
     }
@@ -36,7 +53,7 @@ export function getTopLevelVars(code) {
     return variables;
 }
 export function getAST(code) {
-    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, false);
+    const sourceFile = ts.createSourceFile('xxx.ts', code, ts.ScriptTarget.ESNext, true);
     let indent = 0;
     function printTree(node) {
         console.log(new Array(indent + 1).join(' ') + ts.SyntaxKind[node.kind]);

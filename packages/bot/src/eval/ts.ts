@@ -5,7 +5,7 @@ export function getAllVars(code: string): string[] {
         'xxx.ts',
         code,
         ts.ScriptTarget.ESNext,
-        false
+        true
     )
 
     let identifiers: string[] = []
@@ -19,6 +19,34 @@ export function getAllVars(code: string): string[] {
 
     visit(sourceFile)
     identifiers = [...new Set(identifiers)]
+    identifiers = identifiers.filter($ => !['export'].includes($))
+    return identifiers
+}
+
+export function getAllDeclaredVars(code: string): string[] {
+    const sourceFile = ts.createSourceFile(
+        'xxx.ts',
+        code,
+        ts.ScriptTarget.ESNext,
+        true
+    )
+
+    let identifiers: string[] = []
+
+    function visit(node: ts.Node) {
+        if (
+            ts.isIdentifier(node) &&
+            (ts.isVariableDeclaration(node.parent) ||
+                ts.isBindingElement(node.parent))
+        ) {
+            identifiers.push(ts.idText(node))
+        }
+        node.forEachChild(visit)
+    }
+
+    visit(sourceFile)
+    identifiers = [...new Set(identifiers)]
+    identifiers = identifiers.filter($ => !['export'].includes($))
     return identifiers
 }
 
@@ -27,7 +55,7 @@ export function getTopLevelVars(code: string): string[] {
         'xxx.ts',
         code,
         ts.ScriptTarget.ESNext,
-        false
+        true
     )
 
     function getKind(node: ts.Node) {
@@ -64,7 +92,7 @@ export function getAST(code: string) {
         'xxx.ts',
         code,
         ts.ScriptTarget.ESNext,
-        false
+        true
     )
     let indent = 0
 
