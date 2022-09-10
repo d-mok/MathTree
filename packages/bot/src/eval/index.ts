@@ -1,4 +1,4 @@
-import { transpile, getTopLevelVars } from './ts'
+import { getAllVars } from './ts'
 
 const VariableError = Error('A variable is used before a value is defined.')
 VariableError.name = 'VariableError'
@@ -11,20 +11,28 @@ function isVarError(e: unknown) {
 }
 
 function assembleCtx(code: string, contexts: object[]): string {
+    let allVars = getAllVars(code)
+    let contextVars = contexts.flatMap($ => Object.keys($))
+
+    let newDeclaredVars = allVars.filter($ => !contextVars.includes($))
+
     let T = '"use strict";'
     contexts.forEach((ctx, i) => {
         T += Object.keys(ctx)
-            .map(_ => `let ${_} = this[${i}].${_};`)
+            .map(k => `let ${k} = this[${i}].${k};`)
             .join('')
     })
     T += code + '\n;'
     contexts.forEach((ctx, i) => {
         T += Object.keys(ctx)
-            .map(_ => `this[${i}].${_} = ${_};`)
+            .map(k => `this[${i}].${k} = ${k};`)
             .join('')
     })
-    let topVars = getTopLevelVars(code)
-    T += `this.TOPVARS = {${topVars.join(',')}};`
+
+    T += `this.newDeclaredVars = {};`
+    for (let k of newDeclaredVars) {
+        T += `try { this.newDeclaredVars.${k} = ${k} } catch (e) { }`
+    }
     return T
 }
 
@@ -38,7 +46,7 @@ export function evalCtx(code: string, ...contexts: object[]): object {
         const fn = new Function(fullCode)
         fn.call(contexts)
         // @ts-ignore
-        return contexts.TOPVARS
+        return contexts.newDeclaredVars
     } catch (e) {
         throw isVarError(e) ? VariableError : e
     }
