@@ -5413,6 +5413,7 @@ declare module "Soil/soil" {
         private isValidated;
         private runPopulate;
         private runSlot;
+        private runLoop;
         private runSection;
         private runPreprocess;
         private runOption;

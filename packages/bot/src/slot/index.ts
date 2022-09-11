@@ -15,7 +15,10 @@ function getSlots(html: string): Record<string, string> {
 }
 
 function injectSlots(html: string, slots: Record<string, string>) {
-    return html.replaceAll(/<p>##([\w]+)<\/p>/g, (match, p1) => slots[p1])
+    return html.replaceAll(
+        /<p>##([\w]+)<\/p>/g,
+        (match, p1) => slots[p1] ?? `## slot ${p1} not found!`
+    )
 }
 
 export function mergeSlots(sourceHtml: string, targetHtml: string) {

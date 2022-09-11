@@ -3,6 +3,7 @@ export { evalCtx, exprCtx, exprCtxHTML } from './eval';
 export { transpile } from './eval/ts';
 export { cropSection } from './section';
 export { mergeSlots } from './slot';
+export { loopSection } from './loop';
 export { Blacksmith } from './blacksmith';
 export { HTMLWorker } from './dom';
 export { shuffleIndex, shuffleAs } from './coshuffle';
