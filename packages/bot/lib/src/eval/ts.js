@@ -43,29 +43,34 @@ export function getAllDeclaredVars(code) {
     visit(sourceFile);
     return handleIds(identifiers);
 }
-export function getTopLevelVars(code) {
-    const sourceFile = getSourceFile(code);
-    function getKind(node) {
-        return ts.SyntaxKind[node.kind];
-    }
-    function getChildrenOfKind(kind, nodes) {
-        let children = [];
-        for (let node of nodes) {
-            ts.forEachChild(node, $ => {
-                if (getKind($) === kind)
-                    children.push($);
-            });
-        }
-        return children;
-    }
-    let FirstStatements = getChildrenOfKind('FirstStatement', [sourceFile]);
-    let VariableDeclarationLists = getChildrenOfKind('VariableDeclarationList', FirstStatements);
-    let VariableDeclarations = getChildrenOfKind('VariableDeclaration', VariableDeclarationLists);
-    let Identifiers = getChildrenOfKind('Identifier', VariableDeclarations);
-    // @ts-ignore
-    let variables = Identifiers.map($ => $.escapedText);
-    return variables;
-}
+// export function getTopLevelVars(code: string): string[] {
+//     const sourceFile = getSourceFile(code)
+//     function getKind(node: ts.Node) {
+//         return ts.SyntaxKind[node.kind]
+//     }
+//     function getChildrenOfKind(kind: string, nodes: ts.Node[]) {
+//         let children: ts.Node[] = []
+//         for (let node of nodes) {
+//             ts.forEachChild(node, $ => {
+//                 if (getKind($) === kind) children.push($)
+//             })
+//         }
+//         return children
+//     }
+//     let FirstStatements = getChildrenOfKind('FirstStatement', [sourceFile])
+//     let VariableDeclarationLists = getChildrenOfKind(
+//         'VariableDeclarationList',
+//         FirstStatements
+//     )
+//     let VariableDeclarations = getChildrenOfKind(
+//         'VariableDeclaration',
+//         VariableDeclarationLists
+//     )
+//     let Identifiers = getChildrenOfKind('Identifier', VariableDeclarations)
+//     // @ts-ignore
+//     let variables = Identifiers.map($ => $.escapedText)
+//     return variables
+// }
 export function getAST(code) {
     const sourceFile = getSourceFile(code);
     let indent = 0;
