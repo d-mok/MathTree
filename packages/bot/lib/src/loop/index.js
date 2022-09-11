@@ -4,7 +4,7 @@ function dropTags(html) {
     return html;
 }
 export function loopSection(html, context) {
-    return html.replaceAll(new RegExp('<p>##\\[([\\w]+),([\\w]+),([\\w]+)\\]<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>', 'g'), (match, index, start, end) => {
+    return html.replaceAll(new RegExp('<p>##\\[([\\w]+),([^,\\[\\]]+),([^,\\[\\]]+)\\]<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>', 'g'), (match, index, start, end) => {
         let s = exprCtxHTML(start, context);
         let e = exprCtxHTML(end, context);
         let T = '';
