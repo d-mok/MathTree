@@ -33,9 +33,13 @@ export function getAllDeclaredVars(code: string): string[] {
         if (!ts.isIdentifier(node)) return false
         if (
             !ts.isVariableDeclaration(node.parent) &&
-            !ts.isBindingElement(node.parent)
-        )
+            !ts.isBindingElement(node.parent) &&
+            !ts.isFunctionDeclaration(node.parent)
+        ) {
             return false
+        }
+
+        if (node.parent.getChildAt(0) !== node) return false
 
         let p: ts.Node = node.parent
         while (p !== undefined) {

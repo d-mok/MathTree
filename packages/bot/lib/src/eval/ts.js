@@ -24,7 +24,11 @@ export function getAllDeclaredVars(code) {
         if (!ts.isIdentifier(node))
             return false;
         if (!ts.isVariableDeclaration(node.parent) &&
-            !ts.isBindingElement(node.parent))
+            !ts.isBindingElement(node.parent) &&
+            !ts.isFunctionDeclaration(node.parent)) {
+            return false;
+        }
+        if (node.parent.getChildAt(0) !== node)
             return false;
         let p = node.parent;
         while (p !== undefined) {
