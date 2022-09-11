@@ -5408,7 +5408,6 @@ declare module "Soil/soil" {
         private logger;
         constructor(gene: Gene);
         private reset;
-        transpile(): void;
         private evalCode;
         private checkDict;
         private isValidated;
@@ -5431,6 +5430,7 @@ declare module "Soil/index" {
         var MathSoil2: MathSoil2Cls;
     }
     class MathSoil2Cls {
+        private nurture;
         reap(gene: Gene): Fruit;
         inspect(gene: Gene, repeat: number): Inspection;
     }
@@ -5453,8 +5453,8 @@ declare type Inspection = {
 declare type Gene = {
     readonly qn: string;
     readonly sol: string;
-    populate: string;
-    validate: string;
-    preprocess: string;
-    postprocess: string;
+    readonly populate: string;
+    readonly validate: string;
+    readonly preprocess: string;
+    readonly postprocess: string;
 };
