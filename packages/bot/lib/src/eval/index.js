@@ -17,7 +17,7 @@ function assembleCtx(code, contexts) {
     let newVars = [...declaredVars];
     // for backward compatible alphabets
     newVars = [...newVars, ...missingAlphabetVars];
-    console.log(newVars);
+    // console.log(newVars)
     let T = '"use strict";';
     contexts.forEach((ctx, i) => {
         T += Object.keys(ctx)

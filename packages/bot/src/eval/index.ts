@@ -25,7 +25,7 @@ function assembleCtx(code: string, contexts: object[]): string {
     // for backward compatible alphabets
     newVars = [...newVars, ...missingAlphabetVars]
 
-    console.log(newVars)
+    // console.log(newVars)
 
     let T = '"use strict";'
     contexts.forEach((ctx, i) => {
