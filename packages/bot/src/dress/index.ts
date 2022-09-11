@@ -1,6 +1,4 @@
-
 import { Dressor } from './dressor'
-
 
 function capOr(...reg: string[]): string {
     return '(' + reg.join('|') + ')'
@@ -25,7 +23,6 @@ const sl = String.raw`\\`
 const left = String.raw`\\left`
 const sq = String.raw`\\sqrt`
 
-
 export function dress(html: string): string {
     let d = new Dressor(html)
 
@@ -40,14 +37,20 @@ export function dress(html: string): string {
     // handle Sqrt
     d.do([String.raw`\\sqrt\[2\]`], '\\sqrt')
     // handle Coeff
-    d.do([capOr(p, m, e, l, sl, r, c), '1', capOr(v, f, pl, left, sq)], '$1 $2', true)
+    d.do(
+        [capOr(p, m, e, l, sl, r, c), '1', capOr(v, f, pl, left, sq)],
+        '$1 $2',
+        true
+    )
     // handle Prime
     d.do([cap(v) + "'"], '$1 \\prime ', true)
-
+    // handle responsive bracket
+    d.do(['\\('], '\\left(', true)
+    d.do(['\\)'], '\\right)', true)
+    d.do(['\\left\\left('], '\\left(', true)
+    d.do(['\\right\\right\\)'], '\\right)', true)
+    
     return d.get()
 }
 
-
-
 // .replace(/(?<=<span class="math-tex">[^<>]*)([\+\-\=\(\[\{\\\)\]\}\,])(\s|&nbsp;)*1(\s|&nbsp;)*(?=[A-Za-z\(\[][^<>]*<\/span>)/g, '$1')
-

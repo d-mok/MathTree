@@ -35,6 +35,11 @@ export function dress(html) {
     d.do([capOr(p, m, e, l, sl, r, c), '1', capOr(v, f, pl, left, sq)], '$1 $2', true);
     // handle Prime
     d.do([cap(v) + "'"], '$1 \\prime ', true);
+    // handle responsive bracket
+    d.do(['\\('], '\\left(', true);
+    d.do(['\\)'], '\\right)', true);
+    d.do(['\\left\\left('], '\\left(', true);
+    d.do(['\\right\\right\\)'], '\\right)', true);
     return d.get();
 }
 // .replace(/(?<=<span class="math-tex">[^<>]*)([\+\-\=\(\[\{\\\)\]\}\,])(\s|&nbsp;)*1(\s|&nbsp;)*(?=[A-Za-z\(\[][^<>]*<\/span>)/g, '$1')
