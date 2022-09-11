@@ -47,9 +47,9 @@ export function dress(html: string): string {
     // handle responsive bracket
     d.do(['\\('], '\\left(', true)
     d.do(['\\)'], '\\right)', true)
-    d.do(['\\left\\left('], '\\left(', true)
+    d.do(['\\left\\left\\('], '\\left(', true)
     d.do(['\\right\\right\\)'], '\\right)', true)
-    
+
     return d.get()
 }
 
