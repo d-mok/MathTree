@@ -22,4 +22,5 @@ type Gene = {
     readonly validate: string
     readonly preprocess: string
     readonly postprocess: string
+    readonly inject: string
 }

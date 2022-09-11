@@ -108,7 +108,7 @@ export class Soil {
             try {
                 this.counter++
                 this.reset()
-                this.evalCode(this.gene.populate)
+                this.evalCode(this.gene.inject + ';' + this.gene.populate)
                 const [ok, dictReport] = this.checkDict()
                 if (!ok)
                     throw CustomError(

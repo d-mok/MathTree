@@ -13,6 +13,7 @@ function transpileGene(gene: Gene): Gene {
         validate: transpile(gene.validate),
         preprocess: transpile(gene.preprocess),
         postprocess: transpile(gene.postprocess),
+        inject: transpile(gene.inject),
     }
 }
 
