@@ -39,7 +39,7 @@ export function getAllDeclaredVars(code: string): string[] {
             return false
         }
 
-        if (node.parent.getChildAt(0) !== node) return false
+        // if (node.parent.getChildAt(0) !== node) return false
 
         let p: ts.Node = node.parent
         while (p !== undefined) {

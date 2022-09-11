@@ -28,8 +28,7 @@ export function getAllDeclaredVars(code) {
             !ts.isFunctionDeclaration(node.parent)) {
             return false;
         }
-        if (node.parent.getChildAt(0) !== node)
-            return false;
+        // if (node.parent.getChildAt(0) !== node) return false
         let p = node.parent;
         while (p !== undefined) {
             if (ts.isBlock(p))
