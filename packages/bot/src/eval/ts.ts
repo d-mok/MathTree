@@ -49,6 +49,7 @@ export function getAllDeclaredVars(code: string): string[] {
             if (ts.isForStatement(p)) return false
             if (ts.isForOfStatement(p)) return false
             if (ts.isForInStatement(p)) return false
+            if (ts.isParameter(p)) return false
             p = p.parent
         }
         return true
@@ -104,7 +105,6 @@ export function getAST(code: string) {
     function printTree(node: ts.Node) {
         console.log(new Array(indent + 1).join(' ') + ts.SyntaxKind[node.kind])
         console.log(node)
-        console.log(ts.isMissingDeclaration(node))
         indent++
         ts.forEachChild(node, printTree)
         indent--
