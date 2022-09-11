@@ -48,7 +48,11 @@ export class BlacksmithForge extends BlacksmithBase {
     /** Replace all patterns like *A, **A, etc */
     forge(text, dict) {
         for (let p of this.forgePatterns) {
-            let symbols = '(' + Object.keys(dict).join('|') + ')';
+            let keys = Object.keys(dict);
+            keys.sort(function (a, b) {
+                return b.length - a.length;
+            });
+            let symbols = '(' + keys.join('|') + ')';
             text = text.replaceAll(this.reg(p, symbols), (match, p1) => this.transform(p, dict[p1]) ?? match);
         }
         return text;

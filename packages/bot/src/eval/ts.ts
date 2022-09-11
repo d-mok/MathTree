@@ -29,12 +29,24 @@ export function getAllDeclaredVars(code: string): string[] {
 
     let identifiers: string[] = []
 
-    function visit(node: ts.Node) {
+    function isTopLevelDeclared(node: ts.Node): node is ts.Identifier {
+        if (!ts.isIdentifier(node)) return false
         if (
-            ts.isIdentifier(node) &&
-            (ts.isVariableDeclaration(node.parent) ||
-                ts.isBindingElement(node.parent))
-        ) {
+            !ts.isVariableDeclaration(node.parent) &&
+            !ts.isBindingElement(node.parent)
+        )
+            return false
+
+        let p: ts.Node = node.parent
+        while (p !== undefined) {
+            if (ts.isBlock(p)) return false
+            p = p.parent
+        }
+        return true
+    }
+
+    function visit(node: ts.Node) {
+        if (isTopLevelDeclared(node)) {
             identifiers.push(ts.idText(node))
         }
         node.forEachChild(visit)

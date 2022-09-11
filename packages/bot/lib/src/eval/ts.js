@@ -20,10 +20,22 @@ export function getAllVars(code) {
 export function getAllDeclaredVars(code) {
     const sourceFile = getSourceFile(code);
     let identifiers = [];
+    function isTopLevelDeclared(node) {
+        if (!ts.isIdentifier(node))
+            return false;
+        if (!ts.isVariableDeclaration(node.parent) &&
+            !ts.isBindingElement(node.parent))
+            return false;
+        let p = node.parent;
+        while (p !== undefined) {
+            if (ts.isBlock(p))
+                return false;
+            p = p.parent;
+        }
+        return true;
+    }
     function visit(node) {
-        if (ts.isIdentifier(node) &&
-            (ts.isVariableDeclaration(node.parent) ||
-                ts.isBindingElement(node.parent))) {
+        if (isTopLevelDeclared(node)) {
             identifiers.push(ts.idText(node));
         }
         node.forEachChild(visit);

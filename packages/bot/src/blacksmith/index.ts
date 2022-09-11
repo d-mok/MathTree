@@ -5,33 +5,31 @@ function escapeRegExp(text: string): string {
 }
 
 class Stringifier<T> {
-
     constructor(
         public pattern: string,
         public checker: ($: any) => $ is T,
         public transformer: ($: T) => string
-    ) { }
-
+    ) {}
 }
 
-
 class BlacksmithBase {
-
     private sfrs: Stringifier<any>[] = []
 
-    add<T>(pattern: string, checker: ($: any) => $ is T, transformer: ($: T) => string) {
+    add<T>(
+        pattern: string,
+        checker: ($: any) => $ is T,
+        transformer: ($: T) => string
+    ) {
         let s = new Stringifier<T>(pattern, checker, transformer)
         this.sfrs.push(s)
     }
 
     protected transform(pattern: string, val: unknown): string | undefined {
-        if (typeof val === 'symbol')
-            return undefined
+        if (typeof val === 'symbol') return undefined
 
         let ss = this.sfrs.filter($ => $.pattern === pattern)
         for (let s of ss) {
-            if (s.checker(val))
-                return s.transformer(val)
+            if (s.checker(val)) return s.transformer(val)
         }
         return String(val)
     }
@@ -45,12 +43,9 @@ class BlacksmithBase {
         let reg = escapeRegExp(pattern).replace('@', innerRegex)
         return new RegExp(reg, 'g')
     }
-
-
 }
 
 export class BlacksmithForge extends BlacksmithBase {
-
     private forgePatterns: string[] = []
 
     /** Set patterns for forge. Default to all patterns. */
@@ -58,29 +53,25 @@ export class BlacksmithForge extends BlacksmithBase {
         this.forgePatterns = patterns ?? this.allPatterns()
     }
 
-
     /** Replace all patterns like *A, **A, etc */
     forge(text: string, dict: { [symbol: string]: any }): string {
         for (let p of this.forgePatterns) {
-            let symbols = '(' + Object.keys(dict).join('|') + ')'
+            let keys = Object.keys(dict)
+            keys.sort(function (a, b) {
+                return b.length - a.length
+            })
+            let symbols = '(' + keys.join('|') + ')'
             text = text.replaceAll(
                 this.reg(p, symbols),
-                (match, p1) => this.transform(p, dict[p1]) ?? match)
+                (match, p1) => this.transform(p, dict[p1]) ?? match
+            )
         }
         return text
     }
-
-
-
 }
 
-
-
-
 class BlacksmithIntra extends BlacksmithForge {
-
     private intraPatterns: string[] = []
-
 
     /** Set patterns for intra. Default to all patterns. */
     setIntraPatterns(patterns?: string[]) {
@@ -95,23 +86,22 @@ class BlacksmithIntra extends BlacksmithForge {
                 (match, code) => {
                     let result = exprCtxHTML(code, context)
                     return this.transform(pattern, result) ?? match
-                })
+                }
+            )
             .replaceAll(
                 this.reg(pattern, String.raw`\{([^\{\}]*)\}`),
                 (match, code) => {
                     let result = exprCtxHTML(code, context)
                     return this.transform(pattern, result) ?? match
-                })
+                }
+            )
     }
 
     /** Intrapolate js *{...js...} or *\\{...js...\\} */
     intra(text: string, context: object): string {
-        for (let p of this.intraPatterns)
-            text = this.intraOne(text, p, context)
+        for (let p of this.intraPatterns) text = this.intraOne(text, p, context)
         return text
     }
-
-
 }
 
-export class Blacksmith extends BlacksmithIntra { }
+export class Blacksmith extends BlacksmithIntra {}
