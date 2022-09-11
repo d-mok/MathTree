@@ -15,12 +15,17 @@ function assembleCtx(code: string, contexts: object[]): string {
     let contextVars = contexts.flatMap($ => Object.keys($))
     let declaredVars = getAllDeclaredVars(code)
 
-    let newVars = allVars.filter($ => !contextVars.includes($))
-
     // for backward compatible alphabets
-    let missingAlphabetVars = newVars
-        .filter($ => !declaredVars.includes($))
+    let missingAlphabetVars = allVars
         .filter($ => $.length === 1)
+        .filter($ => !contextVars.includes($))
+        .filter($ => !declaredVars.includes($))
+
+    let newVars = [...declaredVars]
+    // for backward compatible alphabets
+    newVars = [...newVars, ...missingAlphabetVars]
+
+    console.log(newVars)
 
     let T = '"use strict";'
     contexts.forEach((ctx, i) => {

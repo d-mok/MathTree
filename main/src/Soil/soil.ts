@@ -2,7 +2,7 @@ import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Config } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
-import { dress, evalCtx, exprCtx, cropSection, Timer, transpile } from 'bot'
+import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
 
 // util functions
@@ -70,17 +70,11 @@ export class Soil {
         this.config = new Config()
     }
 
-    transpile() {
-        this.gene.populate = transpile(this.gene.populate)
-        this.gene.validate = transpile(this.gene.validate)
-        this.gene.preprocess = transpile(this.gene.preprocess)
-        this.gene.postprocess = transpile(this.gene.postprocess)
-    }
-
     private evalCode(code: string): void {
         let content = { question: this.qn, solution: this.sol }
         let topVars = evalCtx(code, this.dict, this.config, content)
 
+        // temporary
         if (typeof this.config.answer === 'number')
             this.config.answer = ['A', 'B', 'C', 'D'][this.config.answer]
 

@@ -1,21 +1,38 @@
 import { Soil } from './soil'
+import { transpile } from 'bot'
 
 declare global {
     var MathSoil2: MathSoil2Cls
 }
 
+function transpileGene(gene: Gene): Gene {
+    return {
+        qn: gene.qn,
+        sol: gene.sol,
+        populate: transpile(gene.populate),
+        validate: transpile(gene.validate),
+        preprocess: transpile(gene.preprocess),
+        postprocess: transpile(gene.postprocess),
+    }
+}
+
 class MathSoil2Cls {
-    public reap(gene: Gene): Fruit {
+    private nurture(gene: Gene): Fruit {
         let soil = new Soil(gene)
-        soil.transpile()
         return soil.nurture()
     }
 
+    public reap(gene: Gene): Fruit {
+        gene = transpileGene(gene)
+        return this.nurture(gene)
+    }
+
     public inspect(gene: Gene, repeat: number): Inspection {
+        gene = transpileGene(gene)
         let counters = []
         let times = []
         for (let i = 1; i <= repeat; i++) {
-            let fruit: Fruit = this.reap(gene)
+            let fruit = this.nurture(gene)
             if (!fruit.success)
                 return {
                     counter: 0,
