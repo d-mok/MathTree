@@ -163,7 +163,7 @@ export class Soil {
     }
 
     private runLoop(): boolean {
-        // merge slots
+        // for loop
         this.qn = loopSection(this.qn, this.dict)
         this.sol = loopSection(this.sol, this.dict)
         return true
