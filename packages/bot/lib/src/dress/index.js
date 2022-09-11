@@ -40,7 +40,10 @@ export function dress(html) {
     d.do(['\\)'], '\\right)', true);
     d.do(['\\left\\left\\('], '\\left(', true);
     d.do(['\\right\\right\\)'], '\\right)', true);
+    d.do(['\\\\left\\('], '\\(', true);
+    d.do(['\\\\right\\)'], '\\)', true);
     return d.get();
 }
+// wait for regex lookbehind
 // .replace(/(?<=<span class="math-tex">[^<>]*)([\+\-\=\(\[\{\\\)\]\}\,])(\s|&nbsp;)*1(\s|&nbsp;)*(?=[A-Za-z\(\[][^<>]*<\/span>)/g, '$1')
 //# sourceMappingURL=index.js.map
