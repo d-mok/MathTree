@@ -36,12 +36,12 @@ export function dress(html) {
     // handle Prime
     d.do([cap(v) + "'"], '$1 \\prime ', true);
     // handle responsive bracket
-    d.do(['\\('], '\\left(', true);
-    d.do(['\\)'], '\\right)', true);
-    d.do(['\\left\\left\\('], '\\left(', true);
-    d.do(['\\right\\right\\)'], '\\right)', true);
-    d.do(['\\\\left\\('], '\\(', true);
-    d.do(['\\\\right\\)'], '\\)', true);
+    d.do([String.raw `\(`], String.raw `\left(`, true);
+    d.do([String.raw `\)`], String.raw `\right)`, true);
+    d.do([String.raw `\\left\\left\(`], String.raw `\left(`, true);
+    d.do([String.raw `\\right\\right\)`], String.raw `\right)`, true);
+    d.do([String.raw `\\\\left\(`], String.raw `\(`, true);
+    d.do([String.raw `\\\\right\)`], String.raw `\)`, true);
     return d.get();
 }
 // wait for regex lookbehind
