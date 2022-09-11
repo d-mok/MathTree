@@ -2,7 +2,7 @@ import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Config } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
-import { dress, evalCtx, exprCtx, cropSection, Timer } from 'bot'
+import { dress, evalCtx, exprCtx, cropSection, mergeSlots, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
 
 // util functions
@@ -147,6 +147,13 @@ export class Soil {
         )
     }
 
+    private runSlot(): boolean {
+        // merge slots
+        this.qn = mergeSlots(this.gene.slot, this.qn)
+        this.sol = mergeSlots(this.gene.slot, this.sol)
+        return true
+    }
+
     private runSection(): boolean {
         // crop section
         this.qn = cropSection(this.qn, this.dict)
@@ -253,6 +260,7 @@ export class Soil {
             do {
                 this.reset()
                 this.runPopulate()
+                this.runSlot()
                 this.runSection()
                 this.runPreprocess()
                 this.runOption()

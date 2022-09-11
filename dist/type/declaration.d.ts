@@ -5412,6 +5412,7 @@ declare module "Soil/soil" {
         private checkDict;
         private isValidated;
         private runPopulate;
+        private runSlot;
         private runSection;
         private runPreprocess;
         private runOption;
@@ -5453,6 +5454,7 @@ declare type Inspection = {
 declare type Gene = {
     readonly qn: string;
     readonly sol: string;
+    readonly slot: string;
     readonly populate: string;
     readonly validate: string;
     readonly preprocess: string;

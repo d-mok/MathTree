@@ -1,6 +1,4 @@
-
 import { exprCtxHTML } from '../eval'
-
 
 function dropTags(html: string) {
     html = html.replaceAll(new RegExp('<[^#<]*##[^#>]*>', 'g'), '')
@@ -9,11 +7,10 @@ function dropTags(html: string) {
 
 function dropCondition(html: string, context: object): string {
     return html.replaceAll(
-        new RegExp('<p>##\{([^\{\}]*)\}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>', 'g'),
-        (match, p1) => exprCtxHTML(p1, context) ? match : ""
+        new RegExp('<p>##{([^{}]*)}<\\/p>((\\s|\\S)(?!##))*<p>##<\\/p>', 'g'),
+        (match, p1) => (exprCtxHTML(p1, context) ? match : '')
     )
 }
-
 
 export function cropSection(html: string, context: object) {
     html = dropCondition(html, context)

@@ -9,6 +9,7 @@ function transpileGene(gene: Gene): Gene {
     return {
         qn: gene.qn,
         sol: gene.sol,
+        slot: gene.slot,
         populate: transpile(gene.populate),
         validate: transpile(gene.validate),
         preprocess: transpile(gene.preprocess),

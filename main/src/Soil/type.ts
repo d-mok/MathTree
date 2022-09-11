@@ -18,6 +18,7 @@ type Inspection = {
 type Gene = {
     readonly qn: string
     readonly sol: string
+    readonly slot: string
     readonly populate: string
     readonly validate: string
     readonly preprocess: string
