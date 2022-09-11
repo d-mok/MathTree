@@ -39,7 +39,9 @@ export function getAllDeclaredVars(code: string): string[] {
             return false
         }
 
-        // if (node.parent.getChildAt(0) !== node) return false
+        let siblings: ts.Node[] = []
+        ts.forEachChild(node.parent, n => siblings.push(n))
+        if (siblings[0] !== node) return false
 
         let p: ts.Node = node.parent
         while (p !== undefined) {
