@@ -120,6 +120,7 @@ declare module "Core/Ink/index" {
     export function printConstraint(con: Constraint, align?: boolean, replaceEqual?: boolean): string;
     export function printConstraints(cons: Constraint[]): string;
     export function printLabeledValue(obj: LabeledValue, order?: number, isAngle?: boolean): string;
+    export function printPrimeFactors(num: number): string;
 }
 declare module "Core/index" {
     import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'ruby';

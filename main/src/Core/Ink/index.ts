@@ -1,5 +1,3 @@
-
-
 // export function printIneq(greater: boolean, equal: boolean): Ineq {
 //     if (greater && equal) return '\\ge'
 //     if (greater && !equal) return '\\gt'
@@ -14,21 +12,24 @@
 //     return [greater, equal]
 // }
 
-export function printDfrac(numerator: number, denominator: number, upSign = false): string {
+export function printDfrac(
+    numerator: number,
+    denominator: number,
+    upSign = false
+): string {
     let p = numerator
     let q = denominator
-    if (p === 0) return '0';
-    [p, q] = cal.toFraction(p / q)
+    if (p === 0) return '0'
+    ;[p, q] = cal.toFraction(p / q)
     if (q === 1) return p.toString()
     if (upSign) {
         return '\\dfrac{' + p + '}{' + q + '}'
     } else {
-        return p > 0 ?
-            '\\dfrac{' + p + '}{' + q + '}' :
-            '-\\dfrac{' + Math.abs(p) + '}{' + q + '}'
+        return p > 0
+            ? '\\dfrac{' + p + '}{' + q + '}'
+            : '-\\dfrac{' + Math.abs(p) + '}{' + q + '}'
     }
 }
-
 
 // export function parseDfrac(dfrac: string): Fraction {
 //     if (!owl.dfrac(dfrac)) throw 'not dfrac'
@@ -58,29 +59,25 @@ export function printCombo(combo: [boolean, boolean, boolean]): string {
 
 export function printTrigValue(T: TrigValue): string {
     if (typeof T[1] === 'number') {
-        return "\\" + T[0] + " " + T[1] + "°"
+        return '\\' + T[0] + ' ' + T[1] + '°'
     } else {
-        return "\\" + T[0] + " " + T[1]
+        return '\\' + T[0] + ' ' + T[1]
     }
 }
 
-
 export function printTrigExp(T: TrigExp): string {
-    return "\\" + T[0] + "(" + T[1] + "°" + (T[2] > 0 ? '+' : '-') + T[3] + ")"
+    return '\\' + T[0] + '(' + T[1] + '°' + (T[2] > 0 ? '+' : '-') + T[3] + ')'
 }
-
 
 export function printOrTrigRoots(roots: (number | undefined)[]): string {
     roots = roots.filter(owl.num)
     roots = roots.map(x => Round(x!, 5))
     let ss = roots.map(x => x + '°')
-    if (ss.length === 0) return "no solution"
+    if (ss.length === 0) return 'no solution'
     if (ss.length === 1) return ss[0]
     let last = ss.pop()
     return ss.join(',') + '~\\text{or}~' + last
 }
-
-
 
 export function printSurd(num: number): string {
     let [p, q] = cal.toSurd(num)
@@ -101,8 +98,11 @@ export function printPointPolar(point: Point2D): string {
     return `(${printSurd(r)},${q}°)`
 }
 
-
-export function printConstraint(con: Constraint, align = false, replaceEqual = false): string {
+export function printConstraint(
+    con: Constraint,
+    align = false,
+    replaceEqual = false
+): string {
     let [a, b, i, c] = con
     if (i === '>=') i = '\\ge'
     if (i === '>') i = '\\gt'
@@ -117,9 +117,8 @@ export function printConstraint(con: Constraint, align = false, replaceEqual = f
     return ` ${a}x + ${b}y ${j} ${c} `
 }
 
-
 export function printConstraints(cons: Constraint[]): string {
-    let T = ""
+    let T = ''
     T += ' \\left\\{ \\begin{aligned} '
     for (let c of cons) {
         T += printConstraint(c, true) + ' \\\\ '
@@ -128,12 +127,24 @@ export function printConstraints(cons: Constraint[]): string {
     return T
 }
 
-
-
-export function printLabeledValue(obj: LabeledValue, order = 1, isAngle: boolean = false): string {
+export function printLabeledValue(
+    obj: LabeledValue,
+    order = 1,
+    isAngle: boolean = false
+): string {
     let value = obj[0]
     let label = obj[order]
     let T = label + ' = ' + value
     if (isAngle) T += '°'
     return T
+}
+
+export function printPrimeFactors(num: number): string {
+    let factors = PrimeFactors(num)
+    const primes = [2, 3, 5, 7, 11, 13, 17, 19]
+    return primes
+        .map(p => [p, Freq(factors, p)])
+        .filter(([p, n]) => n > 0)
+        .map(([p, n]) => p + '^{' + n + '}')
+        .join(' \\times ')
 }
