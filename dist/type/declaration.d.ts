@@ -1441,6 +1441,7 @@ declare module "Math/Code/Latex" {
         var FreqTable: typeof Host.FreqTable;
         var PairTable: typeof Host.PairTable;
         var CheckVertices: typeof Host.CheckVertices;
+        var ShortDivision: typeof Host.ShortDivision;
     }
 }
 declare module "Math/Code/LinearProgram" {
