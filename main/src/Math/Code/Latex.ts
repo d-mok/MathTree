@@ -281,7 +281,7 @@ export class Host {
         numbers: number[]
         mode?: 'HCF' | 'LCM'
     }): string {
-        const primes = [2, 3, 5, 7, 11, 13, 17, 19]
+        const primes = cal.primes(Math.max(...numbers))
 
         // is divisible by
         function isDiv(n: number, p: number): boolean {
@@ -302,6 +302,7 @@ export class Host {
             p: number,
             mode: 'HCF' | 'LCM'
         ): boolean {
+            if (ns.length === 1 && ns[0] === p) return false
             return mode === 'HCF'
                 ? ns.every($ => isDiv($, p)) //allDivisible:
                 : ns.filter($ => isDiv($, p)).length > 1 //twoDivisible

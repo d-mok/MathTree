@@ -215,7 +215,7 @@ export class Host {
      */
     @checkIt(owl.positiveInt)
     static PrimeFactors(num: number): number[] {
-        const primes = [2, 3, 5, 7, 11, 13, 17, 19]
+        const primes = cal.primes(num)
         let factors: number[] = []
         while (true) {
             let f = primes.find($ => num % $ === 0)

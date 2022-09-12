@@ -141,7 +141,7 @@ export function printLabeledValue(
 
 export function printPrimeFactors(num: number): string {
     let factors = PrimeFactors(num)
-    const primes = [2, 3, 5, 7, 11, 13, 17, 19]
+    const primes = cal.primes(num)
     return primes
         .map(p => [p, Freq(factors, p)])
         .filter(([p, n]) => n > 0)
