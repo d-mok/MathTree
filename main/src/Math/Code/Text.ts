@@ -263,14 +263,14 @@ export class Host {
         let flagFirst = true
 
         function add(variable: string, power: number) {
-            let mul = multiply && !flagFirst
-            let s = mul ? '& \\times &' : '&'
+            let blank = multiply && variable !== keys[0]
+            let s = !blank ? '&' : flagFirst ? '& &' : '& \\times &'
             if (power > 1) {
                 T += s + variable + '^{' + power + '}'
             } else if (power === 1) {
                 T += s + variable
             } else {
-                T += mul ? '& &' : ' & '
+                T += blank ? '& &' : ' & '
             }
             if (power > 0) flagFirst = false
         }
