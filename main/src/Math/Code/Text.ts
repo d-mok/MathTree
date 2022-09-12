@@ -257,19 +257,21 @@ export class Host {
         { hcf = false, lcm = false, multiply = false }
     ) {
         let T = '\\begin{matrix} '
+        let keys = Object.keys(val)
+        let n = val[keys[0]].length
+
         function add(variable: string, power: number) {
-            let s = multiply ? '& \\times &' : '&'
+            let mul = multiply && variable !== keys[0]
+            let s = mul ? '& \\times &' : '&'
             if (power > 1) {
                 T += s + variable + '^{' + power + '}'
             } else if (power === 1) {
                 T += s + variable
             } else {
-                T += multiply ? '& &' : ' & '
+                T += mul ? '& &' : ' & '
             }
         }
 
-        let keys = Object.keys(val)
-        let n = val[keys[0]].length
         for (let i = 0; i < n; i++) {
             T += ' & '
             if (keys.includes('number')) T += ' & ' + val.number[i]
