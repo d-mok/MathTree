@@ -1422,23 +1422,17 @@ declare module "Math/Code/Latex" {
         }): string;
         /**
          * A short division for prime factorization of numbers.
-         * @param numbers - The array of numbers to factorize.
          * @example
          * ```
-         * CheckVertices({
-         *    constraints: [
-         *      [1,0,'>',0],
-         *      [0,1,'>',0],
-         *      [1,1,'<',2],
-         * ],
-         *    field: [1,2,3],
-         *    label: "P"
+         * ShortDivision({
+         *    numbers: [12,16,18],
+         *    mode: 'HCF',
          * })
          * ```
          */
         static ShortDivision({ numbers, mode, }: {
             numbers: number[];
-            mode: 'HCF' | 'LCM';
+            mode?: 'HCF' | 'LCM';
         }): string;
     }
     global {
