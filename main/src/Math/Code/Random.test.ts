@@ -1,6 +1,5 @@
 import { repeat } from '../Jest/JestExtend'
 
-
 test('RndN', () => {
     repeat(10, () => {
         expect(RndN(5, 10)).toBeOneOf([5, 6, 7, 8, 9, 10])
@@ -8,7 +7,6 @@ test('RndN', () => {
         expect(() => RndN(5, 10)).toSpanSame([5, 6, 7, 8, 9, 10])
     })
 })
-
 
 test('RndNs', () => {
     repeat(10, () => {
@@ -19,8 +17,6 @@ test('RndNs', () => {
         expect(RndNs(5, 10, 6)).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
     })
 })
-
-
 
 test('RndAscNs', () => {
     repeat(10, () => {
@@ -46,7 +42,6 @@ test('RndR', () => {
     })
 })
 
-
 test('RndRs', () => {
     repeat(10, () => {
         expect(RndRs(5, 10, 3)).toAllBeBetween(5, 10)
@@ -55,12 +50,9 @@ test('RndRs', () => {
         expect(RndRs(5, 10, 3)).toBeDupless()
         expect(RndRs(5, 10, 1000)).toSpanRange(5, 10)
     })
-
-
 })
 
 test('RndQ', () => {
-
     repeat(10, () => {
         expect(RndQ(8, [0, 6])).toBeBetween(0, 6)
         expect(RndQ(8, [0, 6])).toSatisfy(owl.rational)
@@ -74,7 +66,6 @@ test('RndQ', () => {
     })
 })
 
-
 test('RndQs', () => {
     repeat(10, () => {
         expect(RndQs(8, [0, 6], 3)).toAllBeBetween(0, 6)
@@ -86,77 +77,73 @@ test('RndQs', () => {
     })
 })
 
-
 test('RndU', () => {
-
     repeat(10, () => {
         expect(RndU()).toBeOneOf([1, -1])
         expect(() => RndU()).toSpanSame([-1, 1])
     })
 })
 
-
 test('RndT', () => {
-
     repeat(10, () => {
         expect(RndT()).toBeOneOf([true, false])
         expect(() => RndT()).toSpanSame([true, false])
     })
 })
 
-
 test('RndZ', () => {
-
     repeat(10, () => {
-        expect(RndZ(5, 10)).toBeOneOf([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
+        expect(RndZ(5, 10)).toBeOneOf([
+            5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10,
+        ])
         expect(RndZ(5, 10)).toBeInteger()
-        expect(() => RndZ(5, 10)).toSpanSame([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
+        expect(() => RndZ(5, 10)).toSpanSame([
+            5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10,
+        ])
     })
-
 })
 
-
 test('RndZs', () => {
-
     repeat(10, () => {
-        expect(RndZs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
+        expect(RndZs(5, 10, 3)).toAllBeOneOf([
+            5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10,
+        ])
         expect(RndZs(5, 10, 3)).toAllBeInteger()
         expect(RndZs(5, 10, 3)).toHaveLength(3)
         expect(RndZs(5, 10, 3)).toBeDupless()
-        expect(() => RndZs(5, 10, 3)).toSpanSame([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10], 1)
+        expect(() => RndZs(5, 10, 3)).toSpanSame(
+            [5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10],
+            1
+        )
     })
-
 })
-
-
 
 test('RndAscZs', () => {
     repeat(10, () => {
-        expect(RndAscZs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10])
+        expect(RndAscZs(5, 10, 3)).toAllBeOneOf([
+            5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10,
+        ])
         expect(RndAscZs(5, 10, 3)).toAllBeInteger()
         expect(RndAscZs(5, 10, 3)).toHaveLength(3)
         expect(RndAscZs(5, 10, 3)).toBeDupless()
-        expect(() => RndAscZs(5, 10, 3)).toSpanSame([5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10], 1)
+        expect(() => RndAscZs(5, 10, 3)).toSpanSame(
+            [5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10],
+            1
+        )
         let [a, b] = RndAscZs(1, 10, 2)
         expect(a < b).toBeTrue()
     })
 })
 
-
 test('RndP', () => {
-
     repeat(10, () => {
         expect(RndP(100)).toBeOneOf(cal.primes(100))
         expect(RndP(100)).toBeInteger()
         expect(() => RndP(100)).toSpanSame(cal.primes(100))
     })
-
 })
 
-
-
 test('RndOdd', () => {
-
     repeat(10, () => {
         expect(RndOdd(5, 10)).toBeOneOf([5, 7, 9])
         expect(RndOdd(5, 10)).toBeInteger()
@@ -165,56 +152,55 @@ test('RndOdd', () => {
     })
 })
 
-
-
-
 test('RndEven', () => {
-
     repeat(10, () => {
         expect(RndEven(5, 10)).toBeOneOf([6, 8, 10])
         expect(RndEven(5, 10)).toBeInteger()
         expect(RndEven(5, 10)).toBeEven()
         expect(() => RndEven(5, 10)).toSpanSame([6, 8, 10])
     })
-
 })
 
-
+test('RndComposite', () => {
+    repeat(10, () => {
+        expect(RndComposite([2, 3, 5], 2)).toBeOneOf([4, 6, 10, 9, 15, 25])
+        expect(RndComposite([2, 3, 5], 2)).toBeInteger()
+        expect(() => RndComposite([2, 3, 5], 2)).toSpanSame([
+            4, 6, 10, 9, 15, 25,
+        ])
+    })
+})
 
 test('RndPoly', () => {
-
     repeat(10, () => {
         expect(RndPoly(3, 4, 5)[0]).toBeOneOf([1, 2, 3])
         expect(RndPoly(3, 4, 5)[1]).toBeOneOf([1, 2, 3, 4, -1, -2, -3, -4])
-        expect(RndPoly(3, 4, 5)[2]).toBeOneOf([1, 2, 3, 4, 5, -1, -2, -3, -4, -5])
+        expect(RndPoly(3, 4, 5)[2]).toBeOneOf([
+            1, 2, 3, 4, 5, -1, -2, -3, -4, -5,
+        ])
         expect(RndPoly(3, 4, 5)).toAllBeInteger()
 
         expect(() => RndPoly(3, 4, 5)[0]).toSpanSame([1, 2, 3])
-        expect(() => RndPoly(3, 4, 5)[1]).toSpanSame([1, 2, 3, 4, -1, -2, -3, -4])
-        expect(() => RndPoly(3, 4, 5)[2]).toSpanSame([1, 2, 3, 4, 5, -1, -2, -3, -4, -5])
+        expect(() => RndPoly(3, 4, 5)[1]).toSpanSame([
+            1, 2, 3, 4, -1, -2, -3, -4,
+        ])
+        expect(() => RndPoly(3, 4, 5)[2]).toSpanSame([
+            1, 2, 3, 4, 5, -1, -2, -3, -4, -5,
+        ])
     })
-
 })
 
-
 test('RndPyth', () => {
-
     repeat(10, () => {
         expect(RndPyth(50)).toSatisfy(x => x[0] ** 2 + x[1] ** 2 === x[2] ** 2)
         expect(RndPyth(50)).toAllBeBetween(1, 50)
         expect(RndPyth(50)).toAllBeInteger()
         expect(RndPyth(50)).toBeDupless()
         expect(() => RndPyth(50)).toSpanLength(14)
-
     })
-
 })
 
-
-
-
 test('RndPoint', () => {
-
     repeat(10, () => {
         expect(RndPoint([1, 4], [-10, 14])[0]).toBeBetween(1, 4)
         expect(RndPoint([1, 4], [-10, 14])[0]).toBeInteger()
@@ -227,13 +213,9 @@ test('RndPoint', () => {
         expect(() => RndPoint([1, 4], [-10, 14])[0]).toSpanRange(1, 4)
         expect(() => RndPoint([1, 4], [-10, 14])[1]).toSpanRange(-10, 14)
     })
-
 })
 
-
-
 test('RndPoints', () => {
-
     repeat(10, () => {
         let pts = RndPoints([1, 4], [-10, 14], 3)
         let [A, B, C] = pts
@@ -243,16 +225,16 @@ test('RndPoints', () => {
         expect([...A, ...B, ...C]).toAllBeInteger()
         expect([A[0], B[0], C[0]]).toAllBeBetween(1, 4)
         expect([A[1], B[1], C[1]]).toAllBeBetween(-10, 14)
-        expect(() => RndPoints([1, 4], [-10, 14], 3).map($ => $[0])).toSpanRange(1, 4, 1)
-        expect(() => RndPoints([1, 4], [-10, 14], 3).map($ => $[1])).toSpanRange(-10, 14, 1)
+        expect(() =>
+            RndPoints([1, 4], [-10, 14], 3).map($ => $[0])
+        ).toSpanRange(1, 4, 1)
+        expect(() =>
+            RndPoints([1, 4], [-10, 14], 3).map($ => $[1])
+        ).toSpanRange(-10, 14, 1)
     })
 })
 
-
-
-
 test('RndAngles', () => {
-
     repeat(10, () => {
         let angles = RndAngles(3, 50)
         let [A, B, C] = angles
@@ -266,16 +248,14 @@ test('RndAngles', () => {
         expect(angles).toAllBeInteger()
         expect([d1, d2, d3]).toAllBeBetween(50, 360)
     })
-
-
 })
 
-
 test('RndOnCircle', () => {
-
     repeat(10, () => {
         let pts = RndOnCircle(3, 50)
-        let angles = pts.map($ => RectToPol($)[1]).map($ => cal.round($, 5).off())
+        let angles = pts
+            .map($ => RectToPol($)[1])
+            .map($ => cal.round($, 5).off())
         let [A, B, C] = angles.sort((a, b) => a - b)
         let d1 = B - A
         let d2 = C - B
@@ -287,13 +267,9 @@ test('RndOnCircle', () => {
         expect(angles).toAllBeInteger()
         expect([d1, d2, d3]).toAllBeBetween(50, 360)
     })
-
-
 })
 
-
 test('RndConvexPolygon', () => {
-
     repeat(10, () => {
         let pts = RndConvexPolygon(3, [0, 0], 10, 50)
         let [A, B, C] = pts
@@ -311,13 +287,9 @@ test('RndConvexPolygon', () => {
         expect(A).toHaveLength(2)
         expect([d1, d2, d3]).toAllBeBetween(40, 360)
     })
-
 })
 
-
-
 test('RndData', () => {
-
     repeat(10, () => {
         let data = RndData(10, 15, 5)
         expect(data).toAllBeBetween(10, 15)
@@ -325,14 +297,15 @@ test('RndData', () => {
         expect(data).toHaveLength(5)
         expect(data).toSatisfy($ => Mode(...$).length === 1)
     })
-
 })
 
-
 test('RndTriangle', () => {
-
     repeat(10, () => {
-        let tri = RndTriangle([0, 5], [0, 5], { minAngle: 30, maxAngle: 70, minLength: 2 })
+        let tri = RndTriangle([0, 5], [0, 5], {
+            minAngle: 30,
+            maxAngle: 70,
+            minLength: 2,
+        })
         let [A, B, C] = tri
         expect(tri).toHaveLength(3)
         expect(Distance(A, B)).toBeGreaterThanOrEqual(2)
@@ -345,13 +318,9 @@ test('RndTriangle', () => {
         expect(Angle(B, C, A)).toBeLessThanOrEqual(70)
         expect(Angle(C, A, B)).toBeLessThanOrEqual(70)
     })
-
 })
 
-
-
 test('RndTrigValue', () => {
-
     let trig = (funcName: string, angle: number) => {
         if (funcName === 'sin') return sin(angle)
         if (funcName === 'cos') return cos(angle)
@@ -379,9 +348,7 @@ test('RndTrigValue', () => {
         expect(trig(t, v as number)).toBeCloseTo(tan(60))
         expect(RndTrigValue('tan', 60)).toHaveLength(2)
     })
-
 })
-
 
 test('RndTrigEqv', () => {
     let trig = (funcName: string, angle: number) => {
@@ -391,14 +358,12 @@ test('RndTrigEqv', () => {
         throw 'never'
     }
 
-
     repeat(10, () => {
         let [t, k, s, v] = RndTrigEqv('sin', 'x')
         expect(t).toBeOneOf(['sin', 'cos', 'tan'])
         expect(trig(t, k + s)).toBeCloseTo(sin(1))
         expect(RndTrigEqv('sin', 'x')).toHaveLength(4)
     })
-
 
     repeat(10, () => {
         let [t, k, s, v] = RndTrigEqv('cos', 'x')
@@ -407,21 +372,15 @@ test('RndTrigEqv', () => {
         expect(RndTrigEqv('cos', 'x')).toHaveLength(4)
     })
 
-
     repeat(10, () => {
         let [t, k, s, v] = RndTrigEqv('1/tan', 'x')
         expect(t).toBeOneOf(['sin', 'cos', 'tan'])
         expect(trig(t, k + s)).toBeCloseTo(tan(89))
         expect(RndTrigEqv('1/tan', 'x')).toHaveLength(4)
     })
-
 })
 
-
-
-
 test('RndPointPolar', () => {
-
     repeat(10, () => {
         function getR2() {
             let pt = RndPointPolar()
@@ -435,23 +394,14 @@ test('RndPointPolar', () => {
             return cal.blur(q)
         }
 
-        expect(getR2).toSpanSame([
-            4, 16, 36,
-            8, 32, 72,
-            12, 48, 108
-        ])
+        expect(getR2).toSpanSame([4, 16, 36, 8, 32, 72, 12, 48, 108])
         expect(getq).toSpanSame([
-            30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330
+            30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330,
         ])
     })
-
 })
 
-
-
-
 test('RndRatio', () => {
-
     repeat(10, () => {
         let nums = RndRatio(2, 9, 3)
         expect(nums).toSatisfy($ => HCF(...$) === 1)
@@ -459,5 +409,4 @@ test('RndRatio', () => {
         expect(nums).toBeDupless()
         expect(nums).toAllBeInteger()
     })
-
 })

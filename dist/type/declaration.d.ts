@@ -1739,6 +1739,13 @@ declare module "Math/Code/Numeracy" {
          */
         static LCM(...nums: number[]): number;
         /**
+         * The prime factors of `num`.
+         * ```
+         * PrimeFactors(12) // [2,2,3]
+         * ```
+         */
+        static PrimeFactors(num: number): number[];
+        /**
          * convert num to fraction
          * ```
          * ToFrac(0.5) // [1,2]
@@ -1763,6 +1770,7 @@ declare module "Math/Code/Numeracy" {
         var Ratio: typeof Host.Ratio;
         var HCF: typeof Host.HCF;
         var LCM: typeof Host.LCM;
+        var PrimeFactors: typeof Host.PrimeFactors;
         var ToFrac: typeof Host.ToFrac;
     }
 }
@@ -2049,6 +2057,13 @@ declare module "Math/Code/Random" {
          */
         static RndEven(min: number, max: number): number;
         /**
+         * a random composite number built from `n` factors in `factors`.
+         * ```
+         * RndComposite([2,3,5],3) // return 2*2*2, 2*3*5, 2*3*3, ...
+         * ```
+         */
+        static RndComposite(factors: number[], n: number): number;
+        /**
          * an array of random polynomial coefficients
          * ```
          * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
@@ -2164,6 +2179,7 @@ declare module "Math/Code/Random" {
         var RndP: typeof Host.RndP;
         var RndOdd: typeof Host.RndOdd;
         var RndEven: typeof Host.RndEven;
+        var RndComposite: typeof Host.RndComposite;
         var RndPoly: typeof Host.RndPoly;
         var RndPyth: typeof Host.RndPyth;
         var RndPoint: typeof Host.RndPoint;

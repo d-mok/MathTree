@@ -1,14 +1,8 @@
-
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-
 
 @exposeAll()
 @captureAll()
 export class Host {
-
-
-
-
     /**
      * division with x/0 handling
      * ```
@@ -21,8 +15,6 @@ export class Host {
         return dividend / divisor
     }
 
-
-
     /**
      * the absolute value. Equivalent to Math.abs(x).
      * ```
@@ -33,8 +25,6 @@ export class Host {
     static Abs(num: number): number {
         return Math.abs(num)
     }
-
-
 
     /**
      * the sign of the number as 1,0 or -1.
@@ -51,8 +41,6 @@ export class Host {
         return 0
     }
 
-
-
     /**
      * @deprecated
      * the sign of the number as 1,0 or -1.
@@ -65,11 +53,6 @@ export class Host {
         return cal.sigfig(cal.blur(num))
     }
 
-
-
-
-
-
     /**
      * the number rounded off to given sigfig.
      * ```
@@ -81,7 +64,6 @@ export class Host {
     static Round(num: number, sigfig = 3): number {
         num = num * (1 + Number.EPSILON)
         return cal.round(num, sigfig).off()
-
     }
 
     /**
@@ -109,7 +91,6 @@ export class Host {
         num = num * (1 + Number.EPSILON)
         return cal.round(num, sigfig).down()
     }
-
 
     /**
      * the number rounded off to given decimal place.
@@ -141,8 +122,6 @@ export class Host {
         return cal.fix(num, dp).up()
     }
 
-
-
     /**
      * the number rounded down to given decimal place.
      * ```
@@ -157,8 +136,6 @@ export class Host {
         num = num * (1 + Number.EPSILON)
         return cal.fix(num, dp).down()
     }
-
-
 
     /**
      * the ceiling integer of the number.
@@ -186,9 +163,6 @@ export class Host {
         return Math.floor(num)
     }
 
-
-
-
     /**
      * reduce input array to integral ratio.
      * ```
@@ -203,10 +177,6 @@ export class Host {
     static Ratio(...nums: number[]): number[] {
         return toNumbers(nums).ratio()
     }
-
-
-
-
 
     /**
      * The HCF of nums.
@@ -223,7 +193,6 @@ export class Host {
         return toNumbers(nums).hcf()
     }
 
-
     /**
      * The LCM of nums.
      * ```
@@ -238,9 +207,24 @@ export class Host {
         return toNumbers(nums).lcm()
     }
 
-
-
-
+    /**
+     * The prime factors of `num`.
+     * ```
+     * PrimeFactors(12) // [2,2,3]
+     * ```
+     */
+    @checkIt(owl.positiveInt)
+    static PrimeFactors(num: number): number[] {
+        const primes = [2, 3, 5, 7, 11, 13, 17, 19]
+        let factors: number[] = []
+        while (true) {
+            let f = primes.find($ => num % $ === 0)
+            if (f === undefined) break
+            factors.push(f)
+            num = num / f
+        }
+        return factors
+    }
 
     /**
      * convert num to fraction
@@ -253,13 +237,7 @@ export class Host {
     static ToFrac(num: number): Fraction {
         return cal.toFraction(num)
     }
-
-
-
 }
-
-
-
 
 declare global {
     var Divide: typeof Host.Divide
@@ -277,10 +255,6 @@ declare global {
     var Ratio: typeof Host.Ratio
     var HCF: typeof Host.HCF
     var LCM: typeof Host.LCM
+    var PrimeFactors: typeof Host.PrimeFactors
     var ToFrac: typeof Host.ToFrac
 }
-
-
-
-
-

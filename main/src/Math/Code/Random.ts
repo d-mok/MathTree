@@ -4,9 +4,6 @@ import { poker, dice } from 'fate'
 @exposeAll()
 @captureAll()
 export class Host {
-
-
-
     /**
      * a random integer in [min, max] inclusive.
      * ```
@@ -27,9 +24,10 @@ export class Host {
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static RndNs(min: number, max: number, n: number = 10): number[] {
         n = Math.min(Math.floor(max - min + 1), n)
-        return dice(() => RndN(min, max)).unique().rolls(n)
+        return dice(() => RndN(min, max))
+            .unique()
+            .rolls(n)
     }
-
 
     /**
      * an array of n unique random integer in [min, max] inclusive, sorted in ascending order.
@@ -42,7 +40,6 @@ export class Host {
         return Sort(...RndNs(min, max, n))
     }
 
-
     /**
      * a random real number in [min, max] inclusive
      * ```
@@ -54,7 +51,6 @@ export class Host {
         return poker.real(min, max)
     }
 
-
     /**
      * an array of n unique random real number in [min, max] inclusive.
      * ```
@@ -63,10 +59,10 @@ export class Host {
      */
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static RndRs(min: number, max: number, n: number = 10): number[] {
-        return dice(() => RndR(min, max)).unique().rolls(n)
+        return dice(() => RndR(min, max))
+            .unique()
+            .rolls(n)
     }
-
-
 
     /**
      * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
@@ -79,17 +75,14 @@ export class Host {
     static RndQ(largest: number = 9, range?: interval): number {
         let L = Math.abs(largest)
         let sign = largest > 0 ? 1 : RndU()
-        let f = () => RndN(1, L) / RndN(2, L) * sign
+        let f = () => (RndN(1, L) / RndN(2, L)) * sign
 
         let d = dice(f).shield(_ => owl.dec(_))
         if (range) {
-            d.shield(_ => _ >= range[0])
-                .shield(_ => _ <= range[1])
+            d.shield(_ => _ >= range[0]).shield(_ => _ <= range[1])
         }
         return d.roll()
     }
-
-
 
     /**
      * an array of n unique random fractions (non-integer) .
@@ -98,13 +91,16 @@ export class Host {
      * ```
      */
     @checkIt(owl.nonZeroInt, owl.interval, owl.positiveInt)
-    static RndQs(largest: number = 9, range?: interval, n: number = 10): number[] {
+    static RndQs(
+        largest: number = 9,
+        range?: interval,
+        n: number = 10
+    ): number[] {
         n = Math.min(Math.abs(largest) + 1, n)
-        return dice(() => RndQ(largest, range)).unique().rolls(n)
+        return dice(() => RndQ(largest, range))
+            .unique()
+            .rolls(n)
     }
-
-
-
 
     /**
      * 1 or -1
@@ -116,7 +112,6 @@ export class Host {
         return list<1 | -1>(1, -1).draw()!
     }
 
-
     /**
      * true or false.
      * ```
@@ -126,9 +121,6 @@ export class Host {
     static RndT(): boolean {
         return poker.bool()
     }
-
-
-
 
     /**
      * a random integer in [min, max] or [-max, -min] inclusive.
@@ -141,9 +133,6 @@ export class Host {
         return RndN(min, max) * RndU()
     }
 
-
-
-
     /**
      * @param n - default to 10
      * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
@@ -154,10 +143,11 @@ export class Host {
     @checkIt(owl.nonNegative, owl.nonNegative, owl.positiveInt)
     static RndZs(min: number, max: number, n: number = 10): number[] {
         n = Math.min(Math.floor(max - min + 1), n)
-        return dice(() => RndN(min, max)).unique().rolls(n).map(x => x * RndU())
+        return dice(() => RndN(min, max))
+            .unique()
+            .rolls(n)
+            .map(x => x * RndU())
     }
-
-
 
     /**
      * @param n - default to 10
@@ -171,8 +161,6 @@ export class Host {
         return Sort(...RndZs(min, max, n))
     }
 
-
-
     /**
      * a random prime number less than or equal to max.
      * ```
@@ -183,10 +171,6 @@ export class Host {
     static RndP(max: number): number {
         return poker.prime(2, max)!
     }
-
-
-
-
 
     /**
      * a random odd integer in [min, max] inclusive
@@ -201,8 +185,6 @@ export class Host {
         return 2 * RndN(min, max) - 1
     }
 
-
-
     /**
      * a random even integer in [min, max] inclusive
      * ```
@@ -216,7 +198,20 @@ export class Host {
         return 2 * RndN(min, max)
     }
 
-
+    /**
+     * a random composite number built from `n` factors in `factors`.
+     * ```
+     * RndComposite([2,3,5],3) // return 2*2*2, 2*3*5, 2*3*3, ...
+     * ```
+     */
+    @checkIt(owl.arrayWith(owl.positiveInt), owl.positiveInt)
+    static RndComposite(factors: number[], n: number): number {
+        let num = 1
+        for (let i = 1; i <= n; i++) {
+            num *= RndPick(...factors)
+        }
+        return num
+    }
 
     /**
      * an array of random polynomial coefficients
@@ -230,9 +225,6 @@ export class Host {
         arr[0] = Math.abs(arr[0])
         return arr
     }
-
-
-
 
     /**
      * an array of a Pyth Triple
@@ -256,7 +248,6 @@ export class Host {
         return toList(arr).draw()!
     }
 
-
     /**
      * a point within given range, x and y are distinct and non-zero
      * ```
@@ -266,7 +257,10 @@ export class Host {
      * ```
      */
     @checkIt(owl.or([owl.num, owl.interval]))
-    static RndPoint(xRange: number | interval, yRange: number | interval = xRange): Point2D {
+    static RndPoint(
+        xRange: number | interval,
+        yRange: number | interval = xRange
+    ): Point2D {
         if (typeof xRange === 'number') xRange = [-xRange, xRange]
         if (typeof yRange === 'number') yRange = [-yRange, yRange]
         let [x1, x2] = xRange
@@ -279,23 +273,32 @@ export class Host {
             .roll()
     }
 
-
-
     /**
      * n points within given range, no horizontal / vertical / collinear
      * ```
      * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
      * ```
      */
-    @checkIt(owl.or([owl.num, owl.interval]), owl.or([owl.num, owl.interval]), owl.num)
-    static RndPoints(xRange: number | interval, yRange: number | interval = xRange, n = 10): Point2D[] {
+    @checkIt(
+        owl.or([owl.num, owl.interval]),
+        owl.or([owl.num, owl.interval]),
+        owl.num
+    )
+    static RndPoints(
+        xRange: number | interval,
+        yRange: number | interval = xRange,
+        n = 10
+    ): Point2D[] {
         return dice(() => RndPoint(xRange, yRange))
             .unique(([x, y]) => x)
             .unique(([x, y]) => y)
-            .coherent($ => toList($).combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C)))
+            .coherent($ =>
+                toList($)
+                    .combinations(3)
+                    .every(([A, B, C]) => Slope(A, B) !== Slope(B, C))
+            )
             .rolls(n)
     }
-
 
     /**
      * n angles in [0,360] at least cyclic separated by separation
@@ -306,13 +309,13 @@ export class Host {
     @checkIt(owl.positiveInt, owl.positive)
     static RndAngles(n: number, separation: number): number[] {
         let angles = dice(() => RndN(0, 360))
-            .coherent(angles => toNumbers(angles).gapsMod(360).min() > separation)
+            .coherent(
+                angles => toNumbers(angles).gapsMod(360).min() > separation
+            )
             .unique()
             .rolls(n)
         return [...toList(angles).ascending()]
     }
-
-
 
     /**
      * `n` points on a unit circle at least cyclic separated by separation
@@ -326,7 +329,6 @@ export class Host {
         return RndAngles(n, separation).map($ => OnCircle($ + t))
     }
 
-
     /**
      * n vertices of a convex polygon generated by rounding a cyclic polygon
      * ```
@@ -334,17 +336,22 @@ export class Host {
      * ```
      */
     @checkIt(owl.positiveInt, owl.point2D, owl.positive, owl.positive)
-    static RndConvexPolygon(n: number, center: Point2D, radius: number, separation: number): Point2D[] {
+    static RndConvexPolygon(
+        n: number,
+        center: Point2D,
+        radius: number,
+        separation: number
+    ): Point2D[] {
         let [h, k] = center
         let r = radius
         let angles = RndAngles(n, separation)
-        let vertices: Point2D[] = angles.map(a => [h + r * cos(a), k + r * sin(a)])
+        let vertices: Point2D[] = angles.map(a => [
+            h + r * cos(a),
+            k + r * sin(a),
+        ])
         vertices = vertices.map(([x, y]) => [Fix(x), Fix(y)])
         return vertices
     }
-
-
-
 
     /**
      * n integers from [min, max], must be uni-moded
@@ -360,7 +367,6 @@ export class Host {
         return toList(data).ascending()
     }
 
-
     /**
      * 3 points forming a triangle, with min angle and length
      * ```
@@ -368,12 +374,11 @@ export class Host {
      * ```
      */
     @checkIt(owl.interval, owl.interval, owl.object)
-    static RndTriangle(xRange: interval, yRange: interval, {
-        minAngle = 0,
-        maxAngle = 180,
-        minLength = 0,
-        obtuse = false
-    } = {}): [Point2D, Point2D, Point2D] {
+    static RndTriangle(
+        xRange: interval,
+        yRange: interval,
+        { minAngle = 0, maxAngle = 180, minLength = 0, obtuse = false } = {}
+    ): [Point2D, Point2D, Point2D] {
         let [x1, x2] = xRange
         let [y1, y2] = yRange
         let arr: Point2D[] = []
@@ -383,8 +388,6 @@ export class Host {
             }
         }
         arr = RndShuffle(...arr)
-
-
 
         for (let i = 0; i < arr.length; i++) {
             for (let j = i + 1; j < arr.length; j++) {
@@ -415,13 +418,7 @@ export class Host {
             }
         }
         throw 'RndTriangle fail to find a suitable triangle.'
-
     }
-
-
-
-
-
 
     /**
      * an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
@@ -452,16 +449,13 @@ export class Host {
                 for (let s of [angle, -angle]) {
                     if (a === 360 && s > 0) continue
                     if (a === 0 && s < 0) continue
-                    if (cal.eq(trig(f as TrigFunc, a + s), v)) arr.push([f as TrigFunc, a + s])
+                    if (cal.eq(trig(f as TrigFunc, a + s), v))
+                        arr.push([f as TrigFunc, a + s])
                 }
             }
         }
         return RndPick(...arr)
     }
-
-
-
-
 
     /**
      * an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
@@ -470,7 +464,18 @@ export class Host {
      * ```
      */
     @checkIt(owl.str, owl.str)
-    static RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '1/tan' | '-1/tan', label: string): TrigExp {
+    static RndTrigEqv(
+        result:
+            | 'sin'
+            | '-sin'
+            | 'cos'
+            | '-cos'
+            | 'tan'
+            | '-tan'
+            | '1/tan'
+            | '-1/tan',
+        label: string
+    ): TrigExp {
         let trig = (funcName: TrigFunc, angle: number): number => {
             if (funcName === 'sin') return sin(angle)
             if (funcName === 'cos') return cos(angle)
@@ -499,9 +504,6 @@ export class Host {
         return RndPick(...arr)
     }
 
-
-
-
     /**
      * a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
      * ```
@@ -510,13 +512,25 @@ export class Host {
      * ```
      */
     static RndPointPolar(): Point2D {
-        let angle = RndPick(30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330)
+        let angle = RndPick(
+            30,
+            45,
+            60,
+            120,
+            135,
+            150,
+            210,
+            225,
+            240,
+            300,
+            315,
+            330
+        )
         let a = RndEven(2, 6)
         let b = RndPick(1, 2, 3)
         let r = a * Math.sqrt(b)
         return PolToRect([r, angle])
     }
-
 
     /**
      * a random ratio group in [min, max] inclusive.
@@ -529,12 +543,7 @@ export class Host {
         let nums = RndNs(min, max, n)
         return toNumbers(nums).ratio()
     }
-
-
 }
-
-
-
 
 declare global {
     var RndN: typeof Host.RndN
@@ -552,6 +561,7 @@ declare global {
     var RndP: typeof Host.RndP
     var RndOdd: typeof Host.RndOdd
     var RndEven: typeof Host.RndEven
+    var RndComposite: typeof Host.RndComposite
     var RndPoly: typeof Host.RndPoly
     var RndPyth: typeof Host.RndPyth
     var RndPoint: typeof Host.RndPoint
@@ -565,8 +575,4 @@ declare global {
     var RndTrigEqv: typeof Host.RndTrigEqv
     var RndPointPolar: typeof Host.RndPointPolar
     var RndRatio: typeof Host.RndRatio
-
 }
-
-
-
