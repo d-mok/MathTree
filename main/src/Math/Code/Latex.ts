@@ -7,7 +7,6 @@ export class Host {
      * Print a stem-and-leaf diagram in latex.
      * @param data - sorted data
      * @param labels - a copy of data, but you can replace some number with string label.
-     * @example
      * ```
      * StemAndLeaf({
      *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
@@ -76,7 +75,6 @@ export class Host {
      * @param columns - a latex syntax for column border
      * @param rows - similar to `columns`
      * @param stretch - scale the height of the cells
-     * @example
      * ```
      * Table({
      *     content: [
@@ -141,7 +139,6 @@ export class Host {
      * Print a frequency table in latex.
      * @param dataLabel - the label for the 1st row
      * @param freqLabel - the label for the 2nd row
-     * @example
      * ```
      * FreqTable({
      *   data: [1, 1, 4, 4, 3, 3, 3],
@@ -175,7 +172,6 @@ export class Host {
      * @param rows - array of row values
      * @param cols - array of column values
      * @param cell - a function mapping row and column values to cell content
-     * @example
      * ```
      * PairTable({
      *    rowTitle:'first',
@@ -238,7 +234,6 @@ export class Host {
     /**
      * Print the check vertice steps.
      * @param label - the field label
-     * @example
      * ```
      * CheckVertices({
      *    constraints: [
@@ -272,7 +267,6 @@ export class Host {
 
     /**
      * A short division for prime factorization of numbers.
-     * @example
      * ```
      * ShortDivision({
      *    numbers: [12,16,18],
