@@ -15,7 +15,6 @@
   "dependencies": {
     "bot": "file:../packages/bot",
     "contract": "file:../packages/contract",
-    "esbuild-wasm": "^0.15.7",
     "fate": "file:../packages/fate",
     "gauss": "file:../packages/gauss",
     "katex": "^0.13.23",
