@@ -140,11 +140,11 @@ export function printLabeledValue(
 }
 
 export function printPrimeFactors(num: number): string {
+    if (num === 1) return String(1)
     let factors = PrimeFactors(num)
-    const primes = cal.primes(num)
+    const primes = [...new Set(factors)]
     return primes
         .map(p => [p, Freq(factors, p)])
-        .filter(([p, n]) => n > 0)
         .map(([p, n]) => p + '^{' + n + '}')
         .join(' \\times ')
 }
