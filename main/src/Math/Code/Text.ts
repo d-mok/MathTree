@@ -260,8 +260,10 @@ export class Host {
         let keys = Object.keys(val)
         let n = val[keys[0]].length
 
+        let flagFirst = true
+
         function add(variable: string, power: number) {
-            let mul = multiply && variable !== keys[0]
+            let mul = multiply && !flagFirst
             let s = mul ? '& \\times &' : '&'
             if (power > 1) {
                 T += s + variable + '^{' + power + '}'
@@ -270,9 +272,11 @@ export class Host {
             } else {
                 T += mul ? '& &' : ' & '
             }
+            if (power > 0) flagFirst = false
         }
 
         for (let i = 0; i < n; i++) {
+            flagFirst = true
             T += ' & '
             if (keys.includes('number')) T += ' & ' + val.number[i]
             for (let k of keys) {
@@ -283,6 +287,7 @@ export class Host {
         }
         T += '\\hline'
         if (hcf) {
+            flagFirst = true
             T += ' \\text{HCF} & = '
             if (keys.includes('number')) T += ' & ' + HCF(...val.number)
             for (let k of keys) {
@@ -292,6 +297,7 @@ export class Host {
             T += ' \\\\ '
         }
         if (lcm) {
+            flagFirst = true
             T += ' \\text{LCM} & = '
             if (keys.includes('number')) T += ' & ' + LCM(...val.number)
             for (let k of keys) {
