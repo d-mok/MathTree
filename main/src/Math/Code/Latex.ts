@@ -1,11 +1,8 @@
-
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-
 
 @exposeAll()
 @captureAll()
 export class Host {
-
     /**
      * Print a stem-and-leaf diagram in latex.
      * @param data - sorted data
@@ -21,14 +18,18 @@ export class Host {
      * // a diagram with two numbers replaced by 'x' and 'y'
      * ```
      */
-    static StemAndLeaf({ data, labels, stem = "(tens)", leaf = "(units)" }: {
-        data: number[],
-        labels?: (number | string)[],
-        stem?: string,
+    static StemAndLeaf({
+        data,
+        labels,
+        stem = '(tens)',
+        leaf = '(units)',
+    }: {
+        data: number[]
+        labels?: (number | string)[]
+        stem?: string
         leaf?: string
     }): string {
-
-        let T = ""
+        let T = ''
         T += '\\begin{array}{r|l}'
         T += `\\text{Stem} & \\text{Leaf} \\\\ `
         T += `\\text{${stem}} & \\text{${leaf}} \\\\ \\hline `
@@ -42,8 +43,7 @@ export class Host {
         }
 
         function parse(label: number | string): string {
-            if (typeof label === 'number')
-                return unit(label).toString()
+            if (typeof label === 'number') return unit(label).toString()
             return label
         }
 
@@ -70,12 +70,6 @@ export class Host {
     }
     // ************TO BE DONE!!! VALIDATE OBJECT
 
-
-
-
-
-
-
     /**
      * Print a table in latex.
      * @param content - the cell content
@@ -96,24 +90,33 @@ export class Host {
      * })
      * ```
      */
-    static Table({ content, columns, rows, stretch }: {
-        content: (string | number)[][],
-        columns?: string,
-        rows?: string,
+    static Table({
+        content,
+        columns,
+        rows,
+        stretch,
+    }: {
+        content: (string | number)[][]
+        columns?: string
+        rows?: string
         stretch?: number
-
     }): string {
         let nCol = Math.max(...content.map($ => $.length))
-        columns ??= Array(nCol + 1).fill("|").join("c")
+        columns ??= Array(nCol + 1)
+            .fill('|')
+            .join('c')
 
         let nRow = content.length
-        rows ??= Array(nRow + 1).fill("|").join("r")
-        let rowsArr = rows.split('r').map($ => $
-            .replace(/\|/g, " \\hline ")
-            .replace(/\:/g, " \\hdashline ")
-        )
+        rows ??= Array(nRow + 1)
+            .fill('|')
+            .join('r')
+        let rowsArr = rows
+            .split('r')
+            .map($ =>
+                $.replace(/\|/g, ' \\hline ').replace(/\:/g, ' \\hdashline ')
+            )
 
-        let T = ""
+        let T = ''
         if (stretch) T += '\\def \\arraystretch{1.5} '
         T += `\\begin{array}{${columns}}`
 
@@ -125,7 +128,7 @@ export class Host {
         let i = 0
         for (let row of content) {
             T += rowsArr[i] ?? ''
-            T += row.map(parseCell).join(" & ") + " \\\\ "
+            T += row.map(parseCell).join(' & ') + ' \\\\ '
             i++
         }
         T += rowsArr[i] ?? ''
@@ -133,12 +136,6 @@ export class Host {
         return T
     }
     // ************TO BE DONE!!! VALIDATE OBJECT
-
-
-
-
-
-
 
     /**
      * Print a frequency table in latex.
@@ -153,25 +150,25 @@ export class Host {
      * })
      * ```
      */
-    static FreqTable({ data, dataLabel, freqLabel }: {
-        data: number[],
-        dataLabel: string,
+    static FreqTable({
+        data,
+        dataLabel,
+        freqLabel,
+    }: {
+        data: number[]
+        dataLabel: string
         freqLabel: string
     }): string {
         let values = ListIntegers(Math.min(...data), Math.max(...data))
         let freqs = Freqs(data, values)
         return Table({
-            content:
-                [
-                    [dataLabel, ...values],
-                    [freqLabel, ...freqs]
-                ]
+            content: [
+                [dataLabel, ...values],
+                [freqLabel, ...freqs],
+            ],
         })
     }
     // ************TO BE DONE!!! VALIDATE OBJECT
-
-
-
 
     /**
      * Print a table in latex showing cartisian product of two items.
@@ -195,16 +192,14 @@ export class Host {
         colTitle,
         rows,
         cols,
-        cell
+        cell,
     }: {
-        rowTitle: string,
-        colTitle: string,
-        rows: R[],
-        cols: C[],
+        rowTitle: string
+        colTitle: string
+        rows: R[]
+        cols: C[]
         cell: (rowValue: R, colValue: C) => string | number | boolean
-    }
-    ): string {
-
+    }): string {
         function parseCell(cell: string | number): string {
             if (typeof cell === 'number') return String(cell)
             return cell.startsWith('$') ? cell.substring(1) : `\\text{${cell}}`
@@ -221,7 +216,7 @@ export class Host {
             return String(val)
         }
 
-        let T = ""
+        let T = ''
         T += '\\begin{matrix}'
         T += ` & ${colTitle} \\\\`
         T += ` ${rowTitle} & {`
@@ -240,10 +235,6 @@ export class Host {
     }
     // ************TO BE DONE!!! VALIDATE OBJECT
 
-
-
-
-
     /**
      * Print the check vertice steps.
      * @param label - the field label
@@ -260,13 +251,16 @@ export class Host {
      * })
      * ```
      */
-    static CheckVertices({ constraints, field, label }:
-        {
-            constraints: Constraint[],
-            field: Field,
-            label: string
-        }): string {
-        let T = ""
+    static CheckVertices({
+        constraints,
+        field,
+        label,
+    }: {
+        constraints: Constraint[]
+        field: Field
+        label: string
+    }): string {
+        let T = ''
         let vs = toReins(constraints).vertices()
         for (let v of vs) {
             T += '\\text{At } ' + Coord(v) + ':~~~'
@@ -276,11 +270,88 @@ export class Host {
     }
     // ************TO BE DONE!!! VALIDATE OBJECT
 
+    /**
+     * A short division for prime factorization of numbers.
+     * @param numbers - The array of numbers to factorize.
+     * @example
+     * ```
+     * CheckVertices({
+     *    constraints: [
+     *      [1,0,'>',0],
+     *      [0,1,'>',0],
+     *      [1,1,'<',2],
+     * ],
+     *    field: [1,2,3],
+     *    label: "P"
+     * })
+     * ```
+     */
+    static ShortDivision({
+        numbers,
+        mode,
+    }: {
+        numbers: number[]
+        mode: 'HCF' | 'LCM'
+    }): string {
+        const primes = [2, 3, 5, 7, 11, 13, 17, 19]
 
+        // is divisible by
+        function isDiv(n: number, p: number): boolean {
+            return n % p === 0
+        }
+
+        // return integer quotient or else, self
+        function tryDiv(n: number, p: number): number {
+            return isDiv(n, p) ? n / p : n
+        }
+
+        function tryDivs(ns: number[], p: number): number[] {
+            return ns.map($ => tryDiv($, p))
+        }
+
+        function shouldContinue(
+            ns: number[],
+            p: number,
+            mode: 'HCF' | 'LCM'
+        ): boolean {
+            return mode === 'HCF'
+                ? ns.every($ => isDiv($, p)) //allDivisible:
+                : ns.filter($ => isDiv($, p)).length > 1 //twoDivisible
+        }
+
+        function divideStep(ns: number[]): [number, number[]] | undefined {
+            for (let p of primes) {
+                let go = shouldContinue(ns, p, 'HCF')
+                if (go) return [p, tryDivs(ns, p)]
+            }
+            if (mode === 'HCF') return undefined
+            for (let p of primes) {
+                let go = shouldContinue(ns, p, 'LCM')
+                if (go) return [p, tryDivs(ns, p)]
+            }
+            return undefined
+        }
+
+        let nums = [...numbers]
+
+        let ps: number[] = []
+        let steps: number[][] = [[...numbers]]
+
+        while (true) {
+            let step = divideStep(nums)
+            if (step === undefined) break
+            ps.push(step[0])
+            steps.push(step[1])
+            nums = step[1]
+        }
+        let T1 = '\\begin{array}{r|}' + ps.join(' \\\\ ') + '\\end{array}'
+        let T2 =
+            '\\begin{array}{}' +
+            steps.map($ => $.join('&')).join(' \\\\\\hline ') +
+            '\\end{array}'
+        return T1 + ' ' + T2
+    }
 }
-
-
-
 
 declare global {
     var StemAndLeaf: typeof Host.StemAndLeaf
@@ -289,8 +360,3 @@ declare global {
     var PairTable: typeof Host.PairTable
     var CheckVertices: typeof Host.CheckVertices
 }
-
-
-
-
-

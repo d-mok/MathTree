@@ -1325,7 +1325,7 @@ declare module "Math/Code/Latex" {
          * // a diagram with two numbers replaced by 'x' and 'y'
          * ```
          */
-        static StemAndLeaf({ data, labels, stem, leaf }: {
+        static StemAndLeaf({ data, labels, stem, leaf, }: {
             data: number[];
             labels?: (number | string)[];
             stem?: string;
@@ -1351,7 +1351,7 @@ declare module "Math/Code/Latex" {
          * })
          * ```
          */
-        static Table({ content, columns, rows, stretch }: {
+        static Table({ content, columns, rows, stretch, }: {
             content: (string | number)[][];
             columns?: string;
             rows?: string;
@@ -1370,7 +1370,7 @@ declare module "Math/Code/Latex" {
          * })
          * ```
          */
-        static FreqTable({ data, dataLabel, freqLabel }: {
+        static FreqTable({ data, dataLabel, freqLabel, }: {
             data: number[];
             dataLabel: string;
             freqLabel: string;
@@ -1392,7 +1392,7 @@ declare module "Math/Code/Latex" {
          * // a table showing the sum of two dices
          * ```
          */
-        static PairTable<R, C>({ rowTitle, colTitle, rows, cols, cell }: {
+        static PairTable<R, C>({ rowTitle, colTitle, rows, cols, cell, }: {
             rowTitle: string;
             colTitle: string;
             rows: R[];
@@ -1415,10 +1415,30 @@ declare module "Math/Code/Latex" {
          * })
          * ```
          */
-        static CheckVertices({ constraints, field, label }: {
+        static CheckVertices({ constraints, field, label, }: {
             constraints: Constraint[];
             field: Field;
             label: string;
+        }): string;
+        /**
+         * A short division for prime factorization of numbers.
+         * @param numbers - The array of numbers to factorize.
+         * @example
+         * ```
+         * CheckVertices({
+         *    constraints: [
+         *      [1,0,'>',0],
+         *      [0,1,'>',0],
+         *      [1,1,'<',2],
+         * ],
+         *    field: [1,2,3],
+         *    label: "P"
+         * })
+         * ```
+         */
+        static ShortDivision({ numbers, mode, }: {
+            numbers: number[];
+            mode: 'HCF' | 'LCM';
         }): string;
     }
     global {
