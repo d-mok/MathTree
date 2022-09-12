@@ -1,6 +1,6 @@
 {
   "name": "mathtree-client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a private package",
   "main": "lib/index.js",
   "types": "lib",
@@ -10,5 +10,12 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "publish_package": "npm version patch --no-git-tag-version && npm publish --access public"
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "singleAttributePerLine": true
   }
 }

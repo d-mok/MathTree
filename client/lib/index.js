@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeedArray = void 0;
-const type_1 = require("./type");
+const seed_1 = require("./seed");
 function cloneJSON(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
@@ -14,14 +14,14 @@ class SeedArray extends Array {
         const response = await fetch(url, {
             headers: {
                 apikey: this.SUPABASE_ANON_KEY,
-                Authorization: 'Bearer ' + this.SUPABASE_ANON_KEY
-            }
+                Authorization: 'Bearer ' + this.SUPABASE_ANON_KEY,
+            },
         });
         let json = await response.json();
         return ids
             .map(id => json.find($ => $.id === id) ?? ErrIdNotFound(id))
             .map($ => cloneJSON($))
-            .map($ => new type_1.Seed($));
+            .map($ => new seed_1.Seed($));
     }
     async refreshByIds(ids) {
         this.clear();
@@ -46,43 +46,16 @@ class SeedArray extends Array {
         this[0].grow();
     }
     tick() {
-        this.cycle(1);
+        this.cycle();
         this.growFirst();
     }
-    /**
-     * Cycle the order of elements in-place by `n` steps.
-     * @param n - number to step to cycle
-     * ```
-     * [1,2,3,4,5].cycle(2) // [3,4,5,1,2]
-     * [1,2,3,4,5].cycle(-2) // [4,5,1,2,3]
-     * ```
-     */
-    cycle(n) {
-        if (this.length === 0)
-            return;
-        if (n === 0)
-            return;
-        if (n > 0) {
-            for (let i = 1; i <= n; i++) {
-                this.push(this.shift());
-            }
-        }
-        if (n < 0) {
-            n = Math.abs(n);
-            for (let i = 1; i <= n; i++) {
-                this.unshift(this.pop());
-            }
-        }
+    cycle() {
+        this.push(this.shift());
     }
-    /**
-     * Shuffle this array in-place.
-     * ```
-     * [1,2,3].shuffle() //-> [2,1,3] or [3,1,2] or ...
-     * ```
-     */
     shuffle() {
         for (let i = this.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1)); // random from 0 to i
+            let j = Math.floor(Math.random() * (i + 1)) // random from 0 to i
+            ;
             [this[i], this[j]] = [this[j], this[i]];
         }
     }
