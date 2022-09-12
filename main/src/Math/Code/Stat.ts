@@ -1,13 +1,8 @@
-
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-
 
 @exposeAll()
 @captureAll()
 export class Host {
-
-
-
     /**
      * the minimum value. Equivalent to Math.min().
      * ```
@@ -18,7 +13,6 @@ export class Host {
     static Min(...nums: number[]): number {
         return Math.min(...nums)
     }
-
 
     /**
      * the maximum value. Equivalent to Math.max().
@@ -31,8 +25,6 @@ export class Host {
         return Math.max(...nums)
     }
 
-
-
     /**
      * the sorted array of numbers.
      * ```
@@ -43,8 +35,6 @@ export class Host {
     static Sort(...nums: number[]): number[] {
         return [...nums].sort((a, b) => a - b)
     }
-
-
 
     /**
      * the sorted array of items by giving each item a value.
@@ -58,13 +48,12 @@ export class Host {
         return [...items].sort((a, b) => valueFunc(a) - valueFunc(b))
     }
 
-
-
     /**
      * sum of nums
      * ```
      * Sum(1,2,3) // 6
      * Sum(-1,2,3,4,5) // 13
+     * Sum() // 0
      * ```
      */
     @checkIt(owl.num)
@@ -72,8 +61,19 @@ export class Host {
         return toData(nums).sum()
     }
 
-
-
+    /**
+     * product of nums
+     * ```
+     * Product(2,3) // 6
+     * Product(-1,2,3,4,5) // -120
+     * Product() // 1
+     * ```
+     */
+    @checkIt(owl.num)
+    static Product(...nums: number[]): number {
+        if (nums.length === 0) return 1
+        return toData(nums).product()
+    }
 
     /**
      * mean of nums
@@ -83,14 +83,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.num)
-    @inspectIt(function is_not_empty(...nums) { return nums.length > 0 })
+    @inspectIt(function is_not_empty(...nums) {
+        return nums.length > 0
+    })
     static Mean(...nums: number[]): number {
         return toData(nums).mean()
     }
-
-
-
-
 
     /**
      * median of nums
@@ -103,7 +101,6 @@ export class Host {
     static Median(...nums: number[]): number {
         return toData(nums).median()
     }
-
 
     /**
      * lower quartile of nums
@@ -129,9 +126,6 @@ export class Host {
         return toData(nums).upperQuartile()
     }
 
-
-
-
     /**
      * range of nums
      * ```
@@ -144,9 +138,6 @@ export class Host {
         return toData(nums).range()
     }
 
-
-
-
     /**
      * inter-quartile range of nums
      * ```
@@ -158,9 +149,6 @@ export class Host {
         return toData(nums).IQR()
     }
 
-
-
-
     /**
      * count frequency of item in array
      * ```
@@ -171,7 +159,6 @@ export class Host {
     static Freq<T>(array: T[], item: T): number {
         return toList(array).freq(item)
     }
-
 
     /**
      * mode of nums
@@ -185,8 +172,6 @@ export class Host {
         return [...toData(nums).modes()]
     }
 
-
-
     /**
      * the only mode of nums, if there are multiple modes, then throw error
      * ```
@@ -195,7 +180,9 @@ export class Host {
      * ```
      */
     @checkIt(owl.num)
-    @inspectIt(function has_single_mode(...nums) { return toData(nums).isSingleMode(1) })
+    @inspectIt(function has_single_mode(...nums) {
+        return toData(nums).isSingleMode(1)
+    })
     static UniMode(...nums: number[]): number {
         return toData(nums).mode()
     }
@@ -212,8 +199,6 @@ export class Host {
         return toData(nums).stdDev()
     }
 
-
-
     /**
      * z-score of `num` in a data set with `mean` and `SD`
      * ```
@@ -224,10 +209,6 @@ export class Host {
     static ZScore(num: number, mean: number, SD: number): number {
         return (num - mean) / SD
     }
-
-
-
-
 
     /**
      * the location of median
@@ -240,9 +221,6 @@ export class Host {
     static MedianAt(total: number): number {
         return (total + 1) / 2
     }
-
-
-
 
     /**
      * the location of LQ
@@ -257,8 +235,6 @@ export class Host {
         return MedianAt(total)
     }
 
-
-
     /**
      * the location of UQ
      * ```
@@ -270,8 +246,6 @@ export class Host {
     static UpperQAt(total: number): number {
         return total + 1 - LowerQAt(total)
     }
-
-
 
     /**
      * array of all integers between the min and max of `data`.
@@ -285,7 +259,6 @@ export class Host {
         let max = Math.max(...data)
         return cal.range(min, max)
     }
-
 
     /**
      * array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
@@ -304,8 +277,6 @@ export class Host {
         return arr
     }
 
-
-
     /**
      * make a data set from frequencies
      * ```
@@ -315,14 +286,16 @@ export class Host {
      */
     @checkIt(owl.ntuple)
     static DataFromFreqs(values: number[], frequencies: number[]): number[] {
-        Should(values.length === frequencies.length, 'values and frequencies must be the same length')
+        Should(
+            values.length === frequencies.length,
+            'values and frequencies must be the same length'
+        )
         let data: number[] = []
         for (let i = 0; i < values.length; i++) {
             data.push(...Array(frequencies[i]).fill(values[i]))
         }
         return data
     }
-
 
     /**
      * array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
@@ -339,14 +312,10 @@ export class Host {
             d.lowerQuartile(),
             d.median(),
             d.upperQuartile(),
-            d.max()
+            d.max(),
         ]
     }
-
 }
-
-
-
 
 declare global {
     var Min: typeof Host.Min
@@ -354,6 +323,7 @@ declare global {
     var Sort: typeof Host.Sort
     var SortBy: typeof Host.SortBy
     var Sum: typeof Host.Sum
+    var Product: typeof Host.Product
     var Mean: typeof Host.Mean
     var Median: typeof Host.Median
     var LowerQ: typeof Host.LowerQ
@@ -372,9 +342,4 @@ declare global {
     var Freqs: typeof Host.Freqs
     var DataFromFreqs: typeof Host.DataFromFreqs
     var Summary: typeof Host.Summary
-
 }
-
-
-
-

@@ -2600,9 +2600,19 @@ declare module "Math/Code/Stat" {
          * ```
          * Sum(1,2,3) // 6
          * Sum(-1,2,3,4,5) // 13
+         * Sum() // 0
          * ```
          */
         static Sum(...nums: number[]): number;
+        /**
+         * product of nums
+         * ```
+         * Product(2,3) // 6
+         * Product(-1,2,3,4,5) // -120
+         * Product() // 1
+         * ```
+         */
+        static Product(...nums: number[]): number;
         /**
          * mean of nums
          * ```
@@ -2749,6 +2759,7 @@ declare module "Math/Code/Stat" {
         var Sort: typeof Host.Sort;
         var SortBy: typeof Host.SortBy;
         var Sum: typeof Host.Sum;
+        var Product: typeof Host.Product;
         var Mean: typeof Host.Mean;
         var Median: typeof Host.Median;
         var LowerQ: typeof Host.LowerQ;
