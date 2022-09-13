@@ -36,7 +36,12 @@ export function dress(html: string): string {
     d.do([String.raw`\^\{1\}`], '')
     // handle Sqrt
     d.do([String.raw`\\sqrt\[2\]`], '\\sqrt')
-    // handle Coeff
+    // handle Coeff, twice to handle head-tail overlap
+    d.do(
+        [capOr(p, m, e, l, sl, r, c), '1', capOr(v, f, pl, left, sq)],
+        '$1 $2',
+        true
+    )
     d.do(
         [capOr(p, m, e, l, sl, r, c), '1', capOr(v, f, pl, left, sq)],
         '$1 $2',
