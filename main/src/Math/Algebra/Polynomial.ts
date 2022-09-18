@@ -1,41 +1,40 @@
-
-
-
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-import { MonomialCls } from './PolynomialClass'
 import { poker, dice } from 'fate'
+import { printPolynomial } from '../../Core/Ink'
 
+function getVars(mono: monomial): { name: string; power: number }[] {
+    let keys = Object.keys(mono).filter($ => $ !== 'coeff')
+    keys.sort()
+    return keys.map($ => ({ name: $, power: mono[$] }))
+}
+
+function getDeg(mono: monomial): number {
+    let powers = getVars(mono).map($ => $.power)
+    return Sum(...powers)
+}
+
+export function getMaxDeg(poly: polynomial): number {
+    let degs = poly.map($ => getDeg($))
+    return Math.max(...degs)
+}
+
+function getSize(mono: monomial): number {
+    let s = getDeg(mono)
+    let order = 1
+    for (let { name, power } of getVars(mono)) {
+        order = order / 100
+        s += order * power
+    }
+    return s
+}
+
+function clone<T>(obj: T): T {
+    return JSON.parse(JSON.stringify(obj))
+}
 
 @exposeAll()
 @captureAll()
 export class Host {
-
-
-
-    /**
-     * @deprecated
-     * a monomial object
-     */
-    @checkIt(owl.num, owl.array)
-    static Monomial<V extends string>(coeff: number, vars: { variable: V, power: number }[]) {
-        return new MonomialCls<V>(coeff, vars)
-    }
-
-
-
-    /**
-     * clone a polynomial
-     * ```
-     * PolyClone(7xy+3x^2y^3-2xy^3)
-     * //  7xy+3x^2y^3-2xy^3
-     * ```
-     */
-    @checkIt(owl.polynomial)
-    static PolyClone<V extends string>(poly: polynomial<V>): polynomial<V> {
-        return poly.map(M => M.clone())
-    }
-
-
     /**
      * a random polynomial object
      * ```
@@ -44,21 +43,32 @@ export class Host {
      * ```
      */
     @checkIt(owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num)
-    static RndPolynomial<V extends string>(degree: number, vars: V[] = ["x" as V], terms: number = degree + 1, maxCoeff: number = 9): polynomial<V> {
-        let RndMono = () => {
-            let M = new MonomialCls<V>()
-            M.random(RndN(0, degree), vars, maxCoeff)
+    static RndPolynomial(
+        degree: number,
+        vars: string[] = ['x'],
+        terms: number = degree + 1,
+        maxCoeff: number = 9
+    ): polynomial {
+        function randomPartition(n: number): number[] {
+            let len = vars.length
+            if (n === 0) return Array(len).fill(0)
+            let ps = Partition(n, len, true)
+            let p = RndPick(...ps)
+            return RndShuffle(...p)
+        }
+
+        function randomMono(degree: number) {
+            let M: monomial = { coeff: RndZ(1, maxCoeff) }
+            let degs = randomPartition(degree)
+            vars.forEach((v, i) => (M[v] = degs[i]))
             return M
         }
-        let f = () => dice(RndMono).unique(M => M.size()).rolls(terms)
-        return dice(f).shield(P => Max(...P.map(M => M.degree())) === degree).roll()
 
+        return dice(() => randomMono(RndN(0, degree)))
+            .unique(M => getVars(M))
+            .coherent(P => getMaxDeg(P) === degree)
+            .rolls(terms)
     }
-
-
-
-
-
 
     /**
      * a string of the polynomial object
@@ -68,11 +78,9 @@ export class Host {
      * ```
      */
     @checkIt(owl.polynomial)
-    static PolyPrint<V extends string>(poly: polynomial<V>): string {
-        return poly.map(M => M.print()).filter(x => x !== '0').join("+")
+    static PolyPrint(poly: polynomial): string {
+        return printPolynomial(poly, false)
     }
-
-
 
     /**
      * a polynomial object sorted by power
@@ -82,18 +90,14 @@ export class Host {
      * ```
      */
     @checkIt(owl.polynomial, owl.bool)
-    static PolySort<V extends string>(poly: polynomial<V>, desc = true): polynomial<V> {
-        poly = PolyClone(poly)
-        let arr = SortBy(poly, M => desc ? -M.size() : M.size())
-        return arr
+    static PolySort(poly: polynomial, desc = true): polynomial {
+        poly = clone(poly)
+        if (desc) {
+            return SortBy(poly, M => -getSize(M))
+        } else {
+            return SortBy(poly, M => getSize(M))
+        }
     }
-
-
-    // function PolyPrettyPrint(poly: polynomial) {
-    //     // return (new PolyClass(poly)).print()
-    // }
-    // globalThis.PolyPrettyPrint = contract(PolyPrettyPrint).sign([owl.polynomial])
-
 
     /**
      * a function of the polynomial, for substitution
@@ -103,18 +107,27 @@ export class Host {
      * ```
      */
     @checkIt(owl.polynomial)
-    static PolyFunction<V extends string>(poly: polynomial<V>): (values: { [_: string]: number }) => number {
-        poly = PolyClone(poly)
+    static PolyFunction(
+        poly: polynomial
+    ): (values: { [_: string]: number }) => number {
+        poly = clone(poly)
+
+        function funcMono(mono: monomial) {
+            return (input: { [_: string]: number }) => {
+                let x = mono.coeff
+                for (let { name, power } of getVars(mono)) {
+                    x = x * input[name] ** power
+                }
+                return x
+            }
+        }
         return (values: { [_: string]: number }): number => {
-            return Sum(...poly.map(M => M.func()(values)))
+            return Sum(...poly.map(M => funcMono(M)(values)))
         }
     }
 
-
-
-
-
     /**
+     * @deprecated
      * join arrays of monomials
      * ```
      * PolyJoin([x^5, 2x^6], [3x^7])
@@ -122,15 +135,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.polynomial)
-    static PolyJoin<V extends string>(...polys: polynomial<V>[]): polynomial<V> {
-        polys = polys.map(p => PolyClone(p))
-        let arr: polynomial<V> = []
-        for (let p of polys)
-            arr.push(...p)
+    static PolyJoin(...polys: polynomial[]): polynomial {
+        polys = polys.map(p => clone(p))
+        let arr: polynomial = []
+        for (let p of polys) arr.push(...p)
         return arr
     }
-
-
 
     /**
      * combine like terms in polynomial
@@ -140,11 +150,16 @@ export class Host {
      * ```
      */
     @checkIt(owl.polynomial)
-    static PolySimplify<V extends string>(poly: polynomial<V>): polynomial<V> {
-        poly = PolyClone(poly)
-        let arr: polynomial<V> = []
-        function findLikeTerm(M: MonomialCls<V>) {
-            return arr.find(m => m.signature() === M.signature())
+    static PolySimplify(poly: polynomial): polynomial {
+        poly = clone(poly)
+        let arr: polynomial = []
+
+        function signature(M: monomial) {
+            return JSON.stringify(getVars(M))
+        }
+        function findLikeTerm(M: monomial) {
+            let sign = signature(M)
+            return arr.find(m => signature(m) === sign)
         }
         for (let M of poly) {
             let like = findLikeTerm(M)
@@ -156,42 +171,13 @@ export class Host {
         }
         return arr.filter(m => m.coeff !== 0)
     }
-
-
-
-
-
-    /**
-     * the degree of the polynomial
-     * ```
-     * PolyDegree([x^5, 2x^6, 3x^7]) // 7
-     * ```
-     */
-    @checkIt(owl.polynomial)
-    static PolyDegree<V extends string>(poly: polynomial<V>): number {
-        return Max(...poly.map(M => M.degree()))
-    }
-
-
-
 }
 
-
-
-
-
-
 declare global {
-    var Monomial: typeof Host.Monomial
-    var PolyClone: typeof Host.PolyClone
     var RndPolynomial: typeof Host.RndPolynomial
     var PolyPrint: typeof Host.PolyPrint
     var PolySort: typeof Host.PolySort
     var PolyFunction: typeof Host.PolyFunction
     var PolyJoin: typeof Host.PolyJoin
     var PolySimplify: typeof Host.PolySimplify
-    var PolyDegree: typeof Host.PolyDegree
 }
-
-
-

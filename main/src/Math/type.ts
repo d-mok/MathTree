@@ -1,7 +1,4 @@
-import { MonomialCls } from './Algebra/PolynomialClass'
-
 declare global {
-
     /**
      * ```
      * // quadratic form
@@ -14,9 +11,6 @@ declare global {
     type Point3D = [x: number, y: number, z: number]
     type Point = Point2D | Point3D
 
-
-
-
     type interval = [min: number, max: number]
 
     type Fraction = [numerator: number, denominator: number]
@@ -27,7 +21,12 @@ declare global {
      * [1,2,"<=",3] // x+2y <= 3
      * ```
      */
-    type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number]
+    type Constraint = [
+        xCoeff: number,
+        yCoeff: number,
+        ineq: Ineq,
+        constant: number
+    ]
 
     /**
      * ```
@@ -37,30 +36,25 @@ declare global {
      */
     type Field = [xCoeff: number, yCoeff: number, constant: number]
 
-
-
     type Highlight = {
-        point: Point2D,
-        color?: string,
-        circle?: boolean,
-        contour?: boolean,
-        coordinates?: boolean,
+        point: Point2D
+        color?: string
+        circle?: boolean
+        contour?: boolean
+        coordinates?: boolean
         label?: boolean
     }
 
-
     type Triangle = {
-        sideA: number,
-        sideB: number,
-        sideC: number,
-        angleA: number,
-        angleB: number,
+        sideA: number
+        sideB: number
+        sideC: number
+        angleA: number
+        angleB: number
         angleC: number
     }
 
-
-
-    type QuadrantName = "I" | "II" | "III" | "IV"
+    type QuadrantName = 'I' | 'II' | 'III' | 'IV'
     type QuadrantCode = 1 | 2 | 3 | 4
 
     type PolarPoint = [r: number, q: number]
@@ -69,8 +63,8 @@ declare global {
 
     type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<'
 
-
-    type polynomial<V extends string> = MonomialCls<V>[]
+    type monomial = { coeff: number; [_: string]: number }
+    type polynomial = monomial[]
 
     type TrigValue = [TrigFunc, number | string]
 
@@ -80,7 +74,7 @@ declare global {
     type LabeledValue2 = [value: number, label1: string, label2: string]
     type LabeledValue = LabeledValue1 | LabeledValue2
 
-
-    type quantity = { val: number, unit: string }
-
+    type quantity = { val: number; unit: string }
 }
+
+export {}

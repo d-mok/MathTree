@@ -255,3 +255,26 @@ test('ToFrac', () => {
         }
     }
 })
+
+test('Partition', () => {
+    expect(Partition(5)).toEqual([
+        [5],
+        [4, 1],
+        [3, 2],
+        [3, 1, 1],
+        [2, 2, 1],
+        [2, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+    ])
+    expect(Partition(5, 3)).toEqual([
+        [3, 1, 1],
+        [2, 2, 1],
+    ])
+    expect(Partition(5, 3, true)).toEqual([
+        [5, 0, 0],
+        [4, 1, 0],
+        [3, 2, 0],
+        [3, 1, 1],
+        [2, 2, 1],
+    ])
+})

@@ -4,38 +4,7 @@ declare module "index" {
     import './Pen/index.ts';
     import './Soil/index.ts';
 }
-declare module "Math/Algebra/PolynomialClass" {
-    /**
-     * @ignore
-     */
-    export class MonomialCls<V extends string> {
-        coeff: number;
-        vars: {
-            variable: V;
-            power: number;
-        }[];
-        constructor(coeff?: number, vars?: {
-            variable: V;
-            power: number;
-        }[]);
-        clone(): MonomialCls<V>;
-        random(degree: number, variables: V[], maxCoeff: number): void;
-        degree(): number;
-        sortedVars(): {
-            variable: V;
-            power: number;
-        }[];
-        size(): number;
-        signature(): string;
-        sort(): void;
-        print(): string;
-        func(): (input: {
-            [_: string]: number;
-        }) => number;
-    }
-}
 declare module "Core/Owl/index" {
-    import { MonomialCls } from "Math/Algebra/PolynomialClass";
     export const num: (_: unknown) => _ is number;
     export const whole: (_: unknown) => _ is number;
     export const int: (_: unknown) => _ is number;
@@ -82,8 +51,8 @@ declare module "Core/Owl/index" {
     export const vector: (_: unknown) => _ is Point2D;
     export const vector3D: (_: unknown) => _ is Point3D;
     export const triangleSides: (_: unknown) => boolean;
-    export const monomial: (_: unknown) => _ is MonomialCls<any>;
-    export const polynomial: (_: unknown) => _ is polynomial<any>;
+    export const monomial: (_: unknown) => _ is monomial;
+    export const polynomial: (_: unknown) => _ is polynomial;
     export const trigValue: (_: unknown) => _ is TrigValue;
     export const trigExp: (_: unknown) => _ is TrigExp;
     export const labeledValue1: (_: unknown) => _ is LabeledValue1;
@@ -121,6 +90,7 @@ declare module "Core/Ink/index" {
     export function printConstraints(cons: Constraint[]): string;
     export function printLabeledValue(obj: LabeledValue, order?: number, isAngle?: boolean): string;
     export function printPrimeFactors(num: number): string;
+    export function printPolynomial(poly: polynomial, fraction: boolean): string;
 }
 declare module "Core/index" {
     import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'ruby';
@@ -156,24 +126,8 @@ declare module "Core/index" {
     }
 }
 declare module "Math/Algebra/Polynomial" {
-    import { MonomialCls } from "Math/Algebra/PolynomialClass";
+    export function getMaxDeg(poly: polynomial): number;
     export class Host {
-        /**
-         * @deprecated
-         * a monomial object
-         */
-        static Monomial<V extends string>(coeff: number, vars: {
-            variable: V;
-            power: number;
-        }[]): MonomialCls<V>;
-        /**
-         * clone a polynomial
-         * ```
-         * PolyClone(7xy+3x^2y^3-2xy^3)
-         * //  7xy+3x^2y^3-2xy^3
-         * ```
-         */
-        static PolyClone<V extends string>(poly: polynomial<V>): polynomial<V>;
         /**
          * a random polynomial object
          * ```
@@ -181,7 +135,7 @@ declare module "Math/Algebra/Polynomial" {
          * // may return 7xy+3x^2y^3-2xy^3
          * ```
          */
-        static RndPolynomial<V extends string>(degree: number, vars?: V[], terms?: number, maxCoeff?: number): polynomial<V>;
+        static RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
         /**
          * a string of the polynomial object
          * ```
@@ -189,7 +143,7 @@ declare module "Math/Algebra/Polynomial" {
          * // x^{5}+2x^{6}+3x^{7}
          * ```
          */
-        static PolyPrint<V extends string>(poly: polynomial<V>): string;
+        static PolyPrint(poly: polynomial): string;
         /**
          * a polynomial object sorted by power
          * ```
@@ -197,7 +151,7 @@ declare module "Math/Algebra/Polynomial" {
          * //  [x^5, 2x^6, 3x^7]
          * ```
          */
-        static PolySort<V extends string>(poly: polynomial<V>, desc?: boolean): polynomial<V>;
+        static PolySort(poly: polynomial, desc?: boolean): polynomial;
         /**
          * a function of the polynomial, for substitution
          * ```
@@ -205,17 +159,18 @@ declare module "Math/Algebra/Polynomial" {
          * func({x:2}) // 272
          * ```
          */
-        static PolyFunction<V extends string>(poly: polynomial<V>): (values: {
+        static PolyFunction(poly: polynomial): (values: {
             [_: string]: number;
         }) => number;
         /**
+         * @deprecated
          * join arrays of monomials
          * ```
          * PolyJoin([x^5, 2x^6], [3x^7])
          * // [x^5, 2x^6, 3x^7]
          * ```
          */
-        static PolyJoin<V extends string>(...polys: polynomial<V>[]): polynomial<V>;
+        static PolyJoin(...polys: polynomial[]): polynomial;
         /**
          * combine like terms in polynomial
          * ```
@@ -223,25 +178,15 @@ declare module "Math/Algebra/Polynomial" {
          * // [4x^5, 2x^6]
          * ```
          */
-        static PolySimplify<V extends string>(poly: polynomial<V>): polynomial<V>;
-        /**
-         * the degree of the polynomial
-         * ```
-         * PolyDegree([x^5, 2x^6, 3x^7]) // 7
-         * ```
-         */
-        static PolyDegree<V extends string>(poly: polynomial<V>): number;
+        static PolySimplify(poly: polynomial): polynomial;
     }
     global {
-        var Monomial: typeof Host.Monomial;
-        var PolyClone: typeof Host.PolyClone;
         var RndPolynomial: typeof Host.RndPolynomial;
         var PolyPrint: typeof Host.PolyPrint;
         var PolySort: typeof Host.PolySort;
         var PolyFunction: typeof Host.PolyFunction;
         var PolyJoin: typeof Host.PolyJoin;
         var PolySimplify: typeof Host.PolySimplify;
-        var PolyDegree: typeof Host.PolyDegree;
     }
 }
 declare module "Math/Builder/support/latex" {
@@ -422,7 +367,6 @@ declare module "Math/should" {
     export {};
 }
 declare module "Math/type" {
-    import { MonomialCls } from "Math/Algebra/PolynomialClass";
     global {
         /**
          * ```
@@ -442,7 +386,12 @@ declare module "Math/type" {
          * [1,2,"<=",3] // x+2y <= 3
          * ```
          */
-        type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number];
+        type Constraint = [
+            xCoeff: number,
+            yCoeff: number,
+            ineq: Ineq,
+            constant: number
+        ];
         /**
          * ```
          * // used in linear programming
@@ -466,12 +415,16 @@ declare module "Math/type" {
             angleB: number;
             angleC: number;
         };
-        type QuadrantName = "I" | "II" | "III" | "IV";
+        type QuadrantName = 'I' | 'II' | 'III' | 'IV';
         type QuadrantCode = 1 | 2 | 3 | 4;
         type PolarPoint = [r: number, q: number];
         type TrigFunc = 'sin' | 'cos' | 'tan';
         type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
-        type polynomial<V extends string> = MonomialCls<V>[];
+        type monomial = {
+            coeff: number;
+            [_: string]: number;
+        };
+        type polynomial = monomial[];
         type TrigValue = [TrigFunc, number | string];
         type TrigExp = [TrigFunc, number, 1 | -1, string];
         type LabeledValue1 = [value: number, label: string];
@@ -482,6 +435,7 @@ declare module "Math/type" {
             unit: string;
         };
     }
+    export {};
 }
 declare module "Math/Algebra/Algebra" {
     export class Host {
@@ -1754,6 +1708,18 @@ declare module "Math/Code/Numeracy" {
          * ```
          */
         static ToFrac(num: number): Fraction;
+        /**
+         * all integer partition of `n`.
+         * ```
+         * Partition(4)
+         * // [ [4], [3,1], [2,2], [2,1,1], [1,1,1,1] ]
+         * Partition(4, 2, false)
+         * // [ [3,1], [2,2] ]
+         * Partition(4, 2, true)
+         * // [ [4,0], [3,1], [2,2] ]
+         * ```
+         */
+        static Partition(n: number, length?: number, allowZero?: boolean): number[][];
     }
     global {
         var Divide: typeof Host.Divide;
@@ -1773,6 +1739,7 @@ declare module "Math/Code/Numeracy" {
         var LCM: typeof Host.LCM;
         var PrimeFactors: typeof Host.PrimeFactors;
         var ToFrac: typeof Host.ToFrac;
+        var Partition: typeof Host.Partition;
     }
 }
 declare module "Math/Code/PhyConst" {

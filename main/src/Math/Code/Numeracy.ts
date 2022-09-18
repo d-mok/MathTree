@@ -237,6 +237,68 @@ export class Host {
     static ToFrac(num: number): Fraction {
         return cal.toFraction(num)
     }
+
+    /**
+     * all integer partition of `n`.
+     * ```
+     * Partition(4)
+     * // [ [4], [3,1], [2,2], [2,1,1], [1,1,1,1] ]
+     * Partition(4, 2, false)
+     * // [ [3,1], [2,2] ]
+     * Partition(4, 2, true)
+     * // [ [4,0], [3,1], [2,2] ]
+     * ```
+     */
+    @checkIt(owl.positiveInt, owl.positiveInt, owl.bool)
+    static Partition(
+        n: number,
+        length?: number,
+        allowZero = false
+    ): number[][] {
+        function padArray<T>(arr: T[], length: number, val: T): T[] {
+            arr.length = length
+            return Array.from(arr, v => v ?? val)
+        }
+
+        let arr: number[][] = []
+        let p: number[] = new Array(n)
+        let k = 0
+        p[k] = n
+
+        while (true) {
+            arr.push(p.filter($ => $))
+            let rem_val = 0
+
+            while (k >= 0 && p[k] === 1) {
+                rem_val += p[k]
+                k--
+            }
+            if (k < 0) break
+
+            p[k]--
+            rem_val++
+
+            while (rem_val > p[k]) {
+                p[k + 1] = p[k]
+                rem_val = rem_val - p[k]
+                k++
+            }
+
+            p[k + 1] = rem_val
+            k++
+        }
+        if (length === undefined) {
+            return arr
+        } else {
+            if (allowZero) {
+                return arr
+                    .filter($ => $.length <= length)
+                    .map($ => padArray($, length, 0))
+            } else {
+                return arr.filter($ => $.length === length)
+            }
+        }
+    }
 }
 
 declare global {
@@ -257,4 +319,5 @@ declare global {
     var LCM: typeof Host.LCM
     var PrimeFactors: typeof Host.PrimeFactors
     var ToFrac: typeof Host.ToFrac
+    var Partition: typeof Host.Partition
 }

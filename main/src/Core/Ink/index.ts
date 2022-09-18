@@ -148,3 +148,54 @@ export function printPrimeFactors(num: number): string {
         .map(([p, n]) => p + '^{' + n + '}')
         .join(' \\times ')
 }
+
+function printMono(mono: monomial, fraction: boolean): string {
+    let keys = Object.keys(mono).filter($ => $ !== 'coeff')
+    keys.sort()
+    let vars = keys.map($ => ({ name: $, power: mono[$] }))
+    let coeff = mono.coeff
+
+    if (!fraction) {
+        let T = String(mono.coeff)
+
+        for (let { name, power } of vars) {
+            if (power === 0) {
+                continue
+            } else if (power === 1) {
+                T += name
+            } else {
+                T += name + '^{' + power + '}'
+            }
+        }
+        return T
+    } else {
+        let [p, q] = cal.toFraction(coeff)
+        let needFrac = q !== 1 || vars.some($ => $.power < 0)
+        if (!needFrac) {
+            return printMono(mono, false)
+        }
+        let a = '' // numerator
+        let b = '' // denominator
+        a = (p < 0 ? '-' : '') + String(Math.abs(p))
+        b = String(q)
+        for (let { name, power } of vars) {
+            if (power === 0) {
+                continue
+            } else if (power === 1) {
+                a += name
+            } else if (power > 0) {
+                a += name + '^{' + power + '}'
+            } else {
+                b += name + '^{' + -power + '}'
+            }
+        }
+        return `\\dfrac{${a}}{${b}}`
+    }
+}
+
+export function printPolynomial(poly: polynomial, fraction: boolean): string {
+    return poly
+        .filter(M => M.coeff !== 0)
+        .map(M => printMono(M, fraction))
+        .join('+')
+}

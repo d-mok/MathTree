@@ -1,11 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
-
-
     /**
      * the discriminant b^2-4ac.
      * ```
@@ -17,7 +14,6 @@ export class Host {
         return b * b - 4 * a * c
     }
 
-
     /**
      * the roots [p,q] of ax^2+bx+c=0 where p<=q
      * ```
@@ -26,7 +22,9 @@ export class Host {
      * ```
      */
     @checkIt(owl.nonZero, owl.num, owl.num)
-    @inspectIt(function has_real_root(a, b, c) { return b ** 2 - 4 * a * c >= 0 })
+    @inspectIt(function has_real_root(a, b, c) {
+        return b ** 2 - 4 * a * c >= 0
+    })
     static QuadraticRoot(a: number, b: number, c: number): [number, number] {
         const d = Discriminant(a, b, c)
         const s = Math.sqrt(d)
@@ -34,8 +32,6 @@ export class Host {
         const r2 = Divide(-b + s, 2 * a)
         return [Min(r1, r2), Max(r1, r2)]
     }
-
-
 
     /**
      * the vertex [h,k] of y=ax^2+bx+c.
@@ -50,8 +46,6 @@ export class Host {
         return [h, k]
     }
 
-
-
     /**
      * the quadratic coeff [a,b,c] from given a and roots p and q.
      * ```
@@ -62,9 +56,6 @@ export class Host {
     static QuadraticFromRoot(a: number, p: number, q: number): Quadratic {
         return [a, -a * (p + q), a * p * q]
     }
-
-
-
 
     /**
      * the quadratic coeff [a,b,c] from given a and vertex (h,k).
@@ -78,17 +69,7 @@ export class Host {
         const c = k - a * h * h - b * h
         return [a, b, c]
     }
-
-
-
-
 }
-
-
-
-
-
-
 
 declare global {
     var Discriminant: typeof Host.Discriminant
@@ -97,6 +78,3 @@ declare global {
     var QuadraticFromRoot: typeof Host.QuadraticFromRoot
     var QuadraticFromVertex: typeof Host.QuadraticFromVertex
 }
-
-
-
