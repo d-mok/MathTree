@@ -90,6 +90,7 @@ declare module "Core/Ink/index" {
     export function printConstraints(cons: Constraint[]): string;
     export function printLabeledValue(obj: LabeledValue, order?: number, isAngle?: boolean): string;
     export function printPrimeFactors(num: number): string;
+    export function printMonomial(mono: monomial, fraction: boolean): string;
     export function printPolynomial(poly: polynomial, fraction: boolean): string;
 }
 declare module "Core/index" {

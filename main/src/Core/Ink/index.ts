@@ -149,7 +149,7 @@ export function printPrimeFactors(num: number): string {
         .join(' \\times ')
 }
 
-function printMono(mono: monomial, fraction: boolean): string {
+export function printMonomial(mono: monomial, fraction: boolean): string {
     let keys = Object.keys(mono).filter($ => $ !== 'coeff')
     keys.sort()
     let vars = keys.map($ => ({ name: $, power: mono[$] }))
@@ -172,7 +172,7 @@ function printMono(mono: monomial, fraction: boolean): string {
         let [p, q] = cal.toFraction(coeff)
         let needFrac = q !== 1 || vars.some($ => $.power < 0)
         if (!needFrac) {
-            return printMono(mono, false)
+            return printMonomial(mono, false)
         }
         let a = '' // numerator
         let b = '' // denominator
@@ -196,6 +196,6 @@ function printMono(mono: monomial, fraction: boolean): string {
 export function printPolynomial(poly: polynomial, fraction: boolean): string {
     return poly
         .filter(M => M.coeff !== 0)
-        .map(M => printMono(M, fraction))
+        .map(M => printMonomial(M, fraction))
         .join('+')
 }
