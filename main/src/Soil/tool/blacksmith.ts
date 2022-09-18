@@ -78,6 +78,11 @@ addRule('*/@', 'num', $ => {
     return Dfrac(p, q)
 })
 
+// print */x as fraction
+addRule('*/@', 'polynomial', $ => {
+    return ink.printPolynomial($, true)
+})
+
 // print */(x) as fraction with bracket if necessary
 addRule('*/(@)', 'num', $ => {
     let [p, q] = ToFrac($)
@@ -186,7 +191,7 @@ addRule('*@', 'bool', $ => ($ ? '✔' : '✘'))
 addRule('*@', 'quantity', ({ val, unit }) => String(numberDefault(val)) + unit)
 addRule('*@', 'point2D', $ => Coord($))
 addRule('*@', 'combo', $ => ink.printCombo($))
-addRule('*@', 'polynomial', $ => PolyPrint($))
+addRule('*@', 'polynomial', $ => ink.printPolynomial($, false))
 addRule('*@', 'trigValue', $ => ink.printTrigValue($))
 addRule('*@', 'trigExp', $ => ink.printTrigExp($))
 addRule('*@', 'constraint', $ => ink.printConstraint($))
