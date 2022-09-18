@@ -176,7 +176,7 @@ function printMono(mono: monomial, fraction: boolean): string {
         }
         let a = '' // numerator
         let b = '' // denominator
-        a = (p < 0 ? '-' : '') + String(Math.abs(p))
+        a = String(Math.abs(p))
         b = String(q)
         for (let { name, power } of vars) {
             if (power === 0) {
@@ -189,7 +189,7 @@ function printMono(mono: monomial, fraction: boolean): string {
                 b += name + '^{' + -power + '}'
             }
         }
-        return `\\dfrac{${a}}{${b}}`
+        return (p < 0 ? '-' : '') + `\\dfrac{${a}}{${b}}`
     }
 }
 
