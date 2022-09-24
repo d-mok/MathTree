@@ -312,7 +312,8 @@ export class Host {
                 }
             }
             let T = s.join('')
-            if (poker.bool(0.2)) T += '0'
+            if (poker.bool(0.3)) T += '0'
+            if (poker.bool(0.3)) T += '0'
             return T
         }
 
