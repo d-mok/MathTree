@@ -36,17 +36,17 @@ export function AutoOptions<D extends object>(
 
     if (Qn.liCount() === 1) {
         Qn.cloneLi(0, 3)
-        Qn.printInLi(1, dicts[0])
-        Qn.printInLi(2, dicts[1])
-        Qn.printInLi(3, dicts[2])
+        Qn.printInLi(1, { ...source, ...dicts[0] })
+        Qn.printInLi(2, { ...source, ...dicts[1] })
+        Qn.printInLi(3, { ...source, ...dicts[2] })
         return Qn.export()
     }
 
     if (Qn.liCount() === 2) {
         Qn.cloneLi(0)
         Qn.cloneLi(1)
-        Qn.printInLi(2, dicts[0])
-        Qn.printInLi(3, dicts[0])
+        Qn.printInLi(2, { ...source, ...dicts[0] })
+        Qn.printInLi(3, { ...source, ...dicts[0] })
         return Qn.export()
     }
     return question

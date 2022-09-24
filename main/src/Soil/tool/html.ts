@@ -23,8 +23,8 @@ export class QuestionHTML extends HTMLWorker {
     printInLi(index: number, dict: object) {
         this.tranformInnerHTML(
             html => {
-                html = blacksmith.forge(html, dict)
                 html = blacksmith.intra(html, dict)
+                html = blacksmith.forge(html, dict)
                 return html
             },
             'li',
