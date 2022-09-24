@@ -21,7 +21,15 @@ export class QuestionHTML extends HTMLWorker {
     }
 
     printInLi(index: number, dict: object) {
-        this.tranformInnerHTML($ => blacksmith.forge($, dict), 'li', index)
+        this.tranformInnerHTML(
+            html => {
+                html = blacksmith.forge(html, dict)
+                html = blacksmith.intra(html, dict)
+                return html
+            },
+            'li',
+            index
+        )
     }
 
     isLiDuplicated(): boolean {
