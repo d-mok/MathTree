@@ -2177,7 +2177,7 @@ declare module "Math/Code/RandomShake" {
          * // equivalent to RndShakeR(10.5)
          * ```
          */
-        static RndShake(anchor: any): (typeof anchor)[];
+        static RndShake(anchor: any): typeof anchor[];
         /**
          * 3 nearby same-signed integers, range = Max(5, anchor * 10%)
          * ```
@@ -2258,7 +2258,7 @@ declare module "Math/Code/RandomShake" {
          */
         static RndShakeRatio(anchor: number[]): number[][];
         /**
-         * an array of 3 ratios
+         * an array of 3 number in given number system
          * ```
          * RndShakeBase('AB0CD_{16}')
          * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
