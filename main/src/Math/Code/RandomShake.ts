@@ -343,7 +343,13 @@ export class Host {
         return dice(() => dress(mutate(num)))
             .forbid(anchor)
             .unique()
-            .unique($ => $.split('').filter(_ => _ !== '0').length)
+            .unique(
+                $ =>
+                    $.replaceAll('{', '')
+                        .replaceAll('}', '')
+                        .split('')
+                        .filter(_ => _ !== '0').length
+            )
             .rolls(3)
     }
 
