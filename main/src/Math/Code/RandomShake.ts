@@ -340,16 +340,20 @@ export class Host {
         //     return [B1, B2, B3]
         // }
 
+        function nonZeroCount(str: string): number {
+            return str
+                .replaceAll('{', '')
+                .replaceAll('}', '')
+                .split('')
+                .filter(_ => _ !== '0').length
+        }
+
+        let anchorNonZeroCount = nonZeroCount(anchor)
+
         return dice(() => dress(mutate(num)))
             .forbid(anchor)
             .unique()
-            .unique(
-                $ =>
-                    $.replaceAll('{', '')
-                        .replaceAll('}', '')
-                        .split('')
-                        .filter(_ => _ !== '0').length
-            )
+            .shield($ => nonZeroCount($) === anchorNonZeroCount)
             .rolls(3)
     }
 
