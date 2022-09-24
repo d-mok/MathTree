@@ -354,7 +354,8 @@ export class Host {
         return dice(() => dress(mutate(num)))
             .forbid(anchor)
             .unique()
-            .shield($ => nonZeroCount($) === anchorNonZeroCount)
+            .shield($ => nonZeroCount($) === anchorNonZeroCount) // same non-zero digit count
+            .shield($ => !$.startsWith('_')) // not empty
             .rolls(3)
     }
 
