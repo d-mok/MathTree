@@ -29,66 +29,66 @@ export class AutoPenCls {
         return this.pen.exportTrim(html, placeholder)
     }
 
-    /**
-     * A short division diagram for prime factorization of numbers.
-     * @param numbers - The array of numbers to factorize.
-     * ```
-     * let pen = new AutoPen()
-     * pen.PrimeFactorization({numbers:[12,24]})
-     * ```
-     */
-    PrimeFactorization({ numbers }: { numbers: number[] }) {
-        function lowestFactor(arr: number[]) {
-            const primes = [2, 3, 5, 7, 11, 13, 17, 19]
-            for (let p of primes) {
-                if (HCF(...arr) % p === 0) return p
-            }
-            return 1
-        }
-        const pen = new Pen()
-        pen.range.set([-10, 10], [-15, 5])
-        pen.size.set(4)
-        const w = 1
-        const h = 1
-        function drawRow(arr: number[], pivot: number[]) {
-            for (let i = 0; i < arr.length; i++) {
-                pen.write([pivot[0] + i * w, pivot[1]], arr[i].toString())
-            }
-        }
-        function drawVert(pivot: number[]) {
-            pen.line(
-                [pivot[0] - 0.5 * w, pivot[1] - h / 2],
-                [pivot[0] - 0.5 * w, pivot[1] + h / 2]
-            )
-        }
-        function drawUnderline(arr: number[], pivot: number[]) {
-            for (let i = 0; i < arr.length; i++) {
-                pen.line(
-                    [pivot[0] + i * w - 0.5 * w, pivot[1] - h / 2],
-                    [pivot[0] + i * w + 0.5 * w, pivot[1] - h / 2]
-                )
-            }
-        }
-        function drawDivisor(pivot: number[], divisor: number) {
-            pen.write([pivot[0] - w, pivot[1]], divisor.toString())
-        }
-        function drawDiv(arr: number[], pivot: number[]) {
-            const d = lowestFactor(arr)
-            drawVert(pivot)
-            drawUnderline(arr, pivot)
-            drawDivisor(pivot, d)
-            arr = arr.map(x => x / d)
-            pivot = [pivot[0], pivot[1] - h]
-            drawRow(arr, pivot)
-            return [arr, pivot]
-        }
-        let pivot = [1, 0]
-        drawRow(numbers, pivot)
-        while (HCF(...numbers) > 1) {
-            ;[numbers, pivot] = drawDiv(numbers, pivot)
-        }
-        this.pen = pen
-    }
+    // /**
+    //  * A short division diagram for prime factorization of numbers.
+    //  * @param numbers - The array of numbers to factorize.
+    //  * ```
+    //  * let pen = new AutoPen()
+    //  * pen.PrimeFactorization({numbers:[12,24]})
+    //  * ```
+    //  */
+    // PrimeFactorization({ numbers }: { numbers: number[] }) {
+    //     function lowestFactor(arr: number[]) {
+    //         const primes = [2, 3, 5, 7, 11, 13, 17, 19]
+    //         for (let p of primes) {
+    //             if (HCF(...arr) % p === 0) return p
+    //         }
+    //         return 1
+    //     }
+    //     const pen = new Pen()
+    //     pen.range.set([-10, 10], [-15, 5])
+    //     pen.size.set(4)
+    //     const w = 1
+    //     const h = 1
+    //     function drawRow(arr: number[], pivot: number[]) {
+    //         for (let i = 0; i < arr.length; i++) {
+    //             pen.write([pivot[0] + i * w, pivot[1]], arr[i].toString())
+    //         }
+    //     }
+    //     function drawVert(pivot: number[]) {
+    //         pen.line(
+    //             [pivot[0] - 0.5 * w, pivot[1] - h / 2],
+    //             [pivot[0] - 0.5 * w, pivot[1] + h / 2]
+    //         )
+    //     }
+    //     function drawUnderline(arr: number[], pivot: number[]) {
+    //         for (let i = 0; i < arr.length; i++) {
+    //             pen.line(
+    //                 [pivot[0] + i * w - 0.5 * w, pivot[1] - h / 2],
+    //                 [pivot[0] + i * w + 0.5 * w, pivot[1] - h / 2]
+    //             )
+    //         }
+    //     }
+    //     function drawDivisor(pivot: number[], divisor: number) {
+    //         pen.write([pivot[0] - w, pivot[1]], divisor.toString())
+    //     }
+    //     function drawDiv(arr: number[], pivot: number[]) {
+    //         const d = lowestFactor(arr)
+    //         drawVert(pivot)
+    //         drawUnderline(arr, pivot)
+    //         drawDivisor(pivot, d)
+    //         arr = arr.map(x => x / d)
+    //         pivot = [pivot[0], pivot[1] - h]
+    //         drawRow(arr, pivot)
+    //         return [arr, pivot]
+    //     }
+    //     let pivot = [1, 0]
+    //     drawRow(numbers, pivot)
+    //     while (HCF(...numbers) > 1) {
+    //         ;[numbers, pivot] = drawDiv(numbers, pivot)
+    //     }
+    //     this.pen = pen
+    // }
 
     /**
      * Arrow diagram for inequalities.
