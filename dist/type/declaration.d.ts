@@ -4803,17 +4803,6 @@ declare module "Pen/AutoPen" {
          */
         export(html: string, placeholder: string): string;
         /**
-         * A short division diagram for prime factorization of numbers.
-         * @param numbers - The array of numbers to factorize.
-         * ```
-         * let pen = new AutoPen()
-         * pen.PrimeFactorization({numbers:[12,24]})
-         * ```
-         */
-        PrimeFactorization({ numbers }: {
-            numbers: number[];
-        }): void;
-        /**
          * Arrow diagram for inequalities.
          * @param items - Represent the inequalities.
          * @param ticks - Represent the tick or cross for each region.
