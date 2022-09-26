@@ -66,7 +66,7 @@ export class AutoPenCls {
             [-width - 2, width + 2],
             [-len * (height + 2) + 2, height + 1]
         )
-        pen.size.set(2, 0.25 * len)
+        pen.size.set(2, 0.25 * (len + 1))
         pen.set.textLatex(true)
 
         function defaultPosition(index: number): number {
