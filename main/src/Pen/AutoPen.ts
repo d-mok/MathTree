@@ -120,7 +120,7 @@ export class AutoPenCls {
 
         function tick(position: number, correct: boolean) {
             let align = -width + 2 * width * position
-            let y = -(len - 1) * (height + 2) - height / 2
+            let y = -(len - 1) * (height + 2) - height
             pen.write([align, y], correct ? '✔' : '✘')
         }
 
