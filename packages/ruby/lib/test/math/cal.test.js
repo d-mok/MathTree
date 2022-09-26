@@ -1,7 +1,5 @@
 import * as cal from "../../src/math/cal";
 import { describe, expect, it } from "vitest";
-import { toBeDeepCloseTo, toMatchCloseTo } from "jest-matcher-deep-close-to";
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 describe("blur", () => {
     const cases = [
         [0.1 + 0.2, 0.3],

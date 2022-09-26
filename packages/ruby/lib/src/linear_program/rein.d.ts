@@ -1,6 +1,11 @@
 declare type Point2D = [number, number];
-import { Ineq } from './inequal';
-export declare type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number];
+import * as INEQUAL from '../math/inequal';
+export declare type Constraint = [
+    xCoeff: number,
+    yCoeff: number,
+    ineq: INEQUAL.Ineq,
+    constant: number
+];
 export declare class Rein {
     constraint: Constraint;
     constructor(constraint: Constraint);

@@ -61,7 +61,16 @@ declare global {
 
     type TrigFunc = 'sin' | 'cos' | 'tan'
 
-    type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<'
+    type Ineq =
+        | '\\ge'
+        | '\\gt'
+        | '\\le'
+        | '\\lt'
+        | '>='
+        | '<='
+        | '>'
+        | '<'
+        | [greater: boolean, equal: boolean]
 
     type monomial = { coeff: number; [_: string]: number }
     type polynomial = monomial[]

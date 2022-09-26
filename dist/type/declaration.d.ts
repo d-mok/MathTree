@@ -94,7 +94,7 @@ declare module "Core/Ink/index" {
     export function printPolynomial(poly: polynomial, fraction: boolean): string;
 }
 declare module "Core/index" {
-    import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, ineq as $ineq, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'ruby';
+    import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, INEQUAL as $INEQUAL, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'ruby';
     import * as $Owl from "Core/Owl/index";
     import * as $Ink from "Core/Ink/index";
     global {
@@ -117,7 +117,7 @@ declare module "Core/index" {
         var toVector: typeof $toVector;
         var vec2D: typeof $vec2D;
         var vec3D: typeof $vec3D;
-        var ineq: typeof $ineq;
+        var INEQUAL: typeof $INEQUAL;
         var optimizer: typeof $optimizer;
         var rein: typeof $rein;
         var toReins: typeof $toReins;
@@ -420,7 +420,7 @@ declare module "Math/type" {
         type QuadrantCode = 1 | 2 | 3 | 4;
         type PolarPoint = [r: number, q: number];
         type TrigFunc = 'sin' | 'cos' | 'tan';
-        type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
+        type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<' | [greater: boolean, equal: boolean];
         type monomial = {
             coeff: number;
             [_: string]: number;
@@ -4806,8 +4806,6 @@ declare module "Pen/AutoPen" {
          * Arrow diagram for inequalities.
          * @param items - Represent the inequalities.
          * @param ticks - Represent the tick or cross for each region.
-         * @param scale - scale for pen.setup.size()
-         * @param ratio - ratio for pen.setup.size()
          * ```
          * let pen = new AutoPen()
          * pen.Inequalities({
@@ -4819,16 +4817,14 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        Inequalities({ items, ticks, scale, ratio, }: {
+        Inequalities({ items, ticks, }: {
             items: {
-                position: number;
-                sign: string;
+                sign: Ineq;
                 num: number | string;
-                vertical: boolean;
+                position?: number;
+                vertical?: boolean;
             }[];
-            ticks: boolean[];
-            scale?: number;
-            ratio?: number;
+            ticks: boolean[] | 'AND' | 'OR';
         }): void;
         /**
          * Trig Graph for solving basic trig equation.

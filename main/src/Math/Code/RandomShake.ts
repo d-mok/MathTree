@@ -182,9 +182,8 @@ export class Host {
      */
     @checkIt(owl.ineq)
     static RndShakeIneq(anchor: Ineq): Ineq[] {
-        let i = ineq(anchor)
-        let me = i.print()
-        let flip = i.flip()
+        let me = INEQUAL.print(anchor)
+        let flip = INEQUAL.print(INEQUAL.flip(anchor))
         return list(me, flip, flip).shuffled()
     }
 

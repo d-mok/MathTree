@@ -104,11 +104,7 @@ export function printConstraint(
     replaceEqual = false
 ): string {
     let [a, b, i, c] = con
-    if (i === '>=') i = '\\ge'
-    if (i === '>') i = '\\gt'
-    if (i === '<=') i = '\\le'
-    if (i === '<') i = '\\lt'
-    let j: string = i
+    let j: string = INEQUAL.print(i)
     if (replaceEqual) j = '='
     if (align) j = ' & ' + j
     if (a === 0 && b === 0) return ` 0 ${j} ${c} `

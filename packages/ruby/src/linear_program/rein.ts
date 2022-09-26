@@ -1,14 +1,16 @@
-
 type Point2D = [number, number]
 import { crammer } from '../math/cal'
-import { ineq, Ineq } from './inequal'
+import * as INEQUAL from '../math/inequal'
 
-
-export type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number]
+export type Constraint = [
+    xCoeff: number,
+    yCoeff: number,
+    ineq: INEQUAL.Ineq,
+    constant: number
+]
 
 export class Rein {
-
-    constructor(public constraint: Constraint) { }
+    constructor(public constraint: Constraint) {}
 
     private clone(): Rein {
         return new Rein(this.constraint)
@@ -20,7 +22,7 @@ export class Rein {
     public contains(point: Point2D): boolean {
         let [a, b, i, c] = this.constraint
         let [x, y] = point
-        return ineq(i).compare(a * x + b * y, c)
+        return INEQUAL.compare(a * x + b * y, i, c)
     }
 
     /**
@@ -28,7 +30,7 @@ export class Rein {
      */
     canEqual(): boolean {
         let [a, b, i, c] = this.constraint
-        return ineq(i).canEqual()
+        return INEQUAL.canEqual(i)
     }
 
     /**
@@ -36,7 +38,7 @@ export class Rein {
      */
     public strict(): Rein {
         let [a, b, i, c] = this.constraint
-        let j = ineq(i).strict()
+        let j = INEQUAL.strict(i)
         return new Rein([a, b, j, c])
     }
 
@@ -45,17 +47,16 @@ export class Rein {
      */
     public loose(): Rein {
         let [a, b, i, c] = this.constraint
-        let j = ineq(i).loose()
+        let j = INEQUAL.loose(i)
         return new Rein([a, b, j, c])
     }
-
 
     /**
      * Return a flipped version of this constraint.
      */
     public flip(): Rein {
         let [a, b, i, c] = this.constraint
-        let j = ineq(i).flip()
+        let j = INEQUAL.flip(i)
         return new Rein([a, b, j, c])
     }
 
@@ -67,9 +68,8 @@ export class Rein {
         let [a1, b1, i1, c1] = this.constraint
         let [a2, b2, i2, c2] = another.constraint
         if (a1 / b1 === a2 / b2) return undefined
-        return crammer(a1, b1, c1, a2, b2, c2);
+        return crammer(a1, b1, c1, a2, b2, c2)
     }
-
 
     /**
      * Return a clone or a flipped version.
@@ -95,10 +95,6 @@ export class Rein {
     }
 }
 
-
-
-
-
 /**
  * Return a `Rein` instance.
  * @param constraint - the constraint to represent
@@ -109,5 +105,5 @@ export class Rein {
  * ```
  */
 export function rein(constraint: Constraint): Rein {
-    return new Rein(constraint);
+    return new Rein(constraint)
 }

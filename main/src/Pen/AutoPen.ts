@@ -1,3 +1,4 @@
+import { solveCompoundInequality } from 'ruby'
 import { PenCls } from './Pen'
 
 /**
@@ -29,73 +30,10 @@ export class AutoPenCls {
         return this.pen.exportTrim(html, placeholder)
     }
 
-    // /**
-    //  * A short division diagram for prime factorization of numbers.
-    //  * @param numbers - The array of numbers to factorize.
-    //  * ```
-    //  * let pen = new AutoPen()
-    //  * pen.PrimeFactorization({numbers:[12,24]})
-    //  * ```
-    //  */
-    // PrimeFactorization({ numbers }: { numbers: number[] }) {
-    //     function lowestFactor(arr: number[]) {
-    //         const primes = [2, 3, 5, 7, 11, 13, 17, 19]
-    //         for (let p of primes) {
-    //             if (HCF(...arr) % p === 0) return p
-    //         }
-    //         return 1
-    //     }
-    //     const pen = new Pen()
-    //     pen.range.set([-10, 10], [-15, 5])
-    //     pen.size.set(4)
-    //     const w = 1
-    //     const h = 1
-    //     function drawRow(arr: number[], pivot: number[]) {
-    //         for (let i = 0; i < arr.length; i++) {
-    //             pen.write([pivot[0] + i * w, pivot[1]], arr[i].toString())
-    //         }
-    //     }
-    //     function drawVert(pivot: number[]) {
-    //         pen.line(
-    //             [pivot[0] - 0.5 * w, pivot[1] - h / 2],
-    //             [pivot[0] - 0.5 * w, pivot[1] + h / 2]
-    //         )
-    //     }
-    //     function drawUnderline(arr: number[], pivot: number[]) {
-    //         for (let i = 0; i < arr.length; i++) {
-    //             pen.line(
-    //                 [pivot[0] + i * w - 0.5 * w, pivot[1] - h / 2],
-    //                 [pivot[0] + i * w + 0.5 * w, pivot[1] - h / 2]
-    //             )
-    //         }
-    //     }
-    //     function drawDivisor(pivot: number[], divisor: number) {
-    //         pen.write([pivot[0] - w, pivot[1]], divisor.toString())
-    //     }
-    //     function drawDiv(arr: number[], pivot: number[]) {
-    //         const d = lowestFactor(arr)
-    //         drawVert(pivot)
-    //         drawUnderline(arr, pivot)
-    //         drawDivisor(pivot, d)
-    //         arr = arr.map(x => x / d)
-    //         pivot = [pivot[0], pivot[1] - h]
-    //         drawRow(arr, pivot)
-    //         return [arr, pivot]
-    //     }
-    //     let pivot = [1, 0]
-    //     drawRow(numbers, pivot)
-    //     while (HCF(...numbers) > 1) {
-    //         ;[numbers, pivot] = drawDiv(numbers, pivot)
-    //     }
-    //     this.pen = pen
-    // }
-
     /**
      * Arrow diagram for inequalities.
      * @param items - Represent the inequalities.
      * @param ticks - Represent the tick or cross for each region.
-     * @param scale - scale for pen.setup.size()
-     * @param ratio - ratio for pen.setup.size()
      * ```
      * let pen = new AutoPen()
      * pen.Inequalities({
@@ -110,55 +48,48 @@ export class AutoPenCls {
     Inequalities({
         items = [],
         ticks = [],
-        scale = 1.6,
-        ratio = 0.5,
     }: {
         items: {
-            position: number
-            sign: string
+            sign: Ineq
             num: number | string
-            vertical: boolean
+            position?: number
+            vertical?: boolean
         }[]
-        ticks: boolean[]
-        scale?: number
-        ratio?: number
+        ticks: boolean[] | 'AND' | 'OR'
     }) {
         const width = 5
         const height = 2
-
-        let ineqs: {
-            position: number
-            sign: string
-            num: number | string
-            vertical: boolean
-            base: number
-        }[] = items.map((x, i) => ({ base: -i * (height + 2), ...x }))
+        const len = items.length
 
         const pen = new Pen()
         pen.range.set(
             [-width - 2, width + 2],
-            [-ineqs.length * (height + 2) + 2, height + 1]
+            [-len * (height + 2) + 2, height + 1]
         )
-        pen.size.set(scale, scale * ratio)
-
+        pen.size.set(2, 0.25 * len)
         pen.set.textLatex(true)
 
-        function inequality({
-            position,
-            sign,
-            num,
-            base,
-            vertical,
-        }: {
-            position: number
-            sign: string
-            num: number | string
-            base: number
-            vertical: boolean
-        }) {
-            let greater = sign.includes('>') || sign.includes('g')
-            let solid = sign.includes('=') || sign.includes('e')
+        function defaultPosition(index: number): number {
+            if (len === 1) return 0.5
+            if (len === 2) {
+                let me = Number(items[index].num)
+                let other = Number(items[index === 0 ? 1 : 0].num)
+                if (me < other) return 0.3
+                if (me === other) return 0.5
+                if (me > other) return 0.7
+            }
+            return 0.5
+        }
+
+        function inequality(
+            index: number,
+            { position, sign, num, vertical }: typeof items[number]
+        ) {
+            let greater = INEQUAL.greaterThan(sign)
+            let solid = INEQUAL.canEqual(sign)
+            position ??= defaultPosition(index)
             let align = -width + 2 * width * position
+            let base = -index * (height + 2)
 
             let B: Point2D = [align, base]
             let T: Point2D = [align, base + height]
@@ -189,18 +120,33 @@ export class AutoPenCls {
 
         function tick(position: number, correct: boolean) {
             let align = -width + 2 * width * position
-            let y = -(ineqs.length - 1) * (height + 2) - height / 2
+            let y = -(len - 1) * (height + 2) - height / 2
             pen.write([align, y], correct ? '✔' : '✘')
         }
 
-        ineqs.forEach(x => inequality(x))
+        items.forEach((x, i) => inequality(i, x))
 
-        let cutting = ineqs.map(x => x.position)
-        cutting = [0, ...cutting, 1]
+        let cutting = [
+            0,
+            ...items.map((x, i) => x.position ?? defaultPosition(i)),
+            1,
+        ]
 
-        for (let i = 0; i < ticks.length; i++) {
-            let p = (cutting[i] + cutting[i + 1]) / 2
-            tick(p, ticks[i])
+        if (len === 2 && typeof ticks === 'string') {
+            ticks = solveCompoundInequality(
+                items[0].sign,
+                Number(items[0].num),
+                items[1].sign,
+                Number(items[1].num),
+                ticks
+            )
+        }
+
+        if (typeof ticks !== 'string') {
+            for (let i = 0; i < ticks.length; i++) {
+                let p = (cutting[i] + cutting[i + 1]) / 2
+                tick(p, ticks[i])
+            }
         }
 
         this.pen = pen
@@ -813,7 +759,7 @@ export class AutoPenCls {
         function drawLines() {
             for (let i = 0; i < constraints.length; i++) {
                 let [a, b, s, c] = constraints[i]
-                if (!ineq(s).canEqual()) pen.set.dash([5, 5])
+                if (!INEQUAL.canEqual(s)) pen.set.dash([5, 5])
                 pen.set.color(constraintColors[i] ?? 'black')
                 pen.graph.linear(a, b, -c)
                 pen.set.color()

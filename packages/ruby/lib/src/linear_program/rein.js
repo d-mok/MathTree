@@ -1,5 +1,5 @@
 import { crammer } from '../math/cal';
-import { ineq } from './inequal';
+import * as INEQUAL from '../math/inequal';
 export class Rein {
     constructor(constraint) {
         this.constraint = constraint;
@@ -13,21 +13,21 @@ export class Rein {
     contains(point) {
         let [a, b, i, c] = this.constraint;
         let [x, y] = point;
-        return ineq(i).compare(a * x + b * y, c);
+        return INEQUAL.compare(a * x + b * y, i, c);
     }
     /**
      * Check if me can equal.
      */
     canEqual() {
         let [a, b, i, c] = this.constraint;
-        return ineq(i).canEqual();
+        return INEQUAL.canEqual(i);
     }
     /**
      * Return a strict version of this constraint.
      */
     strict() {
         let [a, b, i, c] = this.constraint;
-        let j = ineq(i).strict();
+        let j = INEQUAL.strict(i);
         return new Rein([a, b, j, c]);
     }
     /**
@@ -35,7 +35,7 @@ export class Rein {
      */
     loose() {
         let [a, b, i, c] = this.constraint;
-        let j = ineq(i).loose();
+        let j = INEQUAL.loose(i);
         return new Rein([a, b, j, c]);
     }
     /**
@@ -43,7 +43,7 @@ export class Rein {
      */
     flip() {
         let [a, b, i, c] = this.constraint;
-        let j = ineq(i).flip();
+        let j = INEQUAL.flip(i);
         return new Rein([a, b, j, c]);
     }
     /**

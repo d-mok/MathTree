@@ -1,8 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Vector3D, vector3D } from "../../src/array/vector3D";
-import { toBeDeepCloseTo, toMatchCloseTo } from "jest-matcher-deep-close-to";
 import { vector2D } from "../../src/array/vector2D";
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 class SubVector3D extends Vector3D {
 }
 function it_preserve_original(func) {

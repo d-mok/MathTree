@@ -165,7 +165,9 @@ export const alphabet = (_: unknown): _ is string =>
     str(_) && _.length === 1 && _.toLowerCase() !== _.toUpperCase()
 
 export const ineq = (_: unknown): _ is Ineq =>
-    str(_) && ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'].includes(_)
+    (str(_) &&
+        ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'].includes(_)) ||
+    (arrayOfLength(2)(_) && arrayWith(bool)(_))
 
 export const dfrac = (_: unknown): _ is string => {
     const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`

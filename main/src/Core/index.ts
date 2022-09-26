@@ -18,13 +18,12 @@ import {
     toVector as $toVector,
     vec2D as $vec2D,
     vec3D as $vec3D,
-    ineq as $ineq,
+    INEQUAL as $INEQUAL,
     optimizer as $optimizer,
     rein as $rein,
     toReins as $toReins,
     lin as $lin,
 } from 'ruby'
-
 
 globalThis.cal = $cal
 globalThis.data = $data
@@ -45,27 +44,17 @@ globalThis.toShape3D = $toShape3D
 globalThis.toVector = $toVector
 globalThis.vec2D = $vec2D
 globalThis.vec3D = $vec3D
-globalThis.ineq = $ineq
+globalThis.INEQUAL = $INEQUAL
 globalThis.optimizer = $optimizer
 globalThis.rein = $rein
 globalThis.toReins = $toReins
 globalThis.lin = $lin
 
-
 import * as $Owl from './Owl/index'
 globalThis.owl = $Owl
 
-
-
-
 import * as $Ink from './Ink/index'
 globalThis.ink = $Ink
-
-
-
-
-
-
 
 declare global {
     var cal: typeof $cal
@@ -87,7 +76,7 @@ declare global {
     var toVector: typeof $toVector
     var vec2D: typeof $vec2D
     var vec3D: typeof $vec3D
-    var ineq: typeof $ineq
+    var INEQUAL: typeof $INEQUAL
     var optimizer: typeof $optimizer
     var rein: typeof $rein
     var toReins: typeof $toReins
