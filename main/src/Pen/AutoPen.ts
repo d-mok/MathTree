@@ -101,11 +101,11 @@ export class AutoPenCls {
             let E2: Point2D = [greater ? width : -width, base]
 
             if (vertical) {
-                pen.set.color('grey')
                 pen.set.dash(10)
+                pen.set.alpha(0.5)
                 pen.graph.vertical(align)
-                pen.set.color()
                 pen.set.dash()
+                pen.set.alpha()
             }
 
             pen.polyshade(B, T, E1, E2)
