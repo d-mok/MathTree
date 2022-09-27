@@ -221,7 +221,7 @@ export function printCompoundInequality(
         if (num1 !== num2) {
             if (g1 && g2) return x + p2 + num2
             if (!g1 && !g2) return x + p1 + num1
-            if (g1 && !g2) return num1 + r1 + x + p2 + num2
+            if (g1 && !g2) return num1 + r1 + ' ' + x + p2 + num2
             if (!g1 && g2) return t('no solution')
         } else {
             let e = e1 && e2
