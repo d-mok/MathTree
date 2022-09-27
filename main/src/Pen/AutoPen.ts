@@ -122,11 +122,11 @@ export class AutoPenCls {
 
         items.forEach((x, i) => inequality(i, x))
 
-        let cutting = [
+        let cutting = Sort(
             0,
             ...items.map((x, i) => x.position ?? defaultPosition(i)),
-            1,
-        ]
+            1
+        )
 
         if (len === 2 && typeof ticks === 'string') {
             ticks = solveCompoundInequality(
