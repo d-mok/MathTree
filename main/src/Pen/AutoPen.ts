@@ -55,7 +55,7 @@ export class AutoPenCls {
             position?: number
             vertical?: boolean
         }[]
-        ticks: boolean[] | 'AND' | 'OR'
+        ticks?: boolean[] | 'AND' | 'OR'
     }) {
         const width = 5
         const height = 2
@@ -68,6 +68,9 @@ export class AutoPenCls {
         )
         pen.size.set(2, 0.25 * (len + 1))
         pen.set.textLatex(true)
+
+        pen.axis.xy('', '')
+        pen.grid.xy()
 
         function defaultPosition(index: number): number {
             if (len === 1) return 0.5
