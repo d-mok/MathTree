@@ -71,7 +71,6 @@ export class AutoPenCls {
         pen.set.textLatex(true)
 
         function defaultPosition(index: number): number {
-            if (len === 1) return 0.5
             if (len === 2) {
                 let me = Number(items[index].num)
                 let other = Number(items[index === 0 ? 1 : 0].num)
