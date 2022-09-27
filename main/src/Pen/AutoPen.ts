@@ -64,7 +64,8 @@ export class AutoPenCls {
         const len = items.length
 
         const pen = new Pen()
-        pen.range.capture([0, -2])
+        pen.set.border(0.1)
+        pen.range.capture([0, -1])
         pen.range.capture([width, len * height])
         pen.size.lock(2)
         pen.set.textLatex(true)
