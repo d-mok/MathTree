@@ -69,9 +69,6 @@ export class AutoPenCls {
         pen.size.lock(2)
         pen.set.textLatex(true)
 
-        pen.axis.xy('', '')
-        pen.grid.xy()
-
         function defaultPosition(index: number): number {
             if (len === 1) return 0.5
             if (len === 2) {
