@@ -1,8 +1,4 @@
-
-
 import { repeat } from '../Jest/JestExtend'
-
-
 
 test('RndShake', () => {
     expect(RndShake('\\ge')).toSatisfyAll(owl.ineq)
@@ -11,13 +7,13 @@ test('RndShake', () => {
     expect(RndShake(1.5)).toSatisfyAll(owl.positive)
 })
 
-
-
-
-
-
 test('RndShakeN', () => {
-    function run(anchor: number, min: number, max: number, distinct = max - min) {
+    function run(
+        anchor: number,
+        min: number,
+        max: number,
+        distinct = max - min
+    ) {
         let shaked = RndShakeN(anchor)
         expect(shaked).toAllBeBetween(min, max)
         expect(shaked).toAllBeInteger()
@@ -25,7 +21,6 @@ test('RndShakeN', () => {
         expect(shaked).toHaveLength(3)
         expect(() => RndShakeN(anchor)).toSpanLength(distinct, 1)
     }
-
 
     repeat(100, () => {
         run(5, 2, 8)
@@ -39,14 +34,10 @@ test('RndShakeN', () => {
         run(456, 411, 501)
     })
 
-
     repeat(100, () => {
         RndShakeN(RndN(-1000, 1000))
     })
-
 })
-
-
 
 test('RndShakeR', () => {
     function run(anchor: number, min: number, max: number) {
@@ -57,31 +48,24 @@ test('RndShakeR', () => {
         expect(() => RndShakeR(anchor)).toSpanRange(min, max, 1)
     }
 
-
     repeat(100, () => {
         run(3.5, 1.8, 5.2)
         run(1.5, 1, 2.3)
         run(-1.5, -2.3, -1)
         run(123.45, 100, 185.17)
         run(900.1, 450.1, 999.9)
-        run(4.567e-20, 2.284e-20, 6.850e-20)
-        run(-4.567e-20, -6.850e-20, -2.284e-20)
+        run(4.567e-20, 2.284e-20, 6.85e-20)
+        run(-4.567e-20, -6.85e-20, -2.284e-20)
     })
 
     repeat(100, () => {
         RndShakeR(RndR(-1000, 1000))
         RndShakeR(RndR(-1, 1))
     })
-
-
 })
 
-
-
 test('RndShakeQ', () => {
-
     function run(anchor: number, isPositive: boolean, isProb: boolean) {
-
         let shaked = RndShakeQ(anchor)
         if (isPositive) {
             expect(shaked).toSatisfyAll($ => $ > 0)
@@ -90,23 +74,16 @@ test('RndShakeQ', () => {
         }
         expect(shaked).toHaveLength(3)
         expect(shaked).toSatisfyAll(owl.rational)
-        if (isProb)
-            expect(shaked).toSatisfyAll($ => $ >= 0 && $ <= 1)
+        if (isProb) expect(shaked).toSatisfyAll($ => $ >= 0 && $ <= 1)
     }
-
 
     repeat(100, () => {
         run(5 / 6, true, true)
         run(6 / -5, false, false)
     })
-
-
 })
 
-
-
 test('RndShakeG', () => {
-
     function run(anchor: number, base: number) {
         let shaked = RndShakeG(anchor, base)
         expect(shaked).toHaveLength(3)
@@ -117,12 +94,7 @@ test('RndShakeG', () => {
         run(24, 2)
         run(13.123, 0.3)
     })
-
 })
-
-
-
-
 
 // test('RndShakeDfrac', () => {
 //     function run(anchor:number, isPositive) {
@@ -143,10 +115,7 @@ test('RndShakeG', () => {
 //     run('\\dfrac{6}{-5}', false);
 // });
 
-
-
 test('RndShakeIneq', () => {
-
     repeat(10, () => {
         let shaked = RndShakeIneq('\\ge')
         expect(shaked).toSpanSame(['\\ge', '\\le'])
@@ -162,16 +131,10 @@ test('RndShakeIneq', () => {
         expect(shaked.filter($ => $ === '\\lt')).toHaveLength(1)
         expect(shaked.filter($ => $ === '\\gt')).toHaveLength(2)
     })
-
 })
 
-
-
-
 test('RndShakePoint', () => {
-
     function run(anchor: Point2D, isXPositive: boolean, isYPositive: boolean) {
-
         let shaked = RndShakePoint(anchor)
         let xs = shaked.map(([x, y]) => x)
         let ys = shaked.map(([x, y]) => y)
@@ -192,9 +155,7 @@ test('RndShakePoint', () => {
         }
 
         expect(shaked).toHaveLength(3)
-
     }
-
 
     repeat(10, () => {
         run([5, 6], true, true)
@@ -202,15 +163,9 @@ test('RndShakePoint', () => {
         run([-3, 12], false, true)
         run([-3, -12], false, false)
     })
-
-
 })
 
-
-
-
 test('RndShakeCombo', () => {
-
     function run(anchor: [boolean, boolean, boolean]) {
         let [a, b, c] = anchor
         let shaked = RndShakeCombo(anchor)
@@ -222,35 +177,24 @@ test('RndShakeCombo', () => {
         expect([c, ...shaked.map($ => $[2])]).toIncludeAllMembers([true, false])
     }
 
-
     repeat(10, () => {
         run([true, true, true])
     })
-
 })
 
-
-
 test('RndShakeTrig', () => {
-
     function run(anchor: TrigFunc) {
         let shaked = RndShakeTrig(anchor)
         expect(shaked).toSatisfyAll(owl.trig)
         expect(shaked).toHaveLength(3)
     }
 
-
     repeat(10, () => {
         run('sin')
     })
-
-
 })
 
-
-
 test('RndShakeTrigValue', () => {
-
     function run(anchor: TrigValue) {
         let shaked = RndShakeTrigValue(anchor)
         expect(shaked).toSatisfyAll(owl.trigValue)
@@ -260,13 +204,9 @@ test('RndShakeTrigValue', () => {
     repeat(10, () => {
         run(['sin', 'x'])
     })
-
 })
 
-
-
 test('RndShakeRatio', () => {
-
     function run(anchor: number[]) {
         let shaked = RndShakeRatio(anchor)
         expect(shaked).toSatisfyAll(owl.ntuple)
@@ -276,12 +216,9 @@ test('RndShakeRatio', () => {
     repeat(10, () => {
         run([4, 5, 6])
     })
-
 })
 
-
 test('RndShakeBase', () => {
-
     function run(anchor: string) {
         let shaked = RndShakeBase(anchor)
         expect(shaked).toSatisfyAll(owl.base)
@@ -291,30 +228,29 @@ test('RndShakeBase', () => {
     repeat(10, () => {
         run('{A}{B}{0}{C}{D}_{16}')
     })
-
 })
 
-
 test('RndShakePointPolar', () => {
-
     function run(anchor: PolarPoint) {
         let shaked = RndShakePointPolar(anchor).map($ => RectToPol($))
         expect(shaked).toSatisfyAll(owl.point2D)
-        expect(shaked).toSatisfyAll(([r, q]) => Number.isInteger(cal.blur(r ** 2)))
-        expect(shaked).toSatisfyAll(([r, q]) => [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330].includes(cal.blur(q)))
+        expect(shaked).toSatisfyAll(([r, q]) =>
+            Number.isInteger(cal.blur(r ** 2))
+        )
+        expect(shaked).toSatisfyAll(([r, q]) =>
+            [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330].includes(
+                cal.blur(q)
+            )
+        )
         expect(shaked).toHaveLength(3)
     }
 
     repeat(10, () => {
         run([Math.sqrt(3), 3])
     })
-
 })
 
-
-
 test('RndShakeConstraint', () => {
-
     function run(anchor: Constraint) {
         let shaked = RndShakeConstraint(anchor)
         expect(shaked).toSatisfyAll(owl.constraint)
@@ -327,14 +263,9 @@ test('RndShakeConstraint', () => {
         run([1, 2, '>', 3])
         run([1, 2, '>=', 3])
     })
-
 })
 
-
-
-
 test('RndShakeConstraints', () => {
-
     function run(anchor: Constraint[]) {
         let shaked = RndShakeConstraints(anchor)
         expect(shaked).toSatisfyAll(owl.constraints)
@@ -344,17 +275,18 @@ test('RndShakeConstraints', () => {
     }
 
     repeat(10, () => {
-        run([[1, 2, '>', 3], [4, 5, '>', 6]])
-        run([[1, 2, '>=', 3], [4, 5, '>=', 6]])
+        run([
+            [1, 2, '>', 3],
+            [4, 5, '>', 6],
+        ])
+        run([
+            [1, 2, '>=', 3],
+            [4, 5, '>=', 6],
+        ])
     })
-
 })
 
-
-
-
 test('RndShakeQuantity', () => {
-
     function run(anchor: quantity) {
         let shaked = RndShakeQuantity(anchor)
         expect(shaked).toSatisfyAll(owl.quantity)
@@ -365,5 +297,15 @@ test('RndShakeQuantity', () => {
     repeat(10, () => {
         run({ val: 1, unit: 'm' })
     })
+})
 
+test('RndShakeCompoundInequality', () => {
+    function run(anchor: CompoundInequality) {
+        let shaked = RndShakeCompoundInequality(anchor)
+        expect(shaked).toSatisfyAll(owl.compoundInequality)
+    }
+
+    repeat(10, () => {
+        run(['AND', '>', 1, '<', 2, 'x'])
+    })
 })

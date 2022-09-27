@@ -53,6 +53,7 @@ declare module "Core/Owl/index" {
     export const triangleSides: (_: unknown) => boolean;
     export const monomial: (_: unknown) => _ is monomial;
     export const polynomial: (_: unknown) => _ is polynomial;
+    export const compoundInequality: (_: unknown) => _ is CompoundInequality;
     export const trigValue: (_: unknown) => _ is TrigValue;
     export const trigExp: (_: unknown) => _ is TrigExp;
     export const labeledValue1: (_: unknown) => _ is LabeledValue1;
@@ -92,6 +93,7 @@ declare module "Core/Ink/index" {
     export function printPrimeFactors(num: number): string;
     export function printMonomial(mono: monomial, fraction: boolean): string;
     export function printPolynomial(poly: polynomial, fraction: boolean): string;
+    export function printCompoundInequality(compoundInequality: CompoundInequality): string;
 }
 declare module "Core/index" {
     import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, INEQUAL as $INEQUAL, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'ruby';
@@ -426,6 +428,14 @@ declare module "Math/type" {
             [_: string]: number;
         };
         type polynomial = monomial[];
+        type CompoundInequality = [
+            connective: 'AND' | 'OR',
+            sign1: Ineq,
+            num1: number,
+            sign2: Ineq,
+            num2: number,
+            variable: string
+        ];
         type TrigValue = [TrigFunc, number | string];
         type TrigExp = [TrigFunc, number, 1 | -1, string];
         type LabeledValue1 = [value: number, label: string];
@@ -2296,6 +2306,7 @@ declare module "Math/Code/RandomShake" {
          */
         static RndShakeConstraints(anchor: Constraint[]): Constraint[][];
         static RndShakeQuantity(anchor: quantity): quantity[];
+        static RndShakeCompoundInequality(anchor: CompoundInequality): CompoundInequality[];
     }
     global {
         var RndShake: typeof Host.RndShake;
@@ -2314,6 +2325,7 @@ declare module "Math/Code/RandomShake" {
         var RndShakeConstraint: typeof Host.RndShakeConstraint;
         var RndShakeConstraints: typeof Host.RndShakeConstraints;
         var RndShakeQuantity: typeof Host.RndShakeQuantity;
+        var RndShakeCompoundInequality: typeof Host.RndShakeCompoundInequality;
     }
 }
 declare module "Math/Code/RandomUtil.test" { }
@@ -2876,15 +2888,6 @@ declare module "Math/Code/Text" {
          * ```
          */
         static ConstraintText(constraint: Constraint, sign?: boolean | null, xReplace?: string, yReplace?: string): string;
-        /**
-         * the latex representing the `constraint`
-         * ```
-         * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
-         * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
-         * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
-         * ```
-         */
-        static SolveCompoundIneq(connective: 'AND' | 'OR', sign1: Ineq, num1: number, sign2: Ineq, num2: number, variable?: string): string;
     }
     global {
         var GrammarJoin: typeof Host.GrammarJoin;
@@ -2897,7 +2900,6 @@ declare module "Math/Code/Text" {
         var ToBase: typeof Host.ToBase;
         var PrimeFactorize: typeof Host.PrimeFactorize;
         var ConstraintText: typeof Host.ConstraintText;
-        var SolveCompoundIneq: typeof Host.SolveCompoundIneq;
     }
 }
 declare module "Math/Code/Triangle.test" { }

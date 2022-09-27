@@ -74,6 +74,15 @@ declare global {
 
     type monomial = { coeff: number; [_: string]: number }
     type polynomial = monomial[]
+    
+    type CompoundInequality = [
+        connective: 'AND' | 'OR',
+        sign1: Ineq,
+        num1: number,
+        sign2: Ineq,
+        num2: number,
+        variable: string
+    ]
 
     type TrigValue = [TrigFunc, number | string]
 

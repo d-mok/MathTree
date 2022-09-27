@@ -58,6 +58,9 @@ export class Host {
             // Constraints
             return RndShakeConstraints(anchor)
         }
+        if (owl.compoundInequality(anchor)) {
+            return RndShakeCompoundInequality(anchor)
+        }
         if (typeof anchor === 'number' && owl.num(anchor)) {
             anchor = cal.blur(anchor)
             // Integer
@@ -436,6 +439,20 @@ export class Host {
         let vals = RndShake(val)
         return vals.map($ => ({ val: $, unit }))
     }
+
+    @checkIt(owl.compoundInequality)
+    static RndShakeCompoundInequality(
+        anchor: CompoundInequality
+    ): CompoundInequality[] {
+        let [connective, s1, n1, s2, n2, x] = anchor
+        let r1 = INEQUAL.flip(s1)
+        let r2 = INEQUAL.flip(s2)
+        return [
+            [connective, r1, n1, s2, n2, x],
+            [connective, s1, n1, r2, n2, x],
+            [connective, r1, n1, r2, n2, x],
+        ]
+    }
 }
 
 declare global {
@@ -455,4 +472,5 @@ declare global {
     var RndShakeConstraint: typeof Host.RndShakeConstraint
     var RndShakeConstraints: typeof Host.RndShakeConstraints
     var RndShakeQuantity: typeof Host.RndShakeQuantity
+    var RndShakeCompoundInequality: typeof Host.RndShakeCompoundInequality
 }

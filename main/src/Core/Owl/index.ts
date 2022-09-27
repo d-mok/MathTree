@@ -131,6 +131,15 @@ export const monomial = (_: unknown): _ is monomial => object(_) && 'coeff' in _
 export const polynomial = (_: unknown): _ is polynomial =>
     arrayWith(monomial)(_)
 
+export const compoundInequality = (_: unknown): _ is CompoundInequality =>
+    arrayOfLength(6)(_) &&
+    (_[0] === 'AND' || _[0] === 'OR') &&
+    ineq(_[1]) &&
+    num(_[2]) &&
+    ineq(_[3]) &&
+    num(_[4]) &&
+    str(_[5])
+
 export const trigValue = (_: unknown): _ is TrigValue =>
     arrayOfLength(2)(_) && trig(_[0]) && (num(_[1]) || str(_[1]))
 

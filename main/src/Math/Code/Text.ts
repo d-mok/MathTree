@@ -332,70 +332,70 @@ export class Host {
         return T
     }
 
-    /**
-     * the latex representing the `constraint`
-     * ```
-     * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
-     * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
-     * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
-     * ```
-     */
-    @checkIt(owl.str, owl.ineq, owl.num, owl.ineq, owl.num, owl.str)
-    static SolveCompoundIneq(
-        connective: 'AND' | 'OR',
-        sign1: Ineq,
-        num1: number,
-        sign2: Ineq,
-        num2: number,
-        variable = 'x'
-    ): string {
-        let x = variable
-        if (num1 > num2) {
-            ;[sign1, sign2] = [sign2, sign1]
-            ;[num1, num2] = [num2, num1]
-        }
-        let g1 = INEQUAL.greaterThan(sign1)
-        let g2 = INEQUAL.greaterThan(sign2)
-        let e1 = INEQUAL.canEqual(sign1)
-        let e2 = INEQUAL.canEqual(sign2)
-        let p1 = INEQUAL.print(sign1)
-        let p2 = INEQUAL.print(sign2)
-        let r1 = INEQUAL.print(INEQUAL.flip(sign1))
-        let r2 = INEQUAL.print(INEQUAL.flip(sign2))
+    // /**
+    //  * the latex representing the `constraint`
+    //  * ```
+    //  * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
+    //  * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
+    //  * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
+    //  * ```
+    //  */
+    // @checkIt(owl.str, owl.ineq, owl.num, owl.ineq, owl.num, owl.str)
+    // static SolveCompoundIneq(
+    //     connective: 'AND' | 'OR',
+    //     sign1: Ineq,
+    //     num1: number,
+    //     sign2: Ineq,
+    //     num2: number,
+    //     variable = 'x'
+    // ): string {
+    //     let x = variable
+    //     if (num1 > num2) {
+    //         ;[sign1, sign2] = [sign2, sign1]
+    //         ;[num1, num2] = [num2, num1]
+    //     }
+    //     let g1 = INEQUAL.greaterThan(sign1)
+    //     let g2 = INEQUAL.greaterThan(sign2)
+    //     let e1 = INEQUAL.canEqual(sign1)
+    //     let e2 = INEQUAL.canEqual(sign2)
+    //     let p1 = INEQUAL.print(sign1)
+    //     let p2 = INEQUAL.print(sign2)
+    //     let r1 = INEQUAL.print(INEQUAL.flip(sign1))
+    //     let r2 = INEQUAL.print(INEQUAL.flip(sign2))
 
-        function t(str: string): string {
-            return '\\text{' + str + '}'
-        }
+    //     function t(str: string): string {
+    //         return '\\text{' + str + '}'
+    //     }
 
-        if (connective === 'AND') {
-            if (num1 !== num2) {
-                if (g1 && g2) return x + p2 + num2
-                if (!g1 && !g2) return x + p1 + num1
-                if (g1 && !g2) return num1 + r1 + x + p2 + num2
-                if (!g1 && g2) return t('no solution')
-            } else {
-                let e = e1 && e2
-                if (g1 === g2) return x + INEQUAL.print([g1, e]) + num1
-                if (g1 !== g2) return e ? x + '=' + num1 : t('no solution')
-            }
-        }
-        if (connective === 'OR') {
-            if (num1 !== num2) {
-                if (g1 && g2) return x + p1 + num1
-                if (!g1 && !g2) return x + p2 + num2
-                if (g1 && !g2) return t('all real values')
-                if (!g1 && g2) return x + p1 + num1 + t(' or ') + x + p2 + num2
-            } else {
-                let e = e1 || e2
-                if (g1 === g2) return x + INEQUAL.print([g1, e]) + num1
-                if (g1 !== g2)
-                    return e
-                        ? t('all real values')
-                        : t('all real values except') + x + '=' + num1
-            }
-        }
-        throw 'cannot recognize inequalitiy!'
-    }
+    //     if (connective === 'AND') {
+    //         if (num1 !== num2) {
+    //             if (g1 && g2) return x + p2 + num2
+    //             if (!g1 && !g2) return x + p1 + num1
+    //             if (g1 && !g2) return num1 + r1 + x + p2 + num2
+    //             if (!g1 && g2) return t('no solution')
+    //         } else {
+    //             let e = e1 && e2
+    //             if (g1 === g2) return x + INEQUAL.print([g1, e]) + num1
+    //             if (g1 !== g2) return e ? x + '=' + num1 : t('no solution')
+    //         }
+    //     }
+    //     if (connective === 'OR') {
+    //         if (num1 !== num2) {
+    //             if (g1 && g2) return x + p1 + num1
+    //             if (!g1 && !g2) return x + p2 + num2
+    //             if (g1 && !g2) return t('all real values')
+    //             if (!g1 && g2) return x + p1 + num1 + t(' or ') + x + p2 + num2
+    //         } else {
+    //             let e = e1 || e2
+    //             if (g1 === g2) return x + INEQUAL.print([g1, e]) + num1
+    //             if (g1 !== g2)
+    //                 return e
+    //                     ? t('all real values')
+    //                     : t('all real values except') + x + '=' + num1
+    //         }
+    //     }
+    //     throw 'cannot recognize inequalitiy!'
+    // }
 }
 
 declare global {
@@ -409,5 +409,5 @@ declare global {
     var ToBase: typeof Host.ToBase
     var PrimeFactorize: typeof Host.PrimeFactorize
     var ConstraintText: typeof Host.ConstraintText
-    var SolveCompoundIneq: typeof Host.SolveCompoundIneq
+    // var SolveCompoundIneq: typeof Host.SolveCompoundIneq
 }
