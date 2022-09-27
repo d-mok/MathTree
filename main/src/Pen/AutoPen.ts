@@ -57,16 +57,16 @@ export class AutoPenCls {
         }[]
         ticks?: boolean[] | 'AND' | 'OR'
     }) {
-        const width = 5
-        const height = 2
+        const width = 10 // full width of number line
+        const aLength = width * 0.2
+        const aHeight = 1 // height of arrow
+        const height = 2 // height of one block
         const len = items.length
 
         const pen = new Pen()
-        pen.range.set(
-            [-width - 2, width + 2],
-            [-len * (height + 2) + 2, height + 1]
-        )
-        pen.size.set(2, 0.25 * (len + 1))
+        pen.range.capture([0, -2])
+        pen.range.capture([width, len * height])
+        pen.size.lock(2)
         pen.set.textLatex(true)
 
         pen.axis.xy('', '')
@@ -91,17 +91,12 @@ export class AutoPenCls {
             let greater = INEQUAL.greaterThan(sign)
             let solid = INEQUAL.canEqual(sign)
             position ??= defaultPosition(index)
-            let align = -width + 2 * width * position
-            let base = -index * (height + 2)
+            let align = width * position
+            let base = index * height
 
             let B: Point2D = [align, base]
-            let T: Point2D = [align, base + height]
-            let E: Point2D = [
-                greater ? align + 0.4 * width : align - 0.4 * width,
-                base + height,
-            ]
-            let E1: Point2D = [greater ? width : -width, base + height]
-            let E2: Point2D = [greater ? width : -width, base]
+            let T: Point2D = [align, base + aHeight]
+            let E: Point2D = [greater ? width : 0, base + aHeight]
 
             if (vertical) {
                 pen.set.dash(10)
@@ -111,20 +106,18 @@ export class AutoPenCls {
                 pen.set.alpha()
             }
 
-            pen.polyshade(B, T, E1, E2)
+            pen.shade.rect(B, E)
 
-            pen.arrow([-width, base], [width, base])
+            pen.arrow([0, base], [width, base])
+            pen.rod.arrow(T, greater ? 0 : 180, aLength)
             pen.line(B, T)
-            pen.arrow(T, E)
             solid ? pen.dot(T) : pen.hole(T)
 
             pen.label.point(B, num.toString(), 270)
         }
 
         function tick(position: number, correct: boolean) {
-            let align = -width + 2 * width * position
-            let y = -(len - 1) * (height + 2) - height
-            pen.write([align, y], correct ? '✔' : '✘')
+            pen.write([width * position, -1], correct ? '✔' : '✘')
         }
 
         items.forEach((x, i) => inequality(i, x))
