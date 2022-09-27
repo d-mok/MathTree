@@ -2876,6 +2876,15 @@ declare module "Math/Code/Text" {
          * ```
          */
         static ConstraintText(constraint: Constraint, sign?: boolean | null, xReplace?: string, yReplace?: string): string;
+        /**
+         * the latex representing the `constraint`
+         * ```
+         * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
+         * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
+         * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
+         * ```
+         */
+        static SolveCompoundIneq(connective: 'AND' | 'OR', sign1: Ineq, num1: number, sign2: Ineq, num2: number, variable?: string): string;
     }
     global {
         var GrammarJoin: typeof Host.GrammarJoin;
@@ -2888,6 +2897,7 @@ declare module "Math/Code/Text" {
         var ToBase: typeof Host.ToBase;
         var PrimeFactorize: typeof Host.PrimeFactorize;
         var ConstraintText: typeof Host.ConstraintText;
+        var SolveCompoundIneq: typeof Host.SolveCompoundIneq;
     }
 }
 declare module "Math/Code/Triangle.test" { }
