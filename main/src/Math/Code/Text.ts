@@ -340,7 +340,7 @@ export class Host {
      * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
      * ```
      */
-    @checkIt(owl.constraint, owl.pass, owl.str, owl.str)
+    @checkIt(owl.str, owl.ineq, owl.num, owl.ineq, owl.num, owl.str)
     static SolveCompoundIneq(
         connective: 'AND' | 'OR',
         sign1: Ineq,

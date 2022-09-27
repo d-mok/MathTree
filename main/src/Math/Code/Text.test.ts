@@ -135,3 +135,10 @@ test('ConstraintText', () => {
     expect(ConstraintText([1, 2, '<', 3], false)).toBe(' 1x + 2y \\gt 3 ')
     expect(ConstraintText([1, 2, '<', 3], null)).toBe(' 1x + 2y = 3 ')
 })
+
+test('SolveCompoundIneq', () => {
+    expect(SolveCompoundIneq('AND', '>', 1, '>=', 2, 'y')).toBe('y\\ge2')
+    expect(SolveCompoundIneq('AND', '<', 1, '>=', 2, 'y')).toBe(
+        '\\text{no solution}'
+    )
+})
