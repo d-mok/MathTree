@@ -104,11 +104,11 @@ export class AutoPenCls {
             let E2: Point2D = [greater ? width : -width, base]
 
             if (vertical) {
-                pen.set.color('grey')
                 pen.set.dash(10)
+                pen.set.alpha(0.5)
                 pen.graph.vertical(align)
-                pen.set.color()
                 pen.set.dash()
+                pen.set.alpha()
             }
 
             pen.polyshade(B, T, E1, E2)
@@ -123,7 +123,7 @@ export class AutoPenCls {
 
         function tick(position: number, correct: boolean) {
             let align = -width + 2 * width * position
-            let y = -(len - 1) * (height + 2) - height / 2
+            let y = -(len - 1) * (height + 2) - height
             pen.write([align, y], correct ? '✔' : '✘')
         }
 
