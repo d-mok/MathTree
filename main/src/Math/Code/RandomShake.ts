@@ -447,11 +447,18 @@ export class Host {
         let [connective, s1, n1, s2, n2, x] = anchor
         let r1 = INEQUAL.flip(s1)
         let r2 = INEQUAL.flip(s2)
-        return [
-            [connective, r1, n1, s2, n2, x],
-            [connective, s1, n1, r2, n2, x],
-            [connective, r1, n1, r2, n2, x],
-        ]
+        let f = (): CompoundInequality =>
+            RndPick(
+                ['AND', s1, n1, s2, n2, x],
+                ['AND', r1, n1, s2, n2, x],
+                ['AND', s1, n1, r2, n2, x],
+                ['AND', r1, n1, r2, n2, x],
+                ['OR', s1, n1, s2, n2, x],
+                ['OR', r1, n1, s2, n2, x],
+                ['OR', s1, n1, r2, n2, x],
+                ['OR', r1, n1, r2, n2, x]
+            )
+        return dice(f).unique().forbid(anchor).rolls(3)
     }
 }
 
