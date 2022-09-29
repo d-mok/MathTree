@@ -4,7 +4,6 @@ import { getFittableOrder } from './searcher'
 
 
 export class Fitter {
-
     private readonly allVariables: string[]
 
     private vals: valObj = {}
@@ -20,7 +19,7 @@ export class Fitter {
 
     private reset() {
         this.vals = {}
-        this.allVariables.forEach($ => this.vals[$] = NaN)
+        this.allVariables.forEach($ => (this.vals[$] = NaN))
         this.setVals(this.preset)
     }
 
@@ -46,12 +45,8 @@ export class Fitter {
                 this.reset()
                 orderedFS.forEach($ => this.fitOne($))
                 return this.vals
-            } catch {
-
-            }
+            } catch {}
         }
         throw 'The system is not fittable in given range.'
     }
-
 }
-

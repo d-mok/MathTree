@@ -1,4 +1,3 @@
-import './lodash'
 export { fit } from './EquationFitter'
 export {
     analyze,
