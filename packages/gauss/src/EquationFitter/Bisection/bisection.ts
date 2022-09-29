@@ -30,7 +30,6 @@ function randomValue(range: [number, number]): number {
 export class Bisection {
     private a: number[] = [] // positive point
     private b: number[] = [] // negative point
-    private readonly precision: number = 10
 
     constructor(
         private readonly equation: zeroFunction,
@@ -74,8 +73,9 @@ export class Bisection {
     }
 
     private done(): boolean {
-        const precision_a = this.a.map($ => $.toPrecision(this.precision))
-        const precision_b = this.b.map($ => $.toPrecision(this.precision))
+        const PRECISION = 10
+        const precision_a = this.a.map($ => $.toPrecision(PRECISION))
+        const precision_b = this.b.map($ => $.toPrecision(PRECISION))
         return _.isEqual(precision_a, precision_b)
     }
 

@@ -1,2 +1,8 @@
+import './lodash'
 export { fit } from './EquationFitter'
-export { analyze, solutionFlow, solvingSymbol, readTree } from './EquationAnalyzer'
+export {
+    analyze,
+    solutionFlow,
+    solvingSymbol,
+    readTree,
+} from './EquationAnalyzer'
