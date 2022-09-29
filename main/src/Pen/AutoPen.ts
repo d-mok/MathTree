@@ -65,9 +65,9 @@ export class AutoPenCls {
 
         const pen = new Pen()
         pen.set.border(0.1)
-        pen.range.capture([0, -1])
-        pen.range.capture([width, len * height])
-        pen.size.lock(2)
+        pen.range.capture([0, -2])
+        pen.range.capture([width, len * height - 1])
+        pen.size.lock(1.5)
         pen.set.textLatex(true)
 
         function defaultPosition(index: number): number {
@@ -114,7 +114,7 @@ export class AutoPenCls {
         }
 
         function tick(position: number, correct: boolean) {
-            pen.write([width * position, -1], correct ? '✔' : '✘')
+            pen.write([width * position, -2], correct ? '✔' : '✘')
         }
 
         items.forEach((x, i) => inequality(i, x))
