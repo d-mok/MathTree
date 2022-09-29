@@ -7,10 +7,12 @@
     "@testdeck/jest": "^0.2.0",
     "@types/jest": "^27.4.1",
     "@types/katex": "^0.11.0",
+    "@types/lodash": "^4.14.186",
     "cross-env": "^7.0.3",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
     "jest-matcher-deep-close-to": "^3.0.2",
+    "lodash": "^4.17.21",
     "ts-jest": "^27.1.3",
     "typescript": "^4.6.2",
     "vitest": "^0.21.1"

@@ -1,10 +1,12 @@
+import _ from 'lodash'
+
 function randomUniform(range: [number, number]): number {
-    const [min, max] = range;
-    return Math.random() * (max - min) + min;
+    const [min, max] = range
+    return _.random(min, max, true)
 }
 
 function randomLog(range: [number, number]): number {
-    const [min, max] = range;
+    const [min, max] = range
     const logmin = Math.log10(min)
     const logmax = Math.log10(max)
     const e = randomUniform([logmin, logmax])
@@ -25,18 +27,7 @@ function randomValue(range: [number, number]): number {
     return randomUniform(range)
 }
 
-function mid(a: number[], b: number[]) {
-    return a.map(($, i) => ($ + b[i]) / 2);
-}
-
-function equal(a: any[], b: any[]) {
-    return a.every(($, i) => $ === b[i])
-        && a.length === b.length
-}
-
-
 export class Bisection {
-
     private a: number[] = [] // positive point
     private b: number[] = [] // negative point
     private readonly precision: number = 10
@@ -44,7 +35,7 @@ export class Bisection {
     constructor(
         private readonly equation: zeroFunction,
         private readonly ranges: [number, number][]
-    ) { }
+    ) {}
 
     private randomPoint(): number[] {
         return this.ranges.map(randomValue)
@@ -57,7 +48,10 @@ export class Bisection {
             const sameSign = value * sign > 0
             if (sameSign) return point
         }
-        console.error("[bisection] No signed point in ranges: " + JSON.stringify(this.ranges))
+        console.error(
+            '[bisection] No signed point in ranges: ' +
+                JSON.stringify(this.ranges)
+        )
         throw ''
     }
 
@@ -66,13 +60,13 @@ export class Bisection {
         this.b = this.randomSignedPoint(-1)
     }
 
-
-
     private iterate() {
-        const m = mid(this.a, this.b)
+        const m = _.zipWith(this.a, this.b, (i, j) => (i + j) / 2) // mid-pt
         const M = this.equation(...m)
         if (!Number.isFinite(M)) {
-            console.error('[bisection] The function value is not a finite number!')
+            console.error(
+                '[bisection] The function value is not a finite number!'
+            )
             throw ''
         }
         if (M >= 0) this.a = m
@@ -82,7 +76,7 @@ export class Bisection {
     private done(): boolean {
         const precision_a = this.a.map($ => $.toPrecision(this.precision))
         const precision_b = this.b.map($ => $.toPrecision(this.precision))
-        return equal(precision_a, precision_b)
+        return _.isEqual(precision_a, precision_b)
     }
 
     private assertRange(): void {
@@ -100,7 +94,9 @@ export class Bisection {
             this.iterate()
             if (this.done()) return [...this.a]
         }
-        console.error('[bisection] fail to find tolarable solution after 100 iteration')
+        console.error(
+            '[bisection] fail to find tolarable solution after 100 iteration'
+        )
         throw ''
     }
 
@@ -112,4 +108,3 @@ export class Bisection {
         }
     }
 }
-
