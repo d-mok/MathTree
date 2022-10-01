@@ -1,5 +1,5 @@
 import { RoundVars, toVarGrp } from './support/varObjs'
-import { analyze2 } from 'gauss'
+import { analyze } from 'gauss'
 
 import _ from 'lodash'
 import { fitAgain, fitFree, readTree } from './support/system'
@@ -89,7 +89,7 @@ function BuildSolveOnce(
     fitFree(fs, vGrp)
 
     // get givens, hiddens, unknown
-    let validTrees = analyze2(fs).filter(t => checkAvoids(t, avoids))
+    let validTrees = analyze(fs).filter(t => checkAvoids(t, avoids))
     if (validTrees.length === 0) throw 'no sensible set of solvables found!'
 
     let tree = _.sample(validTrees)!

@@ -2,7 +2,7 @@ import { toVarGrp } from './support/varObjs'
 import _ from 'lodash'
 import { fitAgain, fitFree, readTree } from './support/system'
 import * as WRITE from './support/write'
-import { analyze2 } from 'gauss'
+import { analyze } from 'gauss'
 
 export function BuildTrend(
     variables: [
@@ -29,7 +29,7 @@ export function BuildTrend(
     let fs = _.map(equations, 0)
 
     //generateTrend
-    let tree = _.sample(analyze2(fs))
+    let tree = _.sample(analyze(fs))
     if (tree === undefined) throw 'no sensible set of solvables found!'
     let { top: target, givens, hiddens } = readTree(tree)
 
