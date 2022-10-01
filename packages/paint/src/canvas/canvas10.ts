@@ -1,16 +1,10 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas09 } from "./canvas09"
-
-
-
+import { Canvas09 } from './canvas09'
+import { blur } from '../support/blur'
 
 function degrize(text: string | number): string {
-    return typeof text === 'number'
-        ? text + '°'
-        : text
+    return typeof text === 'number' ? blur(text) + '°' : text
 }
-
-
 
 function mid(A: Point, B: Point): Point {
     if (A.length === 3 && B.length === 3) {
@@ -24,15 +18,17 @@ function mid(A: Point, B: Point): Point {
     }
 }
 
-
 /**
  * Handle:
  * - label
  */
 export class Canvas10 extends Canvas09 {
-
-
-    labelPoint(text: string | number, point: Point, dir: number, radius: px): void {
+    labelPoint(
+        text: string | number,
+        point: Point,
+        dir: number,
+        radius: px
+    ): void {
         this.label(text, point, radius, dir)
     }
 
@@ -41,24 +37,36 @@ export class Canvas10 extends Canvas09 {
         this.label(text, point, radius, dir)
     }
 
-
-    labelAngle(text: string | number, [A, O, B]: [Point, Point, Point], dir: number, radius: px): void {
+    labelAngle(
+        text: string | number,
+        [A, O, B]: [Point, Point, Point],
+        dir: number,
+        radius: px
+    ): void {
         let T = degrize(text)
         let mid = this.getMidDir(A, O, B)
         this.label(T, O, radius, mid + dir)
     }
 
-
-    labelLine(text: string | number, [A, B]: [Point, Point], dir: number, radius: px): void {
+    labelLine(
+        text: string | number,
+        [A, B]: [Point, Point],
+        dir: number,
+        radius: px
+    ): void {
         text = this.unitize(text)
         let M = mid(A, B)
         let normal = this.getLineDir(A, B)
         this.label(text, M, radius, normal + dir)
     }
 
-    labelFront(text: string | number, [A, B]: [Point, Point], dir: number, radius: px): void {
+    labelFront(
+        text: string | number,
+        [A, B]: [Point, Point],
+        dir: number,
+        radius: px
+    ): void {
         let arrowDir = this.getDir(A, B)
         this.labelPoint(text, B, arrowDir + dir, radius)
     }
-
 }

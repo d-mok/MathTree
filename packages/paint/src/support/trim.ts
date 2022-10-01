@@ -1,4 +1,3 @@
-
 function getAlpha(img: ImageData, x: number, y: number): number {
     let i = 0
     i += y * img.width
@@ -6,11 +5,9 @@ function getAlpha(img: ImageData, x: number, y: number): number {
     return img.data[4 * i + 3]
 }
 
-
 function isPainted(img: ImageData, x: number, y: number): boolean {
     return getAlpha(img, x, y) !== 0
 }
-
 
 function rowBlank(img: ImageData, y: number) {
     for (let x = 0; x < img.width; x++) {
@@ -19,7 +16,6 @@ function rowBlank(img: ImageData, y: number) {
     return true
 }
 
-
 function colBlank(img: ImageData, x: number) {
     for (let y = 0; y < img.height; y++) {
         if (isPainted(img, x, y)) return false
@@ -27,9 +23,8 @@ function colBlank(img: ImageData, x: number) {
     return true
 }
 
-
 function trimCanvasX(canvas: HTMLCanvasElement): void {
-    let ctx = canvas.getContext("2d")!
+    let ctx = canvas.getContext('2d')!
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height)
     let top = 0
     let bottom = img.height - 1
@@ -43,10 +38,8 @@ function trimCanvasX(canvas: HTMLCanvasElement): void {
     ctx.putImageData(trimmed, 0, 0)
 }
 
-
-
 function trimCanvasY(canvas: HTMLCanvasElement): void {
-    let ctx = canvas.getContext("2d")!
+    let ctx = canvas.getContext('2d')!
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height)
     let left = 0
     let right = img.width - 1
@@ -60,10 +53,7 @@ function trimCanvasY(canvas: HTMLCanvasElement): void {
     ctx.putImageData(trimmed, 0, 0)
 }
 
-
-
 export function trimCanvas(canvas: HTMLCanvasElement): void {
     trimCanvasX(canvas)
     trimCanvasY(canvas)
 }
-

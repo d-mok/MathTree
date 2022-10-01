@@ -1,8 +1,7 @@
-import { Canvas09 } from "./canvas09";
+import { Canvas09 } from './canvas09';
+import { blur } from '../support/blur';
 function degrize(text) {
-    return typeof text === 'number'
-        ? text + '°'
-        : text;
+    return typeof text === 'number' ? blur(text) + '°' : text;
 }
 function mid(A, B) {
     if (A.length === 3 && B.length === 3) {

@@ -8,8 +8,9 @@ const QUALITY = 3
 const INCH_SCALE = 10
 
 // REM_PIXEL is the default font size of the browser, usually 16px
-const REM_PIXEL: number = parseFloat(getComputedStyle(document.documentElement).fontSize)
-
+const REM_PIXEL: number = parseFloat(
+    getComputedStyle(document.documentElement).fontSize
+)
 
 function inchToPx(inch: inch): px {
     return inch * INCH_SCALE * REM_PIXEL
@@ -26,9 +27,8 @@ function pxToInch(px: px): inch {
  * - exporting
  */
 export class Canvas00 {
-
-    protected canvas: HTMLCanvasElement = document.createElement('canvas');
-    protected ctx: CanvasRenderingContext2D = this.canvas.getContext("2d")!;
+    protected canvas: HTMLCanvasElement = document.createElement('canvas')
+    protected ctx: CanvasRenderingContext2D = this.canvas.getContext('2d')!
 
     // size in pixel
 
@@ -57,7 +57,6 @@ export class Canvas00 {
 
     // size in inch
 
-
     public get widthInch(): inch {
         return pxToInch(this.width)
     }
@@ -74,13 +73,9 @@ export class Canvas00 {
         this.height = inchToPx(value)
     }
 
-
-
-
     // image store
 
     private imgStore: ImageData | null = null
-
 
     public saveImg(): void {
         const w = this.canvas.width
@@ -89,10 +84,8 @@ export class Canvas00 {
     }
 
     public restoreImg(): void {
-        if (this.imgStore !== null)
-            this.ctx.putImageData(this.imgStore, 0, 0)
+        if (this.imgStore !== null) this.ctx.putImageData(this.imgStore, 0, 0)
     }
-
 
     public clearImg(): void {
         const w = this.canvas.width
@@ -100,11 +93,9 @@ export class Canvas00 {
         this.ctx.clearRect(0, 0, w, h)
     }
 
-
     // export
 
-    public backgroundURL: string = ""
-
+    public backgroundURL: string = ''
 
     public export(html: string, placeholder: string, trim: boolean): string {
         let cv = cloneCanvas(this.canvas)
@@ -117,21 +108,17 @@ export class Canvas00 {
         const width = ` width="${displayWidth}"`
         const height = ` height="${displayHeight}"`
 
-        const bg = this.backgroundURL.length === 0 ?
-            '' :
-            ` style="background-image:url('${this.backgroundURL}');background-size:100% 100%;" `
+        const bg =
+            this.backgroundURL.length === 0
+                ? ''
+                : ` style="background-image:url('${this.backgroundURL}');background-size:100% 100%;" `
 
         return html.replace(
             'src="' + placeholder + '"',
             src + width + height + bg
         )
     }
-
 }
-
-
-
-
 
 /**
  * Return a clone of the canvas.

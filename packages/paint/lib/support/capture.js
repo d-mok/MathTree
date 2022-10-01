@@ -5,7 +5,7 @@ function getCircleCorners(center, radius) {
         [h + r, k + r],
         [h + r, k - r],
         [h - r, k + r],
-        [h - r, k - r]
+        [h - r, k - r],
     ];
 }
 function getSphereCorners(center, radius) {
@@ -35,40 +35,40 @@ function getQuadraticCorners(a, b, c, scale) {
     return [A, B, V];
 }
 function isPoint2D(thing) {
-    return Array.isArray(thing)
-        && thing.length === 2
-        && typeof thing[0] === 'number'
-        && typeof thing[1] === 'number';
+    return (Array.isArray(thing) &&
+        thing.length === 2 &&
+        typeof thing[0] === 'number' &&
+        typeof thing[1] === 'number');
 }
 function isPoint3D(thing) {
-    return Array.isArray(thing)
-        && thing.length === 3
-        && typeof thing[0] === 'number'
-        && typeof thing[1] === 'number'
-        && typeof thing[2] === 'number';
+    return (Array.isArray(thing) &&
+        thing.length === 3 &&
+        typeof thing[0] === 'number' &&
+        typeof thing[1] === 'number' &&
+        typeof thing[2] === 'number');
 }
 function isCircle(thing) {
-    return Array.isArray(thing)
-        && thing.length === 3
-        && thing[0] === 'circle'
-        && isPoint2D(thing[1])
-        && typeof thing[2] === 'number';
+    return (Array.isArray(thing) &&
+        thing.length === 3 &&
+        thing[0] === 'circle' &&
+        isPoint2D(thing[1]) &&
+        typeof thing[2] === 'number');
 }
 function isSphere(thing) {
-    return Array.isArray(thing)
-        && thing.length === 3
-        && thing[0] === 'sphere'
-        && isPoint3D(thing[1])
-        && typeof thing[2] === 'number';
+    return (Array.isArray(thing) &&
+        thing.length === 3 &&
+        thing[0] === 'sphere' &&
+        isPoint3D(thing[1]) &&
+        typeof thing[2] === 'number');
 }
 function isQuadratic(thing) {
-    return Array.isArray(thing)
-        && thing.length === 5
-        && thing[0] === 'quadratic'
-        && typeof thing[1] === 'number'
-        && typeof thing[2] === 'number'
-        && typeof thing[3] === 'number'
-        && typeof thing[4] === 'number';
+    return (Array.isArray(thing) &&
+        thing.length === 5 &&
+        thing[0] === 'quadratic' &&
+        typeof thing[1] === 'number' &&
+        typeof thing[2] === 'number' &&
+        typeof thing[3] === 'number' &&
+        typeof thing[4] === 'number');
 }
 export function thingsToPoints(things) {
     let pts = [];

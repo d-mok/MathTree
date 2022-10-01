@@ -1,10 +1,11 @@
 import { Canvas05 } from './canvas05';
+import { blur } from '../support/blur';
 // math
 function sin(degree) {
-    return Math.sin(degree / 180 * Math.PI);
+    return Math.sin((degree / 180) * Math.PI);
 }
 function cos(degree) {
-    return Math.cos(degree / 180 * Math.PI);
+    return Math.cos((degree / 180) * Math.PI);
 }
 function Move([x, y], dir, length) {
     x += length * cos(dir);
@@ -12,7 +13,7 @@ function Move([x, y], dir, length) {
     return [x, y];
 }
 function deg(radian) {
-    return radian / Math.PI * 180;
+    return (radian / Math.PI) * 180;
 }
 function dotVec([x1, y1], [x2, y2]) {
     return [x2 - x1, y2 - y1];
@@ -98,6 +99,7 @@ export class Canvas06 extends Canvas05 {
     // string
     unitize(text) {
         if (typeof text === 'number') {
+            text = blur(text);
             text = String(text);
             let unit = this.$LENGTH_UNIT;
             if (unit === '')

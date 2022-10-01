@@ -1,18 +1,15 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
 import { Canvas05 } from './canvas05'
-
+import { blur } from '../support/blur'
 
 // math
 
-
-
 function sin(degree: number): number {
-    return Math.sin(degree / 180 * Math.PI)
+    return Math.sin((degree / 180) * Math.PI)
 }
 
-
 function cos(degree: number): number {
-    return Math.cos(degree / 180 * Math.PI)
+    return Math.cos((degree / 180) * Math.PI)
 }
 
 function Move([x, y]: Point2D, dir: number, length: number): Point2D {
@@ -21,16 +18,13 @@ function Move([x, y]: Point2D, dir: number, length: number): Point2D {
     return [x, y]
 }
 
-
 function deg(radian: number): number {
-    return radian / Math.PI * 180
+    return (radian / Math.PI) * 180
 }
-
 
 function dotVec([x1, y1]: dot, [x2, y2]: dot): dot {
     return [x2 - x1, y2 - y1]
 }
-
 
 function dir(A: dot, B: dot): number {
     let [dx, dy] = dotVec(A, B)
@@ -38,9 +32,7 @@ function dir(A: dot, B: dot): number {
     return deg(rad)
 }
 
-
 // polar
-
 
 function vec(p1: Point2D, p2: Point2D): Point2D {
     let [x1, y1] = p1
@@ -48,13 +40,11 @@ function vec(p1: Point2D, p2: Point2D): Point2D {
     return [x2 - x1, y2 - y1]
 }
 
-
 function cross2D(vec1: Point2D, vec2: Point2D): number {
     let [x1, y1] = vec1
     let [x2, y2] = vec2
     return x1 * y2 - y1 * x2
 }
-
 
 function IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean {
     let OA = vec(O, A)
@@ -62,17 +52,17 @@ function IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean {
     return cross2D(OA, OB) < 0
 }
 
-function polarFlip(A: Point2D, O: Point2D, B: Point2D, mode: 'normal' | 'polar' | 'reflex'): boolean {
+function polarFlip(
+    A: Point2D,
+    O: Point2D,
+    B: Point2D,
+    mode: 'normal' | 'polar' | 'reflex'
+): boolean {
     let isReflex = IsReflex(A, O, B)
     if (mode === 'normal' && isReflex) return true
     if (mode === 'reflex' && !isReflex) return true
     return false
 }
-
-
-
-
-
 
 /**
  * Handle:
@@ -80,8 +70,6 @@ function polarFlip(A: Point2D, O: Point2D, B: Point2D, mode: 'normal' | 'polar' 
  * - other helper functions
  */
 export class Canvas06 extends Canvas05 {
-
-
     // dir
 
     public getDir(start: Point, end: Point): number {
@@ -94,7 +82,6 @@ export class Canvas06 extends Canvas05 {
         let C = this.$LABEL_CENTER[0]
         return this.getDir(C, point)
     }
-
 
     public getDirAngle(A: Point, O: Point, B: Point): number {
         let flip = this.polarFlip(A, O, B)
@@ -135,6 +122,7 @@ export class Canvas06 extends Canvas05 {
 
     public unitize(text: string | number): string {
         if (typeof text === 'number') {
+            text = blur(text)
             text = String(text)
             let unit = this.$LENGTH_UNIT
             if (unit === '') return text
@@ -147,25 +135,27 @@ export class Canvas06 extends Canvas05 {
         }
     }
 
-
     // Find the extra pixel allowance when drawing angle arc and angle label for small angles.
-    public getAngleAllowance(A: Point, O: Point, B: Point, threshold: number, pixelPerDeg: px): px {
+    public getAngleAllowance(
+        A: Point,
+        O: Point,
+        B: Point,
+        threshold: number,
+        pixelPerDeg: px
+    ): px {
         let angle = this.getDirAngle(A, O, B)
         let angleUnderThreshold = Math.max(threshold - angle, 0)
         return angleUnderThreshold * pixelPerDeg
     }
 
-    public getApexFromDial(A: Point | number, O: Point, B: Point | number): [Point2D, Point2D, Point2D] {
+    public getApexFromDial(
+        A: Point | number,
+        O: Point,
+        B: Point | number
+    ): [Point2D, Point2D, Point2D] {
         let V = this.pj(O)
         let P = typeof A === 'number' ? Move(V, A, 1) : this.pj(A)
         let Q = typeof B === 'number' ? Move(V, B, 1) : this.pj(B)
         return [P, V, Q]
     }
-
 }
-
-
-
-
-
-

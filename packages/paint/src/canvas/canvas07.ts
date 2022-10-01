@@ -1,9 +1,7 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas06 } from "./canvas06"
-
+import { Canvas06 } from './canvas06'
 
 // step
-
 
 function isOdd(n: number): boolean {
     return n % 2 !== 0
@@ -34,7 +32,6 @@ function steps(n: number): number[] {
     return arr
 }
 
-
 // vector
 
 function mid(A: Point, B: Point): Point {
@@ -49,14 +46,11 @@ function mid(A: Point, B: Point): Point {
     }
 }
 
-
-
 /**
  * Handle:
  * - basic elements
  */
 export class Canvas07 extends Canvas06 {
-
     private linePx(dots: dot[]) {
         this.createPathPx(dots)
         this.doStroke()
@@ -66,8 +60,6 @@ export class Canvas07 extends Canvas06 {
         this.createPathPx(dots)
         this.doSolid()
     }
-
-
 
     line(pts: Point[]) {
         this.createPath(pts)
@@ -86,7 +78,6 @@ export class Canvas07 extends Canvas06 {
         this.line([A, B])
     }
 
-
     solid(pts: Point[]) {
         this.createPath(pts)
         this.doSolid()
@@ -97,12 +88,10 @@ export class Canvas07 extends Canvas06 {
         this.doDash()
     }
 
-
     shape(pts: Point[]) {
         this.createShape(pts)
         this.doStroke()
     }
-
 
     fill(pts: Point[]) {
         this.createShape(pts)
@@ -134,7 +123,6 @@ export class Canvas07 extends Canvas06 {
         this.doFill()
     }
 
-
     halo(center: Point, radius: px) {
         this.createArc(center, radius, [0, 360])
         this.doShade()
@@ -153,20 +141,24 @@ export class Canvas07 extends Canvas06 {
         this.restore()
     }
 
-
     arrow(start: Point, end: Point, size: px) {
         this.line([start, end])
         this.arrowHead(start, end, size, 0)
     }
 
-
-    anglePolar(A: Point, O: Point, B: Point, radius: px, count: number, space: px) {
+    anglePolar(
+        A: Point,
+        O: Point,
+        B: Point,
+        radius: px,
+        count: number,
+        space: px
+    ) {
         for (let s of steps(count)) {
             let r = radius + s * space
             this.solidArc(A, O, B, r)
         }
     }
-
 
     angle(A: Point, O: Point, B: Point, radius: px, count: number, space: px) {
         let flip = this.polarFlip(A, O, B)
@@ -175,15 +167,10 @@ export class Canvas07 extends Canvas06 {
         this.anglePolar(P, O, Q, radius, count, space)
     }
 
-
-
-
     rightAngle(A: Point, O: Point, B: Point, size: px) {
         this.createRightAnglePath(A, O, B, size)
         this.doSolid()
     }
-
-
 
     parallel(start: Point, end: Point, size: px, count: number, space: px) {
         let M = mid(start, end)
@@ -196,7 +183,6 @@ export class Canvas07 extends Canvas06 {
         this.parallel(start, end, size, 1, 0)
     }
 
-
     tick(start: Point, end: Point, length: px, offset: px) {
         this.save()
         this.translateTo(end)
@@ -207,19 +193,15 @@ export class Canvas07 extends Canvas06 {
         this.restore()
     }
 
-
     tickVert(pt: Point, length: px) {
         let [x, y] = pt
         this.tick([x - 1, y], pt, length, 0)
     }
 
-
-
     tickHori(pt: Point, length: px) {
         let [x, y] = pt
         this.tick([x, y - 1], pt, length, 0)
     }
-
 
     equalSide(start: Point, end: Point, length: px, count: number, space: px) {
         let M = mid(start, end)
@@ -227,7 +209,6 @@ export class Canvas07 extends Canvas06 {
             this.tick(start, M, length, s * space)
         }
     }
-
 
     compass(center: Point, xSize: px, ySize: px, arrowSize: px) {
         this.save()
@@ -243,6 +224,4 @@ export class Canvas07 extends Canvas06 {
         this.solidPx([A, N, B])
         this.restore()
     }
-
-
 }

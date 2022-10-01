@@ -1,15 +1,10 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas07 } from "./canvas07"
-
-
-
+import { Canvas07 } from './canvas07'
 
 const LABEL_OFFSET_PX = 20
 const X_MARK_OFFSET_PX = 15
 const Y_MARK_OFFSET_PX = 10
 const TICK_LENGTH_PX = 5
-
-
 
 /**
  * Return an array of ticks position at `interval` within `[min,max]`.
@@ -31,14 +26,11 @@ function getTicks(min: number, max: number, interval: number): number[] {
     return arr
 }
 
-
 /**
  * Handle:
  * - Axis
  */
 export class Canvas08 extends Canvas07 {
-
-
     private bottomEnd(x: number): Point2D {
         return this.$HALF_AXIS_Y ? [x, 0] : this.edgeBottom(x)
     }
@@ -53,50 +45,37 @@ export class Canvas08 extends Canvas07 {
         this.arrow(A, B, 5)
     }
 
-
     yAxis(): void {
         let A = this.bottomEnd(0)
         let B = this.edgeTop(0)
         this.arrow(A, B, 5)
     }
 
-
     xAxisLabel(text: string): void {
         this.save()
-        this.$TEXT_ALIGN = "right"
-        this.$TEXT_BASELINE = "middle"
+        this.$TEXT_ALIGN = 'right'
+        this.$TEXT_BASELINE = 'middle'
         this.label(text, this.edgeRight(0), LABEL_OFFSET_PX, 120)
         this.restore()
     }
 
-
-
-
     yAxisLabel(text: string): void {
         this.save()
-        this.$TEXT_ALIGN = "left"
-        this.$TEXT_BASELINE = "top"
+        this.$TEXT_ALIGN = 'left'
+        this.$TEXT_BASELINE = 'top'
         this.label(text, this.edgeTop(0), LABEL_OFFSET_PX, -30)
         this.restore()
     }
 
-
     private xTicks(interval: number): number[] {
-        let min = this.$HALF_AXIS_X
-            ? Math.max(0, this.xmin)
-            : this.xmin
+        let min = this.$HALF_AXIS_X ? Math.max(0, this.xmin) : this.xmin
         return getTicks(min, this.xmax, interval)
     }
 
-
     private yTicks(interval: number): number[] {
-        let min = this.$HALF_AXIS_Y
-            ? Math.max(0, this.ymin)
-            : this.ymin
+        let min = this.$HALF_AXIS_Y ? Math.max(0, this.ymin) : this.ymin
         return getTicks(min, this.ymax, interval)
     }
-
-
 
     xAxisTick(interval: number): void {
         for (let x of this.xTicks(interval)) {
@@ -104,39 +83,33 @@ export class Canvas08 extends Canvas07 {
         }
     }
 
-
     yAxisTick(interval: number): void {
         for (let y of this.yTicks(interval)) {
             this.tickHori([0, y], TICK_LENGTH_PX)
         }
     }
 
-
-
     xAxisTickMark(interval: number): void {
         this.save()
         this.$TEXT_ITALIC = false
-        this.$TEXT_ALIGN = "center"
-        this.$TEXT_BASELINE = "middle"
+        this.$TEXT_ALIGN = 'center'
+        this.$TEXT_BASELINE = 'middle'
         for (let x of this.xTicks(interval)) {
             this.label(String(x), [x, 0], X_MARK_OFFSET_PX, 270)
         }
         this.restore()
     }
 
-
-
     yAxisTickMark(interval: number): void {
         this.save()
         this.$TEXT_ITALIC = false
-        this.$TEXT_ALIGN = "right"
-        this.$TEXT_BASELINE = "middle"
+        this.$TEXT_ALIGN = 'right'
+        this.$TEXT_BASELINE = 'middle'
         for (let y of this.yTicks(interval)) {
             this.label(String(y), [0, y], Y_MARK_OFFSET_PX, 180)
         }
         this.restore()
     }
-
 
     private gridLineVert(x: number) {
         let A = this.bottomEnd(x)
@@ -152,7 +125,7 @@ export class Canvas08 extends Canvas07 {
 
     xAxisGrid(interval: number): void {
         this.save()
-        this.$COLOR = "#d3d5db"
+        this.$COLOR = '#d3d5db'
         this.gridLineVert(0)
         for (let x of this.xTicks(interval)) {
             this.gridLineVert(x)
@@ -160,18 +133,13 @@ export class Canvas08 extends Canvas07 {
         this.restore()
     }
 
-
-
     yAxisGrid(interval: number): void {
         this.save()
-        this.$COLOR = "#d3d5db"
+        this.$COLOR = '#d3d5db'
         this.gridLineHori(0)
         for (let y of this.yTicks(interval)) {
             this.gridLineHori(y)
         }
         this.restore()
     }
-
-
-
 }

@@ -1,9 +1,9 @@
 import { Canvas03 } from './canvas03';
 function rad(degree) {
-    return degree * Math.PI / 180;
+    return (degree * Math.PI) / 180;
 }
 function deg(radian) {
-    return radian / Math.PI * 180;
+    return (radian / Math.PI) * 180;
 }
 function dotVec([x1, y1], [x2, y2]) {
     return [x2 - x1, y2 - y1];

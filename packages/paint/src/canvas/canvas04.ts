@@ -1,22 +1,17 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
 import { Canvas03 } from './canvas03'
 
-
-
 function rad(degree: number): number {
-    return degree * Math.PI / 180
+    return (degree * Math.PI) / 180
 }
-
 
 function deg(radian: number): number {
-    return radian / Math.PI * 180
+    return (radian / Math.PI) * 180
 }
-
 
 function dotVec([x1, y1]: dot, [x2, y2]: dot): dot {
     return [x2 - x1, y2 - y1]
 }
-
 
 function dir(A: dot, B: dot): number {
     let [dx, dy] = dotVec(A, B)
@@ -49,15 +44,12 @@ function moveDot(A: dot, B: dot, dist: number): dot {
     return addDot(A, d)
 }
 
-
-
 /**
  * Handle:
  * - transform
  * - drawing in pixel and coordinates
  */
 export class Canvas04 extends Canvas03 {
-
     // transform
 
     protected translateTo(pt: Point): void {
@@ -89,11 +81,9 @@ export class Canvas04 extends Canvas03 {
         this.ctx.moveTo(x, y)
     }
 
-
     protected lineToPx([x, y]: dot) {
         this.ctx.lineTo(x, y)
     }
-
 
     protected createPathPx(dots: dot[]) {
         this.ctx.beginPath()
@@ -109,9 +99,6 @@ export class Canvas04 extends Canvas03 {
         this.createPathPx(dots)
         this.ctx.closePath()
     }
-
-
-
 
     // straight drawer in coord
 
@@ -135,12 +122,10 @@ export class Canvas04 extends Canvas03 {
         }
     }
 
-
     protected createShape(pts: Point[]) {
         this.createPath(pts)
         this.ctx.closePath()
     }
-
 
     // arc drawer
 
@@ -152,7 +137,6 @@ export class Canvas04 extends Canvas03 {
         this.ctx.beginPath()
         this.ctx.arc(x, y, radius, q1, q2, true)
     }
-
 
     protected createArcByPoints(P: Point, O: Point, Q: Point, radius: px) {
         let p = this.toPx(P)
@@ -172,7 +156,6 @@ export class Canvas04 extends Canvas03 {
         let c = addDot(b, dotVec(o, a))
         this.createPathPx([a, c, b])
     }
-
 
     // finishing
 
@@ -205,14 +188,4 @@ export class Canvas04 extends Canvas03 {
         this.ctx.fill()
         this.$ALPHA = alpha
     }
-
-
-
-
 }
-
-
-
-
-
-

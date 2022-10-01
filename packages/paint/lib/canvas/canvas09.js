@@ -1,4 +1,4 @@
-import { Canvas08 } from "./canvas08";
+import { Canvas08 } from './canvas08';
 import { trace, splitNull } from '../support/trace';
 import { sectoroid } from '../support/sectoroid';
 /**
@@ -16,9 +16,11 @@ export class Canvas09 extends Canvas08 {
         // }
         let isIll = (p) => {
             let [x, y] = p;
-            return !Number.isFinite(x) || !Number.isFinite(y) || !this.isVisible(p, 1);
+            return (!Number.isFinite(x) ||
+                !Number.isFinite(y) ||
+                !this.isVisible(p, 1));
         };
-        let filteredPoints = points.map(p => isIll(p) ? null : p);
+        let filteredPoints = points.map(p => (isIll(p) ? null : p));
         let segments = splitNull(filteredPoints);
         for (let seg of segments)
             this.line(seg);

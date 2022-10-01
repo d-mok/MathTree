@@ -133,7 +133,7 @@ export class Canvas03 extends Canvas02 {
             $LINE_LABEL: this.$LINE_LABEL,
             $ARROW_LABEL: this.$ARROW_LABEL,
             $HALF_AXIS_X: this.$HALF_AXIS_X,
-            $HALF_AXIS_Y: this.$HALF_AXIS_Y
+            $HALF_AXIS_Y: this.$HALF_AXIS_Y,
         });
     }
     restore() {

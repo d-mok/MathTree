@@ -1,7 +1,6 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
 import { Canvas02 } from './canvas02'
 
-
 type AngleMode = 'normal' | 'polar' | 'reflex'
 type LineLabel = 'auto' | 'left' | 'right'
 type ArrowLabel = 'line' | 'head' | 'front'
@@ -21,32 +20,27 @@ type state = {
     $HALF_AXIS_Y: boolean
 }
 
-
 // dash handler
 
 type segment = px[] | px | boolean
 
 function segmentArray(seg: segment): px[] {
-    if (Array.isArray(seg))
-        return seg
-    if (typeof seg === 'number')
-        return [seg, seg]
-    if (typeof seg === 'boolean')
-        return seg ? [5, 5] : []
+    if (Array.isArray(seg)) return seg
+    if (typeof seg === 'number') return [seg, seg]
+    if (typeof seg === 'boolean') return seg ? [5, 5] : []
     return []
 }
 
-
 // REM_PIXEL is the default font size of the browser, usually 16px
-const REM_PIXEL: number = parseFloat(getComputedStyle(document.documentElement).fontSize)
-
+const REM_PIXEL: number = parseFloat(
+    getComputedStyle(document.documentElement).fontSize
+)
 
 /**
  * Handle:
  * - Settings
  */
 export class Canvas03 extends Canvas02 {
-
     // initialize state
 
     public AUTO_BORDER = false
@@ -125,7 +119,6 @@ export class Canvas03 extends Canvas02 {
         this.$TEXT_PIXEL = value * REM_PIXEL
     }
 
-
     public get $TEXT_ITALIC(): boolean {
         return this.ctx.font.includes('italic')
     }
@@ -135,9 +128,7 @@ export class Canvas03 extends Canvas02 {
         if (value) this.ctx.font = 'italic ' + this.ctx.font
     }
 
-
     // parent setting
-
 
     public get $3D_ANGLE(): number {
         return this.Proj_3D_Angle
@@ -155,7 +146,6 @@ export class Canvas03 extends Canvas02 {
         this.Proj_3D_Depth = value
     }
 
-
     // user setting
 
     public $TEXT_DIR: number = 0
@@ -168,7 +158,6 @@ export class Canvas03 extends Canvas02 {
     public $HALF_AXIS_X: boolean = false
     public $HALF_AXIS_Y: boolean = false
 
-
     private _$LABEL_CENTER: Point2D = this.center()
 
     public set $LABEL_CENTER(centers: Point[]) {
@@ -180,12 +169,9 @@ export class Canvas03 extends Canvas02 {
         return [this._$LABEL_CENTER]
     }
 
-
-
     // setting meta
 
     private states: state[] = []
-
 
     public save() {
         this.ctx.save()
@@ -201,7 +187,7 @@ export class Canvas03 extends Canvas02 {
             $LINE_LABEL: this.$LINE_LABEL,
             $ARROW_LABEL: this.$ARROW_LABEL,
             $HALF_AXIS_X: this.$HALF_AXIS_X,
-            $HALF_AXIS_Y: this.$HALF_AXIS_Y
+            $HALF_AXIS_Y: this.$HALF_AXIS_Y,
         })
     }
 
@@ -222,11 +208,7 @@ export class Canvas03 extends Canvas02 {
         this.$HALF_AXIS_X = state.$HALF_AXIS_X
         this.$HALF_AXIS_Y = state.$HALF_AXIS_Y
     }
-
-
 }
-
-
 
 function mid(Points: Point2D[]): Point2D {
     if (Points.length === 0) return [0, 0]
@@ -239,5 +221,3 @@ function mid(Points: Point2D[]): Point2D {
     let n = Points.length
     return [X / n, Y / n]
 }
-
-

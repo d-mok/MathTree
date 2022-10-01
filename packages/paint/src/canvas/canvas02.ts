@@ -2,9 +2,8 @@ import { px, dot, Point2D, Point3D, Point, capturable } from '../global'
 import { Canvas01 } from './canvas01'
 import { thingsToPoints } from '../support/capture'
 
-
 function proj(point3D: Point3D, angle: number, depth: number): Point2D {
-    let a = angle * Math.PI / 180
+    let a = (angle * Math.PI) / 180
     let s = Math.sin(a)
     let c = Math.cos(a)
 
@@ -14,13 +13,9 @@ function proj(point3D: Point3D, angle: number, depth: number): Point2D {
     return [x_new, y_new]
 }
 
-
 function forceProj(point: Point, angle: number, depth: number): Point2D {
-    return point.length === 3
-        ? proj(point, angle, depth)
-        : point
+    return point.length === 3 ? proj(point, angle, depth) : point
 }
-
 
 /**
  * Handle:
@@ -28,7 +23,6 @@ function forceProj(point: Point, angle: number, depth: number): Point2D {
  * - capturing things
  */
 export class Canvas02 extends Canvas01 {
-
     // setting
 
     protected Proj_3D_Angle = 60
@@ -56,7 +50,4 @@ export class Canvas02 extends Canvas01 {
         let pt2Ds = this.pjs(pts)
         this.capturePoints2D(pt2Ds)
     }
-
-
 }
-

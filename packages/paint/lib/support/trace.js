@@ -18,7 +18,6 @@ export function trace(func, range, dots = 1000) {
             result = [t, result];
         return result;
     }
-    ;
     let [t1, t2] = range;
     const step = (t2 - t1) / (dots - 1);
     let points = [];
@@ -38,10 +37,10 @@ export function trace(func, range, dots = 1000) {
 export function traceCircle(center, radius, angleRange, dots = 100) {
     const [h, k] = center;
     function sin(degree) {
-        return Math.sin(degree / 180 * Math.PI);
+        return Math.sin((degree / 180) * Math.PI);
     }
     function cos(degree) {
-        return Math.cos(degree / 180 * Math.PI);
+        return Math.cos((degree / 180) * Math.PI);
     }
     return trace(t => [h + radius * cos(t), k + radius * sin(t)], angleRange, dots);
 }

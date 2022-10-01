@@ -8,7 +8,7 @@ function vec(p1: Point2D, p2: Point2D): Point2D {
 }
 
 function deg(radian: number): number {
-    return radian / Math.PI * 180
+    return (radian / Math.PI) * 180
 }
 
 function magnitude([x, y]: Point2D): number {
@@ -22,12 +22,12 @@ function argument([x, y]: Point2D): number {
     return angle
 }
 
-
-
-
-
-
-export function sectoroid(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]) {
+export function sectoroid(
+    O: Point2D,
+    A: Point2D,
+    B: Point2D,
+    vertices: Point2D[]
+) {
     let v1 = vec(O, A)
     let v2 = vec(O, B)
     let r = magnitude(v1)
@@ -37,4 +37,3 @@ export function sectoroid(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[
     let points = traceCircle(O, r, [q1, q2])
     return [A, ...points, B, ...vertices]
 }
-

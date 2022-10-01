@@ -1,18 +1,13 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas08 } from "./canvas08"
+import { Canvas08 } from './canvas08'
 import { trace, splitNull } from '../support/trace'
 import { sectoroid } from '../support/sectoroid'
-
-
 
 /**
  * Handle:
  * - plot
  */
 export class Canvas09 extends Canvas08 {
-
-
-
     plot(
         func: ((t: number) => number) | ((t: number) => Point2D),
         tStart = this.xmin,
@@ -30,16 +25,18 @@ export class Canvas09 extends Canvas08 {
 
         let isIll = (p: Point2D): boolean => {
             let [x, y] = p
-            return !Number.isFinite(x) || !Number.isFinite(y) || !this.isVisible(p, 1)
+            return (
+                !Number.isFinite(x) ||
+                !Number.isFinite(y) ||
+                !this.isVisible(p, 1)
+            )
         }
 
-        let filteredPoints = points.map(p => isIll(p) ? null : p)
+        let filteredPoints = points.map(p => (isIll(p) ? null : p))
 
         let segments = splitNull(filteredPoints)
         for (let seg of segments) this.line(seg)
     }
-
-
 
     sectoroidLine(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]) {
         let pts = sectoroid(O, A, B, vertices)
@@ -51,14 +48,8 @@ export class Canvas09 extends Canvas08 {
         this.fill(pts)
     }
 
-
     sectoroidShade(O: Point2D, A: Point2D, B: Point2D, vertices: Point2D[]) {
         let pts = sectoroid(O, A, B, vertices)
         this.shade(pts)
     }
-
-
-
-
-
 }

@@ -20,11 +20,11 @@ function pxToInch(px) {
 export class Canvas00 {
     constructor() {
         this.canvas = document.createElement('canvas');
-        this.ctx = this.canvas.getContext("2d");
+        this.ctx = this.canvas.getContext('2d');
         // image store
         this.imgStore = null;
         // export
-        this.backgroundURL = "";
+        this.backgroundURL = '';
     }
     // size in pixel
     reset() {
@@ -81,9 +81,9 @@ export class Canvas00 {
         const src = `src="${cv.toDataURL()}"`;
         const width = ` width="${displayWidth}"`;
         const height = ` height="${displayHeight}"`;
-        const bg = this.backgroundURL.length === 0 ?
-            '' :
-            ` style="background-image:url('${this.backgroundURL}');background-size:100% 100%;" `;
+        const bg = this.backgroundURL.length === 0
+            ? ''
+            : ` style="background-image:url('${this.backgroundURL}');background-size:100% 100%;" `;
         return html.replace('src="' + placeholder + '"', src + width + height + bg);
     }
 }

@@ -1,6 +1,5 @@
 import { Point2D, Point3D, Point, circle, sphere, capturable } from '../global'
 
-
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.
  * ```
@@ -13,8 +12,6 @@ export function trace(
     range: [number, number],
     dots = 1000
 ): Point2D[] {
-
-
     function tracer(t: number): Point2D {
         let result: number | Point2D
         try {
@@ -22,10 +19,9 @@ export function trace(
         } catch {
             return [NaN, NaN]
         }
-        if (!Array.isArray(result))
-            result = [t, result]
+        if (!Array.isArray(result)) result = [t, result]
         return result
-    };
+    }
 
     let [t1, t2] = range
 
@@ -36,8 +32,6 @@ export function trace(
     }
     return points
 }
-
-
 
 /**
  * Return an array of 2D points as [number,number] by tracing a circle.
@@ -56,21 +50,19 @@ export function traceCircle(
     const [h, k] = center
 
     function sin(degree: number): number {
-        return Math.sin(degree / 180 * Math.PI)
+        return Math.sin((degree / 180) * Math.PI)
     }
 
     function cos(degree: number): number {
-        return Math.cos(degree / 180 * Math.PI)
+        return Math.cos((degree / 180) * Math.PI)
     }
 
-    return trace(t => [h + radius * cos(t), k + radius * sin(t)], angleRange, dots)
+    return trace(
+        t => [h + radius * cos(t), k + radius * sin(t)],
+        angleRange,
+        dots
+    )
 }
-
-
-
-
-
-
 
 export function splitNull(arr: (Point2D | null)[]): Point2D[][] {
     let ls = []

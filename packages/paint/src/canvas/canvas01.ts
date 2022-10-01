@@ -1,32 +1,26 @@
-import { px, dot, inch, Point2D, } from '../global'
+import { px, dot, inch, Point2D } from '../global'
 import { Canvas00 } from './canvas00'
-
 
 // pixel conversion
 
 function toPixelX(xmin: number, xmax: number, width: px, xCoord: number): px {
-    return (xCoord - xmin) / (xmax - xmin) * width
+    return ((xCoord - xmin) / (xmax - xmin)) * width
 }
 
 function toPixelY(ymin: number, ymax: number, height: px, yCoord: number): px {
-    return height - (yCoord - ymin) / (ymax - ymin) * height
+    return height - ((yCoord - ymin) / (ymax - ymin)) * height
 }
-
-
 
 function sin(degree: number): number {
-    return Math.sin(degree / 180 * Math.PI)
+    return Math.sin((degree / 180) * Math.PI)
 }
-
 
 function cos(degree: number): number {
-    return Math.cos(degree / 180 * Math.PI)
+    return Math.cos((degree / 180) * Math.PI)
 }
 
-
-
 function tan(degree: number): number {
-    return Math.tan(degree / 180 * Math.PI)
+    return Math.tan((degree / 180) * Math.PI)
 }
 
 /**
@@ -35,7 +29,6 @@ function tan(degree: number): number {
  * - 2D coordinate to px conversion
  */
 export class Canvas01 extends Canvas00 {
-
     // coord
 
     public xmin: number = 0
@@ -105,13 +98,11 @@ export class Canvas01 extends Canvas00 {
         return [x + Dx, this.ymax]
     }
 
-
     private toBottomEdge([x, y]: Point2D, dir: number): Point2D {
         let Dy = this.ymin - y
         let Dx = Dy / tan(dir)
         return [x + Dx, this.ymin]
     }
-
 
     private toRightEdge([x, y]: Point2D, dir: number): Point2D {
         let Dx = this.xmax - x
@@ -119,13 +110,11 @@ export class Canvas01 extends Canvas00 {
         return [this.xmax, y + Dy]
     }
 
-
     private toLeftEdge([x, y]: Point2D, dir: number): Point2D {
         let Dx = this.xmin - x
         let Dy = Dx * tan(dir)
         return [this.xmin, y + Dy]
     }
-
 
     public edgePoint(anchor: Point2D, dir: number): Point2D {
         if (!this.isVisible(anchor)) return anchor
@@ -134,7 +123,7 @@ export class Canvas01 extends Canvas00 {
             this.toTopEdge(anchor, dir),
             this.toBottomEdge(anchor, dir),
             this.toRightEdge(anchor, dir),
-            this.toLeftEdge(anchor, dir)
+            this.toLeftEdge(anchor, dir),
         ]
         arr = arr
             .filter($ => this.isVisible($))
@@ -190,13 +179,11 @@ export class Canvas01 extends Canvas00 {
         this.ymax = ymax
     }
 
-
-
     // border
 
     public addBorder(borderInch: inch): void {
-        let borderXUnit = this.dx() / this.widthInch * borderInch
-        let borderYUnit = this.dy() / this.heightInch * borderInch
+        let borderXUnit = (this.dx() / this.widthInch) * borderInch
+        let borderYUnit = (this.dy() / this.heightInch) * borderInch
 
         this.xmin -= borderXUnit
         this.xmax += borderXUnit
@@ -207,19 +194,12 @@ export class Canvas01 extends Canvas00 {
         this.heightInch += 2 * borderInch
     }
 
-
-
     // conversion
-    
+
     protected point2DtoPx(point: Point2D): dot {
         let [xCoord, yCoord] = point
         let x = toPixelX(this.xmin, this.xmax, this.width, xCoord)
         let y = toPixelY(this.ymin, this.ymax, this.height, yCoord)
         return [x, y]
     }
-
-
 }
-
-
-

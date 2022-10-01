@@ -1,19 +1,19 @@
 import { Canvas00 } from './canvas00';
 // pixel conversion
 function toPixelX(xmin, xmax, width, xCoord) {
-    return (xCoord - xmin) / (xmax - xmin) * width;
+    return ((xCoord - xmin) / (xmax - xmin)) * width;
 }
 function toPixelY(ymin, ymax, height, yCoord) {
-    return height - (yCoord - ymin) / (ymax - ymin) * height;
+    return height - ((yCoord - ymin) / (ymax - ymin)) * height;
 }
 function sin(degree) {
-    return Math.sin(degree / 180 * Math.PI);
+    return Math.sin((degree / 180) * Math.PI);
 }
 function cos(degree) {
-    return Math.cos(degree / 180 * Math.PI);
+    return Math.cos((degree / 180) * Math.PI);
 }
 function tan(degree) {
-    return Math.tan(degree / 180 * Math.PI);
+    return Math.tan((degree / 180) * Math.PI);
 }
 /**
  * Handle:
@@ -101,7 +101,7 @@ export class Canvas01 extends Canvas00 {
             this.toTopEdge(anchor, dir),
             this.toBottomEdge(anchor, dir),
             this.toRightEdge(anchor, dir),
-            this.toLeftEdge(anchor, dir)
+            this.toLeftEdge(anchor, dir),
         ];
         arr = arr
             .filter($ => this.isVisible($))
@@ -153,8 +153,8 @@ export class Canvas01 extends Canvas00 {
     }
     // border
     addBorder(borderInch) {
-        let borderXUnit = this.dx() / this.widthInch * borderInch;
-        let borderYUnit = this.dy() / this.heightInch * borderInch;
+        let borderXUnit = (this.dx() / this.widthInch) * borderInch;
+        let borderYUnit = (this.dy() / this.heightInch) * borderInch;
         this.xmin -= borderXUnit;
         this.xmax += borderXUnit;
         this.ymin -= borderYUnit;

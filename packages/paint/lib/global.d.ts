@@ -6,6 +6,12 @@ export declare type Point3D = [number, number, number];
 export declare type Point = Point2D | Point3D;
 export declare type circle = [type: 'circle', center: Point2D, radius: number];
 export declare type sphere = [type: 'sphere', center: Point3D, radius: number];
-export declare type quadratic = [type: 'quadratic', a: number, b: number, c: number, scale: number];
+export declare type quadratic = [
+    type: 'quadratic',
+    a: number,
+    b: number,
+    c: number,
+    scale: number
+];
 export declare type capturable = Point | circle | sphere | quadratic;
 //# sourceMappingURL=global.d.ts.map

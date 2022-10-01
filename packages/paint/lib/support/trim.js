@@ -22,7 +22,7 @@ function colBlank(img, x) {
     return true;
 }
 function trimCanvasX(canvas) {
-    let ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext('2d');
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let top = 0;
     let bottom = img.height - 1;
@@ -36,7 +36,7 @@ function trimCanvasX(canvas) {
     ctx.putImageData(trimmed, 0, 0);
 }
 function trimCanvasY(canvas) {
-    let ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext('2d');
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let left = 0;
     let right = img.width - 1;

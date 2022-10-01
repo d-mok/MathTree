@@ -1,4 +1,4 @@
-import { Canvas07 } from "./canvas07";
+import { Canvas07 } from './canvas07';
 /**
  * Handle:
  * - Axis

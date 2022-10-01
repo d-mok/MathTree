@@ -5,7 +5,7 @@ function vec(p1, p2) {
     return [x2 - x1, y2 - y1];
 }
 function deg(radian) {
-    return radian / Math.PI * 180;
+    return (radian / Math.PI) * 180;
 }
 function magnitude([x, y]) {
     return (x * x + y * y) ** 0.5;

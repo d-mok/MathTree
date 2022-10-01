@@ -1,4 +1,4 @@
-import { Canvas07 } from "./canvas07";
+import { Canvas07 } from './canvas07';
 const LABEL_OFFSET_PX = 20;
 const X_MARK_OFFSET_PX = 15;
 const Y_MARK_OFFSET_PX = 10;
@@ -48,28 +48,24 @@ export class Canvas08 extends Canvas07 {
     }
     xAxisLabel(text) {
         this.save();
-        this.$TEXT_ALIGN = "right";
-        this.$TEXT_BASELINE = "middle";
+        this.$TEXT_ALIGN = 'right';
+        this.$TEXT_BASELINE = 'middle';
         this.label(text, this.edgeRight(0), LABEL_OFFSET_PX, 120);
         this.restore();
     }
     yAxisLabel(text) {
         this.save();
-        this.$TEXT_ALIGN = "left";
-        this.$TEXT_BASELINE = "top";
+        this.$TEXT_ALIGN = 'left';
+        this.$TEXT_BASELINE = 'top';
         this.label(text, this.edgeTop(0), LABEL_OFFSET_PX, -30);
         this.restore();
     }
     xTicks(interval) {
-        let min = this.$HALF_AXIS_X
-            ? Math.max(0, this.xmin)
-            : this.xmin;
+        let min = this.$HALF_AXIS_X ? Math.max(0, this.xmin) : this.xmin;
         return getTicks(min, this.xmax, interval);
     }
     yTicks(interval) {
-        let min = this.$HALF_AXIS_Y
-            ? Math.max(0, this.ymin)
-            : this.ymin;
+        let min = this.$HALF_AXIS_Y ? Math.max(0, this.ymin) : this.ymin;
         return getTicks(min, this.ymax, interval);
     }
     xAxisTick(interval) {
@@ -85,8 +81,8 @@ export class Canvas08 extends Canvas07 {
     xAxisTickMark(interval) {
         this.save();
         this.$TEXT_ITALIC = false;
-        this.$TEXT_ALIGN = "center";
-        this.$TEXT_BASELINE = "middle";
+        this.$TEXT_ALIGN = 'center';
+        this.$TEXT_BASELINE = 'middle';
         for (let x of this.xTicks(interval)) {
             this.label(String(x), [x, 0], X_MARK_OFFSET_PX, 270);
         }
@@ -95,8 +91,8 @@ export class Canvas08 extends Canvas07 {
     yAxisTickMark(interval) {
         this.save();
         this.$TEXT_ITALIC = false;
-        this.$TEXT_ALIGN = "right";
-        this.$TEXT_BASELINE = "middle";
+        this.$TEXT_ALIGN = 'right';
+        this.$TEXT_BASELINE = 'middle';
         for (let y of this.yTicks(interval)) {
             this.label(String(y), [0, y], Y_MARK_OFFSET_PX, 180);
         }
@@ -114,7 +110,7 @@ export class Canvas08 extends Canvas07 {
     }
     xAxisGrid(interval) {
         this.save();
-        this.$COLOR = "#d3d5db";
+        this.$COLOR = '#d3d5db';
         this.gridLineVert(0);
         for (let x of this.xTicks(interval)) {
             this.gridLineVert(x);
@@ -123,7 +119,7 @@ export class Canvas08 extends Canvas07 {
     }
     yAxisGrid(interval) {
         this.save();
-        this.$COLOR = "#d3d5db";
+        this.$COLOR = '#d3d5db';
         this.gridLineHori(0);
         for (let y of this.yTicks(interval)) {
             this.gridLineHori(y);

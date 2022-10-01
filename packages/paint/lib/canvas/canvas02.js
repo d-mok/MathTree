@@ -1,7 +1,7 @@
 import { Canvas01 } from './canvas01';
 import { thingsToPoints } from '../support/capture';
 function proj(point3D, angle, depth) {
-    let a = angle * Math.PI / 180;
+    let a = (angle * Math.PI) / 180;
     let s = Math.sin(a);
     let c = Math.cos(a);
     let [x, y, z] = point3D;
@@ -10,9 +10,7 @@ function proj(point3D, angle, depth) {
     return [x_new, y_new];
 }
 function forceProj(point, angle, depth) {
-    return point.length === 3
-        ? proj(point, angle, depth)
-        : point;
+    return point.length === 3 ? proj(point, angle, depth) : point;
 }
 /**
  * Handle:
