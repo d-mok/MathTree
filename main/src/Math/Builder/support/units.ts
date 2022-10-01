@@ -27,6 +27,7 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     wavelength: 'm',
     capacitiy: 'm3',
     angle: '°',
+    '∠': '°',
     energy: 'J',
     'molar mass': 'kg mol-1',
     mass: 'kg',
