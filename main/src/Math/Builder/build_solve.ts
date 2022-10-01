@@ -93,8 +93,8 @@ export function BuildSolve(
                 let latexs = _.map(equations, 1)
                 return (
                     (solPlain
-                        ? WRITE.printSystem(vGrp, latexs) + ' \\\\~\\\\ '
-                        : '') +
+                        ? ''
+                        : WRITE.printSystem(vGrp, latexs) + ' \\\\~\\\\ ') +
                     WRITE.printSystem(vGrp, latexs, givens) +
                     ' \\\\~\\\\ ' +
                     WRITE.printSystemSol(vGrp, hiddens)
