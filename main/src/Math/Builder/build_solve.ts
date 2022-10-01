@@ -41,7 +41,7 @@ export function BuildSolve(
                 solFormat,
             })
         } catch (e) {
-            if (i === 10) {
+            if (i === 0) {
                 throw e
             } else {
                 continue
