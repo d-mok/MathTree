@@ -1,4 +1,4 @@
-import { bisect } from './Bisection'
+import { bisect } from '../Bisection'
 import { getAllVars } from '../utils'
 import { getFittableOrder } from './searcher'
 

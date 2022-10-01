@@ -1,152 +1,72 @@
-import { combinations, getAllVars, getVars } from "../utils";
-class Vabe {
-    constructor(symbol) {
-        this.symbol = symbol;
-        this.order = NaN;
+import { combinations, getAllVars, getVars } from '../utils';
+import _ from 'lodash';
+function analyzeOnce(fs, givens) {
+    const vars = getAllVars(fs);
+    // to store the order of each var
+    // initialized with given vars = order 0
+    let TREE = Object.fromEntries(givens.map(v => [
+        v,
+        {
+            variable: v,
+            order: 0,
+            isGiven: true,
+            solvedBy: null,
+            deps: [],
+            isTop: false,
+        },
+    ]));
+    function getDeps(f, solvedVar) {
+        let otherVars = _.without(getVars(f), solvedVar);
+        return _.uniq([
+            ...otherVars,
+            ..._(TREE).pick(otherVars).map('deps').value().flat(),
+        ]);
     }
-    reset() {
-        this.order = NaN;
+    function getNextOrder(f) {
+        let realOrders = _(TREE).pick(getVars(f)).map('order').value();
+        return Math.max(-1, ...realOrders) + 1;
     }
-    setZero() {
-        this.order = 0;
-    }
-    solve(order) {
-        this.order = order;
-    }
-    solved() {
-        return Number.isFinite(this.order);
-    }
-}
-class Eqube {
-    constructor(vabes) {
-        this.vabes = vabes;
-    }
-    unsolvedVabes() {
-        return this.vabes.filter($ => !$.solved());
-    }
-    solved() {
-        return this.unsolvedVabes().length === 0;
-    }
-    solvable() {
-        return this.unsolvedVabes().length === 1;
-    }
-    orders() {
-        return this.vabes.map($ => $.order);
-    }
-    realOrders() {
-        return this.orders().filter($ => Number.isFinite($));
-    }
-    maxOrder() {
-        const orders = this.realOrders();
-        if (orders.length === 0)
-            return -1;
-        return Math.max(...orders);
-    }
-    nextOrder() {
-        return this.maxOrder() + 1;
-    }
-    forceSolve() {
-        let nextOrder = this.nextOrder();
-        for (let v of this.unsolvedVabes()) {
-            v.solve(nextOrder);
-        }
-    }
-    trySolve() {
-        if (this.solvable()) {
-            this.forceSolve();
-            return true;
-        }
-        else {
+    function trySolve(f) {
+        let unsolved = getVars(f).filter(v => !(v in TREE));
+        // eq is solvable only if exactly 1 var is unsolved
+        if (unsolved.length !== 1)
             return false;
-        }
+        // solve eq (mocking)
+        let v = unsolved[0];
+        TREE[v] = {
+            variable: v,
+            order: getNextOrder(f),
+            isGiven: false,
+            solvedBy: f,
+            deps: getDeps(f, v),
+            isTop: getDeps(f, v).length === vars.length - 1,
+        };
+        return true;
     }
+    function trySolveNext() {
+        let nextF = fs.find(f => trySolve(f));
+        return nextF !== undefined;
+    }
+    //try until no eq can be solved
+    while (trySolveNext()) { }
+    // healthy if all vars are solved and at least 1 top var
+    let isHealthy = _.size(TREE) === vars.length && _(TREE).map('isTop').some();
+    return isHealthy ? TREE : undefined;
 }
-class PresetAnalyzer {
-    constructor(vabes, equbes, preset) {
-        this.vabes = vabes;
-        this.equbes = equbes;
-        this.preset = preset;
-    }
-    reset() {
-        for (let v of this.vabes) {
-            const isPreset = this.preset.includes(v);
-            isPreset ? v.setZero() : v.reset();
-        }
-    }
-    trySolveNext() {
-        for (let eq of this.equbes) {
-            const t = eq.trySolve();
-            if (t === true)
-                return true;
-        }
-        return false;
-    }
-    exportOrder() {
-        const orders = {};
-        for (let v of this.vabes) {
-            orders[v.symbol] = v.order;
-        }
-        return orders;
-    }
-    /**
-     * Get the tree of the system under current preset.
-     * The process is deterministic, so a unique tree should be obtained.
-     * The tree may or may not be healthy, i.e. fully solved.
-     */
-    getTree() {
-        this.reset();
-        for (let i = 0; i <= this.equbes.length; i++) {
-            const t = this.trySolveNext();
-            if (!t)
-                break;
-        }
-        return this.exportOrder();
-    }
-}
-class Analyzer {
-    constructor(vabes, equbes) {
-        this.vabes = vabes;
-        this.equbes = equbes;
-    }
-    allVabeCombinations() {
-        const n = this.vabes.length - this.equbes.length;
-        return combinations(this.vabes, n);
-    }
-    getTrees() {
-        const combs = this.allVabeCombinations();
-        const ts = [];
-        for (let c of combs) {
-            const ana = new PresetAnalyzer(this.vabes, this.equbes, c);
-            ts.push(ana.getTree());
-        }
-        return ts;
-    }
-    isHealthy(tree) {
-        // return true
-        const orders = Object.values(tree);
-        return orders.every($ => Number.isFinite($));
-    }
-    /**
-     * Get all the healthy trees generated from all possible 'given variables' combinations.
-     */
-    getHealthyTrees() {
-        return this.getTrees().filter($ => this.isHealthy($));
-    }
+/**
+ * Get all the healthy trees of this system generated from all possible 'given variables' combinations.
+ */
+export function analyze2(fs) {
+    const vars = getAllVars(fs);
+    const nGivens = vars.length - fs.length;
+    const arrGivens = combinations(vars, nGivens);
+    const trees = arrGivens.map(c => analyzeOnce(fs, c));
+    return _.compact(trees);
 }
 /**
  * Get all the healthy trees of this system generated from all possible 'given variables' combinations.
  */
 export function analyze(fs) {
-    const symbols = getAllVars(fs);
-    const vabes = symbols.map($ => new Vabe($));
-    const equbes = [];
-    for (let f of fs) {
-        let syms = getVars(f);
-        const vs = syms.map($ => vabes.find(_ => _.symbol === $));
-        let eq = new Eqube(vs);
-        equbes.push(eq);
-    }
-    let analyzer = new Analyzer(vabes, equbes);
-    return analyzer.getHealthyTrees();
+    return analyze2(fs).map(t => _.mapValues(t, 'order'));
 }
 //# sourceMappingURL=analyze.js.map

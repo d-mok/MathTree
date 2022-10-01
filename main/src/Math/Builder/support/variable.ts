@@ -1,7 +1,5 @@
 import { parseUnit, findUnit } from './units'
 
-
-
 function parseRange(rng: rangeInput): [number, number] {
     if (Array.isArray(rng)) {
         return rng.length === 2 ? rng : [rng[0], rng[0]]
@@ -10,12 +8,9 @@ function parseRange(rng: rangeInput): [number, number] {
     }
 }
 
-
 export class Variable {
-
     private val: number = NaN
-    // public order: number = -1
-    private subscript: string = ""
+    private subscript: string = ''
 
     public unit: string
     public range: [number, number]
@@ -26,22 +21,16 @@ export class Variable {
         public name: string,
         range: rangeInput,
         unit: string | undefined,
-        display: string | undefined,
+        display: string | undefined
     ) {
         unit ??= findUnit(name)
-        unit ??= ""
+        unit ??= ''
         this.unit = parseUnit(unit)
         this.range = parseRange(range)
         let [min, max] = this.range
-        if (min > max) throw "[Variable] Range must have max > min"
+        if (min > max) throw '[Variable] Range must have max > min'
         this.display = display ?? this.sym
     }
-
-    // bounds(): [number, number] {
-    //     if (Number.isFinite(this.val))
-    //         return [this.val, this.val]
-    //     return this.range
-    // }
 
     set(val: number): void {
         this.val = val
@@ -64,58 +53,60 @@ export class Variable {
         return this.val
     }
 
-    // solved(): boolean {
-    //     return Number.isFinite(this.val)
-    // }
-
     widen(fraction: number = 0.1): void {
         let [min, max] = this.range
         this.range = [
             min - Math.abs(min * fraction),
-            max + Math.abs(max * fraction)
+            max + Math.abs(max * fraction),
         ]
     }
 
-    label(subscript: string | number = ""): void {
+    label(subscript: string | number = ''): void {
         this.subscript = String(subscript)
     }
 
     symbol(): string {
         if (this.subscript.length > 0)
-            return this.display + "_{" + this.subscript + "}"
+            return this.display + '_{' + this.subscript + '}'
         return this.display
     }
 
-    short(): string { // val
+    short(): string {
+        // val
         let v = cal.blur(Round(this.val, 3))
         let abs = Math.abs(v)
-        return String((abs >= 10000 || abs <= 0.01) ? Sci(v) : v)
+        return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v)
     }
 
-    long(): string { // val + unit
+    long(): string {
+        // val + unit
         return this.short() + this.unit
     }
 
-    full(): string { // sym = val + unit
-        return this.symbol() + " = " + this.long()
+    full(): string {
+        // sym = val + unit
+        return this.symbol() + ' = ' + this.long()
     }
 
-    whole(): string { // name = val + unit
-        return "\\text{" + this.name + "}" + " = " + this.long()
+    whole(): string {
+        // name = val + unit
+        return '\\text{' + this.name + '}' + ' = ' + this.long()
     }
 
     rich(): string {
-        return "\\text{" + this.name + "}~" + this.symbol() + " = " + this.long()
+        return (
+            '\\text{' + this.name + '}~' + this.symbol() + ' = ' + this.long()
+        )
     }
 
     writeSymbol(latex: string): string {
         let T = latex
         let sym = this.sym
         let s = this.symbol()
-        T = T.replaceAll("*(" + sym + ")", s)
-        T = T.replaceAll("*" + sym, s)
-        T = T.replaceAll("$(" + sym + ")", s)
-        T = T.replaceAll("$" + sym, s)
+        T = T.replaceAll('*(' + sym + ')', s)
+        T = T.replaceAll('*' + sym, s)
+        T = T.replaceAll('$(' + sym + ')', s)
+        T = T.replaceAll('$' + sym, s)
         return T
     }
 
@@ -124,26 +115,15 @@ export class Variable {
         let sym = this.sym
         let S = this.short()
         let L = this.long()
-        T = T.replaceAll("*(" + sym + ")", "(" + S + ")")
-        T = T.replaceAll("*" + sym, S)
-        T = T.replaceAll("$(" + sym + ")", "(" + L + ")")
-        T = T.replaceAll("$" + sym, L)
+        T = T.replaceAll('*(' + sym + ')', '(' + S + ')')
+        T = T.replaceAll('*' + sym, S)
+        T = T.replaceAll('$(' + sym + ')', '(' + L + ')')
+        T = T.replaceAll('$' + sym, L)
         return T
     }
-
-
 }
 
-
-export class Variables extends Array<Variable>{
-
-    // private store: number[] = []
-
-    // bounds(): [number, number][] {
-    //     return this.map($ => $.bounds())
-    // }
-
-
+export class Variables extends Array<Variable> {
     clear(): void {
         this.forEach($ => $.clear())
     }
@@ -163,45 +143,6 @@ export class Variables extends Array<Variable>{
             variable.set(val)
         }
     }
-
-    // setVals2(vals: number[]): void {
-    //     this.forEach((v, i) => v.set(vals[i]))
-    // }
-
-    // solved(): boolean {
-    //     return this.every($ => $.solved())
-    // }
-
-    // solvable(): boolean {
-    //     let unsolved = this.filter($ => !$.solved())
-    //     return unsolved.length === 1
-    // }
-
-    // private maxOrder(): number {
-    //     let orders = this.map($ => $.order)
-    //     return Math.max(...orders)
-    // }
-
-    // zeros(): Variables {
-    //     return new Variables(...this.filter($ => $.order === 0))
-    // }
-
-    // shuffledZeros(): Variables {
-    //     return new Variables(...RndShuffle(...this.zeros()))
-    // }
-
-    // positives(): Variables {
-    //     return new Variables(...this.filter($ => $.order > 0))
-    // }
-
-    // tops(): Variables {
-    //     let max = this.maxOrder()
-    //     return new Variables(...this.filter($ => $.order === max))
-    // }
-
-    // pickTop(): Variable {
-    //     return RndPick(...this.tops())
-    // }
 
     write(latex: string, showVars: Variable[]): string {
         let T = latex
@@ -227,7 +168,6 @@ export class Variables extends Array<Variable>{
         })
     }
 
-
     rangeObj(): rangeObj {
         let obj: rangeObj = {}
         for (let v of this) {
@@ -243,12 +183,4 @@ export class Variables extends Array<Variable>{
         }
         return obj
     }
-
-    // setOrder(tree: tree): void {
-    //     for (let k in tree) {
-    //         let order = tree[k]
-    //         let variable = this.find($ => $.sym === k)!
-    //         variable.order = order
-    //     }
-    // }
 }

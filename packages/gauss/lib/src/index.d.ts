@@ -1,3 +1,3 @@
 export { fit } from './EquationFitter';
-export { analyze, solutionFlow, solvingSymbol, readTree } from './EquationAnalyzer';
+export { analyze, analyze2, solutionFlow, solvingSymbol, readTree, } from './EquationAnalyzer';
 //# sourceMappingURL=index.d.ts.map

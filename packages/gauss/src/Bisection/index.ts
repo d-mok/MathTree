@@ -1,4 +1,4 @@
-import { getVars } from '../../utils'
+import { getVars } from '../utils'
 import { Bisection } from './bisection'
 import _ from 'lodash'
 
@@ -21,7 +21,6 @@ export function bisect(
     const vars = getVars(f)
     const narrowedRngs = narrowRange(ranges, preset)
     const bounds = vars.map($ => narrowedRngs[$])
-    const bi = new Bisection(f, bounds)
-    const sol = bi.exec()
+    const sol = Bisection(f, bounds)
     return _.zipObject(vars, sol)
 }

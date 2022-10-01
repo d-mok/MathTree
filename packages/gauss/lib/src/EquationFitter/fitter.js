@@ -1,4 +1,4 @@
-import { bisect } from './Bisection';
+import { bisect } from '../Bisection';
 import { getAllVars } from '../utils';
 import { getFittableOrder } from './searcher';
 export class Fitter {
@@ -12,7 +12,7 @@ export class Fitter {
     }
     reset() {
         this.vals = {};
-        this.allVariables.forEach($ => this.vals[$] = NaN);
+        this.allVariables.forEach($ => (this.vals[$] = NaN));
         this.setVals(this.preset);
     }
     setVals(vals) {
@@ -36,8 +36,7 @@ export class Fitter {
                 orderedFS.forEach($ => this.fitOne($));
                 return this.vals;
             }
-            catch {
-            }
+            catch { }
         }
         throw 'The system is not fittable in given range.';
     }

@@ -1,13 +1,13 @@
+import _ from 'lodash';
 export function getVars(func) {
     const fnStr = func.toString();
     return fnStr
         .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
-        .replaceAll(" ", "")
-        .split(",");
+        .replaceAll(' ', '')
+        .split(',');
 }
 export function getAllVars(fs) {
-    const vars = fs.map($ => getVars($)).flat();
-    return [...new Set(vars)];
+    return _.uniq(fs.flatMap(getVars));
 }
 export function permute(arr) {
     let result = [];
