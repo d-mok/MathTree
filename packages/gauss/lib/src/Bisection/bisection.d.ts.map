@@ -1,1 +1,1 @@
-{"version":3,"file":"bisection.d.ts","sourceRoot":"","sources":["../../../src/Bisection/bisection.ts"],"names":[],"mappings":"AAGA,wBAAgB,SAAS,CAAC,EAAE,EAAE,YAAY,EAAE,MAAM,EAAE,CAAC,MAAM,EAAE,MAAM,CAAC,EAAE,YAkCrE"}
+{"version":3,"file":"bisection.d.ts","sourceRoot":"","sources":["../../../src/Bisection/bisection.ts"],"names":[],"mappings":"AAGA,wBAAgB,SAAS,CAAC,EAAE,EAAE,YAAY,EAAE,MAAM,EAAE,CAAC,MAAM,EAAE,MAAM,CAAC,EAAE,YAkCrE;AAED,wBAAgB,OAAO,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAE3C"}

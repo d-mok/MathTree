@@ -27,12 +27,15 @@ export function Bisection(eq, ranges) {
         for (let i = 0; i < 100; i++) {
             iterate();
             if (done())
-                return [...a];
+                return a.map(round10);
         }
         throw '[bisection] fail to find tolarable solution after 100 iteration';
     }
     catch {
         throw '[bisection] An error occur during bisection.';
     }
+}
+export function round10(num) {
+    return parseFloat(num.toPrecision(10));
 }
 //# sourceMappingURL=bisection.js.map

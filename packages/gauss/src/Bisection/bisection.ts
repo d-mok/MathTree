@@ -29,10 +29,14 @@ export function Bisection(eq: zeroFunction, ranges: [number, number][]) {
     try {
         for (let i = 0; i < 100; i++) {
             iterate()
-            if (done()) return [...a]
+            if (done()) return a.map(round10)
         }
         throw '[bisection] fail to find tolarable solution after 100 iteration'
     } catch {
         throw '[bisection] An error occur during bisection.'
     }
+}
+
+export function round10(num: number): number {
+    return parseFloat(num.toPrecision(10))
 }
