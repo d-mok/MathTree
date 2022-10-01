@@ -80,25 +80,21 @@ export function BuildSolve(
         } else {
             if (solFormat === 'series') {
                 let knowns = [...givens]
-                let T = ''
+                let arr: string[] = []
                 for (let { solvedBy, variable } of _.sortBy(tree, 'order')) {
                     if (solvedBy === null) continue
                     let latex = equations.find(eq => eq[0] === solvedBy)![1]
-                    T += writeStep(latex, knowns, variable)
-                    T += ' \\\\~\\\\ '
+                    arr.push(writeStep(latex, knowns, variable))
                     knowns.push(variable)
                 }
-                return T
+                return arr.join(' \\\\~\\\\ ')
             } else {
                 let latexs = _.map(equations, 1)
-                return (
-                    (solPlain
-                        ? ''
-                        : WRITE.printSystem(vGrp, latexs) + ' \\\\~\\\\ ') +
-                    WRITE.printSystem(vGrp, latexs, givens) +
-                    ' \\\\~\\\\ ' +
-                    WRITE.printSystemSol(vGrp, hiddens)
-                )
+                return [
+                    ...(solPlain ? [] : [WRITE.printSystem(vGrp, latexs)]),
+                    WRITE.printSystem(vGrp, latexs, givens),
+                    WRITE.printSystemSol(vGrp, hiddens),
+                ].join(' \\\\~\\\\ ')
             }
         }
     }
