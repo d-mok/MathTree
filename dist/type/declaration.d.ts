@@ -192,143 +192,8 @@ declare module "Math/Algebra/Polynomial" {
         var PolySimplify: typeof Host.PolySimplify;
     }
 }
-declare module "Math/Builder/support/latex" {
-    export function latexAligned(texts: string[]): string;
-    export function latexBraced(texts: string[]): string;
-}
-declare module "Math/Builder/support/units" {
-    export function findUnit(name: string): string | undefined;
-    export function parseUnit(raw: string): string;
-}
-declare module "Math/Builder/support/variable" {
-    export class Variable {
-        sym: string;
-        name: string;
-        private val;
-        private subscript;
-        unit: string;
-        range: [number, number];
-        private display;
-        constructor(sym: string, name: string, range: rangeInput, unit: string | undefined, display: string | undefined);
-        set(val: number): void;
-        round(sigfig?: number): void;
-        shake(): void;
-        clear(): void;
-        getVal(): number;
-        widen(fraction?: number): void;
-        label(subscript?: string | number): void;
-        symbol(): string;
-        short(): string;
-        long(): string;
-        full(): string;
-        whole(): string;
-        rich(): string;
-        writeSymbol(latex: string): string;
-        writeValue(latex: string): string;
-    }
-    export class Variables extends Array<Variable> {
-        clear(): void;
-        widen(): void;
-        getVals(): number[];
-        setVal(obj: valObj): void;
-        write(latex: string, showVars: Variable[]): string;
-        compareWith(oldVals: number[]): void;
-        rangeObj(): rangeObj;
-        valObj(): valObj;
-    }
-}
-declare module "Math/Builder/support/equation" {
-    import { Variable, Variables } from "Math/Builder/support/variable";
-    export class Equation {
-        zeroFunc: zeroFunction;
-        latex: string;
-        dep: Variables;
-        constructor(zeroFunc: zeroFunction, latex: string, dep: Variables);
-        print(showVars?: Variable[]): string;
-    }
-}
-declare module "Math/Builder/support/system" {
-    import { Variable, Variables } from "Math/Builder/support/variable";
-    import { Equation } from "Math/Builder/support/equation";
-    export class EquSystem {
-        variables: Variables;
-        equations: Equation[];
-        private fs;
-        private tree;
-        constructor(variables: Variables, equations: Equation[]);
-        fit(): void;
-        fitAgain(vars: Variable[]): void;
-        getVariables(symbols: string[]): Variables;
-        private getFullTree;
-        private checkAvoid;
-        private checkAvoids;
-        generateSolvables(avoids?: string[][]): [givens: Variables, hiddens: Variables, unknown: Variable];
-        solInSteps(unknown: Variable): string;
-        generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable];
-        print(givens?: Variable[]): string;
-    }
-}
-declare module "Math/Builder/support/support" {
-    import { Equation } from "Math/Builder/support/equation";
-    import { EquSystem } from "Math/Builder/support/system";
-    import { Variables } from "Math/Builder/support/variable";
-    export function toVariables(vars: varInput[]): Variables;
-    export function toEquations(eqs: equInput[], vars: Variables): Equation[];
-    export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
-}
-declare module "Math/Builder/build_solve" {
-    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig, solFormat }?: {
-        listSym?: boolean;
-        avoids?: string[][];
-        sigfig?: {
-            [_: string]: number;
-        };
-        solFormat?: 'series' | 'parallel';
-    }): {
-        list: string;
-        sol: string;
-        vars: string[];
-        vals: number[];
-        unknown: [symbol: string, name: string, val: number, unit: string];
-        ans: quantity;
-    };
-}
-declare module "Math/Builder/build_trend" {
-    export function BuildTrend(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], settings?: {
-        trends?: [inc: string, dec: string, unchange: string];
-    }): {
-        sol: string;
-        consts: [symbol: string[], name: string[]];
-        agent: [symbol: string, name: string, trend: string, code: number];
-        responses: [symbol: string, name: string, trend: string, code: number][];
-        target: [symbol: string, name: string, trend: string, code: number];
-    };
-}
-declare module "Math/Builder/build_ratio" {
-    export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], func: zeroFunction, latex: string, { cases, subscript, sigfig }?: {
-        cases?: [string, string];
-        subscript?: [string | number, string | number];
-        sigfig?: {
-            [_: string]: number;
-        };
-    }): {
-        table: string;
-        sol: string;
-        consts: [symbol: string[], name: string[]];
-        given: [symbol: string, name: string];
-        unknown: [symbol: string, name: string, val: number, unit: string];
-        ans: quantity;
-    };
-}
 declare module "Math/Builder/index" {
-    import { BuildSolve as $BuildSolve } from "Math/Builder/build_solve";
-    import { BuildTrend as $BuildTrend } from "Math/Builder/build_trend";
-    import { BuildRatio as $BuildRatio } from "Math/Builder/build_ratio";
-    global {
-        var BuildSolve: typeof $BuildSolve;
-        var BuildTrend: typeof $BuildTrend;
-        var BuildRatio: typeof $BuildRatio;
-    }
+    export {};
 }
 declare module "Math/index" {
     import './Code/Assertion.ts';
@@ -701,6 +566,237 @@ declare module "Math/Algebra/Quadratic" {
         var QuadraticVertex: typeof Host.QuadraticVertex;
         var QuadraticFromRoot: typeof Host.QuadraticFromRoot;
         var QuadraticFromVertex: typeof Host.QuadraticFromVertex;
+    }
+}
+declare module "Math/Builder/support/latex" {
+    export function latexAligned(texts: string[]): string;
+    export function latexBraced(texts: string[]): string;
+}
+declare module "Math/Builder/support/units" {
+    export function findUnit(name: string): string | undefined;
+    export function parseUnit(raw: string): string;
+}
+declare module "Math/Builder/support/variable" {
+    export class Variable {
+        sym: string;
+        name: string;
+        private val;
+        private subscript;
+        unit: string;
+        range: [number, number];
+        private display;
+        constructor(sym: string, name: string, range: rangeInput, unit: string | undefined, display: string | undefined);
+        set(val: number): void;
+        round(sigfig?: number): void;
+        shake(): void;
+        clear(): void;
+        getVal(): number;
+        widen(fraction?: number): void;
+        label(subscript?: string | number): void;
+        symbol(): string;
+        short(): string;
+        long(): string;
+        full(): string;
+        whole(): string;
+        rich(): string;
+        writeSymbol(latex: string): string;
+        writeValue(latex: string): string;
+    }
+    export class Variables extends Array<Variable> {
+        clear(): void;
+        widen(): void;
+        getVals(): number[];
+        setVal(obj: valObj): void;
+        write(latex: string, showVars: Variable[]): string;
+        compareWith(oldVals: number[]): void;
+        rangeObj(): rangeObj;
+        valObj(): valObj;
+    }
+}
+declare module "Math/Builder/support/equation" {
+    import { Variable, Variables } from "Math/Builder/support/variable";
+    export class Equation {
+        zeroFunc: zeroFunction;
+        latex: string;
+        dep: Variables;
+        constructor(zeroFunc: zeroFunction, latex: string, dep: Variables);
+        print(showVars?: Variable[]): string;
+    }
+}
+declare module "Math/Builder/support/system" {
+    import { Variable, Variables } from "Math/Builder/support/variable";
+    import { Equation } from "Math/Builder/support/equation";
+    export class EquSystem {
+        variables: Variables;
+        equations: Equation[];
+        private fs;
+        private tree;
+        constructor(variables: Variables, equations: Equation[]);
+        fit(): void;
+        fitAgain(vars: Variable[]): void;
+        getVariables(symbols: string[]): Variables;
+        private getFullTree;
+        private checkAvoid;
+        private checkAvoids;
+        generateSolvables(avoids?: string[][]): [givens: Variables, hiddens: Variables, unknown: Variable];
+        solInSteps(unknown: Variable): string;
+        generateTrend(): [constants: Variable[], agent: Variable, responses: Variable[], target: Variable];
+        print(givens?: Variable[]): string;
+    }
+}
+declare module "Math/Builder/support/support" {
+    import { Equation } from "Math/Builder/support/equation";
+    import { EquSystem } from "Math/Builder/support/system";
+    import { Variables } from "Math/Builder/support/variable";
+    export function toVariables(vars: varInput[]): Variables;
+    export function toEquations(eqs: equInput[], vars: Variables): Equation[];
+    export function toEquSystem(variables: varInput[], equations: equInput[]): EquSystem;
+}
+declare module "Math/Builder/build_ratio" {
+    export function BuildRatio(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], func: zeroFunction, latex: string, { cases, subscript, sigfig }?: {
+        cases?: [string, string];
+        subscript?: [string | number, string | number];
+        sigfig?: {
+            [_: string]: number;
+        };
+    }): {
+        table: string;
+        sol: string;
+        consts: [symbol: string[], name: string[]];
+        given: [symbol: string, name: string];
+        unknown: [symbol: string, name: string, val: number, unit: string];
+        ans: quantity;
+    };
+}
+declare module "Math/Builder/build_solve" {
+    export function BuildSolve(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig, solFormat }?: {
+        listSym?: boolean;
+        avoids?: string[][];
+        sigfig?: {
+            [_: string]: number;
+        };
+        solFormat?: 'series' | 'parallel';
+    }): {
+        list: string;
+        sol: string;
+        vars: string[];
+        vals: number[];
+        unknown: [symbol: string, name: string, val: number, unit: string];
+        ans: quantity;
+    };
+}
+declare module "Math/Builder/build_trend" {
+    export function BuildTrend(variables: [sym: string, name: string, range: rangeInput, unit?: string, display?: string][], equations: [func: zeroFunction, latex: string][], settings?: {
+        trends?: [inc: string, dec: string, unchange: string];
+    }): {
+        sol: string;
+        consts: [symbol: string[], name: string[]];
+        agent: [symbol: string, name: string, trend: string, code: number];
+        responses: [symbol: string, name: string, trend: string, code: number][];
+        target: [symbol: string, name: string, trend: string, code: number];
+    };
+}
+declare module "Math/Builder2/support/units" {
+    export function findUnit(name: string): string | undefined;
+    export function parseUnit(raw: string): string;
+}
+declare module "Math/Builder2/support/varObjs" {
+    export function toVarGrp(varInputs: varInput[]): varGrp;
+    export function RoundVars(vGrp: varGrp, vars: string[], sigfig: Record<string, number>): void;
+}
+declare module "Math/Builder2/support/system" {
+    export function fitFree(fs: zeroFunction[], varGrp: varGrp): void;
+    export function fitAgain(fs: zeroFunction[], varGrp: varGrp, reFitVars: string[]): void;
+    export function readTree(tree: TREE): {
+        vars: string[];
+        givens: string[];
+        top: string;
+        hiddens: string[];
+    };
+}
+declare module "Math/Builder2/support/write" {
+    export function symbol(v: varObj): string;
+    export function short(v: varObj): string;
+    export function long(v: varObj): string;
+    export function full(v: varObj): string;
+    export function whole(v: varObj): string;
+    export function rich(v: varObj): string;
+    export function write(vGrp: varGrp, latex: string, showVars?: string[]): string;
+    export function printSystem(vGrp: varGrp, latexs: string[], givens?: string[]): string;
+    export function printSystemSol(vGrp: varGrp, vars: string[]): string;
+    export function latexAligned(texts: string[]): string;
+    export function latexBraced(texts: string[]): string;
+}
+declare module "Math/Builder2/build_ratio" {
+    export function BuildRatio(variables: [
+        sym: string,
+        name: string,
+        range: rangeInput,
+        unit?: string,
+        display?: string
+    ][], func: zeroFunction, latex: string, { cases, subscript, sigfig, }?: {
+        cases?: [string, string];
+        subscript?: [string | number, string | number];
+        sigfig?: {
+            [_: string]: number;
+        };
+    }): {
+        table: string;
+        sol: string;
+        consts: [symbol: string[], name: string[]];
+        given: [symbol: string, name: string];
+        unknown: [symbol: string, name: string, val: number, unit: string];
+        ans: quantity;
+    };
+}
+declare module "Math/Builder2/build_solve" {
+    export function BuildSolve(variables: [
+        sym: string,
+        name: string,
+        range: rangeInput,
+        unit?: string,
+        display?: string
+    ][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig, solFormat, }?: {
+        listSym?: boolean;
+        avoids?: string[][];
+        sigfig?: {
+            [_: string]: number;
+        };
+        solFormat?: 'series' | 'parallel';
+    }): {
+        list: string;
+        sol: string;
+        vars: string[];
+        vals: number[];
+        unknown: [symbol: string, name: string, val: number, unit: string];
+        ans: quantity;
+    };
+}
+declare module "Math/Builder2/build_trend" {
+    export function BuildTrend(variables: [
+        sym: string,
+        name: string,
+        range: rangeInput,
+        unit?: string,
+        display?: string
+    ][], equations: [func: zeroFunction, latex: string][], settings?: {
+        trends?: [inc: string, dec: string, unchange: string];
+    }): {
+        sol: string;
+        consts: [symbol: string[], name: string[]];
+        agent: [symbol: string, name: string, trend: string, code: number];
+        responses: [symbol: string, name: string, trend: string, code: number][];
+        target: [symbol: string, name: string, trend: string, code: number];
+    };
+}
+declare module "Math/Builder2/index" {
+    import { BuildSolve as $BuildSolve } from "Math/Builder2/build_solve";
+    import { BuildTrend as $BuildTrend } from "Math/Builder2/build_trend";
+    import { BuildRatio as $BuildRatio } from "Math/Builder2/build_ratio";
+    global {
+        var BuildSolve: typeof $BuildSolve;
+        var BuildTrend: typeof $BuildTrend;
+        var BuildRatio: typeof $BuildRatio;
     }
 }
 declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
