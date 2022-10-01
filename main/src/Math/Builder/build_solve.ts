@@ -126,7 +126,7 @@ function BuildSolveOnce(
                 }
                 return T
             } else {
-                let latexs = _.map(equations, '1')
+                let latexs = _.map(equations, 1)
                 return (
                     WRITE.printSystem(vGrp, latexs) +
                     ' \\\\~\\\\ ' +
