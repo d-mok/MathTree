@@ -9,15 +9,13 @@ function analyzeOnce(fs: zeroFunction[], givens: string[]): tree | undefined {
     // initialized with given vars = order 0
     let orderMap = Object.fromEntries(givens.map(v => [v, 0]))
 
-    
-
     function trySolve(eq: string[]): boolean {
         let unsolved = eq.filter(v => !(v in orderMap))
         // eq is solvable only if exactly 1 var is unsolved
         if (unsolved.length !== 1) return false
         // solve eq (mocking)
         let v = unsolved[0]
-        let maxOrder = Math.max(-1, ...Object.values(orderMap))
+        let maxOrder = Math.max(-1, ...Object.values(_.pick(orderMap, eq)))
         orderMap[v] = maxOrder + 1
         return true
     }
