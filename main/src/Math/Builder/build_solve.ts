@@ -32,60 +32,10 @@ export function BuildSolve(
     unknown: [symbol: string, name: string, val: number, unit: string]
     ans: quantity
 } {
-    for (let i = 0; i <= 0; i++) {
-        try {
-            return BuildSolveOnce(variables, equations, {
-                listSym,
-                avoids,
-                sigfig,
-                solFormat,
-            })
-        } catch (e) {
-            if (i === 0) {
-                throw e
-            } else {
-                continue
-            }
-        }
-    }
-    throw 'never'
-}
-
-function BuildSolveOnce(
-    variables: [
-        sym: string,
-        name: string,
-        range: rangeInput,
-        unit?: string,
-        display?: string
-    ][],
-    equations: [func: zeroFunction, latex: string][],
-    {
-        listSym = false,
-        avoids = [],
-        sigfig = {},
-        solFormat = 'series',
-    }: {
-        listSym?: boolean
-        avoids?: string[][]
-        sigfig?: { [_: string]: number } | number
-        solFormat?: 'series' | 'parallel'
-    } = {}
-): {
-    list: string
-    sol: string
-    vars: string[]
-    vals: number[]
-    unknown: [symbol: string, name: string, val: number, unit: string]
-    ans: quantity
-} {
     // varGrp object
     let vars = _.map(variables, 0)
     let vGrp = toVarGrp(variables)
     let fs = _.map(equations, 0)
-
-    // fit once
-    fitFree(fs, vGrp)
 
     // get givens, hiddens, unknown
     let validTrees = analyze(fs).filter(t => checkAvoids(t, avoids))
@@ -95,9 +45,19 @@ function BuildSolveOnce(
     // console.log(tree)
     let { givens, top: unknown, hiddens } = readTree(tree)
 
-    // round and fit again
-    RoundVars(vGrp, givens, sigfig)
-    fitAgain(fs, vGrp, hiddens)
+    for (let i = 0; i <= 10; i++) {
+        try {
+            for (let v of vars) vGrp[v].val = NaN
+            // fit once
+            fitFree(fs, vGrp)
+            // round and fit again
+            RoundVars(vGrp, givens, sigfig)
+            fitAgain(fs, vGrp, hiddens)
+            break
+        } catch (e) {
+            if (i === 10) throw e
+        }
+    }
 
     function sol(): string {
         if (equations.length === 1) {
