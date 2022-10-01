@@ -3,6 +3,7 @@ import { analyze } from 'gauss'
 import _ from 'lodash'
 import { fitAgain, fitFree, readTree } from './support/system'
 import * as WRITE from './support/write'
+import { PenCls } from '../../Pen/Pen'
 
 export function BuildSolve(
     variables: [
@@ -33,6 +34,7 @@ export function BuildSolve(
     vals: number[]
     unknown: [symbol: string, name: string, val: number, unit: string]
     ans: quantity
+    labelAngle: (_: PenCls) => void
 } {
     // varGrp object
     let vars = _.map(variables, 0)
@@ -99,6 +101,17 @@ export function BuildSolve(
         }
     }
 
+    function labelAngle(pen: PenCls) {
+        for (let [sym, name, range] of variables) {
+            if (Array.isArray(range) && range.length === 3) {
+                let label = givens.includes(sym)
+                    ? WRITE.long(vGrp[sym])
+                    : WRITE.symbol(vGrp[sym])
+                pen.angle(...range, label)
+            }
+        }
+    }
+
     return {
         list: givens
             .map($ => (listSym ? WRITE.rich(vGrp[$]) : WRITE.whole(vGrp[$])))
@@ -115,6 +128,7 @@ export function BuildSolve(
             vGrp[unknown].unit,
         ],
         ans: { val: vGrp[unknown].val, unit: vGrp[unknown].unit },
+        labelAngle,
     }
 }
 

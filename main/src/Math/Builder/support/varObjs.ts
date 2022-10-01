@@ -1,11 +1,16 @@
 import _ from 'lodash'
 import { parseUnit, findUnit } from './units'
 
-function parseRange(rng: rangeInput): [number, number] {
-    if (Array.isArray(rng)) {
-        return rng.length === 2 ? rng : [rng[0], rng[0]]
+function parseRange(r: rangeInput): [number, number] {
+    if (Array.isArray(r)) {
+        if (r.length === 3) {
+            // angle, [point,point,point]
+            let angle = Angle(...r)
+            return [Math.max(0, angle - 2), angle + 2]
+        }
+        return r.length === 2 ? r : [r[0], r[0]]
     } else {
-        return rng > 0 ? [rng / 10, rng * 10] : [rng * 10, rng / 10]
+        return r > 0 ? [r / 10, r * 10] : [r * 10, r / 10]
     }
 }
 
