@@ -92,7 +92,7 @@ function BuildSolveOnce(
     if (validTrees.length === 0) throw 'no sensible set of solvables found!'
 
     let tree = _.sample(validTrees)!
-    console.log(tree)
+    // console.log(tree)
     let { givens, top: unknown, hiddens } = readTree(tree)
 
     // round and fit again
