@@ -1,65 +1,54 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
 import { Canvas04 } from './canvas04'
-
-
-
+import { blur } from '../support/blur'
 
 function sin(degree: number): number {
-    return Math.sin(degree / 180 * Math.PI)
+    return Math.sin((degree / 180) * Math.PI)
 }
-
 
 function cos(degree: number): number {
-    return Math.cos(degree / 180 * Math.PI)
+    return Math.cos((degree / 180) * Math.PI)
 }
-
-
 
 // CanvasLatex is a library that must be imported from script tag
 function LatexWidget(text: string, color: string, size: number) {
     text = `\\color{${color}} ` + text
     // @ts-ignore
-    const widget = new CanvasLatex.default(
-        text,
-        {
-            displayMode: true,
-            debugBounds: false,
-            baseSize: size
-        }
-    )
+    const widget = new CanvasLatex.default(text, {
+        displayMode: true,
+        debugBounds: false,
+        baseSize: size,
+    })
     return widget
 }
 
 function latexTuneX(x: number, width: number, textAlign: CanvasTextAlign): px {
-    if (textAlign === 'left') return - x
-    if (textAlign === 'right') return - x - width
-    if (textAlign === 'center') return - x - width / 2
-    return - x - width / 2
+    if (textAlign === 'left') return -x
+    if (textAlign === 'right') return -x - width
+    if (textAlign === 'center') return -x - width / 2
+    return -x - width / 2
 }
 
-function latexTuneY(y: number, height: number, textBaseline: CanvasTextBaseline): px {
-    if (textBaseline === 'top') return - y
-    if (textBaseline === 'bottom') return - y - height
-    if (textBaseline === 'middle') return - y - height / 2
-    return - y / 2
+function latexTuneY(
+    y: number,
+    height: number,
+    textBaseline: CanvasTextBaseline
+): px {
+    if (textBaseline === 'top') return -y
+    if (textBaseline === 'bottom') return -y - height
+    if (textBaseline === 'middle') return -y - height / 2
+    return -y / 2
 }
-
-
-
 
 function isAlphabet(_: string) {
-    return _.length === 1 && (_.toLowerCase() !== _.toUpperCase())
+    return _.length === 1 && _.toLowerCase() !== _.toUpperCase()
 }
-
-
 
 /**
  * Handle:
  * - text basic
  */
 export class Canvas05 extends Canvas04 {
-
-
     // text in pixel
 
     private plainPx(text: string, dot: dot) {
@@ -72,7 +61,6 @@ export class Canvas05 extends Canvas04 {
         this.restore()
     }
 
-
     private latexPx(text: string, dot: dot) {
         text = String(text)
         if (text === '') return
@@ -81,7 +69,9 @@ export class Canvas05 extends Canvas04 {
         const bounds = widget.getBounds()
 
         if (bounds === null) {
-            console.error('[CanvasLatex] bounds === null! This is an unexpected error.')
+            console.error(
+                '[CanvasLatex] bounds === null! This is an unexpected error.'
+            )
             return
         }
 
@@ -122,17 +112,17 @@ export class Canvas05 extends Canvas04 {
 
     private labelOffset(text: string, radius: px, dir: number): dot {
         let textWidth = this.textSemi(text)
-        let extraX = this.$TEXT_ALIGN === 'center' ? (textWidth - 4) : 0
+        let extraX = this.$TEXT_ALIGN === 'center' ? textWidth - 4 : 0
         let x = (radius + extraX) * cos(dir)
         let y = radius * sin(dir)
         return [x, y]
     }
 
     public label(text: string | number, point: Point, radius: px, dir: number) {
+        if (typeof text === 'number') text = blur(text)
         text = String(text)
         let italic = this.$TEXT_ITALIC
-        if (isAlphabet(text))
-            this.$TEXT_ITALIC = true
+        if (isAlphabet(text)) this.$TEXT_ITALIC = true
         let offset = this.labelOffset(text, radius, dir)
         this.text(text, point, offset)
         this.$TEXT_ITALIC = italic
@@ -151,15 +141,6 @@ export class Canvas05 extends Canvas04 {
     }
 
     private textSemi(text: string): px {
-        return this.$TEXT_LATEX ?
-            this.latexSemi(text) :
-            this.plainSemi(text)
+        return this.$TEXT_LATEX ? this.latexSemi(text) : this.plainSemi(text)
     }
-
-
-
 }
-
-
-
-

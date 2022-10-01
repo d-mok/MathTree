@@ -1,9 +1,10 @@
 import { Canvas04 } from './canvas04';
+import { blur } from '../support/blur';
 function sin(degree) {
-    return Math.sin(degree / 180 * Math.PI);
+    return Math.sin((degree / 180) * Math.PI);
 }
 function cos(degree) {
-    return Math.cos(degree / 180 * Math.PI);
+    return Math.cos((degree / 180) * Math.PI);
 }
 // CanvasLatex is a library that must be imported from script tag
 function LatexWidget(text, color, size) {
@@ -12,7 +13,7 @@ function LatexWidget(text, color, size) {
     const widget = new CanvasLatex.default(text, {
         displayMode: true,
         debugBounds: false,
-        baseSize: size
+        baseSize: size,
     });
     return widget;
 }
@@ -35,7 +36,7 @@ function latexTuneY(y, height, textBaseline) {
     return -y / 2;
 }
 function isAlphabet(_) {
-    return _.length === 1 && (_.toLowerCase() !== _.toUpperCase());
+    return _.length === 1 && _.toLowerCase() !== _.toUpperCase();
 }
 /**
  * Handle:
@@ -94,12 +95,14 @@ export class Canvas05 extends Canvas04 {
     // label in coord
     labelOffset(text, radius, dir) {
         let textWidth = this.textSemi(text);
-        let extraX = this.$TEXT_ALIGN === 'center' ? (textWidth - 4) : 0;
+        let extraX = this.$TEXT_ALIGN === 'center' ? textWidth - 4 : 0;
         let x = (radius + extraX) * cos(dir);
         let y = radius * sin(dir);
         return [x, y];
     }
     label(text, point, radius, dir) {
+        if (typeof text === 'number')
+            text = blur(text);
         text = String(text);
         let italic = this.$TEXT_ITALIC;
         if (isAlphabet(text))
@@ -118,9 +121,7 @@ export class Canvas05 extends Canvas04 {
         return bounds === null ? 0 : bounds.width / 2;
     }
     textSemi(text) {
-        return this.$TEXT_LATEX ?
-            this.latexSemi(text) :
-            this.plainSemi(text);
+        return this.$TEXT_LATEX ? this.latexSemi(text) : this.plainSemi(text);
     }
 }
 //# sourceMappingURL=canvas05.js.map

@@ -1,6 +1,5 @@
 import { RoundVars, toVarGrp } from './support/varObjs'
 import { analyze } from 'gauss'
-
 import _ from 'lodash'
 import { fitAgain, fitFree, readTree } from './support/system'
 import * as WRITE from './support/write'
@@ -93,6 +92,7 @@ function BuildSolveOnce(
     if (validTrees.length === 0) throw 'no sensible set of solvables found!'
 
     let tree = _.sample(validTrees)!
+    console.log(tree)
     let { givens, top: unknown, hiddens } = readTree(tree)
 
     // round and fit again
