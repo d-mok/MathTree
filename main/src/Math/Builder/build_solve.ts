@@ -113,6 +113,7 @@ function BuildSolveOnce(
                 let T = ''
                 for (let step of _.sortBy(tree, 'order')) {
                     let f = step.solvedBy
+                    if (f === null) continue
                     let latex = equations.find(eq => eq[0] === f)![1]
                     let solved = step.variable
                     T += WRITE.latexAligned([
