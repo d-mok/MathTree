@@ -25,8 +25,6 @@ type varGrp = Record<string, varObj>
 type rangeObj = { [_: string]: [number, number] }
 type valObj = { [_: string]: number }
 
-type tree = valObj
-
 type TREE = Record<
     string,
     {
