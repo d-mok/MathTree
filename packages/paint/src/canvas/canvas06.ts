@@ -1,6 +1,6 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
 import { Canvas05 } from './canvas05'
-import { blur } from '../support/blur'
+import { round5 } from '../support/round'
 
 // math
 
@@ -122,7 +122,7 @@ export class Canvas06 extends Canvas05 {
 
     public unitize(text: string | number): string {
         if (typeof text === 'number') {
-            text = blur(text)
+            text = round5(text)
             text = String(text)
             let unit = this.$LENGTH_UNIT
             if (unit === '') return text

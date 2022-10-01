@@ -29,11 +29,11 @@ export function toVarGrp(varInputs: varInput[]): varGrp {
 export function RoundVars(
     vGrp: varGrp,
     vars: string[],
-    sigfig: Record<string, number>
+    sigfig: Record<string, number> | number
 ) {
     for (let v of vars) {
         let vObj = vGrp[v]
-        let sf = sigfig[v] ?? 2
+        let sf = typeof sigfig === 'number' ? sigfig : sigfig[v] ?? 2
         vObj.val = Round(vObj.val, sf)
     }
 }

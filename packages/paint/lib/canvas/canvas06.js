@@ -1,5 +1,5 @@
 import { Canvas05 } from './canvas05';
-import { blur } from '../support/blur';
+import { round5 } from '../support/round';
 // math
 function sin(degree) {
     return Math.sin((degree / 180) * Math.PI);
@@ -99,7 +99,7 @@ export class Canvas06 extends Canvas05 {
     // string
     unitize(text) {
         if (typeof text === 'number') {
-            text = blur(text);
+            text = round5(text);
             text = String(text);
             let unit = this.$LENGTH_UNIT;
             if (unit === '')

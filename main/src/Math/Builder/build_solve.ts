@@ -21,7 +21,7 @@ export function BuildSolve(
     }: {
         listSym?: boolean
         avoids?: string[][]
-        sigfig?: { [_: string]: number }
+        sigfig?: { [_: string]: number } | number
         solFormat?: 'series' | 'parallel'
     } = {}
 ): {
@@ -32,7 +32,7 @@ export function BuildSolve(
     unknown: [symbol: string, name: string, val: number, unit: string]
     ans: quantity
 } {
-    for (let i = 0; i <= 10; i++) {
+    for (let i = 0; i <= 0; i++) {
         try {
             return BuildSolveOnce(variables, equations, {
                 listSym,
@@ -68,7 +68,7 @@ function BuildSolveOnce(
     }: {
         listSym?: boolean
         avoids?: string[][]
-        sigfig?: { [_: string]: number }
+        sigfig?: { [_: string]: number } | number
         solFormat?: 'series' | 'parallel'
     } = {}
 ): {

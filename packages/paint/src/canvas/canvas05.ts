@@ -1,6 +1,6 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
 import { Canvas04 } from './canvas04'
-import { blur } from '../support/blur'
+import { round5 } from '../support/round'
 
 function sin(degree: number): number {
     return Math.sin((degree / 180) * Math.PI)
@@ -119,7 +119,7 @@ export class Canvas05 extends Canvas04 {
     }
 
     public label(text: string | number, point: Point, radius: px, dir: number) {
-        if (typeof text === 'number') text = blur(text)
+        if (typeof text === 'number') text = round5(text)
         text = String(text)
         let italic = this.$TEXT_ITALIC
         if (isAlphabet(text)) this.$TEXT_ITALIC = true

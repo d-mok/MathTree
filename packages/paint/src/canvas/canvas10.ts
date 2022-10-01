@@ -1,9 +1,9 @@
 import { px, dot, Point2D, Point3D, Point, inch } from '../global'
 import { Canvas09 } from './canvas09'
-import { blur } from '../support/blur'
+import { round5 } from '../support/round'
 
 function degrize(text: string | number): string {
-    return typeof text === 'number' ? blur(text) + '°' : text
+    return typeof text === 'number' ? round5(text) + '°' : text
 }
 
 function mid(A: Point, B: Point): Point {

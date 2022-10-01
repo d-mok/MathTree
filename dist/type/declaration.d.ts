@@ -198,7 +198,7 @@ declare module "Math/Builder/support/units" {
 }
 declare module "Math/Builder/support/varObjs" {
     export function toVarGrp(varInputs: varInput[]): varGrp;
-    export function RoundVars(vGrp: varGrp, vars: string[], sigfig: Record<string, number>): void;
+    export function RoundVars(vGrp: varGrp, vars: string[], sigfig: Record<string, number> | number): void;
 }
 declare module "Math/Builder/support/system" {
     export function fitFree(fs: zeroFunction[], varGrp: varGrp): void;
@@ -235,7 +235,7 @@ declare module "Math/Builder/build_solve" {
         avoids?: string[][];
         sigfig?: {
             [_: string]: number;
-        };
+        } | number;
         solFormat?: 'series' | 'parallel';
     }): {
         list: string;

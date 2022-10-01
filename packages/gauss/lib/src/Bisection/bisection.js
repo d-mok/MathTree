@@ -18,7 +18,7 @@ export function Bisection(eq, ranges) {
             b = m;
     }
     function done() {
-        const PRECISION = 10;
+        const PRECISION = 12;
         const precision_a = a.map($ => $.toPrecision(PRECISION));
         const precision_b = b.map($ => $.toPrecision(PRECISION));
         return _.isEqual(precision_a, precision_b);

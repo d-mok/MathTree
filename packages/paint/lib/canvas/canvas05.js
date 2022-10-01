@@ -1,5 +1,5 @@
 import { Canvas04 } from './canvas04';
-import { blur } from '../support/blur';
+import { round5 } from '../support/round';
 function sin(degree) {
     return Math.sin((degree / 180) * Math.PI);
 }
@@ -102,7 +102,7 @@ export class Canvas05 extends Canvas04 {
     }
     label(text, point, radius, dir) {
         if (typeof text === 'number')
-            text = blur(text);
+            text = round5(text);
         text = String(text);
         let italic = this.$TEXT_ITALIC;
         if (isAlphabet(text))

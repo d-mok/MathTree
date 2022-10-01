@@ -20,7 +20,7 @@ export function Bisection(eq: zeroFunction, ranges: [number, number][]) {
     }
 
     function done(): boolean {
-        const PRECISION = 10
+        const PRECISION = 12
         const precision_a = a.map($ => $.toPrecision(PRECISION))
         const precision_b = b.map($ => $.toPrecision(PRECISION))
         return _.isEqual(precision_a, precision_b)
