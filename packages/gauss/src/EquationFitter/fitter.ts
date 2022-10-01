@@ -46,8 +46,8 @@ export class Fitter {
                 return this.vals
             } catch {}
         }
-        console.error('vals:', this.vals)
-        console.error('ranges:', this.ranges)
+        // console.error('vals:', this.vals)
+        // console.error('ranges:', this.ranges)
         throw 'The system is not fittable in given range.'
     }
 }

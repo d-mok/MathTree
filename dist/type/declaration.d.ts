@@ -230,13 +230,14 @@ declare module "Math/Builder/build_solve" {
         range: rangeInput,
         unit?: string,
         display?: string
-    ][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig, solFormat, }?: {
+    ][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig, solFormat, solPlain, }?: {
         listSym?: boolean;
         avoids?: string[][];
         sigfig?: {
             [_: string]: number;
         } | number;
         solFormat?: 'series' | 'parallel';
+        solPlain?: boolean;
     }): {
         list: string;
         sol: string;

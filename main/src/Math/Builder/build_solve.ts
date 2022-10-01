@@ -18,11 +18,13 @@ export function BuildSolve(
         avoids = [],
         sigfig = {},
         solFormat = 'series',
+        solPlain = false,
     }: {
         listSym?: boolean
         avoids?: string[][]
         sigfig?: { [_: string]: number } | number
         solFormat?: 'series' | 'parallel'
+        solPlain?: boolean
     } = {}
 ): {
     list: string
@@ -59,37 +61,40 @@ export function BuildSolve(
         }
     }
 
+    function writeStep(
+        latex: string,
+        stepVars: string[],
+        finalVar: string
+    ): string {
+        return WRITE.latexAligned([
+            ...(solPlain ? [] : [WRITE.write(vGrp, latex)]),
+            WRITE.write(vGrp, latex, stepVars),
+            WRITE.full(vGrp[finalVar]),
+        ])
+    }
+
     function sol(): string {
         if (equations.length === 1) {
             let [fs, latex] = equations[0]
-            return WRITE.latexAligned([
-                WRITE.write(vGrp, latex),
-                WRITE.write(vGrp, latex, givens),
-                WRITE.full(vGrp[unknown]),
-            ])
+            return writeStep(latex, givens, unknown)
         } else {
             if (solFormat === 'series') {
-                let known = [...givens]
+                let knowns = [...givens]
                 let T = ''
-                for (let step of _.sortBy(tree, 'order')) {
-                    let f = step.solvedBy
-                    if (f === null) continue
-                    let latex = equations.find(eq => eq[0] === f)![1]
-                    let solved = step.variable
-                    T += WRITE.latexAligned([
-                        WRITE.write(vGrp, latex),
-                        WRITE.write(vGrp, latex, known),
-                        WRITE.full(vGrp[solved]),
-                    ])
+                for (let { solvedBy, variable } of _.sortBy(tree, 'order')) {
+                    if (solvedBy === null) continue
+                    let latex = equations.find(eq => eq[0] === solvedBy)![1]
+                    T += writeStep(latex, knowns, variable)
                     T += ' \\\\~\\\\ '
-                    known.push(solved)
+                    knowns.push(variable)
                 }
                 return T
             } else {
                 let latexs = _.map(equations, 1)
                 return (
-                    WRITE.printSystem(vGrp, latexs) +
-                    ' \\\\~\\\\ ' +
+                    (solPlain
+                        ? WRITE.printSystem(vGrp, latexs) + ' \\\\~\\\\ '
+                        : '') +
                     WRITE.printSystem(vGrp, latexs, givens) +
                     ' \\\\~\\\\ ' +
                     WRITE.printSystemSol(vGrp, hiddens)

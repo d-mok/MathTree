@@ -24,7 +24,6 @@ export function BuildTrend(
     target: [symbol: string, name: string, trend: string, code: number]
 } {
     // varGrp object
-    let vars = _.map(variables, 0)
     let vGrp = toVarGrp(variables)
     let fs = _.map(equations, 0)
 
