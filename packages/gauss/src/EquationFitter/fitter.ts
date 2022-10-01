@@ -2,7 +2,6 @@ import { bisect } from '../Bisection'
 import { getAllVars } from '../utils'
 import { getFittableOrder } from './searcher'
 
-
 export class Fitter {
     private readonly allVariables: string[]
 
@@ -47,6 +46,8 @@ export class Fitter {
                 return this.vals
             } catch {}
         }
+        console.error('vals:', this.vals)
+        console.error('ranges:', this.ranges)
         throw 'The system is not fittable in given range.'
     }
 }
