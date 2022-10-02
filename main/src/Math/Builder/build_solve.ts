@@ -102,13 +102,20 @@ export function BuildSolve(
     }
 
     function labelAngle(pen: PenCls) {
-        for (let [sym, name, range] of variables) {
-            if (Array.isArray(range) && range.length === 3) {
-                let label = givens.includes(sym)
-                    ? WRITE.long(vGrp[sym])
-                    : WRITE.symbol(vGrp[sym])
-                pen.angle(...range, label)
+        function draw(vars: string[]) {
+            let drawVars = variables.filter($ => vars.includes($[0]))
+            for (let [sym, name, range] of drawVars) {
+                if (Array.isArray(range) && range.length === 3) {
+                    let label = givens.includes(sym)
+                        ? WRITE.long(vGrp[sym])
+                        : WRITE.symbol(vGrp[sym])
+                    pen.angle(...range, label)
+                }
             }
+        }
+        return {
+            all: () => draw(vars),
+            plain: () => draw([unknown, ...givens]),
         }
     }
 
