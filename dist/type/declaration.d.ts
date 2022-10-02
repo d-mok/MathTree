@@ -1692,7 +1692,10 @@ declare module "Math/Builder/build_solve" {
         vals: number[];
         unknown: [symbol: string, name: string, val: number, unit: string];
         ans: quantity;
-        labelAngle: (_: PenCls) => void;
+        labelAngle: (_: PenCls) => {
+            all: () => void;
+            plain: () => void;
+        };
     };
 }
 declare module "Math/Builder/build_trend" {
