@@ -13,7 +13,7 @@ export function fitAgain(
     varGrp: varGrp,
     reFitVars: string[]
 ) {
-    const fraction = 0.1
+    const fraction = 0.02
     reFitVars.forEach($ => {
         // clear val
         varGrp[$].val = NaN
