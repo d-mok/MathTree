@@ -59,9 +59,9 @@ export function BuildSolve(
     // console.log(tree)
     let { givens, top: unknown, hiddens } = readTree(tree)
 
-    for (let i = 0; i <= 20; i++) {
+    for (let i = 0; i <= 10; i++) {
         try {
-            for (let v of vars) vGrp[v].val = NaN
+            vGrp = toVarGrp(variables)
             // fit once
             fitFree(fs, vGrp)
             // round and fit again
@@ -74,10 +74,7 @@ export function BuildSolve(
             }
             break
         } catch (e) {
-            if (i === 20) {
-                console.error(vGrp)
-                throw e
-            }
+            if (i === 10) Should(false, String(e))
         }
     }
 
