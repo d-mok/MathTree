@@ -1767,6 +1767,7 @@ declare module "Math/index" {
     import './Code/Text.ts';
     import './Code/Triangle.ts';
     import './Code/Trigonometry.ts';
+    import './Code/Utility.ts';
     import './Code/Vector.ts';
     import './Code/Vector3D.ts';
     import './Algebra/Algebra.ts';
@@ -4637,6 +4638,29 @@ declare module "Math/Code/Trigonometry" {
         var PolarDiff: typeof Host.PolarDiff;
         var WholeBearing: typeof Host.WholeBearing;
         var CompassBearing: typeof Host.CompassBearing;
+    }
+}
+declare module "Math/Code/Utility" {
+    export class Host {
+        /**
+         * get the element at cyclic index
+         * ```
+         * At([1,2,3],-1) // 3
+         * At([1,2,3],3) // 1
+         * ```
+         */
+        static At<T>(arr: T[], index: number): T;
+        /**
+         * get the chain of elements around `centreIndex` in cyclic fashion
+         * ```
+         * Lace([1,2,3,4,5,6],0,[-1,0,1]) // [6,1,2]
+         * ```
+         */
+        static Lace<T>(arr: T[], centreIndex: number, relativeIndices: number[]): T[];
+    }
+    global {
+        var At: typeof Host.At;
+        var Lace: typeof Host.Lace;
     }
 }
 declare module "Math/Code/Vector" {

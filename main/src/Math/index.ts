@@ -16,6 +16,7 @@ import './Code/Stat.ts'
 import './Code/Text.ts'
 import './Code/Triangle.ts'
 import './Code/Trigonometry.ts'
+import './Code/Utility.ts'
 import './Code/Vector.ts'
 import './Code/Vector3D.ts'
 
@@ -25,7 +26,6 @@ import './Algebra/Circle.ts'
 import './Algebra/Quadratic.ts'
 import './Algebra/Linear.ts'
 import './Algebra/Polynomial'
-
 
 import './should.ts'
 
