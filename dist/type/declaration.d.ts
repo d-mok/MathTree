@@ -196,7 +196,7 @@ declare module "Math/Builder/support/units" {
     export function findUnit(name: string): string | undefined;
     export function parseUnit(raw: string): string;
 }
-declare module "Math/Builder/support/varObjs" {
+declare module "Math/Builder/support/variable" {
     export function toVarGrp(varInputs: varInput[]): varGrp;
     export function RoundVars(vGrp: varGrp, vars: string[], sigfig: Record<string, number> | number, integer: boolean): void;
 }

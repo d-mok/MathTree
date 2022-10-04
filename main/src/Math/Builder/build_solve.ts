@@ -1,4 +1,4 @@
-import { RoundVars, toVarGrp } from './support/varObjs'
+import { RoundVars, toVarGrp } from './support/variable'
 import { analyze } from 'gauss'
 import _ from 'lodash'
 import { fitAgain, fitFree, readTree } from './support/system'

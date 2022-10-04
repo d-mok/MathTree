@@ -1,4 +1,4 @@
-import { toVarGrp } from './support/varObjs'
+import { toVarGrp } from './support/variable'
 import _ from 'lodash'
 import { fitAgain, fitFree, readTree } from './support/system'
 import * as WRITE from './support/write'

@@ -1,4 +1,4 @@
-import { RoundVars, toVarGrp } from './support/varObjs'
+import { RoundVars, toVarGrp } from './support/variable'
 import _ from 'lodash'
 import { fitAgain, fitFree } from './support/system'
 import * as WRITE from './support/write'
@@ -43,7 +43,7 @@ export function BuildRatio(
     fitFree([func], vGrp)
 
     // round and refit
-    RoundVars(vGrp, [given, unknown], sigfig)
+    RoundVars(vGrp, [given, unknown], sigfig, false)
     g.push(vGrp[given].val)
     u.push(vGrp[unknown].val)
     fitAgain([func], vGrp, constants)
@@ -51,7 +51,7 @@ export function BuildRatio(
     for (let i = 0; i < 10; i++) {
         // avoid accidentally getting same set of [given,unknown]
         fitAgain([func], vGrp, [given, unknown])
-        RoundVars(vGrp, [given], sigfig)
+        RoundVars(vGrp, [given], sigfig, false)
         if (vGrp[given].val !== g[0]) break
     }
 
