@@ -44,8 +44,13 @@ export function BuildSolve(
     let vGrp = toVarGrp(variables)
     let fs = _.map(equations, 0)
 
+    // get locked vars
+    let locked = vars.filter(v => vGrp[v].range[0] === vGrp[v].range[1])
+
     // get givens, hiddens, unknown
-    let validTrees = analyze(fs).filter(t => checkAvoids(t, avoids))
+    let validTrees = analyze(fs)
+        .filter(t => checkAvoids(t, avoids))
+        .filter(t => includesAll(readTree(t).givens, locked))
     if (validTrees.length === 0) throw 'no sensible set of solvables found!'
 
     let tree = _.sample(validTrees)!
@@ -140,6 +145,10 @@ export function BuildSolve(
         ans: { val: vGrp[unknown].val, unit: vGrp[unknown].unit },
         labelAngle,
     }
+}
+
+function includesAll<T>(superset: T[], subset: T[]): boolean {
+    return _.difference(subset, superset).length === 0
 }
 
 function includesExact<T>(arr1: T[], arr2: T[]): boolean {
