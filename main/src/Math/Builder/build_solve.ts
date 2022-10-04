@@ -67,7 +67,10 @@ export function BuildSolve(
             fitAgain(fs, vGrp, hiddens)
             break
         } catch (e) {
-            if (i === 10) throw e
+            if (i === 10) {
+                console.error(vGrp)
+                throw e
+            }
         }
     }
 
