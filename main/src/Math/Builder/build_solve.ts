@@ -20,12 +20,14 @@ export function BuildSolve(
         sigfig = {},
         solFormat = 'series',
         solPlain = false,
+        integer = false,
     }: {
         listSym?: boolean
         avoids?: string[][]
         sigfig?: { [_: string]: number } | number
         solFormat?: 'series' | 'parallel'
         solPlain?: boolean
+        integer?: boolean
     } = {}
 ): {
     list: string
@@ -63,8 +65,13 @@ export function BuildSolve(
             // fit once
             fitFree(fs, vGrp)
             // round and fit again
-            RoundVars(vGrp, givens, sigfig)
+            RoundVars(vGrp, givens, sigfig, integer)
             fitAgain(fs, vGrp, hiddens)
+            if (integer) {
+                let areAllIntegers = _.map(vGrp, 'val').every(Number.isInteger)
+                if (!areAllIntegers)
+                    throw 'cannot find a set of integer variables!'
+            }
             break
         } catch (e) {
             if (i === 20) {
