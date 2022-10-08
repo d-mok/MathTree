@@ -39,6 +39,8 @@ type pattern =
     | '*^\\le_@'
     | '*%@'
     | '*\\%@'
+    | '*%|@|'
+    | '*\\%|@|'
     | '*:@'
     | '*|.@'
     | '*.@'
@@ -142,6 +144,11 @@ addRule('*^\\le_@', 'num', $ => ($ > 0 ? '\\le' : $ < 0 ? '\\ge' : '='))
 addRule('*%@', 'num', $ => numberDefault($ * 100) + '%')
 // print *\%x as percent
 addRule('*\\%@', 'num', $ => numberDefault($ * 100) + '\\%')
+
+// print *\%|x| as percent abs
+addRule('*%|@|', 'num', $ => numberDefault(Abs($ * 100)) + '%')
+// print *\%|x| as percent abs
+addRule('*\\%|@|', 'num', $ => numberDefault(Abs($ * 100)) + '\\%')
 
 // print *:x as ratio
 addRule('*:@', 'ntuple', $ => toNumbers($).ratio().join(':'))
