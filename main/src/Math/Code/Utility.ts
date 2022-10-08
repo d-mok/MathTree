@@ -38,7 +38,7 @@ export class Host {
      * Repl('a','b') // replace 'a' by 'b'
      * ```
      */
-    @checkIt(owl.array, owl.int, owl.arrayWith(owl.int))
+    @checkIt(owl.str, owl.str)
     static Repl<T>(original: string, replaceBy: string): void {
         let Q = ''
         let S = ''
