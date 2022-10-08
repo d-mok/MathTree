@@ -31,9 +31,28 @@ export class Host {
         let ls = list(...arr)
         return relativeIndices.map(i => ls.cyclicAt(centreIndex + i)!)
     }
+
+    /**
+     * Replace text in `question` and `solution`. A meta function.
+     * ```
+     * Repl('a','b') // replace 'a' by 'b'
+     * ```
+     */
+    @checkIt(owl.array, owl.int, owl.arrayWith(owl.int))
+    static Repl<T>(original: string, replaceBy: string): void {
+        let Q = ''
+        let S = ''
+        eval('Q = question')
+        eval('S = solution')
+        Q = Q.replaceAll(original, replaceBy)
+        S = S.replaceAll(original, replaceBy)
+        eval('question = Q')
+        eval('solution = S')
+    }
 }
 
 declare global {
     var At: typeof Host.At
     var Lace: typeof Host.Lace
+    var Repl: typeof Host.Repl
 }
