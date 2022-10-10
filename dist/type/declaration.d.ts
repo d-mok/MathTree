@@ -4657,18 +4657,10 @@ declare module "Math/Code/Utility" {
          * ```
          */
         static Lace<T>(arr: T[], centreIndex: number, relativeIndices: number[]): T[];
-        /**
-         * Replace text in `question` and `solution`. A meta function.
-         * ```
-         * Repl('a','b') // replace 'a' by 'b'
-         * ```
-         */
-        static Repl<T>(original: string, replaceBy: string): void;
     }
     global {
         var At: typeof Host.At;
         var Lace: typeof Host.Lace;
-        var Repl: typeof Host.Repl;
     }
 }
 declare module "Math/Code/Vector" {
