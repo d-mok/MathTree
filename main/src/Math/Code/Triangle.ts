@@ -1,6 +1,4 @@
-
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-
 
 let angle = owl.between(0, 180)
 let side = owl.positive
@@ -12,7 +10,6 @@ function triangle_ineq(a: number, b: number, c: number) {
 @exposeAll()
 @captureAll()
 export class Host {
-
     /**
      * Find c from a and b of a right triangle.
      * ```
@@ -24,7 +21,6 @@ export class Host {
         return (a ** 2 + b ** 2) ** 0.5
     }
 
-
     /**
      * Find b from c and a of a right triangle.
      * ```
@@ -32,11 +28,12 @@ export class Host {
      * ```
      */
     @checkIt(side)
-    @inspectIt(function is_triangle(c, a) { return c >= a })
+    @inspectIt(function is_triangle(c, a) {
+        return c >= a
+    })
     static PythLeg(c: number, a: number): number {
         return (c ** 2 - a ** 2) ** 0.5
     }
-
 
     /**
      * Find side length c by cosine law. Input sides a,b and angle C.
@@ -48,10 +45,6 @@ export class Host {
     static CosineLawLength(a: number, b: number, C: number): number {
         return (a ** 2 + b ** 2 - 2 * a * b * cos(C)) ** 0.5
     }
-
-
-
-
 
     /**
      * Find angle C by cosine law. Input sides a,b,c.
@@ -67,7 +60,6 @@ export class Host {
         return arccos((c ** 2 - a ** 2 - b ** 2) / (-2 * a * b))
     }
 
-
     /**
      * Find side b by sine law.
      * ```
@@ -76,9 +68,8 @@ export class Host {
      */
     @checkIt(angle, side, angle)
     static SineLawLength(A: number, a: number, B: number): number {
-        return a / sin(A) * sin(B)
+        return (a / sin(A)) * sin(B)
     }
-
 
     /**
      * Find angle B by sine law. Assume acute.
@@ -87,11 +78,12 @@ export class Host {
      * ```
      */
     @checkIt(side, angle, side)
-    @inspectIt(function is_triangle(a, A, b) { return sin(A) / a * b >= 0 && sin(A) / a * b <= 1 })
+    @inspectIt(function is_triangle(a, A, b) {
+        return (sin(A) / a) * b >= 0 && (sin(A) / a) * b <= 1
+    })
     static SineLawAngle(a: number, A: number, b: number): number {
-        return arcsin(sin(A) / a * b)
+        return arcsin((sin(A) / a) * b)
     }
-
 
     /**
      * Find area by Heron's formula.
@@ -116,7 +108,11 @@ export class Host {
      */
     @checkIt(side)
     @inspectIt(triangle_ineq)
-    static SolveSSS(a: number, b: number, c: number): [C: number, A: number, B: number] {
+    static SolveSSS(
+        a: number,
+        b: number,
+        c: number
+    ): [C: number, A: number, B: number] {
         let A = CosineLawAngle(b, c, a)
         let B = CosineLawAngle(c, a, b)
         let C = CosineLawAngle(a, b, c)
@@ -130,12 +126,15 @@ export class Host {
      * ```
      */
     @checkIt(side, angle, side)
-    static SolveSAS(a: number, C: number, b: number): [A: number, c: number, B: number] {
+    static SolveSAS(
+        a: number,
+        C: number,
+        b: number
+    ): [A: number, c: number, B: number] {
         let c = CosineLawLength(a, b, C)
         let [_, A, B] = SolveSSS(a, b, c)
         return [A, c, B]
     }
-
 
     /**
      * Solve AAS triangle.
@@ -144,7 +143,11 @@ export class Host {
      * ```
      */
     @checkIt(angle, angle, side)
-    static SolveAAS(A: number, B: number, a: number): [c: number, C: number, b: number] {
+    static SolveAAS(
+        A: number,
+        B: number,
+        a: number
+    ): [c: number, C: number, b: number] {
         let C = 180 - A - B
         let b = SineLawLength(A, a, B)
         let c = CosineLawLength(a, b, C)
@@ -158,13 +161,16 @@ export class Host {
      * ```
      */
     @checkIt(angle, side, angle)
-    static SolveASA(A: number, c: number, B: number): [a: number, C: number, b: number] {
+    static SolveASA(
+        A: number,
+        c: number,
+        B: number
+    ): [a: number, C: number, b: number] {
         let C = 180 - A - B
         let a = SineLawLength(C, c, A)
         let b = SineLawLength(C, c, B)
         return [a, C, b]
     }
-
 
     /**
      * Solve SSA triangle.
@@ -173,13 +179,16 @@ export class Host {
      * ```
      */
     @checkIt(side, side, angle)
-    static SolveSSA(a: number, b: number, A: number): [C: number, c: number, B: number] {
+    static SolveSSA(
+        a: number,
+        b: number,
+        A: number
+    ): [C: number, c: number, B: number] {
         let B = SineLawAngle(a, A, b)
         let C = 180 - A - B
         let c = SineLawLength(A, a, C)
         return [C, c, B]
     }
-
 
     /**
      * Find heights of SSS triangle.
@@ -189,14 +198,17 @@ export class Host {
      */
     @checkIt(side)
     @inspectIt(triangle_ineq)
-    static HeightsBySSS(a: number, b: number, c: number): [Ha: number, Hb: number, Hc: number] {
+    static HeightsBySSS(
+        a: number,
+        b: number,
+        c: number
+    ): [Ha: number, Hb: number, Hc: number] {
         let area = Heron(a, b, c)
-        let Ha = 2 * area / a
-        let Hb = 2 * area / b
-        let Hc = 2 * area / c
+        let Ha = (2 * area) / a
+        let Hb = (2 * area) / b
+        let Hc = (2 * area) / c
         return [Ha, Hb, Hc]
     }
-
 
     /**
      * Find height of SSS triangle, against the first base.
@@ -208,10 +220,8 @@ export class Host {
     @inspectIt(triangle_ineq)
     static HeightBySSS(a: number, b: number, c: number): number {
         let area = Heron(a, b, c)
-        return 2 * area / a
+        return (2 * area) / a
     }
-
-
 
     /**
      * Find heights of SAS triangle.
@@ -220,13 +230,14 @@ export class Host {
      * ```
      */
     @checkIt(side, angle, side)
-    static HeightsBySAS(a: number, C: number, b: number): [Ha: number, Hb: number, Hc: number] {
+    static HeightsBySAS(
+        a: number,
+        C: number,
+        b: number
+    ): [Ha: number, Hb: number, Hc: number] {
         let [A, c, B] = SolveSAS(a, C, b)
         return HeightsBySSS(a, b, c)
     }
-
-
-
 
     /**
      * Find height of SAS triangle, opposite to the given angle.
@@ -240,12 +251,8 @@ export class Host {
         return hc
     }
 
-
-
-
-
     /**
-     * @deprecated
+     * @deprecated - use TriangleFromPoint
      * @param fix - Round all return values to integer.
      * Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
      * ```
@@ -254,7 +261,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.point2D, owl.point2D, owl.bool)
-    static TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix = true): Triangle {
+    static TriangleFromVertex(
+        A: Point2D,
+        B: Point2D,
+        C: Point2D,
+        fix = true
+    ): Triangle {
         let sideC = Distance(A, B)
         let sideA = Distance(B, C)
         let sideB = Distance(C, A)
@@ -272,12 +284,44 @@ export class Host {
         return { sideC, angleB, sideA, angleC, sideB, angleA }
     }
 
-
-
-
-
-
-
+    /**
+     * @param fix - Round all return values to integer.
+     * Return the 6 elements of a triangle given vertice. [sideA, sideB, sideC, angleA, angleB, angleC]
+     * ```
+     * TriangleFromPoint([0,0],[4,0],[0,3],false)
+     * // [5, 3, 4, 90, 36.86989765, 53.13013235]
+     * ```
+     */
+    @checkIt(owl.point2D, owl.point2D, owl.point2D, owl.bool)
+    static TriangleFromPoint(
+        A: Point2D,
+        B: Point2D,
+        C: Point2D,
+        fix = true
+    ): [
+        sideA: number,
+        sideB: number,
+        sideC: number,
+        angleA: number,
+        angleB: number,
+        angleC: number
+    ] {
+        let sideC = Distance(A, B)
+        let sideA = Distance(B, C)
+        let sideB = Distance(C, A)
+        let angleC = CosineLawAngle(sideA, sideB, sideC)
+        let angleA = CosineLawAngle(sideB, sideC, sideA)
+        let angleB = CosineLawAngle(sideA, sideC, sideB)
+        if (fix) {
+            sideC = Fix(sideC)
+            sideA = Fix(sideA)
+            sideB = Fix(sideB)
+            angleC = Fix(angleC)
+            angleA = Fix(angleA)
+            angleB = Fix(angleB)
+        }
+        return [sideA, sideB, sideC, angleA, angleB, angleC]
+    }
 
     /**
      * @deprecated
@@ -293,9 +337,14 @@ export class Host {
      * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
      * ```
      */
-    static SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: Partial<Triangle>): Triangle {
-
-
+    static SolveTriangle({
+        sideA,
+        sideB,
+        sideC,
+        angleA,
+        angleB,
+        angleC,
+    }: Partial<Triangle>): Triangle {
         let a = sideA
         let b = sideB
         let c = sideC
@@ -311,11 +360,13 @@ export class Host {
         if (B === null) throw 'SolveTriangle not accept null now'
         if (C === null) throw 'SolveTriangle not accept null now'
 
-
         function angleSum() {
-            if (A === undefined && B !== undefined && C !== undefined) A = 180 - B - C
-            if (B === undefined && A !== undefined && C !== undefined) B = 180 - A - C
-            if (C === undefined && B !== undefined && A !== undefined) C = 180 - A - B
+            if (A === undefined && B !== undefined && C !== undefined)
+                A = 180 - B - C
+            if (B === undefined && A !== undefined && C !== undefined)
+                B = 180 - A - C
+            if (C === undefined && B !== undefined && A !== undefined)
+                C = 180 - A - B
         }
 
         function SSS() {
@@ -327,25 +378,62 @@ export class Host {
         }
 
         function SAS() {
-            if (a !== undefined && b !== undefined && C !== undefined && c === undefined) c = CosineLawLength(a, b, C)
-            if (b !== undefined && c !== undefined && A !== undefined && a === undefined) a = CosineLawLength(b, c, A)
-            if (c !== undefined && a !== undefined && B !== undefined && b === undefined) b = CosineLawLength(c, a, B)
+            if (
+                a !== undefined &&
+                b !== undefined &&
+                C !== undefined &&
+                c === undefined
+            )
+                c = CosineLawLength(a, b, C)
+            if (
+                b !== undefined &&
+                c !== undefined &&
+                A !== undefined &&
+                a === undefined
+            )
+                a = CosineLawLength(b, c, A)
+            if (
+                c !== undefined &&
+                a !== undefined &&
+                B !== undefined &&
+                b === undefined
+            )
+                b = CosineLawLength(c, a, B)
         }
 
         function AAS() {
             let r: number | undefined = undefined
-            if (A !== undefined && a !== undefined && r === undefined) r = sin(A) / a
-            if (B !== undefined && b !== undefined && r === undefined) r = sin(B) / b
-            if (C !== undefined && c !== undefined && r === undefined) r = sin(C) / c
-            if (r !== undefined && A !== undefined && a === undefined) a = sin(A) / r
-            if (r !== undefined && B !== undefined && b === undefined) b = sin(B) / r
-            if (r !== undefined && C !== undefined && c === undefined) c = sin(C) / r
+            if (A !== undefined && a !== undefined && r === undefined)
+                r = sin(A) / a
+            if (B !== undefined && b !== undefined && r === undefined)
+                r = sin(B) / b
+            if (C !== undefined && c !== undefined && r === undefined)
+                r = sin(C) / c
+            if (r !== undefined && A !== undefined && a === undefined)
+                a = sin(A) / r
+            if (r !== undefined && B !== undefined && b === undefined)
+                b = sin(B) / r
+            if (r !== undefined && C !== undefined && c === undefined)
+                c = sin(C) / r
         }
 
         for (let i = 0; i < 10; i++) {
-            if (a !== undefined && b !== undefined && c !== undefined
-                && A !== undefined && B !== undefined && C !== undefined) {
-                return { sideA: a, sideB: b, sideC: c, angleA: A, angleB: B, angleC: C }
+            if (
+                a !== undefined &&
+                b !== undefined &&
+                c !== undefined &&
+                A !== undefined &&
+                B !== undefined &&
+                C !== undefined
+            ) {
+                return {
+                    sideA: a,
+                    sideB: b,
+                    sideC: c,
+                    angleA: A,
+                    angleB: B,
+                    angleC: C,
+                }
             }
             angleSum()
             SSS()
@@ -355,8 +443,6 @@ export class Host {
         Should(false, 'Solve Triangle Fail!')
         throw 'never'
     }
-
-
 
     /**
      * the orthocentre of a triangle
@@ -372,8 +458,6 @@ export class Host {
         return [cal.blur(x), cal.blur(y)]
     }
 
-
-
     /**
      * the circumcentre of a triangle
      * ```
@@ -388,9 +472,6 @@ export class Host {
         return [cal.blur(x), cal.blur(y)]
     }
 
-
-
-
     /**
      * the centroid of a triangle
      * ```
@@ -402,9 +483,6 @@ export class Host {
         let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3]
         return [cal.blur(x), cal.blur(y)]
     }
-
-
-
 
     /**
      * the incentre of a triangle
@@ -423,71 +501,82 @@ export class Host {
         return [cal.blur(x), cal.blur(y)]
     }
 
-
-
-
     /**
      * the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
      */
     @checkIt(owl.point2D)
-    static ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
+    static ScaleOrthocentreToInt(
+        A: Point2D,
+        B: Point2D,
+        C: Point2D
+    ): [Point2D, Point2D, Point2D] {
         let [x, y] = Orthocentre(A, B, C)
         let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
         Should(owl.num(q), 'original orthocentre must be rational')
-        return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
+        return shape2D(A, B, C).scale(q).toArray() as [
+            Point2D,
+            Point2D,
+            Point2D
+        ]
     }
-
-
-
-
-
 
     /**
      * the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
      */
     @checkIt(owl.point2D)
-    static ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
+    static ScaleCircumcentreToInt(
+        A: Point2D,
+        B: Point2D,
+        C: Point2D
+    ): [Point2D, Point2D, Point2D] {
         let [x, y] = Circumcentre(A, B, C)
         let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
         Should(owl.num(q), 'original circumcentre must be rational')
-        return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
+        return shape2D(A, B, C).scale(q).toArray() as [
+            Point2D,
+            Point2D,
+            Point2D
+        ]
     }
-
-
-
-
 
     /**
      * the scaled points [A,B,C] so that their centroid and themselves becomes integral
      */
     @checkIt(owl.point2D)
-    static ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
+    static ScaleCentroidToInt(
+        A: Point2D,
+        B: Point2D,
+        C: Point2D
+    ): [Point2D, Point2D, Point2D] {
         let [x, y] = Centroid(A, B, C)
         let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
         Should(owl.num(q), 'original centroid must be rational')
-        return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
+        return shape2D(A, B, C).scale(q).toArray() as [
+            Point2D,
+            Point2D,
+            Point2D
+        ]
     }
-
-
-
-
 
     /**
      * the scaled points [A,B,C] so that their incentre and themselves becomes integral
      */
     @checkIt(owl.point2D)
-    static ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D] {
+    static ScaleIncentreToInt(
+        A: Point2D,
+        B: Point2D,
+        C: Point2D
+    ): [Point2D, Point2D, Point2D] {
         let [x, y] = Incentre(A, B, C)
         let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
         Should(owl.num(q), 'original incentre must be rational')
-        return shape2D(A, B, C).scale(q).toArray() as [Point2D, Point2D, Point2D]
+        return shape2D(A, B, C).scale(q).toArray() as [
+            Point2D,
+            Point2D,
+            Point2D
+        ]
     }
-
-
-
 }
-
-
 
 declare global {
     var Pyth: typeof Host.Pyth
@@ -510,6 +599,7 @@ declare global {
     var HeightBySAS: typeof Host.HeightBySAS
 
     var TriangleFromVertex: typeof Host.TriangleFromVertex
+    var TriangleFromPoint: typeof Host.TriangleFromPoint
     var SolveTriangle: typeof Host.SolveTriangle
     var Orthocentre: typeof Host.Orthocentre
     var Circumcentre: typeof Host.Circumcentre
@@ -519,9 +609,4 @@ declare global {
     var ScaleCircumcentreToInt: typeof Host.ScaleCircumcentreToInt
     var ScaleCentroidToInt: typeof Host.ScaleCentroidToInt
     var ScaleIncentreToInt: typeof Host.ScaleIncentreToInt
-
 }
-
-
-
-

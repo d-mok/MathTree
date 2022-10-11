@@ -4441,7 +4441,7 @@ declare module "Math/Code/Triangle" {
          */
         static HeightBySAS(a: number, C: number, b: number): number;
         /**
-         * @deprecated
+         * @deprecated - use TriangleFromPoint
          * @param fix - Round all return values to integer.
          * Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
          * ```
@@ -4450,6 +4450,22 @@ declare module "Math/Code/Triangle" {
          * ```
          */
         static TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): Triangle;
+        /**
+         * @param fix - Round all return values to integer.
+         * Return the 6 elements of a triangle given vertice. [sideA, sideB, sideC, angleA, angleB, angleC]
+         * ```
+         * TriangleFromPoint([0,0],[4,0],[0,3],false)
+         * // [5, 3, 4, 90, 36.86989765, 53.13013235]
+         * ```
+         */
+        static TriangleFromPoint(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): [
+            sideA: number,
+            sideB: number,
+            sideC: number,
+            angleA: number,
+            angleB: number,
+            angleC: number
+        ];
         /**
          * @deprecated
          * Solve a triangle. return the triangle object solved.
@@ -4464,7 +4480,7 @@ declare module "Math/Code/Triangle" {
          * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
          * ```
          */
-        static SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC }: Partial<Triangle>): Triangle;
+        static SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC, }: Partial<Triangle>): Triangle;
         /**
          * the orthocentre of a triangle
          * ```
@@ -4528,6 +4544,7 @@ declare module "Math/Code/Triangle" {
         var HeightsBySAS: typeof Host.HeightsBySAS;
         var HeightBySAS: typeof Host.HeightBySAS;
         var TriangleFromVertex: typeof Host.TriangleFromVertex;
+        var TriangleFromPoint: typeof Host.TriangleFromPoint;
         var SolveTriangle: typeof Host.SolveTriangle;
         var Orthocentre: typeof Host.Orthocentre;
         var Circumcentre: typeof Host.Circumcentre;
