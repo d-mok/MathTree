@@ -71,10 +71,12 @@ export class Host {
     }
 
     /**
-     * the point P on AB such that AP : PB = ratio : 1-ratio
+     * the point X on dir or segment PQ such that PX : QX = ratioA : ratioB
      * ```
      * Slide([1,0],[5,0],0.75) // [4,0]
      * Slide([1,0],[5,0],3,1) // [4,0]
+     * Slide([0,1],[[0,0],[1,0]],1) // [1,1]
+     * Slide([0,1],[[0,0],[1,0]],2) // [2,1]
      * ```
      */
     @checkIt(
@@ -226,26 +228,6 @@ export class Host {
     static MoveY(P: Point2D, distance: number): Point2D {
         let [x, y] = P
         return [x, y + distance]
-    }
-
-    /**
-     * @deprecated - use slide instead
-     * Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
-     * ```
-     * Shift([0,1],[[0,0],[1,0]],1) // [1,1]
-     * Shift([0,1],[[0,0],[1,0]],2) // [2,1]
-     * ```
-     */
-    @checkIt(owl.point2D, owl.point2Ds, owl.num)
-    static Shift(
-        P: Point2D,
-        [A, B]: [Point2D, Point2D],
-        scale: number = 1
-    ): Point2D {
-        let [x, y] = P
-        let [xA, yA] = A
-        let [xB, yB] = B
-        return [x + (xB - xA) * scale, y + (yB - yA) * scale]
     }
 
     /**
@@ -448,7 +430,6 @@ declare global {
     var Move: typeof Host.Move
     var MoveX: typeof Host.MoveX
     var MoveY: typeof Host.MoveY
-    var Shift: typeof Host.Shift
     var ReflectX: typeof Host.ReflectX
     var ReflectY: typeof Host.ReflectY
     var IntersectAngle: typeof Host.IntersectAngle

@@ -169,39 +169,6 @@ test('MoveY', () => {
     expect(MoveY([1, 2], -3)).toEqual([1, -1])
 })
 
-test('Shift', () => {
-    expect(
-        Shift(
-            [0, 1],
-            [
-                [0, 0],
-                [1, 0],
-            ],
-            1
-        )
-    ).toEqual([1, 1])
-    expect(
-        Shift(
-            [0, 1],
-            [
-                [0, 0],
-                [1, 0],
-            ],
-            2
-        )
-    ).toEqual([2, 1])
-    expect(
-        Shift(
-            [3, 4],
-            [
-                [1, 2],
-                [5, 0],
-            ],
-            3
-        )
-    ).toEqual([15, -2])
-})
-
 test('ReflectX', () => {
     expect(ReflectX([1, 2])).toEqual([1, -2])
     expect(ReflectX([-1, 2])).toEqual([-1, -2])
