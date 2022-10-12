@@ -2499,9 +2499,10 @@ declare module "Math/Code/Geometry" {
          * the point P on AB such that AP : PB = ratio : 1-ratio
          * ```
          * Slide([1,0],[5,0],0.75) // [4,0]
+         * Slide([1,0],[5,0],3,1) // [4,0]
          * ```
          */
-        static Slide(A: Point2D, B: Point2D, ratio: number): Point2D;
+        static Slide(P: Point2D, dir: Point2D | [Point2D, Point2D], ratioA?: number, ratioB?: number): Point2D;
         /**
          * point P rotated anticlockwise by angle q about point O.
          * ```
@@ -2558,7 +2559,8 @@ declare module "Math/Code/Geometry" {
          */
         static MoveY(P: Point2D, distance: number): Point2D;
         /**
-         * @returns Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
+         * @deprecated - use slide instead
+         * Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
          * ```
          * Shift([0,1],[[0,0],[1,0]],1) // [1,1]
          * Shift([0,1],[[0,0],[1,0]],2) // [2,1]

@@ -1,16 +1,8 @@
-
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
-
-
-
 
 @exposeAll()
 @captureAll()
 export class Host {
-
-
-
-
     /**
      * the slope of AB
      * ```
@@ -19,7 +11,9 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D)
-    @inspectIt(function not_vertical(A, B) { return !cal.eq(A[0], B[0]) })
+    @inspectIt(function not_vertical(A, B) {
+        return !cal.eq(A[0], B[0])
+    })
     static Slope(A: Point2D, B: Point2D): number {
         return (A[1] - B[1]) / (A[0] - B[0])
     }
@@ -32,13 +26,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D)
-    @inspectIt(function not_horizontal(A, B) { return !cal.eq(A[1], B[1]) })
+    @inspectIt(function not_horizontal(A, B) {
+        return !cal.eq(A[1], B[1])
+    })
     static SlopePd(A: Point2D, B: Point2D): number {
         return -1 / Slope(A, B)
     }
-
-
-
 
     /**
      * the distance AB
@@ -50,7 +43,6 @@ export class Host {
     static Distance(A: Point2D, B: Point2D): number {
         return ((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2) ** 0.5
     }
-
 
     /**
      * the chessboard distance AB, max(horizontal,vertical)
@@ -78,21 +70,38 @@ export class Host {
         return toShape2D(points).mean().toArray()
     }
 
-
     /**
      * the point P on AB such that AP : PB = ratio : 1-ratio
      * ```
      * Slide([1,0],[5,0],0.75) // [4,0]
+     * Slide([1,0],[5,0],3,1) // [4,0]
      * ```
      */
-    @checkIt(owl.point2D, owl.point2D, owl.num)
-    static Slide(A: Point2D, B: Point2D, ratio: number): Point2D {
-        let r = ratio
-        let s = 1 - r
-        return [A[0] * s + B[0] * r, A[1] * s + B[1] * r]
+    @checkIt(
+        owl.point2D,
+        owl.or([owl.point2D, owl.arrayWith(owl.point2D)]),
+        owl.num,
+        owl.num
+    )
+    static Slide(
+        P: Point2D,
+        dir: Point2D | [Point2D, Point2D],
+        ratioA: number = 1,
+        ratioB: number = 1 - ratioA
+    ): Point2D {
+        let r = ratioA / (ratioA + ratioB)
+        let s = ratioB / (ratioA + ratioB)
+        if (owl.point2D(dir)) {
+            let Q = dir
+            return [P[0] * s + Q[0] * r, P[1] * s + Q[1] * r]
+        } else {
+            let [A, B] = dir
+            let [x, y] = P
+            let [xA, yA] = A
+            let [xB, yB] = B
+            return [x + (xB - xA) * r, y + (yB - yA) * r]
+        }
     }
-
-
 
     /**
      * point P rotated anticlockwise by angle q about point O.
@@ -105,7 +114,6 @@ export class Host {
         return vec2D(O, P).rotate(q).add(O).blur().toArray()
     }
 
-
     /**
      * the polar angle of B if A is the origin within [0,360].
      * ```
@@ -114,15 +122,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D)
-    @inspectIt(function distinct_points(A, B) { return owl.distinct([A, B]) })
+    @inspectIt(function distinct_points(A, B) {
+        return owl.distinct([A, B])
+    })
     static Dir(A: Point2D, B: Point2D): number {
         return vec2D(A, B).argument()
     }
-
-
-
-
-
 
     /**
      * the foot of perpendicular from P to AB.
@@ -131,13 +136,13 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.arrayWith(owl.or([owl.point2D, owl.num])))
-    @inspectIt(function distinct_points(P, [A, B]) { return owl.distinct([A, B]) })
+    @inspectIt(function distinct_points(P, [A, B]) {
+        return owl.distinct([A, B])
+    })
     static PdFoot(P: Point2D, [A, B]: [Point2D, Point2D | number]): Point2D {
         if (typeof B === 'number') B = Move(A, B, 1)
         return vec2D(A, P).projectOn(vec2D(A, B)).add(A).toArray()
     }
-
-
 
     /**
      * the intersection point of AB and CD.
@@ -149,17 +154,21 @@ export class Host {
     @inspectIt(function distinct_points(A, B, C, D) {
         return owl.distinct([A, B]) && owl.distinct([C, D])
     })
-    static Intersection(A: Point2D, B: Point2D, C: Point2D, D: Point2D): Point2D {
+    static Intersection(
+        A: Point2D,
+        B: Point2D,
+        C: Point2D,
+        D: Point2D
+    ): Point2D {
         return Crammer(
             B[1] - A[1],
             A[0] - B[0],
             A[0] * B[1] - B[0] * A[1],
             D[1] - C[1],
             C[0] - D[0],
-            C[0] * D[1] - D[0] * C[1],
+            C[0] * D[1] - D[0] * C[1]
         )
     }
-
 
     /**
      * Translate point P in the direction `dir` by a `distance`.
@@ -175,7 +184,11 @@ export class Host {
         owl.or([owl.num, owl.point2D, owl.arrayWith(owl.point2D)]),
         owl.num
     )
-    static Move(P: Point2D, dir: number | Point2D | [Point2D, Point2D], distance: number): Point2D {
+    static Move(
+        P: Point2D,
+        dir: number | Point2D | [Point2D, Point2D],
+        distance: number
+    ): Point2D {
         let q = 0
         if (typeof dir === 'number') {
             q = dir
@@ -188,11 +201,6 @@ export class Host {
         let y = P[1] + distance * sin(q)
         return [x, y]
     }
-
-
-
-
-
 
     /**
      * Translate point P to the right by a distance.
@@ -207,10 +215,6 @@ export class Host {
         return [x + distance, y]
     }
 
-
-
-
-
     /**
      * Translate point P upward by a distance.
      * ```
@@ -224,17 +228,20 @@ export class Host {
         return [x, y + distance]
     }
 
-
-
     /**
-     * @returns Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
+     * @deprecated - use slide instead
+     * Move point `P` by vector `AB`, by a distance of `AB` times `scaled`.
      * ```
      * Shift([0,1],[[0,0],[1,0]],1) // [1,1]
      * Shift([0,1],[[0,0],[1,0]],2) // [2,1]
      * ```
      */
     @checkIt(owl.point2D, owl.point2Ds, owl.num)
-    static Shift(P: Point2D, [A, B]: [Point2D, Point2D], scale: number = 1): Point2D {
+    static Shift(
+        P: Point2D,
+        [A, B]: [Point2D, Point2D],
+        scale: number = 1
+    ): Point2D {
         let [x, y] = P
         let [xA, yA] = A
         let [xB, yB] = B
@@ -253,9 +260,6 @@ export class Host {
         return [P[0], -P[1]]
     }
 
-
-
-
     /**
      * Reflect point P about y-axis
      * ```
@@ -267,11 +271,6 @@ export class Host {
     static ReflectY(P: Point2D): Point2D {
         return [-P[0], P[1]]
     }
-
-
-
-
-
 
     /**
      * angle of intersection between two slopes
@@ -288,8 +287,6 @@ export class Host {
         if (d > 90) d = 180 - d
         return d
     }
-
-
 
     /**
      * angle AOB, non-reflex
@@ -309,8 +306,6 @@ export class Host {
         return cal.blur(a)
     }
 
-
-
     /**
      * angle AOB, measured anticlockwise
      * ```
@@ -329,8 +324,6 @@ export class Host {
         return a <= b ? b - a : 360 + b - a
     }
 
-
-
     /**
      * check if the polar angle AOB is reflex
      * ```
@@ -348,11 +341,6 @@ export class Host {
         return angle > 180
     }
 
-
-
-
-
-
     /**
      * points on a regular polygon
      * ```
@@ -360,7 +348,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.num, owl.point2D, owl.num, owl.num)
-    static RegularPolygon(n: number, center: Point2D, radius: number, startAngle: number) {
+    static RegularPolygon(
+        n: number,
+        center: Point2D,
+        radius: number,
+        startAngle: number
+    ) {
         let a = 360 / n
         let arr: Point2D[] = []
         for (let i = 0; i < n; i++) {
@@ -374,11 +367,6 @@ export class Host {
         return arr
     }
 
-
-
-
-
-
     /**
      * arc length with given radius and angle
      * ```
@@ -388,12 +376,8 @@ export class Host {
      */
     @checkIt(owl.nonNegative, owl.nonNegative)
     static ArcLength(radius: number, theta: number): number {
-        return 2 * Math.PI * radius * theta / 360
+        return (2 * Math.PI * radius * theta) / 360
     }
-
-
-
-
 
     /**
      * sector area with given radius and angle
@@ -404,13 +388,8 @@ export class Host {
      */
     @checkIt(owl.nonNegative, owl.nonNegative)
     static SectorArea(radius: number, theta: number): number {
-        return Math.PI * radius * radius * theta / 360
+        return (Math.PI * radius * radius * theta) / 360
     }
-
-
-
-
-
 
     /**
      * check is convex polygon
@@ -421,11 +400,12 @@ export class Host {
      */
     @checkIt(owl.point2D)
     static IsConvexPolygon(...points: Point2D[]): boolean {
-        Should(points.length >= 3, "must have at least 3 points to be a polygon")
+        Should(
+            points.length >= 3,
+            'must have at least 3 points to be a polygon'
+        )
         return toShape2D(points).isConvex()
     }
-
-
 
     /**
      * Arrange Points in anti-clockwise direction around their mean
@@ -441,9 +421,6 @@ export class Host {
         return ss.toArray()
     }
 
-
-
-
     /**
      * a point with polar coordinates (1, `angle`).
      * ```
@@ -455,12 +432,7 @@ export class Host {
     static OnCircle(angle: number): Point2D {
         return PolToRect([1, angle])
     }
-
-
 }
-
-
-
 
 declare global {
     var Slope: typeof Host.Slope
@@ -489,7 +461,4 @@ declare global {
     var IsConvexPolygon: typeof Host.IsConvexPolygon
     var ArrangePoints: typeof Host.ArrangePoints
     var OnCircle: typeof Host.OnCircle
-
 }
-
-
