@@ -81,10 +81,12 @@
 }
 
 .qs td {
-  text-align: center;
+  text-align: center !important;
 }
 
-.qs table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
+.qs table,
+th,
+td {
+  border: 1px solid black !important;
+  border-collapse: collapse !important;
 }
