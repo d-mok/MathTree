@@ -4,59 +4,52 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 @exposeAll()
 @captureAll()
 export class Host {
-
-
     /**
-    * an array of integers from start to end inclusive.
-    * ```
-    * ListIntegers(2,6) // [2,3,4,5,6]
-    * ListIntegers(-2,1) // [-2,-1,0,1]
-    * ```
-    */
+     * an array of integers from start to end inclusive.
+     * ```
+     * Rng(2,6) // [2,3,4,5,6]
+     * Rng(-2,1) // [-2,-1,0,1]
+     * ```
+     */
     @checkIt(owl.num)
-    @inspectIt(function is_range(start, end) { return start < end })
-    static ListIntegers(start: number, end: number): number[] {
+    @inspectIt(function is_range(start, end) {
+        return start < end
+    })
+    static Rng(start: number, end: number): number[] {
         return cal.range(start, end)
     }
 
-
-
-
     /**
-    * Tn in an arithmetic sequence: a+(n-1)d
-    * ```
-    * ASterm(2,3,10) // 29
-    * ASterm(5,-2,6) // -5
-    * ```
-    */
+     * Tn in an arithmetic sequence: a+(n-1)d
+     * ```
+     * ASterm(2,3,10) // 29
+     * ASterm(5,-2,6) // -5
+     * ```
+     */
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static ASterm(a: number, d: number, n: number): number {
         return a + (n - 1) * d
     }
 
-
-
     /**
-    * Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).
-    * ```
-    * ASsum(2,3,10) // 155
-    * ASsum(5,-2,6) // 0
-    * ```
-    */
+     * Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).
+     * ```
+     * ASsum(2,3,10) // 155
+     * ASsum(5,-2,6) // 0
+     * ```
+     */
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static ASsum(a: number, d: number, n: number): number {
         return 0.5 * n * (2 * a + (n - 1) * d)
     }
 
-
-
     /**
-    * an array of the first n terms in an arithmetic sequence.
-    * ```
-    * ASequence(2,3,5) // [2,5,8,11,14]
-    * ASequence(5,-2,3) // [5,3,1]
-    * ```
-    */
+     * an array of the first n terms in an arithmetic sequence.
+     * ```
+     * ASequence(2,3,5) // [2,5,8,11,14]
+     * ASequence(5,-2,3) // [5,3,1]
+     * ```
+     */
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static ASequence(a: number, d: number, n = 10): number[] {
         let arr = []
@@ -66,43 +59,38 @@ export class Host {
         return arr
     }
 
-
-
     /**
-    * Tn in a geometric sequence: ar**(n-1)
-    * ```
-    * GSterm(2,3,4) // 54
-    * GSterm(5,-2,6) // -160
-    * ```
-    */
+     * Tn in a geometric sequence: ar**(n-1)
+     * ```
+     * GSterm(2,3,4) // 54
+     * GSterm(5,-2,6) // -160
+     * ```
+     */
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static GSterm(a: number, r: number, n: number): number {
-        return a * (r ** (n - 1))
+        return a * r ** (n - 1)
     }
 
-
-
-
     /**
-    * Sn in a geometric sequence: a*(r*n-1)/(r-1)
-    * ```
-    * GSsum(2,3,4) // 80
-    * GSsum(5,-2,3) // 15
-    * GSsum(3,0.5) // 6 , sum to inf if omit n
-    * ```
-    */
+     * Sn in a geometric sequence: a*(r*n-1)/(r-1)
+     * ```
+     * GSsum(2,3,4) // 80
+     * GSsum(5,-2,3) // 15
+     * GSsum(3,0.5) // 6 , sum to inf if omit n
+     * ```
+     */
     @checkIt(owl.num, owl.num, owl.int)
     static GSsum(a: number, r: number, n: number = -1): number {
-        return n > 0 ? a * (r ** n - 1) / (r - 1) : a / (1 - r)
+        return n > 0 ? (a * (r ** n - 1)) / (r - 1) : a / (1 - r)
     }
 
     /**
-    * an array of the first n terms in a geometric sequence.
-    * ```
-    * GSequence(2,3,5) // return [2,6,18,54,162]
-    * GSequence(5,-2,3) // return [5,-10,20]
-    * ```
-    */
+     * an array of the first n terms in a geometric sequence.
+     * ```
+     * GSequence(2,3,5) // return [2,6,18,54,162]
+     * GSequence(5,-2,3) // return [5,-10,20]
+     * ```
+     */
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static GSequence(a: number, r: number, n = 10): number[] {
         let arr = []
@@ -112,16 +100,19 @@ export class Host {
         return arr
     }
 
-
-
     /**
-    * the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q
-    * ```
-    * QuadraticSequence(1,2,3,4) //
-    * ```
-    */
+     * the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q
+     * ```
+     * QuadraticSequence(1,2,3,4) //
+     * ```
+     */
     @checkIt(owl.num, owl.num, owl.num, owl.positiveInt)
-    static QuadraticSequence(a: number, p: number, q: number, n: number): number {
+    static QuadraticSequence(
+        a: number,
+        p: number,
+        q: number,
+        n: number
+    ): number {
         let c = a
         for (let i = 2; i <= n; i++) {
             c += p * (i - 1) + q
@@ -129,15 +120,20 @@ export class Host {
         return c
     }
 
-
     /**
-    * the nth term in a lucas sequence, a_i = p*a_{i-1} + q*a_{i-2}
-    * ```
-    * LucasSequence(1,2,3,4,5) //
-    * ```
-    */
+     * the nth term in a lucas sequence, a_i = p*a_{i-1} + q*a_{i-2}
+     * ```
+     * LucasSequence(1,2,3,4,5) //
+     * ```
+     */
     @checkIt(owl.num, owl.num, owl.num, owl.num, owl.positiveInt)
-    static LucasSequence(first: number, second: number, p: number, q: number, n: number): number {
+    static LucasSequence(
+        first: number,
+        second: number,
+        p: number,
+        q: number,
+        n: number
+    ): number {
         if (n === 1) return first
         if (n === 2) return second
         let S = [first, second]
@@ -146,14 +142,13 @@ export class Host {
         }
         return S[n - 1]
     }
-
 }
 
 
 
 
 declare global {
-    var ListIntegers: typeof Host.ListIntegers
+    var Rng: typeof Host.Rng
     var ASterm: typeof Host.ASterm
     var ASsum: typeof Host.ASsum
     var ASequence: typeof Host.ASequence

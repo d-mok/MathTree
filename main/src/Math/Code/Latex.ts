@@ -151,12 +151,16 @@ export class Host {
         data,
         dataLabel,
         freqLabel,
+        min = Math.min(...data),
+        max = Math.max(...data),
     }: {
         data: number[]
         dataLabel: string
         freqLabel: string
+        min?: number
+        max?: number
     }): string {
-        let values = ListIntegers(Math.min(...data), Math.max(...data))
+        let values = Rng(min, max)
         let freqs = Freqs(data, values)
         return Table({
             content: [

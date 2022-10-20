@@ -2746,10 +2746,12 @@ declare module "Math/Code/Latex" {
          * })
          * ```
          */
-        static FreqTable({ data, dataLabel, freqLabel, }: {
+        static FreqTable({ data, dataLabel, freqLabel, min, max, }: {
             data: number[];
             dataLabel: string;
             freqLabel: string;
+            min?: number;
+            max?: number;
         }): string;
         /**
          * Print a table in latex showing cartisian product of two items.
@@ -3891,79 +3893,79 @@ declare module "Math/Code/Relation" {
 declare module "Math/Code/Sequence" {
     export class Host {
         /**
-        * an array of integers from start to end inclusive.
-        * ```
-        * ListIntegers(2,6) // [2,3,4,5,6]
-        * ListIntegers(-2,1) // [-2,-1,0,1]
-        * ```
-        */
-        static ListIntegers(start: number, end: number): number[];
+         * an array of integers from start to end inclusive.
+         * ```
+         * Rng(2,6) // [2,3,4,5,6]
+         * Rng(-2,1) // [-2,-1,0,1]
+         * ```
+         */
+        static Rng(start: number, end: number): number[];
         /**
-        * Tn in an arithmetic sequence: a+(n-1)d
-        * ```
-        * ASterm(2,3,10) // 29
-        * ASterm(5,-2,6) // -5
-        * ```
-        */
+         * Tn in an arithmetic sequence: a+(n-1)d
+         * ```
+         * ASterm(2,3,10) // 29
+         * ASterm(5,-2,6) // -5
+         * ```
+         */
         static ASterm(a: number, d: number, n: number): number;
         /**
-        * Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).
-        * ```
-        * ASsum(2,3,10) // 155
-        * ASsum(5,-2,6) // 0
-        * ```
-        */
+         * Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).
+         * ```
+         * ASsum(2,3,10) // 155
+         * ASsum(5,-2,6) // 0
+         * ```
+         */
         static ASsum(a: number, d: number, n: number): number;
         /**
-        * an array of the first n terms in an arithmetic sequence.
-        * ```
-        * ASequence(2,3,5) // [2,5,8,11,14]
-        * ASequence(5,-2,3) // [5,3,1]
-        * ```
-        */
+         * an array of the first n terms in an arithmetic sequence.
+         * ```
+         * ASequence(2,3,5) // [2,5,8,11,14]
+         * ASequence(5,-2,3) // [5,3,1]
+         * ```
+         */
         static ASequence(a: number, d: number, n?: number): number[];
         /**
-        * Tn in a geometric sequence: ar**(n-1)
-        * ```
-        * GSterm(2,3,4) // 54
-        * GSterm(5,-2,6) // -160
-        * ```
-        */
+         * Tn in a geometric sequence: ar**(n-1)
+         * ```
+         * GSterm(2,3,4) // 54
+         * GSterm(5,-2,6) // -160
+         * ```
+         */
         static GSterm(a: number, r: number, n: number): number;
         /**
-        * Sn in a geometric sequence: a*(r*n-1)/(r-1)
-        * ```
-        * GSsum(2,3,4) // 80
-        * GSsum(5,-2,3) // 15
-        * GSsum(3,0.5) // 6 , sum to inf if omit n
-        * ```
-        */
+         * Sn in a geometric sequence: a*(r*n-1)/(r-1)
+         * ```
+         * GSsum(2,3,4) // 80
+         * GSsum(5,-2,3) // 15
+         * GSsum(3,0.5) // 6 , sum to inf if omit n
+         * ```
+         */
         static GSsum(a: number, r: number, n?: number): number;
         /**
-        * an array of the first n terms in a geometric sequence.
-        * ```
-        * GSequence(2,3,5) // return [2,6,18,54,162]
-        * GSequence(5,-2,3) // return [5,-10,20]
-        * ```
-        */
+         * an array of the first n terms in a geometric sequence.
+         * ```
+         * GSequence(2,3,5) // return [2,6,18,54,162]
+         * GSequence(5,-2,3) // return [5,-10,20]
+         * ```
+         */
         static GSequence(a: number, r: number, n?: number): number[];
         /**
-        * the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q
-        * ```
-        * QuadraticSequence(1,2,3,4) //
-        * ```
-        */
+         * the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q
+         * ```
+         * QuadraticSequence(1,2,3,4) //
+         * ```
+         */
         static QuadraticSequence(a: number, p: number, q: number, n: number): number;
         /**
-        * the nth term in a lucas sequence, a_i = p*a_{i-1} + q*a_{i-2}
-        * ```
-        * LucasSequence(1,2,3,4,5) //
-        * ```
-        */
+         * the nth term in a lucas sequence, a_i = p*a_{i-1} + q*a_{i-2}
+         * ```
+         * LucasSequence(1,2,3,4,5) //
+         * ```
+         */
         static LucasSequence(first: number, second: number, p: number, q: number, n: number): number;
     }
     global {
-        var ListIntegers: typeof Host.ListIntegers;
+        var Rng: typeof Host.Rng;
         var ASterm: typeof Host.ASterm;
         var ASsum: typeof Host.ASsum;
         var ASequence: typeof Host.ASequence;
