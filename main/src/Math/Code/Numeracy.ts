@@ -255,38 +255,26 @@ export class Host {
         length?: number,
         allowZero = false
     ): number[][] {
+
+        function parti(n: number): number[][] {
+            if (n === 0) return [[]]
+            let arr: number[][] = []
+            for (let p of parti(n - 1)) {
+                arr.push([1, ...p])
+                if (p.length > 0 && (p.length < 2 || p[1] > p[0])) {
+                    let [p0, ...rest] = p
+                    arr.push([p0 + 1, ...rest])
+                }
+            }
+            return arr
+        }
+
         function padArray<T>(arr: T[], length: number, val: T): T[] {
             arr.length = length
             return Array.from(arr, v => v ?? val)
         }
 
-        let arr: number[][] = []
-        let p: number[] = new Array(n)
-        let k = 0
-        p[k] = n
-
-        while (true) {
-            arr.push(p.filter($ => $))
-            let rem_val = 0
-
-            while (k >= 0 && p[k] === 1) {
-                rem_val += p[k]
-                k--
-            }
-            if (k < 0) break
-
-            p[k]--
-            rem_val++
-
-            while (rem_val > p[k]) {
-                p[k + 1] = p[k]
-                rem_val = rem_val - p[k]
-                k++
-            }
-
-            p[k + 1] = rem_val
-            k++
-        }
+        let arr = parti(n)
         if (length === undefined) {
             return arr
         } else {

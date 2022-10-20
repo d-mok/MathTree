@@ -258,23 +258,27 @@ test('ToFrac', () => {
 
 test('Partition', () => {
     expect(Partition(5)).toEqual([
-        [5],
-        [4, 1],
-        [3, 2],
-        [3, 1, 1],
-        [2, 2, 1],
-        [2, 1, 1, 1],
         [1, 1, 1, 1, 1],
+        [1, 1, 1, 2],
+        [1, 2, 2],
+        [1, 1, 3],
+        [2, 3],
+        [1, 4],
+        [5],
     ])
     expect(Partition(5, 3)).toEqual([
-        [3, 1, 1],
-        [2, 2, 1],
+        [1, 2, 2],
+        [1, 1, 3],
     ])
     expect(Partition(5, 3, true)).toEqual([
+        [1, 2, 2],
+        [1, 1, 3],
+        [2, 3, 0],
+        [1, 4, 0],
         [5, 0, 0],
-        [4, 1, 0],
-        [3, 2, 0],
-        [3, 1, 1],
-        [2, 2, 1],
     ])
+    expect(Partition(10).length).toEqual(42)
+    expect(Partition(10)).toSatisfyAll(
+        $ => $.reduce((a: number, b: number) => a + b, 0) === 10
+    )
 })
