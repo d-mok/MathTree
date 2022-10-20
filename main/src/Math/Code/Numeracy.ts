@@ -166,16 +166,28 @@ export class Host {
     /**
      * reduce input array to integral ratio.
      * ```
-     * IntegerRatio(2,4,6) // [1,2,3]
-     * IntegerRatio(0,4,6) // [0,2,3]
-     * IntegerRatio(0,4) // [0,1]
-     * IntegerRatio(1/3,1/2,1/4) // [4,6,3]
-     * IntegerRatio(Math.sqrt(2),1/2,1/4) // throw
+     * Ratio(2,4,6) // [1,2,3]
+     * Ratio(0,4,6) // [0,2,3]
+     * Ratio(0,4) // [0,1]
+     * Ratio(1/3,1/2,1/4) // [4,6,3]
+     * Ratio(Math.sqrt(2),1/2,1/4) // throw
      * ```
      */
     @checkIt(owl.rational)
     static Ratio(...nums: number[]): number[] {
         return toNumbers(nums).ratio()
+    }
+
+    /**
+     * scale `nums` so that their sum becomes `total`.
+     * ```
+     * ScaleTo([1,2,3], 60) // [10,20,30]
+     * ```
+     */
+    @checkIt(owl.ntuple, owl.num)
+    static ScaleTo(nums: number[], total: number): number[] {
+        let sum = Sum(...nums)
+        return nums.map($ => ($ / sum) * total)
     }
 
     /**
@@ -255,7 +267,6 @@ export class Host {
         length?: number,
         allowZero = false
     ): number[][] {
-
         function parti(n: number): number[][] {
             if (n === 0) return [[]]
             let arr: number[][] = []
@@ -303,6 +314,7 @@ declare global {
     var Ceil: typeof Host.Ceil
     var Floor: typeof Host.Floor
     var Ratio: typeof Host.Ratio
+    var ScaleTo: typeof Host.ScaleTo
     var HCF: typeof Host.HCF
     var LCM: typeof Host.LCM
     var PrimeFactors: typeof Host.PrimeFactors

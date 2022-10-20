@@ -3090,14 +3090,21 @@ declare module "Math/Code/Numeracy" {
         /**
          * reduce input array to integral ratio.
          * ```
-         * IntegerRatio(2,4,6) // [1,2,3]
-         * IntegerRatio(0,4,6) // [0,2,3]
-         * IntegerRatio(0,4) // [0,1]
-         * IntegerRatio(1/3,1/2,1/4) // [4,6,3]
-         * IntegerRatio(Math.sqrt(2),1/2,1/4) // throw
+         * Ratio(2,4,6) // [1,2,3]
+         * Ratio(0,4,6) // [0,2,3]
+         * Ratio(0,4) // [0,1]
+         * Ratio(1/3,1/2,1/4) // [4,6,3]
+         * Ratio(Math.sqrt(2),1/2,1/4) // throw
          * ```
          */
         static Ratio(...nums: number[]): number[];
+        /**
+         * scale `nums` so that their sum becomes `total`.
+         * ```
+         * ScaleTo([1,2,3], 60) // [10,20,30]
+         * ```
+         */
+        static ScaleTo(nums: number[], total: number): number[];
         /**
          * The HCF of nums.
          * ```
@@ -3161,6 +3168,7 @@ declare module "Math/Code/Numeracy" {
         var Ceil: typeof Host.Ceil;
         var Floor: typeof Host.Floor;
         var Ratio: typeof Host.Ratio;
+        var ScaleTo: typeof Host.ScaleTo;
         var HCF: typeof Host.HCF;
         var LCM: typeof Host.LCM;
         var PrimeFactors: typeof Host.PrimeFactors;
@@ -5005,7 +5013,7 @@ declare module "Pen/AutoPen" {
          * let pen = new AutoPen()
          * pen.PieChart({
          *   categories: ['a','b','c','d','e'],
-         *   labels: ['10%','20%','30%','40%',''],
+         *   labels: ['10%','20%','y%',null,''],
          *   angles: [45,135,60,50,70],
          *   angleLabels: [null,'x',null,undefined,''],
          *   size:1.5
@@ -5014,7 +5022,7 @@ declare module "Pen/AutoPen" {
          */
         PieChart({ categories, labels, angles, angleLabels, size, }: {
             categories: string[];
-            labels: string[];
+            labels: (string | null)[];
             angles: number[];
             angleLabels: (string | null | undefined)[];
             size?: number;

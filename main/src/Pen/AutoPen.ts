@@ -905,7 +905,7 @@ export class AutoPenCls {
      * let pen = new AutoPen()
      * pen.PieChart({
      *   categories: ['a','b','c','d','e'],
-     *   labels: ['10%','20%','30%','40%',''],
+     *   labels: ['10%','20%','y%',null,''],
      *   angles: [45,135,60,50,70],
      *   angleLabels: [null,'x',null,undefined,''],
      *   size:1.5
@@ -920,11 +920,15 @@ export class AutoPenCls {
         size = 2,
     }: {
         categories: string[]
-        labels: string[]
+        labels: (string | null)[]
         angles: number[]
         angleLabels: (string | null | undefined)[]
         size?: number
     }) {
+        let lbls = labels.map(
+            ($, i) => $ ?? cal.blur((angles[i] / 360) * 100) + '%'
+        )
+
         const pen = new Pen()
         pen.range.set([-1.2, 1.2], [-1.2, 1.2])
         pen.size.set(size)
@@ -941,12 +945,12 @@ export class AutoPenCls {
             pen.line(O, PolToRect([1, next]))
 
             if (categories[i] === '') {
-                pen.write(PolToRect([0.7, mid]), labels[i])
-            } else if (labels[i] === '') {
+                pen.write(PolToRect([0.7, mid]), lbls[i])
+            } else if (lbls[i] === '') {
                 pen.write(PolToRect([0.7, mid]), categories[i])
             } else {
                 pen.label.point(PolToRect([0.7, mid]), categories[i], 90, 10)
-                pen.label.point(PolToRect([0.7, mid]), labels[i], 270, 10)
+                pen.label.point(PolToRect([0.7, mid]), lbls[i], 270, 10)
             }
 
             if (angleLabels[i] !== undefined) {

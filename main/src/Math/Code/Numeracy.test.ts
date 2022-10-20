@@ -177,6 +177,10 @@ test('Ratio', () => {
     expect(() => Ratio(Math.sqrt(2), 1 / 2, 1 / 4)).toThrow()
 })
 
+test('ScaleTo', () => {
+    expect(ScaleTo([1, 2, 3], 60)).toEqual([10, 20, 30])
+})
+
 // test('Blur', () => {
 //     expect(Blur(0.1 + 0.2)).toBe(0.3);
 //     expect(Blur(0.81 - 1)).toBe(-0.19);
