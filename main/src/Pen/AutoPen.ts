@@ -929,20 +929,19 @@ export class AutoPenCls {
             ($, i) => $ ?? cal.blur((angles[i] / 360) * 100) + '%'
         )
 
+        let O: Point2D = [0, 0]
         const pen = new Pen()
         pen.range.set([-1.2, 1.2], [-1.2, 1.2])
         pen.size.set(size)
-        pen.graph.circle([0, 0], 1)
+        pen.graph.circle(O, 1)
         pen.set.angle('polar')
 
-        pen.rod.line([0, 0], 0, 1)
         let current = 0
         for (let i = 0; i < angles.length; i++) {
             let a = angles[i]
             let next = current + a
-            let mid = current + a / 2
-            pen.rod.line([0, 0], next, 1)
-            let H = PolToRect([0.7, mid]) // position of text
+            pen.rod.line(O, next, 1)
+            let H = PolToRect([0.7, (current + next) / 2]) // position of text
             if (categories[i] === '') {
                 pen.write(H, lbls[i])
             } else if (lbls[i] === '') {
@@ -953,12 +952,7 @@ export class AutoPenCls {
             }
 
             if (angleLabels[i] !== undefined) {
-                pen.angle(
-                    PolToRect([1, current]),
-                    [0, 0],
-                    PolToRect([1, next]),
-                    angleLabels[i] ?? angles[i]
-                )
+                pen.angleDir(current, O, next, angleLabels[i] ?? angles[i])
             }
             current += a
         }
