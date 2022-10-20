@@ -85,8 +85,8 @@
 }
 
 .qs table,
-th,
-td {
+.qs th,
+.qs td {
   border: 1px solid black !important;
   border-collapse: collapse !important;
 }
