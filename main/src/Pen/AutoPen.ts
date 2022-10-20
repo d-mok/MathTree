@@ -935,28 +935,27 @@ export class AutoPenCls {
         pen.graph.circle([0, 0], 1)
         pen.set.angle('polar')
 
-        let O: Point2D = [0, 0]
-        pen.line(O, [1, 0])
+        pen.rod.line([0, 0], 0, 1)
         let current = 0
         for (let i = 0; i < angles.length; i++) {
             let a = angles[i]
             let next = current + a
             let mid = current + a / 2
-            pen.line(O, PolToRect([1, next]))
-
+            pen.rod.line([0, 0], next, 1)
+            let H = PolToRect([0.7, mid]) // position of text
             if (categories[i] === '') {
-                pen.write(PolToRect([0.7, mid]), lbls[i])
+                pen.write(H, lbls[i])
             } else if (lbls[i] === '') {
-                pen.write(PolToRect([0.7, mid]), categories[i])
+                pen.write(H, categories[i])
             } else {
-                pen.label.point(PolToRect([0.7, mid]), categories[i], 90, 10)
-                pen.label.point(PolToRect([0.7, mid]), lbls[i], 270, 10)
+                pen.label.point(H, categories[i], 90, 10)
+                pen.label.point(H, lbls[i], 270, 10)
             }
 
             if (angleLabels[i] !== undefined) {
                 pen.angle(
                     PolToRect([1, current]),
-                    O,
+                    [0, 0],
                     PolToRect([1, next]),
                     angleLabels[i] ?? angles[i]
                 )
