@@ -410,3 +410,12 @@ test('RndRatio', () => {
         expect(nums).toAllBeInteger()
     })
 })
+
+test('RndPartition', () => {
+    repeat(10, () => {
+        let nums = RndPartition(10, 3)
+        expect(nums).toSatisfy($ => Sum(...$) === 10)
+        expect(nums).toHaveLength(3)
+        expect(nums).toAllBeInteger()
+    })
+})

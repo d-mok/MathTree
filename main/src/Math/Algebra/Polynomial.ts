@@ -52,9 +52,7 @@ export class Host {
         function randomPartition(n: number): number[] {
             let len = vars.length
             if (n === 0) return Array(len).fill(0)
-            let ps = Partition(n, len, true)
-            let p = RndPick(...ps)
-            return RndShuffle(...p)
+            return RndPartition(n, len, true)
         }
 
         function randomMono(degree: number) {

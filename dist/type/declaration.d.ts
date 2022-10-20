@@ -3556,6 +3556,15 @@ declare module "Math/Code/Random" {
          * ```
          */
         static RndRatio(min: number, max: number, n?: number): number[];
+        /**
+         * a random partition of integer `n`.
+         * ```
+         * RndPartition(4) // may return [1,2,1]
+         * RndPartition(4, 2, false) // may return [3,1] or [2,2]
+         * RndPartition(4, 2, true) // may return [4,0] or [3,1] or [2,2]
+         * ```
+         */
+        static RndPartition(n: number, length?: number, allowZero?: boolean): number[];
     }
     global {
         var RndN: typeof Host.RndN;
@@ -3587,6 +3596,7 @@ declare module "Math/Code/Random" {
         var RndTrigEqv: typeof Host.RndTrigEqv;
         var RndPointPolar: typeof Host.RndPointPolar;
         var RndRatio: typeof Host.RndRatio;
+        var RndPartition: typeof Host.RndPartition;
     }
 }
 declare module "Math/Code/RandomShake.test" { }

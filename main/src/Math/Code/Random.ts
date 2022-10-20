@@ -543,6 +543,24 @@ export class Host {
         let nums = RndNs(min, max, n)
         return toNumbers(nums).ratio()
     }
+
+    /**
+     * a random partition of integer `n`.
+     * ```
+     * RndPartition(4) // may return [1,2,1]
+     * RndPartition(4, 2, false) // may return [3,1] or [2,2]
+     * RndPartition(4, 2, true) // may return [4,0] or [3,1] or [2,2]
+     * ```
+     */
+    @checkIt(owl.positiveInt, owl.positiveInt, owl.bool)
+    static RndPartition(
+        n: number,
+        length?: number,
+        allowZero = false
+    ): number[] {
+        let arr = Partition(n, length, allowZero)
+        return RndShuffle(...RndPick(...arr))
+    }
 }
 
 declare global {
@@ -575,4 +593,5 @@ declare global {
     var RndTrigEqv: typeof Host.RndTrigEqv
     var RndPointPolar: typeof Host.RndPointPolar
     var RndRatio: typeof Host.RndRatio
+    var RndPartition: typeof Host.RndPartition
 }
