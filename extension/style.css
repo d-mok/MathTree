@@ -79,14 +79,3 @@
 .cke_source {
   white-space: pre-wrap !important;
 }
-
-.qs td {
-  text-align: center !important;
-}
-
-.qs table,
-.qs th,
-.qs td {
-  border: 1px solid black !important;
-  border-collapse: collapse !important;
-}
