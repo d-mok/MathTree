@@ -954,7 +954,7 @@ export class AutoPenCls {
                     PolToRect([1, current]),
                     O,
                     PolToRect([1, next]),
-                    angleLabels[i] ?? angles[i] + '°'
+                    angleLabels[i] ?? angles[i]
                 )
             }
             current += a
