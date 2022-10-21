@@ -127,7 +127,7 @@ export class Host {
     }
 
     /**
-     * range of nums
+     * range of `nums`
      * ```
      * StatRange(1,2,3,4,5) // 4
      * StatRange(1,2,3,4,5,7) // 6
@@ -250,11 +250,11 @@ export class Host {
     /**
      * array of all integers between the min and max of `data`.
      * ```
-     * ListRange(1,1,4,4,3,3,3) \\ [1,2,3,4]
+     * Span(1,1,4,4,3,3,3) \\ [1,2,3,4]
      * ```
      */
     @checkIt(owl.int)
-    static ListRange(...data: number[]): number[] {
+    static Span(...data: number[]): number[] {
         let min = Math.min(...data)
         let max = Math.max(...data)
         return cal.range(min, max)
@@ -269,7 +269,7 @@ export class Host {
     @checkIt(owl.ntuple, owl.ntuple)
     static Freqs(data: number[], nums?: number[]): number[] {
         let ls = toList(data)
-        nums ??= ListRange(...data)
+        nums ??= Span(...data)
         let arr: number[] = []
         for (let v of nums) {
             arr.push(ls.freq(v))
@@ -338,7 +338,7 @@ declare global {
     var MedianAt: typeof Host.MedianAt
     var LowerQAt: typeof Host.LowerQAt
     var UpperQAt: typeof Host.UpperQAt
-    var ListRange: typeof Host.ListRange
+    var Span: typeof Host.Span
     var Freqs: typeof Host.Freqs
     var DataFromFreqs: typeof Host.DataFromFreqs
     var Summary: typeof Host.Summary

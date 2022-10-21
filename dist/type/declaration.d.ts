@@ -4076,7 +4076,7 @@ declare module "Math/Code/Stat" {
          */
         static UpperQ(...nums: number[]): number;
         /**
-         * range of nums
+         * range of `nums`
          * ```
          * StatRange(1,2,3,4,5) // 4
          * StatRange(1,2,3,4,5,7) // 6
@@ -4155,10 +4155,10 @@ declare module "Math/Code/Stat" {
         /**
          * array of all integers between the min and max of `data`.
          * ```
-         * ListRange(1,1,4,4,3,3,3) \\ [1,2,3,4]
+         * Span(1,1,4,4,3,3,3) \\ [1,2,3,4]
          * ```
          */
-        static ListRange(...data: number[]): number[];
+        static Span(...data: number[]): number[];
         /**
          * array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
          * ```
@@ -4204,7 +4204,7 @@ declare module "Math/Code/Stat" {
         var MedianAt: typeof Host.MedianAt;
         var LowerQAt: typeof Host.LowerQAt;
         var UpperQAt: typeof Host.UpperQAt;
-        var ListRange: typeof Host.ListRange;
+        var Span: typeof Host.Span;
         var Freqs: typeof Host.Freqs;
         var DataFromFreqs: typeof Host.DataFromFreqs;
         var Summary: typeof Host.Summary;
