@@ -169,7 +169,68 @@ export class Host {
             ],
         })
     }
-    // ************TO BE DONE!!! VALIDATE OBJECT
+
+    /**
+     * Print a grouped frequency table in latex.
+     * ```
+     * GroupFreqTable({
+     *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
+     *   dataLabel: '$x',
+     *   freqLabel: 'count'
+     *   intervalSample: [1, 5]
+     * })
+     * ```
+     */
+    static GroupFreqTable({
+        data,
+        dataLabel,
+        freqLabel,
+        intervalSample,
+    }: {
+        data: number[]
+        dataLabel: string
+        freqLabel: string
+        intervalSample: [number, number]
+    }): string {
+        let g = DataGroup(data, intervalSample)
+        return Table({
+            content: [
+                [dataLabel, freqLabel],
+                ...g.map($ => [$.lowerLimit + ' - ' + $.upperLimit, $.freq]),
+            ],
+        })
+    }
+
+    /**
+     * Print a grouped frequency table in latex.
+     * ```
+     * GroupFreqTable({
+     *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
+     *   dataLabel: '$x',
+     *   freqLabel: 'count'
+     *   intervalSample: [1, 5]
+     * })
+     * ```
+     */
+    static GroupCumFreqTable({
+        data,
+        dataLabel,
+        freqLabel,
+        intervalSample,
+    }: {
+        data: number[]
+        dataLabel: string
+        freqLabel: string
+        intervalSample: [number, number]
+    }): string {
+        let g = DataGroup(data, intervalSample)
+        return Table({
+            content: [
+                [dataLabel, freqLabel],
+                ...g.map($ => [$.upperBound, $.cumFreq]),
+            ],
+        })
+    }
 
     /**
      * Print a table in latex showing cartisian product of two items.

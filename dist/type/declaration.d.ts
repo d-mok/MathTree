@@ -2754,6 +2754,40 @@ declare module "Math/Code/Latex" {
             max?: number;
         }): string;
         /**
+         * Print a grouped frequency table in latex.
+         * ```
+         * GroupFreqTable({
+         *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
+         *   dataLabel: '$x',
+         *   freqLabel: 'count'
+         *   intervalSample: [1, 5]
+         * })
+         * ```
+         */
+        static GroupFreqTable({ data, dataLabel, freqLabel, intervalSample, }: {
+            data: number[];
+            dataLabel: string;
+            freqLabel: string;
+            intervalSample: [number, number];
+        }): string;
+        /**
+         * Print a grouped frequency table in latex.
+         * ```
+         * GroupFreqTable({
+         *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
+         *   dataLabel: '$x',
+         *   freqLabel: 'count'
+         *   intervalSample: [1, 5]
+         * })
+         * ```
+         */
+        static GroupCumFreqTable({ data, dataLabel, freqLabel, intervalSample, }: {
+            data: number[];
+            dataLabel: string;
+            freqLabel: string;
+            intervalSample: [number, number];
+        }): string;
+        /**
          * Print a table in latex showing cartisian product of two items.
          * @param rows - array of row values
          * @param cols - array of column values
