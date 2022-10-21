@@ -925,36 +925,28 @@ export class AutoPenCls {
         angleLabels: (string | null | undefined)[]
         size?: number
     }) {
-        let lbls = labels.map(
-            ($, i) => $ ?? cal.blur((angles[i] / 360) * 100) + '%'
-        )
-
         let O: Point2D = [0, 0]
         const pen = new Pen()
-        pen.range.set([-1.2, 1.2], [-1.2, 1.2])
+        pen.range.square(1.2)
         pen.size.set(size)
         pen.graph.circle(O, 1)
         pen.set.angle('polar')
 
         let current = 0
         for (let i = 0; i < angles.length; i++) {
-            let a = angles[i]
-            let next = current + a
+            let next = current + angles[i]
             pen.rod.line(O, next, 1)
+
             let H = PolToRect([0.7, (current + next) / 2]) // position of text
-            if (categories[i] === '') {
-                pen.write(H, lbls[i])
-            } else if (lbls[i] === '') {
-                pen.write(H, categories[i])
-            } else {
-                pen.label.point(H, categories[i], 90, 10)
-                pen.label.point(H, lbls[i], 270, 10)
-            }
+            let offsetR = categories[i] === '' || labels[i] === '' ? 0 : 10
+            let percent = cal.blur((angles[i] / 360) * 100) + '%'
+            pen.label.point(H, categories[i], 90, offsetR)
+            pen.label.point(H, labels[i] ?? percent, 270, offsetR)
 
             if (angleLabels[i] !== undefined) {
                 pen.angleDir(current, O, next, angleLabels[i] ?? angles[i])
             }
-            current += a
+            current += angles[i]
         }
         this.pen = pen
     }
@@ -1002,12 +994,11 @@ export class AutoPenCls {
     }) {
         const pen = new Pen()
 
-        let endGap = barWidth + barGap / 2
+        let endGap = barWidth
         let width = endGap + categories.length * (barWidth + barGap) + endGap
-        let max = Max(...data)
-        let maxUnit = Ceil(max / interval)
-        let maxSubUnit = maxUnit * (interval / subInterval)
-        let height = maxUnit * interval * 1.1
+        let maxY = Ceil(Max(...data), interval)
+        let maxSubY = Ceil(Max(...data), subInterval)
+        let height = maxY * 1.1
 
         pen.range.set([-width * 0.5, width], [-height, height])
         pen.size.resolution(0.2, 1.4 / height)
@@ -1021,52 +1012,54 @@ export class AutoPenCls {
 
         pen.label.point([width / 2, 0], xLabel, 270, 40)
 
-        function grid(y: number) {
+        function grid(y: number, alpha: number) {
+            pen.set.alpha(alpha)
             pen.line([0, y], [width, y])
+            pen.set.alpha()
         }
 
-        for (let y = 1; y <= maxUnit; y++) {
-            let h = y * interval
-            pen.set.alpha(0.2)
-            grid(h)
-            pen.cutY([0, h])
-            pen.set.alpha()
-            pen.label.point([0, h], h.toString(), 180)
+        for (let y = 0; y <= maxY; y += interval) {
+            grid(y, 0.2)
+            pen.tickY(y)
         }
 
-        for (let y = 1; y <= maxSubUnit; y++) {
-            pen.set.alpha(0.1)
-            grid(y * subInterval)
-            pen.set.alpha()
+        for (let y = 0; y <= maxSubY; y += subInterval) {
+            grid(y, 0.1)
         }
 
         function bar(x: number, w: number, h: number) {
-            pen.set.color('grey')
-            pen.polyfill([x, 0], [x, h], [x + w, h], [x + w, 0])
-            pen.set.color()
-            pen.polygon([x, 0], [x, h], [x + w, h], [x + w, 0])
+            pen.polyshape(
+                [x - w / 2, 0],
+                [x - w / 2, h],
+                [x + w / 2, h],
+                [x + w / 2, 0]
+            )
         }
 
-        function writeCat(x: number, w: number, text: string) {
-            pen.label.point([x + w / 2, 0], text, 270, 15)
+        function writeCat(x: number, text: string) {
+            pen.label.point([x, 0], text, 270, 15)
+        }
+
+        function getX(i: number): number {
+            return endGap + (0.5 + i) * (barWidth + barGap)
         }
 
         if (showBar) {
             for (let i = 0; i < categories.length; i++) {
-                let x = endGap + i * (barWidth + barGap) + barGap / 2
+                let x = getX(i)
                 bar(x, barWidth, data[i])
-                writeCat(x, barWidth, categories[i])
+                writeCat(x, categories[i])
             }
         }
 
         if (showLine) {
             let points: Point2D[] = []
             for (let i = 0; i < categories.length; i++) {
-                let x = endGap + i * (barWidth + barGap) + barGap / 2
-                let p: Point2D = [x + barWidth / 2, data[i]]
+                let x = getX(i)
+                let p: Point2D = [x, data[i]]
                 pen.point(p)
                 points.push(p)
-                writeCat(x, barWidth, categories[i])
+                writeCat(x, categories[i])
             }
             pen.set.weight(2)
             pen.polyline(...points)
