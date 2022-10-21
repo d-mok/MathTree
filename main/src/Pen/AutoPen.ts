@@ -958,19 +958,23 @@ export class AutoPenCls {
      * pen.HeightChart({
      *   categories: ['a','b','c','d','e'],
      *   freqs: [7, 47, 15, 3, 7],
+     *   // data = [2, 2, 2, 7, 7, 7, 7],
+     *   // intervalSample = [1, 5],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
      *   interval: 5,
      *   subInterval: 1,
-     *   barWidth: 0.5,
      *   colWidth: 1,
+     *   barWidth: 0.8,
      *   mode: 'bar',
      * })
      * ```
      */
     HeightChart({
-        categories,
-        freqs,
+        categories = [],
+        freqs = [],
+        data,
+        intervalSample,
         xLabel = '',
         yLabel = '',
         interval = 5,
@@ -979,17 +983,33 @@ export class AutoPenCls {
         colWidth = 1,
         mode = 'bar',
     }: {
-        categories: string[]
-        freqs: number[]
+        categories?: (string | number)[]
+        freqs?: number[]
+        data?: number[]
+        intervalSample?: [number, number]
         xLabel?: string
         yLabel?: string
         interval?: number
         subInterval?: number
         barWidth?: number
         colWidth?: number
-        mode: 'bar' | 'line' | 'hist' | 'freq' | 'cumFreq'
+        mode: 'bar' | 'line' | 'hist' | 'freq'
     }) {
-        const pen = new Pen()
+        if (categories.length === 0 || freqs.length === 0) {
+            if (data === undefined || intervalSample === undefined)
+                throw '[HeightChart] data and intervalSample must be supplied when categories or freqs is not.'
+            let bin = Bin(data, intervalSample)
+            if (mode === 'freq') {
+                categories.push(bin[0].mark - bin[0].width)
+                freqs.push(0)
+            }
+            categories.push(...bin.map($ => $.mark))
+            freqs.push(...bin.map($ => $.freq))
+            if (mode === 'freq') {
+                categories.push(bin.at(-1)!.mark + bin[0].width)
+                freqs.push(0)
+            }
+        }
 
         let endGap = colWidth
         let width = endGap + categories.length * colWidth + endGap
@@ -997,6 +1017,7 @@ export class AutoPenCls {
         let maxSubY = Ceil(Max(...freqs), subInterval)
         let height = maxY * 1.1
 
+        const pen = new Pen()
         pen.range.set([-width * 0.5, width], [-height, height])
         pen.size.resolution(0.2, 1.4 / height)
 
@@ -1048,7 +1069,7 @@ export class AutoPenCls {
             function writeCat(x: number, text: string) {
                 pen.label.point([x, 0], text, 270, 15)
             }
-            categories.forEach(($, i) => writeCat(getX(i), $))
+            categories.forEach(($, i) => writeCat(getX(i), String($)))
         }
 
         function drawLine() {
@@ -1071,6 +1092,12 @@ export class AutoPenCls {
 
         if (mode === 'hist') {
             drawBars()
+            drawXTicks()
+            writeCats()
+        }
+
+        if (mode === 'freq') {
+            drawLine()
             drawXTicks()
             writeCats()
         }

@@ -196,7 +196,7 @@ export class Host {
         return Table({
             content: [
                 [dataLabel, freqLabel],
-                ...g.map($ => [$.lowerLimit + ' - ' + $.upperLimit, $.freq]),
+                ...g.map($ => [$.loLimit + ' - ' + $.upLimit, $.freq]),
             ],
         })
     }
@@ -227,7 +227,7 @@ export class Host {
         return Table({
             content: [
                 [dataLabel, freqLabel],
-                ...g.map($ => [$.upperBound, $.cumFreq]),
+                ...g.map($ => [$.upBound, $.cumFreq]),
             ],
         })
     }

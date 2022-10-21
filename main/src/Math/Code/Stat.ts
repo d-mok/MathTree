@@ -312,12 +312,12 @@ export class Host {
     @checkIt(owl.ntuple, owl.couple)
     static Bin(data: number[], intervalSample: [number, number]) {
         type Interval = {
-            lowerLimit: number
-            upperLimit: number
-            classMark: number
-            lowerBound: number
-            upperBound: number
-            classWidth: number
+            loLimit: number
+            upLimit: number
+            mark: number
+            loBound: number
+            upBound: number
+            width: number
             freq: number
             cumFreq: number
         }
@@ -337,12 +337,12 @@ export class Host {
             let freq = data.filter(x => x >= l - 0.5 && x < u + 0.5).length
             cumFreq += freq
             intervals.push({
-                lowerLimit: l,
-                upperLimit: u,
-                classMark: (l + u) / 2,
-                lowerBound: l - 0.5,
-                upperBound: u + 0.5,
-                classWidth: width,
+                loLimit: l,
+                upLimit: u,
+                mark: (l + u) / 2,
+                loBound: l - 0.5,
+                upBound: u + 0.5,
+                width: width,
                 freq,
                 cumFreq,
             })

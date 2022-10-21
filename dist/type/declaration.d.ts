@@ -4212,12 +4212,12 @@ declare module "Math/Code/Stat" {
          * ```
          */
         static Bin(data: number[], intervalSample: [number, number]): {
-            lowerLimit: number;
-            upperLimit: number;
-            classMark: number;
-            lowerBound: number;
-            upperBound: number;
-            classWidth: number;
+            loLimit: number;
+            upLimit: number;
+            mark: number;
+            loBound: number;
+            upBound: number;
+            width: number;
             freq: number;
             cumFreq: number;
         }[];
@@ -5072,6 +5072,8 @@ declare module "Pen/AutoPen" {
          * pen.HeightChart({
          *   categories: ['a','b','c','d','e'],
          *   freqs: [7, 47, 15, 3, 7],
+         *   // data = [2, 2, 2, 7, 7, 7, 7],
+         *   // intervalSample = [1, 5],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
          *   interval: 5,
@@ -5082,16 +5084,18 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        HeightChart({ categories, freqs, xLabel, yLabel, interval, subInterval, barWidth, colWidth, mode, }: {
-            categories: string[];
-            freqs: number[];
+        HeightChart({ categories, freqs, data, intervalSample, xLabel, yLabel, interval, subInterval, barWidth, colWidth, mode, }: {
+            categories?: (string | number)[];
+            freqs?: number[];
+            data?: number[];
+            intervalSample?: [number, number];
             xLabel?: string;
             yLabel?: string;
             interval?: number;
             subInterval?: number;
             barWidth?: number;
             colWidth?: number;
-            mode: 'bar' | 'line' | 'hist' | 'freq' | 'cumFreq';
+            mode: 'bar' | 'line' | 'hist' | 'freq';
         }): void;
         /**
          * A boxplot
