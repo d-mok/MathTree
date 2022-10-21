@@ -1518,7 +1518,7 @@ function HeightChart({
     colWidth: number
     barWidth?: number
 }) {
-    let endGap = colWidth
+    let endGap = colWidth / 2
     let width = endGap + categories.length * colWidth + endGap
     let maxY = Ceil(Max(...freqs), interval)
     let height = maxY * 1.1
