@@ -1106,6 +1106,108 @@ export class AutoPenCls {
     }
 
     /**
+     * A bar chart.
+     * ```
+     * let pen = new AutoPen()
+     * pen.BarChart({
+     *   categories: ['a','b','c','d','e'],
+     *   freqs: [7, 47, 15, 3, 7],
+     *   xLabel: 'x-axis',
+     *   yLabel: 'y-axis',
+     *   interval: 5,
+     *   subInterval: 1,
+     *   colWidth: 1,
+     *   barWidth: 0.8,
+     * })
+     * ```
+     */
+    BarChart({
+        categories,
+        freqs,
+        xLabel = '',
+        yLabel = '',
+        interval = 5,
+        subInterval = 1,
+        colWidth = 1,
+        barWidth = 0.8,
+    }: {
+        categories: (string | number)[]
+        freqs: number[]
+        xLabel?: string
+        yLabel?: string
+        interval?: number
+        subInterval?: number
+        colWidth?: number
+        barWidth?: number
+    }) {
+        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
+            HeightChart({
+                categories,
+                freqs,
+                xLabel,
+                yLabel,
+                interval,
+                subInterval,
+                colWidth,
+                barWidth,
+            })
+
+        drawBars()
+        drawCategories()
+
+        this.pen = pen
+    }
+
+    /**
+     * A line chart.
+     * ```
+     * let pen = new AutoPen()
+     * pen.LineChart({
+     *   categories: ['a','b','c','d','e'],
+     *   freqs: [7, 47, 15, 3, 7],
+     *   xLabel: 'x-axis',
+     *   yLabel: 'y-axis',
+     *   interval: 5,
+     *   subInterval: 1,
+     *   colWidth: 1,
+     * })
+     * ```
+     */
+    LineChart({
+        categories,
+        freqs,
+        xLabel = '',
+        yLabel = '',
+        interval = 5,
+        subInterval = 1,
+        colWidth = 1,
+    }: {
+        categories: (string | number)[]
+        freqs: number[]
+        xLabel?: string
+        yLabel?: string
+        interval?: number
+        subInterval?: number
+        colWidth?: number
+    }) {
+        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
+            HeightChart({
+                categories,
+                freqs,
+                xLabel,
+                yLabel,
+                interval,
+                subInterval,
+                colWidth,
+            })
+
+        drawLine()
+        drawCategories()
+
+        this.pen = pen
+    }
+
+    /**
      * A boxplot
      * ```
      * let pen = new AutoPen()
@@ -1390,4 +1492,97 @@ export class AutoPenCls {
 
         this.pen = pen
     }
+}
+
+function HeightChart({
+    categories,
+    freqs,
+    xLabel,
+    yLabel,
+    interval,
+    subInterval,
+    colWidth,
+    barWidth = 0,
+}: {
+    categories: (string | number)[]
+    freqs: number[]
+    xLabel: string
+    yLabel: string
+    interval: number
+    subInterval: number
+    colWidth: number
+    barWidth?: number
+}) {
+    let endGap = colWidth
+    let width = endGap + categories.length * colWidth + endGap
+    let maxY = Ceil(Max(...freqs), interval)
+    let maxSubY = Ceil(Max(...freqs), subInterval)
+    let height = maxY * 1.1
+
+    const pen = new Pen()
+    pen.range.set([-width * 0.5, width], [-height, height])
+    pen.size.resolution(0.2, 1.4 / height)
+
+    pen.line([0, 0], [width, 0])
+    pen.arrow([0, 0], [0, height])
+
+    pen.set.textDir(90)
+    pen.write([-1.5, height / 2], yLabel)
+    pen.set.textDir()
+
+    pen.label.point([width / 2, 0], xLabel, 270, 40)
+
+    function grid(y: number, alpha: number) {
+        pen.set.alpha(alpha)
+        pen.line([0, y], [width, y])
+        pen.set.alpha()
+    }
+
+    for (let y = 0; y <= maxY; y += interval) {
+        grid(y, 0.2)
+        pen.tickY(y)
+    }
+
+    for (let y = 0; y <= maxSubY; y += subInterval) {
+        grid(y, 0.1)
+    }
+
+    function getX(i: number): number {
+        return endGap + (0.5 + i) * colWidth
+    }
+
+    let Xs = freqs.forEach(($, i) => getX(i))
+
+    function drawBars() {
+        function bar(x: number, h: number) {
+            pen.polyshape(
+                [x - barWidth / 2, 0],
+                [x - barWidth / 2, h],
+                [x + barWidth / 2, h],
+                [x + barWidth / 2, 0]
+            )
+        }
+        freqs.forEach(($, i) => bar(getX(i), $))
+    }
+
+    function drawXTicks() {
+        categories.forEach(($, i) => pen.tickX(getX(i)))
+    }
+
+    function drawCategories() {
+        function writeCat(x: number, text: string) {
+            pen.label.point([x, 0], text, 270, 15)
+        }
+        categories.forEach(($, i) => writeCat(getX(i), String($)))
+    }
+
+    function drawLine() {
+        let points: Point2D[] = freqs.map((v, i) => [getX(i), v])
+        points.forEach($ => pen.point($))
+        pen.set.weight(2)
+        pen.polyline(...points)
+        pen.set.weight()
+    }
+
+    return { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs }
 }

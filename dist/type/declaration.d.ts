@@ -2773,7 +2773,7 @@ declare module "Math/Code/Latex" {
         /**
          * Print a grouped frequency table in latex.
          * ```
-         * GroupFreqTable({
+         * GroupCumFreqTable({
          *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
          *   dataLabel: '$x',
          *   freqLabel: 'count'
@@ -5098,6 +5098,56 @@ declare module "Pen/AutoPen" {
             barWidth?: number;
             colWidth?: number;
             mode: 'bar' | 'line' | 'hist' | 'freq' | 'cumFreq';
+        }): void;
+        /**
+         * A bar chart.
+         * ```
+         * let pen = new AutoPen()
+         * pen.BarChart({
+         *   categories: ['a','b','c','d','e'],
+         *   freqs: [7, 47, 15, 3, 7],
+         *   xLabel: 'x-axis',
+         *   yLabel: 'y-axis',
+         *   interval: 5,
+         *   subInterval: 1,
+         *   colWidth: 1,
+         *   barWidth: 0.8,
+         * })
+         * ```
+         */
+        BarChart({ categories, freqs, xLabel, yLabel, interval, subInterval, colWidth, barWidth, }: {
+            categories: (string | number)[];
+            freqs: number[];
+            xLabel?: string;
+            yLabel?: string;
+            interval?: number;
+            subInterval?: number;
+            colWidth?: number;
+            barWidth?: number;
+        }): void;
+        /**
+         * A line chart.
+         * ```
+         * let pen = new AutoPen()
+         * pen.LineChart({
+         *   categories: ['a','b','c','d','e'],
+         *   freqs: [7, 47, 15, 3, 7],
+         *   xLabel: 'x-axis',
+         *   yLabel: 'y-axis',
+         *   interval: 5,
+         *   subInterval: 1,
+         *   colWidth: 1,
+         * })
+         * ```
+         */
+        LineChart({ categories, freqs, xLabel, yLabel, interval, subInterval, colWidth, }: {
+            categories: (string | number)[];
+            freqs: number[];
+            xLabel?: string;
+            yLabel?: string;
+            interval?: number;
+            subInterval?: number;
+            colWidth?: number;
         }): void;
         /**
          * A boxplot

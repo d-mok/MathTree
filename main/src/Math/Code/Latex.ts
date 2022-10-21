@@ -67,7 +67,6 @@ export class Host {
         T += ' \\end{array}'
         return T
     }
-    // ************TO BE DONE!!! VALIDATE OBJECT
 
     /**
      * Print a table in latex.
@@ -133,7 +132,6 @@ export class Host {
         T += ` \\end{array}`
         return T
     }
-    // ************TO BE DONE!!! VALIDATE OBJECT
 
     /**
      * Print a frequency table in latex.
@@ -192,11 +190,13 @@ export class Host {
         freqLabel: string
         intervalSample: [number, number]
     }): string {
-        let g = Bin(data, intervalSample)
         return Table({
             content: [
                 [dataLabel, freqLabel],
-                ...g.map($ => [$.loLimit + ' - ' + $.upLimit, $.freq]),
+                ...Bin(data, intervalSample).map($ => [
+                    $.loLimit + ' - ' + $.upLimit,
+                    $.freq,
+                ]),
             ],
         })
     }
@@ -223,11 +223,10 @@ export class Host {
         freqLabel: string
         intervalSample: [number, number]
     }): string {
-        let g = Bin(data, intervalSample)
         return Table({
             content: [
                 [dataLabel, freqLabel],
-                ...g.map($ => [$.upBound, $.cumFreq]),
+                ...Bin(data, intervalSample).map($ => [$.upBound, $.cumFreq]),
             ],
         })
     }
@@ -294,7 +293,6 @@ export class Host {
 
         return T
     }
-    // ************TO BE DONE!!! VALIDATE OBJECT
 
     /**
      * Print the check vertice steps.
@@ -328,7 +326,6 @@ export class Host {
         }
         return T
     }
-    // ************TO BE DONE!!! VALIDATE OBJECT
 
     /**
      * A short division for prime factorization of numbers.
