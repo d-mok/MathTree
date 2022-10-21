@@ -3913,13 +3913,15 @@ declare module "Math/Code/Relation" {
 declare module "Math/Code/Sequence" {
     export class Host {
         /**
-         * an array of integers from start to end inclusive.
+         * array of all integers between (inclusive) the min and max of `nums`.
          * ```
          * Rng(2,6) // [2,3,4,5,6]
+         * Rng(6,2) // [2,3,4,5,6]
          * Rng(-2,1) // [-2,-1,0,1]
+         * Rng(1,1,4,4,3,3,3) \\ [1,2,3,4]
          * ```
          */
-        static Rng(start: number, end: number): number[];
+        static Rng(...nums: number[]): number[];
         /**
          * Tn in an arithmetic sequence: a+(n-1)d
          * ```
@@ -4155,27 +4157,12 @@ declare module "Math/Code/Stat" {
          */
         static UpperQAt(total: number): number;
         /**
-         * array of all integers between the min and max of `data`.
-         * ```
-         * Span(1,1,4,4,3,3,3) \\ [1,2,3,4]
-         * ```
-         */
-        static Span(...data: number[]): number[];
-        /**
          * array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
          * ```
          * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
          * ```
          */
         static Freqs(data: number[], nums?: number[]): number[];
-        /**
-         * make a data set from frequencies
-         * ```
-         * DataFromFreqs([1,9,5],[2,2,3])
-         * // [1,1,9,9,5,5,5]
-         * ```
-         */
-        static DataFromFreqs(values: number[], frequencies: number[]): number[];
         /**
          * array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
          * ```
@@ -4222,10 +4209,9 @@ declare module "Math/Code/Stat" {
         var MedianAt: typeof Host.MedianAt;
         var LowerQAt: typeof Host.LowerQAt;
         var UpperQAt: typeof Host.UpperQAt;
-        var Span: typeof Host.Span;
         var Freqs: typeof Host.Freqs;
-        var DataFromFreqs: typeof Host.DataFromFreqs;
         var Summary: typeof Host.Summary;
+        var DataGroup: typeof Host.DataGroup;
     }
 }
 declare module "Math/Code/Text" {

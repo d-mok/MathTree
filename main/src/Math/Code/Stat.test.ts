@@ -161,22 +161,43 @@ test('UpperQAt', () => {
     expect(UpperQAt(20)).toBe(15.5)
 })
 
-test('Span', () => {
-    expect(Span(1, 1, 4, 4, 3, 3, 3)).toEqual([1, 2, 3, 4])
-})
-
 test('Freqs', () => {
     expect(Freqs([1, 1, 4, 4, 3, 3, 3], [1, 2, 3, 4])).toEqual([2, 0, 3, 2])
     expect(Freqs([1, 1, 4, 4, 3, 3, 3])).toEqual([2, 0, 3, 2])
 })
 
-test('DataFromFreqs', () => {
-    expect(DataFromFreqs([1, 9, 5], [2, 2, 3])).toEqual([1, 1, 9, 9, 5, 5, 5])
-})
+// test('DataFromFreqs', () => {
+//     expect(DataFromFreqs([1, 9, 5], [2, 2, 3])).toEqual([1, 1, 9, 9, 5, 5, 5])
+// })
 
 test('Summary', () => {
     expect(Summary(1, 1, 2, 3, 3, 3, 3, 4, 5, 5)).toStrictEqual([1, 2, 3, 4, 5])
     expect(Summary(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).toStrictEqual([
         1, 3, 5.5, 8, 10,
+    ])
+})
+
+test('DataGroup', () => {
+    expect(DataGroup([2, 2, 3, 3, 7, 7, 7, 8, 8], [11, 15])).toEqual([
+        {
+            lowerLimit: 1,
+            upperLimit: 5,
+            classMark: 3,
+            lowerBound: 0.5,
+            upperBound: 5.5,
+            classWidth: 5,
+            freq: 4,
+            cumFreq: 4,
+        },
+        {
+            lowerLimit: 6,
+            upperLimit: 10,
+            classMark: 8,
+            lowerBound: 5.5,
+            upperBound: 10.5,
+            classWidth: 5,
+            freq: 5,
+            cumFreq: 9,
+        },
     ])
 })

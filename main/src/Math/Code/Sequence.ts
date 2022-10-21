@@ -1,22 +1,22 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
     /**
-     * an array of integers from start to end inclusive.
+     * array of all integers between (inclusive) the min and max of `nums`.
      * ```
      * Rng(2,6) // [2,3,4,5,6]
+     * Rng(6,2) // [2,3,4,5,6]
      * Rng(-2,1) // [-2,-1,0,1]
+     * Rng(1,1,4,4,3,3,3) \\ [1,2,3,4]
      * ```
      */
     @checkIt(owl.num)
-    @inspectIt(function is_range(start, end) {
-        return start < end
-    })
-    static Rng(start: number, end: number): number[] {
-        return cal.range(start, end)
+    static Rng(...nums: number[]): number[] {
+        let min = Math.min(...nums)
+        let max = Math.max(...nums)
+        return cal.range(min, max)
     }
 
     /**
@@ -144,9 +144,6 @@ export class Host {
     }
 }
 
-
-
-
 declare global {
     var Rng: typeof Host.Rng
     var ASterm: typeof Host.ASterm
@@ -158,6 +155,3 @@ declare global {
     var QuadraticSequence: typeof Host.QuadraticSequence
     var LucasSequence: typeof Host.LucasSequence
 }
-
-
-

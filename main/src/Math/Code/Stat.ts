@@ -248,19 +248,6 @@ export class Host {
     }
 
     /**
-     * array of all integers between the min and max of `data`.
-     * ```
-     * Span(1,1,4,4,3,3,3) \\ [1,2,3,4]
-     * ```
-     */
-    @checkIt(owl.int)
-    static Span(...data: number[]): number[] {
-        let min = Math.min(...data)
-        let max = Math.max(...data)
-        return cal.range(min, max)
-    }
-
-    /**
      * array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
      * ```
      * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
@@ -269,7 +256,7 @@ export class Host {
     @checkIt(owl.ntuple, owl.ntuple)
     static Freqs(data: number[], nums?: number[]): number[] {
         let ls = toList(data)
-        nums ??= Span(...data)
+        nums ??= Rng(...data)
         let arr: number[] = []
         for (let v of nums) {
             arr.push(ls.freq(v))
@@ -277,25 +264,25 @@ export class Host {
         return arr
     }
 
-    /**
-     * make a data set from frequencies
-     * ```
-     * DataFromFreqs([1,9,5],[2,2,3])
-     * // [1,1,9,9,5,5,5]
-     * ```
-     */
-    @checkIt(owl.ntuple)
-    static DataFromFreqs(values: number[], frequencies: number[]): number[] {
-        Should(
-            values.length === frequencies.length,
-            'values and frequencies must be the same length'
-        )
-        let data: number[] = []
-        for (let i = 0; i < values.length; i++) {
-            data.push(...Array(frequencies[i]).fill(values[i]))
-        }
-        return data
-    }
+    // /**
+    //  * make a data set from frequencies
+    //  * ```
+    //  * DataFromFreqs([1,9,5],[2,2,3])
+    //  * // [1,1,9,9,5,5,5]
+    //  * ```
+    //  */
+    // @checkIt(owl.ntuple)
+    // static DataFromFreqs(values: number[], frequencies: number[]): number[] {
+    //     Should(
+    //         values.length === frequencies.length,
+    //         'values and frequencies must be the same length'
+    //     )
+    //     let data: number[] = []
+    //     for (let i = 0; i < values.length; i++) {
+    //         data.push(...Array(frequencies[i]).fill(values[i]))
+    //     }
+    //     return data
+    // }
 
     /**
      * array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
@@ -322,7 +309,7 @@ export class Host {
      * DataGroup([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
      * ```
      */
-    @checkIt(owl.num)
+    @checkIt(owl.ntuple, owl.couple)
     static DataGroup(data: number[], intervalSample: [number, number]) {
         type Interval = {
             lowerLimit: number
@@ -388,8 +375,8 @@ declare global {
     var MedianAt: typeof Host.MedianAt
     var LowerQAt: typeof Host.LowerQAt
     var UpperQAt: typeof Host.UpperQAt
-    var Span: typeof Host.Span
     var Freqs: typeof Host.Freqs
-    var DataFromFreqs: typeof Host.DataFromFreqs
+    // var DataFromFreqs: typeof Host.DataFromFreqs
     var Summary: typeof Host.Summary
+    var DataGroup: typeof Host.DataGroup
 }
