@@ -142,12 +142,15 @@ export class Host {
      * ```
      * Ceil(1.1) // 2
      * Ceil(-1.1) // -1
-     * Ceil(2)) // 2
+     * Ceil(2) // 2
+     * Ceil(3,5,1) // Ceil 3 to [1,6,11,...], return 6
      * ```
      */
     @checkIt(owl.num)
-    static Ceil(num: number): number {
-        return Math.ceil(num)
+    static Ceil(num: number, interval = 1, offset = 0): number {
+        let scaleNum = (num - offset) / interval
+        scaleNum -= Number.EPSILON
+        return Math.ceil(scaleNum) * interval + offset
     }
 
     /**
@@ -156,11 +159,14 @@ export class Host {
      * Floor(1.9) // 1
      * Floor(-1.9) // -2
      * Floor(2)) // 2
+     * Floor(3,5,1) // Floor 3 to [1,6,11,...], return 1
      * ```
      */
     @checkIt(owl.num)
-    static Floor(num: number): number {
-        return Math.floor(num)
+    static Floor(num: number, interval = 1, offset = 0): number {
+        let scaleNum = (num - offset) / interval
+        scaleNum += Number.EPSILON
+        return Math.floor(scaleNum) * interval + offset
     }
 
     /**

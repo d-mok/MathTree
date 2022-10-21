@@ -315,6 +315,56 @@ export class Host {
             d.max(),
         ]
     }
+
+    /**
+     * group `data` into intervals
+     * ```
+     * DataGroup([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
+     * ```
+     */
+    @checkIt(owl.num)
+    static DataGroup(data: number[], intervalSample: [number, number]) {
+        type Interval = {
+            lowerLimit: number
+            upperLimit: number
+            classMark: number
+            lowerBound: number
+            upperBound: number
+            classWidth: number
+            freq: number
+            cumFreq: number
+        }
+
+        let [L, U] = intervalSample
+        let gap = U - L
+        let width = gap + 1
+        let l0 = Floor(Min(...data), width, L)
+        let u0 = l0 + gap
+        let intervals: Interval[] = []
+
+        let l = l0
+        let u = u0
+        let cumFreq = 0
+
+        while (data.length > cumFreq) {
+            let freq = data.filter(x => x >= l - 0.5 && x < u + 0.5).length
+            cumFreq += freq
+            intervals.push({
+                lowerLimit: l,
+                upperLimit: u,
+                classMark: (l + u) / 2,
+                lowerBound: l - 0.5,
+                upperBound: u + 0.5,
+                classWidth: width,
+                freq,
+                cumFreq,
+            })
+            l += width
+            u += width
+        }
+
+        return intervals
+    }
 }
 
 declare global {

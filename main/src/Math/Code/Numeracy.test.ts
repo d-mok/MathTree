@@ -134,6 +134,9 @@ test('Ceil', () => {
     expect(Ceil(-1.5)).toBe(-1)
     expect(Ceil(-1.1)).toBe(-1)
     expect(Ceil(-1.9)).toBe(-1)
+    expect(Ceil(3, 5, 1)).toBe(6)
+    expect(Ceil(6, 5, 1)).toBe(6)
+    expect(Ceil(1, 5, 1)).toBe(1)
 })
 
 test('Floor', () => {
@@ -145,6 +148,9 @@ test('Floor', () => {
     expect(Floor(-1.5)).toBe(-2)
     expect(Floor(-1.1)).toBe(-2)
     expect(Floor(-1.9)).toBe(-2)
+    expect(Floor(3, 5, 1)).toBe(1)
+    expect(Floor(6, 5, 1)).toBe(6)
+    expect(Floor(1, 5, 1)).toBe(1)
 })
 
 // test('SimpRatio', () => {

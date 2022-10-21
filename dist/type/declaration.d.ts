@@ -3074,19 +3074,21 @@ declare module "Math/Code/Numeracy" {
          * ```
          * Ceil(1.1) // 2
          * Ceil(-1.1) // -1
-         * Ceil(2)) // 2
+         * Ceil(2) // 2
+         * Ceil(3,5,1) // Ceil 3 to [1,6,11,...], return 6
          * ```
          */
-        static Ceil(num: number): number;
+        static Ceil(num: number, interval?: number, offset?: number): number;
         /**
          * the floor integer of the number.
          * ```
          * Floor(1.9) // 1
          * Floor(-1.9) // -2
          * Floor(2)) // 2
+         * Floor(3,5,1) // Floor 3 to [1,6,11,...], return 1
          * ```
          */
-        static Floor(num: number): number;
+        static Floor(num: number, interval?: number, offset?: number): number;
         /**
          * reduce input array to integral ratio.
          * ```
@@ -4182,6 +4184,22 @@ declare module "Math/Code/Stat" {
          * ```
          */
         static Summary(...data: number[]): number[];
+        /**
+         * group `data` into intervals
+         * ```
+         * DataGroup([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
+         * ```
+         */
+        static DataGroup(data: number[], intervalSample: [number, number]): {
+            lowerLimit: number;
+            upperLimit: number;
+            classMark: number;
+            lowerBound: number;
+            upperBound: number;
+            classWidth: number;
+            freq: number;
+            cumFreq: number;
+        }[];
     }
     global {
         var Min: typeof Host.Min;
