@@ -204,7 +204,7 @@ export class Host {
     /**
      * Print a grouped frequency table in latex.
      * ```
-     * GroupFreqTable({
+     * GroupCumFreqTable({
      *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
      *   dataLabel: '$x',
      *   freqLabel: 'count'
@@ -411,6 +411,8 @@ declare global {
     var StemAndLeaf: typeof Host.StemAndLeaf
     var Table: typeof Host.Table
     var FreqTable: typeof Host.FreqTable
+    var GroupFreqTable: typeof Host.GroupFreqTable
+    var GroupCumFreqTable: typeof Host.GroupCumFreqTable
     var PairTable: typeof Host.PairTable
     var CheckVertices: typeof Host.CheckVertices
     var ShortDivision: typeof Host.ShortDivision

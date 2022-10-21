@@ -2848,6 +2848,8 @@ declare module "Math/Code/Latex" {
         var StemAndLeaf: typeof Host.StemAndLeaf;
         var Table: typeof Host.Table;
         var FreqTable: typeof Host.FreqTable;
+        var GroupFreqTable: typeof Host.GroupFreqTable;
+        var GroupCumFreqTable: typeof Host.GroupCumFreqTable;
         var PairTable: typeof Host.PairTable;
         var CheckVertices: typeof Host.CheckVertices;
         var ShortDivision: typeof Host.ShortDivision;
@@ -5078,8 +5080,8 @@ declare module "Pen/AutoPen" {
          *   yLabel: 'y-axis',
          *   interval: 5,
          *   subInterval: 1,
-         *   barWidth: 0.5,
          *   colWidth: 1,
+         *   barWidth: 0.8,
          *   mode: 'bar',
          * })
          * ```
@@ -5095,7 +5097,7 @@ declare module "Pen/AutoPen" {
             subInterval?: number;
             barWidth?: number;
             colWidth?: number;
-            mode: 'bar' | 'line' | 'hist' | 'freq';
+            mode: 'bar' | 'line' | 'hist' | 'freq' | 'cumFreq';
         }): void;
         /**
          * A boxplot
