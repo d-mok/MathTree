@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { solveCompoundInequality } from 'ruby'
 import { PenCls } from './Pen'
 
@@ -1054,6 +1055,164 @@ export class AutoPenCls {
     }
 
     /**
+     * ```
+     * let pen = new AutoPen()
+     * pen.Histogram({
+     *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
+     *   intervalSample: [1, 5],
+     *   xLabel: 'x-axis',
+     *   yLabel: 'y-axis',
+     *   interval: 5,
+     *   subInterval: 1,
+     *   colWidth: 1,
+     * })
+     * ```
+     */
+    Histogram({
+        data,
+        intervalSample,
+        xLabel = '',
+        yLabel = '',
+        interval = 5,
+        subInterval = interval / 5,
+        colWidth = 1,
+    }: {
+        data: number[]
+        intervalSample: [number, number]
+        xLabel?: string
+        yLabel?: string
+        interval?: number
+        subInterval?: number
+        colWidth?: number
+    }) {
+        let bin = Bin(data, intervalSample)
+
+        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
+            HeightChart({
+                categories: _.map(bin, 'mark'),
+                freqs: _.map(bin, 'freq'),
+                xLabel,
+                yLabel,
+                interval,
+                subInterval,
+                colWidth,
+            })
+
+        drawBars()
+        drawXTicks()
+        drawCategories()
+
+        this.pen = pen
+    }
+
+    /**
+     * ```
+     * let pen = new AutoPen()
+     * pen.FreqPolygon({
+     *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
+     *   intervalSample: [1, 5],
+     *   xLabel: 'x-axis',
+     *   yLabel: 'y-axis',
+     *   interval: 5,
+     *   subInterval: 1,
+     *   colWidth: 1,
+     * })
+     * ```
+     */
+    FreqPolygon({
+        data,
+        intervalSample,
+        xLabel = '',
+        yLabel = '',
+        interval = 5,
+        subInterval = interval / 5,
+        colWidth = 1,
+    }: {
+        data: number[]
+        intervalSample: [number, number]
+        xLabel?: string
+        yLabel?: string
+        interval?: number
+        subInterval?: number
+        colWidth?: number
+    }) {
+        let bin = Bin(data, intervalSample)
+        let width = bin[0].width
+
+        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
+            HeightChart({
+                categories: [
+                    bin[0].mark - width,
+                    ..._.map(bin, 'mark'),
+                    bin.at(-1)!.mark + width,
+                ],
+                freqs: [0, ..._.map(bin, 'freq'), 0],
+                xLabel,
+                yLabel,
+                interval,
+                subInterval,
+                colWidth,
+            })
+
+        drawLine()
+        drawXTicks()
+        drawCategories()
+
+        this.pen = pen
+    }
+
+    /**
+     * ```
+     * let pen = new AutoPen()
+     * pen.CumFreqPolygon({
+     *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
+     *   intervalSample: [1, 5],
+     *   xLabel: 'x-axis',
+     *   yLabel: 'y-axis',
+     *   interval: 5,
+     *   subInterval: 1,
+     *   colWidth: 1,
+     * })
+     * ```
+     */
+    CumFreqPolygon({
+        data,
+        intervalSample,
+        xLabel = '',
+        yLabel = '',
+        interval = 5,
+        subInterval = interval / 5,
+        colWidth = 1,
+    }: {
+        data: number[]
+        intervalSample: [number, number]
+        xLabel?: string
+        yLabel?: string
+        interval?: number
+        subInterval?: number
+        colWidth?: number
+    }) {
+        let bin = Bin(data, intervalSample)
+
+        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
+            HeightChart({
+                categories: [bin[0].mark - bin[0].width, ..._.map(bin, 'mark')],
+                freqs: [0, ..._.map(bin, 'cumFreq')],
+                xLabel,
+                yLabel,
+                interval,
+                subInterval,
+                colWidth,
+            })
+
+        drawLine()
+        drawXTicks()
+        drawCategories()
+
+        this.pen = pen
+    }
+
+    /**
      * A boxplot
      * ```
      * let pen = new AutoPen()
@@ -1348,7 +1507,7 @@ function HeightChart({
     interval,
     subInterval,
     colWidth,
-    barWidth = 0,
+    barWidth = colWidth,
 }: {
     categories: (string | number)[]
     freqs: number[]

@@ -5118,6 +5118,75 @@ declare module "Pen/AutoPen" {
             colWidth?: number;
         }): void;
         /**
+         * ```
+         * let pen = new AutoPen()
+         * pen.Histogram({
+         *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
+         *   intervalSample: [1, 5],
+         *   xLabel: 'x-axis',
+         *   yLabel: 'y-axis',
+         *   interval: 5,
+         *   subInterval: 1,
+         *   colWidth: 1,
+         * })
+         * ```
+         */
+        Histogram({ data, intervalSample, xLabel, yLabel, interval, subInterval, colWidth, }: {
+            data: number[];
+            intervalSample: [number, number];
+            xLabel?: string;
+            yLabel?: string;
+            interval?: number;
+            subInterval?: number;
+            colWidth?: number;
+        }): void;
+        /**
+         * ```
+         * let pen = new AutoPen()
+         * pen.FreqPolygon({
+         *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
+         *   intervalSample: [1, 5],
+         *   xLabel: 'x-axis',
+         *   yLabel: 'y-axis',
+         *   interval: 5,
+         *   subInterval: 1,
+         *   colWidth: 1,
+         * })
+         * ```
+         */
+        FreqPolygon({ data, intervalSample, xLabel, yLabel, interval, subInterval, colWidth, }: {
+            data: number[];
+            intervalSample: [number, number];
+            xLabel?: string;
+            yLabel?: string;
+            interval?: number;
+            subInterval?: number;
+            colWidth?: number;
+        }): void;
+        /**
+         * ```
+         * let pen = new AutoPen()
+         * pen.CumFreqPolygon({
+         *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
+         *   intervalSample: [1, 5],
+         *   xLabel: 'x-axis',
+         *   yLabel: 'y-axis',
+         *   interval: 5,
+         *   subInterval: 1,
+         *   colWidth: 1,
+         * })
+         * ```
+         */
+        CumFreqPolygon({ data, intervalSample, xLabel, yLabel, interval, subInterval, colWidth, }: {
+            data: number[];
+            intervalSample: [number, number];
+            xLabel?: string;
+            yLabel?: string;
+            interval?: number;
+            subInterval?: number;
+            colWidth?: number;
+        }): void;
+        /**
          * A boxplot
          * ```
          * let pen = new AutoPen()
