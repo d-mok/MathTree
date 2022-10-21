@@ -1127,7 +1127,7 @@ export class AutoPenCls {
         xLabel = '',
         yLabel = '',
         interval = 5,
-        subInterval = 1,
+        subInterval = interval / 5,
         colWidth = 1,
         barWidth = 0.8,
     }: {
@@ -1179,7 +1179,7 @@ export class AutoPenCls {
         xLabel = '',
         yLabel = '',
         interval = 5,
-        subInterval = 1,
+        subInterval = interval / 5,
         colWidth = 1,
     }: {
         categories: (string | number)[]
@@ -1516,7 +1516,6 @@ function HeightChart({
     let endGap = colWidth
     let width = endGap + categories.length * colWidth + endGap
     let maxY = Ceil(Max(...freqs), interval)
-    let maxSubY = Ceil(Max(...freqs), subInterval)
     let height = maxY * 1.1
 
     const pen = new Pen()
@@ -1543,7 +1542,7 @@ function HeightChart({
         pen.tickY(y)
     }
 
-    for (let y = 0; y <= maxSubY; y += subInterval) {
+    for (let y = 0; y <= maxY; y += subInterval) {
         grid(y, 0.1)
     }
 
