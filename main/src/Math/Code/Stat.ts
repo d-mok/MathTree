@@ -311,7 +311,12 @@ export class Host {
      */
     @checkIt(owl.ntuple, owl.couple)
     static Bin(data: number[], intervalSample: [number, number]) {
-        type Interval = {
+        let [L, U] = intervalSample
+        let gap = U - L
+        let width = gap + 1
+        let l0 = Floor(Min(...data), width, L)
+        let u0 = l0 + gap
+        let intervals: {
             loLimit: number
             upLimit: number
             mark: number
@@ -320,14 +325,7 @@ export class Host {
             width: number
             freq: number
             cumFreq: number
-        }
-
-        let [L, U] = intervalSample
-        let gap = U - L
-        let width = gap + 1
-        let l0 = Floor(Min(...data), width, L)
-        let u0 = l0 + gap
-        let intervals: Interval[] = []
+        }[] = []
 
         let l = l0
         let u = u0

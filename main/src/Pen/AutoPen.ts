@@ -1570,7 +1570,7 @@ function HeightChart({
     }
 
     function drawXTicks() {
-        categories.forEach(($, i) => pen.tickX(getX(i)))
+        categories.forEach(($, i) => pen.cutX(getX(i)))
     }
 
     function drawCategories() {
