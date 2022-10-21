@@ -993,7 +993,7 @@ export class AutoPenCls {
         subInterval?: number
         barWidth?: number
         colWidth?: number
-        mode: 'bar' | 'line' | 'hist' | 'freq'
+        mode: 'bar' | 'line' | 'hist' | 'freq' | 'cumFreq'
     }) {
         if (categories.length === 0 || freqs.length === 0) {
             if (data === undefined || intervalSample === undefined)
