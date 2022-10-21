@@ -5129,7 +5129,7 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        Histogram({ data, intervalSample, xLabel, yLabel, interval, subInterval, colWidth, }: {
+        Histogram({ data, intervalSample, xLabel, yLabel, interval, subInterval, colWidth, mode, }: {
             data: number[];
             intervalSample: [number, number];
             xLabel?: string;
@@ -5137,6 +5137,7 @@ declare module "Pen/AutoPen" {
             interval?: number;
             subInterval?: number;
             colWidth?: number;
+            mode?: 'mid' | 'end';
         }): void;
         /**
          * ```

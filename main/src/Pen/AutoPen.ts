@@ -1076,6 +1076,7 @@ export class AutoPenCls {
         interval = 5,
         subInterval = interval / 5,
         colWidth = 1,
+        mode = 'mid',
     }: {
         data: number[]
         intervalSample: [number, number]
@@ -1084,23 +1085,31 @@ export class AutoPenCls {
         interval?: number
         subInterval?: number
         colWidth?: number
+        mode?: 'mid' | 'end'
     }) {
         let bin = Bin(data, intervalSample)
 
-        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
+        let { pen, drawBars, drawXTicks, drawCategories, drawBound } =
             HeightChart({
                 categories: _.map(bin, 'mark'),
                 freqs: _.map(bin, 'freq'),
+                boundLabels: [bin[0].bound[0], ..._.map(bin, $ => $.bound[1])],
                 xLabel,
                 yLabel,
                 interval,
                 subInterval,
                 colWidth,
+                barWidth: colWidth,
             })
 
         drawBars()
-        drawXTicks()
-        drawCategories()
+        if (mode === 'mid') {
+            drawXTicks()
+            drawCategories()
+        }
+        if (mode === 'end') {
+            drawBound()
+        }
 
         this.pen = pen
     }
@@ -1502,6 +1511,7 @@ export class AutoPenCls {
 function HeightChart({
     categories,
     freqs,
+    boundLabels,
     xLabel,
     yLabel,
     interval,
@@ -1511,6 +1521,7 @@ function HeightChart({
 }: {
     categories: (string | number)[]
     freqs: number[]
+    boundLabels?: (string | number)[]
     xLabel: string
     yLabel: string
     interval: number
@@ -1574,10 +1585,16 @@ function HeightChart({
     }
 
     function drawCategories() {
-        function writeCat(x: number, text: string) {
-            pen.label.point([x, 0], text, 270, 15)
-        }
-        categories.forEach(($, i) => writeCat(getX(i), String($)))
+        categories.forEach(($, i) => pen.label.point([getX(i), 0], $, 270, 15))
+    }
+
+    function drawBound() {
+        // only for histogram
+        boundLabels?.forEach(($, i) => {
+            let x = getX(i) - barWidth / 2
+            pen.label.point([x, 0], $, 270, 15)
+            pen.cutX(x)
+        })
     }
 
     function drawLine() {
@@ -1588,5 +1605,13 @@ function HeightChart({
         pen.set.weight()
     }
 
-    return { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs }
+    return {
+        pen,
+        drawBars,
+        drawLine,
+        drawXTicks,
+        drawCategories,
+        drawBound,
+        Xs,
+    }
 }
