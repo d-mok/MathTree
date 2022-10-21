@@ -194,7 +194,7 @@ export class Host {
             content: [
                 [dataLabel, freqLabel],
                 ...Bin(data, intervalSample).map($ => [
-                    $.loLimit + ' - ' + $.upLimit,
+                    $.limit[0] + ' - ' + $.limit[1],
                     $.freq,
                 ]),
             ],
@@ -226,7 +226,7 @@ export class Host {
         return Table({
             content: [
                 [dataLabel, freqLabel],
-                ...Bin(data, intervalSample).map($ => [$.upBound, $.cumFreq]),
+                ...Bin(data, intervalSample).map($ => [$.bound[1], $.cumFreq]),
             ],
         })
     }

@@ -180,21 +180,17 @@ test('Summary', () => {
 test('Bin', () => {
     expect(Bin([2, 2, 3, 3, 7, 7, 7, 8, 8], [11, 15])).toEqual([
         {
-            loLimit: 1,
-            upLimit: 5,
+            limit: [1, 5],
+            bound: [0.5, 5.5],
             mark: 3,
-            loBound: 0.5,
-            upBound: 5.5,
             width: 5,
             freq: 4,
             cumFreq: 4,
         },
         {
-            loLimit: 6,
-            upLimit: 10,
+            limit: [6, 10],
+            bound: [5.5, 10.5],
             mark: 8,
-            loBound: 5.5,
-            upBound: 10.5,
             width: 5,
             freq: 5,
             cumFreq: 9,

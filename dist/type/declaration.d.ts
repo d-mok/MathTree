@@ -4214,11 +4214,9 @@ declare module "Math/Code/Stat" {
          * ```
          */
         static Bin(data: number[], intervalSample: [number, number]): {
-            loLimit: number;
-            upLimit: number;
+            limit: [number, number];
+            bound: [number, number];
             mark: number;
-            loBound: number;
-            upBound: number;
             width: number;
             freq: number;
             cumFreq: number;

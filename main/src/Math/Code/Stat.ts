@@ -317,11 +317,9 @@ export class Host {
         let l0 = Floor(Min(...data), width, L)
         let u0 = l0 + gap
         let intervals: {
-            loLimit: number
-            upLimit: number
+            limit: [number, number]
+            bound: [number, number]
             mark: number
-            loBound: number
-            upBound: number
             width: number
             freq: number
             cumFreq: number
@@ -335,11 +333,9 @@ export class Host {
             let freq = data.filter(x => x >= l - 0.5 && x < u + 0.5).length
             cumFreq += freq
             intervals.push({
-                loLimit: l,
-                upLimit: u,
+                limit: [l, u],
+                bound: [l - 0.5, u + 0.5],
                 mark: (l + u) / 2,
-                loBound: l - 0.5,
-                upBound: u + 0.5,
                 width: width,
                 freq,
                 cumFreq,
