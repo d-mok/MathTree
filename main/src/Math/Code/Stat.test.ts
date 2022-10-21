@@ -177,8 +177,8 @@ test('Summary', () => {
     ])
 })
 
-test('DataGroup', () => {
-    expect(DataGroup([2, 2, 3, 3, 7, 7, 7, 8, 8], [11, 15])).toEqual([
+test('Bin', () => {
+    expect(Bin([2, 2, 3, 3, 7, 7, 7, 8, 8], [11, 15])).toEqual([
         {
             lowerLimit: 1,
             upperLimit: 5,

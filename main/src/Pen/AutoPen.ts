@@ -957,47 +957,44 @@ export class AutoPenCls {
      * let pen = new AutoPen()
      * pen.HeightChart({
      *   categories: ['a','b','c','d','e'],
-     *   data:[7,47,15,3,7],
-     *   xLabel:'x-axis',
-     *   yLabel:'y-axis',
-     *   interval:5,
-     *   subInterval:1,
-     *   barWidth:1,
-     *   barGap:1,
-     *   showBar:true,
-     *   showLine:true
+     *   freqs: [7, 47, 15, 3, 7],
+     *   xLabel: 'x-axis',
+     *   yLabel: 'y-axis',
+     *   interval: 5,
+     *   subInterval: 1,
+     *   barWidth: 0.5,
+     *   colWidth: 1,
+     *   mode: 'bar',
      * })
      * ```
      */
     HeightChart({
         categories,
-        data,
+        freqs,
         xLabel = '',
         yLabel = '',
         interval = 5,
         subInterval = 1,
-        barWidth = 1,
-        barGap = 1,
-        showBar = false,
-        showLine = false,
+        barWidth = 0.5,
+        colWidth = 1,
+        mode = 'bar',
     }: {
         categories: string[]
-        data: number[]
+        freqs: number[]
         xLabel?: string
         yLabel?: string
         interval?: number
         subInterval?: number
         barWidth?: number
-        barGap?: number
-        showBar?: boolean
-        showLine?: boolean
+        colWidth?: number
+        mode: 'bar' | 'line' | 'hist' | 'freq' | 'cumFreq'
     }) {
         const pen = new Pen()
 
-        let endGap = barWidth
-        let width = endGap + categories.length * (barWidth + barGap) + endGap
-        let maxY = Ceil(Max(...data), interval)
-        let maxSubY = Ceil(Max(...data), subInterval)
+        let endGap = colWidth
+        let width = endGap + categories.length * colWidth + endGap
+        let maxY = Ceil(Max(...freqs), interval)
+        let maxSubY = Ceil(Max(...freqs), subInterval)
         let height = maxY * 1.1
 
         pen.range.set([-width * 0.5, width], [-height, height])
@@ -1027,43 +1024,55 @@ export class AutoPenCls {
             grid(y, 0.1)
         }
 
-        function bar(x: number, w: number, h: number) {
-            pen.polyshape(
-                [x - w / 2, 0],
-                [x - w / 2, h],
-                [x + w / 2, h],
-                [x + w / 2, 0]
-            )
-        }
-
-        function writeCat(x: number, text: string) {
-            pen.label.point([x, 0], text, 270, 15)
-        }
-
         function getX(i: number): number {
-            return endGap + (0.5 + i) * (barWidth + barGap)
+            return endGap + (0.5 + i) * colWidth
         }
 
-        if (showBar) {
-            for (let i = 0; i < categories.length; i++) {
-                let x = getX(i)
-                bar(x, barWidth, data[i])
-                writeCat(x, categories[i])
+        function drawBars() {
+            function bar(x: number, h: number) {
+                pen.polyshape(
+                    [x - barWidth / 2, 0],
+                    [x - barWidth / 2, h],
+                    [x + barWidth / 2, h],
+                    [x + barWidth / 2, 0]
+                )
             }
+            freqs.forEach(($, i) => bar(getX(i), $))
         }
 
-        if (showLine) {
-            let points: Point2D[] = []
-            for (let i = 0; i < categories.length; i++) {
-                let x = getX(i)
-                let p: Point2D = [x, data[i]]
-                pen.point(p)
-                points.push(p)
-                writeCat(x, categories[i])
+        function drawXTicks() {
+            categories.forEach(($, i) => pen.tickX(getX(i)))
+        }
+
+        function writeCats() {
+            function writeCat(x: number, text: string) {
+                pen.label.point([x, 0], text, 270, 15)
             }
+            categories.forEach(($, i) => writeCat(getX(i), $))
+        }
+
+        function drawLine() {
+            let points: Point2D[] = freqs.map((v, i) => [getX(i), v])
+            points.forEach($ => pen.point($))
             pen.set.weight(2)
             pen.polyline(...points)
             pen.set.weight()
+        }
+
+        if (mode === 'bar') {
+            drawBars()
+            writeCats()
+        }
+
+        if (mode === 'line') {
+            drawLine()
+            writeCats()
+        }
+
+        if (mode === 'hist') {
+            drawBars()
+            drawXTicks()
+            writeCats()
         }
 
         this.pen = pen

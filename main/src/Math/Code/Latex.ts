@@ -192,7 +192,7 @@ export class Host {
         freqLabel: string
         intervalSample: [number, number]
     }): string {
-        let g = DataGroup(data, intervalSample)
+        let g = Bin(data, intervalSample)
         return Table({
             content: [
                 [dataLabel, freqLabel],
@@ -223,7 +223,7 @@ export class Host {
         freqLabel: string
         intervalSample: [number, number]
     }): string {
-        let g = DataGroup(data, intervalSample)
+        let g = Bin(data, intervalSample)
         return Table({
             content: [
                 [dataLabel, freqLabel],

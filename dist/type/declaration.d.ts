@@ -4208,10 +4208,10 @@ declare module "Math/Code/Stat" {
         /**
          * group `data` into intervals
          * ```
-         * DataGroup([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
+         * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
          * ```
          */
-        static DataGroup(data: number[], intervalSample: [number, number]): {
+        static Bin(data: number[], intervalSample: [number, number]): {
             lowerLimit: number;
             upperLimit: number;
             classMark: number;
@@ -4245,7 +4245,7 @@ declare module "Math/Code/Stat" {
         var UpperQAt: typeof Host.UpperQAt;
         var Freqs: typeof Host.Freqs;
         var Summary: typeof Host.Summary;
-        var DataGroup: typeof Host.DataGroup;
+        var Bin: typeof Host.Bin;
     }
 }
 declare module "Math/Code/Text" {
@@ -5071,29 +5071,27 @@ declare module "Pen/AutoPen" {
          * let pen = new AutoPen()
          * pen.HeightChart({
          *   categories: ['a','b','c','d','e'],
-         *   data:[7,47,15,3,7],
-         *   xLabel:'x-axis',
-         *   yLabel:'y-axis',
-         *   interval:5,
-         *   subInterval:1,
-         *   barWidth:1,
-         *   barGap:1,
-         *   showBar:true,
-         *   showLine:true
+         *   freqs: [7, 47, 15, 3, 7],
+         *   xLabel: 'x-axis',
+         *   yLabel: 'y-axis',
+         *   interval: 5,
+         *   subInterval: 1,
+         *   barWidth: 0.5,
+         *   colWidth: 1,
+         *   mode: 'bar',
          * })
          * ```
          */
-        HeightChart({ categories, data, xLabel, yLabel, interval, subInterval, barWidth, barGap, showBar, showLine, }: {
+        HeightChart({ categories, freqs, xLabel, yLabel, interval, subInterval, barWidth, colWidth, mode, }: {
             categories: string[];
-            data: number[];
+            freqs: number[];
             xLabel?: string;
             yLabel?: string;
             interval?: number;
             subInterval?: number;
             barWidth?: number;
-            barGap?: number;
-            showBar?: boolean;
-            showLine?: boolean;
+            colWidth?: number;
+            mode: 'bar' | 'line' | 'hist' | 'freq' | 'cumFreq';
         }): void;
         /**
          * A boxplot

@@ -306,11 +306,11 @@ export class Host {
     /**
      * group `data` into intervals
      * ```
-     * DataGroup([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
+     * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
      * ```
      */
     @checkIt(owl.ntuple, owl.couple)
-    static DataGroup(data: number[], intervalSample: [number, number]) {
+    static Bin(data: number[], intervalSample: [number, number]) {
         type Interval = {
             lowerLimit: number
             upperLimit: number
@@ -378,5 +378,5 @@ declare global {
     var Freqs: typeof Host.Freqs
     // var DataFromFreqs: typeof Host.DataFromFreqs
     var Summary: typeof Host.Summary
-    var DataGroup: typeof Host.DataGroup
+    var Bin: typeof Host.Bin
 }
