@@ -1065,6 +1065,7 @@ export class AutoPenCls {
      *   interval: 5,
      *   subInterval: 1,
      *   colWidth: 1,
+     *   mode: 'mid,
      * })
      * ```
      */
