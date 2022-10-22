@@ -49,6 +49,7 @@ type pattern =
     | '*=.@'
     | '*==.@'
     | '*^×@'
+    | '*@th'
 
 export let blacksmith = new Blacksmith()
 
@@ -193,6 +194,11 @@ addRule('*==.@', 'labeledValue2', $ => {
 // print *^× as prime factors
 addRule('*^×@', 'num', $ => {
     return ink.printPrimeFactors($)
+})
+
+// print *×th as proper ordinal, e.g. 1st
+addRule('*@th', 'num', $ => {
+    return ink.printOrdinal($)
 })
 
 // print *x as normal
