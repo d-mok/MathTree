@@ -1131,7 +1131,10 @@ export class AutoPenCls {
         let bin = Bin(config.data, config.cls)
 
         let { pen, drawLine, drawXTicks, drawItems } = HeightChart({
-            items: [bin[0].mark - bin[0].width, ..._.map(bin, 'mark')],
+            items: [
+                bin[0].bound[1] - bin[0].width,
+                ..._.map(bin, $ => $.bound[1]),
+            ],
             freqs: [0, ..._.map(bin, 'cumFreq')],
             ...config,
         })
