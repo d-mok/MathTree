@@ -5153,6 +5153,7 @@ declare module "Pen/AutoPen" {
          *   yLabel: 'y-axis',
          *   // grid: [5, 1], // can be 5
          *   // colWidth: 1.2,
+         *   // guides: [2, 3]
          * })
          * ```
          */
@@ -5163,6 +5164,7 @@ declare module "Pen/AutoPen" {
             yLabel?: string;
             grid?: [main: number, sub: number] | number;
             colWidth?: number;
+            guides?: number[];
         }): void;
         /**
          * ```

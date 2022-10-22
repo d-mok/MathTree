@@ -1117,6 +1117,7 @@ export class AutoPenCls {
      *   yLabel: 'y-axis',
      *   // grid: [5, 1], // can be 5
      *   // colWidth: 1.2,
+     *   // guides: [2, 3]
      * })
      * ```
      */
@@ -1127,10 +1128,11 @@ export class AutoPenCls {
         yLabel?: string
         grid?: [main: number, sub: number] | number
         colWidth?: number
+        guides?: number[]
     }) {
         let bin = Bin(config.data, config.cls)
 
-        let { pen, drawLine, drawXTicks, drawItems } = HeightChart({
+        let { pen, drawLine, drawXTicks, drawItems, Xs } = HeightChart({
             items: [
                 bin[0].bound[1] - bin[0].width,
                 ..._.map(bin, $ => $.bound[1]),
@@ -1142,6 +1144,9 @@ export class AutoPenCls {
         drawLine()
         drawXTicks()
         drawItems()
+
+        for (let i of config.guides ?? [])
+            pen.guide([Xs[i + 1], _.map(bin, 'cumFreq')[i]])
 
         this.pen = pen
     }
@@ -1486,7 +1491,7 @@ function HeightChart({
         return endGap + (0.5 + i) * colWidth
     }
 
-    let Xs = freqs.forEach(($, i) => getX(i))
+    let Xs = freqs.map(($, i) => getX(i))
 
     function drawBars() {
         function bar(x: number, h: number) {
