@@ -1452,7 +1452,7 @@ function HeightChart({
     colWidth?: number
     barWidthRatio?: number
 }) {
-    let endGap = colWidth / 2
+    let endGap = colWidth / 5
     let width = endGap + items.length * colWidth + endGap
     let [interval, subInterval] = Array.isArray(grid) ? grid : [grid, grid / 5]
     let maxY = Ceil(Max(...freqs), interval)
