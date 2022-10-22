@@ -1141,12 +1141,12 @@ export class AutoPenCls {
             ...config,
         })
 
+        for (let i of config.guides ?? [])
+            pen.guide([Xs[i + 1], _.map(bin, 'cumFreq')[i]])
+
         drawLine()
         drawXTicks()
         drawItems()
-
-        for (let i of config.guides ?? [])
-            pen.guide([Xs[i + 1], _.map(bin, 'cumFreq')[i]])
 
         this.pen = pen
     }
