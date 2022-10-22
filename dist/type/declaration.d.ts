@@ -5139,6 +5139,7 @@ declare module "Pen/AutoPen" {
             yLabel?: string;
             grid?: [main: number, sub: number] | number;
             colWidth?: number;
+            bar?: boolean;
         }): void;
         /**
          * ```

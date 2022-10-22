@@ -1066,11 +1066,12 @@ export class AutoPenCls {
         yLabel?: string
         grid?: [main: number, sub: number] | number
         colWidth?: number
+        bar?: boolean
     }) {
         let bin = Bin(config.data, config.cls)
         let width = bin[0].width
 
-        let { pen, drawLine, drawXTicks, drawItems } = HeightChart({
+        let { pen, drawBars, drawLine, drawXTicks, drawItems } = HeightChart({
             items: [
                 bin[0].mark - width,
                 ..._.map(bin, 'mark'),
@@ -1078,11 +1079,13 @@ export class AutoPenCls {
             ],
             freqs: [0, ..._.map(bin, 'freq'), 0],
             ...config,
+            barWidthRatio: 1,
         })
 
         drawLine()
         drawXTicks()
         drawItems()
+        if (config.bar) drawBars()
 
         this.pen = pen
     }
