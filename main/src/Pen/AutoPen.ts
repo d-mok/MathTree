@@ -36,7 +36,6 @@ export class AutoPenCls {
      * @param items - Represent the inequalities.
      * @param ticks - Represent the tick or cross for each region.
      * ```
-     * let pen = new AutoPen()
      * pen.Inequalities({
      *    items:[
      *       { position: 0.3, sign: "\\ge", num: 5,vertical:true },
@@ -153,7 +152,6 @@ export class AutoPenCls {
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
      * ```
-     * let pen = new AutoPen()
      * pen.TrigSolution({trig:'sin', k:0.5})
      * ```
      */
@@ -343,7 +341,6 @@ export class AutoPenCls {
      * @param scale - scale for pen.setup.size()
      * @param ratio - ratio for pen.setup.size()
      * ```
-     * let pen = new AutoPen()
      * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
      * ```
      */
@@ -476,7 +473,6 @@ export class AutoPenCls {
      * @param heights - Whether to draw the height.
      * @param scale - scale for pen.setup.size()
      * ```
-     * let pen = new AutoPen()
      * pen.Triangle({
      *   vertices:[[0,0],[4,0],[0,3]],
      *   triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},
@@ -620,7 +616,6 @@ export class AutoPenCls {
      * @param ranges - Range of Canvas.
      * @param resolution - Resolution of Canvas
      * ```
-     * let pen = new AutoPen()
      * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
      * pen.LinearProgram({
      *     constraints,
@@ -861,7 +856,6 @@ export class AutoPenCls {
      * @param n - the pattern required
      * @param offset - offset of initial position
      * ```
-     * let pen = new AutoPen()
      * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
      * ```
      */
@@ -901,11 +895,9 @@ export class AutoPenCls {
     }
 
     /**
-     * A pie chart
      * ```
-     * let pen = new AutoPen()
      * pen.PieChart({
-     *   categories: ['a','b','c','d','e'],
+     *   items: ['a','b','c','d','e'],
      *   labels: ['10%','20%','y%',null,''],
      *   angles: [45,135,60,50,70],
      *   angleLabels: [null,'x',null,undefined,''],
@@ -914,13 +906,13 @@ export class AutoPenCls {
      * ```
      */
     PieChart({
-        categories,
+        items,
         labels,
         angles,
         angleLabels,
         size = 2,
     }: {
-        categories: string[]
+        items: string[]
         labels: (string | null)[]
         angles: number[]
         angleLabels: (string | null | undefined)[]
@@ -939,9 +931,9 @@ export class AutoPenCls {
             pen.rod.line(O, next, 1)
 
             let H = PolToRect([0.7, (current + next) / 2]) // position of text
-            let offsetR = categories[i] === '' || labels[i] === '' ? 0 : 10
+            let offsetR = items[i] === '' || labels[i] === '' ? 0 : 10
             let percent = cal.blur((angles[i] / 360) * 100) + '%'
-            pen.label.point(H, categories[i], 90, offsetR)
+            pen.label.point(H, items[i], 90, offsetR)
             pen.label.point(H, labels[i] ?? percent, 270, offsetR)
 
             if (angleLabels[i] !== undefined) {
@@ -953,163 +945,103 @@ export class AutoPenCls {
     }
 
     /**
-     * A bar chart.
      * ```
-     * let pen = new AutoPen()
      * pen.BarChart({
-     *   categories: ['a','b','c','d','e'],
+     *   items: ['a','b','c','d','e'],
      *   freqs: [7, 47, 15, 3, 7],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
-     *   interval: 5,
-     *   subInterval: 1,
-     *   colWidth: 1,
-     *   barWidth: 0.8,
+     *   // grid: [5, 1], // can be 5
+     *   // colWidth: 1.2,
      * })
      * ```
      */
-    BarChart({
-        categories,
-        freqs,
-        xLabel = '',
-        yLabel = '',
-        interval = 5,
-        subInterval = interval / 5,
-        colWidth = 1,
-        barWidth = 0.8,
-    }: {
-        categories: (string | number)[]
+    BarChart(config: {
+        items: (string | number)[]
         freqs: number[]
         xLabel?: string
         yLabel?: string
-        interval?: number
-        subInterval?: number
+        grid?: [main: number, sub: number] | number
         colWidth?: number
-        barWidth?: number
     }) {
-        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
-            HeightChart({
-                categories,
-                freqs,
-                xLabel,
-                yLabel,
-                interval,
-                subInterval,
-                colWidth,
-                barWidth,
-            })
+        let { pen, drawBars, drawItems } = HeightChart({
+            ...config,
+            barWidthRatio: 0.7,
+        })
 
         drawBars()
-        drawCategories()
+        drawItems()
 
         this.pen = pen
     }
 
     /**
-     * A line chart.
      * ```
-     * let pen = new AutoPen()
      * pen.LineChart({
-     *   categories: ['a','b','c','d','e'],
+     *   items: ['a','b','c','d','e'],
      *   freqs: [7, 47, 15, 3, 7],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
-     *   interval: 5,
-     *   subInterval: 1,
-     *   colWidth: 1,
+     *   // grid: [5, 1], // can be 5
+     *   // colWidth: 1.2,
      * })
      * ```
      */
-    LineChart({
-        categories,
-        freqs,
-        xLabel = '',
-        yLabel = '',
-        interval = 5,
-        subInterval = interval / 5,
-        colWidth = 1,
-    }: {
-        categories: (string | number)[]
+    LineChart(config: {
+        items: (string | number)[]
         freqs: number[]
         xLabel?: string
         yLabel?: string
-        interval?: number
-        subInterval?: number
+        grid?: [main: number, sub: number] | number
         colWidth?: number
     }) {
-        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
-            HeightChart({
-                categories,
-                freqs,
-                xLabel,
-                yLabel,
-                interval,
-                subInterval,
-                colWidth,
-            })
+        let { pen, drawLine, drawItems } = HeightChart(config)
 
         drawLine()
-        drawCategories()
+        drawItems()
 
         this.pen = pen
     }
 
     /**
      * ```
-     * let pen = new AutoPen()
      * pen.Histogram({
      *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-     *   intervalSample: [1, 5],
+     *   class: [1, 5],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
-     *   interval: 5,
-     *   subInterval: 1,
-     *   colWidth: 1,
+     *   // grid: [5, 1], // can be 5
+     *   // colWidth: 1.2,
      *   mode: 'mid,
      * })
      * ```
      */
-    Histogram({
-        data,
-        intervalSample,
-        xLabel = '',
-        yLabel = '',
-        interval = 5,
-        subInterval = interval / 5,
-        colWidth = 1,
-        mode = 'mid',
-    }: {
+    Histogram(config: {
         data: number[]
-        intervalSample: [number, number]
+        class: [number, number]
         xLabel?: string
         yLabel?: string
-        interval?: number
-        subInterval?: number
+        grid?: [main: number, sub: number] | number
         colWidth?: number
-        mode?: 'mid' | 'end'
+        mode: 'mid' | 'end'
     }) {
-        let bin = Bin(data, intervalSample)
+        let bin = Bin(config.data, config.class)
 
-        let { pen, drawBars, drawXTicks, drawCategories, drawBound } =
-            HeightChart({
-                categories: _.map(bin, 'mark'),
-                freqs: _.map(bin, 'freq'),
-                boundLabels: [bin[0].bound[0], ..._.map(bin, $ => $.bound[1])],
-                xLabel,
-                yLabel,
-                interval,
-                subInterval,
-                colWidth,
-                barWidth: colWidth,
-            })
+        let { pen, drawBars, drawXTicks, drawItems, drawBounds } = HeightChart({
+            items: _.map(bin, 'mark'),
+            freqs: _.map(bin, 'freq'),
+            boundLabels: [bin[0].bound[0], ..._.map(bin, $ => $.bound[1])],
+            ...config,
+            barWidthRatio: 1,
+        })
 
         drawBars()
-        if (mode === 'mid') {
+        if (config.mode === 'mid') {
             drawXTicks()
-            drawCategories()
+            drawItems()
         }
-        if (mode === 'end') {
-            drawBound()
+        if (config.mode === 'end') {
+            drawBounds()
         }
 
         this.pen = pen
@@ -1117,115 +1049,81 @@ export class AutoPenCls {
 
     /**
      * ```
-     * let pen = new AutoPen()
      * pen.FreqPolygon({
      *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-     *   intervalSample: [1, 5],
+     *   class: [1, 5],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
-     *   interval: 5,
-     *   subInterval: 1,
-     *   colWidth: 1,
+     *   // grid: [5, 1], // can be 5
+     *   // colWidth: 1.2,
      * })
      * ```
      */
-    FreqPolygon({
-        data,
-        intervalSample,
-        xLabel = '',
-        yLabel = '',
-        interval = 5,
-        subInterval = interval / 5,
-        colWidth = 1,
-    }: {
+    FreqPolygon(config: {
         data: number[]
-        intervalSample: [number, number]
+        class: [number, number]
         xLabel?: string
         yLabel?: string
-        interval?: number
-        subInterval?: number
+        grid?: [main: number, sub: number] | number
         colWidth?: number
     }) {
-        let bin = Bin(data, intervalSample)
+        let bin = Bin(config.data, config.class)
         let width = bin[0].width
 
-        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
-            HeightChart({
-                categories: [
-                    bin[0].mark - width,
-                    ..._.map(bin, 'mark'),
-                    bin.at(-1)!.mark + width,
-                ],
-                freqs: [0, ..._.map(bin, 'freq'), 0],
-                xLabel,
-                yLabel,
-                interval,
-                subInterval,
-                colWidth,
-            })
+        let { pen, drawLine, drawXTicks, drawItems } = HeightChart({
+            items: [
+                bin[0].mark - width,
+                ..._.map(bin, 'mark'),
+                bin.at(-1)!.mark + width,
+            ],
+            freqs: [0, ..._.map(bin, 'freq'), 0],
+            ...config,
+        })
 
         drawLine()
         drawXTicks()
-        drawCategories()
+        drawItems()
 
         this.pen = pen
     }
 
     /**
      * ```
-     * let pen = new AutoPen()
      * pen.CumFreqPolygon({
      *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-     *   intervalSample: [1, 5],
+     *   class: [1, 5],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
-     *   interval: 5,
-     *   subInterval: 1,
-     *   colWidth: 1,
+     *   // grid: [5, 1], // can be 5
+     *   // colWidth: 1.2,
      * })
      * ```
      */
-    CumFreqPolygon({
-        data,
-        intervalSample,
-        xLabel = '',
-        yLabel = '',
-        interval = 5,
-        subInterval = interval / 5,
-        colWidth = 1,
-    }: {
+    CumFreqPolygon(config: {
         data: number[]
-        intervalSample: [number, number]
+        class: [number, number]
         xLabel?: string
         yLabel?: string
-        interval?: number
-        subInterval?: number
+        grid?: [main: number, sub: number] | number
         colWidth?: number
     }) {
-        let bin = Bin(data, intervalSample)
+        let bin = Bin(config.data, config.class)
 
-        let { pen, drawBars, drawLine, drawXTicks, drawCategories, Xs } =
-            HeightChart({
-                categories: [bin[0].mark - bin[0].width, ..._.map(bin, 'mark')],
-                freqs: [0, ..._.map(bin, 'cumFreq')],
-                xLabel,
-                yLabel,
-                interval,
-                subInterval,
-                colWidth,
-            })
+        let { pen, drawLine, drawXTicks, drawItems } = HeightChart({
+            items: [bin[0].mark - bin[0].width, ..._.map(bin, 'mark')],
+            freqs: [0, ..._.map(bin, 'cumFreq')],
+            ...config,
+        })
 
         drawLine()
         drawXTicks()
-        drawCategories()
+        drawItems()
 
         this.pen = pen
     }
 
     /**
-     * A boxplot
      * ```
-     * let pen = new AutoPen()
      * pen.Boxplot({
      *   summary: [41,45,48,52,55],
      *   labels: [null,null,'x',null,'y'],
@@ -1330,9 +1228,7 @@ export class AutoPenCls {
     }
 
     /**
-     * A regular polygon
      * ```
-     * let pen = new AutoPen()
      * pen.RegularPolygon({
      *   side: 8,
      *   diagonal: true,
@@ -1406,7 +1302,6 @@ export class AutoPenCls {
     /**
      * A 2x2 binary tree diagram for probability.
      * ```
-     * let pen = new AutoPen()
      * pen.TreeDiagram({
      *    titles: ['step 1', 'step 2'],
      *    probabilities: [[0.1], [0.2, 0.3]],
@@ -1510,30 +1405,30 @@ export class AutoPenCls {
 }
 
 function HeightChart({
-    categories,
+    items,
     freqs,
     boundLabels,
-    xLabel,
-    yLabel,
-    interval,
-    subInterval,
-    colWidth,
-    barWidth = colWidth,
+    xLabel = '',
+    yLabel = '',
+    grid = [5, 1],
+    colWidth = 1.2,
+    barWidthRatio = 1,
 }: {
-    categories: (string | number)[]
+    items: (string | number)[]
     freqs: number[]
     boundLabels?: (string | number)[]
-    xLabel: string
-    yLabel: string
-    interval: number
-    subInterval: number
-    colWidth: number
-    barWidth?: number
+    xLabel?: string
+    yLabel?: string
+    grid?: [main: number, sub: number] | number
+    colWidth?: number
+    barWidthRatio?: number
 }) {
     let endGap = colWidth / 2
-    let width = endGap + categories.length * colWidth + endGap
+    let width = endGap + items.length * colWidth + endGap
+    let [interval, subInterval] = Array.isArray(grid) ? grid : [grid, grid / 5]
     let maxY = Ceil(Max(...freqs), interval)
     let height = maxY * 1.1
+    let barWidth = colWidth * barWidthRatio
 
     const pen = new Pen()
     pen.range.set([-width * 0.5, width], [-height, height])
@@ -1548,19 +1443,19 @@ function HeightChart({
 
     pen.label.point([width / 2, 0], xLabel, 270, 40)
 
-    function grid(y: number, alpha: number) {
+    function drawGrid(y: number, alpha: number) {
         pen.set.alpha(alpha)
         pen.line([0, y], [width, y])
         pen.set.alpha()
     }
 
     for (let y = 0; y <= maxY; y += interval) {
-        grid(y, 0.2)
+        drawGrid(y, 0.2)
         pen.tickY(y)
     }
 
     for (let y = 0; y <= maxY; y += subInterval) {
-        grid(y, 0.1)
+        drawGrid(y, 0.1)
     }
 
     function getX(i: number): number {
@@ -1582,14 +1477,14 @@ function HeightChart({
     }
 
     function drawXTicks() {
-        categories.forEach(($, i) => pen.cutX(getX(i)))
+        items.forEach(($, i) => pen.cutX(getX(i)))
     }
 
-    function drawCategories() {
-        categories.forEach(($, i) => pen.label.point([getX(i), 0], $, 270, 15))
+    function drawItems() {
+        items.forEach(($, i) => pen.label.point([getX(i), 0], $, 270, 15))
     }
 
-    function drawBound() {
+    function drawBounds() {
         // only for histogram
         boundLabels?.forEach(($, i) => {
             let x = getX(i) - barWidth / 2
@@ -1611,8 +1506,8 @@ function HeightChart({
         drawBars,
         drawLine,
         drawXTicks,
-        drawCategories,
-        drawBound,
+        drawItems,
+        drawBounds,
         Xs,
     }
 }

@@ -4884,7 +4884,6 @@ declare module "Pen/AutoPen" {
          * @param items - Represent the inequalities.
          * @param ticks - Represent the tick or cross for each region.
          * ```
-         * let pen = new AutoPen()
          * pen.Inequalities({
          *    items:[
          *       { position: 0.3, sign: "\\ge", num: 5,vertical:true },
@@ -4910,7 +4909,6 @@ declare module "Pen/AutoPen" {
          * @param scale - scale for pen.setup.size()
          * @param ratio - ratio for pen.setup.size()
          * ```
-         * let pen = new AutoPen()
          * pen.TrigSolution({trig:'sin', k:0.5})
          * ```
          */
@@ -4927,7 +4925,6 @@ declare module "Pen/AutoPen" {
          * @param scale - scale for pen.setup.size()
          * @param ratio - ratio for pen.setup.size()
          * ```
-         * let pen = new AutoPen()
          * pen.QuadraticInequality({quadratic:[1,2,-3],sign:'\\ge'})
          * ```
          */
@@ -4945,7 +4942,6 @@ declare module "Pen/AutoPen" {
          * @param heights - Whether to draw the height.
          * @param scale - scale for pen.setup.size()
          * ```
-         * let pen = new AutoPen()
          * pen.Triangle({
          *   vertices:[[0,0],[4,0],[0,3]],
          *   triangle:{sideC:4,angleB:37,sideA:5,angleC:53,sideB:3,angleA:90},
@@ -4972,7 +4968,6 @@ declare module "Pen/AutoPen" {
          * @param ranges - Range of Canvas.
          * @param resolution - Resolution of Canvas
          * ```
-         * let pen = new AutoPen()
          * let constraints = [[1, 1, "<=", 5], [1, -1, "<", 4], [2, 1, ">=", -5], [3, 1, ">", -10]]
          * pen.LinearProgram({
          *     constraints,
@@ -5034,7 +5029,6 @@ declare module "Pen/AutoPen" {
          * @param n - the pattern required
          * @param offset - offset of initial position
          * ```
-         * let pen = new AutoPen()
          * pen.DotPattern({a:3, p:3, q:2, n:4, offset:1})
          * ```
          */
@@ -5046,11 +5040,9 @@ declare module "Pen/AutoPen" {
             offset: number;
         }): void;
         /**
-         * A pie chart
          * ```
-         * let pen = new AutoPen()
          * pen.PieChart({
-         *   categories: ['a','b','c','d','e'],
+         *   items: ['a','b','c','d','e'],
          *   labels: ['10%','20%','y%',null,''],
          *   angles: [45,135,60,50,70],
          *   angleLabels: [null,'x',null,undefined,''],
@@ -5058,137 +5050,117 @@ declare module "Pen/AutoPen" {
          * })
          * ```
          */
-        PieChart({ categories, labels, angles, angleLabels, size, }: {
-            categories: string[];
+        PieChart({ items, labels, angles, angleLabels, size, }: {
+            items: string[];
             labels: (string | null)[];
             angles: number[];
             angleLabels: (string | null | undefined)[];
             size?: number;
         }): void;
         /**
-         * A bar chart.
          * ```
-         * let pen = new AutoPen()
          * pen.BarChart({
-         *   categories: ['a','b','c','d','e'],
+         *   items: ['a','b','c','d','e'],
          *   freqs: [7, 47, 15, 3, 7],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
-         *   interval: 5,
-         *   subInterval: 1,
-         *   colWidth: 1,
-         *   barWidth: 0.8,
+         *   // grid: [5, 1], // can be 5
+         *   // colWidth: 1.2,
          * })
          * ```
          */
-        BarChart({ categories, freqs, xLabel, yLabel, interval, subInterval, colWidth, barWidth, }: {
-            categories: (string | number)[];
+        BarChart(config: {
+            items: (string | number)[];
             freqs: number[];
             xLabel?: string;
             yLabel?: string;
-            interval?: number;
-            subInterval?: number;
+            grid?: [main: number, sub: number] | number;
             colWidth?: number;
-            barWidth?: number;
         }): void;
         /**
-         * A line chart.
          * ```
-         * let pen = new AutoPen()
          * pen.LineChart({
-         *   categories: ['a','b','c','d','e'],
+         *   items: ['a','b','c','d','e'],
          *   freqs: [7, 47, 15, 3, 7],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
-         *   interval: 5,
-         *   subInterval: 1,
-         *   colWidth: 1,
+         *   // grid: [5, 1], // can be 5
+         *   // colWidth: 1.2,
          * })
          * ```
          */
-        LineChart({ categories, freqs, xLabel, yLabel, interval, subInterval, colWidth, }: {
-            categories: (string | number)[];
+        LineChart(config: {
+            items: (string | number)[];
             freqs: number[];
             xLabel?: string;
             yLabel?: string;
-            interval?: number;
-            subInterval?: number;
+            grid?: [main: number, sub: number] | number;
             colWidth?: number;
         }): void;
         /**
          * ```
-         * let pen = new AutoPen()
          * pen.Histogram({
          *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-         *   intervalSample: [1, 5],
+         *   class: [1, 5],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
-         *   interval: 5,
-         *   subInterval: 1,
-         *   colWidth: 1,
+         *   // grid: [5, 1], // can be 5
+         *   // colWidth: 1.2,
+         *   mode: 'mid,
          * })
          * ```
          */
-        Histogram({ data, intervalSample, xLabel, yLabel, interval, subInterval, colWidth, mode, }: {
+        Histogram(config: {
             data: number[];
-            intervalSample: [number, number];
+            class: [number, number];
             xLabel?: string;
             yLabel?: string;
-            interval?: number;
-            subInterval?: number;
+            grid?: [main: number, sub: number] | number;
             colWidth?: number;
-            mode?: 'mid' | 'end';
+            mode: 'mid' | 'end';
         }): void;
         /**
          * ```
-         * let pen = new AutoPen()
          * pen.FreqPolygon({
          *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-         *   intervalSample: [1, 5],
+         *   class: [1, 5],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
-         *   interval: 5,
-         *   subInterval: 1,
-         *   colWidth: 1,
+         *   // grid: [5, 1], // can be 5
+         *   // colWidth: 1.2,
          * })
          * ```
          */
-        FreqPolygon({ data, intervalSample, xLabel, yLabel, interval, subInterval, colWidth, }: {
+        FreqPolygon(config: {
             data: number[];
-            intervalSample: [number, number];
+            class: [number, number];
             xLabel?: string;
             yLabel?: string;
-            interval?: number;
-            subInterval?: number;
+            grid?: [main: number, sub: number] | number;
             colWidth?: number;
         }): void;
         /**
          * ```
-         * let pen = new AutoPen()
          * pen.CumFreqPolygon({
          *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-         *   intervalSample: [1, 5],
+         *   class: [1, 5],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
-         *   interval: 5,
-         *   subInterval: 1,
-         *   colWidth: 1,
+         *   // grid: [5, 1], // can be 5
+         *   // colWidth: 1.2,
          * })
          * ```
          */
-        CumFreqPolygon({ data, intervalSample, xLabel, yLabel, interval, subInterval, colWidth, }: {
+        CumFreqPolygon(config: {
             data: number[];
-            intervalSample: [number, number];
+            class: [number, number];
             xLabel?: string;
             yLabel?: string;
-            interval?: number;
-            subInterval?: number;
+            grid?: [main: number, sub: number] | number;
             colWidth?: number;
         }): void;
         /**
-         * A boxplot
          * ```
-         * let pen = new AutoPen()
          * pen.Boxplot({
          *   summary: [41,45,48,52,55],
          *   labels: [null,null,'x',null,'y'],
@@ -5214,9 +5186,7 @@ declare module "Pen/AutoPen" {
             showTick?: boolean;
         }): void;
         /**
-         * A regular polygon
          * ```
-         * let pen = new AutoPen()
          * pen.RegularPolygon({
          *   side: 8,
          *   diagonal: true,
@@ -5234,7 +5204,6 @@ declare module "Pen/AutoPen" {
         /**
          * A 2x2 binary tree diagram for probability.
          * ```
-         * let pen = new AutoPen()
          * pen.TreeDiagram({
          *    titles: ['step 1', 'step 2'],
          *    probabilities: [[0.1], [0.2, 0.3]],
