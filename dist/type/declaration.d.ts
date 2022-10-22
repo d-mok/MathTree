@@ -2760,15 +2760,15 @@ declare module "Math/Code/Latex" {
          *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
          *   dataLabel: '$x',
          *   freqLabel: 'count'
-         *   intervalSample: [1, 5]
+         *   cls: [1, 5]
          * })
          * ```
          */
-        static GroupFreqTable({ data, dataLabel, freqLabel, intervalSample, }: {
+        static GroupFreqTable({ data, dataLabel, freqLabel, cls, }: {
             data: number[];
             dataLabel: string;
             freqLabel: string;
-            intervalSample: [number, number];
+            cls: [number, number];
         }): string;
         /**
          * Print a grouped frequency table in latex.
@@ -2777,15 +2777,15 @@ declare module "Math/Code/Latex" {
          *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
          *   dataLabel: '$x',
          *   freqLabel: 'count'
-         *   intervalSample: [1, 5]
+         *   cls: [1, 5]
          * })
          * ```
          */
-        static GroupCumFreqTable({ data, dataLabel, freqLabel, intervalSample, }: {
+        static GroupCumFreqTable({ data, dataLabel, freqLabel, cls, }: {
             data: number[];
             dataLabel: string;
             freqLabel: string;
-            intervalSample: [number, number];
+            cls: [number, number];
         }): string;
         /**
          * Print a table in latex showing cartisian product of two items.
@@ -4210,10 +4210,10 @@ declare module "Math/Code/Stat" {
         /**
          * group `data` into intervals
          * ```
-         * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
+         * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into class intervals [1,5] and [6,10]
          * ```
          */
-        static Bin(data: number[], intervalSample: [number, number]): {
+        static Bin(data: number[], cls: [number, number]): {
             limit: [number, number];
             bound: [number, number];
             mark: number;
@@ -5101,7 +5101,7 @@ declare module "Pen/AutoPen" {
          * ```
          * pen.Histogram({
          *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-         *   class: [1, 5],
+         *   cls: [1, 5],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
          *   // grid: [5, 1], // can be 5
@@ -5112,7 +5112,7 @@ declare module "Pen/AutoPen" {
          */
         Histogram(config: {
             data: number[];
-            class: [number, number];
+            cls: [number, number];
             xLabel?: string;
             yLabel?: string;
             grid?: [main: number, sub: number] | number;
@@ -5123,7 +5123,7 @@ declare module "Pen/AutoPen" {
          * ```
          * pen.FreqPolygon({
          *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-         *   class: [1, 5],
+         *   cls: [1, 5],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
          *   // grid: [5, 1], // can be 5
@@ -5133,7 +5133,7 @@ declare module "Pen/AutoPen" {
          */
         FreqPolygon(config: {
             data: number[];
-            class: [number, number];
+            cls: [number, number];
             xLabel?: string;
             yLabel?: string;
             grid?: [main: number, sub: number] | number;
@@ -5143,7 +5143,7 @@ declare module "Pen/AutoPen" {
          * ```
          * pen.CumFreqPolygon({
          *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-         *   class: [1, 5],
+         *   cls: [1, 5],
          *   xLabel: 'x-axis',
          *   yLabel: 'y-axis',
          *   // grid: [5, 1], // can be 5
@@ -5153,7 +5153,7 @@ declare module "Pen/AutoPen" {
          */
         CumFreqPolygon(config: {
             data: number[];
-            class: [number, number];
+            cls: [number, number];
             xLabel?: string;
             yLabel?: string;
             grid?: [main: number, sub: number] | number;

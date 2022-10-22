@@ -175,7 +175,7 @@ export class Host {
      *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
      *   dataLabel: '$x',
      *   freqLabel: 'count'
-     *   intervalSample: [1, 5]
+     *   cls: [1, 5]
      * })
      * ```
      */
@@ -183,17 +183,17 @@ export class Host {
         data,
         dataLabel,
         freqLabel,
-        intervalSample,
+        cls,
     }: {
         data: number[]
         dataLabel: string
         freqLabel: string
-        intervalSample: [number, number]
+        cls: [number, number]
     }): string {
         return Table({
             content: [
                 [dataLabel, freqLabel],
-                ...Bin(data, intervalSample).map($ => [
+                ...Bin(data, cls).map($ => [
                     $.limit[0] + ' - ' + $.limit[1],
                     $.freq,
                 ]),
@@ -208,7 +208,7 @@ export class Host {
      *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
      *   dataLabel: '$x',
      *   freqLabel: 'count'
-     *   intervalSample: [1, 5]
+     *   cls: [1, 5]
      * })
      * ```
      */
@@ -216,17 +216,17 @@ export class Host {
         data,
         dataLabel,
         freqLabel,
-        intervalSample,
+        cls,
     }: {
         data: number[]
         dataLabel: string
         freqLabel: string
-        intervalSample: [number, number]
+        cls: [number, number]
     }): string {
         return Table({
             content: [
                 [dataLabel, freqLabel],
-                ...Bin(data, intervalSample).map($ => [$.bound[1], $.cumFreq]),
+                ...Bin(data, cls).map($ => [$.bound[1], $.cumFreq]),
             ],
         })
     }

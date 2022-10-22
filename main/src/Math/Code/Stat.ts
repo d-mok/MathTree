@@ -306,12 +306,12 @@ export class Host {
     /**
      * group `data` into intervals
      * ```
-     * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into [1,5] and [6, 10]
+     * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into class intervals [1,5] and [6,10]
      * ```
      */
     @checkIt(owl.ntuple, owl.couple)
-    static Bin(data: number[], intervalSample: [number, number]) {
-        let [L, U] = intervalSample
+    static Bin(data: number[], cls: [number, number]) {
+        let [L, U] = cls
         let gap = U - L
         let width = gap + 1
         let l0 = Floor(Min(...data), width, L)

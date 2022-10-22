@@ -1007,7 +1007,7 @@ export class AutoPenCls {
      * ```
      * pen.Histogram({
      *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-     *   class: [1, 5],
+     *   cls: [1, 5],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
      *   // grid: [5, 1], // can be 5
@@ -1018,14 +1018,14 @@ export class AutoPenCls {
      */
     Histogram(config: {
         data: number[]
-        class: [number, number]
+        cls: [number, number]
         xLabel?: string
         yLabel?: string
         grid?: [main: number, sub: number] | number
         colWidth?: number
         mode: 'mid' | 'end'
     }) {
-        let bin = Bin(config.data, config.class)
+        let bin = Bin(config.data, config.cls)
 
         let { pen, drawBars, drawXTicks, drawItems, drawBounds } = HeightChart({
             items: _.map(bin, 'mark'),
@@ -1051,7 +1051,7 @@ export class AutoPenCls {
      * ```
      * pen.FreqPolygon({
      *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-     *   class: [1, 5],
+     *   cls: [1, 5],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
      *   // grid: [5, 1], // can be 5
@@ -1061,13 +1061,13 @@ export class AutoPenCls {
      */
     FreqPolygon(config: {
         data: number[]
-        class: [number, number]
+        cls: [number, number]
         xLabel?: string
         yLabel?: string
         grid?: [main: number, sub: number] | number
         colWidth?: number
     }) {
-        let bin = Bin(config.data, config.class)
+        let bin = Bin(config.data, config.cls)
         let width = bin[0].width
 
         let { pen, drawLine, drawXTicks, drawItems } = HeightChart({
@@ -1091,7 +1091,7 @@ export class AutoPenCls {
      * ```
      * pen.CumFreqPolygon({
      *   data: [2, 2, 2, 7, 7, 7, 8, 8, 13, 13],
-     *   class: [1, 5],
+     *   cls: [1, 5],
      *   xLabel: 'x-axis',
      *   yLabel: 'y-axis',
      *   // grid: [5, 1], // can be 5
@@ -1101,13 +1101,13 @@ export class AutoPenCls {
      */
     CumFreqPolygon(config: {
         data: number[]
-        class: [number, number]
+        cls: [number, number]
         xLabel?: string
         yLabel?: string
         grid?: [main: number, sub: number] | number
         colWidth?: number
     }) {
-        let bin = Bin(config.data, config.class)
+        let bin = Bin(config.data, config.cls)
 
         let { pen, drawLine, drawXTicks, drawItems } = HeightChart({
             items: [bin[0].mark - bin[0].width, ..._.map(bin, 'mark')],
