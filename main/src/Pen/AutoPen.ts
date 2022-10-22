@@ -1095,6 +1095,8 @@ export class AutoPenCls {
         drawLine()
         if (config.bar) drawBars()
 
+        config.mode ??= 'mid'
+
         if (config.mode === 'mid') {
             drawXTicks()
             drawItems()
