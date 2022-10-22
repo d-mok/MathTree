@@ -5107,7 +5107,7 @@ declare module "Pen/AutoPen" {
          *   yLabel: 'y-axis',
          *   // grid: [5, 1], // can be 5
          *   // colWidth: 1.2,
-         *   mode: 'mid,
+         *   mode: 'mid',
          * })
          * ```
          */
@@ -5129,6 +5129,8 @@ declare module "Pen/AutoPen" {
          *   yLabel: 'y-axis',
          *   // grid: [5, 1], // can be 5
          *   // colWidth: 1.2,
+         *   // bar: false,
+         *   // mode: 'mid',
          * })
          * ```
          */
@@ -5140,6 +5142,7 @@ declare module "Pen/AutoPen" {
             grid?: [main: number, sub: number] | number;
             colWidth?: number;
             bar?: boolean;
+            mode?: 'mid' | 'end';
         }): void;
         /**
          * ```

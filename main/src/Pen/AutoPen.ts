@@ -1012,7 +1012,7 @@ export class AutoPenCls {
      *   yLabel: 'y-axis',
      *   // grid: [5, 1], // can be 5
      *   // colWidth: 1.2,
-     *   mode: 'mid,
+     *   mode: 'mid',
      * })
      * ```
      */
@@ -1056,6 +1056,8 @@ export class AutoPenCls {
      *   yLabel: 'y-axis',
      *   // grid: [5, 1], // can be 5
      *   // colWidth: 1.2,
+     *   // bar: false,
+     *   // mode: 'mid',
      * })
      * ```
      */
@@ -1067,25 +1069,39 @@ export class AutoPenCls {
         grid?: [main: number, sub: number] | number
         colWidth?: number
         bar?: boolean
+        mode?: 'mid' | 'end'
     }) {
         let bin = Bin(config.data, config.cls)
         let width = bin[0].width
 
-        let { pen, drawBars, drawLine, drawXTicks, drawItems } = HeightChart({
-            items: [
-                bin[0].mark - width,
-                ..._.map(bin, 'mark'),
-                bin.at(-1)!.mark + width,
-            ],
-            freqs: [0, ..._.map(bin, 'freq'), 0],
-            ...config,
-            barWidthRatio: 1,
-        })
+        let { pen, drawBars, drawLine, drawXTicks, drawItems, drawBounds } =
+            HeightChart({
+                items: [
+                    bin[0].mark - width,
+                    ..._.map(bin, 'mark'),
+                    bin.at(-1)!.mark + width,
+                ],
+                freqs: [0, ..._.map(bin, 'freq'), 0],
+                boundLabels: [
+                    '',
+                    bin[0].bound[0],
+                    ..._.map(bin, $ => $.bound[1]),
+                    '',
+                ],
+                ...config,
+                barWidthRatio: 1,
+            })
 
         drawLine()
-        drawXTicks()
-        drawItems()
         if (config.bar) drawBars()
+
+        if (config.mode === 'mid') {
+            drawXTicks()
+            drawItems()
+        }
+        if (config.mode === 'end') {
+            drawBounds()
+        }
 
         this.pen = pen
     }
