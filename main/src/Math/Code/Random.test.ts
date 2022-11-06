@@ -52,6 +52,40 @@ test('RndRs', () => {
     })
 })
 
+test('RndF', () => {
+    repeat(10, () => {
+        let [p, q] = RndF(8, [0, 6])
+        let f = p / q
+        expect(f).toBeBetween(0, 6)
+        expect(f).toSatisfy(owl.rational)
+        expect(f).toSatisfy(owl.dec)
+        expect(HCF(p, q)).toBe(1)
+    })
+    repeat(10, () => {
+        let [p, q] = RndF(-8, [-6, 6])
+        let f = p / q
+        expect(f).toBeBetween(-6, 6)
+        expect(f).toSatisfy(owl.rational)
+        expect(f).toSatisfy(owl.dec)
+        expect(HCF(p, q)).toBe(1)
+    })
+    expect(() => RndF(8, [0, 6])).toSpanLength(35)
+    expect(() => RndF(-8, [-6, 6])).toSpanLength(70)
+})
+
+test('RndFs', () => {
+    repeat(10, () => {
+        let fs = RndFs(8, [0, 6], 3)
+        let qs = fs.map(([p, q]) => p / q)
+        expect(qs).toAllBeBetween(0, 6)
+        expect(qs).toSatisfyAll(owl.rational)
+        expect(qs).toSatisfyAll(owl.dec)
+        expect(qs).toHaveLength(3)
+        expect(qs).toBeDupless()
+        expect(fs.flat()).toBeDupless()
+    })
+})
+
 test('RndQ', () => {
     repeat(10, () => {
         expect(RndQ(8, [0, 6])).toBeBetween(0, 6)
