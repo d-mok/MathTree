@@ -65,64 +65,64 @@ export class Host {
             .rolls(n)
     }
 
-    /**
-     * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
-     * ```
-     * RndF(9,[2,9]) // may return [7, 2]
-     * RndF(-9,[-9,9]) // may return [7, 2] or [-7, 2], i.e. can be +ve or -ve
-     * ```
-     */
-    @checkIt(owl.nonZeroInt, owl.interval)
-    static RndF(largest: number = 9, range?: interval): [number, number] {
-        let L = Math.abs(largest)
-        let sign = largest > 0 ? 1 : RndU()
-        let f = () => Ratio(RndN(1, L) * sign, RndN(2, L)) as [number, number]
+    // /**
+    //  * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
+    //  * ```
+    //  * RndF(9,[2,9]) // may return [7, 2]
+    //  * RndF(-9,[-9,9]) // may return [7, 2] or [-7, 2], i.e. can be +ve or -ve
+    //  * ```
+    //  */
+    // @checkIt(owl.nonZeroInt, owl.interval)
+    // static RndF(largest: number = 9, range?: interval): [number, number] {
+    //     let L = Math.abs(largest)
+    //     let sign = largest > 0 ? 1 : RndU()
+    //     let f = () => Ratio(RndN(1, L) * sign, RndN(2, L)) as [number, number]
 
-        return dice(f)
-            .shield(([p, q]) => owl.dec(p / q))
-            .shield(([p, q]) => {
-                if (range === undefined) return true
-                let f = p / q
-                let [a, b] = range
-                return f >= a && f <= b
-            })
-            .roll()
-    }
+    //     return dice(f)
+    //         .shield(([p, q]) => owl.dec(p / q))
+    //         .shield(([p, q]) => {
+    //             if (range === undefined) return true
+    //             let f = p / q
+    //             let [a, b] = range
+    //             return f >= a && f <= b
+    //         })
+    //         .roll()
+    // }
 
-    /**
-     * an array of n unique random fractions (non-integer) .
-     * ```
-     * RndFs(9,[2,9],3) // may return [[5,2],[7,3],[9,2]]
-     * ```
-     */
-    @checkIt(owl.nonZeroInt, owl.interval, owl.positiveInt)
-    static RndFs(
-        largest: number = 9,
-        range?: interval,
-        n: number = 10
-    ): [number, number][] {
-        n = Math.min(Math.floor(Math.abs(largest) / 2), n)
-        let f = () =>
-            _(cal.range(1, largest)).shuffle().chunk(2).take(n).value() as [
-                number,
-                number
-            ][]
+    // /**
+    //  * an array of n unique random fractions (non-integer) .
+    //  * ```
+    //  * RndFs(9,[2,9],3) // may return [[5,2],[7,3],[9,2]]
+    //  * ```
+    //  */
+    // @checkIt(owl.nonZeroInt, owl.interval, owl.positiveInt)
+    // static RndFs(
+    //     largest: number = 9,
+    //     range?: interval,
+    //     n: number = 10
+    // ): [number, number][] {
+    //     n = Math.min(Math.floor(Math.abs(largest) / 2), n)
+    //     let f = () =>
+    //         _(cal.range(1, largest)).shuffle().chunk(2).take(n).value() as [
+    //             number,
+    //             number
+    //         ][]
 
-        function inRange([p, q]: [number, number]): boolean {
-            if (range === undefined) return true
-            let f = p / q
-            let [a, b] = range
-            return f >= a && f <= b
-        }
+    //     function inRange([p, q]: [number, number]): boolean {
+    //         if (range === undefined) return true
+    //         let f = p / q
+    //         let [a, b] = range
+    //         return f >= a && f <= b
+    //     }
 
-        function check([p, q]: [number, number]): boolean {
-            return q !== 1 && AreCoprime(p, q) && inRange([p, q])
-        }
+    //     function check([p, q]: [number, number]): boolean {
+    //         return q !== 1 && AreCoprime(p, q) && inRange([p, q])
+    //     }
 
-        return dice(f)
-            .shield(ns => ns.every(check))
-            .roll()
-    }
+    //     return dice(f)
+    //         .shield(ns => ns.every(check))
+    //         .roll()
+    // }
 
     /**
      * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
@@ -133,8 +133,18 @@ export class Host {
      */
     @checkIt(owl.nonZeroInt, owl.interval)
     static RndQ(largest: number = 9, range?: interval): number {
-        let [p, q] = RndF(largest, range)
-        return p / q
+        let L = Math.abs(largest)
+        let sign = largest > 0 ? 1 : RndU()
+        let f = () => (RndN(1, L) / RndN(2, L)) * sign
+
+        return dice(f)
+            .shield($ => owl.dec($))
+            .shield($ => {
+                if (range === undefined) return true
+                let [a, b] = range
+                return $ >= a && $ <= b
+            })
+            .roll()
     }
 
     /**
@@ -622,8 +632,8 @@ declare global {
     var RndAscNs: typeof Host.RndAscNs
     var RndR: typeof Host.RndR
     var RndRs: typeof Host.RndRs
-    var RndF: typeof Host.RndF
-    var RndFs: typeof Host.RndFs
+    // var RndF: typeof Host.RndF
+    // var RndFs: typeof Host.RndFs
     var RndQ: typeof Host.RndQ
     var RndQs: typeof Host.RndQs
     var RndU: typeof Host.RndU

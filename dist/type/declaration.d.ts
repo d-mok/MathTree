@@ -3427,21 +3427,6 @@ declare module "Math/Code/Random" {
         /**
          * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
          * ```
-         * RndF(9,[2,9]) // may return [7, 2]
-         * RndF(-9,[-9,9]) // may return [7, 2] or [-7, 2], i.e. can be +ve or -ve
-         * ```
-         */
-        static RndF(largest?: number, range?: interval): [number, number];
-        /**
-         * an array of n unique random fractions (non-integer) .
-         * ```
-         * RndFs(9,[2,9],3) // may return [[5,2],[7,3],[9,2]]
-         * ```
-         */
-        static RndFs(largest?: number, range?: interval, n?: number): [number, number][];
-        /**
-         * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
-         * ```
          * RndQ(9,[2,9]) // may return 7/2
          * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
          * ```
@@ -3634,8 +3619,6 @@ declare module "Math/Code/Random" {
         var RndAscNs: typeof Host.RndAscNs;
         var RndR: typeof Host.RndR;
         var RndRs: typeof Host.RndRs;
-        var RndF: typeof Host.RndF;
-        var RndFs: typeof Host.RndFs;
         var RndQ: typeof Host.RndQ;
         var RndQs: typeof Host.RndQs;
         var RndU: typeof Host.RndU;
