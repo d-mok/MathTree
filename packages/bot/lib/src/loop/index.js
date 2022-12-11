@@ -8,7 +8,7 @@ export function loopSection(html, context) {
         let s = exprCtxHTML(start, context);
         let e = exprCtxHTML(end, context);
         let T = '';
-        for (let i = s; i < e; i++) {
+        for (let i = s; i <= e; i++) {
             T += dropTags(match).replaceAll(index, String(i));
         }
         return T;
