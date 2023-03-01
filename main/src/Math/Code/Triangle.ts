@@ -306,19 +306,19 @@ export class Host {
         angleB: number,
         angleC: number
     ] {
-        let sideC = Distance(A, B)
         let sideA = Distance(B, C)
         let sideB = Distance(C, A)
-        let angleC = CosineLawAngle(sideA, sideB, sideC)
+        let sideC = Distance(A, B)
         let angleA = CosineLawAngle(sideB, sideC, sideA)
         let angleB = CosineLawAngle(sideA, sideC, sideB)
+        let angleC = 180 - angleA - angleB // keep angle sum 180
         if (fix) {
-            sideC = Fix(sideC)
             sideA = Fix(sideA)
             sideB = Fix(sideB)
-            angleC = Fix(angleC)
+            sideC = Fix(sideC)
             angleA = Fix(angleA)
             angleB = Fix(angleB)
+            angleC = Fix(angleC)
         }
         return [sideA, sideB, sideC, angleA, angleB, angleC]
     }
