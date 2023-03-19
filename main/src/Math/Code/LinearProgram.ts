@@ -1,12 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
-
-
-
     /**
      * the value of field at given point
      * ```
@@ -18,7 +14,6 @@ export class Host {
     static FieldAt(point: Point2D, field: Field): number {
         return optimizer({ field }).fieldAt(point)
     }
-
 
     /**
      * check if point is constrained by cons
@@ -36,7 +31,6 @@ export class Host {
         return toReins(cons).contains(point)
     }
 
-
     /**
      * check if point is constrained by cons, treating all cons as 'or equal to'
      * ```
@@ -52,9 +46,6 @@ export class Host {
     static isLooseConstrained(cons: Constraint[], point: Point2D): boolean {
         return toReins(cons).looseContains(point)
     }
-
-
-
 
     /**
      * the vertices of the feasible polygon
@@ -75,9 +66,6 @@ export class Host {
         return vs
     }
 
-
-
-
     /**
      * the vertices of the feasible polygon
      * ```
@@ -96,10 +84,6 @@ export class Host {
         Should(vs.length > 0, 'no feasible vertex')
         return vs
     }
-
-
-
-
 
     /**
      * check if the feasible region is bounded
@@ -122,10 +106,6 @@ export class Host {
         return toReins(cons).isBounded()
     }
 
-
-
-
-
     /**
      * the integral points inside the feasible polygon
      * ```
@@ -143,7 +123,6 @@ export class Host {
         return toReins(cons).integrals()
     }
 
-
     /**
      * the point with the max value of field
      * ```
@@ -155,14 +134,12 @@ export class Host {
         Should(points.length > 0, 'No feasible point')
         let pts = optimizer({
             field: field,
-            feasiblePoints: points
+            feasiblePoints: points,
         }).maxPoints()
         Should(pts.length > 0, 'No max point')
         Should(pts.length < 2, 'Multiple max points')
         return pts[0]
     }
-
-
 
     /**
      * the point with the min value of field
@@ -175,14 +152,12 @@ export class Host {
         Should(points.length > 0, 'No feasible point')
         let pts = optimizer({
             field: field,
-            feasiblePoints: points
+            feasiblePoints: points,
         }).minPoints()
         Should(pts.length > 0, 'No min point')
         Should(pts.length < 2, 'Multiple min points')
         return pts[0]
     }
-
-
 
     /**
      * the point with the min/max value of field
@@ -192,14 +167,13 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2Ds, owl.field, owl.bool)
-    static OptimizePoint(points: Point2D[], field: Field, max: boolean): Point2D {
+    static OptimizePoint(
+        points: Point2D[],
+        field: Field,
+        max: boolean
+    ): Point2D {
         return max ? MaximizePoint(points, field) : MinimizePoint(points, field)
     }
-
-
-
-
-
 
     /**
      * the max value of field
@@ -211,14 +185,12 @@ export class Host {
     static MaximizeField(points: Point2D[], field: Field): number {
         let op = optimizer({
             field: field,
-            feasiblePoints: points
+            feasiblePoints: points,
         })
         let val = op.max()
         Should(val !== null, 'No optimal value for this field!')
         return val
     }
-
-
 
     /**
      * the min value of field
@@ -230,14 +202,12 @@ export class Host {
     static MinimizeField(points: Point2D[], field: Field): number {
         let op = optimizer({
             field: field,
-            feasiblePoints: points
+            feasiblePoints: points,
         })
         let val = op.min()
         Should(val !== null, 'No optimal value for this field!')
         return val
     }
-
-
 
     /**
      * the min/max value of field
@@ -247,11 +217,13 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2Ds, owl.field, owl.bool)
-    static OptimizeField(points: Point2D[], field: Field, max: boolean): number {
+    static OptimizeField(
+        points: Point2D[],
+        field: Field,
+        max: boolean
+    ): number {
         return max ? MaximizeField(points, field) : MinimizeField(points, field)
     }
-
-
 
     /**
      * the constraints from the given points
@@ -276,16 +248,12 @@ export class Host {
             let A = pts[i]
             let B = pts[i + 1]
             let [a, b, c] = LinearFromTwoPoints(A, B)
-            let sign: Ineq = FieldAt(mean, [a, b, c]) > 0 ? "\\ge" : "\\le"
+            let sign: Ineq = FieldAt(mean, [a, b, c]) > 0 ? '\\ge' : '\\le'
             constraints.push([a, b, sign, -c])
         }
         return constraints
     }
-
 }
-
-
-
 
 declare global {
     var FieldAt: typeof Host.FieldAt
@@ -302,8 +270,4 @@ declare global {
     var MinimizeField: typeof Host.MinimizeField
     var OptimizeField: typeof Host.OptimizeField
     var ConstraintsFromPoints: typeof Host.ConstraintsFromPoints
-
 }
-
-
-

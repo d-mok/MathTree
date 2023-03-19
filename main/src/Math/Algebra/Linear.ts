@@ -1,11 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
-
-
 @exposeAll()
 @captureAll()
 export class Host {
-
     /**
      * [x-int,y-int,slope] of ax+by+c=0
      * ```
@@ -14,13 +11,16 @@ export class Host {
      * ```
      */
     @checkIt(owl.nonZero, owl.nonZero, owl.num)
-    static LineFeat(a: number, b: number, c: number): [slope: number, yInt: number, xInt: number] {
+    static LineFeat(
+        a: number,
+        b: number,
+        c: number
+    ): [slope: number, yInt: number, xInt: number] {
         let x = -c / a
         let y = -c / b
         let m = -a / b
         return [m, y, x]
     }
-
 
     /**
      * the coeff [a,b,c] in ax+by+c=0 from given intercepts
@@ -30,11 +30,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.nonZero, owl.nonZero)
-    static LinearFromIntercepts(xInt: number, yInt: number): [a: number, b: number, c: number] {
+    static LinearFromIntercepts(
+        xInt: number,
+        yInt: number
+    ): [a: number, b: number, c: number] {
         return lin().byIntercepts(xInt, yInt).toLinear()
     }
-
-
 
     /**
      * the coeff [a,b,c] in ax+by+c=0 from two given points
@@ -44,11 +45,15 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.point2D)
-    @inspectIt(function different_points(p1, p2) { return owl.distinct([p1, p2]) })
-    static LinearFromTwoPoints(point1: Point2D, point2: Point2D): [a: number, b: number, c: number] {
+    @inspectIt(function different_points(p1, p2) {
+        return owl.distinct([p1, p2])
+    })
+    static LinearFromTwoPoints(
+        point1: Point2D,
+        point2: Point2D
+    ): [a: number, b: number, c: number] {
         return lin().byTwoPoints(point1, point2).toLinear()
     }
-
 
     /**
      * the coeff [a,b,c] in ax+by+c=0 from point and slope
@@ -58,11 +63,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.num)
-    static LinearFromPointSlope(point: Point2D, slope: number): [a: number, b: number, c: number] {
+    static LinearFromPointSlope(
+        point: Point2D,
+        slope: number
+    ): [a: number, b: number, c: number] {
         return lin().byPointSlope(point, slope).toLinear()
     }
-
-
 
     /**
      * the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
@@ -72,8 +78,13 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.point2D)
-    @inspectIt(function different_points(p1, p2) { return owl.distinct([p1, p2]) })
-    static LinearFromBisector(A: Point2D, B: Point2D): [a: number, b: number, c: number] {
+    @inspectIt(function different_points(p1, p2) {
+        return owl.distinct([p1, p2])
+    })
+    static LinearFromBisector(
+        A: Point2D,
+        B: Point2D
+    ): [a: number, b: number, c: number] {
         return lin().byBisector(A, B).toLinear()
     }
 
@@ -85,13 +96,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.nonZero, owl.nonZero)
-    static LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number] {
+    static LineFromIntercepts(
+        xInt: number,
+        yInt: number
+    ): [slope: number, yInt: number] {
         return lin().byIntercepts(xInt, yInt).toLine()
     }
-
-
-
-
 
     /**
      * [slope,yInt] from two given points
@@ -101,12 +111,18 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.point2D)
-    @inspectIt(function different_points(p1, p2) { return owl.distinct([p1, p2]) })
-    @inspectIt(function non_vertical(p1, p2) { return p1[0] !== p2[0] })
-    static LineFromTwoPoints(point1: Point2D, point2: Point2D): [slope: number, yInt: number] {
+    @inspectIt(function different_points(p1, p2) {
+        return owl.distinct([p1, p2])
+    })
+    @inspectIt(function non_vertical(p1, p2) {
+        return p1[0] !== p2[0]
+    })
+    static LineFromTwoPoints(
+        point1: Point2D,
+        point2: Point2D
+    ): [slope: number, yInt: number] {
         return lin().byTwoPoints(point1, point2).toLine()
     }
-
 
     /**
      * [slope,yInt] from point and slope
@@ -116,12 +132,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.num)
-    static LineFromPointSlope(point: Point2D, slope: number): [slope: number, yInt: number] {
+    static LineFromPointSlope(
+        point: Point2D,
+        slope: number
+    ): [slope: number, yInt: number] {
         return lin().byPointSlope(point, slope).toLine()
     }
-
-
-
 
     /**
      * [slope,yInt] from perpendicular bisector of AB
@@ -131,16 +147,19 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.point2D)
-    @inspectIt(function different_points(p1, p2) { return owl.distinct([p1, p2]) })
-    @inspectIt(function non_horizontal(p1, p2) { return p1[1] !== p2[1] })
-    static LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number] {
+    @inspectIt(function different_points(p1, p2) {
+        return owl.distinct([p1, p2])
+    })
+    @inspectIt(function non_horizontal(p1, p2) {
+        return p1[1] !== p2[1]
+    })
+    static LineFromBisector(
+        A: Point2D,
+        B: Point2D
+    ): [slope: number, yInt: number] {
         return lin().byBisector(A, B).toLine()
     }
-
-
 }
-
-
 
 declare global {
     var LineFeat: typeof Host.LineFeat
@@ -153,6 +172,3 @@ declare global {
     var LineFromPointSlope: typeof Host.LineFromPointSlope
     var LineFromBisector: typeof Host.LineFromBisector
 }
-
-
-

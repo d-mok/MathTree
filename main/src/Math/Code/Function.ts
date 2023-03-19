@@ -1,10 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
-
     /**
      * log(b,N)
      * ```
@@ -17,19 +15,6 @@ export class Host {
         return cal.blur(v)
     }
 
-    /**
-     * @deprecated
-     * @ignore
-     * a**b, a to the power of b.
-     * ```
-     * Power(2,3) // 8
-     * ```
-     */
-    @checkIt(owl.num)
-    static Power(a: number, b: number): number {
-        const v = Math.pow(a, b)
-        return cal.blur(v)
-    }
 
     /**
      * square root of x
@@ -53,11 +38,9 @@ export class Host {
      */
     @checkIt(owl.num)
     static Radian(degree: number): number {
-        const v = degree / 180 * Math.PI
+        const v = (degree / 180) * Math.PI
         return cal.blur(v)
     }
-
-
 
     /**
      * the degree of the radian
@@ -69,11 +52,9 @@ export class Host {
      */
     @checkIt(owl.num)
     static Degree(radian: number): number {
-        const v = radian * 180 / Math.PI
+        const v = (radian * 180) / Math.PI
         return cal.blur(v)
     }
-
-
 
     /**
      * sin(x).
@@ -84,7 +65,7 @@ export class Host {
     @checkIt(owl.num)
     static sin(x: number): number {
         if (x % 180 === 0) return 0
-        let v = Math.sin(x / 180 * Math.PI)
+        let v = Math.sin((x / 180) * Math.PI)
         return cal.blur(v)
     }
 
@@ -97,7 +78,7 @@ export class Host {
     @checkIt(owl.num)
     static cos(x: number): number {
         if ((x - 90) % 180 === 0) return 0
-        let v = Math.cos(x / 180 * Math.PI)
+        let v = Math.cos((x / 180) * Math.PI)
         return cal.blur(v)
     }
 
@@ -110,7 +91,7 @@ export class Host {
     @checkIt(owl.num)
     static tan(x: number): number {
         if (x % 180 === 0) return 0
-        let v = Math.tan(x / 180 * Math.PI)
+        let v = Math.tan((x / 180) * Math.PI)
         return cal.blur(v)
     }
 
@@ -122,7 +103,7 @@ export class Host {
      */
     @checkIt(owl.between(-1, 1))
     static arcsin(x: number): number {
-        let v = Math.asin(x) * 180 / Math.PI
+        let v = (Math.asin(x) * 180) / Math.PI
         return cal.blur(v)
     }
 
@@ -134,7 +115,7 @@ export class Host {
      */
     @checkIt(owl.between(-1, 1))
     static arccos(x: number): number {
-        let v = Math.acos(x) * 180 / Math.PI
+        let v = (Math.acos(x) * 180) / Math.PI
         return cal.blur(v)
     }
 
@@ -146,21 +127,13 @@ export class Host {
      */
     @checkIt(owl.num)
     static arctan(x: number): number {
-        let v = Math.atan(x) * 180 / Math.PI
+        let v = (Math.atan(x) * 180) / Math.PI
         return cal.blur(v)
     }
-
-
-
 }
-
-
-
-
 
 declare global {
     var log: typeof Host.log
-    var Power: typeof Host.Power
     var Sqrt: typeof Host.Sqrt
     var Radian: typeof Host.Radian
     var Degree: typeof Host.Degree
@@ -171,6 +144,3 @@ declare global {
     var arccos: typeof Host.arccos
     var arctan: typeof Host.arctan
 }
-
-
-

@@ -1,12 +1,8 @@
-
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-
-
 
 @exposeAll()
 @captureAll()
 export class Host {
-
     /**
      * D,E,F of circle general form
      * ```
@@ -14,7 +10,10 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.positive)
-    static CircleGeneral(centre: Point2D, radius: number): [D: number, E: number, F: number] {
+    static CircleGeneral(
+        centre: Point2D,
+        radius: number
+    ): [D: number, E: number, F: number] {
         let [h, k] = centre
         let r = radius
         let D = -2 * h
@@ -23,9 +22,6 @@ export class Host {
         return [D, E, F]
     }
 
-
-
-
     /**
      * Centre and radius from general form.
      * ```
@@ -33,18 +29,17 @@ export class Host {
      * ```
      */
     @checkIt(owl.num)
-    static CircleFromGeneral(D: number, E: number, F: number): [Point2D, number] {
+    static CircleFromGeneral(
+        D: number,
+        E: number,
+        F: number
+    ): [Point2D, number] {
         let [h, k] = [-D / 2, -E / 2]
         let R = (D / 2) ** 2 + (E / 2) ** 2 - F
-        Should(R >= 0, "radius should be real")
+        Should(R >= 0, 'radius should be real')
         let r = R ** 0.5
         return [[h, k], r]
     }
-
-
-
-
-
 
     /**
      * Intersections between a circle and a straight line.
@@ -53,7 +48,11 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.positive, owl.triple)
-    static CircleLinearIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D] {
+    static CircleLinearIntersect(
+        center: Point2D,
+        radius: number,
+        linear: [number, number, number]
+    ): [Point2D, Point2D] {
         let [a, b, c] = linear
         let [h, k] = center
         let r = radius
@@ -82,8 +81,6 @@ export class Host {
         }
     }
 
-
-
     /**
      * Intersections between a circle and a straight line through `A` and `B`.
      * ```
@@ -91,16 +88,15 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2D, owl.positive, owl.point2Ds)
-    static CircleLineIntersect(center: Point2D, radius: number, [A, B]: [Point2D, Point2D]): [Point2D, Point2D] {
+    static CircleLineIntersect(
+        center: Point2D,
+        radius: number,
+        [A, B]: [Point2D, Point2D]
+    ): [Point2D, Point2D] {
         let lin = LinearFromTwoPoints(A, B)
         return CircleLinearIntersect(center, radius, lin)
     }
-
-
-
 }
-
-
 
 declare global {
     var CircleGeneral: typeof Host.CircleGeneral
@@ -108,5 +104,3 @@ declare global {
     var CircleLinearIntersect: typeof Host.CircleLinearIntersect
     var CircleLineIntersect: typeof Host.CircleLineIntersect
 }
-
-

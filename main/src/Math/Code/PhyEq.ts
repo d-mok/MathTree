@@ -1,12 +1,22 @@
-
-
 function makeFn(args: string[], body: (...args: any[]) => any): zeroFunction {
     const paras = args.join(',')
-    return new Function("return (" + paras + ") => (" + body.toString() + ').apply(null,[' + args + '])')()
+    return new Function(
+        'return (' +
+            paras +
+            ') => (' +
+            body.toString() +
+            ').apply(null,[' +
+            args +
+            '])'
+    )()
 }
 
-
-function makeLatex(args: string[], template: string, units: string, brackets: string): string {
+function makeLatex(
+    args: string[],
+    template: string,
+    units: string,
+    brackets: string
+): string {
     let T = template
     for (let i = 0; i < args.length; i++) {
         const [l, r] = brackets[i] === '|' ? ['(', ')'] : ['', '']
@@ -16,15 +26,10 @@ function makeLatex(args: string[], template: string, units: string, brackets: st
     return T
 }
 
-
 type eq = [func: zeroFunction, latex: string]
 
-
 export class PhyEqCls {
-
-
     Heat = {
-
         /**
          * E = Pt
          */
@@ -32,16 +37,12 @@ export class PhyEqCls {
             let args = [E, P, t]
             return [
                 makeFn(args, (E, P, t) => E - P * t),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
-
     }
 
-
     Motion = {
-
-
         /**
          * v = u + at
          */
@@ -49,7 +50,7 @@ export class PhyEqCls {
             let args = [v, u, a, t]
             return [
                 makeFn(args, (v, u, a, t) => v - u - a * t),
-                makeLatex(args, '@=@+@@', $, '::||')
+                makeLatex(args, '@=@+@@', $, '::||'),
             ]
         },
 
@@ -60,7 +61,7 @@ export class PhyEqCls {
             let args = [v, u, a, s]
             return [
                 makeFn(args, (v, u, a, s) => v ** 2 - u ** 2 - 2 * a * s),
-                makeLatex(args, '@^2=@^2+2@@', $, '||||')
+                makeLatex(args, '@^2=@^2+2@@', $, '||||'),
             ]
         },
 
@@ -72,7 +73,12 @@ export class PhyEqCls {
             let [_s, _u, _t, _a] = $
             return [
                 makeFn(args, (s, u, t, a) => s - u * t - 0.5 * a * t * t),
-                makeLatex([s, u, t, a, t], '@=@@+\\dfrac{1}{2}@@^2', [_s, _u, _t, _a, _t].join(''), ':||||')
+                makeLatex(
+                    [s, u, t, a, t],
+                    '@=@@+\\dfrac{1}{2}@@^2',
+                    [_s, _u, _t, _a, _t].join(''),
+                    ':||||'
+                ),
             ]
         },
 
@@ -83,10 +89,9 @@ export class PhyEqCls {
             let args = [s, u, v, t]
             return [
                 makeFn(args, (s, u, v, t) => s - 0.5 * (u + v) * t),
-                makeLatex(args, '@=\\dfrac{1}{2}(@+@)@', $, ':::|')
+                makeLatex(args, '@=\\dfrac{1}{2}(@+@)@', $, ':::|'),
             ]
         },
-
 
         /**
          * s  = 0.5at^2
@@ -95,10 +100,9 @@ export class PhyEqCls {
             let args = [s, a, t]
             return [
                 makeFn(args, (s, a, t) => s - 0.5 * a * t * t),
-                makeLatex(args, '@=\\dfrac{1}{2}@@^2', $, ':||')
+                makeLatex(args, '@=\\dfrac{1}{2}@@^2', $, ':||'),
             ]
         },
-
 
         /**
          * v = at
@@ -107,10 +111,9 @@ export class PhyEqCls {
             let args = [v, a, t]
             return [
                 makeFn(args, (v, a, t) => v - a * t),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
-
 
         /**
          * v^2 = 2as
@@ -119,16 +122,12 @@ export class PhyEqCls {
             let args = [v, a, s]
             return [
                 makeFn(args, (v, a, s) => v ** 2 - 2 * a * s),
-                makeLatex(args, '@^2=2@@', $, '|||')
+                makeLatex(args, '@^2=2@@', $, '|||'),
             ]
         },
     }
 
-
-
     Force = {
-
-
         /**
          * F = ma
          */
@@ -136,14 +135,12 @@ export class PhyEqCls {
             let args = [F, m, a]
             return [
                 makeFn(args, (F, m, a) => F - m * a),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
-
     }
 
     CircularMotion = {
-
         /**
          * s = vt
          */
@@ -151,10 +148,9 @@ export class PhyEqCls {
             let args = [s, v, t]
             return [
                 makeFn(args, (s, v, t) => s - v * t),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
-
 
         /**
          * θ = ωt
@@ -163,7 +159,7 @@ export class PhyEqCls {
             let args = [θ, ω, t]
             return [
                 makeFn(args, (θ, ω, t) => θ - ω * t),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
 
@@ -173,8 +169,8 @@ export class PhyEqCls {
         ωT(ω = 'ω', T = 'T', $ = '$$'): eq {
             let args = [ω, T]
             return [
-                makeFn(args, (ω, T) => ω - 2 * Math.PI / T),
-                makeLatex(args, '@=\\dfrac{2π}{@}', $, '::')
+                makeFn(args, (ω, T) => ω - (2 * Math.PI) / T),
+                makeLatex(args, '@=\\dfrac{2π}{@}', $, '::'),
             ]
         },
 
@@ -186,7 +182,7 @@ export class PhyEqCls {
 
             return [
                 makeFn(args, (s, r, θ) => s - r * θ),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
 
@@ -197,11 +193,9 @@ export class PhyEqCls {
             let args = [v, r, ω]
             return [
                 makeFn(args, (v, r, ω) => v - r * ω),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
-
-
 
         /**
          * a = vω
@@ -210,7 +204,7 @@ export class PhyEqCls {
             let args = [a, v, ω]
             return [
                 makeFn(args, (a, v, ω) => a - v * ω),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
 
@@ -220,8 +214,8 @@ export class PhyEqCls {
         avr(a = 'a', v = 'v', r = 'r', $ = '***'): eq {
             let args = [a, v, r]
             return [
-                makeFn(args, (a, v, r) => a - v * v / r),
-                makeLatex(args, '@=\\dfrac{@^2}{@}', $, ':|:')
+                makeFn(args, (a, v, r) => a - (v * v) / r),
+                makeLatex(args, '@=\\dfrac{@^2}{@}', $, ':|:'),
             ]
         },
 
@@ -232,7 +226,7 @@ export class PhyEqCls {
             let args = [a, r, ω]
             return [
                 makeFn(args, (a, r, ω) => a - r * ω * ω),
-                makeLatex(args, '@=@@^2', $, ':||')
+                makeLatex(args, '@=@@^2', $, ':||'),
             ]
         },
 
@@ -243,7 +237,7 @@ export class PhyEqCls {
             let args = [F, m, v, ω]
             return [
                 makeFn(args, (F, m, v, ω) => F - m * v * ω),
-                makeLatex(args, '@=@@@', $, ':|||')
+                makeLatex(args, '@=@@@', $, ':|||'),
             ]
         },
 
@@ -253,8 +247,8 @@ export class PhyEqCls {
         Fmvr(F = 'F', m = 'm', v = 'v', r = 'r', $ = '****'): eq {
             let args = [F, m, v, r]
             return [
-                makeFn(args, (F, m, v, r) => F - m * v * v / r),
-                makeLatex(args, '@=\\dfrac{@@^2}{@}', $, ':||:')
+                makeFn(args, (F, m, v, r) => F - (m * v * v) / r),
+                makeLatex(args, '@=\\dfrac{@@^2}{@}', $, ':||:'),
             ]
         },
 
@@ -265,23 +259,20 @@ export class PhyEqCls {
             let args = [F, m, r, ω]
             return [
                 makeFn(args, (F, m, r, ω) => F - m * r * ω * ω),
-                makeLatex(args, '@=@@@^2', $, ':|||')
+                makeLatex(args, '@=@@@^2', $, ':|||'),
             ]
-        }
-
+        },
     }
 
-
     Gravitation = {
-
         /**
          * F = GMm/r^2
          */
         FGMmr2(F = 'F', M = 'M', m = 'm', r = 'r', $ = '****'): eq {
             let args = [F, M, m, r]
             return [
-                makeFn(args, (F, M, m, r) => F - PhyConst.G * M * m / (r ** 2)),
-                makeLatex(args, '@=\\dfrac{G@@}{@^2}', $, ':|||')
+                makeFn(args, (F, M, m, r) => F - (PhyConst.G * M * m) / r ** 2),
+                makeLatex(args, '@=\\dfrac{G@@}{@^2}', $, ':|||'),
             ]
         },
 
@@ -291,8 +282,11 @@ export class PhyEqCls {
         FGMmRh2(F = 'F', M = 'M', m = 'm', R = 'R', h = 'h', $ = '*****'): eq {
             let args = [F, M, m, R, h]
             return [
-                makeFn(args, (F, M, m, R, h) => F - PhyConst.G * M * m / ((R + h) ** 2)),
-                makeLatex(args, '@=\\dfrac{G@@}{(@+@)^2}', $, ':||::')
+                makeFn(
+                    args,
+                    (F, M, m, R, h) => F - (PhyConst.G * M * m) / (R + h) ** 2
+                ),
+                makeLatex(args, '@=\\dfrac{G@@}{(@+@)^2}', $, ':||::'),
             ]
         },
 
@@ -302,8 +296,8 @@ export class PhyEqCls {
         gGMr2(g = 'g', M = 'M', r = 'r', $ = '***'): eq {
             let args = [g, M, r]
             return [
-                makeFn(args, (g, M, r) => g - PhyConst.G * M / (r ** 2)),
-                makeLatex(args, '@=\\dfrac{G@}{@^2}', $, ':||')
+                makeFn(args, (g, M, r) => g - (PhyConst.G * M) / r ** 2),
+                makeLatex(args, '@=\\dfrac{G@}{@^2}', $, ':||'),
             ]
         },
 
@@ -313,11 +307,13 @@ export class PhyEqCls {
         gGMRh2(g = 'g', M = 'M', R = 'R', h = 'h', $ = '****'): eq {
             let args = [g, M, R, h]
             return [
-                makeFn(args, (g, M, R, h) => g - PhyConst.G * M / ((R + h) ** 2)),
-                makeLatex(args, '@=\\dfrac{G@}{(@+@)^2}', $, ':|::')
+                makeFn(
+                    args,
+                    (g, M, R, h) => g - (PhyConst.G * M) / (R + h) ** 2
+                ),
+                makeLatex(args, '@=\\dfrac{G@}{(@+@)^2}', $, ':|::'),
             ]
         },
-
 
         /**
          * F = mg
@@ -326,11 +322,9 @@ export class PhyEqCls {
             let args = [F, m, g]
             return [
                 makeFn(args, (F, m, g) => F - m * g),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
-
-
 
         /**
          * GMm/r2 = mv2/r
@@ -340,11 +334,18 @@ export class PhyEqCls {
             let [_M, _r, _v] = $
             $ = [_M, _r, _v, _r].join('')
             return [
-                makeFn(args, (M, r, v) => PhyConst.G * M / r / r - v * v / r),
-                makeLatex([M, r, v, r], '\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}', $, '|||:')
+                makeFn(
+                    args,
+                    (M, r, v) => (PhyConst.G * M) / r / r - (v * v) / r
+                ),
+                makeLatex(
+                    [M, r, v, r],
+                    '\\dfrac{G@m}{@^2}=\\dfrac{m@^2}{@}',
+                    $,
+                    '|||:'
+                ),
             ]
         },
-
 
         /**
          * GMm/r2 = mrω2
@@ -354,28 +355,26 @@ export class PhyEqCls {
             let [_M, _r, _ω] = $
             $ = [_M, _r, _r, _ω].join('')
             return [
-                makeFn(args, (M, r, ω) => PhyConst.G * M / r / r - r * ω * ω),
-                makeLatex([M, r, r, ω], '\\dfrac{G@m}{@^2}=m@@^2', $, '||||')
+                makeFn(args, (M, r, ω) => (PhyConst.G * M) / r / r - r * ω * ω),
+                makeLatex([M, r, r, ω], '\\dfrac{G@m}{@^2}=m@@^2', $, '||||'),
             ]
         },
-
-
-
     }
 
-
-
-
     Radioactive = {
-
         /**
          * N = n(1/2)^(t/T)
          */
         NntT(N = 'N', n = 'n', t = 't', T = 'T', $ = '****'): eq {
             let args = [N, n, t, T]
             return [
-                makeFn(args, (N, n, t, T) => N - (n * 0.5 ** (t / T))),
-                makeLatex(args, '@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}', $, '::::')
+                makeFn(args, (N, n, t, T) => N - n * 0.5 ** (t / T)),
+                makeLatex(
+                    args,
+                    '@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}',
+                    $,
+                    '::::'
+                ),
             ]
         },
 
@@ -385,11 +384,15 @@ export class PhyEqCls {
         AatT(A = 'A', a = 'a', t = 't', T = 'T', $ = '****'): eq {
             let args = [A, a, t, T]
             return [
-                makeFn(args, (A, a, t, T) => A - (a * 0.5 ** (t / T))),
-                makeLatex(args, '@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}', $, '::::')
+                makeFn(args, (A, a, t, T) => A - a * 0.5 ** (t / T)),
+                makeLatex(
+                    args,
+                    '@=@\\left(\\dfrac{1}{2}\\right)^\\dfrac{@}{@}',
+                    $,
+                    '::::'
+                ),
             ]
         },
-
 
         /**
          * A = kN
@@ -398,10 +401,9 @@ export class PhyEqCls {
             let args = [A, k, N]
             return [
                 makeFn(args, (A, k, N) => A - k * N),
-                makeLatex(args, '@=@@', $, ':||')
+                makeLatex(args, '@=@@', $, ':||'),
             ]
         },
-
 
         /**
          * kT = ln2
@@ -410,10 +412,9 @@ export class PhyEqCls {
             let args = [k, T]
             return [
                 makeFn(args, (k, T) => k * T - Math.log(2)),
-                makeLatex(args, '@@=\\ln2', $, '||')
+                makeLatex(args, '@@=\\ln2', $, '||'),
             ]
         },
-
 
         /**
          * E = mc2
@@ -422,13 +423,10 @@ export class PhyEqCls {
             let args = [E, m]
             return [
                 makeFn(args, (E, m) => E - m * PhyConst.c ** 2),
-                makeLatex(args, '@=@c^2', $, ':|')
+                makeLatex(args, '@=@c^2', $, ':|'),
             ]
         },
-
     }
-
-
 }
 
 declare global {

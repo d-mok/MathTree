@@ -3,13 +3,6 @@ import './Math/index.ts'
 import './Pen/index.ts'
 import './Soil/index.ts'
 
-
-// import katexObj from 'katex'
-// globalThis.katex = katexObj
-
-
-
-
 // polyfill for .at
 function at(this: any, n: number) {
     // ToInteger() abstract op
@@ -22,15 +15,13 @@ function at(this: any, n: number) {
     return this[n]
 }
 
-
 const TypedArray = Reflect.getPrototypeOf(Int8Array)
 for (const C of [Array, String, TypedArray]) {
     // @ts-ignore
-    Object.defineProperty(C.prototype, "at",
-        {
-            value: at,
-            writable: true,
-            enumerable: false,
-            configurable: true
-        })
+    Object.defineProperty(C.prototype, 'at', {
+        value: at,
+        writable: true,
+        enumerable: false,
+        configurable: true,
+    })
 }

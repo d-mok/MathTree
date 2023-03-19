@@ -331,7 +331,6 @@ export class Host {
         T = T.replace(/y/g, yReplace)
         return T
     }
-
 }
 
 declare global {

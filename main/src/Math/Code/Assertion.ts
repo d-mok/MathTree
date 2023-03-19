@@ -1,10 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
-
     /**
      * check is a finite number.
      * ```
@@ -18,7 +16,6 @@ export class Host {
         return items.every(owl.num)
     }
 
-
     /**
      * check is an integer.
      * ```
@@ -29,8 +26,6 @@ export class Host {
     static IsInteger(...items: any[]): boolean {
         return items.every(owl.int)
     }
-
-
 
     /**
      * check is a decimal (non-integer).
@@ -43,8 +38,6 @@ export class Host {
         return items.every(owl.dec)
     }
 
-
-
     /**
      * check is a terminating decimal (or integer)
      * ```
@@ -55,8 +48,6 @@ export class Host {
     static IsTerminating(...items: any[]): boolean {
         return items.every(owl.terminating)
     }
-
-
 
     /**
      * check is a rational number with denominator <= 1000.
@@ -70,12 +61,6 @@ export class Host {
         return items.every(owl.rational)
     }
 
-
-
-
-
-
-
     /**
      * check is an odd integer.
      * ```
@@ -87,9 +72,6 @@ export class Host {
     static IsOdd(...items: any[]): boolean {
         return items.every(owl.odd)
     }
-
-
-
 
     /**
      * check is an even integer.
@@ -104,8 +86,6 @@ export class Host {
         return items.every(owl.even)
     }
 
-
-
     /**
      * check is in range [0,1].
      * ```
@@ -119,8 +99,6 @@ export class Host {
         return items.every(owl.prob)
     }
 
-
-
     /**
      * check is a square number.
      * ```
@@ -133,8 +111,6 @@ export class Host {
         return items.every(owl.sq)
     }
 
-
-
     /**
      * check is positive.
      * ```
@@ -146,8 +122,6 @@ export class Host {
     static IsPositive(...items: any[]): boolean {
         return items.every(owl.positive)
     }
-
-
 
     /**
      * check is non-negative.
@@ -162,9 +136,6 @@ export class Host {
         return items.every(owl.nonNegative)
     }
 
-
-
-
     /**
      * check is a positive integer.
      * ```
@@ -177,7 +148,6 @@ export class Host {
     static IsPositiveInteger(...items: any[]): boolean {
         return items.every(owl.positiveInt)
     }
-
 
     /**
      * check is a non-negative integer.
@@ -192,10 +162,6 @@ export class Host {
         return items.every(owl.nonNegativeInt)
     }
 
-
-
-
-
     /**
      * check is negative.
      * ```
@@ -207,9 +173,6 @@ export class Host {
     static IsNegative(...items: any[]): boolean {
         return items.every(owl.negative)
     }
-
-
-
 
     /**
      * check is non-zero finite number.
@@ -223,11 +186,6 @@ export class Host {
         return items.every(owl.nonZero)
     }
 
-
-
-
-
-
     /**
      * check is between min and max inclusive.
      * ```
@@ -237,12 +195,12 @@ export class Host {
      * ```
      */
     @checkIt(owl.num)
-    @inspectIt(function is_range(min, max) { return min < max })
+    @inspectIt(function is_range(min, max) {
+        return min < max
+    })
     static IsBetween(min: number, max: number) {
         return (...items: any[]): boolean => items.every(owl.between(min, max))
     }
-
-
 
     /**
      * check if its abs is between min and max inclusive.
@@ -253,14 +211,13 @@ export class Host {
      * ```
      */
     @checkIt(owl.nonNegative)
-    @inspectIt(function is_range(min, max) { return min < max })
+    @inspectIt(function is_range(min, max) {
+        return min < max
+    })
     static IsAbsBetween(min: number, max: number) {
-        return (...items: any[]): boolean => items.every(owl.absBetween(min, max))
+        return (...items: any[]): boolean =>
+            items.every(owl.absBetween(min, max))
     }
-
-
-
-
 
     /**
      * Check if the points are chessboard around anchor.
@@ -271,12 +228,9 @@ export class Host {
      */
     @checkIt(owl.point2D, owl.positive)
     static IsAroundPoint(anchor: Point2D, range: number) {
-        return (...points: Point2D[]): boolean => points.every(
-            p => ChessboardDistance(anchor, p) <= range
-        )
+        return (...points: Point2D[]): boolean =>
+            points.every(p => ChessboardDistance(anchor, p) <= range)
     }
-
-
 
     /**
      * Check if the array of legnths can form a triangle
@@ -291,15 +245,7 @@ export class Host {
     static IsTriangle(...triangles: [number, number, number][]): boolean {
         return triangles.every(owl.triangleSides)
     }
-
-
 }
-
-
-
-
-
-
 
 declare global {
     var IsNum: typeof Host.IsNum
@@ -322,6 +268,3 @@ declare global {
     var IsAroundPoint: typeof Host.IsAroundPoint
     var IsTriangle: typeof Host.IsTriangle
 }
-
-
-

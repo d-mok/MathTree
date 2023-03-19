@@ -1,22 +1,16 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenLabel {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
-    * Add a label to a point.
-    * ```
-    * pen.label.point([1,2],'A',180)
-    * // label the point [1,2] as 'A', place the label on the left (180 degree)
-    * ```
-    */
+     * Add a label to a point.
+     * ```
+     * pen.label.point([1,2],'A',180)
+     * // label the point [1,2] as 'A', place the label on the left (180 degree)
+     * ```
+     */
     point(point: Point, text: string | number, dir?: number, radius = 15) {
         if (dir !== undefined) {
             this.cv.labelPoint(text, point, dir, radius)
@@ -37,7 +31,6 @@ export class PenLabel {
         }
     }
 
-
     /**
      * Add a label to points, using index as text, with label center set as center of points.
      * ```
@@ -51,7 +44,6 @@ export class PenLabel {
         this.cv.restore()
     }
 
-
     /**
      * Add a label to an angle AOB.
      * ```
@@ -59,7 +51,12 @@ export class PenLabel {
      * // label the angle as 'x'
      * ```
      */
-    angle([A, O, B]: [Point, Point, Point], text: string | number, dir = 0, radius = -1) {
+    angle(
+        [A, O, B]: [Point, Point, Point],
+        text: string | number,
+        dir = 0,
+        radius = -1
+    ) {
         if (radius < 0) {
             radius = 28 + this.cv.getAngleAllowance(A, O, B, 40, 1.5)
         }
@@ -76,7 +73,6 @@ export class PenLabel {
         this.cv.labelLine(text, [A, B], dir, radius)
     }
 
-
     /**
      * Add a label at the front of arrow AB.
      * ```
@@ -86,10 +82,6 @@ export class PenLabel {
     front([A, B]: [Point, Point], text: string | number, dir = 0, radius = 15) {
         this.cv.labelFront(text, [A, B], dir, radius)
     }
-
-
-
-
 
     /**
      * Add a label to a polygon.
@@ -116,7 +108,6 @@ export class PenLabel {
         let text = `(${x}, ${y})`
         this.point(point, text, dir, radius)
     }
-
 
     /**
      * Add a label to the origin.

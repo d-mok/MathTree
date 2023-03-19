@@ -1,31 +1,31 @@
 {
-  "name": "mathtree",
-  "version": "1.0.0",
-  "scripts": {
-    "publish": "npm run build-edge && npm run build-type",
-    "build-edge": "esbuild src/index.ts --bundle --outfile=../dist/edge/mathtree.js",
-    "build-type": "npx tsc --project tsconfig.d.json",
-    "build-stable": "esbuild src/index.ts --bundle --minify --outfile=../dist/stable/mathtree.js",
-    "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./src/Math",
-    "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js"
-  },
-  "devDependencies": {
-    "esbuild": "^0.14.7"
-  },
-  "dependencies": {
-    "bot": "file:../packages/bot",
-    "contract": "file:../packages/contract",
-    "fate": "file:../packages/fate",
-    "gauss": "file:../packages/gauss",
-    "katex": "^0.13.23",
-    "paint": "file:../packages/paint",
-    "ruby": "file:../packages/ruby"
-  },
-  "prettier": {
-    "tabWidth": 4,
-    "semi": false,
-    "singleQuote": true,
-    "arrowParens": "avoid",
-    "singleAttributePerLine": true
-  }
+    "name": "mathtree",
+    "version": "1.0.0",
+    "scripts": {
+        "publish": "npm run build-edge && npm run build-type",
+        "build-edge": "esbuild src/index.ts --bundle --outfile=../dist/edge/mathtree.js",
+        "build-type": "npx tsc --project tsconfig.d.json",
+        "build-stable": "esbuild src/index.ts --bundle --minify --outfile=../dist/stable/mathtree.js",
+        "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./src/Math",
+        "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js"
+    },
+    "devDependencies": {
+        "esbuild": "^0.14.7"
+    },
+    "dependencies": {
+        "bot": "file:../packages/bot",
+        "contract": "file:../packages/contract",
+        "fate": "file:../packages/fate",
+        "gauss": "file:../packages/gauss",
+        "katex": "^0.13.23",
+        "paint": "file:../packages/paint",
+        "ruby": "file:../packages/ruby"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true,
+        "arrowParens": "avoid",
+        "singleAttributePerLine": true
+    }
 }

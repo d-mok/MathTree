@@ -11,5 +11,5 @@ module.exports = {
     },
     verbose: false,
     silent: false,
-    testEnvironment: "jsdom"
+    testEnvironment: 'jsdom',
 }

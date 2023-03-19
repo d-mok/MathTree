@@ -1,14 +1,8 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenSize {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     private initSize(widthInch: number, heightInch: number): void {
         if (!this.cv.RANGE_DONE) throw '[Pencil] Range must be set before Size'
@@ -17,13 +11,13 @@ export class PenSize {
         this.cv.SIZE_DONE = true
     }
 
-
     private initOuterBorder(): void {
-        if (!this.cv.RANGE_DONE) throw '[Pencil] Range must be set before setting border'
-        if (!this.cv.SIZE_DONE) throw '[Pencil] Size must be set before setting border'
+        if (!this.cv.RANGE_DONE)
+            throw '[Pencil] Range must be set before setting border'
+        if (!this.cv.SIZE_DONE)
+            throw '[Pencil] Size must be set before setting border'
         this.cv.addBorder(this.cv.$BORDER)
     }
-
 
     /**
      * Set the canvas size.
@@ -65,7 +59,4 @@ export class PenSize {
             this.set(maxHeightInch / ratio, maxHeightInch)
         }
     }
-
-
-
 }

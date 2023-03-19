@@ -2,7 +2,6 @@ import { PenCls } from './Pen'
 import { AutoPenCls } from './AutoPen'
 import { PhyPenCls } from './PhyPen'
 
-
 declare global {
     var Pen: typeof PenCls
     var AutoPen: typeof AutoPenCls

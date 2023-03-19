@@ -167,15 +167,6 @@ declare module "Math/Algebra/Polynomial" {
             [_: string]: number;
         }) => number;
         /**
-         * @deprecated
-         * join arrays of monomials
-         * ```
-         * PolyJoin([x^5, 2x^6], [3x^7])
-         * // [x^5, 2x^6, 3x^7]
-         * ```
-         */
-        static PolyJoin(...polys: polynomial[]): polynomial;
-        /**
          * combine like terms in polynomial
          * ```
          * PolySimplify([x^5, 2x^6, 3x^5])
@@ -189,7 +180,6 @@ declare module "Math/Algebra/Polynomial" {
         var PolyPrint: typeof Host.PolyPrint;
         var PolySort: typeof Host.PolySort;
         var PolyFunction: typeof Host.PolyFunction;
-        var PolyJoin: typeof Host.PolyJoin;
         var PolySimplify: typeof Host.PolySimplify;
     }
 }
@@ -420,7 +410,7 @@ declare module "Pen/modules/settings" {
          * pen.set.dash(false) // set solid line
          * ```
          */
-        dash(segments?: (number[] | number | boolean)): void;
+        dash(segments?: number[] | number | boolean): void;
         /**
          * Set the horizontal alignment of text.
          * ```
@@ -567,7 +557,7 @@ declare module "Pen/modules/d3" {
          * pen.d3.circle([0,0,1],2,[1,0,0],[0,1,0]) // draw a xy circle with radius 2
          * ```
          */
-        circle(center: Point3D, radius: number, xVec: Point3D, yVec: Point3D, { line, dash, shade, fill, arc }?: {
+        circle(center: Point3D, radius: number, xVec: Point3D, yVec: Point3D, { line, dash, shade, fill, arc, }?: {
             line?: boolean;
             dash?: boolean;
             shade?: boolean;
@@ -580,7 +570,7 @@ declare module "Pen/modules/d3" {
          * pen.d3.circleXZ([0,3,0],2) // draw a xz circle with radius 2
          * ```
          */
-        circleXZ(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+        circleXZ(center: Point3D, radius: number, { line, dash, shade, fill, arc, }?: {
             line?: boolean;
             dash?: boolean;
             shade?: boolean;
@@ -593,7 +583,7 @@ declare module "Pen/modules/d3" {
          * pen.d3.circleYZ([3,0,0],2) // draw a yz circle with radius 2
          * ```
          */
-        circleYZ(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+        circleYZ(center: Point3D, radius: number, { line, dash, shade, fill, arc, }?: {
             line?: boolean;
             dash?: boolean;
             shade?: boolean;
@@ -606,7 +596,7 @@ declare module "Pen/modules/d3" {
          * pen.d3.circleXY([0,0,3],2) // draw a xy circle with radius 2
          * ```
          */
-        circleXY(center: Point3D, radius: number, { line, dash, shade, fill, arc }?: {
+        circleXY(center: Point3D, radius: number, { line, dash, shade, fill, arc, }?: {
             line?: boolean;
             dash?: boolean;
             shade?: boolean;
@@ -619,7 +609,7 @@ declare module "Pen/modules/d3" {
          * pen.d3.sphere([1,0,0],3) // draw a sphere with radius 3
          * ```
          */
-        sphere(center: Point3D, radius: number, { baseDash, baseShade, radiusLine, radiusDash, radiusLabel, lowerOnly, upperOnly }?: {
+        sphere(center: Point3D, radius: number, { baseDash, baseShade, radiusLine, radiusDash, radiusLabel, lowerOnly, upperOnly, }?: {
             baseDash?: boolean | undefined;
             baseShade?: boolean | undefined;
             radiusLine?: boolean | undefined;
@@ -951,12 +941,12 @@ declare module "Pen/modules/label" {
         private cv;
         constructor(pen: PenCls, cv: Convas);
         /**
-        * Add a label to a point.
-        * ```
-        * pen.label.point([1,2],'A',180)
-        * // label the point [1,2] as 'A', place the label on the left (180 degree)
-        * ```
-        */
+         * Add a label to a point.
+         * ```
+         * pen.label.point([1,2],'A',180)
+         * // label the point [1,2] as 'A', place the label on the left (180 degree)
+         * ```
+         */
         point(point: Point, text: string | number, dir?: number, radius?: number): void;
         /**
          * Add a label to points, using index as text.
@@ -1060,11 +1050,11 @@ declare module "Pen/modules/tick" {
         private cv;
         constructor(pen: PenCls, cv: Convas);
         /**
-        * Draw ticks on the x-axis.
-        * ```
-        * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
-        * ```
-        */
+         * Draw ticks on the x-axis.
+         * ```
+         * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
+         * ```
+         */
         x(interval?: number, mark?: boolean): void;
         /**
          * Draw ticks on the y-axis.
@@ -2397,15 +2387,6 @@ declare module "Math/Code/Function" {
          */
         static log(b: number, N: number): number;
         /**
-         * @deprecated
-         * @ignore
-         * a**b, a to the power of b.
-         * ```
-         * Power(2,3) // 8
-         * ```
-         */
-        static Power(a: number, b: number): number;
-        /**
          * square root of x
          * ```
          * Sqrt(4) // 2
@@ -2475,7 +2456,6 @@ declare module "Math/Code/Function" {
     }
     global {
         var log: typeof Host.log;
-        var Power: typeof Host.Power;
         var Sqrt: typeof Host.Sqrt;
         var Radian: typeof Host.Radian;
         var Degree: typeof Host.Degree;
@@ -4856,24 +4836,24 @@ declare module "Math/Code/Vector3D" {
          */
         static Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: number): Point3D[];
         /**
-        * @category 3DPen
-        * @deprecated use built-in projector in Pen instead
-        * projector function from 3D point to 2D plane
-        * ```
-        * const pj = Projector(60,0.5) // create a 3D projector function
-        * pj(1,1,0) // [1.25, 0.433012701892]
-        * ```
-        */
+         * @category 3DPen
+         * @deprecated use built-in projector in Pen instead
+         * projector function from 3D point to 2D plane
+         * ```
+         * const pj = Projector(60,0.5) // create a 3D projector function
+         * pj(1,1,0) // [1.25, 0.433012701892]
+         * ```
+         */
         static Projector(angle?: number, depth?: number): (x: number, y: number, z: number) => Point;
         /**
-        * @category 3DPen
-        * @deprecated use built-in projector in Pen instead
-        * projector function from 3D point to 2D plane
-        * ```
-        * const pj = Projector3D(60,0.5) // create a 3D projector function
-        * pj([1,1,0]) // [1.25, 0.433012701892]
-        * ```
-        */
+         * @category 3DPen
+         * @deprecated use built-in projector in Pen instead
+         * projector function from 3D point to 2D plane
+         * ```
+         * const pj = Projector3D(60,0.5) // create a 3D projector function
+         * pj([1,1,0]) // [1.25, 0.433012701892]
+         * ```
+         */
         static Projector3D(angle?: number, depth?: number): (_: Point3D) => Point;
     }
     global {
@@ -5319,7 +5299,7 @@ declare module "Pen/PhyPen" {
          * })
          * ```
          */
-        InclinedPlane({ boxMid, boxWidth, boxHeight, length, angle, angleLabel, weight, weightLabel, weightXLabel, weightYLabel, weightAngleLabel, normal, normalLabel, friction, frictionLabel, applied, appliedLabel, appliedXLabel, appliedYLabel, appliedAngle, appliedAngleLabel, showForces, showWeightCompo, showAppliedCompo }: {
+        InclinedPlane({ boxMid, boxWidth, boxHeight, length, angle, angleLabel, weight, weightLabel, weightXLabel, weightYLabel, weightAngleLabel, normal, normalLabel, friction, frictionLabel, applied, appliedLabel, appliedXLabel, appliedYLabel, appliedAngle, appliedAngleLabel, showForces, showWeightCompo, showAppliedCompo, }: {
             boxMid?: number;
             boxWidth?: number;
             boxHeight?: number;
@@ -5387,7 +5367,7 @@ declare module "Pen/PhyPen" {
          * })
          * ```
          */
-        CarOnBankedRoad({ carMid, carWidth, wheelHeight, carHeight, angle, angleLabel, weight, weightLabel, normal, normalLabel, friction, frictionLabel, showAllForces }: {
+        CarOnBankedRoad({ carMid, carWidth, wheelHeight, carHeight, angle, angleLabel, weight, weightLabel, normal, normalLabel, friction, frictionLabel, showAllForces, }: {
             carMid?: number;
             carWidth?: number;
             wheelHeight?: number;
@@ -5420,7 +5400,7 @@ declare module "Pen/PhyPen" {
          * })
          * ```
          */
-        AirplaneTurning({ wingWidth, planeRadius, angle, angleLabel, weight, weightLabel, lift, liftLabel, showAllForces }: {
+        AirplaneTurning({ wingWidth, planeRadius, angle, angleLabel, weight, weightLabel, lift, liftLabel, showAllForces, }: {
             planeMid?: number;
             wingWidth?: number;
             planeRadius?: number;
@@ -5450,7 +5430,7 @@ declare module "Pen/PhyPen" {
          * })
          * ```
          */
-        ConicalPendulum({ bobRadius, length, angle, angleLabel, weight, weightLabel, tension, tensionLabel, showAllForces }: {
+        ConicalPendulum({ bobRadius, length, angle, angleLabel, weight, weightLabel, tension, tensionLabel, showAllForces, }: {
             bobRadius?: number;
             length?: number;
             angle?: number;
@@ -5473,7 +5453,7 @@ declare module "Pen/PhyPen" {
          * })
          * ```
          */
-        SatelliteOrbit({ planetRadius, orbitRadius, angle, showHeight }: {
+        SatelliteOrbit({ planetRadius, orbitRadius, angle, showHeight, }: {
             planetRadius?: number;
             orbitRadius?: number;
             angle?: number;
@@ -5496,8 +5476,13 @@ declare module "Pen/PhyPen" {
          * })
          * ```
          */
-        RefractionMedia({ rays, upMedLabel, lowMedLabel, upMedColor, lowMedColor, roundTo }: {
-            rays: [dir: number, to: boolean, angleV: boolean | string, angleH: boolean | string][];
+        RefractionMedia({ rays, upMedLabel, lowMedLabel, upMedColor, lowMedColor, roundTo, }: {
+            rays: [
+                dir: number,
+                to: boolean,
+                angleV: boolean | string,
+                angleH: boolean | string
+            ][];
             upMedLabel: string;
             lowMedLabel: string;
             upMedColor: string;

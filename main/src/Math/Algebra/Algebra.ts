@@ -3,7 +3,6 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 @exposeAll()
 @captureAll()
 export class Host {
-
     /**
      * Solve [x,y] from ax+by=c and px+qy=r.
      * ```
@@ -12,8 +11,17 @@ export class Host {
      * ```
      */
     @checkIt(owl.num)
-    @inspectIt(function has_unique_sol(a, b, c, p, q, r) { return a * q - b * p !== 0 })
-    static Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number] {
+    @inspectIt(function has_unique_sol(a, b, c, p, q, r) {
+        return a * q - b * p !== 0
+    })
+    static Crammer(
+        a: number,
+        b: number,
+        c: number,
+        p: number,
+        q: number,
+        r: number
+    ): [number, number] {
         const D = a * q - b * p
         const x = (c * q - b * r) / D
         const y = (a * r - c * p) / D
@@ -27,7 +35,12 @@ export class Host {
      * // (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
      * ```
      */
-    @checkIt([owl.ntuple, function non_zero_leading_coeff(_) { return _[0] !== 0 }])
+    @checkIt([
+        owl.ntuple,
+        function non_zero_leading_coeff(_) {
+            return _[0] !== 0
+        },
+    ])
     static xPolynomial(poly1: number[], poly2: number[]): number[] {
         const deg1 = poly1.length - 1
         const deg2 = poly2.length - 1
@@ -41,7 +54,6 @@ export class Host {
         return result
     }
 
-
     /**
      * Expansion coeff of (Ax+B)^n in descending power of x.
      * ```
@@ -53,20 +65,14 @@ export class Host {
     static Binomial(A: number, B: number, n: number = 2): number[] {
         let coeff: number[] = []
         for (let i = 0; i <= n; i++) {
-            coeff.push(nCr(n, i) * (A ** (n - i)) * (B ** i))
+            coeff.push(nCr(n, i) * A ** (n - i) * B ** i)
         }
         return coeff
     }
-
-
 }
-
 
 declare global {
     var Crammer: typeof Host.Crammer
     var xPolynomial: typeof Host.xPolynomial
     var Binomial: typeof Host.Binomial
 }
-
-
-

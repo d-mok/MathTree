@@ -2,20 +2,13 @@ import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
 export class PenRod {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     private end(A: Point2D, dir: number, length?: number): Point2D {
         return length === undefined
             ? this.cv.edgePoint(A, dir)
             : Move(A, dir, length)
     }
-
-
 
     /**
      * Draw a line from `A` in `dir` with `length`.
@@ -28,7 +21,6 @@ export class PenRod {
         this.pen.line(A, B, label)
     }
 
-
     /**
      * Draw a dash line from `A` in `dir` with `length`.
      * ```
@@ -39,7 +31,6 @@ export class PenRod {
         let B = this.end(A, dir, length)
         this.pen.dash(A, B, label)
     }
-
 
     /**
      * Draw an arrow from `A` in `dir` with `length`.
@@ -52,7 +43,6 @@ export class PenRod {
         this.pen.arrow(A, B, label)
     }
 
-
     /**
      * Draw a ray from `A` in `dir` with `length`.
      * ```
@@ -64,7 +54,6 @@ export class PenRod {
         this.pen.ray(A, B, label)
     }
 
-
     /**
      * Draw a ray to `A` in `dir` with `length`.
      * ```
@@ -75,5 +64,4 @@ export class PenRod {
         let B = this.end(A, dir, length)
         this.pen.ray(B, A, label)
     }
-
 }

@@ -1,12 +1,9 @@
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
 import { poker, dice } from 'fate'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
-
-
     /**
      * a random item from the given items
      * ```
@@ -16,7 +13,6 @@ export class Host {
     static RndPick<T>(...items: T[]): T {
         return toList(items).draw()!
     }
-
 
     /**
      * a shuffled array of the given items
@@ -28,8 +24,6 @@ export class Host {
         return [...toList(items).shuffled()]
     }
 
-
-
     /**
      * n random items from given items without replacement, but NOT necessarily unique if there are duplicated object in items.
      * ```
@@ -40,8 +34,6 @@ export class Host {
     static RndPickN<T>(items: T[], n: number): T[] {
         return [...toList(items).sample(n)!]
     }
-
-
 
     /**
      * n random unique items from given items, deep compare.
@@ -55,10 +47,6 @@ export class Host {
         return [...toList(items).uniqueDeep().sample(n)!]
     }
 
-
-
-
-
     /**
      * a random male name
      * ```
@@ -69,8 +57,6 @@ export class Host {
         return poker.he()
     }
 
-
-
     /**
      * a random female name
      * ```
@@ -80,8 +66,6 @@ export class Host {
     static RndShe(): string {
         return poker.she()
     }
-
-
 
     /**
      * a random 3-letters array
@@ -97,13 +81,9 @@ export class Host {
             ['p', 'q', 'r'],
             ['r', 's', 't'],
             ['u', 'v', 'w'],
-            ['x', 'y', 'z'],
+            ['x', 'y', 'z']
         )
     }
-
-
-
-
 
     /**
      * a random 3-letters array
@@ -119,17 +99,10 @@ export class Host {
             ['P', 'Q', 'R'],
             ['R', 'S', 'T'],
             ['U', 'V', 'W'],
-            ['X', 'Y', 'Z'],
+            ['X', 'Y', 'Z']
         )
     }
-
-
-
-
 }
-
-
-
 
 declare global {
     var RndPick: typeof Host.RndPick
@@ -140,9 +113,4 @@ declare global {
     var RndShe: typeof Host.RndShe
     var RndLetters: typeof Host.RndLetters
     var RndCapitals: typeof Host.RndCapitals
-
 }
-
-
-
-

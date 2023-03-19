@@ -1,14 +1,8 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenShade {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
      * Shade a circle (x-h)^2+(y-k)^2 = r^2.
@@ -62,5 +56,4 @@ export class PenShade {
         let [c, d] = C
         this.pen.polyshade([a, b], [c, b], [c, d], [a, d])
     }
-
 }

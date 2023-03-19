@@ -1,14 +1,8 @@
 import { PenCls } from '../Pen'
 import { capturable, Convas } from 'paint'
 
-
 export class PenRange {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
      * Set the coordinate range.
@@ -73,18 +67,19 @@ export class PenRange {
         this.cv.AUTO_BORDER = true
     }
 
-
     private capQuadX(a: number, b: number, c: number) {
         if (Discriminant(a, b, c) >= 0) {
             let [p, q] = QuadraticRoot(a, b, c)
-            this.cv.capture([[p, 0], [q, 0]])
+            this.cv.capture([
+                [p, 0],
+                [q, 0],
+            ])
         }
     }
 
     private capQuadY(a: number, b: number, c: number) {
         this.cv.capture([[0, c]])
     }
-
 
     private capQuadV(a: number, b: number, c: number) {
         this.cv.capture([['quadratic', a, b, c, 1]])
@@ -148,7 +143,6 @@ export class PenRange {
     //     this.cv.AUTO_BORDER = true
     // }
 
-
     /**
      * Set the coordinate range by capture points or objects, include O(0,0).
      * ```
@@ -159,7 +153,6 @@ export class PenRange {
     extend(...points: Point[]) {
         this.capture([0, 0], ...points)
     }
-
 
     /**
      * Set the coordinate range by capturing a circle, include O(0,0).
@@ -172,8 +165,4 @@ export class PenRange {
         this.cv.capture([['circle', center, radius]])
         this.cv.AUTO_BORDER = true
     }
-
-
-
-
 }

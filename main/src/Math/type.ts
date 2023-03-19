@@ -74,7 +74,7 @@ declare global {
 
     type monomial = { coeff: number; [_: string]: number }
     type polynomial = monomial[]
-    
+
     type CompoundInequality = [
         connective: 'AND' | 'OR',
         sign1: Ineq,

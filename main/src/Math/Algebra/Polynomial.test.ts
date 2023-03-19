@@ -42,23 +42,6 @@ test('PolyFunction', () => {
     expect(func({ x: 2, y: 3 })).toBe(9511.5)
 })
 
-test('PolyJoin', () => {
-    let P = [
-        { coeff: 5, x: 1, y: 6 },
-        { coeff: -7, x: -1, y: 5 },
-        { coeff: 1, x: 3, y: 4 },
-        { coeff: -1, x: 6, y: 3 },
-    ]
-    let Q = [
-        { coeff: 6, x: 0, y: 2 },
-        { coeff: 0, x: 3, y: 1 },
-        { coeff: 8, x: 9, y: 0 },
-        { coeff: 2, x: 0, y: 0 },
-    ]
-    let T = '5xy^{6}+-7x^{-1}y^{5}+1x^{3}y^{4}+-1x^{6}y^{3}+6y^{2}+8x^{9}+2'
-    expect(PolyPrint([...P, ...Q])).toBe(T)
-})
-
 test('PolySimplify', () => {
     let P = [
         { coeff: 1, x: 1, y: 3 },

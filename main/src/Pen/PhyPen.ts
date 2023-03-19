@@ -1,6 +1,5 @@
 import { PenCls } from './Pen'
 
-
 export class PhyPenCls {
     /**
      * @ignore
@@ -91,7 +90,7 @@ export class PhyPenCls {
         appliedAngleLabel = 'φ',
         showForces = false,
         showWeightCompo = showForces,
-        showAppliedCompo = showForces
+        showAppliedCompo = showForces,
     }: {
         boxMid?: number
         boxWidth?: number
@@ -118,8 +117,6 @@ export class PhyPenCls {
         showWeightCompo?: boolean
         showAppliedCompo?: boolean
     }) {
-
-
         let O: Point2D = [0, 0]
         let l = boxMid - boxWidth / 2
         let r = boxMid + boxWidth / 2
@@ -128,9 +125,9 @@ export class PhyPenCls {
         let P: Point2D = [l, 0]
         let Q = MoveY(P, boxHeight)
         let R: Point2D = [r, 0]
-        let S = MoveY(R, boxHeight);
+        let S = MoveY(R, boxHeight)
 
-        [P, Q, R, S] = [P, Q, R, S].map($ => Rotate($, angle, O))
+        ;[P, Q, R, S] = [P, Q, R, S].map($ => Rotate($, angle, O))
 
         // road
         let Z: Point2D = [length, 0]
@@ -154,8 +151,8 @@ export class PhyPenCls {
         let F = Move(E, angle + appliedAngle, applied)
         let apA = applied === 0 ? 0 : Dir(E, F)
         if (apA > angle + 90 && apA < angle + 270) {
-            F = Rotate(F, 180, E);
-            [E, F] = [F, E]
+            F = Rotate(F, 180, E)
+            ;[E, F] = [F, E]
         }
 
         let pen = new Pen()
@@ -191,7 +188,8 @@ export class PhyPenCls {
                     let a: string | undefined
                     if (weightAngleLabel === true) a = angleLabel
                     if (weightAngleLabel === false) a = undefined
-                    if (typeof weightAngleLabel === 'string') a = weightAngleLabel
+                    if (typeof weightAngleLabel === 'string')
+                        a = weightAngleLabel
                     pen.arrowCompo(G, W, angle + 90, weightYLabel, a)
                     pen.set.labelCenter()
                     pen.set.dash()
@@ -206,14 +204,12 @@ export class PhyPenCls {
                 pen.arrow(M, N, normalLabel)
             }
 
-
             // friction
             if (friction !== 0) {
                 pen.set.weight(3)
                 pen.set.color('blue')
                 pen.arrow(g, f, frictionLabel)
             }
-
 
             // applied
             if (applied !== 0) {
@@ -233,20 +229,17 @@ export class PhyPenCls {
                     let a: string | undefined
                     if (appliedAngleLabel === true) a = ''
                     if (appliedAngleLabel === false) a = undefined
-                    if (typeof appliedAngleLabel === 'string') a = appliedAngleLabel
+                    if (typeof appliedAngleLabel === 'string')
+                        a = appliedAngleLabel
                     pen.arrowCompo(E, F, angle, appliedXLabel, a)
                     pen.set.dash()
                 }
                 pen.set.labelCenter()
             }
-
         }
 
         this.pen = pen
-
     }
-
-
 
     /**
      * A projectile trajectory.
@@ -279,7 +272,7 @@ export class PhyPenCls {
         let ux = speed * cos(angle)
         let uy = speed * sin(angle)
 
-        time ??= 2 * uy / 9.81
+        time ??= (2 * uy) / 9.81
 
         let x = (t: number) => ux * t
         let y = (t: number) => uy * t - 0.5 * 9.81 * t * t
@@ -302,7 +295,6 @@ export class PhyPenCls {
 
         this.pen = pen
     }
-
 
     /**
      * A car on a banked road.
@@ -339,7 +331,7 @@ export class PhyPenCls {
         normalLabel = 'R',
         friction = 0,
         frictionLabel = 'f',
-        showAllForces = false
+        showAllForces = false,
     }: {
         carMid?: number
         carWidth?: number
@@ -355,8 +347,6 @@ export class PhyPenCls {
         frictionLabel?: string
         showAllForces?: boolean
     }) {
-
-
         let O: Point2D = [0, 0]
         let l = carMid - carWidth / 2
         let r = carMid + carWidth / 2
@@ -369,9 +359,9 @@ export class PhyPenCls {
         let P = MoveY(A, wheelHeight)
         let Q = MoveY(P, carHeight)
         let R = MoveY(B, wheelHeight)
-        let S = MoveY(R, carHeight);
+        let S = MoveY(R, carHeight)
 
-        [A, B, P, Q, R, S] = [A, B, P, Q, R, S].map($ => Rotate($, angle, O))
+        ;[A, B, P, Q, R, S] = [A, B, P, Q, R, S].map($ => Rotate($, angle, O))
 
         // road
         let Z: Point2D = [2 * r, 0]
@@ -410,7 +400,6 @@ export class PhyPenCls {
             pen.arrow(G, W, weightLabel)
             pen.set.lineLabel()
 
-
             pen.set.weight(3)
             pen.set.color('purple')
             pen.arrow(G, N)
@@ -429,12 +418,7 @@ export class PhyPenCls {
         }
 
         this.pen = pen
-
     }
-
-
-
-
 
     /**
      * A plane making a turn.
@@ -463,7 +447,7 @@ export class PhyPenCls {
         weightLabel = 'mg',
         lift = 5,
         liftLabel = 'L',
-        showAllForces = false
+        showAllForces = false,
     }: {
         planeMid?: number
         wingWidth?: number
@@ -479,9 +463,9 @@ export class PhyPenCls {
         let O: Point2D = [0, 0]
 
         // plane centre
-        let P: Point2D = [- wingWidth, 0]
-        let Q: Point2D = [+ wingWidth, 0];
-        [P, Q] = [P, Q].map($ => Rotate($, angle, O))
+        let P: Point2D = [-wingWidth, 0]
+        let Q: Point2D = [+wingWidth, 0]
+        ;[P, Q] = [P, Q].map($ => Rotate($, angle, O))
 
         // mg
         let W = MoveY(O, -weight)
@@ -522,11 +506,7 @@ export class PhyPenCls {
         }
 
         this.pen = pen
-
     }
-
-
-
 
     /**
      * A conical pendulum.
@@ -555,7 +535,7 @@ export class PhyPenCls {
         weightLabel = 'mg',
         tension = 10,
         tensionLabel = 'T',
-        showAllForces = false
+        showAllForces = false,
     }: {
         bobRadius?: number
         length?: number
@@ -576,7 +556,6 @@ export class PhyPenCls {
 
         // tension
         let T: Point2D = Move(P, 90 + angle, tension)
-
 
         let pen = new Pen()
 
@@ -601,22 +580,15 @@ export class PhyPenCls {
 
             // tension
             pen.set.color('blue')
-            pen.arrow(P, T,)
+            pen.arrow(P, T)
             pen.set.weight(2)
             pen.arrowResolve(P, T, 90, [], angleLabel)
             pen.set.weight()
             pen.label.point(T, tensionLabel)
-
         }
 
         this.pen = pen
-
-
     }
-
-
-
-
 
     /**
      * A satellite orbits around a planet.
@@ -634,14 +606,13 @@ export class PhyPenCls {
         planetRadius = 1.3,
         orbitRadius = 2,
         angle = 30,
-        showHeight = false
+        showHeight = false,
     }: {
         planetRadius?: number
         orbitRadius?: number
         angle?: number
         showHeight?: boolean
     }) {
-
         let pen = new Pen()
         let O: Point2D = [0, 0]
         //satellite
@@ -678,17 +649,6 @@ export class PhyPenCls {
         this.pen = pen
     }
 
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Refraction between two media.
      * ```
@@ -706,23 +666,26 @@ export class PhyPenCls {
      * })
      * ```
      */
-    RefractionMedia(
-        {
-            rays = [],
-            upMedLabel = '',
-            lowMedLabel = '',
-            upMedColor = 'white',
-            lowMedColor = 'black',
-            roundTo = 5
-        }: {
-            rays: [dir: number, to: boolean, angleV: boolean | string, angleH: boolean | string][]
-            upMedLabel: string
-            lowMedLabel: string
-            upMedColor: string
-            lowMedColor: string
-            roundTo: number
-        }) {
-
+    RefractionMedia({
+        rays = [],
+        upMedLabel = '',
+        lowMedLabel = '',
+        upMedColor = 'white',
+        lowMedColor = 'black',
+        roundTo = 5,
+    }: {
+        rays: [
+            dir: number,
+            to: boolean,
+            angleV: boolean | string,
+            angleH: boolean | string
+        ][]
+        upMedLabel: string
+        lowMedLabel: string
+        upMedColor: string
+        lowMedColor: string
+        roundTo: number
+    }) {
         let O: Point2D = [0, 0]
 
         // pen setup
@@ -748,54 +711,36 @@ export class PhyPenCls {
 
         function angleWtihYAxis(dir: number) {
             dir = PolarReduce(dir)
-            return Math.min(
-                Math.abs(dir - 90),
-                Math.abs(dir - 270)
-            )
+            return Math.min(Math.abs(dir - 90), Math.abs(dir - 270))
         }
 
         function angleWtihXAxis(dir: number) {
             return 90 - angleWtihYAxis(dir)
         }
 
-
         for (let ray of rays) {
             let [dir, isTo, angleV, angleH] = ray
             dir = PolarReduce(dir)
 
             //draw ray
-            isTo
-                ? pen.rod.rayTo(O, dir)
-                : pen.rod.rayFrom(O, dir)
+            isTo ? pen.rod.rayTo(O, dir) : pen.rod.rayFrom(O, dir)
 
             // draw angle with vertical
             if (angleV !== undefined && angleV !== false) {
                 let V: Point2D = [0, sin(dir)]
-                let label = angleV === true
-                    ? angleWtihYAxis(dir)
-                    : angleV
-                if (typeof label === 'number')
-                    label = Round(label, roundTo)
+                let label = angleV === true ? angleWtihYAxis(dir) : angleV
+                if (typeof label === 'number') label = Round(label, roundTo)
                 pen.angleDir(V, O, dir, label)
             }
 
             // draw angle with horizontal
             if (angleH !== undefined && angleH !== false) {
                 let H: Point2D = [cos(dir), 0]
-                let label = angleH === true
-                    ? angleWtihXAxis(dir)
-                    : angleH
-                if (typeof label === 'number')
-                    label = Round(label, roundTo)
+                let label = angleH === true ? angleWtihXAxis(dir) : angleH
+                if (typeof label === 'number') label = Round(label, roundTo)
                 pen.angleDir(H, O, dir, label)
             }
-
         }
         this.pen = pen
     }
-
-
-
-
 }
-

@@ -1,14 +1,8 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenSettings {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
      * Set the weight of the pen (line width).
@@ -25,7 +19,7 @@ export class PenSettings {
      * pen.set.color('grey')
      * ```
      */
-    color(color = "black"): void {
+    color(color = 'black'): void {
         this.cv.$COLOR = color
     }
     /**
@@ -46,7 +40,7 @@ export class PenSettings {
      * pen.set.dash(false) // set solid line
      * ```
      */
-    dash(segments: (number[] | number | boolean) = []): void {
+    dash(segments: number[] | number | boolean = []): void {
         this.cv.$DASH = segments
     }
 
@@ -56,7 +50,7 @@ export class PenSettings {
      * pen.set.textAlign('left') // {'left','right','center'}
      * ```
      */
-    textAlign(align: CanvasTextAlign = "center"): void {
+    textAlign(align: CanvasTextAlign = 'center'): void {
         this.cv.$TEXT_ALIGN = align
     }
 
@@ -66,7 +60,7 @@ export class PenSettings {
      * pen.set.textBaseline('bottom') // {'top','bottom','middle'}
      * ```
      */
-    textBaseline(baseline: CanvasTextBaseline = "middle"): void {
+    textBaseline(baseline: CanvasTextBaseline = 'middle'): void {
         this.cv.$TEXT_BASELINE = baseline
     }
     /**
@@ -173,7 +167,6 @@ export class PenSettings {
         this.cv.$LINE_LABEL = setting
     }
 
-
     /**
      * Set the mode for arrow label.
      * ```
@@ -183,7 +176,6 @@ export class PenSettings {
     arrowLabel(setting: 'line' | 'head' | 'front' = 'line'): void {
         this.cv.$ARROW_LABEL = setting
     }
-
 
     /**
      * Use positive x-axis only.
@@ -195,8 +187,6 @@ export class PenSettings {
         this.cv.$HALF_AXIS_X = half
     }
 
-
-
     /**
      * Use positive y-axis only.
      * ```
@@ -206,7 +196,6 @@ export class PenSettings {
     halfAxisY(half: boolean = false): void {
         this.cv.$HALF_AXIS_Y = half
     }
-
 
     /**
      * Use positive axis only.
@@ -218,9 +207,6 @@ export class PenSettings {
         this.halfAxisX(half)
         this.halfAxisY(half)
     }
-
-
-
 
     /**
      * Reset all pen settings.
@@ -252,6 +238,4 @@ export class PenSettings {
         this.border()
         this.projector3D()
     }
-
-
 }

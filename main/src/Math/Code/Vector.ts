@@ -1,14 +1,8 @@
-
-
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-
-
 
 @exposeAll()
 @captureAll()
 export class Host {
-
-
     /**
      * sum of all vectors
      * ```
@@ -21,21 +15,11 @@ export class Host {
         const y = Sum(...vectors.map(p => p[1]))
         return [x, y]
     }
-
-
-
 }
-
-
 
 declare global {
     var VecAdd: typeof Host.VecAdd
 }
-
-
-
-
-
 
 // /**
 //  * @category Vector
@@ -48,7 +32,6 @@ declare global {
 //     return [P[0] - O[0], P[1] - O[1]];
 // }
 // globalThis.Vector = contract(Vector).sign([owl.point2D])
-
 
 // /**
 //  * @category Vector
@@ -65,8 +48,6 @@ declare global {
 // }
 // globalThis.Mid = contract(Mid).sign([owl.vector])
 
-
-
 // /**
 //  * @category Vector
 //  * @deprecated useless
@@ -82,10 +63,6 @@ declare global {
 //     return (x * x + y * y) ** 0.5
 // }
 // globalThis.VectorLength = contract(VectorLength).sign([owl.vector])
-
-
-
-
 
 // /**
 //  * @category Vector
@@ -108,10 +85,6 @@ declare global {
 // }
 // globalThis.VectorArg = contract(VectorArg).sign([owl.vector])
 
-
-
-
-
 // /**
 //  * @category Vector
 //  * @return find [kx,ky] from [x,y]
@@ -124,11 +97,6 @@ declare global {
 //     return [k * v[0], k * v[1]];
 // }
 // globalThis.VectorScale = contract(VectorScale).sign([owl.vector, owl.num])
-
-
-
-
-
 
 // /**
 //  * @category Vector
@@ -145,10 +113,6 @@ declare global {
 //     return [-x, -y]
 // }
 // globalThis.VectorRev = contract(VectorRev).sign([owl.vector])
-
-
-
-
 
 // /**
 //  * @category Vector
@@ -167,8 +131,6 @@ declare global {
 // }
 // globalThis.VectorUnit = contract(VectorUnit).sign([owl.vector])
 
-
-
 // /**
 //  * @category Vector
 //  * @deprecated useless
@@ -183,12 +145,6 @@ declare global {
 //     return VectorScale(VectorUnit(v), length)
 // }
 // globalThis.VectorScaleTo = contract(VectorScaleTo).sign([owl.vector, owl.num])
-
-
-
-
-
-
 
 // /**
 //  * @category Vector
@@ -207,6 +163,3 @@ declare global {
 //     return [x1, y1]
 // }
 // globalThis.VectorRotate = contract(VectorRotate).sign([owl.vector, owl.num])
-
-
-

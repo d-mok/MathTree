@@ -1,24 +1,18 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenTick {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
-    * Draw ticks on the x-axis.
-    * ```
-    * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
-    * ```
-    */
+     * Draw ticks on the x-axis.
+     * ```
+     * pen.tick.x(2) // draw ticks on the x-axis, at interval 2 units
+     * ```
+     */
     x(interval = 1, mark = true) {
         this.cv.xAxisTick(interval)
         if (mark) this.cv.xAxisTickMark(interval)
-
     }
 
     /**
@@ -42,5 +36,4 @@ export class PenTick {
         this.x(interval, mark)
         this.y(interval, mark)
     }
-
 }

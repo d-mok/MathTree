@@ -1,15 +1,8 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenLinProg {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
      * Draw a constraint line.
@@ -56,5 +49,4 @@ export class PenLinProg {
             this.pen.label.coordinates(v)
         }
     }
-
 }

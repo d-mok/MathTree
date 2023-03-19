@@ -124,21 +124,6 @@ export class Host {
         }
     }
 
-    /**
-     * @deprecated
-     * join arrays of monomials
-     * ```
-     * PolyJoin([x^5, 2x^6], [3x^7])
-     * // [x^5, 2x^6, 3x^7]
-     * ```
-     */
-    @checkIt(owl.polynomial)
-    static PolyJoin(...polys: polynomial[]): polynomial {
-        polys = polys.map(p => clone(p))
-        let arr: polynomial = []
-        for (let p of polys) arr.push(...p)
-        return arr
-    }
 
     /**
      * combine like terms in polynomial
@@ -176,6 +161,5 @@ declare global {
     var PolyPrint: typeof Host.PolyPrint
     var PolySort: typeof Host.PolySort
     var PolyFunction: typeof Host.PolyFunction
-    var PolyJoin: typeof Host.PolyJoin
     var PolySimplify: typeof Host.PolySimplify
 }

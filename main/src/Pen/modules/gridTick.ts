@@ -1,13 +1,8 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenGridTick {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
      * Draw gridlines and ticks on the x-axis.
@@ -41,5 +36,4 @@ export class PenGridTick {
         this.x(interval, mark)
         this.y(interval, mark)
     }
-
 }

@@ -1,14 +1,8 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenFill {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
      * Fill a circle.
@@ -61,5 +55,4 @@ export class PenFill {
         let [c, d] = C
         this.pen.polyfill([a, b], [c, b], [c, d], [a, d])
     }
-
 }

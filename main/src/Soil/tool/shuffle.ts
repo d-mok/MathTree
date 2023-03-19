@@ -1,9 +1,7 @@
 import { QuestionHTML } from './html'
 import { shuffleIndex, shuffleAs } from 'bot'
 
-
 export class OptionShuffler {
-
     public hasDuplicatedOptions = false
 
     constructor(
@@ -20,7 +18,8 @@ export class OptionShuffler {
         let liCount = Qn.liCount()
         this.hasDuplicatedOptions = Qn.isLiDuplicated()
 
-        if (liCount === 0 || !Qn.hasOneUl()) {// blank <ul></ul> || no <ul></ul>
+        if (liCount === 0 || !Qn.hasOneUl()) {
+            // blank <ul></ul> || no <ul></ul>
             this.ans = 'X'
             return
         }
@@ -44,11 +43,7 @@ export class OptionShuffler {
         let ansList = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, perm.length)
         let shuffled = shuffleAs(ansList, perm)
         let map: { [old: string]: string } = {}
-        for (let i = 0; i < perm.length; i++)
-            map[shuffled[i]] = ansList[i]
+        for (let i = 0; i < perm.length; i++) map[shuffled[i]] = ansList[i]
         return map
     }
-
 }
-
-

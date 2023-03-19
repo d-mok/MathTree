@@ -1,12 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
-
-
-
     /**
      * Check if the numbers are all distinct.
      * ```
@@ -17,11 +13,8 @@ export class Host {
     @checkIt(owl.num)
     static AreDistinct(...nums: number[]): boolean {
         nums = nums.map(cal.blur)
-        return (new Set(nums)).size === nums.length
+        return new Set(nums).size === nums.length
     }
-
-
-
 
     /**
      * Check if the absolute values of the numbers are all distinct.
@@ -36,9 +29,6 @@ export class Host {
         return AreDistinct(...nums.map(Math.abs))
     }
 
-
-
-
     /**
      * Check if the numbers all have the same sign.
      * ```
@@ -51,7 +41,6 @@ export class Host {
     static AreSameSign(...nums: number[]): boolean {
         return [...new Set(nums.map(Math.sign))].length === 1
     }
-
 
     /**
      * Check if the numbers all pairwise coprime.
@@ -69,9 +58,10 @@ export class Host {
         nums = nums.map(cal.blur)
         if (!IsInteger(...nums)) return true
         if (!IsNonZero(...nums)) return true
-        return toList(nums).pairs().every(([a, b]) => HCF(a, b) === 1)
+        return toList(nums)
+            .pairs()
+            .every(([a, b]) => HCF(a, b) === 1)
     }
-
 
     /**
      * Check if the points are pairwise distant apart.
@@ -88,8 +78,6 @@ export class Host {
         return check(AreDistant, [owl.point2D])
     }
 
-
-
     /**
      * Check if slopes are at least oblique at minAngle
      * ```
@@ -100,12 +88,12 @@ export class Host {
     @checkIt(owl.positive)
     static AreOblique(minAngle: number) {
         let areOblique = function (...slopes: number[]): boolean {
-            return toList(slopes).pairs().every(([a, b]) => IntersectAngle(a, b) >= minAngle)
+            return toList(slopes)
+                .pairs()
+                .every(([a, b]) => IntersectAngle(a, b) >= minAngle)
         }
         return check(areOblique, [owl.num])
     }
-
-
 
     /**
      * Check if the items are all distinct, by JSON.stringify.
@@ -117,12 +105,7 @@ export class Host {
     static AreDifferent(...items: any[]) {
         return toList(items).duplessDeep()
     }
-
-
 }
-
-
-
 
 declare global {
     var AreDistinct: typeof Host.AreDistinct
@@ -133,6 +116,3 @@ declare global {
     var AreOblique: typeof Host.AreOblique
     var AreDifferent: typeof Host.AreDifferent
 }
-
-
-

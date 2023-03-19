@@ -1,14 +1,8 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 
-
 export class PenGraph {
-
-    constructor(
-        private pen: PenCls,
-        private cv: Convas
-    ) { }
-
+    constructor(private pen: PenCls, private cv: Convas) {}
 
     /**
      * Draw a circle (x-h)^2+(y-k)^2 = r^2.
@@ -130,7 +124,6 @@ export class PenGraph {
         this.linear(a, b, c)
     }
 
-
     /**
      * Draw a rectangle.
      * ```
@@ -142,6 +135,4 @@ export class PenGraph {
         let [c, d] = C
         this.pen.polygon([a, b], [c, b], [c, d], [a, d])
     }
-
-
 }

@@ -14,7 +14,6 @@ import { PenGridTick } from './modules/gridTick'
 import { PenLinProg } from './modules/linProg'
 import { PenRod } from './modules/rod'
 
-
 /**
  * @ignore
  */
@@ -25,12 +24,8 @@ const DEFAULT_POINT_RADIUS_PIXEL = 2
  */
 const DEFAULT_CUTTER_LENGTH_PIXEL = 5
 
-
-
 export class PenCls {
-
     protected cv: Convas = new Convas()
-
 
     constructor() {
         this.range.set([-5, 5], [-5, 5])
@@ -44,20 +39,17 @@ export class PenCls {
      */
     range = new PenRange(this, this.cv)
 
-
     /**
      * Setup of canvas size.
      * @category setting
      */
     size = new PenSize(this, this.cv)
 
-
     /**
      * Settings.
      * @category setting
      */
     set = new PenSettings(this, this.cv)
-
 
     /**
      * Plot an explicit or parametric function.
@@ -70,11 +62,11 @@ export class PenCls {
      */
     plot(
         func: ((t: number) => number) | ((t: number) => Point2D),
-        tStart?: number, tEnd?: number
+        tStart?: number,
+        tEnd?: number
     ) {
         this.cv.plot(func, tStart, tEnd, 1000)
     }
-
 
     /**
      * Same as .plot but dashed.
@@ -83,7 +75,7 @@ export class PenCls {
     plotDash(
         func: ((t: number) => number) | ((t: number) => Point2D),
         tStart?: number,
-        tEnd?: number,
+        tEnd?: number
     ) {
         this.cv.save()
         this.set.dash(true)
@@ -91,16 +83,11 @@ export class PenCls {
         this.cv.restore()
     }
 
-
-
     /**
      * Drawing graph of functions.
      * @category graph
      */
     graph = new PenGraph(this, this.cv)
-
-
-
 
     /**
      * Draw a point.
@@ -112,8 +99,7 @@ export class PenCls {
      */
     point(position: Point, label?: string) {
         this.cv.disc(position, DEFAULT_POINT_RADIUS_PIXEL)
-        if (label !== undefined)
-            this.label.point(position, label)
+        if (label !== undefined) this.label.point(position, label)
     }
 
     /**
@@ -160,7 +146,6 @@ export class PenCls {
         if (label !== undefined) this.label.point(position, label, 180)
     }
 
-
     /**
      * Draw a tick on the x-axis.
      * ```
@@ -172,7 +157,6 @@ export class PenCls {
         this.cutX(x, x)
     }
 
-
     /**
      * Draw a tick on the y-axis.
      * ```
@@ -183,8 +167,6 @@ export class PenCls {
     tickY(y: number) {
         this.cutY(y, y)
     }
-
-
 
     /**
      * Draw a guide line from `point` to the x-axis.
@@ -202,7 +184,6 @@ export class PenCls {
         }
     }
 
-
     /**
      * Draw a guide line from `point` to the y-axis.
      * ```
@@ -219,7 +200,6 @@ export class PenCls {
         }
     }
 
-
     /**
      * Draw two guide lines from `point` to the x-axis and y-axis.
      * ```
@@ -229,12 +209,14 @@ export class PenCls {
      */
     guide(
         point: Point2D,
-        labels: [string | number | undefined, string | number | undefined] = [undefined, undefined]
+        labels: [string | number | undefined, string | number | undefined] = [
+            undefined,
+            undefined,
+        ]
     ) {
         this.guideX(point, labels[0])
         this.guideY(point, labels[1])
     }
-
 
     /**
      * Draw a guide line from `point` to the x-axis, and mark the x-coord.
@@ -247,7 +229,6 @@ export class PenCls {
         this.guideX(point, point[0])
     }
 
-
     /**
      * Draw a guide line from `point` to the y-axis, and mark the y-coord.
      * ```
@@ -258,7 +239,6 @@ export class PenCls {
     leadY(point: Point2D) {
         this.guideY(point, point[1])
     }
-
 
     /**
      * Draw two guide lines from `point` to the x-axis and y-axis, and mark the x-coord and y-coord.
@@ -272,8 +252,6 @@ export class PenCls {
         this.leadY(point)
     }
 
-
-
     /**
      * Draw a circle.
      * ```
@@ -284,7 +262,6 @@ export class PenCls {
     circle(center: Point2D, radius: number) {
         this.cv.circle(center, radius)
     }
-
 
     /**
      * Fill a disc.
@@ -297,7 +274,6 @@ export class PenCls {
         this.cv.disc(center, radius)
     }
 
-
     /**
      * Shade a disc.
      * ```
@@ -309,8 +285,6 @@ export class PenCls {
         this.cv.halo(center, radius)
     }
 
-
-
     /**
      * Draw a dot.
      * ```
@@ -321,7 +295,6 @@ export class PenCls {
     dot(point: Point2D) {
         this.disc(point, 4)
     }
-
 
     /**
      * Draw a hole.
@@ -337,8 +310,6 @@ export class PenCls {
         this.cv.restore()
         this.circle(point, 4)
     }
-
-
 
     /**
      * Draw a line between two points.
@@ -365,7 +336,6 @@ export class PenCls {
         this.cv.dash([A, B])
         if (label !== undefined) this.label.line([A, B], label)
     }
-
 
     /**
      * Draw an arrow between two points.
@@ -394,17 +364,20 @@ export class PenCls {
      * ```
      * @category draw
      */
-    arrowCompo(O: Point2D, P: Point2D, alongDir: number, arrowLabel?: string | number, angleLabel?: string | number) {
+    arrowCompo(
+        O: Point2D,
+        P: Point2D,
+        alongDir: number,
+        arrowLabel?: string | number,
+        angleLabel?: string | number
+    ) {
         let Q = PdFoot(P, [O, alongDir])
         this.cv.save()
-        if (this.cv.$ARROW_LABEL === 'line')
-            this.set.labelCenter(O, P)
+        if (this.cv.$ARROW_LABEL === 'line') this.set.labelCenter(O, P)
         this.arrow(O, Q, arrowLabel)
         this.cv.restore()
-        if (angleLabel !== undefined)
-            this.angle(Q, O, P, angleLabel)
+        if (angleLabel !== undefined) this.angle(Q, O, P, angleLabel)
     }
-
 
     /**
      * Draw both components of the arrow.
@@ -417,7 +390,9 @@ export class PenCls {
      * @category draw
      */
     arrowResolve(
-        O: Point2D, P: Point2D, alongDir: number,
+        O: Point2D,
+        P: Point2D,
+        alongDir: number,
         arrowLabels: (string | number | undefined)[] = [],
         angleLabel?: string | number
     ) {
@@ -425,8 +400,6 @@ export class PenCls {
         this.arrowCompo(O, P, alongDir, l1, angleLabel)
         this.arrowCompo(O, P, alongDir + 90, l2)
     }
-
-
 
     /**
      * Draw a length between two points.
@@ -440,10 +413,8 @@ export class PenCls {
         this.cv.line([A, B])
         this.cv.tick(A, B, 5, 0)
         this.cv.tick(B, A, 5, 0)
-        if (label !== undefined)
-            this.label.line([A, B], label)
+        if (label !== undefined) this.label.line([A, B], label)
     }
-
 
     /**
      * Draw a dashed height with right angle, from V to AB.
@@ -457,10 +428,8 @@ export class PenCls {
         let F = PdFoot(V, [A, B])
         this.dash(V, F)
         this.rightAngle(A, F, V)
-        if (label !== undefined)
-            this.label.line([V, F], label)
+        if (label !== undefined) this.label.line([V, F], label)
     }
-
 
     /**
      * Draw a ray from A to B.
@@ -471,13 +440,9 @@ export class PenCls {
      */
     ray(A: Point2D, B: Point2D, label?: string | number) {
         this.cv.line([A, B])
-        if (label !== undefined)
-            this.label.line([A, B], label)
+        if (label !== undefined) this.label.line([A, B], label)
         this.cv.midArrowHead(A, B, 5)
     }
-
-
-
 
     /**
      * Draw a polyline given points.
@@ -489,7 +454,6 @@ export class PenCls {
     polyline(...points: Point[]) {
         this.cv.line(points)
     }
-
 
     /**
      * Draw a polygon given points.
@@ -524,7 +488,6 @@ export class PenCls {
         this.cv.shade(points)
     }
 
-
     /**
      * Draw and shade a polygon given points.
      * ```
@@ -536,9 +499,6 @@ export class PenCls {
         this.polygon(...points)
         this.polyshade(...points)
     }
-
-
-
 
     /**
      * Draw a rod.
@@ -552,28 +512,17 @@ export class PenCls {
      */
     fill = new PenFill(this, this.cv)
 
-
-
-
     /**
      * Shade a shape.
      * @category shade
      */
     shade = new PenShade(this, this.cv)
 
-
-
-
-
     /**
      * Linear Programming tools.
      * @category linProg
      */
     linProg = new PenLinProg(this, this.cv)
-
-
-
-
 
     /**
      * Draw an angle with label.
@@ -582,17 +531,27 @@ export class PenCls {
      * ```
      * @category draw
      */
-    angle(A: Point, O: Point, B: Point, label?: string | number, arc = 1, radius = -1) {
+    angle(
+        A: Point,
+        O: Point,
+        B: Point,
+        label?: string | number,
+        arc = 1,
+        radius = -1
+    ) {
         if (radius < 0)
             radius = 15 + this.cv.getAngleAllowance(A, O, B, 40, 1.5)
         let space = 3
         this.cv.angle(A, O, B, radius, arc, space)
 
         if (label !== undefined && label !== '')
-            this.label.angle([A, O, B], label, undefined, radius < 0 ? radius : radius + 13)
+            this.label.angle(
+                [A, O, B],
+                label,
+                undefined,
+                radius < 0 ? radius : radius + 13
+            )
     }
-
-
 
     /**
      * Draw an angle by direction.
@@ -601,13 +560,17 @@ export class PenCls {
      * ```
      * @category draw
      */
-    angleDir(A: Point2D | number, O: Point2D, B: Point2D | number, label?: string | number, arc = 1, radius = -1) {
-        [A, O, B] = this.cv.getApexFromDial(A, O, B)
+    angleDir(
+        A: Point2D | number,
+        O: Point2D,
+        B: Point2D | number,
+        label?: string | number,
+        arc = 1,
+        radius = -1
+    ) {
+        ;[A, O, B] = this.cv.getApexFromDial(A, O, B)
         this.angle(A, O, B, label, arc, radius)
     }
-
-
-
 
     /**
      * Decorate equal side lengths.
@@ -621,7 +584,6 @@ export class PenCls {
         this.cv.equalSide(A, B, 5, tick, 3)
     }
 
-
     /**
      * Decorate bisecting equal lengths of a side.
      * ```
@@ -631,12 +593,11 @@ export class PenCls {
      * @category decorator
      */
     bisectSide(A: Point, B: Point, tick = 1) {
-        [A, B] = this.cv.pjs([A, B])
+        ;[A, B] = this.cv.pjs([A, B])
         let M = Mid(A, B)
         this.equalSide(A, M, tick)
         this.equalSide(B, M, tick)
     }
-
 
     /**
      * Decorate parallel side.
@@ -649,8 +610,6 @@ export class PenCls {
     parallel(A: Point, B: Point, tick = 1) {
         this.cv.parallel(A, B, 5, tick, 6)
     }
-
-
 
     /**
      * Decorate a right-angle AOB.
@@ -680,8 +639,6 @@ export class PenCls {
         this.cv.compass(point, 17, 20, 3.5)
     }
 
-
-
     /**
      * Write text.
      * ```
@@ -693,21 +650,16 @@ export class PenCls {
         this.cv.write(text, point)
     }
 
-
-
     /**
      * @category text
      */
     label = new PenLabel(this, this.cv)
-
-
 
     /**
      * The axis.
      * @category axis
      */
     axis = new PenAxis(this, this.cv)
-
 
     /**
      * Draw both axis. Default no label.
@@ -716,10 +668,9 @@ export class PenCls {
      * pen.axes('x','y') // label as 'x' and 'y'
      * ```
      */
-    axes(xlabel = "", ylabel = "") {
+    axes(xlabel = '', ylabel = '') {
         this.axis.xy(xlabel, ylabel)
     }
-
 
     /**
      * The axis ticks.
@@ -733,23 +684,17 @@ export class PenCls {
      */
     grid = new PenGrid(this, this.cv)
 
-
     /**
      * The axis gridlines and ticks.
      * @category axis
      */
     gridTick = new PenGridTick(this, this.cv)
 
-
-
     /**
      * The 3D pen
      * @category 3D
      */
     d3 = new PenD3(this, this.cv)
-
-
-
 
     /**
      * Set the background image url.
@@ -762,8 +707,6 @@ export class PenCls {
         this.cv.backgroundURL = url
     }
 
-
-
     /**
      * Export the canvas to image tag.
      * ```
@@ -774,8 +717,7 @@ export class PenCls {
      */
     export(html: string, placeholder: string): string {
         return this.cv.export(html, placeholder, false)
-    };
-
+    }
 
     /**
      * Export the canvas to image tag, with white space trimmed.
@@ -787,8 +729,7 @@ export class PenCls {
      */
     exportTrim(html: string, placeholder: string) {
         return this.cv.export(html, placeholder, true)
-    };
-
+    }
 
     /**
      * Clear the canvas.
@@ -813,6 +754,4 @@ export class PenCls {
     restoreImg() {
         this.cv.restoreImg()
     }
-
-
-};
+}

@@ -1,12 +1,8 @@
-
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
-
 
 @exposeAll()
 @captureAll()
 export class Host {
-
-
     /**
      * mean of all vectors
      * ```
@@ -21,8 +17,6 @@ export class Host {
         return [x, y, z]
     }
 
-
-
     /**
      * the point P on AB such that AP : PB = ratio : 1-ratio
      * ```
@@ -33,15 +27,8 @@ export class Host {
     static Slide3D(A: Point3D, B: Point3D, ratio: number): Point3D {
         let r = ratio
         let s = 1 - r
-        return [
-            A[0] * s + B[0] * r,
-            A[1] * s + B[1] * r,
-            A[2] * s + B[2] * r
-        ]
+        return [A[0] * s + B[0] * r, A[1] * s + B[1] * r, A[2] * s + B[2] * r]
     }
-
-
-
 
     /**
      * projection of a point on a plane
@@ -53,10 +40,16 @@ export class Host {
      * ```
      */
     @checkIt(owl.point3D, owl.point3Ds)
-    static PdFoot3D(point: Point3D, base: [Point3D, Point3D, Point3D] | [Point3D, Point3D]): Point3D {
+    static PdFoot3D(
+        point: Point3D,
+        base: [Point3D, Point3D, Point3D] | [Point3D, Point3D]
+    ): Point3D {
         if (base.length === 3) {
             let [A, B, C] = base
-            return vec3D(A, point).projectOnPlane(vec3D(A, B), vec3D(B, C)).add(A).toArray()
+            return vec3D(A, point)
+                .projectOnPlane(vec3D(A, B), vec3D(B, C))
+                .add(A)
+                .toArray()
         } else if (base.length === 2) {
             let [A, B] = base
             return vec3D(A, point).projectOn(vec3D(A, B)).add(A).toArray()
@@ -64,7 +57,6 @@ export class Host {
         Should(false, 'base must have 2 or 3 points')
         throw 'never'
     }
-
 
     /**
      * embed points on xy-plane onto a plane in 3D
@@ -74,11 +66,13 @@ export class Host {
      * ```
      */
     @checkIt(owl.point2Ds, owl.point3D, owl.vector3D, owl.vector3D)
-    static Embed(plane2D: Point2D[], origin: Point3D, xVec: Point3D, yVec: Point3D): Point3D[] {
-        return toShape2D(plane2D)
-            .erect(xVec, yVec)
-            .translate(origin)
-            .toArray()
+    static Embed(
+        plane2D: Point2D[],
+        origin: Point3D,
+        xVec: Point3D,
+        yVec: Point3D
+    ): Point3D[] {
+        return toShape2D(plane2D).erect(xVec, yVec).translate(origin).toArray()
     }
 
     /**
@@ -93,7 +87,6 @@ export class Host {
         return Embed(plane2D, [x, 0, 0], [0, 1, 0], [0, 0, 1])
     }
 
-
     /**
      * embed 2D points onto a plane in 3D with constant y. The x-axis becomes the 3D x-axis. The y-axis becomes the 3D z-axis.
      * ```
@@ -105,8 +98,6 @@ export class Host {
     static EmbedY(plane2D: Point2D[], y: number = 0): Point3D[] {
         return Embed(plane2D, [0, y, 0], [1, 0, 0], [0, 0, 1])
     }
-
-
 
     /**
      * embed points on xy-plane onto a plane in 3D with constant z
@@ -120,8 +111,6 @@ export class Host {
         return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0])
     }
 
-
-
     /**
      * flatten points to the same z-plane
      * ```
@@ -134,11 +123,6 @@ export class Host {
         return points.map(([x, y, _]) => [x, y, z])
     }
 
-
-
-
-
-
     /**
      * extrude the lower base of a frustum towards the upper base by a ratio
      * ```
@@ -147,24 +131,26 @@ export class Host {
      * ```
      */
     @checkIt(owl.point3Ds, owl.point3Ds, owl.num)
-    static Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: number): Point3D[] {
+    static Extrude(
+        lowerBase: Point3D[],
+        upperBase: Point3D[],
+        scale: number
+    ): Point3D[] {
         let max = Math.max(lowerBase.length, upperBase.length)
         let LB = toShape3D(lowerBase).padTail(max)
         let UB = toShape3D(upperBase).padTail(max)
         return LB.extrudeToShape(UB, scale).toArray()
     }
 
-
-
     /**
-    * @category 3DPen
-    * @deprecated use built-in projector in Pen instead
-    * projector function from 3D point to 2D plane
-    * ```
-    * const pj = Projector(60,0.5) // create a 3D projector function
-    * pj(1,1,0) // [1.25, 0.433012701892]
-    * ```
-    */
+     * @category 3DPen
+     * @deprecated use built-in projector in Pen instead
+     * projector function from 3D point to 2D plane
+     * ```
+     * const pj = Projector(60,0.5) // create a 3D projector function
+     * pj(1,1,0) // [1.25, 0.433012701892]
+     * ```
+     */
     static Projector(angle: number = 60, depth: number = 0.5) {
         return function (x: number, y: number, z: number): Point {
             let x_new = x + depth * y * cos(angle)
@@ -173,18 +159,20 @@ export class Host {
         }
     }
 
-
     /**
-    * @category 3DPen
-    * @deprecated use built-in projector in Pen instead
-    * projector function from 3D point to 2D plane
-    * ```
-    * const pj = Projector3D(60,0.5) // create a 3D projector function
-    * pj([1,1,0]) // [1.25, 0.433012701892]
-    * ```
-    */
+     * @category 3DPen
+     * @deprecated use built-in projector in Pen instead
+     * projector function from 3D point to 2D plane
+     * ```
+     * const pj = Projector3D(60,0.5) // create a 3D projector function
+     * pj([1,1,0]) // [1.25, 0.433012701892]
+     * ```
+     */
     @checkIt(owl.num, owl.num)
-    static Projector3D(angle: number = 60, depth: number = 0.5): (_: Point3D) => Point {
+    static Projector3D(
+        angle: number = 60,
+        depth: number = 0.5
+    ): (_: Point3D) => Point {
         let projector = function (point3D: Point3D): Point {
             let [x, y, z] = point3D
             let x_new = x + depth * y * cos(angle)
@@ -193,11 +181,7 @@ export class Host {
         }
         return check(projector, [owl.point3D])
     }
-
 }
-
-
-
 
 declare global {
     var Mid3D: typeof Host.Mid3D
@@ -211,9 +195,4 @@ declare global {
     var Extrude: typeof Host.Extrude
     var Projector: typeof Host.Projector
     var Projector3D: typeof Host.Projector3D
-
 }
-
-
-
-

@@ -4,7 +4,6 @@ import { differentiate, integrate, functionize } from 'ruby'
 @exposeAll()
 @captureAll()
 export class Host {
-
     /**
      * Derivative of the function.
      * ```
@@ -21,10 +20,12 @@ export class Host {
      * integrate(x=>2*x, [0,3]) // x=>x**2+3
      * ```
      */
-    static integrate(fn: (x: number) => number, fixPoint: Point2D = [0, 0]): (x: number) => number {
+    static integrate(
+        fn: (x: number) => number,
+        fixPoint: Point2D = [0, 0]
+    ): (x: number) => number {
         return integrate(fn, fixPoint)
     }
-
 
     /**
      * Make a function passing through the points.
@@ -37,18 +38,10 @@ export class Host {
     static functionize(points: Point2D[]): (x: number) => number {
         return functionize(points)
     }
-
-
-
 }
-
-
 
 declare global {
     var differentiate: typeof Host.differentiate
     var integrate: typeof Host.integrate
     var functionize: typeof Host.functionize
 }
-
-
-
