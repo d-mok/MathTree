@@ -4,8 +4,7 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 
 type morph = [action: 'HT' | 'VT' | 'HR' | 'VR' | 'HS' | 'VS', val: number]
 
-type state = { a: number; b: number; m: number; n: number }
-// nf(mx+a)+b
+type state = { a: number; b: number; m: number; n: number } // nf(mx+a)+b
 
 function left(v: number) {
     return v > 0 ? 'leftwards' : 'rightwards'
@@ -100,9 +99,6 @@ function printState(state: state): string {
     return `${N}f(${M}x${A})${B}`
 }
 
-/**
- * Print the intermediate step.
- */
 function printIntermediate(state: state, [t, v]: morph): string | null {
     let { a, b, m, n } = state
     let pr = printState(state)
