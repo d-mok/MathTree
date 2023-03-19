@@ -26,8 +26,8 @@ import './Algebra/Circle.ts'
 import './Algebra/Quadratic.ts'
 import './Algebra/Linear.ts'
 import './Algebra/Polynomial'
+import './Algebra/Transform'
 
 import './should.ts'
 
 import './Builder/index'
-
