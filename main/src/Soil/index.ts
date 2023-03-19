@@ -9,12 +9,12 @@ function transpileGene(gene: Gene): Gene {
     return {
         qn: gene.qn,
         sol: gene.sol,
-        slot: gene.slot,
+        // slot: gene.slot,
         populate: transpile(gene.populate),
         validate: transpile(gene.validate),
         preprocess: transpile(gene.preprocess),
         postprocess: transpile(gene.postprocess),
-        inject: transpile(gene.inject),
+        // inject: transpile(gene.inject),
     }
 }
 

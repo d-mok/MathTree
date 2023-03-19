@@ -7,7 +7,6 @@ import {
     evalCtx,
     exprCtx,
     cropSection,
-    mergeSlots,
     loopSection,
     Timer,
 } from 'bot'
@@ -116,7 +115,7 @@ export class Soil {
             try {
                 this.counter++
                 this.reset()
-                this.evalCode(this.gene.inject + ';' + this.gene.populate)
+                this.evalCode(this.gene.populate)
                 const [ok, dictReport] = this.checkDict()
                 if (!ok)
                     throw CustomError(
@@ -155,12 +154,12 @@ export class Soil {
         )
     }
 
-    private runSlot(): boolean {
-        // merge slots
-        this.qn = mergeSlots(this.gene.slot, this.qn)
-        this.sol = mergeSlots(this.gene.slot, this.sol)
-        return true
-    }
+    // private runSlot(): boolean {
+    //     // merge slots
+    //     this.qn = mergeSlots(this.gene.slot, this.qn)
+    //     this.sol = mergeSlots(this.gene.slot, this.sol)
+    //     return true
+    // }
 
     private runLoop(): boolean {
         // for loop
@@ -275,7 +274,7 @@ export class Soil {
             do {
                 this.reset()
                 this.runPopulate()
-                this.runSlot()
+                // this.runSlot()
                 this.runLoop()
                 this.runSection()
                 this.runPreprocess()
