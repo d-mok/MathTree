@@ -135,23 +135,31 @@ function printStep(state: state, morph: morph): string {
 @captureAll()
 export class Host {
     /**
-     * Solve [x,y] from ax+by=c and px+qy=r.
+     * Explain a series of function transforms.
      * ```
-     * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
-     * Crammer(1,1,3,2,2,6) // throw, parallel
+     * let initialState = {a:0,b:0,m:1,n:1}
+     * let transforms = [['HT',4],['VT',3]]
+     * explainTransforms(initialState,...transforms)
      * ```
      */
     static explainTransforms(
         initialState: state,
         ...morphs: morph[]
-    ): [description: string, latex: string][] {
+    ): {
+        descriptions: string[]
+        steps: string[]
+        finalState: state
+    } {
         let state = initialState
-        let output: [string, string][] = []
+        let descriptions: string[] = []
+        let steps: string[] = []
+
         for (let m of morphs) {
-            output.push([description(m), brac(printStep(state, m))])
+            descriptions.push(description(m))
+            steps.push(brac(printStep(state, m)))
             state = transform(state, m)
         }
-        return output
+        return { descriptions, steps, finalState: state }
     }
 }
 
