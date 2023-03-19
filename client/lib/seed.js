@@ -7,15 +7,15 @@ class SeedRow {
         this.id = '';
         this.bank = '';
         this.folder = '';
-        this.master = '';
+        // master: string = ''
         this.qn = '';
         this.sol = '';
-        this.slot = '';
+        // slot: string = ''
         this.populate = '';
         this.validate = '';
         this.preprocess = '';
         this.postprocess = '';
-        this.inject = '';
+        // inject: string = ''
     }
 }
 exports.SeedRow = SeedRow;
@@ -29,12 +29,12 @@ class Seed extends SeedRow {
         return {
             qn: this.qn,
             sol: this.sol,
-            slot: this.slot,
+            // slot: this.slot,
             populate: this.populate,
             validate: this.validate,
             preprocess: this.preprocess,
             postprocess: this.postprocess,
-            inject: this.inject,
+            // inject: this.inject,
         };
     }
     grow() {
