@@ -62,10 +62,18 @@ function transform(state: state, [t, v]: morph): state {
     return { a, b, m, n }
 }
 
+function transformFunc(
+    f: (x: number) => number,
+    [t, v]: morph
+): (x: number) => number {
+    let { a, b, m, n } = transform({ a: 0, b: 0, m: 1, n: 1 }, [t, v])
+    return (x: number) => n * f(m * x + a) + b
+}
+
 /**
  * Get the description of a transform.
  */
-function description([t, v]: morph): string {
+function action([t, v]: morph): string {
     switch (t) {
         case 'HT':
             return 'translated ' + Abs(v) + ' units ' + left(v)
@@ -137,29 +145,40 @@ export class Host {
     /**
      * Explain a series of function transforms.
      * ```
-     * let initialState = {a:0,b:0,m:1,n:1}
+     * let state = {a:0,b:0,m:1,n:1}
+     * let func = (x:number)=>x**2
      * let transforms = [['HT',4],['VT',3]]
-     * explainTransforms(initialState,...transforms)
+     * explainTransforms({state,func,transforms})
      * ```
      */
-    static explainTransforms(
-        initialState: state,
-        ...morphs: morph[]
-    ): {
-        descriptions: string[]
+    static explainTransforms({
+        state,
+        func,
+        transforms,
+    }: {
+        state: state
+        func: (x: number) => number
+        transforms: morph[]
+    }): {
+        actions: string[]
         steps: string[]
-        finalState: state
+        funcs: ((x: number) => number)[]
+        // finalState: state
     } {
-        let state = initialState
-        let descriptions: string[] = []
+        let s = { ...state }
+        let f = (x: number) => func(x)
+        let actions: string[] = []
         let steps: string[] = []
+        let funcs: ((x: number) => number)[] = []
 
-        for (let m of morphs) {
-            descriptions.push(description(m))
-            steps.push(brac(printStep(state, m)))
-            state = transform(state, m)
+        for (let m of transforms) {
+            actions.push(action(m))
+            steps.push(brac(printStep(s, m)))
+            s = transform(s, m)
+            f = transformFunc(f, m)
+            funcs.push(f)
         }
-        return { descriptions, steps, finalState: state }
+        return { actions, steps, funcs }
     }
 }
 

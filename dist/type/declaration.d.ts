@@ -193,6 +193,38 @@ declare module "Math/Algebra/Polynomial" {
         var PolySimplify: typeof Host.PolySimplify;
     }
 }
+declare module "Math/Algebra/Transform" {
+    type morph = [action: 'HT' | 'VT' | 'HR' | 'VR' | 'HS' | 'VS', val: number];
+    type state = {
+        a: number;
+        b: number;
+        m: number;
+        n: number;
+    };
+    export class Host {
+        /**
+         * Explain a series of function transforms.
+         * ```
+         * let state = {a:0,b:0,m:1,n:1}
+         * let func = (x:number)=>x**2
+         * let transforms = [['HT',4],['VT',3]]
+         * explainTransforms({state,func,transforms})
+         * ```
+         */
+        static explainTransforms({ state, func, transforms, }: {
+            state: state;
+            func: (x: number) => number;
+            transforms: morph[];
+        }): {
+            actions: string[];
+            steps: string[];
+            funcs: ((x: number) => number)[];
+        };
+    }
+    global {
+        var explainTransforms: typeof Host.explainTransforms;
+    }
+}
 declare module "Math/Builder/support/units" {
     export function findUnit(name: string): string | undefined;
     export function parseUnit(raw: string): string;
@@ -1777,6 +1809,7 @@ declare module "Math/index" {
     import './Algebra/Quadratic.ts';
     import './Algebra/Linear.ts';
     import "Math/Algebra/Polynomial";
+    import "Math/Algebra/Transform";
     import './should.ts';
     import "Math/Builder/index";
 }
