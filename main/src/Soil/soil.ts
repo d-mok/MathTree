@@ -2,14 +2,7 @@ import { OptionShuffler } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Config } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
-import {
-    dress,
-    evalCtx,
-    exprCtx,
-    cropSection,
-    loopSection,
-    Timer,
-} from 'bot'
+import { dress, evalCtx, exprCtx, cropSection, loopSection, Timer } from 'bot'
 import { blacksmith } from './tool/blacksmith'
 
 // util functions
@@ -153,13 +146,6 @@ export class Soil {
             'No population found after 1000 trials!'
         )
     }
-
-    // private runSlot(): boolean {
-    //     // merge slots
-    //     this.qn = mergeSlots(this.gene.slot, this.qn)
-    //     this.sol = mergeSlots(this.gene.slot, this.sol)
-    //     return true
-    // }
 
     private runLoop(): boolean {
         // for loop
