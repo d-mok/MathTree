@@ -141,7 +141,6 @@ export class Host {
      * Crammer(1,1,3,2,2,6) // throw, parallel
      * ```
      */
-    @checkIt(owl.num)
     static explainTransforms(
         initialState: state,
         ...morphs: morph[]
