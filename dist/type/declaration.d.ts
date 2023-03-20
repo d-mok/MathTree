@@ -62,6 +62,7 @@ declare module "Core/Owl/index" {
     export const quantity: (_: unknown) => _ is quantity;
     export const pass: (_: unknown) => boolean;
     export const fail: (_: unknown) => boolean;
+    export const distinct: (_: unknown[]) => boolean;
     export const alphabet: (_: unknown) => _ is string;
     export const ineq: (_: unknown) => _ is Ineq;
     export const dfrac: (_: unknown) => _ is string;
@@ -4048,7 +4049,6 @@ declare module "Math/Code/Sequence" {
         var LucasSequence: typeof Host.LucasSequence;
     }
 }
-declare module "Math/Code/Shake.test" { }
 declare module "Math/Code/Shake" {
     export class Host {
         /**
