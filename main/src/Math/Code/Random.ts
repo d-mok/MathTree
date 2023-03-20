@@ -308,7 +308,7 @@ export class Host {
                 }
             }
         }
-        return toList(arr).draw()!
+        return _.sample(arr)!
     }
 
     /**

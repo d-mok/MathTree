@@ -1,21 +1,20 @@
+import _ from 'lodash'
 import { repeat } from '../Jest/JestExtend'
 
 test('RndN', () => {
-    repeat(10, () => {
-        expect(RndN(5, 10)).toBeOneOf([5, 6, 7, 8, 9, 10])
-        expect(RndN(5, 10)).toBeInteger()
-        expect(() => RndN(5, 10)).toSpanSame([5, 6, 7, 8, 9, 10])
-    })
+    expect(RndN(5, 10)).toBeOneOf([5, 6, 7, 8, 9, 10])
+    expect(RndN(5, 10)).toBeInteger()
+    expect(_.times(10, () => RndN(5, 10))).toIncludeAllMembers([
+        5, 6, 7, 8, 9, 10,
+    ])
 })
 
 test('RndNs', () => {
-    repeat(10, () => {
-        expect(RndNs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10])
-        expect(RndNs(5, 10, 3)).toAllBeInteger()
-        expect(RndNs(5, 10, 3)).toHaveLength(3)
-        expect(RndNs(5, 10, 3)).toBeDupless()
-        expect(RndNs(5, 10, 6)).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
-    })
+    expect(RndNs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10])
+    expect(RndNs(5, 10, 3)).toAllBeInteger()
+    expect(RndNs(5, 10, 3)).toHaveLength(3)
+    expect(RndNs(5, 10, 3)).toBeDupless()
+    expect(RndNs(5, 10, 6)).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
 })
 
 test('RndAscNs', () => {
