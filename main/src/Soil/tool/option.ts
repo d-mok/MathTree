@@ -1,52 +1,47 @@
 import { QuestionHTML } from './html'
+import { dice } from 'fate'
+import _ from 'lodash'
 
-function produce(source: any, assigned: any): typeof source[] {
-    return Array.isArray(assigned) && assigned !== source
-        ? RndShuffle(...assigned)
-        : RndShake(source)
-}
-
-function blankDicts<D>(count: number): D[] {
-    let arr: D[] = []
-    for (let i = 0; i < count; i++) arr.push({} as D)
-    return arr
-}
-
-function execInstructions<D extends object>(
-    instructions: Partial<D>,
-    source: D
-): Partial<D>[] {
-    let dicts = blankDicts<D>(20)
-    let k: keyof typeof instructions
-    for (k in instructions) {
-        let arr = produce(source[k], instructions[k])
-        arr.forEach((v, i) => (dicts[i][k] = v))
+function produce<S>(source: S, assigned: S | S[] | ((_: S) => S)): S[] {
+    if (assigned === source) {
+        return RndShake(source)
     }
-    return dicts
+    if (typeof assigned === 'function' && assigned instanceof Function) {
+        let f = () => assigned(source)
+        return dice(f).forbid(source).unique().rolls(3)
+    }
+    if (Array.isArray(assigned)) {
+        return _.shuffle(assigned)
+    }
+    return RndShake(source)
 }
 
-export function AutoOptions<D extends object>(
-    instructions: Partial<D>,
+type dict = Record<string, any>
+
+export function AutoOptions(
+    instructions: dict,
     question: string,
-    source: D
+    source: dict
 ): string {
     if (owl.emptyObject(instructions)) return question
     let Qn = new QuestionHTML(question)
-    let dicts = execInstructions(instructions, source)
+
+    let patches = _.mapValues(instructions, (v, k) => produce(source[k], v))
+    let dicts = (i: number) => _.mapValues(patches, $ => $[i])
 
     if (Qn.liCount() === 1) {
         Qn.cloneLi(0, 3)
-        Qn.printInLi(1, { ...source, ...dicts[0] })
-        Qn.printInLi(2, { ...source, ...dicts[1] })
-        Qn.printInLi(3, { ...source, ...dicts[2] })
+        Qn.printInLi(1, { ...source, ...dicts(0) })
+        Qn.printInLi(2, { ...source, ...dicts(1) })
+        Qn.printInLi(3, { ...source, ...dicts(2) })
         return Qn.export()
     }
 
     if (Qn.liCount() === 2) {
         Qn.cloneLi(0)
         Qn.cloneLi(1)
-        Qn.printInLi(2, { ...source, ...dicts[0] })
-        Qn.printInLi(3, { ...source, ...dicts[0] })
+        Qn.printInLi(2, { ...source, ...dicts(0) })
+        Qn.printInLi(3, { ...source, ...dicts(0) })
         return Qn.export()
     }
     return question

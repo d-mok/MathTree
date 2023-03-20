@@ -12,8 +12,6 @@ export declare class HTMLWorker {
     protected clone(tag: Tag, index?: number): Node;
     /** Check if the elements have duplicates. */
     protected hasDuplicate(tag: Tag): boolean;
-    /** Shuffle in-place the children of an element. */
-    protected shuffleChildren(indexArr: number[], tag: Tag, index?: number): number[];
     /** Get the body tag's innerHTML */
     export(): string;
     /** Transform innerHTML of an element. */

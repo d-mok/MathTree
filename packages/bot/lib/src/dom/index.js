@@ -1,4 +1,3 @@
-import { shuffleAs } from '../coshuffle';
 export class HTMLWorker {
     constructor(html = '') {
         this.body = (new DOMParser())
@@ -26,15 +25,15 @@ export class HTMLWorker {
         let htmls = this.all(tag).map($ => $.innerHTML.replaceAll(' ', ''));
         return (new Set(htmls)).size !== htmls.length;
     }
-    /** Shuffle in-place the children of an element. */
-    shuffleChildren(indexArr, tag, index = 0) {
-        let children = this.childrenOf(tag, index);
-        let htmls = children.map($ => $.innerHTML);
-        htmls = shuffleAs(htmls, indexArr);
-        for (let i = 0; i < children.length; i++)
-            children[i].innerHTML = htmls[i];
-        return indexArr;
-    }
+    // /** Shuffle in-place the children of an element. */
+    // protected shuffleChildren(indexArr: number[], tag: Tag, index: number = 0): number[] {
+    //     let children = this.childrenOf(tag, index)
+    //     let htmls = children.map($ => $.innerHTML)
+    //     htmls = shuffleAs(htmls, indexArr)
+    //     for (let i = 0; i < children.length; i++)
+    //         children[i].innerHTML = htmls[i]
+    //     return indexArr
+    // }
     /** Get the body tag's innerHTML */
     export() {
         return this.body.innerHTML;

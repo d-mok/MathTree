@@ -1,49 +1,51 @@
 import { QuestionHTML } from './html'
-import { shuffleIndex, shuffleAs } from 'bot'
+import _ from 'lodash'
 
-export class OptionShuffler {
-    public hasDuplicatedOptions = false
+function coshuffle<T1, T2>(
+    arr1: T1[],
+    arr2: T2[],
+    shuffle: boolean
+): [T1[], T2[]] {
+    if (!shuffle) return [arr1, arr2]
+    return _(arr1).zip(arr2).shuffle().unzip().value() as [T1[], T2[]]
+}
 
-    constructor(
-        public qn: string,
-        public sol: string,
-        public ans: string,
-        private shuffle: boolean
-    ) {
-        this.exec()
+export function shuffleOptions(
+    qn: string,
+    sol: string,
+    ans: string,
+    shuffle: boolean
+): {
+    qn: string
+    sol: string
+    ans: string
+    hasDuplicatedOptions: boolean
+} {
+    let Qn = new QuestionHTML(qn)
+    let hasDuplicatedOptions = Qn.isLiDuplicated()
+
+    if (Qn.liCount() === 0 || !Qn.hasOneUl() || hasDuplicatedOptions) {
+        // blank <ul></ul> || no <ul></ul> || duplicated
+        ans = 'X'
+    } else {
+        let htmls = Qn.getLiHTMLs()
+        let ansList = _.take(['A', 'B', 'C', 'D', 'E', 'F'], htmls.length)
+        let [newHtmls, newAnsList] = coshuffle(htmls, ansList, shuffle)
+        let map = _.zipObject(newAnsList, ansList)
+
+        Qn.setLiHTMLs(newHtmls)
+        qn = Qn.export()
+        ans = map[ans]
+        sol = `<p>Answer: ${ans}</p><p><b>Solution:</b></p>${sol}`.replaceAll(
+            /{#([A-Z])}/g,
+            (match, p1) => map[p1]
+        )
     }
 
-    private exec() {
-        let Qn = new QuestionHTML(this.qn)
-        let liCount = Qn.liCount()
-        this.hasDuplicatedOptions = Qn.isLiDuplicated()
-
-        if (liCount === 0 || !Qn.hasOneUl()) {
-            // blank <ul></ul> || no <ul></ul>
-            this.ans = 'X'
-            return
-        }
-
-        let perm = shuffleIndex(liCount, this.shuffle)
-        let map = this.letterMap(perm)
-
-        // qn
-        Qn.shuffleLi(perm)
-        this.qn = Qn.export()
-
-        // ans
-        this.ans = map[this.ans]
-
-        // sol
-        this.sol = `<p>Answer: ${this.ans}</p><p><b>Solution:</b></p>${this.sol}`
-        this.sol = this.sol.replaceAll(/{#([A-Z])}/g, (match, p1) => map[p1])
-    }
-
-    private letterMap(perm: number[]): { [old: string]: string } {
-        let ansList = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, perm.length)
-        let shuffled = shuffleAs(ansList, perm)
-        let map: { [old: string]: string } = {}
-        for (let i = 0; i < perm.length; i++) map[shuffled[i]] = ansList[i]
-        return map
+    return {
+        qn,
+        sol,
+        ans,
+        hasDuplicatedOptions,
     }
 }

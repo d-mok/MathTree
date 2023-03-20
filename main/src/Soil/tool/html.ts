@@ -13,6 +13,16 @@ export class QuestionHTML extends HTMLWorker {
         return this.all('li').length
     }
 
+    getLiHTMLs(): string[] {
+        return this.all('li').map($ => $.innerHTML)
+    }
+
+    setLiHTMLs(htmls: string[]): void {
+        for (let i = 0; i < this.liCount(); i++) {
+            this.all('li')[i].innerHTML = htmls[i]
+        }
+    }
+
     cloneLi(sourceIndex: number, repeat = 1) {
         for (let i = 1; i <= repeat; i++) {
             let clone = this.clone('li', sourceIndex)
@@ -36,7 +46,7 @@ export class QuestionHTML extends HTMLWorker {
         return this.hasDuplicate('li')
     }
 
-    shuffleLi(indexArr: number[]) {
-        this.shuffleChildren(indexArr, 'ul')
-    }
+    // shuffleLi(indexArr: number[]) {
+    //     this.shuffleChildren(indexArr, 'ul')
+    // }
 }

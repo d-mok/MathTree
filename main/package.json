@@ -18,6 +18,7 @@
         "fate": "file:../packages/fate",
         "gauss": "file:../packages/gauss",
         "katex": "^0.13.23",
+        "lodash": "^4.17.21",
         "paint": "file:../packages/paint",
         "ruby": "file:../packages/ruby"
     },

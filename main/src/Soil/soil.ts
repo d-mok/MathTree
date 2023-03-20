@@ -1,4 +1,4 @@
-import { OptionShuffler } from './tool/shuffle'
+import { shuffleOptions } from './tool/shuffle'
 import { AutoOptions } from './tool/option'
 import { Config } from './cls'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
@@ -206,22 +206,22 @@ export class Soil {
     }
 
     private runShuffle(): boolean {
-        let shuffler = new OptionShuffler(
+        let { qn, sol, ans, hasDuplicatedOptions } = shuffleOptions(
             this.qn,
             this.sol,
             this.config.answer,
             this.config.shuffle
         )
 
-        if (shuffler.hasDuplicatedOptions) {
+        if (hasDuplicatedOptions) {
             this.logger.add(
                 CustomError('ShuffleError', 'Duplicated options found!')
             )
             return false
         }
-        this.qn = shuffler.qn
-        this.sol = shuffler.sol
-        this.config.answer = shuffler.ans
+        this.qn = qn
+        this.sol = sol
+        this.config.answer = ans
         return true
     }
 

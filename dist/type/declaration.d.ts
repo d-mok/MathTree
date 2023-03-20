@@ -5526,26 +5526,24 @@ declare module "Soil/tool/html" {
     export class QuestionHTML extends HTMLWorker {
         hasOneUl(): boolean;
         liCount(): number;
+        getLiHTMLs(): string[];
+        setLiHTMLs(htmls: string[]): void;
         cloneLi(sourceIndex: number, repeat?: number): void;
         printInLi(index: number, dict: object): void;
         isLiDuplicated(): boolean;
-        shuffleLi(indexArr: number[]): void;
     }
 }
 declare module "Soil/tool/shuffle" {
-    export class OptionShuffler {
+    export function shuffleOptions(qn: string, sol: string, ans: string, shuffle: boolean): {
         qn: string;
         sol: string;
         ans: string;
-        private shuffle;
         hasDuplicatedOptions: boolean;
-        constructor(qn: string, sol: string, ans: string, shuffle: boolean);
-        private exec;
-        private letterMap;
-    }
+    };
 }
 declare module "Soil/tool/option" {
-    export function AutoOptions<D extends object>(instructions: Partial<D>, question: string, source: D): string;
+    type dict = Record<string, any>;
+    export function AutoOptions(instructions: dict, question: string, source: dict): string;
 }
 declare module "Soil/soil" {
     export class Soil {
