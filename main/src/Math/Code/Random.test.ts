@@ -4,7 +4,7 @@ import { repeat } from '../Jest/JestExtend'
 test('RndN', () => {
     expect(RndN(5, 10)).toBeOneOf([5, 6, 7, 8, 9, 10])
     expect(RndN(5, 10)).toBeInteger()
-    expect(_.times(10, () => RndN(5, 10))).toIncludeAllMembers([
+    expect(_.times(100, () => RndN(5, 10))).toIncludeAllMembers([
         5, 6, 7, 8, 9, 10,
     ])
 })
