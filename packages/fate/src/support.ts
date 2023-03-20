@@ -1,5 +1,3 @@
-
-
 /**
  * Return whether `num` is prime.
  * @param num - the integer to check
@@ -21,10 +19,6 @@ export function isPrime(num: number): boolean {
     return true
 }
 
-
-
-
-
 /**
  * Return all the primes under `max`.
  * @param max - upper bound of primes requested
@@ -43,11 +37,9 @@ export function primes(max: number): number[] {
     return arr
 }
 
-
 function rndInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
-
 
 function randomIndex(array: any[]): number {
     return rndInt(0, array.length - 1)
@@ -57,7 +49,6 @@ export function draw<T>(array: T[]): T {
     let i = randomIndex(array)
     return array[i]
 }
-
 
 export function unique<T>(array: T[]): T[] {
     return [...new Set(array)]

@@ -1,12 +1,19 @@
 {
-  "name": "fate",
-  "version": "0.0.0",
-  "description": "a random generator",
-  "main": "lib/src/index.js",
-  "types": "lib/src",
-  "type": "module",
-  "scripts": {
-    "jest": "jest",
-    "build": "tsc"
-  }
+    "name": "fate",
+    "version": "0.0.0",
+    "description": "a random generator",
+    "main": "lib/src/index.js",
+    "types": "lib/src",
+    "type": "module",
+    "scripts": {
+        "jest": "jest",
+        "build": "tsc"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true,
+        "arrowParens": "avoid",
+        "singleAttributePerLine": true
+    }
 }

@@ -1,6 +1,20 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import { poker, dice } from 'fate'
 
+function shake<T>(
+    anchor: T,
+    shaker: (_: T) => T,
+    ...coherentPred: ((_: T[]) => boolean)[]
+) {
+    let d = dice(() => shaker(anchor))
+        .unique()
+        .forbid(anchor)
+    for (let co of coherentPred) {
+        d = d.coherent(co)
+    }
+    return d.rolls(3)
+}
+
 @exposeAll()
 @captureAll()
 export class Host {
@@ -86,25 +100,8 @@ export class Host {
      * ```
      */
     @checkIt(owl.int)
-    static RndShakeN(anchor: number): [number, number, number] {
-        anchor = cal.blur(anchor)
-        let a = Abs(anchor)
-        let s = Sign(anchor)
-        let f: () => number
-
-        if (anchor === 0) {
-            f = () => RndN(1, 3)
-        } else {
-            let range = Max(3, a * 0.1)
-            let max = Min(Floor(a + range), cal.logCeil(a) - 1)
-            let min = Max(Ceil(a - range), 1, cal.logFloor(a))
-            f = () => RndN(min, max) * s
-        }
-
-        return dice(f)
-            .shield(x => x !== anchor)
-            .unique()
-            .rolls(3) as [number, number, number]
+    static RndShakeN(anchor: number): number[] {
+        return shake(anchor, shakeN)
     }
 
     /**
@@ -115,17 +112,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static RndShakeR(anchor: number): number[] {
-        let exp = cal.e(anchor)
-        let m = cal.blur(cal.mantissa(anchor))
-        if (IsInteger(m)) return RndShakeN(m).map(x => Number(x + 'e' + exp))
-        let dp = cal.dp(m)
-        return dice(() => Fix(m * (1 + RndR(0, 0.5) * RndU()), dp))
-            .shield(x => x * m > 0)
-            .shield(x => cal.e(x) === cal.e(m))
-            .shield(x => x !== m)
-            .unique()
-            .rolls(3)
-            .map(x => Number(x + 'e' + exp))
+        return shake(anchor, shakeR)
     }
 
     /**
@@ -139,29 +126,7 @@ export class Host {
      */
     @checkIt(owl.rational)
     static RndShakeQ(anchor: number): number[] {
-        if (owl.int(anchor)) return RndShakeN(anchor)
-        let [p, q]: Fraction = ToFrac(anchor)
-        ;[p, q] = [p, q].map(cal.blur)
-        Should(IsInteger(p, q), 'input should be integral fraction')
-        return dice((): Fraction => {
-            const h = RndShakeN(p)[0]
-            const k = RndShakeN(q)[0]
-            let a = RndR(0, 1) < 1 / Math.abs(p) ? p : h
-            let b = RndR(0, 1) < 1 / Math.abs(q) ? q : k
-            if (a === p && b === q) return [h, k]
-            return [a, b]
-        })
-            .shield(([a, b]) => AreCoprime(a, b))
-            .shield(([a, b]) => a !== 0)
-            .shield(([a, b]) => b !== 0)
-            .shield(([a, b]) => b !== 1)
-            .shield(([a, b]) => b !== 1)
-            .shield(([a, b]) =>
-                IsProbability(p / q) ? IsProbability(a / b) : true
-            )
-            .unique(([p, q]) => p / q)
-            .rolls(3)
-            .map(([p, q]) => p / q)
+        return shake(anchor, shakeQ)
     }
 
     /**
@@ -172,8 +137,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static RndShakeG(anchor: number, base: number): number[] {
-        let arr = RndPickN([-2, -1, 1, 2], 3)
-        return arr.map($ => anchor * base ** $)
+        return shake(anchor, a => shakeG(a, base))
     }
 
     /**
@@ -187,7 +151,7 @@ export class Host {
     static RndShakeIneq(anchor: Ineq): Ineq[] {
         let me = INEQUAL.print(anchor)
         let flip = INEQUAL.print(INEQUAL.flip(anchor))
-        return list(me, flip, flip).shuffled()
+        return RndShuffle(me, flip, flip)
     }
 
     /**
@@ -199,13 +163,7 @@ export class Host {
      */
     @checkIt(owl.point2D)
     static RndShakePoint(anchor: Point2D): Point2D[] {
-        let [x, y] = anchor
-        let func = (): Point2D => {
-            const h = IsInteger(x) ? RndShakeN(x)[0] : RndShakeR(x)[0]
-            const k = IsInteger(y) ? RndShakeN(y)[0] : RndShakeR(y)[0]
-            return [h, k]
-        }
-        return dice(func)
+        return dice(() => shakePoint(anchor))
             .unique(([x, y]) => x)
             .unique(([x, y]) => y)
             .rolls(3)
@@ -267,17 +225,7 @@ export class Host {
      */
     @checkIt(owl.ntuple)
     static RndShakeRatio(anchor: number[]): number[][] {
-        anchor = [...toNumbers(anchor).ratio()]
-        let func = (): number[] => {
-            return anchor.map(x =>
-                RndR(0, 1) < 1 / (Math.abs(x) + 1) ? x : RndShakeN(x)[0]
-            )
-        }
-        return dice(func)
-            .shield(r => toNumbers(r).hcf() === 1)
-            .shield(r => AreDifferent(anchor, r))
-            .unique()
-            .rolls(3)
+        return shake(anchor, shakeRatio)
     }
 
     /**
@@ -289,76 +237,7 @@ export class Host {
      */
     @checkIt(owl.base)
     static RndShakeBase(anchor: string): string[] {
-        let [num, base] = anchor.split('_')
-        base = base.replace('{', '').replace('}', '')
-        num = num.replaceAll('{', '').replaceAll('}', '')
-        let digits = '0123456789ABCDEF'.substring(0, Number(base)).split('')
-
-        function shake(d: string): string {
-            let x = digits.indexOf(d) + RndU()
-            if (x < 0) x = 0
-            if (x > digits.length - 1) x = digits.length - 1
-            return digits[x]
-        }
-
-        function mutate(str: string): string {
-            let s = []
-            let nonzero = str.split('').filter(_ => _ !== '0').length
-            for (let d of str.split('')) {
-                if (d === '0') {
-                    let go = poker.bool(0.1)
-                    s.push(go ? toList(digits).draw()! : '0')
-                } else {
-                    let go = poker.bool(1 / (nonzero + 2))
-                    s.push(go ? shake(d) : d)
-                }
-            }
-            let T = s.join('')
-            if (poker.bool(0.3)) T += '0'
-            if (poker.bool(0.3)) T += '0'
-            return T
-        }
-
-        function dress(str: string): string {
-            str = str.replace(/^0+/, '')
-            str = str
-                .split('')
-                .map($ => '{' + $ + '}')
-                .join('')
-            return str + '_{' + base + '}'
-        }
-
-        // let f = (): string[] => {
-        //     let middle = Math.ceil(num.length / 2)
-        //     let s1 = num.slice(0, middle)
-        //     let s2 = num.slice(middle)
-
-        //     let t1 = mutate(s1)
-        //     let t2 = mutate(s2)
-
-        //     let B1 = dress(s1 + t2)
-        //     let B2 = dress(t1 + s2)
-        //     let B3 = dress(t1 + t2)
-
-        //     return [B1, B2, B3]
-        // }
-
-        function nonZeroCount(str: string): number {
-            return str
-                .replaceAll('{', '')
-                .replaceAll('}', '')
-                .split('')
-                .filter(_ => _ !== '0').length
-        }
-
-        let anchorNonZeroCount = nonZeroCount(anchor)
-
-        return dice(() => dress(mutate(num)))
-            .forbid(anchor)
-            .unique()
-            .shield($ => nonZeroCount($) === anchorNonZeroCount) // same non-zero digit count
-            .shield($ => !$.startsWith('_')) // not empty
-            .rolls(3)
+        return shake(anchor, shakeBase)
     }
 
     /**
@@ -371,23 +250,7 @@ export class Host {
     @checkIt(owl.point2D)
     static RndShakePointPolar(anchor: Point2D): Point2D[] {
         let [r1, q1] = RectToPol(anchor)
-        let [a, b] = cal.toSurd(r1)
-        let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a
-        let angles = list(
-            30,
-            45,
-            60,
-            120,
-            135,
-            150,
-            210,
-            225,
-            240,
-            300,
-            315,
-            330
-        )
-        let q2 = angles.except([q1]).draw()!
+        let [r2, q2] = RectToPol(shakePointPolar(anchor))
         return RndShuffle<PolarPoint>([r1, q2], [r2, q1], [r2, q2]).map($ =>
             PolToRect($)
         )
@@ -403,7 +266,7 @@ export class Host {
     @checkIt(owl.constraint)
     static RndShakeConstraint(anchor: Constraint): Constraint[] {
         let flip = rein(anchor).flip().constraint
-        return list(anchor, flip, flip).shuffled()
+        return RndShuffle(anchor, flip, flip)
     }
 
     /**
@@ -421,44 +284,19 @@ export class Host {
      */
     @checkIt(owl.constraints)
     static RndShakeConstraints(anchor: Constraint[]): Constraint[][] {
-        let func = () => [
-            ...toReins(anchor)
-                .shake()
-                .map($ => $.constraint),
-        ]
-        return dice(func)
-            .forbid(anchor)
-            .shield($ => toReins($).isConsistent())
-            .unique()
-            .rolls(3)
+        return shake(anchor, shakeConstraints)
     }
 
     @checkIt(owl.quantity)
     static RndShakeQuantity(anchor: quantity): quantity[] {
-        let { val, unit } = anchor
-        let vals = RndShake(val)
-        return vals.map($ => ({ val: $, unit }))
+        return shake(anchor, shakeQuantity)
     }
 
     @checkIt(owl.compoundInequality)
     static RndShakeCompoundInequality(
         anchor: CompoundInequality
     ): CompoundInequality[] {
-        let [connective, s1, n1, s2, n2, x] = anchor
-        let r1 = INEQUAL.flip(s1)
-        let r2 = INEQUAL.flip(s2)
-        let f = (): CompoundInequality =>
-            RndPick(
-                ['AND', s1, n1, s2, n2, x],
-                ['AND', r1, n1, s2, n2, x],
-                ['AND', s1, n1, r2, n2, x],
-                ['AND', r1, n1, r2, n2, x],
-                ['OR', s1, n1, s2, n2, x],
-                ['OR', r1, n1, s2, n2, x],
-                ['OR', s1, n1, r2, n2, x],
-                ['OR', r1, n1, r2, n2, x]
-            )
-        return dice(f).unique().forbid(anchor).rolls(3)
+        return shake(anchor, shakeCompoundInequality)
     }
 }
 

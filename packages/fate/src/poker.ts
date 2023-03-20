@@ -1,14 +1,10 @@
-
 import { primes, draw } from './support'
-
 
 function error(msg: string): Error {
     const e = new Error(msg)
     e.name = 'PokerError'
     return e
 }
-
-
 
 /**
  * Return a random integer from `min` to `max` inclusive.
@@ -23,11 +19,9 @@ function error(msg: string): Error {
 export function integer(min: number, max: number): number {
     min = Math.ceil(min)
     max = Math.floor(max)
-    if (min > max)
-        throw error('min must be less than max!')
+    if (min > max) throw error('min must be less than max!')
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
-
 
 /**
  * Return a random real number from `min` to `max` inclusive.
@@ -40,8 +34,7 @@ export function integer(min: number, max: number): number {
  * ```
  */
 export function real(min: number, max: number): number {
-    if (min > max)
-        throw error('min must be less than max!')
+    if (min > max) throw error('min must be less than max!')
     return Math.random() * (max - min) + min
 }
 
@@ -57,12 +50,10 @@ export function real(min: number, max: number): number {
  * ```
  */
 export function prime(min: number, max: number): number | undefined {
-    if (min > max)
-        throw error('min must be less than max!')
+    if (min > max) throw error('min must be less than max!')
     let ps = primes(max).filter($ => $ >= min)
     return draw(ps)
 }
-
 
 /**
  * Return a random male name.
@@ -73,9 +64,68 @@ export function prime(min: number, max: number): number | undefined {
  * ```
  */
 export function he(): string {
-    return draw(["Aaron", "Adam", "Alan", "Alexander", "Andrew", "Ben", "Brian", "Cameron", "Charlie", "Colin", "Daniel", "David", "Derek", "Donald", "Edward", "Eric", "Ethan", "Frank", "Gary", "George", "Gordon", "Harris", "Harry", "Jack", "Jacob", "James", "Jamie", "Jason", "John", "Jordan", "Joseph", "Kevin", "Kyle", "Leo", "Lewis", "Lucas", "Martin", "Mason", "Matthew", "Michael", "Nathan", "Nicholas", "Noah", "Oliver", "Patrick", "Paul", "Peter", "Philip", "Riley", "Robert", "Rory", "Ryan", "Samuel", "Scott", "Stephen", "Steven", "Thomas", "Timothy", "William"])
+    return draw([
+        'Aaron',
+        'Adam',
+        'Alan',
+        'Alexander',
+        'Andrew',
+        'Ben',
+        'Brian',
+        'Cameron',
+        'Charlie',
+        'Colin',
+        'Daniel',
+        'David',
+        'Derek',
+        'Donald',
+        'Edward',
+        'Eric',
+        'Ethan',
+        'Frank',
+        'Gary',
+        'George',
+        'Gordon',
+        'Harris',
+        'Harry',
+        'Jack',
+        'Jacob',
+        'James',
+        'Jamie',
+        'Jason',
+        'John',
+        'Jordan',
+        'Joseph',
+        'Kevin',
+        'Kyle',
+        'Leo',
+        'Lewis',
+        'Lucas',
+        'Martin',
+        'Mason',
+        'Matthew',
+        'Michael',
+        'Nathan',
+        'Nicholas',
+        'Noah',
+        'Oliver',
+        'Patrick',
+        'Paul',
+        'Peter',
+        'Philip',
+        'Riley',
+        'Robert',
+        'Rory',
+        'Ryan',
+        'Samuel',
+        'Scott',
+        'Stephen',
+        'Steven',
+        'Thomas',
+        'Timothy',
+        'William',
+    ])
 }
-
 
 /**
  * Return a random female name.
@@ -86,9 +136,83 @@ export function he(): string {
  * ```
  */
 export function she(): string {
-    return draw(["Abbie", "Alice", "Alison", "Amanda", "Amelia", "Amy", "Angela", "Ann", "Anna", "Ashley", "Cara", "Carol", "Caroline", "Charlotte", "Cheryl", "Chloe", "Christine", "Claire", "Donna", "Elaine", "Ella", "Ellie", "Emily", "Emma", "Eva", "Fiona", "Gillian", "Grace", "Hazel", "Helen", "Holly", "Ivy", "Jacqueline", "Jade", "Janet", "Jennifer", "Jessica", "Julie", "Karen", "Kate", "Katie", "Kelly", "Kirsty", "Lily", "Linda", "Lisa", "Lorraine", "Louise", "Lucy", "Mandy", "Mary", "Michelle", "Natalie", "Nicole", "Olivia", "Pamela", "Pauline", "Rachel", "Rebecca", "Rosie", "Samantha", "Sarah", "Shannon", "Sharon", "Sophia", "Sophie", "Stephanie", "Susan", "Tracey", "Tracy", "Valerie", "Victoria", "Wendy", "Zoe"])
+    return draw([
+        'Abbie',
+        'Alice',
+        'Alison',
+        'Amanda',
+        'Amelia',
+        'Amy',
+        'Angela',
+        'Ann',
+        'Anna',
+        'Ashley',
+        'Cara',
+        'Carol',
+        'Caroline',
+        'Charlotte',
+        'Cheryl',
+        'Chloe',
+        'Christine',
+        'Claire',
+        'Donna',
+        'Elaine',
+        'Ella',
+        'Ellie',
+        'Emily',
+        'Emma',
+        'Eva',
+        'Fiona',
+        'Gillian',
+        'Grace',
+        'Hazel',
+        'Helen',
+        'Holly',
+        'Ivy',
+        'Jacqueline',
+        'Jade',
+        'Janet',
+        'Jennifer',
+        'Jessica',
+        'Julie',
+        'Karen',
+        'Kate',
+        'Katie',
+        'Kelly',
+        'Kirsty',
+        'Lily',
+        'Linda',
+        'Lisa',
+        'Lorraine',
+        'Louise',
+        'Lucy',
+        'Mandy',
+        'Mary',
+        'Michelle',
+        'Natalie',
+        'Nicole',
+        'Olivia',
+        'Pamela',
+        'Pauline',
+        'Rachel',
+        'Rebecca',
+        'Rosie',
+        'Samantha',
+        'Sarah',
+        'Shannon',
+        'Sharon',
+        'Sophia',
+        'Sophie',
+        'Stephanie',
+        'Susan',
+        'Tracey',
+        'Tracy',
+        'Valerie',
+        'Victoria',
+        'Wendy',
+        'Zoe',
+    ])
 }
-
 
 /**
  * Return a random boolean.
@@ -102,6 +226,3 @@ export function she(): string {
 export function bool(trueChance: number = 0.5): boolean {
     return real(0, 1) < trueChance
 }
-
-
-

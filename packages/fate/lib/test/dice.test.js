@@ -65,14 +65,26 @@ describe('Class Dice', () => {
         d.forbid(5, 7);
         it('govern roll', () => {
             repeat(10, () => {
-                expect(theRange.filter($ => $ !== 5 && $ !== 7))
-                    .toContain(d.roll());
+                expect(theRange.filter($ => $ !== 5 && $ !== 7)).toContain(d.roll());
             });
         });
         it('govern rolls', () => {
             repeat(10, () => {
-                expect(theRange.filter($ => $ !== 5 && $ !== 7))
-                    .toIncludeAllMembers(d.rolls(99));
+                expect(theRange.filter($ => $ !== 5 && $ !== 7)).toIncludeAllMembers(d.rolls(99));
+            });
+        });
+    });
+    describe('preserve', () => {
+        let d = getDice();
+        d.preserve($ => $ % 2, 8);
+        it('govern roll', () => {
+            repeat(10, () => {
+                expect(d.roll()).toSatisfy($ => $ % 2 === 0);
+            });
+        });
+        it('govern rolls', () => {
+            repeat(10, () => {
+                expect(d.rolls(3)).toSatisfyAll($ => $ % 2 === 0);
             });
         });
     });
@@ -109,7 +121,9 @@ describe('Class Dice', () => {
             let parity6 = ($) => $ % 6;
             d.unique(parity6);
             repeat(10, () => {
-                expect(d.rolls(6).map($ => $ % 6)).toIncludeSameMembers([0, 1, 2, 3, 4, 5]);
+                expect(d.rolls(6).map($ => $ % 6)).toIncludeSameMembers([
+                    0, 1, 2, 3, 4, 5,
+                ]);
                 expect(() => d.rolls(7)).toThrow();
             });
         });
@@ -125,7 +139,9 @@ describe('Class Dice', () => {
             let parity = ([$]) => [$ % 2];
             d.unique(parity);
             repeat(10, () => {
-                expect(d.rolls(2).map(([$]) => $ % 2)).toIncludeSameMembers([1, 0]);
+                expect(d.rolls(2).map(([$]) => $ % 2)).toIncludeSameMembers([
+                    1, 0,
+                ]);
                 expect(() => d.rolls(3)).toThrow();
             });
         });
@@ -136,8 +152,6 @@ describe('Class Dice', () => {
                 expect(() => d.rolls(11)).toThrow();
             });
         });
-    });
-    describe('uniqueDeep', () => {
     });
     describe('distinct', () => {
         let d = getDice();
@@ -172,7 +186,9 @@ describe('Class Dice', () => {
             let parity6 = (a, b) => a % 6 === b % 6;
             d.distinct(parity6);
             repeat(10, () => {
-                expect(d.rolls(6).map($ => $ % 6)).toIncludeSameMembers([0, 1, 2, 3, 4, 5]);
+                expect(d.rolls(6).map($ => $ % 6)).toIncludeSameMembers([
+                    0, 1, 2, 3, 4, 5,
+                ]);
                 expect(() => d.rolls(7)).toThrow();
             });
         });

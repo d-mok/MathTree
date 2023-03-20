@@ -6,7 +6,6 @@ function produce<S>(source: S, assigned: S | S[] | ((_: S) => S)): S[] {
     if (assigned === source) {
         return RndShake(source)
     }
-
     if (_.isFunction(assigned)) {
         let f = () => assigned(source)
         return dice(f).forbid(source).unique().rolls(3)

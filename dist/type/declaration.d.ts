@@ -1786,6 +1786,7 @@ declare module "Math/index" {
     import './Code/RandomUtil.ts';
     import './Code/Relation.ts';
     import './Code/Sequence.ts';
+    import './Code/Shake.ts';
     import './Code/Stat.ts';
     import './Code/Text.ts';
     import './Code/Triangle.ts';
@@ -3679,7 +3680,7 @@ declare module "Math/Code/RandomShake" {
          * RndShakeN(5) // return 3 unique integers from 1-10
          * ```
          */
-        static RndShakeN(anchor: number): [number, number, number];
+        static RndShakeN(anchor: number): number[];
         /**
          * 3 nearby same-signed real number with same precision, range = anchor * 50%
          * ```
@@ -4046,6 +4047,129 @@ declare module "Math/Code/Sequence" {
         var GSequence: typeof Host.GSequence;
         var QuadraticSequence: typeof Host.QuadraticSequence;
         var LucasSequence: typeof Host.LucasSequence;
+    }
+}
+declare module "Math/Code/Shake" {
+    export class Host {
+        /**
+         * Nearby same-signed integers, range = Max(3, anchor * 10%)
+         * ```
+         * shakeN(5) // integers from 2-8
+         * ```
+         */
+        static shakeN(anchor: number): number;
+        /**
+         * Nearby same-signed real number with same precision, range = anchor * 50%
+         * ```
+         * shakeR(3.5) // return 3 unique values from [1.8,5.2]
+         * ```
+         */
+        static shakeR(anchor: number): number;
+        /**
+         * Nearby same-sign rational by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+         * ```
+         * shakeQ(5/6)
+         * // return fraction around [5,6]
+         * shakeQ(6/-5)
+         * // return fraction around [6,-5]
+         * ```
+         */
+        static shakeQ(anchor: number): number;
+        /**
+         * Numbers by multiplying / dividing the `anchor` by the `base` a few times.
+         * ```
+         * shakeG(24,2) // any of [6,12,48,96]
+         * ```
+         */
+        static shakeG(anchor: number, base: number): number;
+        /**
+         * ineq signs.
+         * ```
+         * shakeIneq('\\ge')
+         * // may return ['\\ge','\\le']
+         * ```
+         */
+        static shakeIneq(anchor: Ineq): Ineq;
+        /**
+         * point
+         * ```
+         * shakePoint([3,4])
+         * // may return [[2,5],[1,6],[4,2]]
+         * ```
+         */
+        static shakePoint(anchor: Point2D): Point2D;
+        /**
+         * TrigValue
+         * ```
+         * shakeTrigValue(['sin','x'])
+         * // may return [['cos','x'],['sin','x'],['cos','x']]
+         * ```
+         */
+        static shakeTrigValue(anchor: TrigValue): TrigValue;
+        /**
+         * ratios
+         * ```
+         * shakeRatio([4,5,6])
+         * // may return [[3,6,5],[7,5,3],[8,4,5]]
+         * ```
+         */
+        static shakeRatio(anchor: number[]): number[];
+        /**
+         * number in given number system
+         * ```
+         * shakeBase('AB0CD_{16}')
+         * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
+         * ```
+         */
+        static shakeBase(anchor: string): string;
+        /**
+         * points, all are special in polar coordinates
+         * ```
+         * shakePointPolar([3,60])
+         * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
+         * ```
+         */
+        static shakePointPolar(anchor: Point2D): Point2D;
+        /**
+         * constraint, with only the sign shaken
+         * ```
+         * shakeConstraint([1,2,'>',3])
+         * // may return [[1,2,'>',3], [1,2,'<',3], [1,2,'<',3]]
+         * ```
+         */
+        static shakeConstraint(anchor: Constraint): Constraint;
+        /**
+         * sets of constraints, with only the sign shaken
+         * ```
+         * shakeConstraints([
+         *   [1,2,'>',3], [4,5,'>',6]
+         * ])
+         * // may return [
+         * // [[1,2,'>',3],[4,5,'>',6]],
+         * // [[1,2,'<',3],[4,5,'<',6]],
+         * // [[1,2,'<',3],[4,5,'>',6]]
+         * // ]
+         * ```
+         */
+        static shakeConstraints(anchor: Constraint[]): Constraint[];
+        static shakeQuantity(anchor: quantity): quantity;
+        static shakeCompoundInequality(anchor: CompoundInequality): CompoundInequality;
+    }
+    global {
+        var shakeN: typeof Host.shakeN;
+        var shakeR: typeof Host.shakeR;
+        var shakeQ: typeof Host.shakeQ;
+        var shakeG: typeof Host.shakeG;
+        var shakeIneq: typeof Host.shakeIneq;
+        var shakePoint: typeof Host.shakePoint;
+        var shakeTrigValue: typeof Host.shakeTrigValue;
+        var shakeRatio: typeof Host.shakeRatio;
+        var shakeBase: typeof Host.shakeBase;
+        var shakePointPolar: typeof Host.shakePointPolar;
+        var shakeConstraint: typeof Host.shakeConstraint;
+        var shakeConstraints: typeof Host.shakeConstraints;
+        var shakeQuantity: typeof Host.shakeQuantity;
+        var shakeCompoundInequality: typeof Host.shakeCompoundInequality;
     }
 }
 declare module "Math/Code/Stat" {
