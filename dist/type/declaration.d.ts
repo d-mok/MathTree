@@ -4049,6 +4049,7 @@ declare module "Math/Code/Sequence" {
         var LucasSequence: typeof Host.LucasSequence;
     }
 }
+declare module "Math/Code/Shake.test" { }
 declare module "Math/Code/Shake" {
     export class Host {
         /**
