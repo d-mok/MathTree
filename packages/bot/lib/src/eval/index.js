@@ -12,7 +12,7 @@ function assembleCtx(code, contexts) {
     // for backward compatible alphabets
     let missingAlphabetVars = [];
     // @ts-ignore
-    if (global.AUTO_ALPHABETS !== false)
+    if (globalThis.AUTO_ALPHABETS !== false)
         missingAlphabetVars = allVars
             .filter($ => $.length === 1)
             .filter($ => !contextVars.includes($))
