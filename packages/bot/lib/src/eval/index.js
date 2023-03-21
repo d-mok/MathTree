@@ -10,10 +10,13 @@ function assembleCtx(code, contexts) {
     let contextVars = contexts.flatMap($ => Object.keys($));
     let declaredVars = getAllDeclaredVars(code);
     // for backward compatible alphabets
-    let missingAlphabetVars = allVars
-        .filter($ => $.length === 1)
-        .filter($ => !contextVars.includes($))
-        .filter($ => !declaredVars.includes($));
+    let missingAlphabetVars = [];
+    // @ts-ignore
+    if (global.AUTO_ALPHABETS !== false)
+        missingAlphabetVars = allVars
+            .filter($ => $.length === 1)
+            .filter($ => !contextVars.includes($))
+            .filter($ => !declaredVars.includes($));
     let newVars = [...declaredVars];
     // for backward compatible alphabets
     newVars = [...newVars, ...missingAlphabetVars];
