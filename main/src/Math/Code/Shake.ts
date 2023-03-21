@@ -222,6 +222,21 @@ export class Host {
             .roll()
     }
 
+    // /**
+    //  * Number in given number system
+    //  * ```
+    //  * shakeBase('AB0CD_{16}')
+    //  * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
+    //  * ```
+    //  */
+    // @checkIt(owl.int)
+    // static shakeBase2(anchor: number,base:number): number {
+      
+        
+
+
+    // }
+
     /**
      * Points, all are special in polar coordinates
      * ```

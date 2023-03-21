@@ -3420,14 +3420,6 @@ declare module "Math/Code/Random" {
          */
         static RndNs(min: number, max: number, n?: number, sort?: 'asc' | 'desc' | 'none'): number[];
         /**
-         * an array of n unique random integer in [min, max] inclusive, sorted in ascending order.
-         * ```
-         * RndAscNs(2,8,3) // may return [3,5,7]
-         * ```
-         * @deprecated
-         */
-        static RndAscNs(min: number, max: number, n?: number): number[];
-        /**
          * a random real number in [min, max] inclusive
          * ```
          * RndR(1,2) // may return 1.242574363
@@ -3487,15 +3479,6 @@ declare module "Math/Code/Random" {
          * ```
          */
         static RndZs(min: number, max: number, n?: number, sort?: 'asc' | 'desc' | 'none'): number[];
-        /**
-         * @param n - default to 10
-         * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive, sorted in ascending order.
-         * ```
-         * RndAscZs(2,8,3) // may return [-3,5,7]
-         * ```
-         * @deprecated
-         */
-        static RndAscZs(min: number, max: number, n?: number): number[];
         /**
          * a random prime number less than or equal to max.
          * ```
@@ -3636,7 +3619,6 @@ declare module "Math/Code/Random" {
     global {
         var RndN: typeof Host.RndN;
         var RndNs: typeof Host.RndNs;
-        var RndAscNs: typeof Host.RndAscNs;
         var RndR: typeof Host.RndR;
         var RndRs: typeof Host.RndRs;
         var RndQ: typeof Host.RndQ;
@@ -3645,7 +3627,6 @@ declare module "Math/Code/Random" {
         var RndT: typeof Host.RndT;
         var RndZ: typeof Host.RndZ;
         var RndZs: typeof Host.RndZs;
-        var RndAscZs: typeof Host.RndAscZs;
         var RndP: typeof Host.RndP;
         var RndOdd: typeof Host.RndOdd;
         var RndEven: typeof Host.RndEven;
