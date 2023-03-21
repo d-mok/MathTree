@@ -3414,14 +3414,17 @@ declare module "Math/Code/Random" {
          * an array of n unique random integer in [min, max] inclusive.
          * ```
          * RndNs(2,8,3) // may return [5,3,7]
+         * RndNs(2,8,3,'asc') // ascending
+         * RndNs(2,8,3,'desc') // descending
          * ```
          */
-        static RndNs(min: number, max: number, n?: number): number[];
+        static RndNs(min: number, max: number, n?: number, sort?: 'asc' | 'desc' | 'none'): number[];
         /**
          * an array of n unique random integer in [min, max] inclusive, sorted in ascending order.
          * ```
          * RndAscNs(2,8,3) // may return [3,5,7]
          * ```
+         * @deprecated
          */
         static RndAscNs(min: number, max: number, n?: number): number[];
         /**
@@ -3479,15 +3482,18 @@ declare module "Math/Code/Random" {
          * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
          * ```
          * RndZs(2,8,3) // may return [5,-3,7]
+         * RndZs(2,8,3,'asc') // ascending
+         * RndZs(2,8,3,'desc') // descending
          * ```
          */
-        static RndZs(min: number, max: number, n?: number): number[];
+        static RndZs(min: number, max: number, n?: number, sort?: 'asc' | 'desc' | 'none'): number[];
         /**
          * @param n - default to 10
          * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive, sorted in ascending order.
          * ```
          * RndAscZs(2,8,3) // may return [-3,5,7]
          * ```
+         * @deprecated
          */
         static RndAscZs(min: number, max: number, n?: number): number[];
         /**

@@ -20,14 +20,24 @@ export class Host {
      * an array of n unique random integer in [min, max] inclusive.
      * ```
      * RndNs(2,8,3) // may return [5,3,7]
+     * RndNs(2,8,3,'asc') // ascending
+     * RndNs(2,8,3,'desc') // descending
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
-    static RndNs(min: number, max: number, n: number = 10): number[] {
+    @checkIt(owl.num, owl.num, owl.positiveInt, owl.str)
+    static RndNs(
+        min: number,
+        max: number,
+        n: number = 10,
+        sort: 'asc' | 'desc' | 'none' = 'none'
+    ): number[] {
         n = Math.min(Math.floor(max - min + 1), n)
-        return dice(() => RndN(min, max))
+        let nums = dice(() => RndN(min, max))
             .unique()
             .rolls(n)
+        if (sort === 'asc') return Sort(...nums)
+        if (sort === 'desc') return Sort(...nums).reverse()
+        return nums
     }
 
     /**
@@ -35,6 +45,7 @@ export class Host {
      * ```
      * RndAscNs(2,8,3) // may return [3,5,7]
      * ```
+     * @deprecated
      */
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static RndAscNs(min: number, max: number, n: number = 10): number[] {
@@ -58,71 +69,12 @@ export class Host {
      * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
+    @checkIt(owl.num, owl.num, owl.positiveInt, owl.str)
     static RndRs(min: number, max: number, n: number = 10): number[] {
         return dice(() => RndR(min, max))
             .unique()
             .rolls(n)
     }
-
-    // /**
-    //  * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
-    //  * ```
-    //  * RndF(9,[2,9]) // may return [7, 2]
-    //  * RndF(-9,[-9,9]) // may return [7, 2] or [-7, 2], i.e. can be +ve or -ve
-    //  * ```
-    //  */
-    // @checkIt(owl.nonZeroInt, owl.interval)
-    // static RndF(largest: number = 9, range?: interval): [number, number] {
-    //     let L = Math.abs(largest)
-    //     let sign = largest > 0 ? 1 : RndU()
-    //     let f = () => Ratio(RndN(1, L) * sign, RndN(2, L)) as [number, number]
-
-    //     return dice(f)
-    //         .shield(([p, q]) => owl.dec(p / q))
-    //         .shield(([p, q]) => {
-    //             if (range === undefined) return true
-    //             let f = p / q
-    //             let [a, b] = range
-    //             return f >= a && f <= b
-    //         })
-    //         .roll()
-    // }
-
-    // /**
-    //  * an array of n unique random fractions (non-integer) .
-    //  * ```
-    //  * RndFs(9,[2,9],3) // may return [[5,2],[7,3],[9,2]]
-    //  * ```
-    //  */
-    // @checkIt(owl.nonZeroInt, owl.interval, owl.positiveInt)
-    // static RndFs(
-    //     largest: number = 9,
-    //     range?: interval,
-    //     n: number = 10
-    // ): [number, number][] {
-    //     n = Math.min(Math.floor(Math.abs(largest) / 2), n)
-    //     let f = () =>
-    //         _(cal.range(1, largest)).shuffle().chunk(2).take(n).value() as [
-    //             number,
-    //             number
-    //         ][]
-
-    //     function inRange([p, q]: [number, number]): boolean {
-    //         if (range === undefined) return true
-    //         let f = p / q
-    //         let [a, b] = range
-    //         return f >= a && f <= b
-    //     }
-
-    //     function check([p, q]: [number, number]): boolean {
-    //         return q !== 1 && AreCoprime(p, q) && inRange([p, q])
-    //     }
-
-    //     return dice(f)
-    //         .shield(ns => ns.every(check))
-    //         .roll()
-    // }
 
     /**
      * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
@@ -172,7 +124,7 @@ export class Host {
      * ```
      */
     static RndU(): 1 | -1 {
-        return list<1 | -1>(1, -1).draw()!
+        return _.sample([1, -1])!
     }
 
     /**
@@ -182,7 +134,7 @@ export class Host {
      * ```
      */
     static RndT(): boolean {
-        return poker.bool()
+        return _.sample([true, false])!
     }
 
     /**
@@ -201,15 +153,25 @@ export class Host {
      * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
      * ```
      * RndZs(2,8,3) // may return [5,-3,7]
+     * RndZs(2,8,3,'asc') // ascending
+     * RndZs(2,8,3,'desc') // descending
      * ```
      */
-    @checkIt(owl.nonNegative, owl.nonNegative, owl.positiveInt)
-    static RndZs(min: number, max: number, n: number = 10): number[] {
+    @checkIt(owl.nonNegative, owl.nonNegative, owl.positiveInt, owl.str)
+    static RndZs(
+        min: number,
+        max: number,
+        n: number = 10,
+        sort: 'asc' | 'desc' | 'none' = 'none'
+    ): number[] {
         n = Math.min(Math.floor(max - min + 1), n)
-        return dice(() => RndN(min, max))
+        let nums = dice(() => RndN(min, max))
             .unique()
             .rolls(n)
             .map(x => x * RndU())
+        if (sort === 'asc') return Sort(...nums)
+        if (sort === 'desc') return Sort(...nums).reverse()
+        return nums
     }
 
     /**
@@ -218,6 +180,7 @@ export class Host {
      * ```
      * RndAscZs(2,8,3) // may return [-3,5,7]
      * ```
+     * @deprecated
      */
     @checkIt(owl.nonNegative, owl.nonNegative, owl.positiveInt)
     static RndAscZs(min: number, max: number, n: number = 10): number[] {
@@ -632,8 +595,6 @@ declare global {
     var RndAscNs: typeof Host.RndAscNs
     var RndR: typeof Host.RndR
     var RndRs: typeof Host.RndRs
-    // var RndF: typeof Host.RndF
-    // var RndFs: typeof Host.RndFs
     var RndQ: typeof Host.RndQ
     var RndQs: typeof Host.RndQs
     var RndU: typeof Host.RndU

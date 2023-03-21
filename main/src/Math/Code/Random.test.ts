@@ -15,19 +15,29 @@ test('RndNs', () => {
     expect(RndNs(5, 10, 3)).toHaveLength(3)
     expect(RndNs(5, 10, 3)).toBeDupless()
     expect(RndNs(5, 10, 6)).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
+
+    expect(RndNs(5, 10, 3, 'asc')).toAllBeOneOf([5, 6, 7, 8, 9, 10])
+    expect(RndNs(5, 10, 3, 'asc')).toAllBeInteger()
+    expect(RndNs(5, 10, 3, 'asc')).toHaveLength(3)
+    expect(RndNs(5, 10, 3, 'asc')).toBeDupless()
+    expect(RndNs(5, 10, 6, 'asc')).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
+    let [a, b] = RndNs(1, 10, 2, 'asc')
+    expect(a < b).toBeTrue()
+    let [x, y] = RndNs(1, 10, 2, 'desc')
+    expect(y < x).toBeTrue()
 })
 
-test('RndAscNs', () => {
-    repeat(10, () => {
-        expect(RndAscNs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10])
-        expect(RndAscNs(5, 10, 3)).toAllBeInteger()
-        expect(RndAscNs(5, 10, 3)).toHaveLength(3)
-        expect(RndAscNs(5, 10, 3)).toBeDupless()
-        expect(RndAscNs(5, 10, 6)).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
-        let [a, b] = RndAscNs(1, 10, 2)
-        expect(a < b).toBeTrue()
-    })
-})
+// test('RndAscNs', () => {
+//     repeat(10, () => {
+//         expect(RndAscNs(5, 10, 3)).toAllBeOneOf([5, 6, 7, 8, 9, 10])
+//         expect(RndAscNs(5, 10, 3)).toAllBeInteger()
+//         expect(RndAscNs(5, 10, 3)).toHaveLength(3)
+//         expect(RndAscNs(5, 10, 3)).toBeDupless()
+//         expect(RndAscNs(5, 10, 6)).toIncludeSameMembers([5, 6, 7, 8, 9, 10])
+//         let [a, b] = RndAscNs(1, 10, 2)
+//         expect(a < b).toBeTrue()
+//     })
+// })
 
 test('RndR', () => {
     repeat(10, () => {
@@ -148,25 +158,41 @@ test('RndZs', () => {
             [5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10],
             1
         )
-    })
-})
 
-test('RndAscZs', () => {
-    repeat(10, () => {
-        expect(RndAscZs(5, 10, 3)).toAllBeOneOf([
+        expect(RndZs(5, 10, 3, 'asc')).toAllBeOneOf([
             5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10,
         ])
-        expect(RndAscZs(5, 10, 3)).toAllBeInteger()
-        expect(RndAscZs(5, 10, 3)).toHaveLength(3)
-        expect(RndAscZs(5, 10, 3)).toBeDupless()
-        expect(() => RndAscZs(5, 10, 3)).toSpanSame(
+        expect(RndZs(5, 10, 3, 'asc')).toAllBeInteger()
+        expect(RndZs(5, 10, 3, 'asc')).toHaveLength(3)
+        expect(RndZs(5, 10, 3, 'asc')).toBeDupless()
+        expect(() => RndZs(5, 10, 3, 'asc')).toSpanSame(
             [5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10],
             1
         )
-        let [a, b] = RndAscZs(1, 10, 2)
+        
+        let [a, b] = RndZs(1, 10, 2, 'asc')
         expect(a < b).toBeTrue()
+        let [x, y] = RndZs(1, 10, 2, 'desc')
+        expect(y < x).toBeTrue()
     })
 })
+
+// test('RndAscZs', () => {
+//     repeat(10, () => {
+//         expect(RndAscZs(5, 10, 3)).toAllBeOneOf([
+//             5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10,
+//         ])
+//         expect(RndAscZs(5, 10, 3)).toAllBeInteger()
+//         expect(RndAscZs(5, 10, 3)).toHaveLength(3)
+//         expect(RndAscZs(5, 10, 3)).toBeDupless()
+//         expect(() => RndAscZs(5, 10, 3)).toSpanSame(
+//             [5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10],
+//             1
+//         )
+//         let [a, b] = RndAscZs(1, 10, 2)
+//         expect(a < b).toBeTrue()
+//     })
+// })
 
 test('RndP', () => {
     repeat(10, () => {
