@@ -11,6 +11,13 @@ function produce<S>(source: S, assigned: S | S[] | ((_: S) => S)): S[] {
         return dice(f).forbid(source).unique().rolls(3)
     }
     if (Array.isArray(assigned)) {
+        if (assigned.length === 1) {
+            let fake = assigned[0]
+            return _.shuffle([source, fake, fake])
+        }
+        if (assigned.length === 2) {
+            return _.shuffle([source, ...assigned, ...assigned])
+        }
         return _.shuffle(assigned)
     }
     return RndShake(source)
