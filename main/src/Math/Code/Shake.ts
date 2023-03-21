@@ -166,76 +166,60 @@ export class Host {
      */
     @checkIt(owl.base)
     static shakeBase(anchor: string): string {
-        let [num, base] = anchor.split('_')
-        base = base.replace('{', '').replace('}', '')
-        num = num.replaceAll('{', '').replaceAll('}', '')
-        let digits = '0123456789ABCDEF'.substring(0, Number(base)).split('')
+        let [numStr, baseStr] = anchor
+            .replaceAll('{', '')
+            .replaceAll('}', '')
+            .split('_')
+        let base = Number(baseStr)
+        let nums = numStr.split('').map($ => Number('0x' + $))
 
-        function shake(d: string): string {
-            let x = digits.indexOf(d) + RndU()
-            if (x < 0) x = 0
-            if (x > digits.length - 1) x = digits.length - 1
-            return digits[x]
+        function removeZero(ns: number[]): void {
+            let indices = _.range(0, ns.length).filter($ => ns[$] === 0)
+            if (indices.length === 0) return
+            let i = _.sample(indices)!
+            _.pullAt(ns, [i])
         }
 
-        function mutate(str: string): string {
-            let s = []
-            let nonzero = str.split('').filter(_ => _ !== '0').length
-            for (let d of str.split('')) {
-                if (d === '0') {
-                    let go = poker.bool(0.1)
-                    s.push(go ? toList(digits).draw()! : '0')
+        function insertZero(ns: number[]): void {
+            let indices = _.range(0, ns.length)
+            let i = _.sample(indices)!
+            ns.splice(i, 0, 0)
+        }
+
+        function countNonZero(ns: number[]): number {
+            return ns.filter($ => $ !== 0).length
+        }
+
+        function mutate(ns: number[]): number[] {
+            let arr: number[] = []
+            for (let d of ns) {
+                if (d === 0) {
+                    arr.push(RndT(0.1) ? RndN(0, base - 1) : 0)
                 } else {
-                    let go = poker.bool(1 / (nonzero + 2))
-                    s.push(go ? shake(d) : d)
+                    arr.push(RndT(0.5) ? d + RndU() : d)
                 }
             }
-            let T = s.join('')
-            if (poker.bool(0.3)) T += '0'
-            if (poker.bool(0.3)) T += '0'
-            return T
+            if (RndT(0.3)) removeZero(arr)
+            if (RndT(0.3)) removeZero(arr)
+            if (RndT(0.3)) insertZero(arr)
+            if (RndT(0.3)) insertZero(arr)
+            return arr.map($ => _.clamp($, 0, base - 1))
         }
 
-        function dress(str: string): string {
-            str = str.replace(/^0+/, '')
-            str = str
-                .split('')
-                .map($ => '{' + $ + '}')
-                .join('')
-            return str + '_{' + base + '}'
-        }
-
-        function nonZeroCount(str: string): number {
-            return str
-                .replaceAll('{', '')
-                .replaceAll('}', '')
-                .split('')
-                .filter(_ => _ !== '0').length
-        }
-
-        let anchorNonZeroCount = nonZeroCount(anchor)
-
-        return dice(() => dress(mutate(num)))
-            .forbid(anchor)
-            .shield($ => nonZeroCount($) === anchorNonZeroCount) // same non-zero digit count
-            .shield($ => !$.startsWith('_')) // not empty
+        let newNums = dice(() => mutate(nums))
+            .forbid(nums)
+            .preserve(countNonZero, nums)
+            .shield($ => $.some(_ => _ > 0)) // not empty
+            .shield($ => $[0] !== 0) // not start with 0
             .roll()
+
+        let newNumStr = newNums
+            .map($ => $.toString(16).toUpperCase())
+            .map($ => '{' + $ + '}')
+            .join('')
+        return newNumStr + '_{' + base + '}'
     }
 
-    // /**
-    //  * Number in given number system
-    //  * ```
-    //  * shakeBase('AB0CD_{16}')
-    //  * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
-    //  * ```
-    //  */
-    // @checkIt(owl.int)
-    // static shakeBase2(anchor: number,base:number): number {
-      
-        
-
-
-    // }
 
     /**
      * Points, all are special in polar coordinates

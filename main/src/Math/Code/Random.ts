@@ -119,10 +119,11 @@ export class Host {
      * true or false.
      * ```
      * RndT() // may return true or false
+     * RndT(0.6) // 60% true
      * ```
      */
-    static RndT(): boolean {
-        return _.sample([true, false])!
+    static RndT(trueChance: number = 0.5): boolean {
+        return poker.bool(trueChance)
     }
 
     /**

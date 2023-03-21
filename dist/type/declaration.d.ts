@@ -3459,9 +3459,10 @@ declare module "Math/Code/Random" {
          * true or false.
          * ```
          * RndT() // may return true or false
+         * RndT(0.6) // 60% true
          * ```
          */
-        static RndT(): boolean;
+        static RndT(trueChance?: number): boolean;
         /**
          * a random integer in [min, max] or [-max, -min] inclusive.
          * ```
