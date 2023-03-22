@@ -11,22 +11,22 @@ function isVarError(e: unknown) {
 }
 
 function assembleCtx(code: string, contexts: object[]): string {
-    let allVars = getAllVars(code)
-    let contextVars = contexts.flatMap($ => Object.keys($))
+    // let allVars = getAllVars(code)
+    // let contextVars = contexts.flatMap($ => Object.keys($))
     let declaredVars = getAllDeclaredVars(code)
 
     // for backward compatible alphabets
-    let missingAlphabetVars: string[] = []
+    // let missingAlphabetVars: string[] = []
     // @ts-ignore
-    if (globalThis.AUTO_ALPHABETS !== false)
-        missingAlphabetVars = allVars
-            .filter($ => $.length === 1)
-            .filter($ => !contextVars.includes($))
-            .filter($ => !declaredVars.includes($))
+    // if (globalThis.AUTO_ALPHABETS !== false)
+    //     missingAlphabetVars = allVars
+    //         .filter($ => $.length === 1)
+    //         .filter($ => !contextVars.includes($))
+    //         .filter($ => !declaredVars.includes($))
 
     let newVars = [...declaredVars]
     // for backward compatible alphabets
-    newVars = [...newVars, ...missingAlphabetVars]
+    // newVars = [...newVars, ...missingAlphabetVars]
 
     // console.log(newVars)
 
@@ -38,9 +38,9 @@ function assembleCtx(code: string, contexts: object[]): string {
     })
 
     // for backward compatible alphabets
-    for (let k of missingAlphabetVars) {
-        T += `let ${k} = Symbol();`
-    }
+    // for (let k of missingAlphabetVars) {
+    //     T += `let ${k} = Symbol();`
+    // }
 
     T += code + '\n;'
 
