@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('Factorial', () => {
     expect(Factorial(0)).toBe(1)
     expect(Factorial(1)).toBe(1)

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('GrammarJoin', () => {
     expect(GrammarJoin(1, 2, 3, 4)).toBe('1, 2, 3 and 4')
     expect(GrammarJoin('a', 'b', 'c')).toBe('a, b and c')

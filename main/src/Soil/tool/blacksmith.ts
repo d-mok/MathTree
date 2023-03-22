@@ -1,4 +1,5 @@
 import { Blacksmith } from 'bot'
+import _ from 'lodash'
 
 function numberDefault(num: number): number {
     let v = num
@@ -64,13 +65,13 @@ function addRule<T extends condition>(
 
 // print **x as sci notation
 addRule('**@', 'num', $ => {
-    let v = cal.blur(Round($, 3))
+    let v = _.blur(Round($, 3))
     let abs = Math.abs(v)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v)
 })
 
 addRule('**@', 'quantity', ({ val, unit }) => {
-    let v = cal.blur(Round(val, 3))
+    let v = _.blur(Round(val, 3))
     let abs = Math.abs(v)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v) + unit
 })
@@ -152,7 +153,7 @@ addRule('*%|@|', 'num', $ => numberDefault(Abs($ * 100)) + '%')
 addRule('*\\%|@|', 'num', $ => numberDefault(Abs($ * 100)) + '\\%')
 
 // print *:x as ratio
-addRule('*:@', 'ntuple', $ => toNumbers($).ratio().join(':'))
+addRule('*:@', 'ntuple', $ => Ratio(...$).join(':'))
 addRule('*:@', 'num', $ => {
     let [p, q] = cal.toFraction($)
     return p + ':' + q

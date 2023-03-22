@@ -1,214 +1,216 @@
-export const num = (_: unknown): _ is number => Number.isFinite(_)
+import _ from 'lodash'
 
-export const whole = (_: unknown): _ is number => Number.isInteger(_)
+export const num = ($: unknown): $ is number => Number.isFinite($)
 
-export const int = (_: unknown): _ is number =>
-    num(_) && Number.isInteger(cal.blur(_))
+export const whole = ($: unknown): $ is number => Number.isInteger($)
 
-export const dec = (_: unknown): _ is number => num(_) && !int(_)
+export const int = ($: unknown): $ is number =>
+    num($) && Number.isInteger(_.blur($))
 
-export const terminating = (_: unknown): _ is number =>
-    num(_) && cal.sigfig(_) < 10
+export const dec = ($: unknown): $ is number => num($) && !int($)
 
-export const rational = (_: unknown): _ is number => num(_) && cal.isRational(_)
+export const terminating = ($: unknown): $ is number =>
+    num($) && cal.sigfig($) < 10
 
-export const irrational = (_: unknown): _ is number =>
-    num(_) && !cal.isRational(_)
+export const rational = ($: unknown): $ is number => num($) && cal.isRational($)
 
-export const odd = (_: unknown): _ is number =>
-    int(_) && Math.abs(cal.blur(_)) % 2 === 1
+export const irrational = ($: unknown): $ is number =>
+    num($) && !cal.isRational($)
 
-export const even = (_: unknown): _ is number =>
-    int(_) && Math.abs(cal.blur(_)) % 2 === 0
+export const odd = ($: unknown): $ is number =>
+    int($) && Math.abs(_.blur($)) % 2 === 1
 
-export const prob = (_: unknown): _ is number => num(_) && _ >= 0 && _ <= 1
+export const even = ($: unknown): $ is number =>
+    int($) && Math.abs(_.blur($)) % 2 === 0
 
-export const sq = (_: unknown): _ is number => int(_) && int(Math.sqrt(_))
+export const prob = ($: unknown): $ is number => num($) && $ >= 0 && $ <= 1
 
-export const positive = (_: unknown): _ is number => num(_) && _ > 0
+export const sq = ($: unknown): $ is number => int($) && int(Math.sqrt($))
 
-export const positiveInt = (_: unknown): _ is number => int(_) && _ > 0
+export const positive = ($: unknown): $ is number => num($) && $ > 0
 
-export const nonNegative = (_: unknown): _ is number => num(_) && _ >= 0
+export const positiveInt = ($: unknown): $ is number => int($) && $ > 0
 
-export const nonNegativeInt = (_: unknown): _ is number => int(_) && _ >= 0
+export const nonNegative = ($: unknown): $ is number => num($) && $ >= 0
 
-export const negative = (_: unknown): _ is number => num(_) && _ < 0
+export const nonNegativeInt = ($: unknown): $ is number => int($) && $ >= 0
 
-export const negativeInt = (_: unknown): _ is number => int(_) && _ < 0
+export const negative = ($: unknown): $ is number => num($) && $ < 0
 
-export const nonPositive = (_: unknown): _ is number => num(_) && _ <= 0
+export const negativeInt = ($: unknown): $ is number => int($) && $ < 0
 
-export const nonPositiveInt = (_: unknown): _ is number => int(_) && _ <= 0
+export const nonPositive = ($: unknown): $ is number => num($) && $ <= 0
 
-export const zero = (_: unknown): _ is number => num(_) && Math.abs(_) < 1e-14
+export const nonPositiveInt = ($: unknown): $ is number => int($) && $ <= 0
 
-export const nonZero = (_: unknown): _ is number => num(_) && !zero(_)
+export const zero = ($: unknown): $ is number => num($) && Math.abs($) < 1e-14
 
-export const nonZeroInt = (_: unknown): _ is number => int(_) && !zero(_)
+export const nonZero = ($: unknown): $ is number => num($) && !zero($)
+
+export const nonZeroInt = ($: unknown): $ is number => int($) && !zero($)
 
 export const between = (min: number, max: number) =>
     build(
         `between(${min},${max})`,
-        (_: unknown): _ is number => num(_) && _ >= min && _ <= max
+        ($: unknown): $ is number => num($) && $ >= min && $ <= max
     )
 
 export const absBetween = (min: number, max: number) =>
     build(
         `absBetween(${min},${max})`,
-        (_: unknown): _ is number =>
-            num(_) && Math.abs(_) >= min && Math.abs(_) <= max
+        ($: unknown): $ is number =>
+            num($) && Math.abs($) >= min && Math.abs($) <= max
     )
 
 // JS native type
 
-export const str = (_: unknown): _ is string => typeof _ === 'string'
+export const str = ($: unknown): $ is string => typeof $ === 'string'
 
-export const bool = (_: unknown): _ is boolean => typeof _ === 'boolean'
+export const bool = ($: unknown): $ is boolean => typeof $ === 'boolean'
 
-export const object = (_: unknown): _ is Object =>
-    typeof _ === 'object' && _ !== null
+export const object = ($: unknown): $ is Object =>
+    typeof $ === 'object' && $ !== null
 
-export const emptyObject = (_: unknown): _ is Object =>
-    object(_) && !!_ && _.constructor === Object && Object.keys(_).length === 0
+export const emptyObject = ($: unknown): $ is Object =>
+    object($) && !!$ && $.constructor === Object && Object.keys($).length === 0
 
-export const array = (_: unknown): _ is any[] => Array.isArray(_)
+export const array = ($: unknown): $ is any[] => Array.isArray($)
 
 export const arrayOfLength = (length: number) =>
     build(
         `arrayOfLength(${length})`,
-        (_: unknown): _ is any[] => array(_) && _.length === length
+        ($: unknown): $ is any[] => array($) && $.length === length
     )
 
-export const arrayWith = (predicate: (_: unknown) => boolean) =>
+export const arrayWith = (predicate: ($: unknown) => boolean) =>
     build(
         `arrayWith(${predicate.name})`,
-        (_: unknown): _ is any[] => array(_) && _.every(predicate)
+        ($: unknown): $ is any[] => array($) && $.every(predicate)
     )
 
 // Math Types
 
-export const couple = (_: unknown): _ is [number, number] =>
-    arrayOfLength(2)(_) && arrayWith(num)(_)
+export const couple = ($: unknown): $ is [number, number] =>
+    arrayOfLength(2)($) && arrayWith(num)($)
 
-export const triple = (_: unknown): _ is [number, number, number] =>
-    arrayOfLength(3)(_) && arrayWith(num)(_)
+export const triple = ($: unknown): $ is [number, number, number] =>
+    arrayOfLength(3)($) && arrayWith(num)($)
 
-export const combo = (_: unknown): _ is [boolean, boolean, boolean] =>
-    arrayOfLength(3)(_) && arrayWith(bool)(_)
+export const combo = ($: unknown): $ is [boolean, boolean, boolean] =>
+    arrayOfLength(3)($) && arrayWith(bool)($)
 
-export const ntuple = (_: unknown): _ is number[] => arrayWith(num)(_)
+export const ntuple = ($: unknown): $ is number[] => arrayWith(num)($)
 
-export const interval = (_: unknown): _ is interval => couple(_) && _[0] <= _[1]
+export const interval = ($: unknown): $ is interval => couple($) && $[0] <= $[1]
 
-export const point2D = (_: unknown): _ is Point2D => couple(_)
+export const point2D = ($: unknown): $ is Point2D => couple($)
 
-export const point2Ds = (_: unknown): _ is Point2D[] => arrayWith(point2D)(_)
+export const point2Ds = ($: unknown): $ is Point2D[] => arrayWith(point2D)($)
 
-export const point3D = (_: unknown): _ is Point3D => triple(_)
+export const point3D = ($: unknown): $ is Point3D => triple($)
 
-export const point3Ds = (_: unknown): _ is Point3D[] => arrayWith(point3D)(_)
+export const point3Ds = ($: unknown): $ is Point3D[] => arrayWith(point3D)($)
 
-export const polar = (_: unknown): _ is PolarPoint => couple(_) && _[0] >= 0
+export const polar = ($: unknown): $ is PolarPoint => couple($) && $[0] >= 0
 
-export const fraction = (_: unknown): _ is Fraction => couple(_)
+export const fraction = ($: unknown): $ is Fraction => couple($)
 
-export const properFraction = (_: unknown): _ is Fraction =>
-    fraction(_) && _[1] !== 0
+export const properFraction = ($: unknown): $ is Fraction =>
+    fraction($) && $[1] !== 0
 
-export const vector = (_: unknown): _ is Point2D => couple(_)
+export const vector = ($: unknown): $ is Point2D => couple($)
 
-export const vector3D = (_: unknown): _ is Point3D => triple(_)
+export const vector3D = ($: unknown): $ is Point3D => triple($)
 
-export const triangleSides = (_: unknown) => {
-    if (!triple(_)) return false
-    let [a, b, c] = _
-    return _.every(positive) && a + b > c && b + c > a && c + a > b
+export const triangleSides = ($: unknown) => {
+    if (!triple($)) return false
+    let [a, b, c] = $
+    return $.every(positive) && a + b > c && b + c > a && c + a > b
 }
 
-export const monomial = (_: unknown): _ is monomial => object(_) && 'coeff' in _
+export const monomial = ($: unknown): $ is monomial => object($) && 'coeff' in $
 
-export const polynomial = (_: unknown): _ is polynomial =>
-    arrayWith(monomial)(_)
+export const polynomial = ($: unknown): $ is polynomial =>
+    arrayWith(monomial)($)
 
-export const compoundInequality = (_: unknown): _ is CompoundInequality =>
-    arrayOfLength(6)(_) &&
-    (_[0] === 'AND' || _[0] === 'OR') &&
-    ineq(_[1]) &&
-    num(_[2]) &&
-    ineq(_[3]) &&
-    num(_[4]) &&
-    str(_[5])
+export const compoundInequality = ($: unknown): $ is CompoundInequality =>
+    arrayOfLength(6)($) &&
+    ($[0] === 'AND' || $[0] === 'OR') &&
+    ineq($[1]) &&
+    num($[2]) &&
+    ineq($[3]) &&
+    num($[4]) &&
+    str($[5])
 
-export const trigValue = (_: unknown): _ is TrigValue =>
-    arrayOfLength(2)(_) && trig(_[0]) && (num(_[1]) || str(_[1]))
+export const trigValue = ($: unknown): $ is TrigValue =>
+    arrayOfLength(2)($) && trig($[0]) && (num($[1]) || str($[1]))
 
-export const trigExp = (_: unknown): _ is TrigExp =>
-    arrayOfLength(4)(_) && trig(_[0]) && num(_[1]) && num(_[2]) && str(_[3])
+export const trigExp = ($: unknown): $ is TrigExp =>
+    arrayOfLength(4)($) && trig($[0]) && num($[1]) && num($[2]) && str($[3])
 
-export const labeledValue1 = (_: unknown): _ is LabeledValue1 =>
-    arrayOfLength(2)(_) && num(_[0]) && str(_[1])
+export const labeledValue1 = ($: unknown): $ is LabeledValue1 =>
+    arrayOfLength(2)($) && num($[0]) && str($[1])
 
-export const labeledValue2 = (_: unknown): _ is LabeledValue2 =>
-    arrayOfLength(3)(_) && num(_[0]) && str(_[1]) && str(_[2])
+export const labeledValue2 = ($: unknown): $ is LabeledValue2 =>
+    arrayOfLength(3)($) && num($[0]) && str($[1]) && str($[2])
 
-export const labeledValue = (_: unknown): _ is LabeledValue =>
-    labeledValue1(_) || labeledValue2(_)
+export const labeledValue = ($: unknown): $ is LabeledValue =>
+    labeledValue1($) || labeledValue2($)
 
-export const quantity = (_: unknown): _ is quantity =>
-    object(_) && 'val' in _ && 'unit' in _
+export const quantity = ($: unknown): $ is quantity =>
+    object($) && 'val' in $ && 'unit' in $
 
 // trivial
 
-export const pass = (_: unknown) => true
+export const pass = ($: unknown) => true
 
-export const fail = (_: unknown) => false
+export const fail = ($: unknown) => false
 
 // // relation
 
-export const distinct = (_: unknown[]) => toList(_).duplessDeep()
+export const distinct = ($: unknown[]) => _.isUniqDeep($)
 
 // special text
 
-export const alphabet = (_: unknown): _ is string =>
-    str(_) && _.length === 1 && _.toLowerCase() !== _.toUpperCase()
+export const alphabet = ($: unknown): $ is string =>
+    str($) && $.length === 1 && $.toLowerCase() !== $.toUpperCase()
 
-export const ineq = (_: unknown): _ is Ineq =>
-    (str(_) &&
-        ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'].includes(_)) ||
-    (arrayOfLength(2)(_) && arrayWith(bool)(_))
+export const ineq = ($: unknown): $ is Ineq =>
+    (str($) &&
+        ['>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'].includes($)) ||
+    (arrayOfLength(2)($) && arrayWith(bool)($))
 
-export const dfrac = (_: unknown): _ is string => {
+export const dfrac = ($: unknown): $ is string => {
     const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
-    return str(_) && !!_.match(new RegExp(f, 'g'))
+    return str($) && !!$.match(new RegExp(f, 'g'))
 }
 
-export const constraint = (_: unknown): _ is Constraint =>
-    arrayOfLength(4)(_) && num(_[0]) && num(_[1]) && ineq(_[2]) && num(_[3])
+export const constraint = ($: unknown): $ is Constraint =>
+    arrayOfLength(4)($) && num($[0]) && num($[1]) && ineq($[2]) && num($[3])
 
-export const constraints = (_: unknown): _ is Constraint[] =>
-    arrayWith(constraint)(_)
+export const constraints = ($: unknown): $ is Constraint[] =>
+    arrayWith(constraint)($)
 
-export const field = (_: unknown): _ is Field => triple(_)
+export const field = ($: unknown): $ is Field => triple($)
 
-export const quadrantCode = (_: unknown): _ is QuadrantCode =>
-    int(_) && [1, 2, 3, 4].includes(_)
+export const quadrantCode = ($: unknown): $ is QuadrantCode =>
+    int($) && [1, 2, 3, 4].includes($)
 
-export const quadrantName = (_: unknown): _ is QuadrantName =>
-    str(_) && ['I', 'II', 'III', 'IV'].includes(_)
+export const quadrantName = ($: unknown): $ is QuadrantName =>
+    str($) && ['I', 'II', 'III', 'IV'].includes($)
 
-export const quadrant = (_: unknown): _ is QuadrantCode | QuadrantName =>
-    quadrantCode(_) || quadrantName(_)
+export const quadrant = ($: unknown): $ is QuadrantCode | QuadrantName =>
+    quadrantCode($) || quadrantName($)
 
-export const trig = (_: unknown): _ is TrigFunc =>
-    str(_) && ['sin', 'cos', 'tan'].includes(_)
+export const trig = ($: unknown): $ is TrigFunc =>
+    str($) && ['sin', 'cos', 'tan'].includes($)
 
-export const roman = (_: unknown): _ is string =>
-    str(_) &&
-    ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'].includes(_)
+export const roman = ($: unknown): $ is string =>
+    str($) &&
+    ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'].includes($)
 
-export const base = (_: unknown): _ is string =>
-    str(_) && _.match(/[\{\}0-9A-Z]+\_\{[0-9]+\}/g) !== null
+export const base = ($: unknown): $ is string =>
+    str($) && $.match(/[\{\}0-9A-Z]+\_\{[0-9]+\}/g) !== null
 
 // functor
 
@@ -223,15 +225,15 @@ function build<F extends predicate>(funcName: string, func: F): F {
 
 export function and(pds: predicate[], name?: string): predicate {
     name ??= '(' + pds.map(f => f.name).join(' && ') + ')'
-    return build(name, (_: unknown) => pds.every(p => p(_)))
+    return build(name, ($: unknown) => pds.every(p => p($)))
 }
 
 export function or(pds: predicate[], name?: string): predicate {
     name ??= '(' + pds.map(f => f.name).join(' || ') + ')'
-    return build(name, (_: unknown) => pds.some(p => p(_)))
+    return build(name, ($: unknown) => pds.some(p => p($)))
 }
 
 export function every(pd: predicate, name?: string): predicate {
     name ??= '(every.' + pd.name + ')'
-    return build(name, (_: unknown) => array(_) && _.every(pd))
+    return build(name, ($: unknown) => array($) && $.every(pd))
 }

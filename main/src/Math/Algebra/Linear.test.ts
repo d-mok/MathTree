@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('LineFeat', () => {
     expect(LineFeat(2, 4, 6)).toEqual([-0.5, -1.5, -3])
     expect(() => LineFeat(0, 4, 6)).toThrow()

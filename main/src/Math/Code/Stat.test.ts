@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('Min', () => {
     expect(Min(1, 2, 3)).toBe(1)
     expect(Min(4, 6, 8)).toBe(4)

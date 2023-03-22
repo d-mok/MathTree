@@ -1,4 +1,5 @@
 import { repeat } from '../Jest/JestExtend'
+import _ from 'lodash'
 
 test('RndPick', () => {
     repeat(10, () => {

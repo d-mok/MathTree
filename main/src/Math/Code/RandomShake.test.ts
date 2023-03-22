@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { repeat } from '../Jest/JestExtend'
 
 test('RndShake', () => {
@@ -235,11 +236,11 @@ test('RndShakePointPolar', () => {
         let shaked = RndShakePointPolar(anchor).map($ => RectToPol($))
         expect(shaked).toSatisfyAll(owl.point2D)
         expect(shaked).toSatisfyAll(([r, q]) =>
-            Number.isInteger(cal.blur(r ** 2))
+            Number.isInteger(_.blur(r ** 2))
         )
         expect(shaked).toSatisfyAll(([r, q]) =>
             [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330].includes(
-                cal.blur(q)
+                _.blur(q)
             )
         )
         expect(shaked).toHaveLength(3)

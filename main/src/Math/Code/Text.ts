@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -93,7 +94,7 @@ export class Host {
      */
     @checkIt(owl.point2D)
     static Coord(point: Point2D, dp: number = 1): string {
-        let [a, b] = point.map(_ => cal.blur(_))
+        let [a, b] = point.map($ => _.blur($))
         a = Fix(a, dp)
         b = Fix(b, dp)
         return '(' + a + ', ' + b + ')'
@@ -111,10 +112,10 @@ export class Host {
     @checkIt(owl.num)
     static Sci(num: number): string {
         if (num === 0) return '0'
-        let m = cal.e(cal.blur(num))
+        let m = cal.e(_.blur(num))
         if (m === 0) return num.toString()
         num = num / 10 ** m
-        num = cal.blur(num)
+        num = _.blur(num)
         return num.toString() + ' \\times ' + '10^{ ' + m + '}'
     }
 

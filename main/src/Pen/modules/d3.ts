@@ -1,5 +1,6 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
+import _ from 'lodash'
 
 export class PenD3 {
     constructor(private pen: PenCls, private cv: Convas) {}
@@ -210,29 +211,25 @@ export class PenD3 {
      * ```
      */
     envelope(lowerBase: Point3D[], upperBase: Point3D[]): [Point3D, Point3D][] {
-        const LB = toList(lowerBase)
-        const UB = toList(upperBase)
+        const LB = lowerBase
+        const UB = upperBase
 
         let isPolar = (A: Point3D, O: Point3D, B: Point3D) =>
             AnglePolar(this.cv.pj(A), this.cv.pj(O), this.cv.pj(B)) < 180
                 ? 1
                 : -1
 
-        let lastPolarwise = isPolar(
-            LB.cyclicAt(-1)!,
-            UB.cyclicAt(-1)!,
-            LB.cyclicAt(0)!
-        )
+        let lastPolarwise = isPolar(LB.at(-1)!, UB.at(-1)!, LB.at(0)!)
         let arr: [Point3D, Point3D][] = []
 
         for (let i = 0; i < LB.length; i++) {
             let polarwise = isPolar(
-                LB.cyclicAt(i)!,
-                UB.cyclicAt(i)!,
-                LB.cyclicAt(i + 1)!
+                _.cyclicAt(LB, i)!,
+                _.cyclicAt(UB, i)!,
+                _.cyclicAt(LB, i + 1)!
             )
             if (lastPolarwise * polarwise === -1)
-                arr.push([LB.cyclicAt(i)!, UB.cyclicAt(i)!])
+                arr.push([_.cyclicAt(LB, i)!, _.cyclicAt(UB, i)!])
             lastPolarwise = polarwise
         }
 

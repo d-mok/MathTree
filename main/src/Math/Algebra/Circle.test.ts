@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('CircleGeneral', () => {
     expect(CircleGeneral([2, 3], 5)).toEqual([-4, -6, -12])
 })

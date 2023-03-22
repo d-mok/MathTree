@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('shakeN', () => {
     function run(anchor: number, min: number, max: number) {
         let shaked = shakeN(anchor)
@@ -105,10 +107,10 @@ test('shakeBase', () => {
 test('shakePointPolar', () => {
     function run(anchor: PolarPoint) {
         let [r, q] = RectToPol(shakePointPolar(anchor))
-        expect(cal.blur(r ** 2)).toBeInteger()
+        expect(_.blur(r ** 2)).toBeInteger()
         expect([
             30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330,
-        ]).toContain(cal.blur(q))
+        ]).toContain(_.blur(q))
     }
 
     run([Math.sqrt(3), 3])

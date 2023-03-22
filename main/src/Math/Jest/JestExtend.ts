@@ -1,3 +1,6 @@
+import { list, toList } from 'ruby'
+import _ from 'lodash'
+
 function getSample(func: () => any, n = 1000): any[] {
     let arr = []
     for (let i = 0; i < n; i++) arr.push(func())
@@ -105,20 +108,20 @@ expect.extend({
         max: number,
         flatDepth = 0
     ) => {
-        let sample = numbers()
+        let sample: number[] = []
         if (Array.isArray(funcOrArray)) {
-            sample = toNumbers(funcOrArray)
+            sample = [...funcOrArray]
         } else {
-            sample = toNumbers(getSample(funcOrArray))
+            sample = getSample(funcOrArray)
         }
         if (flatDepth > 0) {
-            sample = toNumbers(sample.flat(flatDepth) as number[])
+            sample = sample.flat(flatDepth) as number[]
         }
 
         let tolerance = (max - min) * 0.1
 
         const pass =
-            sample.max() > max - tolerance && sample.min() < min + tolerance
+            _.max(sample)! > max - tolerance && _.min(sample)! < min + tolerance
         if (pass) {
             return {
                 message: () =>

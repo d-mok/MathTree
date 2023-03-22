@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('At', () => {
     expect(At([1, 2, 3], -1)).toEqual(3)
     expect(At([1, 2, 3], 1)).toEqual(2)

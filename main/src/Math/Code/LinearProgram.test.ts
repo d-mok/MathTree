@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('FieldAt', () => {
     expect(FieldAt([0, 0], [1, 2, 3])).toBe(3)
     expect(FieldAt([1, 2], [3, -4, 5])).toBe(0)

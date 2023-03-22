@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('AreDistinct', () => {
     expect(AreDistinct(1, 2, 3)).toBe(true)
     expect(AreDistinct(1, -1, 2)).toBe(true)

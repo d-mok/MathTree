@@ -13,7 +13,7 @@ export class Host {
      */
     @checkIt(owl.int)
     static shakeN(anchor: number): number {
-        anchor = cal.blur(anchor)
+        anchor = _.blur(anchor)
         if (anchor === 0) return RndN(1, 3)
 
         let a = Abs(anchor)
@@ -36,7 +36,7 @@ export class Host {
     @checkIt(owl.num)
     static shakeR(anchor: number): number {
         let exp = cal.e(anchor)
-        let m = cal.blur(cal.mantissa(anchor))
+        let m = _.blur(cal.mantissa(anchor))
         if (IsInteger(m)) return Number(shakeN(m) + 'e' + exp)
         let dp = cal.dp(m)
         let newM = dice(() => Fix(m * RndR(0.5, 1.5), dp))
@@ -57,7 +57,7 @@ export class Host {
     @checkIt(owl.rational)
     static shakeQ(anchor: number): number {
         if (owl.int(anchor)) return shakeN(anchor)
-        let [p, q] = ToFrac(anchor).map(cal.blur)
+        let [p, q] = ToFrac(anchor).map(_.blur)
         Should(IsInteger(p, q), 'input should be integral fraction')
 
         let f = () => {
@@ -220,7 +220,6 @@ export class Host {
         return newNumStr + '_{' + base + '}'
     }
 
-
     /**
      * Points, all are special in polar coordinates
      * ```
@@ -233,20 +232,9 @@ export class Host {
         let [r1, q1] = RectToPol(anchor)
         let [a, b] = cal.toSurd(r1)
         let r2 = b === 1 ? a * Math.sqrt(RndPick(2, 3)) : a
-        let angles = list(
-            30,
-            45,
-            60,
-            120,
-            135,
-            150,
-            210,
-            225,
-            240,
-            300,
-            315,
-            330
-        ).filter($ => $ !== q1)
+        let angles = [
+            30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330,
+        ].filter($ => $ !== q1)
         let q2 = RndPick(...angles)
         return PolToRect([r2, q2])
     }

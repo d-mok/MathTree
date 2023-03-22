@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -12,7 +13,7 @@ export class Host {
      */
     @checkIt([owl.array, $ => $.length > 0], owl.int)
     static At<T>(arr: T[], index: number): T {
-        return list(...arr).cyclicAt(index)!
+        return _.cyclicAt(arr, index)!
     }
 
     /**
@@ -28,8 +29,7 @@ export class Host {
         relativeIndices: number[]
     ): T[] {
         if (arr.length === 0) return []
-        let ls = list(...arr)
-        return relativeIndices.map(i => ls.cyclicAt(centreIndex + i)!)
+        return relativeIndices.map(i => _.cyclicAt(arr, centreIndex + i)!)
     }
 }
 

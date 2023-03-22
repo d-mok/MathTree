@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('Quadrant', () => {
     expect(Quadrant([1, 1])).toBe('I')
     expect(Quadrant([-1, 1])).toBe('II')

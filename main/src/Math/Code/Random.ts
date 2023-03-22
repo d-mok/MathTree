@@ -295,28 +295,32 @@ export class Host {
             .unique(([x, y]) => x)
             .unique(([x, y]) => y)
             .coherent($ =>
-                toList($)
-                    .combinations(3)
-                    .every(([A, B, C]) => Slope(A, B) !== Slope(B, C))
+                _.combinations($, 3).every(
+                    ([A, B, C]) => Slope(A, B) !== Slope(B, C)
+                )
             )
             .rolls(n)
     }
 
     /**
-     * n angles in [0,360] at least cyclic separated by separation
+     * n angles in [0,360] at least cyclic separated by `separation`
      * ```
      * RndAngles(3,50) // may return [30,90,200]
      * ```
      */
     @checkIt(owl.positiveInt, owl.positive)
     static RndAngles(n: number, separation: number): number[] {
+        function farEnough([a, b]: [number, number]): boolean {
+            let d1 = Abs(a - b)
+            let d2 = 360 - d1
+            return d1 > separation && d2 > separation
+        }
+
         let angles = dice(() => RndN(0, 360))
-            .coherent(
-                angles => toNumbers(angles).gapsMod(360).min() > separation
-            )
+            .coherent(angles => _.combinations(angles, 2).every(farEnough))
             .unique()
             .rolls(n)
-        return [...toList(angles).ascending()]
+        return _.sortBy(angles)
     }
 
     /**
@@ -364,9 +368,9 @@ export class Host {
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static RndData(min: number, max: number, n: number): number[] {
         let data = dice(() => RndN(min, max))
-            .coherent(d => toData(d).isSingleMode())
+            .coherent(d => _.mode(d).length === 1)
             .rolls(n)
-        return toList(data).ascending()
+        return _.sortBy(data)
     }
 
     /**
@@ -444,7 +448,7 @@ export class Host {
         }
         let v = trig(func, angle)
         angle = atrig(func, Abs(trig(func, angle)))
-        angle = cal.blur(angle)
+        angle = _.blur(angle)
         let arr: TrigValue[] = []
         for (let f of ['sin', 'cos', 'tan']) {
             for (let a of [0, 90, 180, 270, 360]) {
@@ -543,7 +547,7 @@ export class Host {
     @checkIt(owl.positive, owl.positive, owl.positiveInt)
     static RndRatio(min: number, max: number, n: number = 10): number[] {
         let nums = RndNs(min, max, n)
-        return toNumbers(nums).ratio()
+        return Ratio(...nums)
     }
 
     /**

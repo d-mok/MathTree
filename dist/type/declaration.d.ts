@@ -4,77 +4,129 @@ declare module "index" {
     import './Pen/index.ts';
     import './Soil/index.ts';
 }
+declare module "Core/lodash" {
+    function combinations<T>(collection: T[], n: 2): [T, T][];
+    function combinations<T>(collection: T[], n: 3): [T, T, T][];
+    function uniqDeep<T>(array: T[]): T[];
+    function isUniq(array: any[]): boolean;
+    function isUniqDeep(array: any[]): boolean;
+    function count<T>(array: T[], item: T): number;
+    function cyclicAt<T>(array: T[], index: number): T | undefined;
+    module 'lodash' {
+        interface LoDashStatic {
+            combinations: typeof combinations;
+            uniqDeep: typeof uniqDeep;
+            isUniq: typeof isUniq;
+            isUniqDeep: typeof isUniqDeep;
+            count: typeof count;
+            cyclicAt: typeof cyclicAt;
+        }
+    }
+    /**
+     * =============================
+     * MATH
+     * =============================
+     */
+    function blur(num: number): number;
+    function hcf(nums: number[]): number;
+    function lcm(nums: number[]): number;
+    function toFraction(num: number): [numerator: number, deno: number];
+    function median(nums: number[]): number;
+    function mode(nums: number[]): number[];
+    function std(nums: number[]): number;
+    /**
+     * Return an array of integral ratio. All inputs will be forced into fraction first.
+     * ```
+     * [2,4,6].ratio() // [1,2,3]
+     * [0,4,6].ratio() // [0,2,3]
+     * [1.5,2.5,3.5].ratio() // [3,5,7]
+     * ```
+     */
+    function toIntRatio(nums: number[]): number[];
+    module 'lodash' {
+        interface LoDashStatic {
+            blur: typeof blur;
+            hcf: typeof hcf;
+            lcm: typeof lcm;
+            toFraction: typeof toFraction;
+            toIntRatio: typeof toIntRatio;
+            median: typeof median;
+            mode: typeof mode;
+            std: typeof std;
+        }
+    }
+}
 declare module "Core/Owl/index" {
-    export const num: (_: unknown) => _ is number;
-    export const whole: (_: unknown) => _ is number;
-    export const int: (_: unknown) => _ is number;
-    export const dec: (_: unknown) => _ is number;
-    export const terminating: (_: unknown) => _ is number;
-    export const rational: (_: unknown) => _ is number;
-    export const irrational: (_: unknown) => _ is number;
-    export const odd: (_: unknown) => _ is number;
-    export const even: (_: unknown) => _ is number;
-    export const prob: (_: unknown) => _ is number;
-    export const sq: (_: unknown) => _ is number;
-    export const positive: (_: unknown) => _ is number;
-    export const positiveInt: (_: unknown) => _ is number;
-    export const nonNegative: (_: unknown) => _ is number;
-    export const nonNegativeInt: (_: unknown) => _ is number;
-    export const negative: (_: unknown) => _ is number;
-    export const negativeInt: (_: unknown) => _ is number;
-    export const nonPositive: (_: unknown) => _ is number;
-    export const nonPositiveInt: (_: unknown) => _ is number;
-    export const zero: (_: unknown) => _ is number;
-    export const nonZero: (_: unknown) => _ is number;
-    export const nonZeroInt: (_: unknown) => _ is number;
-    export const between: (min: number, max: number) => (_: unknown) => _ is number;
-    export const absBetween: (min: number, max: number) => (_: unknown) => _ is number;
-    export const str: (_: unknown) => _ is string;
-    export const bool: (_: unknown) => _ is boolean;
-    export const object: (_: unknown) => _ is Object;
-    export const emptyObject: (_: unknown) => _ is Object;
-    export const array: (_: unknown) => _ is any[];
-    export const arrayOfLength: (length: number) => (_: unknown) => _ is any[];
-    export const arrayWith: (predicate: (_: unknown) => boolean) => (_: unknown) => _ is any[];
-    export const couple: (_: unknown) => _ is [number, number];
-    export const triple: (_: unknown) => _ is [number, number, number];
-    export const combo: (_: unknown) => _ is [boolean, boolean, boolean];
-    export const ntuple: (_: unknown) => _ is number[];
-    export const interval: (_: unknown) => _ is interval;
-    export const point2D: (_: unknown) => _ is Point2D;
-    export const point2Ds: (_: unknown) => _ is Point2D[];
-    export const point3D: (_: unknown) => _ is Point3D;
-    export const point3Ds: (_: unknown) => _ is Point3D[];
-    export const polar: (_: unknown) => _ is PolarPoint;
-    export const fraction: (_: unknown) => _ is Fraction;
-    export const properFraction: (_: unknown) => _ is Fraction;
-    export const vector: (_: unknown) => _ is Point2D;
-    export const vector3D: (_: unknown) => _ is Point3D;
-    export const triangleSides: (_: unknown) => boolean;
-    export const monomial: (_: unknown) => _ is monomial;
-    export const polynomial: (_: unknown) => _ is polynomial;
-    export const compoundInequality: (_: unknown) => _ is CompoundInequality;
-    export const trigValue: (_: unknown) => _ is TrigValue;
-    export const trigExp: (_: unknown) => _ is TrigExp;
-    export const labeledValue1: (_: unknown) => _ is LabeledValue1;
-    export const labeledValue2: (_: unknown) => _ is LabeledValue2;
-    export const labeledValue: (_: unknown) => _ is LabeledValue;
-    export const quantity: (_: unknown) => _ is quantity;
-    export const pass: (_: unknown) => boolean;
-    export const fail: (_: unknown) => boolean;
-    export const distinct: (_: unknown[]) => boolean;
-    export const alphabet: (_: unknown) => _ is string;
-    export const ineq: (_: unknown) => _ is Ineq;
-    export const dfrac: (_: unknown) => _ is string;
-    export const constraint: (_: unknown) => _ is Constraint;
-    export const constraints: (_: unknown) => _ is Constraint[];
-    export const field: (_: unknown) => _ is Field;
-    export const quadrantCode: (_: unknown) => _ is QuadrantCode;
-    export const quadrantName: (_: unknown) => _ is QuadrantName;
-    export const quadrant: (_: unknown) => _ is QuadrantCode | QuadrantName;
-    export const trig: (_: unknown) => _ is TrigFunc;
-    export const roman: (_: unknown) => _ is string;
-    export const base: (_: unknown) => _ is string;
+    export const num: ($: unknown) => $ is number;
+    export const whole: ($: unknown) => $ is number;
+    export const int: ($: unknown) => $ is number;
+    export const dec: ($: unknown) => $ is number;
+    export const terminating: ($: unknown) => $ is number;
+    export const rational: ($: unknown) => $ is number;
+    export const irrational: ($: unknown) => $ is number;
+    export const odd: ($: unknown) => $ is number;
+    export const even: ($: unknown) => $ is number;
+    export const prob: ($: unknown) => $ is number;
+    export const sq: ($: unknown) => $ is number;
+    export const positive: ($: unknown) => $ is number;
+    export const positiveInt: ($: unknown) => $ is number;
+    export const nonNegative: ($: unknown) => $ is number;
+    export const nonNegativeInt: ($: unknown) => $ is number;
+    export const negative: ($: unknown) => $ is number;
+    export const negativeInt: ($: unknown) => $ is number;
+    export const nonPositive: ($: unknown) => $ is number;
+    export const nonPositiveInt: ($: unknown) => $ is number;
+    export const zero: ($: unknown) => $ is number;
+    export const nonZero: ($: unknown) => $ is number;
+    export const nonZeroInt: ($: unknown) => $ is number;
+    export const between: (min: number, max: number) => ($: unknown) => $ is number;
+    export const absBetween: (min: number, max: number) => ($: unknown) => $ is number;
+    export const str: ($: unknown) => $ is string;
+    export const bool: ($: unknown) => $ is boolean;
+    export const object: ($: unknown) => $ is Object;
+    export const emptyObject: ($: unknown) => $ is Object;
+    export const array: ($: unknown) => $ is any[];
+    export const arrayOfLength: (length: number) => ($: unknown) => $ is any[];
+    export const arrayWith: (predicate: ($: unknown) => boolean) => ($: unknown) => $ is any[];
+    export const couple: ($: unknown) => $ is [number, number];
+    export const triple: ($: unknown) => $ is [number, number, number];
+    export const combo: ($: unknown) => $ is [boolean, boolean, boolean];
+    export const ntuple: ($: unknown) => $ is number[];
+    export const interval: ($: unknown) => $ is interval;
+    export const point2D: ($: unknown) => $ is Point2D;
+    export const point2Ds: ($: unknown) => $ is Point2D[];
+    export const point3D: ($: unknown) => $ is Point3D;
+    export const point3Ds: ($: unknown) => $ is Point3D[];
+    export const polar: ($: unknown) => $ is PolarPoint;
+    export const fraction: ($: unknown) => $ is Fraction;
+    export const properFraction: ($: unknown) => $ is Fraction;
+    export const vector: ($: unknown) => $ is Point2D;
+    export const vector3D: ($: unknown) => $ is Point3D;
+    export const triangleSides: ($: unknown) => boolean;
+    export const monomial: ($: unknown) => $ is monomial;
+    export const polynomial: ($: unknown) => $ is polynomial;
+    export const compoundInequality: ($: unknown) => $ is CompoundInequality;
+    export const trigValue: ($: unknown) => $ is TrigValue;
+    export const trigExp: ($: unknown) => $ is TrigExp;
+    export const labeledValue1: ($: unknown) => $ is LabeledValue1;
+    export const labeledValue2: ($: unknown) => $ is LabeledValue2;
+    export const labeledValue: ($: unknown) => $ is LabeledValue;
+    export const quantity: ($: unknown) => $ is quantity;
+    export const pass: ($: unknown) => boolean;
+    export const fail: ($: unknown) => boolean;
+    export const distinct: ($: unknown[]) => boolean;
+    export const alphabet: ($: unknown) => $ is string;
+    export const ineq: ($: unknown) => $ is Ineq;
+    export const dfrac: ($: unknown) => $ is string;
+    export const constraint: ($: unknown) => $ is Constraint;
+    export const constraints: ($: unknown) => $ is Constraint[];
+    export const field: ($: unknown) => $ is Field;
+    export const quadrantCode: ($: unknown) => $ is QuadrantCode;
+    export const quadrantName: ($: unknown) => $ is QuadrantName;
+    export const quadrant: ($: unknown) => $ is QuadrantCode | QuadrantName;
+    export const trig: ($: unknown) => $ is TrigFunc;
+    export const roman: ($: unknown) => $ is string;
+    export const base: ($: unknown) => $ is string;
     export function and(pds: predicate[], name?: string): predicate;
     export function or(pds: predicate[], name?: string): predicate;
     export function every(pd: predicate, name?: string): predicate;
@@ -97,23 +149,18 @@ declare module "Core/Ink/index" {
     export function printOrdinal(n: number): string;
 }
 declare module "Core/index" {
-    import { cal as $cal, data as $data, list as $list, numbers as $numbers, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toData as $toData, toList as $toList, toNumbers as $toNumbers, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, INEQUAL as $INEQUAL, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'ruby';
+    import { cal as $cal, shape as $shape, shape2D as $shape2D, shape3D as $shape3D, vector as $vector, vector2D as $vector2D, vector3D as $vector3D, toShape as $toShape, toShape2D as $toShape2D, toShape3D as $toShape3D, toVector as $toVector, vec2D as $vec2D, vec3D as $vec3D, INEQUAL as $INEQUAL, optimizer as $optimizer, rein as $rein, toReins as $toReins, lin as $lin } from 'ruby';
+    import "Core/lodash";
     import * as $Owl from "Core/Owl/index";
     import * as $Ink from "Core/Ink/index";
     global {
         var cal: typeof $cal;
-        var data: typeof $data;
-        var list: typeof $list;
-        var numbers: typeof $numbers;
         var shape: typeof $shape;
         var shape2D: typeof $shape2D;
         var shape3D: typeof $shape3D;
         var vector: typeof $vector;
         var vector2D: typeof $vector2D;
         var vector3D: typeof $vector3D;
-        var toData: typeof $toData;
-        var toList: typeof $toList;
-        var toNumbers: typeof $toNumbers;
         var toShape: typeof $toShape;
         var toShape2D: typeof $toShape2D;
         var toShape3D: typeof $toShape3D;
@@ -1892,6 +1939,7 @@ declare module "Math/type" {
     }
     export {};
 }
+declare module "Math/Algebra/Algebra.test" { }
 declare module "Math/Algebra/Algebra" {
     export class Host {
         /**
@@ -1925,6 +1973,7 @@ declare module "Math/Algebra/Algebra" {
         var Binomial: typeof Host.Binomial;
     }
 }
+declare module "Math/Algebra/Calculus.test" { }
 declare module "Math/Algebra/Calculus" {
     export class Host {
         /**
@@ -1956,6 +2005,7 @@ declare module "Math/Algebra/Calculus" {
         var functionize: typeof Host.functionize;
     }
 }
+declare module "Math/Algebra/Circle.test" { }
 declare module "Math/Algebra/Circle" {
     export class Host {
         /**
@@ -1994,6 +2044,7 @@ declare module "Math/Algebra/Circle" {
         var CircleLineIntersect: typeof Host.CircleLineIntersect;
     }
 }
+declare module "Math/Algebra/Linear.test" { }
 declare module "Math/Algebra/Linear" {
     export class Host {
         /**
@@ -2100,6 +2151,7 @@ declare module "Math/Jest/JestExtend" {
     }
 }
 declare module "Math/Algebra/Polynomial.test" { }
+declare module "Math/Algebra/Quadratic.test" { }
 declare module "Math/Algebra/Quadratic" {
     export class Host {
         /**
@@ -2147,7 +2199,7 @@ declare module "Math/Algebra/Quadratic" {
         var QuadraticFromVertex: typeof Host.QuadraticFromVertex;
     }
 }
-declare function testAssertion(func: (..._: any[]) => boolean, truthy: any[], falsy: any[], withTrash?: boolean): void;
+declare module "Math/Code/Assertion.test" { }
 declare module "Math/Code/Assertion" {
     export class Host {
         /**
@@ -2347,6 +2399,7 @@ declare module "Math/Code/Assertion" {
         var IsTriangle: typeof Host.IsTriangle;
     }
 }
+declare module "Math/Code/Combinatorics.test" { }
 declare module "Math/Code/Combinatorics" {
     export class Host {
         /**
@@ -2378,6 +2431,7 @@ declare module "Math/Code/Combinatorics" {
         var nPr: typeof Host.nPr;
     }
 }
+declare module "Math/Code/Function.test" { }
 declare module "Math/Code/Function" {
     export class Host {
         /**
@@ -2702,6 +2756,7 @@ declare module "Math/Code/Geometry" {
         var OnCircle: typeof Host.OnCircle;
     }
 }
+declare module "Math/Code/Latex.test" { }
 declare module "Math/Code/Latex" {
     export class Host {
         /**
@@ -2870,6 +2925,7 @@ declare module "Math/Code/Latex" {
         var ShortDivision: typeof Host.ShortDivision;
     }
 }
+declare module "Math/Code/LinearProgram.test" { }
 declare module "Math/Code/LinearProgram" {
     export class Host {
         /**
@@ -3032,6 +3088,7 @@ declare module "Math/Code/LinearProgram" {
         var ConstraintsFromPoints: typeof Host.ConstraintsFromPoints;
     }
 }
+declare module "Math/Code/Numeracy.test" { }
 declare module "Math/Code/Numeracy" {
     export class Host {
         /**
@@ -3539,7 +3596,7 @@ declare module "Math/Code/Random" {
          */
         static RndPoints(xRange: number | interval, yRange?: number | interval, n?: number): Point2D[];
         /**
-         * n angles in [0,360] at least cyclic separated by separation
+         * n angles in [0,360] at least cyclic separated by `separation`
          * ```
          * RndAngles(3,50) // may return [30,90,200]
          * ```
@@ -3874,6 +3931,7 @@ declare module "Math/Code/RandomUtil" {
         var RndCapitals: typeof Host.RndCapitals;
     }
 }
+declare module "Math/Code/Relation.test" { }
 declare module "Math/Code/Relation" {
     export class Host {
         /**
@@ -3931,7 +3989,7 @@ declare module "Math/Code/Relation" {
          */
         static AreOblique(minAngle: number): (...slopes: number[]) => boolean;
         /**
-         * Check if the items are all distinct, by JSON.stringify.
+         * Check if the items are all distinct, deep compare.
          * ```
          * AreDifferent([1,2],[3,4]) // true
          * AreDifferent([1,2],[1,2]) // false
@@ -3949,6 +4007,7 @@ declare module "Math/Code/Relation" {
         var AreDifferent: typeof Host.AreDifferent;
     }
 }
+declare module "Math/Code/Sequence.test" { }
 declare module "Math/Code/Sequence" {
     export class Host {
         /**
@@ -4037,6 +4096,7 @@ declare module "Math/Code/Sequence" {
         var LucasSequence: typeof Host.LucasSequence;
     }
 }
+declare module "Math/Code/Shake.test" { }
 declare module "Math/Code/Shake" {
     export class Host {
         /**
@@ -4155,6 +4215,7 @@ declare module "Math/Code/Shake" {
         var shakeCompoundInequality: typeof Host.shakeCompoundInequality;
     }
 }
+declare module "Math/Code/Stat.test" { }
 declare module "Math/Code/Stat" {
     export class Host {
         /**
@@ -4369,6 +4430,7 @@ declare module "Math/Code/Stat" {
         var Bin: typeof Host.Bin;
     }
 }
+declare module "Math/Code/Text.test" { }
 declare module "Math/Code/Text" {
     export class Host {
         /**
@@ -4729,6 +4791,7 @@ declare module "Math/Code/Triangle" {
         var ScaleIncentreToInt: typeof Host.ScaleIncentreToInt;
     }
 }
+declare module "Math/Code/Trigonometry.test" { }
 declare module "Math/Code/Trigonometry" {
     export class Host {
         /**
@@ -4830,6 +4893,7 @@ declare module "Math/Code/Trigonometry" {
         var CompassBearing: typeof Host.CompassBearing;
     }
 }
+declare module "Math/Code/Utility.test" { }
 declare module "Math/Code/Utility" {
     export class Host {
         /**
@@ -4853,6 +4917,7 @@ declare module "Math/Code/Utility" {
         var Lace: typeof Host.Lace;
     }
 }
+declare module "Math/Code/Vector.test" { }
 declare module "Math/Code/Vector" {
     export class Host {
         /**

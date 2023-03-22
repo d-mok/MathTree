@@ -1,5 +1,6 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import { poker, dice } from 'fate'
+import _ from 'lodash'
 
 function shake<T>(
     anchor: T,
@@ -76,7 +77,7 @@ export class Host {
             return RndShakeCompoundInequality(anchor)
         }
         if (typeof anchor === 'number' && owl.num(anchor)) {
-            anchor = cal.blur(anchor)
+            anchor = _.blur(anchor)
             // Integer
             if (owl.int(anchor)) {
                 return RndShakeN(anchor)
@@ -201,7 +202,7 @@ export class Host {
      */
     @checkIt(owl.trig)
     static RndShakeTrig(anchor: TrigFunc): TrigFunc[] {
-        return [...list<TrigFunc>('sin', 'cos', 'tan').draws(3)!]
+        return _.sampleSize<TrigFunc>(['sin', 'cos', 'tan'], 3)
     }
 
     /**

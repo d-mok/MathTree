@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 function testAssertion(
     func: (..._: any[]) => boolean,
     truthy: any[],
@@ -28,7 +30,7 @@ function testAssertion(
     expect(func(falsy[0], ...truthy)).toBe(false)
     expect(func(truthy[1], ...falsy)).toBe(false)
 }
-globalThis.testAssertion = testAssertion
+// globalThis.testAssertion = testAssertion
 
 test('IsNum', () => {
     const T = [0, 4, -2, 1.23, -4.567, 9999999, 1 / 3]

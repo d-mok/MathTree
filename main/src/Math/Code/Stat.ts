@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -58,7 +59,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static Sum(...nums: number[]): number {
-        return toData(nums).sum()
+        return _.sum(nums)
     }
 
     /**
@@ -72,7 +73,7 @@ export class Host {
     @checkIt(owl.num)
     static Product(...nums: number[]): number {
         if (nums.length === 0) return 1
-        return toData(nums).product()
+        return nums.reduce((a, b) => a * b)
     }
 
     /**
@@ -87,7 +88,7 @@ export class Host {
         return nums.length > 0
     })
     static Mean(...nums: number[]): number {
-        return toData(nums).mean()
+        return _.mean(nums)
     }
 
     /**
@@ -99,7 +100,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static Median(...nums: number[]): number {
-        return toData(nums).median()
+        return _.median(nums)
     }
 
     /**
@@ -111,7 +112,12 @@ export class Host {
      */
     @checkIt(owl.num)
     static LowerQ(...nums: number[]): number {
-        return toData(nums).lowerQuartile()
+        if (nums.length === 0) return NaN
+        const sorted = _.sortBy(nums)
+        let n = sorted.length
+        let m = n / 2
+        if (n % 2 !== 0) m = Math.floor(m)
+        return _.median(_.take(sorted, m))
     }
 
     /**
@@ -123,7 +129,12 @@ export class Host {
      */
     @checkIt(owl.num)
     static UpperQ(...nums: number[]): number {
-        return toData(nums).upperQuartile()
+        if (nums.length === 0) return NaN
+        const sorted = _.sortBy(nums)
+        let n = sorted.length
+        let m = n / 2
+        if (n % 2 !== 0) m = Math.floor(m)
+        return _.median(_.takeRight(sorted, m))
     }
 
     /**
@@ -135,7 +146,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static StatRange(...nums: number[]): number {
-        return toData(nums).range()
+        return Math.max(...nums) - Math.min(...nums)
     }
 
     /**
@@ -146,7 +157,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static IQR(...nums: number[]): number {
-        return toData(nums).IQR()
+        return UpperQ(...nums) - LowerQ(...nums)
     }
 
     /**
@@ -157,7 +168,7 @@ export class Host {
      */
     @checkIt(owl.array, owl.pass)
     static Freq<T>(array: T[], item: T): number {
-        return toList(array).freq(item)
+        return _.count(array, item)
     }
 
     /**
@@ -169,7 +180,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static Mode(...nums: number[]): number[] {
-        return [...toData(nums).modes()]
+        return _.mode(nums)
     }
 
     /**
@@ -181,10 +192,10 @@ export class Host {
      */
     @checkIt(owl.num)
     @inspectIt(function has_single_mode(...nums) {
-        return toData(nums).isSingleMode(1)
+        return _.mode(nums).length === 1
     })
     static UniMode(...nums: number[]): number {
-        return toData(nums).mode()
+        return _.mode(nums)[0]
     }
 
     /**
@@ -196,7 +207,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static StdDev(...nums: number[]): number {
-        return toData(nums).stdDev()
+        return _.std(nums)
     }
 
     /**
@@ -255,34 +266,9 @@ export class Host {
      */
     @checkIt(owl.ntuple, owl.ntuple)
     static Freqs(data: number[], nums?: number[]): number[] {
-        let ls = toList(data)
         nums ??= Rng(...data)
-        let arr: number[] = []
-        for (let v of nums) {
-            arr.push(ls.freq(v))
-        }
-        return arr
+        return nums.map($ => _.count(data, $))
     }
-
-    // /**
-    //  * make a data set from frequencies
-    //  * ```
-    //  * DataFromFreqs([1,9,5],[2,2,3])
-    //  * // [1,1,9,9,5,5,5]
-    //  * ```
-    //  */
-    // @checkIt(owl.ntuple)
-    // static DataFromFreqs(values: number[], frequencies: number[]): number[] {
-    //     Should(
-    //         values.length === frequencies.length,
-    //         'values and frequencies must be the same length'
-    //     )
-    //     let data: number[] = []
-    //     for (let i = 0; i < values.length; i++) {
-    //         data.push(...Array(frequencies[i]).fill(values[i]))
-    //     }
-    //     return data
-    // }
 
     /**
      * array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
@@ -293,13 +279,12 @@ export class Host {
      */
     @checkIt(owl.num)
     static Summary(...data: number[]): number[] {
-        let d = toData(data)
         return [
-            d.min(),
-            d.lowerQuartile(),
-            d.median(),
-            d.upperQuartile(),
-            d.max(),
+            Min(...data),
+            LowerQ(...data),
+            Median(...data),
+            UpperQ(...data),
+            Max(...data),
         ]
     }
 

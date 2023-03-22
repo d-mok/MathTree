@@ -1,5 +1,6 @@
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
 import { poker, dice } from 'fate'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -11,7 +12,7 @@ export class Host {
      * ```
      */
     static RndPick<T>(...items: T[]): T {
-        return toList(items).draw()!
+        return _.sample(items)!
     }
 
     /**
@@ -21,7 +22,7 @@ export class Host {
      * ```
      */
     static RndShuffle<T>(...items: T[]): T[] {
-        return [...toList(items).shuffled()]
+        return _.shuffle([...items])
     }
 
     /**
@@ -32,7 +33,7 @@ export class Host {
      */
     @checkIt(owl.array, owl.positiveInt)
     static RndPickN<T>(items: T[], n: number): T[] {
-        return [...toList(items).sample(n)!]
+        return _.sampleSize(items, n)
     }
 
     /**
@@ -44,7 +45,7 @@ export class Host {
      */
     @checkIt(owl.array, owl.positiveInt)
     static RndPickUnique<T>(items: T[], n: number): T[] {
-        return [...toList(items).uniqueDeep().sample(n)!]
+        return _.sampleSize(_.uniqDeep(items), n)
     }
 
     /**

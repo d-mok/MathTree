@@ -6,6 +6,8 @@
 //     throw 'never'
 // }
 
+import _ from "lodash";
+
 // export function parseIneq(text: Ineq): [greater: boolean, equal: boolean] {
 //     let greater = text.includes('g') || text.includes('>')
 //     let equal = text.includes('e') || text.includes('=')
@@ -94,7 +96,7 @@ export function printSurd(num: number): string {
 
 export function printPointPolar(point: Point2D): string {
     let [r, q] = RectToPol(point)
-    q = cal.blur(q)
+    q = _.blur(q)
     return `(${printSurd(r)},${q}°)`
 }
 
@@ -253,5 +255,5 @@ export function printOrdinal(n: number): string {
     if (j === 1 && k !== 11) return n + 'st'
     if (j === 2 && k !== 12) return n + 'nd'
     if (j === 3 && k !== 13) return n + 'rd'
-    return cal.blur(n) + 'th'
+    return _.blur(n) + 'th'
 }

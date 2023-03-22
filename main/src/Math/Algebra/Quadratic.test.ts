@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('Discriminant', () => {
     expect(Discriminant(1, 2, 3)).toBe(-8)
     expect(Discriminant(4, -5, 6)).toBe(-71)

@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -12,7 +13,7 @@ export class Host {
     @checkIt(owl.positive)
     static log(b: number, N: number): number {
         const v = Math.log(N) / Math.log(b)
-        return cal.blur(v)
+        return _.blur(v)
     }
 
 
@@ -25,7 +26,7 @@ export class Host {
     @checkIt(owl.nonNegative)
     static Sqrt(x: number): number {
         const v = Math.sqrt(x)
-        return cal.blur(v)
+        return _.blur(v)
     }
 
     /**
@@ -39,7 +40,7 @@ export class Host {
     @checkIt(owl.num)
     static Radian(degree: number): number {
         const v = (degree / 180) * Math.PI
-        return cal.blur(v)
+        return _.blur(v)
     }
 
     /**
@@ -53,7 +54,7 @@ export class Host {
     @checkIt(owl.num)
     static Degree(radian: number): number {
         const v = (radian * 180) / Math.PI
-        return cal.blur(v)
+        return _.blur(v)
     }
 
     /**
@@ -66,7 +67,7 @@ export class Host {
     static sin(x: number): number {
         if (x % 180 === 0) return 0
         let v = Math.sin((x / 180) * Math.PI)
-        return cal.blur(v)
+        return _.blur(v)
     }
 
     /**
@@ -79,7 +80,7 @@ export class Host {
     static cos(x: number): number {
         if ((x - 90) % 180 === 0) return 0
         let v = Math.cos((x / 180) * Math.PI)
-        return cal.blur(v)
+        return _.blur(v)
     }
 
     /**
@@ -92,7 +93,7 @@ export class Host {
     static tan(x: number): number {
         if (x % 180 === 0) return 0
         let v = Math.tan((x / 180) * Math.PI)
-        return cal.blur(v)
+        return _.blur(v)
     }
 
     /**
@@ -104,7 +105,7 @@ export class Host {
     @checkIt(owl.between(-1, 1))
     static arcsin(x: number): number {
         let v = (Math.asin(x) * 180) / Math.PI
-        return cal.blur(v)
+        return _.blur(v)
     }
 
     /**
@@ -116,7 +117,7 @@ export class Host {
     @checkIt(owl.between(-1, 1))
     static arccos(x: number): number {
         let v = (Math.acos(x) * 180) / Math.PI
-        return cal.blur(v)
+        return _.blur(v)
     }
 
     /**
@@ -128,7 +129,7 @@ export class Host {
     @checkIt(owl.num)
     static arctan(x: number): number {
         let v = (Math.atan(x) * 180) / Math.PI
-        return cal.blur(v)
+        return _.blur(v)
     }
 }
 

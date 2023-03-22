@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -50,7 +51,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static SigFig(num: number): number {
-        return cal.sigfig(cal.blur(num))
+        return cal.sigfig(_.blur(num))
     }
 
     /**
@@ -181,7 +182,7 @@ export class Host {
      */
     @checkIt(owl.rational)
     static Ratio(...nums: number[]): number[] {
-        return toNumbers(nums).ratio()
+        return _.toIntRatio(nums)
     }
 
     /**
@@ -208,7 +209,7 @@ export class Host {
      */
     @checkIt(owl.nonZeroInt)
     static HCF(...nums: number[]): number {
-        return toNumbers(nums).hcf()
+        return _.hcf(nums)
     }
 
     /**
@@ -222,7 +223,7 @@ export class Host {
      */
     @checkIt(owl.nonZeroInt)
     static LCM(...nums: number[]): number {
-        return toNumbers(nums).lcm()
+        return _.lcm(nums)
     }
 
     /**

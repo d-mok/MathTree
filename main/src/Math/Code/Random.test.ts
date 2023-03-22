@@ -157,14 +157,13 @@ test('RndZs', () => {
             [5, 6, 7, 8, 9, 10, -5, -6, -7, -8, -9, -10],
             1
         )
-        
+
         let [a, b] = RndZs(1, 10, 2, 'asc')
         expect(a < b).toBeTrue()
         let [x, y] = RndZs(1, 10, 2, 'desc')
         expect(y < x).toBeTrue()
     })
 })
-
 
 test('RndP', () => {
     repeat(10, () => {
@@ -416,13 +415,13 @@ test('RndPointPolar', () => {
         function getR2() {
             let pt = RndPointPolar()
             let [r, q] = RectToPol(pt)
-            return cal.blur(r ** 2)
+            return _.blur(r ** 2)
         }
 
         function getq() {
             let pt = RndPointPolar()
             let [r, q] = RectToPol(pt)
-            return cal.blur(q)
+            return _.blur(q)
         }
 
         expect(getR2).toSpanSame([4, 16, 36, 8, 32, 72, 12, 48, 108])

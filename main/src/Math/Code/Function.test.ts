@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('log', () => {
     expect(log(10, 100)).toBe(2)
     expect(log(2, 8)).toBe(3)

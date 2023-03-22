@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -285,7 +286,7 @@ export class Host {
     static Angle(A: Point2D, O: Point2D, B: Point2D): number {
         let anglePolar = AnglePolar(A, O, B)
         let a = IsReflex(A, O, B) ? 360 - anglePolar : anglePolar
-        return cal.blur(a)
+        return _.blur(a)
     }
 
     /**
@@ -342,8 +343,8 @@ export class Host {
             let p = PolToRect([radius, startAngle + i * a])
             p[0] += center[0]
             p[1] += center[1]
-            p[0] = cal.blur(p[0])
-            p[1] = cal.blur(p[1])
+            p[0] = _.blur(p[0])
+            p[1] = _.blur(p[1])
             arr.push(p)
         }
         return arr

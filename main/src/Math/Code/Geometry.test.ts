@@ -1,5 +1,6 @@
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to'
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo })
+import _ from 'lodash'
 
 test('Slope', () => {
     expect(Slope([0, 0], [1, 2])).toBe(2)

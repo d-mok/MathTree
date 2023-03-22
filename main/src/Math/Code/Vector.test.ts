@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('pass', () => {})
 
 test('VecAdd', () => {

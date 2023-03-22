@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -12,7 +13,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static AreDistinct(...nums: number[]): boolean {
-        nums = nums.map(cal.blur)
+        nums = nums.map(_.blur)
         return new Set(nums).size === nums.length
     }
 
@@ -55,12 +56,10 @@ export class Host {
      */
     @checkIt(owl.num)
     static AreCoprime(...nums: number[]): boolean {
-        nums = nums.map(cal.blur)
+        nums = nums.map(_.blur)
         if (!IsInteger(...nums)) return true
         if (!IsNonZero(...nums)) return true
-        return toList(nums)
-            .pairs()
-            .every(([a, b]) => HCF(a, b) === 1)
+        return _.combinations(nums, 2).every(([a, b]) => HCF(a, b) === 1)
     }
 
     /**
@@ -88,22 +87,22 @@ export class Host {
     @checkIt(owl.positive)
     static AreOblique(minAngle: number) {
         let areOblique = function (...slopes: number[]): boolean {
-            return toList(slopes)
-                .pairs()
-                .every(([a, b]) => IntersectAngle(a, b) >= minAngle)
+            return _.combinations(slopes, 2).every(
+                ([a, b]) => IntersectAngle(a, b) >= minAngle
+            )
         }
         return check(areOblique, [owl.num])
     }
 
     /**
-     * Check if the items are all distinct, by JSON.stringify.
+     * Check if the items are all distinct, deep compare.
      * ```
      * AreDifferent([1,2],[3,4]) // true
      * AreDifferent([1,2],[1,2]) // false
      * ```
      */
     static AreDifferent(...items: any[]) {
-        return toList(items).duplessDeep()
+        return _.isUniqDeep(items)
     }
 }
 

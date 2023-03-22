@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -66,8 +67,8 @@ export class Host {
             let [x1, x2] = QuadraticRoot(A, B, C)
             let y1 = (-a * x1 - c) / b
             let y2 = (-a * x2 - c) / b
-            let P: Point2D = [cal.blur(x1), cal.blur(y1)]
-            let Q: Point2D = [cal.blur(x2), cal.blur(y2)]
+            let P: Point2D = [_.blur(x1), _.blur(y1)]
+            let Q: Point2D = [_.blur(x2), _.blur(y2)]
             return [P, Q]
         } else {
             let x = -c / a
@@ -75,8 +76,8 @@ export class Host {
             Should(D >= 0, 'no intersection')
             let y1 = k - Math.sqrt(D)
             let y2 = k + Math.sqrt(D)
-            let P: Point2D = [cal.blur(x), cal.blur(y1)]
-            let Q: Point2D = [cal.blur(x), cal.blur(y2)]
+            let P: Point2D = [_.blur(x), _.blur(y1)]
+            let Q: Point2D = [_.blur(x), _.blur(y2)]
             return [P, Q]
         }
     }

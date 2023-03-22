@@ -1,3 +1,5 @@
+import _ from "lodash"
+
 export function symbol(v: varObj): string {
     if (v.subscript.length > 0) return v.display + '_{' + v.subscript + '}'
     return v.display
@@ -5,7 +7,7 @@ export function symbol(v: varObj): string {
 
 export function short(v: varObj): string {
     // val
-    let value = cal.blur(Round(v.val, 3))
+    let value = _.blur(Round(v.val, 3))
     let abs = Math.abs(value)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(value) : value)
 }

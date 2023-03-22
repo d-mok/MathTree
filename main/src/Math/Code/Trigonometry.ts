@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
 
 @exposeAll()
 @captureAll()
@@ -225,9 +226,9 @@ export class Host {
     static WholeBearing(polarAngle: number): string {
         let q = polarAngle
         q = PolarReduce(q)
-        q = cal.blur(q)
+        q = _.blur(q)
         q = q <= 90 ? 90 - q : 450 - q
-        q = cal.blur(q)
+        q = _.blur(q)
         return q.toString().padStart(3, '0') + '°'
     }
 
@@ -241,7 +242,7 @@ export class Host {
     static CompassBearing(polarAngle: number): string {
         let q = polarAngle
         q = PolarReduce(q)
-        q = cal.blur(q)
+        q = _.blur(q)
 
         if (q === 0) return 'east'
         if (q === 270) return 'south'

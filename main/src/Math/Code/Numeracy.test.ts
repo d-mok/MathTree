@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 test('Divide', () => {
     expect(Divide(6, 2)).toBe(3)
     expect(() => Divide(6, 0)).toThrow()

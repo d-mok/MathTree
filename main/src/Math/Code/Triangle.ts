@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
 
 let angle = owl.between(0, 180)
 let side = owl.positive
@@ -455,7 +456,7 @@ export class Host {
         let H = PdFoot(C, [A, B])
         let G = PdFoot(A, [B, C])
         let [x, y] = Intersection(C, H, A, G)
-        return [cal.blur(x), cal.blur(y)]
+        return [_.blur(x), _.blur(y)]
     }
 
     /**
@@ -469,7 +470,7 @@ export class Host {
         let [a1, b1, c1] = LinearFromBisector(A, B)
         let [a2, b2, c2] = LinearFromBisector(B, C)
         let [x, y] = Crammer(a1, b1, -c1, a2, b2, -c2)
-        return [cal.blur(x), cal.blur(y)]
+        return [_.blur(x), _.blur(y)]
     }
 
     /**
@@ -481,7 +482,7 @@ export class Host {
     @checkIt(owl.point2D)
     static Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D {
         let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3]
-        return [cal.blur(x), cal.blur(y)]
+        return [_.blur(x), _.blur(y)]
     }
 
     /**
@@ -498,7 +499,7 @@ export class Host {
         let p = a + b + c
         let x = (a * A[0] + b * B[0] + c * C[0]) / p
         let y = (a * A[1] + b * B[1] + c * C[1]) / p
-        return [cal.blur(x), cal.blur(y)]
+        return [_.blur(x), _.blur(y)]
     }
 
     /**
@@ -511,7 +512,7 @@ export class Host {
         C: Point2D
     ): [Point2D, Point2D, Point2D] {
         let [x, y] = Orthocentre(A, B, C)
-        let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
+        let q = ratioFactor(x, y, ...A, ...B, ...C)
         Should(owl.num(q), 'original orthocentre must be rational')
         return shape2D(A, B, C).scale(q).toArray() as [
             Point2D,
@@ -530,7 +531,7 @@ export class Host {
         C: Point2D
     ): [Point2D, Point2D, Point2D] {
         let [x, y] = Circumcentre(A, B, C)
-        let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
+        let q = ratioFactor(x, y, ...A, ...B, ...C)
         Should(owl.num(q), 'original circumcentre must be rational')
         return shape2D(A, B, C).scale(q).toArray() as [
             Point2D,
@@ -549,7 +550,7 @@ export class Host {
         C: Point2D
     ): [Point2D, Point2D, Point2D] {
         let [x, y] = Centroid(A, B, C)
-        let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
+        let q = ratioFactor(x, y, ...A, ...B, ...C)
         Should(owl.num(q), 'original centroid must be rational')
         return shape2D(A, B, C).scale(q).toArray() as [
             Point2D,
@@ -568,7 +569,7 @@ export class Host {
         C: Point2D
     ): [Point2D, Point2D, Point2D] {
         let [x, y] = Incentre(A, B, C)
-        let q = numbers(x, y, ...A, ...B, ...C).ratioFactor()
+        let q = ratioFactor(x, y, ...A, ...B, ...C)
         Should(owl.num(q), 'original incentre must be rational')
         return shape2D(A, B, C).scale(q).toArray() as [
             Point2D,
@@ -609,4 +610,21 @@ declare global {
     var ScaleCircumcentreToInt: typeof Host.ScaleCircumcentreToInt
     var ScaleCentroidToInt: typeof Host.ScaleCentroidToInt
     var ScaleIncentreToInt: typeof Host.ScaleIncentreToInt
+}
+
+/**
+ * Return the multiplied factor when applying {@link this.ratio()} on this array.
+ * ```
+ * [2,4,6].ratio() // 0.5
+ * [0,4,6].ratio() // 0.5
+ * [1.5,2.5,3.5].ratio() // 2
+ * [sqrt(2),3].ratio()  // NaN
+ * ```
+ */
+function ratioFactor(...nums: number[]): number {
+    let clone = _.without(nums, 0)
+    if (clone.length === 0) return NaN
+    if (nums.some($ => !IsRational($))) return NaN
+    let ratioed = Ratio(...clone)
+    return _.blur(ratioed[0] / clone[0])
 }
