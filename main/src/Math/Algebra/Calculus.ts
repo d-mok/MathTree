@@ -1,5 +1,7 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import { differentiate, integrate, functionize } from 'ruby'
+import _ from 'lodash'
+import * as math from 'mathjs'
 
 @exposeAll()
 @captureAll()

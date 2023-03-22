@@ -195,8 +195,6 @@ describe("toFraction", () => {
                 return 1;
             return Math.ceil(i / ratio);
         }
-        // let f = cal.toFraction(3/10)
-        // console.log('ans:' + f)
         for (let i = 0; i <= 100000; i += jump(i, 11)) {
             for (let j = 1; j <= 100000; j += jump(j, 15)) {
                 let f = i / j;
@@ -278,20 +276,6 @@ describe("toSurd", () => {
         expect(cal.toSurd(num)).toStrictEqual([a, b]);
     });
 });
-describe("isPrime", () => {
-    const primes = [
-        2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
-        73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
-    ];
-    it("pass first 100 primes", () => {
-        for (let i = 0; i <= 100; i++) {
-            expect(cal.isPrime(i)).toBe(primes.includes(i));
-        }
-    });
-    it("return false for non-integer", () => {
-        expect(cal.isPrime(0.5)).toBeFalse();
-    });
-});
 describe("primes", () => {
     const primes = [
         2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
@@ -320,45 +304,6 @@ describe("primeFactors", () => {
     ];
     it.each(cases)("primeFactors(%p)", (num, arr) => {
         expect(cal.primeFactors(num)).toStrictEqual(arr);
-    });
-});
-describe("factorial", () => {
-    const cases = [
-        [0, 1],
-        [1, 1],
-        [2, 2],
-        [3, 6],
-        [4, 24],
-        [5, 120],
-        [6, 720],
-    ];
-    it.each(cases)("factorial(%p)", (num, expected) => {
-        expect(cal.factorial(num)).toStrictEqual(expected);
-    });
-});
-describe("nCr nPr", () => {
-    const cases = [
-        [8, 0, 1, 1],
-        [8, 1, 8, 8],
-        [8, 2, 28, 56],
-        [8, 8, 1, 40320],
-        [6, 2, 15, 30],
-        [15, 7, 6435, 32432400],
-    ];
-    it.each(cases)("nCr nPr(%p,%p)", (n, r, nCr, nPr) => {
-        expect(cal.nCr(n, r)).toStrictEqual(nCr);
-        expect(cal.nPr(n, r)).toStrictEqual(nPr);
-    });
-});
-describe("range", () => {
-    const cases = [
-        [2, 5, [2, 3, 4, 5]],
-        [1.1, 9.3, [2, 3, 4, 5, 6, 7, 8, 9]],
-        [-2, 3, [-2, -1, 0, 1, 2, 3]],
-        [-2.3, 2.3, [-2, -1, 0, 1, 2]],
-    ];
-    it.each(cases)("range(%p,%p)", (min, max, expected) => {
-        expect(cal.range(min, max)).toStrictEqual(expected);
     });
 });
 describe("trace", () => {

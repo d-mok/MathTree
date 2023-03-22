@@ -1,4 +1,5 @@
-import _ from "lodash"
+import _ from 'lodash'
+import * as math from 'mathjs'
 
 export function symbol(v: varObj): string {
     if (v.subscript.length > 0) return v.display + '_{' + v.subscript + '}'

@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('Quadrant', () => {
     expect(Quadrant([1, 1])).toBe('I')

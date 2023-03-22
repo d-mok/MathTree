@@ -1,5 +1,6 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 @exposeAll()
 @captureAll()
@@ -254,7 +255,7 @@ export class Host {
      */
     @checkIt(owl.rational)
     static ToFrac(num: number): Fraction {
-        return cal.toFraction(num)
+        return _.toFraction(num)
     }
 
     /**

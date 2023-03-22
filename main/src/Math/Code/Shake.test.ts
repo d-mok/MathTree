@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('shakeN', () => {
     function run(anchor: number, min: number, max: number) {

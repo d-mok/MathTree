@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 function testAssertion(
     func: (..._: any[]) => boolean,

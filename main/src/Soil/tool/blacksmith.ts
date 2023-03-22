@@ -1,5 +1,6 @@
 import { Blacksmith } from 'bot'
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 function numberDefault(num: number): number {
     let v = num
@@ -155,7 +156,7 @@ addRule('*\\%|@|', 'num', $ => numberDefault(Abs($ * 100)) + '\\%')
 // print *:x as ratio
 addRule('*:@', 'ntuple', $ => Ratio(...$).join(':'))
 addRule('*:@', 'num', $ => {
-    let [p, q] = cal.toFraction($)
+    let [p, q] = _.toFraction($)
     return p + ':' + q
 })
 

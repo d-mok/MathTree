@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('differentiate', () => {
     expect(differentiate(x => x ** 2)(5)).toBeCloseTo(10)

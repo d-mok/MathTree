@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 export const num = ($: unknown): $ is number => Number.isFinite($)
 

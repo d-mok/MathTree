@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('Rng', () => {
     expect(Rng(2, 6)).toEqual([2, 3, 4, 5, 6])

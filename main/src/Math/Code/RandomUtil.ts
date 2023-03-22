@@ -1,6 +1,7 @@
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
 import { poker, dice } from 'fate'
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 @exposeAll()
 @captureAll()

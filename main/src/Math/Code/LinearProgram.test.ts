@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('FieldAt', () => {
     expect(FieldAt([0, 0], [1, 2, 3])).toBe(3)

@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('Factorial', () => {
     expect(Factorial(0)).toBe(1)

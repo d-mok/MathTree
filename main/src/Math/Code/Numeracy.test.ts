@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('Divide', () => {
     expect(Divide(6, 2)).toBe(3)

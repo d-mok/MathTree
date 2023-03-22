@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { solveCompoundInequality } from 'ruby'
 import { PenCls } from './Pen'
+import * as math from 'mathjs'
 
 /**
  * @category DrawingPen

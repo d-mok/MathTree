@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('At', () => {
     expect(At([1, 2, 3], -1)).toEqual(3)

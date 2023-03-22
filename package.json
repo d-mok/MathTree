@@ -19,6 +19,7 @@
     "vitest": "^0.23.4"
   },
   "dependencies": {
+    "decimal.js": "^10.4.3",
     "mathjs": "^11.7.0"
   }
 }

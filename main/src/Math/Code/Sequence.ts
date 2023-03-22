@@ -1,4 +1,6 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import _ from 'lodash'
+import * as math from 'mathjs'
 
 @exposeAll()
 @captureAll()
@@ -16,7 +18,7 @@ export class Host {
     static Rng(...nums: number[]): number[] {
         let min = Math.min(...nums)
         let max = Math.max(...nums)
-        return cal.range(min, max)
+        return _.range(min, max + 0.01)
     }
 
     /**

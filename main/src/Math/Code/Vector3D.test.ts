@@ -1,6 +1,7 @@
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to'
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo })
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('Mid3D', () => {
     expect(Mid3D([1, 2, 3], [3, 4, 5], [5, 6, 7])).toEqual([3, 4, 5])

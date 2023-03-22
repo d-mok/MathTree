@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 import { repeat } from '../Jest/JestExtend'
 
 test('RndN', () => {

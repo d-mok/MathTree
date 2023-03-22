@@ -1,5 +1,6 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 let angle = owl.between(0, 180)
 let side = owl.positive

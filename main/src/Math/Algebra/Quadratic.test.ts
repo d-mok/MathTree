@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('Discriminant', () => {
     expect(Discriminant(1, 2, 3)).toBe(-8)

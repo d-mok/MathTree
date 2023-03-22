@@ -1,6 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import { poker, dice } from 'fate'
 import { printPolynomial } from '../../Core/Ink'
+import _ from 'lodash'
+import * as math from 'mathjs'
 
 function getVars(mono: monomial): { name: string; power: number }[] {
     let keys = Object.keys(mono).filter($ => $ !== 'coeff')

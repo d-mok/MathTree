@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('log', () => {
     expect(log(10, 100)).toBe(2)

@@ -6,7 +6,8 @@
 //     throw 'never'
 // }
 
-import _ from "lodash";
+import _ from 'lodash'
+import * as math from 'mathjs'
 
 // export function parseIneq(text: Ineq): [greater: boolean, equal: boolean] {
 //     let greater = text.includes('g') || text.includes('>')
@@ -22,7 +23,7 @@ export function printDfrac(
     let p = numerator
     let q = denominator
     if (p === 0) return '0'
-    ;[p, q] = cal.toFraction(p / q)
+    ;[p, q] = _.toFraction(p / q)
     if (q === 1) return p.toString()
     if (upSign) {
         return '\\dfrac{' + p + '}{' + q + '}'
@@ -167,7 +168,7 @@ export function printMonomial(mono: monomial, fraction: boolean): string {
         }
         return T
     } else {
-        let [p, q] = cal.toFraction(coeff)
+        let [p, q] = _.toFraction(coeff)
         let needFrac = q !== 1 || vars.some($ => $.power < 0)
         if (!needFrac) {
             return printMonomial(mono, false)

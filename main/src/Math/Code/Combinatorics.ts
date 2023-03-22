@@ -1,4 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import * as math from 'mathjs'
 
 @exposeAll()
 @captureAll()
@@ -12,7 +13,7 @@ export class Host {
      */
     @checkIt(owl.nonNegativeInt)
     static Factorial(n: number): number {
-        return cal.factorial(n)
+        return math.factorial(n)
     }
 
     /**
@@ -26,7 +27,7 @@ export class Host {
         return n >= r
     })
     static nCr(n: number, r: number): number {
-        return cal.nCr(n, r)
+        return math.combinations(n, r)
     }
 
     /**
@@ -40,7 +41,7 @@ export class Host {
         return n >= r
     })
     static nPr(n: number, r: number): number {
-        return cal.nPr(n, r)
+        return math.permutations(n, r)
     }
 }
 

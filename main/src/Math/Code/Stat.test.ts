@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 test('Min', () => {
     expect(Min(1, 2, 3)).toBe(1)
