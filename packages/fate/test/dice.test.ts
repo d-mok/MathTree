@@ -1,5 +1,6 @@
 import 'jest-extended'
-import { poker, dice } from '../src'
+import { dice } from '../src'
+import _ from 'lodash'
 
 function repeat(times: number, func: Function) {
     for (let i = 1; i <= times; i++) {
@@ -16,9 +17,13 @@ function range(min: number, max: number): number[] {
     return arr
 }
 
+function randomInt(): number {
+    return _.sample([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])!
+}
+
 describe('Class Dice', () => {
     function getDice() {
-        return dice(() => poker.integer(1, 10))
+        return dice(() => randomInt())
     }
 
     const theRange = range(1, 10)
@@ -172,7 +177,7 @@ describe('Class Dice', () => {
         })
 
         it('govern rolls, deep', () => {
-            let d = dice(() => [poker.integer(1, 10)])
+            let d = dice(() => [randomInt()])
             let parity = ([$]: number[]) => [$ % 2]
 
             d.unique(parity)
@@ -186,7 +191,7 @@ describe('Class Dice', () => {
         })
 
         it('default self, deep', () => {
-            let d = dice(() => [poker.integer(1, 10)])
+            let d = dice(() => [randomInt()])
             d.unique()
 
             repeat(10, () => {

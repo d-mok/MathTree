@@ -1,5 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-import { poker, dice } from 'fate'
+import { dice } from 'fate'
 import _ from 'lodash'
 import * as math from 'mathjs'
 

@@ -1,7 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-import { poker, dice } from 'fate'
+import { dice } from 'fate'
 import _ from 'lodash'
 import * as math from 'mathjs'
+import Chance from 'chance'
 
 @exposeAll()
 @captureAll()
@@ -14,7 +15,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static RndN(min: number, max: number): number {
-        return poker.integer(min, max)
+        return new Chance().integer({ min, max })
     }
 
     /**
@@ -49,7 +50,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static RndR(min: number, max: number): number {
-        return poker.real(min, max)
+        return _.random(min, max, true)
     }
 
     /**
@@ -124,7 +125,7 @@ export class Host {
      * ```
      */
     static RndT(trueChance: number = 0.5): boolean {
-        return poker.bool(trueChance)
+        return new Chance().bool({ likelihood: trueChance * 100 })
     }
 
     /**
@@ -172,7 +173,8 @@ export class Host {
      */
     @checkIt(owl.positive)
     static RndP(max: number): number {
-        return poker.prime(2, max)!
+        // @ts-ignore
+        return new Chance().prime({ min: 1, max })
     }
 
     /**

@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
+import { describe, expect, it, test } from 'vitest'
 
 test('Crammer', () => {
     expect(Crammer(1, 1, 5, 1, -1, 1)).toEqual([3, 2])

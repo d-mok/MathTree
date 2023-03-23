@@ -1,7 +1,8 @@
 import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
-import { poker, dice } from 'fate'
+import { dice } from 'fate'
 import _ from 'lodash'
 import * as math from 'mathjs'
+import Chance from 'chance'
 
 @exposeAll()
 @captureAll()
@@ -56,7 +57,9 @@ export class Host {
      * ```
      */
     static RndHe(): string {
-        return poker.he()
+        return new Chance()
+            .name({ gender: 'male', nationality: 'en' })
+            .split(' ')[0]
     }
 
     /**
@@ -66,7 +69,9 @@ export class Host {
      * ```
      */
     static RndShe(): string {
-        return poker.she()
+        return new Chance()
+            .name({ gender: 'female', nationality: 'en' })
+            .split(' ')[0]
     }
 
     /**
