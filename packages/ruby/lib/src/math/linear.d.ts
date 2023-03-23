@@ -1,5 +1,5 @@
-declare type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
-declare type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number];
+type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<';
+type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number];
 export declare class Linear {
     private _linear;
     private defined;

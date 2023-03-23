@@ -1,6 +1,6 @@
-declare type Point2D = [number, number];
+type Point2D = [number, number];
 import * as INEQUAL from '../math/inequal';
-export declare type Constraint = [
+export type Constraint = [
     xCoeff: number,
     yCoeff: number,
     ineq: INEQUAL.Ineq,

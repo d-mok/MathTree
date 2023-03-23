@@ -1,8 +1,7 @@
-import { numbers } from '../array/numbers'
+import _ from 'lodash'
 
 type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<'
 type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number]
-
 
 function slope(A: [number, number], B: [number, number]): number {
     let [x1, y1] = A
@@ -10,18 +9,15 @@ function slope(A: [number, number], B: [number, number]): number {
     return (y2 - y1) / (x2 - x1)
 }
 
-
 function midpoint(A: [number, number], B: [number, number]): [number, number] {
     let [x1, y1] = A
     let [x2, y2] = B
     return [(x1 + x2) / 2, (y1 + y2) / 2]
 }
 
-
 export class Linear {
     private _linear: [a: number, b: number, c: number] = [NaN, NaN, NaN]
     private defined: boolean = false
-
 
     byLinear(linear: [a: number, b: number, c: number]): this {
         this._linear = linear
@@ -35,9 +31,7 @@ export class Linear {
         return this
     }
 
-
     byTwoPoints(p1: [number, number], p2: [number, number]): this {
-
         let [x1, y1] = p1
         let [x2, y2] = p2
         let dx = x1 - x2
@@ -45,9 +39,10 @@ export class Linear {
         if (dx === 0 && dy === 0) return this
 
         let [a, b, c] = [dy, -dx, dx * y1 - dy * x1]
-        let s: number = Math.sign(a) || Math.sign(b) || 1;
+        let s: number = Math.sign(a) || Math.sign(b) || 1
 
-        [a, b, c] = numbers(a, b, c).times(s).ratio()
+        ;[a, b, c] = [a, b, c].map($ => $ * s)
+        ;[a, b, c] = _.toIntRatio([a, b, c])
         this.byLinear([a, b, c])
         return this
     }
@@ -80,7 +75,6 @@ export class Linear {
         }
         return this
     }
-
 
     slope(): number {
         let [a, b, c] = this._linear
@@ -117,10 +111,7 @@ export class Linear {
         let [a, b, c] = this.toStandard()
         return [a, b, ineq, c]
     }
-
-
 }
-
 
 /**
  * Return a `Linear` instance.

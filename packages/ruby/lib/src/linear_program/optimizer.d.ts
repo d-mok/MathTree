@@ -1,5 +1,5 @@
-declare type Point2D = [number, number];
-declare type Field = [a: number, b: number, c: number];
+type Point2D = [number, number];
+type Field = [a: number, b: number, c: number];
 export declare class Optimizer {
     private field;
     private feasiblePoints;

@@ -1,26 +1,22 @@
 import { Rein, Constraint } from './rein'
 import { List, toList } from '../array/list'
-import { shape2D, Shape2D } from '../array/shape2D'
-import { vec2D } from '../array/vector2D'
+import _ from 'lodash'
+import * as vec from '../math/vec'
 
 type Point2D = [number, number]
-
-
 
 /**
  * A subclass of array. Designed as a set of constraints.
  */
-export class Reins extends List<Rein>{
-
+export class Reins extends List<Rein> {
     private readonly EDGE = 100
 
     private readonly EDGE_CONSTRAINTS: Rein[] = [
-        new Rein([1, 0, "<=", this.EDGE]),
-        new Rein([1, 0, ">=", -this.EDGE]),
-        new Rein([0, 1, "<=", this.EDGE]),
-        new Rein([0, 1, ">=", -this.EDGE])
+        new Rein([1, 0, '<=', this.EDGE]),
+        new Rein([1, 0, '>=', -this.EDGE]),
+        new Rein([0, 1, '<=', this.EDGE]),
+        new Rein([0, 1, '>=', -this.EDGE]),
     ]
-
 
     private fullConstraints(): Reins {
         let cons = this.clone()
@@ -35,41 +31,34 @@ export class Reins extends List<Rein>{
         return this.map($ => $.constraint)
     }
 
-
     public onEdge(point: Point2D): boolean {
         let [x, y] = point
         return Math.abs(x) + 1 >= this.EDGE || Math.abs(y) + 1 >= this.EDGE
     }
 
-
     /**
      * Check if `point` satisfy every constraint.
      */
     public contains(point: Point2D): boolean {
-        return this.every($ => $.contains(point));
+        return this.every($ => $.contains(point))
     }
-
 
     /**
      * Check if `point` loosely satisfy every constraint.
      */
     public looseContains(point: Point2D): boolean {
-        return this.map($ => $.loose()).every($ => $.contains(point));
+        return this.map($ => $.loose()).every($ => $.contains(point))
     }
-
-
 
     /**
      * Return the vertices of the feasible polygon, including EDGE points.
      */
     public polygon(): Point2D[] {
-
         let cons = this.fullConstraints()
-        let vs: Shape2D = shape2D()
+        let vs: Point2D[] = []
 
         for (let i = 0; i < cons.length; i++) {
             for (let j = i + 1; j < cons.length; j++) {
-
                 let p = cons[i].intersectWith(cons[j])
                 if (p === undefined) continue
 
@@ -77,13 +66,12 @@ export class Reins extends List<Rein>{
                 others.pull(j)
                 others.pull(i)
 
-                if (others.looseContains(p))
-                    vs.push(vec2D(p))
+                if (others.looseContains(p)) vs.push(p)
             }
         }
-        vs = vs.uniqueDeep()
-        vs.sortAroundMean()
-        return vs.toArray()
+        vs = _.uniqDeep(vs)
+        vs = vec.sortAroundMean(...vs)
+        return vs
     }
 
     /**
@@ -92,7 +80,6 @@ export class Reins extends List<Rein>{
     public vertices(): Point2D[] {
         return this.polygon().filter($ => !this.onEdge($))
     }
-
 
     /**
      * Check if the feasible region is bounded.
@@ -108,12 +95,10 @@ export class Reins extends List<Rein>{
         return this.polygon().length > 2
     }
 
-
     /**
      * Return all the integral points inside the feasible polygon.
      */
     public integrals(): Point2D[] {
-
         let vs = toList(this.polygon())
         let ymax = Math.ceil(vs.maxOf(([x, y]) => y))
         let xmax = Math.ceil(vs.maxOf(([x, y]) => x))
@@ -124,13 +109,11 @@ export class Reins extends List<Rein>{
         for (let i = xmin; i <= xmax; i++) {
             for (let j = ymin; j <= ymax; j++) {
                 let p: Point2D = [i, j]
-                if (this.contains(p))
-                    points.push(p);
+                if (this.contains(p)) points.push(p)
             }
         }
         return points
     }
-
 
     /**
      * Return a shaked version of me.
@@ -139,23 +122,14 @@ export class Reins extends List<Rein>{
         let cons = this.map($ => $.shake())
         return this.create(cons)
     }
-
 }
 
-
-
-
-
-declare module "./reins" {
-    interface Reins {
-    }
+declare module './reins' {
+    interface Reins {}
     namespace Reins {
         export function of<T>(...items: T[]): Reins & List<T>
     }
 }
-
-
-
 
 /**
  * Return a `Reins` prefilled with `constraints`.
@@ -171,8 +145,6 @@ export function reins(...constraints: Constraint[]): Reins {
     cs.push(...constraints.map($ => new Rein($)))
     return cs
 }
-
-
 
 /**
  * Return a `Reins` prefilled with `constraints`.

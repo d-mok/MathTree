@@ -10,6 +10,9 @@
         "test": "vitest run",
         "build": "tsc"
     },
+    "dependencies": {
+        "lodash-extension": "file:../lodash-extension"
+    },
     "prettier": {
         "tabWidth": 4,
         "semi": false,

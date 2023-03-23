@@ -1,4 +1,4 @@
-export declare type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<' | [greater: boolean, equal: boolean];
+export type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<' | [greater: boolean, equal: boolean];
 /**
  * Check if me is > or >=.
  */

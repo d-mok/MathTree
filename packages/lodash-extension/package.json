@@ -1,0 +1,20 @@
+{
+    "name": "lodash-extension",
+    "version": "0.0.0",
+    "description": "a lodash mixin",
+    "main": "lib/src/index.js",
+    "types": "lib/src",
+    "type": "module",
+    "scripts": {
+        "jest": "jest",
+        "test": "vitest run",
+        "build": "tsc"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true,
+        "arrowParens": "avoid",
+        "singleAttributePerLine": true
+    }
+}

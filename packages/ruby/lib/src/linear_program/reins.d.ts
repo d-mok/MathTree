@@ -1,6 +1,6 @@
 import { Rein, Constraint } from './rein';
 import { List } from '../array/list';
-declare type Point2D = [number, number];
+type Point2D = [number, number];
 /**
  * A subclass of array. Designed as a set of constraints.
  */
