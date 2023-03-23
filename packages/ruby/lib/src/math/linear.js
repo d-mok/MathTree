@@ -1,4 +1,4 @@
-import { numbers } from '../array/numbers';
+import { cal } from '..';
 function slope(A, B) {
     let [x1, y1] = A;
     let [x2, y2] = B;
@@ -33,7 +33,8 @@ export class Linear {
             return this;
         let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
         let s = Math.sign(a) || Math.sign(b) || 1;
-        [a, b, c] = numbers(a, b, c).times(s).ratio();
+        [a, b, c] = [a, b, c].map($ => $ * s);
+        [a, b, c] = cal.toRatio([a, b, c]);
         this.byLinear([a, b, c]);
         return this;
     }

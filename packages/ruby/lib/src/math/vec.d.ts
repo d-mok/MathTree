@@ -1,8 +1,20 @@
 /**
- * ====================================
- * NEW
- * ====================================
+ * Return the vector from A to B.
+ * ```
+ * fromTo([3,4],[1,0]) // [2,4]
+ * ```
  */
+export declare function fromTo<T extends number[]>(A: [...T], B: T): T;
+/**
+ * Return the mean of the points.
+ * ```
+ * let A = [0,0]
+ * let B = [3,0]
+ * let C = [0,6]
+ * [A,B,C].mean() // [1,2]
+ * ```
+ */
+export declare function mean<T extends number[]>(vecs: [...T][]): T;
 /**
  * Return this vector scaled to the given magnitude.
  * ```
@@ -76,4 +88,34 @@ export declare function normalToPlane(vec: [number, number, number], planeVec1: 
  * ```
  */
 export declare function projectTo2D(vec: [number, number, number], angle?: number, depth?: number): [number, number];
+/**
+ * Sort the points by measuring their polar angle from the mean.
+ * @example
+ * ```
+ * let A = [0,0]
+ * let B = [2,0]
+ * let C = [1,1]
+ * [A,B,C].sortAroundMean() //-> [C,A,B]
+ * ```
+ */
+export declare function sortAroundMean(vecs: [number, number][]): [number, number][];
+/**
+ * Return whether this shape is a convex polygon, but not neccessarily ordered.
+ * ```
+ * [[0,0],[1,0],[0,1]].isConvex() // true
+ * [[0,0],[3,0],[1,1],[0,3]].isConvex() // false
+ * [[0,0],[1,0]].isConvex() // true if length <= 3
+ * ```
+ */
+export declare function isConvex(vecs: [number, number][]): boolean;
+/**
+ * Return a Shape3D by erecting this shape into 3D.
+ * @param vecX - the new unit vector in x-direction
+ * @param vecY - the new unit vector in y-direction
+ * ```
+ * let [A,B,C] = [[0,0],[1,0],[0,1]]
+ * [A,B,C].erect([1,0,0],[0,1,0]) // [[0,0,0],[1,0,0],[0,1,0]]
+ * ```
+ */
+export declare function erect(vec: [number, number], vecX: [number, number, number], vecY: [number, number, number]): [number, number, number];
 //# sourceMappingURL=vec.d.ts.map

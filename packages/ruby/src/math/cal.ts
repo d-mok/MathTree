@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import _ from 'lodash'
 import * as math from 'mathjs'
 /**
  * The number of significant digits used in {@link blur}.
@@ -334,4 +335,48 @@ export function crammer(
     const x = (c * q - b * r) / D
     const y = (a * r - c * p) / D
     return [blur(x), blur(y)]
+}
+
+export function hcf(nums: number[]): number {
+    if (nums.length === 0) return NaN
+    if (nums.length === 1) return nums[0]
+    //@ts-ignore
+    return math.gcd(...nums)
+}
+
+export function lcm(nums: number[]): number {
+    if (nums.length === 0) return NaN
+    if (nums.length === 1) return nums[0]
+    //@ts-ignore
+    return math.lcm(...nums)
+}
+
+/**
+ * Return an array of integral ratio. All inputs will be forced into fraction first.
+ * ```
+ * [2,4,6].ratio() // [1,2,3]
+ * [0,4,6].ratio() // [0,2,3]
+ * [1.5,2.5,3.5].ratio() // [3,5,7]
+ * ```
+ */
+export function toRatio(nums: number[]): number[] {
+    if (_.without(nums, 0).length === 0) return [...nums]
+    let fracs = nums.map(toFraction)
+    let denos = fracs.map($ => $[1])
+    let multiple = lcm(denos)
+    let ints = nums.map($ => $ * multiple).map(blur)
+    let HCF = hcf(ints)
+    return ints.map($ => $ / HCF).map(blur)
+}
+
+export function median(nums: number[]): number {
+    return math.median(...nums)
+}
+
+export function mode(nums: number[]): number[] {
+    return math.mode(...nums)
+}
+
+export function std(nums: number[]): number {
+    return math.std(nums, 'uncorrected')
 }

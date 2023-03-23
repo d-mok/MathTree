@@ -1,14 +1,11 @@
-import { Reins } from './reins';
-import { toList, list } from '../array/list';
+import _ from 'lodash';
+import * as reins from './reins';
 export class Optimizer {
-    constructor({ field, feasiblePoints = [] }) {
-        this.field = [0, 0, 0];
-        this.feasiblePoints = list();
+    constructor(field = [0, 0, 0], feasiblePoints) {
         this.field = field;
-        this.feasiblePoints = toList(feasiblePoints);
-    }
-    onEdge(point) {
-        return (new Reins()).onEdge(point);
+        this.feasiblePoints = feasiblePoints;
+        this.field = field;
+        this.feasiblePoints = feasiblePoints;
     }
     /**
      * Evaluate `this.field` at `point`.
@@ -23,20 +20,26 @@ export class Optimizer {
      * Points onEdge are excluded.
      */
     maxPoints() {
-        return this.feasiblePoints
-            .maxsBy($ => this.fieldAt($))
-            .uniqueDeep()
-            .violate($ => this.onEdge($));
+        let fieldValues = this.feasiblePoints.map($ => this.fieldAt($));
+        let maxValue = Math.max(...fieldValues);
+        return _(this.feasiblePoints)
+            .filter($ => this.fieldAt($) === maxValue)
+            .uniqWith(_.isEqual)
+            .filter($ => !reins.onEdge($))
+            .value();
     }
     /**
      * Return the points (among feasible points) where the field is min.
      * Points onEdge are excluded.
      */
     minPoints() {
-        return this.feasiblePoints
-            .minsBy($ => this.fieldAt($))
-            .uniqueDeep()
-            .violate($ => this.onEdge($));
+        let fieldValues = this.feasiblePoints.map($ => this.fieldAt($));
+        let minValue = Math.min(...fieldValues);
+        return _(this.feasiblePoints)
+            .filter($ => this.fieldAt($) === minValue)
+            .uniqWith(_.isEqual)
+            .filter($ => !reins.onEdge($))
+            .value();
     }
     /**
      * Return the points (among feasible points) where the field is min or max.
@@ -75,15 +78,14 @@ export class Optimizer {
 }
 /**
  * Return a `Optimizer` instance.
- * @example
  * ```
- * optimizer({
- *    field: [1,2,3],
- *    feasiblePoints: [[0,0],[1,0],[0,1]]
- * })
+ * optimizer(
+ *     [1,2,3],
+ *     [[0,0],[1,0],[0,1]]
+ * )
  * ```
  */
-export function optimizer({ field, feasiblePoints = [] }) {
-    return new Optimizer({ field, feasiblePoints });
+export function optimizer(field, feasiblePoints = []) {
+    return new Optimizer(field, feasiblePoints);
 }
 //# sourceMappingURL=optimizer.js.map

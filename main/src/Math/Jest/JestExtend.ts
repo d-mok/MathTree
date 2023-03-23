@@ -1,4 +1,3 @@
-import { list, toList } from 'ruby'
 import _ from 'lodash'
 
 function getSample(func: () => any, n = 1000): any[] {
@@ -66,24 +65,24 @@ expect.extend({
         members: any[],
         flatDepth = 0
     ) => {
-        let sample = list()
+        let sample: any[] = []
         if (Array.isArray(funcOrArray)) {
-            sample = toList(funcOrArray)
+            sample = funcOrArray
         } else {
-            sample = toList(getSample(funcOrArray))
+            sample = getSample(funcOrArray)
         }
 
-        sample = sample.unique().uniqueDeep()
+        sample = _.uniqDeep(sample)
         if (flatDepth > 0) {
-            sample = toList(sample.flat(flatDepth))
+            sample = sample.flat(flatDepth)
         }
 
         let sampleJSON = sample.map($ => JSON.stringify($))
-        let membersJSON = toList(members.map($ => JSON.stringify($)))
+        let membersJSON = members.map($ => JSON.stringify($))
 
         const pass =
-            sampleJSON.includesAll(membersJSON) &&
-            membersJSON.includesAll(sampleJSON)
+            sampleJSON.every($ => membersJSON.includes($)) &&
+            membersJSON.every($ => sampleJSON.includes($))
         if (pass) {
             return {
                 message: () =>
@@ -143,17 +142,17 @@ expect.extend({
         length: number,
         flatDepth = 0
     ) => {
-        let sample = list()
+        let sample = []
         if (Array.isArray(funcOrArray)) {
-            sample = toList(funcOrArray)
+            sample = funcOrArray
         } else {
-            sample = toList(getSample(funcOrArray))
+            sample = getSample(funcOrArray)
         }
         if (flatDepth > 0) {
-            sample = toList(sample.flat(flatDepth))
+            sample = sample.flat(flatDepth)
         }
 
-        sample = sample.unique().uniqueDeep()
+        sample = _.uniqDeep(sample)
 
         const pass = sample.length === length
         if (pass) {
@@ -171,7 +170,7 @@ expect.extend({
     },
 
     toAllBeOneOf: (array: any[], members: any[]) => {
-        const pass = toList(members).includesAll(array)
+        const pass = array.every($ => members.includes($))
         if (pass) {
             return {
                 message: () =>
@@ -213,149 +212,8 @@ expect.extend({
         }
     },
 
-    // toBeArrayCloseTo(received, arr) {
-    //   let pass = true;
-    //   if (!Array.isArray(received)) pass = false;
-    //   if (!Array.isArray(arr)) pass = false;
-    //   if (received.length !== arr.length) pass = false;
-    //   for (let i = 0; i < arr.length; i++) {
-    //     if (Math.abs(received[i] - arr[i]) > 0.000000001) pass = false;
-    //   }
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to be close to ${arr}`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to be close to ${arr}`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
-    // toBeFlatWithin(received, min, max) {
-    //   const pass = received.flat().every(x => x >= min && x <= max);
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to be within ${min} - ${max}`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to be within ${min} - ${max}`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
-    // toBeFlatAbsWithin(received, min, max) {
-    //   const pass = received.flat().every(x => Abs(x) >= min && Abs(x) <= max);
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to be abs within ${min} - ${max}`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to be abs within ${min} - ${max}`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
-    // toBeFlatIs(received: any[], func: ($: any) => boolean, flatDepth = 1) {
-    //   const pass = received.flat(flatDepth).every(x => func(x));
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to be ${func.name}`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to be ${func.name}`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
-    // toBeFlatIsInteger(received, func) {
-    //   const pass = received.flat().every(x => IsInteger(x));
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to be ${func.name}`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to be ${func.name}`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
-    // toBeFlatDistinct(received, count) {
-    //   const pass = [... new Set(received.flat())].length === count;
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to have ${count} distinct items`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to have ${count} distinct items`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
-    // toBeFlatDiverse(received) {
-    //   const pass = [... new Set(received.flat())].length > 100;
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to have >100 distinct items`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to have >100 distinct items`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
-    // toAllHaveLength(received, length) {
-    //   const pass = received.every(x => x.length === length);
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to all have legnth ${length}`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to all have legnth ${length}`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
-    // toBeFlatIncluded(received, allowed) {
-    //   const pass = received.flat().every(x => allowed.includes(x));
-    //   if (pass) {
-    //     return {
-    //       message: () => `expected ${received} not to be included in ${allowed}`,
-    //       pass: true,
-    //     };
-    //   } else {
-    //     return {
-    //       message: () => `expected ${received} to be included in ${allowed}`,
-    //       pass: false,
-    //     };
-    //   }
-    // },
-
     toBeDupless(array: any[]) {
-        const pass = toList(array).duplessDeep() && toList(array).dupless()
+        const pass = _.isUniqDeep(array)
         if (pass) {
             return {
                 message: () => `expected ${array} not to all be duplicate-free`,

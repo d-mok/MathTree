@@ -933,7 +933,7 @@ export class AutoPenCls {
 
             let H = PolToRect([0.7, (current + next) / 2]) // position of text
             let offsetR = items[i] === '' || labels[i] === '' ? 0 : 10
-            let percent = _.blur((angles[i] / 360) * 100) + '%'
+            let percent = cal.blur((angles[i] / 360) * 100) + '%'
             pen.label.point(H, items[i], 90, offsetR)
             pen.label.point(H, labels[i] ?? percent, 270, offsetR)
 

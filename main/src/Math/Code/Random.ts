@@ -369,7 +369,7 @@ export class Host {
     @checkIt(owl.num, owl.num, owl.positiveInt)
     static RndData(min: number, max: number, n: number): number[] {
         let data = dice(() => RndN(min, max))
-            .coherent(d => _.mode(d).length === 1)
+            .coherent(d => cal.mode(d).length === 1)
             .rolls(n)
         return _.sortBy(data)
     }
@@ -449,7 +449,7 @@ export class Host {
         }
         let v = trig(func, angle)
         angle = atrig(func, Abs(trig(func, angle)))
-        angle = _.blur(angle)
+        angle = cal.blur(angle)
         let arr: TrigValue[] = []
         for (let f of ['sin', 'cos', 'tan']) {
             for (let a of [0, 90, 180, 270, 360]) {

@@ -10,23 +10,50 @@ describe('fromTo', () => {
 
 describe('mean', () => {
     it('returns the mean', () => {
-        expect(vec.mean([1, 2])).toStrictEqual([1, 2])
-        expect(vec.mean([0, 0], [3, 0], [0, 6])).toStrictEqual([1, 2])
-        expect(vec.mean([0, 0], [3, 0], [0, 4])).toStrictEqual([1, 4 / 3])
-        expect(vec.mean([1, 2], [6, 5], [-3, -4])).toStrictEqual([4 / 3, 1])
-        expect(vec.mean([0, 0], [1, 0], [1, 1], [0, 1])).toStrictEqual([
-            0.5, 0.5,
-        ])
-        expect(vec.mean([0, 0, 5], [3, 0, 5], [0, 4, 5])).toStrictEqual([
-            1,
-            4 / 3,
-            5,
-        ])
-        expect(vec.mean([1, 2, 3], [6, 5, 4], [-3, -4, -5])).toStrictEqual([
-            4 / 3,
-            1,
-            2 / 3,
-        ])
+        expect(vec.mean([[1, 2]])).toStrictEqual([1, 2])
+        expect(
+            vec.mean([
+                [0, 0],
+                [3, 0],
+                [0, 6],
+            ])
+        ).toStrictEqual([1, 2])
+        expect(
+            vec.mean([
+                [0, 0],
+                [3, 0],
+                [0, 4],
+            ])
+        ).toStrictEqual([1, 4 / 3])
+        expect(
+            vec.mean([
+                [1, 2],
+                [6, 5],
+                [-3, -4],
+            ])
+        ).toStrictEqual([4 / 3, 1])
+        expect(
+            vec.mean([
+                [0, 0],
+                [1, 0],
+                [1, 1],
+                [0, 1],
+            ])
+        ).toStrictEqual([0.5, 0.5])
+        expect(
+            vec.mean([
+                [0, 0, 5],
+                [3, 0, 5],
+                [0, 4, 5],
+            ])
+        ).toStrictEqual([1, 4 / 3, 5])
+        expect(
+            vec.mean([
+                [1, 2, 3],
+                [6, 5, 4],
+                [-3, -4, -5],
+            ])
+        ).toStrictEqual([4 / 3, 1, 2 / 3])
     })
 })
 
@@ -141,14 +168,26 @@ describe('projectTo2D', () => {
 
 describe('sortAroundMean', () => {
     it('sort around the mean', () => {
-        expect(vec.sortAroundMean([0, 0], [2, 0], [1, 1])).toStrictEqual([
+        expect(
+            vec.sortAroundMean([
+                [0, 0],
+                [2, 0],
+                [1, 1],
+            ])
+        ).toStrictEqual([
             [1, 1],
             [0, 0],
             [2, 0],
         ])
 
         expect(
-            vec.sortAroundMean([-6, -2], [3, 5], [3, -6], [-3, 4], [7, -1])
+            vec.sortAroundMean([
+                [-6, -2],
+                [3, 5],
+                [3, -6],
+                [-3, 4],
+                [7, -1],
+            ])
         ).toStrictEqual([
             [3, 5],
             [-3, 4],
@@ -161,13 +200,38 @@ describe('sortAroundMean', () => {
 
 describe('isConvex', () => {
     it('return boolean', () => {
-        expect(vec.isConvex([0, 0], [2, 0], [1, 1])).toBeTrue()
         expect(
-            vec.isConvex([-6, -2], [3, 5], [3, -6], [-3, 4], [7, -1])
+            vec.isConvex([
+                [0, 0],
+                [2, 0],
+                [1, 1],
+            ])
         ).toBeTrue()
-        expect(vec.isConvex([0, 0], [3, 0], [1, 1], [0, 3])).toBeFalse()
         expect(
-            vec.isConvex([-6, -2], [3, 5], [3, -6], [-1, 1], [7, -1])
+            vec.isConvex([
+                [-6, -2],
+                [3, 5],
+                [3, -6],
+                [-3, 4],
+                [7, -1],
+            ])
+        ).toBeTrue()
+        expect(
+            vec.isConvex([
+                [0, 0],
+                [3, 0],
+                [1, 1],
+                [0, 3],
+            ])
+        ).toBeFalse()
+        expect(
+            vec.isConvex([
+                [-6, -2],
+                [3, 5],
+                [3, -6],
+                [-1, 1],
+                [7, -1],
+            ])
         ).toBeFalse()
     })
 })

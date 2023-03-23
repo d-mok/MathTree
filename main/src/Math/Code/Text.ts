@@ -95,7 +95,7 @@ export class Host {
      */
     @checkIt(owl.point2D)
     static Coord(point: Point2D, dp: number = 1): string {
-        let [a, b] = point.map($ => _.blur($))
+        let [a, b] = point.map($ => cal.blur($))
         a = Fix(a, dp)
         b = Fix(b, dp)
         return '(' + a + ', ' + b + ')'
@@ -113,10 +113,10 @@ export class Host {
     @checkIt(owl.num)
     static Sci(num: number): string {
         if (num === 0) return '0'
-        let m = cal.e(_.blur(num))
+        let m = cal.e(cal.blur(num))
         if (m === 0) return num.toString()
         num = num / 10 ** m
-        num = _.blur(num)
+        num = cal.blur(num)
         return num.toString() + ' \\times ' + '10^{ ' + m + '}'
     }
 
@@ -327,7 +327,7 @@ export class Host {
         xReplace = 'x',
         yReplace = 'y'
     ): string {
-        if (sign === false) constraint = rein(constraint).flip().constraint
+        if (sign === false) constraint = rein.flip(constraint)
         let T = ink.printConstraint(constraint, false, sign === null)
         T = T.replace(/x/g, xReplace)
         T = T.replace(/y/g, yReplace)

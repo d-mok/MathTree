@@ -48,13 +48,20 @@ export class Host {
     ): Point3D {
         if (base.length === 3) {
             let [A, B, C] = base
-            return vec3D(A, point)
-                .projectOnPlane(vec3D(A, B), vec3D(B, C))
-                .add(A)
-                .toArray()
+            return math.add(
+                vec.projectOnPlane(
+                    vec.fromTo(A, point),
+                    vec.fromTo(A, B),
+                    vec.fromTo(B, C)
+                ),
+                A
+            )
         } else if (base.length === 2) {
             let [A, B] = base
-            return vec3D(A, point).projectOn(vec3D(A, B)).add(A).toArray()
+            return math.add(
+                vec.projection(vec.fromTo(A, point), vec.fromTo(A, B)),
+                A
+            )
         }
         Should(false, 'base must have 2 or 3 points')
         throw 'never'
@@ -74,7 +81,9 @@ export class Host {
         xVec: Point3D,
         yVec: Point3D
     ): Point3D[] {
-        return toShape2D(plane2D).erect(xVec, yVec).translate(origin).toArray()
+        return plane2D
+            .map($ => vec.erect($, xVec, yVec))
+            .map($ => math.add($, origin))
     }
 
     /**
@@ -138,10 +147,13 @@ export class Host {
         upperBase: Point3D[],
         scale: number
     ): Point3D[] {
+        function padTail(arr: any[], len: number): void {
+            while (arr.length < len) arr.push(arr.at(-1))
+        }
         let max = Math.max(lowerBase.length, upperBase.length)
-        let LB = toShape3D(lowerBase).padTail(max)
-        let UB = toShape3D(upperBase).padTail(max)
-        return LB.extrudeToShape(UB, scale).toArray()
+        padTail(lowerBase, max)
+        padTail(upperBase, max)
+        return lowerBase.map((v, i) => vec.extrude(v, upperBase[i], scale))
     }
 
     /**

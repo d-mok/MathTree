@@ -1,14 +1,11 @@
-export { List, list, toList } from './array/list'
-
-export { Predicate, Criteria, Ordering, strKeyOf, Mapper } from './array/types'
-
 export * as INEQUAL from './math/inequal'
 export { solveCompoundInequality } from './math/inequality'
 export { Optimizer, optimizer } from './linear_program/optimizer'
-export { Reins, toReins, reins } from './linear_program/reins'
-export { Rein, rein } from './linear_program/rein'
+export * as reins from './linear_program/reins'
+export * as rein from './linear_program/rein'
 
 export * as cal from './math/cal'
+export * as vec from './math/vec'
 export { lin } from './math/linear'
 
 export { functionize, differentiate, integrate } from './math/calculus'

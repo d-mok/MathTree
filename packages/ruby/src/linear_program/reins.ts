@@ -1,160 +1,91 @@
-import { Rein, Constraint } from './rein'
-import { List, toList } from '../array/list'
+import { Constraint } from './rein'
+import * as rein from './rein'
 import _ from 'lodash'
 import * as vec from '../math/vec'
 
 type Point2D = [number, number]
 
+const EDGE = 100
+
+const EDGE_CONSTRAINTS: Constraint[] = [
+    [1, 0, '<=', EDGE],
+    [1, 0, '>=', -EDGE],
+    [0, 1, '<=', EDGE],
+    [0, 1, '>=', -EDGE],
+]
+
+export function onEdge(point: Point2D): boolean {
+    let [x, y] = point
+    return Math.abs(x) + 1 >= EDGE || Math.abs(y) + 1 >= EDGE
+}
+
 /**
- * A subclass of array. Designed as a set of constraints.
+ * Check if `point` satisfy every constraint.
  */
-export class Reins extends List<Rein> {
-    private readonly EDGE = 100
+export function contains(
+    cons: Constraint[],
+    point: Point2D,
+    mode: 'strict' | 'loose' | 'self' = 'self'
+): boolean {
+    return cons.every($ => rein.contains($, point, mode))
+}
 
-    private readonly EDGE_CONSTRAINTS: Rein[] = [
-        new Rein([1, 0, '<=', this.EDGE]),
-        new Rein([1, 0, '>=', -this.EDGE]),
-        new Rein([0, 1, '<=', this.EDGE]),
-        new Rein([0, 1, '>=', -this.EDGE]),
-    ]
+/**
+ * Return the vertices of the feasible polygon, including EDGE points.
+ */
+export function polygon(cons: Constraint[]): Point2D[] {
+    let fullCons = [...cons, ...EDGE_CONSTRAINTS]
+    let vs: Point2D[] = []
 
-    private fullConstraints(): Reins {
-        let cons = this.clone()
-        cons.push(...this.EDGE_CONSTRAINTS)
-        return cons
+    for (let [con1, con2] of _.combinations(fullCons, 2)) {
+        let p = rein.intersectWith(con1, con2)
+        if (p === undefined) continue
+        let others = _.without(fullCons, con1, con2)
+        if (contains(others, p, 'loose')) vs.push(p)
     }
+    vs = _.uniqDeep(vs)
+    vs = vec.sortAroundMean(vs)
+    return vs
+}
 
-    /**
-     * Return me as array of `Constraint`.
-     */
-    public constraints(): Constraint[] {
-        return this.map($ => $.constraint)
-    }
+/**
+ * Return the vertices of the feasible region, excluding EDGE points.
+ */
+export function vertices(cons: Constraint[]): Point2D[] {
+    return polygon(cons).filter($ => !onEdge($))
+}
 
-    public onEdge(point: Point2D): boolean {
-        let [x, y] = point
-        return Math.abs(x) + 1 >= this.EDGE || Math.abs(y) + 1 >= this.EDGE
-    }
+/**
+ * Check if the feasible region is bounded.
+ */
+export function isBounded(cons: Constraint[]): boolean {
+    return polygon(cons).every($ => !onEdge($))
+}
 
-    /**
-     * Check if `point` satisfy every constraint.
-     */
-    public contains(point: Point2D): boolean {
-        return this.every($ => $.contains(point))
-    }
+/**
+ * Check if this set of constraints has any solution at all.
+ */
+export function isConsistent(cons: Constraint[]): boolean {
+    return polygon(cons).length > 2
+}
 
-    /**
-     * Check if `point` loosely satisfy every constraint.
-     */
-    public looseContains(point: Point2D): boolean {
-        return this.map($ => $.loose()).every($ => $.contains(point))
-    }
+/**
+ * Return all the integral points inside the feasible polygon.
+ */
+export function integrals(cons: Constraint[]): Point2D[] {
+    let vs = polygon(cons)
+    if (vs.length === 0) return []
+    let ymax = Math.ceil(_.max(vs.map(([x, y]) => y))!)
+    let xmax = Math.ceil(_.max(vs.map(([x, y]) => x))!)
+    let xmin = Math.floor(_.min(vs.map(([x, y]) => x))!)
+    let ymin = Math.floor(_.min(vs.map(([x, y]) => y))!)
 
-    /**
-     * Return the vertices of the feasible polygon, including EDGE points.
-     */
-    public polygon(): Point2D[] {
-        let cons = this.fullConstraints()
-        let vs: Point2D[] = []
-
-        for (let i = 0; i < cons.length; i++) {
-            for (let j = i + 1; j < cons.length; j++) {
-                let p = cons[i].intersectWith(cons[j])
-                if (p === undefined) continue
-
-                let others = cons.clone()
-                others.pull(j)
-                others.pull(i)
-
-                if (others.looseContains(p)) vs.push(p)
-            }
+    let points: Point2D[] = []
+    for (let i = xmin; i <= xmax; i++) {
+        for (let j = ymin; j <= ymax; j++) {
+            let p: Point2D = [i, j]
+            if (contains(cons, p)) points.push(p)
         }
-        vs = _.uniqDeep(vs)
-        vs = vec.sortAroundMean(...vs)
-        return vs
     }
-
-    /**
-     * Return the vertices of the feasible region, excluding EDGE points.
-     */
-    public vertices(): Point2D[] {
-        return this.polygon().filter($ => !this.onEdge($))
-    }
-
-    /**
-     * Check if the feasible region is bounded.
-     */
-    public isBounded(): boolean {
-        return this.polygon().every($ => !this.onEdge($))
-    }
-
-    /**
-     * Check if this set of constraints has any solution at all.
-     */
-    public isConsistent(): boolean {
-        return this.polygon().length > 2
-    }
-
-    /**
-     * Return all the integral points inside the feasible polygon.
-     */
-    public integrals(): Point2D[] {
-        let vs = toList(this.polygon())
-        let ymax = Math.ceil(vs.maxOf(([x, y]) => y))
-        let xmax = Math.ceil(vs.maxOf(([x, y]) => x))
-        let xmin = Math.floor(vs.minOf(([x, y]) => x))
-        let ymin = Math.floor(vs.minOf(([x, y]) => y))
-
-        let points: Point2D[] = []
-        for (let i = xmin; i <= xmax; i++) {
-            for (let j = ymin; j <= ymax; j++) {
-                let p: Point2D = [i, j]
-                if (this.contains(p)) points.push(p)
-            }
-        }
-        return points
-    }
-
-    /**
-     * Return a shaked version of me.
-     */
-    public shake(): Reins {
-        let cons = this.map($ => $.shake())
-        return this.create(cons)
-    }
-}
-
-declare module './reins' {
-    interface Reins {}
-    namespace Reins {
-        export function of<T>(...items: T[]): Reins & List<T>
-    }
-}
-
-/**
- * Return a `Reins` prefilled with `constraints`.
- * @param constraints - the constraints to put in the `Numbers`
- * @returns a `Reins` array
- * @example
- * ```
- * reins([1,2,'<',3],[4,5,'>',6])
- * ```
- */
-export function reins(...constraints: Constraint[]): Reins {
-    let cs = new Reins()
-    cs.push(...constraints.map($ => new Rein($)))
-    return cs
-}
-
-/**
- * Return a `Reins` prefilled with `constraints`.
- * @param constraints - the constraints to put in the `Reins`
- * @returns a `Reins` array
- * @example
- * ```
- * toReins([[1,2,'<',3],[4,5,'>',6]])
- * ```
- */
-export function toReins(constraints: Constraint[]): Reins {
-    return reins(...constraints)
+    return points
 }

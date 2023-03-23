@@ -14,7 +14,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static AreDistinct(...nums: number[]): boolean {
-        nums = nums.map(_.blur)
+        nums = nums.map(cal.blur)
         return new Set(nums).size === nums.length
     }
 
@@ -57,7 +57,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static AreCoprime(...nums: number[]): boolean {
-        nums = nums.map(_.blur)
+        nums = nums.map(cal.blur)
         if (!IsInteger(...nums)) return true
         if (!IsNonZero(...nums)) return true
         return _.combinations(nums, 2).every(([a, b]) => HCF(a, b) === 1)
@@ -73,7 +73,9 @@ export class Host {
     @checkIt(owl.positive)
     static AreDistantPoint(distance: number) {
         let AreDistant = function (...points: Point2D[]): boolean {
-            return toShape2D(points).distances().min() >= distance
+            return _.combinations(points, 2).every(
+                ([A, B]) => Distance(A, B) >= distance
+            )
         }
         return check(AreDistant, [owl.point2D])
     }

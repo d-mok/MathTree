@@ -1,22 +1,12 @@
 type point = [number, number]
 type Fn1D = (_: number) => number
 
-
-
-// function sortByX(pts: point[]): point[] {
-//     return [...pts].sort(([x1, y1], [x2, y2]) => x1 - x2)
-
-// }
-
-
 function intrapolateBetween([A, B]: [point, point], x: number): number {
     let [x1, y1] = A
     let [x2, y2] = B
     let r = (x - x1) / (x2 - x1)
     return y1 + (y2 - y1) * r
 }
-
-
 
 function intrapolate(sortedPts: point[], x: number): number {
     let first = sortedPts[0]
@@ -29,16 +19,12 @@ function intrapolate(sortedPts: point[], x: number): number {
     return intrapolateBetween([sortedPts[i], sortedPts[j]], x)
 }
 
-
 export function functionize(sortedPts: point[]): Fn1D {
     // let sortedPts = sortByX(pts)
     return function (x: number): number {
         return intrapolate(sortedPts, x)
     }
 }
-
-
-
 
 export function differentiate(fn: Fn1D): Fn1D {
     return function (x: number): number {

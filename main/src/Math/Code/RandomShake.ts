@@ -78,7 +78,7 @@ export class Host {
             return RndShakeCompoundInequality(anchor)
         }
         if (typeof anchor === 'number' && owl.num(anchor)) {
-            anchor = _.blur(anchor)
+            anchor = cal.blur(anchor)
             // Integer
             if (owl.int(anchor)) {
                 return RndShakeN(anchor)
@@ -103,7 +103,7 @@ export class Host {
      */
     @checkIt(owl.int)
     static RndShakeN(anchor: number): number[] {
-        return shake(anchor, shakeN)
+        return shake(anchor, ShakeN)
     }
 
     /**
@@ -114,7 +114,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static RndShakeR(anchor: number): number[] {
-        return shake(anchor, shakeR)
+        return shake(anchor, ShakeR)
     }
 
     /**
@@ -128,7 +128,7 @@ export class Host {
      */
     @checkIt(owl.rational)
     static RndShakeQ(anchor: number): number[] {
-        return shake(anchor, shakeQ)
+        return shake(anchor, ShakeQ)
     }
 
     /**
@@ -139,7 +139,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static RndShakeG(anchor: number, base: number): number[] {
-        return shake(anchor, a => shakeG(a, base))
+        return shake(anchor, a => ShakeG(a, base))
     }
 
     /**
@@ -165,7 +165,7 @@ export class Host {
      */
     @checkIt(owl.point2D)
     static RndShakePoint(anchor: Point2D): Point2D[] {
-        return dice(() => shakePoint(anchor))
+        return dice(() => ShakePoint(anchor))
             .unique(([x, y]) => x)
             .unique(([x, y]) => y)
             .rolls(3)
@@ -227,7 +227,7 @@ export class Host {
      */
     @checkIt(owl.ntuple)
     static RndShakeRatio(anchor: number[]): number[][] {
-        return shake(anchor, shakeRatio)
+        return shake(anchor, ShakeRatio)
     }
 
     /**
@@ -239,7 +239,7 @@ export class Host {
      */
     @checkIt(owl.base)
     static RndShakeBase(anchor: string): string[] {
-        return shake(anchor, shakeBase)
+        return shake(anchor, ShakeBase)
     }
 
     /**
@@ -252,7 +252,7 @@ export class Host {
     @checkIt(owl.point2D)
     static RndShakePointPolar(anchor: Point2D): Point2D[] {
         let [r1, q1] = RectToPol(anchor)
-        let [r2, q2] = RectToPol(shakePointPolar(anchor))
+        let [r2, q2] = RectToPol(ShakePointPolar(anchor))
         return RndShuffle<PolarPoint>([r1, q2], [r2, q1], [r2, q2]).map($ =>
             PolToRect($)
         )
@@ -267,7 +267,7 @@ export class Host {
      */
     @checkIt(owl.constraint)
     static RndShakeConstraint(anchor: Constraint): Constraint[] {
-        let flip = rein(anchor).flip().constraint
+        let flip = rein.flip(anchor)
         return RndShuffle(anchor, flip, flip)
     }
 
@@ -286,19 +286,19 @@ export class Host {
      */
     @checkIt(owl.constraints)
     static RndShakeConstraints(anchor: Constraint[]): Constraint[][] {
-        return shake(anchor, shakeConstraints)
+        return shake(anchor, ShakeConstraints)
     }
 
     @checkIt(owl.quantity)
     static RndShakeQuantity(anchor: quantity): quantity[] {
-        return shake(anchor, shakeQuantity)
+        return shake(anchor, ShakeQuantity)
     }
 
     @checkIt(owl.compoundInequality)
     static RndShakeCompoundInequality(
         anchor: CompoundInequality
     ): CompoundInequality[] {
-        return shake(anchor, shakeCompoundInequality)
+        return shake(anchor, ShakeCompoundInequality)
     }
 }
 

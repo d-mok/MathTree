@@ -416,13 +416,13 @@ test('RndPointPolar', () => {
         function getR2() {
             let pt = RndPointPolar()
             let [r, q] = RectToPol(pt)
-            return _.blur(r ** 2)
+            return cal.blur(r ** 2)
         }
 
         function getq() {
             let pt = RndPointPolar()
             let [r, q] = RectToPol(pt)
-            return _.blur(q)
+            return cal.blur(q)
         }
 
         expect(getR2).toSpanSame([4, 16, 36, 8, 32, 72, 12, 48, 108])

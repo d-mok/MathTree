@@ -1,6 +1,7 @@
 import { PenCls } from '../Pen'
 import { Convas } from 'paint'
 import _ from 'lodash'
+import * as math from 'mathjs'
 
 export class PenD3 {
     constructor(private pen: PenCls, private cv: Convas) {}
@@ -190,7 +191,7 @@ export class PenD3 {
             shade: baseShade,
         })
 
-        let leftEnd = vec3D(center).add([radius, 0, 0]).toArray()
+        let leftEnd = math.add(center, [radius, 0, 0]) as Point3D
 
         if (radiusLine) this.pen.line(center, leftEnd)
 
@@ -276,7 +277,7 @@ export class PenD3 {
         }
 
         if (height) {
-            let V = toShape3D(upperBase).mean().toArray()
+            let V = vec.mean(upperBase)
             let [A, B, C] = lowerBase
             let O = PdFoot3D(V, [A, B, C])
             this.pen.dash(O, V)

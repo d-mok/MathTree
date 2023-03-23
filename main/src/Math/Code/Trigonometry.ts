@@ -227,9 +227,9 @@ export class Host {
     static WholeBearing(polarAngle: number): string {
         let q = polarAngle
         q = PolarReduce(q)
-        q = _.blur(q)
+        q = cal.blur(q)
         q = q <= 90 ? 90 - q : 450 - q
-        q = _.blur(q)
+        q = cal.blur(q)
         return q.toString().padStart(3, '0') + '°'
     }
 
@@ -243,7 +243,7 @@ export class Host {
     static CompassBearing(polarAngle: number): string {
         let q = polarAngle
         q = PolarReduce(q)
-        q = _.blur(q)
+        q = cal.blur(q)
 
         if (q === 0) return 'east'
         if (q === 270) return 'south'

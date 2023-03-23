@@ -9,101 +9,86 @@ export type Constraint = [
     constant: number
 ]
 
-export class Rein {
-    constructor(public constraint: Constraint) {}
-
-    private clone(): Rein {
-        return new Rein(this.constraint)
-    }
-
-    /**
-     * Check if this constraint contains `point`.
-     */
-    public contains(point: Point2D): boolean {
-        let [a, b, i, c] = this.constraint
-        let [x, y] = point
-        return INEQUAL.compare(a * x + b * y, i, c)
-    }
-
-    /**
-     * Check if me can equal.
-     */
-    canEqual(): boolean {
-        let [a, b, i, c] = this.constraint
-        return INEQUAL.canEqual(i)
-    }
-
-    /**
-     * Return a strict version of this constraint.
-     */
-    public strict(): Rein {
-        let [a, b, i, c] = this.constraint
-        let j = INEQUAL.strict(i)
-        return new Rein([a, b, j, c])
-    }
-
-    /**
-     * Return a loose version of this constraint.
-     */
-    public loose(): Rein {
-        let [a, b, i, c] = this.constraint
-        let j = INEQUAL.loose(i)
-        return new Rein([a, b, j, c])
-    }
-
-    /**
-     * Return a flipped version of this constraint.
-     */
-    public flip(): Rein {
-        let [a, b, i, c] = this.constraint
-        let j = INEQUAL.flip(i)
-        return new Rein([a, b, j, c])
-    }
-
-    /**
-     * Return the intersection point of this and `another`.
-     * If parallel, return `undefined`.
-     */
-    public intersectWith(another: Rein): Point2D | undefined {
-        let [a1, b1, i1, c1] = this.constraint
-        let [a2, b2, i2, c2] = another.constraint
-        if (a1 / b1 === a2 / b2) return undefined
-        return crammer(a1, b1, c1, a2, b2, c2)
-    }
-
-    /**
-     * Return a clone or a flipped version.
-     */
-    public shake(): Rein {
-        return Math.random() > 0.5 ? this.clone() : this.flip()
-    }
-
-    /**
-     * Return Linear form object from constraint.
-     */
-    public toLinear(): [a: number, b: number, c: number] {
-        let [a, b, i, c] = this.constraint
-        return [a, b, -c]
-    }
-
-    /**
-     * Return Standard form object from constraint.
-     */
-    public toStandard(): [a: number, b: number, _c: number] {
-        let [a, b, i, c] = this.constraint
-        return [a, b, c]
+/**
+ * Check if this constraint contains `point`.
+ */
+export function contains(
+    [a, b, i, c]: Constraint,
+    point: Point2D,
+    mode: 'strict' | 'loose' | 'self' = 'self'
+): boolean {
+    let [x, y] = point
+    switch (mode) {
+        case 'self':
+            return INEQUAL.compare(a * x + b * y, i, c)
+        case 'strict':
+            return contains(strict([a, b, i, c]), point, 'self')
+        case 'loose':
+            return contains(loose([a, b, i, c]), point, 'self')
     }
 }
 
 /**
- * Return a `Rein` instance.
- * @param constraint - the constraint to represent
- * @returns a `Rein` instance
- * @example
- * ```
- * rein([1,2,'<',3])
- * ```
+ * Check if me can equal.
  */
-export function rein(constraint: Constraint): Rein {
-    return new Rein(constraint)
+export function canEqual([a, b, i, c]: Constraint): boolean {
+    return INEQUAL.canEqual(i)
+}
+
+/**
+ * Return a strict version of this constraint.
+ */
+export function strict([a, b, i, c]: Constraint): Constraint {
+    let j = INEQUAL.strict(i)
+    return [a, b, j, c]
+}
+
+/**
+ * Return a loose version of this constraint.
+ */
+export function loose([a, b, i, c]: Constraint): Constraint {
+    let j = INEQUAL.loose(i)
+    return [a, b, j, c]
+}
+
+/**
+ * Return a flipped version of this constraint.
+ */
+export function flip([a, b, i, c]: Constraint): Constraint {
+    let j = INEQUAL.flip(i)
+    return [a, b, j, c]
+}
+
+/**
+ * Return the intersection point of this and `another`.
+ * If parallel, return `undefined`.
+ */
+export function intersectWith(
+    [a1, b1, i1, c1]: Constraint,
+    [a2, b2, i2, c2]: Constraint
+): Point2D | undefined {
+    if (a1 / b1 === a2 / b2) return undefined
+    return crammer(a1, b1, c1, a2, b2, c2)
+}
+
+/**
+ * Return Linear form object from constraint.
+ */
+export function toLinear([a, b, i, c]: Constraint): [
+    a: number,
+    b: number,
+    c: number
+] {
+    return [a, b, -c]
+}
+
+/**
+ * Return Standard form object from constraint.
+ */
+export function toStandard([a, b, i, c]: Constraint): [
+    a: number,
+    b: number,
+    _c: number
+] {
+    return [a, b, c]
 }

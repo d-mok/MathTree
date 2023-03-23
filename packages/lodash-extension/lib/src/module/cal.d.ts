@@ -1,3 +1,4 @@
+import * as cal from '../cal';
 declare function blur(num: number): number;
 declare function hcf(nums: number[]): number;
 declare function lcm(nums: number[]): number;
@@ -18,6 +19,7 @@ declare module 'lodash' {
         lcm: typeof lcm;
         toFraction: typeof toFraction;
         toIntRatio: typeof toIntRatio;
+        cal: typeof cal;
     }
 }
 export {};

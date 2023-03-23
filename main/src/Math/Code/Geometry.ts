@@ -69,7 +69,7 @@ export class Host {
      */
     @checkIt(owl.point2D)
     static Mid(...points: Point2D[]): Point2D {
-        return toShape2D(points).mean().toArray()
+        return vec.mean(points)
     }
 
     /**
@@ -115,7 +115,9 @@ export class Host {
      */
     @checkIt(owl.point2D, owl.num, owl.point2D)
     static Rotate(P: Point2D, q: number, O: Point2D = [0, 0]): Point2D {
-        return vec2D(O, P).rotate(q).add(O).blur().toArray()
+        let v = vec.fromTo(O, P)
+        v = math.rotate(v, (q / 180) * Math.PI)
+        return math.add(v, O).map(cal.blur) as Point2D
     }
 
     /**
@@ -130,7 +132,7 @@ export class Host {
         return owl.distinct([A, B])
     })
     static Dir(A: Point2D, B: Point2D): number {
-        return vec2D(A, B).argument()
+        return vec.argument(vec.fromTo(A, B))
     }
 
     /**
@@ -145,7 +147,10 @@ export class Host {
     })
     static PdFoot(P: Point2D, [A, B]: [Point2D, Point2D | number]): Point2D {
         if (typeof B === 'number') B = Move(A, B, 1)
-        return vec2D(A, P).projectOn(vec2D(A, B)).add(A).toArray()
+        let AP = vec.fromTo(A, P)
+        let AB = vec.fromTo(A, B)
+        let p = vec.projection(AP, AB)
+        return math.add(A, p)
     }
 
     /**
@@ -287,7 +292,7 @@ export class Host {
     static Angle(A: Point2D, O: Point2D, B: Point2D): number {
         let anglePolar = AnglePolar(A, O, B)
         let a = IsReflex(A, O, B) ? 360 - anglePolar : anglePolar
-        return _.blur(a)
+        return cal.blur(a)
     }
 
     /**
@@ -303,8 +308,8 @@ export class Host {
         return owl.distinct([A, O]) && owl.distinct([B, O])
     })
     static AnglePolar(A: Point2D, O: Point2D, B: Point2D): number {
-        let a = vec2D(O, A).argument()
-        let b = vec2D(O, B).argument()
+        let a = Dir(O, A)
+        let b = Dir(O, B)
         return a <= b ? b - a : 360 + b - a
     }
 
@@ -344,8 +349,8 @@ export class Host {
             let p = PolToRect([radius, startAngle + i * a])
             p[0] += center[0]
             p[1] += center[1]
-            p[0] = _.blur(p[0])
-            p[1] = _.blur(p[1])
+            p[0] = cal.blur(p[0])
+            p[1] = cal.blur(p[1])
             arr.push(p)
         }
         return arr
@@ -388,7 +393,7 @@ export class Host {
             points.length >= 3,
             'must have at least 3 points to be a polygon'
         )
-        return toShape2D(points).isConvex()
+        return vec.isConvex(points)
     }
 
     /**
@@ -400,9 +405,7 @@ export class Host {
      */
     @checkIt(owl.point2D)
     static ArrangePoints(...points: Point2D[]): Point2D[] {
-        let ss = toShape2D(points)
-        ss.sortAroundMean()
-        return ss.toArray()
+        return vec.sortAroundMean(points)
     }
 
     /**

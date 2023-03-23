@@ -319,10 +319,10 @@ export class Host {
         label: string
     }): string {
         let T = ''
-        let vs = toReins(constraints).vertices()
+        let vs = reins.vertices(constraints)
         for (let v of vs) {
             T += '\\text{At } ' + Coord(v) + ':~~~'
-            T += label + ' = ' + optimizer({ field }).fieldAt(v) + ' \\\\ '
+            T += label + ' = ' + optimizer(field).fieldAt(v) + ' \\\\ '
         }
         return T
     }

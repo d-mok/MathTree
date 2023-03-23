@@ -11,12 +11,12 @@ export class PenLinProg {
      * ```
      */
     drawConstraints(...constraints: Constraint[]) {
-        for (let c of toReins(constraints)) {
-            if (c.canEqual()) {
-                this.pen.graph.linear(...c.toLinear())
+        for (let c of constraints) {
+            if (rein.canEqual(c)) {
+                this.pen.graph.linear(...rein.toLinear(c))
             } else {
                 this.pen.set.dash(true)
-                this.pen.graph.linear(...c.toLinear())
+                this.pen.graph.linear(...rein.toLinear(c))
                 this.pen.set.dash()
             }
         }
@@ -29,7 +29,7 @@ export class PenLinProg {
      * ```
      */
     shadeConstraints(constraints: Constraint[]) {
-        let poly = toReins(constraints).polygon()
+        let poly = reins.polygon(constraints)
         this.pen.polyshade(...poly)
     }
 
@@ -44,7 +44,7 @@ export class PenLinProg {
      * ```
      */
     verticesCoord(constraints: Constraint[]) {
-        let vs = toReins(constraints).vertices()
+        let vs = reins.vertices(constraints)
         for (let v of vs) {
             this.pen.label.coordinates(v)
         }

@@ -42,4 +42,5 @@ function toIntRatio(nums) {
     return ints.map($ => $ / HCF).map(_.blur);
 }
 _.mixin({ blur, hcf, lcm, toFraction, toIntRatio });
+_.cal = cal;
 //# sourceMappingURL=cal.js.map

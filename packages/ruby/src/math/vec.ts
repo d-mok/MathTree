@@ -20,7 +20,7 @@ export function fromTo<T extends number[]>(A: [...T], B: T): T {
  * [A,B,C].mean() // [1,2]
  * ```
  */
-export function mean<T extends number[]>(...vecs: [...T][]): T {
+export function mean<T extends number[]>(vecs: [...T][]): T {
     let sum = vecs.reduce((a, b) => math.add(a, b))
     return sum.map($ => $ / vecs.length) as T
 }
@@ -177,10 +177,8 @@ export function projectTo2D(
  * [A,B,C].sortAroundMean() //-> [C,A,B]
  * ```
  */
-export function sortAroundMean(
-    ...vecs: [number, number][]
-): [number, number][] {
-    let m = mean(...vecs)
+export function sortAroundMean(vecs: [number, number][]): [number, number][] {
+    let m = mean(vecs)
     return _.sortBy(vecs, $ => argument(math.subtract($, m)))
 }
 
@@ -192,9 +190,9 @@ export function sortAroundMean(
  * [[0,0],[1,0]].isConvex() // true if length <= 3
  * ```
  */
-export function isConvex(...vecs: [number, number][]): boolean {
+export function isConvex(vecs: [number, number][]): boolean {
     if (vecs.length <= 3) return true
-    let sorted = sortAroundMean(...vecs)
+    let sorted = sortAroundMean(vecs)
     let cross = []
     for (let i = 0; i < sorted.length; i++) {
         let p1 = sorted.at(-1)!

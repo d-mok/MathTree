@@ -1,6 +1,47 @@
 import * as math from 'mathjs';
 import { describe, expect, it } from 'vitest';
 import * as vec from '../../src/math/vec';
+describe('fromTo', () => {
+    it('find vector', () => {
+        expect(vec.fromTo([1, 2], [12, 45])).toStrictEqual([11, 43]);
+    });
+});
+describe('mean', () => {
+    it('returns the mean', () => {
+        expect(vec.mean([[1, 2]])).toStrictEqual([1, 2]);
+        expect(vec.mean([
+            [0, 0],
+            [3, 0],
+            [0, 6],
+        ])).toStrictEqual([1, 2]);
+        expect(vec.mean([
+            [0, 0],
+            [3, 0],
+            [0, 4],
+        ])).toStrictEqual([1, 4 / 3]);
+        expect(vec.mean([
+            [1, 2],
+            [6, 5],
+            [-3, -4],
+        ])).toStrictEqual([4 / 3, 1]);
+        expect(vec.mean([
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+        ])).toStrictEqual([0.5, 0.5]);
+        expect(vec.mean([
+            [0, 0, 5],
+            [3, 0, 5],
+            [0, 4, 5],
+        ])).toStrictEqual([1, 4 / 3, 5]);
+        expect(vec.mean([
+            [1, 2, 3],
+            [6, 5, 4],
+            [-3, -4, -5],
+        ])).toStrictEqual([4 / 3, 1, 2 / 3]);
+    });
+});
 describe('scaledTo', () => {
     it('returns the scaled vector', () => {
         expect(vec.scaledTo([8, 6], 20)).toStrictEqual([16, 12]);
@@ -81,6 +122,73 @@ describe('projectTo2D', () => {
             6.064177772475912, 7.571150438746157,
         ]);
         expect(vec.projectTo2D([3, 4, 5], 90, 2)).toBeDeepCloseTo([3, 13]);
+    });
+});
+describe('sortAroundMean', () => {
+    it('sort around the mean', () => {
+        expect(vec.sortAroundMean([
+            [0, 0],
+            [2, 0],
+            [1, 1],
+        ])).toStrictEqual([
+            [1, 1],
+            [0, 0],
+            [2, 0],
+        ]);
+        expect(vec.sortAroundMean([
+            [-6, -2],
+            [3, 5],
+            [3, -6],
+            [-3, 4],
+            [7, -1],
+        ])).toStrictEqual([
+            [3, 5],
+            [-3, 4],
+            [-6, -2],
+            [3, -6],
+            [7, -1],
+        ]);
+    });
+});
+describe('isConvex', () => {
+    it('return boolean', () => {
+        expect(vec.isConvex([
+            [0, 0],
+            [2, 0],
+            [1, 1],
+        ])).toBeTrue();
+        expect(vec.isConvex([
+            [-6, -2],
+            [3, 5],
+            [3, -6],
+            [-3, 4],
+            [7, -1],
+        ])).toBeTrue();
+        expect(vec.isConvex([
+            [0, 0],
+            [3, 0],
+            [1, 1],
+            [0, 3],
+        ])).toBeFalse();
+        expect(vec.isConvex([
+            [-6, -2],
+            [3, 5],
+            [3, -6],
+            [-1, 1],
+            [7, -1],
+        ])).toBeFalse();
+    });
+});
+describe('erect', () => {
+    it('erect', () => {
+        expect(vec.erect([0, 0], [1, 0, 0], [0, 1, 0])).toStrictEqual([0, 0, 0]);
+        expect(vec.erect([1, 0], [1, 0, 0], [0, 1, 0])).toStrictEqual([1, 0, 0]);
+        expect(vec.erect([0, 1], [1, 0, 0], [0, 1, 0])).toStrictEqual([0, 1, 0]);
+        expect(vec.erect([3, 4], [1, 0, 0], [0, 1, 0])).toStrictEqual([3, 4, 0]);
+        expect(vec.erect([0, 0], [0, 1, 0], [0, 0, 2])).toStrictEqual([0, 0, 0]);
+        expect(vec.erect([1, 0], [0, 1, 0], [0, 0, 2])).toStrictEqual([0, 1, 0]);
+        expect(vec.erect([0, 1], [0, 1, 0], [0, 0, 2])).toStrictEqual([0, 0, 2]);
+        expect(vec.erect([3, 4], [0, 1, 0], [0, 0, 2])).toStrictEqual([0, 3, 8]);
     });
 });
 //# sourceMappingURL=vec.test.js.map

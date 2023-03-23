@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
 
-test('shakeN', () => {
+test('ShakeN', () => {
     function run(anchor: number, min: number, max: number) {
-        let shaked = shakeN(anchor)
+        let shaked = ShakeN(anchor)
         expect(shaked).toBeBetween(min, max)
         expect(shaked).toBeInteger()
     }
@@ -19,9 +19,9 @@ test('shakeN', () => {
     run(456, 411, 501)
 })
 
-test('shakeR', () => {
+test('ShakeR', () => {
     function run(anchor: number, min: number, max: number) {
-        let shaked = shakeR(anchor)
+        let shaked = ShakeR(anchor)
         expect(shaked).toBeBetween(min, max)
     }
 
@@ -34,9 +34,9 @@ test('shakeR', () => {
     run(-4.567e-20, -6.85e-20, -2.284e-20)
 })
 
-test('shakeQ', () => {
+test('ShakeQ', () => {
     function run(anchor: number, isPositive: boolean, isProb: boolean) {
-        let shaked = shakeQ(anchor)
+        let shaked = ShakeQ(anchor)
         isPositive
             ? expect(shaked).toBePositive()
             : expect(shaked).toBeNegative()
@@ -48,9 +48,9 @@ test('shakeQ', () => {
     run(6 / -5, false, false)
 })
 
-test('shakeG', () => {
+test('ShakeG', () => {
     function run(anchor: number, base: number) {
-        let shaked = shakeG(anchor, base)
+        let shaked = ShakeG(anchor, base)
         expect(log(base, shaked / anchor)).toBeInteger()
     }
 
@@ -58,14 +58,14 @@ test('shakeG', () => {
     run(13.123, 0.3)
 })
 
-test('shakeIneq', () => {
-    expect(['\\ge', '\\le']).toContain(shakeIneq('\\ge'))
-    expect(['\\gt', '\\lt']).toContain(shakeIneq('\\lt'))
+test('ShakeIneq', () => {
+    expect(['\\ge', '\\le']).toContain(ShakeIneq('\\ge'))
+    expect(['\\gt', '\\lt']).toContain(ShakeIneq('\\lt'))
 })
 
-test('shakePoint', () => {
+test('ShakePoint', () => {
     function run(anchor: Point2D, isXPositive: boolean, isYPositive: boolean) {
-        let [x, y] = shakePoint(anchor)
+        let [x, y] = ShakePoint(anchor)
         expect(x).toBeInteger()
         expect(y).toBeInteger()
         isXPositive ? expect(x).toBePositive() : expect(x).toBeNegative()
@@ -78,48 +78,48 @@ test('shakePoint', () => {
     run([-3, -12], false, false)
 })
 
-test('shakeTrigValue', () => {
+test('ShakeTrigValue', () => {
     function run(anchor: TrigValue) {
-        let shaked = shakeTrigValue(anchor)
+        let shaked = ShakeTrigValue(anchor)
         expect(shaked).toSatisfy(owl.trigValue)
     }
 
     run(['sin', 'x'])
 })
 
-test('shakeRatio', () => {
+test('ShakeRatio', () => {
     function run(anchor: number[]) {
-        let shaked = shakeRatio(anchor)
+        let shaked = ShakeRatio(anchor)
         expect(shaked).toSatisfy(owl.ntuple)
     }
 
     run([4, 5, 6])
 })
 
-test('shakeBase', () => {
+test('ShakeBase', () => {
     function run(anchor: string) {
-        let shaked = shakeBase(anchor)
+        let shaked = ShakeBase(anchor)
         expect(shaked).toSatisfy(owl.base)
     }
 
     run('{A}{B}{0}{C}{D}_{16}')
 })
 
-test('shakePointPolar', () => {
+test('ShakePointPolar', () => {
     function run(anchor: PolarPoint) {
-        let [r, q] = RectToPol(shakePointPolar(anchor))
-        expect(_.blur(r ** 2)).toBeInteger()
+        let [r, q] = RectToPol(ShakePointPolar(anchor))
+        expect(cal.blur(r ** 2)).toBeInteger()
         expect([
             30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330,
-        ]).toContain(_.blur(q))
+        ]).toContain(cal.blur(q))
     }
 
     run([Math.sqrt(3), 3])
 })
 
-test('shakeConstraint', () => {
+test('ShakeConstraint', () => {
     function run(anchor: Constraint) {
-        let shaked = shakeConstraint(anchor)
+        let shaked = ShakeConstraint(anchor)
         expect(shaked).toSatisfy(owl.constraint)
         expect(shaked[0]).toBe(anchor[0])
         expect(shaked[1]).toBe(anchor[1])
@@ -130,9 +130,9 @@ test('shakeConstraint', () => {
     run([1, 2, '>=', 3])
 })
 
-test('shakeConstraints', () => {
+test('ShakeConstraints', () => {
     function run(anchor: Constraint[]) {
-        let shaked = shakeConstraints(anchor)
+        let shaked = ShakeConstraints(anchor)
         expect(shaked).toSatisfy(owl.constraints)
         expect(shaked[0][0]).toBe(anchor[0][0])
         expect(shaked[0][1]).toBe(anchor[0][1])
@@ -149,18 +149,18 @@ test('shakeConstraints', () => {
     ])
 })
 
-test('shakeQuantity', () => {
+test('ShakeQuantity', () => {
     function run(anchor: quantity) {
-        let shaked = shakeQuantity(anchor)
+        let shaked = ShakeQuantity(anchor)
         expect(shaked).toSatisfy(owl.quantity)
     }
 
     run({ val: 1, unit: 'm' })
 })
 
-test('shakeCompoundInequality', () => {
+test('ShakeCompoundInequality', () => {
     function run(anchor: CompoundInequality) {
-        let shaked = shakeCompoundInequality(anchor)
+        let shaked = ShakeCompoundInequality(anchor)
         expect(shaked).toSatisfy(owl.compoundInequality)
     }
 

@@ -1,25 +1,15 @@
-
 type Point2D = [number, number]
 type Field = [a: number, b: number, c: number]
-
-import { Reins } from './reins'
-import { toList, list, List } from '../array/list'
-
-
+import _ from 'lodash'
+import * as reins from './reins'
 
 export class Optimizer {
-
-    private field: Field = [0, 0, 0]
-    private feasiblePoints: List<Point2D> = list<Point2D>()
-
-    constructor({ field, feasiblePoints = [] }: { field: Field, feasiblePoints?: Point2D[] }) {
+    constructor(
+        private readonly field: Field = [0, 0, 0],
+        private readonly feasiblePoints: Point2D[]
+    ) {
         this.field = field
-        this.feasiblePoints = toList(feasiblePoints)
-    }
-
-
-    private onEdge(point: Point2D): boolean {
-        return (new Reins()).onEdge(point)
+        this.feasiblePoints = feasiblePoints
     }
 
     /**
@@ -36,25 +26,28 @@ export class Optimizer {
      * Points onEdge are excluded.
      */
     public maxPoints(): Point2D[] {
-        return this.feasiblePoints
-            .maxsBy($ => this.fieldAt($))
-            .uniqueDeep()
-            .violate($ => this.onEdge($))
+        let fieldValues = this.feasiblePoints.map($ => this.fieldAt($))
+        let maxValue = Math.max(...fieldValues)
+        return _(this.feasiblePoints)
+            .filter($ => this.fieldAt($) === maxValue)
+            .uniqWith(_.isEqual)
+            .filter($ => !reins.onEdge($))
+            .value()
     }
-
-
 
     /**
      * Return the points (among feasible points) where the field is min.
      * Points onEdge are excluded.
      */
     public minPoints(): Point2D[] {
-        return this.feasiblePoints
-            .minsBy($ => this.fieldAt($))
-            .uniqueDeep()
-            .violate($ => this.onEdge($))
+        let fieldValues = this.feasiblePoints.map($ => this.fieldAt($))
+        let minValue = Math.min(...fieldValues)
+        return _(this.feasiblePoints)
+            .filter($ => this.fieldAt($) === minValue)
+            .uniqWith(_.isEqual)
+            .filter($ => !reins.onEdge($))
+            .value()
     }
-
 
     /**
      * Return the points (among feasible points) where the field is min or max.
@@ -63,7 +56,6 @@ export class Optimizer {
     public optimalPoints(max: boolean): Point2D[] {
         return max ? this.maxPoints() : this.minPoints()
     }
-
 
     /**
      * Return the max field value among feasible points.
@@ -75,7 +67,6 @@ export class Optimizer {
         return this.fieldAt(pts[0])
     }
 
-
     /**
      * Return the min field value among feasible points.
      * Points onEdge are excluded.
@@ -86,8 +77,6 @@ export class Optimizer {
         return this.fieldAt(pts[0])
     }
 
-
-
     /**
      * Return the min or max field value among feasible points.
      * Points onEdge are excluded.
@@ -95,28 +84,20 @@ export class Optimizer {
     public optimal(max: boolean): number | null {
         return max ? this.max() : this.min()
     }
-
 }
-
-
 
 /**
  * Return a `Optimizer` instance.
- * @example
  * ```
- * optimizer({
- *    field: [1,2,3],
- *    feasiblePoints: [[0,0],[1,0],[0,1]]
- * })
+ * optimizer(
+ *     [1,2,3],
+ *     [[0,0],[1,0],[0,1]]
+ * )
  * ```
  */
-export function optimizer({
-    field,
-    feasiblePoints = [] }:
-    {
-        field: Field,
-        feasiblePoints?: Point2D[]
-    }): Optimizer {
-    return new Optimizer({ field, feasiblePoints })
+export function optimizer(
+    field: Field,
+    feasiblePoints: Point2D[] = []
+): Optimizer {
+    return new Optimizer(field, feasiblePoints)
 }
-

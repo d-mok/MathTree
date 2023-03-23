@@ -164,5 +164,19 @@ export declare function traceCircle(center: Point2D, radius: number, angleRange:
  * ```
  */
 export declare function crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
+export declare function hcf(nums: number[]): number;
+export declare function lcm(nums: number[]): number;
+/**
+ * Return an array of integral ratio. All inputs will be forced into fraction first.
+ * ```
+ * [2,4,6].ratio() // [1,2,3]
+ * [0,4,6].ratio() // [0,2,3]
+ * [1.5,2.5,3.5].ratio() // [3,5,7]
+ * ```
+ */
+export declare function toRatio(nums: number[]): number[];
+export declare function median(nums: number[]): number;
+export declare function mode(nums: number[]): number[];
+export declare function std(nums: number[]): number;
 export {};
 //# sourceMappingURL=cal.d.ts.map

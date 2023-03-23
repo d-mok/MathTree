@@ -101,7 +101,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static Median(...nums: number[]): number {
-        return _.median(nums)
+        return cal.median(nums)
     }
 
     /**
@@ -118,7 +118,7 @@ export class Host {
         let n = sorted.length
         let m = n / 2
         if (n % 2 !== 0) m = Math.floor(m)
-        return _.median(_.take(sorted, m))
+        return cal.median(_.take(sorted, m))
     }
 
     /**
@@ -135,7 +135,7 @@ export class Host {
         let n = sorted.length
         let m = n / 2
         if (n % 2 !== 0) m = Math.floor(m)
-        return _.median(_.takeRight(sorted, m))
+        return cal.median(_.takeRight(sorted, m))
     }
 
     /**
@@ -181,7 +181,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static Mode(...nums: number[]): number[] {
-        return _.mode(nums)
+        return cal.mode(nums)
     }
 
     /**
@@ -193,10 +193,10 @@ export class Host {
      */
     @checkIt(owl.num)
     @inspectIt(function has_single_mode(...nums) {
-        return _.mode(nums).length === 1
+        return cal.mode(nums).length === 1
     })
     static UniMode(...nums: number[]): number {
-        return _.mode(nums)[0]
+        return cal.mode(nums)[0]
     }
 
     /**
@@ -208,7 +208,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static StdDev(...nums: number[]): number {
-        return _.std(nums)
+        return cal.std(nums)
     }
 
     /**

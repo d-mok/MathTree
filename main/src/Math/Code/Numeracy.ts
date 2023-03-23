@@ -52,7 +52,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static SigFig(num: number): number {
-        return cal.sigfig(_.blur(num))
+        return cal.sigfig(cal.blur(num))
     }
 
     /**
@@ -183,7 +183,7 @@ export class Host {
      */
     @checkIt(owl.rational)
     static Ratio(...nums: number[]): number[] {
-        return _.toIntRatio(nums)
+        return cal.toRatio(nums)
     }
 
     /**
@@ -210,7 +210,7 @@ export class Host {
      */
     @checkIt(owl.nonZeroInt)
     static HCF(...nums: number[]): number {
-        return _.hcf(nums)
+        return cal.hcf(nums)
     }
 
     /**
@@ -224,7 +224,7 @@ export class Host {
      */
     @checkIt(owl.nonZeroInt)
     static LCM(...nums: number[]): number {
-        return _.lcm(nums)
+        return cal.lcm(nums)
     }
 
     /**
@@ -255,7 +255,7 @@ export class Host {
      */
     @checkIt(owl.rational)
     static ToFrac(num: number): Fraction {
-        return _.toFraction(num)
+        return cal.toFraction(num)
     }
 
     /**

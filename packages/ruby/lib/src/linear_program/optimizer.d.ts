@@ -1,13 +1,9 @@
 type Point2D = [number, number];
 type Field = [a: number, b: number, c: number];
 export declare class Optimizer {
-    private field;
-    private feasiblePoints;
-    constructor({ field, feasiblePoints }: {
-        field: Field;
-        feasiblePoints?: Point2D[];
-    });
-    private onEdge;
+    private readonly field;
+    private readonly feasiblePoints;
+    constructor(field: Field, feasiblePoints: Point2D[]);
     /**
      * Evaluate `this.field` at `point`.
      */
@@ -45,17 +41,13 @@ export declare class Optimizer {
 }
 /**
  * Return a `Optimizer` instance.
- * @example
  * ```
- * optimizer({
- *    field: [1,2,3],
- *    feasiblePoints: [[0,0],[1,0],[0,1]]
- * })
+ * optimizer(
+ *     [1,2,3],
+ *     [[0,0],[1,0],[0,1]]
+ * )
  * ```
  */
-export declare function optimizer({ field, feasiblePoints }: {
-    field: Field;
-    feasiblePoints?: Point2D[];
-}): Optimizer;
+export declare function optimizer(field: Field, feasiblePoints?: Point2D[]): Optimizer;
 export {};
 //# sourceMappingURL=optimizer.d.ts.map

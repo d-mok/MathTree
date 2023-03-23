@@ -6,7 +6,7 @@ export const num = ($: unknown): $ is number => Number.isFinite($)
 export const whole = ($: unknown): $ is number => Number.isInteger($)
 
 export const int = ($: unknown): $ is number =>
-    num($) && Number.isInteger(_.blur($))
+    num($) && Number.isInteger(cal.blur($))
 
 export const dec = ($: unknown): $ is number => num($) && !int($)
 
@@ -19,10 +19,10 @@ export const irrational = ($: unknown): $ is number =>
     num($) && !cal.isRational($)
 
 export const odd = ($: unknown): $ is number =>
-    int($) && Math.abs(_.blur($)) % 2 === 1
+    int($) && Math.abs(cal.blur($)) % 2 === 1
 
 export const even = ($: unknown): $ is number =>
-    int($) && Math.abs(_.blur($)) % 2 === 0
+    int($) && Math.abs(cal.blur($)) % 2 === 0
 
 export const prob = ($: unknown): $ is number => num($) && $ >= 0 && $ <= 1
 

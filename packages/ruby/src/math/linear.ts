@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { cal } from '..'
 
 type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<'
 type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number]
@@ -42,7 +43,7 @@ export class Linear {
         let s: number = Math.sign(a) || Math.sign(b) || 1
 
         ;[a, b, c] = [a, b, c].map($ => $ * s)
-        ;[a, b, c] = _.toIntRatio([a, b, c])
+        ;[a, b, c] = cal.toRatio([a, b, c])
         this.byLinear([a, b, c])
         return this
     }

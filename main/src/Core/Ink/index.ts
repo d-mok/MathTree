@@ -1,19 +1,5 @@
-// export function printIneq(greater: boolean, equal: boolean): Ineq {
-//     if (greater && equal) return '\\ge'
-//     if (greater && !equal) return '\\gt'
-//     if (!greater && equal) return '\\le'
-//     if (!greater && !equal) return '\\lt'
-//     throw 'never'
-// }
-
 import _ from 'lodash'
 import * as math from 'mathjs'
-
-// export function parseIneq(text: Ineq): [greater: boolean, equal: boolean] {
-//     let greater = text.includes('g') || text.includes('>')
-//     let equal = text.includes('e') || text.includes('=')
-//     return [greater, equal]
-// }
 
 export function printDfrac(
     numerator: number,
@@ -23,7 +9,7 @@ export function printDfrac(
     let p = numerator
     let q = denominator
     if (p === 0) return '0'
-    ;[p, q] = _.toFraction(p / q)
+    ;[p, q] = cal.toFraction(p / q)
     if (q === 1) return p.toString()
     if (upSign) {
         return '\\dfrac{' + p + '}{' + q + '}'
@@ -33,19 +19,6 @@ export function printDfrac(
             : '-\\dfrac{' + Math.abs(p) + '}{' + q + '}'
     }
 }
-
-// export function parseDfrac(dfrac: string): Fraction {
-//     if (!owl.dfrac(dfrac)) throw 'not dfrac'
-//     const d = String.raw`-?\d+\.?\d*`
-//     const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
-//     dfrac = dfrac.match(new RegExp(f, 'g'))![0]
-//     const matches = dfrac.match(new RegExp(d, 'g'))!
-//     const u = dfrac.charAt(0) === '-' ? -1 : 1
-//     const p = Number(matches[0]) * u
-//     const q = Number(matches[1])
-//     if (!(owl.num(p) && owl.num(q))) throw 'fail to parse dfrac'
-//     return [p, q]
-// }
 
 export function printCombo(combo: [boolean, boolean, boolean]): string {
     let [a, b, c] = combo
@@ -97,7 +70,7 @@ export function printSurd(num: number): string {
 
 export function printPointPolar(point: Point2D): string {
     let [r, q] = RectToPol(point)
-    q = _.blur(q)
+    q = cal.blur(q)
     return `(${printSurd(r)},${q}°)`
 }
 
@@ -168,7 +141,7 @@ export function printMonomial(mono: monomial, fraction: boolean): string {
         }
         return T
     } else {
-        let [p, q] = _.toFraction(coeff)
+        let [p, q] = cal.toFraction(coeff)
         let needFrac = q !== 1 || vars.some($ => $.power < 0)
         if (!needFrac) {
             return printMonomial(mono, false)
@@ -256,5 +229,5 @@ export function printOrdinal(n: number): string {
     if (j === 1 && k !== 11) return n + 'st'
     if (j === 2 && k !== 12) return n + 'nd'
     if (j === 3 && k !== 13) return n + 'rd'
-    return _.blur(n) + 'th'
+    return cal.blur(n) + 'th'
 }
