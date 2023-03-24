@@ -2,9 +2,9 @@
     "name": "lodash-extension",
     "version": "0.0.0",
     "description": "a lodash mixin",
-    "main": "lib/src/index.js",
-    "types": "lib/src",
     "type": "module",
+    "exports": "./lib/src/index.js",
+    "types": "lib/src",
     "scripts": {
         "jest": "jest",
         "test": "vitest run",
