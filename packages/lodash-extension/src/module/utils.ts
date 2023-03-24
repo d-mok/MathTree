@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 function combinations<T>(collection: T[], n: 2): [T, T][]
 function combinations<T>(collection: T[], n: 3): [T, T, T][]

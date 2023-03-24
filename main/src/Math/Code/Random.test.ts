@@ -235,10 +235,9 @@ test('RndPoint', () => {
     repeat(10, () => {
         expect(RndPoint([1, 4], [-10, 14])[0]).toBeBetween(1, 4)
         expect(RndPoint([1, 4], [-10, 14])[0]).toBeInteger()
-        expect(RndPoint([1, 4], [-10, 14])[0]).not.toContain(0)
         expect(RndPoint([1, 4], [-10, 14])[1]).toBeBetween(-10, 14)
         expect(RndPoint([1, 4], [-10, 14])[1]).toBeInteger()
-        expect(RndPoint([1, 4], [-10, 14])[1]).not.toContain(0)
+        expect(RndPoint([1, 4], [-10, 14])).not.toContain(0)
         expect(RndPoint([1, 4], [-10, 14])).toBeDupless()
         expect(RndPoint([1, 4], [-10, 14])).toHaveLength(2)
         expect(() => RndPoint([1, 4], [-10, 14])[0]).toSpanRange(1, 4)

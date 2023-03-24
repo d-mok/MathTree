@@ -6,7 +6,6 @@
     "types": "lib/src",
     "type": "module",
     "scripts": {
-        "jest": "jest",
         "test": "vitest run",
         "npm i": "npm i --install-links=false",
         "build": "tsc"

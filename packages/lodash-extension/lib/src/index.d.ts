@@ -1,2 +1,2 @@
-import './module/utils.js';
+import './module/utils';
 //# sourceMappingURL=index.d.ts.map
