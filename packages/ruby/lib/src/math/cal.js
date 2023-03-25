@@ -292,12 +292,14 @@ export function traceCircle(center, radius, angleRange, dots = 100) {
  * ```
  */
 export function crammer(a, b, c, p, q, r) {
-    if (a / b === p / q)
+    const A = [
+        [a, b],
+        [p, q],
+    ];
+    const B = [c, r];
+    if (math.det(A) === 0)
         return [NaN, NaN];
-    const D = a * q - b * p;
-    const x = (c * q - b * r) / D;
-    const y = (a * r - c * p) / D;
-    return [blur(x), blur(y)];
+    return math.lusolve(A, B).flat();
 }
 export function hcf(nums) {
     if (nums.length === 0)

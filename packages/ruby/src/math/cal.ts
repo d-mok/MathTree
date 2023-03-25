@@ -330,11 +330,13 @@ export function crammer(
     q: number,
     r: number
 ): [number, number] {
-    if (a / b === p / q) return [NaN, NaN]
-    const D = a * q - b * p
-    const x = (c * q - b * r) / D
-    const y = (a * r - c * p) / D
-    return [blur(x), blur(y)]
+    const A = [
+        [a, b],
+        [p, q],
+    ]
+    const B = [c, r]
+    if (math.det(A) === 0) return [NaN, NaN]
+    return math.lusolve(A, B).flat() as [number, number]
 }
 
 export function hcf(nums: number[]): number {
