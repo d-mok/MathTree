@@ -4,6 +4,7 @@ import * as math from 'mathjs'
 test('Rng', () => {
     expect(Rng(2, 6)).toEqual([2, 3, 4, 5, 6])
     expect(Rng(-2, 2)).toEqual([-2, -1, 0, 1, 2])
+    expect(Rng(-2.1, 1.6)).toEqual([-2, -1, 0, 1])
     expect(Rng(1, 1, 4, 4, 3, 3, 3)).toEqual([1, 2, 3, 4])
 })
 

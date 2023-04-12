@@ -16,8 +16,8 @@ export class Host {
      */
     @checkIt(owl.num)
     static Rng(...nums: number[]): number[] {
-        let min = Math.min(...nums)
-        let max = Math.max(...nums)
+        let min = Math.ceil(Math.min(...nums))
+        let max = Math.floor(Math.max(...nums))
         return _.range(min, max + 0.01)
     }
 
