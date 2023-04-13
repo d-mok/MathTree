@@ -34,7 +34,11 @@ export class Linear {
         let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
         let s = Math.sign(a) || Math.sign(b) || 1;
         [a, b, c] = [a, b, c].map($ => $ * s);
-        [a, b, c] = cal.toRatio([a, b, c]);
+        try {
+            ;
+            [a, b, c] = cal.toRatio([a, b, c]);
+        }
+        catch (e) { }
         this.byLinear([a, b, c]);
         return this;
     }
