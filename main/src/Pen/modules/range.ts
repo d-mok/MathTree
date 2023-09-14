@@ -133,15 +133,32 @@ export class PenRange {
         this.cv.AUTO_BORDER = true
     }
 
-    // captureLine(m: number, c: number) {
-    //     let x = -c / m
-    //     if (m === 0) {
-    //         this.cv.capture([[0, c]])
-    //     } else {
-    //         this.cv.capture([[x, 0], [0, c]])
-    //     }
-    //     this.cv.AUTO_BORDER = true
-    // }
+    /**
+     * Set the coordinate range by capturing a line (with both int).
+     * ```
+     * pen.range.captureLinear(2,3,4) // 2x+3y+4=0
+     * ```
+     */
+    captureLinear(a: number, b: number, c: number) {
+        let x = -c / a
+        let y = -c / b
+        if (Number.isFinite(x)) this.cv.capture([[x, 0]])
+        if (Number.isFinite(y)) this.cv.capture([[0, y]])
+        this.cv.AUTO_BORDER = true
+    }
+
+    /**
+     * Set the coordinate range by capturing a line (with both int).
+     * ```
+     * pen.range.captureLine(2,3) // y=2x+3
+     * ```
+     */
+    captureLine(m: number, c: number) {
+        let x = -c / m
+        this.cv.capture([[0, c]])
+        if (Number.isFinite(x)) this.cv.capture([[x, 0]])
+        this.cv.AUTO_BORDER = true
+    }
 
     /**
      * Set the coordinate range by capture points or objects, include O(0,0).

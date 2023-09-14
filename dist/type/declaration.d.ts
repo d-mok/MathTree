@@ -3082,7 +3082,7 @@ declare module "Math/Algebra/Quadratic" {
 declare module "Math/Algebra/Linear" {
     export class Host {
         /**
-         * [x-int,y-int,slope] of ax+by+c=0
+         * [slope,y-int,x-int] of ax+by+c=0
          * ```
          * LineFeat(2,4,6) // [-0.5,-1.5,-3]
          * LineFeat(0,4,6) // throw
@@ -3368,6 +3368,20 @@ declare module "Pen/modules/range" {
          * ```
          */
         captureQuad(a: number, b: number, c: number): void;
+        /**
+         * Set the coordinate range by capturing a line (with both int).
+         * ```
+         * pen.range.captureLinear(2,3,4) // 2x+3y+4=0
+         * ```
+         */
+        captureLinear(a: number, b: number, c: number): void;
+        /**
+         * Set the coordinate range by capturing a line (with both int).
+         * ```
+         * pen.range.captureLine(2,3) // y=2x+3
+         * ```
+         */
+        captureLine(m: number, c: number): void;
         /**
          * Set the coordinate range by capture points or objects, include O(0,0).
          * ```
