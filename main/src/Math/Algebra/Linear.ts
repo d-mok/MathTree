@@ -6,7 +6,7 @@ import * as math from 'mathjs'
 @captureAll()
 export class Host {
     /**
-     * [x-int,y-int,slope] of ax+by+c=0
+     * [slope,y-int,x-int] of ax+by+c=0
      * ```
      * LineFeat(2,4,6) // [-0.5,-1.5,-3]
      * LineFeat(0,4,6) // throw
