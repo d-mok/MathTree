@@ -1617,7 +1617,7 @@ declare module "Math/Code/RandomShake" {
          * // equivalent to RndShakeR(10.5)
          * ```
          */
-        static RndShake(anchor: any): typeof anchor[];
+        static RndShake(anchor: any): (typeof anchor)[];
         /**
          * 3 nearby same-signed integers, range = Max(5, anchor * 10%)
          * ```

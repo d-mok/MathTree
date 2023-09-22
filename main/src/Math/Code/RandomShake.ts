@@ -30,7 +30,7 @@ export class Host {
      * // equivalent to RndShakeR(10.5)
      * ```
      */
-    static RndShake(anchor: any): typeof anchor[] {
+    static RndShake(anchor: any): (typeof anchor)[] {
         if (typeof anchor === 'string') {
             // Fraction, to be deleted
             if (owl.dfrac(anchor)) {
@@ -183,15 +183,7 @@ export class Host {
         anchor: [boolean, boolean, boolean]
     ): [boolean, boolean, boolean][] {
         let [a, b, c] = anchor
-        let func = (): [boolean, boolean, boolean] => [RndT(), RndT(), RndT()]
-        let diff = (bools: boolean[]) =>
-            bools.some($ => $) && bools.some($ => !$)
-        return dice(func)
-            .unique()
-            .coherent(all => diff([a, ...all.map($ => $[0])]))
-            .coherent(all => diff([b, ...all.map($ => $[1])]))
-            .coherent(all => diff([c, ...all.map($ => $[2])]))
-            .rolls(3)
+        return RndShuffle([a, !b, !c], [!a, b, !c], [!a, !b, c])
     }
 
     /**
