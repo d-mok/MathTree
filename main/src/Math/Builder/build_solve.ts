@@ -15,17 +15,17 @@ export function BuildSolve(
     ][],
     equations: [func: zeroFunction, latex: string][],
     {
-        listSym = false,
+        // listSym = false,
         avoids = [],
         sigfig = {},
-        solFormat = 'series',
+        // solFormat = 'series',
         solPlain = false,
         integer = false,
     }: {
-        listSym?: boolean
+        // listSym?: boolean
         avoids?: string[][]
         sigfig?: { [_: string]: number } | number
-        solFormat?: 'series' | 'parallel'
+        // solFormat?: 'series' | 'parallel'
         solPlain?: boolean
         integer?: boolean
     } = {}
@@ -95,7 +95,8 @@ export function BuildSolve(
             let [fs, latex] = equations[0]
             return writeStep(latex, givens, unknown)
         } else {
-            if (solFormat === 'series') {
+            // if (solFormat === 'series') {
+            if (true) {
                 let knowns = [...givens]
                 let arr: string[] = []
                 for (let { solvedBy, variable } of _.sortBy(tree, 'order')) {
@@ -106,12 +107,12 @@ export function BuildSolve(
                 }
                 return arr.join(' \\\\~\\\\ ')
             } else {
-                let latexs = _.map(equations, 1)
-                return [
-                    ...(solPlain ? [] : [WRITE.printSystem(vGrp, latexs)]),
-                    WRITE.printSystem(vGrp, latexs, givens),
-                    WRITE.printSystemSol(vGrp, hiddens),
-                ].join(' \\\\~\\\\ ')
+                // let latexs = _.map(equations, 1)
+                // return [
+                //     ...(solPlain ? [] : [WRITE.printSystem(vGrp, latexs)]),
+                //     WRITE.printSystem(vGrp, latexs, givens),
+                //     WRITE.printSystemSol(vGrp, hiddens),
+                // ].join(' \\\\~\\\\ ')
             }
         }
     }
@@ -135,9 +136,7 @@ export function BuildSolve(
     }
 
     return {
-        list: givens
-            .map($ => (listSym ? WRITE.rich(vGrp[$]) : WRITE.whole(vGrp[$])))
-            .join('\\\\'),
+        list: givens.map($ => WRITE.whole(vGrp[$])).join('\\\\'),
         sol: sol(),
         vars: vars.map(v =>
             givens.includes(v) ? WRITE.long(vGrp[v]) : WRITE.symbol(vGrp[v])
