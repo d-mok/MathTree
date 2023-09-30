@@ -28,7 +28,7 @@ export function BuildAngle(
             parseRange(angle, mode),
         ]),
         equations,
-        { solPlain: true, integer: true }
+        { solPlain: true, integer: true, sigfig: 3 }
     )
 
     function labelAngle(pen: PenCls) {
