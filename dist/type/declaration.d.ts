@@ -3250,24 +3250,6 @@ declare module "Math/should" {
     }
     export {};
 }
-declare module "Math/Builder/support/units" {
-    export function findUnit(name: string): string | undefined;
-    export function parseUnit(raw: string): string;
-}
-declare module "Math/Builder/support/variable" {
-    export function toVarGrp(varInputs: varInput[]): varGrp;
-    export function RoundVars(vGrp: varGrp, vars: string[], sigfig: Record<string, number> | number, integer: boolean): void;
-}
-declare module "Math/Builder/support/system" {
-    export function fitFree(fs: zeroFunction[], varGrp: varGrp): void;
-    export function fitAgain(fs: zeroFunction[], varGrp: varGrp, reFitVars: string[]): void;
-    export function readTree(tree: TREE): {
-        vars: string[];
-        givens: string[];
-        top: string;
-        hiddens: string[];
-    };
-}
 declare module "Math/Builder/support/write" {
     export function symbol(v: varObj): string;
     export function short(v: varObj): string;
@@ -4741,6 +4723,24 @@ declare module "Pen/Pen" {
         restoreImg(): void;
     }
 }
+declare module "Math/Builder/support/units" {
+    export function findUnit(name: string): string | undefined;
+    export function parseUnit(raw: string): string;
+}
+declare module "Math/Builder/support/variable" {
+    export function toVarGrp(varInputs: varInput[]): varGrp;
+    export function RoundVars(vGrp: varGrp, vars: string[], sigfig: Record<string, number> | number, integer: boolean): void;
+}
+declare module "Math/Builder/support/system" {
+    export function fitFree(fs: zeroFunction[], varGrp: varGrp): void;
+    export function fitAgain(fs: zeroFunction[], varGrp: varGrp, reFitVars: string[]): void;
+    export function readTree(tree: TREE): {
+        vars: string[];
+        givens: string[];
+        top: string;
+        hiddens: string[];
+    };
+}
 declare module "Math/Builder/build_solve" {
     import { PenCls } from "Pen/Pen";
     export function BuildSolve(variables: [
@@ -4762,6 +4762,31 @@ declare module "Math/Builder/build_solve" {
         vars: string[];
         vals: number[];
         unknown: [symbol: string, name: string, val: number, unit: string];
+        ans: quantity;
+        labelAngle: (_: PenCls) => {
+            all: () => void;
+            plain: () => void;
+        };
+        _INTERNAL: {
+            vars: string[];
+            givens: string[];
+            hiddens: string[];
+            unknown: string;
+            vGrp: varGrp;
+        };
+    };
+}
+declare module "Math/Builder/build_angle" {
+    import { PenCls } from "Pen/Pen";
+    export function BuildAngle(variables: [
+        sym: string,
+        angle: [Point2D, Point2D, Point2D],
+        mode?: 'normal' | 'polar' | 'reflex'
+    ][], equations: [func: zeroFunction, latex: string][]): {
+        sol: string;
+        vars: string[];
+        vals: number[];
+        target: string;
         ans: quantity;
         labelAngle: (_: PenCls) => {
             all: () => void;
@@ -4809,10 +4834,12 @@ declare module "Math/Builder/build_ratio" {
     };
 }
 declare module "Math/Builder/index" {
+    import { BuildAngle as $BuildAngle } from "Math/Builder/build_angle";
     import { BuildSolve as $BuildSolve } from "Math/Builder/build_solve";
     import { BuildTrend as $BuildTrend } from "Math/Builder/build_trend";
     import { BuildRatio as $BuildRatio } from "Math/Builder/build_ratio";
     global {
+        var BuildAngle: typeof $BuildAngle;
         var BuildSolve: typeof $BuildSolve;
         var BuildTrend: typeof $BuildTrend;
         var BuildRatio: typeof $BuildRatio;

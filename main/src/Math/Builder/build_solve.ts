@@ -15,17 +15,13 @@ export function BuildSolve(
     ][],
     equations: [func: zeroFunction, latex: string][],
     {
-        // listSym = false,
         avoids = [],
         sigfig = {},
-        // solFormat = 'series',
         solPlain = false,
         integer = false,
     }: {
-        // listSym?: boolean
         avoids?: string[][]
         sigfig?: { [_: string]: number } | number
-        // solFormat?: 'series' | 'parallel'
         solPlain?: boolean
         integer?: boolean
     } = {}
@@ -39,6 +35,13 @@ export function BuildSolve(
     labelAngle: (_: PenCls) => {
         all: () => void
         plain: () => void
+    }
+    _INTERNAL: {
+        vars: string[]
+        givens: string[]
+        hiddens: string[]
+        unknown: string
+        vGrp: varGrp
     }
 } {
     // varGrp object
@@ -95,25 +98,15 @@ export function BuildSolve(
             let [fs, latex] = equations[0]
             return writeStep(latex, givens, unknown)
         } else {
-            // if (solFormat === 'series') {
-            if (true) {
-                let knowns = [...givens]
-                let arr: string[] = []
-                for (let { solvedBy, variable } of _.sortBy(tree, 'order')) {
-                    if (solvedBy === null) continue
-                    let latex = equations.find(eq => eq[0] === solvedBy)![1]
-                    arr.push(writeStep(latex, knowns, variable))
-                    knowns.push(variable)
-                }
-                return arr.join(' \\\\~\\\\ ')
-            } else {
-                // let latexs = _.map(equations, 1)
-                // return [
-                //     ...(solPlain ? [] : [WRITE.printSystem(vGrp, latexs)]),
-                //     WRITE.printSystem(vGrp, latexs, givens),
-                //     WRITE.printSystemSol(vGrp, hiddens),
-                // ].join(' \\\\~\\\\ ')
+            let knowns = [...givens]
+            let arr: string[] = []
+            for (let { solvedBy, variable } of _.sortBy(tree, 'order')) {
+                if (solvedBy === null) continue
+                let latex = equations.find(eq => eq[0] === solvedBy)![1]
+                arr.push(writeStep(latex, knowns, variable))
+                knowns.push(variable)
             }
+            return arr.join(' \\\\~\\\\ ')
         }
     }
 
@@ -150,6 +143,13 @@ export function BuildSolve(
         ],
         ans: { val: vGrp[unknown].val, unit: vGrp[unknown].unit },
         labelAngle,
+        _INTERNAL: {
+            vars,
+            givens,
+            hiddens,
+            unknown,
+            vGrp,
+        },
     }
 }
 
