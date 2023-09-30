@@ -4782,7 +4782,7 @@ declare module "Math/Builder/build_angle" {
         sym: string,
         angle: [Point2D, Point2D, Point2D],
         mode?: 'normal' | 'polar' | 'reflex'
-    ][], equations: [func: zeroFunction, latex: string][]): {
+    ][], equations: [func: zeroFunction, latex: string, explain?: string][]): {
         sol: string;
         vars: string[];
         vals: number[];

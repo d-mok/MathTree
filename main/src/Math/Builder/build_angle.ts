@@ -9,7 +9,7 @@ export function BuildAngle(
         angle: [Point2D, Point2D, Point2D],
         mode?: 'normal' | 'polar' | 'reflex'
     ][],
-    equations: [func: zeroFunction, latex: string][]
+    equations: [func: zeroFunction, latex: string, explain?: string][]
 ): {
     sol: string
     vars: string[]
