@@ -13,7 +13,7 @@ export function BuildSolve(
         unit?: string,
         display?: string
     ][],
-    equations: [func: zeroFunction, latex: string][],
+    equations: [func: zeroFunction, latex: string, explain?: string][],
     {
         avoids = [],
         sigfig = {},
@@ -82,28 +82,34 @@ export function BuildSolve(
     }
 
     function writeStep(
+        explain: string | undefined,
         latex: string,
         stepVars: string[],
         finalVar: string
     ): string {
-        return WRITE.latexAligned([
-            ...(solPlain ? [] : [WRITE.write(vGrp, latex)]),
-            WRITE.write(vGrp, latex, stepVars),
-            WRITE.full(vGrp[finalVar]),
-        ])
+        return (
+            (explain ? '\\text{' + explain + '}\\\\' : '') +
+            WRITE.latexAligned([
+                ...(solPlain ? [] : [WRITE.write(vGrp, latex)]),
+                WRITE.write(vGrp, latex, stepVars),
+                WRITE.full(vGrp[finalVar]),
+            ])
+        )
     }
 
     function sol(): string {
         if (equations.length === 1) {
-            let [fs, latex] = equations[0]
-            return writeStep(latex, givens, unknown)
+            let [fs, latex, explain] = equations[0]
+            return writeStep(explain, latex, givens, unknown)
         } else {
             let knowns = [...givens]
             let arr: string[] = []
             for (let { solvedBy, variable } of _.sortBy(tree, 'order')) {
                 if (solvedBy === null) continue
-                let latex = equations.find(eq => eq[0] === solvedBy)![1]
-                arr.push(writeStep(latex, knowns, variable))
+                let [fs, latex, explain] = equations.find(
+                    $ => $[0] === solvedBy
+                )!
+                arr.push(writeStep(explain, latex, knowns, variable))
                 knowns.push(variable)
             }
             return arr.join(' \\\\~\\\\ ')

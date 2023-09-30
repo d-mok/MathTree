@@ -4749,7 +4749,7 @@ declare module "Math/Builder/build_solve" {
         range: rangeInput,
         unit?: string,
         display?: string
-    ][], equations: [func: zeroFunction, latex: string][], { avoids, sigfig, solPlain, integer, }?: {
+    ][], equations: [func: zeroFunction, latex: string, explain?: string][], { avoids, sigfig, solPlain, integer, }?: {
         avoids?: string[][];
         sigfig?: {
             [_: string]: number;
