@@ -183,7 +183,7 @@ export class AutoPenCls {
             if (0 > k && k > -0.9) k = -0.9
         }
 
-        let [a, b, c] = TrigRoot(trig, k)
+        let [a, b, c] = TrigSolve(trig, k)
 
         const pen = new Pen()
 

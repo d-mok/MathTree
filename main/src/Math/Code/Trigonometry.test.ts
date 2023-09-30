@@ -40,19 +40,6 @@ test('ASTC', () => {
     expect(ASTC('III', 'tan')).toEqual(1)
 })
 
-test('TrigRoot', () => {
-    expect(TrigRoot('sin', 0)).toEqual([0, 180, 360])
-    expect(TrigRoot('sin', 0.5)).toEqual([30, 150, undefined])
-    expect(TrigRoot('sin', 1)).toEqual([90, undefined, undefined])
-    expect(TrigRoot('sin', 2)).toEqual([undefined, undefined, undefined])
-    expect(TrigRoot('cos', 0)).toEqual([90, 270, undefined])
-    expect(TrigRoot('cos', 0.5)).toEqual([60, 300, undefined])
-    expect(TrigRoot('cos', 1)).toEqual([0, 360, undefined])
-    expect(TrigRoot('cos', -2)).toEqual([undefined, undefined, undefined])
-    expect(TrigRoot('tan', 0)).toEqual([0, 180, 360])
-    expect(TrigRoot('tan', 1)).toEqual([45, 225, undefined])
-})
-
 test('TrigSolve', () => {
     expect(TrigSolve('sin', 0)).toEqual([0, 180, 360])
     expect(TrigSolve('sin', 0.5)).toEqual([30, 150])

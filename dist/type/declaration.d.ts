@@ -2719,16 +2719,6 @@ declare module "Math/Code/Trigonometry" {
          */
         static ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): -1 | 0 | 1;
         /**
-         * @deprecated use TrigSolve instead
-         * the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k. The angles [r1,r2,r3].
-         * ```
-         * TrigRoot('sin',0) // [0, 180, 360]
-         * TrigRoot('sin',0.5) // [30, 150, undefined]
-         * TrigRoot('sin',1) // [90, undefined, undefined]
-         * ```
-         */
-        static TrigRoot(func: TrigFunc, k: number): [number | undefined, number | undefined, number | undefined];
-        /**
          * the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k.
          * ```
          * TrigSolve('sin',0) // [0, 180, 360]
@@ -2776,7 +2766,6 @@ declare module "Math/Code/Trigonometry" {
         var PolToRect: typeof Host.PolToRect;
         var RectToPol: typeof Host.RectToPol;
         var ASTC: typeof Host.ASTC;
-        var TrigRoot: typeof Host.TrigRoot;
         var TrigSolve: typeof Host.TrigSolve;
         var PolarReduce: typeof Host.PolarReduce;
         var PolarDiff: typeof Host.PolarDiff;
@@ -4760,13 +4749,11 @@ declare module "Math/Builder/build_solve" {
         range: rangeInput,
         unit?: string,
         display?: string
-    ][], equations: [func: zeroFunction, latex: string][], { listSym, avoids, sigfig, solFormat, solPlain, integer, }?: {
-        listSym?: boolean;
+    ][], equations: [func: zeroFunction, latex: string][], { avoids, sigfig, solPlain, integer, }?: {
         avoids?: string[][];
         sigfig?: {
             [_: string]: number;
         } | number;
-        solFormat?: 'series' | 'parallel';
         solPlain?: boolean;
         integer?: boolean;
     }): {

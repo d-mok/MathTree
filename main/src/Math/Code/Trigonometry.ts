@@ -76,63 +76,6 @@ export class Host {
     }
 
     /**
-     * @deprecated use TrigSolve instead
-     * the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k. The angles [r1,r2,r3].
-     * ```
-     * TrigRoot('sin',0) // [0, 180, 360]
-     * TrigRoot('sin',0.5) // [30, 150, undefined]
-     * TrigRoot('sin',1) // [90, undefined, undefined]
-     * ```
-     */
-    @checkIt(owl.trig, owl.num)
-    static TrigRoot(
-        func: TrigFunc,
-        k: number
-    ): [number | undefined, number | undefined, number | undefined] {
-        if (func == 'sin') {
-            if (k > 1 || k < -1) return [undefined, undefined, undefined]
-            if (k == 0) return [0, 180, 360]
-            if (k == 1) return [90, undefined, undefined]
-            if (k == -1) return [270, undefined, undefined]
-            if (k > 0) {
-                let a = arcsin(k)
-                let b = 180 - a
-                return [a, b, undefined]
-            }
-            if (k < 0) {
-                let x = -arcsin(k)
-                let a = 180 + x
-                let b = 360 - x
-                return [a, b, undefined]
-            }
-        }
-        if (func == 'cos') {
-            if (k > 1 || k < -1) return [undefined, undefined, undefined]
-            if (k == 0) return [90, 270, undefined]
-            if (k == 1) return [0, 360, undefined]
-            if (k == -1) return [180, undefined, undefined]
-            let a = arccos(k)
-            let b = 360 - a
-            return [a, b, undefined]
-        }
-        if (func == 'tan') {
-            if (k == 0) return [0, 180, 360]
-            if (k > 0) {
-                let a = arctan(k)
-                let b = 180 + a
-                return [a, b, undefined]
-            }
-            if (k < 0) {
-                let x = -arctan(k)
-                let a = 180 - x
-                let b = 360 - x
-                return [a, b, undefined]
-            }
-        }
-        return [undefined, undefined, undefined]
-    }
-
-    /**
      * the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k.
      * ```
      * TrigSolve('sin',0) // [0, 180, 360]
@@ -263,7 +206,6 @@ declare global {
     var PolToRect: typeof Host.PolToRect
     var RectToPol: typeof Host.RectToPol
     var ASTC: typeof Host.ASTC
-    var TrigRoot: typeof Host.TrigRoot
     var TrigSolve: typeof Host.TrigSolve
     var PolarReduce: typeof Host.PolarReduce
     var PolarDiff: typeof Host.PolarDiff
