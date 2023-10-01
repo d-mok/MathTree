@@ -37,20 +37,20 @@ export function BuildSolve(
         plain: () => void
     }
     _INTERNAL: {
-        vars: string[]
+        allVars: string[]
         givens: string[]
         hiddens: string[]
-        unknown: string
+        aim: string
         vGrp: varGrp
     }
 } {
     // varGrp object
-    let vars = _.map(variables, 0)
+    let allVars = _.map(variables, 0)
     let vGrp = toVarGrp(variables)
     let fs = _.map(equations, 0)
 
     // get locked vars
-    let locked = vars.filter(v => vGrp[v].range[0] === vGrp[v].range[1])
+    let locked = allVars.filter(v => vGrp[v].range[0] === vGrp[v].range[1])
 
     // get givens, hiddens, unknown
     let validTrees = analyze(fs)
@@ -60,7 +60,7 @@ export function BuildSolve(
 
     let tree = _.sample(validTrees)!
     // console.log(tree)
-    let { givens, top: unknown, hiddens } = readTree(tree)
+    let { givens, top: aim, hiddens } = readTree(tree)
 
     for (let i = 0; i <= 10; i++) {
         try {
@@ -100,7 +100,7 @@ export function BuildSolve(
     function sol(): string {
         if (equations.length === 1) {
             let [fs, latex, explain] = equations[0]
-            return writeStep(explain, latex, givens, unknown)
+            return writeStep(explain, latex, givens, aim)
         } else {
             let knowns = [...givens]
             let arr: string[] = []
@@ -129,31 +129,31 @@ export function BuildSolve(
             }
         }
         return {
-            all: () => draw(vars),
-            plain: () => draw([unknown, ...givens]),
+            all: () => draw(allVars),
+            plain: () => draw([aim, ...givens]),
         }
     }
 
     return {
         list: givens.map($ => WRITE.whole(vGrp[$])).join('\\\\'),
         sol: sol(),
-        vars: vars.map(v =>
+        vars: allVars.map(v =>
             givens.includes(v) ? WRITE.long(vGrp[v]) : WRITE.symbol(vGrp[v])
         ),
-        vals: vars.map(v => vGrp[v].val),
+        vals: allVars.map(v => vGrp[v].val),
         unknown: [
-            WRITE.symbol(vGrp[unknown]),
-            vGrp[unknown].name,
-            vGrp[unknown].val,
-            vGrp[unknown].unit,
+            WRITE.symbol(vGrp[aim]),
+            vGrp[aim].name,
+            vGrp[aim].val,
+            vGrp[aim].unit,
         ],
-        ans: { val: vGrp[unknown].val, unit: vGrp[unknown].unit },
+        ans: { val: vGrp[aim].val, unit: vGrp[aim].unit },
         labelAngle,
         _INTERNAL: {
-            vars,
+            allVars,
             givens,
             hiddens,
-            unknown,
+            aim,
             vGrp,
         },
     }

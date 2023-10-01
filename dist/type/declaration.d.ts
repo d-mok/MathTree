@@ -4768,10 +4768,10 @@ declare module "Math/Builder/build_solve" {
             plain: () => void;
         };
         _INTERNAL: {
-            vars: string[];
+            allVars: string[];
             givens: string[];
             hiddens: string[];
-            unknown: string;
+            aim: string;
             vGrp: varGrp;
         };
     };
@@ -4786,11 +4786,11 @@ declare module "Math/Builder/build_angle" {
         sol: string;
         vars: string[];
         vals: number[];
-        target: string;
+        aim: string;
         ans: quantity;
-        labelAngle: (_: PenCls) => {
-            all: () => void;
-            plain: () => void;
+        labeler: {
+            all: (_: PenCls) => void;
+            ask: (_: PenCls) => void;
         };
     };
 }
