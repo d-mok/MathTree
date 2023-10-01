@@ -4,7 +4,7 @@
     "scripts": {
         "publish": "npm run build-edge && npm run build-type",
         "build-edge": "esbuild src/index.ts --bundle --outfile=../dist/edge/mathtree.js",
-        "build-type": "npx tsc --project tsconfig.d.json",
+        "build-type": "npx tsc --project tsconfig.d.json && node ./modify_declaration.js",
         "build-stable": "esbuild src/index.ts --bundle --minify --outfile=../dist/stable/mathtree.js",
         "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./src/Math",
         "test": "vitest run",
