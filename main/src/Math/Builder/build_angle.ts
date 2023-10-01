@@ -17,8 +17,9 @@ export function BuildAngle(
     aim: string
     ans: quantity
     labeler: {
-        all: (_: PenCls) => void
         ask: (_: PenCls) => void
+        all: (_: PenCls) => void
+        _SYMBOL: (_: PenCls) => void
     }
 } {
     let {
@@ -37,16 +38,29 @@ export function BuildAngle(
         { solPlain: true, integer: true, sigfig: 3 }
     )
 
-    function draw(pen: PenCls, vars: string[]) {
-        let drawVars = variables.filter($ => vars.includes($[0]))
-        for (let [sym, angle, mode] of drawVars) {
-            let isGiven = givens.includes(sym)
-            let varObj = vGrp[sym]
-            let label = isGiven ? WRITE.long(varObj) : WRITE.symbol(varObj)
-            pen.set.angle(mode ?? 'normal')
-            pen.angle(...angle, label)
-            pen.set.angle()
-        }
+    function drawOne(pen: PenCls, v: string, type: 'symbol' | 'value') {
+        let [sym, angle, mode] = variables.find($ => $[0] === v)!
+        pen.set.angle(mode ?? 'normal')
+        pen.angle(
+            ...angle,
+            type === 'symbol' ? WRITE.symbol(vGrp[v]) : WRITE.long(vGrp[v])
+        )
+        pen.set.angle()
+    }
+
+    function draw(pen: PenCls, symbolVars: string[], valueVars: string[]) {
+        symbolVars.forEach(v => drawOne(pen, v, 'symbol'))
+        valueVars.forEach(v => drawOne(pen, v, 'value'))
+
+        // let drawVars = variables.filter($ => vars.includes($[0]))
+        // for (let [sym, angle, mode] of drawVars) {
+        //     let isGiven = givens.includes(sym)
+        //     let varObj = vGrp[sym]
+        //     let label = isGiven ? WRITE.long(varObj) : WRITE.symbol(varObj)
+        //     pen.set.angle(mode ?? 'normal')
+        //     pen.angle(...angle, label)
+        //     pen.set.angle()
+        // }
     }
 
     return {
@@ -56,8 +70,9 @@ export function BuildAngle(
         aim,
         ans,
         labeler: {
-            all: (pen: PenCls) => draw(pen, allVars),
-            ask: (pen: PenCls) => draw(pen, [aim, ...givens]),
+            ask: (pen: PenCls) => draw(pen, [aim], givens),
+            all: (pen: PenCls) => draw(pen, [aim, ...hiddens], givens),
+            _SYMBOL: (pen: PenCls) => draw(pen, allVars, []),
         },
     }
 }

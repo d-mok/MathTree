@@ -4789,8 +4789,9 @@ declare module "Math/Builder/build_angle" {
         aim: string;
         ans: quantity;
         labeler: {
-            all: (_: PenCls) => void;
             ask: (_: PenCls) => void;
+            all: (_: PenCls) => void;
+            _SYMBOL: (_: PenCls) => void;
         };
     };
 }
