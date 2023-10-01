@@ -1,10 +1,6 @@
 type zeroFunction = (...args: number[]) => number
 
-type rangeInput =
-    | [number, number]
-    | [number]
-    | number
-    | [Point2D, Point2D, Point2D]
+type rangeInput = [number, number] | [number] | number
 
 type varInput = [
     sym: string,

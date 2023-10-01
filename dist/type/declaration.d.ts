@@ -4742,7 +4742,6 @@ declare module "Math/Builder/support/system" {
     };
 }
 declare module "Math/Builder/build_solve" {
-    import { PenCls } from "Pen/Pen";
     export function BuildSolve(variables: [
         sym: string,
         name: string,
@@ -4763,10 +4762,6 @@ declare module "Math/Builder/build_solve" {
         vals: number[];
         unknown: [symbol: string, name: string, val: number, unit: string];
         ans: quantity;
-        labelAngle: (_: PenCls) => {
-            all: () => void;
-            plain: () => void;
-        };
         _INTERNAL: {
             allVars: string[];
             givens: string[];
