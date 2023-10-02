@@ -88,10 +88,6 @@ declare global {
 
     type TrigExp = [TrigFunc, number, 1 | -1, string]
 
-    type LabeledValue1 = [value: number, label: string]
-    type LabeledValue2 = [value: number, label1: string, label2: string]
-    type LabeledValue = LabeledValue1 | LabeledValue2
-
     type quantity = { val: number; unit: string }
 }
 

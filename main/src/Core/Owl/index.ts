@@ -149,15 +149,6 @@ export const trigValue = ($: unknown): $ is TrigValue =>
 export const trigExp = ($: unknown): $ is TrigExp =>
     arrayOfLength(4)($) && trig($[0]) && num($[1]) && num($[2]) && str($[3])
 
-export const labeledValue1 = ($: unknown): $ is LabeledValue1 =>
-    arrayOfLength(2)($) && num($[0]) && str($[1])
-
-export const labeledValue2 = ($: unknown): $ is LabeledValue2 =>
-    arrayOfLength(3)($) && num($[0]) && str($[1]) && str($[2])
-
-export const labeledValue = ($: unknown): $ is LabeledValue =>
-    labeledValue1($) || labeledValue2($)
-
 export const quantity = ($: unknown): $ is quantity =>
     object($) && 'val' in $ && 'unit' in $
 

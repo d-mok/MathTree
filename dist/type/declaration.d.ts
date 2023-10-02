@@ -50,9 +50,6 @@ declare module "Core/Owl/index" {
     export const compoundInequality: ($: unknown) => $ is CompoundInequality;
     export const trigValue: ($: unknown) => $ is TrigValue;
     export const trigExp: ($: unknown) => $ is TrigExp;
-    export const labeledValue1: ($: unknown) => $ is LabeledValue1;
-    export const labeledValue2: ($: unknown) => $ is LabeledValue2;
-    export const labeledValue: ($: unknown) => $ is LabeledValue;
     export const quantity: ($: unknown) => $ is quantity;
     export const pass: ($: unknown) => boolean;
     export const fail: ($: unknown) => boolean;
@@ -83,7 +80,6 @@ declare module "Core/Ink/index" {
     export function printPointPolar(point: Point2D): string;
     export function printConstraint(con: Constraint, align?: boolean, replaceEqual?: boolean): string;
     export function printConstraints(cons: Constraint[]): string;
-    export function printLabeledValue(obj: LabeledValue, order?: number, isAngle?: boolean): string;
     export function printPrimeFactors(num: number): string;
     export function printMonomial(mono: monomial, fraction: boolean): string;
     export function printPolynomial(poly: polynomial, fraction: boolean): string;
@@ -5656,9 +5652,6 @@ declare module "Math/type" {
         ];
         type TrigValue = [TrigFunc, number | string];
         type TrigExp = [TrigFunc, number, 1 | -1, string];
-        type LabeledValue1 = [value: number, label: string];
-        type LabeledValue2 = [value: number, label1: string, label2: string];
-        type LabeledValue = LabeledValue1 | LabeledValue2;
         type quantity = {
             val: number;
             unit: string;

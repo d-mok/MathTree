@@ -17,7 +17,7 @@ type ConditionKeys<T> = {
     [k in keyof T]: T[k] extends (...args: any[]) => boolean ? k : never
 }[keyof T]
 type condition = ConditionKeys<typeof owl>
-type GuardType<T extends condition> = typeof owl[T] extends (
+type GuardType<T extends condition> = (typeof owl)[T] extends (
     _: any
 ) => _ is infer R
     ? R
@@ -46,10 +46,6 @@ type pattern =
     | '*:@'
     | '*|.@'
     | '*.@'
-    | '*=@'
-    | '*==@'
-    | '*=.@'
-    | '*==.@'
     | '*^×@'
     | '*@th'
 
@@ -164,34 +160,6 @@ addRule('*:@', 'num', $ => {
 addRule('*|.@', 'array', $ => ink.printOrTrigRoots($))
 // print *.x as polar coordinates, with r being a surd
 addRule('*.@', 'point2D', $ => ink.printPointPolar($))
-
-// print *= as equation for labeled value
-addRule('*=@', 'labeledValue', $ => {
-    let v: LabeledValue = [...$]
-    v[0] = numberDefault(v[0])
-    return ink.printLabeledValue(v, 1, false)
-})
-
-// print *== as equation for labeled value
-addRule('*==@', 'labeledValue2', $ => {
-    let v: LabeledValue2 = [...$]
-    v[0] = numberDefault(v[0])
-    return ink.printLabeledValue(v, 2, false)
-})
-
-// print *=. as equation for labeled value
-addRule('*=.@', 'labeledValue', $ => {
-    let v: LabeledValue = [...$]
-    v[0] = numberDefault(v[0])
-    return ink.printLabeledValue(v, 1, true)
-})
-
-// print *==. as equation for labeled value
-addRule('*==.@', 'labeledValue2', $ => {
-    let v: LabeledValue2 = [...$]
-    v[0] = numberDefault(v[0])
-    return ink.printLabeledValue(v, 2, true)
-})
 
 // print *^× as prime factors
 addRule('*^×@', 'num', $ => {
