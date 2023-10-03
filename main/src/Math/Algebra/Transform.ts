@@ -98,7 +98,7 @@ function printState(state: state): string {
     let B = b === 0 ? '' : '+' + asFrac(b)
     let M = m === 1 ? '' : asFrac(m)
     let N = n === 1 ? '' : asFrac(n)
-    return `${N}f(${M}x${A})${B}`
+    return `${N}\\operatorname f(${M}x${A})${B}`
 }
 
 function printIntermediate(state: state, [t, v]: morph): string | null {
