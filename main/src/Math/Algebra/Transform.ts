@@ -82,9 +82,9 @@ function action([t, v]: morph): string {
         case 'VT':
             return 'translate ' + Abs(v) + ' units ' + up(v)
         case 'HR':
-            return 'reflecte about the $y$-axis'
+            return 'reflect about the $y$-axis'
         case 'VR':
-            return 'reflecte about the $x$-axis'
+            return 'reflect about the $x$-axis'
         case 'HS':
             v = 1 / v
             return large(v) + ' to ' + times(v) + ' times along the $x$-axis'
@@ -188,18 +188,22 @@ export class Host {
         }
 
         function drawQ(pen: PenCls) {
+            pen.set.weight(2)
             pen.plot(func)
             pen.plotDash(funcs.at(-1)!)
+            pen.set.weight()
         }
 
         function drawS(pen: PenCls) {
             let intervals = [[1], [1, 0.3], [1, 0.5, 0.2], [1, 0.7, 0.4, 0.1]][
                 actions.length - 1
             ]
+            pen.set.weight(3)
             for (let i = 0; i < actions.length; i++) {
                 pen.set.alpha(intervals[i])
                 pen.plot(funcs[i])
             }
+            pen.set.weight()
             pen.set.alpha()
         }
 
