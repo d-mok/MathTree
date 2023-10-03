@@ -170,7 +170,7 @@ export class Host {
         let f = (x: number) => func(x)
         let actions: string[] = ['']
         let steps: string[] = [`y=${brac(printState(state))}`]
-        let funcs: ((x: number) => number)[] = [f]
+        let funcs: ((x: number) => number)[] = [func]
 
         for (let m of transforms) {
             actions.push(action(m))
@@ -183,12 +183,12 @@ export class Host {
         let explain = ''
         for (let i = 0; i < actions.length; i++) {
             if (actions[i] !== '')
-                explain += `\\textcolor{blue}{\\text{${actions[i]}}} \\\\`
-            explain += steps[i]
+                explain += `\\textcolor{blue}{↓  \\text{${actions[i]}}} \\\\`
+            explain += steps[i] + '\\\\'
         }
 
         function drawQ(pen: PenCls) {
-            pen.plot(f)
+            pen.plot(func)
             pen.plotDash(funcs.at(-1)!)
         }
 
