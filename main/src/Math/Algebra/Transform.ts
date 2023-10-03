@@ -203,8 +203,8 @@ export class Host {
                 pen.set.alpha(intervals[i])
                 pen.plot(funcs[i])
             }
-            pen.set.weight()
             pen.set.alpha()
+            pen.set.weight()
         }
 
         return {
