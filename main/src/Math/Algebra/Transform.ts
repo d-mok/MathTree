@@ -96,8 +96,8 @@ function printState(state: state): string {
     let { a, b, m, n } = state
     let A = a === 0 ? '' : '+' + asFrac(a)
     let B = b === 0 ? '' : '+' + asFrac(b)
-    let M = m === 1 ? '' : asFrac(m)
-    let N = n === 1 ? '' : asFrac(n)
+    let M = m === 1 ? '' : m === -1 ? '-' : asFrac(m)
+    let N = n === 1 ? '' : n === -1 ? '-' : asFrac(n)
     return `${N}\\operatorname f(${M}x${A})${B}`
 }
 
