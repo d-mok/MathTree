@@ -150,7 +150,7 @@ export class Host {
      * ```
      */
     static explainTransforms({
-        state,
+        state = { a: 0, b: 0, m: 1, n: 1 },
         func,
         transforms,
     }: {
