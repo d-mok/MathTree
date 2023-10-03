@@ -81,14 +81,14 @@ function action([t, v]: morph): string {
         case 'VT':
             return 'translated ' + Abs(v) + ' units ' + up(v)
         case 'HR':
-            return 'reflected about the y-axis'
+            return 'reflected about the $y$-axis'
         case 'VR':
-            return 'reflected about the x-axis'
+            return 'reflected about the $x$-axis'
         case 'HS':
             v = 1 / v
-            return large(v) + ' to ' + times(v) + ' times along the x-axis'
+            return large(v) + ' to ' + times(v) + ' times along the $x$-axis'
         case 'VS':
-            return large(v) + ' to ' + times(v) + ' times along the y-axis'
+            return large(v) + ' to ' + times(v) + ' times along the $y$-axis'
     }
 }
 
@@ -162,12 +162,13 @@ export class Host {
         steps: string[]
         funcs: ((x: number) => number)[]
         // finalState: state
+        explain: string
     } {
         let s = { ...state }
         let f = (x: number) => func(x)
-        let actions: string[] = []
-        let steps: string[] = []
-        let funcs: ((x: number) => number)[] = []
+        let actions: string[] = ['']
+        let steps: string[] = [`y=${brac(printState(state))}`]
+        let funcs: ((x: number) => number)[] = [f]
 
         for (let m of transforms) {
             actions.push(action(m))
@@ -176,7 +177,15 @@ export class Host {
             f = transformFunc(f, m)
             funcs.push(f)
         }
-        return { actions, steps, funcs }
+
+        let explain = ''
+        for (let i = 0; i < actions.length; i++) {
+            if (actions[i] !== '')
+                explain += `\\textcolor{blue}{\\text{${actions[i]}}} \\\\`
+            explain += steps[i]
+        }
+
+        return { actions, steps, funcs, explain }
     }
 }
 

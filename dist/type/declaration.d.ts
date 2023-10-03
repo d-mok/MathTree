@@ -3231,6 +3231,7 @@ declare module "Math/Algebra/Transform" {
             actions: string[];
             steps: string[];
             funcs: ((x: number) => number)[];
+            explain: string;
         };
     }
     global {
