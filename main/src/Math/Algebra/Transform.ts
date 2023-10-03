@@ -18,7 +18,7 @@ function up(v: number) {
 }
 
 function large(v: number) {
-    return v >= 1 ? 'enlarged' : 'reduced'
+    return v >= 1 ? 'enlarge' : 'reduce'
 }
 
 function times(v: number): string {
@@ -78,13 +78,13 @@ function transformFunc(
 function action([t, v]: morph): string {
     switch (t) {
         case 'HT':
-            return 'translated ' + Abs(v) + ' units ' + left(v)
+            return 'translate ' + Abs(v) + ' units ' + left(v)
         case 'VT':
-            return 'translated ' + Abs(v) + ' units ' + up(v)
+            return 'translate ' + Abs(v) + ' units ' + up(v)
         case 'HR':
-            return 'reflected about the $y$-axis'
+            return 'reflecte about the $y$-axis'
         case 'VR':
-            return 'reflected about the $x$-axis'
+            return 'reflecte about the $x$-axis'
         case 'HS':
             v = 1 / v
             return large(v) + ' to ' + times(v) + ' times along the $x$-axis'
@@ -193,7 +193,6 @@ export class Host {
         }
 
         function drawS(pen: PenCls) {
-            pen.plot(f)
             let intervals = [[1], [1, 0.3], [1, 0.5, 0.2], [1, 0.7, 0.4, 0.1]][
                 actions.length - 1
             ]
@@ -201,6 +200,7 @@ export class Host {
                 pen.set.alpha(intervals[i])
                 pen.plot(funcs[i])
             }
+            pen.set.alpha()
         }
 
         return {
