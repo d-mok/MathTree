@@ -3205,61 +3205,6 @@ declare module "Math/Algebra/Polynomial" {
         var PolySimplify: typeof Host.PolySimplify;
     }
 }
-declare module "Math/Algebra/Transform" {
-    type morph = [action: 'HT' | 'VT' | 'HR' | 'VR' | 'HS' | 'VS', val: number];
-    type state = {
-        a: number;
-        b: number;
-        m: number;
-        n: number;
-    };
-    export class Host {
-        /**
-         * Explain a series of function transforms.
-         * ```
-         * let state = {a:0,b:0,m:1,n:1}
-         * let func = (x:number)=>x**2
-         * let transforms = [['HT',4],['VT',3]]
-         * explainTransforms({state,func,transforms})
-         * ```
-         */
-        static explainTransforms({ state, func, transforms, }: {
-            state?: state;
-            func: (x: number) => number;
-            transforms: morph[];
-        }): {
-            actions: string[];
-            steps: string[];
-            funcs: ((x: number) => number)[];
-            explain: string;
-        };
-    }
-    global {
-        var explainTransforms: typeof Host.explainTransforms;
-    }
-}
-declare module "Math/should" {
-    global {
-        var CustomError: any;
-        var toError: any;
-        var MathError: any;
-        var Should: (condition: boolean, msg: string) => asserts condition;
-    }
-    export {};
-}
-declare module "Math/Builder/support/write" {
-    export function symbol(v: varObj): string;
-    export function short(v: varObj): string;
-    export function long(v: varObj): string;
-    export function full(v: varObj): string;
-    export function whole(v: varObj): string;
-    export function rich(v: varObj): string;
-    export function write(vGrp: varGrp, latex: string, showVars?: string[]): string;
-    export function printSystem(vGrp: varGrp, latexs: string[], givens?: string[]): string;
-    export function printSystemSol(vGrp: varGrp, vars: string[]): string;
-    export function latexAligned(texts: string[]): string;
-    export function latexBraced(texts: string[]): string;
-}
 declare module "Pen/modules/range" {
     import { PenCls } from "Pen/Pen";
     import { Convas } from 'paint';
@@ -4719,6 +4664,66 @@ declare module "Pen/Pen" {
          */
         restoreImg(): void;
     }
+}
+declare module "Math/Algebra/Transform" {
+    import { PenCls } from "Pen/Pen";
+    type morph = [action: 'HT' | 'VT' | 'HR' | 'VR' | 'HS' | 'VS', val: number];
+    type state = {
+        a: number;
+        b: number;
+        m: number;
+        n: number;
+    };
+    export class Host {
+        /**
+         * Explain a series of function transforms.
+         * ```
+         * let state = {a:0,b:0,m:1,n:1}
+         * let func = (x:number)=>x**2
+         * let transforms = [['HT',4],['VT',3]]
+         * explainTransforms({state,func,transforms})
+         * ```
+         */
+        static explainTransforms({ state, func, transforms, }: {
+            state?: state;
+            func: (x: number) => number;
+            transforms: morph[];
+        }): {
+            actions: string[];
+            steps: string[];
+            funcs: ((x: number) => number)[];
+            explain: string;
+            draw: {
+                Q: (pen: PenCls) => void;
+                S: (pen: PenCls) => void;
+            };
+        };
+    }
+    global {
+        var explainTransforms: typeof Host.explainTransforms;
+    }
+}
+declare module "Math/should" {
+    global {
+        var CustomError: any;
+        var toError: any;
+        var MathError: any;
+        var Should: (condition: boolean, msg: string) => asserts condition;
+    }
+    export {};
+}
+declare module "Math/Builder/support/write" {
+    export function symbol(v: varObj): string;
+    export function short(v: varObj): string;
+    export function long(v: varObj): string;
+    export function full(v: varObj): string;
+    export function whole(v: varObj): string;
+    export function rich(v: varObj): string;
+    export function write(vGrp: varGrp, latex: string, showVars?: string[]): string;
+    export function printSystem(vGrp: varGrp, latexs: string[], givens?: string[]): string;
+    export function printSystemSol(vGrp: varGrp, vars: string[]): string;
+    export function latexAligned(texts: string[]): string;
+    export function latexBraced(texts: string[]): string;
 }
 declare module "Math/Builder/support/units" {
     export function findUnit(name: string): string | undefined;

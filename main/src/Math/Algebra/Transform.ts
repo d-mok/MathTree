@@ -1,6 +1,7 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import _ from 'lodash'
 import * as math from 'mathjs'
+import { PenCls } from '../../Pen/Pen'
 
 // types
 
@@ -163,6 +164,7 @@ export class Host {
         funcs: ((x: number) => number)[]
         // finalState: state
         explain: string
+        draw: { Q: (pen: PenCls) => void; S: (pen: PenCls) => void }
     } {
         let s = { ...state }
         let f = (x: number) => func(x)
@@ -185,7 +187,29 @@ export class Host {
             explain += steps[i]
         }
 
-        return { actions, steps, funcs, explain }
+        function drawQ(pen: PenCls) {
+            pen.plot(f)
+            pen.plotDash(funcs.at(-1)!)
+        }
+
+        function drawS(pen: PenCls) {
+            pen.plot(f)
+            let intervals = [[1], [1, 0.3], [1, 0.5, 0.2], [1, 0.7, 0.4, 0.1]][
+                actions.length - 1
+            ]
+            for (let i = 0; i < actions.length; i++) {
+                pen.set.alpha(intervals[i])
+                pen.plot(funcs[i])
+            }
+        }
+
+        return {
+            actions,
+            steps,
+            funcs,
+            explain,
+            draw: { Q: drawQ, S: drawS },
+        }
     }
 }
 
