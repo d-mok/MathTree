@@ -154,7 +154,7 @@ export class Host {
         func,
         transforms,
     }: {
-        state: state
+        state?: state
         func: (x: number) => number
         transforms: morph[]
     }): {

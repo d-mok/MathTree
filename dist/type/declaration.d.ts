@@ -3224,7 +3224,7 @@ declare module "Math/Algebra/Transform" {
          * ```
          */
         static explainTransforms({ state, func, transforms, }: {
-            state: state;
+            state?: state;
             func: (x: number) => number;
             transforms: morph[];
         }): {
