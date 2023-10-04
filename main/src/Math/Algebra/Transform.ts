@@ -171,7 +171,7 @@ export class Host {
         actions: string[]
         steps: string[]
         funcs: ((x: number) => number)[]
-        // finalState: state
+        latexs: string[]
         explain: string
         draw: { Q: (pen: PenCls) => void; S: (pen: PenCls) => void }
     } {
@@ -180,12 +180,14 @@ export class Host {
         let actions: string[] = ['']
         let steps: string[] = [`y=${brac(printState(state))}`]
         let funcs: ((x: number) => number)[] = [func]
+        let latexs: string[] = [`y=${brac(printState(state))}`]
 
         for (let m of transforms) {
             actions.push(action(m))
             steps.push(brac(printStep(s, m)))
             s = transform(s, m)
             f = TransformFunc(f, m)
+            latexs.push(`y=${brac(printState(s))}`)
             funcs.push(f)
         }
 
@@ -221,6 +223,7 @@ export class Host {
             actions,
             steps,
             funcs,
+            latexs,
             explain,
             draw: { Q: drawQ, S: drawS },
         }
