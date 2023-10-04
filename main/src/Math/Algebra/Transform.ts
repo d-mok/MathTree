@@ -142,11 +142,11 @@ export class Host {
      */
     static TransformFunc(
         f: (x: number) => number,
-        morphType: morph[0],
-        morphValue: morph[1]
+        ...morphs: morph[]
     ): (x: number) => number {
-        let morph: morph = [morphType, morphValue]
-        let { a, b, m, n } = transform({ a: 0, b: 0, m: 1, n: 1 }, morph)
+        let state = { a: 0, b: 0, m: 1, n: 1 }
+        for (let m of morphs) state = transform(state, m)
+        let { a, b, m, n } = state
         return (x: number) => n * f(m * x + a) + b
     }
 
@@ -185,7 +185,7 @@ export class Host {
             actions.push(action(m))
             steps.push(brac(printStep(s, m)))
             s = transform(s, m)
-            f = TransformFunc(f, ...m)
+            f = TransformFunc(f, m)
             funcs.push(f)
         }
 

@@ -4682,7 +4682,7 @@ declare module "Math/Algebra/Transform" {
          * TransformFunc(f,'HT',4) // x => (x+4)**2
          * ```
          */
-        static TransformFunc(f: (x: number) => number, morphType: morph[0], morphValue: morph[1]): (x: number) => number;
+        static TransformFunc(f: (x: number) => number, ...morphs: morph[]): (x: number) => number;
         /**
          * Explain a series of function transforms.
          * ```
