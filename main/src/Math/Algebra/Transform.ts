@@ -64,14 +64,6 @@ function transform(state: state, [t, v]: morph): state {
     return { a, b, m, n }
 }
 
-function transformFunc(
-    f: (x: number) => number,
-    [t, v]: morph
-): (x: number) => number {
-    let { a, b, m, n } = transform({ a: 0, b: 0, m: 1, n: 1 }, [t, v])
-    return (x: number) => n * f(m * x + a) + b
-}
-
 /**
  * Get the description of a transform.
  */
@@ -142,15 +134,32 @@ function printStep(state: state, morph: morph): string {
 @captureAll()
 export class Host {
     /**
+     * Transform a function.
+     * ```
+     * let f = x => x**2
+     * TransformFunc(f,'HT',4) // x => (x+4)**2
+     * ```
+     */
+    static TransformFunc(
+        f: (x: number) => number,
+        morphType: morph[0],
+        morphValue: morph[1]
+    ): (x: number) => number {
+        let morph: morph = [morphType, morphValue]
+        let { a, b, m, n } = transform({ a: 0, b: 0, m: 1, n: 1 }, morph)
+        return (x: number) => n * f(m * x + a) + b
+    }
+
+    /**
      * Explain a series of function transforms.
      * ```
      * let state = {a:0,b:0,m:1,n:1}
      * let func = (x:number)=>x**2
      * let transforms = [['HT',4],['VT',3]]
-     * explainTransforms({state,func,transforms})
+     * ExplainTransforms({state,func,transforms})
      * ```
      */
-    static explainTransforms({
+    static ExplainTransforms({
         state = { a: 0, b: 0, m: 1, n: 1 },
         func,
         transforms,
@@ -176,7 +185,7 @@ export class Host {
             actions.push(action(m))
             steps.push(brac(printStep(s, m)))
             s = transform(s, m)
-            f = transformFunc(f, m)
+            f = TransformFunc(f, ...m)
             funcs.push(f)
         }
 
@@ -218,5 +227,6 @@ export class Host {
 }
 
 declare global {
-    var explainTransforms: typeof Host.explainTransforms
+    var ExplainTransforms: typeof Host.ExplainTransforms
+    var TransformFunc: typeof Host.TransformFunc
 }

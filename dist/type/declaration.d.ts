@@ -4676,15 +4676,23 @@ declare module "Math/Algebra/Transform" {
     };
     export class Host {
         /**
+         * Transform a function.
+         * ```
+         * let f = x => x**2
+         * TransformFunc(f,'HT',4) // x => (x+4)**2
+         * ```
+         */
+        static TransformFunc(f: (x: number) => number, morphType: morph[0], morphValue: morph[1]): (x: number) => number;
+        /**
          * Explain a series of function transforms.
          * ```
          * let state = {a:0,b:0,m:1,n:1}
          * let func = (x:number)=>x**2
          * let transforms = [['HT',4],['VT',3]]
-         * explainTransforms({state,func,transforms})
+         * ExplainTransforms({state,func,transforms})
          * ```
          */
-        static explainTransforms({ state, func, transforms, }: {
+        static ExplainTransforms({ state, func, transforms, }: {
             state?: state;
             func: (x: number) => number;
             transforms: morph[];
@@ -4700,7 +4708,8 @@ declare module "Math/Algebra/Transform" {
         };
     }
     global {
-        var explainTransforms: typeof Host.explainTransforms;
+        var ExplainTransforms: typeof Host.ExplainTransforms;
+        var TransformFunc: typeof Host.TransformFunc;
     }
 }
 declare module "Math/should" {
