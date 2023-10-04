@@ -204,12 +204,13 @@ export class Host {
         }
 
         function drawS(pen: PenCls) {
-            let intervals = [[1], [1, 0.3], [1, 0.5, 0.2], [1, 0.7, 0.4, 0.1]][
-                actions.length - 1
-            ]
+            let intervals =
+                [[1], [1, 0.3], [1, 0.5, 0.2], [1, 0.7, 0.4, 0.1]][
+                    actions.length - 1
+                ] ?? []
             pen.set.weight(3)
             for (let i = 0; i < actions.length; i++) {
-                pen.set.alpha(intervals[i])
+                pen.set.alpha(intervals[i] ?? 1)
                 pen.plot(funcs[i])
             }
             pen.set.alpha()
