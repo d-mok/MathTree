@@ -53,7 +53,7 @@ function writeValue(v: varObj, latex: string): string {
 
 export function write(vGrp: varGrp, latex: string, showVars: string[] = []) {
     let T = latex
-    for (let v in _.sortBy(vGrp, $ => -$.sym.length)) {
+    for (let v of _.sortBy(Object.keys(vGrp), $ => -vGrp[$].sym.length)) {
         T = showVars.includes(v)
             ? writeValue(vGrp[v], T)
             : writeSymbol(vGrp[v], T)
