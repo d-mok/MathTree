@@ -4700,6 +4700,7 @@ declare module "Math/Algebra/Transform" {
             actions: string[];
             steps: string[];
             funcs: ((x: number) => number)[];
+            latexs: string[];
             explain: string;
             draw: {
                 Q: (pen: PenCls) => void;
