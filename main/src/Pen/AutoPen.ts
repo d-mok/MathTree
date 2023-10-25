@@ -58,6 +58,8 @@ export class AutoPenCls {
         }[]
         ticks?: boolean[] | 'AND' | 'OR'
     }) {
+        items = _.reverse(items)
+
         const width = 10 // full width of number line
         const aLength = width * 0.2
         const aHeight = 1 // height of arrow
@@ -124,7 +126,7 @@ export class AutoPenCls {
             pen.write([width * position, -2], correct ? '✔' : '✘')
         }
 
-        items.toReversed().forEach((x, i) => inequality(i, x))
+        items.forEach((x, i) => inequality(i, x))
 
         let cutting = Sort(
             0,
