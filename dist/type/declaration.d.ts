@@ -5608,8 +5608,8 @@ declare module "Math/type" {
          * ```
          */
         type Quadratic = [a: number, b: number, c: number];
-        type Point2D = [x: number, y: number] | number[];
-        type Point3D = [x: number, y: number, z: number] | number[];
+        type Point2D = [x: number, y: number];
+        type Point3D = [x: number, y: number, z: number];
         type Point = Point2D | Point3D;
         type interval = [min: number, max: number];
         type Fraction = [numerator: number, denominator: number];

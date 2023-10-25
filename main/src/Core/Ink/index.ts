@@ -205,7 +205,7 @@ export function printCompoundInequality(
             if (g1 !== g2)
                 return e
                     ? t('all real values')
-                    : t('all real values except') + x + '=' + num1
+                    : t('all real values except ') + x + '=' + num1
         }
     }
     throw 'cannot recognize inequalitiy!'

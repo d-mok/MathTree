@@ -82,9 +82,11 @@ export class AutoPenCls {
             return 0.5
         }
 
+        const writtenNum: string[] = []
+
         function inequality(
             index: number,
-            { position, sign, num, vertical }: typeof items[number]
+            { position, sign, num, vertical }: (typeof items)[number]
         ) {
             let greater = INEQUAL.greaterThan(sign)
             let solid = INEQUAL.canEqual(sign)
@@ -111,14 +113,18 @@ export class AutoPenCls {
             pen.line(B, T)
             solid ? pen.dot(T) : pen.hole(T)
 
-            pen.label.point(B, num.toString(), 270)
+            let n = num.toString()
+            if (!writtenNum.includes(n)) {
+                pen.label.point(B, n, 270)
+                writtenNum.push(n)
+            }
         }
 
         function tick(position: number, correct: boolean) {
             pen.write([width * position, -2], correct ? '✔' : '✘')
         }
 
-        items.forEach((x, i) => inequality(i, x))
+        items.toReversed().forEach((x, i) => inequality(i, x))
 
         let cutting = Sort(
             0,
