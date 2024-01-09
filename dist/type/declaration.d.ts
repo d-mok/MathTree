@@ -2786,10 +2786,29 @@ declare module "Math/Code/Utility" {
          * ```
          */
         static Lace<T>(arr: T[], centreIndex: number, relativeIndices: number[]): T[];
+        /**
+         * If `bool`, return `[first, second]`, else return `[second, first]`
+         * ```
+         * Flop(true,1,2) // [1,2]
+         * Flop(false,1,2) // [2,1]
+         * ```
+         */
+        static Flop<T>(bool: boolean, first: T, second: T): [T, T];
+        /**
+         * Select the displayed value in each pair in `trueFalsePairs` according to `truth`.
+         * ```
+         * ComboDisplay([true,false],[[1,2],[3,4]]) // [1,4]
+         * ComboDisplay(0,[1,2],[3,4]) // [1,4]
+         * ComboDisplay(1,[1,2],[3,4]) // [2,3]
+         * ```
+         */
+        static ComboDisplay<T>(truth: boolean[] | number, ...trueFalsePairs: [trueValue: T, falseValue: T][]): T[];
     }
     global {
         var At: typeof Host.At;
         var Lace: typeof Host.Lace;
+        var Flop: typeof Host.Flop;
+        var ComboDisplay: typeof Host.ComboDisplay;
     }
 }
 declare module "Math/Code/Vector" {
