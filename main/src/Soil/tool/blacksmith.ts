@@ -39,6 +39,7 @@ type pattern =
     | '*^\\lt_@'
     | '*^\\ge_@'
     | '*^\\le_@'
+    | '*^=_@'
     | '*%@'
     | '*\\%@'
     | '*%|@|'
@@ -138,6 +139,9 @@ addRule('*^\\ge_@', 'num', $ => ($ > 0 ? '\\ge' : $ < 0 ? '\\le' : '='))
 // print *^\le_x as '<=' or '>='
 addRule('*^\\le_@', 'bool', $ => ($ ? '\\le' : '\\ge'))
 addRule('*^\\le_@', 'num', $ => ($ > 0 ? '\\le' : $ < 0 ? '\\ge' : '='))
+
+// print *^=_x as '=' or '<>'
+addRule('*^=_@', 'bool', $ => ($ ? '=' : '\\neq'))
 
 // print *\%x as percent
 addRule('*%@', 'num', $ => numberDefault($ * 100) + '%')
