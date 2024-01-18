@@ -63,7 +63,7 @@ export class Host {
         nums = nums.map(cal.blur)
         if (!IsInteger(...nums)) return true
         if (!IsNonZero(...nums)) return true
-        return nums.combinations(2).every(([a, b]) => HCF(a, b) === 1)
+        return _.combinations(nums, 2).every(([a, b]) => HCF(a, b) === 1)
     }
 
     /**

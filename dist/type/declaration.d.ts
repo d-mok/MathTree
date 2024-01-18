@@ -5617,7 +5617,6 @@ declare module "index" {
     import "Math/index";
     import "Pen/index";
     import "Soil/index";
-    import 'sapphire-js';
 }
 declare module "Math/type" {
     global {
