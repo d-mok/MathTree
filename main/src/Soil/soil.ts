@@ -125,6 +125,7 @@ export class Soil {
                 if (e instanceof Error) {
                     switch (e.name) {
                         case 'ContractError':
+                            throw e // testing
                             this.logger.add(e)
                             break
                         case 'MathError':
