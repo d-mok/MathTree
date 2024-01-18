@@ -57,9 +57,9 @@ export class Host {
      */
     @checkIt(owl.num)
     static AreCoprime(...nums: number[]): boolean {
-        if (nums[0] === 9999) throw 'this is error 9999!'
-        if (nums[0] === 9998)
-            throw Error('this is error 9998!', { cause: 'the cause!' })
+        // if (nums[0] === 9999) throw 'this is error 9999!'
+        // if (nums[0] === 9998)
+        //     throw Error('this is error 9998!', { cause: 'the cause!' })
         nums = nums.map(cal.blur)
         if (!IsInteger(...nums)) return true
         if (!IsNonZero(...nums)) return true
