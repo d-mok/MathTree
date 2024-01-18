@@ -57,10 +57,13 @@ export class Host {
      */
     @checkIt(owl.num)
     static AreCoprime(...nums: number[]): boolean {
+        if (nums[0] === 9999) throw 'this is error 9999!'
+        if (nums[0] === 9998)
+            throw Error('this is error 9998!', { cause: 'the cause!' })
         nums = nums.map(cal.blur)
         if (!IsInteger(...nums)) return true
         if (!IsNonZero(...nums)) return true
-        return _.combinations(nums, 2).every(([a, b]) => HCF(a, b) === 1)
+        return nums.combinations(2).every(([a, b]) => HCF(a, b) === 1)
     }
 
     /**
