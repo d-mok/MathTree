@@ -361,8 +361,8 @@ export class AutoPenCls {
     }: {
         quadratic: [number, number, number]
         sign: string
-        scale: number
-        ratio: number
+        scale?: number
+        ratio?: number
     }) {
         let a = quadratic[0]
         let b = quadratic[1]

@@ -4980,8 +4980,8 @@ declare module "Pen/AutoPen" {
         QuadraticInequality({ quadratic, sign, scale, ratio, }: {
             quadratic: [number, number, number];
             sign: string;
-            scale: number;
-            ratio: number;
+            scale?: number;
+            ratio?: number;
         }): void;
         /**
          * Draw a triangle.
