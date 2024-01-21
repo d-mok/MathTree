@@ -1,6 +1,6 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import {  dice } from 'fate'
-import { printPolynomial } from '../../Core/Ink'
+import { printPolynomial } from '../../Core/ink'
 import _ from 'lodash'
 import * as math from 'mathjs'
 

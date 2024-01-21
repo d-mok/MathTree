@@ -16,10 +16,10 @@ globalThis.rein = $rein
 globalThis.reins = $reins
 globalThis.lin = $lin
 
-import * as $Owl from './Owl/index'
+import * as $Owl from './owl'
 globalThis.owl = $Owl
 
-import * as $Ink from './Ink/index'
+import * as $Ink from './ink'
 globalThis.ink = $Ink
 
 declare global {

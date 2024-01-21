@@ -1,4 +1,4 @@
-declare module "Core/Owl/index" {
+declare module "Core/owl" {
     export const num: (_: unknown) => _ is number;
     export const whole: (_: unknown) => _ is number;
     export const int: (_: unknown) => _ is number;
@@ -69,7 +69,7 @@ declare module "Core/Owl/index" {
     export function or(...pds: predicate[]): predicate;
     export function anyOf(...vals: any[]): predicate;
 }
-declare module "Core/Ink/index" {
+declare module "Core/ink" {
     export function printDfrac(numerator: number, denominator: number, upSign?: boolean): string;
     export function printCombo(combo: [boolean, boolean, boolean]): string;
     export function printTrigValue(T: TrigValue): string;
@@ -87,8 +87,8 @@ declare module "Core/Ink/index" {
 }
 declare module "Core/index" {
     import { cal as $cal, vec as $vec, INEQUAL as $INEQUAL, optimizer as $optimizer, rein as $rein, reins as $reins, lin as $lin } from 'ruby';
-    import * as $Owl from "Core/Owl/index";
-    import * as $Ink from "Core/Ink/index";
+    import * as $Owl from "Core/owl";
+    import * as $Ink from "Core/ink";
     global {
         var cal: typeof $cal;
         var vec: typeof $vec;
@@ -5627,8 +5627,8 @@ declare module "Math/type" {
          * ```
          */
         type Quadratic = [a: number, b: number, c: number];
-        type Point2D = [x: number, y: number] | number[];
-        type Point3D = [x: number, y: number, z: number] | number[];
+        type Point2D = [x: number, y: number];
+        type Point3D = [x: number, y: number, z: number];
         type Point = Point2D | Point3D;
         type interval = [min: number, max: number];
         type Fraction = [numerator: number, denominator: number];
