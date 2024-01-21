@@ -1,6 +1,6 @@
-import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas04 } from './canvas04'
-import { round5 } from '../support/round'
+import { px, dot, Point2D, Point3D, Point, inch } from '../global.js'
+import { Canvas04 } from './canvas04.js'
+import { round5 } from '../support/round.js'
 
 function sin(degree: number): number {
     return Math.sin((degree / 180) * Math.PI)

@@ -1,6 +1,6 @@
 import * as math from 'mathjs';
 import { describe, expect, it } from 'vitest';
-import * as vec from '../../src/math/vec';
+import * as vec from '../../src/math/vec.js';
 describe('fromTo', () => {
     it('find vector', () => {
         expect(vec.fromTo([1, 2], [12, 45])).toStrictEqual([11, 43]);

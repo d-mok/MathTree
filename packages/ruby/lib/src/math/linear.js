@@ -1,4 +1,4 @@
-import { cal } from '..';
+import { cal } from '../index.js';
 function slope(A, B) {
     let [x1, y1] = A;
     let [x2, y2] = B;

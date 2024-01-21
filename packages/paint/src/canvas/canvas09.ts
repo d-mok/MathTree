@@ -1,7 +1,7 @@
-import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas08 } from './canvas08'
-import { trace, splitNull } from '../support/trace'
-import { sectoroid } from '../support/sectoroid'
+import { px, dot, Point2D, Point3D, Point, inch } from '../global.js'
+import { Canvas08 } from './canvas08.js'
+import { trace, splitNull } from '../support/trace.js'
+import { sectoroid } from '../support/sectoroid.js'
 
 /**
  * Handle:

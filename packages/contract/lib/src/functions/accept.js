@@ -1,5 +1,5 @@
-import { err, join, brand, transferBrand, makeStaticDecorator } from '../util';
-import { matchRule } from '../assertion';
+import { err, join, brand, transferBrand, makeStaticDecorator } from '../util.js';
+import { matchRule } from '../assertion/index.js';
 function e(f, argValues, returnValue, msg) {
     return err(f, 'args = (' + join(argValues) + ')', 'return = ' + returnValue, 'violate: ' + msg);
 }

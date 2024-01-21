@@ -1,5 +1,5 @@
-import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas03 } from './canvas03'
+import { px, dot, Point2D, Point3D, Point, inch } from '../global.js'
+import { Canvas03 } from './canvas03.js'
 
 function rad(degree: number): number {
     return (degree * Math.PI) / 180

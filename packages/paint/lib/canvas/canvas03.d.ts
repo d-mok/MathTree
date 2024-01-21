@@ -1,8 +1,8 @@
-import { px, Point2D, Point, inch } from '../global';
-import { Canvas02 } from './canvas02';
-declare type AngleMode = 'normal' | 'polar' | 'reflex';
-declare type LineLabel = 'auto' | 'left' | 'right';
-declare type ArrowLabel = 'line' | 'head' | 'front';
+import { px, Point2D, Point, inch } from '../global.js';
+import { Canvas02 } from './canvas02.js';
+type AngleMode = 'normal' | 'polar' | 'reflex';
+type LineLabel = 'auto' | 'left' | 'right';
+type ArrowLabel = 'line' | 'head' | 'front';
 /**
  * Handle:
  * - Settings

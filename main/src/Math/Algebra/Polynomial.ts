@@ -44,7 +44,7 @@ export class Host {
      * // may return 7xy+3x^2y^3-2xy^3
      * ```
      */
-    @checkIt(owl.positiveInt, owl.arrayWith(owl.str), owl.positiveInt, owl.num)
+    @checkIt(owl.positiveInt, owl.array(owl.str), owl.positiveInt, owl.num)
     static RndPolynomial(
         degree: number,
         vars: string[] = ['x'],

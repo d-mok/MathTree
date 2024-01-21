@@ -1,5 +1,5 @@
-import { getVars } from '../utils';
-import { Bisection } from './bisection';
+import { getVars } from '../utils.js';
+import { Bisection } from './bisection.js';
 import _ from 'lodash';
 function narrowRange(ranges, preset) {
     return _.mapValues(ranges, (value, key) => {

@@ -1,7 +1,7 @@
-import { Constraint } from './rein'
-import * as rein from './rein'
+import { Constraint } from './rein.js'
+import * as rein from './rein.js'
 import _ from 'lodash'
-import * as vec from '../math/vec'
+import * as vec from '../math/vec.js'
 
 type Point2D = [number, number]
 

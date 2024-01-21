@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { cal } from '..'
+import { cal } from '../index.js'
 
 type Ineq = '\\ge' | '\\gt' | '\\le' | '\\lt' | '>=' | '<=' | '>' | '<'
 type Constraint = [xCoeff: number, yCoeff: number, ineq: Ineq, constant: number]

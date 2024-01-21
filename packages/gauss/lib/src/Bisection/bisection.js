@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { rndSignedPoint } from './random';
+import { rndSignedPoint } from './random.js';
 export function Bisection(eq, ranges) {
     if (!ranges.some(([min, max]) => max > min)) {
         throw '[bisection] all variables are locked already';

@@ -1,4 +1,4 @@
-import { Canvas07 } from './canvas07';
+import { Canvas07 } from './canvas07.js';
 const LABEL_OFFSET_PX = 20;
 const X_MARK_OFFSET_PX = 15;
 const Y_MARK_OFFSET_PX = 10;

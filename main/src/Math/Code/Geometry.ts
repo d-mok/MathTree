@@ -83,7 +83,7 @@ export class Host {
      */
     @checkIt(
         owl.point2D,
-        owl.or([owl.point2D, owl.arrayWith(owl.point2D)]),
+        owl.or(owl.point2D, owl.array(owl.point2D)),
         owl.num,
         owl.num
     )
@@ -141,7 +141,7 @@ export class Host {
      * PdFoot([-2,2],[[-1,-1],[1,1]]) // [0,0]
      * ```
      */
-    @checkIt(owl.point2D, owl.arrayWith(owl.or([owl.point2D, owl.num])))
+    @checkIt(owl.point2D, owl.array(owl.or(owl.point2D, owl.num)))
     @inspectIt(function distinct_points(P, [A, B]) {
         return owl.distinct([A, B])
     })
@@ -190,7 +190,7 @@ export class Host {
      */
     @checkIt(
         owl.point2D,
-        owl.or([owl.num, owl.point2D, owl.arrayWith(owl.point2D)]),
+        owl.or(owl.num, owl.point2D, owl.array(owl.point2D)),
         owl.num
     )
     static Move(

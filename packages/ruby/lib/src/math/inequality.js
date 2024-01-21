@@ -1,4 +1,4 @@
-import * as INEQUAL from './inequal';
+import * as INEQUAL from './inequal.js';
 export function solveCompoundInequality(sign1, num1, sign2, num2, connective) {
     function buildInequality(sign, num) {
         return (x) => INEQUAL.compare(x, sign, num);

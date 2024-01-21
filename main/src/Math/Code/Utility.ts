@@ -12,7 +12,7 @@ export class Host {
      * At([1,2,3],3) // 1
      * ```
      */
-    @checkIt([owl.array, $ => $.length > 0], owl.int)
+    @checkIt([owl.array(), $ => $.length > 0], owl.int)
     static At<T>(arr: T[], index: number): T {
         return _.cyclicAt(arr, index)!
     }
@@ -23,7 +23,7 @@ export class Host {
      * Lace([1,2,3,4,5,6],0,[-1,0,1]) // [6,1,2]
      * ```
      */
-    @checkIt(owl.array, owl.int, owl.arrayWith(owl.int))
+    @checkIt(owl.array(), owl.int, owl.array(owl.int))
     static Lace<T>(
         arr: T[],
         centreIndex: number,
@@ -53,7 +53,7 @@ export class Host {
      * ComboDisplay(1,[1,2],[3,4]) // [2,3]
      * ```
      */
-    // @checkIt(owl.or([owl.bool, owl.nonNegativeInt]))
+    // @checkIt(owl.or(owl.bool, owl.nonNegativeInt))
     static ComboDisplay<T>(
         truth: boolean[] | number,
         ...trueFalsePairs: [trueValue: T, falseValue: T][]

@@ -1,4 +1,4 @@
-import { px, inch } from '../global';
+import { px, inch } from '../global.js';
 /**
  * Handle:
  * - all canvas width and height issue

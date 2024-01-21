@@ -15,7 +15,7 @@ export class Host {
      * Quadrant(350) \\ 'IV'
      * ```
      */
-    @checkIt(owl.or([owl.point2D, owl.num]))
+    @checkIt(owl.or(owl.point2D, owl.num))
     static Quadrant(rect: Point2D | number): QuadrantName {
         if (!Array.isArray(rect)) rect = PolToRect([1, rect])
         const q = RectToPol(rect)[1]

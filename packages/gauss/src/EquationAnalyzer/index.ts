@@ -1,4 +1,4 @@
-import { combinations, getAllVars, getVars } from '../utils'
+import { combinations, getAllVars, getVars } from '../utils.js'
 import _ from 'lodash'
 
 type TREE = Record<

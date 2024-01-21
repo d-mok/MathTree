@@ -1,5 +1,5 @@
-import { px, Point } from '../global';
-import { Canvas06 } from './canvas06';
+import { px, Point } from '../global.js';
+import { Canvas06 } from './canvas06.js';
 /**
  * Handle:
  * - basic elements

@@ -1,7 +1,7 @@
 type Point2D = [number, number]
 type Field = [a: number, b: number, c: number]
 import _ from 'lodash'
-import * as reins from './reins'
+import * as reins from './reins.js'
 
 export class Optimizer {
     constructor(

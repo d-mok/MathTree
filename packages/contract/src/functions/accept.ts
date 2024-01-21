@@ -1,5 +1,5 @@
-import { err, join, brand, transferBrand, makeStaticDecorator } from '../util'
-import { matchRule, rule } from '../assertion'
+import { err, join, brand, transferBrand, makeStaticDecorator } from '../util.js'
+import { matchRule, rule } from '../assertion/index.js'
 
 
 function e(f: fnBranded, argValues: any[], returnValue: unknown, msg: string): Error {

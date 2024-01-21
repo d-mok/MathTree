@@ -1,4 +1,4 @@
-import { getVars, permute } from '../utils';
+import { getVars, permute } from '../utils.js';
 import _ from 'lodash';
 function includesAll(superset, subset) {
     return _.difference(subset, superset).length === 0;

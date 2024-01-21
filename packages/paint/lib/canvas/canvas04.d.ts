@@ -1,5 +1,5 @@
-import { px, dot, Point } from '../global';
-import { Canvas03 } from './canvas03';
+import { px, dot, Point } from '../global.js';
+import { Canvas03 } from './canvas03.js';
 /**
  * Handle:
  * - transform

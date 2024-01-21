@@ -1,4 +1,4 @@
-import { getClassStaticNames } from '../util';
+import { getClassStaticNames } from '../util.js';
 export function expose(name, f) {
     // @ts-ignore
     globalThis[String(name)] = f;

@@ -1,4 +1,4 @@
-import { Linear } from '../../src/math/linear'
+import { Linear } from '../../src/math/linear.js'
 import { describe, expect, it } from 'vitest'
 
 describe('Linear class', () => {

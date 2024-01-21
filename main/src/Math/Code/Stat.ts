@@ -45,7 +45,7 @@ export class Host {
      * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
      * ```
      */
-    @checkIt(owl.array, owl.pass)
+    @checkIt(owl.array(), owl.pass)
     static SortBy<T>(items: T[], valueFunc: (_: T) => number): T[] {
         return [...items].sort((a, b) => valueFunc(a) - valueFunc(b))
     }
@@ -167,7 +167,7 @@ export class Host {
      * Freq([2,3,4,1,5,1,1,4,5],1) // 3
      * ```
      */
-    @checkIt(owl.array, owl.pass)
+    @checkIt(owl.array(), owl.pass)
     static Freq<T>(array: T[], item: T): number {
         return _.count(array, item)
     }

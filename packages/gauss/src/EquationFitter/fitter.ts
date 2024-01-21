@@ -1,6 +1,6 @@
-import { bisect } from '../Bisection'
-import { getAllVars } from '../utils'
-import { getFittableOrder } from './searcher'
+import { bisect } from '../Bisection/index.js'
+import { getAllVars } from '../utils.js'
+import { getFittableOrder } from './searcher.js'
 
 export class Fitter {
     private readonly allVariables: string[]

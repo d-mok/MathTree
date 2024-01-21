@@ -1,4 +1,4 @@
-import { err, join, str, brand, transferBrand, makeStaticDecorator, getClassStaticNames } from '../util'
+import { err, join, str, brand, transferBrand, makeStaticDecorator, getClassStaticNames } from '../util.js'
 
 function catchString(f: fnBranded, vals: any[], e: string): Error {
     return err(f,

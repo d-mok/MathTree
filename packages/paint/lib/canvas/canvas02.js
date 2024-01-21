@@ -1,5 +1,5 @@
-import { Canvas01 } from './canvas01';
-import { thingsToPoints } from '../support/capture';
+import { Canvas01 } from './canvas01.js';
+import { thingsToPoints } from '../support/capture.js';
 function proj(point3D, angle, depth) {
     let a = (angle * Math.PI) / 180;
     let s = Math.sin(a);

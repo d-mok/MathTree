@@ -1,4 +1,4 @@
-import { Dressor } from './dressor';
+import { Dressor } from './dressor.js';
 function capOr(...reg) {
     return '(' + reg.join('|') + ')';
 }

@@ -1,4 +1,4 @@
-import { shuffleAs } from '../coshuffle'
+import { shuffleAs } from '../coshuffle/index.js'
 
 
 type Tag = keyof HTMLElementTagNameMap

@@ -1,5 +1,5 @@
-import { err, str, brand, transferBrand, makeStaticDecorator } from '../util'
-import { matchRule, rule } from '../assertion'
+import { err, str, brand, transferBrand, makeStaticDecorator } from '../util.js'
+import { matchRule, rule } from '../assertion/index.js'
 
 
 function getToTail(arr: any[], index: number) {

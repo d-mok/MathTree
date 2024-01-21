@@ -1,4 +1,4 @@
-import { str, getClassStaticNames } from '../util'
+import { str, getClassStaticNames } from '../util.js'
 
 export function expose(name: any, f: Function): void {
     // @ts-ignore

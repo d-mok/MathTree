@@ -1,3 +1,3 @@
-export { capturable } from './global'
+export { capturable } from './global.js'
 
-export { Canvas10 as Convas } from './canvas/canvas10'
+export { Canvas10 as Convas } from './canvas/canvas10.js'

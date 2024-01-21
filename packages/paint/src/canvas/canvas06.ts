@@ -1,6 +1,6 @@
-import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas05 } from './canvas05'
-import { round5 } from '../support/round'
+import { px, dot, Point2D, Point3D, Point, inch } from '../global.js'
+import { Canvas05 } from './canvas05.js'
+import { round5 } from '../support/round.js'
 
 // math
 

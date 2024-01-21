@@ -1,4 +1,4 @@
-import { Canvas03 } from './canvas03';
+import { Canvas03 } from './canvas03.js';
 function rad(degree) {
     return (degree * Math.PI) / 180;
 }

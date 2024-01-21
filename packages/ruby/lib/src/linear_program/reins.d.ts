@@ -1,4 +1,4 @@
-import { Constraint } from './rein';
+import { Constraint } from './rein.js';
 type Point2D = [number, number];
 export declare function onEdge(point: Point2D): boolean;
 /**

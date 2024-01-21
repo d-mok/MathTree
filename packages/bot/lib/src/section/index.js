@@ -1,4 +1,4 @@
-import { exprCtxHTML } from '../eval';
+import { exprCtxHTML } from '../eval/index.js';
 function dropTags(html) {
     html = html.replaceAll(new RegExp('<[^#<]*##[^#>]*>', 'g'), '');
     return html;

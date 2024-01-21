@@ -1,5 +1,5 @@
-import { err, str, brand, transferBrand, makeStaticDecorator } from '../util';
-import { matchRule } from '../assertion';
+import { err, str, brand, transferBrand, makeStaticDecorator } from '../util.js';
+import { matchRule } from '../assertion/index.js';
 function getToTail(arr, index) {
     const n = arr.length - 1;
     const i = Math.min(index, n);

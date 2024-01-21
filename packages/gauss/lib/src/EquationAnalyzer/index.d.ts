@@ -1,4 +1,4 @@
-declare type TREE = Record<string, {
+type TREE = Record<string, {
     variable: string;
     order: number;
     isGiven: boolean;

@@ -1,5 +1,5 @@
-import { dot, Point2D, Point, capturable } from '../global';
-import { Canvas01 } from './canvas01';
+import { dot, Point2D, Point, capturable } from '../global.js';
+import { Canvas01 } from './canvas01.js';
 /**
  * Handle:
  * - 3D coordinate to px conversion

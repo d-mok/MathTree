@@ -1,5 +1,5 @@
-import { Canvas05 } from './canvas05';
-import { round5 } from '../support/round';
+import { Canvas05 } from './canvas05.js';
+import { round5 } from '../support/round.js';
 // math
 function sin(degree) {
     return Math.sin((degree / 180) * Math.PI);

@@ -1,4 +1,4 @@
-import * as INEQUAL from './inequal'
+import * as INEQUAL from './inequal.js'
 
 type Ineq = INEQUAL.Ineq
 

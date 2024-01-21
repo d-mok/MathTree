@@ -1,6 +1,6 @@
-import { Canvas08 } from './canvas08';
-import { trace, splitNull } from '../support/trace';
-import { sectoroid } from '../support/sectoroid';
+import { Canvas08 } from './canvas08.js';
+import { trace, splitNull } from '../support/trace.js';
+import { sectoroid } from '../support/sectoroid.js';
 /**
  * Handle:
  * - plot

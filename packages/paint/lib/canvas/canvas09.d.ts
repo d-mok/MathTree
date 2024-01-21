@@ -1,5 +1,5 @@
-import { Point2D } from '../global';
-import { Canvas08 } from './canvas08';
+import { Point2D } from '../global.js';
+import { Canvas08 } from './canvas08.js';
 /**
  * Handle:
  * - plot

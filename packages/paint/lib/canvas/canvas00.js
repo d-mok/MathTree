@@ -1,4 +1,4 @@
-import { trimCanvas } from '../support/trim';
+import { trimCanvas } from '../support/trim.js';
 // The scale factor of canvas size for clearer image.
 const QUALITY = 3;
 // The scale factor for width and height settings.

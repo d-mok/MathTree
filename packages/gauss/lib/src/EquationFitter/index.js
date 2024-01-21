@@ -1,4 +1,4 @@
-import { Fitter } from "./fitter";
+import { Fitter } from "./fitter.js";
 /**
  * Fit the system of equations under given ranges and presets.
  */

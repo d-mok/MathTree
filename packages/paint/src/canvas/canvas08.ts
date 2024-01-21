@@ -1,5 +1,5 @@
-import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas07 } from './canvas07'
+import { px, dot, Point2D, Point3D, Point, inch } from '../global.js'
+import { Canvas07 } from './canvas07.js'
 
 const LABEL_OFFSET_PX = 20
 const X_MARK_OFFSET_PX = 15

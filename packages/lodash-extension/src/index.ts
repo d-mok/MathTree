@@ -1,1 +1,1 @@
-import './module/utils'
+import './module/utils.js'

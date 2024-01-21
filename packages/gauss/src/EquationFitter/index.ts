@@ -1,4 +1,4 @@
-import { Fitter } from "./fitter"
+import { Fitter } from "./fitter.js"
 
 
 /**

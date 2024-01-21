@@ -1,6 +1,6 @@
-import { px, dot, Point2D, Point3D, Point, capturable } from '../global'
-import { Canvas01 } from './canvas01'
-import { thingsToPoints } from '../support/capture'
+import { px, dot, Point2D, Point3D, Point, capturable } from '../global.js'
+import { Canvas01 } from './canvas01.js'
+import { thingsToPoints } from '../support/capture.js'
 
 function proj(point3D: Point3D, angle: number, depth: number): Point2D {
     let a = (angle * Math.PI) / 180

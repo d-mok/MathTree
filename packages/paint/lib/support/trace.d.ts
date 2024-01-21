@@ -1,4 +1,4 @@
-import { Point2D } from '../global';
+import { Point2D } from '../global.js';
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.
  * ```

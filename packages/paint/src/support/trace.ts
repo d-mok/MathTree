@@ -1,4 +1,4 @@
-import { Point2D, Point3D, Point, circle, sphere, capturable } from '../global'
+import { Point2D, Point3D, Point, circle, sphere, capturable } from '../global.js'
 
 /**
  * Return an array of 2D points as [number,number] by tracing `func` within `range`.

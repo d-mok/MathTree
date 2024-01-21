@@ -1,4 +1,4 @@
-declare type Tag = keyof HTMLElementTagNameMap;
+type Tag = keyof HTMLElementTagNameMap;
 export declare class HTMLWorker {
     protected body: HTMLBodyElement;
     constructor(html?: string);

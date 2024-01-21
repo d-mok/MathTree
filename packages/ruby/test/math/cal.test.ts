@@ -1,4 +1,4 @@
-import * as cal from "../../src/math/cal";
+import * as cal from "../../src/math/cal.js";
 import { describe, expect, it } from "vitest";
 
 describe("blur", () => {

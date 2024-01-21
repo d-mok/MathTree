@@ -1,5 +1,5 @@
-import { crammer } from '../math/cal';
-import * as INEQUAL from '../math/inequal';
+import { crammer } from '../math/cal.js';
+import * as INEQUAL from '../math/inequal.js';
 /**
  * Check if this constraint contains `point`.
  */

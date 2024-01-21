@@ -1,4 +1,4 @@
-import { Canvas06 } from './canvas06';
+import { Canvas06 } from './canvas06.js';
 // step
 function isOdd(n) {
     return n % 2 !== 0;

@@ -1,5 +1,5 @@
 type Point2D = [number, number];
-import * as INEQUAL from '../math/inequal';
+import * as INEQUAL from '../math/inequal.js';
 export type Constraint = [
     xCoeff: number,
     yCoeff: number,

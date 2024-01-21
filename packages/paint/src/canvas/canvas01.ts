@@ -1,5 +1,5 @@
-import { px, dot, inch, Point2D } from '../global'
-import { Canvas00 } from './canvas00'
+import { px, dot, inch, Point2D } from '../global.js'
+import { Canvas00 } from './canvas00.js'
 
 // pixel conversion
 

@@ -209,7 +209,7 @@ export class Host {
      * RndComposite([2,3,5],3) // return 2*2*2, 2*3*5, 2*3*3, ...
      * ```
      */
-    @checkIt(owl.arrayWith(owl.positiveInt), owl.positiveInt)
+    @checkIt(owl.array(owl.positiveInt), owl.positiveInt)
     static RndComposite(factors: number[], n: number): number {
         let num = 1
         for (let i = 1; i <= n; i++) {
@@ -261,7 +261,7 @@ export class Host {
      * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
      * ```
      */
-    @checkIt(owl.or([owl.num, owl.interval]))
+    @checkIt(owl.or(owl.num, owl.interval))
     static RndPoint(
         xRange: number | interval,
         yRange: number | interval = xRange
@@ -285,8 +285,8 @@ export class Host {
      * ```
      */
     @checkIt(
-        owl.or([owl.num, owl.interval]),
-        owl.or([owl.num, owl.interval]),
+        owl.or(owl.num, owl.interval),
+        owl.or(owl.num, owl.interval),
         owl.num
     )
     static RndPoints(
@@ -382,7 +382,7 @@ export class Host {
      * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
      * ```
      */
-    @checkIt(owl.interval, owl.interval, owl.object)
+    @checkIt(owl.interval, owl.interval, owl.object())
     static RndTriangle(
         xRange: interval,
         yRange: interval,

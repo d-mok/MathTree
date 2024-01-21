@@ -1,5 +1,5 @@
-import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas02 } from './canvas02'
+import { px, dot, Point2D, Point3D, Point, inch } from '../global.js'
+import { Canvas02 } from './canvas02.js'
 
 type AngleMode = 'normal' | 'polar' | 'reflex'
 type LineLabel = 'auto' | 'left' | 'right'

@@ -1,8 +1,6 @@
-import { fit } from '../src/EquationFitter/index';
+import { fit } from '../src/EquationFitter/index.js';
 test('fit', () => {
-    const vals = fit([
-        (x, y) => x - y
-    ], {
+    const vals = fit([(x, y) => x - y], {
         x: [-100, 10],
         y: [-100, 10],
     }, {});

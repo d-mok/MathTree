@@ -1,5 +1,5 @@
-import { px, Point2D, Point } from '../global';
-import { Canvas05 } from './canvas05';
+import { px, Point2D, Point } from '../global.js';
+import { Canvas05 } from './canvas05.js';
 /**
  * Handle:
  * - direction helper

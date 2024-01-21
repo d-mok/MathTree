@@ -1,1 +1,1 @@
-{"version":3,"file":"sectoroid.d.ts","sourceRoot":"","sources":["../../src/support/sectoroid.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAA8C,MAAM,WAAW,CAAA;AAwB/E,wBAAgB,SAAS,CACrB,CAAC,EAAE,OAAO,EACV,CAAC,EAAE,OAAO,EACV,CAAC,EAAE,OAAO,EACV,QAAQ,EAAE,OAAO,EAAE,aAUtB"}
+{"version":3,"file":"sectoroid.d.ts","sourceRoot":"","sources":["../../src/support/sectoroid.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAA8C,MAAM,cAAc,CAAA;AAwBlF,wBAAgB,SAAS,CACrB,CAAC,EAAE,OAAO,EACV,CAAC,EAAE,OAAO,EACV,CAAC,EAAE,OAAO,EACV,QAAQ,EAAE,OAAO,EAAE,aAUtB"}

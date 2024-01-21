@@ -1,4 +1,4 @@
-import { Canvas00 } from './canvas00';
+import { Canvas00 } from './canvas00.js';
 // pixel conversion
 function toPixelX(xmin, xmax, width, xCoord) {
     return ((xCoord - xmin) / (xmax - xmin)) * width;

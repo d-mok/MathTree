@@ -6,7 +6,7 @@ import {
     sphere,
     quadratic,
     capturable,
-} from '../global'
+} from '../global.js'
 
 function getCircleCorners(
     center: Point2D,

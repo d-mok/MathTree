@@ -1,2 +1,2 @@
-export { dice } from './dice';
+export { dice } from './dice.js';
 //# sourceMappingURL=index.d.ts.map

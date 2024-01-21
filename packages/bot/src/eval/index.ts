@@ -1,4 +1,4 @@
-import { getAllVars, getAllDeclaredVars } from './ts'
+import { getAllVars, getAllDeclaredVars } from './ts.js'
 
 const VariableError = Error('A variable is used before a value is defined.')
 VariableError.name = 'VariableError'

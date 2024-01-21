@@ -20,9 +20,9 @@
         "fate": "file:../packages/fate",
         "gauss": "file:../packages/gauss",
         "katex": "^0.13.23",
+        "lodash-extension": "file:../packages/lodash-extension",
         "paint": "file:../packages/paint",
-        "ruby": "file:../packages/ruby",
-        "lodash-extension": "file:../packages/lodash-extension"
+        "ruby": "file:../packages/ruby"
     },
     "prettier": {
         "tabWidth": 4,

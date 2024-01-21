@@ -1,18 +1,19 @@
-import { err, join, brand, transferBrand, makeStaticDecorator } from '../util'
-import { matchTreaty, treaty } from '../assertion'
-
+import {
+    err,
+    join,
+    brand,
+    transferBrand,
+    makeStaticDecorator,
+} from '../util.js'
+import { matchTreaty, treaty } from '../assertion/index.js'
 
 function e(f: fnBranded, vals: any[], msg: string): Error {
-    return err(f,
-        'args = (' + join(vals) + ')',
-        'violate: ' + msg
-    )
+    return err(f, 'args = (' + join(vals) + ')', 'violate: ' + msg)
 }
 
 function match(f: fnBranded, vals: any[], treaty: treaty): void {
     const pass = matchTreaty(vals, treaty)
-    if (pass !== true)
-        throw e(f, vals, pass)
+    if (pass !== true) throw e(f, vals, pass)
 }
 
 export function inspect<F extends fn>(f: F, treaty: treaty<F>): F {
@@ -24,7 +25,6 @@ export function inspect<F extends fn>(f: F, treaty: treaty<F>): F {
     transferBrand(f, nf)
     return nf as F
 }
-
 
 export function inspectIt(treaty: treaty): StaticDecorator {
     return makeStaticDecorator($ => inspect($, treaty))

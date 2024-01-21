@@ -1,1 +1,1 @@
-export { dice } from './dice'
+export { dice } from './dice.js'

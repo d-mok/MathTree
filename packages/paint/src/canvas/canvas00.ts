@@ -1,5 +1,5 @@
-import { px, inch } from '../global'
-import { trimCanvas } from '../support/trim'
+import { px, inch } from '../global.js'
+import { trimCanvas } from '../support/trim.js'
 
 // The scale factor of canvas size for clearer image.
 const QUALITY = 3

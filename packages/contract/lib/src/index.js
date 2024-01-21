@@ -1,6 +1,6 @@
-export { capture, captureIt, captureAll } from './functions/capture';
-export { accept, acceptIt } from './functions/accept';
-export { check, checkIt } from './functions/check';
-export { inspect, inspectIt } from './functions/inspect';
-export { expose, exposeIt, exposeAll } from './functions/expose';
+export { capture, captureIt, captureAll } from './functions/capture.js';
+export { accept, acceptIt } from './functions/accept.js';
+export { check, checkIt } from './functions/check.js';
+export { inspect, inspectIt } from './functions/inspect.js';
+export { expose, exposeIt, exposeAll } from './functions/expose.js';
 //# sourceMappingURL=index.js.map

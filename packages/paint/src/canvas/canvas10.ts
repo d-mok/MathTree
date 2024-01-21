@@ -1,6 +1,6 @@
-import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas09 } from './canvas09'
-import { round5 } from '../support/round'
+import { px, dot, Point2D, Point3D, Point, inch } from '../global.js'
+import { Canvas09 } from './canvas09.js'
+import { round5 } from '../support/round.js'
 
 function degrize(text: string | number): string {
     return typeof text === 'number' ? round5(text) + '°' : text

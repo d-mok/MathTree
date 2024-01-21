@@ -1,6 +1,6 @@
 type Point2D = [number, number]
-import { crammer } from '../math/cal'
-import * as INEQUAL from '../math/inequal'
+import { crammer } from '../math/cal.js'
+import * as INEQUAL from '../math/inequal.js'
 
 export type Constraint = [
     xCoeff: number,

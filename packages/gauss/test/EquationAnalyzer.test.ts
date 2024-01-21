@@ -1,4 +1,4 @@
-import { analyze } from '../src/EquationAnalyzer'
+import { analyze } from '../src/EquationAnalyzer/index.js'
 
 test('analyze', () => {
 

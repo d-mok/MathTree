@@ -1,5 +1,5 @@
-import { Point2D, Point3D, Point, circle, sphere, capturable } from '../global'
-import { traceCircle } from './trace'
+import { Point2D, Point3D, Point, circle, sphere, capturable } from '../global.js'
+import { traceCircle } from './trace.js'
 
 function vec(p1: Point2D, p2: Point2D): Point2D {
     let [x1, y1] = p1

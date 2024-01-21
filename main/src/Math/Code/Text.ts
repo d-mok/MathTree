@@ -253,7 +253,7 @@ export class Host {
      * )
      * ```
      */
-    @checkIt(owl.object, owl.object)
+    @checkIt(owl.object(), owl.object())
     static PrimeFactorize(
         val: { [_: string]: number[] },
         { hcf = false, lcm = false, multiply = false }

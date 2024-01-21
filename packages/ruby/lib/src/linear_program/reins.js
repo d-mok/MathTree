@@ -1,6 +1,6 @@
-import * as rein from './rein';
+import * as rein from './rein.js';
 import _ from 'lodash';
-import * as vec from '../math/vec';
+import * as vec from '../math/vec.js';
 const EDGE = 100;
 const EDGE_CONSTRAINTS = [
     [1, 0, '<=', EDGE],

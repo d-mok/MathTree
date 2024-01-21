@@ -1,4 +1,4 @@
-import { Canvas02 } from './canvas02';
+import { Canvas02 } from './canvas02.js';
 function segmentArray(seg) {
     if (Array.isArray(seg))
         return seg;

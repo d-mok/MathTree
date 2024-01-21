@@ -1,4 +1,4 @@
-import { exprCtxHTML } from '../eval';
+import { exprCtxHTML } from '../eval/index.js';
 function escapeRegExp(text) {
     return text.replaceAll(/[.*+!?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }

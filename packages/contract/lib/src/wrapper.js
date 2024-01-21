@@ -1,8 +1,8 @@
-"use strict";
 // export function signature(f: Function): string {
 //     const s = f.toString()
 //     return s.slice(s.indexOf('(') + 1, s.indexOf(')'))
 // }
+export {};
 // export function brand(f: fn): asserts f is fnBranded {
 //     if (!('wax_name' in f))
 //         f.wax_name = f.name ?? f.toString()

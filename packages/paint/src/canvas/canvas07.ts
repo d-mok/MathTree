@@ -1,5 +1,5 @@
-import { px, dot, Point2D, Point3D, Point, inch } from '../global'
-import { Canvas06 } from './canvas06'
+import { px, dot, Point2D, Point3D, Point, inch } from '../global.js'
+import { Canvas06 } from './canvas06.js'
 
 // step
 

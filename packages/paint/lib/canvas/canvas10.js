@@ -1,5 +1,5 @@
-import { Canvas09 } from './canvas09';
-import { round5 } from '../support/round';
+import { Canvas09 } from './canvas09.js';
+import { round5 } from '../support/round.js';
 function degrize(text) {
     return typeof text === 'number' ? round5(text) + '°' : text;
 }

@@ -1,2 +1,2 @@
-"use strict";
+export {};
 //# sourceMappingURL=cal.test.js.map

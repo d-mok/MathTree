@@ -1,5 +1,5 @@
 import 'jest-extended'
-import { dice } from '../src'
+import { dice } from '../src/index.js'
 import _ from 'lodash'
 
 function repeat(times: number, func: Function) {

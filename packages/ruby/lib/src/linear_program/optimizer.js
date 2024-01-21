@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import * as reins from './reins';
+import * as reins from './reins.js';
 export class Optimizer {
     constructor(field = [0, 0, 0], feasiblePoints) {
         this.field = field;

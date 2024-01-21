@@ -1,13 +1,13 @@
-export { dress } from './dress';
-export { evalCtx, exprCtx, exprCtxHTML } from './eval';
-export { transpile } from './eval/ts';
-export { cropSection } from './section';
-export { loopSection } from './loop';
-export { Blacksmith } from './blacksmith';
-export { HTMLWorker } from './dom';
-export { shuffleIndex, shuffleAs } from './coshuffle';
-export { Timer } from './timer';
-import * as ts from './eval/ts';
+export { dress } from './dress/index.js';
+export { evalCtx, exprCtx, exprCtxHTML } from './eval/index.js';
+export { transpile } from './eval/ts.js';
+export { cropSection } from './section/index.js';
+export { loopSection } from './loop/index.js';
+export { Blacksmith } from './blacksmith/index.js';
+export { HTMLWorker } from './dom/index.js';
+export { shuffleIndex, shuffleAs } from './coshuffle/index.js';
+export { Timer } from './timer/index.js';
+import * as ts from './eval/ts.js';
 // @ts-ignore
 globalThis.ts = ts;
 //# sourceMappingURL=index.js.map

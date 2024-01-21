@@ -1,4 +1,4 @@
-import { traceCircle } from './trace';
+import { traceCircle } from './trace.js';
 function vec(p1, p2) {
     let [x1, y1] = p1;
     let [x2, y2] = p2;
