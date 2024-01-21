@@ -116,7 +116,7 @@ export class Soil {
                 if (!ok)
                     throw CustomError(
                         'PopulationError',
-                        'Dict Check Failed:\n' + dictReport
+                        'Dict Check Failed\n' + dictReport
                     )
                 if (!this.isValidated())
                     throw CustomError(

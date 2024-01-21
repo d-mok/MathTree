@@ -154,6 +154,7 @@ export class Host {
     }
 
     /**
+     * @deprecated
      * the intersection point of AB and CD.
      * ```
      * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
@@ -178,6 +179,26 @@ export class Host {
             C[0] * D[1] - D[0] * C[1]
         )
     }
+
+    // /**
+    //  * the intersection point of AB and CD.
+    //  * ```
+    //  * Intersect([[0,0],[2,2]],[[2,0],[0,2]]) // [1,1]
+    //  * ```
+    //  */
+    // @checkIt(owl.point2D)
+    // static Intersect(L1: Line, L2: Line): Point2D {
+    //     let [A, B] = L1
+    //     let [C, D] = L2
+    //     return Crammer(
+    //         B[1] - A[1],
+    //         A[0] - B[0],
+    //         A[0] * B[1] - B[0] * A[1],
+    //         D[1] - C[1],
+    //         C[0] - D[0],
+    //         C[0] * D[1] - D[0] * C[1]
+    //     )
+    // }
 
     /**
      * Translate point P in the direction `dir` by a `distance`.
