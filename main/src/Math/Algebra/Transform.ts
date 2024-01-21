@@ -200,8 +200,8 @@ export class Host {
 
         function drawQ(pen: PenCls) {
             pen.set.weight(2)
-            pen.plot(func)
-            pen.plotDash(funcs.at(-1)!)
+            pen.plotDash(func)
+            pen.plot(funcs.at(-1)!)
             pen.set.weight()
         }
 
@@ -210,10 +210,11 @@ export class Host {
                 [[1], [1, 0.3], [1, 0.5, 0.2], [1, 0.7, 0.4, 0.1]][
                     actions.length - 1
                 ] ?? []
+            intervals.reverse()
             pen.set.weight(3)
             for (let i = 0; i < actions.length; i++) {
                 pen.set.alpha(intervals[i] ?? 1)
-                pen.plot(funcs[i])
+                i === 0 ? pen.plotDash(funcs[i]) : pen.plot(funcs[i])
             }
             pen.set.alpha()
             pen.set.weight()
