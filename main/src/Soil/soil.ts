@@ -25,7 +25,7 @@ class ErrorLogger {
 
     add(e: unknown) {
         let err = toError(e)
-        this.pile.push('[' + err.name + '] ' + err.message)
+        this.pile.push('[' + err.name + ']\n' + err.message)
     }
 
     private readHtml(delimiter: string): string {
@@ -84,15 +84,18 @@ export class Soil {
     }
 
     private checkDict(): [boolean, string] {
-        let report = ''
-
-        const notOK = (v: any) =>
-            v === undefined || // v === null ||
-            (typeof v === 'number' && !Number.isFinite(v))
-
-        for (const [k, v] of Object.entries(this.dict)) {
-            if (notOK(v)) report += `[${k}: ${v}]`
+        function notOK(v: any) {
+            return (
+                v === undefined || // v === null ||
+                (typeof v === 'number' && !Number.isFinite(v))
+            )
         }
+
+        let report = Object.entries(this.dict)
+            .filter(([k, v]) => notOK(v))
+            .map(([k, v]) => `${k}: ${v}`)
+            .join('\n')
+
         return [report === '', report]
     }
 
@@ -113,7 +116,7 @@ export class Soil {
                 if (!ok)
                     throw CustomError(
                         'PopulationError',
-                        'Dict Check Failed: ' + dictReport
+                        'Dict Check Failed:\n' + dictReport
                     )
                 if (!this.isValidated())
                     throw CustomError(
