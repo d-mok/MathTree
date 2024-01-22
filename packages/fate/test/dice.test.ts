@@ -1,4 +1,5 @@
 import 'jest-extended'
+import { describe, test, it, expect } from 'vitest'
 import { dice } from '../src/index.js'
 import _ from 'lodash'
 
@@ -107,7 +108,7 @@ describe('Class Dice', () => {
 
         it('govern roll', () => {
             repeat(10, () => {
-                expect(d.roll()).toSatisfy($ => $ % 2 === 0)
+                expect(d.roll()).toSatisfy(($: number) => $ % 2 === 0)
             })
         })
 

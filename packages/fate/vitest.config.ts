@@ -4,6 +4,5 @@ export default defineConfig({
     test: {
         setupFiles: './vitest.setup.ts',
         exclude: [...configDefaults.exclude, '**/lib/**'],
-        globals: true,
     },
 })
