@@ -133,6 +133,7 @@ test('PdFoot', () => {
 
 test('Intersection', () => {
     expect(Intersection([0, 0], [2, 2], [2, 0], [0, 2])).toEqual([1, 1])
+    expect(Intersection([0, 0], 45, [2, 0], 135)).toEqual([1, 1])
     expect(Intersection([2, 1], [-1, 1], [1, -1], [1, 2])).toEqual([1, 1])
     expect(() => Intersection([0, 0], [2, 2], [0, 0], [2, 2])).toThrow()
 })

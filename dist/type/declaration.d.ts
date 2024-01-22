@@ -472,7 +472,7 @@ declare module "Math/Code/Geometry" {
          * Slide([0,1],[[0,0],[1,0]],2) // [2,1]
          * ```
          */
-        static Slide(P: Point2D, dir: Point2D | [Point2D, Point2D], ratioA?: number, ratioB?: number): Point2D;
+        static Slide(P: Point2D, vec: Point2D | [Point2D, Point2D], ratioA?: number, ratioB?: number): Point2D;
         /**
          * point P rotated anticlockwise by angle q about point O.
          * ```
@@ -496,13 +496,13 @@ declare module "Math/Code/Geometry" {
          */
         static PdFoot(P: Point2D, [A, B]: [Point2D, Point2D | number]): Point2D;
         /**
-         * @deprecated
          * the intersection point of AB and CD.
          * ```
          * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
+         * Intersection([0,0],45,[2,0],135) // [1,1]
          * ```
          */
-        static Intersection(A: Point2D, B: Point2D, C: Point2D, D: Point2D): Point2D;
+        static Intersection(A: Point2D, B: Point2D | number, C: Point2D, D: Point2D | number): Point2D;
         /**
          * Translate point P in the direction `dir` by a `distance`.
          * @param dir - a polar angle, or two points [A,B] representing Dir(A,B), or one point A representing Dir(P,A)
@@ -5627,8 +5627,8 @@ declare module "Math/type" {
          * ```
          */
         type Quadratic = [a: number, b: number, c: number];
-        type Point2D = [x: number, y: number];
-        type Point3D = [x: number, y: number, z: number];
+        type Point2D = [x: number, y: number] | number[];
+        type Point3D = [x: number, y: number, z: number] | number[];
         type Point = Point2D | Point3D;
         type interval = [min: number, max: number];
         type Fraction = [numerator: number, denominator: number];
@@ -5691,9 +5691,6 @@ declare module "Math/type" {
             val: number;
             unit: string;
         };
-        type Line = [Point2D, Point2D] | [A: number, B: number, C: number] | [A: number, B: number, '=', C: number] | [m: number, c: number] | [Point2D, m: number] | [polarAngle: number, Point2D];
-        type Circle = [Point2D, radius: number] | [D: number, E: number, F: number] | [Point2D, Point2D, Point2D];
-        type Direction = number | [Point2D, Point2D];
     }
     export {};
 }

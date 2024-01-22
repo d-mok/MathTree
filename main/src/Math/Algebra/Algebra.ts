@@ -2,7 +2,6 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import _ from 'lodash'
 import * as math from 'mathjs'
 
-
 @exposeAll()
 @captureAll()
 export class Host {
@@ -28,7 +27,7 @@ export class Host {
         const D = a * q - b * p
         const x = (c * q - b * r) / D
         const y = (a * r - c * p) / D
-        return [x, y]
+        return [cal.blur(x), cal.blur(y)]
     }
 
     /**

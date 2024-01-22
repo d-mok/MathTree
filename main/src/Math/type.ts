@@ -89,21 +89,6 @@ declare global {
     type TrigExp = [TrigFunc, number, 1 | -1, string]
 
     type quantity = { val: number; unit: string }
-
-    type Line =
-        | [Point2D, Point2D]
-        | [A: number, B: number, C: number]
-        | [A: number, B: number, '=', C: number]
-        | [m: number, c: number]
-        | [Point2D, m: number]
-        | [polarAngle: number, Point2D]
-
-    type Circle =
-        | [Point2D, radius: number]
-        | [D: number, E: number, F: number]
-        | [Point2D, Point2D, Point2D]
-
-    type Direction = number | [Point2D, Point2D]
 }
 
 export {}

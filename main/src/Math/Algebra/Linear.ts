@@ -161,20 +161,6 @@ export class Host {
     ): [slope: number, yInt: number] {
         return lin().byBisector(A, B).toLine()
     }
-
-    // /**
-    //  * the coeff [a,b,c] in ax+by+c=0 from two given points
-    //  * ```
-    //  * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
-    //  * LinearFromTwoPoints([1,2],[1,2]) // throw
-    //  * ```
-    //  */
-    // static ToLinear(L: Line): [a: number, b: number, c: number] {
-    //     if (owl.tuple(owl.point2D, owl.point2D)(L)) {
-
-    //     }
-    //     return lin().byTwoPoints(point1, point2).toLinear()
-    // }
 }
 
 declare global {

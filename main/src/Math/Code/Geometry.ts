@@ -89,17 +89,17 @@ export class Host {
     )
     static Slide(
         P: Point2D,
-        dir: Point2D | [Point2D, Point2D],
+        vec: Point2D | [Point2D, Point2D],
         ratioA: number = 1,
         ratioB: number = 1 - ratioA
     ): Point2D {
         let r = ratioA / (ratioA + ratioB)
         let s = ratioB / (ratioA + ratioB)
-        if (owl.point2D(dir)) {
-            let Q = dir
+        if (owl.point2D(vec)) {
+            let Q = vec
             return [P[0] * s + Q[0] * r, P[1] * s + Q[1] * r]
         } else {
-            let [A, B] = dir
+            let [A, B] = vec
             let [x, y] = P
             let [xA, yA] = A
             let [xB, yB] = B
@@ -154,22 +154,29 @@ export class Host {
     }
 
     /**
-     * @deprecated
      * the intersection point of AB and CD.
      * ```
      * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
+     * Intersection([0,0],45,[2,0],135) // [1,1]
      * ```
      */
-    @checkIt(owl.point2D)
+    @checkIt(
+        owl.point2D,
+        owl.or(owl.point2D, owl.num),
+        owl.point2D,
+        owl.or(owl.point2D, owl.num)
+    )
     @inspectIt(function distinct_points(A, B, C, D) {
         return owl.distinct([A, B]) && owl.distinct([C, D])
     })
     static Intersection(
         A: Point2D,
-        B: Point2D,
+        B: Point2D | number,
         C: Point2D,
-        D: Point2D
+        D: Point2D | number
     ): Point2D {
+        if (typeof B === 'number') B = Move(A, B, 1)
+        if (typeof D === 'number') D = Move(C, D, 1)
         return Crammer(
             B[1] - A[1],
             A[0] - B[0],
@@ -179,26 +186,6 @@ export class Host {
             C[0] * D[1] - D[0] * C[1]
         )
     }
-
-    // /**
-    //  * the intersection point of AB and CD.
-    //  * ```
-    //  * Intersect([[0,0],[2,2]],[[2,0],[0,2]]) // [1,1]
-    //  * ```
-    //  */
-    // @checkIt(owl.point2D)
-    // static Intersect(L1: Line, L2: Line): Point2D {
-    //     let [A, B] = L1
-    //     let [C, D] = L2
-    //     return Crammer(
-    //         B[1] - A[1],
-    //         A[0] - B[0],
-    //         A[0] * B[1] - B[0] * A[1],
-    //         D[1] - C[1],
-    //         C[0] - D[0],
-    //         C[0] * D[1] - D[0] * C[1]
-    //     )
-    // }
 
     /**
      * Translate point P in the direction `dir` by a `distance`.
