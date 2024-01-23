@@ -6,13 +6,12 @@
         "build-edge": "esbuild src/index.ts --bundle --outfile=../dist/edge/mathtree.js",
         "build-type": "npx tsc --project tsconfig.d.json && node ./modify_declaration.js",
         "build-stable": "esbuild src/index.ts --bundle --minify --outfile=../dist/stable/mathtree.js",
-        "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./src/Math",
         "test": "vitest run",
         "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js",
         "npm i": "npm i --install-links=false"
     },
     "devDependencies": {
-        "esbuild": "^0.14.7"
+        "esbuild": "^0.19.11"
     },
     "dependencies": {
         "bot": "file:../packages/bot",
