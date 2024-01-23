@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
+import { describe, expect, it, test } from 'vitest'
 
 test('At', () => {
     expect(At([1, 2, 3], -1)).toEqual(3)

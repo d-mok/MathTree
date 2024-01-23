@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
+import { describe, expect, it, test } from 'vitest'
 
 test('LineFeat', () => {
     expect(LineFeat(2, 4, 6)).toEqual([-0.5, -1.5, -3])

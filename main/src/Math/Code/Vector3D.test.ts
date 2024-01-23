@@ -1,3 +1,4 @@
+import { describe, expect, it, test } from 'vitest'
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to'
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo })
 import _ from 'lodash'

@@ -2,6 +2,7 @@ import { repeat } from '../Jest/JestExtend'
 import { getMaxDeg } from './Polynomial'
 import _ from 'lodash'
 import * as math from 'mathjs'
+import { describe, expect, it, test } from 'vitest'
 
 function getPoly(): polynomial {
     return [
@@ -23,7 +24,7 @@ test('RndPolynomial', () => {
     repeat(10, () => {
         let poly = RndPolynomial(8, ['x', 'y'], 3, 9)
         expect(poly).toSatisfy(owl.polynomial)
-        expect(poly).toSatisfy($ => getMaxDeg($) === 8)
+        expect(poly).toSatisfy(($: polynomial) => getMaxDeg($) === 8)
     })
 })
 

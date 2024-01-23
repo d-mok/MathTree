@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
 import { repeat } from '../Jest/JestExtend'
+import { describe, expect, it, test } from 'vitest'
 
 test('RndN', () => {
     expect(RndN(5, 10)).toBeOneOf([5, 6, 7, 8, 9, 10])
@@ -223,7 +224,9 @@ test('RndPoly', () => {
 
 test('RndPyth', () => {
     repeat(10, () => {
-        expect(RndPyth(50)).toSatisfy(x => x[0] ** 2 + x[1] ** 2 === x[2] ** 2)
+        expect(RndPyth(50)).toSatisfy<number[]>(
+            x => x[0] ** 2 + x[1] ** 2 === x[2] ** 2
+        )
         expect(RndPyth(50)).toAllBeBetween(1, 50)
         expect(RndPyth(50)).toAllBeInteger()
         expect(RndPyth(50)).toBeDupless()
@@ -325,7 +328,7 @@ test('RndData', () => {
         expect(data).toAllBeBetween(10, 15)
         expect(data).toAllBeInteger()
         expect(data).toHaveLength(5)
-        expect(data).toSatisfy($ => Mode(...$).length === 1)
+        expect(data).toSatisfy<number[]>($ => Mode(...$).length === 1)
     })
 })
 
@@ -434,7 +437,7 @@ test('RndPointPolar', () => {
 test('RndRatio', () => {
     repeat(10, () => {
         let nums = RndRatio(2, 9, 3)
-        expect(nums).toSatisfy($ => HCF(...$) === 1)
+        expect(nums).toSatisfy<number[]>($ => HCF(...$) === 1)
         expect(nums).toHaveLength(3)
         expect(nums).toBeDupless()
         expect(nums).toAllBeInteger()
@@ -444,7 +447,7 @@ test('RndRatio', () => {
 test('RndPartition', () => {
     repeat(10, () => {
         let nums = RndPartition(10, 3)
-        expect(nums).toSatisfy($ => Sum(...$) === 10)
+        expect(nums).toSatisfy<number[]>($ => Sum(...$) === 10)
         expect(nums).toHaveLength(3)
         expect(nums).toAllBeInteger()
     })

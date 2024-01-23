@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
+import { describe, expect, it, test } from 'vitest'
 
 test('CircleGeneral', () => {
     expect(CircleGeneral([2, 3], 5)).toEqual([-4, -6, -12])

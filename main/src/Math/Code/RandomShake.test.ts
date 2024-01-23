@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
 import { repeat } from '../Jest/JestExtend'
+import { describe, expect, it, test } from 'vitest'
 
 test('RndShake', () => {
     expect(RndShake('\\ge')).toSatisfyAll(owl.ineq)

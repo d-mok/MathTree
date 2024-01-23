@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { describe, expect, it, test } from 'vitest'
 
 function getSample(func: () => any, n = 1000): any[] {
     let arr = []

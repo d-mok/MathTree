@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
+import { describe, expect, it, test } from 'vitest'
 
 test('ShakeN', () => {
     function run(anchor: number, min: number, max: number) {

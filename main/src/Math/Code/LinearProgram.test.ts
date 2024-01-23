@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import * as math from 'mathjs'
+import { describe, expect, it, test } from 'vitest'
 
 test('FieldAt', () => {
     expect(FieldAt([0, 0], [1, 2, 3])).toBe(3)
