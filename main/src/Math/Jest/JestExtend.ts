@@ -73,7 +73,7 @@ expect.extend({
             sample = getSample(funcOrArray)
         }
 
-        sample = _.uniqDeep(sample)
+        sample = sample.uniqEqual()
         if (flatDepth > 0) {
             sample = sample.flat(flatDepth)
         }
@@ -153,7 +153,7 @@ expect.extend({
             sample = sample.flat(flatDepth)
         }
 
-        sample = _.uniqDeep(sample)
+        sample = sample.uniqEqual()
 
         const pass = sample.length === length
         if (pass) {
@@ -214,7 +214,7 @@ expect.extend({
     },
 
     toBeDupless(array: any[]) {
-        const pass = _.isUniqDeep(array)
+        const pass = array.isUniqEqual()
         if (pass) {
             return {
                 message: () => `expected ${array} not to all be duplicate-free`,

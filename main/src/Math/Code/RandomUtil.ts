@@ -47,7 +47,7 @@ export class Host {
      */
     @checkIt(owl.array(), owl.positiveInt)
     static RndPickUnique<T>(items: T[], n: number): T[] {
-        return _.sampleSize(_.uniqDeep(items), n)
+        return _.sampleSize(items.uniqEqual(), n)
     }
 
     /**

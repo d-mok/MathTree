@@ -14,7 +14,7 @@ export class Host {
      */
     @checkIt([owl.array(), $ => $.length > 0], owl.int)
     static At<T>(arr: T[], index: number): T {
-        return _.cyclicAt(arr, index)!
+        return arr.nth(index)!
     }
 
     /**
@@ -30,7 +30,7 @@ export class Host {
         relativeIndices: number[]
     ): T[] {
         if (arr.length === 0) return []
-        return relativeIndices.map(i => _.cyclicAt(arr, centreIndex + i)!)
+        return relativeIndices.map(i => arr.nth(centreIndex + i)!)
     }
 
     /**

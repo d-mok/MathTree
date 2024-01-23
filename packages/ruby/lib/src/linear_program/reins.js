@@ -24,7 +24,7 @@ export function contains(cons, point, mode = 'self') {
 export function polygon(cons) {
     let fullCons = [...cons, ...EDGE_CONSTRAINTS];
     let vs = [];
-    for (let [con1, con2] of _.combinations(fullCons, 2)) {
+    for (let [con1, con2] of fullCons.combinations(2)) {
         let p = rein.intersectWith(con1, con2);
         if (p === undefined)
             continue;
@@ -32,7 +32,7 @@ export function polygon(cons) {
         if (contains(others, p, 'loose'))
             vs.push(p);
     }
-    vs = _.uniqDeep(vs);
+    vs = vs.uniqEqual();
     vs = vec.sortAroundMean(vs);
     return vs;
 }

@@ -224,13 +224,9 @@ export class PenD3 {
         let arr: [Point3D, Point3D][] = []
 
         for (let i = 0; i < LB.length; i++) {
-            let polarwise = isPolar(
-                _.cyclicAt(LB, i)!,
-                _.cyclicAt(UB, i)!,
-                _.cyclicAt(LB, i + 1)!
-            )
+            let polarwise = isPolar(LB.nth(i)!, UB.nth(i)!, LB.nth(i + 1)!)
             if (lastPolarwise * polarwise === -1)
-                arr.push([_.cyclicAt(LB, i)!, _.cyclicAt(UB, i)!])
+                arr.push([LB.nth(i)!, UB.nth(i)!])
             lastPolarwise = polarwise
         }
 

@@ -7,5 +7,5 @@ export * as cal from './math/cal.js';
 export * as vec from './math/vec.js';
 export { lin } from './math/linear.js';
 export { functionize, differentiate, integrate } from './math/calculus.js';
-import 'lodash-extension';
+import 'sapphire-js';
 //# sourceMappingURL=index.d.ts.map

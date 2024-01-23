@@ -298,7 +298,7 @@ export class Host {
             .unique(([x, y]) => x)
             .unique(([x, y]) => y)
             .coherent($ =>
-                _.combinations($, 3).every(
+                $.combinations(3).every(
                     ([A, B, C]) => Slope(A, B) !== Slope(B, C)
                 )
             )
@@ -320,7 +320,7 @@ export class Host {
         }
 
         let angles = dice(() => RndN(0, 360))
-            .coherent(angles => _.combinations(angles, 2).every(farEnough))
+            .coherent(angles => angles.combinations(2).every(farEnough))
             .unique()
             .rolls(n)
         return _.sortBy(angles)

@@ -33,5 +33,3 @@ declare global {
     var owl: typeof $Owl
     var ink: typeof $Ink
 }
-
-import 'lodash-extension'

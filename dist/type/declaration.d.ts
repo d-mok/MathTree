@@ -100,7 +100,6 @@ declare module "Core/index" {
         var owl: typeof $Owl;
         var ink: typeof $Ink;
     }
-    import 'lodash-extension';
 }
 declare module "Math/Code/Assertion" {
     export class Host {

@@ -120,7 +120,7 @@ export const fail = ($: unknown) => false
 
 // // relation
 
-export const distinct = ($: unknown[]) => _.isUniqDeep($)
+export const distinct = ($: unknown[]) => $.isUniqEqual()
 
 // special text
 

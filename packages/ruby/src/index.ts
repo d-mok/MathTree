@@ -10,4 +10,4 @@ export { lin } from './math/linear.js'
 
 export { functionize, differentiate, integrate } from './math/calculus.js'
 
-import 'lodash-extension'
+import 'sapphire-js'

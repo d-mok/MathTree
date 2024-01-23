@@ -10,9 +10,6 @@
         "npm i": "npm i --install-links=false",
         "build": "tsc"
     },
-    "dependencies": {
-        "lodash-extension": "file:../lodash-extension"
-    },
     "prettier": {
         "tabWidth": 4,
         "semi": false,

@@ -60,7 +60,7 @@ export class Host {
         nums = nums.map(cal.blur)
         if (!IsInteger(...nums)) return true
         if (!IsNonZero(...nums)) return true
-        return _.combinations(nums, 2).every(([a, b]) => HCF(a, b) === 1)
+        return nums.combinations(2).every(([a, b]) => HCF(a, b) === 1)
     }
 
     /**
@@ -73,9 +73,9 @@ export class Host {
     @checkIt(owl.positive)
     static AreDistantPoint(distance: number) {
         let AreDistant = function (...points: Point2D[]): boolean {
-            return _.combinations(points, 2).every(
-                ([A, B]) => Distance(A, B) >= distance
-            )
+            return points
+                .combinations(2)
+                .every(([A, B]) => Distance(A, B) >= distance)
         }
         return check(AreDistant, [owl.point2D])
     }
@@ -90,9 +90,9 @@ export class Host {
     @checkIt(owl.positive)
     static AreOblique(minAngle: number) {
         let areOblique = function (...slopes: number[]): boolean {
-            return _.combinations(slopes, 2).every(
-                ([a, b]) => IntersectAngle(a, b) >= minAngle
-            )
+            return slopes
+                .combinations(2)
+                .every(([a, b]) => IntersectAngle(a, b) >= minAngle)
         }
         return check(areOblique, [owl.num])
     }
@@ -105,7 +105,7 @@ export class Host {
      * ```
      */
     static AreDifferent(...items: any[]) {
-        return _.isUniqDeep(items)
+        return items.isUniqEqual()
     }
 }
 

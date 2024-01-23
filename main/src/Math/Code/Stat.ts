@@ -169,7 +169,7 @@ export class Host {
      */
     @checkIt(owl.array(), owl.pass)
     static Freq<T>(array: T[], item: T): number {
-        return _.count(array, item)
+        return array.count([item])
     }
 
     /**
@@ -268,7 +268,7 @@ export class Host {
     @checkIt(owl.ntuple, owl.ntuple)
     static Freqs(data: number[], nums?: number[]): number[] {
         nums ??= Rng(...data)
-        return nums.map($ => _.count(data, $))
+        return nums.map($ => data.count([$]))
     }
 
     /**
