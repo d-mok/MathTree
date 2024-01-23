@@ -1,8 +1,8 @@
-import { RoundVars, toVarGrp } from './support/variable'
+import { RoundVars, toVarGrp } from './support/variable.js'
 import { analyze } from 'gauss'
 import _ from 'lodash'
-import { fitAgain, fitFree, readTree } from './support/system'
-import * as WRITE from './support/write'
+import { fitAgain, fitFree, readTree } from './support/system.js'
+import * as WRITE from './support/write.js'
 
 export function BuildSolve(
     variables: [

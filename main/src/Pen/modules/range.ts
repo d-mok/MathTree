@@ -1,4 +1,4 @@
-import { PenCls } from '../Pen'
+import { PenCls } from '../Pen.js'
 import { capturable, Convas } from 'paint'
 
 export class PenRange {

@@ -1,13 +1,14 @@
 {
     "name": "mathtree",
     "version": "1.0.0",
+    "type": "module",
     "scripts": {
         "publish": "npm run build-edge && npm run build-type",
         "build-edge": "esbuild src/index.ts --bundle --outfile=../dist/edge/mathtree.js",
         "build-type": "npx tsc --project tsconfig.d.json && node ./modify_declaration.js",
         "build-stable": "esbuild src/index.ts --bundle --minify --outfile=../dist/stable/mathtree.js",
         "test": "vitest run",
-        "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js",
+        "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js --external:sapphire-js",
         "npm i": "npm i --install-links=false"
     },
     "devDependencies": {

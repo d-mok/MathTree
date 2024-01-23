@@ -1,4 +1,4 @@
-import { PenCls } from '../Pen'
+import { PenCls } from '../Pen.js'
 import { Convas } from 'paint'
 import _ from 'lodash'
 import * as math from 'mathjs'

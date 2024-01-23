@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { parseUnit, findUnit } from './units'
+import { parseUnit, findUnit } from './units.js'
 
 function parseRange(r: rangeInput): [number, number] {
     if (Array.isArray(r)) {

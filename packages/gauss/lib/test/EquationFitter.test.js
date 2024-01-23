@@ -1,4 +1,5 @@
 import { fit } from '../src/EquationFitter/index.js';
+import { test, expect } from 'vitest';
 test('fit', () => {
     const vals = fit([(x, y) => x - y], {
         x: [-100, 10],

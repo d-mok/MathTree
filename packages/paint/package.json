@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "a canvas library",
     "main": "lib/index.js",
-    "types": "lib",
+    "types": "lib/index.d.ts",
     "type": "module",
     "scripts": {
         "build": "tsc"

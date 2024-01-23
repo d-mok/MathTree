@@ -1,4 +1,3 @@
-import 'jest-extended';
 export declare class Host {
     static log(): string;
 }

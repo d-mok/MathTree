@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "a library for function validation",
     "main": "lib/src/index.js",
-    "types": "lib/src",
+    "types": "lib/src/index.d.ts",
     "type": "module",
     "scripts": {
         "test": "vitest run",

@@ -1,7 +1,7 @@
-import { BuildAngle as $BuildAngle } from './build_angle'
-import { BuildSolve as $BuildSolve } from './build_solve'
-import { BuildTrend as $BuildTrend } from './build_trend'
-import { BuildRatio as $BuildRatio } from './build_ratio'
+import { BuildAngle as $BuildAngle } from './build_angle.js'
+import { BuildSolve as $BuildSolve } from './build_solve.js'
+import { BuildTrend as $BuildTrend } from './build_trend.js'
+import { BuildRatio as $BuildRatio } from './build_ratio.js'
 
 globalThis.BuildAngle = $BuildAngle
 globalThis.BuildSolve = $BuildSolve

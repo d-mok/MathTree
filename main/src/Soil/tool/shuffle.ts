@@ -1,4 +1,4 @@
-import { QuestionHTML } from './html'
+import { QuestionHTML } from './html.js'
 import _ from 'lodash'
 
 function coshuffle<T1, T2>(

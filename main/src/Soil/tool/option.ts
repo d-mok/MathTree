@@ -1,4 +1,4 @@
-import { QuestionHTML } from './html'
+import { QuestionHTML } from './html.js'
 import { dice } from 'fate'
 import _ from 'lodash'
 

@@ -1,4 +1,4 @@
-import 'jest-extended';
+import { describe, it, expect } from 'vitest';
 import { dice } from '../src/index.js';
 import _ from 'lodash';
 function repeat(times, func) {
@@ -83,7 +83,7 @@ describe('Class Dice', () => {
         d.preserve($ => $ % 2, 8);
         it('govern roll', () => {
             repeat(10, () => {
-                expect(d.roll()).toSatisfy($ => $ % 2 === 0);
+                expect(d.roll()).toSatisfy(($) => $ % 2 === 0);
             });
         });
         it('govern rolls', () => {

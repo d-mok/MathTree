@@ -1,7 +1,7 @@
 import _ from 'lodash'
-import * as WRITE from './support/write'
-import { PenCls } from '../../Pen/Pen'
-import { BuildSolve } from './build_solve'
+import * as WRITE from './support/write.js'
+import { PenCls } from '../../Pen/Pen.js'
+import { BuildSolve } from './build_solve.js'
 
 export function BuildAngle(
     variables: [

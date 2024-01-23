@@ -1,7 +1,7 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import _ from 'lodash'
 import * as math from 'mathjs'
-import { PenCls } from '../../Pen/Pen'
+import { PenCls } from '../../Pen/Pen.js'
 
 // types
 

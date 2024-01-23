@@ -1,4 +1,4 @@
-import { blacksmith } from './blacksmith'
+import { blacksmith } from './blacksmith.js'
 import { HTMLWorker } from 'bot'
 
 export class QuestionHTML extends HTMLWorker {

@@ -1,4 +1,4 @@
-import { Soil } from './soil'
+import { Soil } from './soil.js'
 import { transpile } from 'bot'
 
 declare global {

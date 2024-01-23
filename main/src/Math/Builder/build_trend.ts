@@ -1,7 +1,7 @@
-import { toVarGrp } from './support/variable'
+import { toVarGrp } from './support/variable.js'
 import _ from 'lodash'
-import { fitAgain, fitFree, readTree } from './support/system'
-import * as WRITE from './support/write'
+import { fitAgain, fitFree, readTree } from './support/system.js'
+import * as WRITE from './support/write.js'
 import { analyze } from 'gauss'
 
 export function BuildTrend(

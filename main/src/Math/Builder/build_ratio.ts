@@ -1,7 +1,7 @@
-import { RoundVars, toVarGrp } from './support/variable'
+import { RoundVars, toVarGrp } from './support/variable.js'
 import _ from 'lodash'
-import { fitAgain, fitFree } from './support/system'
-import * as WRITE from './support/write'
+import { fitAgain, fitFree } from './support/system.js'
+import * as WRITE from './support/write.js'
 
 export function BuildRatio(
     variables: [

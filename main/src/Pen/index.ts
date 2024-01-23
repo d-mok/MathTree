@@ -1,6 +1,6 @@
-import { PenCls } from './Pen'
-import { AutoPenCls } from './AutoPen'
-import { PhyPenCls } from './PhyPen'
+import { PenCls } from './Pen.js'
+import { AutoPenCls } from './AutoPen.js'
+import { PhyPenCls } from './PhyPen.js'
 
 declare global {
     var Pen: typeof PenCls

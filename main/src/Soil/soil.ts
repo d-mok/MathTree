@@ -1,9 +1,9 @@
-import { shuffleOptions } from './tool/shuffle'
-import { AutoOptions } from './tool/option'
-import { Config } from './cls'
+import { shuffleOptions } from './tool/shuffle.js'
+import { AutoOptions } from './tool/option.js'
+import { Config } from './cls.js'
 import renderMathInElement from 'katex/dist/contrib/auto-render'
 import { dress, evalCtx, exprCtx, cropSection, loopSection, Timer } from 'bot'
-import { blacksmith } from './tool/blacksmith'
+import { blacksmith } from './tool/blacksmith.js'
 
 // util functions
 

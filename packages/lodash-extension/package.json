@@ -4,7 +4,7 @@
     "description": "a lodash mixin",
     "type": "module",
     "exports": "./lib/src/index.js",
-    "types": "lib/src",
+    "types": "lib/src/index.d.ts",
     "scripts": {
         "test": "vitest run",
         "build": "tsc"

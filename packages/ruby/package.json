@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "description": "a math lib",
     "main": "lib/src/index.js",
-    "types": "lib/src",
+    "types": "lib/src/index.d.ts",
     "type": "module",
     "scripts": {
         "test": "vitest run",
