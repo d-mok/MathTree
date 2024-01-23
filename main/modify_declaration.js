@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs from 'fs'
 
 const declarationFilePath = '../dist/type/declaration.d.ts'
 

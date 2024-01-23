@@ -8,7 +8,7 @@
         "build-type": "npx tsc --project tsconfig.d.json && node ./modify_declaration.js",
         "build-stable": "esbuild src/index.ts --bundle --minify --outfile=../dist/stable/mathtree.js",
         "test": "vitest run",
-        "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js --external:sapphire-js",
+        "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js",
         "npm i": "npm i --install-links=false"
     },
     "devDependencies": {
