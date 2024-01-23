@@ -1,4 +1,3 @@
-import 'jest-extended'
 import { describe, test, it, expect } from 'vitest'
 import { dice } from '../src/index.js'
 import _ from 'lodash'

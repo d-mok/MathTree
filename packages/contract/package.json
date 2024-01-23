@@ -1,19 +1,19 @@
 {
-  "name": "contract",
-  "version": "1.0.0",
-  "description": "a library for function validation",
-  "main": "lib/src/index.js",
-  "types": "lib/src",
-  "type": "module",
-  "scripts": {
-    "jest": "jest",
-    "build": "tsc"
-  },
-  "prettier": {
-    "tabWidth": 4,
-    "semi": false,
-    "singleQuote": true,
-    "arrowParens": "avoid",
-    "singleAttributePerLine": true
-  }
+    "name": "contract",
+    "version": "1.0.0",
+    "description": "a library for function validation",
+    "main": "lib/src/index.js",
+    "types": "lib/src",
+    "type": "module",
+    "scripts": {
+        "test": "vitest run",
+        "build": "tsc"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true,
+        "arrowParens": "avoid",
+        "singleAttributePerLine": true
+    }
 }

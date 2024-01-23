@@ -1,10 +1,7 @@
-import { expose, exposeIt, exposeAll } from '../src/index'
-import 'jest-extended'
-import { suite, test, params } from "@testdeck/jest"
-
+import { expose, exposeIt, exposeAll } from '../src/index.js'
+import { test, expect } from 'vitest'
 
 export class Host {
-
     @exposeIt()
     static log() {
         return 'hi'
@@ -13,7 +10,6 @@ export class Host {
 
 @exposeAll()
 export class Host2 {
-
     static log2() {
         return 'hihi'
     }
@@ -24,23 +20,10 @@ declare global {
     var log2: any
 }
 
+test('expose', () => {
+    expect(log()).toBe('hi')
+})
 
-
-
-@suite
-class Expose {
-
-    @test
-    expose() {
-        expect(log()).toBe('hi')
-    }
-
-    @test
-    exposeAll() {
-        expect(log2()).toBe('hihi')
-    }
-
-}
-
-
-
+test('exposeAll', () => {
+    expect(log2()).toBe('hihi')
+})
