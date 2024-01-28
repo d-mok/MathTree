@@ -24,6 +24,23 @@ function isValidVariable(v: any): boolean {
     return true
 }
 
+function printThing(v: any): string {
+    if (Array.isArray(v)) return '[' + v.map(printThing).join(',') + ']'
+
+    if (typeof v === 'object' && v !== null)
+        return (
+            '{' +
+            Object.entries(v)
+                .map(([k, v]) => `${k}:${printThing(v)}`)
+                .join(',') +
+            '}'
+        )
+
+    if (v === undefined) return 'undefined'
+    if (v === null) return 'null'
+    return String(v)
+}
+
 function katex(html: string): string {
     let ele = document.createElement('div')
     ele.innerHTML = html
@@ -103,7 +120,7 @@ export class Soil {
     private checkDict(): [boolean, string] {
         let report = Object.entries(this.dict)
             .filter(([k, v]) => !isValidVariable(v))
-            .map(([k, v]) => `${k}: ${String(v)}`)
+            .map(([k, v]) => `${k}: ${printThing(v)}`)
             .join('\n')
 
         return [report === '', report]
