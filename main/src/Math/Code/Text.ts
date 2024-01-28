@@ -73,7 +73,6 @@ export class Host {
     }
 
     /**
-
      * convert index katex to surd
      * ```
      * IndexToSurd('{x}^{0.5}') // '\\sqrt{x}'
@@ -86,7 +85,6 @@ export class Host {
     }
 
     /**
-
      * @deprecated
      * the coordinates '(a, b)' of point [a,b]
      * ```
@@ -102,7 +100,6 @@ export class Host {
     }
 
     /**
-
      * @deprecated
      * the scientific notation of number
      * ```
@@ -121,7 +118,6 @@ export class Host {
     }
 
     /**
-
      * the katex of long division
      * ```
      * LongDivision([1,2,3,4],[1,2]) //
@@ -217,7 +213,6 @@ export class Host {
     }
 
     /**
-
      * the representation of num in base b
      * ```
      * ToBase(1000,16) // '3E8_{16}'
@@ -240,7 +235,6 @@ export class Host {
     }
 
     /**
-
      * a prime factorization layout for HCF or LCM
      * ```
      * PrimeFactorize({

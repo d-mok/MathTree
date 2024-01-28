@@ -86,7 +86,8 @@ export class Soil {
     private checkDict(): [boolean, string] {
         function notOK(v: any) {
             return (
-                v === undefined || // v === null ||
+                v === undefined ||
+                v === null ||
                 (typeof v === 'number' && !Number.isFinite(v))
             )
         }
