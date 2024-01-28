@@ -3723,12 +3723,19 @@ declare module "Pen/modules/d3" {
         /**
          * Draw the dash height and right-angle.
          * ```
+         * pen.d3.drop([0,0,1],[0,0,0],[0,1,0])
+         * ```
+         */
+        drop(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string): void;
+        /**
+         * Draw the dash height, right-angle and the leg.
+         * ```
          * pen.d3.height([0,0,1],[0,0,0],[0,1,0])
          * ```
          */
         height(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string): void;
         /**
-         * Draw the solid height and right-angle.
+         * Draw the solid height, right-angle and the leg.
          * ```
          * pen.d3.altitude([0,0,1],[0,0,0],[0,1,0])
          * ```

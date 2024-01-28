@@ -485,6 +485,18 @@ export class PenD3 {
     /**
      * Draw the dash height and right-angle.
      * ```
+     * pen.d3.drop([0,0,1],[0,0,0],[0,1,0])
+     * ```
+     */
+    drop(vertex: Point3D, foot: Point3D, leg: Point3D, label?: string) {
+        this.pen.dash(vertex, foot)
+        this.pen.rightAngle(vertex, foot, leg)
+        if (label !== undefined) this.pen.label.line([vertex, foot], label)
+    }
+
+    /**
+     * Draw the dash height, right-angle and the leg.
+     * ```
      * pen.d3.height([0,0,1],[0,0,0],[0,1,0])
      * ```
      */
@@ -496,7 +508,7 @@ export class PenD3 {
     }
 
     /**
-     * Draw the solid height and right-angle.
+     * Draw the solid height, right-angle and the leg.
      * ```
      * pen.d3.altitude([0,0,1],[0,0,0],[0,1,0])
      * ```
