@@ -103,7 +103,7 @@ export class Soil {
     private checkDict(): [boolean, string] {
         let report = Object.entries(this.dict)
             .filter(([k, v]) => !isValidVariable(v))
-            .map(([k, v]) => `${k}: ${v || JSON.stringify(v)}`)
+            .map(([k, v]) => `${k}: ${String(v)}`)
             .join('\n')
 
         return [report === '', report]
