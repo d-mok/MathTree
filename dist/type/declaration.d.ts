@@ -2355,7 +2355,6 @@ declare module "Math/Code/Text" {
          */
         static Dfrac(numerator: number, denominator: number, upSign?: boolean): string;
         /**
-    
          * convert index katex to surd
          * ```
          * IndexToSurd('{x}^{0.5}') // '\\sqrt{x}'
@@ -2364,7 +2363,6 @@ declare module "Math/Code/Text" {
          */
         static IndexToSurd(text: string): string;
         /**
-    
          * @deprecated
          * the coordinates '(a, b)' of point [a,b]
          * ```
@@ -2373,7 +2371,6 @@ declare module "Math/Code/Text" {
          */
         static Coord(point: Point2D, dp?: number): string;
         /**
-    
          * @deprecated
          * the scientific notation of number
          * ```
@@ -2383,7 +2380,6 @@ declare module "Math/Code/Text" {
          */
         static Sci(num: number): string;
         /**
-    
          * the katex of long division
          * ```
          * LongDivision([1,2,3,4],[1,2]) //
@@ -2392,7 +2388,6 @@ declare module "Math/Code/Text" {
          */
         static LongDivision(dividend: number[], divisor: number[]): string;
         /**
-    
          * the representation of num in base b
          * ```
          * ToBase(1000,16) // '3E8_{16}'
@@ -2401,7 +2396,6 @@ declare module "Math/Code/Text" {
          */
         static ToBase(num: number, base: number): string;
         /**
-    
          * a prime factorization layout for HCF or LCM
          * ```
          * PrimeFactorize({

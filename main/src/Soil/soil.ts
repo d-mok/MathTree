@@ -7,6 +7,23 @@ import { blacksmith } from './tool/blacksmith.js'
 
 // util functions
 
+function isValidVariable(v: any): boolean {
+    // Check if the value is valid directly
+    if (v === undefined) return false
+    if (v === null) return false
+    if (typeof v === 'number' && !Number.isFinite(v)) return false
+
+    // If the value is an array, check each element
+    if (Array.isArray(v)) return v.every(isValidVariable)
+
+    // If the v is an object, check each field
+    if (typeof v === 'object' && v !== null)
+        return Object.values(v).every(isValidVariable)
+
+    // If none of the above conditions met, return true
+    return true
+}
+
 function katex(html: string): string {
     let ele = document.createElement('div')
     ele.innerHTML = html
@@ -84,16 +101,8 @@ export class Soil {
     }
 
     private checkDict(): [boolean, string] {
-        function notOK(v: any) {
-            return (
-                v === undefined ||
-                v === null ||
-                (typeof v === 'number' && !Number.isFinite(v))
-            )
-        }
-
         let report = Object.entries(this.dict)
-            .filter(([k, v]) => notOK(v))
+            .filter(([k, v]) => !isValidVariable(v))
             .map(([k, v]) => `${k}: ${v}`)
             .join('\n')
 
