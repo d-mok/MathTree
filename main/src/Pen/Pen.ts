@@ -35,19 +35,16 @@ export class PenCls {
 
     /**
      * Setup of canvas coordinate range.
-     * @category setting
      */
     range = new PenRange(this, this.cv)
 
     /**
      * Setup of canvas size.
-     * @category setting
      */
     size = new PenSize(this, this.cv)
 
     /**
      * Settings.
-     * @category setting
      */
     set = new PenSettings(this, this.cv)
 
@@ -58,7 +55,6 @@ export class PenCls {
      * pen.plot(x=>x**2) // y=x^2 in from x = xmin to xmax
      * pen.plot(t=>[cos(t),sin(t)],0,360) // a unit circle
      * ```
-     * @category graph
      */
     plot(
         func: ((t: number) => number) | ((t: number) => Point2D),
@@ -70,7 +66,6 @@ export class PenCls {
 
     /**
      * Same as .plot but dashed.
-     * @category graph
      */
     plotDash(
         func: ((t: number) => number) | ((t: number) => Point2D),
@@ -85,7 +80,6 @@ export class PenCls {
 
     /**
      * Drawing graph of functions.
-     * @category graph
      */
     graph = new PenGraph(this, this.cv)
 
@@ -95,7 +89,6 @@ export class PenCls {
      * pen.point([1,2]) // draw a point at [1,2]
      * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
      * ```
-     * @category draw
      */
     point(position: Point, label?: string) {
         this.cv.disc(position, DEFAULT_POINT_RADIUS_PIXEL)
@@ -108,7 +101,6 @@ export class PenCls {
      * pen.points({A,B}) // mark and label point A as 'A', point B as 'B'
      * pen.points({A,B},false) // mark point A and B, without label
      * ```
-     * @category draw
      */
     points(positions: { [k: string]: Point }) {
         for (let k in positions) {
@@ -123,7 +115,6 @@ export class PenCls {
      * pen.cutX(1) // same as cutX([1,0])
      * pen.cutX(1,'x') // label 'x'
      * ```
-     * @category draw
      */
     cutX(position: Point2D | number, label?: string | number) {
         if (typeof position === 'number') position = [position, 0]
@@ -138,7 +129,6 @@ export class PenCls {
      * pen.cutY(1) // same as cutY([0,1])
      * pen.cutY(1,'y') // label 'y'
      * ```
-     * @category draw
      */
     cutY(position: Point2D | number, label?: string | number) {
         if (typeof position === 'number') position = [0, position]
@@ -151,7 +141,6 @@ export class PenCls {
      * ```
      * pen.tickX(1) // draw a tick at x=1
      * ```
-     * @category draw
      */
     tickX(x: number) {
         this.cutX(x, x)
@@ -162,7 +151,6 @@ export class PenCls {
      * ```
      * pen.tickY(1) // draw a tick at y=1
      * ```
-     * @category draw
      */
     tickY(y: number) {
         this.cutY(y, y)
@@ -173,7 +161,6 @@ export class PenCls {
      * ```
      * pen.guideX([1,2],'1') // draw guide from [1,2] and label '1' on x-axis
      * ```
-     * @category draw
      */
     guideX(point: Point2D, label?: string | number) {
         let [x, y] = point
@@ -189,7 +176,6 @@ export class PenCls {
      * ```
      * pen.guideY([1,2],'2') // draw guide from [1,2] and label '2' on y-axis
      * ```
-     * @category draw
      */
     guideY(point: Point2D, label?: string | number) {
         let [x, y] = point
@@ -205,7 +191,6 @@ export class PenCls {
      * ```
      * pen.guide([1,2],['a','b']) // draw guide from [1,2] and label 'a' on x-axis and 'b' on y-axis
      * ```
-     * @category draw
      */
     guide(
         point: Point2D,
@@ -223,7 +208,6 @@ export class PenCls {
      * ```
      * pen.leadX([1,2]) // draw guide from [1,2] and label 1 on x-axis
      * ```
-     * @category draw
      */
     leadX(point: Point2D) {
         this.guideX(point, point[0])
@@ -234,7 +218,6 @@ export class PenCls {
      * ```
      * pen.leadY([1,2]) // draw guide from [1,2] and label 2 on y-axis
      * ```
-     * @category draw
      */
     leadY(point: Point2D) {
         this.guideY(point, point[1])
@@ -245,7 +228,6 @@ export class PenCls {
      * ```
      * pen.lead([1,2]) // draw guide from [1,2] and label 1 on x-axis and 2 on y-axis
      * ```
-     * @category draw
      */
     lead(point: Point2D) {
         this.leadX(point)
@@ -257,7 +239,6 @@ export class PenCls {
      * ```
      * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
      * ```
-     * @category draw
      */
     circle(center: Point2D, radius: number) {
         this.cv.circle(center, radius)
@@ -268,7 +249,6 @@ export class PenCls {
      * ```
      * pen.disc([1,2], 10) // draw a disc centered at [1,2] with 10 px radius
      * ```
-     * @category draw
      */
     disc(center: Point2D, radius: number) {
         this.cv.disc(center, radius)
@@ -279,7 +259,6 @@ export class PenCls {
      * ```
      * pen.halo([1,2], 10) // shade a disc centered at [1,2] with 10 px radius
      * ```
-     * @category draw
      */
     halo(center: Point2D, radius: number) {
         this.cv.halo(center, radius)
@@ -290,7 +269,6 @@ export class PenCls {
      * ```
      * pen.dot([1,2]) // draw a dot at [1,2]
      * ```
-     * @category draw
      */
     dot(point: Point2D) {
         this.disc(point, 4)
@@ -301,7 +279,6 @@ export class PenCls {
      * ```
      * pen.hole([1,2]) // draw a hole at [1,2]
      * ```
-     * @category draw
      */
     hole(point: Point2D) {
         this.cv.save()
@@ -317,7 +294,6 @@ export class PenCls {
      * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
      * pen.line([1,2],[3,4],'10') //  also label '10'
      * ```
-     * @category draw
      */
     line(A: Point, B: Point, label?: string | number) {
         this.cv.line([A, B])
@@ -330,7 +306,6 @@ export class PenCls {
      * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
      * pen.dash([1,2],[3,4],'10') //  also label '10'
      * ```
-     * @category draw
      */
     dash(A: Point, B: Point, label?: string | number) {
         this.cv.dash([A, B])
@@ -342,7 +317,6 @@ export class PenCls {
      * ```
      * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
      * ```
-     * @category draw
      */
     arrow(A: Point, B: Point, label?: string | number) {
         this.cv.arrow(A, B, 5)
@@ -362,7 +336,6 @@ export class PenCls {
      * // label the arrow as 'F'
      * // label the angle as 'θ'
      * ```
-     * @category draw
      */
     arrowCompo(
         O: Point2D,
@@ -387,7 +360,6 @@ export class PenCls {
      * // label the arrows as 'Fx' and 'Fy'
      * // label the angle with the horizontal as 'θ'
      * ```
-     * @category draw
      */
     arrowResolve(
         O: Point2D,
@@ -407,7 +379,6 @@ export class PenCls {
      * pen.length([1,2],[3,4],'d')
      * // draw an length 'd' from [1,2] to [3,4]
      * ```
-     * @category draw
      */
     length(A: Point, B: Point, label?: string | number) {
         this.cv.line([A, B])
@@ -422,7 +393,6 @@ export class PenCls {
      * pen.height([0,4],[[-1,0],[1,0]],'h')
      * // draw the height 'h' from [0,4] to x-axis
      * ```
-     * @category draw
      */
     height(V: Point2D, [A, B]: [Point2D, Point2D], label?: string | number) {
         let F = PdFoot(V, [A, B])
@@ -436,7 +406,6 @@ export class PenCls {
      * ```
      * pen.ray([0,0],[1,1])
      * ```
-     * @category draw
      */
     ray(A: Point2D, B: Point2D, label?: string | number) {
         this.cv.line([A, B])
@@ -449,7 +418,6 @@ export class PenCls {
      * ```
      * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline through 3 points
      * ```
-     * @category draw
      */
     polyline(...points: Point[]) {
         this.cv.line(points)
@@ -460,7 +428,6 @@ export class PenCls {
      * ```
      * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle
      * ```
-     * @category draw
      */
     polygon(...points: Point[]) {
         this.cv.shape(points)
@@ -471,7 +438,6 @@ export class PenCls {
      * ```
      * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle
      * ```
-     * @category draw
      */
     polyfill(...points: Point[]) {
         this.cv.fill(points)
@@ -482,7 +448,6 @@ export class PenCls {
      * ```
      * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle
      * ```
-     * @category draw
      */
     polyshade(...points: Point[]) {
         this.cv.shade(points)
@@ -493,7 +458,6 @@ export class PenCls {
      * ```
      * pen.polyshape([0,0],[5,2],[3,4]) // draw and shade a triangle
      * ```
-     * @category draw
      */
     polyshape(...points: Point[]) {
         this.polygon(...points)
@@ -502,25 +466,21 @@ export class PenCls {
 
     /**
      * Draw a rod.
-     * @category rod
      */
     rod = new PenRod(this, this.cv)
 
     /**
      * Fill a shape.
-     * @category fill
      */
     fill = new PenFill(this, this.cv)
 
     /**
      * Shade a shape.
-     * @category shade
      */
     shade = new PenShade(this, this.cv)
 
     /**
      * Linear Programming tools.
-     * @category linProg
      */
     linProg = new PenLinProg(this, this.cv)
 
@@ -529,7 +489,6 @@ export class PenCls {
      * ```
      * pen.angle([0,0],[5,2],[3,4],'x')
      * ```
-     * @category draw
      */
     angle(
         A: Point,
@@ -558,7 +517,6 @@ export class PenCls {
      * ```
      * pen.angleDir(0,[0,0],60,'x')
      * ```
-     * @category draw
      */
     angleDir(
         A: Point2D | number,
@@ -578,7 +536,6 @@ export class PenCls {
      * pen.decorate.equalSide([1,0],[3,2],2)
      * // a double-tick at the mid-pt of [1,0] and [3,2]
      * ```
-     * @category decorator
      */
     equalSide(A: Point, B: Point, tick = 1) {
         this.cv.equalSide(A, B, 5, tick, 3)
@@ -590,7 +547,6 @@ export class PenCls {
      * pen.decorate.bisectSide([0,0], [2,2], 2)
      * // two double-ticks bisecting [0,0] and [2,2] at their mid-pt
      * ```
-     * @category decorator
      */
     bisectSide(A: Point, B: Point, tick = 1) {
         ;[A, B] = this.cv.pjs([A, B])
@@ -605,7 +561,6 @@ export class PenCls {
      * pen.decorate.parallel([1,0],[3,2],2)
      * // a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
      * ```
-     * @category decorator
      */
     parallel(A: Point, B: Point, tick = 1) {
         this.cv.parallel(A, B, 5, tick, 6)
@@ -617,7 +572,6 @@ export class PenCls {
      * pen.decorate.rightAngle([1,0],[0,0],[3,2])
      * // an right-angle AOB
      * ```
-     * @category decorator
      */
     rightAngle(A: Point, O: Point, B?: Point, size = 12) {
         A = this.cv.pj(A)
@@ -633,7 +587,6 @@ export class PenCls {
      * pen.decorate.compass([1,2])
      * // a compass at [1,2]
      * ```
-     * @category decorator
      */
     compass(point: Point2D) {
         this.cv.compass(point, 17, 20, 3.5)
@@ -644,20 +597,17 @@ export class PenCls {
      * ```
      * pen.write([1,2],'abc') // 'abc' at [1,2]
      * ```
-     * @category text
      */
     write(point: Point, text: string) {
         this.cv.write(text, point)
     }
 
     /**
-     * @category text
      */
     label = new PenLabel(this, this.cv)
 
     /**
      * The axis.
-     * @category axis
      */
     axis = new PenAxis(this, this.cv)
 
@@ -674,25 +624,21 @@ export class PenCls {
 
     /**
      * The axis ticks.
-     * @category axis
      */
     tick = new PenTick(this, this.cv)
 
     /**
      * The axis gridlines.
-     * @category axis
      */
     grid = new PenGrid(this, this.cv)
 
     /**
      * The axis gridlines and ticks.
-     * @category axis
      */
     gridTick = new PenGridTick(this, this.cv)
 
     /**
      * The 3D pen
-     * @category 3D
      */
     d3 = new PenD3(this, this.cv)
 
@@ -701,7 +647,6 @@ export class PenCls {
      * ```
      * pen.background('https://www2.pyc.edu.hk/img/pycnet_logo.png')
      * ```
-     * @category export
      */
     background(url: string): void {
         this.cv.backgroundURL = url
@@ -713,7 +658,6 @@ export class PenCls {
      * question = pen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
-     * @category export
      */
     export(html: string, placeholder: string): string {
         return this.cv.export(html, placeholder, false)
@@ -725,7 +669,6 @@ export class PenCls {
      * question = pen.exportTrim(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
      * ```
-     * @category export
      */
     exportTrim(html: string, placeholder: string) {
         return this.cv.export(html, placeholder, true)
@@ -733,7 +676,6 @@ export class PenCls {
 
     /**
      * Clear the canvas.
-     * @category export
      */
     clear() {
         this.cv.clearImg()
@@ -741,7 +683,6 @@ export class PenCls {
 
     /**
      * Temporarily save the img internally. Can be later restored by restoreImg.
-     * @category export
      */
     saveImg() {
         this.cv.saveImg()
@@ -749,7 +690,6 @@ export class PenCls {
 
     /**
      * Restored the previously saved img by saveImg.
-     * @category export
      */
     restoreImg() {
         this.cv.restoreImg()
