@@ -10,18 +10,6 @@ export class AutoPenCls {
     }
 
     /**
-     * @deprecated
-     * Export the canvas to image tag.
-     * ```
-     * question = autoPen.export(question,'imgQ')
-     * // paste the canvas to the image tag with src field 'imgQ'
-     * ```
-     */
-    export(html: string, placeholder: string) {
-        return this.pen.exportTrim(html, placeholder)
-    }
-
-    /**
      * Export the canvas to image tag.
      * ```
      * question = autoPen.export(question,'imgQ')
@@ -498,10 +486,17 @@ export class AutoPenCls {
         scale = 1.6,
     }: {
         vertices: Point2D[]
-        triangle: any
-        labels: string[]
-        heights: [boolean, boolean, boolean]
-        scale: number
+        triangle?: {
+            sideA?: number
+            sideB?: number
+            sideC?: number
+            angleA?: number
+            angleB?: number
+            angleC?: number
+        }
+        labels?: string[]
+        heights?: [boolean, boolean, boolean]
+        scale?: number
     }) {
         let A = vertices[0]
         let B = vertices[1]
@@ -522,13 +517,7 @@ export class AutoPenCls {
 
         let G = Mid(A, B, C)
 
-        let T = triangle
-        let sideA = T.sideA
-        let sideB = T.sideB
-        let sideC = T.sideC
-        let angleA = T.angleA
-        let angleB = T.angleB
-        let angleC = T.angleC
+        let { sideA, sideB, sideC, angleA, angleB, angleC } = triangle
 
         let labelA = labels[0]
         let labelB = labels[1]

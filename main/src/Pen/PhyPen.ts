@@ -8,18 +8,6 @@ export class PhyPenCls {
     }
 
     /**
-     * @deprecated
-     * Export the canvas to image tag.
-     * ```
-     * question = autoPen.export(question,'imgQ')
-     * // paste the canvas to the image tag with src field 'imgQ'
-     * ```
-     */
-    export(html: string, placeholder: string) {
-        return this.pen.print(html, placeholder)
-    }
-
-    /**
      * Export the canvas to image tag.
      * ```
      * question = autoPen.export(question,'imgQ')

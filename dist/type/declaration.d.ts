@@ -4543,24 +4543,7 @@ declare module "Pen/Pen" {
          */
         background(url: string): void;
         /**
-         * @deprecated
-         * Export the canvas to image tag.
-         * ```
-         * question = pen.export(question,'imgQ')
-         * // paste the canvas to the image tag with src field 'imgQ'
-         * ```
-         */
-        export(html: string, placeholder: string): string;
-        /**
-         * @deprecated
-         * Export the canvas to image tag, with white space trimmed.
-         * ```
-         * question = pen.exportTrim(question,'imgQ')
-         * // paste the canvas to the image tag with src field 'imgQ'
-         * ```
-         */
-        exportTrim(html: string, placeholder: string): string;
-        /**
+         * @deprecated dev only
          * Export the canvas to image tag. For development only.
          * ```
          * question = pen.printFull(question,'imgQ')
@@ -4816,15 +4799,6 @@ declare module "Pen/AutoPen" {
         private pen;
         constructor();
         /**
-         * @deprecated
-         * Export the canvas to image tag.
-         * ```
-         * question = autoPen.export(question,'imgQ')
-         * // paste the canvas to the image tag with src field 'imgQ'
-         * ```
-         */
-        export(html: string, placeholder: string): string;
-        /**
          * Export the canvas to image tag.
          * ```
          * question = autoPen.export(question,'imgQ')
@@ -4905,10 +4879,17 @@ declare module "Pen/AutoPen" {
          */
         Triangle({ vertices, triangle, labels, heights, scale, }: {
             vertices: Point2D[];
-            triangle: any;
-            labels: string[];
-            heights: [boolean, boolean, boolean];
-            scale: number;
+            triangle?: {
+                sideA?: number;
+                sideB?: number;
+                sideC?: number;
+                angleA?: number;
+                angleB?: number;
+                angleC?: number;
+            };
+            labels?: string[];
+            heights?: [boolean, boolean, boolean];
+            scale?: number;
         }): void;
         /**
          * Draw a graph for linear programming.
@@ -5185,15 +5166,6 @@ declare module "Pen/PhyPen" {
     export class PhyPenCls {
         private pen;
         constructor();
-        /**
-         * @deprecated
-         * Export the canvas to image tag.
-         * ```
-         * question = autoPen.export(question,'imgQ')
-         * // paste the canvas to the image tag with src field 'imgQ'
-         * ```
-         */
-        export(html: string, placeholder: string): string;
         /**
          * Export the canvas to image tag.
          * ```
