@@ -2892,26 +2892,6 @@ declare module "Math/Code/Vector3D" {
          * ```
          */
         static Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: number): Point3D[];
-        /**
-         * @category 3DPen
-         * @deprecated use built-in projector in Pen instead
-         * projector function from 3D point to 2D plane
-         * ```
-         * const pj = Projector(60,0.5) // create a 3D projector function
-         * pj(1,1,0) // [1.25, 0.433012701892]
-         * ```
-         */
-        static Projector(angle?: number, depth?: number): (x: number, y: number, z: number) => Point;
-        /**
-         * @category 3DPen
-         * @deprecated use built-in projector in Pen instead
-         * projector function from 3D point to 2D plane
-         * ```
-         * const pj = Projector3D(60,0.5) // create a 3D projector function
-         * pj([1,1,0]) // [1.25, 0.433012701892]
-         * ```
-         */
-        static Projector3D(angle?: number, depth?: number): (_: Point3D) => Point;
     }
     global {
         var Mid3D: typeof Host.Mid3D;
@@ -2923,8 +2903,6 @@ declare module "Math/Code/Vector3D" {
         var EmbedZ: typeof Host.EmbedZ;
         var FlatZ: typeof Host.FlatZ;
         var Extrude: typeof Host.Extrude;
-        var Projector: typeof Host.Projector;
-        var Projector3D: typeof Host.Projector3D;
     }
 }
 declare module "Math/Algebra/Algebra" {
