@@ -653,6 +653,7 @@ export class PenCls {
     }
 
     /**
+     * @deprecated
      * Export the canvas to image tag.
      * ```
      * question = pen.export(question,'imgQ')
@@ -664,6 +665,7 @@ export class PenCls {
     }
 
     /**
+     * @deprecated
      * Export the canvas to image tag, with white space trimmed.
      * ```
      * question = pen.exportTrim(question,'imgQ')
@@ -671,6 +673,28 @@ export class PenCls {
      * ```
      */
     exportTrim(html: string, placeholder: string) {
+        return this.cv.export(html, placeholder, true)
+    }
+
+    /**
+     * Export the canvas to image tag. For development only.
+     * ```
+     * question = pen.printFull(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
+     */
+    printFull(html: string, placeholder: string): string {
+        return this.cv.export(html, placeholder, false)
+    }
+
+    /**
+     * Export the canvas to image tag, with white space trimmed.
+     * ```
+     * question = pen.print(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
+     */
+    print(html: string, placeholder: string) {
         return this.cv.export(html, placeholder, true)
     }
 

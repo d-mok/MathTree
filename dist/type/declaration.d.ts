@@ -4172,17 +4172,14 @@ declare module "Pen/Pen" {
         constructor();
         /**
          * Setup of canvas coordinate range.
-         * @category setting
          */
         range: PenRange;
         /**
          * Setup of canvas size.
-         * @category setting
          */
         size: PenSize;
         /**
          * Settings.
-         * @category setting
          */
         set: PenSettings;
         /**
@@ -4192,17 +4189,14 @@ declare module "Pen/Pen" {
          * pen.plot(x=>x**2) // y=x^2 in from x = xmin to xmax
          * pen.plot(t=>[cos(t),sin(t)],0,360) // a unit circle
          * ```
-         * @category graph
          */
         plot(func: ((t: number) => number) | ((t: number) => Point2D), tStart?: number, tEnd?: number): void;
         /**
          * Same as .plot but dashed.
-         * @category graph
          */
         plotDash(func: ((t: number) => number) | ((t: number) => Point2D), tStart?: number, tEnd?: number): void;
         /**
          * Drawing graph of functions.
-         * @category graph
          */
         graph: PenGraph;
         /**
@@ -4211,7 +4205,6 @@ declare module "Pen/Pen" {
          * pen.point([1,2]) // draw a point at [1,2]
          * pen.point([1,2],"A") // draw a point at [1,2] and label as "A"
          * ```
-         * @category draw
          */
         point(position: Point, label?: string): void;
         /**
@@ -4220,7 +4213,6 @@ declare module "Pen/Pen" {
          * pen.points({A,B}) // mark and label point A as 'A', point B as 'B'
          * pen.points({A,B},false) // mark point A and B, without label
          * ```
-         * @category draw
          */
         points(positions: {
             [k: string]: Point;
@@ -4232,7 +4224,6 @@ declare module "Pen/Pen" {
          * pen.cutX(1) // same as cutX([1,0])
          * pen.cutX(1,'x') // label 'x'
          * ```
-         * @category draw
          */
         cutX(position: Point2D | number, label?: string | number): void;
         /**
@@ -4242,7 +4233,6 @@ declare module "Pen/Pen" {
          * pen.cutY(1) // same as cutY([0,1])
          * pen.cutY(1,'y') // label 'y'
          * ```
-         * @category draw
          */
         cutY(position: Point2D | number, label?: string | number): void;
         /**
@@ -4250,7 +4240,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.tickX(1) // draw a tick at x=1
          * ```
-         * @category draw
          */
         tickX(x: number): void;
         /**
@@ -4258,7 +4247,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.tickY(1) // draw a tick at y=1
          * ```
-         * @category draw
          */
         tickY(y: number): void;
         /**
@@ -4266,7 +4254,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.guideX([1,2],'1') // draw guide from [1,2] and label '1' on x-axis
          * ```
-         * @category draw
          */
         guideX(point: Point2D, label?: string | number): void;
         /**
@@ -4274,7 +4261,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.guideY([1,2],'2') // draw guide from [1,2] and label '2' on y-axis
          * ```
-         * @category draw
          */
         guideY(point: Point2D, label?: string | number): void;
         /**
@@ -4282,7 +4268,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.guide([1,2],['a','b']) // draw guide from [1,2] and label 'a' on x-axis and 'b' on y-axis
          * ```
-         * @category draw
          */
         guide(point: Point2D, labels?: [string | number | undefined, string | number | undefined]): void;
         /**
@@ -4290,7 +4275,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.leadX([1,2]) // draw guide from [1,2] and label 1 on x-axis
          * ```
-         * @category draw
          */
         leadX(point: Point2D): void;
         /**
@@ -4298,7 +4282,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.leadY([1,2]) // draw guide from [1,2] and label 2 on y-axis
          * ```
-         * @category draw
          */
         leadY(point: Point2D): void;
         /**
@@ -4306,7 +4289,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.lead([1,2]) // draw guide from [1,2] and label 1 on x-axis and 2 on y-axis
          * ```
-         * @category draw
          */
         lead(point: Point2D): void;
         /**
@@ -4314,7 +4296,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.circle([1,2], 10) // draw a circle centered at [1,2] with r=10px
          * ```
-         * @category draw
          */
         circle(center: Point2D, radius: number): void;
         /**
@@ -4322,7 +4303,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.disc([1,2], 10) // draw a disc centered at [1,2] with 10 px radius
          * ```
-         * @category draw
          */
         disc(center: Point2D, radius: number): void;
         /**
@@ -4330,7 +4310,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.halo([1,2], 10) // shade a disc centered at [1,2] with 10 px radius
          * ```
-         * @category draw
          */
         halo(center: Point2D, radius: number): void;
         /**
@@ -4338,7 +4317,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.dot([1,2]) // draw a dot at [1,2]
          * ```
-         * @category draw
          */
         dot(point: Point2D): void;
         /**
@@ -4346,7 +4324,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.hole([1,2]) // draw a hole at [1,2]
          * ```
-         * @category draw
          */
         hole(point: Point2D): void;
         /**
@@ -4355,7 +4332,6 @@ declare module "Pen/Pen" {
          * pen.line([1,2],[3,4]) // draw a line from [1,2] to [3,4]
          * pen.line([1,2],[3,4],'10') //  also label '10'
          * ```
-         * @category draw
          */
         line(A: Point, B: Point, label?: string | number): void;
         /**
@@ -4364,7 +4340,6 @@ declare module "Pen/Pen" {
          * pen.dash([1,2],[3,4]) // draw a dash line from [1,2] to [3,4]
          * pen.dash([1,2],[3,4],'10') //  also label '10'
          * ```
-         * @category draw
          */
         dash(A: Point, B: Point, label?: string | number): void;
         /**
@@ -4372,7 +4347,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.arrow([1,2],[3,4]) // draw an arrow from [1,2] to [3,4]
          * ```
-         * @category draw
          */
         arrow(A: Point, B: Point, label?: string | number): void;
         /**
@@ -4383,7 +4357,6 @@ declare module "Pen/Pen" {
          * // label the arrow as 'F'
          * // label the angle as 'θ'
          * ```
-         * @category draw
          */
         arrowCompo(O: Point2D, P: Point2D, alongDir: number, arrowLabel?: string | number, angleLabel?: string | number): void;
         /**
@@ -4394,7 +4367,6 @@ declare module "Pen/Pen" {
          * // label the arrows as 'Fx' and 'Fy'
          * // label the angle with the horizontal as 'θ'
          * ```
-         * @category draw
          */
         arrowResolve(O: Point2D, P: Point2D, alongDir: number, arrowLabels?: (string | number | undefined)[], angleLabel?: string | number): void;
         /**
@@ -4403,7 +4375,6 @@ declare module "Pen/Pen" {
          * pen.length([1,2],[3,4],'d')
          * // draw an length 'd' from [1,2] to [3,4]
          * ```
-         * @category draw
          */
         length(A: Point, B: Point, label?: string | number): void;
         /**
@@ -4412,7 +4383,6 @@ declare module "Pen/Pen" {
          * pen.height([0,4],[[-1,0],[1,0]],'h')
          * // draw the height 'h' from [0,4] to x-axis
          * ```
-         * @category draw
          */
         height(V: Point2D, [A, B]: [Point2D, Point2D], label?: string | number): void;
         /**
@@ -4420,7 +4390,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.ray([0,0],[1,1])
          * ```
-         * @category draw
          */
         ray(A: Point2D, B: Point2D, label?: string | number): void;
         /**
@@ -4428,7 +4397,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.polyline([0,0],[5,2],[3,4]) // draw a polyline through 3 points
          * ```
-         * @category draw
          */
         polyline(...points: Point[]): void;
         /**
@@ -4436,7 +4404,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.polygon([0,0],[5,2],[3,4]) // draw a triangle
          * ```
-         * @category draw
          */
         polygon(...points: Point[]): void;
         /**
@@ -4444,7 +4411,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.polyfill([0,0],[5,2],[3,4]) // fill a triangle
          * ```
-         * @category draw
          */
         polyfill(...points: Point[]): void;
         /**
@@ -4452,7 +4418,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.polyshade([0,0],[5,2],[3,4]) // shade a triangle
          * ```
-         * @category draw
          */
         polyshade(...points: Point[]): void;
         /**
@@ -4460,27 +4425,22 @@ declare module "Pen/Pen" {
          * ```
          * pen.polyshape([0,0],[5,2],[3,4]) // draw and shade a triangle
          * ```
-         * @category draw
          */
         polyshape(...points: Point[]): void;
         /**
          * Draw a rod.
-         * @category rod
          */
         rod: PenRod;
         /**
          * Fill a shape.
-         * @category fill
          */
         fill: PenFill;
         /**
          * Shade a shape.
-         * @category shade
          */
         shade: PenShade;
         /**
          * Linear Programming tools.
-         * @category linProg
          */
         linProg: PenLinProg;
         /**
@@ -4488,7 +4448,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.angle([0,0],[5,2],[3,4],'x')
          * ```
-         * @category draw
          */
         angle(A: Point, O: Point, B: Point, label?: string | number, arc?: number, radius?: number): void;
         /**
@@ -4496,7 +4455,6 @@ declare module "Pen/Pen" {
          * ```
          * pen.angleDir(0,[0,0],60,'x')
          * ```
-         * @category draw
          */
         angleDir(A: Point2D | number, O: Point2D, B: Point2D | number, label?: string | number, arc?: number, radius?: number): void;
         /**
@@ -4505,7 +4463,6 @@ declare module "Pen/Pen" {
          * pen.decorate.equalSide([1,0],[3,2],2)
          * // a double-tick at the mid-pt of [1,0] and [3,2]
          * ```
-         * @category decorator
          */
         equalSide(A: Point, B: Point, tick?: number): void;
         /**
@@ -4514,7 +4471,6 @@ declare module "Pen/Pen" {
          * pen.decorate.bisectSide([0,0], [2,2], 2)
          * // two double-ticks bisecting [0,0] and [2,2] at their mid-pt
          * ```
-         * @category decorator
          */
         bisectSide(A: Point, B: Point, tick?: number): void;
         /**
@@ -4523,7 +4479,6 @@ declare module "Pen/Pen" {
          * pen.decorate.parallel([1,0],[3,2],2)
          * // a double-tick parallel mark at the mid-pt of [1,0] and [3,2]
          * ```
-         * @category decorator
          */
         parallel(A: Point, B: Point, tick?: number): void;
         /**
@@ -4532,7 +4487,6 @@ declare module "Pen/Pen" {
          * pen.decorate.rightAngle([1,0],[0,0],[3,2])
          * // an right-angle AOB
          * ```
-         * @category decorator
          */
         rightAngle(A: Point, O: Point, B?: Point, size?: number): void;
         /**
@@ -4541,7 +4495,6 @@ declare module "Pen/Pen" {
          * pen.decorate.compass([1,2])
          * // a compass at [1,2]
          * ```
-         * @category decorator
          */
         compass(point: Point2D): void;
         /**
@@ -4549,16 +4502,13 @@ declare module "Pen/Pen" {
          * ```
          * pen.write([1,2],'abc') // 'abc' at [1,2]
          * ```
-         * @category text
          */
         write(point: Point, text: string): void;
         /**
-         * @category text
          */
         label: PenLabel;
         /**
          * The axis.
-         * @category axis
          */
         axis: PenAxis;
         /**
@@ -4571,22 +4521,18 @@ declare module "Pen/Pen" {
         axes(xlabel?: string, ylabel?: string): void;
         /**
          * The axis ticks.
-         * @category axis
          */
         tick: PenTick;
         /**
          * The axis gridlines.
-         * @category axis
          */
         grid: PenGrid;
         /**
          * The axis gridlines and ticks.
-         * @category axis
          */
         gridTick: PenGridTick;
         /**
          * The 3D pen
-         * @category 3D
          */
         d3: PenD3;
         /**
@@ -4594,40 +4540,52 @@ declare module "Pen/Pen" {
          * ```
          * pen.background('https://www2.pyc.edu.hk/img/pycnet_logo.png')
          * ```
-         * @category export
          */
         background(url: string): void;
         /**
+         * @deprecated
          * Export the canvas to image tag.
          * ```
          * question = pen.export(question,'imgQ')
          * // paste the canvas to the image tag with src field 'imgQ'
          * ```
-         * @category export
          */
         export(html: string, placeholder: string): string;
         /**
+         * @deprecated
          * Export the canvas to image tag, with white space trimmed.
          * ```
          * question = pen.exportTrim(question,'imgQ')
          * // paste the canvas to the image tag with src field 'imgQ'
          * ```
-         * @category export
          */
         exportTrim(html: string, placeholder: string): string;
         /**
+         * Export the canvas to image tag. For development only.
+         * ```
+         * question = pen.printFull(question,'imgQ')
+         * // paste the canvas to the image tag with src field 'imgQ'
+         * ```
+         */
+        printFull(html: string, placeholder: string): string;
+        /**
+         * Export the canvas to image tag, with white space trimmed.
+         * ```
+         * question = pen.print(question,'imgQ')
+         * // paste the canvas to the image tag with src field 'imgQ'
+         * ```
+         */
+        print(html: string, placeholder: string): string;
+        /**
          * Clear the canvas.
-         * @category export
          */
         clear(): void;
         /**
          * Temporarily save the img internally. Can be later restored by restoreImg.
-         * @category export
          */
         saveImg(): void;
         /**
          * Restored the previously saved img by saveImg.
-         * @category export
          */
         restoreImg(): void;
     }
@@ -4854,9 +4812,6 @@ declare module "Math/index" {
     import "Math/Builder/index";
 }
 declare module "Pen/AutoPen" {
-    /**
-     * @category DrawingPen
-     */
     export class AutoPenCls {
         /**
          * @ignore
@@ -4867,15 +4822,22 @@ declare module "Pen/AutoPen" {
          */
         constructor();
         /**
+         * @deprecated
          * Export the canvas to image tag.
-         * @param html - The html string to export to.
-         * @param placeholder - The src field of the image tag to export to.
          * ```
          * question = autoPen.export(question,'imgQ')
          * // paste the canvas to the image tag with src field 'imgQ'
          * ```
          */
         export(html: string, placeholder: string): string;
+        /**
+         * Export the canvas to image tag.
+         * ```
+         * question = autoPen.export(question,'imgQ')
+         * // paste the canvas to the image tag with src field 'imgQ'
+         * ```
+         */
+        print(html: string, placeholder: string): string;
         /**
          * Arrow diagram for inequalities.
          * @param items - Represent the inequalities.
@@ -5236,6 +5198,7 @@ declare module "Pen/PhyPen" {
          */
         constructor();
         /**
+         * @deprecated
          * Export the canvas to image tag.
          * ```
          * question = autoPen.export(question,'imgQ')
@@ -5243,6 +5206,14 @@ declare module "Pen/PhyPen" {
          * ```
          */
         export(html: string, placeholder: string): string;
+        /**
+         * Export the canvas to image tag.
+         * ```
+         * question = autoPen.export(question,'imgQ')
+         * // paste the canvas to the image tag with src field 'imgQ'
+         * ```
+         */
+        print(html: string, placeholder: string): string;
         /**
          * Return the originally pen object.
          * ```

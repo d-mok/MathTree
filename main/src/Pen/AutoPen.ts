@@ -16,9 +16,8 @@ export class AutoPenCls {
     }
 
     /**
+     * @deprecated
      * Export the canvas to image tag.
-     * @param html - The html string to export to.
-     * @param placeholder - The src field of the image tag to export to.
      * ```
      * question = autoPen.export(question,'imgQ')
      * // paste the canvas to the image tag with src field 'imgQ'
@@ -26,6 +25,17 @@ export class AutoPenCls {
      */
     export(html: string, placeholder: string) {
         return this.pen.exportTrim(html, placeholder)
+    }
+
+    /**
+     * Export the canvas to image tag.
+     * ```
+     * question = autoPen.export(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
+     */
+    print(html: string, placeholder: string) {
+        return this.pen.print(html, placeholder)
     }
 
     /**
