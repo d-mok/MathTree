@@ -3628,6 +3628,7 @@ declare module "Pen/modules/d3" {
             upperOnly?: boolean | undefined;
         }): void;
         /**
+         * @deprecated - for dev only
          * Return the envelop of a frustum
          * @param lowerBase - the points in the lower base
          * @param upperBase - the point in the upper base, must have the same length as lowerBase
@@ -3654,101 +3655,6 @@ declare module "Pen/modules/d3" {
             lowerZ?: number;
             height?: boolean;
             envelopeOnly?: boolean;
-        }): void;
-        /**
-         * Draw a frustum
-         * ```
-         * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
-         * let V = [0,0,5]
-         * pen.d3.frustum([A,B,C],[V]) // draw a cone
-         * ```
-         */
-        frustum(lowerBase: Point3D[], upperBase: Point3D[] | Point3D, { base, height, shadeLower, shadeUpper, envelope, }?: {
-            base?: boolean | undefined;
-            height?: boolean | undefined;
-            shadeLower?: boolean | undefined;
-            shadeUpper?: boolean | undefined;
-            envelope?: boolean | undefined;
-        }): void;
-        /**
-         * Draw a prism along the z-direction
-         * ```
-         * let [A,B,C] = [[0,0],[2,0],[0,2]]
-         * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
-         * ```
-         */
-        prismZ(lowerBase: Point2D[], lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
-            base?: boolean | undefined;
-            height?: boolean | undefined;
-            shadeLower?: boolean | undefined;
-            shadeUpper?: boolean | undefined;
-            envelope?: boolean | undefined;
-        }): void;
-        /**
-         * Draw a cylinder along the z-direction
-         * ```
-         * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
-         * ```
-         */
-        cylinderZ(center: Point2D, radius: number, lowerZ: number, upperZ: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
-            base?: boolean | undefined;
-            height?: boolean | undefined;
-            shadeLower?: boolean | undefined;
-            shadeUpper?: boolean | undefined;
-            envelope?: boolean | undefined;
-        }): void;
-        /**
-         * @deprecated
-         * Draw a pyramid along the z-direction
-         * ```
-         * let [A,B,C] = [[0,0],[2,0],[0,2]]
-         * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
-         * ```
-         */
-        pyramidZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
-            base?: boolean | undefined;
-            height?: boolean | undefined;
-            shadeLower?: boolean | undefined;
-            envelope?: boolean | undefined;
-        }): void;
-        /**
-         * Draw a cone along the z-direction
-         * ```
-         * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
-         * ```
-         */
-        coneZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, { base, height, shadeLower, envelope, }?: {
-            base?: boolean | undefined;
-            height?: boolean | undefined;
-            shadeLower?: boolean | undefined;
-            envelope?: boolean | undefined;
-        }): void;
-        /**
-         * Draw a frustum along the z-direction
-         * ```
-         * let [A,B,C] = [[0,0],[2,0],[0,2]]
-         * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
-         * ```
-         */
-        frustumZ(lowerBase: Point2D[], lowerZ: number, vertex: Point3D, scale: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
-            base?: boolean | undefined;
-            height?: boolean | undefined;
-            shadeLower?: boolean | undefined;
-            shadeUpper?: boolean | undefined;
-            envelope?: boolean | undefined;
-        }): void;
-        /**
-         * Draw a conical frustum along the z-direction
-         * ```
-         * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
-         * ```
-         */
-        conicalFrustumZ(center: Point2D, radius: number, lowerZ: number, vertex: Point3D, scale: number, { base, height, shadeLower, shadeUpper, envelope, }?: {
-            base?: boolean | undefined;
-            height?: boolean | undefined;
-            shadeLower?: boolean | undefined;
-            shadeUpper?: boolean | undefined;
-            envelope?: boolean | undefined;
         }): void;
         /**
          * Draw the angle between two plane.

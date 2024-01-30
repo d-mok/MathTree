@@ -202,6 +202,7 @@ export class PenD3 {
     }
 
     /**
+     * @deprecated - for dev only
      * Return the envelop of a frustum
      * @param lowerBase - the points in the lower base
      * @param upperBase - the point in the upper base, must have the same length as lowerBase
@@ -353,229 +354,235 @@ export class PenD3 {
         }
     }
 
-    /**
-     * Draw a frustum
-     * ```
-     * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
-     * let V = [0,0,5]
-     * pen.d3.frustum([A,B,C],[V]) // draw a cone
-     * ```
-     */
-    frustum(
-        lowerBase: Point3D[],
-        upperBase: Point3D[] | Point3D,
-        {
-            base = true,
-            height = !true,
-            shadeLower = !true,
-            shadeUpper = !true,
-            envelope = !true,
-        } = {}
-    ) {
-        if (owl.point3D(upperBase)) {
-            upperBase = Array(lowerBase.length).fill(upperBase)
-        }
+    // /**
+    //  * @deprecated
+    //  * Draw a frustum
+    //  * ```
+    //  * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
+    //  * let V = [0,0,5]
+    //  * pen.d3.frustum([A,B,C],[V]) // draw a cone
+    //  * ```
+    //  */
+    // frustum(
+    //     lowerBase: Point3D[],
+    //     upperBase: Point3D[] | Point3D,
+    //     {
+    //         base = true,
+    //         height = !true,
+    //         shadeLower = !true,
+    //         shadeUpper = !true,
+    //         envelope = !true,
+    //     } = {}
+    // ) {
+    //     if (owl.point3D(upperBase)) {
+    //         upperBase = Array(lowerBase.length).fill(upperBase)
+    //     }
 
-        if (base) {
-            this.pen.polygon(...lowerBase)
-            this.pen.polygon(...upperBase)
-        }
+    //     if (base) {
+    //         this.pen.polygon(...lowerBase)
+    //         this.pen.polygon(...upperBase)
+    //     }
 
-        if (envelope) {
-            let env = this.envelope(lowerBase, upperBase)
-            for (let e of env) {
-                this.pen.line(e[0], e[1])
-            }
-        } else {
-            for (let i = 0; i < lowerBase.length; i++) {
-                this.pen.line(lowerBase[i], upperBase[i])
-            }
-        }
+    //     if (envelope) {
+    //         let env = this.envelope(lowerBase, upperBase)
+    //         for (let e of env) {
+    //             this.pen.line(e[0], e[1])
+    //         }
+    //     } else {
+    //         for (let i = 0; i < lowerBase.length; i++) {
+    //             this.pen.line(lowerBase[i], upperBase[i])
+    //         }
+    //     }
 
-        if (height) {
-            let V = vec.mean(upperBase)
-            let [A, B, C] = lowerBase
-            let O = PdFoot3D(V, [A, B, C])
-            this.pen.dash(O, V)
-        }
-        if (shadeLower) this.pen.polyshade(...lowerBase)
-        if (shadeUpper) this.pen.polyshade(...upperBase)
-    }
+    //     if (height) {
+    //         let V = vec.mean(upperBase)
+    //         let [A, B, C] = lowerBase
+    //         let O = PdFoot3D(V, [A, B, C])
+    //         this.pen.dash(O, V)
+    //     }
+    //     if (shadeLower) this.pen.polyshade(...lowerBase)
+    //     if (shadeUpper) this.pen.polyshade(...upperBase)
+    // }
 
-    /**
-     * Draw a prism along the z-direction
-     * ```
-     * let [A,B,C] = [[0,0],[2,0],[0,2]]
-     * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
-     * ```
-     */
-    prismZ(
-        lowerBase: Point2D[],
-        lowerZ: number,
-        upperZ: number,
-        {
-            base = true,
-            height = !true,
-            shadeLower = !true,
-            shadeUpper = !true,
-            envelope = !true,
-        } = {}
-    ) {
-        let lower = EmbedZ(lowerBase, lowerZ)
-        let upper = EmbedZ(lowerBase, upperZ)
-        this.frustum(lower, upper, {
-            base,
-            height,
-            shadeLower,
-            shadeUpper,
-            envelope,
-        })
-    }
+    // /**
+    //  * @deprecated
+    //  * Draw a prism along the z-direction
+    //  * ```
+    //  * let [A,B,C] = [[0,0],[2,0],[0,2]]
+    //  * pen.d3.prismZ([A,B,C],0,4) // draw a triangular prism
+    //  * ```
+    //  */
+    // prismZ(
+    //     lowerBase: Point2D[],
+    //     lowerZ: number,
+    //     upperZ: number,
+    //     {
+    //         base = true,
+    //         height = !true,
+    //         shadeLower = !true,
+    //         shadeUpper = !true,
+    //         envelope = !true,
+    //     } = {}
+    // ) {
+    //     let lower = EmbedZ(lowerBase, lowerZ)
+    //     let upper = EmbedZ(lowerBase, upperZ)
+    //     this.frustum(lower, upper, {
+    //         base,
+    //         height,
+    //         shadeLower,
+    //         shadeUpper,
+    //         envelope,
+    //     })
+    // }
 
-    /**
-     * Draw a cylinder along the z-direction
-     * ```
-     * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
-     * ```
-     */
-    cylinderZ(
-        center: Point2D,
-        radius: number,
-        lowerZ: number,
-        upperZ: number,
-        {
-            base = true,
-            height = !true,
-            shadeLower = !true,
-            shadeUpper = !true,
-            envelope = true,
-        } = {}
-    ) {
-        let ps = cal.traceCircle(center, radius, [0, 360])
-        this.prismZ(ps, lowerZ, upperZ, {
-            base,
-            height,
-            shadeLower,
-            shadeUpper,
-            envelope,
-        })
-    }
+    // /**
+    //  * @deprecated
+    //  * Draw a cylinder along the z-direction
+    //  * ```
+    //  * pen.d3.cylinderZ([0,0],2,0,4) // draw a cylinder
+    //  * ```
+    //  */
+    // cylinderZ(
+    //     center: Point2D,
+    //     radius: number,
+    //     lowerZ: number,
+    //     upperZ: number,
+    //     {
+    //         base = true,
+    //         height = !true,
+    //         shadeLower = !true,
+    //         shadeUpper = !true,
+    //         envelope = true,
+    //     } = {}
+    // ) {
+    //     let ps = cal.traceCircle(center, radius, [0, 360])
+    //     this.prismZ(ps, lowerZ, upperZ, {
+    //         base,
+    //         height,
+    //         shadeLower,
+    //         shadeUpper,
+    //         envelope,
+    //     })
+    // }
 
-    /**
-     * @deprecated
-     * Draw a pyramid along the z-direction
-     * ```
-     * let [A,B,C] = [[0,0],[2,0],[0,2]]
-     * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
-     * ```
-     */
-    pyramidZ(
-        lowerBase: Point2D[],
-        lowerZ: number,
-        vertex: Point3D,
-        {
-            base = true,
-            height = !true,
-            shadeLower = !true,
-            envelope = !true,
-        } = {}
-    ) {
-        let lower = EmbedZ(lowerBase, lowerZ)
-        this.frustum(lower, vertex, {
-            base,
-            height,
-            shadeLower,
-            envelope,
-        })
-    }
+    // /**
+    //  * @deprecated
+    //  * Draw a pyramid along the z-direction
+    //  * ```
+    //  * let [A,B,C] = [[0,0],[2,0],[0,2]]
+    //  * pen.d3.pyramidZ([A,B,C],0,[0,0,4]) // draw a triangular prism
+    //  * ```
+    //  */
+    // pyramidZ(
+    //     lowerBase: Point2D[],
+    //     lowerZ: number,
+    //     vertex: Point3D,
+    //     {
+    //         base = true,
+    //         height = !true,
+    //         shadeLower = !true,
+    //         envelope = !true,
+    //     } = {}
+    // ) {
+    //     let lower = EmbedZ(lowerBase, lowerZ)
+    //     this.frustum(lower, vertex, {
+    //         base,
+    //         height,
+    //         shadeLower,
+    //         envelope,
+    //     })
+    // }
 
-    /**
-     * Draw a cone along the z-direction
-     * ```
-     * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
-     * ```
-     */
-    coneZ(
-        center: Point2D,
-        radius: number,
-        lowerZ: number,
-        vertex: Point3D,
-        {
-            base = true,
-            height = !true,
-            shadeLower = !true,
-            envelope = true,
-        } = {}
-    ) {
-        let ps = cal.traceCircle(center, radius, [0, 360])
-        this.pyramidZ(ps, lowerZ, vertex, {
-            base,
-            height,
-            shadeLower,
-            envelope,
-        })
-    }
+    // /**
+    //  * @deprecated
+    //  * Draw a cone along the z-direction
+    //  * ```
+    //  * pen.d3.coneZ([0,0],2,[0,0,4]) // draw a cone
+    //  * ```
+    //  */
+    // coneZ(
+    //     center: Point2D,
+    //     radius: number,
+    //     lowerZ: number,
+    //     vertex: Point3D,
+    //     {
+    //         base = true,
+    //         height = !true,
+    //         shadeLower = !true,
+    //         envelope = true,
+    //     } = {}
+    // ) {
+    //     let ps = cal.traceCircle(center, radius, [0, 360])
+    //     this.pyramidZ(ps, lowerZ, vertex, {
+    //         base,
+    //         height,
+    //         shadeLower,
+    //         envelope,
+    //     })
+    // }
 
-    /**
-     * Draw a frustum along the z-direction
-     * ```
-     * let [A,B,C] = [[0,0],[2,0],[0,2]]
-     * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
-     * ```
-     */
-    frustumZ(
-        lowerBase: Point2D[],
-        lowerZ: number,
-        vertex: Point3D,
-        scale: number,
-        {
-            base = true,
-            height = !true,
-            shadeLower = !true,
-            shadeUpper = !true,
-            envelope = !true,
-        } = {}
-    ) {
-        let lower = EmbedZ(lowerBase, lowerZ)
-        let upper = Extrude(lower, [vertex], scale)
-        this.frustum(lower, upper, {
-            base,
-            height,
-            shadeLower,
-            shadeUpper,
-            envelope,
-        })
-    }
+    // /**
+    //  * @deprecated
+    //  * Draw a frustum along the z-direction
+    //  * ```
+    //  * let [A,B,C] = [[0,0],[2,0],[0,2]]
+    //  * pen.d3.frustumZ([A,B,C],0,[0,0,4],0.25) // draw a triangular frustum
+    //  * ```
+    //  */
+    // frustumZ(
+    //     lowerBase: Point2D[],
+    //     lowerZ: number,
+    //     vertex: Point3D,
+    //     scale: number,
+    //     {
+    //         base = true,
+    //         height = !true,
+    //         shadeLower = !true,
+    //         shadeUpper = !true,
+    //         envelope = !true,
+    //     } = {}
+    // ) {
+    //     let lower = EmbedZ(lowerBase, lowerZ)
+    //     let upper = Extrude(lower, [vertex], scale)
+    //     this.frustum(lower, upper, {
+    //         base,
+    //         height,
+    //         shadeLower,
+    //         shadeUpper,
+    //         envelope,
+    //     })
+    // }
 
-    /**
-     * Draw a conical frustum along the z-direction
-     * ```
-     * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
-     * ```
-     */
-    conicalFrustumZ(
-        center: Point2D,
-        radius: number,
-        lowerZ: number,
-        vertex: Point3D,
-        scale: number,
-        {
-            base = true,
-            height = !true,
-            shadeLower = !true,
-            shadeUpper = !true,
-            envelope = true,
-        } = {}
-    ) {
-        let ps = cal.traceCircle(center, radius, [0, 360])
-        this.frustumZ(ps, lowerZ, vertex, scale, {
-            base,
-            height,
-            shadeLower,
-            shadeUpper,
-            envelope,
-        })
-    }
+    // /**
+    //  * @deprecated
+    //  * Draw a conical frustum along the z-direction
+    //  * ```
+    //  * pen.d3.conicalFrustumZ([0,0],2,[0,0,4],0.25) // draw a conical frustum
+    //  * ```
+    //  */
+    // conicalFrustumZ(
+    //     center: Point2D,
+    //     radius: number,
+    //     lowerZ: number,
+    //     vertex: Point3D,
+    //     scale: number,
+    //     {
+    //         base = true,
+    //         height = !true,
+    //         shadeLower = !true,
+    //         shadeUpper = !true,
+    //         envelope = true,
+    //     } = {}
+    // ) {
+    //     let ps = cal.traceCircle(center, radius, [0, 360])
+    //     this.frustumZ(ps, lowerZ, vertex, scale, {
+    //         base,
+    //         height,
+    //         shadeLower,
+    //         shadeUpper,
+    //         envelope,
+    //     })
+    // }
 
     /**
      * Draw the angle between two plane.
