@@ -1,73 +1,114 @@
+declare module "Core/owl/custom" {
+    export function custom<T>(predicate: Checker, funcName?: string): TypeGuard<T>;
+}
+declare module "Core/owl/and" {
+    export function and<T1>(p1: TypeGuard<T1>): TypeGuard<T1>;
+    export function and<T1, T2>(p1: TypeGuard<T1>, p2: TypeGuard<T2>): TypeGuard<T1 & T2>;
+    export function and<T1, T2, T3>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>): TypeGuard<T1 & T2 & T3>;
+    export function and<T1, T2, T3, T4>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>): TypeGuard<T1 & T2 & T3 & T4>;
+    export function and<T1, T2, T3, T4, T5>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>): TypeGuard<T1 & T2 & T3 & T4 & T5>;
+    export function and<T1, T2, T3, T4, T5, T6>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>, p6: TypeGuard<T6>): TypeGuard<T1 & T2 & T3 & T4 & T5 & T6>;
+    export function and<T1, T2, T3, T4, T5, T6, T7>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>, p6: TypeGuard<T6>, p7: TypeGuard<T7>): TypeGuard<T1 & T2 & T3 & T4 & T5 & T6 & T7>;
+}
+declare module "Core/owl/array" {
+    export function array(): TypeGuard<any[]>;
+    export function array<T>(guard: TypeGuard<T>): TypeGuard<T[]>;
+}
+declare module "Core/owl/anyOf" {
+    export function anyOf<const T>(...vals: T[]): TypeGuard<T>;
+}
+declare module "Core/owl/object" {
+    export function object(schema?: Record<string, Checker>): TypeGuard<Record<string, any>>;
+}
+declare module "Core/owl/or" {
+    export function or<T1>(p1: TypeGuard<T1>): TypeGuard<T1>;
+    export function or<T1, T2>(p1: TypeGuard<T1>, p2: TypeGuard<T2>): TypeGuard<T1 | T2>;
+    export function or<T1, T2, T3>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>): TypeGuard<T1 | T2 | T3>;
+    export function or<T1, T2, T3, T4>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>): TypeGuard<T1 | T2 | T3 | T4>;
+    export function or<T1, T2, T3, T4, T5>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>): TypeGuard<T1 | T2 | T3 | T4 | T5>;
+    export function or<T1, T2, T3, T4, T5, T6>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>, p6: TypeGuard<T6>): TypeGuard<T1 | T2 | T3 | T4 | T5 | T6>;
+    export function or<T1, T2, T3, T4, T5, T6, T7>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>, p6: TypeGuard<T6>, p7: TypeGuard<T7>): TypeGuard<T1 | T2 | T3 | T4 | T5 | T6 | T7>;
+}
+declare module "Core/owl/tuple" {
+    export function tuple<T1>(p1: TypeGuard<T1>): TypeGuard<[T1]>;
+    export function tuple<T1, T2>(p1: TypeGuard<T1>, p2: TypeGuard<T2>): TypeGuard<[T1, T2]>;
+    export function tuple<T1, T2, T3>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>): TypeGuard<[T1, T2, T3]>;
+    export function tuple<T1, T2, T3, T4>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>): TypeGuard<[T1, T2, T3, T4]>;
+    export function tuple<T1, T2, T3, T4, T5>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>): TypeGuard<[T1, T2, T3, T4, T5]>;
+    export function tuple<T1, T2, T3, T4, T5, T6>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>, p6: TypeGuard<T6>): TypeGuard<[T1, T2, T3, T4, T5, T6]>;
+    export function tuple<T1, T2, T3, T4, T5, T6, T7>(p1: TypeGuard<T1>, p2: TypeGuard<T2>, p3: TypeGuard<T3>, p4: TypeGuard<T4>, p5: TypeGuard<T5>, p6: TypeGuard<T6>, p7: TypeGuard<T7>): TypeGuard<[T1, T2, T3, T4, T5, T6, T7]>;
+}
 declare module "Core/owl" {
-    export const num: (_: unknown) => _ is number;
-    export const whole: (_: unknown) => _ is number;
-    export const int: (_: unknown) => _ is number;
-    export const dec: (_: unknown) => _ is number;
-    export const terminating: (_: unknown) => _ is number;
-    export const rational: (_: unknown) => _ is number;
-    export const irrational: (_: unknown) => _ is number;
-    export const odd: (_: unknown) => _ is number;
-    export const even: (_: unknown) => _ is number;
-    export const prob: (_: unknown) => _ is number;
-    export const sq: (_: unknown) => _ is number;
-    export const positive: (_: unknown) => _ is number;
-    export const positiveInt: (_: unknown) => _ is number;
-    export const nonNegative: (_: unknown) => _ is number;
-    export const nonNegativeInt: (_: unknown) => _ is number;
-    export const negative: (_: unknown) => _ is number;
-    export const negativeInt: (_: unknown) => _ is number;
-    export const nonPositive: (_: unknown) => _ is number;
-    export const nonPositiveInt: (_: unknown) => _ is number;
-    export const zero: (_: unknown) => _ is number;
-    export const nonZero: (_: unknown) => _ is number;
-    export const nonZeroInt: (_: unknown) => _ is number;
-    export const between: (min: number, max: number) => ($: unknown) => $ is number;
-    export const absBetween: (min: number, max: number) => ($: unknown) => $ is number;
-    export const str: (_: unknown) => _ is string;
-    export const bool: (_: unknown) => _ is boolean;
-    export const object: (schema?: Record<string, ($: unknown) => boolean> | undefined) => ($: unknown) => $ is Record<string, any>;
-    export const emptyObject: (_: unknown) => _ is object;
-    export const array: (predicate?: (($: unknown) => boolean) | undefined) => ($: unknown) => $ is any[];
-    export const tuple: (...predicates: (($: unknown) => boolean)[]) => ($: unknown) => $ is any[];
+    export { and } from "Core/owl/and";
+    export { array } from "Core/owl/array";
+    export { anyOf } from "Core/owl/anyOf";
+    export { custom } from "Core/owl/custom";
+    export { object } from "Core/owl/object";
+    export { or } from "Core/owl/or";
+    export { tuple } from "Core/owl/tuple";
+    export const num: TypeGuard<number>;
+    export const whole: TypeGuard<number>;
+    export const int: TypeGuard<number>;
+    export const dec: TypeGuard<number>;
+    export const terminating: TypeGuard<number>;
+    export const rational: TypeGuard<number>;
+    export const irrational: TypeGuard<number>;
+    export const odd: TypeGuard<number>;
+    export const even: TypeGuard<number>;
+    export const prob: TypeGuard<number>;
+    export const sq: TypeGuard<number>;
+    export const positive: TypeGuard<number>;
+    export const positiveInt: TypeGuard<number>;
+    export const nonNegative: TypeGuard<number>;
+    export const nonNegativeInt: TypeGuard<number>;
+    export const negative: TypeGuard<number>;
+    export const negativeInt: TypeGuard<number>;
+    export const nonPositive: TypeGuard<number>;
+    export const nonPositiveInt: TypeGuard<number>;
+    export const zero: TypeGuard<number>;
+    export const nonZero: TypeGuard<number>;
+    export const nonZeroInt: TypeGuard<number>;
+    export const between: (min: number, max: number) => TypeGuard<number>;
+    export const absBetween: (min: number, max: number) => TypeGuard<number>;
+    export const str: TypeGuard<string>;
+    export const bool: TypeGuard<boolean>;
+    export const emptyObject: TypeGuard<{}>;
     export const pass: ($: unknown) => boolean;
     export const fail: ($: unknown) => boolean;
     export const distinct: ($: unknown[]) => boolean;
-    export const alphabet: (_: unknown) => _ is string;
-    export const ineq: (_: unknown) => _ is Ineq;
-    export const dfrac: (_: unknown) => _ is string;
-    export const constraint: (_: unknown) => _ is Constraint;
-    export const constraints: (_: unknown) => _ is Constraint[];
-    export const field: (_: unknown) => _ is Field;
-    export const quadrantCode: (_: unknown) => _ is QuadrantCode;
-    export const quadrantName: (_: unknown) => _ is QuadrantName;
-    export const quadrant: (_: unknown) => _ is QuadrantCode | QuadrantName;
-    export const trig: (_: unknown) => _ is TrigFunc;
-    export const roman: (_: unknown) => _ is string;
-    export const base: (_: unknown) => _ is string;
-    export const couple: (_: unknown) => _ is [number, number];
-    export const triple: (_: unknown) => _ is [number, number, number];
-    export const combo: (_: unknown) => _ is [boolean, boolean, boolean];
-    export const ntuple: (_: unknown) => _ is number[];
-    export const interval: (_: unknown) => _ is interval;
-    export const point2D: (_: unknown) => _ is Point2D;
-    export const point2Ds: (_: unknown) => _ is Point2D[];
-    export const point3D: (_: unknown) => _ is Point3D;
-    export const point3Ds: (_: unknown) => _ is Point3D[];
-    export const polar: (_: unknown) => _ is PolarPoint;
-    export const fraction: (_: unknown) => _ is Fraction;
-    export const properFraction: (_: unknown) => _ is Fraction;
-    export const vector: (_: unknown) => _ is Point2D;
-    export const vector3D: (_: unknown) => _ is Point3D;
-    export const triangleSides: (_: unknown) => _ is [number, number, number];
-    export const monomial: (_: unknown) => _ is monomial;
-    export const polynomial: (_: unknown) => _ is polynomial;
-    export const compoundInequality: (_: unknown) => _ is CompoundInequality;
-    export const trigValue: (_: unknown) => _ is TrigValue;
-    export const trigExp: (_: unknown) => _ is TrigExp;
-    export const quantity: (_: unknown) => _ is quantity;
-    export function and(...pds: predicate[]): predicate;
-    export function or(...pds: predicate[]): predicate;
-    export function anyOf(...vals: any[]): predicate;
+    export const alphabet: TypeGuard<string>;
+    export const ineq: TypeGuard<Ineq>;
+    export const dfrac: TypeGuard<string>;
+    export const constraint: TypeGuard<Constraint>;
+    export const constraints: TypeGuard<Constraint[]>;
+    export const field: TypeGuard<Field>;
+    export const quadrantCode: TypeGuard<QuadrantCode>;
+    export const quadrantName: TypeGuard<QuadrantName>;
+    export const quadrant: TypeGuard<QuadrantCode | QuadrantName>;
+    export const trig: TypeGuard<TrigFunc>;
+    export const roman: TypeGuard<string>;
+    export const base: TypeGuard<string>;
+    export const couple: TypeGuard<[number, number]>;
+    export const triple: TypeGuard<[number, number, number]>;
+    export const combo: TypeGuard<[boolean, boolean, boolean]>;
+    export const ntuple: TypeGuard<number[]>;
+    export const interval: TypeGuard<interval>;
+    export const point2D: TypeGuard<Point2D>;
+    export const point2Ds: TypeGuard<Point2D[]>;
+    export const point3D: TypeGuard<Point3D>;
+    export const point3Ds: TypeGuard<Point3D[]>;
+    export const polar: TypeGuard<PolarPoint>;
+    export const fraction: TypeGuard<Fraction>;
+    export const properFraction: TypeGuard<Fraction>;
+    export const vector: TypeGuard<Point2D>;
+    export const vector3D: TypeGuard<Point3D>;
+    export const triangleSides: TypeGuard<[number, number, number]>;
+    export const monomial: TypeGuard<monomial>;
+    export const polynomial: TypeGuard<polynomial>;
+    export const compoundInequality: TypeGuard<CompoundInequality>;
+    export const trigValue: TypeGuard<TrigValue>;
+    export const trigExp: TypeGuard<TrigExp>;
+    export const quantity: TypeGuard<quantity>;
 }
 declare module "Core/ink" {
     export function printDfrac(numerator: number, denominator: number, upSign?: boolean): string;
@@ -3592,6 +3633,22 @@ declare module "Pen/modules/d3" {
          * ```
          */
         envelope(lowerBase: Point3D[], upperBase: Point3D[]): [Point3D, Point3D][];
+        /**
+         * Draw a solid
+         * ```
+         * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
+         * let V = [0,0,5]
+         * pen.d3.solid([A,B,C],V) // draw a cone
+         * ```
+         */
+        solid(lowerBase: Point3D[] | [center: Point3D, radius: number], upperBase: Point3D[] | Point3D | [center: Point3D, radius: number] | [scale: number, vertex: Point3D] | number, { showUpper, showLower, shadeLower, shadeUpper, height, envelopeOnly, }?: {
+            showUpper?: boolean;
+            showLower?: boolean;
+            shadeLower?: boolean;
+            shadeUpper?: boolean;
+            height?: boolean;
+            envelopeOnly?: boolean;
+        }): void;
         /**
          * Draw a frustum
          * ```

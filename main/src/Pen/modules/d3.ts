@@ -234,6 +234,108 @@ export class PenD3 {
     }
 
     /**
+     * Draw a solid
+     * ```
+     * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
+     * let V = [0,0,5]
+     * pen.d3.solid([A,B,C],V) // draw a cone
+     * ```
+     */
+    solid(
+        lowerBase: Point3D[] | [center: Point3D, radius: number],
+        upperBase:
+            | Point3D[]
+            | Point3D
+            | [center: Point3D, radius: number]
+            | [scale: number, vertex: Point3D]
+            | number,
+        {
+            showUpper = true,
+            showLower = true,
+            shadeLower = !true,
+            shadeUpper = !true,
+            height = !true,
+            envelopeOnly,
+        }: {
+            showUpper?: boolean
+            showLower?: boolean
+            shadeLower?: boolean
+            shadeUpper?: boolean
+            height?: boolean
+            envelopeOnly?: boolean
+        } = {}
+    ) {
+        const isPoint3Ds = owl.point3Ds
+        const isPoint3D = owl.point3D
+        const isCircle = owl.tuple(owl.point3D, owl.num)
+        const isExtrue = owl.tuple(owl.num, owl.point3D)
+
+        let LB: Point3D[] = []
+        let UB: Point3D[] = []
+
+        if (isPoint3Ds(lowerBase)) {
+            LB.push(...lowerBase)
+        } else if (isCircle(lowerBase)) {
+            let [center, radius] = lowerBase
+            let ps = cal.traceCircle([0, 0], radius, [0, 360])
+            let ps3D = Embed(ps, center, [1, 0, 0], [0, 1, 0])
+            LB.push(...ps3D)
+        } else {
+            throw Error(
+                'lowerBase must be Point3D[] | [center: Point3D, radius: number]'
+            )
+        }
+
+        if (isPoint3Ds(upperBase)) {
+            UB.push(...upperBase)
+        } else if (isPoint3D(upperBase)) {
+            UB.push(upperBase)
+        } else if (isCircle(upperBase)) {
+            let [center, radius] = upperBase
+            let ps = cal.traceCircle([0, 0], radius, [0, 360])
+            let ps3D = Embed(ps, center, [1, 0, 0], [0, 1, 0])
+            UB.push(...ps3D)
+        } else if (isExtrue(upperBase)) {
+            let [scale, vertex] = upperBase
+            UB.push(...Extrude(LB, [vertex], scale))
+        } else if (owl.num(upperBase)) {
+            for (let [x, y] of UB) {
+                UB.push([x, y, upperBase])
+            }
+        } else {
+            throw Error(
+                'upperBase must be Point3D[] | Point3D | [center: Point3D, radius: number] | [scale: number, vertex: Point3D] | number'
+            )
+        }
+
+        if (showLower) this.pen.polygon(...LB)
+        if (showUpper) this.pen.polygon(...UB)
+
+        if (shadeLower) this.pen.polyshade(...LB)
+        if (shadeUpper) this.pen.polyshade(...UB)
+
+        envelopeOnly ??= isCircle(lowerBase) || isCircle(upperBase)
+
+        if (envelopeOnly) {
+            let env = this.envelope(LB, UB)
+            for (let e of env) {
+                this.pen.line(e[0], e[1])
+            }
+        } else {
+            for (let i = 0; i < LB.length; i++) {
+                this.pen.line(LB[i], UB.nth(i)!)
+            }
+        }
+
+        if (height) {
+            let V = vec.mean(UB)
+            let [A, B, C] = LB
+            let O = PdFoot3D(V, [A, B, C])
+            this.pen.dash(O, V)
+        }
+    }
+
+    /**
      * Draw a frustum
      * ```
      * let [A,B,C] = [[0,0,0],[2,0,0],[0,2,0]]
