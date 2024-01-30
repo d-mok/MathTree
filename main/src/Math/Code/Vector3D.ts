@@ -155,46 +155,6 @@ export class Host {
         padTail(upperBase, max)
         return lowerBase.map((v, i) => vec.extrude(v, upperBase[i], scale))
     }
-
-    // /**
-    //  * @category 3DPen
-    //  * @deprecated use built-in projector in Pen instead
-    //  * projector function from 3D point to 2D plane
-    //  * ```
-    //  * const pj = Projector(60,0.5) // create a 3D projector function
-    //  * pj(1,1,0) // [1.25, 0.433012701892]
-    //  * ```
-    //  */
-    // static Projector(angle: number = 60, depth: number = 0.5) {
-    //     return function (x: number, y: number, z: number): Point {
-    //         let x_new = x + depth * y * cos(angle)
-    //         let y_new = z + depth * y * sin(angle)
-    //         return [x_new, y_new]
-    //     }
-    // }
-
-    // /**
-    //  * @category 3DPen
-    //  * @deprecated use built-in projector in Pen instead
-    //  * projector function from 3D point to 2D plane
-    //  * ```
-    //  * const pj = Projector3D(60,0.5) // create a 3D projector function
-    //  * pj([1,1,0]) // [1.25, 0.433012701892]
-    //  * ```
-    //  */
-    // @checkIt(owl.num, owl.num)
-    // static Projector3D(
-    //     angle: number = 60,
-    //     depth: number = 0.5
-    // ): (_: Point3D) => Point {
-    //     let projector = function (point3D: Point3D): Point {
-    //         let [x, y, z] = point3D
-    //         let x_new = x + depth * y * cos(angle)
-    //         let y_new = z + depth * y * sin(angle)
-    //         return [x_new, y_new]
-    //     }
-    //     return check(projector, [owl.point3D])
-    // }
 }
 
 declare global {
