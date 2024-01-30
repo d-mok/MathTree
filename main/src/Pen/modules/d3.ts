@@ -242,7 +242,11 @@ export class PenD3 {
      * ```
      */
     solid(
-        lowerBase: Point3D[] | [center: Point3D, radius: number],
+        lowerBase:
+            | Point3D[]
+            | Point2D[]
+            | [center: Point3D, radius: number]
+            | [center: Point2D, radius: number],
         upperBase:
             | Point3D[]
             | Point3D
@@ -254,6 +258,7 @@ export class PenD3 {
             showLower = true,
             shadeLower = !true,
             shadeUpper = !true,
+            lowerZ = 0,
             height = !true,
             envelopeOnly,
         }: {
@@ -261,13 +266,16 @@ export class PenD3 {
             showLower?: boolean
             shadeLower?: boolean
             shadeUpper?: boolean
+            lowerZ?: number
             height?: boolean
             envelopeOnly?: boolean
         } = {}
     ) {
         const isPoint3Ds = owl.point3Ds
+        const isPoint2Ds = owl.point2Ds
         const isPoint3D = owl.point3D
-        const isCircle = owl.tuple(owl.point3D, owl.num)
+        const isCircle3D = owl.tuple(owl.point3D, owl.num)
+        const isCircle2D = owl.tuple(owl.point2D, owl.num)
         const isExtrue = owl.tuple(owl.num, owl.point3D)
 
         let LB: Point3D[] = []
@@ -275,10 +283,17 @@ export class PenD3 {
 
         if (isPoint3Ds(lowerBase)) {
             LB.push(...lowerBase)
-        } else if (isCircle(lowerBase)) {
+        } else if (isPoint2Ds(lowerBase)) {
+            LB.push(...EmbedZ(lowerBase, lowerZ))
+        } else if (isCircle3D(lowerBase)) {
             let [center, radius] = lowerBase
             let ps = cal.traceCircle([0, 0], radius, [0, 360])
             let ps3D = Embed(ps, center, [1, 0, 0], [0, 1, 0])
+            LB.push(...ps3D)
+        } else if (isCircle2D(lowerBase)) {
+            let [[x, y], radius] = lowerBase
+            let ps = cal.traceCircle([0, 0], radius, [0, 360])
+            let ps3D = Embed(ps, [x, y, lowerZ], [1, 0, 0], [0, 1, 0])
             LB.push(...ps3D)
         } else {
             throw Error(
@@ -290,7 +305,7 @@ export class PenD3 {
             UB.push(...upperBase)
         } else if (isPoint3D(upperBase)) {
             UB.push(upperBase)
-        } else if (isCircle(upperBase)) {
+        } else if (isCircle3D(upperBase)) {
             let [center, radius] = upperBase
             let ps = cal.traceCircle([0, 0], radius, [0, 360])
             let ps3D = Embed(ps, center, [1, 0, 0], [0, 1, 0])
@@ -314,7 +329,10 @@ export class PenD3 {
         if (shadeLower) this.pen.polyshade(...LB)
         if (shadeUpper) this.pen.polyshade(...UB)
 
-        envelopeOnly ??= isCircle(lowerBase) || isCircle(upperBase)
+        envelopeOnly ??=
+            isCircle3D(lowerBase) ||
+            isCircle3D(upperBase) ||
+            isCircle2D(lowerBase)
 
         if (envelopeOnly) {
             let env = this.envelope(LB, UB)

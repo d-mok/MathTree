@@ -3641,11 +3641,12 @@ declare module "Pen/modules/d3" {
          * pen.d3.solid([A,B,C],V) // draw a cone
          * ```
          */
-        solid(lowerBase: Point3D[] | [center: Point3D, radius: number], upperBase: Point3D[] | Point3D | [center: Point3D, radius: number] | [scale: number, vertex: Point3D] | number, { showUpper, showLower, shadeLower, shadeUpper, height, envelopeOnly, }?: {
+        solid(lowerBase: Point3D[] | Point2D[] | [center: Point3D, radius: number] | [center: Point2D, radius: number], upperBase: Point3D[] | Point3D | [center: Point3D, radius: number] | [scale: number, vertex: Point3D] | number, { showUpper, showLower, shadeLower, shadeUpper, lowerZ, height, envelopeOnly, }?: {
             showUpper?: boolean;
             showLower?: boolean;
             shadeLower?: boolean;
             shadeUpper?: boolean;
+            lowerZ?: number;
             height?: boolean;
             envelopeOnly?: boolean;
         }): void;
