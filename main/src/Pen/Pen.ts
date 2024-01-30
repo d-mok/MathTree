@@ -693,30 +693,6 @@ export class PenCls {
     }
 
     /**
-     * Export the canvas to image tag. For development only.
-     * ```
-     * question = pen.printFull(question,'imgQ')
-     * // paste the canvas to the image tag with src field 'imgQ'
-     * ```
-     */
-    printFull2(placeholder: string) {
-        eval(`question = this.cv.export(question, ${placeholder}, false)`)
-        eval(`solution = this.cv.export(solution, ${placeholder}, false)`)
-    }
-
-    /**
-     * Export the canvas to image tag, with white space trimmed.
-     * ```
-     * question = pen.print(question,'imgQ')
-     * // paste the canvas to the image tag with src field 'imgQ'
-     * ```
-     */
-    print2(placeholder: string) {
-        eval(`question = this.cv.export(question, ${placeholder}, true)`)
-        eval(`solution = this.cv.export(solution, ${placeholder}, true)`)
-    }
-
-    /**
      * Clear the canvas.
      */
     clear() {
