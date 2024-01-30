@@ -3259,20 +3259,16 @@ declare module "Pen/modules/range" {
          */
         square(size: number, [x, y]?: Point2D): void;
         /**
-         * Set the coordinate range by capture points or objects.
+         * Set the coordinate range by capture points.
          * ```
          * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
-         * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
-         * // point | circle [[h,k],r] | sphere [[a,b,c],r]
          * ```
          */
         capture(...points: Point[]): void;
         /**
          * Set the coordinate range by capture points EmbedZ.
          * ```
-         * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
-         * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
-         * // point | circle [[h,k],r] | sphere [[a,b,c],r]
+         * pen.range.captureZ([[1,2],[3,4]], 5) //  [1,2,5], [3,4,5] must be in-view
          * ```
          */
         captureZ(points: Point2D[], z?: number): void;
@@ -3702,6 +3698,7 @@ declare module "Pen/modules/d3" {
             envelope?: boolean | undefined;
         }): void;
         /**
+         * @deprecated
          * Draw a pyramid along the z-direction
          * ```
          * let [A,B,C] = [[0,0],[2,0],[0,2]]

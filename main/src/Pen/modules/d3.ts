@@ -314,7 +314,7 @@ export class PenD3 {
             let [scale, vertex] = upperBase
             UB.push(...Extrude(LB, [vertex], scale))
         } else if (owl.num(upperBase)) {
-            for (let [x, y] of UB) {
+            for (let [x, y] of LB) {
                 UB.push([x, y, upperBase])
             }
         } else {
@@ -462,6 +462,7 @@ export class PenD3 {
     }
 
     /**
+     * @deprecated
      * Draw a pyramid along the z-direction
      * ```
      * let [A,B,C] = [[0,0],[2,0],[0,2]]
