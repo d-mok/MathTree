@@ -14,14 +14,8 @@ import { PenGridTick } from './modules/gridTick.js'
 import { PenLinProg } from './modules/linProg.js'
 import { PenRod } from './modules/rod.js'
 
-/**
- * @ignore
- */
 const DEFAULT_POINT_RADIUS_PIXEL = 2
 
-/**
- * @ignore
- */
 const DEFAULT_CUTTER_LENGTH_PIXEL = 5
 
 export class PenCls {
@@ -696,6 +690,30 @@ export class PenCls {
      */
     print(html: string, placeholder: string) {
         return this.cv.export(html, placeholder, true)
+    }
+
+    /**
+     * Export the canvas to image tag. For development only.
+     * ```
+     * question = pen.printFull(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
+     */
+    printFull2(placeholder: string) {
+        eval(`question = this.cv.export(question, ${placeholder}, false)`)
+        eval(`solution = this.cv.export(solution, ${placeholder}, false)`)
+    }
+
+    /**
+     * Export the canvas to image tag, with white space trimmed.
+     * ```
+     * question = pen.print(question,'imgQ')
+     * // paste the canvas to the image tag with src field 'imgQ'
+     * ```
+     */
+    print2(placeholder: string) {
+        eval(`question = this.cv.export(question, ${placeholder}, true)`)
+        eval(`solution = this.cv.export(solution, ${placeholder}, true)`)
     }
 
     /**

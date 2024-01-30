@@ -4577,6 +4577,22 @@ declare module "Pen/Pen" {
          */
         print(html: string, placeholder: string): string;
         /**
+         * Export the canvas to image tag. For development only.
+         * ```
+         * question = pen.printFull(question,'imgQ')
+         * // paste the canvas to the image tag with src field 'imgQ'
+         * ```
+         */
+        printFull2(placeholder: string): void;
+        /**
+         * Export the canvas to image tag, with white space trimmed.
+         * ```
+         * question = pen.print(question,'imgQ')
+         * // paste the canvas to the image tag with src field 'imgQ'
+         * ```
+         */
+        print2(placeholder: string): void;
+        /**
          * Clear the canvas.
          */
         clear(): void;
@@ -4813,13 +4829,7 @@ declare module "Math/index" {
 }
 declare module "Pen/AutoPen" {
     export class AutoPenCls {
-        /**
-         * @ignore
-         */
         private pen;
-        /**
-         * @ignore
-         */
         constructor();
         /**
          * @deprecated
@@ -5189,13 +5199,7 @@ declare module "Pen/AutoPen" {
 declare module "Pen/PhyPen" {
     import { PenCls } from "Pen/Pen";
     export class PhyPenCls {
-        /**
-         * @ignore
-         */
         private pen;
-        /**
-         * @ignore
-         */
         constructor();
         /**
          * @deprecated

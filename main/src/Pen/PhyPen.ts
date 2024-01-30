@@ -1,14 +1,8 @@
 import { PenCls } from './Pen.js'
 
 export class PhyPenCls {
-    /**
-     * @ignore
-     */
     private pen: PenCls
 
-    /**
-     * @ignore
-     */
     constructor() {
         this.pen = new Pen()
     }

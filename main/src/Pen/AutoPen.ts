@@ -3,14 +3,8 @@ import { solveCompoundInequality } from 'ruby'
 import { PenCls } from './Pen.js'
 
 export class AutoPenCls {
-    /**
-     * @ignore
-     */
     private pen: PenCls
 
-    /**
-     * @ignore
-     */
     constructor() {
         this.pen = new Pen()
     }

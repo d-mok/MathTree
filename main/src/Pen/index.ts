@@ -8,17 +8,8 @@ declare global {
     var PhyPen: typeof PhyPenCls
 }
 
-/**
- * @ignore
- */
 globalThis.Pen = PenCls
 
-/**
- * @ignore
- */
 globalThis.AutoPen = AutoPenCls
 
-/**
- * @ignore
- */
 globalThis.PhyPen = PhyPenCls
