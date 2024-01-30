@@ -15,13 +15,15 @@ function at(this: any[], n: number) {
     return this[n]
 }
 
-const TypedArray = Reflect.getPrototypeOf(Int8Array)
-for (const C of [Array, String, TypedArray]) {
-    //@ts-ignore
-    Object.defineProperty(C.prototype, 'at', {
-        value: at,
-        writable: true,
-        enumerable: false,
-        configurable: true,
-    })
+if (![].at) {
+    const TypedArray = Reflect.getPrototypeOf(Int8Array)
+    for (const C of [Array, String, TypedArray]) {
+        //@ts-ignore
+        Object.defineProperty(C.prototype, 'at', {
+            value: at,
+            writable: true,
+            enumerable: false,
+            configurable: true,
+        })
+    }
 }
