@@ -33,15 +33,24 @@ export class PenRange {
     }
 
     /**
-     * Set the coordinate range by capture points or objects.
+     * Set the coordinate range by capture points.
      * ```
      * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
-     * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
-     * // point | circle [[h,k],r] | sphere [[a,b,c],r]
      * ```
      */
     capture(...points: Point[]) {
         this.cv.capture(points)
+        this.cv.AUTO_BORDER = true
+    }
+
+    /**
+     * Set the coordinate range by capture points EmbedZ.
+     * ```
+     * pen.range.captureZ([[1,2],[3,4]], 5) //  [1,2,5], [3,4,5] must be in-view
+     * ```
+     */
+    captureZ(points: Point2D[], z = 0) {
+        this.cv.capture(EmbedZ(points, z))
         this.cv.AUTO_BORDER = true
     }
 

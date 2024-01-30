@@ -3268,6 +3268,15 @@ declare module "Pen/modules/range" {
          */
         capture(...points: Point[]): void;
         /**
+         * Set the coordinate range by capture points EmbedZ.
+         * ```
+         * pen.range.capture([1,2],[3,4]) //  [1,2], [3,4] must be in-view
+         * pen.range.capture([[1,2],3]) //  [1-3,2-3], [1+3,2+3] must be in-view
+         * // point | circle [[h,k],r] | sphere [[a,b,c],r]
+         * ```
+         */
+        captureZ(points: Point2D[], z?: number): void;
+        /**
          * Set the coordinate range by capturing a circle.
          * ```
          * pen.range.captureCircle([1,2], 3)
