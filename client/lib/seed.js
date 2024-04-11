@@ -5,17 +5,12 @@ const MathSoil_1 = require("./MathSoil");
 class SeedRow {
     constructor() {
         this.id = '';
-        this.bank = '';
-        this.folder = '';
-        // master: string = ''
         this.qn = '';
         this.sol = '';
-        // slot: string = ''
         this.populate = '';
         this.validate = '';
         this.preprocess = '';
         this.postprocess = '';
-        // inject: string = ''
     }
 }
 exports.SeedRow = SeedRow;
@@ -29,12 +24,10 @@ class Seed extends SeedRow {
         return {
             qn: this.qn,
             sol: this.sol,
-            // slot: this.slot,
             populate: this.populate,
             validate: this.validate,
             preprocess: this.preprocess,
             postprocess: this.postprocess,
-            // inject: this.inject,
         };
     }
     grow() {

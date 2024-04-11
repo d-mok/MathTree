@@ -1,5 +1,6 @@
 import { Seed } from './seed';
 import { Fruit } from './MathSoil';
+import 'sapphire-js';
 export declare abstract class SeedArray extends Array<Seed> {
     protected abstract SUPABASE_URL: string;
     protected abstract SUPABASE_ANON_KEY: string;
@@ -11,8 +12,5 @@ export declare abstract class SeedArray extends Array<Seed> {
     growAll(): void;
     growFirst(): void;
     tick(): void;
-    cycle(): void;
-    shuffle(): void;
-    clear(): void;
 }
 //# sourceMappingURL=index.d.ts.map

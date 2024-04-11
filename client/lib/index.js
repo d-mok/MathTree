@@ -2,11 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeedArray = void 0;
 const seed_1 = require("./seed");
-function cloneJSON(obj) {
-    return JSON.parse(JSON.stringify(obj));
-}
-function ErrIdNotFound(id) {
-    throw 'Error! Seed ' + id + ' not found during fetching!';
+require("sapphire-js");
+function dummySeedRow(idNotFound) {
+    console.error('ERROR! Seed ' + idNotFound + ' not found during fetching!');
+    return {
+        id: 'NOT_FOUND_' + crypto.randomUUID().left(4),
+        qn: 'Question not found!',
+        sol: 'Question not found!',
+        populate: '',
+        validate: '',
+        preprocess: '',
+        postprocess: '',
+    };
 }
 class SeedArray extends Array {
     async fetchAPI(ids) {
@@ -19,8 +26,7 @@ class SeedArray extends Array {
         });
         let json = await response.json();
         return ids
-            .map(id => json.find($ => $.id === id) ?? ErrIdNotFound(id))
-            .map($ => cloneJSON($))
+            .map(id => json.get({ id }) ?? dummySeedRow(id))
             .map($ => new seed_1.Seed($));
     }
     async refreshByIds(ids) {
@@ -46,21 +52,8 @@ class SeedArray extends Array {
         this[0].grow();
     }
     tick() {
-        this.cycle();
+        this.cycle(1);
         this.growFirst();
-    }
-    cycle() {
-        this.push(this.shift());
-    }
-    shuffle() {
-        for (let i = this.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1)) // random from 0 to i
-            ;
-            [this[i], this[j]] = [this[j], this[i]];
-        }
-    }
-    clear() {
-        this.length = 0;
     }
 }
 exports.SeedArray = SeedArray;

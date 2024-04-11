@@ -1,12 +1,19 @@
 import { Seed, SeedRow } from './seed'
 import { Fruit } from './MathSoil'
+import 'sapphire-js'
 
-function cloneJSON<T>(obj: T): T {
-    return JSON.parse(JSON.stringify(obj))
-}
+function dummySeedRow(idNotFound: string): SeedRow {
+    console.error('ERROR! Seed ' + idNotFound + ' not found during fetching!')
 
-function ErrIdNotFound(id: string): never {
-    throw 'Error! Seed ' + id + ' not found during fetching!'
+    return {
+        id: 'NOT_FOUND_' + crypto.randomUUID().left(4),
+        qn: 'Question not found!',
+        sol: 'Question not found!',
+        populate: '',
+        validate: '',
+        preprocess: '',
+        postprocess: '',
+    }
 }
 
 export abstract class SeedArray extends Array<Seed> {
@@ -23,8 +30,7 @@ export abstract class SeedArray extends Array<Seed> {
         })
         let json: SeedRow[] = await response.json()
         return ids
-            .map(id => json.find($ => $.id === id) ?? ErrIdNotFound(id))
-            .map($ => cloneJSON($))
+            .map(id => json.get({ id }) ?? dummySeedRow(id))
             .map($ => new Seed($))
     }
 
@@ -56,22 +62,7 @@ export abstract class SeedArray extends Array<Seed> {
     }
 
     tick() {
-        this.cycle()
+        this.cycle(1)
         this.growFirst()
-    }
-
-    cycle(): void {
-        this.push(this.shift()!)
-    }
-
-    shuffle(): void {
-        for (let i = this.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1)) // random from 0 to i
-            ;[this[i], this[j]] = [this[j], this[i]]
-        }
-    }
-
-    clear(): void {
-        this.length = 0
     }
 }

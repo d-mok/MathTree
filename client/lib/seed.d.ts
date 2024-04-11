@@ -1,8 +1,6 @@
 import { Fruit } from './MathSoil';
 export declare class SeedRow {
     id: string;
-    bank: string;
-    folder: string;
     qn: string;
     sol: string;
     populate: string;

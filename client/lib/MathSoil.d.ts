@@ -4,7 +4,7 @@ declare global {
         inspect(gene: Gene, repeat: number): Inspection;
     };
 }
-declare type Gene = {
+type Gene = {
     readonly qn: string;
     readonly sol: string;
     readonly populate: string;
@@ -12,7 +12,7 @@ declare type Gene = {
     readonly preprocess: string;
     readonly postprocess: string;
 };
-declare type Inspection = {
+type Inspection = {
     readonly counter: number;
     readonly success: boolean;
     readonly logs: string[];
