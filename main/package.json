@@ -12,7 +12,8 @@
         "npm i": "npm i --install-links=false"
     },
     "devDependencies": {
-        "esbuild": "^0.19.11"
+        "esbuild": "^0.19.11",
+        "jsdom": "^24.1.0"
     },
     "dependencies": {
         "bot": "file:../packages/bot",

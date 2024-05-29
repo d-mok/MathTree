@@ -12,12 +12,12 @@
     "jest-matcher-deep-close-to": "^3.0.2",
     "lodash": "^4.17.21",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.1"
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "chance": "^1.1.11",
     "decimal.js": "^10.4.3",
     "mathjs": "^11.7.0",
-    "sapphire-js": "^2.1.5"
+    "sapphire-js": "^2.1.15"
   }
 }
