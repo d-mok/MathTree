@@ -887,7 +887,7 @@ export class AutoPenCls {
         if (n === 1) m = '1st'
         if (n === 2) m = '2nd'
         if (n === 3) m = '3rd'
-        if (n >= 3) m = n + 'th'
+        if (n > 3) m = n + 'th'
         pen.write([(1 + a + (n - 1) * p) / 2, -1], m + ' pattern')
         this.pen = pen
     }
