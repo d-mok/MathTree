@@ -22,16 +22,16 @@ class MathSoil2Cls {
         return soil.nurture()
     }
 
-    public reap(gene: Gene): Fruit {
+    reap(gene: Gene): Fruit {
         gene = transpileGene(gene)
         return this.nurture(gene)
     }
 
-    public inspect(gene: Gene, repeat: number): Inspection {
+    inspect(gene: Gene, repeat: number): Inspection {
         gene = transpileGene(gene)
         let counters = []
         let times = []
-        let sols = []
+        let fingerPrints = []
         for (let i = 1; i <= repeat; i++) {
             let fruit = this.nurture(gene)
             if (!fruit.success)
@@ -44,25 +44,27 @@ class MathSoil2Cls {
                 }
             counters.push(fruit.counter)
             times.push(fruit.time)
-            sols.push(fruit.sol)
+            fingerPrints.push(this.fingerPrint(fruit))
         }
         return {
             counter: counters.mean(),
             success: true,
             logs: [],
             time: times.mean(),
-            uniqueness:
-                (sols.map(htmlNoFirst).uniq().length - 1) / (repeat - 1),
+            uniqueness: (fingerPrints.uniq().length - 1) / (repeat - 1),
         }
+    }
+
+    fingerPrint(fruit: Fruit): string {
+        // for comparing the uniqueness of the generated questions
+        const document = new DOMParser().parseFromString(fruit.sol, 'text/html')
+        //remove the first node
+        const firstNode = document.body.firstChild
+        if (firstNode) document.body.removeChild(firstNode)
+        const html = document.body.innerHTML
+        return html.replaceAll('✔', '').replaceAll('✘', '')
     }
 }
 
 var MathSoil2 = new MathSoil2Cls()
 globalThis.MathSoil2 = MathSoil2
-
-function htmlNoFirst(htmlString: string): string {
-    const document = new DOMParser().parseFromString(htmlString, 'text/html')
-    const firstNode = document.body.firstChild
-    if (firstNode) document.body.removeChild(firstNode)
-    return document.body.innerHTML
-}

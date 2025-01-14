@@ -5489,6 +5489,7 @@ declare module "Soil/index" {
         private nurture;
         reap(gene: Gene): Fruit;
         inspect(gene: Gene, repeat: number): Inspection;
+        fingerPrint(fruit: Fruit): string;
     }
 }
 declare module "index" {
