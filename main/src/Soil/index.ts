@@ -31,6 +31,7 @@ class MathSoil2Cls {
         gene = transpileGene(gene)
         let counters = []
         let times = []
+        let sols = []
         for (let i = 1; i <= repeat; i++) {
             let fruit = this.nurture(gene)
             if (!fruit.success)
@@ -39,23 +40,19 @@ class MathSoil2Cls {
                     success: false,
                     logs: fruit.logs,
                     time: 0,
-                    dull: false,
+                    uniqueness: 0,
                 }
             counters.push(fruit.counter)
             times.push(fruit.time)
+            sols.push(fruit.sol)
         }
-        const dull =
-            [1, 2]
-                .map(() => this.nurture(gene))
-                .pluck('sol')
-                .map(htmlNoFirst)
-                .distincts().length === 0
         return {
             counter: counters.mean(),
             success: true,
             logs: [],
             time: times.mean(),
-            dull,
+            uniqueness:
+                (sols.map(htmlNoFirst).uniq().length - 1) / (repeat - 1),
         }
     }
 }

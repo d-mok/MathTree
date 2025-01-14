@@ -13,7 +13,7 @@ type Inspection = {
     readonly success: boolean
     readonly logs: string[]
     readonly time: number
-    readonly dull: boolean
+    readonly uniqueness: number
 }
 
 type Gene = {
