@@ -39,18 +39,33 @@ class MathSoil2Cls {
                     success: false,
                     logs: fruit.logs,
                     time: 0,
+                    dull: false,
                 }
             counters.push(fruit.counter)
             times.push(fruit.time)
         }
+        const dull =
+            [1, 2]
+                .map(() => this.nurture(gene))
+                .pluck('sol')
+                .map(htmlNoFirst)
+                .distincts().length === 0
         return {
-            counter: Mean(...counters),
+            counter: counters.mean(),
             success: true,
             logs: [],
-            time: Mean(...times),
+            time: times.mean(),
+            dull,
         }
     }
 }
 
 var MathSoil2 = new MathSoil2Cls()
 globalThis.MathSoil2 = MathSoil2
+
+function htmlNoFirst(htmlString: string): string {
+    const document = new DOMParser().parseFromString(htmlString, 'text/html')
+    const firstNode = document.body.firstChild
+    if (firstNode) document.body.removeChild(firstNode)
+    return document.body.innerHTML
+}
