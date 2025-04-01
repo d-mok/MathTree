@@ -12,7 +12,7 @@
         "npm i": "npm i --install-links=false"
     },
     "devDependencies": {
-        "esbuild": "^0.19.11",
+        "esbuild": "^0.25.2",
         "jsdom": "^24.1.0"
     },
     "dependencies": {
@@ -20,7 +20,7 @@
         "contract": "file:../packages/contract",
         "fate": "file:../packages/fate",
         "gauss": "file:../packages/gauss",
-        "katex": "^0.13.23",
+        "katex": "^0.16.21",
         "paint": "file:../packages/paint",
         "ruby": "file:../packages/ruby"
     },
