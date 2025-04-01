@@ -36,7 +36,7 @@ declare global {
      */
     type Field = [xCoeff: number, yCoeff: number, constant: number]
 
-    type Highlight = {
+    type HighLight = {
         point: Point2D
         color?: string
         circle?: boolean

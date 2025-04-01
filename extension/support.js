@@ -1,4 +1,4 @@
-//// This extension require katex, chance.js and lodash.js
+//// This extension require katex and lodash.js
 
 
 

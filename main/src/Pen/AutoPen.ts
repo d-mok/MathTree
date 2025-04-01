@@ -674,7 +674,7 @@ export class AutoPenCls {
         field: Field
         contours: number[]
         labelConstraints: ((x: number, y: number) => boolean)[]
-        highlights: Highlight[]
+        highlights: HighLight[]
         ranges: [[number, number], [number, number]]
         resolution: number
         grid: number
@@ -801,7 +801,7 @@ export class AutoPenCls {
             contour = true,
             coordinates = true,
             label = true,
-        }: Highlight) {
+        }: HighLight) {
             pen.set.color(color)
             pen.point(point)
             if (circle) pen.circle(point, 5)

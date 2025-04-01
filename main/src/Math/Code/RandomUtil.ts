@@ -2,7 +2,6 @@ import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
 import { dice } from 'fate'
 import _ from 'lodash'
 import * as math from 'mathjs'
-import Chance from 'chance'
 
 @exposeAll()
 @captureAll()
@@ -57,9 +56,20 @@ export class Host {
      * ```
      */
     static RndHe(): string {
-        return new Chance()
-            .name({ gender: 'male', nationality: 'en' })
-            .split(' ')[0]
+        return (
+            [
+                'James',
+                'John',
+                'Robert',
+                'Michael',
+                'William',
+                'David',
+                'Richard',
+                'Joseph',
+                'Thomas',
+                'Charles',
+            ].sample() ?? 'Tom'
+        )
     }
 
     /**
@@ -69,9 +79,20 @@ export class Host {
      * ```
      */
     static RndShe(): string {
-        return new Chance()
-            .name({ gender: 'female', nationality: 'en' })
-            .split(' ')[0]
+        return (
+            [
+                'Chloe',
+                'May',
+                'Sophia',
+                'Emma',
+                'Betty',
+                'Mary',
+                'Alice',
+                'Natalie',
+                'Grace',
+                'Kelly',
+            ].sample() ?? 'Cathy'
+        )
     }
 
     /**

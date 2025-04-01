@@ -1455,7 +1455,7 @@ declare module "Math/Code/Random" {
          * RndT(0.6) // 60% true
          * ```
          */
-        static RndT(trueChance?: number): boolean;
+        static RndT(trueProb?: number): boolean;
         /**
          * a random integer in [min, max] or [-max, -min] inclusive.
          * ```
@@ -4935,7 +4935,7 @@ declare module "Pen/AutoPen" {
             field: Field;
             contours: number[];
             labelConstraints: ((x: number, y: number) => boolean)[];
-            highlights: Highlight[];
+            highlights: HighLight[];
             ranges: [[number, number], [number, number]];
             resolution: number;
             grid: number;
@@ -5532,7 +5532,7 @@ declare module "Math/type" {
          * ```
          */
         type Field = [xCoeff: number, yCoeff: number, constant: number];
-        type Highlight = {
+        type HighLight = {
             point: Point2D;
             color?: string;
             circle?: boolean;
