@@ -13,12 +13,12 @@ function produce<S>(source: S, assigned: S | S[] | ((_: S) => S)): S[] {
     if (Array.isArray(assigned)) {
         if (assigned.length === 1) {
             let fake = assigned[0]
-            return _.shuffle([source, fake, fake])
+            return [source, fake, fake].shuffled()
         }
         if (assigned.length === 2) {
-            return _.shuffle([source, ...assigned, ...assigned])
+            return [source, ...assigned, ...assigned].shuffled()
         }
-        return _.shuffle(assigned)
+        return assigned.shuffled()
     }
     return RndShake(source)
 }

@@ -177,13 +177,13 @@ export class Host {
         function removeZero(ns: number[]): void {
             let indices = _.range(0, ns.length).filter($ => ns[$] === 0)
             if (indices.length === 0) return
-            let i = _.sample(indices)!
+            let i = indices.sample()!
             _.pullAt(ns, [i])
         }
 
         function insertZero(ns: number[]): void {
             let indices = _.range(0, ns.length)
-            let i = _.sample(indices)!
+            let i = indices.sample()!
             ns.splice(i, 0, 0)
         }
 

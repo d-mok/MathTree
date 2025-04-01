@@ -53,7 +53,7 @@ export function BuildSolve(
         .filter(t => includesAll(readTree(t).givens, locked))
     if (validTrees.length === 0) throw 'no sensible set of solvables found!'
 
-    let tree = _.sample(validTrees)!
+    let tree = validTrees.sample()!
     // console.log(tree)
     let { givens, top: aim, hiddens } = readTree(tree)
 

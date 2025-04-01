@@ -13,7 +13,7 @@ export class Host {
      * ```
      */
     static RndPick<T>(...items: T[]): T {
-        return _.sample(items)!
+        return items.sample()!
     }
 
     /**
@@ -23,7 +23,7 @@ export class Host {
      * ```
      */
     static RndShuffle<T>(...items: T[]): T[] {
-        return _.shuffle([...items])
+        return [...items].shuffled()
     }
 
     /**

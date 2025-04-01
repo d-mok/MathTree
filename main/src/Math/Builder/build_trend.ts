@@ -28,7 +28,7 @@ export function BuildTrend(
     let fs = _.map(equations, 0)
 
     //generateTrend
-    let tree = _.sample(analyze(fs))
+    let tree = analyze(fs).sample()
     if (tree === undefined) throw 'no sensible set of solvables found!'
     let { top: target, givens, hiddens } = readTree(tree)
 

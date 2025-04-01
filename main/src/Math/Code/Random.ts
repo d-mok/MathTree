@@ -51,7 +51,7 @@ export class Host {
      */
     @checkIt(owl.num)
     static RndR(min: number, max: number): number {
-        return _.random(min, max, true)
+        return Math.random() * (max - min) + min
     }
 
     /**
@@ -115,7 +115,7 @@ export class Host {
      * ```
      */
     static RndU(): 1 | -1 {
-        return _.sample([1, -1])!
+        return [1, -1].sample()! as 1 | -1
     }
 
     /**
@@ -250,7 +250,7 @@ export class Host {
                 }
             }
         }
-        return _.sample(arr)!
+        return arr.sample()!
     }
 
     /**
