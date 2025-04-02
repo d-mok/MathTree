@@ -211,7 +211,7 @@ export const point3Ds = v.array(point3D)
 
 export const polar = v.pipe(
     couple,
-    v.check($ => $[0] > 0)
+    v.check(([r, q]) => r >= 0)
 )
 
 export const fraction = couple
@@ -245,12 +245,17 @@ export const compoundInequality = v.strictTuple([
 
 export const trigValue = v.strictTuple([trig, v.union([num, str])])
 
-export const trigExp = v.strictTuple([trig, num, num, str])
+export const trigExp = v.strictTuple([
+    trig,
+    num,
+    v.union([v.literal(1), v.literal(-1)]),
+    str,
+])
 
 export const quantity = v.object({ val: num, unit: str })
 
 // testing
 
 function xxx(_: unknown) {
-    return v.is(compoundInequality, _)
+    return v.is(quantity, _)
 }

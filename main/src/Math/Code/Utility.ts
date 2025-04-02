@@ -12,7 +12,6 @@ export class Host {
      * At([1,2,3],3) // 1
      * ```
      */
-    @checkIt([owl.array(), $ => $.length > 0], owl.int)
     static At<T>(arr: T[], index: number): T {
         return arr.nth(index)!
     }
@@ -23,7 +22,6 @@ export class Host {
      * Lace([1,2,3,4,5,6],0,[-1,0,1]) // [6,1,2]
      * ```
      */
-    @checkIt(owl.array(), owl.int, owl.array(owl.int))
     static Lace<T>(
         arr: T[],
         centreIndex: number,
@@ -40,7 +38,6 @@ export class Host {
      * Flop(false,1,2) // [2,1]
      * ```
      */
-    // @checkIt(owl.bool)
     static Flop<T>(bool: boolean, first: T, second: T): [T, T] {
         return bool ? [first, second] : [second, first]
     }
@@ -53,7 +50,6 @@ export class Host {
      * ComboDisplay(1,[1,2],[3,4]) // [2,3]
      * ```
      */
-    // @checkIt(owl.or(owl.bool, owl.nonNegativeInt))
     static ComboDisplay<T>(
         truth: boolean[] | number,
         ...trueFalsePairs: [trueValue: T, falseValue: T][]

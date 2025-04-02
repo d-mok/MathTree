@@ -11,7 +11,6 @@ export class Host {
      * Min(2,3,4) // 2
      * ```
      */
-    @checkIt(owl.num)
     static Min(...nums: number[]): number {
         return Math.min(...nums)
     }
@@ -22,7 +21,6 @@ export class Host {
      * Max(2,3,4) // 4
      * ```
      */
-    @checkIt(owl.num)
     static Max(...nums: number[]): number {
         return Math.max(...nums)
     }
@@ -33,7 +31,6 @@ export class Host {
      * Sort(2,3,1) // [1,2,3]
      * ```
      */
-    @checkIt(owl.num)
     static Sort(...nums: number[]): number[] {
         return [...nums].sort((a, b) => a - b)
     }
@@ -45,7 +42,6 @@ export class Host {
      * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
      * ```
      */
-    @checkIt(owl.array(), owl.pass)
     static SortBy<T>(items: T[], valueFunc: (_: T) => number): T[] {
         return [...items].sort((a, b) => valueFunc(a) - valueFunc(b))
     }
@@ -58,7 +54,6 @@ export class Host {
      * Sum() // 0
      * ```
      */
-    @checkIt(owl.num)
     static Sum(...nums: number[]): number {
         return _.sum(nums)
     }
@@ -71,7 +66,6 @@ export class Host {
      * Product() // 1
      * ```
      */
-    @checkIt(owl.num)
     static Product(...nums: number[]): number {
         if (nums.length === 0) return 1
         return nums.reduce((a, b) => a * b)
@@ -84,11 +78,8 @@ export class Host {
      * Mean(-1,2,3,4,5) // 2.6
      * ```
      */
-    @checkIt(owl.num)
-    @inspectIt(function is_not_empty(...nums) {
-        return nums.length > 0
-    })
     static Mean(...nums: number[]): number {
+        if (nums.length === 0) return NaN
         return _.mean(nums)
     }
 
@@ -99,8 +90,8 @@ export class Host {
      * Median(1,2,3,4,5,7) // 3.5
      * ```
      */
-    @checkIt(owl.num)
     static Median(...nums: number[]): number {
+        if (nums.length === 0) return NaN
         return cal.median(nums)
     }
 
@@ -111,7 +102,6 @@ export class Host {
      * LowerQ(1,2,3,4,5,7) // 2
      * ```
      */
-    @checkIt(owl.num)
     static LowerQ(...nums: number[]): number {
         if (nums.length === 0) return NaN
         const sorted = _.sortBy(nums)
@@ -128,7 +118,6 @@ export class Host {
      * UpperQ(1,2,3,4,5,7) // 5
      * ```
      */
-    @checkIt(owl.num)
     static UpperQ(...nums: number[]): number {
         if (nums.length === 0) return NaN
         const sorted = _.sortBy(nums)
@@ -145,7 +134,6 @@ export class Host {
      * StatRange(1,2,3,4,5,7) // 6
      * ```
      */
-    @checkIt(owl.num)
     static StatRange(...nums: number[]): number {
         return Math.max(...nums) - Math.min(...nums)
     }
@@ -156,7 +144,6 @@ export class Host {
      * IQR(1,2,3,4,5,6) // 3
      * ```
      */
-    @checkIt(owl.num)
     static IQR(...nums: number[]): number {
         return UpperQ(...nums) - LowerQ(...nums)
     }
@@ -167,7 +154,6 @@ export class Host {
      * Freq([2,3,4,1,5,1,1,4,5],1) // 3
      * ```
      */
-    @checkIt(owl.array(), owl.pass)
     static Freq<T>(array: T[], item: T): number {
         return array.count([item])
     }
@@ -179,7 +165,6 @@ export class Host {
      * Mode(1,1,2,2,3) \\ [1,2]
      * ```
      */
-    @checkIt(owl.num)
     static Mode(...nums: number[]): number[] {
         return cal.mode(nums)
     }
@@ -191,12 +176,10 @@ export class Host {
      * UniMode(1,1,2,2,3) \\ throw error
      * ```
      */
-    @checkIt(owl.num)
-    @inspectIt(function has_single_mode(...nums) {
-        return cal.mode(nums).length === 1
-    })
     static UniMode(...nums: number[]): number {
-        return cal.mode(nums)[0]
+        let modes = cal.mode(nums)
+        if (modes.length !== 1) return NaN
+        return modes[0]
     }
 
     /**
@@ -206,7 +189,6 @@ export class Host {
      * StdDev(1,1,2,2,3) \\ 0.748331477
      * ```
      */
-    @checkIt(owl.num)
     static StdDev(...nums: number[]): number {
         return cal.std(nums)
     }
@@ -217,7 +199,6 @@ export class Host {
      * ZScore(80,60,10) \\ 2
      * ```
      */
-    @checkIt(owl.num)
     static ZScore(num: number, mean: number, SD: number): number {
         return (num - mean) / SD
     }
@@ -229,7 +210,6 @@ export class Host {
      * MedianAt(13) \\ 7
      * ```
      */
-    @checkIt(owl.int)
     static MedianAt(total: number): number {
         return (total + 1) / 2
     }
@@ -241,7 +221,6 @@ export class Host {
      * LowerQAt(13) \\ 3.5
      * ```
      */
-    @checkIt(owl.int)
     static LowerQAt(total: number): number {
         total = Math.floor(total / 2)
         return MedianAt(total)
@@ -254,7 +233,6 @@ export class Host {
      * UpperQAt(13) \\ 10.5
      * ```
      */
-    @checkIt(owl.int)
     static UpperQAt(total: number): number {
         return total + 1 - LowerQAt(total)
     }
@@ -265,7 +243,6 @@ export class Host {
      * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
      * ```
      */
-    @checkIt(owl.ntuple, owl.ntuple)
     static Freqs(data: number[], nums?: number[]): number[] {
         nums ??= Rng(...data)
         return nums.map($ => data.count([$]))
@@ -278,7 +255,6 @@ export class Host {
      * Summary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
      * ```
      */
-    @checkIt(owl.num)
     static Summary(...data: number[]): number[] {
         return [
             Min(...data),
@@ -295,7 +271,6 @@ export class Host {
      * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into class intervals [1,5] and [6,10]
      * ```
      */
-    @checkIt(owl.ntuple, owl.couple)
     static Bin(data: number[], cls: [number, number]) {
         let [L, U] = cls
         let gap = U - L

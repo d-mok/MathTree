@@ -11,7 +11,6 @@ export class Host {
      * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
      * ```
      */
-    @checkIt(owl.vector3D)
     static Mid3D(...vectors: Point3D[]): Point3D {
         const x = Sum(...vectors.map(p => p[0])) / vectors.length
         const y = Sum(...vectors.map(p => p[1])) / vectors.length
@@ -25,7 +24,6 @@ export class Host {
      * Slide3D([1,0,0],[5,0,0],0.75) // [4,0,0]
      * ```
      */
-    @checkIt(owl.point3D, owl.point3D, owl.num)
     static Slide3D(A: Point3D, B: Point3D, ratio: number): Point3D {
         let r = ratio
         let s = 1 - r
@@ -41,7 +39,6 @@ export class Host {
      * PdFoot3D(P,[A,B]) // [2,0,0]
      * ```
      */
-    @checkIt(owl.point3D, owl.point3Ds)
     static PdFoot3D(
         point: Point3D,
         base: [Point3D, Point3D, Point3D] | [Point3D, Point3D]
@@ -74,7 +71,6 @@ export class Host {
      * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
      * ```
      */
-    @checkIt(owl.point2Ds, owl.point3D, owl.vector3D, owl.vector3D)
     static Embed(
         plane2D: Point2D[],
         origin: Point3D,
@@ -93,7 +89,6 @@ export class Host {
      * EmbedX([A,B,C],2) // [[2,0,0],[2,3,0],[2,0,1]]
      * ```
      */
-    @checkIt(owl.point2Ds, owl.num)
     static EmbedX(plane2D: Point2D[], x: number = 0): Point3D[] {
         return Embed(plane2D, [x, 0, 0], [0, 1, 0], [0, 0, 1])
     }
@@ -105,7 +100,6 @@ export class Host {
      * EmbedY([A,B,C],2) // [[0,2,0],[3,2,0],[0,2,1]]
      * ```
      */
-    @checkIt(owl.point2Ds, owl.num)
     static EmbedY(plane2D: Point2D[], y: number = 0): Point3D[] {
         return Embed(plane2D, [0, y, 0], [1, 0, 0], [0, 0, 1])
     }
@@ -117,7 +111,6 @@ export class Host {
      * EmbedZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
      * ```
      */
-    @checkIt(owl.point2Ds, owl.num)
     static EmbedZ(plane2D: Point2D[], z: number = 0): Point3D[] {
         return Embed(plane2D, [0, 0, z], [1, 0, 0], [0, 1, 0])
     }
@@ -129,7 +122,6 @@ export class Host {
      * FlatZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
      * ```
      */
-    @checkIt(owl.point3Ds, owl.num)
     static FlatZ(points: Point3D[], z: number = 0): Point3D[] {
         return points.map(([x, y, _]) => [x, y, z])
     }
@@ -141,7 +133,6 @@ export class Host {
      * Extrude([A,B,C],[[0,0,4]],0.75) // [[0,0,0],[3,0,0],[0,3,0]]
      * ```
      */
-    @checkIt(owl.point3Ds, owl.point3Ds, owl.num)
     static Extrude(
         lowerBase: Point3D[],
         upperBase: Point3D[],

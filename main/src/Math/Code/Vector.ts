@@ -11,7 +11,6 @@ export class Host {
      * VecAdd([1,2],[3,4],[5,6]) // [9,12]
      * ```
      */
-    @checkIt(owl.vector)
     static VecAdd(...vectors: Point2D[]): Point2D {
         const x = Sum(...vectors.map(p => p[0]))
         const y = Sum(...vectors.map(p => p[1]))

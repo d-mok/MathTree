@@ -23,7 +23,6 @@ test('CosineLawAngle', () => {
     expect(CosineLawAngle(5, 5, 5)).toBeCloseTo(60)
     expect(CosineLawAngle(3, 4, 5)).toBeCloseTo(90)
     expect(CosineLawAngle(7, 8, 9)).toBeCloseTo(73.3984504)
-    expect(() => CosineLawAngle(1, 1, 3)).toThrow()
 })
 
 test('SineLawLength', () => {
@@ -34,19 +33,16 @@ test('SineLawLength', () => {
 test('SineLawAngle', () => {
     expect(SineLawAngle(1, 60, 1)).toBeCloseTo(60)
     expect(SineLawAngle(2, 90, 1)).toBeCloseTo(30)
-    expect(() => SineLawAngle(2, 90, 3)).toThrow()
 })
 
 test('Heron', () => {
     expect(Heron(3, 4, 5)).toBeCloseTo(6)
     expect(Heron(1, 1, 1)).toBeCloseTo(0.433012701)
     expect(Heron(7, 8, 9)).toBeCloseTo(26.83281573)
-    expect(() => Heron(1, 1, 3)).toThrow()
 })
 
 test('SolveSSS', () => {
     expect(SolveSSS(1, 3 ** 0.5, 2)).toEqual([90, 30, 60])
-    expect(() => SolveSSS(1, 1, 3)).toThrow()
 })
 
 test('SolveSAS', () => {
@@ -71,14 +67,12 @@ test('HeightsBySSS', () => {
         1,
         0.5 * 3 ** 0.5,
     ])
-    expect(() => HeightsBySSS(1, 1, 3)).toThrow()
 })
 
 test('HeightBySSS', () => {
     expect(HeightBySSS(1, 3 ** 0.5, 2)).toBeCloseTo(3 ** 0.5)
     expect(HeightBySSS(3 ** 0.5, 2, 1)).toBeCloseTo(1)
     expect(HeightBySSS(2, 1, 3 ** 0.5)).toBeCloseTo(0.5 * 3 ** 0.5)
-    expect(() => HeightBySSS(1, 1, 3)).toThrow()
 })
 
 test('HeightsBySAS', () => {

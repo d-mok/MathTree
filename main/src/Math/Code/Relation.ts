@@ -12,7 +12,6 @@ export class Host {
      * AreDistinct(1,2,2) // false
      * ```
      */
-    @checkIt(owl.num)
     static AreDistinct(...nums: number[]): boolean {
         nums = nums.map(cal.blur)
         return new Set(nums).size === nums.length
@@ -26,7 +25,6 @@ export class Host {
      * AreAbsDistinct(1,2,-2) // false
      * ```
      */
-    @checkIt(owl.num)
     static AreAbsDistinct(...nums: number[]): boolean {
         return AreDistinct(...nums.map(Math.abs))
     }
@@ -39,7 +37,6 @@ export class Host {
      * AreSameSign(1,2,0) // false
      * ```
      */
-    @checkIt(owl.num)
     static AreSameSign(...nums: number[]): boolean {
         return [...new Set(nums.map(Math.sign))].length === 1
     }
@@ -55,7 +52,6 @@ export class Host {
      * AreCoprime(0,3) // true
      * ```
      */
-    @checkIt(owl.num)
     static AreCoprime(...nums: number[]): boolean {
         nums = nums.map(cal.blur)
         if (!IsInteger(...nums)) return true
@@ -70,7 +66,6 @@ export class Host {
      * AreDistantPoint(2)([0,0],[1,0]) // false
      * ```
      */
-    @checkIt(owl.positive)
     static AreDistantPoint(distance: number) {
         let AreDistant = function (...points: Point2D[]): boolean {
             return points
@@ -87,7 +82,6 @@ export class Host {
      * AreOblique(40)(0,0.5) // false
      * ```
      */
-    @checkIt(owl.positive)
     static AreOblique(minAngle: number) {
         let areOblique = function (...slopes: number[]): boolean {
             return slopes

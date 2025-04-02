@@ -11,7 +11,6 @@ export class Host {
      * log(2,8) // 3
      * ```
      */
-    @checkIt(owl.positive)
     static log(b: number, N: number): number {
         const v = Math.log(N) / Math.log(b)
         return cal.blur(v)
@@ -23,7 +22,6 @@ export class Host {
      * Sqrt(4) // 2
      * ```
      */
-    @checkIt(owl.nonNegative)
     static Sqrt(x: number): number {
         const v = Math.sqrt(x)
         return cal.blur(v)
@@ -37,7 +35,6 @@ export class Host {
      * Radian(30) // PI/6
      * ```
      */
-    @checkIt(owl.num)
     static Radian(degree: number): number {
         const v = (degree / 180) * Math.PI
         return cal.blur(v)
@@ -51,7 +48,6 @@ export class Host {
      * Degree(Math.PI/6) // 30
      * ```
      */
-    @checkIt(owl.num)
     static Degree(radian: number): number {
         const v = (radian * 180) / Math.PI
         return cal.blur(v)
@@ -63,7 +59,6 @@ export class Host {
      * sin(30) // 0.5
      * ```
      */
-    @checkIt(owl.num)
     static sin(x: number): number {
         if (x % 180 === 0) return 0
         let v = Math.sin((x / 180) * Math.PI)
@@ -76,7 +71,6 @@ export class Host {
      * cos(60) // 0.5
      * ```
      */
-    @checkIt(owl.num)
     static cos(x: number): number {
         if ((x - 90) % 180 === 0) return 0
         let v = Math.cos((x / 180) * Math.PI)
@@ -89,7 +83,6 @@ export class Host {
      * tan(45) // 1
      * ```
      */
-    @checkIt(owl.num)
     static tan(x: number): number {
         if (x % 180 === 0) return 0
         let v = Math.tan((x / 180) * Math.PI)
@@ -102,7 +95,6 @@ export class Host {
      * arcsin(0.5) // 30
      * ```
      */
-    @checkIt(owl.between(-1, 1))
     static arcsin(x: number): number {
         let v = (Math.asin(x) * 180) / Math.PI
         return cal.blur(v)
@@ -114,7 +106,6 @@ export class Host {
      * arccos(0.5) // 60
      * ```
      */
-    @checkIt(owl.between(-1, 1))
     static arccos(x: number): number {
         let v = (Math.acos(x) * 180) / Math.PI
         return cal.blur(v)
@@ -126,7 +117,6 @@ export class Host {
      * arctan(1) // 45
      * ```
      */
-    @checkIt(owl.num)
     static arctan(x: number): number {
         let v = (Math.atan(x) * 180) / Math.PI
         return cal.blur(v)

@@ -1,103 +1,50 @@
-import _ from 'lodash'
-import { and } from './owl/and.js'
-import { array } from './owl/array.js'
-import { anyOf } from './owl/anyOf.js'
-import { custom } from './owl/custom.js'
-import { object } from './owl/object.js'
-import { or } from './owl/or.js'
-import { tuple } from './owl/tuple.js'
-export { and } from './owl/and.js'
+import * as v from 'valibot'
+import * as schema from './schema.js'
+
 export { array } from './owl/array.js'
-export { anyOf } from './owl/anyOf.js'
-export { custom } from './owl/custom.js'
-export { object } from './owl/object.js'
-export { or } from './owl/or.js'
 export { tuple } from './owl/tuple.js'
 
-type GuardedType<T extends (_: unknown) => boolean> = T extends (
-    _: unknown
-) => _ is infer U
-    ? U
-    : never
+function is<
+    T,
+    S extends v.BaseSchema<any, any, any> = v.BaseSchema<any, any, any>
+>(schema: S) {
+    return (_: unknown): _ is T => v.is(schema, _)
+}
 
-export const num = custom<number>(Number.isFinite)
+export const num = is<number>(schema.num)
+export const whole = is<number>(schema.whole)
+export const int = is<number>(schema.int)
+export const dec = is<number>(schema.dec)
+export const terminating = is<number>(schema.terminating)
+export const rational = is<number>(schema.rational)
+export const irrational = is<number>(schema.irrational)
+export const odd = is<number>(schema.odd)
+export const even = is<number>(schema.even)
+export const prob = is<number>(schema.prob)
+export const sq = is<number>(schema.sq)
+export const positive = is<number>(schema.positive)
+export const positiveInt = is<number>(schema.positiveInt)
+export const nonNegative = is<number>(schema.nonNegative)
+export const nonNegativeInt = is<number>(schema.nonNegativeInt)
+export const negative = is<number>(schema.negative)
+export const negativeInt = is<number>(schema.negativeInt)
+export const nonPositive = is<number>(schema.nonPositive)
+export const nonPositiveInt = is<number>(schema.nonPositiveInt)
+export const zero = is<number>(schema.zero)
+export const nonZero = is<number>(schema.nonZero)
+export const nonZeroInt = is<number>(schema.nonZeroInt)
 
-export const whole = custom<number>(Number.isInteger)
+export const between = (min: number, max: number) => ($: unknown) =>
+    num($) && $ >= min && $ <= max
 
-export const int = custom<number>(
-    and(
-        num,
-        custom(($: any) => Number.isInteger(cal.blur($)))
-    )
-)
-
-export const dec = custom<number>($ => num($) && !int($))
-
-export const terminating = custom<number>($ => num($) && cal.sigfig($) < 10)
-
-export const rational = custom<number>($ => num($) && cal.isRational($))
-
-export const irrational = custom<number>($ => num($) && !cal.isRational($))
-
-export const odd = custom<number>(
-    $ => int($) && Math.abs(cal.blur($)) % 2 === 1
-)
-
-export const even = custom<number>(
-    $ => int($) && Math.abs(cal.blur($)) % 2 === 0
-)
-
-export const prob = custom<number>($ => num($) && $ >= 0 && $ <= 1)
-
-export const sq = custom<number>($ => int($) && int(Math.sqrt($)))
-
-export const positive = custom<number>($ => num($) && $ > 0)
-
-export const positiveInt = custom<number>($ => int($) && $ > 0)
-
-export const nonNegative = custom<number>($ => num($) && $ >= 0)
-
-export const nonNegativeInt = custom<number>($ => int($) && $ >= 0)
-
-export const negative = custom<number>($ => num($) && $ < 0)
-
-export const negativeInt = custom<number>($ => int($) && $ < 0)
-
-export const nonPositive = custom<number>($ => num($) && $ <= 0)
-
-export const nonPositiveInt = custom<number>($ => int($) && $ <= 0)
-
-export const zero = custom<number>($ => num($) && Math.abs($) < 1e-14)
-
-export const nonZero = custom<number>($ => num($) && !zero($))
-
-export const nonZeroInt = custom<number>($ => int($) && !zero($))
-
-export const between = (min: number, max: number) =>
-    custom<number>(
-        $ => num($) && $ >= min && $ <= max,
-        `between(${min},${max})`
-    )
-
-export const absBetween = (min: number, max: number) =>
-    custom<number>(
-        $ => num($) && Math.abs($) >= min && Math.abs($) <= max,
-        `absBetween(${min},${max})`
-    )
+export const absBetween = (min: number, max: number) => ($: unknown) =>
+    num($) && Math.abs($) >= min && Math.abs($) <= max
 
 // JS native type
 
-export const str = custom<string>($ => typeof $ === 'string')
-
-export const bool = custom<boolean>($ => typeof $ === 'boolean')
-
-export const emptyObject = custom<{}>(
-    $ =>
-        object()($) &&
-        !!$ &&
-        $.constructor === Object &&
-        Object.keys($).length === 0
-)
+export const str = is<string>(schema.str)
+export const bool = is<boolean>(schema.bool)
+export const emptyObject = is<{}>(schema.emptyObject)
 
 // trivial
 
@@ -105,100 +52,47 @@ export const pass = ($: unknown) => true
 
 export const fail = ($: unknown) => false
 
-// // relation
+// relation
 
-export const distinct = ($: unknown[]) => $.isUniqEqual()
+export const distinct = is<unknown[]>(schema.distinct)
 
 // special text
 
-export const alphabet = custom<string>(
-    $ => str($) && $.length === 1 && $.toLowerCase() !== $.toUpperCase()
-)
-
-export const ineq = custom<Ineq>(
-    or(
-        anyOf('>', '<', '>=', '<=', '\\gt', '\\lt', '\\ge', '\\le'),
-        tuple(bool, bool)
-    )
-)
-
-export const dfrac = custom<string>($ => {
-    const f = String.raw`-?\\dfrac{(-?\d+\.?\d*)}{(-?\d+\.?\d*)}`
-    return str($) && !!$.match(new RegExp(f, 'g'))
-})
-
-export const constraint = custom<Constraint>(tuple(num, num, ineq, num))
-
-export const constraints = custom<Constraint[]>(array(constraint))
-
-export const field = custom<Field>(tuple(num, num, num))
-
-export const quadrantCode = custom<QuadrantCode>(anyOf(1, 2, 3, 4))
-
-export const quadrantName = custom<QuadrantName>(anyOf('I', 'II', 'III', 'IV'))
-
-export const quadrant = custom<QuadrantCode | QuadrantName>(
-    or(quadrantCode, quadrantName)
-)
-
-export const trig = custom<TrigFunc>(anyOf('sin', 'cos', 'tan'))
-
-export const roman = custom<string>(
-    anyOf('I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X')
-)
-
-export const base = custom<string>(
-    $ => str($) && $.match(/[\{\}0-9A-Z]+\_\{[0-9]+\}/g) !== null
-)
+export const alphabet = is<string>(schema.alphabet)
+export const ineq = is<Ineq>(schema.ineq)
+export const dfrac = is<string>(schema.dfrac)
+export const constraint = is<Constraint>(schema.constraint)
+export const constraints = is<Constraint[]>(schema.constraints)
+export const field = is<Field>(schema.field)
+export const quadrantCode = is<QuadrantCode>(schema.quadrantCode)
+export const quadrantName = is<QuadrantName>(schema.quadrantName)
+export const quadrant = is<QuadrantCode | QuadrantName>(schema.quadrant)
+export const trig = is<TrigFunc>(schema.trig)
+export const roman = is<string>(schema.roman)
+export const base = is<string>(schema.base)
 
 // Math Types
 
-export const couple = custom<[number, number]>(tuple(num, num))
-
-export const triple = custom<[number, number, number]>(tuple(num, num, num))
-
-export const combo = custom<[boolean, boolean, boolean]>(
-    tuple(bool, bool, bool)
+export const couple = is<[number, number]>(schema.couple)
+export const triple = is<[number, number, number]>(schema.triple)
+export const combo = is<[boolean, boolean, boolean]>(schema.combo)
+export const ntuple = is<number[]>(schema.ntuple)
+export const interval = is<interval>(schema.interval)
+export const point2D = is<Point2D>(schema.point2D)
+export const point2Ds = is<Point2D[]>(schema.point2Ds)
+export const point3D = is<Point3D>(schema.point3D)
+export const point3Ds = is<Point3D[]>(schema.point3Ds)
+export const polar = is<PolarPoint>(schema.polar)
+export const fraction = is<Fraction>(schema.fraction)
+export const properFraction = is<Fraction>(schema.properFraction)
+export const vector = is<Point2D>(schema.vector)
+export const vector3D = is<Point3D>(schema.vector3D)
+export const triangleSides = is<[number, number, number]>(schema.triangleSides)
+export const monomial = is<monomial>(schema.monomial)
+export const polynomial = is<polynomial>(schema.polynomial)
+export const compoundInequality = is<CompoundInequality>(
+    schema.compoundInequality
 )
-
-export const ntuple = custom<number[]>(array(num))
-
-export const interval = custom<interval>($ => couple($) && $[0] <= $[1])
-
-export const point2D = custom<Point2D>(couple)
-
-export const point2Ds = custom<Point2D[]>(array(point2D))
-
-export const point3D = custom<Point3D>(triple)
-
-export const point3Ds = custom<Point3D[]>(array(point3D))
-
-export const polar = custom<PolarPoint>($ => couple($) && $[0] >= 0)
-
-export const fraction = custom<Fraction>(couple)
-
-export const properFraction = custom<Fraction>($ => fraction($) && $[1] !== 0)
-
-export const vector = custom<Point2D>(couple)
-
-export const vector3D = custom<Point3D>(triple)
-
-export const triangleSides = custom<[number, number, number]>($ => {
-    if (!triple($)) return false
-    let [a, b, c] = $
-    return $.every(positive) && a + b > c && b + c > a && c + a > b
-})
-
-export const monomial = custom<monomial>(object({ coeff: num }))
-
-export const polynomial = custom<polynomial>(array(monomial))
-
-export const compoundInequality = custom<CompoundInequality>(
-    tuple(anyOf('AND', 'OR'), ineq, num, ineq, num, str)
-)
-
-export const trigValue = custom<TrigValue>(tuple(trig, or(num, str)))
-
-export const trigExp = custom<TrigExp>(tuple(trig, num, num, str))
-
-export const quantity = custom<quantity>(object({ val: num, unit: str }))
+export const trigValue = is<TrigValue>(schema.trigValue)
+export const trigExp = is<TrigExp>(schema.trigExp)
+export const quantity = is<quantity>(schema.quantity)

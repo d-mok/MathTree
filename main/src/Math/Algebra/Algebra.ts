@@ -1,4 +1,4 @@
-import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
+import { captureAll, exposeAll } from 'contract'
 import _ from 'lodash'
 import * as math from 'mathjs'
 
@@ -12,10 +12,6 @@ export class Host {
      * Crammer(1,1,3,2,2,6) // throw, parallel
      * ```
      */
-    @checkIt(owl.num)
-    @inspectIt(function has_unique_sol(a, b, c, p, q, r) {
-        return a * q - b * p !== 0
-    })
     static Crammer(
         a: number,
         b: number,
@@ -37,12 +33,6 @@ export class Host {
      * // (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
      * ```
      */
-    @checkIt([
-        owl.ntuple,
-        function non_zero_leading_coeff(_) {
-            return _[0] !== 0
-        },
-    ])
     static xPolynomial(poly1: number[], poly2: number[]): number[] {
         const deg1 = poly1.length - 1
         const deg2 = poly2.length - 1
@@ -63,7 +53,6 @@ export class Host {
      * Binomial(2,3) // power default to n = 2
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
     static Binomial(A: number, B: number, n: number = 2): number[] {
         let coeff: number[] = []
         for (let i = 0; i <= n; i++) {

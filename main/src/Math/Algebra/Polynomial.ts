@@ -1,5 +1,5 @@
 import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
-import {  dice } from 'fate'
+import { dice } from 'fate'
 import { printPolynomial } from '../../Core/ink.js'
 import _ from 'lodash'
 import * as math from 'mathjs'
@@ -44,7 +44,6 @@ export class Host {
      * // may return 7xy+3x^2y^3-2xy^3
      * ```
      */
-    @checkIt(owl.positiveInt, owl.array(owl.str), owl.positiveInt, owl.num)
     static RndPolynomial(
         degree: number,
         vars: string[] = ['x'],
@@ -77,7 +76,6 @@ export class Host {
      * // x^{5}+2x^{6}+3x^{7}
      * ```
      */
-    @checkIt(owl.polynomial)
     static PolyPrint(poly: polynomial): string {
         return printPolynomial(poly, false)
     }
@@ -89,7 +87,6 @@ export class Host {
      * //  [x^5, 2x^6, 3x^7]
      * ```
      */
-    @checkIt(owl.polynomial, owl.bool)
     static PolySort(poly: polynomial, desc = true): polynomial {
         poly = clone(poly)
         if (desc) {
@@ -106,7 +103,6 @@ export class Host {
      * func({x:2}) // 272
      * ```
      */
-    @checkIt(owl.polynomial)
     static PolyFunction(
         poly: polynomial
     ): (values: { [_: string]: number }) => number {
@@ -126,7 +122,6 @@ export class Host {
         }
     }
 
-
     /**
      * combine like terms in polynomial
      * ```
@@ -134,7 +129,6 @@ export class Host {
      * // [4x^5, 2x^6]
      * ```
      */
-    @checkIt(owl.polynomial)
     static PolySimplify(poly: polynomial): polynomial {
         poly = clone(poly)
         let arr: polynomial = []

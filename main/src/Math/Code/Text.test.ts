@@ -35,7 +35,6 @@ test('IneqSign', () => {
 //     expect(ParseIneqSign('<=')).toEqual([false, true]);
 //     expect(ParseIneqSign('>')).toEqual([true, false]);
 //     expect(ParseIneqSign('<')).toEqual([false, false]);
-//     expect(() => ParseIneqSign('abc')).toThrow();
 // });
 
 test('Dfrac', () => {
@@ -46,7 +45,6 @@ test('Dfrac', () => {
     expect(Dfrac(6, -2)).toBe('-3')
     expect(Dfrac(0, 2)).toBe('0')
     expect(Dfrac(6, -4, true)).toBe('\\dfrac{-3}{2}')
-    expect(() => Dfrac(5, 0)).toThrow()
 })
 
 // test('ParseDfrac', () => {
@@ -55,8 +53,6 @@ test('Dfrac', () => {
 //     expect(ParseDfrac('-\\dfrac{1.2}{2}')).toEqual([-1.2, 2]);
 //     expect(ParseDfrac('-\\dfrac{-1.2}{2}')).toEqual([1.2, 2]);
 //     expect(ParseDfrac('-\\dfrac{-1.2}{-2}')).toEqual([1.2, -2]);
-//     expect(() => ParseDfrac('\\dfrac{x}{2}')).toThrow();
-//     expect(() => ParseDfrac('\\d{1}{2}')).toThrow();
 // });
 
 test('IndexToSurd', () => {
@@ -99,7 +95,6 @@ test('LongDivision', () => {
 //     expect(Roman(4)).toBe('IV');
 //     expect(Roman(5)).toBe('V');
 //     expect(Roman(6)).toBe('VI');
-//     expect(() => Roman(0)).toThrow();
 // });
 
 // test('DeRoman', () => {
@@ -108,7 +103,6 @@ test('LongDivision', () => {
 //     expect(DeRoman('III')).toBe(3);
 //     expect(DeRoman('IV')).toBe(4);
 //     expect(DeRoman('V')).toBe(5);
-//     expect(() => DeRoman('XI')).toThrow();
 // });
 
 test('ToBase', () => {

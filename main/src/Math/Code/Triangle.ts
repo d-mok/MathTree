@@ -2,13 +2,6 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import _ from 'lodash'
 import * as math from 'mathjs'
 
-let angle = owl.between(0, 180)
-let side = owl.positive
-
-function triangle_ineq(a: number, b: number, c: number) {
-    return owl.triangleSides([a, b, c])
-}
-
 @exposeAll()
 @captureAll()
 export class Host {
@@ -18,7 +11,6 @@ export class Host {
      * Pyth(3,4) // 5
      * ```
      */
-    @checkIt(side)
     static Pyth(a: number, b: number): number {
         return (a ** 2 + b ** 2) ** 0.5
     }
@@ -29,10 +21,6 @@ export class Host {
      * PythLeg(5,4) // 3
      * ```
      */
-    @checkIt(side)
-    @inspectIt(function is_triangle(c, a) {
-        return c >= a
-    })
     static PythLeg(c: number, a: number): number {
         return (c ** 2 - a ** 2) ** 0.5
     }
@@ -43,7 +31,6 @@ export class Host {
      * CosineLawLength(3, 4, 90) // 5
      * ```
      */
-    @checkIt(side, side, angle)
     static CosineLawLength(a: number, b: number, C: number): number {
         return (a ** 2 + b ** 2 - 2 * a * b * cos(C)) ** 0.5
     }
@@ -56,8 +43,6 @@ export class Host {
      * CosineLawAngle(7,8,9) // 73.3984504
      * ```
      */
-    @checkIt(side)
-    @inspectIt(triangle_ineq)
     static CosineLawAngle(a: number, b: number, c: number): number {
         return arccos((c ** 2 - a ** 2 - b ** 2) / (-2 * a * b))
     }
@@ -68,7 +53,6 @@ export class Host {
      * SineLawLength(60,1,60) // 1
      * ```
      */
-    @checkIt(angle, side, angle)
     static SineLawLength(A: number, a: number, B: number): number {
         return (a / sin(A)) * sin(B)
     }
@@ -79,10 +63,6 @@ export class Host {
      * SineLawAngle(1,60,1) // 60
      * ```
      */
-    @checkIt(side, angle, side)
-    @inspectIt(function is_triangle(a, A, b) {
-        return (sin(A) / a) * b >= 0 && (sin(A) / a) * b <= 1
-    })
     static SineLawAngle(a: number, A: number, b: number): number {
         return arcsin((sin(A) / a) * b)
     }
@@ -95,8 +75,6 @@ export class Host {
      * Heron(7,8,9) // 26.83281573
      * ```
      */
-    @checkIt(side)
-    @inspectIt(triangle_ineq)
     static Heron(a: number, b: number, c: number): number {
         let s = (a + b + c) / 2
         return (s * (s - a) * (s - b) * (s - c)) ** 0.5
@@ -108,8 +86,6 @@ export class Host {
      * SolveSSS(1,sqrt(3),2) // [90,30,60]
      * ```
      */
-    @checkIt(side)
-    @inspectIt(triangle_ineq)
     static SolveSSS(
         a: number,
         b: number,
@@ -127,7 +103,6 @@ export class Host {
      * SolveSAS(1,90,sqrt(3)) // [30,2,60]
      * ```
      */
-    @checkIt(side, angle, side)
     static SolveSAS(
         a: number,
         C: number,
@@ -144,7 +119,6 @@ export class Host {
      * SolveAAS(60,90,sqrt(3)) // [1,30,2]
      * ```
      */
-    @checkIt(angle, angle, side)
     static SolveAAS(
         A: number,
         B: number,
@@ -162,7 +136,6 @@ export class Host {
      * SolveASA(90,sqrt(3),30) // [2,60,1]
      * ```
      */
-    @checkIt(angle, side, angle)
     static SolveASA(
         A: number,
         c: number,
@@ -180,7 +153,6 @@ export class Host {
      * SolveSSA(1,sqrt(3),30) // [90,2,60]
      * ```
      */
-    @checkIt(side, side, angle)
     static SolveSSA(
         a: number,
         b: number,
@@ -198,8 +170,6 @@ export class Host {
      * HeightsBySSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
      * ```
      */
-    @checkIt(side)
-    @inspectIt(triangle_ineq)
     static HeightsBySSS(
         a: number,
         b: number,
@@ -218,8 +188,6 @@ export class Host {
      * HeightBySSS(1,sqrt(3),2) // sqrt(3)
      * ```
      */
-    @checkIt(side)
-    @inspectIt(triangle_ineq)
     static HeightBySSS(a: number, b: number, c: number): number {
         let area = Heron(a, b, c)
         return (2 * area) / a
@@ -231,7 +199,6 @@ export class Host {
      * HeightsBySAS(1,90,sqrt(3)) // [sqrt(3),1,sqrt(3)/2]
      * ```
      */
-    @checkIt(side, angle, side)
     static HeightsBySAS(
         a: number,
         C: number,
@@ -247,7 +214,6 @@ export class Host {
      * HeightBySAS(1,90,sqrt(3)) // sqrt(3)/2
      * ```
      */
-    @checkIt(side, angle, side)
     static HeightBySAS(a: number, C: number, b: number): number {
         let [ha, hb, hc] = HeightsBySAS(a, C, b)
         return hc
@@ -262,7 +228,6 @@ export class Host {
      * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
      * ```
      */
-    @checkIt(owl.point2D, owl.point2D, owl.point2D, owl.bool)
     static TriangleFromVertex(
         A: Point2D,
         B: Point2D,
@@ -294,7 +259,6 @@ export class Host {
      * // [5, 3, 4, 90, 36.86989765, 53.13013235]
      * ```
      */
-    @checkIt(owl.point2D, owl.point2D, owl.point2D, owl.bool)
     static TriangleFromPoint(
         A: Point2D,
         B: Point2D,
@@ -452,7 +416,6 @@ export class Host {
      * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
      * ```
      */
-    @checkIt(owl.point2D)
     static Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
         let H = PdFoot(C, [A, B])
         let G = PdFoot(A, [B, C])
@@ -466,7 +429,6 @@ export class Host {
      * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
      * ```
      */
-    @checkIt(owl.point2D)
     static Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
         let [a1, b1, c1] = LinearFromBisector(A, B)
         let [a2, b2, c2] = LinearFromBisector(B, C)
@@ -480,7 +442,6 @@ export class Host {
      * Centroid([3,6],[9,12],[15,21])  // [9,13]
      * ```
      */
-    @checkIt(owl.point2D)
     static Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D {
         let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3]
         return [cal.blur(x), cal.blur(y)]
@@ -492,7 +453,6 @@ export class Host {
      * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
      * ```
      */
-    @checkIt(owl.point2D)
     static Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
         let a = Distance(B, C)
         let b = Distance(A, C)
@@ -506,7 +466,6 @@ export class Host {
     /**
      * the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
      */
-    @checkIt(owl.point2D)
     static ScaleOrthocentreToInt(
         A: Point2D,
         B: Point2D,
@@ -521,7 +480,6 @@ export class Host {
     /**
      * the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
      */
-    @checkIt(owl.point2D)
     static ScaleCircumcentreToInt(
         A: Point2D,
         B: Point2D,
@@ -536,7 +494,6 @@ export class Host {
     /**
      * the scaled points [A,B,C] so that their centroid and themselves becomes integral
      */
-    @checkIt(owl.point2D)
     static ScaleCentroidToInt(
         A: Point2D,
         B: Point2D,
@@ -551,7 +508,6 @@ export class Host {
     /**
      * the scaled points [A,B,C] so that their incentre and themselves becomes integral
      */
-    @checkIt(owl.point2D)
     static ScaleIncentreToInt(
         A: Point2D,
         B: Point2D,

@@ -194,10 +194,6 @@ export class Host {
      * IsBetween(2,5)(1) // false
      * ```
      */
-    @checkIt(owl.num)
-    @inspectIt(function is_range(min, max) {
-        return min < max
-    })
     static IsBetween(min: number, max: number) {
         return (...items: any[]): boolean => items.every(owl.between(min, max))
     }
@@ -210,10 +206,6 @@ export class Host {
      * IsAbsBetween(2,5)(1) // false
      * ```
      */
-    @checkIt(owl.nonNegative)
-    @inspectIt(function is_range(min, max) {
-        return min < max
-    })
     static IsAbsBetween(min: number, max: number) {
         return (...items: any[]): boolean =>
             items.every(owl.absBetween(min, max))
@@ -226,7 +218,6 @@ export class Host {
      * IsAroundPoint([0,0],2)([3,0]) // false
      * ```
      */
-    @checkIt(owl.point2D, owl.positive)
     static IsAroundPoint(anchor: Point2D, range: number) {
         return (...points: Point2D[]): boolean =>
             points.every(p => ChessboardDistance(anchor, p) <= range)
@@ -241,7 +232,6 @@ export class Host {
      * IsTriangle([6,14,8]) // false
      * ```
      */
-    @checkIt(owl.triple)
     static IsTriangle(...triangles: [number, number, number][]): boolean {
         return triangles.every(owl.triangleSides)
     }

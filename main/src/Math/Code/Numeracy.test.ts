@@ -4,7 +4,6 @@ import { describe, expect, it, test } from 'vitest'
 
 test('Divide', () => {
     expect(Divide(6, 2)).toBe(3)
-    expect(() => Divide(6, 0)).toThrow()
 })
 
 test('Abs', () => {
@@ -184,7 +183,6 @@ test('Ratio', () => {
     expect(Ratio(0, -4)).toEqual([0, -1])
     expect(Ratio(2, 4, 6.5)).toEqual([4, 8, 13])
     expect(Ratio(1 / 3, 1 / 2, 1 / 4)).toEqual([4, 6, 3])
-    expect(() => Ratio(Math.sqrt(2), 1 / 2, 1 / 4)).toThrow()
 })
 
 test('ScaleTo', () => {
@@ -216,9 +214,6 @@ test('HCF', () => {
     expect(HCF(24, 36, -60)).toBe(12)
     expect(HCF(1, 1)).toBe(1)
     expect(HCF(30)).toBe(30)
-    expect(() => HCF(5, 10, 5.1)).toThrow()
-    expect(() => HCF(0.1, 0.2)).toThrow()
-    expect(() => HCF(0, 3)).toThrow()
 })
 
 test('LCM', () => {
@@ -227,8 +222,6 @@ test('LCM', () => {
     expect(LCM(24, 36, -60)).toBe(360)
     expect(LCM(1, 1)).toBe(1)
     expect(LCM(30)).toBe(30)
-    expect(() => LCM(10, 2.5)).toThrow()
-    expect(() => LCM(0, 3)).toThrow()
 })
 
 test('PrimeFactors', () => {
@@ -242,7 +235,6 @@ test('PrimeFactors', () => {
 //     expect(FracSign(2, -3)).toEqual([-2, 3]);
 //     expect(FracSign(-2, -3)).toEqual([2, 3]);
 //     expect(FracSign(0, -2)).toEqual([0, 2]);
-//     expect(() => FracSign(-2, 0)).toThrow();
 // });
 
 // test('Frac', () => {
@@ -253,7 +245,6 @@ test('PrimeFactors', () => {
 //     expect(Frac(0, 2)).toEqual([0, 1]);
 //     expect(Frac(1.5, -2)).toEqual([-1.5, 2]);
 //     expect(Frac(1, 1)).toEqual([1, 1]);
-//     expect(() => Frac(-2, 0)).toThrow();
 // });
 
 test('ToFrac', () => {

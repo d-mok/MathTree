@@ -15,7 +15,6 @@ export class Host {
      * Quadrant(350) \\ 'IV'
      * ```
      */
-    @checkIt(owl.or(owl.point2D, owl.num))
     static Quadrant(rect: Point2D | number): QuadrantName {
         if (!Array.isArray(rect)) rect = PolToRect([1, rect])
         const q = RectToPol(rect)[1]
@@ -33,7 +32,6 @@ export class Host {
      * PolToRect([1,45]) // [0.707,0.707]
      * ```
      */
-    @checkIt(owl.polar)
     static PolToRect([r, q]: PolarPoint): Point2D {
         return [r * cos(q), r * sin(q)]
     }
@@ -44,7 +42,6 @@ export class Host {
      * RectToPol([1,1]) // [1.414,45]
      * ```
      */
-    @checkIt(owl.point2D)
     static RectToPol([x, y]: Point2D): PolarPoint {
         const r = Math.sqrt(x * x + y * y)
         let q = (Math.atan2(y, x) * 180) / Math.PI
@@ -59,7 +56,6 @@ export class Host {
      * ASTC('III','tan') // 1
      * ```
      */
-    @checkIt(owl.quadrant, owl.trig)
     static ASTC(
         quadrant: QuadrantCode | QuadrantName,
         func: TrigFunc
@@ -83,7 +79,6 @@ export class Host {
      * TrigSolve('sin',1) // [90]
      * ```
      */
-    @checkIt(owl.trig, owl.num)
     static TrigSolve(func: TrigFunc, k: number): number[] {
         if (func == 'sin') {
             if (k > 1 || k < -1) return []
@@ -136,7 +131,6 @@ export class Host {
      * PolarReduce(-10) // 350
      * ```
      */
-    @checkIt(owl.num)
     static PolarReduce(q: number): number {
         q = q % 360
         if (q < 0) q += 360
@@ -151,7 +145,6 @@ export class Host {
      * PolarDiff(350,10) // 20
      * ```
      */
-    @checkIt(owl.num)
     static PolarDiff(angle1: number, angle2: number): number {
         angle1 = PolarReduce(angle1)
         angle2 = PolarReduce(angle2)
@@ -166,7 +159,6 @@ export class Host {
      * WholeBearing(180) // '270°'
      * ```
      */
-    @checkIt(owl.int)
     static WholeBearing(polarAngle: number): string {
         let q = polarAngle
         q = PolarReduce(q)
@@ -182,7 +174,6 @@ export class Host {
      * CompassBearing(30) // 'N60°E'
      * ```
      */
-    @checkIt(owl.num)
     static CompassBearing(polarAngle: number): string {
         let q = polarAngle
         q = PolarReduce(q)

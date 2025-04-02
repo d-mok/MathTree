@@ -32,7 +32,6 @@ export class Host {
      * RndPickN([1,2,3,4,5],3) // may return [2,5,3]
      * ```
      */
-    @checkIt(owl.array(), owl.positiveInt)
     static RndPickN<T>(items: T[], n: number): T[] {
         return _.sampleSize(items, n)
     }
@@ -44,7 +43,6 @@ export class Host {
      * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
      * ```
      */
-    @checkIt(owl.array(), owl.positiveInt)
     static RndPickUnique<T>(items: T[], n: number): T[] {
         return _.sampleSize(items.uniqEqual(), n)
     }

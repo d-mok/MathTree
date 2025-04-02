@@ -11,8 +11,8 @@ export class Host {
      * Discriminant(2,3,4) // -23
      * ```
      */
-    @checkIt(owl.nonZero, owl.num, owl.num)
     static Discriminant(a: number, b: number, c: number): number {
+        if (a === 0) return NaN
         return b * b - 4 * a * c
     }
 
@@ -23,15 +23,13 @@ export class Host {
      * QuadraticRoot(1,2,3) // throw when no real root
      * ```
      */
-    @checkIt(owl.nonZero, owl.num, owl.num)
-    @inspectIt(function has_real_root(a, b, c) {
-        return b ** 2 - 4 * a * c >= 0
-    })
     static QuadraticRoot(a: number, b: number, c: number): [number, number] {
+        if (a === 0) return [NaN, NaN]
         const d = Discriminant(a, b, c)
+        if (d < 0) return [NaN, NaN]
         const s = Math.sqrt(d)
-        const r1 = Divide(-b - s, 2 * a)
-        const r2 = Divide(-b + s, 2 * a)
+        const r1 = (-b - s) / (2 * a)
+        const r2 = (-b + s) / (2 * a)
         return [Min(r1, r2), Max(r1, r2)]
     }
 
@@ -41,9 +39,9 @@ export class Host {
      * QuadraticVertex(1,2,3) // [-1,2]
      * ```
      */
-    @checkIt(owl.nonZero, owl.num, owl.num)
     static QuadraticVertex(a: number, b: number, c: number): Point2D {
-        const h = Divide(-b, 2 * a)
+        if (a === 0) return [NaN, NaN]
+        const h = -b / (2 * a)
         const k = a * h * h + b * h + c
         return [h, k]
     }
@@ -54,8 +52,8 @@ export class Host {
      * QuadraticFromRoot(1,2,3) // [1,-5,6]
      * ```
      */
-    @checkIt(owl.nonZero, owl.num, owl.num)
     static QuadraticFromRoot(a: number, p: number, q: number): Quadratic {
+        if (a === 0) return [NaN, NaN, NaN]
         return [a, -a * (p + q), a * p * q]
     }
 
@@ -65,8 +63,8 @@ export class Host {
      * QuadraticFromVertex(1,2,3) // [1,-4,7]
      * ```
      */
-    @checkIt(owl.nonZero, owl.num, owl.num)
     static QuadraticFromVertex(a: number, h: number, k: number): Quadratic {
+        if (a === 0) return [NaN, NaN, NaN]
         const b = -2 * a * h
         const c = k - a * h * h - b * h
         return [a, b, c]

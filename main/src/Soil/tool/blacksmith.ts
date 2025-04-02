@@ -1,6 +1,8 @@
 import { Blacksmith } from 'bot'
 import _ from 'lodash'
 import * as math from 'mathjs'
+import * as schema from '../../Core/schema.js'
+import * as v from 'valibot'
 
 function numberDefault(num: number): number {
     let v = num
@@ -12,9 +14,6 @@ function numberDefault(num: number): number {
     }
     return v
 }
-
-type GuardType<T> = T extends (_: any) => _ is infer R ? R : unknown
-type transformer<T> = ($: GuardType<T>) => string
 
 type pattern =
     | '*@'
@@ -44,44 +43,43 @@ type pattern =
 
 export let blacksmith = new Blacksmith()
 
-function addRule<T extends predicate>(
+function addRule<T>(
     pattern: pattern,
-    condition: T,
-    fn: transformer<T>
+    schema: v.BaseSchema<T, T, any>,
+    fn: (_: T) => string
 ) {
-    let checker = ($: any): $ is GuardType<T> => condition($)
-    blacksmith.add(pattern, checker, fn)
+    blacksmith.add(pattern, ($: unknown) => v.is(schema, $), fn)
 }
 
 // print **x as sci notation
-addRule('**@', owl.num, $ => {
+addRule('**@', schema.num, $ => {
     let v = cal.blur(Round($, 3))
     let abs = Math.abs(v)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v)
 })
 
-addRule('**@', owl.quantity, ({ val, unit }) => {
+addRule('**@', schema.quantity, ({ val, unit }) => {
     let v = cal.blur(Round(val, 3))
     let abs = Math.abs(v)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v) + unit
 })
 
 // print */x as fraction
-addRule('*/@', owl.num, $ => {
+addRule('*/@', schema.num, $ => {
     let [p, q] = ToFrac($)
     return Dfrac(p, q)
 })
 
-addRule('*/@', owl.monomial, $ => {
+addRule('*/@', schema.monomial, $ => {
     return ink.printMonomial($, true)
 })
 
-addRule('*/@', owl.polynomial, $ => {
+addRule('*/@', schema.polynomial, $ => {
     return ink.printPolynomial($, true)
 })
 
 // print */(x) as fraction with bracket if necessary
-addRule('*/(@)', owl.num, $ => {
+addRule('*/(@)', schema.num, $ => {
     let [p, q] = ToFrac($)
     if (q === 1 && p >= 0) return Dfrac(p, q)
     if (q === 1 && p < 0) return '(' + Dfrac(p, q) + ')'
@@ -89,101 +87,103 @@ addRule('*/(@)', owl.num, $ => {
 })
 
 // print *//x as fraction
-addRule('*//@', owl.num, $ => {
+addRule('*//@', schema.num, $ => {
     let [p, q] = ToFrac($)
     return Dfrac(p, q).replace(/dfrac/g, 'frac')
 })
 
 // print *(x) as bracket if negative
-addRule('*(@)', owl.num, $ => {
+addRule('*(@)', schema.num, $ => {
     let v = numberDefault($)
     return String(v >= 0 ? v : '(' + v + ')')
 })
 
 // print *!x as surd
-addRule('*!@', owl.num, $ => ink.printSurd($))
+addRule('*!@', schema.num, $ => ink.printSurd($))
 addRule(
     '*!@',
-    owl.point2D,
+    schema.point2D,
     ([a, b]) => '(' + ink.printSurd(a) + ',' + ink.printSurd(b) + ')'
 )
 
 // print *^+_x as sign of x
-addRule('*^+_@', owl.num, $ => ($ >= 0 ? '+' : '-'))
+addRule('*^+_@', schema.num, $ => ($ >= 0 ? '+' : '-'))
 // print *^-_x as opposite sign of x
-addRule('*^-_@', owl.num, $ => ($ >= 0 ? '-' : '+'))
+addRule('*^-_@', schema.num, $ => ($ >= 0 ? '-' : '+'))
 
 // print *|x| as abs(x)
-addRule('*|@|', owl.num, $ => String(numberDefault(Math.abs($))))
+addRule('*|@|', schema.num, $ => String(numberDefault(Math.abs($))))
 
 // print *^\gt_x as '>' or '<'
-addRule('*^\\gt_@', owl.bool, $ => ($ ? '\\gt' : '\\lt'))
-addRule('*^\\gt_@', owl.num, $ => ($ > 0 ? '\\gt' : $ < 0 ? '\\lt' : '='))
+addRule('*^\\gt_@', schema.bool, $ => ($ ? '\\gt' : '\\lt'))
+addRule('*^\\gt_@', schema.num, $ => ($ > 0 ? '\\gt' : $ < 0 ? '\\lt' : '='))
 
 // print *^\lt_x as '<' or '>'
-addRule('*^\\lt_@', owl.bool, $ => ($ ? '\\lt' : '\\gt'))
-addRule('*^\\lt_@', owl.num, $ => ($ > 0 ? '\\lt' : $ < 0 ? '\\gt' : '='))
+addRule('*^\\lt_@', schema.bool, $ => ($ ? '\\lt' : '\\gt'))
+addRule('*^\\lt_@', schema.num, $ => ($ > 0 ? '\\lt' : $ < 0 ? '\\gt' : '='))
 
 // print *^\ge_x as '>=' or '<='
-addRule('*^\\ge_@', owl.bool, $ => ($ ? '\\ge' : '\\le'))
-addRule('*^\\ge_@', owl.num, $ => ($ > 0 ? '\\ge' : $ < 0 ? '\\le' : '='))
+addRule('*^\\ge_@', schema.bool, $ => ($ ? '\\ge' : '\\le'))
+addRule('*^\\ge_@', schema.num, $ => ($ > 0 ? '\\ge' : $ < 0 ? '\\le' : '='))
 
 // print *^\le_x as '<=' or '>='
-addRule('*^\\le_@', owl.bool, $ => ($ ? '\\le' : '\\ge'))
-addRule('*^\\le_@', owl.num, $ => ($ > 0 ? '\\le' : $ < 0 ? '\\ge' : '='))
+addRule('*^\\le_@', schema.bool, $ => ($ ? '\\le' : '\\ge'))
+addRule('*^\\le_@', schema.num, $ => ($ > 0 ? '\\le' : $ < 0 ? '\\ge' : '='))
 
 // print *^=_x as '=' or '<>'
-addRule('*^=_@', owl.bool, $ => ($ ? '=' : '\\neq'))
+addRule('*^=_@', schema.bool, $ => ($ ? '=' : '\\neq'))
 
 // print *\%x as percent
-addRule('*%@', owl.num, $ => numberDefault($ * 100) + '%')
+addRule('*%@', schema.num, $ => numberDefault($ * 100) + '%')
 // print *\%x as percent
-addRule('*\\%@', owl.num, $ => numberDefault($ * 100) + '\\%')
+addRule('*\\%@', schema.num, $ => numberDefault($ * 100) + '\\%')
 
 // print *\%|x| as percent abs
-addRule('*%|@|', owl.num, $ => numberDefault(Abs($ * 100)) + '%')
+addRule('*%|@|', schema.num, $ => numberDefault(Abs($ * 100)) + '%')
 // print *\%|x| as percent abs
-addRule('*\\%|@|', owl.num, $ => numberDefault(Abs($ * 100)) + '\\%')
+addRule('*\\%|@|', schema.num, $ => numberDefault(Abs($ * 100)) + '\\%')
 
 // print *:x as ratio
-addRule('*:@', owl.ntuple, $ => Ratio(...$).join(':'))
-addRule('*:@', owl.num, $ => {
+addRule('*:@', schema.ntuple, $ => Ratio(...$).join(':'))
+addRule('*:@', schema.num, $ => {
     let [p, q] = cal.toFraction($)
     return p + ':' + q
 })
 
 // print *|.x as OR trig roots
-addRule('*|.@', owl.array(), $ => ink.printOrTrigRoots($))
+addRule('*|.@', v.array(v.union([v.number(), v.undefined()])), $ =>
+    ink.printOrTrigRoots($)
+)
 // print *.x as polar coordinates, with r being a surd
-addRule('*.@', owl.point2D, $ => ink.printPointPolar($))
+addRule('*.@', schema.point2D, $ => ink.printPointPolar($))
 
 // print *^× as prime factors
-addRule('*^×@', owl.num, $ => {
+addRule('*^×@', schema.num, $ => {
     return ink.printPrimeFactors($)
 })
 
 // print *×th as proper ordinal, e.g. 1st
-addRule('*@th', owl.num, $ => {
+addRule('*@th', schema.num, $ => {
     return ink.printOrdinal($)
 })
 
 // print *x as normal
-addRule('*@', owl.num, $ => String(numberDefault($)))
-addRule('*@', owl.bool, $ => ($ ? '✔' : '✘'))
+addRule('*@', schema.num, $ => String(numberDefault($)))
+addRule('*@', schema.bool, $ => ($ ? '✔' : '✘'))
 addRule(
     '*@',
-    owl.quantity,
+    schema.quantity,
     ({ val, unit }) => String(numberDefault(val)) + unit
 )
-addRule('*@', owl.point2D, $ => Coord($))
-addRule('*@', owl.combo, $ => ink.printCombo($))
-addRule('*@', owl.monomial, $ => ink.printMonomial($, false))
-addRule('*@', owl.polynomial, $ => ink.printPolynomial($, false))
-addRule('*@', owl.compoundInequality, $ => ink.printCompoundInequality($))
-addRule('*@', owl.trigValue, $ => ink.printTrigValue($))
-addRule('*@', owl.trigExp, $ => ink.printTrigExp($))
-addRule('*@', owl.constraint, $ => ink.printConstraint($))
-addRule('*@', owl.constraints, $ => ink.printConstraints($))
+addRule('*@', schema.point2D, $ => Coord($))
+addRule('*@', schema.combo, $ => ink.printCombo($))
+addRule('*@', schema.monomial, $ => ink.printMonomial($, false))
+addRule('*@', schema.polynomial, $ => ink.printPolynomial($, false))
+addRule('*@', schema.compoundInequality, $ => ink.printCompoundInequality($))
+addRule('*@', schema.trigValue, $ => ink.printTrigValue($))
+addRule('*@', schema.trigExp, $ => ink.printTrigExp($))
+addRule('*@', schema.constraint, $ => ink.printConstraint($))
+addRule('*@', schema.constraints, $ => ink.printConstraints($))
 
 blacksmith.setForgePatterns()
 blacksmith.setIntraPatterns(['**@', '*@', '*/@'])

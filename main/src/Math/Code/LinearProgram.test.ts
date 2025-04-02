@@ -71,7 +71,6 @@ test('FeasiblePolygon', () => {
         [-5, -5],
         [10, -5],
     ])
-    expect(() => FeasiblePolygon([1, 1, '<', 10], [1, 1, '>', 10])).toThrow()
 })
 
 test('FeasibleIntegral', () => {
@@ -128,7 +127,6 @@ test('FeasibleVertices', () => {
         [-5, -5],
         [10, -5],
     ])
-    expect(() => FeasibleVertices([1, 1, '<', 10])).toThrow()
     expect(FeasibleVertices([1, 1, '<', 0], [1, -1, '<', 0])).toEqual([[0, 0]])
 })
 
@@ -153,7 +151,6 @@ test('MaximizePoint', () => {
         [3, 1, '>', -10]
     )
     expect(MaximizePoint(points, [2, 1, 1])).toEqual([4, 1])
-    expect(() => MaximizePoint(points, [1, 1, 1])).toThrow()
 })
 
 test('MinimizePoint', () => {
@@ -164,7 +161,6 @@ test('MinimizePoint', () => {
         [3, 1, '>', -10]
     )
     expect(MinimizePoint(points, [1, 1, 1])).toEqual([-1, -3])
-    expect(() => MinimizePoint(points, [2, 1, 1])).toThrow()
 })
 
 test('OptimizePoint', () => {
@@ -176,7 +172,6 @@ test('OptimizePoint', () => {
     )
     expect(OptimizePoint(points, [2, 1, 1], true)).toEqual([4, 1])
     expect(OptimizePoint(points, [1, 1, 1], false)).toEqual([-1, -3])
-    expect(() => OptimizePoint(points, [2, 1, 1], false)).toThrow()
 })
 
 test('MaximizeField', () => {
@@ -213,10 +208,6 @@ test('OptimizeField', () => {
 })
 
 test('ConstraintsFromPoints', () => {
-    expect(() =>
-        ConstraintsFromPoints([0, 3], [0, 1], [3, 0], [1, 1])
-    ).toThrow()
-
     expect(ConstraintsFromPoints([0, 0], [0, 1], [1, 0])).toEqual([
         [1, 0, '\\ge', -0],
         [0, 1, '\\ge', -0],

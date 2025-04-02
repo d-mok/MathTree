@@ -8,16 +8,12 @@ test('Slope', () => {
     expect(Slope([0, 0], [1, 2])).toBe(2)
     expect(Slope([1, 2], [0, 0])).toBe(2)
     expect(Slope([3, 4], [6, -5])).toBe(-3)
-    expect(() => Slope([3, 4], [3, 3])).toThrow()
-    expect(() => Slope([3, 3], [3, 3])).toThrow()
 })
 
 test('SlopePd', () => {
     expect(SlopePd([0, 0], [1, 2])).toBe(-1 / 2)
     expect(SlopePd([1, 2], [0, 0])).toBe(-1 / 2)
     expect(SlopePd([3, 4], [6, -5])).toBe(1 / 3)
-    expect(() => SlopePd([3, 4], [2, 4])).toThrow()
-    expect(() => SlopePd([3, 3], [3, 3])).toThrow()
 })
 
 test('Distance', () => {
@@ -90,7 +86,6 @@ test('Rotate', () => {
 test('Dir', () => {
     expect(Dir([1, 0], [3, 2])).toBe(45)
     expect(Dir([3, 2], [1, 0])).toBe(225)
-    expect(() => Dir([3, 2], [3, 2])).toThrow()
 })
 
 test('PdFoot', () => {
@@ -136,7 +131,6 @@ test('Intersection', () => {
     expect(Intersection([0, 0], [2, 2], [2, 0], [0, 2])).toEqual([1, 1])
     expect(Intersection([0, 0], 45, [2, 0], 135)).toEqual([1, 1])
     expect(Intersection([2, 1], [-1, 1], [1, -1], [1, 2])).toEqual([1, 1])
-    expect(() => Intersection([0, 0], [2, 2], [0, 0], [2, 2])).toThrow()
 })
 
 test('Move', () => {

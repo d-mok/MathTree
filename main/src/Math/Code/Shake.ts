@@ -12,7 +12,6 @@ export class Host {
      * ShakeN(5) // integers from 2-8
      * ```
      */
-    @checkIt(owl.int)
     static ShakeN(anchor: number): number {
         anchor = cal.blur(anchor)
         if (anchor === 0) return RndN(1, 3)
@@ -34,7 +33,6 @@ export class Host {
      * ShakeR(3.5) // from [1.8,5.2]
      * ```
      */
-    @checkIt(owl.num)
     static ShakeR(anchor: number): number {
         let exp = cal.e(anchor)
         let m = cal.blur(cal.mantissa(anchor))
@@ -55,7 +53,6 @@ export class Host {
      * ShakeQ(6/-5) // return fraction around [6,-5]
      * ```
      */
-    @checkIt(owl.rational)
     static ShakeQ(anchor: number): number {
         if (owl.int(anchor)) return ShakeN(anchor)
         let [p, q] = ToFrac(anchor).map(cal.blur)
@@ -88,7 +85,6 @@ export class Host {
      * ShakeG(24,2) // any of [6,12,48,96]
      * ```
      */
-    @checkIt(owl.num)
     static ShakeG(anchor: number, base: number): number {
         let i = RndPick(-2, -1, 1, 2)
         return anchor * base ** i
@@ -100,7 +96,6 @@ export class Host {
      * ShakeIneq('\\ge')  // may return '\\ge' or '\\le'
      * ```
      */
-    @checkIt(owl.ineq)
     static ShakeIneq(anchor: Ineq): Ineq {
         let me = INEQUAL.print(anchor)
         let flip = INEQUAL.print(INEQUAL.flip(anchor))
@@ -113,7 +108,6 @@ export class Host {
      * ShakePoint([3,4])   // may return [[2,5],[1,6],[4,2]]
      * ```
      */
-    @checkIt(owl.point2D)
     static ShakePoint(anchor: Point2D): Point2D {
         let [x, y] = anchor
         let f = (): Point2D => {
@@ -131,7 +125,6 @@ export class Host {
      * // may return [['cos','x'],['sin','x'],['cos','x']]
      * ```
      */
-    @checkIt(owl.trigValue)
     static ShakeTrigValue(anchor: TrigValue): TrigValue {
         let [func, val] = anchor
         return [RndPick<TrigFunc>('sin', 'cos', 'tan'), val]
@@ -144,7 +137,6 @@ export class Host {
      * // may return [[3,6,5],[7,5,3],[8,4,5]]
      * ```
      */
-    @checkIt(owl.ntuple)
     static ShakeRatio(anchor: number[]): number[] {
         let a = Ratio(...anchor)
         let func = (): number[] => {
@@ -165,7 +157,6 @@ export class Host {
      * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
      * ```
      */
-    @checkIt(owl.base)
     static ShakeBase(anchor: string): string {
         let [numStr, baseStr] = anchor
             .replaceAll('{', '')
@@ -228,7 +219,6 @@ export class Host {
      * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
      * ```
      */
-    @checkIt(owl.point2D)
     static ShakePointPolar(anchor: Point2D): Point2D {
         let [r1, q1] = RectToPol(anchor)
         let [a, b] = cal.toSurd(r1)
@@ -247,7 +237,6 @@ export class Host {
      * // may return [1,2,'>',3] or [1,2,'<',3]
      * ```
      */
-    @checkIt(owl.constraint)
     static ShakeConstraint(anchor: Constraint): Constraint {
         let flip = rein.flip(anchor)
         return RndPick(anchor, flip)
@@ -265,7 +254,6 @@ export class Host {
      * // [[1,2,'<',3],[4,5,'>',6]]
      * ```
      */
-    @checkIt(owl.constraints)
     static ShakeConstraints(anchor: Constraint[]): Constraint[] {
         let func = () => anchor.map($ => ShakeConstraint($))
         return dice(func)
@@ -274,13 +262,11 @@ export class Host {
             .roll()
     }
 
-    @checkIt(owl.quantity)
     static ShakeQuantity(anchor: quantity): quantity {
         let { val, unit } = anchor
         return { val: ShakeR(val), unit }
     }
 
-    @checkIt(owl.compoundInequality)
     static ShakeCompoundInequality(
         anchor: CompoundInequality
     ): CompoundInequality {

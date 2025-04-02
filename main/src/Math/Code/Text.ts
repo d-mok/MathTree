@@ -33,7 +33,6 @@ export class Host {
      * IneqSign(false,false) // ['\\lt', '\\gt']
      * ```
      */
-    @checkIt(owl.bool, owl.bool)
     static IneqSign(greater: boolean, equal: boolean = false): [Ineq, Ineq] {
         if (greater && equal) {
             return ['\\ge', '\\le']
@@ -63,7 +62,6 @@ export class Host {
      * Dfrac(5,0) // undefined
      * ```
      */
-    @checkIt(owl.num, owl.nonZero, owl.bool)
     static Dfrac(
         numerator: number,
         denominator: number,
@@ -79,7 +77,6 @@ export class Host {
      * IndexToSurd('{(y)}^{0.5}') // '\\sqrt{y}'
      * ```
      */
-    @checkIt(owl.str)
     static IndexToSurd(text: string) {
         return text.replace(/\{\(*([^\{\(\}\)]*)\)*\}\^\{0\.5\}/g, '\\sqrt{$1}')
     }
@@ -91,7 +88,6 @@ export class Host {
      * Coord([1,2]) // '(1, 2)'
      * ```
      */
-    @checkIt(owl.point2D)
     static Coord(point: Point2D, dp: number = 1): string {
         let [a, b] = point.map($ => cal.blur($))
         a = Fix(a, dp)
@@ -107,7 +103,6 @@ export class Host {
      * Sci(1.2345) // '1.2345'
      * ```
      */
-    @checkIt(owl.num)
     static Sci(num: number): string {
         if (num === 0) return '0'
         let m = cal.e(cal.blur(num))
@@ -124,7 +119,6 @@ export class Host {
      * LongDivision([1,2,3,4],[1,2]) //
      * ```
      */
-    @checkIt(owl.ntuple, owl.ntuple)
     static LongDivision(dividend: number[], divisor: number[]): string {
         dividend = dividend.reverse()
         divisor = divisor.reverse()
@@ -219,7 +213,6 @@ export class Host {
      * ToBase(13,2) // '1101_{2}'
      * ```
      */
-    @checkIt([owl.num, Number.isSafeInteger], owl.positiveInt)
     static ToBase(num: number, base: number): string {
         return (
             num
@@ -247,7 +240,6 @@ export class Host {
      * )
      * ```
      */
-    @checkIt(owl.object(), owl.object())
     static PrimeFactorize(
         val: { [_: string]: number[] },
         { hcf = false, lcm = false, multiply = false }
@@ -314,7 +306,6 @@ export class Host {
      * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
      * ```
      */
-    @checkIt(owl.constraint, owl.pass, owl.str, owl.str)
     static ConstraintText(
         constraint: Constraint,
         sign: boolean | null = true,

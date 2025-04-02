@@ -12,7 +12,6 @@ export class Host {
      * RndN(2,5) // may return 2, 3, 4 or 5
      * ```
      */
-    @checkIt(owl.num)
     static RndN(min: number, max: number): number {
         min = Math.ceil(Math.min(min, max))
         max = Math.floor(Math.max(min, max))
@@ -27,7 +26,6 @@ export class Host {
      * RndNs(2,8,3,'desc') // descending
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt, owl.str)
     static RndNs(
         min: number,
         max: number,
@@ -49,7 +47,6 @@ export class Host {
      * RndR(1,2) // may return 1.242574363
      * ```
      */
-    @checkIt(owl.num)
     static RndR(min: number, max: number): number {
         return Math.random() * (max - min) + min
     }
@@ -60,7 +57,6 @@ export class Host {
      * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt, owl.str)
     static RndRs(min: number, max: number, n: number = 10): number[] {
         return dice(() => RndR(min, max))
             .unique()
@@ -74,7 +70,6 @@ export class Host {
      * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
      * ```
      */
-    @checkIt(owl.nonZeroInt, owl.interval)
     static RndQ(largest: number = 9, range?: interval): number {
         let L = Math.abs(largest)
         let sign = largest > 0 ? 1 : RndU()
@@ -96,7 +91,6 @@ export class Host {
      * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
      * ```
      */
-    @checkIt(owl.nonZeroInt, owl.interval, owl.positiveInt)
     static RndQs(
         largest: number = 9,
         range?: interval,
@@ -135,7 +129,6 @@ export class Host {
      * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
      * ```
      */
-    @checkIt(owl.num)
     static RndZ(min: number, max: number): number {
         return RndN(min, max) * RndU()
     }
@@ -149,7 +142,6 @@ export class Host {
      * RndZs(2,8,3,'desc') // descending
      * ```
      */
-    @checkIt(owl.nonNegative, owl.nonNegative, owl.positiveInt, owl.str)
     static RndZs(
         min: number,
         max: number,
@@ -172,7 +164,6 @@ export class Host {
      * RndP(10) // may return 2, 3, 5 or 7
      * ```
      */
-    @checkIt(owl.positive)
     static RndP(max: number): number {
         return cal.primes(max).sample() ?? NaN
     }
@@ -183,7 +174,6 @@ export class Host {
      * RndOdd(3,8) // return 3, 5 or 7
      * ```
      */
-    @checkIt(owl.num)
     static RndOdd(min: number, max: number): number {
         min = Math.ceil((min + 1) / 2)
         max = Math.floor((max + 1) / 2)
@@ -196,7 +186,6 @@ export class Host {
      * RndEven(3,8) // return 4, 6 or 8
      * ```
      */
-    @checkIt(owl.num)
     static RndEven(min: number, max: number): number {
         min = Math.ceil(min / 2)
         max = Math.floor(max / 2)
@@ -209,7 +198,6 @@ export class Host {
      * RndComposite([2,3,5],3) // return 2*2*2, 2*3*5, 2*3*3, ...
      * ```
      */
-    @checkIt(owl.array(owl.positiveInt), owl.positiveInt)
     static RndComposite(factors: number[], n: number): number {
         let num = 1
         for (let i = 1; i <= n; i++) {
@@ -224,7 +212,6 @@ export class Host {
      * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
      * ```
      */
-    @checkIt(owl.positive)
     static RndPoly(...coeff: number[]): number[] {
         let arr = coeff.map(x => RndZ(1, x))
         arr[0] = Math.abs(arr[0])
@@ -237,7 +224,6 @@ export class Host {
      * RndPyth(10) // may return [3,4,5]
      * ```
      */
-    @checkIt(owl.positive)
     static RndPyth(max = 100): [number, number, number] {
         let arr: [number, number, number][] = []
         for (let m = 1; m < 10; m++) {
@@ -261,7 +247,6 @@ export class Host {
      * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
      * ```
      */
-    @checkIt(owl.or(owl.num, owl.interval))
     static RndPoint(
         xRange: number | interval,
         yRange: number | interval = xRange
@@ -284,11 +269,6 @@ export class Host {
      * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
      * ```
      */
-    @checkIt(
-        owl.or(owl.num, owl.interval),
-        owl.or(owl.num, owl.interval),
-        owl.num
-    )
     static RndPoints(
         xRange: number | interval,
         yRange: number | interval = xRange,
@@ -311,7 +291,6 @@ export class Host {
      * RndAngles(3,50) // may return [30,90,200]
      * ```
      */
-    @checkIt(owl.positiveInt, owl.positive)
     static RndAngles(n: number, separation: number): number[] {
         function farEnough([a, b]: [number, number]): boolean {
             let d1 = Abs(a - b)
@@ -332,7 +311,6 @@ export class Host {
      * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
      * ```
      */
-    @checkIt(owl.positiveInt, owl.positive)
     static RndOnCircle(n: number, separation: number): Point2D[] {
         let t = RndN(0, 360)
         return RndAngles(n, separation).map($ => OnCircle($ + t))
@@ -344,7 +322,6 @@ export class Host {
      * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
      * ```
      */
-    @checkIt(owl.positiveInt, owl.point2D, owl.positive, owl.positive)
     static RndConvexPolygon(
         n: number,
         center: Point2D,
@@ -368,7 +345,6 @@ export class Host {
      * RndData(10,15,5) // may return [11,11,12,13,15]
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
     static RndData(min: number, max: number, n: number): number[] {
         let data = dice(() => RndN(min, max))
             .coherent(d => cal.mode(d).length === 1)
@@ -382,7 +358,6 @@ export class Host {
      * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
      * ```
      */
-    @checkIt(owl.interval, owl.interval, owl.object())
     static RndTriangle(
         xRange: interval,
         yRange: interval,
@@ -435,7 +410,6 @@ export class Host {
      * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
      * ```
      */
-    @checkIt(owl.trig, owl.num)
     static RndTrigValue(func: TrigFunc, angle: number): TrigValue {
         let trig = (funcName: TrigFunc, q: number): number => {
             if (funcName === 'sin') return sin(q)
@@ -472,7 +446,6 @@ export class Host {
      * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
      * ```
      */
-    @checkIt(owl.str, owl.str)
     static RndTrigEqv(
         result:
             | 'sin'
@@ -547,7 +520,6 @@ export class Host {
      * RndRatio(2,9,3) // may return [3,7,5]
      * ```
      */
-    @checkIt(owl.positive, owl.positive, owl.positiveInt)
     static RndRatio(min: number, max: number, n: number = 10): number[] {
         let nums = RndNs(min, max, n)
         return Ratio(...nums)
@@ -561,7 +533,6 @@ export class Host {
      * RndPartition(4, 2, true) // may return [4,0] or [3,1] or [2,2]
      * ```
      */
-    @checkIt(owl.positiveInt, owl.positiveInt, owl.bool)
     static RndPartition(
         n: number,
         length?: number,

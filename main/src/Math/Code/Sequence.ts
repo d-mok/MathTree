@@ -14,7 +14,6 @@ export class Host {
      * Rng(1,1,4,4,3,3,3) \\ [1,2,3,4]
      * ```
      */
-    @checkIt(owl.num)
     static Rng(...nums: number[]): number[] {
         let min = Math.ceil(Math.min(...nums))
         let max = Math.floor(Math.max(...nums))
@@ -28,7 +27,6 @@ export class Host {
      * ASterm(5,-2,6) // -5
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
     static ASterm(a: number, d: number, n: number): number {
         return a + (n - 1) * d
     }
@@ -40,7 +38,6 @@ export class Host {
      * ASsum(5,-2,6) // 0
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
     static ASsum(a: number, d: number, n: number): number {
         return 0.5 * n * (2 * a + (n - 1) * d)
     }
@@ -52,7 +49,6 @@ export class Host {
      * ASequence(5,-2,3) // [5,3,1]
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
     static ASequence(a: number, d: number, n = 10): number[] {
         let arr = []
         for (let i = 1; i <= n; i++) {
@@ -68,7 +64,6 @@ export class Host {
      * GSterm(5,-2,6) // -160
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
     static GSterm(a: number, r: number, n: number): number {
         return a * r ** (n - 1)
     }
@@ -81,7 +76,6 @@ export class Host {
      * GSsum(3,0.5) // 6 , sum to inf if omit n
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.int)
     static GSsum(a: number, r: number, n: number = -1): number {
         return n > 0 ? (a * (r ** n - 1)) / (r - 1) : a / (1 - r)
     }
@@ -93,7 +87,6 @@ export class Host {
      * GSequence(5,-2,3) // return [5,-10,20]
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.positiveInt)
     static GSequence(a: number, r: number, n = 10): number[] {
         let arr = []
         for (let i = 1; i <= n; i++) {
@@ -108,7 +101,6 @@ export class Host {
      * QuadraticSequence(1,2,3,4) //
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.num, owl.positiveInt)
     static QuadraticSequence(
         a: number,
         p: number,
@@ -128,7 +120,6 @@ export class Host {
      * LucasSequence(1,2,3,4,5) //
      * ```
      */
-    @checkIt(owl.num, owl.num, owl.num, owl.num, owl.positiveInt)
     static LucasSequence(
         first: number,
         second: number,

@@ -11,7 +11,6 @@ export class Host {
      * CircleGeneral([2,3],5) // [-4,-6,-12]
      * ```
      */
-    @checkIt(owl.point2D, owl.positive)
     static CircleGeneral(
         centre: Point2D,
         radius: number
@@ -30,7 +29,6 @@ export class Host {
      * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
      * ```
      */
-    @checkIt(owl.num)
     static CircleFromGeneral(
         D: number,
         E: number,
@@ -49,7 +47,6 @@ export class Host {
      * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
      * ```
      */
-    @checkIt(owl.point2D, owl.positive, owl.triple)
     static CircleLinearIntersect(
         center: Point2D,
         radius: number,
@@ -89,7 +86,6 @@ export class Host {
      * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
      * ```
      */
-    @checkIt(owl.point2D, owl.positive, owl.point2Ds)
     static CircleLineIntersect(
         center: Point2D,
         radius: number,

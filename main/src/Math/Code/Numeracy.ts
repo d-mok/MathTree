@@ -6,14 +6,15 @@ import * as math from 'mathjs'
 @captureAll()
 export class Host {
     /**
+     * @deprecated
      * division with x/0 handling
      * ```
      * Divide(6,2) // 3
      * Divide(6,0) // throw
      * ```
      */
-    @checkIt(owl.num, owl.nonZero)
     static Divide(dividend: number, divisor: number): number {
+        if (divisor === 0) return NaN
         return dividend / divisor
     }
 
@@ -23,7 +24,6 @@ export class Host {
      * Abs(-2) // 2
      * ```
      */
-    @checkIt(owl.num)
     static Abs(num: number): number {
         return Math.abs(num)
     }
@@ -36,7 +36,6 @@ export class Host {
      * Sign(0) // 0
      * ```
      */
-    @checkIt(owl.num)
     static Sign(num: number): -1 | 0 | 1 {
         if (num > 0) return 1
         if (num < 0) return -1
@@ -50,7 +49,6 @@ export class Host {
      * SigFig(123.45) // 5
      * ```
      */
-    @checkIt(owl.num)
     static SigFig(num: number): number {
         return cal.sigfig(cal.blur(num))
     }
@@ -62,7 +60,6 @@ export class Host {
      * Round(1.23567,3) // 1.24
      * ```
      */
-    @checkIt(owl.num, owl.positiveInt)
     static Round(num: number, sigfig = 3): number {
         num = num * (1 + Number.EPSILON)
         return cal.round(num, sigfig).off()
@@ -75,7 +72,6 @@ export class Host {
      * RoundUp(1.23567,1) // 2
      * ```
      */
-    @checkIt(owl.num, owl.positiveInt)
     static RoundUp(num: number, sigfig = 3): number {
         num = num * (1 - Number.EPSILON)
         return cal.round(num, sigfig).up()
@@ -88,7 +84,6 @@ export class Host {
      * RoundDown(1.6789,1) // 1
      * ```
      */
-    @checkIt(owl.num, owl.positiveInt)
     static RoundDown(num: number, sigfig = 3): number {
         num = num * (1 + Number.EPSILON)
         return cal.round(num, sigfig).down()
@@ -103,7 +98,6 @@ export class Host {
      * Fix(12345.678,-2) // round to hundred, return 12300
      * ```
      */
-    @checkIt(owl.num, owl.int)
     static Fix(num: number, dp = 0): number {
         num = num * (1 + Number.EPSILON)
         return cal.fix(num, dp).off()
@@ -118,7 +112,6 @@ export class Host {
      * FixUp(12.34,-1) // round to ten, return 20
      * ```
      */
-    @checkIt(owl.num, owl.int)
     static FixUp(num: number, dp = 0): number {
         num = num * (1 - Number.EPSILON)
         return cal.fix(num, dp).up()
@@ -133,7 +126,6 @@ export class Host {
      * FixDown(17.89,-1) // round to ten, return 10
      * ```
      */
-    @checkIt(owl.num, owl.int)
     static FixDown(num: number, dp = 0): number {
         num = num * (1 + Number.EPSILON)
         return cal.fix(num, dp).down()
@@ -148,7 +140,6 @@ export class Host {
      * Ceil(3,5,1) // Ceil 3 to [1,6,11,...], return 6
      * ```
      */
-    @checkIt(owl.num)
     static Ceil(num: number, interval = 1, offset = 0): number {
         let scaleNum = (num - offset) / interval
         scaleNum -= Number.EPSILON
@@ -164,7 +155,6 @@ export class Host {
      * Floor(3,5,1) // Floor 3 to [1,6,11,...], return 1
      * ```
      */
-    @checkIt(owl.num)
     static Floor(num: number, interval = 1, offset = 0): number {
         let scaleNum = (num - offset) / interval
         scaleNum += Number.EPSILON
@@ -181,8 +171,8 @@ export class Host {
      * Ratio(Math.sqrt(2),1/2,1/4) // throw
      * ```
      */
-    @checkIt(owl.rational)
     static Ratio(...nums: number[]): number[] {
+        if (nums.some($ => !owl.rational($))) return nums.map($ => NaN)
         return cal.toRatio(nums)
     }
 
@@ -192,7 +182,6 @@ export class Host {
      * ScaleTo([1,2,3], 60) // [10,20,30]
      * ```
      */
-    @checkIt(owl.ntuple, owl.num)
     static ScaleTo(nums: number[], total: number): number[] {
         let sum = Sum(...nums)
         return nums.map($ => ($ / sum) * total)
@@ -208,7 +197,6 @@ export class Host {
      * HCF(0,3) // throw
      * ```
      */
-    @checkIt(owl.nonZeroInt)
     static HCF(...nums: number[]): number {
         return cal.hcf(nums)
     }
@@ -222,7 +210,6 @@ export class Host {
      * LCM(0,3) // throw
      * ```
      */
-    @checkIt(owl.nonZeroInt)
     static LCM(...nums: number[]): number {
         return cal.lcm(nums)
     }
@@ -233,7 +220,6 @@ export class Host {
      * PrimeFactors(12) // [2,2,3]
      * ```
      */
-    @checkIt(owl.positiveInt)
     static PrimeFactors(num: number): number[] {
         const primes = cal.primes(num)
         let factors: number[] = []
@@ -253,8 +239,8 @@ export class Host {
      * ToFrac(-456/123) // [-152,41]
      * ```
      */
-    @checkIt(owl.rational)
     static ToFrac(num: number): Fraction {
+        if (!owl.rational(num)) return [NaN, NaN]
         return cal.toFraction(num)
     }
 
@@ -269,7 +255,6 @@ export class Host {
      * // [ [4,0], [3,1], [2,2] ]
      * ```
      */
-    @checkIt(owl.positiveInt, owl.positiveInt, owl.bool)
     static Partition(
         n: number,
         length?: number,

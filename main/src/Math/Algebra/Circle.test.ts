@@ -32,8 +32,6 @@ test('CircleLinearIntersect', () => {
         [5, 5],
         [7, 5],
     ])
-    expect(() => CircleLinearIntersect([6, 7], 5 ** 0.5, [1, 0, -10])).toThrow()
-    expect(() => CircleLinearIntersect([6, 7], 5 ** 0.5, [0, 1, -10])).toThrow()
 })
 
 test('CircleLineIntersect', () => {

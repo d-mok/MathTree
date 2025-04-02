@@ -18,7 +18,6 @@ test('Sqrt', () => {
     expect(Sqrt(16)).toBe(4)
     expect(Sqrt(25)).toBe(5)
     expect(Sqrt(10)).toBeCloseTo(3.16227766)
-    expect(() => Sqrt(-1)).toThrow()
 })
 
 test('Radian', () => {

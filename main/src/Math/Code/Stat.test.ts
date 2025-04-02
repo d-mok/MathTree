@@ -63,7 +63,6 @@ test('Mean', () => {
     expect(Mean(2, -3, 1)).toBe(0)
     expect(Mean(4.5, 3, 2, 1)).toBe(2.625)
     expect(Mean(3, 2, 2, 0, 1)).toBe(1.6)
-    expect(() => Mean()).toThrow()
 })
 
 test('Median', () => {
@@ -116,7 +115,6 @@ test('Mode', () => {
 
 test('UniMode', () => {
     expect(UniMode(1, 2, 3, 2, 2, 3, 4)).toBe(2)
-    expect(() => UniMode(1, 1, 2, 2, 3)).toThrow()
 })
 
 test('StdDev', () => {

@@ -36,7 +36,6 @@ export class Host {
      * functionize([[0,0],[1,2]]) // like x=>2*x within 0<x<1
      * ```
      */
-    @checkIt(owl.point2Ds)
     static functionize(points: Point2D[]): (x: number) => number {
         return functionize(points)
     }

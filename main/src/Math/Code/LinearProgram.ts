@@ -10,7 +10,6 @@ export class Host {
      * FieldAt([1,2],[3,-4,5]) // 0
      * ```
      */
-    @checkIt(owl.point2D, owl.field)
     static FieldAt(point: Point2D, field: Field): number {
         return optimizer(field).fieldAt(point)
     }
@@ -26,7 +25,6 @@ export class Host {
      * // check whether [0,0] satisfies all the constraints
      * ```
      */
-    @checkIt(owl.constraints, owl.point2D)
     static isConstrained(cons: Constraint[], point: Point2D): boolean {
         return reins.contains(cons, point)
     }
@@ -42,7 +40,6 @@ export class Host {
      * // check whether [0,0] loosely satisfies all the constraints
      * ```
      */
-    @checkIt(owl.constraints, owl.point2D)
     static isLooseConstrained(cons: Constraint[], point: Point2D): boolean {
         return reins.contains(cons, point, 'loose')
     }
@@ -59,7 +56,6 @@ export class Host {
      * // [[-5,-5],[10,-5],[10,10],[-5,10]]
      * ```
      */
-    @checkIt(owl.constraint)
     static FeasiblePolygon(...cons: Constraint[]) {
         let vs = reins.polygon(cons)
         Should(vs.length > 2, 'No feasible region.')
@@ -78,7 +74,6 @@ export class Host {
      * // [[-5,-5],[10,-5],[10,10],[-5,10]]
      * ```
      */
-    @checkIt(owl.constraint)
     static FeasibleVertices(...cons: Constraint[]) {
         let vs = reins.vertices(cons)
         Should(vs.length > 0, 'no feasible vertex')
@@ -101,7 +96,6 @@ export class Host {
      * // false
      * ```
      */
-    @checkIt(owl.constraint)
     static FeasibleIsBounded(...cons: Constraint[]) {
         return reins.isBounded(cons)
     }
@@ -118,7 +112,6 @@ export class Host {
      * // [[1,1],[2,1]]
      * ```
      */
-    @checkIt(owl.constraint)
     static FeasibleIntegral(...cons: Constraint[]): Point2D[] {
         return reins.integrals(cons)
     }
@@ -129,7 +122,6 @@ export class Host {
      * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
      * ```
      */
-    @checkIt(owl.point2Ds, owl.field)
     static MaximizePoint(points: Point2D[], field: Field): Point2D {
         Should(points.length > 0, 'No feasible point')
         let pts = optimizer(field, points).maxPoints()
@@ -144,7 +136,6 @@ export class Host {
      * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
      * ```
      */
-    @checkIt(owl.point2Ds, owl.field)
     static MinimizePoint(points: Point2D[], field: Field): Point2D {
         Should(points.length > 0, 'No feasible point')
         let pts = optimizer(field, points).minPoints()
@@ -160,7 +151,6 @@ export class Host {
      * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
      * ```
      */
-    @checkIt(owl.point2Ds, owl.field, owl.bool)
     static OptimizePoint(
         points: Point2D[],
         field: Field,
@@ -175,7 +165,6 @@ export class Host {
      * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
      * ```
      */
-    @checkIt(owl.point2Ds, owl.field)
     static MaximizeField(points: Point2D[], field: Field): number {
         let op = optimizer(field, points)
         let val = op.max()
@@ -189,7 +178,6 @@ export class Host {
      * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
      * ```
      */
-    @checkIt(owl.point2Ds, owl.field)
     static MinimizeField(points: Point2D[], field: Field): number {
         let op = optimizer(field, points)
         let val = op.min()
@@ -204,7 +192,6 @@ export class Host {
      * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
      * ```
      */
-    @checkIt(owl.point2Ds, owl.field, owl.bool)
     static OptimizeField(
         points: Point2D[],
         field: Field,
@@ -222,7 +209,6 @@ export class Host {
      * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
      * ```
      */
-    @checkIt(owl.point2D)
     static ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
         Should(IsConvexPolygon(...points), 'Not a convex region')
 
