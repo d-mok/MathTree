@@ -473,7 +473,7 @@ export class Host {
     ): [Point2D, Point2D, Point2D] {
         let [x, y] = Orthocentre(A, B, C)
         let q = ratioFactor(x, y, ...A, ...B, ...C)
-        Should(owl.num(q), 'original orthocentre must be rational')
+        Should(IsNum(q), 'original orthocentre must be rational')
         return scale([A, B, C], q)
     }
 
@@ -487,7 +487,7 @@ export class Host {
     ): [Point2D, Point2D, Point2D] {
         let [x, y] = Circumcentre(A, B, C)
         let q = ratioFactor(x, y, ...A, ...B, ...C)
-        Should(owl.num(q), 'original circumcentre must be rational')
+        Should(IsNum(q), 'original circumcentre must be rational')
         return scale([A, B, C], q)
     }
 
@@ -501,7 +501,7 @@ export class Host {
     ): [Point2D, Point2D, Point2D] {
         let [x, y] = Centroid(A, B, C)
         let q = ratioFactor(x, y, ...A, ...B, ...C)
-        Should(owl.num(q), 'original centroid must be rational')
+        Should(IsNum(q), 'original centroid must be rational')
         return scale([A, B, C], q)
     }
 
@@ -515,7 +515,7 @@ export class Host {
     ): [Point2D, Point2D, Point2D] {
         let [x, y] = Incentre(A, B, C)
         let q = ratioFactor(x, y, ...A, ...B, ...C)
-        Should(owl.num(q), 'original incentre must be rational')
+        Should(IsNum(q), 'original incentre must be rational')
         return scale([A, B, C], q)
     }
 }

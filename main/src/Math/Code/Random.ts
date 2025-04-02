@@ -76,7 +76,7 @@ export class Host {
         let f = () => (RndN(1, L) / RndN(2, L)) * sign
 
         return dice(f)
-            .shield($ => owl.dec($))
+            .shield($ => Number.isDecimal($))
             .shield($ => {
                 if (range === undefined) return true
                 let [a, b] = range

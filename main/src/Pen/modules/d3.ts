@@ -2,6 +2,8 @@ import { PenCls } from '../Pen.js'
 import { Convas } from 'paint'
 import _ from 'lodash'
 import * as math from 'mathjs'
+import * as schema from '../../Core/schema.js'
+import * as v from 'valibot'
 
 export class PenD3 {
     constructor(private pen: PenCls, private cv: Convas) {}
@@ -272,12 +274,15 @@ export class PenD3 {
             envelopeOnly?: boolean
         } = {}
     ) {
-        const isPoint3Ds = owl.point3Ds
-        const isPoint2Ds = owl.point2Ds
-        const isPoint3D = owl.point3D
-        const isCircle3D = owl.tuple(owl.point3D, owl.num)
-        const isCircle2D = owl.tuple(owl.point2D, owl.num)
-        const isExtrue = owl.tuple(owl.num, owl.point3D)
+        const isPoint3Ds = (_: any) => v.is(v.array(schema.point3D), _)
+        const isPoint2Ds = (_: any) => v.is(v.array(schema.point2D), _)
+        const isPoint3D = (_: any) => v.is(schema.point3D, _)
+        const isCircle3D = (_: any) =>
+            v.is(v.tuple([schema.point3D, v.number()]), _)
+        const isCircle2D = (_: any) =>
+            v.is(v.tuple([schema.point2D, v.number()]), _)
+        const isExtrue = (_: any) =>
+            v.is(v.tuple([v.number(), schema.point3D]), _)
 
         let LB: Point3D[] = []
         let UB: Point3D[] = []
@@ -314,7 +319,7 @@ export class PenD3 {
         } else if (isExtrue(upperBase)) {
             let [scale, vertex] = upperBase
             UB.push(...Extrude(LB, [vertex], scale))
-        } else if (owl.num(upperBase)) {
+        } else if (typeof upperBase === 'number') {
             for (let [x, y] of LB) {
                 UB.push([x, y, upperBase])
             }

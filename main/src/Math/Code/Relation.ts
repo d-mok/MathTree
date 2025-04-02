@@ -67,12 +67,11 @@ export class Host {
      * ```
      */
     static AreDistantPoint(distance: number) {
-        let AreDistant = function (...points: Point2D[]): boolean {
+        return function (...points: Point2D[]): boolean {
             return points
                 .combinations(2)
                 .every(([A, B]) => Distance(A, B) >= distance)
         }
-        return check(AreDistant, [owl.point2D])
     }
 
     /**
@@ -83,12 +82,11 @@ export class Host {
      * ```
      */
     static AreOblique(minAngle: number) {
-        let areOblique = function (...slopes: number[]): boolean {
+        return function (...slopes: number[]): boolean {
             return slopes
                 .combinations(2)
                 .every(([a, b]) => IntersectAngle(a, b) >= minAngle)
         }
-        return check(areOblique, [owl.num])
     }
 
     /**

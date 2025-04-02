@@ -72,9 +72,6 @@ export class Host {
      * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
      * ```
      */
-    @inspectIt(function different_points(p1, p2) {
-        return owl.distinct([p1, p2])
-    })
     static LinearFromBisector(
         A: Point2D,
         B: Point2D

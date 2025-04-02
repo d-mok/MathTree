@@ -2,6 +2,8 @@ import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import { dice } from 'fate'
 import _ from 'lodash'
 import * as math from 'mathjs'
+import * as schema from '../../Core/schema.js'
+import { is } from 'valibot'
 
 function shake<T>(
     anchor: T,
@@ -32,62 +34,55 @@ export class Host {
      */
     static RndShake(anchor: any): (typeof anchor)[] {
         if (typeof anchor === 'string') {
-            // Fraction, to be deleted
-            if (owl.dfrac(anchor)) {
-                Should(false, 'RndShakeDfrac is not supported anymore')
-                // return RndShakeDfrac(anchor)
-            }
             // Inequal Sign
-            if (owl.ineq(anchor)) {
+            if (is(schema.ineq, anchor)) {
                 return RndShakeIneq(anchor)
             }
             // trig
-            if (owl.trig(anchor)) {
-                return RndShakeTrig(anchor as TrigFunc)
+            if (is(schema.trig, anchor)) {
+                return RndShakeTrig(anchor)
             }
             // else convert to number
             if (Number(anchor)) {
                 anchor = Number(anchor)
             }
         }
-        if (owl.quantity(anchor)) {
+        if (is(schema.quantity, anchor)) {
             // quantity
             return RndShakeQuantity(anchor)
         }
-        if (owl.point2D(anchor)) {
+        if (is(schema.point2D, anchor)) {
             // Point
             return RndShakePoint(anchor)
         }
-        if (owl.combo(anchor)) {
+        if (is(schema.combo, anchor)) {
             // Combo
             return RndShakeCombo(anchor)
         }
-        if (owl.trigValue(anchor)) {
+        if (is(schema.trigValue, anchor)) {
             // TrigValue
             return RndShakeTrigValue(anchor)
         }
-        if (owl.constraint(anchor)) {
+        if (is(schema.constraint, anchor)) {
             // Constraint
             return RndShakeConstraint(anchor)
         }
-        if (owl.constraints(anchor)) {
+        if (is(schema.constraints, anchor)) {
             // Constraints
             return RndShakeConstraints(anchor)
         }
-        if (owl.compoundInequality(anchor)) {
+        if (is(schema.compoundInequality, anchor)) {
             return RndShakeCompoundInequality(anchor)
         }
-        if (typeof anchor === 'number' && owl.num(anchor)) {
+        if (typeof anchor === 'number' && Number.isFinite(anchor)) {
             anchor = cal.blur(anchor)
-            // Integer
-            if (owl.int(anchor)) {
+            if (Number.isInteger(anchor)) {
                 return RndShakeN(anchor)
             }
-            // Decimal
-            if (owl.num(anchor)) {
+            if (Number.isDecimal(anchor)) {
                 return RndShakeR(anchor)
             }
-            if (isNaN(anchor)) {
+            if (Number.isNaN(anchor)) {
                 return []
             }
         }

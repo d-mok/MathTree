@@ -12,8 +12,10 @@ export class Host {
      * IsNum('2') // false
      * ```
      */
-    static IsNum(...items: any[]): boolean {
-        return items.every(owl.num)
+    static IsNum(...items: unknown[]) {
+        return items.every(
+            $ => typeof $ === 'number' && !isNaN($) && isFinite($)
+        )
     }
 
     /**
@@ -23,8 +25,10 @@ export class Host {
      * IsInteger(0.5) // false
      * ```
      */
-    static IsInteger(...items: any[]): boolean {
-        return items.every(owl.int)
+    static IsInteger(...items: unknown[]): boolean {
+        return items.every(
+            $ => typeof $ === 'number' && IsNum($) && Number.isInteger($.blur())
+        )
     }
 
     /**
@@ -34,8 +38,8 @@ export class Host {
      * IsDecimal(5) // false
      * ```
      */
-    static IsDecimal(...items: any[]): boolean {
-        return items.every(owl.dec)
+    static IsDecimal(...items: unknown[]): boolean {
+        return items.every($ => IsNum($) && !IsInteger($))
     }
 
     /**
@@ -45,8 +49,10 @@ export class Host {
      * IsTerminating(5) // false
      * ```
      */
-    static IsTerminating(...items: any[]): boolean {
-        return items.every(owl.terminating)
+    static IsTerminating(...items: unknown[]): boolean {
+        return items.every(
+            $ => typeof $ === 'number' && IsNum($) && cal.sigfig($) < 10
+        )
     }
 
     /**
@@ -57,8 +63,10 @@ export class Host {
      * IsRational(Math.sqrt(2)) // false
      * ```
      */
-    static IsRational(...items: any[]): boolean {
-        return items.every(owl.rational)
+    static IsRational(...items: unknown[]): boolean {
+        return items.every(
+            $ => typeof $ === 'number' && IsNum($) && Number.isRational($)
+        )
     }
 
     /**
@@ -69,8 +77,13 @@ export class Host {
      * IsOdd(4) // false
      * ```
      */
-    static IsOdd(...items: any[]): boolean {
-        return items.every(owl.odd)
+    static IsOdd(...items: unknown[]): boolean {
+        return items.every(
+            $ =>
+                typeof $ === 'number' &&
+                IsInteger($) &&
+                Math.abs(cal.blur($)) % 2 === 1
+        )
     }
 
     /**
@@ -82,8 +95,13 @@ export class Host {
      * IsEven(5) // false
      * ```
      */
-    static IsEven(...items: any[]): boolean {
-        return items.every(owl.even)
+    static IsEven(...items: unknown[]): boolean {
+        return items.every(
+            $ =>
+                typeof $ === 'number' &&
+                IsInteger($) &&
+                Math.abs(cal.blur($)) % 2 === 0
+        )
     }
 
     /**
@@ -95,8 +113,10 @@ export class Host {
      * IsProbability(-0.1) // false
      * ```
      */
-    static IsProbability(...items: any[]): boolean {
-        return items.every(owl.prob)
+    static IsProbability(...items: unknown[]): boolean {
+        return items.every(
+            $ => typeof $ === 'number' && IsNum($) && $ >= 0 && $ <= 1
+        )
     }
 
     /**
@@ -107,8 +127,11 @@ export class Host {
      * IsSquareNum(-9) // false
      * ```
      */
-    static IsSquareNum(...items: any[]): boolean {
-        return items.every(owl.sq)
+    static IsSquareNum(...items: unknown[]): boolean {
+        return items.every(
+            $ =>
+                typeof $ === 'number' && IsInteger($) && IsInteger(Math.sqrt($))
+        )
     }
 
     /**
@@ -119,8 +142,8 @@ export class Host {
      * IsPositive(-2) // false
      * ```
      */
-    static IsPositive(...items: any[]): boolean {
-        return items.every(owl.positive)
+    static IsPositive(...items: unknown[]): boolean {
+        return items.every($ => typeof $ === 'number' && IsNum($) && $ > 0)
     }
 
     /**
@@ -132,8 +155,8 @@ export class Host {
      * IsNonNegative(1.5) // true
      * ```
      */
-    static IsNonNegative(...items: any[]): boolean {
-        return items.every(owl.nonNegative)
+    static IsNonNegative(...items: unknown[]): boolean {
+        return items.every($ => typeof $ === 'number' && IsNum($) && $ >= 0)
     }
 
     /**
@@ -145,8 +168,8 @@ export class Host {
      * IsPositiveInteger(1.5) // false
      * ```
      */
-    static IsPositiveInteger(...items: any[]): boolean {
-        return items.every(owl.positiveInt)
+    static IsPositiveInteger(...items: unknown[]): boolean {
+        return items.every($ => typeof $ === 'number' && IsInteger($) && $ > 0)
     }
 
     /**
@@ -158,8 +181,8 @@ export class Host {
      * IsNonNegativeInteger(1.5) // false
      * ```
      */
-    static IsNonNegativeInteger(...items: any[]): boolean {
-        return items.every(owl.nonNegativeInt)
+    static IsNonNegativeInteger(...items: unknown[]): boolean {
+        return items.every($ => typeof $ === 'number' && IsInteger($) && $ >= 0)
     }
 
     /**
@@ -170,8 +193,8 @@ export class Host {
      * IsNegative(2) // false
      * ```
      */
-    static IsNegative(...items: any[]): boolean {
-        return items.every(owl.negative)
+    static IsNegative(...items: unknown[]): boolean {
+        return items.every($ => typeof $ === 'number' && IsNum($) && $ < 0)
     }
 
     /**
@@ -182,8 +205,10 @@ export class Host {
      * IsNonZero(-2) // true
      * ```
      */
-    static IsNonZero(...items: any[]): boolean {
-        return items.every(owl.nonZero)
+    static IsNonZero(...items: unknown[]): boolean {
+        return items.every(
+            $ => typeof $ === 'number' && IsNum($) && Math.abs($) >= 1e-14
+        )
     }
 
     /**
@@ -195,7 +220,10 @@ export class Host {
      * ```
      */
     static IsBetween(min: number, max: number) {
-        return (...items: any[]): boolean => items.every(owl.between(min, max))
+        return (...items: unknown[]): boolean =>
+            items.every(
+                $ => typeof $ === 'number' && IsNum($) && $ >= min && $ <= max
+            )
     }
 
     /**
@@ -207,8 +235,10 @@ export class Host {
      * ```
      */
     static IsAbsBetween(min: number, max: number) {
-        return (...items: any[]): boolean =>
-            items.every(owl.absBetween(min, max))
+        return (...items: unknown[]): boolean =>
+            items.every(
+                $ => typeof $ === 'number' && IsBetween(min, max)(Math.abs($))
+            )
     }
 
     /**
@@ -233,7 +263,10 @@ export class Host {
      * ```
      */
     static IsTriangle(...triangles: [number, number, number][]): boolean {
-        return triangles.every(owl.triangleSides)
+        return triangles.every(
+            ([a, b, c]) =>
+                a > 0 && b > 0 && c > 0 && a + b > c && b + c > a && c + a > b
+        )
     }
 }
 

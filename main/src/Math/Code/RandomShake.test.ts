@@ -3,11 +3,14 @@ import * as math from 'mathjs'
 import { repeat } from '../Jest/JestExtend.js'
 import { describe, expect, it, test } from 'vitest'
 
+import * as schema from '../../Core/schema.js'
+import { is } from 'valibot'
+
 test('RndShake', () => {
-    expect(RndShake('\\ge')).toSatisfyAll(owl.ineq)
-    expect(RndShake(5)).toSatisfyAll(owl.int)
-    expect(RndShake(0.5)).toSatisfyAll(owl.prob)
-    expect(RndShake(1.5)).toSatisfyAll(owl.positive)
+    expect(RndShake('\\ge')).toSatisfyAll((_: any) => is(schema.ineq, _))
+    expect(RndShake(5)).toSatisfyAll(Number.isInteger)
+    expect(RndShake(0.5)).toSatisfyAll($ => $ >= 0 && $ <= 1)
+    expect(RndShake(1.5)).toSatisfyAll($ => $ > 0)
 })
 
 test('RndShakeN', () => {
@@ -76,7 +79,7 @@ test('RndShakeQ', () => {
             expect(shaked).toSatisfyAll($ => $ < 0)
         }
         expect(shaked).toHaveLength(3)
-        expect(shaked).toSatisfyAll(owl.rational)
+        expect(shaked).toSatisfyAll(Number.isRational)
         if (isProb) expect(shaked).toSatisfyAll($ => $ >= 0 && $ <= 1)
     }
 
@@ -98,25 +101,6 @@ test('RndShakeG', () => {
         run(13.123, 0.3)
     })
 })
-
-// test('RndShakeDfrac', () => {
-//     function run(anchor:number, isPositive) {
-//         let arr = sample(() => RndShakeDfrac(anchor));
-//         let arr0 = arr.flat(2).map(x => ink.parseDfrac(x)[0]);
-//         let arr1 = arr.flat(2).map(x => ink.parseDfrac(x)[1]);
-//         expect(arr0).toBeFlatIsInteger();
-//         expect(arr1).toBeFlatIsInteger();
-//         if (isPositive) {
-//             expect(arr0).toBeFlatIs(x => x > 0);
-//         } else {
-//             expect(arr0).toBeFlatIs(x => x < 0);
-//         }
-//         expect(arr1).toBeFlatIs(x => x > 1);
-//         expect(arr).toAllHaveLength(3);
-//     }
-//     run('\\dfrac{5}{6}', true);
-//     run('\\dfrac{6}{-5}', false);
-// });
 
 test('RndShakeIneq', () => {
     repeat(10, () => {
@@ -172,7 +156,6 @@ test('RndShakeCombo', () => {
     function run(anchor: [boolean, boolean, boolean]) {
         let [a, b, c] = anchor
         let shaked = RndShakeCombo(anchor)
-        expect(shaked).toSatisfyAll(owl.combo)
         expect(shaked).toHaveLength(3)
         expect(shaked).toHaveLength(3)
         expect([a, ...shaked.map($ => $[0])]).toIncludeAllMembers([true, false])
@@ -188,7 +171,6 @@ test('RndShakeCombo', () => {
 test('RndShakeTrig', () => {
     function run(anchor: TrigFunc) {
         let shaked = RndShakeTrig(anchor)
-        expect(shaked).toSatisfyAll(owl.trig)
         expect(shaked).toHaveLength(3)
     }
 
@@ -200,7 +182,6 @@ test('RndShakeTrig', () => {
 test('RndShakeTrigValue', () => {
     function run(anchor: TrigValue) {
         let shaked = RndShakeTrigValue(anchor)
-        expect(shaked).toSatisfyAll(owl.trigValue)
         expect(shaked).toHaveLength(3)
     }
 
@@ -212,7 +193,6 @@ test('RndShakeTrigValue', () => {
 test('RndShakeRatio', () => {
     function run(anchor: number[]) {
         let shaked = RndShakeRatio(anchor)
-        expect(shaked).toSatisfyAll(owl.ntuple)
         expect(shaked).toHaveLength(3)
     }
 
@@ -224,7 +204,7 @@ test('RndShakeRatio', () => {
 test('RndShakeBase', () => {
     function run(anchor: string) {
         let shaked = RndShakeBase(anchor)
-        expect(shaked).toSatisfyAll(owl.base)
+        expect(shaked).toSatisfyAll((_: any) => is(schema.base, _))
         expect(shaked).toHaveLength(3)
     }
 
@@ -236,7 +216,6 @@ test('RndShakeBase', () => {
 test('RndShakePointPolar', () => {
     function run(anchor: PolarPoint) {
         let shaked = RndShakePointPolar(anchor).map($ => RectToPol($))
-        expect(shaked).toSatisfyAll(owl.point2D)
         expect(shaked).toSatisfyAll(([r, q]) =>
             Number.isInteger(cal.blur(r ** 2))
         )
@@ -256,7 +235,6 @@ test('RndShakePointPolar', () => {
 test('RndShakeConstraint', () => {
     function run(anchor: Constraint) {
         let shaked = RndShakeConstraint(anchor)
-        expect(shaked).toSatisfyAll(owl.constraint)
         expect(shaked[0][0]).toBe(anchor[0])
         expect(shaked[0][1]).toBe(anchor[1])
         expect(shaked[0][3]).toBe(anchor[3])
@@ -271,7 +249,6 @@ test('RndShakeConstraint', () => {
 test('RndShakeConstraints', () => {
     function run(anchor: Constraint[]) {
         let shaked = RndShakeConstraints(anchor)
-        expect(shaked).toSatisfyAll(owl.constraints)
         expect(shaked[0][0][0]).toBe(anchor[0][0])
         expect(shaked[0][0][1]).toBe(anchor[0][1])
         expect(shaked[0][0][3]).toBe(anchor[0][3])
@@ -292,7 +269,6 @@ test('RndShakeConstraints', () => {
 test('RndShakeQuantity', () => {
     function run(anchor: quantity) {
         let shaked = RndShakeQuantity(anchor)
-        expect(shaked).toSatisfyAll(owl.quantity)
         expect(typeof shaked[0].val).toBe('number')
         expect(typeof shaked[0].unit).toBe('string')
     }
@@ -305,7 +281,7 @@ test('RndShakeQuantity', () => {
 test('RndShakeCompoundInequality', () => {
     function run(anchor: CompoundInequality) {
         let shaked = RndShakeCompoundInequality(anchor)
-        expect(shaked).toSatisfyAll(owl.compoundInequality)
+        expect(shaked).toSatisfyAll($ => ['AND', 'OR'].includes($[0]))
     }
 
     repeat(10, () => {

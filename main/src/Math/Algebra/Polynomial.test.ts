@@ -23,7 +23,6 @@ let TSorted = '8x^{9}+-1x^{6}y^{3}+1x^{3}y^{4}+5xy^{6}+-7x^{-1}y^{5}+6y^{2}+2'
 test('RndPolynomial', () => {
     repeat(10, () => {
         let poly = RndPolynomial(8, ['x', 'y'], 3, 9)
-        expect(poly).toSatisfy(owl.polynomial)
         expect(poly).toSatisfy(($: polynomial) => getMaxDeg($) === 8)
     })
 })

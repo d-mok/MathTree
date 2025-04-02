@@ -30,7 +30,7 @@ export function AutoOptions(
     question: string,
     source: dict
 ): string {
-    if (owl.emptyObject(instructions)) return question
+    if (Object.keys(instructions).length === 0) return question
     let Qn = new QuestionHTML(question)
 
     let patches = _.mapValues(instructions, (v, k) => produce(source[k], v))

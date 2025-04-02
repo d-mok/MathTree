@@ -2,6 +2,9 @@ import { checkIt, inspectIt, captureAll, exposeAll, check } from 'contract'
 import _ from 'lodash'
 import * as math from 'mathjs'
 
+import * as schema from '../../Core/schema.js'
+import { is } from 'valibot'
+
 @exposeAll()
 @captureAll()
 export class Host {
@@ -78,7 +81,7 @@ export class Host {
     ): Point2D {
         let r = ratioA / (ratioA + ratioB)
         let s = ratioB / (ratioA + ratioB)
-        if (owl.point2D(vec)) {
+        if (is(schema.point2D, vec)) {
             let Q = vec
             return [P[0] * s + Q[0] * r, P[1] * s + Q[1] * r]
         } else {
@@ -170,7 +173,7 @@ export class Host {
         let q = 0
         if (typeof dir === 'number') {
             q = dir
-        } else if (owl.point2D(dir)) {
+        } else if (is(schema.point2D, dir)) {
             q = Dir(P, dir)
         } else {
             q = Dir(dir[0], dir[1])

@@ -172,7 +172,7 @@ export class Host {
      * ```
      */
     static Ratio(...nums: number[]): number[] {
-        if (nums.some($ => !owl.rational($))) return nums.map($ => NaN)
+        if (nums.some($ => !Number.isRational($))) return nums.map($ => NaN)
         return cal.toRatio(nums)
     }
 
@@ -240,7 +240,7 @@ export class Host {
      * ```
      */
     static ToFrac(num: number): Fraction {
-        if (!owl.rational(num)) return [NaN, NaN]
+        if (!Number.isRational(num)) return [NaN, NaN]
         return cal.toFraction(num)
     }
 

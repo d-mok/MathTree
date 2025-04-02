@@ -5,14 +5,13 @@ import * as schema from '../../Core/schema.js'
 import * as v from 'valibot'
 
 function numberDefault(num: number): number {
-    let v = num
-    if (owl.zero(v)) return 0
-    if (IsInteger(v)) {
-        v = Fix(v, 0)
+    if (Math.abs(num) < 1e-14) return 0
+    if (IsInteger(num)) {
+        num = Fix(num, 0)
     } else {
-        v = Math.abs(v) > 100 ? Fix(v, 2) : Round(v, 5)
+        num = Math.abs(num) > 100 ? Fix(num, 2) : Round(num, 5)
     }
-    return v
+    return num
 }
 
 type pattern =

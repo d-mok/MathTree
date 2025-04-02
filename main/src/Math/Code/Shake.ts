@@ -54,7 +54,7 @@ export class Host {
      * ```
      */
     static ShakeQ(anchor: number): number {
-        if (owl.int(anchor)) return ShakeN(anchor)
+        if (Number.isInteger(cal.blur(anchor))) return ShakeN(anchor)
         let [p, q] = ToFrac(anchor).map(cal.blur)
         Should(IsInteger(p, q), 'input should be integral fraction')
 
