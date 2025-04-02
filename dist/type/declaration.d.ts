@@ -28,3101 +28,242 @@ declare module "Core/index" {
         var ink: typeof $Ink;
     }
 }
-declare module "Math/Code/Assertion" {
-    export class Host {
-        /**
-         * check is a finite number.
-         * ```
-         * IsNum(1.23) // true
-         * IsNum(NaN) // false
-         * IsNum(Infinity) // false
-         * IsNum('2') // false
-         * ```
-         */
-        static IsNum(...items: unknown[]): boolean;
-        /**
-         * check is an integer.
-         * ```
-         * IsInteger(5) // true
-         * IsInteger(0.5) // false
-         * ```
-         */
-        static IsInteger(...items: unknown[]): boolean;
-        /**
-         * check is a decimal (non-integer).
-         * ```
-         * IsDecimal(0.5) // true
-         * IsDecimal(5) // false
-         * ```
-         */
-        static IsDecimal(...items: unknown[]): boolean;
-        /**
-         * check is a terminating decimal (or integer)
-         * ```
-         * IsTerminating(1/4) // true
-         * IsTerminating(5) // false
-         * ```
-         */
-        static IsTerminating(...items: unknown[]): boolean;
-        /**
-         * check is a rational number with denominator <= 1000.
-         * ```
-         * IsRational(0.5) // true
-         * IsRational(-5) // true
-         * IsRational(Math.sqrt(2)) // false
-         * ```
-         */
-        static IsRational(...items: unknown[]): boolean;
-        /**
-         * check is an odd integer.
-         * ```
-         * IsOdd(5) // true
-         * IsOdd(-5) // true
-         * IsOdd(4) // false
-         * ```
-         */
-        static IsOdd(...items: unknown[]): boolean;
-        /**
-         * check is an even integer.
-         * ```
-         * IsEven(4) // true
-         * IsEven(-4) // true
-         * IsEven(0) // true
-         * IsEven(5) // false
-         * ```
-         */
-        static IsEven(...items: unknown[]): boolean;
-        /**
-         * check is in range [0,1].
-         * ```
-         * IsProbability(0) // true
-         * IsProbability(0.5467) // true
-         * IsProbability(1.1) // false
-         * IsProbability(-0.1) // false
-         * ```
-         */
-        static IsProbability(...items: unknown[]): boolean;
-        /**
-         * check is a square number.
-         * ```
-         * IsSquareNum(9) // true
-         * IsSquareNum(10) // false
-         * IsSquareNum(-9) // false
-         * ```
-         */
-        static IsSquareNum(...items: unknown[]): boolean;
-        /**
-         * check is positive.
-         * ```
-         * IsPositive(2) // true
-         * IsPositive(0) // false
-         * IsPositive(-2) // false
-         * ```
-         */
-        static IsPositive(...items: unknown[]): boolean;
-        /**
-         * check is non-negative.
-         * ```
-         * IsNonNegative(2) // true
-         * IsNonNegative(0) // true
-         * IsNonNegative(-2) // false
-         * IsNonNegative(1.5) // true
-         * ```
-         */
-        static IsNonNegative(...items: unknown[]): boolean;
-        /**
-         * check is a positive integer.
-         * ```
-         * IsPositiveInteger(2) // true
-         * IsPositiveInteger(0) // false
-         * IsPositiveInteger(-2) // false
-         * IsPositiveInteger(1.5) // false
-         * ```
-         */
-        static IsPositiveInteger(...items: unknown[]): boolean;
-        /**
-         * check is a non-negative integer.
-         * ```
-         * IsNonNegativeInteger(2) // true
-         * IsNonNegativeInteger(0) // true
-         * IsNonNegativeInteger(-2) // false
-         * IsNonNegativeInteger(1.5) // false
-         * ```
-         */
-        static IsNonNegativeInteger(...items: unknown[]): boolean;
-        /**
-         * check is negative.
-         * ```
-         * IsNegative(-2) // true
-         * IsNegative(0) // false
-         * IsNegative(2) // false
-         * ```
-         */
-        static IsNegative(...items: unknown[]): boolean;
-        /**
-         * check is non-zero finite number.
-         * ```
-         * IsNonZero(2) // true
-         * IsNonZero(0) // false
-         * IsNonZero(-2) // true
-         * ```
-         */
-        static IsNonZero(...items: unknown[]): boolean;
-        /**
-         * check is between min and max inclusive.
-         * ```
-         * IsBetween(2,5)(3) // true
-         * IsBetween(2,5)(2) // true
-         * IsBetween(2,5)(1) // false
-         * ```
-         */
-        static IsBetween(min: number, max: number): (...items: unknown[]) => boolean;
-        /**
-         * check if its abs is between min and max inclusive.
-         * ```
-         * IsAbsBetween(2,5)(-3) // true
-         * IsAbsBetween(2,5)(-2) // true
-         * IsAbsBetween(2,5)(1) // false
-         * ```
-         */
-        static IsAbsBetween(min: number, max: number): (...items: unknown[]) => boolean;
-        /**
-         * Check if the points are chessboard around anchor.
-         * ```
-         * IsAroundPoint([0,0],2)([2,2]) // true
-         * IsAroundPoint([0,0],2)([3,0]) // false
-         * ```
-         */
-        static IsAroundPoint(anchor: Point2D, range: number): (...points: Point2D[]) => boolean;
-        /**
-         * Check if the array of legnths can form a triangle
-         * ```
-         * IsTriangle([1,1,1]) // true
-         * IsTriangle([6,7,8]) // true
-         * IsTriangle([1,2,3]) // false
-         * IsTriangle([6,14,8]) // false
-         * ```
-         */
-        static IsTriangle(...triangles: [number, number, number][]): boolean;
-    }
-    global {
-        var IsNum: typeof Host.IsNum;
-        var IsInteger: typeof Host.IsInteger;
-        var IsDecimal: typeof Host.IsDecimal;
-        var IsTerminating: typeof Host.IsTerminating;
-        var IsRational: typeof Host.IsRational;
-        var IsOdd: typeof Host.IsOdd;
-        var IsEven: typeof Host.IsEven;
-        var IsProbability: typeof Host.IsProbability;
-        var IsSquareNum: typeof Host.IsSquareNum;
-        var IsPositive: typeof Host.IsPositive;
-        var IsNonNegative: typeof Host.IsNonNegative;
-        var IsPositiveInteger: typeof Host.IsPositiveInteger;
-        var IsNonNegativeInteger: typeof Host.IsNonNegativeInteger;
-        var IsNegative: typeof Host.IsNegative;
-        var IsNonZero: typeof Host.IsNonZero;
-        var IsBetween: typeof Host.IsBetween;
-        var IsAbsBetween: typeof Host.IsAbsBetween;
-        var IsAroundPoint: typeof Host.IsAroundPoint;
-        var IsTriangle: typeof Host.IsTriangle;
-    }
-}
-declare module "Math/Code/Combinatorics" {
-    export class Host {
-        /**
-         * the factorial n!
-         * ```
-         * Factorial(5) // 120
-         * Factorial(1.5) // throw
-         * ```
-         */
-        static Factorial(n: number): number;
-        /**
-         * nCr
-         * ```
-         * nCr(5,3) // 10
-         * ```
-         */
-        static nCr(n: number, r: number): number;
-        /**
-         * nPr
-         * ```
-         * nPr(5,3) // 60
-         * ```
-         */
-        static nPr(n: number, r: number): number;
-    }
-    global {
-        var Factorial: typeof Host.Factorial;
-        var nCr: typeof Host.nCr;
-        var nPr: typeof Host.nPr;
-    }
-}
-declare module "Math/Code/Function" {
-    export class Host {
-        /**
-         * log(b,N)
-         * ```
-         * log(2,8) // 3
-         * ```
-         */
-        static log(b: number, N: number): number;
-        /**
-         * square root of x
-         * ```
-         * Sqrt(4) // 2
-         * ```
-         */
-        static Sqrt(x: number): number;
-        /**
-         * the radian of the degree
-         * ```
-         * Radian(180) // pi
-         * Radian(90) // pi/2
-         * Radian(30) // PI/6
-         * ```
-         */
-        static Radian(degree: number): number;
-        /**
-         * the degree of the radian
-         * ```
-         * Degree(Math.PI) // 180
-         * Degree(Math.PI/2) // 90
-         * Degree(Math.PI/6) // 30
-         * ```
-         */
-        static Degree(radian: number): number;
-        /**
-         * sin(x).
-         * ```
-         * sin(30) // 0.5
-         * ```
-         */
-        static sin(x: number): number;
-        /**
-         * cos(x).
-         * ```
-         * cos(60) // 0.5
-         * ```
-         */
-        static cos(x: number): number;
-        /**
-         * tan(x).
-         * ```
-         * tan(45) // 1
-         * ```
-         */
-        static tan(x: number): number;
-        /**
-         * arcsin(x) between -90 and 90.
-         * ```
-         * arcsin(0.5) // 30
-         * ```
-         */
-        static arcsin(x: number): number;
-        /**
-         * arccos(x) between 0 and 180.
-         * ```
-         * arccos(0.5) // 60
-         * ```
-         */
-        static arccos(x: number): number;
-        /**
-         * arctan(x) between -90 and 90.
-         * ```
-         * arctan(1) // 45
-         * ```
-         */
-        static arctan(x: number): number;
-    }
-    global {
-        var log: typeof Host.log;
-        var Sqrt: typeof Host.Sqrt;
-        var Radian: typeof Host.Radian;
-        var Degree: typeof Host.Degree;
-        var sin: typeof Host.sin;
-        var cos: typeof Host.cos;
-        var tan: typeof Host.tan;
-        var arcsin: typeof Host.arcsin;
-        var arccos: typeof Host.arccos;
-        var arctan: typeof Host.arctan;
-    }
-}
-declare module "Core/schema" {
-    import * as v from 'valibot';
-    export const num: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
-    export const int: v.SchemaWithPipe<readonly [v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.CheckAction<number, undefined>]>;
-    export const positive: v.SchemaWithPipe<readonly [v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.GtValueAction<number, 0, undefined>]>;
-    export const str: v.StringSchema<undefined>;
-    export const bool: v.BooleanSchema<undefined>;
-    export const ineq: v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>;
-    export const constraint: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const constraints: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
-    export const trig: v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>;
-    export const base: v.SchemaWithPipe<readonly [v.StringSchema<undefined>, v.CheckAction<string, undefined>]>;
-    export const couple: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const triple: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const combo: v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>;
-    export const ntuple: v.ArraySchema<v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, undefined>;
-    export const point2D: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const point2Ds: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
-    export const point3D: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const point3Ds: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
-    export const monomial: v.ObjectSchema<{
-        readonly coeff: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
-    }, undefined>;
-    export const polynomial: v.ArraySchema<v.ObjectSchema<{
-        readonly coeff: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
-    }, undefined>, undefined>;
-    export const compoundInequality: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"AND", undefined>, v.LiteralSchema<"OR", undefined>], undefined>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.StringSchema<undefined>], undefined>;
-    export const trigValue: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>, v.UnionSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.StringSchema<undefined>], undefined>], undefined>;
-    export const trigExp: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<1, undefined>, v.LiteralSchema<-1, undefined>], undefined>, v.StringSchema<undefined>], undefined>;
-    export const quantity: v.ObjectSchema<{
-        readonly val: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
-        readonly unit: v.StringSchema<undefined>;
-    }, undefined>;
-}
-declare module "Math/Code/Geometry" {
-    export class Host {
-        /**
-         * the slope of AB
-         * ```
-         * Slope([0,0],[1,2]) // 2
-         * Slope([1,2],[1,2]) // NaN
-         * ```
-         */
-        static Slope(A: Point2D, B: Point2D): number;
-        /**
-         * the slope perpendicular to AB
-         * ```
-         * SlopePd([0,0],[1,2]) // -0.5
-         * SlopePd([1,2],[1,2]) // NaN
-         * ```
-         */
-        static SlopePd(A: Point2D, B: Point2D): number;
-        /**
-         * the distance AB
-         * ```
-         * Distance([0,0],[1,2]) // 2.23606797749979
-         * ```
-         */
-        static Distance(A: Point2D, B: Point2D): number;
-        /**
-         * the chessboard distance AB, max(horizontal,vertical)
-         * ```
-         * ChessboardDistance([0,0],[1,2]) // 2
-         * ChessboardDistance([0,0],[3,2]) // 3
-         * ```
-         */
-        static ChessboardDistance(A: Point2D, B: Point2D): number;
-        /**
-         * the mid-pt / centroid of `points`
-         * ```
-         * Mid([1,2],[3,4]) // [2,3]
-         * Mid([1,2],[3,4],[5,6]) // [3,4]
-         * ```
-         */
-        static Mid(...points: Point2D[]): Point2D;
-        /**
-         * the point X on dir or segment PQ such that PX : QX = ratioA : ratioB
-         * ```
-         * Slide([1,0],[5,0],0.75) // [4,0]
-         * Slide([1,0],[5,0],3,1) // [4,0]
-         * Slide([0,1],[[0,0],[1,0]],1) // [1,1]
-         * Slide([0,1],[[0,0],[1,0]],2) // [2,1]
-         * ```
-         */
-        static Slide(P: Point2D, vec: Point2D | [Point2D, Point2D], ratioA?: number, ratioB?: number): Point2D;
-        /**
-         * point P rotated anticlockwise by angle q about point O.
-         * ```
-         * Rotate([1,2],90,[0,0]) // [-2,1]
-         * ```
-         */
-        static Rotate(P: Point2D, q: number, O?: Point2D): Point2D;
-        /**
-         * the polar angle of B if A is the origin within [0,360].
-         * ```
-         * Dir([1,0],[3,2]) // 45
-         * Dir([3,2],[1,0]) // 225
-         * ```
-         */
-        static Dir(A: Point2D, B: Point2D): number;
-        /**
-         * the foot of perpendicular from P to AB.
-         * ```
-         * PdFoot([-2,2],[[-1,-1],[1,1]]) // [0,0]
-         * ```
-         */
-        static PdFoot(P: Point2D, [A, B]: [Point2D, Point2D | number]): Point2D;
-        /**
-         * the intersection point of AB and CD.
-         * ```
-         * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
-         * Intersection([0,0],45,[2,0],135) // [1,1]
-         * ```
-         */
-        static Intersection(A: Point2D, B: Point2D | number, C: Point2D, D: Point2D | number): Point2D;
-        /**
-         * Translate point P in the direction `dir` by a `distance`.
-         * @param dir - a polar angle, or two points [A,B] representing Dir(A,B), or one point A representing Dir(P,A)
-         * ```
-         * Move([1,2],90,3) // [1,5]
-         * Move([1,2],[2, 2],3) // [4,2]
-         * Move([1,2],[[0,0],[1,0]],3) // [4,2]
-         * ```
-         */
-        static Move(P: Point2D, dir: number | Point2D | [Point2D, Point2D], distance: number): Point2D;
-        /**
-         * Translate point P to the right by a distance.
-         * ```
-         * MoveX([1,2],3) // [4,2]
-         * MoveX([1,2],-3) // [-2,2]
-         * ```
-         */
-        static MoveX(P: Point2D, distance: number): Point2D;
-        /**
-         * Translate point P upward by a distance.
-         * ```
-         * MoveY([1,2],3) // [4,2]
-         * MoveY([1,2],-3) // [-2,2]
-         * ```
-         */
-        static MoveY(P: Point2D, distance: number): Point2D;
-        /**
-         * Reflect point P about x-axis
-         * ```
-         * ReflectX([1,2]) // [1,-2]
-         * ReflectX([1,-2]) // [1,2]
-         * ```
-         */
-        static ReflectX(P: Point2D): Point2D;
-        /**
-         * Reflect point P about y-axis
-         * ```
-         * ReflectY([1,2]) // [-1,2]
-         * ReflectY([-1,2]) // [1,2]
-         * ```
-         */
-        static ReflectY(P: Point2D): Point2D;
-        /**
-         * angle of intersection between two slopes
-         * ```
-         * IntersectAngle(0,1) // 45
-         * IntersectAngle(1,-1) // 90
-         * ```
-         */
-        static IntersectAngle(slope1: number, slope2: number): number;
-        /**
-         * angle AOB, non-reflex
-         * ```
-         * Angle([1,0],[0,0],[0,2]) // 90
-         * Angle([2,2],[1,1],[1,3]) // 45
-         * Angle([1,3],[1,1],[2,2]) // 45
-         * ```
-         */
-        static Angle(A: Point2D, O: Point2D, B: Point2D): number;
-        /**
-         * angle AOB, measured anticlockwise
-         * ```
-         * AnglePolar([1,0],[0,0],[0,2]) // 90
-         * AnglePolar([2,2],[1,1],[1,3]) // 45
-         * AnglePolar([1,3],[1,1],[2,2]) // 315
-         * ```
-         */
-        static AnglePolar(A: Point2D, O: Point2D, B: Point2D): number;
-        /**
-         * check if the polar angle AOB is reflex
-         * ```
-         * IsReflex([1,0],[0,0],[0,2]) // false
-         * IsReflex([2,2],[1,1],[1,3]) // false
-         * IsReflex([1,3],[1,1],[2,2]) // true
-         * ```
-         */
-        static IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean;
-        /**
-         * points on a regular polygon
-         * ```
-         * RegularPolygon(4,[0,0],1,0) // [[1,0],[0,1],[-1,0],[0,-1]]
-         * ```
-         */
-        static RegularPolygon(n: number, center: Point2D, radius: number, startAngle: number): Point2D[];
-        /**
-         * arc length with given radius and angle
-         * ```
-         * ArcLength(2,90) // pi
-         * ArcLength(2,180) // 2*pi
-         * ```
-         */
-        static ArcLength(radius: number, theta: number): number;
-        /**
-         * sector area with given radius and angle
-         * ```
-         * SectorArea(2,90) // pi
-         * SectorArea(2,180) // 2*pi
-         * ```
-         */
-        static SectorArea(radius: number, theta: number): number;
-        /**
-         * check is convex polygon
-         * ```
-         * IsConvexPolygon([0,0],[1,0],[0,1]) // true
-         * IsConvexPolygon([0,0],[3,0],[1,1],[0,3]) // false
-         * ```
-         */
-        static IsConvexPolygon(...points: Point2D[]): boolean;
-        /**
-         * Arrange Points in anti-clockwise direction around their mean
-         * ```
-         * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
-         * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
-         * ```
-         */
-        static ArrangePoints(...points: Point2D[]): Point2D[];
-        /**
-         * a point with polar coordinates (1, `angle`).
-         * ```
-         * OnCircle(0) // [1,0]
-         * OnCircle(90) // [0,1]
-         * ```
-         */
-        static OnCircle(angle: number): Point2D;
-    }
-    global {
-        var Slope: typeof Host.Slope;
-        var SlopePd: typeof Host.SlopePd;
-        var Distance: typeof Host.Distance;
-        var ChessboardDistance: typeof Host.ChessboardDistance;
-        var Mid: typeof Host.Mid;
-        var Slide: typeof Host.Slide;
-        var Rotate: typeof Host.Rotate;
-        var Dir: typeof Host.Dir;
-        var PdFoot: typeof Host.PdFoot;
-        var Intersection: typeof Host.Intersection;
-        var Move: typeof Host.Move;
-        var MoveX: typeof Host.MoveX;
-        var MoveY: typeof Host.MoveY;
-        var ReflectX: typeof Host.ReflectX;
-        var ReflectY: typeof Host.ReflectY;
-        var IntersectAngle: typeof Host.IntersectAngle;
-        var Angle: typeof Host.Angle;
-        var AnglePolar: typeof Host.AnglePolar;
-        var IsReflex: typeof Host.IsReflex;
-        var RegularPolygon: typeof Host.RegularPolygon;
-        var ArcLength: typeof Host.ArcLength;
-        var SectorArea: typeof Host.SectorArea;
-        var IsConvexPolygon: typeof Host.IsConvexPolygon;
-        var ArrangePoints: typeof Host.ArrangePoints;
-        var OnCircle: typeof Host.OnCircle;
-    }
-}
-declare module "Math/Code/Latex" {
-    export class Host {
-        /**
-         * Print a stem-and-leaf diagram in latex.
-         * @param data - sorted data
-         * @param labels - a copy of data, but you can replace some number with string label.
-         * ```
-         * StemAndLeaf({
-         *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
-         *   labels: [2,'x',6,12,14,16,23,23,24,25,26,'y',26,26,27,31],
-         *   stem: "10 units",
-         *   leaf: "{1} unit"
-         * })
-         * // a diagram with two numbers replaced by 'x' and 'y'
-         * ```
-         */
-        static StemAndLeaf({ data, labels, stem, leaf, }: {
-            data: number[];
-            labels?: (number | string)[];
-            stem?: string;
-            leaf?: string;
-        }): string;
-        /**
-         * Print a table in latex.
-         * @param content - the cell content
-         * @param columns - a latex syntax for column border
-         * @param rows - similar to `columns`
-         * @param stretch - scale the height of the cells
-         * ```
-         * Table({
-         *     content: [
-         *         ['a', 2, 3],   // 'a' will be printed as '\text{a}'
-         *         ['b', 5, 6],
-         *         ['$c', 7, 8],  // 'c' will be printed as is
-         *         ['$d', 12, 13]
-         *     ],
-         *     columns: '|c::c:c|',
-         *     rows: '|r||r|rr|',
-         * })
-         * ```
-         */
-        static Table({ content, columns, rows, stretch, }: {
-            content: (string | number)[][];
-            columns?: string;
-            rows?: string;
-            stretch?: number;
-        }): string;
-        /**
-         * Print a frequency table in latex.
-         * @param dataLabel - the label for the 1st row
-         * @param freqLabel - the label for the 2nd row
-         * ```
-         * FreqTable({
-         *   data: [1, 1, 4, 4, 3, 3, 3],
-         *   dataLabel: '$x',
-         *   freqLabel: 'count'
-         * })
-         * ```
-         */
-        static FreqTable({ data, dataLabel, freqLabel, min, max, }: {
-            data: number[];
-            dataLabel: string;
-            freqLabel: string;
-            min?: number;
-            max?: number;
-        }): string;
-        /**
-         * Print a grouped frequency table in latex.
-         * ```
-         * GroupFreqTable({
-         *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
-         *   dataLabel: '$x',
-         *   freqLabel: 'count'
-         *   cls: [1, 5]
-         * })
-         * ```
-         */
-        static GroupFreqTable({ data, dataLabel, freqLabel, cls, }: {
-            data: number[];
-            dataLabel: string;
-            freqLabel: string;
-            cls: [number, number];
-        }): string;
-        /**
-         * Print a grouped frequency table in latex.
-         * ```
-         * GroupCumFreqTable({
-         *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
-         *   dataLabel: '$x',
-         *   freqLabel: 'count'
-         *   cls: [1, 5]
-         * })
-         * ```
-         */
-        static GroupCumFreqTable({ data, dataLabel, freqLabel, cls, }: {
-            data: number[];
-            dataLabel: string;
-            freqLabel: string;
-            cls: [number, number];
-        }): string;
-        /**
-         * Print a table in latex showing cartisian product of two items.
-         * @param rows - array of row values
-         * @param cols - array of column values
-         * @param cell - a function mapping row and column values to cell content
-         * ```
-         * PairTable({
-         *    rowTitle:'first',
-         *    colTitle:'second',
-         *    rows: [1,2,3,4,5,6],
-         *    cols: [1,2,3,4,5,6],
-         *    cell: (r,c) => r+c
-         * })
-         * // a table showing the sum of two dices
-         * ```
-         */
-        static PairTable<R, C>({ rowTitle, colTitle, rows, cols, cell, }: {
-            rowTitle: string;
-            colTitle: string;
-            rows: R[];
-            cols: C[];
-            cell: (rowValue: R, colValue: C) => string | number | boolean;
-        }): string;
-        /**
-         * Print the check vertice steps.
-         * @param label - the field label
-         * ```
-         * CheckVertices({
-         *    constraints: [
-         *      [1,0,'>',0],
-         *      [0,1,'>',0],
-         *      [1,1,'<',2],
-         * ],
-         *    field: [1,2,3],
-         *    label: "P"
-         * })
-         * ```
-         */
-        static CheckVertices({ constraints, field, label, }: {
-            constraints: Constraint[];
-            field: Field;
-            label: string;
-        }): string;
-        /**
-         * A short division for prime factorization of numbers.
-         * ```
-         * ShortDivision({
-         *    numbers: [12,16,18],
-         *    mode: 'HCF',
-         * })
-         * ```
-         */
-        static ShortDivision({ numbers, mode, }: {
-            numbers: number[];
-            mode?: 'HCF' | 'LCM';
-        }): string;
-    }
-    global {
-        var StemAndLeaf: typeof Host.StemAndLeaf;
-        var Table: typeof Host.Table;
-        var FreqTable: typeof Host.FreqTable;
-        var GroupFreqTable: typeof Host.GroupFreqTable;
-        var GroupCumFreqTable: typeof Host.GroupCumFreqTable;
-        var PairTable: typeof Host.PairTable;
-        var CheckVertices: typeof Host.CheckVertices;
-        var ShortDivision: typeof Host.ShortDivision;
-    }
-}
-declare module "Math/Code/LinearProgram" {
-    export class Host {
-        /**
-         * the value of field at given point
-         * ```
-         * FieldAt([0,0],[1,2,3]) // 3
-         * FieldAt([1,2],[3,-4,5]) // 0
-         * ```
-         */
-        static FieldAt(point: Point2D, field: Field): number;
-        /**
-         * check if point is constrained by cons
-         * ```
-         * isConstrained([
-         *    [1, 1, "<=", 5],
-         *    [1, -1, "<", 4],
-         *    [2, 1, ">=", -5]
-         * ], [0, 0])
-         * // check whether [0,0] satisfies all the constraints
-         * ```
-         */
-        static isConstrained(cons: Constraint[], point: Point2D): boolean;
-        /**
-         * check if point is constrained by cons, treating all cons as 'or equal to'
-         * ```
-         * isLooseConstrained([
-         *    [1, 1, "<=", 5],
-         *    [1, -1, "<", 4],
-         *    [2, 1, ">=", -5]
-         * ], [0, 0])
-         * // check whether [0,0] loosely satisfies all the constraints
-         * ```
-         */
-        static isLooseConstrained(cons: Constraint[], point: Point2D): boolean;
-        /**
-         * the vertices of the feasible polygon
-         * ```
-         * FeasiblePolygon([
-         *    [1, 0, '<', 10],
-         *    [1, 0, '>', -5],
-         *    [0, 1, '<', 10],
-         *    [0, 1, '>', -5]
-         * ])
-         * // [[-5,-5],[10,-5],[10,10],[-5,10]]
-         * ```
-         */
-        static FeasiblePolygon(...cons: Constraint[]): [number, number][];
-        /**
-         * the vertices of the feasible polygon
-         * ```
-         * FeasiblePolygon([
-         *    [1, 0, '<', 10],
-         *    [1, 0, '>', -5],
-         *    [0, 1, '<', 10],
-         *    [0, 1, '>', -5]
-         * ])
-         * // [[-5,-5],[10,-5],[10,10],[-5,10]]
-         * ```
-         */
-        static FeasibleVertices(...cons: Constraint[]): [number, number][];
-        /**
-         * check if the feasible region is bounded
-         * ```
-         * FeasibleIsBounded([
-         *    [1, 0, '<', 10],
-         *    [1, 0, '>', -5],
-         *    [0, 1, '<', 10],
-         *    [0, 1, '>', -5]
-         * ])
-         * // true
-         * FeasibleIsBounded([
-         *    [1, 0, '<', 10],
-         * ])
-         * // false
-         * ```
-         */
-        static FeasibleIsBounded(...cons: Constraint[]): boolean;
-        /**
-         * the integral points inside the feasible polygon
-         * ```
-         * FeasibleIntegral([
-         *    [1, 0, '<', 3],
-         *    [1, 0, '>', 0],
-         *    [0, 1, '<', 2],
-         *    [0, 1, '>', 0]
-         * ])
-         * // [[1,1],[2,1]]
-         * ```
-         */
-        static FeasibleIntegral(...cons: Constraint[]): Point2D[];
-        /**
-         * the point with the max value of field
-         * ```
-         * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
-         * ```
-         */
-        static MaximizePoint(points: Point2D[], field: Field): Point2D;
-        /**
-         * the point with the min value of field
-         * ```
-         * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
-         * ```
-         */
-        static MinimizePoint(points: Point2D[], field: Field): Point2D;
-        /**
-         * the point with the min/max value of field
-         * ```
-         * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [10,10]
-         * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
-         * ```
-         */
-        static OptimizePoint(points: Point2D[], field: Field, max: boolean): Point2D;
-        /**
-         * the max value of field
-         * ```
-         * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
-         * ```
-         */
-        static MaximizeField(points: Point2D[], field: Field): number;
-        /**
-         * the min value of field
-         * ```
-         * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
-         * ```
-         */
-        static MinimizeField(points: Point2D[], field: Field): number;
-        /**
-         * the min/max value of field
-         * ```
-         * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
-         * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
-         * ```
-         */
-        static OptimizeField(points: Point2D[], field: Field, max: boolean): number;
-        /**
-         * the constraints from the given points
-         * ```
-         * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
-         * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2])
-         * // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
-         * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
-         * ```
-         */
-        static ConstraintsFromPoints(...points: Point2D[]): Constraint[];
-    }
-    global {
-        var FieldAt: typeof Host.FieldAt;
-        var isConstrained: typeof Host.isConstrained;
-        var isLooseConstrained: typeof Host.isLooseConstrained;
-        var FeasiblePolygon: typeof Host.FeasiblePolygon;
-        var FeasibleVertices: typeof Host.FeasibleVertices;
-        var FeasibleIsBounded: typeof Host.FeasibleIsBounded;
-        var FeasibleIntegral: typeof Host.FeasibleIntegral;
-        var MaximizePoint: typeof Host.MaximizePoint;
-        var MinimizePoint: typeof Host.MinimizePoint;
-        var OptimizePoint: typeof Host.OptimizePoint;
-        var MaximizeField: typeof Host.MaximizeField;
-        var MinimizeField: typeof Host.MinimizeField;
-        var OptimizeField: typeof Host.OptimizeField;
-        var ConstraintsFromPoints: typeof Host.ConstraintsFromPoints;
-    }
-}
-declare module "Math/Code/Numeracy" {
-    export class Host {
-        /**
-         * @deprecated
-         * division with x/0 handling
-         * ```
-         * Divide(6,2) // 3
-         * Divide(6,0) // throw
-         * ```
-         */
-        static Divide(dividend: number, divisor: number): number;
-        /**
-         * the absolute value. Equivalent to Math.abs(x).
-         * ```
-         * Abs(-2) // 2
-         * ```
-         */
-        static Abs(num: number): number;
-        /**
-         * the sign of the number as 1,0 or -1.
-         * ```
-         * Sign(3) // 1
-         * Sign(-4.5) // -1
-         * Sign(0) // 0
-         * ```
-         */
-        static Sign(num: number): -1 | 0 | 1;
-        /**
-         * @deprecated
-         * the sign of the number as 1,0 or -1.
-         * ```
-         * SigFig(123.45) // 5
-         * ```
-         */
-        static SigFig(num: number): number;
-        /**
-         * the number rounded off to given sigfig.
-         * ```
-         * Round(1.23456,3) // 1.23
-         * Round(1.23567,3) // 1.24
-         * ```
-         */
-        static Round(num: number, sigfig?: number): number;
-        /**
-         * the number rounded up to given sigfig.
-         * ```
-         * RoundUp(1.23456,3) // 1.23
-         * RoundUp(1.23567,1) // 2
-         * ```
-         */
-        static RoundUp(num: number, sigfig?: number): number;
-        /**
-         * the number rounded down to given sigfig.
-         * ```
-         * RoundDown(1.23456,5) // 1.2345
-         * RoundDown(1.6789,1) // 1
-         * ```
-         */
-        static RoundDown(num: number, sigfig?: number): number;
-        /**
-         * the number rounded off to given decimal place.
-         * ```
-         * Fix(12345.678) // round to integer by default, return 12346
-         * Fix(12345.678,0) // round to integer, return 12346
-         * Fix(12345.678,2) // round to 2 dp, return 12345.68
-         * Fix(12345.678,-2) // round to hundred, return 12300
-         * ```
-         */
-        static Fix(num: number, dp?: number): number;
-        /**
-         * the number rounded up to given decimal place.
-         * ```
-         * FixUp(12.34) // round to integer by default, return 13
-         * FixUp(12.34,0) // round to integer, return 13
-         * FixUp(12.34,1) // round to 1 dp, return 12.4
-         * FixUp(12.34,-1) // round to ten, return 20
-         * ```
-         */
-        static FixUp(num: number, dp?: number): number;
-        /**
-         * the number rounded down to given decimal place.
-         * ```
-         * FixDown(17.89) // round to integer by default, return 17
-         * FixDown(17.89,0) // round to integer, return 17
-         * FixDown(17.89,1) // round to 1 dp, return 17.8
-         * FixDown(17.89,-1) // round to ten, return 10
-         * ```
-         */
-        static FixDown(num: number, dp?: number): number;
-        /**
-         * the ceiling integer of the number.
-         * ```
-         * Ceil(1.1) // 2
-         * Ceil(-1.1) // -1
-         * Ceil(2) // 2
-         * Ceil(3,5,1) // Ceil 3 to [1,6,11,...], return 6
-         * ```
-         */
-        static Ceil(num: number, interval?: number, offset?: number): number;
-        /**
-         * the floor integer of the number.
-         * ```
-         * Floor(1.9) // 1
-         * Floor(-1.9) // -2
-         * Floor(2)) // 2
-         * Floor(3,5,1) // Floor 3 to [1,6,11,...], return 1
-         * ```
-         */
-        static Floor(num: number, interval?: number, offset?: number): number;
-        /**
-         * reduce input array to integral ratio.
-         * ```
-         * Ratio(2,4,6) // [1,2,3]
-         * Ratio(0,4,6) // [0,2,3]
-         * Ratio(0,4) // [0,1]
-         * Ratio(1/3,1/2,1/4) // [4,6,3]
-         * Ratio(Math.sqrt(2),1/2,1/4) // throw
-         * ```
-         */
-        static Ratio(...nums: number[]): number[];
-        /**
-         * scale `nums` so that their sum becomes `total`.
-         * ```
-         * ScaleTo([1,2,3], 60) // [10,20,30]
-         * ```
-         */
-        static ScaleTo(nums: number[], total: number): number[];
-        /**
-         * The HCF of nums.
-         * ```
-         * HCF(6,8) // 2
-         * HCF(6,8,9) // 1
-         * HCF(1,3) // 1
-         * HCF(0.5,3) // throw
-         * HCF(0,3) // throw
-         * ```
-         */
-        static HCF(...nums: number[]): number;
-        /**
-         * The LCM of nums.
-         * ```
-         * LCM(2,3) // 6
-         * LCM(2,3,5) // 30
-         * LCM(0.5,3) // throw
-         * LCM(0,3) // throw
-         * ```
-         */
-        static LCM(...nums: number[]): number;
-        /**
-         * The prime factors of `num`.
-         * ```
-         * PrimeFactors(12) // [2,2,3]
-         * ```
-         */
-        static PrimeFactors(num: number): number[];
-        /**
-         * convert num to fraction
-         * ```
-         * ToFrac(0.5) // [1,2]
-         * ToFrac(-456/123) // [-152,41]
-         * ```
-         */
-        static ToFrac(num: number): Fraction;
-        /**
-         * all integer partition of `n`.
-         * ```
-         * Partition(4)
-         * // [ [4], [3,1], [2,2], [2,1,1], [1,1,1,1] ]
-         * Partition(4, 2, false)
-         * // [ [3,1], [2,2] ]
-         * Partition(4, 2, true)
-         * // [ [4,0], [3,1], [2,2] ]
-         * ```
-         */
-        static Partition(n: number, length?: number, allowZero?: boolean): number[][];
-    }
-    global {
-        var Divide: typeof Host.Divide;
-        var Abs: typeof Host.Abs;
-        var Sign: typeof Host.Sign;
-        var SigFig: typeof Host.SigFig;
-        var Round: typeof Host.Round;
-        var RoundUp: typeof Host.RoundUp;
-        var RoundDown: typeof Host.RoundDown;
-        var Fix: typeof Host.Fix;
-        var FixUp: typeof Host.FixUp;
-        var FixDown: typeof Host.FixDown;
-        var Ceil: typeof Host.Ceil;
-        var Floor: typeof Host.Floor;
-        var Ratio: typeof Host.Ratio;
-        var ScaleTo: typeof Host.ScaleTo;
-        var HCF: typeof Host.HCF;
-        var LCM: typeof Host.LCM;
-        var PrimeFactors: typeof Host.PrimeFactors;
-        var ToFrac: typeof Host.ToFrac;
-        var Partition: typeof Host.Partition;
-    }
-}
-declare module "Math/Code/PhyConst" {
-    var PhyConstObj: {
-        R: number;
-        N_A: number;
-        g: number;
-        G: number;
-        c: number;
-        e: number;
-        m_e: number;
-        epsilon_0: number;
-        mu_0: number;
-        m_u: number;
-        au: number;
-        light_year: number;
-        parsec: number;
-        sigma: number;
-        h: number;
-    };
-    global {
-        var PhyConst: typeof PhyConstObj;
-    }
-    export {};
-}
-declare module "Math/Code/PhyEq" {
-    type eq = [func: zeroFunction, latex: string];
-    export class PhyEqCls {
-        Heat: {
-            /**
-             * E = Pt
-             */
-            EPt(E?: string, P?: string, t?: string, $?: string): eq;
-        };
-        Motion: {
-            /**
-             * v = u + at
-             */
-            vuat(v?: string, u?: string, a?: string, t?: string, $?: string): eq;
-            /**
-             * v^2 = u^2 + 2as
-             */
-            vu2as(v?: string, u?: string, a?: string, s?: string, $?: string): eq;
-            /**
-             * s = ut + 0.5at^2
-             */
-            sutat2(s?: string, u?: string, t?: string, a?: string, $?: string): eq;
-            /**
-             * s = 0.5(u+v)t
-             */
-            suvt(s?: string, u?: string, v?: string, t?: string, $?: string): eq;
-            /**
-             * s  = 0.5at^2
-             */
-            sat2(s?: string, a?: string, t?: string, $?: string): eq;
-            /**
-             * v = at
-             */
-            vat(v?: string, a?: string, t?: string, $?: string): eq;
-            /**
-             * v^2 = 2as
-             */
-            v2as(v?: string, a?: string, s?: string, $?: string): eq;
-        };
-        Force: {
-            /**
-             * F = ma
-             */
-            Fma(F?: string, m?: string, a?: string, $?: string): eq;
-        };
-        CircularMotion: {
-            /**
-             * s = vt
-             */
-            svt(s?: string, v?: string, t?: string, $?: string): eq;
-            /**
-             * θ = ωt
-             */
-            θωt(θ?: string, ω?: string, t?: string, $?: string): eq;
-            /**
-             * ω = 2π/T
-             */
-            ωT(ω?: string, T?: string, $?: string): eq;
-            /**
-             * s = rθ
-             */
-            srθ(s?: string, r?: string, θ?: string, $?: string): eq;
-            /**
-             * v = rω
-             */
-            vrω(v?: string, r?: string, ω?: string, $?: string): eq;
-            /**
-             * a = vω
-             */
-            avω(a?: string, v?: string, ω?: string, $?: string): eq;
-            /**
-             * a = v^2/r
-             */
-            avr(a?: string, v?: string, r?: string, $?: string): eq;
-            /**
-             * a = rω^2
-             */
-            arω(a?: string, r?: string, ω?: string, $?: string): eq;
-            /**
-             * F = mvω
-             */
-            Fmvω(F?: string, m?: string, v?: string, ω?: string, $?: string): eq;
-            /**
-             * F = mv^2/r
-             */
-            Fmvr(F?: string, m?: string, v?: string, r?: string, $?: string): eq;
-            /**
-             * F = mrω^2
-             */
-            Fmrω(F?: string, m?: string, r?: string, ω?: string, $?: string): eq;
-        };
-        Gravitation: {
-            /**
-             * F = GMm/r^2
-             */
-            FGMmr2(F?: string, M?: string, m?: string, r?: string, $?: string): eq;
-            /**
-             * F = GMm/(R+h)^2
-             */
-            FGMmRh2(F?: string, M?: string, m?: string, R?: string, h?: string, $?: string): eq;
-            /**
-             * g = GM/r^2
-             */
-            gGMr2(g?: string, M?: string, r?: string, $?: string): eq;
-            /**
-             * g = GM/(R+h)^2
-             */
-            gGMRh2(g?: string, M?: string, R?: string, h?: string, $?: string): eq;
-            /**
-             * F = mg
-             */
-            Fmg(F?: string, m?: string, g?: string, $?: string): eq;
-            /**
-             * GMm/r2 = mv2/r
-             */
-            GMmr2v2r(M?: string, r?: string, v?: string, $?: string): eq;
-            /**
-             * GMm/r2 = mrω2
-             */
-            GMmr2rω2(M?: string, r?: string, ω?: string, $?: string): eq;
-        };
-        Radioactive: {
-            /**
-             * N = n(1/2)^(t/T)
-             */
-            NntT(N?: string, n?: string, t?: string, T?: string, $?: string): eq;
-            /**
-             * A = a(1/2)^(t/T)
-             */
-            AatT(A?: string, a?: string, t?: string, T?: string, $?: string): eq;
-            /**
-             * A = kN
-             */
-            AkN(A?: string, k?: string, N?: string, $?: string): eq;
-            /**
-             * kT = ln2
-             */
-            kTln2(k?: string, T?: string, $?: string): eq;
-            /**
-             * E = mc2
-             */
-            Emc2(E?: string, m?: string, $?: string): eq;
-        };
-    }
-    global {
-        var PhyEq: PhyEqCls;
-    }
-}
-declare module "Math/Code/Random" {
-    export class Host {
-        /**
-         * a random integer in [min, max] inclusive.
-         * ```
-         * RndN(2,5) // may return 2, 3, 4 or 5
-         * ```
-         */
-        static RndN(min: number, max: number): number;
-        /**
-         * an array of n unique random integer in [min, max] inclusive.
-         * ```
-         * RndNs(2,8,3) // may return [5,3,7]
-         * RndNs(2,8,3,'asc') // ascending
-         * RndNs(2,8,3,'desc') // descending
-         * ```
-         */
-        static RndNs(min: number, max: number, n?: number, sort?: 'asc' | 'desc' | 'none'): number[];
-        /**
-         * a random real number in [min, max] inclusive
-         * ```
-         * RndR(1,2) // may return 1.242574363
-         * ```
-         */
-        static RndR(min: number, max: number): number;
-        /**
-         * an array of n unique random real number in [min, max] inclusive.
-         * ```
-         * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
-         * ```
-         */
-        static RndRs(min: number, max: number, n?: number): number[];
-        /**
-         * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
-         * ```
-         * RndQ(9,[2,9]) // may return 7/2
-         * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
-         * ```
-         */
-        static RndQ(largest?: number, range?: interval): number;
-        /**
-         * an array of n unique random fractions (non-integer) .
-         * ```
-         * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
-         * ```
-         */
-        static RndQs(largest?: number, range?: interval, n?: number): number[];
-        /**
-         * 1 or -1
-         * ```
-         * RndU() // may return 1 or -1
-         * ```
-         */
-        static RndU(): 1 | -1;
-        /**
-         * true or false.
-         * ```
-         * RndT() // may return true or false
-         * RndT(0.6) // 60% true
-         * ```
-         */
-        static RndT(trueProb?: number): boolean;
-        /**
-         * a random integer in [min, max] or [-max, -min] inclusive.
-         * ```
-         * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
-         * ```
-         */
-        static RndZ(min: number, max: number): number;
-        /**
-         * @param n - default to 10
-         * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
-         * ```
-         * RndZs(2,8,3) // may return [5,-3,7]
-         * RndZs(2,8,3,'asc') // ascending
-         * RndZs(2,8,3,'desc') // descending
-         * ```
-         */
-        static RndZs(min: number, max: number, n?: number, sort?: 'asc' | 'desc' | 'none'): number[];
-        /**
-         * a random prime number less than or equal to max.
-         * ```
-         * RndP(10) // may return 2, 3, 5 or 7
-         * ```
-         */
-        static RndP(max: number): number;
-        /**
-         * a random odd integer in [min, max] inclusive
-         * ```
-         * RndOdd(3,8) // return 3, 5 or 7
-         * ```
-         */
-        static RndOdd(min: number, max: number): number;
-        /**
-         * a random even integer in [min, max] inclusive
-         * ```
-         * RndEven(3,8) // return 4, 6 or 8
-         * ```
-         */
-        static RndEven(min: number, max: number): number;
-        /**
-         * a random composite number built from `n` factors in `factors`.
-         * ```
-         * RndComposite([2,3,5],3) // return 2*2*2, 2*3*5, 2*3*3, ...
-         * ```
-         */
-        static RndComposite(factors: number[], n: number): number;
-        /**
-         * an array of random polynomial coefficients
-         * ```
-         * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
-         * ```
-         */
-        static RndPoly(...coeff: number[]): number[];
-        /**
-         * an array of a Pyth Triple
-         * ```
-         * RndPyth(10) // may return [3,4,5]
-         * ```
-         */
-        static RndPyth(max?: number): [number, number, number];
-        /**
-         * a point within given range, x and y are distinct and non-zero
-         * ```
-         * RndPoint([1,4],[10,14]) // may return [2,12]
-         * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
-         * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
-         * ```
-         */
-        static RndPoint(xRange: number | interval, yRange?: number | interval): Point2D;
-        /**
-         * n points within given range, no horizontal / vertical / collinear
-         * ```
-         * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
-         * ```
-         */
-        static RndPoints(xRange: number | interval, yRange?: number | interval, n?: number): Point2D[];
-        /**
-         * n angles in [0,360] at least cyclic separated by `separation`
-         * ```
-         * RndAngles(3,50) // may return [30,90,200]
-         * ```
-         */
-        static RndAngles(n: number, separation: number): number[];
-        /**
-         * `n` points on a unit circle at least cyclic separated by separation
-         * ```
-         * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
-         * ```
-         */
-        static RndOnCircle(n: number, separation: number): Point2D[];
-        /**
-         * n vertices of a convex polygon generated by rounding a cyclic polygon
-         * ```
-         * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
-         * ```
-         */
-        static RndConvexPolygon(n: number, center: Point2D, radius: number, separation: number): Point2D[];
-        /**
-         * n integers from [min, max], must be uni-moded
-         * ```
-         * RndData(10,15,5) // may return [11,11,12,13,15]
-         * ```
-         */
-        static RndData(min: number, max: number, n: number): number[];
-        /**
-         * 3 points forming a triangle, with min angle and length
-         * ```
-         * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
-         * ```
-         */
-        static RndTriangle(xRange: interval, yRange: interval, { minAngle, maxAngle, minLength, obtuse }?: {
-            minAngle?: number | undefined;
-            maxAngle?: number | undefined;
-            minLength?: number | undefined;
-            obtuse?: boolean | undefined;
-        }): [Point2D, Point2D, Point2D];
-        /**
-         * an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
-         * ```
-         * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
-         * ```
-         */
-        static RndTrigValue(func: TrigFunc, angle: number): TrigValue;
-        /**
-         * an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
-         * ```
-         * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
-         * ```
-         */
-        static RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '1/tan' | '-1/tan', label: string): TrigExp;
-        /**
-         * a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
-         * ```
-         * RndPointPolar()
-         * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
-         * ```
-         */
-        static RndPointPolar(): Point2D;
-        /**
-         * a random ratio group in [min, max] inclusive.
-         * ```
-         * RndRatio(2,9,3) // may return [3,7,5]
-         * ```
-         */
-        static RndRatio(min: number, max: number, n?: number): number[];
-        /**
-         * a random partition of integer `n`.
-         * ```
-         * RndPartition(4) // may return [1,2,1]
-         * RndPartition(4, 2, false) // may return [3,1] or [2,2]
-         * RndPartition(4, 2, true) // may return [4,0] or [3,1] or [2,2]
-         * ```
-         */
-        static RndPartition(n: number, length?: number, allowZero?: boolean): number[];
-    }
-    global {
-        var RndN: typeof Host.RndN;
-        var RndNs: typeof Host.RndNs;
-        var RndR: typeof Host.RndR;
-        var RndRs: typeof Host.RndRs;
-        var RndQ: typeof Host.RndQ;
-        var RndQs: typeof Host.RndQs;
-        var RndU: typeof Host.RndU;
-        var RndT: typeof Host.RndT;
-        var RndZ: typeof Host.RndZ;
-        var RndZs: typeof Host.RndZs;
-        var RndP: typeof Host.RndP;
-        var RndOdd: typeof Host.RndOdd;
-        var RndEven: typeof Host.RndEven;
-        var RndComposite: typeof Host.RndComposite;
-        var RndPoly: typeof Host.RndPoly;
-        var RndPyth: typeof Host.RndPyth;
-        var RndPoint: typeof Host.RndPoint;
-        var RndPoints: typeof Host.RndPoints;
-        var RndAngles: typeof Host.RndAngles;
-        var RndOnCircle: typeof Host.RndOnCircle;
-        var RndConvexPolygon: typeof Host.RndConvexPolygon;
-        var RndData: typeof Host.RndData;
-        var RndTriangle: typeof Host.RndTriangle;
-        var RndTrigValue: typeof Host.RndTrigValue;
-        var RndTrigEqv: typeof Host.RndTrigEqv;
-        var RndPointPolar: typeof Host.RndPointPolar;
-        var RndRatio: typeof Host.RndRatio;
-        var RndPartition: typeof Host.RndPartition;
-    }
-}
-declare module "Math/Code/RandomShake" {
-    export class Host {
-        /**
-         * @deprecated
-         * an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
-         * ```
-         * RndShake(10)
-         * // equivalent to RndShakeN(10)
-         * RndShake(10.5)
-         * // equivalent to RndShakeR(10.5)
-         * ```
-         */
-        static RndShake(anchor: any): (typeof anchor)[];
-        /**
-         * 3 nearby same-signed integers, range = Max(5, anchor * 10%)
-         * ```
-         * RndShakeN(5) // return 3 unique integers from 1-10
-         * ```
-         */
-        static RndShakeN(anchor: number): number[];
-        /**
-         * 3 nearby same-signed real number with same precision, range = anchor * 50%
-         * ```
-         * RndShakeR(3.5) // return 3 unique values from [1.8,5.2]
-         * ```
-         */
-        static RndShakeR(anchor: number): number[];
-        /**
-         * 3 nearby same-sign rational by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
-         * ```
-         * RndShakeQ(5/6)
-         * // return 3 unique fractions around [5,6]
-         * RndShakeQ(6/-5)
-         * // return 3 unique fractions around [6,-5]
-         * ```
-         */
-        static RndShakeQ(anchor: number): number[];
-        /**
-         * 3 numbers by multiplying / dividing the `anchor` by the `base` a few times.
-         * ```
-         * RndShakeG(24,2) // any 3 of [6,12,48,96]
-         * ```
-         */
-        static RndShakeG(anchor: number, base: number): number[];
-        /**
-         * an array of 3 ineq signs, balanced in number.
-         * ```
-         * RndShakeIneq('\\ge')
-         * // may return ['\\ge','\\le','\\le']
-         * ```
-         */
-        static RndShakeIneq(anchor: Ineq): Ineq[];
-        /**
-         * an array of 3 point, both x and y are unique
-         * ```
-         * RndShakePoint([3,4])
-         * // may return [[2,5],[1,6],[4,2]]
-         * ```
-         */
-        static RndShakePoint(anchor: Point2D): Point2D[];
-        /**
-         * an array of 3 combo
-         * ```
-         * RndShakeCombo([true,true,true])
-         * // may return [[true,false,true],[false,true,false],[false,true,true]]
-         * ```
-         */
-        static RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, boolean][];
-        /**
-         * an array of 3 trig
-         * ```
-         * RndShakeTrig('sin')
-         * // may return ['cos','sin','cos']
-         * ```
-         */
-        static RndShakeTrig(anchor: TrigFunc): TrigFunc[];
-        /**
-         * an array of 3 TrigValue
-         * ```
-         * RndShakeTrigValue(['sin','x'])
-         * // may return [['cos','x'],['sin','x'],['cos','x']]
-         * ```
-         */
-        static RndShakeTrigValue(anchor: TrigValue): TrigValue[];
-        /**
-         * an array of 3 ratios
-         * ```
-         * RndShakeRatio([4,5,6])
-         * // may return [[3,6,5],[7,5,3],[8,4,5]]
-         * ```
-         */
-        static RndShakeRatio(anchor: number[]): number[][];
-        /**
-         * an array of 3 number in given number system
-         * ```
-         * RndShakeBase('AB0CD_{16}')
-         * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
-         * ```
-         */
-        static RndShakeBase(anchor: string): string[];
-        /**
-         * an array of 3 points, all are special in polar coordinates
-         * ```
-         * RndShakePointPolar([3,60])
-         * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
-         * ```
-         */
-        static RndShakePointPolar(anchor: Point2D): Point2D[];
-        /**
-         * an array of 3 constraint, with only the sign shaken
-         * ```
-         * RndShakeConstraint([1,2,'>',3])
-         * // may return [[1,2,'>',3], [1,2,'<',3], [1,2,'<',3]]
-         * ```
-         */
-        static RndShakeConstraint(anchor: Constraint): Constraint[];
-        /**
-         * an array of 3 sets of constraints, with only the sign shaken
-         * ```
-         * RndShakeConstraints([
-         *   [1,2,'>',3], [4,5,'>',6]
-         * ])
-         * // may return [
-         * // [[1,2,'>',3],[4,5,'>',6]],
-         * // [[1,2,'<',3],[4,5,'<',6]],
-         * // [[1,2,'<',3],[4,5,'>',6]]
-         * // ]
-         * ```
-         */
-        static RndShakeConstraints(anchor: Constraint[]): Constraint[][];
-        static RndShakeQuantity(anchor: quantity): quantity[];
-        static RndShakeCompoundInequality(anchor: CompoundInequality): CompoundInequality[];
-    }
-    global {
-        var RndShake: typeof Host.RndShake;
-        var RndShakeN: typeof Host.RndShakeN;
-        var RndShakeR: typeof Host.RndShakeR;
-        var RndShakeQ: typeof Host.RndShakeQ;
-        var RndShakeG: typeof Host.RndShakeG;
-        var RndShakeIneq: typeof Host.RndShakeIneq;
-        var RndShakePoint: typeof Host.RndShakePoint;
-        var RndShakeCombo: typeof Host.RndShakeCombo;
-        var RndShakeTrig: typeof Host.RndShakeTrig;
-        var RndShakeTrigValue: typeof Host.RndShakeTrigValue;
-        var RndShakeRatio: typeof Host.RndShakeRatio;
-        var RndShakeBase: typeof Host.RndShakeBase;
-        var RndShakePointPolar: typeof Host.RndShakePointPolar;
-        var RndShakeConstraint: typeof Host.RndShakeConstraint;
-        var RndShakeConstraints: typeof Host.RndShakeConstraints;
-        var RndShakeQuantity: typeof Host.RndShakeQuantity;
-        var RndShakeCompoundInequality: typeof Host.RndShakeCompoundInequality;
-    }
-}
-declare module "Math/Code/RandomUtil" {
-    export class Host {
-        /**
-         * a random item from the given items
-         * ```
-         * RndPick(2,4,6) // may return 2, 4 or 6
-         * ```
-         */
-        static RndPick<T>(...items: T[]): T;
-        /**
-         * a shuffled array of the given items
-         * ```
-         * RndShuffle(2,4,6) // may return [4,2,6]
-         * ```
-         */
-        static RndShuffle<T>(...items: T[]): T[];
-        /**
-         * n random items from given items without replacement, but NOT necessarily unique if there are duplicated object in items.
-         * ```
-         * RndPickN([1,2,3,4,5],3) // may return [2,5,3]
-         * ```
-         */
-        static RndPickN<T>(items: T[], n: number): T[];
-        /**
-         * n random unique items from given items, deep compare.
-         * ```
-         * RndPickUnique([2,4,6],2) // may return [4,2]
-         * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
-         * ```
-         */
-        static RndPickUnique<T>(items: T[], n: number): T[];
-        /**
-         * a random male name
-         * ```
-         * RndHe() // may return 'Peter', 'David', etc
-         * ```
-         */
-        static RndHe(): string;
-        /**
-         * a random female name
-         * ```
-         * RndShe() // may return 'Mary', 'Alice', etc
-         * ```
-         */
-        static RndShe(): string;
-        /**
-         * a random 3-letters array
-         * ```
-         * RndLetters() // may return ['a','b','c'] or ['x','y','z'] or etc
-         * ```
-         */
-        static RndLetters(): string[];
-        /**
-         * a random 3-letters array
-         * ```
-         * RndCapitals() // may return ['A','A','A'] or ['X','Y','Z'] or etc
-         * ```
-         */
-        static RndCapitals(): string[];
-    }
-    global {
-        var RndPick: typeof Host.RndPick;
-        var RndShuffle: typeof Host.RndShuffle;
-        var RndPickN: typeof Host.RndPickN;
-        var RndPickUnique: typeof Host.RndPickUnique;
-        var RndHe: typeof Host.RndHe;
-        var RndShe: typeof Host.RndShe;
-        var RndLetters: typeof Host.RndLetters;
-        var RndCapitals: typeof Host.RndCapitals;
-    }
-}
-declare module "Math/Code/Relation" {
-    export class Host {
-        /**
-         * Check if the numbers are all distinct.
-         * ```
-         * AreDistinct(1,2,3) // true
-         * AreDistinct(1,2,2) // false
-         * ```
-         */
-        static AreDistinct(...nums: number[]): boolean;
-        /**
-         * Check if the absolute values of the numbers are all distinct.
-         * ```
-         * AreAbsDistinct(1,2,3) // true
-         * AreAbsDistinct(1,2,2) // false
-         * AreAbsDistinct(1,2,-2) // false
-         * ```
-         */
-        static AreAbsDistinct(...nums: number[]): boolean;
-        /**
-         * Check if the numbers all have the same sign.
-         * ```
-         * AreSameSign(1,2,3) // true
-         * AreSameSign(1,2,-3) // false
-         * AreSameSign(1,2,0) // false
-         * ```
-         */
-        static AreSameSign(...nums: number[]): boolean;
-        /**
-         * Check if the numbers all pairwise coprime.
-         * ```
-         * AreCoprime(2,3) // true
-         * AreCoprime(2,6) // false
-         * AreCoprime(1,2) // true
-         * AreCoprime(2,3,6) // true
-         * AreCoprime(1.5,3) // true
-         * AreCoprime(0,3) // true
-         * ```
-         */
-        static AreCoprime(...nums: number[]): boolean;
-        /**
-         * Check if the points are pairwise distant apart.
-         * ```
-         * AreDistantPoint(2)([0,0],[3,0]) // true
-         * AreDistantPoint(2)([0,0],[1,0]) // false
-         * ```
-         */
-        static AreDistantPoint(distance: number): (...points: Point2D[]) => boolean;
-        /**
-         * Check if slopes are at least oblique at minAngle
-         * ```
-         * AreOblique(40)(0,1) // true
-         * AreOblique(40)(0,0.5) // false
-         * ```
-         */
-        static AreOblique(minAngle: number): (...slopes: number[]) => boolean;
-        /**
-         * Check if the items are all distinct, deep compare.
-         * ```
-         * AreDifferent([1,2],[3,4]) // true
-         * AreDifferent([1,2],[1,2]) // false
-         * ```
-         */
-        static AreDifferent(...items: any[]): boolean;
-    }
-    global {
-        var AreDistinct: typeof Host.AreDistinct;
-        var AreAbsDistinct: typeof Host.AreAbsDistinct;
-        var AreSameSign: typeof Host.AreSameSign;
-        var AreCoprime: typeof Host.AreCoprime;
-        var AreDistantPoint: typeof Host.AreDistantPoint;
-        var AreOblique: typeof Host.AreOblique;
-        var AreDifferent: typeof Host.AreDifferent;
-    }
-}
-declare module "Math/Code/Sequence" {
-    export class Host {
-        /**
-         * array of all integers between (inclusive) the min and max of `nums`.
-         * ```
-         * Rng(2,6) // [2,3,4,5,6]
-         * Rng(6,2) // [2,3,4,5,6]
-         * Rng(-2,1) // [-2,-1,0,1]
-         * Rng(1,1,4,4,3,3,3) \\ [1,2,3,4]
-         * ```
-         */
-        static Rng(...nums: number[]): number[];
-        /**
-         * Tn in an arithmetic sequence: a+(n-1)d
-         * ```
-         * ASterm(2,3,10) // 29
-         * ASterm(5,-2,6) // -5
-         * ```
-         */
-        static ASterm(a: number, d: number, n: number): number;
-        /**
-         * Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).
-         * ```
-         * ASsum(2,3,10) // 155
-         * ASsum(5,-2,6) // 0
-         * ```
-         */
-        static ASsum(a: number, d: number, n: number): number;
-        /**
-         * an array of the first n terms in an arithmetic sequence.
-         * ```
-         * ASequence(2,3,5) // [2,5,8,11,14]
-         * ASequence(5,-2,3) // [5,3,1]
-         * ```
-         */
-        static ASequence(a: number, d: number, n?: number): number[];
-        /**
-         * Tn in a geometric sequence: ar**(n-1)
-         * ```
-         * GSterm(2,3,4) // 54
-         * GSterm(5,-2,6) // -160
-         * ```
-         */
-        static GSterm(a: number, r: number, n: number): number;
-        /**
-         * Sn in a geometric sequence: a*(r*n-1)/(r-1)
-         * ```
-         * GSsum(2,3,4) // 80
-         * GSsum(5,-2,3) // 15
-         * GSsum(3,0.5) // 6 , sum to inf if omit n
-         * ```
-         */
-        static GSsum(a: number, r: number, n?: number): number;
-        /**
-         * an array of the first n terms in a geometric sequence.
-         * ```
-         * GSequence(2,3,5) // return [2,6,18,54,162]
-         * GSequence(5,-2,3) // return [5,-10,20]
-         * ```
-         */
-        static GSequence(a: number, r: number, n?: number): number[];
-        /**
-         * the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q
-         * ```
-         * QuadraticSequence(1,2,3,4) //
-         * ```
-         */
-        static QuadraticSequence(a: number, p: number, q: number, n: number): number;
-        /**
-         * the nth term in a lucas sequence, a_i = p*a_{i-1} + q*a_{i-2}
-         * ```
-         * LucasSequence(1,2,3,4,5) //
-         * ```
-         */
-        static LucasSequence(first: number, second: number, p: number, q: number, n: number): number;
-    }
-    global {
-        var Rng: typeof Host.Rng;
-        var ASterm: typeof Host.ASterm;
-        var ASsum: typeof Host.ASsum;
-        var ASequence: typeof Host.ASequence;
-        var GSterm: typeof Host.GSterm;
-        var GSsum: typeof Host.GSsum;
-        var GSequence: typeof Host.GSequence;
-        var QuadraticSequence: typeof Host.QuadraticSequence;
-        var LucasSequence: typeof Host.LucasSequence;
-    }
-}
-declare module "Math/Code/Shake" {
-    export class Host {
-        /**
-         * Same-signed integer
-         * ```
-         * ShakeN(5) // integers from 2-8
-         * ```
-         */
-        static ShakeN(anchor: number): number;
-        /**
-         * Same-signed real number with same precision
-         * ```
-         * ShakeR(3.5) // from [1.8,5.2]
-         * ```
-         */
-        static ShakeR(anchor: number): number;
-        /**
-         * Same-sign rational by shaking the numerator and denominator (simplest), preserve IsProbability.
-         * ```
-         * ShakeQ(5/6)  // return fraction around [5,6]
-         * ShakeQ(6/-5) // return fraction around [6,-5]
-         * ```
-         */
-        static ShakeQ(anchor: number): number;
-        /**
-         * Number by multiplying / dividing `anchor` by the `base` a few times.
-         * ```
-         * ShakeG(24,2) // any of [6,12,48,96]
-         * ```
-         */
-        static ShakeG(anchor: number, base: number): number;
-        /**
-         * Ineq signs
-         * ```
-         * ShakeIneq('\\ge')  // may return '\\ge' or '\\le'
-         * ```
-         */
-        static ShakeIneq(anchor: Ineq): Ineq;
-        /**
-         * Point
-         * ```
-         * ShakePoint([3,4])   // may return [[2,5],[1,6],[4,2]]
-         * ```
-         */
-        static ShakePoint(anchor: Point2D): Point2D;
-        /**
-         * TrigValue
-         * ```
-         * ShakeTrigValue(['sin','x'])
-         * // may return [['cos','x'],['sin','x'],['cos','x']]
-         * ```
-         */
-        static ShakeTrigValue(anchor: TrigValue): TrigValue;
-        /**
-         * Ratios
-         * ```
-         * ShakeRatio([4,5,6])
-         * // may return [[3,6,5],[7,5,3],[8,4,5]]
-         * ```
-         */
-        static ShakeRatio(anchor: number[]): number[];
-        /**
-         * Number in given number system
-         * ```
-         * ShakeBase('AB0CD_{16}')
-         * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
-         * ```
-         */
-        static ShakeBase(anchor: string): string;
-        /**
-         * Points, all are special in polar coordinates
-         * ```
-         * ShakePointPolar([3,60])
-         * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
-         * ```
-         */
-        static ShakePointPolar(anchor: Point2D): Point2D;
-        /**
-         * Constraint, with only the sign shaken.
-         * ```
-         * ShakeConstraint([1,2,'>',3])
-         * // may return [1,2,'>',3] or [1,2,'<',3]
-         * ```
-         */
-        static ShakeConstraint(anchor: Constraint): Constraint;
-        /**
-         * Sets of constraints, with only the sign shaken.
-         * ```
-         * ShakeConstraints([
-         *   [1,2,'>',3], [4,5,'>',6]
-         * ])
-         * // may return
-         * // [[1,2,'>',3],[4,5,'>',6]] or
-         * // [[1,2,'<',3],[4,5,'<',6]] or
-         * // [[1,2,'<',3],[4,5,'>',6]]
-         * ```
-         */
-        static ShakeConstraints(anchor: Constraint[]): Constraint[];
-        static ShakeQuantity(anchor: quantity): quantity;
-        static ShakeCompoundInequality(anchor: CompoundInequality): CompoundInequality;
-    }
-    global {
-        var ShakeN: typeof Host.ShakeN;
-        var ShakeR: typeof Host.ShakeR;
-        var ShakeQ: typeof Host.ShakeQ;
-        var ShakeG: typeof Host.ShakeG;
-        var ShakeIneq: typeof Host.ShakeIneq;
-        var ShakePoint: typeof Host.ShakePoint;
-        var ShakeTrigValue: typeof Host.ShakeTrigValue;
-        var ShakeRatio: typeof Host.ShakeRatio;
-        var ShakeBase: typeof Host.ShakeBase;
-        var ShakePointPolar: typeof Host.ShakePointPolar;
-        var ShakeConstraint: typeof Host.ShakeConstraint;
-        var ShakeConstraints: typeof Host.ShakeConstraints;
-        var ShakeQuantity: typeof Host.ShakeQuantity;
-        var ShakeCompoundInequality: typeof Host.ShakeCompoundInequality;
-    }
-}
-declare module "Math/Code/Stat" {
-    export class Host {
-        /**
-         * the minimum value. Equivalent to Math.min().
-         * ```
-         * Min(2,3,4) // 2
-         * ```
-         */
-        static Min(...nums: number[]): number;
-        /**
-         * the maximum value. Equivalent to Math.max().
-         * ```
-         * Max(2,3,4) // 4
-         * ```
-         */
-        static Max(...nums: number[]): number;
-        /**
-         * the sorted array of numbers.
-         * ```
-         * Sort(2,3,1) // [1,2,3]
-         * ```
-         */
-        static Sort(...nums: number[]): number[];
-        /**
-         * the sorted array of items by giving each item a value.
-         * ```
-         * SortBy([2,3,1],x=>x) // [1,2,3]
-         * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
-         * ```
-         */
-        static SortBy<T>(items: T[], valueFunc: (_: T) => number): T[];
-        /**
-         * sum of nums
-         * ```
-         * Sum(1,2,3) // 6
-         * Sum(-1,2,3,4,5) // 13
-         * Sum() // 0
-         * ```
-         */
-        static Sum(...nums: number[]): number;
-        /**
-         * product of nums
-         * ```
-         * Product(2,3) // 6
-         * Product(-1,2,3,4,5) // -120
-         * Product() // 1
-         * ```
-         */
-        static Product(...nums: number[]): number;
-        /**
-         * mean of nums
-         * ```
-         * Mean(1,2,3) // 2
-         * Mean(-1,2,3,4,5) // 2.6
-         * ```
-         */
-        static Mean(...nums: number[]): number;
-        /**
-         * median of nums
-         * ```
-         * Median(1,2,3,4,50) // 3
-         * Median(1,2,3,4,5,7) // 3.5
-         * ```
-         */
-        static Median(...nums: number[]): number;
-        /**
-         * lower quartile of nums
-         * ```
-         * LowerQ(1,2,3,4,5) // 1.5
-         * LowerQ(1,2,3,4,5,7) // 2
-         * ```
-         */
-        static LowerQ(...nums: number[]): number;
-        /**
-         * lower quartile of nums
-         * ```
-         * UpperQ(1,2,3,4,5) // 4.5
-         * UpperQ(1,2,3,4,5,7) // 5
-         * ```
-         */
-        static UpperQ(...nums: number[]): number;
-        /**
-         * range of `nums`
-         * ```
-         * StatRange(1,2,3,4,5) // 4
-         * StatRange(1,2,3,4,5,7) // 6
-         * ```
-         */
-        static StatRange(...nums: number[]): number;
-        /**
-         * inter-quartile range of nums
-         * ```
-         * IQR(1,2,3,4,5,6) // 3
-         * ```
-         */
-        static IQR(...nums: number[]): number;
-        /**
-         * count frequency of item in array
-         * ```
-         * Freq([2,3,4,1,5,1,1,4,5],1) // 3
-         * ```
-         */
-        static Freq<T>(array: T[], item: T): number;
-        /**
-         * mode of nums
-         * ```
-         * Mode(1,2,3,2,2,3,4) \\ [2]
-         * Mode(1,1,2,2,3) \\ [1,2]
-         * ```
-         */
-        static Mode(...nums: number[]): number[];
-        /**
-         * the only mode of nums, if there are multiple modes, then throw error
-         * ```
-         * UniMode(1,2,3,2,2,3,4) \\ 2
-         * UniMode(1,1,2,2,3) \\ throw error
-         * ```
-         */
-        static UniMode(...nums: number[]): number;
-        /**
-         * SD of nums
-         * ```
-         * StdDev(1,2,3,2,2,3,4) \\ 0.903507902
-         * StdDev(1,1,2,2,3) \\ 0.748331477
-         * ```
-         */
-        static StdDev(...nums: number[]): number;
-        /**
-         * z-score of `num` in a data set with `mean` and `SD`
-         * ```
-         * ZScore(80,60,10) \\ 2
-         * ```
-         */
-        static ZScore(num: number, mean: number, SD: number): number;
-        /**
-         * the location of median
-         * ```
-         * MedianAt(12) \\ 6.5
-         * MedianAt(13) \\ 7
-         * ```
-         */
-        static MedianAt(total: number): number;
-        /**
-         * the location of LQ
-         * ```
-         * LowerQAt(12) \\ 3.5
-         * LowerQAt(13) \\ 3.5
-         * ```
-         */
-        static LowerQAt(total: number): number;
-        /**
-         * the location of UQ
-         * ```
-         * UpperQAt(12) \\ 9.5
-         * UpperQAt(13) \\ 10.5
-         * ```
-         */
-        static UpperQAt(total: number): number;
-        /**
-         * array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
-         * ```
-         * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
-         * ```
-         */
-        static Freqs(data: number[], nums?: number[]): number[];
-        /**
-         * array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
-         * ```
-         * Summary(1,1,2,3,3,3,3,4,5,5) \\ [1,2,3,4,5]
-         * Summary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
-         * ```
-         */
-        static Summary(...data: number[]): number[];
-        /**
-         * group `data` into intervals
-         * ```
-         * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into class intervals [1,5] and [6,10]
-         * ```
-         */
-        static Bin(data: number[], cls: [number, number]): {
-            limit: [number, number];
-            bound: [number, number];
-            mark: number;
-            width: number;
-            freq: number;
-            cumFreq: number;
-        }[];
-    }
-    global {
-        var Min: typeof Host.Min;
-        var Max: typeof Host.Max;
-        var Sort: typeof Host.Sort;
-        var SortBy: typeof Host.SortBy;
-        var Sum: typeof Host.Sum;
-        var Product: typeof Host.Product;
-        var Mean: typeof Host.Mean;
-        var Median: typeof Host.Median;
-        var LowerQ: typeof Host.LowerQ;
-        var UpperQ: typeof Host.UpperQ;
-        var StatRange: typeof Host.StatRange;
-        var IQR: typeof Host.IQR;
-        var Freq: typeof Host.Freq;
-        var Mode: typeof Host.Mode;
-        var UniMode: typeof Host.UniMode;
-        var StdDev: typeof Host.StdDev;
-        var ZScore: typeof Host.ZScore;
-        var MedianAt: typeof Host.MedianAt;
-        var LowerQAt: typeof Host.LowerQAt;
-        var UpperQAt: typeof Host.UpperQAt;
-        var Freqs: typeof Host.Freqs;
-        var Summary: typeof Host.Summary;
-        var Bin: typeof Host.Bin;
-    }
-}
-declare module "Math/Code/Text" {
-    export class Host {
-        /**
-         * a string of joined elements. [1,2,3] --> '1, 2 and 3'
-         * ```
-         * GrammarJoin(1,2,3,4) // '1, 2, 3 and 4'
-         * GrammarJoin('a','b','c') // 'a, b and c'
-         * ```
-         */
-        static GrammarJoin(...items: unknown[]): string;
-        /**
-         * @deprecated use symbol printing instead!!!
-         * a pair of latex inequalities sign array like ['\\ge', '\\le'].
-         * ```typescript
-         * IneqSign(true,true) // ['\\ge', '\\le']
-         * IneqSign(true,false) // ['\\gt', '\\lt']
-         * IneqSign(false,true) // ['\\le', '\\ge']
-         * IneqSign(false,false) // ['\\lt', '\\gt']
-         * ```
-         */
-        static IneqSign(greater: boolean, equal?: boolean): [Ineq, Ineq];
-        /**
-         * @deprecated
-         * @param upSign - put -ve sign on numerator instead of the front.
-         * latex of dfrac p/q like \dfrac{1}{2}.
-         * ```
-         * Dfrac(1,2) // '\\dfrac{1}{2}'
-         * Dfrac(1,-2) // '\\dfrac{-1}{2}'
-         * Dfrac(6,4) // '\\dfrac{3}{2}'
-         * Dfrac(6,-2) // '-3'
-         * Dfrac(0,2) // '0'
-         * Dfrac(5,0) // undefined
-         * ```
-         */
-        static Dfrac(numerator: number, denominator: number, upSign?: boolean): string;
-        /**
-         * convert index katex to surd
-         * ```
-         * IndexToSurd('{x}^{0.5}') // '\\sqrt{x}'
-         * IndexToSurd('{(y)}^{0.5}') // '\\sqrt{y}'
-         * ```
-         */
-        static IndexToSurd(text: string): string;
-        /**
-         * @deprecated
-         * the coordinates '(a, b)' of point [a,b]
-         * ```
-         * Coord([1,2]) // '(1, 2)'
-         * ```
-         */
-        static Coord(point: Point2D, dp?: number): string;
-        /**
-         * @deprecated
-         * the scientific notation of number
-         * ```
-         * Sci(123.45) // '1.2345 x 10^{ 2}'
-         * Sci(1.2345) // '1.2345'
-         * ```
-         */
-        static Sci(num: number): string;
-        /**
-         * the katex of long division
-         * ```
-         * LongDivision([1,2,3,4],[1,2]) //
-         * LongDivision([1,2,3,4],[1,2]) //
-         * ```
-         */
-        static LongDivision(dividend: number[], divisor: number[]): string;
-        /**
-         * the representation of num in base b
-         * ```
-         * ToBase(1000,16) // '3E8_{16}'
-         * ToBase(13,2) // '1101_{2}'
-         * ```
-         */
-        static ToBase(num: number, base: number): string;
-        /**
-         * a prime factorization layout for HCF or LCM
-         * ```
-         * PrimeFactorize({
-         *  'number': [30, 15, 12],
-         *   a: [3, 0, 5],
-         *   b: [5, 6, 1],
-         *   '(x+1)': [8, 7, 5]
-         * },
-         * {hcf:true,lcm:true,multiply:!true}
-         * )
-         * ```
-         */
-        static PrimeFactorize(val: {
-            [_: string]: number[];
-        }, { hcf, lcm, multiply }: {
-            hcf?: boolean | undefined;
-            lcm?: boolean | undefined;
-            multiply?: boolean | undefined;
-        }): string;
-        /**
-         * the latex representing the `constraint`
-         * ```
-         * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
-         * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
-         * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
-         * ```
-         */
-        static ConstraintText(constraint: Constraint, sign?: boolean | null, xReplace?: string, yReplace?: string): string;
-    }
-    global {
-        var GrammarJoin: typeof Host.GrammarJoin;
-        var IneqSign: typeof Host.IneqSign;
-        var Dfrac: typeof Host.Dfrac;
-        var IndexToSurd: typeof Host.IndexToSurd;
-        var Coord: typeof Host.Coord;
-        var Sci: typeof Host.Sci;
-        var LongDivision: typeof Host.LongDivision;
-        var ToBase: typeof Host.ToBase;
-        var PrimeFactorize: typeof Host.PrimeFactorize;
-        var ConstraintText: typeof Host.ConstraintText;
-    }
-}
-declare module "Math/Code/Triangle" {
-    export class Host {
-        /**
-         * Find c from a and b of a right triangle.
-         * ```
-         * Pyth(3,4) // 5
-         * ```
-         */
-        static Pyth(a: number, b: number): number;
-        /**
-         * Find b from c and a of a right triangle.
-         * ```
-         * PythLeg(5,4) // 3
-         * ```
-         */
-        static PythLeg(c: number, a: number): number;
-        /**
-         * Find side length c by cosine law. Input sides a,b and angle C.
-         * ```
-         * CosineLawLength(3, 4, 90) // 5
-         * ```
-         */
-        static CosineLawLength(a: number, b: number, C: number): number;
-        /**
-         * Find angle C by cosine law. Input sides a,b,c.
-         * ```
-         * CosineLawAngle(5,5,5) // 60
-         * CosineLawAngle(3,4,5) // 90
-         * CosineLawAngle(7,8,9) // 73.3984504
-         * ```
-         */
-        static CosineLawAngle(a: number, b: number, c: number): number;
-        /**
-         * Find side b by sine law.
-         * ```
-         * SineLawLength(60,1,60) // 1
-         * ```
-         */
-        static SineLawLength(A: number, a: number, B: number): number;
-        /**
-         * Find angle B by sine law. Assume acute.
-         * ```
-         * SineLawAngle(1,60,1) // 60
-         * ```
-         */
-        static SineLawAngle(a: number, A: number, b: number): number;
-        /**
-         * Find area by Heron's formula.
-         * ```
-         * Heron(3,4,5) // 6
-         * Heron(1,1,1) // 0.433012701
-         * Heron(7,8,9) // 26.83281573
-         * ```
-         */
-        static Heron(a: number, b: number, c: number): number;
-        /**
-         * Solve SSS triangle.
-         * ```
-         * SolveSSS(1,sqrt(3),2) // [90,30,60]
-         * ```
-         */
-        static SolveSSS(a: number, b: number, c: number): [C: number, A: number, B: number];
-        /**
-         * Solve SAS triangle.
-         * ```
-         * SolveSAS(1,90,sqrt(3)) // [30,2,60]
-         * ```
-         */
-        static SolveSAS(a: number, C: number, b: number): [A: number, c: number, B: number];
-        /**
-         * Solve AAS triangle.
-         * ```
-         * SolveAAS(60,90,sqrt(3)) // [1,30,2]
-         * ```
-         */
-        static SolveAAS(A: number, B: number, a: number): [c: number, C: number, b: number];
-        /**
-         * Solve ASA triangle.
-         * ```
-         * SolveASA(90,sqrt(3),30) // [2,60,1]
-         * ```
-         */
-        static SolveASA(A: number, c: number, B: number): [a: number, C: number, b: number];
-        /**
-         * Solve SSA triangle.
-         * ```
-         * SolveSSA(1,sqrt(3),30) // [90,2,60]
-         * ```
-         */
-        static SolveSSA(a: number, b: number, A: number): [C: number, c: number, B: number];
-        /**
-         * Find heights of SSS triangle.
-         * ```
-         * HeightsBySSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
-         * ```
-         */
-        static HeightsBySSS(a: number, b: number, c: number): [Ha: number, Hb: number, Hc: number];
-        /**
-         * Find height of SSS triangle, against the first base.
-         * ```
-         * HeightBySSS(1,sqrt(3),2) // sqrt(3)
-         * ```
-         */
-        static HeightBySSS(a: number, b: number, c: number): number;
-        /**
-         * Find heights of SAS triangle.
-         * ```
-         * HeightsBySAS(1,90,sqrt(3)) // [sqrt(3),1,sqrt(3)/2]
-         * ```
-         */
-        static HeightsBySAS(a: number, C: number, b: number): [Ha: number, Hb: number, Hc: number];
-        /**
-         * Find height of SAS triangle, opposite to the given angle.
-         * ```
-         * HeightBySAS(1,90,sqrt(3)) // sqrt(3)/2
-         * ```
-         */
-        static HeightBySAS(a: number, C: number, b: number): number;
-        /**
-         * @deprecated - use TriangleFromPoint
-         * @param fix - Round all return values to integer.
-         * Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
-         * ```
-         * TriangleFromVertex([0,0],[4,0],[0,3],false)
-         * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
-         * ```
-         */
-        static TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): Triangle;
-        /**
-         * @param fix - Round all return values to integer.
-         * Return the 6 elements of a triangle given vertice. [sideA, sideB, sideC, angleA, angleB, angleC]
-         * ```
-         * TriangleFromPoint([0,0],[4,0],[0,3],false)
-         * // [5, 3, 4, 90, 36.86989765, 53.13013235]
-         * ```
-         */
-        static TriangleFromPoint(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): [
-            sideA: number,
-            sideB: number,
-            sideC: number,
-            angleA: number,
-            angleB: number,
-            angleC: number
-        ];
-        /**
-         * @deprecated
-         * Solve a triangle. return the triangle object solved.
-         * ```
-         * SolveTriangle({sideC:2, sideA:2, sideB:2})
-         * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
-         * SolveTriangle({sideC:3, angleB:90, sideA:4})
-         * // {sideC:3, angleB:90, sideA:4, angleC:36.86989765, sideB:5, angleA:53.13010235}
-         * SolveTriangle({sideC:5, angleB:30, angleC:80})
-         * // {sideC:5, angleB:30, sideA:4.770944471, angleC:80, sideB:2.53856653, angleA:70}
-         * SolveTriangle({sideC:6, angleB:30, angleA:40})
-         * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
-         * ```
-         */
-        static SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC, }: Partial<Triangle>): Triangle;
-        /**
-         * the orthocentre of a triangle
-         * ```
-         * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
-         * ```
-         */
-        static Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
-        /**
-         * the circumcentre of a triangle
-         * ```
-         * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
-         * ```
-         */
-        static Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
-        /**
-         * the centroid of a triangle
-         * ```
-         * Centroid([3,6],[9,12],[15,21])  // [9,13]
-         * ```
-         */
-        static Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D;
-        /**
-         * the incentre of a triangle
-         * ```
-         * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
-         * ```
-         */
-        static Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
-        /**
-         * the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
-         */
-        static ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
-        /**
-         * the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
-         */
-        static ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
-        /**
-         * the scaled points [A,B,C] so that their centroid and themselves becomes integral
-         */
-        static ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
-        /**
-         * the scaled points [A,B,C] so that their incentre and themselves becomes integral
-         */
-        static ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
-    }
-    global {
-        var Pyth: typeof Host.Pyth;
-        var PythLeg: typeof Host.PythLeg;
-        var CosineLawLength: typeof Host.CosineLawLength;
-        var CosineLawAngle: typeof Host.CosineLawAngle;
-        var SineLawLength: typeof Host.SineLawLength;
-        var SineLawAngle: typeof Host.SineLawAngle;
-        var Heron: typeof Host.Heron;
-        var SolveSSS: typeof Host.SolveSSS;
-        var SolveSAS: typeof Host.SolveSAS;
-        var SolveAAS: typeof Host.SolveAAS;
-        var SolveASA: typeof Host.SolveASA;
-        var SolveSSA: typeof Host.SolveSSA;
-        var HeightsBySSS: typeof Host.HeightsBySSS;
-        var HeightBySSS: typeof Host.HeightBySSS;
-        var HeightsBySAS: typeof Host.HeightsBySAS;
-        var HeightBySAS: typeof Host.HeightBySAS;
-        var TriangleFromVertex: typeof Host.TriangleFromVertex;
-        var TriangleFromPoint: typeof Host.TriangleFromPoint;
-        var SolveTriangle: typeof Host.SolveTriangle;
-        var Orthocentre: typeof Host.Orthocentre;
-        var Circumcentre: typeof Host.Circumcentre;
-        var Centroid: typeof Host.Centroid;
-        var Incentre: typeof Host.Incentre;
-        var ScaleOrthocentreToInt: typeof Host.ScaleOrthocentreToInt;
-        var ScaleCircumcentreToInt: typeof Host.ScaleCircumcentreToInt;
-        var ScaleCentroidToInt: typeof Host.ScaleCentroidToInt;
-        var ScaleIncentreToInt: typeof Host.ScaleIncentreToInt;
-    }
-}
-declare module "Math/Code/Trigonometry" {
-    export class Host {
-        /**
-         * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
-         * the quadrant of a point or angle: 'I','II','III' or 'IV'.
-         * ```
-         * Quadrant([1,1]) \\ 'I'
-         * Quadrant([-1,1]) \\ 'II'
-         * Quadrant(200) \\ 'III'
-         * Quadrant(350) \\ 'IV'
-         * ```
-         */
-        static Quadrant(rect: Point2D | number): QuadrantName;
-        /**
-         * the rectangular coordinates [x,y] from a polar coordinates [r,theta].
-         * ```
-         * PolToRect([1,45]) // [0.707,0.707]
-         * ```
-         */
-        static PolToRect([r, q]: PolarPoint): Point2D;
-        /**
-         * the polar coordinates [r,theta] of a rectangular coordinates [x,y].
-         * ```
-         * RectToPol([1,1]) // [1.414,45]
-         * ```
-         */
-        static RectToPol([x, y]: Point2D): PolarPoint;
-        /**
-         * the sign from ASTC diagram, 1 or -1, representing positive or negative.
-         * ```
-         * ASTC(2,'cos') // -1
-         * ASTC('III','tan') // 1
-         * ```
-         */
-        static ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): -1 | 0 | 1;
-        /**
-         * the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k.
-         * ```
-         * TrigSolve('sin',0) // [0, 180, 360]
-         * TrigSolve('sin',0.5) // [30, 150]
-         * TrigSolve('sin',1) // [90]
-         * ```
-         */
-        static TrigSolve(func: TrigFunc, k: number): number[];
-        /**
-         * @deprecated
-         * reduce the polar angle into the range [0,360)
-         * ```
-         * PolarReduce(370) // 10
-         * PolarReduce(-10) // 350
-         * ```
-         */
-        static PolarReduce(q: number): number;
-        /**
-         * @deprecated
-         * the angle (within [0,180]) between two polar angles
-         * ```
-         * PolarDiff(80,70) // 10
-         * PolarDiff(350,10) // 20
-         * ```
-         */
-        static PolarDiff(angle1: number, angle2: number): number;
-        /**
-         * the whole bearing in the polar angle direction
-         * ```
-         * WholeBearing(0) // '090°'
-         * WholeBearing(180) // '270°'
-         * ```
-         */
-        static WholeBearing(polarAngle: number): string;
-        /**
-         * the compass bearing in the polar angle direction
-         * ```
-         * CompassBearing(30) // 'N60°E'
-         * ```
-         */
-        static CompassBearing(polarAngle: number): string;
-    }
-    global {
-        var Quadrant: typeof Host.Quadrant;
-        var PolToRect: typeof Host.PolToRect;
-        var RectToPol: typeof Host.RectToPol;
-        var ASTC: typeof Host.ASTC;
-        var TrigSolve: typeof Host.TrigSolve;
-        var PolarReduce: typeof Host.PolarReduce;
-        var PolarDiff: typeof Host.PolarDiff;
-        var WholeBearing: typeof Host.WholeBearing;
-        var CompassBearing: typeof Host.CompassBearing;
-    }
-}
-declare module "Math/Code/Utility" {
-    export class Host {
-        /**
-         * get the element at cyclic index
-         * ```
-         * At([1,2,3],-1) // 3
-         * At([1,2,3],3) // 1
-         * ```
-         */
-        static At<T>(arr: T[], index: number): T;
-        /**
-         * get the chain of elements around `centreIndex` in cyclic fashion
-         * ```
-         * Lace([1,2,3,4,5,6],0,[-1,0,1]) // [6,1,2]
-         * ```
-         */
-        static Lace<T>(arr: T[], centreIndex: number, relativeIndices: number[]): T[];
-        /**
-         * If `bool`, return `[first, second]`, else return `[second, first]`
-         * ```
-         * Flop(true,1,2) // [1,2]
-         * Flop(false,1,2) // [2,1]
-         * ```
-         */
-        static Flop<T>(bool: boolean, first: T, second: T): [T, T];
-        /**
-         * Select the displayed value in each pair in `trueFalsePairs` according to `truth`.
-         * ```
-         * ComboDisplay([true,false],[[1,2],[3,4]]) // [1,4]
-         * ComboDisplay(0,[1,2],[3,4]) // [1,4]
-         * ComboDisplay(1,[1,2],[3,4]) // [2,3]
-         * ```
-         */
-        static ComboDisplay<T>(truth: boolean[] | number, ...trueFalsePairs: [trueValue: T, falseValue: T][]): T[];
-    }
-    global {
-        var At: typeof Host.At;
-        var Lace: typeof Host.Lace;
-        var Flop: typeof Host.Flop;
-        var ComboDisplay: typeof Host.ComboDisplay;
-    }
-}
-declare module "Math/Code/Vector" {
-    export class Host {
-        /**
-         * sum of all vectors
-         * ```
-         * VecAdd([1,2],[3,4],[5,6]) // [9,12]
-         * ```
-         */
-        static VecAdd(...vectors: Point2D[]): Point2D;
-    }
-    global {
-        var VecAdd: typeof Host.VecAdd;
-    }
-}
-declare module "Math/Code/Vector3D" {
-    export class Host {
-        /**
-         * mean of all vectors
-         * ```
-         * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
-         * ```
-         */
-        static Mid3D(...vectors: Point3D[]): Point3D;
-        /**
-         * the point P on AB such that AP : PB = ratio : 1-ratio
-         * ```
-         * Slide3D([1,0,0],[5,0,0],0.75) // [4,0,0]
-         * ```
-         */
-        static Slide3D(A: Point3D, B: Point3D, ratio: number): Point3D;
-        /**
-         * projection of a point on a plane
-         * ```
-         * let P = [2,3,4]
-         * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
-         * PdFoot3D(P,[A,B,C]) // [2,3,0]
-         * PdFoot3D(P,[A,B]) // [2,0,0]
-         * ```
-         */
-        static PdFoot3D(point: Point3D, base: [Point3D, Point3D, Point3D] | [Point3D, Point3D]): Point3D;
-        /**
-         * embed points on xy-plane onto a plane in 3D
-         * ```
-         * let [A,B,C] = [[0,0],[1,0],[0,1]]
-         * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
-         * ```
-         */
-        static Embed(plane2D: Point2D[], origin: Point3D, xVec: Point3D, yVec: Point3D): Point3D[];
-        /**
-         * embed 2D points onto a plane in 3D with constant x. The x-axis becomes the 3D y-axis. The y-axis becomes the 3D z-axis.
-         * ```
-         * let [A,B,C] = [[0,0],[3,0],[0,1]]
-         * EmbedX([A,B,C],2) // [[2,0,0],[2,3,0],[2,0,1]]
-         * ```
-         */
-        static EmbedX(plane2D: Point2D[], x?: number): Point3D[];
-        /**
-         * embed 2D points onto a plane in 3D with constant y. The x-axis becomes the 3D x-axis. The y-axis becomes the 3D z-axis.
-         * ```
-         * let [A,B,C] = [[0,0],[3,0],[0,1]]
-         * EmbedY([A,B,C],2) // [[0,2,0],[3,2,0],[0,2,1]]
-         * ```
-         */
-        static EmbedY(plane2D: Point2D[], y?: number): Point3D[];
-        /**
-         * embed points on xy-plane onto a plane in 3D with constant z
-         * ```
-         * let [A,B,C] = [[0,0],[3,0],[0,1]]
-         * EmbedZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
-         * ```
-         */
-        static EmbedZ(plane2D: Point2D[], z?: number): Point3D[];
-        /**
-         * flatten points to the same z-plane
-         * ```
-         * let [A,B,C] = [[0,0,0],[3,0,1],[0,1,2]]
-         * FlatZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
-         * ```
-         */
-        static FlatZ(points: Point3D[], z?: number): Point3D[];
-        /**
-         * extrude the lower base of a frustum towards the upper base by a ratio
-         * ```
-         * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
-         * Extrude([A,B,C],[[0,0,4]],0.75) // [[0,0,0],[3,0,0],[0,3,0]]
-         * ```
-         */
-        static Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: number): Point3D[];
-    }
-    global {
-        var Mid3D: typeof Host.Mid3D;
-        var Slide3D: typeof Host.Slide3D;
-        var PdFoot3D: typeof Host.PdFoot3D;
-        var Embed: typeof Host.Embed;
-        var EmbedX: typeof Host.EmbedX;
-        var EmbedY: typeof Host.EmbedY;
-        var EmbedZ: typeof Host.EmbedZ;
-        var FlatZ: typeof Host.FlatZ;
-        var Extrude: typeof Host.Extrude;
-    }
+declare module "Math/Algebra/Algebra" {
+    /**
+     * Solve [x,y] from ax + by = c and px + qy = r.
+     * ```
+     * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
+     * Crammer(1,1,3,2,2,6) // throw, parallel
+     * ```
+     */
+    export function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
+    /**
+     * The product of two polynomials.
+     * ```
+     * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
+     * // (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
+     * ```
+     */
+    export function xPolynomial(poly1: number[], poly2: number[]): number[];
+    /**
+     * Expansion coeff of (Ax+B)^n in descending power of x.
+     * ```
+     * Binomial(2,3,2) // (2x+3)^2 = [4,12,9]
+     * Binomial(2,3) // power default to n = 2
+     * ```
+     */
+    export function Binomial(A: number, B: number, n?: number): number[];
 }
 declare module "Math/Algebra/Calculus" {
-    export class Host {
-        /**
-         * Derivative of the function.
-         * ```
-         * differentiate(x=>x**2) // x=>2*x
-         * ```
-         */
-        static differentiate(fn: (x: number) => number): (x: number) => number;
-        /**
-         * Integral of the function, passing through the fix point.
-         * ```
-         * integrate(x=>2*x, [0,3]) // x=>x**2+3
-         * ```
-         */
-        static integrate(fn: (x: number) => number, fixPoint?: Point2D): (x: number) => number;
-        /**
-         * Make a function passing through the points.
-         * The points must be sorted in increasing x.
-         * ```
-         * functionize([[0,0],[1,2]]) // like x=>2*x within 0<x<1
-         * ```
-         */
-        static functionize(points: Point2D[]): (x: number) => number;
-    }
-    global {
-        var differentiate: typeof Host.differentiate;
-        var integrate: typeof Host.integrate;
-        var functionize: typeof Host.functionize;
-    }
+    /**
+     * Derivative of the function.
+     * ```
+     * differentiate(x=>x**2) // x=>2*x
+     * ```
+     */
+    export function differentiate(fn: (x: number) => number): (x: number) => number;
+    /**
+     * Integral of the function, passing through the fix point.
+     * ```
+     * integrate(x=>2*x, [0,3]) // x=>x**2+3
+     * ```
+     */
+    export function integrate(fn: (x: number) => number, fixPoint?: Point2D): (x: number) => number;
+    /**
+     * Make a function passing through the points.
+     * The points must be sorted in increasing x.
+     * ```
+     * functionize([[0,0],[1,2]]) // like x=>2*x within 0<x<1
+     * ```
+     */
+    export function functionize(points: Point2D[]): (x: number) => number;
 }
 declare module "Math/Algebra/Circle" {
-    export class Host {
-        /**
-         * D,E,F of circle general form
-         * ```
-         * CircleGeneral([2,3],5) // [-4,-6,-12]
-         * ```
-         */
-        static CircleGeneral(centre: Point2D, radius: number): [D: number, E: number, F: number];
-        /**
-         * Centre and radius from general form.
-         * ```
-         * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
-         * ```
-         */
-        static CircleFromGeneral(D: number, E: number, F: number): [Point2D, number];
-        /**
-         * Intersections between a circle and a straight line.
-         * ```
-         * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
-         * ```
-         */
-        static CircleLinearIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D];
-        /**
-         * Intersections between a circle and a straight line through `A` and `B`.
-         * ```
-         * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
-         * ```
-         */
-        static CircleLineIntersect(center: Point2D, radius: number, [A, B]: [Point2D, Point2D]): [Point2D, Point2D];
-    }
-    global {
-        var CircleGeneral: typeof Host.CircleGeneral;
-        var CircleFromGeneral: typeof Host.CircleFromGeneral;
-        var CircleLinearIntersect: typeof Host.CircleLinearIntersect;
-        var CircleLineIntersect: typeof Host.CircleLineIntersect;
-    }
+    /**
+     * D,E,F of circle general form
+     * ```
+     * CircleGeneral([2,3],5) // [-4,-6,-12]
+     * ```
+     */
+    export function CircleGeneral(centre: Point2D, radius: number): [D: number, E: number, F: number];
+    /**
+     * Centre and radius from general form.
+     * ```
+     * CircleFromGeneral(-4,-6,-12) // [[2,3],5]
+     * ```
+     */
+    export function CircleFromGeneral(D: number, E: number, F: number): [Point2D, number];
+    /**
+     * Intersections between a circle and a straight line.
+     * ```
+     * CircleLinearIntersect([0,0],2**0.5,[1,-1,0]) // [[-1,-1],[1,1]]
+     * ```
+     */
+    export function CircleLinearIntersect(center: Point2D, radius: number, linear: [number, number, number]): [Point2D, Point2D];
+    /**
+     * Intersections between a circle and a straight line through `A` and `B`.
+     * ```
+     * CircleLineIntersect([0,0],2**0.5,[[0,0],[1,1]]) // [[-1,-1],[1,1]]
+     * ```
+     */
+    export function CircleLineIntersect(center: Point2D, radius: number, [A, B]: [Point2D, Point2D]): [Point2D, Point2D];
 }
 declare module "Math/Algebra/Quadratic" {
-    export class Host {
-        /**
-         * the discriminant b^2-4ac.
-         * ```
-         * Discriminant(2,3,4) // -23
-         * ```
-         */
-        static Discriminant(a: number, b: number, c: number): number;
-        /**
-         * the roots [p,q] of ax^2+bx+c=0 where p<=q
-         * ```
-         * QuadraticRoot(1,2,-3) // [-3,1]
-         * QuadraticRoot(1,2,3) // throw when no real root
-         * ```
-         */
-        static QuadraticRoot(a: number, b: number, c: number): [number, number];
-        /**
-         * the vertex [h,k] of y=ax^2+bx+c.
-         * ```
-         * QuadraticVertex(1,2,3) // [-1,2]
-         * ```
-         */
-        static QuadraticVertex(a: number, b: number, c: number): Point2D;
-        /**
-         * the quadratic coeff [a,b,c] from given a and roots p and q.
-         * ```
-         * QuadraticFromRoot(1,2,3) // [1,-5,6]
-         * ```
-         */
-        static QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
-        /**
-         * the quadratic coeff [a,b,c] from given a and vertex (h,k).
-         * ```
-         * QuadraticFromVertex(1,2,3) // [1,-4,7]
-         * ```
-         */
-        static QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
-    }
-    global {
-        var Discriminant: typeof Host.Discriminant;
-        var QuadraticRoot: typeof Host.QuadraticRoot;
-        var QuadraticVertex: typeof Host.QuadraticVertex;
-        var QuadraticFromRoot: typeof Host.QuadraticFromRoot;
-        var QuadraticFromVertex: typeof Host.QuadraticFromVertex;
-    }
+    /**
+     * the discriminant b^2-4ac.
+     * ```
+     * Discriminant(2,3,4) // -23
+     * ```
+     */
+    export function Discriminant(a: number, b: number, c: number): number;
+    /**
+     * the roots [p,q] of ax^2+bx+c=0 where p<=q
+     * ```
+     * QuadraticRoot(1,2,-3) // [-3,1]
+     * QuadraticRoot(1,2,3) // throw when no real root
+     * ```
+     */
+    export function QuadraticRoot(a: number, b: number, c: number): [number, number];
+    /**
+     * the vertex [h,k] of y=ax^2+bx+c.
+     * ```
+     * QuadraticVertex(1,2,3) // [-1,2]
+     * ```
+     */
+    export function QuadraticVertex(a: number, b: number, c: number): Point2D;
+    /**
+     * the quadratic coeff [a,b,c] from given a and roots p and q.
+     * ```
+     * QuadraticFromRoot(1,2,3) // [1,-5,6]
+     * ```
+     */
+    export function QuadraticFromRoot(a: number, p: number, q: number): Quadratic;
+    /**
+     * the quadratic coeff [a,b,c] from given a and vertex (h,k).
+     * ```
+     * QuadraticFromVertex(1,2,3) // [1,-4,7]
+     * ```
+     */
+    export function QuadraticFromVertex(a: number, h: number, k: number): Quadratic;
 }
 declare module "Math/Algebra/Linear" {
-    export class Host {
-        /**
-         * [slope,y-int,x-int] of ax+by+c=0
-         * ```
-         * LineFeat(2,4,6) // [-0.5,-1.5,-3]
-         * LineFeat(0,4,6) // throw
-         * ```
-         */
-        static LineFeat(a: number, b: number, c: number): [slope: number, yInt: number, xInt: number];
-        /**
-         * the coeff [a,b,c] in ax+by+c=0 from given intercepts
-         * ```
-         * LinearFromIntercepts(1,2) // [2,1,-2]
-         * LinearFromIntercepts(0,2) // throw
-         * ```
-         */
-        static LinearFromIntercepts(xInt: number, yInt: number): [a: number, b: number, c: number];
-        /**
-         * the coeff [a,b,c] in ax+by+c=0 from two given points
-         * ```
-         * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
-         * LinearFromTwoPoints([1,2],[1,2]) // throw
-         * ```
-         */
-        static LinearFromTwoPoints(point1: Point2D, point2: Point2D): [a: number, b: number, c: number];
-        /**
-         * the coeff [a,b,c] in ax+by+c=0 from point and slope
-         * ```
-         * LinearFromPointSlope([1,2],3) // [3,-1,-1]
-         * LinearFromPointSlope([1,2],0) // [0,1,-2]
-         * ```
-         */
-        static LinearFromPointSlope(point: Point2D, slope: number): [a: number, b: number, c: number];
-        /**
-         * the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
-         * ```
-         * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
-         * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
-         * ```
-         */
-        static LinearFromBisector(A: Point2D, B: Point2D): [a: number, b: number, c: number];
-        /**
-         * [slope,yInt] from given intercepts
-         * ```
-         * LineFromIntercepts(1,2) // [-2,2]
-         * LineFromIntercepts(0,2) // throw
-         * ```
-         */
-        static LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number];
-        /**
-         * [slope,yInt] from two given points
-         * ```
-         * LineFromTwoPoints([1,2],[3,4]) // [1,1]
-         * LineFromTwoPoints([1,2],[1,2]) // throw
-         * ```
-         */
-        static LineFromTwoPoints(point1: Point2D, point2: Point2D): [slope: number, yInt: number];
-        /**
-         * [slope,yInt] from point and slope
-         * ```
-         * LineFromPointSlope([1,2],3) // [3,-1]
-         * LineFromPointSlope([1,2],0) // [0,2]
-         * ```
-         */
-        static LineFromPointSlope(point: Point2D, slope: number): [slope: number, yInt: number];
-        /**
-         * [slope,yInt] from perpendicular bisector of AB
-         * ```
-         * LineFromBisector([1,2],[3,4]) // [-1,5]
-         * LineFromBisector([1,2],[1,4]) // [0,3]
-         * ```
-         */
-        static LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number];
-    }
-    global {
-        var LineFeat: typeof Host.LineFeat;
-        var LinearFromIntercepts: typeof Host.LinearFromIntercepts;
-        var LinearFromTwoPoints: typeof Host.LinearFromTwoPoints;
-        var LinearFromPointSlope: typeof Host.LinearFromPointSlope;
-        var LinearFromBisector: typeof Host.LinearFromBisector;
-        var LineFromIntercepts: typeof Host.LineFromIntercepts;
-        var LineFromTwoPoints: typeof Host.LineFromTwoPoints;
-        var LineFromPointSlope: typeof Host.LineFromPointSlope;
-        var LineFromBisector: typeof Host.LineFromBisector;
-    }
+    /**
+     * [slope,y-int,x-int] of ax+by+c=0
+     * ```
+     * LineFeat(2,4,6) // [-0.5,-1.5,-3]
+     * LineFeat(0,4,6) // throw
+     * ```
+     */
+    export function LineFeat(a: number, b: number, c: number): [slope: number, yInt: number, xInt: number];
+    /**
+     * the coeff [a,b,c] in ax+by+c=0 from given intercepts
+     * ```
+     * LinearFromIntercepts(1,2) // [2,1,-2]
+     * LinearFromIntercepts(0,2) // throw
+     * ```
+     */
+    export function LinearFromIntercepts(xInt: number, yInt: number): [a: number, b: number, c: number];
+    /**
+     * the coeff [a,b,c] in ax+by+c=0 from two given points
+     * ```
+     * LinearFromTwoPoints([1,2],[3,4]) // [1,-1,1]
+     * LinearFromTwoPoints([1,2],[1,2]) // throw
+     * ```
+     */
+    export function LinearFromTwoPoints(point1: Point2D, point2: Point2D): [a: number, b: number, c: number];
+    /**
+     * the coeff [a,b,c] in ax+by+c=0 from point and slope
+     * ```
+     * LinearFromPointSlope([1,2],3) // [3,-1,-1]
+     * LinearFromPointSlope([1,2],0) // [0,1,-2]
+     * ```
+     */
+    export function LinearFromPointSlope(point: Point2D, slope: number): [a: number, b: number, c: number];
+    /**
+     * the coeff [a,b,c] in ax+by+c=0 from perpendicular bisector of AB
+     * ```
+     * LinearFromBisector([1,2],[3,4]) // [1,1,-5]
+     * LinearFromBisector([1,2],[1,4]) // [0,1,-3]
+     * ```
+     */
+    export function LinearFromBisector(A: Point2D, B: Point2D): [a: number, b: number, c: number];
+    /**
+     * [slope,yInt] from given intercepts
+     * ```
+     * LineFromIntercepts(1,2) // [-2,2]
+     * LineFromIntercepts(0,2) // throw
+     * ```
+     */
+    export function LineFromIntercepts(xInt: number, yInt: number): [slope: number, yInt: number];
+    /**
+     * [slope,yInt] from two given points
+     * ```
+     * LineFromTwoPoints([1,2],[3,4]) // [1,1]
+     * LineFromTwoPoints([1,2],[1,2]) // throw
+     * ```
+     */
+    export function LineFromTwoPoints(point1: Point2D, point2: Point2D): [slope: number, yInt: number];
+    /**
+     * [slope,yInt] from point and slope
+     * ```
+     * LineFromPointSlope([1,2],3) // [3,-1]
+     * LineFromPointSlope([1,2],0) // [0,2]
+     * ```
+     */
+    export function LineFromPointSlope(point: Point2D, slope: number): [slope: number, yInt: number];
+    /**
+     * [slope,yInt] from perpendicular bisector of AB
+     * ```
+     * LineFromBisector([1,2],[3,4]) // [-1,5]
+     * LineFromBisector([1,2],[1,4]) // [0,3]
+     * ```
+     */
+    export function LineFromBisector(A: Point2D, B: Point2D): [slope: number, yInt: number];
 }
 declare module "Math/Algebra/Polynomial" {
     export function getMaxDeg(poly: polynomial): number;
-    export class Host {
-        /**
-         * a random polynomial object
-         * ```
-         * RndPolynomial(5, ['x', 'y'], 3, 9))
-         * // may return 7xy+3x^2y^3-2xy^3
-         * ```
-         */
-        static RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
-        /**
-         * a string of the polynomial object
-         * ```
-         * PolyPrint([x^5, 2x^6, 3x^7])
-         * // x^{5}+2x^{6}+3x^{7}
-         * ```
-         */
-        static PolyPrint(poly: polynomial): string;
-        /**
-         * a polynomial object sorted by power
-         * ```
-         * PolySort([2x^6, x^5, 3x^7])
-         * //  [x^5, 2x^6, 3x^7]
-         * ```
-         */
-        static PolySort(poly: polynomial, desc?: boolean): polynomial;
-        /**
-         * a function of the polynomial, for substitution
-         * ```
-         * func = PolyFunction([2x^6, x^5, 3x^7])
-         * func({x:2}) // 272
-         * ```
-         */
-        static PolyFunction(poly: polynomial): (values: {
-            [_: string]: number;
-        }) => number;
-        /**
-         * combine like terms in polynomial
-         * ```
-         * PolySimplify([x^5, 2x^6, 3x^5])
-         * // [4x^5, 2x^6]
-         * ```
-         */
-        static PolySimplify(poly: polynomial): polynomial;
-    }
-    global {
-        var RndPolynomial: typeof Host.RndPolynomial;
-        var PolyPrint: typeof Host.PolyPrint;
-        var PolySort: typeof Host.PolySort;
-        var PolyFunction: typeof Host.PolyFunction;
-        var PolySimplify: typeof Host.PolySimplify;
-    }
+    /**
+     * a random polynomial object
+     * ```
+     * RndPolynomial(5, ['x', 'y'], 3, 9))
+     * // may return 7xy+3x^2y^3-2xy^3
+     * ```
+     */
+    export function RndPolynomial(degree: number, vars?: string[], terms?: number, maxCoeff?: number): polynomial;
+    /**
+     * a string of the polynomial object
+     * ```
+     * PolyPrint([x^5, 2x^6, 3x^7])
+     * // x^{5}+2x^{6}+3x^{7}
+     * ```
+     */
+    export function PolyPrint(poly: polynomial): string;
+    /**
+     * a polynomial object sorted by power
+     * ```
+     * PolySort([2x^6, x^5, 3x^7])
+     * //  [x^5, 2x^6, 3x^7]
+     * ```
+     */
+    export function PolySort(poly: polynomial, desc?: boolean): polynomial;
+    /**
+     * a function of the polynomial, for substitution
+     * ```
+     * func = PolyFunction([2x^6, x^5, 3x^7])
+     * func({x:2}) // 272
+     * ```
+     */
+    export function PolyFunction(poly: polynomial): (values: {
+        [_: string]: number;
+    }) => number;
+    /**
+     * combine like terms in polynomial
+     * ```
+     * PolySimplify([x^5, 2x^6, 3x^5])
+     * // [4x^5, 2x^6]
+     * ```
+     */
+    export function PolySimplify(poly: polynomial): polynomial;
 }
 declare module "Pen/modules/range" {
     import { PenCls } from "Pen/Pen";
@@ -3432,6 +573,40 @@ declare module "Pen/modules/settings" {
          */
         resetAll(): void;
     }
+}
+declare module "Core/schema" {
+    import * as v from 'valibot';
+    export const num: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
+    export const int: v.SchemaWithPipe<readonly [v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.CheckAction<number, undefined>]>;
+    export const positive: v.SchemaWithPipe<readonly [v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.GtValueAction<number, 0, undefined>]>;
+    export const str: v.StringSchema<undefined>;
+    export const bool: v.BooleanSchema<undefined>;
+    export const ineq: v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>;
+    export const constraint: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
+    export const constraints: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
+    export const trig: v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>;
+    export const base: v.SchemaWithPipe<readonly [v.StringSchema<undefined>, v.CheckAction<string, undefined>]>;
+    export const couple: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
+    export const triple: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
+    export const combo: v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>;
+    export const ntuple: v.ArraySchema<v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, undefined>;
+    export const point2D: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
+    export const point2Ds: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
+    export const point3D: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
+    export const point3Ds: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
+    export const monomial: v.ObjectSchema<{
+        readonly coeff: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
+    }, undefined>;
+    export const polynomial: v.ArraySchema<v.ObjectSchema<{
+        readonly coeff: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
+    }, undefined>, undefined>;
+    export const compoundInequality: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"AND", undefined>, v.LiteralSchema<"OR", undefined>], undefined>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.StringSchema<undefined>], undefined>;
+    export const trigValue: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>, v.UnionSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.StringSchema<undefined>], undefined>], undefined>;
+    export const trigExp: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<1, undefined>, v.LiteralSchema<-1, undefined>], undefined>, v.StringSchema<undefined>], undefined>;
+    export const quantity: v.ObjectSchema<{
+        readonly val: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
+        readonly unit: v.StringSchema<undefined>;
+    }, undefined>;
 }
 declare module "Pen/modules/d3" {
     import { PenCls } from "Pen/Pen";
@@ -4470,53 +1645,2493 @@ declare module "Math/Algebra/Transform" {
         m: number;
         n: number;
     };
-    export class Host {
-        /**
-         * Transform a function.
-         * ```
-         * let f = x => x**2
-         * TransformFunc(f,'HT',4) // x => (x+4)**2
-         * ```
-         */
-        static TransformFunc(f: (x: number) => number, ...morphs: morph[]): (x: number) => number;
-        /**
-         * Explain a series of function transforms.
-         * ```
-         * let state = {a:0,b:0,m:1,n:1}
-         * let func = (x:number)=>x**2
-         * let transforms = [['HT',4],['VT',3]]
-         * ExplainTransforms({state,func,transforms})
-         * ```
-         */
-        static ExplainTransforms({ state, func, transforms, }: {
-            state?: state;
-            func: (x: number) => number;
-            transforms: morph[];
-        }): {
-            actions: string[];
-            steps: string[];
-            funcs: ((x: number) => number)[];
-            latexs: string[];
-            explain: string;
-            draw: {
-                Q: (pen: PenCls) => void;
-                S: (pen: PenCls) => void;
-            };
+    /**
+     * Transform a function.
+     * ```
+     * let f = x => x**2
+     * TransformFunc(f,'HT',4) // x => (x+4)**2
+     * ```
+     */
+    export function TransformFunc(f: (x: number) => number, ...morphs: morph[]): (x: number) => number;
+    /**
+     * Explain a series of function transforms.
+     * ```
+     * let state = {a:0,b:0,m:1,n:1}
+     * let func = (x:number)=>x**2
+     * let transforms = [['HT',4],['VT',3]]
+     * ExplainTransforms({state,func,transforms})
+     * ```
+     */
+    export function ExplainTransforms({ state, func, transforms, }: {
+        state?: state;
+        func: (x: number) => number;
+        transforms: morph[];
+    }): {
+        actions: string[];
+        steps: string[];
+        funcs: ((x: number) => number)[];
+        latexs: string[];
+        explain: string;
+        draw: {
+            Q: (pen: PenCls) => void;
+            S: (pen: PenCls) => void;
+        };
+    };
+}
+declare module "Math/Code/Assertion" {
+    /**
+     * check is a finite number.
+     * ```
+     * IsNum(1.23) // true
+     * IsNum(NaN) // false
+     * IsNum(Infinity) // false
+     * IsNum('2') // false
+     * ```
+     */
+    export function IsNum(...items: unknown[]): boolean;
+    /**
+     * check is an integer.
+     * ```
+     * IsInteger(5) // true
+     * IsInteger(0.5) // false
+     * ```
+     */
+    export function IsInteger(...items: unknown[]): boolean;
+    /**
+     * check is a decimal (non-integer).
+     * ```
+     * IsDecimal(0.5) // true
+     * IsDecimal(5) // false
+     * ```
+     */
+    export function IsDecimal(...items: unknown[]): boolean;
+    /**
+     * check is a terminating decimal (or integer)
+     * ```
+     * IsTerminating(1/4) // true
+     * IsTerminating(5) // false
+     * ```
+     */
+    export function IsTerminating(...items: unknown[]): boolean;
+    /**
+     * check is a rational number with denominator <= 1000.
+     * ```
+     * IsRational(0.5) // true
+     * IsRational(-5) // true
+     * IsRational(Math.sqrt(2)) // false
+     * ```
+     */
+    export function IsRational(...items: unknown[]): boolean;
+    /**
+     * check is an odd integer.
+     * ```
+     * IsOdd(5) // true
+     * IsOdd(-5) // true
+     * IsOdd(4) // false
+     * ```
+     */
+    export function IsOdd(...items: unknown[]): boolean;
+    /**
+     * check is an even integer.
+     * ```
+     * IsEven(4) // true
+     * IsEven(-4) // true
+     * IsEven(0) // true
+     * IsEven(5) // false
+     * ```
+     */
+    export function IsEven(...items: unknown[]): boolean;
+    /**
+     * check is in range [0,1].
+     * ```
+     * IsProbability(0) // true
+     * IsProbability(0.5467) // true
+     * IsProbability(1.1) // false
+     * IsProbability(-0.1) // false
+     * ```
+     */
+    export function IsProbability(...items: unknown[]): boolean;
+    /**
+     * check is a square number.
+     * ```
+     * IsSquareNum(9) // true
+     * IsSquareNum(10) // false
+     * IsSquareNum(-9) // false
+     * ```
+     */
+    export function IsSquareNum(...items: unknown[]): boolean;
+    /**
+     * check is positive.
+     * ```
+     * IsPositive(2) // true
+     * IsPositive(0) // false
+     * IsPositive(-2) // false
+     * ```
+     */
+    export function IsPositive(...items: unknown[]): boolean;
+    /**
+     * check is non-negative.
+     * ```
+     * IsNonNegative(2) // true
+     * IsNonNegative(0) // true
+     * IsNonNegative(-2) // false
+     * IsNonNegative(1.5) // true
+     * ```
+     */
+    export function IsNonNegative(...items: unknown[]): boolean;
+    /**
+     * check is a positive integer.
+     * ```
+     * IsPositiveInteger(2) // true
+     * IsPositiveInteger(0) // false
+     * IsPositiveInteger(-2) // false
+     * IsPositiveInteger(1.5) // false
+     * ```
+     */
+    export function IsPositiveInteger(...items: unknown[]): boolean;
+    /**
+     * check is a non-negative integer.
+     * ```
+     * IsNonNegativeInteger(2) // true
+     * IsNonNegativeInteger(0) // true
+     * IsNonNegativeInteger(-2) // false
+     * IsNonNegativeInteger(1.5) // false
+     * ```
+     */
+    export function IsNonNegativeInteger(...items: unknown[]): boolean;
+    /**
+     * check is negative.
+     * ```
+     * IsNegative(-2) // true
+     * IsNegative(0) // false
+     * IsNegative(2) // false
+     * ```
+     */
+    export function IsNegative(...items: unknown[]): boolean;
+    /**
+     * check is non-zero finite number.
+     * ```
+     * IsNonZero(2) // true
+     * IsNonZero(0) // false
+     * IsNonZero(-2) // true
+     * ```
+     */
+    export function IsNonZero(...items: unknown[]): boolean;
+    /**
+     * check is between min and max inclusive.
+     * ```
+     * IsBetween(2,5)(3) // true
+     * IsBetween(2,5)(2) // true
+     * IsBetween(2,5)(1) // false
+     * ```
+     */
+    export function IsBetween(min: number, max: number): (...items: unknown[]) => boolean;
+    /**
+     * check if its abs is between min and max inclusive.
+     * ```
+     * IsAbsBetween(2,5)(-3) // true
+     * IsAbsBetween(2,5)(-2) // true
+     * IsAbsBetween(2,5)(1) // false
+     * ```
+     */
+    export function IsAbsBetween(min: number, max: number): (...items: unknown[]) => boolean;
+    /**
+     * Check if the points are chessboard around anchor.
+     * ```
+     * IsAroundPoint([0,0],2)([2,2]) // true
+     * IsAroundPoint([0,0],2)([3,0]) // false
+     * ```
+     */
+    export function IsAroundPoint(anchor: Point2D, range: number): (...points: Point2D[]) => boolean;
+    /**
+     * Check if the array of legnths can form a triangle
+     * ```
+     * IsTriangle([1,1,1]) // true
+     * IsTriangle([6,7,8]) // true
+     * IsTriangle([1,2,3]) // false
+     * IsTriangle([6,14,8]) // false
+     * ```
+     */
+    export function IsTriangle(...triangles: [number, number, number][]): boolean;
+}
+declare module "Math/Code/Combinatorics" {
+    /**
+     * the factorial n!
+     * ```
+     * Factorial(5) // 120
+     * Factorial(1.5) // throw
+     * ```
+     */
+    export function Factorial(n: number): number;
+    /**
+     * nCr
+     * ```
+     * nCr(5,3) // 10
+     * ```
+     */
+    export function nCr(n: number, r: number): number;
+    /**
+     * nPr
+     * ```
+     * nPr(5,3) // 60
+     * ```
+     */
+    export function nPr(n: number, r: number): number;
+}
+declare module "Math/Code/Function" {
+    /**
+     * log(b,N)
+     * ```
+     * log(2,8) // 3
+     * ```
+     */
+    export function log(b: number, N: number): number;
+    /**
+     * square root of x
+     * ```
+     * Sqrt(4) // 2
+     * ```
+     */
+    export function Sqrt(x: number): number;
+    /**
+     * the radian of the degree
+     * ```
+     * Radian(180) // pi
+     * Radian(90) // pi/2
+     * Radian(30) // PI/6
+     * ```
+     */
+    export function Radian(degree: number): number;
+    /**
+     * the degree of the radian
+     * ```
+     * Degree(Math.PI) // 180
+     * Degree(Math.PI/2) // 90
+     * Degree(Math.PI/6) // 30
+     * ```
+     */
+    export function Degree(radian: number): number;
+    /**
+     * sin(x).
+     * ```
+     * sin(30) // 0.5
+     * ```
+     */
+    export function sin(x: number): number;
+    /**
+     * cos(x).
+     * ```
+     * cos(60) // 0.5
+     * ```
+     */
+    export function cos(x: number): number;
+    /**
+     * tan(x).
+     * ```
+     * tan(45) // 1
+     * ```
+     */
+    export function tan(x: number): number;
+    /**
+     * arcsin(x) between -90 and 90.
+     * ```
+     * arcsin(0.5) // 30
+     * ```
+     */
+    export function arcsin(x: number): number;
+    /**
+     * arccos(x) between 0 and 180.
+     * ```
+     * arccos(0.5) // 60
+     * ```
+     */
+    export function arccos(x: number): number;
+    /**
+     * arctan(x) between -90 and 90.
+     * ```
+     * arctan(1) // 45
+     * ```
+     */
+    export function arctan(x: number): number;
+}
+declare module "Math/Code/Geometry" {
+    /**
+     * the slope of AB
+     * ```
+     * Slope([0,0],[1,2]) // 2
+     * Slope([1,2],[1,2]) // NaN
+     * ```
+     */
+    export function Slope(A: Point2D, B: Point2D): number;
+    /**
+     * the slope perpendicular to AB
+     * ```
+     * SlopePd([0,0],[1,2]) // -0.5
+     * SlopePd([1,2],[1,2]) // NaN
+     * ```
+     */
+    export function SlopePd(A: Point2D, B: Point2D): number;
+    /**
+     * the distance AB
+     * ```
+     * Distance([0,0],[1,2]) // 2.23606797749979
+     * ```
+     */
+    export function Distance(A: Point2D, B: Point2D): number;
+    /**
+     * the chessboard distance AB, max(horizontal,vertical)
+     * ```
+     * ChessboardDistance([0,0],[1,2]) // 2
+     * ChessboardDistance([0,0],[3,2]) // 3
+     * ```
+     */
+    export function ChessboardDistance(A: Point2D, B: Point2D): number;
+    /**
+     * the mid-pt / centroid of `points`
+     * ```
+     * Mid([1,2],[3,4]) // [2,3]
+     * Mid([1,2],[3,4],[5,6]) // [3,4]
+     * ```
+     */
+    export function Mid(...points: Point2D[]): Point2D;
+    /**
+     * the point X on dir or segment PQ such that PX : QX = ratioA : ratioB
+     * ```
+     * Slide([1,0],[5,0],0.75) // [4,0]
+     * Slide([1,0],[5,0],3,1) // [4,0]
+     * Slide([0,1],[[0,0],[1,0]],1) // [1,1]
+     * Slide([0,1],[[0,0],[1,0]],2) // [2,1]
+     * ```
+     */
+    export function Slide(P: Point2D, vec: Point2D | [Point2D, Point2D], ratioA?: number, ratioB?: number): Point2D;
+    /**
+     * point P rotated anticlockwise by angle q about point O.
+     * ```
+     * Rotate([1,2],90,[0,0]) // [-2,1]
+     * ```
+     */
+    export function Rotate(P: Point2D, q: number, O?: Point2D): Point2D;
+    /**
+     * the polar angle of B if A is the origin within [0,360].
+     * ```
+     * Dir([1,0],[3,2]) // 45
+     * Dir([3,2],[1,0]) // 225
+     * ```
+     */
+    export function Dir(A: Point2D, B: Point2D): number;
+    /**
+     * the foot of perpendicular from P to AB.
+     * ```
+     * PdFoot([-2,2],[[-1,-1],[1,1]]) // [0,0]
+     * ```
+     */
+    export function PdFoot(P: Point2D, [A, B]: [Point2D, Point2D | number]): Point2D;
+    /**
+     * the intersection point of AB and CD.
+     * ```
+     * Intersection([0,0],[2,2],[2,0],[0,2]) // [1,1]
+     * Intersection([0,0],45,[2,0],135) // [1,1]
+     * ```
+     */
+    export function Intersection(A: Point2D, B: Point2D | number, C: Point2D, D: Point2D | number): Point2D;
+    /**
+     * Translate point P in the direction `dir` by a `distance`.
+     * @param dir - a polar angle, or two points [A,B] representing Dir(A,B), or one point A representing Dir(P,A)
+     * ```
+     * Move([1,2],90,3) // [1,5]
+     * Move([1,2],[2, 2],3) // [4,2]
+     * Move([1,2],[[0,0],[1,0]],3) // [4,2]
+     * ```
+     */
+    export function Move(P: Point2D, dir: number | Point2D | [Point2D, Point2D], distance: number): Point2D;
+    /**
+     * Translate point P to the right by a distance.
+     * ```
+     * MoveX([1,2],3) // [4,2]
+     * MoveX([1,2],-3) // [-2,2]
+     * ```
+     */
+    export function MoveX(P: Point2D, distance: number): Point2D;
+    /**
+     * Translate point P upward by a distance.
+     * ```
+     * MoveY([1,2],3) // [4,2]
+     * MoveY([1,2],-3) // [-2,2]
+     * ```
+     */
+    export function MoveY(P: Point2D, distance: number): Point2D;
+    /**
+     * Reflect point P about x-axis
+     * ```
+     * ReflectX([1,2]) // [1,-2]
+     * ReflectX([1,-2]) // [1,2]
+     * ```
+     */
+    export function ReflectX(P: Point2D): Point2D;
+    /**
+     * Reflect point P about y-axis
+     * ```
+     * ReflectY([1,2]) // [-1,2]
+     * ReflectY([-1,2]) // [1,2]
+     * ```
+     */
+    export function ReflectY(P: Point2D): Point2D;
+    /**
+     * angle of intersection between two slopes
+     * ```
+     * IntersectAngle(0,1) // 45
+     * IntersectAngle(1,-1) // 90
+     * ```
+     */
+    export function IntersectAngle(slope1: number, slope2: number): number;
+    /**
+     * angle AOB, non-reflex
+     * ```
+     * Angle([1,0],[0,0],[0,2]) // 90
+     * Angle([2,2],[1,1],[1,3]) // 45
+     * Angle([1,3],[1,1],[2,2]) // 45
+     * ```
+     */
+    export function Angle(A: Point2D, O: Point2D, B: Point2D): number;
+    /**
+     * angle AOB, measured anticlockwise
+     * ```
+     * AnglePolar([1,0],[0,0],[0,2]) // 90
+     * AnglePolar([2,2],[1,1],[1,3]) // 45
+     * AnglePolar([1,3],[1,1],[2,2]) // 315
+     * ```
+     */
+    export function AnglePolar(A: Point2D, O: Point2D, B: Point2D): number;
+    /**
+     * check if the polar angle AOB is reflex
+     * ```
+     * IsReflex([1,0],[0,0],[0,2]) // false
+     * IsReflex([2,2],[1,1],[1,3]) // false
+     * IsReflex([1,3],[1,1],[2,2]) // true
+     * ```
+     */
+    export function IsReflex(A: Point2D, O: Point2D, B: Point2D): boolean;
+    /**
+     * points on a regular polygon
+     * ```
+     * RegularPolygon(4,[0,0],1,0) // [[1,0],[0,1],[-1,0],[0,-1]]
+     * ```
+     */
+    export function RegularPolygon(n: number, center: Point2D, radius: number, startAngle: number): Point2D[];
+    /**
+     * arc length with given radius and angle
+     * ```
+     * ArcLength(2,90) // pi
+     * ArcLength(2,180) // 2*pi
+     * ```
+     */
+    export function ArcLength(radius: number, theta: number): number;
+    /**
+     * sector area with given radius and angle
+     * ```
+     * SectorArea(2,90) // pi
+     * SectorArea(2,180) // 2*pi
+     * ```
+     */
+    export function SectorArea(radius: number, theta: number): number;
+    /**
+     * check is convex polygon
+     * ```
+     * IsConvexPolygon([0,0],[1,0],[0,1]) // true
+     * IsConvexPolygon([0,0],[3,0],[1,1],[0,3]) // false
+     * ```
+     */
+    export function IsConvexPolygon(...points: Point2D[]): boolean;
+    /**
+     * Arrange Points in anti-clockwise direction around their mean
+     * ```
+     * ArrangePoints([0,0],[1,1],[0,1],[1,0]) // [[1, 0],[0, 0],[0, 1],[1, 1]]
+     * ArrangePoints([0,0],[1,2],[2,1],[0,1],[1,0])// [[1, 0],[0, 0],[0, 1],[1, 2],[2, 1]]
+     * ```
+     */
+    export function ArrangePoints(...points: Point2D[]): Point2D[];
+    /**
+     * a point with polar coordinates (1, `angle`).
+     * ```
+     * OnCircle(0) // [1,0]
+     * OnCircle(90) // [0,1]
+     * ```
+     */
+    export function OnCircle(angle: number): Point2D;
+}
+declare module "Math/Code/Latex" {
+    /**
+     * Print a stem-and-leaf diagram in latex.
+     * @param data - sorted data
+     * @param labels - a copy of data, but you can replace some number with string label.
+     * ```
+     * StemAndLeaf({
+     *   data: [2,5,6,12,14,16,23,23,24,25,26,26,26,26,27,31],
+     *   labels: [2,'x',6,12,14,16,23,23,24,25,26,'y',26,26,27,31],
+     *   stem: "10 units",
+     *   leaf: "{1} unit"
+     * })
+     * // a diagram with two numbers replaced by 'x' and 'y'
+     * ```
+     */
+    export function StemAndLeaf({ data, labels, stem, leaf, }: {
+        data: number[];
+        labels?: (number | string)[];
+        stem?: string;
+        leaf?: string;
+    }): string;
+    /**
+     * Print a table in latex.
+     * @param content - the cell content
+     * @param columns - a latex syntax for column border
+     * @param rows - similar to `columns`
+     * @param stretch - scale the height of the cells
+     * ```
+     * Table({
+     *     content: [
+     *         ['a', 2, 3],   // 'a' will be printed as '\text{a}'
+     *         ['b', 5, 6],
+     *         ['$c', 7, 8],  // 'c' will be printed as is
+     *         ['$d', 12, 13]
+     *     ],
+     *     columns: '|c::c:c|',
+     *     rows: '|r||r|rr|',
+     * })
+     * ```
+     */
+    export function Table({ content, columns, rows, stretch, }: {
+        content: (string | number)[][];
+        columns?: string;
+        rows?: string;
+        stretch?: number;
+    }): string;
+    /**
+     * Print a frequency table in latex.
+     * @param dataLabel - the label for the 1st row
+     * @param freqLabel - the label for the 2nd row
+     * ```
+     * FreqTable({
+     *   data: [1, 1, 4, 4, 3, 3, 3],
+     *   dataLabel: '$x',
+     *   freqLabel: 'count'
+     * })
+     * ```
+     */
+    export function FreqTable({ data, dataLabel, freqLabel, min, max, }: {
+        data: number[];
+        dataLabel: string;
+        freqLabel: string;
+        min?: number;
+        max?: number;
+    }): string;
+    /**
+     * Print a grouped frequency table in latex.
+     * ```
+     * GroupFreqTable({
+     *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
+     *   dataLabel: '$x',
+     *   freqLabel: 'count'
+     *   cls: [1, 5]
+     * })
+     * ```
+     */
+    export function GroupFreqTable({ data, dataLabel, freqLabel, cls, }: {
+        data: number[];
+        dataLabel: string;
+        freqLabel: string;
+        cls: [number, number];
+    }): string;
+    /**
+     * Print a grouped frequency table in latex.
+     * ```
+     * GroupCumFreqTable({
+     *   data: [1, 1, 4, 4, 3, 3, 3, 7, 8, 9],
+     *   dataLabel: '$x',
+     *   freqLabel: 'count'
+     *   cls: [1, 5]
+     * })
+     * ```
+     */
+    export function GroupCumFreqTable({ data, dataLabel, freqLabel, cls, }: {
+        data: number[];
+        dataLabel: string;
+        freqLabel: string;
+        cls: [number, number];
+    }): string;
+    /**
+     * Print a table in latex showing cartisian product of two items.
+     * @param rows - array of row values
+     * @param cols - array of column values
+     * @param cell - a function mapping row and column values to cell content
+     * ```
+     * PairTable({
+     *    rowTitle:'first',
+     *    colTitle:'second',
+     *    rows: [1,2,3,4,5,6],
+     *    cols: [1,2,3,4,5,6],
+     *    cell: (r,c) => r+c
+     * })
+     * // a table showing the sum of two dices
+     * ```
+     */
+    export function PairTable<R, C>({ rowTitle, colTitle, rows, cols, cell, }: {
+        rowTitle: string;
+        colTitle: string;
+        rows: R[];
+        cols: C[];
+        cell: (rowValue: R, colValue: C) => string | number | boolean;
+    }): string;
+    /**
+     * Print the check vertice steps.
+     * @param label - the field label
+     * ```
+     * CheckVertices({
+     *    constraints: [
+     *      [1,0,'>',0],
+     *      [0,1,'>',0],
+     *      [1,1,'<',2],
+     * ],
+     *    field: [1,2,3],
+     *    label: "P"
+     * })
+     * ```
+     */
+    export function CheckVertices({ constraints, field, label, }: {
+        constraints: Constraint[];
+        field: Field;
+        label: string;
+    }): string;
+    /**
+     * A short division for prime factorization of numbers.
+     * ```
+     * ShortDivision({
+     *    numbers: [12,16,18],
+     *    mode: 'HCF',
+     * })
+     * ```
+     */
+    export function ShortDivision({ numbers, mode, }: {
+        numbers: number[];
+        mode?: 'HCF' | 'LCM';
+    }): string;
+}
+declare module "Math/Code/LinearProgram" {
+    /**
+     * the value of field at given point
+     * ```
+     * FieldAt([0,0],[1,2,3]) // 3
+     * FieldAt([1,2],[3,-4,5]) // 0
+     * ```
+     */
+    export function FieldAt(point: Point2D, field: Field): number;
+    /**
+     * check if point is constrained by cons
+     * ```
+     * isConstrained([
+     *    [1, 1, "<=", 5],
+     *    [1, -1, "<", 4],
+     *    [2, 1, ">=", -5]
+     * ], [0, 0])
+     * // check whether [0,0] satisfies all the constraints
+     * ```
+     */
+    export function isConstrained(cons: Constraint[], point: Point2D): boolean;
+    /**
+     * check if point is constrained by cons, treating all cons as 'or equal to'
+     * ```
+     * isLooseConstrained([
+     *    [1, 1, "<=", 5],
+     *    [1, -1, "<", 4],
+     *    [2, 1, ">=", -5]
+     * ], [0, 0])
+     * // check whether [0,0] loosely satisfies all the constraints
+     * ```
+     */
+    export function isLooseConstrained(cons: Constraint[], point: Point2D): boolean;
+    /**
+     * the vertices of the feasible polygon
+     * ```
+     * FeasiblePolygon([
+     *    [1, 0, '<', 10],
+     *    [1, 0, '>', -5],
+     *    [0, 1, '<', 10],
+     *    [0, 1, '>', -5]
+     * ])
+     * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+     * ```
+     */
+    export function FeasiblePolygon(...cons: Constraint[]): [number, number][];
+    /**
+     * the vertices of the feasible polygon
+     * ```
+     * FeasiblePolygon([
+     *    [1, 0, '<', 10],
+     *    [1, 0, '>', -5],
+     *    [0, 1, '<', 10],
+     *    [0, 1, '>', -5]
+     * ])
+     * // [[-5,-5],[10,-5],[10,10],[-5,10]]
+     * ```
+     */
+    export function FeasibleVertices(...cons: Constraint[]): [number, number][];
+    /**
+     * check if the feasible region is bounded
+     * ```
+     * FeasibleIsBounded([
+     *    [1, 0, '<', 10],
+     *    [1, 0, '>', -5],
+     *    [0, 1, '<', 10],
+     *    [0, 1, '>', -5]
+     * ])
+     * // true
+     * FeasibleIsBounded([
+     *    [1, 0, '<', 10],
+     * ])
+     * // false
+     * ```
+     */
+    export function FeasibleIsBounded(...cons: Constraint[]): boolean;
+    /**
+     * the integral points inside the feasible polygon
+     * ```
+     * FeasibleIntegral([
+     *    [1, 0, '<', 3],
+     *    [1, 0, '>', 0],
+     *    [0, 1, '<', 2],
+     *    [0, 1, '>', 0]
+     * ])
+     * // [[1,1],[2,1]]
+     * ```
+     */
+    export function FeasibleIntegral(...cons: Constraint[]): Point2D[];
+    /**
+     * the point with the max value of field
+     * ```
+     * MaximizePoint([[0,0],[10,10]],[1,2,3]) // [10,10]
+     * ```
+     */
+    export function MaximizePoint(points: Point2D[], field: Field): Point2D;
+    /**
+     * the point with the min value of field
+     * ```
+     * MinimizePoint([[0,0],[10,10]],[1,2,3]) // [0,0]
+     * ```
+     */
+    export function MinimizePoint(points: Point2D[], field: Field): Point2D;
+    /**
+     * the point with the min/max value of field
+     * ```
+     * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [10,10]
+     * OptimizePoint([[0,0],[10,10]],[1,2,3],true) // [0,0]
+     * ```
+     */
+    export function OptimizePoint(points: Point2D[], field: Field, max: boolean): Point2D;
+    /**
+     * the max value of field
+     * ```
+     * MaximizeField([[0,0],[10,10]],[1,2,3]) // 33
+     * ```
+     */
+    export function MaximizeField(points: Point2D[], field: Field): number;
+    /**
+     * the min value of field
+     * ```
+     * MinimizeField([[0,0],[10,10]],[1,2,3]) // 3
+     * ```
+     */
+    export function MinimizeField(points: Point2D[], field: Field): number;
+    /**
+     * the min/max value of field
+     * ```
+     * OptimizeField([[0,0],[10,10]],[1,2,3],true) // 33
+     * OptimizeField([[0,0],[10,10]],[1,2,3],false) // 3
+     * ```
+     */
+    export function OptimizeField(points: Point2D[], field: Field, max: boolean): number;
+    /**
+     * the constraints from the given points
+     * ```
+     * ConstraintsFromPoints([0,0],[0,1],[1,0]) // [[0,1,'\\ge',-0],[1,0,'\\ge',-0],[1,1,'\\le',1]]
+     * ConstraintsFromPoints([0,0],[3,-1],[2,2],[1,3],[-2,2])
+     * // [[[1, 3, "\\ge", -0],[1, 1, "\\ge", -0],[1, -3, "\\ge", -8],[1, 1, "\\le", 4],[3, 1, "\\le", 8]]]
+     * ConstraintsFromPoints([0,0],[1,2],[2,1],[0,1],[1,0]) // [[0, 1, "\\ge", -0],[1, 0, "\\ge", -0],[1, -1, "\\ge", -1],[1, 1, "\\le", 3],[1, -1, "\\le", 1]]
+     * ```
+     */
+    export function ConstraintsFromPoints(...points: Point2D[]): Constraint[];
+}
+declare module "Math/Code/Numeracy" {
+    /**
+     * @deprecated
+     * division with x/0 handling
+     * ```
+     * Divide(6,2) // 3
+     * Divide(6,0) // throw
+     * ```
+     */
+    export function Divide(dividend: number, divisor: number): number;
+    /**
+     * the absolute value. Equivalent to Math.abs(x).
+     * ```
+     * Abs(-2) // 2
+     * ```
+     */
+    export function Abs(num: number): number;
+    /**
+     * the sign of the number as 1,0 or -1.
+     * ```
+     * Sign(3) // 1
+     * Sign(-4.5) // -1
+     * Sign(0) // 0
+     * ```
+     */
+    export function Sign(num: number): -1 | 0 | 1;
+    /**
+     * @deprecated
+     * the sign of the number as 1,0 or -1.
+     * ```
+     * SigFig(123.45) // 5
+     * ```
+     */
+    export function SigFig(num: number): number;
+    /**
+     * the number rounded off to given sigfig.
+     * ```
+     * Round(1.23456,3) // 1.23
+     * Round(1.23567,3) // 1.24
+     * ```
+     */
+    export function Round(num: number, sigfig?: number): number;
+    /**
+     * the number rounded up to given sigfig.
+     * ```
+     * RoundUp(1.23456,3) // 1.23
+     * RoundUp(1.23567,1) // 2
+     * ```
+     */
+    export function RoundUp(num: number, sigfig?: number): number;
+    /**
+     * the number rounded down to given sigfig.
+     * ```
+     * RoundDown(1.23456,5) // 1.2345
+     * RoundDown(1.6789,1) // 1
+     * ```
+     */
+    export function RoundDown(num: number, sigfig?: number): number;
+    /**
+     * the number rounded off to given decimal place.
+     * ```
+     * Fix(12345.678) // round to integer by default, return 12346
+     * Fix(12345.678,0) // round to integer, return 12346
+     * Fix(12345.678,2) // round to 2 dp, return 12345.68
+     * Fix(12345.678,-2) // round to hundred, return 12300
+     * ```
+     */
+    export function Fix(num: number, dp?: number): number;
+    /**
+     * the number rounded up to given decimal place.
+     * ```
+     * FixUp(12.34) // round to integer by default, return 13
+     * FixUp(12.34,0) // round to integer, return 13
+     * FixUp(12.34,1) // round to 1 dp, return 12.4
+     * FixUp(12.34,-1) // round to ten, return 20
+     * ```
+     */
+    export function FixUp(num: number, dp?: number): number;
+    /**
+     * the number rounded down to given decimal place.
+     * ```
+     * FixDown(17.89) // round to integer by default, return 17
+     * FixDown(17.89,0) // round to integer, return 17
+     * FixDown(17.89,1) // round to 1 dp, return 17.8
+     * FixDown(17.89,-1) // round to ten, return 10
+     * ```
+     */
+    export function FixDown(num: number, dp?: number): number;
+    /**
+     * the ceiling integer of the number.
+     * ```
+     * Ceil(1.1) // 2
+     * Ceil(-1.1) // -1
+     * Ceil(2) // 2
+     * Ceil(3,5,1) // Ceil 3 to [1,6,11,...], return 6
+     * ```
+     */
+    export function Ceil(num: number, interval?: number, offset?: number): number;
+    /**
+     * the floor integer of the number.
+     * ```
+     * Floor(1.9) // 1
+     * Floor(-1.9) // -2
+     * Floor(2)) // 2
+     * Floor(3,5,1) // Floor 3 to [1,6,11,...], return 1
+     * ```
+     */
+    export function Floor(num: number, interval?: number, offset?: number): number;
+    /**
+     * reduce input array to integral ratio.
+     * ```
+     * Ratio(2,4,6) // [1,2,3]
+     * Ratio(0,4,6) // [0,2,3]
+     * Ratio(0,4) // [0,1]
+     * Ratio(1/3,1/2,1/4) // [4,6,3]
+     * Ratio(Math.sqrt(2),1/2,1/4) // throw
+     * ```
+     */
+    export function Ratio(...nums: number[]): number[];
+    /**
+     * scale `nums` so that their sum becomes `total`.
+     * ```
+     * ScaleTo([1,2,3], 60) // [10,20,30]
+     * ```
+     */
+    export function ScaleTo(nums: number[], total: number): number[];
+    /**
+     * The HCF of nums.
+     * ```
+     * HCF(6,8) // 2
+     * HCF(6,8,9) // 1
+     * HCF(1,3) // 1
+     * HCF(0.5,3) // throw
+     * HCF(0,3) // throw
+     * ```
+     */
+    export function HCF(...nums: number[]): number;
+    /**
+     * The LCM of nums.
+     * ```
+     * LCM(2,3) // 6
+     * LCM(2,3,5) // 30
+     * LCM(0.5,3) // throw
+     * LCM(0,3) // throw
+     * ```
+     */
+    export function LCM(...nums: number[]): number;
+    /**
+     * The prime factors of `num`.
+     * ```
+     * PrimeFactors(12) // [2,2,3]
+     * ```
+     */
+    export function PrimeFactors(num: number): number[];
+    /**
+     * convert num to fraction
+     * ```
+     * ToFrac(0.5) // [1,2]
+     * ToFrac(-456/123) // [-152,41]
+     * ```
+     */
+    export function ToFrac(num: number): Fraction;
+    /**
+     * all integer partition of `n`.
+     * ```
+     * Partition(4)
+     * // [ [4], [3,1], [2,2], [2,1,1], [1,1,1,1] ]
+     * Partition(4, 2, false)
+     * // [ [3,1], [2,2] ]
+     * Partition(4, 2, true)
+     * // [ [4,0], [3,1], [2,2] ]
+     * ```
+     */
+    export function Partition(n: number, length?: number, allowZero?: boolean): number[][];
+}
+declare module "Math/Code/PhyConst" {
+    export const PhyConst: {
+        R: number;
+        N_A: number;
+        g: number;
+        G: number;
+        c: number;
+        e: number;
+        m_e: number;
+        epsilon_0: number;
+        mu_0: number;
+        m_u: number;
+        au: number;
+        light_year: number;
+        parsec: number;
+        sigma: number;
+        h: number;
+    };
+}
+declare module "Math/Code/PhyEq" {
+    type eq = [func: zeroFunction, latex: string];
+    export class PhyEqCls {
+        Heat: {
+            /**
+             * E = Pt
+             */
+            EPt(E?: string, P?: string, t?: string, $?: string): eq;
+        };
+        Motion: {
+            /**
+             * v = u + at
+             */
+            vuat(v?: string, u?: string, a?: string, t?: string, $?: string): eq;
+            /**
+             * v^2 = u^2 + 2as
+             */
+            vu2as(v?: string, u?: string, a?: string, s?: string, $?: string): eq;
+            /**
+             * s = ut + 0.5at^2
+             */
+            sutat2(s?: string, u?: string, t?: string, a?: string, $?: string): eq;
+            /**
+             * s = 0.5(u+v)t
+             */
+            suvt(s?: string, u?: string, v?: string, t?: string, $?: string): eq;
+            /**
+             * s  = 0.5at^2
+             */
+            sat2(s?: string, a?: string, t?: string, $?: string): eq;
+            /**
+             * v = at
+             */
+            vat(v?: string, a?: string, t?: string, $?: string): eq;
+            /**
+             * v^2 = 2as
+             */
+            v2as(v?: string, a?: string, s?: string, $?: string): eq;
+        };
+        Force: {
+            /**
+             * F = ma
+             */
+            Fma(F?: string, m?: string, a?: string, $?: string): eq;
+        };
+        CircularMotion: {
+            /**
+             * s = vt
+             */
+            svt(s?: string, v?: string, t?: string, $?: string): eq;
+            /**
+             * θ = ωt
+             */
+            θωt(θ?: string, ω?: string, t?: string, $?: string): eq;
+            /**
+             * ω = 2π/T
+             */
+            ωT(ω?: string, T?: string, $?: string): eq;
+            /**
+             * s = rθ
+             */
+            srθ(s?: string, r?: string, θ?: string, $?: string): eq;
+            /**
+             * v = rω
+             */
+            vrω(v?: string, r?: string, ω?: string, $?: string): eq;
+            /**
+             * a = vω
+             */
+            avω(a?: string, v?: string, ω?: string, $?: string): eq;
+            /**
+             * a = v^2/r
+             */
+            avr(a?: string, v?: string, r?: string, $?: string): eq;
+            /**
+             * a = rω^2
+             */
+            arω(a?: string, r?: string, ω?: string, $?: string): eq;
+            /**
+             * F = mvω
+             */
+            Fmvω(F?: string, m?: string, v?: string, ω?: string, $?: string): eq;
+            /**
+             * F = mv^2/r
+             */
+            Fmvr(F?: string, m?: string, v?: string, r?: string, $?: string): eq;
+            /**
+             * F = mrω^2
+             */
+            Fmrω(F?: string, m?: string, r?: string, ω?: string, $?: string): eq;
+        };
+        Gravitation: {
+            /**
+             * F = GMm/r^2
+             */
+            FGMmr2(F?: string, M?: string, m?: string, r?: string, $?: string): eq;
+            /**
+             * F = GMm/(R+h)^2
+             */
+            FGMmRh2(F?: string, M?: string, m?: string, R?: string, h?: string, $?: string): eq;
+            /**
+             * g = GM/r^2
+             */
+            gGMr2(g?: string, M?: string, r?: string, $?: string): eq;
+            /**
+             * g = GM/(R+h)^2
+             */
+            gGMRh2(g?: string, M?: string, R?: string, h?: string, $?: string): eq;
+            /**
+             * F = mg
+             */
+            Fmg(F?: string, m?: string, g?: string, $?: string): eq;
+            /**
+             * GMm/r2 = mv2/r
+             */
+            GMmr2v2r(M?: string, r?: string, v?: string, $?: string): eq;
+            /**
+             * GMm/r2 = mrω2
+             */
+            GMmr2rω2(M?: string, r?: string, ω?: string, $?: string): eq;
+        };
+        Radioactive: {
+            /**
+             * N = n(1/2)^(t/T)
+             */
+            NntT(N?: string, n?: string, t?: string, T?: string, $?: string): eq;
+            /**
+             * A = a(1/2)^(t/T)
+             */
+            AatT(A?: string, a?: string, t?: string, T?: string, $?: string): eq;
+            /**
+             * A = kN
+             */
+            AkN(A?: string, k?: string, N?: string, $?: string): eq;
+            /**
+             * kT = ln2
+             */
+            kTln2(k?: string, T?: string, $?: string): eq;
+            /**
+             * E = mc2
+             */
+            Emc2(E?: string, m?: string, $?: string): eq;
         };
     }
-    global {
-        var ExplainTransforms: typeof Host.ExplainTransforms;
-        var TransformFunc: typeof Host.TransformFunc;
-    }
+    export const PhyEq: PhyEqCls;
 }
-declare module "Math/should" {
-    global {
-        var CustomError: any;
-        var toError: any;
-        var MathError: any;
-        var Should: (condition: boolean, msg: string) => asserts condition;
-    }
-    export {};
+declare module "Math/Code/Random" {
+    /**
+     * a random integer in [min, max] inclusive.
+     * ```
+     * RndN(2,5) // may return 2, 3, 4 or 5
+     * ```
+     */
+    export function RndN(min: number, max: number): number;
+    /**
+     * an array of n unique random integer in [min, max] inclusive.
+     * ```
+     * RndNs(2,8,3) // may return [5,3,7]
+     * RndNs(2,8,3,'asc') // ascending
+     * RndNs(2,8,3,'desc') // descending
+     * ```
+     */
+    export function RndNs(min: number, max: number, n?: number, sort?: 'asc' | 'desc' | 'none'): number[];
+    /**
+     * a random real number in [min, max] inclusive
+     * ```
+     * RndR(1,2) // may return 1.242574363
+     * ```
+     */
+    export function RndR(min: number, max: number): number;
+    /**
+     * an array of n unique random real number in [min, max] inclusive.
+     * ```
+     * RndRs(2,8,3) // may return [5.5315,3.653456,7.542345]
+     * ```
+     */
+    export function RndRs(min: number, max: number, n?: number): number[];
+    /**
+     * a random fraction (non-integer) with largest numerator / denominator, within range inclusive.
+     * ```
+     * RndQ(9,[2,9]) // may return 7/2
+     * RndQ(-9,[-9,9]) // may return 7/2 or -7/2, i.e. can be +ve or -ve
+     * ```
+     */
+    export function RndQ(largest?: number, range?: interval): number;
+    /**
+     * an array of n unique random fractions (non-integer) .
+     * ```
+     * RndQs(9,[2,9],3) // may return [5/2,7/3,9/2]
+     * ```
+     */
+    export function RndQs(largest?: number, range?: interval, n?: number): number[];
+    /**
+     * 1 or -1
+     * ```
+     * RndU() // may return 1 or -1
+     * ```
+     */
+    export function RndU(): 1 | -1;
+    /**
+     * true or false.
+     * ```
+     * RndT() // may return true or false
+     * RndT(0.6) // 60% true
+     * ```
+     */
+    export function RndT(trueProb?: number): boolean;
+    /**
+     * a random integer in [min, max] or [-max, -min] inclusive.
+     * ```
+     * RndZ(2,4) // return -4, -3, -2, 2, 3 or 4
+     * ```
+     */
+    export function RndZ(min: number, max: number): number;
+    /**
+     * @param n - default to 10
+     * an array of n absolutely unique random integers in [min, max] or [-max, -min] inclusive.
+     * ```
+     * RndZs(2,8,3) // may return [5,-3,7]
+     * RndZs(2,8,3,'asc') // ascending
+     * RndZs(2,8,3,'desc') // descending
+     * ```
+     */
+    export function RndZs(min: number, max: number, n?: number, sort?: 'asc' | 'desc' | 'none'): number[];
+    /**
+     * a random prime number less than or equal to max.
+     * ```
+     * RndP(10) // may return 2, 3, 5 or 7
+     * ```
+     */
+    export function RndP(max: number): number;
+    /**
+     * a random odd integer in [min, max] inclusive
+     * ```
+     * RndOdd(3,8) // return 3, 5 or 7
+     * ```
+     */
+    export function RndOdd(min: number, max: number): number;
+    /**
+     * a random even integer in [min, max] inclusive
+     * ```
+     * RndEven(3,8) // return 4, 6 or 8
+     * ```
+     */
+    export function RndEven(min: number, max: number): number;
+    /**
+     * a random composite number built from `n` factors in `factors`.
+     * ```
+     * RndComposite([2,3,5],3) // return 2*2*2, 2*3*5, 2*3*3, ...
+     * ```
+     */
+    export function RndComposite(factors: number[], n: number): number;
+    /**
+     * an array of random polynomial coefficients
+     * ```
+     * RndPoly(2,3,4) // equivalent to [RndN(1,2), RndZ(1,3), RndZ(1,4)]
+     * ```
+     */
+    export function RndPoly(...coeff: number[]): number[];
+    /**
+     * an array of a Pyth Triple
+     * ```
+     * RndPyth(10) // may return [3,4,5]
+     * ```
+     */
+    export function RndPyth(max?: number): [number, number, number];
+    /**
+     * a point within given range, x and y are distinct and non-zero
+     * ```
+     * RndPoint([1,4],[10,14]) // may return [2,12]
+     * RndPoint(2,4) // equivalent to RndPoint([-2,2],[-4,4])
+     * RndPoint(2) // equivalent to RndPoint([-2,2],[-2,2])
+     * ```
+     */
+    export function RndPoint(xRange: number | interval, yRange?: number | interval): Point2D;
+    /**
+     * n points within given range, no horizontal / vertical / collinear
+     * ```
+     * RndPoints([1,4],[10,14],3) // may return [[2,12],[3,11],[1,13]]
+     * ```
+     */
+    export function RndPoints(xRange: number | interval, yRange?: number | interval, n?: number): Point2D[];
+    /**
+     * n angles in [0,360] at least cyclic separated by `separation`
+     * ```
+     * RndAngles(3,50) // may return [30,90,200]
+     * ```
+     */
+    export function RndAngles(n: number, separation: number): number[];
+    /**
+     * `n` points on a unit circle at least cyclic separated by separation
+     * ```
+     * RndOnCircle(3,50) // may return [[1,0],[0,1],[-1,0]]]
+     * ```
+     */
+    export function RndOnCircle(n: number, separation: number): Point2D[];
+    /**
+     * n vertices of a convex polygon generated by rounding a cyclic polygon
+     * ```
+     * RndConvexPolygon(3,[0,0],10,50) // may return [[10,0],[-6,8],[0,-10]]
+     * ```
+     */
+    export function RndConvexPolygon(n: number, center: Point2D, radius: number, separation: number): Point2D[];
+    /**
+     * n integers from [min, max], must be uni-moded
+     * ```
+     * RndData(10,15,5) // may return [11,11,12,13,15]
+     * ```
+     */
+    export function RndData(min: number, max: number, n: number): number[];
+    /**
+     * 3 points forming a triangle, with min angle and length
+     * ```
+     * RndTriangle([0,5],[0,5],{minAngle:30,minLength:2})
+     * ```
+     */
+    export function RndTriangle(xRange: interval, yRange: interval, { minAngle, maxAngle, minLength, obtuse }?: {
+        minAngle?: number | undefined;
+        maxAngle?: number | undefined;
+        minLength?: number | undefined;
+        obtuse?: boolean | undefined;
+    }): [Point2D, Point2D, Point2D];
+    /**
+     * an array like ['sin',60] representing sin 60, which is numerically equivalent to the input
+     * ```
+     * RndTrigValue('sin',60) // RndPick(['sin',60],['sin',120],['cos',30],['cos',330])
+     * ```
+     */
+    export function RndTrigValue(func: TrigFunc, angle: number): TrigValue;
+    /**
+     * an array like ['sin',180,-1,'x'] representing sin(180-x), which is numerically equivalent to the input
+     * ```
+     * RndTrigEqv('sin','x') // RndPick(['sin',180,-1,'x'],['cos',90,-1,'x'],['cos',270,1,'x'])
+     * ```
+     */
+    export function RndTrigEqv(result: 'sin' | '-sin' | 'cos' | '-cos' | 'tan' | '-tan' | '1/tan' | '-1/tan', label: string): TrigExp;
+    /**
+     * a random point (in rect coord) at special polar angle and radius, whose rect coords must be in the form of a*sqrt(b).
+     * ```
+     * RndPointPolar()
+     * // maybe [sqrt(3),3] representing polar [2*sqrt(3),60]
+     * ```
+     */
+    export function RndPointPolar(): Point2D;
+    /**
+     * a random ratio group in [min, max] inclusive.
+     * ```
+     * RndRatio(2,9,3) // may return [3,7,5]
+     * ```
+     */
+    export function RndRatio(min: number, max: number, n?: number): number[];
+    /**
+     * a random partition of integer `n`.
+     * ```
+     * RndPartition(4) // may return [1,2,1]
+     * RndPartition(4, 2, false) // may return [3,1] or [2,2]
+     * RndPartition(4, 2, true) // may return [4,0] or [3,1] or [2,2]
+     * ```
+     */
+    export function RndPartition(n: number, length?: number, allowZero?: boolean): number[];
+}
+declare module "Math/Code/RandomShake" {
+    /**
+     * @deprecated
+     * an array of n nearby values around anchor, within range inclusive, auto detecting the input type.
+     * ```
+     * RndShake(10)
+     * // equivalent to RndShakeN(10)
+     * RndShake(10.5)
+     * // equivalent to RndShakeR(10.5)
+     * ```
+     */
+    export function RndShake(anchor: any): (typeof anchor)[];
+    /**
+     * 3 nearby same-signed integers, range = Max(5, anchor * 10%)
+     * ```
+     * RndShakeN(5) // return 3 unique integers from 1-10
+     * ```
+     */
+    export function RndShakeN(anchor: number): number[];
+    /**
+     * 3 nearby same-signed real number with same precision, range = anchor * 50%
+     * ```
+     * RndShakeR(3.5) // return 3 unique values from [1.8,5.2]
+     * ```
+     */
+    export function RndShakeR(anchor: number): number[];
+    /**
+     * 3 nearby same-sign rational by shaking the numerator and denominator (simplest) within range, preserve IsProbability.
+     * ```
+     * RndShakeQ(5/6)
+     * // return 3 unique fractions around [5,6]
+     * RndShakeQ(6/-5)
+     * // return 3 unique fractions around [6,-5]
+     * ```
+     */
+    export function RndShakeQ(anchor: number): number[];
+    /**
+     * 3 numbers by multiplying / dividing the `anchor` by the `base` a few times.
+     * ```
+     * RndShakeG(24,2) // any 3 of [6,12,48,96]
+     * ```
+     */
+    export function RndShakeG(anchor: number, base: number): number[];
+    /**
+     * an array of 3 ineq signs, balanced in number.
+     * ```
+     * RndShakeIneq('\\ge')
+     * // may return ['\\ge','\\le','\\le']
+     * ```
+     */
+    export function RndShakeIneq(anchor: Ineq): Ineq[];
+    /**
+     * an array of 3 point, both x and y are unique
+     * ```
+     * RndShakePoint([3,4])
+     * // may return [[2,5],[1,6],[4,2]]
+     * ```
+     */
+    export function RndShakePoint(anchor: Point2D): Point2D[];
+    /**
+     * an array of 3 combo
+     * ```
+     * RndShakeCombo([true,true,true])
+     * // may return [[true,false,true],[false,true,false],[false,true,true]]
+     * ```
+     */
+    export function RndShakeCombo(anchor: [boolean, boolean, boolean]): [boolean, boolean, boolean][];
+    /**
+     * an array of 3 trig
+     * ```
+     * RndShakeTrig('sin')
+     * // may return ['cos','sin','cos']
+     * ```
+     */
+    export function RndShakeTrig(anchor: TrigFunc): TrigFunc[];
+    /**
+     * an array of 3 TrigValue
+     * ```
+     * RndShakeTrigValue(['sin','x'])
+     * // may return [['cos','x'],['sin','x'],['cos','x']]
+     * ```
+     */
+    export function RndShakeTrigValue(anchor: TrigValue): TrigValue[];
+    /**
+     * an array of 3 ratios
+     * ```
+     * RndShakeRatio([4,5,6])
+     * // may return [[3,6,5],[7,5,3],[8,4,5]]
+     * ```
+     */
+    export function RndShakeRatio(anchor: number[]): number[][];
+    /**
+     * an array of 3 number in given number system
+     * ```
+     * RndShakeBase('AB0CD_{16}')
+     * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
+     * ```
+     */
+    export function RndShakeBase(anchor: string): string[];
+    /**
+     * an array of 3 points, all are special in polar coordinates
+     * ```
+     * RndShakePointPolar([3,60])
+     * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
+     * ```
+     */
+    export function RndShakePointPolar(anchor: Point2D): Point2D[];
+    /**
+     * an array of 3 constraint, with only the sign shaken
+     * ```
+     * RndShakeConstraint([1,2,'>',3])
+     * // may return [[1,2,'>',3], [1,2,'<',3], [1,2,'<',3]]
+     * ```
+     */
+    export function RndShakeConstraint(anchor: Constraint): Constraint[];
+    /**
+     * an array of 3 sets of constraints, with only the sign shaken
+     * ```
+     * RndShakeConstraints([
+     *   [1,2,'>',3], [4,5,'>',6]
+     * ])
+     * // may return [
+     * // [[1,2,'>',3],[4,5,'>',6]],
+     * // [[1,2,'<',3],[4,5,'<',6]],
+     * // [[1,2,'<',3],[4,5,'>',6]]
+     * // ]
+     * ```
+     */
+    export function RndShakeConstraints(anchor: Constraint[]): Constraint[][];
+    export function RndShakeQuantity(anchor: quantity): quantity[];
+    export function RndShakeCompoundInequality(anchor: CompoundInequality): CompoundInequality[];
+}
+declare module "Math/Code/RandomUtil" {
+    /**
+     * a random item from the given items
+     * ```
+     * RndPick(2,4,6) // may return 2, 4 or 6
+     * ```
+     */
+    export function RndPick<T>(...items: T[]): T;
+    /**
+     * a shuffled array of the given items
+     * ```
+     * RndShuffle(2,4,6) // may return [4,2,6]
+     * ```
+     */
+    export function RndShuffle<T>(...items: T[]): T[];
+    /**
+     * n random items from given items without replacement, but NOT necessarily unique if there are duplicated object in items.
+     * ```
+     * RndPickN([1,2,3,4,5],3) // may return [2,5,3]
+     * ```
+     */
+    export function RndPickN<T>(items: T[], n: number): T[];
+    /**
+     * n random unique items from given items, deep compare.
+     * ```
+     * RndPickUnique([2,4,6],2) // may return [4,2]
+     * RndPickUnique([1,2,2,2,2,2,2,2],2) // must return [1,2] or [2,1]
+     * ```
+     */
+    export function RndPickUnique<T>(items: T[], n: number): T[];
+    /**
+     * a random male name
+     * ```
+     * RndHe() // may return 'Peter', 'David', etc
+     * ```
+     */
+    export function RndHe(): string;
+    /**
+     * a random female name
+     * ```
+     * RndShe() // may return 'Mary', 'Alice', etc
+     * ```
+     */
+    export function RndShe(): string;
+    /**
+     * a random 3-letters array
+     * ```
+     * RndLetters() // may return ['a','b','c'] or ['x','y','z'] or etc
+     * ```
+     */
+    export function RndLetters(): string[];
+    /**
+     * a random 3-letters array
+     * ```
+     * RndCapitals() // may return ['A','A','A'] or ['X','Y','Z'] or etc
+     * ```
+     */
+    export function RndCapitals(): string[];
+}
+declare module "Math/Code/Relation" {
+    /**
+     * Check if the numbers are all distinct.
+     * ```
+     * AreDistinct(1,2,3) // true
+     * AreDistinct(1,2,2) // false
+     * ```
+     */
+    export function AreDistinct(...nums: number[]): boolean;
+    /**
+     * Check if the absolute values of the numbers are all distinct.
+     * ```
+     * AreAbsDistinct(1,2,3) // true
+     * AreAbsDistinct(1,2,2) // false
+     * AreAbsDistinct(1,2,-2) // false
+     * ```
+     */
+    export function AreAbsDistinct(...nums: number[]): boolean;
+    /**
+     * Check if the numbers all have the same sign.
+     * ```
+     * AreSameSign(1,2,3) // true
+     * AreSameSign(1,2,-3) // false
+     * AreSameSign(1,2,0) // false
+     * ```
+     */
+    export function AreSameSign(...nums: number[]): boolean;
+    /**
+     * Check if the numbers all pairwise coprime.
+     * ```
+     * AreCoprime(2,3) // true
+     * AreCoprime(2,6) // false
+     * AreCoprime(1,2) // true
+     * AreCoprime(2,3,6) // true
+     * AreCoprime(1.5,3) // true
+     * AreCoprime(0,3) // true
+     * ```
+     */
+    export function AreCoprime(...nums: number[]): boolean;
+    /**
+     * Check if the points are pairwise distant apart.
+     * ```
+     * AreDistantPoint(2)([0,0],[3,0]) // true
+     * AreDistantPoint(2)([0,0],[1,0]) // false
+     * ```
+     */
+    export function AreDistantPoint(distance: number): (...points: Point2D[]) => boolean;
+    /**
+     * Check if slopes are at least oblique at minAngle
+     * ```
+     * AreOblique(40)(0,1) // true
+     * AreOblique(40)(0,0.5) // false
+     * ```
+     */
+    export function AreOblique(minAngle: number): (...slopes: number[]) => boolean;
+    /**
+     * Check if the items are all distinct, deep compare.
+     * ```
+     * AreDifferent([1,2],[3,4]) // true
+     * AreDifferent([1,2],[1,2]) // false
+     * ```
+     */
+    export function AreDifferent(...items: any[]): boolean;
+}
+declare module "Math/Code/Sequence" {
+    /**
+     * array of all integers between (inclusive) the min and max of `nums`.
+     * ```
+     * Rng(2,6) // [2,3,4,5,6]
+     * Rng(6,2) // [2,3,4,5,6]
+     * Rng(-2,1) // [-2,-1,0,1]
+     * Rng(1,1,4,4,3,3,3) \\ [1,2,3,4]
+     * ```
+     */
+    export function Rng(...nums: number[]): number[];
+    /**
+     * Tn in an arithmetic sequence: a+(n-1)d
+     * ```
+     * ASterm(2,3,10) // 29
+     * ASterm(5,-2,6) // -5
+     * ```
+     */
+    export function ASterm(a: number, d: number, n: number): number;
+    /**
+     * Sn in an arithmetic sequence: (n/2)(2a+(n-1)d).
+     * ```
+     * ASsum(2,3,10) // 155
+     * ASsum(5,-2,6) // 0
+     * ```
+     */
+    export function ASsum(a: number, d: number, n: number): number;
+    /**
+     * an array of the first n terms in an arithmetic sequence.
+     * ```
+     * ASequence(2,3,5) // [2,5,8,11,14]
+     * ASequence(5,-2,3) // [5,3,1]
+     * ```
+     */
+    export function ASequence(a: number, d: number, n?: number): number[];
+    /**
+     * Tn in a geometric sequence: ar**(n-1)
+     * ```
+     * GSterm(2,3,4) // 54
+     * GSterm(5,-2,6) // -160
+     * ```
+     */
+    export function GSterm(a: number, r: number, n: number): number;
+    /**
+     * Sn in a geometric sequence: a*(r*n-1)/(r-1)
+     * ```
+     * GSsum(2,3,4) // 80
+     * GSsum(5,-2,3) // 15
+     * GSsum(3,0.5) // 6 , sum to inf if omit n
+     * ```
+     */
+    export function GSsum(a: number, r: number, n?: number): number;
+    /**
+     * an array of the first n terms in a geometric sequence.
+     * ```
+     * GSequence(2,3,5) // return [2,6,18,54,162]
+     * GSequence(5,-2,3) // return [5,-10,20]
+     * ```
+     */
+    export function GSequence(a: number, r: number, n?: number): number[];
+    /**
+     * the nth term in a quadratic sequence, 1st term = a, P_i+1=P_i + pi+q
+     * ```
+     * QuadraticSequence(1,2,3,4) //
+     * ```
+     */
+    export function QuadraticSequence(a: number, p: number, q: number, n: number): number;
+    /**
+     * the nth term in a lucas sequence, a_i = p*a_{i-1} + q*a_{i-2}
+     * ```
+     * LucasSequence(1,2,3,4,5) //
+     * ```
+     */
+    export function LucasSequence(first: number, second: number, p: number, q: number, n: number): number;
+}
+declare module "Math/Code/Shake" {
+    /**
+     * Same-signed integer
+     * ```
+     * ShakeN(5) // integers from 2-8
+     * ```
+     */
+    export function ShakeN(anchor: number): number;
+    /**
+     * Same-signed real number with same precision
+     * ```
+     * ShakeR(3.5) // from [1.8,5.2]
+     * ```
+     */
+    export function ShakeR(anchor: number): number;
+    /**
+     * Same-sign rational by shaking the numerator and denominator (simplest), preserve IsProbability.
+     * ```
+     * ShakeQ(5/6)  // return fraction around [5,6]
+     * ShakeQ(6/-5) // return fraction around [6,-5]
+     * ```
+     */
+    export function ShakeQ(anchor: number): number;
+    /**
+     * Number by multiplying / dividing `anchor` by the `base` a few times.
+     * ```
+     * ShakeG(24,2) // any of [6,12,48,96]
+     * ```
+     */
+    export function ShakeG(anchor: number, base: number): number;
+    /**
+     * Ineq signs
+     * ```
+     * ShakeIneq('\\ge')  // may return '\\ge' or '\\le'
+     * ```
+     */
+    export function ShakeIneq(anchor: Ineq): Ineq;
+    /**
+     * Point
+     * ```
+     * ShakePoint([3,4])   // may return [[2,5],[1,6],[4,2]]
+     * ```
+     */
+    export function ShakePoint(anchor: Point2D): Point2D;
+    /**
+     * TrigValue
+     * ```
+     * ShakeTrigValue(['sin','x'])
+     * // may return [['cos','x'],['sin','x'],['cos','x']]
+     * ```
+     */
+    export function ShakeTrigValue(anchor: TrigValue): TrigValue;
+    /**
+     * Ratios
+     * ```
+     * ShakeRatio([4,5,6])
+     * // may return [[3,6,5],[7,5,3],[8,4,5]]
+     * ```
+     */
+    export function ShakeRatio(anchor: number[]): number[];
+    /**
+     * Number in given number system
+     * ```
+     * ShakeBase('AB0CD_{16}')
+     * // may return ['BB0CE_{16}','AB0DD_{16}','BA0BE_{16}']
+     * ```
+     */
+    export function ShakeBase(anchor: string): string;
+    /**
+     * Points, all are special in polar coordinates
+     * ```
+     * ShakePointPolar([3,60])
+     * // may return [[3, 120], [3*sqrt(2), 120], [3*sqrt(2), 60]]
+     * ```
+     */
+    export function ShakePointPolar(anchor: Point2D): Point2D;
+    /**
+     * Constraint, with only the sign shaken.
+     * ```
+     * ShakeConstraint([1,2,'>',3])
+     * // may return [1,2,'>',3] or [1,2,'<',3]
+     * ```
+     */
+    export function ShakeConstraint(anchor: Constraint): Constraint;
+    /**
+     * Sets of constraints, with only the sign shaken.
+     * ```
+     * ShakeConstraints([
+     *   [1,2,'>',3], [4,5,'>',6]
+     * ])
+     * // may return
+     * // [[1,2,'>',3],[4,5,'>',6]] or
+     * // [[1,2,'<',3],[4,5,'<',6]] or
+     * // [[1,2,'<',3],[4,5,'>',6]]
+     * ```
+     */
+    export function ShakeConstraints(anchor: Constraint[]): Constraint[];
+    export function ShakeQuantity(anchor: quantity): quantity;
+    export function ShakeCompoundInequality(anchor: CompoundInequality): CompoundInequality;
+}
+declare module "Math/Code/Stat" {
+    /**
+     * the minimum value. Equivalent to Math.min().
+     * ```
+     * Min(2,3,4) // 2
+     * ```
+     */
+    export function Min(...nums: number[]): number;
+    /**
+     * the maximum value. Equivalent to Math.max().
+     * ```
+     * Max(2,3,4) // 4
+     * ```
+     */
+    export function Max(...nums: number[]): number;
+    /**
+     * the sorted array of numbers.
+     * ```
+     * Sort(2,3,1) // [1,2,3]
+     * ```
+     */
+    export function Sort(...nums: number[]): number[];
+    /**
+     * the sorted array of items by giving each item a value.
+     * ```
+     * SortBy([2,3,1],x=>x) // [1,2,3]
+     * SortBy(["aa", "aaa", "a"], x => x.length) // ["a", "aa", "aaa"]
+     * ```
+     */
+    export function SortBy<T>(items: T[], valueFunc: (_: T) => number): T[];
+    /**
+     * sum of nums
+     * ```
+     * Sum(1,2,3) // 6
+     * Sum(-1,2,3,4,5) // 13
+     * Sum() // 0
+     * ```
+     */
+    export function Sum(...nums: number[]): number;
+    /**
+     * product of nums
+     * ```
+     * Product(2,3) // 6
+     * Product(-1,2,3,4,5) // -120
+     * Product() // 1
+     * ```
+     */
+    export function Product(...nums: number[]): number;
+    /**
+     * mean of nums
+     * ```
+     * Mean(1,2,3) // 2
+     * Mean(-1,2,3,4,5) // 2.6
+     * ```
+     */
+    export function Mean(...nums: number[]): number;
+    /**
+     * median of nums
+     * ```
+     * Median(1,2,3,4,50) // 3
+     * Median(1,2,3,4,5,7) // 3.5
+     * ```
+     */
+    export function Median(...nums: number[]): number;
+    /**
+     * lower quartile of nums
+     * ```
+     * LowerQ(1,2,3,4,5) // 1.5
+     * LowerQ(1,2,3,4,5,7) // 2
+     * ```
+     */
+    export function LowerQ(...nums: number[]): number;
+    /**
+     * lower quartile of nums
+     * ```
+     * UpperQ(1,2,3,4,5) // 4.5
+     * UpperQ(1,2,3,4,5,7) // 5
+     * ```
+     */
+    export function UpperQ(...nums: number[]): number;
+    /**
+     * range of `nums`
+     * ```
+     * StatRange(1,2,3,4,5) // 4
+     * StatRange(1,2,3,4,5,7) // 6
+     * ```
+     */
+    export function StatRange(...nums: number[]): number;
+    /**
+     * inter-quartile range of nums
+     * ```
+     * IQR(1,2,3,4,5,6) // 3
+     * ```
+     */
+    export function IQR(...nums: number[]): number;
+    /**
+     * count frequency of item in array
+     * ```
+     * Freq([2,3,4,1,5,1,1,4,5],1) // 3
+     * ```
+     */
+    export function Freq<T>(array: T[], item: T): number;
+    /**
+     * mode of nums
+     * ```
+     * Mode(1,2,3,2,2,3,4) \\ [2]
+     * Mode(1,1,2,2,3) \\ [1,2]
+     * ```
+     */
+    export function Mode(...nums: number[]): number[];
+    /**
+     * the only mode of nums, if there are multiple modes, then throw error
+     * ```
+     * UniMode(1,2,3,2,2,3,4) \\ 2
+     * UniMode(1,1,2,2,3) \\ throw error
+     * ```
+     */
+    export function UniMode(...nums: number[]): number;
+    /**
+     * SD of nums
+     * ```
+     * StdDev(1,2,3,2,2,3,4) \\ 0.903507902
+     * StdDev(1,1,2,2,3) \\ 0.748331477
+     * ```
+     */
+    export function StdDev(...nums: number[]): number;
+    /**
+     * z-score of `num` in a data set with `mean` and `SD`
+     * ```
+     * ZScore(80,60,10) \\ 2
+     * ```
+     */
+    export function ZScore(num: number, mean: number, SD: number): number;
+    /**
+     * the location of median
+     * ```
+     * MedianAt(12) \\ 6.5
+     * MedianAt(13) \\ 7
+     * ```
+     */
+    export function MedianAt(total: number): number;
+    /**
+     * the location of LQ
+     * ```
+     * LowerQAt(12) \\ 3.5
+     * LowerQAt(13) \\ 3.5
+     * ```
+     */
+    export function LowerQAt(total: number): number;
+    /**
+     * the location of UQ
+     * ```
+     * UpperQAt(12) \\ 9.5
+     * UpperQAt(13) \\ 10.5
+     * ```
+     */
+    export function UpperQAt(total: number): number;
+    /**
+     * array of the corresponding frequency of `nums` in a data set. If `nums` is omitted, default to the whole range of `data`.
+     * ```
+     * Freqs([1,1,4,4,3,3,3],[1,2,3,4]) \\ [2,0,3,2]
+     * ```
+     */
+    export function Freqs(data: number[], nums?: number[]): number[];
+    /**
+     * array of summary of the data [Minimum,LowerQ,Median,UpperQ,Maximum]
+     * ```
+     * Summary(1,1,2,3,3,3,3,4,5,5) \\ [1,2,3,4,5]
+     * Summary(1,2,3,4,5,6,7,8,9,10) \\ [1,3,5.5,8,10]
+     * ```
+     */
+    export function Summary(...data: number[]): number[];
+    /**
+     * group `data` into intervals
+     * ```
+     * Bin([2,2,2,7,7,7,7],[1,5]) \\ group into class intervals [1,5] and [6,10]
+     * ```
+     */
+    export function Bin(data: number[], cls: [number, number]): {
+        limit: [number, number];
+        bound: [number, number];
+        mark: number;
+        width: number;
+        freq: number;
+        cumFreq: number;
+    }[];
+}
+declare module "Math/Code/Text" {
+    /**
+     * a string of joined elements. [1,2,3] --> '1, 2 and 3'
+     * ```
+     * GrammarJoin(1,2,3,4) // '1, 2, 3 and 4'
+     * GrammarJoin('a','b','c') // 'a, b and c'
+     * ```
+     */
+    export function GrammarJoin(...items: unknown[]): string;
+    /**
+     * @deprecated use symbol printing instead!!!
+     * a pair of latex inequalities sign array like ['\\ge', '\\le'].
+     * ```typescript
+     * IneqSign(true,true) // ['\\ge', '\\le']
+     * IneqSign(true,false) // ['\\gt', '\\lt']
+     * IneqSign(false,true) // ['\\le', '\\ge']
+     * IneqSign(false,false) // ['\\lt', '\\gt']
+     * ```
+     */
+    export function IneqSign(greater: boolean, equal?: boolean): [Ineq, Ineq];
+    /**
+     * @deprecated
+     * @param upSign - put -ve sign on numerator instead of the front.
+     * latex of dfrac p/q like \dfrac{1}{2}.
+     * ```
+     * Dfrac(1,2) // '\\dfrac{1}{2}'
+     * Dfrac(1,-2) // '\\dfrac{-1}{2}'
+     * Dfrac(6,4) // '\\dfrac{3}{2}'
+     * Dfrac(6,-2) // '-3'
+     * Dfrac(0,2) // '0'
+     * Dfrac(5,0) // undefined
+     * ```
+     */
+    export function Dfrac(numerator: number, denominator: number, upSign?: boolean): string;
+    /**
+     * convert index katex to surd
+     * ```
+     * IndexToSurd('{x}^{0.5}') // '\\sqrt{x}'
+     * IndexToSurd('{(y)}^{0.5}') // '\\sqrt{y}'
+     * ```
+     */
+    export function IndexToSurd(text: string): string;
+    /**
+     * @deprecated
+     * the coordinates '(a, b)' of point [a,b]
+     * ```
+     * Coord([1,2]) // '(1, 2)'
+     * ```
+     */
+    export function Coord(point: Point2D, dp?: number): string;
+    /**
+     * @deprecated
+     * the scientific notation of number
+     * ```
+     * Sci(123.45) // '1.2345 x 10^{ 2}'
+     * Sci(1.2345) // '1.2345'
+     * ```
+     */
+    export function Sci(num: number): string;
+    /**
+     * the katex of long division
+     * ```
+     * LongDivision([1,2,3,4],[1,2]) //
+     * LongDivision([1,2,3,4],[1,2]) //
+     * ```
+     */
+    export function LongDivision(dividend: number[], divisor: number[]): string;
+    /**
+     * the representation of num in base b
+     * ```
+     * ToBase(1000,16) // '3E8_{16}'
+     * ToBase(13,2) // '1101_{2}'
+     * ```
+     */
+    export function ToBase(num: number, base: number): string;
+    /**
+     * a prime factorization layout for HCF or LCM
+     * ```
+     * PrimeFactorize({
+     *  'number': [30, 15, 12],
+     *   a: [3, 0, 5],
+     *   b: [5, 6, 1],
+     *   '(x+1)': [8, 7, 5]
+     * },
+     * {hcf:true,lcm:true,multiply:!true}
+     * )
+     * ```
+     */
+    export function PrimeFactorize(val: {
+        [_: string]: number[];
+    }, { hcf, lcm, multiply }: {
+        hcf?: boolean | undefined;
+        lcm?: boolean | undefined;
+        multiply?: boolean | undefined;
+    }): string;
+    /**
+     * the latex representing the `constraint`
+     * ```
+     * ConstraintText([1,2,'<',3],true,'h','k') // 'h+2k<3'
+     * ConstraintText([1,2,'<',3],false) // 'x+2y>3'
+     * ConstraintText([1,2,'<',3],null) // 'x+2y=3'
+     * ```
+     */
+    export function ConstraintText(constraint: Constraint, sign?: boolean | null, xReplace?: string, yReplace?: string): string;
+}
+declare module "Math/Code/Triangle" {
+    /**
+     * Find c from a and b of a right triangle.
+     * ```
+     * Pyth(3,4) // 5
+     * ```
+     */
+    export function Pyth(a: number, b: number): number;
+    /**
+     * Find b from c and a of a right triangle.
+     * ```
+     * PythLeg(5,4) // 3
+     * ```
+     */
+    export function PythLeg(c: number, a: number): number;
+    /**
+     * Find side length c by cosine law. Input sides a,b and angle C.
+     * ```
+     * CosineLawLength(3, 4, 90) // 5
+     * ```
+     */
+    export function CosineLawLength(a: number, b: number, C: number): number;
+    /**
+     * Find angle C by cosine law. Input sides a,b,c.
+     * ```
+     * CosineLawAngle(5,5,5) // 60
+     * CosineLawAngle(3,4,5) // 90
+     * CosineLawAngle(7,8,9) // 73.3984504
+     * ```
+     */
+    export function CosineLawAngle(a: number, b: number, c: number): number;
+    /**
+     * Find side b by sine law.
+     * ```
+     * SineLawLength(60,1,60) // 1
+     * ```
+     */
+    export function SineLawLength(A: number, a: number, B: number): number;
+    /**
+     * Find angle B by sine law. Assume acute.
+     * ```
+     * SineLawAngle(1,60,1) // 60
+     * ```
+     */
+    export function SineLawAngle(a: number, A: number, b: number): number;
+    /**
+     * Find area by Heron's formula.
+     * ```
+     * Heron(3,4,5) // 6
+     * Heron(1,1,1) // 0.433012701
+     * Heron(7,8,9) // 26.83281573
+     * ```
+     */
+    export function Heron(a: number, b: number, c: number): number;
+    /**
+     * Solve SSS triangle.
+     * ```
+     * SolveSSS(1,sqrt(3),2) // [90,30,60]
+     * ```
+     */
+    export function SolveSSS(a: number, b: number, c: number): [C: number, A: number, B: number];
+    /**
+     * Solve SAS triangle.
+     * ```
+     * SolveSAS(1,90,sqrt(3)) // [30,2,60]
+     * ```
+     */
+    export function SolveSAS(a: number, C: number, b: number): [A: number, c: number, B: number];
+    /**
+     * Solve AAS triangle.
+     * ```
+     * SolveAAS(60,90,sqrt(3)) // [1,30,2]
+     * ```
+     */
+    export function SolveAAS(A: number, B: number, a: number): [c: number, C: number, b: number];
+    /**
+     * Solve ASA triangle.
+     * ```
+     * SolveASA(90,sqrt(3),30) // [2,60,1]
+     * ```
+     */
+    export function SolveASA(A: number, c: number, B: number): [a: number, C: number, b: number];
+    /**
+     * Solve SSA triangle.
+     * ```
+     * SolveSSA(1,sqrt(3),30) // [90,2,60]
+     * ```
+     */
+    export function SolveSSA(a: number, b: number, A: number): [C: number, c: number, B: number];
+    /**
+     * Find heights of SSS triangle.
+     * ```
+     * HeightsBySSS(1,sqrt(3),2) // [sqrt(3),1,sqrt(3)/2]
+     * ```
+     */
+    export function HeightsBySSS(a: number, b: number, c: number): [Ha: number, Hb: number, Hc: number];
+    /**
+     * Find height of SSS triangle, against the first base.
+     * ```
+     * HeightBySSS(1,sqrt(3),2) // sqrt(3)
+     * ```
+     */
+    export function HeightBySSS(a: number, b: number, c: number): number;
+    /**
+     * Find heights of SAS triangle.
+     * ```
+     * HeightsBySAS(1,90,sqrt(3)) // [sqrt(3),1,sqrt(3)/2]
+     * ```
+     */
+    export function HeightsBySAS(a: number, C: number, b: number): [Ha: number, Hb: number, Hc: number];
+    /**
+     * Find height of SAS triangle, opposite to the given angle.
+     * ```
+     * HeightBySAS(1,90,sqrt(3)) // sqrt(3)/2
+     * ```
+     */
+    export function HeightBySAS(a: number, C: number, b: number): number;
+    /**
+     * @deprecated - use TriangleFromPoint
+     * @param fix - Round all return values to integer.
+     * Return the 6 elements of a triangle given vertice. { sideC, angleB, sideA, angleC, sideB, angleA }
+     * ```
+     * TriangleFromVertex([0,0],[4,0],[0,3],false)
+     * // {sideC:4, angleB:36.86989765, sideA:5, angleC:53.13013235, sideB:3, angleA:90}
+     * ```
+     */
+    export function TriangleFromVertex(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): Triangle;
+    /**
+     * @param fix - Round all return values to integer.
+     * Return the 6 elements of a triangle given vertice. [sideA, sideB, sideC, angleA, angleB, angleC]
+     * ```
+     * TriangleFromPoint([0,0],[4,0],[0,3],false)
+     * // [5, 3, 4, 90, 36.86989765, 53.13013235]
+     * ```
+     */
+    export function TriangleFromPoint(A: Point2D, B: Point2D, C: Point2D, fix?: boolean): [
+        sideA: number,
+        sideB: number,
+        sideC: number,
+        angleA: number,
+        angleB: number,
+        angleC: number
+    ];
+    /**
+     * @deprecated
+     * Solve a triangle. return the triangle object solved.
+     * ```
+     * SolveTriangle({sideC:2, sideA:2, sideB:2})
+     * // {sideC:2, angleB:60, sideA:2, angleC:60, sideB:2, angleA:60}
+     * SolveTriangle({sideC:3, angleB:90, sideA:4})
+     * // {sideC:3, angleB:90, sideA:4, angleC:36.86989765, sideB:5, angleA:53.13010235}
+     * SolveTriangle({sideC:5, angleB:30, angleC:80})
+     * // {sideC:5, angleB:30, sideA:4.770944471, angleC:80, sideB:2.53856653, angleA:70}
+     * SolveTriangle({sideC:6, angleB:30, angleA:40})
+     * // {sideC:6, angleB:30, sideA:4.10424172, angleC:110, sideB:3.192533317, angleA:40}
+     * ```
+     */
+    export function SolveTriangle({ sideA, sideB, sideC, angleA, angleB, angleC, }: Partial<Triangle>): Triangle;
+    /**
+     * the orthocentre of a triangle
+     * ```
+     * Orthocentre([9,-6],[6,10],[-7,10])  // [9,13]
+     * ```
+     */
+    export function Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
+    /**
+     * the circumcentre of a triangle
+     * ```
+     * Circumcentre([1,7],[8,-4],[-10,0])  // [-1,-2]
+     * ```
+     */
+    export function Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
+    /**
+     * the centroid of a triangle
+     * ```
+     * Centroid([3,6],[9,12],[15,21])  // [9,13]
+     * ```
+     */
+    export function Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D;
+    /**
+     * the incentre of a triangle
+     * ```
+     * Incentre([3,0],[-3,0],[0,4])  // [0,1.5]
+     * ```
+     */
+    export function Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D;
+    /**
+     * the scaled points [A,B,C] so that their orthecentre and themselves becomes integral
+     */
+    export function ScaleOrthocentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+    /**
+     * the scaled points [A,B,C] so that their circumcentre and themselves becomes integral
+     */
+    export function ScaleCircumcentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+    /**
+     * the scaled points [A,B,C] so that their centroid and themselves becomes integral
+     */
+    export function ScaleCentroidToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+    /**
+     * the scaled points [A,B,C] so that their incentre and themselves becomes integral
+     */
+    export function ScaleIncentreToInt(A: Point2D, B: Point2D, C: Point2D): [Point2D, Point2D, Point2D];
+}
+declare module "Math/Code/Trigonometry" {
+    /**
+     * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
+     * the quadrant of a point or angle: 'I','II','III' or 'IV'.
+     * ```
+     * Quadrant([1,1]) \\ 'I'
+     * Quadrant([-1,1]) \\ 'II'
+     * Quadrant(200) \\ 'III'
+     * Quadrant(350) \\ 'IV'
+     * ```
+     */
+    export function Quadrant(rect: Point2D | number): QuadrantName;
+    /**
+     * the rectangular coordinates [x,y] from a polar coordinates [r,theta].
+     * ```
+     * PolToRect([1,45]) // [0.707,0.707]
+     * ```
+     */
+    export function PolToRect([r, q]: PolarPoint): Point2D;
+    /**
+     * the polar coordinates [r,theta] of a rectangular coordinates [x,y].
+     * ```
+     * RectToPol([1,1]) // [1.414,45]
+     * ```
+     */
+    export function RectToPol([x, y]: Point2D): PolarPoint;
+    /**
+     * the sign from ASTC diagram, 1 or -1, representing positive or negative.
+     * ```
+     * ASTC(2,'cos') // -1
+     * ASTC('III','tan') // 1
+     * ```
+     */
+    export function ASTC(quadrant: QuadrantCode | QuadrantName, func: TrigFunc): -1 | 0 | 1;
+    /**
+     * the roots of trig equations sin(x)=k , cos(x)=k or tan(x)=k.
+     * ```
+     * TrigSolve('sin',0) // [0, 180, 360]
+     * TrigSolve('sin',0.5) // [30, 150]
+     * TrigSolve('sin',1) // [90]
+     * ```
+     */
+    export function TrigSolve(func: TrigFunc, k: number): number[];
+    /**
+     * @deprecated
+     * reduce the polar angle into the range [0,360)
+     * ```
+     * PolarReduce(370) // 10
+     * PolarReduce(-10) // 350
+     * ```
+     */
+    export function PolarReduce(q: number): number;
+    /**
+     * @deprecated
+     * the angle (within [0,180]) between two polar angles
+     * ```
+     * PolarDiff(80,70) // 10
+     * PolarDiff(350,10) // 20
+     * ```
+     */
+    export function PolarDiff(angle1: number, angle2: number): number;
+    /**
+     * the whole bearing in the polar angle direction
+     * ```
+     * WholeBearing(0) // '090°'
+     * WholeBearing(180) // '270°'
+     * ```
+     */
+    export function WholeBearing(polarAngle: number): string;
+    /**
+     * the compass bearing in the polar angle direction
+     * ```
+     * CompassBearing(30) // 'N60°E'
+     * ```
+     */
+    export function CompassBearing(polarAngle: number): string;
+}
+declare module "Math/Code/Utility" {
+    /**
+     * get the element at cyclic index
+     * ```
+     * At([1,2,3],-1) // 3
+     * At([1,2,3],3) // 1
+     * ```
+     */
+    export function At<T>(arr: T[], index: number): T;
+    /**
+     * get the chain of elements around `centreIndex` in cyclic fashion
+     * ```
+     * Lace([1,2,3,4,5,6],0,[-1,0,1]) // [6,1,2]
+     * ```
+     */
+    export function Lace<T>(arr: T[], centreIndex: number, relativeIndices: number[]): T[];
+    /**
+     * If `bool`, return `[first, second]`, else return `[second, first]`
+     * ```
+     * Flop(true,1,2) // [1,2]
+     * Flop(false,1,2) // [2,1]
+     * ```
+     */
+    export function Flop<T>(bool: boolean, first: T, second: T): [T, T];
+    /**
+     * Select the displayed value in each pair in `trueFalsePairs` according to `truth`.
+     * ```
+     * ComboDisplay([true,false],[[1,2],[3,4]]) // [1,4]
+     * ComboDisplay(0,[1,2],[3,4]) // [1,4]
+     * ComboDisplay(1,[1,2],[3,4]) // [2,3]
+     * ```
+     */
+    export function ComboDisplay<T>(truth: boolean[] | number, ...trueFalsePairs: [trueValue: T, falseValue: T][]): T[];
+}
+declare module "Math/Code/Vector" {
+    /**
+     * sum of all vectors
+     * ```
+     * VecAdd([1,2],[3,4],[5,6]) // [9,12]
+     * ```
+     */
+    export function VecAdd(...vectors: Point2D[]): Point2D;
+}
+declare module "Math/Code/Vector3D" {
+    /**
+     * mean of all vectors
+     * ```
+     * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
+     * ```
+     */
+    export function Mid3D(...vectors: Point3D[]): Point3D;
+    /**
+     * the point P on AB such that AP : PB = ratio : 1-ratio
+     * ```
+     * Slide3D([1,0,0],[5,0,0],0.75) // [4,0,0]
+     * ```
+     */
+    export function Slide3D(A: Point3D, B: Point3D, ratio: number): Point3D;
+    /**
+     * projection of a point on a plane
+     * ```
+     * let P = [2,3,4]
+     * let [A,B,C] = [[0,0,0],[1,0,0],[0,1,0]]
+     * PdFoot3D(P,[A,B,C]) // [2,3,0]
+     * PdFoot3D(P,[A,B]) // [2,0,0]
+     * ```
+     */
+    export function PdFoot3D(point: Point3D, base: [Point3D, Point3D, Point3D] | [Point3D, Point3D]): Point3D;
+    /**
+     * embed points on xy-plane onto a plane in 3D
+     * ```
+     * let [A,B,C] = [[0,0],[1,0],[0,1]]
+     * Embed([A,B,C],[0,0,2],[1,0,0],[0,1,0]) // [[0,0,2],[1,0,2],[0,1,2]]
+     * ```
+     */
+    export function Embed(plane2D: Point2D[], origin: Point3D, xVec: Point3D, yVec: Point3D): Point3D[];
+    /**
+     * embed 2D points onto a plane in 3D with constant x. The x-axis becomes the 3D y-axis. The y-axis becomes the 3D z-axis.
+     * ```
+     * let [A,B,C] = [[0,0],[3,0],[0,1]]
+     * EmbedX([A,B,C],2) // [[2,0,0],[2,3,0],[2,0,1]]
+     * ```
+     */
+    export function EmbedX(plane2D: Point2D[], x?: number): Point3D[];
+    /**
+     * embed 2D points onto a plane in 3D with constant y. The x-axis becomes the 3D x-axis. The y-axis becomes the 3D z-axis.
+     * ```
+     * let [A,B,C] = [[0,0],[3,0],[0,1]]
+     * EmbedY([A,B,C],2) // [[0,2,0],[3,2,0],[0,2,1]]
+     * ```
+     */
+    export function EmbedY(plane2D: Point2D[], y?: number): Point3D[];
+    /**
+     * embed points on xy-plane onto a plane in 3D with constant z
+     * ```
+     * let [A,B,C] = [[0,0],[3,0],[0,1]]
+     * EmbedZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
+     * ```
+     */
+    export function EmbedZ(plane2D: Point2D[], z?: number): Point3D[];
+    /**
+     * flatten points to the same z-plane
+     * ```
+     * let [A,B,C] = [[0,0,0],[3,0,1],[0,1,2]]
+     * FlatZ([A,B,C],2) // [[0,0,2],[3,0,2],[0,1,2]]
+     * ```
+     */
+    export function FlatZ(points: Point3D[], z?: number): Point3D[];
+    /**
+     * extrude the lower base of a frustum towards the upper base by a ratio
+     * ```
+     * let [A,B,C] = [[0,0,0],[4,0,0],[0,4,0]]
+     * Extrude([A,B,C],[[0,0,4]],0.75) // [[0,0,0],[3,0,0],[0,3,0]]
+     * ```
+     */
+    export function Extrude(lowerBase: Point3D[], upperBase: Point3D[], scale: number): Point3D[];
 }
 declare module "Math/Builder/support/write" {
     export function symbol(v: varObj): string;
@@ -4638,85 +4253,366 @@ declare module "Math/Builder/build_ratio" {
     };
 }
 declare module "Math/Builder/index" {
-    import { BuildAngle as $BuildAngle } from "Math/Builder/build_angle";
-    import { BuildSolve as $BuildSolve } from "Math/Builder/build_solve";
-    import { BuildTrend as $BuildTrend } from "Math/Builder/build_trend";
-    import { BuildRatio as $BuildRatio } from "Math/Builder/build_ratio";
-    global {
-        var BuildAngle: typeof $BuildAngle;
-        var BuildSolve: typeof $BuildSolve;
-        var BuildTrend: typeof $BuildTrend;
-        var BuildRatio: typeof $BuildRatio;
-    }
+    export { BuildAngle } from "Math/Builder/build_angle";
+    export { BuildSolve } from "Math/Builder/build_solve";
+    export { BuildTrend } from "Math/Builder/build_trend";
+    export { BuildRatio } from "Math/Builder/build_ratio";
 }
-declare module "Math/Algebra/Algebra" {
-    /**
-     * Solve [x,y] from ax + by = c and px + qy = r.
-     * ```
-     * Crammer(1,1,5,1,-1,1) // [3,2] solving x+y=5 and x-y=1
-     * Crammer(1,1,3,2,2,6) // throw, parallel
-     * ```
-     */
-    export function Crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
-    /**
-     * The product of two polynomials.
-     * ```
-     * xPolynomial([1,2,3],[4,5]) // [4,13,22,15]
-     * // (1x^2+2x+3)(4x+5) = 4x^3+13x^2+22x+15
-     * ```
-     */
-    export function xPolynomial(poly1: number[], poly2: number[]): number[];
-    /**
-     * Expansion coeff of (Ax+B)^n in descending power of x.
-     * ```
-     * Binomial(2,3,2) // (2x+3)^2 = [4,12,9]
-     * Binomial(2,3) // power default to n = 2
-     * ```
-     */
-    export function Binomial(A: number, B: number, n?: number): number[];
+declare module "Math/should" {
+    class CustomErrorCls extends Error {
+        constructor(name: string, message: string);
+    }
+    export function CustomError(name: string, message: string): CustomErrorCls;
+    export function toError(e: unknown): Error;
+    export function MathError(message: string): CustomErrorCls;
+    export function Should(condition: boolean, msg?: string): asserts condition;
 }
 declare module "Math/bundle" {
     export * from "Math/Algebra/Algebra";
+    export * from "Math/Algebra/Calculus";
+    export * from "Math/Algebra/Circle";
+    export * from "Math/Algebra/Quadratic";
+    export * from "Math/Algebra/Linear";
+    export * from "Math/Algebra/Polynomial";
+    export * from "Math/Algebra/Transform";
+    export * from "Math/Code/Assertion";
+    export * from "Math/Code/Combinatorics";
+    export * from "Math/Code/Function";
+    export * from "Math/Code/Geometry";
+    export * from "Math/Code/Latex";
+    export * from "Math/Code/LinearProgram";
+    export * from "Math/Code/Numeracy";
+    export * from "Math/Code/PhyConst";
+    export * from "Math/Code/PhyEq";
+    export * from "Math/Code/Random";
+    export * from "Math/Code/RandomShake";
+    export * from "Math/Code/RandomUtil";
+    export * from "Math/Code/Relation";
+    export * from "Math/Code/Sequence";
+    export * from "Math/Code/Shake";
+    export * from "Math/Code/Stat";
+    export * from "Math/Code/Text";
+    export * from "Math/Code/Triangle";
+    export * from "Math/Code/Trigonometry";
+    export * from "Math/Code/Utility";
+    export * from "Math/Code/Vector";
+    export * from "Math/Code/Vector3D";
+    export * from "Math/Builder/index";
+    export * from "Math/should";
 }
 declare module "Math/bundled" {
     import * as bundle from "Math/bundle";
     global {
+        var ASTC: typeof bundle.ASTC;
+        var ASequence: typeof bundle.ASequence;
+        var ASsum: typeof bundle.ASsum;
+        var ASterm: typeof bundle.ASterm;
+        var Abs: typeof bundle.Abs;
+        var Angle: typeof bundle.Angle;
+        var AnglePolar: typeof bundle.AnglePolar;
+        var ArcLength: typeof bundle.ArcLength;
+        var AreAbsDistinct: typeof bundle.AreAbsDistinct;
+        var AreCoprime: typeof bundle.AreCoprime;
+        var AreDifferent: typeof bundle.AreDifferent;
+        var AreDistantPoint: typeof bundle.AreDistantPoint;
+        var AreDistinct: typeof bundle.AreDistinct;
+        var AreOblique: typeof bundle.AreOblique;
+        var AreSameSign: typeof bundle.AreSameSign;
+        var ArrangePoints: typeof bundle.ArrangePoints;
+        var At: typeof bundle.At;
+        var Bin: typeof bundle.Bin;
         var Binomial: typeof bundle.Binomial;
+        var BuildAngle: typeof bundle.BuildAngle;
+        var BuildRatio: typeof bundle.BuildRatio;
+        var BuildSolve: typeof bundle.BuildSolve;
+        var BuildTrend: typeof bundle.BuildTrend;
+        var Ceil: typeof bundle.Ceil;
+        var Centroid: typeof bundle.Centroid;
+        var CheckVertices: typeof bundle.CheckVertices;
+        var ChessboardDistance: typeof bundle.ChessboardDistance;
+        var CircleFromGeneral: typeof bundle.CircleFromGeneral;
+        var CircleGeneral: typeof bundle.CircleGeneral;
+        var CircleLineIntersect: typeof bundle.CircleLineIntersect;
+        var CircleLinearIntersect: typeof bundle.CircleLinearIntersect;
+        var Circumcentre: typeof bundle.Circumcentre;
+        var ComboDisplay: typeof bundle.ComboDisplay;
+        var CompassBearing: typeof bundle.CompassBearing;
+        var ConstraintText: typeof bundle.ConstraintText;
+        var ConstraintsFromPoints: typeof bundle.ConstraintsFromPoints;
+        var Coord: typeof bundle.Coord;
+        var CosineLawAngle: typeof bundle.CosineLawAngle;
+        var CosineLawLength: typeof bundle.CosineLawLength;
         var Crammer: typeof bundle.Crammer;
+        var CustomError: typeof bundle.CustomError;
+        var Degree: typeof bundle.Degree;
+        var Dfrac: typeof bundle.Dfrac;
+        var Dir: typeof bundle.Dir;
+        var Discriminant: typeof bundle.Discriminant;
+        var Distance: typeof bundle.Distance;
+        var Divide: typeof bundle.Divide;
+        var Embed: typeof bundle.Embed;
+        var EmbedX: typeof bundle.EmbedX;
+        var EmbedY: typeof bundle.EmbedY;
+        var EmbedZ: typeof bundle.EmbedZ;
+        var ExplainTransforms: typeof bundle.ExplainTransforms;
+        var Extrude: typeof bundle.Extrude;
+        var Factorial: typeof bundle.Factorial;
+        var FeasibleIntegral: typeof bundle.FeasibleIntegral;
+        var FeasibleIsBounded: typeof bundle.FeasibleIsBounded;
+        var FeasiblePolygon: typeof bundle.FeasiblePolygon;
+        var FeasibleVertices: typeof bundle.FeasibleVertices;
+        var FieldAt: typeof bundle.FieldAt;
+        var Fix: typeof bundle.Fix;
+        var FixDown: typeof bundle.FixDown;
+        var FixUp: typeof bundle.FixUp;
+        var FlatZ: typeof bundle.FlatZ;
+        var Floor: typeof bundle.Floor;
+        var Flop: typeof bundle.Flop;
+        var Freq: typeof bundle.Freq;
+        var FreqTable: typeof bundle.FreqTable;
+        var Freqs: typeof bundle.Freqs;
+        var GSequence: typeof bundle.GSequence;
+        var GSsum: typeof bundle.GSsum;
+        var GSterm: typeof bundle.GSterm;
+        var GrammarJoin: typeof bundle.GrammarJoin;
+        var GroupCumFreqTable: typeof bundle.GroupCumFreqTable;
+        var GroupFreqTable: typeof bundle.GroupFreqTable;
+        var HCF: typeof bundle.HCF;
+        var HeightBySAS: typeof bundle.HeightBySAS;
+        var HeightBySSS: typeof bundle.HeightBySSS;
+        var HeightsBySAS: typeof bundle.HeightsBySAS;
+        var HeightsBySSS: typeof bundle.HeightsBySSS;
+        var Heron: typeof bundle.Heron;
+        var IQR: typeof bundle.IQR;
+        var Incentre: typeof bundle.Incentre;
+        var IndexToSurd: typeof bundle.IndexToSurd;
+        var IneqSign: typeof bundle.IneqSign;
+        var IntersectAngle: typeof bundle.IntersectAngle;
+        var Intersection: typeof bundle.Intersection;
+        var IsAbsBetween: typeof bundle.IsAbsBetween;
+        var IsAroundPoint: typeof bundle.IsAroundPoint;
+        var IsBetween: typeof bundle.IsBetween;
+        var IsConvexPolygon: typeof bundle.IsConvexPolygon;
+        var IsDecimal: typeof bundle.IsDecimal;
+        var IsEven: typeof bundle.IsEven;
+        var IsInteger: typeof bundle.IsInteger;
+        var IsNegative: typeof bundle.IsNegative;
+        var IsNonNegative: typeof bundle.IsNonNegative;
+        var IsNonNegativeInteger: typeof bundle.IsNonNegativeInteger;
+        var IsNonZero: typeof bundle.IsNonZero;
+        var IsNum: typeof bundle.IsNum;
+        var IsOdd: typeof bundle.IsOdd;
+        var IsPositive: typeof bundle.IsPositive;
+        var IsPositiveInteger: typeof bundle.IsPositiveInteger;
+        var IsProbability: typeof bundle.IsProbability;
+        var IsRational: typeof bundle.IsRational;
+        var IsReflex: typeof bundle.IsReflex;
+        var IsSquareNum: typeof bundle.IsSquareNum;
+        var IsTerminating: typeof bundle.IsTerminating;
+        var IsTriangle: typeof bundle.IsTriangle;
+        var LCM: typeof bundle.LCM;
+        var Lace: typeof bundle.Lace;
+        var LineFeat: typeof bundle.LineFeat;
+        var LineFromBisector: typeof bundle.LineFromBisector;
+        var LineFromIntercepts: typeof bundle.LineFromIntercepts;
+        var LineFromPointSlope: typeof bundle.LineFromPointSlope;
+        var LineFromTwoPoints: typeof bundle.LineFromTwoPoints;
+        var LinearFromBisector: typeof bundle.LinearFromBisector;
+        var LinearFromIntercepts: typeof bundle.LinearFromIntercepts;
+        var LinearFromPointSlope: typeof bundle.LinearFromPointSlope;
+        var LinearFromTwoPoints: typeof bundle.LinearFromTwoPoints;
+        var LongDivision: typeof bundle.LongDivision;
+        var LowerQ: typeof bundle.LowerQ;
+        var LowerQAt: typeof bundle.LowerQAt;
+        var LucasSequence: typeof bundle.LucasSequence;
+        var MathError: typeof bundle.MathError;
+        var Max: typeof bundle.Max;
+        var MaximizeField: typeof bundle.MaximizeField;
+        var MaximizePoint: typeof bundle.MaximizePoint;
+        var Mean: typeof bundle.Mean;
+        var Median: typeof bundle.Median;
+        var MedianAt: typeof bundle.MedianAt;
+        var Mid: typeof bundle.Mid;
+        var Mid3D: typeof bundle.Mid3D;
+        var Min: typeof bundle.Min;
+        var MinimizeField: typeof bundle.MinimizeField;
+        var MinimizePoint: typeof bundle.MinimizePoint;
+        var Mode: typeof bundle.Mode;
+        var Move: typeof bundle.Move;
+        var MoveX: typeof bundle.MoveX;
+        var MoveY: typeof bundle.MoveY;
+        var OnCircle: typeof bundle.OnCircle;
+        var OptimizeField: typeof bundle.OptimizeField;
+        var OptimizePoint: typeof bundle.OptimizePoint;
+        var Orthocentre: typeof bundle.Orthocentre;
+        var PairTable: typeof bundle.PairTable;
+        var Partition: typeof bundle.Partition;
+        var PdFoot: typeof bundle.PdFoot;
+        var PdFoot3D: typeof bundle.PdFoot3D;
+        var PhyConst: typeof bundle.PhyConst;
+        var PhyEq: typeof bundle.PhyEq;
+        var PhyEqCls: typeof bundle.PhyEqCls;
+        var PolToRect: typeof bundle.PolToRect;
+        var PolarDiff: typeof bundle.PolarDiff;
+        var PolarReduce: typeof bundle.PolarReduce;
+        var PolyFunction: typeof bundle.PolyFunction;
+        var PolyPrint: typeof bundle.PolyPrint;
+        var PolySimplify: typeof bundle.PolySimplify;
+        var PolySort: typeof bundle.PolySort;
+        var PrimeFactorize: typeof bundle.PrimeFactorize;
+        var PrimeFactors: typeof bundle.PrimeFactors;
+        var Product: typeof bundle.Product;
+        var Pyth: typeof bundle.Pyth;
+        var PythLeg: typeof bundle.PythLeg;
+        var Quadrant: typeof bundle.Quadrant;
+        var QuadraticFromRoot: typeof bundle.QuadraticFromRoot;
+        var QuadraticFromVertex: typeof bundle.QuadraticFromVertex;
+        var QuadraticRoot: typeof bundle.QuadraticRoot;
+        var QuadraticSequence: typeof bundle.QuadraticSequence;
+        var QuadraticVertex: typeof bundle.QuadraticVertex;
+        var Radian: typeof bundle.Radian;
+        var Ratio: typeof bundle.Ratio;
+        var RectToPol: typeof bundle.RectToPol;
+        var ReflectX: typeof bundle.ReflectX;
+        var ReflectY: typeof bundle.ReflectY;
+        var RegularPolygon: typeof bundle.RegularPolygon;
+        var RndAngles: typeof bundle.RndAngles;
+        var RndCapitals: typeof bundle.RndCapitals;
+        var RndComposite: typeof bundle.RndComposite;
+        var RndConvexPolygon: typeof bundle.RndConvexPolygon;
+        var RndData: typeof bundle.RndData;
+        var RndEven: typeof bundle.RndEven;
+        var RndHe: typeof bundle.RndHe;
+        var RndLetters: typeof bundle.RndLetters;
+        var RndN: typeof bundle.RndN;
+        var RndNs: typeof bundle.RndNs;
+        var RndOdd: typeof bundle.RndOdd;
+        var RndOnCircle: typeof bundle.RndOnCircle;
+        var RndP: typeof bundle.RndP;
+        var RndPartition: typeof bundle.RndPartition;
+        var RndPick: typeof bundle.RndPick;
+        var RndPickN: typeof bundle.RndPickN;
+        var RndPickUnique: typeof bundle.RndPickUnique;
+        var RndPoint: typeof bundle.RndPoint;
+        var RndPointPolar: typeof bundle.RndPointPolar;
+        var RndPoints: typeof bundle.RndPoints;
+        var RndPoly: typeof bundle.RndPoly;
+        var RndPolynomial: typeof bundle.RndPolynomial;
+        var RndPyth: typeof bundle.RndPyth;
+        var RndQ: typeof bundle.RndQ;
+        var RndQs: typeof bundle.RndQs;
+        var RndR: typeof bundle.RndR;
+        var RndRatio: typeof bundle.RndRatio;
+        var RndRs: typeof bundle.RndRs;
+        var RndShake: typeof bundle.RndShake;
+        var RndShakeBase: typeof bundle.RndShakeBase;
+        var RndShakeCombo: typeof bundle.RndShakeCombo;
+        var RndShakeCompoundInequality: typeof bundle.RndShakeCompoundInequality;
+        var RndShakeConstraint: typeof bundle.RndShakeConstraint;
+        var RndShakeConstraints: typeof bundle.RndShakeConstraints;
+        var RndShakeG: typeof bundle.RndShakeG;
+        var RndShakeIneq: typeof bundle.RndShakeIneq;
+        var RndShakeN: typeof bundle.RndShakeN;
+        var RndShakePoint: typeof bundle.RndShakePoint;
+        var RndShakePointPolar: typeof bundle.RndShakePointPolar;
+        var RndShakeQ: typeof bundle.RndShakeQ;
+        var RndShakeQuantity: typeof bundle.RndShakeQuantity;
+        var RndShakeR: typeof bundle.RndShakeR;
+        var RndShakeRatio: typeof bundle.RndShakeRatio;
+        var RndShakeTrig: typeof bundle.RndShakeTrig;
+        var RndShakeTrigValue: typeof bundle.RndShakeTrigValue;
+        var RndShe: typeof bundle.RndShe;
+        var RndShuffle: typeof bundle.RndShuffle;
+        var RndT: typeof bundle.RndT;
+        var RndTriangle: typeof bundle.RndTriangle;
+        var RndTrigEqv: typeof bundle.RndTrigEqv;
+        var RndTrigValue: typeof bundle.RndTrigValue;
+        var RndU: typeof bundle.RndU;
+        var RndZ: typeof bundle.RndZ;
+        var RndZs: typeof bundle.RndZs;
+        var Rng: typeof bundle.Rng;
+        var Rotate: typeof bundle.Rotate;
+        var Round: typeof bundle.Round;
+        var RoundDown: typeof bundle.RoundDown;
+        var RoundUp: typeof bundle.RoundUp;
+        var ScaleCentroidToInt: typeof bundle.ScaleCentroidToInt;
+        var ScaleCircumcentreToInt: typeof bundle.ScaleCircumcentreToInt;
+        var ScaleIncentreToInt: typeof bundle.ScaleIncentreToInt;
+        var ScaleOrthocentreToInt: typeof bundle.ScaleOrthocentreToInt;
+        var ScaleTo: typeof bundle.ScaleTo;
+        var Sci: typeof bundle.Sci;
+        var SectorArea: typeof bundle.SectorArea;
+        var ShakeBase: typeof bundle.ShakeBase;
+        var ShakeCompoundInequality: typeof bundle.ShakeCompoundInequality;
+        var ShakeConstraint: typeof bundle.ShakeConstraint;
+        var ShakeConstraints: typeof bundle.ShakeConstraints;
+        var ShakeG: typeof bundle.ShakeG;
+        var ShakeIneq: typeof bundle.ShakeIneq;
+        var ShakeN: typeof bundle.ShakeN;
+        var ShakePoint: typeof bundle.ShakePoint;
+        var ShakePointPolar: typeof bundle.ShakePointPolar;
+        var ShakeQ: typeof bundle.ShakeQ;
+        var ShakeQuantity: typeof bundle.ShakeQuantity;
+        var ShakeR: typeof bundle.ShakeR;
+        var ShakeRatio: typeof bundle.ShakeRatio;
+        var ShakeTrigValue: typeof bundle.ShakeTrigValue;
+        var ShortDivision: typeof bundle.ShortDivision;
+        var Should: typeof bundle.Should;
+        var SigFig: typeof bundle.SigFig;
+        var Sign: typeof bundle.Sign;
+        var SineLawAngle: typeof bundle.SineLawAngle;
+        var SineLawLength: typeof bundle.SineLawLength;
+        var Slide: typeof bundle.Slide;
+        var Slide3D: typeof bundle.Slide3D;
+        var Slope: typeof bundle.Slope;
+        var SlopePd: typeof bundle.SlopePd;
+        var SolveAAS: typeof bundle.SolveAAS;
+        var SolveASA: typeof bundle.SolveASA;
+        var SolveSAS: typeof bundle.SolveSAS;
+        var SolveSSA: typeof bundle.SolveSSA;
+        var SolveSSS: typeof bundle.SolveSSS;
+        var SolveTriangle: typeof bundle.SolveTriangle;
+        var Sort: typeof bundle.Sort;
+        var SortBy: typeof bundle.SortBy;
+        var Sqrt: typeof bundle.Sqrt;
+        var StatRange: typeof bundle.StatRange;
+        var StdDev: typeof bundle.StdDev;
+        var StemAndLeaf: typeof bundle.StemAndLeaf;
+        var Sum: typeof bundle.Sum;
+        var Summary: typeof bundle.Summary;
+        var Table: typeof bundle.Table;
+        var ToBase: typeof bundle.ToBase;
+        var ToFrac: typeof bundle.ToFrac;
+        var TransformFunc: typeof bundle.TransformFunc;
+        var TriangleFromPoint: typeof bundle.TriangleFromPoint;
+        var TriangleFromVertex: typeof bundle.TriangleFromVertex;
+        var TrigSolve: typeof bundle.TrigSolve;
+        var UniMode: typeof bundle.UniMode;
+        var UpperQ: typeof bundle.UpperQ;
+        var UpperQAt: typeof bundle.UpperQAt;
+        var VecAdd: typeof bundle.VecAdd;
+        var WholeBearing: typeof bundle.WholeBearing;
+        var ZScore: typeof bundle.ZScore;
+        var arccos: typeof bundle.arccos;
+        var arcsin: typeof bundle.arcsin;
+        var arctan: typeof bundle.arctan;
+        var cos: typeof bundle.cos;
+        var differentiate: typeof bundle.differentiate;
+        var functionize: typeof bundle.functionize;
+        var getMaxDeg: typeof bundle.getMaxDeg;
+        var integrate: typeof bundle.integrate;
+        var isConstrained: typeof bundle.isConstrained;
+        var isLooseConstrained: typeof bundle.isLooseConstrained;
+        var log: typeof bundle.log;
+        var nCr: typeof bundle.nCr;
+        var nPr: typeof bundle.nPr;
+        var sin: typeof bundle.sin;
+        var tan: typeof bundle.tan;
+        var toError: typeof bundle.toError;
         var xPolynomial: typeof bundle.xPolynomial;
     }
 }
 declare module "Math/index" {
-    import "Math/Code/Assertion";
-    import "Math/Code/Combinatorics";
-    import "Math/Code/Function";
-    import "Math/Code/Geometry";
-    import "Math/Code/Latex";
-    import "Math/Code/LinearProgram";
-    import "Math/Code/Numeracy";
-    import "Math/Code/PhyConst";
-    import "Math/Code/PhyEq";
-    import "Math/Code/Random";
-    import "Math/Code/RandomShake";
-    import "Math/Code/RandomUtil";
-    import "Math/Code/Relation";
-    import "Math/Code/Sequence";
-    import "Math/Code/Shake";
-    import "Math/Code/Stat";
-    import "Math/Code/Text";
-    import "Math/Code/Triangle";
-    import "Math/Code/Trigonometry";
-    import "Math/Code/Utility";
-    import "Math/Code/Vector";
-    import "Math/Code/Vector3D";
-    import "Math/Algebra/Calculus";
-    import "Math/Algebra/Circle";
-    import "Math/Algebra/Quadratic";
-    import "Math/Algebra/Linear";
-    import "Math/Algebra/Polynomial";
-    import "Math/Algebra/Transform";
-    import "Math/should";
-    import "Math/Builder/index";
     import "Math/bundled";
 }
 declare module "Pen/AutoPen" {

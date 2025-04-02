@@ -155,9 +155,6 @@ export class Soil {
             } catch (e) {
                 if (e instanceof Error) {
                     switch (e.name) {
-                        case 'ContractError':
-                            this.logger.add(e)
-                            break
                         case 'MathError':
                             this.logger.add(e)
                             break

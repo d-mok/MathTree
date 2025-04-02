@@ -429,7 +429,4 @@ export class PhyEqCls {
     }
 }
 
-declare global {
-    var PhyEq: PhyEqCls
-}
-globalThis.PhyEq = new PhyEqCls()
+export const PhyEq = new PhyEqCls()

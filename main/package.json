@@ -10,7 +10,8 @@
         "test": "vitest run",
         "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js",
         "npm i": "npm i --install-links=false",
-        "expose_global": "npx tsc --project tsconfig.bundle.json && node --experimental-strip-types ./expose.ts"
+        "expose_1": "npx tsc --project tsconfig.bundle.json",
+        "expose_2": "node --experimental-strip-types ./expose.ts"
     },
     "devDependencies": {
         "esbuild": "^0.25.2",
@@ -18,7 +19,6 @@
     },
     "dependencies": {
         "bot": "file:../packages/bot",
-        "contract": "file:../packages/contract",
         "fate": "file:../packages/fate",
         "gauss": "file:../packages/gauss",
         "katex": "^0.16.21",

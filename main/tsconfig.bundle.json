@@ -64,5 +64,5 @@
         "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
     },
     "include": ["./src"],
-    "exclude": ["src/Soil/context.ts"]
+    "exclude": ["src/Soil/context.ts", "**/*.test.ts"]
 }

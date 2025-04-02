@@ -5,12 +5,11 @@ class CustomErrorCls extends Error {
     }
 }
 
-function CustomError(name: string, message: string) {
+export function CustomError(name: string, message: string) {
     return new CustomErrorCls(name, message)
 }
-globalThis.CustomError = CustomError
 
-function toError(e: unknown): Error {
+export function toError(e: unknown): Error {
     if (e instanceof Error) {
         return e
     } else if (typeof e === 'string') {
@@ -19,14 +18,12 @@ function toError(e: unknown): Error {
         return CustomError('UnknownError', JSON.stringify(e))
     }
 }
-globalThis.toError = toError
 
-function MathError(message: string) {
+export function MathError(message: string) {
     return new CustomErrorCls('MathError', message)
 }
-globalThis.MathError = MathError
 
-function Should(
+export function Should(
     condition: boolean,
     msg: string = 'Should condition failed!'
 ): asserts condition {
@@ -37,13 +34,3 @@ function Should(
         throw MathError(caller + ': ' + msg)
     }
 }
-globalThis.Should = Should
-
-declare global {
-    var CustomError: any
-    var toError: any
-    var MathError: any
-    var Should: (condition: boolean, msg: string) => asserts condition
-}
-
-export {}

@@ -1,4 +1,3 @@
-import { checkIt, inspectIt, captureAll, exposeAll } from 'contract'
 import _ from 'lodash'
 import * as math from 'mathjs'
 import { PenCls } from '../../Pen/Pen.js'
@@ -130,108 +129,99 @@ function printStep(state: state, morph: morph): string {
         : `\\begin{aligned}y&=${step}\\\\&=${final}\\end{aligned}`
 }
 
-@exposeAll()
-@captureAll()
-export class Host {
-    /**
-     * Transform a function.
-     * ```
-     * let f = x => x**2
-     * TransformFunc(f,'HT',4) // x => (x+4)**2
-     * ```
-     */
-    static TransformFunc(
-        f: (x: number) => number,
-        ...morphs: morph[]
-    ): (x: number) => number {
-        let state = { a: 0, b: 0, m: 1, n: 1 }
-        for (let m of morphs) state = transform(state, m)
-        let { a, b, m, n } = state
-        return (x: number) => n * f(m * x + a) + b
-    }
-
-    /**
-     * Explain a series of function transforms.
-     * ```
-     * let state = {a:0,b:0,m:1,n:1}
-     * let func = (x:number)=>x**2
-     * let transforms = [['HT',4],['VT',3]]
-     * ExplainTransforms({state,func,transforms})
-     * ```
-     */
-    static ExplainTransforms({
-        state = { a: 0, b: 0, m: 1, n: 1 },
-        func,
-        transforms,
-    }: {
-        state?: state
-        func: (x: number) => number
-        transforms: morph[]
-    }): {
-        actions: string[]
-        steps: string[]
-        funcs: ((x: number) => number)[]
-        latexs: string[]
-        explain: string
-        draw: { Q: (pen: PenCls) => void; S: (pen: PenCls) => void }
-    } {
-        let s = { ...state }
-        let f = (x: number) => func(x)
-        let actions: string[] = ['']
-        let steps: string[] = [`y=${brac(printState(state))}`]
-        let funcs: ((x: number) => number)[] = [func]
-        let latexs: string[] = [`y=${brac(printState(state))}`]
-
-        for (let m of transforms) {
-            actions.push(action(m))
-            steps.push(brac(printStep(s, m)))
-            s = transform(s, m)
-            f = TransformFunc(f, m)
-            latexs.push(`y=${brac(printState(s))}`)
-            funcs.push(f)
-        }
-
-        let explain = ''
-        for (let i = 0; i < actions.length; i++) {
-            if (actions[i] !== '')
-                explain += `\\textcolor{blue}{↓  \\text{${actions[i]}}} \\\\`
-            explain += steps[i] + '\\\\'
-        }
-
-        function drawQ(pen: PenCls) {
-            pen.set.weight(2)
-            pen.plotDash(func)
-            pen.plot(funcs.at(-1)!)
-            pen.set.weight()
-        }
-
-        function drawS(pen: PenCls) {
-            let intervals =
-                [[1], [1, 0.3], [1, 0.5, 0.2], [1, 0.7, 0.4, 0.1]][
-                    actions.length - 1
-                ] ?? []
-            intervals.reverse()
-            pen.set.weight(3)
-            for (let i = 0; i < actions.length; i++) {
-                pen.set.alpha(intervals[i] ?? 1)
-                i === 0 ? pen.plotDash(funcs[i]) : pen.plot(funcs[i])
-            }
-            pen.set.alpha()
-            pen.set.weight()
-        }
-
-        return {
-            actions,
-            steps,
-            funcs,
-            latexs,
-            explain,
-            draw: { Q: drawQ, S: drawS },
-        }
-    }
+/**
+ * Transform a function.
+ * ```
+ * let f = x => x**2
+ * TransformFunc(f,'HT',4) // x => (x+4)**2
+ * ```
+ */
+export function TransformFunc(
+    f: (x: number) => number,
+    ...morphs: morph[]
+): (x: number) => number {
+    let state = { a: 0, b: 0, m: 1, n: 1 }
+    for (let m of morphs) state = transform(state, m)
+    let { a, b, m, n } = state
+    return (x: number) => n * f(m * x + a) + b
 }
 
-declare global {
-    var ExplainTransforms: typeof Host.ExplainTransforms
-    var TransformFunc: typeof Host.TransformFunc
+/**
+ * Explain a series of function transforms.
+ * ```
+ * let state = {a:0,b:0,m:1,n:1}
+ * let func = (x:number)=>x**2
+ * let transforms = [['HT',4],['VT',3]]
+ * ExplainTransforms({state,func,transforms})
+ * ```
+ */
+export function ExplainTransforms({
+    state = { a: 0, b: 0, m: 1, n: 1 },
+    func,
+    transforms,
+}: {
+    state?: state
+    func: (x: number) => number
+    transforms: morph[]
+}): {
+    actions: string[]
+    steps: string[]
+    funcs: ((x: number) => number)[]
+    latexs: string[]
+    explain: string
+    draw: { Q: (pen: PenCls) => void; S: (pen: PenCls) => void }
+} {
+    let s = { ...state }
+    let f = (x: number) => func(x)
+    let actions: string[] = ['']
+    let steps: string[] = [`y=${brac(printState(state))}`]
+    let funcs: ((x: number) => number)[] = [func]
+    let latexs: string[] = [`y=${brac(printState(state))}`]
+
+    for (let m of transforms) {
+        actions.push(action(m))
+        steps.push(brac(printStep(s, m)))
+        s = transform(s, m)
+        f = TransformFunc(f, m)
+        latexs.push(`y=${brac(printState(s))}`)
+        funcs.push(f)
+    }
+
+    let explain = ''
+    for (let i = 0; i < actions.length; i++) {
+        if (actions[i] !== '')
+            explain += `\\textcolor{blue}{↓  \\text{${actions[i]}}} \\\\`
+        explain += steps[i] + '\\\\'
+    }
+
+    function drawQ(pen: PenCls) {
+        pen.set.weight(2)
+        pen.plotDash(func)
+        pen.plot(funcs.at(-1)!)
+        pen.set.weight()
+    }
+
+    function drawS(pen: PenCls) {
+        let intervals =
+            [[1], [1, 0.3], [1, 0.5, 0.2], [1, 0.7, 0.4, 0.1]][
+                actions.length - 1
+            ] ?? []
+        intervals.reverse()
+        pen.set.weight(3)
+        for (let i = 0; i < actions.length; i++) {
+            pen.set.alpha(intervals[i] ?? 1)
+            i === 0 ? pen.plotDash(funcs[i]) : pen.plot(funcs[i])
+        }
+        pen.set.alpha()
+        pen.set.weight()
+    }
+
+    return {
+        actions,
+        steps,
+        funcs,
+        latexs,
+        explain,
+        draw: { Q: drawQ, S: drawS },
+    }
 }
