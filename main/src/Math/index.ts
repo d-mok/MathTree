@@ -21,7 +21,7 @@ import './Code/Utility.js'
 import './Code/Vector.js'
 import './Code/Vector3D.js'
 
-import './Algebra/Algebra.js'
+// import './Algebra/Algebra.js'
 import './Algebra/Calculus.js'
 import './Algebra/Circle.js'
 import './Algebra/Quadratic.js'
@@ -32,3 +32,5 @@ import './Algebra/Transform.js'
 import './should.js'
 
 import './Builder/index.js'
+
+import './bundled.js'

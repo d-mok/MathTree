@@ -1,1 +1,1 @@
-export * from './Algebra/Algebra2.js'
+export * from './Algebra/Algebra.js'

@@ -10,7 +10,7 @@
         "test": "vitest run",
         "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js",
         "npm i": "npm i --install-links=false",
-        "expose_global": "node --experimental-strip-types ./expose.js"
+        "expose_global": "npx tsc --project tsconfig.bundle.json && node --experimental-strip-types ./expose.ts"
     },
     "devDependencies": {
         "esbuild": "^0.25.2",
