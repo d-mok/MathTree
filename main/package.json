@@ -9,7 +9,8 @@
         "build-stable": "esbuild src/index.ts --bundle --minify --outfile=../dist/stable/mathtree.js",
         "test": "vitest run",
         "dev": "esbuild src/index.ts --bundle --outfile=../dist/dev/mathtree.js",
-        "npm i": "npm i --install-links=false"
+        "npm i": "npm i --install-links=false",
+        "expose_global": "node --experimental-strip-types ./expose.js"
     },
     "devDependencies": {
         "esbuild": "^0.25.2",
