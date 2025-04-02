@@ -7,7 +7,8 @@ function coshuffle<T1, T2>(
     shuffle: boolean
 ): [T1[], T2[]] {
     if (!shuffle) return [arr1, arr2]
-    return _(arr1).zip(arr2).shuffle().unzip().value() as [T1[], T2[]]
+    let zipped = arr1.zip(arr2).shuffled()
+    return [zipped.map($ => $[0]), zipped.map($ => $[1])]
 }
 
 export function shuffleOptions(
