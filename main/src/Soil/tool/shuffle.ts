@@ -30,9 +30,9 @@ export function shuffleOptions(
         ans = 'X'
     } else {
         let htmls = Qn.getLiHTMLs()
-        let ansList = _.take(['A', 'B', 'C', 'D', 'E', 'F'], htmls.length)
+        let ansList = ['A', 'B', 'C', 'D', 'E', 'F'].slice(0, htmls.length)
         let [newHtmls, newAnsList] = coshuffle(htmls, ansList, shuffle)
-        let map = _.zipObject(newAnsList, ansList)
+        let map = Object.fromEntries(newAnsList.zip(ansList))
 
         Qn.setLiHTMLs(newHtmls)
         qn = Qn.export()
