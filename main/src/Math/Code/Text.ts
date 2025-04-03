@@ -88,7 +88,7 @@ export function IndexToSurd(text: string) {
  * ```
  */
 export function Coord(point: Point2D, dp: number = 1): string {
-    let [a, b] = point.map($ => cal.blur($))
+    let [a, b] = point.map($ => $.blur())
     a = Fix(a, dp)
     b = Fix(b, dp)
     return '(' + a + ', ' + b + ')'
@@ -104,10 +104,10 @@ export function Coord(point: Point2D, dp: number = 1): string {
  */
 export function Sci(num: number): string {
     if (num === 0) return '0'
-    let m = cal.e(cal.blur(num))
+    let m = num.blur().exponent()
     if (m === 0) return num.toString()
     num = num / 10 ** m
-    num = cal.blur(num)
+    num = num.blur()
     return num.toString() + ' \\times ' + '10^{ ' + m + '}'
 }
 

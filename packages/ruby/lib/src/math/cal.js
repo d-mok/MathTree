@@ -1,165 +1,4 @@
-import { Decimal } from 'decimal.js';
-import _ from 'lodash';
 import * as math from 'mathjs';
-/**
- * The number of significant digits used in {@link blur}.
- */
-const STANDARD_SIGFIG = 14;
-/**
- * Return the blurred value to avoid things like 0.300000000004.
- * If blurring can reduce the number of sigfig by 5 or more, return the blurred value; else, return the original value.
- * ```
- * blur(0.1+0.2) // 0.3
- * ```
- */
-export function blur(num) {
-    let n = parseFloat(num.toPrecision(STANDARD_SIGFIG));
-    return sigfig(n) <= STANDARD_SIGFIG - 5 ? n : num;
-}
-/**
- * Return the deep-blurred value for checking things like integer and equality.
- * This is necessary for comparing numbers that are blurred before.
- * Use 2-digit less accurate that {@link blur}. Unlike {@link blur}, this blurs `num` regardless of the reduction in number of sigfig.
- * ```
- * correct(0.1+0.2) // 0.3
- * ```
- */
-export function correct(num) {
-    return parseFloat(num.toPrecision(STANDARD_SIGFIG - 2));
-}
-/**
- * Check if the two numbers are equal if deep-blurred by {@link correct}.
- * ```
- * eq(0.1+0.2, 0.3) // true
- * ```
- */
-export function eq(a, b) {
-    return correct(a) === correct(b);
-}
-/**
- * Return the number of significant figures of `num`.
- * ```
- * sigfig(1.234) // 4
- * ```
- */
-export function sigfig(num) {
-    return new Decimal(num).precision(false);
-}
-/**
- * Return the number of decimal places of `num`.
- * ```
- * dp(1.234) // 3
- * ```
- */
-export function dp(num) {
-    return new Decimal(num).decimalPlaces();
-}
-/**
- * Return `num` rounded to `sigfig`.
- * ```
- * round(1.2345,4).off() // 1.235
- * round(1.2344,4).up() // 1.235
- * round(1.2345,4).down() // 1.234
- * ```
- */
-export function round(num, sigfig = 3) {
-    function exec(mode) {
-        return new Decimal(num).toSignificantDigits(sigfig, mode).toNumber();
-    }
-    return {
-        off: () => exec(Decimal.ROUND_HALF_UP),
-        up: () => exec(Decimal.ROUND_UP),
-        down: () => exec(Decimal.ROUND_DOWN),
-    };
-}
-/**
- * Return `num` rounded to `dp`.
- * ```
- * fix(1.2345,3).off() // 1.235
- * fix(1.2344,3).up() // 1.235
- * fix(1.2345,3).down() // 1.234
- * ```
- */
-export function fix(num, dp = 0) {
-    function exec(mode) {
-        return new Decimal(num)
-            .toNearest(Number('1e' + String(-dp)), mode)
-            .toNumber();
-    }
-    return {
-        off: () => exec(Decimal.ROUND_HALF_UP),
-        up: () => exec(Decimal.ROUND_UP),
-        down: () => exec(Decimal.ROUND_DOWN),
-    };
-}
-/**
- * Return the exponent part of `num`.
- * ```
- * e(1234) // 3
- * ```
- */
-export function e(num) {
-    return Number(num.toExponential().split('e')[1]);
-}
-/**
- * Return the mantissa part of `num`.
- * ```
- * mantissa(1234) // 1.234
- * ```
- */
-export function mantissa(num) {
-    return Number(num.toExponential().split('e')[0]);
-}
-/**
- * Return the ceil value of `num` in its order of magnitude.
- * ```
- * logCeil(1234) // 10000
- * ```
- */
-export function logCeil(num) {
-    let exp = e(num) + 1;
-    return Number('1e' + exp);
-}
-/**
- * Return the floor value of `num` in its order of magnitude.
- * ```
- * logCeil(1234) // 1000
- * ```
- */
-export function logFloor(num) {
-    let exp = e(num);
-    return Number('1e' + exp);
-}
-/**
- * Return the fraction form of `num`, with max denominator 100000.
- * ```
- * toFraction(0.75) // [3,4]
- * ```
- */
-export function toFraction(num) {
-    if (num === Infinity)
-        return [1, 0];
-    if (num === -Infinity)
-        return [-1, 0];
-    let [P, Q] = new Decimal(num).toFraction(100000);
-    return [P.toNumber(), Q.toNumber()];
-}
-/**
- * Check if `num` is rational, approximately.
- * ```
- * isRational(0.3) // true
- * isRational(Math.sqrt(2)) // false
- * ```
- */
-export function isRational(num) {
-    if (num === Infinity)
-        return false;
-    if (num === -Infinity)
-        return false;
-    let rough = new Decimal(num).toFraction(100000).map($ => $.toNumber());
-    let accurate = new Decimal(num).toFraction(10000000).map($ => $.toNumber());
-    return rough[0] === accurate[0] && rough[1] === accurate[1];
-}
 /**
  * Return the surd in the form of [a,b] meaning a*sqrt(b).
  * ```
@@ -168,10 +7,10 @@ export function isRational(num) {
  * ```
  */
 export function toSurd(num) {
-    num = blur(num);
+    num = num.blur();
     let s = Math.sign(num);
     let a = Math.abs(num);
-    let square = blur(a ** 2);
+    let square = (a ** 2).blur();
     if (square === 0)
         return [0, 1];
     let factors = [1];
@@ -301,47 +140,7 @@ export function crammer(a, b, c, p, q, r) {
         return [NaN, NaN];
     return math.lusolve(A, B).flat();
 }
-export function hcf(nums) {
-    if (nums.length === 0)
-        return NaN;
-    if (nums.length === 1)
-        return nums[0];
-    //@ts-ignore
-    return math.gcd(...nums);
-}
-export function lcm(nums) {
-    if (nums.length === 0)
-        return NaN;
-    if (nums.length === 1)
-        return nums[0];
-    //@ts-ignore
-    return math.lcm(...nums);
-}
-/**
- * Return an array of integral ratio. All inputs will be forced into fraction first.
- * ```
- * [2,4,6].ratio() // [1,2,3]
- * [0,4,6].ratio() // [0,2,3]
- * [1.5,2.5,3.5].ratio() // [3,5,7]
- * ```
- */
-export function toRatio(nums) {
-    if (_.without(nums, 0).length === 0)
-        return [...nums];
-    let fracs = nums.map(toFraction);
-    let denos = fracs.map($ => $[1]);
-    let multiple = lcm(denos);
-    let ints = nums.map($ => $ * multiple).map(blur);
-    let HCF = hcf(ints);
-    return ints.map($ => $ / HCF).map(blur);
-}
-export function median(nums) {
-    return math.median(...nums);
-}
 export function mode(nums) {
     return math.mode(...nums);
-}
-export function std(nums) {
-    return math.std(nums, 'uncorrected');
 }
 //# sourceMappingURL=cal.js.map

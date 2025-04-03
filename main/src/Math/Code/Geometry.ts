@@ -98,7 +98,7 @@ export function Slide(
 export function Rotate(P: Point2D, q: number, O: Point2D = [0, 0]): Point2D {
     let v = vec.fromTo(O, P)
     v = math.rotate(v, (q / 180) * Math.PI)
-    return math.add(v, O).map(cal.blur) as Point2D
+    return math.add(v, O).map($ => $.blur()) as Point2D
 }
 
 /**
@@ -256,7 +256,7 @@ export function Angle(A: Point2D, O: Point2D, B: Point2D): number {
     if (Object.isEqual(B, O)) return NaN
     let anglePolar = AnglePolar(A, O, B)
     let a = IsReflex(A, O, B) ? 360 - anglePolar : anglePolar
-    return cal.blur(a)
+    return a.blur()
 }
 
 /**
@@ -308,8 +308,8 @@ export function RegularPolygon(
         let p = PolToRect([radius, startAngle + i * a])
         p[0] += center[0]
         p[1] += center[1]
-        p[0] = cal.blur(p[0])
-        p[1] = cal.blur(p[1])
+        p[0] = p[0].blur()
+        p[1] = p[1].blur()
         arr.push(p)
     }
     return arr

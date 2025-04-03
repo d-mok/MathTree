@@ -4,7 +4,7 @@ export const num = v.pipe(v.number(), v.custom(Number.isFinite))
 
 export const int = v.pipe(
     num,
-    v.check($ => Number.isInteger(cal.blur($)))
+    v.check($ => Number.isInteger($.blur()))
 )
 
 export const positive = v.pipe(num, v.gtValue(0))

@@ -415,7 +415,7 @@ export function Orthocentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let H = PdFoot(C, [A, B])
     let G = PdFoot(A, [B, C])
     let [x, y] = Intersection(C, H, A, G)
-    return [cal.blur(x), cal.blur(y)]
+    return [x.blur(), y.blur()]
 }
 
 /**
@@ -428,7 +428,7 @@ export function Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let [a1, b1, c1] = LinearFromBisector(A, B)
     let [a2, b2, c2] = LinearFromBisector(B, C)
     let [x, y] = Crammer(a1, b1, -c1, a2, b2, -c2)
-    return [cal.blur(x), cal.blur(y)]
+    return [x.blur(), y.blur()]
 }
 
 /**
@@ -439,7 +439,7 @@ export function Circumcentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
  */
 export function Centroid(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let [x, y] = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3]
-    return [cal.blur(x), cal.blur(y)]
+    return [x.blur(), y.blur()]
 }
 
 /**
@@ -455,7 +455,7 @@ export function Incentre(A: Point2D, B: Point2D, C: Point2D): Point2D {
     let p = a + b + c
     let x = (a * A[0] + b * B[0] + c * C[0]) / p
     let y = (a * A[1] + b * B[1] + c * C[1]) / p
-    return [cal.blur(x), cal.blur(y)]
+    return [x.blur(), y.blur()]
 }
 
 /**
@@ -524,7 +524,7 @@ function ratioFactor(...nums: number[]): number {
     if (clone.length === 0) return NaN
     if (nums.some($ => !IsRational($))) return NaN
     let ratioed = Ratio(...clone)
-    return cal.blur(ratioed[0] / clone[0])
+    return (ratioed[0] / clone[0]).blur()
 }
 
 function scale<T extends [number, number][]>(

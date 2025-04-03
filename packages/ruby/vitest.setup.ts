@@ -5,3 +5,5 @@ expect.extend(matchers)
 
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to'
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo })
+
+import 'sapphire-js'

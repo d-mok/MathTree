@@ -88,7 +88,7 @@ export function Mean(...nums: number[]): number {
  */
 export function Median(...nums: number[]): number {
     if (nums.length === 0) return NaN
-    return cal.median(nums)
+    return nums.median()
 }
 
 /**
@@ -104,7 +104,7 @@ export function LowerQ(...nums: number[]): number {
     let n = sorted.length
     let m = n / 2
     if (n % 2 !== 0) m = Math.floor(m)
-    return cal.median(_.take(sorted, m))
+    return _.take(sorted, m).median()
 }
 
 /**
@@ -120,7 +120,7 @@ export function UpperQ(...nums: number[]): number {
     let n = sorted.length
     let m = n / 2
     if (n % 2 !== 0) m = Math.floor(m)
-    return cal.median(_.takeRight(sorted, m))
+    return _.takeRight(sorted, m).median()
 }
 
 /**
@@ -186,7 +186,7 @@ export function UniMode(...nums: number[]): number {
  * ```
  */
 export function StdDev(...nums: number[]): number {
-    return cal.std(nums)
+    return nums.sd()
 }
 
 /**

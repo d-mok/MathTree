@@ -9,7 +9,7 @@ import * as math from 'mathjs'
  */
 export function log(b: number, N: number): number {
     const v = Math.log(N) / Math.log(b)
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -20,7 +20,7 @@ export function log(b: number, N: number): number {
  */
 export function Sqrt(x: number): number {
     const v = Math.sqrt(x)
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -33,7 +33,7 @@ export function Sqrt(x: number): number {
  */
 export function Radian(degree: number): number {
     const v = (degree / 180) * Math.PI
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -46,7 +46,7 @@ export function Radian(degree: number): number {
  */
 export function Degree(radian: number): number {
     const v = (radian * 180) / Math.PI
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -58,7 +58,7 @@ export function Degree(radian: number): number {
 export function sin(x: number): number {
     if (x % 180 === 0) return 0
     let v = Math.sin((x / 180) * Math.PI)
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -70,7 +70,7 @@ export function sin(x: number): number {
 export function cos(x: number): number {
     if ((x - 90) % 180 === 0) return 0
     let v = Math.cos((x / 180) * Math.PI)
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -82,7 +82,7 @@ export function cos(x: number): number {
 export function tan(x: number): number {
     if (x % 180 === 0) return 0
     let v = Math.tan((x / 180) * Math.PI)
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -93,7 +93,7 @@ export function tan(x: number): number {
  */
 export function arcsin(x: number): number {
     let v = (Math.asin(x) * 180) / Math.PI
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -104,7 +104,7 @@ export function arcsin(x: number): number {
  */
 export function arccos(x: number): number {
     let v = (Math.acos(x) * 180) / Math.PI
-    return cal.blur(v)
+    return v.blur()
 }
 
 /**
@@ -115,5 +115,5 @@ export function arccos(x: number): number {
  */
 export function arctan(x: number): number {
     let v = (Math.atan(x) * 180) / Math.PI
-    return cal.blur(v)
+    return v.blur()
 }

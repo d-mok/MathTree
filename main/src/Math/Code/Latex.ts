@@ -315,7 +315,7 @@ export function CheckVertices({
     let vs = reins.vertices(constraints)
     for (let v of vs) {
         T += '\\text{At } ' + Coord(v) + ':~~~'
-        T += label + ' = ' + cal.blur(optimizer(field).fieldAt(v)) + ' \\\\ '
+        T += label + ' = ' + optimizer(field).fieldAt(v).blur() + ' \\\\ '
     }
     return T
 }

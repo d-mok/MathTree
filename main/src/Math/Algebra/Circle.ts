@@ -59,16 +59,16 @@ export function CircleLinearIntersect(
         let [x1, x2] = QuadraticRoot(A, B, C)
         let y1 = (-a * x1 - c) / b
         let y2 = (-a * x2 - c) / b
-        let P: Point2D = [cal.blur(x1), cal.blur(y1)]
-        let Q: Point2D = [cal.blur(x2), cal.blur(y2)]
+        let P: Point2D = [x1.blur(), y1.blur()]
+        let Q: Point2D = [x2.blur(), y2.blur()]
         return [P, Q]
     } else {
         let x = -c / a
         let D = r * r - (x - h) ** 2
         let y1 = k - Math.sqrt(D)
         let y2 = k + Math.sqrt(D)
-        let P: Point2D = [cal.blur(x), cal.blur(y1)]
-        let Q: Point2D = [cal.blur(x), cal.blur(y2)]
+        let P: Point2D = [x.blur(), y1.blur()]
+        let Q: Point2D = [x.blur(), y2.blur()]
         return [P, Q]
     }
 }

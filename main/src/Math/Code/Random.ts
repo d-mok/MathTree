@@ -416,15 +416,14 @@ export function RndTrigValue(func: TrigFunc, angle: number): TrigValue {
     }
     let v = trig(func, angle)
     angle = atrig(func, Abs(trig(func, angle)))
-    angle = cal.blur(angle)
+    angle = angle.blur()
     let arr: TrigValue[] = []
-    for (let f of ['sin', 'cos', 'tan']) {
+    for (let f of ['sin', 'cos', 'tan'] as const) {
         for (let a of [0, 90, 180, 270, 360]) {
             for (let s of [angle, -angle]) {
                 if (a === 360 && s > 0) continue
                 if (a === 0 && s < 0) continue
-                if (cal.eq(trig(f as TrigFunc, a + s), v))
-                    arr.push([f as TrigFunc, a + s])
+                if (v.equal(trig(f, a + s))) arr.push([f, a + s])
             }
         }
     }
@@ -465,12 +464,11 @@ export function RndTrigEqv(
     if (result === '1/tan') v = 1 / tan(1)
     if (result === '-1/tan') v = -1 / tan(1)
     let arr: TrigExp[] = []
-    for (let f of ['sin', 'cos', 'tan']) {
+    for (let f of ['sin', 'cos', 'tan'] as const) {
         for (let a of [90, 180, 270, 360]) {
-            for (let s of [1, -1]) {
+            for (let s of [1, -1] as const) {
                 if (a === 360 && s > 0) continue
-                if (cal.eq(trig(f as TrigFunc, a + s), v))
-                    arr.push([f as TrigFunc, a, s as 1 | -1, label])
+                if (v.equal(trig(f, a + s))) arr.push([f, a, s, label])
             }
         }
     }

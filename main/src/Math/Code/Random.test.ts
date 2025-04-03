@@ -252,9 +252,7 @@ test('RndAngles', () => {
 test('RndOnCircle', () => {
     repeat(10, () => {
         let pts = RndOnCircle(3, 50)
-        let angles = pts
-            .map($ => RectToPol($)[1])
-            .map($ => cal.round($, 5).off())
+        let angles = pts.map($ => RectToPol($)[1]).map($ => $.round(5))
         let [A, B, C] = angles.sort((a, b) => a - b)
         let d1 = B - A
         let d2 = C - B
@@ -384,13 +382,13 @@ test('RndPointPolar', () => {
         function getR2() {
             let pt = RndPointPolar()
             let [r, q] = RectToPol(pt)
-            return cal.blur(r ** 2)
+            return (r ** 2).blur()
         }
 
         function getq() {
             let pt = RndPointPolar()
             let [r, q] = RectToPol(pt)
-            return cal.blur(q)
+            return q.blur()
         }
 
         expect(getR2).toSpanSame([4, 16, 36, 8, 32, 72, 12, 48, 108])

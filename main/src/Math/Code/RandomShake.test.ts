@@ -217,11 +217,11 @@ test('RndShakePointPolar', () => {
     function run(anchor: PolarPoint) {
         let shaked = RndShakePointPolar(anchor).map($ => RectToPol($))
         expect(shaked).toSatisfyAll(([r, q]) =>
-            Number.isInteger(cal.blur(r ** 2))
+            Number.isInteger((r ** 2).blur())
         )
         expect(shaked).toSatisfyAll(([r, q]) =>
             [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330].includes(
-                cal.blur(q)
+                q.blur()
             )
         )
         expect(shaked).toHaveLength(3)

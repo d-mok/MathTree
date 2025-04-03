@@ -588,7 +588,7 @@ export class AutoPenCls {
             Q: Point2D
         ): void {
             if (angle) {
-                if (typeof angle === 'number' && cal.correct(angle) === 90) {
+                if (typeof angle === 'number' && angle.equal(90)) {
                     pen.rightAngle(P, O, Q)
                 } else {
                     pen.angle(P, O, Q, angle)
@@ -930,7 +930,7 @@ export class AutoPenCls {
 
             let H = PolToRect([0.7, (current + next) / 2]) // position of text
             let offsetR = items[i] === '' || labels[i] === '' ? 0 : 10
-            let percent = cal.blur((angles[i] / 360) * 100) + '%'
+            let percent = ((angles[i] / 360) * 100).blur() + '%'
             pen.label.point(H, items[i], 90, offsetR)
             pen.label.point(H, labels[i] ?? percent, 270, offsetR)
 

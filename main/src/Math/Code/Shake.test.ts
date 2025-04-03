@@ -112,10 +112,10 @@ test('ShakeBase', () => {
 test('ShakePointPolar', () => {
     function run(anchor: PolarPoint) {
         let [r, q] = RectToPol(ShakePointPolar(anchor))
-        expect(cal.blur(r ** 2)).toBeInteger()
+        expect((r ** 2).blur()).toBeInteger()
         expect([
             30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330,
-        ]).toContain(cal.blur(q))
+        ]).toContain(q.blur())
     }
 
     run([Math.sqrt(3), 3])

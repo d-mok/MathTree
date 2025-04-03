@@ -9,15 +9,15 @@ import * as math from 'mathjs'
  * ```
  */
 export function ShakeN(anchor: number): number {
-    anchor = cal.blur(anchor)
+    anchor = anchor.blur()
     if (anchor === 0) return RndN(1, 3)
 
     let a = Abs(anchor)
     let s = Sign(anchor)
 
     let range = Max(3, a * 0.1)
-    let max = Min(Floor(a + range), cal.logCeil(a) - 1)
-    let min = Max(Ceil(a - range), 1, cal.logFloor(a))
+    let max = Min(Floor(a + range), Math.logCeil(a) - 1)
+    let min = Max(Ceil(a - range), 1, Math.logFloor(a))
     let f = () => RndN(min, max) * s
 
     return dice(f).forbid(anchor).roll()
@@ -30,13 +30,13 @@ export function ShakeN(anchor: number): number {
  * ```
  */
 export function ShakeR(anchor: number): number {
-    let exp = cal.e(anchor)
-    let m = cal.blur(cal.mantissa(anchor))
+    let exp = anchor.exponent()
+    let m = anchor.mantissa().blur()
     if (IsInteger(m)) return Number(ShakeN(m) + 'e' + exp)
-    let dp = cal.dp(m)
+    let dp = m.dp()
     let newM = dice(() => Fix(m * RndR(0.5, 1.5), dp))
         .preserve(Sign, m)
-        .preserve(cal.e, m)
+        .preserve($ => $.exponent(), m)
         .forbid(m)
         .roll()
     return Number(newM + 'e' + exp)
@@ -50,8 +50,8 @@ export function ShakeR(anchor: number): number {
  * ```
  */
 export function ShakeQ(anchor: number): number {
-    if (Number.isInteger(cal.blur(anchor))) return ShakeN(anchor)
-    let [p, q] = ToFrac(anchor).map(cal.blur)
+    if (Number.isInteger(anchor.blur())) return ShakeN(anchor)
+    let [p, q] = ToFrac(anchor).map($ => $.blur())
     if (!IsInteger(p, q)) {
         throw new Error('ShakeQ: input should be integral fraction')
     }

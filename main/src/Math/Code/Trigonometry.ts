@@ -157,9 +157,9 @@ export function PolarDiff(angle1: number, angle2: number): number {
 export function WholeBearing(polarAngle: number): string {
     let q = polarAngle
     q = PolarReduce(q)
-    q = cal.blur(q)
+    q = q.blur()
     q = q <= 90 ? 90 - q : 450 - q
-    q = cal.blur(q)
+    q = q.blur()
     return q.toString().padStart(3, '0') + '°'
 }
 
@@ -172,7 +172,7 @@ export function WholeBearing(polarAngle: number): string {
 export function CompassBearing(polarAngle: number): string {
     let q = polarAngle
     q = PolarReduce(q)
-    q = cal.blur(q)
+    q = q.blur()
 
     if (q === 0) return 'east'
     if (q === 270) return 'south'

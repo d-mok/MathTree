@@ -52,13 +52,13 @@ function addRule<T>(
 
 // print **x as sci notation
 addRule('**@', schema.num, $ => {
-    let v = cal.blur(Round($, 3))
+    let v = Round($, 3).blur()
     let abs = Math.abs(v)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v)
 })
 
 addRule('**@', schema.quantity, ({ val, unit }) => {
-    let v = cal.blur(Round(val, 3))
+    let v = Round(val, 3).blur()
     let abs = Math.abs(v)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v) + unit
 })
@@ -145,7 +145,7 @@ addRule('*\\%|@|', schema.num, $ => numberDefault(Abs($ * 100)) + '\\%')
 // print *:x as ratio
 addRule('*:@', schema.ntuple, $ => Ratio(...$).join(':'))
 addRule('*:@', schema.num, $ => {
-    let [p, q] = cal.toFraction($)
+    let [p, q] = Math.fraction($)
     return p + ':' + q
 })
 

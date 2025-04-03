@@ -9,7 +9,7 @@ export function printDfrac(
     let p = numerator
     let q = denominator
     if (p === 0) return '0'
-    ;[p, q] = cal.toFraction(p / q)
+    ;[p, q] = Math.fraction(p / q)
     if (q === 1) return p.toString()
     if (upSign) {
         return '\\dfrac{' + p + '}{' + q + '}'
@@ -68,8 +68,7 @@ export function printSurd(num: number): string {
 
 export function printPointPolar(point: Point2D): string {
     let [r, q] = RectToPol(point)
-    q = cal.blur(q)
-    return `(${printSurd(r)},${q}°)`
+    return `(${printSurd(r)},${q.blur()}°)`
 }
 
 export function printConstraint(
@@ -127,7 +126,7 @@ export function printMonomial(mono: monomial, fraction: boolean): string {
         }
         return T
     } else {
-        let [p, q] = cal.toFraction(coeff)
+        let [p, q] = Math.fraction(coeff)
         let needFrac = q !== 1 || vars.some($ => $.power < 0)
         if (!needFrac) {
             return printMonomial(mono, false)
@@ -215,5 +214,5 @@ export function printOrdinal(n: number): string {
     if (j === 1 && k !== 11) return n + 'st'
     if (j === 2 && k !== 12) return n + 'nd'
     if (j === 3 && k !== 13) return n + 'rd'
-    return cal.blur(n) + 'th'
+    return n.blur() + 'th'
 }

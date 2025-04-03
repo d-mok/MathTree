@@ -44,7 +44,7 @@ export class Linear {
 
         ;[a, b, c] = [a, b, c].map($ => $ * s)
         try {
-            ;[a, b, c] = cal.toRatio([a, b, c])
+            ;[a, b, c] = Math.ratio(a, b, c)
         } catch (e) {}
         this.byLinear([a, b, c])
         return this

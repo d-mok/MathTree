@@ -46,7 +46,7 @@ export function Sign(num: number): -1 | 0 | 1 {
  * ```
  */
 export function SigFig(num: number): number {
-    return cal.sigfig(cal.blur(num))
+    return num.blur().sigfig()
 }
 
 /**
@@ -58,7 +58,7 @@ export function SigFig(num: number): number {
  */
 export function Round(num: number, sigfig = 3): number {
     num = num * (1 + Number.EPSILON)
-    return cal.round(num, sigfig).off()
+    return num.round(sigfig, 'off')
 }
 
 /**
@@ -70,7 +70,7 @@ export function Round(num: number, sigfig = 3): number {
  */
 export function RoundUp(num: number, sigfig = 3): number {
     num = num * (1 - Number.EPSILON)
-    return cal.round(num, sigfig).up()
+    return num.round(sigfig, 'up')
 }
 
 /**
@@ -82,7 +82,7 @@ export function RoundUp(num: number, sigfig = 3): number {
  */
 export function RoundDown(num: number, sigfig = 3): number {
     num = num * (1 + Number.EPSILON)
-    return cal.round(num, sigfig).down()
+    return num.round(sigfig, 'down')
 }
 
 /**
@@ -96,7 +96,7 @@ export function RoundDown(num: number, sigfig = 3): number {
  */
 export function Fix(num: number, dp = 0): number {
     num = num * (1 + Number.EPSILON)
-    return cal.fix(num, dp).off()
+    return num.fix(dp, 'off')
 }
 
 /**
@@ -110,7 +110,7 @@ export function Fix(num: number, dp = 0): number {
  */
 export function FixUp(num: number, dp = 0): number {
     num = num * (1 - Number.EPSILON)
-    return cal.fix(num, dp).up()
+    return num.fix(dp, 'up')
 }
 
 /**
@@ -124,7 +124,7 @@ export function FixUp(num: number, dp = 0): number {
  */
 export function FixDown(num: number, dp = 0): number {
     num = num * (1 + Number.EPSILON)
-    return cal.fix(num, dp).down()
+    return num.fix(dp, 'down')
 }
 
 /**
@@ -169,7 +169,7 @@ export function Floor(num: number, interval = 1, offset = 0): number {
  */
 export function Ratio(...nums: number[]): number[] {
     if (nums.some($ => !Number.isRational($))) return nums.map($ => NaN)
-    return cal.toRatio(nums)
+    return Math.ratio(...nums)
 }
 
 /**
@@ -194,7 +194,7 @@ export function ScaleTo(nums: number[], total: number): number[] {
  * ```
  */
 export function HCF(...nums: number[]): number {
-    return cal.hcf(nums)
+    return Math.hcf(...nums)
 }
 
 /**
@@ -207,7 +207,7 @@ export function HCF(...nums: number[]): number {
  * ```
  */
 export function LCM(...nums: number[]): number {
-    return cal.lcm(nums)
+    return Math.lcm(...nums)
 }
 
 /**
@@ -236,8 +236,7 @@ export function PrimeFactors(num: number): number[] {
  * ```
  */
 export function ToFrac(num: number): Fraction {
-    if (!Number.isRational(num)) return [NaN, NaN]
-    return cal.toFraction(num)
+    return Math.fraction(num)
 }
 
 /**

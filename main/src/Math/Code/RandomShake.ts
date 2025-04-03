@@ -71,7 +71,7 @@ export function RndShake(anchor: any): (typeof anchor)[] {
         return RndShakeCompoundInequality(anchor)
     }
     if (typeof anchor === 'number' && Number.isFinite(anchor)) {
-        anchor = cal.blur(anchor)
+        anchor = anchor.blur()
         if (Number.isInteger(anchor)) {
             return RndShakeN(anchor)
         }

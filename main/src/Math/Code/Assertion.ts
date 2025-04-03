@@ -44,7 +44,7 @@ export function IsDecimal(...items: unknown[]): boolean {
  */
 export function IsTerminating(...items: unknown[]): boolean {
     return items.every(
-        $ => typeof $ === 'number' && IsNum($) && cal.sigfig($) < 10
+        $ => typeof $ === 'number' && IsNum($) && $.sigfig() < 10
     )
 }
 
@@ -75,7 +75,7 @@ export function IsOdd(...items: unknown[]): boolean {
         $ =>
             typeof $ === 'number' &&
             IsInteger($) &&
-            Math.abs(cal.blur($)) % 2 === 1
+            Math.abs($.blur()) % 2 === 1
     )
 }
 
@@ -93,7 +93,7 @@ export function IsEven(...items: unknown[]): boolean {
         $ =>
             typeof $ === 'number' &&
             IsInteger($) &&
-            Math.abs(cal.blur($)) % 2 === 0
+            Math.abs($.blur()) % 2 === 0
     )
 }
 

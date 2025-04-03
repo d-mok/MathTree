@@ -1,4 +1,3 @@
-import { cal } from '../index.js';
 function slope(A, B) {
     let [x1, y1] = A;
     let [x2, y2] = B;
@@ -36,7 +35,7 @@ export class Linear {
         [a, b, c] = [a, b, c].map($ => $ * s);
         try {
             ;
-            [a, b, c] = cal.toRatio([a, b, c]);
+            [a, b, c] = Math.ratio(a, b, c);
         }
         catch (e) { }
         this.byLinear([a, b, c]);

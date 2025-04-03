@@ -19,7 +19,7 @@ export function Crammer(
     const D = a * q - b * p
     const x = (c * q - b * r) / D
     const y = (a * r - c * p) / D
-    return [cal.blur(x), cal.blur(y)]
+    return [x.blur(), y.blur()]
 }
 
 /**

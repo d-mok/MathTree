@@ -9,7 +9,7 @@ import * as math from 'mathjs'
  * ```
  */
 export function AreDistinct(...nums: number[]): boolean {
-    nums = nums.map(cal.blur)
+    nums = nums.map($ => $.blur())
     return new Set(nums).size === nums.length
 }
 
@@ -49,7 +49,7 @@ export function AreSameSign(...nums: number[]): boolean {
  * ```
  */
 export function AreCoprime(...nums: number[]): boolean {
-    nums = nums.map(cal.blur)
+    nums = nums.map($ => $.blur())
     if (!IsInteger(...nums)) return true
     if (!IsNonZero(...nums)) return true
     return nums.combinations(2).every(([a, b]) => HCF(a, b) === 1)
