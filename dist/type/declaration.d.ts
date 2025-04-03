@@ -3,7 +3,7 @@ declare module "Core/ink" {
     export function printCombo(combo: [boolean, boolean, boolean]): string;
     export function printTrigValue(T: TrigValue): string;
     export function printTrigExp(T: TrigExp): string;
-    export function printOrTrigRoots(roots: (number | undefined)[]): string;
+    export function printOrTrigRoots(roots: number[]): string;
     export function printSurd(num: number): string;
     export function printPointPolar(point: Point2D): string;
     export function printConstraint(con: Constraint, align?: boolean, replaceEqual?: boolean): string;
@@ -2360,7 +2360,7 @@ declare module "Math/Code/LinearProgram" {
      * // [[-5,-5],[10,-5],[10,10],[-5,10]]
      * ```
      */
-    export function FeasiblePolygon(...cons: Constraint[]): [number, number][];
+    export function FeasiblePolygon(...cons: Constraint[]): Point2D[];
     /**
      * the vertices of the feasible polygon
      * ```
@@ -2373,7 +2373,7 @@ declare module "Math/Code/LinearProgram" {
      * // [[-5,-5],[10,-5],[10,10],[-5,10]]
      * ```
      */
-    export function FeasibleVertices(...cons: Constraint[]): [number, number][];
+    export function FeasibleVertices(...cons: Constraint[]): Point2D[];
     /**
      * check if the feasible region is bounded
      * ```
@@ -4258,15 +4258,6 @@ declare module "Math/Builder/index" {
     export { BuildTrend } from "Math/Builder/build_trend";
     export { BuildRatio } from "Math/Builder/build_ratio";
 }
-declare module "Math/should" {
-    class CustomErrorCls extends Error {
-        constructor(name: string, message: string);
-    }
-    export function CustomError(name: string, message: string): CustomErrorCls;
-    export function toError(e: unknown): Error;
-    export function MathError(message: string): CustomErrorCls;
-    export function Should(condition: boolean, msg?: string): asserts condition;
-}
 declare module "Math/bundle" {
     export * from "Math/Algebra/Algebra";
     export * from "Math/Algebra/Calculus";
@@ -4298,9 +4289,8 @@ declare module "Math/bundle" {
     export * from "Math/Code/Vector";
     export * from "Math/Code/Vector3D";
     export * from "Math/Builder/index";
-    export * from "Math/should";
 }
-declare module "Math/bundled" {
+declare module "Math/index" {
     import * as bundle from "Math/bundle";
     global {
         var ASTC: typeof bundle.ASTC;
@@ -4343,7 +4333,6 @@ declare module "Math/bundled" {
         var CosineLawAngle: typeof bundle.CosineLawAngle;
         var CosineLawLength: typeof bundle.CosineLawLength;
         var Crammer: typeof bundle.Crammer;
-        var CustomError: typeof bundle.CustomError;
         var Degree: typeof bundle.Degree;
         var Dfrac: typeof bundle.Dfrac;
         var Dir: typeof bundle.Dir;
@@ -4425,7 +4414,6 @@ declare module "Math/bundled" {
         var LowerQ: typeof bundle.LowerQ;
         var LowerQAt: typeof bundle.LowerQAt;
         var LucasSequence: typeof bundle.LucasSequence;
-        var MathError: typeof bundle.MathError;
         var Max: typeof bundle.Max;
         var MaximizeField: typeof bundle.MaximizeField;
         var MaximizePoint: typeof bundle.MaximizePoint;
@@ -4557,7 +4545,6 @@ declare module "Math/bundled" {
         var ShakeRatio: typeof bundle.ShakeRatio;
         var ShakeTrigValue: typeof bundle.ShakeTrigValue;
         var ShortDivision: typeof bundle.ShortDivision;
-        var Should: typeof bundle.Should;
         var SigFig: typeof bundle.SigFig;
         var Sign: typeof bundle.Sign;
         var SineLawAngle: typeof bundle.SineLawAngle;
@@ -4608,12 +4595,8 @@ declare module "Math/bundled" {
         var nPr: typeof bundle.nPr;
         var sin: typeof bundle.sin;
         var tan: typeof bundle.tan;
-        var toError: typeof bundle.toError;
         var xPolynomial: typeof bundle.xPolynomial;
     }
-}
-declare module "Math/index" {
-    import "Math/bundled";
 }
 declare module "Pen/AutoPen" {
     export class AutoPenCls {
