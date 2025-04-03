@@ -45,11 +45,8 @@ export function printTrigExp(T: TrigExp): string {
     return '\\' + T[0] + '(' + T[1] + '°' + (T[2] > 0 ? '+' : '-') + T[3] + ')'
 }
 
-export function printOrTrigRoots(roots: (number | undefined)[]): string {
-    let ss = roots
-        .filter(x => x !== undefined)
-        .map(x => Round(x, 5))
-        .map(x => x + '°')
+export function printOrTrigRoots(roots: number[]): string {
+    let ss = roots.map(x => Round(x, 5)).map(x => x + '°')
     if (ss.length === 0) return 'no solution'
     if (ss.length === 1) return ss[0]
     let last = ss.pop()

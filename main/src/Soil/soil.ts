@@ -59,8 +59,11 @@ class ErrorLogger {
     private pile: string[] = []
 
     add(e: unknown) {
-        let err = toError(e)
-        this.pile.push('[' + err.name + ']\n' + err.message)
+        this.pile.push(
+            e instanceof Error
+                ? '[' + e.name + ']\n' + e.message
+                : '[Error]\n' + JSON.stringify(e)
+        )
     }
 
     private readHtml(delimiter: string): string {
@@ -133,7 +136,7 @@ export class Soil {
         return exprCtx(v, { ...this.dict }) === true
     }
 
-    private runPopulate(): boolean {
+    private runPopulate(): true {
         while (this.counter <= 1000) {
             this.timer.check()
             try {
@@ -142,37 +145,18 @@ export class Soil {
                 this.evalCode(this.gene.populate)
                 const [ok, dictReport] = this.checkDict()
                 if (!ok)
-                    throw CustomError(
-                        'PopulationError',
-                        'Dict Check Failed\n' + dictReport
+                    throw new Error(
+                        'runPopulate: Dict Check Failed\n' + dictReport
                     )
                 if (!this.isValidated())
-                    throw CustomError(
-                        'PopulationError',
-                        'Cannot pass validate.'
-                    )
+                    throw new Error('runPopulate: Cannot pass validate.')
                 return true
             } catch (e) {
-                if (e instanceof Error) {
-                    switch (e.name) {
-                        case 'MathError':
-                            this.logger.add(e)
-                            break
-                        case 'PopulationError':
-                            this.logger.add(e)
-                            break
-                        default:
-                            throw e
-                    }
-                } else {
-                    throw e
-                }
+                this.logger.add(e)
+                break
             }
         }
-        throw CustomError(
-            'PopulationError',
-            'No population found after 1000 trials!'
-        )
+        throw new Error('runPopulate: No population found after 1000 trials!')
     }
 
     private runLoop(): boolean {
@@ -206,10 +190,7 @@ export class Soil {
                 continue
             }
         }
-        throw CustomError(
-            'OptionError',
-            'No valid option generated after 100 trials'
-        )
+        throw new Error('runOption: No valid option generated after 100 trials')
     }
 
     private runIntrapolate(): boolean {
@@ -242,9 +223,7 @@ export class Soil {
         )
 
         if (hasDuplicatedOptions) {
-            this.logger.add(
-                CustomError('ShuffleError', 'Duplicated options found!')
-            )
+            this.logger.add(new Error('runShuffle: Duplicated options found!'))
             return false
         }
         this.qn = qn

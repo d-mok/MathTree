@@ -41,7 +41,6 @@ declare global {
     var CosineLawAngle: typeof bundle.CosineLawAngle
     var CosineLawLength: typeof bundle.CosineLawLength
     var Crammer: typeof bundle.Crammer
-    var CustomError: typeof bundle.CustomError
     var Degree: typeof bundle.Degree
     var Dfrac: typeof bundle.Dfrac
     var Dir: typeof bundle.Dir
@@ -123,7 +122,6 @@ declare global {
     var LowerQ: typeof bundle.LowerQ
     var LowerQAt: typeof bundle.LowerQAt
     var LucasSequence: typeof bundle.LucasSequence
-    var MathError: typeof bundle.MathError
     var Max: typeof bundle.Max
     var MaximizeField: typeof bundle.MaximizeField
     var MaximizePoint: typeof bundle.MaximizePoint
@@ -305,7 +303,6 @@ declare global {
     var nPr: typeof bundle.nPr
     var sin: typeof bundle.sin
     var tan: typeof bundle.tan
-    var toError: typeof bundle.toError
     var xPolynomial: typeof bundle.xPolynomial
 }
 
@@ -349,7 +346,6 @@ globalThis.Coord = bundle.Coord
 globalThis.CosineLawAngle = bundle.CosineLawAngle
 globalThis.CosineLawLength = bundle.CosineLawLength
 globalThis.Crammer = bundle.Crammer
-globalThis.CustomError = bundle.CustomError
 globalThis.Degree = bundle.Degree
 globalThis.Dfrac = bundle.Dfrac
 globalThis.Dir = bundle.Dir
@@ -431,7 +427,6 @@ globalThis.LongDivision = bundle.LongDivision
 globalThis.LowerQ = bundle.LowerQ
 globalThis.LowerQAt = bundle.LowerQAt
 globalThis.LucasSequence = bundle.LucasSequence
-globalThis.MathError = bundle.MathError
 globalThis.Max = bundle.Max
 globalThis.MaximizeField = bundle.MaximizeField
 globalThis.MaximizePoint = bundle.MaximizePoint
@@ -613,5 +608,4 @@ globalThis.nCr = bundle.nCr
 globalThis.nPr = bundle.nPr
 globalThis.sin = bundle.sin
 globalThis.tan = bundle.tan
-globalThis.toError = bundle.toError
 globalThis.xPolynomial = bundle.xPolynomial

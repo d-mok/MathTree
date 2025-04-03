@@ -150,9 +150,7 @@ addRule('*:@', schema.num, $ => {
 })
 
 // print *|.x as OR trig roots
-addRule('*|.@', v.array(v.union([v.number(), v.undefined()])), $ =>
-    ink.printOrTrigRoots($)
-)
+addRule('*|.@', schema.ntuple, $ => ink.printOrTrigRoots($))
 // print *.x as polar coordinates, with r being a surd
 addRule('*.@', schema.point2D, $ => ink.printPointPolar($))
 
