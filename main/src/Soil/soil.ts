@@ -153,7 +153,7 @@ export class Soil {
                 return true
             } catch (e) {
                 this.logger.add(e)
-                break
+                continue
             }
         }
         throw new Error('runPopulate: No population found after 1000 trials!')
