@@ -2,8 +2,6 @@ import { PenCls } from '../Pen.js'
 import { Convas } from 'paint'
 import _ from 'lodash'
 import * as math from 'mathjs'
-import * as schema from '../../Core/schema.js'
-import * as v from 'valibot'
 
 export class PenD3 {
     constructor(private pen: PenCls, private cv: Convas) {}
@@ -274,15 +272,12 @@ export class PenD3 {
             envelopeOnly?: boolean
         } = {}
     ) {
-        const isPoint3Ds = (_: any) => v.is(v.array(schema.point3D), _)
-        const isPoint2Ds = (_: any) => v.is(v.array(schema.point2D), _)
-        const isPoint3D = (_: any) => v.is(schema.point3D, _)
-        const isCircle3D = (_: any) =>
-            v.is(v.tuple([schema.point3D, v.number()]), _)
-        const isCircle2D = (_: any) =>
-            v.is(v.tuple([schema.point2D, v.number()]), _)
-        const isExtrue = (_: any) =>
-            v.is(v.tuple([v.number(), schema.point3D]), _)
+        const isPoint3Ds = schema.be(schema.array(schema.point3D))
+        const isPoint2Ds = schema.be(schema.array(schema.point2D))
+        const isPoint3D = schema.be(schema.point3D)
+        const isCircle3D = schema.be(schema.tuple([schema.point3D, schema.num]))
+        const isCircle2D = schema.be(schema.tuple([schema.point2D, schema.num]))
+        const isExtrue = schema.be(schema.tuple([schema.num, schema.point3D]))
 
         let LB: Point3D[] = []
         let UB: Point3D[] = []

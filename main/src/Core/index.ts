@@ -19,6 +19,9 @@ globalThis.lin = $lin
 import * as $Ink from './ink.js'
 globalThis.ink = $Ink
 
+import * as $schema from './schema.js'
+globalThis.schema = $schema
+
 declare global {
     var cal: typeof $cal
     var vec: typeof $vec
@@ -28,4 +31,5 @@ declare global {
     var reins: typeof $reins
     var lin: typeof $lin
     var ink: typeof $Ink
+    var schema: typeof $schema
 }

@@ -33,11 +33,9 @@ export class Linear {
         let [a, b, c] = [dy, -dx, dx * y1 - dy * x1];
         let s = Math.sign(a) || Math.sign(b) || 1;
         [a, b, c] = [a, b, c].map($ => $ * s);
-        try {
-            ;
-            [a, b, c] = Math.ratio(a, b, c);
-        }
-        catch (e) { }
+        let ratioed = Math.ratio(a, b, c);
+        if (ratioed.every($ => Number.isInteger($)))
+            [a, b, c] = ratioed;
         this.byLinear([a, b, c]);
         return this;
     }

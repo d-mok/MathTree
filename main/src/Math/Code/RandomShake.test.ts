@@ -3,11 +3,8 @@ import * as math from 'mathjs'
 import { repeat } from '../Jest/JestExtend.js'
 import { describe, expect, it, test } from 'vitest'
 
-import * as schema from '../../Core/schema.js'
-import { is } from 'valibot'
-
 test('RndShake', () => {
-    expect(RndShake('\\ge')).toSatisfyAll((_: any) => is(schema.ineq, _))
+    expect(RndShake('\\ge')).toSatisfyAll(schema.be(schema.ineq))
     expect(RndShake(5)).toSatisfyAll(Number.isInteger)
     expect(RndShake(0.5)).toSatisfyAll($ => $ >= 0 && $ <= 1)
     expect(RndShake(1.5)).toSatisfyAll($ => $ > 0)
@@ -204,7 +201,7 @@ test('RndShakeRatio', () => {
 test('RndShakeBase', () => {
     function run(anchor: string) {
         let shaked = RndShakeBase(anchor)
-        expect(shaked).toSatisfyAll((_: any) => is(schema.base, _))
+        expect(shaked).toSatisfyAll(schema.be(schema.base))
         expect(shaked).toHaveLength(3)
     }
 

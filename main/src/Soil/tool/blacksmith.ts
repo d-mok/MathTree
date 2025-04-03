@@ -1,8 +1,6 @@
 import { Blacksmith } from 'bot'
 import _ from 'lodash'
-import * as math from 'mathjs'
-import * as schema from '../../Core/schema.js'
-import * as v from 'valibot'
+import { BaseSchema } from 'valibot'
 
 function numberDefault(num: number): number {
     if (Math.abs(num) < 1e-14) return 0
@@ -44,10 +42,10 @@ export let blacksmith = new Blacksmith()
 
 function addRule<T>(
     pattern: pattern,
-    schema: v.BaseSchema<T, T, any>,
+    sch: BaseSchema<T, T, any>,
     fn: (_: T) => string
 ) {
-    blacksmith.add(pattern, ($: unknown) => v.is(schema, $), fn)
+    blacksmith.add(pattern, schema.be(sch), fn)
 }
 
 // print **x as sci notation
@@ -114,23 +112,23 @@ addRule('*^-_@', schema.num, $ => ($ >= 0 ? '-' : '+'))
 addRule('*|@|', schema.num, $ => String(numberDefault(Math.abs($))))
 
 // print *^\gt_x as '>' or '<'
-addRule('*^\\gt_@', schema.bool, $ => ($ ? '\\gt' : '\\lt'))
+addRule('*^\\gt_@', schema.boolean(), $ => ($ ? '\\gt' : '\\lt'))
 addRule('*^\\gt_@', schema.num, $ => ($ > 0 ? '\\gt' : $ < 0 ? '\\lt' : '='))
 
 // print *^\lt_x as '<' or '>'
-addRule('*^\\lt_@', schema.bool, $ => ($ ? '\\lt' : '\\gt'))
+addRule('*^\\lt_@', schema.boolean(), $ => ($ ? '\\lt' : '\\gt'))
 addRule('*^\\lt_@', schema.num, $ => ($ > 0 ? '\\lt' : $ < 0 ? '\\gt' : '='))
 
 // print *^\ge_x as '>=' or '<='
-addRule('*^\\ge_@', schema.bool, $ => ($ ? '\\ge' : '\\le'))
+addRule('*^\\ge_@', schema.boolean(), $ => ($ ? '\\ge' : '\\le'))
 addRule('*^\\ge_@', schema.num, $ => ($ > 0 ? '\\ge' : $ < 0 ? '\\le' : '='))
 
 // print *^\le_x as '<=' or '>='
-addRule('*^\\le_@', schema.bool, $ => ($ ? '\\le' : '\\ge'))
+addRule('*^\\le_@', schema.boolean(), $ => ($ ? '\\le' : '\\ge'))
 addRule('*^\\le_@', schema.num, $ => ($ > 0 ? '\\le' : $ < 0 ? '\\ge' : '='))
 
 // print *^=_x as '=' or '<>'
-addRule('*^=_@', schema.bool, $ => ($ ? '=' : '\\neq'))
+addRule('*^=_@', schema.boolean(), $ => ($ ? '=' : '\\neq'))
 
 // print *\%x as percent
 addRule('*%@', schema.num, $ => numberDefault($ * 100) + '%')
@@ -166,7 +164,7 @@ addRule('*@th', schema.num, $ => {
 
 // print *x as normal
 addRule('*@', schema.num, $ => String(numberDefault($)))
-addRule('*@', schema.bool, $ => ($ ? '✔' : '✘'))
+addRule('*@', schema.boolean(), $ => ($ ? '✔' : '✘'))
 addRule(
     '*@',
     schema.quantity,

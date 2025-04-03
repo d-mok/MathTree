@@ -1,14 +1,12 @@
 import * as v from 'valibot'
+export { string, boolean, array, tuple, object, is } from 'valibot'
+export type { BaseSchema } from 'valibot'
+
+export function be<T>(schema: v.BaseSchema<T, T, any>) {
+    return (_: unknown) => v.is(schema, _)
+}
 
 export const num = v.pipe(v.number(), v.custom(Number.isFinite))
-
-export const positive = v.pipe(num, v.gtValue(0))
-
-// JS native type
-
-export const str = v.string()
-
-export const bool = v.boolean()
 
 // special text
 
@@ -41,21 +39,13 @@ export const base = v.pipe(
 
 // Math Types
 
-export const couple = v.strictTuple([num, num])
-
-export const triple = v.strictTuple([num, num, num])
-
-export const combo = v.strictTuple([bool, bool, bool])
+export const combo = v.strictTuple([v.boolean(), v.boolean(), v.boolean()])
 
 export const ntuple = v.array(num)
 
-export const point2D = couple
+export const point2D = v.strictTuple([num, num])
 
-export const point2Ds = v.array(point2D)
-
-export const point3D = triple
-
-export const point3Ds = v.array(point3D)
+export const point3D = v.strictTuple([num, num, num])
 
 export const monomial = v.object({ coeff: num })
 
@@ -67,19 +57,19 @@ export const compoundInequality = v.strictTuple([
     num,
     ineq,
     num,
-    str,
+    v.string(),
 ])
 
-export const trigValue = v.strictTuple([trig, v.union([num, str])])
+export const trigValue = v.strictTuple([trig, v.union([num, v.string()])])
 
 export const trigExp = v.strictTuple([
     trig,
     num,
     v.union([v.literal(1), v.literal(-1)]),
-    str,
+    v.string(),
 ])
 
-export const quantity = v.object({ val: num, unit: str })
+export const quantity = v.object({ val: num, unit: v.string() })
 
 // testing
 

@@ -2,9 +2,6 @@ import _ from 'lodash'
 import * as math from 'mathjs'
 import { describe, expect, it, test } from 'vitest'
 
-import * as schema from '../../Core/schema.js'
-import { is } from 'valibot'
-
 test('ShakeN', () => {
     function run(anchor: number, min: number, max: number) {
         let shaked = ShakeN(anchor)
@@ -103,7 +100,7 @@ test('ShakeRatio', () => {
 test('ShakeBase', () => {
     function run(anchor: string) {
         let shaked = ShakeBase(anchor)
-        expect(is(schema.base, shaked)).toBe(true)
+        expect(schema.is(schema.base, shaked)).toBe(true)
     }
 
     run('{A}{B}{0}{C}{D}_{16}')

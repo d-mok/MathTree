@@ -1,8 +1,6 @@
 import { dice } from 'fate'
 import _ from 'lodash'
 import * as math from 'mathjs'
-import * as schema from '../../Core/schema.js'
-import { is } from 'valibot'
 
 function shake<T>(
     anchor: T,
@@ -31,11 +29,11 @@ function shake<T>(
 export function RndShake(anchor: any): (typeof anchor)[] {
     if (typeof anchor === 'string') {
         // Inequal Sign
-        if (is(schema.ineq, anchor)) {
+        if (schema.is(schema.ineq, anchor)) {
             return RndShakeIneq(anchor)
         }
         // trig
-        if (is(schema.trig, anchor)) {
+        if (schema.is(schema.trig, anchor)) {
             return RndShakeTrig(anchor)
         }
         // else convert to number
@@ -43,31 +41,31 @@ export function RndShake(anchor: any): (typeof anchor)[] {
             anchor = Number(anchor)
         }
     }
-    if (is(schema.quantity, anchor)) {
+    if (schema.is(schema.quantity, anchor)) {
         // quantity
         return RndShakeQuantity(anchor)
     }
-    if (is(schema.point2D, anchor)) {
+    if (schema.is(schema.point2D, anchor)) {
         // Point
         return RndShakePoint(anchor)
     }
-    if (is(schema.combo, anchor)) {
+    if (schema.is(schema.combo, anchor)) {
         // Combo
         return RndShakeCombo(anchor)
     }
-    if (is(schema.trigValue, anchor)) {
+    if (schema.is(schema.trigValue, anchor)) {
         // TrigValue
         return RndShakeTrigValue(anchor)
     }
-    if (is(schema.constraint, anchor)) {
+    if (schema.is(schema.constraint, anchor)) {
         // Constraint
         return RndShakeConstraint(anchor)
     }
-    if (is(schema.constraints, anchor)) {
+    if (schema.is(schema.constraints, anchor)) {
         // Constraints
         return RndShakeConstraints(anchor)
     }
-    if (is(schema.compoundInequality, anchor)) {
+    if (schema.is(schema.compoundInequality, anchor)) {
         return RndShakeCompoundInequality(anchor)
     }
     if (typeof anchor === 'number' && Number.isFinite(anchor)) {
