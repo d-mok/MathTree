@@ -30,5 +30,3 @@ export * from './Code/Vector.js'
 export * from './Code/Vector3D.js'
 
 export * from './Builder/index.js'
-
-export * from './should.js'
