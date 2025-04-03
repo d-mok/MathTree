@@ -345,7 +345,9 @@ export function SectorArea(radius: number, theta: number): number {
  * ```
  */
 export function IsConvexPolygon(...points: Point2D[]): boolean {
-    Should(points.length >= 3, 'must have at least 3 points to be a polygon')
+    if (points.length < 3) {
+        throw new Error('must have at least 3 points to be a polygon')
+    }
     return vec.isConvex(points)
 }
 

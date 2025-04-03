@@ -56,8 +56,7 @@ export function PdFoot3D(
             A
         )
     }
-    Should(false, 'base must have 2 or 3 points')
-    throw 'never'
+    throw new Error('PdFoot3D: base must have 2 or 3 points')
 }
 
 /**

@@ -54,9 +54,9 @@ export function isLooseConstrained(
  * // [[-5,-5],[10,-5],[10,10],[-5,10]]
  * ```
  */
-export function FeasiblePolygon(...cons: Constraint[]) {
+export function FeasiblePolygon(...cons: Constraint[]): Point2D[] {
     let vs = reins.polygon(cons)
-    Should(vs.length > 2, 'No feasible region.')
+    if (vs.length <= 2) return Array(3).fill([NaN, NaN]) // No feasible region
     return vs
 }
 
@@ -72,9 +72,9 @@ export function FeasiblePolygon(...cons: Constraint[]) {
  * // [[-5,-5],[10,-5],[10,10],[-5,10]]
  * ```
  */
-export function FeasibleVertices(...cons: Constraint[]) {
+export function FeasibleVertices(...cons: Constraint[]): Point2D[] {
     let vs = reins.vertices(cons)
-    Should(vs.length > 0, 'no feasible vertex')
+    if (vs.length === 0) return cons.map($ => [NaN, NaN]) // no feasible vertex
     return vs
 }
 
@@ -121,11 +121,10 @@ export function FeasibleIntegral(...cons: Constraint[]): Point2D[] {
  * ```
  */
 export function MaximizePoint(points: Point2D[], field: Field): Point2D {
-    Should(points.length > 0, 'No feasible point')
+    if (points.length === 0) return [NaN, NaN] // 'No feasible point'
     let pts = optimizer(field, points).maxPoints()
-    Should(pts.length > 0, 'No max point')
-    Should(pts.length < 2, 'Multiple max points')
-    return pts[0]
+    if (pts.length === 1) return pts[0]
+    return [NaN, NaN] // 'No or multiple point'
 }
 
 /**
@@ -135,11 +134,10 @@ export function MaximizePoint(points: Point2D[], field: Field): Point2D {
  * ```
  */
 export function MinimizePoint(points: Point2D[], field: Field): Point2D {
-    Should(points.length > 0, 'No feasible point')
+    if (points.length === 0) return [NaN, NaN] // 'No feasible point'
     let pts = optimizer(field, points).minPoints()
-    Should(pts.length > 0, 'No min point')
-    Should(pts.length < 2, 'Multiple min points')
-    return pts[0]
+    if (pts.length === 1) return pts[0]
+    return [NaN, NaN] // 'No or multiple point'
 }
 
 /**
@@ -166,7 +164,7 @@ export function OptimizePoint(
 export function MaximizeField(points: Point2D[], field: Field): number {
     let op = optimizer(field, points)
     let val = op.max()
-    Should(val !== null, 'No optimal value for this field!')
+    if (val === null) return NaN
     return val
 }
 
@@ -179,7 +177,7 @@ export function MaximizeField(points: Point2D[], field: Field): number {
 export function MinimizeField(points: Point2D[], field: Field): number {
     let op = optimizer(field, points)
     let val = op.min()
-    Should(val !== null, 'No optimal value for this field!')
+    if (val === null) return NaN
     return val
 }
 
@@ -208,7 +206,9 @@ export function OptimizeField(
  * ```
  */
 export function ConstraintsFromPoints(...points: Point2D[]): Constraint[] {
-    Should(IsConvexPolygon(...points), 'Not a convex region')
+    if (!IsConvexPolygon(...points)) {
+        throw new Error('Not a convex polygon')
+    }
 
     let mean = vec.mean(points)
     let pts = ArrangePoints(...points)

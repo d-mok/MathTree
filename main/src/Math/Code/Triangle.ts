@@ -314,14 +314,6 @@ export function SolveTriangle({
     let B = angleB
     let C = angleC
 
-    // temp
-    if (a === null) throw 'SolveTriangle not accept null now'
-    if (b === null) throw 'SolveTriangle not accept null now'
-    if (c === null) throw 'SolveTriangle not accept null now'
-    if (A === null) throw 'SolveTriangle not accept null now'
-    if (B === null) throw 'SolveTriangle not accept null now'
-    if (C === null) throw 'SolveTriangle not accept null now'
-
     function angleSum() {
         if (A === undefined && B !== undefined && C !== undefined)
             A = 180 - B - C
@@ -402,8 +394,15 @@ export function SolveTriangle({
         SAS()
         AAS()
     }
-    Should(false, 'Solve Triangle Fail!')
-    throw 'never'
+
+    return {
+        sideA: NaN,
+        sideB: NaN,
+        sideC: NaN,
+        angleA: NaN,
+        angleB: NaN,
+        angleC: NaN,
+    }
 }
 
 /**
@@ -469,7 +468,6 @@ export function ScaleOrthocentreToInt(
 ): [Point2D, Point2D, Point2D] {
     let [x, y] = Orthocentre(A, B, C)
     let q = ratioFactor(x, y, ...A, ...B, ...C)
-    Should(IsNum(q), 'original orthocentre must be rational')
     return scale([A, B, C], q)
 }
 
@@ -483,7 +481,6 @@ export function ScaleCircumcentreToInt(
 ): [Point2D, Point2D, Point2D] {
     let [x, y] = Circumcentre(A, B, C)
     let q = ratioFactor(x, y, ...A, ...B, ...C)
-    Should(IsNum(q), 'original circumcentre must be rational')
     return scale([A, B, C], q)
 }
 
@@ -497,7 +494,6 @@ export function ScaleCentroidToInt(
 ): [Point2D, Point2D, Point2D] {
     let [x, y] = Centroid(A, B, C)
     let q = ratioFactor(x, y, ...A, ...B, ...C)
-    Should(IsNum(q), 'original centroid must be rational')
     return scale([A, B, C], q)
 }
 
@@ -511,12 +507,11 @@ export function ScaleIncentreToInt(
 ): [Point2D, Point2D, Point2D] {
     let [x, y] = Incentre(A, B, C)
     let q = ratioFactor(x, y, ...A, ...B, ...C)
-    Should(IsNum(q), 'original incentre must be rational')
     return scale([A, B, C], q)
 }
 
 /**
- * Return the multiplied factor when applying {@link this.ratio()} on this array.
+ * Return the multiplied factor when applying Ratio() on this array.
  * ```
  * [2,4,6].ratio() // 0.5
  * [0,4,6].ratio() // 0.5
@@ -525,7 +520,7 @@ export function ScaleIncentreToInt(
  * ```
  */
 function ratioFactor(...nums: number[]): number {
-    let clone = _.without(nums, 0)
+    let clone = nums.unmatch([0])
     if (clone.length === 0) return NaN
     if (nums.some($ => !IsRational($))) return NaN
     let ratioed = Ratio(...clone)

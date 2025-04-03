@@ -255,7 +255,6 @@ declare global {
     var ShakeRatio: typeof bundle.ShakeRatio
     var ShakeTrigValue: typeof bundle.ShakeTrigValue
     var ShortDivision: typeof bundle.ShortDivision
-    var Should: typeof bundle.Should
     var SigFig: typeof bundle.SigFig
     var Sign: typeof bundle.Sign
     var SineLawAngle: typeof bundle.SineLawAngle
@@ -564,7 +563,6 @@ globalThis.ShakeR = bundle.ShakeR
 globalThis.ShakeRatio = bundle.ShakeRatio
 globalThis.ShakeTrigValue = bundle.ShakeTrigValue
 globalThis.ShortDivision = bundle.ShortDivision
-globalThis.Should = bundle.Should
 globalThis.SigFig = bundle.SigFig
 globalThis.Sign = bundle.Sign
 globalThis.SineLawAngle = bundle.SineLawAngle
@@ -617,4 +615,3 @@ globalThis.sin = bundle.sin
 globalThis.tan = bundle.tan
 globalThis.toError = bundle.toError
 globalThis.xPolynomial = bundle.xPolynomial
-

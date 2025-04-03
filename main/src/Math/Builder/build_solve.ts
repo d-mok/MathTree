@@ -72,7 +72,7 @@ export function BuildSolve(
             }
             break
         } catch (e) {
-            if (i === 10) Should(false, String(e))
+            if (i === 10) throw MathError(String(e))
         }
     }
 

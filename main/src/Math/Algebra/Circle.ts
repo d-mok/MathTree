@@ -32,7 +32,6 @@ export function CircleFromGeneral(
 ): [Point2D, number] {
     let [h, k] = [-D / 2, -E / 2]
     let R = (D / 2) ** 2 + (E / 2) ** 2 - F
-    Should(R >= 0, 'radius should be real')
     let r = R ** 0.5
     return [[h, k], r]
 }
@@ -57,7 +56,6 @@ export function CircleLinearIntersect(
         let A = 1 + m * m
         let B = -2 * h + 2 * m * n
         let C = h * h + n * n - r * r
-        Should(Discriminant(A, B, C) >= 0, 'no intersection')
         let [x1, x2] = QuadraticRoot(A, B, C)
         let y1 = (-a * x1 - c) / b
         let y2 = (-a * x2 - c) / b
@@ -67,7 +65,6 @@ export function CircleLinearIntersect(
     } else {
         let x = -c / a
         let D = r * r - (x - h) ** 2
-        Should(D >= 0, 'no intersection')
         let y1 = k - Math.sqrt(D)
         let y2 = k + Math.sqrt(D)
         let P: Point2D = [cal.blur(x), cal.blur(y1)]

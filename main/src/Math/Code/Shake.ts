@@ -1,5 +1,5 @@
 import { dice } from 'fate'
-import _ from 'lodash'
+import _, { isInteger } from 'lodash'
 import * as math from 'mathjs'
 
 /**
@@ -52,7 +52,9 @@ export function ShakeR(anchor: number): number {
 export function ShakeQ(anchor: number): number {
     if (Number.isInteger(cal.blur(anchor))) return ShakeN(anchor)
     let [p, q] = ToFrac(anchor).map(cal.blur)
-    Should(IsInteger(p, q), 'input should be integral fraction')
+    if (!IsInteger(p, q)) {
+        throw new Error('ShakeQ: input should be integral fraction')
+    }
 
     let f = () => {
         const h = ShakeN(p)

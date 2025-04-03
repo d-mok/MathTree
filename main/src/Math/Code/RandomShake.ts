@@ -83,7 +83,7 @@ export function RndShake(anchor: any): (typeof anchor)[] {
         }
     }
     if (anchor === undefined) return []
-    throw MathError('Fail to RndShake: ' + anchor)
+    throw new Error('RndShake cannot recognise type of : ' + anchor)
 }
 
 /**
