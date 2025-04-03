@@ -14,9 +14,39 @@ declare module "Core/ink" {
     export function printCompoundInequality(compoundInequality: CompoundInequality): string;
     export function printOrdinal(n: number): string;
 }
+declare module "Core/schema" {
+    import * as v from 'valibot';
+    export { string, boolean, array, tuple, object, is } from 'valibot';
+    export type { BaseSchema } from 'valibot';
+    export function be<T>(schema: v.BaseSchema<T, T, any>): (_: unknown) => _ is T;
+    export const num: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
+    export const ineq: v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>;
+    export const constraint: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
+    export const constraints: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
+    export const trig: v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>;
+    export const base: v.SchemaWithPipe<readonly [v.StringSchema<undefined>, v.CheckAction<string, undefined>]>;
+    export const combo: v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>;
+    export const ntuple: v.ArraySchema<v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, undefined>;
+    export const point2D: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
+    export const point3D: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
+    export const monomial: v.ObjectSchema<{
+        readonly coeff: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
+    }, undefined>;
+    export const polynomial: v.ArraySchema<v.ObjectSchema<{
+        readonly coeff: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
+    }, undefined>, undefined>;
+    export const compoundInequality: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"AND", undefined>, v.LiteralSchema<"OR", undefined>], undefined>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.StringSchema<undefined>], undefined>;
+    export const trigValue: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>, v.UnionSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.StringSchema<undefined>], undefined>], undefined>;
+    export const trigExp: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<1, undefined>, v.LiteralSchema<-1, undefined>], undefined>, v.StringSchema<undefined>], undefined>;
+    export const quantity: v.ObjectSchema<{
+        readonly val: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
+        readonly unit: v.StringSchema<undefined>;
+    }, undefined>;
+}
 declare module "Core/index" {
     import { cal as $cal, vec as $vec, INEQUAL as $INEQUAL, optimizer as $optimizer, rein as $rein, reins as $reins, lin as $lin } from 'ruby';
     import * as $Ink from "Core/ink";
+    import * as $schema from "Core/schema";
     global {
         var cal: typeof $cal;
         var vec: typeof $vec;
@@ -26,6 +56,7 @@ declare module "Core/index" {
         var reins: typeof $reins;
         var lin: typeof $lin;
         var ink: typeof $Ink;
+        var schema: typeof $schema;
     }
 }
 declare module "Math/Algebra/Algebra" {
@@ -573,40 +604,6 @@ declare module "Pen/modules/settings" {
          */
         resetAll(): void;
     }
-}
-declare module "Core/schema" {
-    import * as v from 'valibot';
-    export const num: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
-    export const int: v.SchemaWithPipe<readonly [v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.CheckAction<number, undefined>]>;
-    export const positive: v.SchemaWithPipe<readonly [v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.GtValueAction<number, 0, undefined>]>;
-    export const str: v.StringSchema<undefined>;
-    export const bool: v.BooleanSchema<undefined>;
-    export const ineq: v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>;
-    export const constraint: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const constraints: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
-    export const trig: v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>;
-    export const base: v.SchemaWithPipe<readonly [v.StringSchema<undefined>, v.CheckAction<string, undefined>]>;
-    export const couple: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const triple: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const combo: v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>;
-    export const ntuple: v.ArraySchema<v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, undefined>;
-    export const point2D: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const point2Ds: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
-    export const point3D: v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>;
-    export const point3Ds: v.ArraySchema<v.StrictTupleSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>], undefined>, undefined>;
-    export const monomial: v.ObjectSchema<{
-        readonly coeff: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
-    }, undefined>;
-    export const polynomial: v.ArraySchema<v.ObjectSchema<{
-        readonly coeff: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
-    }, undefined>, undefined>;
-    export const compoundInequality: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"AND", undefined>, v.LiteralSchema<"OR", undefined>], undefined>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<">", undefined>, v.LiteralSchema<"<", undefined>, v.LiteralSchema<">=", undefined>, v.LiteralSchema<"<=", undefined>, v.LiteralSchema<"\\gt", undefined>, v.LiteralSchema<"\\lt", undefined>, v.LiteralSchema<"\\ge", undefined>, v.LiteralSchema<"\\le", undefined>, v.StrictTupleSchema<[v.BooleanSchema<undefined>, v.BooleanSchema<undefined>], undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.StringSchema<undefined>], undefined>;
-    export const trigValue: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>, v.UnionSchema<[v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.StringSchema<undefined>], undefined>], undefined>;
-    export const trigExp: v.StrictTupleSchema<[v.UnionSchema<[v.LiteralSchema<"sin", undefined>, v.LiteralSchema<"cos", undefined>, v.LiteralSchema<"tan", undefined>], undefined>, v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>, v.UnionSchema<[v.LiteralSchema<1, undefined>, v.LiteralSchema<-1, undefined>], undefined>, v.StringSchema<undefined>], undefined>;
-    export const quantity: v.ObjectSchema<{
-        readonly val: v.SchemaWithPipe<readonly [v.NumberSchema<undefined>, v.CustomSchema<number, undefined>]>;
-        readonly unit: v.StringSchema<undefined>;
-    }, undefined>;
 }
 declare module "Pen/modules/d3" {
     import { PenCls } from "Pen/Pen";
