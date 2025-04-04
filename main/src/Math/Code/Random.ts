@@ -337,7 +337,7 @@ export function RndConvexPolygon(
  */
 export function RndData(min: number, max: number, n: number): number[] {
     let data = dice(() => RndN(min, max))
-        .coherent(d => cal.mode(d).length === 1)
+        .coherent(d => d.modes().length === 1)
         .rolls(n)
     return _.sortBy(data)
 }

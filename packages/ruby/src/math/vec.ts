@@ -1,14 +1,13 @@
-import * as math from 'mathjs'
 import _ from 'lodash'
 
 /**
  * Return the vector from A to B.
  * ```
- * fromTo([3,4],[1,0]) // [2,4]
+ * fromTo([1,0],[3,4]) // [2,4]
  * ```
  */
 export function fromTo<T extends number[]>(A: [...T], B: T): T {
-    return math.subtract(B, A)
+    return Math.sum(B, Math.scale(A, -1))
 }
 
 /**
@@ -21,7 +20,7 @@ export function fromTo<T extends number[]>(A: [...T], B: T): T {
  * ```
  */
 export function mean<T extends number[]>(vecs: [...T][]): T {
-    let sum = vecs.reduce((a, b) => math.add(a, b))
+    let sum = vecs.reduce((a, b) => Math.sum(a, b))
     return sum.map($ => $ / vecs.length) as T
 }
 
@@ -32,8 +31,8 @@ export function mean<T extends number[]>(vecs: [...T][]): T {
  * ```
  */
 export function scaledTo<T extends number[]>(vec: [...T], magnitude = 1): T {
-    let mag = Number(math.norm(vec))
-    return vec.map($ => ($ / mag) * magnitude) as T
+    let mag = Math.hypot(...vec)
+    return Math.scale(vec, magnitude / mag)
 }
 
 /**
@@ -43,9 +42,9 @@ export function scaledTo<T extends number[]>(vec: [...T], magnitude = 1): T {
  * ```
  */
 export function angleBetween(vec1: number[], vec2: number[]): number {
-    let m1 = Number(math.norm(vec1))
-    let m2 = Number(math.norm(vec2))
-    let dot = math.dot(vec1, vec2)
+    let m1 = Math.hypot(...vec1)
+    let m2 = Math.hypot(...vec2)
+    let dot = Math.dot(vec1, vec2)
     let cos = dot / m1 / m2
     let angle = (Math.acos(cos) * 180) / Math.PI
     return angle
@@ -59,7 +58,7 @@ export function angleBetween(vec1: number[], vec2: number[]): number {
  */
 export function projection<T extends number[]>(ofVec: [...T], onVec: T): T {
     let unit = scaledTo(onVec, 1)
-    let dot = math.dot(ofVec, unit)
+    let dot = Math.dot(ofVec, unit)
     return unit.map($ => $ * dot) as T
 }
 
@@ -71,7 +70,7 @@ export function projection<T extends number[]>(ofVec: [...T], onVec: T): T {
  */
 export function normal<T extends number[]>(ofVec: [...T], onVec: T): T {
     let parallel = projection(ofVec, onVec)
-    return math.subtract(ofVec, parallel)
+    return Math.subtract(ofVec, parallel)
 }
 
 /**
@@ -86,9 +85,9 @@ export function extrude<T extends number[]>(
     vertex: T,
     scale: number
 ): T {
-    let d = math.subtract(vec, vertex)
+    let d = Math.subtract(vec, vertex)
     d = d.map($ => $ * scale) as T
-    return math.add(vertex, d)
+    return Math.sum(vertex, d)
 }
 
 /**
@@ -126,7 +125,7 @@ export function projectOnPlane(
     planeVec2: [number, number, number]
 ): [number, number, number] {
     let normal = normalToPlane(vec, planeVec1, planeVec2)
-    return math.subtract(vec, normal)
+    return Math.subtract(vec, normal)
 }
 
 /**
@@ -140,7 +139,7 @@ export function normalToPlane(
     planeVec1: [number, number, number],
     planeVec2: [number, number, number]
 ): [number, number, number] {
-    let normal = math.cross(planeVec1, planeVec2) as [number, number, number]
+    let normal = Math.cross(planeVec1, planeVec2)
     return projection(vec, normal)
 }
 
@@ -179,7 +178,7 @@ export function projectTo2D(
  */
 export function sortAroundMean(vecs: [number, number][]): [number, number][] {
     let m = mean(vecs)
-    return _.sortBy(vecs, $ => argument(math.subtract($, m)))
+    return _.sortBy(vecs, $ => argument(Math.subtract($, m)))
 }
 
 /**
@@ -198,9 +197,9 @@ export function isConvex(vecs: [number, number][]): boolean {
         let p1 = sorted.at(-1)!
         let p2 = sorted.at(0)!
         let p3 = sorted.at(1)!
-        let u = [...fromTo(p1, p2), 0]
-        let v = [...fromTo(p2, p3), 0]
-        cross.push((math.cross(u, v) as number[])[2])
+        let u = [...fromTo(p1, p2), 0] as [number, number, number]
+        let v = [...fromTo(p2, p3), 0] as [number, number, number]
+        cross.push(Math.cross(u, v)[2])
         sorted.push(sorted.shift()!)
     }
     cross.filter($ => $ !== 0)
@@ -222,7 +221,7 @@ export function erect(
     vecY: [number, number, number]
 ): [number, number, number] {
     let [x, y] = vec
-    let vx3D = math.multiply(vecX, x) as [number, number, number]
-    let vy3D = math.multiply(vecY, y) as [number, number, number]
-    return math.add(vx3D, vy3D)
+    let vx3D = Math.scale(vecX, x) as [number, number, number]
+    let vy3D = Math.scale(vecY, y) as [number, number, number]
+    return Math.sum(vx3D, vy3D)
 }

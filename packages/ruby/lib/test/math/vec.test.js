@@ -1,4 +1,3 @@
-import * as math from 'mathjs';
 import { describe, expect, it } from 'vitest';
 import * as vec from '../../src/math/vec.js';
 describe('fromTo', () => {
@@ -70,7 +69,7 @@ describe('normalTo', () => {
         expect(vec.normal([5, -7, -2], [-1, 9, 3])).toBeDeepCloseTo([4.1868, 0.319, 0.4396], 3);
         let v1 = [3, -5, -12];
         let v2 = [-2, 5, 6];
-        expect(math.dot(vec.normal(v1, v2), v2)).toBeCloseTo(0);
+        expect(Math.dot(vec.normal(v1, v2), v2)).toBeCloseTo(0);
     });
 });
 describe('extrudeTo', () => {

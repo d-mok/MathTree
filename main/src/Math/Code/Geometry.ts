@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * the slope of AB
@@ -94,7 +93,7 @@ export function Slide(
  */
 export function Rotate(P: Point2D, q: number, O: Point2D = [0, 0]): Point2D {
     let v = vec.fromTo(O, P)
-    v = math.rotate(v, (q / 180) * Math.PI)
+    v = Math.rotate(v, q)
     return VecAdd(v, O)
 }
 

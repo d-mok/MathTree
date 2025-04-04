@@ -57,6 +57,5 @@ export declare function traceCircle(center: Point2D, radius: number, angleRange:
  * ```
  */
 export declare function crammer(a: number, b: number, c: number, p: number, q: number, r: number): [number, number];
-export declare function mode(nums: number[]): number[];
 export {};
 //# sourceMappingURL=cal.d.ts.map

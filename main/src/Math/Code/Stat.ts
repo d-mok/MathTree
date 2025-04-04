@@ -161,7 +161,7 @@ export function Freq<T>(array: T[], item: T): number {
  * ```
  */
 export function Mode(...nums: number[]): number[] {
-    return cal.mode(nums)
+    return nums.modes()
 }
 
 /**
@@ -172,7 +172,7 @@ export function Mode(...nums: number[]): number[] {
  * ```
  */
 export function UniMode(...nums: number[]): number {
-    let modes = cal.mode(nums)
+    let modes = nums.modes()
     if (modes.length !== 1) return NaN
     return modes[0]
 }

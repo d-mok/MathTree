@@ -1,13 +1,12 @@
-import * as math from 'mathjs';
 import _ from 'lodash';
 /**
  * Return the vector from A to B.
  * ```
- * fromTo([3,4],[1,0]) // [2,4]
+ * fromTo([1,0],[3,4]) // [2,4]
  * ```
  */
 export function fromTo(A, B) {
-    return math.subtract(B, A);
+    return Math.sum(B, Math.scale(A, -1));
 }
 /**
  * Return the mean of the points.
@@ -19,7 +18,7 @@ export function fromTo(A, B) {
  * ```
  */
 export function mean(vecs) {
-    let sum = vecs.reduce((a, b) => math.add(a, b));
+    let sum = vecs.reduce((a, b) => Math.sum(a, b));
     return sum.map($ => $ / vecs.length);
 }
 /**
@@ -29,8 +28,8 @@ export function mean(vecs) {
  * ```
  */
 export function scaledTo(vec, magnitude = 1) {
-    let mag = Number(math.norm(vec));
-    return vec.map($ => ($ / mag) * magnitude);
+    let mag = Math.hypot(...vec);
+    return Math.scale(vec, magnitude / mag);
 }
 /**
  * Return the angle between this vector and `vec`.
@@ -39,9 +38,9 @@ export function scaledTo(vec, magnitude = 1) {
  * ```
  */
 export function angleBetween(vec1, vec2) {
-    let m1 = Number(math.norm(vec1));
-    let m2 = Number(math.norm(vec2));
-    let dot = math.dot(vec1, vec2);
+    let m1 = Math.hypot(...vec1);
+    let m2 = Math.hypot(...vec2);
+    let dot = Math.dot(vec1, vec2);
     let cos = dot / m1 / m2;
     let angle = (Math.acos(cos) * 180) / Math.PI;
     return angle;
@@ -54,7 +53,7 @@ export function angleBetween(vec1, vec2) {
  */
 export function projection(ofVec, onVec) {
     let unit = scaledTo(onVec, 1);
-    let dot = math.dot(ofVec, unit);
+    let dot = Math.dot(ofVec, unit);
     return unit.map($ => $ * dot);
 }
 /**
@@ -65,7 +64,7 @@ export function projection(ofVec, onVec) {
  */
 export function normal(ofVec, onVec) {
     let parallel = projection(ofVec, onVec);
-    return math.subtract(ofVec, parallel);
+    return Math.subtract(ofVec, parallel);
 }
 /**
  * Return the vector extruded towards `vertex` by `scale`.
@@ -75,9 +74,9 @@ export function normal(ofVec, onVec) {
  * ```
  */
 export function extrude(vec, vertex, scale) {
-    let d = math.subtract(vec, vertex);
+    let d = Math.subtract(vec, vertex);
     d = d.map($ => $ * scale);
-    return math.add(vertex, d);
+    return Math.sum(vertex, d);
 }
 /**
  * 2D
@@ -109,7 +108,7 @@ export function argument(vec2D) {
  */
 export function projectOnPlane(vec, planeVec1, planeVec2) {
     let normal = normalToPlane(vec, planeVec1, planeVec2);
-    return math.subtract(vec, normal);
+    return Math.subtract(vec, normal);
 }
 /**
  * Return the normal component of this vector to the plane formed by `vec1` and `vec2`.
@@ -118,7 +117,7 @@ export function projectOnPlane(vec, planeVec1, planeVec2) {
  * ```
  */
 export function normalToPlane(vec, planeVec1, planeVec2) {
-    let normal = math.cross(planeVec1, planeVec2);
+    let normal = Math.cross(planeVec1, planeVec2);
     return projection(vec, normal);
 }
 /**
@@ -150,7 +149,7 @@ export function projectTo2D(vec, angle = 60, depth = 0.5) {
  */
 export function sortAroundMean(vecs) {
     let m = mean(vecs);
-    return _.sortBy(vecs, $ => argument(math.subtract($, m)));
+    return _.sortBy(vecs, $ => argument(Math.subtract($, m)));
 }
 /**
  * Return whether this shape is a convex polygon, but not neccessarily ordered.
@@ -171,7 +170,7 @@ export function isConvex(vecs) {
         let p3 = sorted.at(1);
         let u = [...fromTo(p1, p2), 0];
         let v = [...fromTo(p2, p3), 0];
-        cross.push(math.cross(u, v)[2]);
+        cross.push(Math.cross(u, v)[2]);
         sorted.push(sorted.shift());
     }
     cross.filter($ => $ !== 0);
@@ -188,8 +187,8 @@ export function isConvex(vecs) {
  */
 export function erect(vec, vecX, vecY) {
     let [x, y] = vec;
-    let vx3D = math.multiply(vecX, x);
-    let vy3D = math.multiply(vecY, y);
-    return math.add(vx3D, vy3D);
+    let vx3D = Math.scale(vecX, x);
+    let vy3D = Math.scale(vecY, y);
+    return Math.sum(vx3D, vy3D);
 }
 //# sourceMappingURL=vec.js.map

@@ -1,7 +1,7 @@
 /**
  * Return the vector from A to B.
  * ```
- * fromTo([3,4],[1,0]) // [2,4]
+ * fromTo([1,0],[3,4]) // [2,4]
  * ```
  */
 export declare function fromTo<T extends number[]>(A: [...T], B: T): T;

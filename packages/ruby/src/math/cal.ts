@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * Return the surd in the form of [a,b] meaning a*sqrt(b).
@@ -39,11 +38,7 @@ export function toSurd(num: number): [a: number, b: number] {
  * ```
  */
 export function primes(max: number): number[] {
-    let arr: number[] = []
-    for (let i = 2; i <= max; i++) {
-        if (math.isPrime(i)) arr.push(i)
-    }
-    return arr
+    return Math.range(2, max).filter($ => Number.isPrime($))
 }
 
 /**
@@ -56,7 +51,7 @@ export function primeFactors(num: number): number[] {
     let arr: number[] = []
     let i = 2
     while (num > 1) {
-        if (!math.isPrime(i)) {
+        if (!Number.isPrime(i)) {
             i++
             continue
         }
@@ -161,15 +156,9 @@ export function crammer(
     q: number,
     r: number
 ): [number, number] {
-    const A = [
-        [a, b],
-        [p, q],
-    ]
-    const B = [c, r]
-    if (math.det(A) === 0) return [NaN, NaN]
-    return math.lusolve(A, B).flat() as [number, number]
-}
-
-export function mode(nums: number[]): number[] {
-    return math.mode(...nums)
+    const D = a * q - b * p
+    if (D === 0) return [NaN, NaN]
+    const x = (c * q - b * r) / D
+    const y = (a * r - c * p) / D
+    return [x, y]
 }

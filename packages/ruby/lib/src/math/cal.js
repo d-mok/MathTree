@@ -1,4 +1,3 @@
-import * as math from 'mathjs';
 /**
  * Return the surd in the form of [a,b] meaning a*sqrt(b).
  * ```
@@ -36,12 +35,7 @@ export function toSurd(num) {
  * ```
  */
 export function primes(max) {
-    let arr = [];
-    for (let i = 2; i <= max; i++) {
-        if (math.isPrime(i))
-            arr.push(i);
-    }
-    return arr;
+    return Math.range(2, max).filter($ => Number.isPrime($));
 }
 /**
  * Return an array of ordered prime factors.
@@ -53,7 +47,7 @@ export function primeFactors(num) {
     let arr = [];
     let i = 2;
     while (num > 1) {
-        if (!math.isPrime(i)) {
+        if (!Number.isPrime(i)) {
             i++;
             continue;
         }
@@ -131,16 +125,11 @@ export function traceCircle(center, radius, angleRange, dots = 100) {
  * ```
  */
 export function crammer(a, b, c, p, q, r) {
-    const A = [
-        [a, b],
-        [p, q],
-    ];
-    const B = [c, r];
-    if (math.det(A) === 0)
+    const D = a * q - b * p;
+    if (D === 0)
         return [NaN, NaN];
-    return math.lusolve(A, B).flat();
-}
-export function mode(nums) {
-    return math.mode(...nums);
+    const x = (c * q - b * r) / D;
+    const y = (a * r - c * p) / D;
+    return [x, y];
 }
 //# sourceMappingURL=cal.js.map
