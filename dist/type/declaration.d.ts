@@ -5225,6 +5225,14 @@ declare module "Pen/index" {
         var PhyPen: typeof PhyPenCls;
     }
 }
+declare module "Soil/tool/shuffle" {
+    export function shuffleOptions(qn: string, sol: string, ans: string, shuffle: boolean): {
+        qn: string;
+        sol: string;
+        ans: string;
+        hasDuplicatedOptions: boolean;
+    };
+}
 declare module "Soil/tool/blacksmith" {
     import { Blacksmith } from 'bot';
     export let blacksmith: Blacksmith;
@@ -5240,14 +5248,6 @@ declare module "Soil/tool/html" {
         printInLi(index: number, dict: object): void;
         isLiDuplicated(): boolean;
     }
-}
-declare module "Soil/tool/shuffle" {
-    export function shuffleOptions(qn: string, sol: string, ans: string, shuffle: boolean): {
-        qn: string;
-        sol: string;
-        ans: string;
-        hasDuplicatedOptions: boolean;
-    };
 }
 declare module "Soil/tool/option" {
     type dict = Record<string, any>;
