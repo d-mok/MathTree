@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 import { describe, expect, it, test } from 'vitest'
 
 test('LineFeat', () => {
@@ -40,10 +39,10 @@ test('LineFromTwoPoints', () => {
 
 test('LineFromPointSlope', () => {
     expect(LineFromPointSlope([1, 2], 3)).toEqual([3, -1])
-    expect(LineFromPointSlope([1, 2], 0)).toEqual([-0, 2])
+    expect(LineFromPointSlope([1, 2], 0)).toEqual([0, 2])
 })
 
 test('LineFromBisector', () => {
     expect(LineFromBisector([1, 2], [3, 4])).toEqual([-1, 5])
-    expect(LineFromBisector([1, 2], [1, 4])).toEqual([-0, 3])
+    expect(LineFromBisector([1, 2], [1, 4])).toEqual([0, 3])
 })

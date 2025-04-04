@@ -2,7 +2,10 @@ import { describe, expect, it, test } from 'vitest'
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to'
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo })
 import _ from 'lodash'
-import * as math from 'mathjs'
+
+test('VecAdd3D', () => {
+    expect(VecAdd3D([1, 2, 3], [3, 4, 5], [5, 6, 7])).toEqual([9, 12, 15])
+})
 
 test('Mid3D', () => {
     expect(Mid3D([1, 2, 3], [3, 4, 5], [5, 6, 7])).toEqual([3, 4, 5])

@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * sum of all vectors
@@ -8,7 +7,7 @@ import * as math from 'mathjs'
  * ```
  */
 export function VecAdd(...vectors: Point2D[]): Point2D {
-    const x = Sum(...vectors.map(p => p[0]))
-    const y = Sum(...vectors.map(p => p[1]))
+    const x = vectors.sum(p => p[0])
+    const y = vectors.sum(p => p[1])
     return [x, y]
 }

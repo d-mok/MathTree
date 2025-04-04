@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 export function symbol(v: varObj): string {
     if (v.subscript.length > 0) return v.display + '_{' + v.subscript + '}'
@@ -8,7 +7,7 @@ export function symbol(v: varObj): string {
 
 export function short(v: varObj): string {
     // val
-    let value = Round(v.val, 3).blur()
+    let value = Round(v.val, 3)
     let abs = Math.abs(value)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(value) : value)
 }

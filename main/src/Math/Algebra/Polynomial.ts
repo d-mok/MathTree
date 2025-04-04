@@ -1,7 +1,6 @@
 import { dice } from 'fate'
 import { printPolynomial } from '../../Core/ink.js'
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 function getVars(mono: monomial): { name: string; power: number }[] {
     let keys = Object.keys(mono).filter($ => $ !== 'coeff')

@@ -30,3 +30,13 @@ export * from './Code/Vector.js'
 export * from './Code/Vector3D.js'
 
 export * from './Builder/index.js'
+
+export function deepBlurize<F extends (...args: any[]) => any>(f: F): F {
+    return function (...args: any[]) {
+        let result = f(...args)
+        return Object.deepMap(result, (value: any) => {
+            if (typeof value === 'number') return value.blur()
+            return value
+        })
+    } as F
+}

@@ -1,6 +1,4 @@
-import { dice } from 'fate'
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * a random item from the given items

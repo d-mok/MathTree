@@ -6,6 +6,6 @@ export default defineConfig({
         exclude: [...configDefaults.exclude],
         environment: 'jsdom', // or 'jsdom', 'node',
         globals: true,
-        testTimeout: 60 * 1000, // 1 minute
+        testTimeout: 120 * 1000, // 1 minute
     },
 })

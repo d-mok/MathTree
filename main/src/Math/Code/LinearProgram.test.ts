@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 import { describe, expect, it, test } from 'vitest'
 
 test('FieldAt', () => {
@@ -209,8 +208,8 @@ test('OptimizeField', () => {
 
 test('ConstraintsFromPoints', () => {
     expect(ConstraintsFromPoints([0, 0], [0, 1], [1, 0])).toEqual([
-        [1, 0, '\\ge', -0],
-        [0, 1, '\\ge', -0],
+        [1, 0, '\\ge', 0],
+        [0, 1, '\\ge', 0],
         [1, 1, '\\le', 1],
     ])
 
@@ -219,8 +218,8 @@ test('ConstraintsFromPoints', () => {
     ).toEqual([
         [1, 1, '\\le', 4],
         [1, -3, '\\ge', -8],
-        [1, 1, '\\ge', -0],
-        [1, 3, '\\ge', -0],
+        [1, 1, '\\ge', 0],
+        [1, 3, '\\ge', 0],
         [3, 1, '\\le', 8],
     ])
     expect(
@@ -228,8 +227,8 @@ test('ConstraintsFromPoints', () => {
     ).toEqual([
         [1, 1, '\\le', 3],
         [1, -1, '\\ge', -1],
-        [1, 0, '\\ge', -0],
-        [0, 1, '\\ge', -0],
+        [1, 0, '\\ge', 0],
+        [0, 1, '\\ge', 0],
         [1, -1, '\\le', 1],
     ])
 })

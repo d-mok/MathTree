@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * Solve [x,y] from ax + by = c and px + qy = r.
@@ -19,7 +18,7 @@ export function Crammer(
     const D = a * q - b * p
     const x = (c * q - b * r) / D
     const y = (a * r - c * p) / D
-    return [x.blur(), y.blur()]
+    return [x, y]
 }
 
 /**

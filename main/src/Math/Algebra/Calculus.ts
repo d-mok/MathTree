@@ -1,6 +1,5 @@
 import * as ruby from 'ruby'
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * Derivative of the function.

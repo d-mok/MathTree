@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * array of all integers between (inclusive) the min and max of `nums`.

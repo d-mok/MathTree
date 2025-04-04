@@ -28,7 +28,7 @@ function makeLatex(
 
 type eq = [func: zeroFunction, latex: string]
 
-export class PhyEqCls {
+class PhyEqCls {
     Heat = {
         /**
          * E = Pt

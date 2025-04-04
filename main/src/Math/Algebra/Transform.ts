@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 import { PenCls } from '../../Pen/Pen.js'
 
 // types

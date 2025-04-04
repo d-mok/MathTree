@@ -1,5 +1,3 @@
-import * as math from 'mathjs'
-
 /**
  * the factorial n!
  * ```
@@ -8,7 +6,11 @@ import * as math from 'mathjs'
  * ```
  */
 export function Factorial(n: number): number {
-    return math.factorial(n)
+    n = n.blur()
+    if (!Number.isInteger(n)) return NaN
+    if (n < 0) return NaN
+    if (n === 0) return 1
+    return Math.range(1, n).reduce((a, b) => a * b)
 }
 
 /**
@@ -19,7 +21,7 @@ export function Factorial(n: number): number {
  */
 export function nCr(n: number, r: number): number {
     if (r > n) return NaN
-    return math.combinations(n, r)
+    return Factorial(n) / (Factorial(r) * Factorial(n - r))
 }
 
 /**
@@ -30,5 +32,5 @@ export function nCr(n: number, r: number): number {
  */
 export function nPr(n: number, r: number): number {
     if (r > n) return NaN
-    return math.permutations(n, r)
+    return Factorial(n) / Factorial(n - r)
 }

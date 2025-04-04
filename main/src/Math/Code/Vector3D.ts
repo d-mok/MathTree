@@ -2,16 +2,28 @@ import _ from 'lodash'
 import * as math from 'mathjs'
 
 /**
+ * sum of all vectors
+ * ```
+ * VecAdd3D([1, 2, 3], [3, 4, 5], [5, 6, 7]) // [9, 12, 15]
+ * ```
+ */
+export function VecAdd3D(...vectors: Point3D[]): Point3D {
+    const x = vectors.sum(p => p[0])
+    const y = vectors.sum(p => p[1])
+    const z = vectors.sum(p => p[2])
+    return [x, y, z]
+}
+
+/**
  * mean of all vectors
  * ```
  * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
  * ```
  */
 export function Mid3D(...vectors: Point3D[]): Point3D {
-    const x = Sum(...vectors.map(p => p[0])) / vectors.length
-    const y = Sum(...vectors.map(p => p[1])) / vectors.length
-    const z = Sum(...vectors.map(p => p[2])) / vectors.length
-    return [x, y, z]
+    const [x, y, z] = VecAdd3D(...vectors)
+    const n = vectors.length
+    return [x / n, y / n, z / n]
 }
 
 /**
@@ -41,7 +53,7 @@ export function PdFoot3D(
 ): Point3D {
     if (base.length === 3) {
         let [A, B, C] = base
-        return math.add(
+        return VecAdd3D(
             vec.projectOnPlane(
                 vec.fromTo(A, point),
                 vec.fromTo(A, B),
@@ -51,7 +63,7 @@ export function PdFoot3D(
         )
     } else if (base.length === 2) {
         let [A, B] = base
-        return math.add(
+        return VecAdd3D(
             vec.projection(vec.fromTo(A, point), vec.fromTo(A, B)),
             A
         )
@@ -74,7 +86,7 @@ export function Embed(
 ): Point3D[] {
     return plane2D
         .map($ => vec.erect($, xVec, yVec))
-        .map($ => math.add($, origin))
+        .map($ => VecAdd3D($, origin))
 }
 
 /**

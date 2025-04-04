@@ -50,13 +50,13 @@ function addRule<T>(
 
 // print **x as sci notation
 addRule('**@', schema.num, $ => {
-    let v = Round($, 3).blur()
+    let v = Round($, 3)
     let abs = Math.abs(v)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v)
 })
 
 addRule('**@', schema.quantity, ({ val, unit }) => {
-    let v = Round(val, 3).blur()
+    let v = Round(val, 3)
     let abs = Math.abs(v)
     return String(abs >= 10000 || abs <= 0.01 ? Sci(v) : v) + unit
 })

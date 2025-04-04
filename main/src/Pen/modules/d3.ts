@@ -191,7 +191,7 @@ export class PenD3 {
             shade: baseShade,
         })
 
-        let leftEnd = math.add(center, [radius, 0, 0]) as Point3D
+        let leftEnd = VecAdd3D(center, [radius, 0, 0])
 
         if (radiusLine) this.pen.line(center, leftEnd)
 

@@ -17,8 +17,11 @@ fs.readFile(path, 'utf8', (err, data) => {
 
     for (let key in bundle) {
         if (key === 'default') continue
-
-        data += `globalThis.${key} = bundle.${key}\n`
+        if (typeof bundle[key] === 'function') {
+            data += `globalThis.${key} = bundle.deepBlurize(bundle.${key})\n`
+        } else {
+            data += `globalThis.${key} = bundle.${key}\n`
+        }
     }
     data += '\n'
 

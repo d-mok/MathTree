@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * [slope,y-int,x-int] of ax+by+c=0

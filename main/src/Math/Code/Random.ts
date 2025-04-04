@@ -1,6 +1,5 @@
 import { dice } from 'fate'
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * a random integer in [min, max] inclusive.

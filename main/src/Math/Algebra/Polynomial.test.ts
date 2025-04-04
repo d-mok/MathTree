@@ -1,7 +1,6 @@
 import { repeat } from '../Jest/JestExtend.js'
 import { getMaxDeg } from './Polynomial.js'
 import _ from 'lodash'
-import * as math from 'mathjs'
 import { describe, expect, it, test } from 'vitest'
 
 function getPoly(): polynomial {

@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
@@ -159,8 +158,7 @@ export function WholeBearing(polarAngle: number): string {
     q = PolarReduce(q)
     q = q.blur()
     q = q <= 90 ? 90 - q : 450 - q
-    q = q.blur()
-    return q.toString().padStart(3, '0') + '°'
+    return q.blur().toString().padStart(3, '0') + '°'
 }
 
 /**

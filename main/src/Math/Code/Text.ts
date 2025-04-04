@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * a string of joined elements. [1,2,3] --> '1, 2 and 3'

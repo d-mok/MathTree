@@ -1,6 +1,5 @@
 import { dice } from 'fate'
 import _, { isInteger } from 'lodash'
-import * as math from 'mathjs'
 
 /**
  * Same-signed integer
