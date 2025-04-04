@@ -1,42 +1,41 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Mock MathSoil</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <script src='../dist/dev/mathtree.js'></script>
-    <!-- <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="../extension/canvas-latex.js"></script>
-</head>
+    <script src="../dist/dev/mathtree.js"></script>
+    <!-- <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script> -->
+  </head>
 
-<body>
+  <body>
     <div id="container">
-
-        <div id="leftThing">
-            <div> <a href="https://d-mok.github.io/MathTree/typedoc/" target="_blank">Doc Link</a></div>
-            <textarea id="code" rows="40" style="width:80%" spellcheck="false">
-            </textarea>
-            <div>
-                <button type="button" onClick="draw()">Draw</button>
-                <button type="button" onClick="drawTrim()">Trim</button>
-                <button type="button" onClick="run()">Run</button>
-                <button type="button" onClick="store()">Store</button>
-                <button type="button" onClick="retrieve()">Retrieve</button>
-            </div>
+      <div id="leftThing">
+        <div>
+          <a href="https://d-mok.github.io/MathTree/typedoc/" target="_blank"
+            >Doc Link</a
+          >
         </div>
-
-        <div id="rightThing">
-            <div id="img"></div>
+        <textarea id="code" rows="40" style="width: 80%" spellcheck="false">
+        </textarea>
+        <div>
+          <button type="button" onClick="draw()">Draw</button>
+          <button type="button" onClick="drawTrim()">Trim</button>
+          <button type="button" onClick="run()">Run</button>
+          <button type="button" onClick="store()">Store</button>
+          <button type="button" onClick="retrieve()">Retrieve</button>
         </div>
+      </div>
 
+      <div id="rightThing">
+        <div id="img"></div>
+      </div>
     </div>
 
-
-
     <script>
-        let template = `const pen = new Pen();
+      let template = `const pen = new Pen();
 
 pen.range.set([-5,5],[-5,5]);
 pen.size.set(1);
@@ -46,57 +45,58 @@ pen.grid.y();
 pen.tick.x();
 pen.tick.y();
 pen.axis.x();
-pen.axis.y();`
+pen.axis.y();`;
 
-        document.getElementById("code").value = template
+      document.getElementById("code").value = template;
 
-        function code() {
-            return document.getElementById("code").value
-        }
+      function code() {
+        return document.getElementById("code").value;
+      }
 
-        function draw() {
-            let q = '<img src="img"/>';
-            eval(code() + '\n document.getElementById("img").innerHTML = pen.export(q,"img")');
-        }
+      function draw() {
+        let q = '<img src="img"/>';
+        eval(
+          code() +
+            '\n document.getElementById("img").innerHTML = pen.export(q,"img")'
+        );
+      }
 
-        function drawTrim() {
-            let q = '<img src="img"/>';
-            eval(code() + '\n document.getElementById("img").innerHTML = pen.exportTrim(q,"img")');
-        }
+      function drawTrim() {
+        let q = '<img src="img"/>';
+        eval(
+          code() +
+            '\n document.getElementById("img").innerHTML = pen.exportTrim(q,"img")'
+        );
+      }
 
-        function run() {
-            eval(code());
-        }
+      function run() {
+        eval(code());
+      }
 
-        function store() {
-            localStorage.setItem('devCode', code());
-            console.log('code stored!')
-        }
+      function store() {
+        localStorage.setItem("devCode", code());
+        console.log("code stored!");
+      }
 
-        function retrieve() {
-            document.getElementById("code").value = localStorage.getItem('devCode')
-        }
-
-
+      function retrieve() {
+        document.getElementById("code").value = localStorage.getItem("devCode");
+      }
     </script>
 
-
     <style>
-        #container {
-            height: 100%;
-            width: 100%;
-            display: flex;
-        }
+      #container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+      }
 
-        #leftThing {
-            width: 50%;
-        }
+      #leftThing {
+        width: 50%;
+      }
 
-        #rightThing {
-            width: 50%;
-        }
+      #rightThing {
+        width: 50%;
+      }
     </style>
-
-</body>
-
+  </body>
 </html>
