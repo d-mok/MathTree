@@ -121,7 +121,7 @@ expect.extend({
         let tolerance = (max - min) * 0.1
 
         const pass =
-            _.max(sample)! > max - tolerance && _.min(sample)! < min + tolerance
+            sample.max() > max - tolerance && sample.min() < min + tolerance
         if (pass) {
             return {
                 message: () =>

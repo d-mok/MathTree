@@ -46,7 +46,7 @@ export class AutoPenCls {
         }[]
         ticks?: boolean[] | 'AND' | 'OR'
     }) {
-        items = _.reverse(items)
+        items = items.reversed()
 
         const width = 10 // full width of number line
         const aLength = width * 0.2

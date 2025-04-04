@@ -50,7 +50,7 @@ export function SortBy<T>(items: T[], valueFunc: (_: T) => number): T[] {
  * ```
  */
 export function Sum(...nums: number[]): number {
-    return _.sum(nums)
+    return nums.sum()
 }
 
 /**
@@ -75,7 +75,7 @@ export function Product(...nums: number[]): number {
  */
 export function Mean(...nums: number[]): number {
     if (nums.length === 0) return NaN
-    return _.mean(nums)
+    return nums.mean()
 }
 
 /**
@@ -99,11 +99,11 @@ export function Median(...nums: number[]): number {
  */
 export function LowerQ(...nums: number[]): number {
     if (nums.length === 0) return NaN
-    const sorted = _.sortBy(nums)
+    const sorted = nums.sortedBy()
     let n = sorted.length
     let m = n / 2
     if (n % 2 !== 0) m = Math.floor(m)
-    return _.take(sorted, m).median()
+    return sorted.take(m).median()
 }
 
 /**
@@ -115,11 +115,11 @@ export function LowerQ(...nums: number[]): number {
  */
 export function UpperQ(...nums: number[]): number {
     if (nums.length === 0) return NaN
-    const sorted = _.sortBy(nums)
+    const sorted = nums.sortedBy()
     let n = sorted.length
     let m = n / 2
     if (n % 2 !== 0) m = Math.floor(m)
-    return _.takeRight(sorted, m).median()
+    return sorted.take(-m).median()
 }
 
 /**

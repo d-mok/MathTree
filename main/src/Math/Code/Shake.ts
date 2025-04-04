@@ -190,7 +190,7 @@ export function ShakeBase(anchor: string): string {
         if (RndT(0.3)) removeZero(arr)
         if (RndT(0.3)) insertZero(arr)
         if (RndT(0.3)) insertZero(arr)
-        return arr.map($ => _.clamp($, 0, base - 1))
+        return arr.map($ => $.clamp(0, base - 1))
     }
 
     let newNums = dice(() => mutate(nums))

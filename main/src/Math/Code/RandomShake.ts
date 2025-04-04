@@ -175,7 +175,7 @@ export function RndShakeCombo(
  * ```
  */
 export function RndShakeTrig(anchor: TrigFunc): TrigFunc[] {
-    return _.sampleSize<TrigFunc>(['sin', 'cos', 'tan'], 3)
+    return (['sin', 'cos', 'tan'] as TrigFunc[]).sampleSize(3)
 }
 
 /**

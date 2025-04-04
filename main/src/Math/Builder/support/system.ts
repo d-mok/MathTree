@@ -31,7 +31,7 @@ export function readTree(tree: TREE) {
     let vars = _.keys(tree)
     let givens = _(tree).pickBy('isGiven').keys().value()
     let top = _.findKey(tree, 'isTop')!
-    let hiddens = _.difference(vars, givens)
+    let hiddens = vars.unmatch(givens)
     return {
         vars,
         givens,

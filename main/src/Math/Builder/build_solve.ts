@@ -50,7 +50,7 @@ export function BuildSolve(
     // get givens, hiddens, unknown
     let validTrees = analyze(fs)
         .filter(t => checkAvoids(t, avoids))
-        .filter(t => includesAll(readTree(t).givens, locked))
+        .filter(t => readTree(t).givens.includesEvery(locked))
     if (validTrees.length === 0) throw 'no sensible set of solvables found!'
 
     let tree = validTrees.sample()!
@@ -135,18 +135,7 @@ export function BuildSolve(
     }
 }
 
-function includesAll<T>(superset: T[], subset: T[]): boolean {
-    return _.difference(subset, superset).length === 0
-}
-
-function includesExact<T>(arr1: T[], arr2: T[]): boolean {
-    return (
-        _.difference(arr1, arr2).length === 0 &&
-        _.difference(arr2, arr1).length === 0
-    )
-}
-
 function checkAvoids(tree: TREE, avoids: string[][]): boolean {
     let { givens, top: unknown } = readTree(tree)
-    return avoids.every($ => !includesExact($, [unknown, ...givens]))
+    return avoids.every($ => !$.includesExact([unknown, ...givens]))
 }

@@ -5239,7 +5239,7 @@ declare module "Soil/tool/blacksmith" {
 }
 declare module "Soil/tool/option" {
     type dict = Record<string, any>;
-    export function AutoOptions(instructions: dict, question: string, source: dict): string;
+    export function AutoOptions(instructions: dict, qn: string, source: dict): string;
 }
 declare module "Soil/cls" {
     export class Config {
@@ -5425,15 +5425,3 @@ declare var options: object;
 declare var shuffle: boolean;
 declare var question: string;
 declare var solution: string;
-declare module "Soil/tool/html" {
-    import { HTMLWorker } from 'bot';
-    export class QuestionHTML extends HTMLWorker {
-        hasOneUl(): boolean;
-        liCount(): number;
-        getLiHTMLs(): string[];
-        setLiHTMLs(htmls: string[]): void;
-        cloneLi(sourceIndex: number, repeat?: number): void;
-        printInLi(index: number, dict: object): void;
-        isLiDuplicated(): boolean;
-    }
-}

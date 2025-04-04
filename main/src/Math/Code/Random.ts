@@ -295,7 +295,7 @@ export function RndAngles(n: number, separation: number): number[] {
         .coherent(angles => angles.combinations(2).every(farEnough))
         .unique()
         .rolls(n)
-    return _.sortBy(angles)
+    return angles.sortedBy()
 }
 
 /**
@@ -339,7 +339,7 @@ export function RndData(min: number, max: number, n: number): number[] {
     let data = dice(() => RndN(min, max))
         .coherent(d => d.modes().length === 1)
         .rolls(n)
-    return _.sortBy(data)
+    return data.sortedBy()
 }
 
 /**

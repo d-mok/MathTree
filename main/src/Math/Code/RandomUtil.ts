@@ -27,7 +27,7 @@ export function RndShuffle<T>(...items: T[]): T[] {
  * ```
  */
 export function RndPickN<T>(items: T[], n: number): T[] {
-    return _.sampleSize(items, n)
+    return items.sampleSize(n)
 }
 
 /**
@@ -38,7 +38,7 @@ export function RndPickN<T>(items: T[], n: number): T[] {
  * ```
  */
 export function RndPickUnique<T>(items: T[], n: number): T[] {
-    return _.sampleSize(items.uniqEqual(), n)
+    return items.uniqEqual().sampleSize(n)
 }
 
 /**
