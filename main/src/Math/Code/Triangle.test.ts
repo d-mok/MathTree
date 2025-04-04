@@ -213,10 +213,10 @@ test('ScaleOrthocentreToInt', () => {
         [420, 660],
         [0, 555],
     ])
-    expect(ScaleOrthocentreToInt([8, 32], [40, 49], [15, 9])).toEqual([
-        [1368, 5472],
-        [6840, 8379],
-        [2565, 1539],
+    expect(ScaleOrthocentreToInt([8, 32], [40, 49], [15, 0])).toEqual([
+        [9144, 36576],
+        [45720, 56007],
+        [17145, 0],
     ])
 })
 

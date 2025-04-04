@@ -2652,7 +2652,7 @@ declare module "Math/Code/PhyConst" {
 }
 declare module "Math/Code/PhyEq" {
     type eq = [func: zeroFunction, latex: string];
-    export class PhyEqCls {
+    class PhyEqCls {
         Heat: {
             /**
              * E = Pt
@@ -4058,6 +4058,13 @@ declare module "Math/Code/Vector" {
 }
 declare module "Math/Code/Vector3D" {
     /**
+     * sum of all vectors
+     * ```
+     * VecAdd3D([1, 2, 3], [3, 4, 5], [5, 6, 7]) // [9, 12, 15]
+     * ```
+     */
+    export function VecAdd3D(...vectors: Point3D[]): Point3D;
+    /**
      * mean of all vectors
      * ```
      * Mid3D([1,2,3],[3,4,5],[5,6,7]) // [3,4,5]
@@ -4286,6 +4293,7 @@ declare module "Math/bundle" {
     export * from "Math/Code/Vector";
     export * from "Math/Code/Vector3D";
     export * from "Math/Builder/index";
+    export function deepBlurize<F extends (...args: any[]) => any>(f: F): F;
 }
 declare module "Math/index" {
     import * as bundle from "Math/bundle";
@@ -4436,7 +4444,6 @@ declare module "Math/index" {
         var PdFoot3D: typeof bundle.PdFoot3D;
         var PhyConst: typeof bundle.PhyConst;
         var PhyEq: typeof bundle.PhyEq;
-        var PhyEqCls: typeof bundle.PhyEqCls;
         var PolToRect: typeof bundle.PolToRect;
         var PolarDiff: typeof bundle.PolarDiff;
         var PolarReduce: typeof bundle.PolarReduce;
@@ -4575,12 +4582,14 @@ declare module "Math/index" {
         var UpperQ: typeof bundle.UpperQ;
         var UpperQAt: typeof bundle.UpperQAt;
         var VecAdd: typeof bundle.VecAdd;
+        var VecAdd3D: typeof bundle.VecAdd3D;
         var WholeBearing: typeof bundle.WholeBearing;
         var ZScore: typeof bundle.ZScore;
         var arccos: typeof bundle.arccos;
         var arcsin: typeof bundle.arcsin;
         var arctan: typeof bundle.arctan;
         var cos: typeof bundle.cos;
+        var deepBlurize: typeof bundle.deepBlurize;
         var differentiate: typeof bundle.differentiate;
         var functionize: typeof bundle.functionize;
         var getMaxDeg: typeof bundle.getMaxDeg;

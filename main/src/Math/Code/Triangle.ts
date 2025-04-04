@@ -516,9 +516,10 @@ export function ScaleIncentreToInt(
  * ```
  */
 function ratioFactor(...nums: number[]): number {
+    nums = nums.map($ => $.blur())
     let clone = nums.unmatch([0])
     if (clone.length === 0) return NaN
-    if (nums.some($ => !IsRational($))) return NaN
+    if (clone.some($ => !IsRational($))) return NaN
     let ratioed = Ratio(...clone)
     return (ratioed[0] / clone[0]).blur()
 }
