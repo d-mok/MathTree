@@ -359,14 +359,8 @@ export class AutoPenCls {
         let greater = sign.includes('>') || sign.includes('g')
         let equal = sign.includes('=') || sign.includes('e')
 
-        let p: number | undefined
-        let q: number | undefined
-        try {
-            ;[p, q] = QuadraticRoot(a, b, c)
-        } catch {
-            ;[p, q] = [undefined, undefined]
-        }
-        if (p !== undefined && q !== undefined) {
+        let [p, q] = QuadraticRoot(a, b, c)
+        if (IsNum(p, q)) {
             ;[p, q] = [Max(p, q), Min(p, q)]
             p = Fix(p, 2)
             q = Fix(q, 2)
@@ -380,7 +374,7 @@ export class AutoPenCls {
 
         pen.axis.x('')
 
-        if (p !== undefined && q !== undefined && p !== q) {
+        if (IsNum(p, q) && p !== q) {
             pen.plot(x => Sign(a) * (x ** 2 - 4))
             let P: Point2D = [2, 0]
             let Q: Point2D = [-2, 0]
@@ -412,7 +406,7 @@ export class AutoPenCls {
             pen.label.point(Q, q.toString(), a > 0 ? 225 : 135)
         }
 
-        if (p === undefined && q === undefined) {
+        if (!IsNum(p) && !IsNum(q)) {
             if ((a > 0 && greater) || (a < 0 && !greater)) {
                 pen.set.weight(3)
                 pen.set.color('red')
@@ -421,7 +415,7 @@ export class AutoPenCls {
             if (a < 0) pen.plot(x => -(x ** 2) - 2)
         }
 
-        if (p !== undefined && q !== undefined && p === q) {
+        if (IsNum(p, q) && p === q) {
             let func = a > 0 ? (x: number) => x ** 2 : (x: number) => -(x ** 2)
             pen.plot(func)
             pen.label.point([0, 0], p.toString(), a > 0 ? 270 : 90)
