@@ -33,9 +33,13 @@ export function ShakeR(anchor: number): number {
     let m = anchor.mantissa().blur()
     if (IsInteger(m)) return Number(ShakeN(m) + 'e' + exp)
     let dp = m.dp()
-    let newM = dice(() => Fix(m * RndR(0.5, 1.5), dp))
+    let newM = dice(() =>
+        Fix(m * RndPick(RndR(0.8, 1.2), RndR(0.9, 1.3), RndR(0.7, 1.1)), dp)
+    )
         .preserve(Sign, m)
         .preserve($ => $.exponent(), m)
+        .preserve($ => $.dp(), m)
+        .preserve($ => $.sigfig(), m)
         .forbid(m)
         .roll()
     return Number(newM + 'e' + exp)
@@ -259,7 +263,8 @@ export function ShakeConstraints(anchor: Constraint[]): Constraint[] {
 
 export function ShakeQuantity(anchor: quantity): quantity {
     let { val, unit } = anchor
-    return { val: ShakeR(val), unit }
+    val = val.blur()
+    return { val: Number.isInteger(val) ? ShakeN(val) : ShakeR(val), unit }
 }
 
 export function ShakeCompoundInequality(

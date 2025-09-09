@@ -14,7 +14,7 @@
     "vitest": "^3.1.1"
   },
   "dependencies": {
-    "sapphire-js": "^2.1.47",
+    "sapphire-js": "^2.1.49",
     "valibot": "^1.0.0"
   }
 }
