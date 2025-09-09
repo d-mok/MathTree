@@ -2311,6 +2311,13 @@ declare module "Math/Code/Latex" {
         numbers: number[];
         mode?: 'HCF' | 'LCM';
     }): string;
+    /**
+     * A short division to find the binary of `n`.
+     * ```
+     * ShortDivisionBy2(9)
+     * ```
+     */
+    export function ShortDivisionBy2(n: number): string;
 }
 declare module "Math/Code/LinearProgram" {
     /**
@@ -4549,6 +4556,7 @@ declare module "Math/index" {
         var ShakeRatio: typeof bundle.ShakeRatio;
         var ShakeTrigValue: typeof bundle.ShakeTrigValue;
         var ShortDivision: typeof bundle.ShortDivision;
+        var ShortDivisionBy2: typeof bundle.ShortDivisionBy2;
         var SigFig: typeof bundle.SigFig;
         var Sign: typeof bundle.Sign;
         var SineLawAngle: typeof bundle.SineLawAngle;
