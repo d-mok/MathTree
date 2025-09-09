@@ -6,12 +6,14 @@
   "devDependencies": {
     "@types/katex": "^0.16.7",
     "@types/lodash": "^4.17.16",
+    "@types/node": "^24.3.1",
     "cross-env": "^7.0.3",
     "jest-extended": "^4.0.2",
     "jest-matcher-deep-close-to": "^3.0.2",
+    "jsdom": "^26.1.0",
     "lodash": "^4.17.21",
     "typescript": "^5.8.2",
-    "vitest": "^3.1.1"
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "sapphire-js": "^2.1.49",

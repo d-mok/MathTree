@@ -254,6 +254,7 @@ declare global {
     var ShakeRatio: typeof bundle.ShakeRatio
     var ShakeTrigValue: typeof bundle.ShakeTrigValue
     var ShortDivision: typeof bundle.ShortDivision
+    var ShortDivisionBy2: typeof bundle.ShortDivisionBy2
     var SigFig: typeof bundle.SigFig
     var Sign: typeof bundle.Sign
     var SineLawAngle: typeof bundle.SineLawAngle
@@ -560,6 +561,7 @@ globalThis.ShakeR = bundle.deepBlurize(bundle.ShakeR)
 globalThis.ShakeRatio = bundle.deepBlurize(bundle.ShakeRatio)
 globalThis.ShakeTrigValue = bundle.deepBlurize(bundle.ShakeTrigValue)
 globalThis.ShortDivision = bundle.deepBlurize(bundle.ShortDivision)
+globalThis.ShortDivisionBy2 = bundle.deepBlurize(bundle.ShortDivisionBy2)
 globalThis.SigFig = bundle.deepBlurize(bundle.SigFig)
 globalThis.Sign = bundle.deepBlurize(bundle.Sign)
 globalThis.SineLawAngle = bundle.deepBlurize(bundle.SineLawAngle)

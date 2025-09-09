@@ -14,8 +14,7 @@
         "expose_2": "node --experimental-strip-types ./expose.ts"
     },
     "devDependencies": {
-        "esbuild": "^0.25.2",
-        "jsdom": "^24.1.0"
+        "esbuild": "^0.25.2"
     },
     "dependencies": {
         "bot": "file:../packages/bot",

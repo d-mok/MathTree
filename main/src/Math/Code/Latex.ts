@@ -395,3 +395,35 @@ export function ShortDivision({
         '\\end{array}'
     return T1 + ' ' + T2
 }
+
+/**
+ * A short division to find the binary of `n`.
+ * ```
+ * ShortDivisionBy2(9)
+ * ```
+ */
+export function ShortDivisionBy2(n: number): string {
+    let divs = [n]
+    let remainders: number[] = []
+    while (true) {
+        let div = divs[divs.length - 1]
+        if (div <= 1) break
+        divs.push(Math.floor(div / 2))
+        remainders.push(div % 2)
+    }
+    let T1 =
+        '\\begin{array}{r|}' +
+        remainders.map($ => 2).join(' \\\\ ') +
+        '\\end{array}'
+    let T2 =
+        '\\begin{array}{}' +
+        divs
+            .map((v, i) => (i === divs.length - 1 ? '\\color{red}' + v : v))
+            .join(' \\\\\\hline ') +
+        '\\end{array}'
+    let T3 =
+        '\\begin{array}{} \\\\' +
+        remainders.map($ => '...\\color{red}' + $).join(' \\\\ ') +
+        '\\end{array}'
+    return T1 + ' ' + T2 + ' ' + T3
+}
