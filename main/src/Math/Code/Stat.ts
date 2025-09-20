@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * the minimum value. Equivalent to Math.min().
  * ```

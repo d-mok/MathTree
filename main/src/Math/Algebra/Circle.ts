@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * D,E,F of circle general form
  * ```

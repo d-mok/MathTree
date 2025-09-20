@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * sum of all vectors
  * ```

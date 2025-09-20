@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * @deprecated
  * division with x/0 handling

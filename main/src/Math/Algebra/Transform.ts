@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { PenCls } from '../../Pen/Pen.js'
 
 // types

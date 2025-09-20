@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * Solve [x,y] from ax + by = c and px + qy = r.
  * ```

@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 export function printDfrac(
     numerator: number,
     denominator: number,

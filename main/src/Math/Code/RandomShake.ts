@@ -1,5 +1,4 @@
 import { dice } from 'fate'
-import _ from 'lodash'
 
 function shake<T>(
     anchor: T,

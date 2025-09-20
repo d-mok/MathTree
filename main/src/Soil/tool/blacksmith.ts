@@ -1,5 +1,4 @@
 import { Blacksmith } from 'bot'
-import _ from 'lodash'
 import { BaseSchema } from 'valibot'
 
 function numberDefault(num: number): number {

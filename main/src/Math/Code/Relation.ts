@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * Check if the numbers are all distinct.
  * ```

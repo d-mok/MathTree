@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { describe, expect, it, test } from 'vitest'
 
 test('CircleGeneral', () => {

@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * @param rect - The rectangular coordinates [x,y] of a point, or a polar angle theta.
  * the quadrant of a point or angle: 'I','II','III' or 'IV'.

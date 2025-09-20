@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * a random item from the given items
  * ```

@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * get the element at cyclic index
  * ```

@@ -1,5 +1,4 @@
 import * as ruby from 'ruby'
-import _ from 'lodash'
 
 /**
  * Derivative of the function.

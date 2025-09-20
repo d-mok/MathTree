@@ -1,6 +1,5 @@
 import { PenCls } from '../Pen.js'
 import { Convas } from 'paint'
-import _ from 'lodash'
 
 export class PenD3 {
     constructor(private pen: PenCls, private cv: Convas) {}

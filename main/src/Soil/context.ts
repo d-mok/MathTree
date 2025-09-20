@@ -1,6 +1,3 @@
-/**
- * @deprecated
- */
 declare var answer: string | number
 declare var options: object
 declare var shuffle: boolean

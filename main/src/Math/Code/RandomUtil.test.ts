@@ -1,5 +1,4 @@
 import { repeat } from '../Jest/JestExtend.js'
-import _ from 'lodash'
 import { describe, expect, it, test } from 'vitest'
 
 test('RndPick', () => {

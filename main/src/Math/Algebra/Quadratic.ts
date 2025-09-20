@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * the discriminant b^2-4ac.
  * ```

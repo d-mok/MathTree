@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * array of all integers between (inclusive) the min and max of `nums`.
  * ```
@@ -12,7 +10,7 @@ import _ from 'lodash'
 export function Rng(...nums: number[]): number[] {
     let min = Math.ceil(Math.min(...nums))
     let max = Math.floor(Math.max(...nums))
-    return _.range(min, max + 0.01)
+    return Math.range(min, max)
 }
 
 /**

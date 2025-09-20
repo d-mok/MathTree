@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * [slope,y-int,x-int] of ax+by+c=0
  * ```

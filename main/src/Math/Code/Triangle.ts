@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * Find c from a and b of a right triangle.
  * ```

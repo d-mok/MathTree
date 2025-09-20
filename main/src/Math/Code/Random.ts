@@ -1,5 +1,4 @@
 import { dice } from 'fate'
-import _ from 'lodash'
 
 /**
  * a random integer in [min, max] inclusive.

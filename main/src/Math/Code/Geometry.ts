@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * the slope of AB
  * ```

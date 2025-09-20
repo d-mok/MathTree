@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 /**
  * a string of joined elements. [1,2,3] --> '1, 2 and 3'
  * ```
