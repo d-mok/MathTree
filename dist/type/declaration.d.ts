@@ -5425,9 +5425,6 @@ declare module "Math/Code/Trigonometry.test" { }
 declare module "Math/Code/Utility.test" { }
 declare module "Math/Code/Vector.test" { }
 declare module "Math/Code/Vector3D.test" { }
-/**
- * @deprecated
- */
 declare var answer: string | number;
 declare var options: object;
 declare var shuffle: boolean;
