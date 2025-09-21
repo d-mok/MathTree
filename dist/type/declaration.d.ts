@@ -4648,6 +4648,14 @@ declare module "Pen/AutoPen" {
             ticks?: boolean[] | 'AND' | 'OR';
         }): void;
         /**
+         * Arrow diagram for compound inequalities.
+         * ```
+         * pen.CompoundInequalities(['AND','<',2,'>',1,'x'])
+         * // x < 2 and x > 1
+         * ```
+         */
+        CompoundInequalities([connective, sign1, num1, sign2, num2, variable,]: CompoundInequality): void;
+        /**
          * Trig Graph for solving basic trig equation.
          * @param trig - 'sin' | 'cos' | 'tan'
          * @param k - value of trig, like sin = k.

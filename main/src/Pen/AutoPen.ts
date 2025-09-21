@@ -143,6 +143,30 @@ export class AutoPenCls {
     }
 
     /**
+     * Arrow diagram for compound inequalities.
+     * ```
+     * pen.CompoundInequalities(['AND','<',2,'>',1,'x'])
+     * // x < 2 and x > 1
+     * ```
+     */
+    CompoundInequalities([
+        connective,
+        sign1,
+        num1,
+        sign2,
+        num2,
+        variable,
+    ]: CompoundInequality) {
+        this.Inequalities({
+            items: [
+                { sign: sign1, num: num1, vertical: true },
+                { sign: sign2, num: num2, vertical: true },
+            ],
+            ticks: connective,
+        })
+    }
+
+    /**
      * Trig Graph for solving basic trig equation.
      * @param trig - 'sin' | 'cos' | 'tan'
      * @param k - value of trig, like sin = k.
@@ -155,7 +179,7 @@ export class AutoPenCls {
     TrigSolution({
         trig = 'sin',
         k = 0,
-        scale = 1.5,
+        scale = 1.7,
         ratio = 0.7,
     }: {
         trig: TrigFunc
@@ -344,8 +368,8 @@ export class AutoPenCls {
     QuadraticInequality({
         quadratic,
         sign,
-        scale = 1,
-        ratio = 0.8,
+        scale = 1.5,
+        ratio = 0.5,
     }: {
         quadratic: [number, number, number]
         sign: string
