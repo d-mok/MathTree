@@ -99,8 +99,10 @@ const BASE_PREFIX = ['n', 'u', 'm', 'c', 'k', 'M', 'G', 'T', '']
 const BASE_INDEX = ['-4', '-3', '-2', '-1', '1', '2', '3', '4']
 
 export function findUnit(name: string): string | undefined {
-    for (let k in DEFAULT_UNIT) {
-        if (name.includes(k)) return DEFAULT_UNIT[k]
+    for (let [k, v] of Object.entries(DEFAULT_UNIT).sortedBy(
+        $ => -$[0].length,
+    )) {
+        if (name.includes(k)) return v
     }
     return undefined
 }
@@ -113,14 +115,14 @@ export function parseUnit(raw: string): string {
         for (let p of BASE_PREFIX) {
             T = T.replaceAll(
                 new RegExp('([^a-zA-z°])' + p + u + '([^a-zA-z°])', 'g'),
-                '$1' + '~\\text{' + p + u + '}' + '$2'
+                '$1' + '~\\text{' + p + u + '}' + '$2',
             )
         }
     }
     for (let i of BASE_INDEX)
         T = T.replaceAll(
             new RegExp('([^0123456789-])' + i + '([^0123456789-])', 'g'),
-            '$1' + '^{' + i + '}' + '$2'
+            '$1' + '^{' + i + '}' + '$2',
         )
     return T
 }
