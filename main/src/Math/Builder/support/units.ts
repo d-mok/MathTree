@@ -45,6 +45,7 @@ const DEFAULT_UNIT: { [_: string]: string } = {
     'normal reaction': 'N',
     friction: 'N',
     moment: 'N m',
+    momentum: 'kg m s-1',
     power: 'W',
     'gravitational field strength': 'N kg-1',
     'angular position': '°',
