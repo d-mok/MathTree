@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -22,7 +22,6 @@
         </textarea>
         <div>
           <button type="button" onClick="draw()">Draw</button>
-          <button type="button" onClick="drawTrim()">Trim</button>
           <button type="button" onClick="run()">Run</button>
           <button type="button" onClick="store()">Store</button>
           <button type="button" onClick="retrieve()">Retrieve</button>
@@ -57,15 +56,7 @@ pen.axis.y();`;
         let q = '<img src="img"/>';
         eval(
           code() +
-            '\n document.getElementById("img").innerHTML = pen.export(q,"img")'
-        );
-      }
-
-      function drawTrim() {
-        let q = '<img src="img"/>';
-        eval(
-          code() +
-            '\n document.getElementById("img").innerHTML = pen.exportTrim(q,"img")'
+            '\n document.getElementById("img").innerHTML = pen.print(q,"img")',
         );
       }
 

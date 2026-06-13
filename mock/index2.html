@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Mock MathSoil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="../extension/canvas-latex.js"></script>
+    <script src="../dist/dev/mathtree.js"></script>
+    <!-- <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script> -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="leftThing">
+        <div>
+          <a href="https://d-mok.github.io/MathTree/typedoc/" target="_blank"
+            >Doc Link</a
+          >
+        </div>
+        <textarea id="code" rows="40" style="width: 80%" spellcheck="false">
+        </textarea>
+        <div>
+          <button type="button" onClick="draw()">Draw</button>
+          <button type="button" onClick="run()">Run</button>
+          <button type="button" onClick="store()">Store</button>
+          <button type="button" onClick="retrieve()">Retrieve</button>
+        </div>
+      </div>
+
+      <div id="rightThing">
+        <div id="img"></div>
+        <div id="img2"></div>
+      </div>
+    </div>
+
+    <script>
+      let template = `const pen = new Pen();
+
+pen.range.set([-5,5],[-5,5]);
+pen.size.set(1);
+
+pen.grid.x();
+pen.grid.y();
+pen.tick.x();
+pen.tick.y();
+pen.axis.x();
+pen.axis.y();`;
+
+      document.getElementById("code").value = template;
+
+      function code() {
+        return document.getElementById("code").value;
+      }
+
+      function draw() {
+        let q = '<img src="img"/>';
+        eval(
+          code() +
+            '\n document.getElementById("img").innerHTML = pen.print(q,"img")',
+        );
+        let q2 = '<img src="img2"/>';
+        eval(
+          code().replaceAll("new Pen()", "new Pen2()") +
+            '\n document.getElementById("img2").innerHTML = pen.print(q2,"img2")',
+        );
+      }
+
+      function run() {
+        eval(code());
+      }
+
+      function store() {
+        localStorage.setItem("devCode", code());
+        console.log("code stored!");
+      }
+
+      function retrieve() {
+        document.getElementById("code").value = localStorage.getItem("devCode");
+      }
+    </script>
+
+    <style>
+      #container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+      }
+
+      #leftThing {
+        width: 50%;
+      }
+
+      #rightThing {
+        width: 50%;
+      }
+    </style>
+  </body>
+</html>
