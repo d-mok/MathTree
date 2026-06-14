@@ -1,7 +1,6 @@
 import './Core/index.js'
 import './Math/index.js'
 import './Pen/index.js'
-import './Pen2/index.js'
 import './Soil/index.js'
 import 'sapphire-js'
 
