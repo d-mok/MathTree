@@ -1,4 +1,4 @@
-import { dice } from 'fate'
+import { dice } from '@mathtree/dev-fate'
 
 /**
  * a random integer in [min, max] inclusive.
@@ -24,7 +24,7 @@ export function RndNs(
     min: number,
     max: number,
     n: number = 10,
-    sort: 'asc' | 'desc' | 'none' = 'none'
+    sort: 'asc' | 'desc' | 'none' = 'none',
 ): number[] {
     n = Math.min(Math.floor(max - min + 1), n)
     let nums = dice(() => RndN(min, max))
@@ -88,7 +88,7 @@ export function RndQ(largest: number = 9, range?: interval): number {
 export function RndQs(
     largest: number = 9,
     range?: interval,
-    n: number = 10
+    n: number = 10,
 ): number[] {
     n = Math.min(Math.abs(largest) + 1, n)
     return dice(() => RndQ(largest, range))
@@ -140,7 +140,7 @@ export function RndZs(
     min: number,
     max: number,
     n: number = 10,
-    sort: 'asc' | 'desc' | 'none' = 'none'
+    sort: 'asc' | 'desc' | 'none' = 'none',
 ): number[] {
     n = Math.min(Math.floor(max - min + 1), n)
     let nums = dice(() => RndN(min, max))
@@ -243,7 +243,7 @@ export function RndPyth(max = 100): [number, number, number] {
  */
 export function RndPoint(
     xRange: number | interval,
-    yRange: number | interval = xRange
+    yRange: number | interval = xRange,
 ): Point2D {
     if (typeof xRange === 'number') xRange = [-xRange, xRange]
     if (typeof yRange === 'number') yRange = [-yRange, yRange]
@@ -266,13 +266,13 @@ export function RndPoint(
 export function RndPoints(
     xRange: number | interval,
     yRange: number | interval = xRange,
-    n = 10
+    n = 10,
 ): Point2D[] {
     return dice(() => RndPoint(xRange, yRange))
         .unique(([x, y]) => x)
         .unique(([x, y]) => y)
         .coherent($ =>
-            $.combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C))
+            $.combinations(3).every(([A, B, C]) => Slope(A, B) !== Slope(B, C)),
         )
         .rolls(n)
 }
@@ -318,7 +318,7 @@ export function RndConvexPolygon(
     n: number,
     center: Point2D,
     radius: number,
-    separation: number
+    separation: number,
 ): Point2D[] {
     let [h, k] = center
     let r = radius
@@ -350,7 +350,7 @@ export function RndData(min: number, max: number, n: number): number[] {
 export function RndTriangle(
     xRange: interval,
     yRange: interval,
-    { minAngle = 0, maxAngle = 180, minLength = 0, obtuse = false } = {}
+    { minAngle = 0, maxAngle = 180, minLength = 0, obtuse = false } = {},
 ): [Point2D, Point2D, Point2D] {
     let [x1, x2] = xRange
     let [y1, y2] = yRange
@@ -444,7 +444,7 @@ export function RndTrigEqv(
         | '-tan'
         | '1/tan'
         | '-1/tan',
-    label: string
+    label: string,
 ): TrigExp {
     let trig = (funcName: TrigFunc, angle: number): number => {
         if (funcName === 'sin') return sin(angle)
@@ -510,7 +510,7 @@ export function RndRatio(min: number, max: number, n: number = 10): number[] {
 export function RndPartition(
     n: number,
     length?: number,
-    allowZero = false
+    allowZero = false,
 ): number[] {
     let arr = Partition(n, length, allowZero)
     return RndShuffle(...RndPick(...arr))

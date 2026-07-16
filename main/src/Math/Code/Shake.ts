@@ -1,4 +1,4 @@
-import { dice } from 'fate'
+import { dice } from '@mathtree/dev-fate'
 import _, { isInteger } from 'lodash'
 
 /**
@@ -34,7 +34,7 @@ export function ShakeR(anchor: number): number {
     if (IsInteger(m)) return Number(ShakeN(m) + 'e' + exp)
     let dp = m.dp()
     let newM = dice(() =>
-        Fix(m * RndPick(RndR(0.8, 1.2), RndR(0.9, 1.3), RndR(0.7, 1.1)), dp)
+        Fix(m * RndPick(RndR(0.8, 1.2), RndR(0.9, 1.3), RndR(0.7, 1.1)), dp),
     )
         .preserve(Sign, m)
         .preserve($ => $.exponent(), m)
@@ -73,7 +73,7 @@ export function ShakeQ(anchor: number): number {
         .shield(([a, b]) => b !== 0)
         .shield(([a, b]) => b !== 1)
         .shield(([a, b]) =>
-            IsProbability(p / q) ? IsProbability(a / b) : true
+            IsProbability(p / q) ? IsProbability(a / b) : true,
         )
         .shield(([a, b]) => a / b !== anchor)
         .roll()
@@ -268,7 +268,7 @@ export function ShakeQuantity(anchor: quantity): quantity {
 }
 
 export function ShakeCompoundInequality(
-    anchor: CompoundInequality
+    anchor: CompoundInequality,
 ): CompoundInequality {
     let [connective, s1, n1, s2, n2, x] = anchor
     let r1 = INEQUAL.flip(s1)
@@ -282,7 +282,7 @@ export function ShakeCompoundInequality(
             ['OR', s1, n1, s2, n2, x],
             ['OR', r1, n1, s2, n2, x],
             ['OR', s1, n1, r2, n2, x],
-            ['OR', r1, n1, r2, n2, x]
+            ['OR', r1, n1, r2, n2, x],
         )
     return dice(f).forbid(anchor).roll()
 }

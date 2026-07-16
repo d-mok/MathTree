@@ -1,4 +1,4 @@
-import { dice } from 'fate'
+import { dice } from '@mathtree/dev-fate'
 import { blacksmith } from './blacksmith.js'
 
 function isFunction(obj: unknown): obj is Function {
@@ -31,13 +31,13 @@ type dict = Record<string, any>
 export function AutoOptions(
     instructions: dict,
     qn: string,
-    source: dict
+    source: dict,
 ): string {
     if (Object.keys(instructions).length === 0) return qn
     let liTags = qn.between('<li>', '</li>')
 
     let patches = Object.mapValues(instructions, (v, k) =>
-        produce(source[k], v)
+        produce(source[k], v),
     )
     let dicts = (i: number) => Object.mapValues(patches, $ => $[i])
 

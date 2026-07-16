@@ -1,4 +1,4 @@
-import { dice } from 'fate'
+import { dice } from '@mathtree/dev-fate'
 import { printPolynomial } from '../../Core/ink.js'
 
 function getVars(mono: monomial): { name: string; power: number }[] {
@@ -38,7 +38,7 @@ export function RndPolynomial(
     degree: number,
     vars: string[] = ['x'],
     terms: number = degree + 1,
-    maxCoeff: number = 9
+    maxCoeff: number = 9,
 ): polynomial {
     function randomPartition(n: number): number[] {
         let len = vars.length
@@ -94,7 +94,7 @@ export function PolySort(poly: polynomial, desc = true): polynomial {
  * ```
  */
 export function PolyFunction(
-    poly: polynomial
+    poly: polynomial,
 ): (values: { [_: string]: number }) => number {
     poly = JSON.clone(poly)
 

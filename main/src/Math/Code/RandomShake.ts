@@ -1,4 +1,4 @@
-import { dice } from 'fate'
+import { dice } from '@mathtree/dev-fate'
 
 function shake<T>(
     anchor: T,
@@ -160,7 +160,7 @@ export function RndShakePoint(anchor: Point2D): Point2D[] {
  * ```
  */
 export function RndShakeCombo(
-    anchor: [boolean, boolean, boolean]
+    anchor: [boolean, boolean, boolean],
 ): [boolean, boolean, boolean][] {
     let [a, b, c] = anchor
     return RndShuffle([a, !b, !c], [!a, b, !c], [!a, !b, c])
@@ -221,7 +221,7 @@ export function RndShakePointPolar(anchor: Point2D): Point2D[] {
     let [r1, q1] = RectToPol(anchor)
     let [r2, q2] = RectToPol(ShakePointPolar(anchor))
     return RndShuffle<PolarPoint>([r1, q2], [r2, q1], [r2, q2]).map($ =>
-        PolToRect($)
+        PolToRect($),
     )
 }
 
@@ -259,7 +259,7 @@ export function RndShakeQuantity(anchor: quantity): quantity[] {
 }
 
 export function RndShakeCompoundInequality(
-    anchor: CompoundInequality
+    anchor: CompoundInequality,
 ): CompoundInequality[] {
     return shake(anchor, ShakeCompoundInequality)
 }
