@@ -1,5 +1,5 @@
-import { getVars, permute } from '../utils.js'
-import _ from 'lodash'
+import { getVars, permute } from '../utils.ts'
+import * as _ from 'es-toolkit/compat'
 
 function includesAll<T>(superset: T[], subset: T[]): boolean {
     return _.difference(subset, superset).length === 0
@@ -8,7 +8,7 @@ function includesAll<T>(superset: T[], subset: T[]): boolean {
 function isFittableOrder(fs: zeroFunction[], givens: string[]): boolean {
     const founds = [...givens]
 
-    for (let f of fs) {
+    for (const f of fs) {
         const vars = getVars(f)
         // f is full if all vars in it are found.
         const isFull = includesAll(founds, vars)
@@ -25,7 +25,7 @@ function isFittableOrder(fs: zeroFunction[], givens: string[]): boolean {
  */
 export function getFittableOrder(
     fs: zeroFunction[],
-    preset: valObj
+    preset: valObj,
 ): zeroFunction[] | undefined {
     const presetted = _.pickBy(preset, _.isFinite)
     const givens = _.keys(presetted)

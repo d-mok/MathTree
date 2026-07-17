@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import * as _ from 'es-toolkit/compat'
 
 function rndUniform(range: [number, number]): number {
     const [min, max] = range
@@ -21,7 +21,7 @@ function rndLogNeg(range: [number, number]): number {
 }
 
 function rndValue(range: [number, number]): number {
-    let [min, max] = range
+    const [min, max] = range
     if (min > 0 && max > 0) return rndLog(range)
     if (min < 0 && max < 0) return rndLogNeg(range)
     return rndUniform(range)
@@ -34,7 +34,7 @@ function rndPoint(ranges: [number, number][]): number[] {
 export function rndSignedPoint(
     eq: zeroFunction,
     ranges: [number, number][],
-    sign: 1 | -1
+    sign: 1 | -1,
 ): number[] {
     for (let i = 0; i < 100; i++) {
         const point = rndPoint(ranges)

@@ -1,12 +1,13 @@
-import { Fitter } from "./fitter.js"
-
+import { Fitter } from './fitter.ts'
 
 /**
  * Fit the system of equations under given ranges and presets.
  */
-export function fit(fs: zeroFunction[], ranges: rangeObj, preset: valObj): valObj {
-    let fitter = new Fitter(fs, ranges, preset)
+export function fit(
+    fs: zeroFunction[],
+    ranges: rangeObj,
+    preset: valObj,
+): valObj {
+    const fitter = new Fitter(fs, ranges, preset)
     return fitter.fit()
 }
-
-

@@ -1,0 +1,14 @@
+{
+    "name": "@mathtree/dev-gauss",
+    "version": "0.1.1",
+    "license": "MIT",
+    "exports": "./src/index.ts",
+    "tasks": {
+        "release": "deno bump-version patch && deno publish"
+    },
+    "imports": {
+        "es-toolkit": "npm:es-toolkit@^1.49.0",
+        "@std/testing/bdd": "jsr:@std/testing/bdd",
+        "@std/expect": "jsr:@std/expect"
+    }
+}

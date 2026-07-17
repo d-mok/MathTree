@@ -1,6 +1,6 @@
-import { bisect } from '../Bisection/index.js'
-import { getAllVars } from '../utils.js'
-import { getFittableOrder } from './searcher.js'
+import { bisect } from '../Bisection/index.ts'
+import { getAllVars } from '../utils.ts'
+import { getFittableOrder } from './searcher.ts'
 
 export class Fitter {
     private readonly allVariables: string[]
@@ -10,7 +10,7 @@ export class Fitter {
     constructor(
         private readonly fs: zeroFunction[],
         private readonly ranges: rangeObj,
-        private readonly preset: valObj
+        private readonly preset: valObj,
     ) {
         this.allVariables = getAllVars(fs)
         this.reset()
@@ -44,7 +44,9 @@ export class Fitter {
                 this.reset()
                 orderedFS.forEach($ => this.fitOne($))
                 return this.vals
-            } catch {}
+            } catch {
+                true
+            }
         }
         // console.error('vals:', this.vals)
         // console.error('ranges:', this.ranges)

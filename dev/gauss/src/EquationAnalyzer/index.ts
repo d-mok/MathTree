@@ -1,5 +1,5 @@
-import { combinations, getAllVars, getVars } from '../utils.js'
-import _ from 'lodash'
+import { combinations, getAllVars, getVars } from '../utils.ts'
+import * as _ from 'es-toolkit/compat'
 
 type TREE = Record<
     string,
@@ -18,7 +18,7 @@ function analyzeOnce(fs: zeroFunction[], givens: string[]): TREE | undefined {
 
     // to store the order of each var
     // initialized with given vars = order 0
-    let TREE: TREE = Object.fromEntries(
+    const TREE: TREE = Object.fromEntries(
         givens.map(v => [
             v,
             {
@@ -29,28 +29,28 @@ function analyzeOnce(fs: zeroFunction[], givens: string[]): TREE | undefined {
                 deps: [],
                 isTop: false,
             },
-        ])
+        ]),
     )
 
     function getDeps(f: zeroFunction, solvedVar: string): string[] {
-        let otherVars = _.without(getVars(f), solvedVar)
+        const otherVars = _.without(getVars(f), solvedVar)
         return _.uniq([
             ...otherVars,
-            ..._(TREE).pick(otherVars).map('deps').value().flat(),
+            ..._.map(_.pick(TREE, otherVars), 'deps').flat(),
         ])
     }
 
     function getNextOrder(f: zeroFunction): number {
-        let realOrders = _(TREE).pick(getVars(f)).map('order').value()
+        const realOrders = _.map(_.pick(TREE, getVars(f)), 'order')
         return Math.max(-1, ...realOrders) + 1
     }
 
     function trySolve(f: zeroFunction): boolean {
-        let unsolved = getVars(f).filter(v => !(v in TREE))
+        const unsolved = getVars(f).filter(v => !(v in TREE))
         // eq is solvable only if exactly 1 var is unsolved
         if (unsolved.length !== 1) return false
         // solve eq (mocking)
-        let v = unsolved[0]
+        const v = unsolved[0]
         TREE[v] = {
             variable: v,
             order: getNextOrder(f),
@@ -63,15 +63,18 @@ function analyzeOnce(fs: zeroFunction[], givens: string[]): TREE | undefined {
     }
 
     function trySolveNext(): boolean {
-        let nextF = fs.find(f => trySolve(f))
+        const nextF = fs.find(f => trySolve(f))
         return nextF !== undefined
     }
 
     //try until no eq can be solved
-    while (trySolveNext()) {}
+    while (trySolveNext()) {
+        true
+    }
 
     // healthy if all vars are solved and at least 1 top var
-    let isHealthy = _.size(TREE) === vars.length && _(TREE).map('isTop').some()
+    const isHealthy =
+        _.size(TREE) === vars.length && _.some(_.map(TREE, 'isTop'))
 
     return isHealthy ? TREE : undefined
 }

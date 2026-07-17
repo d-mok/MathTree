@@ -1,5 +1,5 @@
-import _ from 'lodash'
-import { rndSignedPoint } from './random.js'
+import * as _ from 'es-toolkit'
+import { rndSignedPoint } from './random.ts'
 
 export function Bisection(eq: zeroFunction, ranges: [number, number][]) {
     if (!ranges.some(([min, max]) => max > min)) {

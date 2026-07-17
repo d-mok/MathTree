@@ -1,2 +1,2 @@
-export { fit } from './EquationFitter/index.js'
-export { analyze } from './EquationAnalyzer/index.js'
+export { fit } from './EquationFitter/index.ts'
+export { analyze } from './EquationAnalyzer/index.ts'
