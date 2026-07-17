@@ -4,7 +4,7 @@
     "license": "MIT",
     "exports": "./src/index.ts",
     "tasks": {
-        "release": "deno bump-version patch && deno publish"
+        "release": "deno bump-version patch && deno publish --allow-dirty"
     },
     "imports": {
         "es-toolkit": "npm:es-toolkit@^1.49.0",
