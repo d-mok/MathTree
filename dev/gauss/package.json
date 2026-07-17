@@ -1,0 +1,19 @@
+{
+    "name": "gauss",
+    "version": "0.0.0",
+    "description": "a library for analysis of system of equations",
+    "main": "lib/src/index.js",
+    "types": "lib/src/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "test": "vitest run",
+        "build": "tsc"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true,
+        "arrowParens": "avoid",
+        "singleAttributePerLine": true
+    }
+}
