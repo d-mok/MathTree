@@ -1,4 +1,5 @@
 import * as _ from 'es-toolkit/compat'
+import type { zeroFunction } from './globals.d.ts'
 
 export function getVars(func: zeroFunction): string[] {
     const fnStr = func.toString()

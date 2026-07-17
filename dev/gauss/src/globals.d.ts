@@ -1,5 +1,4 @@
-type zeroFunction = (...args: number[]) => number
-type numGenerator = () => number
+export type zeroFunction = (...args: number[]) => number
 
-type rangeObj = { [_: string]: [number, number] }
-type valObj = { [_: string]: number }
+export type rangeObj = { [_: string]: [number, number] }
+export type valObj = { [_: string]: number }

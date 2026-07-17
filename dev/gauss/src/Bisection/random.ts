@@ -1,4 +1,5 @@
 import * as _ from 'es-toolkit/compat'
+import type { zeroFunction } from '../globals.d.ts'
 
 function rndUniform(range: [number, number]): number {
     const [min, max] = range

@@ -1,5 +1,6 @@
 import { combinations, getAllVars, getVars } from '../utils.ts'
 import * as _ from 'es-toolkit/compat'
+import type { zeroFunction } from '../globals.d.ts'
 
 type TREE = Record<
     string,

@@ -1,5 +1,6 @@
 import * as _ from 'es-toolkit'
 import { rndSignedPoint } from './random.ts'
+import type { zeroFunction } from '../globals.d.ts'
 
 export function Bisection(eq: zeroFunction, ranges: [number, number][]) {
     if (!ranges.some(([min, max]) => max > min)) {

@@ -1,6 +1,7 @@
 import { bisect } from '../Bisection/index.ts'
 import { getAllVars } from '../utils.ts'
 import { getFittableOrder } from './searcher.ts'
+import type { zeroFunction, rangeObj, valObj } from '../globals.d.ts'
 
 export class Fitter {
     private readonly allVariables: string[]

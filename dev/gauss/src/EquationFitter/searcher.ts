@@ -1,5 +1,6 @@
 import { getVars, permute } from '../utils.ts'
 import * as _ from 'es-toolkit/compat'
+import type { zeroFunction, valObj } from '../globals.d.ts'
 
 function includesAll<T>(superset: T[], subset: T[]): boolean {
     return _.difference(subset, superset).length === 0

@@ -1,6 +1,7 @@
 import { getVars } from '../utils.ts'
 import { Bisection } from './bisection.ts'
 import * as _ from 'es-toolkit'
+import type { zeroFunction, rangeObj, valObj } from '../globals.d.ts'
 
 function narrowRange(ranges: rangeObj, preset: valObj): rangeObj {
     return _.mapValues(ranges, (value, key) => {
